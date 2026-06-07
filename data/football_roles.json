@@ -58,6 +58,28 @@
       "tacticalDislikes": ["slow_possession", "static_low_tempo", "central_target_play"]
     },
     {
+      "id": "pressing_forward",
+      "name": "Presspiss",
+      "positionGroup": "striker",
+      "validPositions": ["ST"],
+      "requires": ["pressing_runs", "stamina", "off_ball_runs", "acceleration", "pressing"],
+      "goodWith": ["high_press", "box_to_box", "wide_pressers", "vertical_play"],
+      "badFor": ["deep_block_only", "static_low_tempo", "no_forward_runs"],
+      "tacticalLikes": ["high_press", "fast_transitions", "vertical_play", "pressing"],
+      "tacticalDislikes": ["low_block", "static_low_tempo", "slow_possession"]
+    },
+    {
+      "id": "advanced_forward",
+      "name": "Avansert spiss",
+      "positionGroup": "striker",
+      "validPositions": ["ST"],
+      "requires": ["finishing", "off_ball_runs", "space_behind", "acceleration", "movement"],
+      "goodWith": ["deep_playmaker", "classic_ten", "early_through_balls"],
+      "badFor": ["deep_link_play", "no_service", "slow_possession"],
+      "tacticalLikes": ["direct_counter", "fast_transitions", "vertical_play", "space_behind"],
+      "tacticalDislikes": ["static_low_tempo", "crossing_only", "deep_block_no_space"]
+    },
+    {
       "id": "target_striker",
       "name": "Targetspiss",
       "positionGroup": "striker",
@@ -135,6 +157,17 @@
       "tacticalDislikes": ["chaos", "high_risk_build_up", "all_out_attack"]
     },
     {
+      "id": "holding_midfielder",
+      "name": "Holdende midtbanespiller",
+      "positionGroup": "midfield",
+      "validPositions": ["DM", "CM"],
+      "requires": ["positioning", "simple_passing", "covering", "defensive_balance", "clear_structure"],
+      "goodWith": ["deep_playmaker", "box_to_box", "rest_defense"],
+      "badFor": ["constant_forward_runs", "free_creator_role", "unprotected_midfield"],
+      "tacticalLikes": ["compact_shape", "rest_defense", "medium_press", "possession"],
+      "tacticalDislikes": ["chaos", "high_risk_build_up", "all_out_attack"]
+    },
+    {
       "id": "box_to_box",
       "name": "Boks-til-boks",
       "positionGroup": "midfield",
@@ -144,6 +177,17 @@
       "badFor": ["fixed_holding_role", "static_low_tempo", "no_forward_runs"],
       "tacticalLikes": ["high_press", "fast_transitions", "vertical_play", "second_balls"],
       "tacticalDislikes": ["static_low_tempo", "deep_block_only", "no_forward_runs"]
+    },
+    {
+      "id": "pressing_midfielder",
+      "name": "Pressende midtbanespiller",
+      "positionGroup": "midfield",
+      "validPositions": ["CM", "AM", "DM"],
+      "requires": ["pressing", "stamina", "late_runs", "vertical_space", "transition_moments"],
+      "goodWith": ["pressing_forward", "box_to_box", "high_press"],
+      "badFor": ["static_low_tempo", "deep_block_only", "fixed_holding_role"],
+      "tacticalLikes": ["high_press", "fast_transitions", "vertical_play", "pressing"],
+      "tacticalDislikes": ["static_low_tempo", "deep_block_only", "slow_possession"]
     },
     {
       "id": "overlapping_fullback",
@@ -157,6 +201,17 @@
       "tacticalDislikes": ["narrow_low_tempo", "deep_only", "no_cover"]
     },
     {
+      "id": "wingback",
+      "name": "Vingback",
+      "positionGroup": "fullback",
+      "validPositions": ["WB", "LB", "RB"],
+      "requires": ["stamina", "wide_support", "overlapping_runs", "crossing", "wide_lane"],
+      "goodWith": ["back_three", "box_striker", "wide_attack"],
+      "badFor": ["static_back_four", "deep_only", "no_cover"],
+      "tacticalLikes": ["wide_attack", "overloads", "crossing", "high_width"],
+      "tacticalDislikes": ["narrow_low_tempo", "deep_block_only", "no_cover"]
+    },
+    {
       "id": "inverted_fullback",
       "name": "Invertert back",
       "positionGroup": "fullback",
@@ -166,6 +221,17 @@
       "badFor": ["constant_overlap", "crossing_only", "wide_lane_only"],
       "tacticalLikes": ["possession", "structured_build_up", "central_control", "rest_defense"],
       "tacticalDislikes": ["crossing_only", "wide_direct_only", "chaos"]
+    },
+    {
+      "id": "support_fullback",
+      "name": "Støtteback",
+      "positionGroup": "fullback",
+      "validPositions": ["LB", "RB"],
+      "requires": ["positioning", "short_passing", "wide_support", "defensive_balance", "rest_defense"],
+      "goodWith": ["wide_dribbler", "deep_playmaker", "structured_build_up"],
+      "badFor": ["constant_overlap", "no_cover", "all_out_attack"],
+      "tacticalLikes": ["possession", "structured_build_up", "rest_defense", "medium_press"],
+      "tacticalDislikes": ["chaos", "crossing_only", "high_risk_build_up"]
     },
     {
       "id": "ball_playing_centre_back",
@@ -179,6 +245,17 @@
       "tacticalDislikes": ["clearance_only", "deep_block_only", "long_ball_only"]
     },
     {
+      "id": "libero",
+      "name": "Libero",
+      "positionGroup": "defender",
+      "validPositions": ["CB", "DM"],
+      "requires": ["composure", "passing_range", "line_breaking_pass", "defensive_reading", "central_support"],
+      "goodWith": ["back_three", "deep_playmaker", "sweeperkeeper"],
+      "badFor": ["clearance_only", "constant_duels", "deep_block_only"],
+      "tacticalLikes": ["possession", "structured_build_up", "central_control", "high_line"],
+      "tacticalDislikes": ["clearance_only", "long_ball_only", "no_passing_options"]
+    },
+    {
       "id": "duel_centre_back",
       "name": "Duellstopper",
       "positionGroup": "defender",
@@ -186,6 +263,17 @@
       "requires": ["heading", "duels", "blocking", "compact_shape", "box_protection"],
       "goodWith": ["ball_playing_centre_back", "line_keeper", "low_block"],
       "badFor": ["very_high_line", "constant_open_space", "playmaker_role"],
+      "tacticalLikes": ["compact_shape", "low_block", "cross_defense", "second_balls"],
+      "tacticalDislikes": ["very_high_line", "high_risk_build_up", "isolated_wide_defending"]
+    },
+    {
+      "id": "stopper",
+      "name": "Stopper",
+      "positionGroup": "defender",
+      "validPositions": ["CB"],
+      "requires": ["duels", "blocking", "defensive_presence", "heading", "box_protection"],
+      "goodWith": ["covering_partner", "line_keeper", "compact_shape"],
+      "badFor": ["constant_open_space", "very_high_line", "playmaker_role"],
       "tacticalLikes": ["compact_shape", "low_block", "cross_defense", "second_balls"],
       "tacticalDislikes": ["very_high_line", "high_risk_build_up", "isolated_wide_defending"]
     },
