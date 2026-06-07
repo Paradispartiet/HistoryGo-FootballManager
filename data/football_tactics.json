@@ -1,0 +1,66 @@
+{
+  "schema": "historygo-football-manager.tactics.v1",
+  "version": 1,
+  "tactics": [
+    {
+      "id": "wide_fast_433",
+      "name": "Bredt og hurtig 4-3-3",
+      "formation": "4-3-3",
+      "pressing": "high",
+      "tempo": "fast",
+      "width": "wide",
+      "buildUp": "direct_wide",
+      "chanceCreation": "isolate_wingers",
+      "defensiveLine": "medium_high",
+      "tags": ["wide_attack", "fast_transitions", "isolate_wingers", "high_width", "overloads", "vertical_play"]
+    },
+    {
+      "id": "central_possession_4231",
+      "name": "Sentralt possession-spill 4-2-3-1",
+      "formation": "4-2-3-1",
+      "pressing": "medium",
+      "tempo": "controlled",
+      "width": "medium",
+      "buildUp": "structured_build_up",
+      "chanceCreation": "central_combinations",
+      "defensiveLine": "medium",
+      "tags": ["possession", "structured_build_up", "central_combinations", "central_control", "close_support", "fluid_attack"]
+    },
+    {
+      "id": "direct_counter_442",
+      "name": "Direkte kontringer 4-4-2",
+      "formation": "4-4-2",
+      "pressing": "medium_low",
+      "tempo": "fast",
+      "width": "medium_wide",
+      "buildUp": "direct_play",
+      "chanceCreation": "early_through_balls",
+      "defensiveLine": "medium_low",
+      "tags": ["direct_counter", "fast_transitions", "vertical_play", "space_behind", "second_balls", "direct_play"]
+    },
+    {
+      "id": "high_press_343",
+      "name": "Høyt press 3-4-3",
+      "formation": "3-4-3",
+      "pressing": "very_high",
+      "tempo": "fast",
+      "width": "wide",
+      "buildUp": "aggressive_build_up",
+      "chanceCreation": "pressing_waves",
+      "defensiveLine": "high",
+      "tags": ["high_press", "fast_transitions", "vertical_play", "high_line", "pressing", "overloads"]
+    },
+    {
+      "id": "low_block_transition_541",
+      "name": "Lav blokk og overganger 5-4-1",
+      "formation": "5-4-1",
+      "pressing": "low",
+      "tempo": "direct_when_possible",
+      "width": "compact",
+      "buildUp": "secure_first",
+      "chanceCreation": "counter_from_deep",
+      "defensiveLine": "low",
+      "tags": ["low_block", "compact_shape", "cross_defense", "direct_counter", "protected_box", "medium_or_low_line"]
+    }
+  ]
+}
