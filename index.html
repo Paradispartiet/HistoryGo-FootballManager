@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HistoryGo Football Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <p class="eyebrow">HistoryGo Football Manager</p>
+    <h1>Treneren avgjør</h1>
+    <p class="lede">
+      Alle spillerne er klassespillere. Poenget er ikke å finne dårlige og gode kort,
+      men å forstå hva hver spiller trenger for å bli brukt riktig.
+    </p>
+  </header>
+
+  <main class="app-shell" id="app">
+    <section class="panel intro-panel" aria-labelledby="introTitle">
+      <h2 id="introTitle">Første rollefit-demo</h2>
+      <p>
+        Velg spiller, posisjon, rolle og taktikk. Motoren vurderer om treneren bruker spilleren riktig.
+      </p>
+      <p class="principle">
+        En lavere rated klassespiller brukt riktig kan prestere bedre enn en høyere rated spiller brukt feil.
+      </p>
+    </section>
+
+    <section class="grid-layout" aria-label="Rollefit-demo">
+      <form class="panel control-panel" id="fitForm">
+        <h2>Laguttakstest</h2>
+
+        <label for="playerSelect">Spiller</label>
+        <select id="playerSelect" name="player"></select>
+
+        <label for="positionSelect">Posisjon</label>
+        <select id="positionSelect" name="position"></select>
+
+        <label for="roleSelect">Rolle</label>
+        <select id="roleSelect" name="role"></select>
+
+        <label for="tacticSelect">Taktikk</label>
+        <select id="tacticSelect" name="tactic"></select>
+      </form>
+
+      <section class="panel result-panel" aria-live="polite">
+        <div class="result-heading">
+          <p class="eyebrow">Fit-resultat</p>
+          <h2 id="fitStatus">Laster…</h2>
+        </div>
+
+        <div class="score-ring" id="matchScore">–</div>
+
+        <div class="metric-grid">
+          <article>
+            <span>Posisjon</span>
+            <strong id="positionFit">–</strong>
+          </article>
+          <article>
+            <span>Rolle</span>
+            <strong id="roleFit">–</strong>
+          </article>
+          <article>
+            <span>Taktikk</span>
+            <strong id="tacticFit">–</strong>
+          </article>
+          <article>
+            <span>Feilbruk</span>
+            <strong id="misusePenalty">–</strong>
+          </article>
+        </div>
+
+        <section class="explanation-box">
+          <h3>Forklaring</h3>
+          <p id="fitExplanation">Data lastes inn.</p>
+        </section>
+
+        <section class="warning-box" id="warningBox" hidden>
+          <h3>Advarsel</h3>
+          <ul id="warningsList"></ul>
+        </section>
+
+        <section class="suggestion-box" id="suggestionBox" hidden>
+          <h3>Bedre roller</h3>
+          <ul id="suggestedRoles"></ul>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Første MVP: rollefit-motor, ikke full liga.</p>
+  </footer>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
