@@ -55,6 +55,82 @@ function setOptions(select, items, getValue, getLabel) {
   });
 }
 
+function validateFootballData({ players, roles, tactics }) {
+  const warnings = [];
+  const roleIds = new Set(roles.map((role) => role.id));
+  const validPositions = new Set(FOOTBALL_POSITIONS);
+
+  players.forEach((player) => {
+    if (!player.id || !player.name) {
+      warnings.push("En spiller mangler id eller name.");
+    }
+
+    if (typeof player.overall !== "number" || player.overall < 85 || player.overall > 100) {
+      warnings.push(`${player.name || player.id} har overall utenfor 85–100.`);
+    }
+
+    if (!Array.isArray(player.naturalPositions) || player.naturalPositions.length === 0) {
+      warnings.push(`${player.name || player.id} mangler naturalPositions.`);
+    }
+
+    player.naturalPositions?.forEach((position) => {
+      if (!validPositions.has(position)) {
+        warnings.push(`${player.name || player.id} har ukjent naturalPosition: ${position}.`);
+      }
+    });
+
+    player.usablePositions?.forEach((position) => {
+      if (!validPositions.has(position)) {
+        warnings.push(`${player.name || player.id} har ukjent usablePosition: ${position}.`);
+      }
+    });
+
+    player.poorFits?.forEach((position) => {
+      if (!validPositions.has(position)) {
+        warnings.push(`${player.name || player.id} har ukjent poorFit: ${position}.`);
+      }
+    });
+
+    if (!Array.isArray(player.preferredRoles) || player.preferredRoles.length === 0) {
+      warnings.push(`${player.name || player.id} mangler preferredRoles.`);
+    }
+
+    player.preferredRoles?.forEach((roleId) => {
+      if (!roleIds.has(roleId)) {
+        warnings.push(`${player.name || player.id} peker på ukjent rolle: ${roleId}.`);
+      }
+    });
+  });
+
+  roles.forEach((role) => {
+    if (!role.id || !role.name) {
+      warnings.push("En rolle mangler id eller name.");
+    }
+
+    if (!Array.isArray(role.validPositions) || role.validPositions.length === 0) {
+      warnings.push(`${role.name || role.id} mangler validPositions.`);
+    }
+
+    role.validPositions?.forEach((position) => {
+      if (!validPositions.has(position)) {
+        warnings.push(`${role.name || role.id} har ukjent validPosition: ${position}.`);
+      }
+    });
+  });
+
+  tactics.forEach((tactic) => {
+    if (!tactic.id || !tactic.name) {
+      warnings.push("En taktikk mangler id eller name.");
+    }
+
+    if (!Array.isArray(tactic.tags) || tactic.tags.length === 0) {
+      warnings.push(`${tactic.name || tactic.id} mangler tags.`);
+    }
+  });
+
+  return warnings;
+}
+
 function getSelectedData() {
   const player = state.players.find((item) => item.id === state.selectedPlayerId);
   const role = state.roles.find((item) => item.id === state.selectedRoleId);
@@ -187,6 +263,12 @@ async function init() {
     state.players = playersData.players;
     state.roles = rolesData.roles;
     state.tactics = tacticsData.tactics;
+
+    const dataWarnings = validateFootballData(state);
+
+    if (dataWarnings.length > 0) {
+      console.warn("Football Manager-data har kvalitetsadvarsler:", dataWarnings);
+    }
 
     renderControls();
     setInitialSelections();
