@@ -1,0 +1,215 @@
+{
+  "schema": "historygo-football-manager.roles.v1",
+  "version": 1,
+  "roles": [
+    {
+      "id": "wide_dribbler",
+      "name": "Bred dribler",
+      "positionGroup": "wing",
+      "validPositions": ["LW", "RW"],
+      "requires": ["dribbling", "one_vs_one", "acceleration", "wide_space", "isolation"],
+      "goodWith": ["overlapping_fullback", "switches_of_play", "fast_transitions", "wide_attack"],
+      "badFor": ["back_to_goal_striker", "narrow_low_tempo", "central_target_play"],
+      "tacticalLikes": ["wide_attack", "fast_transitions", "isolate_wingers", "creative_freedom"],
+      "tacticalDislikes": ["narrow_low_tempo", "central_target_play", "static_crossing"]
+    },
+    {
+      "id": "inverted_winger",
+      "name": "Innoverkant",
+      "positionGroup": "wing",
+      "validPositions": ["LW", "RW"],
+      "requires": ["dribbling", "cut_inside", "chance_creation", "acceleration"],
+      "goodWith": ["overlapping_fullback", "central_combinations", "box_striker"],
+      "badFor": ["wide_lane_only", "no_overlap", "static_crossing"],
+      "tacticalLikes": ["wide_attack", "central_combinations", "fluid_attack", "creative_freedom"],
+      "tacticalDislikes": ["crossing_only", "deep_block_only", "long_ball_only"]
+    },
+    {
+      "id": "linking_striker",
+      "name": "Møtende spiss",
+      "positionGroup": "striker",
+      "validPositions": ["ST"],
+      "requires": ["first_touch", "combination_play", "hold_up_play", "central_space", "runners_around"],
+      "goodWith": ["box_to_box", "channel_runner", "classic_ten", "inside_runner"],
+      "badFor": ["wide_isolation_only", "no_close_support", "only_run_channels"],
+      "tacticalLikes": ["central_combinations", "possession", "close_support", "fluid_attack"],
+      "tacticalDislikes": ["wide_direct_only", "crossing_only", "isolated_striker"]
+    },
+    {
+      "id": "false_nine",
+      "name": "Falsk nier",
+      "positionGroup": "striker",
+      "validPositions": ["ST"],
+      "requires": ["vision", "first_touch", "central_space", "runners_ahead", "combination_play"],
+      "goodWith": ["inside_forwards", "late_runs", "central_combinations"],
+      "badFor": ["static_wingers", "no_depth", "crossing_only"],
+      "tacticalLikes": ["possession", "fluid_attack", "central_combinations", "creative_freedom"],
+      "tacticalDislikes": ["long_ball_only", "crossing_only", "direct_counter_only"]
+    },
+    {
+      "id": "channel_runner",
+      "name": "Bakromsspiss",
+      "positionGroup": "striker",
+      "validPositions": ["ST"],
+      "requires": ["off_ball_runs", "acceleration", "space_behind", "early_through_balls", "finishing"],
+      "goodWith": ["deep_playmaker", "direct_play", "transition_midfielder"],
+      "badFor": ["slow_possession", "deep_block_no_space", "back_to_goal_striker"],
+      "tacticalLikes": ["direct_counter", "fast_transitions", "vertical_play", "high_line_opponent"],
+      "tacticalDislikes": ["slow_possession", "static_low_tempo", "central_target_play"]
+    },
+    {
+      "id": "target_striker",
+      "name": "Targetspiss",
+      "positionGroup": "striker",
+      "validPositions": ["ST"],
+      "requires": ["heading", "hold_up_play", "duels", "crossing", "box_service"],
+      "goodWith": ["overlapping_fullback", "box_to_box", "second_balls", "wide_attack"],
+      "badFor": ["no_crosses", "deep_link_play", "wide_isolation_only"],
+      "tacticalLikes": ["crossing", "direct_play", "second_balls", "wide_attack"],
+      "tacticalDislikes": ["no_crosses", "central_combinations_only", "low_box_presence"]
+    },
+    {
+      "id": "box_striker",
+      "name": "Boksspiss",
+      "positionGroup": "striker",
+      "validPositions": ["ST"],
+      "requires": ["box_finishing", "movement", "crossing", "chance_creation", "box_service"],
+      "goodWith": ["wide_dribbler", "overlapping_fullback", "classic_ten"],
+      "badFor": ["no_service", "deep_link_play", "isolated_striker"],
+      "tacticalLikes": ["wide_attack", "crossing", "central_combinations", "fluid_attack"],
+      "tacticalDislikes": ["long_ball_only", "deep_block_only", "low_box_presence"]
+    },
+    {
+      "id": "free_creator",
+      "name": "Fri offensiv skaper",
+      "positionGroup": "attacking_midfield",
+      "validPositions": ["AM", "LW", "RW", "ST"],
+      "requires": ["creativity", "vision", "first_touch", "creative_freedom", "runners_ahead"],
+      "goodWith": ["channel_runner", "box_to_box", "wide_dribbler", "central_combinations"],
+      "badFor": ["rigid_wide_only", "deep_defensive_role", "isolated_pressing"],
+      "tacticalLikes": ["creative_freedom", "fluid_attack", "central_combinations", "possession"],
+      "tacticalDislikes": ["rigid_shape", "long_ball_only", "deep_block_only"]
+    },
+    {
+      "id": "classic_ten",
+      "name": "Klassisk tier",
+      "positionGroup": "attacking_midfield",
+      "validPositions": ["AM"],
+      "requires": ["vision", "final_pass", "space_between_lines", "runners_ahead", "creativity"],
+      "goodWith": ["channel_runner", "box_striker", "box_to_box"],
+      "badFor": ["long_ball_only", "rigid_wide_only", "isolated_pressing"],
+      "tacticalLikes": ["central_combinations", "possession", "fluid_attack", "creative_freedom"],
+      "tacticalDislikes": ["crossing_only", "deep_defensive_role", "static_low_tempo"]
+    },
+    {
+      "id": "deep_playmaker",
+      "name": "Dyp playmaker",
+      "positionGroup": "midfield",
+      "validPositions": ["DM", "CM"],
+      "requires": ["passing_range", "vision", "tempo_control", "protected_zone", "passing_options"],
+      "goodWith": ["wide_receivers", "channel_runner", "structured_build_up"],
+      "badFor": ["chaos", "isolated_midfield", "constant_second_balls"],
+      "tacticalLikes": ["possession", "structured_build_up", "switches_of_play", "central_control"],
+      "tacticalDislikes": ["long_ball_only", "chaos", "high_risk_build_up"]
+    },
+    {
+      "id": "regista",
+      "name": "Regista",
+      "positionGroup": "midfield",
+      "validPositions": ["DM"],
+      "requires": ["passing_range", "vision", "tempo_control", "central_control", "protected_zone"],
+      "goodWith": ["balancing_six", "structured_build_up", "wide_receivers"],
+      "badFor": ["unprotected_midfield", "chaos", "constant_forward_runs"],
+      "tacticalLikes": ["possession", "structured_build_up", "central_control", "switches_of_play"],
+      "tacticalDislikes": ["direct_counter_only", "constant_second_balls", "long_ball_only"]
+    },
+    {
+      "id": "balancing_six",
+      "name": "Balanserende sekser",
+      "positionGroup": "midfield",
+      "validPositions": ["DM"],
+      "requires": ["positioning", "covering", "defensive_balance", "compact_midfield", "stable_rest_defense"],
+      "goodWith": ["deep_playmaker", "box_to_box", "high_width"],
+      "badFor": ["constant_forward_runs", "free_creator_role", "unprotected_midfield"],
+      "tacticalLikes": ["compact_shape", "rest_defense", "medium_press", "possession"],
+      "tacticalDislikes": ["chaos", "high_risk_build_up", "all_out_attack"]
+    },
+    {
+      "id": "box_to_box",
+      "name": "Boks-til-boks",
+      "positionGroup": "midfield",
+      "validPositions": ["CM"],
+      "requires": ["stamina", "pressing", "late_runs", "vertical_space", "ball_carrying"],
+      "goodWith": ["balancing_six", "deep_playmaker", "linking_striker"],
+      "badFor": ["fixed_holding_role", "static_low_tempo", "no_forward_runs"],
+      "tacticalLikes": ["high_press", "fast_transitions", "vertical_play", "second_balls"],
+      "tacticalDislikes": ["static_low_tempo", "deep_block_only", "no_forward_runs"]
+    },
+    {
+      "id": "overlapping_fullback",
+      "name": "Overlappende back",
+      "positionGroup": "fullback",
+      "validPositions": ["LB", "RB", "WB"],
+      "requires": ["overlapping_runs", "crossing", "stamina", "wide_lane", "wide_support"],
+      "goodWith": ["wide_dribbler", "inverted_winger", "box_striker"],
+      "badFor": ["narrow_fullback", "no_cover", "static_back_four"],
+      "tacticalLikes": ["wide_attack", "overloads", "crossing", "high_width"],
+      "tacticalDislikes": ["narrow_low_tempo", "deep_only", "no_cover"]
+    },
+    {
+      "id": "inverted_fullback",
+      "name": "Invertert back",
+      "positionGroup": "fullback",
+      "validPositions": ["LB", "RB"],
+      "requires": ["short_passing", "positioning", "build_up", "central_support", "structured_build_up"],
+      "goodWith": ["wide_winger", "deep_playmaker", "rest_defense"],
+      "badFor": ["constant_overlap", "crossing_only", "wide_lane_only"],
+      "tacticalLikes": ["possession", "structured_build_up", "central_control", "rest_defense"],
+      "tacticalDislikes": ["crossing_only", "wide_direct_only", "chaos"]
+    },
+    {
+      "id": "ball_playing_centre_back",
+      "name": "Ballspillende stopper",
+      "positionGroup": "defender",
+      "validPositions": ["CB"],
+      "requires": ["passing_range", "composure", "line_breaking_pass", "structured_build_up", "defensive_reading"],
+      "goodWith": ["deep_playmaker", "sweeperkeeper", "central_control"],
+      "badFor": ["clearance_only", "no_passing_options", "constant_duels"],
+      "tacticalLikes": ["possession", "structured_build_up", "high_line", "central_control"],
+      "tacticalDislikes": ["clearance_only", "deep_block_only", "long_ball_only"]
+    },
+    {
+      "id": "duel_centre_back",
+      "name": "Duellstopper",
+      "positionGroup": "defender",
+      "validPositions": ["CB"],
+      "requires": ["heading", "duels", "blocking", "compact_shape", "box_protection"],
+      "goodWith": ["ball_playing_centre_back", "line_keeper", "low_block"],
+      "badFor": ["very_high_line", "constant_open_space", "playmaker_role"],
+      "tacticalLikes": ["compact_shape", "low_block", "cross_defense", "second_balls"],
+      "tacticalDislikes": ["very_high_line", "high_risk_build_up", "isolated_wide_defending"]
+    },
+    {
+      "id": "sweeperkeeper",
+      "name": "Sweeperkeeper",
+      "positionGroup": "keeper",
+      "validPositions": ["GK"],
+      "requires": ["distribution", "sweeping", "high_line", "structured_build_up", "composure"],
+      "goodWith": ["ball_playing_centre_back", "high_line", "possession"],
+      "badFor": ["deep_block_only", "clearance_only", "static_goalkeeping"],
+      "tacticalLikes": ["high_line", "possession", "structured_build_up", "keeper_support"],
+      "tacticalDislikes": ["deep_block_only", "clearance_only", "no_build_up"]
+    },
+    {
+      "id": "line_keeper",
+      "name": "Linjekeeper",
+      "positionGroup": "keeper",
+      "validPositions": ["GK"],
+      "requires": ["shot_stopping", "reflexes", "box_presence", "protected_box", "positioning"],
+      "goodWith": ["duel_centre_back", "compact_shape", "low_block"],
+      "badFor": ["very_high_line", "sweeper_role", "large_space_behind"],
+      "tacticalLikes": ["low_block", "compact_shape", "cross_defense", "medium_press"],
+      "tacticalDislikes": ["very_high_line", "high_line", "build_up_pressure"]
+    }
+  ]
+}
