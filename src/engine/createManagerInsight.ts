@@ -23,10 +23,16 @@ import type {
   WeakPointSeverity,
 } from "./analyzeWeakPoints.js";
 
+import type {
+  TrainingFocusItem,
+  TrainingFocusPlan,
+} from "./createTrainingFocus.js";
+
 import { evaluateTeamSetup } from "./evaluateTeamSetup.js";
 import { createTeamSetupReport } from "./createTeamSetupReport.js";
 import { recommendRoleChanges } from "./recommendRoleChanges.js";
 import { analyzeWeakPoints } from "./analyzeWeakPoints.js";
+import { createTrainingFocus } from "./createTrainingFocus.js";
 
 export type ManagerInsightPriority =
   | "critical"
@@ -37,7 +43,8 @@ export type ManagerInsightPriority =
 export type ManagerInsightActionSource =
   | "weak_point"
   | "role_change"
-  | "coach_advice";
+  | "coach_advice"
+  | "training_focus";
 
 export type ManagerInsightAction = {
   code: string;
@@ -62,6 +69,7 @@ export type ManagerInsight = {
   report: TeamSetupReport;
   weakPointAnalysis: WeakPointAnalysis;
   roleChangeRecommendations: RoleChangeRecommendationResult;
+  trainingFocusPlan: TrainingFocusPlan;
 
   topActions: ManagerInsightAction[];
 
@@ -80,6 +88,12 @@ function priorityValue(priority: ManagerInsightPriority): number {
 function weakPointPriority(severity: WeakPointSeverity): ManagerInsightPriority {
   if (severity === "high") return "high";
   if (severity === "medium") return "medium";
+  return "low";
+}
+
+function trainingFocusPriority(item: TrainingFocusItem): ManagerInsightPriority {
+  if (item.priority === 1) return "high";
+  if (item.priority === 2) return "medium";
   return "low";
 }
 
@@ -162,15 +176,28 @@ function buildCoachAdviceActions(report: TeamSetupReport): ManagerInsightAction[
   }));
 }
 
+function buildTrainingFocusActions(plan: TrainingFocusPlan): ManagerInsightAction[] {
+  return plan.weeklyPlan.map((item) => ({
+    code: `training_focus_${item.code}`,
+    priority: trainingFocusPriority(item),
+    source: "training_focus",
+    label: item.label,
+    rationale: `${item.rationale} ${item.suggestedSession}`,
+    relatedPlayerIds: item.relatedPlayerIds,
+  }));
+}
+
 function buildTopActions(
   report: TeamSetupReport,
   weakPointAnalysis: WeakPointAnalysis,
   roleChangeRecommendations: RoleChangeRecommendationResult,
+  trainingFocusPlan: TrainingFocusPlan,
 ): ManagerInsightAction[] {
   const actions = [
     ...buildWeakPointActions(weakPointAnalysis),
     ...buildRoleChangeActions(roleChangeRecommendations),
     ...buildCoachAdviceActions(report),
+    ...buildTrainingFocusActions(trainingFocusPlan),
   ];
 
   return sortActions(dedupeActions(actions)).slice(0, MAX_TOP_ACTIONS);
@@ -181,13 +208,19 @@ function buildSummary(
   report: TeamSetupReport,
   weakPointAnalysis: WeakPointAnalysis,
   roleChangeRecommendations: RoleChangeRecommendationResult,
+  trainingFocusPlan: TrainingFocusPlan,
 ): string {
   if (!setup.isComplete) {
     return "Managerinnsikten er foreløpig: startelleveren må fullføres før treneren kan stole på helhetsvurderingen.";
   }
 
   const mainWeakPoint = weakPointAnalysis.mainWeakPoint;
+  const primaryTrainingFocus = trainingFocusPlan.primaryFocus;
   const strongRoleChanges = roleChangeRecommendations.strongChanges.length;
+
+  if (mainWeakPoint && primaryTrainingFocus) {
+    return `Managerinnsikten peker først på dette: ${mainWeakPoint.label} Første treningsfokus bør være ${primaryTrainingFocus.area}.`;
+  }
 
   if (mainWeakPoint) {
     return `Managerinnsikten peker først på dette: ${mainWeakPoint.label} ${mainWeakPoint.suggestedAction}`;
@@ -195,6 +228,10 @@ function buildSummary(
 
   if (strongRoleChanges > 0) {
     return `Managerinnsikten fant ${strongRoleChanges} tydelige rolleendring(er) som bør vurderes før taktikken endres.`;
+  }
+
+  if (primaryTrainingFocus) {
+    return `Managerinnsikten finner ingen kritiske svakheter, men første treningsfokus bør være ${primaryTrainingFocus.area}.`;
   }
 
   if (report.level === "elite") {
@@ -217,11 +254,13 @@ export function createManagerInsight(input: ManagerInsightInput): ManagerInsight
   const report = createTeamSetupReport(setup);
   const weakPointAnalysis = analyzeWeakPoints(setup);
   const roleChangeRecommendations = recommendRoleChanges(input.team, input.tactic, input.roles);
+  const trainingFocusPlan = createTrainingFocus(setup);
 
   const topActions = buildTopActions(
     report,
     weakPointAnalysis,
     roleChangeRecommendations,
+    trainingFocusPlan,
   );
 
   return {
@@ -232,6 +271,7 @@ export function createManagerInsight(input: ManagerInsightInput): ManagerInsight
     report,
     weakPointAnalysis,
     roleChangeRecommendations,
+    trainingFocusPlan,
 
     topActions,
 
@@ -240,6 +280,7 @@ export function createManagerInsight(input: ManagerInsightInput): ManagerInsight
       report,
       weakPointAnalysis,
       roleChangeRecommendations,
+      trainingFocusPlan,
     ),
   };
 }
