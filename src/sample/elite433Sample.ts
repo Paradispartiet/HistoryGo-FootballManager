@@ -68,7 +68,6 @@ export const sampleRoles: Role[] = [
     requiredAttributes: {
       stamina: 86,
       pace: 84,
-      crossing: undefined as never,
     },
     preferredTraits: ["wide_creator", "line_breaker"],
     badTraits: ["safe_circulator"],
