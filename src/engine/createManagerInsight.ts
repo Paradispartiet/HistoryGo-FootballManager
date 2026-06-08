@@ -28,11 +28,17 @@ import type {
   TrainingFocusPlan,
 } from "./createTrainingFocus.js";
 
+import type {
+  FootballKnowledgePrinciple,
+  FootballKnowledgeRecommendation,
+} from "../domain/footballKnowledgeTypes.js";
+
 import { evaluateTeamSetup } from "./evaluateTeamSetup.js";
 import { createTeamSetupReport } from "./createTeamSetupReport.js";
 import { recommendRoleChanges } from "./recommendRoleChanges.js";
 import { analyzeWeakPoints } from "./analyzeWeakPoints.js";
 import { createTrainingFocus } from "./createTrainingFocus.js";
+import { createFootballKnowledgeRecommendations } from "./createFootballKnowledgeRecommendations.js";
 
 export type ManagerInsightPriority =
   | "critical"
@@ -59,6 +65,7 @@ export type ManagerInsightInput = {
   team: Team;
   tactic: Tactic;
   roles: Role[];
+  knowledgePrinciples?: FootballKnowledgePrinciple[];
 };
 
 export type ManagerInsight = {
@@ -70,6 +77,8 @@ export type ManagerInsight = {
   weakPointAnalysis: WeakPointAnalysis;
   roleChangeRecommendations: RoleChangeRecommendationResult;
   trainingFocusPlan: TrainingFocusPlan;
+
+  knowledgeRecommendations: FootballKnowledgeRecommendation[];
 
   topActions: ManagerInsightAction[];
 
@@ -256,6 +265,12 @@ export function createManagerInsight(input: ManagerInsightInput): ManagerInsight
   const roleChangeRecommendations = recommendRoleChanges(input.team, input.tactic, input.roles);
   const trainingFocusPlan = createTrainingFocus(setup);
 
+  const knowledgeRecommendations = createFootballKnowledgeRecommendations({
+    weakPointAnalysis,
+    trainingFocusPlan,
+    principles: input.knowledgePrinciples ?? [],
+  });
+
   const topActions = buildTopActions(
     report,
     weakPointAnalysis,
@@ -272,6 +287,8 @@ export function createManagerInsight(input: ManagerInsightInput): ManagerInsight
     weakPointAnalysis,
     roleChangeRecommendations,
     trainingFocusPlan,
+
+    knowledgeRecommendations,
 
     topActions,
 

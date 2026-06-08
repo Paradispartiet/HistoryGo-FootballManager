@@ -7,25 +7,29 @@ import type {
 } from "../domain/footballKnowledgeTypes.js";
 
 import type {
-  ManagerInsight,
-} from "./createManagerInsight.js";
-
-import type {
   WeakPoint,
+  WeakPointAnalysis,
 } from "./analyzeWeakPoints.js";
 
 import type {
   TrainingFocusItem,
+  TrainingFocusPlan,
 } from "./createTrainingFocus.js";
 
 /**
  * Input til kunnskapsmotoren.
  *
- * Prinsippene sendes inn som parameter slik at funksjonen forblir ren og
- * testbar – den leser ikke filer, gjør ikke fetch og rører ikke DOM.
+ * Funksjonen tar bare de delene av managerinnsikten den faktisk bruker
+ * (svakhetsanalyse og treningsfokus). Det holder funksjonen ren og testbar,
+ * og lar createManagerInsight bygge anbefalingene uten en sirkulær avhengighet
+ * til en ferdig ManagerInsight.
+ *
+ * Prinsippene sendes inn som parameter – funksjonen leser ikke filer, gjør
+ * ikke fetch og rører ikke DOM.
  */
 export type FootballKnowledgeRecommendationInput = {
-  insight: ManagerInsight;
+  weakPointAnalysis: WeakPointAnalysis;
+  trainingFocusPlan: TrainingFocusPlan;
   principles: FootballKnowledgePrinciple[];
 };
 
@@ -106,14 +110,14 @@ function buildReason(
 export function createFootballKnowledgeRecommendations(
   input: FootballKnowledgeRecommendationInput,
 ): FootballKnowledgeRecommendation[] {
-  const { insight, principles } = input;
+  const { weakPointAnalysis, trainingFocusPlan, principles } = input;
 
-  const weakPoints = insight.weakPointAnalysis.weakPoints;
-  const weeklyPlan = insight.trainingFocusPlan.weeklyPlan;
+  const weakPoints = weakPointAnalysis.weakPoints;
+  const weeklyPlan = trainingFocusPlan.weeklyPlan;
 
-  const mainWeakPointCode = insight.weakPointAnalysis.mainWeakPoint?.code ?? null;
+  const mainWeakPointCode = weakPointAnalysis.mainWeakPoint?.code ?? null;
   const highPriorityCodes = new Set(
-    insight.weakPointAnalysis.highPriorityWeakPoints.map((weakPoint) => weakPoint.code),
+    weakPointAnalysis.highPriorityWeakPoints.map((weakPoint) => weakPoint.code),
   );
 
   const seen = new Set<string>();
