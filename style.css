@@ -708,6 +708,26 @@ ul {
   padding: 12px 16px;
 }
 
+/* ---------- Treningsfokus-liste ---------- */
+.training-focus-item {
+  margin: 0 0 6px;
+}
+
+/* Trenervalgt ukesøkt skiller seg fra engine-genererte punkter:
+   hvit ramme, sort bakgrunn og tydeligere font. Ingen gul bakgrunn. */
+.training-focus-item.is-knowledge-focus {
+  list-style: none;
+  margin-left: -20px;
+  margin-bottom: 10px;
+  border: 2px solid var(--text);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--text);
+  font-weight: 800;
+  line-height: 1.5;
+  padding: 12px 16px;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   padding: 8px 0 40px;

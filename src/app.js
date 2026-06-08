@@ -441,6 +441,37 @@ function renderTextList(list, items, getText, emptyText) {
   });
 }
 
+// Trygg liste-render for managerTrainingPlan: ligner renderTextList, men gir
+// det aktivt valgte kunnskapsfokuset egen visuell markering via item.type.
+// Bruker kun textContent, ingen innerHTML.
+function renderTrainingFocusList(list, items, emptyText) {
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+
+  if (!Array.isArray(items) || items.length === 0) {
+    const empty = document.createElement("li");
+    empty.textContent = emptyText || "Ingen tydelige punkter ennå.";
+    list.append(empty);
+    return;
+  }
+
+  items.forEach((item) => {
+    const li = document.createElement("li");
+
+    if (item.type === "knowledge_focus") {
+      li.className = "training-focus-item is-knowledge-focus";
+    } else {
+      li.className = "training-focus-item";
+    }
+
+    li.textContent = item.text;
+    list.append(li);
+  });
+}
+
 // Render kunnskapsanbefalinger som ryddige kort i stedet for én lang tekstlinje.
 // Bruker kun textContent, ingen innerHTML.
 function renderKnowledgeCards(list, items, emptyText) {
@@ -842,10 +873,9 @@ function renderManagerDashboardViewModel(viewModel) {
     }))
   ];
 
-  renderTextList(
+  renderTrainingFocusList(
     elements.managerTrainingPlan,
     trainingItems,
-    (item) => item.text,
     viewModel.emptyStates.trainingPlan,
   );
 
