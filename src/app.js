@@ -410,6 +410,54 @@ function renderTextList(list, items, getText, emptyText) {
   });
 }
 
+// Render kunnskapsanbefalinger som ryddige kort i stedet for én lang tekstlinje.
+// Bruker kun textContent, ingen innerHTML.
+function renderKnowledgeCards(list, items, emptyText) {
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+
+  if (!Array.isArray(items) || items.length === 0) {
+    const empty = document.createElement("li");
+    empty.textContent = emptyText || "Ingen kunnskapsanbefalinger ennå.";
+    list.append(empty);
+    return;
+  }
+
+  items.forEach((item) => {
+    const card = document.createElement("li");
+    card.className = "knowledge-card";
+
+    const header = document.createElement("div");
+    header.className = "knowledge-card-header";
+
+    const title = document.createElement("strong");
+    title.textContent = item.title;
+
+    const meta = document.createElement("span");
+    meta.textContent = `${item.priorityText} · ${item.categoryText}`;
+
+    header.append(title, meta);
+
+    const reason = document.createElement("p");
+    reason.className = "knowledge-reason";
+    reason.textContent = `Hvorfor: ${item.reason}`;
+
+    const advice = document.createElement("p");
+    advice.className = "knowledge-advice";
+    advice.textContent = `Trenergrep: ${item.coachAdvice}`;
+
+    const session = document.createElement("p");
+    session.className = "knowledge-session";
+    session.textContent = `Økt: ${item.trainingSession}`;
+
+    card.append(header, reason, advice, session);
+    list.append(card);
+  });
+}
+
 function getTeamStatus(teamFit) {
   if (!teamFit || teamFit.completeCount < teamFit.totalSlots) {
     return "Ufullstendig";
@@ -737,11 +785,9 @@ function renderManagerDashboardViewModel(viewModel) {
     viewModel.emptyStates.weakPoints,
   );
 
-  renderTextList(
+  renderKnowledgeCards(
     elements.managerKnowledgeRecommendations,
     viewModel.knowledgeRecommendations,
-    (item) =>
-      `${item.priorityText}: ${item.title} (${item.categoryText}) — ${item.reason} Trenergrep: ${item.coachAdvice} Økt: ${item.trainingSession}`,
     viewModel.emptyStates.knowledgeRecommendations,
   );
 }
