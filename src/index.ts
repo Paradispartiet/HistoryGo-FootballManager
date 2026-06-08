@@ -164,6 +164,13 @@ export type {
   LegacyManagerAppStateInput,
 } from "./engine/createLegacyManagerAppState.js";
 
+export type {
+  ClubWeekEffects,
+  ClubWeekMetric,
+  ClubWeekPhase,
+  ClubWeekState,
+} from "./engine/createClubWeekState.js";
+
 export { calculateRoleFit } from "./engine/calculateRoleFit.js";
 export { calculateTeamBalance } from "./engine/calculateTeamBalance.js";
 export { evaluateTeamSetup } from "./engine/evaluateTeamSetup.js";
@@ -187,3 +194,14 @@ export {
 } from "./engine/adaptLegacyFootballData.js";
 
 export { createLegacyManagerAppState } from "./engine/createLegacyManagerAppState.js";
+
+export {
+  advanceClubWeekPhase,
+  applyClubWeekEffects,
+  clampClubMetric,
+  createClubWeekSummary,
+  createInitialClubWeekState,
+  getClubWeekPhaseLabel,
+  isClubWeekPhase,
+  normalizeClubWeekState,
+} from "./engine/createClubWeekState.js";
