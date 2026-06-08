@@ -29,6 +29,41 @@
   <main class="app-shell" id="app">
     <!-- ============================ LAG / TAKTIKK ============================ -->
     <div class="tab-section" data-tab-section="team">
+      <section class="panel club-week-panel" aria-label="Klubbuke">
+        <p class="eyebrow">Klubbuke</p>
+        <h2 id="clubWeekSummary">Uke 1 · Analyse</h2>
+
+        <div class="club-week-phase-row">
+          <span id="clubWeekPhase">Analyse</span>
+          <button type="button" id="advanceClubWeekPhase">
+            Fortsett til neste fase
+          </button>
+        </div>
+
+        <div class="club-week-metrics" aria-label="Klubbtilstand">
+          <article>
+            <span>Styretillit</span>
+            <strong id="clubBoardTrust">50</strong>
+          </article>
+          <article>
+            <span>Moral</span>
+            <strong id="clubPlayerMorale">50</strong>
+          </article>
+          <article>
+            <span>Taktisk klarhet</span>
+            <strong id="clubTacticalClarity">50</strong>
+          </article>
+          <article>
+            <span>Treningskultur</span>
+            <strong id="clubTrainingCulture">50</strong>
+          </article>
+          <article>
+            <span>Medietrykk</span>
+            <strong id="clubMediaPressure">50</strong>
+          </article>
+        </div>
+      </section>
+
       <section class="controls-layout" aria-label="Overordnede valg">
         <form class="panel control-panel" id="teamForm">
           <h2>Lagplan</h2>
