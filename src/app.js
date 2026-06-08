@@ -77,7 +77,9 @@ const elements = {
   clearKnowledgeFocus: document.querySelector("#clearKnowledgeFocus"),
   trainingWeekStatus: document.querySelector("#trainingWeekStatus"),
   advanceTrainingWeek: document.querySelector("#advanceTrainingWeek"),
-  trainingHistoryList: document.querySelector("#trainingHistoryList")
+  trainingHistoryList: document.querySelector("#trainingHistoryList"),
+  knowledgeCompletedThisWeek: document.querySelector("#knowledgeCompletedThisWeek"),
+  knowledgeCompletedTotal: document.querySelector("#knowledgeCompletedTotal")
 };
 
 let managerEngineRenderId = 0;
@@ -678,6 +680,22 @@ function getCompletedKnowledgeFocusStore() {
   return readCompletedKnowledgeFocusStore();
 }
 
+// Progresjonstall: hvor mange økter er fullført denne uken. Leser fra Set-et
+// for gjeldende uke. Kun UI/progresjon, ingen engine- eller score-effekt.
+function countCompletedThisWeek() {
+  return state.completedKnowledgeFocusIds.size;
+}
+
+// Progresjonstall: hvor mange økter er fullført totalt på tvers av alle uker.
+// Robust mot ugyldige verdier: bare arrays teller, andre verdier ignoreres.
+// Kun UI/progresjon, ingen engine- eller score-effekt.
+function countCompletedTotal() {
+  const store = getCompletedKnowledgeFocusStore();
+  return Object.values(store).reduce((total, ids) => {
+    return total + (Array.isArray(ids) ? ids.length : 0);
+  }, 0);
+}
+
 // Finn lesbar tittel for en fullført principleId i gjeldende viewModel.
 // Faller trygt tilbake til selve ID-en hvis prinsippet ikke finnes lenger.
 function findKnowledgePrincipleTitle(principleId, viewModel) {
@@ -1008,6 +1026,14 @@ function renderManagerDashboardViewModel(viewModel) {
 
   if (elements.trainingWeekStatus) {
     elements.trainingWeekStatus.textContent = `Treningsuke ${state.trainingWeek}`;
+  }
+
+  if (elements.knowledgeCompletedThisWeek) {
+    elements.knowledgeCompletedThisWeek.textContent = String(countCompletedThisWeek());
+  }
+
+  if (elements.knowledgeCompletedTotal) {
+    elements.knowledgeCompletedTotal.textContent = String(countCompletedTotal());
   }
 
   elements.teamStatus.textContent = viewModel.score.label;
