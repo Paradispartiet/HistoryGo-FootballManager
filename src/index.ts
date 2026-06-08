@@ -134,6 +134,18 @@ export type {
 } from "./engine/createManagerAppState.js";
 
 export type {
+  FootballKnowledgeCategory,
+  FootballKnowledgePhase,
+  FootballKnowledgePriority,
+  FootballKnowledgePrinciple,
+  FootballKnowledgeRecommendation,
+} from "./domain/footballKnowledgeTypes.js";
+
+export type {
+  FootballKnowledgeRecommendationInput,
+} from "./engine/createFootballKnowledgeRecommendations.js";
+
+export type {
   AdaptLegacyTacticInput,
   AdaptLegacyTeamInput,
   LegacyFootballFormation,
@@ -163,6 +175,7 @@ export { compareFormations } from "./engine/compareFormations.js";
 export { createManagerDashboardData } from "./engine/createManagerDashboardData.js";
 export { createManagerDashboardViewModel } from "./engine/createManagerDashboardViewModel.js";
 export { createManagerAppState } from "./engine/createManagerAppState.js";
+export { createFootballKnowledgeRecommendations } from "./engine/createFootballKnowledgeRecommendations.js";
 
 export {
   adaptLegacyPlayers,

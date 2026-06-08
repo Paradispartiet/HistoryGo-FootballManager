@@ -1,0 +1,102 @@
+{
+  "schema": "historygo-football-manager.knowledge-principles.v1",
+  "version": 1,
+  "principles": [
+    {
+      "id": "width_creates_space",
+      "title": "Bredde skaper rom",
+      "category": "bredde",
+      "phase": "attack",
+      "summary": "Når laget holder reell bredde, tvinges motstanderens forsvar til å bli bredt. Det åpner sentrale rom og pasningsvinkler innover. Mangler bredden, blir laget lett å forsvare i en smal blokk.",
+      "appliesToWeakPoints": ["width_balance_weak", "weak_width_balance"],
+      "appliesToTrainingAreas": ["bredde", "lagstruktur"],
+      "relatedTags": ["bredde", "lagstruktur", "angrepsstruktur"],
+      "coachAdvice": "Sørg for at minst én spiller per side faktisk holder bredden, enten en bred kant eller en overlappende back. Hvis kantene søker innover, må backene gi bredden.",
+      "trainingSession": "Breddeøkt: tren på kantbruk, back-/vingrelasjoner og når laget skal holde bredde eller søke innover for å trekke motstanderen ut av posisjon."
+    },
+    {
+      "id": "pressing_must_be_connected",
+      "title": "Press må henge sammen",
+      "category": "press",
+      "phase": "defence",
+      "summary": "Press er en laghandling, ikke enkeltløp. Når pressutløser, andre- og tredjeledd ikke følger samme signal, oppstår store rom bak første presslinje. Sammenhengende press krever felles utløsere og korte avstander mellom ledd.",
+      "appliesToWeakPoints": ["pressing_coherence_weak", "weak_pressing_coherence"],
+      "appliesToTrainingAreas": ["press"],
+      "relatedTags": ["press", "lagstruktur", "restforsvar"],
+      "coachAdvice": "Enten senk presshøyden så laget kan henge sammen, eller legg inn flere roller som faktisk kan presse høyt. Det viktigste er at hele laget presser på samme signal.",
+      "trainingSession": "Pressøkt: tren på pressutløsere, avstander mellom ledd og når laget skal støte eller falle samlet."
+    },
+    {
+      "id": "rest_defence_protects_the_attack",
+      "title": "Restforsvar beskytter angrepet",
+      "category": "restforsvar",
+      "phase": "transition",
+      "summary": "Restforsvar er sikringen bak ballen mens laget angriper. Uten balanse bak straffes laget på overganger nettopp når det presser på for mål. Godt restforsvar lar laget angripe med flere fordi noen holder igjen.",
+      "appliesToWeakPoints": ["defensive_balance_weak", "weak_defensive_balance", "risk_balance_weak", "weak_risk_balance"],
+      "appliesToTrainingAreas": ["restforsvar", "risikobalanse"],
+      "relatedTags": ["restforsvar", "risikobalanse", "forsvar"],
+      "coachAdvice": "Pek ut hvem som holder igjen når laget angriper. Legg inn en tydelig sikrings-/balanserolle slik at ikke for mange tar risiko samtidig.",
+      "trainingSession": "Restforsvarsøkt: tren på sikring bak ballen, balanse ved backløp og posisjonering ved balltap."
+    },
+    {
+      "id": "midfield_control_is_support_angles",
+      "title": "Midtbanekontroll handler om støttevinkler",
+      "category": "midtbanekontroll",
+      "phase": "general",
+      "summary": "Kontroll på midtbanen kommer ikke bare av kvalitet, men av at spillerne tilbyr gode støttevinkler. Når ballfører alltid har to-tre pasningsalternativer i ulike vinkler, beholder laget ballen og styrer tempoet.",
+      "appliesToWeakPoints": ["midfield_control_weak", "team_balance_weak"],
+      "appliesToTrainingAreas": ["midtbanekontroll"],
+      "relatedTags": ["midtbanekontroll", "oppbygging", "lagstruktur"],
+      "coachAdvice": "Vurder en tempo-kontrollør eller dyp playmaker, og tren på at spillerne rundt ballfører flytter seg for å tilby vinkler i stedet for å stå i pasningsskygge.",
+      "trainingSession": "Midtbaneøkt: tren på tempo, støttevinkler, sentral kontroll og hvem som skal styre spillet."
+    },
+    {
+      "id": "depth_threatens_the_space_behind",
+      "title": "Dybde truer bakrom",
+      "category": "dybde",
+      "phase": "attack",
+      "summary": "Uten løp i dybden kan motstanderens forsvarslinje stå høyt og presse rommet sammen. Én troverdig dybdetrussel tvinger linjen bakover og åpner rom mellom ledd for skaperne.",
+      "appliesToWeakPoints": ["attacking_balance_weak"],
+      "appliesToTrainingAreas": ["angrepsstruktur"],
+      "relatedTags": ["dybde", "angrepsstruktur", "bredde"],
+      "coachAdvice": "Sørg for minst én romangriper som løper i bakrom. Selv om han ikke får ballen hver gang, skaper løpene plass for de andre.",
+      "trainingSession": "Angrepsøkt: tren på timing av dybdeløp og samspillet mellom skaper og romangriper."
+    },
+    {
+      "id": "role_understanding_over_raw_quality",
+      "title": "Rolleforståelse er viktigere enn rå kvalitet",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "En klassespiller brukt i feil rolle presterer dårligere enn en mindre rost spiller som forstår oppgaven sin. Lagets nivå avgjøres oftere av rolleforståelse og struktur enn av individuell rating.",
+      "appliesToWeakPoints": ["average_role_fit_weak", "weak_average_role_fit", "individual_role_fit_weak"],
+      "appliesToTrainingAreas": ["rolleforståelse"],
+      "relatedTags": ["rolleforståelse", "lagstruktur"],
+      "coachAdvice": "Gå gjennom hva hver rolle faktisk skal gi laget. Test alternative roller for spillerne med lavest rollefit før du konkluderer med at kvaliteten mangler.",
+      "trainingSession": "Rolleøkt: gå gjennom hver spillers oppgaver i posisjon, med fokus på hva rollen skal gi laget."
+    },
+    {
+      "id": "build_up_needs_passing_angles",
+      "title": "Oppbygging krever pasningsvinkler",
+      "category": "oppbygging",
+      "phase": "attack",
+      "summary": "Oppbygging fra bakre ledd stopper opp uten gode pasningsvinkler. Spillerne må bryte linjer ved å tilby seg i mellomrom og ulike høyder, ellers tvinges laget til lange, dårlige baller.",
+      "appliesToWeakPoints": ["midfield_control_weak", "team_balance_weak"],
+      "appliesToTrainingAreas": ["midtbanekontroll", "lagstruktur"],
+      "relatedTags": ["oppbygging", "midtbanekontroll", "lagstruktur"],
+      "coachAdvice": "Få bakre ledd og sekser til å tilby vinkler i stedet for å stå på linje. Én spiller som tør å ta imot mellom linjene gjør hele oppbyggingen tryggere.",
+      "trainingSession": "Oppbyggingsøkt: tren på pasningsvinkler fra bakre ledd, å bryte presslinjer og å finne den frie mannen mellom ledd."
+    },
+    {
+      "id": "attack_structure_needs_creator_runner_finisher",
+      "title": "Angrepsstruktur må ha skaper, løper og avslutter",
+      "category": "angrepsstruktur",
+      "phase": "attack",
+      "summary": "Et balansert angrep trenger tre tydelige funksjoner: en skaper som lager sjansene, en løper som angriper rommet, og en avslutter som setter ballen i mål. Mangler én av dem, stopper angrepet opp.",
+      "appliesToWeakPoints": ["attacking_balance_weak"],
+      "appliesToTrainingAreas": ["angrepsstruktur"],
+      "relatedTags": ["angrepsstruktur", "dybde", "rolleforståelse"],
+      "coachAdvice": "Kontroller at laget har minst én skaper, én romangriper og én tydelig avslutterrolle. Hvis to spillere gjør samme jobb, mangler laget en av de andre funksjonene.",
+      "trainingSession": "Angrepsøkt: tren på forholdet mellom skaper, romangriper og avslutter."
+    }
+  ]
+}
