@@ -10,7 +10,7 @@ import type {
   RoleAssignment,
   Score100,
   Tactic,
-} from "../domain/footballTypes";
+} from "../domain/footballTypes.js";
 
 /**
  * Første motorbit i HG Football Manager Core.
