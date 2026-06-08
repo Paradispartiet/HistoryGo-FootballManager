@@ -18,6 +18,10 @@ import type {
   ManagerInsight,
 } from "./createManagerInsight.js";
 
+import type {
+  FootballKnowledgePrinciple,
+} from "../domain/footballKnowledgeTypes.js";
+
 import { createManagerDashboardData } from "./createManagerDashboardData.js";
 import { createManagerDashboardViewModel } from "./createManagerDashboardViewModel.js";
 import { createManagerInsight } from "./createManagerInsight.js";
@@ -32,6 +36,7 @@ export type ManagerAppStateInput = {
   team: Team;
   tactic: Tactic;
   roles: Role[];
+  knowledgePrinciples?: FootballKnowledgePrinciple[];
 };
 
 export type ManagerAppState = {
@@ -89,7 +94,12 @@ function buildSummary(
 }
 
 export function createManagerAppState(input: ManagerAppStateInput): ManagerAppState {
-  const insight = createManagerInsight(input);
+  const insight = createManagerInsight({
+    team: input.team,
+    tactic: input.tactic,
+    roles: input.roles,
+    knowledgePrinciples: input.knowledgePrinciples ?? [],
+  });
   const dashboardData = createManagerDashboardData(insight);
   const dashboardViewModel = createManagerDashboardViewModel(dashboardData);
   const status = getStateStatus(insight);

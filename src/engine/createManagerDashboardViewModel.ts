@@ -2,6 +2,7 @@
 
 import type {
   DashboardActionCard,
+  DashboardKnowledgeCard,
   DashboardMetricCard,
   DashboardRoleChangeCard,
   DashboardSeverity,
@@ -77,6 +78,16 @@ export type DashboardWeakPointViewModel = {
   className: DashboardViewModelCardClass;
 };
 
+export type DashboardKnowledgeViewModel = {
+  principleId: string;
+  title: string;
+  categoryText: string;
+  priorityText: string;
+  reason: string;
+  coachAdvice: string;
+  trainingSession: string;
+};
+
 export type ManagerDashboardViewModel = {
   teamId: string;
   tacticId: string;
@@ -97,6 +108,8 @@ export type ManagerDashboardViewModel = {
 
   weakPoints: DashboardWeakPointViewModel[];
 
+  knowledgeRecommendations: DashboardKnowledgeViewModel[];
+
   emptyStates: {
     topActions: string | null;
     keyStrengths: string | null;
@@ -104,6 +117,7 @@ export type ManagerDashboardViewModel = {
     trainingPlan: string | null;
     roleChanges: string | null;
     weakPoints: string | null;
+    knowledgeRecommendations: string | null;
   };
 };
 
@@ -164,6 +178,20 @@ function weakPointCategoryText(category: string): string {
   if (category === "width") return "Bredde";
   if (category === "risk") return "Risiko";
   return category;
+}
+
+function knowledgePriorityText(priority: string): string {
+  if (priority === "high") return "Høy";
+  if (priority === "medium") return "Middels";
+  return "Lav";
+}
+
+function knowledgeCategoryText(category: string): string {
+  if (category.length === 0) {
+    return category;
+  }
+
+  return category.charAt(0).toUpperCase() + category.slice(1);
 }
 
 function relatedPlayerText(playerIds: string[]): string {
@@ -238,6 +266,18 @@ function toWeakPointViewModel(card: DashboardWeakPointCard): DashboardWeakPointV
   };
 }
 
+function toKnowledgeViewModel(card: DashboardKnowledgeCard): DashboardKnowledgeViewModel {
+  return {
+    principleId: card.principleId,
+    title: card.title,
+    categoryText: knowledgeCategoryText(card.category),
+    priorityText: knowledgePriorityText(card.priority),
+    reason: card.reason,
+    coachAdvice: card.coachAdvice,
+    trainingSession: card.trainingSession,
+  };
+}
+
 function emptyState<T>(items: T[], text: string): string | null {
   return items.length === 0 ? text : null;
 }
@@ -250,6 +290,7 @@ export function createManagerDashboardViewModel(
   const trainingPlan = dashboard.trainingPlan.map(toTrainingViewModel);
   const roleChanges = dashboard.roleChanges.map(toRoleChangeViewModel);
   const weakPoints = dashboard.weakPoints.map(toWeakPointViewModel);
+  const knowledgeRecommendations = dashboard.knowledgeRecommendations.map(toKnowledgeViewModel);
 
   return {
     teamId: dashboard.teamId,
@@ -282,6 +323,8 @@ export function createManagerDashboardViewModel(
 
     weakPoints,
 
+    knowledgeRecommendations,
+
     emptyStates: {
       topActions: emptyState(topActions, "Ingen prioriterte tiltak akkurat nå."),
       keyStrengths: emptyState(dashboard.keyStrengths, "Ingen tydelige styrker er identifisert ennå."),
@@ -289,6 +332,10 @@ export function createManagerDashboardViewModel(
       trainingPlan: emptyState(trainingPlan, "Ingen treningsfokus er foreslått ennå."),
       roleChanges: emptyState(roleChanges, "Ingen rollebytter er foreslått."),
       weakPoints: emptyState(weakPoints, "Ingen tydelige svakheter er funnet."),
+      knowledgeRecommendations: emptyState(
+        knowledgeRecommendations,
+        "Ingen kunnskapsanbefalinger er koblet inn ennå.",
+      ),
     },
   };
 }

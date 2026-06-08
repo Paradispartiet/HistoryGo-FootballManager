@@ -10,6 +10,10 @@ import type {
   ManagerInsightPriority,
 } from "./createManagerInsight.js";
 
+import type {
+  FootballKnowledgeRecommendation,
+} from "../domain/footballKnowledgeTypes.js";
+
 export type DashboardSeverity =
   | "positive"
   | "neutral"
@@ -78,6 +82,16 @@ export type DashboardWeakPointCard = {
   relatedPlayerIds: string[];
 };
 
+export type DashboardKnowledgeCard = {
+  principleId: string;
+  title: string;
+  category: string;
+  priority: string;
+  reason: string;
+  coachAdvice: string;
+  trainingSession: string;
+};
+
 export type ManagerDashboardData = {
   teamId: string;
   tacticId: string;
@@ -97,6 +111,8 @@ export type ManagerDashboardData = {
   roleChanges: DashboardRoleChangeCard[];
 
   weakPoints: DashboardWeakPointCard[];
+
+  knowledgeRecommendations: DashboardKnowledgeCard[];
 };
 
 function severityFromScore(score: Score100): DashboardSeverity {
@@ -127,6 +143,20 @@ function buildScoreLabel(score: Score100): string {
   }
 
   return "Svakt oppsett";
+}
+
+function toKnowledgeCard(
+  recommendation: FootballKnowledgeRecommendation,
+): DashboardKnowledgeCard {
+  return {
+    principleId: recommendation.principleId,
+    title: recommendation.title,
+    category: recommendation.category,
+    priority: recommendation.priority,
+    reason: recommendation.reason,
+    coachAdvice: recommendation.coachAdvice,
+    trainingSession: recommendation.trainingSession,
+  };
 }
 
 function toActionCard(action: ManagerInsightAction): DashboardActionCard {
@@ -244,5 +274,7 @@ export function createManagerDashboardData(insight: ManagerInsight): ManagerDash
       suggestedAction: weakPoint.suggestedAction,
       relatedPlayerIds: weakPoint.relatedPlayerIds,
     })),
+
+    knowledgeRecommendations: insight.knowledgeRecommendations.map(toKnowledgeCard),
   };
 }

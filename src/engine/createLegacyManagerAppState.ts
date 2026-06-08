@@ -20,6 +20,10 @@ import type {
   LegacyLineup,
 } from "./adaptLegacyFootballData.js";
 
+import type {
+  FootballKnowledgePrinciple,
+} from "../domain/footballKnowledgeTypes.js";
+
 import {
   adaptLegacyRoles,
   adaptLegacyTactic,
@@ -38,6 +42,8 @@ export type LegacyManagerAppStateInput = {
   tactic: LegacyFootballTactic;
   formation: LegacyFootballFormation;
   lineup: LegacyLineup;
+
+  knowledgePrinciples?: FootballKnowledgePrinciple[];
 };
 
 export type LegacyManagerAppState = {
@@ -96,6 +102,7 @@ export function createLegacyManagerAppState(
     team: adaptedTeam,
     tactic: adaptedTactic,
     roles: adaptedRoles,
+    knowledgePrinciples: input.knowledgePrinciples ?? [],
   });
 
   return {
