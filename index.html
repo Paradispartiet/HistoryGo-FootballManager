@@ -2,194 +2,317 @@
 <html lang="no">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HistoryGo Football Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>HG Football Manager</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
-    <p class="eyebrow">HistoryGo Football Manager</p>
-    <h1>Treneren avgjør</h1>
-    <p class="lede">
-      Alle spillerne er klassespillere. Poenget er ikke å finne dårlige og gode kort,
-      men å forstå hva hver spiller trenger for å bli brukt riktig.
-    </p>
+    <div class="header-inner">
+      <p class="eyebrow">HG Football Manager</p>
+      <h1>Klubbkontoret</h1>
+      <p class="lede">Treneren avgjør. Bygg laget på banen, styr klubben og forstå hva hver spiller trenger.</p>
+    </div>
   </header>
 
+  <nav class="main-nav" aria-label="Hovednavigasjon">
+    <div class="main-nav-inner" role="tablist">
+      <button type="button" class="nav-tab is-active" role="tab" aria-selected="true" data-tab-target="team">Lag / Taktikk</button>
+      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="inbox">Innboks</button>
+      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="facilities">Fasiliteter</button>
+      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="admin">Administrasjon</button>
+      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="market">Markedsavdeling</button>
+      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="board">Styret</button>
+    </div>
+  </nav>
+
   <main class="app-shell" id="app">
-    <section class="panel intro-panel" aria-labelledby="introTitle">
-      <h2 id="introTitle">Startellever og lagfit</h2>
-      <p>
-        Velg formasjon, taktikk, spillere og roller. Motoren vurderer både enkeltspillere og om laget henger sammen som helhet.
-      </p>
-      <p class="principle">
-        En lavere rated klassespiller brukt riktig kan prestere bedre enn en høyere rated spiller brukt feil.
-      </p>
-    </section>
+    <!-- ============================ LAG / TAKTIKK ============================ -->
+    <div class="tab-section" data-tab-section="team">
+      <section class="controls-layout" aria-label="Overordnede valg">
+        <form class="panel control-panel" id="teamForm">
+          <h2>Lagplan</h2>
 
-    <section class="top-controls" aria-label="Overordnede valg">
-      <form class="panel control-panel" id="teamForm">
-        <h2>Lagplan</h2>
+          <label for="formationSelect">Formasjon</label>
+          <select id="formationSelect" name="formation"></select>
 
-        <label for="formationSelect">Formasjon</label>
-        <select id="formationSelect" name="formation"></select>
-
-        <label for="tacticSelect">Taktikk</label>
-        <select id="tacticSelect" name="tactic"></select>
-      </form>
-
-      <section class="panel team-summary-panel" aria-live="polite">
-        <div class="result-heading">
-          <div>
-            <p class="eyebrow">Samlet lagfit</p>
-            <h2 id="teamStatus">Laster…</h2>
-          </div>
-          <div class="score-ring" id="teamScore">–</div>
-        </div>
-
-        <div class="metric-grid team-metrics">
-          <article>
-            <span>Rollefit</span>
-            <strong id="roleFitAverage">–</strong>
-          </article>
-          <article>
-            <span>Taktikk</span>
-            <strong id="tacticFitAverage">–</strong>
-          </article>
-          <article>
-            <span>Balanse</span>
-            <strong id="balanceScore">–</strong>
-          </article>
-          <article>
-            <span>Restforsvar</span>
-            <strong id="restDefenseScore">–</strong>
-          </article>
-        </div>
-      </section>
-    </section>
-
-    <section class="lineup-layout" aria-label="Startelleverbygger">
-      <section class="panel pitch-panel">
-        <div class="panel-heading-row">
-          <div>
-            <p class="eyebrow">Startellever</p>
-            <h2 id="formationTitle">Formasjon</h2>
-          </div>
-          <p id="completeCount" class="mini-status">0/11</p>
-        </div>
-
-        <div class="pitch" id="lineupSlots" aria-label="Formasjonsslots"></div>
-      </section>
-
-      <aside class="panel slot-editor-panel" aria-live="polite">
-        <div class="panel-heading-row">
-          <div>
-            <p class="eyebrow">Valgt plass</p>
-            <h2 id="selectedSlotTitle">Velg en plass</h2>
-          </div>
-        </div>
-
-        <form id="slotEditor" class="slot-editor">
-          <label for="slotPlayerSelect">Spiller</label>
-          <select id="slotPlayerSelect" name="slotPlayer"></select>
-
-          <label for="slotRoleSelect">Rolle</label>
-          <select id="slotRoleSelect" name="slotRole"></select>
+          <label for="tacticSelect">Taktikk</label>
+          <select id="tacticSelect" name="tactic"></select>
         </form>
 
-        <section class="selected-fit-box">
-          <div class="score-row">
-            <span>Spillerfit</span>
-            <strong id="selectedMatchScore">–</strong>
+        <section class="panel team-summary-panel" aria-live="polite">
+          <div class="result-heading">
+            <div>
+              <p class="eyebrow">Samlet lagfit</p>
+              <h2 id="teamStatus">Laster…</h2>
+            </div>
+            <div class="score-ring" id="teamScore">–</div>
           </div>
-          <p id="selectedFitStatus" class="fit-status-text">Velg plass, spiller og rolle.</p>
-          <p id="selectedFitExplanation" class="muted-text">Når du velger rolle, får du forklaring på om treneren bruker spilleren riktig.</p>
+
+          <div class="metric-grid team-metrics">
+            <article>
+              <span>Rollefit</span>
+              <strong id="roleFitAverage">–</strong>
+            </article>
+            <article>
+              <span>Taktikk</span>
+              <strong id="tacticFitAverage">–</strong>
+            </article>
+            <article>
+              <span>Balanse</span>
+              <strong id="balanceScore">–</strong>
+            </article>
+            <article>
+              <span>Restforsvar</span>
+              <strong id="restDefenseScore">–</strong>
+            </article>
+          </div>
         </section>
-      </aside>
-    </section>
-
-    <section class="report-layout" aria-label="Lagrapport">
-      <section class="panel report-panel">
-        <p class="eyebrow">Lagrapport</p>
-        <h2>Hva fungerer?</h2>
-        <p id="reportSummary" class="muted-text">Fyll laget for å se rapport.</p>
-
-        <div class="report-columns">
-          <section>
-            <h3>Styrker</h3>
-            <ul id="strengthsList"></ul>
-          </section>
-          <section>
-            <h3>Problemer</h3>
-            <ul id="issuesList"></ul>
-          </section>
-        </div>
       </section>
 
-      <section class="panel detail-metrics-panel">
-        <p class="eyebrow">Detaljer</p>
-        <h2>Lagets profil</h2>
-        <div class="metric-grid detail-metrics">
-          <article>
-            <span>Bredde</span>
-            <strong id="widthScore">–</strong>
-          </article>
-          <article>
-            <span>Dybde</span>
-            <strong id="depthScore">–</strong>
-          </article>
-          <article>
-            <span>Oppbygging</span>
-            <strong id="buildUpScore">–</strong>
-          </article>
-          <article>
-            <span>Press</span>
-            <strong id="pressScore">–</strong>
-          </article>
-        </div>
-      </section>
-    </section>
+      <section class="lineup-layout" aria-label="Startelleverbygger">
+        <section class="panel pitch-panel">
+          <div class="panel-heading-row">
+            <div>
+              <p class="eyebrow">Startellever</p>
+              <h2 id="formationTitle">Formasjon</h2>
+            </div>
+            <p id="completeCount" class="mini-status">0/11</p>
+          </div>
 
-    <section class="manager-insight-layout" aria-label="Managerinnsikt">
-      <section class="panel manager-insight-panel">
-        <p class="eyebrow">Ny manager-engine</p>
-        <h2>Managerinnsikt</h2>
-        <p id="managerSummary" class="muted-text">
-          Når TypeScript-motoren er lastet, vises samlet managerinnsikt her.
-        </p>
+          <p class="pitch-hint">Dra spillerne for å endre posisjon. Klikk for å velge plass.</p>
+          <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
+        </section>
 
-        <div class="report-columns">
-          <section>
-            <h3>Prioriterte tiltak</h3>
-            <ul id="managerTopActions"></ul>
+        <aside class="panel slot-editor-panel" aria-live="polite">
+          <div class="panel-heading-row">
+            <div>
+              <p class="eyebrow">Valgt plass</p>
+              <h2 id="selectedSlotTitle">Velg en plass</h2>
+            </div>
+          </div>
+
+          <form id="slotEditor" class="slot-editor">
+            <label for="slotPlayerSelect">Spiller</label>
+            <select id="slotPlayerSelect" name="slotPlayer"></select>
+
+            <label for="slotRoleSelect">Rolle</label>
+            <select id="slotRoleSelect" name="slotRole"></select>
+          </form>
+
+          <section class="selected-fit-box">
+            <div class="score-row">
+              <span>Spillerfit</span>
+              <strong id="selectedMatchScore">–</strong>
+            </div>
+            <p id="selectedFitStatus" class="fit-status-text">Velg plass, spiller og rolle.</p>
+            <p id="selectedFitExplanation" class="muted-text">Når du velger rolle, får du forklaring på om treneren bruker spilleren riktig.</p>
           </section>
-          <section>
-            <h3>Treningsfokus</h3>
-            <ul id="managerTrainingPlan"></ul>
-          </section>
-        </div>
+        </aside>
       </section>
 
-      <section class="panel manager-detail-panel">
-        <p class="eyebrow">Trenergrep</p>
-        <h2>Rollebytter og svakheter</h2>
+      <section class="report-layout" aria-label="Lagrapport">
+        <section class="panel report-panel">
+          <p class="eyebrow">Lagrapport</p>
+          <h2>Hva fungerer?</h2>
+          <p id="reportSummary" class="muted-text">Fyll laget for å se rapport.</p>
 
-        <div class="report-columns">
-          <section>
-            <h3>Rolleforslag</h3>
-            <ul id="managerRoleChanges"></ul>
-          </section>
-          <section>
-            <h3>Svakheter</h3>
-            <ul id="managerWeakPoints"></ul>
-          </section>
-        </div>
+          <div class="report-columns">
+            <section>
+              <h3>Styrker</h3>
+              <ul id="strengthsList"></ul>
+            </section>
+            <section>
+              <h3>Problemer</h3>
+              <ul id="issuesList"></ul>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel detail-metrics-panel">
+          <p class="eyebrow">Detaljer</p>
+          <h2>Lagets profil</h2>
+          <div class="metric-grid detail-metrics">
+            <article>
+              <span>Bredde</span>
+              <strong id="widthScore">–</strong>
+            </article>
+            <article>
+              <span>Dybde</span>
+              <strong id="depthScore">–</strong>
+            </article>
+            <article>
+              <span>Oppbygging</span>
+              <strong id="buildUpScore">–</strong>
+            </article>
+            <article>
+              <span>Press</span>
+              <strong id="pressScore">–</strong>
+            </article>
+          </div>
+        </section>
       </section>
-    </section>
+    </div>
+
+    <!-- ============================ INNBOKS ============================ -->
+    <div class="tab-section" data-tab-section="inbox" hidden>
+      <section class="panel section-header-panel">
+        <p class="eyebrow">Meldingssenter</p>
+        <h2>Innboks</h2>
+        <p class="muted-text">Klubbens meldinger samles her: scouting, styret, medisinsk og presse.</p>
+      </section>
+
+      <div class="message-list">
+        <article class="message-card">
+          <div class="message-meta">
+            <span class="message-from">Styret</span>
+            <span class="message-tag">Sesongmål</span>
+          </div>
+          <h3>Velkommen til klubben</h3>
+          <p>Styret forventer en stabil sesong. Bygg en ellever som henger sammen taktisk, og vis at klassespillere kan brukes riktig.</p>
+        </article>
+        <article class="message-card">
+          <div class="message-meta">
+            <span class="message-from">Trenerteam</span>
+            <span class="message-tag">Taktikk</span>
+          </div>
+          <h3>Klar for oppsett</h3>
+          <p>Gå til Lag / Taktikk for å plassere spillerne på banen. Dra brikkene dit du vil ha dem.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- ============================ FASILITETER ============================ -->
+    <div class="tab-section" data-tab-section="facilities" hidden>
+      <section class="panel section-header-panel">
+        <p class="eyebrow">Klubbanlegg</p>
+        <h2>Fasiliteter</h2>
+        <p class="muted-text">Oversikt over klubbens anlegg. Utbygging og nivåer kobles på senere.</p>
+      </section>
+
+      <div class="facility-grid">
+        <article class="facility-card">
+          <h3>Treningsanlegg</h3>
+          <p class="facility-level">Nivå –</p>
+          <p class="muted-text">Påvirker spillerutvikling og treningsfokus.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Stadion</h3>
+          <p class="facility-level">Nivå –</p>
+          <p class="muted-text">Kapasitet og kampdagsinntekter.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Akademi</h3>
+          <p class="facility-level">Nivå –</p>
+          <p class="muted-text">Henter frem unge klassespillere.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Medisinsk avdeling</h3>
+          <p class="facility-level">Nivå –</p>
+          <p class="muted-text">Skadeforebygging og rehabilitering.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- ============================ ADMINISTRASJON ============================ -->
+    <div class="tab-section" data-tab-section="admin" hidden>
+      <section class="panel section-header-panel">
+        <p class="eyebrow">Drift og økonomi</p>
+        <h2>Administrasjon</h2>
+        <p class="muted-text">Økonomi, kontrakter og ansatte samles her etter hvert som funksjonene kommer.</p>
+      </section>
+
+      <div class="facility-grid">
+        <article class="facility-card">
+          <h3>Økonomi</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Budsjett, lønn og balanse.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Kontrakter</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Lengde, klausuler og fornyelser.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Ansatte</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Trenerteam og støtteapparat.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Klubbstruktur</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Organisasjon og daglig drift.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- ============================ MARKEDSAVDELING ============================ -->
+    <div class="tab-section" data-tab-section="market" hidden>
+      <section class="panel section-header-panel">
+        <p class="eyebrow">Kommersiell utvikling</p>
+        <h2>Markedsavdeling</h2>
+        <p class="muted-text">Sponsorer, publikum, omdømme og medierarbeid. Klar for funksjonalitet senere.</p>
+      </section>
+
+      <div class="facility-grid">
+        <article class="facility-card">
+          <h3>Sponsorer</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Avtaler og kommersielle inntekter.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Publikum</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Oppmøte og tilhørighet.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Omdømme</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Klubbens status nasjonalt og internasjonalt.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Kampanjer</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Medierarbeid og markedsføring.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- ============================ STYRET ============================ -->
+    <div class="tab-section" data-tab-section="board" hidden>
+      <section class="panel section-header-panel">
+        <p class="eyebrow">Boardroom</p>
+        <h2>Styret</h2>
+        <p class="muted-text">Forventninger, budsjett, tillit og sesongmål. Følges opp gjennom sesongen.</p>
+      </section>
+
+      <div class="facility-grid">
+        <article class="facility-card">
+          <h3>Sesongmål</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Hva styret forventer denne sesongen.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Tillit</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Styrets tillit til treneren.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Budsjett</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Rammene du har å jobbe innenfor.</p>
+        </article>
+        <article class="facility-card">
+          <h3>Krav</h3>
+          <p class="facility-level">–</p>
+          <p class="muted-text">Konkrete krav og milepæler.</p>
+        </article>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <p>Andre MVP-lag: startellever, formasjon og samlet lagfit. Fortsatt ikke full kampmotor.</p>
+    <p>HG Football Manager — startellever, formasjon og samlet lagfit. Fortsatt ikke full kampmotor.</p>
   </footer>
 
   <script type="module" src="src/app.js"></script>
