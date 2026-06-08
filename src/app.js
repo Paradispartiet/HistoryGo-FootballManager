@@ -9,7 +9,8 @@ const DATA_PATHS = {
   players: "data/football_players.json",
   roles: "data/football_roles.json",
   tactics: "data/football_tactics.json",
-  formations: "data/football_formations.json"
+  formations: "data/football_formations.json",
+  knowledgePrinciples: "data/football_knowledge_principles.json"
 };
 
 const EMPTY_VALUE = "__empty__";
@@ -23,6 +24,7 @@ const state = {
   roles: [],
   tactics: [],
   formations: [],
+  knowledgePrinciples: [],
   selectedFormationId: null,
   selectedTacticId: null,
   selectedSlotId: null,
@@ -55,7 +57,13 @@ const elements = {
   widthScore: document.querySelector("#widthScore"),
   depthScore: document.querySelector("#depthScore"),
   buildUpScore: document.querySelector("#buildUpScore"),
-  pressScore: document.querySelector("#pressScore")
+  pressScore: document.querySelector("#pressScore"),
+  managerSummary: document.querySelector("#managerSummary"),
+  managerTopActions: document.querySelector("#managerTopActions"),
+  managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
+  managerRoleChanges: document.querySelector("#managerRoleChanges"),
+  managerWeakPoints: document.querySelector("#managerWeakPoints"),
+  managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations")
 };
 
 let managerEngineRenderId = 0;
@@ -380,6 +388,28 @@ function renderList(list, items) {
   });
 }
 
+// Trygg liste-render: hopper over hvis elementet mangler, og viser emptyText når listen er tom.
+function renderTextList(list, items, getText, emptyText) {
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+
+  if (!Array.isArray(items) || items.length === 0) {
+    const item = document.createElement("li");
+    item.textContent = emptyText || "Ingen tydelige punkter ennå.";
+    list.append(item);
+    return;
+  }
+
+  items.forEach((entry) => {
+    const item = document.createElement("li");
+    item.textContent = getText(entry);
+    list.append(item);
+  });
+}
+
 function getTeamStatus(teamFit) {
   if (!teamFit || teamFit.completeCount < teamFit.totalSlots) {
     return "Ufullstendig";
@@ -674,6 +704,46 @@ function renderManagerDashboardViewModel(viewModel) {
   ];
 
   renderList(elements.issuesList, issueTexts);
+
+  if (elements.managerSummary) {
+    elements.managerSummary.textContent = viewModel.summary.summary;
+  }
+
+  renderTextList(
+    elements.managerTopActions,
+    viewModel.topActions,
+    (action) => `${action.priorityText}: ${action.label} — ${action.rationale}`,
+    viewModel.emptyStates.topActions,
+  );
+
+  renderTextList(
+    elements.managerTrainingPlan,
+    viewModel.trainingPlan,
+    (item) => `${item.areaText}: ${item.suggestedSession}`,
+    viewModel.emptyStates.trainingPlan,
+  );
+
+  renderTextList(
+    elements.managerRoleChanges,
+    viewModel.roleChanges,
+    (item) => `${item.statusText}: ${item.label}`,
+    viewModel.emptyStates.roleChanges,
+  );
+
+  renderTextList(
+    elements.managerWeakPoints,
+    viewModel.weakPoints,
+    (item) => `${item.categoryText}: ${item.label} — ${item.suggestedAction}`,
+    viewModel.emptyStates.weakPoints,
+  );
+
+  renderTextList(
+    elements.managerKnowledgeRecommendations,
+    viewModel.knowledgeRecommendations,
+    (item) =>
+      `${item.priorityText}: ${item.title} (${item.categoryText}) — ${item.reason} Trenergrep: ${item.coachAdvice} Økt: ${item.trainingSession}`,
+    viewModel.emptyStates.knowledgeRecommendations,
+  );
 }
 
 async function renderManagerEngineBridge() {
@@ -689,6 +759,7 @@ async function renderManagerEngineBridge() {
     selectedTacticId: state.selectedTacticId,
     selectedFormationId: state.selectedFormationId,
     lineup: state.lineup,
+    knowledgePrinciples: state.knowledgePrinciples,
   });
 
   if (renderId !== managerEngineRenderId) {
@@ -786,17 +857,27 @@ async function init() {
   initTabs();
 
   try {
-    const [playersData, rolesData, tacticsData, formationsData] = await Promise.all([
+    const [playersData, rolesData, tacticsData, formationsData, knowledgeData] = await Promise.all([
       loadJson(DATA_PATHS.players),
       loadJson(DATA_PATHS.roles),
       loadJson(DATA_PATHS.tactics),
-      loadJson(DATA_PATHS.formations)
+      loadJson(DATA_PATHS.formations),
+      // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
+      loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null)
     ]);
 
     state.players = playersData.players;
     state.roles = rolesData.roles;
     state.tactics = tacticsData.tactics;
     state.formations = formationsData.formations;
+
+    if (Array.isArray(knowledgeData?.principles)) {
+      state.knowledgePrinciples = knowledgeData.principles;
+    } else {
+      state.knowledgePrinciples = [];
+      console.warn("Fotballkunnskap-data mangler eller har feil format. Fortsetter uten kunnskapsanbefalinger.");
+    }
+
     state.selectedFormationId = state.formations[0]?.id || null;
     state.selectedTacticId = state.tactics[0]?.id || null;
 
