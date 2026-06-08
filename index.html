@@ -18,79 +18,141 @@
 
   <main class="app-shell" id="app">
     <section class="panel intro-panel" aria-labelledby="introTitle">
-      <h2 id="introTitle">Første rollefit-demo</h2>
+      <h2 id="introTitle">Startellever og lagfit</h2>
       <p>
-        Velg spiller, posisjon, rolle og taktikk. Motoren vurderer om treneren bruker spilleren riktig.
+        Velg formasjon, taktikk, spillere og roller. Motoren vurderer både enkeltspillere og om laget henger sammen som helhet.
       </p>
       <p class="principle">
         En lavere rated klassespiller brukt riktig kan prestere bedre enn en høyere rated spiller brukt feil.
       </p>
     </section>
 
-    <section class="grid-layout" aria-label="Rollefit-demo">
-      <form class="panel control-panel" id="fitForm">
-        <h2>Laguttakstest</h2>
+    <section class="top-controls" aria-label="Overordnede valg">
+      <form class="panel control-panel" id="teamForm">
+        <h2>Lagplan</h2>
 
-        <label for="playerSelect">Spiller</label>
-        <select id="playerSelect" name="player"></select>
-
-        <label for="positionSelect">Posisjon</label>
-        <select id="positionSelect" name="position"></select>
-
-        <label for="roleSelect">Rolle</label>
-        <select id="roleSelect" name="role"></select>
+        <label for="formationSelect">Formasjon</label>
+        <select id="formationSelect" name="formation"></select>
 
         <label for="tacticSelect">Taktikk</label>
         <select id="tacticSelect" name="tactic"></select>
       </form>
 
-      <section class="panel result-panel" aria-live="polite">
+      <section class="panel team-summary-panel" aria-live="polite">
         <div class="result-heading">
-          <p class="eyebrow">Fit-resultat</p>
-          <h2 id="fitStatus">Laster…</h2>
+          <div>
+            <p class="eyebrow">Samlet lagfit</p>
+            <h2 id="teamStatus">Laster…</h2>
+          </div>
+          <div class="score-ring" id="teamScore">–</div>
         </div>
 
-        <div class="score-ring" id="matchScore">–</div>
-
-        <div class="metric-grid">
+        <div class="metric-grid team-metrics">
           <article>
-            <span>Posisjon</span>
-            <strong id="positionFit">–</strong>
-          </article>
-          <article>
-            <span>Rolle</span>
-            <strong id="roleFit">–</strong>
+            <span>Rollefit</span>
+            <strong id="roleFitAverage">–</strong>
           </article>
           <article>
             <span>Taktikk</span>
-            <strong id="tacticFit">–</strong>
+            <strong id="tacticFitAverage">–</strong>
           </article>
           <article>
-            <span>Feilbruk</span>
-            <strong id="misusePenalty">–</strong>
+            <span>Balanse</span>
+            <strong id="balanceScore">–</strong>
+          </article>
+          <article>
+            <span>Restforsvar</span>
+            <strong id="restDefenseScore">–</strong>
           </article>
         </div>
+      </section>
+    </section>
 
-        <section class="explanation-box">
-          <h3>Forklaring</h3>
-          <p id="fitExplanation">Data lastes inn.</p>
-        </section>
+    <section class="lineup-layout" aria-label="Startelleverbygger">
+      <section class="panel pitch-panel">
+        <div class="panel-heading-row">
+          <div>
+            <p class="eyebrow">Startellever</p>
+            <h2 id="formationTitle">Formasjon</h2>
+          </div>
+          <p id="completeCount" class="mini-status">0/11</p>
+        </div>
 
-        <section class="warning-box" id="warningBox" hidden>
-          <h3>Advarsel</h3>
-          <ul id="warningsList"></ul>
-        </section>
+        <div class="pitch" id="lineupSlots" aria-label="Formasjonsslots"></div>
+      </section>
 
-        <section class="suggestion-box" id="suggestionBox" hidden>
-          <h3>Bedre roller</h3>
-          <ul id="suggestedRoles"></ul>
+      <aside class="panel slot-editor-panel" aria-live="polite">
+        <div class="panel-heading-row">
+          <div>
+            <p class="eyebrow">Valgt plass</p>
+            <h2 id="selectedSlotTitle">Velg en plass</h2>
+          </div>
+        </div>
+
+        <form id="slotEditor" class="slot-editor">
+          <label for="slotPlayerSelect">Spiller</label>
+          <select id="slotPlayerSelect" name="slotPlayer"></select>
+
+          <label for="slotRoleSelect">Rolle</label>
+          <select id="slotRoleSelect" name="slotRole"></select>
+        </form>
+
+        <section class="selected-fit-box">
+          <div class="score-row">
+            <span>Spillerfit</span>
+            <strong id="selectedMatchScore">–</strong>
+          </div>
+          <p id="selectedFitStatus" class="fit-status-text">Velg plass, spiller og rolle.</p>
+          <p id="selectedFitExplanation" class="muted-text">Når du velger rolle, får du forklaring på om treneren bruker spilleren riktig.</p>
         </section>
+      </aside>
+    </section>
+
+    <section class="report-layout" aria-label="Lagrapport">
+      <section class="panel report-panel">
+        <p class="eyebrow">Lagrapport</p>
+        <h2>Hva fungerer?</h2>
+        <p id="reportSummary" class="muted-text">Fyll laget for å se rapport.</p>
+
+        <div class="report-columns">
+          <section>
+            <h3>Styrker</h3>
+            <ul id="strengthsList"></ul>
+          </section>
+          <section>
+            <h3>Problemer</h3>
+            <ul id="issuesList"></ul>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel detail-metrics-panel">
+        <p class="eyebrow">Detaljer</p>
+        <h2>Lagets profil</h2>
+        <div class="metric-grid detail-metrics">
+          <article>
+            <span>Bredde</span>
+            <strong id="widthScore">–</strong>
+          </article>
+          <article>
+            <span>Dybde</span>
+            <strong id="depthScore">–</strong>
+          </article>
+          <article>
+            <span>Oppbygging</span>
+            <strong id="buildUpScore">–</strong>
+          </article>
+          <article>
+            <span>Press</span>
+            <strong id="pressScore">–</strong>
+          </article>
+        </div>
       </section>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Første MVP: rollefit-motor, ikke full liga.</p>
+    <p>Andre MVP-lag: startellever, formasjon og samlet lagfit. Fortsatt ikke full kampmotor.</p>
   </footer>
 
   <script type="module" src="src/app.js"></script>
