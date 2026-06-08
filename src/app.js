@@ -16,6 +16,7 @@ const DATA_PATHS = {
 const EMPTY_VALUE = "__empty__";
 const POSITIONS_KEY = "hgfm.slotPositions.v1";
 const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
+const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -33,7 +34,9 @@ const state = {
   // slotId -> { x, y } i prosent innenfor banen, for gjeldende formasjon.
   slotPositions: {},
   // Valgt kunnskapskort som ukens treningsfokus (kun UI/state, ingen kampmotor-effekt).
-  activeKnowledgeFocusId: null
+  activeKnowledgeFocusId: null,
+  // Kunnskapsfokus som er markert fullført denne uken (kun UI/progresjon, ingen score-effekt).
+  completedKnowledgeFocusIds: new Set()
 };
 
 const elements = {
@@ -345,6 +348,39 @@ function clearActiveKnowledgeFocus() {
   }
 }
 
+// Fullført ukesøkt: hvilke kunnskapsfokus brukeren har markert som gjennomført.
+// Rent UI/progresjonslag i localStorage – ingen effekt på score, engine eller matching.
+// Lagres som JSON-array, holdes i minnet som Set for raske oppslag.
+function loadCompletedKnowledgeFocusIds() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(COMPLETED_KNOWLEDGE_FOCUS_KEY));
+    return new Set(Array.isArray(stored) ? stored : []);
+  } catch (error) {
+    return new Set();
+  }
+}
+
+function saveCompletedKnowledgeFocusIds(ids) {
+  try {
+    localStorage.setItem(COMPLETED_KNOWLEDGE_FOCUS_KEY, JSON.stringify(Array.from(ids)));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+function markKnowledgeFocusCompleted(principleId) {
+  if (!principleId) {
+    return;
+  }
+
+  state.completedKnowledgeFocusIds.add(principleId);
+  saveCompletedKnowledgeFocusIds(state.completedKnowledgeFocusIds);
+}
+
+function isKnowledgeFocusCompleted(principleId) {
+  return Boolean(principleId) && state.completedKnowledgeFocusIds.has(principleId);
+}
+
 // Logiske standardposisjoner: grupper slots per lagdel og spre dem jevnt i bredden.
 function computeDefaultPositions(formation) {
   const positions = {};
@@ -462,12 +498,35 @@ function renderTrainingFocusList(list, items, emptyText) {
     const li = document.createElement("li");
 
     if (item.type === "knowledge_focus") {
+      const completed = isKnowledgeFocusCompleted(item.principleId);
+
       li.className = "training-focus-item is-knowledge-focus";
+
+      if (completed) {
+        li.classList.add("is-completed");
+      }
+
+      // Tekst og knapp i egne noder, slik at vi kun bruker textContent.
+      const text = document.createElement("p");
+      text.className = "training-focus-text";
+      text.textContent = item.text;
+      li.append(text);
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "training-focus-complete-button";
+      button.textContent = completed ? "Fullført" : "Fullfør ukesøkt";
+      button.disabled = completed;
+      button.addEventListener("click", () => {
+        markKnowledgeFocusCompleted(item.principleId);
+        renderApp();
+      });
+      li.append(button);
     } else {
       li.className = "training-focus-item";
+      li.textContent = item.text;
     }
 
-    li.textContent = item.text;
     list.append(li);
   });
 }
@@ -490,12 +549,17 @@ function renderKnowledgeCards(list, items, emptyText) {
 
   items.forEach((item) => {
     const isActiveFocus = item.principleId === state.activeKnowledgeFocusId;
+    const isCompletedFocus = isKnowledgeFocusCompleted(item.principleId);
 
     const card = document.createElement("li");
     card.className = "knowledge-card";
 
     if (isActiveFocus) {
       card.classList.add("is-active-focus");
+    }
+
+    if (isCompletedFocus) {
+      card.classList.add("is-completed-focus");
     }
 
     const header = document.createElement("div");
@@ -528,6 +592,13 @@ function renderKnowledgeCards(list, items, emptyText) {
       status.className = "knowledge-focus-status";
       status.textContent = "Aktivt treningsfokus";
       card.append(status);
+    }
+
+    if (isCompletedFocus) {
+      const completedStatus = document.createElement("p");
+      completedStatus.className = "knowledge-completed-status";
+      completedStatus.textContent = "Fullført";
+      card.append(completedStatus);
     }
 
     const action = document.createElement("button");
@@ -865,6 +936,7 @@ function renderManagerDashboardViewModel(viewModel) {
   const trainingItems = [
     ...(activeKnowledge ? [{
       type: "knowledge_focus",
+      principleId: activeKnowledge.principleId,
       text: `Valgt ukesøkt: ${activeKnowledge.title} — ${activeKnowledge.trainingSession}`
     }] : []),
     ...viewModel.trainingPlan.map((item) => ({
@@ -903,8 +975,13 @@ function renderManagerDashboardViewModel(viewModel) {
     const active = activeKnowledge;
 
     if (active) {
-      elements.activeKnowledgeFocus.textContent =
-        `Aktivt fokus: ${active.title} — ${active.trainingSession}`;
+      if (isKnowledgeFocusCompleted(active.principleId)) {
+        elements.activeKnowledgeFocus.textContent =
+          `Aktivt fokus: ${active.title} — fullført denne uken`;
+      } else {
+        elements.activeKnowledgeFocus.textContent =
+          `Aktivt fokus: ${active.title} — ${active.trainingSession}`;
+      }
     } else {
       elements.activeKnowledgeFocus.textContent = "Ingen aktiv kunnskapsøkt valgt.";
     }
@@ -1058,6 +1135,7 @@ async function init() {
     state.selectedFormationId = state.formations[0]?.id || null;
     state.selectedTacticId = state.tactics[0]?.id || null;
     state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
+    state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
 
     const dataWarnings = validateFootballData(state);
 
