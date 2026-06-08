@@ -67,7 +67,8 @@ const elements = {
   managerRoleChanges: document.querySelector("#managerRoleChanges"),
   managerWeakPoints: document.querySelector("#managerWeakPoints"),
   managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations"),
-  activeKnowledgeFocus: document.querySelector("#activeKnowledgeFocus")
+  activeKnowledgeFocus: document.querySelector("#activeKnowledgeFocus"),
+  clearKnowledgeFocus: document.querySelector("#clearKnowledgeFocus")
 };
 
 let managerEngineRenderId = 0;
@@ -857,6 +858,10 @@ function renderManagerDashboardViewModel(viewModel) {
     } else {
       elements.activeKnowledgeFocus.textContent = "Ingen aktiv kunnskapsøkt valgt.";
     }
+
+    if (elements.clearKnowledgeFocus) {
+      elements.clearKnowledgeFocus.hidden = !active;
+    }
   }
 }
 
@@ -944,6 +949,14 @@ function bindEvents() {
 
     renderApp();
   });
+
+  if (elements.clearKnowledgeFocus) {
+    elements.clearKnowledgeFocus.addEventListener("click", () => {
+      state.activeKnowledgeFocusId = null;
+      clearActiveKnowledgeFocus();
+      renderApp();
+    });
+  }
 }
 
 function initTabs() {
