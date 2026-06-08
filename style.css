@@ -266,6 +266,11 @@ select {
   border-color: rgba(255, 177, 166, 0.65);
 }
 
+.lineup-slot.is-duplicate {
+  border-color: rgba(255, 177, 166, 0.9);
+  background: rgba(255, 177, 166, 0.12);
+}
+
 .lineup-slot[data-line="keeper"] {
   grid-column: 3;
   grid-row: 5;
