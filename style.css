@@ -728,6 +728,64 @@ ul {
   padding: 12px 16px;
 }
 
+.training-focus-item.is-knowledge-focus .training-focus-text {
+  margin: 0;
+}
+
+/* Fullført ukesøkt: dempet, stiplet ramme som skiller seg fra aktiv. Ingen gul bakgrunn. */
+.training-focus-item.is-completed {
+  border-style: dashed;
+  border-color: var(--line-soft);
+}
+
+/* Fullfør-knapp i sort/hvitt, matcher resten av demoens knapper. */
+.training-focus-complete-button {
+  justify-self: start;
+  margin-top: 10px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.training-focus-complete-button:hover {
+  background: var(--text);
+  color: #000000;
+}
+
+.training-focus-complete-button:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+.training-focus-complete-button:disabled {
+  cursor: default;
+  border-style: dashed;
+  border-color: var(--line-soft);
+  color: var(--muted);
+}
+
+/* Fullført kunnskapskort: tynn stiplet ramme + liten statuslinje, ingen gul bakgrunn. */
+.knowledge-card.is-completed-focus {
+  border-style: dashed;
+  border-color: var(--line-soft);
+}
+
+.knowledge-completed-status {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   padding: 8px 0 40px;
