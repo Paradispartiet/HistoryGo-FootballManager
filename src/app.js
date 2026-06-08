@@ -1,5 +1,9 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
+import {
+  createLegacyManagerAppStateFromBrowserState,
+  getDashboardViewModelFromLegacyManagerState,
+} from "./app-manager-engine-bridge.js";
 
 const DATA_PATHS = {
   players: "data/football_players.json",
@@ -47,6 +51,8 @@ const elements = {
   buildUpScore: document.querySelector("#buildUpScore"),
   pressScore: document.querySelector("#pressScore")
 };
+
+let managerEngineRenderId = 0;
 
 async function loadJson(path) {
   const response = await fetch(path);
@@ -462,6 +468,63 @@ function renderReport(teamFit) {
   renderList(elements.issuesList, teamFit.report.issues);
 }
 
+function renderManagerDashboardViewModel(viewModel) {
+  if (!viewModel) {
+    return;
+  }
+
+  elements.teamStatus.textContent = viewModel.score.label;
+  elements.teamScore.textContent = viewModel.score.setupScoreText;
+  elements.balanceScore.textContent = viewModel.score.teamBalanceText;
+
+  const widthMetric = viewModel.metrics.find((metric) => metric.label === "Bredde");
+  const pressMetric = viewModel.metrics.find((metric) => metric.label === "Press");
+  const defenceMetric = viewModel.metrics.find((metric) => metric.label === "Forsvar");
+  const midfieldMetric = viewModel.metrics.find((metric) => metric.label === "Midtbane");
+  const attackMetric = viewModel.metrics.find((metric) => metric.label === "Angrep");
+
+  elements.widthScore.textContent = widthMetric?.valueText ?? elements.widthScore.textContent;
+  elements.pressScore.textContent = pressMetric?.valueText ?? elements.pressScore.textContent;
+  elements.restDefenseScore.textContent = defenceMetric?.valueText ?? elements.restDefenseScore.textContent;
+  elements.buildUpScore.textContent = midfieldMetric?.valueText ?? elements.buildUpScore.textContent;
+  elements.depthScore.textContent = attackMetric?.valueText ?? elements.depthScore.textContent;
+
+  elements.reportSummary.textContent = viewModel.summary.summary;
+
+  renderList(elements.strengthsList, viewModel.keyStrengths);
+
+  const issueTexts = [
+    ...viewModel.keyProblems,
+    ...viewModel.topActions.slice(0, 3).map((action) => action.label),
+  ];
+
+  renderList(elements.issuesList, issueTexts);
+}
+
+async function renderManagerEngineBridge() {
+  const renderId = ++managerEngineRenderId;
+
+  const legacyManagerState = await createLegacyManagerAppStateFromBrowserState({
+    teamId: "browser_legacy_team",
+    teamName: "Browser Legacy Team",
+    players: state.players,
+    roles: state.roles,
+    tactics: state.tactics,
+    formations: state.formations,
+    selectedTacticId: state.selectedTacticId,
+    selectedFormationId: state.selectedFormationId,
+    lineup: state.lineup,
+  });
+
+  if (renderId !== managerEngineRenderId) {
+    return;
+  }
+
+  const viewModel = getDashboardViewModelFromLegacyManagerState(legacyManagerState);
+
+  renderManagerDashboardViewModel(viewModel);
+}
+
 function renderApp() {
   const teamFit = getTeamFit();
 
@@ -470,6 +533,8 @@ function renderApp() {
   renderLineup(teamFit);
   renderSlotEditor(teamFit);
   renderReport(teamFit);
+
+  renderManagerEngineBridge();
 }
 
 function bindEvents() {
