@@ -14,6 +14,7 @@ import type {
   Tactic,
   TacticPrinciples,
   TacticalFunction,
+  TacticalNeeds,
   Team,
   TempoStyle,
   WidthStyle,
@@ -356,7 +357,7 @@ function traitsFromLegacyPlayer(player: LegacyFootballPlayer): PlayerTrait[] {
   return unique(traits);
 }
 
-function tacticalNeedsFromLegacyPlayer(player: LegacyFootballPlayer): Player["tacticalNeeds"] {
+function tacticalNeedsFromLegacyPlayer(player: LegacyFootballPlayer): TacticalNeeds {
   const needs = new Set([
     ...(player.needs ?? []),
     ...(player.likesTactics ?? []),
@@ -565,28 +566,28 @@ export function adaptLegacyRoles(roles: LegacyFootballRole[]): Role[] {
         ? "safe"
         : "balanced",
     behaviour: {
-      holdsWidth: role.tacticalLikes?.includes("wide_attack") ||
-        role.requires?.includes("wide_lane"),
-      attacksSpace: role.requires?.includes("space_behind") ||
-        role.requires?.includes("off_ball_runs"),
+      holdsWidth: Boolean(role.tacticalLikes?.includes("wide_attack") ||
+        role.requires?.includes("wide_lane")),
+      attacksSpace: Boolean(role.requires?.includes("space_behind") ||
+        role.requires?.includes("off_ball_runs")),
       dropsDeep: role.id === "false_nine" || role.id === "linking_striker",
       playsBackToGoal: role.id === "target_striker" || role.id === "linking_striker",
-      receivesBetweenLines: role.validPositions.includes("AM") ||
-        role.requires?.includes("space_between_lines"),
-      carriesBall: role.requires?.includes("dribbling") ||
-        role.requires?.includes("ball_carrying"),
-      crossesOften: role.requires?.includes("crossing"),
-      cutsInside: role.id === "inverted_winger" || role.requires?.includes("cut_inside"),
-      pressesHigh: role.tacticalLikes?.includes("high_press") ||
-        role.requires?.includes("pressing"),
-      protectsDefence: role.requires?.includes("defensive_balance") ||
-        role.tacticalLikes?.includes("rest_defense"),
-      dictatesTempo: role.requires?.includes("tempo_control") ||
-        role.requires?.includes("passing_range"),
-      takesRisks: role.tacticalLikes?.includes("creative_freedom") ||
+      receivesBetweenLines: Boolean(role.validPositions.includes("AM") ||
+        role.requires?.includes("space_between_lines")),
+      carriesBall: Boolean(role.requires?.includes("dribbling") ||
+        role.requires?.includes("ball_carrying")),
+      crossesOften: Boolean(role.requires?.includes("crossing")),
+      cutsInside: role.id === "inverted_winger" || Boolean(role.requires?.includes("cut_inside")),
+      pressesHigh: Boolean(role.tacticalLikes?.includes("high_press") ||
+        role.requires?.includes("pressing")),
+      protectsDefence: Boolean(role.requires?.includes("defensive_balance") ||
+        role.tacticalLikes?.includes("rest_defense")),
+      dictatesTempo: Boolean(role.requires?.includes("tempo_control") ||
+        role.requires?.includes("passing_range")),
+      takesRisks: Boolean(role.tacticalLikes?.includes("creative_freedom")) ||
         role.id === "free_creator",
-      coversBehind: role.requires?.includes("covering") ||
-        role.tacticalLikes?.includes("rest_defense"),
+      coversBehind: Boolean(role.requires?.includes("covering") ||
+        role.tacticalLikes?.includes("rest_defense")),
     },
   }));
 }

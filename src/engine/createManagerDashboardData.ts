@@ -225,8 +225,12 @@ export function createManagerDashboardData(insight: ManagerInsight): ManagerDash
       playerId: recommendation.playerId,
       position: recommendation.position,
       currentRoleId: recommendation.currentRoleId,
-      currentRoleName: recommendation.currentRoleName,
-      currentFit: recommendation.currentFit,
+      ...(recommendation.currentRoleName !== undefined
+        ? { currentRoleName: recommendation.currentRoleName }
+        : {}),
+      ...(recommendation.currentFit !== undefined
+        ? { currentFit: recommendation.currentFit }
+        : {}),
       status: recommendation.status,
       label: recommendation.label,
     })),
