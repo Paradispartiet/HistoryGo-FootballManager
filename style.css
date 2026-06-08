@@ -664,7 +664,8 @@ ul {
 
 /* Sort/hvit knapp som matcher resten av demoens stil. */
 .knowledge-card-action,
-.clear-knowledge-focus-button {
+.clear-knowledge-focus-button,
+.advance-training-week-button {
   justify-self: start;
   margin-top: 4px;
   border: 2px solid var(--line);
@@ -680,15 +681,31 @@ ul {
 }
 
 .knowledge-card-action:hover,
-.clear-knowledge-focus-button:hover {
+.clear-knowledge-focus-button:hover,
+.advance-training-week-button:hover {
   background: var(--text);
   color: #000000;
 }
 
 .knowledge-card-action:focus-visible,
-.clear-knowledge-focus-button:focus-visible {
+.clear-knowledge-focus-button:focus-visible,
+.advance-training-week-button:focus-visible {
   outline: 3px solid var(--text);
   outline-offset: 2px;
+}
+
+/* Treningsuke-status: sort/hvitt, hvit ramme, ingen gul bakgrunn. */
+.training-week-status {
+  margin: 4px 0 0;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  padding: 10px 16px;
 }
 
 .knowledge-card.is-active-focus .knowledge-card-action {

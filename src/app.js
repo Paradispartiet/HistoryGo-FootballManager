@@ -17,6 +17,7 @@ const EMPTY_VALUE = "__empty__";
 const POSITIONS_KEY = "hgfm.slotPositions.v1";
 const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
 const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
+const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -36,7 +37,9 @@ const state = {
   // Valgt kunnskapskort som ukens treningsfokus (kun UI/state, ingen kampmotor-effekt).
   activeKnowledgeFocusId: null,
   // Kunnskapsfokus som er markert fullført denne uken (kun UI/progresjon, ingen score-effekt).
-  completedKnowledgeFocusIds: new Set()
+  completedKnowledgeFocusIds: new Set(),
+  // Gjeldende treningsuke (kun UI/progresjon, ingen kampmotor- eller score-effekt).
+  trainingWeek: 1
 };
 
 const elements = {
@@ -71,7 +74,9 @@ const elements = {
   managerWeakPoints: document.querySelector("#managerWeakPoints"),
   managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations"),
   activeKnowledgeFocus: document.querySelector("#activeKnowledgeFocus"),
-  clearKnowledgeFocus: document.querySelector("#clearKnowledgeFocus")
+  clearKnowledgeFocus: document.querySelector("#clearKnowledgeFocus"),
+  trainingWeekStatus: document.querySelector("#trainingWeekStatus"),
+  advanceTrainingWeek: document.querySelector("#advanceTrainingWeek")
 };
 
 let managerEngineRenderId = 0;
@@ -348,21 +353,70 @@ function clearActiveKnowledgeFocus() {
   }
 }
 
+// Treningsuke: enkel uke-state slik at "fullført denne uken" knyttes til en uke.
+// Kun UI/progresjon i localStorage – ingen effekt på score, engine eller matching.
+function loadTrainingWeek() {
+  try {
+    const stored = Number(JSON.parse(localStorage.getItem(TRAINING_WEEK_KEY)));
+    return Number.isInteger(stored) && stored >= 1 ? stored : 1;
+  } catch (error) {
+    return 1;
+  }
+}
+
+function saveTrainingWeek(week) {
+  try {
+    localStorage.setItem(TRAINING_WEEK_KEY, JSON.stringify(week));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+function advanceTrainingWeek() {
+  state.trainingWeek += 1;
+  saveTrainingWeek(state.trainingWeek);
+  // Ny uke starter uten valgt fokus; aktivt fokus nullstilles.
+  state.activeKnowledgeFocusId = null;
+  clearActiveKnowledgeFocus();
+  // Fullført-status leses på nytt for gjeldende uke (tom for en helt ny uke).
+  state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
+}
+
 // Fullført ukesøkt: hvilke kunnskapsfokus brukeren har markert som gjennomført.
 // Rent UI/progresjonslag i localStorage – ingen effekt på score, engine eller matching.
-// Lagres som JSON-array, holdes i minnet som Set for raske oppslag.
-function loadCompletedKnowledgeFocusIds() {
+// Lagres som objekt per uke ({ "1": [...], "2": [...] }), holdes i minnet som Set
+// for raske oppslag på gjeldende uke. Robust migrering: gammel flat array tolkes
+// som uke 1.
+function readCompletedKnowledgeFocusStore() {
   try {
     const stored = JSON.parse(localStorage.getItem(COMPLETED_KNOWLEDGE_FOCUS_KEY));
-    return new Set(Array.isArray(stored) ? stored : []);
+
+    if (Array.isArray(stored)) {
+      // Gammel lagringsmodell: flat array behandles som uke 1.
+      return { "1": stored };
+    }
+
+    if (stored && typeof stored === "object") {
+      return stored;
+    }
+
+    return {};
   } catch (error) {
-    return new Set();
+    return {};
   }
+}
+
+function loadCompletedKnowledgeFocusIds() {
+  const store = readCompletedKnowledgeFocusStore();
+  const weekIds = store[String(state.trainingWeek)];
+  return new Set(Array.isArray(weekIds) ? weekIds : []);
 }
 
 function saveCompletedKnowledgeFocusIds(ids) {
   try {
-    localStorage.setItem(COMPLETED_KNOWLEDGE_FOCUS_KEY, JSON.stringify(Array.from(ids)));
+    const store = readCompletedKnowledgeFocusStore();
+    store[String(state.trainingWeek)] = Array.from(ids);
+    localStorage.setItem(COMPLETED_KNOWLEDGE_FOCUS_KEY, JSON.stringify(store));
   } catch (error) {
     // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
   }
@@ -893,6 +947,10 @@ function renderManagerDashboardViewModel(viewModel) {
     return;
   }
 
+  if (elements.trainingWeekStatus) {
+    elements.trainingWeekStatus.textContent = `Treningsuke ${state.trainingWeek}`;
+  }
+
   elements.teamStatus.textContent = viewModel.score.label;
   elements.teamScore.textContent = viewModel.score.setupScoreText;
   elements.balanceScore.textContent = viewModel.score.teamBalanceText;
@@ -1084,6 +1142,13 @@ function bindEvents() {
       renderApp();
     });
   }
+
+  if (elements.advanceTrainingWeek) {
+    elements.advanceTrainingWeek.addEventListener("click", () => {
+      advanceTrainingWeek();
+      renderApp();
+    });
+  }
 }
 
 function initTabs() {
@@ -1134,6 +1199,7 @@ async function init() {
 
     state.selectedFormationId = state.formations[0]?.id || null;
     state.selectedTacticId = state.tactics[0]?.id || null;
+    state.trainingWeek = loadTrainingWeek();
     state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
     state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
 
