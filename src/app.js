@@ -777,6 +777,15 @@ function renderReport(teamFit) {
   renderList(elements.issuesList, teamFit.report.issues);
 }
 
+// Finn aktiv kunnskapsanbefaling i gjeldende viewModel, eller null hvis ingen er valgt
+// eller det valgte kortet ikke finnes lenger. Kun UI/state, ingen engine-effekt.
+function getActiveKnowledgeRecommendation(viewModel) {
+  if (!viewModel || !state.activeKnowledgeFocusId) return null;
+  return viewModel.knowledgeRecommendations.find(
+    (item) => item.principleId === state.activeKnowledgeFocusId
+  ) || null;
+}
+
 function renderManagerDashboardViewModel(viewModel) {
   if (!viewModel) {
     return;
@@ -820,10 +829,23 @@ function renderManagerDashboardViewModel(viewModel) {
     viewModel.emptyStates.topActions,
   );
 
+  const activeKnowledge = getActiveKnowledgeRecommendation(viewModel);
+
+  const trainingItems = [
+    ...(activeKnowledge ? [{
+      type: "knowledge_focus",
+      text: `Valgt ukesøkt: ${activeKnowledge.title} — ${activeKnowledge.trainingSession}`
+    }] : []),
+    ...viewModel.trainingPlan.map((item) => ({
+      type: "engine_training",
+      text: `${item.areaText}: ${item.suggestedSession}`
+    }))
+  ];
+
   renderTextList(
     elements.managerTrainingPlan,
-    viewModel.trainingPlan,
-    (item) => `${item.areaText}: ${item.suggestedSession}`,
+    trainingItems,
+    (item) => item.text,
     viewModel.emptyStates.trainingPlan,
   );
 
@@ -848,9 +870,7 @@ function renderManagerDashboardViewModel(viewModel) {
   );
 
   if (elements.activeKnowledgeFocus) {
-    const active = viewModel.knowledgeRecommendations.find(
-      (item) => item.principleId === state.activeKnowledgeFocusId,
-    );
+    const active = activeKnowledge;
 
     if (active) {
       elements.activeKnowledgeFocus.textContent =
