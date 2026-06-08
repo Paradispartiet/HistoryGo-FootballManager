@@ -58,7 +58,7 @@ async function loadJson(path) {
   return response.json();
 }
 
-function setOptions(select, items, getValue, getLabel, emptyLabel = null) {
+function setOptions(select, items, getValue, getLabel, emptyLabel = null, shouldDisable = null) {
   select.innerHTML = "";
 
   if (emptyLabel) {
@@ -72,6 +72,7 @@ function setOptions(select, items, getValue, getLabel, emptyLabel = null) {
     const option = document.createElement("option");
     option.value = getValue(item);
     option.textContent = getLabel(item);
+    option.disabled = shouldDisable ? shouldDisable(item) : false;
     select.append(option);
   });
 }
@@ -202,6 +203,15 @@ function getTeamFit() {
   });
 }
 
+function getUsedPlayerIds(exceptSlotId = null) {
+  return new Set(
+    Object.entries(state.lineup)
+      .filter(([slotId]) => slotId !== exceptSlotId)
+      .map(([, slotState]) => slotState.playerId)
+      .filter(Boolean)
+  );
+}
+
 function getDefaultRoleForPlayer(player, slot) {
   if (!player || !slot) {
     return null;
@@ -219,6 +229,24 @@ function getDefaultRoleForPlayer(player, slot) {
   return validRole?.id || state.roles[0]?.id || null;
 }
 
+function findBestAvailablePlayerForSlot(slot, usedPlayerIds) {
+  const tiers = [
+    (candidate) => candidate.naturalPositions.includes(slot.position),
+    (candidate) => candidate.usablePositions.includes(slot.position),
+    (candidate) => !candidate.poorFits.includes(slot.position)
+  ];
+
+  for (const matches of tiers) {
+    const player = state.players.find((candidate) => !usedPlayerIds.has(candidate.id) && matches(candidate));
+
+    if (player) {
+      return player;
+    }
+  }
+
+  return null;
+}
+
 function seedLineupForFormation() {
   const formation = getFormation();
 
@@ -232,13 +260,7 @@ function seedLineupForFormation() {
   const usedPlayerIds = new Set();
 
   formation.slots.forEach((slot) => {
-    const player = state.players.find((candidate) => {
-      if (usedPlayerIds.has(candidate.id)) {
-        return false;
-      }
-
-      return candidate.naturalPositions.includes(slot.position) || candidate.usablePositions.includes(slot.position);
-    });
+    const player = findBestAvailablePlayerForSlot(slot, usedPlayerIds);
 
     if (!player) {
       state.lineup[slot.slotId] = {
@@ -276,6 +298,10 @@ function renderList(list, items) {
 function getTeamStatus(teamFit) {
   if (!teamFit || teamFit.completeCount < teamFit.totalSlots) {
     return "Ufullstendig";
+  }
+
+  if (teamFit.duplicatePlayers?.length > 0) {
+    return "Ugyldig ellever";
   }
 
   if (teamFit.teamScore >= 84) {
@@ -338,6 +364,10 @@ function renderLineup(teamFit) {
       button.classList.add("is-misused");
     }
 
+    if (teamFit.duplicatePlayers.some((player) => player.id === assignment?.player?.id)) {
+      button.classList.add("is-duplicate");
+    }
+
     const playerName = assignment?.player?.name || "Tom plass";
     const roleName = assignment?.role?.name || "Ingen rolle";
     const score = assignment?.fit?.matchScore ?? "–";
@@ -367,6 +397,7 @@ function renderSlotEditor(teamFit) {
 
   const slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
   const assignment = teamFit?.assignments.find((item) => item.slot.slotId === slot.slotId);
+  const usedPlayerIds = getUsedPlayerIds(slot.slotId);
 
   elements.selectedSlotTitle.textContent = `${slot.label} · ${slot.position}`;
 
@@ -375,7 +406,8 @@ function renderSlotEditor(teamFit) {
     state.players,
     (player) => player.id,
     (player) => `${player.name} · ${player.overall}`,
-    "Tom plass"
+    "Tom plass",
+    (player) => usedPlayerIds.has(player.id)
   );
 
   const roleOptions = state.roles.filter((role) => role.validPositions.includes(slot.position));
