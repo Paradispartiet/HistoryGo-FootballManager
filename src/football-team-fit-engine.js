@@ -30,6 +30,23 @@ function countPositions(assignments, positions) {
   return assignments.filter((assignment) => positions.includes(assignment.slot.position)).length;
 }
 
+function getDuplicatePlayers(assignments) {
+  const counts = new Map();
+
+  assignments.forEach((assignment) => {
+    if (!assignment.player?.id) {
+      return;
+    }
+
+    counts.set(assignment.player.id, (counts.get(assignment.player.id) || 0) + 1);
+  });
+
+  return [...counts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([playerId]) => assignments.find((assignment) => assignment.player?.id === playerId)?.player)
+    .filter(Boolean);
+}
+
 function buildAssignmentResults(lineup, formation, tactic, players, roles) {
   return formation.slots.map((slot) => {
     const slotState = lineup[slot.slotId] || {};
@@ -200,7 +217,7 @@ function calculateRestDefenseScore(assignments, tactic) {
   return clamp(score);
 }
 
-function buildTeamReport({ assignmentResults, metrics, tactic }) {
+function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers }) {
   const strengths = [];
   const issues = [];
   const completeAssignments = assignmentResults.filter((assignment) => assignment.isComplete);
@@ -237,6 +254,10 @@ function buildTeamReport({ assignmentResults, metrics, tactic }) {
     issues.push("Restforsvaret er sårbart når laget angriper.");
   }
 
+  duplicatePlayers.forEach((player) => {
+    issues.push(`${player.name} er brukt flere steder i samme ellever. Hver spiller bør bare brukes én gang.`);
+  });
+
   const misusedPlayers = completeAssignments.filter((assignment) => assignment.fit.status === "feilbrukt");
   const bestFit = [...completeAssignments].sort((a, b) => b.fit.matchScore - a.fit.matchScore)[0];
 
@@ -264,6 +285,7 @@ function buildTeamReport({ assignmentResults, metrics, tactic }) {
 export function calculateTeamFit({ lineup, formation, tactic, players, roles }) {
   const assignmentResults = buildAssignmentResults(lineup, formation, tactic, players, roles);
   const completeAssignments = assignmentResults.filter((assignment) => assignment.isComplete);
+  const duplicatePlayers = getDuplicatePlayers(completeAssignments);
   const individualScores = completeAssignments.map((assignment) => assignment.fit.matchScore);
   const roleFits = completeAssignments.map((assignment) => assignment.fit.roleFit);
   const tacticFits = completeAssignments.map((assignment) => assignment.fit.tacticFit);
@@ -279,7 +301,8 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles }) 
     depthScore: calculateDepthScore(completeAssignments, tactic),
     buildUpScore: calculateBuildUpScore(completeAssignments, tactic),
     pressScore: calculatePressScore(completeAssignments, tactic),
-    restDefenseScore: calculateRestDefenseScore(completeAssignments, tactic)
+    restDefenseScore: calculateRestDefenseScore(completeAssignments, tactic),
+    duplicatePenalty: duplicatePlayers.length * 12
   };
 
   const teamScore = clamp(Math.round(
@@ -292,7 +315,8 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles }) 
     metrics.buildUpScore * 0.08 +
     metrics.pressScore * 0.06 +
     metrics.restDefenseScore * 0.06 -
-    metrics.misuseAverage * 0.08
+    metrics.misuseAverage * 0.08 -
+    metrics.duplicatePenalty
   ));
 
   return {
@@ -301,6 +325,7 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles }) 
     totalSlots: formation.slots.length,
     metrics,
     assignments: assignmentResults,
-    report: buildTeamReport({ assignmentResults, metrics, tactic })
+    duplicatePlayers,
+    report: buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers })
   };
 }
