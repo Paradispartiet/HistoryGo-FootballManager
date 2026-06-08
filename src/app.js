@@ -3,6 +3,10 @@ import { calculateTeamFit } from "./football-team-fit-engine.js";
 import {
   createLegacyManagerAppStateFromBrowserState,
   getDashboardViewModelFromLegacyManagerState,
+  createInitialClubWeekStateFromBrowser,
+  advanceClubWeekPhaseFromBrowser,
+  createClubWeekSummaryFromBrowser,
+  getClubWeekPhaseLabelFromBrowser,
 } from "./app-manager-engine-bridge.js";
 
 const DATA_PATHS = {
@@ -18,6 +22,7 @@ const POSITIONS_KEY = "hgfm.slotPositions.v1";
 const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
 const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
 const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
+const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -39,7 +44,9 @@ const state = {
   // Kunnskapsfokus som er markert fullført denne uken (kun UI/progresjon, ingen score-effekt).
   completedKnowledgeFocusIds: new Set(),
   // Gjeldende treningsuke (kun UI/progresjon, ingen kampmotor- eller score-effekt).
-  trainingWeek: 1
+  trainingWeek: 1,
+  // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
+  clubWeekState: null
 };
 
 const elements = {
@@ -79,7 +86,15 @@ const elements = {
   advanceTrainingWeek: document.querySelector("#advanceTrainingWeek"),
   trainingHistoryList: document.querySelector("#trainingHistoryList"),
   knowledgeCompletedThisWeek: document.querySelector("#knowledgeCompletedThisWeek"),
-  knowledgeCompletedTotal: document.querySelector("#knowledgeCompletedTotal")
+  knowledgeCompletedTotal: document.querySelector("#knowledgeCompletedTotal"),
+  clubWeekSummary: document.querySelector("#clubWeekSummary"),
+  clubWeekPhase: document.querySelector("#clubWeekPhase"),
+  advanceClubWeekPhase: document.querySelector("#advanceClubWeekPhase"),
+  clubBoardTrust: document.querySelector("#clubBoardTrust"),
+  clubPlayerMorale: document.querySelector("#clubPlayerMorale"),
+  clubTacticalClarity: document.querySelector("#clubTacticalClarity"),
+  clubTrainingCulture: document.querySelector("#clubTrainingCulture"),
+  clubMediaPressure: document.querySelector("#clubMediaPressure")
 };
 
 let managerEngineRenderId = 0;
@@ -383,6 +398,36 @@ function advanceTrainingWeek() {
   clearActiveKnowledgeFocus();
   // Fullført-status leses på nytt for gjeldende uke (tom for en helt ny uke).
   state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
+}
+
+// Club Week-tilstand: uke, fase og klubbverdier fra Club Week Engine.
+// Kun lett persistens i localStorage – selve logikken ligger i engine/fallback.
+function loadClubWeekState() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(CLUB_WEEK_STATE_KEY));
+
+    if (stored && typeof stored === "object" && !Array.isArray(stored)) {
+      return stored;
+    }
+
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveClubWeekState(clubWeekState) {
+  try {
+    localStorage.setItem(CLUB_WEEK_STATE_KEY, JSON.stringify(clubWeekState));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+function setClubWeekState(clubWeekState) {
+  state.clubWeekState = clubWeekState;
+  saveClubWeekState(clubWeekState);
+  renderApp();
 }
 
 // Fullført ukesøkt: hvilke kunnskapsfokus brukeren har markert som gjennomført.
@@ -1162,6 +1207,49 @@ async function renderManagerEngineBridge() {
   renderManagerDashboardViewModel(viewModel);
 }
 
+// Render Club Week-panelet: uke, fase og klubbverdier. Async fordi summary/label
+// hentes via bridge (engine eller fallback). Påvirker ikke resten av renderApp.
+async function renderClubWeek() {
+  if (!state.clubWeekState) {
+    return;
+  }
+
+  const clubWeekState = state.clubWeekState;
+
+  const [summary, phaseLabel] = await Promise.all([
+    createClubWeekSummaryFromBrowser(clubWeekState),
+    getClubWeekPhaseLabelFromBrowser(clubWeekState.phase),
+  ]);
+
+  if (elements.clubWeekSummary) {
+    elements.clubWeekSummary.textContent = summary;
+  }
+
+  if (elements.clubWeekPhase) {
+    elements.clubWeekPhase.textContent = phaseLabel;
+  }
+
+  if (elements.clubBoardTrust) {
+    elements.clubBoardTrust.textContent = String(clubWeekState.boardTrust);
+  }
+
+  if (elements.clubPlayerMorale) {
+    elements.clubPlayerMorale.textContent = String(clubWeekState.playerMorale);
+  }
+
+  if (elements.clubTacticalClarity) {
+    elements.clubTacticalClarity.textContent = String(clubWeekState.tacticalClarity);
+  }
+
+  if (elements.clubTrainingCulture) {
+    elements.clubTrainingCulture.textContent = String(clubWeekState.trainingCulture);
+  }
+
+  if (elements.clubMediaPressure) {
+    elements.clubMediaPressure.textContent = String(clubWeekState.mediaPressure);
+  }
+}
+
 function renderApp() {
   const teamFit = getTeamFit();
 
@@ -1172,6 +1260,7 @@ function renderApp() {
   renderReport(teamFit);
 
   renderManagerEngineBridge();
+  renderClubWeek().catch(console.error);
 }
 
 function bindEvents() {
@@ -1236,6 +1325,18 @@ function bindEvents() {
       renderApp();
     });
   }
+
+  if (elements.advanceClubWeekPhase) {
+    elements.advanceClubWeekPhase.addEventListener("click", async () => {
+      // Mangler tilstanden, lager vi en initial uke 1 / analyse først.
+      if (!state.clubWeekState) {
+        state.clubWeekState = await createInitialClubWeekStateFromBrowser({});
+      }
+
+      const next = await advanceClubWeekPhaseFromBrowser(state.clubWeekState);
+      setClubWeekState(next);
+    });
+  }
 }
 
 function initTabs() {
@@ -1295,6 +1396,11 @@ async function init() {
     if (dataWarnings.length > 0) {
       console.warn("Football Manager-data har kvalitetsadvarsler:", dataWarnings);
     }
+
+    // Club Week-tilstand: les lagret tilstand og la engine/fallback normalisere
+    // den (ugyldig/gammel verdi blir uke 1 / analyse).
+    const storedClubWeekState = loadClubWeekState();
+    state.clubWeekState = await createInitialClubWeekStateFromBrowser(storedClubWeekState || {});
 
     seedLineupForFormation();
     ensurePositionsForFormation();

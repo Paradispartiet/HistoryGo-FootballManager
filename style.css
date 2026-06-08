@@ -903,6 +903,91 @@ ul {
   color: var(--text);
 }
 
+/* ---------- Club Week-panel ---------- */
+/* Klubbuke: uke, fase og klubbverdier. Sort bakgrunn, hvite rammer, store
+   lesbare tall. Ingen gul flate. Matcher resten av den sort/hvite stilen. */
+.club-week-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.club-week-panel h2 {
+  margin: 0;
+}
+
+.club-week-phase-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.club-week-phase-row span {
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: #000000;
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+}
+
+#advanceClubWeekPhase {
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+#advanceClubWeekPhase:hover {
+  background: var(--text);
+  color: #000000;
+}
+
+#advanceClubWeekPhase:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+.club-week-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.club-week-metrics article {
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--panel-strong);
+  padding: 14px;
+}
+
+.club-week-metrics span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.club-week-metrics strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--text);
+  font-size: 1.8rem;
+  line-height: 1;
+  font-weight: 900;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   padding: 8px 0 40px;
