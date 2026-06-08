@@ -76,7 +76,8 @@ const elements = {
   activeKnowledgeFocus: document.querySelector("#activeKnowledgeFocus"),
   clearKnowledgeFocus: document.querySelector("#clearKnowledgeFocus"),
   trainingWeekStatus: document.querySelector("#trainingWeekStatus"),
-  advanceTrainingWeek: document.querySelector("#advanceTrainingWeek")
+  advanceTrainingWeek: document.querySelector("#advanceTrainingWeek"),
+  trainingHistoryList: document.querySelector("#trainingHistoryList")
 };
 
 let managerEngineRenderId = 0;
@@ -670,6 +671,64 @@ function renderKnowledgeCards(list, items, emptyText) {
   });
 }
 
+// Leser hele fullført-lageret (objekt per uke). Tynn wrapper rundt den
+// migrerende leseren, slik at historikk-renderen kan vise alle uker, ikke
+// bare gjeldende uke. Kun UI/progresjon, ingen engine- eller score-effekt.
+function getCompletedKnowledgeFocusStore() {
+  return readCompletedKnowledgeFocusStore();
+}
+
+// Finn lesbar tittel for en fullført principleId i gjeldende viewModel.
+// Faller trygt tilbake til selve ID-en hvis prinsippet ikke finnes lenger.
+function findKnowledgePrincipleTitle(principleId, viewModel) {
+  const match = viewModel.knowledgeRecommendations.find((item) => item.principleId === principleId);
+  return match?.title || principleId;
+}
+
+// Enkel treningshistorikk: lister fullførte kunnskapsøkter gruppert per uke,
+// nyeste uke først. Rent UI/progresjon fra localStorage – ingen engine- eller
+// score-effekt. Bruker kun textContent, ingen innerHTML.
+function renderTrainingHistory(list, viewModel) {
+  if (!list) {
+    return;
+  }
+
+  const store = getCompletedKnowledgeFocusStore();
+  const weeks = Object.keys(store)
+    .map((week) => Number(week))
+    .filter((week) => Number.isInteger(week) && week >= 1)
+    .sort((a, b) => b - a);
+
+  list.innerHTML = "";
+
+  const hasHistory = weeks.some((week) => {
+    const ids = store[String(week)];
+    return Array.isArray(ids) && ids.length > 0;
+  });
+
+  if (!hasHistory) {
+    const empty = document.createElement("li");
+    empty.textContent = "Ingen fullførte kunnskapsøkter ennå.";
+    list.append(empty);
+    return;
+  }
+
+  weeks.forEach((week) => {
+    const ids = store[String(week)];
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return;
+    }
+
+    const titles = ids.map((id) => findKnowledgePrincipleTitle(id, viewModel));
+
+    const item = document.createElement("li");
+    item.className = "training-history-week";
+    item.textContent = `Uke ${week}: ${titles.join(", ")}`;
+    list.append(item);
+  });
+}
+
 function getTeamStatus(teamFit) {
   if (!teamFit || teamFit.completeCount < teamFit.totalSlots) {
     return "Ufullstendig";
@@ -1028,6 +1087,8 @@ function renderManagerDashboardViewModel(viewModel) {
     viewModel.knowledgeRecommendations,
     viewModel.emptyStates.knowledgeRecommendations,
   );
+
+  renderTrainingHistory(elements.trainingHistoryList, viewModel);
 
   if (elements.activeKnowledgeFocus) {
     const active = activeKnowledge;
