@@ -838,6 +838,38 @@ ul {
   padding: 10px 14px;
 }
 
+/* ---------- Knowledge-progresjon ---------- */
+/* Små, kompakte tallkort: sort bakgrunn, myk hvit ramme, ingen gul flate. */
+.knowledge-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.knowledge-progress-grid article {
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--panel-strong);
+  padding: 12px 14px;
+}
+
+.knowledge-progress-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.knowledge-progress-grid strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.6rem;
+  color: var(--text);
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   padding: 8px 0 40px;
