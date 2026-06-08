@@ -1,8 +1,8 @@
 # HistoryGo Football Manager
 
-HistoryGo Football Manager er en selvstendig første prototype for fotballmanager-delen av History Go / Civication.
+HistoryGo Football Manager er en selvstendig prototype for fotballmanager-delen av History Go / Civication.
 
-Prosjektet skal bygge en fotballfaglig manager der trenerens forståelse er viktigere enn rå rating. Det er ikke et vanlig samlekortspill der spilleren bare finner bedre og bedre kort.
+Prosjektet skal bygge en fotballfaglig manager der trenerens forståelse er viktigere enn rå rating. Dette er ikke et vanlig samlekortspill der spilleren bare finner bedre og bedre kort.
 
 ## Kjerneidé
 
@@ -23,13 +23,22 @@ Spillet skal derfor spørre:
 - Hvilke medspillere gjør ham bedre?
 - Hvilke trenerfeil skjuler kvaliteten hans?
 
-## Hva første versjon gjør
+## Hva denne versjonen gjør
 
-Første MVP tester bare én ting:
+Denne versjonen har gått fra én-spiller-test til startellever-test.
 
-> Velg spiller → velg posisjon → velg rolle → velg taktikk → se om treneren bruker spilleren riktig.
+Appen lar deg nå:
 
-Denne prototypen har ikke full kampmotor, liga, tabell, tropp, startellever, benk eller sesong. Første mål er å bevise at rollefit-motoren fungerer.
+1. velge formasjon
+2. velge taktikk
+3. fylle elleve posisjonsslots
+4. velge spiller per slot
+5. velge rolle per slot
+6. se individuell spillerfit for valgt plass
+7. se samlet lagfit
+8. lese en enkel lagrapport med styrker og problemer
+
+Dette er fortsatt ikke full kampmotor, liga, tabell, tropp, benk eller sesong. Målet med denne versjonen er å teste om en hel ellever henger sammen taktisk.
 
 ## Nåværende filstruktur
 
@@ -40,10 +49,12 @@ README.md
 src/
   app.js
   football-fit-engine.js
+  football-team-fit-engine.js
 data/
   football_players.json
   football_roles.json
   football_tactics.json
+  football_formations.json
 ```
 
 ## Kjøring
@@ -85,6 +96,10 @@ Spillet skal ikke bare vise `72`. Det skal forklare hvorfor spilleren får 72, h
 ### 5. Posisjon og rolle er ikke det samme
 
 En spiller kan stå i LW, men rollen kan være bred dribler, innoverkant eller fri offensiv skaper. Motoren må derfor vurdere både posisjon og rolle.
+
+### 6. Laget er mer enn summen av spillerne
+
+Samlet lagfit skal ikke bare være gjennomsnitt av elleve spillere. Laget må også vurderes for balanse, bredde, dybde, oppbygging, press og restforsvar.
 
 ## Datakontrakt
 
@@ -183,9 +198,34 @@ Hver taktikk skal ha:
 
 Taktiske `tags` er det viktigste koblingsfeltet. De brukes av fit-motoren for å se om spillerens behov, rolle og taktikk peker i samme retning.
 
-## Fit-motor
+### `data/football_formations.json`
 
-Fit-motoren ligger i:
+Formasjonsdata ligger under toppfeltet `formations`.
+
+Hver formasjon skal ha nøyaktig elleve slots:
+
+```json
+{
+  "id": "4-3-3",
+  "name": "4-3-3",
+  "description": "Balansert formasjon med tre angripere, tre midtbanespillere og naturlig bredde.",
+  "slots": [
+    { "slotId": "gk", "label": "Keeper", "position": "GK", "line": "keeper" },
+    { "slotId": "lb", "label": "Venstreback", "position": "LB", "line": "defense" }
+  ]
+}
+```
+
+`line` brukes foreløpig for visuell plassering på banen:
+
+- `keeper`
+- `defense`
+- `midfield`
+- `attack`
+
+## Individuell fit-motor
+
+Individuell fit-motor ligger i:
 
 ```txt
 src/football-fit-engine.js
@@ -230,11 +270,67 @@ Status skal være:
 - `brukbar`
 - `feilbrukt`
 
+## Lagfit-motor
+
+Lagfit-motoren ligger i:
+
+```txt
+src/football-team-fit-engine.js
+```
+
+Den bygger på individuell fit og legger til helhetsvurdering av laget.
+
+`calculateTeamFit` returnerer:
+
+```json
+{
+  "teamScore": 78,
+  "completeCount": 11,
+  "totalSlots": 11,
+  "metrics": {
+    "individualFitAverage": 80,
+    "roleFitAverage": 76,
+    "tacticFitAverage": 72,
+    "misuseAverage": 8,
+    "balanceScore": 74,
+    "widthScore": 82,
+    "depthScore": 69,
+    "buildUpScore": 77,
+    "pressScore": 61,
+    "restDefenseScore": 70,
+    "duplicatePenalty": 0
+  },
+  "assignments": [],
+  "duplicatePlayers": [],
+  "report": {
+    "summary": "...",
+    "strengths": [],
+    "issues": []
+  }
+}
+```
+
+Lagfit vurderer foreløpig:
+
+- individuell fit
+- rollefit
+- taktisk fit
+- feilbruk
+- balanse
+- bredde
+- dybde
+- oppbygging
+- press
+- restforsvar
+- duplikatspillere
+
 ## Hvordan score skal forstås
 
 `matchScore` er ikke en objektiv sannhet om spilleren. Det er en vurdering av hvordan treneren bruker spilleren i akkurat denne rollen, posisjonen og taktikken.
 
-En høy score betyr:
+`teamScore` er ikke bare gjennomsnittet av spillerne. Det er en vurdering av om laget henger sammen som helhet.
+
+En høy individuell score betyr:
 
 - posisjonen passer
 - rollen passer
@@ -242,15 +338,18 @@ En høy score betyr:
 - spillerens behov blir møtt
 - treneren legger til rette for foretrukne situasjoner
 
-En lav score betyr:
+En høy lagscore betyr:
 
-- spilleren brukes på feil sted
-- rollen skjuler styrkene hans
-- taktikken treffer misliker-punkter
-- spilleren får ikke nok av situasjonene han trenger
-- treneren gjør en strukturell feil
+- flere spillere brukes riktig
+- rollene passer taktikken
+- laget har balanse
+- laget har nok bredde/dybde
+- oppbygging og press passer spillerne
+- restforsvaret tåler lagets angrepsmønster
 
-## Eksempel: riktig bruk
+En lav score betyr ikke at spillerne er dårlige. Det betyr at treneren har satt sammen laget feil.
+
+## Eksempel: riktig individuell bruk
 
 Driblende venstrekant:
 
@@ -268,7 +367,7 @@ Forventet vurdering:
 
 Forklaring: spilleren får bredde, rom, 1v1-situasjoner og støtte i et system som isolerer kantspillere.
 
-## Eksempel: feil bruk
+## Eksempel: feil individuell bruk
 
 Driblende venstrekant:
 
@@ -285,18 +384,31 @@ Forventet vurdering:
 
 Forklaring: spilleren mister bredde, 1v1-situasjoner og rom til å utfordre. Problemet er trenerens bruk, ikke spillerens kvalitet.
 
+## Eksempel: lagproblem
+
+Et lag kan ha mange gode enkeltspillere, men fortsatt få lavere lagfit hvis:
+
+- begge backene går høyt uten balanserende sekser
+- taktikken søker bakrom, men laget mangler bakromsløpere
+- laget spiller possession uten dyp playmaker, ballspillende stopper eller sweeperkeeper
+- laget spiller høyt press uten presspiss eller pressende midtbanespiller
+- samme spiller brukes flere steder
+
 ## Appflyt
 
 `src/app.js` gjør dette:
 
 1. laster JSON-data med `fetch`
-2. fyller select-feltene
-3. setter første spiller/rolle/taktikk
-4. lytter på brukerens valg
-5. sender valgt kombinasjon til fit-motoren
-6. viser score, status, forklaring, advarsler og bedre roller
+2. validerer spillere, roller, taktikker og formasjoner
+3. fyller formasjon- og taktikkvalg
+4. auto-fyller en startellever basert på formasjon
+5. lar brukeren klikke en slot på banen
+6. lar brukeren endre spiller og rolle for valgt slot
+7. hindrer valg av samme spiller i flere slots via disabled player-options
+8. sender hele elleveren til `calculateTeamFit`
+9. viser lagscore, delmetrikker og rapport
 
-`index.html` inneholder bare første demo-UI. Det skal ikke inneholde hardkodet spillerdata.
+`index.html` inneholder bare demo-UI. Det skal ikke inneholde hardkodet spillerdata.
 
 ## Kvalitetssjekk før nye endringer
 
@@ -311,6 +423,8 @@ Før nye endringer bør dette sjekkes:
 - Alle spillere bør ha minst én `preferredRoles`.
 - Alle roller bør ha minst én `validPositions`.
 - Alle taktikker bør ha minst én `tags`.
+- Alle formasjoner må ha nøyaktig 11 slots.
+- Alle formasjonsslots må ha gyldig `position`.
 - Nye tagger bør enten være bevisst nye eller gjenbrukes på tvers av spiller/rolle/taktikk.
 
 ### Motor
@@ -320,6 +434,8 @@ Før nye endringer bør dette sjekkes:
 - Forklaringsteksten skal ikke antyde at spilleren er dårlig.
 - Feilbruk skal beskrives som trenerfeil.
 - Dribler som spiss skal fortsatt gi tydelig advarsel.
+- Lagfit skal ikke bare være gjennomsnitt av enkeltspillere.
+- Duplikatspillere skal oppdages og gi problem i rapporten.
 
 ### UI
 
@@ -327,18 +443,18 @@ Før nye endringer bør dette sjekkes:
 - Endring i JSON skal kunne vises uten endring i app-logikken.
 - Kontrollene skal fungere på mobil/iPad.
 - Resultatet skal vise forklaring, ikke bare tall.
+- Banen skal være lesbar også når formasjoner har ulike linjer.
 
 ## Bevisste avgrensninger i denne versjonen
 
 Følgende er ikke bygget ennå:
 
-- full startellever
 - benk
 - troppskrav på 15 spillere
-- samlet lagfit
-- relasjoner mellom spillere
+- spillerrelasjoner som egen motor
+- motstanderprofil
 - kampmotor
-- kamprapport
+- kamprapport etter kamp
 - ukekamp
 - liga
 - sesong
@@ -348,17 +464,17 @@ Følgende er ikke bygget ennå:
 - lisensierte spillernavn
 - ekte klubbdata
 
-Dette er bevisst. Først må grunnmotoren for rollefit bli riktig.
+Dette er bevisst. Først må grunnmotoren for rollefit og lagfit bli riktig.
 
 ## Neste utviklingsrekkefølge
 
 Anbefalt videre rekkefølge:
 
-1. Utvid fra én-spiller-test til full startellever.
-2. Lag `football_formations.json` med posisjonsslots.
-3. Lag samlet lagfit basert på elleve spillere.
-4. Legg inn enkle relasjoner mellom roller.
-5. Legg inn benk og troppskrav på 15 spillere.
+1. Kvalitetssikre startellever-UI i nettleser/iPad.
+2. Legg inn flere spillere slik at alle formasjoner kan fylles bedre.
+3. Legg inn benk og troppskrav på 15 spillere.
+4. Lag en tydeligere relasjonsmotor mellom roller.
+5. Lag motstanderprofiler.
 6. Lag enkel ukekamp uten live-kampmotor.
 7. Lag kamprapport som forklarer trenerens valg.
 8. Lag liga og sesong.
@@ -371,9 +487,9 @@ Mulige senere filer:
 
 ```txt
 data/
-  football_formations.json
   football_team_state.json
   football_relationships.json
+  football_opponents.json
   football_match_events.json
   football_leagues.json
   football_unlocks.json
@@ -385,7 +501,8 @@ Mulige senere JS-filer:
 ```txt
 src/
   football-lineup-engine.js
-  football-team-fit-engine.js
+  football-relationship-engine.js
+  football-opponent-engine.js
   football-match-sim.js
   football-report-engine.js
   football-storage.js
