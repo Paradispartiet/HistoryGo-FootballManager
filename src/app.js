@@ -15,6 +15,7 @@ const DATA_PATHS = {
 
 const EMPTY_VALUE = "__empty__";
 const POSITIONS_KEY = "hgfm.slotPositions.v1";
+const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -30,7 +31,9 @@ const state = {
   selectedSlotId: null,
   lineup: {},
   // slotId -> { x, y } i prosent innenfor banen, for gjeldende formasjon.
-  slotPositions: {}
+  slotPositions: {},
+  // Valgt kunnskapskort som ukens treningsfokus (kun UI/state, ingen kampmotor-effekt).
+  activeKnowledgeFocusId: null
 };
 
 const elements = {
@@ -63,7 +66,8 @@ const elements = {
   managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
   managerRoleChanges: document.querySelector("#managerRoleChanges"),
   managerWeakPoints: document.querySelector("#managerWeakPoints"),
-  managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations")
+  managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations"),
+  activeKnowledgeFocus: document.querySelector("#activeKnowledgeFocus")
 };
 
 let managerEngineRenderId = 0;
@@ -314,6 +318,32 @@ function saveStoredPositions(all) {
   }
 }
 
+// Aktivt treningsfokus: hvilket kunnskapskort brukeren har valgt for uken.
+// Kun lett persistens i localStorage, ingen effekt på score eller engine.
+function loadActiveKnowledgeFocus() {
+  try {
+    return localStorage.getItem(ACTIVE_KNOWLEDGE_FOCUS_KEY) || null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveActiveKnowledgeFocus(principleId) {
+  try {
+    localStorage.setItem(ACTIVE_KNOWLEDGE_FOCUS_KEY, principleId);
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+function clearActiveKnowledgeFocus() {
+  try {
+    localStorage.removeItem(ACTIVE_KNOWLEDGE_FOCUS_KEY);
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
 // Logiske standardposisjoner: grupper slots per lagdel og spre dem jevnt i bredden.
 function computeDefaultPositions(formation) {
   const positions = {};
@@ -427,8 +457,14 @@ function renderKnowledgeCards(list, items, emptyText) {
   }
 
   items.forEach((item) => {
+    const isActiveFocus = item.principleId === state.activeKnowledgeFocusId;
+
     const card = document.createElement("li");
     card.className = "knowledge-card";
+
+    if (isActiveFocus) {
+      card.classList.add("is-active-focus");
+    }
 
     const header = document.createElement("div");
     header.className = "knowledge-card-header";
@@ -454,6 +490,25 @@ function renderKnowledgeCards(list, items, emptyText) {
     session.textContent = `Økt: ${item.trainingSession}`;
 
     card.append(header, reason, advice, session);
+
+    if (isActiveFocus) {
+      const status = document.createElement("p");
+      status.className = "knowledge-focus-status";
+      status.textContent = "Aktivt treningsfokus";
+      card.append(status);
+    }
+
+    const action = document.createElement("button");
+    action.type = "button";
+    action.className = "knowledge-card-action";
+    action.textContent = isActiveFocus ? "Aktivt fokus" : "Sett som ukens fokus";
+    action.addEventListener("click", () => {
+      state.activeKnowledgeFocusId = item.principleId;
+      saveActiveKnowledgeFocus(item.principleId);
+      renderApp();
+    });
+    card.append(action);
+
     list.append(card);
   });
 }
@@ -790,6 +845,19 @@ function renderManagerDashboardViewModel(viewModel) {
     viewModel.knowledgeRecommendations,
     viewModel.emptyStates.knowledgeRecommendations,
   );
+
+  if (elements.activeKnowledgeFocus) {
+    const active = viewModel.knowledgeRecommendations.find(
+      (item) => item.principleId === state.activeKnowledgeFocusId,
+    );
+
+    if (active) {
+      elements.activeKnowledgeFocus.textContent =
+        `Aktivt fokus: ${active.title} — ${active.trainingSession}`;
+    } else {
+      elements.activeKnowledgeFocus.textContent = "Ingen aktiv kunnskapsøkt valgt.";
+    }
+  }
 }
 
 async function renderManagerEngineBridge() {
@@ -926,6 +994,7 @@ async function init() {
 
     state.selectedFormationId = state.formations[0]?.id || null;
     state.selectedTacticId = state.tactics[0]?.id || null;
+    state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
 
     const dataWarnings = validateFootballData(state);
 
