@@ -75,6 +75,13 @@ export type {
 } from "./engine/analyzeWeakPoints.js";
 
 export type {
+  TrainingFocusArea,
+  TrainingFocusIntensity,
+  TrainingFocusItem,
+  TrainingFocusPlan,
+} from "./engine/createTrainingFocus.js";
+
+export type {
   ManagerInsight,
   ManagerInsightAction,
   ManagerInsightActionSource,
@@ -97,11 +104,51 @@ export type {
 } from "./engine/compareFormations.js";
 
 export type {
-  TrainingFocusArea,
-  TrainingFocusIntensity,
-  TrainingFocusItem,
-  TrainingFocusPlan,
-} from "./engine/createTrainingFocus.js";
+  DashboardActionCard,
+  DashboardMetricCard,
+  DashboardRoleChangeCard,
+  DashboardScorePanel,
+  DashboardSeverity,
+  DashboardSummaryPanel,
+  DashboardTrainingCard,
+  DashboardWeakPointCard,
+  ManagerDashboardData,
+} from "./engine/createManagerDashboardData.js";
+
+export type {
+  DashboardActionViewModel,
+  DashboardMetricViewModel,
+  DashboardRoleChangeViewModel,
+  DashboardScoreViewModel,
+  DashboardSummaryViewModel,
+  DashboardTrainingViewModel,
+  DashboardViewModelCardClass,
+  DashboardWeakPointViewModel,
+  ManagerDashboardViewModel,
+} from "./engine/createManagerDashboardViewModel.js";
+
+export type {
+  ManagerAppState,
+  ManagerAppStateInput,
+  ManagerAppStateStatus,
+} from "./engine/createManagerAppState.js";
+
+export type {
+  AdaptLegacyTacticInput,
+  AdaptLegacyTeamInput,
+  LegacyFootballFormation,
+  LegacyFootballFormationSlot,
+  LegacyFootballPlayer,
+  LegacyFootballRole,
+  LegacyFootballTactic,
+  LegacyLineup,
+  LegacyLineupSlotState,
+} from "./engine/adaptLegacyFootballData.js";
+
+export type {
+  LegacyManagerAppState,
+  LegacyManagerAppStateInput,
+} from "./engine/createLegacyManagerAppState.js";
 
 export { calculateRoleFit } from "./engine/calculateRoleFit.js";
 export { calculateTeamBalance } from "./engine/calculateTeamBalance.js";
@@ -109,7 +156,19 @@ export { evaluateTeamSetup } from "./engine/evaluateTeamSetup.js";
 export { createTeamSetupReport } from "./engine/createTeamSetupReport.js";
 export { recommendRoleChanges } from "./engine/recommendRoleChanges.js";
 export { analyzeWeakPoints } from "./engine/analyzeWeakPoints.js";
+export { createTrainingFocus } from "./engine/createTrainingFocus.js";
 export { createManagerInsight } from "./engine/createManagerInsight.js";
 export { compareTactics } from "./engine/compareTactics.js";
 export { compareFormations } from "./engine/compareFormations.js";
-export { createTrainingFocus } from "./engine/createTrainingFocus.js";
+export { createManagerDashboardData } from "./engine/createManagerDashboardData.js";
+export { createManagerDashboardViewModel } from "./engine/createManagerDashboardViewModel.js";
+export { createManagerAppState } from "./engine/createManagerAppState.js";
+
+export {
+  adaptLegacyPlayers,
+  adaptLegacyRoles,
+  adaptLegacyTactic,
+  adaptLegacyTeam,
+} from "./engine/adaptLegacyFootballData.js";
+
+export { createLegacyManagerAppState } from "./engine/createLegacyManagerAppState.js";
