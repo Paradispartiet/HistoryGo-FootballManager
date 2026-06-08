@@ -41,6 +41,7 @@ export async function createLegacyManagerAppStateFromBrowserState({
   selectedTacticId,
   selectedFormationId,
   lineup,
+  knowledgePrinciples = [],
 }) {
   const engine = await loadManagerEngine();
 
@@ -63,6 +64,7 @@ export async function createLegacyManagerAppStateFromBrowserState({
     tactic,
     formation,
     lineup,
+    knowledgePrinciples,
   });
 }
 
