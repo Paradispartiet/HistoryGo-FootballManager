@@ -11,7 +11,7 @@ import type {
   Tactic,
   Team,
   TeamBalanceResult,
-} from "../domain/footballTypes";
+} from "../domain/footballTypes.js";
 
 /**
  * HG Football Manager Core v0.1
@@ -35,8 +35,8 @@ const NEUTRAL_SCORE: Score100 = 70;
 
 type SelectedSlot = {
   assignment: RoleAssignment;
-  player?: Player;
-  role?: Role;
+  player: Player | undefined;
+  role: Role | undefined;
 };
 
 function clampScore(value: number): Score100 {
