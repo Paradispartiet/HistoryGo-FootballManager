@@ -1,0 +1,96 @@
+{
+  "schema": "historygo-football-manager.formations.v1",
+  "version": 1,
+  "formations": [
+    {
+      "id": "4-3-3",
+      "name": "4-3-3",
+      "description": "Balansert formasjon med tre angripere, tre midtbanespillere og naturlig bredde.",
+      "slots": [
+        { "slotId": "gk", "label": "Keeper", "position": "GK", "line": "keeper" },
+        { "slotId": "lb", "label": "Venstreback", "position": "LB", "line": "defense" },
+        { "slotId": "lcb", "label": "Venstre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "rcb", "label": "Høyre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "rb", "label": "Høyreback", "position": "RB", "line": "defense" },
+        { "slotId": "dm", "label": "Sekser", "position": "DM", "line": "midfield" },
+        { "slotId": "lcm", "label": "Venstre indreløper", "position": "CM", "line": "midfield" },
+        { "slotId": "rcm", "label": "Høyre indreløper", "position": "CM", "line": "midfield" },
+        { "slotId": "lw", "label": "Venstrekant", "position": "LW", "line": "attack" },
+        { "slotId": "st", "label": "Spiss", "position": "ST", "line": "attack" },
+        { "slotId": "rw", "label": "Høyrekant", "position": "RW", "line": "attack" }
+      ]
+    },
+    {
+      "id": "4-2-3-1",
+      "name": "4-2-3-1",
+      "description": "Formasjon med dobbel pivot, tierrom og tydelig struktur bak ballen.",
+      "slots": [
+        { "slotId": "gk", "label": "Keeper", "position": "GK", "line": "keeper" },
+        { "slotId": "lb", "label": "Venstreback", "position": "LB", "line": "defense" },
+        { "slotId": "lcb", "label": "Venstre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "rcb", "label": "Høyre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "rb", "label": "Høyreback", "position": "RB", "line": "defense" },
+        { "slotId": "ldm", "label": "Venstre sekser", "position": "DM", "line": "midfield" },
+        { "slotId": "rdm", "label": "Høyre sekser", "position": "DM", "line": "midfield" },
+        { "slotId": "lw", "label": "Venstre offensiv", "position": "LW", "line": "attack" },
+        { "slotId": "am", "label": "Tier", "position": "AM", "line": "attack" },
+        { "slotId": "rw", "label": "Høyre offensiv", "position": "RW", "line": "attack" },
+        { "slotId": "st", "label": "Spiss", "position": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "4-4-2",
+      "name": "4-4-2",
+      "description": "Klassisk struktur med to spisser, bredde fra kantene og tydelig balanse.",
+      "slots": [
+        { "slotId": "gk", "label": "Keeper", "position": "GK", "line": "keeper" },
+        { "slotId": "lb", "label": "Venstreback", "position": "LB", "line": "defense" },
+        { "slotId": "lcb", "label": "Venstre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "rcb", "label": "Høyre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "rb", "label": "Høyreback", "position": "RB", "line": "defense" },
+        { "slotId": "lm", "label": "Venstre midtbane", "position": "LW", "line": "midfield" },
+        { "slotId": "lcm", "label": "Venstre sentral", "position": "CM", "line": "midfield" },
+        { "slotId": "rcm", "label": "Høyre sentral", "position": "CM", "line": "midfield" },
+        { "slotId": "rm", "label": "Høyre midtbane", "position": "RW", "line": "midfield" },
+        { "slotId": "lst", "label": "Venstre spiss", "position": "ST", "line": "attack" },
+        { "slotId": "rst", "label": "Høyre spiss", "position": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "3-4-3",
+      "name": "3-4-3",
+      "description": "Aggressiv formasjon med tre stoppere, vingbacker og høyt trykk.",
+      "slots": [
+        { "slotId": "gk", "label": "Keeper", "position": "GK", "line": "keeper" },
+        { "slotId": "lcb", "label": "Venstre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "ccb", "label": "Midtstopper", "position": "CB", "line": "defense" },
+        { "slotId": "rcb", "label": "Høyre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "lwb", "label": "Venstre vingback", "position": "WB", "line": "midfield" },
+        { "slotId": "lcm", "label": "Venstre sentral", "position": "CM", "line": "midfield" },
+        { "slotId": "rcm", "label": "Høyre sentral", "position": "CM", "line": "midfield" },
+        { "slotId": "rwb", "label": "Høyre vingback", "position": "WB", "line": "midfield" },
+        { "slotId": "lw", "label": "Venstrekant", "position": "LW", "line": "attack" },
+        { "slotId": "st", "label": "Spiss", "position": "ST", "line": "attack" },
+        { "slotId": "rw", "label": "Høyrekant", "position": "RW", "line": "attack" }
+      ]
+    },
+    {
+      "id": "5-4-1",
+      "name": "5-4-1",
+      "description": "Kompakt formasjon for lav blokk, boksforsvar og overganger.",
+      "slots": [
+        { "slotId": "gk", "label": "Keeper", "position": "GK", "line": "keeper" },
+        { "slotId": "lwb", "label": "Venstre vingback", "position": "WB", "line": "defense" },
+        { "slotId": "lcb", "label": "Venstre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "ccb", "label": "Midtstopper", "position": "CB", "line": "defense" },
+        { "slotId": "rcb", "label": "Høyre stopper", "position": "CB", "line": "defense" },
+        { "slotId": "rwb", "label": "Høyre vingback", "position": "WB", "line": "defense" },
+        { "slotId": "lm", "label": "Venstre midtbane", "position": "LW", "line": "midfield" },
+        { "slotId": "lcm", "label": "Venstre sentral", "position": "CM", "line": "midfield" },
+        { "slotId": "rcm", "label": "Høyre sentral", "position": "CM", "line": "midfield" },
+        { "slotId": "rm", "label": "Høyre midtbane", "position": "RW", "line": "midfield" },
+        { "slotId": "st", "label": "Spiss", "position": "ST", "line": "attack" }
+      ]
+    }
+  ]
+}
