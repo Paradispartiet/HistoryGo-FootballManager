@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "audit:knowledge": "node scripts/audit-football-knowledge-data.mjs",
     "build": "tsc"
   },
   "devDependencies": {

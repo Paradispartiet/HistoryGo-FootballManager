@@ -35,6 +35,9 @@ jobs:
       - name: Typecheck TypeScript engine
         run: npm run typecheck
 
+      - name: Audit Football Knowledge data
+        run: npm run audit:knowledge
+
       - name: Build TypeScript engine
         run: npm run build
 
