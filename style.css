@@ -708,6 +708,39 @@ ul {
   padding: 10px 16px;
 }
 
+/* Football Knowledge-progresjon: kompakte sort/hvite tallkort. Ingen gul bakgrunn. */
+.knowledge-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0 0;
+}
+
+.knowledge-progress-grid article {
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: #000000;
+  padding: 12px 14px;
+}
+
+.knowledge-progress-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.knowledge-progress-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--text);
+  font-size: 1.8rem;
+  line-height: 1;
+  font-weight: 900;
+}
+
 .knowledge-card.is-active-focus .knowledge-card-action {
   background: var(--text);
   color: #000000;
