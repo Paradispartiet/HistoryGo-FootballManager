@@ -663,7 +663,8 @@ ul {
 }
 
 /* Sort/hvit knapp som matcher resten av demoens stil. */
-.knowledge-card-action {
+.knowledge-card-action,
+.clear-knowledge-focus-button {
   justify-self: start;
   margin-top: 4px;
   border: 2px solid var(--line);
@@ -678,12 +679,14 @@ ul {
   transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
 
-.knowledge-card-action:hover {
+.knowledge-card-action:hover,
+.clear-knowledge-focus-button:hover {
   background: var(--text);
   color: #000000;
 }
 
-.knowledge-card-action:focus-visible {
+.knowledge-card-action:focus-visible,
+.clear-knowledge-focus-button:focus-visible {
   outline: 3px solid var(--text);
   outline-offset: 2px;
 }
