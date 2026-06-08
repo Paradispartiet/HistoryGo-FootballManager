@@ -48,6 +48,27 @@ export type {
   TeamSetupIssueSeverity,
 } from "./engine/evaluateTeamSetup.js";
 
+export type {
+  BalanceReportItem,
+  CoachAdvice,
+  CoachAdvicePriority,
+  PlayerFitReport,
+  PlayerFitReportStatus,
+  TeamBalanceReport,
+  TeamSetupReport,
+  TeamSetupReportLevel,
+  TeamSetupReportSeverity,
+} from "./engine/createTeamSetupReport.js";
+
+export type {
+  RoleChangeCandidate,
+  RoleChangeRecommendation,
+  RoleChangeRecommendationResult,
+  RoleChangeRecommendationStatus,
+} from "./engine/recommendRoleChanges.js";
+
 export { calculateRoleFit } from "./engine/calculateRoleFit.js";
 export { calculateTeamBalance } from "./engine/calculateTeamBalance.js";
 export { evaluateTeamSetup } from "./engine/evaluateTeamSetup.js";
+export { createTeamSetupReport } from "./engine/createTeamSetupReport.js";
+export { recommendRoleChanges } from "./engine/recommendRoleChanges.js";
