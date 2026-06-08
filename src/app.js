@@ -13,6 +13,10 @@ const DATA_PATHS = {
 };
 
 const EMPTY_VALUE = "__empty__";
+const POSITIONS_KEY = "hgfm.slotPositions.v1";
+
+// Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
+const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
 
 const state = {
   players: [],
@@ -22,7 +26,9 @@ const state = {
   selectedFormationId: null,
   selectedTacticId: null,
   selectedSlotId: null,
-  lineup: {}
+  lineup: {},
+  // slotId -> { x, y } i prosent innenfor banen, for gjeldende formasjon.
+  slotPositions: {}
 };
 
 const elements = {
@@ -284,6 +290,79 @@ function seedLineupForFormation() {
   });
 }
 
+function loadStoredPositions() {
+  try {
+    return JSON.parse(localStorage.getItem(POSITIONS_KEY)) || {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function saveStoredPositions(all) {
+  try {
+    localStorage.setItem(POSITIONS_KEY, JSON.stringify(all));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+// Logiske standardposisjoner: grupper slots per lagdel og spre dem jevnt i bredden.
+function computeDefaultPositions(formation) {
+  const positions = {};
+  const byLine = {};
+
+  formation.slots.forEach((slot) => {
+    (byLine[slot.line] ||= []).push(slot);
+  });
+
+  Object.entries(byLine).forEach(([line, slots]) => {
+    const y = LINE_Y[line] ?? 50;
+    const count = slots.length;
+
+    slots.forEach((slot, index) => {
+      const x = count === 1 ? 50 : 14 + (72 * index) / (count - 1);
+      positions[slot.slotId] = { x, y };
+    });
+  });
+
+  return positions;
+}
+
+// Sørg for at gjeldende formasjon har posisjoner (lagret eller standard) for alle slots.
+function ensurePositionsForFormation() {
+  const formation = getFormation();
+
+  if (!formation) {
+    state.slotPositions = {};
+    return;
+  }
+
+  const all = loadStoredPositions();
+  const defaults = computeDefaultPositions(formation);
+  const stored = all[formation.id] || {};
+  const merged = {};
+
+  formation.slots.forEach((slot) => {
+    merged[slot.slotId] = stored[slot.slotId] || defaults[slot.slotId];
+  });
+
+  all[formation.id] = merged;
+  saveStoredPositions(all);
+  state.slotPositions = merged;
+}
+
+function persistCurrentPositions() {
+  const formation = getFormation();
+
+  if (!formation) {
+    return;
+  }
+
+  const all = loadStoredPositions();
+  all[formation.id] = state.slotPositions;
+  saveStoredPositions(all);
+}
+
 function renderList(list, items) {
   list.innerHTML = "";
 
@@ -356,42 +435,138 @@ function renderLineup(teamFit) {
 
   formation.slots.forEach((slot) => {
     const assignment = teamFit.assignments.find((item) => item.slot.slotId === slot.slotId);
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "lineup-slot";
-    button.dataset.slotId = slot.slotId;
-    button.dataset.line = slot.line;
+    const position = state.slotPositions[slot.slotId] || { x: 50, y: 50 };
+
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "player-chip";
+    chip.dataset.slotId = slot.slotId;
+    chip.dataset.line = slot.line;
+    chip.style.left = `${position.x}%`;
+    chip.style.top = `${position.y}%`;
 
     if (slot.slotId === state.selectedSlotId) {
-      button.classList.add("is-selected");
+      chip.classList.add("is-selected");
     }
 
     if (assignment?.fit?.status === "feilbrukt") {
-      button.classList.add("is-misused");
+      chip.classList.add("is-misused");
     }
 
     if (teamFit.duplicatePlayers.some((player) => player.id === assignment?.player?.id)) {
-      button.classList.add("is-duplicate");
+      chip.classList.add("is-duplicate");
     }
 
     const playerName = assignment?.player?.name || "Tom plass";
     const roleName = assignment?.role?.name || "Ingen rolle";
     const score = assignment?.fit?.matchScore ?? "–";
 
-    button.innerHTML = `
-      <span class="slot-position">${slot.position}</span>
-      <strong>${playerName}</strong>
-      <small>${roleName}</small>
-      <span class="slot-score">${score}</span>
+    chip.innerHTML = `
+      <span class="chip-pos">${slot.position}</span>
+      <span class="chip-name">${playerName}</span>
+      <span class="chip-role">${roleName}</span>
+      <span class="chip-score">${score}</span>
     `;
 
-    button.addEventListener("click", () => {
-      state.selectedSlotId = slot.slotId;
-      renderApp();
-    });
+    chip.setAttribute("aria-label", `${slot.label}: ${playerName}. Dra for å flytte, klikk for å velge.`);
 
-    elements.lineupSlots.append(button);
+    attachChipDrag(chip, slot.slotId);
+
+    elements.lineupSlots.append(chip);
   });
+}
+
+// Drag-and-drop med pointer events: fungerer med mus og touch (også iPad).
+// Liten bevegelse tolkes som klikk (velg plass), større bevegelse som flytting.
+function attachChipDrag(chip, slotId) {
+  const DRAG_THRESHOLD = 5;
+  let dragging = false;
+  let moved = false;
+  let startX = 0;
+  let startY = 0;
+  let pitchRect = null;
+  let pendingPosition = null;
+
+  function clamp(value) {
+    return Math.min(96, Math.max(4, value));
+  }
+
+  function onPointerDown(event) {
+    if (event.button !== undefined && event.button !== 0) {
+      return;
+    }
+
+    dragging = true;
+    moved = false;
+    startX = event.clientX;
+    startY = event.clientY;
+    pitchRect = elements.lineupSlots.getBoundingClientRect();
+    pendingPosition = null;
+
+    chip.classList.add("is-dragging");
+
+    try {
+      chip.setPointerCapture(event.pointerId);
+    } catch (error) {
+      // Ignorer hvis pointer capture ikke støttes.
+    }
+  }
+
+  function onPointerMove(event) {
+    if (!dragging || !pitchRect) {
+      return;
+    }
+
+    if (!moved && (Math.abs(event.clientX - startX) > DRAG_THRESHOLD || Math.abs(event.clientY - startY) > DRAG_THRESHOLD)) {
+      moved = true;
+    }
+
+    if (!moved) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const x = clamp(((event.clientX - pitchRect.left) / pitchRect.width) * 100);
+    const y = clamp(((event.clientY - pitchRect.top) / pitchRect.height) * 100);
+
+    pendingPosition = { x, y };
+    chip.style.left = `${x}%`;
+    chip.style.top = `${y}%`;
+  }
+
+  function onPointerUp(event) {
+    if (!dragging) {
+      return;
+    }
+
+    dragging = false;
+    chip.classList.remove("is-dragging");
+
+    try {
+      chip.releasePointerCapture(event.pointerId);
+    } catch (error) {
+      // Ignorer.
+    }
+
+    if (moved && pendingPosition) {
+      state.slotPositions[slotId] = pendingPosition;
+      persistCurrentPositions();
+      // Behold valgt plass i sync slik at editoren peker på spilleren som ble flyttet.
+      state.selectedSlotId = slotId;
+      renderApp();
+      return;
+    }
+
+    // Ren klikk: velg plassen.
+    state.selectedSlotId = slotId;
+    renderApp();
+  }
+
+  chip.addEventListener("pointerdown", onPointerDown);
+  chip.addEventListener("pointermove", onPointerMove);
+  chip.addEventListener("pointerup", onPointerUp);
+  chip.addEventListener("pointercancel", onPointerUp);
 }
 
 function renderSlotEditor(teamFit) {
@@ -541,6 +716,7 @@ function bindEvents() {
   elements.formationSelect.addEventListener("change", (event) => {
     state.selectedFormationId = event.target.value;
     seedLineupForFormation();
+    ensurePositionsForFormation();
     renderApp();
   });
 
@@ -585,7 +761,30 @@ function bindEvents() {
   });
 }
 
+function initTabs() {
+  const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
+  const sections = Array.from(document.querySelectorAll("[data-tab-section]"));
+
+  tabButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.dataset.tabTarget;
+
+      tabButtons.forEach((other) => {
+        const isActive = other === button;
+        other.classList.toggle("is-active", isActive);
+        other.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      sections.forEach((section) => {
+        section.hidden = section.dataset.tabSection !== target;
+      });
+    });
+  });
+}
+
 async function init() {
+  initTabs();
+
   try {
     const [playersData, rolesData, tacticsData, formationsData] = await Promise.all([
       loadJson(DATA_PATHS.players),
@@ -608,6 +807,7 @@ async function init() {
     }
 
     seedLineupForFormation();
+    ensurePositionsForFormation();
     bindEvents();
     renderApp();
   } catch (error) {
