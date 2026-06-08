@@ -40,5 +40,14 @@ export type {
   WidthStyle,
 } from "./domain/footballTypes.js";
 
+export type {
+  MissingAssignment,
+  TeamSetupEvaluation,
+  TeamSetupEvaluationInput,
+  TeamSetupIssue,
+  TeamSetupIssueSeverity,
+} from "./engine/evaluateTeamSetup.js";
+
 export { calculateRoleFit } from "./engine/calculateRoleFit.js";
 export { calculateTeamBalance } from "./engine/calculateTeamBalance.js";
+export { evaluateTeamSetup } from "./engine/evaluateTeamSetup.js";
