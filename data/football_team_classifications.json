@@ -1,0 +1,139 @@
+{
+  "schema": "historygo-football-manager.team_classifications.v1",
+  "version": 1,
+  "classifications": [
+    {
+      "id": "transition_team",
+      "name": "Overgangslag",
+      "requiresBadges": [
+        {
+          "familyId": "team_speed",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "attacking_depth",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "high_press",
+          "minimumLevel": "bronze"
+        }
+      ],
+      "description": "Laget er best når det angriper rom raskt etter brudd."
+    },
+    {
+      "id": "pressing_team",
+      "name": "Presslag",
+      "requiresBadges": [
+        {
+          "familyId": "high_press",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "team_stamina",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "rest_defense",
+          "minimumLevel": "silver"
+        }
+      ],
+      "description": "Laget bruker kollektivt press som hovedvåpen."
+    },
+    {
+      "id": "control_team",
+      "name": "Kontrollag",
+      "requiresBadges": [
+        {
+          "familyId": "passing_quality",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "build_from_back",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "midfield_triangle",
+          "minimumLevel": "silver"
+        }
+      ],
+      "description": "Laget styrer kamper gjennom balltempo, posisjonering og midtbanekontroll."
+    },
+    {
+      "id": "wide_dominant_team",
+      "name": "Kantdominant lag",
+      "requiresBadges": [
+        {
+          "familyId": "attacking_width",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "fullback_winger_relation",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "final_delivery",
+          "minimumLevel": "bronze"
+        }
+      ],
+      "description": "Laget bruker bredde, kantrelasjoner og siste pasning som hovedvei til sjanser."
+    },
+    {
+      "id": "defensive_structure_team",
+      "name": "Defensivt strukturert lag",
+      "requiresBadges": [
+        {
+          "familyId": "low_block",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "rest_defense",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "centre_back_pair",
+          "minimumLevel": "silver"
+        }
+      ],
+      "description": "Laget beskytter rom, boks og balanse bedre enn det dominerer med ball."
+    },
+    {
+      "id": "set_piece_team",
+      "name": "Dødballag",
+      "requiresBadges": [
+        {
+          "familyId": "set_piece_attack",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "set_piece_defense",
+          "minimumLevel": "bronze"
+        },
+        {
+          "familyId": "duel_strength",
+          "minimumLevel": "bronze"
+        }
+      ],
+      "description": "Laget får kampverdi gjennom planlagte dødballer og fysisk tilstedeværelse."
+    },
+    {
+      "id": "development_team",
+      "name": "Utviklingslag",
+      "requiresBadges": [
+        {
+          "familyId": "training_culture",
+          "minimumLevel": "silver"
+        },
+        {
+          "familyId": "first_touch_pressure",
+          "minimumLevel": "bronze"
+        },
+        {
+          "familyId": "passing_quality",
+          "minimumLevel": "bronze"
+        }
+      ],
+      "description": "Laget utvikler spillere og lagkompetanse raskere gjennom strukturert treningskultur."
+    }
+  ]
+}

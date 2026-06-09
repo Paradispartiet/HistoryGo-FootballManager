@@ -1,0 +1,160 @@
+{
+  "schema": "historygo-football-manager.staff.v1",
+  "version": 1,
+  "staff": [
+    {
+      "id": "jorgen_isnes",
+      "name": "Jørgen Isnes",
+      "staffType": "head_coach",
+      "canBeHiredAs": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "sourcePlaceIds": [
+        "kfum_arena"
+      ],
+      "expertiseIds": [
+        "team_organisation",
+        "club_building",
+        "development_culture",
+        "pressing_structure",
+        "rest_defense"
+      ],
+      "roles": [
+        "structure_builder",
+        "development_coach",
+        "promotion_builder"
+      ],
+      "fitsClubs": [
+        "small_budget_club",
+        "identity_club",
+        "development_project"
+      ],
+      "warningWhenMisused": "Denne trenerprofilen passer best i klubber som bygger struktur, identitet og utvikling over tid."
+    },
+    {
+      "id": "johannes_moesgaard",
+      "name": "Johannes Moesgaard",
+      "staffType": "head_coach",
+      "canBeHiredAs": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "sourcePlaceIds": [
+        "kfum_arena",
+        "intility_arena"
+      ],
+      "expertiseIds": [
+        "development_culture",
+        "passing_training",
+        "team_organisation",
+        "pressing_structure"
+      ],
+      "roles": [
+        "field_coach",
+        "player_developer",
+        "modern_head_coach"
+      ],
+      "fitsClubs": [
+        "development_project",
+        "ambitious_city_club",
+        "modern_training_environment"
+      ],
+      "warningWhenMisused": "Denne trenerprofilen bør brukes i miljøer der treneren får påvirke feltarbeid, utvikling og spillmodell tydelig."
+    },
+    {
+      "id": "bislett_speed_specialist",
+      "name": "Bislett hurtighetsspesialist",
+      "staffType": "physical_coach",
+      "isPlaceholder": true,
+      "needsResearch": true,
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "sourcePlaceIds": [
+        "bislett_stadion"
+      ],
+      "expertiseIds": [
+        "speed_training",
+        "physical_preparation",
+        "stamina_training",
+        "load_management"
+      ],
+      "roles": [
+        "speed_coach",
+        "physical_preparation_coach"
+      ],
+      "fitsClubs": [
+        "high_intensity_team",
+        "transition_team",
+        "pressing_team"
+      ],
+      "warningWhenMisused": "Denne spesialisten gir mest verdi hvis laget faktisk trener hurtighet, intensitet og restitusjon over flere uker."
+    },
+    {
+      "id": "ullevaal_final_pressure_mentor",
+      "name": "Ullevaal press- og finalementor",
+      "staffType": "assistant_coach",
+      "isPlaceholder": true,
+      "needsResearch": true,
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
+      "expertiseIds": [
+        "finals_culture",
+        "pressure_handling",
+        "match_discipline",
+        "defensive_structure"
+      ],
+      "roles": [
+        "mental_coach",
+        "match_preparation_coach"
+      ],
+      "fitsClubs": [
+        "cup_team",
+        "big_match_team",
+        "defensive_structure_project"
+      ],
+      "warningWhenMisused": "Denne profilen bør brukes til kampforberedelse, pressmestring og struktur, ikke som ren teknikktrener."
+    },
+    {
+      "id": "ekeberg_recruitment_coach",
+      "name": "Ekeberg utviklings- og rekrutteringstrener",
+      "staffType": "coach",
+      "isPlaceholder": true,
+      "needsResearch": true,
+      "canBeHiredAs": [
+        "coach",
+        "assistant_coach",
+        "scout"
+      ],
+      "sourcePlaceIds": [
+        "ekebergsletta"
+      ],
+      "expertiseIds": [
+        "development_culture",
+        "technical_training",
+        "depth_runs",
+        "finishing_training"
+      ],
+      "roles": [
+        "youth_development_coach",
+        "recruitment_observer",
+        "tournament_scout"
+      ],
+      "fitsClubs": [
+        "development_project",
+        "youth_focused_club",
+        "broad_recruitment_club"
+      ],
+      "warningWhenMisused": "Denne profilen passer best når klubben bruker trening og rekruttering som langsiktig utviklingsvei."
+    }
+  ]
+}

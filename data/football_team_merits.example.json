@@ -1,0 +1,42 @@
+{
+  "schema": "historygo-football-manager.team_merits.v1",
+  "version": 1,
+  "teamId": "browser_legacy_team",
+  "teamName": "Browser Legacy Team",
+  "activeTrainingWeek": 1,
+  "hiredStaffIds": [
+    "jorgen_isnes"
+  ],
+  "unlockedPlaceIds": [
+    "kfum_arena"
+  ],
+  "unlockedExpertiseIds": [
+    "team_organisation",
+    "club_building",
+    "development_culture",
+    "pressing_structure",
+    "rest_defense"
+  ],
+  "earnedBadgeIds": [
+    "training_culture_bronze"
+  ],
+  "badgeProgress": [
+    {
+      "badgeFamilyId": "high_press",
+      "targetBadgeId": "high_press_bronze",
+      "progressWeeks": 0,
+      "requiredWeeks": 1,
+      "activeProgramId": "program_high_press"
+    },
+    {
+      "badgeFamilyId": "rest_defense",
+      "targetBadgeId": "rest_defense_bronze",
+      "progressWeeks": 0,
+      "requiredWeeks": 1,
+      "activeProgramId": "program_rest_defense"
+    }
+  ],
+  "activeClassifications": [
+    "development_team"
+  ]
+}

@@ -1,0 +1,445 @@
+{
+  "schema": "historygo-football-manager.expertise.v1",
+  "version": 1,
+  "expertise": [
+    {
+      "id": "speed_training",
+      "name": "Hurtighetstrening",
+      "category": "physical",
+      "unlockedByPlaceIds": [
+        "bislett_stadion"
+      ],
+      "usableByStaffTypes": [
+        "coach",
+        "assistant_coach",
+        "physical_coach"
+      ],
+      "opensBadgeFamilies": [
+        "team_speed",
+        "explosive_actions"
+      ]
+    },
+    {
+      "id": "physical_preparation",
+      "name": "Fysisk grunntrening",
+      "category": "physical",
+      "unlockedByPlaceIds": [
+        "bislett_stadion",
+        "holmenkollen_nasjonalanlegg"
+      ],
+      "usableByStaffTypes": [
+        "coach",
+        "physical_coach",
+        "physio"
+      ],
+      "opensBadgeFamilies": [
+        "team_speed",
+        "team_stamina",
+        "duel_strength",
+        "load_management"
+      ]
+    },
+    {
+      "id": "stamina_training",
+      "name": "Utholdenhetstrening",
+      "category": "physical",
+      "unlockedByPlaceIds": [
+        "bislett_stadion",
+        "holmenkollen_nasjonalanlegg"
+      ],
+      "usableByStaffTypes": [
+        "coach",
+        "physical_coach"
+      ],
+      "opensBadgeFamilies": [
+        "team_stamina"
+      ]
+    },
+    {
+      "id": "load_management",
+      "name": "Belastningsstyring",
+      "category": "physical",
+      "unlockedByPlaceIds": [
+        "bislett_stadion"
+      ],
+      "usableByStaffTypes": [
+        "physio",
+        "physical_coach"
+      ],
+      "opensBadgeFamilies": [
+        "load_management"
+      ]
+    },
+    {
+      "id": "injury_prevention",
+      "name": "Skadeforebygging",
+      "category": "physical",
+      "unlockedByPlaceIds": [
+        "bislett_stadion"
+      ],
+      "usableByStaffTypes": [
+        "physio",
+        "physical_coach"
+      ],
+      "opensBadgeFamilies": [
+        "load_management"
+      ]
+    },
+    {
+      "id": "team_organisation",
+      "name": "Lagorganisering",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "kfum_arena",
+        "ullevaal_stadion"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "high_press",
+        "rest_defense",
+        "match_discipline",
+        "training_culture"
+      ]
+    },
+    {
+      "id": "club_building",
+      "name": "Klubbbygging",
+      "category": "mental",
+      "unlockedByPlaceIds": [
+        "kfum_arena"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach"
+      ],
+      "opensBadgeFamilies": [
+        "training_culture"
+      ]
+    },
+    {
+      "id": "development_culture",
+      "name": "Utviklingskultur",
+      "category": "mental",
+      "unlockedByPlaceIds": [
+        "kfum_arena",
+        "ekebergsletta"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "training_culture",
+        "first_touch_pressure",
+        "passing_quality"
+      ]
+    },
+    {
+      "id": "pressing_structure",
+      "name": "Pressorganisering",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "kfum_arena",
+        "intility_arena"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "high_press",
+        "rest_defense"
+      ]
+    },
+    {
+      "id": "rest_defense",
+      "name": "Restforsvar",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "kfum_arena",
+        "intility_arena"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "rest_defense"
+      ]
+    },
+    {
+      "id": "build_up_play",
+      "name": "Oppbygging bakfra",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "intility_arena",
+        "ullevaal_stadion"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "opensBadgeFamilies": [
+        "build_from_back",
+        "keeper_distribution"
+      ]
+    },
+    {
+      "id": "wide_attack",
+      "name": "Bredt angrepsspill",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "intility_arena",
+        "gressbanen"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "attacking_width",
+        "fullback_winger_relation"
+      ]
+    },
+    {
+      "id": "depth_runs",
+      "name": "Dybdeløp",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "ekebergsletta",
+        "gressbanen"
+      ],
+      "usableByStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "opensBadgeFamilies": [
+        "attacking_depth"
+      ]
+    },
+    {
+      "id": "finals_culture",
+      "name": "Finale- og presskultur",
+      "category": "mental",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "pressure_handling",
+        "match_discipline"
+      ]
+    },
+    {
+      "id": "low_block",
+      "name": "Lav blokk",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "low_block"
+      ]
+    },
+    {
+      "id": "defensive_structure",
+      "name": "Defensiv struktur",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion",
+        "nordre_aasen_idrettspark"
+      ],
+      "usableByStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "low_block",
+        "centre_back_pair",
+        "set_piece_defense"
+      ]
+    },
+    {
+      "id": "technical_training",
+      "name": "Teknisk trening",
+      "category": "technical",
+      "unlockedByPlaceIds": [
+        "ekebergsletta",
+        "nordre_aasen_idrettspark"
+      ],
+      "usableByStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "opensBadgeFamilies": [
+        "first_touch_pressure",
+        "passing_quality",
+        "ball_carrying"
+      ]
+    },
+    {
+      "id": "passing_training",
+      "name": "Pasningstrening",
+      "category": "technical",
+      "unlockedByPlaceIds": [
+        "nordre_aasen_idrettspark",
+        "kfum_arena"
+      ],
+      "usableByStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "opensBadgeFamilies": [
+        "passing_quality",
+        "midfield_triangle"
+      ]
+    },
+    {
+      "id": "chance_creation",
+      "name": "Sjanseskaping",
+      "category": "technical",
+      "unlockedByPlaceIds": [
+        "intility_arena",
+        "ekebergsletta"
+      ],
+      "usableByStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "opensBadgeFamilies": [
+        "final_delivery",
+        "striker_ten_relation"
+      ]
+    },
+    {
+      "id": "finishing_training",
+      "name": "Avslutningstrening",
+      "category": "technical",
+      "unlockedByPlaceIds": [
+        "ekebergsletta",
+        "gressbanen"
+      ],
+      "usableByStaffTypes": [
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "finishing"
+      ]
+    },
+    {
+      "id": "set_piece_attack",
+      "name": "Offensive dødballer",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion",
+        "intility_arena"
+      ],
+      "usableByStaffTypes": [
+        "assistant_coach",
+        "coach"
+      ],
+      "opensBadgeFamilies": [
+        "set_piece_attack"
+      ]
+    },
+    {
+      "id": "set_piece_defense",
+      "name": "Defensive dødballer",
+      "category": "tactical",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion",
+        "intility_arena"
+      ],
+      "usableByStaffTypes": [
+        "assistant_coach",
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "opensBadgeFamilies": [
+        "set_piece_defense"
+      ]
+    },
+    {
+      "id": "goalkeeper_training",
+      "name": "Keepertrening",
+      "category": "goalkeeper",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion",
+        "intility_arena"
+      ],
+      "usableByStaffTypes": [
+        "goalkeeper_coach"
+      ],
+      "opensBadgeFamilies": [
+        "keeper_distribution",
+        "sweeper_keeper",
+        "keeper_box_control",
+        "keeper_defense_relation"
+      ]
+    },
+    {
+      "id": "keeper_distribution",
+      "name": "Keeperdistribusjon",
+      "category": "goalkeeper",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion",
+        "intility_arena"
+      ],
+      "usableByStaffTypes": [
+        "goalkeeper_coach"
+      ],
+      "opensBadgeFamilies": [
+        "keeper_distribution",
+        "build_from_back"
+      ]
+    },
+    {
+      "id": "sweeper_keeper_training",
+      "name": "Sweeperkeeper-trening",
+      "category": "goalkeeper",
+      "unlockedByPlaceIds": [
+        "intility_arena"
+      ],
+      "usableByStaffTypes": [
+        "goalkeeper_coach"
+      ],
+      "opensBadgeFamilies": [
+        "sweeper_keeper"
+      ]
+    },
+    {
+      "id": "keeper_box_control",
+      "name": "Feltkontroll",
+      "category": "goalkeeper",
+      "unlockedByPlaceIds": [
+        "ullevaal_stadion"
+      ],
+      "usableByStaffTypes": [
+        "goalkeeper_coach"
+      ],
+      "opensBadgeFamilies": [
+        "keeper_box_control"
+      ]
+    }
+  ]
+}

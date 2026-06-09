@@ -1,0 +1,186 @@
+{
+  "schema": "historygo-football-manager.unlocks.v1",
+  "version": 1,
+  "placeUnlocks": [
+    {
+      "placeId": "kfum_arena",
+      "placeName": "KFUM Arena",
+      "placeRole": "coach_source",
+      "unlocks": [
+        {
+          "type": "head_coach_candidate",
+          "targetId": "jorgen_isnes"
+        },
+        {
+          "type": "head_coach_candidate",
+          "targetId": "johannes_moesgaard"
+        },
+        {
+          "type": "expertise",
+          "targetId": "team_organisation"
+        },
+        {
+          "type": "expertise",
+          "targetId": "club_building"
+        },
+        {
+          "type": "expertise",
+          "targetId": "development_culture"
+        },
+        {
+          "type": "training_model",
+          "targetId": "small_club_structure_to_elite"
+        }
+      ],
+      "notes": "KFUM Arena skal ikke være spillerkilde i v1. Stedet låser opp trenerkandidater, klubbbygging og treningskultur."
+    },
+    {
+      "placeId": "bislett_stadion",
+      "placeName": "Bislett Stadion",
+      "placeRole": "physical_training_source",
+      "unlocks": [
+        {
+          "type": "staff_candidate",
+          "targetId": "bislett_speed_specialist"
+        },
+        {
+          "type": "expertise",
+          "targetId": "speed_training"
+        },
+        {
+          "type": "expertise",
+          "targetId": "physical_preparation"
+        },
+        {
+          "type": "expertise",
+          "targetId": "stamina_training"
+        },
+        {
+          "type": "training_program",
+          "targetId": "program_team_speed"
+        },
+        {
+          "type": "training_program",
+          "targetId": "program_team_stamina"
+        }
+      ],
+      "notes": "Bislett brukes som kilde til fysisk treningslære, særlig hurtighet og utholdenhet."
+    },
+    {
+      "placeId": "ullevaal_stadion",
+      "placeName": "Ullevaal Stadion",
+      "placeRole": "national_arena_expertise_source",
+      "unlocks": [
+        {
+          "type": "staff_candidate",
+          "targetId": "ullevaal_final_pressure_mentor"
+        },
+        {
+          "type": "expertise",
+          "targetId": "finals_culture"
+        },
+        {
+          "type": "expertise",
+          "targetId": "pressure_handling"
+        },
+        {
+          "type": "expertise",
+          "targetId": "defensive_structure"
+        },
+        {
+          "type": "training_program",
+          "targetId": "program_pressure_handling"
+        },
+        {
+          "type": "training_program",
+          "targetId": "program_match_discipline"
+        }
+      ],
+      "notes": "Ullevaal gir nasjonalarena-, cupfinale- og presskompetanse."
+    },
+    {
+      "placeId": "intility_arena",
+      "placeName": "Intility Arena",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "expertise",
+          "targetId": "pressing_structure"
+        },
+        {
+          "type": "expertise",
+          "targetId": "build_up_play"
+        },
+        {
+          "type": "expertise",
+          "targetId": "wide_attack"
+        },
+        {
+          "type": "expertise",
+          "targetId": "goalkeeper_training"
+        },
+        {
+          "type": "training_program",
+          "targetId": "program_high_press"
+        },
+        {
+          "type": "training_program",
+          "targetId": "program_build_from_back"
+        }
+      ],
+      "notes": "Intility brukes som moderne klubbground-kilde. Spillere kan kobles senere, men v1 prioriterer ekspertise."
+    },
+    {
+      "placeId": "gressbanen",
+      "placeName": "Gressbanen",
+      "placeRole": "historical_football_ground_source",
+      "unlocks": [
+        {
+          "type": "expertise",
+          "targetId": "wide_attack"
+        },
+        {
+          "type": "expertise",
+          "targetId": "depth_runs"
+        },
+        {
+          "type": "expertise",
+          "targetId": "finishing_training"
+        },
+        {
+          "type": "training_model",
+          "targetId": "early_norwegian_football_ground"
+        }
+      ],
+      "notes": "Gressbanen gir historisk fotballforståelse og tidlig ground-kultur."
+    },
+    {
+      "placeId": "ekebergsletta",
+      "placeName": "Ekebergsletta",
+      "placeRole": "grassroots_and_recruitment_source",
+      "unlocks": [
+        {
+          "type": "staff_candidate",
+          "targetId": "ekeberg_recruitment_coach"
+        },
+        {
+          "type": "expertise",
+          "targetId": "development_culture"
+        },
+        {
+          "type": "expertise",
+          "targetId": "technical_training"
+        },
+        {
+          "type": "expertise",
+          "targetId": "depth_runs"
+        },
+        {
+          "type": "training_model",
+          "targetId": "tournament_recruitment_logic"
+        }
+      ],
+      "notes": "Ekebergsletta gir breddefotball, rekruttering, turneringslogistikk og utviklingskultur."
+    }
+  ]
+}

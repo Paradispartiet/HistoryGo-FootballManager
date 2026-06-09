@@ -1,0 +1,1167 @@
+{
+  "schema": "historygo-football-manager.training_programs.v1",
+  "version": 1,
+  "programs": [
+    {
+      "id": "program_team_speed",
+      "name": "Hurtighet treningsprogram",
+      "category": "physical",
+      "badgeFamilyId": "team_speed",
+      "requiresExpertiseIds": [
+        "speed_training",
+        "physical_preparation"
+      ],
+      "requiredStaffTypes": [
+        "physical_coach",
+        "coach",
+        "physio"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "team_speed_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "team_speed_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "team_speed_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle hurtighet fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_team_stamina",
+      "name": "Utholdenhet treningsprogram",
+      "category": "physical",
+      "badgeFamilyId": "team_stamina",
+      "requiresExpertiseIds": [
+        "stamina_training",
+        "physical_preparation"
+      ],
+      "requiredStaffTypes": [
+        "physical_coach",
+        "coach",
+        "physio"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "team_stamina_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "team_stamina_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "team_stamina_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle utholdenhet fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_explosive_actions",
+      "name": "Eksplosivitet treningsprogram",
+      "category": "physical",
+      "badgeFamilyId": "explosive_actions",
+      "requiresExpertiseIds": [
+        "explosive_power",
+        "speed_training"
+      ],
+      "requiredStaffTypes": [
+        "physical_coach",
+        "coach",
+        "physio"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "explosive_actions_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "explosive_actions_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "explosive_actions_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle eksplosivitet fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_duel_strength",
+      "name": "Duellstyrke treningsprogram",
+      "category": "physical",
+      "badgeFamilyId": "duel_strength",
+      "requiresExpertiseIds": [
+        "duel_training",
+        "physical_preparation"
+      ],
+      "requiredStaffTypes": [
+        "physical_coach",
+        "coach",
+        "physio"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "duel_strength_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "duel_strength_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "duel_strength_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle duellstyrke fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_load_management",
+      "name": "Belastningskontroll treningsprogram",
+      "category": "physical",
+      "badgeFamilyId": "load_management",
+      "requiresExpertiseIds": [
+        "load_management",
+        "injury_prevention",
+        "recovery_training"
+      ],
+      "requiredStaffTypes": [
+        "physical_coach",
+        "coach",
+        "physio"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "load_management_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "load_management_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "load_management_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle belastningskontroll fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_first_touch_pressure",
+      "name": "Førstetouch under press treningsprogram",
+      "category": "technical",
+      "badgeFamilyId": "first_touch_pressure",
+      "requiresExpertiseIds": [
+        "technical_training",
+        "press_resistance"
+      ],
+      "requiredStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "first_touch_pressure_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "first_touch_pressure_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "first_touch_pressure_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle førstetouch under press fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_passing_quality",
+      "name": "Pasningskvalitet treningsprogram",
+      "category": "technical",
+      "badgeFamilyId": "passing_quality",
+      "requiresExpertiseIds": [
+        "passing_training",
+        "technical_training"
+      ],
+      "requiredStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "passing_quality_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "passing_quality_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "passing_quality_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle pasningskvalitet fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_final_delivery",
+      "name": "Siste pasning treningsprogram",
+      "category": "technical",
+      "badgeFamilyId": "final_delivery",
+      "requiresExpertiseIds": [
+        "chance_creation",
+        "crossing_and_cutbacks"
+      ],
+      "requiredStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "final_delivery_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "final_delivery_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "final_delivery_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle siste pasning fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_finishing",
+      "name": "Avslutninger treningsprogram",
+      "category": "technical",
+      "badgeFamilyId": "finishing",
+      "requiresExpertiseIds": [
+        "finishing_training",
+        "chance_conversion"
+      ],
+      "requiredStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "finishing_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "finishing_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "finishing_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle avslutninger fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_ball_carrying",
+      "name": "Ballføring treningsprogram",
+      "category": "technical",
+      "badgeFamilyId": "ball_carrying",
+      "requiresExpertiseIds": [
+        "ball_carrying",
+        "press_breaking"
+      ],
+      "requiredStaffTypes": [
+        "coach",
+        "assistant_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "ball_carrying_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "ball_carrying_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "ball_carrying_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle ballføring fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_high_press",
+      "name": "Høyt press treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "high_press",
+      "requiresExpertiseIds": [
+        "pressing_structure",
+        "team_organisation"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "high_press_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "high_press_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "high_press_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle høyt press fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_rest_defense",
+      "name": "Restforsvar treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "rest_defense",
+      "requiresExpertiseIds": [
+        "rest_defense",
+        "team_organisation"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "rest_defense_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "rest_defense_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "rest_defense_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle restforsvar fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_build_from_back",
+      "name": "Oppbygging bakfra treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "build_from_back",
+      "requiresExpertiseIds": [
+        "build_up_play",
+        "keeper_distribution"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "build_from_back_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "build_from_back_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "build_from_back_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle oppbygging bakfra fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_attacking_width",
+      "name": "Bredde treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "attacking_width",
+      "requiresExpertiseIds": [
+        "wide_attack",
+        "positional_play"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "attacking_width_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "attacking_width_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "attacking_width_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle bredde fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_attacking_depth",
+      "name": "Dybde treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "attacking_depth",
+      "requiresExpertiseIds": [
+        "depth_runs",
+        "attacking_timing"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "attacking_depth_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "attacking_depth_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "attacking_depth_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle dybde fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_low_block",
+      "name": "Lav blokk treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "low_block",
+      "requiresExpertiseIds": [
+        "low_block",
+        "defensive_structure"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "low_block_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "low_block_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "low_block_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle lav blokk fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_set_piece_attack",
+      "name": "Offensive dødballer treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "set_piece_attack",
+      "requiresExpertiseIds": [
+        "set_piece_attack",
+        "duel_training"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "set_piece_attack_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "set_piece_attack_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "set_piece_attack_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle offensive dødballer fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_set_piece_defense",
+      "name": "Defensive dødballer treningsprogram",
+      "category": "tactical",
+      "badgeFamilyId": "set_piece_defense",
+      "requiresExpertiseIds": [
+        "set_piece_defense",
+        "defensive_structure"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "set_piece_defense_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "set_piece_defense_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "set_piece_defense_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle defensive dødballer fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_match_discipline",
+      "name": "Kampdisiplin treningsprogram",
+      "category": "mental",
+      "badgeFamilyId": "match_discipline",
+      "requiresExpertiseIds": [
+        "match_discipline",
+        "team_organisation"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "match_discipline_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "match_discipline_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "match_discipline_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle kampdisiplin fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_pressure_handling",
+      "name": "Pressmestring treningsprogram",
+      "category": "mental",
+      "badgeFamilyId": "pressure_handling",
+      "requiresExpertiseIds": [
+        "pressure_handling",
+        "finals_culture"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "pressure_handling_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "pressure_handling_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "pressure_handling_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle pressmestring fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_comeback_mentality",
+      "name": "Comeback-mentalitet treningsprogram",
+      "category": "mental",
+      "badgeFamilyId": "comeback_mentality",
+      "requiresExpertiseIds": [
+        "mental_resilience",
+        "pressure_handling"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "comeback_mentality_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "comeback_mentality_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "comeback_mentality_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle comeback-mentalitet fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_training_culture",
+      "name": "Treningskultur treningsprogram",
+      "category": "mental",
+      "badgeFamilyId": "training_culture",
+      "requiresExpertiseIds": [
+        "development_culture",
+        "club_building",
+        "team_organisation"
+      ],
+      "requiredStaffTypes": [
+        "head_coach",
+        "assistant_coach",
+        "coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "training_culture_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "training_culture_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "training_culture_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle treningskultur fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_centre_back_pair",
+      "name": "Stopperpar treningsprogram",
+      "category": "relational",
+      "badgeFamilyId": "centre_back_pair",
+      "requiresExpertiseIds": [
+        "defensive_partnerships",
+        "defensive_structure"
+      ],
+      "requiredStaffTypes": [
+        "assistant_coach",
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "centre_back_pair_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "centre_back_pair_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "centre_back_pair_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle stopperpar fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_fullback_winger_relation",
+      "name": "Back/kant-relasjon treningsprogram",
+      "category": "relational",
+      "badgeFamilyId": "fullback_winger_relation",
+      "requiresExpertiseIds": [
+        "wide_attack",
+        "role_relationships"
+      ],
+      "requiredStaffTypes": [
+        "assistant_coach",
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "fullback_winger_relation_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "fullback_winger_relation_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "fullback_winger_relation_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle back/kant-relasjon fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_midfield_triangle",
+      "name": "Midtbanetriangel treningsprogram",
+      "category": "relational",
+      "badgeFamilyId": "midfield_triangle",
+      "requiresExpertiseIds": [
+        "midfield_structure",
+        "role_relationships"
+      ],
+      "requiredStaffTypes": [
+        "assistant_coach",
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "midfield_triangle_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "midfield_triangle_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "midfield_triangle_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle midtbanetriangel fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_striker_ten_relation",
+      "name": "Spiss/tier-relasjon treningsprogram",
+      "category": "relational",
+      "badgeFamilyId": "striker_ten_relation",
+      "requiresExpertiseIds": [
+        "central_combinations",
+        "role_relationships"
+      ],
+      "requiredStaffTypes": [
+        "assistant_coach",
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "striker_ten_relation_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "striker_ten_relation_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "striker_ten_relation_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle spiss/tier-relasjon fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_keeper_defense_relation",
+      "name": "Keeper/forsvar-relasjon treningsprogram",
+      "category": "relational",
+      "badgeFamilyId": "keeper_defense_relation",
+      "requiresExpertiseIds": [
+        "keeper_defense_coordination",
+        "goalkeeper_training"
+      ],
+      "requiredStaffTypes": [
+        "assistant_coach",
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "keeper_defense_relation_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "keeper_defense_relation_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "keeper_defense_relation_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle keeper/forsvar-relasjon fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_keeper_distribution",
+      "name": "Keeperdistribusjon treningsprogram",
+      "category": "goalkeeper",
+      "badgeFamilyId": "keeper_distribution",
+      "requiresExpertiseIds": [
+        "keeper_distribution",
+        "goalkeeper_training"
+      ],
+      "requiredStaffTypes": [
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "keeper_distribution_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "keeper_distribution_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "keeper_distribution_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle keeperdistribusjon fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_sweeper_keeper",
+      "name": "Sweeperkeeper treningsprogram",
+      "category": "goalkeeper",
+      "badgeFamilyId": "sweeper_keeper",
+      "requiresExpertiseIds": [
+        "sweeper_keeper_training",
+        "goalkeeper_training"
+      ],
+      "requiredStaffTypes": [
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "sweeper_keeper_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "sweeper_keeper_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "sweeper_keeper_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle sweeperkeeper fra innført prinsipp til lagidentitet."
+    },
+    {
+      "id": "program_keeper_box_control",
+      "name": "Feltkontroll treningsprogram",
+      "category": "goalkeeper",
+      "badgeFamilyId": "keeper_box_control",
+      "requiresExpertiseIds": [
+        "keeper_box_control",
+        "goalkeeper_training"
+      ],
+      "requiredStaffTypes": [
+        "goalkeeper_coach"
+      ],
+      "levels": [
+        {
+          "targetBadgeId": "keeper_box_control_bronze",
+          "level": "bronze",
+          "weeksRequired": 1,
+          "requiresPreviousLevel": false,
+          "weeklyFocusCost": 1
+        },
+        {
+          "targetBadgeId": "keeper_box_control_silver",
+          "level": "silver",
+          "weeksRequired": 3,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 2
+        },
+        {
+          "targetBadgeId": "keeper_box_control_gold",
+          "level": "gold",
+          "weeksRequired": 6,
+          "requiresPreviousLevel": true,
+          "weeklyFocusCost": 3
+        }
+      ],
+      "description": "Treningsprogram for å utvikle feltkontroll fra innført prinsipp til lagidentitet."
+    }
+  ]
+}

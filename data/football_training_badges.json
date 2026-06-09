@@ -1,0 +1,1371 @@
+{
+  "schema": "historygo-football-manager.training_badges.v1",
+  "version": 1,
+  "levels": [
+    "bronze",
+    "silver",
+    "gold"
+  ],
+  "categories": [
+    "physical",
+    "technical",
+    "tactical",
+    "mental",
+    "relational",
+    "goalkeeper"
+  ],
+  "badgeFamilies": [
+    {
+      "id": "team_speed",
+      "name": "Hurtighet",
+      "category": "physical",
+      "expertiseIds": [
+        "speed_training",
+        "physical_preparation"
+      ],
+      "levels": [
+        {
+          "id": "team_speed_bronze",
+          "level": "bronze",
+          "name": "Hurtighet I",
+          "description": "Laget har grunntrening i akselerasjon, første meter og raske reaksjoner etter balltap.",
+          "effects": {
+            "transition_speed": 3,
+            "press_recovery": 2,
+            "runs_in_behind": 2
+          }
+        },
+        {
+          "id": "team_speed_silver",
+          "level": "silver",
+          "name": "Hurtighet II",
+          "description": "Laget kan spille flere hurtige overganger uten å miste struktur.",
+          "effects": {
+            "transition_speed": 6,
+            "press_recovery": 4,
+            "runs_in_behind": 4
+          }
+        },
+        {
+          "id": "team_speed_gold",
+          "level": "gold",
+          "name": "Hurtighet III",
+          "description": "Laget kan bygge spillestilen rundt tempo, gjenvinning og bakromstrussel.",
+          "effects": {
+            "transition_speed": 9,
+            "press_recovery": 7,
+            "runs_in_behind": 7,
+            "identity_fast_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "team_stamina",
+      "name": "Utholdenhet",
+      "category": "physical",
+      "expertiseIds": [
+        "stamina_training",
+        "physical_preparation"
+      ],
+      "levels": [
+        {
+          "id": "team_stamina_bronze",
+          "level": "bronze",
+          "name": "Utholdenhet I",
+          "description": "Laget faller mindre i intensitet mot slutten av kampen.",
+          "effects": {
+            "late_match_intensity": 3,
+            "press_duration": 2,
+            "fatigue_resistance": 2
+          }
+        },
+        {
+          "id": "team_stamina_silver",
+          "level": "silver",
+          "name": "Utholdenhet II",
+          "description": "Laget tåler høyere press og flere løp over en hel kamp.",
+          "effects": {
+            "late_match_intensity": 6,
+            "press_duration": 5,
+            "fatigue_resistance": 4
+          }
+        },
+        {
+          "id": "team_stamina_gold",
+          "level": "gold",
+          "name": "Utholdenhet III",
+          "description": "Laget kan dominere kamper gjennom vedvarende intensitet.",
+          "effects": {
+            "late_match_intensity": 9,
+            "press_duration": 8,
+            "fatigue_resistance": 7,
+            "identity_high_intensity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "explosive_actions",
+      "name": "Eksplosivitet",
+      "category": "physical",
+      "expertiseIds": [
+        "explosive_power",
+        "speed_training"
+      ],
+      "levels": [
+        {
+          "id": "explosive_actions_bronze",
+          "level": "bronze",
+          "name": "Eksplosivitet I",
+          "description": "Laget får bedre korte rykk, duellstarter og pressutløsere.",
+          "effects": {
+            "first_step": 3,
+            "duel_start": 2,
+            "press_trigger_speed": 2
+          }
+        },
+        {
+          "id": "explosive_actions_silver",
+          "level": "silver",
+          "name": "Eksplosivitet II",
+          "description": "Flere spillere får fordel i første aksjon etter ballmottak eller balltap.",
+          "effects": {
+            "first_step": 6,
+            "duel_start": 4,
+            "press_trigger_speed": 4
+          }
+        },
+        {
+          "id": "explosive_actions_gold",
+          "level": "gold",
+          "name": "Eksplosivitet III",
+          "description": "Laget blir farlig i korte, aggressive kampsekvenser.",
+          "effects": {
+            "first_step": 9,
+            "duel_start": 7,
+            "press_trigger_speed": 7,
+            "identity_explosive_moments": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "duel_strength",
+      "name": "Duellstyrke",
+      "category": "physical",
+      "expertiseIds": [
+        "duel_training",
+        "physical_preparation"
+      ],
+      "levels": [
+        {
+          "id": "duel_strength_bronze",
+          "level": "bronze",
+          "name": "Duellstyrke I",
+          "description": "Laget blir bedre i kroppskontakt, hodedueller og andreballer.",
+          "effects": {
+            "duels": 3,
+            "aerial_duels": 2,
+            "second_balls": 2
+          }
+        },
+        {
+          "id": "duel_strength_silver",
+          "level": "silver",
+          "name": "Duellstyrke II",
+          "description": "Laget tåler mer fysisk kamp og vinner flere løse baller.",
+          "effects": {
+            "duels": 6,
+            "aerial_duels": 5,
+            "second_balls": 4
+          }
+        },
+        {
+          "id": "duel_strength_gold",
+          "level": "gold",
+          "name": "Duellstyrke III",
+          "description": "Laget kan bruke fysikk som en tydelig del av spillestilen.",
+          "effects": {
+            "duels": 9,
+            "aerial_duels": 8,
+            "second_balls": 7,
+            "identity_physical_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "load_management",
+      "name": "Belastningskontroll",
+      "category": "physical",
+      "expertiseIds": [
+        "load_management",
+        "injury_prevention",
+        "recovery_training"
+      ],
+      "levels": [
+        {
+          "id": "load_management_bronze",
+          "level": "bronze",
+          "name": "Belastningskontroll I",
+          "description": "Laget får lavere risiko for formfall etter harde kamper.",
+          "effects": {
+            "injury_risk_reduction": 2,
+            "recovery_quality": 3,
+            "training_consistency": 2
+          }
+        },
+        {
+          "id": "load_management_silver",
+          "level": "silver",
+          "name": "Belastningskontroll II",
+          "description": "Laget tåler tettere kampprogram bedre.",
+          "effects": {
+            "injury_risk_reduction": 4,
+            "recovery_quality": 6,
+            "training_consistency": 4
+          }
+        },
+        {
+          "id": "load_management_gold",
+          "level": "gold",
+          "name": "Belastningskontroll III",
+          "description": "Klubben får en profesjonell kultur rundt belastning, hvile og toppform.",
+          "effects": {
+            "injury_risk_reduction": 7,
+            "recovery_quality": 9,
+            "training_consistency": 7,
+            "identity_professional_load_culture": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "first_touch_pressure",
+      "name": "Førstetouch under press",
+      "category": "technical",
+      "expertiseIds": [
+        "technical_training",
+        "press_resistance"
+      ],
+      "levels": [
+        {
+          "id": "first_touch_pressure_bronze",
+          "level": "bronze",
+          "name": "Førstetouch under press I",
+          "description": "Laget mister ballen sjeldnere når motstanderen presser.",
+          "effects": {
+            "press_resistance": 3,
+            "turnovers_under_pressure": -2,
+            "first_touch_quality": 3
+          }
+        },
+        {
+          "id": "first_touch_pressure_silver",
+          "level": "silver",
+          "name": "Førstetouch under press II",
+          "description": "Laget kan spille seg ut av press oftere.",
+          "effects": {
+            "press_resistance": 6,
+            "turnovers_under_pressure": -4,
+            "first_touch_quality": 6
+          }
+        },
+        {
+          "id": "first_touch_pressure_gold",
+          "level": "gold",
+          "name": "Førstetouch under press III",
+          "description": "Laget kan lokke press og bruke teknikk som våpen.",
+          "effects": {
+            "press_resistance": 9,
+            "turnovers_under_pressure": -7,
+            "first_touch_quality": 9,
+            "identity_press_baiting": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "passing_quality",
+      "name": "Pasningskvalitet",
+      "category": "technical",
+      "expertiseIds": [
+        "passing_training",
+        "technical_training"
+      ],
+      "levels": [
+        {
+          "id": "passing_quality_bronze",
+          "level": "bronze",
+          "name": "Pasningskvalitet I",
+          "description": "Laget får bedre enkle pasninger og færre brudd i oppbygging.",
+          "effects": {
+            "passing_accuracy": 3,
+            "build_up_stability": 2,
+            "tempo_control": 1
+          }
+        },
+        {
+          "id": "passing_quality_silver",
+          "level": "silver",
+          "name": "Pasningskvalitet II",
+          "description": "Laget finner oftere riktige vinkler og tredje mann.",
+          "effects": {
+            "passing_accuracy": 6,
+            "build_up_stability": 5,
+            "third_man_combinations": 4
+          }
+        },
+        {
+          "id": "passing_quality_gold",
+          "level": "gold",
+          "name": "Pasningskvalitet III",
+          "description": "Laget kan kontrollere kamper gjennom balltempo og presisjon.",
+          "effects": {
+            "passing_accuracy": 9,
+            "build_up_stability": 8,
+            "tempo_control": 8,
+            "identity_possession_control": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "final_delivery",
+      "name": "Siste pasning",
+      "category": "technical",
+      "expertiseIds": [
+        "chance_creation",
+        "crossing_and_cutbacks"
+      ],
+      "levels": [
+        {
+          "id": "final_delivery_bronze",
+          "level": "bronze",
+          "name": "Siste pasning I",
+          "description": "Laget blir bedre på innlegg, cutbacks og pasninger inn i boks.",
+          "effects": {
+            "chance_creation": 3,
+            "crossing_quality": 2,
+            "cutback_quality": 2
+          }
+        },
+        {
+          "id": "final_delivery_silver",
+          "level": "silver",
+          "name": "Siste pasning II",
+          "description": "Laget skaper flere klare sjanser fra gode angrepsposisjoner.",
+          "effects": {
+            "chance_creation": 6,
+            "crossing_quality": 4,
+            "cutback_quality": 5
+          }
+        },
+        {
+          "id": "final_delivery_gold",
+          "level": "gold",
+          "name": "Siste pasning III",
+          "description": "Laget får en tydelig evne til å gjøre overtak om til sjanser.",
+          "effects": {
+            "chance_creation": 9,
+            "crossing_quality": 7,
+            "cutback_quality": 8,
+            "identity_final_third_quality": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "finishing",
+      "name": "Avslutninger",
+      "category": "technical",
+      "expertiseIds": [
+        "finishing_training",
+        "chance_conversion"
+      ],
+      "levels": [
+        {
+          "id": "finishing_bronze",
+          "level": "bronze",
+          "name": "Avslutninger I",
+          "description": "Laget får litt bedre uttelling på store sjanser.",
+          "effects": {
+            "chance_conversion": 3,
+            "shot_quality": 2,
+            "box_composure": 1
+          }
+        },
+        {
+          "id": "finishing_silver",
+          "level": "silver",
+          "name": "Avslutninger II",
+          "description": "Laget avslutter bedre fra ulike vinkler og pressede situasjoner.",
+          "effects": {
+            "chance_conversion": 6,
+            "shot_quality": 5,
+            "box_composure": 4
+          }
+        },
+        {
+          "id": "finishing_gold",
+          "level": "gold",
+          "name": "Avslutninger III",
+          "description": "Laget får en tydelig målscoreridentitet.",
+          "effects": {
+            "chance_conversion": 9,
+            "shot_quality": 8,
+            "box_composure": 7,
+            "identity_goal_threat": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "ball_carrying",
+      "name": "Ballføring",
+      "category": "technical",
+      "expertiseIds": [
+        "ball_carrying",
+        "press_breaking"
+      ],
+      "levels": [
+        {
+          "id": "ball_carrying_bronze",
+          "level": "bronze",
+          "name": "Ballføring I",
+          "description": "Spillerne fører ballen bedre gjennom ledige rom.",
+          "effects": {
+            "carry_progression": 3,
+            "press_breaking": 2,
+            "central_advancement": 1
+          }
+        },
+        {
+          "id": "ball_carrying_silver",
+          "level": "silver",
+          "name": "Ballføring II",
+          "description": "Laget kan bryte pressledd med føring.",
+          "effects": {
+            "carry_progression": 6,
+            "press_breaking": 5,
+            "central_advancement": 4
+          }
+        },
+        {
+          "id": "ball_carrying_gold",
+          "level": "gold",
+          "name": "Ballføring III",
+          "description": "Laget kan bruke ballførere som strukturelt våpen i oppbygging og overgang.",
+          "effects": {
+            "carry_progression": 9,
+            "press_breaking": 8,
+            "central_advancement": 7,
+            "identity_ball_carrying_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "high_press",
+      "name": "Høyt press",
+      "category": "tactical",
+      "expertiseIds": [
+        "pressing_structure",
+        "team_organisation"
+      ],
+      "levels": [
+        {
+          "id": "high_press_bronze",
+          "level": "bronze",
+          "name": "Høyt press I",
+          "description": "Laget presser oftere riktig førsteforsvarer.",
+          "effects": {
+            "press_timing": 3,
+            "first_defender_quality": 3,
+            "turnovers_high": 1
+          }
+        },
+        {
+          "id": "high_press_silver",
+          "level": "silver",
+          "name": "Høyt press II",
+          "description": "Laget koordinerer første-, andre- og tredjeforsvarer bedre.",
+          "effects": {
+            "press_timing": 6,
+            "press_coordination": 5,
+            "turnovers_high": 4
+          }
+        },
+        {
+          "id": "high_press_gold",
+          "level": "gold",
+          "name": "Høyt press III",
+          "description": "Laget kan vinne kamper gjennom press som identitet.",
+          "effects": {
+            "press_timing": 9,
+            "press_coordination": 8,
+            "turnovers_high": 7,
+            "identity_pressing_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "rest_defense",
+      "name": "Restforsvar",
+      "category": "tactical",
+      "expertiseIds": [
+        "rest_defense",
+        "team_organisation"
+      ],
+      "levels": [
+        {
+          "id": "rest_defense_bronze",
+          "level": "bronze",
+          "name": "Restforsvar I",
+          "description": "Laget står bedre igjen når angrepet bryter sammen.",
+          "effects": {
+            "counter_protection": 3,
+            "defensive_balance": 3,
+            "second_ball_security": 1
+          }
+        },
+        {
+          "id": "rest_defense_silver",
+          "level": "silver",
+          "name": "Restforsvar II",
+          "description": "Laget kan angripe med flere spillere uten å bli like sårbart.",
+          "effects": {
+            "counter_protection": 6,
+            "defensive_balance": 6,
+            "second_ball_security": 4
+          }
+        },
+        {
+          "id": "rest_defense_gold",
+          "level": "gold",
+          "name": "Restforsvar III",
+          "description": "Laget kan spille offensivt med trygg defensiv struktur bak ballen.",
+          "effects": {
+            "counter_protection": 9,
+            "defensive_balance": 9,
+            "second_ball_security": 7,
+            "identity_secure_attacking_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "build_from_back",
+      "name": "Oppbygging bakfra",
+      "category": "tactical",
+      "expertiseIds": [
+        "build_up_play",
+        "keeper_distribution"
+      ],
+      "levels": [
+        {
+          "id": "build_from_back_bronze",
+          "level": "bronze",
+          "name": "Oppbygging bakfra I",
+          "description": "Keeper og stoppere finner oftere trygge førstevalg.",
+          "effects": {
+            "build_up_stability": 3,
+            "keeper_support": 2,
+            "first_phase_quality": 2
+          }
+        },
+        {
+          "id": "build_from_back_silver",
+          "level": "silver",
+          "name": "Oppbygging bakfra II",
+          "description": "Laget spiller seg oftere forbi første pressledd.",
+          "effects": {
+            "build_up_stability": 6,
+            "first_phase_quality": 5,
+            "press_escape": 4
+          }
+        },
+        {
+          "id": "build_from_back_gold",
+          "level": "gold",
+          "name": "Oppbygging bakfra III",
+          "description": "Laget kan bruke keeper, stoppere og sekser som kontrollsentrum.",
+          "effects": {
+            "build_up_stability": 9,
+            "first_phase_quality": 8,
+            "press_escape": 7,
+            "identity_build_up_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "attacking_width",
+      "name": "Bredde",
+      "category": "tactical",
+      "expertiseIds": [
+        "wide_attack",
+        "positional_play"
+      ],
+      "levels": [
+        {
+          "id": "attacking_width_bronze",
+          "level": "bronze",
+          "name": "Bredde I",
+          "description": "Kantene holder bedre posisjon og laget strekker motstander mer.",
+          "effects": {
+            "width_score": 3,
+            "one_vs_one_creation": 2,
+            "switches_of_play": 1
+          }
+        },
+        {
+          "id": "attacking_width_silver",
+          "level": "silver",
+          "name": "Bredde II",
+          "description": "Laget skaper flere 1v1-situasjoner og rom mellom ledd.",
+          "effects": {
+            "width_score": 6,
+            "one_vs_one_creation": 5,
+            "switches_of_play": 4
+          }
+        },
+        {
+          "id": "attacking_width_gold",
+          "level": "gold",
+          "name": "Bredde III",
+          "description": "Laget kan dominere gjennom sideforskyvning, vendinger og kantsoner.",
+          "effects": {
+            "width_score": 9,
+            "one_vs_one_creation": 8,
+            "switches_of_play": 7,
+            "identity_wide_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "attacking_depth",
+      "name": "Dybde",
+      "category": "tactical",
+      "expertiseIds": [
+        "depth_runs",
+        "attacking_timing"
+      ],
+      "levels": [
+        {
+          "id": "attacking_depth_bronze",
+          "level": "bronze",
+          "name": "Dybde I",
+          "description": "Laget truer bakrommet oftere.",
+          "effects": {
+            "depth_score": 3,
+            "runs_in_behind": 3,
+            "opponent_line_stretch": 1
+          }
+        },
+        {
+          "id": "attacking_depth_silver",
+          "level": "silver",
+          "name": "Dybde II",
+          "description": "Spisser og kanter timer løp bedre.",
+          "effects": {
+            "depth_score": 6,
+            "runs_in_behind": 6,
+            "attacking_timing": 4
+          }
+        },
+        {
+          "id": "attacking_depth_gold",
+          "level": "gold",
+          "name": "Dybde III",
+          "description": "Laget tvinger motstanderen bakover og åpner rom foran forsvarslinjen.",
+          "effects": {
+            "depth_score": 9,
+            "runs_in_behind": 9,
+            "attacking_timing": 7,
+            "identity_depth_threat": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "low_block",
+      "name": "Lav blokk",
+      "category": "tactical",
+      "expertiseIds": [
+        "low_block",
+        "defensive_structure"
+      ],
+      "levels": [
+        {
+          "id": "low_block_bronze",
+          "level": "bronze",
+          "name": "Lav blokk I",
+          "description": "Laget står mer kompakt når det forsvarer dypt.",
+          "effects": {
+            "compactness": 3,
+            "box_protection": 2,
+            "space_between_lines": -1
+          }
+        },
+        {
+          "id": "low_block_silver",
+          "level": "silver",
+          "name": "Lav blokk II",
+          "description": "Laget beskytter boksen bedre og slipper til færre store sjanser.",
+          "effects": {
+            "compactness": 6,
+            "box_protection": 5,
+            "chance_suppression": 4
+          }
+        },
+        {
+          "id": "low_block_gold",
+          "level": "gold",
+          "name": "Lav blokk III",
+          "description": "Laget kan kontrollere kampbildet defensivt uten å ha ballen.",
+          "effects": {
+            "compactness": 9,
+            "box_protection": 8,
+            "chance_suppression": 7,
+            "identity_deep_defensive_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "set_piece_attack",
+      "name": "Offensive dødballer",
+      "category": "tactical",
+      "expertiseIds": [
+        "set_piece_attack",
+        "duel_training"
+      ],
+      "levels": [
+        {
+          "id": "set_piece_attack_bronze",
+          "level": "bronze",
+          "name": "Offensive dødballer I",
+          "description": "Laget får bedre struktur på cornere og frispark.",
+          "effects": {
+            "set_piece_chance_creation": 3,
+            "corner_structure": 2,
+            "free_kick_patterns": 1
+          }
+        },
+        {
+          "id": "set_piece_attack_silver",
+          "level": "silver",
+          "name": "Offensive dødballer II",
+          "description": "Laget skaper flere sjanser etter planlagte trekk.",
+          "effects": {
+            "set_piece_chance_creation": 6,
+            "corner_structure": 5,
+            "free_kick_patterns": 4
+          }
+        },
+        {
+          "id": "set_piece_attack_gold",
+          "level": "gold",
+          "name": "Offensive dødballer III",
+          "description": "Dødballer blir en reell scoringsvei og del av lagets identitet.",
+          "effects": {
+            "set_piece_chance_creation": 9,
+            "corner_structure": 8,
+            "free_kick_patterns": 7,
+            "identity_set_piece_attack": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "set_piece_defense",
+      "name": "Defensive dødballer",
+      "category": "tactical",
+      "expertiseIds": [
+        "set_piece_defense",
+        "defensive_structure"
+      ],
+      "levels": [
+        {
+          "id": "set_piece_defense_bronze",
+          "level": "bronze",
+          "name": "Defensive dødballer I",
+          "description": "Laget får bedre markering og soneansvar.",
+          "effects": {
+            "set_piece_concession_reduction": 3,
+            "marking_quality": 2,
+            "second_ball_security": 1
+          }
+        },
+        {
+          "id": "set_piece_defense_silver",
+          "level": "silver",
+          "name": "Defensive dødballer II",
+          "description": "Laget slipper til færre farlige andreballer og returer.",
+          "effects": {
+            "set_piece_concession_reduction": 6,
+            "marking_quality": 5,
+            "second_ball_security": 4
+          }
+        },
+        {
+          "id": "set_piece_defense_gold",
+          "level": "gold",
+          "name": "Defensive dødballer III",
+          "description": "Laget blir svært vanskelig å score på etter dødball.",
+          "effects": {
+            "set_piece_concession_reduction": 9,
+            "marking_quality": 8,
+            "second_ball_security": 7,
+            "identity_set_piece_secure": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "match_discipline",
+      "name": "Kampdisiplin",
+      "category": "mental",
+      "expertiseIds": [
+        "match_discipline",
+        "team_organisation"
+      ],
+      "levels": [
+        {
+          "id": "match_discipline_bronze",
+          "level": "bronze",
+          "name": "Kampdisiplin I",
+          "description": "Laget gjør færre unødvendige brudd på kampplanen.",
+          "effects": {
+            "game_plan_stability": 3,
+            "emotional_control": 2,
+            "structure_after_events": 1
+          }
+        },
+        {
+          "id": "match_discipline_silver",
+          "level": "silver",
+          "name": "Kampdisiplin II",
+          "description": "Laget holder struktur også etter mål imot.",
+          "effects": {
+            "game_plan_stability": 6,
+            "emotional_control": 5,
+            "structure_after_events": 4
+          }
+        },
+        {
+          "id": "match_discipline_gold",
+          "level": "gold",
+          "name": "Kampdisiplin III",
+          "description": "Laget mister sjelden hodet og spiller med tydelig kollektiv kontroll.",
+          "effects": {
+            "game_plan_stability": 9,
+            "emotional_control": 8,
+            "structure_after_events": 7,
+            "identity_disciplined_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "pressure_handling",
+      "name": "Pressmestring",
+      "category": "mental",
+      "expertiseIds": [
+        "pressure_handling",
+        "finals_culture"
+      ],
+      "levels": [
+        {
+          "id": "pressure_handling_bronze",
+          "level": "bronze",
+          "name": "Pressmestring I",
+          "description": "Laget presterer litt bedre i viktige kamper.",
+          "effects": {
+            "big_match_composure": 3,
+            "crowd_pressure_resistance": 2,
+            "mistake_response": 1
+          }
+        },
+        {
+          "id": "pressure_handling_silver",
+          "level": "silver",
+          "name": "Pressmestring II",
+          "description": "Laget tåler publikum, tabellpress og cupkamper bedre.",
+          "effects": {
+            "big_match_composure": 6,
+            "crowd_pressure_resistance": 5,
+            "mistake_response": 4
+          }
+        },
+        {
+          "id": "pressure_handling_gold",
+          "level": "gold",
+          "name": "Pressmestring III",
+          "description": "Laget får finalementalitet.",
+          "effects": {
+            "big_match_composure": 9,
+            "crowd_pressure_resistance": 8,
+            "mistake_response": 7,
+            "identity_final_mentality": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "comeback_mentality",
+      "name": "Comeback-mentalitet",
+      "category": "mental",
+      "expertiseIds": [
+        "mental_resilience",
+        "pressure_handling"
+      ],
+      "levels": [
+        {
+          "id": "comeback_mentality_bronze",
+          "level": "bronze",
+          "name": "Comeback I",
+          "description": "Laget faller mindre sammen etter baklengsmål.",
+          "effects": {
+            "response_after_conceding": 3,
+            "late_push": 2,
+            "morale_stability": 2
+          }
+        },
+        {
+          "id": "comeback_mentality_silver",
+          "level": "silver",
+          "name": "Comeback II",
+          "description": "Laget presser bedre etter å ha havnet under.",
+          "effects": {
+            "response_after_conceding": 6,
+            "late_push": 5,
+            "morale_stability": 4
+          }
+        },
+        {
+          "id": "comeback_mentality_gold",
+          "level": "gold",
+          "name": "Comeback III",
+          "description": "Laget blir farligst når kampbildet snur imot dem.",
+          "effects": {
+            "response_after_conceding": 9,
+            "late_push": 8,
+            "morale_stability": 7,
+            "identity_resilient_team": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "training_culture",
+      "name": "Treningskultur",
+      "category": "mental",
+      "expertiseIds": [
+        "development_culture",
+        "club_building",
+        "team_organisation"
+      ],
+      "levels": [
+        {
+          "id": "training_culture_bronze",
+          "level": "bronze",
+          "name": "Treningskultur I",
+          "description": "Laget responderer bedre på ukesøkter.",
+          "effects": {
+            "training_gain": 3,
+            "badge_progress_rate": 1,
+            "method_adoption": 2
+          }
+        },
+        {
+          "id": "training_culture_silver",
+          "level": "silver",
+          "name": "Treningskultur II",
+          "description": "Badges utvikles raskere når riktig stab er på plass.",
+          "effects": {
+            "training_gain": 6,
+            "badge_progress_rate": 3,
+            "method_adoption": 5
+          }
+        },
+        {
+          "id": "training_culture_gold",
+          "level": "gold",
+          "name": "Treningskultur III",
+          "description": "Klubben får en varig læringskultur.",
+          "effects": {
+            "training_gain": 9,
+            "badge_progress_rate": 5,
+            "method_adoption": 8,
+            "identity_learning_club": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "centre_back_pair",
+      "name": "Stopperpar",
+      "category": "relational",
+      "expertiseIds": [
+        "defensive_partnerships",
+        "defensive_structure"
+      ],
+      "levels": [
+        {
+          "id": "centre_back_pair_bronze",
+          "level": "bronze",
+          "name": "Stopperpar I",
+          "description": "Stopperne dekker hverandre litt bedre.",
+          "effects": {
+            "centre_back_cover": 3,
+            "line_coordination": 2,
+            "duel_distribution": 1
+          }
+        },
+        {
+          "id": "centre_back_pair_silver",
+          "level": "silver",
+          "name": "Stopperpar II",
+          "description": "Stopperne får bedre avstand, sikring og duellfordeling.",
+          "effects": {
+            "centre_back_cover": 6,
+            "line_coordination": 5,
+            "duel_distribution": 4
+          }
+        },
+        {
+          "id": "centre_back_pair_gold",
+          "level": "gold",
+          "name": "Stopperpar III",
+          "description": "Stopperparet fungerer som en egen defensiv akse.",
+          "effects": {
+            "centre_back_cover": 9,
+            "line_coordination": 8,
+            "duel_distribution": 7,
+            "identity_defensive_axis": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "fullback_winger_relation",
+      "name": "Back/kant-relasjon",
+      "category": "relational",
+      "expertiseIds": [
+        "wide_attack",
+        "role_relationships"
+      ],
+      "levels": [
+        {
+          "id": "fullback_winger_relation_bronze",
+          "level": "bronze",
+          "name": "Back/kant I",
+          "description": "Laget får bedre overlapp og rolleforståelse på siden.",
+          "effects": {
+            "wide_combinations": 3,
+            "overlap_timing": 2,
+            "wing_support": 2
+          }
+        },
+        {
+          "id": "fullback_winger_relation_silver",
+          "level": "silver",
+          "name": "Back/kant II",
+          "description": "Laget skaper flere sidekombinasjoner.",
+          "effects": {
+            "wide_combinations": 6,
+            "overlap_timing": 5,
+            "wing_support": 4
+          }
+        },
+        {
+          "id": "fullback_winger_relation_gold",
+          "level": "gold",
+          "name": "Back/kant III",
+          "description": "Siden blir en tydelig angrepskanal.",
+          "effects": {
+            "wide_combinations": 9,
+            "overlap_timing": 8,
+            "wing_support": 7,
+            "identity_flank_channel": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "midfield_triangle",
+      "name": "Midtbanetriangel",
+      "category": "relational",
+      "expertiseIds": [
+        "midfield_structure",
+        "role_relationships"
+      ],
+      "levels": [
+        {
+          "id": "midfield_triangle_bronze",
+          "level": "bronze",
+          "name": "Midtbanetriangel I",
+          "description": "Laget får bedre avstander mellom sekser og indreløpere.",
+          "effects": {
+            "midfield_spacing": 3,
+            "central_control": 2,
+            "passing_angles": 2
+          }
+        },
+        {
+          "id": "midfield_triangle_silver",
+          "level": "silver",
+          "name": "Midtbanetriangel II",
+          "description": "Laget får bedre balanse mellom kontroll og framdrift.",
+          "effects": {
+            "midfield_spacing": 6,
+            "central_control": 5,
+            "passing_angles": 5
+          }
+        },
+        {
+          "id": "midfield_triangle_gold",
+          "level": "gold",
+          "name": "Midtbanetriangel III",
+          "description": "Midtbanen styrer rytmen i kampen.",
+          "effects": {
+            "midfield_spacing": 9,
+            "central_control": 8,
+            "passing_angles": 8,
+            "identity_midfield_control": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "striker_ten_relation",
+      "name": "Spiss/tier-relasjon",
+      "category": "relational",
+      "expertiseIds": [
+        "central_combinations",
+        "role_relationships"
+      ],
+      "levels": [
+        {
+          "id": "striker_ten_relation_bronze",
+          "level": "bronze",
+          "name": "Spiss/tier I",
+          "description": "Laget får bedre avstand mellom møtende spiss og offensiv midtbane.",
+          "effects": {
+            "central_combinations": 3,
+            "third_man_runs": 2,
+            "between_lines_connection": 2
+          }
+        },
+        {
+          "id": "striker_ten_relation_silver",
+          "level": "silver",
+          "name": "Spiss/tier II",
+          "description": "Laget skaper flere veggspill, tredje-mann-løp og kombinasjoner sentralt.",
+          "effects": {
+            "central_combinations": 6,
+            "third_man_runs": 5,
+            "between_lines_connection": 5
+          }
+        },
+        {
+          "id": "striker_ten_relation_gold",
+          "level": "gold",
+          "name": "Spiss/tier III",
+          "description": "Laget får en kreativ sentral angrepsakse.",
+          "effects": {
+            "central_combinations": 9,
+            "third_man_runs": 8,
+            "between_lines_connection": 8,
+            "identity_central_attack_axis": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "keeper_defense_relation",
+      "name": "Keeper/forsvar-relasjon",
+      "category": "relational",
+      "expertiseIds": [
+        "keeper_defense_coordination",
+        "goalkeeper_training"
+      ],
+      "levels": [
+        {
+          "id": "keeper_defense_relation_bronze",
+          "level": "bronze",
+          "name": "Keeper/forsvar I",
+          "description": "Laget får bedre kommunikasjon mellom keeper og bakre firer/treer.",
+          "effects": {
+            "keeper_defense_communication": 3,
+            "line_depth_control": 2,
+            "box_control_support": 1
+          }
+        },
+        {
+          "id": "keeper_defense_relation_silver",
+          "level": "silver",
+          "name": "Keeper/forsvar II",
+          "description": "Laget får bedre valg i oppbygging, bakromskontroll og feltarbeid.",
+          "effects": {
+            "keeper_defense_communication": 6,
+            "line_depth_control": 5,
+            "box_control_support": 4
+          }
+        },
+        {
+          "id": "keeper_defense_relation_gold",
+          "level": "gold",
+          "name": "Keeper/forsvar III",
+          "description": "Keeperen blir en aktiv del av lagets struktur.",
+          "effects": {
+            "keeper_defense_communication": 9,
+            "line_depth_control": 8,
+            "box_control_support": 7,
+            "identity_keeper_defense_unit": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "keeper_distribution",
+      "name": "Keeperdistribusjon",
+      "category": "goalkeeper",
+      "expertiseIds": [
+        "keeper_distribution",
+        "goalkeeper_training"
+      ],
+      "levels": [
+        {
+          "id": "keeper_distribution_bronze",
+          "level": "bronze",
+          "name": "Keeperdistribusjon I",
+          "description": "Keeperen får bedre korte igangsettinger.",
+          "effects": {
+            "keeper_short_distribution": 3,
+            "build_up_stability": 1,
+            "turnovers_from_keeper": -1
+          }
+        },
+        {
+          "id": "keeper_distribution_silver",
+          "level": "silver",
+          "name": "Keeperdistribusjon II",
+          "description": "Keeperen finner oftere riktige pasningsvalg under press.",
+          "effects": {
+            "keeper_short_distribution": 6,
+            "keeper_long_distribution": 4,
+            "turnovers_from_keeper": -3
+          }
+        },
+        {
+          "id": "keeper_distribution_gold",
+          "level": "gold",
+          "name": "Keeperdistribusjon III",
+          "description": "Keeperen blir en reell playmaker i oppbyggingen.",
+          "effects": {
+            "keeper_short_distribution": 9,
+            "keeper_long_distribution": 7,
+            "turnovers_from_keeper": -5,
+            "identity_keeper_playmaker": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sweeper_keeper",
+      "name": "Sweeperkeeper",
+      "category": "goalkeeper",
+      "expertiseIds": [
+        "sweeper_keeper_training",
+        "goalkeeper_training"
+      ],
+      "levels": [
+        {
+          "id": "sweeper_keeper_bronze",
+          "level": "bronze",
+          "name": "Sweeperkeeper I",
+          "description": "Keeperen dekker bakrommet litt bedre.",
+          "effects": {
+            "keeper_sweeping": 3,
+            "high_line_security": 2,
+            "defensive_depth_control": 1
+          }
+        },
+        {
+          "id": "sweeper_keeper_silver",
+          "level": "silver",
+          "name": "Sweeperkeeper II",
+          "description": "Laget kan stå høyere med større trygghet.",
+          "effects": {
+            "keeper_sweeping": 6,
+            "high_line_security": 5,
+            "defensive_depth_control": 4
+          }
+        },
+        {
+          "id": "sweeper_keeper_gold",
+          "level": "gold",
+          "name": "Sweeperkeeper III",
+          "description": "Keeperrollen endrer hele lagets forsvarshøyde.",
+          "effects": {
+            "keeper_sweeping": 9,
+            "high_line_security": 8,
+            "defensive_depth_control": 7,
+            "identity_high_line_keeper": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "keeper_box_control",
+      "name": "Feltkontroll",
+      "category": "goalkeeper",
+      "expertiseIds": [
+        "keeper_box_control",
+        "goalkeeper_training"
+      ],
+      "levels": [
+        {
+          "id": "keeper_box_control_bronze",
+          "level": "bronze",
+          "name": "Feltkontroll I",
+          "description": "Keeperen håndterer innlegg litt bedre.",
+          "effects": {
+            "cross_claiming": 3,
+            "box_control": 2,
+            "set_piece_defense": 1
+          }
+        },
+        {
+          "id": "keeper_box_control_silver",
+          "level": "silver",
+          "name": "Feltkontroll II",
+          "description": "Laget slipper til færre farlige situasjoner etter innlegg.",
+          "effects": {
+            "cross_claiming": 6,
+            "box_control": 5,
+            "set_piece_defense": 4
+          }
+        },
+        {
+          "id": "keeper_box_control_gold",
+          "level": "gold",
+          "name": "Feltkontroll III",
+          "description": "Keeperen kontrollerer sekstenmeteren som et eget forsvarsrom.",
+          "effects": {
+            "cross_claiming": 9,
+            "box_control": 8,
+            "set_piece_defense": 7,
+            "identity_box_control_keeper": 1
+          }
+        }
+      ]
+    }
+  ]
+}
