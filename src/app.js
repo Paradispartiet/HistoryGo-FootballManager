@@ -16,7 +16,17 @@ const DATA_PATHS = {
   tactics: "data/football_tactics.json",
   formations: "data/football_formations.json",
   knowledgePrinciples: "data/football_knowledge_principles.json",
-  clubInboxMessages: "data/club_inbox_messages.json"
+  clubInboxMessages: "data/club_inbox_messages.json",
+  // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
+  unlocks: "data/football_unlocks.json",
+  staff: "data/football_staff.json",
+  expertise: "data/football_expertise.json",
+  trainingPrograms: "data/football_training_programs.json",
+  trainingBadges: "data/football_training_badges.json",
+  teamClassifications: "data/football_team_classifications.json",
+  // V1 bruker example-filen som midlertidig lag-/demostate (unlockedPlaceIds,
+  // hiredStaffIds, earnedBadgeIds osv.). Flyttes til save-system senere.
+  teamMerits: "data/football_team_merits.example.json"
 };
 
 const EMPTY_VALUE = "__empty__";
@@ -60,7 +70,18 @@ const state = {
   clubWeekEventLog: [],
   // Lesbare innboksmeldinger fra datafil. Kun visning i denne PR-en –
   // ingen state-effekter, svarvalg eller konsekvenser ennå.
-  clubInboxMessages: []
+  clubInboxMessages: [],
+  // History Go-unlocks (v1). Kobler besøkte steder til Football Manager-ressurser.
+  // Filtreres gjennom teamMerits.unlockedPlaceIds. Ingen fit-/kampmotor-effekt.
+  unlocks: { placeUnlocks: [] },
+  staff: [],
+  expertise: [],
+  trainingPrograms: [],
+  trainingBadges: { badgeFamilies: [] },
+  teamClassifications: { classifications: [] },
+  // Midlertidig lag-/demostate fra example-filen (unlockedPlaceIds, hiredStaffIds,
+  // unlockedExpertiseIds, earnedBadgeIds, badgeProgress, activeClassifications).
+  teamMerits: null
 };
 
 const elements = {
@@ -111,7 +132,15 @@ const elements = {
   clubTrainingCulture: document.querySelector("#clubTrainingCulture"),
   clubMediaPressure: document.querySelector("#clubMediaPressure"),
   clubWeekEventLog: document.querySelector("#clubWeekEventLog"),
-  inboxMessageList: document.querySelector("#inboxMessageList")
+  inboxMessageList: document.querySelector("#inboxMessageList"),
+  // History Go-unlocks (v1).
+  unlockPlacesList: document.querySelector("#unlockPlacesList"),
+  availableStaffList: document.querySelector("#availableStaffList"),
+  hiredStaffList: document.querySelector("#hiredStaffList"),
+  unlockedExpertiseList: document.querySelector("#unlockedExpertiseList"),
+  availableTrainingProgramsList: document.querySelector("#availableTrainingProgramsList"),
+  earnedBadgesList: document.querySelector("#earnedBadgesList"),
+  teamClassificationsList: document.querySelector("#teamClassificationsList")
 };
 
 let managerEngineRenderId = 0;
@@ -236,6 +265,338 @@ function validateFootballData({ players, roles, tactics, formations }) {
         warnings.push(`${formation.name || formation.id} har ukjent slot-posisjon: ${slot.position}.`);
       }
     });
+  });
+
+  return warnings;
+}
+
+// ============================================================================
+// History Go unlock-motor (v1)
+// Kobler besøkte/samlede History Go-steder til Football Manager-ressurser.
+// Kjerneløkke: Sted → Person → Ekspertise → Treningsprogram → Badge → Lagklasse.
+// Alt filtreres gjennom unlockedPlaceIds (+ team merits). Rene hjelpefunksjoner,
+// robuste mot manglende prototypefelt. Ingen effekt på fit-/kamp-/scoremotoren.
+// ============================================================================
+
+// Rekkefølge på badge-nivåer, brukes til klassifiseringsberegning.
+const BADGE_LEVEL_ORDER = { bronze: 1, silver: 2, gold: 3 };
+
+// Tekst per programstatus, brukt i render.
+const TRAINING_STATUS_TEXT = {
+  available: "Tilgjengelig",
+  needs_staff: "Mangler riktig stab",
+  needs_expertise: "Mangler ekspertise"
+};
+
+// Unlock-typer i football_unlocks.json som regnes som stab/trener/personkandidat.
+function isStaffUnlockType(type) {
+  return typeof type === "string" && /staff|coach|person|candidate/i.test(type);
+}
+
+// Opplåste steder som Set – leses fra midlertidig team-state.
+function getUnlockedPlaceIds() {
+  const ids = state.teamMerits?.unlockedPlaceIds;
+  return new Set(Array.isArray(ids) ? ids : []);
+}
+
+// placeUnlocks filtrert på opplåste steder.
+function getPlaceUnlocks() {
+  const unlockedPlaceIds = getUnlockedPlaceIds();
+  const placeUnlocks = state.unlocks?.placeUnlocks;
+  if (!Array.isArray(placeUnlocks)) {
+    return [];
+  }
+  return placeUnlocks.filter((place) => place && unlockedPlaceIds.has(place.placeId));
+}
+
+// Stab-id-er som er eksplisitt låst opp via football_unlocks.json på et opplåst
+// sted (type som inneholder staff/coach/person/candidate, f.eks. head_coach_candidate).
+function getStaffIdsFromPlaceUnlocks() {
+  const ids = new Set();
+  getPlaceUnlocks().forEach((place) => {
+    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (unlock && isStaffUnlockType(unlock.type) && unlock.targetId) {
+        ids.add(unlock.targetId);
+      }
+    });
+  });
+  return ids;
+}
+
+// Stab som er tilgjengelig: kommer fra et opplåst sted (sourcePlaceIds) eller er
+// eksplisitt låst opp gjennom football_unlocks.json.
+function getUnlockedStaff() {
+  const unlockedPlaceIds = getUnlockedPlaceIds();
+  const explicitStaffIds = getStaffIdsFromPlaceUnlocks();
+  const staff = Array.isArray(state.staff) ? state.staff : [];
+
+  return staff.filter((member) => {
+    if (!member || !member.id) {
+      return false;
+    }
+    const sources = Array.isArray(member.sourcePlaceIds) ? member.sourcePlaceIds : [];
+    const fromPlace = sources.some((placeId) => unlockedPlaceIds.has(placeId));
+    return fromPlace || explicitStaffIds.has(member.id);
+  });
+}
+
+// Engasjert stab: tilgjengelig stab som finnes i hiredStaffIds.
+function getHiredStaff() {
+  const hiredIds = new Set(
+    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : []
+  );
+  return getUnlockedStaff().filter((member) => hiredIds.has(member.id));
+}
+
+// Alle staff-typer en ansatt kan dekke (staffType + canBeHiredAs).
+function getStaffCoveredTypes(member) {
+  const types = new Set();
+  if (member?.staffType) {
+    types.add(member.staffType);
+  }
+  (Array.isArray(member?.canBeHiredAs) ? member.canBeHiredAs : []).forEach((type) => types.add(type));
+  return types;
+}
+
+// Opplåst ekspertise som Set av id-er: via opplåst sted, via teamMerits, eller
+// fordi en ansatt stab har ekspertisen i expertiseIds.
+function getUnlockedExpertiseIds() {
+  const unlockedPlaceIds = getUnlockedPlaceIds();
+  const fromMerits = new Set(
+    Array.isArray(state.teamMerits?.unlockedExpertiseIds) ? state.teamMerits.unlockedExpertiseIds : []
+  );
+
+  const hiredExpertise = new Set();
+  getHiredStaff().forEach((member) => {
+    (Array.isArray(member.expertiseIds) ? member.expertiseIds : []).forEach((id) => hiredExpertise.add(id));
+  });
+
+  const result = new Set();
+  const expertise = Array.isArray(state.expertise) ? state.expertise : [];
+  expertise.forEach((item) => {
+    if (!item || !item.id) {
+      return;
+    }
+    const places = Array.isArray(item.unlockedByPlaceIds) ? item.unlockedByPlaceIds : [];
+    const fromPlace = places.some((placeId) => unlockedPlaceIds.has(placeId));
+    if (fromPlace || fromMerits.has(item.id) || hiredExpertise.has(item.id)) {
+      result.add(item.id);
+    }
+  });
+  return result;
+}
+
+// Opplåst ekspertise som hele objekter.
+function getUnlockedExpertise() {
+  const ids = getUnlockedExpertiseIds();
+  const expertise = Array.isArray(state.expertise) ? state.expertise : [];
+  return expertise.filter((item) => item && ids.has(item.id));
+}
+
+// Badgefamilier som er åpnet av opplåst ekspertise (via opensBadgeFamilies).
+function getOpenedBadgeFamilyIds() {
+  const families = new Set();
+  getUnlockedExpertise().forEach((item) => {
+    (Array.isArray(item.opensBadgeFamilies) ? item.opensBadgeFamilies : []).forEach((id) => families.add(id));
+  });
+  return families;
+}
+
+// Treningsprogrammer innen rekkevidde, med status og begrunnelse.
+// Relevansport: programmet vises bare hvis minst ett krav-ekspertise er opplåst,
+// eller programmets badgefamilie er åpnet av opplåst ekspertise. Status:
+//   available       – ekspertise på plass OG matchende ansatt stab
+//   needs_staff     – ekspertise på plass, men ingen ansatt stab matcher
+//   needs_expertise – nådd via badgefamilie, men selve krav-ekspertisen mangler
+function getAvailableTrainingPrograms() {
+  const unlockedExpertise = getUnlockedExpertiseIds();
+  const openedFamilies = getOpenedBadgeFamilyIds();
+  const hiredStaff = getHiredStaff();
+  const programs = Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [];
+
+  const results = [];
+
+  programs.forEach((program) => {
+    if (!program || !program.id) {
+      return;
+    }
+
+    const required = Array.isArray(program.requiresExpertiseIds) ? program.requiresExpertiseIds : [];
+    const matchedExpertise = required.filter((id) => unlockedExpertise.has(id));
+    const hasExpertise = matchedExpertise.length > 0;
+    const familyOpened = openedFamilies.has(program.badgeFamilyId);
+
+    if (!hasExpertise && !familyOpened) {
+      return;
+    }
+
+    const requiredStaffTypes = Array.isArray(program.requiredStaffTypes) ? program.requiredStaffTypes : [];
+    const matchedStaff = hiredStaff.filter((member) => {
+      const covered = getStaffCoveredTypes(member);
+      return requiredStaffTypes.some((type) => covered.has(type));
+    });
+    const hasStaff = matchedStaff.length > 0;
+
+    let status;
+    const reasons = [];
+
+    if (!hasExpertise) {
+      status = "needs_expertise";
+      const missing = required.filter((id) => !unlockedExpertise.has(id));
+      reasons.push(`Mangler ekspertise: ${missing.join(", ") || "ukjent"}`);
+    } else if (!hasStaff) {
+      status = "needs_staff";
+      reasons.push(`Krever stab: ${requiredStaffTypes.join(", ") || "ukjent"}`);
+    } else {
+      status = "available";
+      reasons.push(`Ekspertise på plass: ${matchedExpertise.join(", ")}`);
+      reasons.push(`Stab: ${matchedStaff.map((member) => member.name || member.id).join(", ")}`);
+    }
+
+    results.push({ program, status, reasons });
+  });
+
+  const order = { available: 0, needs_staff: 1, needs_expertise: 2 };
+  results.sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
+  return results;
+}
+
+// Oppslag fra badge-id til badgeobjekt beriket med familieinfo.
+function getBadgeCatalog() {
+  const families = Array.isArray(state.trainingBadges?.badgeFamilies) ? state.trainingBadges.badgeFamilies : [];
+  const byBadgeId = new Map();
+
+  families.forEach((family) => {
+    (Array.isArray(family.levels) ? family.levels : []).forEach((level) => {
+      if (level && level.id) {
+        byBadgeId.set(level.id, {
+          ...level,
+          familyId: family.id,
+          familyName: family.name,
+          category: family.category
+        });
+      }
+    });
+  });
+
+  return byBadgeId;
+}
+
+// Opptjente badges (fra earnedBadgeIds) som berikede badgeobjekter.
+function getEarnedBadges() {
+  const earnedIds = Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [];
+  const catalog = getBadgeCatalog();
+  return earnedIds.map((id) => catalog.get(id)).filter(Boolean);
+}
+
+// Høyeste oppnådde badge-nivå (som tall) per badgefamilie ut fra earnedBadgeIds.
+function getEarnedBadgeLevelByFamily() {
+  const levels = new Map();
+  getEarnedBadges().forEach((badge) => {
+    const rank = BADGE_LEVEL_ORDER[badge.level] || 0;
+    const current = levels.get(badge.familyId) || 0;
+    if (rank > current) {
+      levels.set(badge.familyId, rank);
+    }
+  });
+  return levels;
+}
+
+// Beregn hvilke lagklasser som er oppnådd ut fra earnedBadgeIds. Trygg helper
+// for senere bruk; v1-render viser eksplisitt lagrede activeClassifications.
+function computeActiveClassificationIds() {
+  const familyLevels = getEarnedBadgeLevelByFamily();
+  const classifications = Array.isArray(state.teamClassifications?.classifications)
+    ? state.teamClassifications.classifications
+    : [];
+
+  return classifications
+    .filter((classification) => {
+      const required = Array.isArray(classification.requiresBadges) ? classification.requiresBadges : [];
+      return required.length > 0 && required.every((req) => {
+        const have = familyLevels.get(req.familyId) || 0;
+        const need = BADGE_LEVEL_ORDER[req.minimumLevel] || 0;
+        return have >= need;
+      });
+    })
+    .map((classification) => classification.id);
+}
+
+// Aktive lagklasser. V1 viser eksplisitt lagrede activeClassifications fra
+// team-state; beregning fra badges finnes i computeActiveClassificationIds().
+function getActiveTeamClassifications() {
+  const classifications = Array.isArray(state.teamClassifications?.classifications)
+    ? state.teamClassifications.classifications
+    : [];
+  const activeIds = new Set(
+    Array.isArray(state.teamMerits?.activeClassifications) ? state.teamMerits.activeClassifications : []
+  );
+  return classifications.filter((classification) => activeIds.has(classification.id));
+}
+
+// Enkel validering av unlock-/stab-/badge-data. Skriver advarsler med
+// console.warn, men krasjer ikke appen om prototypedata mangler felt.
+function validateUnlockData() {
+  const warnings = [];
+  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
+  const staff = Array.isArray(state.staff) ? state.staff : [];
+  const expertise = Array.isArray(state.expertise) ? state.expertise : [];
+  const programs = Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [];
+  const families = Array.isArray(state.trainingBadges?.badgeFamilies) ? state.trainingBadges.badgeFamilies : [];
+
+  const familyIds = new Set(families.map((family) => family && family.id).filter(Boolean));
+  const badgeIds = new Set();
+  families.forEach((family) => {
+    (Array.isArray(family.levels) ? family.levels : []).forEach((level) => {
+      if (level && level.id) {
+        badgeIds.add(level.id);
+      }
+    });
+  });
+  const staffIds = new Set(staff.map((member) => member && member.id).filter(Boolean));
+
+  placeUnlocks.forEach((place) => {
+    if (typeof place?.placeId !== "string" || !place.placeId) {
+      warnings.push("Et placeUnlock mangler gyldig placeId (streng).");
+    }
+  });
+
+  staff.forEach((member) => {
+    if (!member?.id || !member?.name || !member?.staffType) {
+      warnings.push(`Stab mangler id, name eller staffType: ${member?.id || member?.name || "ukjent"}.`);
+    }
+    if (member && member.sourcePlaceIds !== undefined && !Array.isArray(member.sourcePlaceIds)) {
+      warnings.push(`Stab ${member.id || member.name} har sourcePlaceIds som ikke er array.`);
+    }
+  });
+
+  expertise.forEach((item) => {
+    if (!item?.id || !item?.name || !item?.category) {
+      warnings.push(`Ekspertise mangler id, name eller category: ${item?.id || item?.name || "ukjent"}.`);
+    }
+  });
+
+  programs.forEach((program) => {
+    if (!program?.id || !program?.badgeFamilyId || !Array.isArray(program?.requiresExpertiseIds)) {
+      warnings.push(`Treningsprogram mangler id, badgeFamilyId eller requiresExpertiseIds: ${program?.id || "ukjent"}.`);
+    }
+    if (program?.badgeFamilyId && !familyIds.has(program.badgeFamilyId)) {
+      warnings.push(`Treningsprogram ${program.id} peker på ukjent badgeFamilyId: ${program.badgeFamilyId}.`);
+    }
+  });
+
+  const earnedBadgeIds = Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [];
+  earnedBadgeIds.forEach((id) => {
+    if (!badgeIds.has(id)) {
+      warnings.push(`earnedBadgeId finnes ikke i badge-katalogen: ${id}.`);
+    }
+  });
+
+  const hiredStaffIds = Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : [];
+  hiredStaffIds.forEach((id) => {
+    if (!staffIds.has(id)) {
+      warnings.push(`hiredStaffId finnes ikke i staff-filen: ${id}.`);
+    }
   });
 
   return warnings;
@@ -1559,6 +1920,256 @@ function renderInboxMessages() {
   }
 }
 
+// ============================================================================
+// History Go unlock-render (v1)
+// Bygger kort med createElement/textContent (ingen innerHTML utenom clearing).
+// Trygg mot manglende elementer og felt. Ingen fit-/kampmotor-effekt.
+// ============================================================================
+
+// Tom-tilstand for en unlock-liste.
+function renderUnlockEmpty(container, text) {
+  const empty = document.createElement("p");
+  empty.className = "unlock-empty muted-text";
+  empty.textContent = text;
+  container.append(empty);
+}
+
+function createUnlockCard() {
+  const card = document.createElement("article");
+  card.className = "unlock-card";
+  return card;
+}
+
+function appendUnlockTitle(card, text) {
+  const title = document.createElement("h4");
+  title.className = "unlock-card-title";
+  title.textContent = text;
+  card.append(title);
+}
+
+function appendUnlockMeta(card, text) {
+  const meta = document.createElement("p");
+  meta.className = "unlock-meta";
+  meta.textContent = text;
+  card.append(meta);
+}
+
+// Steder: navn, rolle og kort hva stedet låser opp.
+function renderUnlockPlaces() {
+  const list = elements.unlockPlacesList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+  const places = getPlaceUnlocks();
+
+  if (!places.length) {
+    renderUnlockEmpty(list, "Ingen besøkte History Go-steder ennå.");
+    return;
+  }
+
+  places.forEach((place) => {
+    const card = createUnlockCard();
+    appendUnlockTitle(card, place.placeName || place.placeId);
+
+    if (place.placeRole) {
+      appendUnlockMeta(card, `Rolle: ${place.placeRole}`);
+    }
+
+    const unlocks = Array.isArray(place.unlocks) ? place.unlocks : [];
+    if (unlocks.length) {
+      const ul = document.createElement("ul");
+      ul.className = "unlock-list";
+      unlocks.forEach((unlock) => {
+        const li = document.createElement("li");
+        li.textContent = `${unlock.type}: ${unlock.targetId}`;
+        ul.append(li);
+      });
+      card.append(ul);
+    }
+
+    list.append(card);
+  });
+}
+
+// Ett stab-kort: navn, type, hva de kan ansettes som, viktigste ekspertise,
+// og prototype-notat når isPlaceholder er satt.
+function createStaffCard(member) {
+  const card = createUnlockCard();
+  appendUnlockTitle(card, member.name || member.id);
+  appendUnlockMeta(card, `Type: ${member.staffType || "ukjent"}`);
+
+  const canBeHiredAs = Array.isArray(member.canBeHiredAs) ? member.canBeHiredAs : [];
+  if (canBeHiredAs.length) {
+    appendUnlockMeta(card, `Kan ansettes som: ${canBeHiredAs.join(", ")}`);
+  }
+
+  const expertiseIds = Array.isArray(member.expertiseIds) ? member.expertiseIds : [];
+  if (expertiseIds.length) {
+    appendUnlockMeta(card, `Ekspertise: ${expertiseIds.slice(0, 4).join(", ")}`);
+  }
+
+  if (member.isPlaceholder) {
+    const note = document.createElement("p");
+    note.className = "staff-placeholder-note";
+    note.textContent = "Prototypeprofil – krever research.";
+    card.append(note);
+  }
+
+  return card;
+}
+
+// Tilgjengelig og engasjert stab.
+function renderStaffUnlocks() {
+  const availableList = elements.availableStaffList;
+  if (availableList) {
+    availableList.innerHTML = "";
+    const available = getUnlockedStaff();
+    if (!available.length) {
+      renderUnlockEmpty(availableList, "Ingen tilgjengelig stab ennå. Besøk flere steder.");
+    } else {
+      available.forEach((member) => availableList.append(createStaffCard(member)));
+    }
+  }
+
+  const hiredList = elements.hiredStaffList;
+  if (hiredList) {
+    hiredList.innerHTML = "";
+    const hired = getHiredStaff();
+    if (!hired.length) {
+      renderUnlockEmpty(hiredList, "Ingen engasjert stab ennå.");
+    } else {
+      hired.forEach((member) => hiredList.append(createStaffCard(member)));
+    }
+  }
+}
+
+// Ekspertise: navn, kategori og hvilke badgefamilier den åpner.
+function renderExpertiseUnlocks() {
+  const list = elements.unlockedExpertiseList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+  const expertise = getUnlockedExpertise();
+
+  if (!expertise.length) {
+    renderUnlockEmpty(list, "Ingen tilgjengelig ekspertise ennå.");
+    return;
+  }
+
+  expertise.forEach((item) => {
+    const card = createUnlockCard();
+    appendUnlockTitle(card, item.name || item.id);
+    appendUnlockMeta(card, `Kategori: ${item.category || "ukjent"}`);
+
+    const families = Array.isArray(item.opensBadgeFamilies) ? item.opensBadgeFamilies : [];
+    if (families.length) {
+      appendUnlockMeta(card, `Åpner badgefamilier: ${families.join(", ")}`);
+    }
+
+    list.append(card);
+  });
+}
+
+// Treningsprogrammer: navn, kategori, target badge family, status og nivåer.
+function renderTrainingPrograms() {
+  const list = elements.availableTrainingProgramsList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+  const entries = getAvailableTrainingPrograms();
+
+  if (!entries.length) {
+    renderUnlockEmpty(list, "Ingen treningsprogrammer er innen rekkevidde ennå.");
+    return;
+  }
+
+  entries.forEach(({ program, status, reasons }) => {
+    const card = createUnlockCard();
+    appendUnlockTitle(card, program.name || program.id);
+    appendUnlockMeta(
+      card,
+      `Kategori: ${program.category || "ukjent"} · Badgefamilie: ${program.badgeFamilyId || "ukjent"}`
+    );
+
+    const statusEl = document.createElement("p");
+    statusEl.className = "unlock-status";
+    statusEl.classList.add(status === "available" ? "is-available" : "is-locked");
+    statusEl.textContent = TRAINING_STATUS_TEXT[status] || status;
+    card.append(statusEl);
+
+    (Array.isArray(reasons) ? reasons : []).forEach((reason) => appendUnlockMeta(card, reason));
+
+    const levels = Array.isArray(program.levels) ? program.levels : [];
+    if (levels.length) {
+      const ul = document.createElement("ul");
+      ul.className = "unlock-list";
+      levels.forEach((level) => {
+        const li = document.createElement("li");
+        const weeks = typeof level.weeksRequired === "number" ? `${level.weeksRequired} uker` : "ukjent";
+        li.textContent = `${level.level}: ${weeks}`;
+        ul.append(li);
+      });
+      card.append(ul);
+    }
+
+    list.append(card);
+  });
+}
+
+// Badges: opptjente badges fra earnedBadgeIds som små pills.
+function renderEarnedBadges() {
+  const list = elements.earnedBadgesList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+  const badges = getEarnedBadges();
+
+  if (!badges.length) {
+    renderUnlockEmpty(list, "Ingen opptjente badges ennå.");
+    return;
+  }
+
+  badges.forEach((badge) => {
+    const pill = document.createElement("span");
+    pill.className = "badge-pill";
+    pill.textContent = `${badge.familyName || badge.familyId}: ${badge.name || badge.id}`;
+    list.append(pill);
+  });
+}
+
+// Lagklasser: navn og beskrivelse.
+function renderTeamClassifications() {
+  const list = elements.teamClassificationsList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+  const classifications = getActiveTeamClassifications();
+
+  if (!classifications.length) {
+    renderUnlockEmpty(list, "Ingen aktive lagklasser ennå.");
+    return;
+  }
+
+  classifications.forEach((classification) => {
+    const card = createUnlockCard();
+    appendUnlockTitle(card, classification.name || classification.id);
+    if (classification.description) {
+      appendUnlockMeta(card, classification.description);
+    }
+    list.append(card);
+  });
+}
+
 function renderApp() {
   const teamFit = getTeamFit();
 
@@ -1571,6 +2182,14 @@ function renderApp() {
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
   renderInboxMessages();
+
+  // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
+  renderUnlockPlaces();
+  renderStaffUnlocks();
+  renderExpertiseUnlocks();
+  renderTrainingPrograms();
+  renderEarnedBadges();
+  renderTeamClassifications();
 }
 
 function bindEvents() {
@@ -1701,7 +2320,14 @@ async function init() {
       tacticsData,
       formationsData,
       knowledgeData,
-      clubInboxMessagesData
+      clubInboxMessagesData,
+      unlocksData,
+      staffData,
+      expertiseData,
+      trainingProgramsData,
+      trainingBadgesData,
+      teamClassificationsData,
+      teamMeritsData
     ] = await Promise.all([
       loadJson(DATA_PATHS.players),
       loadJson(DATA_PATHS.roles),
@@ -1710,7 +2336,16 @@ async function init() {
       // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
       loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
       // Innboksdata er valgfri: hvis filen mangler, brukes fallback-meldinger.
-      loadJson(DATA_PATHS.clubInboxMessages).catch(() => null)
+      loadJson(DATA_PATHS.clubInboxMessages).catch(() => null),
+      // History Go-unlock-data er valgfri: hvis en fil mangler, fortsetter
+      // appen uten det aktuelle laget (prototype-robusthet).
+      loadJson(DATA_PATHS.unlocks).catch(() => null),
+      loadJson(DATA_PATHS.staff).catch(() => null),
+      loadJson(DATA_PATHS.expertise).catch(() => null),
+      loadJson(DATA_PATHS.trainingPrograms).catch(() => null),
+      loadJson(DATA_PATHS.trainingBadges).catch(() => null),
+      loadJson(DATA_PATHS.teamClassifications).catch(() => null),
+      loadJson(DATA_PATHS.teamMerits).catch(() => null)
     ]);
 
     state.players = playersData.players;
@@ -1732,6 +2367,25 @@ async function init() {
       console.warn("Innboks-data mangler eller har feil format. Bruker fallback-meldinger.");
     }
 
+    // History Go-unlocks (v1): normaliser hver fil til forventet form. Manglende
+    // eller feilformede filer faller tilbake til tomme strukturer, slik at
+    // resten av appen (fit-/lagfitmotor) er upåvirket.
+    state.unlocks = Array.isArray(unlocksData?.placeUnlocks) ? unlocksData : { placeUnlocks: [] };
+    state.staff = Array.isArray(staffData?.staff) ? staffData.staff : [];
+    state.expertise = Array.isArray(expertiseData?.expertise) ? expertiseData.expertise : [];
+    state.trainingPrograms = Array.isArray(trainingProgramsData?.programs) ? trainingProgramsData.programs : [];
+    state.trainingBadges = Array.isArray(trainingBadgesData?.badgeFamilies) ? trainingBadgesData : { badgeFamilies: [] };
+    state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
+      ? teamClassificationsData
+      : { classifications: [] };
+    state.teamMerits = teamMeritsData && typeof teamMeritsData === "object" && !Array.isArray(teamMeritsData)
+      ? teamMeritsData
+      : null;
+
+    if (!state.teamMerits) {
+      console.warn("History Go team merits mangler eller har feil format. Unlock-laget vises tomt.");
+    }
+
     state.selectedFormationId = state.formations[0]?.id || null;
     state.selectedTacticId = state.tactics[0]?.id || null;
     state.trainingWeek = loadTrainingWeek();
@@ -1742,6 +2396,12 @@ async function init() {
 
     if (dataWarnings.length > 0) {
       console.warn("Football Manager-data har kvalitetsadvarsler:", dataWarnings);
+    }
+
+    const unlockWarnings = validateUnlockData();
+
+    if (unlockWarnings.length > 0) {
+      console.warn("History Go unlock-data har kvalitetsadvarsler:", unlockWarnings);
     }
 
     // Club Week-tilstand: les lagret tilstand og la engine/fallback normalisere
