@@ -1,0 +1,142 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages.v1",
+  "version": 1,
+  "messages": [
+    {
+      "id": "welcome_from_board",
+      "from": "Styret",
+      "tag": "Sesongmål",
+      "title": "Velkommen til klubben",
+      "body": "Styret forventer en stabil sesong. Bygg en ellever som henger sammen taktisk, og vis at klassespillere kan brukes riktig.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_training_focus",
+      "from": "Trenerteam",
+      "tag": "Trening",
+      "title": "Ukens treningsvalg",
+      "body": "Når laget har en tydelig svakhet, bør treningsuka brukes til ett konkret prinsipp. Velg en kunnskapsøkt og fullfør den før klubben går videre.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "board_analysis_phase",
+      "from": "Styret",
+      "tag": "Analyse",
+      "title": "Analyse før neste grep",
+      "body": "Styret vil se at du leser laget før du handler. Bruk managerinnsikten til å se om problemet ligger i balanse, rollebruk eller taktisk struktur.",
+      "phases": [
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "club_work_phase_notice",
+      "from": "Administrasjonen",
+      "tag": "Klubbdrift",
+      "title": "Klubbdrift krever prioritering",
+      "body": "Klubbdriften handler ikke bare om laget på banen. Fasiliteter, økonomi, administrasjon og markedsarbeid må etter hvert trekkes inn i managerrollen.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "match_preparation_pressure",
+      "from": "Presseansvarlig",
+      "tag": "Kampforberedelse",
+      "title": "Kampen nærmer seg",
+      "body": "Når kampdagen nærmer seg, øker oppmerksomheten. Et tydelig laguttak og en forståelig kampplan vil gjøre klubben roligere.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "match_day_board_watch",
+      "from": "Styret",
+      "tag": "Kampdag",
+      "title": "Styret følger kampen",
+      "body": "Kampdag handler ikke bare om resultatet. Styret følger med på om laget ser organisert ut, og om manageren har bygget en troverdig plan.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "low_tactical_clarity_warning",
+      "from": "Trenerteam",
+      "tag": "Taktisk klarhet",
+      "title": "Laget trenger tydeligere prinsipper",
+      "body": "Taktisk klarhet er lav. Spillerne trenger færre ideer, tydeligere roller og en treningsuke som peker mot samme spillmodell.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "high_media_pressure_warning",
+      "from": "Presseansvarlig",
+      "tag": "Medietrykk",
+      "title": "Medietrykket øker",
+      "body": "Medietrykket er høyt. Klubben trenger tydelig kommunikasjon, rolig ledelse og færre uklare signaler før neste kamp.",
+      "phases": [
+        "match_preparation",
+        "match_day",
+        "analysis"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "low_training_culture_warning",
+      "from": "Trenerteam",
+      "tag": "Treningskultur",
+      "title": "Treningskulturen må løftes",
+      "body": "Treningskulturen faller når økter velges uten å fullføres. Laget trenger en tydeligere ukeplan og bedre oppfølging av treningsfokuset.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "strong_training_culture_praise",
+      "from": "Assistenttrener",
+      "tag": "Treningskultur",
+      "title": "Treningsarbeidet begynner å sette seg",
+      "body": "Treningskulturen er god. Spillerne responderer bedre når øktene er konkrete, gjentatte og koblet til lagets faktiske svakheter.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    }
+  ]
+}
