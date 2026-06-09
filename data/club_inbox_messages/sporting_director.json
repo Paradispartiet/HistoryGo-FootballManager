@@ -16,6 +16,228 @@
         "club_work"
       ],
       "conditions": {}
+    },
+    {
+      "id": "sporting_director_profile_before_names",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Profil",
+      "title": "Profil før navn",
+      "body": "Før vi snakker om hvem vi vil ha, må vi vite hvilken type spiller vi mangler. Navn kan friste, men profilen avgjør om spilleren faktisk styrker laget.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sporting_director_roles_are_assets",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Rolleprofil",
+      "title": "Roller er klubbens eiendeler",
+      "body": "En god stall er ikke bare elleve sterke kort. Den er et sett med roller som passer sammen, slik at én spillers styrke åpner rom for en annens.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sporting_director_low_tactical_clarity_warning",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Retning",
+      "title": "Det er vanskelig å bygge stall uten klar spillidé",
+      "body": "Når den taktiske klarheten er lav, blir stallplanleggingen mer usikker. Vi risikerer å hente eller bruke spillere til en idé vi ennå ikke har gjort tydelig nok.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "sporting_director_high_tactical_clarity_support",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Retning",
+      "title": "Tydelig spillidé gjør stallarbeidet enklere",
+      "body": "Når spillideen er tydelig, blir også spillerlogistikken tydeligere. Da kan vi se hvilke profiler som forsterker planen, og hvilke som bare ser gode ut isolert.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "sporting_director_board_trust_alignment",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Klubbretning",
+      "title": "Styret må se sammenhengen i valgene",
+      "body": "Når styretilliten er lav, må stallarbeidet være ekstra logisk. Hvert valg bør kunne forklares: hvorfor denne rollen, hvorfor denne profilen, hvorfor nå.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "boardTrust",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "sporting_director_dont_patch_every_problem",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Langsiktighet",
+      "title": "Ikke alle problemer skal løses med nye spillere",
+      "body": "Noen svakheter krever bedre trening, andre krever tydeligere roller. Hvis vi bruker stallarbeidet til å lappe alt, mister klubben retning og økonomien mister disiplin.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sporting_director_training_culture_develops_value",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Utvikling",
+      "title": "God treningskultur øker verdien i stallen",
+      "body": "Når treningskulturen er god, får vi mer ut av spillerne vi allerede har. Det gjør også rekruttering enklere, fordi nye spillere kommer inn i en struktur som utvikler dem.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "sporting_director_low_training_culture_cost",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Utvikling",
+      "title": "Svak treningskultur gjør stallarbeidet dyrere",
+      "body": "Hvis treningshverdagen ikke utvikler spillerne, må klubben stadig hente løsninger utenfra. Det er dyrt, kortsiktig og gjør oss mindre presise i spillerlogistikken.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "sporting_director_morale_and_contracts",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Garderobe",
+      "title": "Lav moral påvirker mer enn neste kamp",
+      "body": "Lav spillermoral påvirker spilletidssamtaler, kontrakter og hvordan spillere ser på fremtiden sin i klubben. Sportslig plan og garderobetillit må henge sammen.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "sporting_director_match_preparation_squad_logic",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Kampforberedelse",
+      "title": "Laguttaket viser stallens logikk",
+      "body": "Når kampplanen settes, ser vi om stallen faktisk er bygget for ideen. Hvis roller må tvinges på plass hver uke, er problemet større enn én kamp.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sporting_director_match_day_evaluation",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Kampdag",
+      "title": "Kampdag viser om profilen passer rollen",
+      "body": "På kampdag ser vi ikke bare prestasjon. Vi ser om spilleren blir brukt i situasjoner som passer profilen hans. Det er forskjell på dårlig form og feil bruk.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sporting_director_history_go_recruitment_link",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "History Go",
+      "title": "Opplåste klubber gir nye sportslige spor",
+      "body": "Når klubbsteder låses opp gjennom History Go, bør vi se på mer enn navn. Spillere, trenere og staff må vurderes som profiler som kan passe klubbens retning.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sporting_director_staff_as_part_of_squad",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Stab",
+      "title": "Staben er også en del av sportslig plan",
+      "body": "Assistenttrener, keepertrener, fysio og trenere er ikke pynt rundt laget. Riktig stab gjør spillideen mer trenbar, mer robust og lettere å utvikle over tid.",
+      "phases": [
+        "club_work",
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sporting_director_identity_over_market_noise",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Identitet",
+      "title": "Markedet må ikke bestemme identiteten",
+      "body": "Det vil alltid finnes fristende spillere. Men hvis markedet styrer identiteten, mister klubben seg selv. Vi må vite hvem vi er før vi velger hvem vi henter.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
