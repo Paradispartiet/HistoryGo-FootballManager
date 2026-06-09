@@ -4,6 +4,7 @@
   "messages": [
     {
       "id": "welcome_from_board",
+      "threadId": "board_direction_and_trust",
       "senderId": "board",
       "from": "Styret",
       "tag": "Sesongmål",
@@ -20,6 +21,7 @@
     },
     {
       "id": "assistant_training_focus",
+      "threadId": "coaching_training_focus",
       "senderId": "coaching_team",
       "from": "Trenerteam",
       "tag": "Trening",
@@ -32,6 +34,7 @@
     },
     {
       "id": "board_analysis_phase",
+      "threadId": "board_direction_and_trust",
       "senderId": "board",
       "from": "Styret",
       "tag": "Analyse",
@@ -44,6 +47,7 @@
     },
     {
       "id": "club_work_phase_notice",
+      "threadId": "administration_club_work",
       "senderId": "administration",
       "from": "Administrasjonen",
       "tag": "Klubbdrift",
@@ -56,6 +60,7 @@
     },
     {
       "id": "match_preparation_pressure",
+      "threadId": "press_media_pressure",
       "senderId": "press_officer",
       "from": "Presseansvarlig",
       "tag": "Kampforberedelse",
@@ -68,6 +73,7 @@
     },
     {
       "id": "match_day_board_watch",
+      "threadId": "board_match_expectations",
       "senderId": "board",
       "from": "Styret",
       "tag": "Kampdag",
@@ -80,6 +86,7 @@
     },
     {
       "id": "low_tactical_clarity_warning",
+      "threadId": "coaching_training_focus",
       "senderId": "coaching_team",
       "from": "Trenerteam",
       "tag": "Taktisk klarhet",
@@ -97,6 +104,7 @@
     },
     {
       "id": "high_media_pressure_warning",
+      "threadId": "press_media_pressure",
       "senderId": "press_officer",
       "from": "Presseansvarlig",
       "tag": "Medietrykk",
@@ -115,6 +123,7 @@
     },
     {
       "id": "low_training_culture_warning",
+      "threadId": "coaching_training_focus",
       "senderId": "coaching_team",
       "from": "Trenerteam",
       "tag": "Treningskultur",
@@ -132,6 +141,7 @@
     },
     {
       "id": "strong_training_culture_praise",
+      "threadId": "assistant_training_culture",
       "senderId": "assistant_coach",
       "from": "Assistenttrener",
       "tag": "Treningskultur",
@@ -150,6 +160,7 @@
     },
     {
       "id": "sports_director_squad_plan",
+      "threadId": "sporting_director_squad_plan",
       "senderId": "sporting_director",
       "from": "Sportsdirektør",
       "tag": "Stallplan",
@@ -163,6 +174,7 @@
     },
     {
       "id": "goalkeeper_coach_depth",
+      "threadId": "goalkeeper_coach_depth",
       "senderId": "goalkeeper_coach",
       "from": "Keepertrener",
       "tag": "Keeper",
@@ -176,6 +188,7 @@
     },
     {
       "id": "physio_load_warning",
+      "threadId": "physio_load_management",
       "senderId": "physio",
       "from": "Fysio",
       "tag": "Medisinsk",
@@ -189,6 +202,7 @@
     },
     {
       "id": "captain_clarity",
+      "threadId": "captain_dressing_room_clarity",
       "senderId": "captain",
       "from": "Kapteinen",
       "tag": "Garderobe",
@@ -206,6 +220,7 @@
     },
     {
       "id": "supporter_identity",
+      "threadId": "supporter_identity",
       "senderId": "supporter_group",
       "from": "Supportergruppe",
       "tag": "Supportere",
@@ -219,6 +234,7 @@
     },
     {
       "id": "groundhopper_unlock_hint",
+      "threadId": "groundhopper_unlocks",
       "senderId": "groundhopper",
       "from": "Groundhopper",
       "tag": "History Go",
@@ -232,6 +248,7 @@
     },
     {
       "id": "club_archive_history",
+      "threadId": "club_archive_identity",
       "senderId": "club_archive",
       "from": "Klubbarkivet",
       "tag": "Historie",
@@ -245,6 +262,7 @@
     },
     {
       "id": "sponsor_visibility",
+      "threadId": "sponsor_visibility",
       "senderId": "sponsor",
       "from": "Sponsor",
       "tag": "Marked",
@@ -257,6 +275,7 @@
     },
     {
       "id": "league_formal_notice",
+      "threadId": "league_formal_notices",
       "senderId": "league_office",
       "from": "Ligaen",
       "tag": "Formelt",
@@ -269,6 +288,7 @@
     },
     {
       "id": "card_collection_unlock",
+      "threadId": "card_collection_unlocks",
       "senderId": "card_collection_system",
       "from": "Samlekortsystemet",
       "tag": "Samling",

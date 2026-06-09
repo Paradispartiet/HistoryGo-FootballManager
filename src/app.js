@@ -18,6 +18,7 @@ const DATA_PATHS = {
   knowledgePrinciples: "data/football_knowledge_principles.json",
   clubInboxMessages: "data/club_inbox_messages.json",
   clubInboxSenders: "data/club_inbox_senders.json",
+  clubInboxThreads: "data/club_inbox_threads.json",
   // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
   unlocks: "data/football_unlocks.json",
   staff: "data/football_staff.json",
@@ -41,6 +42,9 @@ const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
 // History Go-lagprogresjon (team merits) i localStorage. Seedes fra example-filen
 // ved første lasting, deretter persisteres brukerens egne endringer her.
 const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
+// Innboks-tråder: leste og leverte meldings-id-er (kun UI/progresjon).
+const READ_INBOX_MESSAGE_IDS_KEY = "hgfm.readInboxMessageIds.v1";
+const DELIVERED_INBOX_MESSAGE_IDS_KEY = "hgfm.deliveredInboxMessageIds.v1";
 
 // Maks antall klubbhendelser som beholdes i loggen (nyeste først).
 const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
@@ -77,6 +81,17 @@ const state = {
   clubInboxMessages: [],
   // Full avsenderkatalog for Innboks. Brukes til å vise stabile klubbstemmer fra start.
   clubInboxSenders: [],
+  // Trådkatalog for Innboks. Grupperer meldinger i samtaletråder per avsender/tema.
+  clubInboxThreads: [],
+  // Innboks-tråd-state (kun UI/progresjon i localStorage – ingen kampmotor-,
+  // rollefit- eller matching-effekt):
+  // - delivered = meldinger som har blitt utløst/vist minst én gang (matchet
+  //   fase/conditions). Huskes i historikken selv etter at conditions slutter å matche.
+  // - read = meldinger brukeren har markert som lest via "Marker tråd som lest".
+  // - Innboks viser aktive tråder med uleste meldinger.
+  // - Arkiv viser tråder med levert/lest historikk.
+  readInboxMessageIds: new Set(),
+  deliveredInboxMessageIds: new Set(),
   // History Go-unlocks (v1). Kobler besøkte steder til Football Manager-ressurser.
   // Filtreres gjennom teamMerits.unlockedPlaceIds. Ingen fit-/kampmotor-effekt.
   unlocks: { placeUnlocks: [] },
@@ -139,6 +154,8 @@ const elements = {
   clubMediaPressure: document.querySelector("#clubMediaPressure"),
   clubWeekEventLog: document.querySelector("#clubWeekEventLog"),
   inboxMessageList: document.querySelector("#inboxMessageList"),
+  inboxThreadList: document.querySelector("#inboxThreadList"),
+  inboxThreadArchive: document.querySelector("#inboxThreadArchive"),
   // History Go-unlocks (v1).
   unlockPlacesList: document.querySelector("#unlockPlacesList"),
   availableStaffList: document.querySelector("#availableStaffList"),
@@ -2124,6 +2141,95 @@ function getFallbackInboxSenders() {
   ];
 }
 
+// Les et sett med meldings-id-er fra localStorage. Robust mot manglende eller
+// korrupt storage: ugyldig innhold gir et tomt Set. Filtrerer bort tomme/ikke-
+// string-verdier. Kun UI/progresjon – ingen effekt på score, engine eller matching.
+function loadInboxMessageIdSet(key) {
+  try {
+    const stored = JSON.parse(localStorage.getItem(key));
+
+    if (!Array.isArray(stored)) {
+      return new Set();
+    }
+
+    return new Set(stored.filter((id) => typeof id === "string" && id.length > 0));
+  } catch (error) {
+    return new Set();
+  }
+}
+
+// Lagre et sett med meldings-id-er til localStorage som JSON-array. Stille no-op
+// hvis lagring feiler (privat modus e.l.) – Innboks fungerer da videre i minnet.
+function saveInboxMessageIdSet(key, ids) {
+  try {
+    localStorage.setItem(key, JSON.stringify(Array.from(ids)));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+function loadReadInboxMessageIds() {
+  return loadInboxMessageIdSet(READ_INBOX_MESSAGE_IDS_KEY);
+}
+
+function saveReadInboxMessageIds() {
+  saveInboxMessageIdSet(READ_INBOX_MESSAGE_IDS_KEY, state.readInboxMessageIds);
+}
+
+function loadDeliveredInboxMessageIds() {
+  return loadInboxMessageIdSet(DELIVERED_INBOX_MESSAGE_IDS_KEY);
+}
+
+function saveDeliveredInboxMessageIds() {
+  saveInboxMessageIdSet(DELIVERED_INBOX_MESSAGE_IDS_KEY, state.deliveredInboxMessageIds);
+}
+
+// Fallback-tråder brukes hvis tråddatafilen ikke laster. Holder et minimum av
+// trådstruktur tilgjengelig selv uten data/club_inbox_threads.json.
+function getFallbackInboxThreads() {
+  return [
+    {
+      id: "board_direction_and_trust",
+      senderId: "board",
+      subject: "Retning og styretillit",
+      category: "club_leadership",
+      description: "Styrets vurdering av klubbens retning og tillit."
+    },
+    {
+      id: "coaching_training_focus",
+      senderId: "coaching_team",
+      subject: "Treningsfokus",
+      category: "sporting_staff",
+      description: "Trenerteamets meldinger om trening og taktisk klarhet."
+    }
+  ];
+}
+
+// Slå opp en tråd i trådkatalogen via threadId. Returnerer null hvis threadId
+// mangler eller ikke finnes – da bygges tråden ad hoc fra meldingens egne felt.
+function getInboxThread(threadId) {
+  if (!threadId) {
+    return null;
+  }
+  return state.clubInboxThreads.find((thread) => thread.id === threadId) || null;
+}
+
+// Finn threadId for en melding. Bruker message.threadId hvis det finnes, ellers
+// faller vi tilbake til message.id slik at meldingen blir sin egen tråd.
+function getMessageThreadId(message) {
+  if (message && typeof message.threadId === "string" && message.threadId.length > 0) {
+    return message.threadId;
+  }
+  return message?.id || null;
+}
+
+// Finn avsenderen for en tråd: først trådens egen senderId, så meldingens
+// senderId. Returnerer avsenderobjektet (eller null) via getInboxSender.
+function getThreadSender(thread, message) {
+  const senderId = thread?.senderId || message?.senderId || null;
+  return getInboxSender(senderId);
+}
+
 // Slå opp en avsender i avsenderkatalogen via senderId. Returnerer null hvis
 // senderId mangler eller ikke finnes – da brukes meldingens egen from/tag.
 function getInboxSender(senderId) {
@@ -2189,11 +2295,97 @@ function messageMatchesClubWeek(message) {
   return currentValue >= value;
 }
 
-// Filtrer innboksmeldinger på fase og klubbverdier, og begrens til maks 8.
-function getVisibleInboxMessages() {
-  return state.clubInboxMessages
-    .filter(messageMatchesClubWeek)
-    .slice(0, 8);
+// Meldinger som matcher gjeldende Club Week-fase/conditions akkurat nå.
+function getActiveInboxMessages() {
+  return state.clubInboxMessages.filter(messageMatchesClubWeek);
+}
+
+// Marker alle aktive meldinger som levert. En melding som har matchet fase/
+// conditions huskes da i historikken selv etter at conditions slutter å matche.
+function syncDeliveredInboxMessages(activeMessages) {
+  let changed = false;
+
+  for (const message of activeMessages) {
+    if (message?.id && !state.deliveredInboxMessageIds.has(message.id)) {
+      state.deliveredInboxMessageIds.add(message.id);
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    saveDeliveredInboxMessageIds();
+  }
+}
+
+// Grupper meldinger i tråder. Returnerer en array av trådgrupper med thread,
+// sender, meldinger, uleste meldinger og siste melding. Bevarer datarekkefølge
+// (nyeste/sist aktive tråd vises i den rekkefølgen meldingene kommer i v1).
+function groupInboxMessagesByThread(messages) {
+  const groups = new Map();
+
+  for (const message of messages) {
+    const threadId = getMessageThreadId(message);
+
+    if (!threadId) {
+      continue;
+    }
+
+    if (!groups.has(threadId)) {
+      groups.set(threadId, {
+        threadId,
+        thread: getInboxThread(threadId),
+        messages: []
+      });
+    }
+
+    groups.get(threadId).messages.push(message);
+  }
+
+  return Array.from(groups.values()).map((group) => {
+    const latestMessage = group.messages[group.messages.length - 1] || null;
+    const unreadMessages = group.messages.filter((message) => {
+      return message?.id && !state.readInboxMessageIds.has(message.id);
+    });
+
+    return {
+      threadId: group.threadId,
+      thread: group.thread,
+      sender: getThreadSender(group.thread, latestMessage),
+      messages: group.messages,
+      unreadMessages,
+      latestMessage
+    };
+  });
+}
+
+// Aktiv Innboks: tråder med minst én ulest, aktiv melding. Synker samtidig
+// levert-historikken slik at arkivet husker meldinger som er vist minst én gang.
+function getActiveInboxThreads() {
+  const activeMessages = getActiveInboxMessages();
+  syncDeliveredInboxMessages(activeMessages);
+
+  const unreadActiveMessages = activeMessages.filter((message) => {
+    return message?.id && !state.readInboxMessageIds.has(message.id);
+  });
+
+  return groupInboxMessagesByThread(unreadActiveMessages);
+}
+
+// Trådarkiv: levert historikk som ikke er ulest-aktiv. En melding som fortsatt
+// er aktiv og ulest hører hjemme i Innboks, ikke i arkivet.
+function getArchivedInboxThreads() {
+  const deliveredMessages = state.clubInboxMessages.filter((message) => {
+    return message?.id && state.deliveredInboxMessageIds.has(message.id);
+  });
+
+  const readOrInactiveMessages = deliveredMessages.filter((message) => {
+    const isRead = state.readInboxMessageIds.has(message.id);
+    const isActive = messageMatchesClubWeek(message);
+    const isUnreadActive = isActive && !isRead;
+    return !isUnreadActive;
+  });
+
+  return groupInboxMessagesByThread(readOrInactiveMessages);
 }
 
 // Bygg ett message-card-element fra en melding. Bruker kun textContent,
@@ -2233,34 +2425,117 @@ function createMessageCard(message, isEmpty = false) {
   return article;
 }
 
-// Render Innboksen dynamisk fra state.clubInboxMessages. Tømmer containeren
-// (eneste innerHTML-bruk) og bygger kort med createElement/textContent.
-function renderInboxMessages() {
-  if (!elements.inboxMessageList) {
-    return;
+// Bygg ett trådkort fra en trådgruppe. Bruker kun createElement/textContent og
+// gjenbruker message-card-CSS. options.showReadButton gir en "Marker tråd som
+// lest"-knapp som markerer alle uleste meldinger i tråden som lest.
+function createInboxThreadCard(threadGroup, options = {}) {
+  const article = document.createElement("article");
+  article.className = "message-card inbox-thread-card";
+
+  const thread = threadGroup.thread;
+  const latestMessage = threadGroup.latestMessage;
+  const sender = threadGroup.sender;
+  const unreadCount = threadGroup.unreadMessages.length;
+
+  if (sender?.group) {
+    article.dataset.senderGroup = sender.group;
   }
 
-  elements.inboxMessageList.innerHTML = "";
+  const meta = document.createElement("div");
+  meta.className = "message-meta";
 
-  const messages = getVisibleInboxMessages();
+  // Avsendernavn: trådens/meldingens avsender, ellers meldingens egen from.
+  const from = document.createElement("span");
+  from.className = "message-from";
+  from.textContent = sender?.name || latestMessage?.from || "Klubbkontoret";
 
-  if (!messages.length) {
-    elements.inboxMessageList.append(
-      createMessageCard(
-        {
-          from: "Klubbkontoret",
-          tag: "Ingen nye meldinger",
-          title: "Innboksen er rolig",
-          body: "Det er ingen nye meldinger for denne fasen."
-        },
-        true
-      )
-    );
-    return;
+  // Kategori/tag: trådens kategori, ellers avsenderens standardtag.
+  const tag = document.createElement("span");
+  tag.className = "message-tag";
+  tag.textContent = thread?.category || sender?.defaultTag || "Tråd";
+
+  meta.append(from, tag);
+
+  if (unreadCount > 0) {
+    const unread = document.createElement("span");
+    unread.className = "message-tag";
+    unread.textContent = unreadCount === 1 ? "1 ulest" : `${unreadCount} uleste`;
+    meta.append(unread);
   }
 
-  for (const message of messages) {
-    elements.inboxMessageList.append(createMessageCard(message));
+  const subject = document.createElement("h3");
+  subject.textContent = thread?.subject || latestMessage?.title || "Tråd";
+
+  const latestTitle = document.createElement("p");
+  latestTitle.className = "inbox-thread-latest-title";
+  latestTitle.textContent = `Siste: ${latestMessage?.title || "Ingen meldinger"}`;
+
+  const body = document.createElement("p");
+  body.textContent = latestMessage?.body || "Ingen meldingstekst.";
+
+  article.append(meta, subject, latestTitle, body);
+
+  if (options.showReadButton) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "inbox-thread-read-button";
+    button.textContent = "Marker tråd som lest";
+    button.addEventListener("click", () => {
+      for (const message of threadGroup.unreadMessages) {
+        if (message?.id) {
+          state.readInboxMessageIds.add(message.id);
+        }
+      }
+      saveReadInboxMessageIds();
+      renderApp();
+    });
+    article.append(button);
+  }
+
+  return article;
+}
+
+// Render Innboks som trådsystem: aktive tråder (uleste, aktive meldinger) og
+// trådarkiv (levert/lest historikk). Tømmer containerne (eneste innerHTML-bruk)
+// og bygger trådkort med createElement/textContent.
+function renderInboxThreads() {
+  const activeContainer = elements.inboxThreadList;
+  const archiveContainer = elements.inboxThreadArchive;
+
+  if (activeContainer) {
+    activeContainer.innerHTML = "";
+    const activeThreads = getActiveInboxThreads();
+
+    if (!activeThreads.length) {
+      activeContainer.append(createMessageCard({
+        from: "Klubbkontoret",
+        tag: "Ingen uleste tråder",
+        title: "Innboksen er rolig",
+        body: "Det er ingen aktive uleste tråder akkurat nå."
+      }, true));
+    } else {
+      activeThreads.forEach((thread) => {
+        activeContainer.append(createInboxThreadCard(thread, { showReadButton: true }));
+      });
+    }
+  }
+
+  if (archiveContainer) {
+    archiveContainer.innerHTML = "";
+    const archivedThreads = getArchivedInboxThreads();
+
+    if (!archivedThreads.length) {
+      archiveContainer.append(createMessageCard({
+        from: "Klubbkontoret",
+        tag: "Arkiv",
+        title: "Ingen trådhistorikk ennå",
+        body: "Tråder dukker opp her etter at meldinger er levert eller lest."
+      }, true));
+    } else {
+      archivedThreads.slice(0, 12).forEach((thread) => {
+        archiveContainer.append(createInboxThreadCard(thread, { showReadButton: false }));
+      });
+    }
   }
 }
 
@@ -2629,7 +2904,7 @@ function renderApp() {
 
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
-  renderInboxMessages();
+  renderInboxThreads();
 
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderUnlockPlaces();
@@ -2784,6 +3059,7 @@ async function init() {
       knowledgeData,
       clubInboxMessagesData,
       clubInboxSendersData,
+      clubInboxThreadsData,
       unlocksData,
       staffData,
       expertiseData,
@@ -2802,6 +3078,8 @@ async function init() {
       loadJson(DATA_PATHS.clubInboxMessages).catch(() => null),
       // Avsenderkatalogen er valgfri: hvis filen mangler, brukes fallback-avsendere.
       loadJson(DATA_PATHS.clubInboxSenders).catch(() => null),
+      // Trådkatalogen er valgfri: hvis filen mangler, brukes fallback-tråder.
+      loadJson(DATA_PATHS.clubInboxThreads).catch(() => null),
       // History Go-unlock-data er valgfri: hvis en fil mangler, fortsetter
       // appen uten det aktuelle laget (prototype-robusthet).
       loadJson(DATA_PATHS.unlocks).catch(() => null),
@@ -2839,6 +3117,13 @@ async function init() {
       console.warn("Innboks-avsendere mangler eller har feil format. Bruker fallback-avsendere.");
     }
 
+    if (Array.isArray(clubInboxThreadsData?.threads)) {
+      state.clubInboxThreads = clubInboxThreadsData.threads;
+    } else {
+      state.clubInboxThreads = getFallbackInboxThreads();
+      console.warn("Innboks-tråder mangler eller har feil format. Bruker fallback-tråder.");
+    }
+
     // History Go-unlocks (v1): normaliser hver fil til forventet form. Manglende
     // eller feilformede filer faller tilbake til tomme strukturer, slik at
     // resten av appen (fit-/lagfitmotor) er upåvirket.
@@ -2870,6 +3155,8 @@ async function init() {
     state.trainingWeek = loadTrainingWeek();
     state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
     state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
+    state.readInboxMessageIds = loadReadInboxMessageIds();
+    state.deliveredInboxMessageIds = loadDeliveredInboxMessageIds();
 
     const dataWarnings = validateFootballData(state);
 

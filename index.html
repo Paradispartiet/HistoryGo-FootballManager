@@ -269,7 +269,17 @@
         <p class="muted-text">Klubbens meldinger samles her: scouting, styret, medisinsk og presse.</p>
       </section>
 
-      <div id="inboxMessageList" class="message-list"></div>
+      <div class="inbox-thread-layout">
+        <section class="inbox-thread-panel" aria-label="Aktive tråder">
+          <h3>Aktive tråder</h3>
+          <div id="inboxThreadList" class="message-list"></div>
+        </section>
+
+        <section class="inbox-thread-panel" aria-label="Trådarkiv">
+          <h3>Trådarkiv</h3>
+          <div id="inboxThreadArchive" class="message-list"></div>
+        </section>
+      </div>
     </div>
 
     <!-- ============================ FASILITETER ============================ -->

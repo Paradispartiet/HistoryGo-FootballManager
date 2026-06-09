@@ -1,0 +1,118 @@
+{
+  "schema": "historygo-football-manager.club-inbox-threads.v1",
+  "version": 1,
+  "threads": [
+    {
+      "id": "board_direction_and_trust",
+      "senderId": "board",
+      "subject": "Retning og styretillit",
+      "category": "club_leadership",
+      "description": "Styrets vurdering av klubbens retning, stabilitet, troverdighet og tillit til manageren."
+    },
+    {
+      "id": "board_match_expectations",
+      "senderId": "board",
+      "subject": "Kampforberedelse og kampdag",
+      "category": "club_leadership",
+      "description": "Styrets vurderinger før og under kampdag, med vekt på organisering og tydelig plan."
+    },
+    {
+      "id": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "subject": "Treningsfokus og taktisk klarhet",
+      "category": "sporting_staff",
+      "description": "Trenerteamets meldinger om treningsuke, taktiske prinsipper, svakheter og gjennomføring."
+    },
+    {
+      "id": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "subject": "Treningskultur",
+      "category": "sporting_staff",
+      "description": "Assistenttrenerens oppfølging av treningskultur, økter og om treningsarbeidet setter seg."
+    },
+    {
+      "id": "administration_club_work",
+      "senderId": "administration",
+      "subject": "Klubbdrift",
+      "category": "club_operations",
+      "description": "Administrasjonens meldinger om klubbdrift, prioritering og utvikling utenfor banen."
+    },
+    {
+      "id": "press_media_pressure",
+      "senderId": "press_officer",
+      "subject": "Medietrykk og kommunikasjon",
+      "category": "media",
+      "description": "Presseansvarliges meldinger om medietrykk, kommunikasjon og ro rundt klubben."
+    },
+    {
+      "id": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "subject": "Stallplan og sportslig retning",
+      "category": "club_leadership",
+      "description": "Sportsdirektørens vurderinger av spillerprofiler, roller og langsiktig stallbygging."
+    },
+    {
+      "id": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "subject": "Keeperrolle og bakrom",
+      "category": "sporting_staff",
+      "description": "Keepertrenerens meldinger om keeperens rolle, forsvarslinje og kontroll av bakrom."
+    },
+    {
+      "id": "physio_load_management",
+      "senderId": "physio",
+      "subject": "Belastning og medisinsk risiko",
+      "category": "medical",
+      "description": "Fysioens meldinger om slitasje, restitusjon, belastning og medisinsk risiko."
+    },
+    {
+      "id": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "subject": "Garderobe og tydelighet",
+      "category": "dressing_room",
+      "description": "Kapteinens meldinger om garderobens forståelse, rolletrygghet og tydelige beskjeder."
+    },
+    {
+      "id": "supporter_identity",
+      "senderId": "supporter_group",
+      "subject": "Supportere og identitet",
+      "category": "supporters",
+      "description": "Supportergruppens meldinger om klubbfølelse, identitet, innsats og gjenkjennelighet."
+    },
+    {
+      "id": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "subject": "History Go-opplåsing",
+      "category": "history_go",
+      "description": "Groundhopper-meldinger om stadionbesøk, klubbsteder og opplåste muligheter."
+    },
+    {
+      "id": "club_archive_identity",
+      "senderId": "club_archive",
+      "subject": "Klubbhistorie og identitet",
+      "category": "history_go",
+      "description": "Klubbarkivets meldinger om historiske spillere, trenere, kamper og klubbfortellinger."
+    },
+    {
+      "id": "sponsor_visibility",
+      "senderId": "sponsor",
+      "subject": "Synlighet og kommersiell verdi",
+      "category": "commercial",
+      "description": "Sponsorens meldinger om profil, omdømme, publikumsinteresse og kommersiell retning."
+    },
+    {
+      "id": "league_formal_notices",
+      "senderId": "league_office",
+      "subject": "Liga og formelle krav",
+      "category": "authorities",
+      "description": "Ligaens formelle meldinger om kampuke, rapportering og struktur."
+    },
+    {
+      "id": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "subject": "Samlekort og samleobjekter",
+      "category": "history_go",
+      "description": "Meldinger om spillere, trenere, staff, badges og samleobjekter låst opp i History Go."
+    }
+  ]
+}
