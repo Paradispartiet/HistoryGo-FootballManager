@@ -560,6 +560,11 @@ ul {
   letter-spacing: 0.08em;
 }
 
+.message-card.is-empty {
+  border-style: dashed;
+  border-color: var(--line-soft);
+}
+
 /* ---------- Facility / generic card grids ---------- */
 .facility-grid {
   display: grid;
