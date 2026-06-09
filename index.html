@@ -23,6 +23,7 @@
       <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="admin">Administrasjon</button>
       <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="market">Markedsavdeling</button>
       <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="board">Styret</button>
+      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="historygo">History Go</button>
     </div>
   </nav>
 
@@ -397,6 +398,56 @@
           <p class="muted-text">Konkrete krav og milepæler.</p>
         </article>
       </div>
+    </div>
+
+    <!-- ============================ HISTORY GO ============================ -->
+    <div class="tab-section" data-tab-section="historygo" hidden>
+      <section class="panel section-header-panel">
+        <p class="eyebrow">History Go-unlocks</p>
+        <h2>History Go</h2>
+        <p class="muted-text">
+          Besøkte History Go-steder låser opp stab, ekspertise, treningsprogrammer og badges.
+          Kjernen er: Sted → Person → Ekspertise → Treningsprogram → Badge → Lagklasse.
+          Alt filtreres gjennom de stedene laget har samlet.
+        </p>
+      </section>
+
+      <section class="panel unlock-panel" aria-label="History Go-unlocks">
+        <div class="unlock-block">
+          <h3>Samlede sportsteder</h3>
+          <div id="unlockPlacesList" class="unlock-grid"></div>
+        </div>
+
+        <div class="unlock-block">
+          <h3>Tilgjengelig stab</h3>
+          <div id="availableStaffList" class="unlock-grid"></div>
+        </div>
+
+        <div class="unlock-block">
+          <h3>Engasjert stab</h3>
+          <div id="hiredStaffList" class="unlock-grid"></div>
+        </div>
+
+        <div class="unlock-block">
+          <h3>Tilgjengelig ekspertise</h3>
+          <div id="unlockedExpertiseList" class="unlock-grid"></div>
+        </div>
+
+        <div class="unlock-block">
+          <h3>Treningsprogrammer</h3>
+          <div id="availableTrainingProgramsList" class="unlock-grid"></div>
+        </div>
+
+        <div class="unlock-block">
+          <h3>Opptjente badges</h3>
+          <div id="earnedBadgesList" class="unlock-badge-list"></div>
+        </div>
+
+        <div class="unlock-block">
+          <h3>Lagklasser</h3>
+          <div id="teamClassificationsList" class="unlock-grid"></div>
+        </div>
+      </section>
     </div>
   </main>
 
