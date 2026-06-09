@@ -1,0 +1,237 @@
+{
+  "schema": "historygo-football-manager.club-inbox-senders.v1",
+  "version": 1,
+  "senders": [
+    {
+      "id": "board",
+      "name": "Styret",
+      "group": "club_leadership",
+      "description": "Klubbens øverste ledelse. Reagerer på retning, stabilitet, økonomi, omdømme og sportslig troverdighet.",
+      "defaultTag": "Styret"
+    },
+    {
+      "id": "sporting_director",
+      "name": "Sportsdirektør",
+      "group": "club_leadership",
+      "description": "Kobler spillerlogistikk, stallbygging, kontrakter og klubbens langsiktige sportslige plan.",
+      "defaultTag": "Sportslig"
+    },
+    {
+      "id": "administration",
+      "name": "Administrasjonen",
+      "group": "club_operations",
+      "description": "Holder klubben i gang i hverdagen. Varsler om drift, struktur, prioriteringer og praktiske behov.",
+      "defaultTag": "Administrasjon"
+    },
+    {
+      "id": "finance_department",
+      "name": "Økonomiavdelingen",
+      "group": "club_operations",
+      "description": "Følger budsjett, lønnsrom, investeringer, risiko og økonomiske begrensninger.",
+      "defaultTag": "Økonomi"
+    },
+    {
+      "id": "facilities_manager",
+      "name": "Fasilitetsansvarlig",
+      "group": "club_operations",
+      "description": "Følger treningsfelt, stadion, akademi, medisinsk avdeling og anleggsnivå.",
+      "defaultTag": "Fasiliteter"
+    },
+    {
+      "id": "marketing_department",
+      "name": "Markedsavdelingen",
+      "group": "club_operations",
+      "description": "Arbeider med profil, publikumsbygging, kommersiell utvikling og klubbens synlighet.",
+      "defaultTag": "Marked"
+    },
+    {
+      "id": "coaching_team",
+      "name": "Trenerteam",
+      "group": "sporting_staff",
+      "description": "Gir helhetlige sportslige vurderinger om lagstruktur, treningsbehov, roller og taktisk utvikling.",
+      "defaultTag": "Trening"
+    },
+    {
+      "id": "assistant_coach",
+      "name": "Assistenttrener",
+      "group": "sporting_staff",
+      "description": "Nærmeste faglige støtte. Reagerer på spillmodell, trening, svakheter og praktiske trenergrep.",
+      "defaultTag": "Assistent"
+    },
+    {
+      "id": "goalkeeper_coach",
+      "name": "Keepertrener",
+      "group": "sporting_staff",
+      "description": "Følger keeperrollen, sweeper-keeper, distribusjon, feltarbeid og kommunikasjon med backlinjen.",
+      "defaultTag": "Keeper"
+    },
+    {
+      "id": "fitness_coach",
+      "name": "Fysisk trener",
+      "group": "sporting_staff",
+      "description": "Følger belastning, intensitet, treningsnivå, utholdenhet, sprint og fysisk utvikling.",
+      "defaultTag": "Fysisk"
+    },
+    {
+      "id": "physio",
+      "name": "Fysio",
+      "group": "medical",
+      "description": "Følger skader, slitasje, rehabilitering, restitusjon og medisinsk risiko.",
+      "defaultTag": "Medisinsk"
+    },
+    {
+      "id": "analyst",
+      "name": "Analytiker",
+      "group": "sporting_staff",
+      "description": "Leser mønstre, svakheter, kampdata, rom, press, balanse og gjentakende problemer.",
+      "defaultTag": "Analyse"
+    },
+    {
+      "id": "opposition_analyst",
+      "name": "Motstanderanalyse",
+      "group": "sporting_staff",
+      "description": "Varsler om neste motstander, deres styrker, svakheter og taktiske mønstre.",
+      "defaultTag": "Motstander"
+    },
+    {
+      "id": "scouting",
+      "name": "Speider",
+      "group": "recruitment",
+      "description": "Foreslår spillere, staff, potensial, profiler og mulige rekrutteringsspor.",
+      "defaultTag": "Scouting"
+    },
+    {
+      "id": "academy_manager",
+      "name": "Akademisjef",
+      "group": "academy",
+      "description": "Følger unge spillere, utviklingsløp, akademinivå og veien fra talent til førstelag.",
+      "defaultTag": "Akademi"
+    },
+    {
+      "id": "captain",
+      "name": "Kapteinen",
+      "group": "dressing_room",
+      "description": "Representerer garderoben. Reagerer på moral, tydelighet, roller og stemning i spillergruppen.",
+      "defaultTag": "Garderobe"
+    },
+    {
+      "id": "player",
+      "name": "Spiller",
+      "group": "dressing_room",
+      "description": "En spiller som reagerer på rolle, spilletid, taktisk klarhet, moral eller treningshverdag.",
+      "defaultTag": "Spiller"
+    },
+    {
+      "id": "young_player",
+      "name": "Ung spiller",
+      "group": "dressing_room",
+      "description": "En utviklingsspiller som trenger plan, trygghet, muligheter og tydelig rolle.",
+      "defaultTag": "Ung spiller"
+    },
+    {
+      "id": "veteran",
+      "name": "Veteran",
+      "group": "dressing_room",
+      "description": "En erfaren spiller som reagerer på retning, kultur, profesjonalitet og garderobens standard.",
+      "defaultTag": "Veteran"
+    },
+    {
+      "id": "agent",
+      "name": "Agent",
+      "group": "external_pressure",
+      "description": "Representerer spillere utenfra. Reagerer på spilletid, rolle, kontrakt og karriereplan.",
+      "defaultTag": "Agent"
+    },
+    {
+      "id": "press_officer",
+      "name": "Presseansvarlig",
+      "group": "media",
+      "description": "Håndterer medietrykk, kommunikasjon, presse, omdømme og ro rundt klubben.",
+      "defaultTag": "Presse"
+    },
+    {
+      "id": "local_press",
+      "name": "Lokalpresse",
+      "group": "media",
+      "description": "Skriver om klubben utenfra. Reagerer på resultater, identitet, uro og store valg.",
+      "defaultTag": "Lokalpresse"
+    },
+    {
+      "id": "supporter_group",
+      "name": "Supportergruppe",
+      "group": "supporters",
+      "description": "Gir stemningen fra tribunen. Reagerer på innsats, identitet, lokale spillere og klubbfølelse.",
+      "defaultTag": "Supportere"
+    },
+    {
+      "id": "sponsor",
+      "name": "Sponsor",
+      "group": "commercial",
+      "description": "Reagerer på profil, synlighet, omdømme, publikumsinteresse og kommersiell retning.",
+      "defaultTag": "Sponsor"
+    },
+    {
+      "id": "league_office",
+      "name": "Ligaen",
+      "group": "authorities",
+      "description": "Sender formelle meldinger om terminliste, regler, kampdag, rapportering og ligakrav.",
+      "defaultTag": "Liga"
+    },
+    {
+      "id": "football_association",
+      "name": "Forbundet",
+      "group": "authorities",
+      "description": "Representerer overordnet fotballstruktur, lisens, regelverk og formelle prosesser.",
+      "defaultTag": "Forbund"
+    },
+    {
+      "id": "referee_office",
+      "name": "Dommerkontoret",
+      "group": "authorities",
+      "description": "Varsler om dommerrelaterte forhold, disiplin, rapporter og kampadministrasjon.",
+      "defaultTag": "Dommer"
+    },
+    {
+      "id": "groundhopper",
+      "name": "Groundhopper",
+      "group": "history_go",
+      "description": "Kobler managerdelen til stadionbesøk, opplåste klubber, steder, spillere og staff.",
+      "defaultTag": "Groundhopper"
+    },
+    {
+      "id": "history_go",
+      "name": "History Go",
+      "group": "history_go",
+      "description": "Sender meldinger fra hovedsystemet: steder, kunnskap, samlinger og opplåsing gjennom virkelige besøk.",
+      "defaultTag": "History Go"
+    },
+    {
+      "id": "club_archive",
+      "name": "Klubbarkivet",
+      "group": "history_go",
+      "description": "Løfter frem historiske spillere, trenere, staff, klubbfortellinger og gamle identiteter.",
+      "defaultTag": "Klubbarkiv"
+    },
+    {
+      "id": "stadium_historian",
+      "name": "Stadionhistoriker",
+      "group": "history_go",
+      "description": "Knytter stadion, stedshistorie, kultur, kamper og minner til klubbens identitet.",
+      "defaultTag": "Stadionhistorie"
+    },
+    {
+      "id": "supporter_history",
+      "name": "Supporterhistorie",
+      "group": "history_go",
+      "description": "Henter frem supporterfortellinger, tribunehistorie, rivalisering og lokal klubbkultur.",
+      "defaultTag": "Supporterhistorie"
+    },
+    {
+      "id": "card_collection_system",
+      "name": "Samlekortsystemet",
+      "group": "history_go",
+      "description": "Varsler om nye kort, spillere, trenere, staff, badges og samleobjekter låst opp i History Go.",
+      "defaultTag": "Samlekort"
+    }
+  ]
+}
