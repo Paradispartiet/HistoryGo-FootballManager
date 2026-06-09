@@ -1189,6 +1189,16 @@ ul {
   gap: 10px;
 }
 
+.history-go-sync-status {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--text);
+  font-weight: 700;
+}
+
 .unlock-subhead {
   margin: 8px 0 0;
   font-size: 1rem;
