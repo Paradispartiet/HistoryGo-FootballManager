@@ -17,6 +17,7 @@ const DATA_PATHS = {
   formations: "data/football_formations.json",
   knowledgePrinciples: "data/football_knowledge_principles.json",
   clubInboxMessages: "data/club_inbox_messages.json",
+  clubInboxSenders: "data/club_inbox_senders.json",
   // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
   unlocks: "data/football_unlocks.json",
   staff: "data/football_staff.json",
@@ -71,6 +72,8 @@ const state = {
   // Lesbare innboksmeldinger fra datafil. Kun visning i denne PR-en –
   // ingen state-effekter, svarvalg eller konsekvenser ennå.
   clubInboxMessages: [],
+  // Full avsenderkatalog for Innboks. Brukes til å vise stabile klubbstemmer fra start.
+  clubInboxSenders: [],
   // History Go-unlocks (v1). Kobler besøkte steder til Football Manager-ressurser.
   // Filtreres gjennom teamMerits.unlockedPlaceIds. Ingen fit-/kampmotor-effekt.
   unlocks: { placeUnlocks: [] },
@@ -1797,6 +1800,57 @@ function getFallbackInboxMessages() {
   ];
 }
 
+// Fallback-avsendere brukes hvis avsenderfilen ikke laster. Holder et minimum
+// av stabile klubbstemmer tilgjengelig selv uten data/club_inbox_senders.json.
+function getFallbackInboxSenders() {
+  return [
+    {
+      id: "board",
+      name: "Styret",
+      group: "club_leadership",
+      description: "Klubbens øverste ledelse.",
+      defaultTag: "Styret"
+    },
+    {
+      id: "coaching_team",
+      name: "Trenerteam",
+      group: "sporting_staff",
+      description: "Gir sportslige vurderinger.",
+      defaultTag: "Trening"
+    },
+    {
+      id: "press_officer",
+      name: "Presseansvarlig",
+      group: "media",
+      description: "Håndterer kommunikasjon og medietrykk.",
+      defaultTag: "Presse"
+    },
+    {
+      id: "administration",
+      name: "Administrasjonen",
+      group: "club_operations",
+      description: "Holder klubben i gang.",
+      defaultTag: "Administrasjon"
+    },
+    {
+      id: "groundhopper",
+      name: "Groundhopper",
+      group: "history_go",
+      description: "Kobler managerdelen til History Go.",
+      defaultTag: "Groundhopper"
+    }
+  ];
+}
+
+// Slå opp en avsender i avsenderkatalogen via senderId. Returnerer null hvis
+// senderId mangler eller ikke finnes – da brukes meldingens egen from/tag.
+function getInboxSender(senderId) {
+  if (!senderId) {
+    return null;
+  }
+  return state.clubInboxSenders.find((sender) => sender.id === senderId) || null;
+}
+
 // Gyldige klubbverdi-nøkler for betinget innboksfiltrering. Holdes synk med
 // Club Week-state. Brukes kun til lesefiltrering – ingen state-effekt.
 const CLUB_WEEK_METRIC_KEYS = new Set([
@@ -1866,16 +1920,24 @@ function createMessageCard(message, isEmpty = false) {
   const article = document.createElement("article");
   article.className = isEmpty ? "message-card is-empty" : "message-card";
 
+  // Avsenderkatalogen brukes når senderId finnes; ellers faller vi tilbake til
+  // meldingens egen from/tag. Beskrivelse vises ikke i UI ennå.
+  const sender = getInboxSender(message.senderId);
+
+  if (sender?.group) {
+    article.dataset.senderGroup = sender.group;
+  }
+
   const meta = document.createElement("div");
   meta.className = "message-meta";
 
   const from = document.createElement("span");
   from.className = "message-from";
-  from.textContent = message.from || "Klubbkontoret";
+  from.textContent = sender?.name || message.from || "Klubbkontoret";
 
   const tag = document.createElement("span");
   tag.className = "message-tag";
-  tag.textContent = message.tag || "Melding";
+  tag.textContent = message.tag || sender?.defaultTag || "Melding";
 
   const title = document.createElement("h3");
   title.textContent = message.title || "Ny melding";
@@ -2321,6 +2383,7 @@ async function init() {
       formationsData,
       knowledgeData,
       clubInboxMessagesData,
+      clubInboxSendersData,
       unlocksData,
       staffData,
       expertiseData,
@@ -2337,6 +2400,8 @@ async function init() {
       loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
       // Innboksdata er valgfri: hvis filen mangler, brukes fallback-meldinger.
       loadJson(DATA_PATHS.clubInboxMessages).catch(() => null),
+      // Avsenderkatalogen er valgfri: hvis filen mangler, brukes fallback-avsendere.
+      loadJson(DATA_PATHS.clubInboxSenders).catch(() => null),
       // History Go-unlock-data er valgfri: hvis en fil mangler, fortsetter
       // appen uten det aktuelle laget (prototype-robusthet).
       loadJson(DATA_PATHS.unlocks).catch(() => null),
@@ -2365,6 +2430,13 @@ async function init() {
     } else {
       state.clubInboxMessages = getFallbackInboxMessages();
       console.warn("Innboks-data mangler eller har feil format. Bruker fallback-meldinger.");
+    }
+
+    if (Array.isArray(clubInboxSendersData?.senders)) {
+      state.clubInboxSenders = clubInboxSendersData.senders;
+    } else {
+      state.clubInboxSenders = getFallbackInboxSenders();
+      console.warn("Innboks-avsendere mangler eller har feil format. Bruker fallback-avsendere.");
     }
 
     // History Go-unlocks (v1): normaliser hver fil til forventet form. Manglende

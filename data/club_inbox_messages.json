@@ -4,6 +4,7 @@
   "messages": [
     {
       "id": "welcome_from_board",
+      "senderId": "board",
       "from": "Styret",
       "tag": "Sesongmål",
       "title": "Velkommen til klubben",
@@ -19,6 +20,7 @@
     },
     {
       "id": "assistant_training_focus",
+      "senderId": "coaching_team",
       "from": "Trenerteam",
       "tag": "Trening",
       "title": "Ukens treningsvalg",
@@ -30,6 +32,7 @@
     },
     {
       "id": "board_analysis_phase",
+      "senderId": "board",
       "from": "Styret",
       "tag": "Analyse",
       "title": "Analyse før neste grep",
@@ -41,6 +44,7 @@
     },
     {
       "id": "club_work_phase_notice",
+      "senderId": "administration",
       "from": "Administrasjonen",
       "tag": "Klubbdrift",
       "title": "Klubbdrift krever prioritering",
@@ -52,6 +56,7 @@
     },
     {
       "id": "match_preparation_pressure",
+      "senderId": "press_officer",
       "from": "Presseansvarlig",
       "tag": "Kampforberedelse",
       "title": "Kampen nærmer seg",
@@ -63,6 +68,7 @@
     },
     {
       "id": "match_day_board_watch",
+      "senderId": "board",
       "from": "Styret",
       "tag": "Kampdag",
       "title": "Styret følger kampen",
@@ -74,6 +80,7 @@
     },
     {
       "id": "low_tactical_clarity_warning",
+      "senderId": "coaching_team",
       "from": "Trenerteam",
       "tag": "Taktisk klarhet",
       "title": "Laget trenger tydeligere prinsipper",
@@ -90,6 +97,7 @@
     },
     {
       "id": "high_media_pressure_warning",
+      "senderId": "press_officer",
       "from": "Presseansvarlig",
       "tag": "Medietrykk",
       "title": "Medietrykket øker",
@@ -107,6 +115,7 @@
     },
     {
       "id": "low_training_culture_warning",
+      "senderId": "coaching_team",
       "from": "Trenerteam",
       "tag": "Treningskultur",
       "title": "Treningskulturen må løftes",
@@ -123,6 +132,7 @@
     },
     {
       "id": "strong_training_culture_praise",
+      "senderId": "assistant_coach",
       "from": "Assistenttrener",
       "tag": "Treningskultur",
       "title": "Treningsarbeidet begynner å sette seg",
@@ -137,6 +147,138 @@
         "operator": "gte",
         "value": 55
       }
+    },
+    {
+      "id": "sports_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Stallplan",
+      "title": "Stallen må ha en retning",
+      "body": "Når laget bygges, må roller og spillerprofiler henge sammen. Vi bør ikke bare samle gode spillere, men spillere som passer planen.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Keeper",
+      "title": "Keeperrollen må følge forsvarslinjen",
+      "body": "Hvis laget står høyt, må keeperen være klar til å kontrollere bakrommet. Keeperrollen bør vurderes sammen med forsvarshøyden.",
+      "phases": [
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_load_warning",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Medisinsk",
+      "title": "Belastningen må følges",
+      "body": "Treningskultur er positivt, men høy intensitet uten restitusjon kan gi slitasje. Vi bør følge belastningen når ukene blir tettere.",
+      "phases": [
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "captain_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Garderobe",
+      "title": "Spillerne trenger tydelige beskjeder",
+      "body": "Garderoben responderer best når planen er enkel å forstå. Færre prinsipper, tydeligere roller og korte beskjeder hjelper laget.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Supportere",
+      "title": "Vi vil kjenne igjen laget",
+      "body": "Supporterne vil se et lag med tydelig identitet. Resultater betyr mye, men laget må også se ut som det tror på noe.",
+      "phases": [
+        "analysis",
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_unlock_hint",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "History Go",
+      "title": "Stadionbesøk kan åpne nye muligheter",
+      "body": "Når du besøker klubbsteder i History Go, kan spillere, trenere og staff etter hvert bli tilgjengelige i managerdelen.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "club_archive_history",
+      "senderId": "club_archive",
+      "from": "Klubbarkivet",
+      "tag": "Historie",
+      "title": "Klubbhistorien kan brukes",
+      "body": "Gamle spillere, trenere og kamper kan gi klubben identitet. Historien bør ikke bare være pynt, men en del av hvordan laget bygges.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "sponsor_visibility",
+      "senderId": "sponsor",
+      "from": "Sponsor",
+      "tag": "Marked",
+      "title": "Synlighet gir verdi",
+      "body": "Et tydelig lag og en tydelig historie gjør klubben mer attraktiv. Sportslig identitet og kommersiell profil bør etter hvert henge sammen.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "league_formal_notice",
+      "senderId": "league_office",
+      "from": "Ligaen",
+      "tag": "Formelt",
+      "title": "Kampuken følger ligastrukturen",
+      "body": "Ligaen minner om at kampforberedelse, registrering og rapportering etter hvert vil bli en del av klubbhverdagen.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_unlock",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Samling",
+      "title": "Samlinger blir en del av klubben",
+      "body": "Spillere, trenere, assistenter, fysio og keepertrenere kan etter hvert samles og knyttes til klubber du har oppdaget.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
