@@ -31,6 +31,9 @@ const DATA_PATHS = {
   trainingPrograms: "data/football_training_programs.json",
   trainingBadges: "data/football_training_badges.json",
   teamClassifications: "data/football_team_classifications.json",
+  // Stedsrapporter (v1): forklarer hva hvert sportsted gir manageren. Rent
+  // UI-/forklaringslag – ingen unlock-, fit- eller badgeeffektmotor-effekt.
+  placeReports: "data/football_place_reports.json",
   // V1 bruker example-filen som midlertidig lag-/demostate (unlockedPlaceIds,
   // hiredStaffIds, earnedBadgeIds osv.). Flyttes til save-system senere.
   teamMerits: "data/football_team_merits.example.json"
@@ -117,6 +120,9 @@ const state = {
   trainingPrograms: [],
   trainingBadges: { badgeFamilies: [] },
   teamClassifications: { classifications: [] },
+  // Stedsrapporter (v1): forklaringskort per sportsted. Kun visning – ingen
+  // effekt på unlock-, fit- eller badgeeffektmotor.
+  placeReports: { placeReports: [] },
   // Midlertidig lag-/demostate fra example-filen (unlockedPlaceIds, hiredStaffIds,
   // unlockedExpertiseIds, earnedBadgeIds, badgeProgress, activeClassifications).
   teamMerits: null
@@ -184,6 +190,8 @@ const elements = {
   availableTrainingProgramsList: document.querySelector("#availableTrainingProgramsList"),
   earnedBadgesList: document.querySelector("#earnedBadgesList"),
   teamClassificationsList: document.querySelector("#teamClassificationsList"),
+  // Stedsrapporter (v1).
+  placeReportsList: document.querySelector("#placeReportsList"),
   // History Go-treningsuke og progresjon (v1, interaktivt).
   hgTrainingWeekStatus: document.querySelector("#hgTrainingWeekStatus"),
   advanceHgTrainingWeek: document.querySelector("#advanceHgTrainingWeek"),
@@ -821,6 +829,86 @@ function getPlayerSourcePlaces(playerId) {
   return places;
 }
 
+// ----------------------------------------------------------------------------
+// Stedsrapporter (v1)
+// Rent forklarings-/UI-lag. Kobler hvert sportsted til en lesbar rapport om hva
+// stedet gir manageren (spillere, stab, ekspertise, trening, identitet).
+// Leser unlock-data, men endrer den ikke. Ingen fit-/badgeeffektmotor-effekt.
+// ----------------------------------------------------------------------------
+
+// Finn en stedsrapport på placeId.
+function getPlaceReport(placeId) {
+  if (!placeId) {
+    return null;
+  }
+  const reports = Array.isArray(state.placeReports?.placeReports)
+    ? state.placeReports.placeReports
+    : [];
+  return reports.find((report) => report && report.placeId === placeId) || null;
+}
+
+// Lite oppsummeringsobjekt med antall unlocks per kategori for ett sted. Leser
+// rå placeUnlocks (ufiltrert) slik at telleverket gjelder selve stedet.
+function getPlaceReportUnlockSummary(placeId) {
+  const summary = { players: 0, staff: 0, expertise: 0, training: 0 };
+  if (!placeId) {
+    return summary;
+  }
+
+  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
+  const place = placeUnlocks.find((entry) => entry && entry.placeId === placeId);
+  if (!place) {
+    return summary;
+  }
+
+  (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
+    if (!unlock || !unlock.type) {
+      return;
+    }
+    if (isPlayerUnlockType(unlock.type)) {
+      summary.players += 1;
+    } else if (isStaffUnlockType(unlock.type)) {
+      summary.staff += 1;
+    } else if (unlock.type === "expertise") {
+      summary.expertise += 1;
+    } else if (unlock.type === "training_program" || unlock.type === "training_model") {
+      summary.training += 1;
+    }
+  });
+
+  return summary;
+}
+
+// Rapporter for aktive/samlede steder (via getPlaceUnlocks()). Mangler en rapport
+// for et opplåst sted, bygges en enkel fallback fra selve placeUnlock-objektet.
+function getUnlockedPlaceReports() {
+  return getPlaceUnlocks().map((place) => {
+    const report = getPlaceReport(place.placeId);
+    if (report) {
+      return report;
+    }
+    return {
+      placeId: place.placeId,
+      title: place.placeName || place.placeId,
+      summary: "Ingen detaljert stedsrapport tilgjengelig ennå for dette stedet.",
+      managerValue: "",
+      unlocksExplanation: {},
+      recommendedUse: [],
+      helpsBuildClassifications: [],
+      warning: ""
+    };
+  });
+}
+
+// Slå opp et lesbart navn for en lagklasse-id. Faller tilbake til id-en selv.
+function getClassificationName(classificationId) {
+  const classifications = Array.isArray(state.teamClassifications?.classifications)
+    ? state.teamClassifications.classifications
+    : [];
+  const match = classifications.find((entry) => entry && entry.id === classificationId);
+  return match?.name || classificationId;
+}
+
 // Engasjert stab: tilgjengelig stab som finnes i hiredStaffIds.
 function getHiredStaff() {
   const hiredIds = new Set(
@@ -1311,6 +1399,66 @@ function validateUnlockData() {
   activeClassifications.forEach((id) => {
     if (!classificationIds.has(id)) {
       warnings.push(`activeClassification finnes ikke i klassifiseringsfilen: ${id}.`);
+    }
+  });
+
+  return warnings;
+}
+
+// Validerer stedsrapporter (football_place_reports.json). Rene UI-data, så feil
+// gir console.warn og advarsler – aldri krasj. Sjekker at hver rapport har
+// placeId som finnes i placeUnlocks, at lagklasse-id-er finnes hvis mulig, og at
+// KFUM/Bislett ikke beskriver spillere som unlock (de er ikke spillerkilder).
+function validatePlaceReportsData() {
+  const warnings = [];
+  const reports = Array.isArray(state.placeReports?.placeReports)
+    ? state.placeReports.placeReports
+    : [];
+  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
+  const placeIds = new Set(placeUnlocks.map((place) => place && place.placeId).filter(Boolean));
+  const classificationIds = new Set(
+    (Array.isArray(state.teamClassifications?.classifications) ? state.teamClassifications.classifications : [])
+      .map((classification) => classification && classification.id)
+      .filter(Boolean)
+  );
+
+  // Steder som ikke skal beskrive spillere som unlock i v1.
+  const noPlayerPlaceIds = new Set(["kfum_arena", "bislett_stadion"]);
+
+  reports.forEach((report) => {
+    if (typeof report?.placeId !== "string" || !report.placeId) {
+      const message = "En stedsrapport mangler gyldig placeId (streng).";
+      warnings.push(message);
+      console.warn(message);
+      return;
+    }
+
+    if (!placeIds.has(report.placeId)) {
+      const message =
+        `Stedsrapport peker på placeId som ikke finnes i football_unlocks.json: ${report.placeId}.`;
+      warnings.push(message);
+      console.warn(message);
+    }
+
+    (Array.isArray(report.helpsBuildClassifications) ? report.helpsBuildClassifications : []).forEach((id) => {
+      if (classificationIds.size > 0 && !classificationIds.has(id)) {
+        const message =
+          `Stedsrapport ${report.placeId} peker på ukjent lagklasse: ${id}.`;
+        warnings.push(message);
+        console.warn(message);
+      }
+    });
+
+    // KFUM og Bislett er ikke spillerkilder – rapporten skal ikke beskrive
+    // spillere som faktisk opplåsing.
+    if (noPlayerPlaceIds.has(report.placeId)) {
+      const summary = getPlaceReportUnlockSummary(report.placeId);
+      if (summary.players > 0) {
+        const message =
+          `Stedsrapport ${report.placeId} skal ikke beskrive spillere som unlock, men stedet har player-unlocks.`;
+        warnings.push(message);
+        console.warn(message);
+      }
     }
   });
 
@@ -3292,6 +3440,138 @@ function renderUnlockedPlayers() {
   });
 }
 
+// Stedsrapporter: ett kort per aktivt/samlet sted. Forklarer hva stedet gir
+// manageren. Bygger alt med createElement/textContent (ingen innerHTML utenom
+// clearing). Ren visning – ingen fit-/kampmotor- eller unlock-effekt.
+function renderPlaceReports() {
+  const list = elements.placeReportsList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+  const reports = getUnlockedPlaceReports();
+
+  if (!reports.length) {
+    renderUnlockEmpty(
+      list,
+      "Ingen stedsrapporter aktive ennå. Synk besøkte History Go-steder for å se hva de gir manageren."
+    );
+    return;
+  }
+
+  reports.forEach((report) => {
+    const card = document.createElement("article");
+    card.className = "place-report-card";
+
+    const title = document.createElement("h4");
+    title.className = "place-report-title";
+    title.textContent = report.title || report.placeId || "Ukjent sted";
+    card.append(title);
+
+    if (report.summary) {
+      const summary = document.createElement("p");
+      summary.className = "place-report-summary";
+      summary.textContent = report.summary;
+      card.append(summary);
+    }
+
+    if (report.managerValue) {
+      const managerValue = document.createElement("p");
+      managerValue.className = "place-report-summary";
+      managerValue.textContent = report.managerValue;
+      card.append(managerValue);
+    }
+
+    // Små tellere/pills for spillere, stab, ekspertise og trening.
+    const counts = getPlaceReportUnlockSummary(report.placeId);
+    const meta = document.createElement("div");
+    meta.className = "place-report-meta";
+    [
+      ["Spillere", counts.players],
+      ["Stab", counts.staff],
+      ["Ekspertise", counts.expertise],
+      ["Trening", counts.training]
+    ].forEach(([label, value]) => {
+      const pill = document.createElement("span");
+      pill.className = "place-report-pill";
+      pill.textContent = `${label}: ${value}`;
+      meta.append(pill);
+    });
+    card.append(meta);
+
+    // unlocksExplanation som korte avsnitt med ledetekst.
+    const explanation = report.unlocksExplanation || {};
+    const explanationFields = [
+      ["Spillere", explanation.players],
+      ["Stab", explanation.staff],
+      ["Ekspertise", explanation.expertise],
+      ["Trening", explanation.training],
+      ["Lagidentitet", explanation.identity]
+    ];
+    explanationFields.forEach(([label, text]) => {
+      if (!text) {
+        return;
+      }
+      const section = document.createElement("p");
+      section.className = "place-report-section";
+      const strong = document.createElement("strong");
+      strong.textContent = `${label}: `;
+      section.append(strong);
+      section.append(document.createTextNode(text));
+      card.append(section);
+    });
+
+    // recommendedUse som punktliste.
+    const recommended = Array.isArray(report.recommendedUse) ? report.recommendedUse : [];
+    if (recommended.length) {
+      const heading = document.createElement("p");
+      heading.className = "place-report-section";
+      const strong = document.createElement("strong");
+      strong.textContent = "Anbefalt bruk:";
+      heading.append(strong);
+      card.append(heading);
+
+      const ul = document.createElement("ul");
+      ul.className = "place-report-list";
+      recommended.forEach((item) => {
+        if (!item) {
+          return;
+        }
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.append(li);
+      });
+      card.append(ul);
+    }
+
+    // helpsBuildClassifications som lesbare navn der mulig, ellers id.
+    const classifications = Array.isArray(report.helpsBuildClassifications)
+      ? report.helpsBuildClassifications
+      : [];
+    if (classifications.length) {
+      const section = document.createElement("p");
+      section.className = "place-report-section";
+      const strong = document.createElement("strong");
+      strong.textContent = "Hjelper å bygge: ";
+      section.append(strong);
+      section.append(
+        document.createTextNode(classifications.map((id) => getClassificationName(id)).join(", "))
+      );
+      card.append(section);
+    }
+
+    if (report.warning) {
+      const warning = document.createElement("p");
+      warning.className = "place-report-warning";
+      warning.textContent = report.warning;
+      card.append(warning);
+    }
+
+    list.append(card);
+  });
+}
+
 // Ett stab-kort: navn, type, hva de kan ansettes som, viktigste ekspertise,
 // og prototype-notat når isPlaceholder er satt.
 function createStaffCard(member) {
@@ -3614,6 +3894,7 @@ function renderApp() {
   renderHistoryGoSyncStatus();
   renderUnlockPlaces();
   renderUnlockedPlayers();
+  renderPlaceReports();
   renderStaffUnlocks();
   renderExpertiseUnlocks();
   renderTrainingPrograms();
@@ -3784,6 +4065,7 @@ async function init() {
       trainingProgramsData,
       trainingBadgesData,
       teamClassificationsData,
+      placeReportsData,
       teamMeritsData
     ] = await Promise.all([
       loadJson(DATA_PATHS.players),
@@ -3807,6 +4089,9 @@ async function init() {
       loadJson(DATA_PATHS.trainingPrograms).catch(() => null),
       loadJson(DATA_PATHS.trainingBadges).catch(() => null),
       loadJson(DATA_PATHS.teamClassifications).catch(() => null),
+      // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
+      // tilbake til tom liste og bygger enkle fallback-kort fra placeUnlocks.
+      loadJson(DATA_PATHS.placeReports).catch(() => null),
       loadJson(DATA_PATHS.teamMerits).catch(() => null)
     ]);
 
@@ -3852,6 +4137,9 @@ async function init() {
     state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
       ? teamClassificationsData
       : { classifications: [] };
+    state.placeReports = Array.isArray(placeReportsData?.placeReports)
+      ? placeReportsData
+      : { placeReports: [] };
     // Seed fra example-filen brukes ved første lasting; deretter persisteres
     // brukerens egne endringer i localStorage (hgfm.teamMerits.v1).
     const seedMerits = teamMeritsData && typeof teamMeritsData === "object" && !Array.isArray(teamMeritsData)
@@ -3890,6 +4178,12 @@ async function init() {
 
     if (unlockWarnings.length > 0) {
       console.warn("History Go unlock-data har kvalitetsadvarsler:", unlockWarnings);
+    }
+
+    const placeReportWarnings = validatePlaceReportsData();
+
+    if (placeReportWarnings.length > 0) {
+      console.warn("Stedsrapport-data har kvalitetsadvarsler:", placeReportWarnings);
     }
 
     // Club Week-tilstand: les lagret tilstand og la engine/fallback normalisere
