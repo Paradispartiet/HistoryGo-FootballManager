@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "physio",
+  "messages": [
+    {
+      "id": "physio_load_warning",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Medisinsk",
+      "title": "Belastningen må følges",
+      "body": "Treningskultur er positivt, men høy intensitet uten restitusjon kan gi slitasje. Vi bør følge belastningen når ukene blir tettere.",
+      "phases": [
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    }
+  ]
+}

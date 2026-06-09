@@ -1,0 +1,20 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "league_office",
+  "messages": [
+    {
+      "id": "league_formal_notice",
+      "threadId": "league_formal_notices",
+      "senderId": "league_office",
+      "from": "Ligaen",
+      "tag": "Formelt",
+      "title": "Kampuken følger ligastrukturen",
+      "body": "Ligaen minner om at kampforberedelse, registrering og rapportering etter hvert vil bli en del av klubbhverdagen.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    }
+  ]
+}

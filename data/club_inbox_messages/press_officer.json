@@ -1,0 +1,39 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "press_officer",
+  "messages": [
+    {
+      "id": "match_preparation_pressure",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Kampforberedelse",
+      "title": "Kampen nærmer seg",
+      "body": "Når kampdagen nærmer seg, øker oppmerksomheten. Et tydelig laguttak og en forståelig kampplan vil gjøre klubben roligere.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "high_media_pressure_warning",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Medietrykk",
+      "title": "Medietrykket øker",
+      "body": "Medietrykket er høyt. Klubben trenger tydelig kommunikasjon, rolig ledelse og færre uklare signaler før neste kamp.",
+      "phases": [
+        "match_preparation",
+        "match_day",
+        "analysis"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    }
+  ]
+}

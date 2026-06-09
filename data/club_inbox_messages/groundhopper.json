@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "groundhopper",
+  "messages": [
+    {
+      "id": "groundhopper_unlock_hint",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "History Go",
+      "title": "Stadionbesøk kan åpne nye muligheter",
+      "body": "Når du besøker klubbsteder i History Go, kan spillere, trenere og staff etter hvert bli tilgjengelige i managerdelen.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    }
+  ]
+}

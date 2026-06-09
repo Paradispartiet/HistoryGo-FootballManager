@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "sporting_director",
+  "messages": [
+    {
+      "id": "sports_director_squad_plan",
+      "threadId": "sporting_director_squad_plan",
+      "senderId": "sporting_director",
+      "from": "Sportsdirektør",
+      "tag": "Stallplan",
+      "title": "Stallen må ha en retning",
+      "body": "Når laget bygges, må roller og spillerprofiler henge sammen. Vi bør ikke bare samle gode spillere, men spillere som passer planen.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    }
+  ]
+}

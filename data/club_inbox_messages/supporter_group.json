@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "supporter_group",
+  "messages": [
+    {
+      "id": "supporter_identity",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Supportere",
+      "title": "Vi vil kjenne igjen laget",
+      "body": "Supporterne vil se et lag med tydelig identitet. Resultater betyr mye, men laget må også se ut som det tror på noe.",
+      "phases": [
+        "analysis",
+        "match_day"
+      ],
+      "conditions": {}
+    }
+  ]
+}

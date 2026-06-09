@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-message-manifest.v1",
+  "version": 1,
+  "files": [
+    "data/club_inbox_messages/board.json",
+    "data/club_inbox_messages/assistant_coach.json",
+    "data/club_inbox_messages/coaching_team.json",
+    "data/club_inbox_messages/administration.json",
+    "data/club_inbox_messages/press_officer.json",
+    "data/club_inbox_messages/sporting_director.json",
+    "data/club_inbox_messages/goalkeeper_coach.json",
+    "data/club_inbox_messages/physio.json",
+    "data/club_inbox_messages/captain.json",
+    "data/club_inbox_messages/supporter_group.json",
+    "data/club_inbox_messages/groundhopper.json",
+    "data/club_inbox_messages/club_archive.json",
+    "data/club_inbox_messages/sponsor.json",
+    "data/club_inbox_messages/league_office.json",
+    "data/club_inbox_messages/card_collection_system.json"
+  ]
+}
