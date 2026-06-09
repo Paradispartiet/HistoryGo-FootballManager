@@ -16,6 +16,261 @@
         "match_day"
       ],
       "conditions": {}
+    },
+    {
+      "id": "supporter_identity_has_to_show",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Identitet",
+      "title": "Identiteten må synes fra tribunen",
+      "body": "Vi trenger ikke forstå hvert taktiske valg, men vi må kjenne igjen laget. Det må være noe i presset, løpene og reaksjonene som sier: dette er oss.",
+      "phases": [
+        "analysis",
+        "match_day",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "supporter_low_tactical_clarity_noise",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Uro",
+      "title": "Det er vanskelig å støtte en uklar plan",
+      "body": "Når laget virker usikkert på hva det prøver på, blir tribunen også usikker. Vi kan tåle feil, men vi må se en retning vi kan rope laget videre i.",
+      "phases": [
+        "analysis",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "supporter_high_tactical_clarity_belief",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Tro",
+      "title": "Det hjelper når laget vet hva det vil",
+      "body": "Når planen er tydelig, merkes det på tribunen. Folk ser bevegelser de kjenner igjen, forstår hvorfor laget tar risiko, og blir mer tålmodige når angrepet ikke sitter med en gang.",
+      "phases": [
+        "analysis",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "supporter_low_morale_seen_from_stands",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Moral",
+      "title": "Lav moral synes helt opp på tribunen",
+      "body": "Når hodene faller, ser vi det. Det handler ikke bare om å vinne dueller, men om hvordan spillerne reagerer etter feil, etter baklengs og etter en tung periode.",
+      "phases": [
+        "analysis",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "supporter_high_morale_connection",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Moral",
+      "title": "Når spillerne tror, tror tribunen også",
+      "body": "Det merkes når gruppa har energi. Pressløpene kommer litt raskere, kroppsspråket løftes, og publikum får noe å svare på.",
+      "phases": [
+        "analysis",
+        "match_day",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "supporter_media_pressure_fatigue",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Press",
+      "title": "Støyen rundt klubben sliter på folk",
+      "body": "Når alt rundt klubben blir diskusjon, blir supporterne også slitne. Vi trenger mindre støy og mer fotball vi kan samle oss rundt.",
+      "phases": [
+        "analysis",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "supporter_board_trust_signal",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Tillit",
+      "title": "Når klubben virker samlet, blir vi roligere",
+      "body": "Supporterne merker når klubben trekker i samme retning. Styret, manageren og laget trenger ikke si alt, men de må virke som de står i samme prosjekt.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "boardTrust",
+        "operator": "gte",
+        "value": 60
+      }
+    },
+    {
+      "id": "supporter_low_board_trust_unrest",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Uro",
+      "title": "Uro i klubben blir fort uro på tribunen",
+      "body": "Når styretilliten virker lav, begynner folk å lese alt som tegn. Laguttak, bytter, intervjuer og kroppsspråk blir tolket hardere enn vanlig.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "boardTrust",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "supporter_training_culture_respect",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Arbeid",
+      "title": "Folk respekterer arbeid de kan se spor av",
+      "body": "Supporterne ser ikke alle øktene, men de ser sporene. Når laget gjentar gode vaner, vinner andreballer og reagerer samlet, skjønner folk at det trenes riktig.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "supporter_low_training_culture_frustration",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Frustrasjon",
+      "title": "Når feilene gjentar seg, mister folk tålmodighet",
+      "body": "En feil kan alle tåle. Det som gjør tribunen rastløs, er når samme feil kommer igjen og igjen uten at laget ser nærmere en løsning.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "supporter_match_preparation_expectation",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Kampforberedelse",
+      "title": "Før kamp vil vi merke at laget er klart",
+      "body": "Supporterne trenger ikke alle detaljene, men vi vil se et lag som går inn i kampen med plan, kropp og blikk i samme retning.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "supporter_match_day_noise_and_lift",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Kampdag",
+      "title": "Gi oss noe å løfte",
+      "body": "På kampdag kan tribunen bære laget, men laget må gi oss noe å bære. En takling, et pressløp, en blokkering eller et løp i bakrom kan være nok til å tenne stedet.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "supporter_rivalry_memory",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Rivalisering",
+      "title": "Noen kamper er større enn formen",
+      "body": "I rivaloppgjør teller historien også. Tabellen forklarer ikke alt. Supporterne kommer med gamle kamper i kroppen, og laget må forstå at det betyr noe.",
+      "phases": [
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "supporter_history_go_place_belonging",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Sted",
+      "title": "Stedet betyr noe for tilhørigheten",
+      "body": "Når History Go knytter laget til stadioner, nabolag og gamle klubbspor, blir supporterkulturen tydeligere. Fotballen lever ikke bare i spillerkortene, men i stedene folk samles.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "supporter_identity_from_effort_and_style",
+      "threadId": "supporter_identity",
+      "senderId": "supporter_group",
+      "from": "Supportergruppe",
+      "tag": "Stil",
+      "title": "Stil og innsats må henge sammen",
+      "body": "Vi kan elske et spillende lag, et hardtarbeidende lag eller et lag som presser høyt. Det vi ikke tåler lenge, er et lag som hverken har stil eller trøkk.",
+      "phases": [
+        "analysis",
+        "match_day",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
