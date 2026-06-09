@@ -42,6 +42,14 @@ const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
 // ved første lasting, deretter persisteres brukerens egne endringer her.
 const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
 
+// Ekte History Go-progresjon i localStorage (skrives av History Go-appen, ikke
+// av Football Manager). Brukes som kilde til faktisk besøkte sportsteder.
+//   visited_places            – objekt/map med besøkte placeId-er ({ id: true }).
+//   hg_groundhopper_stats_v1  – Groundhopper-/sportstatistikk, der
+//                               visited_groundhopper_places er hovedlisten.
+const HISTORY_GO_VISITED_PLACES_KEY = "visited_places";
+const HISTORY_GO_GROUNDHOPPER_STATS_KEY = "hg_groundhopper_stats_v1";
+
 // Maks antall klubbhendelser som beholdes i loggen (nyeste først).
 const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
 
@@ -151,7 +159,10 @@ const elements = {
   hgTrainingWeekStatus: document.querySelector("#hgTrainingWeekStatus"),
   advanceHgTrainingWeek: document.querySelector("#advanceHgTrainingWeek"),
   resetHgTeamMerits: document.querySelector("#resetHgTeamMerits"),
-  badgeProgressList: document.querySelector("#badgeProgressList")
+  badgeProgressList: document.querySelector("#badgeProgressList"),
+  // Ekte History Go-sync (v1): statusfelt og manuell synk-knapp.
+  historyGoSyncStatus: document.querySelector("#historyGoSyncStatus"),
+  syncHistoryGoPlaces: document.querySelector("#syncHistoryGoPlaces")
 };
 
 let managerEngineRenderId = 0;
@@ -382,6 +393,137 @@ function recomputeActiveClassifications() {
   if (state.teamMerits) {
     state.teamMerits.activeClassifications = computeActiveClassificationIds();
   }
+}
+
+// ----------------------------------------------------------------------------
+// Ekte History Go-sync (v1)
+// Football Manager leser History Go sin egen localStorage-progresjon og bruker
+// faktisk besøkte sportsteder som grunnlag for unlocks. Dette legges som et lag
+// oppå demo-/lagstaten i hgfm.teamMerits.v1 – det erstatter den ikke.
+// ----------------------------------------------------------------------------
+
+// Trygg JSON-lesing fra localStorage. Krasjer aldri: returnerer fallback ved
+// manglende nøkkel, ugyldig JSON eller utilgjengelig localStorage (privat modus).
+function readJsonLocalStorage(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || "null") ?? fallback;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+// Besøkte steder fra History Go (`visited_places`). Forventet form er et
+// objekt/map { placeId: truthy }. Returnerer Set med placeId-er der verdien er
+// truthy. Ugyldig format gir tom Set + console.warn.
+function getHistoryGoVisitedPlaceIds() {
+  const raw = readJsonLocalStorage(HISTORY_GO_VISITED_PLACES_KEY, null);
+  const ids = new Set();
+
+  if (raw === null || raw === undefined) {
+    return ids;
+  }
+
+  if (typeof raw !== "object" || Array.isArray(raw)) {
+    console.warn("History Go-sync: visited_places har ugyldig format (forventet objekt/map).");
+    return ids;
+  }
+
+  Object.entries(raw).forEach(([placeId, value]) => {
+    if (placeId && value) {
+      ids.add(placeId);
+    }
+  });
+
+  return ids;
+}
+
+// Groundhopper-/sportsteder fra History Go (`hg_groundhopper_stats_v1`). Bruker
+// `visited_groundhopper_places` (array) som hovedliste. Ugyldig format gir tom
+// Set + console.warn.
+function getHistoryGoGroundhopperPlaceIds() {
+  const raw = readJsonLocalStorage(HISTORY_GO_GROUNDHOPPER_STATS_KEY, null);
+  const ids = new Set();
+
+  if (raw === null || raw === undefined) {
+    return ids;
+  }
+
+  if (typeof raw !== "object" || Array.isArray(raw)) {
+    console.warn("History Go-sync: hg_groundhopper_stats_v1 har ugyldig format (forventet objekt).");
+    return ids;
+  }
+
+  const visited = raw.visited_groundhopper_places;
+
+  if (visited === undefined) {
+    return ids;
+  }
+
+  if (!Array.isArray(visited)) {
+    console.warn("History Go-sync: visited_groundhopper_places er ikke en array.");
+    return ids;
+  }
+
+  visited.forEach((placeId) => {
+    if (typeof placeId === "string" && placeId) {
+      ids.add(placeId);
+    }
+  });
+
+  return ids;
+}
+
+// Samlede sportsteder fra History Go som faktisk har unlock-data i Football
+// Manager. Slår sammen Groundhopper-steder og generelt besøkte steder, og
+// filtrerer til placeId-er som finnes i state.unlocks.placeUnlocks. Dermed bryr
+// Football Manager seg bare om History Go-steder den selv har innhold for.
+function getHistoryGoCollectedSportPlaceIds() {
+  const collected = new Set();
+  getHistoryGoGroundhopperPlaceIds().forEach((id) => collected.add(id));
+  getHistoryGoVisitedPlaceIds().forEach((id) => collected.add(id));
+
+  const knownPlaceIds = new Set(
+    (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [])
+      .map((place) => place && place.placeId)
+      .filter(Boolean)
+  );
+
+  const result = new Set();
+  collected.forEach((id) => {
+    if (knownPlaceIds.has(id)) {
+      result.add(id);
+    }
+  });
+
+  return result;
+}
+
+// Synk ekte History Go-steder inn i team merits. Legger nye besøkte sportsteder
+// til state.teamMerits.unlockedPlaceIds uten å overskrive eksisterende
+// progresjon. Finnes ingen ekte History Go-steder, beholdes demo-/lagstaten
+// urørt. Normaliserer alltid unlockedPlaceIds til en duplikatfri array.
+function syncUnlockedPlacesFromHistoryGo() {
+  if (!state.teamMerits) {
+    return;
+  }
+
+  const collected = getHistoryGoCollectedSportPlaceIds();
+
+  const existing = Array.isArray(state.teamMerits.unlockedPlaceIds)
+    ? state.teamMerits.unlockedPlaceIds.filter((id) => typeof id === "string" && id)
+    : [];
+
+  // Ingen ekte History Go-steder: ikke rør eksisterende demo-/lagstate.
+  if (collected.size === 0) {
+    state.teamMerits.unlockedPlaceIds = Array.from(new Set(existing));
+    return;
+  }
+
+  const merged = new Set(existing);
+  collected.forEach((id) => merged.add(id));
+
+  state.teamMerits.unlockedPlaceIds = Array.from(merged);
+  saveTeamMerits();
 }
 
 // Unlock-typer i football_unlocks.json som regnes som stab/trener/personkandidat.
@@ -2618,6 +2760,29 @@ function renderTeamClassifications() {
   });
 }
 
+// Statusfelt for ekte History Go-sync: hvor mange steder som er funnet i hver
+// kilde, og hvor mange relevante Football Manager-unlock-steder som er aktive.
+function renderHistoryGoSyncStatus() {
+  const el = elements.historyGoSyncStatus;
+  if (!el) {
+    return;
+  }
+
+  const visitedCount = getHistoryGoVisitedPlaceIds().size;
+  const groundhopperCount = getHistoryGoGroundhopperPlaceIds().size;
+  const relevantCount = getHistoryGoCollectedSportPlaceIds().size;
+
+  if (relevantCount === 0) {
+    el.textContent =
+      "History Go-sync: ingen besøkte sportsteder funnet ennå. Bruker demo-/lagstate.";
+    return;
+  }
+
+  el.textContent =
+    `History Go-sync: ${relevantCount} relevante sportsteder funnet. ` +
+    `(${visitedCount} i visited_places, ${groundhopperCount} i hg_groundhopper_stats_v1.)`;
+}
+
 function renderApp() {
   const teamFit = getTeamFit();
 
@@ -2632,6 +2797,7 @@ function renderApp() {
   renderInboxMessages();
 
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
+  renderHistoryGoSyncStatus();
   renderUnlockPlaces();
   renderStaffUnlocks();
   renderExpertiseUnlocks();
@@ -2714,6 +2880,16 @@ function bindEvents() {
   if (elements.resetHgTeamMerits) {
     elements.resetHgTeamMerits.addEventListener("click", () => {
       resetTeamMerits();
+    });
+  }
+
+  // Manuell synk av ekte History Go-steder. Gjør testing enkel på iPad/GitHub Pages.
+  if (elements.syncHistoryGoPlaces) {
+    elements.syncHistoryGoPlaces.addEventListener("click", () => {
+      syncUnlockedPlacesFromHistoryGo();
+      recomputeActiveClassifications();
+      saveTeamMerits();
+      renderApp();
     });
   }
 
@@ -2860,9 +3036,14 @@ async function init() {
     if (!state.teamMerits) {
       console.warn("History Go team merits mangler eller har feil format. Unlock-laget vises tomt.");
     } else {
+      // Ekte History Go-sync: unlock-data (state.unlocks) er nå lastet, så vi kan
+      // filtrere besøkte steder mot placeUnlocks og merge dem inn i team merits
+      // uten å overskrive eksisterende progresjon.
+      syncUnlockedPlacesFromHistoryGo();
       // Hold lagklasser synk med opptjente badges fra start (seed kan ha
       // utdaterte activeClassifications).
       recomputeActiveClassifications();
+      saveTeamMerits();
     }
 
     state.selectedFormationId = state.formations[0]?.id || null;
