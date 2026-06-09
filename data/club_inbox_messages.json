@@ -299,6 +299,193 @@
         "club_work"
       ],
       "conditions": {}
+    },
+    {
+      "id": "board_low_trust_warning",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Styretillit",
+      "title": "Tilliten må bygges opp igjen",
+      "body": "Styretilliten er lav. Klubben trenger tydeligere prioriteringer, færre uklare signaler og en manager som viser at valgene henger sammen.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "boardTrust",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "board_high_trust_support",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Styretillit",
+      "title": "Styret støtter retningen",
+      "body": "Styret opplever at klubben beveger seg i riktig retning. Det viktigste nå er å holde fast ved prinsippene og ikke skifte kurs for raskt.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "boardTrust",
+        "operator": "gte",
+        "value": 60
+      }
+    },
+    {
+      "id": "board_low_tactical_clarity_concern",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Taktisk klarhet",
+      "title": "Planen må bli lettere å forstå",
+      "body": "Laget har kvalitet, men planen fremstår uklar. Styret forventer at manageren tydeliggjør hvordan laget skal angripe, forsvare og reagere etter balltap.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "board_training_culture_concern",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Trening",
+      "title": "Treningsarbeidet må få mer retning",
+      "body": "Treningskulturen er for svak. Klubben kan ikke utvikle seg hvis ukene mangler tydelige økter, gjennomføring og sammenheng med kampplanen.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "board_media_pressure_concern",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Omdømme",
+      "title": "Presset rundt klubben øker",
+      "body": "Medietrykket er høyt. Styret ønsker roligere kommunikasjon, tydeligere prioriteringer og færre signaler som kan tolkes som usikkerhet.",
+      "phases": [
+        "analysis",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "board_analysis_expectation",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Analyse",
+      "title": "Analysefasen må brukes riktig",
+      "body": "Før klubben handler, må manageren forstå hvor laget faktisk svikter. Styret forventer at neste grep bygger på mønstre, ikke enkelthendelser.",
+      "phases": [
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "board_training_expectation",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Trening",
+      "title": "Treningen må vise retning",
+      "body": "Styret forventer at treningsfasen brukes til ett tydelig hovedfokus. Klubben trenger ikke flere løse ideer, men bedre gjennomføring av det viktigste.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "board_club_work_expectation",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Klubbdrift",
+      "title": "Klubben må bygges utenfor banen også",
+      "body": "Klubbdrift handler om mer enn kampplan. Styret følger med på om administrasjon, fasiliteter, marked og sportslig retning begynner å henge sammen.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "board_match_preparation_expectation",
+      "threadId": "board_match_expectations",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Kampforberedelse",
+      "title": "Kampplanen må være tydelig",
+      "body": "Før kamp forventer styret at laget har en plan spillerne kan forstå. En enkel, gjennomført idé er bedre enn en komplisert plan ingen klarer å følge.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "board_match_day_expectation",
+      "threadId": "board_match_expectations",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Kampdag",
+      "title": "Styret ser etter organisering",
+      "body": "På kampdag ser styret ikke bare på resultatet. De ser etter struktur, rolleforståelse og om laget opptrer som om det vet hva det prøver å gjøre.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "board_identity_expectation",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Klubbidentitet",
+      "title": "Klubben trenger en tydelig identitet",
+      "body": "Styret ønsker at laget etter hvert skal være gjenkjennelig. Spillerne kan være ulike, men klubben må ha en retning som binder dem sammen.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "board_stability_message",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Stabilitet",
+      "title": "Stabilitet er også utvikling",
+      "body": "Ikke alle problemer løses ved å endre alt. Noen ganger trenger klubben gjentakelse, tydelige krav og nok tid til at prinsippene setter seg.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
