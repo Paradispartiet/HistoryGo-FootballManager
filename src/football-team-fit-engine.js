@@ -1,4 +1,9 @@
 import { calculatePlayerMatchFit } from "./football-fit-engine.js";
+import {
+  buildEarnedBadgeEffectContext,
+  calculateBadgeMetricEffects,
+  applyBadgeEffectsToMetrics
+} from "./football-badge-effect-engine.js";
 
 function clamp(value, min = 0, max = 100) {
   return Math.max(min, Math.min(max, value));
@@ -282,7 +287,7 @@ function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers 
   };
 }
 
-export function calculateTeamFit({ lineup, formation, tactic, players, roles }) {
+export function calculateTeamFit({ lineup, formation, tactic, players, roles, earnedBadgeIds = [], trainingBadges = null }) {
   const assignmentResults = buildAssignmentResults(lineup, formation, tactic, players, roles);
   const completeAssignments = assignmentResults.filter((assignment) => assignment.isComplete);
   const duplicatePlayers = getDuplicatePlayers(completeAssignments);
@@ -291,7 +296,7 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles }) 
   const tacticFits = completeAssignments.map((assignment) => assignment.fit.tacticFit);
   const misusePenalties = completeAssignments.map((assignment) => assignment.fit.misusePenalty);
 
-  const metrics = {
+  const baseMetrics = {
     individualFitAverage: average(individualScores),
     roleFitAverage: average(roleFits),
     tacticFitAverage: average(tacticFits),
@@ -304,6 +309,12 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles }) 
     restDefenseScore: calculateRestDefenseScore(completeAssignments, tactic),
     duplicatePenalty: duplicatePlayers.length * 12
   };
+
+  // Forsiktig kobling av opptjente badges: beregn små bonuser og legg dem oppå
+  // basismetrikkene. Uten badges blir adjusted metrics identisk med base.
+  const badgeContext = buildEarnedBadgeEffectContext({ earnedBadgeIds, trainingBadges });
+  const badgeEffects = calculateBadgeMetricEffects(badgeContext);
+  const metrics = applyBadgeEffectsToMetrics(baseMetrics, badgeEffects);
 
   const teamScore = clamp(Math.round(
     metrics.individualFitAverage * 0.3 +
@@ -324,6 +335,8 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles }) 
     completeCount: completeAssignments.length,
     totalSlots: formation.slots.length,
     metrics,
+    baseMetrics,
+    badgeEffects,
     assignments: assignmentResults,
     duplicatePlayers,
     report: buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers })
