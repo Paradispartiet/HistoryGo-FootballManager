@@ -176,6 +176,8 @@ const elements = {
   inboxThreadArchive: document.querySelector("#inboxThreadArchive"),
   // History Go-unlocks (v1).
   unlockPlacesList: document.querySelector("#unlockPlacesList"),
+  unlockedPlayersStatus: document.querySelector("#unlockedPlayersStatus"),
+  unlockedPlayersList: document.querySelector("#unlockedPlayersList"),
   availableStaffList: document.querySelector("#availableStaffList"),
   hiredStaffList: document.querySelector("#hiredStaffList"),
   unlockedExpertiseList: document.querySelector("#unlockedExpertiseList"),
@@ -540,6 +542,8 @@ function resetTeamMerits() {
 
   state.teamMerits = teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
   recomputeActiveClassifications();
+  // Nullstilling kan låse spillere igjen; fjern nå-låste spillere fra lineup.
+  sanitizeLineupForUnlockedPlayers();
   renderApp();
 }
 
@@ -733,6 +737,88 @@ function getUnlockedStaff() {
     const fromPlace = sources.some((placeId) => unlockedPlaceIds.has(placeId));
     return fromPlace || explicitStaffIds.has(member.id);
   });
+}
+
+// ----------------------------------------------------------------------------
+// Spiller-unlocks (v1)
+// Ekte spillere (football_players.json) låses opp via player_candidate-unlocks
+// på besøkte/samlede History Go-steder. Brukeren kan bare velge spillere som er
+// låst opp på denne måten. Rene hjelpefunksjoner uten effekt på fit-/kampmotoren.
+// ----------------------------------------------------------------------------
+
+// Unlock-typer i football_unlocks.json som regnes som spillerkandidat.
+function isPlayerUnlockType(type) {
+  return typeof type === "string" && (type === "player_candidate" || /player/i.test(type));
+}
+
+// Ekte spiller-id-er som er eksplisitt låst opp via player_candidate-unlocks på
+// opplåste steder. Returnerer et Set med targetId-er.
+function getPlayerIdsFromPlaceUnlocks() {
+  const ids = new Set();
+  getPlaceUnlocks().forEach((place) => {
+    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (unlock && isPlayerUnlockType(unlock.type) && unlock.targetId) {
+        ids.add(unlock.targetId);
+      }
+    });
+  });
+  return ids;
+}
+
+// Opplåste spillere: ekte spillere fra state.players som er pekt på av et
+// player_candidate-unlock på et opplåst sted. Ukjente playerIds (som ikke finnes
+// i football_players.json) ignoreres med console.warn. Finnes ingen
+// player-unlocks, returneres en tom array – det faller aldri tilbake til alle
+// spillere.
+function getUnlockedPlayers() {
+  const unlockedIds = getPlayerIdsFromPlaceUnlocks();
+
+  if (unlockedIds.size === 0) {
+    return [];
+  }
+
+  const players = Array.isArray(state.players) ? state.players : [];
+  const byId = new Map(players.filter((player) => player && player.id).map((player) => [player.id, player]));
+
+  const result = [];
+  unlockedIds.forEach((playerId) => {
+    const player = byId.get(playerId);
+    if (player) {
+      result.push(player);
+    } else {
+      console.warn(`Spiller-unlock peker på ukjent spiller-id: ${playerId} (ignoreres).`);
+    }
+  });
+
+  return result;
+}
+
+// Er en spiller låst opp (kan velges)?
+function isPlayerUnlocked(playerId) {
+  if (!playerId) {
+    return false;
+  }
+  return getUnlockedPlayers().some((player) => player.id === playerId);
+}
+
+// Kildeplass(er) for en opplåst spiller: liste med { placeId, placeName } fra
+// aktive getPlaceUnlocks() der et player_candidate matcher playerId. Brukes kun
+// til visning.
+function getPlayerSourcePlaces(playerId) {
+  if (!playerId) {
+    return [];
+  }
+
+  const places = [];
+  getPlaceUnlocks().forEach((place) => {
+    const matches = (Array.isArray(place.unlocks) ? place.unlocks : []).some(
+      (unlock) => unlock && isPlayerUnlockType(unlock.type) && unlock.targetId === playerId
+    );
+    if (matches) {
+      places.push({ placeId: place.placeId, placeName: place.placeName || place.placeId });
+    }
+  });
+  return places;
 }
 
 // Engasjert stab: tilgjengelig stab som finnes i hiredStaffIds.
@@ -1113,10 +1199,55 @@ function validateUnlockData() {
   });
   const staffIds = new Set(staff.map((member) => member && member.id).filter(Boolean));
 
+  // Ekte spiller-id-er og arketype-id-er for å validere player_candidate-unlocks.
+  const playerIds = new Set(
+    (Array.isArray(state.players) ? state.players : []).map((player) => player && player.id).filter(Boolean)
+  );
+  const archetypeIds = new Set(
+    (Array.isArray(state.playerArchetypes) ? state.playerArchetypes : [])
+      .map((archetype) => archetype && archetype.id)
+      .filter(Boolean)
+  );
+
   placeUnlocks.forEach((place) => {
     if (typeof place?.placeId !== "string" || !place.placeId) {
       warnings.push("Et placeUnlock mangler gyldig placeId (streng).");
     }
+
+    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (!unlock || !isPlayerUnlockType(unlock.type)) {
+        return;
+      }
+
+      // KFUM Arena skal aldri gi spillere – den er kun trener-/ekspertise-kilde.
+      if (place.placeId === "kfum_arena") {
+        const message = "KFUM Arena skal ikke gi spillere.";
+        warnings.push(message);
+        console.warn(message);
+      }
+
+      const targetId = unlock.targetId;
+
+      if (!targetId) {
+        warnings.push(`Et player_candidate på ${place.placeId || "ukjent sted"} mangler targetId.`);
+        return;
+      }
+
+      // En player_candidate skal peke på en ekte spiller-id, ikke en arketype-id.
+      if (!playerIds.has(targetId)) {
+        if (archetypeIds.has(targetId)) {
+          const message =
+            `player_candidate på ${place.placeId || "ukjent sted"} peker på arketype-id "${targetId}" ` +
+            "i stedet for en ekte spiller-id fra football_players.json.";
+          warnings.push(message);
+          console.warn(message);
+        } else {
+          warnings.push(
+            `player_candidate på ${place.placeId || "ukjent sted"} peker på ukjent spiller-id: ${targetId} (ignoreres).`
+          );
+        }
+      }
+    });
   });
 
   staff.forEach((member) => {
@@ -1244,7 +1375,7 @@ function getDefaultRoleForPlayer(player, slot) {
   return validRole?.id || state.roles[0]?.id || null;
 }
 
-function findBestAvailablePlayerForSlot(slot, usedPlayerIds) {
+function findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers) {
   const tiers = [
     (candidate) => candidate.naturalPositions.includes(slot.position),
     (candidate) => candidate.usablePositions.includes(slot.position),
@@ -1252,7 +1383,7 @@ function findBestAvailablePlayerForSlot(slot, usedPlayerIds) {
   ];
 
   for (const matches of tiers) {
-    const player = state.players.find((candidate) => !usedPlayerIds.has(candidate.id) && matches(candidate));
+    const player = availablePlayers.find((candidate) => !usedPlayerIds.has(candidate.id) && matches(candidate));
 
     if (player) {
       return player;
@@ -1272,10 +1403,13 @@ function seedLineupForFormation() {
     return;
   }
 
+  // Bare opplåste spillere kan seedes inn i startoppstillingen. Er ingen
+  // spillere låst opp, fylles ingen plasser automatisk.
+  const availablePlayers = getUnlockedPlayers();
   const usedPlayerIds = new Set();
 
   formation.slots.forEach((slot) => {
-    const player = findBestAvailablePlayerForSlot(slot, usedPlayerIds);
+    const player = findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers);
 
     if (!player) {
       state.lineup[slot.slotId] = {
@@ -1291,6 +1425,24 @@ function seedLineupForFormation() {
       roleId: getDefaultRoleForPlayer(player, slot)
     };
   });
+}
+
+// Saner gjeldende lineup mot opplåste spillere. Gamle valg i localStorage/state
+// skal ikke kunne omgå unlock-regelen: en plass som peker på en spiller som ikke
+// lenger er opplåst, beholder rollen sin men mister playerId. Returnerer true
+// hvis noe ble endret.
+function sanitizeLineupForUnlockedPlayers() {
+  const unlockedIds = new Set(getUnlockedPlayers().map((player) => player.id));
+  let changed = false;
+
+  Object.entries(state.lineup).forEach(([slotId, slotState]) => {
+    if (slotState && slotState.playerId && !unlockedIds.has(slotState.playerId)) {
+      state.lineup[slotId] = { ...slotState, playerId: null };
+      changed = true;
+    }
+  });
+
+  return changed;
 }
 
 function loadStoredPositions() {
@@ -2061,20 +2213,41 @@ function renderSlotEditor(teamFit) {
     return;
   }
 
-  const slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
+  let slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
+
+  // Bare spillere som faktisk er låst opp gjennom History Go-steder kan velges.
+  const availablePlayers = getUnlockedPlayers();
+
+  // Hvis denne plassen har en spiller som ikke lenger er opplåst, fjern
+  // playerId men behold rollen, og rerender trygt.
+  if (slotState.playerId && !availablePlayers.some((player) => player.id === slotState.playerId)) {
+    slotState = { ...slotState, playerId: null };
+    state.lineup[slot.slotId] = slotState;
+  }
+
   const assignment = teamFit?.assignments.find((item) => item.slot.slotId === slot.slotId);
   const usedPlayerIds = getUsedPlayerIds(slot.slotId);
 
   elements.selectedSlotTitle.textContent = `${slot.label} · ${slot.position}`;
 
-  setOptions(
-    elements.slotPlayerSelect,
-    state.players,
-    (player) => player.id,
-    (player) => `${player.name} · ${player.overall}`,
-    "Tom plass",
-    (player) => usedPlayerIds.has(player.id)
-  );
+  if (availablePlayers.length === 0) {
+    // Ingen spillere låst opp: vis én disabled placeholder-option uten å krasje.
+    elements.slotPlayerSelect.innerHTML = "";
+    const option = document.createElement("option");
+    option.value = EMPTY_VALUE;
+    option.textContent = "Ingen spillere låst opp ennå";
+    option.disabled = true;
+    elements.slotPlayerSelect.append(option);
+  } else {
+    setOptions(
+      elements.slotPlayerSelect,
+      availablePlayers,
+      (player) => player.id,
+      (player) => `${player.name} · ${player.overall}`,
+      "Tom plass",
+      (player) => usedPlayerIds.has(player.id)
+    );
+  }
 
   const roleOptions = state.roles.filter((role) => role.validPositions.includes(slot.position));
 
@@ -3072,6 +3245,53 @@ function renderUnlockPlaces() {
   });
 }
 
+// Opplåste spillere: statuslinje + kort med navn, posisjoner, overall og
+// kildeplass(er). Bruker bare textContent. Ren visning – ingen fit-/kampeffekt.
+function renderUnlockedPlayers() {
+  const players = getUnlockedPlayers();
+
+  if (elements.unlockedPlayersStatus) {
+    if (players.length > 0) {
+      elements.unlockedPlayersStatus.textContent = `Opplåste spillere: ${players.length}`;
+    } else {
+      elements.unlockedPlayersStatus.textContent =
+        "Ingen spillere låst opp ennå. Besøk/synk fotballsteder som Ullevaal, Intility, Gressbanen eller Ekebergsletta.";
+    }
+  }
+
+  const list = elements.unlockedPlayersList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+
+  if (players.length === 0) {
+    return;
+  }
+
+  players.forEach((player) => {
+    const card = createUnlockCard();
+    appendUnlockTitle(card, player.name || player.id);
+
+    const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions : [];
+    if (positions.length) {
+      appendUnlockMeta(card, `Posisjoner: ${positions.join(", ")}`);
+    }
+
+    if (Number.isFinite(player.overall)) {
+      appendUnlockMeta(card, `Overall: ${player.overall}`);
+    }
+
+    const sources = getPlayerSourcePlaces(player.id);
+    if (sources.length) {
+      appendUnlockMeta(card, `Kilde: ${sources.map((place) => place.placeName).join(", ")}`);
+    }
+
+    list.append(card);
+  });
+}
+
 // Ett stab-kort: navn, type, hva de kan ansettes som, viktigste ekspertise,
 // og prototype-notat når isPlaceholder er satt.
 function createStaffCard(member) {
@@ -3393,6 +3613,7 @@ function renderApp() {
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
   renderUnlockPlaces();
+  renderUnlockedPlayers();
   renderStaffUnlocks();
   renderExpertiseUnlocks();
   renderTrainingPrograms();
@@ -3483,6 +3704,8 @@ function bindEvents() {
       syncUnlockedPlacesFromHistoryGo();
       recomputeActiveClassifications();
       saveTeamMerits();
+      // Synk kan endre hvilke spillere som er opplåst; saner lineup etterpå.
+      sanitizeLineupForUnlockedPlayers();
       renderApp();
     });
   }
@@ -3677,6 +3900,9 @@ async function init() {
     state.clubWeekEventLog = loadClubWeekEventLog();
 
     seedLineupForFormation();
+    // Saner lineup etter at players/unlocks/teamMerits er lastet og synket, slik
+    // at gamle valg ikke omgår unlock-regelen.
+    sanitizeLineupForUnlockedPlayers();
     ensurePositionsForFormation();
     bindEvents();
     renderApp();

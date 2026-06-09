@@ -94,9 +94,49 @@
         {
           "type": "training_program",
           "targetId": "program_match_discipline"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_odegaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erling_haaland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "caroline_graham_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ada_hegerberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stefan_strandberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_juve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arne_brustad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oscar_bobb"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "antonio_nusa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_berge"
         }
       ],
-      "notes": "Ullevaal gir nasjonalarena-, cupfinale- og presskompetanse."
+      "notes": "Ullevaal gir nasjonalarena-, cupfinale- og presskompetanse, og er hovedkilden til ekte spiller-unlocks (player_candidate) i v1."
     },
     {
       "placeId": "intility_arena",
@@ -126,9 +166,21 @@
         {
           "type": "training_program",
           "targetId": "program_build_from_back"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohammed_abdellaoue"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ghayas_zahid"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stefan_strandberg"
         }
       ],
-      "notes": "Intility brukes som moderne klubbground-kilde. Spillere kan kobles senere, men v1 prioriterer ekspertise."
+      "notes": "Intility brukes som moderne klubbground-kilde. Låser opp ekspertise og et utvalg ekte spillere (player_candidate)."
     },
     {
       "placeId": "gressbanen",
@@ -150,9 +202,17 @@
         {
           "type": "training_model",
           "targetId": "early_norwegian_football_ground"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_juve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arne_brustad"
         }
       ],
-      "notes": "Gressbanen gir historisk fotballforståelse og tidlig ground-kultur."
+      "notes": "Gressbanen gir historisk fotballforståelse, tidlig ground-kultur og historiske spiller-unlocks (player_candidate)."
     },
     {
       "placeId": "ekebergsletta",
@@ -178,9 +238,17 @@
         {
           "type": "training_model",
           "targetId": "tournament_recruitment_logic"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oscar_bobb"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "antonio_nusa"
         }
       ],
-      "notes": "Ekebergsletta gir breddefotball, rekruttering, turneringslogistikk og utviklingskultur."
+      "notes": "Ekebergsletta gir breddefotball, rekruttering, turneringslogistikk, utviklingskultur og unge spiller-unlocks (player_candidate)."
     }
   ]
 }
