@@ -16,6 +16,209 @@
         "analysis"
       ],
       "conditions": {}
+    },
+    {
+      "id": "groundhopper_places_are_sporting_keys",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Steder",
+      "title": "Steder skal være sportslige nøkler",
+      "body": "Et stadionbesøk bør ikke bare være et merke. Det bør åpne en klubb, en historie, en spillerprofil, en trenerstemme eller en ny måte å forstå laget på.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_collected_places_only",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Samling",
+      "title": "Laget bør bygges fra steder du faktisk har samlet",
+      "body": "Managerdelen blir sterkere hvis spillerne kommer fra klubber og steder du har låst opp. Da blir laget ditt en samling av erfaringer, ikke bare en liste med navn.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_stadium_to_player_pipeline",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Opplåsing",
+      "title": "Stadion til spiller er en naturlig linje",
+      "body": "Når et stadion er besøkt, kan klubben bak stedet begynne å gi mening i managerdelen. Spillere, trenere og gamle profiler bør låses opp gjennom den forbindelsen.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_staff_unlocks_matter",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Staff",
+      "title": "Staff bør også kunne samles",
+      "body": "Assistenttrener, keepertrener, trenere og fysio bør ikke være generiske figurer. De kan knyttes til klubber og steder på samme måte som spillere.",
+      "phases": [
+        "club_work",
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_club_identity_from_place",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Klubbidentitet",
+      "title": "Klubbidentitet starter ofte i stedet",
+      "body": "Et sted bærer mer enn koordinater. Stadion, nabolag, tribuner, rivaler og gamle kamper kan gi klubben en identitet som også bør merkes i managerdelen.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_training_places_as_knowledge",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Trening",
+      "title": "Treningssteder kan gi annen kunnskap enn stadioner",
+      "body": "Ikke alle viktige fotballsteder er arenaer. Treningsfelt, akademier, løkker og gamle klubbhus kan åpne andre typer kunnskap: øvelser, kultur, utvikling og lokale spillertyper.",
+      "phases": [
+        "training",
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_world_stadiums_future",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Globalt",
+      "title": "Groundhopper kan utvides til hele verden",
+      "body": "Når systemet er klart, kan de store stadionene i verden ligge som sportssteder i History Go-byer. Da slipper vi senere rot og kan bygge global samling på samme struktur.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_local_before_global",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Ryddighet",
+      "title": "Lokal struktur må tåle global utvidelse",
+      "body": "Før vi fyller verden med stadioner, må hvert sted vite hva det er: stadion, treningsfelt, klubbhus, historisk sted eller bredt sportsområde. Da kan alt vokse uten å bli rot.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_match_day_place_memory",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Kampdag",
+      "title": "Kampdag føles annerledes når stedet betyr noe",
+      "body": "Når du har samlet et stadion, blir kampdagen mer enn en skjerm. Stedet har minne, tribune, historie og klubbspor som kan gjøre laget mer levende.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_match_preparation_place_context",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Kampforberedelse",
+      "title": "Stedskunnskap kan påvirke kampforberedelsen",
+      "body": "Et bortested kan fortelle noe om press, publikum, underlag, tradisjon og motstanderens selvbilde. Det er ikke taktikk alene, men det kan farge kampplanen.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_low_tactical_clarity_use_place_examples",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Kunnskap",
+      "title": "Stedseksempler kan gjøre spillideen klarere",
+      "body": "Når taktisk klarhet er lav, kan konkrete steder hjelpe. En klubb, en stadionhistorie eller en kjent spillertype kan gjøre en abstrakt spillidé lettere å forstå.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "groundhopper_training_culture_from_places",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Kultur",
+      "title": "Treningskultur kan også samles fra steder",
+      "body": "Noen steder lærer oss hvordan spillere formes: løkka, akademiet, kunstgressbanen, klubbhuset. Slike steder kan gi managerdelen mer enn bare stadionnavn.",
+      "phases": [
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "groundhopper_collection_as_club_resource",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Ressurs",
+      "title": "Samlingen må bli en klubbressurs",
+      "body": "Det du samler i History Go bør få praktisk verdi: flere valg, mer kunnskap, nye profiler og sterkere klubbidentitet. Samling uten bruk blir bare et arkiv.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "groundhopper_identity_from_collected_map",
+      "threadId": "groundhopper_unlocks",
+      "senderId": "groundhopper",
+      "from": "Groundhopper",
+      "tag": "Identitet",
+      "title": "Kartet kan bli klubbens hukommelse",
+      "body": "Når stedene du har besøkt begynner å henge sammen med spillerne, staffen og historiene du bruker, får managerdelen en egen hukommelse. Da lever kartet videre i laget.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
