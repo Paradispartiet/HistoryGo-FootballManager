@@ -34,6 +34,223 @@
         "operator": "gte",
         "value": 55
       }
+    },
+    {
+      "id": "press_officer_analysis_message",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Kommunikasjon",
+      "title": "Vi må eie fortellingen tidlig",
+      "body": "I analysefasen bør vi bestemme hva klubben faktisk skal si utad. Hvis vi ikke forklarer retningen selv, blir den forklart av resultatet, rykter og tilfeldige sitater.",
+      "phases": [
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "press_officer_clear_plan_needed",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Tydelighet",
+      "title": "Uklare signaler blir fort en sak",
+      "body": "Når den sportslige planen virker uklar, fylles tomrommet raskt. Presse, supportere og sponsorer leser usikkerhet selv i små formuleringer. Vi trenger et enkelt budskap som tåler spørsmål.",
+      "phases": [
+        "analysis",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "press_officer_low_board_trust_signal",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Omdømme",
+      "title": "Lav styretillit kan merkes utenfra",
+      "body": "Når styretilliten faller, bør kommunikasjonen være ekstra ryddig. Vi skal ikke late som alt er perfekt, men vi må vise at klubben fortsatt handler samlet.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "boardTrust",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "press_officer_high_board_trust_message",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Stabilitet",
+      "title": "Støtte fra styret gir ro rundt klubben",
+      "body": "Når styret står tydelig bak retningen, kan vi kommunisere med mer ro. Da handler det om å vise kontinuitet, ikke å love raske løsninger.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "boardTrust",
+        "operator": "gte",
+        "value": 60
+      }
+    },
+    {
+      "id": "press_officer_training_culture_story",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Trening",
+      "title": "God treningskultur gir en bedre historie",
+      "body": "Når treningsarbeidet har retning, blir det lettere å forklare hva klubben bygger. Det trenger ikke være store ord. Det holder at arbeidet virker konkret og gjenkjennelig.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "press_officer_low_training_culture_risk",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Trening",
+      "title": "Svakt treningsarbeid gir dårlige forklaringer",
+      "body": "Hvis treningskulturen virker svak, blir alle forklaringer tynnere. Det er vanskelig å snakke om langsiktig utvikling hvis ukene ikke ser ut som de bygger noe.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "press_officer_low_morale_external_reading",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Moral",
+      "title": "Lav moral blir synlig",
+      "body": "Lav spillermoral blir ofte synlig før noen sier det høyt. Kroppsspråk, korte svar og usikre prestasjoner kan bli en større sak enn selve resultatet.",
+      "phases": [
+        "analysis",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "press_officer_match_week_line",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Kampuke",
+      "title": "Kampuka trenger én tydelig linje",
+      "body": "Før kamp bør vi være samkjørte på hva vi sier. Ikke for å skjule noe, men for å unngå at spillerne, trenerteamet og klubben sender tre ulike signaler.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "press_officer_match_day_noise",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Kampdag",
+      "title": "Kampdag forsterker alt",
+      "body": "På kampdag blir små signaler store. Et rolig kroppsspråk på sidelinjen og korte, presise uttalelser etterpå kan dempe mer uro enn en lang forklaring.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "press_officer_high_pressure_dont_overexplain",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Medietrykk",
+      "title": "Ikke forklar klubben i stykker",
+      "body": "Når medietrykket er høyt, frister det å forklare alt. Det kan virke motsatt. Vi bør si mindre, men tydeligere: hva vi jobber med, hvorfor det betyr noe, og hva neste steg er.",
+      "phases": [
+        "analysis",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 60
+      }
+    },
+    {
+      "id": "press_officer_club_work_profile",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Profil",
+      "title": "Klubbdrift er også kommunikasjon",
+      "body": "Fasiliteter, marked, administrasjon og sportslig retning blir etter hvert samme historie. Hvis klubben ser ryddig ut bak kulissene, blir det lettere å tro på prosjektet foran kamera.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "press_officer_identity_public_language",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Identitet",
+      "title": "Identiteten må kunne sies enkelt",
+      "body": "Hvis vi ikke klarer å forklare hva laget skal være med enkle ord, er sjansen stor for at publikum heller ikke ser det. En tydelig identitet starter med et språk klubben faktisk bruker.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "press_officer_after_positive_trend",
+      "threadId": "press_media_pressure",
+      "senderId": "press_officer",
+      "from": "Presseansvarlig",
+      "tag": "Ro",
+      "title": "Vi kan bygge ro uten å overdrive",
+      "body": "Når signalene rundt klubben er bedre, bør vi ikke selge det som et gjennombrudd for tidlig. Ro bygges best når kommunikasjonen er nøktern og arbeidet får tale først.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "lte",
+        "value": 45
+      }
     }
   ]
 }
