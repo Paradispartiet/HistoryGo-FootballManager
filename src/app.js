@@ -25,6 +25,10 @@ const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
 const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
 const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
 const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
+const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
+
+// Maks antall klubbhendelser som beholdes i loggen (nyeste først).
+const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -50,7 +54,9 @@ const state = {
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
-  clubWeekFeedback: "Klubbuken er klar."
+  clubWeekFeedback: "Klubbuken er klar.",
+  // Kort logg over fasebytter i Club Week (nyeste først). Kun UI/state/localStorage.
+  clubWeekEventLog: []
 };
 
 const elements = {
@@ -99,7 +105,8 @@ const elements = {
   clubPlayerMorale: document.querySelector("#clubPlayerMorale"),
   clubTacticalClarity: document.querySelector("#clubTacticalClarity"),
   clubTrainingCulture: document.querySelector("#clubTrainingCulture"),
-  clubMediaPressure: document.querySelector("#clubMediaPressure")
+  clubMediaPressure: document.querySelector("#clubMediaPressure"),
+  clubWeekEventLog: document.querySelector("#clubWeekEventLog")
 };
 
 let managerEngineRenderId = 0;
@@ -456,6 +463,32 @@ function saveClubWeekFeedback(message) {
 function setClubWeekFeedback(message) {
   state.clubWeekFeedback = message;
   saveClubWeekFeedback(message);
+}
+
+// Club Week-hendelseslogg: korte hendelser fra fasebytter. Nyeste først, maks 12.
+// Kun lett persistens i localStorage – ingen effekt på score, engine eller matching.
+function loadClubWeekEventLog() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(CLUB_WEEK_EVENT_LOG_KEY));
+    return Array.isArray(stored) ? stored.slice(0, CLUB_WEEK_EVENT_LOG_LIMIT) : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveClubWeekEventLog(events) {
+  try {
+    const list = Array.isArray(events) ? events.slice(0, CLUB_WEEK_EVENT_LOG_LIMIT) : [];
+    localStorage.setItem(CLUB_WEEK_EVENT_LOG_KEY, JSON.stringify(list));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+function addClubWeekEvent(event) {
+  // Nyeste hendelse først, behold maks 12.
+  state.clubWeekEventLog = [event, ...state.clubWeekEventLog].slice(0, CLUB_WEEK_EVENT_LOG_LIMIT);
+  saveClubWeekEventLog(state.clubWeekEventLog);
 }
 
 // Lokal fase-etikettmap som fallback for konsekvenstekster. Holdes synk med
@@ -1295,6 +1328,35 @@ async function renderManagerEngineBridge() {
   renderManagerDashboardViewModel(viewModel);
 }
 
+// Render Club Week-hendelseslogg: korte hendelser fra fasebytter, nyeste først.
+// Bruker kun textContent, ingen innerHTML. Trygg fallback hvis felt mangler.
+function renderClubWeekEventLog(list) {
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (!state.clubWeekEventLog.length) {
+    const empty = document.createElement("li");
+    empty.className = "club-week-event-log-empty";
+    empty.textContent = "Ingen klubbhendelser ennå.";
+    list.append(empty);
+    return;
+  }
+
+  for (const event of state.clubWeekEventLog) {
+    const week = (event && (typeof event.week === "number" || typeof event.week === "string"))
+      ? event.week
+      : "?";
+    const phaseLabel = (event && event.phaseLabel) || (event && event.phase) || "Fase";
+    const message = (event && event.message) || "Hendelse registrert.";
+
+    const item = document.createElement("li");
+    item.className = "club-week-event-log-item";
+    item.textContent = `Uke ${week} · ${phaseLabel}: ${message}`;
+    list.append(item);
+  }
+}
+
 // Render Club Week-panelet: uke, fase og klubbverdier. Async fordi summary/label
 // hentes via bridge (engine eller fallback). Påvirker ikke resten av renderApp.
 async function renderClubWeek() {
@@ -1340,6 +1402,8 @@ async function renderClubWeek() {
   if (elements.clubMediaPressure) {
     elements.clubMediaPressure.textContent = String(clubWeekState.mediaPressure);
   }
+
+  renderClubWeekEventLog(elements.clubWeekEventLog);
 }
 
 function renderApp() {
@@ -1434,6 +1498,17 @@ function bindEvents() {
         next = await applyClubWeekEffectsFromBrowser(next, consequences.effects);
       }
 
+      // Loggfør hendelsen med fasen som nettopp ble avsluttet (previous).
+      const previousPhaseLabel = CLUB_WEEK_PHASE_LABELS[previous.phase] || previous.phase;
+
+      addClubWeekEvent({
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        week: previous.week,
+        phase: previous.phase,
+        phaseLabel: previousPhaseLabel,
+        message: consequences.message
+      });
+
       // Feedback må settes før setClubWeekState, som trigger renderApp().
       setClubWeekFeedback(consequences.message);
       setClubWeekState(next);
@@ -1504,6 +1579,7 @@ async function init() {
     const storedClubWeekState = loadClubWeekState();
     state.clubWeekState = await createInitialClubWeekStateFromBrowser(storedClubWeekState || {});
     state.clubWeekFeedback = loadClubWeekFeedback();
+    state.clubWeekEventLog = loadClubWeekEventLog();
 
     seedLineupForFormation();
     ensurePositionsForFormation();

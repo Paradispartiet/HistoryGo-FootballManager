@@ -1001,6 +1001,41 @@ ul {
   font-weight: 900;
 }
 
+.club-week-event-log-panel {
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: #000000;
+  padding: 14px 16px;
+}
+
+.club-week-event-log-panel h3 {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.club-week-event-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.club-week-event-log-item,
+.club-week-event-log-empty {
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--panel-strong);
+  color: var(--text);
+  line-height: 1.5;
+  padding: 10px 12px;
+}
+
+.club-week-event-log-empty {
+  color: var(--muted);
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   padding: 8px 0 40px;
