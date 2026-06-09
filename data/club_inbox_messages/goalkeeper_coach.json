@@ -16,6 +16,227 @@
         "match_preparation"
       ],
       "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_line_and_start_position",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Posisjonering",
+      "title": "Startposisjonen må stemme med laget",
+      "body": "Keeperen kan ikke stå som en isolert skuddstopper hvis resten av laget presser høyt. Startposisjonen må følge forsvarslinjen, ellers åpner vi rommet bak oss.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_low_tactical_clarity_communication",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Kommunikasjon",
+      "title": "Keeperen trenger klarere signaler foran seg",
+      "body": "Når den taktiske klarheten er lav, blir keeperens valg vanskeligere. Han må vite når laget skal falle, når vi står, og hvem som tar ansvar for rommet foran boksen.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "goalkeeper_coach_high_tactical_clarity_support",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Samhandling",
+      "title": "Keeper og backlinje begynner å lese samme kamp",
+      "body": "Når spillideen er tydeligere, blir keeperrollen også tydeligere. Keeperen ser tidligere når han skal støtte, styre, roe ned eller slå tidlig forbi presset.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "goalkeeper_coach_distribution_under_pressure",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Distribusjon",
+      "title": "Distribusjonen må ha en plan",
+      "body": "Keeperens pasninger er ikke bare igangsettinger. De bestemmer ofte om vi får ro, om vi lokker press, eller om vi må slå over første pressledd.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_training_repetition",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Trening",
+      "title": "Keepertrening må kobles til lagets økt",
+      "body": "Keeperen kan ikke bare trene isolert. Han må ha repetisjoner med backlinjen, med press rundt seg og med de samme valgene han møter i kamp.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_low_training_culture_keeper_risk",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Treningskultur",
+      "title": "Keeperrollen lider når øktene blir løse",
+      "body": "Når treningskulturen faller, mister keeperen de små avklaringene han trenger: avstand til stopperne, timing i feltet og når han skal tørre å gå høyt.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "goalkeeper_coach_high_training_culture_keeper_growth",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Treningskultur",
+      "title": "Gode økter gjør keeperen modigere",
+      "body": "Når treningskulturen er god, tør keeperen å ta større ansvar. Ikke fordi han gambler, men fordi situasjonene er trent nok til at valgene føles kjente.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "goalkeeper_coach_field_control",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Feltarbeid",
+      "title": "Feltet må eies tidligere",
+      "body": "På innlegg og dødballer handler det ikke bare om høyde og rekkevidde. Keeperen må lese når han skal eie feltet, og når han heller skal organisere blokka foran seg.",
+      "phases": [
+        "training",
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_rest_defence_relation",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Restforsvar",
+      "title": "Keeperen er siste del av restforsvaret",
+      "body": "Når vi angriper, er keeperen allerede en del av sikringen. Han må lese avstanden til stopperne og være klar for første ball bak presset.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_morale_after_mistakes",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Mentalitet",
+      "title": "Keeperen må tåle neste situasjon",
+      "body": "Lav moral merkes ekstra godt hos keeperen. En feil kan sitte lenge hvis laget ikke gir ham en tydelig neste oppgave og en struktur han kan stole på.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "goalkeeper_coach_match_preparation_opponent_press",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Motstander",
+      "title": "Vi må vite hvordan de presser keeperen",
+      "body": "Før kamp må keeperen vite om motstanderen låser kort igangsetting, presser på tilbakespill eller lar ham slå ut. Det avgjør første valget hans med ball.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_match_day_first_ten_minutes",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Kampdag",
+      "title": "De første minuttene setter keeperens rytme",
+      "body": "På kampdag trenger keeperen en tidlig berøring, en tydelig kommunikasjon med stopperne og en følelse av hvor høyt laget faktisk står.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_club_work_staffing",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Stab",
+      "title": "Keeperarbeidet trenger tid og struktur",
+      "body": "Keeperutvikling forsvinner lett hvis den bare legges rundt resten av økta. Klubben trenger faste keeperøkter, men også økter der keeperen trenes inn i laget.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "goalkeeper_coach_identity_from_the_back",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Identitet",
+      "title": "Laget starter ofte hos keeperen",
+      "body": "Hvis vi vil være et lag som spiller med ro, må det synes fra første pasning bakfra. Hvis vi vil være direkte, må keeperen vite når han skal sette fart på spillet.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
