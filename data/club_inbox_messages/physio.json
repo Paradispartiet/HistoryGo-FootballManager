@@ -16,6 +16,232 @@
         "club_work"
       ],
       "conditions": {}
+    },
+    {
+      "id": "physio_training_load_balance",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Belastning",
+      "title": "Belastning handler om rytme, ikke bare mengde",
+      "body": "En hard økt er ikke et problem alene. Problemet kommer når harde økter, kampforberedelse og svak restitusjon ligger oppå hverandre uten tydelig rytme.",
+      "phases": [
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_low_training_culture_injury_risk",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Skaderisiko",
+      "title": "Utydelige økter øker risikoen",
+      "body": "Når treningskulturen er svak, blir belastningen mer uforutsigbar. Spillerne vet ikke alltid når de skal presse, når de skal kontrollere, og når kroppen trenger en roligere repetisjon.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "physio_high_training_culture_recovery_window",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Restitusjon",
+      "title": "God treningskultur gjør restitusjon enklere",
+      "body": "Når øktene har struktur, blir det lettere å styre belastningen. Da kan vi trene hardt på riktig tidspunkt og gi spillerne rom til å hente seg inn før neste toppunkt.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "physio_low_morale_body_language",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Moral",
+      "title": "Lav moral kan sette seg i kroppen",
+      "body": "Når moralen er lav, ser vi det ofte i løpsvilje, kroppsspråk og små plager. Det medisinske handler ikke bare om muskler, men også om hvordan spillerne bærer belastningen mentalt.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "physio_tactical_clarity_reduces_waste_runs",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Taktisk klarhet",
+      "title": "Tydelig plan gir færre unødvendige meter",
+      "body": "Når spillerne forstår planen, løper de ofte smartere. Uklarhet gir flere panikkløp, flere sene sprinter og mer belastning som ikke nødvendigvis hjelper laget.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "physio_low_tactical_clarity_late_reactions",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Belastning",
+      "title": "Uklare roller gir sene reaksjoner",
+      "body": "Når taktikken er uklar, reagerer spillerne senere. Sene reaksjoner betyr ofte hardere akselerasjoner, dårligere kroppsstilling og større risiko i dueller.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "physio_match_preparation_minutes",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Kampforberedelse",
+      "title": "Minuttene må planlegges før kamp",
+      "body": "Før kamp bør vi vite hvem som tåler 90 minutter, hvem som bør beskyttes, og hvilke spillere som trenger en tydeligere plan for belastning gjennom kampen.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_match_day_warning_signs",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Kampdag",
+      "title": "Se etter varselsignalene tidlig",
+      "body": "På kampdag handler det om små tegn: kortere steg, mindre kraft i vendinger, hånd på låret etter sprint. Ser vi det tidlig, kan vi unngå større problemer.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_pressing_load",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Intensitet",
+      "title": "Presspillet har en fysisk pris",
+      "body": "Høyt press kan være riktig, men det har en kostnad. Hvis avstandene blir for store, blir presset dyrere enn nødvendig, særlig for spillere som må gjenta lange sprinter.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_recovery_after_high_pressure_week",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Ro",
+      "title": "Medietrykk kan også bli belastning",
+      "body": "Høyt medietrykk påvirker søvn, fokus og restitusjon. Spillerne kan virke klare på feltet, men kroppen henter seg ikke alltid inn når hodet står på hele uka.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "physio_club_work_medical_structure",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Klubbdrift",
+      "title": "Medisinsk struktur må bygges før skadene kommer",
+      "body": "Det medisinske arbeidet kan ikke bare reagere når noen får vondt. Vi trenger rutiner for screening, belastningslogg, restitusjon og oppfølging før problemene blir synlige.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_return_to_play_patience",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Rehab",
+      "title": "Tilbakekomst må ikke forveksles med klarhet",
+      "body": "En spiller kan være tilbake i trening uten å være klar for full kampbelastning. Det siste steget handler om repetert intensitet, ikke bare fravær av smerte.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_rotation_is_not_weakness",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Rotasjon",
+      "title": "Rotasjon er ikke svakhet",
+      "body": "Noen ganger beskytter vi laget ved å beskytte enkeltspillere. Riktig rotasjon handler ikke om å spare seg, men om å holde intensiteten høy over flere uker.",
+      "phases": [
+        "match_preparation",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "physio_identity_of_durability",
+      "threadId": "physio_load_management",
+      "senderId": "physio",
+      "from": "Fysio",
+      "tag": "Robusthet",
+      "title": "Robusthet kan bli en del av identiteten",
+      "body": "Et lag som tåler sesongen, trener ikke bare hardt. Det trener presist, restituerer riktig og bygger spillere som kan gjenta høy kvalitet uten å brytes ned.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
