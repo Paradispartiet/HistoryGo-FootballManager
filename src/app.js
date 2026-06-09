@@ -5,6 +5,7 @@ import {
   getDashboardViewModelFromLegacyManagerState,
   createInitialClubWeekStateFromBrowser,
   advanceClubWeekPhaseFromBrowser,
+  applyClubWeekEffectsFromBrowser,
   createClubWeekSummaryFromBrowser,
   getClubWeekPhaseLabelFromBrowser,
 } from "./app-manager-engine-bridge.js";
@@ -23,6 +24,7 @@ const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
 const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
 const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
 const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
+const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -46,7 +48,9 @@ const state = {
   // Gjeldende treningsuke (kun UI/progresjon, ingen kampmotor- eller score-effekt).
   trainingWeek: 1,
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
-  clubWeekState: null
+  clubWeekState: null,
+  // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
+  clubWeekFeedback: "Klubbuken er klar."
 };
 
 const elements = {
@@ -89,6 +93,7 @@ const elements = {
   knowledgeCompletedTotal: document.querySelector("#knowledgeCompletedTotal"),
   clubWeekSummary: document.querySelector("#clubWeekSummary"),
   clubWeekPhase: document.querySelector("#clubWeekPhase"),
+  clubWeekFeedback: document.querySelector("#clubWeekFeedback"),
   advanceClubWeekPhase: document.querySelector("#advanceClubWeekPhase"),
   clubBoardTrust: document.querySelector("#clubBoardTrust"),
   clubPlayerMorale: document.querySelector("#clubPlayerMorale"),
@@ -428,6 +433,89 @@ function setClubWeekState(clubWeekState) {
   state.clubWeekState = clubWeekState;
   saveClubWeekState(clubWeekState);
   renderApp();
+}
+
+// Club Week-feedback: kort tekst om siste fasebytte. Kun lett persistens i
+// localStorage – ingen effekt på score, engine eller matching.
+function loadClubWeekFeedback() {
+  try {
+    return localStorage.getItem(CLUB_WEEK_FEEDBACK_KEY) || "Klubbuken er klar.";
+  } catch (error) {
+    return "Klubbuken er klar.";
+  }
+}
+
+function saveClubWeekFeedback(message) {
+  try {
+    localStorage.setItem(CLUB_WEEK_FEEDBACK_KEY, message);
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+function setClubWeekFeedback(message) {
+  state.clubWeekFeedback = message;
+  saveClubWeekFeedback(message);
+}
+
+// Lokal fase-etikettmap som fallback for konsekvenstekster. Holdes synk med
+// Club Week Engine-fasene; brukes kun til visningstekst.
+const CLUB_WEEK_PHASE_LABELS = {
+  analysis: "Analyse",
+  training: "Trening",
+  club_work: "Klubbdrift",
+  match_preparation: "Kampforberedelse",
+  match_day: "Kampdag"
+};
+
+// Små, synlige konsekvenser av et fasebytte. Returnerer effekter på
+// klubbverdier og en kort norsk tilbakemelding. Kun UI/Club Week-state –
+// ingen lagscore, kampmotor, rollefit eller Football Knowledge-matching.
+function getClubWeekTransitionConsequences(previousState, nextState) {
+  if (previousState.phase === "training") {
+    if (state.activeKnowledgeFocusId && isKnowledgeFocusCompleted(state.activeKnowledgeFocusId)) {
+      return {
+        effects: { trainingCulture: 2, tacticalClarity: 1 },
+        message:
+          "Treningsfasen er fullført. Kunnskapsøkten ga +2 treningskultur og +1 taktisk klarhet."
+      };
+    }
+
+    if (state.activeKnowledgeFocusId) {
+      return {
+        effects: { trainingCulture: -1 },
+        message:
+          "Treningsfasen er over. Valgt kunnskapsøkt ble ikke fullført, og treningskulturen faller med 1."
+      };
+    }
+
+    return {
+      effects: { tacticalClarity: -1 },
+      message:
+        "Treningsfasen er over uten valgt kunnskapsfokus. Taktisk klarhet faller med 1."
+    };
+  }
+
+  if (previousState.phase === "match_preparation") {
+    return {
+      effects: { mediaPressure: 1 },
+      message: "Kampdag nærmer seg. Medietrykket øker med 1."
+    };
+  }
+
+  if (previousState.phase === "match_day" && nextState.phase === "analysis") {
+    return {
+      effects: { mediaPressure: -1 },
+      message: `Kampdagen er over. Klubben går inn i uke ${nextState.week} med ny analysefase.`
+    };
+  }
+
+  const label = CLUB_WEEK_PHASE_LABELS[nextState.phase] || "neste fase";
+
+  return {
+    effects: {},
+    message: `Klubben går videre til ${label}.`
+  };
 }
 
 // Fullført ukesøkt: hvilke kunnskapsfokus brukeren har markert som gjennomført.
@@ -1229,6 +1317,10 @@ async function renderClubWeek() {
     elements.clubWeekPhase.textContent = phaseLabel;
   }
 
+  if (elements.clubWeekFeedback) {
+    elements.clubWeekFeedback.textContent = state.clubWeekFeedback || "Klubbuken er klar.";
+  }
+
   if (elements.clubBoardTrust) {
     elements.clubBoardTrust.textContent = String(clubWeekState.boardTrust);
   }
@@ -1333,7 +1425,17 @@ function bindEvents() {
         state.clubWeekState = await createInitialClubWeekStateFromBrowser({});
       }
 
-      const next = await advanceClubWeekPhaseFromBrowser(state.clubWeekState);
+      const previous = state.clubWeekState;
+      let next = await advanceClubWeekPhaseFromBrowser(previous);
+      const consequences = getClubWeekTransitionConsequences(previous, next);
+
+      // Bruk små klubbkonsekvenser kun når et fasebytte faktisk gir effekter.
+      if (Object.keys(consequences.effects).length > 0) {
+        next = await applyClubWeekEffectsFromBrowser(next, consequences.effects);
+      }
+
+      // Feedback må settes før setClubWeekState, som trigger renderApp().
+      setClubWeekFeedback(consequences.message);
       setClubWeekState(next);
     });
   }
@@ -1401,6 +1503,7 @@ async function init() {
     // den (ugyldig/gammel verdi blir uke 1 / analyse).
     const storedClubWeekState = loadClubWeekState();
     state.clubWeekState = await createInitialClubWeekStateFromBrowser(storedClubWeekState || {});
+    state.clubWeekFeedback = loadClubWeekFeedback();
 
     seedLineupForFormation();
     ensurePositionsForFormation();
