@@ -15,7 +15,8 @@ const DATA_PATHS = {
   roles: "data/football_roles.json",
   tactics: "data/football_tactics.json",
   formations: "data/football_formations.json",
-  knowledgePrinciples: "data/football_knowledge_principles.json"
+  knowledgePrinciples: "data/football_knowledge_principles.json",
+  clubInboxMessages: "data/club_inbox_messages.json"
 };
 
 const EMPTY_VALUE = "__empty__";
@@ -56,7 +57,10 @@ const state = {
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
   clubWeekFeedback: "Klubbuken er klar.",
   // Kort logg over fasebytter i Club Week (nyeste først). Kun UI/state/localStorage.
-  clubWeekEventLog: []
+  clubWeekEventLog: [],
+  // Lesbare innboksmeldinger fra datafil. Kun visning i denne PR-en –
+  // ingen state-effekter, svarvalg eller konsekvenser ennå.
+  clubInboxMessages: []
 };
 
 const elements = {
@@ -106,7 +110,8 @@ const elements = {
   clubTacticalClarity: document.querySelector("#clubTacticalClarity"),
   clubTrainingCulture: document.querySelector("#clubTrainingCulture"),
   clubMediaPressure: document.querySelector("#clubMediaPressure"),
-  clubWeekEventLog: document.querySelector("#clubWeekEventLog")
+  clubWeekEventLog: document.querySelector("#clubWeekEventLog"),
+  inboxMessageList: document.querySelector("#inboxMessageList")
 };
 
 let managerEngineRenderId = 0;
@@ -1406,6 +1411,154 @@ async function renderClubWeek() {
   renderClubWeekEventLog(elements.clubWeekEventLog);
 }
 
+// Fallback-innboksmeldinger brukes hvis datafilen ikke laster. Holder
+// Innboksen levende selv uten data/club_inbox_messages.json.
+function getFallbackInboxMessages() {
+  return [
+    {
+      id: "welcome_from_board",
+      from: "Styret",
+      tag: "Sesongmål",
+      title: "Velkommen til klubben",
+      body: "Styret forventer en stabil sesong. Bygg en ellever som henger sammen taktisk, og vis at klassespillere kan brukes riktig.",
+      phases: ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      conditions: {}
+    },
+    {
+      id: "assistant_training_focus",
+      from: "Trenerteam",
+      tag: "Trening",
+      title: "Ukens treningsvalg",
+      body: "Når laget har en tydelig svakhet, bør treningsuka brukes til ett konkret prinsipp. Velg en kunnskapsøkt og fullfør den før klubben går videre.",
+      phases: ["training"],
+      conditions: {}
+    }
+  ];
+}
+
+// Gyldige klubbverdi-nøkler for betinget innboksfiltrering. Holdes synk med
+// Club Week-state. Brukes kun til lesefiltrering – ingen state-effekt.
+const CLUB_WEEK_METRIC_KEYS = new Set([
+  "boardTrust",
+  "playerMorale",
+  "tacticalClarity",
+  "trainingCulture",
+  "mediaPressure"
+]);
+
+// Avgjør om en innboksmelding skal vises i gjeldende Club Week-fase og
+// med gjeldende klubbverdier. Rent lesefilter – endrer ikke state.
+function messageMatchesClubWeek(message) {
+  if (!message || typeof message !== "object") {
+    return false;
+  }
+
+  const phase = state.clubWeekState?.phase || "analysis";
+
+  if (Array.isArray(message.phases) && message.phases.length > 0 && !message.phases.includes(phase)) {
+    return false;
+  }
+
+  const conditions = message.conditions;
+
+  if (!conditions || Object.keys(conditions).length === 0) {
+    return true;
+  }
+
+  const { metric, operator, value } = conditions;
+
+  if (!CLUB_WEEK_METRIC_KEYS.has(metric)) {
+    return false;
+  }
+
+  if (operator !== "lte" && operator !== "gte") {
+    return false;
+  }
+
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return false;
+  }
+
+  const currentValue = state.clubWeekState?.[metric];
+
+  if (typeof currentValue !== "number" || !Number.isFinite(currentValue)) {
+    return false;
+  }
+
+  if (operator === "lte") {
+    return currentValue <= value;
+  }
+
+  return currentValue >= value;
+}
+
+// Filtrer innboksmeldinger på fase og klubbverdier, og begrens til maks 8.
+function getVisibleInboxMessages() {
+  return state.clubInboxMessages
+    .filter(messageMatchesClubWeek)
+    .slice(0, 8);
+}
+
+// Bygg ett message-card-element fra en melding. Bruker kun textContent,
+// gjenbruker eksisterende message-card-CSS. isEmpty gir empty-state-stil.
+function createMessageCard(message, isEmpty = false) {
+  const article = document.createElement("article");
+  article.className = isEmpty ? "message-card is-empty" : "message-card";
+
+  const meta = document.createElement("div");
+  meta.className = "message-meta";
+
+  const from = document.createElement("span");
+  from.className = "message-from";
+  from.textContent = message.from || "Klubbkontoret";
+
+  const tag = document.createElement("span");
+  tag.className = "message-tag";
+  tag.textContent = message.tag || "Melding";
+
+  const title = document.createElement("h3");
+  title.textContent = message.title || "Ny melding";
+
+  const body = document.createElement("p");
+  body.textContent = message.body || "Ingen meldingstekst.";
+
+  meta.append(from, tag);
+  article.append(meta, title, body);
+
+  return article;
+}
+
+// Render Innboksen dynamisk fra state.clubInboxMessages. Tømmer containeren
+// (eneste innerHTML-bruk) og bygger kort med createElement/textContent.
+function renderInboxMessages() {
+  if (!elements.inboxMessageList) {
+    return;
+  }
+
+  elements.inboxMessageList.innerHTML = "";
+
+  const messages = getVisibleInboxMessages();
+
+  if (!messages.length) {
+    elements.inboxMessageList.append(
+      createMessageCard(
+        {
+          from: "Klubbkontoret",
+          tag: "Ingen nye meldinger",
+          title: "Innboksen er rolig",
+          body: "Det er ingen nye meldinger for denne fasen."
+        },
+        true
+      )
+    );
+    return;
+  }
+
+  for (const message of messages) {
+    elements.inboxMessageList.append(createMessageCard(message));
+  }
+}
+
 function renderApp() {
   const teamFit = getTeamFit();
 
@@ -1417,6 +1570,7 @@ function renderApp() {
 
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
+  renderInboxMessages();
 }
 
 function bindEvents() {
@@ -1541,13 +1695,22 @@ async function init() {
   initTabs();
 
   try {
-    const [playersData, rolesData, tacticsData, formationsData, knowledgeData] = await Promise.all([
+    const [
+      playersData,
+      rolesData,
+      tacticsData,
+      formationsData,
+      knowledgeData,
+      clubInboxMessagesData
+    ] = await Promise.all([
       loadJson(DATA_PATHS.players),
       loadJson(DATA_PATHS.roles),
       loadJson(DATA_PATHS.tactics),
       loadJson(DATA_PATHS.formations),
       // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
-      loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null)
+      loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
+      // Innboksdata er valgfri: hvis filen mangler, brukes fallback-meldinger.
+      loadJson(DATA_PATHS.clubInboxMessages).catch(() => null)
     ]);
 
     state.players = playersData.players;
@@ -1560,6 +1723,13 @@ async function init() {
     } else {
       state.knowledgePrinciples = [];
       console.warn("Fotballkunnskap-data mangler eller har feil format. Fortsetter uten kunnskapsanbefalinger.");
+    }
+
+    if (Array.isArray(clubInboxMessagesData?.messages)) {
+      state.clubInboxMessages = clubInboxMessagesData.messages;
+    } else {
+      state.clubInboxMessages = getFallbackInboxMessages();
+      console.warn("Innboks-data mangler eller har feil format. Bruker fallback-meldinger.");
     }
 
     state.selectedFormationId = state.formations[0]?.id || null;
