@@ -1,0 +1,156 @@
+{
+  "schema": "historygo-football-manager.place_reports.v1",
+  "version": 1,
+  "placeReports": [
+    {
+      "placeId": "kfum_arena",
+      "title": "KFUM Arena – trenerkultur og klubbbygging",
+      "summary": "KFUM Arena er ikke et spillersted i HG Football Manager. Verdien ligger i trenerkultur, utviklingsarbeid, struktur og småklubb-til-toppfotball-modellen.",
+      "managerValue": "Gir tilgang til trenerkandidater, klubbbygging, lagorganisering og treningskultur. Stedet passer for managere som vil bygge laget gjennom metode, struktur og utvikling over tid.",
+      "unlocksExplanation": {
+        "players": "Ingen spillere. KFUM Arena skal ikke gi player_candidate-unlocks.",
+        "staff": "Låser opp trenerprofiler som Jørgen Isnes og Johannes Moesgaard.",
+        "expertise": "Lagorganisering, klubbbygging, utviklingskultur, pressorganisering og restforsvar.",
+        "training": "Støtter treningskultur, strukturert press og restforsvar.",
+        "identity": "Utviklingslag, presslag og strukturert småklubbmodell."
+      },
+      "recommendedUse": [
+        "Engasjer trenerprofil fra KFUM tidlig hvis du vil bygge treningskultur.",
+        "Bruk stedet til å utvikle struktur før du jakter store spillerprofiler.",
+        "Kombiner KFUM-ekspertise med spillere fra Ullevaal, Intility eller Ekebergsletta."
+      ],
+      "helpsBuildClassifications": [
+        "development_team",
+        "pressing_team",
+        "defensive_structure_team"
+      ],
+      "warning": "KFUM Arena skal ikke brukes som spillerkilde. Stedets verdi er trenerkapital."
+    },
+    {
+      "placeId": "ullevaal_stadion",
+      "title": "Ullevaal Stadion – landslagsnivå, store kamper og norsk fotballhukommelse",
+      "summary": "Ullevaal Stadion gir tilgang til nasjonale toppspillere, historiske profiler og ekspertise knyttet til store kamper, pressmestring og landslagsidentitet.",
+      "managerValue": "Gir manageren spillere med høy kvalitet, mental tyngde og nasjonal fotballkultur. Stedet passer når laget trenger ledere, stjerner og spillere som tåler press.",
+      "unlocksExplanation": {
+        "players": "Låser opp norske toppspillere og historiske landslagsprofiler som Martin Ødegaard, Erling Haaland, Caroline Graham Hansen, Ada Hegerberg, Jørgen Juve, Arne Brustad, Oscar Bobb, Antonio Nusa, Sander Berge og Stefan Strandberg.",
+        "staff": "Kan gi press-/finalementor og kampforberedende kompetanse.",
+        "expertise": "Finale- og presskultur, pressmestring, defensiv struktur og nasjonalarena-erfaring.",
+        "training": "Støtter pressmestring, kampdisiplin, defensiv struktur og store-kamper-forberedelse.",
+        "identity": "Kontrollag, overgangslag, utviklingslag og lag med pressmestring."
+      },
+      "recommendedUse": [
+        "Bruk Ullevaal for å få spillere med høy individuell kvalitet.",
+        "Kombiner Ødegaard/Berge med kontroll- og oppbyggingsbadges.",
+        "Kombiner Haaland/Nusa/Bobb med hurtighet, dybde og overgangsspill.",
+        "Bruk Ullevaal-ekspertise til å løfte laget i viktige kamper."
+      ],
+      "helpsBuildClassifications": [
+        "control_team",
+        "transition_team",
+        "development_team",
+        "defensive_structure_team"
+      ],
+      "warning": "Ullevaal gir sterke spillere, men laget blir ikke godt bare av navnene. Spillerne må fortsatt brukes i riktig rolle og taktikk."
+    },
+    {
+      "placeId": "intility_arena",
+      "title": "Intility Arena – moderne klubbground, bredde og oppbygging",
+      "summary": "Intility Arena gir moderne klubbfotball, Vålerenga-kobling, oppbygging, press, bredde og keeper-/forsvarsstruktur.",
+      "managerValue": "Gir manageren tekniske og taktiske spillere, moderne klubbekspertise og ressurser for å bygge et lag som kan presse, angripe bredt og spille seg ut bakfra.",
+      "unlocksExplanation": {
+        "players": "Låser opp Mohammed Abdellaoue, Ghayas Zahid og Stefan Strandberg.",
+        "staff": "Kan kobles til moderne klubbmiljø og treningskultur.",
+        "expertise": "Pressorganisering, oppbygging bakfra, bredt angrepsspill og keepertrening.",
+        "training": "Støtter høyt press, oppbygging bakfra, bredde, keeperdistribusjon og restforsvar.",
+        "identity": "Presslag, kontrollag og kantdominant lag."
+      },
+      "recommendedUse": [
+        "Bruk Intility for å bygge et moderne lag med press og oppbygging.",
+        "Kombiner Zahid med sentrale kombinasjoner og kreativ frihet.",
+        "Kombiner Strandberg med defensiv struktur og lavere risiko bak.",
+        "Bruk Intility-ekspertise til å åpne høyt press og build-up-badges."
+      ],
+      "helpsBuildClassifications": [
+        "pressing_team",
+        "control_team",
+        "wide_dominant_team",
+        "defensive_structure_team"
+      ],
+      "warning": "Intility-spillere og ekspertise passer best når laget har tydelig struktur. Uten balanse kan press og bredde gjøre laget sårbart."
+    },
+    {
+      "placeId": "gressbanen",
+      "title": "Gressbanen – historisk fotballgrunn, dueller og tidlig norsk fotball",
+      "summary": "Gressbanen gir historisk fotballkultur, tidlig norsk ground-identitet, bredde, dueller, innlegg og klassiske angreps-/forsvarsprofiler.",
+      "managerValue": "Gir manageren historiske spillere og en mer fysisk, direkte og klassisk fotballforståelse. Stedet passer for lag som vil bygge på dueller, boksnærvær og bredde.",
+      "unlocksExplanation": {
+        "players": "Låser opp Jørgen Juve og Arne Brustad.",
+        "staff": "Ingen hovedstab i v1.",
+        "expertise": "Bredt angrepsspill, dybdeløp og avslutningstrening.",
+        "training": "Støtter dybde, bredde, avslutninger, duellstyrke og offensive mønstre.",
+        "identity": "Overgangslag, kantdominant lag og dødball-/duellag."
+      },
+      "recommendedUse": [
+        "Bruk Gressbanen hvis laget trenger historisk tyngde og angrepskraft.",
+        "Kombiner Juve med innlegg, boksnærvær og støtte rundt spissen.",
+        "Kombiner Brustad med tempo, dybde og overganger.",
+        "Bruk Gressbanen sammen med Bislett eller Ekebergsletta for mer fart og løpskraft."
+      ],
+      "helpsBuildClassifications": [
+        "transition_team",
+        "wide_dominant_team",
+        "set_piece_team"
+      ],
+      "warning": "Historiske profiler må oversettes riktig til moderne roller. Ikke bruk dem bare som navn; bruk styrkene deres."
+    },
+    {
+      "placeId": "ekebergsletta",
+      "title": "Ekebergsletta – breddefotball, rekruttering og utviklingsspor",
+      "summary": "Ekebergsletta gir breddefotball, turneringskultur, utvikling, rekruttering og unge tekniske spillere.",
+      "managerValue": "Gir manageren tilgang til utviklingsspillere, fart, én-mot-én-ferdigheter og rekrutteringslogikk. Stedet passer for managere som bygger framtid, bredde og utviklingslag.",
+      "unlocksExplanation": {
+        "players": "Låser opp Oscar Bobb og Antonio Nusa.",
+        "staff": "Låser opp utviklings- og rekrutteringstrener.",
+        "expertise": "Utviklingskultur, teknisk trening og dybdeløp.",
+        "training": "Støtter teknikk, førstetouch, dribling, dybde og utviklingsbadges.",
+        "identity": "Utviklingslag, overgangslag og kantdominant lag."
+      },
+      "recommendedUse": [
+        "Bruk Ekebergsletta for å bygge unge, kreative og eksplosive lag.",
+        "Kombiner Bobb og Nusa med bredde, kreativ frihet og hurtige overganger.",
+        "Bruk utviklingskompetansen til å få treningskultur og tekniske badges.",
+        "Kombiner med KFUM for sterkere utviklingsstruktur."
+      ],
+      "helpsBuildClassifications": [
+        "development_team",
+        "transition_team",
+        "wide_dominant_team"
+      ],
+      "warning": "Ekebergsletta gir potensial og utviklingskraft, men laget trenger struktur rundt spillerne for at talentet skal bli stabilt."
+    },
+    {
+      "placeId": "bislett_stadion",
+      "title": "Bislett Stadion – fysisk treningslære, hurtighet og utholdenhet",
+      "summary": "Bislett Stadion er ikke spillerkilde i v1. Verdien ligger i fysisk treningslære, hurtighet, utholdenhet, belastningsstyring og prestasjonskultur.",
+      "managerValue": "Gir manageren fysisk ekspertise og treningsprogrammer som kan gjøre laget raskere, mer utholdende og bedre rustet for høyt tempo.",
+      "unlocksExplanation": {
+        "players": "Ingen spillere i v1.",
+        "staff": "Låser opp fysisk/hurtighetsspesialist.",
+        "expertise": "Hurtighetstrening, fysisk grunntrening, utholdenhet, belastningsstyring og skadeforebygging.",
+        "training": "Støtter hurtighet, utholdenhet, eksplosivitet og belastningskontroll.",
+        "identity": "Overgangslag, presslag og fysisk robust lag."
+      },
+      "recommendedUse": [
+        "Bruk Bislett før du bygger presslag eller overgangslag.",
+        "Kombiner hurtighetstrening med Haaland, Nusa, Bobb eller Brustad.",
+        "Bruk belastningsstyring hvis laget trener mange badges samtidig.",
+        "Kombiner med Intility for moderne press og med Ekebergsletta for fart/talent."
+      ],
+      "helpsBuildClassifications": [
+        "transition_team",
+        "pressing_team"
+      ],
+      "warning": "Bislett gir fysisk kapasitet, men ikke automatisk fotballstruktur. Fart må kombineres med taktisk retning."
+    }
+  ]
+}
