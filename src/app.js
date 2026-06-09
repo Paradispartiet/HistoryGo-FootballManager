@@ -38,6 +38,9 @@ const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
 const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
 const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
 const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
+// History Go-lagprogresjon (team merits) i localStorage. Seedes fra example-filen
+// ved første lasting, deretter persisteres brukerens egne endringer her.
+const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
 
 // Maks antall klubbhendelser som beholdes i loggen (nyeste først).
 const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
@@ -143,7 +146,12 @@ const elements = {
   unlockedExpertiseList: document.querySelector("#unlockedExpertiseList"),
   availableTrainingProgramsList: document.querySelector("#availableTrainingProgramsList"),
   earnedBadgesList: document.querySelector("#earnedBadgesList"),
-  teamClassificationsList: document.querySelector("#teamClassificationsList")
+  teamClassificationsList: document.querySelector("#teamClassificationsList"),
+  // History Go-treningsuke og progresjon (v1, interaktivt).
+  hgTrainingWeekStatus: document.querySelector("#hgTrainingWeekStatus"),
+  advanceHgTrainingWeek: document.querySelector("#advanceHgTrainingWeek"),
+  resetHgTeamMerits: document.querySelector("#resetHgTeamMerits"),
+  badgeProgressList: document.querySelector("#badgeProgressList")
 };
 
 let managerEngineRenderId = 0;
@@ -290,6 +298,91 @@ const TRAINING_STATUS_TEXT = {
   needs_staff: "Mangler riktig stab",
   needs_expertise: "Mangler ekspertise"
 };
+
+// Seed fra football_team_merits.example.json. Brukes som utgangspunkt ved første
+// lasting og når brukeren nullstiller progresjonen.
+let teamMeritsSeed = null;
+
+// Dyp klone uten å dele referanser med seed eller localStorage-parsing.
+function cloneTeamMerits(merits) {
+  return JSON.parse(JSON.stringify(merits));
+}
+
+function isTeamMeritsObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+// Normaliser team merits til forventet form slik at render-/progresjonslaget
+// alltid har gyldige arrays/tall, uansett seed eller lagret tilstand.
+function normalizeTeamMerits(merits) {
+  const base = isTeamMeritsObject(merits) ? merits : {};
+  return {
+    ...base,
+    activeTrainingWeek:
+      Number.isInteger(base.activeTrainingWeek) && base.activeTrainingWeek >= 1 ? base.activeTrainingWeek : 1,
+    hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
+    unlockedPlaceIds: Array.isArray(base.unlockedPlaceIds) ? base.unlockedPlaceIds : [],
+    unlockedExpertiseIds: Array.isArray(base.unlockedExpertiseIds) ? base.unlockedExpertiseIds : [],
+    earnedBadgeIds: Array.isArray(base.earnedBadgeIds) ? base.earnedBadgeIds : [],
+    badgeProgress: Array.isArray(base.badgeProgress) ? base.badgeProgress : [],
+    activeClassifications: Array.isArray(base.activeClassifications) ? base.activeClassifications : []
+  };
+}
+
+// Les team merits: prøv localStorage først, fall ellers tilbake til seed-data.
+// Må tåle manglende/korrupt localStorage uten å krasje. Lagrer seed-en for
+// senere bruk (resetTeamMerits).
+function loadTeamMerits(seedMerits) {
+  teamMeritsSeed = isTeamMeritsObject(seedMerits) ? cloneTeamMerits(seedMerits) : null;
+
+  try {
+    const raw = localStorage.getItem(TEAM_MERITS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (isTeamMeritsObject(parsed)) {
+        return normalizeTeamMerits(parsed);
+      }
+    }
+  } catch (error) {
+    // Korrupt eller utilgjengelig localStorage: bruk seed i stedet for å krasje.
+  }
+
+  return teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
+}
+
+// Lagre gjeldende team merits til localStorage. Stille no-op hvis lagring feiler.
+function saveTeamMerits() {
+  if (!state.teamMerits) {
+    return;
+  }
+  try {
+    localStorage.setItem(TEAM_MERITS_KEY, JSON.stringify(state.teamMerits));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+// Nullstill progresjon: slett localStorage-key, gjenopprett seed og rerender.
+function resetTeamMerits() {
+  try {
+    localStorage.removeItem(TEAM_MERITS_KEY);
+  } catch (error) {
+    // Fjerning kan feile i privat modus e.l. Da fortsetter vi uansett.
+  }
+
+  state.teamMerits = teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
+  recomputeActiveClassifications();
+  renderApp();
+}
+
+// Hold activeClassifications synk med opptjente badges. Kjøres etter hver
+// badge-endring og ved lasting/nullstilling slik at lagrede/viste klasser
+// alltid speiler earnedBadgeIds.
+function recomputeActiveClassifications() {
+  if (state.teamMerits) {
+    state.teamMerits.activeClassifications = computeActiveClassificationIds();
+  }
+}
 
 // Unlock-typer i football_unlocks.json som regnes som stab/trener/personkandidat.
 function isStaffUnlockType(type) {
@@ -525,16 +618,179 @@ function computeActiveClassificationIds() {
     .map((classification) => classification.id);
 }
 
-// Aktive lagklasser. V1 viser eksplisitt lagrede activeClassifications fra
-// team-state; beregning fra badges finnes i computeActiveClassificationIds().
+// Aktive lagklasser beregnet direkte fra opptjente badges, slik at visningen
+// alltid speiler earnedBadgeIds. state.teamMerits.activeClassifications holdes
+// synk med samme beregning (recomputeActiveClassifications) for persistens.
 function getActiveTeamClassifications() {
   const classifications = Array.isArray(state.teamClassifications?.classifications)
     ? state.teamClassifications.classifications
     : [];
-  const activeIds = new Set(
-    Array.isArray(state.teamMerits?.activeClassifications) ? state.teamMerits.activeClassifications : []
-  );
+  const activeIds = new Set(computeActiveClassificationIds());
   return classifications.filter((classification) => activeIds.has(classification.id));
+}
+
+// Engasjer tilgjengelig stab: legg staff-id i hiredStaffIds, lagre og rerender.
+// Robust mot ukjent/utilgjengelig id og duplikater (console.warn, ingen krasj).
+function hireStaff(staffId) {
+  if (!state.teamMerits) {
+    console.warn("hireStaff: team merits mangler – kan ikke engasjere stab.");
+    return;
+  }
+
+  const member = getUnlockedStaff().find((candidate) => candidate.id === staffId);
+
+  if (!member) {
+    console.warn(`hireStaff: ukjent eller utilgjengelig staff-id: ${staffId}`);
+    return;
+  }
+
+  if (!Array.isArray(state.teamMerits.hiredStaffIds)) {
+    state.teamMerits.hiredStaffIds = [];
+  }
+
+  if (state.teamMerits.hiredStaffIds.includes(staffId)) {
+    return;
+  }
+
+  state.teamMerits.hiredStaffIds.push(staffId);
+  saveTeamMerits();
+  renderApp();
+}
+
+// Finn neste badge-nivå i et program som ennå ikke er opptjent. Sjekker nivåer
+// i rekkefølge bronse → sølv → gull, og hopper over nivåer som krever et
+// foregående nivå som ikke er opptjent ennå. Returnerer level-objektet eller null.
+function findNextBadgeTargetForProgram(program) {
+  const levels = Array.isArray(program?.levels) ? program.levels : [];
+  const earned = new Set(
+    Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : []
+  );
+
+  const ordered = [...levels].sort(
+    (a, b) => (BADGE_LEVEL_ORDER[a?.level] || 0) - (BADGE_LEVEL_ORDER[b?.level] || 0)
+  );
+
+  for (const level of ordered) {
+    if (!level || !level.targetBadgeId || earned.has(level.targetBadgeId)) {
+      continue;
+    }
+
+    if (level.requiresPreviousLevel) {
+      const rank = BADGE_LEVEL_ORDER[level.level] || 0;
+      const previous = ordered.find((candidate) => (BADGE_LEVEL_ORDER[candidate?.level] || 0) === rank - 1);
+      if (previous && previous.targetBadgeId && !earned.has(previous.targetBadgeId)) {
+        continue;
+      }
+    }
+
+    return level;
+  }
+
+  return null;
+}
+
+// Velg et tilgjengelig treningsprogram: sett (eller behold) en aktiv
+// badge-progresjon mot programmets neste badge-nivå. Krever at programmet finnes
+// i getAvailableTrainingPrograms() med status "available".
+function selectTrainingProgram(programId) {
+  if (!state.teamMerits) {
+    console.warn("selectTrainingProgram: team merits mangler – kan ikke velge program.");
+    return;
+  }
+
+  const entry = getAvailableTrainingPrograms().find(
+    (item) => item.program?.id === programId && item.status === "available"
+  );
+
+  if (!entry) {
+    console.warn(`selectTrainingProgram: program er ikke tilgjengelig: ${programId}`);
+    return;
+  }
+
+  const program = entry.program;
+  const target = findNextBadgeTargetForProgram(program);
+
+  if (!target) {
+    console.warn(`selectTrainingProgram: ingen gjenstående badge-nivå i program: ${programId}`);
+    return;
+  }
+
+  if (!Array.isArray(state.teamMerits.badgeProgress)) {
+    state.teamMerits.badgeProgress = [];
+  }
+
+  const requiredWeeks =
+    Number.isInteger(target.weeksRequired) && target.weeksRequired >= 1 ? target.weeksRequired : 1;
+  const existing = state.teamMerits.badgeProgress.find(
+    (item) => item && item.targetBadgeId === target.targetBadgeId
+  );
+
+  if (existing) {
+    // Samme target finnes allerede: behold opptjent progress, oppdater metadata.
+    existing.badgeFamilyId = program.badgeFamilyId;
+    existing.requiredWeeks = requiredWeeks;
+    existing.activeProgramId = program.id;
+  } else {
+    state.teamMerits.badgeProgress.push({
+      badgeFamilyId: program.badgeFamilyId,
+      targetBadgeId: target.targetBadgeId,
+      progressWeeks: 0,
+      requiredWeeks,
+      activeProgramId: program.id
+    });
+  }
+
+  saveTeamMerits();
+  renderApp();
+}
+
+// Avanser treningsuke: øk uketeller, gi hver aktiv progresjon +1 uke, tildel
+// badge når requiredWeeks er nådd (uten duplikater), oppdater lagklasser fra
+// earned badges, lagre og rerender.
+function advanceHgTrainingWeek() {
+  if (!state.teamMerits) {
+    console.warn("advanceHgTrainingWeek: team merits mangler – kan ikke avansere uke.");
+    return;
+  }
+
+  const merits = state.teamMerits;
+
+  merits.activeTrainingWeek = (Number.isInteger(merits.activeTrainingWeek) ? merits.activeTrainingWeek : 0) + 1;
+
+  if (!Array.isArray(merits.earnedBadgeIds)) {
+    merits.earnedBadgeIds = [];
+  }
+
+  const remaining = [];
+
+  (Array.isArray(merits.badgeProgress) ? merits.badgeProgress : []).forEach((progress) => {
+    if (!progress || typeof progress !== "object") {
+      return;
+    }
+
+    const required =
+      Number.isInteger(progress.requiredWeeks) && progress.requiredWeeks >= 1 ? progress.requiredWeeks : 1;
+    const nextWeeks = (Number.isInteger(progress.progressWeeks) ? progress.progressWeeks : 0) + 1;
+
+    if (nextWeeks >= required) {
+      // Badge oppnådd: legg til (uten duplikat) og fjern progresjonen.
+      if (progress.targetBadgeId && !merits.earnedBadgeIds.includes(progress.targetBadgeId)) {
+        merits.earnedBadgeIds.push(progress.targetBadgeId);
+      }
+      return;
+    }
+
+    progress.progressWeeks = nextWeeks;
+    remaining.push(progress);
+  });
+
+  merits.badgeProgress = remaining;
+
+  // Lagklasser beregnes på nytt fra earned badges etter badge-endringene.
+  recomputeActiveClassifications();
+
+  saveTeamMerits();
+  renderApp();
 }
 
 // Enkel validering av unlock-/stab-/badge-data. Skriver advarsler med
@@ -599,6 +855,32 @@ function validateUnlockData() {
   hiredStaffIds.forEach((id) => {
     if (!staffIds.has(id)) {
       warnings.push(`hiredStaffId finnes ikke i staff-filen: ${id}.`);
+    }
+  });
+
+  const programIds = new Set(programs.map((program) => program && program.id).filter(Boolean));
+  const classificationIds = new Set(
+    (Array.isArray(state.teamClassifications?.classifications) ? state.teamClassifications.classifications : [])
+      .map((classification) => classification && classification.id)
+      .filter(Boolean)
+  );
+
+  const badgeProgress = Array.isArray(state.teamMerits?.badgeProgress) ? state.teamMerits.badgeProgress : [];
+  badgeProgress.forEach((entry) => {
+    if (entry?.activeProgramId && !programIds.has(entry.activeProgramId)) {
+      warnings.push(`badgeProgress peker på ukjent treningsprogram: ${entry.activeProgramId}.`);
+    }
+    if (entry?.targetBadgeId && !badgeIds.has(entry.targetBadgeId)) {
+      warnings.push(`badgeProgress peker på ukjent badge: ${entry.targetBadgeId}.`);
+    }
+  });
+
+  const activeClassifications = Array.isArray(state.teamMerits?.activeClassifications)
+    ? state.teamMerits.activeClassifications
+    : [];
+  activeClassifications.forEach((id) => {
+    if (!classificationIds.has(id)) {
+      warnings.push(`activeClassification finnes ikke i klassifiseringsfilen: ${id}.`);
     }
   });
 
@@ -2079,7 +2361,32 @@ function createStaffCard(member) {
     card.append(note);
   }
 
+  appendStaffAction(card, member);
+
   return card;
+}
+
+// Engasjer-knapp for ledig stab, eller "Engasjert"-status for ansatt stab.
+function appendStaffAction(card, member) {
+  const hiredIds = new Set(
+    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : []
+  );
+
+  if (hiredIds.has(member.id)) {
+    card.classList.add("is-hired");
+    const status = document.createElement("p");
+    status.className = "unlock-status is-available";
+    status.textContent = "Engasjert";
+    card.append(status);
+    return;
+  }
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "unlock-card-action";
+  button.textContent = "Engasjer";
+  button.addEventListener("click", () => hireStaff(member.id));
+  card.append(button);
 }
 
 // Tilgjengelig og engasjert stab.
@@ -2151,8 +2458,15 @@ function renderTrainingPrograms() {
     return;
   }
 
+  const activeProgramIds = new Set(
+    (Array.isArray(state.teamMerits?.badgeProgress) ? state.teamMerits.badgeProgress : [])
+      .map((progress) => progress && progress.activeProgramId)
+      .filter(Boolean)
+  );
+
   entries.forEach(({ program, status, reasons }) => {
     const card = createUnlockCard();
+    card.classList.add(status === "available" ? "is-available-program" : "is-locked-program");
     appendUnlockTitle(card, program.name || program.id);
     appendUnlockMeta(
       card,
@@ -2180,6 +2494,17 @@ function renderTrainingPrograms() {
       card.append(ul);
     }
 
+    // Tilgjengelige programmer kan velges; låste programmer viser kun status.
+    if (status === "available") {
+      const isActive = activeProgramIds.has(program.id);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "unlock-card-action";
+      button.textContent = isActive ? "Velg neste nivå" : "Velg program";
+      button.addEventListener("click", () => selectTrainingProgram(program.id));
+      card.append(button);
+    }
+
     list.append(card);
   });
 }
@@ -2201,9 +2526,70 @@ function renderEarnedBadges() {
 
   badges.forEach((badge) => {
     const pill = document.createElement("span");
-    pill.className = "badge-pill";
+    pill.className = "badge-pill is-earned";
     pill.textContent = `${badge.familyName || badge.familyId}: ${badge.name || badge.id}`;
     list.append(pill);
+  });
+}
+
+// Treningsuke-status og aktive badge-progresjoner i History Go-fanen.
+function renderHgTrainingWeek() {
+  if (elements.hgTrainingWeekStatus) {
+    const week = Number.isInteger(state.teamMerits?.activeTrainingWeek)
+      ? state.teamMerits.activeTrainingWeek
+      : 1;
+    elements.hgTrainingWeekStatus.textContent = `Treningsuke ${week}`;
+  }
+
+  renderBadgeProgress();
+}
+
+// Aktive treningsprogresjoner: programnavn, target badge-navn og uke-teller.
+function renderBadgeProgress() {
+  const list = elements.badgeProgressList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+
+  const progress = Array.isArray(state.teamMerits?.badgeProgress) ? state.teamMerits.badgeProgress : [];
+
+  if (!progress.length) {
+    renderUnlockEmpty(list, "Ingen aktive treningsprogresjoner. Velg et treningsprogram for å starte.");
+    return;
+  }
+
+  const catalog = getBadgeCatalog();
+  const programsById = new Map(
+    (Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [])
+      .filter((program) => program && program.id)
+      .map((program) => [program.id, program])
+  );
+
+  progress.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
+
+    const card = createUnlockCard();
+    card.classList.add("unlock-progress-card");
+
+    const program = programsById.get(entry.activeProgramId);
+    appendUnlockTitle(card, program?.name || entry.activeProgramId || "Treningsprogram");
+
+    const badge = catalog.get(entry.targetBadgeId);
+    appendUnlockMeta(card, `Mål-badge: ${badge ? badge.name || badge.id : entry.targetBadgeId || "ukjent"}`);
+
+    const done = Number.isInteger(entry.progressWeeks) ? entry.progressWeeks : 0;
+    const need = Number.isInteger(entry.requiredWeeks) && entry.requiredWeeks >= 1 ? entry.requiredWeeks : 1;
+
+    const line = document.createElement("p");
+    line.className = "unlock-progress-line";
+    line.textContent = `${done}/${need} uker`;
+    card.append(line);
+
+    list.append(card);
   });
 }
 
@@ -2250,6 +2636,7 @@ function renderApp() {
   renderStaffUnlocks();
   renderExpertiseUnlocks();
   renderTrainingPrograms();
+  renderHgTrainingWeek();
   renderEarnedBadges();
   renderTeamClassifications();
 }
@@ -2314,6 +2701,19 @@ function bindEvents() {
     elements.advanceTrainingWeek.addEventListener("click", () => {
       advanceTrainingWeek();
       renderApp();
+    });
+  }
+
+  // History Go-progresjon: avanser treningsuke og nullstill lagstate.
+  if (elements.advanceHgTrainingWeek) {
+    elements.advanceHgTrainingWeek.addEventListener("click", () => {
+      advanceHgTrainingWeek();
+    });
+  }
+
+  if (elements.resetHgTeamMerits) {
+    elements.resetHgTeamMerits.addEventListener("click", () => {
+      resetTeamMerits();
     });
   }
 
@@ -2450,12 +2850,19 @@ async function init() {
     state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
       ? teamClassificationsData
       : { classifications: [] };
-    state.teamMerits = teamMeritsData && typeof teamMeritsData === "object" && !Array.isArray(teamMeritsData)
+    // Seed fra example-filen brukes ved første lasting; deretter persisteres
+    // brukerens egne endringer i localStorage (hgfm.teamMerits.v1).
+    const seedMerits = teamMeritsData && typeof teamMeritsData === "object" && !Array.isArray(teamMeritsData)
       ? teamMeritsData
       : null;
+    state.teamMerits = loadTeamMerits(seedMerits);
 
     if (!state.teamMerits) {
       console.warn("History Go team merits mangler eller har feil format. Unlock-laget vises tomt.");
+    } else {
+      // Hold lagklasser synk med opptjente badges fra start (seed kan ha
+      // utdaterte activeClassifications).
+      recomputeActiveClassifications();
     }
 
     state.selectedFormationId = state.formations[0]?.id || null;

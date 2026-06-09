@@ -670,7 +670,8 @@ ul {
 /* Sort/hvit knapp som matcher resten av demoens stil. */
 .knowledge-card-action,
 .clear-knowledge-focus-button,
-.advance-training-week-button {
+.advance-training-week-button,
+.unlock-card-action {
   justify-self: start;
   margin-top: 4px;
   border: 2px solid var(--line);
@@ -687,14 +688,16 @@ ul {
 
 .knowledge-card-action:hover,
 .clear-knowledge-focus-button:hover,
-.advance-training-week-button:hover {
+.advance-training-week-button:hover,
+.unlock-card-action:hover {
   background: var(--text);
   color: #000000;
 }
 
 .knowledge-card-action:focus-visible,
 .clear-knowledge-focus-button:focus-visible,
-.advance-training-week-button:focus-visible {
+.advance-training-week-button:focus-visible,
+.unlock-card-action:focus-visible {
   outline: 3px solid var(--text);
   outline-offset: 2px;
 }
@@ -1157,6 +1160,57 @@ ul {
   font-style: italic;
   line-height: 1.4;
   padding: 6px 10px;
+}
+
+/* Engasjert stab og opptjent badge markeres med hvit fyllfarge (fullført). */
+.unlock-card.is-hired {
+  border-color: var(--text);
+}
+
+.badge-pill.is-earned {
+  background: var(--text);
+  color: #000000;
+  border-color: var(--text);
+}
+
+/* Treningsprogram-kort: tydelig skille mellom tilgjengelig og låst. */
+.unlock-card.is-available-program {
+  border-color: var(--good, var(--text));
+}
+
+.unlock-card.is-locked-program {
+  border-color: var(--line-soft);
+}
+
+/* Treningsuke-handlinger: knapperad. */
+.unlock-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.unlock-subhead {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* Aktiv treningsprogresjon: kort med tydelig uke-teller. */
+.unlock-progress-card {
+  border-color: var(--text);
+}
+
+.unlock-progress-line {
+  margin: 4px 0 0;
+  justify-self: start;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: #000000;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
 }
 
 .unlock-empty {
