@@ -1072,7 +1072,9 @@ function getTeamFit() {
     formation,
     tactic,
     players: state.players,
-    roles: state.roles
+    roles: state.roles,
+    earnedBadgeIds: state.teamMerits?.earnedBadgeIds || [],
+    trainingBadges: state.trainingBadges
   });
 }
 
