@@ -936,6 +936,17 @@ ul {
   padding: 8px 16px;
 }
 
+.club-week-feedback {
+  margin: 0;
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--text);
+  font-weight: 800;
+  line-height: 1.5;
+  padding: 12px 16px;
+}
+
 #advanceClubWeekPhase {
   border: 2px solid var(--line);
   border-radius: 10px;

@@ -182,6 +182,37 @@ export async function advanceClubWeekPhaseFromBrowser(state) {
   return advanceFallbackClubWeekPhase(state);
 }
 
+function applyFallbackClubWeekEffects(state, effects = {}) {
+  const next = createFallbackClubWeekState(state);
+
+  const clamp = (value) => {
+    if (!Number.isFinite(value)) {
+      return 50;
+    }
+
+    return Math.max(0, Math.min(100, Math.round(value)));
+  };
+
+  return {
+    ...next,
+    boardTrust: clamp(next.boardTrust + (effects.boardTrust ?? 0)),
+    playerMorale: clamp(next.playerMorale + (effects.playerMorale ?? 0)),
+    tacticalClarity: clamp(next.tacticalClarity + (effects.tacticalClarity ?? 0)),
+    trainingCulture: clamp(next.trainingCulture + (effects.trainingCulture ?? 0)),
+    mediaPressure: clamp(next.mediaPressure + (effects.mediaPressure ?? 0)),
+  };
+}
+
+export async function applyClubWeekEffectsFromBrowser(state, effects = {}) {
+  const engine = await loadManagerEngine();
+
+  if (engine?.applyClubWeekEffects) {
+    return engine.applyClubWeekEffects(state, effects);
+  }
+
+  return applyFallbackClubWeekEffects(state, effects);
+}
+
 export async function createClubWeekSummaryFromBrowser(state) {
   const engine = await loadManagerEngine();
 
