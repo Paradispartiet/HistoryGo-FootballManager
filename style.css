@@ -913,6 +913,8 @@ ul {
 
 .club-week-panel h2 {
   margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  text-transform: uppercase;
 }
 
 .club-week-phase-row {
