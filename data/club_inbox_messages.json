@@ -33,6 +33,238 @@
       "conditions": {}
     },
     {
+      "id": "assistant_training_week_start",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Treningsuke",
+      "title": "Vi må velge ett hovedfokus",
+      "body": "Denne uka bør vi ikke prøve å rette alt samtidig. Velg ett tydelig treningsfokus, fullfør økta, og la spillerne møte det samme prinsippet flere ganger med samme språk.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_no_training_focus_warning",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Treningsfokus",
+      "title": "Treningen trenger en rød tråd",
+      "body": "Når treningsuka mangler et klart fokus, blir øktene fort løsrevne. Spillerne må vite hva vi trener på, hvorfor det betyr noe, og hvordan det skal se ut når kampen starter.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 48
+      }
+    },
+    {
+      "id": "assistant_low_training_culture_practical",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Treningskultur",
+      "title": "Vi må heve standarden på feltet",
+      "body": "Treningskulturen er for lav. Det handler ikke bare om å trene hardere, men om presisjon, repetisjon og at hver øvelse har en tydelig kobling til måten vi vil spille på.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "assistant_good_training_culture_momentum",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Treningskultur",
+      "title": "Treningsarbeidet begynner å feste seg",
+      "body": "Det er mer sammenheng i treningsarbeidet nå. Når øktene er konkrete, gjentas med samme krav og kobles til kampbildet, begynner spillerne å kjenne igjen laget i seg selv.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "assistant_low_tactical_clarity_roles",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Rollebruk",
+      "title": "Rollene må bli enklere å forstå",
+      "body": "Taktisk klarhet er lav. Vi bør gå gjennom én lagdel om gangen og sjekke om spillerne faktisk forstår hvor de skal være, hva de skal true, og hvem de skal støtte.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "assistant_training_focus_after_analysis",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Analyse",
+      "title": "Analysen må bli til en økt",
+      "body": "Når analysen peker på en svakhet, må vi oversette den til treningsfeltet. Én svakhet, én økt, ett tydelig prinsipp spillerne kan kjenne igjen når de møter press.",
+      "phases": [
+        "analysis"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_press_structure_training",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Press",
+      "title": "Presset må henge sammen",
+      "body": "Hvis førsteforsvarer går alene, blir laget strukket. Vi må trene på når presset starter, hvem som sikrer bak, og hvor resten av laget skal stå når ballen spilles forbi første pressledd.",
+      "phases": [
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_rest_defence_training",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Balanse",
+      "title": "Vi må sikre oss mens vi angriper",
+      "body": "Laget kan ikke bare se på hva vi gjør med ball. Restforsvaret må være klart før vi mister den, ellers blir hvert balltap en overgang imot.",
+      "phases": [
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_role_misuse_warning",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Rollebruk",
+      "title": "Gode spillere kan fortsatt brukes feil",
+      "body": "Vi har klassespillere, men det er ikke nok. En dribler som alltid mottar feilvendt, en bakromsspiss uten dybdeballer, eller en playmaker uten støtte mister fort det som gjør ham god.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_match_plan_training_link",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Kampplan",
+      "title": "Kampplanen må komme fra treningsuka",
+      "body": "Før kamp bør planen ligne på noe vi faktisk har trent på. Spillerne stoler mer på en enkel idé de har repetert enn en perfekt idé de bare har hørt om.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_match_day_simple_reminder",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Kampdag",
+      "title": "Gi spillerne korte beskjeder",
+      "body": "På kampdag bør vi holde beskjedene korte. Én ting med ball, én ting uten ball, og én ting vi må huske når kampen blir stressende.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_club_work_training_structure",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Klubbdrift",
+      "title": "Treningshverdagen trenger struktur",
+      "body": "Klubbdrift påvirker treningsfeltet mer enn man tror. Gode rutiner, riktig stab og tydelige øktplaner gjør det lettere å bygge kultur uke etter uke.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_training_detail_repetition",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Repetisjon",
+      "title": "Detaljene må gjentas",
+      "body": "Spillerne lærer ikke prinsippene fordi vi sier dem én gang. De lærer når samme detalj dukker opp i oppvarming, øvelse, spilldel og kampplan.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "assistant_high_media_pressure_training_calm",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Ro",
+      "title": "Medietrykk må ikke styre treningen",
+      "body": "Medietrykket øker, men treningsfeltet må være rolig. Vi kan ikke la overskriftene bestemme økta. Spillerne trenger klare prinsipper, ikke stress.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "assistant_morale_training_response",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "from": "Assistenttrener",
+      "tag": "Moral",
+      "title": "Moral bygges gjennom mestring",
+      "body": "Spillermoralen løftes ikke bare av prat. Den løftes når spillerne forstår oppgaven, lykkes oftere på feltet og merker at rollen deres gir mening.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
       "id": "board_analysis_phase",
       "threadId": "board_direction_and_trust",
       "senderId": "board",
