@@ -1,0 +1,20 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "sponsor",
+  "messages": [
+    {
+      "id": "sponsor_visibility",
+      "threadId": "sponsor_visibility",
+      "senderId": "sponsor",
+      "from": "Sponsor",
+      "tag": "Marked",
+      "title": "Synlighet gir verdi",
+      "body": "Et tydelig lag og en tydelig historie gjør klubben mer attraktiv. Sportslig identitet og kommersiell profil bør etter hvert henge sammen.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    }
+  ]
+}

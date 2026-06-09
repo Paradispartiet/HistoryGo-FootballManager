@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "goalkeeper_coach",
+  "messages": [
+    {
+      "id": "goalkeeper_coach_depth",
+      "threadId": "goalkeeper_coach_depth",
+      "senderId": "goalkeeper_coach",
+      "from": "Keepertrener",
+      "tag": "Keeper",
+      "title": "Keeperrollen må følge forsvarslinjen",
+      "body": "Hvis laget står høyt, må keeperen være klar til å kontrollere bakrommet. Keeperrollen bør vurderes sammen med forsvarshøyden.",
+      "phases": [
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    }
+  ]
+}

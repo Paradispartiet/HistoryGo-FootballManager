@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "card_collection_system",
+  "messages": [
+    {
+      "id": "card_collection_unlock",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Samling",
+      "title": "Samlinger blir en del av klubben",
+      "body": "Spillere, trenere, assistenter, fysio og keepertrenere kan etter hvert samles og knyttes til klubber du har oppdaget.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    }
+  ]
+}

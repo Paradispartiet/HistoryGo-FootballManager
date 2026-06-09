@@ -1,0 +1,25 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "captain",
+  "messages": [
+    {
+      "id": "captain_clarity",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Garderobe",
+      "title": "Spillerne trenger tydelige beskjeder",
+      "body": "Garderoben responderer best når planen er enkel å forstå. Færre prinsipper, tydeligere roller og korte beskjeder hjelper laget.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    }
+  ]
+}

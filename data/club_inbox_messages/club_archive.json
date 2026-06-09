@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "club_archive",
+  "messages": [
+    {
+      "id": "club_archive_history",
+      "threadId": "club_archive_identity",
+      "senderId": "club_archive",
+      "from": "Klubbarkivet",
+      "tag": "Historie",
+      "title": "Klubbhistorien kan brukes",
+      "body": "Gamle spillere, trenere og kamper kan gi klubben identitet. Historien bør ikke bare være pynt, men en del av hvordan laget bygges.",
+      "phases": [
+        "club_work",
+        "analysis"
+      ],
+      "conditions": {}
+    }
+  ]
+}

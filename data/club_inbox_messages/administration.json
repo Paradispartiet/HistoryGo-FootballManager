@@ -1,0 +1,20 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "administration",
+  "messages": [
+    {
+      "id": "club_work_phase_notice",
+      "threadId": "administration_club_work",
+      "senderId": "administration",
+      "from": "Administrasjonen",
+      "tag": "Klubbdrift",
+      "title": "Klubbdrift krever prioritering",
+      "body": "Klubbdriften handler ikke bare om laget på banen. Fasiliteter, økonomi, administrasjon og markedsarbeid må etter hvert trekkes inn i managerrollen.",
+      "phases": [
+        "club_work"
+      ],
+      "conditions": {}
+    }
+  ]
+}

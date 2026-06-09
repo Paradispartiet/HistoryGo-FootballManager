@@ -18,6 +18,7 @@ const DATA_PATHS = {
   formations: "data/football_formations.json",
   knowledgePrinciples: "data/football_knowledge_principles.json",
   clubInboxMessages: "data/club_inbox_messages.json",
+  clubInboxMessageManifest: "data/club_inbox_messages/manifest.json",
   clubInboxSenders: "data/club_inbox_senders.json",
   clubInboxThreads: "data/club_inbox_threads.json",
   // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
@@ -194,6 +195,105 @@ async function loadJson(path) {
   }
 
   return response.json();
+}
+
+// Slår sammen innboks-meldinger fra én fil per avsender (manifest-basert) til
+// én samlet array. Faller tilbake til den gamle samlefilen og deretter til
+// hardkodede fallback-meldinger. Kaster aldri videre til init().
+async function loadClubInboxMessages() {
+  // 1) Primærkilde: manifest + én avsenderfil per avsender.
+  try {
+    const manifest = await loadJson(DATA_PATHS.clubInboxMessageManifest);
+
+    if (Array.isArray(manifest?.files)) {
+      const results = await Promise.allSettled(
+        manifest.files.map((filePath) => loadJson(filePath))
+      );
+
+      const merged = [];
+      results.forEach((result, index) => {
+        const filePath = manifest.files[index];
+
+        if (result.status !== "fulfilled") {
+          console.warn(`Innboks-avsenderfil kunne ikke lastes: ${filePath}`);
+          return;
+        }
+
+        const fileData = result.value;
+        if (!Array.isArray(fileData?.messages)) {
+          console.warn(`Innboks-avsenderfil mangler gyldig messages-array: ${filePath}`);
+          return;
+        }
+
+        fileData.messages.forEach((message) => {
+          if (
+            typeof fileData.senderId === "string" &&
+            message &&
+            typeof message.senderId === "string" &&
+            message.senderId !== fileData.senderId
+          ) {
+            console.warn(
+              `Innboks-melding ${message.id ?? "(ukjent id)"} har senderId "${message.senderId}" men ligger i ${filePath} (forventet "${fileData.senderId}").`
+            );
+          }
+          merged.push(message);
+        });
+      });
+
+      const validated = validateClubInboxMessages(merged);
+      if (validated.length > 0) {
+        return validated;
+      }
+    } else {
+      console.warn("Innboks-manifest mangler eller har feil format. Prøver legacy samlefil.");
+    }
+  } catch (error) {
+    console.warn("Innboks-manifest mangler eller har feil format. Prøver legacy samlefil.");
+  }
+
+  // 2) Legacy fallback: den gamle samlefilen.
+  try {
+    const legacyData = await loadJson(DATA_PATHS.clubInboxMessages);
+    if (Array.isArray(legacyData?.messages)) {
+      return validateClubInboxMessages(legacyData.messages);
+    }
+  } catch (error) {
+    // Faller gjennom til hardkodede fallback-meldinger nedenfor.
+  }
+
+  // 3) Siste fallback: hardkodede meldinger.
+  console.warn("Innboks-data mangler eller har feil format. Bruker fallback-meldinger.");
+  return getFallbackInboxMessages();
+}
+
+// Intern validering av en samlet messages-array. Filtrerer bort objekter uten
+// string-id og varsler om dubletter eller manglende felt, men stopper aldri appen.
+function validateClubInboxMessages(messages) {
+  const seenIds = new Set();
+  const valid = [];
+
+  messages.forEach((message) => {
+    if (!message || typeof message.id !== "string") {
+      console.warn("Innboks-melding uten gyldig string-id ble hoppet over.");
+      return;
+    }
+
+    if (seenIds.has(message.id)) {
+      console.warn(`Innboks-melding med duplikat id oppdaget: ${message.id}`);
+    }
+    seenIds.add(message.id);
+
+    if (typeof message.senderId !== "string") {
+      console.warn(`Innboks-melding ${message.id} mangler senderId.`);
+    }
+    if (typeof message.threadId !== "string") {
+      console.warn(`Innboks-melding ${message.id} mangler threadId.`);
+    }
+
+    valid.push(message);
+  });
+
+  return valid;
 }
 
 function setOptions(select, items, getValue, getLabel, emptyLabel = null, shouldDisable = null) {
@@ -3414,7 +3514,6 @@ async function init() {
       tacticsData,
       formationsData,
       knowledgeData,
-      clubInboxMessagesData,
       clubInboxSendersData,
       clubInboxThreadsData,
       unlocksData,
@@ -3431,8 +3530,6 @@ async function init() {
       loadJson(DATA_PATHS.formations),
       // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
       loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
-      // Innboksdata er valgfri: hvis filen mangler, brukes fallback-meldinger.
-      loadJson(DATA_PATHS.clubInboxMessages).catch(() => null),
       // Avsenderkatalogen er valgfri: hvis filen mangler, brukes fallback-avsendere.
       loadJson(DATA_PATHS.clubInboxSenders).catch(() => null),
       // Trådkatalogen er valgfri: hvis filen mangler, brukes fallback-tråder.
@@ -3460,12 +3557,9 @@ async function init() {
       console.warn("Fotballkunnskap-data mangler eller har feil format. Fortsetter uten kunnskapsanbefalinger.");
     }
 
-    if (Array.isArray(clubInboxMessagesData?.messages)) {
-      state.clubInboxMessages = clubInboxMessagesData.messages;
-    } else {
-      state.clubInboxMessages = getFallbackInboxMessages();
-      console.warn("Innboks-data mangler eller har feil format. Bruker fallback-meldinger.");
-    }
+    // Innboks-meldinger lastes manifest-basert (én fil per avsender) med
+    // fallback til legacy samlefil og deretter hardkodede meldinger.
+    state.clubInboxMessages = await loadClubInboxMessages();
 
     if (Array.isArray(clubInboxSendersData?.senders)) {
       state.clubInboxSenders = clubInboxSendersData.senders;

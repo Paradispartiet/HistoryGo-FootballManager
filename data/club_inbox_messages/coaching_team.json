@@ -1,0 +1,56 @@
+{
+  "schema": "historygo-football-manager.club-inbox-messages-by-sender.v1",
+  "version": 1,
+  "senderId": "coaching_team",
+  "messages": [
+    {
+      "id": "assistant_training_focus",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Trening",
+      "title": "Ukens treningsvalg",
+      "body": "Når laget har en tydelig svakhet, bør treningsuka brukes til ett konkret prinsipp. Velg en kunnskapsøkt og fullfør den før klubben går videre.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "low_tactical_clarity_warning",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Taktisk klarhet",
+      "title": "Laget trenger tydeligere prinsipper",
+      "body": "Taktisk klarhet er lav. Spillerne trenger færre ideer, tydeligere roller og en treningsuke som peker mot samme spillmodell.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "low_training_culture_warning",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Treningskultur",
+      "title": "Treningskulturen må løftes",
+      "body": "Treningskulturen faller når økter velges uten å fullføres. Laget trenger en tydeligere ukeplan og bedre oppfølging av treningsfokuset.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    }
+  ]
+}
