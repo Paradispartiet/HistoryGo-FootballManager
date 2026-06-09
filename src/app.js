@@ -1,5 +1,6 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
+import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
 import {
   createLegacyManagerAppStateFromBrowserState,
   getDashboardViewModelFromLegacyManagerState,
@@ -132,6 +133,7 @@ const elements = {
   selectedFitStatus: document.querySelector("#selectedFitStatus"),
   selectedFitExplanation: document.querySelector("#selectedFitExplanation"),
   reportSummary: document.querySelector("#reportSummary"),
+  badgeEffectsSummary: document.querySelector("#badgeEffectsSummary"),
   strengthsList: document.querySelector("#strengthsList"),
   issuesList: document.querySelector("#issuesList"),
   widthScore: document.querySelector("#widthScore"),
@@ -1988,6 +1990,182 @@ function renderReport(teamFit) {
   renderList(elements.issuesList, teamFit.report.issues);
 }
 
+// ----------------------------------------------------------------------------
+// Badge-effekter i laganalysen (kun visning)
+// PR #30 koblet opptjente treningsbadges inn i lagfitmotoren, og
+// calculateTeamFit returnerer nå badgeEffects ved siden av metrics/baseMetrics.
+// Her viser vi disse effektene i UI slik at brukeren ser hvilke badges som
+// nudger lagets metrics. Ren render – ingen endring i badge-effektmotor,
+// lagfitmotor, unlock-system eller progresjon.
+// ----------------------------------------------------------------------------
+
+// Norske visningsnavn for lagmetrikkene som badge-effekter kan påvirke.
+const BADGE_EFFECT_METRIC_LABELS = {
+  individualFitAverage: "Individuell fit",
+  roleFitAverage: "Rollefit",
+  tacticFitAverage: "Taktisk fit",
+  balanceScore: "Balanse",
+  widthScore: "Bredde",
+  depthScore: "Dybde",
+  buildUpScore: "Oppbygging",
+  pressScore: "Press",
+  restDefenseScore: "Restforsvar"
+};
+
+// Norske nivåetiketter for badge-nivåene.
+const BADGE_EFFECT_LEVEL_LABELS = { bronze: "Bronse", silver: "Sølv", gold: "Gull" };
+
+function formatBadgeEffectMetricLabel(metric) {
+  return BADGE_EFFECT_METRIC_LABELS[metric] || metric;
+}
+
+function formatBadgeEffectMetrics(metrics) {
+  return metrics
+    .map((entry) =>
+      Number.isFinite(entry.amount)
+        ? `${formatBadgeEffectMetricLabel(entry.metric)} (+${entry.amount})`
+        : formatBadgeEffectMetricLabel(entry.metric)
+    )
+    .join(", ");
+}
+
+// Bygg badge-sentrerte visningseffekter fra opptjente badges. Tar høyeste
+// opptjente nivå per familie (samme prioritering som lagfitmotoren bruker) og
+// regner ut familiens metrikkeffekter via den eksporterte motorfunksjonen, slik
+// at visningen alltid speiler det motoren faktisk legger oppå metrikkene.
+function buildBadgeEffectDisplayItems() {
+  const highestByFamily = new Map();
+
+  getEarnedBadges().forEach((badge) => {
+    if (!badge || !badge.familyId) {
+      return;
+    }
+
+    const rank = BADGE_LEVEL_ORDER[badge.level] || 0;
+    const current = highestByFamily.get(badge.familyId);
+
+    if (!current || rank > (BADGE_LEVEL_ORDER[current.level] || 0)) {
+      highestByFamily.set(badge.familyId, badge);
+    }
+  });
+
+  const items = [];
+
+  highestByFamily.forEach((badge) => {
+    const familyEffects = calculateBadgeMetricEffects({
+      familyLevels: { [badge.familyId]: badge.level }
+    });
+
+    const metrics = Object.entries(familyEffects)
+      .filter(([, amount]) => Number(amount) > 0)
+      .map(([metric, amount]) => ({ metric, amount }));
+
+    if (metrics.length === 0) {
+      return;
+    }
+
+    items.push({
+      name: badge.familyName || badge.familyId,
+      level: BADGE_EFFECT_LEVEL_LABELS[badge.level] || badge.level || null,
+      summary: badge.description || null,
+      metrics
+    });
+  });
+
+  return items;
+}
+
+// Vis hvilke opptjente badges som påvirker laget, og hvilke metrics de nudger.
+// Uten aktive effekter vises en tydelig tom-tekst. Bruker textContent (ikke
+// innerHTML) for alt brukernært innhold.
+function renderBadgeEffects(teamFit) {
+  const panel = elements.badgeEffectsSummary;
+  if (!panel) {
+    return;
+  }
+
+  panel.innerHTML = "";
+
+  const badgeEffects = teamFit?.badgeEffects;
+  const hasActiveEffects =
+    badgeEffects &&
+    typeof badgeEffects === "object" &&
+    Object.values(badgeEffects).some((amount) => Number(amount) > 0);
+
+  if (!hasActiveEffects) {
+    const empty = document.createElement("p");
+    empty.className = "badge-effect-empty";
+    empty.textContent = "Ingen badge-effekter aktive ennå.";
+    panel.append(empty);
+    return;
+  }
+
+  // Eventuell grunnscore før badges og samlet bonus til lagscore vises bare hvis
+  // lagfitmotoren faktisk leverer feltene.
+  if (Number.isFinite(teamFit?.baseTeamScore)) {
+    const base = document.createElement("p");
+    base.className = "badge-effect-meta";
+    base.textContent = `Grunnscore før badges: ${teamFit.baseTeamScore}`;
+    panel.append(base);
+  }
+
+  if (Number.isFinite(teamFit?.teamScoreBonus) && teamFit.teamScoreBonus !== 0) {
+    const bonus = document.createElement("p");
+    bonus.className = "badge-effect-meta";
+    bonus.textContent = `Badge-bonus til lagscore: +${teamFit.teamScoreBonus}`;
+    panel.append(bonus);
+  }
+
+  // Foretrekk en badge-sentrert visning (navn + nivå). Faller tilbake til en
+  // metrikk-sentrert visning hvis vi ikke finner berikede badges, slik at
+  // panelet aldri står tomt når effekter er aktive.
+  let effects = buildBadgeEffectDisplayItems();
+
+  if (effects.length === 0) {
+    effects = Object.entries(badgeEffects)
+      .filter(([, amount]) => Number(amount) > 0)
+      .map(([metric, amount]) => ({
+        name: formatBadgeEffectMetricLabel(metric),
+        level: null,
+        summary: null,
+        metrics: [{ metric, amount: Number(amount) }]
+      }));
+  }
+
+  effects.slice(0, 6).forEach((effect) => {
+    const card = document.createElement("article");
+    card.className = "badge-effect-card";
+
+    const title = document.createElement("p");
+    title.className = "badge-effect-title";
+    title.textContent = effect.name;
+    card.append(title);
+
+    if (effect.level) {
+      const meta = document.createElement("p");
+      meta.className = "badge-effect-meta";
+      meta.textContent = `Nivå: ${effect.level}`;
+      card.append(meta);
+    }
+
+    if (effect.metrics.length > 0) {
+      const metricsEl = document.createElement("p");
+      metricsEl.className = "badge-effect-metrics";
+      metricsEl.textContent = `Påvirker: ${formatBadgeEffectMetrics(effect.metrics)}`;
+      card.append(metricsEl);
+    }
+
+    if (effect.summary) {
+      const summaryEl = document.createElement("p");
+      summaryEl.className = "badge-effect-meta";
+      summaryEl.textContent = effect.summary;
+      card.append(summaryEl);
+    }
+
+    panel.append(card);
+  });
+}
+
 // Finn aktiv kunnskapsanbefaling i gjeldende viewModel, eller null hvis ingen er valgt
 // eller det valgte kortet ikke finnes lenger. Kun UI/state, ingen engine-effekt.
 function getActiveKnowledgeRecommendation(viewModel) {
@@ -3068,6 +3246,7 @@ function renderApp() {
   renderLineup(teamFit);
   renderSlotEditor(teamFit);
   renderReport(teamFit);
+  renderBadgeEffects(teamFit);
 
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
