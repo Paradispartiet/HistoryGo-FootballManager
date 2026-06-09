@@ -13,6 +13,9 @@ import {
 
 const DATA_PATHS = {
   players: "data/football_players.json",
+  // Spillerarketyper (rolleprofiler/underliggende logikk) som ekte spillere
+  // kobler seg til via archetypeIds. Brukes ikke til å fylle spillerselect.
+  playerArchetypes: "data/football_player_archetypes.json",
   roles: "data/football_roles.json",
   tactics: "data/football_tactics.json",
   formations: "data/football_formations.json",
@@ -64,6 +67,10 @@ const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
 
 const state = {
   players: [],
+  // Spillerarketyper fra football_player_archetypes.json. Underliggende
+  // rolleprofiler som ekte spillere kobler seg til via archetypeIds. Brukes
+  // ikke til å fylle spillerselect og har ingen direkte fit-/kampmotor-effekt.
+  playerArchetypes: [],
   roles: [],
   tactics: [],
   formations: [],
@@ -315,10 +322,20 @@ function setOptions(select, items, getValue, getLabel, emptyLabel = null, should
   });
 }
 
-function validateFootballData({ players, roles, tactics, formations }) {
+function validateFootballData({ players, playerArchetypes = [], roles, tactics, formations }) {
   const warnings = [];
   const roleIds = new Set(roles.map((role) => role.id));
   const validPositions = new Set(FOOTBALL_POSITIONS);
+
+  // Arketypeobjekter må ha id; bygg samtidig oppslag for spillernes archetypeIds.
+  const archetypeIds = new Set();
+  playerArchetypes.forEach((archetype) => {
+    if (!archetype || !archetype.id) {
+      warnings.push("En spillerarketype mangler id.");
+      return;
+    }
+    archetypeIds.add(archetype.id);
+  });
 
   players.forEach((player) => {
     if (!player.id || !player.name) {
@@ -332,6 +349,27 @@ function validateFootballData({ players, roles, tactics, formations }) {
     if (!Array.isArray(player.naturalPositions) || player.naturalPositions.length === 0) {
       warnings.push(`${player.name || player.id} mangler naturalPositions.`);
     }
+
+    if (!Array.isArray(player.strengths) || player.strengths.length === 0) {
+      warnings.push(`${player.name || player.id} mangler strengths.`);
+    }
+
+    if (!Array.isArray(player.needs) || player.needs.length === 0) {
+      warnings.push(`${player.name || player.id} mangler needs.`);
+    }
+
+    if (!Array.isArray(player.likesTactics) || player.likesTactics.length === 0) {
+      warnings.push(`${player.name || player.id} mangler likesTactics.`);
+    }
+
+    // Hver archetypeId må peke på en arketype i football_player_archetypes.json.
+    player.archetypeIds?.forEach((archetypeId) => {
+      if (!archetypeIds.has(archetypeId)) {
+        const message = `${player.name || player.id} peker på ukjent arketype: ${archetypeId}.`;
+        warnings.push(message);
+        console.warn(`Spillerarketype-kobling mangler: ${message}`);
+      }
+    });
 
     player.naturalPositions?.forEach((position) => {
       if (!validPositions.has(position)) {
@@ -3510,6 +3548,7 @@ async function init() {
   try {
     const [
       playersData,
+      playerArchetypesData,
       rolesData,
       tacticsData,
       formationsData,
@@ -3525,6 +3564,9 @@ async function init() {
       teamMeritsData
     ] = await Promise.all([
       loadJson(DATA_PATHS.players),
+      // Spillerarketyper er valgfrie for kjøring: hvis filen mangler, fortsetter
+      // appen med tom arketypeliste (kun validering varsler om brutte koblinger).
+      loadJson(DATA_PATHS.playerArchetypes).catch(() => null),
       loadJson(DATA_PATHS.roles),
       loadJson(DATA_PATHS.tactics),
       loadJson(DATA_PATHS.formations),
@@ -3545,7 +3587,8 @@ async function init() {
       loadJson(DATA_PATHS.teamMerits).catch(() => null)
     ]);
 
-    state.players = playersData.players;
+    state.players = playersData.players || [];
+    state.playerArchetypes = playerArchetypesData?.archetypes || [];
     state.roles = rolesData.roles;
     state.tactics = tacticsData.tactics;
     state.formations = formationsData.formations;
