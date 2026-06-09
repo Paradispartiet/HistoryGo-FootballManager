@@ -51,6 +51,210 @@
         "operator": "lte",
         "value": 45
       }
+    },
+    {
+      "id": "coaching_team_model_before_details",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Spillmodell",
+      "title": "Modellen må komme før detaljene",
+      "body": "Før vi justerer enkeltroller, må laget vite hva det prøver å være. Presshøyde, avstander, gjenvinning og angrepsrytme må trekke i samme retning.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_high_tactical_clarity_build",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Taktisk klarhet",
+      "title": "Klarheten gir oss noe å bygge videre på",
+      "body": "Når spillerne forstår hovedprinsippene, kan vi begynne å legge på detaljer. Først da gir det mening å finjustere roller, bevegelser og motstandertilpasning.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "coaching_team_balance_between_lines",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Balanse",
+      "title": "Avstandene mellom lagdelene må ned",
+      "body": "Når laget blir langt, taper vi både press og støtte. Vi må trene på at forsvar, midtbane og angrep flytter seg som én kropp, ikke tre separate lag.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_press_trigger_training",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Press",
+      "title": "Presset trenger tydelige utløsere",
+      "body": "Spillerne må vite hva som starter presset: dårlig touch, feilvendt mottak, pasning ut mot linja eller støttepasning. Uten utløsere blir presset bare løping.",
+      "phases": [
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_rest_defence_principle",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Restforsvar",
+      "title": "Vi må angripe med sikring",
+      "body": "Et godt angrep forbereder også neste forsvarssituasjon. Hvis vi sender for mange foran ball uten kontroll bak, blir hvert balltap en kamp i ubalanse.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_role_fit_warning",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Rollefit",
+      "title": "Rollefit må tas på alvor",
+      "body": "Klassespillere kan forsvinne fra kampen hvis rollen ikke passer. Vi må se på hva spilleren naturlig søker: rom, ball, duell, løp, støtte eller kontroll.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_low_morale_simplify",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Moral",
+      "title": "Lav moral krever enklere oppgaver",
+      "body": "Når moralen er lav, bør vi ikke fylle spillerne med flere beskjeder. Vi må gjøre oppgaven tydeligere, slik at de får flere situasjoner de kan mestre.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "coaching_team_high_training_culture_next_layer",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Treningskultur",
+      "title": "Nå kan vi legge på neste lag",
+      "body": "Når treningskulturen er god, tåler laget mer presisjon. Da kan vi gå fra hovedprinsipp til små detaljer: kroppsvinkel, første touch, timing og avstand.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "coaching_team_training_week_priority",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Ukeplan",
+      "title": "Treningsuka må ha én prioritet",
+      "body": "En god ukeplan handler ikke om å rekke alt. Den handler om å velge riktig problem, repetere det nok og la kampplanen vokse naturlig ut av øktene.",
+      "phases": [
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_match_preparation_alignment",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Kampforberedelse",
+      "title": "Kampplanen må stemme med laget vi har",
+      "body": "Før kamp må vi passe oss for å lage en plan som ser god ut på tavla, men dårlig ut i spillergruppen. Planen må bruke styrkene våre, ikke bare dekke frykten vår.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_match_day_adjustments",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Kampdag",
+      "title": "Justeringer må være små nok til å utføres",
+      "body": "På kampdag kan vi ikke endre hele laget fra sidelinjen. De beste justeringene er ofte små: fem meter høyere, én mann nærmere, ett enklere valg etter gjenvinning.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "coaching_team_media_pressure_keep_working",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Ro",
+      "title": "Vi må ikke la støyen styre øktene",
+      "body": "Når medietrykket er høyt, er det lett å endre for mye. Trenerteamet bør holde fast ved arbeidet som faktisk utvikler laget, ikke økta som høres best ut utenfra.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "coaching_team_identity_in_repetition",
+      "threadId": "coaching_training_focus",
+      "senderId": "coaching_team",
+      "from": "Trenerteam",
+      "tag": "Identitet",
+      "title": "Identitet må kunne trenes",
+      "body": "Hvis identiteten bare finnes i ord, hjelper den lite. Den må være synlig i øvelsene: hvordan vi presser, støtter, sikrer, vender spill og reagerer etter balltap.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
