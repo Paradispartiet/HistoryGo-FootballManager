@@ -20,6 +20,233 @@
         "operator": "lte",
         "value": 50
       }
+    },
+    {
+      "id": "captain_single_message_needed",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Beskjeder",
+      "title": "Garderoben trenger én hovedbeskjed",
+      "body": "Spillerne prøver å gjøre det du ber om, men akkurat nå kan det høres ut som tre planer samtidig. Gi oss én retning vi kan bære med oss ut på feltet.",
+      "phases": [
+        "analysis",
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "captain_roles_need_meaning",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Rolletrygghet",
+      "title": "Rollene må gi mening",
+      "body": "Flere spillere gjør jobben sin, men de må forstå hvorfor rollen er viktig. Når rollen gir mening, blir innsatsen roligere og valgene tydeligere.",
+      "phases": [
+        "analysis",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "captain_low_morale_warning",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Moral",
+      "title": "Garderoben trenger noe å tro på",
+      "body": "Moral handler ikke bare om humør. Spillerne trenger å kjenne at arbeidet peker et sted, og at innsatsen deres faktisk betyr noe for laget.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "captain_morale_from_mastery",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Mestring",
+      "title": "Spillerne løftes av å mestre planen",
+      "body": "Når spillerne kjenner igjen situasjonene fra trening, blir laget roligere. Det er den typen mestring som bygger moral, ikke bare store ord før kamp.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "captain_media_pressure_group",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Press",
+      "title": "Trykket utenfra merkes i gruppa",
+      "body": "Det merkes når presset utenfra øker. Da trenger vi ikke flere forklaringer, men færre og klarere beskjeder som spillerne kan holde fast i.",
+      "phases": [
+        "match_preparation",
+        "match_day"
+      ],
+      "conditions": {
+        "metric": "mediaPressure",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "captain_training_culture_seen_by_players",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Treningskultur",
+      "title": "Spillerne merker standarden på feltet",
+      "body": "Treningskultur handler også om hvordan økten kjennes for spillerne. Når kravene er tydelige og øvelsene henger sammen, blir det lettere å ta ansvar selv.",
+      "phases": [
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "captain_low_training_culture_concern",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Treningskultur",
+      "title": "Øktene må kjennes viktige",
+      "body": "Når treningskulturen faller, merker spillerne det raskt. Da blir øvelsene noe vi gjennomfører, ikke noe vi bygger laget på.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "captain_tactical_clarity_needed",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Tydelighet",
+      "title": "Planen må tåle stress",
+      "body": "Når kampen blir rotete, faller spillerne tilbake på det de virkelig forstår. Hvis planen ikke er tydelig nok, blir vi elleve spillere som løser ting hver for oss.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "captain_too_many_changes",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Stabilitet",
+      "title": "For mange endringer skaper uro",
+      "body": "Spillerne tåler krav, men vi trenger også noe fast å holde i. Hvis alt endres hele tiden, begynner folk å spille for å unngå feil i stedet for å ta riktige valg.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "captain_match_preparation_confidence",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Kampforberedelse",
+      "title": "Spillerne må kjenne igjen kampplanen",
+      "body": "Før kamp trenger spillerne å kjenne igjen planen fra treningsuka. Hvis beskjedene ligner på noe vi har gjort før, går vi inn i kampen med mer ro.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "captain_match_day_focus",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Kampdag",
+      "title": "Hold oss samlet når kampen åpner seg",
+      "body": "På kampdag kommer perioder der planen blir testet. Da trenger vi én felles beskjed som holder laget samlet, særlig etter balltap og etter motgang.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "captain_after_good_training_week",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Flyt",
+      "title": "Treningsuka har gitt gruppa mer ro",
+      "body": "Det merkes når uka har hatt en tydelig rytme. Spillerne snakker mer om løsninger enn om usikkerhet, og det er ofte et tegn på at arbeidet begynner å feste seg.",
+      "phases": [
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "captain_identity_from_repetition",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Identitet",
+      "title": "Identitet kommer av gjentakelse",
+      "body": "Laget får ikke identitet av en setning på tavla. Det kommer når vi gjør de samme tingene ofte nok til at spillerne kjenner igjen hverandre i bevegelsene.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "captain_trust_between_manager_and_group",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "from": "Kapteinen",
+      "tag": "Tillit",
+      "title": "Tillit bygges når beskjeden holder",
+      "body": "Garderoben følger en manager som er tydelig og står i planen lenge nok til at spillerne merker utvikling. Tillit bygges når ordene på tavla stemmer med arbeidet på feltet.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
