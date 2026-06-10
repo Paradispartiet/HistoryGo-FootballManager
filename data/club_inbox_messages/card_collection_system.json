@@ -16,6 +16,254 @@
         "club_work"
       ],
       "conditions": {}
+    },
+    {
+      "id": "card_collection_places_gate_players",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Opplåsing",
+      "title": "Spillere bør låses opp gjennom steder",
+      "body": "Spillerkort skal ikke bare dukke opp i en liste. De bør knyttes til klubber, stadioner og steder du faktisk har samlet i History Go.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_player_card_is_profile",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Spillerkort",
+      "title": "Et spillerkort er mer enn et navn",
+      "body": "Hvert spillerkort bør inneholde rolle, styrker, foretrukket posisjon, klubbtilknytning og hvorfor spilleren kan brukes på ulike måter i laget.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_role_fit_matters",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Rollefit",
+      "title": "Kortverdi må ikke erstatte rollefit",
+      "body": "Høy rating betyr ikke automatisk god bruk. En spiller blir mest verdifull når rollen, posisjonen og lagets plan lar styrkene hans komme frem.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_staff_cards_enabled",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Staff",
+      "title": "Staffkort bør være egne samlekort",
+      "body": "Assistenttrener, tre trenere, fysio og keepertrener bør kunne samles som egne kort. De skal høre til klubber og steder, ikke bare være generiske roller.",
+      "phases": [
+        "club_work",
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_goalkeeper_coach_link",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Keepertrener",
+      "title": "Keepertrenere kan kobles til gamle keepere",
+      "body": "Keepertrenerkort kan gjerne komme fra tidligere keepere. Da blir samlingen både historisk, sportslig og praktisk knyttet til hvordan keeperrollen utvikles.",
+      "phases": [
+        "club_work",
+        "training"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_training_staff_depth",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Trenere",
+      "title": "Trenerkort bør gi faglig bredde",
+      "body": "Tre trenerkort kan representere ulike treningsstyrker: press, teknikk, fysisk arbeid, ungdomsutvikling, dødball eller rolleforståelse. Slik får staben reell betydning.",
+      "phases": [
+        "training",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_low_tactical_clarity_recommend_profiles",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Anbefaling",
+      "title": "Ved lav taktisk klarhet bør systemet foreslå enklere profiler",
+      "body": "Når taktisk klarhet er lav, bør samlingssystemet fremheve kort som gjør laget lettere å forstå: tydelige roller, klare posisjoner og spillere med lett lesbare styrker.",
+      "phases": [
+        "analysis",
+        "training",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "lte",
+        "value": 50
+      }
+    },
+    {
+      "id": "card_collection_high_tactical_clarity_unlock_complexity",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Kompleksitet",
+      "title": "Tydelig spillidé kan åpne mer spesialiserte kort",
+      "body": "Når laget forstår planen bedre, kan systemet løfte frem mer spesialiserte profiler. Da kan asymmetriske roller, hybridspillere og nisjestyrker brukes mer presist.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "tacticalClarity",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "card_collection_training_culture_staff_bonus",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Treningskultur",
+      "title": "God treningskultur bør gjøre staffkort viktigere",
+      "body": "Når treningskulturen er god, kan staffkort få mer verdi. Da blir trenernes fagområder faktisk brukt, ikke bare vist som navn i en samling.",
+      "phases": [
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "gte",
+        "value": 55
+      }
+    },
+    {
+      "id": "card_collection_low_training_culture_staff_hint",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Treningskultur",
+      "title": "Svak treningskultur kan kreve bedre staffkort",
+      "body": "Når treningskulturen er lav, bør systemet kunne peke mot staffkort som hjelper med struktur: assistenttrener, trenere, fysio eller keepertrener med tydelig fagprofil.",
+      "phases": [
+        "analysis",
+        "training",
+        "club_work"
+      ],
+      "conditions": {
+        "metric": "trainingCulture",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "card_collection_morale_chemistry_hint",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Kjemi",
+      "title": "Lav moral kan gjøre kortkjemi viktigere",
+      "body": "Når spillermoralen er lav, bør samlingssystemet etter hvert kunne vurdere relasjoner: klubblinker, rolletrygghet, kjent trener, lokal tilhørighet og spillere som passer sammen.",
+      "phases": [
+        "analysis",
+        "club_work",
+        "match_preparation"
+      ],
+      "conditions": {
+        "metric": "playerMorale",
+        "operator": "lte",
+        "value": 45
+      }
+    },
+    {
+      "id": "card_collection_match_preparation_lineup_validation",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Laguttak",
+      "title": "Laguttak bør valideres mot tilgjengelige kort",
+      "body": "Før kamp bør systemet skille mellom kort du eier, kort som er tilgjengelige, og kort som faktisk kan brukes i kamptroppen. Samling og kampregistrering er ikke samme ting.",
+      "phases": [
+        "match_preparation"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_match_day_active_cards",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Kampdag",
+      "title": "Kampdag bør vise aktive kort",
+      "body": "På kampdag bør manageren se hvilke spiller- og staffkort som faktisk påvirker laget: startellever, benk, trenerteam, fysio og keepertrener.",
+      "phases": [
+        "match_day"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_history_go_badges_to_team",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Badges",
+      "title": "Badges bør kunne gi lagbyggingseffekt",
+      "body": "Badges fra History Go kan etter hvert knyttes til managerdelen. Et stadionmerke, en klubbserie eller en Groundhopper-bragd kan åpne nye kort eller sterkere koblinger.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_global_club_sets",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Klubbsett",
+      "title": "Globale stadioner kan bli klubbsett",
+      "body": "Når Groundhopper utvides globalt, kan store klubbsteder gi egne klubbsett: spillere, trenere, staff, rivaler, stadionhistorie og spesielle kort knyttet til stedet.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
+    },
+    {
+      "id": "card_collection_not_random_packs",
+      "threadId": "card_collection_unlocks",
+      "senderId": "card_collection_system",
+      "from": "Samlekortsystemet",
+      "tag": "Prinsipp",
+      "title": "Samlingen bør ikke bygges som tilfeldige pakker",
+      "body": "Kort bør komme fra steder, prestasjoner, kunnskap og klubbspor. Det gjør samlingen mer rettferdig og mer meningsfull enn tilfeldige pakkeåpninger.",
+      "phases": [
+        "analysis",
+        "club_work"
+      ],
+      "conditions": {}
     }
   ]
 }
