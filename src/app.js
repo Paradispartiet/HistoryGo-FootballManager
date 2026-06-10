@@ -199,7 +199,29 @@ const elements = {
   badgeProgressList: document.querySelector("#badgeProgressList"),
   // Ekte History Go-sync (v1): statusfelt og manuell synk-knapp.
   historyGoSyncStatus: document.querySelector("#historyGoSyncStatus"),
-  syncHistoryGoPlaces: document.querySelector("#syncHistoryGoPlaces")
+  syncHistoryGoPlaces: document.querySelector("#syncHistoryGoPlaces"),
+  // Fase 2: dynamisk sidepanel (spillerprofil vs. neste beslutninger).
+  sidePanelKicker: document.querySelector("#sidePanelKicker"),
+  sideProfile: document.querySelector("#sideProfile"),
+  profileRating: document.querySelector("#profileRating"),
+  profileName: document.querySelector("#profileName"),
+  profilePositions: document.querySelector("#profilePositions"),
+  profileSource: document.querySelector("#profileSource"),
+  profileStrengths: document.querySelector("#profileStrengths"),
+  profileNeeds: document.querySelector("#profileNeeds"),
+  sideDecisions: document.querySelector("#sideDecisions"),
+  sideDecisionsList: document.querySelector("#sideDecisionsList"),
+  // Fase 2: statuskort med neste beslutninger på hovedskjermen.
+  decisionCards: document.querySelector("#decisionCards"),
+  // Fase 2: avdelinger med levende status.
+  inboxPulseCount: document.querySelector("#inboxPulseCount"),
+  adminSquadCount: document.querySelector("#adminSquadCount"),
+  adminStaffCount: document.querySelector("#adminStaffCount"),
+  marketMediaValue: document.querySelector("#marketMediaValue"),
+  marketReputationNote: document.querySelector("#marketReputationNote"),
+  boardTrustValue: document.querySelector("#boardTrustValue"),
+  boardTrustFill: document.querySelector("#boardTrustFill"),
+  boardTrustNote: document.querySelector("#boardTrustNote")
 };
 
 let managerEngineRenderId = 0;
@@ -2242,15 +2264,20 @@ function renderLineup(teamFit) {
       chip.classList.add("is-duplicate");
     }
 
-    const playerName = assignment?.player?.name || "Tom plass";
+    const player = assignment?.player || null;
+    const playerName = player?.name || "Tom plass";
     const roleName = assignment?.role?.name || "Ingen rolle";
     const score = assignment?.fit?.matchScore ?? "–";
+    const overall = Number.isFinite(player?.overall) ? player.overall : null;
 
     chip.innerHTML = `
-      <span class="chip-pos">${slot.position}</span>
+      <span class="chip-token${overall === null ? " is-empty" : ""}">${overall ?? slot.position}</span>
       <span class="chip-name">${playerName}</span>
       <span class="chip-role">${roleName}</span>
-      <span class="chip-score">${score}</span>
+      <span class="chip-foot">
+        <span class="chip-pos">${slot.position}</span>
+        <span class="chip-score">${score}</span>
+      </span>
     `;
 
     chip.setAttribute("aria-label", `${slot.label}: ${playerName}. Dra for å flytte, klikk for å velge.`);
@@ -2354,7 +2381,7 @@ function attachChipDrag(chip, slotId) {
   chip.addEventListener("pointercancel", onPointerUp);
 }
 
-function renderSlotEditor(teamFit) {
+function renderSidePanel(teamFit) {
   const slot = getSelectedSlot();
 
   if (!slot) {
@@ -2418,6 +2445,334 @@ function renderSlotEditor(teamFit) {
     elements.selectedMatchScore.textContent = "–";
     elements.selectedFitStatus.textContent = "Ufullstendig plass";
     elements.selectedFitExplanation.textContent = "Velg både spiller og rolle for å se om denne plassen fungerer.";
+  }
+
+  // Dynamisk sidepanel: spillerprofil når plassen har en spiller, ellers
+  // "Neste beslutninger". Selve handlingene (spiller-/rollevalg) vises alltid.
+  const player =
+    assignment?.player || state.players.find((item) => item.id === slotState.playerId) || null;
+
+  if (player) {
+    if (elements.sidePanelKicker) {
+      elements.sidePanelKicker.textContent = `${slot.label} · ${slot.position}`;
+    }
+    if (elements.sideProfile) {
+      elements.sideProfile.hidden = false;
+    }
+    if (elements.sideDecisions) {
+      elements.sideDecisions.hidden = true;
+    }
+    renderPlayerProfile(player, slot);
+  } else {
+    if (elements.sidePanelKicker) {
+      elements.sidePanelKicker.textContent = "Neste beslutninger";
+    }
+    if (elements.sideProfile) {
+      elements.sideProfile.hidden = true;
+    }
+    if (elements.sideDecisions) {
+      elements.sideDecisions.hidden = false;
+    }
+    renderSideDecisions(teamFit);
+  }
+}
+
+// Fyll spillerprofilen i sidepanelet: rating, navn, posisjoner, samlet History
+// Go-sted, styrker og behov. Taktisk samsvar settes allerede over (fit-boksen).
+function renderPlayerProfile(player, slot) {
+  if (elements.profileRating) {
+    elements.profileRating.textContent = Number.isFinite(player.overall) ? player.overall : "–";
+  }
+  if (elements.profileName) {
+    elements.profileName.textContent = player.name || player.id;
+  }
+  if (elements.profilePositions) {
+    const natural = Array.isArray(player.naturalPositions) ? player.naturalPositions : [];
+    const usable = Array.isArray(player.usablePositions) ? player.usablePositions : [];
+    const parts = [];
+    if (natural.length) {
+      parts.push(natural.join(" / "));
+    }
+    if (usable.length) {
+      parts.push(`(også ${usable.join(", ")})`);
+    }
+    elements.profilePositions.textContent = parts.join(" ") || "Ingen posisjoner registrert";
+  }
+  if (elements.profileSource) {
+    const sources = getPlayerSourcePlaces(player.id);
+    elements.profileSource.textContent = sources.length
+      ? `History Go-sted: ${sources.map((place) => place.placeName).join(", ")}`
+      : "History Go-sted: ukjent kilde";
+  }
+  if (elements.profileStrengths) {
+    renderTextChips(elements.profileStrengths, player.strengths, "Ingen registrert");
+  }
+  if (elements.profileNeeds) {
+    renderTextChips(elements.profileNeeds, player.needs, "Ingen registrert");
+  }
+}
+
+// Liten hjelper: fyll en <ul> med korte tekstpunkter (eller tom-tekst).
+function renderTextChips(list, items, emptyText) {
+  list.innerHTML = "";
+  const values = Array.isArray(items) ? items.filter(Boolean) : [];
+  if (!values.length) {
+    const li = document.createElement("li");
+    li.textContent = emptyText;
+    list.append(li);
+    return;
+  }
+  values.slice(0, 5).forEach((value) => {
+    const li = document.createElement("li");
+    li.textContent = formatTagText(value);
+    list.append(li);
+  });
+}
+
+// Gjør tekniske tags lesbare: "final_pass" -> "Final pass".
+function formatTagText(value) {
+  const text = String(value).replace(/_/g, " ").trim();
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// ----------------------------------------------------------------------------
+// Neste beslutninger (Fase 2)
+// Samler de viktigste åpne beslutningene på tvers av laget, klubbuken, innboksen
+// og History Go. Hver beslutning peker mot en konkret handling (velg plass,
+// avanser klubbuke, bytt fane). Ren UI/navigasjon – ingen score- eller
+// kampmotor-effekt.
+// ----------------------------------------------------------------------------
+
+// Handling som velger en plass på banen og bytter til Kontoret-fanen.
+function selectSlotDecision(slotId) {
+  return () => {
+    state.selectedSlotId = slotId;
+    activateTab("team");
+    renderApp();
+  };
+}
+
+function buildNextDecisions(teamFit) {
+  const decisions = [];
+
+  if (!teamFit) {
+    return decisions;
+  }
+
+  const assignments = Array.isArray(teamFit.assignments) ? teamFit.assignments : [];
+
+  // 1) Tomme plasser i startelleveren.
+  const emptySlots = assignments.filter((item) => !item.player);
+  if (emptySlots.length) {
+    decisions.push({
+      tag: "Lag",
+      title: emptySlots.length === 1 ? "Fyll én tom plass" : `Fyll ${emptySlots.length} tomme plasser`,
+      detail: `Startelleveren mangler ${emptySlots.length} av ${teamFit.totalSlots} spillere.`,
+      action: selectSlotDecision(emptySlots[0].slot.slotId)
+    });
+  }
+
+  // 2) Feilbrukte spillere.
+  const misused = assignments.filter((item) => item.player && item.fit?.status === "feilbrukt");
+  if (misused.length) {
+    decisions.push({
+      tag: "Taktikk",
+      title: misused.length === 1 ? "Én spiller er feilbrukt" : `${misused.length} spillere er feilbrukt`,
+      detail: `${misused[0].player.name} passer dårlig som ${misused[0].slot.position}. Bytt rolle eller posisjon.`,
+      action: selectSlotDecision(misused[0].slot.slotId)
+    });
+  }
+
+  // 3) Samme spiller brukt flere ganger.
+  const duplicateIds = new Set((teamFit.duplicatePlayers || []).map((player) => player.id));
+  if (duplicateIds.size) {
+    const duplicateAssignment = assignments.find((item) => item.player && duplicateIds.has(item.player.id));
+    if (duplicateAssignment) {
+      decisions.push({
+        tag: "Lag",
+        title: "Samme spiller står flere steder",
+        detail: `${duplicateAssignment.player.name} er satt opp på mer enn én plass. Velg en annen spiller.`,
+        action: selectSlotDecision(duplicateAssignment.slot.slotId)
+      });
+    }
+  }
+
+  // 4) Driv klubbuken videre.
+  if (state.clubWeekState) {
+    const phaseLabel = CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase;
+    decisions.push({
+      tag: "Klubbuke",
+      title: "Driv klubbuken videre",
+      detail: `Du er i fasen «${phaseLabel}» i uke ${state.clubWeekState.week}.`,
+      action: () => {
+        advanceClubWeekPhaseAction().catch(console.error);
+      }
+    });
+  }
+
+  // 5) Uleste innbokstråder.
+  const unreadThreads = getActiveInboxThreads().length;
+  if (unreadThreads > 0) {
+    decisions.push({
+      tag: "Innboks",
+      title: unreadThreads === 1 ? "1 ulest tråd venter" : `${unreadThreads} uleste tråder`,
+      detail: "Klubbens puls har meldinger som venter på et svar.",
+      action: () => activateTab("inbox")
+    });
+  }
+
+  // 6) Stab klar til å engasjeres.
+  const hiredIds = new Set(state.teamMerits?.hiredStaffIds || []);
+  const availableToHire = getUnlockedStaff().filter((member) => !hiredIds.has(member.id));
+  if (availableToHire.length) {
+    decisions.push({
+      tag: "History Go",
+      title: availableToHire.length === 1 ? "Engasjer ny stab" : `${availableToHire.length} stab er klare`,
+      detail: `${availableToHire[0].name || availableToHire[0].id} er låst opp og kan engasjeres.`,
+      action: () => activateTab("historygo")
+    });
+  }
+
+  // 7) Treningsprogram klart til å startes.
+  const availablePrograms = getAvailableTrainingPrograms().filter((entry) => entry.status === "available");
+  if (availablePrograms.length) {
+    decisions.push({
+      tag: "Trening",
+      title: "Start et treningsprogram",
+      detail: `${availablePrograms.length} program kan starte badge-progresjon nå.`,
+      action: () => activateTab("historygo")
+    });
+  }
+
+  // 8) Lagets største svakhet fra rapporten (informativ, ingen direkte handling).
+  const issues = teamFit.report?.issues;
+  if (Array.isArray(issues) && issues.length) {
+    decisions.push({
+      tag: "Analyse",
+      title: "Følg opp lagets svakhet",
+      detail: issues[0],
+      action: null
+    });
+  }
+
+  if (!decisions.length) {
+    decisions.push({
+      tag: "Klart",
+      title: "Laget er klart",
+      detail: "Ingen åpne beslutninger akkurat nå. Driv klubbuken videre når du er klar.",
+      action: null
+    });
+  }
+
+  return decisions;
+}
+
+// Bygg ett beslutningselement. baseClass "decision-card" gir statuskort,
+// "decision-item" gir den kompakte sidepanel-varianten. Beslutninger uten
+// handling rendres som ikke-klikkbare kort.
+function createDecisionElement(decision, baseClass) {
+  const isCard = baseClass === "decision-card";
+  const isStatic = typeof decision.action !== "function";
+
+  const el = document.createElement(isStatic ? "div" : "button");
+  el.className = isStatic ? `${baseClass} is-static` : baseClass;
+
+  if (!isStatic) {
+    el.type = "button";
+    el.addEventListener("click", decision.action);
+  }
+
+  const tag = document.createElement("span");
+  tag.className = isCard ? "decision-card-tag" : "decision-tag";
+  tag.textContent = decision.tag;
+
+  const title = document.createElement(isCard ? "h3" : "span");
+  title.className = isCard ? "decision-card-title" : "decision-title";
+  title.textContent = decision.title;
+
+  const detail = document.createElement(isCard ? "p" : "span");
+  detail.className = isCard ? "decision-card-detail" : "decision-detail";
+  detail.textContent = decision.detail;
+
+  el.append(tag, title, detail);
+  return el;
+}
+
+// Sidepanel-variant: kompakt liste med de viktigste beslutningene.
+function renderSideDecisions(teamFit) {
+  const list = elements.sideDecisionsList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+  buildNextDecisions(teamFit).slice(0, 6).forEach((decision) => {
+    const li = document.createElement("li");
+    li.append(createDecisionElement(decision, "decision-item"));
+    list.append(li);
+  });
+}
+
+// Statuskort-strip på hovedskjermen. Første aktive beslutning fremheves.
+function renderDecisionCards(teamFit) {
+  const container = elements.decisionCards;
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = "";
+  buildNextDecisions(teamFit).slice(0, 4).forEach((decision, index) => {
+    const card = createDecisionElement(decision, "decision-card");
+    if (index === 0 && typeof decision.action === "function") {
+      card.classList.add("is-primary");
+    }
+    container.append(card);
+  });
+}
+
+// Levende status i avdelingene: innboks-puls, stallstørrelse, medietrykk og
+// styretillit. Leser eksisterende state direkte. Trygg mot manglende elementer.
+function renderDepartments() {
+  if (elements.inboxPulseCount) {
+    elements.inboxPulseCount.textContent = String(getActiveInboxThreads().length);
+  }
+
+  if (elements.adminSquadCount) {
+    elements.adminSquadCount.textContent = String(getUnlockedPlayers().length);
+  }
+
+  if (elements.adminStaffCount) {
+    const count = getHiredStaff().length;
+    elements.adminStaffCount.textContent = `${count} ${count === 1 ? "ansatt" : "ansatte"}`;
+  }
+
+  const media = state.clubWeekState?.mediaPressure;
+  if (elements.marketMediaValue) {
+    elements.marketMediaValue.textContent = Number.isFinite(media) ? String(media) : "–";
+  }
+  if (elements.marketReputationNote && Number.isFinite(media)) {
+    elements.marketReputationNote.textContent =
+      media >= 65
+        ? "Høyt medietrykk. Omdømmet er under press – styr forventningene aktivt."
+        : media <= 40
+          ? "Lavt medietrykk. Det er rolig rundt klubben akkurat nå."
+          : "Medietrykket er normalt. Omdømmet følger resultatene dine.";
+  }
+
+  const trust = state.clubWeekState?.boardTrust;
+  if (elements.boardTrustValue) {
+    elements.boardTrustValue.textContent = Number.isFinite(trust) ? String(trust) : "–";
+  }
+  if (elements.boardTrustFill && Number.isFinite(trust)) {
+    elements.boardTrustFill.style.width = `${Math.max(0, Math.min(100, trust))}%`;
+  }
+  if (elements.boardTrustNote && Number.isFinite(trust)) {
+    elements.boardTrustNote.textContent =
+      trust >= 65
+        ? "Styret har solid tillit til treneren."
+        : trust <= 35
+          ? "Styret er bekymret. Tilliten er lav – det trengs resultater."
+          : "Styret følger utviklingen tett. Tilliten er moderat.";
   }
 }
 
@@ -3882,13 +4237,15 @@ function renderApp() {
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
-  renderSlotEditor(teamFit);
+  renderSidePanel(teamFit);
+  renderDecisionCards(teamFit);
   renderReport(teamFit);
   renderBadgeEffects(teamFit);
 
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
   renderInboxThreads();
+  renderDepartments();
 
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
@@ -3992,56 +4349,68 @@ function bindEvents() {
   }
 
   if (elements.advanceClubWeekPhase) {
-    elements.advanceClubWeekPhase.addEventListener("click", async () => {
-      // Mangler tilstanden, lager vi en initial uke 1 / analyse først.
-      if (!state.clubWeekState) {
-        state.clubWeekState = await createInitialClubWeekStateFromBrowser({});
-      }
-
-      const previous = state.clubWeekState;
-      let next = await advanceClubWeekPhaseFromBrowser(previous);
-      const consequences = getClubWeekTransitionConsequences(previous, next);
-
-      // Bruk små klubbkonsekvenser kun når et fasebytte faktisk gir effekter.
-      if (Object.keys(consequences.effects).length > 0) {
-        next = await applyClubWeekEffectsFromBrowser(next, consequences.effects);
-      }
-
-      // Loggfør hendelsen med fasen som nettopp ble avsluttet (previous).
-      const previousPhaseLabel = CLUB_WEEK_PHASE_LABELS[previous.phase] || previous.phase;
-
-      addClubWeekEvent({
-        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-        week: previous.week,
-        phase: previous.phase,
-        phaseLabel: previousPhaseLabel,
-        message: consequences.message
-      });
-
-      // Feedback må settes før setClubWeekState, som trigger renderApp().
-      setClubWeekFeedback(consequences.message);
-      setClubWeekState(next);
+    elements.advanceClubWeekPhase.addEventListener("click", () => {
+      advanceClubWeekPhaseAction().catch(console.error);
     });
   }
 }
 
-function initTabs() {
+// Avanser klubbukens fase med konsekvenser, logg og feedback. Delt mellom
+// toppstripe-knappen og "Neste beslutninger". Trigger renderApp via setClubWeekState.
+async function advanceClubWeekPhaseAction() {
+  // Mangler tilstanden, lager vi en initial uke 1 / analyse først.
+  if (!state.clubWeekState) {
+    state.clubWeekState = await createInitialClubWeekStateFromBrowser({});
+  }
+
+  const previous = state.clubWeekState;
+  let next = await advanceClubWeekPhaseFromBrowser(previous);
+  const consequences = getClubWeekTransitionConsequences(previous, next);
+
+  // Bruk små klubbkonsekvenser kun når et fasebytte faktisk gir effekter.
+  if (Object.keys(consequences.effects).length > 0) {
+    next = await applyClubWeekEffectsFromBrowser(next, consequences.effects);
+  }
+
+  // Loggfør hendelsen med fasen som nettopp ble avsluttet (previous).
+  const previousPhaseLabel = CLUB_WEEK_PHASE_LABELS[previous.phase] || previous.phase;
+
+  addClubWeekEvent({
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    week: previous.week,
+    phase: previous.phase,
+    phaseLabel: previousPhaseLabel,
+    message: consequences.message
+  });
+
+  // Feedback må settes før setClubWeekState, som trigger renderApp().
+  setClubWeekFeedback(consequences.message);
+  setClubWeekState(next);
+}
+
+// Aktiver en fane programmatisk: brukes av fane-knappene og av "Neste
+// beslutninger" som navigerer brukeren til riktig avdeling.
+function activateTab(target) {
   const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
   const sections = Array.from(document.querySelectorAll("[data-tab-section]"));
 
   tabButtons.forEach((button) => {
+    const isActive = button.dataset.tabTarget === target;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+
+  sections.forEach((section) => {
+    section.hidden = section.dataset.tabSection !== target;
+  });
+}
+
+function initTabs() {
+  const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
+
+  tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const target = button.dataset.tabTarget;
-
-      tabButtons.forEach((other) => {
-        const isActive = other === button;
-        other.classList.toggle("is-active", isActive);
-        other.setAttribute("aria-selected", isActive ? "true" : "false");
-      });
-
-      sections.forEach((section) => {
-        section.hidden = section.dataset.tabSection !== target;
-      });
+      activateTab(button.dataset.tabTarget);
     });
   });
 }
