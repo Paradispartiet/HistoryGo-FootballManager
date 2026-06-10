@@ -46,6 +46,32 @@ function buildRoleIndexes() {
   });
 }
 
+function ensureRelationshipMetricCard() {
+  if (document.querySelector("#relationshipScore")) {
+    return;
+  }
+
+  const metricsGrid = document.querySelector(".detail-metrics");
+
+  if (!metricsGrid) {
+    return;
+  }
+
+  const article = document.createElement("article");
+  article.className = "relationship-metric-card";
+
+  const label = document.createElement("span");
+  label.textContent = "Relasjoner";
+
+  const value = document.createElement("strong");
+  value.id = "relationshipScore";
+  value.textContent = "–";
+  value.title = "Relasjonsscore mellom rollene i elleveren.";
+
+  article.append(label, value);
+  metricsGrid.append(article);
+}
+
 function getSelectedTactic() {
   const tacticSelect = document.querySelector("#tacticSelect");
   const selectedId = tacticSelect?.value;
@@ -76,6 +102,7 @@ function getAssignmentsFromPitch() {
 }
 
 function setRelationshipScore(value, title = "") {
+  ensureRelationshipMetricCard();
   const target = document.querySelector("#relationshipScore");
 
   if (!target) {
@@ -150,6 +177,8 @@ function bindControls() {
 
 async function initRelationshipMetric() {
   try {
+    ensureRelationshipMetricCard();
+
     const [rolesData, tacticsData] = await Promise.all([
       loadJson(DATA_PATHS.roles),
       loadJson(DATA_PATHS.tactics)
