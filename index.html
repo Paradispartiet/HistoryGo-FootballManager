@@ -24,6 +24,7 @@
       <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="market">Marked</button>
       <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="board">Styret</button>
       <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="historygo">History Go</button>
+      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="hgfmLibrary">Formasjoner</button>
     </div>
   </nav>
 
@@ -501,6 +502,28 @@
         </div>
       </section>
     </div>
+
+    <!-- ============================ FORMASJONSBIBLIOTEK (HG FOOTBALL MANAGER) ============================ -->
+    <div class="tab-section dept dept-hgfm" data-tab-section="hgfmLibrary" hidden>
+      <section class="dept-hero dept-hero-hgfm">
+        <div>
+          <p class="eyebrow">HG Football Manager</p>
+          <h2>Formasjonsbibliotek</h2>
+          <p class="dept-hero-lede">
+            Bla gjennom fotballhistoriens taktiske systemer, epoke for epoke. Hver formasjon er et
+            historisk system med faser, prinsipper og rollekrav – ikke bare tall.
+          </p>
+        </div>
+        <div class="dept-hero-stat">
+          <strong id="hgfmFormationCount">–</strong>
+          <span>formasjoner</span>
+        </div>
+      </section>
+
+      <div id="hgfmLibraryRoot" class="hgfm-library">
+        <p class="hgfm-loading">Laster formasjonsbibliotek…</p>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -508,5 +531,6 @@
   </footer>
 
   <script type="module" src="src/app.js"></script>
+  <script type="module" src="src/hg-formation-library.js"></script>
 </body>
 </html>
