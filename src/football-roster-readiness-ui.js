@@ -26,6 +26,98 @@ const state = {
   scheduled: false
 };
 
+function ensureRosterReadinessStyles() {
+  if (document.querySelector("#rosterReadinessStyles")) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = "rosterReadinessStyles";
+  style.textContent = `
+    .roster-readiness-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .roster-readiness-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .roster-readiness-head h2,
+    .roster-readiness-panel h3 {
+      margin: 0;
+    }
+
+    .roster-readiness-badge {
+      flex: 0 0 auto;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      background: #000000;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+    }
+
+    .roster-readiness-badge[data-ready="true"] {
+      border-color: var(--good);
+      color: var(--good);
+    }
+
+    .bench-player-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .bench-player-card {
+      display: grid;
+      gap: 4px;
+      border: 2px solid var(--line-soft);
+      border-radius: 10px;
+      background: var(--panel-strong);
+      padding: 12px 14px;
+    }
+
+    .bench-player-card.is-registered {
+      border-color: var(--line);
+    }
+
+    .bench-player-card strong {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .bench-player-card span {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.3;
+    }
+
+    .bench-empty,
+    .roster-readiness-note {
+      margin: 0;
+    }
+
+    @media (max-width: 760px) {
+      .roster-readiness-head {
+        display: grid;
+      }
+
+      .roster-readiness-badge {
+        width: fit-content;
+      }
+    }
+  `;
+  document.head.append(style);
+}
+
 async function loadJson(path) {
   const response = await fetch(path);
 
@@ -320,6 +412,7 @@ function renderBenchList(players) {
 }
 
 function renderRosterReadiness() {
+  ensureRosterReadinessStyles();
   ensureTopbarMetric();
   ensureRosterPanel();
 
@@ -398,6 +491,7 @@ function observeApp() {
 
 async function initRosterReadiness() {
   try {
+    ensureRosterReadinessStyles();
     ensureTopbarMetric();
     ensureRosterPanel();
 
