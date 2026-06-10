@@ -2,6 +2,12 @@ import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
 import {
+  adaptHgFormations,
+  buildRoleTypeIndex,
+  getRoleDisplayNames,
+  getHistoricalFormationRoleHint
+} from "./hg-football-formation-adapter.js";
+import {
   createLegacyManagerAppStateFromBrowserState,
   getDashboardViewModelFromLegacyManagerState,
   createInitialClubWeekStateFromBrowser,
@@ -18,7 +24,17 @@ const DATA_PATHS = {
   playerArchetypes: "data/football_player_archetypes.json",
   roles: "data/football_roles.json",
   tactics: "data/football_tactics.json",
-  formations: "data/football_formations.json",
+  // Gammel formasjonskatalog beholdes som legacy/fallback. Taktikktavla på
+  // forsiden drives nå av de historiske hgFootball-formasjonene under, men
+  // filen slettes ikke: den er trygg fallback hvis hgFootball-data mangler.
+  legacyFormations: "data/football_formations.json",
+  // Historisk formasjonsgrunnlag (data/hgFootball/) som nå fyller formationSelect
+  // og tegnes på den eksisterende grønne banen via formasjonsadapteren.
+  hgFormations: "data/hgFootball/formations.json",
+  hgFormationEras: "data/hgFootball/formationEras.json",
+  hgRoleTypes: "data/hgFootball/roleTypes.json",
+  hgRoleFitRules: "data/hgFootball/playerRoleFitRules.json",
+  hgUnlockRules: "data/hgFootball/unlockRules.json",
   knowledgePrinciples: "data/football_knowledge_principles.json",
   clubInboxMessages: "data/club_inbox_messages.json",
   clubInboxMessageManifest: "data/club_inbox_messages/manifest.json",
@@ -80,8 +96,22 @@ const state = {
   playerArchetypes: [],
   roles: [],
   tactics: [],
+  // Runtime-formasjoner som taktikktavla bruker. Fylles nå fra de historiske
+  // hgFootball-formasjonene via adapteren (adaptHgFormations). Gamle
+  // football_formations.json beholdes i legacyFormations som fallback.
   formations: [],
+  legacyFormations: [],
+  // Historisk hgFootball-grunnlag (data/hgFootball/). Rådata pluss oppslag.
+  // Driver formationSelect, faseformasjons-/taktikkpanelet og rollefit-hint.
+  hgFormations: [],
+  hgFormationEras: [],
+  hgRoleTypes: [],
+  // Oppslag id -> roleType for visningsnavn på nøkkelroller (roleTypes.json).
+  hgRoleTypeIndex: new Map(),
+  hgRoleFitRules: null,
+  hgUnlockRules: null,
   knowledgePrinciples: [],
+  // Peker på en hgFootball-formation.id (felles state, ingen parallell id).
   selectedFormationId: null,
   selectedTacticId: null,
   selectedSlotId: null,
@@ -151,6 +181,10 @@ const elements = {
   formationTitle: document.querySelector("#formationTitle"),
   completeCount: document.querySelector("#completeCount"),
   lineupSlots: document.querySelector("#lineupSlots"),
+  // Kompakt taktisk systempanel for valgt historisk formasjon (nær banen).
+  tacticalSystemPanel: document.querySelector("#tacticalSystemPanel"),
+  // Additivt historisk rollefit-hint i sidepanelet.
+  historicalRoleHint: document.querySelector("#historicalRoleHint"),
   selectedSlotTitle: document.querySelector("#selectedSlotTitle"),
   slotPlayerSelect: document.querySelector("#slotPlayerSelect"),
   slotRoleSelect: document.querySelector("#slotRoleSelect"),
@@ -2248,6 +2282,21 @@ function isKnowledgeFocusCompleted(principleId) {
 // Logiske standardposisjoner: grupper slots per lagdel og spre dem jevnt i bredden.
 function computeDefaultPositions(formation) {
   const positions = {};
+
+  // hgFootball-formasjoner kommer fra adapteren med ferdige standardkoordinater
+  // (shape -> slot-koordinat). Bruk dem direkte når alle slots har x/y, ellers
+  // fall tilbake til den gamle linjebaserte fordelingen (legacy-formasjoner).
+  const hasExplicitCoordinates = formation.slots.every(
+    (slot) => Number.isFinite(slot.x) && Number.isFinite(slot.y)
+  );
+
+  if (hasExplicitCoordinates) {
+    formation.slots.forEach((slot) => {
+      positions[slot.slotId] = { x: slot.x, y: slot.y };
+    });
+    return positions;
+  }
+
   const byLine = {};
 
   formation.slots.forEach((slot) => {
@@ -2583,7 +2632,9 @@ function renderControls() {
     elements.formationSelect,
     state.formations,
     (formation) => formation.id,
-    (formation) => formation.name
+    // Vis navn + epoke + skole slik at f.eks. historisk "WM 3-2-2-3" og moderne
+    // "Box Midfield 3-2-2-3" ikke forveksles selv om tallene ligner.
+    (formation) => formation.selectLabel || formation.name
   );
 
   setOptions(
@@ -2814,6 +2865,10 @@ function renderSidePanel(teamFit) {
     elements.selectedFitExplanation.textContent = "Velg både spiller og rolle for å se om denne plassen fungerer.";
   }
 
+  // Additivt historisk rollefit-hint: forklarer om valgt rolle passer det valgte
+  // historiske systemet. Erstatter ikke lagfit-motoren over.
+  renderHistoricalRoleHint(slot, slotState);
+
   // Dynamisk sidepanel: spillerprofil når plassen har en spiller, ellers
   // "Neste beslutninger". Selve handlingene (spiller-/rollevalg) vises alltid.
   const player =
@@ -2900,6 +2955,205 @@ function renderTextChips(list, items, emptyText) {
 function formatTagText(value) {
   const text = String(value).replace(/_/g, " ").trim();
   return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// Additivt historisk rollefit-hint (historicalFormationRoleHint). Sammenligner
+// den valgte rollen mot valgt historisk formasjons roleRequirements/
+// preferredPlayerTypes/misusedPlayerTypes og viser en kort forklarende tekst.
+// Påvirker ikke lagfit-scoren; faller tilbake til nøytral tekst uten match.
+function renderHistoricalRoleHint(slot, slotState) {
+  if (!elements.historicalRoleHint) {
+    return;
+  }
+
+  const formation = getFormation();
+  const role = slotState?.roleId
+    ? state.roles.find((item) => item.id === slotState.roleId) || null
+    : null;
+
+  const hint = getHistoricalFormationRoleHint(formation, role, state.hgRoleTypeIndex);
+  elements.historicalRoleHint.textContent = hint.text;
+  elements.historicalRoleHint.dataset.tone = hint.tone;
+}
+
+// ----------------------------------------------------------------------------
+// Taktisk systempanel (Managerkontoret)
+// Kompakt info om den valgte historiske formasjonen rett ved banen: epoke,
+// taktisk skole, faseformasjoner, vanskelighetsgrad, nøkkelroller, de viktigste
+// prinsippene og en kort History Go-opplåsingsnote. Dette er bevisst kort og
+// kamp-/taktikkrelevant – det fullstendige biblioteket finnes i egen fane.
+// ----------------------------------------------------------------------------
+
+const TACTIC_DIFFICULTY_LABELS = {
+  low: "Lav",
+  medium: "Middels",
+  high: "Høy",
+  very_high: "Svært høy"
+};
+
+const TACTIC_PHASE_FIELDS = [
+  { key: "baseShape", label: "Grunnform" },
+  { key: "inPossessionShape", label: "Med ball" },
+  { key: "outOfPossessionShape", label: "Uten ball" },
+  { key: "pressShape", label: "Press" },
+  { key: "lowBlockShape", label: "Lav blokk" },
+  { key: "restDefenceShape", label: "Restforsvar" }
+];
+
+// Liten chip-liste-bygger for systempanelet (kun textContent, ingen innerHTML).
+function appendTacticChips(container, items, variant) {
+  const list = document.createElement("ul");
+  list.className = `tactic-system-chips${variant ? ` tactic-system-chips-${variant}` : ""}`;
+  const values = (Array.isArray(items) ? items : []).filter(Boolean);
+
+  if (!values.length) {
+    const empty = document.createElement("li");
+    empty.className = "tactic-system-chip is-empty";
+    empty.textContent = "–";
+    list.append(empty);
+  } else {
+    values.forEach((value) => {
+      const chip = document.createElement("li");
+      chip.className = "tactic-system-chip";
+      chip.textContent = value;
+      list.append(chip);
+    });
+  }
+
+  container.append(list);
+}
+
+// Kort History Go-opplåsingsnote for valgt formasjon. Leser trygt fra
+// unlockRules.json (tier + tema) med fallback til formation.unlockLinks. Blokker
+// ikke bruk; dette er ren visning.
+function buildFormationUnlockNote(formation) {
+  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
+  const sources = Array.isArray(state.hgUnlockRules?.unlockSources) ? state.hgUnlockRules.unlockSources : [];
+  const sourceNames = new Map(sources.map((source) => [source.id, source.name]));
+  const tierLabels = { start: "Startformasjon", early: "Tidlig", standard: "Standard", advanced: "Avansert" };
+
+  const describe = (clause) =>
+    (Array.isArray(clause) ? clause : [])
+      .map((req) => {
+        const name = sourceNames.get(req.sourceType) || req.sourceType;
+        return req.theme ? `${name}: ${req.theme}` : name;
+      })
+      .filter(Boolean);
+
+  const rule = rules.find((item) => item.appliesTo === "formation" && item.formationId === formation.id);
+
+  if (rule) {
+    const tierLabel = tierLabels[rule.tier] || rule.tier || "Standard";
+    const themes = [...describe(rule.requires?.anyOf), ...describe(rule.requires?.allOf)];
+    const themeText = themes.length ? ` · ${themes.slice(0, 3).join(" · ")}` : "";
+    return `Tilknyttet History Go (${tierLabel})${themeText}`;
+  }
+
+  const links = (Array.isArray(formation.unlockLinks) ? formation.unlockLinks : [])
+    .map((link) => {
+      const name = sourceNames.get(link.sourceType) || link.sourceType;
+      return link.theme ? `${name}: ${link.theme}` : name;
+    })
+    .filter(Boolean);
+
+  if (links.length) {
+    return `Tilknyttet History Go · ${links.slice(0, 3).join(" · ")}`;
+  }
+
+  return "Ingen spesifikk opplåsingsregel registrert ennå.";
+}
+
+function renderTacticalSystemPanel() {
+  const panel = elements.tacticalSystemPanel;
+  if (!panel) {
+    return;
+  }
+
+  panel.innerHTML = "";
+  const formation = getFormation();
+
+  if (!formation) {
+    const empty = document.createElement("p");
+    empty.className = "tactic-system-empty";
+    empty.textContent = "Velg en formasjon for å se det taktiske systemet.";
+    panel.append(empty);
+    return;
+  }
+
+  // Topplinje: epoke · periode · skole. Holder like tall (f.eks. to 3-2-2-3)
+  // tydelig adskilt fordi epoke og skole vises eksplisitt.
+  const head = document.createElement("div");
+  head.className = "tactic-system-head";
+
+  const eyebrow = document.createElement("p");
+  eyebrow.className = "tactic-system-eyebrow";
+  eyebrow.textContent = [formation.eraName, formation.eraPeriod, formation.tacticalSchool]
+    .filter(Boolean)
+    .join(" · ");
+  head.append(eyebrow);
+
+  const titleRow = document.createElement("div");
+  titleRow.className = "tactic-system-title";
+  const shapeBadge = document.createElement("span");
+  shapeBadge.className = "tactic-system-shape";
+  shapeBadge.textContent = formation.baseShape || "";
+  const titleText = document.createElement("h3");
+  titleText.textContent = formation.name;
+  titleRow.append(shapeBadge, titleText);
+  head.append(titleRow);
+
+  const difficulty = document.createElement("span");
+  difficulty.className = `tactic-system-diff tactic-system-diff-${formation.tacticalDifficulty || "medium"}`;
+  difficulty.textContent = `Taktisk vanskelighetsgrad: ${
+    TACTIC_DIFFICULTY_LABELS[formation.tacticalDifficulty] || formation.tacticalDifficulty || "–"
+  }`;
+  head.append(difficulty);
+
+  panel.append(head);
+
+  // Faseformasjoner: grunnform + de fem fasene i kompakte bokser.
+  const phaseGrid = document.createElement("div");
+  phaseGrid.className = "tactic-system-phases";
+  TACTIC_PHASE_FIELDS.forEach(({ key, label }) => {
+    const box = document.createElement("div");
+    box.className = "tactic-system-phase";
+    const phaseLabel = document.createElement("span");
+    phaseLabel.className = "tactic-system-phase-label";
+    phaseLabel.textContent = label;
+    const phaseValue = document.createElement("span");
+    phaseValue.className = "tactic-system-phase-value";
+    phaseValue.textContent = formation[key] || "–";
+    box.append(phaseLabel, phaseValue);
+    phaseGrid.append(box);
+  });
+  panel.append(phaseGrid);
+
+  // Nøkkelroller (roleRequirements) med visningsnavn fra roleTypes.json.
+  const roleNames = getRoleDisplayNames(formation.roleRequirements, state.hgRoleTypeIndex);
+  const rolesBlock = document.createElement("div");
+  rolesBlock.className = "tactic-system-block";
+  const rolesLabel = document.createElement("p");
+  rolesLabel.className = "tactic-system-block-label";
+  rolesLabel.textContent = "Nøkkelroller";
+  rolesBlock.append(rolesLabel);
+  appendTacticChips(rolesBlock, roleNames, "role");
+  panel.append(rolesBlock);
+
+  // 2–4 viktigste prinsipper.
+  const principlesBlock = document.createElement("div");
+  principlesBlock.className = "tactic-system-block";
+  const principlesLabel = document.createElement("p");
+  principlesLabel.className = "tactic-system-block-label";
+  principlesLabel.textContent = "Viktigste prinsipper";
+  principlesBlock.append(principlesLabel);
+  appendTacticChips(principlesBlock, (formation.principles || []).slice(0, 4), "principle");
+  panel.append(principlesBlock);
+
+  // Kort History Go-opplåsingsnote (blokkerer ikke bruk).
+  const unlockNote = document.createElement("p");
+  unlockNote.className = "tactic-system-unlock";
+  unlockNote.textContent = buildFormationUnlockNote(formation);
+  panel.append(unlockNote);
 }
 
 // ----------------------------------------------------------------------------
@@ -5004,6 +5258,7 @@ function renderApp() {
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
+  renderTacticalSystemPanel();
   renderSidePanel(teamFit);
   renderDecisionCards(teamFit);
   renderReport(teamFit);
@@ -5203,7 +5458,12 @@ async function init() {
       trainingBadgesData,
       teamClassificationsData,
       placeReportsData,
-      teamMeritsData
+      teamMeritsData,
+      hgFormationErasData,
+      hgRoleTypesData,
+      hgRoleFitRulesData,
+      hgUnlockRulesData,
+      legacyFormationsData
     ] = await Promise.all([
       loadJson(DATA_PATHS.players),
       // Spillerarketyper er valgfrie for kjøring: hvis filen mangler, fortsetter
@@ -5211,7 +5471,8 @@ async function init() {
       loadJson(DATA_PATHS.playerArchetypes).catch(() => null),
       loadJson(DATA_PATHS.roles),
       loadJson(DATA_PATHS.tactics),
-      loadJson(DATA_PATHS.formations),
+      // Primærkilde for taktikktavla: de historiske hgFootball-formasjonene.
+      loadJson(DATA_PATHS.hgFormations),
       // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
       loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
       // Avsenderkatalogen er valgfri: hvis filen mangler, brukes fallback-avsendere.
@@ -5229,14 +5490,42 @@ async function init() {
       // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
       // tilbake til tom liste og bygger enkle fallback-kort fra placeUnlocks.
       loadJson(DATA_PATHS.placeReports).catch(() => null),
-      loadJson(DATA_PATHS.teamMerits).catch(() => null)
+      loadJson(DATA_PATHS.teamMerits).catch(() => null),
+      // Historiske epoker (kreves for å vise epoke/skole på valgt formasjon).
+      loadJson(DATA_PATHS.hgFormationEras).catch(() => null),
+      // roleTypes/fit-regler/unlock-regler er valgfrie: ved feil faller appen
+      // tilbake til id-er / nøytrale hint uten å kaste.
+      loadJson(DATA_PATHS.hgRoleTypes).catch(() => null),
+      loadJson(DATA_PATHS.hgRoleFitRules).catch(() => null),
+      loadJson(DATA_PATHS.hgUnlockRules).catch(() => null),
+      // Gammel formasjonskatalog beholdes som trygg fallback.
+      loadJson(DATA_PATHS.legacyFormations).catch(() => null)
     ]);
 
     state.players = playersData.players || [];
     state.playerArchetypes = playerArchetypesData?.archetypes || [];
     state.roles = rolesData.roles;
     state.tactics = tacticsData.tactics;
-    state.formations = formationsData.formations;
+
+    // Historisk hgFootball-grunnlag: rådata + oppslag. Taktikktavla bygges fra
+    // disse via adapteren (shape -> slots), ikke fra en hardkodet liste i JS.
+    state.hgFormations = Array.isArray(formationsData?.formations) ? formationsData.formations : [];
+    state.hgFormationEras = Array.isArray(hgFormationErasData?.eras) ? hgFormationErasData.eras : [];
+    state.hgRoleTypes = Array.isArray(hgRoleTypesData?.roleTypes) ? hgRoleTypesData.roleTypes : [];
+    state.hgRoleTypeIndex = buildRoleTypeIndex(hgRoleTypesData);
+    state.hgRoleFitRules = hgRoleFitRulesData || null;
+    state.hgUnlockRules = hgUnlockRulesData || null;
+    state.legacyFormations = Array.isArray(legacyFormationsData?.formations)
+      ? legacyFormationsData.formations
+      : [];
+
+    // Oversett historiske formasjoner til runtime-format og fyll taktikktavla.
+    // Faller trygt tilbake til legacy-katalogen hvis hgFootball-data mangler.
+    state.formations = adaptHgFormations(formationsData, hgFormationErasData);
+    if (!state.formations.length) {
+      state.formations = state.legacyFormations;
+      console.warn("hgFootball-formasjoner mangler eller er ugyldige. Faller tilbake til legacy football_formations.json.");
+    }
 
     if (Array.isArray(knowledgeData?.principles)) {
       state.knowledgePrinciples = knowledgeData.principles;
