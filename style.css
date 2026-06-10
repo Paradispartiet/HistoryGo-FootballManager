@@ -1474,6 +1474,156 @@ ul {
   margin: 0;
 }
 
+/* Lagidentitet (v1): forklarings-/planleggingspanel for lagklasser. Mørk stil
+   med tydelige hvite rammer, ingen gul bakgrunn. */
+.team-identity-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.team-identity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.team-identity-card {
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-strong);
+  padding: 18px 20px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.team-identity-card.is-unlocked {
+  border-color: var(--good);
+}
+
+.team-identity-card.is-near {
+  border-color: var(--line-soft);
+}
+
+.team-identity-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.team-identity-status {
+  margin: 0;
+  justify-self: start;
+  border: 2px solid var(--good);
+  border-radius: 999px;
+  background: #000000;
+  color: var(--good);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+}
+
+.team-identity-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.team-identity-progress {
+  margin: 0;
+  justify-self: start;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: #000000;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+}
+
+.team-identity-requirements {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.team-identity-requirements li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.team-identity-requirements li::before {
+  position: absolute;
+  left: 0;
+  font-weight: 900;
+}
+
+.team-identity-requirements li.is-met {
+  color: var(--text);
+}
+
+.team-identity-requirements li.is-met::before {
+  content: "✓";
+  color: var(--good);
+}
+
+.team-identity-requirements li.is-missing::before {
+  content: "•";
+  color: var(--line-soft);
+}
+
+.team-identity-recommendations {
+  display: grid;
+  gap: 4px;
+}
+
+.team-identity-rec-label {
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.team-identity-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.team-identity-pill {
+  display: inline-block;
+  border: 2px solid var(--line-soft);
+  border-radius: 999px;
+  background: #000000;
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 4px 12px;
+}
+
+.team-identity-empty {
+  margin: 0;
+  border: 2px dashed var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--panel-strong);
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  padding: 18px 20px;
+}
+
 /* ============================================================================
    FASE 2 — Managerkontor-layout
    Toppstripe, stor bane, dynamisk sidepanel, statuskort og avdelinger.

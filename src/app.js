@@ -190,6 +190,8 @@ const elements = {
   availableTrainingProgramsList: document.querySelector("#availableTrainingProgramsList"),
   earnedBadgesList: document.querySelector("#earnedBadgesList"),
   teamClassificationsList: document.querySelector("#teamClassificationsList"),
+  // Lagidentitet (v1): forklarings-/planleggingspanel.
+  teamIdentityPanel: document.querySelector("#teamIdentityPanel"),
   // Stedsrapporter (v1).
   placeReportsList: document.querySelector("#placeReportsList"),
   // History Go-treningsuke og progresjon (v1, interaktivt).
@@ -491,6 +493,9 @@ function validateFootballData({ players, playerArchetypes = [], roles, tactics, 
 
 // Rekkefølge på badge-nivåer, brukes til klassifiseringsberegning.
 const BADGE_LEVEL_ORDER = { bronze: 1, silver: 2, gold: 3 };
+
+// Lesbare etiketter for badge-nivåer i UI (lagidentitet). Fallback til id-en selv.
+const BADGE_LEVEL_LABELS = { none: "Ingen", bronze: "Bronse", silver: "Sølv", gold: "Gull" };
 
 // Tekst per programstatus, brukt i render.
 const TRAINING_STATUS_TEXT = {
@@ -1124,6 +1129,224 @@ function getActiveTeamClassifications() {
   return classifications.filter((classification) => activeIds.has(classification.id));
 }
 
+// ----------------------------------------------------------------------------
+// Lagidentitet (v1)
+// Forklarings- og planleggingslag oppå badges/lagklasser: hvilke identiteter
+// laget har, hvilke det nesten har, og hva som mangler (badges, treningsprogram,
+// steder, spillere og stab). Rene helpers – ingen fit-/kampmotor-, badgeeffekt-
+// eller unlock-effekt.
+// ----------------------------------------------------------------------------
+
+// Lesbart navn for en badgefamilie ut fra trainingBadges. Fallback til id-en.
+function getBadgeFamilyName(familyId) {
+  const families = Array.isArray(state.trainingBadges?.badgeFamilies)
+    ? state.trainingBadges.badgeFamilies
+    : [];
+  const match = families.find((family) => family && family.id === familyId);
+  return match?.name || familyId;
+}
+
+// Lesbar etikett for et badge-nivå (bronze/silver/gold/none). Fallback til verdien.
+function getBadgeLevelLabel(level) {
+  return BADGE_LEVEL_LABELS[level] || level;
+}
+
+// Høyeste opptjente nivå i en badgefamilie ut fra earnedBadgeIds. Returnerer
+// { level: "none", rank: 0, badge: null } når ingenting er opptjent, ellers
+// bronze/silver/gold med rank 1/2/3 og selve badgeobjektet.
+function getBadgeFamilyCurrentLevel(familyId) {
+  let best = { level: "none", rank: 0, badge: null };
+  getEarnedBadges().forEach((badge) => {
+    if (badge.familyId !== familyId) {
+      return;
+    }
+    const rank = BADGE_LEVEL_ORDER[badge.level] || 0;
+    if (rank > best.rank) {
+      best = { level: badge.level, rank, badge };
+    }
+  });
+  return best;
+}
+
+// Progresjon mot én lagklasse: hvert badgekrav med nåværende/krevd nivå, hvor
+// mange krav som er møtt, om identiteten er oppnådd, og hvilke krav som mangler.
+function getClassificationProgress(classification) {
+  const required = Array.isArray(classification?.requiresBadges) ? classification.requiresBadges : [];
+
+  const requirements = required.map((req) => {
+    const familyId = req?.familyId;
+    const minimumLevel = req?.minimumLevel;
+    const requiredRank = BADGE_LEVEL_ORDER[minimumLevel] || 0;
+    const current = getBadgeFamilyCurrentLevel(familyId);
+    return {
+      familyId,
+      familyName: getBadgeFamilyName(familyId),
+      minimumLevel,
+      minimumLevelLabel: getBadgeLevelLabel(minimumLevel),
+      currentLevel: current.level,
+      currentLevelLabel: getBadgeLevelLabel(current.level),
+      currentRank: current.rank,
+      requiredRank,
+      completed: current.rank >= requiredRank
+    };
+  });
+
+  const totalRequirements = requirements.length;
+  const completedRequirements = requirements.filter((req) => req.completed).length;
+  const progressRatio = totalRequirements > 0 ? completedRequirements / totalRequirements : 0;
+  const isUnlocked = totalRequirements > 0 && completedRequirements === totalRequirements;
+  const missingRequirements = requirements.filter((req) => !req.completed);
+
+  return {
+    classification,
+    requirements,
+    completedRequirements,
+    totalRequirements,
+    progressRatio,
+    isUnlocked,
+    missingRequirements
+  };
+}
+
+// Alle lagklasser med progresjon, sortert: oppnådde først, deretter nesten
+// ferdige (høyest andel oppfylte krav), deretter resten (stabilt på navn).
+function getTeamIdentityProgress() {
+  const classifications = Array.isArray(state.teamClassifications?.classifications)
+    ? state.teamClassifications.classifications
+    : [];
+
+  return classifications
+    .filter((classification) => classification && classification.id)
+    .map((classification) => getClassificationProgress(classification))
+    .sort((a, b) => {
+      if (a.isUnlocked !== b.isUnlocked) {
+        return a.isUnlocked ? -1 : 1;
+      }
+      if (b.progressRatio !== a.progressRatio) {
+        return b.progressRatio - a.progressRatio;
+      }
+      const aName = a.classification.name || a.classification.id || "";
+      const bName = b.classification.name || b.classification.id || "";
+      return aName.localeCompare(bName);
+    });
+}
+
+// Treningsprogrammer som bygger en gitt badgefamilie (program.badgeFamilyId).
+function getTrainingProgramsForBadgeFamily(familyId) {
+  if (!familyId) {
+    return [];
+  }
+  const programs = Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [];
+  return programs.filter((program) => program && program.badgeFamilyId === familyId);
+}
+
+// Steder som kan hjelpe en badgefamilie: finn programmene for familien, hvilke
+// ekspertise-id-er de krever, og hvilke steder i football_unlocks.json som låser
+// opp disse ekspertisene eller selve treningsprogrammene. Returnerer unike
+// { placeId, placeName }. Leser rå placeUnlocks (alle steder), ikke bare opplåste.
+function getPlacesForBadgeFamily(familyId) {
+  if (!familyId) {
+    return [];
+  }
+
+  const programs = getTrainingProgramsForBadgeFamily(familyId);
+  const expertiseIds = new Set();
+  const programIds = new Set();
+  programs.forEach((program) => {
+    if (program.id) {
+      programIds.add(program.id);
+    }
+    (Array.isArray(program.requiresExpertiseIds) ? program.requiresExpertiseIds : []).forEach((id) =>
+      expertiseIds.add(id)
+    );
+  });
+
+  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
+  const result = [];
+  const seen = new Set();
+
+  placeUnlocks.forEach((place) => {
+    if (!place || !place.placeId || seen.has(place.placeId)) {
+      return;
+    }
+    const helps = (Array.isArray(place.unlocks) ? place.unlocks : []).some((unlock) => {
+      if (!unlock || !unlock.targetId) {
+        return false;
+      }
+      if (unlock.type === "expertise" && expertiseIds.has(unlock.targetId)) {
+        return true;
+      }
+      return unlock.type === "training_program" && programIds.has(unlock.targetId);
+    });
+    if (helps) {
+      seen.add(place.placeId);
+      result.push({ placeId: place.placeId, placeName: place.placeName || place.placeId });
+    }
+  });
+
+  return result;
+}
+
+// Hjelper: har en spiller minst én av verdiene i et listefelt?
+function playerFieldIncludesAny(player, field, values) {
+  const list = Array.isArray(player?.[field]) ? player[field] : [];
+  return values.some((value) => list.includes(value));
+}
+
+// Opplåste spillere som passer en lagidentitet. Enkel v1-mapping i kode:
+// matcher på likesTactics/strengths/archetypes/era/kilde. Filtrert til
+// getUnlockedPlayers() og begrenset til maks 5. Ren visning – ingen kampeffekt.
+function getRelevantPlayersForClassification(classificationId) {
+  const matchers = {
+    transition_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["fast_transitions", "vertical_play", "direct_counter"]),
+    pressing_team: (p) =>
+      playerFieldIncludesAny(p, "likesTactics", ["high_press"]) ||
+      playerFieldIncludesAny(p, "strengths", ["pressing", "pressing_intelligence"]) ||
+      playerFieldIncludesAny(p, "archetypes", ["pressing_intelligence"]),
+    control_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["possession", "structured_build_up", "central_control"]),
+    wide_dominant_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["wide_attack", "isolate_wingers"]),
+    defensive_structure_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["compact_shape", "low_block", "medium_press"]),
+    set_piece_team: (p) =>
+      playerFieldIncludesAny(p, "strengths", ["heading", "duels", "box_presence"]) ||
+      playerFieldIncludesAny(p, "archetypes", ["box_presence"]),
+    development_team: (p) =>
+      p?.era === "modern" || (Array.isArray(p?.sourcePlaceIds) && p.sourcePlaceIds.includes("ekebergsletta"))
+  };
+
+  const matcher = matchers[classificationId];
+  if (!matcher) {
+    return [];
+  }
+  return getUnlockedPlayers().filter(matcher).slice(0, 5);
+}
+
+// Tilgjengelig stab som passer en lagidentitet. Enkel v1-mapping på ekspertise.
+// Filtrert til getUnlockedStaff() (tilgjengelig/engasjert stab) og maks 5.
+function getRelevantStaffForClassification(classificationId) {
+  const expertiseByClassification = {
+    development_team: ["development_culture", "club_building"],
+    pressing_team: ["pressing_structure", "team_organisation"],
+    defensive_structure_team: ["defensive_structure", "rest_defense", "team_organisation"],
+    control_team: ["passing_training", "build_up_play", "team_organisation"],
+    transition_team: ["speed_training", "physical_preparation", "depth_runs"],
+    wide_dominant_team: ["wide_attack", "chance_creation"],
+    set_piece_team: ["set_piece_attack", "set_piece_defense", "duel_training"]
+  };
+
+  const wanted = expertiseByClassification[classificationId];
+  if (!Array.isArray(wanted)) {
+    return [];
+  }
+  const wantedSet = new Set(wanted);
+
+  return getUnlockedStaff()
+    .filter((member) => {
+      const expertiseIds = Array.isArray(member.expertiseIds) ? member.expertiseIds : [];
+      return expertiseIds.some((id) => wantedSet.has(id));
+    })
+    .slice(0, 5);
+}
+
 // Engasjer tilgjengelig stab: legg staff-id i hiredStaffIds, lagre og rerender.
 // Robust mot ukjent/utilgjengelig id og duplikater (console.warn, ingen krasj).
 function hireStaff(staffId) {
@@ -1482,6 +1705,44 @@ function validatePlaceReportsData() {
         console.warn(message);
       }
     }
+  });
+
+  return warnings;
+}
+
+// Validerer lagklasser (football_team_classifications.json) for lagidentitet.
+// Rene UI-/planleggingsdata, så feil gir console.warn og advarsler – aldri krasj.
+// Sjekker at hver klasse har en id, at hvert badgekrav peker på en kjent
+// badgefamilie, og at minimumLevel er bronze/silver/gold.
+function validateTeamClassificationsData() {
+  const warnings = [];
+  const classifications = Array.isArray(state.teamClassifications?.classifications)
+    ? state.teamClassifications.classifications
+    : [];
+  const families = Array.isArray(state.trainingBadges?.badgeFamilies) ? state.trainingBadges.badgeFamilies : [];
+  const familyIds = new Set(families.map((family) => family && family.id).filter(Boolean));
+  const validLevels = new Set(["bronze", "silver", "gold"]);
+
+  classifications.forEach((classification) => {
+    if (typeof classification?.id !== "string" || !classification.id) {
+      const message = "En lagklasse mangler gyldig id (streng).";
+      warnings.push(message);
+      console.warn(message);
+      return;
+    }
+
+    (Array.isArray(classification.requiresBadges) ? classification.requiresBadges : []).forEach((req) => {
+      if (typeof req?.familyId !== "string" || !familyIds.has(req.familyId)) {
+        const message = `Lagklasse ${classification.id} peker på ukjent badgefamilie: ${req?.familyId || "ukjent"}.`;
+        warnings.push(message);
+        console.warn(message);
+      }
+      if (!validLevels.has(req?.minimumLevel)) {
+        const message = `Lagklasse ${classification.id} har ugyldig minimumLevel: ${req?.minimumLevel || "ukjent"}.`;
+        warnings.push(message);
+        console.warn(message);
+      }
+    });
   });
 
   return warnings;
@@ -4208,6 +4469,191 @@ function renderTeamClassifications() {
   });
 }
 
+// ============================================================================
+// Lagidentitet-render (v1)
+// Forklarings- og planleggingspanel: hvilke identiteter laget har oppnådd,
+// hvilke det nesten har, og hva som mangler (badges, treningsprogram, steder,
+// spillere og stab). Bygger alt med createElement/textContent (ingen innerHTML
+// utenom clearing). Ren visning – ingen fit-/kampmotor- eller unlock-effekt.
+// ============================================================================
+
+// En liten overskrift i identitetspanelet.
+function appendIdentityHeading(panel, text) {
+  const heading = document.createElement("h4");
+  heading.className = "unlock-subhead";
+  heading.textContent = text;
+  panel.append(heading);
+}
+
+// En anbefalingsrad med etikett og pills (treningsprogram, steder, spillere,
+// stab). Vises bare når det finnes minst ett element.
+function appendIdentityRecommendation(card, label, items) {
+  const values = Array.isArray(items) ? items.filter(Boolean) : [];
+  if (!values.length) {
+    return;
+  }
+
+  const section = document.createElement("div");
+  section.className = "team-identity-recommendations";
+
+  const labelEl = document.createElement("span");
+  labelEl.className = "team-identity-rec-label";
+  labelEl.textContent = label;
+  section.append(labelEl);
+
+  const pills = document.createElement("div");
+  pills.className = "team-identity-pills";
+  values.forEach((value) => {
+    const pill = document.createElement("span");
+    pill.className = "team-identity-pill";
+    pill.textContent = value;
+    pills.append(pill);
+  });
+  section.append(pills);
+
+  card.append(section);
+}
+
+// Kort for en oppnådd identitet: navn, "Oppnådd", beskrivelse og møtte krav.
+function createUnlockedIdentityCard(entry) {
+  const classification = entry.classification;
+  const card = document.createElement("article");
+  card.className = "team-identity-card is-unlocked";
+
+  const title = document.createElement("h5");
+  title.className = "team-identity-title";
+  title.textContent = classification.name || classification.id;
+  card.append(title);
+
+  const status = document.createElement("p");
+  status.className = "team-identity-status";
+  status.textContent = "Oppnådd";
+  card.append(status);
+
+  if (classification.description) {
+    const desc = document.createElement("p");
+    desc.className = "team-identity-desc";
+    desc.textContent = classification.description;
+    card.append(desc);
+  }
+
+  if (entry.requirements.length) {
+    const reqs = document.createElement("ul");
+    reqs.className = "team-identity-requirements";
+    entry.requirements.forEach((req) => {
+      const li = document.createElement("li");
+      li.className = "is-met";
+      li.textContent = `${req.familyName}: ${req.currentLevelLabel} (krav ${req.minimumLevelLabel})`;
+      reqs.append(li);
+    });
+    card.append(reqs);
+  }
+
+  return card;
+}
+
+// Kort for en nesten oppnådd identitet: navn, beskrivelse, progress, manglende
+// badges og anbefalte treningsprogram, steder, spillere og stab.
+function createNearIdentityCard(entry) {
+  const classification = entry.classification;
+  const card = document.createElement("article");
+  card.className = "team-identity-card is-near";
+
+  const title = document.createElement("h5");
+  title.className = "team-identity-title";
+  title.textContent = classification.name || classification.id;
+  card.append(title);
+
+  if (classification.description) {
+    const desc = document.createElement("p");
+    desc.className = "team-identity-desc";
+    desc.textContent = classification.description;
+    card.append(desc);
+  }
+
+  const progressLine = document.createElement("p");
+  progressLine.className = "team-identity-progress";
+  progressLine.textContent = `${entry.completedRequirements}/${entry.totalRequirements} krav oppfylt`;
+  card.append(progressLine);
+
+  const missing = entry.missingRequirements;
+  if (missing.length) {
+    const list = document.createElement("ul");
+    list.className = "team-identity-requirements";
+    missing.forEach((req) => {
+      const li = document.createElement("li");
+      li.className = "is-missing";
+      li.textContent = `Mangler ${req.familyName}: ${req.minimumLevelLabel} (har ${req.currentLevelLabel})`;
+      list.append(li);
+    });
+    card.append(list);
+  }
+
+  // Anbefalte treningsprogram og steder ut fra de manglende badgefamiliene.
+  const programNames = new Set();
+  const placeNames = new Set();
+  missing.forEach((req) => {
+    getTrainingProgramsForBadgeFamily(req.familyId).forEach((program) => {
+      programNames.add(program.name || program.id);
+    });
+    getPlacesForBadgeFamily(req.familyId).forEach((place) => {
+      placeNames.add(place.placeName);
+    });
+  });
+
+  appendIdentityRecommendation(card, "Treningsprogrammer", Array.from(programNames));
+  appendIdentityRecommendation(card, "Steder", Array.from(placeNames));
+
+  const players = getRelevantPlayersForClassification(classification.id);
+  appendIdentityRecommendation(card, "Spillere", players.map((player) => player.name || player.id));
+
+  const staff = getRelevantStaffForClassification(classification.id);
+  appendIdentityRecommendation(card, "Stab", staff.map((member) => member.name || member.id));
+
+  return card;
+}
+
+// Hovedrender for lagidentitet. Tom/oppstartstekst uten badges, ellers aktive
+// og nærmeste identiteter.
+function renderTeamIdentityPanel() {
+  const panel = elements.teamIdentityPanel;
+  if (!panel) {
+    return;
+  }
+
+  panel.innerHTML = "";
+
+  // Uten opptjente badges har laget ingen tydelig identitet ennå.
+  if (!getEarnedBadges().length) {
+    const empty = document.createElement("p");
+    empty.className = "team-identity-empty";
+    empty.textContent =
+      "Laget har ikke tydelig identitet ennå. Start med treningsprogrammer i History Go-fanen for å bygge de første badges.";
+    panel.append(empty);
+    return;
+  }
+
+  const progress = getTeamIdentityProgress();
+  const unlocked = progress.filter((entry) => entry.isUnlocked);
+  const near = progress.filter((entry) => !entry.isUnlocked).slice(0, 3);
+
+  if (unlocked.length) {
+    appendIdentityHeading(panel, "Aktive identiteter");
+    const grid = document.createElement("div");
+    grid.className = "team-identity-grid";
+    unlocked.forEach((entry) => grid.append(createUnlockedIdentityCard(entry)));
+    panel.append(grid);
+  }
+
+  if (near.length) {
+    appendIdentityHeading(panel, "Nærmeste identiteter");
+    const grid = document.createElement("div");
+    grid.className = "team-identity-grid";
+    near.forEach((entry) => grid.append(createNearIdentityCard(entry)));
+    panel.append(grid);
+  }
+}
+
 // Statusfelt for ekte History Go-sync: hvor mange steder som er funnet i hver
 // kilde, og hvor mange relevante Football Manager-unlock-steder som er aktive.
 function renderHistoryGoSyncStatus() {
@@ -4258,6 +4704,7 @@ function renderApp() {
   renderHgTrainingWeek();
   renderEarnedBadges();
   renderTeamClassifications();
+  renderTeamIdentityPanel();
 }
 
 function bindEvents() {
@@ -4553,6 +5000,12 @@ async function init() {
 
     if (placeReportWarnings.length > 0) {
       console.warn("Stedsrapport-data har kvalitetsadvarsler:", placeReportWarnings);
+    }
+
+    const classificationWarnings = validateTeamClassificationsData();
+
+    if (classificationWarnings.length > 0) {
+      console.warn("Lagklasse-data har kvalitetsadvarsler:", classificationWarnings);
     }
 
     // Club Week-tilstand: les lagret tilstand og la engine/fallback normalisere
