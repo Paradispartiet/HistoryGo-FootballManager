@@ -1,0 +1,183 @@
+{
+  "schema": "history-go.hg-football.staff-roles.v1",
+  "version": 1,
+  "principles": [
+    "Staff hører til klubber, ikke bare generiske steder.",
+    "Staff låses opp via History Go-steder, særlig klubber, stadioner og sportssteder.",
+    "Staff påvirker taktisk læring, rolleforståelse og formasjonstilvenning, ikke spillernes grunnkvalitet.",
+    "Antall aktive staff per type er begrenset av maxActive."
+  ],
+  "field_docs": {
+    "id": "Stabil snake_case-id.",
+    "name": "Visningsnavn.",
+    "summary": "Hva rollen gjør.",
+    "clubLinked": "true hvis rollen samles via klubber/klubbsteder.",
+    "canBeCollected": "Kan samles gjennom History Go-progresjon.",
+    "maxActive": "Maks antall aktive samtidig i staben.",
+    "affects": "Hvilke lag-/utviklingsdimensjoner rollen påvirker.",
+    "idealUnlockSources": "unlockSources-typer som passer best som kilde.",
+    "examples": "Eksempler på profiler (kan være placeholders som må forskes på)."
+  },
+  "collectionRequirements": {
+    "assistant_coach": "Kan samles.",
+    "training_coaches": "Tre trenere/treningscoacher kan samles (training_coach maxActive 3).",
+    "physio": "Én fysio kan samles (maxActive 1).",
+    "goalkeeper_coach": "Én keepertrener kan samles (maxActive 1), kan være en tidligere keeper."
+  },
+  "staffRoles": [
+    {
+      "id": "manager",
+      "name": "Manager / Hovedtrener",
+      "summary": "Lagets øverste taktiske ansvarlige; velger formasjon, prinsipper og hvordan spillerne brukes.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["tacticalLearningSpeed", "formationFamiliarity", "roleFitClarity", "attackingPatterns", "defensiveOrganisation"],
+      "idealUnlockSources": ["football_club", "football_stadium", "collected_manager"],
+      "examples": ["klubbtilknyttet hovedtrener", "historisk manager-skole"]
+    },
+    {
+      "id": "assistant_coach",
+      "name": "Assistenttrener",
+      "summary": "Trenerens høyre hånd som forsterker taktisk læring og rolleforståelse på treningsfeltet.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["tacticalLearningSpeed", "roleFitClarity", "formationFamiliarity"],
+      "idealUnlockSources": ["football_club", "football_stadium", "collected_staff"],
+      "examples": ["klubbassistent", "Ullevaal press- og finalementor"]
+    },
+    {
+      "id": "first_team_coach",
+      "name": "A-lagstrener",
+      "summary": "Trener med ansvar for A-lagets daglige arbeid og spillmodell.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["formationFamiliarity", "attackingPatterns", "defensiveOrganisation"],
+      "idealUnlockSources": ["football_club", "football_stadium"],
+      "examples": ["A-lagstrener fra klubbsted"]
+    },
+    {
+      "id": "training_coach",
+      "name": "Treningscoach",
+      "summary": "Trener med ansvar for treningsøkter som bygger formasjons- og rolletilvenning. Tre kan samles.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 3,
+      "affects": ["tacticalLearningSpeed", "formationFamiliarity", "roleFitClarity", "pressingDrills"],
+      "idealUnlockSources": ["football_club", "sport_place", "football_stadium"],
+      "examples": ["treningscoach A", "treningscoach B", "treningscoach C"]
+    },
+    {
+      "id": "tactical_coach",
+      "name": "Taktisk trener",
+      "summary": "Spesialist på taktiske prinsipper, faseformasjoner og avanserte systemer.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["tacticalLearningSpeed", "formationFamiliarity", "roleFitClarity", "attackingPatterns", "defensiveOrganisation"],
+      "idealUnlockSources": ["football_club", "collected_manager", "collected_staff"],
+      "examples": ["taktisk spesialist for posisjons- og box-systemer"]
+    },
+    {
+      "id": "technical_coach",
+      "name": "Teknisk trener",
+      "summary": "Trener som utvikler teknisk kvalitet og kombinasjonsspill.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["roleFitClarity", "attackingPatterns", "youthDevelopment"],
+      "idealUnlockSources": ["football_club", "sport_place"],
+      "examples": ["teknisk utviklingstrener"]
+    },
+    {
+      "id": "fitness_coach",
+      "name": "Fysisk trener / Fitnesscoach",
+      "summary": "Trener som bygger fysisk kapasitet for press- og overgangssystemer.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["pressingDrills", "injuryRecovery", "defensiveOrganisation"],
+      "idealUnlockSources": ["sport_place", "football_stadium", "football_club"],
+      "examples": ["Bislett hurtighetsspesialist", "fysisk preparator"]
+    },
+    {
+      "id": "physio",
+      "name": "Fysioterapeut",
+      "summary": "Ansvarlig for skadeforebygging og restitusjon. Én kan samles.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["injuryRecovery"],
+      "idealUnlockSources": ["football_club", "sport_place", "football_stadium"],
+      "examples": ["klubbfysio"]
+    },
+    {
+      "id": "goalkeeper_coach",
+      "name": "Keepertrener",
+      "summary": "Trener som utvikler målvakter. Én kan samles, og rollen kan fylles av en tidligere keeper.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["goalkeeperDevelopment", "defensiveOrganisation"],
+      "idealUnlockSources": ["football_club", "football_stadium", "collected_staff"],
+      "examples": ["klubbkeepertrener"]
+    },
+    {
+      "id": "former_goalkeeper_goalkeeper_coach",
+      "name": "Keepertrener (tidligere keeper)",
+      "summary": "Keepertrener som selv var målvakt; samme aktivgrense som ordinær keepertrener.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["goalkeeperDevelopment", "defensiveOrganisation"],
+      "idealUnlockSources": ["football_club", "collected_player", "collected_staff"],
+      "examples": ["pensjonert klubbkeeper som keepertrener"]
+    },
+    {
+      "id": "academy_coach",
+      "name": "Akademitrener",
+      "summary": "Trener med ansvar for ungdoms- og talentutvikling.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["youthDevelopment", "roleFitClarity"],
+      "idealUnlockSources": ["football_club", "sport_place"],
+      "examples": ["Ekeberg utviklings- og rekrutteringstrener"]
+    },
+    {
+      "id": "scout",
+      "name": "Speider",
+      "summary": "Identifiserer spillere og staff knyttet til steder og klubber i History Go.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 2,
+      "affects": ["youthDevelopment", "roleFitClarity"],
+      "idealUnlockSources": ["football_club", "groundhopper_place", "sport_place"],
+      "examples": ["turneringsspeider", "groundhopper-speider"]
+    },
+    {
+      "id": "analyst",
+      "name": "Analytiker",
+      "summary": "Leverer kamp- og motstanderanalyse som forsterker taktisk forståelse.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["tacticalLearningSpeed", "formationFamiliarity", "defensiveOrganisation", "attackingPatterns"],
+      "idealUnlockSources": ["football_club", "collected_staff"],
+      "examples": ["kampanalytiker"]
+    },
+    {
+      "id": "sporting_director",
+      "name": "Sportslig leder",
+      "summary": "Bygger klubbstruktur, staben og den langsiktige spillmodellen.",
+      "clubLinked": true,
+      "canBeCollected": true,
+      "maxActive": 1,
+      "affects": ["youthDevelopment", "formationFamiliarity", "roleFitClarity"],
+      "idealUnlockSources": ["football_club", "football_stadium"],
+      "examples": ["klubbtilknyttet sportslig leder"]
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "schema": "history-go.hg-football.formation-eras.v1",
+  "version": 1,
+  "field_docs": {
+    "id": "Stabil snake_case-id som formasjoner peker på via eraId.",
+    "name": "Epokens navn.",
+    "period": "Omtrentlig periode.",
+    "summary": "Hva epoken handlet om taktisk og historisk.",
+    "tacticalShift": "Det avgjørende skiftet epoken representerer.",
+    "keyIdeas": "Bærende prinsipper i epoken.",
+    "representativeFormations": "Formation-IDs som hører hjemme i epoken.",
+    "playerTypeEmphasis": "Spillertyper epoken løfter frem (beskrivende, ikke nødvendigvis role-IDs).",
+    "historyGoUnlockThemes": "Temaer/steder/personer i History Go som kan låse opp epoken."
+  },
+  "eras": [
+    {
+      "id": "early_rush",
+      "name": "Tidlig rush",
+      "period": "1860–1880",
+      "summary": "Den tidligste fotballen før moderne struktur, dominert av dribling, masseangrep og nesten ingen organisert defensiv.",
+      "tacticalShift": "Fra rent kaos og individuell dribling mot de første forsøkene på balanse mellom angrep og forsvar.",
+      "keyIdeas": ["masseangrep", "individuell dribling", "minimal struktur", "få bak ballen"],
+      "representativeFormations": ["rush_118", "rush_127", "early_balance_226"],
+      "playerTypeEmphasis": ["dribbler", "rusher", "wide-forward"],
+      "historyGoUnlockThemes": ["tidlig britisk fotball", "skoler og universiteter", "fotballens opprinnelse", "gamle baner"]
+    },
+    {
+      "id": "pyramid",
+      "name": "Pyramiden",
+      "period": "1880–1925",
+      "summary": "Pyramidesystemet 2-3-5 ble standarden: to backer, tre halvbacker og fem angripere med naturlig bredde.",
+      "tacticalShift": "Etablering av et stabilt lagskjelett med tydelige linjer og en sentral dirigerende center-half.",
+      "keyIdeas": ["bredde", "fem angripere", "half-backs som binder", "center-half som dirigent"],
+      "representativeFormations": ["pyramid_235", "direct_english_235"],
+      "playerTypeEmphasis": ["center-half", "wing-half", "inside-forward", "outside-forward", "full-back"],
+      "historyGoUnlockThemes": ["tidlige britiske klubber", "viktorianske baner", "fotballhistoriske stories", "engelsk og skotsk fotball"]
+    },
+    {
+      "id": "scottish_combination",
+      "name": "Skotsk kombinasjonsspill",
+      "period": "1880–1910",
+      "summary": "Den skotske skolen brøt med engelsk dribling og innførte kollektivt pasningsspill og kombinasjoner.",
+      "tacticalShift": "Fra individuell dribling til lagbasert pasningsspill og bevegelse i samme 2-3-5-skjelett.",
+      "keyIdeas": ["pasningsspill", "kombinasjoner", "kollektivt angrep", "bevegelse uten ball"],
+      "representativeFormations": ["scottish_combination_235"],
+      "playerTypeEmphasis": ["passing inside-forward", "combination wing-half", "technical forward"],
+      "historyGoUnlockThemes": ["skotsk fotball", "Queen's Park", "tidlig pasningskultur", "fotballhistoriske stories"]
+    },
+    {
+      "id": "metodo_danubian",
+      "name": "Metodo og Danubisk skole",
+      "period": "1925–1940",
+      "summary": "Sentraleuropeisk og italiensk fotball trakk inside-forwards lavere og bygde bedre midtbanebalanse og kontroll.",
+      "tacticalShift": "Fra ren femmannsfront mot et 2-3-2-3 med to lavere indre og mer kontroll i sentrum.",
+      "keyIdeas": ["midtbanebalanse", "teknikk", "rom mellom ledd", "kontring fra kontroll"],
+      "representativeFormations": ["metodo_2323", "danubian_2323", "early_false_nine_235"],
+      "playerTypeEmphasis": ["metodista", "withdrawn-centre-forward", "technical inside-forward", "wing-half"],
+      "historyGoUnlockThemes": ["italiensk metodo", "Pozzo", "Donau-skolen", "Wien og Budapest", "sentraleuropeisk fotball"]
+    },
+    {
+      "id": "wm_revolution",
+      "name": "WM-revolusjonen",
+      "period": "1925–1955",
+      "summary": "Overgangen fra pyramidefotball til tydeligere defensiv organisering etter offsidereformen i 1925.",
+      "tacticalShift": "Center-half trekkes ned, laget får tre bak og en mer balansert WM-struktur.",
+      "keyIdeas": ["mannorientering", "rask overgang", "inside-forwards mellom ledd", "tydeligere forsvarsrekke"],
+      "representativeFormations": ["wm_3223", "wm_counter_3223", "wm_midfield_variant_3232"],
+      "playerTypeEmphasis": ["center-half", "inside-forward", "wide-forward", "disciplined-half-back"],
+      "historyGoUnlockThemes": ["Arsenal", "Highbury", "Herbert Chapman", "engelsk mellomkrigsfotball"]
+    },
+    {
+      "id": "hungarian_brazilian",
+      "name": "Ungarn, MM og Brasil",
+      "period": "1950–1962",
+      "summary": "Det ungarske Aranycsapat og brasiliansk fotball brøt WM med tilbaketrukne spisser og firebackslinje.",
+      "tacticalShift": "Fra WM mot 3-2-3-2 og 4-2-4: dyp center-forward, flytende angrep og en ekte firerlinje bak.",
+      "keyIdeas": ["tilbaketrukket spiss", "flytende angrep", "firebackslinje", "individuell kvalitet"],
+      "representativeFormations": ["hungarian_mm_3232", "brazil_424", "early_433"],
+      "playerTypeEmphasis": ["deep-lying-forward", "inside-forward", "attacking full-back", "technical winger"],
+      "historyGoUnlockThemes": ["Ungarn 1953", "Puskás", "Brasil 1958", "brasilianske stadioner", "VM-historie"]
+    },
+    {
+      "id": "verrou_catenaccio",
+      "name": "Verrou og Catenaccio",
+      "period": "1930–1970",
+      "summary": "Sveitsisk verrou og italiensk catenaccio gjorde sikring og libero til et helt defensivt system.",
+      "tacticalShift": "Innføring av en fri spiller bak mannmarkeringen som låser bakrommet og muliggjør kontring.",
+      "keyIdeas": ["libero", "mannmarkering", "lav blokk", "kontring", "beskytte ledelse"],
+      "representativeFormations": ["verrou_1333", "catenaccio_1432", "catenaccio_532", "low_block_541"],
+      "playerTypeEmphasis": ["libero", "man-marker", "counter-forward", "tracking winger"],
+      "historyGoUnlockThemes": ["Inter", "San Siro", "Helenio Herrera", "italiensk fotball", "sveitsisk verrou"]
+    },
+    {
+      "id": "libero_back_three",
+      "name": "Libero og treback",
+      "period": "1970–1995",
+      "summary": "Liberoen ble offensiv og treback med wingbacks ga både sikring og bredde i et fleksibelt system.",
+      "tacticalShift": "Fra defensiv libero mot offensiv libero, wingbacks og 3-5-2/3-4-1-2-strukturer.",
+      "keyIdeas": ["offensiv libero", "wingbacks", "bredde fra dyp", "fleksibilitet mellom tre og fem bak"],
+      "representativeFormations": ["libero_352", "defensive_532", "creator_3412", "attacking_343"],
+      "playerTypeEmphasis": ["attacking libero", "wing-back", "two-striker pairing", "central creator"],
+      "historyGoUnlockThemes": ["tysk fotball", "Beckenbauer", "Serie A", "treback-tradisjon"]
+    },
+    {
+      "id": "total_football",
+      "name": "Totalfotball",
+      "period": "1970–1985",
+      "summary": "Ajax og Nederland gjorde posisjonsbytter, høyt press og kollektiv romforståelse til en helhetlig filosofi.",
+      "tacticalShift": "Fra faste roller mot rotasjon: enhver spiller kan dekke enhver posisjon i et komprimert rom.",
+      "keyIdeas": ["rotasjoner", "posisjonsbytter", "høyt press", "kompakt rom", "teknikk og forståelse"],
+      "representativeFormations": ["total_433", "total_343", "ajax_diamond_343"],
+      "playerTypeEmphasis": ["all-round technician", "inside-forward", "ball-playing defender", "pressing forward"],
+      "historyGoUnlockThemes": ["Ajax", "Amsterdam", "Nederland", "Rinus Michels", "Johan Cruyff"]
+    },
+    {
+      "id": "classic_442",
+      "name": "Klassisk 4-4-2",
+      "period": "1985–2005",
+      "summary": "Flat 4-4-2 med to spisser, brede midtbanespillere og tydelige par-relasjoner ble den dominerende strukturen.",
+      "tacticalShift": "Fra libero/treback mot soneforsvar i en flat firer og enkle, robuste par-relasjoner.",
+      "keyIdeas": ["to spisser", "flate ledd", "par-relasjoner", "bredde fra kantene"],
+      "representativeFormations": ["classic_442", "english_direct_442", "pressing_442", "diamond_41212"],
+      "playerTypeEmphasis": ["target-forward", "poacher", "wide-midfielder", "central-midfield pairing"],
+      "historyGoUnlockThemes": ["engelsk klubbfotball", "Premier League-tidlig", "AC Milan sone", "klassisk europeisk fotball"]
+    },
+    {
+      "id": "late_20th_century_hybrids",
+      "name": "Sen-1900-talls hybrider",
+      "period": "1995–2008",
+      "summary": "Broformasjoner mellom 4-4-2 og 4-2-3-1 med hengende spiss og mer tierrom.",
+      "tacticalShift": "Fra ren flat 4-4-2 mot hengende spiss og bedre kontroll av rommet mellom leddene.",
+      "keyIdeas": ["hengende spiss", "mellomrom", "overgang til tierrollen", "fleksibel front"],
+      "representativeFormations": ["second_striker_4411"],
+      "playerTypeEmphasis": ["second-striker", "deep-lying-forward", "wide-midfielder"],
+      "historyGoUnlockThemes": ["europeisk klubbfotball", "Serie A", "moderniseringen av 4-4-2"]
+    },
+    {
+      "id": "modern_balance",
+      "name": "Moderne balanse",
+      "period": "2005–2020",
+      "summary": "Dobbel pivot, tier og én spiss ga balanserte, stabile systemer som 4-2-3-1 og moderne 4-3-3.",
+      "tacticalShift": "Fra to spisser mot kontroll via dobbel pivot, indreløpere og bredde fra back/kant.",
+      "keyIdeas": ["dobbel pivot", "balanse", "indreløpere", "bredde fra back", "fleksibel struktur"],
+      "representativeFormations": ["defensive_451", "modern_4231", "modern_433", "conte_343", "modern_3421"],
+      "playerTypeEmphasis": ["holding-midfielder", "attacking-midfielder", "inverted-winger", "complete-forward", "wing-back"],
+      "historyGoUnlockThemes": ["moderne klubbanlegg", "europeisk toppfotball", "moderne stadioner", "Champions League"]
+    },
+    {
+      "id": "gegenpressing_pressing_schools",
+      "name": "Gegenpressing og pressskoler",
+      "period": "2010–2022",
+      "summary": "Red Bull-, Dortmund- og pressskolene gjorde gjenvinning og vertikalitet til lagets viktigste våpen.",
+      "tacticalShift": "Fra ballbesittelse som mål mot umiddelbar gjenvinning og rask vertikal utnyttelse av kaos.",
+      "keyIdeas": ["gegenpressing", "vertikalitet", "kompakte avstander", "gjenvinning", "intensitet"],
+      "representativeFormations": ["gegen_4222", "narrow_4312_press", "modern_442_press"],
+      "playerTypeEmphasis": ["ball-winner", "pressing-forward", "shadow-striker", "box-to-box-midfielder"],
+      "historyGoUnlockThemes": ["Dortmund", "RB-skolen", "Klopp", "moderne pressfotball", "tysk fotball"]
+    },
+    {
+      "id": "positional_play",
+      "name": "Posisjonsspill",
+      "period": "2010–2024",
+      "summary": "Juego de posición med soner, fem i siste linje og invertert back skapte kontroll i etablert angrep.",
+      "tacticalShift": "Fra fast formasjon mot soneprinsipper: 3-2-5/3-2-2-3 i ballbesittelse med invertert back.",
+      "keyIdeas": ["soneprinsipper", "fem i siste linje", "invertert back", "tallovertak per sone"],
+      "representativeFormations": ["possession_433", "positional_325", "inverted_fullback_235"],
+      "playerTypeEmphasis": ["inverted-full-back", "deep-lying-playmaker", "mezzala", "false-nine", "wide-playmaker"],
+      "historyGoUnlockThemes": ["Barcelona", "Pep Guardiola", "La Masia", "moderne posisjonsspill"]
+    },
+    {
+      "id": "modern_box_midfield",
+      "name": "Moderne box midfield",
+      "period": "2020–2026",
+      "summary": "Box midfield 3-2-2-3/3-2-4-1 med fire sentrale i en boks ble den nye måten å dominere sentrum på.",
+      "tacticalShift": "Fra dobbel pivot mot en midtbaneboks med to dype og to høye sentrale spillere.",
+      "keyIdeas": ["midtbaneboks", "to + to sentralt", "tre bak ballen", "bredde fra kanter"],
+      "representativeFormations": ["box_midfield_3223", "modern_3241", "alonso_3421"],
+      "playerTypeEmphasis": ["inverted-full-back", "advanced-eight", "mezzala", "shadow-striker", "wide-centre-back"],
+      "historyGoUnlockThemes": ["moderne elitefotball", "Leverkusen", "Xabi Alonso", "moderne box-systemer"]
+    },
+    {
+      "id": "modern_rest_defence",
+      "name": "Moderne restforsvar",
+      "period": "2020–2026",
+      "summary": "Eksplisitt design av restforsvaret bak fem angrepsspillere ble et eget taktisk fokus.",
+      "tacticalShift": "Fra implisitt balanse mot bevisst utformet 2-3 eller 3-2 restforsvar bak angrepet.",
+      "keyIdeas": ["bevisst restforsvar", "to + tre eller tre + to bak ballen", "sikring under angrep", "kontroll av motkontring"],
+      "representativeFormations": ["modern_rest_235"],
+      "playerTypeEmphasis": ["ball-playing-centre-back", "inverted-full-back", "holding-midfielder"],
+      "historyGoUnlockThemes": ["moderne elitefotball", "restforsvar-analyse", "Champions League-nivå"]
+    }
+  ]
+}

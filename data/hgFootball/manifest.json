@@ -1,0 +1,32 @@
+{
+  "schema": "history-go.hg-football.manifest.v1",
+  "version": 1,
+  "module": "HG Football Manager",
+  "description": "Historical football manager data foundation connected to History Go unlocks.",
+  "sourceOfTruth": [
+    "data/hgFootball/formationEras.json",
+    "data/hgFootball/formations.json",
+    "data/hgFootball/roleTypes.json",
+    "data/hgFootball/playerRoleFitRules.json",
+    "data/hgFootball/staffRoles.json",
+    "data/hgFootball/unlockRules.json"
+  ],
+  "files": [
+    { "path": "data/hgFootball/manifest.json", "role": "manifest", "schema": "history-go.hg-football.manifest.v1" },
+    { "path": "data/hgFootball/formationEras.json", "role": "eras", "schema": "history-go.hg-football.formation-eras.v1" },
+    { "path": "data/hgFootball/formations.json", "role": "formations", "schema": "history-go.hg-football.formations.v1" },
+    { "path": "data/hgFootball/roleTypes.json", "role": "roleTypes", "schema": "history-go.hg-football.role-types.v1" },
+    { "path": "data/hgFootball/playerRoleFitRules.json", "role": "fitRules", "schema": "history-go.hg-football.player-role-fit-rules.v1" },
+    { "path": "data/hgFootball/staffRoles.json", "role": "staffRoles", "schema": "history-go.hg-football.staff-roles.v1" },
+    { "path": "data/hgFootball/unlockRules.json", "role": "unlockRules", "schema": "history-go.hg-football.unlock-rules.v1" },
+    { "path": "data/hgFootball/README.md", "role": "documentation", "schema": null }
+  ],
+  "notes": [
+    "Formations are historical tactical systems, not just numeric shapes.",
+    "Old formations are not bad by default; they require correct player types and principles.",
+    "Players are strong by default; tactical misuse creates negative performance.",
+    "Unlocks should connect to History Go places, clubs, stadiums, players and staff.",
+    "This module is additive and self-contained; it does not replace the existing data/football_*.json unlock-loop dataset.",
+    "Schema namespace 'history-go.hg-football.*' is intentional for this module and runs alongside the existing 'historygo-football-manager.*' files."
+  ]
+}
