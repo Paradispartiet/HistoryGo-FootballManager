@@ -1,0 +1,221 @@
+{
+  "schema": "history-go.hg-football.player-role-fit-rules.v1",
+  "version": 1,
+  "principles": [
+    "Alle spillere er gode (typisk 85-100). Det finnes ingen dårlige historiske spillere i systemet.",
+    "Kampresultatet avgjøres først og fremst av trenerens evne til å bruke spillerne riktig.",
+    "Riktig bruk gir pluss; feil bruk gir minus, selv for en toppspiller.",
+    "Fit beregnes på tvers av flere dimensjoner, ikke bare posisjon."
+  ],
+  "scoring": {
+    "scale": "Hver fitDimension scores 0-10. Total fit er en vektet sum.",
+    "positiveBand": "Riktig bruk løfter en allerede sterk spiller (pluss).",
+    "negativeBand": "Misbruk trekker ned (minus), uavhengig av spillerens grunnkvalitet.",
+    "neutral": 5
+  },
+  "fitDimensions": [
+    { "id": "roleFit", "name": "Rollepassform", "summary": "Passer spillerens naturlige styrker rollens krav?" },
+    { "id": "formationFit", "name": "Formasjonspassform", "summary": "Støtter formasjonen spillerens bevegelser og rom?" },
+    { "id": "eraPrincipleFit", "name": "Epokeprinsipp-passform", "summary": "Samsvarer spillertypen med systemets epoke og prinsipper?" },
+    { "id": "phaseFit", "name": "Fasepassform", "summary": "Bruker kampfasen (med/uten ball, press, lav blokk, restforsvar) spilleren riktig?" },
+    { "id": "tacticalFamiliarity", "name": "Taktisk fortrolighet", "summary": "Kjenner spilleren systemet gjennom trening og tilvenning?" },
+    { "id": "coachUnderstanding", "name": "Trenerforståelse", "summary": "Forstår treneren systemets prinsipper godt nok til å frigjøre spilleren?" },
+    { "id": "teammateRelationFit", "name": "Relasjonspassform", "summary": "Har spilleren sine sterke relasjoner rundt seg?" },
+    { "id": "physicalDemandFit", "name": "Fysisk passform", "summary": "Matcher systemets fysiske krav spillerens profil?" },
+    { "id": "creativityFit", "name": "Kreativitetspassform", "summary": "Gir systemet rom for spillerens kreative styrker?" },
+    { "id": "defensiveResponsibilityFit", "name": "Defensiv ansvarspassform", "summary": "Matcher det defensive ansvaret spillerens profil?" }
+  ],
+  "rules": [
+    {
+      "id": "dribbler_in_space_systems",
+      "roleType": "dribbler_forward",
+      "effect": "positive",
+      "goodAs": ["inside_forward", "inverted_winger", "second_striker"],
+      "goodInFormations": ["total_433", "brazil_424", "modern_433", "creator_3412"],
+      "condition": "systemer med rom å angripe og støtte rundt",
+      "reason": "Driblerens styrker (dribling, akselerasjon, én-mot-én) får rom og relasjoner."
+    },
+    {
+      "id": "libero_in_libero_systems",
+      "roleType": "libero",
+      "effect": "positive",
+      "goodAs": ["libero", "libero_classic"],
+      "goodInFormations": ["catenaccio_1432", "catenaccio_532", "libero_352", "defensive_532", "verrou_1333"],
+      "condition": "systemer som faktisk har en libero-rolle",
+      "reason": "Liberoen får sikre bakrommet, lese spillet og bryte press slik rollen er ment."
+    },
+    {
+      "id": "target_forward_in_direct_systems",
+      "roleType": "target_forward",
+      "effect": "positive",
+      "goodAs": ["target_forward"],
+      "goodInFormations": ["direct_english_235", "english_direct_442", "low_block_541", "classic_442"],
+      "condition": "systemer med innlegg, andreballer og duellspill",
+      "reason": "Targetspissen får service og dueller som matcher styrkene."
+    },
+    {
+      "id": "false_nine_in_dropping_systems",
+      "roleType": "false_nine",
+      "effect": "positive",
+      "goodAs": ["false_nine", "withdrawn_centre_forward"],
+      "goodInFormations": ["hungarian_mm_3232", "early_false_nine_235", "total_433", "possession_433", "positional_325"],
+      "condition": "systemer med løp rundt en dyp nier",
+      "reason": "Falsk nier får trekke ned og åpne rom mens lagkamerater løper bak."
+    },
+    {
+      "id": "classic_winger_in_wide_systems",
+      "roleType": "classic_winger",
+      "effect": "positive",
+      "goodAs": ["classic_winger", "outside_forward"],
+      "goodInFormations": ["pyramid_235", "scottish_combination_235", "classic_442", "english_direct_442", "modern_433"],
+      "condition": "systemer med naturlig bredde",
+      "reason": "Den klassiske vingen får bredde og én-mot-én-situasjoner."
+    },
+    {
+      "id": "inverted_full_back_in_positional_systems",
+      "roleType": "inverted_full_back",
+      "effect": "positive",
+      "goodAs": ["inverted_full_back"],
+      "goodInFormations": ["inverted_fullback_235", "positional_325", "box_midfield_3223"],
+      "condition": "posisjonelle systemer med behov for sentral tallovervekt",
+      "reason": "Den inverterte backen får gi midtbanekontroll i oppbygging."
+    },
+    {
+      "id": "wing_back_in_back_three_systems",
+      "roleType": "wing_back",
+      "effect": "positive",
+      "goodAs": ["wing_back"],
+      "goodInFormations": ["libero_352", "defensive_532", "conte_343", "modern_3421", "alonso_3421"],
+      "condition": "treback-systemer der wingbacks gir all bredde",
+      "reason": "Wingbacken får hele kanalen og en toveis-oppgave som matcher profilen."
+    },
+    {
+      "id": "regista_in_controlled_systems",
+      "roleType": "regista",
+      "effect": "positive",
+      "goodAs": ["regista", "deep_lying_playmaker"],
+      "goodInFormations": ["possession_433", "modern_4231", "metodo_2323", "danubian_2323"],
+      "condition": "systemer med beskyttet rom og pasningsvinkler",
+      "reason": "Registaen får dirigere tempo fra et beskyttet rom."
+    },
+    {
+      "id": "destroyer_in_defensive_systems",
+      "roleType": "destroyer",
+      "effect": "positive",
+      "goodAs": ["destroyer", "ball_winner"],
+      "goodInFormations": ["catenaccio_532", "classic_442", "defensive_451", "modern_4231"],
+      "condition": "systemer som trenger en skjerm foran forsvaret",
+      "reason": "Destroyeren får bryte opp spill og beskytte rommet foran forsvaret."
+    },
+    {
+      "id": "advanced_eight_in_modern_threes",
+      "roleType": "advanced_eight",
+      "effect": "positive",
+      "goodAs": ["advanced_eight", "mezzala"],
+      "goodInFormations": ["modern_433", "positional_325", "modern_3241"],
+      "condition": "systemer med tre på midten og halvromsløp",
+      "reason": "Den offensive åtteren / mezzalaen får angripe halvrom og siste tredjedel."
+    },
+    {
+      "id": "mezzala_in_modern_threes",
+      "roleType": "mezzala",
+      "effect": "positive",
+      "goodAs": ["mezzala", "advanced_eight"],
+      "goodInFormations": ["modern_433", "positional_325", "modern_3241"],
+      "condition": "systemer med tre på midten og halvromsløp",
+      "reason": "Mezzalaen får angripe halvrommet mellom back og stopper."
+    },
+    {
+      "id": "historic_forwards_in_historic_systems",
+      "roleType": "inside_forward",
+      "effect": "positive",
+      "goodAs": ["inside_forward", "outside_forward", "inside_right", "inside_left", "outside_right", "outside_left"],
+      "goodInFormations": ["pyramid_235", "scottish_combination_235", "wm_3223", "brazil_424", "total_433"],
+      "condition": "historiske og totalfotball-systemer med femmannsfront eller inside-forward-rom",
+      "reason": "De historiske angrepsrollene får rommet og relasjonene de er bygget for."
+    }
+  ],
+  "misuseRules": [
+    {
+      "id": "dribbler_as_static_target",
+      "roleType": "dribbler_forward",
+      "effect": "negative",
+      "misuseContext": "møtende/statisk spiss i feil struktur uten rom",
+      "badInFormations": ["low_block_541", "english_direct_442", "direct_english_235"],
+      "penaltyDimensions": ["roleFit", "phaseFit", "creativityFit"],
+      "reason": "En dribler som brukes som møtende spiss uten rom får minus; styrkene blir innelåst."
+    },
+    {
+      "id": "libero_as_flat_marker",
+      "roleType": "libero",
+      "effect": "negative",
+      "misuseContext": "flat markeringsstopper i en flat firer uten libero-rolle",
+      "badInFormations": ["classic_442", "english_direct_442", "pressing_442"],
+      "penaltyDimensions": ["roleFit", "creativityFit", "eraPrincipleFit"],
+      "reason": "En libero som brukes som vanlig flat stopper mister sin kreative og spillstyrende verdi."
+    },
+    {
+      "id": "classic_winger_in_narrow_diamond",
+      "roleType": "classic_winger",
+      "effect": "negative",
+      "misuseContext": "tvunget inn som smal tier i en diamant uten bredde",
+      "badInFormations": ["diamond_41212", "narrow_4312_press"],
+      "penaltyDimensions": ["roleFit", "formationFit"],
+      "reason": "En klassisk ving tvunget inn som smal tier uten bredde mister effekt."
+    },
+    {
+      "id": "target_forward_without_service",
+      "roleType": "target_forward",
+      "effect": "negative",
+      "misuseContext": "uten innlegg/støtte, eller som falsk nier",
+      "badInFormations": ["total_433", "positional_325", "possession_433"],
+      "penaltyDimensions": ["roleFit", "phaseFit", "teammateRelationFit"],
+      "reason": "En targetspiss uten innlegg og støtte, eller brukt i falsk nier-rolle, mister effekt."
+    },
+    {
+      "id": "false_nine_in_direct_442",
+      "roleType": "false_nine",
+      "effect": "negative",
+      "misuseContext": "falsk nier i direkte 4-4-2 uten løp rundt seg",
+      "badInFormations": ["english_direct_442", "low_block_541", "direct_english_235"],
+      "penaltyDimensions": ["roleFit", "teammateRelationFit", "phaseFit"],
+      "reason": "En falsk nier i et direkte system uten løp rundt seg mister effekt."
+    },
+    {
+      "id": "wing_back_without_coverage",
+      "roleType": "wing_back",
+      "effect": "negative",
+      "misuseContext": "lav energi eller uten bred dekning i begge retninger",
+      "badInFormations": ["classic_442", "diamond_41212"],
+      "penaltyDimensions": ["physicalDemandFit", "formationFit", "defensiveResponsibilityFit"],
+      "reason": "En wingback i et system med lav energi eller uten bred dekning mister effekt."
+    },
+    {
+      "id": "regista_in_chaotic_press",
+      "roleType": "regista",
+      "effect": "negative",
+      "misuseContext": "kaotisk presslag uten pasningsvinkler",
+      "badInFormations": ["gegen_4222", "english_direct_442"],
+      "penaltyDimensions": ["phaseFit", "teammateRelationFit", "physicalDemandFit"],
+      "reason": "En regista i et kaotisk presslag uten pasningsvinkler mister effekt."
+    },
+    {
+      "id": "ball_winner_as_creative_ten",
+      "roleType": "ball_winner",
+      "effect": "negative",
+      "misuseContext": "satt som kreativ tier",
+      "badInFormations": ["creator_3412", "second_striker_4411"],
+      "penaltyDimensions": ["roleFit", "creativityFit"],
+      "reason": "En ballvinner som settes som kreativ tier mister effekt; det er ikke spillerens styrke."
+    },
+    {
+      "id": "half_back_as_free_eight",
+      "roleType": "half_back",
+      "effect": "negative",
+      "misuseContext": "brukt som fri offensiv åtter uten defensivt anker",
+      "badInFormations": ["diamond_41212", "creator_3412"],
+      "penaltyDimensions": ["roleFit", "defensiveResponsibilityFit"],
+      "reason": "En half-back brukt som fri offensiv åtter trekkes ut av sin sterke balanserende relasjon."
+    }
+  ]
+}

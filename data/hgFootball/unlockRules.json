@@ -1,0 +1,186 @@
+{
+  "schema": "history-go.hg-football.unlock-rules.v1",
+  "version": 1,
+  "unlockPrinciples": [
+    "Spilleren kan bare bruke fotballspillere fra steder de har besøkt/låst opp i History Go.",
+    "Spillere fra klubber/steder man ikke har samlet, er ikke tilgjengelige i laget.",
+    "Formasjoner kan låses opp via epoke, klubb, stadion, trener, historisk spiller, sportssted eller Groundhopper-relasjon.",
+    "Staff låses opp via klubbsteder.",
+    "Verdensberømte stadioner kan fungere som sportssteder i History Go og samtidig være Groundhopper-relevante steder.",
+    "Sportkategorien brukes for fotballstadioner, klubbanlegg, baner, arenaer og relevante idrettssteder.",
+    "Parker flyttes ikke til sport bare fordi man kan trene der; fotball-/stadion-/klubbspesifikke steder går i sport.",
+    "Hvis en unlock senere endrer brukerens progression i runtime, må koden dispatche window-eventet 'updateProfile'. Denne oppgaven implementerer ikke runtime-kode."
+  ],
+  "unlockSources": [
+    { "id": "history_go_place", "name": "History Go-sted", "summary": "Et hvilket som helst besøkt/samlet sted i History Go." },
+    { "id": "sport_place", "name": "Sportssted", "summary": "Sted i sportkategorien: stadion, klubbanlegg, bane, arena." },
+    { "id": "football_stadium", "name": "Fotballstadion", "summary": "Stadion, ofte både sportssted og Groundhopper-relevant." },
+    { "id": "football_club", "name": "Fotballklubb", "summary": "Klubbsted som binder spillere og staff." },
+    { "id": "groundhopper_place", "name": "Groundhopper-sted", "summary": "Bane/stadion relevant for Groundhopper-relasjoner." },
+    { "id": "collected_player", "name": "Samlet spiller", "summary": "Spiller låst opp gjennom History Go." },
+    { "id": "collected_manager", "name": "Samlet trener", "summary": "Trener/manager låst opp gjennom History Go." },
+    { "id": "collected_staff", "name": "Samlet staff", "summary": "Staff låst opp gjennom klubbsteder." },
+    { "id": "football_story", "name": "Fotballhistorie", "summary": "Historisk story som låser opp epoke/system." },
+    { "id": "football_lexicon_entry", "name": "Fotballeksikon-oppslag", "summary": "Leksikonoppslag som låser opp taktisk kunnskap." },
+    { "id": "football_badge", "name": "Fotballbadge", "summary": "Badge som markerer oppnådd kunnskap/relasjon." }
+  ],
+  "unlockTiers": ["start", "early", "standard", "advanced"],
+  "field_docs": {
+    "appliesTo": "formation | player | staff.",
+    "formationId": "Settes når appliesTo = formation; må finnes i formations.json.",
+    "requires": "Kilder (anyOf/allOf) som låser opp målet.",
+    "tier": "start | early | standard | advanced."
+  },
+  "rules": [
+    {
+      "id": "unlock_modern_4231_start",
+      "appliesTo": "formation",
+      "formationId": "modern_4231",
+      "tier": "start",
+      "requires": { "anyOf": [ { "sourceType": "history_go_place", "theme": "startformasjon" } ] },
+      "note": "Moderne 4-2-3-1 kan være startformasjon eller låses opp tidlig."
+    },
+    {
+      "id": "unlock_modern_433_early",
+      "appliesTo": "formation",
+      "formationId": "modern_433",
+      "tier": "early",
+      "requires": { "anyOf": [ { "sourceType": "history_go_place", "theme": "startformasjon" }, { "sourceType": "football_lexicon_entry", "theme": "moderne 4-3-3" } ] },
+      "note": "Moderne 4-3-3 kan være startformasjon eller låses opp tidlig."
+    },
+    {
+      "id": "unlock_classic_442_early",
+      "appliesTo": "formation",
+      "formationId": "classic_442",
+      "tier": "early",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "klassisk klubbfotball" }, { "sourceType": "football_lexicon_entry", "theme": "4-4-2-tradisjon" } ] },
+      "note": "Klassisk 4-4-2 låses opp tidlig via klubber og leksikon."
+    },
+    {
+      "id": "unlock_pyramid_235",
+      "appliesTo": "formation",
+      "formationId": "pyramid_235",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "tidlige britiske klubber" }, { "sourceType": "football_story", "theme": "fotballhistorie" }, { "sourceType": "groundhopper_place", "theme": "viktoriansk bane" } ] },
+      "note": "Pyramid 2-3-5 låses opp gjennom tidlige britiske fotballsteder, gamle klubber og fotballhistoriske stories."
+    },
+    {
+      "id": "unlock_scottish_combination_235",
+      "appliesTo": "formation",
+      "formationId": "scottish_combination_235",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "skotsk fotball" }, { "sourceType": "football_story", "theme": "pasningskultur" } ] },
+      "note": "Den skotske kombinasjonsskolen låses opp via skotske fotballsteder og stories."
+    },
+    {
+      "id": "unlock_wm_3223",
+      "appliesTo": "formation",
+      "formationId": "wm_3223",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Arsenal" }, { "sourceType": "football_stadium", "theme": "Highbury" }, { "sourceType": "collected_manager", "theme": "Herbert Chapman" } ] },
+      "note": "WM 3-2-2-3 låses opp gjennom Arsenal/Highbury/Chapman-relaterte koblinger hvis slike steder/data finnes."
+    },
+    {
+      "id": "unlock_metodo_2323",
+      "appliesTo": "formation",
+      "formationId": "metodo_2323",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "italiensk metodo" }, { "sourceType": "collected_manager", "theme": "Pozzo-skolen" } ] },
+      "note": "Metodo låses opp via italienske metodo-koblinger hvis slike data finnes."
+    },
+    {
+      "id": "unlock_hungarian_mm_3232",
+      "appliesTo": "formation",
+      "formationId": "hungarian_mm_3232",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "collected_player", "theme": "dyp nier" }, { "sourceType": "football_story", "theme": "Aranycsapat" } ] },
+      "note": "Det ungarske MM-systemet låses opp via Ungarn 1953-koblinger hvis slike data finnes."
+    },
+    {
+      "id": "unlock_brazil_424",
+      "appliesTo": "formation",
+      "formationId": "brazil_424",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_stadium", "theme": "Maracanã" }, { "sourceType": "collected_player", "theme": "Brasil 1958" }, { "sourceType": "football_club", "theme": "brasiliansk fotball" } ] },
+      "note": "Brazil 4-2-4 låses opp gjennom Brasil 1958 / brasilianske stadioner / brasilianske legender hvis slike data finnes."
+    },
+    {
+      "id": "unlock_catenaccio_1432",
+      "appliesTo": "formation",
+      "formationId": "catenaccio_1432",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Inter" }, { "sourceType": "football_stadium", "theme": "San Siro" }, { "sourceType": "collected_manager", "theme": "Herrera" } ] },
+      "note": "Catenaccio 1-4-3-2 låses opp gjennom Inter/San Siro/Herrera-relaterte koblinger hvis slike data finnes."
+    },
+    {
+      "id": "unlock_libero_352",
+      "appliesTo": "formation",
+      "formationId": "libero_352",
+      "tier": "standard",
+      "requires": { "allOf": [ { "sourceType": "collected_staff", "theme": "libero-kunnskap" } ], "anyOf": [ { "sourceType": "collected_player", "theme": "libero" }, { "sourceType": "football_story", "theme": "libero-tradisjon" } ] },
+      "note": "Libero 3-5-2 krever libero-rolle eller staff/trener med libero-kunnskap."
+    },
+    {
+      "id": "unlock_total_433",
+      "appliesTo": "formation",
+      "formationId": "total_433",
+      "tier": "advanced",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Ajax" }, { "sourceType": "sport_place", "theme": "Amsterdam" }, { "sourceType": "collected_manager", "theme": "Michels" }, { "sourceType": "collected_player", "theme": "Cruyff" } ] },
+      "note": "Total Football 4-3-3 låses opp gjennom Ajax/Amsterdam/Nederland/Cruyff/Michels-relaterte koblinger hvis slike data finnes."
+    },
+    {
+      "id": "unlock_gegen_4222",
+      "appliesTo": "formation",
+      "formationId": "gegen_4222",
+      "tier": "advanced",
+      "requires": { "allOf": [ { "sourceType": "collected_staff", "theme": "presskunnskap" }, { "sourceType": "collected_staff", "theme": "fysisk kapasitet" } ] },
+      "note": "Gegen 4-2-2-2 krever pressing-/fitness-/tactical-coach-kunnskap."
+    },
+    {
+      "id": "unlock_positional_325",
+      "appliesTo": "formation",
+      "formationId": "positional_325",
+      "tier": "advanced",
+      "requires": { "anyOf": [ { "sourceType": "collected_manager", "theme": "posisjonsspill" }, { "sourceType": "collected_staff", "theme": "avansert taktikk" } ] },
+      "note": "Positional 3-2-5 er en avansert opplåsing."
+    },
+    {
+      "id": "unlock_box_midfield_3223",
+      "appliesTo": "formation",
+      "formationId": "box_midfield_3223",
+      "tier": "advanced",
+      "requires": { "anyOf": [ { "sourceType": "collected_staff", "theme": "avansert taktikk" }, { "sourceType": "football_lexicon_entry", "theme": "box midfield" } ] },
+      "note": "Box midfield 3-2-2-3 er en avansert opplåsing."
+    },
+    {
+      "id": "unlock_modern_3241",
+      "appliesTo": "formation",
+      "formationId": "modern_3241",
+      "tier": "advanced",
+      "requires": { "anyOf": [ { "sourceType": "collected_staff", "theme": "avansert taktikk" } ] },
+      "note": "Modern 3-2-4-1 er en avansert opplåsing."
+    },
+    {
+      "id": "unlock_modern_rest_235",
+      "appliesTo": "formation",
+      "formationId": "modern_rest_235",
+      "tier": "advanced",
+      "requires": { "anyOf": [ { "sourceType": "collected_staff", "theme": "restforsvar" }, { "sourceType": "football_lexicon_entry", "theme": "restforsvar" } ] },
+      "note": "Modern Rest-Defence 2-3-5 er en avansert opplåsing."
+    },
+    {
+      "id": "unlock_players_from_collected_places",
+      "appliesTo": "player",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "klubbtilknyttede spillere" }, { "sourceType": "football_stadium", "theme": "stadiontilknyttede spillere" }, { "sourceType": "history_go_place", "theme": "stedstilknyttede spillere" }, { "sourceType": "groundhopper_place", "theme": "Groundhopper-relasjon" } ] },
+      "note": "Spillere er kun tilgjengelige fra klubber/steder/stadioner spilleren har samlet i History Go."
+    },
+    {
+      "id": "unlock_staff_from_clubs",
+      "appliesTo": "staff",
+      "tier": "standard",
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "klubbtilknyttet staff" }, { "sourceType": "football_stadium", "theme": "stadiontilknyttet staff" }, { "sourceType": "sport_place", "theme": "sportsstedstilknyttet staff" } ] },
+      "note": "Staff låses opp via klubbsteder, stadioner og sportssteder; staff hører til klubber."
+    }
+  ]
+}

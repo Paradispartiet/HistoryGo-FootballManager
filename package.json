@@ -6,6 +6,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "audit:knowledge": "node scripts/audit-football-knowledge-data.mjs",
+    "audit:hg-football": "node scripts/audit-hg-football-data.mjs",
     "build": "tsc"
   },
   "devDependencies": {
