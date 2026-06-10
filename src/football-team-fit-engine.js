@@ -4,6 +4,7 @@ import {
   calculateBadgeMetricEffects,
   applyBadgeEffectsToMetrics
 } from "./football-badge-effect-engine.js";
+import { calculateRoleRelationships } from "./football-relationship-engine.js";
 
 function clamp(value, min = 0, max = 100) {
   return Math.max(min, Math.min(max, value));
@@ -222,7 +223,7 @@ function calculateRestDefenseScore(assignments, tactic) {
   return clamp(score);
 }
 
-function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers }) {
+function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers, relationships }) {
   const strengths = [];
   const issues = [];
   const completeAssignments = assignmentResults.filter((assignment) => assignment.isComplete);
@@ -259,6 +260,20 @@ function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers 
     issues.push("Restforsvaret er sårbart når laget angriper.");
   }
 
+  if (relationships?.relationshipScore >= 76) {
+    strengths.push("Rolle-relasjonene støtter laget: flere spillere får riktige medspillere rundt seg.");
+  } else if (relationships?.relationshipScore < 50) {
+    issues.push("Rolle-relasjonene trekker laget ned. Flere roller trenger støtte laget ikke gir dem.");
+  }
+
+  (relationships?.positiveRelations || []).slice(0, 3).forEach((relation) => {
+    strengths.push(`${relation.title}: ${relation.explanation}`);
+  });
+
+  (relationships?.negativeRelations || []).slice(0, 4).forEach((relation) => {
+    issues.push(`${relation.title}: ${relation.explanation}`);
+  });
+
   duplicatePlayers.forEach((player) => {
     issues.push(`${player.name} er brukt flere steder i samme ellever. Hver spiller bør bare brukes én gang.`);
   });
@@ -291,6 +306,7 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
   const assignmentResults = buildAssignmentResults(lineup, formation, tactic, players, roles);
   const completeAssignments = assignmentResults.filter((assignment) => assignment.isComplete);
   const duplicatePlayers = getDuplicatePlayers(completeAssignments);
+  const relationships = calculateRoleRelationships(completeAssignments, tactic);
   const individualScores = completeAssignments.map((assignment) => assignment.fit.matchScore);
   const roleFits = completeAssignments.map((assignment) => assignment.fit.roleFit);
   const tacticFits = completeAssignments.map((assignment) => assignment.fit.tacticFit);
@@ -307,6 +323,7 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
     buildUpScore: calculateBuildUpScore(completeAssignments, tactic),
     pressScore: calculatePressScore(completeAssignments, tactic),
     restDefenseScore: calculateRestDefenseScore(completeAssignments, tactic),
+    relationshipScore: relationships.relationshipScore,
     duplicatePenalty: duplicatePlayers.length * 12
   };
 
@@ -317,15 +334,16 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
   const metrics = applyBadgeEffectsToMetrics(baseMetrics, badgeEffects);
 
   const teamScore = clamp(Math.round(
-    metrics.individualFitAverage * 0.3 +
-    metrics.roleFitAverage * 0.12 +
-    metrics.tacticFitAverage * 0.12 +
-    metrics.balanceScore * 0.1 +
-    metrics.widthScore * 0.08 +
-    metrics.depthScore * 0.08 +
+    metrics.individualFitAverage * 0.26 +
+    metrics.roleFitAverage * 0.11 +
+    metrics.tacticFitAverage * 0.11 +
+    metrics.balanceScore * 0.09 +
+    metrics.widthScore * 0.07 +
+    metrics.depthScore * 0.07 +
     metrics.buildUpScore * 0.08 +
     metrics.pressScore * 0.06 +
-    metrics.restDefenseScore * 0.06 -
+    metrics.restDefenseScore * 0.07 +
+    metrics.relationshipScore * 0.08 -
     metrics.misuseAverage * 0.08 -
     metrics.duplicatePenalty
   ));
@@ -337,8 +355,9 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
     metrics,
     baseMetrics,
     badgeEffects,
+    relationships,
     assignments: assignmentResults,
     duplicatePlayers,
-    report: buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers })
+    report: buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers, relationships })
   };
 }
