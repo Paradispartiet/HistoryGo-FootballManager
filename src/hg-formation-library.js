@@ -9,6 +9,7 @@
 //
 // Designprinsipp: ingen formasjonsliste hardkodes i JS. Alt leses fra
 // data/hgFootball/formations.json (og epoker/roller/unlock-regler).
+import "./football-relationship-metric-ui.js";
 
 const HGFM_DATA = {
   eras: "data/hgFootball/formationEras.json",
