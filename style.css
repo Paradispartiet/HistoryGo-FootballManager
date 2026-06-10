@@ -605,6 +605,29 @@ select:focus-visible {
   font-size: 1rem;
 }
 
+/* Additivt historisk rollefit-hint i sidepanelet. Nøytral som standard, grønn
+   ved god match, rød/varsel ved mulig feilbruk. */
+.historical-role-hint {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--panel-strong);
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.historical-role-hint[data-tone="positive"] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.historical-role-hint[data-tone="warning"] {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
 .report-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1863,6 +1886,151 @@ ul {
 .pitch-controls select {
   padding: 10px 12px;
   font-size: 0.95rem;
+}
+
+/* ---------- Taktisk systempanel (valgt historisk formasjon) ---------- */
+.tactic-system {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-strong);
+}
+
+.tactic-system-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.tactic-system-head {
+  display: grid;
+  gap: 6px;
+}
+
+.tactic-system-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.tactic-system-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tactic-system-title h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+}
+
+.tactic-system-shape {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+}
+
+.tactic-system-diff {
+  justify-self: start;
+  padding: 4px 10px;
+  border: 2px solid var(--line-soft);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.tactic-system-diff-high,
+.tactic-system-diff-very_high {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.tactic-system-diff-low {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.tactic-system-phases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 8px;
+}
+
+.tactic-system-phase {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 2px solid var(--line-soft);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.tactic-system-phase-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.tactic-system-phase-value {
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+.tactic-system-block {
+  display: grid;
+  gap: 6px;
+}
+
+.tactic-system-block-label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.tactic-system-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tactic-system-chip {
+  padding: 4px 10px;
+  border: 2px solid var(--line-soft);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tactic-system-chips-role .tactic-system-chip {
+  border-color: var(--line);
+}
+
+.tactic-system-chip.is-empty {
+  color: var(--muted);
+}
+
+.tactic-system-unlock {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 /* ---------- Dynamisk sidepanel ---------- */

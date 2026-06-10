@@ -79,6 +79,10 @@
 
           <p class="pitch-hint">Dra spillerne for å endre posisjon. Klikk en spiller for å åpne profilen til høyre.</p>
           <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
+
+          <!-- Kompakt taktisk systempanel for valgt historisk formasjon. Fylles
+               av app.js (renderTacticalSystemPanel) fra data/hgFootball. -->
+          <div class="tactic-system" id="tacticalSystemPanel" aria-live="polite"></div>
         </section>
 
         <aside class="panel side-panel" id="sidePanel" aria-live="polite">
@@ -104,6 +108,8 @@
               </div>
               <p id="selectedFitStatus" class="fit-status-text">Velg plass, spiller og rolle.</p>
               <p id="selectedFitExplanation" class="muted-text">Når du velger rolle, får du forklaring på om treneren bruker spilleren riktig.</p>
+              <!-- Additivt historisk rollefit-hint mot valgt formasjon. -->
+              <p id="historicalRoleHint" class="historical-role-hint" data-tone="neutral">Ingen direkte historisk rollefit-regel registrert; bruker vanlig lagfit.</p>
             </div>
 
             <p id="profileSource" class="profile-source"></p>
