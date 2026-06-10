@@ -24,6 +24,7 @@ const DATA_PATHS = {
   clubInboxMessageManifest: "data/club_inbox_messages/manifest.json",
   clubInboxSenders: "data/club_inbox_senders.json",
   clubInboxThreads: "data/club_inbox_threads.json",
+  clubInboxChoiceManifest: "data/club_inbox_choices/manifest.json",
   // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
   unlocks: "data/football_unlocks.json",
   staff: "data/football_staff.json",
@@ -53,6 +54,9 @@ const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
 // Innboks-tråder: leste og leverte meldings-id-er (kun UI/progresjon).
 const READ_INBOX_MESSAGE_IDS_KEY = "hgfm.readInboxMessageIds.v1";
 const DELIVERED_INBOX_MESSAGE_IDS_KEY = "hgfm.deliveredInboxMessageIds.v1";
+// Innboks-svarvalg (v1): brukerens valgte svar per messageId. Kun UI/progresjon
+// pluss små engangs-effekter på Club Week-verdier.
+const SELECTED_INBOX_CHOICES_KEY = "hgfm.selectedInboxChoices.v1";
 
 // Ekte History Go-progresjon i localStorage (skrives av History Go-appen, ikke
 // av Football Manager). Brukes som kilde til faktisk besøkte sportsteder.
@@ -112,6 +116,13 @@ const state = {
   // - Arkiv viser tråder med levert/lest historikk.
   readInboxMessageIds: new Set(),
   deliveredInboxMessageIds: new Set(),
+  // Innboks-svarvalg (v1):
+  // - clubInboxChoices = valgkatalogen lastet fra manifest (én fil per avsender).
+  // - selectedInboxChoices = brukerens valg som map { [messageId]: choiceId }.
+  // Effekter på Club Week-verdier brukes kun første gang et valg tas; reload
+  // bruker ikke effekter på nytt. Ingen kampmotor-, rollefit- eller matching-effekt.
+  clubInboxChoices: [],
+  selectedInboxChoices: {},
   // History Go-unlocks (v1). Kobler besøkte steder til Football Manager-ressurser.
   // Filtreres gjennom teamMerits.unlockedPlaceIds. Ingen fit-/kampmotor-effekt.
   unlocks: { placeUnlocks: [] },
@@ -332,6 +343,101 @@ function validateClubInboxMessages(messages) {
     }
 
     valid.push(message);
+  });
+
+  return valid;
+}
+
+// Gyldige metric-nøkler for innboks-svarvalg. Holdes synk med Club Week-state.
+// Brukes til validering og effekt-applisering. Ingen andre nøkler påvirker noe.
+const INBOX_CHOICE_METRIC_KEYS = new Set([
+  "boardTrust",
+  "playerMorale",
+  "mediaPressure",
+  "trainingCulture",
+  "tacticalClarity"
+]);
+
+// Last innboks-svarvalg manifest-basert (én fil per avsender). Slår sammen alle
+// vellykkede filers choices-array, validerer og returnerer samlet array. Kaster
+// aldri videre til init – ved manglende/feilende manifest returneres tom array.
+async function loadClubInboxChoices() {
+  try {
+    const manifest = await loadJson(DATA_PATHS.clubInboxChoiceManifest);
+
+    if (!Array.isArray(manifest?.files)) {
+      console.warn("Innboks-valg-manifest mangler eller har feil format. Ingen svarvalg lastes.");
+      return [];
+    }
+
+    const results = await Promise.allSettled(
+      manifest.files.map((filePath) => loadJson(filePath))
+    );
+
+    const merged = [];
+    results.forEach((result, index) => {
+      const filePath = manifest.files[index];
+
+      if (result.status !== "fulfilled") {
+        console.warn(`Innboks-valgfil kunne ikke lastes: ${filePath}`);
+        return;
+      }
+
+      const fileData = result.value;
+      if (!Array.isArray(fileData?.choices)) {
+        console.warn(`Innboks-valgfil mangler gyldig choices-array: ${filePath}`);
+        return;
+      }
+
+      fileData.choices.forEach((choice) => merged.push(choice));
+    });
+
+    return validateClubInboxChoices(merged);
+  } catch (error) {
+    console.warn("Innboks-valg-manifest mangler eller har feil format. Ingen svarvalg lastes.");
+    return [];
+  }
+}
+
+// Intern validering av en samlet choices-array. Beholder kun objekter med
+// string-id og varsler om dubletter og manglende/ugyldige felt. Stopper aldri
+// appen – ugyldige enkeltfelt logges, men valget beholdes med string-id.
+function validateClubInboxChoices(choices) {
+  const seenIds = new Set();
+  const valid = [];
+
+  choices.forEach((choice) => {
+    if (!choice || typeof choice.id !== "string") {
+      console.warn("Innboks-valg uten gyldig string-id ble hoppet over.");
+      return;
+    }
+
+    if (seenIds.has(choice.id)) {
+      console.warn(`Innboks-valg med duplikat id oppdaget: ${choice.id}`);
+    }
+    seenIds.add(choice.id);
+
+    if (typeof choice.messageId !== "string") {
+      console.warn(`Innboks-valg ${choice.id} mangler messageId.`);
+    }
+    if (typeof choice.threadId !== "string") {
+      console.warn(`Innboks-valg ${choice.id} mangler threadId.`);
+    }
+    if (typeof choice.senderId !== "string") {
+      console.warn(`Innboks-valg ${choice.id} mangler senderId.`);
+    }
+
+    if (choice.effects && typeof choice.effects === "object" && !Array.isArray(choice.effects)) {
+      for (const [metric, delta] of Object.entries(choice.effects)) {
+        if (!INBOX_CHOICE_METRIC_KEYS.has(metric)) {
+          console.warn(`Innboks-valg ${choice.id} har ukjent metric i effects: ${metric}`);
+        } else if (typeof delta !== "number") {
+          console.warn(`Innboks-valg ${choice.id} har ikke-numerisk effektverdi for ${metric}.`);
+        }
+      }
+    }
+
+    valid.push(choice);
   });
 
   return valid;
@@ -3581,6 +3687,152 @@ function saveDeliveredInboxMessageIds() {
   saveInboxMessageIdSet(DELIVERED_INBOX_MESSAGE_IDS_KEY, state.deliveredInboxMessageIds);
 }
 
+// Les brukerens valgte innboks-svar fra localStorage som map { messageId: choiceId }.
+// Robust: returnerer {} ved parsefeil eller hvis lagret verdi ikke er et objekt.
+function loadSelectedInboxChoices() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(SELECTED_INBOX_CHOICES_KEY));
+
+    if (!stored || typeof stored !== "object" || Array.isArray(stored)) {
+      return {};
+    }
+
+    const result = {};
+    for (const [messageId, choiceId] of Object.entries(stored)) {
+      if (typeof messageId === "string" && typeof choiceId === "string") {
+        result[messageId] = choiceId;
+      }
+    }
+    return result;
+  } catch (error) {
+    return {};
+  }
+}
+
+// Lagre valgte innboks-svar. Stille no-op hvis lagring feiler (privat modus e.l.).
+function saveSelectedInboxChoices(selectedChoices) {
+  try {
+    const map = selectedChoices && typeof selectedChoices === "object" && !Array.isArray(selectedChoices)
+      ? selectedChoices
+      : {};
+    localStorage.setItem(SELECTED_INBOX_CHOICES_KEY, JSON.stringify(map));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+// Alle svarvalg som hører til en gitt melding (kan være 0–2 i v1).
+function getChoicesForMessage(messageId) {
+  return state.clubInboxChoices.filter((choice) => choice.messageId === messageId);
+}
+
+// Det allerede valgte svaret for en melding, eller null hvis intet er valgt.
+function getSelectedChoiceForMessage(messageId) {
+  const choiceId = state.selectedInboxChoices?.[messageId];
+  if (!choiceId) {
+    return null;
+  }
+  return state.clubInboxChoices.find((choice) => choice.id === choiceId) || null;
+}
+
+// Klem en klubbverdi inn i gyldig 0–100-bånd.
+function clampMetric(value) {
+  return Math.max(0, Math.min(100, value));
+}
+
+// Bruk et valgs effekter på Club Week-verdiene. Kun gyldige metric-nøkler med
+// numerisk delta og eksisterende numerisk verdi i clubWeekState påvirkes, og
+// resultatet clamps 0–100. Skriver tilbake til localStorage via saveClubWeekState.
+// Ingen kampmotor-, rollefit-, matching- eller Club Week Engine-endring.
+function applyInboxChoiceEffects(choice) {
+  const effects = choice?.effects;
+  if (!effects || typeof effects !== "object" || Array.isArray(effects)) {
+    return;
+  }
+  if (!state.clubWeekState || typeof state.clubWeekState !== "object") {
+    return;
+  }
+
+  for (const [metric, delta] of Object.entries(effects)) {
+    if (!INBOX_CHOICE_METRIC_KEYS.has(metric) || typeof delta !== "number") {
+      continue;
+    }
+    if (typeof state.clubWeekState[metric] === "number") {
+      state.clubWeekState[metric] = clampMetric(state.clubWeekState[metric] + delta);
+    }
+  }
+
+  saveClubWeekState(state.clubWeekState);
+}
+
+// Velg ett svar for en melding. Idempotent per messageId: hvis et valg allerede
+// finnes for meldingen, gjøres ingenting (effekter brukes kun første gang).
+function chooseInboxChoice(choiceId) {
+  const choice = state.clubInboxChoices.find((item) => item.id === choiceId);
+  if (!choice) {
+    console.warn(`Innboks-valg ikke funnet: ${choiceId}`);
+    return;
+  }
+
+  if (state.selectedInboxChoices[choice.messageId]) {
+    return;
+  }
+
+  state.selectedInboxChoices[choice.messageId] = choice.id;
+  saveSelectedInboxChoices(state.selectedInboxChoices);
+
+  applyInboxChoiceEffects(choice);
+
+  const phaseLabel = (state.clubWeekState && CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase])
+    || state.clubWeekState?.phase
+    || "Innboks";
+
+  addClubWeekEvent({
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    week: state.clubWeekState?.week ?? "?",
+    phase: state.clubWeekState?.phase || "inbox",
+    phaseLabel,
+    title: "Innboksvalg",
+    detail: choice.responseTitle || "Valg registrert",
+    message: `Innboksvalg: ${choice.responseTitle || "Valg registrert"}`
+  });
+
+  renderApp();
+}
+
+// Norske etiketter for klubbverdier i effekttekst.
+const INBOX_CHOICE_EFFECT_LABELS = {
+  boardTrust: "Styretillit",
+  playerMorale: "Spillermoral",
+  mediaPressure: "Medietrykk",
+  trainingCulture: "Treningskultur",
+  tacticalClarity: "Taktisk klarhet"
+};
+
+// Bygg en lesbar effekttekst, f.eks. "Effekt: Styretillit +2, Taktisk klarhet +1".
+// Returnerer tom streng hvis ingen gyldige effekter finnes.
+function formatInboxChoiceEffects(effects) {
+  if (!effects || typeof effects !== "object" || Array.isArray(effects)) {
+    return "";
+  }
+
+  const parts = [];
+  for (const [metric, delta] of Object.entries(effects)) {
+    if (!INBOX_CHOICE_METRIC_KEYS.has(metric) || typeof delta !== "number" || delta === 0) {
+      continue;
+    }
+    const label = INBOX_CHOICE_EFFECT_LABELS[metric] || metric;
+    const sign = delta > 0 ? "+" : "";
+    parts.push(`${label} ${sign}${delta}`);
+  }
+
+  if (parts.length === 0) {
+    return "";
+  }
+
+  return `Effekt: ${parts.join(", ")}`;
+}
+
 // Fallback-tråder brukes hvis tråddatafilen ikke laster. Holder et minimum av
 // trådstruktur tilgjengelig selv uten data/club_inbox_threads.json.
 function getFallbackInboxThreads() {
@@ -3822,6 +4074,66 @@ function createMessageCard(message, isEmpty = false) {
   return article;
 }
 
+// Bygg svarvalg-blokk for én melding. Returnerer null hvis meldingen ikke har
+// valg. Hvis et svar allerede er valgt, vises en responsblokk; ellers vises
+// knapper. Bruker kun createElement/textContent – aldri innerHTML.
+function createInboxChoiceBlock(message) {
+  const messageId = message?.id;
+  if (typeof messageId !== "string") {
+    return null;
+  }
+
+  const choices = getChoicesForMessage(messageId);
+  if (!choices.length) {
+    return null;
+  }
+
+  const container = document.createElement("div");
+  container.className = "inbox-choice-list";
+
+  const selected = getSelectedChoiceForMessage(messageId);
+
+  if (selected) {
+    const response = document.createElement("div");
+    response.className = "inbox-choice-response";
+
+    const chosen = document.createElement("p");
+    chosen.className = "inbox-choice-response-title";
+    chosen.textContent = `Valgt svar: ${selected.label || ""}`;
+
+    const title = document.createElement("p");
+    title.className = "inbox-choice-response-title";
+    title.textContent = selected.responseTitle || "";
+
+    const body = document.createElement("p");
+    body.className = "inbox-choice-response-body";
+    body.textContent = selected.responseBody || "";
+
+    response.append(chosen, title, body);
+
+    const effectsText = formatInboxChoiceEffects(selected.effects);
+    if (effectsText) {
+      const effects = document.createElement("p");
+      effects.className = "inbox-choice-effects";
+      effects.textContent = effectsText;
+      response.append(effects);
+    }
+
+    container.append(response);
+  } else {
+    choices.forEach((choice) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "inbox-choice-button";
+      button.textContent = choice.label || "Svar";
+      button.addEventListener("click", () => chooseInboxChoice(choice.id));
+      container.append(button);
+    });
+  }
+
+  return container;
+}
+
 // Bygg ett trådkort fra en trådgruppe. Bruker kun createElement/textContent og
 // gjenbruker message-card-CSS. options.showReadButton gir en "Marker tråd som
 // lest"-knapp som markerer alle uleste meldinger i tråden som lest.
@@ -3871,6 +4183,15 @@ function createInboxThreadCard(threadGroup, options = {}) {
   body.textContent = latestMessage?.body || "Ingen meldingstekst.";
 
   article.append(meta, subject, latestTitle, body);
+
+  // Svarvalg (v1): vis valg/valgt svar for meldinger i tråden som har choices.
+  // Bygger kun med createElement/textContent. Valg markerer ikke tråden som lest.
+  for (const message of threadGroup.messages) {
+    const choiceBlock = createInboxChoiceBlock(message);
+    if (choiceBlock) {
+      article.append(choiceBlock);
+    }
+  }
 
   if (options.showReadButton) {
     const button = document.createElement("button");
@@ -4983,6 +5304,10 @@ async function init() {
     state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
     state.readInboxMessageIds = loadReadInboxMessageIds();
     state.deliveredInboxMessageIds = loadDeliveredInboxMessageIds();
+    // Innboks-svarvalg (v1): valgkatalog fra manifest + brukerens lagrede valg.
+    // loadClubInboxChoices kaster aldri – appen fungerer uten valg-manifest.
+    state.clubInboxChoices = await loadClubInboxChoices();
+    state.selectedInboxChoices = loadSelectedInboxChoices();
 
     const dataWarnings = validateFootballData(state);
 

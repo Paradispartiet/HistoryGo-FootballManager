@@ -1,0 +1,60 @@
+{
+  "schema": "historygo-football-manager.club-inbox-choices-by-sender.v1",
+  "version": 1,
+  "senderId": "captain",
+  "choices": [
+    {
+      "id": "choice_captain_low_morale_simple_task",
+      "messageId": "captain_low_morale_warning",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "label": "Gi spillergruppen én enkel oppgave",
+      "responseTitle": "Du forenkler for garderoben",
+      "responseBody": "Du gir spillergruppen én tydelig oppgave for neste fase. Det gir mindre støy og mer følelse av mestring.",
+      "effects": {
+        "playerMorale": 2,
+        "tacticalClarity": 1
+      }
+    },
+    {
+      "id": "choice_captain_low_morale_demand_reaction",
+      "messageId": "captain_low_morale_warning",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "label": "Krev sterkere reaksjon fra spillerne",
+      "responseTitle": "Du øker kravene",
+      "responseBody": "Du legger mer ansvar på spillerne. Noen responderer, men for en usikker gruppe kan beskjeden også kjennes tung.",
+      "effects": {
+        "playerMorale": -1,
+        "trainingCulture": 1
+      }
+    },
+    {
+      "id": "choice_captain_too_many_changes_stabilize",
+      "messageId": "captain_too_many_changes",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "label": "Hold fast ved samme hovedprinsipp",
+      "responseTitle": "Du velger stabilitet",
+      "responseBody": "Du bestemmer at laget skal jobbe videre med samme hovedprinsipp. Garderoben får mer ro og bedre grunnlag for repetisjon.",
+      "effects": {
+        "playerMorale": 1,
+        "trainingCulture": 1,
+        "tacticalClarity": 1
+      }
+    },
+    {
+      "id": "choice_captain_too_many_changes_new_solution",
+      "messageId": "captain_too_many_changes",
+      "threadId": "captain_dressing_room_clarity",
+      "senderId": "captain",
+      "label": "Finn en ny løsning raskt",
+      "responseTitle": "Du søker nytt grep",
+      "responseBody": "Du velger å lete etter ny løsning med en gang. Det kan gi energi, men garderoben får mindre fasthet å bygge videre på.",
+      "effects": {
+        "tacticalClarity": -1,
+        "playerMorale": -1
+      }
+    }
+  ]
+}

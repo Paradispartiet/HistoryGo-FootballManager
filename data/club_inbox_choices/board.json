@@ -1,0 +1,59 @@
+{
+  "schema": "historygo-football-manager.club-inbox-choices-by-sender.v1",
+  "version": 1,
+  "senderId": "board",
+  "choices": [
+    {
+      "id": "choice_board_low_trust_present_plan",
+      "messageId": "board_low_trust_warning",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "label": "Legg frem en tydeligere plan",
+      "responseTitle": "Du svarer med plan",
+      "responseBody": "Du lover styret en kortere og mer konkret sportslig plan: én prioritet for laget, én prioritet for treningsuka og én prioritet for klubbdriften.",
+      "effects": {
+        "boardTrust": 2,
+        "tacticalClarity": 1
+      }
+    },
+    {
+      "id": "choice_board_low_trust_wait",
+      "messageId": "board_low_trust_warning",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "label": "Be om tid til å vise det på banen",
+      "responseTitle": "Du ber om tid",
+      "responseBody": "Du ber styret vente på sportslige svar før nye tiltak. Det kan gi arbeidsro, men styret oppfatter også at den konkrete planen fortsatt mangler.",
+      "effects": {
+        "boardTrust": -1,
+        "mediaPressure": 1
+      }
+    },
+    {
+      "id": "choice_board_media_pressure_delegate",
+      "messageId": "board_media_pressure_concern",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "label": "Samle all kommunikasjon hos presseansvarlig",
+      "responseTitle": "Du samler kommunikasjonen",
+      "responseBody": "Du gjør presseansvarlig til tydelig kanal utad. Klubben sender færre sprikende signaler, og presset rundt laget roer seg litt.",
+      "effects": {
+        "mediaPressure": -2,
+        "boardTrust": 1
+      }
+    },
+    {
+      "id": "choice_board_media_pressure_ignore",
+      "messageId": "board_media_pressure_concern",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "label": "Fokuser bare på neste kamp",
+      "responseTitle": "Du prioriterer kampen",
+      "responseBody": "Du vil ikke bruke energi på kommunikasjon nå. Det kan være sportslig forståelig, men klubben virker mindre samlet utad.",
+      "effects": {
+        "mediaPressure": 1,
+        "boardTrust": -1
+      }
+    }
+  ]
+}

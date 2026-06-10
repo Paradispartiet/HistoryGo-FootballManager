@@ -1,0 +1,59 @@
+{
+  "schema": "historygo-football-manager.club-inbox-choices-by-sender.v1",
+  "version": 1,
+  "senderId": "assistant_coach",
+  "choices": [
+    {
+      "id": "choice_assistant_training_week_one_focus",
+      "messageId": "assistant_training_week_start",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "label": "Velg ett hovedfokus for uka",
+      "responseTitle": "Du velger én treningsprioritet",
+      "responseBody": "Du ber trenerteamet bygge uka rundt ett prinsipp. Spillerne får færre beskjeder og tydeligere repetisjon.",
+      "effects": {
+        "trainingCulture": 2,
+        "tacticalClarity": 1
+      }
+    },
+    {
+      "id": "choice_assistant_training_week_fix_all",
+      "messageId": "assistant_training_week_start",
+      "threadId": "assistant_training_culture",
+      "senderId": "assistant_coach",
+      "label": "Prøv å rette flere ting samtidig",
+      "responseTitle": "Du legger inn for mye",
+      "responseBody": "Du prøver å løfte flere områder på én gang. Ambisjonen er høy, men økta mister litt av den røde tråden.",
+      "effects": {
+        "trainingCulture": -1,
+        "tacticalClarity": -1
+      }
+    },
+    {
+      "id": "choice_assistant_roles_one_unit",
+      "messageId": "assistant_low_tactical_clarity_roles",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "label": "Gå gjennom én lagdel om gangen",
+      "responseTitle": "Du forenkler rollejobbingen",
+      "responseBody": "Du starter med én lagdel og tydeliggjør avstander, støtte og ansvar. Spillerne får noe konkret å holde i.",
+      "effects": {
+        "tacticalClarity": 2,
+        "trainingCulture": 1
+      }
+    },
+    {
+      "id": "choice_assistant_roles_change_system",
+      "messageId": "assistant_low_tactical_clarity_roles",
+      "threadId": "coaching_training_focus",
+      "senderId": "assistant_coach",
+      "label": "Bytt system før neste økt",
+      "responseTitle": "Du endrer for raskt",
+      "responseBody": "Du prøver å løse uklarhet med et nytt system. Det kan hjelpe senere, men akkurat nå blir spillerne enda mer usikre.",
+      "effects": {
+        "tacticalClarity": -1,
+        "playerMorale": -1
+      }
+    }
+  ]
+}
