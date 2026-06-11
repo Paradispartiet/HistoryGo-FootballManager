@@ -61,24 +61,24 @@
       "appliesTo": "formation",
       "formationId": "pyramid_235",
       "tier": "standard",
-      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "tidlige britiske klubber" }, { "sourceType": "football_story", "theme": "fotballhistorie" }, { "sourceType": "groundhopper_place", "theme": "viktoriansk bane" } ] },
-      "note": "Pyramid 2-3-5 låses opp gjennom tidlige britiske fotballsteder, gamle klubber og fotballhistoriske stories."
+      "requires": { "anyOf": [ { "sourceType": "football_club", "ref": "deepdale", "theme": "tidlige britiske klubber" }, { "sourceType": "football_story", "theme": "fotballhistorie" }, { "sourceType": "groundhopper_place", "theme": "viktoriansk bane" } ] },
+      "note": "Pyramid 2-3-5 låses opp gjennom tidlige britiske fotballsteder, gamle klubber og fotballhistoriske stories. Konkret kilde: Deepdale (Preston North End)."
     },
     {
       "id": "unlock_scottish_combination_235",
       "appliesTo": "formation",
       "formationId": "scottish_combination_235",
       "tier": "standard",
-      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "skotsk fotball" }, { "sourceType": "football_story", "theme": "pasningskultur" } ] },
-      "note": "Den skotske kombinasjonsskolen låses opp via skotske fotballsteder og stories."
+      "requires": { "anyOf": [ { "sourceType": "football_club", "ref": "hampden_park", "theme": "skotsk fotball" }, { "sourceType": "football_story", "theme": "pasningskultur" } ] },
+      "note": "Den skotske kombinasjonsskolen låses opp via skotske fotballsteder og stories. Konkret kilde: Hampden Park (Queen's Park)."
     },
     {
       "id": "unlock_wm_3223",
       "appliesTo": "formation",
       "formationId": "wm_3223",
       "tier": "standard",
-      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Arsenal" }, { "sourceType": "football_stadium", "theme": "Highbury" }, { "sourceType": "collected_manager", "theme": "Herbert Chapman" } ] },
-      "note": "WM 3-2-2-3 låses opp gjennom Arsenal/Highbury/Chapman-relaterte koblinger hvis slike steder/data finnes."
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Arsenal" }, { "sourceType": "football_stadium", "ref": "highbury", "theme": "Highbury" }, { "sourceType": "collected_manager", "ref": "herbert_chapman", "theme": "Herbert Chapman" } ] },
+      "note": "WM 3-2-2-3 låses opp gjennom Highbury eller Herbert Chapman. Arsenal-klubbkravet er fortsatt tematisk."
     },
     {
       "id": "unlock_metodo_2323",
@@ -101,16 +101,16 @@
       "appliesTo": "formation",
       "formationId": "brazil_424",
       "tier": "standard",
-      "requires": { "anyOf": [ { "sourceType": "football_stadium", "theme": "Maracanã" }, { "sourceType": "collected_player", "theme": "Brasil 1958" }, { "sourceType": "football_club", "theme": "brasiliansk fotball" } ] },
-      "note": "Brazil 4-2-4 låses opp gjennom Brasil 1958 / brasilianske stadioner / brasilianske legender hvis slike data finnes."
+      "requires": { "anyOf": [ { "sourceType": "football_stadium", "ref": "maracana", "theme": "Maracanã" }, { "sourceType": "collected_player", "ref": "pele", "theme": "Brasil 1958" }, { "sourceType": "football_club", "theme": "brasiliansk fotball" } ] },
+      "note": "Brazil 4-2-4 låses opp gjennom Maracanã eller Pelé. Brasiliansk klubb-kravet er fortsatt tematisk."
     },
     {
       "id": "unlock_catenaccio_1432",
       "appliesTo": "formation",
       "formationId": "catenaccio_1432",
       "tier": "standard",
-      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Inter" }, { "sourceType": "football_stadium", "theme": "San Siro" }, { "sourceType": "collected_manager", "theme": "Herrera" } ] },
-      "note": "Catenaccio 1-4-3-2 låses opp gjennom Inter/San Siro/Herrera-relaterte koblinger hvis slike data finnes."
+      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Inter" }, { "sourceType": "football_stadium", "ref": "san_siro", "theme": "San Siro" }, { "sourceType": "collected_manager", "ref": "helenio_herrera", "theme": "Herrera" } ] },
+      "note": "Catenaccio 1-4-3-2 låses opp gjennom San Siro eller Helenio Herrera. Inter-klubbkravet er fortsatt tematisk."
     },
     {
       "id": "unlock_libero_352",
@@ -125,8 +125,8 @@
       "appliesTo": "formation",
       "formationId": "total_433",
       "tier": "advanced",
-      "requires": { "anyOf": [ { "sourceType": "football_club", "theme": "Ajax" }, { "sourceType": "sport_place", "theme": "Amsterdam" }, { "sourceType": "collected_manager", "theme": "Michels" }, { "sourceType": "collected_player", "theme": "Cruyff" } ] },
-      "note": "Total Football 4-3-3 låses opp gjennom Ajax/Amsterdam/Nederland/Cruyff/Michels-relaterte koblinger hvis slike data finnes."
+      "requires": { "anyOf": [ { "sourceType": "football_club", "ref": "ajax_amsterdam", "theme": "Ajax" }, { "sourceType": "sport_place", "theme": "Amsterdam" }, { "sourceType": "collected_manager", "ref": "rinus_michels", "theme": "Michels" }, { "sourceType": "collected_player", "ref": "johan_cruyff", "theme": "Cruyff" } ] },
+      "note": "Total Football 4-3-3 låses opp gjennom Ajax/Amsterdam, Rinus Michels eller Johan Cruyff. Det generelle Amsterdam-sportsstedskravet er fortsatt tematisk."
     },
     {
       "id": "unlock_gegen_4222",

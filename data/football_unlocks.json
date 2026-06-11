@@ -297,6 +297,126 @@
         }
       ],
       "notes": "Ekebergsletta gir breddefotball, rekruttering, turneringslogistikk, utviklingskultur og unge spiller-unlocks (player_candidate)."
+    },
+    {
+      "placeId": "highbury",
+      "placeName": "Highbury (Arsenal Stadium)",
+      "placeRole": "historical_club_stadium_source",
+      "unlocks": [
+        {
+          "type": "head_coach_candidate",
+          "targetId": "herbert_chapman"
+        },
+        {
+          "type": "expertise",
+          "targetId": "team_organisation"
+        },
+        {
+          "type": "expertise",
+          "targetId": "defensive_structure"
+        }
+      ],
+      "notes": "Highbury var Arsenals hjemmebane 1913–2006 og arnested for WM-systemet under Herbert Chapman. Stedet er trener- og taktikkilde, ikke spillerkilde i denne batchen."
+    },
+    {
+      "placeId": "san_siro",
+      "placeName": "San Siro (Stadio Giuseppe Meazza)",
+      "placeRole": "historical_club_stadium_source",
+      "unlocks": [
+        {
+          "type": "head_coach_candidate",
+          "targetId": "helenio_herrera"
+        },
+        {
+          "type": "expertise",
+          "targetId": "defensive_structure"
+        },
+        {
+          "type": "expertise",
+          "targetId": "low_block"
+        }
+      ],
+      "notes": "San Siro er Inters (og Milans) hjemmebane og hjemmet til Grande Inter under Helenio Herrera. Stedet er trener- og taktikkilde for catenaccio-tradisjonen."
+    },
+    {
+      "placeId": "ajax_amsterdam",
+      "placeName": "Ajax / Amsterdam",
+      "placeRole": "historical_club_source",
+      "unlocks": [
+        {
+          "type": "head_coach_candidate",
+          "targetId": "rinus_michels"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johan_cruyff"
+        },
+        {
+          "type": "expertise",
+          "targetId": "pressing_structure"
+        },
+        {
+          "type": "expertise",
+          "targetId": "build_up_play"
+        },
+        {
+          "type": "expertise",
+          "targetId": "technical_training"
+        }
+      ],
+      "notes": "Ajax i Amsterdam er totalfotballens arnested med Rinus Michels som trener og Johan Cruyff som spiller. Stedet er både trener-, spiller- og taktikkilde."
+    },
+    {
+      "placeId": "maracana",
+      "placeName": "Maracanã",
+      "placeRole": "historical_national_stadium_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "pele"
+        },
+        {
+          "type": "expertise",
+          "targetId": "technical_training"
+        },
+        {
+          "type": "expertise",
+          "targetId": "wide_attack"
+        }
+      ],
+      "notes": "Maracanã i Rio de Janeiro er brasiliansk fotballs nasjonalarena. Pelé scoret sitt mål nummer 1000 her i 1969, og arenaen representerer 4-2-4-generasjonens fotballkultur."
+    },
+    {
+      "placeId": "deepdale",
+      "placeName": "Deepdale (Preston North End)",
+      "placeRole": "historical_football_ground_source",
+      "unlocks": [
+        {
+          "type": "expertise",
+          "targetId": "wide_attack"
+        },
+        {
+          "type": "expertise",
+          "targetId": "depth_runs"
+        }
+      ],
+      "notes": "Deepdale (i bruk siden 1878) er Preston North Ends hjemmebane. The Invincibles vant den første ligasesongen 1888–89 med pyramide-2-3-5, og stedet er kilde til tidlig britisk klubbfotball."
+    },
+    {
+      "placeId": "hampden_park",
+      "placeName": "Hampden Park (Queen's Park)",
+      "placeRole": "historical_football_ground_source",
+      "unlocks": [
+        {
+          "type": "expertise",
+          "targetId": "passing_training"
+        },
+        {
+          "type": "expertise",
+          "targetId": "build_up_play"
+        }
+      ],
+      "notes": "Hampden Park i Glasgow er Queen's Parks hjemmebane. Queen's Park utviklet det skotske kombinasjons-/pasningsspillet på 1870–80-tallet, og stedet er kilde til den skotske skolen."
     }
   ]
 }

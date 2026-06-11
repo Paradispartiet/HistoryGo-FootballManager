@@ -155,6 +155,88 @@
         "broad_recruitment_club"
       ],
       "warningWhenMisused": "Denne profilen passer best når klubben bruker trening og rekruttering som langsiktig utviklingsvei."
+    },
+    {
+      "id": "herbert_chapman",
+      "name": "Herbert Chapman",
+      "staffType": "head_coach",
+      "canBeHiredAs": [
+        "head_coach"
+      ],
+      "sourcePlaceIds": [
+        "highbury"
+      ],
+      "expertiseIds": [
+        "team_organisation",
+        "defensive_structure",
+        "club_building"
+      ],
+      "roles": [
+        "system_innovator",
+        "structure_builder",
+        "club_moderniser"
+      ],
+      "fitsClubs": [
+        "identity_club",
+        "defensive_structure_project",
+        "big_match_team"
+      ],
+      "warningWhenMisused": "Chapman bygde WM rundt disiplinert mannorientering og tydelige roller. Profilen passer dårlig hvis laget skal spille fritt posisjonsspill uten struktur."
+    },
+    {
+      "id": "helenio_herrera",
+      "name": "Helenio Herrera",
+      "staffType": "head_coach",
+      "canBeHiredAs": [
+        "head_coach"
+      ],
+      "sourcePlaceIds": [
+        "san_siro"
+      ],
+      "expertiseIds": [
+        "defensive_structure",
+        "low_block",
+        "team_organisation"
+      ],
+      "roles": [
+        "defensive_organiser",
+        "motivator",
+        "match_winner_coach"
+      ],
+      "fitsClubs": [
+        "defensive_structure_project",
+        "big_match_team",
+        "transition_team"
+      ],
+      "warningWhenMisused": "Herrera krever en ekte libero, disiplinert mannmarkering og kontringsspillere. I et lag som vil dominere ballen høyt mister catenaccio-skolen sin verdi."
+    },
+    {
+      "id": "rinus_michels",
+      "name": "Rinus Michels",
+      "staffType": "head_coach",
+      "canBeHiredAs": [
+        "head_coach"
+      ],
+      "sourcePlaceIds": [
+        "ajax_amsterdam"
+      ],
+      "expertiseIds": [
+        "pressing_structure",
+        "build_up_play",
+        "team_organisation",
+        "technical_training"
+      ],
+      "roles": [
+        "system_innovator",
+        "pressing_architect",
+        "collective_developer"
+      ],
+      "fitsClubs": [
+        "pressing_team",
+        "high_intensity_team",
+        "identity_club"
+      ],
+      "warningWhenMisused": "Michels krever tekniske, intelligente spillere som tåler posisjonsbytter og kollektivt press. Totalfotball kollapser i et lag uten teknisk og taktisk grunnlag."
     }
   ]
 }
