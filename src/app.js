@@ -2,6 +2,11 @@ import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
 import {
+  createDefaultOpponent,
+  simulateMatchday,
+  createMatchReport
+} from "./football-matchday-engine.js";
+import {
   adaptHgFormations,
   buildRoleTypeIndex,
   getRoleDisplayNames,
@@ -73,6 +78,9 @@ const DELIVERED_INBOX_MESSAGE_IDS_KEY = "hgfm.deliveredInboxMessageIds.v1";
 // Innboks-svarvalg (v1): brukerens valgte svar per messageId. Kun UI/progresjon
 // pluss små engangs-effekter på Club Week-verdier.
 const SELECTED_INBOX_CHOICES_KEY = "hgfm.selectedInboxChoices.v1";
+// Kampdag (v1): siste spilte kamp. Kun UI/progresjon i localStorage – ingen serie,
+// tabell, sesong eller livekamp. Selve kampberegningen ligger i kampmotoren.
+const MATCHDAY_STATE_KEY = "hgfm.matchday.v1";
 
 // Ekte History Go-progresjon i localStorage (skrives av History Go-appen, ikke
 // av Football Manager). Brukes som kilde til faktisk besøkte sportsteder.
@@ -166,7 +174,10 @@ const state = {
   placeReports: { placeReports: [] },
   // Midlertidig lag-/demostate fra example-filen (unlockedPlaceIds, hiredStaffIds,
   // unlockedExpertiseIds, earnedBadgeIds, badgeProgress, activeClassifications).
-  teamMerits: null
+  teamMerits: null,
+  // Kampdag (v1): siste spilte kamp (resultat, xG, lagstyrke og analyse). Kun
+  // UI/progresjon i localStorage – ingen serie, tabell, sesong eller livekamp.
+  matchday: { lastMatch: null }
 };
 
 const elements = {
@@ -193,6 +204,10 @@ const elements = {
   selectedFitExplanation: document.querySelector("#selectedFitExplanation"),
   reportSummary: document.querySelector("#reportSummary"),
   badgeEffectsSummary: document.querySelector("#badgeEffectsSummary"),
+  // Kampdag (v1): knapper og resultatområde i analysepanelet.
+  playMatchdayButton: document.querySelector("#playMatchdayButton"),
+  resetMatchdayButton: document.querySelector("#resetMatchdayButton"),
+  matchdayResult: document.querySelector("#matchdayResult"),
   strengthsList: document.querySelector("#strengthsList"),
   issuesList: document.querySelector("#issuesList"),
   widthScore: document.querySelector("#widthScore"),
@@ -1920,6 +1935,69 @@ function getTeamFit() {
   });
 }
 
+// ----------------------------------------------------------------------------
+// Kampdag (v1)
+// Tester det valgte HISTORISKE systemet via kampmotoren: laguttak → teamFit →
+// historisk formasjonsfit → badgeeffekter → matchEngineEffects → enkel
+// kampberegning → resultat → kampanalyse → lagring → visning. Ingen serie,
+// tabell, sesong, livekamp, skader, scouting, transfer eller reaksjoner.
+// Endrer ikke unlocks, spillerfilter, badgeeffektmotor, fitmotor eller
+// KFUM/Bislett-regler.
+// ----------------------------------------------------------------------------
+
+// Les siste kamp fra localStorage. Krasjer aldri: faller tilbake til ingen kamp
+// ved manglende nøkkel, ugyldig JSON eller utilgjengelig localStorage.
+function loadMatchdayState() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(MATCHDAY_STATE_KEY));
+
+    if (stored && typeof stored === "object" && !Array.isArray(stored) && stored.lastMatch) {
+      return { lastMatch: stored.lastMatch };
+    }
+
+    return { lastMatch: null };
+  } catch (error) {
+    return { lastMatch: null };
+  }
+}
+
+// Lagre gjeldende kampdag-state. Stille no-op hvis lagring feiler (privat modus).
+function saveMatchdayState() {
+  try {
+    localStorage.setItem(MATCHDAY_STATE_KEY, JSON.stringify(state.matchday));
+  } catch (error) {
+    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+}
+
+// Spill én kamp med gjeldende laguttak og valgt historisk formasjon.
+function playMatchday() {
+  const teamFit = getTeamFit();
+  const formation = getFormation();
+
+  if (!teamFit || !formation) {
+    return;
+  }
+
+  // Aktive lagklasser hvis helperen finnes (ren liten identitetsbonus i motoren).
+  const activeClassifications =
+    typeof getActiveTeamClassifications === "function" ? getActiveTeamClassifications() : [];
+
+  const opponent = createDefaultOpponent();
+  const result = simulateMatchday({ teamFit, formation, activeClassifications, opponent });
+
+  state.matchday.lastMatch = result;
+  saveMatchdayState();
+  renderApp();
+}
+
+// Nullstill siste kamp og fjern den fra localStorage.
+function resetMatchday() {
+  state.matchday.lastMatch = null;
+  saveMatchdayState();
+  renderApp();
+}
+
 function getUsedPlayerIds(exceptSlotId = null) {
   return new Set(
     Object.entries(state.lineup)
@@ -3601,6 +3679,121 @@ function renderBadgeEffects(teamFit) {
   });
 }
 
+// Kampdag (v1): viser siste spilte kamp. Bruker textContent (ingen innerHTML)
+// og bygger alle elementer programmatisk.
+function renderMatchday() {
+  const container = elements.matchdayResult;
+  if (!container) {
+    return;
+  }
+
+  container.textContent = "";
+
+  const lastMatch = state.matchday?.lastMatch || null;
+
+  if (!lastMatch) {
+    const empty = document.createElement("p");
+    empty.className = "matchday-empty muted-text";
+    empty.textContent = "Ingen kamp spilt ennå.";
+    container.append(empty);
+    return;
+  }
+
+  const report = createMatchReport(lastMatch);
+  if (!report) {
+    const empty = document.createElement("p");
+    empty.className = "matchday-empty muted-text";
+    empty.textContent = "Ingen kamp spilt ennå.";
+    container.append(empty);
+    return;
+  }
+
+  const card = document.createElement("article");
+  card.className = "matchday-result-card";
+
+  // Motstander.
+  const opponent = document.createElement("p");
+  opponent.className = "matchday-meta";
+  opponent.textContent = `Motstander: ${report.opponentName}`;
+  card.append(opponent);
+
+  // Valgt formasjon med navn, grunnform, epoke og skole.
+  const formationParts = [report.formationName];
+  if (report.baseShape) {
+    formationParts.push(report.baseShape);
+  }
+  if (report.eraName) {
+    formationParts.push(report.eraName);
+  }
+  if (report.tacticalSchool) {
+    formationParts.push(report.tacticalSchool);
+  }
+  const formationMeta = document.createElement("p");
+  formationMeta.className = "matchday-meta";
+  formationMeta.textContent = `Formasjon: ${formationParts.join(" · ")}`;
+  card.append(formationMeta);
+
+  // Resultat (målscore).
+  const score = document.createElement("p");
+  score.className = "matchday-score";
+  score.textContent = report.scoreLine;
+  card.append(score);
+
+  // Utfall med fargekoding via klasse.
+  const outcome = document.createElement("p");
+  outcome.className = `matchday-outcome is-${report.outcome}`;
+  outcome.textContent = report.outcomeLabel;
+  card.append(outcome);
+
+  // xG.
+  const xg = document.createElement("p");
+  xg.className = "matchday-meta";
+  xg.textContent = `Forventede mål (xG): ${report.expectedGoalsLine}`;
+  card.append(xg);
+
+  // Lagstyrke.
+  const strength = document.createElement("p");
+  strength.className = "matchday-meta";
+  strength.textContent = `Lagstyrke: ${report.teamStrength}`;
+  card.append(strength);
+
+  // Nøkkelfaktorer.
+  if (report.keyFactors.length > 0) {
+    const keyHeading = document.createElement("h4");
+    keyHeading.className = "matchday-subheading";
+    keyHeading.textContent = "Nøkkelfaktorer";
+    card.append(keyHeading);
+
+    const keyList = document.createElement("ul");
+    keyList.className = "matchday-list";
+    report.keyFactors.forEach((factor) => {
+      const item = document.createElement("li");
+      item.textContent = factor;
+      keyList.append(item);
+    });
+    card.append(keyList);
+  }
+
+  // Kampanalyse.
+  if (report.analysis.length > 0) {
+    const analysisHeading = document.createElement("h4");
+    analysisHeading.className = "matchday-subheading";
+    analysisHeading.textContent = "Kampanalyse";
+    card.append(analysisHeading);
+
+    const analysisList = document.createElement("ul");
+    analysisList.className = "matchday-list";
+    report.analysis.forEach((line) => {
+      const item = document.createElement("li");
+      item.textContent = line;
+      analysisList.append(item);
+    });
+    card.append(analysisList);
+  }
+
+  container.append(card);
+}
+
 // Finn aktiv kunnskapsanbefaling i gjeldende viewModel, eller null hvis ingen er valgt
 // eller det valgte kortet ikke finnes lenger. Kun UI/state, ingen engine-effekt.
 function getActiveKnowledgeRecommendation(viewModel) {
@@ -5263,6 +5456,7 @@ function renderApp() {
   renderDecisionCards(teamFit);
   renderReport(teamFit);
   renderBadgeEffects(teamFit);
+  renderMatchday();
 
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
@@ -5374,6 +5568,19 @@ function bindEvents() {
   if (elements.advanceClubWeekPhase) {
     elements.advanceClubWeekPhase.addEventListener("click", () => {
       advanceClubWeekPhaseAction().catch(console.error);
+    });
+  }
+
+  // Kampdag (v1): spill kamp med gjeldende laguttak / nullstill siste kamp.
+  if (elements.playMatchdayButton) {
+    elements.playMatchdayButton.addEventListener("click", () => {
+      playMatchday();
+    });
+  }
+
+  if (elements.resetMatchdayButton) {
+    elements.resetMatchdayButton.addEventListener("click", () => {
+      resetMatchday();
     });
   }
 }
@@ -5597,6 +5804,8 @@ async function init() {
     // loadClubInboxChoices kaster aldri – appen fungerer uten valg-manifest.
     state.clubInboxChoices = await loadClubInboxChoices();
     state.selectedInboxChoices = loadSelectedInboxChoices();
+    // Kampdag (v1): hent siste spilte kamp fra localStorage.
+    state.matchday = loadMatchdayState();
 
     const dataWarnings = validateFootballData(state);
 

@@ -347,6 +347,109 @@ select:focus-visible {
   padding: 12px 14px;
 }
 
+/* ---------- Kampdag (v1) ---------- */
+.matchday-panel {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.matchday-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.matchday-actions button {
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-strong);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.matchday-actions button:hover {
+  background: var(--line);
+  color: var(--bg);
+}
+
+.matchday-result-card {
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-strong);
+  padding: 16px 18px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.matchday-score {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.matchday-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.matchday-subheading {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text);
+}
+
+.matchday-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.matchday-outcome {
+  margin: 0;
+  width: fit-content;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.9rem;
+}
+
+.matchday-outcome.is-win {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.matchday-outcome.is-draw {
+  border-color: var(--line-soft);
+  color: var(--muted);
+}
+
+.matchday-outcome.is-loss {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.matchday-empty {
+  margin: 0;
+}
+
 .mini-status {
   margin: 0;
   border: 2px solid var(--line);
