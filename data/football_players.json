@@ -295,7 +295,7 @@
       "sourcePlaceIds": ["ullevaal_stadion"],
       "overall": 90,
       "naturalPositions": ["RB", "WB"],
-      "usablePositions": ["RM"],
+      "usablePositions": ["RW"],
       "poorFits": ["CB", "ST", "GK"],
       "archetypeIds": ["overlapping_fullback", "support_fullback"],
       "archetypes": ["wide_support", "overlap", "stamina", "defensive_balance"],
