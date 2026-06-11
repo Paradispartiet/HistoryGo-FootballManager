@@ -314,7 +314,7 @@ function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers,
   };
 }
 
-export function calculateTeamFit({ lineup, formation, tactic, players, roles, earnedBadgeIds = [], trainingBadges = null }) {
+export function calculateTeamFit({ lineup, formation, tactic, players, roles, earnedBadgeIds = [], trainingBadges = null, coachContext = null }) {
   const assignmentResults = buildAssignmentResults(lineup, formation, tactic, players, roles);
   const completeAssignments = assignmentResults.filter((assignment) => assignment.isComplete);
   const duplicatePlayers = getDuplicatePlayers(completeAssignments);
@@ -348,7 +348,8 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
     assignments: completeAssignments,
     baseMetrics,
     formation,
-    tactic
+    tactic,
+    coachContext
   });
   const historicalMetricAdjustments = historicalFormationFit.metricAdjustmentResult;
   const preBadgeMetrics = historicalMetricAdjustments.metrics;
@@ -391,6 +392,7 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
     relationships,
     historicalFormationFit,
     historicalMetricAdjustments,
+    coachContext,
     assignments: assignmentResults,
     duplicatePlayers,
     report: buildTeamReport({
