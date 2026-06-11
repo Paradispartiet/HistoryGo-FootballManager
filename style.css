@@ -1984,7 +1984,7 @@ ul {
 
 .topbar-metrics {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 8px;
 }
 
@@ -2013,7 +2013,8 @@ ul {
   line-height: 1;
 }
 
-.topbar-metric-squad {
+.topbar-metric-squad,
+.topbar-metric-roster {
   border-color: var(--line);
 }
 
@@ -2195,6 +2196,17 @@ ul {
 
 .tactic-system-unlock {
   margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Kort formasjonstilgjengelighet: hvor mange systemer er ulåst og hvordan
+   låste systemer åpnes via History Go-samling. */
+.tactic-system-availability {
+  margin: 0;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 10px;
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.5;
@@ -2400,6 +2412,80 @@ ul {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* ---------- Tropp og benk (roster readiness) ---------- */
+/* 15-spillerkravet: 11 i startelleveren + minst 4 på benken. Statisk panel i
+   index.html som rendres av app.js fra availability-snapshotet. */
+.roster-readiness-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.roster-readiness-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.roster-readiness-head h2,
+.roster-readiness-panel h3 {
+  margin: 0;
+}
+
+.roster-readiness-badge {
+  flex: 0 0 auto;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: #000000;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+}
+
+.roster-readiness-badge[data-ready="true"] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.bench-player-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+.bench-player-card {
+  display: grid;
+  gap: 4px;
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--panel-strong);
+  padding: 12px 14px;
+}
+
+.bench-player-card.is-registered {
+  border-color: var(--line);
+}
+
+.bench-player-card strong {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.bench-player-card span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.3;
+}
+
+.bench-empty,
+.roster-readiness-note {
+  margin: 0;
 }
 
 /* ---------- Statuskort: neste beslutninger (strip) ---------- */
@@ -2816,6 +2902,14 @@ ul {
 
   .topbar-metrics {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .roster-readiness-head {
+    display: grid;
+  }
+
+  .roster-readiness-badge {
+    width: fit-content;
   }
 
   .pitch {

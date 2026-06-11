@@ -102,6 +102,13 @@ const HISTORY_GO_GROUNDHOPPER_STATS_KEY = "hg_groundhopper_stats_v1";
 // Maks antall klubbhendelser som beholdes i loggen (nyeste først).
 const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
 
+// Troppskrav (roster readiness): minst 15 opplåste spillere totalt, der 11 står
+// i startelleveren og minst 4 er benkespillere, før manager-/kampdelen regnes
+// som spillklar.
+const REQUIRED_SQUAD_SIZE = 15;
+const REQUIRED_STARTERS = 11;
+const REQUIRED_BENCH = 4;
+
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
 
@@ -180,7 +187,8 @@ const state = {
   // delivered/read-modell. De har ingen effekter eller egne svarvalg i v1.
   clubInboxReplies: [],
   // History Go-unlocks (v1). Kobler besøkte steder til Football Manager-ressurser.
-  // Filtreres gjennom teamMerits.unlockedPlaceIds. Ingen fit-/kampmotor-effekt.
+  // Filtreres gjennom availability-snapshotet (teamMerits + ekte History
+  // Go-progresjon). Ingen fit-/kampmotor-effekt.
   unlocks: { placeUnlocks: [] },
   staff: [],
   expertise: [],
@@ -286,6 +294,16 @@ const elements = {
   // Ekte History Go-sync (v1): statusfelt og manuell synk-knapp.
   historyGoSyncStatus: document.querySelector("#historyGoSyncStatus"),
   syncHistoryGoPlaces: document.querySelector("#syncHistoryGoPlaces"),
+  // Tropp og benk (roster readiness): topbar-teller + statisk panel i Kontoret.
+  // Rendres av app.js fra availability-snapshotet – ingen separat modul.
+  rosterReadyCount: document.querySelector("#rosterReadyCount"),
+  rosterReadinessBadge: document.querySelector("#rosterReadinessBadge"),
+  rosterUnlockedCount: document.querySelector("#rosterUnlockedCount"),
+  rosterStarterCount: document.querySelector("#rosterStarterCount"),
+  rosterBenchCount: document.querySelector("#rosterBenchCount"),
+  rosterReadyStatus: document.querySelector("#rosterReadyStatus"),
+  rosterReadinessNote: document.querySelector("#rosterReadinessNote"),
+  benchPlayersList: document.querySelector("#benchPlayersList"),
   // Fase 2: dynamisk sidepanel (spillerprofil vs. neste beslutninger).
   sidePanelKicker: document.querySelector("#sidePanelKicker"),
   sideProfile: document.querySelector("#sideProfile"),
@@ -874,8 +892,11 @@ function resetTeamMerits() {
 
   state.teamMerits = teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
   recomputeActiveClassifications();
-  // Nullstilling kan låse spillere igjen; fjern nå-låste spillere fra lineup.
+  invalidateAvailability();
+  // Nullstilling kan låse spillere/formasjoner igjen; fjern nå-låste spillere
+  // fra lineup og fall tilbake til første tilgjengelige formasjon ved behov.
   sanitizeLineupForUnlockedPlayers();
+  sanitizeSelectedFormation();
   renderApp();
 }
 
@@ -1024,105 +1045,329 @@ function isStaffUnlockType(type) {
   return typeof type === "string" && /staff|coach|person|candidate/i.test(type);
 }
 
-// Opplåste steder som Set – leses fra midlertidig team-state.
-function getUnlockedPlaceIds() {
-  const ids = state.teamMerits?.unlockedPlaceIds;
-  return new Set(Array.isArray(ids) ? ids : []);
-}
-
-// placeUnlocks filtrert på opplåste steder.
-function getPlaceUnlocks() {
-  const unlockedPlaceIds = getUnlockedPlaceIds();
-  const placeUnlocks = state.unlocks?.placeUnlocks;
-  if (!Array.isArray(placeUnlocks)) {
-    return [];
-  }
-  return placeUnlocks.filter((place) => place && unlockedPlaceIds.has(place.placeId));
-}
-
-// Stab-id-er som er eksplisitt låst opp via football_unlocks.json på et opplåst
-// sted (type som inneholder staff/coach/person/candidate, f.eks. head_coach_candidate).
-function getStaffIdsFromPlaceUnlocks() {
-  const ids = new Set();
-  getPlaceUnlocks().forEach((place) => {
-    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (unlock && isStaffUnlockType(unlock.type) && unlock.targetId) {
-        ids.add(unlock.targetId);
-      }
-    });
-  });
-  return ids;
-}
-
-// Stab som er tilgjengelig: kommer fra et opplåst sted (sourcePlaceIds) eller er
-// eksplisitt låst opp gjennom football_unlocks.json.
-function getUnlockedStaff() {
-  const unlockedPlaceIds = getUnlockedPlaceIds();
-  const explicitStaffIds = getStaffIdsFromPlaceUnlocks();
-  const staff = Array.isArray(state.staff) ? state.staff : [];
-
-  return staff.filter((member) => {
-    if (!member || !member.id) {
-      return false;
-    }
-    const sources = Array.isArray(member.sourcePlaceIds) ? member.sourcePlaceIds : [];
-    const fromPlace = sources.some((placeId) => unlockedPlaceIds.has(placeId));
-    return fromPlace || explicitStaffIds.has(member.id);
-  });
-}
-
-// ----------------------------------------------------------------------------
-// Spiller-unlocks (v1)
-// Ekte spillere (football_players.json) låses opp via player_candidate-unlocks
-// på besøkte/samlede History Go-steder. Brukeren kan bare velge spillere som er
-// låst opp på denne måten. Rene hjelpefunksjoner uten effekt på fit-/kampmotoren.
-// ----------------------------------------------------------------------------
-
 // Unlock-typer i football_unlocks.json som regnes som spillerkandidat.
 function isPlayerUnlockType(type) {
   return typeof type === "string" && (type === "player_candidate" || /player/i.test(type));
 }
 
-// Ekte spiller-id-er som er eksplisitt låst opp via player_candidate-unlocks på
-// opplåste steder. Returnerer et Set med targetId-er.
-function getPlayerIdsFromPlaceUnlocks() {
-  const ids = new Set();
-  getPlaceUnlocks().forEach((place) => {
+// ----------------------------------------------------------------------------
+// Availability-snapshot (runtime source of truth)
+// Én samlet beregning av hva manageren har tilgang til akkurat nå:
+//   - opplåste place-id-er, med eksplisitt kilde (ekte History Go-progresjon
+//     vs. lokal manager-/demostate i hgfm.teamMerits.v1)
+//   - tilgjengelige spillere og stab (football_unlocks.json placeId -> targetId)
+//   - ulåste/låste historiske formasjoner (unlockRules.json + unlockLinks)
+//   - roster readiness (15-spillerkravet)
+// Prinsipp: History Go er det brukeren samler; HG Football Manager er det
+// brukeren kan bruke basert på samlingen. All annen kode leser denne
+// beregningen via getAvailability()/de tynne getterne under – ingen parallelle
+// unlocklesere.
+// ----------------------------------------------------------------------------
+
+// Formasjonstier som gir grunntilgang uten samlede kilder, slik at manageren
+// alltid har noen startsystemer å bygge med (unlockRules.json: start/early).
+const FORMATION_BASELINE_TIERS = new Set(["start", "early"]);
+
+// Memoisert snapshot. Invalidieres ved hver renderApp og i mutasjoner som
+// trenger fersk beregning før neste render (reset/sync/formasjonssanering).
+let availabilityCache = null;
+
+function invalidateAvailability() {
+  availabilityCache = null;
+}
+
+function getAvailability() {
+  if (!availabilityCache) {
+    availabilityCache = computeAvailability();
+  }
+  return availabilityCache;
+}
+
+// Selve beregningen. Leser kun rå kilder (state + History Go-localStorage) og
+// kaller aldri de tynne getterne under – ingen rekursjon.
+function computeAvailability() {
+  // 1) Steder. Ekte History Go-progresjon leses live; manager-/demostate ligger
+  // i hgfm.teamMerits.v1 (seedet fra example-filen og tidligere merges).
+  const historyGoPlaceIds = getHistoryGoCollectedSportPlaceIds();
+  const meritPlaceIds = new Set(
+    (Array.isArray(state.teamMerits?.unlockedPlaceIds) ? state.teamMerits.unlockedPlaceIds : []).filter(
+      (placeId) => typeof placeId === "string" && placeId
+    )
+  );
+  const unlockedPlaceIds = new Set([...meritPlaceIds, ...historyGoPlaceIds]);
+
+  // Eksplisitt kildeskille: et sted regnes som "history-go" når det ligger i
+  // History Go-progresjonen akkurat nå, ellers "manager" (demo-/seed-/lagstate).
+  // Skillet gjør det mulig å håndheve produksjonsprinsippet (kun samlet History
+  // Go-innhold) senere, uten å fjerne demo-støtten nå.
+  const placeSourceById = new Map();
+  unlockedPlaceIds.forEach((placeId) => {
+    placeSourceById.set(placeId, historyGoPlaceIds.has(placeId) ? "history-go" : "manager");
+  });
+
+  // 2) placeUnlocks (football_unlocks.json) filtrert på opplåste steder.
+  const allPlaceUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
+  const placeUnlocks = allPlaceUnlocks.filter((place) => place && unlockedPlaceIds.has(place.placeId));
+
+  // 3) Spillere og stab via konkrete placeId -> targetId-unlocks. Ukjente
+  // spiller-id-er ignoreres med console.warn. Finnes ingen player-unlocks,
+  // er listen tom – det faller aldri tilbake til alle spillere.
+  const unlockedPlayerIds = new Set();
+  const explicitStaffIds = new Set();
+  placeUnlocks.forEach((place) => {
     (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (unlock && isPlayerUnlockType(unlock.type) && unlock.targetId) {
-        ids.add(unlock.targetId);
+      if (!unlock || !unlock.targetId) {
+        return;
+      }
+      if (isPlayerUnlockType(unlock.type)) {
+        unlockedPlayerIds.add(unlock.targetId);
+      } else if (isStaffUnlockType(unlock.type)) {
+        explicitStaffIds.add(unlock.targetId);
       }
     });
   });
-  return ids;
-}
-
-// Opplåste spillere: ekte spillere fra state.players som er pekt på av et
-// player_candidate-unlock på et opplåst sted. Ukjente playerIds (som ikke finnes
-// i football_players.json) ignoreres med console.warn. Finnes ingen
-// player-unlocks, returneres en tom array – det faller aldri tilbake til alle
-// spillere.
-function getUnlockedPlayers() {
-  const unlockedIds = getPlayerIdsFromPlaceUnlocks();
-
-  if (unlockedIds.size === 0) {
-    return [];
-  }
 
   const players = Array.isArray(state.players) ? state.players : [];
-  const byId = new Map(players.filter((player) => player && player.id).map((player) => [player.id, player]));
-
-  const result = [];
-  unlockedIds.forEach((playerId) => {
-    const player = byId.get(playerId);
+  const playersById = new Map(players.filter((player) => player && player.id).map((player) => [player.id, player]));
+  const unlockedPlayers = [];
+  unlockedPlayerIds.forEach((playerId) => {
+    const player = playersById.get(playerId);
     if (player) {
-      result.push(player);
+      unlockedPlayers.push(player);
     } else {
       console.warn(`Spiller-unlock peker på ukjent spiller-id: ${playerId} (ignoreres).`);
+      unlockedPlayerIds.delete(playerId);
     }
   });
 
-  return result;
+  const staff = Array.isArray(state.staff) ? state.staff : [];
+  const unlockedStaff = staff.filter((member) => {
+    if (!member || !member.id) {
+      return false;
+    }
+    const sources = Array.isArray(member.sourcePlaceIds) ? member.sourcePlaceIds : [];
+    return sources.some((placeId) => unlockedPlaceIds.has(placeId)) || explicitStaffIds.has(member.id);
+  });
+
+  // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
+  // vurdert mot samlingen (steder, spillere, stab, badges).
+  const collectedPools = {
+    unlockedPlaceIds,
+    unlockedPlayerIds,
+    unlockedStaffIds: new Set(unlockedStaff.map((member) => member.id)),
+    earnedBadgeIds: new Set(Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [])
+  };
+
+  const unlockedFormations = [];
+  const lockedFormations = [];
+  const formationStatusById = new Map();
+  (Array.isArray(state.formations) ? state.formations : []).forEach((formation) => {
+    const status = evaluateFormationUnlock(formation, collectedPools);
+    formationStatusById.set(formation.id, status);
+    (status.unlocked ? unlockedFormations : lockedFormations).push(formation);
+  });
+
+  // 5) Roster readiness (15-spillerkravet) fra opplåste spillere + lineup.
+  const rosterReadiness = computeRosterReadiness(unlockedPlayers);
+
+  return {
+    historyGoPlaceIds,
+    managerPlaceIds: new Set([...unlockedPlaceIds].filter((placeId) => !historyGoPlaceIds.has(placeId))),
+    unlockedPlaceIds,
+    placeSourceById,
+    placeUnlocks,
+    unlockedPlayers,
+    unlockedPlayerIds,
+    unlockedStaff,
+    unlockedStaffIds: collectedPools.unlockedStaffIds,
+    unlockedFormations,
+    lockedFormations,
+    formationStatusById,
+    rosterReadiness
+  };
+}
+
+// Ett unlock-krav ({ sourceType, ref?, theme? }) mot samlede kilder. Krav uten
+// konkret ref (kun tema, slik reglene i unlockRules.json er skrevet i dag) kan
+// ikke verifiseres mot samlingen ennå og regnes som ikke oppfylt –
+// grunntilgangstierne sørger for at manageren likevel har systemer å spille med.
+function isUnlockRequirementSatisfied(requirement, pools) {
+  if (!requirement || typeof requirement !== "object") {
+    return false;
+  }
+
+  const ref = typeof requirement.ref === "string" ? requirement.ref : "";
+
+  // Eksplisitt startmarkør i formations.json (history_go_place/starting_unlock).
+  if (ref === "starting_unlock") {
+    return true;
+  }
+
+  if (!ref) {
+    return false;
+  }
+
+  switch (requirement.sourceType) {
+    case "history_go_place":
+    case "sport_place":
+    case "football_stadium":
+    case "football_club":
+    case "groundhopper_place":
+      return pools.unlockedPlaceIds.has(ref);
+    case "collected_player":
+      return pools.unlockedPlayerIds.has(ref);
+    case "collected_manager":
+    case "collected_staff":
+      return pools.unlockedStaffIds.has(ref);
+    case "football_badge":
+      return pools.earnedBadgeIds.has(ref);
+    default:
+      // football_story/football_lexicon_entry har ingen samle-/progresjonskilde
+      // i denne appen ennå.
+      return false;
+  }
+}
+
+// anyOf/allOf-klausuler fra unlockRules.json. allOf må være komplett oppfylt;
+// anyOf trenger minst ett treff. Tom/manglende requires gir ingen åpning her.
+function isUnlockRequiresSatisfied(requires, pools) {
+  if (!requires || typeof requires !== "object") {
+    return false;
+  }
+
+  const allOf = Array.isArray(requires.allOf) ? requires.allOf : [];
+  const anyOf = Array.isArray(requires.anyOf) ? requires.anyOf : [];
+
+  if (!allOf.length && !anyOf.length) {
+    return false;
+  }
+
+  const allSatisfied = allOf.every((requirement) => isUnlockRequirementSatisfied(requirement, pools));
+  const anySatisfied = !anyOf.length || anyOf.some((requirement) => isUnlockRequirementSatisfied(requirement, pools));
+
+  return allSatisfied && anySatisfied;
+}
+
+// Formasjonsstatus: { unlocked, tier, reason }. Unlock handler om tilgang/
+// kunnskap/samlekilde – aldri om kvalitet. Alle formasjoner blir stående i det
+// historiske formasjonsbiblioteket uansett status.
+function evaluateFormationUnlock(formation, pools) {
+  if (!formation || !formation.id) {
+    return { unlocked: true, tier: null, reason: "Ukjent formasjon – behandles som åpen." };
+  }
+
+  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
+  const rule =
+    rules.find((item) => item && item.appliesTo === "formation" && item.formationId === formation.id) || null;
+  const tier = rule?.tier || null;
+  const links = Array.isArray(formation.unlockLinks) ? formation.unlockLinks : [];
+
+  // Grunntilgang: start-/early-tier er managerens basissystemer.
+  if (tier && FORMATION_BASELINE_TIERS.has(tier)) {
+    return { unlocked: true, tier, reason: "Grunntilgang (start-/tidligformasjon)." };
+  }
+
+  // Ingen registrert regel og ingen unlockLinks: ingen kjent låsekilde.
+  if (!rule && !links.length) {
+    return { unlocked: true, tier, reason: "Ingen opplåsingsregel registrert – åpen." };
+  }
+
+  if (rule && isUnlockRequiresSatisfied(rule.requires, pools)) {
+    return { unlocked: true, tier, reason: "Låst opp via History Go-samling (unlock-regel)." };
+  }
+
+  if (links.some((link) => isUnlockRequirementSatisfied(link, pools))) {
+    return { unlocked: true, tier, reason: "Låst opp via History Go-samling (unlock-kobling)." };
+  }
+
+  return { unlocked: false, tier, reason: buildFormationUnlockNote(formation) };
+}
+
+// Roster readiness (15-spillerkravet): 11 i startelleveren + minst 4 på benken.
+// Startere telles fra state.lineup (playerId); benk er øvrige opplåste spillere.
+function computeRosterReadiness(unlockedPlayers) {
+  const lineupPlayerIds = new Set(
+    Object.values(state.lineup || {})
+      .map((slotState) => slotState && slotState.playerId)
+      .filter(Boolean)
+  );
+
+  const starters = unlockedPlayers.filter((player) => lineupPlayerIds.has(player.id));
+  const benchCandidates = unlockedPlayers.filter((player) => !lineupPlayerIds.has(player.id));
+
+  const unlockedCount = unlockedPlayers.length;
+  const starterCount = starters.length;
+  const benchCount = benchCandidates.length;
+  const hasEnoughUnlocked = unlockedCount >= REQUIRED_SQUAD_SIZE;
+  const hasCompleteXi = starterCount >= REQUIRED_STARTERS;
+  const hasEnoughBench = benchCount >= REQUIRED_BENCH;
+
+  return {
+    starters,
+    benchCandidates,
+    unlockedCount,
+    starterCount,
+    benchCount,
+    hasEnoughUnlocked,
+    hasCompleteXi,
+    hasEnoughBench,
+    isReady: hasEnoughUnlocked && hasCompleteXi && hasEnoughBench,
+    missingUnlocked: Math.max(0, REQUIRED_SQUAD_SIZE - unlockedCount),
+    missingStarters: Math.max(0, REQUIRED_STARTERS - starterCount),
+    missingBench: Math.max(0, REQUIRED_BENCH - benchCount)
+  };
+}
+
+// Felles refresh ved History Go-progresjon (manuell synk-knapp, updateProfile i
+// samme vindu, storage-event fra andre vinduer): merge nye steder inn i team
+// merits, recompute availability og saner lineup/valgt formasjon før rerender.
+function refreshAvailabilityFromHistoryGo() {
+  if (state.teamMerits) {
+    syncUnlockedPlacesFromHistoryGo();
+    recomputeActiveClassifications();
+    saveTeamMerits();
+  }
+
+  invalidateAvailability();
+  sanitizeLineupForUnlockedPlayers();
+  sanitizeSelectedFormation();
+  renderApp();
+}
+
+// ----------------------------------------------------------------------------
+// Tynne gettere over availability-snapshotet. Resten av appen bruker disse;
+// ingen andre steder skal beregne unlocks selv.
+// ----------------------------------------------------------------------------
+
+// Opplåste steder som Set (teamMerits + ekte History Go-progresjon).
+function getUnlockedPlaceIds() {
+  return getAvailability().unlockedPlaceIds;
+}
+
+// placeUnlocks filtrert på opplåste steder.
+function getPlaceUnlocks() {
+  return getAvailability().placeUnlocks;
+}
+
+// Stab som er tilgjengelig: kommer fra et opplåst sted (sourcePlaceIds) eller er
+// eksplisitt låst opp gjennom football_unlocks.json.
+function getUnlockedStaff() {
+  return getAvailability().unlockedStaff;
+}
+
+// Opplåste spillere: ekte spillere fra state.players som er pekt på av et
+// player_candidate-unlock på et opplåst sted.
+function getUnlockedPlayers() {
+  return getAvailability().unlockedPlayers;
+}
+
+// Er en formasjon tilgjengelig som aktiv managerformasjon?
+function isFormationUnlocked(formationId) {
+  if (!formationId) {
+    return false;
+  }
+  const status = getAvailability().formationStatusById.get(formationId);
+  return status ? status.unlocked : true;
 }
 
 // Er en spiller låst opp (kan velges)?
@@ -2104,7 +2349,11 @@ function validateTeamClassificationsData() {
 }
 
 function getFormation() {
-  return state.formations.find((formation) => formation.id === state.selectedFormationId) || state.formations[0];
+  return (
+    state.formations.find((formation) => formation.id === state.selectedFormationId) ||
+    getAvailability().unlockedFormations[0] ||
+    state.formations[0]
+  );
 }
 
 function getTactic() {
@@ -2312,6 +2561,36 @@ function sanitizeLineupForUnlockedPlayers() {
   });
 
   return changed;
+}
+
+// Saner valgt formasjon mot formasjons-unlocks. Hvis valgt formasjon er låst
+// (eller mangler) etter refresh/sanering, fall tilbake til første tilgjengelige
+// formasjon og reseed lineup/posisjoner. Returnerer true hvis formasjonen ble
+// byttet.
+function sanitizeSelectedFormation() {
+  if (!state.formations.length) {
+    return false;
+  }
+
+  const snapshot = getAvailability();
+  const currentStatus = snapshot.formationStatusById.get(state.selectedFormationId);
+
+  if (currentStatus?.unlocked) {
+    return false;
+  }
+
+  const fallback = snapshot.unlockedFormations[0] || state.formations[0];
+
+  if (!fallback || fallback.id === state.selectedFormationId) {
+    return false;
+  }
+
+  state.selectedFormationId = fallback.id;
+  seedLineupForFormation();
+  ensurePositionsForFormation();
+  // Lineup er reseedet; snapshotets roster readiness må beregnes på nytt.
+  invalidateAvailability();
+  return true;
 }
 
 function loadStoredPositions() {
@@ -2931,8 +3210,15 @@ function renderControls() {
     state.formations,
     (formation) => formation.id,
     // Vis navn + epoke + skole slik at f.eks. historisk "WM 3-2-2-3" og moderne
-    // "Box Midfield 3-2-2-3" ikke forveksles selv om tallene ligner.
-    (formation) => formation.selectLabel || formation.name
+    // "Box Midfield 3-2-2-3" ikke forveksles selv om tallene ligner. Låste
+    // formasjoner merkes og kan ikke velges som aktiv managerformasjon –
+    // unlock handler om tilgang/samlekilde, ikke kvalitet.
+    (formation) =>
+      isFormationUnlocked(formation.id)
+        ? formation.selectLabel || formation.name
+        : `${formation.selectLabel || formation.name} · Låst`,
+    null,
+    (formation) => !isFormationUnlocked(formation.id)
   );
 
   setOptions(
@@ -3452,6 +3738,16 @@ function renderTacticalSystemPanel() {
   unlockNote.className = "tactic-system-unlock";
   unlockNote.textContent = buildFormationUnlockNote(formation);
   panel.append(unlockNote);
+
+  // Kort formasjonstilgjengelighet: hvor mange systemer er ulåst og hvordan
+  // låste systemer åpnes. Bevisst kort – ingen ny stor visning.
+  const snapshot = getAvailability();
+  const availabilityNote = document.createElement("p");
+  availabilityNote.className = "tactic-system-availability";
+  availabilityNote.textContent =
+    `${snapshot.unlockedFormations.length} av ${state.formations.length} historiske systemer er ulåst. ` +
+    `Låste systemer er merket "Låst" i formasjonsvalget og åpnes via History Go-samling (steder, spillere, stab) – de er ikke dårligere.`;
+  panel.append(availabilityNote);
 }
 
 // ----------------------------------------------------------------------------
@@ -5061,7 +5357,8 @@ function renderUnlockPlaces() {
   }
 
   list.innerHTML = "";
-  const places = getPlaceUnlocks();
+  const snapshot = getAvailability();
+  const places = snapshot.placeUnlocks;
 
   if (!places.length) {
     renderUnlockEmpty(list, "Ingen besøkte History Go-steder ennå.");
@@ -5071,6 +5368,13 @@ function renderUnlockPlaces() {
   places.forEach((place) => {
     const card = createUnlockCard();
     appendUnlockTitle(card, place.placeName || place.placeId);
+
+    // Eksplisitt kildeskille: ekte History Go-progresjon vs. manager-/demostate.
+    const source = snapshot.placeSourceById.get(place.placeId);
+    appendUnlockMeta(
+      card,
+      source === "history-go" ? "Kilde: History Go-progresjon" : "Kilde: manager-/demostate"
+    );
 
     if (place.placeRole) {
       appendUnlockMeta(card, `Rolle: ${place.placeRole}`);
@@ -5745,27 +6049,117 @@ function renderHistoryGoSyncStatus() {
     return;
   }
 
+  const snapshot = getAvailability();
   const visitedCount = getHistoryGoVisitedPlaceIds().size;
   const groundhopperCount = getHistoryGoGroundhopperPlaceIds().size;
-  const relevantCount = getHistoryGoCollectedSportPlaceIds().size;
+  const historyGoCount = snapshot.historyGoPlaceIds.size;
+  const managerCount = snapshot.managerPlaceIds.size;
 
-  if (relevantCount === 0) {
+  if (historyGoCount === 0) {
     el.textContent =
-      "History Go-sync: ingen besøkte sportsteder funnet ennå. Bruker demo-/lagstate.";
+      `History Go-sync: ingen besøkte sportsteder funnet ennå. ` +
+      `Bruker manager-/demostate (${managerCount} steder).`;
     return;
   }
 
   el.textContent =
-    `History Go-sync: ${relevantCount} relevante sportsteder funnet. ` +
-    `(${visitedCount} i visited_places, ${groundhopperCount} i hg_groundhopper_stats_v1.)`;
+    `History Go-sync: ${historyGoCount} sportsteder fra History Go ` +
+    `(${visitedCount} i visited_places, ${groundhopperCount} i hg_groundhopper_stats_v1)` +
+    (managerCount > 0 ? ` + ${managerCount} fra manager-/demostate.` : ".");
+}
+
+// Tropp og benk (roster readiness): rendres fra availability-snapshotet inn i
+// statisk HTML i index.html. Ingen egen modul, ingen egen JSON-/localStorage-
+// lesing og ingen CSS-injeksjon.
+function renderRosterReadiness() {
+  const readiness = getAvailability().rosterReadiness;
+
+  if (elements.rosterReadyCount) {
+    elements.rosterReadyCount.textContent = `${readiness.unlockedCount}/${REQUIRED_SQUAD_SIZE}`;
+  }
+  if (elements.rosterUnlockedCount) {
+    elements.rosterUnlockedCount.textContent = `${readiness.unlockedCount}/${REQUIRED_SQUAD_SIZE}`;
+  }
+  if (elements.rosterStarterCount) {
+    elements.rosterStarterCount.textContent = `${readiness.starterCount}/${REQUIRED_STARTERS}`;
+  }
+  if (elements.rosterBenchCount) {
+    elements.rosterBenchCount.textContent = `${Math.min(readiness.benchCount, REQUIRED_BENCH)}/${REQUIRED_BENCH}`;
+  }
+  if (elements.rosterReadyStatus) {
+    elements.rosterReadyStatus.textContent = readiness.isReady ? "Åpen" : "Låst";
+  }
+
+  if (elements.rosterReadinessBadge) {
+    elements.rosterReadinessBadge.textContent = readiness.isReady ? "Spillklar" : "Låst";
+    elements.rosterReadinessBadge.dataset.ready = readiness.isReady ? "true" : "false";
+  }
+
+  if (elements.rosterReadinessNote) {
+    const noteParts = [];
+    if (readiness.missingUnlocked > 0) {
+      noteParts.push(`samle ${readiness.missingUnlocked} spiller${readiness.missingUnlocked === 1 ? "" : "e"} til`);
+    }
+    if (readiness.missingStarters > 0) {
+      noteParts.push(`fyll ${readiness.missingStarters} plass${readiness.missingStarters === 1 ? "" : "er"} i startelleveren`);
+    }
+    if (readiness.missingBench > 0) {
+      noteParts.push(`ha ${readiness.missingBench} benkespiller${readiness.missingBench === 1 ? "" : "e"} til`);
+    }
+
+    elements.rosterReadinessNote.textContent = readiness.isReady
+      ? "Troppen er spillklar: 11 på banen og minst 4 på benken. Neste steg er kampmotor/motstanderprofil."
+      : `Ikke spillklar ennå: ${noteParts.join(", ") || "mangler troppsgrunnlag"}.`;
+  }
+
+  renderBenchList(readiness.benchCandidates);
+}
+
+// Benkeliste: opplåste spillere som ikke står i startelleveren. De første fire
+// regnes som registrert benk (15-spillerkravet); resten er reserve.
+function renderBenchList(players) {
+  const list = elements.benchPlayersList;
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = "";
+
+  if (players.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "bench-empty muted-text";
+    empty.textContent = "Ingen benkespillere tilgjengelig ennå.";
+    list.append(empty);
+    return;
+  }
+
+  players.slice(0, Math.max(REQUIRED_BENCH, 8)).forEach((player, index) => {
+    const card = document.createElement("article");
+    card.className = index < REQUIRED_BENCH ? "bench-player-card is-registered" : "bench-player-card";
+
+    const name = document.createElement("strong");
+    name.textContent = player.name || player.id;
+
+    const meta = document.createElement("span");
+    const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions.join(", ") : "–";
+    meta.textContent = `${positions} · ${Number.isFinite(player.overall) ? player.overall : "–"}`;
+
+    card.append(name, meta);
+    list.append(card);
+  });
 }
 
 function renderApp() {
+  // Fersk availability-beregning per render: én runtime-kilde for unlocks,
+  // formasjonstilgjengelighet og roster readiness.
+  invalidateAvailability();
+
   const teamFit = getTeamFit();
 
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
+  renderRosterReadiness();
   renderTacticalSystemPanel();
   renderSidePanel(teamFit);
   renderDecisionCards(teamFit);
@@ -5794,7 +6188,16 @@ function renderApp() {
 
 function bindEvents() {
   elements.formationSelect.addEventListener("change", (event) => {
-    state.selectedFormationId = event.target.value;
+    const nextFormationId = event.target.value;
+
+    // Disabled options skal hindre dette, men vern uansett: låste formasjoner
+    // kan ikke aktiveres som managerformasjon.
+    if (!isFormationUnlocked(nextFormationId)) {
+      renderApp();
+      return;
+    }
+
+    state.selectedFormationId = nextFormationId;
     seedLineupForFormation();
     ensurePositionsForFormation();
     renderApp();
@@ -5871,14 +6274,28 @@ function bindEvents() {
   // Manuell synk av ekte History Go-steder. Gjør testing enkel på iPad/GitHub Pages.
   if (elements.syncHistoryGoPlaces) {
     elements.syncHistoryGoPlaces.addEventListener("click", () => {
-      syncUnlockedPlacesFromHistoryGo();
-      recomputeActiveClassifications();
-      saveTeamMerits();
-      // Synk kan endre hvilke spillere som er opplåst; saner lineup etterpå.
-      sanitizeLineupForUnlockedPlayers();
-      renderApp();
+      refreshAvailabilityFromHistoryGo();
     });
   }
+
+  // Same-window refresh: History Go/appskallet dispatcher "updateProfile" når
+  // progresjonen endres i samme vindu. Re-synk, recompute og rerender uten å
+  // være avhengig av storage-eventet (som bare fyrer i andre vinduer).
+  window.addEventListener("updateProfile", () => {
+    refreshAvailabilityFromHistoryGo();
+  });
+
+  // Cross-tab/vindu: History Go skriver progresjon i localStorage; storage-
+  // eventet dekker endringer fra andre vinduer/faner. key === null betyr clear().
+  window.addEventListener("storage", (event) => {
+    if (
+      !event.key ||
+      event.key === HISTORY_GO_VISITED_PLACES_KEY ||
+      event.key === HISTORY_GO_GROUNDHOPPER_STATS_KEY
+    ) {
+      refreshAvailabilityFromHistoryGo();
+    }
+  });
 
   if (elements.advanceClubWeekPhase) {
     elements.advanceClubWeekPhase.addEventListener("click", () => {
@@ -6113,7 +6530,10 @@ async function init() {
       saveTeamMerits();
     }
 
-    state.selectedFormationId = state.formations[0]?.id || null;
+    // Startvalg: første tilgjengelige (ulåste) formasjon, ikke bare første i
+    // listen. Team merits er lastet og History Go-synket over, så availability-
+    // snapshotet er gyldig her.
+    state.selectedFormationId = (getAvailability().unlockedFormations[0] || state.formations[0])?.id || null;
     state.selectedTacticId = state.tactics[0]?.id || null;
     state.trainingWeek = loadTrainingWeek();
     state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
@@ -6165,6 +6585,9 @@ async function init() {
     // Saner lineup etter at players/unlocks/teamMerits er lastet og synket, slik
     // at gamle valg ikke omgår unlock-regelen.
     sanitizeLineupForUnlockedPlayers();
+    // Vern: skulle valgt formasjon likevel være låst, fall tilbake til første
+    // tilgjengelige formasjon.
+    sanitizeSelectedFormation();
     ensurePositionsForFormation();
     bindEvents();
     renderApp();
