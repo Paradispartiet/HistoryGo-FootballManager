@@ -1,0 +1,9 @@
+{
+  "schema": "historygo-football-manager.club-inbox-reply-manifest.v1",
+  "version": 1,
+  "files": [
+    "data/club_inbox_replies/board.json",
+    "data/club_inbox_replies/assistant_coach.json",
+    "data/club_inbox_replies/captain.json"
+  ]
+}
