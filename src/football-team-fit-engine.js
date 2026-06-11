@@ -5,6 +5,10 @@ import {
   applyBadgeEffectsToMetrics
 } from "./football-badge-effect-engine.js";
 import { calculateRoleRelationships } from "./football-relationship-engine.js";
+import {
+  calculateHistoricalFormationFit,
+  buildHistoricalFormationReport
+} from "./hg-football-historical-fit-engine.js";
 
 function clamp(value, min = 0, max = 100) {
   return Math.max(min, Math.min(max, value));
@@ -223,7 +227,7 @@ function calculateRestDefenseScore(assignments, tactic) {
   return clamp(score);
 }
 
-function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers, relationships }) {
+function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers, relationships, formation, historicalFormationFit }) {
   const strengths = [];
   const issues = [];
   const completeAssignments = assignmentResults.filter((assignment) => assignment.isComplete);
@@ -293,6 +297,14 @@ function buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers,
     issues.push(`Startelleveren mangler ${11 - completeAssignments.length} spiller${11 - completeAssignments.length === 1 ? "" : "e"}.`);
   }
 
+  // Historisk formasjonsfit: flett de viktigste historiske styrkene/problemene
+  // inn i den eksisterende rapporten uten ny UI-struktur.
+  if (historicalFormationFit) {
+    const historicalReport = buildHistoricalFormationReport({ historicalFormationFit, formation });
+    historicalReport.strengths.slice(0, 3).forEach((strength) => strengths.push(strength));
+    historicalReport.issues.slice(0, 4).forEach((issue) => issues.push(issue));
+  }
+
   return {
     summary: completeAssignments.length === 11
       ? "Laget er komplett. Rapporten vurderer om helheten henger sammen taktisk."
@@ -327,23 +339,43 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
     duplicatePenalty: duplicatePlayers.length * 12
   };
 
+  // Historisk formasjonsfit: formasjonen er selve systemet laget spiller i.
+  // Den justeres FØR badges, slik at badges (trenings-/progresjonsnudges) legges
+  // oppå systemet og ikke skjuler at systemet misbruker roller.
+  // Rekkefølge: 1) individuell fit, 2) rolle/taktikk/relasjoner (baseMetrics),
+  // 3) historisk formasjonsfit, 4) badgeeffekter, 5) teamScore.
+  const historicalFormationFit = calculateHistoricalFormationFit({
+    assignments: completeAssignments,
+    baseMetrics,
+    formation,
+    tactic
+  });
+  const historicalMetricAdjustments = historicalFormationFit.metricAdjustmentResult;
+  const preBadgeMetrics = historicalMetricAdjustments.metrics;
+
   // Forsiktig kobling av opptjente badges: beregn små bonuser og legg dem oppå
-  // basismetrikkene. Uten badges blir adjusted metrics identisk med base.
+  // de historisk justerte metrikkene. Uten badges blir metrics identisk med
+  // preBadgeMetrics.
   const badgeContext = buildEarnedBadgeEffectContext({ earnedBadgeIds, trainingBadges });
   const badgeEffects = calculateBadgeMetricEffects(badgeContext);
-  const metrics = applyBadgeEffectsToMetrics(baseMetrics, badgeEffects);
+  const metrics = applyBadgeEffectsToMetrics(preBadgeMetrics, badgeEffects);
 
   const teamScore = clamp(Math.round(
     metrics.individualFitAverage * 0.26 +
     metrics.roleFitAverage * 0.11 +
     metrics.tacticFitAverage * 0.11 +
-    metrics.balanceScore * 0.09 +
-    metrics.widthScore * 0.07 +
-    metrics.depthScore * 0.07 +
-    metrics.buildUpScore * 0.08 +
-    metrics.pressScore * 0.06 +
-    metrics.restDefenseScore * 0.07 +
-    metrics.relationshipScore * 0.08 -
+    metrics.balanceScore * 0.08 +
+    metrics.widthScore * 0.06 +
+    metrics.depthScore * 0.06 +
+    metrics.buildUpScore * 0.07 +
+    metrics.pressScore * 0.05 +
+    metrics.restDefenseScore * 0.06 +
+    metrics.relationshipScore * 0.07 +
+    // Historisk faktor: forsiktig påvirkning som ikke dominerer spillerfit, men
+    // som lar historisk feilbruk merkes tydelig.
+    historicalFormationFit.historicalScore * 0.07 +
+    historicalFormationFit.historicalBonus -
+    historicalFormationFit.historicalPenalty * 0.35 -
     metrics.misuseAverage * 0.08 -
     metrics.duplicatePenalty
   ));
@@ -354,10 +386,21 @@ export function calculateTeamFit({ lineup, formation, tactic, players, roles, ea
     totalSlots: formation.slots.length,
     metrics,
     baseMetrics,
+    preBadgeMetrics,
     badgeEffects,
     relationships,
+    historicalFormationFit,
+    historicalMetricAdjustments,
     assignments: assignmentResults,
     duplicatePlayers,
-    report: buildTeamReport({ assignmentResults, metrics, tactic, duplicatePlayers, relationships })
+    report: buildTeamReport({
+      assignmentResults,
+      metrics,
+      tactic,
+      duplicatePlayers,
+      relationships,
+      formation,
+      historicalFormationFit
+    })
   };
 }
