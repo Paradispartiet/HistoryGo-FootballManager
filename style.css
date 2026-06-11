@@ -297,6 +297,54 @@ select:focus-visible {
   gap: 16px;
 }
 
+/* ---------- Trenerstøtte (coachContext) i lagrapporten ---------- */
+.coach-context-status {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--panel-strong);
+}
+
+.coach-context-headline {
+  margin: 0;
+}
+
+.coach-context-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.coach-context-metrics article {
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--panel);
+  padding: 10px 12px;
+}
+
+.coach-context-metrics span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.coach-context-metrics strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.35rem;
+}
+
+@media (max-width: 720px) {
+  .coach-context-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* ---------- Badge-effekter i laganalysen ---------- */
 .badge-effects-list {
   display: grid;

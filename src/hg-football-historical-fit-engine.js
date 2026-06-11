@@ -286,13 +286,13 @@ function calculateMetricAlignment(baseMetrics, formationBaseline) {
 
 // 3) Samlet historisk formasjonsfit.
 //
-// coachContext er valgfri og brukes IKKE ennå. Den er forberedt for en senere
-// staff-/trenermotor (ansatte påvirker formationFamiliarity og coachUnderstanding).
-// TODO(staff): koble coachContext til coachUnderstanding når staff-dataene er klare.
-// Denne PR-en lager kun grunnlaget; ingen falsk staff-effekt beregnes nå.
+// coachContext (valgfri) kobler trenerapparatet inn: ansatt stab gjør treneren
+// bedre til å forstå og lære systemet, og letter krevende formasjoner forsiktig.
+// Staben kan IKKE dekke opp for helt feil spillertyper – misusedPlayerTypes-
+// straffen står; staben hjelper bare treneren å forstå systemet. Uten
+// coachContext oppfører motoren seg nøyaktig som før (bakoverkompatibel).
 export function calculateHistoricalFormationFit({ assignments, baseMetrics, formation, tactic, coachContext } = {}) {
   void tactic;
-  void coachContext;
 
   const completeAssignments = asArray(assignments).filter(
     (assignment) => assignment && assignment.role && assignment.player && assignment.slot
@@ -310,7 +310,17 @@ export function calculateHistoricalFormationFit({ assignments, baseMetrics, form
   const difficulty = formation?.tacticalDifficulty;
   const coachingDemand = num(effects?.coachingDemand);
   const demand = clamp((DIFFICULTY_COVERAGE_DEMAND[difficulty] ?? 50) + coachingDemand, 0, 80);
+
+  // Trenerstøtte (valgfri). Staben hjelper treneren å forstå et krevende system
+  // og letter dekningsgapet litt – men den fjerner ikke misbruk av spillertyper.
+  const coachUnderstanding = num(coachContext?.coachUnderstanding);
+  const formationFamiliarity = num(coachContext?.formationFamiliarity);
+  const formationDifficultyRelief = Math.max(0, num(coachContext?.formationDifficultyRelief));
+  const historicalFitSupport = Math.max(0, num(coachContext?.historicalFitSupport));
+  const hasCoachContext = Boolean(coachContext);
+
   const coverageGap = Math.max(0, demand - roleCoverage.coverageScore);
+  const effectiveCoverageGap = Math.max(0, coverageGap - formationDifficultyRelief);
 
   // historicalScore (0-100). Bygger på rolledekning, hvor godt metrikkene matcher
   // formasjonens baseline, og om laget møter systemets krav. En gammel formasjon
@@ -320,9 +330,15 @@ export function calculateHistoricalFormationFit({ assignments, baseMetrics, form
     roleCoverage.coverageScore * 0.55 +
     metricAlignment * 0.3 +
     60 * 0.15;
-  historicalScore -= coverageGap * 0.4;
+  historicalScore -= effectiveCoverageGap * 0.4;
   historicalScore += roleCoverage.preferredBonus;
   historicalScore -= roleCoverage.misusePenalty * 0.5;
+  if (hasCoachContext) {
+    // Forsiktig trenerløft: god forståelse/tilvenning gjør systemet mer spillbart.
+    historicalScore += (coachUnderstanding - 50) * 0.08;
+    historicalScore += (formationFamiliarity - 50) * 0.07;
+    historicalScore += historicalFitSupport * 0.05;
+  }
   historicalScore = clamp(Math.round(historicalScore));
 
   // historicalBonus (0-8): god rolledekning + god match mellom metrics og effects.
@@ -341,10 +357,14 @@ export function calculateHistoricalFormationFit({ assignments, baseMetrics, form
   // historicalPenalty (0-15): dårlig rolledekning, mange misusedPlayerTypes og
   // høy tacticalDifficulty uten dekning.
   let penalty = 0;
-  penalty += Math.min(8, coverageGap * 0.18);
+  // Trenerstøtten letter dekningsgapet, men ikke misbruk av spillertyper.
+  penalty += Math.min(8, effectiveCoverageGap * 0.18);
   penalty += Math.min(6, roleCoverage.misusePenalty * 0.4);
   if (roleCoverage.coverageScore < 45) {
     penalty += 3;
+  }
+  if (hasCoachContext) {
+    penalty -= Math.min(5, formationDifficultyRelief * 0.35);
   }
   const historicalPenalty = clamp(Math.round(penalty), 0, 15);
 
@@ -403,6 +423,27 @@ export function calculateHistoricalFormationFit({ assignments, baseMetrics, form
 
   if (roleCoverage.misusedMatched.length > 0) {
     issues.push("Systemet brukes med spillertyper det historisk svekker.");
+  }
+
+  // Trenerstøtte: flett inn forsiktige styrker/problemer fra coachContext, uten
+  // å overstyre rolledekningens egne vurderinger.
+  if (hasCoachContext) {
+    const demanding = difficulty === "high" || difficulty === "very_high";
+    if (coachUnderstanding >= 62 && demanding) {
+      strengths.push("Trenerteamet hjelper laget å forstå den krevende formasjonen.");
+    }
+    if (formationFamiliarity >= 60 && (coachContext.staffCount || 0) > 0) {
+      strengths.push("Staben øker formasjonstilvenningen.");
+    }
+    if (num(coachContext.roleFitClarity) >= 60) {
+      strengths.push("Assistent/trenere gir systemet bedre rolleforståelse.");
+    }
+    if (demanding && coachUnderstanding < 52) {
+      issues.push("Formasjonen er taktisk krevende, men trenerteamet gir foreløpig lite støtte.");
+    }
+    if (demanding && formationFamiliarity < 50) {
+      issues.push("Laget mangler formasjonstilvenning til dette systemet.");
+    }
   }
 
   const notes = [...metricAdjustmentResult.notes];

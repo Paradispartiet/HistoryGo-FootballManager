@@ -13,6 +13,11 @@ import {
   getHistoricalFormationRoleHint
 } from "./hg-football-formation-adapter.js";
 import {
+  buildCoachContext,
+  buildCoachContextReport,
+  getStaffCategory
+} from "./hg-football-coach-context-engine.js";
+import {
   createLegacyManagerAppStateFromBrowserState,
   getDashboardViewModelFromLegacyManagerState,
   createInitialClubWeekStateFromBrowser,
@@ -40,6 +45,9 @@ const DATA_PATHS = {
   hgRoleTypes: "data/hgFootball/roleTypes.json",
   hgRoleFitRules: "data/hgFootball/playerRoleFitRules.json",
   hgUnlockRules: "data/hgFootball/unlockRules.json",
+  // Stab-/trenerroller: hvilke lag-/utviklingsdimensjoner hver rolle påvirker.
+  // Driver coachContext-motoren (formationFamiliarity, coachUnderstanding m.m.).
+  hgStaffRoles: "data/hgFootball/staffRoles.json",
   knowledgePrinciples: "data/football_knowledge_principles.json",
   clubInboxMessages: "data/club_inbox_messages.json",
   clubInboxMessageManifest: "data/club_inbox_messages/manifest.json",
@@ -118,6 +126,9 @@ const state = {
   hgRoleTypeIndex: new Map(),
   hgRoleFitRules: null,
   hgUnlockRules: null,
+  // Stab-/trenerroller (staffRoles) for coachContext-motoren. Normaliseres til
+  // staffRolesData.staffRoles || [] i init().
+  hgStaffRoles: [],
   knowledgePrinciples: [],
   // Peker på en hgFootball-formation.id (felles state, ingen parallell id).
   selectedFormationId: null,
@@ -203,6 +214,12 @@ const elements = {
   selectedFitStatus: document.querySelector("#selectedFitStatus"),
   selectedFitExplanation: document.querySelector("#selectedFitExplanation"),
   reportSummary: document.querySelector("#reportSummary"),
+  // Trenerstøtte (coachContext) i lagrapporten.
+  coachContextHeadline: document.querySelector("#coachContextHeadline"),
+  coachContextFamiliarity: document.querySelector("#coachContextFamiliarity"),
+  coachContextUnderstanding: document.querySelector("#coachContextUnderstanding"),
+  coachContextLearning: document.querySelector("#coachContextLearning"),
+  coachContextStaff: document.querySelector("#coachContextStaff"),
   badgeEffectsSummary: document.querySelector("#badgeEffectsSummary"),
   // Kampdag (v1): knapper og resultatområde i analysepanelet.
   playMatchdayButton: document.querySelector("#playMatchdayButton"),
@@ -672,6 +689,26 @@ function isTeamMeritsObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
+// Normaliser formationFamiliarity-oppslaget { [formationId]: 0-100 }. Tåler
+// manglende/korrupt struktur og gamle localStorage-data: ikke-objekt blir {},
+// og bare gyldige tallverdier (clampet 0-100) beholdes.
+function normalizeFormationFamiliarity(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+  const result = {};
+  Object.entries(value).forEach(([formationId, raw]) => {
+    if (typeof formationId !== "string" || !formationId) {
+      return;
+    }
+    const numberValue = Number(raw);
+    if (Number.isFinite(numberValue)) {
+      result[formationId] = Math.max(0, Math.min(100, Math.round(numberValue)));
+    }
+  });
+  return result;
+}
+
 // Normaliser team merits til forventet form slik at render-/progresjonslaget
 // alltid har gyldige arrays/tall, uansett seed eller lagret tilstand.
 function normalizeTeamMerits(merits) {
@@ -681,6 +718,10 @@ function normalizeTeamMerits(merits) {
     activeTrainingWeek:
       Number.isInteger(base.activeTrainingWeek) && base.activeTrainingWeek >= 1 ? base.activeTrainingWeek : 1,
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
+    // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
+    // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
+    // verdier filtreres bort og manglende felt blir et tomt oppslag.
+    formationFamiliarity: normalizeFormationFamiliarity(base.formationFamiliarity),
     unlockedPlaceIds: Array.isArray(base.unlockedPlaceIds) ? base.unlockedPlaceIds : [],
     unlockedExpertiseIds: Array.isArray(base.unlockedExpertiseIds) ? base.unlockedExpertiseIds : [],
     earnedBadgeIds: Array.isArray(base.earnedBadgeIds) ? base.earnedBadgeIds : [],
@@ -1525,9 +1566,44 @@ function hireStaff(staffId) {
     return;
   }
 
+  // Respekter staffRoles.maxActive der mappingen er sikker. Usikker mapping
+  // (ukjent kategori eller manglende staffRole) blokkerer ikke – da er det bedre
+  // å advare enn å hindre engasjement i prototypen.
+  if (!canHireWithinStaffLimits(member)) {
+    return;
+  }
+
   state.teamMerits.hiredStaffIds.push(staffId);
   saveTeamMerits();
   renderApp();
+}
+
+// Sjekk om en ny ansatt holder seg innenfor staffRoles.maxActive for sin
+// kategori. Returnerer true (tillat) ved usikker mapping. Keepertrener og
+// "tidligere keeper"-keepertrener deler kategori, så grensen gjelder begge.
+function canHireWithinStaffLimits(member) {
+  const category = getStaffCategory(member);
+  if (!category) {
+    return true;
+  }
+
+  const staffRole = (Array.isArray(state.hgStaffRoles) ? state.hgStaffRoles : []).find(
+    (role) => role && role.id === category
+  );
+  const maxActive = staffRole && Number.isInteger(staffRole.maxActive) ? staffRole.maxActive : null;
+  if (!maxActive) {
+    return true;
+  }
+
+  const currentInCategory = getHiredStaff().filter((hired) => getStaffCategory(hired) === category).length;
+  if (currentInCategory >= maxActive) {
+    console.warn(
+      `hireStaff: ${staffRole.name || category} er allerede engasjert med maks ${maxActive}. Ny ansettelse blokkeres.`
+    );
+    return false;
+  }
+
+  return true;
 }
 
 // Finn neste badge-nivå i et program som ennå ikke er opptjent. Sjekker nivåer
@@ -1658,6 +1734,29 @@ function advanceHgTrainingWeek() {
   });
 
   merits.badgeProgress = remaining;
+
+  // Formasjonstilvenning vokser sakte med treningsuker, raskere med god
+  // læringsfart/stab. Lagres per formationId og brukes som grunnlag av
+  // coachContext-motoren. Aldri en hard avhengighet: progresjonen skal aldri
+  // knekke uken om coachContext/formasjon mangler.
+  try {
+    const formation = getFormation();
+    if (formation && formation.id) {
+      if (!merits.formationFamiliarity || typeof merits.formationFamiliarity !== "object") {
+        merits.formationFamiliarity = {};
+      }
+      const coachContext = getCoachContext();
+      const stored = merits.formationFamiliarity[formation.id];
+      // Start fra dynamisk staff-verdi første gang, deretter fra lagret verdi.
+      const current = Number.isFinite(stored) ? stored : Number(coachContext.formationFamiliarity) || 45;
+      const learn = Math.max(0, Math.min(100, Number(coachContext.tacticalLearningSpeed) || 0));
+      // +1 til +4 per uke basert på taktisk læringsfart.
+      const gain = 1 + Math.round((learn / 100) * 3);
+      merits.formationFamiliarity[formation.id] = Math.max(0, Math.min(100, Math.round(current + gain)));
+    }
+  } catch (error) {
+    // Progresjon er valgfri tilleggsverdi; en feil her skal ikke stoppe uken.
+  }
 
   // Lagklasser beregnes på nytt fra earned badges etter badge-endringene.
   recomputeActiveClassifications();
@@ -1916,6 +2015,17 @@ function getSelectedSlot() {
   return formation?.slots.find((slot) => slot.slotId === state.selectedSlotId) || formation?.slots[0] || null;
 }
 
+// Bygg coachContext fra ansatt stab, staffRoles, valgt formasjon og team merits.
+// Alltid gyldig og nøytral/lav selv uten ansatt stab (ingen null-krasj).
+function getCoachContext() {
+  return buildCoachContext({
+    hiredStaff: getHiredStaff(),
+    staffRoles: state.hgStaffRoles,
+    formation: getFormation(),
+    teamMerits: state.teamMerits
+  });
+}
+
 function getTeamFit() {
   const formation = getFormation();
   const tactic = getTactic();
@@ -1931,7 +2041,8 @@ function getTeamFit() {
     players: state.players,
     roles: state.roles,
     earnedBadgeIds: state.teamMerits?.earnedBadgeIds || [],
-    trainingBadges: state.trainingBadges
+    trainingBadges: state.trainingBadges,
+    coachContext: getCoachContext()
   });
 }
 
@@ -3501,6 +3612,48 @@ function renderReport(teamFit) {
   elements.reportSummary.textContent = teamFit.report.summary;
   renderList(elements.strengthsList, teamFit.report.strengths);
   renderList(elements.issuesList, teamFit.report.issues);
+  renderCoachContextStatus(teamFit.coachContext);
+}
+
+// Liten coachContext-status i lagrapporten (kun visning): formasjonstilvenning,
+// trenerforståelse, taktisk læringsfart og stab. Ingen ny taktikktavle eller
+// stort panel – bruker den eksisterende lagrapporten.
+function renderCoachContextStatus(coachContext) {
+  if (!elements.coachContextHeadline) {
+    return;
+  }
+
+  if (!coachContext) {
+    elements.coachContextHeadline.textContent =
+      "Engasjer stab for å se hvordan trenerteamet støtter formasjonen.";
+    [
+      elements.coachContextFamiliarity,
+      elements.coachContextUnderstanding,
+      elements.coachContextLearning,
+      elements.coachContextStaff
+    ].forEach((node) => {
+      if (node) {
+        node.textContent = "–";
+      }
+    });
+    return;
+  }
+
+  const report = buildCoachContextReport({ coachContext, formation: getFormation() });
+  elements.coachContextHeadline.textContent = report.headline;
+
+  if (elements.coachContextFamiliarity) {
+    elements.coachContextFamiliarity.textContent = String(coachContext.formationFamiliarity);
+  }
+  if (elements.coachContextUnderstanding) {
+    elements.coachContextUnderstanding.textContent = String(coachContext.coachUnderstanding);
+  }
+  if (elements.coachContextLearning) {
+    elements.coachContextLearning.textContent = String(coachContext.tacticalLearningSpeed);
+  }
+  if (elements.coachContextStaff) {
+    elements.coachContextStaff.textContent = String(coachContext.staffCount);
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -5670,6 +5823,7 @@ async function init() {
       hgRoleTypesData,
       hgRoleFitRulesData,
       hgUnlockRulesData,
+      hgStaffRolesData,
       legacyFormationsData
     ] = await Promise.all([
       loadJson(DATA_PATHS.players),
@@ -5705,6 +5859,9 @@ async function init() {
       loadJson(DATA_PATHS.hgRoleTypes).catch(() => null),
       loadJson(DATA_PATHS.hgRoleFitRules).catch(() => null),
       loadJson(DATA_PATHS.hgUnlockRules).catch(() => null),
+      // Stab-/trenerroller er valgfrie: ved feil faller coachContext tilbake til
+      // ren kategori-vekting uten staffRoles-affects, og krasjer ikke.
+      loadJson(DATA_PATHS.hgStaffRoles).catch(() => null),
       // Gammel formasjonskatalog beholdes som trygg fallback.
       loadJson(DATA_PATHS.legacyFormations).catch(() => null)
     ]);
@@ -5722,6 +5879,7 @@ async function init() {
     state.hgRoleTypeIndex = buildRoleTypeIndex(hgRoleTypesData);
     state.hgRoleFitRules = hgRoleFitRulesData || null;
     state.hgUnlockRules = hgUnlockRulesData || null;
+    state.hgStaffRoles = Array.isArray(hgStaffRolesData?.staffRoles) ? hgStaffRolesData.staffRoles : [];
     state.legacyFormations = Array.isArray(legacyFormationsData?.formations)
       ? legacyFormationsData.formations
       : [];
