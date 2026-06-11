@@ -1,0 +1,59 @@
+{
+  "schema": "historygo-football-manager.club-inbox-replies-by-sender.v1",
+  "version": 1,
+  "senderId": "board",
+  "replies": [
+    {
+      "id": "reply_board_low_trust_present_plan",
+      "triggerChoiceId": "choice_board_low_trust_present_plan",
+      "responseToMessageId": "board_low_trust_warning",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Oppfølging",
+      "title": "Styret ber om konkretisering",
+      "body": "Styret tar planen til orientering. De ber om at neste steg blir helt konkret: ett sportslig grep, ett treningsgrep og én prioritet i klubbdriften.",
+      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "conditions": {}
+    },
+    {
+      "id": "reply_board_low_trust_wait",
+      "triggerChoiceId": "choice_board_low_trust_wait",
+      "responseToMessageId": "board_low_trust_warning",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Oppfølging",
+      "title": "Styret aksepterer tid, men ikke uklarhet",
+      "body": "Styret godtar at banen må gi noen svar, men understreker at tid alene ikke er en plan. De forventer tydeligere prioriteringer før neste evaluering.",
+      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "conditions": {}
+    },
+    {
+      "id": "reply_board_media_pressure_delegate",
+      "triggerChoiceId": "choice_board_media_pressure_delegate",
+      "responseToMessageId": "board_media_pressure_concern",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Kommunikasjon",
+      "title": "Styret støtter samlet kommunikasjonslinje",
+      "body": "Styret støtter at presseansvarlig samler kommunikasjonen. Det viktigste nå er at sportslig ledelse og klubbledelse sier det samme, med færre ord.",
+      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "conditions": {}
+    },
+    {
+      "id": "reply_board_media_pressure_ignore",
+      "triggerChoiceId": "choice_board_media_pressure_ignore",
+      "responseToMessageId": "board_media_pressure_concern",
+      "threadId": "board_direction_and_trust",
+      "senderId": "board",
+      "from": "Styret",
+      "tag": "Kommunikasjon",
+      "title": "Styret savner en kommunikasjonsplan",
+      "body": "Styret forstår at kampen prioriteres, men minner om at taushet også tolkes. Klubben bør fortsatt vite hvem som svarer, og hva som skal sies.",
+      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "conditions": {}
+    }
+  ]
+}

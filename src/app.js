@@ -46,6 +46,7 @@ const DATA_PATHS = {
   clubInboxSenders: "data/club_inbox_senders.json",
   clubInboxThreads: "data/club_inbox_threads.json",
   clubInboxChoiceManifest: "data/club_inbox_choices/manifest.json",
+  clubInboxReplyManifest: "data/club_inbox_replies/manifest.json",
   // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
   unlocks: "data/football_unlocks.json",
   staff: "data/football_staff.json",
@@ -138,8 +139,8 @@ const state = {
   clubWeekFeedback: "Klubbuken er klar.",
   // Kort logg over fasebytter i Club Week (nyeste først). Kun UI/state/localStorage.
   clubWeekEventLog: [],
-  // Lesbare innboksmeldinger fra datafil. Kun visning i denne PR-en –
-  // ingen state-effekter, svarvalg eller konsekvenser ennå.
+  // Base-meldinger fra datafil. Svarvalg og replies ligger i egne kataloger og
+  // kobles inn i runtime (getAllRuntimeInboxMessages).
   clubInboxMessages: [],
   // Full avsenderkatalog for Innboks. Brukes til å vise stabile klubbstemmer fra start.
   clubInboxSenders: [],
@@ -161,6 +162,12 @@ const state = {
   // bruker ikke effekter på nytt. Ingen kampmotor-, rollefit- eller matching-effekt.
   clubInboxChoices: [],
   selectedInboxChoices: {},
+  // Innboks-trådsvar (v1):
+  // - clubInboxReplies = reply-katalogen lastet fra manifest (én fil per avsender).
+  // Et reply er en oppfølgingsmelding som låses opp når et bestemt svarvalg er
+  // tatt. Replies er runtime-meldinger med egne id-er som gjenbruker eksisterende
+  // delivered/read-modell. De har ingen effekter eller egne svarvalg i v1.
+  clubInboxReplies: [],
   // History Go-unlocks (v1). Kobler besøkte steder til Football Manager-ressurser.
   // Filtreres gjennom teamMerits.unlockedPlaceIds. Ingen fit-/kampmotor-effekt.
   unlocks: { placeUnlocks: [] },
@@ -487,6 +494,100 @@ function validateClubInboxChoices(choices) {
     }
 
     valid.push(choice);
+  });
+
+  return valid;
+}
+
+// Last innboks-trådsvar manifest-basert (én fil per avsender). Slår sammen alle
+// vellykkede filers replies-array, validerer og returnerer samlet array. Kaster
+// aldri videre til init – ved manglende/feilende manifest returneres tom array,
+// og innboksen fungerer som før uten trådsvar.
+async function loadClubInboxReplies() {
+  try {
+    const manifest = await loadJson(DATA_PATHS.clubInboxReplyManifest);
+
+    if (!Array.isArray(manifest?.files)) {
+      console.warn("Innboks-reply-manifest mangler eller har feil format. Ingen trådsvar lastes.");
+      return [];
+    }
+
+    const results = await Promise.allSettled(
+      manifest.files.map((filePath) => loadJson(filePath))
+    );
+
+    const merged = [];
+    results.forEach((result, index) => {
+      const filePath = manifest.files[index];
+
+      if (result.status !== "fulfilled") {
+        console.warn(`Innboks-replyfil kunne ikke lastes: ${filePath}`);
+        return;
+      }
+
+      const fileData = result.value;
+      if (!Array.isArray(fileData?.replies)) {
+        console.warn(`Innboks-replyfil mangler gyldig replies-array: ${filePath}`);
+        return;
+      }
+
+      const fileSenderId = typeof fileData.senderId === "string" ? fileData.senderId : null;
+      fileData.replies.forEach((reply) => merged.push({ reply, fileSenderId }));
+    });
+
+    return validateClubInboxReplies(merged);
+  } catch (error) {
+    console.warn("Innboks-reply-manifest mangler eller har feil format. Ingen trådsvar lastes.");
+    return [];
+  }
+}
+
+// Intern validering av en samlet replies-array. Hvert element er { reply,
+// fileSenderId } der fileSenderId er avsenderfilens senderId (eller null).
+// Beholder kun objekter med string-id og varsler om dubletter og manglende/
+// ugyldige felt. Stopper aldri appen – returnerer rene reply-objekter.
+function validateClubInboxReplies(entries) {
+  const seenIds = new Set();
+  const valid = [];
+
+  entries.forEach(({ reply, fileSenderId }) => {
+    if (!reply || typeof reply.id !== "string") {
+      console.warn("Innboks-reply uten gyldig string-id ble hoppet over.");
+      return;
+    }
+
+    if (seenIds.has(reply.id)) {
+      console.warn(`Innboks-reply med duplikat id oppdaget: ${reply.id}`);
+    }
+    seenIds.add(reply.id);
+
+    if (typeof reply.triggerChoiceId !== "string") {
+      console.warn(`Innboks-reply ${reply.id} mangler triggerChoiceId.`);
+    }
+    if (typeof reply.responseToMessageId !== "string") {
+      console.warn(`Innboks-reply ${reply.id} mangler responseToMessageId.`);
+    }
+    if (typeof reply.threadId !== "string") {
+      console.warn(`Innboks-reply ${reply.id} mangler threadId.`);
+    }
+    if (typeof reply.senderId !== "string") {
+      console.warn(`Innboks-reply ${reply.id} mangler senderId.`);
+    } else if (fileSenderId && reply.senderId !== fileSenderId) {
+      console.warn(
+        `Innboks-reply ${reply.id} har senderId "${reply.senderId}" men ligger i fil for "${fileSenderId}".`
+      );
+    }
+    if (reply.phases !== undefined && !Array.isArray(reply.phases)) {
+      console.warn(`Innboks-reply ${reply.id} har phases som ikke er array.`);
+    }
+    if (
+      reply.conditions !== undefined &&
+      (typeof reply.conditions !== "object" || reply.conditions === null || Array.isArray(reply.conditions))
+    ) {
+      console.warn(`Innboks-reply ${reply.id} har conditions som ikke er objekt.`);
+    }
+
+    valid.push(reply);
   });
 
   return valid;
@@ -4391,9 +4492,39 @@ function messageMatchesClubWeek(message) {
   return currentValue >= value;
 }
 
+// Alle valgte svarvalg-id-er som et Set (brukerens valg fra selectedInboxChoices).
+function getSelectedInboxChoiceIds() {
+  return new Set(Object.values(state.selectedInboxChoices || {}).filter((id) => typeof id === "string"));
+}
+
+// Trådsvar som er låst opp fordi det utløsende svarvalget er tatt. Returnerer
+// runtime-meldinger (kopier) merket med isReply, slik at de kan behandles som
+// vanlige innboksmeldinger uten å mutere state.clubInboxReplies eller
+// state.clubInboxMessages. Egne id-er gjør at delivered/read-modellen fungerer.
+function getUnlockedInboxReplies() {
+  const selectedChoiceIds = getSelectedInboxChoiceIds();
+
+  return state.clubInboxReplies
+    .filter((reply) => selectedChoiceIds.has(reply.triggerChoiceId))
+    .map((reply) => ({
+      ...reply,
+      isReply: true,
+      replyToMessageId: reply.responseToMessageId
+    }));
+}
+
+// Samlet runtime-meldingssett: base-meldinger pluss opplåste trådsvar. Replies
+// kommer etter base-meldingene, slik at et svar blir siste melding i tråden.
+function getAllRuntimeInboxMessages() {
+  return [
+    ...state.clubInboxMessages,
+    ...getUnlockedInboxReplies()
+  ];
+}
+
 // Meldinger som matcher gjeldende Club Week-fase/conditions akkurat nå.
 function getActiveInboxMessages() {
-  return state.clubInboxMessages.filter(messageMatchesClubWeek);
+  return getAllRuntimeInboxMessages().filter(messageMatchesClubWeek);
 }
 
 // Marker alle aktive meldinger som levert. En melding som har matchet fase/
@@ -4470,7 +4601,7 @@ function getActiveInboxThreads() {
 // Trådarkiv: levert historikk som ikke er ulest-aktiv. En melding som fortsatt
 // er aktiv og ulest hører hjemme i Innboks, ikke i arkivet.
 function getArchivedInboxThreads() {
-  const deliveredMessages = state.clubInboxMessages.filter((message) => {
+  const deliveredMessages = getAllRuntimeInboxMessages().filter((message) => {
     return message?.id && state.deliveredInboxMessageIds.has(message.id);
   });
 
@@ -4624,7 +4755,13 @@ function createInboxThreadCard(threadGroup, options = {}) {
 
   const latestTitle = document.createElement("p");
   latestTitle.className = "inbox-thread-latest-title";
-  latestTitle.textContent = `Siste: ${latestMessage?.title || "Ingen meldinger"}`;
+  // Et trådsvar (reply) er siste melding i tråden når den er låst opp. Marker det
+  // tydelig med "Nytt svar:" slik at tråden synes levende igjen etter et valg.
+  if (latestMessage?.isReply) {
+    latestTitle.textContent = `Nytt svar: ${latestMessage.title || "Oppfølging"}`;
+  } else {
+    latestTitle.textContent = `Siste: ${latestMessage?.title || "Ingen meldinger"}`;
+  }
 
   const body = document.createElement("p");
   body.textContent = latestMessage?.body || "Ingen meldingstekst.";
@@ -5804,6 +5941,9 @@ async function init() {
     // loadClubInboxChoices kaster aldri – appen fungerer uten valg-manifest.
     state.clubInboxChoices = await loadClubInboxChoices();
     state.selectedInboxChoices = loadSelectedInboxChoices();
+    // Innboks-trådsvar (v1): reply-katalog fra manifest. loadClubInboxReplies
+    // kaster aldri – appen fungerer uten reply-manifest.
+    state.clubInboxReplies = await loadClubInboxReplies();
     // Kampdag (v1): hent siste spilte kamp fra localStorage.
     state.matchday = loadMatchdayState();
 
