@@ -5,7 +5,6 @@
 // inn i calculateTeamFit. Denne filen gjør scoren synlig i eksisterende UI uten
 // å røre den store app.js-filen.
 
-import "./football-roster-readiness-ui.js";
 import { calculateRoleRelationships } from "./football-relationship-engine.js";
 
 const DATA_PATHS = {

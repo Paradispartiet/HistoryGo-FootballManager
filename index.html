@@ -56,6 +56,7 @@
           <article><span>Treningskultur</span><strong id="clubTrainingCulture">50</strong></article>
           <article><span>Medietrykk</span><strong id="clubMediaPressure">50</strong></article>
           <article class="topbar-metric-squad"><span>Startellever</span><strong id="completeCount">0/11</strong></article>
+          <article class="topbar-metric-roster"><span>Tropp</span><strong id="rosterReadyCount">–/15</strong></article>
         </div>
       </section>
 
@@ -142,6 +143,32 @@
           </form>
         </aside>
       </div>
+
+      <!-- Tropp og benk: 15-spillerkravet (11 i startelleveren + minst 4 på
+           benken). Rendres av app.js fra availability-snapshotet. -->
+      <section id="rosterReadinessPanel" class="panel roster-readiness-panel" aria-live="polite">
+        <div class="roster-readiness-head">
+          <div>
+            <p class="eyebrow">Tropp og benk</p>
+            <h2>Krav: 15 spillere</h2>
+            <p class="muted-text">
+              Du må ha 11 spillere i startelleveren og minst 4 benkespillere før manager-/kampdelen kan starte.
+            </p>
+          </div>
+          <div id="rosterReadinessBadge" class="roster-readiness-badge">Låst</div>
+        </div>
+
+        <div class="metric-grid roster-readiness-metrics">
+          <article><span>Opplåst</span><strong id="rosterUnlockedCount">0/15</strong></article>
+          <article><span>Startellever</span><strong id="rosterStarterCount">0/11</strong></article>
+          <article><span>Benk</span><strong id="rosterBenchCount">0/4</strong></article>
+          <article><span>Status</span><strong id="rosterReadyStatus">Låst</strong></article>
+        </div>
+
+        <h3>Benk</h3>
+        <div id="benchPlayersList" class="bench-player-list"></div>
+        <p id="rosterReadinessNote" class="muted-text roster-readiness-note">Samle flere spillere via History Go-steder.</p>
+      </section>
 
       <!-- Statuskort: neste beslutninger på tvers av klubben -->
       <section class="decision-strip" aria-label="Neste beslutninger">
