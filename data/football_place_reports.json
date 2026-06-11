@@ -151,6 +151,141 @@
         "pressing_team"
       ],
       "warning": "Bislett gir fysisk kapasitet, men ikke automatisk fotballstruktur. Fart må kombineres med taktisk retning."
+    },
+    {
+      "placeId": "highbury",
+      "title": "Highbury – Chapman, Arsenal og WM-revolusjonen",
+      "summary": "Highbury var Arsenals hjemmebane 1913–2006 og stedet der Herbert Chapman bygde WM-systemet etter offsidereformen i 1925.",
+      "managerValue": "Gir manageren tilgang til Chapman-skolen: lagorganisering, defensiv struktur og klubbbygging. Stedet åpner WM 3-2-2-3 som spillbart system.",
+      "unlocksExplanation": {
+        "players": "Ingen spillere i denne batchen.",
+        "staff": "Låser opp Herbert Chapman som trenerkandidat.",
+        "expertise": "Lagorganisering og defensiv struktur.",
+        "training": "Støtter strukturert rollearbeid og disiplinert mannorientering.",
+        "identity": "Strukturlag og lag med tydelige roller."
+      },
+      "recommendedUse": [
+        "Besøk Highbury for å gjøre WM 3-2-2-3 tilgjengelig.",
+        "Engasjer Chapman hvis laget skal bygges på struktur og tydelige roller.",
+        "Kombiner med duellsterke stoppere og arbeidsvillige indreløpere."
+      ],
+      "helpsBuildClassifications": [
+        "defensive_structure_team"
+      ],
+      "warning": "WM er et historisk system med mannorientering. Det krever disiplin og passer ikke spillere som trenger fri flyt."
+    },
+    {
+      "placeId": "san_siro",
+      "title": "San Siro – Grande Inter, Herrera og catenaccio",
+      "summary": "San Siro i Milano er hjemmet til Grande Inter, laget som perfeksjonerte catenaccio under Helenio Herrera på 1960-tallet.",
+      "managerValue": "Gir manageren catenaccio-skolen: libero-basert sikring, lav blokk og dødelig kontring. Stedet åpner Catenaccio 1-4-3-2 som spillbart system.",
+      "unlocksExplanation": {
+        "players": "Ingen spillere i denne batchen.",
+        "staff": "Låser opp Helenio Herrera som trenerkandidat.",
+        "expertise": "Defensiv struktur og lav blokk.",
+        "training": "Støtter defensiv organisering, markeringsarbeid og kontringsspill.",
+        "identity": "Defensivt strukturlag og overgangslag."
+      },
+      "recommendedUse": [
+        "Besøk San Siro for å gjøre catenaccio tilgjengelig.",
+        "Engasjer Herrera hvis laget skal forsvare lavt og kontre.",
+        "Kombiner med en ekte libero, mannmarkører og raske kontringsspillere."
+      ],
+      "helpsBuildClassifications": [
+        "defensive_structure_team",
+        "transition_team"
+      ],
+      "warning": "Catenaccio krever en ekte libero og tålmodighet uten ball. Systemet er passivt hvis kontringene stoppes."
+    },
+    {
+      "placeId": "ajax_amsterdam",
+      "title": "Ajax / Amsterdam – Michels, Cruyff og totalfotballen",
+      "summary": "Ajax i Amsterdam er totalfotballens arnested. Rinus Michels bygde systemet og Johan Cruyff var dirigenten på banen i gullårene 1971–73.",
+      "managerValue": "Gir manageren totalfotball-skolen: posisjonsbytter, kollektivt press og teknisk oppbygging. Stedet åpner Total Football 4-3-3 som spillbart system.",
+      "unlocksExplanation": {
+        "players": "Låser opp Johan Cruyff.",
+        "staff": "Låser opp Rinus Michels som trenerkandidat.",
+        "expertise": "Pressorganisering, oppbygging bakfra og teknisk trening.",
+        "training": "Støtter høyt press, posisjonsbytter og teknisk kollektivt spill.",
+        "identity": "Presslag og kontrollag med teknisk identitet."
+      },
+      "recommendedUse": [
+        "Besøk Ajax/Amsterdam for å gjøre totalfotball tilgjengelig.",
+        "Bruk Michels og Cruyff sammen for full totalfotball-effekt.",
+        "Kombiner med tekniske, intelligente spillere i alle ledd."
+      ],
+      "helpsBuildClassifications": [
+        "pressing_team",
+        "control_team"
+      ],
+      "warning": "Totalfotball er det mest krevende systemet i biblioteket. Uten teknikk og kollektiv forståelse kollapser det."
+    },
+    {
+      "placeId": "maracana",
+      "title": "Maracanã – brasiliansk fotballkultur og 4-2-4-generasjonen",
+      "summary": "Maracanã i Rio de Janeiro er brasiliansk fotballs nasjonalarena. Pelé, som debuterte for Brasil i 1958-generasjonen, scoret sitt mål nummer 1000 her i 1969.",
+      "managerValue": "Gir manageren brasiliansk angrepskultur: teknikk, bredde og individuell kvalitet. Stedet åpner Brazilian 4-2-4 som spillbart system.",
+      "unlocksExplanation": {
+        "players": "Låser opp Pelé.",
+        "staff": "Ingen stab i denne batchen.",
+        "expertise": "Teknisk trening og bredt angrepsspill.",
+        "training": "Støtter teknikk, kantspill og offensiv kvalitet.",
+        "identity": "Kantdominant lag og offensivt kvalitetslag."
+      },
+      "recommendedUse": [
+        "Besøk Maracanã for å gjøre Brazilian 4-2-4 tilgjengelig.",
+        "Bruk Pelé som kombinerende avslutter nær boksen.",
+        "Kombiner med klassiske vinger og offensive backer."
+      ],
+      "helpsBuildClassifications": [
+        "wide_dominant_team",
+        "transition_team"
+      ],
+      "warning": "4-2-4 har bare to midtbanespillere. Uten arbeidsvillige indre kan laget bli overkjørt sentralt."
+    },
+    {
+      "placeId": "deepdale",
+      "title": "Deepdale – Preston North End og pyramidens fødsel",
+      "summary": "Deepdale (i bruk siden 1878) er Preston North Ends hjemmebane. The Invincibles vant den første ligasesongen 1888–89 ubeseiret med pyramide-2-3-5.",
+      "managerValue": "Gir manageren tidlig britisk klubbfotball: femmannsfront, half-backs og bred angrepskultur. Stedet åpner Pyramid 2-3-5 som spillbart system.",
+      "unlocksExplanation": {
+        "players": "Ingen spillere i denne batchen.",
+        "staff": "Ingen stab i denne batchen.",
+        "expertise": "Bredt angrepsspill og dybdeløp.",
+        "training": "Støtter bredde, fremoverspill og tidlig lagskjelett.",
+        "identity": "Kantdominant lag og historisk angrepslag."
+      },
+      "recommendedUse": [
+        "Besøk Deepdale for å gjøre pyramiden tilgjengelig.",
+        "Bruk systemet med brede vinger og en dirigerende center-half.",
+        "Kombiner med Hampden Park for hele den tidlige britiske skolen."
+      ],
+      "helpsBuildClassifications": [
+        "wide_dominant_team"
+      ],
+      "warning": "Pyramiden har bare to ekte forsvarere. Systemet er historisk presist, men åpent bak half-back-linjen."
+    },
+    {
+      "placeId": "hampden_park",
+      "title": "Hampden Park – Queen's Park og det skotske pasningsspillet",
+      "summary": "Hampden Park i Glasgow er Queen's Parks hjemmebane. Queen's Park utviklet det skotske kombinasjonsspillet som erstattet engelsk driblefotball med pasninger.",
+      "managerValue": "Gir manageren den skotske skolen: pasningskultur, kombinasjoner og bevegelse uten ball. Stedet åpner Scottish Combination 2-3-5 som spillbart system.",
+      "unlocksExplanation": {
+        "players": "Ingen spillere i denne batchen.",
+        "staff": "Ingen stab i denne batchen.",
+        "expertise": "Pasningstrening og oppbygging.",
+        "training": "Støtter kombinasjonsmønstre, pasningskvalitet og bevegelse uten ball.",
+        "identity": "Kontrollag med pasningsidentitet."
+      },
+      "recommendedUse": [
+        "Besøk Hampden Park for å gjøre den skotske kombinasjonsskolen tilgjengelig.",
+        "Bruk systemet med pasningssterke indre og bevegelige løpere.",
+        "Kombiner med Deepdale for hele den tidlige britiske skolen."
+      ],
+      "helpsBuildClassifications": [
+        "control_team"
+      ],
+      "warning": "Kombinasjonsskolen faller sammen uten teknisk pasningskvalitet. Den er ikke et duell- og innleggssystem."
     }
   ]
 }

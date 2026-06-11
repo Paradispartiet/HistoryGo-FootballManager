@@ -457,6 +457,44 @@
       "likesTactics": ["crossing", "central_combinations", "direct_play", "fluid_attack"],
       "dislikesTactics": ["isolated_striker", "no_crosses", "static_low_tempo"],
       "warningWhenMisused": "Flo trenger innlegg, kombinasjoner og boksnærvær. For langt fra mål mister han sluttpunktet sitt."
+    },
+    {
+      "id": "johan_cruyff",
+      "name": "Johan Cruyff",
+      "nationality": "Nederland",
+      "era": "historical",
+      "sourcePlaceIds": ["ajax_amsterdam"],
+      "overall": 99,
+      "naturalPositions": ["ST", "AM"],
+      "usablePositions": ["LW", "RW", "CM"],
+      "poorFits": ["CB", "DM", "GK"],
+      "archetypeIds": ["linking_nine", "classic_ten", "deep_playmaker"],
+      "archetypes": ["creator", "false_nine", "tempo_setter", "pressing_intelligence", "positional_freedom"],
+      "strengths": ["vision", "first_touch", "tempo_control", "dribbling", "pressing_intelligence", "positional_intelligence"],
+      "needs": ["positional_freedom", "technical_teammates", "passing_options", "collective_pressing"],
+      "preferredRoles": ["false_nine", "free_creator", "deep_playmaker"],
+      "likesTactics": ["possession", "high_press", "fluid_attack", "central_combinations", "creative_freedom"],
+      "dislikesTactics": ["rigid_positional_locks", "long_ball_only", "isolated_striker", "low_block"],
+      "warningWhenMisused": "Cruyff må få bevege seg fritt mellom ledd og styre laget. Som låst, statisk spiss mister totalfotballen dirigenten sin."
+    },
+    {
+      "id": "pele",
+      "name": "Pelé",
+      "nationality": "Brasil",
+      "era": "historical",
+      "sourcePlaceIds": ["maracana"],
+      "overall": 99,
+      "naturalPositions": ["ST", "AM"],
+      "usablePositions": ["LW"],
+      "poorFits": ["CB", "DM", "GK"],
+      "archetypeIds": ["linking_nine", "classic_ten"],
+      "archetypes": ["finisher", "creator", "dribbler", "box_presence", "movement"],
+      "strengths": ["finishing", "dribbling", "vision", "off_ball_runs", "combination_play", "box_finishing"],
+      "needs": ["close_support", "central_space", "creative_freedom", "runners_around"],
+      "preferredRoles": ["second_striker", "linking_striker", "free_creator"],
+      "likesTactics": ["fluid_attack", "central_combinations", "wide_attack", "creative_freedom"],
+      "dislikesTactics": ["isolated_striker", "long_ball_only", "static_crossing"],
+      "warningWhenMisused": "Pelé må få kombinere, utfordre og avslutte nær boksen. Som ren målspiss uten relasjoner forsvinner mye av spillet hans."
     }
   ]
 }
