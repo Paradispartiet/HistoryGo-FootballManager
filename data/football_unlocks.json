@@ -134,9 +134,57 @@
         {
           "type": "player_candidate",
           "targetId": "sander_berge"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_thorstvedt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_jarstein"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_arne_riise"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "omar_elabdellaoui"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brede_hangeland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ronny_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "maren_mjelde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hege_riise"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "solveig_gulbrandsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "isabell_herlovsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_carew"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tore_andre_flo"
         }
       ],
-      "notes": "Ullevaal gir nasjonalarena-, cupfinale- og presskompetanse, og er hovedkilden til ekte spiller-unlocks (player_candidate) i v1."
+      "notes": "Ullevaal gir nasjonalarena-, cupfinale- og presskompetanse, og er hovedkilden til ekte spiller-unlocks (player_candidate) i v1. Etter første rosterutvidelse gir Ullevaal nok spillere til å oppfylle 15-spillerkravet."
     },
     {
       "placeId": "intility_arena",
