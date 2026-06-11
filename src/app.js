@@ -2191,6 +2191,10 @@ function playMatchday() {
     return;
   }
 
+  if (!state.matchday || typeof state.matchday !== "object") {
+    state.matchday = { lastMatch: null };
+  }
+
   // Aktive lagklasser hvis helperen finnes (ren liten identitetsbonus i motoren).
   const activeClassifications =
     typeof getActiveTeamClassifications === "function" ? getActiveTeamClassifications() : [];
@@ -2205,6 +2209,10 @@ function playMatchday() {
 
 // Nullstill siste kamp og fjern den fra localStorage.
 function resetMatchday() {
+  if (!state.matchday || typeof state.matchday !== "object") {
+    state.matchday = { lastMatch: null };
+  }
+
   state.matchday.lastMatch = null;
   saveMatchdayState();
   renderApp();
@@ -3508,7 +3516,18 @@ function buildNextDecisions(teamFit) {
     }
   }
 
-  // 4) Driv klubbuken videre.
+  // 4) Kampdag når startelleveren er komplett. Kritiske lineup-problemer ligger
+  // fortsatt foran i listen, slik at kampkortet ikke overstyrer opprydding.
+  if (teamFit.completeCount === teamFit.totalSlots) {
+    decisions.push({
+      tag: "Kampdag",
+      title: "Spill neste kamp",
+      detail: "Laget er komplett. Test det historiske systemet i kamp.",
+      action: playMatchday
+    });
+  }
+
+  // 5) Driv klubbuken videre.
   if (state.clubWeekState) {
     const phaseLabel = CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase;
     decisions.push({
@@ -3521,7 +3540,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 5) Uleste innbokstråder.
+  // 6) Uleste innbokstråder.
   const unreadThreads = getActiveInboxThreads().length;
   if (unreadThreads > 0) {
     decisions.push({
@@ -3532,7 +3551,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 6) Stab klar til å engasjeres.
+  // 7) Stab klar til å engasjeres.
   const hiredIds = new Set(state.teamMerits?.hiredStaffIds || []);
   const availableToHire = getUnlockedStaff().filter((member) => !hiredIds.has(member.id));
   if (availableToHire.length) {
@@ -3544,7 +3563,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 7) Treningsprogram klart til å startes.
+  // 8) Treningsprogram klart til å startes.
   const availablePrograms = getAvailableTrainingPrograms().filter((entry) => entry.status === "available");
   if (availablePrograms.length) {
     decisions.push({
@@ -3555,7 +3574,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 8) Lagets største svakhet fra rapporten (informativ, ingen direkte handling).
+  // 9) Lagets største svakhet fra rapporten (informativ, ingen direkte handling).
   const issues = teamFit.report?.issues;
   if (Array.isArray(issues) && issues.length) {
     decisions.push({
@@ -3954,7 +3973,7 @@ function renderMatchday() {
   }
 
   const report = createMatchReport(lastMatch);
-  if (!report) {
+  if (!report || typeof report !== "object") {
     const empty = document.createElement("p");
     empty.className = "matchday-empty muted-text";
     empty.textContent = "Ingen kamp spilt ennå.";
@@ -3965,14 +3984,17 @@ function renderMatchday() {
   const card = document.createElement("article");
   card.className = "matchday-result-card";
 
+  const safeOutcome = ["win", "draw", "loss"].includes(report.outcome) ? report.outcome : "draw";
+  const safeOutcomeLabel = { win: "Seier", draw: "Uavgjort", loss: "Tap" }[safeOutcome];
+
   // Motstander.
   const opponent = document.createElement("p");
   opponent.className = "matchday-meta";
-  opponent.textContent = `Motstander: ${report.opponentName}`;
+  opponent.textContent = `Motstander: ${report.opponentName || "Ukjent motstander"}`;
   card.append(opponent);
 
   // Valgt formasjon med navn, grunnform, epoke og skole.
-  const formationParts = [report.formationName];
+  const formationParts = [report.formationName || "Ukjent formasjon"];
   if (report.baseShape) {
     formationParts.push(report.baseShape);
   }
@@ -3990,29 +4012,32 @@ function renderMatchday() {
   // Resultat (målscore).
   const score = document.createElement("p");
   score.className = "matchday-score";
-  score.textContent = report.scoreLine;
+  score.textContent = report.scoreLine || "0–0";
   card.append(score);
 
   // Utfall med fargekoding via klasse.
   const outcome = document.createElement("p");
-  outcome.className = `matchday-outcome is-${report.outcome}`;
-  outcome.textContent = report.outcomeLabel;
+  outcome.className = `matchday-outcome is-${safeOutcome}`;
+  outcome.textContent = safeOutcomeLabel;
   card.append(outcome);
 
   // xG.
   const xg = document.createElement("p");
   xg.className = "matchday-meta";
-  xg.textContent = `Forventede mål (xG): ${report.expectedGoalsLine}`;
+  xg.textContent = `Forventede mål (xG): ${report.expectedGoalsLine || "0 – 0"}`;
   card.append(xg);
 
   // Lagstyrke.
   const strength = document.createElement("p");
   strength.className = "matchday-meta";
-  strength.textContent = `Lagstyrke: ${report.teamStrength}`;
+  strength.textContent = `Lagstyrke: ${Number.isFinite(Number(report.teamStrength)) ? report.teamStrength : 0}`;
   card.append(strength);
 
   // Nøkkelfaktorer.
-  if (report.keyFactors.length > 0) {
+  const keyFactors = Array.isArray(report.keyFactors) ? report.keyFactors : [];
+  const analysis = Array.isArray(report.analysis) ? report.analysis : [];
+
+  if (keyFactors.length > 0) {
     const keyHeading = document.createElement("h4");
     keyHeading.className = "matchday-subheading";
     keyHeading.textContent = "Nøkkelfaktorer";
@@ -4020,7 +4045,7 @@ function renderMatchday() {
 
     const keyList = document.createElement("ul");
     keyList.className = "matchday-list";
-    report.keyFactors.forEach((factor) => {
+    keyFactors.forEach((factor) => {
       const item = document.createElement("li");
       item.textContent = factor;
       keyList.append(item);
@@ -4029,7 +4054,7 @@ function renderMatchday() {
   }
 
   // Kampanalyse.
-  if (report.analysis.length > 0) {
+  if (analysis.length > 0) {
     const analysisHeading = document.createElement("h4");
     analysisHeading.className = "matchday-subheading";
     analysisHeading.textContent = "Kampanalyse";
@@ -4037,7 +4062,7 @@ function renderMatchday() {
 
     const analysisList = document.createElement("ul");
     analysisList.className = "matchday-list";
-    report.analysis.forEach((line) => {
+    analysis.forEach((line) => {
       const item = document.createElement("li");
       item.textContent = line;
       analysisList.append(item);

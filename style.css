@@ -400,6 +400,7 @@ select:focus-visible {
   display: grid;
   gap: 16px;
   align-content: start;
+  background: var(--panel);
 }
 
 .matchday-actions {
@@ -411,9 +412,9 @@ select:focus-visible {
 .matchday-actions button {
   border: 2px solid var(--line);
   border-radius: var(--radius);
-  background: var(--panel-strong);
+  background: #000000;
   color: var(--text);
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.95rem;
   padding: 10px 16px;
   cursor: pointer;
@@ -427,43 +428,54 @@ select:focus-visible {
 .matchday-result-card {
   border: 2px solid var(--line);
   border-radius: var(--radius);
-  background: var(--panel-strong);
-  padding: 16px 18px;
+  background: #000000;
+  padding: 18px;
   display: grid;
-  gap: 8px;
+  gap: 10px;
   align-content: start;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .matchday-score {
-  margin: 0;
-  font-size: 2.2rem;
+  margin: 2px 0;
+  color: var(--text);
+  font-size: clamp(2.4rem, 6vw, 4rem);
   font-weight: 900;
   letter-spacing: 0.04em;
-  color: var(--text);
+  line-height: 1;
 }
 
 .matchday-meta {
   margin: 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 700;
   line-height: 1.45;
 }
 
+.matchday-result-card > .matchday-meta:first-child {
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
 .matchday-subheading {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
+  color: var(--text);
   font-size: 1rem;
+  font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: var(--text);
 }
 
 .matchday-list {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 20px;
   display: grid;
-  gap: 4px;
+  gap: 5px;
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 700;
   line-height: 1.45;
 }
 
@@ -472,7 +484,8 @@ select:focus-visible {
   width: fit-content;
   border: 2px solid var(--line);
   border-radius: 999px;
-  padding: 4px 14px;
+  padding: 5px 14px;
+  color: var(--text);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -485,8 +498,8 @@ select:focus-visible {
 }
 
 .matchday-outcome.is-draw {
-  border-color: var(--line-soft);
-  color: var(--muted);
+  border-color: var(--line);
+  color: var(--text);
 }
 
 .matchday-outcome.is-loss {
@@ -496,6 +509,9 @@ select:focus-visible {
 
 .matchday-empty {
   margin: 0;
+  border: 1px dashed var(--line-soft);
+  border-radius: var(--radius);
+  padding: 12px 14px;
 }
 
 .mini-status {
