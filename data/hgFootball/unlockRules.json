@@ -133,7 +133,7 @@
       "appliesTo": "formation",
       "formationId": "gegen_4222",
       "tier": "advanced",
-      "requires": { "allOf": [ { "sourceType": "collected_staff", "theme": "presskunnskap" }, { "sourceType": "collected_staff", "theme": "fysisk kapasitet" } ] },
+      "requires": { "allOf": [ { "sourceType": "collected_staff", "ref": "jorgen_isnes", "theme": "presskunnskap" }, { "sourceType": "collected_staff", "ref": "bislett_speed_specialist", "theme": "fysisk kapasitet" } ] },
       "note": "Gegen 4-2-2-2 krever pressing-/fitness-/tactical-coach-kunnskap."
     },
     {
@@ -165,7 +165,7 @@
       "appliesTo": "formation",
       "formationId": "modern_rest_235",
       "tier": "advanced",
-      "requires": { "anyOf": [ { "sourceType": "collected_staff", "theme": "restforsvar" }, { "sourceType": "football_lexicon_entry", "theme": "restforsvar" } ] },
+      "requires": { "anyOf": [ { "sourceType": "collected_staff", "ref": "jorgen_isnes", "theme": "restforsvar" }, { "sourceType": "football_lexicon_entry", "theme": "restforsvar" } ] },
       "note": "Modern Rest-Defence 2-3-5 er en avansert opplåsing."
     },
     {
