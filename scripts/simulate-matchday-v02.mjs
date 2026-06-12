@@ -32,6 +32,7 @@ import {
   finalizeMatchdaySession,
   getSessionEventIndex
 } from "../src/football-matchday-engine.js";
+import { computeMatchdayConsequences } from "../src/football-match-consequences.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -279,7 +280,122 @@ check(
   weakWithCoach.negative < weakNoCoach.negative
 );
 
-// --- 5) v1-motoren er intakt -------------------------------------------------
+// --- 5) Club Week Consequence Loop v1 ----------------------------------------
+console.log("\nKampkonsekvenser (Club Week Consequence Loop v1):");
+
+// Konsekvens fra et ekte fullført v0.2-resultat.
+const liveConsequences = computeMatchdayConsequences({
+  lastMatch: result,
+  coachSnapshot: session.coachSnapshot,
+  historicalScore: session.teamFitSnapshot.historicalScore
+});
+check("fullført kamp gir konsekvens", Boolean(liveConsequences));
+check(
+  "konsekvensen peker på brukt formationId",
+  liveConsequences?.formationId === "wm_3223"
+);
+check(
+  "formationFamiliarity-økningen er 1-6",
+  Number.isInteger(liveConsequences?.familiarityGain) &&
+    liveConsequences.familiarityGain >= 1 &&
+    liveConsequences.familiarityGain <= 6
+);
+check(
+  "alle klubbeffekter er små (maks ±4)",
+  Object.values(liveConsequences?.clubEffects || {}).every(
+    (delta) => Number.isInteger(delta) && Math.abs(delta) <= 4 && delta !== 0
+  )
+);
+
+// Syntetiske resultater med kontrollert utfall.
+function buildSyntheticResult(overrides = {}) {
+  return {
+    id: "synthetic-match",
+    version: 2,
+    outcome: "win",
+    teamStrength: 60,
+    opponent: { id: "opp", name: "Testlaget", strength: 60 },
+    expectedGoals: { for: 1.4, against: 1.0 },
+    formationSnapshot: { id: "wm_3223", name: "WM" },
+    decisions: [],
+    decisionTotals: { eventScoreDelta: 0, xgDeltaFor: 0, xgDeltaAgainst: 0, momentumDelta: 0, riskDelta: 0, tacticalClarityDelta: 0 },
+    ...overrides
+  };
+}
+
+const winConsequences = computeMatchdayConsequences({ lastMatch: buildSyntheticResult() });
+check(
+  "seier gir positiv moral og styretillit og lavere medietrykk",
+  winConsequences.clubEffects.playerMorale > 0 &&
+    winConsequences.clubEffects.boardTrust > 0 &&
+    winConsequences.clubEffects.mediaPressure < 0
+);
+
+const lossConsequences = computeMatchdayConsequences({
+  lastMatch: buildSyntheticResult({ outcome: "loss", expectedGoals: { for: 0.8, against: 1.9 } })
+});
+check(
+  "tap gir negativ moral/styretillit og økt medietrykk",
+  lossConsequences.clubEffects.playerMorale < 0 &&
+    lossConsequences.clubEffects.boardTrust < 0 &&
+    lossConsequences.clubEffects.mediaPressure > 0
+);
+
+const clarityConsequences = computeMatchdayConsequences({
+  lastMatch: buildSyntheticResult({
+    outcome: "draw",
+    decisionTotals: { eventScoreDelta: 3, xgDeltaFor: 0.3, xgDeltaAgainst: 0, momentumDelta: 2, riskDelta: 0, tacticalClarityDelta: 3 }
+  })
+});
+check(
+  "god beslutningsrekke gir taktisk klarhet",
+  clarityConsequences.clubEffects.tacticalClarity > 0
+);
+
+const riskyLoss = computeMatchdayConsequences({
+  lastMatch: buildSyntheticResult({
+    outcome: "loss",
+    decisionTotals: { eventScoreDelta: -2, xgDeltaFor: 0, xgDeltaAgainst: 0.4, momentumDelta: -2, riskDelta: 5, tacticalClarityDelta: -2 }
+  })
+});
+check(
+  "høy risiko som feiler gir ekstra medietrykk",
+  riskyLoss.clubEffects.mediaPressure > lossConsequences.clubEffects.mediaPressure
+);
+
+const goodMatchGain = computeMatchdayConsequences({
+  lastMatch: buildSyntheticResult({
+    decisionTotals: { eventScoreDelta: 3, xgDeltaFor: 0.4, xgDeltaAgainst: 0, momentumDelta: 2, riskDelta: 0, tacticalClarityDelta: 3 }
+  }),
+  coachSnapshot: strongCoach,
+  historicalScore: 74
+}).familiarityGain;
+const badMatchGain = computeMatchdayConsequences({
+  lastMatch: buildSyntheticResult({
+    outcome: "loss",
+    decisions: [{ tone: "negative" }, { tone: "negative" }, { tone: "neutral" }],
+    decisionTotals: { eventScoreDelta: -3, xgDeltaFor: 0, xgDeltaAgainst: 0.5, momentumDelta: -2, riskDelta: 4, tacticalClarityDelta: -2 }
+  }),
+  coachSnapshot: weakCoach,
+  historicalScore: 40
+}).familiarityGain;
+check(
+  `god kamp gir mer formasjonstilvenning enn dårlig (${goodMatchGain} > ${badMatchGain})`,
+  goodMatchGain > badMatchGain && badMatchGain >= 1
+);
+
+// Engangsbruk og bakoverkompatibilitet.
+check(
+  "resultat med consequencesApplied gir ingen ny konsekvens",
+  computeMatchdayConsequences({ lastMatch: buildSyntheticResult({ consequencesApplied: true }) }) === null
+);
+check(
+  "gammelt v1-resultat (uten version 2) gir ingen konsekvens",
+  computeMatchdayConsequences({ lastMatch: buildSyntheticResult({ version: undefined }) }) === null
+);
+check("manglende resultat gir ingen konsekvens", computeMatchdayConsequences({ lastMatch: null }) === null);
+
+// --- 6) v1-motoren er intakt -------------------------------------------------
 console.log("\nKampdag v1 (regresjon):");
 const v1Result = simulateMatchday({
   teamFit: buildTeamFit("strong"),
