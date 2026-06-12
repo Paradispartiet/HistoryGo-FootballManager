@@ -425,6 +425,37 @@ select:focus-visible {
   color: var(--bg);
 }
 
+.matchday-actions button:disabled {
+  border-color: var(--line-soft);
+  color: var(--muted);
+  background: #000000;
+  cursor: not-allowed;
+}
+
+.matchday-actions button:disabled:hover {
+  background: #000000;
+  color: var(--muted);
+}
+
+/* Kampklar-status: grønn når laget kan spille, hvit/dempet med forklaring når
+   noe mangler. Rendres av renderMatchdayReadiness. */
+.matchday-readiness {
+  margin: 0;
+  border: 2px solid var(--line-soft);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 10px 12px;
+}
+
+.matchday-readiness[data-ready="true"] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
 .matchday-result-card {
   border: 2px solid var(--line);
   border-radius: var(--radius);
@@ -1596,6 +1627,68 @@ ul {
   font-weight: 700;
 }
 
+/* Din fotballsamling: oppsummering av availability-snapshotet i History
+   Go-fanen. Sort grunnflate, hvite rammer, grønt kun for kampklar-status. */
+.collection-summary {
+  display: grid;
+  gap: 14px;
+  margin-bottom: var(--gap);
+}
+
+.collection-summary-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.collection-summary-head h3 {
+  margin: 4px 0 6px;
+  font-size: 1.3rem;
+  color: var(--text);
+}
+
+.collection-summary-head .muted-text {
+  margin: 0;
+  max-width: 60ch;
+}
+
+.collection-matchday-badge {
+  border: 2px solid var(--line-soft);
+  border-radius: 999px;
+  background: #000000;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  white-space: nowrap;
+}
+
+.collection-matchday-badge[data-ready="true"] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.collection-source-note {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.collection-next-step {
+  margin: 0;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #000000;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.5;
+  padding: 10px 14px;
+}
+
 .unlock-players-status {
   margin: 0 0 12px;
   color: var(--muted);
@@ -2210,6 +2303,26 @@ ul {
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.5;
+}
+
+/* Nærmeste låste systemer: kort forklaring på hvorfor de er låst og hvilken
+   History Go-kilde (sted/spiller/stab) som åpner dem. */
+.tactic-system-locked-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.tactic-system-locked-item {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #000000;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  padding: 6px 10px;
 }
 
 /* ---------- Dynamisk sidepanel ---------- */

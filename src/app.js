@@ -294,6 +294,16 @@ const elements = {
   // Ekte History Go-sync (v1): statusfelt og manuell synk-knapp.
   historyGoSyncStatus: document.querySelector("#historyGoSyncStatus"),
   syncHistoryGoPlaces: document.querySelector("#syncHistoryGoPlaces"),
+  // Din fotballsamling: oppsummering av availability-snapshotet i History Go-fanen.
+  collectionPlacesCount: document.querySelector("#collectionPlacesCount"),
+  collectionPlayersCount: document.querySelector("#collectionPlayersCount"),
+  collectionStaffCount: document.querySelector("#collectionStaffCount"),
+  collectionFormationsCount: document.querySelector("#collectionFormationsCount"),
+  collectionMatchdayBadge: document.querySelector("#collectionMatchdayBadge"),
+  collectionSourceNote: document.querySelector("#collectionSourceNote"),
+  collectionNextStep: document.querySelector("#collectionNextStep"),
+  // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
+  matchdayReadiness: document.querySelector("#matchdayReadiness"),
   // Tropp og benk (roster readiness): topbar-teller + statisk panel i Kontoret.
   // Rendres av app.js fra availability-snapshotet – ingen separat modul.
   rosterReadyCount: document.querySelector("#rosterReadyCount"),
@@ -1248,12 +1258,25 @@ function isUnlockRequiresSatisfied(requires, pools) {
   return allSatisfied && anySatisfied;
 }
 
-// Formasjonsstatus: { unlocked, tier, reason }. Unlock handler om tilgang/
-// kunnskap/samlekilde – aldri om kvalitet. Alle formasjoner blir stående i det
-// historiske formasjonsbiblioteket uansett status.
+// Første konkrete krav (med ref) som er oppfylt i en requires-klausul. Brukes
+// kun til "Ulåst via …"-forklaring i UI – selve unlock-avgjørelsen tas over.
+function findSatisfiedUnlockRequirement(requires, pools) {
+  const allOf = Array.isArray(requires?.allOf) ? requires.allOf : [];
+  const anyOf = Array.isArray(requires?.anyOf) ? requires.anyOf : [];
+  return (
+    [...allOf, ...anyOf].find(
+      (requirement) => requirement?.ref && isUnlockRequirementSatisfied(requirement, pools)
+    ) || null
+  );
+}
+
+// Formasjonsstatus: { unlocked, tier, reason, satisfiedBy }. Unlock handler om
+// tilgang/kunnskap/samlekilde – aldri om kvalitet. Alle formasjoner blir stående
+// i det historiske formasjonsbiblioteket uansett status. satisfiedBy er det
+// konkrete kravet (sted/spiller/stab/badge) som åpnet systemet, til UI-visning.
 function evaluateFormationUnlock(formation, pools) {
   if (!formation || !formation.id) {
-    return { unlocked: true, tier: null, reason: "Ukjent formasjon – behandles som åpen." };
+    return { unlocked: true, tier: null, reason: "Ukjent formasjon – behandles som åpen.", satisfiedBy: null };
   }
 
   const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
@@ -1264,23 +1287,34 @@ function evaluateFormationUnlock(formation, pools) {
 
   // Grunntilgang: start-/early-tier er managerens basissystemer.
   if (tier && FORMATION_BASELINE_TIERS.has(tier)) {
-    return { unlocked: true, tier, reason: "Grunntilgang (start-/tidligformasjon)." };
+    return { unlocked: true, tier, reason: "Grunntilgang (start-/tidligformasjon).", satisfiedBy: null };
   }
 
   // Ingen registrert regel og ingen unlockLinks: ingen kjent låsekilde.
   if (!rule && !links.length) {
-    return { unlocked: true, tier, reason: "Ingen opplåsingsregel registrert – åpen." };
+    return { unlocked: true, tier, reason: "Ingen opplåsingsregel registrert – åpen.", satisfiedBy: null };
   }
 
   if (rule && isUnlockRequiresSatisfied(rule.requires, pools)) {
-    return { unlocked: true, tier, reason: "Låst opp via History Go-samling (unlock-regel)." };
+    return {
+      unlocked: true,
+      tier,
+      reason: "Låst opp via History Go-samling (unlock-regel).",
+      satisfiedBy: findSatisfiedUnlockRequirement(rule.requires, pools)
+    };
   }
 
-  if (links.some((link) => isUnlockRequirementSatisfied(link, pools))) {
-    return { unlocked: true, tier, reason: "Låst opp via History Go-samling (unlock-kobling)." };
+  const satisfiedLink = links.find((link) => isUnlockRequirementSatisfied(link, pools));
+  if (satisfiedLink) {
+    return {
+      unlocked: true,
+      tier,
+      reason: "Låst opp via History Go-samling (unlock-kobling).",
+      satisfiedBy: satisfiedLink.ref ? satisfiedLink : null
+    };
   }
 
-  return { unlocked: false, tier, reason: buildFormationUnlockNote(formation) };
+  return { unlocked: false, tier, reason: buildFormationUnlockNote(formation), satisfiedBy: null };
 }
 
 // Roster readiness (15-spillerkravet): 11 i startelleveren + minst 4 på benken.
@@ -1396,6 +1430,67 @@ function getPlayerSourcePlaces(playerId) {
     }
   });
   return places;
+}
+
+// ----------------------------------------------------------------------------
+// Lesbare unlock-forklaringer (kun visning)
+// Oversetter tekniske unlock-typer/-id-er til navn spilleren kjenner igjen.
+// Leser eksisterende kataloger (players/staff/expertise/programs) og availability-
+// snapshotet – beregner aldri egne unlocks.
+// ----------------------------------------------------------------------------
+
+// Norske etiketter for unlock-typene i football_unlocks.json.
+const UNLOCK_TYPE_LABELS = {
+  player_candidate: "Spiller",
+  head_coach_candidate: "Trenerkandidat",
+  staff_candidate: "Stab",
+  expertise: "Ekspertise",
+  training_program: "Treningsprogram",
+  training_model: "Treningsmodell"
+};
+
+// Lesbar tekst for ett place-unlock: "Spiller: Martin Ødegaard" i stedet for
+// "player_candidate: martin_odegaard". Faller tilbake til formatert id.
+function describeUnlockTarget(unlock) {
+  const typeLabel = UNLOCK_TYPE_LABELS[unlock?.type] || formatTagText(unlock?.type || "ukjent");
+  const targetId = unlock?.targetId || "";
+
+  let name = null;
+  if (isPlayerUnlockType(unlock?.type)) {
+    name = (Array.isArray(state.players) ? state.players : []).find((player) => player?.id === targetId)?.name;
+  } else if (isStaffUnlockType(unlock?.type)) {
+    name = (Array.isArray(state.staff) ? state.staff : []).find((member) => member?.id === targetId)?.name;
+  } else if (unlock?.type === "expertise") {
+    name = (Array.isArray(state.expertise) ? state.expertise : []).find((item) => item?.id === targetId)?.name;
+  } else if (unlock?.type === "training_program") {
+    name = (Array.isArray(state.trainingPrograms) ? state.trainingPrograms : []).find(
+      (program) => program?.id === targetId
+    )?.name;
+  }
+
+  return `${typeLabel}: ${name || formatTagText(targetId)}`;
+}
+
+// Historiske formasjoner som peker på et sted i sine unlock-krav (unlockRules
+// eller unlockLinks med ref === placeId). Kun visning: forklarer "dette stedet
+// åpner system X" i stedskort og stedsrapporter.
+function getFormationsLinkedToPlace(placeId) {
+  if (!placeId) {
+    return [];
+  }
+
+  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
+  const refersToPlace = (requirement) => requirement?.ref === placeId;
+
+  return (Array.isArray(state.formations) ? state.formations : []).filter((formation) => {
+    const rule = rules.find((item) => item?.appliesTo === "formation" && item.formationId === formation.id);
+    const ruleRefs = [
+      ...(Array.isArray(rule?.requires?.anyOf) ? rule.requires.anyOf : []),
+      ...(Array.isArray(rule?.requires?.allOf) ? rule.requires.allOf : [])
+    ];
+    const links = Array.isArray(formation.unlockLinks) ? formation.unlockLinks : [];
+    return ruleRefs.some(refersToPlace) || links.some(refersToPlace);
+  });
 }
 
 // ----------------------------------------------------------------------------
@@ -2431,12 +2526,56 @@ function saveMatchdayState() {
   }
 }
 
+// Kampklar-status: samler hvorfor laget eventuelt ikke kan spille kampdag.
+// Leser kun teamFit og availability-snapshotets roster readiness – ingen ny
+// motor, ingen egne unlock-beregninger. Returnerer { isReady, reasons }.
+function getMatchdayReadiness(teamFit) {
+  const readiness = getAvailability().rosterReadiness;
+  const reasons = [];
+
+  if (!teamFit) {
+    reasons.push("Lagdata er ikke lastet ennå.");
+    return { isReady: false, reasons };
+  }
+
+  const missingStarters = teamFit.totalSlots - teamFit.completeCount;
+  if (missingStarters > 0) {
+    reasons.push(
+      `Fyll ${missingStarters} plass${missingStarters === 1 ? "" : "er"} i startelleveren (spiller og rolle).`
+    );
+  }
+
+  const duplicates = Array.isArray(teamFit.duplicatePlayers) ? teamFit.duplicatePlayers : [];
+  if (duplicates.length > 0) {
+    reasons.push(`Samme spiller står på flere plasser: ${duplicates.map((player) => player.name).join(", ")}.`);
+  }
+
+  if (!readiness.hasEnoughBench) {
+    reasons.push(`Mangler ${readiness.missingBench} benkespiller${readiness.missingBench === 1 ? "" : "e"} (krav: ${REQUIRED_BENCH}).`);
+  }
+
+  if (!readiness.hasEnoughUnlocked) {
+    reasons.push(
+      `Samle ${readiness.missingUnlocked} spiller${readiness.missingUnlocked === 1 ? "" : "e"} til via History Go-steder (krav: ${REQUIRED_SQUAD_SIZE} i troppen).`
+    );
+  }
+
+  return { isReady: reasons.length === 0, reasons };
+}
+
 // Spill én kamp med gjeldende laguttak og valgt historisk formasjon.
 function playMatchday() {
   const teamFit = getTeamFit();
   const formation = getFormation();
 
   if (!teamFit || !formation) {
+    return;
+  }
+
+  // Kampdag-gating: ikke spill med ufullstendig eller ugyldig lag. Statusfeltet
+  // i kampdagpanelet (renderMatchdayReadiness) forklarer hva som mangler.
+  if (!getMatchdayReadiness(teamFit).isReady) {
+    renderApp();
     return;
   }
 
@@ -3647,6 +3786,96 @@ function buildFormationUnlockNote(formation) {
   return "Ingen spesifikk opplåsingsregel registrert ennå.";
 }
 
+// Kort, lesbar beskrivelse av ett unlock-krav: "sted: Highbury (Arsenal
+// Stadium)", "spiller: Pelé", "trener/stab: Herbert Chapman", "badge: …".
+// Krav uten konkret ref beskrives med tema. Kun visning.
+function describeUnlockRequirementShort(requirement) {
+  if (!requirement || typeof requirement !== "object") {
+    return "";
+  }
+
+  const ref = typeof requirement.ref === "string" ? requirement.ref : "";
+
+  if (!ref) {
+    return requirement.theme ? `tema: ${requirement.theme}` : "";
+  }
+
+  switch (requirement.sourceType) {
+    case "history_go_place":
+    case "sport_place":
+    case "football_stadium":
+    case "football_club":
+    case "groundhopper_place": {
+      const place = (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).find(
+        (entry) => entry?.placeId === ref
+      );
+      return `sted: ${place?.placeName || formatTagText(ref)}`;
+    }
+    case "collected_player": {
+      const player = (Array.isArray(state.players) ? state.players : []).find((entry) => entry?.id === ref);
+      return `spiller: ${player?.name || formatTagText(ref)}`;
+    }
+    case "collected_manager":
+    case "collected_staff": {
+      const member = (Array.isArray(state.staff) ? state.staff : []).find((entry) => entry?.id === ref);
+      return `trener/stab: ${member?.name || formatTagText(ref)}`;
+    }
+    case "football_badge": {
+      const badge = getBadgeCatalog().get(ref);
+      return `badge: ${badge?.name || formatTagText(ref)}`;
+    }
+    default:
+      return requirement.theme ? `tema: ${requirement.theme}` : formatTagText(ref);
+  }
+}
+
+// Unlock-kravene for én formasjon (regelens anyOf/allOf + unlockLinks).
+// Konkrete krav (med ref) prioriteres, siden de er handlingsbare for spilleren.
+function getFormationUnlockRequirements(formation) {
+  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
+  const rule = rules.find((item) => item?.appliesTo === "formation" && item.formationId === formation?.id);
+  const all = [
+    ...(Array.isArray(rule?.requires?.allOf) ? rule.requires.allOf : []),
+    ...(Array.isArray(rule?.requires?.anyOf) ? rule.requires.anyOf : []),
+    ...(Array.isArray(formation?.unlockLinks) ? formation.unlockLinks : [])
+  ].filter((requirement) => requirement && typeof requirement === "object");
+
+  const concrete = all.filter((requirement) => typeof requirement.ref === "string" && requirement.ref);
+  return concrete.length ? concrete : all;
+}
+
+// Kort tilgangstekst for én formasjon: "Ulåst via sted: Highbury …" for ulåste
+// systemer der availability-snapshotet kan forklare kilden, og "Låst – åpnes
+// via …" med konkrete krav for låste. Kun visning – ingen unlock-beregning.
+function buildFormationAccessText(formation) {
+  const status = formation ? getAvailability().formationStatusById.get(formation.id) : null;
+
+  if (!status) {
+    return "";
+  }
+
+  if (status.unlocked) {
+    if (status.satisfiedBy) {
+      const source = describeUnlockRequirementShort(status.satisfiedBy);
+      return source ? `Ulåst via ${source}.` : status.reason;
+    }
+    if (status.tier && FORMATION_BASELINE_TIERS.has(status.tier)) {
+      return "Ulåst som grunnsystem (start-/tidligformasjon).";
+    }
+    return status.reason;
+  }
+
+  const requirements = getFormationUnlockRequirements(formation)
+    .map((requirement) => describeUnlockRequirementShort(requirement))
+    .filter(Boolean);
+
+  if (!requirements.length) {
+    return "Låst. Ingen kjent opplåsingskilde registrert ennå.";
+  }
+
+  return `Låst – åpnes via ${requirements.slice(0, 3).join(" eller ")}.`;
+}
+
 function renderTacticalSystemPanel() {
   const panel = elements.tacticalSystemPanel;
   if (!panel) {
@@ -3733,10 +3962,11 @@ function renderTacticalSystemPanel() {
   appendTacticChips(principlesBlock, (formation.principles || []).slice(0, 4), "principle");
   panel.append(principlesBlock);
 
-  // Kort History Go-opplåsingsnote (blokkerer ikke bruk).
+  // Kort tilgangstekst for valgt system: hva samlingen faktisk åpnet det med
+  // ("Ulåst via sted: …"), eller grunntilgang. Blokkerer ikke bruk.
   const unlockNote = document.createElement("p");
   unlockNote.className = "tactic-system-unlock";
-  unlockNote.textContent = buildFormationUnlockNote(formation);
+  unlockNote.textContent = buildFormationAccessText(formation) || buildFormationUnlockNote(formation);
   panel.append(unlockNote);
 
   // Kort formasjonstilgjengelighet: hvor mange systemer er ulåst og hvordan
@@ -3748,6 +3978,40 @@ function renderTacticalSystemPanel() {
     `${snapshot.unlockedFormations.length} av ${state.formations.length} historiske systemer er ulåst. ` +
     `Låste systemer er merket "Låst" i formasjonsvalget og åpnes via History Go-samling (steder, spillere, stab) – de er ikke dårligere.`;
   panel.append(availabilityNote);
+
+  // Nærmeste låste systemer med konkret opplåsingskilde (sted/spiller/stab).
+  // Kort liste (maks 3) slik at spilleren ser hvorfor noe er låst og hva som
+  // åpner det – ingen ny formation picker, bare forklaring ved siden av.
+  const lockedWithSource = snapshot.lockedFormations
+    .map((locked) => ({
+      formation: locked,
+      sources: getFormationUnlockRequirements(locked)
+        .filter((requirement) => requirement.ref)
+        .map((requirement) => describeUnlockRequirementShort(requirement))
+        .filter(Boolean)
+    }))
+    .filter((entry) => entry.sources.length > 0)
+    .slice(0, 3);
+
+  if (lockedWithSource.length) {
+    const lockedBlock = document.createElement("div");
+    lockedBlock.className = "tactic-system-block";
+    const lockedLabel = document.createElement("p");
+    lockedLabel.className = "tactic-system-block-label";
+    lockedLabel.textContent = "Nærmeste låste systemer";
+    lockedBlock.append(lockedLabel);
+
+    const lockedList = document.createElement("ul");
+    lockedList.className = "tactic-system-locked-list";
+    lockedWithSource.forEach(({ formation: locked, sources }) => {
+      const item = document.createElement("li");
+      item.className = "tactic-system-locked-item";
+      item.textContent = `${locked.name}: åpnes via ${sources.slice(0, 2).join(" eller ")}.`;
+      lockedList.append(item);
+    });
+    lockedBlock.append(lockedList);
+    panel.append(lockedBlock);
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -3762,6 +4026,21 @@ function renderTacticalSystemPanel() {
 function selectSlotDecision(slotId) {
   return () => {
     state.selectedSlotId = slotId;
+    activateTab("team");
+    renderApp();
+  };
+}
+
+// Handling som aktiverer en ulåst historisk formasjon via den eksisterende
+// formasjonsflyten (samme steg som formationSelect-endring) og går til banen.
+function selectFormationDecision(formationId) {
+  return () => {
+    if (!isFormationUnlocked(formationId)) {
+      return;
+    }
+    state.selectedFormationId = formationId;
+    seedLineupForFormation();
+    ensurePositionsForFormation();
     activateTab("team");
     renderApp();
   };
@@ -3812,18 +4091,57 @@ function buildNextDecisions(teamFit) {
     }
   }
 
-  // 4) Kampdag når startelleveren er komplett. Kritiske lineup-problemer ligger
-  // fortsatt foran i listen, slik at kampkortet ikke overstyrer opprydding.
-  if (teamFit.completeCount === teamFit.totalSlots) {
+  // 4) Troppen mangler samlingsgrunnlag (15-spillerkravet): pek spilleren mot
+  // History Go-samlingen. Leser kun roster readiness fra availability-snapshotet.
+  const rosterReadiness = getAvailability().rosterReadiness;
+  if (!rosterReadiness.hasEnoughUnlocked || !rosterReadiness.hasEnoughBench) {
+    const gapParts = [];
+    if (rosterReadiness.missingUnlocked > 0) {
+      gapParts.push(`${rosterReadiness.missingUnlocked} spillere mangler i troppen (krav: ${REQUIRED_SQUAD_SIZE})`);
+    } else if (rosterReadiness.missingBench > 0) {
+      gapParts.push(`${rosterReadiness.missingBench} benkespillere mangler (krav: ${REQUIRED_BENCH})`);
+    }
+    decisions.push({
+      tag: "Samling",
+      title: "Samle flere spillere",
+      detail: `${gapParts.join(", ")}. Besøk/synk History Go-steder og bruk opplåste spillere.`,
+      action: () => activateTab("historygo")
+    });
+  }
+
+  // 5) Kampdag når laget er kampklart (samme gating som kampdagpanelet:
+  // komplett ellever, ingen duplikater, full benk og 15-spillerkravet).
+  if (getMatchdayReadiness(teamFit).isReady) {
     decisions.push({
       tag: "Kampdag",
       title: "Spill neste kamp",
-      detail: "Laget er komplett. Test det historiske systemet i kamp.",
+      detail: "Laget er kampklart. Test det historiske systemet i kamp.",
       action: playMatchday
     });
   }
 
-  // 5) Driv klubbuken videre.
+  // 6) Historisk system ulåst via samlingen, men ikke i bruk: foreslå å teste
+  // det. Bruker formationStatusById (satisfiedBy) – ingen egen unlock-lesing.
+  const collectedFormation = getAvailability().unlockedFormations.find((formation) => {
+    if (formation.id === state.selectedFormationId) {
+      return false;
+    }
+    const status = getAvailability().formationStatusById.get(formation.id);
+    return Boolean(status?.satisfiedBy);
+  });
+  if (collectedFormation) {
+    const source = describeUnlockRequirementShort(
+      getAvailability().formationStatusById.get(collectedFormation.id)?.satisfiedBy
+    );
+    decisions.push({
+      tag: "Taktikk",
+      title: "Test historisk system",
+      detail: `${collectedFormation.name} er ulåst${source ? ` via ${source}` : ""}. Prøv systemet på taktikktavla.`,
+      action: selectFormationDecision(collectedFormation.id)
+    });
+  }
+
+  // 7) Driv klubbuken videre.
   if (state.clubWeekState) {
     const phaseLabel = CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase;
     decisions.push({
@@ -3836,7 +4154,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 6) Uleste innbokstråder.
+  // 8) Uleste innbokstråder.
   const unreadThreads = getActiveInboxThreads().length;
   if (unreadThreads > 0) {
     decisions.push({
@@ -3847,7 +4165,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 7) Stab klar til å engasjeres.
+  // 9) Stab klar til å engasjeres.
   const hiredIds = new Set(state.teamMerits?.hiredStaffIds || []);
   const availableToHire = getUnlockedStaff().filter((member) => !hiredIds.has(member.id));
   if (availableToHire.length) {
@@ -3859,7 +4177,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 8) Treningsprogram klart til å startes.
+  // 10) Treningsprogram klart til å startes.
   const availablePrograms = getAvailableTrainingPrograms().filter((entry) => entry.status === "available");
   if (availablePrograms.length) {
     decisions.push({
@@ -3870,7 +4188,7 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 9) Lagets største svakhet fra rapporten (informativ, ingen direkte handling).
+  // 11) Lagets største svakhet fra rapporten (informativ, ingen direkte handling).
   const issues = teamFit.report?.issues;
   if (Array.isArray(issues) && issues.length) {
     decisions.push({
@@ -4248,10 +4566,32 @@ function renderBadgeEffects(teamFit) {
   });
 }
 
+// Kampklar-status i kampdagpanelet: grønn "Klar for kampdag" når laget er
+// gyldig, ellers en tydelig forklaring på hva som mangler. Spill kamp-knappen
+// følger samme status. Ren visning – selve kampmotoren er uendret.
+function renderMatchdayReadiness(teamFit) {
+  const el = elements.matchdayReadiness;
+  const { isReady, reasons } = getMatchdayReadiness(teamFit);
+
+  if (el) {
+    el.dataset.ready = isReady ? "true" : "false";
+    el.textContent = isReady
+      ? "Klar for kampdag: 11 gyldige startere og minst 4 på benken."
+      : `Ikke kampklar ennå: ${reasons.join(" ")}`;
+  }
+
+  if (elements.playMatchdayButton) {
+    elements.playMatchdayButton.disabled = !isReady;
+  }
+}
+
 // Kampdag (v1): viser siste spilte kamp. Bruker textContent (ingen innerHTML)
 // og bygger alle elementer programmatisk.
-function renderMatchday() {
+function renderMatchday(teamFit) {
   const container = elements.matchdayResult;
+
+  renderMatchdayReadiness(teamFit);
+
   if (!container) {
     return;
   }
@@ -5377,19 +5717,30 @@ function renderUnlockPlaces() {
     );
 
     if (place.placeRole) {
-      appendUnlockMeta(card, `Rolle: ${place.placeRole}`);
+      appendUnlockMeta(card, `Rolle: ${formatTagText(place.placeRole)}`);
     }
 
+    // Lesbar "dette stedet låser opp"-liste: navn i stedet for tekniske id-er.
     const unlocks = Array.isArray(place.unlocks) ? place.unlocks : [];
     if (unlocks.length) {
+      appendUnlockMeta(card, "Dette stedet låser opp:");
       const ul = document.createElement("ul");
       ul.className = "unlock-list";
       unlocks.forEach((unlock) => {
         const li = document.createElement("li");
-        li.textContent = `${unlock.type}: ${unlock.targetId}`;
+        li.textContent = describeUnlockTarget(unlock);
         ul.append(li);
       });
       card.append(ul);
+    }
+
+    // Historiske systemer stedet peker mot i unlock-reglene (ren forklaring).
+    const linkedFormations = getFormationsLinkedToPlace(place.placeId);
+    if (linkedFormations.length) {
+      appendUnlockMeta(
+        card,
+        `Åpner historiske systemer: ${linkedFormations.map((formation) => formation.name).join(", ")}`
+      );
     }
 
     list.append(card);
@@ -5502,6 +5853,23 @@ function renderPlaceReports() {
       meta.append(pill);
     });
     card.append(meta);
+
+    // Historiske formasjoner stedet låser opp (fra unlock-reglene, kun visning).
+    // Gjør sted → formasjon-koblingen synlig der spilleren leser om stedet.
+    const linkedFormations = getFormationsLinkedToPlace(report.placeId);
+    if (linkedFormations.length) {
+      const formationSection = document.createElement("p");
+      formationSection.className = "place-report-section";
+      const strong = document.createElement("strong");
+      strong.textContent = "Formasjoner: ";
+      formationSection.append(strong);
+      formationSection.append(
+        document.createTextNode(
+          `Åpner ${linkedFormations.map((formation) => formation.name).join(", ")}.`
+        )
+      );
+      card.append(formationSection);
+    }
 
     // unlocksExplanation som korte avsnitt med ledetekst.
     const explanation = report.unlocksExplanation || {};
@@ -6041,6 +6409,61 @@ function renderTeamIdentityPanel() {
   }
 }
 
+// Din fotballsamling: oppsummering av hva samlingen gir laget akkurat nå.
+// Leser kun availability-snapshotet (getAvailability) – steder, spillere, stab,
+// ulåste formasjoner og roster readiness. Beregner ingen egne unlocks.
+function renderCollectionSummary() {
+  if (!elements.collectionPlacesCount) {
+    return;
+  }
+
+  const snapshot = getAvailability();
+  const readiness = snapshot.rosterReadiness;
+
+  elements.collectionPlacesCount.textContent = String(snapshot.unlockedPlaceIds.size);
+  if (elements.collectionPlayersCount) {
+    elements.collectionPlayersCount.textContent = String(snapshot.unlockedPlayers.length);
+  }
+  if (elements.collectionStaffCount) {
+    elements.collectionStaffCount.textContent = String(snapshot.unlockedStaff.length);
+  }
+  if (elements.collectionFormationsCount) {
+    elements.collectionFormationsCount.textContent =
+      `${snapshot.unlockedFormations.length}/${state.formations.length}`;
+  }
+
+  if (elements.collectionMatchdayBadge) {
+    elements.collectionMatchdayBadge.dataset.ready = readiness.isReady ? "true" : "false";
+    elements.collectionMatchdayBadge.textContent = readiness.isReady ? "Klar for kampdag" : "Ikke kampklar";
+  }
+
+  // Kildeskille for utvikling/test: hva som kommer fra ekte History Go-progresjon
+  // og hva som kommer fra manager-/demostate.
+  if (elements.collectionSourceNote) {
+    const historyGoCount = snapshot.historyGoPlaceIds.size;
+    const managerCount = snapshot.managerPlaceIds.size;
+    elements.collectionSourceNote.textContent =
+      `Kilder: ${historyGoCount} sted${historyGoCount === 1 ? "" : "er"} fra ekte History Go-progresjon, ` +
+      `${managerCount} fra manager-/demostate (utvikling/test).`;
+  }
+
+  // Konkret neste handling mot kampdag, i prioritert rekkefølge.
+  if (elements.collectionNextStep) {
+    let nextStep;
+    if (snapshot.unlockedPlayers.length === 0) {
+      nextStep =
+        "Neste: samle spillersteder i History Go (f.eks. Ullevaal, Intility, Gressbanen eller Ekebergsletta) og synk.";
+    } else if (!readiness.hasCompleteXi) {
+      nextStep = `Neste: fyll startelleveren i Kontoret (${readiness.starterCount} av ${REQUIRED_STARTERS} på plass).`;
+    } else if (!readiness.hasEnoughBench || !readiness.hasEnoughUnlocked) {
+      nextStep = "Neste: samle flere spillere til benken via History Go-steder.";
+    } else {
+      nextStep = "Troppen er klar: gå til Kontoret, finjuster formasjonen og spill kamp.";
+    }
+    elements.collectionNextStep.textContent = nextStep;
+  }
+}
+
 // Statusfelt for ekte History Go-sync: hvor mange steder som er funnet i hver
 // kilde, og hvor mange relevante Football Manager-unlock-steder som er aktive.
 function renderHistoryGoSyncStatus() {
@@ -6057,15 +6480,15 @@ function renderHistoryGoSyncStatus() {
 
   if (historyGoCount === 0) {
     el.textContent =
-      `History Go-sync: ingen besøkte sportsteder funnet ennå. ` +
-      `Bruker manager-/demostate (${managerCount} steder).`;
+      `History Go-sync: ingen besøkte sportsteder funnet fra History Go-appen ennå. ` +
+      `Alt under kommer fra manager-/demostate (${managerCount} steder) – demodata for utvikling og test.`;
     return;
   }
 
   el.textContent =
-    `History Go-sync: ${historyGoCount} sportsteder fra History Go ` +
+    `History Go-sync: ${historyGoCount} sportsteder fra ekte History Go-progresjon ` +
     `(${visitedCount} i visited_places, ${groundhopperCount} i hg_groundhopper_stats_v1)` +
-    (managerCount > 0 ? ` + ${managerCount} fra manager-/demostate.` : ".");
+    (managerCount > 0 ? ` + ${managerCount} fra manager-/demostate (utvikling/test).` : ".");
 }
 
 // Tropp og benk (roster readiness): rendres fra availability-snapshotet inn i
@@ -6165,7 +6588,7 @@ function renderApp() {
   renderDecisionCards(teamFit);
   renderReport(teamFit);
   renderBadgeEffects(teamFit);
-  renderMatchday();
+  renderMatchday(teamFit);
 
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
@@ -6174,6 +6597,7 @@ function renderApp() {
 
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
+  renderCollectionSummary();
   renderUnlockPlaces();
   renderUnlockedPlayers();
   renderPlaceReports();

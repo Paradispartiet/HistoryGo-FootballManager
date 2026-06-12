@@ -242,6 +242,9 @@
               Test det valgte historiske systemet mot en balansert motstander. Resultatet bygger på
               laguttak, historisk formasjonsfit og badgeeffekter via lagets teamFit.
             </p>
+            <!-- Kampklar-status: forklarer hvorfor laget eventuelt ikke kan spille.
+                 Rendres av app.js (renderMatchdayReadiness) fra teamFit + availability. -->
+            <p id="matchdayReadiness" class="matchday-readiness" data-ready="false">Laster kampstatus…</p>
             <div class="matchday-actions">
               <button id="playMatchdayButton" type="button">Spill kamp</button>
               <button id="resetMatchdayButton" type="button">Nullstill kamp</button>
@@ -489,6 +492,32 @@
       <p id="historyGoSyncStatus" class="history-go-sync-status">
         History Go-sync: ingen besøkte sportsteder funnet ennå. Bruker demo-/lagstate.
       </p>
+
+      <!-- Din fotballsamling: oppsummering av availability-snapshotet. Viser hva
+           samlingen gir laget akkurat nå. Rendres av app.js (renderCollectionSummary)
+           fra getAvailability() – beregner ingen egne unlocks. -->
+      <section class="panel collection-summary" aria-label="Din fotballsamling" aria-live="polite">
+        <div class="collection-summary-head">
+          <div>
+            <p class="eyebrow">Samling til lag</p>
+            <h3>Din fotballsamling</h3>
+            <p class="muted-text">
+              Det du samler i History Go er det laget kan bruke her: steder gir spillere, stab og formasjoner.
+            </p>
+          </div>
+          <div id="collectionMatchdayBadge" class="collection-matchday-badge" data-ready="false">–</div>
+        </div>
+
+        <div class="metric-grid collection-summary-metrics">
+          <article><span>Opplåste steder</span><strong id="collectionPlacesCount">0</strong></article>
+          <article><span>Tilgjengelige spillere</span><strong id="collectionPlayersCount">0</strong></article>
+          <article><span>Tilgjengelig stab</span><strong id="collectionStaffCount">0</strong></article>
+          <article><span>Ulåste formasjoner</span><strong id="collectionFormationsCount">–</strong></article>
+        </div>
+
+        <p id="collectionSourceNote" class="muted-text collection-source-note"></p>
+        <p id="collectionNextStep" class="collection-next-step"></p>
+      </section>
 
       <section class="panel unlock-panel" aria-label="History Go-unlocks">
         <div class="unlock-block">
