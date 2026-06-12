@@ -48,6 +48,7 @@ data/
   football_formations.json
   football_knowledge_principles.json
   football_unlocks.json
+  football_place_locations.json
   football_staff.json
   football_expertise.json
   football_training_programs.json

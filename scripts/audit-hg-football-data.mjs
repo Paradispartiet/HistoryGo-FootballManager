@@ -14,6 +14,8 @@
  *     pressShape, lowBlockShape og restDefenceShape
  *   - matchEngineEffects finnes med alle nøkler og 0-10-verdier
  *   - tacticalDifficulty bruker kun low/medium/high/very_high
+ *   - lokale startsteder har gyldig schema, unike placeId-er som finnes i
+ *     football_unlocks.json, og finite latitude/longitude-verdier
  *
  * Rent Node-script (standardbibliotek, ingen dependencies). Read-only: skriver
  * ingen filer. Exit code 1 hvis det finnes errors, ellers 0. Warnings feiler
@@ -113,7 +115,15 @@ function validateRoleRefs(formationLabel, field, value, roleIds) {
 }
 
 function main() {
-  const counts = { formations: 0, eras: 0, roleTypes: 0, staffRoles: 0, unlockRules: 0, fitRules: 0 };
+  const counts = {
+    formations: 0,
+    eras: 0,
+    roleTypes: 0,
+    staffRoles: 0,
+    unlockRules: 0,
+    fitRules: 0,
+    placeLocations: 0,
+  };
 
   const manifest = loadJson(MANIFEST_REL);
   if (manifest === undefined) {
@@ -227,6 +237,44 @@ function main() {
     errors.push('unlockRules.json: "rules" må være en array.');
   }
 
+  // --- Koordinater for lokal starttropp ---
+  const footballUnlocks = loadJson("data/football_unlocks.json");
+  const placeLocations = loadJson("data/football_place_locations.json");
+  const unlockPlaceIds = new Set(
+    Array.isArray(footballUnlocks?.placeUnlocks)
+      ? footballUnlocks.placeUnlocks.map((place) => place?.placeId).filter(isNonEmptyString)
+      : []
+  );
+
+  if (placeLocations) {
+    if (placeLocations.schema !== "historygo-football-manager.place-locations.v1") {
+      errors.push('football_place_locations.json: ugyldig "schema".');
+    }
+    if (!Array.isArray(placeLocations.places)) {
+      errors.push('football_place_locations.json: "places" må være en array.');
+    } else {
+      counts.placeLocations = placeLocations.places.length;
+      const seenPlaceIds = new Set();
+      for (const [i, place] of placeLocations.places.entries()) {
+        const label = `football_place_locations.places[${i}]`;
+        if (!isPlainObject(place) || !isNonEmptyString(place.placeId)) {
+          errors.push(`${label}: mangler gyldig "placeId".`);
+          continue;
+        }
+        if (seenPlaceIds.has(place.placeId)) {
+          errors.push(`${label}: duplikat placeId "${place.placeId}".`);
+        }
+        seenPlaceIds.add(place.placeId);
+        if (!unlockPlaceIds.has(place.placeId)) {
+          errors.push(`${label}: placeId "${place.placeId}" finnes ikke i football_unlocks.json.`);
+        }
+        if (!Number.isFinite(place.latitude) || !Number.isFinite(place.longitude)) {
+          errors.push(`${label}: latitude/longitude må være finite numbers.`);
+        }
+      }
+    }
+  }
+
   // --- fitRules: rolle-referanser (warning, ikke hard feil) ---
   if (fitRules) {
     const ruleArrays = [
@@ -256,6 +304,7 @@ function finish(counts) {
   lines.push(`Staff roles: ${counts.staffRoles}`);
   lines.push(`Fit rules: ${counts.fitRules}`);
   lines.push(`Unlock rules: ${counts.unlockRules}`);
+  lines.push(`Place locations: ${counts.placeLocations}`);
   lines.push("");
 
   if (errors.length === 0 && warnings.length === 0) {
