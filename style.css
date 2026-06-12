@@ -673,6 +673,163 @@ select:focus-visible {
   padding: 12px 14px;
 }
 
+/* ---------- Kampdag (v0.2): faser, hendelser og managergrep ---------- */
+.matchday-phase {
+  margin: 0;
+  width: fit-content;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  color: var(--text);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+}
+
+/* Tydelig advarsel når laget starter kampen med svak forutsetning. */
+.matchday-weak-warning {
+  margin: 0;
+  border: 1px solid var(--danger);
+  border-radius: 10px;
+  background: var(--hg-surface-deep);
+  color: var(--danger);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+  padding: 10px 12px;
+}
+
+.matchday-kickoff-button {
+  border: 1px solid var(--good);
+  border-radius: var(--radius);
+  background: var(--hg-surface-deep);
+  color: var(--good);
+  font-weight: 900;
+  font-size: 0.95rem;
+  padding: 10px 16px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.matchday-kickoff-button:hover {
+  background: var(--good);
+  color: #04060b;
+}
+
+/* Aktuell kamp-hendelse: hvit ramme, rød kant ved høyt trykk. */
+.matchday-event-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--hg-surface-deep);
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.matchday-event-card.is-pressure-high {
+  border-color: var(--danger);
+}
+
+.matchday-event-pressure {
+  margin: 0;
+  width: fit-content;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 3px 10px;
+  color: var(--muted);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+}
+
+.matchday-event-card.is-pressure-high .matchday-event-pressure {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.matchday-event-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.matchday-event-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.matchday-decision-options {
+  display: grid;
+  gap: 8px;
+}
+
+.matchday-decision-button {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--hg-surface-deep);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 0.92rem;
+  text-align: left;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.matchday-decision-button:hover {
+  background: var(--text);
+  color: #04060b;
+}
+
+/* Tatt managergrep med konsekvens: grønn = positiv, rød = negativ. */
+.matchday-decision-entry {
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--line);
+  border-radius: 8px;
+  background: var(--hg-surface-deep);
+  padding: 8px 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.matchday-decision-entry.is-positive {
+  border-left-color: var(--good);
+}
+
+.matchday-decision-entry.is-negative {
+  border-left-color: var(--danger);
+}
+
+.matchday-decision-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.matchday-decision-feedback {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.matchday-decision-entry.is-positive .matchday-decision-feedback {
+  color: var(--good);
+}
+
+.matchday-decision-entry.is-negative .matchday-decision-feedback {
+  color: var(--danger);
+}
+
 .mini-status {
   margin: 0;
   border: 1px solid var(--line);
