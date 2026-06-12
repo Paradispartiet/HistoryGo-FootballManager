@@ -25,6 +25,14 @@ import {
   evaluateClubWeekMatchdayGate
 } from "./football-match-consequences.js";
 import {
+  TRAINING_FOCUSES,
+  getTrainingFocus,
+  sanitizeWeeklyTrainingFocus,
+  calculateTrainingStaffSupport,
+  recommendTrainingFocus,
+  createTrainingMatchdaySnapshot
+} from "./football-training-week.js";
+import {
   adaptHgFormations,
   buildRoleTypeIndex,
   getRoleDisplayNames,
@@ -94,6 +102,7 @@ const POSITIONS_KEY = "hgfm.slotPositions.v1";
 const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
 const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
 const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
+const WEEKLY_TRAINING_FOCUS_KEY = "hgfm.weeklyTrainingFocus.v1";
 const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
 const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
 const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
@@ -174,6 +183,9 @@ const state = {
   completedKnowledgeFocusIds: new Set(),
   // Gjeldende treningsuke (kun UI/progresjon, ingen kampmotor- eller score-effekt).
   trainingWeek: 1,
+  // Taktisk treningsfokus for gjeldende Club Week. Holdes bevisst adskilt fra
+  // kunnskapsfokus og History Go-programmer/badges.
+  weeklyTrainingFocus: null,
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
@@ -278,6 +290,9 @@ const elements = {
   startMiniSeasonButton: document.querySelector("#startMiniSeasonButton"),
   resetMiniSeasonButton: document.querySelector("#resetMiniSeasonButton"),
   miniSeasonOverview: document.querySelector("#miniSeasonOverview"),
+  weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
+  weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
+  weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
   strengthsList: document.querySelector("#strengthsList"),
   issuesList: document.querySelector("#issuesList"),
   widthScore: document.querySelector("#widthScore"),
@@ -2867,17 +2882,37 @@ function playMatchday() {
   const activeClassifications =
     typeof getActiveTeamClassifications === "function" ? getActiveTeamClassifications() : [];
 
+  const opponent = getMiniSeasonNextOpponent();
+  const coachContext = getCoachContext();
+  const trainingFocus = createTrainingMatchdaySnapshot({
+    selection: state.weeklyTrainingFocus,
+    clubWeek: state.clubWeekState?.week,
+    coachContext,
+    opponent
+  });
+
   state.matchday.session = createMatchdaySession({
     teamFit,
     formation,
     tactic: getTactic(),
     activeClassifications,
-    coachContext: getCoachContext(),
+    coachContext,
     // Mini Season v0.1: aktiv prøveperiode styrer motstanderen etter den
     // lagrede planen. Uten aktiv mini-sesong (null) velger kampmotoren
     // tilfeldig motstander som før (testkamp).
-    opponent: getMiniSeasonNextOpponent()
+    opponent,
+    trainingFocus
   });
+
+  // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
+  // «Nullstill kamp» aldri gi samme ukebonus til en ny kamp.
+  if (trainingFocus && state.matchday.session?.id) {
+    state.weeklyTrainingFocus = {
+      ...state.weeklyTrainingFocus,
+      appliedSessionId: state.matchday.session.id
+    };
+    saveWeeklyTrainingFocus();
+  }
 
   saveMatchdayState();
   renderApp();
@@ -2921,7 +2956,8 @@ function chooseMatchdayDecision(optionId) {
     option,
     tacticalProfile: session.teamFitSnapshot?.tacticalProfile,
     matchEngineEffects: session.matchEngineEffects,
-    coachSnapshot: session.coachSnapshot
+    coachSnapshot: session.coachSnapshot,
+    trainingFocus: session.trainingFocus
   });
 
   if (!resolution) {
@@ -2935,7 +2971,8 @@ function chooseMatchdayDecision(optionId) {
     optionLabel: option.label,
     tone: resolution.tone,
     effects: resolution.effects,
-    feedback: resolution.feedback
+    feedback: resolution.feedback,
+    trainingImpact: resolution.trainingImpact
   });
 
   if (eventIndex + 1 < session.events.length) {
@@ -3439,6 +3476,47 @@ function advanceTrainingWeek() {
   clearActiveKnowledgeFocus();
   // Fullført-status leses på nytt for gjeldende uke (tom for en helt ny uke).
   state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
+}
+
+// Ukens taktiske treningsfokus. Uke-id og appliedSessionId gjør lagringen
+// robust mot reload, feil uke og gjenbruk etter nullstilling av kamp.
+function loadWeeklyTrainingFocus() {
+  try {
+    return sanitizeWeeklyTrainingFocus(JSON.parse(localStorage.getItem(WEEKLY_TRAINING_FOCUS_KEY)));
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveWeeklyTrainingFocus() {
+  try {
+    if (state.weeklyTrainingFocus) {
+      localStorage.setItem(WEEKLY_TRAINING_FOCUS_KEY, JSON.stringify(state.weeklyTrainingFocus));
+    } else {
+      localStorage.removeItem(WEEKLY_TRAINING_FOCUS_KEY);
+    }
+  } catch (error) {
+    // Privat modus e.l.: appen fortsetter uten persistens.
+  }
+}
+
+function selectWeeklyTrainingFocus(focusId) {
+  const focus = getTrainingFocus(focusId);
+  const week = Number(state.clubWeekState?.week);
+  if (!focus || !Number.isInteger(week) || state.matchday?.session || state.weeklyTrainingFocus?.appliedSessionId) {
+    return;
+  }
+  state.weeklyTrainingFocus = { focusId: focus.id, week, appliedSessionId: null };
+  saveWeeklyTrainingFocus();
+  renderApp();
+}
+
+function syncWeeklyTrainingFocusToClubWeek() {
+  const week = Number(state.clubWeekState?.week);
+  if (state.weeklyTrainingFocus && state.weeklyTrainingFocus.week !== week) {
+    state.weeklyTrainingFocus = null;
+    saveWeeklyTrainingFocus();
+  }
 }
 
 // Club Week-tilstand: uke, fase og klubbverdier fra Club Week Engine.
@@ -5357,6 +5435,11 @@ function renderMatchdaySessionPreMatch(container, session) {
       `Trenerstøtte: systemforståelse ${coach.coachUnderstanding}, formasjonstilvenning ${coach.formationFamiliarity}`
     );
   }
+  if (session.trainingFocus) {
+    planLines.push(
+      `Ukens treningsfokus: ${session.trainingFocus.name} · staff-støtte ${session.trainingFocus.staffSupport?.label?.toLowerCase() || "svak"} · ${session.trainingFocus.effectHint}`
+    );
+  }
   appendMatchdayList(card, planLines);
 
   // Svak forutsetning vises tydelig før avspark, uten å blokkere.
@@ -5535,6 +5618,11 @@ function renderMatchdayReport(container, lastMatch) {
     appendMatchdayList(card, analysis);
   }
 
+  if (report.trainingFocus?.summary) {
+    appendMatchdaySubheading(card, "Ukens trening");
+    appendMatchdayList(card, [report.trainingFocus.summary]);
+  }
+
   // Veien videre: avgjørende lagdel, treningsråd og History Go-hint (v0.2).
   const nextLines = [];
   if (report.decisiveUnit) {
@@ -5704,6 +5792,55 @@ function renderMiniSeasonVerdict(parent, finalVerdict) {
   }
 
   parent.append(box);
+}
+
+function renderWeeklyTrainingFocus(teamFit) {
+  const status = elements.weeklyTrainingStatus;
+  const recommendationEl = elements.weeklyTrainingRecommendation;
+  const options = elements.weeklyTrainingOptions;
+  if (!status || !recommendationEl || !options) return;
+
+  syncWeeklyTrainingFocusToClubWeek();
+  const week = Number(state.clubWeekState?.week) || 1;
+  const selected = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
+  const used = Boolean(state.weeklyTrainingFocus?.appliedSessionId);
+  status.textContent = selected
+    ? `Uke ${week}: ${selected.name}${used ? " · brukt i ukas kampplan" : " · valgt"}`
+    : `Uke ${week}: Velg ett fokus før kamp.`;
+  status.dataset.selected = selected ? "true" : "false";
+
+  const recommendation = recommendTrainingFocus({ opponent: getMiniSeasonNextOpponent(), teamFit });
+  recommendationEl.textContent = recommendation.reason;
+
+  options.textContent = "";
+  TRAINING_FOCUSES.forEach((focus) => {
+    const support = calculateTrainingStaffSupport({ focusId: focus.id, coachContext: getCoachContext() });
+    const isSelected = selected?.id === focus.id;
+    const isRecommended = recommendation.focusIds.includes(focus.id);
+    const card = document.createElement("article");
+    card.className = "weekly-training-card";
+    card.dataset.support = support.level;
+    if (isSelected) card.classList.add("is-selected");
+    if (isRecommended) card.classList.add("is-recommended");
+
+    const heading = document.createElement("h3");
+    heading.textContent = focus.name;
+    const description = document.createElement("p");
+    description.textContent = focus.shortDescription;
+    const effect = document.createElement("p");
+    effect.className = "weekly-training-effect";
+    effect.textContent = focus.effectHint;
+    const meta = document.createElement("p");
+    meta.className = "weekly-training-support";
+    meta.textContent = `Staff-støtte: ${support.label}${isRecommended ? " · anbefalt" : ""}`;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = isSelected ? "Valgt" : "Velg fokus";
+    button.disabled = used || Boolean(state.matchday?.session) || isSelected;
+    button.addEventListener("click", () => selectWeeklyTrainingFocus(focus.id));
+    card.append(heading, description, effect, meta, button);
+    options.append(card);
+  });
 }
 
 function renderMiniSeason() {
@@ -7667,6 +7804,7 @@ function renderApp() {
   renderBadgeEffects(teamFit);
   renderMatchday(teamFit);
   renderMiniSeason();
+  renderWeeklyTrainingFocus(teamFit);
 
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
@@ -7887,6 +8025,10 @@ async function advanceClubWeekPhaseAction() {
 
   const previous = state.clubWeekState;
   let next = await advanceClubWeekPhaseFromBrowser(previous);
+  if (next.week !== previous.week) {
+    state.weeklyTrainingFocus = null;
+    saveWeeklyTrainingFocus();
+  }
   const consequences = getClubWeekTransitionConsequences(previous, next);
 
   // Bruk små klubbkonsekvenser kun når et fasebytte faktisk gir effekter.
@@ -8144,6 +8286,8 @@ async function init() {
     // den (ugyldig/gammel verdi blir uke 1 / analyse).
     const storedClubWeekState = loadClubWeekState();
     state.clubWeekState = await createInitialClubWeekStateFromBrowser(storedClubWeekState || {});
+    state.weeklyTrainingFocus = loadWeeklyTrainingFocus();
+    syncWeeklyTrainingFocusToClubWeek();
     state.clubWeekFeedback = loadClubWeekFeedback();
     state.clubWeekEventLog = loadClubWeekEventLog();
 
