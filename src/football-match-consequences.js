@@ -158,3 +158,48 @@ export function computeMatchdayConsequences({ lastMatch, coachSnapshot = null, h
     familiarityGain
   };
 }
+
+// Kampdag ↔ Club Week-kobling v1: i fasen "match_day" må ukas kamp faktisk
+// spilles før uka kan rulle videre, slik at kampdagen og klubbuka er én
+// sammenhengende rytme. Ren lesefunksjon — app.js eier all state og bestemmer
+// hva som skjer når porten er stengt.
+//
+// Reglene:
+//   - uten Club Week-state, eller utenfor kampdagfasen, er porten alltid åpen,
+//   - en pågående kampsesjon må fullføres før uka kan rulle,
+//   - ellers kreves et fullført resultat merket med gjeldende uke
+//     (lastMatch.playedInClubWeek === clubWeekState.week). Eldre resultater
+//     uten merket teller aldri som ukas kamp.
+//
+// Returnerer { isBlocked, reason } der reason er en kort norsk forklaring
+// (tom streng når porten er åpen).
+export function evaluateClubWeekMatchdayGate({
+  clubWeekState = null,
+  lastMatch = null,
+  hasActiveSession = false
+} = {}) {
+  if (!clubWeekState || typeof clubWeekState !== "object" || clubWeekState.phase !== "match_day") {
+    return { isBlocked: false, reason: "" };
+  }
+
+  if (hasActiveSession) {
+    return {
+      isBlocked: true,
+      reason: "Fullfør kampen som er i gang før uka kan rulle videre."
+    };
+  }
+
+  if (
+    lastMatch &&
+    typeof lastMatch === "object" &&
+    !Array.isArray(lastMatch) &&
+    lastMatch.playedInClubWeek === clubWeekState.week
+  ) {
+    return { isBlocked: false, reason: "" };
+  }
+
+  return {
+    isBlocked: true,
+    reason: "Spill ukens kamp i kampdagpanelet før uka kan rulle videre."
+  };
+}
