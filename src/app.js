@@ -881,20 +881,30 @@ function normalizeFormationFamiliarity(value) {
 
 // Normaliser lokal starttropp separat slik at gamle/korrupt lagrede merits
 // aldri kan lekke ugyldige koordinater eller spiller-id-er inn i availability.
+function isValidLatitude(value) {
+  return Number.isFinite(value) && value >= -90 && value <= 90;
+}
+
+function isValidLongitude(value) {
+  return Number.isFinite(value) && value >= -180 && value <= 180;
+}
+
 function normalizeLocalStart(value) {
   const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
   const playerIds = Array.isArray(base.playerIds)
-    ? [...new Set(base.playerIds.filter((playerId) => typeof playerId === "string" && playerId))]
+    ? [...new Set(base.playerIds.filter((playerId) => typeof playerId === "string").map((playerId) => playerId.trim()))]
+        .filter(Boolean)
+        .slice(0, REQUIRED_SQUAD_SIZE)
     : [];
 
   return {
-    enabled: typeof base.enabled === "boolean" ? base.enabled : false,
-    source: typeof base.source === "string" ? base.source : null,
-    latitude: Number.isFinite(base.latitude) ? base.latitude : null,
-    longitude: Number.isFinite(base.longitude) ? base.longitude : null,
-    chosenPlaceId: typeof base.chosenPlaceId === "string" ? base.chosenPlaceId : null,
+    enabled: base.enabled === true && playerIds.length > 0,
+    source: typeof base.source === "string" && base.source.trim() ? base.source : null,
+    latitude: isValidLatitude(base.latitude) ? base.latitude : null,
+    longitude: isValidLongitude(base.longitude) ? base.longitude : null,
+    chosenPlaceId: typeof base.chosenPlaceId === "string" && base.chosenPlaceId.trim() ? base.chosenPlaceId : null,
     playerIds,
-    createdAt: typeof base.createdAt === "string" ? base.createdAt : null
+    createdAt: typeof base.createdAt === "string" && base.createdAt.trim() ? base.createdAt : null
   };
 }
 
@@ -1133,10 +1143,10 @@ function getLocalStartPlayerIds() {
 // Haversine-avstand mellom to { latitude, longitude }-punkter, i kilometer.
 function calculateDistanceKm(a, b) {
   if (
-    !Number.isFinite(a?.latitude) ||
-    !Number.isFinite(a?.longitude) ||
-    !Number.isFinite(b?.latitude) ||
-    !Number.isFinite(b?.longitude)
+    !isValidLatitude(a?.latitude) ||
+    !isValidLongitude(a?.longitude) ||
+    !isValidLatitude(b?.latitude) ||
+    !isValidLongitude(b?.longitude)
   ) {
     return Number.POSITIVE_INFINITY;
   }
@@ -1151,7 +1161,8 @@ function calculateDistanceKm(a, b) {
     Math.sin(latitudeDelta / 2) ** 2 +
     Math.cos(startLatitude) * Math.cos(endLatitude) * Math.sin(longitudeDelta / 2) ** 2;
 
-  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+  const clampedHaversine = Math.max(0, Math.min(1, haversine));
+  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(clampedHaversine), Math.sqrt(1 - clampedHaversine));
 }
 
 function getPlaceLocationIndex(placeLocations = state.placeLocations) {
@@ -1161,8 +1172,8 @@ function getPlaceLocationIndex(placeLocations = state.placeLocations) {
       place &&
       typeof place.placeId === "string" &&
       place.placeId &&
-      Number.isFinite(place.latitude) &&
-      Number.isFinite(place.longitude)
+      isValidLatitude(place.latitude) &&
+      isValidLongitude(place.longitude)
     ) {
       index.set(place.placeId, place);
     }
@@ -1215,6 +1226,12 @@ function getNearestLocalStartPlayers({ players, placeUnlocks, placeLocations, st
 }
 
 function activateLocalStartSquad(startLocation) {
+  if (!isValidLatitude(startLocation?.latitude) || !isValidLongitude(startLocation?.longitude)) {
+    state.localStartMessage = "Kunne ikke starte lokalt fordi posisjonen har ugyldige koordinater.";
+    renderApp();
+    return;
+  }
+
   if (!state.teamMerits) {
     state.localStartMessage = "Kunne ikke starte lokalt fordi lagprogresjonen ikke er tilgjengelig.";
     renderApp();
@@ -4163,7 +4180,7 @@ function renderSidePanel(teamFit) {
 
   let slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
 
-  // Bare spillere som faktisk er låst opp gjennom History Go-steder kan velges.
+  // Bare spillere som er tilgjengelige via History Go eller lokal starttropp kan velges.
   const availablePlayers = getUnlockedPlayers();
 
   // Hvis denne plassen har en spiller som ikke lenger er opplåst, fjern
