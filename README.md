@@ -15,11 +15,12 @@ Appen har nå flere lag:
 3. **Lagfitmotor** – vurderer helheten: balanse, bredde, dybde, oppbygging, press, restforsvar, relasjoner, badges og duplikatspillere.
 4. **Relasjonsmotor** – vurderer om rollene hjelper eller blokkerer hverandre.
 5. **History Go-unlocks** – spillere, stab, ekspertise, treningsprogrammer og badges kan knyttes til besøkte/samlede steder.
-6. **Innboks / klubbuke** – trådbasert innboks, svarvalg og klubbverdier.
-7. **Stab, ekspertise og trening** – staff og ekspertise åpner treningsprogrammer og badgeprogresjon.
-8. **Lagidentitet** – lagklasser basert på opptjente badges og utviklingsretning.
-9. **Stedsrapporter** – forklarer hva sportsteder gir manageren.
-10. **Historisk formasjonsbibliotek** – egen `data/hgFootball/`-modul med historiske epoker, formasjoner, rolletyper og unlock-regler.
+6. **Lokal starttropp** – valgfri startmodus der manageren kan begynne med de 15 nærmeste kvalifiserte spillerne uten å markere stedene som samlet i History Go.
+7. **Innboks / klubbuke** – trådbasert innboks, svarvalg og klubbverdier.
+8. **Stab, ekspertise og trening** – staff og ekspertise åpner treningsprogrammer og badgeprogresjon.
+9. **Lagidentitet** – lagklasser basert på opptjente badges og utviklingsretning.
+10. **Stedsrapporter** – forklarer hva sportsteder gir manageren.
+11. **Historisk formasjonsbibliotek** – egen `data/hgFootball/`-modul med historiske epoker, formasjoner, rolletyper og unlock-regler.
 
 Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, liga, sesong og full simulering gjenstår.
 
@@ -59,6 +60,9 @@ data/
   club_inbox_messages/
   club_inbox_choices/
   hgFootball/
+
+docs/
+  local-start-squad.md
 
 scripts/
   audit-hg-football-data.mjs
@@ -219,6 +223,25 @@ hg_groundhopper_stats_v1
 
 Disse brukes til å finne besøkte/samlede sportsteder som finnes i Football Manager-unlockdata. Spillere velges ikke fritt: tilgjengelige spillere kommer fra `player_candidate`-unlocks på opplåste steder.
 
+## Lokal starttropp
+
+HG Football Manager skal også støtte et valgfritt startvalg der brukeren kan begynne med de 15 kvalifiserte fotballspillerne som er geografisk nærmest nåværende lokasjon eller valgt offentlig startsted.
+
+Dette er en startsnarvei, ikke en erstatning for History Go-samlingen. Spillere fra lokal start skal kunne brukes i managerdelen og telle mot 15-spillerkravet, men stedene deres skal ikke automatisk markeres som samlet eller besøkt i History Go.
+
+Prinsippet er:
+
+```txt
+local_start = spillbar starttropp
+visited_place = ekte History Go-samling
+```
+
+Den tekniske planen ligger i:
+
+```txt
+docs/local-start-squad.md
+```
+
 ## Stab, ekspertise, trening og badges
 
 Stab og ekspertise låses opp via steder og unlock-regler. Treningsprogrammer krever relevant ekspertise og riktig type ansatt stab. Badgeprogresjon kan gi små metriske bonuser til laget, for eksempel på press, restforsvar, oppbygging eller bredde.
@@ -262,6 +285,8 @@ node scripts/audit-hg-football-data.mjs
 - Nye spiller-unlocks må peke på ekte spiller-id-er, ikke arketype-id-er.
 - Steder som ikke skal gi spillere, for eksempel KFUM Arena/Bislett i nåværende dataregler, må ikke få player-unlocks.
 - Nye tagger bør gjenbrukes på tvers av spiller/rolle/taktikk der det er mulig.
+- Lokal starttropp må ikke skrive til `visited_places` eller `hg_groundhopper_stats_v1`.
+- Lokal starttropp må ikke hardkode spillerdata eller koordinater i `app.js`.
 
 ### Motor
 
@@ -271,6 +296,7 @@ node scripts/audit-hg-football-data.mjs
 - Lagfit skal ikke bare være gjennomsnitt av enkeltspillere.
 - Relasjoner skal forklare hvorfor roller støtter eller blokkerer hverandre.
 - Badges skal nudge, ikke dominere.
+- Lokal starttropp skal integreres i `computeAvailability()`, ikke i en parallell unlock-motor.
 
 ### UI
 
@@ -278,12 +304,13 @@ node scripts/audit-hg-football-data.mjs
 - Banen og managerkontoret skal være lesbart på iPad.
 - Nye data skal helst kunne vises uten å bygge om app-logikken.
 - Relasjonsdata vises foreløpig via lagrapporten; egen UI-metrikk kan legges til senere.
+- Lokal starttropp skal vises som `Lokal starttropp`, ikke som et samlet sted.
 
 ## Ikke ferdig ennå
 
 Følgende gjenstår som større spill-lag:
 
-- benk og 15-spillerkrav
+- implementere lokal starttropp i runtime etter `docs/local-start-squad.md`
 - motstanderprofiler
 - kampmotor
 - kamprapport etter kamp
@@ -295,9 +322,9 @@ Følgende gjenstår som større spill-lag:
 
 ## Neste anbefalte utviklingsrekkefølge
 
-1. Test managerkontoret i nettleser/iPad etter relasjonsmotoren.
-2. Legg relasjonsscore inn som egen synlig metrikk i UI.
-3. Legg inn benk og krav om 15 opplåste spillere.
+1. Implementer lokal starttropp i `computeAvailability()` uten å skrive til History Go-progresjon.
+2. Test managerkontoret i nettleser/iPad etter relasjonsmotoren.
+3. Legg relasjonsscore inn som egen synlig metrikk i UI.
 4. Lag motstanderprofiler.
 5. Lag tekstbasert ukekamp.
 6. Lag kamprapport som forklarer trenerens valg.
