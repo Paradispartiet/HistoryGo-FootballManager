@@ -45,6 +45,7 @@
     "latitude": null,
     "longitude": null,
     "chosenPlaceId": null,
+    "chosenPlaceName": null,
     "playerIds": [],
     "createdAt": null
   }

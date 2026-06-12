@@ -3999,39 +3999,114 @@ ul {
   line-height: 1.45;
 }
 
-/* Valgfri lokal starttropp inne i samlingspanelet. */
+/* Kompakt startvalg som bruker eksisterende availability- og lokal-start-flow. */
 .local-start-panel {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   padding: 14px;
   border: 1px solid var(--line-soft);
   border-radius: 12px;
   background: var(--hg-surface-deep);
 }
 
-.local-start-panel h4 {
-  margin: 0 0 4px;
+.local-start-panel[hidden],
+.active-local-start[hidden],
+#startModeChoices[hidden] {
+  display: none;
+}
+
+.local-start-heading {
+  margin-bottom: 10px;
+}
+
+.local-start-panel h4,
+.local-start-panel h5 {
+  margin: 0;
   color: var(--text);
+}
+
+.local-start-panel h4 {
   font-size: 1.05rem;
 }
 
+.local-start-panel h5 {
+  font-size: 0.95rem;
+}
+
 .local-start-panel .muted-text,
-.local-start-status {
+.local-start-status,
+.public-start-place-help {
   margin: 0;
 }
 
-.local-start-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.start-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
-.local-start-actions .is-secondary {
+.start-mode-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.start-mode-choice > div {
+  display: grid;
+  gap: 5px;
+}
+
+.start-mode-choice .unlock-card-action {
+  margin-top: auto;
+}
+
+.public-start-place-label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.public-start-place-select {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--hg-panel-bg);
+}
+
+.public-start-place-help {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.active-local-start {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.active-local-start > div {
+  display: grid;
+  gap: 5px;
+}
+
+.local-start-panel .is-secondary {
   border-color: var(--line-soft);
   color: var(--muted);
 }
 
-.local-start-actions button:disabled {
+.local-start-panel button:disabled,
+.local-start-panel select:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -4039,6 +4114,17 @@ ul {
 .local-start-status {
   color: var(--text);
   font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .start-mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .active-local-start {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 
 

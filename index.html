@@ -589,17 +589,52 @@
           <article><span>Ulåste formasjoner</span><strong id="collectionFormationsCount">–</strong></article>
         </div>
 
-        <div class="local-start-panel" aria-labelledby="localStartTitle">
-          <div>
-            <h4 id="localStartTitle">Start lokalt</h4>
-            <p class="muted-text">
-              Begynn med de 15 spillerne som er nærmest deg. Dette gir en spillbar starttropp uten å markere stedene som samlet i History Go.
-            </p>
+        <div id="startModePanel" class="local-start-panel" aria-label="Startmodus">
+          <div id="startModeChoices">
+            <div class="local-start-heading">
+              <p class="eyebrow">Startmodus</p>
+              <h4 id="localStartTitle">Hvordan vil du starte?</h4>
+            </div>
+
+            <div class="start-mode-grid">
+              <article class="start-mode-choice">
+                <div>
+                  <h5>Bruk History Go-samlingen min</h5>
+                  <p class="muted-text">Bruk spillere, stab og steder du allerede har samlet.</p>
+                </div>
+                <button type="button" id="useHistoryGoCollection" class="unlock-card-action">Bruk samlingen min</button>
+              </article>
+
+              <article class="start-mode-choice">
+                <div>
+                  <h5>Start lokalt</h5>
+                  <p class="muted-text">Finn de nærmeste spillerne rundt deg og lag en starttropp uten å markere stedene som samlet.</p>
+                </div>
+                <button type="button" id="activateLocalStart" class="unlock-card-action">Finn nærmeste spillere</button>
+              </article>
+
+              <article class="start-mode-choice">
+                <div>
+                  <h5>Velg offentlig startsted</h5>
+                  <p class="muted-text">Velg et offentlig History Go-sted som startpunkt. Dette kan senere brukes som hjemposisjon, lokal start og nærliggende anbefalinger.</p>
+                </div>
+                <label class="public-start-place-label" for="publicStartPlaceSelect">Offentlig History Go-sted</label>
+                <select id="publicStartPlaceSelect" class="public-start-place-select" aria-describedby="publicStartPlaceHelp"></select>
+                <p id="publicStartPlaceHelp" class="public-start-place-help">Stedet lagres med placeId og stedsnavn – aldri som privat adresse.</p>
+                <button type="button" id="activatePublicPlaceStart" class="unlock-card-action">Bruk valgt startsted</button>
+              </article>
+            </div>
           </div>
-          <div class="local-start-actions">
-            <button type="button" id="activateLocalStart" class="unlock-card-action">Start med lokale spillere</button>
+
+          <div id="activeLocalStart" class="active-local-start" hidden>
+            <div>
+              <p class="eyebrow">Aktiv startmodus</p>
+              <h4>Lokal starttropp</h4>
+              <p class="muted-text">Starttroppen er tilgjengelig i managerdelen, men stedene er ikke markert som samlet i History Go.</p>
+            </div>
             <button type="button" id="clearLocalStart" class="unlock-card-action is-secondary">Fjern lokal starttropp</button>
           </div>
+
           <p id="localStartStatus" class="local-start-status" role="status">Ingen lokal starttropp valgt.</p>
         </div>
 

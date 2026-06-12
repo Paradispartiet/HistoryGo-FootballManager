@@ -37,6 +37,7 @@ Lagre lokal start under eksisterende `teamMerits`, for eksempel:
     "latitude": 59.924,
     "longitude": 10.734,
     "chosenPlaceId": null,
+    "chosenPlaceName": null,
     "playerIds": [
       "player_id_1",
       "player_id_2"
@@ -47,6 +48,8 @@ Lagre lokal start under eksisterende `teamMerits`, for eksempel:
 ```
 
 `playerIds` skal beregnes én gang når brukeren velger lokal start, og deretter lagres stabilt. Listen skal ikke beregnes på nytt ved hver render.
+
+Når brukeren velger et offentlig startsted, lagres `chosenPlaceId` og `chosenPlaceName` fra `football_place_locations.json`. Det finnes ikke noe fritekstfelt for adresse, og privat adresse skal aldri lagres.
 
 ## Utvelgelse
 
@@ -72,13 +75,13 @@ Disse spillerne skal telle mot `REQUIRED_SQUAD_SIZE = 15`, kunne velges i starte
 
 ## UI
 
-Legg et kompakt panel i History Go-fanen ved `Din fotballsamling`:
+Legg et kompakt panel i History Go-fanen ved `Din fotballsamling`. Når laget mangler 15 tilgjengelige spillere og ingen lokal starttropp er aktiv, skal panelet tilby tre innganger til det eksisterende availability-systemet:
 
-- `Start med lokale spillere`
-- `Fjern lokal starttropp`
-- statusfelt som viser om lokal start er aktiv og hvor mange spillere den ga
+- bruk eksisterende History Go-samling
+- start lokalt med nettleserens geolokasjon
+- velg et offentlig History Go-sted fra `football_place_locations.json`
 
-Nettleseren skal først be om geolokasjon etter at brukeren klikker på startknappen.
+Aktiv lokal start skal fortsatt kunne fjernes, og statusfeltet skal vise hvor mange spillere starttroppen ga. Nettleseren skal først be om geolokasjon etter at brukeren klikker på lokal start. Offentlig startsted velges fra en liste; det skal ikke finnes fritekst-adressefelt.
 
 ## Nullstilling
 
