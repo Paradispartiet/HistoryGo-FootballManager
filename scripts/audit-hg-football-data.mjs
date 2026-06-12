@@ -15,7 +15,7 @@
  *   - matchEngineEffects finnes med alle nøkler og 0-10-verdier
  *   - tacticalDifficulty bruker kun low/medium/high/very_high
  *   - lokale startsteder har gyldig schema, unike placeId-er som finnes i
- *     football_unlocks.json, og finite latitude/longitude-verdier
+ *     football_unlocks.json, gyldige koordinater og minst én gyldig spillerkandidat
  *
  * Rent Node-script (standardbibliotek, ingen dependencies). Read-only: skriver
  * ingen filer. Exit code 1 hvis det finnes errors, ellers 0. Warnings feiler
@@ -239,16 +239,27 @@ function main() {
 
   // --- Koordinater for lokal starttropp ---
   const footballUnlocks = loadJson("data/football_unlocks.json");
+  const footballPlayers = loadJson("data/football_players.json");
   const placeLocations = loadJson("data/football_place_locations.json");
-  const unlockPlaceIds = new Set(
+  const unlockPlacesById = new Map(
     Array.isArray(footballUnlocks?.placeUnlocks)
-      ? footballUnlocks.placeUnlocks.map((place) => place?.placeId).filter(isNonEmptyString)
+      ? footballUnlocks.placeUnlocks
+          .filter((place) => isPlainObject(place) && isNonEmptyString(place.placeId))
+          .map((place) => [place.placeId, place])
+      : []
+  );
+  const footballPlayerIds = new Set(
+    Array.isArray(footballPlayers?.players)
+      ? footballPlayers.players.map((player) => player?.id).filter(isNonEmptyString)
       : []
   );
 
   if (placeLocations) {
     if (placeLocations.schema !== "historygo-football-manager.place-locations.v1") {
       errors.push('football_place_locations.json: ugyldig "schema".');
+    }
+    if (placeLocations.version !== 1) {
+      errors.push('football_place_locations.json: "version" må være 1.');
     }
     if (!Array.isArray(placeLocations.places)) {
       errors.push('football_place_locations.json: "places" må være en array.');
@@ -265,11 +276,32 @@ function main() {
           errors.push(`${label}: duplikat placeId "${place.placeId}".`);
         }
         seenPlaceIds.add(place.placeId);
-        if (!unlockPlaceIds.has(place.placeId)) {
+        const unlockPlace = unlockPlacesById.get(place.placeId);
+        if (!unlockPlace) {
           errors.push(`${label}: placeId "${place.placeId}" finnes ikke i football_unlocks.json.`);
         }
-        if (!Number.isFinite(place.latitude) || !Number.isFinite(place.longitude)) {
-          errors.push(`${label}: latitude/longitude må være finite numbers.`);
+        if (!isNonEmptyString(place.placeName)) {
+          errors.push(`${label}: mangler gyldig "placeName".`);
+        }
+        if (!Number.isFinite(place.latitude) || place.latitude < -90 || place.latitude > 90) {
+          errors.push(`${label}: latitude må være et finite tall mellom -90 og 90.`);
+        }
+        if (!Number.isFinite(place.longitude) || place.longitude < -180 || place.longitude > 180) {
+          errors.push(`${label}: longitude må være et finite tall mellom -180 og 180.`);
+        }
+
+        if (unlockPlace) {
+          const playerUnlocks = Array.isArray(unlockPlace.unlocks)
+            ? unlockPlace.unlocks.filter((unlock) => unlock?.type === "player_candidate")
+            : [];
+          if (playerUnlocks.length === 0) {
+            errors.push(`${label}: stedet har ingen player_candidate-unlocks.`);
+          }
+          for (const unlock of playerUnlocks) {
+            if (!isNonEmptyString(unlock.targetId) || !footballPlayerIds.has(unlock.targetId)) {
+              errors.push(`${label}: player_candidate peker på ukjent spiller-id "${unlock?.targetId ?? ""}".`);
+            }
+          }
         }
       }
     }
