@@ -149,13 +149,20 @@ export function computeMatchdayConsequences({ lastMatch, coachSnapshot = null, h
   if (historical > 0 && historical < 45) {
     familiarityGain -= 1;
   }
+  // Egen formasjonstilvenning denne uka gir ett lite ekstra steg. Dette skjer
+  // fortsatt innenfor samme engangs-konsekvens og samme eksisterende merits-felt.
+  const trainedFormationFamiliarity = lastMatch.trainingFocus?.focusId === "formation_familiarity";
+  if (trainedFormationFamiliarity) {
+    familiarityGain += lastMatch.trainingFocus?.staffSupport === "strong" ? 2 : 1;
+  }
   familiarityGain = clampRange(familiarityGain, MIN_FAMILIARITY_GAIN, MAX_FAMILIARITY_GAIN);
 
   return {
     matchId: lastMatch.id || null,
     formationId: lastMatch.formationSnapshot?.id || null,
     clubEffects,
-    familiarityGain
+    familiarityGain,
+    trainingFamiliarityBonus: trainedFormationFamiliarity
   };
 }
 

@@ -4040,3 +4040,125 @@ ul {
   color: var(--text);
   font-weight: 800;
 }
+
+
+/* ---------- Treningsuke v0.2 ---------- */
+.weekly-training-panel {
+  border: 1px solid var(--line-strong, #fff);
+}
+
+.weekly-training-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.weekly-training-head h2 {
+  margin: 0.2rem 0 0;
+}
+
+.weekly-training-status,
+.weekly-training-recommendation {
+  margin: 0.45rem 0 0;
+}
+
+.weekly-training-status[data-selected="true"],
+.weekly-training-recommendation {
+  color: var(--green, #75d69c);
+}
+
+.weekly-training-recommendation {
+  max-width: 34rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--green, #75d69c);
+}
+
+.weekly-training-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.weekly-training-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 210px;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.weekly-training-card.is-selected,
+.weekly-training-card.is-recommended {
+  border-color: var(--green, #75d69c);
+}
+
+.weekly-training-card.is-selected {
+  box-shadow: inset 0 0 0 1px var(--green, #75d69c);
+}
+
+.weekly-training-card h3,
+.weekly-training-card p {
+  margin-top: 0;
+}
+
+.weekly-training-card h3 {
+  margin-bottom: 0.45rem;
+}
+
+.weekly-training-card p {
+  font-size: 0.88rem;
+}
+
+.weekly-training-effect {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.weekly-training-support {
+  margin-top: auto;
+  font-weight: 700;
+}
+
+.weekly-training-card[data-support="strong"] .weekly-training-support,
+.weekly-training-card[data-support="medium"] .weekly-training-support {
+  color: var(--green, #75d69c);
+}
+
+.weekly-training-card[data-support="weak"] .weekly-training-support {
+  color: #ff9b73;
+}
+
+.weekly-training-card button {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.weekly-training-card button:hover:not(:disabled),
+.weekly-training-card button:focus-visible {
+  border-color: var(--green, #75d69c);
+  color: var(--green, #75d69c);
+}
+
+.weekly-training-card button:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+@media (max-width: 720px) {
+  .weekly-training-head {
+    display: block;
+  }
+
+  .weekly-training-recommendation {
+    margin-top: 0.85rem;
+  }
+}

@@ -1,3 +1,5 @@
+import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
+
 // HG Football Manager — Matchday Engine (v1)
 //
 // Enkel Kampdag v1 som tester det valgte HISTORISKE systemet, ikke bare en
@@ -445,6 +447,7 @@ export function createMatchReport(matchResult) {
     bestDecision: matchResult.bestDecision || null,
     worstDecision: matchResult.worstDecision || null,
     formationVerdict: matchResult.formationVerdict || "",
+    trainingFocus: matchResult.trainingFocus || null,
     decisiveUnit: matchResult.decisiveUnit || "",
     nextWeekAdvice: matchResult.nextWeekAdvice || "",
     historyGoHint: matchResult.historyGoHint || ""
@@ -1078,7 +1081,7 @@ function evaluateCheck(check, { tacticalProfile, matchEngineEffects, coachSnapsh
 // Vurderer ett managervalg mot teamFit-snapshot, formasjonens
 // matchEngineEffects og coachContext. Returnerer tone (positiv/nøytral/
 // negativ), summerbare effekter og en kort konsekvenstekst.
-export function resolveMatchdayDecision({ event, option, tacticalProfile, matchEngineEffects, coachSnapshot } = {}) {
+export function resolveMatchdayDecision({ event, option, tacticalProfile, matchEngineEffects, coachSnapshot, trainingFocus } = {}) {
   if (!event || !option) {
     return null;
   }
@@ -1094,6 +1097,12 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
     if (outcome > 0) met.push(check);
     if (outcome < 0) failed.push(check);
   });
+
+  // Ukens treningsfokus er et lite tillegg, aldri hovedgrunnlaget. Relevante
+  // grep kan vippe en marginal vurdering, mens restforsvar/dødball kan dempe
+  // skaden i en hendelse laget faktisk trente på.
+  const trainingSupport = evaluateTrainingDecisionSupport({ event, option, trainingFocus });
+  score += trainingSupport.scoreBonus;
 
   // CoachContext mildner vanskelige valg: god systemforståelse eller
   // formasjonstilvenning redder ett feilet krav.
@@ -1137,7 +1146,9 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
   } else {
     // Negativt utfall: grepet koster — mindre trussel fremover, mer trykk mot,
     // og risiko forsterker skaden. Stab med systemforståelse demper.
-    const damping = coachSupport ? 0.7 : 1;
+    const coachDamping = coachSupport ? 0.7 : 1;
+    const trainingDamping = trainingSupport.eventMitigation ? 0.82 : 1;
+    const damping = coachDamping * trainingDamping;
     effects = {
       eventScoreDelta: -1,
       xgDeltaFor: -Math.abs(impact.xgFor) * 0.6 * damping,
@@ -1161,7 +1172,8 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
   } else {
     const reason = failed[0] ? ` Svak ${describeCheck(failed[0])} gjorde laget sårbart.` : "";
     const softened = coachSoftened || coachSupport ? " Trenerteamet dempet skaden noe." : "";
-    feedback = `Grepet slo feil: motstanderen utnyttet situasjonen.${reason}${softened}`;
+    const trained = trainingSupport.eventMitigation ? ` Ukens ${trainingFocus?.name?.toLowerCase() || "trening"} dempet risikoen.` : "";
+    feedback = `Grepet slo feil: motstanderen utnyttet situasjonen.${reason}${softened}${trained}`;
   }
 
   return {
@@ -1170,7 +1182,15 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
     feedback,
     metKeys: met.map((check) => check.key),
     failedKeys: failed.map((check) => check.key),
-    coachSoftened
+    coachSoftened,
+    trainingImpact: trainingSupport.relevant
+      ? {
+          focusId: trainingFocus?.focusId || null,
+          focusName: trainingFocus?.name || "Treningsfokus",
+          scoreBonus: trainingSupport.scoreBonus,
+          mitigatedRisk: trainingSupport.eventMitigation
+        }
+      : null
   };
 }
 
@@ -1180,7 +1200,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
   const strength = calculateMatchStrength({ teamFit, formation, activeClassifications });
   const tp = strength.tacticalProfile;
@@ -1191,6 +1211,11 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     ...tp,
     roleFitAverage: clamp(num(teamFit?.metrics?.roleFitAverage))
   };
+  Object.entries(trainingFocus?.metricBonuses || {}).forEach(([metric, bonus]) => {
+    if (Number.isFinite(Number(tacticalProfile[metric]))) {
+      tacticalProfile[metric] = clamp(num(tacticalProfile[metric]) + num(bonus));
+    }
+  });
 
   const historical = teamFit?.historicalFormationFit || {};
 
@@ -1234,12 +1259,13 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     },
     coachSnapshot: coachContext
       ? {
-          coachUnderstanding: num(coachContext.coachUnderstanding),
-          formationFamiliarity: num(coachContext.formationFamiliarity),
+          coachUnderstanding: clamp(num(coachContext.coachUnderstanding) + num(trainingFocus?.coachBonuses?.coachUnderstanding)),
+          formationFamiliarity: clamp(num(coachContext.formationFamiliarity) + num(trainingFocus?.coachBonuses?.formationFamiliarity)),
           tacticalLearningSpeed: num(coachContext.tacticalLearningSpeed),
-          roleFitClarity: num(coachContext.roleFitClarity)
+          roleFitClarity: clamp(num(coachContext.roleFitClarity) + num(trainingFocus?.coachBonuses?.roleFitClarity))
         }
       : null,
+    trainingFocus: trainingFocus ? { ...trainingFocus } : null,
     events,
     decisions: []
   };
@@ -1514,6 +1540,29 @@ export function finalizeMatchdaySession(session) {
     keyFactors.push("Skjørt restforsvar");
   }
 
+  const trainingImpacts = decisions.map((decision) => decision.trainingImpact).filter(Boolean);
+  const mitigatedTrainingEvent = trainingImpacts.find((impact) => impact.mitigatedRisk);
+  const matchedTrainingDecision = trainingImpacts.find((impact) => num(impact.scoreBonus) > 0);
+  let trainingReport = null;
+  if (session.trainingFocus) {
+    let summary = `Ukens ${String(session.trainingFocus.name || "trening").toLowerCase()} ga liten effekt i denne kampen.`;
+    if (mitigatedTrainingEvent) {
+      summary = `Ukens ${String(session.trainingFocus.name).toLowerCase()} dempet risikoen i en relevant hendelse.`;
+    } else if (matchedTrainingDecision) {
+      summary = `Ukens ${String(session.trainingFocus.name).toLowerCase()} støttet et relevant managergrep.`;
+    } else if (session.trainingFocus.opponentFit) {
+      summary = `Ukens ${String(session.trainingFocus.name).toLowerCase()} passet motstanderprofilen, men ble lite testet.`;
+    }
+    trainingReport = {
+      focusId: session.trainingFocus.focusId,
+      name: session.trainingFocus.name,
+      week: session.trainingFocus.week,
+      staffSupport: session.trainingFocus.staffSupport?.level || "weak",
+      helped: Boolean(mitigatedTrainingEvent || matchedTrainingDecision),
+      summary
+    };
+  }
+
   return {
     id: `matchday-${Date.now()}`,
     version: 2,
@@ -1536,6 +1585,7 @@ export function finalizeMatchdaySession(session) {
       ? { label: worstDecision.optionLabel, eventTitle: worstDecision.eventTitle, tone: worstDecision.tone }
       : null,
     formationVerdict,
+    trainingFocus: trainingReport,
     decisiveUnit,
     nextWeekAdvice,
     historyGoHint
