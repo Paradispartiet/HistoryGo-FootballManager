@@ -1,19 +1,56 @@
 :root {
-  --bg: #000000;
-  --panel: #0b0b0b;
-  --panel-strong: #141414;
-  --text: #ffffff;
-  --muted: #cfd2cc;
-  --line: #ffffff;
-  --line-soft: rgba(255, 255, 255, 0.55);
+  /* ---------- HG design tokens: retro managerkontor i sort/hvitt ---------- */
+  /* Bakgrunn: dyp blåsort med stadiondybde (gradienten ligger på body::before). */
+  --hg-bg-main: #06080d;
+  --hg-bg-glow: rgba(96, 126, 168, 0.14);
+
+  /* Paneler: mørke, lett transparente kontrollflater. */
+  --hg-panel-bg: rgba(15, 19, 27, 0.78);
+  --hg-panel-bg-strong: rgba(23, 28, 39, 0.82);
+  --hg-surface-deep: rgba(4, 6, 11, 0.88);
+
+  /* Rammer: tynne hvite linjer med lav opacity. */
+  --hg-border-soft: rgba(255, 255, 255, 0.12);
+  --hg-border-strong: rgba(255, 255, 255, 0.26);
+
+  /* Tekst: hvit/gråhvit primær, dempet grå sekundær. */
+  --hg-text-main: #f2f4f7;
+  --hg-text-muted: #99a1ad;
+
+  /* Fargeaksenter: små, klare og funksjonelle signaler per managerområde. */
+  --hg-accent-tactics: #46d68c;
+  --hg-accent-inbox: #4da3ff;
+  --hg-accent-facilities: #5ecbc4;
+  --hg-accent-admin: #e3c75e;
+  --hg-accent-market: #ff9d4d;
+  --hg-accent-board: #b48cff;
+  --hg-accent-history: #4dd8e6;
+  --hg-accent-library: #f2f4f7;
+
+  /* Form og rytme. */
+  --hg-radius: 14px;
+  --hg-radius-sm: 10px;
+  --hg-space: 20px;
+  --hg-card-padding: 20px;
+  --hg-icon-size: 22px;
+  --hg-menu-height: 58px;
+
+  /* Legacy-aliaser: hele appen leser fortsatt disse. */
+  --bg: var(--hg-bg-main);
+  --panel: var(--hg-panel-bg);
+  --panel-strong: var(--hg-panel-bg-strong);
+  --text: var(--hg-text-main);
+  --muted: var(--hg-text-muted);
+  --line: var(--hg-border-strong);
+  --line-soft: var(--hg-border-soft);
   --danger: #ff6b5e;
   --good: #8ee36a;
   --pitch-dark: #0d3b1c;
   --pitch-light: #14502a;
-  --pitch-line: rgba(255, 255, 255, 0.85);
-  --radius: 14px;
-  --gap: 18px;
-  --shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
+  --pitch-line: rgba(255, 255, 255, 0.8);
+  --radius: var(--hg-radius);
+  --gap: var(--hg-space);
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.38);
 }
 
 * {
@@ -21,7 +58,7 @@
 }
 
 html {
-  font-size: 18px;
+  font-size: 17px;
 }
 
 body {
@@ -29,9 +66,24 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: var(--bg);
+  background: var(--hg-bg-main);
   color: var(--text);
   -webkit-text-size-adjust: 100%;
+}
+
+/* Dyp stadionbakgrunn: fast gradientlag bak alt innhold (fixed-element i
+   stedet for background-attachment, som er upålitelig på iOS). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 520px at 50% -180px, var(--hg-bg-glow), transparent 70%),
+    radial-gradient(900px 600px at 88% 112%, rgba(70, 214, 140, 0.05), transparent 60%),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 48px),
+    linear-gradient(180deg, #0a0e16 0%, #070a11 48%, #04060a 100%);
 }
 
 button,
@@ -54,94 +106,158 @@ h3 {
   margin-inline: auto;
 }
 
-/* ---------- Header ---------- */
+/* ---------- Header: kompakt statuslinje ---------- */
 .site-header {
-  padding: 40px 0 18px;
+  padding: 18px 0 10px;
 }
 
 .header-inner {
-  border: 2px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 14px;
+  row-gap: 2px;
+  border: 1px solid var(--hg-border-soft);
   border-radius: var(--radius);
-  background: var(--panel);
-  padding: 28px 28px 30px;
+  background: var(--hg-panel-bg);
+  padding: 12px 18px;
+}
+
+.site-header .eyebrow {
+  margin: 0;
+  font-size: 0.66rem;
 }
 
 .site-header h1 {
-  margin: 6px 0 12px;
-  font-size: clamp(2.6rem, 7vw, 4.6rem);
-  line-height: 0.95;
+  margin: 0;
+  font-size: clamp(1.15rem, 3.4vw, 1.5rem);
+  line-height: 1.1;
   font-weight: 900;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .eyebrow {
   margin: 0 0 6px;
-  color: var(--text);
-  font-size: 0.82rem;
+  color: var(--hg-text-muted);
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
 .lede {
-  max-width: 820px;
-  margin: 0;
+  flex: 1 1 100%;
+  max-width: 720px;
+  margin: 2px 0 0;
   color: var(--muted);
-  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
-  line-height: 1.55;
+  font-size: 0.88rem;
+  line-height: 1.5;
 }
 
-/* ---------- Navigation ---------- */
+/* ---------- Navigation: kompakt ikonmeny ---------- */
 .main-nav {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: var(--bg);
-  padding: 8px 0 14px;
+  background: rgba(7, 10, 16, 0.86);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hg-border-soft);
+  padding: 8px 0;
 }
 
 .main-nav-inner {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel);
-  padding: 10px;
+  flex-wrap: nowrap;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px;
+}
+
+.main-nav-inner::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-tab {
-  flex: 1 1 auto;
-  border: 2px solid var(--line-soft);
-  border-radius: 10px;
+  --tab-accent: var(--hg-text-main);
+  position: relative;
+  flex: 1 0 auto;
+  min-width: 76px;
+  min-height: var(--hg-menu-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid transparent;
+  border-radius: var(--hg-radius-sm);
   background: transparent;
-  color: var(--text);
-  font-size: 1.02rem;
+  color: var(--hg-text-muted);
+  font-size: 0.64rem;
   font-weight: 800;
-  letter-spacing: 0.02em;
-  padding: 14px 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 7px 10px 11px;
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
 
+.nav-icon {
+  width: var(--hg-icon-size);
+  height: var(--hg-icon-size);
+  flex: 0 0 auto;
+}
+
 .nav-tab:hover {
-  border-color: var(--line);
+  color: var(--hg-text-main);
+  border-color: var(--hg-border-soft);
 }
 
 .nav-tab.is-active {
-  background: var(--text);
-  color: #000000;
-  border-color: var(--text);
+  color: var(--hg-text-main);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--hg-border-soft);
+}
+
+.nav-tab.is-active .nav-icon {
+  color: var(--tab-accent);
+}
+
+/* Aktiv markør: liten aksentlinje i seksjonens signalfarge. */
+.nav-tab.is-active::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--tab-accent);
 }
 
 .nav-tab:focus-visible {
-  outline: 3px solid var(--text);
+  outline: 2px solid var(--text);
   outline-offset: 2px;
 }
 
+/* Funksjonelle fargeaksenter per managerområde. */
+.nav-tab[data-tab-target="team"] { --tab-accent: var(--hg-accent-tactics); }
+.nav-tab[data-tab-target="inbox"] { --tab-accent: var(--hg-accent-inbox); }
+.nav-tab[data-tab-target="facilities"] { --tab-accent: var(--hg-accent-facilities); }
+.nav-tab[data-tab-target="admin"] { --tab-accent: var(--hg-accent-admin); }
+.nav-tab[data-tab-target="market"] { --tab-accent: var(--hg-accent-market); }
+.nav-tab[data-tab-target="board"] { --tab-accent: var(--hg-accent-board); }
+.nav-tab[data-tab-target="historygo"] { --tab-accent: var(--hg-accent-history); }
+.nav-tab[data-tab-target="hgfmLibrary"] { --tab-accent: var(--hg-accent-library); }
+
 /* ---------- App shell + tab sections ---------- */
 .app-shell {
+  padding-top: 14px;
   padding-bottom: 32px;
 }
 
@@ -156,11 +272,11 @@ h3 {
 
 /* ---------- Panels ---------- */
 .panel {
-  border: 2px solid var(--line);
+  border: 1px solid var(--hg-border-soft);
   border-radius: var(--radius);
   background: var(--panel);
   box-shadow: var(--shadow);
-  padding: 24px;
+  padding: var(--hg-card-padding);
 }
 
 .section-header-panel {
@@ -222,9 +338,9 @@ label {
 
 select {
   width: 100%;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   padding: 14px 16px;
   font-size: 1.05rem;
@@ -250,9 +366,9 @@ select:focus-visible {
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border: 3px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 50%;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 2.4rem;
   font-weight: 900;
@@ -260,12 +376,12 @@ select:focus-visible {
 
 .metric-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
 .metric-grid article {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--panel-strong);
   padding: 14px;
@@ -279,6 +395,17 @@ select:focus-visible {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+/* Lange norske etikettord skal brekke pent i smale kort i stedet for å
+   tvinge layouten bredere enn skjermen. */
+.metric-grid span,
+.coach-context-metrics span,
+.topbar-metrics span,
+.knowledge-progress-grid span {
+  min-width: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .metric-grid strong {
@@ -302,7 +429,7 @@ select:focus-visible {
   display: grid;
   gap: 10px;
   padding: 12px 14px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--panel-strong);
 }
@@ -311,14 +438,15 @@ select:focus-visible {
   margin: 0;
 }
 
+/* To kolonner uansett flate: etikettene her er lange norske fagord. */
 .coach-context-metrics {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
 .coach-context-metrics article {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--panel);
   padding: 10px 12px;
@@ -341,7 +469,7 @@ select:focus-visible {
 
 @media (max-width: 720px) {
   .coach-context-metrics {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -353,7 +481,7 @@ select:focus-visible {
 }
 
 .badge-effect-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel-strong);
   padding: 12px 14px;
@@ -410,9 +538,9 @@ select:focus-visible {
 }
 
 .matchday-actions button {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 900;
   font-size: 0.95rem;
@@ -421,19 +549,19 @@ select:focus-visible {
 }
 
 .matchday-actions button:hover {
-  background: var(--line);
-  color: var(--bg);
+  background: var(--text);
+  color: #04060b;
 }
 
 .matchday-actions button:disabled {
   border-color: var(--line-soft);
   color: var(--muted);
-  background: #000000;
+  background: var(--hg-surface-deep);
   cursor: not-allowed;
 }
 
 .matchday-actions button:disabled:hover {
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--muted);
 }
 
@@ -441,9 +569,9 @@ select:focus-visible {
    noe mangler. Rendres av renderMatchdayReadiness. */
 .matchday-readiness {
   margin: 0;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--muted);
   font-size: 0.95rem;
   font-weight: 700;
@@ -457,9 +585,9 @@ select:focus-visible {
 }
 
 .matchday-result-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #000000;
+  background: var(--hg-surface-deep);
   padding: 18px;
   display: grid;
   gap: 10px;
@@ -513,7 +641,7 @@ select:focus-visible {
 .matchday-outcome {
   margin: 0;
   width: fit-content;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
   padding: 5px 14px;
   color: var(--text);
@@ -547,9 +675,9 @@ select:focus-visible {
 
 .mini-status {
   margin: 0;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 900;
   font-size: 1.05rem;
@@ -567,10 +695,11 @@ select:focus-visible {
 .pitch {
   position: relative;
   width: 100%;
+  max-width: 640px;
   aspect-ratio: 4 / 5;
-  min-height: 460px;
+  min-height: 420px;
   margin-inline: auto;
-  border: 3px solid var(--line);
+  border: 1px solid var(--hg-border-strong);
   border-radius: 18px;
   overflow: hidden;
   /* Gress-striper: vekslende mørk/lys grønn, med en svak vignett for dybde. */
@@ -647,9 +776,9 @@ select:focus-visible {
   gap: 3px;
   justify-items: center;
   width: clamp(78px, 14%, 116px);
-  border: 2px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.86);
+  background: rgba(3, 6, 10, 0.88);
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   color: var(--text);
@@ -675,14 +804,14 @@ select:focus-visible {
 }
 
 .player-chip.is-selected .chip-token {
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   border-color: #000000;
 }
 
 .player-chip.is-selected .chip-pos,
 .player-chip.is-selected .chip-score {
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   border-color: #000000;
 }
@@ -714,7 +843,7 @@ select:focus-visible {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   background: var(--text);
   color: #000000;
   font-size: 0.95rem;
@@ -723,7 +852,7 @@ select:focus-visible {
 }
 
 .chip-token.is-empty {
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--muted);
 }
 
@@ -772,7 +901,7 @@ select:focus-visible {
 /* ---------- Slot editor + report boxes ---------- */
 .selected-fit-box,
 .report-columns section {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   padding: 16px;
   background: var(--panel-strong);
@@ -808,7 +937,7 @@ select:focus-visible {
 .historical-role-hint {
   margin: 10px 0 0;
   padding: 8px 12px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--panel-strong);
   color: var(--muted);
@@ -852,7 +981,7 @@ ul {
 }
 
 .message-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel);
   padding: 20px 22px;
@@ -882,7 +1011,7 @@ ul {
 }
 
 .message-tag {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
   padding: 3px 12px;
   font-size: 0.78rem;
@@ -924,9 +1053,9 @@ ul {
 
 .inbox-thread-read-button {
   justify-self: start;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 900;
   padding: 10px 14px;
@@ -947,9 +1076,9 @@ ul {
 }
 
 .inbox-choice-button {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 800;
   font-size: 0.9rem;
@@ -966,7 +1095,7 @@ ul {
   width: 100%;
   display: grid;
   gap: 6px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-left: 4px solid var(--line);
   border-radius: 10px;
   background: #050505;
@@ -1001,7 +1130,7 @@ ul {
 }
 
 .facility-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel);
   padding: 22px;
@@ -1036,7 +1165,7 @@ ul {
 }
 
 .knowledge-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel);
   padding: 18px 20px;
@@ -1080,9 +1209,9 @@ ul {
 
 /* Aktivt valgt kunnskapskort: tydeligere hvit ramme, fortsatt sort bakgrunn. */
 .knowledge-card.is-active-focus {
-  border-width: 3px;
+  border-width: 2px;
   border-color: var(--text);
-  outline: 2px solid var(--line-soft);
+  outline: 1px solid var(--line-soft);
   outline-offset: 3px;
 }
 
@@ -1102,9 +1231,9 @@ ul {
 .unlock-card-action {
   justify-self: start;
   margin-top: 4px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.92rem;
   font-weight: 800;
@@ -1133,9 +1262,9 @@ ul {
 /* Treningsuke-status: sort/hvitt, hvit ramme, ingen gul bakgrunn. */
 .training-week-status {
   margin: 4px 0 0;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -1153,9 +1282,9 @@ ul {
 }
 
 .knowledge-progress-grid article {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   padding: 12px 14px;
 }
 
@@ -1185,9 +1314,9 @@ ul {
 
 .active-knowledge-focus {
   margin: 4px 0 0;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 800;
   line-height: 1.5;
@@ -1205,9 +1334,9 @@ ul {
   list-style: none;
   margin-left: -20px;
   margin-bottom: 10px;
-  border: 2px solid var(--text);
+  border: 1px solid var(--text);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 800;
   line-height: 1.5;
@@ -1228,9 +1357,9 @@ ul {
 .training-focus-complete-button {
   justify-self: start;
   margin-top: 10px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.88rem;
   font-weight: 800;
@@ -1276,7 +1405,7 @@ ul {
 /* Liten, ryddig historikk: sort bakgrunn, myk hvit ramme, ingen gul flate. */
 .training-history-panel {
   margin-top: 16px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: var(--radius);
   background: var(--panel-strong);
   padding: 16px 18px;
@@ -1300,7 +1429,7 @@ ul {
   margin: 0;
   border: 1px solid var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   line-height: 1.5;
   font-size: 0.95rem;
@@ -1311,13 +1440,13 @@ ul {
 /* Små, kompakte tallkort: sort bakgrunn, myk hvit ramme, ingen gul flate. */
 .knowledge-progress-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin: 12px 0;
 }
 
 .knowledge-progress-grid article {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--panel-strong);
   padding: 12px 14px;
@@ -1362,9 +1491,9 @@ ul {
 }
 
 .club-week-phase-row span {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -1374,9 +1503,9 @@ ul {
 
 .club-week-feedback {
   margin: 0;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 800;
   line-height: 1.5;
@@ -1384,9 +1513,9 @@ ul {
 }
 
 #advanceClubWeekPhase {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.92rem;
   font-weight: 800;
@@ -1413,7 +1542,7 @@ ul {
 }
 
 .club-week-metrics article {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--panel-strong);
   padding: 14px;
@@ -1438,9 +1567,9 @@ ul {
 }
 
 .club-week-event-log-panel {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   padding: 14px 16px;
 }
 
@@ -1498,7 +1627,7 @@ ul {
 }
 
 .unlock-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel-strong);
   padding: 16px 18px;
@@ -1532,7 +1661,7 @@ ul {
 .unlock-list li {
   border: 1px solid var(--line-soft);
   border-radius: 8px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.85rem;
   line-height: 1.4;
@@ -1542,7 +1671,7 @@ ul {
 .unlock-status {
   margin: 2px 0;
   justify-self: start;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
   padding: 4px 12px;
   font-size: 0.78rem;
@@ -1569,9 +1698,9 @@ ul {
 
 .badge-pill {
   display: inline-block;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.85rem;
   font-weight: 800;
@@ -1620,9 +1749,9 @@ ul {
 .history-go-sync-status {
   margin: 12px 0;
   padding: 10px 12px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 700;
 }
@@ -1655,9 +1784,9 @@ ul {
 }
 
 .collection-matchday-badge {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--muted);
   font-size: 0.85rem;
   font-weight: 900;
@@ -1679,9 +1808,9 @@ ul {
 
 .collection-next-step {
   margin: 0;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 1rem;
   font-weight: 800;
@@ -1711,7 +1840,7 @@ ul {
 }
 
 .place-report-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel-strong);
   padding: 18px 20px;
@@ -1755,9 +1884,9 @@ ul {
 
 .place-report-pill {
   display: inline-block;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.78rem;
   font-weight: 800;
@@ -1783,7 +1912,7 @@ ul {
   margin: 4px 0 0;
   border: 1px solid var(--danger);
   border-radius: 8px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--danger);
   font-size: 0.86rem;
   line-height: 1.45;
@@ -1798,9 +1927,9 @@ ul {
 .unlock-progress-line {
   margin: 4px 0 0;
   justify-self: start;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.82rem;
   font-weight: 900;
@@ -1826,7 +1955,7 @@ ul {
 }
 
 .team-identity-card {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel-strong);
   padding: 18px 20px;
@@ -1854,9 +1983,9 @@ ul {
 .team-identity-status {
   margin: 0;
   justify-self: start;
-  border: 2px solid var(--good);
+  border: 1px solid var(--good);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--good);
   font-size: 0.78rem;
   font-weight: 900;
@@ -1875,9 +2004,9 @@ ul {
 .team-identity-progress {
   margin: 0;
   justify-self: start;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.82rem;
   font-weight: 900;
@@ -1941,9 +2070,9 @@ ul {
 
 .team-identity-pill {
   display: inline-block;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.78rem;
   font-weight: 700;
@@ -1953,7 +2082,7 @@ ul {
 
 .team-identity-empty {
   margin: 0;
-  border: 2px dashed var(--line-soft);
+  border: 1px dashed var(--line-soft);
   border-radius: var(--radius);
   background: var(--panel-strong);
   color: var(--muted);
@@ -1986,15 +2115,27 @@ ul {
 
 /* ---------- Toppstripe: klubbstatus ---------- */
 .club-topbar {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(220px, 1fr) auto minmax(280px, 1.4fr);
   align-items: center;
   gap: 22px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--hg-border-soft);
   border-radius: var(--radius);
   background: linear-gradient(180deg, var(--panel-strong), var(--panel));
   box-shadow: var(--shadow);
-  padding: 18px 24px;
+  padding: 16px 22px;
+}
+
+/* Oversikten signeres med taktikk-grønn, som i menyen. */
+.club-topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-tactics);
+  opacity: 0.85;
 }
 
 .topbar-identity h2 {
@@ -2011,9 +2152,9 @@ ul {
 }
 
 .topbar-phase {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -2023,7 +2164,7 @@ ul {
 }
 
 #advanceClubWeekPhase {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--text);
   color: #000000;
@@ -2050,7 +2191,7 @@ ul {
   justify-items: center;
   gap: 2px;
   text-align: center;
-  border-inline: 2px solid var(--line-soft);
+  border-inline: 1px solid var(--line-soft);
   padding-inline: 22px;
 }
 
@@ -2075,16 +2216,17 @@ ul {
   font-weight: 800;
 }
 
+/* 4×2-rutenett: sju nøkkeltall får plass uten å presse toppstripen bredere. */
 .topbar-metrics {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
 
 .topbar-metrics article {
   border: 1px solid var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   padding: 10px 8px;
   text-align: center;
 }
@@ -2154,7 +2296,7 @@ ul {
   display: grid;
   gap: 12px;
   padding: 16px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--panel-strong);
 }
@@ -2193,7 +2335,7 @@ ul {
 .tactic-system-shape {
   flex: 0 0 auto;
   padding: 4px 10px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--bg);
   font-weight: 900;
@@ -2204,7 +2346,7 @@ ul {
 .tactic-system-diff {
   justify-self: start;
   padding: 4px 10px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
   font-size: 0.82rem;
   font-weight: 800;
@@ -2231,7 +2373,7 @@ ul {
   display: grid;
   gap: 2px;
   padding: 8px 10px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 8px;
   background: var(--bg);
 }
@@ -2273,7 +2415,7 @@ ul {
 
 .tactic-system-chip {
   padding: 4px 10px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 700;
@@ -2318,7 +2460,7 @@ ul {
 .tactic-system-locked-item {
   border: 1px solid var(--line-soft);
   border-radius: 8px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.45;
@@ -2328,7 +2470,7 @@ ul {
 /* ---------- Dynamisk sidepanel ---------- */
 .side-panel {
   position: sticky;
-  top: 84px;
+  top: 92px;
   display: grid;
   gap: 16px;
   align-content: start;
@@ -2348,7 +2490,7 @@ ul {
   display: flex;
   align-items: center;
   gap: 14px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--panel-strong);
   padding: 14px 16px;
@@ -2360,7 +2502,7 @@ ul {
   width: 64px;
   height: 64px;
   flex: 0 0 auto;
-  border: 3px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 50%;
   background: var(--text);
   color: #000000;
@@ -2384,7 +2526,7 @@ ul {
 }
 
 .profile-match {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 12px;
   background: var(--panel-strong);
   padding: 14px 16px;
@@ -2394,7 +2536,7 @@ ul {
   margin: 0;
   border: 1px dashed var(--line-soft);
   border-radius: 10px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.88rem;
   font-weight: 700;
@@ -2427,7 +2569,7 @@ ul {
 .profile-tags li {
   border: 1px solid var(--line-soft);
   border-radius: 8px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.82rem;
   line-height: 1.3;
@@ -2456,7 +2598,7 @@ ul {
   gap: 4px;
   width: 100%;
   text-align: left;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--panel-strong);
   color: var(--text);
@@ -2549,9 +2691,9 @@ ul {
 
 .roster-readiness-badge {
   flex: 0 0 auto;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   color: var(--text);
   font-size: 0.85rem;
   font-weight: 900;
@@ -2574,7 +2716,7 @@ ul {
 .bench-player-card {
   display: grid;
   gap: 4px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--panel-strong);
   padding: 12px 14px;
@@ -2624,7 +2766,7 @@ ul {
   gap: 8px;
   align-content: start;
   text-align: left;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel);
   box-shadow: var(--shadow);
@@ -2698,7 +2840,7 @@ ul {
 
 /* ---------- Innsiktsskuff (sekundær detalj) ---------- */
 .insight-drawer {
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: var(--radius);
   background: var(--panel);
   padding: 0 18px;
@@ -2748,23 +2890,46 @@ ul {
 }
 
 .dept-hero {
+  --dept-accent: var(--hg-text-main);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--hg-border-soft);
   border-radius: var(--radius);
   background: var(--panel);
   box-shadow: var(--shadow);
-  padding: 28px 30px;
+  padding: 22px 24px;
   position: relative;
   overflow: hidden;
 }
 
+/* Funksjonell fargesignatur: tynn aksentkant + farget eyebrow per avdeling. */
+.dept-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--dept-accent);
+  opacity: 0.85;
+}
+
+.dept-hero .eyebrow {
+  color: var(--dept-accent);
+}
+
+.dept-hero-inbox { --dept-accent: var(--hg-accent-inbox); }
+.dept-hero-facilities { --dept-accent: var(--hg-accent-facilities); }
+.dept-hero-admin { --dept-accent: var(--hg-accent-admin); }
+.dept-hero-market { --dept-accent: var(--hg-accent-market); }
+.dept-hero-board { --dept-accent: var(--hg-accent-board); }
+.dept-hero-historygo { --dept-accent: var(--hg-accent-history); }
+.dept-hero-hgfm { --dept-accent: var(--hg-accent-library); }
+
 .dept-hero h2 {
-  margin: 4px 0 10px;
-  font-size: clamp(1.9rem, 5vw, 3rem);
+  margin: 4px 0 8px;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
   text-transform: uppercase;
 }
 
@@ -2781,9 +2946,9 @@ ul {
   justify-items: center;
   gap: 2px;
   text-align: center;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 14px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   padding: 16px 24px;
   min-width: 130px;
 }
@@ -2819,11 +2984,11 @@ ul {
   right: -10%;
   width: 220px;
   height: 220px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 28px;
   transform: rotate(25deg);
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.35;
 }
 
 .dept-hero-facilities::after { border-radius: 50%; }
@@ -2853,7 +3018,7 @@ ul {
 .facility-feature {
   grid-column: span 2;
   grid-row: span 2;
-  border-width: 3px;
+  border-width: 2px;
   background:
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0 12px, transparent 12px 24px),
     var(--panel);
@@ -2916,9 +3081,9 @@ ul {
 /* Styretillit-måler */
 .board-trust-meter {
   height: 18px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #000000;
+  background: var(--hg-surface-deep);
   overflow: hidden;
 }
 
@@ -2991,14 +3156,49 @@ ul {
     font-size: 16px;
   }
 
+  :root {
+    --hg-space: 14px;
+    --hg-card-padding: 16px;
+  }
+
+  /* Mobil: menyen flyttes ned i tommelsonen som fast handlingsfelt. */
+  body {
+    padding-bottom: calc(var(--hg-menu-height) + 22px + env(safe-area-inset-bottom));
+  }
+
+  .main-nav {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom: none;
+    border-top: 1px solid var(--hg-border-soft);
+    background: rgba(6, 9, 15, 0.92);
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+  }
+
+  .main-nav-inner {
+    width: 100%;
+    padding-inline: 8px;
+  }
+
   .nav-tab {
-    flex: 1 1 calc(50% - 10px);
-    font-size: 0.95rem;
-    padding: 12px 10px;
+    min-width: 64px;
+    font-size: 0.58rem;
+    padding: 6px 6px 10px;
+  }
+
+  .site-header {
+    padding-top: 12px;
+  }
+
+  .site-header .lede {
+    display: none;
   }
 
   .metric-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .club-topbar {
@@ -3008,13 +3208,18 @@ ul {
 
   .topbar-score {
     border-inline: none;
-    border-block: 2px solid var(--line-soft);
+    border-block: 1px solid var(--line-soft);
     padding-block: 12px;
     padding-inline: 0;
   }
 
   .topbar-metrics {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .topbar-metrics article {
+    min-width: 0;
+    padding: 9px 8px;
   }
 
   .roster-readiness-head {
@@ -3027,6 +3232,7 @@ ul {
 
   .pitch {
     aspect-ratio: 3 / 4;
+    min-height: 380px;
   }
 
   .player-chip {
@@ -3041,7 +3247,7 @@ ul {
   }
 
   .dept-hero {
-    padding: 22px;
+    padding: 18px;
   }
 }
 
@@ -3060,7 +3266,7 @@ ul {
 
 .hgfm-loading,
 .hgfm-error {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   background: var(--panel);
   padding: 20px;
   border-radius: var(--radius);
@@ -3111,7 +3317,7 @@ ul {
   text-align: left;
   cursor: pointer;
   padding: 14px 16px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: var(--radius);
   background: var(--panel);
   color: var(--text);
@@ -3125,7 +3331,7 @@ ul {
 
 .hgfm-era-btn.is-active {
   border-color: var(--line);
-  border-width: 3px;
+  border-width: 2px;
   background: var(--panel-strong);
 }
 
@@ -3148,7 +3354,7 @@ ul {
 
 /* ---------- Formasjon-kolonne ---------- */
 .hgfm-era-head {
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel);
   padding: 18px;
@@ -3199,7 +3405,7 @@ ul {
   text-align: left;
   cursor: pointer;
   padding: 14px 16px;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: var(--radius);
   background: var(--panel);
   color: var(--text);
@@ -3213,7 +3419,7 @@ ul {
 
 .hgfm-formation-card.is-active {
   border-color: var(--line);
-  border-width: 3px;
+  border-width: 2px;
   background: var(--panel-strong);
 }
 
@@ -3222,7 +3428,7 @@ ul {
   font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: 0.02em;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
   padding: 8px 10px;
   white-space: nowrap;
@@ -3249,7 +3455,7 @@ ul {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding: 5px 9px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
   white-space: nowrap;
 }
@@ -3273,7 +3479,7 @@ ul {
 
 /* ---------- Detalj-panel ---------- */
 .hgfm-detail {
-  border: 3px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel);
   padding: 22px;
@@ -3283,7 +3489,7 @@ ul {
 }
 
 .hgfm-detail-head {
-  border-bottom: 2px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
   padding-bottom: 14px;
 }
 
@@ -3307,7 +3513,7 @@ ul {
 .hgfm-detail-shape {
   font-size: 1.2rem;
   font-weight: 800;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
   padding: 6px 10px;
 }
@@ -3332,7 +3538,7 @@ ul {
   margin: 0;
   font-size: 1rem;
   line-height: 1.55;
-  border-left: 3px solid var(--line);
+  border-left: 1px solid var(--line);
   padding-left: 14px;
 }
 
@@ -3364,13 +3570,13 @@ ul {
 /* ---------- Faseformasjoner ---------- */
 .hgfm-phase-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
 @media (max-width: 540px) {
   .hgfm-phase-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -3378,7 +3584,7 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 10px;
   padding: 12px;
   background: var(--panel-strong);
@@ -3409,7 +3615,7 @@ ul {
 
 .hgfm-chip {
   font-size: 0.98rem;
-  border: 2px solid var(--line-soft);
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
   padding: 6px 12px;
   background: var(--panel-strong);
@@ -3435,7 +3641,7 @@ ul {
 
 /* ---------- Unlock ---------- */
 .hgfm-unlock {
-  border-top: 2px solid var(--line-soft);
+  border-top: 1px solid var(--line-soft);
   padding-top: 16px;
 }
 
@@ -3449,7 +3655,7 @@ ul {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 999px;
   padding: 5px 12px;
 }
@@ -3479,7 +3685,7 @@ ul {
 .hgfm-empty {
   font-size: 1.05rem;
   color: var(--muted);
-  border: 2px dashed var(--line-soft);
+  border: 1px dashed var(--line-soft);
   border-radius: var(--radius);
   padding: 18px;
 }
