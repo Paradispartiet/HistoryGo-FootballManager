@@ -3846,3 +3846,155 @@ ul {
   border-radius: var(--radius);
   padding: 18px;
 }
+
+/* ---------- Mini Season v0.1: 5-kampers prøveperiode ---------- */
+.mini-season-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.mini-season-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mini-season-head h2 {
+  margin: 4px 0 6px;
+}
+
+.mini-season-head .muted-text {
+  margin: 0;
+}
+
+.mini-season-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mini-season-actions button {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--hg-surface-deep);
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.mini-season-actions button:hover {
+  background: var(--text);
+  color: #000000;
+}
+
+.mini-season-actions button:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+.mini-season-actions button.is-reset {
+  border-color: var(--line-soft);
+  color: var(--muted);
+}
+
+.mini-season-overview {
+  display: grid;
+  gap: 10px;
+}
+
+.mini-season-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.mini-season-next-opponent {
+  margin: 0;
+  width: fit-content;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 14px;
+  color: var(--text);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.mini-season-objectives,
+.mini-season-results {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 5px;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.mini-season-objectives li.is-achieved::marker,
+.mini-season-results li.is-win::marker {
+  color: var(--good);
+}
+
+.mini-season-objectives li.is-open::marker {
+  color: var(--muted);
+}
+
+.mini-season-results li.is-loss::marker {
+  color: var(--danger);
+}
+
+.mini-season-verdict {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--hg-surface-deep);
+  padding: 12px 16px;
+  display: grid;
+  gap: 6px;
+}
+
+.mini-season-verdict.is-trusted {
+  border-color: var(--good);
+}
+
+.mini-season-verdict.is-failed {
+  border-color: var(--danger);
+}
+
+.mini-season-verdict-label {
+  margin: 0;
+  width: fit-content;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  color: var(--text);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+}
+
+.mini-season-verdict.is-trusted .mini-season-verdict-label {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.mini-season-verdict.is-failed .mini-season-verdict-label {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.mini-season-verdict-headline {
+  margin: 0;
+  color: var(--text);
+  font-weight: 800;
+  line-height: 1.45;
+}
