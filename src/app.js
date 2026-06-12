@@ -75,6 +75,7 @@ const DATA_PATHS = {
   clubInboxReplyManifest: "data/club_inbox_replies/manifest.json",
   // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
   unlocks: "data/football_unlocks.json",
+  placeLocations: "data/football_place_locations.json",
   staff: "data/football_staff.json",
   expertise: "data/football_expertise.json",
   trainingPrograms: "data/football_training_programs.json",
@@ -212,6 +213,9 @@ const state = {
   // Filtreres gjennom availability-snapshotet (teamMerits + ekte History
   // Go-progresjon). Ingen fit-/kampmotor-effekt.
   unlocks: { placeUnlocks: [] },
+  // Koordinater for steder som kan levere lokal starttropp. Datafilen er eneste
+  // kilde til koordinater; app.js inneholder ingen stedsspesifikke posisjoner.
+  placeLocations: { places: [] },
   staff: [],
   expertise: [],
   trainingPrograms: [],
@@ -223,6 +227,9 @@ const state = {
   // Midlertidig lag-/demostate fra example-filen (unlockedPlaceIds, hiredStaffIds,
   // unlockedExpertiseIds, earnedBadgeIds, badgeProgress, activeClassifications).
   teamMerits: null,
+  // Midlertidig UI-melding for geolokasjon/aktivering. Selve valget persisteres
+  // under teamMerits.localStart; denne teksten er kun status i gjeldende økt.
+  localStartMessage: "",
   // Kampdag (v0.2): siste spilte kamp pluss eventuell pågående kampsesjon
   // (faser pre_match → event_1..3 → resolved med managerbeslutninger). Kun
   // UI/progresjon i localStorage – ingen serie, tabell, sesong eller livekamp.
@@ -333,6 +340,9 @@ const elements = {
   collectionMatchdayBadge: document.querySelector("#collectionMatchdayBadge"),
   collectionSourceNote: document.querySelector("#collectionSourceNote"),
   collectionNextStep: document.querySelector("#collectionNextStep"),
+  localStartStatus: document.querySelector("#localStartStatus"),
+  activateLocalStart: document.querySelector("#activateLocalStart"),
+  clearLocalStart: document.querySelector("#clearLocalStart"),
   // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
   matchdayReadiness: document.querySelector("#matchdayReadiness"),
   // Tropp og benk (roster readiness): topbar-teller + statisk panel i Kontoret.
@@ -869,6 +879,25 @@ function normalizeFormationFamiliarity(value) {
   return result;
 }
 
+// Normaliser lokal starttropp separat slik at gamle/korrupt lagrede merits
+// aldri kan lekke ugyldige koordinater eller spiller-id-er inn i availability.
+function normalizeLocalStart(value) {
+  const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const playerIds = Array.isArray(base.playerIds)
+    ? [...new Set(base.playerIds.filter((playerId) => typeof playerId === "string" && playerId))]
+    : [];
+
+  return {
+    enabled: typeof base.enabled === "boolean" ? base.enabled : false,
+    source: typeof base.source === "string" ? base.source : null,
+    latitude: Number.isFinite(base.latitude) ? base.latitude : null,
+    longitude: Number.isFinite(base.longitude) ? base.longitude : null,
+    chosenPlaceId: typeof base.chosenPlaceId === "string" ? base.chosenPlaceId : null,
+    playerIds,
+    createdAt: typeof base.createdAt === "string" ? base.createdAt : null
+  };
+}
+
 // Normaliser team merits til forventet form slik at render-/progresjonslaget
 // alltid har gyldige arrays/tall, uansett seed eller lagret tilstand.
 function normalizeTeamMerits(merits) {
@@ -877,6 +906,7 @@ function normalizeTeamMerits(merits) {
     ...base,
     activeTrainingWeek:
       Number.isInteger(base.activeTrainingWeek) && base.activeTrainingWeek >= 1 ? base.activeTrainingWeek : 1,
+    localStart: normalizeLocalStart(base.localStart),
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
     // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
@@ -932,6 +962,10 @@ function resetTeamMerits() {
   }
 
   state.teamMerits = teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
+  if (state.teamMerits) {
+    state.teamMerits.localStart = normalizeLocalStart(null);
+  }
+  state.localStartMessage = "";
   recomputeActiveClassifications();
   invalidateAvailability();
   // Nullstilling kan låse spillere/formasjoner igjen; fjern nå-låste spillere
@@ -1091,6 +1125,145 @@ function isPlayerUnlockType(type) {
   return typeof type === "string" && (type === "player_candidate" || /player/i.test(type));
 }
 
+function getLocalStartPlayerIds() {
+  const localStart = normalizeLocalStart(state.teamMerits?.localStart);
+  return localStart.enabled ? localStart.playerIds : [];
+}
+
+// Haversine-avstand mellom to { latitude, longitude }-punkter, i kilometer.
+function calculateDistanceKm(a, b) {
+  if (
+    !Number.isFinite(a?.latitude) ||
+    !Number.isFinite(a?.longitude) ||
+    !Number.isFinite(b?.latitude) ||
+    !Number.isFinite(b?.longitude)
+  ) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+  const earthRadiusKm = 6371;
+  const latitudeDelta = toRadians(b.latitude - a.latitude);
+  const longitudeDelta = toRadians(b.longitude - a.longitude);
+  const startLatitude = toRadians(a.latitude);
+  const endLatitude = toRadians(b.latitude);
+  const haversine =
+    Math.sin(latitudeDelta / 2) ** 2 +
+    Math.cos(startLatitude) * Math.cos(endLatitude) * Math.sin(longitudeDelta / 2) ** 2;
+
+  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+}
+
+function getPlaceLocationIndex(placeLocations = state.placeLocations) {
+  const index = new Map();
+  (Array.isArray(placeLocations?.places) ? placeLocations.places : []).forEach((place) => {
+    if (
+      place &&
+      typeof place.placeId === "string" &&
+      place.placeId &&
+      Number.isFinite(place.latitude) &&
+      Number.isFinite(place.longitude)
+    ) {
+      index.set(place.placeId, place);
+    }
+  });
+  return index;
+}
+
+// Returnerer stabile spillerkandidater sortert etter nærmeste kvalifiserte sted.
+// Samme spiller beholdes bare én gang, via stedet med kortest avstand.
+function getNearestLocalStartPlayers({ players, placeUnlocks, placeLocations, startLocation, limit }) {
+  const playerIndex = new Map(
+    (Array.isArray(players) ? players : []).filter((player) => player?.id).map((player) => [player.id, player])
+  );
+  const locationIndex = getPlaceLocationIndex(placeLocations);
+  const nearestByPlayerId = new Map();
+
+  (Array.isArray(placeUnlocks) ? placeUnlocks : []).forEach((place, placeOrder) => {
+    const location = locationIndex.get(place?.placeId);
+    if (!location) {
+      return;
+    }
+    const distanceKm = calculateDistanceKm(startLocation, location);
+    if (!Number.isFinite(distanceKm)) {
+      return;
+    }
+
+    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock, unlockOrder) => {
+      if (!unlock || !isPlayerUnlockType(unlock.type) || !playerIndex.has(unlock.targetId)) {
+        return;
+      }
+      const candidate = {
+        player: playerIndex.get(unlock.targetId),
+        playerId: unlock.targetId,
+        placeId: place.placeId,
+        placeName: place.placeName || location.placeName || place.placeId,
+        distanceKm,
+        order: placeOrder * 1000 + unlockOrder
+      };
+      const current = nearestByPlayerId.get(candidate.playerId);
+      if (!current || candidate.distanceKm < current.distanceKm) {
+        nearestByPlayerId.set(candidate.playerId, candidate);
+      }
+    });
+  });
+
+  const safeLimit = Number.isInteger(limit) && limit >= 0 ? limit : REQUIRED_SQUAD_SIZE;
+  return [...nearestByPlayerId.values()]
+    .sort((a, b) => a.distanceKm - b.distanceKm || a.order - b.order || a.playerId.localeCompare(b.playerId))
+    .slice(0, safeLimit);
+}
+
+function activateLocalStartSquad(startLocation) {
+  if (!state.teamMerits) {
+    state.localStartMessage = "Kunne ikke starte lokalt fordi lagprogresjonen ikke er tilgjengelig.";
+    renderApp();
+    return;
+  }
+
+  const candidates = getNearestLocalStartPlayers({
+    players: state.players,
+    placeUnlocks: state.unlocks?.placeUnlocks,
+    placeLocations: state.placeLocations,
+    startLocation,
+    limit: REQUIRED_SQUAD_SIZE
+  });
+
+  if (!candidates.length) {
+    state.localStartMessage = "Fant ingen kvalifiserte spillere ved koordinatfestede fotballsteder.";
+    renderApp();
+    return;
+  }
+
+  state.teamMerits.localStart = normalizeLocalStart({
+    enabled: true,
+    source: "current_location",
+    latitude: startLocation.latitude,
+    longitude: startLocation.longitude,
+    chosenPlaceId: null,
+    playerIds: candidates.map((candidate) => candidate.playerId),
+    createdAt: new Date().toISOString()
+  });
+  state.localStartMessage = "";
+  saveTeamMerits();
+  invalidateAvailability();
+  sanitizeLineupForUnlockedPlayers();
+  renderApp();
+}
+
+function clearLocalStartSquad() {
+  if (!state.teamMerits) {
+    return;
+  }
+  state.teamMerits.localStart = normalizeLocalStart(null);
+  state.localStartMessage = "";
+  saveTeamMerits();
+  invalidateAvailability();
+  sanitizeLineupForUnlockedPlayers();
+  sanitizeSelectedFormation();
+  renderApp();
+}
+
 // ----------------------------------------------------------------------------
 // Availability-snapshot (runtime source of truth)
 // Én samlet beregning av hva manageren har tilgang til akkurat nå:
@@ -1154,6 +1327,7 @@ function computeAvailability() {
   // spiller-id-er ignoreres med console.warn. Finnes ingen player-unlocks,
   // er listen tom – det faller aldri tilbake til alle spillere.
   const unlockedPlayerIds = new Set();
+  const playerSourceById = new Map();
   const explicitStaffIds = new Set();
   placeUnlocks.forEach((place) => {
     (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
@@ -1162,10 +1336,22 @@ function computeAvailability() {
       }
       if (isPlayerUnlockType(unlock.type)) {
         unlockedPlayerIds.add(unlock.targetId);
+        const sources = playerSourceById.get(unlock.targetId) || { placeIds: new Set(), localStart: false };
+        sources.placeIds.add(place.placeId);
+        playerSourceById.set(unlock.targetId, sources);
       } else if (isStaffUnlockType(unlock.type)) {
         explicitStaffIds.add(unlock.targetId);
       }
     });
+  });
+
+  // Lokal start utvider bare spillerpoolen. Den åpner ingen steder og skriver
+  // aldri til History Go-progresjonen (visited_places/groundhopper-state).
+  getLocalStartPlayerIds().forEach((playerId) => {
+    unlockedPlayerIds.add(playerId);
+    const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
+    sources.localStart = true;
+    playerSourceById.set(playerId, sources);
   });
 
   const players = Array.isArray(state.players) ? state.players : [];
@@ -1219,6 +1405,7 @@ function computeAvailability() {
     placeUnlocks,
     unlockedPlayers,
     unlockedPlayerIds,
+    playerSourceById,
     unlockedStaff,
     unlockedStaffIds: collectedPools.unlockedStaffIds,
     unlockedFormations,
@@ -1443,24 +1630,28 @@ function isPlayerUnlocked(playerId) {
   return getUnlockedPlayers().some((player) => player.id === playerId);
 }
 
-// Kildeplass(er) for en opplåst spiller: liste med { placeId, placeName } fra
-// aktive getPlaceUnlocks() der et player_candidate matcher playerId. Brukes kun
-// til visning.
+// Kilder for en opplåst spiller. Leser playerSourceById fra availability slik
+// at lokal start kan vises uten å late som spillerens sted er samlet.
 function getPlayerSourcePlaces(playerId) {
   if (!playerId) {
     return [];
   }
 
-  const places = [];
-  getPlaceUnlocks().forEach((place) => {
-    const matches = (Array.isArray(place.unlocks) ? place.unlocks : []).some(
-      (unlock) => unlock && isPlayerUnlockType(unlock.type) && unlock.targetId === playerId
-    );
-    if (matches) {
-      places.push({ placeId: place.placeId, placeName: place.placeName || place.placeId });
-    }
+  const snapshot = getAvailability();
+  const sources = snapshot.playerSourceById.get(playerId);
+  if (!sources) {
+    return [];
+  }
+
+  const placeById = new Map(snapshot.placeUnlocks.map((place) => [place.placeId, place]));
+  const result = [...sources.placeIds].map((placeId) => {
+    const place = placeById.get(placeId);
+    return { placeId, placeName: place?.placeName || placeId, source: snapshot.placeSourceById.get(placeId) };
   });
-  return places;
+  if (sources.localStart) {
+    result.push({ placeId: null, placeName: "Lokal starttropp", source: "local_start" });
+  }
+  return result;
 }
 
 // ----------------------------------------------------------------------------
@@ -7262,6 +7453,20 @@ function renderTeamIdentityPanel() {
   }
 }
 
+function renderLocalStartStatus() {
+  if (!elements.localStartStatus) {
+    return;
+  }
+  const localStart = normalizeLocalStart(state.teamMerits?.localStart);
+  elements.localStartStatus.textContent = state.localStartMessage ||
+    (localStart.enabled
+      ? `Lokal starttropp aktiv: ${localStart.playerIds.length} spillere.`
+      : "Ingen lokal starttropp valgt.");
+  if (elements.clearLocalStart) {
+    elements.clearLocalStart.disabled = !localStart.enabled;
+  }
+}
+
 // Din fotballsamling: oppsummering av hva samlingen gir laget akkurat nå.
 // Leser kun availability-snapshotet (getAvailability) – steder, spillere, stab,
 // ulåste formasjoner og roster readiness. Beregner ingen egne unlocks.
@@ -7295,9 +7500,11 @@ function renderCollectionSummary() {
   if (elements.collectionSourceNote) {
     const historyGoCount = snapshot.historyGoPlaceIds.size;
     const managerCount = snapshot.managerPlaceIds.size;
+    const localStartCount = getLocalStartPlayerIds().length;
     elements.collectionSourceNote.textContent =
       `Kilder: ${historyGoCount} sted${historyGoCount === 1 ? "" : "er"} fra ekte History Go-progresjon, ` +
-      `${managerCount} fra manager-/demostate (utvikling/test).`;
+      `${managerCount} fra manager-/demostate (utvikling/test), ` +
+      `${localStartCount} spiller${localStartCount === 1 ? "" : "e"} fra lokal starttropp.`;
   }
 
   // Konkret neste handling mot kampdag, i prioritert rekkefølge.
@@ -7452,6 +7659,7 @@ function renderApp() {
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
   renderCollectionSummary();
+  renderLocalStartStatus();
   renderUnlockPlaces();
   renderUnlockedPlayers();
   renderPlaceReports();
@@ -7547,6 +7755,41 @@ function bindEvents() {
     elements.resetHgTeamMerits.addEventListener("click", () => {
       resetTeamMerits();
     });
+  }
+
+  if (elements.activateLocalStart) {
+    elements.activateLocalStart.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        state.localStartMessage = "Geolokasjon støttes ikke av denne nettleseren.";
+        renderLocalStartStatus();
+        return;
+      }
+
+      state.localStartMessage = "Henter posisjonen din …";
+      renderLocalStartStatus();
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          activateLocalStartSquad({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+        },
+        (error) => {
+          const messages = {
+            1: "Tilgang til geolokasjon ble avslått. Tillat posisjonstilgang og prøv igjen.",
+            2: "Kunne ikke finne posisjonen din. Kontroller posisjonstjenestene og prøv igjen.",
+            3: "Posisjonsforespørselen tok for lang tid. Prøv igjen."
+          };
+          state.localStartMessage = messages[error.code] || "Kunne ikke hente posisjonen din.";
+          renderLocalStartStatus();
+        },
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    });
+  }
+
+  if (elements.clearLocalStart) {
+    elements.clearLocalStart.addEventListener("click", clearLocalStartSquad);
   }
 
   // Manuell synk av ekte History Go-steder. Gjør testing enkel på iPad/GitHub Pages.
@@ -7691,6 +7934,7 @@ async function init() {
       clubInboxSendersData,
       clubInboxThreadsData,
       unlocksData,
+      placeLocationsData,
       staffData,
       expertiseData,
       trainingProgramsData,
@@ -7722,6 +7966,7 @@ async function init() {
       // History Go-unlock-data er valgfri: hvis en fil mangler, fortsetter
       // appen uten det aktuelle laget (prototype-robusthet).
       loadJson(DATA_PATHS.unlocks).catch(() => null),
+      loadJson(DATA_PATHS.placeLocations).catch(() => null),
       loadJson(DATA_PATHS.staff).catch(() => null),
       loadJson(DATA_PATHS.expertise).catch(() => null),
       loadJson(DATA_PATHS.trainingPrograms).catch(() => null),
@@ -7800,6 +8045,7 @@ async function init() {
     // eller feilformede filer faller tilbake til tomme strukturer, slik at
     // resten av appen (fit-/lagfitmotor) er upåvirket.
     state.unlocks = Array.isArray(unlocksData?.placeUnlocks) ? unlocksData : { placeUnlocks: [] };
+    state.placeLocations = Array.isArray(placeLocationsData?.places) ? placeLocationsData : { places: [] };
     state.staff = Array.isArray(staffData?.staff) ? staffData.staff : [];
     state.expertise = Array.isArray(expertiseData?.expertise) ? expertiseData.expertise : [];
     state.trainingPrograms = Array.isArray(trainingProgramsData?.programs) ? trainingProgramsData.programs : [];

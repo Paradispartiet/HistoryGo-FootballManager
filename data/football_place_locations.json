@@ -1,0 +1,42 @@
+{
+  "schema": "historygo-football-manager.place-locations.v1",
+  "version": 1,
+  "places": [
+    {
+      "placeId": "ullevaal_stadion",
+      "placeName": "Ullevaal Stadion",
+      "latitude": 59.9496,
+      "longitude": 10.7349
+    },
+    {
+      "placeId": "intility_arena",
+      "placeName": "Intility Arena",
+      "latitude": 59.917643,
+      "longitude": 10.806723
+    },
+    {
+      "placeId": "gressbanen",
+      "placeName": "Gressbanen",
+      "latitude": 59.95058,
+      "longitude": 10.67639
+    },
+    {
+      "placeId": "ekebergsletta",
+      "placeName": "Ekebergsletta",
+      "latitude": 59.8944922,
+      "longitude": 10.7755693
+    },
+    {
+      "placeId": "ajax_amsterdam",
+      "placeName": "Ajax / Amsterdam",
+      "latitude": 52.3143713,
+      "longitude": 4.9419641
+    },
+    {
+      "placeId": "maracana",
+      "placeName": "Maracanã",
+      "latitude": -22.912376,
+      "longitude": -43.23032
+    }
+  ]
+}

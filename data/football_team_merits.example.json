@@ -38,5 +38,14 @@
   ],
   "activeClassifications": [
     "development_team"
-  ]
+  ],
+  "localStart": {
+    "enabled": false,
+    "source": null,
+    "latitude": null,
+    "longitude": null,
+    "chosenPlaceId": null,
+    "playerIds": [],
+    "createdAt": null
+  }
 }
