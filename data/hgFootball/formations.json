@@ -149,7 +149,7 @@
       "matchEngineEffects": { "attackingWidth": 9, "centralControl": 5, "defensiveSecurity": 3, "transitionThreat": 6, "pressingIntensity": 3, "restDefenceSecurity": 3, "roleComplexity": 4, "staminaDemand": 6, "creativityDemand": 5, "coachingDemand": 4 },
       "historicalExamples": ["tidlige engelske og skotske klubber", "fotball før offsidereformen"],
       "unlockLinks": [
-        { "sourceType": "football_club", "ref": "historic_british_club", "theme": "tidlige britiske klubber" },
+        { "sourceType": "football_club", "ref": "deepdale", "theme": "tidlige britiske klubber" },
         { "sourceType": "football_story", "ref": "pyramiden_oppstaar", "theme": "fotballhistorie" },
         { "sourceType": "groundhopper_place", "ref": "victorian_ground", "theme": "viktoriansk bane" }
       ],
@@ -179,7 +179,7 @@
       "matchEngineEffects": { "attackingWidth": 8, "centralControl": 6, "defensiveSecurity": 3, "transitionThreat": 5, "pressingIntensity": 3, "restDefenceSecurity": 3, "roleComplexity": 5, "staminaDemand": 6, "creativityDemand": 7, "coachingDemand": 5 },
       "historicalExamples": ["Queen's Park", "tidlig skotsk fotball"],
       "unlockLinks": [
-        { "sourceType": "football_club", "ref": "scottish_pioneer_club", "theme": "skotsk fotball" },
+        { "sourceType": "football_club", "ref": "hampden_park", "theme": "skotsk fotball" },
         { "sourceType": "football_story", "ref": "kombinasjonsspillet", "theme": "pasningskultur" }
       ],
       "notes": "Samme tall som pyramid_235, men en egen skole. Behandles ikke som identisk med pyramiden: dette er pasningsskolen."
@@ -441,7 +441,7 @@
       "unlockLinks": [
         { "sourceType": "football_club", "ref": "brazilian_legend_club", "theme": "brasiliansk fotball" },
         { "sourceType": "football_stadium", "ref": "maracana", "theme": "Maracanã" },
-        { "sourceType": "collected_player", "ref": "brazilian_legend", "theme": "Brasil 1958" }
+        { "sourceType": "collected_player", "ref": "pele", "theme": "Brasil 1958" }
       ],
       "notes": "Det brasilianske 4-2-4 som etablerte firebackslinjen som verdensstandard."
     },
@@ -726,7 +726,7 @@
       "matchEngineEffects": { "attackingWidth": 8, "centralControl": 8, "defensiveSecurity": 6, "transitionThreat": 7, "pressingIntensity": 9, "restDefenceSecurity": 6, "roleComplexity": 9, "staminaDemand": 9, "creativityDemand": 9, "coachingDemand": 10 },
       "historicalExamples": ["Ajax 1971-73", "Nederland VM 1974"],
       "unlockLinks": [
-        { "sourceType": "football_club", "ref": "ajax", "theme": "Ajax" },
+        { "sourceType": "football_club", "ref": "ajax_amsterdam", "theme": "Ajax" },
         { "sourceType": "sport_place", "ref": "amsterdam_football_place", "theme": "Amsterdam" },
         { "sourceType": "collected_manager", "ref": "rinus_michels", "theme": "Michels" },
         { "sourceType": "collected_player", "ref": "johan_cruyff", "theme": "Cruyff" }
