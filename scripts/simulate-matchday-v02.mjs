@@ -1,0 +1,297 @@
+// scripts/simulate-matchday-v02.mjs
+//
+// Read-only simulering av Kampdag v0.2 (src/football-matchday-engine.js).
+//
+// Verifiserer hele sesjonsløkken uten DOM/localStorage:
+//   - kampstart med gyldig (syntetisk) teamFit lager en pre_match-sesjon,
+//   - sesjonen får nøyaktig 3 hendelser med 2-4 valg hver,
+//   - alle valg kan vurderes (resolveMatchdayDecision) og gir tone + effekter,
+//   - decisionEffects summeres inn i sluttresultatet (finalizeMatchdaySession),
+//   - sluttrapporten har v0.2-feltene (beste/svakeste grep, systemdom, råd),
+//   - ulike formasjonsfamilier gir ulike hendelser,
+//   - sterke vs. svake forutsetninger gir flere positive vs. negative toner,
+//   - v1-simulateMatchday er fortsatt intakt.
+//
+// Rent Node-script (standardbibliotek + prosjektets egne ESM-moduler). Skriver
+// ingen filer. Exit code 1 hvis en sjekk feiler, ellers 0.
+
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+import { adaptHgFormations } from "../src/hg-football-formation-adapter.js";
+import {
+  simulateMatchday,
+  createMatchReport,
+  OPPONENT_PROFILES,
+  pickOpponentProfile,
+  getFormationFamily,
+  generateMatchdayEvents,
+  createMatchdaySession,
+  resolveMatchdayDecision,
+  finalizeMatchdaySession,
+  getSessionEventIndex
+} from "../src/football-matchday-engine.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, "..");
+
+function readJson(relPath) {
+  return JSON.parse(readFileSync(join(ROOT, relPath), "utf8"));
+}
+
+const formationsData = readJson("data/hgFootball/formations.json");
+const erasData = readJson("data/hgFootball/formationEras.json");
+const formations = adaptHgFormations(formationsData, erasData);
+
+let failures = 0;
+
+function check(label, condition) {
+  if (condition) {
+    console.log(`  ok   ${label}`);
+  } else {
+    failures += 1;
+    console.error(`  FEIL ${label}`);
+  }
+}
+
+function getFormationById(id) {
+  return formations.find((formation) => formation.id === id);
+}
+
+// Syntetisk teamFit med samme felter som kampmotoren leser. level styrer om
+// laget har sterke eller svake forutsetninger.
+function buildTeamFit(level) {
+  const strong = level === "strong";
+  const metricValue = strong ? 74 : 42;
+  return {
+    teamScore: strong ? 76 : 40,
+    completeCount: 11,
+    totalSlots: 11,
+    metrics: {
+      balanceScore: metricValue,
+      widthScore: metricValue,
+      depthScore: metricValue,
+      buildUpScore: metricValue,
+      pressScore: metricValue,
+      restDefenseScore: metricValue,
+      roleFitAverage: metricValue
+    },
+    relationships: { relationshipScore: metricValue },
+    historicalFormationFit: {
+      historicalScore: strong ? 74 : 42,
+      historicalBonus: strong ? 2 : 0,
+      historicalPenalty: strong ? 0 : 2
+    },
+    badgeEffects: {}
+  };
+}
+
+const strongCoach = {
+  coachUnderstanding: 68,
+  formationFamiliarity: 66,
+  tacticalLearningSpeed: 60,
+  roleFitClarity: 62
+};
+const weakCoach = {
+  coachUnderstanding: 38,
+  formationFamiliarity: 36,
+  tacticalLearningSpeed: 35,
+  roleFitClarity: 35
+};
+
+const tactic = { id: "central_possession_4231", name: "Sentralt possession-spill", pressing: "medium", tempo: "controlled", width: "medium", buildUp: "structured_build_up" };
+
+console.log("Kampdag v0.2-simulering");
+
+// --- 1) Motstanderprofiler ---------------------------------------------------
+console.log("\nMotstanderprofiler:");
+check("5 motstanderprofiler finnes", OPPONENT_PROFILES.length === 5);
+check(
+  "alle profiler har id/name/style/strengths/weaknesses/pressurePoints",
+  OPPONENT_PROFILES.every(
+    (profile) =>
+      profile.id &&
+      profile.name &&
+      profile.style &&
+      Array.isArray(profile.strengths) &&
+      Array.isArray(profile.weaknesses) &&
+      Array.isArray(profile.pressurePoints)
+  )
+);
+check("pickOpponentProfile(2) er deterministisk", pickOpponentProfile(2).id === OPPONENT_PROFILES[2].id);
+
+// --- 2) Formasjonsfamilier og hendelsesgenerering ---------------------------
+console.log("\nFormasjonsfamilier og hendelser:");
+const familyExpectations = [
+  ["wm_3223", "wm"],
+  ["catenaccio_1432", "catenaccio"],
+  ["total_433", "total"],
+  ["brazil_424", "brazil"],
+  ["scottish_combination_235", "pyramid"],
+  ["gegen_4222", "press"],
+  ["positional_325", "rest"],
+  ["classic_442", "modern"]
+];
+familyExpectations.forEach(([id, family]) => {
+  const formation = getFormationById(id);
+  check(`${id} → familie ${family}`, formation && getFormationFamily(formation) === family);
+});
+
+const strongFit = buildTeamFit("strong");
+const opponent = pickOpponentProfile(0);
+
+const eventSets = new Map();
+familyExpectations.forEach(([id]) => {
+  const formation = getFormationById(id);
+  const events = generateMatchdayEvents({
+    formation,
+    tacticalProfile: { ...strongFit.metrics, relationshipScore: 74 },
+    opponent
+  });
+  eventSets.set(id, events);
+  check(`${id}: 3 hendelser med 2-4 valg`, events.length === 3 && events.every((event) => event.options.length >= 2 && event.options.length <= 4));
+  check(
+    `${id}: motstanderhendelsen er med`,
+    events.some((event) => event.id.startsWith("opp_"))
+  );
+});
+
+const wmIds = eventSets.get("wm_3223").map((event) => event.id).sort().join(",");
+const catIds = eventSets.get("catenaccio_1432").map((event) => event.id).sort().join(",");
+const totalIds = eventSets.get("total_433").map((event) => event.id).sort().join(",");
+check("WM, catenaccio og totalfotball gir ulike hendelser", wmIds !== catIds && catIds !== totalIds && wmIds !== totalIds);
+
+// --- 3) Full sesjonsløkke ----------------------------------------------------
+console.log("\nSesjonsløkke (sterkt lag, sterk stab):");
+const wmFormation = getFormationById("wm_3223");
+const session = createMatchdaySession({
+  teamFit: strongFit,
+  formation: wmFormation,
+  tactic,
+  activeClassifications: [],
+  coachContext: strongCoach,
+  opponent: pickOpponentProfile(1)
+});
+
+check("sesjonen starter i pre_match", session.phase === "pre_match");
+check("sesjonen har motstander, formasjon og taktikk", Boolean(session.opponent?.id && session.formationSnapshot?.name && session.tacticSnapshot?.name));
+check("teamFitSnapshot har tacticalProfile med roleFitAverage", Number.isFinite(session.teamFitSnapshot?.tacticalProfile?.roleFitAverage));
+check("3 hendelser generert", session.events.length === 3);
+
+session.phase = "event_1";
+const tones = [];
+while (getSessionEventIndex(session) !== null) {
+  const index = getSessionEventIndex(session);
+  const event = session.events[index];
+  const option = event.options[0];
+  const resolution = resolveMatchdayDecision({
+    event,
+    option,
+    tacticalProfile: session.teamFitSnapshot.tacticalProfile,
+    matchEngineEffects: session.matchEngineEffects,
+    coachSnapshot: session.coachSnapshot
+  });
+  check(
+    `hendelse ${index + 1}: beslutning gir tone og effekter`,
+    resolution && ["positive", "neutral", "negative"].includes(resolution.tone) && typeof resolution.effects.xgDeltaFor === "number"
+  );
+  tones.push(resolution.tone);
+  session.decisions.push({
+    eventId: event.id,
+    eventTitle: event.title,
+    optionId: option.id,
+    optionLabel: option.label,
+    tone: resolution.tone,
+    effects: resolution.effects,
+    feedback: resolution.feedback
+  });
+  session.phase = index + 1 < session.events.length ? `event_${index + 2}` : "resolved";
+}
+
+check("alle 3 beslutninger registrert", session.decisions.length === 3);
+
+const result = finalizeMatchdaySession(session);
+check("sluttresultat har score og utfall", result && Number.isInteger(result.score.for) && ["win", "draw", "loss"].includes(result.outcome));
+check(
+  "decisionTotals er summert",
+  result.decisionTotals &&
+    Math.abs(
+      result.decisionTotals.xgDeltaFor -
+        session.decisions.reduce((sum, decision) => sum + decision.effects.xgDeltaFor, 0)
+    ) < 0.001
+);
+check("beste grep finnes i rapporten", Boolean(result.bestDecision?.label));
+check("systemdom finnes", typeof result.formationVerdict === "string" && result.formationVerdict.length > 0);
+check("avgjørende lagdel finnes", typeof result.decisiveUnit === "string" && result.decisiveUnit.length > 0);
+check("råd for neste uke finnes", typeof result.nextWeekAdvice === "string" && result.nextWeekAdvice.length > 0);
+check("History Go-hint finnes", typeof result.historyGoHint === "string" && result.historyGoHint.length > 0);
+
+const report = createMatchReport(result);
+check("createMatchReport tar med v0.2-feltene", report.decisions.length === 3 && Boolean(report.formationVerdict) && Boolean(report.opponentStyle));
+
+// --- 4) Forutsetninger påvirker tonene --------------------------------------
+console.log("\nForutsetninger (sterkt vs. svakt lag):");
+function countTones(teamFit, coach) {
+  const counts = { positive: 0, neutral: 0, negative: 0 };
+  // Kjør over alle familier og alle valg for et stabilt bilde.
+  familyExpectations.forEach(([id]) => {
+    const formation = getFormationById(id);
+    const trial = createMatchdaySession({
+      teamFit,
+      formation,
+      tactic,
+      activeClassifications: [],
+      coachContext: coach,
+      opponent: pickOpponentProfile(0)
+    });
+    trial.events.forEach((event) => {
+      event.options.forEach((option) => {
+        const resolution = resolveMatchdayDecision({
+          event,
+          option,
+          tacticalProfile: trial.teamFitSnapshot.tacticalProfile,
+          matchEngineEffects: trial.matchEngineEffects,
+          coachSnapshot: trial.coachSnapshot
+        });
+        counts[resolution.tone] += 1;
+      });
+    });
+  });
+  return counts;
+}
+
+const strongTones = countTones(buildTeamFit("strong"), strongCoach);
+const weakTones = countTones(buildTeamFit("weak"), weakCoach);
+check(
+  `sterkt lag får flere positive grep (${strongTones.positive} vs ${weakTones.positive})`,
+  strongTones.positive > weakTones.positive
+);
+check(
+  `svakt lag får flere negative grep (${weakTones.negative} vs ${strongTones.negative})`,
+  weakTones.negative > strongTones.negative
+);
+
+const weakNoCoach = countTones(buildTeamFit("weak"), weakCoach);
+const weakWithCoach = countTones(buildTeamFit("weak"), strongCoach);
+check(
+  `sterk stab mildner svakt lag (${weakWithCoach.negative} < ${weakNoCoach.negative} negative)`,
+  weakWithCoach.negative < weakNoCoach.negative
+);
+
+// --- 5) v1-motoren er intakt -------------------------------------------------
+console.log("\nKampdag v1 (regresjon):");
+const v1Result = simulateMatchday({
+  teamFit: buildTeamFit("strong"),
+  formation: wmFormation,
+  activeClassifications: []
+});
+check(
+  "simulateMatchday gir fortsatt gyldig resultat",
+  v1Result && Number.isInteger(v1Result.score.for) && ["win", "draw", "loss"].includes(v1Result.outcome) && Array.isArray(v1Result.analysis)
+);
+const v1Report = createMatchReport(v1Result);
+check("v1-resultat gir fortsatt gyldig rapport (uten v0.2-felter)", v1Report.scoreLine.includes("–") && v1Report.decisions.length === 0);
+
+console.log(failures === 0 ? "\nAlle sjekker besto." : `\n${failures} sjekk(er) feilet.`);
+process.exit(failures === 0 ? 0 : 1);
