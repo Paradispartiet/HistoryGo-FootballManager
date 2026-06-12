@@ -8,6 +8,7 @@ import {
   finalizeMatchdaySession,
   getSessionEventIndex
 } from "./football-matchday-engine.js";
+import { computeMatchdayConsequences } from "./football-match-consequences.js";
 import {
   adaptHgFormations,
   buildRoleTypeIndex,
@@ -2703,11 +2704,139 @@ function chooseMatchdayDecision(optionId) {
   } else {
     // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
     state.matchday.lastMatch = finalizeMatchdaySession(session);
+    // Club Week Consequence Loop v1: kampen gir små klubb-/tilvenningseffekter
+    // én gang. Markeringen (consequencesApplied) persisteres i saveMatchdayState.
+    applyMatchdayConsequences(state.matchday.lastMatch, session);
     state.matchday.session = null;
   }
 
   saveMatchdayState();
   renderApp();
+}
+
+// Norske etiketter og kort tekst for kampkonsekvenser, f.eks.
+// "Spillermoral +3, Taktisk klarhet +2, Medietrykk -1". Tom streng uten utslag.
+const MATCH_CONSEQUENCE_EFFECT_LABELS = {
+  boardTrust: "Styretillit",
+  playerMorale: "Spillermoral",
+  tacticalClarity: "Taktisk klarhet",
+  trainingCulture: "Treningskultur",
+  mediaPressure: "Medietrykk"
+};
+
+function formatMatchConsequenceEffects(effects) {
+  if (!effects || typeof effects !== "object" || Array.isArray(effects)) {
+    return "";
+  }
+
+  const parts = [];
+  for (const [metric, delta] of Object.entries(effects)) {
+    if (!MATCH_CONSEQUENCE_EFFECT_LABELS[metric] || typeof delta !== "number" || delta === 0) {
+      continue;
+    }
+    parts.push(`${MATCH_CONSEQUENCE_EFFECT_LABELS[metric]} ${delta > 0 ? "+" : ""}${delta}`);
+  }
+
+  return parts.join(", ");
+}
+
+// Club Week Consequence Loop v1: bruk et fullført Kampdag v0.2-resultat til
+// små, lesbare effekter på eksisterende Club Week-verdier og formasjons-
+// tilvenning i teamMerits. Kjøres kun i det kampen avsluttes, og resultatet
+// merkes med consequencesApplied slik at reload/dobbeltkall aldri gir ny
+// effekt. Gamle v1-kamper (uten version 2) gir aldri konsekvens og krasjer
+// ikke. Ingen liga, tabell, sesong eller ny motor — bare små deltaer.
+function applyMatchdayConsequences(lastMatch, session) {
+  if (!lastMatch || typeof lastMatch !== "object" || lastMatch.consequencesApplied) {
+    return;
+  }
+
+  const consequences = computeMatchdayConsequences({
+    lastMatch,
+    coachSnapshot: session?.coachSnapshot || null,
+    historicalScore: Number(session?.teamFitSnapshot?.historicalScore) || 0
+  });
+
+  if (!consequences) {
+    return;
+  }
+
+  // Club Week-verdier: samme mønster som innboksvalg — kun eksisterende
+  // numeriske verdier påvirkes, og resultatet clamps 0–100.
+  const appliedEffects = {};
+  if (state.clubWeekState && typeof state.clubWeekState === "object") {
+    for (const [metric, delta] of Object.entries(consequences.clubEffects)) {
+      if (typeof state.clubWeekState[metric] === "number" && typeof delta === "number" && delta !== 0) {
+        state.clubWeekState[metric] = clampMetric(state.clubWeekState[metric] + delta);
+        appliedEffects[metric] = delta;
+      }
+    }
+    if (Object.keys(appliedEffects).length > 0) {
+      saveClubWeekState(state.clubWeekState);
+    }
+  }
+
+  // Formasjonstilvenning for brukt formasjon: eksisterende struktur i
+  // teamMerits.formationFamiliarity[formationId], clampet 0–100. Startverdi
+  // ved første kamp hentes fra stabens formationFamiliarity (som i trenings-
+  // uken), ellers fra lagret verdi.
+  let familiarityApplied = null;
+  if (state.teamMerits && consequences.formationId && consequences.familiarityGain > 0) {
+    const merits = state.teamMerits;
+    if (!merits.formationFamiliarity || typeof merits.formationFamiliarity !== "object") {
+      merits.formationFamiliarity = {};
+    }
+    const stored = merits.formationFamiliarity[consequences.formationId];
+    const current = Number.isFinite(stored)
+      ? stored
+      : Number(session?.coachSnapshot?.formationFamiliarity) || 45;
+    const startValue = Math.max(0, Math.min(100, Math.round(current)));
+    const nextValue = Math.max(0, Math.min(100, Math.round(startValue + consequences.familiarityGain)));
+    merits.formationFamiliarity[consequences.formationId] = nextValue;
+    saveTeamMerits();
+    familiarityApplied = {
+      formationId: consequences.formationId,
+      formationName: lastMatch.formationSnapshot?.name || consequences.formationId,
+      gain: nextValue - startValue,
+      value: nextValue
+    };
+  }
+
+  // Engangsmarkering + lagret oppsummering for sluttrapporten. Persisteres
+  // sammen med lastMatch i matchday-state av kalleren (saveMatchdayState).
+  lastMatch.consequencesApplied = true;
+  lastMatch.clubConsequences = {
+    effects: appliedEffects,
+    familiarity: familiarityApplied
+  };
+
+  // Kort kampkonsekvens i Club Week-loggen og som feedback.
+  const outcomeLabel = { win: "Seier", draw: "Uavgjort", loss: "Tap" }[lastMatch.outcome] || "Kamp";
+  const effectsText = formatMatchConsequenceEffects(appliedEffects);
+  const summaryParts = [];
+  if (effectsText) {
+    summaryParts.push(`Kampkonsekvens: ${effectsText}.`);
+  }
+  if (familiarityApplied && familiarityApplied.gain > 0) {
+    summaryParts.push(`Formasjonstilvenning i ${familiarityApplied.formationName} +${familiarityApplied.gain}.`);
+  }
+
+  const message = [`${outcomeLabel} mot ${lastMatch.opponent?.name || "ukjent motstander"}.`, ...summaryParts].join(" ");
+
+  addClubWeekEvent({
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    week: state.clubWeekState?.week ?? "?",
+    phase: "match_day",
+    phaseLabel: "Kampdag",
+    message
+  });
+  setClubWeekFeedback(message);
+
+  // Profilrelatert progresjon (Club Week-verdier/formationFamiliarity) er
+  // faktisk endret: varsle appskallet. Ren rendering skjer i kalleren.
+  if (Object.keys(appliedEffects).length > 0 || familiarityApplied) {
+    window.dispatchEvent(new Event("updateProfile"));
+  }
 }
 
 // Nullstill kampdag: fjern både siste kamp og eventuell pågående sesjon.
@@ -5002,6 +5131,28 @@ function renderMatchdayReport(container, lastMatch) {
   if (nextLines.length > 0) {
     appendMatchdaySubheading(card, "Veien videre");
     appendMatchdayList(card, nextLines);
+  }
+
+  // Kampkonsekvens (Club Week Consequence Loop v1): kort oppsummering av hva
+  // kampen gjorde med klubbverdiene og formasjonstilvenningen. Leses fra
+  // lastMatch (lagres ved kampslutt); gamle v1-kamper har den ikke.
+  const clubConsequences = lastMatch?.clubConsequences;
+  if (clubConsequences && typeof clubConsequences === "object") {
+    const consequenceLines = [];
+    const effectsText = formatMatchConsequenceEffects(clubConsequences.effects);
+    if (effectsText) {
+      consequenceLines.push(`Klubben: ${effectsText}.`);
+    }
+    const familiarity = clubConsequences.familiarity;
+    if (familiarity && typeof familiarity === "object" && Number(familiarity.gain) > 0) {
+      consequenceLines.push(
+        `Formasjonstilvenning i ${familiarity.formationName || familiarity.formationId} +${familiarity.gain}.`
+      );
+    }
+    if (consequenceLines.length > 0) {
+      appendMatchdaySubheading(card, "Kampkonsekvens");
+      appendMatchdayList(card, consequenceLines);
+    }
   }
 
   container.append(card);
