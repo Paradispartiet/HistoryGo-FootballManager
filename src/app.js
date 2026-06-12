@@ -355,8 +355,14 @@ const elements = {
   collectionMatchdayBadge: document.querySelector("#collectionMatchdayBadge"),
   collectionSourceNote: document.querySelector("#collectionSourceNote"),
   collectionNextStep: document.querySelector("#collectionNextStep"),
+  startModePanel: document.querySelector("#startModePanel"),
+  startModeChoices: document.querySelector("#startModeChoices"),
+  activeLocalStart: document.querySelector("#activeLocalStart"),
   localStartStatus: document.querySelector("#localStartStatus"),
+  useHistoryGoCollection: document.querySelector("#useHistoryGoCollection"),
   activateLocalStart: document.querySelector("#activateLocalStart"),
+  publicStartPlaceSelect: document.querySelector("#publicStartPlaceSelect"),
+  activatePublicPlaceStart: document.querySelector("#activatePublicPlaceStart"),
   clearLocalStart: document.querySelector("#clearLocalStart"),
   // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
   matchdayReadiness: document.querySelector("#matchdayReadiness"),
@@ -918,6 +924,8 @@ function normalizeLocalStart(value) {
     latitude: isValidLatitude(base.latitude) ? base.latitude : null,
     longitude: isValidLongitude(base.longitude) ? base.longitude : null,
     chosenPlaceId: typeof base.chosenPlaceId === "string" && base.chosenPlaceId.trim() ? base.chosenPlaceId : null,
+    chosenPlaceName:
+      typeof base.chosenPlaceName === "string" && base.chosenPlaceName.trim() ? base.chosenPlaceName.trim() : null,
     playerIds,
     createdAt: typeof base.createdAt === "string" && base.createdAt.trim() ? base.createdAt : null
   };
@@ -1240,7 +1248,34 @@ function getNearestLocalStartPlayers({ players, placeUnlocks, placeLocations, st
     .slice(0, safeLimit);
 }
 
-function activateLocalStartSquad(startLocation) {
+// Offentlige startsteder kommer bare fra den versjonerte History Go-stedslisten
+// og må også finnes i unlock-katalogen. UI-et tilbyr aldri fritekst eller adresse.
+function getPublicStartPlaces() {
+  const knownHistoryGoPlaceIds = new Set(
+    (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [])
+      .map((place) => place?.placeId)
+      .filter(Boolean)
+  );
+
+  return (Array.isArray(state.placeLocations?.places) ? state.placeLocations.places : [])
+    .filter((place) =>
+      place &&
+      knownHistoryGoPlaceIds.has(place.placeId) &&
+      typeof place.placeName === "string" &&
+      place.placeName.trim() &&
+      isValidLatitude(place.latitude) &&
+      isValidLongitude(place.longitude)
+    )
+    .map((place) => ({
+      placeId: place.placeId,
+      placeName: place.placeName.trim(),
+      latitude: place.latitude,
+      longitude: place.longitude
+    }))
+    .sort((a, b) => a.placeName.localeCompare(b.placeName, "nb"));
+}
+
+function activateLocalStartSquad(startLocation, startSource = {}) {
   if (!isValidLatitude(startLocation?.latitude) || !isValidLongitude(startLocation?.longitude)) {
     state.localStartMessage = "Kunne ikke starte lokalt fordi posisjonen har ugyldige koordinater.";
     renderApp();
@@ -1267,12 +1302,14 @@ function activateLocalStartSquad(startLocation) {
     return;
   }
 
+  const isPublicPlaceStart = startSource.source === "chosen_place";
   state.teamMerits.localStart = normalizeLocalStart({
     enabled: true,
-    source: "current_location",
+    source: isPublicPlaceStart ? "chosen_place" : "current_location",
     latitude: startLocation.latitude,
     longitude: startLocation.longitude,
-    chosenPlaceId: null,
+    chosenPlaceId: isPublicPlaceStart ? startSource.chosenPlaceId : null,
+    chosenPlaceName: isPublicPlaceStart ? startSource.chosenPlaceName : null,
     playerIds: candidates.map((candidate) => candidate.playerId),
     createdAt: new Date().toISOString()
   });
@@ -7611,11 +7648,50 @@ function renderLocalStartStatus() {
   if (!elements.localStartStatus) {
     return;
   }
+
   const localStart = normalizeLocalStart(state.teamMerits?.localStart);
+  const readiness = getAvailability().rosterReadiness;
+  const shouldShowChoices = !localStart.enabled && !readiness.hasEnoughUnlocked;
+
+  if (elements.startModePanel) {
+    elements.startModePanel.hidden = !localStart.enabled && !shouldShowChoices;
+  }
+  if (elements.startModeChoices) {
+    elements.startModeChoices.hidden = !shouldShowChoices;
+  }
+  if (elements.activeLocalStart) {
+    elements.activeLocalStart.hidden = !localStart.enabled;
+  }
+
+  const publicPlaces = getPublicStartPlaces();
+  if (elements.publicStartPlaceSelect) {
+    const selectedPlaceId = elements.publicStartPlaceSelect.value;
+    elements.publicStartPlaceSelect.replaceChildren();
+    publicPlaces.forEach((place) => {
+      const option = document.createElement("option");
+      option.value = place.placeId;
+      option.textContent = place.placeName;
+      elements.publicStartPlaceSelect.append(option);
+    });
+    if (publicPlaces.some((place) => place.placeId === selectedPlaceId)) {
+      elements.publicStartPlaceSelect.value = selectedPlaceId;
+    }
+    elements.publicStartPlaceSelect.disabled = publicPlaces.length === 0;
+  }
+  if (elements.activatePublicPlaceStart) {
+    elements.activatePublicPlaceStart.disabled = publicPlaces.length === 0;
+  }
+
+  const activeSource = localStart.source === "chosen_place" && localStart.chosenPlaceName
+    ? ` via ${localStart.chosenPlaceName}`
+    : "";
   elements.localStartStatus.textContent = state.localStartMessage ||
     (localStart.enabled
-      ? `Lokal starttropp aktiv: ${localStart.playerIds.length} spillere.`
-      : "Ingen lokal starttropp valgt.");
+      ? `Lokal starttropp aktiv${activeSource}: ${localStart.playerIds.length} spillere.`
+      : publicPlaces.length === 0 && shouldShowChoices
+        ? "Ingen offentlige History Go-startsteder er tilgjengelige i stedslisten."
+        : "Velg hvordan managerkarrieren skal starte.");
+
   if (elements.clearLocalStart) {
     elements.clearLocalStart.disabled = !localStart.enabled;
   }
@@ -7912,6 +7988,13 @@ function bindEvents() {
     });
   }
 
+  if (elements.useHistoryGoCollection) {
+    elements.useHistoryGoCollection.addEventListener("click", () => {
+      state.localStartMessage = "History Go-samlingen er synkronisert med managerlaget.";
+      refreshAvailabilityFromHistoryGo();
+    });
+  }
+
   if (elements.activateLocalStart) {
     elements.activateLocalStart.addEventListener("click", () => {
       if (!navigator.geolocation) {
@@ -7939,6 +8022,24 @@ function bindEvents() {
           renderLocalStartStatus();
         },
         { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    });
+  }
+
+  if (elements.activatePublicPlaceStart) {
+    elements.activatePublicPlaceStart.addEventListener("click", () => {
+      const place = getPublicStartPlaces().find(
+        (entry) => entry.placeId === elements.publicStartPlaceSelect?.value
+      );
+      if (!place) {
+        state.localStartMessage = "Velg et offentlig History Go-sted fra listen.";
+        renderLocalStartStatus();
+        return;
+      }
+
+      activateLocalStartSquad(
+        { latitude: place.latitude, longitude: place.longitude },
+        { source: "chosen_place", chosenPlaceId: place.placeId, chosenPlaceName: place.placeName }
       );
     });
   }
