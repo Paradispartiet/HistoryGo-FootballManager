@@ -8,7 +8,10 @@ import {
   finalizeMatchdaySession,
   getSessionEventIndex
 } from "./football-matchday-engine.js";
-import { computeMatchdayConsequences } from "./football-match-consequences.js";
+import {
+  computeMatchdayConsequences,
+  evaluateClubWeekMatchdayGate
+} from "./football-match-consequences.js";
 import {
   adaptHgFormations,
   buildRoleTypeIndex,
@@ -2704,6 +2707,9 @@ function chooseMatchdayDecision(optionId) {
   } else {
     // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
     state.matchday.lastMatch = finalizeMatchdaySession(session);
+    // Kampdag ↔ Club Week: merk resultatet med uka det ble spilt i, slik at
+    // kampdagfasen kan kreve en faktisk spilt kamp før uka ruller videre.
+    state.matchday.lastMatch.playedInClubWeek = state.clubWeekState?.week ?? null;
     // Club Week Consequence Loop v1: kampen gir små klubb-/tilvenningseffekter
     // én gang. Markeringen (consequencesApplied) persisteres i saveMatchdayState.
     applyMatchdayConsequences(state.matchday.lastMatch, session);
@@ -2830,7 +2836,10 @@ function applyMatchdayConsequences(lastMatch, session) {
     phaseLabel: "Kampdag",
     message
   });
-  setClubWeekFeedback(message);
+  // I kampdagfasen er det denne kampen som åpner porten for fasebyttet.
+  setClubWeekFeedback(
+    state.clubWeekState?.phase === "match_day" ? `${message} Uka kan nå rulle videre.` : message
+  );
 
   // Profilrelatert progresjon (Club Week-verdier/formationFamiliarity) er
   // faktisk endret: varsle appskallet. Ren rendering skjer i kalleren.
@@ -3133,6 +3142,17 @@ const CLUB_WEEK_PHASE_LABELS = {
   match_preparation: "Kampforberedelse",
   match_day: "Kampdag"
 };
+
+// Kampdag ↔ Club Week-kobling: les porten fra den rene modellen med gjeldende
+// state. Stengt port betyr at kampdagfasen venter på en faktisk spilt kamp
+// (eller at en pågående kampsesjon fullføres) før uka kan rulle videre.
+function getClubWeekMatchdayGate() {
+  return evaluateClubWeekMatchdayGate({
+    clubWeekState: state.clubWeekState,
+    lastMatch: state.matchday?.lastMatch || null,
+    hasActiveSession: Boolean(state.matchday?.session)
+  });
+}
 
 // Små, synlige konsekvenser av et fasebytte. Returnerer effekter på
 // klubbverdier og en kort norsk tilbakemelding. Kun UI/Club Week-state –
@@ -4383,17 +4403,28 @@ function buildNextDecisions(teamFit) {
     });
   }
 
-  // 7) Driv klubbuken videre.
+  // 7) Driv klubbuken videre — eller spill ukens kamp når kampdagfasen
+  // krever det (Kampdag ↔ Club Week-porten).
   if (state.clubWeekState) {
     const phaseLabel = CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase;
-    decisions.push({
-      tag: "Klubbuke",
-      title: "Driv klubbuken videre",
-      detail: `Du er i fasen «${phaseLabel}» i uke ${state.clubWeekState.week}.`,
-      action: () => {
-        advanceClubWeekPhaseAction().catch(console.error);
-      }
-    });
+    const gate = getClubWeekMatchdayGate();
+    if (gate.isBlocked) {
+      decisions.push({
+        tag: "Klubbuke",
+        title: "Spill ukens kamp",
+        detail: `Uke ${state.clubWeekState.week} står i fasen «${phaseLabel}». ${gate.reason}`,
+        action: () => activateTab("team")
+      });
+    } else {
+      decisions.push({
+        tag: "Klubbuke",
+        title: "Driv klubbuken videre",
+        detail: `Du er i fasen «${phaseLabel}» i uke ${state.clubWeekState.week}.`,
+        action: () => {
+          advanceClubWeekPhaseAction().catch(console.error);
+        }
+      });
+    }
   }
 
   // 8) Uleste innbokstråder.
@@ -5408,6 +5439,15 @@ async function renderClubWeek() {
 
   if (elements.clubWeekFeedback) {
     elements.clubWeekFeedback.textContent = state.clubWeekFeedback || "Klubbuken er klar.";
+  }
+
+  // Kampdag ↔ Club Week: stengt port gjør "Neste fase" utilgjengelig og
+  // forklarer hvorfor, slik at kampdag og klubbuke er én sammenhengende rytme.
+  if (elements.advanceClubWeekPhase) {
+    const gate = getClubWeekMatchdayGate();
+    elements.advanceClubWeekPhase.disabled = gate.isBlocked;
+    elements.advanceClubWeekPhase.textContent = gate.isBlocked ? "Spill kampen først" : "Neste fase →";
+    elements.advanceClubWeekPhase.title = gate.isBlocked ? gate.reason : "";
   }
 
   if (elements.clubBoardTrust) {
@@ -7241,6 +7281,15 @@ async function advanceClubWeekPhaseAction() {
   // Mangler tilstanden, lager vi en initial uke 1 / analyse først.
   if (!state.clubWeekState) {
     state.clubWeekState = await createInitialClubWeekStateFromBrowser({});
+  }
+
+  // Kampdag ↔ Club Week: kampdagfasen krever en kamp spilt denne uka før uka
+  // ruller videre. Stengt port gir kun feedback — ingen fasebytte eller logg.
+  const gate = getClubWeekMatchdayGate();
+  if (gate.isBlocked) {
+    setClubWeekFeedback(gate.reason);
+    renderApp();
+    return;
   }
 
   const previous = state.clubWeekState;

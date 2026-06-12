@@ -10,6 +10,7 @@
 //   - sluttrapporten har v0.2-feltene (beste/svakeste grep, systemdom, råd),
 //   - ulike formasjonsfamilier gir ulike hendelser,
 //   - sterke vs. svake forutsetninger gir flere positive vs. negative toner,
+//   - Kampdag ↔ Club Week-porten krever en kamp spilt i gjeldende uke,
 //   - v1-simulateMatchday er fortsatt intakt.
 //
 // Rent Node-script (standardbibliotek + prosjektets egne ESM-moduler). Skriver
@@ -32,7 +33,10 @@ import {
   finalizeMatchdaySession,
   getSessionEventIndex
 } from "../src/football-matchday-engine.js";
-import { computeMatchdayConsequences } from "../src/football-match-consequences.js";
+import {
+  computeMatchdayConsequences,
+  evaluateClubWeekMatchdayGate
+} from "../src/football-match-consequences.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -395,7 +399,58 @@ check(
 );
 check("manglende resultat gir ingen konsekvens", computeMatchdayConsequences({ lastMatch: null }) === null);
 
-// --- 6) v1-motoren er intakt -------------------------------------------------
+// --- 6) Kampdag ↔ Club Week-porten -------------------------------------------
+console.log("\nKampdag ↔ Club Week-port (kampdagfasen krever spilt kamp):");
+
+const matchDayWeek = { week: 3, phase: "match_day" };
+check(
+  "uten Club Week-state er porten åpen",
+  evaluateClubWeekMatchdayGate({}).isBlocked === false
+);
+check(
+  "utenfor kampdagfasen er porten åpen",
+  evaluateClubWeekMatchdayGate({ clubWeekState: { week: 3, phase: "training" } }).isBlocked === false
+);
+check(
+  "kampdagfase uten spilt kamp stenger porten",
+  evaluateClubWeekMatchdayGate({ clubWeekState: matchDayWeek }).isBlocked === true
+);
+check(
+  "pågående kampsesjon stenger porten",
+  evaluateClubWeekMatchdayGate({
+    clubWeekState: matchDayWeek,
+    lastMatch: { playedInClubWeek: 3 },
+    hasActiveSession: true
+  }).isBlocked === true
+);
+check(
+  "kamp fra en tidligere uke teller ikke som ukens kamp",
+  evaluateClubWeekMatchdayGate({
+    clubWeekState: matchDayWeek,
+    lastMatch: { playedInClubWeek: 2 }
+  }).isBlocked === true
+);
+check(
+  "gammelt resultat uten ukemerke teller ikke som ukens kamp",
+  evaluateClubWeekMatchdayGate({
+    clubWeekState: matchDayWeek,
+    lastMatch: buildSyntheticResult()
+  }).isBlocked === true
+);
+check(
+  "kamp spilt denne uka åpner porten",
+  evaluateClubWeekMatchdayGate({
+    clubWeekState: matchDayWeek,
+    lastMatch: { playedInClubWeek: 3 }
+  }).isBlocked === false
+);
+check(
+  "stengt port har en norsk begrunnelse",
+  evaluateClubWeekMatchdayGate({ clubWeekState: matchDayWeek }).reason.length > 0 &&
+    evaluateClubWeekMatchdayGate({ clubWeekState: matchDayWeek, lastMatch: { playedInClubWeek: 3 } }).reason === ""
+);
+
+// --- 7) v1-motoren er intakt -------------------------------------------------
 console.log("\nKampdag v1 (regresjon):");
 const v1Result = simulateMatchday({
   teamFit: buildTeamFit("strong"),
