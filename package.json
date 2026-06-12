@@ -10,6 +10,7 @@
     "audit:hg-historical-fit": "node scripts/audit-historical-formation-fit.mjs",
     "audit:hg-coach-context": "node scripts/audit-coach-context-engine.mjs",
     "sim:matchday": "node scripts/simulate-matchday-v02.mjs",
+    "sim:mini-season": "node scripts/simulate-mini-season.mjs",
     "build": "tsc"
   },
   "devDependencies": {

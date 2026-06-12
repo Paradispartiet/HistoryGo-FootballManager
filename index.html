@@ -102,6 +102,25 @@
 
       <p id="clubWeekFeedback" class="club-week-feedback">Klubbuken er klar.</p>
 
+      <!-- Mini Season v0.1: 5-kampers prøveperiode oppå Club Week og Kampdag.
+           Status, neste motstander, poeng, styremål, resultater og styrets
+           sluttvurdering rendres av app.js (renderMiniSeason). Ingen liga,
+           tabell eller sesongøkonomi. -->
+      <section class="panel mini-season-panel" aria-label="Prøveperiode" aria-live="polite">
+        <div class="mini-season-head">
+          <div>
+            <p class="eyebrow">Prøveperiode</p>
+            <h2>5 kamper for styret</h2>
+            <p id="miniSeasonStatus" class="muted-text">Laster prøveperiode…</p>
+          </div>
+          <div class="mini-season-actions">
+            <button type="button" id="startMiniSeasonButton">Start prøveperiode</button>
+            <button type="button" id="resetMiniSeasonButton" class="is-reset" hidden>Nullstill prøveperiode</button>
+          </div>
+        </div>
+        <div id="miniSeasonOverview" class="mini-season-overview"></div>
+      </section>
+
       <!-- Hovedflate: bane + dynamisk sidepanel -->
       <div class="office-main">
         <section class="panel pitch-stage" aria-label="Taktisk bane">
