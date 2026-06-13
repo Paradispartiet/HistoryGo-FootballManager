@@ -49,6 +49,15 @@ export type {
 } from "./engine/evaluateTeamSetup.js";
 
 export type {
+  RelationshipAssignment,
+  RoleRelationship,
+  RoleRelationshipResult,
+  RoleRelationshipType,
+} from "./engine/calculateRoleRelationships.js";
+
+export { calculateRoleRelationships } from "./engine/calculateRoleRelationships.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,

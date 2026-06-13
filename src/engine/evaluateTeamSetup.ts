@@ -13,6 +13,11 @@ import type {
 
 import { calculateRoleFit } from "./calculateRoleFit.js";
 import { calculateTeamBalance } from "./calculateTeamBalance.js";
+import {
+  calculateRoleRelationships,
+  type RelationshipAssignment,
+  type RoleRelationshipResult,
+} from "./calculateRoleRelationships.js";
 
 export type TeamSetupIssueSeverity = "info" | "warning" | "critical";
 
@@ -50,6 +55,7 @@ export type TeamSetupEvaluation = {
 
   roleFitResults: PlayerRoleFitResult[];
   teamBalance: TeamBalanceResult;
+  relationships: RoleRelationshipResult;
 
   missingAssignments: MissingAssignment[];
 
@@ -307,6 +313,17 @@ export function evaluateTeamSetup(input: TeamSetupEvaluationInput): TeamSetupEva
   const teamBalance = calculateTeamBalance(team, tactic, roles, roleFitResults);
   const averageRoleFit = calculateAverageRoleFit(roleFitResults);
 
+  // Relasjonsmotor: vurderer om de resolverte rollene støtter eller blokkerer
+  // hverandre (samme regelsett som legacy football-relationship-engine.js).
+  const relationshipAssignments: RelationshipAssignment[] = resolvedAssignments.map(
+    ({ player, role, assignment }) => ({
+      roleId: role.id,
+      position: assignment.position,
+      playerName: player.name,
+    }),
+  );
+  const relationships = calculateRoleRelationships(relationshipAssignments, tactic);
+
   const totalAssignmentCount = tactic.roleAssignments.length;
   const validAssignmentCount = resolvedAssignments.length;
   const isComplete =
@@ -339,6 +356,7 @@ export function evaluateTeamSetup(input: TeamSetupEvaluationInput): TeamSetupEva
 
     roleFitResults,
     teamBalance,
+    relationships,
 
     missingAssignments,
 

@@ -629,5 +629,8 @@ export function adaptLegacyTactic(input: AdaptLegacyTacticInput): Tactic {
     formation: input.tactic.formation,
     principles: tacticPrinciplesFromLegacyTactic(input.tactic),
     roleAssignments,
+    // Bær med rå legacy-tagger slik at den tagg-drevne relasjonsmotoren får
+    // samme input som legacy (exactOptionalPropertyTypes: utelat hvis tom).
+    ...(input.tactic.tags ? { tags: input.tactic.tags } : {}),
   };
 }
