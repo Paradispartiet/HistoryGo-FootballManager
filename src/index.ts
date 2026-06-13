@@ -58,6 +58,22 @@ export type {
 export { calculateRoleRelationships } from "./engine/calculateRoleRelationships.js";
 
 export type {
+  BadgeLevel,
+  BadgeMetricEffects,
+  BuildEarnedBadgeEffectContextInput,
+  EarnedBadgeEffectContext,
+  TrainingBadgeCatalog,
+  TrainingBadgeFamily,
+  TrainingBadgeLevelEntry,
+} from "./engine/calculateBadgeMetricEffects.js";
+
+export {
+  applyBadgeEffectsToMetrics,
+  buildEarnedBadgeEffectContext,
+  calculateBadgeMetricEffects,
+} from "./engine/calculateBadgeMetricEffects.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,
