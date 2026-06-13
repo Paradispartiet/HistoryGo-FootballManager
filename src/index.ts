@@ -96,6 +96,29 @@ export {
 } from "./engine/calculateHistoricalFormationFit.js";
 
 export type {
+  ActiveStaffEntry,
+  CoachContext,
+  CoachContextFormation,
+  CoachContextReport,
+  CoachContextTeamMerits,
+  StaffEffectProfile,
+  StaffEffectProfileResult,
+  StaffMember,
+  StaffRole,
+} from "./engine/buildCoachContext.js";
+
+export {
+  buildCoachContext,
+  buildCoachContextReport,
+  calculateCoachUnderstanding,
+  calculateFormationDifficultyRelief,
+  calculateFormationFamiliarity,
+  calculateStaffEffectProfile,
+  calculateTacticalLearningSpeed,
+  getStaffCategory,
+} from "./engine/buildCoachContext.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,
