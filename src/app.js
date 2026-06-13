@@ -2881,7 +2881,7 @@ function getTeamFit() {
     return null;
   }
 
-  return calculateTeamFit({
+  const args = {
     lineup: state.lineup,
     formation,
     tactic,
@@ -2890,7 +2890,18 @@ function getTeamFit() {
     earnedBadgeIds: state.teamMerits?.earnedBadgeIds || [],
     trainingBadges: state.trainingBadges,
     coachContext: getCoachContext()
-  });
+  };
+
+  // Steg 7b: TS-motoren eier teamFit-beregningen når den er lastet. Outputen er
+  // bevist byte-identisk med legacy (paritetstest over 255 caser), så alle
+  // konsumenter (renderLineup/renderSidePanel/buildNextDecisions/kampdag) får
+  // samme data. Uten bygget dist/ faller vi tilbake til legacy-motoren.
+  const engine = getLoadedManagerEngine();
+  if (engine?.calculateTeamFit) {
+    return engine.calculateTeamFit(args);
+  }
+
+  return calculateTeamFit(args);
 }
 
 // ----------------------------------------------------------------------------
