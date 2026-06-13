@@ -48,5 +48,14 @@
     "chosenPlaceName": null,
     "playerIds": [],
     "createdAt": null
+  },
+  "publicStartAnchor": {
+    "enabled": false,
+    "placeId": null,
+    "placeName": null,
+    "latitude": null,
+    "longitude": null,
+    "source": null,
+    "createdAt": null
   }
 }

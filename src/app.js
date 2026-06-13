@@ -363,6 +363,8 @@ const elements = {
   activateLocalStart: document.querySelector("#activateLocalStart"),
   publicStartPlaceSelect: document.querySelector("#publicStartPlaceSelect"),
   activatePublicPlaceStart: document.querySelector("#activatePublicPlaceStart"),
+  publicStartAnchorStatus: document.querySelector("#publicStartAnchorStatus"),
+  clearPublicStartAnchor: document.querySelector("#clearPublicStartAnchor"),
   clearLocalStart: document.querySelector("#clearLocalStart"),
   // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
   matchdayReadiness: document.querySelector("#matchdayReadiness"),
@@ -910,6 +912,38 @@ function isValidLongitude(value) {
   return Number.isFinite(value) && value >= -180 && value <= 180;
 }
 
+function normalizePublicStartAnchor(value) {
+  const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const enabled = base.enabled === true;
+  const placeId = typeof base.placeId === "string" && base.placeId.trim() ? base.placeId.trim() : null;
+  const placeName = typeof base.placeName === "string" && base.placeName.trim() ? base.placeName.trim() : null;
+  const latitude = isValidLatitude(base.latitude) ? base.latitude : null;
+  const longitude = isValidLongitude(base.longitude) ? base.longitude : null;
+  const source = base.source === "public_history_go_place" ? base.source : "public_history_go_place";
+
+  if (!enabled || !placeId || !placeName || latitude === null || longitude === null) {
+    return {
+      enabled: false,
+      placeId: null,
+      placeName: null,
+      latitude: null,
+      longitude: null,
+      source: null,
+      createdAt: null
+    };
+  }
+
+  return {
+    enabled: true,
+    placeId,
+    placeName,
+    latitude,
+    longitude,
+    source,
+    createdAt: typeof base.createdAt === "string" && base.createdAt.trim() ? base.createdAt : null
+  };
+}
+
 function normalizeLocalStart(value) {
   const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
   const playerIds = Array.isArray(base.playerIds)
@@ -935,11 +969,26 @@ function normalizeLocalStart(value) {
 // alltid har gyldige arrays/tall, uansett seed eller lagret tilstand.
 function normalizeTeamMerits(merits) {
   const base = isTeamMeritsObject(merits) ? merits : {};
+  const localStart = normalizeLocalStart(base.localStart);
+  const publicStartAnchor = normalizePublicStartAnchor(base.publicStartAnchor);
+  const migratedPublicStartAnchor = publicStartAnchor.enabled
+    ? publicStartAnchor
+    : normalizePublicStartAnchor({
+        enabled: localStart.source === "chosen_place" && Boolean(localStart.chosenPlaceId),
+        placeId: localStart.chosenPlaceId,
+        placeName: localStart.chosenPlaceName,
+        latitude: localStart.latitude,
+        longitude: localStart.longitude,
+        source: "public_history_go_place",
+        createdAt: localStart.createdAt
+      });
+
   return {
     ...base,
     activeTrainingWeek:
       Number.isInteger(base.activeTrainingWeek) && base.activeTrainingWeek >= 1 ? base.activeTrainingWeek : 1,
-    localStart: normalizeLocalStart(base.localStart),
+    publicStartAnchor: migratedPublicStartAnchor,
+    localStart,
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
     // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
@@ -997,6 +1046,7 @@ function resetTeamMerits() {
   state.teamMerits = teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
   if (state.teamMerits) {
     state.teamMerits.localStart = normalizeLocalStart(null);
+    state.teamMerits.publicStartAnchor = normalizePublicStartAnchor(null);
   }
   state.localStartMessage = "";
   recomputeActiveClassifications();
@@ -1161,6 +1211,64 @@ function isPlayerUnlockType(type) {
 function getLocalStartPlayerIds() {
   const localStart = normalizeLocalStart(state.teamMerits?.localStart);
   return localStart.enabled ? localStart.playerIds : [];
+}
+
+function getPublicStartAnchor() {
+  const anchor = normalizePublicStartAnchor(state.teamMerits?.publicStartAnchor);
+  if (!anchor.enabled) {
+    return null;
+  }
+  return {
+    placeId: anchor.placeId,
+    placeName: anchor.placeName,
+    latitude: anchor.latitude,
+    longitude: anchor.longitude,
+    source: anchor.source
+  };
+}
+
+function setPublicStartAnchor(placeId) {
+  if (!state.teamMerits || typeof placeId !== "string" || !placeId.trim()) {
+    return null;
+  }
+
+  const place = getPlaceLocationIndex().get(placeId.trim());
+  const isPublicPlace = getPublicStartPlaces().some((entry) => entry.placeId === placeId.trim());
+  if (!place || !isPublicPlace || !isValidLatitude(place.latitude) || !isValidLongitude(place.longitude)) {
+    state.teamMerits.publicStartAnchor = normalizePublicStartAnchor(null);
+    saveTeamMerits();
+    return null;
+  }
+
+  state.teamMerits.publicStartAnchor = normalizePublicStartAnchor({
+    enabled: true,
+    placeId: place.placeId,
+    placeName: place.placeName,
+    latitude: place.latitude,
+    longitude: place.longitude,
+    source: "public_history_go_place",
+    createdAt: new Date().toISOString()
+  });
+  saveTeamMerits();
+  return getPublicStartAnchor();
+}
+
+function clearPublicStartAnchor() {
+  if (!state.teamMerits) {
+    return;
+  }
+  const anchor = getPublicStartAnchor();
+  state.teamMerits.publicStartAnchor = normalizePublicStartAnchor(null);
+  const localStart = normalizeLocalStart(state.teamMerits.localStart);
+  if (anchor && localStart.source === "chosen_place" && localStart.chosenPlaceId === anchor.placeId) {
+    state.teamMerits.localStart = normalizeLocalStart(null);
+    invalidateAvailability();
+    sanitizeLineupForUnlockedPlayers();
+    sanitizeSelectedFormation();
+  }
+  state.localStartMessage = "Offentlig startsted er fjernet.";
+  saveTeamMerits();
+  renderApp();
 }
 
 // Haversine-avstand mellom to { latitude, longitude }-punkter, i kilometer.
@@ -7650,11 +7758,12 @@ function renderLocalStartStatus() {
   }
 
   const localStart = normalizeLocalStart(state.teamMerits?.localStart);
+  const publicStartAnchor = getPublicStartAnchor();
   const readiness = getAvailability().rosterReadiness;
   const shouldShowChoices = !localStart.enabled && !readiness.hasEnoughUnlocked;
 
   if (elements.startModePanel) {
-    elements.startModePanel.hidden = !localStart.enabled && !shouldShowChoices;
+    elements.startModePanel.hidden = !localStart.enabled && !shouldShowChoices && !publicStartAnchor;
   }
   if (elements.startModeChoices) {
     elements.startModeChoices.hidden = !shouldShowChoices;
@@ -7692,6 +7801,15 @@ function renderLocalStartStatus() {
         ? "Ingen offentlige History Go-startsteder er tilgjengelige i stedslisten."
         : "Velg hvordan managerkarrieren skal starte.");
 
+  if (elements.publicStartAnchorStatus) {
+    elements.publicStartAnchorStatus.textContent = publicStartAnchor
+      ? `Offentlig startsted: ${publicStartAnchor.placeName}`
+      : "Ingen offentlig startposisjon valgt.";
+  }
+  if (elements.clearPublicStartAnchor) {
+    elements.clearPublicStartAnchor.hidden = !publicStartAnchor;
+    elements.clearPublicStartAnchor.disabled = !publicStartAnchor;
+  }
   if (elements.clearLocalStart) {
     elements.clearLocalStart.disabled = !localStart.enabled;
   }
@@ -8044,11 +8162,22 @@ function bindEvents() {
         return;
       }
 
+      const anchor = setPublicStartAnchor(place.placeId);
+      if (!anchor) {
+        state.localStartMessage = "Startstedet mangler gyldige koordinater og ble ikke lagret.";
+        renderLocalStartStatus();
+        return;
+      }
+
       activateLocalStartSquad(
-        { latitude: place.latitude, longitude: place.longitude },
-        { source: "chosen_place", chosenPlaceId: place.placeId, chosenPlaceName: place.placeName }
+        { latitude: anchor.latitude, longitude: anchor.longitude },
+        { source: "chosen_place", chosenPlaceId: anchor.placeId, chosenPlaceName: anchor.placeName }
       );
     });
+  }
+
+  if (elements.clearPublicStartAnchor) {
+    elements.clearPublicStartAnchor.addEventListener("click", clearPublicStartAnchor);
   }
 
   if (elements.clearLocalStart) {

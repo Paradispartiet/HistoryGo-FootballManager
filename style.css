@@ -4248,3 +4248,15 @@ ul {
     margin-top: 0.85rem;
   }
 }
+
+.public-start-anchor-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.public-start-anchor-status-row .local-start-status {
+  margin: 0;
+}
