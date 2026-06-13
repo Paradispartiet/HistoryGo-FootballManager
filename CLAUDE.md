@@ -65,20 +65,12 @@ These `.js` files are plain ESM and run unbuilt in the browser **and** in the `s
 
 `src/domain/`, `src/engine/`, `src/sample/` and `src/index.ts` are a separate, stricter rebuild of the manager brain. It is **pure and data-driven**: it must not read the DOM, manipulate HTML, touch `localStorage`, `fetch`, import `src/app.js`, or mutate legacy data. UI passes data in; the engine returns structured output.
 
-It contains **two complementary computation paths**:
+It contains **two computation paths**, but the live UI is now driven by one of them:
 
-- **The faithful legacy ports** — TS ports of the live `.js` engines, parity-tested to byte-identical output: `calculatePlayerMatchFit.ts` (individual fit), `calculateRoleRelationships.ts`, `calculateBadgeMetricEffects.ts`, `calculateHistoricalFormationFit.ts`, `buildCoachContext.ts`, and `calculateTeamFit.ts` (the assembly that wires them into a legacy-shaped `teamFit`). **`calculateTeamFit` is what `app.js`'s `getTeamFit()` runs at runtime** (see below) — so this path is the live source of truth for the score panel, report, lineup, side panel, decisions and matchday.
-- **The structured dashboard pipeline** — a stricter rebuild over `src/domain/footballTypes.ts` that powers the additive **manager-detail panel** (insight, weak points, role-change recommendations, training focus, knowledge):
+- **The faithful legacy ports (the live brain)** — TS ports of the `.js` engines, parity-tested to byte-identical output: `calculatePlayerMatchFit.ts` (individual fit), `calculateRoleRelationships.ts`, `calculateBadgeMetricEffects.ts`, `calculateHistoricalFormationFit.ts`, `buildCoachContext.ts`, and `calculateTeamFit.ts` (the assembly wiring them into a legacy-shaped `teamFit`). **`calculateTeamFit` is what `app.js`'s `getTeamFit()` runs at runtime** (see below). On top of it sit teamFit-derived view helpers — `recommendRoleChangesFromTeamFit.ts`, `analyzeWeakPointsFromTeamFit.ts`, `createTeamFitManagerInsight.ts` (summary + top actions), `createTrainingFocusFromTeamFit.ts` — that use the *same* `matchScore`/metrics as the lineup. So this path is the single source of truth for the headline score panel, report, lineup, side panel, decisions, matchday **and** the manager-detail panel's assessment (summary, top actions, role changes, weak points, training focus).
+- **The structured dashboard pipeline** — a stricter rebuild over `src/domain/footballTypes.ts` (`calculateRoleFit` → `calculateTeamBalance` → `evaluateTeamSetup` → `analyzeWeakPoints`/`recommendRoleChanges`/`createTrainingFocus` → `createManagerInsight` → `createManagerDashboardData` → `createManagerDashboardViewModel` → `createManagerAppState`). It computes scores differently (`setupScore` vs legacy `teamScore`) and **no longer drives the team assessment**. It now powers only the separate **knowledge sub-feature** (`createFootballKnowledgeRecommendations` + active knowledge focus + training history), which matches football principles by structured weak-point codes and is left on this pipeline deliberately. It also remains the parity-tested rebuild exercised by `src/sample/`.
 
-```
-Player + Role + Tactic + Team
- → calculateRoleFit → calculateTeamBalance → evaluateTeamSetup
- → createTeamSetupReport / analyzeWeakPoints / recommendRoleChanges / createTrainingFocus
- → createManagerInsight        (the central aggregator)
- → createManagerDashboardData → createManagerDashboardViewModel → createManagerAppState
-```
-
-These two paths compute scores differently (legacy-formula `teamScore` vs structured `setupScore`); the headline Laganalyse panel deliberately shows the `calculateTeamFit` numbers, and the dashboard pipeline feeds only the separate manager-detail panel. `src/index.ts` is the public surface — every engine type and function is re-exported there; **sample files must not be exported from it**. `src/domain/footballTypes.ts` is the shared type contract and must stay logic-free.
+`src/index.ts` is the public surface — every engine type and function is re-exported there; **sample files must not be exported from it**. `src/domain/footballTypes.ts` is the shared type contract and must stay logic-free.
 
 ### The bridge between the two layers
 
