@@ -137,6 +137,23 @@ export {
 } from "./engine/calculatePlayerMatchFit.js";
 
 export type {
+  CalculateTeamFitInput,
+  TeamFit,
+  TeamFitAssignment,
+  TeamFitFormation,
+  TeamFitFormationSlot,
+  TeamFitLineup,
+  TeamFitLineupSlotState,
+  TeamFitMetrics,
+  TeamFitPlayer,
+  TeamFitReport,
+  TeamFitRole,
+  TeamFitTactic,
+} from "./engine/calculateTeamFit.js";
+
+export { calculateTeamFit } from "./engine/calculateTeamFit.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,
