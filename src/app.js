@@ -4912,7 +4912,7 @@ function renderTacticalSystemPanel() {
 function selectSlotDecision(slotId) {
   return () => {
     state.selectedSlotId = slotId;
-    activateTab("team");
+    activateTab("tactics");
     renderApp();
   };
 }
@@ -4927,7 +4927,7 @@ function selectFormationDecision(formationId) {
     state.selectedFormationId = formationId;
     seedLineupForFormation();
     ensurePositionsForFormation();
-    activateTab("team");
+    activateTab("tactics");
     renderApp();
   };
 }
@@ -5037,7 +5037,7 @@ function buildNextDecisions(teamFit) {
         tag: "Klubbuke",
         title: "Spill ukens kamp",
         detail: `Uke ${state.clubWeekState.week} står i fasen «${phaseLabel}». ${gate.reason}`,
-        action: () => activateTab("team")
+        action: () => activateTab("kamp")
       });
     } else {
       decisions.push({
