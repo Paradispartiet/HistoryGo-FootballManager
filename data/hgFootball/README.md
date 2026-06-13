@@ -30,6 +30,9 @@ HG Football Manager lar spilleren bygge lag og stab kun av spillere, trenere og 
 | `playerRoleFitRules.json` | Passform- og misbruksregler | `history-go.hg-football.player-role-fit-rules.v1` |
 | `staffRoles.json` | Staff-roller og klubbkoblinger | `history-go.hg-football.staff-roles.v1` |
 | `unlockRules.json` | History Go-opplåsing | `history-go.hg-football.unlock-rules.v1` |
+| `formationKnowledge.json` | Kunnskapslag: matchups, fallgruver, parameterprofil, treningskoblinger | `history-go.hg-football.formation-knowledge.v1` |
+
+> `formationKnowledge.json` er Formation Knowledge Engine-laget: per formasjon `strongAgainst`/`weakAgainst`, `requiredConditions`, `tacticalRisks`, `parameterProfile` og `trainingLinks`, med dyp dokumentasjon under `docs/hgFootball/formations/`. Valideres av `npm run audit:hg-formation-knowledge`. Laget er additivt – det dekker et kuratert formasjonsutvalg og utvides formasjon for formasjon.
 
 > Schema-navnerommet `history-go.hg-football.*` er bevisst valgt for denne modulen og lever side om side med de eksisterende `data/football_*.json`-filene (`historygo-football-manager.*`). Modulen er additiv og dupliserer ikke den eksisterende unlock-loop-pakken.
 
