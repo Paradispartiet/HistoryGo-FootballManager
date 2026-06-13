@@ -8,6 +8,8 @@ Kjerneprinsipp:
 
 Alle spillere er gode. Treneren avgjør. Riktig rolle + riktig taktikk + riktig lagbalanse = høy prestasjon. Feil rollebruk skjuler kvalitet.
 
+> **Statusoppdatering (juni 2026):** Avsnittene «Nåværende status» (18) og «Neste steg» (19–20) under er historiske. De legacy-motorene er nå portet til TS og parity-testet byte-identisk: `calculatePlayerMatchFit.ts`, `calculateRoleRelationships.ts`, `calculateBadgeMetricEffects.ts`, `calculateHistoricalFormationFit.ts`, `buildCoachContext.ts` og sammenstillingen `calculateTeamFit.ts`. `app.js`-funksjonen `getTeamFit()` kjører nå TS-`calculateTeamFit` (via `getLoadedManagerEngine()`) med legacy-fallback uten bygget `dist/`. TS-motoren er dermed live source of truth for `teamFit` (scorepanel, rapport, ellever, kampdag); den strukturerte dashboard-pipelinen under mater kun det additive manager-detalj-panelet. Se CLAUDE.md for den oppdaterte oversikten.
+
 ## 1. Hovedstruktur
 
 Prosjektet har to parallelle lag:

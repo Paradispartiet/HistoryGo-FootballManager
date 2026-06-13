@@ -65,7 +65,10 @@ These `.js` files are plain ESM and run unbuilt in the browser **and** in the `s
 
 `src/domain/`, `src/engine/`, `src/sample/` and `src/index.ts` are a separate, stricter rebuild of the manager brain. It is **pure and data-driven**: it must not read the DOM, manipulate HTML, touch `localStorage`, `fetch`, import `src/app.js`, or mutate legacy data. UI passes data in; the engine returns structured output.
 
-Pipeline (see `docs/ENGINE_ARCHITECTURE.md` for the full file-by-file map):
+It contains **two complementary computation paths**:
+
+- **The faithful legacy ports** — TS ports of the live `.js` engines, parity-tested to byte-identical output: `calculatePlayerMatchFit.ts` (individual fit), `calculateRoleRelationships.ts`, `calculateBadgeMetricEffects.ts`, `calculateHistoricalFormationFit.ts`, `buildCoachContext.ts`, and `calculateTeamFit.ts` (the assembly that wires them into a legacy-shaped `teamFit`). **`calculateTeamFit` is what `app.js`'s `getTeamFit()` runs at runtime** (see below) — so this path is the live source of truth for the score panel, report, lineup, side panel, decisions and matchday.
+- **The structured dashboard pipeline** — a stricter rebuild over `src/domain/footballTypes.ts` that powers the additive **manager-detail panel** (insight, weak points, role-change recommendations, training focus, knowledge):
 
 ```
 Player + Role + Tactic + Team
@@ -75,11 +78,11 @@ Player + Role + Tactic + Team
  → createManagerDashboardData → createManagerDashboardViewModel → createManagerAppState
 ```
 
-`src/index.ts` is the public surface — every engine type and function is re-exported there; **sample files must not be exported from it**. `src/domain/footballTypes.ts` is the shared type contract and must stay logic-free.
+These two paths compute scores differently (legacy-formula `teamScore` vs structured `setupScore`); the headline Laganalyse panel deliberately shows the `calculateTeamFit` numbers, and the dashboard pipeline feeds only the separate manager-detail panel. `src/index.ts` is the public surface — every engine type and function is re-exported there; **sample files must not be exported from it**. `src/domain/footballTypes.ts` is the shared type contract and must stay logic-free.
 
 ### The bridge between the two layers
 
-`src/engine/adaptLegacyFootballData.ts` translates the legacy JSON schema (`naturalPositions`, `poorFits`, `preferredRoles`, `likesTactics`, …) into the TS domain types without mutating it. `createLegacyManagerAppState.ts` chains that into the TS pipeline. At runtime, `src/app-manager-engine-bridge.js` **lazily** `import("../dist/index.js")` — if `dist/` hasn't been built it returns `null` and the legacy demo keeps working unchanged. So the TS engine is wired in additively and is not yet the source of truth for the UI.
+`src/engine/adaptLegacyFootballData.ts` translates the legacy JSON schema (`naturalPositions`, `poorFits`, `preferredRoles`, `likesTactics`, …) into the TS domain types without mutating it. `createLegacyManagerAppState.ts` chains that into the structured pipeline. At runtime, `src/app-manager-engine-bridge.js` resolves the built engine: `init()` calls `preloadManagerEngine()` (a one-time lazy `import("../dist/index.js")`) so the engine is available **synchronously** for the rest of the session via `getLoadedManagerEngine()`. `getTeamFit()` then runs the TS `calculateTeamFit` when loaded and **falls back to the legacy `.js` engine when `dist/` is absent** — output is byte-identical either way, so the legacy demo still works unbuilt. The TS engine is therefore the live source of truth for `teamFit` when built, with legacy as a transparent fallback.
 
 `src/sample/elite433Sample.ts` is a hand-built 11-player 4-3-3 used to exercise the TS engine without legacy data; the `read*Sample.ts` files produce readable output from each pipeline stage.
 
