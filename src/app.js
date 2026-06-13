@@ -5207,6 +5207,14 @@ function renderDepartments() {
 }
 
 function renderTeamSummary(teamFit) {
+  // TS-motoren eier scorepanelet (headline-tallene) når den er lastet – se
+  // renderScorePanelFromViewModel. Da hopper vi over legacy-skrivingen for å
+  // unngå dobbelskriving. Uten bygget dist/ faller vi tilbake til legacy-
+  // lagfiten her, slik at demoen viser tall uansett.
+  if (getLoadedManagerEngine()) {
+    return;
+  }
+
   if (!teamFit) {
     return;
   }
@@ -6072,23 +6080,48 @@ function renderTrainingWeekCounters() {
   }
 }
 
+// Finn metrikkverdi (tekst) fra TS-viewModel etter etikett. Returnerer null
+// hvis metrikken ikke finnes, slik at kalleren kan beholde eksisterende tekst.
+function findMetricValueText(viewModel, label) {
+  const metric = viewModel.metrics.find((item) => item.label === label);
+  return metric ? metric.valueText : null;
+}
+
+// Steg 4: TS-motoren eier scorepanelet (headline-tallene) når den er lastet.
+// Bruker score- og completion-feltene som ble forsonet med legacy i steg 2.
+// Rapporten (sammendrag/styrker/problemer/coachContext) eies fortsatt av
+// legacy renderReport; denne funksjonen rører bare tall-nodene.
+function renderScorePanelFromViewModel(viewModel) {
+  elements.teamStatus.textContent = viewModel.score.label;
+  elements.teamScore.textContent = viewModel.score.setupScoreText;
+  elements.balanceScore.textContent = viewModel.score.teamBalanceText;
+  elements.completeCount.textContent = viewModel.completion.completeCountText;
+  elements.roleFitAverage.textContent = viewModel.completion.roleFitAverageText;
+  elements.tacticFitAverage.textContent = viewModel.completion.tacticFitAverageText;
+
+  const width = findMetricValueText(viewModel, "Bredde");
+  const press = findMetricValueText(viewModel, "Press");
+  const defence = findMetricValueText(viewModel, "Forsvar");
+  const midfield = findMetricValueText(viewModel, "Midtbane");
+  const attack = findMetricValueText(viewModel, "Angrep");
+
+  if (width !== null) elements.widthScore.textContent = width;
+  if (press !== null) elements.pressScore.textContent = press;
+  if (defence !== null) elements.restDefenseScore.textContent = defence;
+  if (midfield !== null) elements.buildUpScore.textContent = midfield;
+  if (attack !== null) elements.depthScore.textContent = attack;
+}
+
 function renderManagerDashboardViewModel(viewModel) {
   if (!viewModel) {
     return;
   }
 
-  // Arbeidsdeling mellom de to motorene (bevisst additivt):
-  //
-  // Den synkrone legacy-lagfiten (renderTeamSummary/renderReport via
-  // calculateTeamFit) eier de delte lagrapport-nodene: lagstatus, lagscore,
-  // balanse, de fem metrikkene, rapportsammendrag og styrker/problemer. Den
-  // kjører alltid – også uten bygget dist/.
-  //
-  // TypeScript-motoren skriver KUN til sitt eget manager-detalj-panel under.
-  // Tidligere overskrev den de delte nodene asynkront når dist/ var bygget,
-  // slik at de synlige tallene avhang av byggetilstand og blinket ved render.
-  // TS-motoren er foreløpig ikke source of truth for UI (se
-  // docs/ENGINE_ARCHITECTURE.md), så den legges ved siden av, ikke oppå.
+  // Når TS-motoren er lastet eier den scorepanelet. Legacy renderTeamSummary
+  // hopper da over de samme nodene (guard der), så ingen dobbelskriving. Uten
+  // bygget dist/ kommer vi aldri hit (viewModel er null), og legacy beholder
+  // panelet.
+  renderScorePanelFromViewModel(viewModel);
 
   if (elements.managerSummary) {
     elements.managerSummary.textContent = viewModel.summary.summary;
