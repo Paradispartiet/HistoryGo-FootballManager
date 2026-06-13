@@ -203,6 +203,10 @@ export type Tactic = {
   formation: string;
   principles: TacticPrinciples;
   roleAssignments: RoleAssignment[];
+  // Valgfrie rå tagger fra legacy-taktikken. De strukturerte `principles` er
+  // den primære kontrakten, men enkelte motorer (f.eks. relasjonsmotoren) er
+  // iboende tagg-drevne, så taggene bæres med for trofast paritet med legacy.
+  tags?: readonly string[];
 };
 
 export type Team = {
