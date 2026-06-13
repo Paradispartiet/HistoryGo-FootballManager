@@ -602,7 +602,7 @@ export function adaptLegacyTeam(input: AdaptLegacyTeamInput): Team {
 
 export function adaptLegacyTactic(input: AdaptLegacyTacticInput): Tactic {
   const roleAssignments: RoleAssignment[] = input.formation.slots
-    .map((slot) => {
+    .map((slot): RoleAssignment | null => {
       const state = input.lineup[slot.slotId];
 
       if (!state?.playerId || !state.roleId) {
@@ -619,6 +619,7 @@ export function adaptLegacyTactic(input: AdaptLegacyTacticInput): Tactic {
         playerId: state.playerId,
         roleId: state.roleId,
         position,
+        slotId: slot.slotId,
       };
     })
     .filter((assignment): assignment is RoleAssignment => assignment !== null);

@@ -195,6 +195,10 @@ export type RoleAssignment = {
   playerId: ID;
   roleId: ID;
   position: Position;
+  // Valgfri formasjons-slot-identitet. Legacy-formasjoner har flere slots med
+  // samme posisjon (f.eks. LCB/RCB), så slotId trengs for å adressere den
+  // enkelte plassen. Den hand-byggede TS-sample-en utelater den.
+  slotId?: ID;
 };
 
 export type Tactic = {
@@ -236,6 +240,9 @@ export type PlayerRoleFitResult = {
   playerId: ID;
   roleId: ID;
   position: Position;
+  // Føres videre fra RoleAssignment.slotId når den finnes, slik at resultater
+  // kan kobles tilbake til den enkelte formasjons-slot-en.
+  slotId?: ID;
   attributeFit: Score100;
   traitFit: Score100;
   positionFit: Score100;
