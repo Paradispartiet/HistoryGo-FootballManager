@@ -528,6 +528,7 @@ export function calculateRoleFit(
     playerId: player.id,
     roleId: role.id,
     position: assignment.position,
+    ...(assignment.slotId !== undefined ? { slotId: assignment.slotId } : {}),
 
     attributeFit,
     traitFit,
