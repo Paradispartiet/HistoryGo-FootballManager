@@ -6129,16 +6129,9 @@ function renderManagerDashboardViewModel(viewModel) {
     viewModel.emptyStates.trainingPlan,
   );
 
-  // Rollebytter rendres separat fra teamFit (renderManagerRoleChanges), slik at
-  // forslagene bruker samme fit-motor som elleveren. Denne funksjonen rører dem
-  // derfor ikke lenger.
-
-  renderTextList(
-    elements.managerWeakPoints,
-    viewModel.weakPoints,
-    (item) => `${item.categoryText}: ${item.label} — ${item.suggestedAction}`,
-    viewModel.emptyStates.weakPoints,
-  );
+  // Rollebytter og svakheter rendres separat fra teamFit
+  // (renderManagerDetailFromTeamFit), slik at de bruker samme motor/metrikker
+  // som elleveren og headline. Denne funksjonen rører dem derfor ikke lenger.
 
   renderKnowledgeCards(
     elements.managerKnowledgeRecommendations,
@@ -6189,32 +6182,37 @@ function getBrowserManagerStateArgs() {
 // tikk som resten av renderApp (ingen async-blink). Før motoren er ferdig
 // lastet – eller hvis dist/ ikke er bygget – faller vi tilbake til den async
 // lastestien, som er null-trygg og lar legacy-demoen kjøre uendret.
-// Rollebytte-anbefalinger i manager-detalj-panelet, avledet fra teamFit slik at
-// de bruker samme fit-motor (calculatePlayerMatchFit/matchScore) som elleveren.
-// Erstatter den strukturerte pipelinens roleChanges, som kunne motsi headline.
+// Manager-detalj-panelets teamFit-avledede seksjoner (rollebytter + svakheter).
+// De bruker samme motor/metrikker (calculateTeamFit) som headline og elleveren,
+// og erstatter den strukturerte pipelinens versjoner som kunne motsi headline.
 // Uten bygget dist/ (motor ikke lastet) lar vi panelet stå som det er.
-function renderManagerRoleChanges(teamFit) {
-  if (!elements.managerRoleChanges) {
-    return;
-  }
-
+function renderManagerDetailFromTeamFit(teamFit) {
   const engine = getLoadedManagerEngine();
 
-  if (!engine?.recommendRoleChangesFromTeamFit || !teamFit) {
-    return;
+  if (elements.managerRoleChanges && engine?.recommendRoleChangesFromTeamFit && teamFit) {
+    const recommendations = engine
+      .recommendRoleChangesFromTeamFit(teamFit, { tactic: getTactic(), roles: state.roles })
+      .filter((recommendation) => recommendation.status !== "keep_role")
+      .sort((a, b) => (b.candidates[0]?.improvement ?? 0) - (a.candidates[0]?.improvement ?? 0));
+
+    renderTextList(
+      elements.managerRoleChanges,
+      recommendations,
+      (recommendation) => recommendation.label,
+      "Ingen tydelige rollebytter akkurat nå. Rollebruken bør i hovedsak beholdes.",
+    );
   }
 
-  const recommendations = engine
-    .recommendRoleChangesFromTeamFit(teamFit, { tactic: getTactic(), roles: state.roles })
-    .filter((recommendation) => recommendation.status !== "keep_role")
-    .sort((a, b) => (b.candidates[0]?.improvement ?? 0) - (a.candidates[0]?.improvement ?? 0));
+  if (elements.managerWeakPoints && engine?.analyzeWeakPointsFromTeamFit && teamFit) {
+    const weakPoints = engine.analyzeWeakPointsFromTeamFit(teamFit);
 
-  renderTextList(
-    elements.managerRoleChanges,
-    recommendations,
-    (recommendation) => recommendation.label,
-    "Ingen tydelige rollebytter akkurat nå. Rollebruken bør i hovedsak beholdes.",
-  );
+    renderTextList(
+      elements.managerWeakPoints,
+      weakPoints,
+      (weakPoint) => `${weakPoint.categoryText}: ${weakPoint.label} — ${weakPoint.suggestedAction}`,
+      "Ingen tydelige svakheter i denne vurderingen.",
+    );
+  }
 }
 
 function renderManagerEngineBridge() {
@@ -8059,7 +8057,7 @@ function renderApp() {
 
   renderTrainingWeekCounters();
   renderManagerEngineBridge();
-  renderManagerRoleChanges(teamFit);
+  renderManagerDetailFromTeamFit(teamFit);
   renderClubWeek().catch(console.error);
   renderInboxThreads();
   renderDepartments();

@@ -162,6 +162,13 @@ export type {
 export { recommendRoleChangesFromTeamFit } from "./engine/recommendRoleChangesFromTeamFit.js";
 
 export type {
+  TeamFitWeakPoint,
+  TeamFitWeakPointSeverity,
+} from "./engine/analyzeWeakPointsFromTeamFit.js";
+
+export { analyzeWeakPointsFromTeamFit } from "./engine/analyzeWeakPointsFromTeamFit.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,
