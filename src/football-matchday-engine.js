@@ -1552,6 +1552,8 @@ export function finalizeMatchdaySession(session) {
       summary = `Ukens ${String(session.trainingFocus.name).toLowerCase()} støttet et relevant managergrep.`;
     } else if (session.trainingFocus.opponentFit) {
       summary = `Ukens ${String(session.trainingFocus.name).toLowerCase()} passet motstanderprofilen, men ble lite testet.`;
+    } else {
+      summary = `Ukens ${String(session.trainingFocus.name).toLowerCase()} passet kampbildet dårlig og ga liten effekt.`;
     }
     trainingReport = {
       focusId: session.trainingFocus.focusId,
