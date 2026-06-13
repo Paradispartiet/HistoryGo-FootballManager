@@ -276,6 +276,187 @@ eller:
 node scripts/audit-hg-football-data.mjs
 ```
 
+## HG Football Manager som læringsspill
+
+> **Designretning.** Denne seksjonen beskriver hva spillet skal være, ikke hva som er ferdig bygget. Mye av poeng-, forslags- og kontekstlogikken under er foreløpig **arkitekturkrav og retning**, ikke implementert motor. Den eksisterende fitmotoren, relasjonsmotoren, lagfitmotoren og det historiske formasjonsbiblioteket er grunnmuren dette skal bygges videre på.
+
+HG Football Manager skal ikke bare være et manager-spill. Det skal være et **læringsspill om fotball** – en spillbar fotballskole om taktikk, trening, formasjoner og kontekstuell managerforståelse.
+
+Grunnprinsippet:
+
+> Forslagene viser hva som normalt er riktig.
+> Dokumentasjonen forklarer hvorfor.
+> Egne valg lar spilleren gå forbi standardløsningen når spilleren forstår konteksten bedre.
+
+### 1. Spillets pedagogiske kjerne
+
+Spilleren skal lære:
+
+- hvorfor en formasjon passer eller ikke passer
+- hvorfor en treningsuke bør settes sammen på en bestemt måte
+- hvordan motstanderens styrker og svakheter påvirker egne valg
+- hvordan taktiske parametre står mot hverandre
+- hvorfor ingen taktikk er perfekt i alle situasjoner
+- hvordan kontekstuelle managergrep kan slå taktisk sterkere lag
+
+Spillet skal lære spilleren å se *hva som er riktig*, ikke bare gi et fasitsvar. Derfor finnes forslagene – og derfor finnes muligheter utover forslagene.
+
+### 2. Forslag ved alle store valg
+
+Alle større valg skal ha **foreslåtte setups**. Dette gjelder blant annet:
+
+- formasjon
+- kampplan
+- treningsprogram
+- rollevalg
+- spillerutvikling
+- restitusjon/skadeforebygging
+- defensiv struktur
+- offensiv struktur
+- overgangsstrategi
+- stab/fasiliteter/administrasjon når dette bygges ut
+
+Prinsipp: spilleren skal aldri bare møte et tomt valg. Spillet skal alltid gi noen faglig logiske forslag. Spilleren kan velge et forslag, se variasjoner, eller lage egen løsning.
+
+### 3. Treningsprogrammer som sammensatte setups
+
+Treningsprogrammet skal bygges rundt presenterte programsammensetninger, for eksempel:
+
+- balansert uke
+- kampforberedende uke
+- restitusjonsuke
+- skadeforebyggende uke
+- defensiv struktur
+- offensiv samhandling
+- press og gjenvinning
+- teknisk utvikling
+- individuell spissutvikling
+- ungdomsutvikling
+- taktisk innkjøring
+
+Hver programsammensetning skal kunne ha **variasjoner** – f.eks. normal belastning, høy intensitet, lav belastning, kamp om tre dager, skadeforebyggende variant, ungdomsvennlig variant, variant mot sterk motstander, variant etter svak kamp, variant etter tett kampprogram. Spilleren skal også kunne lage og lagre egne programsammensetninger.
+
+### 4. Poeng etter relevante parametre, ikke universelt riktige valg
+
+Spillet skal **ikke** gi poeng for at et valg er «bra» isolert sett. Et valg gir uttelling når det treffer riktig kontekst – riktig mengde, riktig tidspunkt.
+
+Eksempler:
+
+- Restitusjon gir poeng når laget har høy slitasje, tett kampprogram eller økt skaderisiko. Restitusjon *hele tiden* gir ikke poeng, fordi laget da mister utvikling, intensitet og kampform.
+- Skadeforebyggende trening gir uttelling når belastningsindikatorer tilsier risiko – overbrukt blir den passiv.
+- Defensiv struktur gir uttelling før kamper mot klart sterkere lag.
+- Press- og gjenvinningstrening gir uttelling når kampplanen faktisk bygger på høyt press.
+- Avslutningstrening gir ekstra uttelling hvis den kobles til konkrete bommer fra forrige kamp. Trener du spissen på akkurat den avslutningstypen han bommet på sist, og han scorer på en lignende sjanse neste kamp, skal det kunne gi managerpoeng.
+
+> HG Football Manager skal ikke belønne perfekte valg.
+> Det skal belønne **relevante** valg.
+
+Slik kobles trening til faktisk kampdata, og blir årsak–virkning i stedet for menyvalg.
+
+### 5. Forslagene kjenner taktikken, men ikke alt utenfor banen
+
+Det går et bevisst skille mellom **taktisk anbefalt setup** og **kontekstuell managerforståelse**.
+
+De foreslåtte valgene skal være gode etter taktiske parametre: spillertyper, formasjon, motstander, kampplan, struktur, styrkeforhold, taktisk risiko. Men forslagene skal **ikke** vite alt, og skal ikke alltid gi maksimal uttelling. De bør ikke fullt ut fange:
+
+- skjult slitasje
+- dårlig moral
+- lav selvtillit
+- familie-/mediepress
+- uro rundt en spiller
+- dårlig relasjon mellom spillere
+- usynlig formsvikt
+- behov for ro, trygghet eller individuell oppfølging
+
+Det er nettopp her spilleren kan slå et taktisk bedre lag: ved å lese situasjonen bedre enn standardsystemet.
+
+### 6. Taktiske fallgruver
+
+Ingen taktikk er perfekt mot alt:
+
+- Høyt press kan fungere mot svakt oppspill, men feile mot raske bakromsspillere.
+- Høy backlinje kan gi kontroll, men åpner rom bak for direkte lag.
+- Lav blokk kan beskytte mot bedre lag, men gjøre eget lag passivt mot svake lag.
+- Ballbesittelse kan gi kontroll, men bli farlig mot aggressivt press.
+- Brede backer kan gi overtall, men åpne kontringsrom.
+- Mannorientert press kan gi trykk, men brytes av rotasjoner og tredjemannsløp.
+- Smal midtbane kan gi sentral kontroll, men være sårbar mot sideskift.
+
+> Det riktige spørsmålet er ikke «hva er best?»
+> Det riktige spørsmålet er «hva er riktig nå?»
+
+### 7. Formation Knowledge Engine
+
+Alle formasjoner bør ha **to lag**.
+
+**A. Spillbart datalag** (brukes av motoren). Eksempler på felter:
+
+`id`, `name`, `era`, `baseShape`, `inPossessionShape`, `outOfPossessionShape`, `pressShape`, `strengths`, `weaknesses`, `requiredConditions`, `strongAgainst`, `weakAgainst`, `tacticalRisks`, `trainingLinks`, `playerRoleRequirements`, `parameterProfile`.
+
+Dette utvider den eksisterende `data/hgFootball/`-modulen, som allerede beskriver formasjoner som historiske systemer med faseformasjoner (se *Historisk formasjonsbibliotek* over).
+
+**B. Dokumentasjonslag** (brukes som lærings- og analysegrunnlag). Hver formasjon bør ha en dyp dokumentasjonsfil, foreslått under `docs/formations/`, f.eks. `modern_433.md`, `wm_3223.md`, `brazil_424.md`, `catenaccio_libero.md`, `conte_343.md`. Hver fil bør forklare:
+
+- historisk bakgrunn
+- taktisk idé
+- styrker og svakheter
+- nødvendige rammebetingelser
+- hvilke spillertyper som kreves
+- hvilke motstandere formasjonen fungerer mot, og hvilke den sliter mot
+- vanlige fallgruver
+- relevante treningsprogrammer
+- parameterkollisjoner mot andre taktikker
+- eksempler på historiske eller moderne lag
+
+Foreslått filstruktur (designretning, ikke ferdig):
+
+```txt
+data/hgFootball/formations/
+  formations.json
+  formation_matchups.json
+  formation_parameters.json
+  formation_training_links.json
+docs/hgFootball/formations/
+  235_pyramid.md
+  wm_3223.md
+  metodo_2323.md
+  brazil_424.md
+  catenaccio_libero.md
+  modern_433.md
+  modern_4231.md
+  conte_343.md
+  positional_325.md
+```
+
+### 8. Parameterlogikk mellom taktikker
+
+Taktikker skal vurderes mot hverandre gjennom parametre. Hver parameter har en motparameter:
+
+| Parameter | Motparameter |
+| --- | --- |
+| høyt press | direkte spill bak press |
+| høy backlinje | bakromstrussel |
+| lav blokk | tålmodig posisjonsspill |
+| bredde | smal kompakt blokk |
+| ballbesittelse | aggressivt press / bruddstyrke |
+| mannorientering | rotasjoner / tredjemannsløp |
+| mange spillere foran ball | kontringsrisiko |
+| smal midtbane | sideskift / overlapp |
+| høyt tempo | teknisk feilrate |
+| hard belastning | slitasje / skaderisiko |
+| relasjonell samhandling | stadige rolle-/formasjonsendringer |
+
+### 9. Samlende designregel
+
+> HG Football Manager skal lære spilleren taktisk korrekt standardforståelse gjennom forslag, men belønne dypere managerforståelse når spilleren gjør relevante kontekstuelle valg som forslagssystemet ikke fullt ut kan se.
+
+Og kortere:
+
+> Foreslåtte setups gir trygg taktisk kvalitet.
+> Egne, kontekstuelle justeringer gir managerpoeng og muligheten til å slå sterkere lag.
+
+Dette må alltid leses sammen med kjerneprinsippet: *alle spillere er gode nok – spørsmålet er om treneren forstår dem.* Læringslaget handler om å bygge den forståelsen hos spilleren.
+
 ## Kvalitetssjekk før nye endringer
 
 ### Data
