@@ -31,6 +31,16 @@ export type DashboardSummaryViewModel = {
   reportSummary: string;
 };
 
+// Visningsklare felter for fullføring/snitt som speiler det eldre scorepanelet.
+export type DashboardCompletionViewModel = {
+  completeCountText: string;
+  isComplete: boolean;
+  roleFitAverageText: string;
+  tacticFitAverageText: string;
+  duplicateCountText: string;
+  hasDuplicates: boolean;
+};
+
 export type DashboardMetricViewModel = {
   code: string;
   label: string;
@@ -94,6 +104,7 @@ export type ManagerDashboardViewModel = {
 
   score: DashboardScoreViewModel;
   summary: DashboardSummaryViewModel;
+  completion: DashboardCompletionViewModel;
 
   metrics: DashboardMetricViewModel[];
 
@@ -308,6 +319,15 @@ export function createManagerDashboardViewModel(
       title: dashboard.summaryPanel.title,
       summary: dashboard.summaryPanel.summary,
       reportSummary: dashboard.summaryPanel.reportSummary,
+    },
+
+    completion: {
+      completeCountText: `${dashboard.completion.completeCount}/${dashboard.completion.totalSlots}`,
+      isComplete: dashboard.completion.isComplete,
+      roleFitAverageText: scoreText(dashboard.completion.roleFitAverage),
+      tacticFitAverageText: scoreText(dashboard.completion.tacticFitAverage),
+      duplicateCountText: `${dashboard.completion.duplicateCount}`,
+      hasDuplicates: dashboard.completion.duplicateCount > 0,
     },
 
     metrics,

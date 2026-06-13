@@ -105,6 +105,7 @@ export type {
 
 export type {
   DashboardActionCard,
+  DashboardCompletionPanel,
   DashboardKnowledgeCard,
   DashboardMetricCard,
   DashboardRoleChangeCard,
@@ -118,6 +119,7 @@ export type {
 
 export type {
   DashboardActionViewModel,
+  DashboardCompletionViewModel,
   DashboardKnowledgeViewModel,
   DashboardMetricViewModel,
   DashboardRoleChangeViewModel,
