@@ -1,0 +1,454 @@
+{
+  "schema": "history-go.hg-football.formation-knowledge.v1",
+  "version": 1,
+  "field_docs": {
+    "formationId": "Refererer en formasjon i formations.json.",
+    "summary": "Kort taktisk idé – hva systemet prøver å gjøre.",
+    "requiredConditions": "Rammebetingelser som må være på plass for at systemet skal fungere.",
+    "strongAgainst": "Motstanderstiler systemet typisk slår (tokens fra vocab.opponentStyles).",
+    "weakAgainst": "Motstanderstiler systemet typisk sliter mot (tokens fra vocab.opponentStyles).",
+    "tacticalRisks": "Vanlige fallgruver – når og hvorfor systemet feiler.",
+    "parameterProfile": "Systemets posisjon på taktiske akser (vocab.parameterAxes). Brukes for matchup-/parameterlogikk.",
+    "trainingLinks": "Treningsbadge-familier (football_training_badges.json) som støtter systemet.",
+    "doc": "Dyp dokumentasjonsfil for læring/analyse (docs/hgFootball/formations/)."
+  },
+  "vocab": {
+    "opponentStyles": [
+      "passive_mid_block",
+      "deep_low_block",
+      "high_press",
+      "aggressive_man_press",
+      "possession_positional",
+      "direct_counter",
+      "fast_transition",
+      "fast_runners_in_behind",
+      "narrow_442",
+      "wide_overload",
+      "target_man_direct",
+      "switching_play",
+      "build_from_back",
+      "compact_532",
+      "three_at_back",
+      "two_striker_press"
+    ],
+    "parameterAxes": {
+      "pressHeight": ["low", "medium", "high"],
+      "defensiveLine": ["deep", "medium", "high"],
+      "width": ["narrow", "balanced", "wide"],
+      "possession": ["direct", "balanced", "patient"],
+      "tempo": ["low", "medium", "high"],
+      "transition": ["low", "medium", "high"],
+      "restDefence": ["weak", "medium", "strong"],
+      "pressingScheme": ["zonal", "mixed", "man_oriented"],
+      "risk": ["low", "medium", "high"]
+    }
+  },
+  "knowledge": [
+    {
+      "formationId": "pyramid_235",
+      "summary": "Den klassiske pyramiden: to backer, tre halfbacks og fem angripere. Det første systemet som balanserte angrep og forsvar etter rush-fotballen.",
+      "requiredConditions": [
+        "En dirigerende center-half som binder forsvar og angrep",
+        "Ekte ytterspillere som holder bredde",
+        "Inside-forwards som kombinerer sentralt"
+      ],
+      "strongAgainst": ["deep_low_block", "passive_mid_block", "target_man_direct"],
+      "weakAgainst": ["direct_counter", "fast_transition", "high_press"],
+      "tacticalRisks": [
+        "Fem faste angripere gir tynt restforsvar ved balltap",
+        "Center-half overbelastes hvis han ikke får støtte",
+        "Mangler moderne presstruktur mot raske omstillinger"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "weak",
+        "pressingScheme": "man_oriented",
+        "risk": "high"
+      },
+      "trainingLinks": ["attacking_width", "fullback_winger_relation", "midfield_triangle", "rest_defense"],
+      "doc": "docs/hgFootball/formations/pyramid_235.md"
+    },
+    {
+      "formationId": "metodo_2323",
+      "summary": "Italiensk metodo: en mer kontrollert pyramide med to mediani som faller inn og to mezzeala. Bygget for balanse og kontring.",
+      "requiredConditions": [
+        "To mediani som kan dekke bredt og falle inn i forsvar",
+        "En sentral skaper bak spissene",
+        "Disiplin i overgang fra angrep til forsvar"
+      ],
+      "strongAgainst": ["high_press", "wide_overload", "possession_positional"],
+      "weakAgainst": ["deep_low_block", "compact_532"],
+      "tacticalRisks": [
+        "Blir passiv mot dypt forsvarende lag",
+        "Krever stor løpskapasitet hos mediani",
+        "Kontringsavhengig – sliter når den må skape selv mot lavblokk"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": ["match_discipline", "team_stamina", "rest_defense", "midfield_triangle"],
+      "doc": "docs/hgFootball/formations/metodo_2323.md"
+    },
+    {
+      "formationId": "wm_3223",
+      "summary": "Chapmans WM: tre backer, to half-backs, to inside-forwards og tre fremst. Mannorientert mellomkrigsfotball med klar struktur.",
+      "requiredConditions": [
+        "En stopper-center-half som vokter den sentrale spissen",
+        "To skapende inside-forwards i halvrommene",
+        "Ytterspillere som strekker forsvaret"
+      ],
+      "strongAgainst": ["target_man_direct", "narrow_442", "deep_low_block"],
+      "weakAgainst": ["possession_positional", "switching_play", "fast_runners_in_behind"],
+      "tacticalRisks": [
+        "Mannorientering brytes av rotasjoner og tredjemannsløp",
+        "Rom mellom backer og half-backs mot sideskift",
+        "Inside-forwards blir isolert uten støtte i halvrommet"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "man_oriented",
+        "risk": "medium"
+      },
+      "trainingLinks": ["centre_back_pair", "striker_ten_relation", "attacking_width", "match_discipline"],
+      "doc": "docs/hgFootball/formations/wm_3223.md"
+    },
+    {
+      "formationId": "brazil_424",
+      "summary": "Brasiliansk 4-2-4 fra 1958: firebackslinje, to koblende midtbanespillere og fire angripere. Broen mellom WM og moderne firebacklinje.",
+      "requiredConditions": [
+        "To midtbanespillere som dekker hele bredden mellom leddene",
+        "Tekniske kantspillere som både skaper og faller tilbake",
+        "Backer som forsvarer 1-mot-1"
+      ],
+      "strongAgainst": ["narrow_442", "passive_mid_block", "target_man_direct"],
+      "weakAgainst": ["high_press", "aggressive_man_press", "fast_transition"],
+      "tacticalRisks": [
+        "Bare to sentrale midtbanespillere blir overspilt mot tett midtbane",
+        "Store avstander hvis kantene ikke jobber defensivt",
+        "Sårbar i overgang når begge åtterne er høye"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": ["attacking_width", "ball_carrying", "midfield_triangle", "team_speed"],
+      "doc": "docs/hgFootball/formations/brazil_424.md"
+    },
+    {
+      "formationId": "catenaccio_532",
+      "summary": "Italiensk catenaccio: en fri libero bak en mannorientert backlinje, kompakt blokk og dødelige kontringer.",
+      "requiredConditions": [
+        "En ekte libero som leser spillet og sikrer bak linjen",
+        "Mannorienterte stoppere på motstanderens angripere",
+        "Raske kontringsspisser foran"
+      ],
+      "strongAgainst": ["possession_positional", "wide_overload", "high_press"],
+      "weakAgainst": ["deep_low_block", "switching_play", "passive_mid_block"],
+      "tacticalRisks": [
+        "Blir ufarlig og passiv mot lag som ikke vil ha ballen",
+        "Mannorientering kan dras ut av posisjon av bevegelse",
+        "Avhengig av libero – faller sammen uten riktig spillertype"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "deep",
+        "width": "narrow",
+        "possession": "direct",
+        "tempo": "low",
+        "transition": "high",
+        "restDefence": "strong",
+        "pressingScheme": "man_oriented",
+        "risk": "low"
+      },
+      "trainingLinks": ["low_block", "rest_defense", "centre_back_pair", "match_discipline", "team_speed"],
+      "doc": "docs/hgFootball/formations/catenaccio_532.md"
+    },
+    {
+      "formationId": "libero_352",
+      "summary": "Libero-3-5-2: en sweeper bak to stoppere, vingbacker som gir bredde og to spisser. Balanse mellom sikring og bredt angrep.",
+      "requiredConditions": [
+        "En ballspillende libero som starter oppspill",
+        "Vingbacker med stor løpskapasitet",
+        "En balanserende sentral midtbane bak de to spissene"
+      ],
+      "strongAgainst": ["narrow_442", "target_man_direct", "two_striker_press"],
+      "weakAgainst": ["wide_overload", "switching_play", "fast_transition"],
+      "tacticalRisks": [
+        "Vingbacker høyt samtidig gir kontringsrom i ryggen",
+        "Tre sentralt bak kan bli passive uten oppspillslibero",
+        "Sårbar mot raske sideskift til ledig kant"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": ["build_from_back", "fullback_winger_relation", "rest_defense", "centre_back_pair"],
+      "doc": "docs/hgFootball/formations/libero_352.md"
+    },
+    {
+      "formationId": "total_433",
+      "summary": "Totalfotballens 4-3-3: posisjonsrotasjon, høy backlinje og kollektivt press. Spillere bytter roller flytende.",
+      "requiredConditions": [
+        "Teknisk sterke spillere som mestrer flere roller",
+        "Høy kollektiv forståelse og rotasjon",
+        "En sweeperkeeper-aktig keeper bak høy linje"
+      ],
+      "strongAgainst": ["deep_low_block", "passive_mid_block", "narrow_442"],
+      "weakAgainst": ["fast_runners_in_behind", "direct_counter", "fast_transition"],
+      "tacticalRisks": [
+        "Høy linje straffes brutalt av bakromsløp",
+        "Rotasjon krever svært høyt teknisk og taktisk nivå",
+        "Stort rom bak ved tap høyt på banen"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "high",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "high"
+      },
+      "trainingLinks": ["high_press", "build_from_back", "attacking_width", "sweeper_keeper", "midfield_triangle"],
+      "doc": "docs/hgFootball/formations/total_433.md"
+    },
+    {
+      "formationId": "classic_442",
+      "summary": "Klassisk 4-4-2: to faste lag på fire, to spisser og rene kanter. Enkelt, balansert og lett å lære.",
+      "requiredConditions": [
+        "To sentrale midtbanespillere som utfyller hverandre (en boks-til-boks, en holdende)",
+        "Kanter som leverer bredde og innlegg",
+        "Et samspilt spisspar"
+      ],
+      "strongAgainst": ["wide_overload", "three_at_back", "high_press"],
+      "weakAgainst": ["possession_positional", "switching_play", "build_from_back"],
+      "tacticalRisks": [
+        "Flat midtbane overspilles av lag med ekstra sentral mann",
+        "Kanter som ikke faller tilbake gir overtall mot egne backer",
+        "To spisser uten støtte blir isolert mot lavblokk"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "low"
+      },
+      "trainingLinks": ["attacking_width", "striker_ten_relation", "match_discipline", "duel_strength"],
+      "doc": "docs/hgFootball/formations/classic_442.md"
+    },
+    {
+      "formationId": "modern_4231",
+      "summary": "Moderne 4-2-3-1: dobbel pivot, en fri tier og en spiss. Balansert mellom kontroll, sikring og kreativitet.",
+      "requiredConditions": [
+        "To pivoter der minst én sikrer mot kontring",
+        "En tier som finner rom mellom leddene",
+        "Kanter og backer som gir bredde og dybde"
+      ],
+      "strongAgainst": ["narrow_442", "high_press", "two_striker_press"],
+      "weakAgainst": ["compact_532", "deep_low_block", "three_at_back"],
+      "tacticalRisks": [
+        "Tieren blir nøytralisert hvis han ikke får støtte fra pivotene",
+        "Begge backer høyt uten balanse gir kontringsrom",
+        "Ufarlig mot lavblokk uten bevegelse i siste tredjedel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "low"
+      },
+      "trainingLinks": ["build_from_back", "striker_ten_relation", "rest_defense", "midfield_triangle"],
+      "doc": "docs/hgFootball/formations/modern_4231.md"
+    },
+    {
+      "formationId": "modern_433",
+      "summary": "Moderne press-4-3-3: posisjonelt angrep, høyt sonebasert press og bevisst restforsvar. Krever høyt teknisk nivå.",
+      "requiredConditions": [
+        "Stoppere som er komfortable med å forsvare rom høyt",
+        "En sekser som skjermer overgangene",
+        "Kanter som holder bredde eller angriper halvrommet intelligent"
+      ],
+      "strongAgainst": ["passive_mid_block", "narrow_442", "switching_play"],
+      "weakAgainst": ["fast_transition", "aggressive_man_press", "fast_runners_in_behind"],
+      "tacticalRisks": [
+        "Eksponerer backene i ryggen ved press høyt",
+        "Sårbar bak avanserte åttere uten sekserdekning",
+        "Krever sterkt restforsvar – ellers straffes av direkte spill"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "medium"
+      },
+      "trainingLinks": ["high_press", "build_from_back", "attacking_width", "rest_defense", "midfield_triangle"],
+      "doc": "docs/hgFootball/formations/modern_433.md"
+    },
+    {
+      "formationId": "possession_433",
+      "summary": "Possession-4-3-3: tålmodig ballbesittelse, oppbygging fra keeper og kontroll gjennom overtall sentralt.",
+      "requiredConditions": [
+        "Tekniske spillere som tør å ha ballen under press",
+        "En dyp playmaker som dirigerer tempo",
+        "Backer/keeper som inngår i oppbyggingen"
+      ],
+      "strongAgainst": ["deep_low_block", "passive_mid_block", "narrow_442"],
+      "weakAgainst": ["aggressive_man_press", "high_press", "direct_counter"],
+      "tacticalRisks": [
+        "Aggressivt mannspress kan skape farlige brudd i oppbyggingen",
+        "Lavt tempo gir motstander tid til å reorganisere",
+        "Mangler bakromstrussel hvis alle vil ha ballen i foten"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "low",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "medium"
+      },
+      "trainingLinks": ["build_from_back", "passing_quality", "first_touch_pressure", "keeper_distribution", "midfield_triangle"],
+      "doc": "docs/hgFootball/formations/possession_433.md"
+    },
+    {
+      "formationId": "gegen_4222",
+      "summary": "Gegenpressing-4-2-2-2: smal, intens struktur bygd for å vinne ballen tilbake umiddelbart og kontre i kaoset.",
+      "requiredConditions": [
+        "Høy fysisk kapasitet i hele laget",
+        "Kort avstand mellom leddene for å presse kollektivt",
+        "Spillere som er dødelige i overgang etter gjenvinning"
+      ],
+      "strongAgainst": ["build_from_back", "possession_positional", "passive_mid_block"],
+      "weakAgainst": ["direct_counter", "fast_runners_in_behind", "deep_low_block"],
+      "tacticalRisks": [
+        "Slått press gir store åpne rom bak",
+        "Ekstremt slitasje- og kondisjonskrevende over tid",
+        "Smal struktur straffes av raske sideskift til bredden"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "narrow",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "weak",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": ["high_press", "team_stamina", "explosive_actions", "first_touch_pressure", "team_speed"],
+      "doc": "docs/hgFootball/formations/gegen_4222.md"
+    },
+    {
+      "formationId": "conte_343",
+      "summary": "Conte-3-4-3: tre stoppere, to vingbacker som gir hele bredden og en kompakt firer på midten. Trygt bakover, eksplosivt i bredden.",
+      "requiredConditions": [
+        "Tre stoppere som forsvarer bredt og bytter mann trygt",
+        "Vingbacker med ekstrem løpskapasitet i begge bokser",
+        "To sentrale midtbanespillere som balanserer"
+      ],
+      "strongAgainst": ["narrow_442", "two_striker_press", "high_press"],
+      "weakAgainst": ["wide_overload", "switching_play", "fast_transition"],
+      "tacticalRisks": [
+        "Begge vingbacker høyt samtidig åpner kontringsrom i kanten",
+        "Krever uvanlig god kondisjon hos vingbackene",
+        "Tre stoppere kan bli passive uten oppspill fra bakover"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "high",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": ["fullback_winger_relation", "centre_back_pair", "team_stamina", "rest_defense"],
+      "doc": "docs/hgFootball/formations/conte_343.md"
+    },
+    {
+      "formationId": "positional_325",
+      "summary": "Posisjonelt 3-2-5 i angrep: tre bak, dobbel pivot og fem i siste linje som okkuperer alle fem angrepskorridorer.",
+      "requiredConditions": [
+        "Spillere med svært høy posisjonell disiplin",
+        "To pivoter som styrer tempo og sikrer mot kontring",
+        "Inverterte backer eller indreløpere som fyller halvrommene"
+      ],
+      "strongAgainst": ["deep_low_block", "passive_mid_block", "narrow_442"],
+      "weakAgainst": ["direct_counter", "fast_runners_in_behind", "aggressive_man_press"],
+      "tacticalRisks": [
+        "Tre bak mot fem-fronts kontring blir undertall i overgang",
+        "Krever ekstremt høyt taktisk nivå – feilposisjonering straffes hardt",
+        "Mister kontroll hvis pivotene presses ut av oppbyggingen"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "medium",
+        "transition": "low",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "high"
+      },
+      "trainingLinks": ["build_from_back", "passing_quality", "rest_defense", "midfield_triangle", "attacking_width"],
+      "doc": "docs/hgFootball/formations/positional_325.md"
+    }
+  ]
+}
