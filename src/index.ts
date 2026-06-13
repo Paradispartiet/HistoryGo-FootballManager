@@ -74,6 +74,28 @@ export {
 } from "./engine/calculateBadgeMetricEffects.js";
 
 export type {
+  HistoricalAssignment,
+  HistoricalAssignmentFit,
+  HistoricalAssignmentFitTone,
+  HistoricalCoachContext,
+  HistoricalFormation,
+  HistoricalFormationFit,
+  HistoricalMetricAdjustment,
+  HistoricalMetricAdjustmentResult,
+  HistoricalRoleCoverage,
+  LegacyTeamMetrics,
+  MatchEngineEffects,
+} from "./engine/calculateHistoricalFormationFit.js";
+
+export {
+  buildHistoricalFormationReport,
+  calculateHistoricalFormationFit,
+  calculateHistoricalMetricAdjustments,
+  calculateHistoricalRoleCoverage,
+  mapLegacyRoleToHgRoleTypes,
+} from "./engine/calculateHistoricalFormationFit.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,
