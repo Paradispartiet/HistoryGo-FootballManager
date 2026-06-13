@@ -6052,11 +6052,10 @@ function getActiveKnowledgeRecommendation(viewModel) {
   ) || null;
 }
 
-function renderManagerDashboardViewModel(viewModel) {
-  if (!viewModel) {
-    return;
-  }
-
+// Treningsuke-tellere leses fra state (ikke fra viewModel) og hører derfor
+// hjemme i den synkrone render-stien, ikke bak den async TS-broen. Ellers
+// sluttet de å oppdatere seg når dist/ ikke var bygget.
+function renderTrainingWeekCounters() {
   if (elements.trainingWeekStatus) {
     elements.trainingWeekStatus.textContent = `Treningsuke ${state.trainingWeek}`;
   }
@@ -6067,6 +6066,12 @@ function renderManagerDashboardViewModel(viewModel) {
 
   if (elements.knowledgeCompletedTotal) {
     elements.knowledgeCompletedTotal.textContent = String(countCompletedTotal());
+  }
+}
+
+function renderManagerDashboardViewModel(viewModel) {
+  if (!viewModel) {
+    return;
   }
 
   // Arbeidsdeling mellom de to motorene (bevisst additivt):
@@ -7986,6 +7991,7 @@ function renderApp() {
   renderMiniSeason();
   renderWeeklyTrainingFocus(teamFit);
 
+  renderTrainingWeekCounters();
   renderManagerEngineBridge();
   renderClubWeek().catch(console.error);
   renderInboxThreads();
