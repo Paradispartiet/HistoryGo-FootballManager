@@ -6087,7 +6087,7 @@ function renderTrainingWeekCounters() {
   }
 }
 
-function renderManagerDashboardViewModel(viewModel) {
+function renderManagerDashboardViewModel(viewModel, teamFit = null) {
   if (!viewModel) {
     return;
   }
@@ -6100,13 +6100,25 @@ function renderManagerDashboardViewModel(viewModel) {
 
   const activeKnowledge = getActiveKnowledgeRecommendation(viewModel);
 
+  // Treningsøktene avledes fra teamFit-svakhetene når motoren er lastet, slik at
+  // de matcher svakhetene panelet viser. Faller tilbake til den strukturerte
+  // treningsplanen uten bygget dist/. Kunnskapsfokus-elementet (valgt ukesøkt)
+  // beholdes uansett, siden det tilhører kunnskaps-funksjonen.
+  const trainingEngine = getLoadedManagerEngine();
+  const teamFitFocus = (trainingEngine?.createTrainingFocusFromTeamFit && teamFit)
+    ? trainingEngine.createTrainingFocusFromTeamFit(teamFit)
+    : viewModel.trainingPlan.map((item) => ({
+        areaText: item.areaText,
+        suggestedSession: item.suggestedSession
+      }));
+
   const trainingItems = [
     ...(activeKnowledge ? [{
       type: "knowledge_focus",
       principleId: activeKnowledge.principleId,
       text: `Valgt ukesøkt: ${activeKnowledge.title} — ${activeKnowledge.trainingSession}`
     }] : []),
-    ...viewModel.trainingPlan.map((item) => ({
+    ...teamFitFocus.map((item) => ({
       type: "engine_training",
       text: `${item.areaText}: ${item.suggestedSession}`
     }))
@@ -6219,7 +6231,7 @@ function renderManagerDetailFromTeamFit(teamFit) {
   }
 }
 
-function renderManagerEngineBridge() {
+function renderManagerEngineBridge(teamFit) {
   if (getLoadedManagerEngine()) {
     // Invalider evt. in-flight async-render slik at den ikke overskriver dette.
     managerEngineRenderId += 1;
@@ -6230,15 +6242,16 @@ function renderManagerEngineBridge() {
 
     renderManagerDashboardViewModel(
       getDashboardViewModelFromLegacyManagerState(legacyManagerState),
+      teamFit,
     );
 
     return;
   }
 
-  renderManagerEngineBridgeAsync();
+  renderManagerEngineBridgeAsync(teamFit);
 }
 
-async function renderManagerEngineBridgeAsync() {
+async function renderManagerEngineBridgeAsync(teamFit) {
   const renderId = ++managerEngineRenderId;
 
   const legacyManagerState = await createLegacyManagerAppStateFromBrowserState(
@@ -6251,7 +6264,7 @@ async function renderManagerEngineBridgeAsync() {
 
   const viewModel = getDashboardViewModelFromLegacyManagerState(legacyManagerState);
 
-  renderManagerDashboardViewModel(viewModel);
+  renderManagerDashboardViewModel(viewModel, teamFit);
 }
 
 // Render Club Week-hendelseslogg: korte hendelser fra fasebytter, nyeste først.
@@ -8060,7 +8073,7 @@ function renderApp() {
   renderWeeklyTrainingFocus(teamFit);
 
   renderTrainingWeekCounters();
-  renderManagerEngineBridge();
+  renderManagerEngineBridge(teamFit);
   renderManagerDetailFromTeamFit(teamFit);
   renderClubWeek().catch(console.error);
   renderInboxThreads();
