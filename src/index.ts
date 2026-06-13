@@ -176,6 +176,10 @@ export type {
 
 export { createTeamFitManagerInsight } from "./engine/createTeamFitManagerInsight.js";
 
+export type { TeamFitTrainingFocusItem } from "./engine/createTrainingFocusFromTeamFit.js";
+
+export { createTrainingFocusFromTeamFit } from "./engine/createTrainingFocusFromTeamFit.js";
+
 export type {
   BalanceReportItem,
   CoachAdvice,
