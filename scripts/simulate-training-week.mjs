@@ -9,6 +9,7 @@ import {
 import {
   createMatchdaySession,
   resolveMatchdayDecision,
+  finalizeMatchdaySession,
   OPPONENT_PROFILES
 } from "../src/football-matchday-engine.js";
 import { computeMatchdayConsequences } from "../src/football-match-consequences.js";
@@ -109,6 +110,29 @@ lastMatch.consequencesApplied = true;
 check("samme kamp får ikke dobbel progresjon", computeMatchdayConsequences({ lastMatch, coachSnapshot: coachContext }) === null);
 const consumed = sanitizeWeeklyTrainingFocus({ ...selected, appliedSessionId: "session-1" });
 check("brukt fokus kan ikke lage nytt snapshot etter reload/reset", createTrainingMatchdaySnapshot({ selection: consumed, clubWeek: 3, coachContext }) === null);
+
+console.log("\nSluttrapport:");
+const helpfulSession = {
+  teamFitSnapshot: { tacticalProfile: teamFit.metrics, historicalScore: 64 },
+  opponent: OPPONENT_PROFILES[0],
+  strengthSnapshot: { finalStrength: 68, modifiers: { missing: 0 } },
+  formationSnapshot: { id: formation.id, name: formation.name },
+  decisions: [{ tone: "positive", effects: { xgDeltaFor: 0.1, xgDeltaAgainst: 0, momentumDelta: 1, riskDelta: 0, tacticalClarityDelta: 0 }, trainingImpact: { relevant: true, mitigatedRisk: true, scoreBonus: 0 } }],
+  trainingFocus: { focusId: "rest_defence", name: "Restforsvar", week: 3, staffSupport: { level: "strong" }, opponentFit: true }
+};
+const helpfulReport = finalizeMatchdaySession(helpfulSession);
+check("hjelpsomt fokus forklares som dempet risiko", helpfulReport.trainingFocus?.helped === true && /dempet risikoen/i.test(helpfulReport.trainingFocus.summary));
+
+const poorFitSession = {
+  teamFitSnapshot: { tacticalProfile: teamFit.metrics, historicalScore: 64 },
+  opponent: OPPONENT_PROFILES[0],
+  strengthSnapshot: { finalStrength: 68, modifiers: { missing: 0 } },
+  formationSnapshot: { id: formation.id, name: formation.name },
+  decisions: [{ tone: "neutral", effects: { xgDeltaFor: 0, xgDeltaAgainst: 0, momentumDelta: 0, riskDelta: 0, tacticalClarityDelta: 0 }, trainingImpact: null }],
+  trainingFocus: { focusId: "pressing", name: "Pressing", week: 3, staffSupport: { level: "weak" }, opponentFit: false }
+};
+const poorReport = finalizeMatchdaySession(poorFitSession);
+check("dårlig tilpasset fokus forklares kort i sluttrapport", poorReport.trainingFocus?.helped === false && /passet kampbildet dårlig/i.test(poorReport.trainingFocus.summary));
 
 console.log("\nTestkamp uten mini-season:");
 const testSession = createMatchdaySession({ teamFit, formation, coachContext, trainingFocus: pressingSnapshot, opponent: null });
