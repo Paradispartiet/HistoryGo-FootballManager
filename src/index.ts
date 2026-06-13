@@ -119,6 +119,24 @@ export {
 } from "./engine/buildCoachContext.js";
 
 export type {
+  FitAssignment,
+  FitPlayer,
+  FitRole,
+  FitTactic,
+  PlayerMatchFit,
+  PlayerMatchFitStatus,
+} from "./engine/calculatePlayerMatchFit.js";
+
+export {
+  FOOTBALL_POSITIONS,
+  calculateLegacyRoleFit,
+  calculateMisusePenalty,
+  calculatePlayerMatchFit,
+  calculatePositionFit,
+  calculateTacticFit,
+} from "./engine/calculatePlayerMatchFit.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,
