@@ -11,27 +11,55 @@
  */
 
 let managerEnginePromise = null;
+// Synkron cache av den ferdig lastede motoren. Settes når dynamisk import er
+// løst, slik at render-stien kan kjøre synkront etter preloadManagerEngine().
+let loadedManagerEngine = null;
 
 async function loadManagerEngine() {
   if (!managerEnginePromise) {
-    managerEnginePromise = import("../dist/index.js").catch((error) => {
-      console.warn(
-        "Ny manager-engine er ikke tilgjengelig ennå. Gammel demo fortsetter.",
-        error,
-      );
+    managerEnginePromise = import("../dist/index.js")
+      .then((engine) => {
+        loadedManagerEngine = engine;
+        return engine;
+      })
+      .catch((error) => {
+        console.warn(
+          "Ny manager-engine er ikke tilgjengelig ennå. Gammel demo fortsetter.",
+          error,
+        );
 
-      return null;
-    });
+        return null;
+      });
   }
 
   return managerEnginePromise;
+}
+
+/**
+ * Pre-resolver TypeScript-motoren én gang ved oppstart. Etter at denne har
+ * løst seg, kan render-stien lese motoren synkront via getLoadedManagerEngine()
+ * og slipper async-overskriving/blink. Returnerer motoren eller null.
+ */
+export async function preloadManagerEngine() {
+  return loadManagerEngine();
+}
+
+/**
+ * Synkron tilgang til den ferdig lastede motoren. Returnerer null hvis motoren
+ * ikke er lastet ennå (eller dist/ ikke er bygget).
+ */
+export function getLoadedManagerEngine() {
+  return loadedManagerEngine;
 }
 
 function findSelectedItem(items, selectedId) {
   return items.find((item) => item.id === selectedId) || items[0] || null;
 }
 
-export async function createLegacyManagerAppStateFromBrowserState({
+// Felles kjerne for både async og synkron app-state-bygging. Tar en allerede
+// løst motor inn; returnerer null hvis motoren mangler eller taktikk/formasjon
+// ikke kan velges.
+function buildLegacyManagerAppState(engine, {
   teamId = "browser_legacy_team",
   teamName = "Browser Legacy Team",
   players,
@@ -43,8 +71,6 @@ export async function createLegacyManagerAppStateFromBrowserState({
   lineup,
   knowledgePrinciples = [],
 }) {
-  const engine = await loadManagerEngine();
-
   if (!engine?.createLegacyManagerAppState) {
     return null;
   }
@@ -66,6 +92,21 @@ export async function createLegacyManagerAppStateFromBrowserState({
     lineup,
     knowledgePrinciples,
   });
+}
+
+export async function createLegacyManagerAppStateFromBrowserState(args) {
+  const engine = await loadManagerEngine();
+
+  return buildLegacyManagerAppState(engine, args);
+}
+
+/**
+ * Synkron variant: bygger app-state fra den allerede preloadede motoren.
+ * Returnerer null hvis motoren ikke er lastet ennå – kalleren bør da falle
+ * tilbake til den async-varianten.
+ */
+export function createLegacyManagerAppStateFromBrowserStateSync(args) {
+  return buildLegacyManagerAppState(getLoadedManagerEngine(), args);
 }
 
 export function getDashboardViewModelFromLegacyManagerState(legacyManagerState) {
