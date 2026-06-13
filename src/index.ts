@@ -154,6 +154,14 @@ export type {
 export { calculateTeamFit } from "./engine/calculateTeamFit.js";
 
 export type {
+  TeamFitRoleChange,
+  TeamFitRoleChangeCandidate,
+  TeamFitRoleChangeStatus,
+} from "./engine/recommendRoleChangesFromTeamFit.js";
+
+export { recommendRoleChangesFromTeamFit } from "./engine/recommendRoleChangesFromTeamFit.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,
