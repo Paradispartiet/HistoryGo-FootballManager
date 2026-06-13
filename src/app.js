@@ -6069,32 +6069,18 @@ function renderManagerDashboardViewModel(viewModel) {
     elements.knowledgeCompletedTotal.textContent = String(countCompletedTotal());
   }
 
-  elements.teamStatus.textContent = viewModel.score.label;
-  elements.teamScore.textContent = viewModel.score.setupScoreText;
-  elements.balanceScore.textContent = viewModel.score.teamBalanceText;
-
-  const widthMetric = viewModel.metrics.find((metric) => metric.label === "Bredde");
-  const pressMetric = viewModel.metrics.find((metric) => metric.label === "Press");
-  const defenceMetric = viewModel.metrics.find((metric) => metric.label === "Forsvar");
-  const midfieldMetric = viewModel.metrics.find((metric) => metric.label === "Midtbane");
-  const attackMetric = viewModel.metrics.find((metric) => metric.label === "Angrep");
-
-  elements.widthScore.textContent = widthMetric?.valueText ?? elements.widthScore.textContent;
-  elements.pressScore.textContent = pressMetric?.valueText ?? elements.pressScore.textContent;
-  elements.restDefenseScore.textContent = defenceMetric?.valueText ?? elements.restDefenseScore.textContent;
-  elements.buildUpScore.textContent = midfieldMetric?.valueText ?? elements.buildUpScore.textContent;
-  elements.depthScore.textContent = attackMetric?.valueText ?? elements.depthScore.textContent;
-
-  elements.reportSummary.textContent = viewModel.summary.summary;
-
-  renderList(elements.strengthsList, viewModel.keyStrengths);
-
-  const issueTexts = [
-    ...viewModel.keyProblems,
-    ...viewModel.topActions.slice(0, 3).map((action) => action.label),
-  ];
-
-  renderList(elements.issuesList, issueTexts);
+  // Arbeidsdeling mellom de to motorene (bevisst additivt):
+  //
+  // Den synkrone legacy-lagfiten (renderTeamSummary/renderReport via
+  // calculateTeamFit) eier de delte lagrapport-nodene: lagstatus, lagscore,
+  // balanse, de fem metrikkene, rapportsammendrag og styrker/problemer. Den
+  // kjører alltid – også uten bygget dist/.
+  //
+  // TypeScript-motoren skriver KUN til sitt eget manager-detalj-panel under.
+  // Tidligere overskrev den de delte nodene asynkront når dist/ var bygget,
+  // slik at de synlige tallene avhang av byggetilstand og blinket ved render.
+  // TS-motoren er foreløpig ikke source of truth for UI (se
+  // docs/ENGINE_ARCHITECTURE.md), så den legges ved siden av, ikke oppå.
 
   if (elements.managerSummary) {
     elements.managerSummary.textContent = viewModel.summary.summary;
