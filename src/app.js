@@ -5218,14 +5218,10 @@ function renderDepartments() {
 }
 
 function renderTeamSummary(teamFit) {
-  // TS-motoren eier scorepanelet (headline-tallene) når den er lastet – se
-  // renderScorePanelFromViewModel. Da hopper vi over legacy-skrivingen for å
-  // unngå dobbelskriving. Uten bygget dist/ faller vi tilbake til legacy-
-  // lagfiten her, slik at demoen viser tall uansett.
-  if (getLoadedManagerEngine()) {
-    return;
-  }
-
+  // Scorepanelet skrives fra teamFit (getTeamFit). Etter steg 7b er teamFit
+  // selv TS-beregnet når motoren er lastet, så hele Laganalyse-panelet (score,
+  // metrikker, rapport, ellever) kommer nå fra én og samme motor –
+  // calculateTeamFit – i stedet for å blande inn dashboard-pipelinens setupScore.
   if (!teamFit) {
     return;
   }
@@ -6091,48 +6087,16 @@ function renderTrainingWeekCounters() {
   }
 }
 
-// Finn metrikkverdi (tekst) fra TS-viewModel etter etikett. Returnerer null
-// hvis metrikken ikke finnes, slik at kalleren kan beholde eksisterende tekst.
-function findMetricValueText(viewModel, label) {
-  const metric = viewModel.metrics.find((item) => item.label === label);
-  return metric ? metric.valueText : null;
-}
-
-// Steg 4: TS-motoren eier scorepanelet (headline-tallene) når den er lastet.
-// Bruker score- og completion-feltene som ble forsonet med legacy i steg 2.
-// Rapporten (sammendrag/styrker/problemer/coachContext) eies fortsatt av
-// legacy renderReport; denne funksjonen rører bare tall-nodene.
-function renderScorePanelFromViewModel(viewModel) {
-  elements.teamStatus.textContent = viewModel.score.label;
-  elements.teamScore.textContent = viewModel.score.setupScoreText;
-  elements.balanceScore.textContent = viewModel.score.teamBalanceText;
-  elements.completeCount.textContent = viewModel.completion.completeCountText;
-  elements.roleFitAverage.textContent = viewModel.completion.roleFitAverageText;
-  elements.tacticFitAverage.textContent = viewModel.completion.tacticFitAverageText;
-
-  const width = findMetricValueText(viewModel, "Bredde");
-  const press = findMetricValueText(viewModel, "Press");
-  const defence = findMetricValueText(viewModel, "Forsvar");
-  const midfield = findMetricValueText(viewModel, "Midtbane");
-  const attack = findMetricValueText(viewModel, "Angrep");
-
-  if (width !== null) elements.widthScore.textContent = width;
-  if (press !== null) elements.pressScore.textContent = press;
-  if (defence !== null) elements.restDefenseScore.textContent = defence;
-  if (midfield !== null) elements.buildUpScore.textContent = midfield;
-  if (attack !== null) elements.depthScore.textContent = attack;
-}
-
 function renderManagerDashboardViewModel(viewModel) {
   if (!viewModel) {
     return;
   }
 
-  // Når TS-motoren er lastet eier den scorepanelet. Legacy renderTeamSummary
-  // hopper da over de samme nodene (guard der), så ingen dobbelskriving. Uten
-  // bygget dist/ kommer vi aldri hit (viewModel er null), og legacy beholder
-  // panelet.
-  renderScorePanelFromViewModel(viewModel);
+  // Scorepanelet (score/metrikker/rapport) eies nå av teamFit via
+  // renderTeamSummary/renderReport, som etter steg 7b selv er TS-beregnet. Denne
+  // funksjonen skriver derfor kun manager-detalj-panelet (innsikt, grep,
+  // treningsfokus, rollebytter, svakheter, kunnskap) – innhold dashboard-
+  // pipelinen produserer som legacy-teamFit ikke har.
 
   if (elements.managerSummary) {
     elements.managerSummary.textContent = viewModel.summary.summary;
