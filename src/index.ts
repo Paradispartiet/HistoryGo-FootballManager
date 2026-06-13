@@ -169,6 +169,14 @@ export type {
 export { analyzeWeakPointsFromTeamFit } from "./engine/analyzeWeakPointsFromTeamFit.js";
 
 export type {
+  TeamFitManagerAction,
+  TeamFitManagerActionPriority,
+  TeamFitManagerInsight,
+} from "./engine/createTeamFitManagerInsight.js";
+
+export { createTeamFitManagerInsight } from "./engine/createTeamFitManagerInsight.js";
+
+export type {
   BalanceReportItem,
   CoachAdvice,
   CoachAdvicePriority,

@@ -6092,22 +6092,11 @@ function renderManagerDashboardViewModel(viewModel) {
     return;
   }
 
-  // Scorepanelet (score/metrikker/rapport) eies nå av teamFit via
-  // renderTeamSummary/renderReport, som etter steg 7b selv er TS-beregnet. Denne
-  // funksjonen skriver derfor kun manager-detalj-panelet (innsikt, grep,
-  // treningsfokus, rollebytter, svakheter, kunnskap) – innhold dashboard-
-  // pipelinen produserer som legacy-teamFit ikke har.
-
-  if (elements.managerSummary) {
-    elements.managerSummary.textContent = viewModel.summary.summary;
-  }
-
-  renderTextList(
-    elements.managerTopActions,
-    viewModel.topActions,
-    (action) => `${action.priorityText}: ${action.label} — ${action.rationale}`,
-    viewModel.emptyStates.topActions,
-  );
+  // Scorepanelet (score/metrikker/rapport) eies av teamFit via renderTeamSummary/
+  // renderReport. Sammendrag, topp-grep, rollebytter og svakheter eies av teamFit
+  // via renderManagerDetailFromTeamFit. Denne funksjonen skriver derfor kun de
+  // gjenstående dashboard-seksjonene: treningsplan (med kunnskapsfokus) og
+  // kunnskapsanbefalinger – innhold som er koblet til kunnskaps-funksjonen.
 
   const activeKnowledge = getActiveKnowledgeRecommendation(viewModel);
 
@@ -6188,6 +6177,21 @@ function getBrowserManagerStateArgs() {
 // Uten bygget dist/ (motor ikke lastet) lar vi panelet stå som det er.
 function renderManagerDetailFromTeamFit(teamFit) {
   const engine = getLoadedManagerEngine();
+
+  if (engine?.createTeamFitManagerInsight && teamFit) {
+    const insight = engine.createTeamFitManagerInsight(teamFit, { tactic: getTactic(), roles: state.roles });
+
+    if (elements.managerSummary) {
+      elements.managerSummary.textContent = insight.summary;
+    }
+
+    renderTextList(
+      elements.managerTopActions,
+      insight.topActions,
+      (action) => `${action.priorityText}: ${action.label}`,
+      "Ingen prioriterte grep akkurat nå.",
+    );
+  }
 
   if (elements.managerRoleChanges && engine?.recommendRoleChangesFromTeamFit && teamFit) {
     const recommendations = engine
