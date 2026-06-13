@@ -6129,12 +6129,9 @@ function renderManagerDashboardViewModel(viewModel) {
     viewModel.emptyStates.trainingPlan,
   );
 
-  renderTextList(
-    elements.managerRoleChanges,
-    viewModel.roleChanges,
-    (item) => `${item.statusText}: ${item.label}`,
-    viewModel.emptyStates.roleChanges,
-  );
+  // Rollebytter rendres separat fra teamFit (renderManagerRoleChanges), slik at
+  // forslagene bruker samme fit-motor som elleveren. Denne funksjonen rører dem
+  // derfor ikke lenger.
 
   renderTextList(
     elements.managerWeakPoints,
@@ -6192,6 +6189,34 @@ function getBrowserManagerStateArgs() {
 // tikk som resten av renderApp (ingen async-blink). Før motoren er ferdig
 // lastet – eller hvis dist/ ikke er bygget – faller vi tilbake til den async
 // lastestien, som er null-trygg og lar legacy-demoen kjøre uendret.
+// Rollebytte-anbefalinger i manager-detalj-panelet, avledet fra teamFit slik at
+// de bruker samme fit-motor (calculatePlayerMatchFit/matchScore) som elleveren.
+// Erstatter den strukturerte pipelinens roleChanges, som kunne motsi headline.
+// Uten bygget dist/ (motor ikke lastet) lar vi panelet stå som det er.
+function renderManagerRoleChanges(teamFit) {
+  if (!elements.managerRoleChanges) {
+    return;
+  }
+
+  const engine = getLoadedManagerEngine();
+
+  if (!engine?.recommendRoleChangesFromTeamFit || !teamFit) {
+    return;
+  }
+
+  const recommendations = engine
+    .recommendRoleChangesFromTeamFit(teamFit, { tactic: getTactic(), roles: state.roles })
+    .filter((recommendation) => recommendation.status !== "keep_role")
+    .sort((a, b) => (b.candidates[0]?.improvement ?? 0) - (a.candidates[0]?.improvement ?? 0));
+
+  renderTextList(
+    elements.managerRoleChanges,
+    recommendations,
+    (recommendation) => recommendation.label,
+    "Ingen tydelige rollebytter akkurat nå. Rollebruken bør i hovedsak beholdes.",
+  );
+}
+
 function renderManagerEngineBridge() {
   if (getLoadedManagerEngine()) {
     // Invalider evt. in-flight async-render slik at den ikke overskriver dette.
@@ -8034,6 +8059,7 @@ function renderApp() {
 
   renderTrainingWeekCounters();
   renderManagerEngineBridge();
+  renderManagerRoleChanges(teamFit);
   renderClubWeek().catch(console.error);
   renderInboxThreads();
   renderDepartments();
