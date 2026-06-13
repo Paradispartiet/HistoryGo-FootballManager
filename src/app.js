@@ -44,7 +44,10 @@ import {
   getStaffCategory
 } from "./hg-football-coach-context-engine.js";
 import {
+  preloadManagerEngine,
+  getLoadedManagerEngine,
   createLegacyManagerAppStateFromBrowserState,
+  createLegacyManagerAppStateFromBrowserStateSync,
   getDashboardViewModelFromLegacyManagerState,
   createInitialClubWeekStateFromBrowser,
   advanceClubWeekPhaseFromBrowser,
@@ -6161,10 +6164,8 @@ function renderManagerDashboardViewModel(viewModel) {
   }
 }
 
-async function renderManagerEngineBridge() {
-  const renderId = ++managerEngineRenderId;
-
-  const legacyManagerState = await createLegacyManagerAppStateFromBrowserState({
+function getBrowserManagerStateArgs() {
+  return {
     teamId: "browser_legacy_team",
     teamName: "Browser Legacy Team",
     players: state.players,
@@ -6175,7 +6176,39 @@ async function renderManagerEngineBridge() {
     selectedFormationId: state.selectedFormationId,
     lineup: state.lineup,
     knowledgePrinciples: state.knowledgePrinciples,
-  });
+  };
+}
+
+// Render manager-detalj-panelet fra TS-motoren. Etter preloadManagerEngine() i
+// init() er motoren tilgjengelig synkront, så vi bygger og rendrer i samme
+// tikk som resten av renderApp (ingen async-blink). Før motoren er ferdig
+// lastet – eller hvis dist/ ikke er bygget – faller vi tilbake til den async
+// lastestien, som er null-trygg og lar legacy-demoen kjøre uendret.
+function renderManagerEngineBridge() {
+  if (getLoadedManagerEngine()) {
+    // Invalider evt. in-flight async-render slik at den ikke overskriver dette.
+    managerEngineRenderId += 1;
+
+    const legacyManagerState = createLegacyManagerAppStateFromBrowserStateSync(
+      getBrowserManagerStateArgs(),
+    );
+
+    renderManagerDashboardViewModel(
+      getDashboardViewModelFromLegacyManagerState(legacyManagerState),
+    );
+
+    return;
+  }
+
+  renderManagerEngineBridgeAsync();
+}
+
+async function renderManagerEngineBridgeAsync() {
+  const renderId = ++managerEngineRenderId;
+
+  const legacyManagerState = await createLegacyManagerAppStateFromBrowserState(
+    getBrowserManagerStateArgs(),
+  );
 
   if (renderId !== managerEngineRenderId) {
     return;
@@ -8311,6 +8344,11 @@ function initTabs() {
 async function init() {
   initTabs();
 
+  // Start lasting av TS-motoren parallelt med datafilene. Vi venter på den før
+  // første render, slik at manager-detalj-panelet kan bygges synkront i
+  // renderApp i stedet for å skrive seg inn en tikk senere (ingen blink).
+  const managerEngineReady = preloadManagerEngine();
+
   try {
     const [
       playersData,
@@ -8529,6 +8567,12 @@ async function init() {
     sanitizeSelectedFormation();
     ensurePositionsForFormation();
     bindEvents();
+
+    // Vent til TS-motoren er ferdig lastet (eller bekreftet utilgjengelig) før
+    // første render, slik at renderManagerEngineBridge kan kjøre synkront.
+    // Demoen fungerer uansett: er dist/ ikke bygget, løser preload til null.
+    await managerEngineReady;
+
     renderApp();
   } catch (error) {
     elements.teamStatus.textContent = "Feil";
