@@ -19,6 +19,7 @@
     { "path": "data/hgFootball/playerRoleFitRules.json", "role": "fitRules", "schema": "history-go.hg-football.player-role-fit-rules.v1" },
     { "path": "data/hgFootball/staffRoles.json", "role": "staffRoles", "schema": "history-go.hg-football.staff-roles.v1" },
     { "path": "data/hgFootball/unlockRules.json", "role": "unlockRules", "schema": "history-go.hg-football.unlock-rules.v1" },
+    { "path": "data/hgFootball/formationKnowledge.json", "role": "formationKnowledge", "schema": "history-go.hg-football.formation-knowledge.v1" },
     { "path": "data/hgFootball/README.md", "role": "documentation", "schema": null }
   ],
   "notes": [
