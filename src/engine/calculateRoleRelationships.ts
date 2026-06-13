@@ -9,11 +9,13 @@
 // isolert? Porten er trofast mot legacy-reglene (samme rolle-id-er, samme
 // tagg-betingelser, samme poeng), slik at TS-motoren kan overta uten regresjon.
 
-import type { ID, Position, Score100, Tactic } from "../domain/footballTypes.js";
+import type { ID, Score100, Tactic } from "../domain/footballTypes.js";
 
 export type RelationshipAssignment = {
   roleId: ID;
-  position: Position;
+  // Posisjonsstreng (domenets Position eller legacy-posisjon). Relasjonsmotoren
+  // leser den ikke, men feltet bæres med for kontekst/parity med legacy.
+  position: string;
   playerName: string;
 };
 
@@ -75,9 +77,11 @@ function addRelation(
   relations.push({ type, points, title, explanation, roleIds });
 }
 
+// Andre-parameteren er strukturelt typet: motoren leser kun `tactic.tags`, så
+// både domenets Tactic og en legacy-taktikk ({ tags }) er gyldig input.
 export function calculateRoleRelationships(
   assignments: RelationshipAssignment[],
-  tactic: Tactic,
+  tactic: Pick<Tactic, "tags">,
 ): RoleRelationshipResult {
   const tacticTags = tactic.tags ?? [];
   const positives: RoleRelationship[] = [];
