@@ -7990,8 +7990,15 @@ function bindEvents() {
 
   if (elements.useHistoryGoCollection) {
     elements.useHistoryGoCollection.addEventListener("click", () => {
-      state.localStartMessage = "History Go-samlingen er synkronisert med managerlaget.";
-      refreshAvailabilityFromHistoryGo();
+      // Startvalget "Bruk History Go-samlingen min" er et rent UI-valg: det
+      // skal ikke skrive til teamMerits, visited_places eller
+      // hg_groundhopper_stats_v1. Availability leser ekte History Go-progresjon
+      // live i computeAvailability(), så en rerender er nok.
+      state.localStartMessage = "Bruker eksisterende History Go-samling uten å endre progresjon.";
+      invalidateAvailability();
+      sanitizeLineupForUnlockedPlayers();
+      sanitizeSelectedFormation();
+      renderApp();
     });
   }
 
