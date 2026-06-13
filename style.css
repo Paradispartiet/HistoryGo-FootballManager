@@ -3038,6 +3038,30 @@ ul {
   grid-column: 1 / -1;
 }
 
+/* Dashboard (oversikt): kompakt kortrutenett i stedet for en lang feed. */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap);
+  padding: 4px 0 22px;
+}
+
+.dashboard-grid .manager-actions-panel {
+  grid-column: 1 / -1;
+}
+
+.dashboard-shortcuts .shortcut-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dashboard-shortcuts .shortcut-button {
+  flex: 1 1 auto;
+  min-width: 140px;
+}
+
 /* ============================================================================
    AVDELINGER — egne visuelle uttrykk
    ============================================================================ */
@@ -3276,7 +3300,8 @@ ul {
     top: auto;
   }
 
-  .insight-grid {
+  .insight-grid,
+  .dashboard-grid {
     grid-template-columns: 1fr;
   }
 }
