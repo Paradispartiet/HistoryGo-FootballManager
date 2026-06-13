@@ -36,6 +36,20 @@ export type DashboardSummaryPanel = {
   reportSummary: string;
 };
 
+// Fullføring og snitt-metrikker som speiler den eldre lagrapporten
+// (completeCount/totalSlots, roleFitAverage, tacticFitAverage, duplikater).
+// Disse lar TS-motoren senere mate hele det eldre scorepanelet, ikke bare
+// balanse-metrikkene. Avledes av data evaluateTeamSetup allerede beregner.
+export type DashboardCompletionPanel = {
+  completeCount: number;
+  totalSlots: number;
+  isComplete: boolean;
+  roleFitAverage: Score100;
+  tacticFitAverage: Score100;
+  duplicatePlayerIds: string[];
+  duplicateCount: number;
+};
+
 export type DashboardMetricCard = {
   code: string;
   label: string;
@@ -98,6 +112,7 @@ export type ManagerDashboardData = {
 
   scorePanel: DashboardScorePanel;
   summaryPanel: DashboardSummaryPanel;
+  completion: DashboardCompletionPanel;
 
   metrics: DashboardMetricCard[];
 
@@ -114,6 +129,24 @@ export type ManagerDashboardData = {
 
   knowledgeRecommendations: DashboardKnowledgeCard[];
 };
+
+function averageScore(values: number[]): Score100 {
+  if (values.length === 0) return 0;
+  const sum = values.reduce((total, value) => total + value, 0);
+  return Math.max(0, Math.min(100, Math.round(sum / values.length)));
+}
+
+function findDuplicatePlayerIds(playerIds: string[]): string[] {
+  const counts = new Map<string, number>();
+
+  for (const id of playerIds) {
+    counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([id]) => id);
+}
 
 function severityFromScore(score: Score100): DashboardSeverity {
   if (score >= 78) return "positive";
@@ -172,8 +205,16 @@ function toActionCard(action: ManagerInsightAction): DashboardActionCard {
 }
 
 export function createManagerDashboardData(insight: ManagerInsight): ManagerDashboardData {
-  const setupScore = insight.setup.setupScore;
-  const teamBalance = insight.setup.teamBalance;
+  const setup = insight.setup;
+  const setupScore = setup.setupScore;
+  const teamBalance = setup.teamBalance;
+
+  const roleFitResults = setup.roleFitResults;
+  const roleFitAverage = averageScore(roleFitResults.map((result) => result.finalFit));
+  const tacticFitAverage = averageScore(roleFitResults.map((result) => result.tacticFit));
+  const duplicatePlayerIds = findDuplicatePlayerIds(
+    roleFitResults.map((result) => result.playerId),
+  );
 
   return {
     teamId: insight.teamId,
@@ -193,6 +234,16 @@ export function createManagerDashboardData(insight: ManagerInsight): ManagerDash
       title: "Managerinnsikt",
       summary: insight.summary,
       reportSummary: insight.report.overallSummary,
+    },
+
+    completion: {
+      completeCount: setup.validAssignmentCount,
+      totalSlots: setup.totalAssignmentCount,
+      isComplete: setup.isComplete,
+      roleFitAverage,
+      tacticFitAverage,
+      duplicatePlayerIds,
+      duplicateCount: duplicatePlayerIds.length,
     },
 
     metrics: [
