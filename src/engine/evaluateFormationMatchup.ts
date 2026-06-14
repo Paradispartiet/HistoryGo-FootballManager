@@ -48,10 +48,41 @@ export type FormationMatchupResult = {
   opponentTokens: string[];
   advantages: FormationMatchupPoint[];
   risks: FormationMatchupPoint[];
+  suggestions: string[];
   score: number;
   lean: FormationMatchupLean;
   summary: string;
 };
+
+// Risiko-token → konkret kontekstuell justering (README pkt. 5: forslagene skal
+// kjenne taktikken). Gjør en risikabel matchup handlingsrettet i stedet for bare
+// å si «risikabel». Holdes i synk med .js-kampmotorens kopi (parity-testet).
+const RISK_ADJUSTMENTS: Record<string, string> = {
+  high_press: "Senk tempoet og bygg tryggere ut – eller spill mer direkte forbi presset.",
+  aggressive_man_press: "Bruk bevegelse og rotasjoner for å bryte manndekningen; tilby flere pasningsvinkler.",
+  direct_counter: "Styrk restforsvaret og hold én back-side lavere ved angrep.",
+  fast_transition: "Reduser risikoen høyt og sørg for tydelig sikring bak ballen.",
+  fast_runners_in_behind: "Senk forsvarslinjen litt for å ta bort bakrommet.",
+  deep_low_block: "Vær tålmodig; bruk bredde, sideskift og overtall for å åpne blokken.",
+  switching_play: "Hold laget kompakt sideveis og vær rask til å forflytte blokken.",
+  possession_positional: "Velg pressutløsere bevisst; ikke jag ballen ukoordinert.",
+  build_from_back: "Press oppspillet målrettet for å tvinge frem feil.",
+  wide_overload: "Doble opp i bredden og sørg for at backen får støtte.",
+  target_man_direct: "Vinn førsteballene og sikre andreballene rundt targetspissen.",
+  compact_532: "Skap overtall sentralt og bruk indreløp i halvrommene.",
+  narrow_442: "Bruk bredden; strekk den flate midtbanen med kant og overlapp.",
+  two_striker_press: "Sikre overtall i oppbyggingen mot de to spissene (en ekstra mann bak).",
+  three_at_back: "Angrip kantrommene utenfor de tre stopperne.",
+  passive_mid_block: "Tør å holde ballen og dra blokken ut av posisjon.",
+};
+
+function suggestionsFromRisks(risks: FormationMatchupPoint[]): string[] {
+  return unique(
+    risks
+      .map((risk) => RISK_ADJUSTMENTS[risk.token])
+      .filter((text): text is string => Boolean(text)),
+  );
+}
 
 function unique(values: string[]): string[] {
   return [...new Set(values)];
@@ -185,6 +216,7 @@ export function evaluateFormationMatchup(
     opponentTokens,
     advantages,
     risks,
+    suggestions: suggestionsFromRisks(risks),
     score,
     lean,
     summary,
@@ -245,6 +277,7 @@ export function evaluateFormationVsOpponentStyles(
     opponentTokens,
     advantages,
     risks,
+    suggestions: suggestionsFromRisks(risks),
     score,
     lean,
     summary,

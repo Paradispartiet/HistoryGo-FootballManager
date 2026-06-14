@@ -5607,6 +5607,9 @@ function renderMatchdaySessionPreMatch(container, session) {
     (Array.isArray(matchup.risks) ? matchup.risks : []).forEach((r) => {
       matchupLines.push(`Risiko: ${r.text}`);
     });
+    (Array.isArray(matchup.suggestions) ? matchup.suggestions : []).forEach((s) => {
+      matchupLines.push(`Vurder: ${s}`);
+    });
     appendMatchdayList(card, matchupLines);
   }
 
