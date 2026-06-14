@@ -577,6 +577,27 @@ function matchupLeanFromScore(score) {
   return "balanced";
 }
 
+// Risiko-token → konkret kontekstuell justering. Trofast kopi av RISK_ADJUSTMENTS
+// i src/engine/evaluateFormationMatchup.ts (parity-testet i sim:formation-matchup).
+const MATCHUP_RISK_ADJUSTMENTS = {
+  high_press: "Senk tempoet og bygg tryggere ut – eller spill mer direkte forbi presset.",
+  aggressive_man_press: "Bruk bevegelse og rotasjoner for å bryte manndekningen; tilby flere pasningsvinkler.",
+  direct_counter: "Styrk restforsvaret og hold én back-side lavere ved angrep.",
+  fast_transition: "Reduser risikoen høyt og sørg for tydelig sikring bak ballen.",
+  fast_runners_in_behind: "Senk forsvarslinjen litt for å ta bort bakrommet.",
+  deep_low_block: "Vær tålmodig; bruk bredde, sideskift og overtall for å åpne blokken.",
+  switching_play: "Hold laget kompakt sideveis og vær rask til å forflytte blokken.",
+  possession_positional: "Velg pressutløsere bevisst; ikke jag ballen ukoordinert.",
+  build_from_back: "Press oppspillet målrettet for å tvinge frem feil.",
+  wide_overload: "Doble opp i bredden og sørg for at backen får støtte.",
+  target_man_direct: "Vinn førsteballene og sikre andreballene rundt targetspissen.",
+  compact_532: "Skap overtall sentralt og bruk indreløp i halvrommene.",
+  narrow_442: "Bruk bredden; strekk den flate midtbanen med kant og overlapp.",
+  two_striker_press: "Sikre overtall i oppbyggingen mot de to spissene (en ekstra mann bak).",
+  three_at_back: "Angrip kantrommene utenfor de tre stopperne.",
+  passive_mid_block: "Tør å holde ballen og dra blokken ut av posisjon."
+};
+
 // formationKnowledge: { strongAgainst, weakAgainst } for valgt formasjon.
 // opponentStyles: motstanderprofilens matchupStyles. Returnerer null hvis det
 // ikke finnes kunnskap for formasjonen (graceful – ikke alle formasjoner dekkes).
@@ -603,6 +624,10 @@ export function evaluateFormationMatchupVsOpponent(formationKnowledge, opponentS
       text: `Ditt system sliter mot «${token}» – slik motstanderen spiller.`
     }));
 
+  const suggestions = [
+    ...new Set(risks.map((r) => MATCHUP_RISK_ADJUSTMENTS[r.token]).filter(Boolean))
+  ];
+
   const score = advantages.length - risks.length;
   const lean = matchupLeanFromScore(score);
   const name = opponentName || "motstanderen";
@@ -616,7 +641,7 @@ export function evaluateFormationMatchupVsOpponent(formationKnowledge, opponentS
     summary = `Balansert matchup mot ${name}: ingen tydelig taktisk overvekt mot denne spillestilen.`;
   }
 
-  return { opponentTokens, advantages, risks, score, lean, summary };
+  return { opponentTokens, advantages, risks, suggestions, score, lean, summary };
 }
 
 // Enkel tilfeldig motstander ved kampstart. Egen funksjon slik at app/test kan

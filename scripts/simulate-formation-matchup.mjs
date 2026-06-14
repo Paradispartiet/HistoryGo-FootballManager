@@ -118,7 +118,14 @@ for (const you of entries) {
       ts.score === js.score &&
       ts.summary === js.summary &&
       JSON.stringify(ts.advantages) === JSON.stringify(js.advantages) &&
-      JSON.stringify(ts.risks) === JSON.stringify(js.risks);
+      JSON.stringify(ts.risks) === JSON.stringify(js.risks) &&
+      JSON.stringify(ts.suggestions) === JSON.stringify(js.suggestions);
+    check(
+      Array.isArray(js.suggestions) &&
+        js.suggestions.every((s) => typeof s === "string" && s.length > 0) &&
+        js.suggestions.length <= js.risks.length,
+      `${you.formationId} vs ${profile.id}: ugyldige suggestions`,
+    );
     check(same, `paritet TS!=JS for ${you.formationId} vs ${profile.id} (TS ${ts.lean}/${ts.score}, JS ${js.lean}/${js.score})`);
   }
 }
