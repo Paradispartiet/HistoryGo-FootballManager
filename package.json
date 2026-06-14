@@ -13,7 +13,8 @@
     "sim:matchday": "node scripts/simulate-matchday-v02.mjs",
     "sim:mini-season": "node scripts/simulate-mini-season.mjs",
     "build": "tsc",
-    "sim:training-week": "node scripts/simulate-training-week.mjs"
+    "sim:training-week": "node scripts/simulate-training-week.mjs",
+    "sim:formation-matchup": "node scripts/simulate-formation-matchup.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

@@ -1,0 +1,118 @@
+// scripts/simulate-formation-matchup.mjs
+//
+// Read-only demonstrasjon + validering av Formation Knowledge Engine sitt
+// beregningslag (src/engine/evaluateFormationMatchup.ts, bygget til dist/).
+//
+// Kjorer matchups mellom alle dekkede formasjoner, sjekker strukturelle
+// invarianter (gyldige tokens fra vocab, score = fordeler - risikoer, gyldig
+// lean), bekrefter et par kjente taktiske utfall, og skriver en lean-matrise.
+//
+// Rent Node-script (standardbibliotek + bygget dist/). Krever `npm run build`.
+// Exit code 1 hvis en sjekk feiler, ellers 0.
+
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, "..");
+
+function loadJson(rel) {
+  return JSON.parse(readFileSync(join(ROOT, rel), "utf8"));
+}
+
+let engine;
+try {
+  engine = await import(join(ROOT, "dist/index.js"));
+} catch (error) {
+  console.error("Kunne ikke laste dist/. Kjor `npm run build` forst.", error.message);
+  process.exit(1);
+}
+const { evaluateFormationMatchup } = engine;
+
+const knowledgeData = loadJson("data/hgFootball/formationKnowledge.json");
+const formations = loadJson("data/hgFootball/formations.json").formations;
+const byId = Object.fromEntries(formations.map((f) => [f.id, f]));
+
+const vocab = new Set(knowledgeData.vocab.opponentStyles);
+const LEANS = new Set(["favourable", "balanced", "risky"]);
+const SOURCES = new Set(["opponent_weakness", "own_strength", "opponent_strength", "own_weakness"]);
+
+const entries = knowledgeData.knowledge.map((k) => ({
+  formationId: k.formationId,
+  name: byId[k.formationId]?.name ?? k.formationId,
+  baseShape: byId[k.formationId]?.baseShape,
+  parameterProfile: k.parameterProfile,
+  strongAgainst: k.strongAgainst,
+  weakAgainst: k.weakAgainst,
+}));
+
+const failures = [];
+function check(condition, message) {
+  if (!condition) failures.push(message);
+}
+
+// 1) Strukturelle invarianter over alle par.
+for (const you of entries) {
+  for (const opp of entries) {
+    const r = evaluateFormationMatchup(you, opp);
+    const label = `${you.formationId} vs ${opp.formationId}`;
+
+    check(Array.isArray(r.yourTokens) && Array.isArray(r.opponentTokens), `${label}: tokens ikke array`);
+    check([...r.yourTokens, ...r.opponentTokens].every((t) => vocab.has(t)), `${label}: token utenfor vocab`);
+    check(Array.isArray(r.advantages) && Array.isArray(r.risks), `${label}: adv/risk ikke array`);
+    check([...r.advantages, ...r.risks].every((p) => SOURCES.has(p.source) && vocab.has(p.token)), `${label}: ugyldig point`);
+    check(r.score === r.advantages.length - r.risks.length, `${label}: score != adv - risk`);
+    check(LEANS.has(r.lean), `${label}: ugyldig lean ${r.lean}`);
+    check(typeof r.summary === "string" && r.summary.length > 0, `${label}: tomt summary`);
+  }
+}
+
+// 2) Kjente taktiske utfall (forankret i de authored dataene).
+const possessionVsGegen = evaluateFormationMatchup(
+  entries.find((e) => e.formationId === "possession_433"),
+  entries.find((e) => e.formationId === "gegen_4222"),
+);
+check(possessionVsGegen.lean === "risky", `possession_433 vs gegen_4222: forventet risky, fikk ${possessionVsGegen.lean}`);
+
+const catenaccioVsPossession = evaluateFormationMatchup(
+  entries.find((e) => e.formationId === "catenaccio_532"),
+  entries.find((e) => e.formationId === "possession_433"),
+);
+check(catenaccioVsPossession.lean === "favourable", `catenaccio_532 vs possession_433: forventet favourable, fikk ${catenaccioVsPossession.lean}`);
+
+// 3) «Ingen taktikk er perfekt mot alt»: minst én formasjon skal ha bade en
+//    favourable og en risky matchup mot ulike motstandere.
+let hasMixedFormation = false;
+for (const you of entries) {
+  const leans = entries.filter((o) => o.formationId !== you.formationId).map((o) => evaluateFormationMatchup(you, o).lean);
+  if (leans.includes("favourable") && leans.includes("risky")) {
+    hasMixedFormation = true;
+    break;
+  }
+}
+check(hasMixedFormation, "Ingen formasjon hadde bade favourable og risky matchup – matchup-logikken gir for flate utfall");
+
+// Rapport: lean-matrise (din formasjon i rad, motstander i kolonne).
+const sym = { favourable: "+", balanced: "·", risky: "-" };
+const ids = entries.map((e) => e.formationId);
+const short = (id) => id.slice(0, 6).padEnd(6);
+console.log("Formation matchup – lean-matrise (rad = ditt system, kolonne = motstander)");
+console.log("        " + ids.map(short).join(" "));
+for (const you of entries) {
+  const row = entries.map((o) => ` ${sym[evaluateFormationMatchup(you, o).lean]}    `.slice(0, 6)).join(" ");
+  console.log(short(you.formationId) + "  " + row);
+}
+console.log(`\nPar vurdert: ${entries.length * entries.length}`);
+console.log("Eksempel – possession_433 mot gegen_4222:");
+console.log("  " + possessionVsGegen.summary);
+for (const p of [...possessionVsGegen.advantages, ...possessionVsGegen.risks]) console.log("   • " + p.text);
+
+if (failures.length > 0) {
+  console.log(`\n${failures.length} sjekk(er) feilet:`);
+  for (const f of failures) console.log("- " + f);
+  console.log("Result: FAIL");
+  process.exit(1);
+}
+console.log("\nAlle matchup-sjekker besto.");
+process.exit(0);
