@@ -31,7 +31,7 @@ try {
 const { evaluateFormationMatchup, evaluateFormationVsOpponentStyles } = engine;
 
 // Live .js-kampmotor (plain ESM, ingen build): motstanderprofiler + .js-matchup.
-const { OPPONENT_PROFILES, evaluateFormationMatchupVsOpponent } = await import(
+const { OPPONENT_PROFILES, evaluateFormationMatchupVsOpponent, calculateMatchStrength } = await import(
   join(ROOT, "src/football-matchday-engine.js")
 );
 
@@ -122,6 +122,22 @@ for (const you of entries) {
     check(same, `paritet TS!=JS for ${you.formationId} vs ${profile.id} (TS ${ts.lean}/${ts.score}, JS ${js.lean}/${js.score})`);
   }
 }
+
+// 5) Nudge: matchupen pavirker faktisk lagstyrken (liten, capped tendens).
+//    Samme lag: gunstig matchup > noytral > risikabel, men forskjellen er liten.
+const nudgeTeamFit = {
+  teamScore: 72, completeCount: 11, totalSlots: 11,
+  metrics: { balanceScore: 70, widthScore: 70, depthScore: 70, buildUpScore: 70, pressScore: 70, restDefenseScore: 70 },
+  relationships: { relationshipScore: 70 }, historicalFormationFit: {}, assignments: [],
+};
+const strFav = calculateMatchStrength({ teamFit: nudgeTeamFit, formation: { id: "x" }, formationMatchup: { score: 3 } });
+const strNeu = calculateMatchStrength({ teamFit: nudgeTeamFit, formation: { id: "x" }, formationMatchup: { score: 0 } });
+const strRsk = calculateMatchStrength({ teamFit: nudgeTeamFit, formation: { id: "x" }, formationMatchup: { score: -3 } });
+check(strFav.finalStrength > strNeu.finalStrength && strNeu.finalStrength > strRsk.finalStrength,
+  `nudge-rekkefolge feil: fav ${strFav.finalStrength}, neu ${strNeu.finalStrength}, risky ${strRsk.finalStrength}`);
+check(Math.abs(strFav.finalStrength - strNeu.finalStrength) <= 5 && Math.abs(strNeu.finalStrength - strRsk.finalStrength) <= 5,
+  "nudge for stor – matchup skal kun gi en liten tendens (<=5)");
+check(strNeu.modifiers.matchupTendency === 0, "noytral matchup skal gi 0 tendens");
 
 // Rapport: lean-matrise (din formasjon i rad, motstander i kolonne).
 const sym = { favourable: "+", balanced: "·", risky: "-" };
