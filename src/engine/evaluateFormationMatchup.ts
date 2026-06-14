@@ -190,3 +190,63 @@ export function evaluateFormationMatchup(
     summary,
   };
 }
+
+/**
+ * Vurder ditt system mot en motstander beskrevet ved spillestil-tokens (ikke en
+ * full formasjon) – f.eks. kampmotorens motstanderprofiler. Da kjenner vi bare
+ * hvordan DITT system står mot stilen (egne strongAgainst/weakAgainst), ikke
+ * motstanderens egne styrker/svakheter. Returnerer samme resultatform.
+ */
+export function evaluateFormationVsOpponentStyles(
+  you: FormationMatchupInput,
+  opponentStyles: string[],
+  opponentName?: string,
+): FormationMatchupResult {
+  const yourTokens = embodiedTokens(you);
+  const opponentTokens = unique(
+    (Array.isArray(opponentStyles) ? opponentStyles : []).filter(
+      (token): token is string => typeof token === "string" && token.length > 0,
+    ),
+  );
+
+  const advantages: FormationMatchupPoint[] = [];
+  const risks: FormationMatchupPoint[] = [];
+
+  for (const token of intersect(you.strongAgainst, opponentTokens)) {
+    advantages.push({
+      token,
+      source: "own_strength",
+      text: `Ditt system er sterkt mot «${token}» – slik motstanderen spiller.`,
+    });
+  }
+  for (const token of intersect(you.weakAgainst, opponentTokens)) {
+    risks.push({
+      token,
+      source: "own_weakness",
+      text: `Ditt system sliter mot «${token}» – slik motstanderen spiller.`,
+    });
+  }
+
+  const score = advantages.length - risks.length;
+  const lean = leanFromScore(score);
+  const name = opponentName ?? "motstanderen";
+
+  let summary: string;
+  if (lean === "favourable") {
+    summary = `Gunstig matchup mot ${name}: systemet passer godt mot denne spillestilen.`;
+  } else if (lean === "risky") {
+    summary = `Risikabel matchup mot ${name}: spillestilen treffer systemets svakheter. Vurder kontekstuelle justeringer.`;
+  } else {
+    summary = `Balansert matchup mot ${name}: ingen tydelig taktisk overvekt mot denne spillestilen.`;
+  }
+
+  return {
+    yourTokens,
+    opponentTokens,
+    advantages,
+    risks,
+    score,
+    lean,
+    summary,
+  };
+}

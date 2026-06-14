@@ -487,7 +487,8 @@ export const OPPONENT_PROFILES = [
     chanceConversion: 70,
     strengths: ["jager ballfører høyt", "vinner ballen i din oppbygging"],
     weaknesses: ["rom bak presslinjen", "sårbar når presset brytes"],
-    pressurePoints: ["oppbygging under press", "keeper og stoppere med ball"]
+    pressurePoints: ["oppbygging under press", "keeper og stoppere med ball"],
+    matchupStyles: ["high_press", "aggressive_man_press"]
   },
   {
     id: "low_block_opponent",
@@ -500,7 +501,8 @@ export const OPPONENT_PROFILES = [
     chanceConversion: 66,
     strengths: ["kompakt femmer/firer bak ballen", "vinner boksdueller"],
     weaknesses: ["lite egen ballbesittelse", "sliter mot rask sideforflytning"],
-    pressurePoints: ["tålmodighet i angrep", "bredde og innlegg"]
+    pressurePoints: ["tålmodighet i angrep", "bredde og innlegg"],
+    matchupStyles: ["deep_low_block", "compact_532"]
   },
   {
     id: "direct_counter_opponent",
@@ -513,7 +515,8 @@ export const OPPONENT_PROFILES = [
     chanceConversion: 74,
     strengths: ["lynraske overganger", "spisser som lever i bakrommet"],
     weaknesses: ["lite kontroll med ball", "kan presses lavt"],
-    pressurePoints: ["restforsvaret ditt", "balansen ved balltap"]
+    pressurePoints: ["restforsvaret ditt", "balansen ved balltap"],
+    matchupStyles: ["direct_counter", "fast_transition", "fast_runners_in_behind"]
   },
   {
     id: "possession_opponent",
@@ -526,7 +529,8 @@ export const OPPONENT_PROFILES = [
     chanceConversion: 70,
     strengths: ["holder ballen i lange perioder", "flytter blokken din"],
     weaknesses: ["sårbar for målrettet press", "lav egen dybdetrussel"],
-    pressurePoints: ["pressdisiplinen din", "tålmodighet uten ball"]
+    pressurePoints: ["pressdisiplinen din", "tålmodighet uten ball"],
+    matchupStyles: ["possession_positional", "build_from_back", "switching_play"]
   },
   {
     id: "physical_set_piece_opponent",
@@ -539,9 +543,71 @@ export const OPPONENT_PROFILES = [
     chanceConversion: 72,
     strengths: ["dominerer i lufta", "farlige på alle dødballer"],
     weaknesses: ["lavt tempo i eget angrepsspill", "sliter mot teknisk kombinasjonsspill"],
-    pressurePoints: ["disiplin nær egen boks", "markering ved dødball"]
+    pressurePoints: ["disiplin nær egen boks", "markering ved dødball"],
+    matchupStyles: ["target_man_direct", "two_striker_press"]
   }
 ];
+
+// ---------------------------------------------------------------------------
+// Formasjons-matchup (Formation Knowledge Engine, kampmotor-siden).
+//
+// Trofast .js-motstykke til evaluateFormationVsOpponentStyles i
+// src/engine/evaluateFormationMatchup.ts: veier DITT systems authored
+// strongAgainst/weakAgainst (fra formationKnowledge.json) mot motstanderprofilens
+// matchupStyles. Holdes i synk med TS-versjonen (parity-testet i
+// sim:formation-matchup). app.js gjør all datalasting.
+// ---------------------------------------------------------------------------
+function uniqueStrings(values) {
+  return [...new Set(asArray(values).filter((v) => typeof v === "string" && v.length > 0))];
+}
+
+function matchupLeanFromScore(score) {
+  if (score >= 2) return "favourable";
+  if (score <= -2) return "risky";
+  return "balanced";
+}
+
+// formationKnowledge: { strongAgainst, weakAgainst } for valgt formasjon.
+// opponentStyles: motstanderprofilens matchupStyles. Returnerer null hvis det
+// ikke finnes kunnskap for formasjonen (graceful – ikke alle formasjoner dekkes).
+export function evaluateFormationMatchupVsOpponent(formationKnowledge, opponentStyles, opponentName) {
+  if (!formationKnowledge || typeof formationKnowledge !== "object") {
+    return null;
+  }
+  const strong = uniqueStrings(formationKnowledge.strongAgainst);
+  const weak = uniqueStrings(formationKnowledge.weakAgainst);
+  const opponentTokens = uniqueStrings(opponentStyles);
+
+  const advantages = strong
+    .filter((token) => opponentTokens.includes(token))
+    .map((token) => ({
+      token,
+      source: "own_strength",
+      text: `Ditt system er sterkt mot «${token}» – slik motstanderen spiller.`
+    }));
+  const risks = weak
+    .filter((token) => opponentTokens.includes(token))
+    .map((token) => ({
+      token,
+      source: "own_weakness",
+      text: `Ditt system sliter mot «${token}» – slik motstanderen spiller.`
+    }));
+
+  const score = advantages.length - risks.length;
+  const lean = matchupLeanFromScore(score);
+  const name = opponentName || "motstanderen";
+
+  let summary;
+  if (lean === "favourable") {
+    summary = `Gunstig matchup mot ${name}: systemet passer godt mot denne spillestilen.`;
+  } else if (lean === "risky") {
+    summary = `Risikabel matchup mot ${name}: spillestilen treffer systemets svakheter. Vurder kontekstuelle justeringer.`;
+  } else {
+    summary = `Balansert matchup mot ${name}: ingen tydelig taktisk overvekt mot denne spillestilen.`;
+  }
+
+  return { opponentTokens, advantages, risks, score, lean, summary };
+}
 
 // Enkel tilfeldig motstander ved kampstart. Egen funksjon slik at app/test kan
 // styre valget deterministisk via index om ønskelig.
@@ -1200,8 +1266,14 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
+
+  // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
+  // Krever at app.js sender inn valgt formasjons kunnskapsoppslag; null ellers.
+  const formationMatchup = formationKnowledge
+    ? evaluateFormationMatchupVsOpponent(formationKnowledge, matchOpponent.matchupStyles, matchOpponent.name)
+    : null;
   const strength = calculateMatchStrength({ teamFit, formation, activeClassifications });
   const tp = strength.tacticalProfile;
 
@@ -1231,6 +1303,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     createdAt: new Date().toISOString(),
     phase: "pre_match",
     opponent: { ...matchOpponent },
+    formationMatchup,
     selectedFormationId: formation?.id || null,
     selectedTacticId: tactic?.id || null,
     tacticSnapshot: tactic
