@@ -95,7 +95,7 @@ export function createDefaultOpponent() {
 //   - historisk formasjonsfit gir en liten bonus/penalty,
 //   - matchEngineEffects gir kun en liten tendens,
 //   - aktive lagklasser gir en liten bonus.
-export function calculateMatchStrength({ teamFit, formation, activeClassifications } = {}) {
+export function calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup } = {}) {
   const fit = teamFit || {};
   const metrics = fit.metrics || {};
   const completeCount = num(fit.completeCount);
@@ -146,6 +146,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
         incompletePenalty: 0,
         historicalModifier: 0,
         matchEngineTendency: 0,
+        matchupTendency: 0,
         classificationBonus: 0,
         missing
       }
@@ -174,10 +175,18 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
   // Aktive lagklasser gir en liten identitetsbonus (maks +4).
   const classificationBonus = Math.min(4, asArray(activeClassifications).length);
 
+  // Formasjons-matchup mot motstanderens spillestil gir KUN en liten tendens
+  // (aldri hovedscore): gunstig matchup løfter litt, risikabel trekker litt ned.
+  // Dette belønner å lese den konkrete matchupen – ikke en universelt «beste»
+  // formasjon. Skala holdes på linje med de andre tendensene (±5).
+  const matchupScore = formationMatchup ? num(formationMatchup.score) : 0;
+  const matchupTendency = clampRange(matchupScore * 1.5, -5, 5);
+
   let finalStrength = baseTeamScore;
   finalStrength -= incompletePenalty;
   finalStrength += historicalModifier;
   finalStrength += matchEngineTendency;
+  finalStrength += matchupTendency;
   finalStrength += classificationBonus;
   finalStrength = clamp(Math.round(finalStrength));
 
@@ -190,6 +199,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
       incompletePenalty: Math.round(incompletePenalty),
       historicalModifier: Math.round(historicalModifier * 10) / 10,
       matchEngineTendency: Math.round(matchEngineTendency * 10) / 10,
+      matchupTendency: Math.round(matchupTendency * 10) / 10,
       classificationBonus,
       missing
     }
@@ -1274,7 +1284,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
   const formationMatchup = formationKnowledge
     ? evaluateFormationMatchupVsOpponent(formationKnowledge, matchOpponent.matchupStyles, matchOpponent.name)
     : null;
-  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications });
+  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup });
   const tp = strength.tacticalProfile;
 
   // roleFitAverage trengs av flere hendelses-sjekker, men er ikke del av v1-
@@ -1592,6 +1602,16 @@ export function finalizeMatchdaySession(session) {
     analysis.push(`Systemsvakhet som preget kampen: ${weaknessHint}.`);
   }
 
+  // Formasjons-matchup: lukk læringssløyfen ved å forklare at matchupen mot
+  // motstanderens spillestil faktisk påvirket lagstyrken (og dermed resultatet).
+  const matchup = session.formationMatchup;
+  const matchupTendency = num(session.strengthSnapshot?.modifiers?.matchupTendency);
+  if (matchup && matchupTendency !== 0) {
+    const leanText = matchup.lean === "favourable" ? "gunstig" : matchup.lean === "risky" ? "risikabel" : "balansert";
+    const sign = matchupTendency > 0 ? "+" : "";
+    analysis.push(`Formasjons-matchup mot ${opponent.name || "motstanderen"} var ${leanText} (${sign}${matchupTendency} lagstyrke).`);
+  }
+
   const keyFactors = [];
   const strengthGap = baseXg.strengthGap;
   if (strengthGap >= 8) {
@@ -1611,6 +1631,11 @@ export function finalizeMatchdaySession(session) {
   }
   if (num(tp.restDefenseScore) < 50) {
     keyFactors.push("Skjørt restforsvar");
+  }
+  if (matchup && matchupTendency >= 2) {
+    keyFactors.push("Gunstig formasjons-matchup");
+  } else if (matchup && matchupTendency <= -2) {
+    keyFactors.push("Risikabel formasjons-matchup");
   }
 
   const trainingImpacts = decisions.map((decision) => decision.trainingImpact).filter(Boolean);
