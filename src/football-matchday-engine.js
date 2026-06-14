@@ -1713,6 +1713,9 @@ export function finalizeMatchdaySession(session) {
     trainingFocus: trainingReport,
     decisiveUnit,
     nextWeekAdvice,
-    historyGoHint
+    historyGoHint,
+    // Maskinlesbar svakhet kampen avslørte (UNIT_LABELS-nøkkel). Lar treningsuka
+    // belønne å trene det som faktisk gikk galt (reaktiv kontekst-relevans).
+    exposedWeaknessMetric: weakest?.key || null
   };
 }

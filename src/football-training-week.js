@@ -134,6 +134,36 @@ export function getMatchupRelevantFocusIds(formationMatchup) {
   return [...new Set(focusIds)];
 }
 
+// Svakhetsmetrikk fra forrige kamp (UNIT_LABELS-nøkkel) → treningsfokus som
+// adresserer den. Lar treningsuka belønne å fikse det som faktisk gikk galt
+// (reaktiv kontekst, komplementært til den proaktive matchup-relevansen).
+const WEAKNESS_METRIC_TO_FOCUS = {
+  restDefenseScore: "rest_defence",
+  balanceScore: "rest_defence",
+  pressScore: "pressing",
+  buildUpScore: "build_up",
+  widthScore: "width",
+  depthScore: "depth_runs",
+  roleFitAverage: "role_understanding",
+  relationshipScore: "role_understanding"
+};
+
+export function getWeaknessRelevantFocusId(weaknessMetric) {
+  return WEAKNESS_METRIC_TO_FOCUS[weaknessMetric] || null;
+}
+
+// Lesbare navn på svakhetsmetrikkene (for treningsråd-teksten).
+const UNIT_LABELS_TEXT = {
+  restDefenseScore: "restforsvaret",
+  balanceScore: "midtbanebalansen",
+  pressScore: "presslinjen",
+  buildUpScore: "oppbyggingsspillet",
+  widthScore: "kantspillet",
+  depthScore: "bakromstruslene",
+  roleFitAverage: "rolleforståelsen",
+  relationshipScore: "rollerelasjonene"
+};
+
 export function sanitizeWeeklyTrainingFocus(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const week = Number(value.week);
@@ -172,9 +202,9 @@ export function calculateTrainingStaffSupport({ focusId, coachContext } = {}) {
   return { level, label, score: Math.round(score), matchedStaffTypes: uniqueMatched };
 }
 
-export function recommendTrainingFocus({ opponent, teamFit, formationMatchup } = {}) {
+export function recommendTrainingFocus({ opponent, teamFit, formationMatchup, lastMatchWeaknessMetric } = {}) {
   // Matchup-bevisst råd har førsteprioritet: tren det den konkrete matchupen mot
-  // neste motstander er risikabel på (kontekstuell relevans, ikke generelt råd).
+  // neste motstander er risikabel på (proaktiv kontekstuell relevans).
   const matchupFocusIds = getMatchupRelevantFocusIds(formationMatchup);
   if (matchupFocusIds.length > 0) {
     const riskTokens = asArray(formationMatchup?.risks).map((risk) => risk?.token).filter(Boolean);
@@ -182,6 +212,16 @@ export function recommendTrainingFocus({ opponent, teamFit, formationMatchup } =
     return {
       focusIds: matchupFocusIds.slice(0, 2),
       reason: `Matchup mot ${opponent?.name || "neste motstander"} er risikabel på ${riskTokens.join(", ")}. ${names.join(" eller ")} adresserer det.`
+    };
+  }
+
+  // Reaktiv kontekst: tren det forrige kamp avslørte som svakest.
+  const weaknessFocusId = getWeaknessRelevantFocusId(lastMatchWeaknessMetric);
+  if (weaknessFocusId) {
+    const focus = getTrainingFocus(weaknessFocusId);
+    return {
+      focusIds: [weaknessFocusId],
+      reason: `Forrige kamp avslørte svakhet i ${UNIT_LABELS_TEXT[lastMatchWeaknessMetric] || "et lagområde"}. ${focus?.name} adresserer det.`
     };
   }
 
@@ -212,7 +252,7 @@ export function recommendTrainingFocus({ opponent, teamFit, formationMatchup } =
   };
 }
 
-export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachContext, opponent, formationMatchup } = {}) {
+export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachContext, opponent, formationMatchup, lastMatchWeaknessMetric } = {}) {
   const stored = sanitizeWeeklyTrainingFocus(selection);
   const week = Number(clubWeek);
   if (!stored || !Number.isInteger(week) || stored.week !== week || stored.appliedSessionId) return null;
@@ -221,10 +261,13 @@ export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachConte
   const staffSupport = calculateTrainingStaffSupport({ focusId: focus.id, coachContext });
   const baseBonus = staffSupport.level === "strong" ? 4 : staffSupport.level === "medium" ? 3 : 2;
 
-  // Kontekstuell relevans (README pkt. 4): adresserer fokuset en faktisk
-  // matchup-risiko mot denne motstanderen, gir det en liten ekstra uttelling.
-  // Et irrelevant fokus får kun base – relevante valg belønnes, ikke alle valg.
-  const contextRelevant = getMatchupRelevantFocusIds(formationMatchup).includes(focus.id);
+  // Kontekstuell relevans (README pkt. 4): fokuset belønnes når det treffer
+  // konteksten – enten proaktivt (adresserer en matchup-risiko mot neste
+  // motstander) eller reaktivt (fikser svakheten forrige kamp avslørte). Et
+  // irrelevant fokus får kun base – relevante valg belønnes, ikke alle valg.
+  const addressesMatchup = getMatchupRelevantFocusIds(formationMatchup).includes(focus.id);
+  const addressesLastWeakness = getWeaknessRelevantFocusId(lastMatchWeaknessMetric) === focus.id;
+  const contextRelevant = addressesMatchup || addressesLastWeakness;
   const metricBonus = contextRelevant ? baseBonus + 1 : baseBonus;
   const metricBonuses = {};
   focus.affectedMetrics.forEach((metric) => {
@@ -240,6 +283,7 @@ export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachConte
     staffSupport: { ...staffSupport },
     opponentFit: focus.bestAgainstOpponentStyles.includes(opponent?.id),
     contextRelevant,
+    contextReason: addressesMatchup ? "matchup" : addressesLastWeakness ? "forrige_kamp" : null,
     metricBonuses,
     coachBonuses: focus.id === "formation_familiarity"
       ? { formationFamiliarity: metricBonus, coachUnderstanding: Math.max(1, metricBonus - 1) }
