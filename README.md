@@ -457,6 +457,29 @@ Og kortere:
 
 Dette må alltid leses sammen med kjerneprinsippet: *alle spillere er gode nok – spørsmålet er om treneren forstår dem.* Læringslaget handler om å bygge den forståelsen hos spilleren.
 
+### 10. Implementert så langt (Formation Knowledge Engine + kontekst-relevans)
+
+Av designretningen over er denne kjeden faktisk bygget og testet. Holdt bevisst enkel: små, additive lag rundt én idé.
+
+**Formation Knowledge Engine** – kunnskap om formasjoner i tre lag:
+
+- *Data:* `data/hgFootball/formationKnowledge.json` – per formasjon `strongAgainst`/`weakAgainst` (mot motstanderstil-tokens), `requiredConditions`, `tacticalRisks`, `parameterProfile`, `trainingLinks`. Dekker et kuratert utvalg (utvides formasjon for formasjon). Valideres av `npm run audit:hg-formation-knowledge`.
+- *Docs:* `docs/hgFootball/formations/*.md` – lesbar analyse per dekket formasjon.
+- *Beregning:* `evaluateFormationMatchup` / `evaluateFormationVsOpponentStyles` (TS, `src/engine/evaluateFormationMatchup.ts`) – utleder hvilke spillestiler en formasjon legemliggjør og veier dem mot motstanderens styrker/svakheter → fordeler, risikoer, konkrete justeringsforslag og en samlet *lean* (favourable / balanced / risky). Demonstreres/valideres av `npm run sim:formation-matchup`.
+
+**Kobling til kampdag** – `src/football-matchday-engine.js` (med trofast `.js`-kopi av matchup-logikken, parity-testet mot TS):
+
+- Hver motstanderprofil har `matchupStyles`. Når en kampsesjon opprettes for en *dekket* formasjon, beregnes en formasjons-matchup som vises i kampplanen (lean + fordeler/risikoer + «Vurder: …»-forslag).
+- Matchupen gir en **liten** tendens på lagstyrken (`matchupTendency`, ±5, på linje med de andre små tendensene) – aldri hovedscore. `teamFit` er fortsatt grunnlaget.
+
+**Kontekst-relevant trening** – `src/football-training-week.js`:
+
+- *Proaktivt:* trening som adresserer matchup-risikoen mot **neste** motstander er relevant (`RISK_TOKEN_TO_FOCUS`).
+- *Reaktivt:* trening som fikser svakheten **forrige** kamp avslørte er relevant (kampmotorens `exposedWeaknessMetric` → `WEAKNESS_METRIC_TO_FOCUS`).
+- Et relevant fokus får en liten ekstra uttelling gjennom det eksisterende treningsbonus-systemet; et irrelevant fokus får kun base. *Relevante* valg belønnes, ikke alle valg. Validert av `npm run sim:training-week`.
+
+Alt er additivt og «graceful»: uten kunnskapsdata / matchup / forrige kamp kjører kampdag og trening som før.
+
 ## Kvalitetssjekk før nye endringer
 
 ### Data
