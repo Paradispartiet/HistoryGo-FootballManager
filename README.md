@@ -8,7 +8,7 @@ Dette er ikke et vanlig ratingspill. `overall` beskriver klasse, ikke automatisk
 
 ## Nåværende hovedstatus
 
-Appen har nå flere lag:
+Appen har nå flere lag som faktisk finnes i repoet:
 
 1. **Managerkontor / startellever** – velg formasjon, taktikk, spillere og roller på banen.
 2. **Individuell fitmotor** – vurderer posisjon, rolle, taktikk og feilbruk for hver spiller.
@@ -16,13 +16,19 @@ Appen har nå flere lag:
 4. **Relasjonsmotor** – vurderer om rollene hjelper eller blokkerer hverandre.
 5. **History Go-unlocks** – spillere, stab, ekspertise, treningsprogrammer og badges kan knyttes til besøkte/samlede steder.
 6. **Lokal starttropp** – valgfri startmodus der manageren kan begynne med de 15 nærmeste kvalifiserte spillerne uten å markere stedene som samlet i History Go.
-7. **Innboks / klubbuke** – trådbasert innboks, svarvalg og klubbverdier.
-8. **Stab, ekspertise og trening** – staff og ekspertise åpner treningsprogrammer og badgeprogresjon.
-9. **Lagidentitet** – lagklasser basert på opptjente badges og utviklingsretning.
-10. **Stedsrapporter** – forklarer hva sportsteder gir manageren.
-11. **Historisk formasjonsbibliotek** – egen `data/hgFootball/`-modul med historiske epoker, formasjoner, rolletyper og unlock-regler.
+7. **Offentlig startanker** – brukeren kan velge et offentlig History Go-/fotballsted som trygg startposisjon uten privat adresse.
+8. **Startvalg for managerkarrieren** – History Go-samling, lokal start eller valgt offentlig startsted.
+9. **Innboks / klubbuke** – trådbasert innboks, svarvalg og klubbverdier.
+10. **Kampdag v0.2** – enkel kampdagsløkke med motstanderprofiler, managergrep, kamprapport og konsekvenser.
+11. **Mini-season v0.1** – femkampers prøveperiode med styremål og sluttvurdering.
+12. **Ukentlig treningsfokus v0.2** – manageren velger taktisk fokus før kamp; fokuset kan påvirke kampdag og sluttrapport.
+13. **Stab, ekspertise og trening** – staff og ekspertise åpner treningsprogrammer og badgeprogresjon.
+14. **Lagidentitet** – lagklasser basert på opptjente badges og utviklingsretning.
+15. **Stedsrapporter** – forklarer hva sportsteder gir manageren.
+16. **Historisk formasjonsbibliotek** – egen `data/hgFootball/`-modul med historiske epoker, formasjoner, rolletyper og unlock-regler.
+17. **Formation Knowledge Engine** – formasjonskunnskap, matchup-logikk, risikoer, justeringsforslag og treningskoblinger.
 
-Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, liga, sesong og full simulering gjenstår.
+Dette er fortsatt ikke et ferdig spill. Full liga, tabell, sesongdybde, rikere UI, full treningsprogram-komposisjon, full off-pitch-simulering og dyp dokumentasjon for alle formasjoner gjenstår.
 
 ## Viktige filer
 
@@ -30,6 +36,7 @@ Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, liga, ses
 index.html
 style.css
 README.md
+CLAUDE.md
 
 src/
   app.js
@@ -38,7 +45,12 @@ src/
   football-team-fit-engine.js
   football-relationship-engine.js
   football-badge-effect-engine.js
+  football-matchday-engine.js
+  football-match-consequences.js
+  football-mini-season.js
+  football-training-week.js
   hg-formation-library.js
+  engine/evaluateFormationMatchup.ts
 
 data/
   football_players.json
@@ -61,12 +73,19 @@ data/
   club_inbox_messages/
   club_inbox_choices/
   hgFootball/
+    formationKnowledge.json
 
 docs/
   local-start-squad.md
+  hgFootball/formations/
 
 scripts/
   audit-hg-football-data.mjs
+  audit-hg-formation-knowledge.mjs
+  simulate-matchday-v02.mjs
+  simulate-mini-season.mjs
+  simulate-training-week.mjs
+  simulate-formation-matchup.mjs
 ```
 
 ## Kjøring
@@ -83,6 +102,22 @@ python3 -m http.server 8000
 
 ```txt
 http://localhost:8000
+```
+
+Viktige sjekker:
+
+```bash
+npm run typecheck
+npm run build
+npm run audit:knowledge
+npm run audit:hg-football
+npm run audit:hg-historical-fit
+npm run audit:hg-coach-context
+npm run audit:hg-formation-knowledge
+npm run sim:matchday
+npm run sim:mini-season
+npm run sim:training-week
+npm run sim:formation-matchup
 ```
 
 ## Designprinsipper
@@ -123,7 +158,9 @@ Negative relasjoner skal også forklares:
 - presspiss uten ettertrykk
 - linjekeeper bak høy linje
 
-## Individuell fitmotor
+## Kjernearkitektur
+
+### Individuell fitmotor
 
 Ligger i:
 
@@ -141,7 +178,7 @@ Den vurderer blant annet:
 - `status`
 - forklaring og rolleforslag
 
-## Lagfitmotor
+### Lagfitmotor
 
 Ligger i:
 
@@ -149,43 +186,11 @@ Ligger i:
 src/football-team-fit-engine.js
 ```
 
-Den bygger på individuell fit og vurderer laget som helhet. `calculateTeamFit` returnerer blant annet:
+Den bygger på individuell fit og vurderer laget som helhet. Den skal ikke bare være et gjennomsnitt av enkeltspillere. Den vurderer blant annet balanse, bredde, dybde, oppbygging, press, restforsvar, relasjoner, badge-effekter og duplikatspillere.
 
-```json
-{
-  "teamScore": 78,
-  "completeCount": 11,
-  "totalSlots": 11,
-  "metrics": {
-    "individualFitAverage": 80,
-    "roleFitAverage": 76,
-    "tacticFitAverage": 72,
-    "misuseAverage": 8,
-    "balanceScore": 74,
-    "widthScore": 82,
-    "depthScore": 69,
-    "buildUpScore": 77,
-    "pressScore": 61,
-    "restDefenseScore": 70,
-    "relationshipScore": 73,
-    "duplicatePenalty": 0
-  },
-  "baseMetrics": {},
-  "badgeEffects": {},
-  "relationships": {},
-  "assignments": [],
-  "duplicatePlayers": [],
-  "report": {
-    "summary": "...",
-    "strengths": [],
-    "issues": []
-  }
-}
-```
+Badge-effekter legges forsiktig oppå base-metrics. Relasjoner inngår som egen `relationshipScore` og som rapportpunkter i styrker/problemer.
 
-Badge-effekter legges forsiktig oppå base-metrics. Relasjoner inngår nå som egen `relationshipScore` og som egne rapportpunkter i styrker/problemer.
-
-## Relasjonsmotor
+### Relasjonsmotor
 
 Ligger i:
 
@@ -195,25 +200,7 @@ src/football-relationship-engine.js
 
 Motoren vurderer om rollene i elleveren hjelper eller blokkerer hverandre. Den endrer ikke spillernes grunnkvalitet. Den vurderer trenerens struktur: får spillerne riktige medspillere rundt seg, eller blir styrkene isolert?
 
-`calculateRoleRelationships(assignments, tactic)` returnerer:
-
-```json
-{
-  "relationshipScore": 72,
-  "positivePoints": 24,
-  "negativePoints": 7,
-  "positiveRelations": [],
-  "negativeRelations": [],
-  "involvedPlayers": {
-    "widthCreators": [],
-    "runners": [],
-    "controllers": [],
-    "holders": []
-  }
-}
-```
-
-## History Go-unlocks
+### History Go-unlocks
 
 Appen leser ekte History Go-progresjon fra localStorage:
 
@@ -224,9 +211,9 @@ hg_groundhopper_stats_v1
 
 Disse brukes til å finne besøkte/samlede sportsteder som finnes i Football Manager-unlockdata. Spillere velges ikke fritt: tilgjengelige spillere kommer fra `player_candidate`-unlocks på opplåste steder.
 
-## Lokal starttropp
+### Lokal starttropp og offentlig startanker
 
-HG Football Manager skal også støtte et valgfritt startvalg der brukeren kan begynne med de 15 kvalifiserte fotballspillerne som er geografisk nærmest nåværende lokasjon eller valgt offentlig startsted.
+HG Football Manager støtter et valgfritt startvalg der brukeren kan begynne med de 15 kvalifiserte fotballspillerne som er geografisk nærmest nåværende lokasjon eller valgt offentlig startsted.
 
 Dette er en startsnarvei, ikke en erstatning for History Go-samlingen. Spillere fra lokal start skal kunne brukes i managerdelen og telle mot 15-spillerkravet, men stedene deres skal ikke automatisk markeres som samlet eller besøkt i History Go.
 
@@ -234,24 +221,27 @@ Prinsippet er:
 
 ```txt
 local_start = spillbar starttropp
+publicStartAnchor = trygg offentlig startposisjon
 visited_place = ekte History Go-samling
 ```
 
-Den tekniske planen ligger i:
+Lokal start og offentlig startanker skal aldri skrive til `visited_places` eller `hg_groundhopper_stats_v1`, og skal aldri lagre privat adresse.
 
-```txt
-docs/local-start-squad.md
-```
-
-## Stab, ekspertise, trening og badges
+### Stab, ekspertise, trening og badges
 
 Stab og ekspertise låses opp via steder og unlock-regler. Treningsprogrammer krever relevant ekspertise og riktig type ansatt stab. Badgeprogresjon kan gi små metriske bonuser til laget, for eksempel på press, restforsvar, oppbygging eller bredde.
 
-## Innboks og klubbuke
+### Innboks og klubbuke
 
 Innboksen er trådbasert. Meldinger kan ha svarvalg. Svarvalg kan gi små effekter på Club Week-verdier som styretillit, moral, taktisk klarhet, treningskultur og medietrykk.
 
-## Historisk formasjonsbibliotek
+### Kampdag, konsekvenser og mini-season
+
+Kampdag v0.2 gir en enkel kampdagsløkke der manageren møter motstanderprofiler, tar valg, får rapport og får konsekvenser tilbake til Club Week / mini-season.
+
+Mini-season v0.1 gir en lett femkampers prøveperiode med motstanderplan, styremål, poeng og sluttvurdering. Dette er en ramme for testing av kampdag og managergrep, ikke en full ligamotor.
+
+### Historisk formasjonsbibliotek
 
 `data/hgFootball/` er et eget historisk datagrunnlag for HG Football Manager. Det inneholder blant annet:
 
@@ -264,21 +254,13 @@ Innboksen er trådbasert. Meldinger kan ha svarvalg. Svarvalg kan gi små effekt
 
 `src/hg-formation-library.js` leser dette som et eget formasjonsbibliotek i appen. Formasjoner behandles som historiske taktiske systemer, ikke bare tall.
 
-Audit for dette datagrunnlaget:
+Audit:
 
 ```bash
 npm run audit:hg-football
 ```
 
-eller:
-
-```bash
-node scripts/audit-hg-football-data.mjs
-```
-
 ## HG Football Manager som læringsspill
-
-> **Designretning.** Denne seksjonen beskriver hva spillet skal være, ikke hva som er ferdig bygget. Mye av poeng-, forslags- og kontekstlogikken under er foreløpig **arkitekturkrav og retning**, ikke implementert motor. Den eksisterende fitmotoren, relasjonsmotoren, lagfitmotoren og det historiske formasjonsbiblioteket er grunnmuren dette skal bygges videre på.
 
 HG Football Manager skal ikke bare være et manager-spill. Det skal være et **læringsspill om fotball** – en spillbar fotballskole om taktikk, trening, formasjoner og kontekstuell managerforståelse.
 
@@ -320,7 +302,7 @@ Prinsipp: spilleren skal aldri bare møte et tomt valg. Spillet skal alltid gi n
 
 ### 3. Treningsprogrammer som sammensatte setups
 
-Treningsprogrammet skal bygges rundt presenterte programsammensetninger, for eksempel:
+Det fullverdige treningsprogramsystemet skal bygges rundt presenterte programsammensetninger, for eksempel:
 
 - balansert uke
 - kampforberedende uke
@@ -335,6 +317,8 @@ Treningsprogrammet skal bygges rundt presenterte programsammensetninger, for eks
 - taktisk innkjøring
 
 Hver programsammensetning skal kunne ha **variasjoner** – f.eks. normal belastning, høy intensitet, lav belastning, kamp om tre dager, skadeforebyggende variant, ungdomsvennlig variant, variant mot sterk motstander, variant etter svak kamp, variant etter tett kampprogram. Spilleren skal også kunne lage og lagre egne programsammensetninger.
+
+Status: ukentlig treningsfokus v0.2 finnes som et første spillbart lag. Full komposisjon av treningsprogrammer med variasjoner og egne lagrede oppsett gjenstår.
 
 ### 4. Poeng etter relevante parametre, ikke universelt riktige valg
 
@@ -370,6 +354,8 @@ De foreslåtte valgene skal være gode etter taktiske parametre: spillertyper, f
 
 Det er nettopp her spilleren kan slå et taktisk bedre lag: ved å lese situasjonen bedre enn standardsystemet.
 
+Status: deler av taktisk forslag/relevans finnes i formasjonsmatchup og treningsfokus. Full off-pitch-/skjult-kontekstsystem gjenstår.
+
 ### 6. Taktiske fallgruver
 
 Ingen taktikk er perfekt mot alt:
@@ -393,9 +379,7 @@ Alle formasjoner bør ha **to lag**.
 
 `id`, `name`, `era`, `baseShape`, `inPossessionShape`, `outOfPossessionShape`, `pressShape`, `strengths`, `weaknesses`, `requiredConditions`, `strongAgainst`, `weakAgainst`, `tacticalRisks`, `trainingLinks`, `playerRoleRequirements`, `parameterProfile`.
 
-Dette utvider den eksisterende `data/hgFootball/`-modulen, som allerede beskriver formasjoner som historiske systemer med faseformasjoner (se *Historisk formasjonsbibliotek* over).
-
-**B. Dokumentasjonslag** (brukes som lærings- og analysegrunnlag). Hver formasjon bør ha en dyp dokumentasjonsfil, foreslått under `docs/formations/`, f.eks. `modern_433.md`, `wm_3223.md`, `brazil_424.md`, `catenaccio_libero.md`, `conte_343.md`. Hver fil bør forklare:
+**B. Dokumentasjonslag** (brukes som lærings- og analysegrunnlag). Hver formasjon bør ha en dyp dokumentasjonsfil under `docs/hgFootball/formations/`. Hver fil bør forklare:
 
 - historisk bakgrunn
 - taktisk idé
@@ -407,26 +391,6 @@ Dette utvider den eksisterende `data/hgFootball/`-modulen, som allerede beskrive
 - relevante treningsprogrammer
 - parameterkollisjoner mot andre taktikker
 - eksempler på historiske eller moderne lag
-
-Foreslått filstruktur (designretning, ikke ferdig):
-
-```txt
-data/hgFootball/formations/
-  formations.json
-  formation_matchups.json
-  formation_parameters.json
-  formation_training_links.json
-docs/hgFootball/formations/
-  235_pyramid.md
-  wm_3223.md
-  metodo_2323.md
-  brazil_424.md
-  catenaccio_libero.md
-  modern_433.md
-  modern_4231.md
-  conte_343.md
-  positional_325.md
-```
 
 ### 8. Parameterlogikk mellom taktikker
 
@@ -463,20 +427,21 @@ Av designretningen over er denne kjeden faktisk bygget og testet. Holdt bevisst 
 
 **Formation Knowledge Engine** – kunnskap om formasjoner i tre lag:
 
-- *Data:* `data/hgFootball/formationKnowledge.json` – per formasjon `strongAgainst`/`weakAgainst` (mot motstanderstil-tokens), `requiredConditions`, `tacticalRisks`, `parameterProfile`, `trainingLinks`. Dekker et kuratert utvalg (utvides formasjon for formasjon). Valideres av `npm run audit:hg-formation-knowledge`.
+- *Data:* `data/hgFootball/formationKnowledge.json` – per formasjon `strongAgainst`/`weakAgainst` (mot motstanderstil-tokens), `requiredConditions`, `tacticalRisks`, `parameterProfile`, `trainingLinks`. Dekker et kuratert utvalg som skal utvides formasjon for formasjon. Valideres av `npm run audit:hg-formation-knowledge`.
 - *Docs:* `docs/hgFootball/formations/*.md` – lesbar analyse per dekket formasjon.
-- *Beregning:* `evaluateFormationMatchup` / `evaluateFormationVsOpponentStyles` (TS, `src/engine/evaluateFormationMatchup.ts`) – utleder hvilke spillestiler en formasjon legemliggjør og veier dem mot motstanderens styrker/svakheter → fordeler, risikoer, konkrete justeringsforslag og en samlet *lean* (favourable / balanced / risky). Demonstreres/valideres av `npm run sim:formation-matchup`.
+- *Beregning:* `evaluateFormationMatchup` / `evaluateFormationVsOpponentStyles` (TS, `src/engine/evaluateFormationMatchup.ts`) – utleder hvilke spillestiler en formasjon legemliggjør og veier dem mot motstanderens styrker/svakheter → fordeler, risikoer, konkrete justeringsforslag og en samlet *lean* (`favourable` / `balanced` / `risky`). Demonstreres/valideres av `npm run sim:formation-matchup`.
 
-**Kobling til kampdag** – `src/football-matchday-engine.js` (med trofast `.js`-kopi av matchup-logikken, parity-testet mot TS):
+**Kobling til kampdag** – `src/football-matchday-engine.js`:
 
-- Hver motstanderprofil har `matchupStyles`. Når en kampsesjon opprettes for en *dekket* formasjon, beregnes en formasjons-matchup som vises i kampplanen (lean + fordeler/risikoer + «Vurder: …»-forslag).
-- Matchupen gir en **liten** tendens på lagstyrken (`matchupTendency`, ±5, på linje med de andre små tendensene) – aldri hovedscore. `teamFit` er fortsatt grunnlaget.
+- Hver motstanderprofil kan ha `matchupStyles`.
+- Når en kampsesjon opprettes for en dekket formasjon, beregnes en formasjons-matchup som vises i kampplanen.
+- Matchupen gir en **liten** tendens på lagstyrken (`matchupTendency`, ±5, på linje med andre små tendenslag). `teamFit` er fortsatt grunnlaget.
 
 **Kontekst-relevant trening** – `src/football-training-week.js`:
 
 - *Proaktivt:* trening som adresserer matchup-risikoen mot **neste** motstander er relevant (`RISK_TOKEN_TO_FOCUS`).
 - *Reaktivt:* trening som fikser svakheten **forrige** kamp avslørte er relevant (kampmotorens `exposedWeaknessMetric` → `WEAKNESS_METRIC_TO_FOCUS`).
-- Et relevant fokus får en liten ekstra uttelling gjennom det eksisterende treningsbonus-systemet; et irrelevant fokus får kun base. *Relevante* valg belønnes, ikke alle valg. Validert av `npm run sim:training-week`.
+- Et relevant fokus får en liten ekstra uttelling gjennom det eksisterende treningsbonus-systemet; et irrelevant fokus får kun base. Validert av `npm run sim:training-week`.
 
 Alt er additivt og «graceful»: uten kunnskapsdata / matchup / forrige kamp kjører kampdag og trening som før.
 
@@ -490,8 +455,8 @@ Alt er additivt og «graceful»: uten kunnskapsdata / matchup / forrige kamp kj�
 - Nye spiller-unlocks må peke på ekte spiller-id-er, ikke arketype-id-er.
 - Steder som ikke skal gi spillere, for eksempel KFUM Arena/Bislett i nåværende dataregler, må ikke få player-unlocks.
 - Nye tagger bør gjenbrukes på tvers av spiller/rolle/taktikk der det er mulig.
-- Lokal starttropp må ikke skrive til `visited_places` eller `hg_groundhopper_stats_v1`.
-- Lokal starttropp må ikke hardkode spillerdata eller koordinater i `app.js`.
+- Lokal starttropp og offentlig startanker må ikke skrive til `visited_places` eller `hg_groundhopper_stats_v1`.
+- Lokal starttropp og offentlig startanker må ikke hardkode spillerdata, koordinater eller private adresser i `app.js`.
 
 ### Motor
 
@@ -502,6 +467,7 @@ Alt er additivt og «graceful»: uten kunnskapsdata / matchup / forrige kamp kj�
 - Relasjoner skal forklare hvorfor roller støtter eller blokkerer hverandre.
 - Badges skal nudge, ikke dominere.
 - Lokal starttropp skal integreres i `computeAvailability()`, ikke i en parallell unlock-motor.
+- Kampdag, treningsuke, Formation Knowledge og mini-season skal være additive lag rundt eksisterende motor, ikke nye konkurrerende motorer.
 
 ### UI
 
@@ -510,31 +476,22 @@ Alt er additivt og «graceful»: uten kunnskapsdata / matchup / forrige kamp kj�
 - Nye data skal helst kunne vises uten å bygge om app-logikken.
 - Relasjonsdata vises foreløpig via lagrapporten; egen UI-metrikk kan legges til senere.
 - Lokal starttropp skal vises som `Lokal starttropp`, ikke som et samlet sted.
+- Offentlig startanker skal vises som offentlig valgt startsted, ikke som privat adresse.
 
-## Ikke ferdig ennå
+## Videre arbeid
 
-Følgende gjenstår som større spill-lag:
+Følgende er de viktigste større lagene som fortsatt gjenstår eller må utvides:
 
-- implementere lokal starttropp i runtime etter `docs/local-start-squad.md`
-- motstanderprofiler
-- kampmotor
-- kamprapport etter kamp
-- ukekamp
-- liga
-- sesong
-- tabell
-- full kobling mellom historisk formasjonsbibliotek og aktiv kampmotor
-
-## Neste anbefalte utviklingsrekkefølge
-
-1. Implementer lokal starttropp i `computeAvailability()` uten å skrive til History Go-progresjon.
-2. Test managerkontoret i nettleser/iPad etter relasjonsmotoren.
-3. Legg relasjonsscore inn som egen synlig metrikk i UI.
-4. Lag motstanderprofiler.
-5. Lag tekstbasert ukekamp.
-6. Lag kamprapport som forklarer trenerens valg.
-7. Koble historiske formasjoner fra `data/hgFootball/` dypere inn i aktiv lagfit/kampmotor.
-8. Lag liga og sesong.
+1. **Rydde og styrke managerkontor-UI** – mindre skjematisk, mer spillfølelse, tydeligere hierarki, grønt taktikkbrett og bedre iPad-lesbarhet.
+2. **Fullføre forslagssystemet ved alle store valg** – formasjon, kampplan, rollevalg, treningsprogram, spillerutvikling, stab/fasiliteter og administrasjon.
+3. **Bygge full treningsprogram-komposisjon** – presenterte programoppsett, variasjoner og egne lagrede programsammensetninger, basert på ukentlig treningsfokus v0.2.
+4. **Utvikle off-pitch-/kontekstparametre** – skjult slitasje, moral, selvtillit, relasjoner, mediepress, uro og behov for trygghet/ro.
+5. **Utvide Formation Knowledge Engine** – dekke flere formasjoner, flere docs-filer, flere matchup-regler og tydeligere treningskoblinger.
+6. **Koble historiske formasjoner dypere inn i aktiv lagfit/kampmotor** – uten å gjøre gamle formasjoner “dårlige”; de skal fungere når rammebetingelsene er riktige.
+7. **Utvikle kampdag videre** – rikere kampforløp, flere hendelsestyper, tydeligere årsak–virkning og bedre kamprapporter.
+8. **Utvikle mini-season til sesongstruktur** – liga, tabell, terminliste, sesongmål og progresjon over tid.
+9. **Synliggjøre læring bedre i UI** – forklar hvorfor forslagene anbefales, hva risikoen er, og hvilke managergrep som går utover standardforslaget.
+10. **Fortsette dataaudits og simulations** – alle nye data- og motorlag må ha lesbare, deterministiske sjekker.
 
 ## Fast regel for videre arbeid
 
