@@ -162,6 +162,20 @@ export type {
 export { recommendRoleChangesFromTeamFit } from "./engine/recommendRoleChangesFromTeamFit.js";
 
 export type {
+  FormationMatchupInput,
+  FormationMatchupLean,
+  FormationMatchupPoint,
+  FormationMatchupResult,
+  FormationParameterProfile,
+} from "./engine/evaluateFormationMatchup.js";
+
+export {
+  deriveFormationShapeTokens,
+  deriveFormationStyleTokens,
+  evaluateFormationMatchup,
+} from "./engine/evaluateFormationMatchup.js";
+
+export type {
   TeamFitWeakPoint,
   TeamFitWeakPointSeverity,
 } from "./engine/analyzeWeakPointsFromTeamFit.js";

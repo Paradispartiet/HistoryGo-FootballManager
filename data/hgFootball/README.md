@@ -33,6 +33,8 @@ HG Football Manager lar spilleren bygge lag og stab kun av spillere, trenere og 
 | `formationKnowledge.json` | Kunnskapslag: matchups, fallgruver, parameterprofil, treningskoblinger | `history-go.hg-football.formation-knowledge.v1` |
 
 > `formationKnowledge.json` er Formation Knowledge Engine-laget: per formasjon `strongAgainst`/`weakAgainst`, `requiredConditions`, `tacticalRisks`, `parameterProfile` og `trainingLinks`, med dyp dokumentasjon under `docs/hgFootball/formations/`. Valideres av `npm run audit:hg-formation-knowledge`. Laget er additivt – det dekker et kuratert formasjonsutvalg og utvides formasjon for formasjon.
+>
+> **Beregningslag:** `evaluateFormationMatchup` (TS, eksportert fra `src/index.ts`) gjør dataene beregningsbare – den utleder hvilke spillestil-tokens en formasjon legemliggjør (fra `parameterProfile` + `baseShape`) og veier dem mot motstanderens authored `strongAgainst`/`weakAgainst` for å gi fordeler, risikoer og en samlet lean. `npm run sim:formation-matchup` demonstrerer og validerer dette (samme formasjon er favourable mot én stil, risky mot en annen – «ingen taktikk er perfekt mot alt»).
 
 > Schema-navnerommet `history-go.hg-football.*` er bevisst valgt for denne modulen og lever side om side med de eksisterende `data/football_*.json`-filene (`historygo-football-manager.*`). Modulen er additiv og dupliserer ikke den eksisterende unlock-loop-pakken.
 
