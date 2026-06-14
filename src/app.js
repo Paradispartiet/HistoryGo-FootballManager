@@ -33,6 +33,7 @@ import {
   recommendTrainingFocus,
   createTrainingMatchdaySnapshot
 } from "./football-training-week.js";
+import { createSuggestedSetups } from "./football-suggested-setups.js";
 import {
   adaptHgFormations,
   buildRoleTypeIndex,
@@ -311,6 +312,7 @@ const elements = {
   pressScore: document.querySelector("#pressScore"),
   managerSummary: document.querySelector("#managerSummary"),
   managerTopActions: document.querySelector("#managerTopActions"),
+  suggestedSetups: document.querySelector("#suggestedSetups"),
   managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
   managerRoleChanges: document.querySelector("#managerRoleChanges"),
   managerWeakPoints: document.querySelector("#managerWeakPoints"),
@@ -6067,6 +6069,124 @@ function renderWeeklyTrainingFocus(teamFit) {
   });
 }
 
+// Suggested Setups v1: 2–4 forklarende oppsettforslag (formasjon, kampplan,
+// treningsuke) på dashbordet. Bygger på samme motorer som resten av appen
+// (teamFit, formasjonskunnskap, motstander, coachContext) og degraderer trygt.
+// Forslagene er additive: de låser ikke spilleren, men forklarer
+// standardforståelsen slik at egne kontekstuelle valg kan slå dem.
+const SUGGESTED_SETUP_GROUPS = [
+  { type: "formation", label: "Formasjon" },
+  { type: "match_plan", label: "Kampplan" },
+  { type: "training_week", label: "Treningsuke" }
+];
+
+function suggestedSetupConfidenceLabel(confidence) {
+  const value = Number(confidence) || 0;
+  if (value >= 0.7) return "Høy";
+  if (value >= 0.5) return "Middels";
+  return "Lav";
+}
+
+function appendSuggestedSetupList(card, className, label, items) {
+  const list = Array.isArray(items) ? items.filter(Boolean) : [];
+  if (list.length === 0) return;
+  const heading = document.createElement("p");
+  heading.className = "suggested-setup-list-label";
+  heading.textContent = label;
+  const ul = document.createElement("ul");
+  ul.className = className;
+  list.forEach((text) => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    ul.append(li);
+  });
+  card.append(heading, ul);
+}
+
+function buildSuggestedSetupCard(suggestion) {
+  const card = document.createElement("article");
+  card.className = "suggested-setup-card";
+
+  const head = document.createElement("div");
+  head.className = "suggested-setup-head";
+  const title = document.createElement("h4");
+  title.textContent = suggestion.title;
+  const confidence = document.createElement("span");
+  confidence.className = "suggested-setup-confidence";
+  confidence.dataset.level = suggestedSetupConfidenceLabel(suggestion.confidence).toLowerCase();
+  confidence.textContent = `Konfidens: ${suggestedSetupConfidenceLabel(suggestion.confidence)}`;
+  head.append(title, confidence);
+  card.append(head);
+
+  const summary = document.createElement("p");
+  summary.className = "suggested-setup-summary";
+  summary.textContent = suggestion.summary;
+  card.append(summary);
+
+  appendSuggestedSetupList(card, "suggested-setup-why", "Hvorfor nå", suggestion.why);
+  appendSuggestedSetupList(card, "suggested-setup-risks", "Risiko", suggestion.risks);
+  appendSuggestedSetupList(card, "suggested-setup-adjust", "Du kan justere", suggestion.suggestedAdjustments);
+
+  return card;
+}
+
+function renderSuggestedSetups(teamFit) {
+  const container = elements.suggestedSetups;
+  if (!container) return;
+
+  container.textContent = "";
+
+  const formation = getFormation();
+  if (!formation) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Velg et system for å se foreslåtte oppsett.";
+    container.append(empty);
+    return;
+  }
+
+  const suggested = createSuggestedSetups({
+    teamFit,
+    formation,
+    tactic: getTactic(),
+    availableFormations: getAvailability().unlockedFormations,
+    formationKnowledgeById: state.formationKnowledgeById,
+    opponent: getMiniSeasonNextOpponent(),
+    coachContext: getCoachContext(),
+    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
+    limit: 3
+  });
+
+  let total = 0;
+  SUGGESTED_SETUP_GROUPS.forEach(({ type, label }) => {
+    const items = Array.isArray(suggested[type]) ? suggested[type] : [];
+    if (items.length === 0) return;
+    total += items.length;
+
+    const group = document.createElement("div");
+    group.className = "suggested-setups-group";
+    group.dataset.type = type;
+
+    const heading = document.createElement("h3");
+    heading.className = "suggested-setups-group-label";
+    heading.textContent = label;
+    group.append(heading);
+
+    const cards = document.createElement("div");
+    cards.className = "suggested-setups-cards";
+    items.forEach((suggestion) => cards.append(buildSuggestedSetupCard(suggestion)));
+    group.append(cards);
+    container.append(group);
+  });
+
+  if (total === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Ingen forslag akkurat nå – fyll laget for et bedre datagrunnlag.";
+    container.append(empty);
+  }
+}
+
 function renderMiniSeason() {
   const statusEl = elements.miniSeasonStatus;
   const overview = elements.miniSeasonOverview;
@@ -8127,6 +8247,7 @@ function renderApp() {
   renderTacticalSystemPanel();
   renderSidePanel(teamFit);
   renderDecisionCards(teamFit);
+  renderSuggestedSetups(teamFit);
   renderReport(teamFit);
   renderBadgeEffects(teamFit);
   renderMatchday(teamFit);
