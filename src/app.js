@@ -7,7 +7,8 @@ import {
   resolveMatchdayDecision,
   finalizeMatchdaySession,
   getSessionEventIndex,
-  OPPONENT_PROFILES
+  OPPONENT_PROFILES,
+  evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
 import {
   MINI_SEASON_TOTAL_MATCHES,
@@ -3018,6 +3019,18 @@ function ensureMatchdayState() {
   }
 }
 
+// Formasjons-matchup mot en gitt motstander, basert på valgt formasjons
+// kunnskapsoppslag (Formation Knowledge Engine). Returnerer null hvis motstander
+// eller kunnskap mangler. Brukes til matchup-bevisst treningsråd og -bonus.
+function getFormationMatchupVsOpponent(opponent) {
+  const formation = getFormation();
+  const knowledge = formation ? state.formationKnowledgeById[formation.id] : null;
+  if (!opponent || !knowledge) {
+    return null;
+  }
+  return evaluateFormationMatchupVsOpponent(knowledge, opponent.matchupStyles, opponent.name);
+}
+
 // Start kampdag: oppretter en ny kampsesjon (pre_match) med motstanderprofil,
 // snapshots og 3 genererte hendelser. Selve resultatet beregnes først når alle
 // managergrep er tatt (finalizeMatchdaySession).
@@ -3053,7 +3066,10 @@ function playMatchday() {
     selection: state.weeklyTrainingFocus,
     clubWeek: state.clubWeekState?.week,
     coachContext,
-    opponent
+    opponent,
+    // Matchup mot denne motstanderen gjør et relevant treningsfokus litt mer verdt
+    // (kontekstuell uttelling). Null hvis motstander/kunnskap mangler.
+    formationMatchup: getFormationMatchupVsOpponent(opponent)
   });
 
   state.matchday.session = createMatchdaySession({
@@ -5631,8 +5647,11 @@ function renderMatchdaySessionPreMatch(container, session) {
     );
   }
   if (session.trainingFocus) {
+    const contextNote = session.trainingFocus.contextRelevant
+      ? " · kontekstuelt relevant mot matchupen (ekstra uttelling)"
+      : "";
     planLines.push(
-      `Ukens treningsfokus: ${session.trainingFocus.name} · staff-støtte ${session.trainingFocus.staffSupport?.label?.toLowerCase() || "svak"} · ${session.trainingFocus.effectHint}`
+      `Ukens treningsfokus: ${session.trainingFocus.name} · staff-støtte ${session.trainingFocus.staffSupport?.label?.toLowerCase() || "svak"} · ${session.trainingFocus.effectHint}${contextNote}`
     );
   }
   appendMatchdayList(card, planLines);
@@ -6004,7 +6023,14 @@ function renderWeeklyTrainingFocus(teamFit) {
     : `Uke ${week}: Velg ett fokus før kamp.`;
   status.dataset.selected = selected ? "true" : "false";
 
-  const recommendation = recommendTrainingFocus({ opponent: getMiniSeasonNextOpponent(), teamFit });
+  // Matchup-bevisst treningsråd: tren det matchupen mot neste motstander er
+  // risikabel på. Faller tilbake til motstanderprofil-/svakhetsråd uten matchup.
+  const nextOpponentForFocus = getMiniSeasonNextOpponent();
+  const recommendation = recommendTrainingFocus({
+    opponent: nextOpponentForFocus,
+    teamFit,
+    formationMatchup: getFormationMatchupVsOpponent(nextOpponentForFocus)
+  });
   recommendationEl.textContent = recommendation.reason;
 
   options.textContent = "";

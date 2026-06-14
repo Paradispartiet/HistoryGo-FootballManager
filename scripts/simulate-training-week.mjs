@@ -4,7 +4,8 @@ import {
   sanitizeWeeklyTrainingFocus,
   calculateTrainingStaffSupport,
   recommendTrainingFocus,
-  createTrainingMatchdaySnapshot
+  createTrainingMatchdaySnapshot,
+  getMatchupRelevantFocusIds
 } from "../src/football-training-week.js";
 import {
   createMatchdaySession,
@@ -137,6 +138,20 @@ check("dårlig tilpasset fokus forklares kort i sluttrapport", poorReport.traini
 console.log("\nTestkamp uten mini-season:");
 const testSession = createMatchdaySession({ teamFit, formation, coachContext, trainingFocus: pressingSnapshot, opponent: null });
 check("testkamp fungerer og beholder treningssnapshot", OPPONENT_PROFILES.some((item) => item.id === testSession.opponent?.id) && testSession.trainingFocus?.focusId === "pressing");
+
+console.log("\nMatchup-bevisst trening (Formation Knowledge Engine):");
+const riskyMatchup = { lean: "risky", risks: [{ token: "high_press" }, { token: "aggressive_man_press" }] };
+check("matchup-risiko mapper til relevant fokus", getMatchupRelevantFocusIds(riskyMatchup).includes("build_up"));
+const matchupRec = recommendTrainingFocus({ opponent: highPress, teamFit, formationMatchup: riskyMatchup });
+check("rad er matchup-bevisst (anbefaler oppbygging)", matchupRec.focusIds.includes("build_up") && /matchup/i.test(matchupRec.reason));
+const relevantSnap = createTrainingMatchdaySnapshot({ selection: { focusId: "build_up", week: 3 }, clubWeek: 3, coachContext, opponent: highPress, formationMatchup: riskyMatchup });
+const irrelevantSnap = createTrainingMatchdaySnapshot({ selection: { focusId: "width", week: 3 }, clubWeek: 3, coachContext, opponent: highPress, formationMatchup: riskyMatchup });
+check("relevant fokus er kontekstuelt relevant", relevantSnap.contextRelevant === true);
+check("irrelevant fokus er ikke kontekstuelt relevant", irrelevantSnap.contextRelevant === false);
+check("relevant fokus gir storre uttelling enn irrelevant",
+  relevantSnap.metricBonuses.buildUpScore > irrelevantSnap.metricBonuses.widthScore);
+check("uten matchup er ingen fokus spesielt relevant (additivt)",
+  createTrainingMatchdaySnapshot({ selection: { focusId: "build_up", week: 3 }, clubWeek: 3, coachContext, opponent: highPress }).contextRelevant === false);
 
 if (failures > 0) {
   console.error(`\n${failures} treningsuke-sjekk(er) feilet.`);

@@ -101,6 +101,39 @@ export function getTrainingFocus(focusId) {
   return TRAINING_FOCUSES.find((focus) => focus.id === focusId) || null;
 }
 
+// Matchup-risiko-token (motstanderens spillestil ditt system sliter mot) → hvilket
+// treningsfokus som adresserer den. Kobler Formation Knowledge Engine til
+// treningsuka: å trene det matchupen er risikabel på er kontekstuelt relevant
+// (README pkt. 4 – belønn relevante valg, ikke universelt «beste» valg).
+const RISK_TOKEN_TO_FOCUS = {
+  high_press: "build_up",
+  aggressive_man_press: "build_up",
+  build_from_back: "pressing",
+  possession_positional: "pressing",
+  direct_counter: "rest_defence",
+  fast_transition: "rest_defence",
+  fast_runners_in_behind: "rest_defence",
+  switching_play: "rest_defence",
+  wide_overload: "rest_defence",
+  deep_low_block: "width",
+  passive_mid_block: "width",
+  compact_532: "width",
+  narrow_442: "width",
+  three_at_back: "width",
+  target_man_direct: "set_pieces",
+  two_striker_press: "build_up"
+};
+
+// Hvilke treningsfokus som er relevante mot en gitt formasjons-matchup (utledet
+// fra matchupens risiko-tokens). Tom liste hvis ingen matchup/risiko.
+export function getMatchupRelevantFocusIds(formationMatchup) {
+  const risks = asArray(formationMatchup?.risks);
+  const focusIds = risks
+    .map((risk) => RISK_TOKEN_TO_FOCUS[risk?.token])
+    .filter(Boolean);
+  return [...new Set(focusIds)];
+}
+
 export function sanitizeWeeklyTrainingFocus(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const week = Number(value.week);
@@ -139,7 +172,19 @@ export function calculateTrainingStaffSupport({ focusId, coachContext } = {}) {
   return { level, label, score: Math.round(score), matchedStaffTypes: uniqueMatched };
 }
 
-export function recommendTrainingFocus({ opponent, teamFit } = {}) {
+export function recommendTrainingFocus({ opponent, teamFit, formationMatchup } = {}) {
+  // Matchup-bevisst råd har førsteprioritet: tren det den konkrete matchupen mot
+  // neste motstander er risikabel på (kontekstuell relevans, ikke generelt råd).
+  const matchupFocusIds = getMatchupRelevantFocusIds(formationMatchup);
+  if (matchupFocusIds.length > 0) {
+    const riskTokens = asArray(formationMatchup?.risks).map((risk) => risk?.token).filter(Boolean);
+    const names = matchupFocusIds.map((id) => getTrainingFocus(id)?.name).filter(Boolean);
+    return {
+      focusIds: matchupFocusIds.slice(0, 2),
+      reason: `Matchup mot ${opponent?.name || "neste motstander"} er risikabel på ${riskTokens.join(", ")}. ${names.join(" eller ")} adresserer det.`
+    };
+  }
+
   const opponentId = opponent?.id || null;
   const opponentMatches = TRAINING_FOCUSES.filter((focus) => focus.bestAgainstOpponentStyles.includes(opponentId));
   if (opponentMatches.length > 0) {
@@ -167,14 +212,20 @@ export function recommendTrainingFocus({ opponent, teamFit } = {}) {
   };
 }
 
-export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachContext, opponent } = {}) {
+export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachContext, opponent, formationMatchup } = {}) {
   const stored = sanitizeWeeklyTrainingFocus(selection);
   const week = Number(clubWeek);
   if (!stored || !Number.isInteger(week) || stored.week !== week || stored.appliedSessionId) return null;
 
   const focus = getTrainingFocus(stored.focusId);
   const staffSupport = calculateTrainingStaffSupport({ focusId: focus.id, coachContext });
-  const metricBonus = staffSupport.level === "strong" ? 4 : staffSupport.level === "medium" ? 3 : 2;
+  const baseBonus = staffSupport.level === "strong" ? 4 : staffSupport.level === "medium" ? 3 : 2;
+
+  // Kontekstuell relevans (README pkt. 4): adresserer fokuset en faktisk
+  // matchup-risiko mot denne motstanderen, gir det en liten ekstra uttelling.
+  // Et irrelevant fokus får kun base – relevante valg belønnes, ikke alle valg.
+  const contextRelevant = getMatchupRelevantFocusIds(formationMatchup).includes(focus.id);
+  const metricBonus = contextRelevant ? baseBonus + 1 : baseBonus;
   const metricBonuses = {};
   focus.affectedMetrics.forEach((metric) => {
     if (!["formationFamiliarity", "coachUnderstanding"].includes(metric)) metricBonuses[metric] = metricBonus;
@@ -188,6 +239,7 @@ export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachConte
     affectedMetrics: [...focus.affectedMetrics],
     staffSupport: { ...staffSupport },
     opponentFit: focus.bestAgainstOpponentStyles.includes(opponent?.id),
+    contextRelevant,
     metricBonuses,
     coachBonuses: focus.id === "formation_familiarity"
       ? { formationFamiliarity: metricBonus, coachUnderstanding: Math.max(1, metricBonus - 1) }
