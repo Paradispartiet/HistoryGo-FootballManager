@@ -77,6 +77,9 @@ const DATA_PATHS = {
   // Stab-/trenerroller: hvilke lag-/utviklingsdimensjoner hver rolle påvirker.
   // Driver coachContext-motoren (formationFamiliarity, coachUnderstanding m.m.).
   hgStaffRoles: "data/hgFootball/staffRoles.json",
+  // Formation Knowledge Engine: kunnskapslag (matchups/parameterprofil) per
+  // formasjon. Driver formasjons-matchup mot motstanderprofiler på kampdag.
+  hgFormationKnowledge: "data/hgFootball/formationKnowledge.json",
   knowledgePrinciples: "data/football_knowledge_principles.json",
   clubInboxMessages: "data/club_inbox_messages.json",
   clubInboxMessageManifest: "data/club_inbox_messages/manifest.json",
@@ -164,6 +167,9 @@ const state = {
   // Driver formationSelect, faseformasjons-/taktikkpanelet og rollefit-hint.
   hgFormations: [],
   hgFormationEras: [],
+  // Formation Knowledge Engine: oppslag formationId -> kunnskap (strongAgainst/
+  // weakAgainst m.m.). Driver formasjons-matchup mot motstanderprofiler.
+  formationKnowledgeById: {},
   hgRoleTypes: [],
   // Oppslag id -> roleType for visningsnavn på nøkkelroller (roleTypes.json).
   hgRoleTypeIndex: new Map(),
@@ -3060,7 +3066,10 @@ function playMatchday() {
     // lagrede planen. Uten aktiv mini-sesong (null) velger kampmotoren
     // tilfeldig motstander som før (testkamp).
     opponent,
-    trainingFocus
+    trainingFocus,
+    // Formation Knowledge Engine: valgt formasjons kunnskapsoppslag (hvis dekket)
+    // lar kampmotoren beregne formasjons-matchup mot motstanderens spillestil.
+    formationKnowledge: state.formationKnowledgeById[formation?.id] || null
   });
 
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
@@ -5580,6 +5589,26 @@ function renderMatchdaySessionPreMatch(container, session) {
     opponentLines.push(`Setter press på: ${line}`);
   });
   appendMatchdayList(card, opponentLines);
+
+  // Formasjons-matchup (Formation Knowledge Engine): hvordan ditt system står mot
+  // motstanderens spillestil. Vises bare når valgt formasjon har kunnskapsoppslag.
+  const matchup = session.formationMatchup;
+  if (matchup) {
+    appendMatchdaySubheading(card, "Formasjons-matchup");
+    const leanText = matchup.lean === "favourable"
+      ? "Gunstig"
+      : matchup.lean === "risky"
+        ? "Risikabel"
+        : "Balansert";
+    const matchupLines = [`${leanText}: ${matchup.summary}`];
+    (Array.isArray(matchup.advantages) ? matchup.advantages : []).forEach((a) => {
+      matchupLines.push(`Fordel: ${a.text}`);
+    });
+    (Array.isArray(matchup.risks) ? matchup.risks : []).forEach((r) => {
+      matchupLines.push(`Risiko: ${r.text}`);
+    });
+    appendMatchdayList(card, matchupLines);
+  }
 
   // Eget system og kampplan.
   appendMatchdaySubheading(card, "Din kampplan");
@@ -8422,7 +8451,8 @@ async function init() {
       hgRoleFitRulesData,
       hgUnlockRulesData,
       hgStaffRolesData,
-      legacyFormationsData
+      legacyFormationsData,
+      hgFormationKnowledgeData
     ] = await Promise.all([
       loadJson(DATA_PATHS.players),
       // Spillerarketyper er valgfrie for kjøring: hvis filen mangler, fortsetter
@@ -8462,7 +8492,9 @@ async function init() {
       // ren kategori-vekting uten staffRoles-affects, og krasjer ikke.
       loadJson(DATA_PATHS.hgStaffRoles).catch(() => null),
       // Gammel formasjonskatalog beholdes som trygg fallback.
-      loadJson(DATA_PATHS.legacyFormations).catch(() => null)
+      loadJson(DATA_PATHS.legacyFormations).catch(() => null),
+      // Formasjonskunnskap er valgfri: mangler den, kjøres kampdag uten matchup.
+      loadJson(DATA_PATHS.hgFormationKnowledge).catch(() => null)
     ]);
 
     state.players = playersData.players || [];
@@ -8482,6 +8514,15 @@ async function init() {
     state.legacyFormations = Array.isArray(legacyFormationsData?.formations)
       ? legacyFormationsData.formations
       : [];
+
+    // Indekser formasjonskunnskap på formationId for raskt matchup-oppslag.
+    state.formationKnowledgeById = {};
+    (Array.isArray(hgFormationKnowledgeData?.knowledge) ? hgFormationKnowledgeData.knowledge : [])
+      .forEach((entry) => {
+        if (entry && typeof entry.formationId === "string") {
+          state.formationKnowledgeById[entry.formationId] = entry;
+        }
+      });
 
     // Oversett historiske formasjoner til runtime-format og fyll taktikktavla.
     // Faller trygt tilbake til legacy-katalogen hvis hgFootball-data mangler.
