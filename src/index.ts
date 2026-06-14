@@ -173,6 +173,7 @@ export {
   deriveFormationShapeTokens,
   deriveFormationStyleTokens,
   evaluateFormationMatchup,
+  evaluateFormationVsOpponentStyles,
 } from "./engine/evaluateFormationMatchup.js";
 
 export type {

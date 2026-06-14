@@ -28,7 +28,12 @@ try {
   console.error("Kunne ikke laste dist/. Kjor `npm run build` forst.", error.message);
   process.exit(1);
 }
-const { evaluateFormationMatchup } = engine;
+const { evaluateFormationMatchup, evaluateFormationVsOpponentStyles } = engine;
+
+// Live .js-kampmotor (plain ESM, ingen build): motstanderprofiler + .js-matchup.
+const { OPPONENT_PROFILES, evaluateFormationMatchupVsOpponent } = await import(
+  join(ROOT, "src/football-matchday-engine.js")
+);
 
 const knowledgeData = loadJson("data/hgFootball/formationKnowledge.json");
 const formations = loadJson("data/hgFootball/formations.json").formations;
@@ -93,6 +98,31 @@ for (const you of entries) {
 }
 check(hasMixedFormation, "Ingen formasjon hadde bade favourable og risky matchup – matchup-logikken gir for flate utfall");
 
+// 4) Paritet: TS evaluateFormationVsOpponentStyles == .js
+//    evaluateFormationMatchupVsOpponent (kampmotorens motstanderprofiler).
+//    Bekrefter at den live .js-kampmotoren og TS-motoren gir samme matchup.
+let opponentPairs = 0;
+for (const you of entries) {
+  for (const profile of OPPONENT_PROFILES) {
+    const styles = profile.matchupStyles;
+    check(Array.isArray(styles) && styles.every((s) => vocab.has(s)), `${profile.id}: ugyldige matchupStyles`);
+    const ts = evaluateFormationVsOpponentStyles(you, styles, profile.name);
+    const js = evaluateFormationMatchupVsOpponent(
+      { strongAgainst: you.strongAgainst, weakAgainst: you.weakAgainst },
+      styles,
+      profile.name,
+    );
+    opponentPairs++;
+    const same =
+      ts.lean === js.lean &&
+      ts.score === js.score &&
+      ts.summary === js.summary &&
+      JSON.stringify(ts.advantages) === JSON.stringify(js.advantages) &&
+      JSON.stringify(ts.risks) === JSON.stringify(js.risks);
+    check(same, `paritet TS!=JS for ${you.formationId} vs ${profile.id} (TS ${ts.lean}/${ts.score}, JS ${js.lean}/${js.score})`);
+  }
+}
+
 // Rapport: lean-matrise (din formasjon i rad, motstander i kolonne).
 const sym = { favourable: "+", balanced: "·", risky: "-" };
 const ids = entries.map((e) => e.formationId);
@@ -103,7 +133,7 @@ for (const you of entries) {
   const row = entries.map((o) => ` ${sym[evaluateFormationMatchup(you, o).lean]}    `.slice(0, 6)).join(" ");
   console.log(short(you.formationId) + "  " + row);
 }
-console.log(`\nPar vurdert: ${entries.length * entries.length}`);
+console.log(`\nPar vurdert: ${entries.length * entries.length} (formasjon vs formasjon) + ${opponentPairs} (formasjon vs motstanderprofil, TS/JS-paritet)`);
 console.log("Eksempel – possession_433 mot gegen_4222:");
 console.log("  " + possessionVsGegen.summary);
 for (const p of [...possessionVsGegen.advantages, ...possessionVsGegen.risks]) console.log("   • " + p.text);
