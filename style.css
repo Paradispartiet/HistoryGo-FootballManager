@@ -4285,3 +4285,90 @@ ul {
 .public-start-anchor-status-row .local-start-status {
   margin: 0;
 }
+
+/* Suggested Setups v1 — forklarende, additive oppsettforslag på dashbordet. */
+.suggested-setups-intro {
+  margin-top: 0;
+}
+
+.suggested-setups-groups {
+  display: grid;
+  gap: 18px;
+}
+
+.suggested-setups-group-label {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.suggested-setups-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.suggested-setup-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.72));
+  border-radius: var(--radius, 12px);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.suggested-setup-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.suggested-setup-card h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.suggested-setup-confidence {
+  flex: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.suggested-setup-confidence[data-level="høy"] {
+  color: var(--green, #75d69c);
+}
+
+.suggested-setup-confidence[data-level="lav"] {
+  color: #ff9b73;
+}
+
+.suggested-setup-summary {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.suggested-setup-list-label {
+  margin: 4px 0 0;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.suggested-setup-card ul {
+  margin: 2px 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.suggested-setup-card .suggested-setup-risks {
+  color: #ffb59a;
+}
