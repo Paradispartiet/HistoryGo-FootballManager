@@ -3068,8 +3068,10 @@ function playMatchday() {
     coachContext,
     opponent,
     // Matchup mot denne motstanderen gjør et relevant treningsfokus litt mer verdt
-    // (kontekstuell uttelling). Null hvis motstander/kunnskap mangler.
-    formationMatchup: getFormationMatchupVsOpponent(opponent)
+    // (proaktiv kontekst). Null hvis motstander/kunnskap mangler.
+    formationMatchup: getFormationMatchupVsOpponent(opponent),
+    // Reaktiv kontekst: å trene det forrige kamp avslørte som svakest belønnes òg.
+    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null
   });
 
   state.matchday.session = createMatchdaySession({
@@ -6029,7 +6031,8 @@ function renderWeeklyTrainingFocus(teamFit) {
   const recommendation = recommendTrainingFocus({
     opponent: nextOpponentForFocus,
     teamFit,
-    formationMatchup: getFormationMatchupVsOpponent(nextOpponentForFocus)
+    formationMatchup: getFormationMatchupVsOpponent(nextOpponentForFocus),
+    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null
   });
   recommendationEl.textContent = recommendation.reason;
 

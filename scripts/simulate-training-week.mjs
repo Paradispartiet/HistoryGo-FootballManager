@@ -5,7 +5,8 @@ import {
   calculateTrainingStaffSupport,
   recommendTrainingFocus,
   createTrainingMatchdaySnapshot,
-  getMatchupRelevantFocusIds
+  getMatchupRelevantFocusIds,
+  getWeaknessRelevantFocusId
 } from "../src/football-training-week.js";
 import {
   createMatchdaySession,
@@ -152,6 +153,16 @@ check("relevant fokus gir storre uttelling enn irrelevant",
   relevantSnap.metricBonuses.buildUpScore > irrelevantSnap.metricBonuses.widthScore);
 check("uten matchup er ingen fokus spesielt relevant (additivt)",
   createTrainingMatchdaySnapshot({ selection: { focusId: "build_up", week: 3 }, clubWeek: 3, coachContext, opponent: highPress }).contextRelevant === false);
+
+console.log("\nReaktiv kontekst (forrige kamps avslorte svakhet):");
+check("svakhetsmetrikk mapper til fokus", getWeaknessRelevantFocusId("restDefenseScore") === "rest_defence");
+const reactiveRec = recommendTrainingFocus({ opponent: null, teamFit, lastMatchWeaknessMetric: "restDefenseScore" });
+check("rad er reaktivt (anbefaler restforsvar fra forrige kamp)", reactiveRec.focusIds.includes("rest_defence") && /forrige kamp/i.test(reactiveRec.reason));
+const reactiveSnap = createTrainingMatchdaySnapshot({ selection: { focusId: "rest_defence", week: 3 }, clubWeek: 3, coachContext, opponent: null, lastMatchWeaknessMetric: "restDefenseScore" });
+check("fokus som fikser forrige kamps svakhet er kontekstuelt relevant", reactiveSnap.contextRelevant === true && reactiveSnap.contextReason === "forrige_kamp");
+const reactiveIrrelevant = createTrainingMatchdaySnapshot({ selection: { focusId: "width", week: 3 }, clubWeek: 3, coachContext, opponent: null, lastMatchWeaknessMetric: "restDefenseScore" });
+check("urelevant fokus er ikke reaktivt relevant", reactiveIrrelevant.contextRelevant === false);
+check("matchup prioriteres over forrige-kamp i rad", recommendTrainingFocus({ opponent: highPress, teamFit, formationMatchup: { risks: [{ token: "high_press" }] }, lastMatchWeaknessMetric: "restDefenseScore" }).focusIds.includes("build_up"));
 
 if (failures > 0) {
   console.error(`\n${failures} treningsuke-sjekk(er) feilet.`);
