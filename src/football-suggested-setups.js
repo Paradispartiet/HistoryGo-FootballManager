@@ -28,6 +28,7 @@ import {
   calculateTrainingStaffSupport
 } from "./football-training-week.js";
 import { evaluateFormationMatchupVsOpponent } from "./football-matchday-engine.js";
+import { getTrainingProgramIdsForFocus } from "./football-training-program-compositions.js";
 
 // ----------------------------------------------------------------------------
 // Hjelpere
@@ -105,6 +106,9 @@ function makeSuggestion(partial) {
     risks: uniqueStrings(partial.risks),
     suggestedAdjustments: uniqueStrings(partial.suggestedAdjustments),
     relatedTrainingFocusIds: uniqueStrings(partial.relatedTrainingFocusIds),
+    // Treningsforslag kan peke videre til dypere treningsprogram-komposisjoner
+    // (football-training-program-compositions.js). Tom for andre forslagstyper.
+    relatedProgramIds: uniqueStrings(partial.relatedProgramIds),
     confidence: round2(clamp(Number(partial.confidence) || 0, 0, 1)),
     sourceSignals: uniqueStrings(partial.sourceSignals)
   };
@@ -616,6 +620,9 @@ function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, 
       "Du står fritt til å velge et annet fokus — et bevisst valg mot et forventet kampbilde kan gi bedre uttelling."
     ],
     relatedTrainingFocusIds: [focusId],
+    // Dypere valg: hvilke ferdige treningsprogram-komposisjoner dette fokuset
+    // leder videre til. Additivt — treningsuka består som eget forslag.
+    relatedProgramIds: getTrainingProgramIdsForFocus(focusId),
     confidence: clamp(confidence, 0.2, 0.95),
     sourceSignals
   });

@@ -34,6 +34,7 @@ import {
   createTrainingMatchdaySnapshot
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
+import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
 import {
   adaptHgFormations,
   buildRoleTypeIndex,
@@ -313,6 +314,7 @@ const elements = {
   managerSummary: document.querySelector("#managerSummary"),
   managerTopActions: document.querySelector("#managerTopActions"),
   suggestedSetups: document.querySelector("#suggestedSetups"),
+  trainingPrograms: document.querySelector("#trainingPrograms"),
   managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
   managerRoleChanges: document.querySelector("#managerRoleChanges"),
   managerWeakPoints: document.querySelector("#managerWeakPoints"),
@@ -6187,6 +6189,109 @@ function renderSuggestedSetups(teamFit) {
   }
 }
 
+// Training Program Composition v1: ferdige ukeprogram (flere økter) som
+// valgspill. Bygger på samme motorer som resten av appen og degraderer trygt.
+// Forslagene låser ikke spilleren — de viser faglige standardvalg som et bevisst
+// kontekstuelt valg kan slå.
+function trainingProgramConfidenceLabel(confidence) {
+  const value = Number(confidence) || 0;
+  if (value >= 0.6) return "Høy";
+  if (value >= 0.45) return "Middels";
+  return "Lav";
+}
+
+const PROGRAM_INTENSITY_LABEL = { low: "lav", medium: "moderat", high: "høy" };
+
+function buildTrainingProgramCard(program) {
+  const card = document.createElement("article");
+  card.className = "training-program-card";
+
+  const head = document.createElement("div");
+  head.className = "training-program-head";
+  const title = document.createElement("h3");
+  title.textContent = program.title;
+  const confidence = document.createElement("span");
+  confidence.className = "training-program-confidence";
+  confidence.dataset.level = trainingProgramConfidenceLabel(program.confidence).toLowerCase();
+  // totalScore/konfidens som forklaring, ikke fasit.
+  confidence.textContent = `Uttelling ${program.scoring.totalScore} · konfidens ${trainingProgramConfidenceLabel(program.confidence)}`;
+  head.append(title, confidence);
+  card.append(head);
+
+  const summary = document.createElement("p");
+  summary.className = "training-program-summary";
+  summary.textContent = program.summary;
+  card.append(summary);
+
+  if (program.recommendedBecause.length > 0) {
+    const why = document.createElement("p");
+    why.className = "training-program-why";
+    why.textContent = program.recommendedBecause[0];
+    card.append(why);
+  }
+
+  // Øktene i uka — kompakt liste.
+  const sessionLabel = document.createElement("p");
+  sessionLabel.className = "training-program-list-label";
+  sessionLabel.textContent = "Økter denne uka";
+  const sessions = document.createElement("ul");
+  sessions.className = "training-program-sessions";
+  program.sessions.forEach((session) => {
+    const li = document.createElement("li");
+    li.textContent = `${session.day}: ${session.title} (${PROGRAM_INTENSITY_LABEL[session.intensity] || session.intensity})`;
+    sessions.append(li);
+  });
+  card.append(sessionLabel, sessions);
+
+  if (program.risks.length > 0) {
+    const riskLabel = document.createElement("p");
+    riskLabel.className = "training-program-list-label";
+    riskLabel.textContent = "Risiko";
+    const risks = document.createElement("ul");
+    risks.className = "training-program-risks";
+    program.risks.forEach((text) => {
+      const li = document.createElement("li");
+      li.textContent = text;
+      risks.append(li);
+    });
+    card.append(riskLabel, risks);
+  }
+
+  return card;
+}
+
+function renderTrainingProgramCompositions(teamFit) {
+  const container = elements.trainingPrograms;
+  if (!container) return;
+
+  container.textContent = "";
+
+  const opponent = getMiniSeasonNextOpponent();
+  const programs = createTrainingProgramCompositions({
+    teamFit,
+    opponent,
+    formation: getFormation(),
+    tactic: getTactic(),
+    formationMatchup: getFormationMatchupVsOpponent(opponent),
+    coachContext: getCoachContext(),
+    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
+    // Slitasje-/skadesignaler finnes ikke i datamodellen ennå → trygg fallback
+    // (0): restitusjon/skadeforebygging blir situasjonsbestemt, ikke alltid riktig.
+    recentTrainingFocusIds: [],
+    limit: 3
+  });
+
+  if (!Array.isArray(programs) || programs.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Ingen treningsprogram akkurat nå – fyll laget for et bedre datagrunnlag.";
+    container.append(empty);
+    return;
+  }
+
+  programs.forEach((program) => container.append(buildTrainingProgramCard(program)));
+}
+
 function renderMiniSeason() {
   const statusEl = elements.miniSeasonStatus;
   const overview = elements.miniSeasonOverview;
@@ -8253,6 +8358,7 @@ function renderApp() {
   renderMatchday(teamFit);
   renderMiniSeason();
   renderWeeklyTrainingFocus(teamFit);
+  renderTrainingProgramCompositions(teamFit);
 
   renderTrainingWeekCounters();
   renderManagerEngineBridge(teamFit);

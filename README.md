@@ -21,6 +21,12 @@ Appen har nå flere lag:
 9. **Lagidentitet** – lagklasser basert på opptjente badges og utviklingsretning.
 10. **Stedsrapporter** – forklarer hva sportsteder gir manageren.
 11. **Historisk formasjonsbibliotek** – egen `data/hgFootball/`-modul med historiske epoker, formasjoner, rolletyper og unlock-regler.
+12. **Training Program Composition v1** – treningsvalget er nå ferdige **komposisjoner av flere økter** for uka (`src/football-training-program-compositions.js`), ikke bare ett enkelt treningsfokus:
+    - Forslagene lærer spilleren gode faglige standardvalg (restitusjon/skadeforebygging, defensiv struktur, avslutningsuke, oppbygging mot press, pressuke, formasjonstilvenning, balansert uke).
+    - Dynamiske parametre (slitasje, motstander, matchup, forrige kamps svakhet, trenerforståelse, treningshistorikk) avgjør uttellingen — `baseScore + contextBonus + overusePenalty + riskAdjustment`.
+    - Et bevisst **kontekstuelt valg kan slå standardforslaget**; forslagene er aldri en fasit eller lås.
+    - Restitusjon/skadeforebygging er **situasjonsbestemt**, ikke alltid riktig: god uttelling når slitasje/risiko tilsier det, men `overusePenalty` ved overforbruk uten grunnlag. Pressuke straffes ved høy fatigue.
+    - Programmene peker tilbake til ekte treningsfokus i treningsuka og vises ved siden av den i UI — et dypere valg, ikke en erstatning.
 
 Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, liga, sesong og full simulering gjenstår.
 
