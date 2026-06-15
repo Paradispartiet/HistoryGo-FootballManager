@@ -12,7 +12,7 @@
       "title": "Kampuken følger ligastrukturen",
       "body": "Ligaen minner om at kampforberedelse, registrering og rapportering etter hvert vil bli en del av klubbhverdagen.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -27,8 +27,8 @@
       "phases": [
         "analysis",
         "training",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -41,8 +41,8 @@
       "title": "Tropp og stab må registreres korrekt",
       "body": "Spillere, trenere og øvrig staff må etter hvert være korrekt registrert for kamp. Ufullstendige registreringer skaper formelle problemer før sportslige vurderinger i det hele tatt begynner.",
       "phases": [
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -55,7 +55,7 @@
       "title": "Kampdag følger fast protokoll",
       "body": "På kampdag må oppmøte, kamptropp, draktsett, rapportering og eventuelle endringer håndteres innenfor ligaens prosedyre. Formell ro gir sportslig ro.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -68,7 +68,7 @@
       "title": "Kampen skal etter hvert rapporteres",
       "body": "Etter kamp vil ligaen kunne kreve rapportering av resultat, hendelser, disiplinærpunkter og eventuelle avvik. Det bør bygges inn som en naturlig del av klubbens kampflyt.",
       "phases": [
-        "match_day",
+        "matchday",
         "analysis"
       ],
       "conditions": {}
@@ -83,9 +83,9 @@
       "body": "Ligaen gjør oppmerksom på at medietrykk ikke påvirker formelle frister. Nettopp i perioder med støy bør klubben være ekstra nøyaktig med rapportering og registrering.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation",
-        "match_day"
+        "inbox",
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -103,7 +103,7 @@
       "body": "Når tilliten rundt klubbens retning er lav, blir tydelig styring viktigere. Beslutninger, roller og ansvar bør være dokumentert slik at klubben kan vise orden i prosessen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -121,8 +121,8 @@
       "body": "Når klubbens interne styring virker stabil, blir det enklere å gjennomføre formelle prosesser uten ekstra avklaringer. Det gir bedre arbeidsrom i kampuken.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -140,7 +140,7 @@
       "body": "Når treningskulturen blir mer strukturert, bør øktplaner og belastningsrutiner også kunne dokumenteres. Profesjonell praksis gjør klubben mer robust i ligaens system.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -159,7 +159,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -176,7 +176,7 @@
       "title": "Samlede spillere må etter hvert knyttes til registrering",
       "body": "Når spillere låses opp gjennom History Go og brukes i managerdelen, må systemet på sikt skille mellom samlet spiller, tilgjengelig spiller og kampregistrert spiller.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -190,7 +190,7 @@
       "title": "Staff må håndteres som formelle roller",
       "body": "Assistenttrener, trenere, keepertrener og fysio kan være samleobjekter, men i ligasammenheng må de også ha tydelige roller. Staff er både spillressurs og formell klubbstruktur.",
       "phases": [
-        "club_work",
+        "inbox",
         "training"
       ],
       "conditions": {}
@@ -204,7 +204,7 @@
       "title": "Kampforberedelse krever administrativ sjekk",
       "body": "Før kamp må klubben ikke bare bekrefte taktikk, men også at tropp, drakter, rapportering, mediepunkt og praktiske krav er avklart.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -217,7 +217,7 @@
       "title": "Arenaer må ha tydelig stedstype",
       "body": "Når stadioner og sportssteder legges inn globalt, bør systemet skille mellom kampstadion, treningssted, klubbhus og historisk sportssted. Dette gjør liga- og kampstruktur enklere senere.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -232,7 +232,7 @@
       "body": "Ligaens rolle er ikke å skape drama, men å gi klubbhverdagen rammer. Frister, registrering og rapportering gjør managerrollen mer troverdig når de bygges inn på riktig nivå.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

@@ -63,7 +63,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -78,7 +78,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -97,7 +97,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -111,7 +111,7 @@
       "body": "Spillerne må vite hva som starter presset: dårlig touch, feilvendt mottak, pasning ut mot linja eller støttepasning. Uten utløsere blir presset bare løping.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -126,7 +126,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -141,7 +141,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -156,7 +156,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -175,7 +175,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -205,7 +205,7 @@
       "title": "Kampplanen må stemme med laget vi har",
       "body": "Før kamp må vi passe oss for å lage en plan som ser god ut på tavla, men dårlig ut i spillergruppen. Planen må bruke styrkene våre, ikke bare dekke frykten vår.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -218,7 +218,7 @@
       "title": "Justeringer må være små nok til å utføres",
       "body": "På kampdag kan vi ikke endre hele laget fra sidelinjen. De beste justeringene er ofte små: fem meter høyere, én mann nærmere, ett enklere valg etter gjenvinning.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -233,7 +233,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -252,7 +252,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

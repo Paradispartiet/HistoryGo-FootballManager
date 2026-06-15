@@ -18,10 +18,11 @@
 
 export type ClubWeekPhase =
   | "analysis"
+  | "inbox"
   | "training"
-  | "club_work"
-  | "match_preparation"
-  | "match_day";
+  | "match_prep"
+  | "matchday"
+  | "review";
 
 export type ClubWeekMetric =
   | "boardTrust"
@@ -44,10 +45,11 @@ export type ClubWeekEffects = Partial<Record<ClubWeekMetric, number>>;
 
 export const CLUB_WEEK_PHASE_ORDER: readonly ClubWeekPhase[] = [
   "analysis",
+  "inbox",
   "training",
-  "club_work",
-  "match_preparation",
-  "match_day",
+  "match_prep",
+  "matchday",
+  "review",
 ];
 
 export const CLUB_WEEK_METRICS: readonly ClubWeekMetric[] = [
@@ -60,10 +62,27 @@ export const CLUB_WEEK_METRICS: readonly ClubWeekMetric[] = [
 
 const CLUB_WEEK_PHASE_LABELS: Record<ClubWeekPhase, string> = {
   analysis: "Analyse",
+  inbox: "Innboks",
   training: "Trening",
-  club_work: "Klubbdrift",
-  match_preparation: "Kampforberedelse",
-  match_day: "Kampdag",
+  match_prep: "Kampplan",
+  matchday: "Kampdag",
+  review: "Oppsummering",
+};
+
+// Kort, handlingsrettet norsk veiledning per fase: "gjør dette nå". Ren tekst,
+// ingen logikk — orchestratoren bruker dette til å lede manageren gjennom uka.
+const CLUB_WEEK_PHASE_GUIDANCE: Record<ClubWeekPhase, string> = {
+  analysis:
+    "Les laget og motstanderen. Sjekk lagfit, svake punkter og forslag før uka settes i gang.",
+  inbox:
+    "Rydd innboksen. Hvert svar påvirker stemningen utenfor banen og legger føringer for uka.",
+  training:
+    "Velg ett treningsfokus. Det former kroppene og hodene, og kan dempe motstanderens styrker på kampdag.",
+  match_prep:
+    "Legg kampplanen. Bekreft formasjon, roller og taktikk mot det analysen og treningen peker på.",
+  matchday: "Spill kampen. Ta grepene underveis — treningen og konteksten følger med inn.",
+  review:
+    "Oppsummer uka. Se konsekvensene av kampen, les nye innbokstråder og ta med lærdommen inn i neste uke.",
 };
 
 const DEFAULT_CLUB_WEEK_STATE: ClubWeekState = {
@@ -146,6 +165,20 @@ export function advanceClubWeekPhase(state: ClubWeekState): ClubWeekState {
 
 export function getClubWeekPhaseLabel(phase: ClubWeekPhase): string {
   return CLUB_WEEK_PHASE_LABELS[phase];
+}
+
+export function getClubWeekPhaseGuidance(phase: ClubWeekPhase): string {
+  return CLUB_WEEK_PHASE_GUIDANCE[isClubWeekPhase(phase) ? phase : "analysis"];
+}
+
+// Hele faserekken med etikett + veiledning, i rekkefølge. Lar UI tegne en
+// fase-stripe der gjeldende fase markeres uten å duplisere etikett-tabellen.
+export function listClubWeekPhases(): { phase: ClubWeekPhase; label: string; guidance: string }[] {
+  return CLUB_WEEK_PHASE_ORDER.map((phase) => ({
+    phase,
+    label: CLUB_WEEK_PHASE_LABELS[phase],
+    guidance: CLUB_WEEK_PHASE_GUIDANCE[phase],
+  }));
 }
 
 export function createClubWeekSummary(state: ClubWeekState): string {

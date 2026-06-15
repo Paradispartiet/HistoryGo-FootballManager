@@ -45,7 +45,7 @@
       "body": "Flere spillere gjør jobben sin, men de må forstå hvorfor rollen er viktig. Når rollen gir mening, blir innsatsen roligere og valgene tydeligere.",
       "phases": [
         "analysis",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -59,7 +59,7 @@
       "body": "Moral handler ikke bare om humør. Spillerne trenger å kjenne at arbeidet peker et sted, og at innsatsen deres faktisk betyr noe for laget.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -78,7 +78,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -95,8 +95,8 @@
       "title": "Trykket utenfra merkes i gruppa",
       "body": "Det merkes når presset utenfra øker. Da trenger vi ikke flere forklaringer, men færre og klarere beskjeder som spillerne kan holde fast i.",
       "phases": [
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -114,7 +114,7 @@
       "body": "Treningskultur handler også om hvordan økten kjennes for spillerne. Når kravene er tydelige og øvelsene henger sammen, blir det lettere å ta ansvar selv.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -133,7 +133,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -152,7 +152,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -171,7 +171,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -184,7 +184,7 @@
       "title": "Spillerne må kjenne igjen kampplanen",
       "body": "Før kamp trenger spillerne å kjenne igjen planen fra treningsuka. Hvis beskjedene ligner på noe vi har gjort før, går vi inn i kampen med mer ro.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -197,7 +197,7 @@
       "title": "Hold oss samlet når kampen åpner seg",
       "body": "På kampdag kommer perioder der planen blir testet. Da trenger vi én felles beskjed som holder laget samlet, særlig etter balltap og etter motgang.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -211,7 +211,7 @@
       "body": "Det merkes når uka har hatt en tydelig rytme. Spillerne snakker mer om løsninger enn om usikkerhet, og det er ofte et tegn på at arbeidet begynner å feste seg.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -230,7 +230,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -244,7 +244,7 @@
       "body": "Garderoben følger en manager som er tydelig og står i planen lenge nok til at spillerne merker utvikling. Tillit bygges når ordene på tavla stemmer med arbeidet på feltet.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

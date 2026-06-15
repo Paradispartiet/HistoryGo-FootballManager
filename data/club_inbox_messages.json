@@ -13,9 +13,9 @@
       "phases": [
         "analysis",
         "training",
-        "club_work",
-        "match_preparation",
-        "match_day"
+        "inbox",
+        "match_prep",
+        "matchday"
       ],
       "conditions": {}
     },
@@ -73,7 +73,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -92,7 +92,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -141,7 +141,7 @@
       "body": "Hvis førsteforsvarer går alene, blir laget strukket. Vi må trene på når presset starter, hvem som sikrer bak, og hvor resten av laget skal stå når ballen spilles forbi første pressledd.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -155,7 +155,7 @@
       "body": "Laget kan ikke bare se på hva vi gjør med ball. Restforsvaret må være klart før vi mister den, ellers blir hvert balltap en overgang imot.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -170,7 +170,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -183,7 +183,7 @@
       "title": "Kampplanen må komme fra treningsuka",
       "body": "Før kamp bør planen ligne på noe vi faktisk har trent på. Spillerne stoler mer på en enkel idé de har repetert enn en perfekt idé de bare har hørt om.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -196,7 +196,7 @@
       "title": "Gi spillerne korte beskjeder",
       "body": "På kampdag bør vi holde beskjedene korte. Én ting med ball, én ting uten ball, og én ting vi må huske når kampen blir stressende.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -209,7 +209,7 @@
       "title": "Treningshverdagen trenger struktur",
       "body": "Klubbdrift påvirker treningsfeltet mer enn man tror. Gode rutiner, riktig stab og tydelige øktplaner gjør det lettere å bygge kultur uke etter uke.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -237,7 +237,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -256,7 +256,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -286,7 +286,7 @@
       "title": "Klubbdrift krever prioritering",
       "body": "Klubbdriften handler ikke bare om laget på banen. Fasiliteter, økonomi, administrasjon og markedsarbeid må etter hvert trekkes inn i managerrollen.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -299,7 +299,7 @@
       "title": "Kampen nærmer seg",
       "body": "Når kampdagen nærmer seg, øker oppmerksomheten. Et tydelig laguttak og en forståelig kampplan vil gjøre klubben roligere.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -312,7 +312,7 @@
       "title": "Styret følger kampen",
       "body": "Kampdag handler ikke bare om resultatet. Styret følger med på om laget ser organisert ut, og om manageren har bygget en troverdig plan.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -343,8 +343,8 @@
       "title": "Medietrykket øker",
       "body": "Medietrykket er høyt. Klubben trenger tydelig kommunikasjon, rolig ledelse og færre uklare signaler før neste kamp.",
       "phases": [
-        "match_preparation",
-        "match_day",
+        "match_prep",
+        "matchday",
         "analysis"
       ],
       "conditions": {
@@ -382,7 +382,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -400,7 +400,7 @@
       "body": "Når laget bygges, må roller og spillerprofiler henge sammen. Vi bør ikke bare samle gode spillere, men spillere som passer planen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -414,7 +414,7 @@
       "body": "Hvis laget står høyt, må keeperen være klar til å kontrollere bakrommet. Keeperrollen bør vurderes sammen med forsvarshøyden.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -428,7 +428,7 @@
       "body": "Treningskultur er positivt, men høy intensitet uten restitusjon kan gi slitasje. Vi bør følge belastningen når ukene blir tettere.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -460,7 +460,7 @@
       "body": "Supporterne vil se et lag med tydelig identitet. Resultater betyr mye, men laget må også se ut som det tror på noe.",
       "phases": [
         "analysis",
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -473,7 +473,7 @@
       "title": "Stadionbesøk kan åpne nye muligheter",
       "body": "Når du besøker klubbsteder i History Go, kan spillere, trenere og staff etter hvert bli tilgjengelige i managerdelen.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -487,7 +487,7 @@
       "title": "Klubbhistorien kan brukes",
       "body": "Gamle spillere, trenere og kamper kan gi klubben identitet. Historien bør ikke bare være pynt, men en del av hvordan laget bygges.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -501,7 +501,7 @@
       "title": "Synlighet gir verdi",
       "body": "Et tydelig lag og en tydelig historie gjør klubben mer attraktiv. Sportslig identitet og kommersiell profil bør etter hvert henge sammen.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -514,7 +514,7 @@
       "title": "Kampuken følger ligastrukturen",
       "body": "Ligaen minner om at kampforberedelse, registrering og rapportering etter hvert vil bli en del av klubbhverdagen.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -528,7 +528,7 @@
       "body": "Spillere, trenere, assistenter, fysio og keepertrenere kan etter hvert samles og knyttes til klubber du har oppdaget.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -542,7 +542,7 @@
       "body": "Styretilliten er lav. Klubben trenger tydeligere prioriteringer, færre uklare signaler og en manager som viser at valgene henger sammen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -560,8 +560,8 @@
       "body": "Styret opplever at klubben beveger seg i riktig retning. Det viktigste nå er å holde fast ved prinsippene og ikke skifte kurs for raskt.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -598,7 +598,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -616,8 +616,8 @@
       "body": "Medietrykket er høyt. Styret ønsker roligere kommunikasjon, tydeligere prioriteringer og færre signaler som kan tolkes som usikkerhet.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -660,7 +660,7 @@
       "title": "Klubben må bygges utenfor banen også",
       "body": "Klubbdrift handler om mer enn kampplan. Styret følger med på om administrasjon, fasiliteter, marked og sportslig retning begynner å henge sammen.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -673,7 +673,7 @@
       "title": "Kampplanen må være tydelig",
       "body": "Før kamp forventer styret at laget har en plan spillerne kan forstå. En enkel, gjennomført idé er bedre enn en komplisert plan ingen klarer å følge.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -686,7 +686,7 @@
       "title": "Styret ser etter organisering",
       "body": "På kampdag ser styret ikke bare på resultatet. De ser etter struktur, rolleforståelse og om laget opptrer som om det vet hva det prøver å gjøre.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -700,7 +700,7 @@
       "body": "Styret ønsker at laget etter hvert skal være gjenkjennelig. Spillerne kan være ulike, men klubben må ha en retning som binder dem sammen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -715,7 +715,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

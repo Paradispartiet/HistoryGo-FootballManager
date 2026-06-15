@@ -13,7 +13,7 @@
       "body": "Treningskultur er positivt, men høy intensitet uten restitusjon kan gi slitasje. Vi bør følge belastningen når ukene blir tettere.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -27,7 +27,7 @@
       "body": "En hard økt er ikke et problem alene. Problemet kommer når harde økter, kampforberedelse og svak restitusjon ligger oppå hverandre uten tydelig rytme.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -42,7 +42,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -61,7 +61,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -80,7 +80,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_day"
+        "matchday"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -99,7 +99,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -118,7 +118,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -135,7 +135,7 @@
       "title": "Minuttene må planlegges før kamp",
       "body": "Før kamp bør vi vite hvem som tåler 90 minutter, hvem som bør beskyttes, og hvilke spillere som trenger en tydeligere plan for belastning gjennom kampen.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -148,7 +148,7 @@
       "title": "Se etter varselsignalene tidlig",
       "body": "På kampdag handler det om små tegn: kortere steg, mindre kraft i vendinger, hånd på låret etter sprint. Ser vi det tidlig, kan vi unngå større problemer.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -163,7 +163,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -178,7 +178,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -195,7 +195,7 @@
       "title": "Medisinsk struktur må bygges før skadene kommer",
       "body": "Det medisinske arbeidet kan ikke bare reagere når noen får vondt. Vi trenger rutiner for screening, belastningslogg, restitusjon og oppfølging før problemene blir synlige.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -210,7 +210,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -223,8 +223,8 @@
       "title": "Rotasjon er ikke svakhet",
       "body": "Noen ganger beskytter vi laget ved å beskytte enkeltspillere. Riktig rotasjon handler ikke om å spare seg, men om å holde intensiteten høy over flere uker.",
       "phases": [
-        "match_preparation",
-        "club_work"
+        "match_prep",
+        "inbox"
       ],
       "conditions": {}
     },
@@ -239,7 +239,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

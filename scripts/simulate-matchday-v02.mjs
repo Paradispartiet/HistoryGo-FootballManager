@@ -402,7 +402,7 @@ check("manglende resultat gir ingen konsekvens", computeMatchdayConsequences({ l
 // --- 6) Kampdag ↔ Club Week-porten -------------------------------------------
 console.log("\nKampdag ↔ Club Week-port (kampdagfasen krever spilt kamp):");
 
-const matchDayWeek = { week: 3, phase: "match_day" };
+const matchDayWeek = { week: 3, phase: "matchday" };
 check(
   "uten Club Week-state er porten åpen",
   evaluateClubWeekMatchdayGate({}).isBlocked === false

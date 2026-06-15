@@ -44,7 +44,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -63,7 +63,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -112,7 +112,7 @@
       "body": "Hvis førsteforsvarer går alene, blir laget strukket. Vi må trene på når presset starter, hvem som sikrer bak, og hvor resten av laget skal stå når ballen spilles forbi første pressledd.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -126,7 +126,7 @@
       "body": "Laget kan ikke bare se på hva vi gjør med ball. Restforsvaret må være klart før vi mister den, ellers blir hvert balltap en overgang imot.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -141,7 +141,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -154,7 +154,7 @@
       "title": "Kampplanen må komme fra treningsuka",
       "body": "Før kamp bør planen ligne på noe vi faktisk har trent på. Spillerne stoler mer på en enkel idé de har repetert enn en perfekt idé de bare har hørt om.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -167,7 +167,7 @@
       "title": "Gi spillerne korte beskjeder",
       "body": "På kampdag bør vi holde beskjedene korte. Én ting med ball, én ting uten ball, og én ting vi må huske når kampen blir stressende.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -180,7 +180,7 @@
       "title": "Treningshverdagen trenger struktur",
       "body": "Klubbdrift påvirker treningsfeltet mer enn man tror. Gode rutiner, riktig stab og tydelige øktplaner gjør det lettere å bygge kultur uke etter uke.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -208,7 +208,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -227,7 +227,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -246,7 +246,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",

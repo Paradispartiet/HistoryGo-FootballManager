@@ -12,7 +12,7 @@
       "title": "Synlighet gir verdi",
       "body": "Et tydelig lag og en tydelig historie gjør klubben mer attraktiv. Sportslig identitet og kommersiell profil bør etter hvert henge sammen.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -26,7 +26,7 @@
       "body": "Sponsorer kjøper ikke bare eksponering. De kjøper tilknytning til en klubb som folk forstår, kjenner igjen og ønsker å være en del av.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -40,8 +40,8 @@
       "body": "Når laget virker taktisk uklart, blir også klubbens profil mer uklar. Det er vanskeligere å bygge kampanjer rundt et prosjekt publikum ikke helt forstår.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -59,8 +59,8 @@
       "body": "Når laget har en tydelig spillidé, blir det enklere å fortelle historien rundt klubben. Da kan partnerarbeidet kobles til noe mer konkret enn logo på drakt.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -78,9 +78,9 @@
       "body": "Synlighet er positivt når klubben virker samlet. Når medietrykket er høyt og signalene spriker, blir samme synlighet mer risikabel for partnerne rundt klubben.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation",
-        "match_day"
+        "inbox",
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -98,7 +98,7 @@
       "body": "Når trykket rundt klubben er lavere, kan sponsorarbeidet handle mer om utvikling, publikum og opplevelse enn om å svare på uro.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -116,7 +116,7 @@
       "body": "Når styret står tydelig bak retningen, virker klubben mer forutsigbar. Det gjør det lettere for partnere å planlegge kampanjer og langsiktige aktiveringer.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -134,7 +134,7 @@
       "body": "Når klubben virker usikker internt, blir partnere mer forsiktige. De vil vite om prosjektet står støtt før de knytter sin egen profil tettere til klubben.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -151,8 +151,8 @@
       "title": "Supporterenergi er også verdi",
       "body": "Når tribunene lever, blir klubben mer attraktiv. Partnerne merker forskjellen på en kamp som bare spilles og en kamp som føles som et sted folk vil være.",
       "phases": [
-        "match_day",
-        "club_work",
+        "matchday",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -168,7 +168,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -187,7 +187,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -204,7 +204,7 @@
       "title": "Kampuka er kommersiell toppflate",
       "body": "Før kamp samles oppmerksomheten. Da bør kommunikasjon, visuell profil, kampplan og publikumsopplevelse trekke i samme retning.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -217,7 +217,7 @@
       "title": "Kampdag er mer enn 90 minutter",
       "body": "For partnerne er kampdag hele opplevelsen: ankomst, tribune, profilering, energi, digital synlighet og historien folk tar med seg etterpå.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -231,7 +231,7 @@
       "body": "Når History Go knytter klubben til stadioner, nabolag og historiske steder, får partnerarbeidet flere flater. Det handler ikke bare om reklame, men om tilhørighet.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -244,7 +244,7 @@
       "title": "Samlekort og profiler kan skape engasjement",
       "body": "Spillere, staff, stadioner og historier kan bli mer enn interne data. Riktig brukt kan de skape kampanjer, publikumsaktivitet og en sterkere følelse av å følge klubben tett.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -259,7 +259,7 @@
       "body": "Det kommersielle arbeidet blir svakere hvis klubben bare prøver å selge flater. Først må folk forstå hva klubben er, hvor den hører hjemme og hvorfor den er verdt å følge.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

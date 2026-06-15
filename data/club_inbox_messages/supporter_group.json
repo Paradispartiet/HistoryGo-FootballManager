@@ -13,7 +13,7 @@
       "body": "Supporterne vil se et lag med tydelig identitet. Resultater betyr mye, men laget må også se ut som det tror på noe.",
       "phases": [
         "analysis",
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -27,8 +27,8 @@
       "body": "Vi trenger ikke forstå hvert taktiske valg, men vi må kjenne igjen laget. Det må være noe i presset, løpene og reaksjonene som sier: dette er oss.",
       "phases": [
         "analysis",
-        "match_day",
-        "club_work"
+        "matchday",
+        "inbox"
       ],
       "conditions": {}
     },
@@ -42,8 +42,8 @@
       "body": "Når laget virker usikkert på hva det prøver på, blir tribunen også usikker. Vi kan tåle feil, men vi må se en retning vi kan rope laget videre i.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -61,8 +61,8 @@
       "body": "Når planen er tydelig, merkes det på tribunen. Folk ser bevegelser de kjenner igjen, forstår hvorfor laget tar risiko, og blir mer tålmodige når angrepet ikke sitter med en gang.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -80,8 +80,8 @@
       "body": "Når hodene faller, ser vi det. Det handler ikke bare om å vinne dueller, men om hvordan spillerne reagerer etter feil, etter baklengs og etter en tung periode.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -99,8 +99,8 @@
       "body": "Det merkes når gruppa har energi. Pressløpene kommer litt raskere, kroppsspråket løftes, og publikum får noe å svare på.",
       "phases": [
         "analysis",
-        "match_day",
-        "club_work"
+        "matchday",
+        "inbox"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -118,8 +118,8 @@
       "body": "Når alt rundt klubben blir diskusjon, blir supporterne også slitne. Vi trenger mindre støy og mer fotball vi kan samle oss rundt.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -137,8 +137,8 @@
       "body": "Supporterne merker når klubben trekker i samme retning. Styret, manageren og laget trenger ikke si alt, men de må virke som de står i samme prosjekt.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -156,8 +156,8 @@
       "body": "Når styretilliten virker lav, begynner folk å lese alt som tegn. Laguttak, bytter, intervjuer og kroppsspråk blir tolket hardere enn vanlig.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_day"
+        "inbox",
+        "matchday"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -176,7 +176,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_day"
+        "matchday"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -195,7 +195,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_day"
+        "matchday"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -212,7 +212,7 @@
       "title": "Før kamp vil vi merke at laget er klart",
       "body": "Supporterne trenger ikke alle detaljene, men vi vil se et lag som går inn i kampen med plan, kropp og blikk i samme retning.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -225,7 +225,7 @@
       "title": "Gi oss noe å løfte",
       "body": "På kampdag kan tribunen bære laget, men laget må gi oss noe å bære. En takling, et pressløp, en blokkering eller et løp i bakrom kan være nok til å tenne stedet.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -238,8 +238,8 @@
       "title": "Noen kamper er større enn formen",
       "body": "I rivaloppgjør teller historien også. Tabellen forklarer ikke alt. Supporterne kommer med gamle kamper i kroppen, og laget må forstå at det betyr noe.",
       "phases": [
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {}
     },
@@ -253,7 +253,7 @@
       "body": "Når History Go knytter laget til stadioner, nabolag og gamle klubbspor, blir supporterkulturen tydeligere. Fotballen lever ikke bare i spillerkortene, men i stedene folk samles.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -267,8 +267,8 @@
       "body": "Vi kan elske et spillende lag, et hardtarbeidende lag eller et lag som presser høyt. Det vi ikke tåler lenge, er et lag som hverken har stil eller trøkk.",
       "phases": [
         "analysis",
-        "match_day",
-        "club_work"
+        "matchday",
+        "inbox"
       ],
       "conditions": {}
     }

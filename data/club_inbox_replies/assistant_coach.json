@@ -13,7 +13,7 @@
       "tag": "Trening",
       "title": "Trenerteamet bygger uka rundt ett prinsipp",
       "body": "Assistenttreneren foreslår at øktene repeterer samme hovedsituasjon med små variasjoner. Da får spillerne færre beskjeder, men flere gjenkjennelige valg.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -26,7 +26,7 @@
       "tag": "Trening",
       "title": "Trenerteamet ber om prioritering",
       "body": "Assistenttreneren varsler at økta blir for bred. Han anbefaler å samle laget rundt ett hovedproblem før detaljer legges til.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -39,7 +39,7 @@
       "tag": "Rollejobb",
       "title": "Én lagdel gir bedre svar",
       "body": "Assistenttreneren starter med én lagdel og foreslår korte stopp i økta: avstand, støtte, pressignal og hvem som sikrer bak ballen.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -52,7 +52,7 @@
       "tag": "Rollejobb",
       "title": "Systembyttet trenger mer forklaring",
       "body": "Assistenttreneren merker at spillerne trenger tid til å forstå hvorfor systemet endres. Han anbefaler at endringen oversettes til enkle rollebeskjeder.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     }
   ]
