@@ -17,7 +17,8 @@
     "sim:formation-matchup": "node scripts/simulate-formation-matchup.mjs",
     "sim:suggested-setups": "node scripts/simulate-suggested-setups.mjs",
     "sim:training-programs": "node scripts/simulate-training-program-compositions.mjs",
-    "sim:off-pitch": "node scripts/simulate-off-pitch-parameters.mjs"
+    "sim:off-pitch": "node scripts/simulate-off-pitch-parameters.mjs",
+    "sim:inbox": "node scripts/simulate-inbox-events.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

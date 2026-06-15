@@ -33,6 +33,10 @@ Appen har nå flere lag:
     - Det går et bevisst skille mellom **faktiske parametre** og **synlige/halvskjulte signaler**. Forslagene (treningsprogram, suggested setups) får bare se det synlige laget (`getVisibleOffPitchSignals` / `summarizeOffPitchContext`) — aldri hele hidden-blokken. Forslagene er gode standarder, men **mangler full tilgang til skjulte signaler**.
     - Derfor kan **bevisste kontekstuelle valg slå standardforslaget**: en manager som leser at laget er tungt, at garderoben murrer eller at presset utenfra øker, kan velge bedre enn et system som bare kjenner taktikken. Dette er kjernen i læringsspillet: taktisk kunnskap **+** menneskelig/managerial vurdering.
     - UI: en kompakt **«Kontekst»**-seksjon i managerkontor-stil viser lesbare signaler (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet, skadefare), ikke bare tall. Kjør `npm run sim:off-pitch`.
+14. **Inbox Event Integration v1** – den eksisterende **Innboksen** («Klubbens puls») er nå koblet til kontekstlaget (`src/football-inbox-events.js`). Innboksen fantes fra før som UI-avdeling med aktive tråder og trådarkiv; den er ikke erstattet, men gjort **levende**.
+    - Trådene genereres dynamisk fra **off-pitch-parametrene, treningsprogram, kampdag og beslutninger**: medisinsk apparat (slitasje/skadefare), styret (styrepress/retning), presse (medietrykk), spillergruppe/garderobe (moral/samhold/rollefrustrasjon), assistenttrener (taktisk klarhet), trening (relevant ukeprogram), kampdag (etterspill av siste kamp) og scouting/History Go (for tynn tropp).
+    - Meldingene **dramatiserer signaler** fra klubbens puls. Innboksen forteller ikke spilleren hva som er riktig: den gir bekymringer, observasjoner og press som manageren må **tolke**. Noen tråder har valg med konsekvenser (`safe`/`balanced`/`risky`/`assertive`/`defensive`), og et bevisst kontekstuelt valg kan fortsatt slå standardforslaget.
+    - Valg i tråder lager et **offPitchEvent** som sendes til `applyOffPitchEvent`, slik at konteksten faktisk beveger seg (slitasje, moral, press, garderobe …). Inbox-state ligger i `teamMerits.inbox` – **aldri** i History Go-progresjonen (`visited_places` / `hg_groundhopper_stats_v1`). Motoren er ren, deterministisk og no-spam (deterministiske tråd-id-er + context hash). Kjør `npm run sim:inbox`.
 
 Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, liga, sesong og full simulering gjenstår.
 
@@ -51,6 +55,7 @@ src/
   football-relationship-engine.js
   football-badge-effect-engine.js
   football-off-pitch-parameters.js
+  football-inbox-events.js
   hg-formation-library.js
 
 data/
@@ -263,6 +268,8 @@ Stab og ekspertise låses opp via steder og unlock-regler. Treningsprogrammer kr
 ## Innboks og klubbuke
 
 Innboksen er trådbasert. Meldinger kan ha svarvalg. Svarvalg kan gi små effekter på Club Week-verdier som styretillit, moral, taktisk klarhet, treningskultur og medietrykk.
+
+**Inbox Event Integration v1** legger et levende lag oppå den eksisterende innboksen (`src/football-inbox-events.js`): tråder genereres dynamisk fra off-pitch-kontekst, trening, kampdag og beslutninger, og rendres i de samme containerne (`inboxThreadList` / `inboxThreadArchive`). Trådene har avsender, prioritet, tags, lenket handling og eventuelle valg. Valg lager et `offPitchEvent` som oppdaterer `teamMerits.offPitch` via `applyOffPitchEvent`. Innboksen muterer aldri History Go-progresjon. Manageren må **tolke** meldingene, ikke bare følge forslaget. Kjør `npm run sim:inbox`.
 
 ## Historisk formasjonsbibliotek
 

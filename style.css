@@ -1279,6 +1279,80 @@ ul {
   letter-spacing: 0.02em;
 }
 
+/* ---------- Inbox Event Integration v1 (levende kontekst-tråder) ---------- */
+.inbox-event-card {
+  border-left: 3px solid var(--line-soft);
+}
+
+.inbox-event-card[data-priority="urgent"] {
+  border-left-color: #ff6b6b;
+}
+
+.inbox-event-card[data-priority="high"] {
+  border-left-color: #ffb454;
+}
+
+.inbox-event-card[data-status="resolved"],
+.inbox-event-card[data-status="archived"] {
+  opacity: 0.78;
+}
+
+.inbox-event-priority[data-priority="urgent"] {
+  border-color: #ff6b6b;
+  color: #ff8c8c;
+}
+
+.inbox-event-priority[data-priority="high"] {
+  border-color: #ffb454;
+  color: #ffc77a;
+}
+
+.inbox-event-status {
+  color: var(--muted);
+}
+
+.inbox-event-hidden-hint {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.88rem;
+}
+
+.inbox-event-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.inbox-event-tag {
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.inbox-event-linked {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.inbox-event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.inbox-event-archive-button {
+  background: transparent;
+}
+
 /* ---------- Facility / generic card grids ---------- */
 .facility-grid {
   display: grid;

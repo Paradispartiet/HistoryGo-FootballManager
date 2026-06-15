@@ -37,6 +37,12 @@ import {
   getTrainingProgramCompositionById
 } from "../src/football-training-program-compositions.js";
 import { createSuggestedSetups } from "../src/football-suggested-setups.js";
+import {
+  createInboxState,
+  integrateInboxThreads,
+  applyInboxChoice,
+  getActiveInboxThreads as getActiveInboxEventThreads
+} from "../src/football-inbox-events.js";
 
 let failures = 0;
 function check(label, condition) {
@@ -253,6 +259,16 @@ const noOff = createSuggestedSetups({
 });
 check("uten offPitch: ingen offPitch-signal lekker inn",
   noOff.training_week.every((s) => !s.sourceSignals.includes("offPitch")));
+
+// === 12. Integrasjon: inbox event → off-pitch ==============================
+console.log("\nIntegrasjon — inbox event → off-pitch:");
+const inboxSeed = integrateInboxThreads(createInboxState(), { offPitchState: tired });
+const medicalThread = getActiveInboxEventThreads(inboxSeed).find((t) => t.type === "medical");
+check("tung off-pitch-state gir medisinsk inbox-tråd", Boolean(medicalThread));
+const inboxChoice = applyInboxChoice(inboxSeed, medicalThread.id, "ease_load", {});
+check("inbox-valg gir offPitchEvent med effects", Boolean(inboxChoice.offPitchEvent) && Object.keys(inboxChoice.offPitchEvent.effects).length > 0);
+const afterInboxEvent = applyOffPitchEvent(tired, inboxChoice.offPitchEvent);
+check("offPitchEvent fra inbox kan anvendes på off-pitch-state", afterInboxEvent.team.fatigue < tired.team.fatigue);
 
 // --- Rapport ---------------------------------------------------------------
 console.log("\nEksempel — synlige signaler ved tung uke og høyt press:");
