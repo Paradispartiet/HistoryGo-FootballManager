@@ -338,6 +338,46 @@ for (const profile of OPPONENT_PROFILES) {
 }
 check("alle motstanderprofiler gir gyldige programmer", allProfilesOk);
 
+// === 16. Off-pitch context som input =======================================
+console.log("\nOff-pitch context:");
+// Off-pitch-state leses som ren data (team/squad-felt 0–100). Høy slitasje skal
+// gjøre recovery mer verdt og pressuke farligere — uten å bryte API-et.
+const offPitchTired = {
+  version: "historygo-football-manager.off-pitch.v1",
+  team: { fatigue: 84, wear: 78, injuryRisk: 58, pressure: 40, cohesion: 50 },
+  squad: { tacticalClarity: 30, hiddenStress: 30 }
+};
+let offThrew = false;
+let withOff;
+try {
+  withOff = createTrainingProgramCompositions({ teamFit, offPitchState: offPitchTired, limit: 7 });
+} catch (e) {
+  offThrew = true;
+  console.error("    kastet:", e.message);
+}
+check("offPitchState som input kaster ikke", !offThrew);
+const offRecovery = (withOff || []).find((p) => p.id === "recovery_prevention");
+check("recovery henter slitasje fra off-pitch-state", offRecovery && offRecovery.scoring.contextBonus > 0);
+check("recovery bærer offPitch som sourceSignal", offRecovery && offRecovery.sourceSignals.includes("offPitch"));
+const offShape = getTrainingProgramCompositionById("formation_familiarisation", { teamFit, offPitchState: offPitchTired });
+check("formasjonstilvenning får off-pitch-bonus ved lav taktisk klarhet", offShape && offShape.scoring.contextBonus > 0);
+const offPress = getTrainingProgramCompositionById("press_week", { teamFit, offPitchState: offPitchTired });
+check("pressuke straffes av off-pitch-slitasje", offPress.scoring.riskAdjustment < 0);
+// offPitchSignals-pakke (med .state) skal også godtas.
+const viaSignals = getTrainingProgramCompositionById("recovery_prevention", {
+  teamFit,
+  offPitchSignals: { state: offPitchTired }
+});
+check("offPitchSignals.state godtas som kilde", viaSignals.scoring.contextBonus > 0);
+// Eksplisitt fatigueRisk skal fortsatt vinne over off-pitch-state.
+const explicitWins = getTrainingProgramCompositionById("recovery_prevention", {
+  teamFit,
+  fatigueRisk: 0,
+  wearRisk: 0,
+  offPitchState: offPitchTired
+});
+check("eksplisitt fatigueRisk vinner over off-pitch-state", explicitWins.scoring.contextBonus === 0);
+
 // --- Rapport ---------------------------------------------------------------
 console.log("\nEksempel — fullt datagrunnlag (sortert etter uttelling):");
 for (const p of full) {

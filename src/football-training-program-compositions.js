@@ -73,6 +73,41 @@ function normalizeRisk(value) {
   return clamp(scaled, 0, 1);
 }
 
+// Off-pitch-kontekst (football-off-pitch-parameters.js) leses som ren data fra
+// context.offPitchState eller context.offPitchSignals.state — ingen import, så
+// ingen kobling/syklus. Returnerer normaliserte 0–1/0–100-verdier eller null
+// (ukjent) per felt, slik at programmene kan skjerpe relevansen ved slitasje,
+// lav taktisk klarhet eller høyt press uten å bli avhengige av off-pitch-laget.
+function readOffPitchInput(context) {
+  const state = context.offPitchState && typeof context.offPitchState === "object" ? context.offPitchState : null;
+  const fromSignals =
+    context.offPitchSignals && typeof context.offPitchSignals === "object" && context.offPitchSignals.state
+      ? context.offPitchSignals.state
+      : null;
+  const src = state || fromSignals;
+  if (!src || typeof src !== "object") return null;
+  const team = src.team && typeof src.team === "object" ? src.team : {};
+  const squad = src.squad && typeof src.squad === "object" ? src.squad : {};
+  const to01 = (v) => {
+    const n = Number(v);
+    if (!Number.isFinite(n)) return null;
+    return clamp(n > 1 ? n / 100 : n, 0, 1);
+  };
+  const to100 = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? clamp(n, 0, 100) : null;
+  };
+  return {
+    fatigue01: to01(team.fatigue),
+    wear01: to01(team.wear),
+    injury01: to01(team.injuryRisk),
+    pressure: to100(team.pressure),
+    cohesion: to100(team.cohesion),
+    tacticalClarity: to100(squad.tacticalClarity),
+    hiddenStress: to100(squad.hiddenStress)
+  };
+}
+
 // Recent focus-/program-id-er fra treningshistorikken (for overuse-deteksjon).
 // Godtar både en flat id-liste og en historikk av {focusId|programId|id}.
 function readRecentTokens(context) {
@@ -117,6 +152,16 @@ function normalizeContext(context) {
   const teamFit = ctx.teamFit && typeof ctx.teamFit === "object" ? ctx.teamFit : null;
   const metrics = teamFit?.metrics && typeof teamFit.metrics === "object" ? teamFit.metrics : {};
   const coachContext = ctx.coachContext && typeof ctx.coachContext === "object" ? ctx.coachContext : null;
+  const offPitch = readOffPitchInput(ctx);
+
+  // Slitasje-/skadesignaler: eksplisitt fatigueRisk/wearRisk/injuryRisk vinner
+  // (ferskest signal), ellers fall tilbake til off-pitch-statens verdier, ellers
+  // 0 (ingen kjent slitasje — restitusjon må fortjenes).
+  const explicit = (raw, fallback01) => {
+    const n = Number(raw);
+    if (Number.isFinite(n)) return normalizeRisk(raw);
+    return fallback01 ?? 0;
+  };
 
   return {
     teamFit,
@@ -126,11 +171,12 @@ function normalizeContext(context) {
     tactic: ctx.tactic && typeof ctx.tactic === "object" ? ctx.tactic : null,
     formationMatchup: ctx.formationMatchup && typeof ctx.formationMatchup === "object" ? ctx.formationMatchup : null,
     coachContext,
+    offPitch,
     lastMatchWeaknessMetric: isNonEmptyString(ctx.lastMatchWeaknessMetric) ? ctx.lastMatchWeaknessMetric : null,
     finishingIssue: readFinishingIssue(ctx),
-    fatigue: normalizeRisk(ctx.fatigueRisk),
-    wear: normalizeRisk(ctx.wearRisk),
-    injury: normalizeRisk(ctx.injuryRisk),
+    fatigue: explicit(ctx.fatigueRisk, offPitch?.fatigue01),
+    wear: explicit(ctx.wearRisk, offPitch?.wear01),
+    injury: explicit(ctx.injuryRisk, offPitch?.injury01),
     recentTokens: readRecentTokens(ctx)
   };
 }
@@ -499,6 +545,11 @@ const SCORERS = {
       signals.push("injuryRisk");
       explanation.push(`Forhøyet skaderisiko (${round2(ctx.injury)}) gir +${Math.round(ctx.injury * 18)} risikojustering.`);
     }
+    // Off-pitch: tydeligere bonus når slitasje/skaderisiko kommer fra kontekstlaget.
+    if (ctx.offPitch && (load > 0 || ctx.injury > 0)) {
+      signals.push("offPitch");
+      explanation.push("Off-pitch-signalene bekrefter at kroppene trenger ro.");
+    }
 
     const { penalty, count } = overuseContribution(ctx, template);
     if (penalty < 0) {
@@ -538,6 +589,16 @@ const SCORERS = {
       riskAdjustment += 6;
       signals.push("teamFit");
       explanation.push(`Lavt restforsvar (${Math.round(restDef)}) gjør struktur mer verdt: +6 risikojustering.`);
+    }
+    // Off-pitch: høyt press utenfra gjør defensiv trygghet mer verdt — men bare
+    // som tillegg når motstanderen/matchupen alt taler for struktur.
+    if (ctx.offPitch && ctx.offPitch.pressure !== null && ctx.offPitch.pressure >= 60 && contextBonus > 0) {
+      const bump = Math.round((ctx.offPitch.pressure - 60) / 40 * 10);
+      if (bump > 0) {
+        contextBonus += bump;
+        signals.push("offPitch");
+        explanation.push(`Høyt press utenfra (${ctx.offPitch.pressure}) gir +${bump} kontekstbonus til defensiv trygghet.`);
+      }
     }
 
     const { penalty, count } = overuseContribution(ctx, template);
@@ -623,6 +684,7 @@ const SCORERS = {
     if (load > 0.4) {
       riskAdjustment -= Math.round(load * 30);
       signals.push("fatigueRisk");
+      if (ctx.offPitch) signals.push("offPitch");
       explanation.push(`Høy slitasje (${round2(load)}) gjør press risikabelt: ${-Math.round(load * 30)} risikojustering.`);
     }
 
@@ -655,6 +717,23 @@ const SCORERS = {
       signals.push("coachContext");
       explanation.push(`Lav formasjonskjennskap (${Math.round(familiarity)}) gir +10 kontekstbonus.`);
     }
+    // Off-pitch: lav taktisk klarhet eller lavt samhold gjør tilvenning mer verdt.
+    if (ctx.offPitch) {
+      const tc = ctx.offPitch.tacticalClarity;
+      if (tc !== null && tc < 50) {
+        const bump = Math.round((50 - tc) / 50 * 14);
+        contextBonus += bump;
+        signals.push("offPitch");
+        explanation.push(`Lav taktisk klarhet (${tc}) gir +${bump} kontekstbonus.`);
+      }
+      const coh = ctx.offPitch.cohesion;
+      if (coh !== null && coh < 50) {
+        const bump = Math.round((50 - coh) / 50 * 8);
+        contextBonus += bump;
+        signals.push("offPitch");
+        explanation.push(`Lavt samhold (${coh}) gir +${bump} kontekstbonus.`);
+      }
+    }
 
     const { penalty, count } = overuseContribution(ctx, template);
     if (penalty < 0) explanation.push(`Tilvenning gjentatt ${count} ganger: ${penalty} overforbruksstraff.`);
@@ -667,9 +746,21 @@ const SCORERS = {
     const signals = [];
     // Litt ekstra verdi nettopp når annet datagrunnlag er tynt.
     const sparse = !ctx.teamFit && !ctx.opponent && !ctx.coachContext;
-    const contextBonus = sparse ? 8 : 4;
+    let contextBonus = sparse ? 8 : 4;
     if (sparse) explanation.push("Tynt datagrunnlag: balansert uke er det tryggeste valget (+8).");
     else explanation.push("Moderat generell verdi (+4).");
+
+    // Off-pitch: uro i gruppa + moderat press → en trygg, balansert uke er en god
+    // fallback ved høy usikkerhet uten å gamble på et spisset opplegg.
+    if (ctx.offPitch) {
+      const hs = ctx.offPitch.hiddenStress;
+      const p = ctx.offPitch.pressure;
+      if (hs !== null && hs >= 55 && p !== null && p >= 30 && p <= 70) {
+        contextBonus += 8;
+        signals.push("offPitch");
+        explanation.push("Uro i gruppa og moderat press: balansert uke demper risiko (+8).");
+      }
+    }
 
     const { penalty, count } = overuseContribution(ctx, template);
     if (penalty < 0) explanation.push(`Balansert uke gjentatt ${count} ganger: ${penalty} overforbruksstraff.`);

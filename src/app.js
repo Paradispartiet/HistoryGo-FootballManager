@@ -36,6 +36,12 @@ import {
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
 import {
+  createDefaultOffPitchState,
+  normalizeOffPitchState,
+  summarizeOffPitchContext,
+  applyMatchdayOffPitchEffects
+} from "./football-off-pitch-parameters.js";
+import {
   adaptHgFormations,
   buildRoleTypeIndex,
   getRoleDisplayNames,
@@ -314,6 +320,8 @@ const elements = {
   managerSummary: document.querySelector("#managerSummary"),
   managerTopActions: document.querySelector("#managerTopActions"),
   suggestedSetups: document.querySelector("#suggestedSetups"),
+  contextSignals: document.querySelector("#contextSignals"),
+  contextHeadline: document.querySelector("#contextHeadline"),
   trainingPrograms: document.querySelector("#trainingPrograms"),
   managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
   managerRoleChanges: document.querySelector("#managerRoleChanges"),
@@ -1012,8 +1020,21 @@ function normalizeTeamMerits(merits) {
     unlockedExpertiseIds: Array.isArray(base.unlockedExpertiseIds) ? base.unlockedExpertiseIds : [],
     earnedBadgeIds: Array.isArray(base.earnedBadgeIds) ? base.earnedBadgeIds : [],
     badgeProgress: Array.isArray(base.badgeProgress) ? base.badgeProgress : [],
-    activeClassifications: Array.isArray(base.activeClassifications) ? base.activeClassifications : []
+    activeClassifications: Array.isArray(base.activeClassifications) ? base.activeClassifications : [],
+    // Off-pitch Parameters v1: managerens kontekstlag (slitasje, moral, press,
+    // garderobe, taktisk klarhet …) ligger i manager-staten, ikke i History
+    // Go-progresjonen. Normaliseres alltid; ny tropp får default-konteksten.
+    offPitch: normalizeOffPitchState(base.offPitch)
   };
+}
+
+// Off-pitch-kontekst (Off-pitch Parameters v1) for manager-staten. Ligger i
+// teamMerits.offPitch; returnerer alltid en normalisert state (default når den
+// mangler). Leses av treningsprogram-, forslag- og kontekst-UI-et.
+function getOffPitchState() {
+  return state.teamMerits?.offPitch
+    ? normalizeOffPitchState(state.teamMerits.offPitch)
+    : createDefaultOffPitchState();
 }
 
 // Les team merits: prøv localStorage først, fall ellers tilbake til seed-data.
@@ -3272,6 +3293,21 @@ function applyMatchdayConsequences(lastMatch, session) {
       gain: nextValue - startValue,
       value: nextValue
     };
+  }
+
+  // Off-pitch Parameters v1: kampen farger også konteksten utenfor banen
+  // (moral, selvtillit, slitasje, press). Manager-staten oppdateres én gang per
+  // kamp (samme consequencesApplied-vern). Ingen History Go-progresjon røres.
+  if (state.teamMerits) {
+    state.teamMerits.offPitch = applyMatchdayOffPitchEffects(getOffPitchState(), {
+      outcome: lastMatch.outcome,
+      goalsFor: lastMatch.score?.for,
+      goalsAgainst: lastMatch.score?.against,
+      teamStrength: lastMatch.teamStrength,
+      opponentStrength: lastMatch.opponent?.strength,
+      exposedWeaknessMetric: lastMatch.exposedWeaknessMetric
+    });
+    saveTeamMerits();
   }
 
   // Engangsmarkering + lagret oppsummering for sluttrapporten. Persisteres
@@ -6156,6 +6192,9 @@ function renderSuggestedSetups(teamFit) {
     opponent: getMiniSeasonNextOpponent(),
     coachContext: getCoachContext(),
     lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
+    // Off-pitch: forslagene får bare det halvskjulte laget (synlige signaler),
+    // aldri hele hidden-blokken — en bevisst manager kan lese mer.
+    offPitchState: getOffPitchState(),
     limit: 3
   });
 
@@ -6267,6 +6306,7 @@ function renderTrainingProgramCompositions(teamFit) {
   container.textContent = "";
 
   const opponent = getMiniSeasonNextOpponent();
+  const offPitchState = getOffPitchState();
   const programs = createTrainingProgramCompositions({
     teamFit,
     opponent,
@@ -6275,9 +6315,11 @@ function renderTrainingProgramCompositions(teamFit) {
     formationMatchup: getFormationMatchupVsOpponent(opponent),
     coachContext: getCoachContext(),
     lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-    // Slitasje-/skadesignaler finnes ikke i datamodellen ennå → trygg fallback
-    // (0): restitusjon/skadeforebygging blir situasjonsbestemt, ikke alltid riktig.
-    recentTrainingFocusIds: [],
+    // Off-pitch Parameters v1: slitasje/skadefare/press kommer nå fra manager-
+    // statens kontekstlag. Restitusjon/skadeforebygging blir dermed situasjons-
+    // bestemt — den må fortjenes av faktisk slitasje, ikke velges som vane.
+    offPitchState,
+    recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
     limit: 3
   });
 
@@ -6290,6 +6332,49 @@ function renderTrainingProgramCompositions(teamFit) {
   }
 
   programs.forEach((program) => container.append(buildTrainingProgramCard(program)));
+}
+
+// Off-pitch Parameters v1: kompakt «Kontekst»-seksjon i managerkontor-stil.
+// Viser lesbare manager-signaler (fysisk, psykisk, garderobe, press, styre/
+// media, taktisk klarhet, skadefare) — ikke rå tall, og aldri hele hidden-laget.
+// Poenget er at manageren skal LESE konteksten, ikke avlese et regneark.
+function renderContextPanel() {
+  const container = elements.contextSignals;
+  if (!container) return;
+
+  const summary = summarizeOffPitchContext(getOffPitchState());
+
+  if (elements.contextHeadline) {
+    elements.contextHeadline.textContent = summary.headline;
+    elements.contextHeadline.dataset.tone = summary.tone;
+  }
+
+  container.textContent = "";
+  summary.visible.forEach((signal) => {
+    const row = document.createElement("div");
+    row.className = "context-signal";
+    row.dataset.severity = signal.severity;
+
+    const label = document.createElement("span");
+    label.className = "context-signal-label";
+    label.textContent = signal.label;
+
+    const text = document.createElement("span");
+    text.className = "context-signal-text";
+    text.textContent = signal.text;
+
+    row.append(label, text);
+    container.append(row);
+  });
+
+  // Vag hint om skjult uro — synlig at noe er der, ikke hva. Forsterker
+  // læringsspill-poenget: forslagene ser ikke alt.
+  if (summary.hiddenHint) {
+    const hint = document.createElement("p");
+    hint.className = "context-hidden-hint";
+    hint.textContent = summary.hiddenHint;
+    container.append(hint);
+  }
 }
 
 function renderMiniSeason() {
@@ -8353,6 +8438,7 @@ function renderApp() {
   renderSidePanel(teamFit);
   renderDecisionCards(teamFit);
   renderSuggestedSetups(teamFit);
+  renderContextPanel();
   renderReport(teamFit);
   renderBadgeEffects(teamFit);
   renderMatchday(teamFit);

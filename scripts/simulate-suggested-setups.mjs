@@ -299,6 +299,71 @@ for (const profile of OPPONENT_PROFILES) {
 }
 check("alle motstanderprofiler gir gyldige forslag", allProfilesOk);
 
+// === 9. Off-pitch context: trygg degradering med og uten ====================
+console.log("\nOff-pitch context (med og uten):");
+// Forslagene skal bare se det HALVSKJULTE laget (synlige signaler), aldri rå
+// hidden-tall. Med høy slitasje/press skal et off-pitch-signal kunne dukke opp
+// additivt; uten off-pitch skal forslagene være identiske med før.
+const offPitchPressured = {
+  version: "historygo-football-manager.off-pitch.v1",
+  team: { fatigue: 82, wear: 78, injuryRisk: 55, pressure: 80, boardPressure: 74 },
+  squad: { tacticalClarity: 45, hiddenStress: 30 },
+  hidden: { mentalLoad: 60, privatePressure: 50, dressingRoomConcern: 40 }
+};
+let offThrew = false;
+let withOff;
+try {
+  withOff = createSuggestedSetups({
+    teamFit,
+    formation: possession,
+    tactic,
+    availableFormations: formations,
+    formationKnowledgeById: knowledgeById,
+    opponent: highPressOpponent,
+    coachContext,
+    lastMatchWeaknessMetric: "restDefenseScore",
+    offPitchState: offPitchPressured,
+    limit: 4
+  });
+} catch (error) {
+  offThrew = true;
+  console.error("    kastet:", error.message);
+}
+check("offPitchState som input kaster ikke", !offThrew);
+validateBundle(withOff, "withOff");
+check(
+  "off-pitch: treningsforslag kan bære offPitch-signal",
+  flattenSuggestedSetups(withOff).some((s) => s.type === "training_week" && s.sourceSignals.includes("offPitch"))
+);
+check(
+  "off-pitch: kampplan kan bære offPitch-signal ved høyt press",
+  withOff.match_plan.some((s) => s.sourceSignals.includes("offPitch"))
+);
+check(
+  "off-pitch: rå hidden-tall lekker ikke inn i forslagstekst",
+  flattenSuggestedSetups(withOff).every((s) =>
+    [...s.suggestedAdjustments, ...s.why].every((t) => !/mentalLoad|privatePressure|dressingRoomConcern/.test(t))
+  )
+);
+
+// Uten off-pitch: byte-identisk med 'full' (ingen offPitch-signal lekker inn).
+const withoutOff = createSuggestedSetups({
+  teamFit,
+  formation: possession,
+  tactic,
+  availableFormations: formations,
+  formationKnowledgeById: knowledgeById,
+  opponent: highPressOpponent,
+  coachContext,
+  lastMatchWeaknessMetric: "restDefenseScore",
+  limit: 4
+});
+check("uten off-pitch: byte-identisk med fullt datagrunnlag", JSON.stringify(withoutOff) === JSON.stringify(full));
+check(
+  "uten off-pitch: ingen offPitch-signal i noe forslag",
+  flattenSuggestedSetups(withoutOff).every((s) => !s.sourceSignals.includes("offPitch"))
+);
+
 // --- Rapport ---------------------------------------------------------------
 console.log("\nEksempel — fullt datagrunnlag mot Pressmaskinen:");
 for (const type of ["formation", "match_plan", "training_week"]) {

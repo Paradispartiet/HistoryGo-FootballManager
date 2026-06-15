@@ -27,6 +27,12 @@ Appen har nå flere lag:
     - Et bevisst **kontekstuelt valg kan slå standardforslaget**; forslagene er aldri en fasit eller lås.
     - Restitusjon/skadeforebygging er **situasjonsbestemt**, ikke alltid riktig: god uttelling når slitasje/risiko tilsier det, men `overusePenalty` ved overforbruk uten grunnlag. Pressuke straffes ved høy fatigue.
     - Programmene peker tilbake til ekte treningsfokus i treningsuka og vises ved siden av den i UI — et dypere valg, ikke en erstatning.
+13. **Off-pitch Parameters v1** – et eget, deterministisk kontekstlag (`src/football-off-pitch-parameters.js`) som gjør managerrollen levende: manageren må lese **kontekstsignaler**, ikke bare taktikk.
+    - Modellerer menneskene rundt taktikken: fatigue/slitasje, skadefare, moral, selvtillit, autonomi, garderobestemning, medie-/styre-/familiepress, skjult mental belastning, rollefrustrasjon, kampviktighet og forventningspress (normalisert 0–100).
+    - **Fatigue, slitasje, moral, press, garderobe og taktisk klarhet påvirker treningsvalg:** høy slitasje gjør restitusjon/skadeforebygging mer verdt og pressuke farligere, lav taktisk klarhet løfter formasjonstilvenning, høyt press løfter defensiv struktur, og uro + moderat press gjør den balanserte uka til en tryggere fallback.
+    - Det går et bevisst skille mellom **faktiske parametre** og **synlige/halvskjulte signaler**. Forslagene (treningsprogram, suggested setups) får bare se det synlige laget (`getVisibleOffPitchSignals` / `summarizeOffPitchContext`) — aldri hele hidden-blokken. Forslagene er gode standarder, men **mangler full tilgang til skjulte signaler**.
+    - Derfor kan **bevisste kontekstuelle valg slå standardforslaget**: en manager som leser at laget er tungt, at garderoben murrer eller at presset utenfra øker, kan velge bedre enn et system som bare kjenner taktikken. Dette er kjernen i læringsspillet: taktisk kunnskap **+** menneskelig/managerial vurdering.
+    - UI: en kompakt **«Kontekst»**-seksjon i managerkontor-stil viser lesbare signaler (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet, skadefare), ikke bare tall. Kjør `npm run sim:off-pitch`.
 
 Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, liga, sesong og full simulering gjenstår.
 
@@ -44,6 +50,7 @@ src/
   football-team-fit-engine.js
   football-relationship-engine.js
   football-badge-effect-engine.js
+  football-off-pitch-parameters.js
   hg-formation-library.js
 
 data/

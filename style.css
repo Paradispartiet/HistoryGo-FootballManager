@@ -4453,3 +4453,73 @@ ul {
 .training-program-card .training-program-risks {
   color: #ffb59a;
 }
+
+/* Off-pitch Parameters v1 — kompakt «Kontekst»-seksjon i managerkontor-stil.
+   Lesbare manager-signaler, tynne hvite rammer, ingen gul hovedstil. Fargene
+   er dempede statusprikker, ikke en rating-skala. */
+.context-headline {
+  margin: 0 0 0.7rem;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.context-signals {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.42));
+  border-radius: var(--radius, 12px);
+  overflow: hidden;
+}
+
+.context-signal {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 0.5rem 0.85rem;
+  background: rgba(0, 0, 0, 0.18);
+  border-left: 2px solid rgba(255, 255, 255, 0.32);
+}
+
+.context-signal-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.context-signal-text {
+  font-size: 0.86rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Dempede statusfarger — alert/watch/good/info. Ikke en tallskala. */
+.context-signal[data-severity="alert"] {
+  border-left-color: #ff9b73;
+}
+
+.context-signal[data-severity="watch"] {
+  border-left-color: #e9d27a;
+}
+
+.context-signal[data-severity="good"] {
+  border-left-color: #75d69c;
+}
+
+.context-hidden-hint {
+  margin: 0.7rem 0 0;
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+@media (max-width: 540px) {
+  .context-signal {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
