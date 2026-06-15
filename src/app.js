@@ -39,8 +39,20 @@ import {
   createDefaultOffPitchState,
   normalizeOffPitchState,
   summarizeOffPitchContext,
-  applyMatchdayOffPitchEffects
+  applyMatchdayOffPitchEffects,
+  applyOffPitchEvent
 } from "./football-off-pitch-parameters.js";
+import {
+  createInboxState,
+  normalizeInboxState,
+  integrateInboxThreads,
+  applyInboxChoice,
+  archiveInboxThread,
+  markInboxThreadRead,
+  getActiveInboxThreads as getActiveInboxEventThreads,
+  getArchivedInboxThreads as getArchivedInboxEventThreads,
+  getUnreadInboxCount as getUnreadInboxEventCount
+} from "./football-inbox-events.js";
 import {
   adaptHgFormations,
   buildRoleTypeIndex,
@@ -1024,7 +1036,12 @@ function normalizeTeamMerits(merits) {
     // Off-pitch Parameters v1: managerens kontekstlag (slitasje, moral, press,
     // garderobe, taktisk klarhet …) ligger i manager-staten, ikke i History
     // Go-progresjonen. Normaliseres alltid; ny tropp får default-konteksten.
-    offPitch: normalizeOffPitchState(base.offPitch)
+    offPitch: normalizeOffPitchState(base.offPitch),
+    // Inbox Event Integration v1: innboksens levende tråder (genererte fra
+    // off-pitch/trening/kampdag/kontekst, leste/løste/arkiverte). Ligger også i
+    // manager-staten, ikke i History Go-progresjonen. Aldri visited_places /
+    // hg_groundhopper_stats_v1.
+    inbox: normalizeInboxState(base.inbox)
   };
 }
 
@@ -1035,6 +1052,14 @@ function getOffPitchState() {
   return state.teamMerits?.offPitch
     ? normalizeOffPitchState(state.teamMerits.offPitch)
     : createDefaultOffPitchState();
+}
+
+// Inbox Event Integration v1: innboksens tråd-state (teamMerits.inbox).
+// Returnerer alltid en normalisert state (default når den mangler).
+function getInboxState() {
+  return state.teamMerits?.inbox
+    ? normalizeInboxState(state.teamMerits.inbox)
+    : createInboxState();
 }
 
 // Les team merits: prøv localStorage først, fall ellers tilbake til seed-data.
@@ -5118,8 +5143,8 @@ function buildNextDecisions(teamFit) {
     }
   }
 
-  // 8) Uleste innbokstråder.
-  const unreadThreads = getActiveInboxThreads().length;
+  // 8) Uleste innbokstråder (statiske JSON-tråder + levende kontekst-tråder).
+  const unreadThreads = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
   if (unreadThreads > 0) {
     decisions.push({
       tag: "Innboks",
@@ -5242,7 +5267,9 @@ function renderDecisionCards(teamFit) {
 // styretillit. Leser eksisterende state direkte. Trygg mot manglende elementer.
 function renderDepartments() {
   if (elements.inboxPulseCount) {
-    elements.inboxPulseCount.textContent = String(getActiveInboxThreads().length);
+    // Uleste tråder = statiske JSON-tråder + levende kontekst-tråder (Inbox Event v1).
+    const unread = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
+    elements.inboxPulseCount.textContent = String(unread);
   }
 
   if (elements.adminSquadCount) {
@@ -7397,46 +7424,320 @@ function createInboxThreadCard(threadGroup, options = {}) {
   return article;
 }
 
-// Render Innboks som trådsystem: aktive tråder (uleste, aktive meldinger) og
-// trådarkiv (levert/lest historikk). Tømmer containerne (eneste innerHTML-bruk)
-// og bygger trådkort med createElement/textContent.
+// ============================================================================
+// Inbox Event Integration v1 — levende tråder fra kontekstlaget.
+//
+// De eksisterende statiske JSON-trådene over beholdes uendret. Her legger vi til
+// et DYNAMISK lag: tråder generert fra off-pitch-parametrene, treningsprogram,
+// kampdag og beslutninger (src/football-inbox-events.js). Trådene rendres i de
+// SAMME containerne (inboxThreadList / inboxThreadArchive) — ingen ny parallell
+// innboks-arkitektur. State ligger i teamMerits.inbox, aldri i History
+// Go-progresjonen.
+// ============================================================================
+const INBOX_EVENT_TYPE_LABELS = {
+  assistant: "Assistent",
+  medical: "Medisinsk",
+  board: "Styret",
+  media: "Presse",
+  squad: "Garderobe",
+  training: "Trening",
+  matchday: "Kampdag",
+  scouting: "Scouting",
+  admin: "Administrasjon"
+};
+
+const INBOX_EVENT_PRIORITY_LABELS = {
+  urgent: "Haster",
+  high: "Høy",
+  medium: "Middels",
+  low: "Lav"
+};
+
+const INBOX_EVENT_STATUS_LABELS = {
+  resolved: "Besvart",
+  read: "Lest",
+  archived: "Arkivert"
+};
+
+// Bygg/forny innboksens levende tråder fra gjeldende kontekst. Idempotent:
+// integrateInboxThreads dupliserer aldri tråder, og vi lagrer kun når noe faktisk
+// endret seg. Muterer ALDRI History Go-progresjon (kun teamMerits.inbox).
+function refreshInboxEvents(teamFit) {
+  if (!state.teamMerits) {
+    return;
+  }
+
+  const offPitchState = getOffPitchState();
+  const lastMatch = state.matchday?.lastMatch;
+  const matchdayResult =
+    lastMatch && typeof lastMatch === "object"
+      ? {
+          matchId: lastMatch.id || null,
+          outcome: lastMatch.outcome,
+          goalsFor: lastMatch.score?.for,
+          goalsAgainst: lastMatch.score?.against,
+          opponentName: lastMatch.opponent?.name,
+          week: lastMatch.playedInClubWeek
+        }
+      : null;
+
+  // Treningsprogram med off-pitch-relevans kan bli en treningstråd. Degraderer
+  // trygt til tom liste hvis komposisjonsmotoren ikke kan kjøre.
+  let trainingPrograms = [];
+  try {
+    trainingPrograms = createTrainingProgramCompositions({
+      teamFit,
+      offPitchState,
+      recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
+      limit: 5
+    });
+  } catch (error) {
+    trainingPrograms = [];
+  }
+
+  const before = getInboxState();
+  const after = integrateInboxThreads(before, {
+    offPitchState,
+    trainingPrograms,
+    matchdayResult,
+    availability: getAvailability(),
+    formation: getFormation(),
+    tactic: getTactic(),
+    teamFit,
+    existingInboxState: before
+  });
+
+  if (JSON.stringify(after) !== JSON.stringify(before)) {
+    state.teamMerits.inbox = after;
+    saveTeamMerits();
+  }
+}
+
+// Ta et valg i en levende tråd: oppdater inbox-state, og send valgets
+// offPitchEvent gjennom off-pitch-motoren slik at konteksten faktisk beveger seg.
+function chooseInboxEventChoice(threadId, choiceId) {
+  if (!state.teamMerits) {
+    return;
+  }
+  const result = applyInboxChoice(getInboxState(), threadId, choiceId, {});
+  state.teamMerits.inbox = result.inboxState;
+  if (result.offPitchEvent) {
+    state.teamMerits.offPitch = applyOffPitchEvent(getOffPitchState(), result.offPitchEvent);
+  }
+  saveTeamMerits();
+  renderApp();
+}
+
+function archiveInboxEventThread(threadId) {
+  if (!state.teamMerits) {
+    return;
+  }
+  state.teamMerits.inbox = archiveInboxThread(getInboxState(), threadId);
+  saveTeamMerits();
+  renderApp();
+}
+
+function markInboxEventThreadRead(threadId) {
+  if (!state.teamMerits) {
+    return;
+  }
+  state.teamMerits.inbox = markInboxThreadRead(getInboxState(), threadId);
+  saveTeamMerits();
+  renderApp();
+}
+
+// Bygg ett trådkort for en levende inbox-event-tråd. Bruker kun createElement/
+// textContent og gjenbruker message-card-stilen pluss kompakte inbox-event-*
+// klasser. options.archived = arkivvisning (ingen handlingsknapper).
+function createInboxEventThreadCard(thread, options = {}) {
+  const article = document.createElement("article");
+  article.className = "message-card inbox-thread-card inbox-event-card";
+  article.dataset.type = thread.type;
+  article.dataset.priority = thread.priority;
+  article.dataset.status = thread.status;
+
+  const meta = document.createElement("div");
+  meta.className = "message-meta";
+
+  const from = document.createElement("span");
+  from.className = "message-from";
+  from.textContent = thread.sender;
+
+  const typeTag = document.createElement("span");
+  typeTag.className = "message-tag";
+  typeTag.textContent = INBOX_EVENT_TYPE_LABELS[thread.type] || "Melding";
+
+  const priorityTag = document.createElement("span");
+  priorityTag.className = "message-tag inbox-event-priority";
+  priorityTag.dataset.priority = thread.priority;
+  priorityTag.textContent = INBOX_EVENT_PRIORITY_LABELS[thread.priority] || thread.priority;
+
+  meta.append(from, typeTag, priorityTag);
+
+  if (thread.status !== "unread" && INBOX_EVENT_STATUS_LABELS[thread.status]) {
+    const statusTag = document.createElement("span");
+    statusTag.className = "message-tag inbox-event-status";
+    statusTag.textContent = INBOX_EVENT_STATUS_LABELS[thread.status];
+    meta.append(statusTag);
+  }
+
+  const title = document.createElement("h3");
+  title.textContent = thread.title;
+
+  const summary = document.createElement("p");
+  summary.className = "inbox-thread-latest-title";
+  summary.textContent = thread.summary;
+
+  article.append(meta, title, summary);
+
+  thread.body.forEach((line) => {
+    const p = document.createElement("p");
+    p.textContent = line;
+    article.append(p);
+  });
+
+  // Halvskjult kontekst-hint (vag uro) — forsterker læringsspill-poenget.
+  if (thread.hiddenContextNote) {
+    const hint = document.createElement("p");
+    hint.className = "inbox-event-hidden-hint";
+    hint.textContent = thread.hiddenContextNote;
+    article.append(hint);
+  }
+
+  // Tags + lenket handling.
+  if (thread.tags.length || thread.linkedAction.label) {
+    const footer = document.createElement("div");
+    footer.className = "inbox-event-footer";
+    thread.tags.forEach((tagText) => {
+      const tag = document.createElement("span");
+      tag.className = "inbox-event-tag";
+      tag.textContent = tagText;
+      footer.append(tag);
+    });
+    if (thread.linkedAction.label) {
+      const link = document.createElement("span");
+      link.className = "inbox-event-linked";
+      link.textContent = `→ ${thread.linkedAction.label}`;
+      footer.append(link);
+    }
+    article.append(footer);
+  }
+
+  // Resultat etter valg (resolved) eller valgknapper (unread/read).
+  if (thread.status === "resolved") {
+    const chosen = thread.choices.find((choice) => choice.id === thread.resolvedChoiceId);
+    if (chosen) {
+      const response = document.createElement("div");
+      response.className = "inbox-choice-response";
+      const chosenTitle = document.createElement("p");
+      chosenTitle.className = "inbox-choice-response-title";
+      chosenTitle.textContent = `Valgt: ${chosen.label}`;
+      response.append(chosenTitle);
+      chosen.resultText.forEach((line) => {
+        const body = document.createElement("p");
+        body.className = "inbox-choice-response-body";
+        body.textContent = line;
+        response.append(body);
+      });
+      article.append(response);
+    }
+  } else if (thread.choices.length) {
+    const choiceList = document.createElement("div");
+    choiceList.className = "inbox-choice-list";
+    thread.choices.forEach((choice) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "inbox-choice-button";
+      button.dataset.tone = choice.tone;
+      button.textContent = choice.label;
+      if (choice.description) {
+        button.title = choice.description;
+      }
+      button.addEventListener("click", () => chooseInboxEventChoice(thread.id, choice.id));
+      choiceList.append(button);
+    });
+    article.append(choiceList);
+  }
+
+  // Handlingsknapper (ikke i arkivvisning).
+  if (!options.archived) {
+    const actions = document.createElement("div");
+    actions.className = "inbox-event-actions";
+
+    if (thread.status === "unread") {
+      const readButton = document.createElement("button");
+      readButton.type = "button";
+      readButton.className = "inbox-thread-read-button";
+      readButton.textContent = "Marker som lest";
+      readButton.addEventListener("click", () => markInboxEventThreadRead(thread.id));
+      actions.append(readButton);
+    }
+
+    const archiveButton = document.createElement("button");
+    archiveButton.type = "button";
+    archiveButton.className = "inbox-thread-read-button inbox-event-archive-button";
+    archiveButton.textContent = "Arkiver";
+    archiveButton.addEventListener("click", () => archiveInboxEventThread(thread.id));
+    actions.append(archiveButton);
+
+    article.append(actions);
+  }
+
+  return article;
+}
+
+// Render Innboks som trådsystem: levende kontekst-tråder (Inbox Event v1) først,
+// deretter de statiske JSON-trådene. Aktive tråder i inboxThreadList, arkiv i
+// inboxThreadArchive. Tømmer containerne (eneste innerHTML-bruk) og bygger
+// trådkort med createElement/textContent.
 function renderInboxThreads() {
   const activeContainer = elements.inboxThreadList;
   const archiveContainer = elements.inboxThreadArchive;
+  const inboxState = getInboxState();
+  const eventActive = getActiveInboxEventThreads(inboxState);
+  const eventArchived = getArchivedInboxEventThreads(inboxState);
 
   if (activeContainer) {
     activeContainer.innerHTML = "";
-    const activeThreads = getActiveInboxThreads();
 
-    if (!activeThreads.length) {
+    eventActive.forEach((thread) => {
+      activeContainer.append(createInboxEventThreadCard(thread));
+    });
+
+    const activeThreads = getActiveInboxThreads();
+    activeThreads.forEach((thread) => {
+      activeContainer.append(createInboxThreadCard(thread, { showReadButton: true }));
+    });
+
+    if (!eventActive.length && !activeThreads.length) {
       activeContainer.append(createMessageCard({
         from: "Klubbkontoret",
         tag: "Ingen uleste tråder",
         title: "Innboksen er rolig",
         body: "Det er ingen aktive uleste tråder akkurat nå."
       }, true));
-    } else {
-      activeThreads.forEach((thread) => {
-        activeContainer.append(createInboxThreadCard(thread, { showReadButton: true }));
-      });
     }
   }
 
   if (archiveContainer) {
     archiveContainer.innerHTML = "";
-    const archivedThreads = getArchivedInboxThreads();
 
-    if (!archivedThreads.length) {
+    eventArchived.slice(-12).forEach((thread) => {
+      archiveContainer.append(createInboxEventThreadCard(thread, { archived: true }));
+    });
+
+    const archivedThreads = getArchivedInboxThreads();
+    archivedThreads.slice(0, 12).forEach((thread) => {
+      archiveContainer.append(createInboxThreadCard(thread, { showReadButton: false }));
+    });
+
+    if (!eventArchived.length && !archivedThreads.length) {
       archiveContainer.append(createMessageCard({
         from: "Klubbkontoret",
         tag: "Arkiv",
         title: "Ingen trådhistorikk ennå",
         body: "Tråder dukker opp her etter at meldinger er levert eller lest."
       }, true));
-    } else {
-      archivedThreads.slice(0, 12).forEach((thread) => {
-        archiveContainer.append(createInboxThreadCard(thread, { showReadButton: false }));
-      });
     }
   }
 }
@@ -8450,6 +8751,7 @@ function renderApp() {
   renderManagerEngineBridge(teamFit);
   renderManagerDetailFromTeamFit(teamFit);
   renderClubWeek().catch(console.error);
+  refreshInboxEvents(teamFit);
   renderInboxThreads();
   renderDepartments();
 

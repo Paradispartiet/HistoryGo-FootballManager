@@ -378,6 +378,15 @@ const explicitWins = getTrainingProgramCompositionById("recovery_prevention", {
 });
 check("eksplisitt fatigueRisk vinner over off-pitch-state", explicitWins.scoring.contextBonus === 0);
 
+// === Integrasjon: treningsprogram kan lenkes fra inbox =====================
+console.log("\nIntegrasjon — treningsprogram → inbox:");
+const { createInboxThreadFromTrainingProgram } = await import("../src/football-inbox-events.js");
+const relevantProgram = createTrainingProgramCompositions({ teamFit, offPitchState: offPitchTired, limit: 6 })
+  .find((p) => p.id === "recovery_prevention");
+const inboxTrainingThread = createInboxThreadFromTrainingProgram(relevantProgram, {});
+check("off-pitch-relevant program gir en treningstråd", Boolean(inboxTrainingThread) && inboxTrainingThread.type === "training");
+check("treningstråd peker tilbake på programmet", inboxTrainingThread?.linkedAction.id === "recovery_prevention");
+
 // --- Rapport ---------------------------------------------------------------
 console.log("\nEksempel — fullt datagrunnlag (sortert etter uttelling):");
 for (const p of full) {
