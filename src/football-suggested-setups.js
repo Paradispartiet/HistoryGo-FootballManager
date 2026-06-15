@@ -29,6 +29,7 @@ import {
 } from "./football-training-week.js";
 import { evaluateFormationMatchupVsOpponent } from "./football-matchday-engine.js";
 import { getTrainingProgramIdsForFocus } from "./football-training-program-compositions.js";
+import { summarizeOffPitchContext } from "./football-off-pitch-parameters.js";
 
 // ----------------------------------------------------------------------------
 // Hjelpere
@@ -124,6 +125,30 @@ function getMetricRanking(teamFit) {
     .filter((entry) => Number.isFinite(entry.value))
     // Deterministisk: stigende verdi, så alfabetisk nøkkel ved likhet.
     .sort((a, b) => a.value - b.value || a.key.localeCompare(b.key));
+}
+
+// Off-pitch-kontekst for forslagene. VIKTIG: forslagssystemet får bare den
+// HALVSKJULTE pakken (summarizeOffPitchContext) — synlige signaler + en vag
+// hint om uro — aldri de rå hidden-tallene. Slik kan en bevisst manager
+// fortsatt lese konteksten bedre enn forslaget. Aksepterer enten en rå
+// offPitchState (summeres her) eller en ferdig summary i offPitchSignals.
+function resolveOffPitchSummary({ offPitchState, offPitchSignals } = {}) {
+  if (offPitchSignals && typeof offPitchSignals === "object") {
+    if (Array.isArray(offPitchSignals.visible)) return offPitchSignals;
+    if (offPitchSignals.summary && typeof offPitchSignals.summary === "object") return offPitchSignals.summary;
+  }
+  if (offPitchState && typeof offPitchState === "object") {
+    return summarizeOffPitchContext(offPitchState);
+  }
+  return null;
+}
+
+// Finn et synlig signal i en kategori med minst en gitt alvorlighet.
+function offPitchConcern(summary, categories, severities = ["alert", "watch"]) {
+  if (!summary || !Array.isArray(summary.visible)) return null;
+  const wantCat = new Set(asArray(categories));
+  const wantSev = new Set(asArray(severities));
+  return summary.visible.find((sig) => wantCat.has(sig.category) && wantSev.has(sig.severity)) || null;
 }
 
 // ----------------------------------------------------------------------------
@@ -305,9 +330,12 @@ export function suggestMatchPlanSetups({
   opponent,
   formationMatchup,
   coachContext,
+  offPitchState,
+  offPitchSignals,
   limit
 } = {}) {
   const max = normalizeLimit(limit);
+  const offPitch = resolveOffPitchSummary({ offPitchState, offPitchSignals });
   const plans = [];
   const ranking = getMetricRanking(teamFit);
   const strongest = ranking.length ? ranking[ranking.length - 1] : null;
@@ -346,7 +374,24 @@ export function suggestMatchPlanSetups({
     seen.add(plan.id);
     unique.push(plan);
   }
-  return unique.slice(0, max);
+
+  // Off-pitch: et halvskjult tilleggssignal om ytre press. Additivt og ikke
+  // styrende — forslaget peker bare på at konteksten utenfor banen finnes.
+  const pressureConcern = offPitchConcern(offPitch, ["pressure", "boardMedia"]);
+  const decorated = pressureConcern
+    ? unique.map((plan) =>
+        makeSuggestion({
+          ...plan,
+          suggestedAdjustments: [
+            ...plan.suggestedAdjustments,
+            `Off-pitch: ${pressureConcern.text} Hold roen i kampplanen og les laget, ikke bare tavla.`
+          ],
+          sourceSignals: [...plan.sourceSignals, "offPitch"]
+        })
+      )
+    : unique;
+
+  return decorated.slice(0, max);
 }
 
 function buildMatchupLeanPlan({ formationMatchup, opponent, matchupFocusIds }) {
@@ -512,9 +557,12 @@ export function suggestTrainingWeekSetups({
   formationMatchup,
   coachContext,
   lastMatchWeaknessMetric,
+  offPitchState,
+  offPitchSignals,
   limit
 } = {}) {
   const max = normalizeLimit(limit);
+  const offPitch = resolveOffPitchSummary({ offPitchState, offPitchSignals });
 
   // Bygg en prioritert (focusId, kilde) -liste; første forekomst vinner.
   const ordered = [];
@@ -545,7 +593,8 @@ export function suggestTrainingWeekSetups({
       opponent,
       formationMatchup,
       coachContext,
-      lastMatchWeaknessMetric
+      lastMatchWeaknessMetric,
+      offPitch
     }));
     if (suggestions.length >= max) break;
   }
@@ -560,7 +609,7 @@ const TRAINING_SOURCE_CONFIDENCE = {
   standard: 0.4
 };
 
-function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, coachContext, lastMatchWeaknessMetric }) {
+function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, coachContext, lastMatchWeaknessMetric, offPitch }) {
   const focus = getTrainingFocus(focusId);
   const support = calculateTrainingStaffSupport({ focusId, coachContext });
   const oppName = opponent?.name || "neste motstander";
@@ -568,6 +617,7 @@ function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, 
   const why = [];
   const recommendedBecause = [];
   const risks = [];
+  const suggestedAdjustments = [];
   const sourceSignals = ["teamFit"];
 
   if (source === "matchup") {
@@ -607,6 +657,21 @@ function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, 
   else if (support.level === "medium") confidence += 0.05;
   else confidence -= 0.05;
 
+  suggestedAdjustments.push(
+    `${focus.effectHint}`,
+    "Du står fritt til å velge et annet fokus — et bevisst valg mot et forventet kampbilde kan gi bedre uttelling."
+  );
+
+  // Off-pitch: et halvskjult signal om at kroppene/hodene kan trenge noe annet
+  // enn det taktisk «riktige» fokuset. Forslaget får bare se det synlige laget.
+  const loadConcern = offPitchConcern(offPitch, ["physical", "injury"]);
+  if (loadConcern) {
+    suggestedAdjustments.push(
+      `Off-pitch: ${loadConcern.text} Vurder belastningen — et lettere/restituerende opplegg kan slå dette fokuset denne uka.`
+    );
+    sourceSignals.push("offPitch");
+  }
+
   return makeSuggestion({
     id: `training_week:${focusId}`,
     title: focus.name,
@@ -615,10 +680,7 @@ function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, 
     why,
     recommendedBecause,
     risks,
-    suggestedAdjustments: [
-      `${focus.effectHint}`,
-      "Du står fritt til å velge et annet fokus — et bevisst valg mot et forventet kampbilde kan gi bedre uttelling."
-    ],
+    suggestedAdjustments,
     relatedTrainingFocusIds: [focusId],
     // Dypere valg: hvilke ferdige treningsprogram-komposisjoner dette fokuset
     // leder videre til. Additivt — treningsuka består som eget forslag.
@@ -644,6 +706,8 @@ export function createSuggestedSetups({
   opponent,
   coachContext,
   lastMatchWeaknessMetric,
+  offPitchState,
+  offPitchSignals,
   limit
 } = {}) {
   const knowledgeById = formationKnowledgeById && typeof formationKnowledgeById === "object"
@@ -671,6 +735,8 @@ export function createSuggestedSetups({
       opponent,
       formationMatchup,
       coachContext,
+      offPitchState,
+      offPitchSignals,
       limit
     }),
     training_week: suggestTrainingWeekSetups({
@@ -679,6 +745,8 @@ export function createSuggestedSetups({
       formationMatchup,
       coachContext,
       lastMatchWeaknessMetric,
+      offPitchState,
+      offPitchSignals,
       limit
     })
   };
