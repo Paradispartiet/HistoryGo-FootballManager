@@ -13,7 +13,7 @@
       "body": "Spillere, trenere, assistenter, fysio og keepertrenere kan etter hvert samles og knyttes til klubber du har oppdaget.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -27,7 +27,7 @@
       "body": "Spillerkort skal ikke bare dukke opp i en liste. De bør knyttes til klubber, stadioner og steder du faktisk har samlet i History Go.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -41,7 +41,7 @@
       "body": "Hvert spillerkort bør inneholde rolle, styrker, foretrukket posisjon, klubbtilknytning og hvorfor spilleren kan brukes på ulike måter i laget.",
       "phases": [
         "analysis",
-        "club_work",
+        "inbox",
         "training"
       ],
       "conditions": {}
@@ -57,7 +57,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -70,7 +70,7 @@
       "title": "Staffkort bør være egne samlekort",
       "body": "Assistenttrener, tre trenere, fysio og keepertrener bør kunne samles som egne kort. De skal høre til klubber og steder, ikke bare være generiske roller.",
       "phases": [
-        "club_work",
+        "inbox",
         "training"
       ],
       "conditions": {}
@@ -84,7 +84,7 @@
       "title": "Keepertrenere kan kobles til gamle keepere",
       "body": "Keepertrenerkort kan gjerne komme fra tidligere keepere. Da blir samlingen både historisk, sportslig og praktisk knyttet til hvordan keeperrollen utvikles.",
       "phases": [
-        "club_work",
+        "inbox",
         "training"
       ],
       "conditions": {}
@@ -99,7 +99,7 @@
       "body": "Tre trenerkort kan representere ulike treningsstyrker: press, teknikk, fysisk arbeid, ungdomsutvikling, dødball eller rolleforståelse. Slik får staben reell betydning.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -114,7 +114,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -132,8 +132,8 @@
       "body": "Når laget forstår planen bedre, kan systemet løfte frem mer spesialiserte profiler. Da kan asymmetriske roller, hybridspillere og nisjestyrker brukes mer presist.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -151,7 +151,7 @@
       "body": "Når treningskulturen er god, kan staffkort få mer verdi. Da blir trenernes fagområder faktisk brukt, ikke bare vist som navn i en samling.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -170,7 +170,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -188,8 +188,8 @@
       "body": "Når spillermoralen er lav, bør samlingssystemet etter hvert kunne vurdere relasjoner: klubblinker, rolletrygghet, kjent trener, lokal tilhørighet og spillere som passer sammen.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -206,7 +206,7 @@
       "title": "Laguttak bør valideres mot tilgjengelige kort",
       "body": "Før kamp bør systemet skille mellom kort du eier, kort som er tilgjengelige, og kort som faktisk kan brukes i kamptroppen. Samling og kampregistrering er ikke samme ting.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -219,7 +219,7 @@
       "title": "Kampdag bør vise aktive kort",
       "body": "På kampdag bør manageren se hvilke spiller- og staffkort som faktisk påvirker laget: startellever, benk, trenerteam, fysio og keepertrener.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -233,7 +233,7 @@
       "body": "Badges fra History Go kan etter hvert knyttes til managerdelen. Et stadionmerke, en klubbserie eller en Groundhopper-bragd kan åpne nye kort eller sterkere koblinger.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -247,7 +247,7 @@
       "body": "Når Groundhopper utvides globalt, kan store klubbsteder gi egne klubbsett: spillere, trenere, staff, rivaler, stadionhistorie og spesielle kort knyttet til stedet.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -261,7 +261,7 @@
       "body": "Kort bør komme fra steder, prestasjoner, kunnskap og klubbspor. Det gjør samlingen mer rettferdig og mer meningsfull enn tilfeldige pakkeåpninger.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

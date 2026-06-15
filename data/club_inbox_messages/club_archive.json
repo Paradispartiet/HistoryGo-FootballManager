@@ -12,7 +12,7 @@
       "title": "Klubbhistorien kan brukes",
       "body": "Gamle spillere, trenere og kamper kan gi klubben identitet. Historien bør ikke bare være pynt, men en del av hvordan laget bygges.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -27,7 +27,7 @@
       "body": "En klubb starter aldri helt på blanke ark. Gamle lag, gamle steder og gamle kamper legger igjen spor. Manageren kan ignorere dem, men han kan også bruke dem til å gi prosjektet tyngde.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -41,8 +41,8 @@
       "body": "Et stadion bærer rop, regn, store kvelder og tunge tap. Når et sted låses opp i History Go, bør også minnene rundt stedet kunne gi managerdelen mer dybde.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_day"
+        "inbox",
+        "matchday"
       ],
       "conditions": {}
     },
@@ -56,7 +56,7 @@
       "body": "En legende er ikke bare en høy rating. Han representerer en måte å spille på, en rolle, en kultur eller et øyeblikk klubben fortsatt kan lære av.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -71,7 +71,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -103,8 +103,8 @@
       "body": "Når laget vet hva det prøver å være, kan arkivet hjelpe med å gi ideen røtter. Da blir spillmodellen ikke bare et system, men en ny versjon av klubbens egen fortelling.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -122,8 +122,8 @@
       "body": "Noen kamper bærer mer historie enn andre. Rivalisering handler ikke bare om motstanderen nå, men om gamle sår, gamle triumfer og hva supporterne forventer at laget skal forstå.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {}
     },
@@ -137,7 +137,7 @@
       "body": "Når medietrykket øker, kan det ligne tidligere perioder i klubbens historie. Arkivet kan vise hvordan uro vokser, men også hvordan klubben tidligere fant ro igjen.",
       "phases": [
         "analysis",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -155,8 +155,8 @@
       "body": "Når moralen er lav, kan historien minne spillerne om at klubben har stått i tunge perioder før. Ikke som nostalgi, men som en konkret påminnelse om at retning kan gjenoppbygges.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -174,7 +174,7 @@
       "body": "Noen klubber har alltid vært kjent for bestemte krav: løpskraft, teknikk, duellstyrke, kollektiv disiplin eller ungdomsutvikling. Slike spor kan brukes når treningskulturen bygges.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -188,7 +188,7 @@
       "body": "Når spillere, staff eller klubbsteder låses opp, bør arkivet forklare hvorfor de betyr noe. Et funn blir sterkere når det får plass i klubbens større fortelling.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -201,7 +201,7 @@
       "title": "Gamle møter kan farge kampforberedelsen",
       "body": "Før kamp kan arkivet gi mer enn statistikk. Tidligere oppgjør, gamle vendepunkt og kjente kampbilder kan hjelpe manageren å forstå hvorfor akkurat denne kampen føles annerledes.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -214,7 +214,7 @@
       "title": "Kampdag vekker gamle ekko",
       "body": "På kampdag kan historien bli nærværende. En tribune, en sang, en gammel scoring eller et gammelt tap kan gjøre at kampen føles større enn tabellen.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -227,7 +227,7 @@
       "title": "Arkivet skal ikke være museum alene",
       "body": "Hvis historien bare ligger lagret, blir den passiv. Den bør gi nye tråder, nye valg, nye spillere, nye trenere og nye måter å forstå laget på.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}

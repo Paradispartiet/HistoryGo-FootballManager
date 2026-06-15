@@ -31,7 +31,8 @@ import {
   sanitizeWeeklyTrainingFocus,
   calculateTrainingStaffSupport,
   recommendTrainingFocus,
-  createTrainingMatchdaySnapshot
+  createTrainingMatchdaySnapshot,
+  buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
@@ -75,6 +76,8 @@ import {
   applyClubWeekEffectsFromBrowser,
   createClubWeekSummaryFromBrowser,
   getClubWeekPhaseLabelFromBrowser,
+  getClubWeekPhaseGuidanceFromBrowser,
+  listClubWeekPhasesFromBrowser,
 } from "./app-manager-engine-bridge.js";
 
 const DATA_PATHS = {
@@ -348,6 +351,8 @@ const elements = {
   knowledgeCompletedTotal: document.querySelector("#knowledgeCompletedTotal"),
   clubWeekSummary: document.querySelector("#clubWeekSummary"),
   clubWeekPhase: document.querySelector("#clubWeekPhase"),
+  clubWeekPhaseSteps: document.querySelector("#clubWeekPhaseSteps"),
+  clubWeekPhaseGuidance: document.querySelector("#clubWeekPhaseGuidance"),
   clubWeekFeedback: document.querySelector("#clubWeekFeedback"),
   advanceClubWeekPhase: document.querySelector("#advanceClubWeekPhase"),
   clubBoardTrust: document.querySelector("#clubBoardTrust"),
@@ -1041,7 +1046,11 @@ function normalizeTeamMerits(merits) {
     // off-pitch/trening/kampdag/kontekst, leste/løste/arkiverte). Ligger også i
     // manager-staten, ikke i History Go-progresjonen. Aldri visited_places /
     // hg_groundhopper_stats_v1.
-    inbox: normalizeInboxState(base.inbox)
+    inbox: normalizeInboxState(base.inbox),
+    // Club Week Orchestrator v1: uke/fase/klubbverdier bor nå i merits, sammen
+    // med off-pitch og innboks, slik at hele manageruka er én sammenhengende
+    // state. null til den er migrert/initialisert (engine/fallback eier formen).
+    clubWeekState: sanitizeStoredClubWeekState(base.clubWeekState)
   };
 }
 
@@ -3359,13 +3368,13 @@ function applyMatchdayConsequences(lastMatch, session) {
   addClubWeekEvent({
     id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     week: state.clubWeekState?.week ?? "?",
-    phase: "match_day",
+    phase: "matchday",
     phaseLabel: "Kampdag",
     message
   });
   // I kampdagfasen er det denne kampen som åpner porten for fasebyttet.
   setClubWeekFeedback(
-    state.clubWeekState?.phase === "match_day" ? `${message} Uka kan nå rulle videre.` : message
+    state.clubWeekState?.phase === "matchday" ? `${message} Uka kan nå rulle videre.` : message
   );
 
   // Profilrelatert progresjon (Club Week-verdier/formationFamiliarity) er
@@ -3522,7 +3531,7 @@ function registerMatchInMiniSeason(lastMatch) {
   addClubWeekEvent({
     id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     week: state.clubWeekState?.week ?? "?",
-    phase: "match_day",
+    phase: "matchday",
     phaseLabel: "Prøveperiode",
     message
   });
@@ -3757,8 +3766,22 @@ function selectWeeklyTrainingFocus(focusId) {
   if (!focus || !Number.isInteger(week) || state.matchday?.session || state.weeklyTrainingFocus?.appliedSessionId) {
     return;
   }
+  const previousFocusId = state.weeklyTrainingFocus?.focusId || null;
   state.weeklyTrainingFocus = { focusId: focus.id, week, appliedSessionId: null };
   saveWeeklyTrainingFocus();
+
+  // Treningsvalget beveger konteksten utenfor banen. Vi anvender effekten kun
+  // når fokuset faktisk endres denne uka, slik at gjentatte klikk ikke stabler
+  // opp samme effekt. Off-pitch-historikken husker hva som ble trent, slik at
+  // kampdag og senere forklaringer kan vise hvorfor laget ble som det ble.
+  if (state.teamMerits && focus.id !== previousFocusId) {
+    const offPitchEvent = buildTrainingFocusOffPitchEvent(focus.id);
+    if (offPitchEvent) {
+      state.teamMerits.offPitch = applyOffPitchEvent(getOffPitchState(), offPitchEvent);
+      saveTeamMerits();
+    }
+  }
+
   renderApp();
 }
 
@@ -3770,27 +3793,70 @@ function syncWeeklyTrainingFocusToClubWeek() {
   }
 }
 
-// Club Week-tilstand: uke, fase og klubbverdier fra Club Week Engine.
-// Kun lett persistens i localStorage – selve logikken ligger i engine/fallback.
+// Gyldige fase-ID-er i den nye 6-fase-rytmen. Brukes til sanering av lagret
+// clubWeekState (gamle fase-ID-er som match_day/club_work faller til analyse).
+const CLUB_WEEK_PHASE_IDS = ["analysis", "inbox", "training", "match_prep", "matchday", "review"];
+
+// Saner en lagret clubWeekState til forventet form. Tolerant mot null/feil
+// typer og gamle fase-ID-er. Speiler engine-normaliseringen, men er synkron
+// slik at merits-normalisereren kan bruke den ved oppstart (før engine er lastet).
+function sanitizeStoredClubWeekState(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+  const week = Number(value.week);
+  const clampM = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : 50;
+  };
+  return {
+    week: Number.isInteger(week) && week >= 1 ? week : 1,
+    phase: CLUB_WEEK_PHASE_IDS.includes(value.phase) ? value.phase : "analysis",
+    boardTrust: clampM(value.boardTrust),
+    playerMorale: clampM(value.playerMorale),
+    tacticalClarity: clampM(value.tacticalClarity),
+    trainingCulture: clampM(value.trainingCulture),
+    mediaPressure: clampM(value.mediaPressure)
+  };
+}
+
+// Club Week-tilstand: uke, fase og klubbverdier fra Club Week Engine. Kanonisk
+// plassering er teamMerits.clubWeekState (Club Week Orchestrator v1). Migrerer
+// fra den gamle frittstående localStorage-nøkkelen når merits ennå mangler en
+// verdi. Selve fase-/effektlogikken ligger i engine/fallback.
 function loadClubWeekState() {
+  const fromMerits = state.teamMerits?.clubWeekState;
+  if (fromMerits && typeof fromMerits === "object" && !Array.isArray(fromMerits)) {
+    return fromMerits;
+  }
+
+  // Migrering: les den gamle nøkkelen én gang slik at eksisterende spill ikke
+  // mister uke/fase/verdier når staten flyttes inn i merits.
   try {
     const stored = JSON.parse(localStorage.getItem(CLUB_WEEK_STATE_KEY));
-
     if (stored && typeof stored === "object" && !Array.isArray(stored)) {
       return stored;
     }
-
-    return null;
   } catch (error) {
-    return null;
+    // Ignorer korrupt/utilgjengelig lagring – vi faller tilbake til ny uke 1.
   }
+
+  return null;
 }
 
 function saveClubWeekState(clubWeekState) {
+  // Skriv til den kanoniske plasseringen i merits. Uten merits (skulle ikke
+  // skje etter init) faller vi stille tilbake uten persistens.
+  if (state.teamMerits && typeof state.teamMerits === "object") {
+    state.teamMerits.clubWeekState = clubWeekState;
+    saveTeamMerits();
+  }
+
+  // Rydd bort den gamle frittstående nøkkelen etter at staten er migrert inn.
   try {
-    localStorage.setItem(CLUB_WEEK_STATE_KEY, JSON.stringify(clubWeekState));
+    localStorage.removeItem(CLUB_WEEK_STATE_KEY);
   } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+    // Privat modus e.l.: ufarlig, den gamle nøkkelen blir bare liggende.
   }
 }
 
@@ -3853,10 +3919,11 @@ function addClubWeekEvent(event) {
 // Club Week Engine-fasene; brukes kun til visningstekst.
 const CLUB_WEEK_PHASE_LABELS = {
   analysis: "Analyse",
+  inbox: "Innboks",
   training: "Trening",
-  club_work: "Klubbdrift",
-  match_preparation: "Kampforberedelse",
-  match_day: "Kampdag"
+  match_prep: "Kampplan",
+  matchday: "Kampdag",
+  review: "Oppsummering"
 };
 
 // Kampdag ↔ Club Week-kobling: les porten fra den rene modellen med gjeldende
@@ -3870,54 +3937,119 @@ function getClubWeekMatchdayGate() {
   });
 }
 
-// Små, synlige konsekvenser av et fasebytte. Returnerer effekter på
-// klubbverdier og en kort norsk tilbakemelding. Kun UI/Club Week-state –
+// Kort norsk effekt-fras per treningsfokus: hva treningen faktisk gjorde med
+// laget på kampdag. Brukes til den kausale "derfor"-forklaringen.
+const TRAINING_FOCUS_MATCH_EFFECT_PHRASE = {
+  rest_defence: "dempet laget kontringsrisikoen",
+  pressing: "presset laget mer samordnet",
+  build_up: "spilte laget tryggere ut bakfra",
+  width: "fant laget bedre rom i bredden",
+  depth_runs: "truet laget rommet bak forsvaret oftere",
+  role_understanding: "sto rollene tydeligere i pressede situasjoner",
+  set_pieces: "sto laget bedre rustet på dødballer",
+  formation_familiarity: "satt systemet tryggere"
+};
+
+// Club Week Orchestrator v1: den kausale lenken trening → kampdag. Leser ukas
+// treningssnapshot fra den spilte kampen og forklarer HVORFOR laget ble som det
+// ble. Dette speiler kampmotorens faktiske oppførsel: et kontekstuelt relevant
+// fokus demper de situasjonene det ble trent på (trainingDamping i
+// resolveMatchdayDecision). Tom streng når ingen trening er knyttet til kampen.
+function buildTrainingMatchCausalNote() {
+  const lastMatch = state.matchday?.lastMatch;
+  const trainingFocus = lastMatch?.trainingFocus;
+  if (!trainingFocus || !trainingFocus.focusId) {
+    return "";
+  }
+  const focusName = trainingFocus.name || getTrainingFocus(trainingFocus.focusId)?.name || "treningsfokuset";
+  const opponentName = lastMatch.opponent?.name || "motstanderen";
+  const phrase = TRAINING_FOCUS_MATCH_EFFECT_PHRASE[trainingFocus.focusId] || "ga laget noe å støtte seg på";
+
+  if (trainingFocus.contextRelevant) {
+    return `Du trente ${focusName} før ${opponentName}, derfor ${phrase}.`;
+  }
+  return `Du trente ${focusName} før ${opponentName}. Det ga laget arbeid, men traff ikke kampbildet direkte denne gangen.`;
+}
+
+// Små, synlige konsekvenser av et fasebytte i den nye 6-fase-rytmen
+// (analyse → innboks → trening → kampplan → kampdag → oppsummering → ny uke).
+// Returnerer effekter på klubbverdier og en kort norsk tilbakemelding som
+// forklarer hvorfor uka beveget seg som den gjorde. Kun UI/Club Week-state –
 // ingen lagscore, kampmotor, rollefit eller Football Knowledge-matching.
 function getClubWeekTransitionConsequences(previousState, nextState) {
-  if (previousState.phase === "training") {
-    if (state.activeKnowledgeFocusId && isKnowledgeFocusCompleted(state.activeKnowledgeFocusId)) {
+  switch (previousState.phase) {
+    case "analysis":
       return {
-        effects: { trainingCulture: 2, tacticalClarity: 1 },
-        message:
-          "Treningsfasen er fullført. Kunnskapsøkten ga +2 treningskultur og +1 taktisk klarhet."
+        effects: {},
+        message: "Analysen er gjennomgått. Nå rydder du innboksen før uka planlegges."
+      };
+
+    case "inbox":
+      return {
+        effects: {},
+        message: "Innboksen er håndtert, og svarene har satt seg i konteksten. Treningsuka kan planlegges."
+      };
+
+    case "training": {
+      const selectedFocus = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
+      const focusNote = selectedFocus
+        ? ` Valgt fokus: ${selectedFocus.name} — det følger med inn i kampplanen.`
+        : " Uten valgt treningsfokus går laget inn i kampuka uten en tydelig rød tråd.";
+
+      if (state.activeKnowledgeFocusId && isKnowledgeFocusCompleted(state.activeKnowledgeFocusId)) {
+        return {
+          effects: { trainingCulture: 2, tacticalClarity: 1 },
+          message: `Treningsfasen er fullført. Kunnskapsøkten ga +2 treningskultur og +1 taktisk klarhet.${focusNote}`
+        };
+      }
+
+      if (state.activeKnowledgeFocusId) {
+        return {
+          effects: { trainingCulture: -1 },
+          message: `Treningsfasen er over. Valgt kunnskapsøkt ble ikke fullført, og treningskulturen faller med 1.${focusNote}`
+        };
+      }
+
+      return {
+        effects: selectedFocus ? {} : { tacticalClarity: -1 },
+        message: selectedFocus
+          ? `Treningsfasen er over.${focusNote}`
+          : `Treningsfasen er over uten valgt kunnskapsfokus. Taktisk klarhet faller med 1.${focusNote}`
       };
     }
 
-    if (state.activeKnowledgeFocusId) {
+    case "match_prep":
       return {
-        effects: { trainingCulture: -1 },
-        message:
-          "Treningsfasen er over. Valgt kunnskapsøkt ble ikke fullført, og treningskulturen faller med 1."
+        effects: { mediaPressure: 1 },
+        message: "Kampplanen er låst. Kampdag nærmer seg, og medietrykket øker med 1."
+      };
+
+    case "matchday": {
+      // Kampen er spilt (porten åpnet av applyMatchdayConsequences). Selve
+      // klubbeffektene ble brukt da kampen ble avsluttet; her forklarer vi
+      // hvorfor laget presterte som det gjorde, og leder over i oppsummeringen.
+      const causalNote = buildTrainingMatchCausalNote();
+      const base = "Kampen er spilt. Nå oppsummeres uka.";
+      return {
+        effects: {},
+        message: causalNote ? `${causalNote} ${base}` : base
       };
     }
 
-    return {
-      effects: { tacticalClarity: -1 },
-      message:
-        "Treningsfasen er over uten valgt kunnskapsfokus. Taktisk klarhet faller med 1."
-    };
+    case "review":
+      return {
+        effects: { mediaPressure: -1 },
+        message: `Uke ${previousState.week} er oppsummert. Klubben går inn i uke ${nextState.week} med ny analysefase.`
+      };
+
+    default: {
+      const label = CLUB_WEEK_PHASE_LABELS[nextState.phase] || "neste fase";
+      return {
+        effects: {},
+        message: `Klubben går videre til ${label}.`
+      };
+    }
   }
-
-  if (previousState.phase === "match_preparation") {
-    return {
-      effects: { mediaPressure: 1 },
-      message: "Kampdag nærmer seg. Medietrykket øker med 1."
-    };
-  }
-
-  if (previousState.phase === "match_day" && nextState.phase === "analysis") {
-    return {
-      effects: { mediaPressure: -1 },
-      message: `Kampdagen er over. Klubben går inn i uke ${nextState.week} med ny analysefase.`
-    };
-  }
-
-  const label = CLUB_WEEK_PHASE_LABELS[nextState.phase] || "neste fase";
-
-  return {
-    effects: {},
-    message: `Klubben går videre til ${label}.`
-  };
 }
 
 // Fullført ukesøkt: hvilke kunnskapsfokus brukeren har markert som gjennomført.
@@ -6696,6 +6828,33 @@ function renderClubWeekEventLog(list) {
 
 // Render Club Week-panelet: uke, fase og klubbverdier. Async fordi summary/label
 // hentes via bridge (engine eller fallback). Påvirker ikke resten av renderApp.
+// Tegn fase-stripa: én bolk per fase i rekkefølge, gjeldende fase markert og
+// allerede passerte faser dempet. Rent visningslag — ingen state-endring.
+function renderClubWeekPhaseSteps(container, phaseList, currentPhase) {
+  if (!container) {
+    return;
+  }
+  container.replaceChildren();
+  const phases = Array.isArray(phaseList) ? phaseList : [];
+  const currentIndex = phases.findIndex((entry) => entry.phase === currentPhase);
+
+  phases.forEach((entry, index) => {
+    const item = document.createElement("li");
+    item.className = "club-week-step";
+    if (index === currentIndex) {
+      item.classList.add("is-active");
+      item.setAttribute("aria-current", "step");
+    } else if (currentIndex >= 0 && index < currentIndex) {
+      item.classList.add("is-done");
+    }
+    item.textContent = entry.label;
+    if (entry.guidance) {
+      item.title = entry.guidance;
+    }
+    container.append(item);
+  });
+}
+
 async function renderClubWeek() {
   if (!state.clubWeekState) {
     return;
@@ -6703,9 +6862,11 @@ async function renderClubWeek() {
 
   const clubWeekState = state.clubWeekState;
 
-  const [summary, phaseLabel] = await Promise.all([
+  const [summary, phaseLabel, guidance, phaseList] = await Promise.all([
     createClubWeekSummaryFromBrowser(clubWeekState),
     getClubWeekPhaseLabelFromBrowser(clubWeekState.phase),
+    getClubWeekPhaseGuidanceFromBrowser(clubWeekState.phase),
+    listClubWeekPhasesFromBrowser(),
   ]);
 
   if (elements.clubWeekSummary) {
@@ -6714,6 +6875,16 @@ async function renderClubWeek() {
 
   if (elements.clubWeekPhase) {
     elements.clubWeekPhase.textContent = phaseLabel;
+  }
+
+  // Club Week Orchestrator v1: fase-stripa gjør ukerytmen synlig og markerer
+  // hvor manageren er nå. Veiledningen forteller hva som skal gjøres i fasen.
+  if (elements.clubWeekPhaseSteps) {
+    renderClubWeekPhaseSteps(elements.clubWeekPhaseSteps, phaseList, clubWeekState.phase);
+  }
+
+  if (elements.clubWeekPhaseGuidance) {
+    elements.clubWeekPhaseGuidance.textContent = guidance;
   }
 
   if (elements.clubWeekFeedback) {
@@ -6762,7 +6933,7 @@ function getFallbackInboxMessages() {
       tag: "Sesongmål",
       title: "Velkommen til klubben",
       body: "Styret forventer en stabil sesong. Bygg en ellever som henger sammen taktisk, og vis at klassespillere kan brukes riktig.",
-      phases: ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      phases: ["analysis", "inbox", "training", "match_prep", "matchday", "review"],
       conditions: {}
     },
     {
@@ -9286,10 +9457,14 @@ async function init() {
       console.warn("Lagklasse-data har kvalitetsadvarsler:", classificationWarnings);
     }
 
-    // Club Week-tilstand: les lagret tilstand og la engine/fallback normalisere
-    // den (ugyldig/gammel verdi blir uke 1 / analyse).
+    // Club Week-tilstand: les lagret tilstand (fra merits, evt. migrert fra den
+    // gamle nøkkelen) og la engine/fallback normalisere den (ugyldig/gammel
+    // verdi blir uke 1 / analyse).
     const storedClubWeekState = loadClubWeekState();
     state.clubWeekState = await createInitialClubWeekStateFromBrowser(storedClubWeekState || {});
+    // Persister med én gang: skriver den kanoniske kopien inn i merits og rydder
+    // bort den gamle frittstående localStorage-nøkkelen (migrering).
+    saveClubWeekState(state.clubWeekState);
     state.weeklyTrainingFocus = loadWeeklyTrainingFocus();
     syncWeeklyTrainingFocusToClubWeek();
     state.clubWeekFeedback = loadClubWeekFeedback();

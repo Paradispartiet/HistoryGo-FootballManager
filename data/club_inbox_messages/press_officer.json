@@ -12,7 +12,7 @@
       "title": "Kampen nærmer seg",
       "body": "Når kampdagen nærmer seg, øker oppmerksomheten. Et tydelig laguttak og en forståelig kampplan vil gjøre klubben roligere.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -25,8 +25,8 @@
       "title": "Medietrykket øker",
       "body": "Medietrykket er høyt. Klubben trenger tydelig kommunikasjon, rolig ledelse og færre uklare signaler før neste kamp.",
       "phases": [
-        "match_preparation",
-        "match_day",
+        "match_prep",
+        "matchday",
         "analysis"
       ],
       "conditions": {
@@ -58,7 +58,7 @@
       "body": "Når den sportslige planen virker uklar, fylles tomrommet raskt. Presse, supportere og sponsorer leser usikkerhet selv i små formuleringer. Vi trenger et enkelt budskap som tåler spørsmål.",
       "phases": [
         "analysis",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -76,7 +76,7 @@
       "body": "Når styretilliten faller, bør kommunikasjonen være ekstra ryddig. Vi skal ikke late som alt er perfekt, men vi må vise at klubben fortsatt handler samlet.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -94,8 +94,8 @@
       "body": "Når styret står tydelig bak retningen, kan vi kommunisere med mer ro. Da handler det om å vise kontinuitet, ikke å love raske løsninger.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -114,7 +114,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -133,7 +133,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -151,8 +151,8 @@
       "body": "Lav spillermoral blir ofte synlig før noen sier det høyt. Kroppsspråk, korte svar og usikre prestasjoner kan bli en større sak enn selve resultatet.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -169,7 +169,7 @@
       "title": "Kampuka trenger én tydelig linje",
       "body": "Før kamp bør vi være samkjørte på hva vi sier. Ikke for å skjule noe, men for å unngå at spillerne, trenerteamet og klubben sender tre ulike signaler.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -182,7 +182,7 @@
       "title": "Kampdag forsterker alt",
       "body": "På kampdag blir små signaler store. Et rolig kroppsspråk på sidelinjen og korte, presise uttalelser etterpå kan dempe mer uro enn en lang forklaring.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -196,8 +196,8 @@
       "body": "Når medietrykket er høyt, frister det å forklare alt. Det kan virke motsatt. Vi bør si mindre, men tydeligere: hva vi jobber med, hvorfor det betyr noe, og hva neste steg er.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -214,7 +214,7 @@
       "title": "Klubbdrift er også kommunikasjon",
       "body": "Fasiliteter, marked, administrasjon og sportslig retning blir etter hvert samme historie. Hvis klubben ser ryddig ut bak kulissene, blir det lettere å tro på prosjektet foran kamera.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -228,8 +228,8 @@
       "body": "Hvis vi ikke klarer å forklare hva laget skal være med enkle ord, er sjansen stor for at publikum heller ikke ser det. En tydelig identitet starter med et språk klubben faktisk bruker.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -243,8 +243,8 @@
       "body": "Når signalene rundt klubben er bedre, bør vi ikke selge det som et gjennombrudd for tidlig. Ro bygges best når kommunikasjonen er nøktern og arbeidet får tale først.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "mediaPressure",

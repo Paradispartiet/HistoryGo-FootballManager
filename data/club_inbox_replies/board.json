@@ -13,7 +13,7 @@
       "tag": "Oppfølging",
       "title": "Styret ber om konkretisering",
       "body": "Styret tar planen til orientering. De ber om at neste steg blir helt konkret: ett sportslig grep, ett treningsgrep og én prioritet i klubbdriften.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -26,7 +26,7 @@
       "tag": "Oppfølging",
       "title": "Styret aksepterer tid, men ikke uklarhet",
       "body": "Styret godtar at banen må gi noen svar, men understreker at tid alene ikke er en plan. De forventer tydeligere prioriteringer før neste evaluering.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -39,7 +39,7 @@
       "tag": "Kommunikasjon",
       "title": "Styret støtter samlet kommunikasjonslinje",
       "body": "Styret støtter at presseansvarlig samler kommunikasjonen. Det viktigste nå er at sportslig ledelse og klubbledelse sier det samme, med færre ord.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -52,7 +52,7 @@
       "tag": "Kommunikasjon",
       "title": "Styret savner en kommunikasjonsplan",
       "body": "Styret forstår at kampen prioriteres, men minner om at taushet også tolkes. Klubben bør fortsatt vite hvem som svarer, og hva som skal sies.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     }
   ]

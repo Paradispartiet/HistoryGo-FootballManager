@@ -12,7 +12,7 @@
       "title": "Stadionbesøk kan åpne nye muligheter",
       "body": "Når du besøker klubbsteder i History Go, kan spillere, trenere og staff etter hvert bli tilgjengelige i managerdelen.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -27,7 +27,7 @@
       "body": "Et stadionbesøk bør ikke bare være et merke. Det bør åpne en klubb, en historie, en spillerprofil, en trenerstemme eller en ny måte å forstå laget på.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -41,7 +41,7 @@
       "body": "Managerdelen blir sterkere hvis spillerne kommer fra klubber og steder du har låst opp. Da blir laget ditt en samling av erfaringer, ikke bare en liste med navn.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -54,7 +54,7 @@
       "title": "Stadion til spiller er en naturlig linje",
       "body": "Når et stadion er besøkt, kan klubben bak stedet begynne å gi mening i managerdelen. Spillere, trenere og gamle profiler bør låses opp gjennom den forbindelsen.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -68,7 +68,7 @@
       "title": "Staff bør også kunne samles",
       "body": "Assistenttrener, keepertrener, trenere og fysio bør ikke være generiske figurer. De kan knyttes til klubber og steder på samme måte som spillere.",
       "phases": [
-        "club_work",
+        "inbox",
         "training"
       ],
       "conditions": {}
@@ -83,7 +83,7 @@
       "body": "Et sted bærer mer enn koordinater. Stadion, nabolag, tribuner, rivaler og gamle kamper kan gi klubben en identitet som også bør merkes i managerdelen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -97,7 +97,7 @@
       "body": "Ikke alle viktige fotballsteder er arenaer. Treningsfelt, akademier, løkker og gamle klubbhus kan åpne andre typer kunnskap: øvelser, kultur, utvikling og lokale spillertyper.",
       "phases": [
         "training",
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -111,7 +111,7 @@
       "title": "Groundhopper kan utvides til hele verden",
       "body": "Når systemet er klart, kan de store stadionene i verden ligge som sportssteder i History Go-byer. Da slipper vi senere rot og kan bygge global samling på samme struktur.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -125,7 +125,7 @@
       "title": "Lokal struktur må tåle global utvidelse",
       "body": "Før vi fyller verden med stadioner, må hvert sted vite hva det er: stadion, treningsfelt, klubbhus, historisk sted eller bredt sportsområde. Da kan alt vokse uten å bli rot.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -139,7 +139,7 @@
       "title": "Kampdag føles annerledes når stedet betyr noe",
       "body": "Når du har samlet et stadion, blir kampdagen mer enn en skjerm. Stedet har minne, tribune, historie og klubbspor som kan gjøre laget mer levende.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -152,7 +152,7 @@
       "title": "Stedskunnskap kan påvirke kampforberedelsen",
       "body": "Et bortested kan fortelle noe om press, publikum, underlag, tradisjon og motstanderens selvbilde. Det er ikke taktikk alene, men det kan farge kampplanen.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -184,7 +184,7 @@
       "body": "Noen steder lærer oss hvordan spillere formes: løkka, akademiet, kunstgressbanen, klubbhuset. Slike steder kan gi managerdelen mer enn bare stadionnavn.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -201,7 +201,7 @@
       "title": "Samlingen må bli en klubbressurs",
       "body": "Det du samler i History Go bør få praktisk verdi: flere valg, mer kunnskap, nye profiler og sterkere klubbidentitet. Samling uten bruk blir bare et arkiv.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -216,7 +216,7 @@
       "body": "Når stedene du har besøkt begynner å henge sammen med spillerne, staffen og historiene du bruker, får managerdelen en egen hukommelse. Da lever kartet videre i laget.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

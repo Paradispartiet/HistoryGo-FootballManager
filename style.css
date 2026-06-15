@@ -2417,6 +2417,50 @@ ul {
   outline-offset: 2px;
 }
 
+/* Club Week Orchestrator v1: fase-stripa gjør ukerytmen synlig. */
+.club-week-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.club-week-step {
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  background: var(--hg-surface-deep);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  opacity: 0.78;
+}
+
+.club-week-step.is-done {
+  color: var(--text);
+  opacity: 0.55;
+}
+
+.club-week-step.is-active {
+  background: var(--text);
+  color: #000000;
+  border-color: var(--text);
+  opacity: 1;
+}
+
+.club-week-guidance {
+  margin: 8px 0 0;
+  max-width: 56ch;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
 .topbar-score {
   display: grid;
   justify-items: center;

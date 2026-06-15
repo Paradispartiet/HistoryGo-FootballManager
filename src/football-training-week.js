@@ -252,6 +252,41 @@ export function recommendTrainingFocus({ opponent, teamFit, formationMatchup, la
   };
 }
 
+// Club Week Orchestrator v1: hvilke off-pitch-effekter ett valgt treningsfokus
+// gir. Dette er den manglende lenken — treningsvalget skal faktisk bevege
+// konteksten utenfor banen, ikke bare være et kampdag-snapshot. Tallene er små
+// (samme størrelsesorden som innboksvalg) og holdt i tråd med fokusets natur:
+// restitusjonspreget arbeid letter kroppene litt, hardt fysisk arbeid koster
+// litt, taktisk arbeid løfter klarhet/samhold. Aldri overall, aldri lagscore.
+const FOCUS_OFFPITCH_EFFECTS = {
+  rest_defence: { fatigue: -4, injuryRisk: -3, tacticalClarity: 4, cohesion: 2 },
+  pressing: { fatigue: 6, wear: 4, injuryRisk: 3, tacticalClarity: 3, confidence: 2 },
+  build_up: { tacticalClarity: 5, cohesion: 3, fatigue: 2 },
+  width: { tacticalClarity: 3, cohesion: 2, fatigue: 3 },
+  depth_runs: { fatigue: 5, wear: 3, confidence: 3, tacticalClarity: 2 },
+  role_understanding: { tacticalClarity: 6, cohesion: 3, roleFrustration: -3 },
+  set_pieces: { tacticalClarity: 3, cohesion: 2, fatigue: 2 },
+  formation_familiarity: { tacticalClarity: 5, cohesion: 4, trainingHappiness: 2 }
+};
+
+// Bygg en off-pitch-hendelse for et valgt treningsfokus (stabil event-form for
+// applyOffPitchEvent: { id, type, title, description, effects }). Returnerer
+// null hvis fokuset er ukjent eller mangler definerte effekter.
+export function buildTrainingFocusOffPitchEvent(focusId) {
+  const focus = getTrainingFocus(focusId);
+  const effects = FOCUS_OFFPITCH_EFFECTS[focus?.id];
+  if (!focus || !effects) {
+    return null;
+  }
+  return {
+    id: `training_focus:${focus.id}`,
+    type: "training",
+    title: `Treningsfokus: ${focus.name}`,
+    description: focus.shortDescription || "",
+    effects: { ...effects }
+  };
+}
+
 export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachContext, opponent, formationMatchup, lastMatchWeaknessMetric } = {}) {
   const stored = sanitizeWeeklyTrainingFocus(selection);
   const week = Number(clubWeek);

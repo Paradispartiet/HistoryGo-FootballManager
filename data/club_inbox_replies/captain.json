@@ -13,7 +13,7 @@
       "tag": "Garderobe",
       "title": "Garderoben tar imot en tydelig oppgave",
       "body": "Kapteinen melder at spillerne responderer bedre når oppgaven er enkel nok til å bæres inn i økta. Det gir gruppa noe konkret å samle seg rundt.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -26,7 +26,7 @@
       "tag": "Garderobe",
       "title": "Kapteinen ber om krav med retning",
       "body": "Kapteinen sier at gruppa tåler krav, men at kravet må være koblet til en tydelig oppgave. Ellers blir det mer press enn ansvar.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -39,7 +39,7 @@
       "tag": "Stabilitet",
       "title": "Garderoben merker stabiliteten",
       "body": "Kapteinen melder at spillerne virker roligere når hovedprinsippet får stå. Det gjør det lettere å rette detaljer uten at hele planen oppleves ny.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     },
     {
@@ -52,7 +52,7 @@
       "tag": "Stabilitet",
       "title": "Kapteinen ber om én fast beskjed",
       "body": "Kapteinen sier at et nytt grep kan gi energi, men garderoben trenger én fast beskjed som ikke endres igjen før spillerne har rukket å teste den.",
-      "phases": ["analysis", "training", "club_work", "match_preparation", "match_day"],
+      "phases": ["analysis", "training", "inbox", "match_prep", "matchday"],
       "conditions": {}
     }
   ]

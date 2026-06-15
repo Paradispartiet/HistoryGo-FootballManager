@@ -12,7 +12,7 @@
       "title": "Klubbdrift krever prioritering",
       "body": "Klubbdriften handler ikke bare om laget på banen. Fasiliteter, økonomi, administrasjon og markedsarbeid må etter hvert trekkes inn i managerrollen.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -26,7 +26,7 @@
       "body": "Når analyse, trening, klubbdrift og kampforberedelse flyter over i hverandre, mister klubben oversikt. En fast ukeplan gjør det lettere å vite hva som skal avgjøres når.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -40,7 +40,7 @@
       "body": "Når styretilliten er lav, må klubbdriften være ekstra presis. Referater, prioriteringer og beslutninger bør være tydelige nok til at ingen er i tvil om hva som er avtalt.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -57,7 +57,7 @@
       "title": "Tillit gir raskere gjennomføring",
       "body": "Når styret har tillit til retningen, går den daglige driften lettere. Da kan administrasjonen bruke mindre tid på avklaringer og mer tid på å få tiltak gjennomført.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {
@@ -76,7 +76,7 @@
       "body": "Gode økter trenger mer enn gode ideer. Banetid, utstyr, garderober, medisinsk oppfølging og stabsplan må være på plass før økta starter.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -91,7 +91,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -109,7 +109,7 @@
       "body": "Når treningsarbeidet fungerer, bør vi gjøre det mindre personavhengig. Øktplaner, møtepunkt og oppfølging må lagres som klubbstruktur, ikke bare sitte i hodet på trenerteamet.",
       "phases": [
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -127,8 +127,8 @@
       "body": "Når trykket utenfra øker, må klubben være samkjørt internt. Hvem svarer, hva sier vi, og hvilke saker skal ikke løses i gangen etter trening?",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -145,7 +145,7 @@
       "title": "Kampforberedelse er også logistikk",
       "body": "Laguttak og taktikk får mest oppmerksomhet, men kampuka faller hvis reise, mat, oppmøte, utstyr og medieplan ikke henger sammen.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -158,7 +158,7 @@
       "title": "Kampdag må gå stille i bakgrunnen",
       "body": "På kampdag er god administrasjon det som ikke synes. Når alt praktisk fungerer, kan spillerne og trenerteamet bruke energien på kampen.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -172,7 +172,7 @@
       "body": "Når spillermoralen faller, ser vi ofte på resultater først. Men garderobeflyt, møteplaner, transport, mat og små praktiske irritasjoner kan forsterke følelsen av uro.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -189,7 +189,7 @@
       "title": "Fasiliteter er ikke pynt",
       "body": "Baner, garderober, analyseplass og medisinsk rom påvirker prestasjon mer enn de får æren for. Dårlige rammer spiser konsentrasjon over tid.",
       "phases": [
-        "club_work",
+        "inbox",
         "training"
       ],
       "conditions": {}
@@ -203,7 +203,7 @@
       "title": "Økonomisk disiplin gir sportslig handlingsrom",
       "body": "Hver praktisk beslutning har en kostnad, også de små. Hvis klubben styrer hverdagsøkonomien godt, får sportslig ledelse mer rom når de viktige valgene kommer.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -217,7 +217,7 @@
       "title": "Opplåsing må inn i klubbens systemer",
       "body": "Når History Go åpner spillere, steder, staff eller klubbhistorie, må administrasjonen kunne registrere det ryddig. Ellers blir samlingen en bunke funn, ikke en klubbressurs.",
       "phases": [
-        "club_work",
+        "inbox",
         "analysis"
       ],
       "conditions": {}
@@ -232,7 +232,7 @@
       "body": "Hvis klubben sier at den er presis, utviklende og profesjonell, må det merkes i møtetider, oppfølging, fasiliteter og kommunikasjon. Identitet er også administrasjon.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

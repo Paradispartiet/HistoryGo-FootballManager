@@ -350,7 +350,9 @@ export {
   clampClubMetric,
   createClubWeekSummary,
   createInitialClubWeekState,
+  getClubWeekPhaseGuidance,
   getClubWeekPhaseLabel,
   isClubWeekPhase,
+  listClubWeekPhases,
   normalizeClubWeekState,
 } from "./engine/createClubWeekState.js";

@@ -14,9 +14,9 @@
       "phases": [
         "analysis",
         "training",
-        "club_work",
-        "match_preparation",
-        "match_day"
+        "inbox",
+        "match_prep",
+        "matchday"
       ],
       "conditions": {}
     },
@@ -42,7 +42,7 @@
       "title": "Styret følger kampen",
       "body": "Kampdag handler ikke bare om resultatet. Styret følger med på om laget ser organisert ut, og om manageren har bygget en troverdig plan.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -56,7 +56,7 @@
       "body": "Styretilliten er lav. Klubben trenger tydeligere prioriteringer, færre uklare signaler og en manager som viser at valgene henger sammen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -74,8 +74,8 @@
       "body": "Styret opplever at klubben beveger seg i riktig retning. Det viktigste nå er å holde fast ved prinsippene og ikke skifte kurs for raskt.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -112,7 +112,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -130,8 +130,8 @@
       "body": "Medietrykket er høyt. Styret ønsker roligere kommunikasjon, tydeligere prioriteringer og færre signaler som kan tolkes som usikkerhet.",
       "phases": [
         "analysis",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {
         "metric": "mediaPressure",
@@ -174,7 +174,7 @@
       "title": "Klubben må bygges utenfor banen også",
       "body": "Klubbdrift handler om mer enn kampplan. Styret følger med på om administrasjon, fasiliteter, marked og sportslig retning begynner å henge sammen.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -187,7 +187,7 @@
       "title": "Kampplanen må være tydelig",
       "body": "Før kamp forventer styret at laget har en plan spillerne kan forstå. En enkel, gjennomført idé er bedre enn en komplisert plan ingen klarer å følge.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -200,7 +200,7 @@
       "title": "Styret ser etter organisering",
       "body": "På kampdag ser styret ikke bare på resultatet. De ser etter struktur, rolleforståelse og om laget opptrer som om det vet hva det prøver å gjøre.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -214,7 +214,7 @@
       "body": "Styret ønsker at laget etter hvert skal være gjenkjennelig. Spillerne kan være ulike, men klubben må ha en retning som binder dem sammen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -229,7 +229,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

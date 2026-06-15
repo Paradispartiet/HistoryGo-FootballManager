@@ -245,9 +245,9 @@ check(
 );
 
 // Kampdag ↔ Club Week-porten fra PR #55 er intakt.
-const matchDayWeek = { week: 3, phase: "match_day" };
+const matchDayWeek = { week: 3, phase: "matchday" };
 check(
-  "match_day uten spilt kamp stenger porten",
+  "matchday uten spilt kamp stenger porten",
   evaluateClubWeekMatchdayGate({ clubWeekState: matchDayWeek }).isBlocked === true
 );
 check(

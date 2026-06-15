@@ -13,7 +13,7 @@
       "body": "Hvis laget står høyt, må keeperen være klar til å kontrollere bakrommet. Keeperrollen bør vurderes sammen med forsvarshøyden.",
       "phases": [
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -28,7 +28,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -61,7 +61,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -80,7 +80,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -108,7 +108,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -127,7 +127,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -145,8 +145,8 @@
       "body": "På innlegg og dødballer handler det ikke bare om høyde og rekkevidde. Keeperen må lese når han skal eie feltet, og når han heller skal organisere blokka foran seg.",
       "phases": [
         "training",
-        "match_preparation",
-        "match_day"
+        "match_prep",
+        "matchday"
       ],
       "conditions": {}
     },
@@ -161,7 +161,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -176,7 +176,7 @@
       "phases": [
         "analysis",
         "training",
-        "match_day"
+        "matchday"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -193,7 +193,7 @@
       "title": "Vi må vite hvordan de presser keeperen",
       "body": "Før kamp må keeperen vite om motstanderen låser kort igangsetting, presser på tilbakespill eller lar ham slå ut. Det avgjør første valget hans med ball.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -206,7 +206,7 @@
       "title": "De første minuttene setter keeperens rytme",
       "body": "På kampdag trenger keeperen en tidlig berøring, en tydelig kommunikasjon med stopperne og en følelse av hvor høyt laget faktisk står.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -219,7 +219,7 @@
       "title": "Keeperarbeidet trenger tid og struktur",
       "body": "Keeperutvikling forsvinner lett hvis den bare legges rundt resten av økta. Klubben trenger faste keeperøkter, men også økter der keeperen trenes inn i laget.",
       "phases": [
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -234,7 +234,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }

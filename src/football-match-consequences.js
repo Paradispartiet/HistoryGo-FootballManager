@@ -166,7 +166,7 @@ export function computeMatchdayConsequences({ lastMatch, coachSnapshot = null, h
   };
 }
 
-// Kampdag ↔ Club Week-kobling v1: i fasen "match_day" må ukas kamp faktisk
+// Kampdag ↔ Club Week-kobling v1: i fasen "matchday" må ukas kamp faktisk
 // spilles før uka kan rulle videre, slik at kampdagen og klubbuka er én
 // sammenhengende rytme. Ren lesefunksjon — app.js eier all state og bestemmer
 // hva som skjer når porten er stengt.
@@ -185,7 +185,7 @@ export function evaluateClubWeekMatchdayGate({
   lastMatch = null,
   hasActiveSession = false
 } = {}) {
-  if (!clubWeekState || typeof clubWeekState !== "object" || clubWeekState.phase !== "match_day") {
+  if (!clubWeekState || typeof clubWeekState !== "object" || clubWeekState.phase !== "matchday") {
     return { isBlocked: false, reason: "" };
   }
 

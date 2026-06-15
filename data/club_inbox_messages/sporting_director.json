@@ -13,7 +13,7 @@
       "body": "Når laget bygges, må roller og spillerprofiler henge sammen. Vi bør ikke bare samle gode spillere, men spillere som passer planen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -27,7 +27,7 @@
       "body": "Før vi snakker om hvem vi vil ha, må vi vite hvilken type spiller vi mangler. Navn kan friste, men profilen avgjør om spilleren faktisk styrker laget.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -41,8 +41,8 @@
       "body": "En god stall er ikke bare elleve sterke kort. Den er et sett med roller som passer sammen, slik at én spillers styrke åpner rom for en annens.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -56,7 +56,7 @@
       "body": "Når den taktiske klarheten er lav, blir stallplanleggingen mer usikker. Vi risikerer å hente eller bruke spillere til en idé vi ennå ikke har gjort tydelig nok.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -74,8 +74,8 @@
       "body": "Når spillideen er tydelig, blir også spillerlogistikken tydeligere. Da kan vi se hvilke profiler som forsterker planen, og hvilke som bare ser gode ut isolert.",
       "phases": [
         "analysis",
-        "club_work",
-        "match_preparation"
+        "inbox",
+        "match_prep"
       ],
       "conditions": {
         "metric": "tacticalClarity",
@@ -93,7 +93,7 @@
       "body": "Når styretilliten er lav, må stallarbeidet være ekstra logisk. Hvert valg bør kunne forklares: hvorfor denne rollen, hvorfor denne profilen, hvorfor nå.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "boardTrust",
@@ -111,7 +111,7 @@
       "body": "Noen svakheter krever bedre trening, andre krever tydeligere roller. Hvis vi bruker stallarbeidet til å lappe alt, mister klubben retning og økonomien mister disiplin.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -126,7 +126,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -145,7 +145,7 @@
       "phases": [
         "analysis",
         "training",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "trainingCulture",
@@ -163,7 +163,7 @@
       "body": "Lav spillermoral påvirker spilletidssamtaler, kontrakter og hvordan spillere ser på fremtiden sin i klubben. Sportslig plan og garderobetillit må henge sammen.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {
         "metric": "playerMorale",
@@ -180,7 +180,7 @@
       "title": "Laguttaket viser stallens logikk",
       "body": "Når kampplanen settes, ser vi om stallen faktisk er bygget for ideen. Hvis roller må tvinges på plass hver uke, er problemet større enn én kamp.",
       "phases": [
-        "match_preparation"
+        "match_prep"
       ],
       "conditions": {}
     },
@@ -193,7 +193,7 @@
       "title": "Kampdag viser om profilen passer rollen",
       "body": "På kampdag ser vi ikke bare prestasjon. Vi ser om spilleren blir brukt i situasjoner som passer profilen hans. Det er forskjell på dårlig form og feil bruk.",
       "phases": [
-        "match_day"
+        "matchday"
       ],
       "conditions": {}
     },
@@ -207,7 +207,7 @@
       "body": "Når klubbsteder låses opp gjennom History Go, bør vi se på mer enn navn. Spillere, trenere og staff må vurderes som profiler som kan passe klubbens retning.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     },
@@ -220,7 +220,7 @@
       "title": "Staben er også en del av sportslig plan",
       "body": "Assistenttrener, keepertrener, fysio og trenere er ikke pynt rundt laget. Riktig stab gjør spillideen mer trenbar, mer robust og lettere å utvikle over tid.",
       "phases": [
-        "club_work",
+        "inbox",
         "training"
       ],
       "conditions": {}
@@ -235,7 +235,7 @@
       "body": "Det vil alltid finnes fristende spillere. Men hvis markedet styrer identiteten, mister klubben seg selv. Vi må vite hvem vi er før vi velger hvem vi henter.",
       "phases": [
         "analysis",
-        "club_work"
+        "inbox"
       ],
       "conditions": {}
     }
