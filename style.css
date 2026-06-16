@@ -4142,6 +4142,122 @@ ul {
   line-height: 1.45;
 }
 
+/* Mini Season v1 / League Loop v1: kompakt sort/hvit managerkontor-stil med
+   tynne hvite rammer. Ikke gul hovedstil, ikke skjemaaktig. */
+.mini-season-goal {
+  margin: 0;
+  width: fit-content;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 12px;
+  color: var(--text);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+.mini-season-standing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mini-season-stat {
+  display: grid;
+  gap: 2px;
+  min-width: 64px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.mini-season-stat-value {
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.mini-season-stat-label {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mini-season-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mini-season-form-pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.mini-season-form-pin.is-win {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.mini-season-form-pin.is-loss {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.mini-season-table-wrap {
+  overflow-x: auto;
+}
+
+.mini-season-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.mini-season-table th,
+.mini-season-table td {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 6px 8px;
+  text-align: right;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.mini-season-table th {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mini-season-table th:nth-child(2),
+.mini-season-table td.mini-season-table-team {
+  text-align: left;
+}
+
+.mini-season-table tr.is-hg td {
+  border-bottom-color: var(--line);
+  color: var(--text);
+  font-weight: 900;
+}
+
+.mini-season-table tr.is-hg td.mini-season-table-team {
+  border-left: 2px solid var(--text);
+  padding-left: 8px;
+}
+
 /* Kompakt startvalg som bruker eksisterende availability- og lokal-start-flow. */
 .local-start-panel {
   display: grid;

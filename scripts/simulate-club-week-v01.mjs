@@ -26,6 +26,14 @@ import {
   applyOffPitchEvent
 } from "../src/football-off-pitch-parameters.js";
 import { buildTrainingFocusOffPitchEvent } from "../src/football-training-week.js";
+import {
+  startMiniSeason,
+  getCurrentMiniSeasonMatch,
+  isCurrentMiniSeasonMatchPlayed,
+  applyMiniSeasonMatchResult,
+  advanceMiniSeasonWeek
+} from "../src/football-mini-season.js";
+import { OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
 
 let passed = 0;
 let failed = 0;
@@ -114,6 +122,56 @@ check("formasjonstilvenning øker (1-6)", consequences.familiarityGain >= 1 && c
 
 const applied = applyClubWeekEffects(createInitialClubWeekState({ week: 2, phase: "review" }), consequences.clubEffects);
 check("klubbverdier holder seg i 0-100 etter effekt", Object.values(applied).every((v) => typeof v !== "number" || (v >= 0 && v <= 100)));
+
+console.log("\nMini Season ↔ Club Week (to uker henger sammen):");
+// En mini-sesong følger Club Week-rytmen: kampen i kampdagfasen registreres, og
+// når uka ruller fra oppsummering til ny uke ruller også mini-sesongen videre.
+const miniContext = { seasonId: "club-week-link", opponents: OPPONENT_PROFILES, teamName: "HG-laget" };
+let mini = startMiniSeason(miniContext);
+let clubWeek = createInitialClubWeekState({});
+check("mini-sesong + Club Week starter begge i uke/runde 1", clubWeek.week === 1 && getCurrentMiniSeasonMatch(mini)?.round === 1);
+
+function buildWeekMatch(round, outcome) {
+  const match = getCurrentMiniSeasonMatch(mini);
+  const opponent = OPPONENT_PROFILES.find((o) => o.id === match.opponentId) || { id: match.opponentId, strength: match.opponentStrength };
+  return {
+    id: `clubweek-match-${round}`,
+    version: 2,
+    outcome,
+    score: { for: outcome === "win" ? 2 : 1, against: outcome === "loss" ? 2 : 1 },
+    opponent: { id: opponent.id, name: match.opponentName, strength: opponent.strength },
+    teamStrength: 70,
+    decisionTotals: { eventScoreDelta: 1 },
+    decisions: [{ tone: "positive" }],
+    trainingFocus: { helped: true, staffSupport: "strong", focusId: "pressing" }
+  };
+}
+
+const weekOutcomes = ["win", "draw"];
+for (let w = 0; w < weekOutcomes.length; w += 1) {
+  const round = w + 1;
+  const currentMatch = getCurrentMiniSeasonMatch(mini);
+  check(`uke ${round}: mini-sesongens runde er ${round}`, currentMatch?.round === round && clubWeek.week === round);
+
+  // Gå gjennom fasene til kampdag, registrer kampen der.
+  while (clubWeek.phase !== "matchday") {
+    clubWeek = advanceClubWeekPhase(clubWeek);
+  }
+  mini = applyMiniSeasonMatchResult(mini, buildWeekMatch(round, weekOutcomes[w]), miniContext);
+  check(`uke ${round}: kampen er registrert i mini-sesongen`, isCurrentMiniSeasonMatchPlayed(mini) === true && mini.matchHistory.length === round);
+
+  // Rull resten av uka (kampdag → oppsummering → ny uke). Ved ukerull ruller
+  // også mini-sesongen til neste kamp.
+  const weekBefore = clubWeek.week;
+  while (clubWeek.week === weekBefore) {
+    clubWeek = advanceClubWeekPhase(clubWeek);
+  }
+  mini = advanceMiniSeasonWeek(mini, miniContext);
+  check(`uke ${round} → ny uke: begge ruller i takt`, clubWeek.week === round + 1 && mini.weekIndex === round);
+}
+
+check("etter to uker har mini-sesongen 2 kamper og poeng", mini.matchHistory.length === 2 && mini.points === 4);
+check("mini-sesongen er fortsatt aktiv (ikke fullført på 2/5)", mini.status === "active" && getCurrentMiniSeasonMatch(mini)?.round === 3);
 
 console.log(`\n${failed === 0 ? "Alle" : passed + "/" + (passed + failed)} Club Week-sjekker ${failed === 0 ? "besto." : "— " + failed + " feilet."}`);
 process.exit(failed === 0 ? 0 : 1);
