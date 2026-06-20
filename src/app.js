@@ -45,7 +45,8 @@ import {
   normalizeOffPitchState,
   summarizeOffPitchContext,
   applyMatchdayOffPitchEffects,
-  applyOffPitchEvent
+  applyOffPitchEvent,
+  applyTrainingProgramOffPitchEffects
 } from "./football-off-pitch-parameters.js";
 import {
   createInboxState,
@@ -137,6 +138,9 @@ const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
 const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
 const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
 const WEEKLY_TRAINING_FOCUS_KEY = "hgfm.weeklyTrainingFocus.v1";
+// Ukens valgte treningsprogram (komposisjon). Holdes adskilt fra treningsfokus
+// og HG-badge-programmer. Kun UI/progresjon + engangs off-pitch-effekt per uke.
+const WEEKLY_TRAINING_PROGRAM_KEY = "hgfm.weeklyTrainingProgram.v1";
 const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
 const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
 const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
@@ -223,6 +227,9 @@ const state = {
   // Taktisk treningsfokus for gjeldende Club Week. Holdes bevisst adskilt fra
   // kunnskapsfokus og History Go-programmer/badges.
   weeklyTrainingFocus: null,
+  // Ukens valgte treningsprogram (komposisjon). { programId, week, applied }.
+  // Adskilt fra treningsfokus; brukes til valgt-tilstand og engangs off-pitch-effekt.
+  weeklyTrainingProgram: null,
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
@@ -252,6 +259,9 @@ const state = {
   // bruker ikke effekter på nytt. Ingen kampmotor-, rollefit- eller matching-effekt.
   clubInboxChoices: [],
   selectedInboxChoices: {},
+  // Hvilken innbokstråd som er åpnet/ekspandert i panelet (kun UI). Tråder vises
+  // kollapset som klikkbare rader; den åpne tråden viser innhold og svarvalg.
+  openInboxThreadId: null,
   // Innboks-trådsvar (v1):
   // - clubInboxReplies = reply-katalogen lastet fra manifest (én fil per avsender).
   // Et reply er en oppfølgingsmelding som låses opp når et bestemt svarvalg er
@@ -346,6 +356,7 @@ const elements = {
   contextSignals: document.querySelector("#contextSignals"),
   contextHeadline: document.querySelector("#contextHeadline"),
   trainingPrograms: document.querySelector("#trainingPrograms"),
+  weeklyTrainingProgramStatus: document.querySelector("#weeklyTrainingProgramStatus"),
   managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
   managerRoleChanges: document.querySelector("#managerRoleChanges"),
   managerWeakPoints: document.querySelector("#managerWeakPoints"),
@@ -3856,6 +3867,75 @@ function syncWeeklyTrainingFocusToClubWeek() {
     state.weeklyTrainingFocus = null;
     saveWeeklyTrainingFocus();
   }
+  if (state.weeklyTrainingProgram && state.weeklyTrainingProgram.week !== week) {
+    state.weeklyTrainingProgram = null;
+    saveWeeklyTrainingProgram();
+  }
+}
+
+// Ukens valgte treningsprogram (komposisjon). Lagring speiler treningsfokuset:
+// programId + uke + applied-flagg gjør den robust mot reload og forhindrer at
+// off-pitch-effekten stables opp ved gjentatte klikk.
+function sanitizeWeeklyTrainingProgram(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+  const programId = typeof value.programId === "string" ? value.programId : null;
+  const week = Number(value.week);
+  if (!programId || !Number.isInteger(week) || week < 1) {
+    return null;
+  }
+  return { programId, week, applied: Boolean(value.applied) };
+}
+
+function loadWeeklyTrainingProgram() {
+  try {
+    return sanitizeWeeklyTrainingProgram(JSON.parse(localStorage.getItem(WEEKLY_TRAINING_PROGRAM_KEY)));
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveWeeklyTrainingProgram() {
+  try {
+    if (state.weeklyTrainingProgram) {
+      localStorage.setItem(WEEKLY_TRAINING_PROGRAM_KEY, JSON.stringify(state.weeklyTrainingProgram));
+    } else {
+      localStorage.removeItem(WEEKLY_TRAINING_PROGRAM_KEY);
+    }
+  } catch (error) {
+    // Privat modus e.l.: appen fortsetter uten persistens.
+  }
+}
+
+// Velg ukens treningsprogram. Idempotent per uke: programmet kan byttes så lenge
+// off-pitch-effekten ikke er brukt (applied), og effekten anvendes kun én gang.
+// Selve uttellingen/forklaringen kommer fra komposisjonsmotoren — UI velger bare.
+function selectWeeklyTrainingProgram(program) {
+  const week = Number(state.clubWeekState?.week);
+  if (!program || typeof program.id !== "string" || !Number.isInteger(week)) {
+    return;
+  }
+  if (state.matchday?.session || state.weeklyTrainingProgram?.applied) {
+    return;
+  }
+  if (state.weeklyTrainingProgram?.programId === program.id) {
+    return;
+  }
+
+  state.weeklyTrainingProgram = { programId: program.id, week, applied: false };
+
+  // Treningsprogrammet beveger konteksten utenfor banen (slitasje, klarhet,
+  // samhold). Effekten anvendes kun én gang per uke; senere bytter samme uke
+  // bare oppdaterer hvilket program som er valgt uten å stable opp belastning.
+  if (state.teamMerits) {
+    state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
+    state.weeklyTrainingProgram.applied = true;
+    saveTeamMerits();
+  }
+  saveWeeklyTrainingProgram();
+
+  renderApp();
 }
 
 // Gyldige fase-ID-er i den nye 6-fase-rytmen. Brukes til sanering av lagret
@@ -6506,9 +6586,58 @@ function appendSuggestedSetupList(card, className, label, items) {
   card.append(heading, ul);
 }
 
+// Hva et forslag faktisk kan «settes» til i eksisterende state. Formasjons- og
+// treningsuke-forslag peker på et konkret valg (selectedFormationId / ukens
+// treningsfokus); kampplan-forslag er rene råd uten egen state og får ikke knapp.
+function resolveSuggestedSetupAction(suggestion) {
+  if (suggestion.type === "formation") {
+    const formationId = suggestion.id.startsWith("formation:")
+      ? suggestion.id.slice("formation:".length)
+      : null;
+    if (!formationId) return null;
+    const isSelected = state.selectedFormationId === formationId;
+    const unlocked = isFormationUnlocked(formationId);
+    return {
+      isSelected,
+      disabled: !unlocked || isSelected,
+      label: isSelected ? "Aktivt system" : unlocked ? "Bruk dette systemet" : "Låst formasjon",
+      apply: () => {
+        if (!isFormationUnlocked(formationId)) return;
+        state.selectedFormationId = formationId;
+        seedLineupForFormation();
+        ensurePositionsForFormation();
+        renderApp();
+      }
+    };
+  }
+  if (suggestion.type === "training_week") {
+    const focusId = suggestion.relatedTrainingFocusIds[0]
+      || (suggestion.id.startsWith("training_week:") ? suggestion.id.slice("training_week:".length) : null);
+    if (!focusId) return null;
+    const isSelected = state.weeklyTrainingFocus?.focusId === focusId;
+    const locked = Boolean(state.matchday?.session || state.weeklyTrainingFocus?.appliedSessionId);
+    return {
+      isSelected,
+      disabled: isSelected || locked,
+      label: isSelected ? "Valgt fokus" : "Velg som treningsfokus",
+      apply: () => selectWeeklyTrainingFocus(focusId)
+    };
+  }
+  return null;
+}
+
 function buildSuggestedSetupCard(suggestion) {
+  const action = resolveSuggestedSetupAction(suggestion);
   const card = document.createElement("article");
   card.className = "suggested-setup-card";
+  if (action?.isSelected) card.classList.add("is-selected");
+
+  if (action?.isSelected) {
+    const chosen = document.createElement("span");
+    chosen.className = "card-selected-flag";
+    chosen.textContent = "✓ Valgt";
+    card.append(chosen);
+  }
 
   const head = document.createElement("div");
   head.className = "suggested-setup-head";
@@ -6529,6 +6658,20 @@ function buildSuggestedSetupCard(suggestion) {
   appendSuggestedSetupList(card, "suggested-setup-why", "Hvorfor nå", suggestion.why);
   appendSuggestedSetupList(card, "suggested-setup-risks", "Risiko", suggestion.risks);
   appendSuggestedSetupList(card, "suggested-setup-adjust", "Du kan justere", suggestion.suggestedAdjustments);
+
+  // Forslag som peker på et konkret valg får en knapp som setter det i state.
+  // Kampplan-forslag er rene råd og forblir uten knapp.
+  if (action) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "suggested-setup-apply";
+    button.textContent = action.label;
+    button.disabled = action.disabled;
+    if (!action.disabled) {
+      button.addEventListener("click", action.apply);
+    }
+    card.append(button);
+  }
 
   return card;
 }
@@ -6606,9 +6749,19 @@ function trainingProgramConfidenceLabel(confidence) {
 
 const PROGRAM_INTENSITY_LABEL = { low: "lav", medium: "moderat", high: "høy" };
 
-function buildTrainingProgramCard(program) {
+function buildTrainingProgramCard(program, context = {}) {
+  const isSelected = Boolean(context.isSelected);
+  const locked = Boolean(context.locked);
   const card = document.createElement("article");
   card.className = "training-program-card";
+  if (isSelected) card.classList.add("is-selected");
+
+  if (isSelected) {
+    const chosen = document.createElement("span");
+    chosen.className = "card-selected-flag";
+    chosen.textContent = "✓ Valgt";
+    card.append(chosen);
+  }
 
   const head = document.createElement("div");
   head.className = "training-program-head";
@@ -6661,6 +6814,17 @@ function buildTrainingProgramCard(program) {
     card.append(riskLabel, risks);
   }
 
+  // Valgknapp: gjør kortet til et faktisk valg koblet til ukens treningsstate.
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "training-program-select";
+  button.textContent = isSelected ? "Valgt program" : "Velg dette programmet";
+  button.disabled = isSelected || locked;
+  if (!isSelected && !locked) {
+    button.addEventListener("click", () => selectWeeklyTrainingProgram(program));
+  }
+  card.append(button);
+
   return card;
 }
 
@@ -6669,6 +6833,9 @@ function renderTrainingProgramCompositions(teamFit) {
   if (!container) return;
 
   container.textContent = "";
+
+  const selectedProgramId = state.weeklyTrainingProgram?.programId || null;
+  const locked = Boolean(state.matchday?.session || state.weeklyTrainingProgram?.applied);
 
   const opponent = getMiniSeasonNextOpponent();
   const offPitchState = getOffPitchState();
@@ -6689,6 +6856,7 @@ function renderTrainingProgramCompositions(teamFit) {
   });
 
   if (!Array.isArray(programs) || programs.length === 0) {
+    updateWeeklyTrainingProgramStatus(null);
     const empty = document.createElement("p");
     empty.className = "muted-text";
     empty.textContent = "Ingen treningsprogram akkurat nå – fyll laget for et bedre datagrunnlag.";
@@ -6696,7 +6864,54 @@ function renderTrainingProgramCompositions(teamFit) {
     return;
   }
 
-  programs.forEach((program) => container.append(buildTrainingProgramCard(program)));
+  // Valgt program kan ligge utenfor de 3 anbefalte denne renderen; pass på at
+  // det fortsatt vises som et kort så valget alltid er synlig.
+  let visiblePrograms = programs;
+  let selectedProgram = programs.find((program) => program.id === selectedProgramId) || null;
+  if (selectedProgramId && !selectedProgram) {
+    const extra = createTrainingProgramCompositions({
+      teamFit,
+      opponent,
+      formation: getFormation(),
+      tactic: getTactic(),
+      formationMatchup: getFormationMatchupVsOpponent(opponent),
+      coachContext: getCoachContext(),
+      lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
+      offPitchState,
+      recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
+      limit: 8
+    });
+    selectedProgram = (Array.isArray(extra) ? extra : []).find((program) => program.id === selectedProgramId) || null;
+    if (selectedProgram) {
+      visiblePrograms = [selectedProgram, ...programs.filter((program) => program.id !== selectedProgramId)];
+    }
+  }
+
+  updateWeeklyTrainingProgramStatus(selectedProgram);
+
+  visiblePrograms.forEach((program) =>
+    container.append(
+      buildTrainingProgramCard(program, {
+        isSelected: program.id === selectedProgramId,
+        locked
+      })
+    )
+  );
+}
+
+// Kort oppsummering av ukens valgte treningsprogram på hovedflaten/treningsfanen.
+function updateWeeklyTrainingProgramStatus(selectedProgram) {
+  const status = elements.weeklyTrainingProgramStatus;
+  if (!status) return;
+  const week = Number(state.clubWeekState?.week) || 1;
+  if (selectedProgram) {
+    const applied = state.weeklyTrainingProgram?.applied;
+    status.textContent = `Uke ${week}: ${selectedProgram.title}${applied ? " · brukt denne uka" : " · valgt"}`;
+    status.dataset.selected = "true";
+  } else {
+    status.textContent = `Uke ${week}: Velg ett treningsprogram for uka.`;
+    status.dataset.selected = "false";
+  }
 }
 
 // Off-pitch Parameters v1: kompakt «Kontekst»-seksjon i managerkontor-stil.
@@ -7631,6 +7846,37 @@ function getArchivedInboxThreads() {
   return groupInboxMessagesByThread(readOrInactiveMessages);
 }
 
+// Inbox UI v2: tråder vises kollapset som klikkbare rader. Den åpne tråden
+// (openInboxThreadId) viser innhold og svarvalg i samme panel. Toggler åpen/lukket
+// uten å røre lest/levert-modellen eller kontekstmotoren — kun visningsstate.
+function toggleInboxThread(threadId) {
+  if (!threadId) return;
+  state.openInboxThreadId = state.openInboxThreadId === threadId ? null : threadId;
+  renderApp();
+}
+
+// Gjør et trådkort til en klikkbar, kollapserbar rad: header-knappen toggler
+// åpen/lukket, og det ekspanderbare innholdet legges i en body-container som kun
+// vises når tråden er åpen. open=true viser innholdet (f.eks. for arkiv-håndtering).
+function makeThreadCollapsible(article, headerNodes, bodyNodes, { threadId, open }) {
+  const header = document.createElement("button");
+  header.type = "button";
+  header.className = "inbox-thread-toggle";
+  header.setAttribute("aria-expanded", open ? "true" : "false");
+  headerNodes.forEach((node) => header.append(node));
+  if (threadId) {
+    header.addEventListener("click", () => toggleInboxThread(threadId));
+  }
+
+  const body = document.createElement("div");
+  body.className = "inbox-thread-body";
+  bodyNodes.forEach((node) => node && body.append(node));
+
+  article.classList.add("is-collapsible");
+  if (open) article.classList.add("is-open");
+  article.append(header, body);
+}
+
 // Bygg ett message-card-element fra en melding. Bruker kun textContent,
 // gjenbruker eksisterende message-card-CSS. isEmpty gir empty-state-stil.
 function createMessageCard(message, isEmpty = false) {
@@ -7731,6 +7977,12 @@ function createInboxChoiceBlock(message) {
 // Bygg ett trådkort fra en trådgruppe. Bruker kun createElement/textContent og
 // gjenbruker message-card-CSS. options.showReadButton gir en "Marker tråd som
 // lest"-knapp som markerer alle uleste meldinger i tråden som lest.
+// Stabil id for en statisk trådgruppe — må matche threadId som brukes i
+// createInboxThreadCard, slik at åpen/lukket-tilstanden treffer riktig kort.
+function getThreadGroupId(threadGroup) {
+  return threadGroup?.thread?.id || threadGroup?.latestMessage?.threadId || threadGroup?.latestMessage?.id || null;
+}
+
 function createInboxThreadCard(threadGroup, options = {}) {
   const article = document.createElement("article");
   article.className = "message-card inbox-thread-card";
@@ -7782,23 +8034,23 @@ function createInboxThreadCard(threadGroup, options = {}) {
   const body = document.createElement("p");
   body.textContent = latestMessage?.body || "Ingen meldingstekst.";
 
-  article.append(meta, subject, latestTitle, body);
-
   // Svarvalg (v1): vis valg/valgt svar for meldinger i tråden som har choices.
   // Bygger kun med createElement/textContent. Valg markerer ikke tråden som lest.
+  const choiceBlocks = [];
   for (const message of threadGroup.messages) {
     const choiceBlock = createInboxChoiceBlock(message);
     if (choiceBlock) {
-      article.append(choiceBlock);
+      choiceBlocks.push(choiceBlock);
     }
   }
 
+  let readButton = null;
   if (options.showReadButton) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "inbox-thread-read-button";
-    button.textContent = "Marker tråd som lest";
-    button.addEventListener("click", () => {
+    readButton = document.createElement("button");
+    readButton.type = "button";
+    readButton.className = "inbox-thread-read-button";
+    readButton.textContent = "Marker tråd som lest";
+    readButton.addEventListener("click", () => {
       for (const message of threadGroup.unreadMessages) {
         if (message?.id) {
           state.readInboxMessageIds.add(message.id);
@@ -7807,8 +8059,15 @@ function createInboxThreadCard(threadGroup, options = {}) {
       saveReadInboxMessageIds();
       renderApp();
     });
-    article.append(button);
   }
+
+  const threadId = thread?.id || latestMessage?.threadId || latestMessage?.id || null;
+  makeThreadCollapsible(
+    article,
+    [meta, subject, latestTitle],
+    [body, ...choiceBlocks, readButton],
+    { threadId, open: Boolean(options.open) }
+  );
 
   return article;
 }
@@ -7977,12 +8236,13 @@ function createInboxEventThreadCard(thread, options = {}) {
   summary.className = "inbox-thread-latest-title";
   summary.textContent = thread.summary;
 
-  article.append(meta, title, summary);
+  // Ekspanderbart innhold samles i bodyNodes og vises bare når tråden er åpen.
+  const bodyNodes = [];
 
   thread.body.forEach((line) => {
     const p = document.createElement("p");
     p.textContent = line;
-    article.append(p);
+    bodyNodes.push(p);
   });
 
   // Halvskjult kontekst-hint (vag uro) — forsterker læringsspill-poenget.
@@ -7990,7 +8250,7 @@ function createInboxEventThreadCard(thread, options = {}) {
     const hint = document.createElement("p");
     hint.className = "inbox-event-hidden-hint";
     hint.textContent = thread.hiddenContextNote;
-    article.append(hint);
+    bodyNodes.push(hint);
   }
 
   // Tags + lenket handling.
@@ -8009,7 +8269,7 @@ function createInboxEventThreadCard(thread, options = {}) {
       link.textContent = `→ ${thread.linkedAction.label}`;
       footer.append(link);
     }
-    article.append(footer);
+    bodyNodes.push(footer);
   }
 
   // Resultat etter valg (resolved) eller valgknapper (unread/read).
@@ -8028,7 +8288,7 @@ function createInboxEventThreadCard(thread, options = {}) {
         body.textContent = line;
         response.append(body);
       });
-      article.append(response);
+      bodyNodes.push(response);
     }
   } else if (thread.choices.length) {
     const choiceList = document.createElement("div");
@@ -8045,7 +8305,7 @@ function createInboxEventThreadCard(thread, options = {}) {
       button.addEventListener("click", () => chooseInboxEventChoice(thread.id, choice.id));
       choiceList.append(button);
     });
-    article.append(choiceList);
+    bodyNodes.push(choiceList);
   }
 
   // Handlingsknapper (ikke i arkivvisning).
@@ -8069,8 +8329,15 @@ function createInboxEventThreadCard(thread, options = {}) {
     archiveButton.addEventListener("click", () => archiveInboxEventThread(thread.id));
     actions.append(archiveButton);
 
-    article.append(actions);
+    bodyNodes.push(actions);
   }
+
+  makeThreadCollapsible(
+    article,
+    [meta, title, summary],
+    bodyNodes,
+    { threadId: thread.id, open: Boolean(options.open) }
+  );
 
   return article;
 }
@@ -8089,13 +8356,29 @@ function renderInboxThreads() {
   if (activeContainer) {
     activeContainer.innerHTML = "";
 
+    const activeThreads = getActiveInboxThreads();
+
+    // Hvilken tråd er åpen? Brukerens valg vinner; ellers åpnes den første aktive
+    // tråden som standard slik at det alltid er én lesbar tråd uten ekstra klikk.
+    const activeThreadIds = [
+      ...eventActive.map((thread) => thread.id),
+      ...activeThreads.map((threadGroup) => getThreadGroupId(threadGroup))
+    ].filter(Boolean);
+    const openId = activeThreadIds.includes(state.openInboxThreadId)
+      ? state.openInboxThreadId
+      : activeThreadIds[0] || null;
+
     eventActive.forEach((thread) => {
-      activeContainer.append(createInboxEventThreadCard(thread));
+      activeContainer.append(createInboxEventThreadCard(thread, { open: thread.id === openId }));
     });
 
-    const activeThreads = getActiveInboxThreads();
-    activeThreads.forEach((thread) => {
-      activeContainer.append(createInboxThreadCard(thread, { showReadButton: true }));
+    activeThreads.forEach((threadGroup) => {
+      activeContainer.append(
+        createInboxThreadCard(threadGroup, {
+          showReadButton: true,
+          open: getThreadGroupId(threadGroup) === openId
+        })
+      );
     });
 
     if (!eventActive.length && !activeThreads.length) {
@@ -8112,12 +8395,19 @@ function renderInboxThreads() {
     archiveContainer.innerHTML = "";
 
     eventArchived.slice(-12).forEach((thread) => {
-      archiveContainer.append(createInboxEventThreadCard(thread, { archived: true }));
+      archiveContainer.append(
+        createInboxEventThreadCard(thread, { archived: true, open: thread.id === state.openInboxThreadId })
+      );
     });
 
     const archivedThreads = getArchivedInboxThreads();
-    archivedThreads.slice(0, 12).forEach((thread) => {
-      archiveContainer.append(createInboxThreadCard(thread, { showReadButton: false }));
+    archivedThreads.slice(0, 12).forEach((threadGroup) => {
+      archiveContainer.append(
+        createInboxThreadCard(threadGroup, {
+          showReadButton: false,
+          open: getThreadGroupId(threadGroup) === state.openInboxThreadId
+        })
+      );
     });
 
     if (!eventArchived.length && !archivedThreads.length) {
@@ -9404,6 +9694,8 @@ async function advanceClubWeekPhaseAction() {
   if (next.week !== previous.week) {
     state.weeklyTrainingFocus = null;
     saveWeeklyTrainingFocus();
+    state.weeklyTrainingProgram = null;
+    saveWeeklyTrainingProgram();
     // Mini Season v1 / League Loop v1: en ny Club Week-uke ruller mini-sesongen
     // til neste kamp (eller fullfører den etter femte kamp).
     advanceMiniSeasonForNewWeek();
@@ -9687,6 +9979,7 @@ async function init() {
     // bort den gamle frittstående localStorage-nøkkelen (migrering).
     saveClubWeekState(state.clubWeekState);
     state.weeklyTrainingFocus = loadWeeklyTrainingFocus();
+    state.weeklyTrainingProgram = loadWeeklyTrainingProgram();
     syncWeeklyTrainingFocusToClubWeek();
     state.clubWeekFeedback = loadClubWeekFeedback();
     state.clubWeekEventLog = loadClubWeekEventLog();

@@ -1266,6 +1266,59 @@ ul {
   gap: 10px;
 }
 
+/* Inbox UI v2 — kollapserbare, klikkbare tråder. Header er en knapp som toggler
+   tråden; innholdet/​svarvalgene vises bare når tråden er åpen. */
+.inbox-thread-card.is-collapsible {
+  padding: 0;
+  overflow: hidden;
+}
+
+.inbox-thread-toggle {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 18px 22px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.inbox-thread-toggle::after {
+  content: "Vis tråd ▾";
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.inbox-thread-toggle[aria-expanded="true"]::after {
+  content: "Skjul tråd ▴";
+}
+
+.inbox-thread-toggle:hover,
+.inbox-thread-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.inbox-thread-card.is-open {
+  border-color: var(--green, #75d69c);
+}
+
+.inbox-thread-body {
+  display: none;
+  gap: 10px;
+  padding: 0 22px 18px;
+}
+
+.inbox-thread-card.is-open .inbox-thread-body {
+  display: grid;
+}
+
 .inbox-thread-latest-title {
   color: var(--text);
   font-weight: 900;
@@ -4749,6 +4802,65 @@ ul {
 
 .training-program-card .training-program-risks {
   color: #ffb59a;
+}
+
+/* Manager UI Completion Pass v1 — felles valgkort-semantikk.
+   Valgkort (treningsprogram, foreslåtte oppsett) skal være tydelig klikkbare
+   med markert valgt-tilstand: grønn ramme, «✓ Valgt»-flagg og en valgknapp i
+   samme svart/hvite managerkontor-stil som treningsfokus-kortene. */
+.training-program-card,
+.suggested-setup-card {
+  position: relative;
+}
+
+.training-program-card.is-selected,
+.suggested-setup-card.is-selected {
+  border-color: var(--green, #75d69c);
+  box-shadow: inset 0 0 0 1px var(--green, #75d69c);
+}
+
+.card-selected-flag {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--green, #75d69c);
+}
+
+.training-program-select,
+.suggested-setup-apply {
+  width: 100%;
+  margin-top: auto;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.training-program-select:hover:not(:disabled),
+.training-program-select:focus-visible,
+.suggested-setup-apply:hover:not(:disabled),
+.suggested-setup-apply:focus-visible {
+  border-color: var(--green, #75d69c);
+  color: var(--green, #75d69c);
+}
+
+.training-program-card.is-selected .training-program-select,
+.suggested-setup-card.is-selected .suggested-setup-apply {
+  border-color: var(--green, #75d69c);
+  color: var(--green, #75d69c);
+}
+
+.training-program-select:disabled,
+.suggested-setup-apply:disabled {
+  cursor: default;
+  opacity: 0.58;
 }
 
 /* Off-pitch Parameters v1 — kompakt «Kontekst»-seksjon i managerkontor-stil.
