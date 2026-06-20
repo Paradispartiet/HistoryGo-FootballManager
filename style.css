@@ -1131,6 +1131,69 @@ ul {
   font-size: 1rem;
 }
 
+/* ---------- Relasjoner mellom rollene ---------- */
+.relationship-block {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.relationship-block h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.relationship-headline {
+  margin: 0;
+}
+
+.relationship-list {
+  display: grid;
+  gap: 8px;
+}
+
+.relationship-entry {
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--line);
+  border-radius: 8px;
+  background: var(--hg-surface-deep);
+  padding: 8px 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.relationship-entry.is-positive {
+  border-left-color: var(--good);
+}
+
+.relationship-entry.is-negative {
+  border-left-color: var(--danger);
+}
+
+.relationship-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.relationship-entry.is-positive .relationship-title {
+  color: var(--good);
+}
+
+.relationship-entry.is-negative .relationship-title {
+  color: var(--danger);
+}
+
+.relationship-explanation {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 /* ---------- Inbox ---------- */
 .message-list {
   display: grid;

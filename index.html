@@ -339,6 +339,16 @@
               <ul id="issuesList"></ul>
             </section>
           </div>
+
+          <!-- Relasjoner: hvilke roller hjelper eller blokkerer hverandre.
+               Rendres av app.js (renderRelationships) fra teamFit.relationships. -->
+          <div class="relationship-block" aria-label="Hvordan rollene støtter eller blokkerer hverandre">
+            <h3>Relasjoner mellom rollene</h3>
+            <p id="relationshipHeadline" class="relationship-headline muted-text">
+              Fyll laget for å se hvordan rollene støtter hverandre.
+            </p>
+            <div id="relationshipList" class="relationship-list"></div>
+          </div>
         </section>
 
         <section class="panel detail-metrics-panel">
@@ -353,6 +363,7 @@
             <article><span>Dybde</span><strong id="depthScore">–</strong></article>
             <article><span>Oppbygging</span><strong id="buildUpScore">–</strong></article>
             <article><span>Press</span><strong id="pressScore">–</strong></article>
+            <article><span>Relasjoner</span><strong id="relationshipScore">–</strong></article>
           </div>
         </section>
 
