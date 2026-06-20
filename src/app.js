@@ -336,6 +336,10 @@ const elements = {
   depthScore: document.querySelector("#depthScore"),
   buildUpScore: document.querySelector("#buildUpScore"),
   pressScore: document.querySelector("#pressScore"),
+  relationshipScore: document.querySelector("#relationshipScore"),
+  // Relasjoner (synlig metrikk + forklarende liste i lagrapporten).
+  relationshipHeadline: document.querySelector("#relationshipHeadline"),
+  relationshipList: document.querySelector("#relationshipList"),
   managerSummary: document.querySelector("#managerSummary"),
   managerTopActions: document.querySelector("#managerTopActions"),
   suggestedSetups: document.querySelector("#suggestedSetups"),
@@ -5524,6 +5528,7 @@ function renderTeamSummary(teamFit) {
   elements.depthScore.textContent = teamFit.metrics.depthScore;
   elements.buildUpScore.textContent = teamFit.metrics.buildUpScore;
   elements.pressScore.textContent = teamFit.metrics.pressScore;
+  elements.relationshipScore.textContent = teamFit.metrics.relationshipScore;
 }
 
 function renderReport(teamFit) {
@@ -5535,6 +5540,73 @@ function renderReport(teamFit) {
   renderList(elements.strengthsList, teamFit.report.strengths);
   renderList(elements.issuesList, teamFit.report.issues);
   renderCoachContextStatus(teamFit.coachContext);
+  renderRelationships(teamFit);
+}
+
+// Relasjoner mellom rollene (kun visning): gjør relasjonsmotorens resultat
+// synlig i lagrapporten. Leser teamFit.relationships (samme kilde som
+// relationshipScore i metrikkpanelet) – beregner ingenting selv. Forklarer
+// HVORFOR roller hjelper eller blokkerer hverandre, i tråd med prinsippet om
+// at relasjoner er en del av taktikken, ikke en spillerstyrke.
+function renderRelationships(teamFit) {
+  if (!elements.relationshipList || !elements.relationshipHeadline) {
+    return;
+  }
+
+  const relationships = teamFit?.relationships;
+  const positives = Array.isArray(relationships?.positiveRelations) ? relationships.positiveRelations : [];
+  const negatives = Array.isArray(relationships?.negativeRelations) ? relationships.negativeRelations : [];
+
+  elements.relationshipList.innerHTML = "";
+
+  // Ufullstendig ellever: relasjoner krever komplette rollepar for å bety noe.
+  if (!relationships || teamFit.completeCount < teamFit.totalSlots) {
+    elements.relationshipHeadline.textContent =
+      "Fyll laget for å se hvordan rollene støtter hverandre.";
+    return;
+  }
+
+  const score = relationships.relationshipScore;
+  if (score >= 76) {
+    elements.relationshipHeadline.textContent =
+      `Relasjonsscore ${score}: rollene løfter hverandre og havner oftere i riktige situasjoner.`;
+  } else if (score < 50) {
+    elements.relationshipHeadline.textContent =
+      `Relasjonsscore ${score}: flere roller mangler medspillerne de trenger for å fungere.`;
+  } else {
+    elements.relationshipHeadline.textContent =
+      `Relasjonsscore ${score}: noen koblinger virker, andre roller står litt isolert.`;
+  }
+
+  const appendRelation = (relation, tone, sign) => {
+    const entry = document.createElement("article");
+    entry.className = `relationship-entry is-${tone}`;
+
+    const title = document.createElement("p");
+    title.className = "relationship-title";
+    const points = Number.isFinite(relation.points) ? ` (${sign}${relation.points})` : "";
+    title.textContent = `${relation.title}${points}`;
+    entry.append(title);
+
+    if (relation.explanation) {
+      const explanation = document.createElement("p");
+      explanation.className = "relationship-explanation";
+      explanation.textContent = relation.explanation;
+      entry.append(explanation);
+    }
+
+    elements.relationshipList.append(entry);
+  };
+
+  positives.forEach((relation) => appendRelation(relation, "positive", "+"));
+  negatives.forEach((relation) => appendRelation(relation, "negative", "−"));
+
+  if (positives.length === 0 && negatives.length === 0) {
+    const entry = document.createElement("p");
+    entry.className = "relationship-explanation muted-text";
+    entry.textContent = "Ingen tydelige relasjoner mellom rollene ennå.";
+    elements.relationshipList.append(entry);
+  }
 }
 
 // Liten coachContext-status i lagrapporten (kun visning): formasjonstilvenning,

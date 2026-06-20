@@ -543,7 +543,7 @@ Dette er fortsatt **ikke** en full liga/sesong — det er en lett, spillbar v1-l
 - Appen skal ikke hardkode spillerdata.
 - Banen og managerkontoret skal være lesbart på iPad.
 - Nye data skal helst kunne vises uten å bygge om app-logikken.
-- Relasjonsdata vises foreløpig via lagrapporten; egen UI-metrikk kan legges til senere.
+- Relasjonsscore vises som egen metrikk i «Lagets profil», og lagrapporten lister hvilke roller som støtter eller blokkerer hverandre (positive/negative relasjoner med forklaring).
 - Lokal starttropp skal vises som `Lokal starttropp`, ikke som et samlet sted.
 
 ## Ikke ferdig ennå
@@ -559,9 +559,8 @@ Allerede bygget (se «Implementert så langt»): motstanderprofiler, kampmotor (
 ## Neste anbefalte utviklingsrekkefølge
 
 1. Test managerkontoret i nettleser/iPad etter Mini Season v1 / League Loop v1 og lokal starttropp.
-2. Legg relasjonsscore inn som egen synlig metrikk i UI.
-3. Koble historiske formasjoner fra `data/hgFootball/` dypere inn i aktiv lagfit/kampmotor.
-4. Bygg videre fra Mini Season v1 til full liga og sesong.
+2. Koble historiske formasjoner fra `data/hgFootball/` dypere inn i aktiv lagfit/kampmotor.
+3. Bygg videre fra Mini Season v1 til full liga og sesong.
 
 ## Fast regel for videre arbeid
 
