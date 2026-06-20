@@ -6755,6 +6755,21 @@ function buildTrainingProgramCard(program, context = {}) {
   const card = document.createElement("article");
   card.className = "training-program-card";
   if (isSelected) card.classList.add("is-selected");
+  const canSelect = !isSelected && !locked;
+  if (canSelect) {
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", `Velg treningsprogram: ${program.title}`);
+    card.addEventListener("click", (event) => {
+      if (event.target instanceof HTMLButtonElement) return;
+      selectWeeklyTrainingProgram(program);
+    });
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      selectWeeklyTrainingProgram(program);
+    });
+  }
 
   if (isSelected) {
     const chosen = document.createElement("span");
@@ -6818,9 +6833,9 @@ function buildTrainingProgramCard(program, context = {}) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "training-program-select";
-  button.textContent = isSelected ? "Valgt program" : "Velg dette programmet";
+  button.textContent = isSelected ? "✓ Valgt" : "Velg dette programmet";
   button.disabled = isSelected || locked;
-  if (!isSelected && !locked) {
+  if (canSelect) {
     button.addEventListener("click", () => selectWeeklyTrainingProgram(program));
   }
   card.append(button);
