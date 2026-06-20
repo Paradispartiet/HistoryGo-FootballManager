@@ -15,30 +15,29 @@ Appen har nå flere lag:
 3. **Lagfitmotor** – vurderer helheten: balanse, bredde, dybde, oppbygging, press, restforsvar, relasjoner, badges og duplikatspillere.
 4. **Relasjonsmotor** – vurderer om rollene hjelper eller blokkerer hverandre.
 5. **History Go-unlocks** – spillere, stab, ekspertise, treningsprogrammer og badges kan knyttes til besøkte/samlede steder.
-6. **Lokal starttropp** – valgfri startmodus der manageren kan begynne med de 15 nærmeste kvalifiserte spillerne uten å markere stedene som samlet i History Go.
-7. **Innboks / klubbuke** – trådbasert innboks, svarvalg og klubbverdier.
-8. **Stab, ekspertise og trening** – staff og ekspertise åpner treningsprogrammer og badgeprogresjon.
-9. **Lagidentitet** – lagklasser basert på opptjente badges og utviklingsretning.
-10. **Stedsrapporter** – forklarer hva sportsteder gir manageren.
-11. **Historisk formasjonsbibliotek** – egen `data/hgFootball/`-modul med historiske epoker, formasjoner, rolletyper og unlock-regler.
-12. **Training Program Composition v1** – treningsvalget er nå ferdige **komposisjoner av flere økter** for uka (`src/football-training-program-compositions.js`), ikke bare ett enkelt treningsfokus:
+6. **Innboks / klubbuke** – trådbasert innboks, svarvalg og klubbverdier.
+7. **Stab, ekspertise og trening** – staff og ekspertise åpner treningsprogrammer og badgeprogresjon.
+8. **Lagidentitet** – lagklasser basert på opptjente badges og utviklingsretning.
+9. **Stedsrapporter** – forklarer hva sportsteder gir manageren.
+10. **Historisk formasjonsbibliotek** – egen `data/hgFootball/`-modul med historiske epoker, formasjoner, rolletyper og unlock-regler.
+11. **Training Program Composition v1** – treningsvalget er nå ferdige **komposisjoner av flere økter** for uka (`src/football-training-program-compositions.js`), ikke bare ett enkelt treningsfokus:
     - Forslagene lærer spilleren gode faglige standardvalg (restitusjon/skadeforebygging, defensiv struktur, avslutningsuke, oppbygging mot press, pressuke, formasjonstilvenning, balansert uke).
     - Dynamiske parametre (slitasje, motstander, matchup, forrige kamps svakhet, trenerforståelse, treningshistorikk) avgjør uttellingen — `baseScore + contextBonus + overusePenalty + riskAdjustment`.
     - Et bevisst **kontekstuelt valg kan slå standardforslaget**; forslagene er aldri en fasit eller lås.
     - Restitusjon/skadeforebygging er **situasjonsbestemt**, ikke alltid riktig: god uttelling når slitasje/risiko tilsier det, men `overusePenalty` ved overforbruk uten grunnlag. Pressuke straffes ved høy fatigue.
     - Programmene peker tilbake til ekte treningsfokus i treningsuka og vises ved siden av den i UI — et dypere valg, ikke en erstatning.
-13. **Off-pitch Parameters v1** – et eget, deterministisk kontekstlag (`src/football-off-pitch-parameters.js`) som gjør managerrollen levende: manageren må lese **kontekstsignaler**, ikke bare taktikk.
+12. **Off-pitch Parameters v1** – et eget, deterministisk kontekstlag (`src/football-off-pitch-parameters.js`) som gjør managerrollen levende: manageren må lese **kontekstsignaler**, ikke bare taktikk.
     - Modellerer menneskene rundt taktikken: fatigue/slitasje, skadefare, moral, selvtillit, autonomi, garderobestemning, medie-/styre-/familiepress, skjult mental belastning, rollefrustrasjon, kampviktighet og forventningspress (normalisert 0–100).
     - **Fatigue, slitasje, moral, press, garderobe og taktisk klarhet påvirker treningsvalg:** høy slitasje gjør restitusjon/skadeforebygging mer verdt og pressuke farligere, lav taktisk klarhet løfter formasjonstilvenning, høyt press løfter defensiv struktur, og uro + moderat press gjør den balanserte uka til en tryggere fallback.
     - Det går et bevisst skille mellom **faktiske parametre** og **synlige/halvskjulte signaler**. Forslagene (treningsprogram, suggested setups) får bare se det synlige laget (`getVisibleOffPitchSignals` / `summarizeOffPitchContext`) — aldri hele hidden-blokken. Forslagene er gode standarder, men **mangler full tilgang til skjulte signaler**.
     - Derfor kan **bevisste kontekstuelle valg slå standardforslaget**: en manager som leser at laget er tungt, at garderoben murrer eller at presset utenfra øker, kan velge bedre enn et system som bare kjenner taktikken. Dette er kjernen i læringsspillet: taktisk kunnskap **+** menneskelig/managerial vurdering.
     - UI: en kompakt **«Kontekst»**-seksjon i managerkontor-stil viser lesbare signaler (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet, skadefare), ikke bare tall. Kjør `npm run sim:off-pitch`.
-14. **Inbox Event Integration v1** – den eksisterende **Innboksen** («Klubbens puls») er nå koblet til kontekstlaget (`src/football-inbox-events.js`). Innboksen fantes fra før som UI-avdeling med aktive tråder og trådarkiv; den er ikke erstattet, men gjort **levende**.
+13. **Inbox Event Integration v1** – den eksisterende **Innboksen** («Klubbens puls») er nå koblet til kontekstlaget (`src/football-inbox-events.js`). Innboksen fantes fra før som UI-avdeling med aktive tråder og trådarkiv; den er ikke erstattet, men gjort **levende**.
     - Trådene genereres dynamisk fra **off-pitch-parametrene, treningsprogram, kampdag og beslutninger**: medisinsk apparat (slitasje/skadefare), styret (styrepress/retning), presse (medietrykk), spillergruppe/garderobe (moral/samhold/rollefrustrasjon), assistenttrener (taktisk klarhet), trening (relevant ukeprogram), kampdag (etterspill av siste kamp) og scouting/History Go (for tynn tropp).
     - Meldingene **dramatiserer signaler** fra klubbens puls. Innboksen forteller ikke spilleren hva som er riktig: den gir bekymringer, observasjoner og press som manageren må **tolke**. Noen tråder har valg med konsekvenser (`safe`/`balanced`/`risky`/`assertive`/`defensive`), og et bevisst kontekstuelt valg kan fortsatt slå standardforslaget.
     - Valg i tråder lager et **offPitchEvent** som sendes til `applyOffPitchEvent`, slik at konteksten faktisk beveger seg (slitasje, moral, press, garderobe …). Inbox-state ligger i `teamMerits.inbox` – **aldri** i History Go-progresjonen (`visited_places` / `hg_groundhopper_stats_v1`). Motoren er ren, deterministisk og no-spam (deterministiske tråd-id-er + context hash). Kjør `npm run sim:inbox`.
 
-Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, liga, sesong og full simulering gjenstår.
+Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, Club Week, kamprapport og Mini Season v1 finnes nå, men full liga/sesong, full simulering og lokal starttropp gjenstår.
 
 ## Viktige filer
 
@@ -561,13 +560,10 @@ Allerede bygget (se «Implementert så langt»): motstanderprofiler, kampmotor (
 ## Neste anbefalte utviklingsrekkefølge
 
 1. Implementer lokal starttropp i `computeAvailability()` uten å skrive til History Go-progresjon.
-2. Test managerkontoret i nettleser/iPad etter relasjonsmotoren.
+2. Test managerkontoret i nettleser/iPad etter Mini Season v1 / League Loop v1.
 3. Legg relasjonsscore inn som egen synlig metrikk i UI.
-4. Lag motstanderprofiler.
-5. Lag tekstbasert ukekamp.
-6. Lag kamprapport som forklarer trenerens valg.
-7. Koble historiske formasjoner fra `data/hgFootball/` dypere inn i aktiv lagfit/kampmotor.
-8. Lag liga og sesong.
+4. Koble historiske formasjoner fra `data/hgFootball/` dypere inn i aktiv lagfit/kampmotor.
+5. Bygg videre fra Mini Season v1 til full liga og sesong.
 
 ## Fast regel for videre arbeid
 

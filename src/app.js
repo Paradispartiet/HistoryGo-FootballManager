@@ -11,6 +11,7 @@ import {
   evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
 import {
+  MINI_SEASON_VERSION,
   MINI_SEASON_TOTAL_WEEKS,
   MINI_SEASON_OUTCOME_LABELS,
   startMiniSeason as createMiniSeasonStart,
@@ -154,7 +155,7 @@ const MATCHDAY_STATE_KEY = "hgfm.matchday.v1";
 // Mini Season v0.1: 5-kampers prøveperiode (motstanderplan, resultater, styremål
 // og sluttvurdering). Kun UI/progresjon i localStorage – ingen liga, tabell,
 // økonomi eller ny kampmotor. Selve logikken ligger i football-mini-season.js.
-const MINI_SEASON_KEY = "hgfm.miniSeason.v1";
+const MINI_SEASON_KEY = MINI_SEASON_VERSION;
 
 // Ekte History Go-progresjon i localStorage (skrives av History Go-appen, ikke
 // av Football Manager). Brukes som kilde til faktisk besøkte sportsteder.
