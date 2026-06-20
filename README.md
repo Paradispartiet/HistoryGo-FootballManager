@@ -500,6 +500,22 @@ Av designretningen over er denne kjeden faktisk bygget og testet. Holdt bevisst 
 
 Alt er additivt og «graceful»: uten kunnskapsdata / matchup / forrige kamp kjører kampdag og trening som før.
 
+### 11. Mini Season v1 / League Loop v1 (prøveperiode oppå Club Week)
+
+Fem Club Weeks er nå **én sammenhengende sportslig prøveperiode** — bygget *oppå* Club Week Orchestrator, ikke ved siden av den. Hver uke følger den samme rytmen (analyse → innboks → trening → kampplan → kampdag → oppsummering), og når uka ruller går mini-sesongen til neste kamp.
+
+- *Motor:* `src/football-mini-season.js` – ren ESM (ingen DOM/fetch/localStorage/app-state), deterministisk: lik input gir byte-identisk JSON. Normalisert state (`historygo-football-manager.mini-season.v1`) med `status`, `weekIndex`, `points`, `wins/draws/losses`, `goalsFor/Against`, `form`, `boardExpectation`, `seasonGoal`, `opponentSchedule`, `matchHistory`, `momentum`, `boardTrustTrend`, `tacticalIdentityScore`, `trainingIdentityScore`, `contextStabilityScore` og `finalReview`.
+- *Kamprekke:* en deterministisk 5-kampers schedule bygges fra de **eksisterende** motstanderprofilene (matchday-engine). Hver runde har vanskelighetsgrad, hjemme/borte, en styreforventning (`win` / `avoid_loss` / `compete` / `free_hit`) og en kort narrativ krok (hva kampen tester).
+- *Resultater:* mini-sesongen **konsumerer** kampdagens resultat (ingen ny kampmotor). Poeng 3/1/0, formkurve (W/D/L), og en trygg adapter mapper utfall→stilling når kampmotoren ikke ga konkret score.
+- *Styret vurderer kontekstuelt:* et tap mot eliten borte (`free_hit`) straffes langt mildere enn et tap hjemme mot et svakere lag (`win`). Tydelig taktisk/treningsmessig identitet og rolig kontekst gir tillit; kaos og uro utenfor banen trekker ned — **resultat alene avgjør ikke** styrets dom.
+- *Sesongmål og retning:* et sesongmål avledes deterministisk av konteksten ved start (f.eks. høy belastning → «Få kontroll på belastningen», lav taktisk klarhet → «Bygg en tydelig spillestil»).
+- *Tabell/light league:* `createMiniSeasonTable` gir en kompakt, deterministisk prøveperiode-tabell (HG-laget + rivaler, P/S/U/T/MF/MM/MD/P). Dette er **ikke** en simulert liga.
+- *Kobling ut:* etter hver kamp kan mini-sesongen foreslå en off-pitch-hendelse (komponerer med `applyMatchdayOffPitchEffects`, dupliserer den ikke), som igjen kan vekke relevante innbokstråder gjennom det eksisterende innbokssystemet.
+- *UI:* prøveperiode-panelet i dashbordet viser runde X av 5, neste motstander (hjemme/borte + forventning), poeng, formkurve, light-league-tabell, sesongmål og styrevurdering — kompakt sort/hvit managerkontor-stil.
+- *Validering:* `npm run sim:mini-season` (hele løkken ende-til-ende) og `npm run sim:club-week` (viser at Club Week + Mini Season ruller i takt over to uker).
+
+Dette er fortsatt **ikke** en full liga/sesong — det er en lett, spillbar v1-loop: en prøveperiode der resultater, form, styreforventninger og kontekst utvikler seg over fem kamper.
+
 ## Kvalitetssjekk før nye endringer
 
 ### Data
@@ -536,14 +552,11 @@ Alt er additivt og «graceful»: uten kunnskapsdata / matchup / forrige kamp kj�
 Følgende gjenstår som større spill-lag:
 
 - implementere lokal starttropp i runtime etter `docs/local-start-squad.md`
-- motstanderprofiler
-- kampmotor
-- kamprapport etter kamp
-- ukekamp
-- liga
-- sesong
-- tabell
+- full liga (mange lag, full tabellsimulering) — Mini Season v1 dekker foreløpig kun en lett 5-kampers prøveperiode med deterministisk light-league-tabell
+- lengre sesong over flere prøveperioder (økonomi, overgangsmarked, kontrakter, kalender)
 - full kobling mellom historisk formasjonsbibliotek og aktiv kampmotor
+
+Allerede bygget (se «Implementert så langt»): motstanderprofiler, kampmotor (Kampdag v0.2), kamprapport etter kamp, ukekamp (Club Week Orchestrator v1) og en spillbar prøveperiode med poeng/form/tabell (Mini Season v1 / League Loop v1).
 
 ## Neste anbefalte utviklingsrekkefølge
 

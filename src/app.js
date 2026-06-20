@@ -11,15 +11,18 @@ import {
   evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
 import {
-  MINI_SEASON_TOTAL_MATCHES,
+  MINI_SEASON_TOTAL_WEEKS,
   MINI_SEASON_OUTCOME_LABELS,
-  createMiniSeason,
-  sanitizeMiniSeason,
-  getNextMiniSeasonOpponentId,
-  registerMiniSeasonResult,
-  calculateMiniSeasonPoints,
-  evaluateMiniSeasonObjectives,
-  computeMiniSeasonVerdict
+  startMiniSeason as createMiniSeasonStart,
+  normalizeMiniSeasonState,
+  getCurrentMiniSeasonMatch,
+  isCurrentMiniSeasonMatchPlayed,
+  applyMiniSeasonMatchResult,
+  advanceMiniSeasonWeek,
+  summarizeMiniSeason,
+  createMiniSeasonTable,
+  createMiniSeasonFormGuide,
+  createMiniSeasonOffPitchEvent
 } from "./football-mini-season.js";
 import {
   computeMatchdayConsequences,
@@ -3406,10 +3409,23 @@ function resetMatchday() {
 // JSON eller korrupt struktur gir null (= ingen prøveperiode startet).
 function loadMiniSeason() {
   try {
-    return sanitizeMiniSeason(JSON.parse(localStorage.getItem(MINI_SEASON_KEY)));
+    return normalizeMiniSeasonState(JSON.parse(localStorage.getItem(MINI_SEASON_KEY)));
   } catch (error) {
     return null;
   }
+}
+
+// Manager-kontekst som mini-sesongen leser (off-pitch + Club Week-verdier). Den
+// brukes til å avlede sesongmål/styreforventning og til kontekstuell vurdering.
+// Leser kun manager-state — aldri History Go-progresjon.
+function getMiniSeasonContext() {
+  return {
+    seasonId: `mini-season-${Date.now()}`,
+    offPitch: getOffPitchState(),
+    clubWeekState: state.clubWeekState,
+    opponents: OPPONENT_PROFILES,
+    teamName: "HG-laget"
+  };
 }
 
 // Lagre gjeldende mini-sesong. Stille no-op hvis lagring feiler (privat modus).
@@ -3425,21 +3441,16 @@ function saveMiniSeason() {
   }
 }
 
-// Start en ny prøveperiode: enkel shuffle av de 5 eksisterende motstander-
-// profilene gir motstanderplanen, og rekkefølgen lagres slik at reload aldri
-// endrer planen. Erstatter en fullført periode; en aktiv periode røres ikke.
+// Start en ny prøveperiode (Mini Season v1 / League Loop v1): en deterministisk
+// 5-kampers kamprekke bygges fra de eksisterende motstanderprofilene, og
+// sesongmål/styreforventning avledes av managerkonteksten. Erstatter en fullført
+// periode; en aktiv periode røres ikke.
 function startMiniSeason() {
   if (state.miniSeason?.status === "active") {
     return;
   }
 
-  const opponentIds = OPPONENT_PROFILES.map((profile) => profile.id);
-  for (let i = opponentIds.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [opponentIds[i], opponentIds[j]] = [opponentIds[j], opponentIds[i]];
-  }
-
-  const miniSeason = createMiniSeason({ opponentIds });
+  const miniSeason = createMiniSeasonStart(getMiniSeasonContext());
   if (!miniSeason) {
     return;
   }
@@ -3452,7 +3463,7 @@ function startMiniSeason() {
     week: state.clubWeekState?.week ?? "?",
     phase: state.clubWeekState?.phase || "analysis",
     phaseLabel: "Prøveperiode",
-    message: `Prøveperioden er i gang: ${MINI_SEASON_TOTAL_MATCHES} kamper avgjør styrets dom.`
+    message: `Prøveperioden er i gang: ${MINI_SEASON_TOTAL_WEEKS} kamper avgjør styrets dom. Sesongmål: ${miniSeason.seasonGoal}.`
   });
 
   renderApp();
@@ -3472,61 +3483,70 @@ function resetMiniSeason() {
 // Neste planlagte motstander som full motstanderprofil, eller null når ingen
 // mini-sesong er aktiv (da beholder kampdagen dagens tilfeldige motstander).
 function getMiniSeasonNextOpponent() {
-  const opponentId = getNextMiniSeasonOpponentId(state.miniSeason);
-  if (!opponentId) {
+  const match = getCurrentMiniSeasonMatch(state.miniSeason);
+  if (!match) {
     return null;
   }
-  const profile = OPPONENT_PROFILES.find((candidate) => candidate.id === opponentId);
-  return profile ? { ...profile } : null;
+  const profile = OPPONENT_PROFILES.find((candidate) => candidate.id === match.opponentId);
+  // Behold kamprekkas hjemme/borte og forventning oppå motstanderprofilen, slik
+  // at kampdag og UI kan vise rammen rundt kampen.
+  return profile
+    ? { ...profile, homeAway: match.homeAway, boardExpectation: match.boardExpectation, narrativeHook: match.narrativeHook }
+    : null;
 }
 
 // Registrer et fullført Kampdag v0.2-resultat i den aktive mini-sesongen.
-// matchId er idempotensnøkkel: reload/dobbeltkall gir aldri dobbel
-// registrering. Femte kamp setter status completed og beregner styrets
-// sluttvurdering fra poeng, Club Week-verdier og styremålene.
+// Mini-sesongen er en ren motor (football-mini-season.js): app.js mater inn
+// kampresultatet og managerkonteksten og lagrer den nye staten. matchId gjør
+// registreringen idempotent (reload/dobbeltkall gir aldri dobbel registrering).
+// Selve uke-rullen skjer når Club Week går fra oppsummering til ny uke.
 function registerMatchInMiniSeason(lastMatch) {
   const miniSeason = state.miniSeason;
   if (!miniSeason || miniSeason.status !== "active" || !lastMatch || typeof lastMatch !== "object") {
     return;
   }
 
-  const score = lastMatch.score || {};
-  const entry = {
+  // Allerede registrert denne runden? Da er dette en reload/dobbeltkall.
+  const before = isCurrentMiniSeasonMatchPlayed(miniSeason);
+  const context = getMiniSeasonContext();
+
+  const matchdayResult = {
+    id: lastMatch.id || null,
     matchId: lastMatch.id || null,
-    opponentId: lastMatch.opponent?.id || null,
-    opponentName: lastMatch.opponent?.name || "Ukjent motstander",
-    formationName: lastMatch.formationSnapshot?.name || "",
-    scoreLine: `${Number(score.for) || 0}–${Number(score.against) || 0}`,
     outcome: lastMatch.outcome || "draw",
+    score: { for: Number(lastMatch.score?.for) || 0, against: Number(lastMatch.score?.against) || 0 },
+    opponent: lastMatch.opponent || null,
     teamStrength: Number(lastMatch.teamStrength) || 0,
-    // Summen av hendelsesutfallene (positiv/negativ beslutningsrekke) — driver
-    // styremålet om minst én kamp med positiv managerbeslutningssum.
-    decisionScore: Number(lastMatch.decisionTotals?.eventScoreDelta) || 0,
-    bestDecision: lastMatch.bestDecision?.label || null,
-    worstDecision: lastMatch.worstDecision?.label || null,
-    clubWeek: lastMatch.playedInClubWeek ?? null,
-    appliedAt: new Date().toISOString()
+    decisionTotals: lastMatch.decisionTotals || {},
+    decisions: Array.isArray(lastMatch.decisions) ? lastMatch.decisions : [],
+    trainingFocus: lastMatch.trainingFocus || null
   };
 
-  const { changed, completed } = registerMiniSeasonResult(miniSeason, entry);
-  if (!changed) {
+  const updated = applyMiniSeasonMatchResult(miniSeason, matchdayResult, context);
+  if (isCurrentMiniSeasonMatchPlayed(updated) === before && JSON.stringify(updated) === JSON.stringify(miniSeason)) {
+    // Ingen endring (idempotens) — ikke logg eller varsle på nytt.
     return;
   }
 
-  if (completed) {
-    miniSeason.finalVerdict = computeMiniSeasonVerdict({
-      miniSeason,
-      clubWeekState: state.clubWeekState
-    });
-  }
-
+  state.miniSeason = updated;
   saveMiniSeason();
 
-  const points = calculateMiniSeasonPoints(miniSeason.results);
-  const outcomeLabel = MINI_SEASON_OUTCOME_LABELS[entry.outcome] || "Kamp";
-  const message = completed
-    ? `Prøveperioden er fullført med ${points} poeng. ${miniSeason.finalVerdict?.headline || ""}`.trim()
-    : `Prøveperiode: kamp ${miniSeason.currentMatchIndex} av ${miniSeason.totalMatches} spilt (${outcomeLabel} ${entry.scoreLine}). ${points} poeng så langt.`;
+  // Off-pitch-kobling: mini-sesongens kontekst kan farge laget utenfor banen
+  // (selvtillit/press/uro/belastning) etter kampen. Komponerer MED den
+  // eksisterende applyMatchdayOffPitchEffects — dupliserer den ikke. Aldri
+  // History Go-progresjon (kun teamMerits.offPitch).
+  if (state.teamMerits) {
+    const offPitchEvent = createMiniSeasonOffPitchEvent(updated, context);
+    if (offPitchEvent) {
+      state.teamMerits.offPitch = applyOffPitchEvent(getOffPitchState(), offPitchEvent);
+      saveTeamMerits();
+    }
+  }
+
+  const summary = summarizeMiniSeason(updated);
+  const lastEntry = updated.matchHistory[updated.matchHistory.length - 1];
+  const outcomeLabel = MINI_SEASON_OUTCOME_LABELS[lastEntry?.outcome] || "Kamp";
+  const message = `Prøveperiode runde ${lastEntry?.round ?? "?"} av ${updated.totalWeeks}: ${outcomeLabel} ${lastEntry?.scoreLine || ""} mot ${lastEntry?.opponentName || "motstanderen"}. ${summary.points} poeng (form ${summary.formText || "—"}).`;
 
   addClubWeekEvent({
     id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
@@ -3538,6 +3558,46 @@ function registerMatchInMiniSeason(lastMatch) {
 
   // Mini-sesong-progresjon er faktisk endret: varsle appskallet (samme mønster
   // som kampkonsekvensene). Ren rendering skjer i kalleren.
+  window.dispatchEvent(new Event("updateProfile"));
+}
+
+// Rull mini-sesongen videre når Club Week går fra oppsummering til ny uke. Den
+// rene motoren krever at ukas kamp er spilt før den ruller (ellers no-op), og
+// fullfører sesongen med styrets sluttvurdering etter femte kamp.
+function advanceMiniSeasonForNewWeek() {
+  const miniSeason = state.miniSeason;
+  if (!miniSeason || miniSeason.status !== "active") {
+    return;
+  }
+  const updated = advanceMiniSeasonWeek(miniSeason, getMiniSeasonContext());
+  if (JSON.stringify(updated) === JSON.stringify(miniSeason)) {
+    return;
+  }
+  state.miniSeason = updated;
+  saveMiniSeason();
+
+  if (updated.status === "completed") {
+    addClubWeekEvent({
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      week: state.clubWeekState?.week ?? "?",
+      phase: "review",
+      phaseLabel: "Prøveperiode",
+      message: `Prøveperioden er fullført med ${updated.points} poeng. ${updated.finalReview?.headline || ""}`.trim()
+    });
+  } else {
+    const nextMatch = getCurrentMiniSeasonMatch(updated);
+    if (nextMatch) {
+      const venue = nextMatch.homeAway === "home" ? "hjemme" : "borte";
+      addClubWeekEvent({
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        week: state.clubWeekState?.week ?? "?",
+        phase: "analysis",
+        phaseLabel: "Prøveperiode",
+        message: `Prøveperiode runde ${nextMatch.round} av ${updated.totalWeeks}: ${nextMatch.opponentName} (${venue}). ${nextMatch.narrativeHook}`
+      });
+    }
+  }
+
   window.dispatchEvent(new Event("updateProfile"));
 }
 
@@ -6138,43 +6198,116 @@ function appendMiniSeasonMeta(parent, text, className = "mini-season-meta") {
   parent.append(el);
 }
 
-function renderMiniSeasonObjectives(parent, miniSeason) {
-  const objectives = evaluateMiniSeasonObjectives({
-    miniSeason,
-    clubWeekState: state.clubWeekState
-  });
-  if (objectives.length === 0) {
+// Sportslig status: poeng, rekord og formkurve som kompakte tall + W/D/L-pinner.
+function renderMiniSeasonStanding(parent, summary, formGuide) {
+  const standing = document.createElement("div");
+  standing.className = "mini-season-standing";
+
+  const stat = (label, value) => {
+    const box = document.createElement("div");
+    box.className = "mini-season-stat";
+    const v = document.createElement("span");
+    v.className = "mini-season-stat-value";
+    v.textContent = value;
+    const l = document.createElement("span");
+    l.className = "mini-season-stat-label";
+    l.textContent = label;
+    box.append(v, l);
+    standing.append(box);
+  };
+
+  stat("Poeng", String(summary.points));
+  stat("S-U-T", summary.record);
+  stat("Mål", `${summary.goalsFor}–${summary.goalsAgainst}`);
+  parent.append(standing);
+
+  // Formkurve som fargede pinner (W/D/L), eldste til nyeste.
+  const form = Array.isArray(formGuide?.form) ? formGuide.form : [];
+  if (form.length > 0) {
+    const formRow = document.createElement("div");
+    formRow.className = "mini-season-form";
+    form.forEach((letter) => {
+      const pin = document.createElement("span");
+      const outcome = letter === "W" ? "win" : letter === "L" ? "loss" : "draw";
+      pin.className = `mini-season-form-pin is-${outcome}`;
+      pin.textContent = letter;
+      formRow.append(pin);
+    });
+    parent.append(formRow);
+    if (formGuide?.note) {
+      appendMiniSeasonMeta(parent, formGuide.note);
+    }
+  }
+}
+
+// Prøveperiode-tabell (light league): HG-laget mot rivaler. Deterministisk.
+function renderMiniSeasonTable(parent, table) {
+  if (!table || !Array.isArray(table.rows) || table.rows.length === 0) {
     return;
   }
 
-  appendMatchdaySubheading(parent, "Styrets mål");
-  const list = document.createElement("ul");
-  list.className = "mini-season-objectives";
-  objectives.forEach((objective) => {
-    const item = document.createElement("li");
-    item.className = objective.achieved ? "is-achieved" : "is-open";
-    item.textContent = `${objective.label} ${objective.status}`.trim();
-    list.append(item);
+  appendMatchdaySubheading(parent, "Prøveperiode-tabell");
+  const wrap = document.createElement("div");
+  wrap.className = "mini-season-table-wrap";
+  const tableEl = document.createElement("table");
+  tableEl.className = "mini-season-table";
+
+  const head = document.createElement("tr");
+  ["#", "Lag", "K", "S", "U", "T", "MF", "MM", "MD", "P"].forEach((label) => {
+    const th = document.createElement("th");
+    th.textContent = label;
+    head.append(th);
   });
-  parent.append(list);
+  tableEl.append(head);
+
+  table.rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    if (row.isHg) {
+      tr.className = "is-hg";
+    }
+    const cells = [
+      String(row.position),
+      row.name,
+      String(row.played),
+      String(row.wins),
+      String(row.draws),
+      String(row.losses),
+      String(row.goalsFor),
+      String(row.goalsAgainst),
+      row.goalDifference > 0 ? `+${row.goalDifference}` : String(row.goalDifference),
+      String(row.points)
+    ];
+    cells.forEach((value, index) => {
+      const td = document.createElement("td");
+      if (index === 1) {
+        td.className = "mini-season-table-team";
+      }
+      td.textContent = value;
+      tr.append(td);
+    });
+    tableEl.append(tr);
+  });
+
+  wrap.append(tableEl);
+  parent.append(wrap);
 }
 
 function renderMiniSeasonResults(parent, miniSeason) {
-  const results = Array.isArray(miniSeason.results) ? miniSeason.results : [];
-  if (results.length === 0) {
+  const history = Array.isArray(miniSeason.matchHistory) ? miniSeason.matchHistory : [];
+  if (history.length === 0) {
     return;
   }
 
   appendMatchdaySubheading(parent, "Resultater");
   const list = document.createElement("ul");
   list.className = "mini-season-results";
-  results.forEach((result, index) => {
+  history.forEach((result) => {
     const item = document.createElement("li");
     const outcome = ["win", "draw", "loss"].includes(result.outcome) ? result.outcome : "draw";
     item.className = `is-${outcome}`;
     const outcomeLabel = MINI_SEASON_OUTCOME_LABELS[outcome] || "Uavgjort";
-    const weekPart = Number.isFinite(Number(result.clubWeek)) ? ` (uke ${result.clubWeek})` : "";
-    item.textContent = `Kamp ${index + 1}: ${outcomeLabel} ${result.scoreLine || "0–0"} mot ${result.opponentName || "ukjent motstander"}${weekPart}`;
+    const venue = result.homeAway === "home" ? "hjemme" : "borte";
+    item.textContent = `Runde ${result.round}: ${outcomeLabel} ${result.scoreLine || "0–0"} mot ${result.opponentName || "ukjent motstander"} (${venue})`;
     list.append(item);
   });
   parent.append(list);
@@ -6551,14 +6684,16 @@ function renderMiniSeason() {
     resetButton.hidden = !miniSeason;
   }
 
+  const summary = miniSeason ? summarizeMiniSeason(miniSeason) : null;
+
   if (statusEl) {
-    if (!miniSeason) {
+    if (!miniSeason || !summary) {
       statusEl.textContent =
         "Ingen aktiv prøveperiode. Start en 5-kampers prøveperiode og bli vurdert av styret — anbefalt ramme for kampdag-loopen.";
     } else if (miniSeason.status === "completed") {
-      statusEl.textContent = `Prøveperioden er fullført: ${calculateMiniSeasonPoints(miniSeason.results)} poeng på ${miniSeason.totalMatches} kamper.`;
+      statusEl.textContent = `Prøveperioden er fullført: ${summary.points} poeng på ${miniSeason.totalWeeks} kamper.`;
     } else {
-      statusEl.textContent = `Kamp ${Math.min(miniSeason.currentMatchIndex + 1, miniSeason.totalMatches)} av ${miniSeason.totalMatches} · ${calculateMiniSeasonPoints(miniSeason.results)} poeng så langt.`;
+      statusEl.textContent = `Runde ${Math.min(miniSeason.weekIndex + 1, miniSeason.totalWeeks)} av ${miniSeason.totalWeeks} · ${summary.points} poeng så langt.`;
     }
   }
 
@@ -6568,26 +6703,36 @@ function renderMiniSeason() {
 
   overview.textContent = "";
 
-  if (!miniSeason) {
+  if (!miniSeason || !summary) {
     return;
   }
 
+  // Sesongmål + samlet styreforventning: den sportslige retningen for perioden.
+  appendMiniSeasonMeta(overview, `Sesongmål: ${miniSeason.seasonGoal}`, "mini-season-goal");
+  if (miniSeason.boardExpectation) {
+    appendMiniSeasonMeta(overview, miniSeason.boardExpectation);
+  }
+
+  // Neste motstander med hjemme/borte, forventning og «hva betyr dette nå?».
   if (miniSeason.status === "active") {
-    const nextOpponent = getMiniSeasonNextOpponent();
-    if (nextOpponent) {
-      const opponentParts = [nextOpponent.name];
-      if (nextOpponent.style) {
-        opponentParts.push(nextOpponent.style);
-      }
-      appendMiniSeasonMeta(overview, `Neste motstander: ${opponentParts.join(" · ")}`, "mini-season-next-opponent");
+    const nextMatch = getCurrentMiniSeasonMatch(miniSeason);
+    if (nextMatch) {
+      const venue = nextMatch.homeAway === "home" ? "Hjemme" : "Borte";
+      appendMiniSeasonMeta(
+        overview,
+        `Runde ${nextMatch.round}/${miniSeason.totalWeeks} · ${nextMatch.opponentName} · ${venue}`,
+        "mini-season-next-opponent"
+      );
+      appendMiniSeasonMeta(overview, nextMatch.narrativeHook);
     }
   }
 
-  renderMiniSeasonObjectives(overview, miniSeason);
+  renderMiniSeasonStanding(overview, summary, createMiniSeasonFormGuide(miniSeason));
+  renderMiniSeasonTable(overview, createMiniSeasonTable(miniSeason, getMiniSeasonContext()));
   renderMiniSeasonResults(overview, miniSeason);
 
   if (miniSeason.status === "completed") {
-    renderMiniSeasonVerdict(overview, miniSeason.finalVerdict);
+    renderMiniSeasonVerdict(overview, miniSeason.finalReview);
   }
 }
 
@@ -9186,6 +9331,9 @@ async function advanceClubWeekPhaseAction() {
   if (next.week !== previous.week) {
     state.weeklyTrainingFocus = null;
     saveWeeklyTrainingFocus();
+    // Mini Season v1 / League Loop v1: en ny Club Week-uke ruller mini-sesongen
+    // til neste kamp (eller fullfører den etter femte kamp).
+    advanceMiniSeasonForNewWeek();
   }
   const consequences = getClubWeekTransitionConsequences(previous, next);
 
