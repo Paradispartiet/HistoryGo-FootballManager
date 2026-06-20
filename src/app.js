@@ -9755,12 +9755,43 @@ function activateTab(target) {
   });
 }
 
+
+// Aktiverer interne rullefaner i managerkontoret uten å bytte hovedseksjon.
+function activateManagerTab(target) {
+  const buttons = Array.from(document.querySelectorAll("[data-manager-tab-target]"));
+  const panes = Array.from(document.querySelectorAll("[data-manager-tab-section]"));
+
+  buttons.forEach((button) => {
+    const isActive = button.dataset.managerTabTarget === target;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+
+  panes.forEach((pane) => {
+    pane.hidden = pane.dataset.managerTabSection !== target;
+    pane.classList.toggle("is-active", pane.dataset.managerTabSection === target);
+  });
+}
+
 function initTabs() {
   const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
+  const managerTabButtons = Array.from(document.querySelectorAll("[data-manager-tab-target]"));
 
   tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
       activateTab(button.dataset.tabTarget);
+      if (button.dataset.managerTabTarget) {
+        activateManagerTab(button.dataset.managerTabTarget);
+      }
+    });
+  });
+
+  managerTabButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.dataset.tabTarget) {
+        activateTab(button.dataset.tabTarget);
+      }
+      activateManagerTab(button.dataset.managerTabTarget);
     });
   });
 }
