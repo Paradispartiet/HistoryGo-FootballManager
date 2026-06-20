@@ -37,7 +37,7 @@ Appen har nå flere lag:
     - Meldingene **dramatiserer signaler** fra klubbens puls. Innboksen forteller ikke spilleren hva som er riktig: den gir bekymringer, observasjoner og press som manageren må **tolke**. Noen tråder har valg med konsekvenser (`safe`/`balanced`/`risky`/`assertive`/`defensive`), og et bevisst kontekstuelt valg kan fortsatt slå standardforslaget.
     - Valg i tråder lager et **offPitchEvent** som sendes til `applyOffPitchEvent`, slik at konteksten faktisk beveger seg (slitasje, moral, press, garderobe …). Inbox-state ligger i `teamMerits.inbox` – **aldri** i History Go-progresjonen (`visited_places` / `hg_groundhopper_stats_v1`). Motoren er ren, deterministisk og no-spam (deterministiske tråd-id-er + context hash). Kjør `npm run sim:inbox`.
 
-Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, Club Week, kamprapport og Mini Season v1 finnes nå, men full liga/sesong, full simulering og lokal starttropp gjenstår.
+Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, Club Week, kamprapport, Mini Season v1 og lokal starttropp finnes nå, men full liga/sesong og full simulering gjenstår.
 
 ## Viktige filer
 
@@ -243,9 +243,9 @@ Disse brukes til å finne besøkte/samlede sportsteder som finnes i Football Man
 
 ## Lokal starttropp
 
-HG Football Manager skal også støtte et valgfritt startvalg der brukeren kan begynne med de 15 kvalifiserte fotballspillerne som er geografisk nærmest nåværende lokasjon eller valgt offentlig startsted.
+HG Football Manager støtter et valgfritt startvalg der brukeren kan begynne med de inntil 15 kvalifiserte fotballspillerne som er geografisk nærmest nåværende lokasjon eller valgt offentlig startsted (Haversine-avstand til koordinatfestede steder med `player_candidate`-unlocks).
 
-Dette er en startsnarvei, ikke en erstatning for History Go-samlingen. Spillere fra lokal start skal kunne brukes i managerdelen og telle mot 15-spillerkravet, men stedene deres skal ikke automatisk markeres som samlet eller besøkt i History Go.
+Dette er en startsnarvei, ikke en erstatning for History Go-samlingen. Spillere fra lokal start kan brukes i managerdelen og teller mot 15-spillerkravet, men stedene deres markeres ikke som samlet eller besøkt i History Go. Lokal start ligger i `teamMerits.localStart`, beregnes én gang og lagres stabilt; den utvider kun spillerpoolen i `computeAvailability()` og skriver aldri til `visited_places` / `hg_groundhopper_stats_v1`. Spillerne vises med kilde `Lokal starttropp`, og `resetTeamMerits()` fjerner starttroppen.
 
 Prinsippet er:
 
@@ -550,20 +550,18 @@ Dette er fortsatt **ikke** en full liga/sesong — det er en lett, spillbar v1-l
 
 Følgende gjenstår som større spill-lag:
 
-- implementere lokal starttropp i runtime etter `docs/local-start-squad.md`
 - full liga (mange lag, full tabellsimulering) — Mini Season v1 dekker foreløpig kun en lett 5-kampers prøveperiode med deterministisk light-league-tabell
 - lengre sesong over flere prøveperioder (økonomi, overgangsmarked, kontrakter, kalender)
 - full kobling mellom historisk formasjonsbibliotek og aktiv kampmotor
 
-Allerede bygget (se «Implementert så langt»): motstanderprofiler, kampmotor (Kampdag v0.2), kamprapport etter kamp, ukekamp (Club Week Orchestrator v1) og en spillbar prøveperiode med poeng/form/tabell (Mini Season v1 / League Loop v1).
+Allerede bygget (se «Implementert så langt»): motstanderprofiler, kampmotor (Kampdag v0.2), kamprapport etter kamp, ukekamp (Club Week Orchestrator v1), en spillbar prøveperiode med poeng/form/tabell (Mini Season v1 / League Loop v1) og lokal starttropp i runtime via `computeAvailability()`.
 
 ## Neste anbefalte utviklingsrekkefølge
 
-1. Implementer lokal starttropp i `computeAvailability()` uten å skrive til History Go-progresjon.
-2. Test managerkontoret i nettleser/iPad etter Mini Season v1 / League Loop v1.
-3. Legg relasjonsscore inn som egen synlig metrikk i UI.
-4. Koble historiske formasjoner fra `data/hgFootball/` dypere inn i aktiv lagfit/kampmotor.
-5. Bygg videre fra Mini Season v1 til full liga og sesong.
+1. Test managerkontoret i nettleser/iPad etter Mini Season v1 / League Loop v1 og lokal starttropp.
+2. Legg relasjonsscore inn som egen synlig metrikk i UI.
+3. Koble historiske formasjoner fra `data/hgFootball/` dypere inn i aktiv lagfit/kampmotor.
+4. Bygg videre fra Mini Season v1 til full liga og sesong.
 
 ## Fast regel for videre arbeid
 
