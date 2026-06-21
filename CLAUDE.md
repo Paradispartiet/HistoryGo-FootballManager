@@ -25,13 +25,17 @@ npm run audit:hg-football      # data/hgFootball/ historical formation module
 npm run audit:hg-historical-fit
 npm run audit:hg-coach-context
 
+# UI-/flyt-vakter (statisk, leser index.html + src/app.js, also run in CI)
+npm run check:dom-ids          # querySelector("#id")-oppslag finnes i index.html
+npm run audit:flow             # hele spilløkka (start → mini-sesong) er wiret
+
 # Simulations (exercise the live JS engines end-to-end, no DOM/localStorage)
 npm run sim:matchday           # matchday session loop (football-matchday-engine.js)
 npm run sim:mini-season        # mini-season loop
 npm run sim:training-week      # weekly training focus
 ```
 
-Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script. **CI only runs `typecheck`, `audit:knowledge` and `build`** (`.github/workflows/pages.yml`), so the other scripts must be run manually.
+Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script. **CI runs `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow` and `build`** (`.github/workflows/pages.yml`), so the other scripts must be run manually.
 
 ### Running the app
 
