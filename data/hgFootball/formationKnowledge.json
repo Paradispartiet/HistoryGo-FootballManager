@@ -10,7 +10,29 @@
     "tacticalRisks": "Vanlige fallgruver – når og hvorfor systemet feiler.",
     "parameterProfile": "Systemets posisjon på taktiske akser (vocab.parameterAxes). Brukes for matchup-/parameterlogikk.",
     "trainingLinks": "Treningsbadge-familier (football_training_badges.json) som støtter systemet.",
-    "doc": "Dyp dokumentasjonsfil for læring/analyse (docs/hgFootball/formations/)."
+    "doc": "Dyp dokumentasjonsfil for læring/analyse (docs/hgFootball/formations/).",
+    "displayName": "Lesbart formasjonsnavn fra formasjonsbiblioteket.",
+    "era": "Historisk periode/epoke der systemet hører hjemme.",
+    "tacticalSchool": "Taktisk skole/tradisjon.",
+    "baseShape": "Grunnform.",
+    "inPossessionShape": "Form i etablert angrep.",
+    "outOfPossessionShape": "Form uten ball.",
+    "pressShape": "Pressform.",
+    "lowBlockShape": "Lav blokk.",
+    "corePrinciple": "Kort samlet systemprinsipp.",
+    "roleRequirements": "Nøkkelroller som må fungere.",
+    "strengths": "Systemets viktigste fordeler.",
+    "weaknesses": "Systemets viktigste sårbarheter.",
+    "idealPlayerTypes": "Spillertyper systemet løfter.",
+    "dangerousIf": "Når systemet blir farlig.",
+    "vulnerableIf": "Når systemet blir sårbart.",
+    "worksWellAgainst": "Motstanderstiler formasjonen fungerer mot.",
+    "strugglesAgainst": "Motstanderstiler formasjonen sliter mot.",
+    "historicalExamples": "Historiske eksempler/koblinger.",
+    "learningPoints": "Pedagogiske poeng for manageren.",
+    "managerHints": "Praktiske managerhint.",
+    "relatedOpponentArchetypes": "Historiske motstanderprofiler som bruker/illustrerer systemet.",
+    "matchupSignals": "Lette data-/tekstsignaler for matchup og fremtidig forklaring."
   },
   "vocab": {
     "opponentStyles": [
@@ -32,32 +54,517 @@
       "two_striker_press"
     ],
     "parameterAxes": {
-      "pressHeight": ["low", "medium", "high"],
-      "defensiveLine": ["deep", "medium", "high"],
-      "width": ["narrow", "balanced", "wide"],
-      "possession": ["direct", "balanced", "patient"],
-      "tempo": ["low", "medium", "high"],
-      "transition": ["low", "medium", "high"],
-      "restDefence": ["weak", "medium", "strong"],
-      "pressingScheme": ["zonal", "mixed", "man_oriented"],
-      "risk": ["low", "medium", "high"]
+      "pressHeight": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "defensiveLine": [
+        "deep",
+        "medium",
+        "high"
+      ],
+      "width": [
+        "narrow",
+        "balanced",
+        "wide"
+      ],
+      "possession": [
+        "direct",
+        "balanced",
+        "patient"
+      ],
+      "tempo": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "transition": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "restDefence": [
+        "weak",
+        "medium",
+        "strong"
+      ],
+      "pressingScheme": [
+        "zonal",
+        "mixed",
+        "man_oriented"
+      ],
+      "risk": [
+        "low",
+        "medium",
+        "high"
+      ]
     }
   },
   "knowledge": [
     {
+      "formationId": "rush_118",
+      "displayName": "Pre-modern Rush 1-1-8",
+      "era": "1860–1875",
+      "tacticalSchool": "Pre-modern English public school football",
+      "baseShape": "1-1-8",
+      "inPossessionShape": "1-1-8",
+      "outOfPossessionShape": "1-1-8",
+      "pressShape": "1-1-8",
+      "lowBlockShape": "2-2-6",
+      "summary": "Pre-modern Rush 1-1-8 er et 1860–1875-system fra Pre-modern English public school football der ekstremt angrep og nesten alle foran ball gjør tallformen spillbar.",
+      "corePrinciple": "ekstremt angrep; nesten alle foran ball; individuell dribling; ingen moderne defensiv struktur",
+      "requiredConditions": [
+        "Roller som matcher shot_stopper, dribbler_forward, outside_forward",
+        "Faseløp fra 1-1-8 til 1-1-8 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "shot_stopper",
+        "dribbler_forward",
+        "outside_forward"
+      ],
+      "strengths": [
+        "massivt offensivt trykk",
+        "mange angripere i siste tredjedel"
+      ],
+      "weaknesses": [
+        "ekstremt sårbar mot kontring",
+        "ingen restforsvar",
+        "ingen sentral kontroll"
+      ],
+      "idealPlayerTypes": [
+        "dribbler_forward",
+        "outside_forward",
+        "inside_forward",
+        "channel_runner"
+      ],
+      "dangerousIf": [
+        "Farlig når ekstremt angrep får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "ekstremt sårbar mot kontring",
+        "ingen restforsvar",
+        "ingen sentral kontroll"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "ekstremt sårbar mot kontring gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "tidlig britisk skolefotball",
+        "fotballens første tiår"
+      ],
+      "learningPoints": [
+        "Les 1-1-8 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 1-1-8 med ball og 1-1-8 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 1-1-8 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "fotballens_opprinnelse",
+          "theme": "tidlig britisk fotball"
+        },
+        {
+          "sourceType": "groundhopper_place",
+          "ref": "victorian_ground",
+          "theme": "viktoriansk bane"
+        }
+      ],
+      "matchupSignals": [
+        "deep linje + low press",
+        "weak restforsvar",
+        "wide bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "deep",
+        "width": "wide",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "weak",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/rush_118.md"
+    },
+    {
+      "formationId": "rush_127",
+      "displayName": "Seven Forwards 1-2-7",
+      "era": "1865–1878",
+      "tacticalSchool": "Pre-modern English football",
+      "baseShape": "1-2-7",
+      "inPossessionShape": "1-2-7",
+      "outOfPossessionShape": "1-2-7",
+      "pressShape": "1-2-7",
+      "lowBlockShape": "2-3-5",
+      "summary": "Seven Forwards 1-2-7 er et 1865–1878-system fra Pre-modern English football der mange løp fremover og to bak som eneste balanse gjør tallformen spillbar.",
+      "corePrinciple": "mange løp fremover; to bak som eneste balanse; individuelt angrep",
+      "requiredConditions": [
+        "Roller som matcher shot_stopper, outside_forward, dribbler_forward",
+        "Faseløp fra 1-2-7 til 1-2-7 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "shot_stopper",
+        "outside_forward",
+        "dribbler_forward"
+      ],
+      "strengths": [
+        "mange spillere i boksen",
+        "konstant angrepspress"
+      ],
+      "weaknesses": [
+        "svak midtbane",
+        "svakt restforsvar",
+        "lett å kontre"
+      ],
+      "idealPlayerTypes": [
+        "dribbler_forward",
+        "outside_forward",
+        "inside_forward",
+        "poacher"
+      ],
+      "dangerousIf": [
+        "Farlig når mange løp fremover får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "svak midtbane",
+        "svakt restforsvar",
+        "lett å kontre"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "svak midtbane gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "tidlig britisk klubbfotball"
+      ],
+      "learningPoints": [
+        "Les 1-2-7 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 1-2-7 med ball og 1-2-7 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 1-2-7 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "tidlig_angrepsfotball",
+          "theme": "tidlig fotball"
+        }
+      ],
+      "matchupSignals": [
+        "deep linje + low press",
+        "weak restforsvar",
+        "wide bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "deep",
+        "width": "wide",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "weak",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/rush_127.md"
+    },
+    {
+      "formationId": "early_balance_226",
+      "displayName": "Early Balance 2-2-6",
+      "era": "1870–1883",
+      "tacticalSchool": "Transitional pre-pyramid football",
+      "baseShape": "2-2-6",
+      "inPossessionShape": "2-2-6",
+      "outOfPossessionShape": "2-2-6",
+      "pressShape": "2-2-6",
+      "lowBlockShape": "2-3-5",
+      "summary": "Early Balance 2-2-6 er et 1870–1883-system fra Transitional pre-pyramid football der tidlig forsøk på balanse og to bak og to i mellomrommet gjør tallformen spillbar.",
+      "corePrinciple": "tidlig forsøk på balanse; to bak og to i mellomrommet; fortsatt mange foran",
+      "requiredConditions": [
+        "Roller som matcher shot_stopper, traditional_full_back, outside_forward",
+        "Faseløp fra 2-2-6 til 2-2-6 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "shot_stopper",
+        "traditional_full_back",
+        "outside_forward"
+      ],
+      "strengths": [
+        "mer struktur enn 1-1-8 og 1-2-7",
+        "begynnende lagskjelett"
+      ],
+      "weaknesses": [
+        "fortsatt svært åpen",
+        "lite sentral kontroll"
+      ],
+      "idealPlayerTypes": [
+        "outside_forward",
+        "inside_forward",
+        "dribbler_forward",
+        "centre_half_historical"
+      ],
+      "dangerousIf": [
+        "Farlig når tidlig forsøk på balanse får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "fortsatt svært åpen",
+        "lite sentral kontroll"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "fortsatt svært åpen gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "overgangsfotball mot pyramiden"
+      ],
+      "learningPoints": [
+        "Les 2-2-6 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-2-6 med ball og 2-2-6 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 2-2-6 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "vei_mot_pyramiden",
+          "theme": "tidlig balanse"
+        }
+      ],
+      "matchupSignals": [
+        "deep linje + low press",
+        "weak restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "deep",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "weak",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/early_balance_226.md"
+    },
+    {
       "formationId": "pyramid_235",
+      "displayName": "Pyramid 2-3-5",
+      "era": "1883–1925",
+      "tacticalSchool": "Classic British pyramid",
+      "baseShape": "2-3-5",
+      "inPossessionShape": "2-3-5",
+      "outOfPossessionShape": "2-3-5",
+      "pressShape": "2-3-5",
+      "lowBlockShape": "2-3-5",
       "summary": "Den klassiske pyramiden: to backer, tre halfbacks og fem angripere. Det første systemet som balanserte angrep og forsvar etter rush-fotballen.",
+      "corePrinciple": "fem angripere; half-backs som binder laget; bredde fra outside-forwards; center-half som dirigent",
       "requiredConditions": [
         "En dirigerende center-half som binder forsvar og angrep",
         "Ekte ytterspillere som holder bredde",
         "Inside-forwards som kombinerer sentralt"
       ],
-      "strongAgainst": ["deep_low_block", "passive_mid_block", "target_man_direct"],
-      "weakAgainst": ["direct_counter", "fast_transition", "high_press"],
+      "roleRequirements": [
+        "traditional_full_back",
+        "centre_half_historical",
+        "wing_half_historical",
+        "outside_right",
+        "outside_left",
+        "inside_right",
+        "inside_left",
+        "centre_forward"
+      ],
+      "strengths": [
+        "bred front",
+        "mange angrepsrelasjoner",
+        "tydelig lagskjelett"
+      ],
+      "weaknesses": [
+        "sårbar bak half-back-linjen",
+        "kun to ekte forsvarere"
+      ],
+      "idealPlayerTypes": [
+        "outside_forward",
+        "inside_right",
+        "inside_left",
+        "wing_half_historical",
+        "centre_half_historical",
+        "outside_right",
+        "outside_left"
+      ],
+      "dangerousIf": [
+        "Farlig når fem angripere får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Fem faste angripere gir tynt restforsvar ved balltap",
+        "Center-half overbelastes hvis han ikke får støtte",
+        "Mangler moderne presstruktur mot raske omstillinger"
+      ],
+      "worksWellAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "direct_counter",
+        "fast_transition",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "direct_counter",
+        "fast_transition",
+        "high_press"
+      ],
       "tacticalRisks": [
         "Fem faste angripere gir tynt restforsvar ved balltap",
         "Center-half overbelastes hvis han ikke får støtte",
         "Mangler moderne presstruktur mot raske omstillinger"
+      ],
+      "historicalExamples": [
+        "tidlige engelske og skotske klubber",
+        "fotball før offsidereformen"
+      ],
+      "learningPoints": [
+        "Les 2-3-5 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-5 med ball og 2-3-5 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 2-3-5 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "deepdale",
+          "theme": "tidlige britiske klubber"
+        },
+        {
+          "sourceType": "football_story",
+          "ref": "pyramiden_oppstaar",
+          "theme": "fotballhistorie"
+        },
+        {
+          "sourceType": "groundhopper_place",
+          "ref": "victorian_ground",
+          "theme": "viktoriansk bane"
+        }
+      ],
+      "matchupSignals": [
+        "deep linje + low press",
+        "weak restforsvar",
+        "wide bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "medium",
@@ -70,23 +577,366 @@
         "pressingScheme": "man_oriented",
         "risk": "high"
       },
-      "trainingLinks": ["attacking_width", "fullback_winger_relation", "midfield_triangle", "rest_defense"],
+      "trainingLinks": [
+        "attacking_width",
+        "fullback_winger_relation",
+        "midfield_triangle",
+        "rest_defense"
+      ],
       "doc": "docs/hgFootball/formations/pyramid_235.md"
     },
     {
+      "formationId": "scottish_combination_235",
+      "displayName": "Scottish Combination 2-3-5",
+      "era": "1880–1910",
+      "tacticalSchool": "Scottish combination school",
+      "baseShape": "2-3-5",
+      "inPossessionShape": "2-3-5",
+      "outOfPossessionShape": "2-3-5",
+      "pressShape": "2-3-5",
+      "lowBlockShape": "2-3-5",
+      "summary": "Scottish Combination 2-3-5 er et 1880–1910-system fra Scottish combination school der pasningsspill og kombinasjoner gjør tallformen spillbar.",
+      "corePrinciple": "pasningsspill; kombinasjoner; kollektivt angrep; bevegelse uten ball",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, centre_half_historical, wing_half_historical",
+        "Faseløp fra 2-3-5 til 2-3-5 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "centre_half_historical",
+        "wing_half_historical",
+        "inside_right",
+        "inside_left",
+        "outside_right",
+        "outside_left",
+        "centre_forward"
+      ],
+      "strengths": [
+        "teknisk samspill",
+        "mindre soloavhengig",
+        "kontroll gjennom pasninger"
+      ],
+      "weaknesses": [
+        "krever pasningssterke spillere",
+        "faller sammen uten teknisk kvalitet"
+      ],
+      "idealPlayerTypes": [
+        "inside_right",
+        "inside_left",
+        "wing_half_historical",
+        "outside_forward",
+        "deep_lying_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når pasningsspill får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever pasningssterke spillere",
+        "faller sammen uten teknisk kvalitet"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever pasningssterke spillere gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Queen's Park",
+        "tidlig skotsk fotball"
+      ],
+      "learningPoints": [
+        "Les 2-3-5 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-5 med ball og 2-3-5 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 2-3-5 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "hampden_park",
+          "theme": "skotsk fotball"
+        },
+        {
+          "sourceType": "football_story",
+          "ref": "kombinasjonsspillet",
+          "theme": "pasningskultur"
+        }
+      ],
+      "matchupSignals": [
+        "deep linje + low press",
+        "weak restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "deep",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "weak",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/scottish_combination_235.md"
+    },
+    {
+      "formationId": "direct_english_235",
+      "displayName": "Direct English Pyramid",
+      "era": "1885–1925",
+      "tacticalSchool": "Direct English pyramid",
+      "baseShape": "2-3-5",
+      "inPossessionShape": "2-3-5",
+      "outOfPossessionShape": "2-3-5",
+      "pressShape": "2-3-5",
+      "lowBlockShape": "2-3-5",
+      "summary": "Direct English Pyramid er et 1885–1925-system fra Direct English pyramid der direkte spill og innlegg gjør tallformen spillbar.",
+      "corePrinciple": "direkte spill; innlegg; dueller; andreballer",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, centre_half_historical, wing_half_historical",
+        "Faseløp fra 2-3-5 til 2-3-5 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "centre_half_historical",
+        "wing_half_historical",
+        "outside_right",
+        "outside_left",
+        "centre_forward"
+      ],
+      "strengths": [
+        "fysisk trykk",
+        "enkel og robust",
+        "sterk i lufta"
+      ],
+      "weaknesses": [
+        "kan bli forutsigbar mot organisert forsvar",
+        "lav kreativitet"
+      ],
+      "idealPlayerTypes": [
+        "target_forward",
+        "outside_forward",
+        "outside_right",
+        "outside_left",
+        "stopper_centre_back"
+      ],
+      "dangerousIf": [
+        "Farlig når direkte spill får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "kan bli forutsigbar mot organisert forsvar",
+        "lav kreativitet"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "kan bli forutsigbar mot organisert forsvar gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "direkte engelsk klubbfotball"
+      ],
+      "learningPoints": [
+        "Les 2-3-5 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-5 med ball og 2-3-5 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 2-3-5 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "historic_british_club",
+          "theme": "engelsk direkte fotball"
+        },
+        {
+          "sourceType": "football_story",
+          "ref": "innlegg_og_dueller",
+          "theme": "direkte spill"
+        }
+      ],
+      "matchupSignals": [
+        "deep linje + medium press",
+        "weak restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "deep",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "weak",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/direct_english_235.md"
+    },
+    {
       "formationId": "metodo_2323",
+      "displayName": "Metodo 2-3-2-3",
+      "era": "1925–1940",
+      "tacticalSchool": "Italian Metodo / Vittorio Pozzo-inspired",
+      "baseShape": "2-3-2-3",
+      "inPossessionShape": "2-3-2-3",
+      "outOfPossessionShape": "2-3-2-3",
+      "pressShape": "2-3-2-3",
+      "lowBlockShape": "2-3-3-2",
       "summary": "Italiensk metodo: en mer kontrollert pyramide med to mediani som faller inn og to mezzeala. Bygget for balanse og kontring.",
+      "corePrinciple": "inside-forwards trekkes lavere; bedre midtbanebalanse; kontring fra kontroll",
       "requiredConditions": [
         "To mediani som kan dekke bredt og falle inn i forsvar",
         "En sentral skaper bak spissene",
         "Disiplin i overgang fra angrep til forsvar"
       ],
-      "strongAgainst": ["high_press", "wide_overload", "possession_positional"],
-      "weakAgainst": ["deep_low_block", "compact_532"],
+      "roleRequirements": [
+        "traditional_full_back",
+        "centre_half_historical",
+        "wing_half_historical",
+        "metodista",
+        "outside_right",
+        "outside_left",
+        "centre_forward"
+      ],
+      "strengths": [
+        "mer kontroll enn 2-3-5",
+        "balanse mellom angrep og forsvar",
+        "kontringsfarlig"
+      ],
+      "weaknesses": [
+        "kan miste femmannsfrontens trykk",
+        "krever intelligente indre"
+      ],
+      "idealPlayerTypes": [
+        "metodista",
+        "inside_right",
+        "inside_left",
+        "wing_half_historical",
+        "outside_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når inside-forwards trekkes lavere får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Blir passiv mot dypt forsvarende lag",
+        "Krever stor løpskapasitet hos mediani",
+        "Kontringsavhengig – sliter når den må skape selv mot lavblokk"
+      ],
+      "worksWellAgainst": [
+        "high_press",
+        "wide_overload",
+        "possession_positional"
+      ],
+      "strugglesAgainst": [
+        "deep_low_block",
+        "compact_532"
+      ],
+      "strongAgainst": [
+        "high_press",
+        "wide_overload",
+        "possession_positional"
+      ],
+      "weakAgainst": [
+        "deep_low_block",
+        "compact_532"
+      ],
       "tacticalRisks": [
         "Blir passiv mot dypt forsvarende lag",
         "Krever stor løpskapasitet hos mediani",
         "Kontringsavhengig – sliter når den må skape selv mot lavblokk"
+      ],
+      "historicalExamples": [
+        "Italia 1934 og 1938 (Pozzo)"
+      ],
+      "learningPoints": [
+        "Les 2-3-2-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-2-3 med ball og 2-3-2-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 2-3-2-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "italian_metodo_club",
+          "theme": "italiensk metodo"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "pozzo_style_manager",
+          "theme": "Pozzo-skolen"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "medium",
@@ -99,23 +949,374 @@
         "pressingScheme": "mixed",
         "risk": "medium"
       },
-      "trainingLinks": ["match_discipline", "team_stamina", "rest_defense", "midfield_triangle"],
+      "trainingLinks": [
+        "match_discipline",
+        "team_stamina",
+        "rest_defense",
+        "midfield_triangle"
+      ],
       "doc": "docs/hgFootball/formations/metodo_2323.md"
     },
     {
+      "formationId": "danubian_2323",
+      "displayName": "Danubian School 2-3-2-3",
+      "era": "1925–1940",
+      "tacticalSchool": "Danubian school (Vienna/Budapest/Prague)",
+      "baseShape": "2-3-2-3",
+      "inPossessionShape": "2-3-2-3",
+      "outOfPossessionShape": "2-3-2-3",
+      "pressShape": "2-3-2-3",
+      "lowBlockShape": "2-3-3-2",
+      "summary": "Danubian School 2-3-2-3 er et 1925–1940-system fra Danubian school (Vienna/Budapest/Prague) der teknikk og kombinasjon gjør tallformen spillbar.",
+      "corePrinciple": "teknikk; kombinasjon; flyt; rom mellom ledd",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, centre_half_historical, wing_half_historical",
+        "Faseløp fra 2-3-2-3 til 2-3-2-3 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "centre_half_historical",
+        "wing_half_historical",
+        "metodista",
+        "deep_lying_forward",
+        "outside_right",
+        "outside_left"
+      ],
+      "strengths": [
+        "kreativitet",
+        "pasningsspill",
+        "flyt mellom ledd"
+      ],
+      "weaknesses": [
+        "krever høy teknisk kvalitet",
+        "sårbar uten forståelse"
+      ],
+      "idealPlayerTypes": [
+        "metodista",
+        "deep_lying_forward",
+        "inside_right",
+        "inside_left",
+        "deep_lying_playmaker"
+      ],
+      "dangerousIf": [
+        "Farlig når teknikk får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever høy teknisk kvalitet",
+        "sårbar uten forståelse"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever høy teknisk kvalitet gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Wunderteam Østerrike",
+        "tidlig ungarsk og tsjekkisk fotball"
+      ],
+      "learningPoints": [
+        "Les 2-3-2-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-2-3 med ball og 2-3-2-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 2-3-2-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "donau_skolen",
+          "theme": "sentraleuropeisk fotball"
+        },
+        {
+          "sourceType": "sport_place",
+          "ref": "vienna_football_place",
+          "theme": "Wien-fotball"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + low press",
+        "medium restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/danubian_2323.md"
+    },
+    {
+      "formationId": "early_false_nine_235",
+      "displayName": "Early Withdrawn Centre-Forward",
+      "era": "1930–1945",
+      "tacticalSchool": "Central European withdrawn-forward experiments",
+      "baseShape": "2-3-5",
+      "inPossessionShape": "2-3-2-3",
+      "outOfPossessionShape": "2-3-5",
+      "pressShape": "2-3-5",
+      "lowBlockShape": "2-3-3-2",
+      "summary": "Early Withdrawn Centre-Forward er et 1930–1945-system fra Central European withdrawn-forward experiments der center-forward trekker ned og inside-forwards angriper rom gjør tallformen spillbar.",
+      "corePrinciple": "center-forward trekker ned; inside-forwards angriper rom; forvirre mannmarkering",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, centre_half_historical, wing_half_historical",
+        "Faseløp fra 2-3-2-3 til 2-3-5 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "centre_half_historical",
+        "wing_half_historical",
+        "withdrawn_centre_forward",
+        "inside_right",
+        "inside_left"
+      ],
+      "strengths": [
+        "skaper forvirring i mannorienterte forsvar",
+        "åpner rom for indreløp"
+      ],
+      "weaknesses": [
+        "spissrollen må være ekstremt intelligent",
+        "faller sammen uten koordinerte løp"
+      ],
+      "idealPlayerTypes": [
+        "withdrawn_centre_forward",
+        "false_nine",
+        "inside_right",
+        "inside_left"
+      ],
+      "dangerousIf": [
+        "Farlig når center-forward trekker ned får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "spissrollen må være ekstremt intelligent",
+        "faller sammen uten koordinerte løp"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "spissrollen må være ekstremt intelligent gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Matthias Sindelar (Østerrike)",
+        "tidlige falsk nier-eksperimenter"
+      ],
+      "learningPoints": [
+        "Les 2-3-5 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-2-3 med ball og 2-3-5 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 2-3-5 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "false_nine_history",
+          "theme": "falsk nier-historie"
+        },
+        {
+          "sourceType": "collected_player",
+          "ref": "withdrawn_forward_legend",
+          "theme": "dyp nier"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + low press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/early_false_nine_235.md"
+    },
+    {
       "formationId": "wm_3223",
+      "displayName": "WM 3-2-2-3",
+      "era": "1925–1955",
+      "tacticalSchool": "Chapman / Arsenal / post-offside reform",
+      "baseShape": "3-2-2-3",
+      "inPossessionShape": "3-2-2-3",
+      "outOfPossessionShape": "3-2-2-3",
+      "pressShape": "3-2-2-3",
+      "lowBlockShape": "3-4-3",
       "summary": "Chapmans WM: tre backer, to half-backs, to inside-forwards og tre fremst. Mannorientert mellomkrigsfotball med klar struktur.",
+      "corePrinciple": "center-half ned i forsvar; inside-forwards som bindeledd; bedre defensiv struktur; mannorientering",
       "requiredConditions": [
         "En stopper-center-half som vokter den sentrale spissen",
         "To skapende inside-forwards i halvrommene",
         "Ytterspillere som strekker forsvaret"
       ],
-      "strongAgainst": ["target_man_direct", "narrow_442", "deep_low_block"],
-      "weakAgainst": ["possession_positional", "switching_play", "fast_runners_in_behind"],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "half_back",
+        "inside_right",
+        "inside_left",
+        "outside_right",
+        "outside_left",
+        "centre_forward"
+      ],
+      "strengths": [
+        "slår naiv 2-3-5",
+        "tydelige roller",
+        "bedre balanse"
+      ],
+      "weaknesses": [
+        "kan bli stiv mot flytende systemer",
+        "mannorientering kan utnyttes"
+      ],
+      "idealPlayerTypes": [
+        "stopper_centre_back",
+        "half_back",
+        "inside_forward",
+        "inside_right",
+        "inside_left",
+        "outside_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når center-half ned i forsvar får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Mannorientering brytes av rotasjoner og tredjemannsløp",
+        "Rom mellom backer og half-backs mot sideskift",
+        "Inside-forwards blir isolert uten støtte i halvrommet"
+      ],
+      "worksWellAgainst": [
+        "target_man_direct",
+        "narrow_442",
+        "deep_low_block"
+      ],
+      "strugglesAgainst": [
+        "possession_positional",
+        "switching_play",
+        "fast_runners_in_behind"
+      ],
+      "strongAgainst": [
+        "target_man_direct",
+        "narrow_442",
+        "deep_low_block"
+      ],
+      "weakAgainst": [
+        "possession_positional",
+        "switching_play",
+        "fast_runners_in_behind"
+      ],
       "tacticalRisks": [
         "Mannorientering brytes av rotasjoner og tredjemannsløp",
         "Rom mellom backer og half-backs mot sideskift",
         "Inside-forwards blir isolert uten støtte i halvrommet"
+      ],
+      "historicalExamples": [
+        "Arsenal under Herbert Chapman",
+        "engelsk fotball 1930-tallet"
+      ],
+      "learningPoints": [
+        "Les 3-2-2-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-2-3 med ball og 3-2-2-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-2-2-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "arsenal",
+          "theme": "Arsenal"
+        },
+        {
+          "sourceType": "football_stadium",
+          "ref": "highbury",
+          "theme": "Highbury"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "herbert_chapman",
+          "theme": "Herbert Chapman"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "medium",
@@ -128,23 +1329,484 @@
         "pressingScheme": "man_oriented",
         "risk": "medium"
       },
-      "trainingLinks": ["centre_back_pair", "striker_ten_relation", "attacking_width", "match_discipline"],
+      "trainingLinks": [
+        "centre_back_pair",
+        "striker_ten_relation",
+        "attacking_width",
+        "match_discipline"
+      ],
       "doc": "docs/hgFootball/formations/wm_3223.md"
     },
     {
+      "formationId": "wm_counter_3223",
+      "displayName": "Counter-attacking WM",
+      "era": "1930–1955",
+      "tacticalSchool": "Counter-attacking WM",
+      "baseShape": "3-2-2-3",
+      "inPossessionShape": "3-2-2-3",
+      "outOfPossessionShape": "3-4-3",
+      "pressShape": "3-2-2-3",
+      "lowBlockShape": "3-4-3",
+      "summary": "Counter-attacking WM er et 1930–1955-system fra Counter-attacking WM der lavere forsvar og rask overgang gjør tallformen spillbar.",
+      "corePrinciple": "lavere forsvar; rask overgang; direkte angrep",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, stopper_centre_back, half_back",
+        "Faseløp fra 3-2-2-3 til 3-4-3 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "half_back",
+        "inside_right",
+        "inside_left",
+        "channel_runner"
+      ],
+      "strengths": [
+        "overgangskraft",
+        "farlig i kontring",
+        "solid bakover"
+      ],
+      "weaknesses": [
+        "kan tape ballkontroll",
+        "avhengig av effektive overganger"
+      ],
+      "idealPlayerTypes": [
+        "channel_runner",
+        "stopper_centre_back",
+        "half_back",
+        "inside_forward",
+        "outside_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når lavere forsvar får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "kan tape ballkontroll",
+        "avhengig av effektive overganger"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "kan tape ballkontroll gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "kontringsbaserte WM-lag"
+      ],
+      "learningPoints": [
+        "Les 3-2-2-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-2-3 med ball og 3-4-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-2-2-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "wm_kontring",
+          "theme": "WM-kontring"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "high",
+        "width": "balanced",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "man_oriented",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/wm_counter_3223.md"
+    },
+    {
+      "formationId": "wm_midfield_variant_3232",
+      "displayName": "WM Midfield Variant 3-2-3-2",
+      "era": "1935–1955",
+      "tacticalSchool": "WM midfield variant",
+      "baseShape": "3-2-3-2",
+      "inPossessionShape": "3-2-3-2",
+      "outOfPossessionShape": "3-2-3-2",
+      "pressShape": "3-2-3-2",
+      "lowBlockShape": "3-4-1-2",
+      "summary": "WM Midfield Variant 3-2-3-2 er et 1935–1955-system fra WM midfield variant der mer midtbanevekt og to spisser gjør tallformen spillbar.",
+      "corePrinciple": "mer midtbanevekt; to spisser; kontroll sentralt",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, stopper_centre_back, half_back",
+        "Faseløp fra 3-2-3-2 til 3-2-3-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "half_back",
+        "metodista",
+        "centre_forward"
+      ],
+      "strengths": [
+        "bedre kontroll sentralt",
+        "tett midtbane"
+      ],
+      "weaknesses": [
+        "mindre naturlig bredde",
+        "kan bli trang"
+      ],
+      "idealPlayerTypes": [
+        "metodista",
+        "half_back",
+        "inside_forward",
+        "second_striker"
+      ],
+      "dangerousIf": [
+        "Farlig når mer midtbanevekt får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "mindre naturlig bredde",
+        "kan bli trang"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "mindre naturlig bredde gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "midtbaneorienterte WM-lag"
+      ],
+      "learningPoints": [
+        "Les 3-2-3-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-3-2 med ball og 3-2-3-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-2-3-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "wm_midtbane",
+          "theme": "WM-varianter"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "patient",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "man_oriented",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/wm_midfield_variant_3232.md"
+    },
+    {
+      "formationId": "hungarian_mm_3232",
+      "displayName": "Hungarian MM / Deep Centre-Forward",
+      "era": "1950–1956",
+      "tacticalSchool": "Hungarian school",
+      "baseShape": "3-2-3-2",
+      "inPossessionShape": "3-2-3-2",
+      "outOfPossessionShape": "3-4-3",
+      "pressShape": "3-2-3-2",
+      "lowBlockShape": "3-4-1-2",
+      "summary": "Hungarian MM / Deep Centre-Forward er et 1950–1956-system fra Hungarian school der tilbaketrukket center-forward og flytende angrep gjør tallformen spillbar.",
+      "corePrinciple": "tilbaketrukket center-forward; flytende angrep; rom bak stoppere",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, stopper_centre_back, half_back",
+        "Faseløp fra 3-2-3-2 til 3-4-3 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "half_back",
+        "withdrawn_centre_forward",
+        "inside_right",
+        "inside_left"
+      ],
+      "strengths": [
+        "bryter mannorientering",
+        "skaper kaos i forsvarslinjer",
+        "flytende front"
+      ],
+      "weaknesses": [
+        "krever falsk nier-type",
+        "avhengig av koordinerte løp"
+      ],
+      "idealPlayerTypes": [
+        "withdrawn_centre_forward",
+        "false_nine",
+        "inside_forward",
+        "deep_lying_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når tilbaketrukket center-forward får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever falsk nier-type",
+        "avhengig av koordinerte løp"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever falsk nier-type gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Ungarn 1953 (Wembley 6-3)",
+        "Hidegkuti som dyp nier"
+      ],
+      "learningPoints": [
+        "Les 3-2-3-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-3-2 med ball og 3-4-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-2-3-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "hungary_1953_mighty_magyars"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_player",
+          "ref": "hidegkuti_type",
+          "theme": "dyp nier"
+        },
+        {
+          "sourceType": "football_story",
+          "ref": "ungarn_1953",
+          "theme": "Aranycsapat"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "high",
+        "width": "balanced",
+        "possession": "patient",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/hungarian_mm_3232.md"
+    },
+    {
       "formationId": "brazil_424",
+      "displayName": "Brazilian 4-2-4",
+      "era": "1958–1962",
+      "tacticalSchool": "Brazilian 4-2-4",
+      "baseShape": "4-2-4",
+      "inPossessionShape": "4-2-4",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-2-4",
+      "lowBlockShape": "4-4-2",
       "summary": "Brasiliansk 4-2-4 fra 1958: firebackslinje, to koblende midtbanespillere og fire angripere. Broen mellom WM og moderne firebacklinje.",
+      "corePrinciple": "fire bak; fire angripere; teknisk bredde; individuell kvalitet",
       "requiredConditions": [
         "To midtbanespillere som dekker hele bredden mellom leddene",
         "Tekniske kantspillere som både skaper og faller tilbake",
         "Backer som forsvarer 1-mot-1"
       ],
-      "strongAgainst": ["narrow_442", "passive_mid_block", "target_man_direct"],
-      "weakAgainst": ["high_press", "aggressive_man_press", "fast_transition"],
+      "roleRequirements": [
+        "overlapping_full_back",
+        "stopper_centre_back",
+        "ball_playing_centre_back",
+        "box_to_box_midfielder",
+        "classic_winger",
+        "centre_forward"
+      ],
+      "strengths": [
+        "sterk angrepsfront",
+        "bedre forsvarsbase enn pyramide-arv",
+        "individuell kvalitet"
+      ],
+      "weaknesses": [
+        "bare to midtbanespillere kan bli overkjørt",
+        "krever arbeidsvillige indre"
+      ],
+      "idealPlayerTypes": [
+        "overlapping_full_back",
+        "classic_winger",
+        "inside_forward",
+        "centre_forward",
+        "box_to_box_midfielder"
+      ],
+      "dangerousIf": [
+        "Farlig når fire bak får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Bare to sentrale midtbanespillere blir overspilt mot tett midtbane",
+        "Store avstander hvis kantene ikke jobber defensivt",
+        "Sårbar i overgang når begge åtterne er høye"
+      ],
+      "worksWellAgainst": [
+        "narrow_442",
+        "passive_mid_block",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "high_press",
+        "aggressive_man_press",
+        "fast_transition"
+      ],
+      "strongAgainst": [
+        "narrow_442",
+        "passive_mid_block",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "high_press",
+        "aggressive_man_press",
+        "fast_transition"
+      ],
       "tacticalRisks": [
         "Bare to sentrale midtbanespillere blir overspilt mot tett midtbane",
         "Store avstander hvis kantene ikke jobber defensivt",
         "Sårbar i overgang når begge åtterne er høye"
+      ],
+      "historicalExamples": [
+        "Brasil VM 1958 og 1962",
+        "Pelé og Garrincha"
+      ],
+      "learningPoints": [
+        "Les 4-2-4 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-2-4 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-2-4 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "brazil_1970_creative_424"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "brazilian_legend_club",
+          "theme": "brasiliansk fotball"
+        },
+        {
+          "sourceType": "football_stadium",
+          "ref": "maracana",
+          "theme": "Maracanã"
+        },
+        {
+          "sourceType": "collected_player",
+          "ref": "pele",
+          "theme": "Brasil 1958"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + medium press",
+        "medium restforsvar",
+        "wide bredde og high overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "medium",
@@ -157,23 +1819,484 @@
         "pressingScheme": "mixed",
         "risk": "medium"
       },
-      "trainingLinks": ["attacking_width", "ball_carrying", "midfield_triangle", "team_speed"],
+      "trainingLinks": [
+        "attacking_width",
+        "ball_carrying",
+        "midfield_triangle",
+        "team_speed"
+      ],
       "doc": "docs/hgFootball/formations/brazil_424.md"
     },
     {
+      "formationId": "early_433",
+      "displayName": "Early 4-3-3",
+      "era": "1960–1970",
+      "tacticalSchool": "Early 4-3-3 (Brazil 1962 evolution)",
+      "baseShape": "4-3-3",
+      "inPossessionShape": "4-3-3",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-3-3",
+      "lowBlockShape": "4-5-1",
+      "summary": "Early 4-3-3 er et 1960–1970-system fra Early 4-3-3 (Brazil 1962 evolution) der en angriper trekkes ned til midtbane og bedre sentral kontroll gjør tallformen spillbar.",
+      "corePrinciple": "en angriper trekkes ned til midtbane; bedre sentral kontroll; balansert front",
+      "requiredConditions": [
+        "Roller som matcher overlapping_full_back, ball_playing_centre_back, stopper_centre_back",
+        "Faseløp fra 4-3-3 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "overlapping_full_back",
+        "ball_playing_centre_back",
+        "stopper_centre_back",
+        "box_to_box_midfielder",
+        "classic_winger",
+        "centre_forward"
+      ],
+      "strengths": [
+        "mer balansert enn 4-2-4",
+        "bedre sentral kontroll"
+      ],
+      "weaknesses": [
+        "mister litt fronttrykk",
+        "krever en arbeidsvillig indreløper"
+      ],
+      "idealPlayerTypes": [
+        "box_to_box_midfielder",
+        "classic_winger",
+        "deep_lying_forward",
+        "centre_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når en angriper trekkes ned til midtbane får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "mister litt fronttrykk",
+        "krever en arbeidsvillig indreløper"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "mister litt fronttrykk gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Brasil 1962-evolusjonen",
+        "tidlig europeisk 4-3-3"
+      ],
+      "learningPoints": [
+        "Les 4-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-3-3 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "fra_424_til_433",
+          "theme": "4-3-3-evolusjon"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/early_433.md"
+    },
+    {
+      "formationId": "verrou_1333",
+      "displayName": "Verrou 1-3-3-3",
+      "era": "1930–1950",
+      "tacticalSchool": "Swiss verrou (Karl Rappan)",
+      "baseShape": "1-3-3-3",
+      "inPossessionShape": "1-3-3-3",
+      "outOfPossessionShape": "5-3-2",
+      "pressShape": "1-3-3-3",
+      "lowBlockShape": "5-3-2",
+      "summary": "Verrou 1-3-3-3 er et 1930–1950-system fra Swiss verrou (Karl Rappan) der lås bak og ekstra sikring gjør tallformen spillbar.",
+      "corePrinciple": "lås bak; ekstra sikring; proto-libero",
+      "requiredConditions": [
+        "Roller som matcher libero_classic, man_marker, tornante",
+        "Faseløp fra 1-3-3-3 til 5-3-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "libero_classic",
+        "man_marker",
+        "tornante",
+        "wing_half_historical"
+      ],
+      "strengths": [
+        "sterk defensiv sikring",
+        "tidlig libero-tanke"
+      ],
+      "weaknesses": [
+        "lavt angrepstrykk",
+        "passivt uten god kontring"
+      ],
+      "idealPlayerTypes": [
+        "libero_classic",
+        "man_marker",
+        "tornante",
+        "metodista"
+      ],
+      "dangerousIf": [
+        "Farlig når lås bak får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "lavt angrepstrykk",
+        "passivt uten god kontring"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "lavt angrepstrykk gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Karl Rappans Sveits",
+        "verrou-tradisjonen"
+      ],
+      "learningPoints": [
+        "Les 1-3-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 1-3-3-3 med ball og 5-3-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 1-3-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_story",
+          "ref": "verrou_rappan",
+          "theme": "sveitsisk verrou"
+        },
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "libero_opprinnelse",
+          "theme": "libero-historie"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + low press",
+        "strong restforsvar",
+        "narrow bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "medium",
+        "width": "narrow",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "low"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/verrou_1333.md"
+    },
+    {
+      "formationId": "catenaccio_1432",
+      "displayName": "Catenaccio 1-4-3-2",
+      "era": "1955–1970",
+      "tacticalSchool": "Italian catenaccio (Herrera)",
+      "baseShape": "1-4-3-2",
+      "inPossessionShape": "1-4-3-2",
+      "outOfPossessionShape": "5-3-2",
+      "pressShape": "5-3-2",
+      "lowBlockShape": "5-3-2",
+      "summary": "Catenaccio 1-4-3-2 er et 1955–1970-system fra Italian catenaccio (Herrera) der libero bak markeringen og mannmarkering gjør tallformen spillbar.",
+      "corePrinciple": "libero bak markeringen; mannmarkering; lav blokk; kontring",
+      "requiredConditions": [
+        "Roller som matcher libero, man_marker, wing_back",
+        "Faseløp fra 1-4-3-2 til 5-3-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "libero",
+        "man_marker",
+        "wing_back",
+        "destroyer",
+        "channel_runner"
+      ],
+      "strengths": [
+        "dreper rom",
+        "beskytter ledelse",
+        "dødelig kontring"
+      ],
+      "weaknesses": [
+        "lav kreativitet hvis kontringene stoppes",
+        "passiv uten balltrussel"
+      ],
+      "idealPlayerTypes": [
+        "libero",
+        "man_marker",
+        "wing_back",
+        "destroyer",
+        "channel_runner",
+        "second_striker"
+      ],
+      "dangerousIf": [
+        "Farlig når libero bak markeringen får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "lav kreativitet hvis kontringene stoppes",
+        "passiv uten balltrussel"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "lav kreativitet hvis kontringene stoppes gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Grande Inter under Helenio Herrera",
+        "italiensk catenaccio"
+      ],
+      "learningPoints": [
+        "Les 1-4-3-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 1-4-3-2 med ball og 5-3-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 1-4-3-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "inter",
+          "theme": "Inter"
+        },
+        {
+          "sourceType": "football_stadium",
+          "ref": "san_siro",
+          "theme": "San Siro"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "helenio_herrera",
+          "theme": "Herrera"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + low press",
+        "strong restforsvar",
+        "balanced bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "high",
+        "width": "balanced",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "strong",
+        "pressingScheme": "man_oriented",
+        "risk": "low"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/catenaccio_1432.md"
+    },
+    {
       "formationId": "catenaccio_532",
+      "displayName": "Catenaccio 5-3-2",
+      "era": "1960–1975",
+      "tacticalSchool": "Italian catenaccio",
+      "baseShape": "5-3-2",
+      "inPossessionShape": "5-3-2",
+      "outOfPossessionShape": "5-3-2",
+      "pressShape": "5-3-2",
+      "lowBlockShape": "5-4-1",
       "summary": "Italiensk catenaccio: en fri libero bak en mannorientert backlinje, kompakt blokk og dødelige kontringer.",
+      "corePrinciple": "libero eller ekstra stopper; kompakt midtbane; to kontringsspisser",
       "requiredConditions": [
         "En ekte libero som leser spillet og sikrer bak linjen",
         "Mannorienterte stoppere på motstanderens angripere",
         "Raske kontringsspisser foran"
       ],
-      "strongAgainst": ["possession_positional", "wide_overload", "high_press"],
-      "weakAgainst": ["deep_low_block", "switching_play", "passive_mid_block"],
+      "roleRequirements": [
+        "libero",
+        "man_marker",
+        "defensive_wing_back",
+        "destroyer",
+        "channel_runner"
+      ],
+      "strengths": [
+        "defensiv kontroll",
+        "vanskelig å bryte ned"
+      ],
+      "weaknesses": [
+        "kan bli passivt",
+        "lite angrepstrykk"
+      ],
+      "idealPlayerTypes": [
+        "libero",
+        "destroyer",
+        "defensive_wing_back",
+        "channel_runner",
+        "poacher"
+      ],
+      "dangerousIf": [
+        "Farlig når libero eller ekstra stopper får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Blir ufarlig og passiv mot lag som ikke vil ha ballen",
+        "Mannorientering kan dras ut av posisjon av bevegelse",
+        "Avhengig av libero – faller sammen uten riktig spillertype"
+      ],
+      "worksWellAgainst": [
+        "possession_positional",
+        "wide_overload",
+        "high_press"
+      ],
+      "strugglesAgainst": [
+        "deep_low_block",
+        "switching_play",
+        "passive_mid_block"
+      ],
+      "strongAgainst": [
+        "possession_positional",
+        "wide_overload",
+        "high_press"
+      ],
+      "weakAgainst": [
+        "deep_low_block",
+        "switching_play",
+        "passive_mid_block"
+      ],
       "tacticalRisks": [
         "Blir ufarlig og passiv mot lag som ikke vil ha ballen",
         "Mannorientering kan dras ut av posisjon av bevegelse",
         "Avhengig av libero – faller sammen uten riktig spillertype"
+      ],
+      "historicalExamples": [
+        "italienske catenaccio-lag"
+      ],
+      "learningPoints": [
+        "Les 5-3-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 5-3-2 med ball og 5-3-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 5-3-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "inter_1960s_catenaccio"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "inter",
+          "theme": "catenaccio"
+        },
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "catenaccio_struktur",
+          "theme": "catenaccio"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + low press",
+        "strong restforsvar",
+        "balanced bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "low",
@@ -186,23 +2309,238 @@
         "pressingScheme": "man_oriented",
         "risk": "low"
       },
-      "trainingLinks": ["low_block", "rest_defense", "centre_back_pair", "match_discipline", "team_speed"],
+      "trainingLinks": [
+        "low_block",
+        "rest_defense",
+        "centre_back_pair",
+        "match_discipline",
+        "team_speed"
+      ],
       "doc": "docs/hgFootball/formations/catenaccio_532.md"
     },
     {
+      "formationId": "low_block_541",
+      "displayName": "Low Block 5-4-1",
+      "era": "1960–2026",
+      "tacticalSchool": "Defensive low block",
+      "baseShape": "5-4-1",
+      "inPossessionShape": "5-4-1",
+      "outOfPossessionShape": "5-4-1",
+      "pressShape": "5-4-1",
+      "lowBlockShape": "5-4-1",
+      "summary": "Low Block 5-4-1 er et 1960–2026-system fra Defensive low block der lav blokk og beskytte boks gjør tallformen spillbar.",
+      "corePrinciple": "lav blokk; beskytte boks; kontring via enslig spiss",
+      "requiredConditions": [
+        "Roller som matcher line_keeper, defensive_wing_back, stopper_centre_back",
+        "Faseløp fra 5-4-1 til 5-4-1 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "line_keeper",
+        "defensive_wing_back",
+        "stopper_centre_back",
+        "destroyer",
+        "target_forward"
+      ],
+      "strengths": [
+        "vanskelig å bryte ned",
+        "trygt mot sterke lag"
+      ],
+      "weaknesses": [
+        "lite ballbesittelse",
+        "få angrep",
+        "passivt"
+      ],
+      "idealPlayerTypes": [
+        "stopper_centre_back",
+        "destroyer",
+        "defensive_wing_back",
+        "target_forward",
+        "channel_runner"
+      ],
+      "dangerousIf": [
+        "Farlig når lav blokk får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "lite ballbesittelse",
+        "få angrep",
+        "passivt"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "lite ballbesittelse gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "underdog-lag mot favoritter",
+        "moderne lav-blokk-defensiv"
+      ],
+      "learningPoints": [
+        "Les 5-4-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 5-4-1 med ball og 5-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 5-4-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "lav_blokk",
+          "theme": "lav blokk"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + low press",
+        "strong restforsvar",
+        "narrow bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "low",
+        "defensiveLine": "medium",
+        "width": "narrow",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "low"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/low_block_541.md"
+    },
+    {
       "formationId": "libero_352",
+      "displayName": "Libero 3-5-2",
+      "era": "1980–1995",
+      "tacticalSchool": "Continental libero / wing-back system",
+      "baseShape": "3-5-2",
+      "inPossessionShape": "3-5-2",
+      "outOfPossessionShape": "5-3-2",
+      "pressShape": "5-3-2",
+      "lowBlockShape": "5-3-2",
       "summary": "Libero-3-5-2: en sweeper bak to stoppere, vingbacker som gir bredde og to spisser. Balanse mellom sikring og bredt angrep.",
+      "corePrinciple": "libero; wingbacks; to spisser; sterk sentral midtbane",
       "requiredConditions": [
         "En ballspillende libero som starter oppspill",
         "Vingbacker med stor løpskapasitet",
         "En balanserende sentral midtbane bak de to spissene"
       ],
-      "strongAgainst": ["narrow_442", "target_man_direct", "two_striker_press"],
-      "weakAgainst": ["wide_overload", "switching_play", "fast_transition"],
+      "roleRequirements": [
+        "libero",
+        "wide_centre_back",
+        "wing_back",
+        "box_to_box_midfielder",
+        "centre_forward"
+      ],
+      "strengths": [
+        "fleksibilitet",
+        "bredde via wingbacks",
+        "offensiv libero"
+      ],
+      "weaknesses": [
+        "krever ekstremt gode wingbacks og libero",
+        "rom hvis wingbacks fanges høyt"
+      ],
+      "idealPlayerTypes": [
+        "libero",
+        "wing_back",
+        "box_to_box_midfielder",
+        "second_striker",
+        "wide_centre_back"
+      ],
+      "dangerousIf": [
+        "Farlig når libero får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Vingbacker høyt samtidig gir kontringsrom i ryggen",
+        "Tre sentralt bak kan bli passive uten oppspillslibero",
+        "Sårbar mot raske sideskift til ledig kant"
+      ],
+      "worksWellAgainst": [
+        "narrow_442",
+        "target_man_direct",
+        "two_striker_press"
+      ],
+      "strugglesAgainst": [
+        "wide_overload",
+        "switching_play",
+        "fast_transition"
+      ],
+      "strongAgainst": [
+        "narrow_442",
+        "target_man_direct",
+        "two_striker_press"
+      ],
+      "weakAgainst": [
+        "wide_overload",
+        "switching_play",
+        "fast_transition"
+      ],
       "tacticalRisks": [
         "Vingbacker høyt samtidig gir kontringsrom i ryggen",
         "Tre sentralt bak kan bli passive uten oppspillslibero",
         "Sårbar mot raske sideskift til ledig kant"
+      ],
+      "historicalExamples": [
+        "tysk og italiensk fotball på 1980-90-tallet",
+        "Beckenbauer-arven"
+      ],
+      "learningPoints": [
+        "Les 3-5-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-5-2 med ball og 5-3-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-5-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "libero_coach",
+          "theme": "libero-kunnskap"
+        },
+        {
+          "sourceType": "football_story",
+          "ref": "libero_aera",
+          "theme": "libero-tradisjon"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "strong restforsvar",
+        "wide bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "medium",
@@ -215,81 +2553,111 @@
         "pressingScheme": "mixed",
         "risk": "medium"
       },
-      "trainingLinks": ["build_from_back", "fullback_winger_relation", "rest_defense", "centre_back_pair"],
+      "trainingLinks": [
+        "build_from_back",
+        "fullback_winger_relation",
+        "rest_defense",
+        "centre_back_pair"
+      ],
       "doc": "docs/hgFootball/formations/libero_352.md"
     },
     {
-      "formationId": "total_433",
-      "summary": "Totalfotballens 4-3-3: posisjonsrotasjon, høy backlinje og kollektivt press. Spillere bytter roller flytende.",
+      "formationId": "defensive_532",
+      "displayName": "Defensive 5-3-2",
+      "era": "1980–2026",
+      "tacticalSchool": "Defensive back-five",
+      "baseShape": "5-3-2",
+      "inPossessionShape": "5-3-2",
+      "outOfPossessionShape": "5-3-2",
+      "pressShape": "5-3-2",
+      "lowBlockShape": "5-4-1",
+      "summary": "Defensive 5-3-2 er et 1980–2026-system fra Defensive back-five der lavere wingbacks og sentral kompakt blokk gjør tallformen spillbar.",
+      "corePrinciple": "lavere wingbacks; sentral kompakt blokk; trygghet",
       "requiredConditions": [
-        "Teknisk sterke spillere som mestrer flere roller",
-        "Høy kollektiv forståelse og rotasjon",
-        "En sweeperkeeper-aktig keeper bak høy linje"
+        "Roller som matcher defensive_wing_back, wide_centre_back, stopper_centre_back",
+        "Faseløp fra 5-3-2 til 5-3-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
       ],
-      "strongAgainst": ["deep_low_block", "passive_mid_block", "narrow_442"],
-      "weakAgainst": ["fast_runners_in_behind", "direct_counter", "fast_transition"],
+      "roleRequirements": [
+        "defensive_wing_back",
+        "wide_centre_back",
+        "stopper_centre_back",
+        "holding_midfielder",
+        "centre_forward"
+      ],
+      "strengths": [
+        "trygghet",
+        "kompakt sentralt",
+        "solid bakover"
+      ],
+      "weaknesses": [
+        "mindre bredde offensivt",
+        "kan bli reaktivt"
+      ],
+      "idealPlayerTypes": [
+        "defensive_wing_back",
+        "stopper_centre_back",
+        "holding_midfielder",
+        "destroyer",
+        "channel_runner"
+      ],
+      "dangerousIf": [
+        "Farlig når lavere wingbacks får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "mindre bredde offensivt",
+        "kan bli reaktivt"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
       "tacticalRisks": [
-        "Høy linje straffes brutalt av bakromsløp",
-        "Rotasjon krever svært høyt teknisk og taktisk nivå",
-        "Stort rom bak ved tap høyt på banen"
+        "mindre bredde offensivt gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
       ],
-      "parameterProfile": {
-        "pressHeight": "high",
-        "defensiveLine": "high",
-        "width": "wide",
-        "possession": "patient",
-        "tempo": "high",
-        "transition": "medium",
-        "restDefence": "medium",
-        "pressingScheme": "zonal",
-        "risk": "high"
-      },
-      "trainingLinks": ["high_press", "build_from_back", "attacking_width", "sweeper_keeper", "midfield_triangle"],
-      "doc": "docs/hgFootball/formations/total_433.md"
-    },
-    {
-      "formationId": "classic_442",
-      "summary": "Klassisk 4-4-2: to faste lag på fire, to spisser og rene kanter. Enkelt, balansert og lett å lære.",
-      "requiredConditions": [
-        "To sentrale midtbanespillere som utfyller hverandre (en boks-til-boks, en holdende)",
-        "Kanter som leverer bredde og innlegg",
-        "Et samspilt spisspar"
+      "historicalExamples": [
+        "defensive treback-lag"
       ],
-      "strongAgainst": ["wide_overload", "three_at_back", "high_press"],
-      "weakAgainst": ["possession_positional", "switching_play", "build_from_back"],
-      "tacticalRisks": [
-        "Flat midtbane overspilles av lag med ekstra sentral mann",
-        "Kanter som ikke faller tilbake gir overtall mot egne backer",
-        "To spisser uten støtte blir isolert mot lavblokk"
+      "learningPoints": [
+        "Les 5-3-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 5-3-2 med ball og 5-3-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
       ],
-      "parameterProfile": {
-        "pressHeight": "medium",
-        "defensiveLine": "medium",
-        "width": "wide",
-        "possession": "balanced",
-        "tempo": "medium",
-        "transition": "medium",
-        "restDefence": "medium",
-        "pressingScheme": "zonal",
-        "risk": "low"
-      },
-      "trainingLinks": ["attacking_width", "striker_ten_relation", "match_discipline", "duel_strength"],
-      "doc": "docs/hgFootball/formations/classic_442.md"
-    },
-    {
-      "formationId": "modern_4231",
-      "summary": "Moderne 4-2-3-1: dobbel pivot, en fri tier og en spiss. Balansert mellom kontroll, sikring og kreativitet.",
-      "requiredConditions": [
-        "To pivoter der minst én sikrer mot kontring",
-        "En tier som finner rom mellom leddene",
-        "Kanter og backer som gir bredde og dybde"
+      "managerHints": [
+        "Ikke kopier 5-3-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
       ],
-      "strongAgainst": ["narrow_442", "high_press", "two_striker_press"],
-      "weakAgainst": ["compact_532", "deep_low_block", "three_at_back"],
-      "tacticalRisks": [
-        "Tieren blir nøytralisert hvis han ikke får støtte fra pivotene",
-        "Begge backer høyt uten balanse gir kontringsrom",
-        "Ufarlig mot lavblokk uten bevegelse i siste tredjedel"
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "back_five_defence",
+          "theme": "femmannsforsvar"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "strong restforsvar",
+        "balanced bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "medium",
@@ -302,23 +2670,1572 @@
         "pressingScheme": "mixed",
         "risk": "low"
       },
-      "trainingLinks": ["build_from_back", "striker_ten_relation", "rest_defense", "midfield_triangle"],
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/defensive_532.md"
+    },
+    {
+      "formationId": "creator_3412",
+      "displayName": "3-4-1-2 Creator System",
+      "era": "1985–2005",
+      "tacticalSchool": "Back-three with a free ten",
+      "baseShape": "3-4-1-2",
+      "inPossessionShape": "3-4-1-2",
+      "outOfPossessionShape": "5-3-2",
+      "pressShape": "3-4-1-2",
+      "lowBlockShape": "5-4-1",
+      "summary": "3-4-1-2 Creator System er et 1985–2005-system fra Back-three with a free ten der tier bak to spisser og wingbacks holder bredde gjør tallformen spillbar.",
+      "corePrinciple": "tier bak to spisser; wingbacks holder bredde; mellomromstrussel",
+      "requiredConditions": [
+        "Roller som matcher wide_centre_back, wing_back, box_to_box_midfielder",
+        "Faseløp fra 3-4-1-2 til 5-3-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "wide_centre_back",
+        "wing_back",
+        "box_to_box_midfielder",
+        "classic_ten",
+        "centre_forward"
+      ],
+      "strengths": [
+        "god mellomromstrussel",
+        "bredde fra wingbacks",
+        "kreativ akse"
+      ],
+      "weaknesses": [
+        "tier må være god under press",
+        "sårbar hvis tier isoleres"
+      ],
+      "idealPlayerTypes": [
+        "classic_ten",
+        "wing_back",
+        "second_striker",
+        "box_to_box_midfielder"
+      ],
+      "dangerousIf": [
+        "Farlig når tier bak to spisser får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "tier må være god under press",
+        "sårbar hvis tier isoleres"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "tier må være god under press gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "treback-lag med klassisk tier"
+      ],
+      "learningPoints": [
+        "Les 3-4-1-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-4-1-2 med ball og 5-3-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-4-1-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_player",
+          "ref": "classic_ten_legend",
+          "theme": "klassisk tier"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "balanced",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/creator_3412.md"
+    },
+    {
+      "formationId": "attacking_343",
+      "displayName": "Attacking 3-4-3",
+      "era": "1985–2010",
+      "tacticalSchool": "Attacking back-three",
+      "baseShape": "3-4-3",
+      "inPossessionShape": "3-4-3",
+      "outOfPossessionShape": "5-4-1",
+      "pressShape": "3-4-3",
+      "lowBlockShape": "5-4-1",
+      "summary": "Attacking 3-4-3 er et 1985–2010-system fra Attacking back-three der tre bak og bred front gjør tallformen spillbar.",
+      "corePrinciple": "tre bak; bred front; wingbacks og midtbane i støtte",
+      "requiredConditions": [
+        "Roller som matcher wide_centre_back, wing_back, box_to_box_midfielder",
+        "Faseløp fra 3-4-3 til 5-4-1 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "wide_centre_back",
+        "wing_back",
+        "box_to_box_midfielder",
+        "classic_winger",
+        "centre_forward"
+      ],
+      "strengths": [
+        "fem kan angripe",
+        "stort offensivt trykk"
+      ],
+      "weaknesses": [
+        "rom bak wingbacks",
+        "krever løpekapasitet"
+      ],
+      "idealPlayerTypes": [
+        "classic_winger",
+        "wing_back",
+        "centre_forward",
+        "box_to_box_midfielder"
+      ],
+      "dangerousIf": [
+        "Farlig når tre bak får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "rom bak wingbacks",
+        "krever løpekapasitet"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "rom bak wingbacks gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "offensive treback-lag"
+      ],
+      "learningPoints": [
+        "Les 3-4-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-4-3 med ball og 5-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-4-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "back_three_attack",
+          "theme": "offensiv treback"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + medium press",
+        "medium restforsvar",
+        "wide bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/attacking_343.md"
+    },
+    {
+      "formationId": "total_433",
+      "displayName": "Total Football 4-3-3",
+      "era": "1970–1985",
+      "tacticalSchool": "Ajax / Netherlands / Michels / Cruyff",
+      "baseShape": "4-3-3",
+      "inPossessionShape": "3-4-3",
+      "outOfPossessionShape": "4-3-3",
+      "pressShape": "4-3-3",
+      "lowBlockShape": "4-4-2",
+      "summary": "Totalfotballens 4-3-3: posisjonsrotasjon, høy backlinje og kollektivt press. Spillere bytter roller flytende.",
+      "corePrinciple": "rotasjoner; posisjonsbytter; høyt press; teknikk; kollektiv forståelse",
+      "requiredConditions": [
+        "Teknisk sterke spillere som mestrer flere roller",
+        "Høy kollektiv forståelse og rotasjon",
+        "En sweeperkeeper-aktig keeper bak høy linje"
+      ],
+      "roleRequirements": [
+        "sweeper_keeper",
+        "ball_playing_centre_back",
+        "overlapping_full_back",
+        "deep_lying_playmaker",
+        "box_to_box_midfielder",
+        "inside_forward",
+        "false_nine"
+      ],
+      "strengths": [
+        "kan dominere rom og tempo",
+        "ekstrem fleksibilitet",
+        "aggressivt press"
+      ],
+      "weaknesses": [
+        "svært krevende taktisk",
+        "kollapser uten forståelse og teknikk"
+      ],
+      "idealPlayerTypes": [
+        "ball_playing_centre_back",
+        "inside_forward",
+        "false_nine",
+        "box_to_box_midfielder",
+        "deep_lying_playmaker",
+        "pressing_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når rotasjoner får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Høy linje straffes brutalt av bakromsløp",
+        "Rotasjon krever svært høyt teknisk og taktisk nivå",
+        "Stort rom bak ved tap høyt på banen"
+      ],
+      "worksWellAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "narrow_442"
+      ],
+      "strugglesAgainst": [
+        "fast_runners_in_behind",
+        "direct_counter",
+        "fast_transition"
+      ],
+      "strongAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "narrow_442"
+      ],
+      "weakAgainst": [
+        "fast_runners_in_behind",
+        "direct_counter",
+        "fast_transition"
+      ],
+      "tacticalRisks": [
+        "Høy linje straffes brutalt av bakromsløp",
+        "Rotasjon krever svært høyt teknisk og taktisk nivå",
+        "Stort rom bak ved tap høyt på banen"
+      ],
+      "historicalExamples": [
+        "Ajax 1971-73",
+        "Nederland VM 1974"
+      ],
+      "learningPoints": [
+        "Les 4-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-4-3 med ball og 4-3-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "ajax_1971_73_total_football",
+        "netherlands_1974_total_football"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "ajax_amsterdam",
+          "theme": "Ajax"
+        },
+        {
+          "sourceType": "sport_place",
+          "ref": "amsterdam_football_place",
+          "theme": "Amsterdam"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "rinus_michels",
+          "theme": "Michels"
+        },
+        {
+          "sourceType": "collected_player",
+          "ref": "johan_cruyff",
+          "theme": "Cruyff"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + high press",
+        "medium restforsvar",
+        "wide bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "high",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "high_press",
+        "build_from_back",
+        "attacking_width",
+        "sweeper_keeper",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/total_433.md"
+    },
+    {
+      "formationId": "total_343",
+      "displayName": "Total Football 3-4-3",
+      "era": "1970–1985",
+      "tacticalSchool": "Total football back-three",
+      "baseShape": "3-4-3",
+      "inPossessionShape": "3-4-3",
+      "outOfPossessionShape": "4-3-3",
+      "pressShape": "3-4-3",
+      "lowBlockShape": "4-4-2",
+      "summary": "Total Football 3-4-3 er et 1970–1985-system fra Total football back-three der aggressiv bredde og kollektiv rotasjon gjør tallformen spillbar.",
+      "corePrinciple": "aggressiv bredde; kollektiv rotasjon; høyt press",
+      "requiredConditions": [
+        "Roller som matcher sweeper_keeper, wide_centre_back, wing_back",
+        "Faseløp fra 3-4-3 til 4-3-3 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "sweeper_keeper",
+        "wide_centre_back",
+        "wing_back",
+        "box_to_box_midfielder",
+        "inside_forward",
+        "centre_forward"
+      ],
+      "strengths": [
+        "stor fleksibilitet",
+        "aggressiv bredde",
+        "høyt press"
+      ],
+      "weaknesses": [
+        "krever spillere som tåler flere roller",
+        "stort fysisk krav"
+      ],
+      "idealPlayerTypes": [
+        "inside_forward",
+        "box_to_box_midfielder",
+        "wing_back",
+        "pressing_forward",
+        "ball_playing_centre_back"
+      ],
+      "dangerousIf": [
+        "Farlig når aggressiv bredde får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever spillere som tåler flere roller",
+        "stort fysisk krav"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever spillere som tåler flere roller gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Ajax-varianter med treback"
+      ],
+      "learningPoints": [
+        "Les 3-4-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-4-3 med ball og 4-3-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-4-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "ajax",
+          "theme": "Ajax"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "rinus_michels",
+          "theme": "totalfotball"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + high press",
+        "medium restforsvar",
+        "wide bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/total_343.md"
+    },
+    {
+      "formationId": "ajax_diamond_343",
+      "displayName": "Ajax Diamond 3-4-3",
+      "era": "1990–2000",
+      "tacticalSchool": "Ajax diamond (Van Gaal)",
+      "baseShape": "3-4-3",
+      "inPossessionShape": "3-1-2-4",
+      "outOfPossessionShape": "4-3-3",
+      "pressShape": "3-4-3",
+      "lowBlockShape": "4-4-2",
+      "summary": "Ajax Diamond 3-4-3 er et 1990–2000-system fra Ajax diamond (Van Gaal) der diamantmidtbane og høy teknikk gjør tallformen spillbar.",
+      "corePrinciple": "diamantmidtbane; høy teknikk; bred front; mange pasningsvinkler",
+      "requiredConditions": [
+        "Roller som matcher ball_playing_centre_back, regista, advanced_eight",
+        "Faseløp fra 3-1-2-4 til 4-3-3 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "ball_playing_centre_back",
+        "regista",
+        "advanced_eight",
+        "classic_winger",
+        "centre_forward"
+      ],
+      "strengths": [
+        "mange pasningsvinkler",
+        "teknisk kontroll",
+        "bred front med dyp diamant"
+      ],
+      "weaknesses": [
+        "sårbar hvis sekseren isoleres",
+        "krever høy teknikk"
+      ],
+      "idealPlayerTypes": [
+        "regista",
+        "advanced_eight",
+        "classic_winger",
+        "ball_playing_centre_back",
+        "inside_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når diamantmidtbane får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "sårbar hvis sekseren isoleres",
+        "krever høy teknikk"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "sårbar hvis sekseren isoleres gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Ajax under Louis van Gaal (1995)"
+      ],
+      "learningPoints": [
+        "Les 3-4-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-1-2-4 med ball og 4-3-3 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-4-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "ajax",
+          "theme": "Ajax"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "van_gaal_style",
+          "theme": "diamantsystem"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + high press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/ajax_diamond_343.md"
+    },
+    {
+      "formationId": "classic_442",
+      "displayName": "Classic 4-4-2",
+      "era": "1985–2005",
+      "tacticalSchool": "Classic flat 4-4-2",
+      "baseShape": "4-4-2",
+      "inPossessionShape": "4-4-2",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-4-2",
+      "summary": "Klassisk 4-4-2: to faste lag på fire, to spisser og rene kanter. Enkelt, balansert og lett å lære.",
+      "corePrinciple": "to spisser; brede midtbanespillere; flate ledd; par-relasjoner",
+      "requiredConditions": [
+        "To sentrale midtbanespillere som utfyller hverandre (en boks-til-boks, en holdende)",
+        "Kanter som leverer bredde og innlegg",
+        "Et samspilt spisspar"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "cover_centre_back",
+        "centre_half",
+        "classic_winger",
+        "centre_forward"
+      ],
+      "strengths": [
+        "enkel struktur",
+        "gode par-relasjoner",
+        "robust og lærbar"
+      ],
+      "weaknesses": [
+        "kan bli undertallig sentralt mot tre på midten"
+      ],
+      "idealPlayerTypes": [
+        "classic_winger",
+        "centre_half",
+        "target_forward",
+        "poacher",
+        "stopper_centre_back"
+      ],
+      "dangerousIf": [
+        "Farlig når to spisser får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Flat midtbane overspilles av lag med ekstra sentral mann",
+        "Kanter som ikke faller tilbake gir overtall mot egne backer",
+        "To spisser uten støtte blir isolert mot lavblokk"
+      ],
+      "worksWellAgainst": [
+        "wide_overload",
+        "three_at_back",
+        "high_press"
+      ],
+      "strugglesAgainst": [
+        "possession_positional",
+        "switching_play",
+        "build_from_back"
+      ],
+      "strongAgainst": [
+        "wide_overload",
+        "three_at_back",
+        "high_press"
+      ],
+      "weakAgainst": [
+        "possession_positional",
+        "switching_play",
+        "build_from_back"
+      ],
+      "tacticalRisks": [
+        "Flat midtbane overspilles av lag med ekstra sentral mann",
+        "Kanter som ikke faller tilbake gir overtall mot egne backer",
+        "To spisser uten støtte blir isolert mot lavblokk"
+      ],
+      "historicalExamples": [
+        "engelsk klubbfotball 1990-tallet",
+        "klassiske 4-4-2-lag"
+      ],
+      "learningPoints": [
+        "Les 4-4-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-4-2 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-4-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "arsenal_2003_04_invincibles"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "classic_english_club",
+          "theme": "klassisk klubbfotball"
+        },
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "flat_442",
+          "theme": "4-4-2-tradisjon"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "low"
+      },
+      "trainingLinks": [
+        "attacking_width",
+        "striker_ten_relation",
+        "match_discipline",
+        "duel_strength"
+      ],
+      "doc": "docs/hgFootball/formations/classic_442.md"
+    },
+    {
+      "formationId": "english_direct_442",
+      "displayName": "English Direct 4-4-2",
+      "era": "1985–2005",
+      "tacticalSchool": "English direct 4-4-2",
+      "baseShape": "4-4-2",
+      "inPossessionShape": "4-4-2",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-4-2",
+      "summary": "English Direct 4-4-2 er et 1985–2005-system fra English direct 4-4-2 der innlegg og targetspiss gjør tallformen spillbar.",
+      "corePrinciple": "innlegg; targetspiss; andreballer; dueller",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, stopper_centre_back, centre_half",
+        "Faseløp fra 4-4-2 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "centre_half",
+        "classic_winger",
+        "target_forward",
+        "poacher"
+      ],
+      "strengths": [
+        "fysisk trykk",
+        "sterk i lufta",
+        "enkel og direkte"
+      ],
+      "weaknesses": [
+        "kan bli forutsigbar",
+        "lav kreativitet"
+      ],
+      "idealPlayerTypes": [
+        "target_forward",
+        "poacher",
+        "classic_winger",
+        "stopper_centre_back",
+        "channel_runner"
+      ],
+      "dangerousIf": [
+        "Farlig når innlegg får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "kan bli forutsigbar",
+        "lav kreativitet"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "kan bli forutsigbar gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "direkte engelsk klubbfotball"
+      ],
+      "learningPoints": [
+        "Les 4-4-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-4-2 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-4-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "leicester_2015_16_direct_transition"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "direct_442",
+          "theme": "direkte 4-4-2"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/english_direct_442.md"
+    },
+    {
+      "formationId": "pressing_442",
+      "displayName": "Pressing 4-4-2",
+      "era": "1990–2010",
+      "tacticalSchool": "Pressing flat 4-4-2",
+      "baseShape": "4-4-2",
+      "inPossessionShape": "4-4-2",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-4-2",
+      "summary": "Pressing 4-4-2 er et 1990–2010-system fra Pressing flat 4-4-2 der to spisser i første press og kompakte firere gjør tallformen spillbar.",
+      "corePrinciple": "to spisser i første press; kompakte firere; kollektivt arbeid",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, stopper_centre_back, ball_winner",
+        "Faseløp fra 4-4-2 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "ball_winner",
+        "classic_winger",
+        "pressing_forward"
+      ],
+      "strengths": [
+        "lett å presse med to foran",
+        "kompakt og energisk"
+      ],
+      "weaknesses": [
+        "krever intensitet og koordinasjon",
+        "rom hvis presset brytes"
+      ],
+      "idealPlayerTypes": [
+        "pressing_forward",
+        "ball_winner",
+        "box_to_box_midfielder",
+        "classic_winger"
+      ],
+      "dangerousIf": [
+        "Farlig når to spisser i første press får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever intensitet og koordinasjon",
+        "rom hvis presset brytes"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever intensitet og koordinasjon gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "pressbaserte 4-4-2-lag"
+      ],
+      "learningPoints": [
+        "Les 4-4-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-4-2 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-4-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "milan_1988_90_sacchi"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "pressing_coach",
+          "theme": "presskunnskap"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + high press",
+        "medium restforsvar",
+        "balanced bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "balanced",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/pressing_442.md"
+    },
+    {
+      "formationId": "diamond_41212",
+      "displayName": "Diamond 4-4-2 / 4-1-2-1-2",
+      "era": "1995–2010",
+      "tacticalSchool": "Midfield diamond",
+      "baseShape": "4-1-2-1-2",
+      "inPossessionShape": "4-1-2-1-2",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-1-2-1-2",
+      "lowBlockShape": "4-4-2",
+      "summary": "Diamond 4-4-2 / 4-1-2-1-2 er et 1995–2010-system fra Midfield diamond der smal midtbane og tier gjør tallformen spillbar.",
+      "corePrinciple": "smal midtbane; tier; to spisser; offensive backer for bredde",
+      "requiredConditions": [
+        "Roller som matcher overlapping_full_back, stopper_centre_back, holding_midfielder",
+        "Faseløp fra 4-1-2-1-2 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "overlapping_full_back",
+        "stopper_centre_back",
+        "holding_midfielder",
+        "carrilero",
+        "classic_ten",
+        "centre_forward"
+      ],
+      "strengths": [
+        "sentral dominans",
+        "tett diamant",
+        "sterk gjennom midten"
+      ],
+      "weaknesses": [
+        "mangler naturlig bredde",
+        "avhengig av offensive backer"
+      ],
+      "idealPlayerTypes": [
+        "classic_ten",
+        "carrilero",
+        "holding_midfielder",
+        "second_striker",
+        "overlapping_full_back"
+      ],
+      "dangerousIf": [
+        "Farlig når smal midtbane får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "mangler naturlig bredde",
+        "avhengig av offensive backer"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "mangler naturlig bredde gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "diamant-4-4-2-lag"
+      ],
+      "learningPoints": [
+        "Les 4-1-2-1-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-1-2-1-2 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-1-2-1-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "midfield_diamond",
+          "theme": "diamantmidtbane"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "narrow bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "narrow",
+        "possession": "patient",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/diamond_41212.md"
+    },
+    {
+      "formationId": "second_striker_4411",
+      "displayName": "4-4-1-1",
+      "era": "1995–2010",
+      "tacticalSchool": "Withdrawn-striker hybrid",
+      "baseShape": "4-4-1-1",
+      "inPossessionShape": "4-4-1-1",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-5-1",
+      "summary": "4-4-1-1 er et 1995–2010-system fra Withdrawn-striker hybrid der hengende spiss og bro mellom 4-4-2 og 4-2-3-1 gjør tallformen spillbar.",
+      "corePrinciple": "hengende spiss; bro mellom 4-4-2 og 4-2-3-1; bedre mellomrom",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, stopper_centre_back, centre_half",
+        "Faseløp fra 4-4-1-1 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "centre_half",
+        "classic_winger",
+        "second_striker",
+        "centre_forward"
+      ],
+      "strengths": [
+        "bedre mellomrom enn flat 4-4-2",
+        "fleksibel front"
+      ],
+      "weaknesses": [
+        "kan isolere spissen",
+        "krever en god hengende spiss"
+      ],
+      "idealPlayerTypes": [
+        "second_striker",
+        "shadow_striker",
+        "classic_winger",
+        "centre_half"
+      ],
+      "dangerousIf": [
+        "Farlig når hengende spiss får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "kan isolere spissen",
+        "krever en god hengende spiss"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "kan isolere spissen gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "lag med klassisk hengende spiss"
+      ],
+      "learningPoints": [
+        "Les 4-4-1-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-4-1-1 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-4-1-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "second_striker_role",
+          "theme": "hengende spiss"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/second_striker_4411.md"
+    },
+    {
+      "formationId": "defensive_451",
+      "displayName": "4-5-1",
+      "era": "2000–2026",
+      "tacticalSchool": "Five-midfield control/defence",
+      "baseShape": "4-5-1",
+      "inPossessionShape": "4-5-1",
+      "outOfPossessionShape": "4-5-1",
+      "pressShape": "4-1-4-1",
+      "lowBlockShape": "4-5-1",
+      "summary": "4-5-1 er et 2000–2026-system fra Five-midfield control/defence der én spiss og fem på midten gjør tallformen spillbar.",
+      "corePrinciple": "én spiss; fem på midten; lavere risiko; midtbanekontroll",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, cover_centre_back, holding_midfielder",
+        "Faseløp fra 4-5-1 til 4-5-1 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "cover_centre_back",
+        "holding_midfielder",
+        "box_to_box_midfielder",
+        "centre_forward"
+      ],
+      "strengths": [
+        "midtbanekontroll",
+        "defensiv trygghet"
+      ],
+      "weaknesses": [
+        "enslig spiss kan bli isolert",
+        "lavt offensivt trykk"
+      ],
+      "idealPlayerTypes": [
+        "holding_midfielder",
+        "destroyer",
+        "box_to_box_midfielder",
+        "channel_runner"
+      ],
+      "dangerousIf": [
+        "Farlig når én spiss får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "enslig spiss kan bli isolert",
+        "lavt offensivt trykk"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "enslig spiss kan bli isolert gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "kontrollerende 4-5-1-lag"
+      ],
+      "learningPoints": [
+        "Les 4-5-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-5-1 med ball og 4-5-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-5-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "five_midfield",
+          "theme": "fem på midten"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "strong restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "patient",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "low"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/defensive_451.md"
+    },
+    {
+      "formationId": "modern_4231",
+      "displayName": "Modern 4-2-3-1",
+      "era": "2005–2026",
+      "tacticalSchool": "Modern double-pivot balance",
+      "baseShape": "4-2-3-1",
+      "inPossessionShape": "2-4-3-1",
+      "outOfPossessionShape": "4-4-1-1",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-5-1",
+      "summary": "Moderne 4-2-3-1: dobbel pivot, en fri tier og en spiss. Balansert mellom kontroll, sikring og kreativitet.",
+      "corePrinciple": "dobbel pivot; tier; én spiss; balanse",
+      "requiredConditions": [
+        "To pivoter der minst én sikrer mot kontring",
+        "En tier som finner rom mellom leddene",
+        "Kanter og backer som gir bredde og dybde"
+      ],
+      "roleRequirements": [
+        "overlapping_full_back",
+        "ball_playing_centre_back",
+        "holding_midfielder",
+        "regista",
+        "attacking_midfielder",
+        "inverted_winger",
+        "centre_forward"
+      ],
+      "strengths": [
+        "fleksibel og stabil",
+        "balanse i alle faser",
+        "lett å lære"
+      ],
+      "weaknesses": [
+        "tier/spiss kan bli frakoblet hvis avstandene blir feil"
+      ],
+      "idealPlayerTypes": [
+        "attacking_midfielder",
+        "regista",
+        "holding_midfielder",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når dobbel pivot får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Tieren blir nøytralisert hvis han ikke får støtte fra pivotene",
+        "Begge backer høyt uten balanse gir kontringsrom",
+        "Ufarlig mot lavblokk uten bevegelse i siste tredjedel"
+      ],
+      "worksWellAgainst": [
+        "narrow_442",
+        "high_press",
+        "two_striker_press"
+      ],
+      "strugglesAgainst": [
+        "compact_532",
+        "deep_low_block",
+        "three_at_back"
+      ],
+      "strongAgainst": [
+        "narrow_442",
+        "high_press",
+        "two_striker_press"
+      ],
+      "weakAgainst": [
+        "compact_532",
+        "deep_low_block",
+        "three_at_back"
+      ],
+      "tacticalRisks": [
+        "Tieren blir nøytralisert hvis han ikke får støtte fra pivotene",
+        "Begge backer høyt uten balanse gir kontringsrom",
+        "Ufarlig mot lavblokk uten bevegelse i siste tredjedel"
+      ],
+      "historicalExamples": [
+        "moderne europeisk toppfotball"
+      ],
+      "learningPoints": [
+        "Les 4-2-3-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-4-3-1 med ball og 4-4-1-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-2-3-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "history_go_place",
+          "ref": "starting_unlock",
+          "theme": "startformasjon"
+        },
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "double_pivot",
+          "theme": "dobbel pivot"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "strong restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "balanced",
+        "tempo": "medium",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "low"
+      },
+      "trainingLinks": [
+        "build_from_back",
+        "striker_ten_relation",
+        "rest_defense",
+        "midfield_triangle"
+      ],
       "doc": "docs/hgFootball/formations/modern_4231.md"
     },
     {
       "formationId": "modern_433",
+      "displayName": "Modern 4-3-3",
+      "era": "2008–2026",
+      "tacticalSchool": "Modern 4-3-3 with single pivot",
+      "baseShape": "4-3-3",
+      "inPossessionShape": "2-3-5",
+      "outOfPossessionShape": "4-1-4-1",
+      "pressShape": "4-3-3",
+      "lowBlockShape": "4-5-1",
       "summary": "Moderne press-4-3-3: posisjonelt angrep, høyt sonebasert press og bevisst restforsvar. Krever høyt teknisk nivå.",
+      "corePrinciple": "bredde; press; tre på midten; indreløpere",
       "requiredConditions": [
         "Stoppere som er komfortable med å forsvare rom høyt",
         "En sekser som skjermer overgangene",
         "Kanter som holder bredde eller angriper halvrommet intelligent"
       ],
-      "strongAgainst": ["passive_mid_block", "narrow_442", "switching_play"],
-      "weakAgainst": ["fast_transition", "aggressive_man_press", "fast_runners_in_behind"],
+      "roleRequirements": [
+        "overlapping_full_back",
+        "ball_playing_centre_back",
+        "holding_midfielder",
+        "mezzala",
+        "advanced_eight",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "strengths": [
+        "høy kontroll og fleksibilitet",
+        "bredde og press"
+      ],
+      "weaknesses": [
+        "krever gode kanter og indreløpere"
+      ],
+      "idealPlayerTypes": [
+        "mezzala",
+        "advanced_eight",
+        "inverted_winger",
+        "complete_forward",
+        "holding_midfielder"
+      ],
+      "dangerousIf": [
+        "Farlig når bredde får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Eksponerer backene i ryggen ved press høyt",
+        "Sårbar bak avanserte åttere uten sekserdekning",
+        "Krever sterkt restforsvar – ellers straffes av direkte spill"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "switching_play"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "aggressive_man_press",
+        "fast_runners_in_behind"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "switching_play"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "aggressive_man_press",
+        "fast_runners_in_behind"
+      ],
       "tacticalRisks": [
         "Eksponerer backene i ryggen ved press høyt",
         "Sårbar bak avanserte åttere uten sekserdekning",
         "Krever sterkt restforsvar – ellers straffes av direkte spill"
+      ],
+      "historicalExamples": [
+        "moderne 4-3-3-lag"
+      ],
+      "learningPoints": [
+        "Les 4-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-5 med ball og 4-1-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "liverpool_2018_20_gegenpress"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "history_go_place",
+          "ref": "starting_unlock",
+          "theme": "startformasjon"
+        },
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "modern_433",
+          "theme": "moderne 4-3-3"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "high",
@@ -331,23 +4248,122 @@
         "pressingScheme": "zonal",
         "risk": "medium"
       },
-      "trainingLinks": ["high_press", "build_from_back", "attacking_width", "rest_defense", "midfield_triangle"],
+      "trainingLinks": [
+        "high_press",
+        "build_from_back",
+        "attacking_width",
+        "rest_defense",
+        "midfield_triangle"
+      ],
       "doc": "docs/hgFootball/formations/modern_433.md"
     },
     {
       "formationId": "possession_433",
+      "displayName": "Possession 4-3-3",
+      "era": "2010–2024",
+      "tacticalSchool": "Positional play (Guardiola-influenced)",
+      "baseShape": "4-3-3",
+      "inPossessionShape": "3-2-5",
+      "outOfPossessionShape": "4-1-4-1",
+      "pressShape": "4-3-3",
+      "lowBlockShape": "4-5-1",
       "summary": "Possession-4-3-3: tålmodig ballbesittelse, oppbygging fra keeper og kontroll gjennom overtall sentralt.",
+      "corePrinciple": "posisjonsspill; soner; fem i siste linje; kontroll i etablert angrep",
       "requiredConditions": [
         "Tekniske spillere som tør å ha ballen under press",
         "En dyp playmaker som dirigerer tempo",
         "Backer/keeper som inngår i oppbyggingen"
       ],
-      "strongAgainst": ["deep_low_block", "passive_mid_block", "narrow_442"],
-      "weakAgainst": ["aggressive_man_press", "high_press", "direct_counter"],
+      "roleRequirements": [
+        "distributor_keeper",
+        "ball_playing_centre_back",
+        "inverted_full_back",
+        "regista",
+        "advanced_eight",
+        "wide_playmaker",
+        "false_nine"
+      ],
+      "strengths": [
+        "kontroll i etablert angrep",
+        "tallovertak i soner"
+      ],
+      "weaknesses": [
+        "kan bli steril uten gjennombrudd",
+        "sårbar i restforsvar ved balltap"
+      ],
+      "idealPlayerTypes": [
+        "regista",
+        "wide_playmaker",
+        "false_nine",
+        "advanced_eight",
+        "inverted_full_back",
+        "ball_playing_centre_back"
+      ],
+      "dangerousIf": [
+        "Farlig når posisjonsspill får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Aggressivt mannspress kan skape farlige brudd i oppbyggingen",
+        "Lavt tempo gir motstander tid til å reorganisere",
+        "Mangler bakromstrussel hvis alle vil ha ballen i foten"
+      ],
+      "worksWellAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "narrow_442"
+      ],
+      "strugglesAgainst": [
+        "aggressive_man_press",
+        "high_press",
+        "direct_counter"
+      ],
+      "strongAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "narrow_442"
+      ],
+      "weakAgainst": [
+        "aggressive_man_press",
+        "high_press",
+        "direct_counter"
+      ],
       "tacticalRisks": [
         "Aggressivt mannspress kan skape farlige brudd i oppbyggingen",
         "Lavt tempo gir motstander tid til å reorganisere",
         "Mangler bakromstrussel hvis alle vil ha ballen i foten"
+      ],
+      "historicalExamples": [
+        "Barcelona og posisjonsspill-lag"
+      ],
+      "learningPoints": [
+        "Les 4-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-5 med ball og 4-1-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "barcelona_2008_12_positional_play"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "barcelona",
+          "theme": "Barcelona"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "guardiola_style",
+          "theme": "Guardiola"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "high",
@@ -360,23 +4376,118 @@
         "pressingScheme": "zonal",
         "risk": "medium"
       },
-      "trainingLinks": ["build_from_back", "passing_quality", "first_touch_pressure", "keeper_distribution", "midfield_triangle"],
+      "trainingLinks": [
+        "build_from_back",
+        "passing_quality",
+        "first_touch_pressure",
+        "keeper_distribution",
+        "midfield_triangle"
+      ],
       "doc": "docs/hgFootball/formations/possession_433.md"
     },
     {
       "formationId": "gegen_4222",
+      "displayName": "4-2-2-2 Press",
+      "era": "2012–2024",
+      "tacticalSchool": "Gegenpressing (Red Bull school)",
+      "baseShape": "4-2-2-2",
+      "inPossessionShape": "4-2-2-2",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-2-2-2",
+      "lowBlockShape": "4-4-2",
       "summary": "Gegenpressing-4-2-2-2: smal, intens struktur bygd for å vinne ballen tilbake umiddelbart og kontre i kaoset.",
+      "corePrinciple": "smale tiere; to spisser; aggressivt press; vertikalitet",
       "requiredConditions": [
         "Høy fysisk kapasitet i hele laget",
         "Kort avstand mellom leddene for å presse kollektivt",
         "Spillere som er dødelige i overgang etter gjenvinning"
       ],
-      "strongAgainst": ["build_from_back", "possession_positional", "passive_mid_block"],
-      "weakAgainst": ["direct_counter", "fast_runners_in_behind", "deep_low_block"],
+      "roleRequirements": [
+        "overlapping_full_back",
+        "stopper_centre_back",
+        "ball_winner",
+        "shadow_striker",
+        "pressing_forward"
+      ],
+      "strengths": [
+        "gjenvinning",
+        "raske angrep",
+        "intens vertikalitet"
+      ],
+      "weaknesses": [
+        "rom på kant hvis presset brytes",
+        "stort fysisk krav"
+      ],
+      "idealPlayerTypes": [
+        "ball_winner",
+        "shadow_striker",
+        "pressing_forward",
+        "box_to_box_midfielder"
+      ],
+      "dangerousIf": [
+        "Farlig når smale tiere får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Slått press gir store åpne rom bak",
+        "Ekstremt slitasje- og kondisjonskrevende over tid",
+        "Smal struktur straffes av raske sideskift til bredden"
+      ],
+      "worksWellAgainst": [
+        "build_from_back",
+        "possession_positional",
+        "passive_mid_block"
+      ],
+      "strugglesAgainst": [
+        "direct_counter",
+        "fast_runners_in_behind",
+        "deep_low_block"
+      ],
+      "strongAgainst": [
+        "build_from_back",
+        "possession_positional",
+        "passive_mid_block"
+      ],
+      "weakAgainst": [
+        "direct_counter",
+        "fast_runners_in_behind",
+        "deep_low_block"
+      ],
       "tacticalRisks": [
         "Slått press gir store åpne rom bak",
         "Ekstremt slitasje- og kondisjonskrevende over tid",
         "Smal struktur straffes av raske sideskift til bredden"
+      ],
+      "historicalExamples": [
+        "RB Leipzig/Salzburg",
+        "tysk pressfotball"
+      ],
+      "learningPoints": [
+        "Les 4-2-2-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-2-2-2 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-2-2-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "pressing_coach",
+          "theme": "presskunnskap"
+        },
+        {
+          "sourceType": "collected_staff",
+          "ref": "fitness_coach",
+          "theme": "fysisk kapasitet"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + high press",
+        "medium restforsvar",
+        "balanced bredde og high overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "high",
@@ -389,23 +4500,349 @@
         "pressingScheme": "mixed",
         "risk": "high"
       },
-      "trainingLinks": ["high_press", "team_stamina", "explosive_actions", "first_touch_pressure", "team_speed"],
+      "trainingLinks": [
+        "high_press",
+        "team_stamina",
+        "explosive_actions",
+        "first_touch_pressure",
+        "team_speed"
+      ],
       "doc": "docs/hgFootball/formations/gegen_4222.md"
     },
     {
+      "formationId": "narrow_4312_press",
+      "displayName": "Narrow 4-3-1-2 Press",
+      "era": "2012–2024",
+      "tacticalSchool": "Central pressing overload",
+      "baseShape": "4-3-1-2",
+      "inPossessionShape": "4-3-1-2",
+      "outOfPossessionShape": "4-3-2-1",
+      "pressShape": "4-3-1-2",
+      "lowBlockShape": "4-5-1",
+      "summary": "Narrow 4-3-1-2 Press er et 2012–2024-system fra Central pressing overload der sentral overbelastning og aggressivt press gjør tallformen spillbar.",
+      "corePrinciple": "sentral overbelastning; aggressivt press; to spisser",
+      "requiredConditions": [
+        "Roller som matcher overlapping_full_back, stopper_centre_back, holding_midfielder",
+        "Faseløp fra 4-3-1-2 til 4-3-2-1 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "overlapping_full_back",
+        "stopper_centre_back",
+        "holding_midfielder",
+        "ball_winner",
+        "shadow_striker",
+        "pressing_forward"
+      ],
+      "strengths": [
+        "stenger sentrum",
+        "sentral tallovervekt",
+        "intenst press"
+      ],
+      "weaknesses": [
+        "krever backer som dekker bredde",
+        "rom i bredden"
+      ],
+      "idealPlayerTypes": [
+        "ball_winner",
+        "carrilero",
+        "shadow_striker",
+        "pressing_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når sentral overbelastning får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever backer som dekker bredde",
+        "rom i bredden"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever backer som dekker bredde gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "sentralt pressende 4-3-1-2-lag"
+      ],
+      "learningPoints": [
+        "Les 4-3-1-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-3-1-2 med ball og 4-3-2-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-1-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "pressing_coach",
+          "theme": "presskunnskap"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + high press",
+        "medium restforsvar",
+        "narrow bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "narrow",
+        "possession": "patient",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/narrow_4312_press.md"
+    },
+    {
+      "formationId": "modern_442_press",
+      "displayName": "Modern 4-4-2 Press",
+      "era": "2012–2026",
+      "tacticalSchool": "Modern compact pressing 4-4-2",
+      "baseShape": "4-4-2",
+      "inPossessionShape": "4-4-2",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-4-2",
+      "summary": "Modern 4-4-2 Press er et 2012–2026-system fra Modern compact pressing 4-4-2 der to foran i press og vinger smalt gjør tallformen spillbar.",
+      "corePrinciple": "to foran i press; vinger smalt; kompakte avstander",
+      "requiredConditions": [
+        "Roller som matcher traditional_full_back, stopper_centre_back, ball_winner",
+        "Faseløp fra 4-4-2 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "traditional_full_back",
+        "stopper_centre_back",
+        "ball_winner",
+        "box_to_box_midfielder",
+        "pressing_forward"
+      ],
+      "strengths": [
+        "enkel presslogikk",
+        "kompakt og koordinert"
+      ],
+      "weaknesses": [
+        "kan bli overspilt mellom midtbane og forsvar"
+      ],
+      "idealPlayerTypes": [
+        "pressing_forward",
+        "ball_winner",
+        "box_to_box_midfielder",
+        "inverted_winger"
+      ],
+      "dangerousIf": [
+        "Farlig når to foran i press får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "kan bli overspilt mellom midtbane og forsvar"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "kan bli overspilt mellom midtbane og forsvar gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "moderne kompakte 4-4-2-presslag"
+      ],
+      "learningPoints": [
+        "Les 4-4-2 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 4-4-2 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-4-2 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "tactical_coach",
+          "theme": "taktisk press"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + high press",
+        "medium restforsvar",
+        "balanced bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "high",
+        "defensiveLine": "high",
+        "width": "balanced",
+        "possession": "direct",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "medium",
+        "pressingScheme": "zonal",
+        "risk": "medium"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/modern_442_press.md"
+    },
+    {
       "formationId": "conte_343",
+      "displayName": "Conte-style 3-4-3",
+      "era": "2014–2026",
+      "tacticalSchool": "Conte automated back-three",
+      "baseShape": "3-4-3",
+      "inPossessionShape": "3-2-5",
+      "outOfPossessionShape": "5-4-1",
+      "pressShape": "5-2-3",
+      "lowBlockShape": "5-4-1",
       "summary": "Conte-3-4-3: tre stoppere, to vingbacker som gir hele bredden og en kompakt firer på midten. Trygt bakover, eksplosivt i bredden.",
+      "corePrinciple": "automatiserte bredderelasjoner; wingbacks; tre stoppere; kontring og kontroll",
       "requiredConditions": [
         "Tre stoppere som forsvarer bredt og bytter mann trygt",
         "Vingbacker med ekstrem løpskapasitet i begge bokser",
         "To sentrale midtbanespillere som balanserer"
       ],
-      "strongAgainst": ["narrow_442", "two_striker_press", "high_press"],
-      "weakAgainst": ["wide_overload", "switching_play", "fast_transition"],
+      "roleRequirements": [
+        "wide_centre_back",
+        "ball_playing_centre_back",
+        "wing_back",
+        "box_to_box_midfielder",
+        "inside_forward",
+        "complete_forward"
+      ],
+      "strengths": [
+        "sterk struktur og tydelige roller",
+        "automatiserte mønstre"
+      ],
+      "weaknesses": [
+        "avhengig av wingbacks og brede angripere"
+      ],
+      "idealPlayerTypes": [
+        "wing_back",
+        "wide_centre_back",
+        "inside_forward",
+        "box_to_box_midfielder",
+        "complete_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når automatiserte bredderelasjoner får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Begge vingbacker høyt samtidig åpner kontringsrom i kanten",
+        "Krever uvanlig god kondisjon hos vingbackene",
+        "Tre stoppere kan bli passive uten oppspill fra bakover"
+      ],
+      "worksWellAgainst": [
+        "narrow_442",
+        "two_striker_press",
+        "high_press"
+      ],
+      "strugglesAgainst": [
+        "wide_overload",
+        "switching_play",
+        "fast_transition"
+      ],
+      "strongAgainst": [
+        "narrow_442",
+        "two_striker_press",
+        "high_press"
+      ],
+      "weakAgainst": [
+        "wide_overload",
+        "switching_play",
+        "fast_transition"
+      ],
       "tacticalRisks": [
         "Begge vingbacker høyt samtidig åpner kontringsrom i kanten",
         "Krever uvanlig god kondisjon hos vingbackene",
         "Tre stoppere kan bli passive uten oppspill fra bakover"
+      ],
+      "historicalExamples": [
+        "Conte-lag (Juventus, Chelsea, Inter)"
+      ],
+      "learningPoints": [
+        "Les 3-4-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-5 med ball og 5-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-4-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "conte_chelsea_2016_17_343"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_manager",
+          "ref": "conte_style",
+          "theme": "Conte-system"
+        },
+        {
+          "sourceType": "collected_player",
+          "ref": "modern_wing_back",
+          "theme": "wingback"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + medium press",
+        "strong restforsvar",
+        "wide bredde og high overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "medium",
@@ -418,23 +4855,356 @@
         "pressingScheme": "mixed",
         "risk": "medium"
       },
-      "trainingLinks": ["fullback_winger_relation", "centre_back_pair", "team_stamina", "rest_defense"],
+      "trainingLinks": [
+        "fullback_winger_relation",
+        "centre_back_pair",
+        "team_stamina",
+        "rest_defense"
+      ],
       "doc": "docs/hgFootball/formations/conte_343.md"
     },
     {
+      "formationId": "modern_3421",
+      "displayName": "Modern 3-4-2-1",
+      "era": "2016–2026",
+      "tacticalSchool": "Modern back-three with two tens",
+      "baseShape": "3-4-2-1",
+      "inPossessionShape": "3-2-5",
+      "outOfPossessionShape": "5-4-1",
+      "pressShape": "5-2-3",
+      "lowBlockShape": "5-4-1",
+      "summary": "Modern 3-4-2-1 er et 2016–2026-system fra Modern back-three with two tens der to mellomromsspillere bak spiss og wingbacks gjør tallformen spillbar.",
+      "corePrinciple": "to mellomromsspillere bak spiss; wingbacks; fleksibelt restforsvar",
+      "requiredConditions": [
+        "Roller som matcher wide_centre_back, ball_playing_centre_back, wing_back",
+        "Faseløp fra 3-2-5 til 5-4-1 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "wide_centre_back",
+        "ball_playing_centre_back",
+        "wing_back",
+        "box_to_box_midfielder",
+        "shadow_striker",
+        "complete_forward"
+      ],
+      "strengths": [
+        "sterk mellomromskontroll",
+        "to skapere bak spiss"
+      ],
+      "weaknesses": [
+        "kan mangle bredde høyt hvis wingbacks presses ned"
+      ],
+      "idealPlayerTypes": [
+        "shadow_striker",
+        "attacking_midfielder",
+        "wing_back",
+        "wide_centre_back",
+        "complete_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når to mellomromsspillere bak spiss får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "kan mangle bredde høyt hvis wingbacks presses ned"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "kan mangle bredde høyt hvis wingbacks presses ned gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "moderne 3-4-2-1-lag"
+      ],
+      "learningPoints": [
+        "Les 3-4-2-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-5 med ball og 5-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-4-2-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "back_three_two_tens",
+          "theme": "treback med doble tiere"
+        }
+      ],
+      "matchupSignals": [
+        "high linje + medium press",
+        "strong restforsvar",
+        "wide bredde og high overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "high",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "high",
+        "transition": "high",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "low"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/modern_3421.md"
+    },
+    {
+      "formationId": "alonso_3421",
+      "displayName": "Modern 3-4-2-1 Relation/Overload",
+      "era": "2022–2026",
+      "tacticalSchool": "Relationist overload back-three (Alonso-style)",
+      "baseShape": "3-4-2-1",
+      "inPossessionShape": "3-2-5",
+      "outOfPossessionShape": "5-4-1",
+      "pressShape": "5-2-3",
+      "lowBlockShape": "5-4-1",
+      "summary": "Modern 3-4-2-1 Relation/Overload er et 2022–2026-system fra Relationist overload back-three (Alonso-style) der overloads og wingbacks gjør tallformen spillbar.",
+      "corePrinciple": "overloads; wingbacks; doble tiere; relasjonsspill",
+      "requiredConditions": [
+        "Roller som matcher wide_centre_back, ball_playing_centre_back, wing_back",
+        "Faseløp fra 3-2-5 til 5-4-1 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "wide_centre_back",
+        "ball_playing_centre_back",
+        "wing_back",
+        "advanced_eight",
+        "shadow_striker",
+        "complete_forward"
+      ],
+      "strengths": [
+        "mange trekanter og mellomrom",
+        "fleksible overloads"
+      ],
+      "weaknesses": [
+        "krever høy relasjonell forståelse"
+      ],
+      "idealPlayerTypes": [
+        "shadow_striker",
+        "advanced_eight",
+        "wing_back",
+        "wide_centre_back",
+        "mezzala"
+      ],
+      "dangerousIf": [
+        "Farlig når overloads får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever høy relasjonell forståelse"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever høy relasjonell forståelse gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "Leverkusen under Xabi Alonso"
+      ],
+      "learningPoints": [
+        "Les 3-4-2-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-5 med ball og 5-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 3-4-2-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_club",
+          "ref": "leverkusen",
+          "theme": "Leverkusen"
+        },
+        {
+          "sourceType": "collected_manager",
+          "ref": "alonso_style",
+          "theme": "relasjonsspill"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/alonso_3421.md"
+    },
+    {
       "formationId": "positional_325",
+      "displayName": "Positional 3-2-5",
+      "era": "2018–2026",
+      "tacticalSchool": "Positional play with three-two rest defence",
+      "baseShape": "4-3-3",
+      "inPossessionShape": "3-2-5",
+      "outOfPossessionShape": "4-1-4-1",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-5-1",
       "summary": "Posisjonelt 3-2-5 i angrep: tre bak, dobbel pivot og fem i siste linje som okkuperer alle fem angrepskorridorer.",
+      "corePrinciple": "fem i siste linje; tre bak og to sentralt i restforsvar; sonestruktur",
       "requiredConditions": [
         "Spillere med svært høy posisjonell disiplin",
         "To pivoter som styrer tempo og sikrer mot kontring",
         "Inverterte backer eller indreløpere som fyller halvrommene"
       ],
-      "strongAgainst": ["deep_low_block", "passive_mid_block", "narrow_442"],
-      "weakAgainst": ["direct_counter", "fast_runners_in_behind", "aggressive_man_press"],
+      "roleRequirements": [
+        "distributor_keeper",
+        "ball_playing_centre_back",
+        "inverted_full_back",
+        "regista",
+        "advanced_eight",
+        "inverted_winger",
+        "false_nine"
+      ],
+      "strengths": [
+        "kontroll",
+        "bredde",
+        "gjenvinning via restforsvar"
+      ],
+      "weaknesses": [
+        "krever høy coachingDemand og rolleforståelse"
+      ],
+      "idealPlayerTypes": [
+        "inverted_full_back",
+        "regista",
+        "advanced_eight",
+        "inverted_winger",
+        "false_nine",
+        "wide_playmaker"
+      ],
+      "dangerousIf": [
+        "Farlig når fem i siste linje får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "Tre bak mot fem-fronts kontring blir undertall i overgang",
+        "Krever ekstremt høyt taktisk nivå – feilposisjonering straffes hardt",
+        "Mister kontroll hvis pivotene presses ut av oppbyggingen"
+      ],
+      "worksWellAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "narrow_442"
+      ],
+      "strugglesAgainst": [
+        "direct_counter",
+        "fast_runners_in_behind",
+        "aggressive_man_press"
+      ],
+      "strongAgainst": [
+        "deep_low_block",
+        "passive_mid_block",
+        "narrow_442"
+      ],
+      "weakAgainst": [
+        "direct_counter",
+        "fast_runners_in_behind",
+        "aggressive_man_press"
+      ],
       "tacticalRisks": [
         "Tre bak mot fem-fronts kontring blir undertall i overgang",
         "Krever ekstremt høyt taktisk nivå – feilposisjonering straffes hardt",
         "Mister kontroll hvis pivotene presses ut av oppbyggingen"
+      ],
+      "historicalExamples": [
+        "moderne posisjonsspill-lag"
+      ],
+      "learningPoints": [
+        "Les 4-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-5 med ball og 4-1-4-1 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [
+        "man_city_2022_23_325_control"
+      ],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_manager",
+          "ref": "positional_specialist",
+          "theme": "posisjonsspill"
+        },
+        {
+          "sourceType": "collected_staff",
+          "ref": "tactical_coach",
+          "theme": "avansert taktikk"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + high press",
+        "strong restforsvar",
+        "wide bredde og medium overgangstrussel"
       ],
       "parameterProfile": {
         "pressHeight": "high",
@@ -447,8 +5217,488 @@
         "pressingScheme": "zonal",
         "risk": "high"
       },
-      "trainingLinks": ["build_from_back", "passing_quality", "rest_defense", "midfield_triangle", "attacking_width"],
+      "trainingLinks": [
+        "build_from_back",
+        "passing_quality",
+        "rest_defense",
+        "midfield_triangle",
+        "attacking_width"
+      ],
       "doc": "docs/hgFootball/formations/positional_325.md"
+    },
+    {
+      "formationId": "inverted_fullback_235",
+      "displayName": "Inverted Fullback 2-3-5",
+      "era": "2018–2026",
+      "tacticalSchool": "Inverted full-back positional play",
+      "baseShape": "4-3-3",
+      "inPossessionShape": "2-3-5",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-3-3",
+      "lowBlockShape": "4-5-1",
+      "summary": "Inverted Fullback 2-3-5 er et 2018–2026-system fra Inverted full-back positional play der back inn i midtbane og fem foran gjør tallformen spillbar.",
+      "corePrinciple": "back inn i midtbane; fem foran; tre i midten bak ball",
+      "requiredConditions": [
+        "Roller som matcher distributor_keeper, ball_playing_centre_back, inverted_full_back",
+        "Faseløp fra 2-3-5 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "distributor_keeper",
+        "ball_playing_centre_back",
+        "inverted_full_back",
+        "regista",
+        "advanced_eight",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "strengths": [
+        "midtbanekontroll",
+        "tallovervekt sentralt"
+      ],
+      "weaknesses": [
+        "rom bak invertert back hvis balltap"
+      ],
+      "idealPlayerTypes": [
+        "inverted_full_back",
+        "regista",
+        "advanced_eight",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når back inn i midtbane får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "rom bak invertert back hvis balltap"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "rom bak invertert back hvis balltap gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "lag med inverterte backer i oppbygging"
+      ],
+      "learningPoints": [
+        "Les 4-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-5 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "inverted_fullback",
+          "theme": "invertert back"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/inverted_fullback_235.md"
+    },
+    {
+      "formationId": "box_midfield_3223",
+      "displayName": "Box Midfield 3-2-2-3",
+      "era": "2020–2026",
+      "tacticalSchool": "Modern box midfield",
+      "baseShape": "4-2-3-1",
+      "inPossessionShape": "3-2-2-3",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-5-1",
+      "summary": "Box Midfield 3-2-2-3 er et 2020–2026-system fra Modern box midfield der fire sentralt i en boks og to tiere gjør tallformen spillbar.",
+      "corePrinciple": "fire sentralt i en boks; to tiere; tre bak; bredde fra vinger",
+      "requiredConditions": [
+        "Roller som matcher distributor_keeper, ball_playing_centre_back, inverted_full_back",
+        "Faseløp fra 3-2-2-3 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "distributor_keeper",
+        "ball_playing_centre_back",
+        "inverted_full_back",
+        "holding_midfielder",
+        "advanced_eight",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "strengths": [
+        "sentral dominans",
+        "midtbaneboks som kontrollerer rommet"
+      ],
+      "weaknesses": [
+        "krever presise posisjoner og timing"
+      ],
+      "idealPlayerTypes": [
+        "inverted_full_back",
+        "advanced_eight",
+        "holding_midfielder",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når fire sentralt i en boks får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "krever presise posisjoner og timing"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "krever presise posisjoner og timing gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "moderne box-midfield-lag"
+      ],
+      "learningPoints": [
+        "Les 4-2-3-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-2-3 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-2-3-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "tactical_coach",
+          "theme": "avansert taktikk"
+        },
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "box_midfield",
+          "theme": "box midfield"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "medium restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "medium",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/box_midfield_3223.md"
+    },
+    {
+      "formationId": "modern_3241",
+      "displayName": "Modern 3-2-4-1",
+      "era": "2020–2026",
+      "tacticalSchool": "Modern 3-2-4-1 box build",
+      "baseShape": "4-3-3",
+      "inPossessionShape": "3-2-4-1",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-3-3",
+      "lowBlockShape": "4-5-1",
+      "summary": "Modern 3-2-4-1 er et 2020–2026-system fra Modern 3-2-4-1 box build der fire mellomromsspillere og én spiss gjør tallformen spillbar.",
+      "corePrinciple": "fire mellomromsspillere; én spiss; kontrollert restforsvar",
+      "requiredConditions": [
+        "Roller som matcher distributor_keeper, ball_playing_centre_back, inverted_full_back",
+        "Faseløp fra 3-2-4-1 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "distributor_keeper",
+        "ball_playing_centre_back",
+        "inverted_full_back",
+        "holding_midfielder",
+        "advanced_eight",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "strengths": [
+        "enorm mellomromskontroll",
+        "fire i siste midtbanelinje"
+      ],
+      "weaknesses": [
+        "kan bli trangt uten bredde"
+      ],
+      "idealPlayerTypes": [
+        "inverted_full_back",
+        "advanced_eight",
+        "mezzala",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når fire mellomromsspillere får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "kan bli trangt uten bredde"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "kan bli trangt uten bredde gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "moderne 3-2-4-1-lag"
+      ],
+      "learningPoints": [
+        "Les 4-3-3 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 3-2-4-1 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-3-3 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "tactical_coach",
+          "theme": "avansert taktikk"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "strong restforsvar",
+        "balanced bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "balanced",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/modern_3241.md"
+    },
+    {
+      "formationId": "modern_rest_235",
+      "displayName": "Modern Rest-Defence 2-3-5",
+      "era": "2020–2026",
+      "tacticalSchool": "Modern rest-defence design",
+      "baseShape": "4-2-3-1",
+      "inPossessionShape": "2-3-5",
+      "outOfPossessionShape": "4-4-2",
+      "pressShape": "4-4-2",
+      "lowBlockShape": "4-5-1",
+      "summary": "Modern Rest-Defence 2-3-5 er et 2020–2026-system fra Modern rest-defence design der to stoppere og tre sikrende spillere bak fem angrepsspillere og angrepstrykk med sikring gjør tallformen spillbar.",
+      "corePrinciple": "to stoppere og tre sikrende spillere bak fem angrepsspillere; angrepstrykk med sikring",
+      "requiredConditions": [
+        "Roller som matcher distributor_keeper, ball_playing_centre_back, inverted_full_back",
+        "Faseløp fra 2-3-5 til 4-4-2 må trenes",
+        "Manageren må beskytte systemets naturlige svake rom"
+      ],
+      "roleRequirements": [
+        "distributor_keeper",
+        "ball_playing_centre_back",
+        "inverted_full_back",
+        "holding_midfielder",
+        "advanced_eight",
+        "inverted_winger",
+        "complete_forward"
+      ],
+      "strengths": [
+        "angrepstrykk med sikring",
+        "fem i angrep uten å bli åpne"
+      ],
+      "weaknesses": [
+        "risikabelt hvis de tre bak ballen er feil spillertyper"
+      ],
+      "idealPlayerTypes": [
+        "ball_playing_centre_back",
+        "inverted_full_back",
+        "holding_midfielder",
+        "advanced_eight",
+        "complete_forward"
+      ],
+      "dangerousIf": [
+        "Farlig når to stoppere og tre sikrende spillere bak fem angrepsspillere får tid og riktige avstander",
+        "Farlig når rollekravene dekkes av spesialister"
+      ],
+      "vulnerableIf": [
+        "risikabelt hvis de tre bak ballen er feil spillertyper"
+      ],
+      "worksWellAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "strugglesAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "strongAgainst": [
+        "passive_mid_block",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "weakAgainst": [
+        "fast_transition",
+        "switching_play",
+        "high_press"
+      ],
+      "tacticalRisks": [
+        "risikabelt hvis de tre bak ballen er feil spillertyper gjør systemet sårbart",
+        "Blir historisk karikatur hvis rollene tolkes som bare tall",
+        "Mangler effekt hvis treningskravene ignoreres"
+      ],
+      "historicalExamples": [
+        "moderne elitelag med eksplisitt restforsvar"
+      ],
+      "learningPoints": [
+        "Les 4-2-3-1 som relasjoner, ikke bare tall",
+        "Forstå overgangen mellom 2-3-5 med ball og 4-4-2 uten ball",
+        "Gamle systemer fungerer når samtidens roller og risiko respekteres"
+      ],
+      "managerHints": [
+        "Ikke kopier 4-2-3-1 blindt; bygg laget rundt nøkkelrollene.",
+        "Tren først avstander, restforsvar og første pasning ut av press."
+      ],
+      "relatedOpponentArchetypes": [],
+      "unlockLinks": [
+        {
+          "sourceType": "collected_staff",
+          "ref": "tactical_coach",
+          "theme": "restforsvar"
+        },
+        {
+          "sourceType": "football_lexicon_entry",
+          "ref": "rest_defence",
+          "theme": "restforsvar"
+        }
+      ],
+      "matchupSignals": [
+        "medium linje + medium press",
+        "strong restforsvar",
+        "wide bredde og medium overgangstrussel"
+      ],
+      "parameterProfile": {
+        "pressHeight": "medium",
+        "defensiveLine": "medium",
+        "width": "wide",
+        "possession": "patient",
+        "tempo": "low",
+        "transition": "medium",
+        "restDefence": "strong",
+        "pressingScheme": "mixed",
+        "risk": "high"
+      },
+      "trainingLinks": [
+        "match_discipline",
+        "rest_defense",
+        "attacking_width",
+        "midfield_triangle"
+      ],
+      "doc": "docs/hgFootball/formations/modern_rest_235.md"
     }
   ]
 }
