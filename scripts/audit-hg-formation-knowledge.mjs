@@ -17,9 +17,10 @@
 // Rent Node-script (standardbibliotek, ingen dependencies). Rører ikke motor,
 // UI eller scorelogikk. Exit code 1 hvis errors, ellers 0. Warnings feiler ikke.
 
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -27,6 +28,34 @@ const ROOT = join(__dirname, "..");
 const KNOWLEDGE_REL = "data/hgFootball/formationKnowledge.json";
 const FORMATIONS_REL = "data/hgFootball/formations.json";
 const BADGES_REL = "data/football_training_badges.json";
+
+const REQUIRED_ARRAY_FIELDS = [
+  "strengths",
+  "weaknesses",
+  "roleRequirements",
+  "learningPoints",
+  "managerHints",
+  "idealPlayerTypes",
+  "worksWellAgainst",
+  "strugglesAgainst"
+];
+const REQUIRED_STRING_FIELDS = [
+  "displayName",
+  "era",
+  "tacticalSchool",
+  "baseShape",
+  "inPossessionShape",
+  "outOfPossessionShape",
+  "pressShape",
+  "lowBlockShape",
+  "corePrinciple"
+];
+const GENERIC_PHRASES = [
+  "lorem ipsum",
+  "tbd",
+  "generisk",
+  "kommer senere"
+];
 
 const errors = [];
 const warnings = [];
@@ -68,6 +97,8 @@ const badgeFamilyIds = new Set(
     ? badgesData.badgeFamilies.map((f) => f && f.id).filter(isNonEmptyString)
     : [],
 );
+const historicalOpponentIds = new Set(HISTORICAL_OPPONENT_PROFILES.map((profile) => profile.id));
+const historicalOpponentFormationIds = new Set(HISTORICAL_OPPONENT_PROFILES.map((profile) => profile.formationId));
 
 if (knowledge) {
   if (knowledge.schema !== "history-go.hg-football.formation-knowledge.v1") {
@@ -133,6 +164,24 @@ if (knowledge) {
 
       if (!isNonEmptyString(entry.summary)) {
         errors.push(`${label}: "summary" må være ikke-tom.`);
+      } else if (entry.summary.trim().split(/\s+/).length < 10) {
+        errors.push(`${label}: "summary" er for tynn til å være et læringsoppslag.`);
+      }
+      for (const field of REQUIRED_STRING_FIELDS) {
+        if (!isNonEmptyString(entry[field])) {
+          errors.push(`${label}: "${field}" må være en ikke-tom streng.`);
+        }
+      }
+      for (const field of REQUIRED_ARRAY_FIELDS) {
+        if (!isNonEmptyStringArray(entry[field])) {
+          errors.push(`${label}: "${field}" må være en ikke-tom liste.`);
+        }
+      }
+      const prose = [entry.summary, entry.corePrinciple, ...(Array.isArray(entry.learningPoints) ? entry.learningPoints : [])].join(" ").toLowerCase();
+      for (const phrase of GENERIC_PHRASES) {
+        if (prose.includes(phrase)) {
+          errors.push(`${label}: inneholder generisk/placeholder-frase "${phrase}".`);
+        }
       }
       if (!isNonEmptyStringArray(entry.requiredConditions)) {
         errors.push(`${label}: "requiredConditions" må være en ikke-tom liste.`);
@@ -198,21 +247,41 @@ if (knowledge) {
         }
       }
 
-      // doc (warning hvis fil mangler).
-      if (entry.doc !== undefined) {
-        if (!isNonEmptyString(entry.doc) || !entry.doc.endsWith(".md")) {
-          errors.push(`${label}: "doc" må være en .md-sti.`);
-        } else if (!existsSync(join(ROOT, entry.doc))) {
-          warnings.push(`${label}: doc-fil mangler ennå: ${entry.doc}.`);
+      // relatedOpponentArchetypes: må peke på ekte historiske læringsmotstandere.
+      if (entry.relatedOpponentArchetypes !== undefined) {
+        if (!Array.isArray(entry.relatedOpponentArchetypes)) {
+          errors.push(`${label}: "relatedOpponentArchetypes" må være en liste.`);
+        } else {
+          const seenOpponents = new Set();
+          for (const opponentId of entry.relatedOpponentArchetypes) {
+            if (!isNonEmptyString(opponentId)) {
+              errors.push(`${label}.relatedOpponentArchetypes: alle verdier må være ikke-tomme strenger.`);
+            } else if (!historicalOpponentIds.has(opponentId)) {
+              errors.push(`${label}.relatedOpponentArchetypes: "${opponentId}" finnes ikke i historical opponent profiles.`);
+            }
+            if (seenOpponents.has(opponentId)) {
+              errors.push(`${label}.relatedOpponentArchetypes: duplikat "${opponentId}".`);
+            }
+            seenOpponents.add(opponentId);
+          }
         }
+      }
+
+      if (historicalOpponentFormationIds.has(entry.formationId) && (!Array.isArray(entry.relatedOpponentArchetypes) || entry.relatedOpponentArchetypes.length === 0)) {
+        errors.push(`${label}: historisk brukt formationId mangler relatedOpponentArchetypes.`);
+      }
+
+      // doc er valgfri, men hvis feltet finnes skal det være en Markdown-sti.
+      if (entry.doc !== undefined && (!isNonEmptyString(entry.doc) || !entry.doc.endsWith(".md"))) {
+        errors.push(`${label}: "doc" må være en .md-sti.`);
       }
     }
 
-    // Dekningsgap (warning, ikke error – kunnskapslaget er additivt).
+    // Dekningsgap er nå feil: formasjonskunnskapen skal være komplett eller eksplisitt falle tilbake.
     if (formationIds.size > 0) {
       const missing = [...formationIds].filter((id) => !coveredIds.has(id));
       if (missing.length > 0) {
-        warnings.push(`Formasjoner uten kunnskapsoppslag (${missing.length}): ${missing.join(", ")}.`);
+        errors.push(`Formasjoner uten kunnskapsoppslag (${missing.length}): ${missing.join(", ")}.`);
       }
     }
   }
@@ -223,6 +292,7 @@ const lines = [];
 lines.push("Formation Knowledge audit");
 lines.push(`Formasjoner i formations.json: ${formationIds.size}`);
 lines.push(`Badge-familier: ${badgeFamilyIds.size}`);
+lines.push(`Historiske motstanderprofiler: ${historicalOpponentIds.size}`);
 lines.push(`Kunnskapsoppslag: ${Array.isArray(knowledge?.knowledge) ? knowledge.knowledge.length : 0}`);
 lines.push(`Errors: ${errors.length}`);
 lines.push(`Warnings: ${warnings.length}`);

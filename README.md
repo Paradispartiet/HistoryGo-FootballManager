@@ -39,8 +39,19 @@ Appen har nå flere lag:
 
 14. **Match Explanation v1.5** – kampdagen **forklarer hvorfor** resultatet ble som det ble (`src/football-match-explanation-engine.js`): en deterministisk, ren forklaringsmotor binder sammen lagfit, rollefit, relasjoner, formasjon/taktikk, treningsuke, treningsprogram, off-pitch-kontekst og managergrep til konkrete årsakskjeder og åpne læringspunkter. Kamprapporten viser nå hovedforklaring, avgjørende faktorer og forslag til neste uke. Se punkt 12 under «HG Football Manager som læringsspill» og kjør `npm run sim:matchday`.
 15. **Historical Opponent Archetypes v1** – motstanderne er **historiske stil-lag** brukt som læringsmotstandere (`src/football-historical-opponent-profiles.js`): 12 historiske taktiske arketyper (Ungarn 1953 → Man City 2022–23) som peker på formasjonsbiblioteket, gir en forklarende stil-matchup, og mater kampforklaring, suggested setups, treningsprogram og Mini Season. Ingen logoer/drakter/emblemer — rent historisk/faglig referanse. Se punkt 13 og kjør `npm run audit:historical-opponents`.
+16. **Formation Knowledge Backfill v1** – `data/hgFootball/formationKnowledge.json` dekker nå alle formasjoner i `data/hgFootball/formations.json` med epoke, taktisk skole, faseformer, rollekrav, styrker/svakheter, læringspunkter, matchup-signaler og koblinger til relevante historiske motstanderarketyper. Audit-en feiler nå på manglende/tynne oppslag i stedet for å la gamle hull stå som warnings. Kjør `npm run audit:hg-formation-knowledge`.
 
 Dette er fortsatt ikke et ferdig spill. Kampmotor, historiske motstanderprofiler, Club Week, kamprapport (nå forklarende), Mini Season v1 og lokal starttropp finnes nå, men full liga/sesong og full simulering gjenstår.
+
+### Formation Knowledge Backfill v1
+
+Formasjonene i HG Football Manager er **taktiske systemer, ikke bare tallmønstre**. Kunnskapslaget i `data/hgFootball/formationKnowledge.json` beskriver derfor hver formasjon med historisk epoke, taktisk skole, grunnform, faseformer med/uten ball, pressform, lav blokk, rollekrav, styrker, svakheter, spillertyper, læringspunkter og managerhint.
+
+Et viktig prinsipp er at gamle formasjoner ikke behandles som dårlige. En 2-3-5, WM, MM, libero-variant eller catenaccio kan fungere når manageren forstår samtidens roller, avstander, restforsvar og rammebetingelser. Feilbruk oppstår når formasjonen kopieres som et tallmønster uten relasjonene som gjorde systemet spillbart.
+
+Formation knowledge mater nå historical opponents, formasjons-matchup, suggested setups, treningsprogram og kamp-/læringsforklaringer med samme kilde. Historiske stilprofiler beskriver laget/arketypen; formation knowledge forklarer systemet de bruker. Feltet `relatedOpponentArchetypes` binder for eksempel totalfotball-4-3-3 til Ajax 1971–73 og Nederland 1974, mens moderne 3-2-5 peker mot Man City 2022–23.
+
+`npm run audit:hg-formation-knowledge` sjekker at alle formationIds har oppslag, at oppslag peker på gyldige formasjoner og historiske motstanderprofiler, at nøkkelfelter som `strengths`, `weaknesses`, `roleRequirements` og `learningPoints` ikke er tomme, og at gamle formasjoner har epoke/taktisk skole.
 
 ## Viktige filer
 

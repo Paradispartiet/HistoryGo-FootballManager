@@ -48,6 +48,7 @@ const byId = Object.fromEntries(formations.map((f) => [f.id, f]));
 const vocab = new Set(knowledgeData.vocab.opponentStyles);
 const LEANS = new Set(["favourable", "balanced", "risky"]);
 const SOURCES = new Set(["opponent_weakness", "own_strength", "opponent_strength", "own_weakness"]);
+const historicalFormationIds = new Set(HISTORICAL_OPPONENT_PROFILES.map((profile) => profile.formationId));
 
 const entries = knowledgeData.knowledge.map((k) => ({
   formationId: k.formationId,
@@ -56,6 +57,9 @@ const entries = knowledgeData.knowledge.map((k) => ({
   parameterProfile: k.parameterProfile,
   strongAgainst: k.strongAgainst,
   weakAgainst: k.weakAgainst,
+  learningPoints: k.learningPoints,
+  relatedOpponentArchetypes: k.relatedOpponentArchetypes,
+  matchupSignals: k.matchupSignals,
 }));
 
 const failures = [];
@@ -76,6 +80,11 @@ for (const you of entries) {
     check(r.score === r.advantages.length - r.risks.length, `${label}: score != adv - risk`);
     check(LEANS.has(r.lean), `${label}: ugyldig lean ${r.lean}`);
     check(typeof r.summary === "string" && r.summary.length > 0, `${label}: tomt summary`);
+  }
+  check(Array.isArray(you.learningPoints) && you.learningPoints.length > 0, `${you.formationId}: mangler læringspunkter`);
+  check(Array.isArray(you.matchupSignals) && you.matchupSignals.length > 0, `${you.formationId}: mangler matchupSignals`);
+  if (historicalFormationIds.has(you.formationId)) {
+    check(Array.isArray(you.relatedOpponentArchetypes) && you.relatedOpponentArchetypes.length > 0, `${you.formationId}: historisk formasjon mangler opponent-kobling`);
   }
 }
 
@@ -181,6 +190,8 @@ for (const you of entries) {
   console.log(short(you.formationId) + "  " + row);
 }
 console.log(`\nPar vurdert: ${entries.length * entries.length} (formasjon vs formasjon) + ${opponentPairs} (formasjon vs motstanderprofil, TS/JS-paritet) + ${historicalPairs} (formasjon vs historisk stil-profil)`);
+const linkedHistorical = entries.filter((entry) => entry.relatedOpponentArchetypes?.length).length;
+console.log(`Historiske formation knowledge-koblinger: ${linkedHistorical}`);
 console.log("Eksempel – possession_433 mot gegen_4222:");
 console.log("  " + possessionVsGegen.summary);
 for (const p of [...possessionVsGegen.advantages, ...possessionVsGegen.risks]) console.log("   • " + p.text);
