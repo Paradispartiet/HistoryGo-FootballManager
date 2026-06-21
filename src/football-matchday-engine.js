@@ -1390,6 +1390,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     createdAt: new Date().toISOString(),
     phase: "pre_match",
     opponent: { ...matchOpponent },
+    formationKnowledge: formationKnowledge ? { ...formationKnowledge } : null,
     formationMatchup,
     historicalMatchup,
     selectedFormationId: formation?.id || null,
