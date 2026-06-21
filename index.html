@@ -123,7 +123,7 @@
 
       <p id="clubWeekFeedback" class="club-week-feedback">Klubbuken er klar.</p>
 
-      <div class="dashboard-grid manager-main-street">
+      <div class="dashboard-grid">
 
         <!-- Managerinnsikt: sammendrag + prioriterte grep (fra teamFit) -->
         <section class="panel manager-actions-panel" aria-live="polite">
@@ -134,6 +134,26 @@
           <ul id="managerTopActions"></ul>
         </section>
 
+        <!-- Suggested Setups v1: 2–4 faglig logiske oppsett (formasjon, kampplan,
+             treningsuke). Forklarende og additive — aldri en fasit eller lås. -->
+        <section class="panel suggested-setups-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
+          <p class="eyebrow">Forslag</p>
+          <h2>Foreslåtte oppsett</h2>
+          <p class="muted-text suggested-setups-intro">Faglige standardforslag. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
+          <div id="suggestedSetups" class="suggested-setups-groups"></div>
+        </section>
+
+        <!-- Off-pitch Parameters v1: managerens kontekstlag. Lesbare signaler
+             (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet,
+             skadefare) — ikke rå tall. Forslagene ser ikke alt; manageren må
+             lese konteksten selv. -->
+        <section class="panel context-panel" aria-label="Kontekst" aria-live="polite">
+          <p class="eyebrow">Off-pitch</p>
+          <h2>Kontekst</h2>
+          <p id="contextHeadline" class="context-headline"></p>
+          <div id="contextSignals" class="context-signals"></div>
+        </section>
+
         <!-- Statuskort: neste beslutninger på tvers av klubben -->
         <section class="panel decision-strip" aria-label="Neste beslutninger">
           <div class="decision-strip-head">
@@ -142,201 +162,41 @@
           </div>
           <div id="decisionCards" class="decision-cards"></div>
         </section>
+
+        <!-- Mini Season v1 / League Loop v1: 5-kampers prøveperiode (kamprekke,
+             poeng, form, light-league-tabell, styrevurdering) oppå Club Week og Kampdag. -->
+        <section class="panel mini-season-panel" aria-label="Prøveperiode" aria-live="polite">
+          <div class="mini-season-head">
+            <div>
+              <p class="eyebrow">Prøveperiode</p>
+              <h2>5 kamper for styret</h2>
+              <p id="miniSeasonStatus" class="muted-text">Laster prøveperiode…</p>
+            </div>
+            <div class="mini-season-actions">
+              <button type="button" id="startMiniSeasonButton">Start prøveperiode</button>
+              <button type="button" id="resetMiniSeasonButton" class="is-reset" hidden>Nullstill prøveperiode</button>
+            </div>
+          </div>
+          <div id="miniSeasonOverview" class="mini-season-overview"></div>
+        </section>
+
+        <!-- Snarveier til arbeidsflatene -->
+        <section class="panel dashboard-shortcuts" aria-label="Snarveier">
+          <p class="eyebrow">Snarveier</p>
+          <h2>Hvor vil du jobbe?</h2>
+          <div class="shortcut-buttons">
+            <button type="button" class="shortcut-button" data-tab-target="tactics">Sett opp laget</button>
+            <button type="button" class="shortcut-button" data-tab-target="kamp">Spill kamp</button>
+            <button type="button" class="shortcut-button" data-tab-target="trening">Trening &amp; kunnskap</button>
+          </div>
+        </section>
+
+        <!-- Klubbhendelser -->
+        <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
+          <h3>Klubbhendelser</h3>
+          <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
+        </section>
       </div>
-
-      <section class="panel manager-tabs-panel" aria-label="Managerfaner">
-        <div class="manager-tab-list" role="tablist" aria-label="Managerkontorets rullefaner">
-          <button type="button" class="manager-tab-button is-active" role="tab" aria-selected="true" data-manager-tab-target="valg">Valg</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="forslag">Forslag</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="trening">Trening</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="kampplan">Kampplan</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="innboks">Innboks</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="kontekst">Kontekst</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="relasjoner">Relasjoner</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="proveperiode">Prøveperiode</button>
-          <button type="button" class="manager-tab-button" role="tab" aria-selected="false" data-manager-tab-target="rapport">Rapport</button>
-        </div>
-
-        <div class="manager-tab-viewport">
-          <div class="manager-tab-pane is-active" data-manager-tab-section="valg">
-            <section class="panel dashboard-shortcuts" aria-label="Snarveier">
-              <p class="eyebrow">Valg</p>
-              <h2>Hvor vil du jobbe?</h2>
-              <div class="shortcut-buttons">
-                <button type="button" class="shortcut-button" data-tab-target="tactics">Sett opp laget</button>
-                <button type="button" class="shortcut-button" data-tab-target="kamp">Spill kamp</button>
-                <button type="button" class="shortcut-button" data-manager-tab-target="trening">Velg trening</button>
-                <button type="button" class="shortcut-button" data-manager-tab-target="forslag">Se forslag</button>
-              </div>
-            </section>
-
-            <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
-              <h3>Klubbhendelser</h3>
-              <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
-            </section>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="forslag" hidden>
-            <section class="panel suggested-setups-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
-              <p class="eyebrow">Forslag</p>
-              <h2>Foreslåtte oppsett</h2>
-              <p class="muted-text suggested-setups-intro">Faglige standardforslag. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
-              <div id="suggestedSetups" class="suggested-setups-groups"></div>
-            </section>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="trening" hidden>
-            <section class="panel weekly-training-panel" aria-label="Ukens treningsfokus" aria-live="polite">
-              <div class="weekly-training-head">
-                <div>
-                  <p class="eyebrow">Club Week</p>
-                  <h2>Ukens treningsfokus</h2>
-                  <p id="weeklyTrainingStatus" class="weekly-training-status">Velg ett fokus før kamp.</p>
-                </div>
-                <p id="weeklyTrainingRecommendation" class="weekly-training-recommendation">Laster anbefaling…</p>
-              </div>
-              <div id="weeklyTrainingOptions" class="weekly-training-options"></div>
-            </section>
-
-            <section class="panel training-programs-panel" aria-label="Treningsprogrammer" aria-live="polite">
-              <p class="eyebrow">Club Week</p>
-              <h2>Treningsprogrammer</h2>
-              <p id="weeklyTrainingProgramStatus" class="weekly-training-status" data-selected="false">Velg ett treningsprogram for uka.</p>
-              <p class="muted-text training-programs-intro">Ferdige ukeprogram av flere økter. Standardforslag som forklarer seg selv — du velger fritt, og et bevisst kontekstuelt valg kan slå standarden.</p>
-              <div id="trainingPrograms" class="training-programs-list"></div>
-            </section>
-
-            <section class="panel manager-training-panel" aria-live="polite">
-              <p class="eyebrow">Managerinnsikt</p>
-              <h2>Treningsfokus</h2>
-              <ul id="managerTrainingPlan"></ul>
-            </section>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="kampplan" hidden>
-            <section class="panel matchday-plan-panel" aria-label="Kampplan">
-              <p class="eyebrow">Kampplan</p>
-              <h2>Neste kampgrep</h2>
-              <p class="muted-text">Bruk hovedgaten til fase og neste handling. Kampfanen inneholder selve kampmotoren.</p>
-              <div class="shortcut-buttons">
-                <button type="button" class="shortcut-button" data-tab-target="kamp">Åpne kamp</button>
-                <button type="button" class="shortcut-button" data-tab-target="tactics">Juster lag &amp; taktikk</button>
-              </div>
-            </section>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="innboks" hidden>
-            <div class="inbox-thread-layout">
-              <section class="panel inbox-thread-panel" aria-label="Aktive tråder">
-                <h3>Aktive tråder</h3>
-                <div id="inboxThreadList" class="message-list"></div>
-              </section>
-
-              <section class="panel inbox-thread-panel inbox-archive" aria-label="Trådarkiv">
-                <h3>Trådarkiv</h3>
-                <div id="inboxThreadArchive" class="message-list"></div>
-              </section>
-            </div>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="kontekst" hidden>
-            <section class="panel context-panel" aria-label="Kontekst" aria-live="polite">
-              <p class="eyebrow">Off-pitch</p>
-              <h2>Kontekst</h2>
-              <p id="contextHeadline" class="context-headline"></p>
-              <div id="contextSignals" class="context-signals"></div>
-            </section>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="relasjoner" hidden>
-            <section class="panel relationship-tab-panel" aria-label="Relasjoner" aria-live="polite">
-              <p class="eyebrow">Relasjoner</p>
-              <h2>Relasjoner mellom rollene</h2>
-              <p id="relationshipHeadline" class="relationship-headline muted-text">Fyll laget for å se hvordan rollene støtter hverandre.</p>
-              <div id="relationshipList" class="relationship-list"></div>
-            </section>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="proveperiode" hidden>
-            <section class="panel mini-season-panel" aria-label="Prøveperiode" aria-live="polite">
-              <div class="mini-season-head">
-                <div>
-                  <p class="eyebrow">Prøveperiode</p>
-                  <h2>5 kamper for styret</h2>
-                  <p id="miniSeasonStatus" class="muted-text">Laster prøveperiode…</p>
-                </div>
-                <div class="mini-season-actions">
-                  <button type="button" id="startMiniSeasonButton">Start prøveperiode</button>
-                  <button type="button" id="resetMiniSeasonButton" class="is-reset" hidden>Nullstill prøveperiode</button>
-                </div>
-              </div>
-              <div id="miniSeasonOverview" class="mini-season-overview"></div>
-            </section>
-          </div>
-
-          <div class="manager-tab-pane" data-manager-tab-section="rapport" hidden>
-            <div class="insight-grid manager-report-grid">
-              <section class="panel report-panel">
-                <p class="eyebrow">Lagrapport</p>
-                <h2>Hva fungerer?</h2>
-                <p id="reportSummary" class="muted-text">Fyll laget for å se rapport.</p>
-
-                <div class="coach-context-status" aria-label="Trenerteamets støtte til formasjonen">
-                  <p id="coachContextHeadline" class="coach-context-headline muted-text">Engasjer stab for å se hvordan trenerteamet støtter formasjonen.</p>
-                  <div class="coach-context-metrics">
-                    <article><span>Formasjonstilvenning</span><strong id="coachContextFamiliarity">–</strong></article>
-                    <article><span>Trenerforståelse</span><strong id="coachContextUnderstanding">–</strong></article>
-                    <article><span>Taktisk læringsfart</span><strong id="coachContextLearning">–</strong></article>
-                    <article><span>Stab</span><strong id="coachContextStaff">–</strong></article>
-                  </div>
-                </div>
-
-                <div class="report-columns">
-                  <section>
-                    <h3>Styrker</h3>
-                    <ul id="strengthsList"></ul>
-                  </section>
-                  <section>
-                    <h3>Problemer</h3>
-                    <ul id="issuesList"></ul>
-                  </section>
-                </div>
-              </section>
-
-              <section class="panel detail-metrics-panel">
-                <p class="eyebrow">Detaljer</p>
-                <h2>Lagets profil</h2>
-                <div class="metric-grid detail-metrics">
-                  <article><span>Rollefit</span><strong id="roleFitAverage">–</strong></article>
-                  <article><span>Taktikk</span><strong id="tacticFitAverage">–</strong></article>
-                  <article><span>Balanse</span><strong id="balanceScore">–</strong></article>
-                  <article><span>Restforsvar</span><strong id="restDefenseScore">–</strong></article>
-                  <article><span>Bredde</span><strong id="widthScore">–</strong></article>
-                  <article><span>Dybde</span><strong id="depthScore">–</strong></article>
-                  <article><span>Oppbygging</span><strong id="buildUpScore">–</strong></article>
-                  <article><span>Press</span><strong id="pressScore">–</strong></article>
-                  <article><span>Relasjoner</span><strong id="relationshipScore">–</strong></article>
-                </div>
-              </section>
-
-              <section class="panel manager-detail-panel" aria-live="polite">
-                <p class="eyebrow">Managerinnsikt</p>
-                <h2>Hva sier motoren?</h2>
-                <div class="report-columns">
-                  <section>
-                    <h3>Rolleforslag</h3>
-                    <ul id="managerRoleChanges"></ul>
-                  </section>
-                  <section>
-                    <h3>Svakheter</h3>
-                    <ul id="managerWeakPoints"></ul>
-                  </section>
-                </div>
-              </section>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
 
     <!-- ============================ LAG & TAKTIKK ============================ -->
@@ -450,7 +310,78 @@
         <p id="rosterReadinessNote" class="muted-text roster-readiness-note">Samle flere spillere via History Go-steder.</p>
       </section>
 
-      <!-- Sekundær innsikt er flyttet til Rapport- og Relasjoner-fanene i managerkontoret. -->
+      <!-- Sekundær innsikt: lagrapport + profil + motorens vurdering -->
+      <div class="insight-grid">
+        <section class="panel report-panel">
+          <p class="eyebrow">Lagrapport</p>
+          <h2>Hva fungerer?</h2>
+          <p id="reportSummary" class="muted-text">Fyll laget for å se rapport.</p>
+
+          <div class="coach-context-status" aria-label="Trenerteamets støtte til formasjonen">
+            <p id="coachContextHeadline" class="coach-context-headline muted-text">
+              Engasjer stab for å se hvordan trenerteamet støtter formasjonen.
+            </p>
+            <div class="coach-context-metrics">
+              <article><span>Formasjonstilvenning</span><strong id="coachContextFamiliarity">–</strong></article>
+              <article><span>Trenerforståelse</span><strong id="coachContextUnderstanding">–</strong></article>
+              <article><span>Taktisk læringsfart</span><strong id="coachContextLearning">–</strong></article>
+              <article><span>Stab</span><strong id="coachContextStaff">–</strong></article>
+            </div>
+          </div>
+
+          <div class="report-columns">
+            <section>
+              <h3>Styrker</h3>
+              <ul id="strengthsList"></ul>
+            </section>
+            <section>
+              <h3>Problemer</h3>
+              <ul id="issuesList"></ul>
+            </section>
+          </div>
+
+          <!-- Relasjoner: hvilke roller hjelper eller blokkerer hverandre.
+               Rendres av app.js (renderRelationships) fra teamFit.relationships. -->
+          <div class="relationship-block" aria-label="Hvordan rollene støtter eller blokkerer hverandre">
+            <h3>Relasjoner mellom rollene</h3>
+            <p id="relationshipHeadline" class="relationship-headline muted-text">
+              Fyll laget for å se hvordan rollene støtter hverandre.
+            </p>
+            <div id="relationshipList" class="relationship-list"></div>
+          </div>
+        </section>
+
+        <section class="panel detail-metrics-panel">
+          <p class="eyebrow">Detaljer</p>
+          <h2>Lagets profil</h2>
+          <div class="metric-grid detail-metrics">
+            <article><span>Rollefit</span><strong id="roleFitAverage">–</strong></article>
+            <article><span>Taktikk</span><strong id="tacticFitAverage">–</strong></article>
+            <article><span>Balanse</span><strong id="balanceScore">–</strong></article>
+            <article><span>Restforsvar</span><strong id="restDefenseScore">–</strong></article>
+            <article><span>Bredde</span><strong id="widthScore">–</strong></article>
+            <article><span>Dybde</span><strong id="depthScore">–</strong></article>
+            <article><span>Oppbygging</span><strong id="buildUpScore">–</strong></article>
+            <article><span>Press</span><strong id="pressScore">–</strong></article>
+            <article><span>Relasjoner</span><strong id="relationshipScore">–</strong></article>
+          </div>
+        </section>
+
+        <section class="panel manager-detail-panel" aria-live="polite">
+          <p class="eyebrow">Managerinnsikt</p>
+          <h2>Hva sier motoren?</h2>
+          <div class="report-columns">
+            <section>
+              <h3>Rolleforslag</h3>
+              <ul id="managerRoleChanges"></ul>
+            </section>
+            <section>
+              <h3>Svakheter</h3>
+              <ul id="managerWeakPoints"></ul>
+            </section>
+          </div>
+        </section>
+      </div>
     </div>
 
     <!-- ============================ KAMP ============================ -->
@@ -485,13 +416,59 @@
 
     <!-- ============================ TRENING & KUNNSKAP ============================ -->
     <div class="tab-section trening-view" data-tab-section="trening" hidden>
-      <section class="panel section-header-panel">
-        <p class="eyebrow">Trening</p>
-        <h2>Trening ligger i managerfanene</h2>
-        <p class="muted-text">Treningsfokus og treningsprogrammer er samlet i rullefanen Trening på oversikten, slik at valg, forslag og rapporter ikke dupliseres.</p>
-        <div class="shortcut-buttons">
-          <button type="button" class="shortcut-button" data-tab-target="dashboard" data-manager-tab-target="trening">Åpne Trening-fanen</button>
+
+      <!-- Treningsuke v0.2: ett taktisk fokus bundet til gjeldende Club Week. -->
+      <section class="panel weekly-training-panel" aria-label="Ukens treningsfokus" aria-live="polite">
+        <div class="weekly-training-head">
+          <div>
+            <p class="eyebrow">Club Week</p>
+            <h2>Ukens treningsfokus</h2>
+            <p id="weeklyTrainingStatus" class="weekly-training-status">Velg ett fokus før kamp.</p>
+          </div>
+          <p id="weeklyTrainingRecommendation" class="weekly-training-recommendation">Laster anbefaling…</p>
         </div>
+        <div id="weeklyTrainingOptions" class="weekly-training-options"></div>
+      </section>
+
+      <!-- Training Program Composition v1: ferdige ukentlige treningsprogram som
+           valgspill (flere økter), et dypere valg ved siden av treningsfokuset.
+           Forklarende og additivt — aldri en fasit eller lås. -->
+      <section class="panel training-programs-panel" aria-label="Treningsprogrammer" aria-live="polite">
+        <p class="eyebrow">Club Week</p>
+        <h2>Treningsprogrammer</h2>
+        <p id="weeklyTrainingProgramStatus" class="weekly-training-status" data-selected="false">Velg ett treningsprogram for uka.</p>
+        <p class="muted-text training-programs-intro">Ferdige ukeprogram av flere økter. Standardforslag som forklarer seg selv — du velger fritt, og et bevisst kontekstuelt valg kan slå standarden.</p>
+        <div id="trainingPrograms" class="training-programs-list"></div>
+      </section>
+
+      <!-- Treningsfokus fra motoren (teamFit-svakheter) -->
+      <section class="panel manager-training-panel" aria-live="polite">
+        <p class="eyebrow">Managerinnsikt</p>
+        <h2>Treningsfokus</h2>
+        <ul id="managerTrainingPlan"></ul>
+      </section>
+
+      <section class="panel manager-knowledge-panel">
+        <p class="eyebrow">Football Knowledge Engine</p>
+        <h2>Fotballkunnskap</h2>
+        <p class="muted-text">
+          Kunnskapsmotoren kobler lagets svakheter til fotballfaglige prinsipper, trenergrep og økter.
+        </p>
+        <p id="trainingWeekStatus" class="training-week-status">Treningsuke 1</p>
+        <div class="knowledge-progress-grid" aria-label="Football Knowledge-progresjon">
+          <article><span>Denne uken</span><strong id="knowledgeCompletedThisWeek">0</strong></article>
+          <article><span>Totalt</span><strong id="knowledgeCompletedTotal">0</strong></article>
+        </div>
+        <button type="button" id="advanceTrainingWeek" class="advance-training-week-button">
+          Gå til neste treningsuke
+        </button>
+        <p id="activeKnowledgeFocus" class="active-knowledge-focus">Ingen aktiv kunnskapsøkt valgt.</p>
+        <button type="button" id="clearKnowledgeFocus" class="clear-knowledge-focus-button">Fjern aktivt fokus</button>
+        <ul id="managerKnowledgeRecommendations" class="knowledge-card-list"></ul>
+        <section class="training-history-panel" aria-label="Treningshistorikk">
+          <h3>Treningshistorikk</h3>
+          <ul id="trainingHistoryList" class="training-history-list"></ul>
+        </section>
       </section>
     </div>
 
@@ -500,15 +477,26 @@
       <section class="dept-hero dept-hero-inbox">
         <div>
           <p class="eyebrow">Klubbens puls</p>
-          <h2>Innboks ligger i managerfanene</h2>
-          <p class="dept-hero-lede">Aktive tråder og arkiv er flyttet til rullefanen Innboks på oversikten.</p>
+          <h2>Innboks</h2>
+          <p class="dept-hero-lede">Scouting, styret, medisinsk og presse melder inn. Hver tråd peker mot en beslutning.</p>
         </div>
         <div class="dept-hero-stat">
           <strong id="inboxPulseCount">0</strong>
           <span>uleste tråder</span>
         </div>
-        <button type="button" class="shortcut-button" data-tab-target="dashboard" data-manager-tab-target="innboks">Åpne Innboks-fanen</button>
       </section>
+
+      <div class="inbox-thread-layout">
+        <section class="panel inbox-thread-panel" aria-label="Aktive tråder">
+          <h3>Aktive tråder</h3>
+          <div id="inboxThreadList" class="message-list"></div>
+        </section>
+
+        <section class="panel inbox-thread-panel inbox-archive" aria-label="Trådarkiv">
+          <h3>Trådarkiv</h3>
+          <div id="inboxThreadArchive" class="message-list"></div>
+        </section>
+      </div>
     </div>
 
     <!-- ============================ FASILITETER ============================ -->
