@@ -35,6 +35,12 @@ const { OPPONENT_PROFILES, evaluateFormationMatchupVsOpponent, calculateMatchStr
   join(ROOT, "src/football-matchday-engine.js")
 );
 
+// Historical Opponent Archetypes v1: de historiske stil-profilene bærer samme
+// matchupStyles-felt og må også gi gyldig TS/JS-paritet i formasjons-matchupen.
+const { HISTORICAL_OPPONENT_PROFILES } = await import(
+  join(ROOT, "src/football-historical-opponent-profiles.js")
+);
+
 const knowledgeData = loadJson("data/hgFootball/formationKnowledge.json");
 const formations = loadJson("data/hgFootball/formations.json").formations;
 const byId = Object.fromEntries(formations.map((f) => [f.id, f]));
@@ -130,6 +136,24 @@ for (const you of entries) {
   }
 }
 
+// 4b) Historiske stil-motstandere: matchupStyles i vokabular + TS/JS-paritet.
+let historicalPairs = 0;
+for (const you of entries) {
+  for (const profile of HISTORICAL_OPPONENT_PROFILES) {
+    const styles = profile.matchupStyles;
+    check(Array.isArray(styles) && styles.every((s) => vocab.has(s)), `${profile.id}: ugyldige matchupStyles (historisk)`);
+    const ts = evaluateFormationVsOpponentStyles(you, styles, profile.name);
+    const js = evaluateFormationMatchupVsOpponent(
+      { strongAgainst: you.strongAgainst, weakAgainst: you.weakAgainst },
+      styles,
+      profile.name,
+    );
+    historicalPairs++;
+    const same = ts.lean === js.lean && ts.score === js.score && ts.summary === js.summary;
+    check(same, `paritet TS!=JS for ${you.formationId} vs ${profile.id} (historisk)`);
+  }
+}
+
 // 5) Nudge: matchupen pavirker faktisk lagstyrken (liten, capped tendens).
 //    Samme lag: gunstig matchup > noytral > risikabel, men forskjellen er liten.
 const nudgeTeamFit = {
@@ -156,7 +180,7 @@ for (const you of entries) {
   const row = entries.map((o) => ` ${sym[evaluateFormationMatchup(you, o).lean]}    `.slice(0, 6)).join(" ");
   console.log(short(you.formationId) + "  " + row);
 }
-console.log(`\nPar vurdert: ${entries.length * entries.length} (formasjon vs formasjon) + ${opponentPairs} (formasjon vs motstanderprofil, TS/JS-paritet)`);
+console.log(`\nPar vurdert: ${entries.length * entries.length} (formasjon vs formasjon) + ${opponentPairs} (formasjon vs motstanderprofil, TS/JS-paritet) + ${historicalPairs} (formasjon vs historisk stil-profil)`);
 console.log("Eksempel – possession_433 mot gegen_4222:");
 console.log("  " + possessionVsGegen.summary);
 for (const p of [...possessionVsGegen.advantages, ...possessionVsGegen.risks]) console.log("   • " + p.text);

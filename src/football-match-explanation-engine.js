@@ -179,6 +179,27 @@ function findExtremeMetric(tp, mode) {
 }
 
 // ---------------------------------------------------------------------------
+// Historiske stil-faktorer (Historical Opponent Archetypes v1): når motstanderen
+// var en historisk arketype, surfacer den tydeligste fordelen og sårbarheten den
+// historiske stilen skapte. Tekstene finnes allerede i matchup-vurderingen — vi
+// rammer dem inn etter utfallet og vekter dem så de kan bli avgjørende faktorer.
+// ---------------------------------------------------------------------------
+function buildHistoricalFactors(historicalMatchup) {
+  if (!isObject(historicalMatchup)) return [];
+  const factors = [];
+  const topVulnerability = asArray(historicalMatchup.vulnerabilities)[0];
+  const topAdvantage = asArray(historicalMatchup.advantages)[0];
+
+  if (topVulnerability && typeof topVulnerability.text === "string") {
+    pushFactor(factors, topVulnerability.text, -6);
+  }
+  if (topAdvantage && typeof topAdvantage.text === "string") {
+    pushFactor(factors, topAdvantage.text, 5);
+  }
+  return factors;
+}
+
+// ---------------------------------------------------------------------------
 // Relasjonsfaktorer: surfacer den tydeligste positive og negative koblingen fra
 // relasjonsmotoren. Tekstene finnes allerede (title/explanation) — vi velger og
 // rammer dem inn etter utfallet.
@@ -312,8 +333,14 @@ function buildDecisionFactors({ bestDecision, worstDecision, positiveCount, nega
 // årsakskjeden til et konkret, men ÅPENT råd — formulert slik at spilleren kan
 // gjøre et annet bevisst valg neste gang (ikke en fasit).
 // ---------------------------------------------------------------------------
-function buildLearningPoints({ outcome, tp, relationshipScore, weakest, strongest, worstDecision, offPitch, concededGoals, matchup }) {
+function buildLearningPoints({ outcome, tp, relationshipScore, weakest, strongest, worstDecision, offPitch, concededGoals, matchup, historicalMatchup }) {
   const points = [];
+
+  // Historisk stil-læringspunkt: den pedagogiske kjernen i å møte en historisk
+  // arketype. Settes først så den ikke fortrenges av garantien nederst.
+  if (isObject(historicalMatchup) && typeof historicalMatchup.historicalLearningPoint === "string" && historicalMatchup.historicalLearningPoint.length > 0) {
+    points.push(historicalMatchup.historicalLearningPoint);
+  }
 
   if (outcome === "win" && num(tp.buildUpScore) >= STRONG && relationshipScore >= STRONG) {
     points.push(
@@ -426,6 +453,11 @@ export function buildMatchExplanation({ result, session } = {}) {
   const relationships = isObject(sess.relationshipSnapshot) ? sess.relationshipSnapshot : null;
   const offPitch = isObject(sess.offPitchSnapshot) ? sess.offPitchSnapshot : null;
   const matchup = isObject(sess.formationMatchup) ? sess.formationMatchup : result.formationMatchup || null;
+  const historicalMatchup = isObject(sess.historicalMatchup)
+    ? sess.historicalMatchup
+    : isObject(result.historicalMatchup)
+      ? result.historicalMatchup
+      : null;
   const historicalScore = num(sess.teamFitSnapshot?.historicalScore);
   const tactic = sess.tacticSnapshot || result.tacticSnapshot || {};
 
@@ -459,6 +491,7 @@ export function buildMatchExplanation({ result, session } = {}) {
     xgAgainst
   });
   const relationshipFactors = buildRelationshipFactors(relationships);
+  const historicalFactors = buildHistoricalFactors(historicalMatchup);
   const trainingFactors = buildTrainingFactors({
     trainingReport: result.trainingFocus,
     trainingFocus: sess.trainingFocus,
@@ -484,7 +517,7 @@ export function buildMatchExplanation({ result, session } = {}) {
       pushFactor(decisiveCandidates, `Jevn styrke mot motstanderen (${teamStrength} mot ${oppStrength}) — detaljene avgjorde.`, 2);
     }
   }
-  [tacticalFactors, decisionFactors, offPitchFactors, relationshipFactors, trainingFactors].forEach((list) => {
+  [tacticalFactors, historicalFactors, decisionFactors, offPitchFactors, relationshipFactors, trainingFactors].forEach((list) => {
     list.forEach((factor) => decisiveCandidates.push(factor));
   });
   const decisiveFactors = decisiveCandidates
@@ -524,7 +557,8 @@ export function buildMatchExplanation({ result, session } = {}) {
     worstDecision: result.worstDecision,
     offPitch,
     concededGoals: goalsAgainst,
-    matchup
+    matchup,
+    historicalMatchup
   });
   const nextWeekSuggestions = buildNextWeekSuggestions({ result, offPitch, matchup });
 
@@ -534,6 +568,7 @@ export function buildMatchExplanation({ result, session } = {}) {
     resultSummary,
     decisiveFactors,
     tacticalFactors: factorTexts(tacticalFactors, 5),
+    historicalFactors: factorTexts(historicalFactors, 4),
     trainingFactors: factorTexts(trainingFactors, 4),
     offPitchFactors: factorTexts(offPitchFactors, 4),
     relationshipFactors: factorTexts(relationshipFactors, 4),

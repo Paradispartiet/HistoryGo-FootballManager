@@ -44,6 +44,9 @@ jobs:
       - name: Flow-audit (spilløkka henger sammen)
         run: npm run audit:flow
 
+      - name: Audit Historical Opponent Archetypes
+        run: npm run audit:historical-opponents
+
       - name: Build TypeScript engine
         run: npm run build
 

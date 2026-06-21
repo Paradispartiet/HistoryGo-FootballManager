@@ -27,6 +27,7 @@ import {
 } from "../src/football-suggested-setups.js";
 import { TRAINING_FOCUSES } from "../src/football-training-week.js";
 import { OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
+import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -362,6 +363,32 @@ check("uten off-pitch: byte-identisk med fullt datagrunnlag", JSON.stringify(wit
 check(
   "uten off-pitch: ingen offPitch-signal i noe forslag",
   flattenSuggestedSetups(withoutOff).every((s) => !s.sourceSignals.includes("offPitch"))
+);
+
+// === Historical Opponent Archetypes v1 =====================================
+console.log("\nHistorisk stil-motstander (Inter 1960-tallet — Catenaccio):");
+const catenaccio = getHistoricalOpponentProfile("inter_1960s_catenaccio");
+const histSetups = createSuggestedSetups({
+  teamFit,
+  formation: possession,
+  tactic,
+  availableFormations: formations,
+  formationKnowledgeById: knowledgeById,
+  opponent: catenaccio,
+  coachContext,
+  limit: 4
+});
+validateBundle(histSetups, "historisk");
+check("historisk: kampplanforslag genereres", histSetups.match_plan.length >= 2);
+check(
+  "historisk: et forslag refererer den historiske motstanderens navn",
+  flattenSuggestedSetups(histSetups).some((s) =>
+    [s.title, s.summary, ...s.why].some((t) => typeof t === "string" && t.includes("Catenaccio"))
+  )
+);
+check(
+  "historisk: motstanderens svakhet (bredde/tålmodighet) brukes i en kampplan",
+  histSetups.match_plan.some((s) => s.why.some((t) => /bredde|tålmodig|kompakt/i.test(t)))
 );
 
 // --- Rapport ---------------------------------------------------------------

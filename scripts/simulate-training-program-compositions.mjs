@@ -28,6 +28,7 @@ import {
 } from "../src/football-training-program-compositions.js";
 import { TRAINING_FOCUSES } from "../src/football-training-week.js";
 import { OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
+import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
 
 let failures = 0;
 function check(label, condition) {
@@ -386,6 +387,38 @@ const relevantProgram = createTrainingProgramCompositions({ teamFit, offPitchSta
 const inboxTrainingThread = createInboxThreadFromTrainingProgram(relevantProgram, {});
 check("off-pitch-relevant program gir en treningstråd", Boolean(inboxTrainingThread) && inboxTrainingThread.type === "training");
 check("treningstråd peker tilbake på programmet", inboxTrainingThread?.linkedAction.id === "recovery_prevention");
+
+// === Historical Opponent Archetypes v1 =====================================
+console.log("\nHistorisk stil-motstander gir kontekst-bonus:");
+
+// Taktisk kompleks stil (Barcelona-posisjonsspill) skal løfte formasjons-
+// tilvenning litt vs. en generisk motstander uten styleTraits.
+const barca = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+const familWithHist = getTrainingProgramCompositionById("formation_familiarisation", { teamFit, opponent: barca });
+const familNoOpp = getTrainingProgramCompositionById("formation_familiarisation", { teamFit });
+check(
+  "kompleks historisk stil gir formasjonstilvenning en kontekstbonus",
+  familWithHist.scoring.contextBonus > familNoOpp.scoring.contextBonus
+);
+check("bonusen er forklart (kompleksitet)", familWithHist.scoring.explanation.some((e) => /kompleks/i.test(e)));
+check("historisk opponent-signal er registrert", familWithHist.sourceSignals.includes("opponent"));
+
+// Høyintensiv historisk stil (Liverpool-gegenpress) + slitne kropper skal løfte
+// restitusjon ytterligere.
+const liverpool = getHistoricalOpponentProfile("liverpool_2018_20_gegenpress");
+const recoveryHist = getTrainingProgramCompositionById("recovery_prevention", { teamFit, opponent: liverpool, offPitchState: offPitchTired });
+const recoveryNoOpp = getTrainingProgramCompositionById("recovery_prevention", { teamFit, offPitchState: offPitchTired });
+check(
+  "høyintensiv historisk stil løfter restitusjon når kroppene er tunge",
+  recoveryHist.scoring.contextBonus > recoveryNoOpp.scoring.contextBonus
+);
+check(
+  "treningsprogram leser historisk opponent-kontekst uten crash for alle profiler",
+  ["hungary_1953_mighty_magyars", "milan_1988_90_sacchi", "conte_chelsea_2016_17_343"].every((id) => {
+    const list = createTrainingProgramCompositions({ teamFit, opponent: getHistoricalOpponentProfile(id), coachContext, limit: 4 });
+    return Array.isArray(list) && list.length >= 2;
+  })
+);
 
 // --- Rapport ---------------------------------------------------------------
 console.log("\nEksempel — fullt datagrunnlag (sortert etter uttelling):");
