@@ -44,6 +44,7 @@ import {
   buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
+import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";
 import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
 import {
   createDefaultOffPitchState,
@@ -325,6 +326,7 @@ const elements = {
   tacticalSystemPanel: document.querySelector("#tacticalSystemPanel"),
   // Additivt historisk rollefit-hint i sidepanelet.
   historicalRoleHint: document.querySelector("#historicalRoleHint"),
+  roleLearningCard: document.querySelector("#roleLearningCard"),
   selectedSlotTitle: document.querySelector("#selectedSlotTitle"),
   slotPlayerSelect: document.querySelector("#slotPlayerSelect"),
   slotRoleSelect: document.querySelector("#slotRoleSelect"),
@@ -4901,6 +4903,7 @@ function renderSidePanel(teamFit) {
   // Additivt historisk rollefit-hint: forklarer om valgt rolle passer det valgte
   // historiske systemet. Erstatter ikke lagfit-motoren over.
   renderHistoricalRoleHint(slot, slotState);
+  renderRoleLearningCard({ slot, slotState, assignment, teamFit });
 
   // Dynamisk sidepanel: spillerprofil når plassen har en spiller, ellers
   // "Neste beslutninger". Selve handlingene (spiller-/rollevalg) vises alltid.
@@ -4930,6 +4933,72 @@ function renderSidePanel(teamFit) {
     }
     renderSideDecisions(teamFit);
   }
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
+  if (!elements.roleLearningCard) return;
+  const player = assignment?.player || state.players.find((item) => item.id === slotState?.playerId) || null;
+  const role = assignment?.role || state.roles.find((item) => item.id === slotState?.roleId) || null;
+  if (!player || !role) {
+    elements.roleLearningCard.hidden = true;
+    elements.roleLearningCard.innerHTML = "";
+    return;
+  }
+
+  const vm = createRoleLearningViewModel({
+    player,
+    role,
+    slot,
+    tactic: getTactic(),
+    roles: state.roles,
+    relationships: teamFit?.relationships || null,
+    formationKnowledge: state.formationKnowledgeById[getFormation()?.id] || null,
+    fit: assignment?.fit || null
+  });
+  if (!vm) {
+    elements.roleLearningCard.hidden = true;
+    return;
+  }
+
+  const row = (label, values, emptyText = "Ingen tydelig signal") => {
+    const items = Array.isArray(values) ? values.filter(Boolean) : [values].filter(Boolean);
+    return `
+      <div class="role-learning-row">
+        <dt>${label}</dt>
+        <dd>${escapeHtml(items.slice(0, 3).join(" · ") || emptyText)}</dd>
+      </div>`;
+  };
+
+  elements.roleLearningCard.hidden = false;
+  elements.roleLearningCard.innerHTML = `
+    <div class="role-learning-head">
+      <div>
+        <p class="eyebrow">Rolleforståelse</p>
+        <h4>${escapeHtml(vm.playerName)} som ${escapeHtml(vm.roleName)}</h4>
+      </div>
+      <span class="role-learning-badge" data-status="${escapeHtml(vm.fitLabel)}">${vm.fitScore ?? "–"} · ${escapeHtml(vm.fitLabel)}</span>
+    </div>
+    <p class="role-learning-type">${escapeHtml(vm.playerType)}</p>
+    <dl class="role-learning-list">
+      ${row("Rollen krever", vm.roleCore)}
+      ${row("Dette får spilleren brukt", vm.usesStrengths)}
+      ${row("Dette mister spilleren", vm.losesStrengths, vm.misuseExplanation)}
+      ${row("Relasjoner som hjelper", vm.relationNeeds)}
+      ${vm.relationWarnings.length ? row("Relasjonsvarsel", vm.relationWarnings) : ""}
+      ${vm.formationRoleHint ? row("Formasjon", [vm.formationRoleHint]) : ""}
+    </dl>
+    <p class="role-learning-hint"><strong>Managerhint:</strong> ${escapeHtml(vm.managerHint)}</p>
+    ${vm.alternativeRoles.length ? `<p class="role-learning-alt">Alternativer: ${escapeHtml(vm.alternativeRoles.join(", "))}</p>` : ""}
+  `;
 }
 
 // Fyll spillerprofilen i sidepanelet: rating, navn, posisjoner, samlet History

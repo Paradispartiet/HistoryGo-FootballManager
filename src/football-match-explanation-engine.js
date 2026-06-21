@@ -335,7 +335,7 @@ function buildDecisionFactors({ bestDecision, worstDecision, positiveCount, nega
 // årsakskjeden til et konkret, men ÅPENT råd — formulert slik at spilleren kan
 // gjøre et annet bevisst valg neste gang (ikke en fasit).
 // ---------------------------------------------------------------------------
-function buildLearningPoints({ outcome, tp, relationshipScore, weakest, strongest, worstDecision, offPitch, concededGoals, matchup, historicalMatchup, formationKnowledge }) {
+function buildLearningPoints({ outcome, tp, relationshipScore, weakest, strongest, worstDecision, offPitch, concededGoals, matchup, historicalMatchup, formationKnowledge, relationships }) {
   const points = [];
 
   // Historisk stil-læringspunkt: den pedagogiske kjernen i å møte en historisk
@@ -347,6 +347,13 @@ function buildLearningPoints({ outcome, tp, relationshipScore, weakest, stronges
   const formationHint = getFormationLearningHint(formationKnowledge);
   if (formationHint) {
     points.push(`Formasjonslæring: ${formationHint}`);
+  }
+
+  const roleUsageWarning = asArray(relationships?.negativeRelations)
+    .slice()
+    .sort((a, b) => num(b.points) - num(a.points))[0];
+  if (roleUsageWarning?.title && roleUsageWarning?.explanation) {
+    points.push(`Rollebruk: ${roleUsageWarning.title.toLowerCase()} — ${roleUsageWarning.explanation}`);
   }
 
   if (outcome === "win" && num(tp.buildUpScore) >= STRONG && relationshipScore >= STRONG) {
@@ -566,7 +573,8 @@ export function buildMatchExplanation({ result, session } = {}) {
     concededGoals: goalsAgainst,
     matchup,
     historicalMatchup,
-    formationKnowledge: sess.formationKnowledge || result.formationKnowledge || null
+    formationKnowledge: sess.formationKnowledge || result.formationKnowledge || null,
+    relationships
   });
   const nextWeekSuggestions = buildNextWeekSuggestions({ result, offPitch, matchup });
 

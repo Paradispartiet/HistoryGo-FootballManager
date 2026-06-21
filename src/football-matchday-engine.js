@@ -1373,12 +1373,14 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
         positiveRelations: asArray(relationshipSource.positiveRelations).map((relation) => ({
           title: relation?.title || "",
           explanation: relation?.explanation || "",
-          points: num(relation?.points)
+          points: num(relation?.points),
+          roleIds: asArray(relation?.roleIds)
         })),
         negativeRelations: asArray(relationshipSource.negativeRelations).map((relation) => ({
           title: relation?.title || "",
           explanation: relation?.explanation || "",
-          points: num(relation?.points)
+          points: num(relation?.points),
+          roleIds: asArray(relation?.roleIds)
         }))
       }
     : null;

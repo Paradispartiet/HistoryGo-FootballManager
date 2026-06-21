@@ -1112,6 +1112,104 @@ select:focus-visible {
   color: var(--danger);
 }
 
+.role-learning-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: var(--panel-strong);
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.role-learning-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.role-learning-head .eyebrow,
+.role-learning-head h4,
+.role-learning-type,
+.role-learning-hint,
+.role-learning-alt {
+  margin: 0;
+}
+
+.role-learning-head h4 {
+  font-size: 1rem;
+}
+
+.role-learning-badge {
+  flex: 0 0 auto;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: capitalize;
+}
+
+.role-learning-badge[data-status="perfekt"],
+.role-learning-badge[data-status="god"] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.role-learning-badge[data-status="feilbrukt"] {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.role-learning-type,
+.role-learning-alt {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.role-learning-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.role-learning-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.42fr) 1fr;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.role-learning-row dt {
+  color: var(--text);
+  font-weight: 900;
+}
+
+.role-learning-row dd {
+  color: var(--muted);
+  margin: 0;
+}
+
+.role-learning-hint {
+  border-top: 1px solid var(--line-soft);
+  padding-top: 8px;
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 620px) {
+  .role-learning-head,
+  .role-learning-row {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .role-learning-badge {
+    justify-self: start;
+  }
+}
+
 .report-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
