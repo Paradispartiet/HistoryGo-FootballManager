@@ -34,6 +34,7 @@ import {
   getSessionEventIndex
 } from "../src/football-matchday-engine.js";
 import { buildMatchExplanation } from "../src/football-match-explanation-engine.js";
+import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
 import {
   computeMatchdayConsequences,
   evaluateClubWeekMatchdayGate
@@ -573,6 +574,59 @@ check(
   "stengt port har en norsk begrunnelse",
   evaluateClubWeekMatchdayGate({ clubWeekState: matchDayWeek }).reason.length > 0 &&
     evaluateClubWeekMatchdayGate({ clubWeekState: matchDayWeek, lastMatch: { playedInClubWeek: 3 } }).reason === ""
+);
+
+// --- 6b) Historical Opponent Archetypes v1 -----------------------------------
+console.log("\nHistoriske stil-motstandere:");
+const histAjax = getHistoricalOpponentProfile("ajax_1971_73_total_football");
+check("historisk profil kan hentes", Boolean(histAjax?.id && histAjax.styleTraits));
+
+const histSession = createMatchdaySession({
+  teamFit: strongFit,
+  formation: wmFormation,
+  tactic,
+  activeClassifications: [],
+  coachContext: strongCoach,
+  opponent: histAjax,
+  offPitchContext: { team: { fatigue: 30, wear: 30 }, squad: { tacticalClarity: 60 } }
+});
+check("kampdag kan bruke en historisk motstander", histSession.opponent?.id === "ajax_1971_73_total_football");
+check("sesjonen bærer en historisk stil-matchup", Boolean(histSession.historicalMatchup?.matchupScore >= 0));
+check(
+  "historisk matchup har advantages/vulnerabilities og læringspunkt",
+  Array.isArray(histSession.historicalMatchup?.advantages) &&
+    Array.isArray(histSession.historicalMatchup?.vulnerabilities) &&
+    typeof histSession.historicalMatchup?.historicalLearningPoint === "string"
+);
+check(
+  "historisk motstander gir likevel en motstanderhendelse (via baseStyleId)",
+  histSession.events.some((event) => event.id.startsWith("opp_"))
+);
+
+histSession.phase = "event_1";
+while (getSessionEventIndex(histSession) !== null) {
+  const idx = getSessionEventIndex(histSession);
+  const ev = histSession.events[idx];
+  const res = resolveMatchdayDecision({
+    event: ev,
+    option: ev.options[0],
+    tacticalProfile: histSession.teamFitSnapshot.tacticalProfile,
+    matchEngineEffects: histSession.matchEngineEffects,
+    coachSnapshot: histSession.coachSnapshot
+  });
+  histSession.decisions.push(res);
+  histSession.phase = idx + 1 < histSession.events.length ? `event_${idx + 2}` : "resolved";
+}
+const histResult = finalizeMatchdaySession(histSession);
+check("historisk resultat bærer historicalMatchup", Boolean(histResult.historicalMatchup));
+check(
+  "kampforklaringen får en historisk stil-faktor",
+  Array.isArray(histResult.explanation?.historicalFactors) && histResult.explanation.historicalFactors.length > 0
+);
+const histReport = createMatchReport(histResult);
+check(
+  "rapporten eksponerer arketyp/epoke/skole",
+  Boolean(histReport.opponentArchetype && histReport.opponentEra && histReport.opponentTacticalSchool)
 );
 
 // --- 7) v1-motoren er intakt -------------------------------------------------

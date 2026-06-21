@@ -1,5 +1,6 @@
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
+import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
 
 // HG Football Manager — Matchday Engine (v1)
 //
@@ -453,6 +454,12 @@ export function createMatchReport(matchResult) {
     analysis: asArray(matchResult.analysis),
     // Kampdag v0.2-felter (tomme/null for v1-resultater — rent additivt).
     opponentStyle: opponent.style || "",
+    // Historical Opponent Archetypes v1: historisk arketyp-kontekst (null for
+    // generiske motstandere).
+    opponentArchetype: opponent.archetypeName || "",
+    opponentEra: opponent.era || "",
+    opponentTacticalSchool: opponent.tacticalSchool || "",
+    historicalMatchup: matchResult.historicalMatchup || null,
     tacticName: matchResult.tacticSnapshot?.name || "",
     decisions: asArray(matchResult.decisions),
     bestDecision: matchResult.bestDecision || null,
@@ -1104,7 +1111,9 @@ export function generateMatchdayEvents({ formation, tacticalProfile, opponent } 
     .sort((a, b) => b.score - a.score)
     .map((entry) => entry.event);
 
-  const opponentEvent = OPPONENT_EVENTS[opponent?.id] || null;
+  // Historiske stil-motstandere har egne id-er; de peker på en generisk
+  // stil-familie via baseStyleId for å gjenbruke hendelsesbiblioteket.
+  const opponentEvent = OPPONENT_EVENTS[opponent?.id] || OPPONENT_EVENTS[opponent?.baseStyleId] || null;
 
   const picked = [rankedFamily[0], opponentEvent, rankedFamily[1]].filter(Boolean).slice(0, 3);
 
@@ -1312,6 +1321,22 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
   const formationMatchup = formationKnowledge
     ? evaluateFormationMatchupVsOpponent(formationKnowledge, matchOpponent.matchupStyles, matchOpponent.name)
     : null;
+
+  // Historical Opponent Archetypes v1: når motstanderen er en historisk stil-
+  // profil (har styleTraits), beregn en forklarende matchup-vurdering mot lagets
+  // ledd. Null for de generiske profilene (trygg degradering).
+  const historicalMatchup = matchOpponent.styleTraits
+    ? evaluateHistoricalOpponentMatchup({
+        teamFit,
+        formation,
+        tactic,
+        trainingFocus,
+        opponentProfile: matchOpponent,
+        relationships: relationships || teamFit?.relationships || null,
+        offPitchContext
+      })
+    : null;
+
   const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup });
   const tp = strength.tacticalProfile;
 
@@ -1366,6 +1391,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     phase: "pre_match",
     opponent: { ...matchOpponent },
     formationMatchup,
+    historicalMatchup,
     selectedFormationId: formation?.id || null,
     selectedTacticId: tactic?.id || null,
     tacticSnapshot: tactic
@@ -1666,6 +1692,13 @@ export function finalizeMatchdaySession(session) {
     analysis.push(`Formasjons-matchup mot ${opponent.name || "motstanderen"} var ${leanText} (${sign}${matchupTendency} lagstyrke).`);
   }
 
+  // Historisk stil-matchup: forklar hvordan den historiske motstanderstilen møtte
+  // lagets ledd (kun når motstanderen er en historisk arketype).
+  const historicalMatchup = session.historicalMatchup;
+  if (historicalMatchup && typeof historicalMatchup === "object") {
+    analysis.push(historicalMatchup.summary);
+  }
+
   const keyFactors = [];
   const strengthGap = baseXg.strengthGap;
   if (strengthGap >= 8) {
@@ -1690,6 +1723,11 @@ export function finalizeMatchdaySession(session) {
     keyFactors.push("Gunstig formasjons-matchup");
   } else if (matchup && matchupTendency <= -2) {
     keyFactors.push("Risikabel formasjons-matchup");
+  }
+  if (historicalMatchup && historicalMatchup.riskLevel === "favourable") {
+    keyFactors.push(`Gunstig stil-matchup mot ${historicalMatchup.archetypeName || "historisk arketype"}`);
+  } else if (historicalMatchup && historicalMatchup.riskLevel === "risky") {
+    keyFactors.push(`Risikabel stil-matchup mot ${historicalMatchup.archetypeName || "historisk arketype"}`);
   }
 
   const trainingImpacts = decisions.map((decision) => decision.trainingImpact).filter(Boolean);
@@ -1725,6 +1763,7 @@ export function finalizeMatchdaySession(session) {
     formationSnapshot: session.formationSnapshot || {},
     tacticSnapshot: session.tacticSnapshot || null,
     formationMatchup: session.formationMatchup || null,
+    historicalMatchup: session.historicalMatchup || null,
     teamStrength,
     score: { for: goalsFor, against: goalsAgainst },
     expectedGoals: { for: expectedGoalsFor, against: expectedGoalsAgainst },

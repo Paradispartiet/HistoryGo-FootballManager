@@ -196,6 +196,16 @@ function opponentHasStyle(ctx, styles) {
   return styles.some((style) => tokens.includes(style));
 }
 
+// Historical Opponent Archetypes v1: les ETT 0–100-trekk fra en historisk stil-
+// profils styleTraits. Null for generiske motstandere (uten styleTraits), slik at
+// disse bonusene KUN gjelder historiske arketyper (trygg, additiv degradering).
+function opponentStyleTrait(ctx, key) {
+  const traits = ctx.opponent?.styleTraits;
+  if (!traits || typeof traits !== "object") return null;
+  const n = Number(traits[key]);
+  return Number.isFinite(n) ? clamp(n, 0, 100) : null;
+}
+
 // Hvor mange ganger dette programmets signatur-tokens dukker opp i nylig historikk.
 function countOveruse(ctx, tokens) {
   const set = new Set(tokens);
@@ -550,6 +560,17 @@ const SCORERS = {
       signals.push("offPitch");
       explanation.push("Off-pitch-signalene bekrefter at kroppene trenger ro.");
     }
+    // Historisk arketyp: en høyintensitetsstil (Liverpool-gegenpress, Sacchi-press
+    // …) gjør restitusjon mer verdt — men bare når kroppene faktisk er slitne.
+    const intensity = opponentStyleTrait(ctx, "intensity");
+    if (intensity !== null && intensity >= 78 && load > 0) {
+      const bump = Math.round((intensity - 78) / 22 * 10);
+      if (bump > 0) {
+        contextBonus += bump;
+        signals.push("opponent");
+        explanation.push(`Høyintensiv historisk stil (intensitet ${intensity}) gjør restitusjon mer verdt: +${bump} kontekstbonus.`);
+      }
+    }
 
     const { penalty, count } = overuseContribution(ctx, template);
     if (penalty < 0) {
@@ -732,6 +753,18 @@ const SCORERS = {
         contextBonus += bump;
         signals.push("offPitch");
         explanation.push(`Lavt samhold (${coh}) gir +${bump} kontekstbonus.`);
+      }
+    }
+
+    // Historisk arketyp: en taktisk kompleks stil (totalfotball, posisjonsspill,
+    // Sacchi-press …) gjør systemforståelse mer verdt før kampen.
+    const complexity = opponentStyleTrait(ctx, "tacticalComplexity");
+    if (complexity !== null && complexity >= 80) {
+      const bump = Math.round((complexity - 80) / 20 * 10);
+      if (bump > 0) {
+        contextBonus += bump;
+        signals.push("opponent");
+        explanation.push(`Taktisk kompleks historisk stil (kompleksitet ${complexity}) gir +${bump} kontekstbonus til tilvenning.`);
       }
     }
 

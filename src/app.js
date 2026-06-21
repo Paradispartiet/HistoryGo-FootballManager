@@ -11,6 +11,11 @@ import {
   evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
 import {
+  HISTORICAL_OPPONENT_PROFILES,
+  getHistoricalOpponentProfile,
+  pickHistoricalOpponentProfile
+} from "./football-historical-opponent-profiles.js";
+import {
   MINI_SEASON_VERSION,
   MINI_SEASON_TOTAL_WEEKS,
   MINI_SEASON_OUTCOME_LABELS,
@@ -3166,7 +3171,10 @@ function playMatchday() {
   const activeClassifications =
     typeof getActiveTeamClassifications === "function" ? getActiveTeamClassifications() : [];
 
-  const opponent = getMiniSeasonNextOpponent();
+  // Mini Season v0.1 styrer motstanderen når en prøveperiode er aktiv. Uten aktiv
+  // periode er dette en testkamp: velg en historisk stil-motstander
+  // (læringsmotstander) i stedet for en generisk robot.
+  const opponent = getMiniSeasonNextOpponent() || pickHistoricalOpponentProfile();
   const coachContext = getCoachContext();
   const trainingFocus = createTrainingMatchdaySnapshot({
     selection: state.weeklyTrainingFocus,
@@ -3472,7 +3480,10 @@ function getMiniSeasonContext() {
     seasonId: `mini-season-${Date.now()}`,
     offPitch: getOffPitchState(),
     clubWeekState: state.clubWeekState,
-    opponents: OPPONENT_PROFILES,
+    // Historical Opponent Archetypes v1: prøveperioden settes opp mot historiske
+    // stil-lag (læringsmotstandere), ikke generiske roboter. Profilene er
+    // runtime-kompatible med kampmotoren.
+    opponents: HISTORICAL_OPPONENT_PROFILES,
     teamName: "HG-laget"
   };
 }
@@ -3536,7 +3547,12 @@ function getMiniSeasonNextOpponent() {
   if (!match) {
     return null;
   }
-  const profile = OPPONENT_PROFILES.find((candidate) => candidate.id === match.opponentId);
+  // Historiske stil-profiler først; fall tilbake til de generiske (for en
+  // mini-sesong som ble startet før Historical Opponent Archetypes v1).
+  const profile =
+    getHistoricalOpponentProfile(match.opponentId) ||
+    OPPONENT_PROFILES.find((candidate) => candidate.id === match.opponentId) ||
+    null;
   // Behold kamprekkas hjemme/borte og forventning oppå motstanderprofilen, slik
   // at kampdag og UI kan vise rammen rundt kampen.
   return profile
@@ -6035,9 +6051,50 @@ function renderMatchdaySessionPreMatch(container, session) {
   phase.textContent = "Kampplan før avspark";
   card.append(phase);
 
+  const opponent = session.opponent || {};
+
+  // Historical Opponent Archetypes v1: når motstanderen er en historisk stil-
+  // profil, vis en kompakt kampforberedelses-boks (historisk stil, formasjon,
+  // taktisk skole, nøkkelduell, managerhint) FØR den ordinære profilen. Rent
+  // tekstlig/faglig referanse — ingen logoer/drakter/emblemer.
+  if (opponent.archetypeName || opponent.tacticalSchool) {
+    appendMatchdaySubheading(card, "Historisk stil-motstander");
+    const histLines = [];
+    if (opponent.archetypeName) histLines.push(`Arketyp: ${opponent.archetypeName}`);
+    if (opponent.era) histLines.push(`Epoke: ${opponent.era}`);
+    if (opponent.tacticalSchool) histLines.push(`Taktisk skole: ${opponent.tacticalSchool}`);
+    if (opponent.inPossessionShape) histLines.push(`Med ball: ${opponent.inPossessionShape}`);
+    if (opponent.outOfPossessionShape) histLines.push(`Uten ball: ${opponent.outOfPossessionShape}`);
+    (Array.isArray(opponent.keyBattles) ? opponent.keyBattles : []).slice(0, 2).forEach((line) => {
+      histLines.push(`Nøkkelduell: ${line}`);
+    });
+    (Array.isArray(opponent.managerHints) ? opponent.managerHints : []).slice(0, 2).forEach((line) => {
+      histLines.push(`Managerhint: ${line}`);
+    });
+    if (opponent.historicalNote) histLines.push(`Historisk: ${opponent.historicalNote}`);
+    appendMatchdayList(card, histLines);
+  }
+
+  // Stil-matchup (Historical Opponent Archetypes v1): hvordan den historiske
+  // stilen møter lagets ledd. Vises bare for historiske arketyper.
+  const histMatchup = session.historicalMatchup;
+  if (histMatchup && typeof histMatchup === "object") {
+    appendMatchdaySubheading(card, "Stil-matchup");
+    const hmLines = [histMatchup.summary];
+    (Array.isArray(histMatchup.advantages) ? histMatchup.advantages : []).slice(0, 2).forEach((a) => {
+      hmLines.push(`Fordel: ${a.text}`);
+    });
+    (Array.isArray(histMatchup.vulnerabilities) ? histMatchup.vulnerabilities : []).slice(0, 2).forEach((v) => {
+      hmLines.push(`Sårbarhet: ${v.text}`);
+    });
+    (Array.isArray(histMatchup.recommendedPreparation) ? histMatchup.recommendedPreparation : []).slice(0, 2).forEach((p) => {
+      hmLines.push(`Forberedelse: ${p}`);
+    });
+    appendMatchdayList(card, hmLines);
+  }
+
   // Motstanderprofil.
   appendMatchdaySubheading(card, "Motstanderprofil");
-  const opponent = session.opponent || {};
   const opponentLines = [];
   if (opponent.style) {
     opponentLines.push(`Stil: ${opponent.style}`);
@@ -6204,6 +6261,15 @@ function renderMatchdayReport(container, lastMatch) {
   }
   appendMatchdayMeta(card, `Motstander: ${opponentParts.join(" · ")}`);
 
+  // Historisk arketyp-kontekst (Historical Opponent Archetypes v1).
+  if (report.opponentArchetype || report.opponentTacticalSchool) {
+    const histParts = [];
+    if (report.opponentArchetype) histParts.push(report.opponentArchetype);
+    if (report.opponentEra) histParts.push(report.opponentEra);
+    if (report.opponentTacticalSchool) histParts.push(report.opponentTacticalSchool);
+    appendMatchdayMeta(card, `Historisk stil: ${histParts.join(" · ")}`);
+  }
+
   // Valgt formasjon med navn, grunnform, epoke og skole.
   const formationParts = [report.formationName || "Ukjent formasjon"];
   if (report.baseShape) {
@@ -6260,6 +6326,7 @@ function renderMatchdayReport(container, lastMatch) {
     const explanationSections = [
       ["Avgjørende faktorer", explanation.decisiveFactors],
       ["Taktisk bilde", explanation.tacticalFactors],
+      ["Historisk stil-matchup", explanation.historicalFactors],
       ["Relasjoner", explanation.relationshipFactors],
       ["Trening", explanation.trainingFactors],
       ["Utenfor banen", explanation.offPitchFactors],
