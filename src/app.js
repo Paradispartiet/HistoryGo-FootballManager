@@ -380,7 +380,6 @@ const elements = {
   clubTrainingCulture: document.querySelector("#clubTrainingCulture"),
   clubMediaPressure: document.querySelector("#clubMediaPressure"),
   clubWeekEventLog: document.querySelector("#clubWeekEventLog"),
-  inboxMessageList: document.querySelector("#inboxMessageList"),
   inboxThreadList: document.querySelector("#inboxThreadList"),
   inboxThreadArchive: document.querySelector("#inboxThreadArchive"),
   // History Go-unlocks (v1).

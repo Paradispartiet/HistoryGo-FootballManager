@@ -4932,3 +4932,77 @@ ul {
     gap: 2px;
   }
 }
+
+/* UI cleanup: foldbare detaljer der innholdet er langt. Native <details> gir
+   kollapserbar visning med tastaturstøtte uten egen JS. Brukes til sekundær
+   prosa/logger så hovedpanelene ikke føles overlesset — aldri til primær
+   beslutningsinfo eller motorstyrt status. */
+.panel-details {
+  margin-top: 0.7rem;
+  border-top: 1px solid var(--line-soft, rgba(255, 255, 255, 0.18));
+  padding-top: 0.6rem;
+}
+
+.panel-details > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  list-style: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted, rgba(255, 255, 255, 0.66));
+}
+
+.panel-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.panel-details > summary::before {
+  content: "▸";
+  font-size: 0.8em;
+  transition: transform 0.12s ease;
+}
+
+.panel-details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.panel-details > summary:hover,
+.panel-details[open] > summary {
+  color: var(--text, #fff);
+}
+
+.panel-details > summary:focus-visible {
+  outline: 2px solid var(--text, #fff);
+  outline-offset: 2px;
+}
+
+.panel-details > :not(summary) {
+  margin-top: 0.6rem;
+}
+
+/* Når foldbar-detaljen er hele panelkroppen (summary erstatter overskriften)
+   skal den ikke ha skillelinje på toppen. */
+.panel-details.is-flush {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+.panel-details.is-flush > summary {
+  font-size: 0.95rem;
+}
+
+/* UI cleanup: tydeligere valgt status. Statuslinja for valgt treningsfokus/
+   -program er allerede grønn ved data-selected="true"; en ✓-markør gjør det
+   utvetydig at noe ER valgt. Rent presentasjonelt. */
+.weekly-training-status[data-selected="true"] {
+  font-weight: 700;
+}
+
+.weekly-training-status[data-selected="true"]::before {
+  content: "✓ ";
+}

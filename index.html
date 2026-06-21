@@ -193,8 +193,10 @@
 
         <!-- Klubbhendelser -->
         <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
-          <h3>Klubbhendelser</h3>
-          <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
+          <details class="panel-details is-flush" open>
+            <summary>Klubbhendelser</summary>
+            <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
+          </details>
         </section>
       </div>
     </div>
@@ -390,11 +392,14 @@
         <section class="panel matchday-panel" aria-live="polite">
           <p class="eyebrow">Kampdag</p>
           <h2>Spill kamp</h2>
-          <p class="muted-text">
-            Test det valgte historiske systemet mot en motstanderprofil. Kampen gir 3 hendelser
-            der du tar managergrep med lesbar konsekvens, før resultatet og rapporten beregnes
-            fra laguttak, formasjonsfit, trenerstøtte og grepene dine.
-          </p>
+          <details class="panel-details">
+            <summary>Slik fungerer kampen</summary>
+            <p class="muted-text">
+              Test det valgte historiske systemet mot en motstanderprofil. Kampen gir 3 hendelser
+              der du tar managergrep med lesbar konsekvens, før resultatet og rapporten beregnes
+              fra laguttak, formasjonsfit, trenerstøtte og grepene dine.
+            </p>
+          </details>
           <!-- Kampklar-status: forklarer hvorfor laget eventuelt ikke kan spille.
                Rendres av app.js (renderMatchdayReadiness) fra teamFit + availability. -->
           <p id="matchdayReadiness" class="matchday-readiness" data-ready="false">Laster kampstatus…</p>
@@ -465,10 +470,10 @@
         <p id="activeKnowledgeFocus" class="active-knowledge-focus">Ingen aktiv kunnskapsøkt valgt.</p>
         <button type="button" id="clearKnowledgeFocus" class="clear-knowledge-focus-button">Fjern aktivt fokus</button>
         <ul id="managerKnowledgeRecommendations" class="knowledge-card-list"></ul>
-        <section class="training-history-panel" aria-label="Treningshistorikk">
-          <h3>Treningshistorikk</h3>
+        <details class="panel-details is-flush training-history-panel">
+          <summary>Treningshistorikk</summary>
           <ul id="trainingHistoryList" class="training-history-list"></ul>
-        </section>
+        </details>
       </section>
     </div>
 
