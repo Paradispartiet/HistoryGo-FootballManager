@@ -297,6 +297,11 @@ function buildFormationSuggestion(entry, ctx) {
     why.push("Dette er systemet laget allerede spiller — kontinuitet gir innarbeidet forståelse.");
   }
 
+  const roleRequirementHint = asArray(formation?.roleRequirements || entry.knowledge?.roleRequirements)[0];
+  if (roleRequirementHint) {
+    suggestedAdjustments.push(`Rollehint: denne formasjonen trenger tydelig ${String(roleRequirementHint).replace(/_/g, " ")}.`);
+  }
+
   // Alltid en påminnelse om at forslaget er additivt, ikke en lås.
   suggestedAdjustments.push("Du kan velge et annet system; et bevisst kontekstuelt valg kan gi bedre uttelling enn standardforslaget.");
 
@@ -594,7 +599,8 @@ export function suggestTrainingWeekSetups({
       formationMatchup,
       coachContext,
       lastMatchWeaknessMetric,
-      offPitch
+      offPitch,
+      teamFit
     }));
     if (suggestions.length >= max) break;
   }
@@ -609,7 +615,7 @@ const TRAINING_SOURCE_CONFIDENCE = {
   standard: 0.4
 };
 
-function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, coachContext, lastMatchWeaknessMetric, offPitch }) {
+function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, coachContext, lastMatchWeaknessMetric, offPitch, teamFit }) {
   const focus = getTrainingFocus(focusId);
   const support = calculateTrainingStaffSupport({ focusId, coachContext });
   const oppName = opponent?.name || "neste motstander";
@@ -619,6 +625,12 @@ function buildTrainingSuggestion({ focusId, source, opponent, formationMatchup, 
   const risks = [];
   const suggestedAdjustments = [];
   const sourceSignals = ["teamFit"];
+  const roleRelationWarning = asArray(teamFit?.relationships?.negativeRelations)[0];
+  if (roleRelationWarning?.title) {
+    suggestedAdjustments.push(`Rollehint: ${roleRelationWarning.title.toLowerCase()} — løs medspillerne rundt rollen før du bytter spiller.`);
+  } else if (Number(teamFit?.metrics?.roleFitAverage) < 58) {
+    suggestedAdjustments.push("Rollehint: prioriter én rolleendring som gir en spiller flere av sine foretrukne situasjoner.");
+  }
 
   if (source === "matchup") {
     const riskTokens = asArray(formationMatchup?.risks).map((r) => r.token).filter(Boolean);

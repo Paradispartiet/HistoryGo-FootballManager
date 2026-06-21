@@ -612,3 +612,11 @@ Ikke bygg nye lag på en måte som gjør prosjektet til et vanlig rating-spill.
 Alt videre arbeid skal bevare denne setningen:
 
 > Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
+
+### Player Role Learning v1
+
+Rollevalg i managerkontoret er nå et læringsobjekt, ikke bare et dropdown-valg. Slot-editoren i «Lag & taktikk» viser et kompakt «Rolleforståelse»-kort for valgt spiller/rolle: spillerprofil, rollens kjernekrav, hva spilleren får brukt, hva feilbruk skjuler, relasjoner som hjelper eller advarer, ett formation-knowledge-hint og ett konkret managerhint.
+
+Laget bygger på eksisterende `football_roles.json`, `football_player_archetypes.json`, spillerdata, `football-fit-engine.js`, `football-team-fit-engine.js`, `football-relationship-engine.js` og `formationKnowledge.json`. Misbruk forklares som et manageransvar: alle spillere er gode, men manageren må forstå hvilke situasjoner rollen gir dem.
+
+Match Explanation kan nå løfte frem ett tydelig rollebruk-/relasjonspunkt etter kamp, og suggested setups kan gi korte rollehint når formasjon, trening eller lagfit tilsier det. Dette skriver ikke til History Go-progresjon og legger ikke til ny hovedfane eller liga.
