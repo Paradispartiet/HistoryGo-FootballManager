@@ -1,4 +1,5 @@
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
+import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 
 // HG Football Manager — Matchday Engine (v1)
 //
@@ -460,7 +461,9 @@ export function createMatchReport(matchResult) {
     trainingFocus: matchResult.trainingFocus || null,
     decisiveUnit: matchResult.decisiveUnit || "",
     nextWeekAdvice: matchResult.nextWeekAdvice || "",
-    historyGoHint: matchResult.historyGoHint || ""
+    historyGoHint: matchResult.historyGoHint || "",
+    // Match Explanation v1.5: strukturert kampforklaring (null for v1-resultater).
+    explanation: matchResult.explanation || null
   };
 }
 
@@ -1301,7 +1304,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
 
   // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
@@ -1331,6 +1334,30 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     tacticalProfile,
     opponent: matchOpponent
   });
+
+  // Forklaringsgrunnlag (Match Explanation v1.5): snapshot av relasjoner og
+  // off-pitch-kontekst SLIK DE VAR FØR KAMPEN. Lagres på sesjonen så
+  // finalizeMatchdaySession kan forklare hvorfor utfallet ble som det ble — og
+  // så forklaringen overlever en reload (den persisteres på resultatet, ikke på
+  // den flyktige app-staten). Begge er valgfrie; mangler de, blir forklaringen
+  // tynnere men fortsatt gyldig. app.js eier all lasting/normalisering.
+  const relationshipSource = relationships || teamFit?.relationships || null;
+  const relationshipSnapshot = relationshipSource
+    ? {
+        relationshipScore: clamp(num(relationshipSource.relationshipScore)),
+        positiveRelations: asArray(relationshipSource.positiveRelations).map((relation) => ({
+          title: relation?.title || "",
+          explanation: relation?.explanation || "",
+          points: num(relation?.points)
+        })),
+        negativeRelations: asArray(relationshipSource.negativeRelations).map((relation) => ({
+          title: relation?.title || "",
+          explanation: relation?.explanation || "",
+          points: num(relation?.points)
+        }))
+      }
+    : null;
+  const offPitchSnapshot = offPitchContext && typeof offPitchContext === "object" ? { ...offPitchContext } : null;
 
   return {
     version: 2,
@@ -1374,6 +1401,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
         }
       : null,
     trainingFocus: trainingFocus ? { ...trainingFocus } : null,
+    relationshipSnapshot,
+    offPitchSnapshot,
     events,
     decisions: []
   };
@@ -1688,13 +1717,14 @@ export function finalizeMatchdaySession(session) {
     };
   }
 
-  return {
+  const result = {
     id: `matchday-${Date.now()}`,
     version: 2,
     playedAt: new Date().toISOString(),
     opponent: { ...opponent },
     formationSnapshot: session.formationSnapshot || {},
     tacticSnapshot: session.tacticSnapshot || null,
+    formationMatchup: session.formationMatchup || null,
     teamStrength,
     score: { for: goalsFor, against: goalsAgainst },
     expectedGoals: { for: expectedGoalsFor, against: expectedGoalsAgainst },
@@ -1718,4 +1748,11 @@ export function finalizeMatchdaySession(session) {
     // belønne å trene det som faktisk gikk galt (reaktiv kontekst-relevans).
     exposedWeaknessMetric: weakest?.key || null
   };
+
+  // Match Explanation v1.5: bygg den forklarende, pedagogiske sluttforklaringen
+  // fra resultatet og sesjonens snapshots, og persistér den på resultatet slik
+  // at UI kan vise HVORFOR utfallet ble som det ble — også etter en reload.
+  result.explanation = buildMatchExplanation({ result, session });
+
+  return result;
 }

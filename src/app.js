@@ -1081,6 +1081,35 @@ function getOffPitchState() {
     : createDefaultOffPitchState();
 }
 
+// Match Explanation v1.5: en lesbar off-pitch-snapshot SLIK KONTEKSTEN VAR FØR
+// kampen, til kampforklaringen. Eksponerer kun de lesbare team-/squad-verdiene
+// og et VAGT hint om skjult uro (summarizeOffPitchContext.hiddenHint) — aldri de
+// rå hidden-tallene (off-pitch-modulens hidden-prinsipp). Kampmotoren leser den;
+// app.js eier all lasting/normalisering.
+function buildMatchdayOffPitchSnapshot() {
+  const offPitchState = getOffPitchState();
+  const summary = summarizeOffPitchContext(offPitchState);
+  const team = offPitchState.team || {};
+  const squad = offPitchState.squad || {};
+  return {
+    morale: team.morale,
+    confidence: team.confidence,
+    cohesion: team.cohesion,
+    fatigue: team.fatigue,
+    wear: team.wear,
+    injuryRisk: team.injuryRisk,
+    mediaPressure: team.mediaPressure,
+    boardPressure: team.boardPressure,
+    tacticalClarity: squad.tacticalClarity,
+    recentTrainingProgramIds: Array.isArray(offPitchState.recentTrainingProgramIds)
+      ? [...offPitchState.recentTrainingProgramIds]
+      : [],
+    hiddenHint: summary.hiddenHint || null,
+    topConcerns: Array.isArray(summary.topConcerns) ? summary.topConcerns.slice(0, 3) : [],
+    positives: Array.isArray(summary.positives) ? summary.positives.slice(0, 3) : []
+  };
+}
+
 // Inbox Event Integration v1: innboksens tråd-state (teamMerits.inbox).
 // Returnerer alltid en normalisert state (default når den mangler).
 function getInboxState() {
@@ -3164,7 +3193,12 @@ function playMatchday() {
     trainingFocus,
     // Formation Knowledge Engine: valgt formasjons kunnskapsoppslag (hvis dekket)
     // lar kampmotoren beregne formasjons-matchup mot motstanderens spillestil.
-    formationKnowledge: state.formationKnowledgeById[formation?.id] || null
+    formationKnowledge: state.formationKnowledgeById[formation?.id] || null,
+    // Match Explanation v1.5: snapshot av relasjoner og off-pitch-kontekst før
+    // kampen, så sluttforklaringen kan binde sammen taktikk, relasjoner, trening
+    // og menneskene rundt laget.
+    relationships: teamFit?.relationships || null,
+    offPitchContext: buildMatchdayOffPitchSnapshot()
   });
 
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
@@ -6204,6 +6238,41 @@ function renderMatchdayReport(container, lastMatch) {
     card,
     `Lagstyrke: ${Number.isFinite(Number(report.teamStrength)) ? report.teamStrength : 0}`
   );
+
+  // Match Explanation v1.5: den forklarende, pedagogiske kampforklaringen øverst
+  // i rapporten — kort hovedforklaring, avgjørende faktorer, taktiske og
+  // menneskelige læringspunkter og forslag til neste uke. Binder sammen taktikk,
+  // relasjoner, trening og off-pitch. Vises kun når motoren har lagt den ved.
+  const explanation = report.explanation;
+  if (explanation && typeof explanation === "object") {
+    appendMatchdaySubheading(card, "Kampforklaring");
+
+    if (explanation.headline) {
+      const headline = document.createElement("p");
+      headline.className = "matchday-explanation-headline";
+      headline.textContent = explanation.headline;
+      card.append(headline);
+    }
+    if (explanation.resultSummary) {
+      appendMatchdayMeta(card, explanation.resultSummary);
+    }
+
+    const explanationSections = [
+      ["Avgjørende faktorer", explanation.decisiveFactors],
+      ["Taktisk bilde", explanation.tacticalFactors],
+      ["Relasjoner", explanation.relationshipFactors],
+      ["Trening", explanation.trainingFactors],
+      ["Utenfor banen", explanation.offPitchFactors],
+      ["Læringspunkter", explanation.learningPoints],
+      ["Vurder til neste uke", explanation.nextWeekSuggestions]
+    ];
+    explanationSections.forEach(([title, items]) => {
+      if (Array.isArray(items) && items.length > 0) {
+        appendMatchdaySubheading(card, title);
+        appendMatchdayList(card, items);
+      }
+    });
+  }
 
   // Managergrep med konsekvens (v0.2).
   appendMatchdayDecisionLog(card, report.decisions, "Managergrep i kampen");

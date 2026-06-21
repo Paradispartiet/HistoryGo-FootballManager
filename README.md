@@ -37,7 +37,9 @@ Appen har nå flere lag:
     - Meldingene **dramatiserer signaler** fra klubbens puls. Innboksen forteller ikke spilleren hva som er riktig: den gir bekymringer, observasjoner og press som manageren må **tolke**. Noen tråder har valg med konsekvenser (`safe`/`balanced`/`risky`/`assertive`/`defensive`), og et bevisst kontekstuelt valg kan fortsatt slå standardforslaget.
     - Valg i tråder lager et **offPitchEvent** som sendes til `applyOffPitchEvent`, slik at konteksten faktisk beveger seg (slitasje, moral, press, garderobe …). Inbox-state ligger i `teamMerits.inbox` – **aldri** i History Go-progresjonen (`visited_places` / `hg_groundhopper_stats_v1`). Motoren er ren, deterministisk og no-spam (deterministiske tråd-id-er + context hash). Kjør `npm run sim:inbox`.
 
-Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, Club Week, kamprapport, Mini Season v1 og lokal starttropp finnes nå, men full liga/sesong og full simulering gjenstår.
+14. **Match Explanation v1.5** – kampdagen **forklarer hvorfor** resultatet ble som det ble (`src/football-match-explanation-engine.js`): en deterministisk, ren forklaringsmotor binder sammen lagfit, rollefit, relasjoner, formasjon/taktikk, treningsuke, treningsprogram, off-pitch-kontekst og managergrep til konkrete årsakskjeder og åpne læringspunkter. Kamprapporten viser nå hovedforklaring, avgjørende faktorer og forslag til neste uke. Se punkt 12 under «HG Football Manager som læringsspill» og kjør `npm run sim:matchday`.
+
+Dette er fortsatt ikke et ferdig spill. Kampmotor, motstanderprofiler, Club Week, kamprapport (nå forklarende), Mini Season v1 og lokal starttropp finnes nå, men full liga/sesong og full simulering gjenstår.
 
 ## Viktige filer
 
@@ -55,6 +57,8 @@ src/
   football-badge-effect-engine.js
   football-off-pitch-parameters.js
   football-inbox-events.js
+  football-matchday-engine.js
+  football-match-explanation-engine.js
   hg-formation-library.js
 
 data/
@@ -514,6 +518,17 @@ Fem Club Weeks er nå **én sammenhengende sportslig prøveperiode** — bygget 
 - *Validering:* `npm run sim:mini-season` (hele løkken ende-til-ende) og `npm run sim:club-week` (viser at Club Week + Mini Season ruller i takt over to uker).
 
 Dette er fortsatt **ikke** en full liga/sesong — det er en lett, spillbar v1-loop: en prøveperiode der resultater, form, styreforventninger og kontekst utvikler seg over fem kamper.
+
+### 12. Match Explanation v1.5 (kampdagen forklarer hvorfor)
+
+Kampdagen viser ikke lenger bare et resultat og en kort rapport — den **forklarer hvorfor** utfallet ble som det ble, slik at kampen blir et pedagogisk speil av managerens valg. Dette er en ren utvidelse av eksisterende kampdag (ingen ny liga, ingen ny hovedfane, ingen flyttede motorer, ingen skriving til History Go-progresjon).
+
+- *Motor:* `src/football-match-explanation-engine.js` – ren ESM (ingen DOM/fetch/localStorage/app-state), **deterministisk**: lik input gir byte-identisk output, ingen ny tilfeldighet som skjuler årsakene. Den finner ikke opp nye datastrukturer; den leser kun det kampsesjonen og resultatet allerede bærer.
+- *Funksjon:* `buildMatchExplanation({ result, session })` returnerer en strukturert forklaring: `headline`, `resultSummary`, `decisiveFactors`, `tacticalFactors`, `relationshipFactors`, `trainingFactors`, `offPitchFactors`, `learningPoints` og `nextWeekSuggestions`. Tomme/irrelevante kategorier utelates stille.
+- *Hvilke parametre forklaringen bruker:* lagfit/`teamScore` og de taktiske metrikkene (`buildUpScore`, `pressScore`, `restDefenseScore`, `depthScore`, `widthScore`, `balanceScore`), individuell rollefit (`roleFitAverage`), relasjoner (`teamFit.relationships` → positive/negative koblinger med egne forklaringer), valgt formasjon + historisk fit, valgt taktikk, formasjons-matchup mot motstanderens spillestil, ukens treningsfokus, treningsprogram-historikk (recovery/press), off-pitch-konteksten (moral, selvtillit, samhold, slitasje, skadefare, medie-/styrepress, taktisk klarhet) og managergrepene i kampen (beste/svakeste grep). Den skjulte uroen vises bare som et vagt hint, aldri som tall (off-pitch-modulens hidden-prinsipp).
+- *Kobling inn:* kampmotoren snapshotter relasjoner og off-pitch-kontekst **slik de var før kampen** når en sesjon opprettes (`createMatchdaySession`), og `finalizeMatchdaySession` legger forklaringen på resultatet (`result.explanation`) — så den overlever en reload. `app.js` sender inn `relationships` og `offPitchContext`, og kamprapporten viser forklaringen øverst (kort hovedforklaring, avgjørende faktorer, taktiske og menneskelige læringspunkter, forslag til neste uke).
+- *Konkret og lærende, ikke fasit:* forklaringene peker på årsakskjeder («Svakt restforsvar gjorde laget sårbart for kontringer», «Pressuka slo negativt ut fordi laget allerede var tungt fysisk», «Lav moral og høyt medietrykk gjorde laget mer sårbart etter baklengsmål»). Læringspunktene er formulert slik at spilleren kan gjøre et annet bevisst valg neste gang — i tråd med at misbruk er en managerfeil, ikke en spillersvakhet.
+- *Validering:* `npm run sim:matchday` verifiserer nå at hvert resultat har en `explanation` med alle felter, at `decisiveFactors`/`learningPoints` ikke er tomme, at motoren er deterministisk, og at off-pitch-/relasjons-/treningsfaktorer dukker opp når inndata tilsier det.
 
 ## Kvalitetssjekk før nye endringer
 
