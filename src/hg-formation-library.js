@@ -10,10 +10,17 @@
 // Designprinsipp: ingen formasjonsliste hardkodes i JS. Alt leses fra
 // data/hgFootball/formations.json (og epoker/roller/unlock-regler).
 import "./football-relationship-metric-ui.js";
+import { HISTORICAL_OPPONENT_PROFILES } from "./football-historical-opponent-profiles.js";
+import {
+  buildFormationKnowledgeIndex,
+  buildOpponentProfileIndex,
+  createFormationKnowledgeViewModel
+} from "./football-formation-knowledge-view-model.js";
 
 const HGFM_DATA = {
   eras: "data/hgFootball/formationEras.json",
   formations: "data/hgFootball/formations.json",
+  formationKnowledge: "data/hgFootball/formationKnowledge.json",
   roleTypes: "data/hgFootball/roleTypes.json",
   unlockRules: "data/hgFootball/unlockRules.json"
 };
@@ -227,6 +234,37 @@ function renderDetail(root, model) {
     detail.append(el("p", { class: "hgfm-detail-notes", text: formation.notes }));
   }
 
+  const knowledgeVm = createFormationKnowledgeViewModel({
+    formation,
+    knowledge: model.knowledgeById[formation.id],
+    roleIndex: model.roleIndex,
+    opponentIndex: model.opponentIndex
+  });
+  if (knowledgeVm) {
+    detail.append(
+      el("section", { class: "hgfm-block hgfm-knowledge" }, [
+        el("h3", { class: "hgfm-block-title", text: "Kunnskap i spill" }),
+        el("p", { class: "hgfm-knowledge-core", text: knowledgeVm.corePrinciple }),
+        el("div", { class: "hgfm-two-col" }, [
+          el("div", {}, [
+            el("p", { class: "hgfm-unlock-label", text: "Matchup-signaler" }),
+            chipList(knowledgeVm.matchupSignals, "signal")
+          ]),
+          el("div", {}, [
+            el("p", { class: "hgfm-unlock-label", text: "Læringspunkter" }),
+            chipList(knowledgeVm.learningPoints, "learning")
+          ])
+        ]),
+        knowledgeVm.relatedOpponentLabels.length
+          ? el("details", { class: "hgfm-knowledge-details" }, [
+              el("summary", { text: "Relaterte historiske motstandere" }),
+              chipList(knowledgeVm.relatedOpponentLabels, "example")
+            ])
+          : null
+      ])
+    );
+  }
+
   // Faseformasjoner: grunnform + de fem fasene.
   const phaseGrid = el("div", { class: "hgfm-phase-grid" });
   PHASE_FIELDS.forEach(({ key, label }) => {
@@ -335,7 +373,7 @@ function render(container, model, handlers) {
 
 // Bygger oppslagsindekser og grupperer formasjoner per epoke. Epoke-rekkefølgen
 // følger formationEras.json (kronologisk).
-function buildModel(erasData, formationsData, roleTypesData, unlockRulesData) {
+function buildModel(erasData, formationsData, roleTypesData, unlockRulesData, formationKnowledgeData) {
   const eras = Array.isArray(erasData?.eras) ? erasData.eras : [];
   const formations = Array.isArray(formationsData?.formations) ? formationsData.formations : [];
   const roleTypes = Array.isArray(roleTypesData?.roleTypes) ? roleTypesData.roleTypes : [];
@@ -343,6 +381,8 @@ function buildModel(erasData, formationsData, roleTypesData, unlockRulesData) {
   const eraIndex = new Map(eras.map((era) => [era.id, era]));
   const formationIndex = new Map(formations.map((f) => [f.id, f]));
   const roleIndex = new Map(roleTypes.map((r) => [r.id, r]));
+  const knowledgeById = buildFormationKnowledgeIndex(formationKnowledgeData);
+  const opponentIndex = buildOpponentProfileIndex(HISTORICAL_OPPONENT_PROFILES);
 
   // Grupper formasjoner per eraId, i den rekkefølgen de står i formations.json.
   const formationsByEra = new Map();
@@ -368,6 +408,8 @@ function buildModel(erasData, formationsData, roleTypesData, unlockRulesData) {
     eraIndex,
     formationIndex,
     roleIndex,
+    knowledgeById,
+    opponentIndex,
     formationsByEra,
     unlockState: { rulesByFormation, sourceNames },
     selectedEraId: eras[0]?.id || null,
@@ -380,16 +422,17 @@ async function initFormationLibrary() {
   if (!container) return;
 
   try {
-    const [erasData, formationsData, roleTypesData, unlockRulesData] = await Promise.all([
+    const [erasData, formationsData, roleTypesData, unlockRulesData, formationKnowledgeData] = await Promise.all([
       loadJson(HGFM_DATA.eras),
       loadJson(HGFM_DATA.formations),
       // roleTypes og unlockRules er valgfrie for visningen: ved feil faller vi
       // tilbake til id-er / nøytral unlock-status uten å kaste.
       loadJson(HGFM_DATA.roleTypes).catch(() => null),
-      loadJson(HGFM_DATA.unlockRules).catch(() => null)
+      loadJson(HGFM_DATA.unlockRules).catch(() => null),
+      loadJson(HGFM_DATA.formationKnowledge).catch(() => null)
     ]);
 
-    const model = buildModel(erasData, formationsData, roleTypesData, unlockRulesData);
+    const model = buildModel(erasData, formationsData, roleTypesData, unlockRulesData, formationKnowledgeData);
 
     // Velg første formasjon i første epoke som standard.
     const firstFormations = model.formationsByEra.get(model.selectedEraId) || [];

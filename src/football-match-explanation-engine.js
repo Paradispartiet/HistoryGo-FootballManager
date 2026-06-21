@@ -18,6 +18,8 @@
 // det kampsesjonen og resultatet allerede bærer med seg. Når et datagrunnlag
 // mangler (f.eks. ingen off-pitch-snapshot), utelates den kategorien stille.
 
+import { getFormationLearningHint } from "./football-formation-knowledge-view-model.js";
+
 function num(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
@@ -333,13 +335,18 @@ function buildDecisionFactors({ bestDecision, worstDecision, positiveCount, nega
 // årsakskjeden til et konkret, men ÅPENT råd — formulert slik at spilleren kan
 // gjøre et annet bevisst valg neste gang (ikke en fasit).
 // ---------------------------------------------------------------------------
-function buildLearningPoints({ outcome, tp, relationshipScore, weakest, strongest, worstDecision, offPitch, concededGoals, matchup, historicalMatchup }) {
+function buildLearningPoints({ outcome, tp, relationshipScore, weakest, strongest, worstDecision, offPitch, concededGoals, matchup, historicalMatchup, formationKnowledge }) {
   const points = [];
 
   // Historisk stil-læringspunkt: den pedagogiske kjernen i å møte en historisk
   // arketype. Settes først så den ikke fortrenges av garantien nederst.
   if (isObject(historicalMatchup) && typeof historicalMatchup.historicalLearningPoint === "string" && historicalMatchup.historicalLearningPoint.length > 0) {
     points.push(historicalMatchup.historicalLearningPoint);
+  }
+
+  const formationHint = getFormationLearningHint(formationKnowledge);
+  if (formationHint) {
+    points.push(`Formasjonslæring: ${formationHint}`);
   }
 
   if (outcome === "win" && num(tp.buildUpScore) >= STRONG && relationshipScore >= STRONG) {
@@ -558,7 +565,8 @@ export function buildMatchExplanation({ result, session } = {}) {
     offPitch,
     concededGoals: goalsAgainst,
     matchup,
-    historicalMatchup
+    historicalMatchup,
+    formationKnowledge: sess.formationKnowledge || result.formationKnowledge || null
   });
   const nextWeekSuggestions = buildNextWeekSuggestions({ result, offPitch, matchup });
 

@@ -71,6 +71,12 @@ import {
   getHistoricalFormationRoleHint
 } from "./hg-football-formation-adapter.js";
 import {
+  buildFormationKnowledgeIndex,
+  buildOpponentProfileIndex,
+  createFormationKnowledgeViewModel,
+  getFormationLearningHint
+} from "./football-formation-knowledge-view-model.js";
+import {
   buildCoachContext,
   buildCoachContextReport,
   getStaffCategory
@@ -5180,6 +5186,66 @@ function buildFormationAccessText(formation) {
   return `Låst – åpnes via ${requirements.slice(0, 3).join(" eller ")}.`;
 }
 
+function appendFormationKnowledgeList(root, label, items, className = "") {
+  const values = Array.isArray(items) ? items.filter(Boolean) : [];
+  if (!values.length) return;
+  const block = document.createElement("div");
+  block.className = `formation-knowledge-mini-block${className ? ` ${className}` : ""}`;
+  const title = document.createElement("p");
+  title.className = "formation-knowledge-mini-label";
+  title.textContent = label;
+  block.append(title);
+  const list = document.createElement("ul");
+  list.className = "formation-knowledge-mini-list";
+  values.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.append(li);
+  });
+  block.append(list);
+  root.append(block);
+}
+
+function createFormationKnowledgeMiniCard(formation, { compact = false } = {}) {
+  const knowledge = formation ? state.formationKnowledgeById[formation.id] : null;
+  const vm = createFormationKnowledgeViewModel({
+    formation,
+    knowledge,
+    roleIndex: state.hgRoleTypeIndex,
+    opponentIndex: state.historicalOpponentIndex
+  });
+  if (!vm) return null;
+
+  const card = document.createElement("section");
+  card.className = `formation-knowledge-mini${compact ? " is-compact" : ""}`;
+  const eyebrow = document.createElement("p");
+  eyebrow.className = "formation-knowledge-mini-eyebrow";
+  eyebrow.textContent = "Formasjonskunnskap";
+  const title = document.createElement("h4");
+  title.textContent = vm.displayName;
+  const subtitle = document.createElement("p");
+  subtitle.className = "formation-knowledge-mini-subtitle";
+  subtitle.textContent = vm.subtitle;
+  const core = document.createElement("p");
+  core.className = "formation-knowledge-mini-core";
+  core.textContent = vm.corePrinciple;
+  card.append(eyebrow, title, subtitle, core);
+
+  appendFormationKnowledgeList(card, "Styrker", vm.quickStrengths, "is-strength");
+  appendFormationKnowledgeList(card, "Svakheter", vm.quickWeaknesses, "is-weakness");
+  appendFormationKnowledgeList(card, "Rollekrav", vm.roleRequirements, "is-role");
+
+  const hint = vm.managerHints[0] || vm.learningPoints[0];
+  if (hint) {
+    const managerHint = document.createElement("p");
+    managerHint.className = "formation-knowledge-mini-hint";
+    managerHint.textContent = `Managerhint: ${hint}`;
+    card.append(managerHint);
+  }
+
+  return card;
+}
+
 function renderTacticalSystemPanel() {
   const panel = elements.tacticalSystemPanel;
   if (!panel) {
@@ -5227,6 +5293,11 @@ function renderTacticalSystemPanel() {
   head.append(difficulty);
 
   panel.append(head);
+
+  const knowledgeCard = createFormationKnowledgeMiniCard(formation);
+  if (knowledgeCard) {
+    panel.append(knowledgeCard);
+  }
 
   // Faseformasjoner: grunnform + de fem fasene i kompakte bokser.
   const phaseGrid = document.createElement("div");
@@ -6073,6 +6144,28 @@ function renderMatchdaySessionPreMatch(container, session) {
     });
     if (opponent.historicalNote) histLines.push(`Historisk: ${opponent.historicalNote}`);
     appendMatchdayList(card, histLines);
+
+    const opponentFormation = state.formations.find((candidate) => candidate.id === opponent.formationId) || null;
+    const opponentFormationKnowledge = opponent.formationId ? state.formationKnowledgeById[opponent.formationId] : null;
+    const opponentFormationVm = createFormationKnowledgeViewModel({
+      formation: opponentFormation,
+      knowledge: opponentFormationKnowledge,
+      roleIndex: state.hgRoleTypeIndex,
+      opponentIndex: state.historicalOpponentIndex
+    });
+    if (opponentFormationVm) {
+      appendMatchdaySubheading(card, "Formasjonen bak stilen");
+      const formationLines = [
+        `${opponentFormationVm.displayName}: ${opponentFormationVm.corePrinciple}`
+      ];
+      opponentFormationVm.matchupSignals.slice(0, 2).forEach((line) => {
+        formationLines.push(`Se etter: ${line}`);
+      });
+      if (opponentFormationVm.managerHints[0]) {
+        formationLines.push(`Managerhint: ${opponentFormationVm.managerHints[0]}`);
+      }
+      appendMatchdayList(card, formationLines);
+    }
   }
 
   // Stil-matchup (Historical Opponent Archetypes v1): hvordan den historiske
@@ -6789,6 +6882,17 @@ function buildSuggestedSetupCard(suggestion) {
   summary.className = "suggested-setup-summary";
   summary.textContent = suggestion.summary;
   card.append(summary);
+
+  if (suggestion.type === "formation") {
+    const formationId = suggestion.id.startsWith("formation:") ? suggestion.id.slice("formation:".length) : null;
+    const learningHint = getFormationLearningHint(state.formationKnowledgeById[formationId]);
+    if (learningHint) {
+      const hint = document.createElement("p");
+      hint.className = "suggested-setup-learning-hint";
+      hint.textContent = `Læringshint: ${learningHint}`;
+      card.append(hint);
+    }
+  }
 
   appendSuggestedSetupList(card, "suggested-setup-why", "Hvorfor nå", suggestion.why);
   appendSuggestedSetupList(card, "suggested-setup-risks", "Risiko", suggestion.risks);
@@ -9996,14 +10100,9 @@ async function init() {
       ? legacyFormationsData.formations
       : [];
 
-    // Indekser formasjonskunnskap på formationId for raskt matchup-oppslag.
-    state.formationKnowledgeById = {};
-    (Array.isArray(hgFormationKnowledgeData?.knowledge) ? hgFormationKnowledgeData.knowledge : [])
-      .forEach((entry) => {
-        if (entry && typeof entry.formationId === "string") {
-          state.formationKnowledgeById[entry.formationId] = entry;
-        }
-      });
+    // Indekser formasjonskunnskap på formationId for raskt matchup-/UI-oppslag.
+    state.formationKnowledgeById = buildFormationKnowledgeIndex(hgFormationKnowledgeData);
+    state.historicalOpponentIndex = buildOpponentProfileIndex(HISTORICAL_OPPONENT_PROFILES);
 
     // Oversett historiske formasjoner til runtime-format og fyll taktikktavla.
     // Faller trygt tilbake til legacy-katalogen hvis hgFootball-data mangler.
