@@ -33,6 +33,7 @@ import {
   finalizeMatchdaySession,
   getSessionEventIndex
 } from "../src/football-matchday-engine.js";
+import { buildMatchExplanation } from "../src/football-match-explanation-engine.js";
 import {
   computeMatchdayConsequences,
   evaluateClubWeekMatchdayGate
@@ -234,6 +235,130 @@ check("History Go-hint finnes", typeof result.historyGoHint === "string" && resu
 
 const report = createMatchReport(result);
 check("createMatchReport tar med v0.2-feltene", report.decisions.length === 3 && Boolean(report.formationVerdict) && Boolean(report.opponentStyle));
+
+// --- 3b) Match Explanation v1.5 ---------------------------------------------
+console.log("\nKampforklaring (Match Explanation v1.5):");
+const explanation = result.explanation;
+check("kampresultatet har en explanation", Boolean(explanation) && typeof explanation === "object");
+check(
+  "explanation har alle forventede felter",
+  explanation &&
+    typeof explanation.headline === "string" &&
+    typeof explanation.resultSummary === "string" &&
+    Array.isArray(explanation.decisiveFactors) &&
+    Array.isArray(explanation.tacticalFactors) &&
+    Array.isArray(explanation.trainingFactors) &&
+    Array.isArray(explanation.offPitchFactors) &&
+    Array.isArray(explanation.relationshipFactors) &&
+    Array.isArray(explanation.learningPoints) &&
+    Array.isArray(explanation.nextWeekSuggestions)
+);
+check("headline og resultSummary er ikke tomme", explanation.headline.length > 0 && explanation.resultSummary.length > 0);
+check("decisiveFactors er ikke tom", explanation.decisiveFactors.length > 0);
+check("learningPoints er ikke tom", explanation.learningPoints.length > 0);
+check("createMatchReport tar med explanation", Boolean(report.explanation) && report.explanation === result.explanation);
+
+// Determinisme: samme sesjon → samme forklaring (ingen tilfeldighet i motoren).
+const explanationAgain = buildMatchExplanation({ result, session });
+check(
+  "buildMatchExplanation er deterministisk",
+  JSON.stringify(explanationAgain) === JSON.stringify(buildMatchExplanation({ result, session }))
+);
+
+// Off-pitch, relasjoner og trening dukker opp NÅR input tilsier det: en sesjon
+// med lav moral/høyt medietrykk/høy slitasje, klare relasjoner og en pressuke.
+const richSession = createMatchdaySession({
+  teamFit: {
+    ...buildTeamFit("strong"),
+    relationships: {
+      relationshipScore: 78,
+      positiveRelations: [
+        { type: "positive", points: 12, title: "Bred dribler får støtte", explanation: "Backen gir overlapp og frigjør driblefoten.", roleIds: ["winger", "overlapping_fullback"] }
+      ],
+      negativeRelations: [
+        { type: "negative", points: 11, title: "Møtende spiss uten løp rundt seg", explanation: "Targetspissen får ingen som angriper bakrommet.", roleIds: ["target_striker"] }
+      ]
+    }
+  },
+  formation: getFormationById("gegen_4222"),
+  tactic,
+  activeClassifications: [],
+  coachContext: strongCoach,
+  opponent: pickOpponentProfile(0),
+  trainingFocus: {
+    focusId: "pressing",
+    name: "Pressing",
+    week: 3,
+    effectHint: "Kan styrke grep som presser høyere.",
+    affectedMetrics: ["pressScore"],
+    staffSupport: { level: "medium", label: "Medium" },
+    opponentFit: true,
+    contextRelevant: true,
+    metricBonuses: { pressScore: 3 }
+  },
+  relationships: {
+    relationshipScore: 78,
+    positiveRelations: [
+      { type: "positive", points: 12, title: "Bred dribler får støtte", explanation: "Backen gir overlapp og frigjør driblefoten.", roleIds: ["winger", "overlapping_fullback"] }
+    ],
+    negativeRelations: [
+      { type: "negative", points: 11, title: "Møtende spiss uten løp rundt seg", explanation: "Targetspissen får ingen som angriper bakrommet.", roleIds: ["target_striker"] }
+    ]
+  },
+  offPitchContext: {
+    morale: 34,
+    confidence: 36,
+    cohesion: 38,
+    fatigue: 72,
+    wear: 68,
+    injuryRisk: 64,
+    mediaPressure: 70,
+    boardPressure: 68,
+    tacticalClarity: 40,
+    recentTrainingProgramIds: ["press_week"],
+    hiddenHint: "Det ligger en uro under overflaten som tallene ikke fullt ut forklarer.",
+    topConcerns: ["Forventningspresset rundt laget er høyt."],
+    positives: []
+  }
+});
+check("sesjonen lagrer relationshipSnapshot", Boolean(richSession.relationshipSnapshot));
+check("sesjonen lagrer offPitchSnapshot", Boolean(richSession.offPitchSnapshot));
+
+// Spill gjennom med et tap-aktig forløp: velg første valg i hver hendelse.
+richSession.phase = "event_1";
+while (getSessionEventIndex(richSession) !== null) {
+  const idx = getSessionEventIndex(richSession);
+  const ev = richSession.events[idx];
+  const opt = ev.options[0];
+  const res = resolveMatchdayDecision({
+    event: ev,
+    option: opt,
+    tacticalProfile: richSession.teamFitSnapshot.tacticalProfile,
+    matchEngineEffects: richSession.matchEngineEffects,
+    coachSnapshot: richSession.coachSnapshot,
+    trainingFocus: richSession.trainingFocus
+  });
+  richSession.decisions.push({
+    eventId: ev.id,
+    eventTitle: ev.title,
+    optionId: opt.id,
+    optionLabel: opt.label,
+    tone: res.tone,
+    effects: res.effects,
+    feedback: res.feedback,
+    trainingImpact: res.trainingImpact
+  });
+  richSession.phase = idx + 1 < richSession.events.length ? `event_${idx + 2}` : "resolved";
+}
+const richResult = finalizeMatchdaySession(richSession);
+const richExplanation = richResult.explanation;
+check("rik sesjon: offPitchFactors dukker opp", richExplanation.offPitchFactors.length > 0);
+check("rik sesjon: relationshipFactors dukker opp", richExplanation.relationshipFactors.length > 0);
+check("rik sesjon: trainingFactors dukker opp", richExplanation.trainingFactors.length > 0);
+check(
+  "rik sesjon: tynn-input gir færre off-pitch-faktorer enn rik input",
+  buildMatchExplanation({ result }).offPitchFactors.length < richExplanation.offPitchFactors.length
+);
 
 // --- 4) Forutsetninger påvirker tonene --------------------------------------
 console.log("\nForutsetninger (sterkt vs. svakt lag):");
