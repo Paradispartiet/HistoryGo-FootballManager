@@ -38,6 +38,12 @@ jobs:
       - name: Audit Football Knowledge data
         run: npm run audit:knowledge
 
+      - name: Check DOM ids (UI-lim)
+        run: npm run check:dom-ids
+
+      - name: Flow-audit (spilløkka henger sammen)
+        run: npm run audit:flow
+
       - name: Build TypeScript engine
         run: npm run build
 
