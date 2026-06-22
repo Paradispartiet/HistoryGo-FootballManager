@@ -20,12 +20,14 @@ npm run typecheck          # tsc --noEmit — type-check the TS engine
 npm run build              # tsc — compile src/**/*.ts to dist/
 
 # Data audits (validate JSON schemas / referential integrity)
-npm run audit:knowledge        # football_knowledge_principles.json (also run in CI)
-npm run audit:hg-football      # data/hgFootball/ historical formation module
+npm run audit:knowledge          # football_knowledge_principles.json
+npm run audit:hg-football        # data/hgFootball/ historical formation module
 npm run audit:hg-historical-fit
 npm run audit:hg-coach-context
+npm run audit:hg-formation-knowledge   # data/hgFootball/formationKnowledge.json
+npm run audit:historical-opponents     # historical opponent archetypes
 
-# UI-/flyt-vakter (statisk, leser index.html + src/app.js, also run in CI)
+# UI-/flyt-vakter (statisk, leser index.html + src/app.js)
 npm run check:dom-ids          # querySelector("#id")-oppslag finnes i index.html
 npm run audit:flow             # hele spilløkka (start → mini-sesong) er wiret
 
@@ -33,9 +35,21 @@ npm run audit:flow             # hele spilløkka (start → mini-sesong) er wire
 npm run sim:matchday           # matchday session loop (football-matchday-engine.js)
 npm run sim:mini-season        # mini-season loop
 npm run sim:training-week      # weekly training focus
+npm run sim:formation-matchup  # formation-vs-formation knowledge engine
+npm run sim:suggested-setups   # self-explaining suggested setups
+npm run sim:training-programs   # weekly training-program compositions
+npm run sim:off-pitch          # off-pitch context parameters
+npm run sim:inbox              # inbox events wired to the context engines
+npm run sim:club-week          # Club Week consequences loop
 ```
 
-Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script. **CI runs `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow` and `build`** (`.github/workflows/pages.yml`), so the other scripts must be run manually.
+Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script.
+
+**Two CI workflows** (`.github/workflows/`):
+- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow`, `audit:historical-opponents`, `build`.
+- `ci.yml` (PRs + every non-`main` branch push) is the safety net that runs the **whole** suite — all `audit:*`, `check:*`, `build` **and** every `sim:*` script.
+
+So on a feature branch, expect the full suite to gate your PR; run the relevant scripts locally before pushing.
 
 ### Running the app
 
@@ -60,7 +74,14 @@ The single most important thing to understand is that this repo contains **two i
 - `football-relationship-engine.js` — whether roles support or block each other (`calculateRoleRelationships`).
 - `football-badge-effect-engine.js` — badge bonuses nudged on top of base metrics.
 - `football-matchday-engine.js` — matchday session loop (events → decisions → report), opponent profiles.
+- `football-match-explanation-engine.js` — takes the finished matchday result + session snapshots and builds a structured, pedagogical explanation of **why** the outcome happened.
+- `football-historical-opponent-profiles.js` — opponents are historical style-teams (taktiske arketyper) used as learning opponents, not generic bots.
 - `football-mini-season.js`, `football-match-consequences.js`, `football-training-week.js` — mini-season, Club Week consequences, weekly training focus.
+- `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
+- `football-suggested-setups.js` — self-explaining 2–4 logical setups (formation / match plan / training week) that advise without replacing the manager's own choice.
+- `football-off-pitch-parameters.js` — the human context layer: fatigue, injury risk, morale, confidence, autonomy, dressing-room mood, media/board/family pressure, hidden mental state.
+- `football-inbox-events.js` — wires the Inbox ("Klubbens puls") to the context engines (off-pitch params, training programs, matchday, decisions), turning a static UI into live events.
+- `football-relationship-metric-ui.js` — thin UI bridge that surfaces the relationship score (engine lives in `football-relationship-engine.js`) without touching `app.js`.
 - `hg-formation-library.js`, `hg-football-formation-adapter.js`, `hg-football-coach-context-engine.js`, `hg-football-historical-fit-engine.js` — the historical formation library (`data/hgFootball/`) and its adapters.
 
 These `.js` files are plain ESM and run unbuilt in the browser **and** in the `scripts/*.mjs` simulations.
@@ -74,7 +95,9 @@ It contains **two computation paths**, but the live UI is now driven by one of t
 - **The faithful legacy ports (the live brain)** — TS ports of the `.js` engines, parity-tested to byte-identical output: `calculatePlayerMatchFit.ts` (individual fit), `calculateRoleRelationships.ts`, `calculateBadgeMetricEffects.ts`, `calculateHistoricalFormationFit.ts`, `buildCoachContext.ts`, and `calculateTeamFit.ts` (the assembly wiring them into a legacy-shaped `teamFit`). **`calculateTeamFit` is what `app.js`'s `getTeamFit()` runs at runtime** (see below). On top of it sit teamFit-derived view helpers — `recommendRoleChangesFromTeamFit.ts`, `analyzeWeakPointsFromTeamFit.ts`, `createTeamFitManagerInsight.ts` (summary + top actions), `createTrainingFocusFromTeamFit.ts` — that use the *same* `matchScore`/metrics as the lineup. So this path is the single source of truth for the headline score panel, report, lineup, side panel, decisions, matchday **and** the manager-detail panel's assessment (summary, top actions, role changes, weak points, training focus).
 - **The structured dashboard pipeline** — a stricter rebuild over `src/domain/footballTypes.ts` (`calculateRoleFit` → `calculateTeamBalance` → `evaluateTeamSetup` → `analyzeWeakPoints`/`recommendRoleChanges`/`createTrainingFocus` → `createManagerInsight` → `createManagerDashboardData` → `createManagerDashboardViewModel` → `createManagerAppState`). It computes scores differently (`setupScore` vs legacy `teamScore`) and **no longer drives the team assessment**. It now powers only the separate **knowledge sub-feature** (`createFootballKnowledgeRecommendations` + active knowledge focus + training history), which matches football principles by structured weak-point codes and is left on this pipeline deliberately. It also remains the parity-tested rebuild exercised by `src/sample/`.
 
-`src/index.ts` is the public surface — every engine type and function is re-exported there; **sample files must not be exported from it**. `src/domain/footballTypes.ts` is the shared type contract and must stay logic-free.
+Alongside these two paths sit a few **additive TS engines** with their own scopes: the Formation Knowledge engine (`evaluateFormationMatchup.ts` + `compareFormations.ts` / `compareTactics.ts`, audited by `audit:hg-formation-knowledge`, simulated by `sim:formation-matchup`), `createTeamSetupReport.ts` (the report view model), and `createClubWeekState.ts` (Club Week engine). These are pure and re-exported from `src/index.ts` like the rest.
+
+`src/index.ts` is the public surface — every engine type and function is re-exported there; **sample files must not be exported from it**. `src/domain/footballTypes.ts` is the shared type contract and must stay logic-free. `src/domain/footballKnowledgeTypes.ts` holds the knowledge sub-feature's types. For the long-form rationale, see `docs/ENGINE_ARCHITECTURE.md` (the live overview here in CLAUDE.md supersedes its historical "status"/"next steps" sections).
 
 ### The bridge between the two layers
 
@@ -89,6 +112,7 @@ It contains **two computation paths**, but the live UI is now driven by one of t
 - Player role/archetype references must point at existing role/archetype ids. Player unlocks must point at real **player** ids, not archetype ids.
 - Players should sit in the high-class band (≈85–100). There are no "bad" players by design.
 - `data/hgFootball/` is an **additive** historical module under its own schema namespace `history-go.hg-football.*`, living beside the `historygo-football-manager.*` files. Load it via its `manifest.json`; every formation must define all six phase shapes (base / inPossession / outOfPossession / press / lowBlock / restDefence). Read `data/hgFootball/README.md` and `README_HGFM_DATA_V1.md` before touching it.
+- The Inbox ("Klubbens puls") is data-driven too: `data/club_inbox_*.json` plus the `club_inbox_messages/`, `club_inbox_replies/`, `club_inbox_choices/` directories, each loaded via a `manifest.json` and keyed by sender. New messages/replies/choices go in these files, not in `app.js`.
 
 ### Core game loop (unlocks)
 
