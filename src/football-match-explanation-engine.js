@@ -231,7 +231,7 @@ function buildRelationshipFactors(relationships) {
 // til kampbildet (eksemplene «Restitusjon ga effekt fordi slitasje var høy» og
 // «Pressuka slo negativt ut fordi laget var tungt fysisk»).
 // ---------------------------------------------------------------------------
-function buildTrainingFactors({ trainingReport, trainingFocus, offPitch }) {
+function buildTrainingFactors({ trainingReport, trainingFocus, offPitch, staffIdentity }) {
   const factors = [];
 
   // Ukens fokus: kort dom fra rapporten (helped/summary).
@@ -257,6 +257,20 @@ function buildTrainingFactors({ trainingReport, trainingFocus, offPitch }) {
       pushFactor(factors, "Pressuka ga uttelling: friske bein tålte den høye intensiteten.", 4);
     } else if (!ranRecovery && injuryRisk >= 60) {
       pushFactor(factors, "Høy skadefare ble ikke adressert med restitusjon — en hard uke kan straffe seg.", -3);
+    }
+  }
+
+  if (isObject(staffIdentity)) {
+    const voices = staffIdentity.staffVoices || {};
+    const support = trainingReport?.staffSupport || trainingFocus?.staffSupport;
+    if (support?.level === "strong") {
+      pushFactor(factors, `Trenerteamets kompetanse gjorde treningsuka mer presis (${support.label?.toLowerCase?.() || "sterk støtte"}).`, 3);
+    } else if (voices.physio && isObject(offPitch) && Math.max(num(offPitch.fatigue), num(offPitch.wear), num(offPitch.injuryRisk)) >= 60) {
+      pushFactor(factors, "Fysioens signaler pekte mot restitusjon før en belastet kampuke.", 2);
+    } else if (!voices.goalkeeperCoach && trainingFocus?.focusId && /build|keeper|oppbygg/i.test(String(trainingFocus.focusId))) {
+      pushFactor(factors, "Manglende keepertrenerstøtte gjorde keeperrollen i oppbyggingen mindre presis.", -2);
+    } else if (voices.assistant && trainingFocus?.focusId && /formation|role|understanding/i.test(String(trainingFocus.focusId))) {
+      pushFactor(factors, "Assistenttrenerens formasjonstilvenning ga bedre taktisk klarhet.", 2);
     }
   }
 
@@ -509,7 +523,8 @@ export function buildMatchExplanation({ result, session } = {}) {
   const trainingFactors = buildTrainingFactors({
     trainingReport: result.trainingFocus,
     trainingFocus: sess.trainingFocus,
-    offPitch
+    offPitch,
+    staffIdentity: sess.staffIdentitySnapshot || null
   });
   const offPitchFactors = buildOffPitchFactors({ offPitch, outcome, concededGoals: goalsAgainst });
   const decisionFactors = buildDecisionFactors({

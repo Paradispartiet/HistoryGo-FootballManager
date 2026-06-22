@@ -620,3 +620,16 @@ Rollevalg i managerkontoret er nå et læringsobjekt, ikke bare et dropdown-valg
 Laget bygger på eksisterende `football_roles.json`, `football_player_archetypes.json`, spillerdata, `football-fit-engine.js`, `football-team-fit-engine.js`, `football-relationship-engine.js` og `formationKnowledge.json`. Misbruk forklares som et manageransvar: alle spillere er gode, men manageren må forstå hvilke situasjoner rollen gir dem.
 
 Match Explanation kan nå løfte frem ett tydelig rollebruk-/relasjonspunkt etter kamp, og suggested setups kan gi korte rollehint når formasjon, trening eller lagfit tilsier det. Dette skriver ikke til History Go-progresjon og legger ikke til ny hovedfane eller liga.
+
+### Staff & Training Identity v1
+
+Stab er nå et spillbart lærings- og støttelag, ikke bare opplåste navn eller krav. `src/football-staff-identity-engine.js` bygger en deterministisk identitet fra eksisterende `football_staff.json`, `football_expertise.json`, unlocks og `teamMerits`: trenerteamets styrker, hull, faglige biaser, aktive staff-stemmer og History Go-kompetanse.
+
+- Assistenttreneren gir helhetlige signaler om rollefit, formasjonstilvenning og kampforberedelse.
+- Trenerteamet støtter relevante treningsprogrammer gjennom små, forklarbare ekspertisebonuser.
+- Keepertrener-kompetanse gjør keeperdistribusjon, sweeperkeeper-bruk og defensiv dødball mer pedagogisk synlig.
+- Fysio-/belastningskompetanse leser fatigue, wear og injuryRisk tydeligere før harde treningsuker.
+- Staben gir råd og støtte, men overtar aldri valget: manageren må fortsatt tolke kontekst, risiko og timing.
+- History Go-unlocks vises som tilgang til kompetanse og som mulige mangler som kan låses opp via relevante sportsteder/klubber; manageren skriver ikke til History Go-progresjon fra dette laget.
+
+Kjør `npm run sim:staff-identity` for en lett sim av tom stab, relevant stab, fysio-/assistentstøtte, treningsprogramscoring, innbokssignaler og kampforklaring med staff context.

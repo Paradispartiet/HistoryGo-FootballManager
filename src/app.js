@@ -46,6 +46,7 @@ import {
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";
 import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
+import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";
 import {
   createDefaultOffPitchState,
   normalizeOffPitchState,
@@ -2988,6 +2989,17 @@ function getSelectedSlot() {
   return formation?.slots.find((slot) => slot.slotId === state.selectedSlotId) || formation?.slots[0] || null;
 }
 
+
+function getStaffIdentitySummary() {
+  return buildStaffIdentitySummary({
+    staff: state.staff,
+    expertise: state.expertise,
+    unlocks: state.unlocks,
+    teamMerits: state.teamMerits,
+    hiredStaff: getHiredStaff()
+  });
+}
+
 // Bygg coachContext fra ansatt stab, staffRoles, valgt formasjon og team merits.
 // Alltid gyldig og nøytral/lav selv uten ansatt stab (ingen null-krasj).
 function getCoachContext() {
@@ -3214,7 +3226,8 @@ function playMatchday() {
     // kampen, så sluttforklaringen kan binde sammen taktikk, relasjoner, trening
     // og menneskene rundt laget.
     relationships: teamFit?.relationships || null,
-    offPitchContext: buildMatchdayOffPitchSnapshot()
+    offPitchContext: buildMatchdayOffPitchSnapshot(),
+    staffIdentity: getStaffIdentitySummary()
   });
 
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
@@ -7137,6 +7150,28 @@ function buildTrainingProgramCard(program, context = {}) {
     card.append(riskLabel, risks);
   }
 
+  if (program.staffSupport) {
+    const support = document.createElement("div");
+    support.className = "training-program-staff-support";
+    const label = document.createElement("p");
+    label.className = "training-program-list-label";
+    label.textContent = `Støtte fra stab: ${program.staffSupport.label}`;
+    support.append(label);
+    const details = document.createElement("ul");
+    [...(program.staffSupport.notes || [])].slice(0, 3).forEach((text) => {
+      const li = document.createElement("li");
+      li.textContent = text;
+      details.append(li);
+    });
+    if (!details.childNodes.length) {
+      const li = document.createElement("li");
+      li.textContent = "Ingen tydelig spesialiststøtte — managerens tolkning blir viktigere.";
+      details.append(li);
+    }
+    support.append(details);
+    card.append(support);
+  }
+
   // Valgknapp: gjør kortet til et faktisk valg koblet til ukens treningsstate.
   const button = document.createElement("button");
   button.type = "button";
@@ -7175,6 +7210,7 @@ function renderTrainingProgramCompositions(teamFit) {
     // bestemt — den må fortjenes av faktisk slitasje, ikke velges som vane.
     offPitchState,
     recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
+    staffIdentity: getStaffIdentitySummary(),
     limit: 3
   });
 
@@ -7202,6 +7238,7 @@ function renderTrainingProgramCompositions(teamFit) {
       lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
       offPitchState,
       recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
+      staffIdentity: getStaffIdentitySummary(),
       limit: 8
     });
     selectedProgram = (Array.isArray(extra) ? extra : []).find((program) => program.id === selectedProgramId) || null;
@@ -8460,6 +8497,7 @@ function refreshInboxEvents(teamFit) {
       teamFit,
       offPitchState,
       recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
+      staffIdentity: getStaffIdentitySummary(),
       limit: 5
     });
   } catch (error) {
@@ -8475,6 +8513,7 @@ function refreshInboxEvents(teamFit) {
     formation: getFormation(),
     tactic: getTactic(),
     teamFit,
+    staffIdentity: getStaffIdentitySummary(),
     existingInboxState: before
   });
 
@@ -9086,6 +9125,22 @@ function appendStaffAction(card, member) {
 
 // Tilgjengelig og engasjert stab.
 function renderStaffUnlocks() {
+  const identity = getStaffIdentitySummary();
+  const identityHost = elements.hiredStaffList?.parentElement;
+  const oldIdentity = identityHost?.querySelector(".staff-identity-summary");
+  if (oldIdentity) oldIdentity.remove();
+  if (identityHost) {
+    const box = document.createElement("section");
+    box.className = "staff-identity-summary";
+    const h = document.createElement("h3");
+    h.textContent = `Stabens vurdering: ${identity.identityLabel} (${identity.staffScore}/100)`;
+    box.append(h);
+    const ul = document.createElement("ul");
+    [...identity.strengths, ...identity.gaps].slice(0, 3).forEach((text) => { const li = document.createElement("li"); li.textContent = text; ul.append(li); });
+    box.append(ul);
+    identityHost.prepend(box);
+  }
+
   const availableList = elements.availableStaffList;
   if (availableList) {
     availableList.innerHTML = "";

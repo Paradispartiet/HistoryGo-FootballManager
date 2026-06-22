@@ -738,6 +738,63 @@ export function createInboxThreadFromMatchday(matchdayResult, context) {
   });
 }
 
+
+function buildStaffIdentityThreads(op, context) {
+  const staffIdentity = isObject(context?.staffIdentity) ? context.staffIdentity : null;
+  if (!staffIdentity) return [];
+  const voices = staffIdentity.staffVoices || {};
+  const threads = [];
+  if (voices.physio && Math.max(op.fatigue, op.wear, op.injuryRisk) >= 62) {
+    threads.push(makeThread({
+      id: "inbox:staff:physio:load",
+      type: "medical",
+      priority: "high",
+      title: "Fysio: kroppen tåler ikke alt nå",
+      sender: "Fysio",
+      summary: "Belastningssignaler gjør harde pressuker mer risikable.",
+      body: ["Flere spillere ser tunge ut i bevegelsene.", "Restitusjon er ikke fasit, men risikoen bør veies før en høyintensiv uke."],
+      tags: ["stab", "fysio", "slitasje"],
+      sourceSignals: ["staff", "fatigue", "injuryRisk"],
+      linkedAction: { kind: "training_program", id: "recovery_prevention", label: "Vurder restitusjon" },
+      effectsPreview: [],
+      choices: []
+    }));
+  }
+  if (!voices.goalkeeperCoach && /build|possession|short/i.test(`${context?.tactic?.buildUp || ""} ${context?.tactic?.tempo || ""}`)) {
+    threads.push(makeThread({
+      id: "inbox:staff:gk:distribution_gap",
+      type: "training",
+      priority: "medium",
+      title: "Keeperrollen mangler fagstøtte",
+      sender: "Trenerteamet",
+      summary: "Oppbygging bakfra krever tydelig keeperdistribusjon.",
+      body: ["Vi kan bruke keeper som oppspillspunkt, men uten keepertrener blir detaljene mindre presise.", "Se etter History Go-kompetanse som keepertrening eller keeperdistribusjon."],
+      tags: ["stab", "keeper", "oppbygging"],
+      sourceSignals: ["staff", "tactic"],
+      linkedAction: { kind: "training_program", id: "build_from_back", label: "Tren oppbygging bakfra" },
+      effectsPreview: [],
+      choices: []
+    }));
+  }
+  if (voices.assistant && (num(context?.coachContext?.formationFamiliarity, 50) < 55 || op.tacticalClarity < 48)) {
+    threads.push(makeThread({
+      id: "inbox:staff:assistant:formation",
+      type: "assistant",
+      priority: "medium",
+      title: "Assistent: systemet trenger repetisjon",
+      sender: "Assistenttrener",
+      summary: "Formasjon og roller forstås ikke helt likt i gruppa ennå.",
+      body: ["Det er ikke sikkert vi skal endre alt.", "En uke med formasjonstilvenning kan gjøre valgene dine tydeligere for spillerne."],
+      tags: ["stab", "formasjon", "rollefit"],
+      sourceSignals: ["staff", "tacticalClarity"],
+      linkedAction: { kind: "training_program", id: "formation_familiarisation", label: "Vurder formasjonstilvenning" },
+      effectsPreview: [],
+      choices: []
+    }));
+  }
+  return threads.slice(0, 1);
+}
+
 // 8) Scouting / History Go — minner om at flere spillere må samles. Muterer
 // ALDRI History Go-progresjon og låser ikke opp noe; ren melding.
 function buildScoutingThread(context) {
@@ -792,6 +849,7 @@ export function createInboxThreads(context) {
   push(buildMediaThread(op));
   push(buildSquadThread(op));
   push(buildAssistantThread(op, ctx));
+  buildStaffIdentityThreads(op, ctx).forEach(push);
 
   // Treningsforslag: ta den mest off-pitch-relevante (om noen) som tråd.
   const programs = asArray(ctx.trainingPrograms);

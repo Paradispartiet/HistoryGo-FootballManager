@@ -1313,7 +1313,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
 
   // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
@@ -1430,6 +1430,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
         }
       : null,
     trainingFocus: trainingFocus ? { ...trainingFocus } : null,
+    staffIdentitySnapshot: staffIdentity && typeof staffIdentity === "object" ? { ...staffIdentity } : null,
     relationshipSnapshot,
     offPitchSnapshot,
     events,
