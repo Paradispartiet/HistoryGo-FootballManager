@@ -23,7 +23,8 @@
     "sim:club-week": "node scripts/simulate-club-week-v01.mjs",
     "check:dom-ids": "node scripts/check-dom-ids.mjs",
     "audit:flow": "node scripts/audit-flow.mjs",
-    "sim:role-learning": "node scripts/simulate-role-learning.mjs"
+    "sim:role-learning": "node scripts/simulate-role-learning.mjs",
+    "sim:staff-identity": "node scripts/simulate-staff-identity.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

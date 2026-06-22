@@ -31,6 +31,7 @@
 // treningsfokus-id-er i football-training-week.js via relatedTrainingFocusIds.
 
 import { TRAINING_FOCUSES, getTrainingFocus } from "./football-training-week.js";
+import { evaluateStaffSupportForTrainingProgram } from "./football-staff-identity-engine.js";
 
 // ----------------------------------------------------------------------------
 // Hjelpere
@@ -177,7 +178,8 @@ function normalizeContext(context) {
     fatigue: explicit(ctx.fatigueRisk, offPitch?.fatigue01),
     wear: explicit(ctx.wearRisk, offPitch?.wear01),
     injury: explicit(ctx.injuryRisk, offPitch?.injury01),
-    recentTokens: readRecentTokens(ctx)
+    recentTokens: readRecentTokens(ctx),
+    staffIdentity: ctx.staffIdentity && typeof ctx.staffIdentity === "object" ? ctx.staffIdentity : null
   };
 }
 
@@ -811,14 +813,16 @@ function scoreComposition(ctx, composition) {
   }
   const baseScore = BASE_SCORE[id];
   const { contextBonus, riskAdjustment, overusePenalty, explanation } = scorer(ctx, template);
-  const totalScore = baseScore + contextBonus + overusePenalty + riskAdjustment;
+  const staffSupport = evaluateStaffSupportForTrainingProgram(composition, ctx.staffIdentity);
+  const totalScore = baseScore + contextBonus + overusePenalty + riskAdjustment + staffSupport.bonus;
   return {
     baseScore,
     contextBonus,
     overusePenalty,
     riskAdjustment,
+    staffBonus: staffSupport.bonus,
     totalScore,
-    explanation: [`Grunnpoeng ${baseScore}.`, ...explanation, `Totalt ${totalScore}.`]
+    explanation: [`Grunnpoeng ${baseScore}.`, ...explanation, ...staffSupport.notes, `Totalt ${totalScore}.`]
   };
 }
 
@@ -844,14 +848,16 @@ function buildComposition(template, ctx) {
   const scorer = SCORERS[template.id];
   const { contextBonus, riskAdjustment, overusePenalty, explanation, signals } = scorer(ctx, template);
   const baseScore = BASE_SCORE[template.id];
-  const totalScore = baseScore + contextBonus + overusePenalty + riskAdjustment;
+  const staffSupport = evaluateStaffSupportForTrainingProgram(template, ctx.staffIdentity);
+  const totalScore = baseScore + contextBonus + overusePenalty + riskAdjustment + staffSupport.bonus;
   const scoring = {
     baseScore,
     contextBonus,
     overusePenalty,
     riskAdjustment,
+    staffBonus: staffSupport.bonus,
     totalScore,
-    explanation: [`Grunnpoeng ${baseScore}.`, ...explanation, `Totalt ${totalScore}.`]
+    explanation: [`Grunnpoeng ${baseScore}.`, ...explanation, ...staffSupport.notes, `Totalt ${totalScore}.`]
   };
 
   const sourceSignals = uniqueStrings(signals);
@@ -873,7 +879,8 @@ function buildComposition(template, ctx) {
     suggestedAdjustments: uniqueStrings(template.suggestedAdjustments),
     scoring,
     confidence,
-    sourceSignals
+    sourceSignals: staffSupport.bonus > 0 ? uniqueStrings([...sourceSignals, "staff"]) : sourceSignals,
+    staffSupport
   };
 }
 
