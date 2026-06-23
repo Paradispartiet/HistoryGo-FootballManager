@@ -44,6 +44,7 @@ import {
   buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
+import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
 import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";
 import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
 import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";
@@ -3093,13 +3094,16 @@ function loadMatchdayState() {
     if (stored && typeof stored === "object" && !Array.isArray(stored)) {
       return {
         lastMatch: stored.lastMatch || null,
-        session: sanitizeStoredMatchdaySession(stored.session)
+        session: sanitizeStoredMatchdaySession(stored.session),
+        // Sett-flagg for kamprapporten (Playable Manager Flow Polish v1.1):
+        // hvilken kamp manageren sist har sett rapporten for.
+        lastSeenMatchId: stored.lastSeenMatchId || null
       };
     }
 
-    return { lastMatch: null, session: null };
+    return { lastMatch: null, session: null, lastSeenMatchId: null };
   } catch (error) {
-    return { lastMatch: null, session: null };
+    return { lastMatch: null, session: null, lastSeenMatchId: null };
   }
 }
 
@@ -3152,11 +3156,37 @@ function getMatchdayReadiness(teamFit) {
 // Sørg for at matchday-state alltid har riktig form før den brukes.
 function ensureMatchdayState() {
   if (!state.matchday || typeof state.matchday !== "object") {
-    state.matchday = { lastMatch: null, session: null };
+    state.matchday = { lastMatch: null, session: null, lastSeenMatchId: null };
   }
   if (!("session" in state.matchday)) {
     state.matchday.session = null;
   }
+  if (!("lastSeenMatchId" in state.matchday)) {
+    state.matchday.lastSeenMatchId = null;
+  }
+}
+
+// Sett-flagg for kamprapporten: en fersk kamp regnes som "ulest" til manageren
+// faktisk har åpnet Kamp-flaten. Brukes av Neste handling-stripa slik at
+// «Se kamprapporten» forsvinner når rapporten er sett.
+function hasUnseenMatchReport() {
+  const lastMatch = state.matchday?.lastMatch || null;
+  if (!lastMatch) {
+    return false;
+  }
+  return (lastMatch.id || null) !== (state.matchday?.lastSeenMatchId || null);
+}
+
+// Marker den siste kampens rapport som sett. Idempotent og persistert.
+// Returnerer true hvis noe faktisk endret seg (slik at kalleren kan rerendre).
+function markMatchReportSeen() {
+  if (!hasUnseenMatchReport()) {
+    return false;
+  }
+  ensureMatchdayState();
+  state.matchday.lastSeenMatchId = state.matchday.lastMatch?.id || null;
+  saveMatchdayState();
+  return true;
 }
 
 // Formasjons-matchup mot en gitt motstander, basert på valgt formasjons
@@ -5734,21 +5764,10 @@ function renderSideDecisions(teamFit) {
   });
 }
 
-// Playable Manager Flow Polish v1: én tydelig "neste handling" + sekundære
-// steg, utledet av eksisterende state (Club Week-fase, roster/kampklar,
-// treningsvalg, innboks, mini-sesong). Ingen ny motor — kun prioritert
-// presentasjon av hva treneren bør gjøre nå. Hvert forslag er
-// { tag, title, hint, run }, sortert mest til minst presserende.
-function computeManagerNextActions(teamFit) {
-  const actions = [];
-  const seen = new Set();
-  const push = (action) => {
-    if (!action || seen.has(action.title)) return;
-    seen.add(action.title);
-    actions.push(action);
-  };
-  const goTab = (target) => () => activateTab(target);
-
+// Bygg det rene kontekstobjektet som Next Action-motoren leser. Trekker kun ut
+// eksisterende state (teamFit, availability, Club Week-port, innboks, trening,
+// mini-sesong) — ingen ny beregning, ingen mutasjon.
+function buildNextActionContext(teamFit) {
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   const emptySlots = assignments.filter((item) => !item.player);
   const misused = assignments.filter((item) => item.player && item.fit?.status === "feilbrukt");
@@ -5756,144 +5775,86 @@ function computeManagerNextActions(teamFit) {
   const duplicateAssignment =
     assignments.find((item) => item.player && duplicateIds.has(item.player.id)) || null;
 
-  const session = state.matchday?.session || null;
-  const lastMatch = state.matchday?.lastMatch || null;
-  const readiness = teamFit ? getMatchdayReadiness(teamFit) : { isReady: false };
   const rosterReadiness = getAvailability().rosterReadiness;
+  const readiness = teamFit ? getMatchdayReadiness(teamFit) : { isReady: false };
   const gate = getClubWeekMatchdayGate();
-  const unreadThreads = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
-  const hasTrainingChoice =
-    Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId);
-  const phase = state.clubWeekState?.phase || null;
+  const clubWeekState = state.clubWeekState || null;
 
-  // 1) Pågående kamp vinner alltid — fullfør grepene først.
-  if (session) {
-    push({
-      tag: "Kampdag",
-      title: "Fortsett kampen",
-      hint: `Kampen mot ${session.opponent?.name || "motstanderen"} venter på managergrepene dine.`,
-      run: goTab("kamp")
-    });
+  return {
+    hasSession: Boolean(state.matchday?.session),
+    opponentName: state.matchday?.session?.opponent?.name || null,
+    roster: {
+      enoughUnlocked: Boolean(rosterReadiness.hasEnoughUnlocked),
+      enoughBench: Boolean(rosterReadiness.hasEnoughBench)
+    },
+    lineup: {
+      totalSlots: teamFit?.totalSlots || 11,
+      emptyCount: emptySlots.length,
+      firstEmptySlotId: emptySlots[0]?.slot?.slotId || null,
+      misused: misused.length
+        ? {
+            name: misused[0].player.name,
+            position: misused[0].slot.position,
+            slotId: misused[0].slot.slotId
+          }
+        : null,
+      duplicate: duplicateAssignment
+        ? { name: duplicateAssignment.player.name, slotId: duplicateAssignment.slot.slotId }
+        : null
+    },
+    clubWeekGate: { isBlocked: Boolean(gate.isBlocked), reason: gate.reason || "" },
+    hasTrainingChoice:
+      Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId),
+    matchdayReady: Boolean(readiness.isReady),
+    unreadThreads: getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState()),
+    hasUnseenReport: hasUnseenMatchReport(),
+    miniSeasonActive: state.miniSeason?.status === "active",
+    clubWeek: clubWeekState
+      ? {
+          week: clubWeekState.week,
+          phase: clubWeekState.phase,
+          phaseLabel: CLUB_WEEK_PHASE_LABELS[clubWeekState.phase] || clubWeekState.phase
+        }
+      : null
+  };
+}
+
+// Oversett en handlingsbeskrivelse fra Next Action-motoren til en faktisk
+// klikk-handler. Selve prioriteringen bor i den rene motoren; her bor bare
+// koblingen til app-state-handlerne.
+function resolveNextActionRun(action) {
+  if (!action || typeof action !== "object") {
+    return null;
   }
-
-  // 2) Troppen mangler spillere (15-kravet) — blokkerer kampdelen.
-  if (!session && (!rosterReadiness.hasEnoughUnlocked || !rosterReadiness.hasEnoughBench)) {
-    push({
-      tag: "Samling",
-      title: "Samle flere spillere",
-      hint: "Troppen mangler spillere for 15-kravet. Synk History Go-steder og bruk opplåste spillere.",
-      run: goTab("historygo")
-    });
-  }
-
-  // 3) Tomme plasser i startelleveren.
-  if (!session && emptySlots.length) {
-    push({
-      tag: "Lag",
-      title: "Fullfør startelleveren",
-      hint: `${emptySlots.length} av ${teamFit?.totalSlots || 11} plasser er tomme. Sett spillere på banen.`,
-      run: selectSlotDecision(emptySlots[0].slot.slotId)
-    });
-  }
-
-  // 4) Feilbrukte spillere — en managerfeil som bør rettes, ikke en spillersvakhet.
-  if (!session && misused.length) {
-    push({
-      tag: "Roller",
-      title: "Velg roller",
-      hint: `${misused[0].player.name} passer dårlig som ${misused[0].slot.position}. Juster rolle eller posisjon.`,
-      run: selectSlotDecision(misused[0].slot.slotId)
-    });
-  }
-
-  // 5) Samme spiller satt opp flere steder.
-  if (!session && duplicateAssignment) {
-    push({
-      tag: "Lag",
-      title: "Rett opp dobbeltbruk",
-      hint: `${duplicateAssignment.player.name} står på mer enn én plass. Velg en annen spiller.`,
-      run: selectSlotDecision(duplicateAssignment.slot.slotId)
-    });
-  }
-
-  // 6) Club Week-porten krever en spilt kamp før uka kan rulle videre.
-  if (!session && gate.isBlocked) {
-    push({
-      tag: "Kampdag",
-      title: "Spill ukens kamp",
-      hint: gate.reason || "Kampdagfasen venter på en spilt kamp.",
-      run: goTab("kamp")
-    });
-  }
-
-  // 7) Uka mangler et treningsvalg.
-  if (!session && !hasTrainingChoice) {
-    push({
-      tag: "Trening",
-      title: "Velg treningsprogram",
-      hint: "Uka mangler et treningsvalg. Velg fokus eller program før kamp.",
-      run: goTab("trening")
-    });
-  }
-
-  // 8) Laget er kampklart — sett kampplan og spill.
-  if (!session && readiness.isReady && !gate.isBlocked) {
-    push({
-      tag: "Kampdag",
-      title: "Spill kamp",
-      hint: "Laget er kampklart. Sett kampplan og test det historiske systemet i kamp.",
-      run: goTab("kamp")
-    });
-  }
-
-  // 9) Uleste innbokstråder — klubbens puls venter på svar.
-  if (unreadThreads > 0) {
-    push({
-      tag: "Innboks",
-      title: "Les innboksen",
-      hint: unreadThreads === 1 ? "1 ulest tråd venter på et svar." : `${unreadThreads} uleste tråder venter på et svar.`,
-      run: goTab("inbox")
-    });
-  }
-
-  // 10) Fersk kamp spilt — se hva kampen lærte før neste uke planlegges.
-  if (!session && lastMatch) {
-    push({
-      tag: "Rapport",
-      title: "Se kamprapporten",
-      hint: "Les hvorfor kampen ble som den ble før du planlegger neste uke.",
-      run: goTab("kamp")
-    });
-  }
-
-  // 11) Prøveperiode ikke aktiv, men laget er klart for de 5 kampene.
-  if (!session && readiness.isReady && state.miniSeason?.status !== "active") {
-    push({
-      tag: "Prøveperiode",
-      title: "Start prøveperiode",
-      hint: "Bli vurdert av styret i en 5-kampers prøveperiode når du føler laget er klart.",
-      run: () => {
+  switch (action.type) {
+    case NEXT_ACTION_TYPES.TAB:
+      return () => activateTab(action.tab);
+    case NEXT_ACTION_TYPES.SLOT:
+      return action.slotId ? selectSlotDecision(action.slotId) : null;
+    case NEXT_ACTION_TYPES.MINI_SEASON:
+      return () => {
         startMiniSeason();
-      }
-    });
-  }
-
-  // 12) Fallback: driv klubbuken videre.
-  if (state.clubWeekState && !gate.isBlocked) {
-    const isReview = phase === "review";
-    push({
-      tag: "Klubbuke",
-      title: isReview ? "Gå til neste uke" : "Gå til neste fase",
-      hint: isReview
-        ? "Oppsummer uka og rull klubben videre."
-        : "Ingen åpne grep akkurat nå. Driv klubbuken videre.",
-      run: () => {
+      };
+    case NEXT_ACTION_TYPES.CLUB_WEEK:
+      return () => {
         advanceClubWeekPhaseAction().catch(console.error);
-      }
-    });
+      };
+    default:
+      return null;
   }
+}
 
-  return actions;
+// Playable Manager Flow Polish v1: én tydelig "neste handling" + sekundære
+// steg, utledet av eksisterende state via den rene Next Action-motoren
+// (src/football-next-action.js). Returnerer { tag, title, hint, run }.
+function computeManagerNextActions(teamFit) {
+  const context = buildNextActionContext(teamFit);
+  return computeNextActions(context).map((descriptor) => ({
+    tag: descriptor.tag,
+    title: descriptor.title,
+    hint: descriptor.hint,
+    run: resolveNextActionRun(descriptor.action)
+  }));
 }
 
 // Render "Neste handling"-stripen øverst på Oversikt: én tydelig primærhandling
@@ -10447,6 +10408,13 @@ function activateTab(target) {
   sections.forEach((section) => {
     section.hidden = section.dataset.tabSection !== target;
   });
+
+  // Å åpne Kamp-flaten regnes som at manageren har sett kamprapporten — da
+  // forsvinner «Se kamprapporten» fra Neste handling-stripa. Stille persistens;
+  // selve rerendret skjer der navigasjonen utløses (initTabs / handlinger).
+  if (target === "kamp") {
+    markMatchReportSeen();
+  }
 }
 
 function initTabs() {
@@ -10454,7 +10422,15 @@ function initTabs() {
 
   tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      activateTab(button.dataset.tabTarget);
+      const target = button.dataset.tabTarget;
+      // Rerender bare når sett-flagget faktisk endrer noe (åpner Kamp med en
+      // ulest rapport), slik at Neste handling-stripa oppdateres uten å rendre
+      // hele appen på hvert fanetrykk.
+      const needsRender = target === "kamp" && hasUnseenMatchReport();
+      activateTab(target);
+      if (needsRender) {
+        renderApp();
+      }
     });
   });
 }
