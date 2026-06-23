@@ -47,6 +47,7 @@ jobs:
           npm run audit:hg-historical-fit
           npm run audit:hg-coach-context
           npm run audit:hg-formation-knowledge
+          npm run audit:historical-opponents
 
       - name: UI-/flyt-vakter
         run: |
@@ -64,3 +65,7 @@ jobs:
           npm run sim:off-pitch
           npm run sim:inbox
           npm run sim:club-week
+          npm run sim:role-learning
+          npm run sim:staff-identity
+          npm run sim:manager-flow-ui
+          npm run sim:role-familiarity

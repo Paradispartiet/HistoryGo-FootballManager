@@ -44,6 +44,14 @@ import {
   buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
+import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
+import {
+  normalizeRoleFamiliarity,
+  recordMatchRoleUsage,
+  summarizeLineupFamiliarity,
+  describeRoleFamiliarity,
+  getRoleFamiliarity
+} from "./football-role-familiarity-engine.js";
 import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";
 import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
 import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";
@@ -366,6 +374,15 @@ const elements = {
   relationshipList: document.querySelector("#relationshipList"),
   managerSummary: document.querySelector("#managerSummary"),
   managerTopActions: document.querySelector("#managerTopActions"),
+  // Neste handling-stripe (Playable Manager Flow Polish v1): prioritert
+  // primærhandling + sekundære steg utledet av eksisterende state.
+  nextActionStrip: document.querySelector("#nextActionStrip"),
+  nextActionPhase: document.querySelector("#nextActionPhase"),
+  nextActionPrimary: document.querySelector("#nextActionPrimary"),
+  nextActionPrimaryTag: document.querySelector("#nextActionPrimaryTag"),
+  nextActionPrimaryTitle: document.querySelector("#nextActionPrimaryTitle"),
+  nextActionPrimaryHint: document.querySelector("#nextActionPrimaryHint"),
+  nextActionSecondary: document.querySelector("#nextActionSecondary"),
   suggestedSetups: document.querySelector("#suggestedSetups"),
   contextSignals: document.querySelector("#contextSignals"),
   contextHeadline: document.querySelector("#contextHeadline"),
@@ -1065,6 +1082,10 @@ function normalizeTeamMerits(merits) {
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
     // verdier filtreres bort og manglende felt blir et tomt oppslag.
     formationFamiliarity: normalizeFormationFamiliarity(base.formationFamiliarity),
+    // Role Familiarity Engine v1: fortrolighet per spiller×rolle (0-100), bygget
+    // ved RIKTIG bruk over kamper. Bor i manager-staten (teamMerits), aldri i
+    // History Go-progresjonen. Robust mot gamle/korrupte data.
+    roleFamiliarity: normalizeRoleFamiliarity(base.roleFamiliarity),
     unlockedPlaceIds: Array.isArray(base.unlockedPlaceIds) ? base.unlockedPlaceIds : [],
     unlockedExpertiseIds: Array.isArray(base.unlockedExpertiseIds) ? base.unlockedExpertiseIds : [],
     earnedBadgeIds: Array.isArray(base.earnedBadgeIds) ? base.earnedBadgeIds : [],
@@ -3000,6 +3021,48 @@ function getStaffIdentitySummary() {
   });
 }
 
+// Role Familiarity Engine v1: manager-statens fortrolighetsoppslag (spiller×rolle).
+function getRoleFamiliarityStore() {
+  return state.teamMerits?.roleFamiliarity && typeof state.teamMerits.roleFamiliarity === "object"
+    ? state.teamMerits.roleFamiliarity
+    : {};
+}
+
+// Komplette spiller×rolle-par i den valgte startelleveren, med fit-status.
+// Grunnlag for både fortrolighets-bonusen og registreringen etter kamp.
+function getLineupRoleUsageEntries(teamFit) {
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  return assignments
+    .filter((item) => item.player && item.role)
+    .map((item) => ({
+      playerId: item.player.id,
+      roleId: item.role.id,
+      status: item.fit?.status || "brukbar"
+    }));
+}
+
+// Oppsummert fortrolighet for den valgte startelleveren (snitt, etablerte/ferske
+// og en liten, klampet kampstyrke-bonus). Ren visning + bonus, ingen mutasjon.
+function getLineupFamiliaritySummary(teamFit) {
+  const pairs = getLineupRoleUsageEntries(teamFit).map(({ playerId, roleId }) => ({ playerId, roleId }));
+  return summarizeLineupFamiliarity(getRoleFamiliarityStore(), pairs);
+}
+
+// Registrer den spilte startelleverens rollebruk: bygg fortrolighet ved riktig
+// bruk, forvitre litt ved feilbruk. Persisteres i teamMerits (aldri i History
+// Go-progresjonen). Idempotent nok: kalles én gang per fullført kamp.
+function recordRoleFamiliarityFromMatch(teamFit) {
+  if (!state.teamMerits) {
+    return;
+  }
+  const entries = getLineupRoleUsageEntries(teamFit);
+  if (!entries.length) {
+    return;
+  }
+  state.teamMerits.roleFamiliarity = recordMatchRoleUsage(getRoleFamiliarityStore(), entries);
+  saveTeamMerits();
+}
+
 // Bygg coachContext fra ansatt stab, staffRoles, valgt formasjon og team merits.
 // Alltid gyldig og nøytral/lav selv uten ansatt stab (ingen null-krasj).
 function getCoachContext() {
@@ -3084,13 +3147,16 @@ function loadMatchdayState() {
     if (stored && typeof stored === "object" && !Array.isArray(stored)) {
       return {
         lastMatch: stored.lastMatch || null,
-        session: sanitizeStoredMatchdaySession(stored.session)
+        session: sanitizeStoredMatchdaySession(stored.session),
+        // Sett-flagg for kamprapporten (Playable Manager Flow Polish v1.1):
+        // hvilken kamp manageren sist har sett rapporten for.
+        lastSeenMatchId: stored.lastSeenMatchId || null
       };
     }
 
-    return { lastMatch: null, session: null };
+    return { lastMatch: null, session: null, lastSeenMatchId: null };
   } catch (error) {
-    return { lastMatch: null, session: null };
+    return { lastMatch: null, session: null, lastSeenMatchId: null };
   }
 }
 
@@ -3143,11 +3209,37 @@ function getMatchdayReadiness(teamFit) {
 // Sørg for at matchday-state alltid har riktig form før den brukes.
 function ensureMatchdayState() {
   if (!state.matchday || typeof state.matchday !== "object") {
-    state.matchday = { lastMatch: null, session: null };
+    state.matchday = { lastMatch: null, session: null, lastSeenMatchId: null };
   }
   if (!("session" in state.matchday)) {
     state.matchday.session = null;
   }
+  if (!("lastSeenMatchId" in state.matchday)) {
+    state.matchday.lastSeenMatchId = null;
+  }
+}
+
+// Sett-flagg for kamprapporten: en fersk kamp regnes som "ulest" til manageren
+// faktisk har åpnet Kamp-flaten. Brukes av Neste handling-stripa slik at
+// «Se kamprapporten» forsvinner når rapporten er sett.
+function hasUnseenMatchReport() {
+  const lastMatch = state.matchday?.lastMatch || null;
+  if (!lastMatch) {
+    return false;
+  }
+  return (lastMatch.id || null) !== (state.matchday?.lastSeenMatchId || null);
+}
+
+// Marker den siste kampens rapport som sett. Idempotent og persistert.
+// Returnerer true hvis noe faktisk endret seg (slik at kalleren kan rerendre).
+function markMatchReportSeen() {
+  if (!hasUnseenMatchReport()) {
+    return false;
+  }
+  ensureMatchdayState();
+  state.matchday.lastSeenMatchId = state.matchday.lastMatch?.id || null;
+  saveMatchdayState();
+  return true;
 }
 
 // Formasjons-matchup mot en gitt motstander, basert på valgt formasjons
@@ -3227,7 +3319,10 @@ function playMatchday() {
     // og menneskene rundt laget.
     relationships: teamFit?.relationships || null,
     offPitchContext: buildMatchdayOffPitchSnapshot(),
-    staffIdentity: getStaffIdentitySummary()
+    staffIdentity: getStaffIdentitySummary(),
+    // Role Familiarity Engine v1: liten, klampet kampstyrke-bonus for kontinuitet
+    // i rollene. Beregnet utenfor fit-motoren og matet inn additivt.
+    roleFamiliarityBonus: getLineupFamiliaritySummary(teamFit).bonus
   });
 
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
@@ -3315,6 +3410,11 @@ function chooseMatchdayDecision(optionId) {
     // Mini Season v0.1: registrer resultatet i en aktiv prøveperiode (matchId
     // som idempotensnøkkel — reload/dobbeltkall gir aldri dobbel registrering).
     registerMatchInMiniSeason(state.matchday.lastMatch);
+    // Role Familiarity Engine v1: bygg spillernes rolle-fortrolighet ved riktig
+    // bruk (forvitre litt ved feilbruk). Startelleveren er låst gjennom sesjonen,
+    // så gjeldende teamFit speiler laget som spilte. Kjøres én gang per kamp
+    // (denne grenen treffes bare når siste hendelse er besvart).
+    recordRoleFamiliarityFromMatch(getTeamFit());
     state.matchday.session = null;
   }
 
@@ -4991,6 +5091,10 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
       </div>`;
   };
 
+  // Role Familiarity Engine v1: hvor godt denne spilleren kjenner denne rollen
+  // etter riktig bruk over kamper. Ren visning oppå rolleforståelseskortet.
+  const familiarity = describeRoleFamiliarity(getRoleFamiliarity(getRoleFamiliarityStore(), player.id, role.id));
+
   elements.roleLearningCard.hidden = false;
   elements.roleLearningCard.innerHTML = `
     <div class="role-learning-head">
@@ -5009,6 +5113,14 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
       ${vm.relationWarnings.length ? row("Relasjonsvarsel", vm.relationWarnings) : ""}
       ${vm.formationRoleHint ? row("Formasjon", [vm.formationRoleHint]) : ""}
     </dl>
+    <div class="role-learning-familiarity" data-level="${familiarity.level}">
+      <div class="role-learning-familiarity-head">
+        <span>Rolleerfaring</span>
+        <strong>${familiarity.value} · ${escapeHtml(familiarity.label)}</strong>
+      </div>
+      <div class="role-learning-familiarity-meter" aria-hidden="true"><span style="width:${familiarity.value}%"></span></div>
+      <p class="role-learning-familiarity-hint">${escapeHtml(familiarity.hint)}</p>
+    </div>
     <p class="role-learning-hint"><strong>Managerhint:</strong> ${escapeHtml(vm.managerHint)}</p>
     ${vm.alternativeRoles.length ? `<p class="role-learning-alt">Alternativer: ${escapeHtml(vm.alternativeRoles.join(", "))}</p>` : ""}
   `;
@@ -5725,6 +5837,154 @@ function renderSideDecisions(teamFit) {
   });
 }
 
+// Bygg det rene kontekstobjektet som Next Action-motoren leser. Trekker kun ut
+// eksisterende state (teamFit, availability, Club Week-port, innboks, trening,
+// mini-sesong) — ingen ny beregning, ingen mutasjon.
+function buildNextActionContext(teamFit) {
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const emptySlots = assignments.filter((item) => !item.player);
+  const misused = assignments.filter((item) => item.player && item.fit?.status === "feilbrukt");
+  const duplicateIds = new Set((teamFit?.duplicatePlayers || []).map((player) => player.id));
+  const duplicateAssignment =
+    assignments.find((item) => item.player && duplicateIds.has(item.player.id)) || null;
+
+  const rosterReadiness = getAvailability().rosterReadiness;
+  const readiness = teamFit ? getMatchdayReadiness(teamFit) : { isReady: false };
+  const gate = getClubWeekMatchdayGate();
+  const clubWeekState = state.clubWeekState || null;
+
+  return {
+    hasSession: Boolean(state.matchday?.session),
+    opponentName: state.matchday?.session?.opponent?.name || null,
+    roster: {
+      enoughUnlocked: Boolean(rosterReadiness.hasEnoughUnlocked),
+      enoughBench: Boolean(rosterReadiness.hasEnoughBench)
+    },
+    lineup: {
+      totalSlots: teamFit?.totalSlots || 11,
+      emptyCount: emptySlots.length,
+      firstEmptySlotId: emptySlots[0]?.slot?.slotId || null,
+      misused: misused.length
+        ? {
+            name: misused[0].player.name,
+            position: misused[0].slot.position,
+            slotId: misused[0].slot.slotId
+          }
+        : null,
+      duplicate: duplicateAssignment
+        ? { name: duplicateAssignment.player.name, slotId: duplicateAssignment.slot.slotId }
+        : null
+    },
+    clubWeekGate: { isBlocked: Boolean(gate.isBlocked), reason: gate.reason || "" },
+    hasTrainingChoice:
+      Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId),
+    matchdayReady: Boolean(readiness.isReady),
+    unreadThreads: getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState()),
+    hasUnseenReport: hasUnseenMatchReport(),
+    miniSeasonActive: state.miniSeason?.status === "active",
+    clubWeek: clubWeekState
+      ? {
+          week: clubWeekState.week,
+          phase: clubWeekState.phase,
+          phaseLabel: CLUB_WEEK_PHASE_LABELS[clubWeekState.phase] || clubWeekState.phase
+        }
+      : null
+  };
+}
+
+// Oversett en handlingsbeskrivelse fra Next Action-motoren til en faktisk
+// klikk-handler. Selve prioriteringen bor i den rene motoren; her bor bare
+// koblingen til app-state-handlerne.
+function resolveNextActionRun(action) {
+  if (!action || typeof action !== "object") {
+    return null;
+  }
+  switch (action.type) {
+    case NEXT_ACTION_TYPES.TAB:
+      return () => activateTab(action.tab);
+    case NEXT_ACTION_TYPES.SLOT:
+      return action.slotId ? selectSlotDecision(action.slotId) : null;
+    case NEXT_ACTION_TYPES.MINI_SEASON:
+      return () => {
+        startMiniSeason();
+      };
+    case NEXT_ACTION_TYPES.CLUB_WEEK:
+      return () => {
+        advanceClubWeekPhaseAction().catch(console.error);
+      };
+    default:
+      return null;
+  }
+}
+
+// Playable Manager Flow Polish v1: én tydelig "neste handling" + sekundære
+// steg, utledet av eksisterende state via den rene Next Action-motoren
+// (src/football-next-action.js). Returnerer { tag, title, hint, run }.
+function computeManagerNextActions(teamFit) {
+  const context = buildNextActionContext(teamFit);
+  return computeNextActions(context).map((descriptor) => ({
+    tag: descriptor.tag,
+    title: descriptor.title,
+    hint: descriptor.hint,
+    run: resolveNextActionRun(descriptor.action)
+  }));
+}
+
+// Render "Neste handling"-stripen øverst på Oversikt: én tydelig primærhandling
+// (stor, invertert knapp) + opptil to sekundære steg. Faseteksten viser hvor i
+// uka treneren er. Alt er utledet av computeManagerNextActions.
+function renderNextActionStrip(teamFit) {
+  const primaryButton = elements.nextActionPrimary;
+  const secondaryContainer = elements.nextActionSecondary;
+  if (!primaryButton || !secondaryContainer) {
+    return;
+  }
+
+  if (elements.nextActionPhase) {
+    const week = Number(state.clubWeekState?.week) || 1;
+    const phaseLabel = state.clubWeekState
+      ? CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase
+      : "Oppsett";
+    elements.nextActionPhase.textContent = `Uke ${week} · ${phaseLabel}`;
+  }
+
+  const actions = computeManagerNextActions(teamFit);
+  const primary = actions[0] || {
+    tag: "Klart",
+    title: "Laget er klart",
+    hint: "Ingen åpne grep akkurat nå. Driv klubbuken videre når du er klar.",
+    run: null
+  };
+
+  if (elements.nextActionPrimaryTag) elements.nextActionPrimaryTag.textContent = primary.tag;
+  if (elements.nextActionPrimaryTitle) elements.nextActionPrimaryTitle.textContent = primary.title;
+  if (elements.nextActionPrimaryHint) elements.nextActionPrimaryHint.textContent = primary.hint;
+  primaryButton.disabled = typeof primary.run !== "function";
+  // Onclick-property (ikke addEventListener) hindrer at handlere hoper seg opp
+  // mellom renders.
+  primaryButton.onclick = typeof primary.run === "function" ? primary.run : null;
+
+  secondaryContainer.innerHTML = "";
+  actions.slice(1, 3).forEach((action) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "next-action-chip";
+    const tag = document.createElement("span");
+    tag.className = "next-action-chip-tag";
+    tag.textContent = action.tag;
+    const title = document.createElement("span");
+    title.className = "next-action-chip-title";
+    title.textContent = action.title;
+    button.append(tag, title);
+    if (typeof action.run === "function") {
+      button.addEventListener("click", action.run);
+    } else {
+      button.disabled = true;
+    }
+    secondaryContainer.append(button);
+  });
+}
+
 // Statuskort-strip på hovedskjermen. Første aktive beslutning fremheves.
 function renderDecisionCards(teamFit) {
   const container = elements.decisionCards;
@@ -6206,6 +6466,78 @@ function renderMatchdaySessionPreMatch(container, session) {
 
   const opponent = session.opponent || {};
 
+  // Playable Manager Flow Polish v1: kompakt kampbrief øverst — motstander, stil,
+  // nøkkelduell, én fare, én mulighet og anbefalt forberedelse + statuschip, slik
+  // at treneren intuitivt ser «dette er laget jeg møter, dette prøver de på, dette
+  // må jeg passe på» før han graver i de fulle profilene under. Rene utdrag fra
+  // den eksisterende motstander-/matchup-dataen — ingen ny motor.
+  {
+    const histMatchup =
+      session.historicalMatchup && typeof session.historicalMatchup === "object" ? session.historicalMatchup : null;
+    const formationMatchup =
+      session.formationMatchup && typeof session.formationMatchup === "object" ? session.formationMatchup : null;
+    const firstText = (arr) => {
+      const item = (Array.isArray(arr) ? arr : [])[0];
+      if (!item) return null;
+      return typeof item === "string" ? item : item.text || null;
+    };
+
+    const styleParts = [];
+    if (opponent.style) styleParts.push(opponent.style);
+    if (opponent.archetypeName) styleParts.push(opponent.archetypeName);
+    if (opponent.tacticalSchool) styleParts.push(opponent.tacticalSchool);
+
+    const keyDuell = (Array.isArray(opponent.keyBattles) ? opponent.keyBattles : [])[0] || null;
+    const danger =
+      firstText(histMatchup?.vulnerabilities) ||
+      firstText(formationMatchup?.risks) ||
+      (Array.isArray(opponent.strengths) ? opponent.strengths : [])[0] ||
+      (Array.isArray(opponent.pressurePoints) ? opponent.pressurePoints : [])[0] ||
+      null;
+    const opportunity =
+      firstText(histMatchup?.advantages) ||
+      firstText(formationMatchup?.advantages) ||
+      (Array.isArray(opponent.weaknesses) ? opponent.weaknesses : [])[0] ||
+      null;
+    const prep =
+      firstText(histMatchup?.recommendedPreparation) ||
+      firstText(formationMatchup?.suggestions) ||
+      (Array.isArray(opponent.managerHints) ? opponent.managerHints : [])[0] ||
+      null;
+
+    const finalStrength = Number(session.strengthSnapshot?.finalStrength) || 0;
+    const status =
+      finalStrength < 50 ? { tone: "risk", text: "Risiko · lav lagstyrke" } : { tone: "ready", text: "Klar for kamp" };
+
+    const brief = document.createElement("div");
+    brief.className = "matchday-brief";
+
+    const statusChip = document.createElement("span");
+    statusChip.className = "matchday-brief-status";
+    statusChip.dataset.tone = status.tone;
+    statusChip.textContent = status.text;
+    brief.append(statusChip);
+
+    const dl = document.createElement("dl");
+    dl.className = "matchday-brief-list";
+    const row = (label, value) => {
+      if (!value) return;
+      const dt = document.createElement("dt");
+      dt.textContent = label;
+      const dd = document.createElement("dd");
+      dd.textContent = value;
+      dl.append(dt, dd);
+    };
+    row("Motstander", opponent.name || "Ukjent motstander");
+    row("Stil", styleParts.join(" · "));
+    row("Nøkkelduell", keyDuell);
+    row("Én fare", danger);
+    row("Én mulighet", opportunity);
+    row("Anbefalt forberedelse", prep);
+    brief.append(dl);
+    card.append(brief);
+  }
+
   // Historical Opponent Archetypes v1: når motstanderen er en historisk stil-
   // profil, vis en kompakt kampforberedelses-boks (historisk stil, formasjon,
   // taktisk skole, nøkkelduell, managerhint) FØR den ordinære profilen. Rent
@@ -6319,6 +6651,12 @@ function renderMatchdaySessionPreMatch(container, session) {
     planLines.push(`Taktikk: ${session.tacticSnapshot.name}`);
   }
   planLines.push(`Lagstyrke: ${Number(session.strengthSnapshot?.finalStrength) || 0}`);
+  // Role Familiarity Engine v1: gjør den lille kontinuitetsbonusen synlig og
+  // forklart når den faktisk slår ut.
+  const familiarityBonus = Number(session.strengthSnapshot?.modifiers?.roleFamiliarityBonus) || 0;
+  if (familiarityBonus > 0) {
+    planLines.push(`Rolleerfaring: +${familiarityBonus} lagstyrke fra kontinuitet i rollene`);
+  }
   const coach = session.coachSnapshot;
   if (coach) {
     planLines.push(
@@ -6424,104 +6762,126 @@ function renderMatchdayReport(container, lastMatch) {
   }
 
   const card = document.createElement("article");
-  card.className = "matchday-result-card";
+  card.className = "matchday-result-card matchday-report-card";
 
   const safeOutcome = ["win", "draw", "loss"].includes(report.outcome) ? report.outcome : "draw";
   const safeOutcomeLabel = { win: "Seier", draw: "Uavgjort", loss: "Tap" }[safeOutcome];
 
-  // Motstander (med stil for v0.2-kamper).
-  const opponentParts = [report.opponentName || "Ukjent motstander"];
-  if (report.opponentStyle) {
-    opponentParts.push(report.opponentStyle);
-  }
-  appendMatchdayMeta(card, `Motstander: ${opponentParts.join(" · ")}`);
+  // Playable Manager Flow Polish v1: rapporten leder med det dramatiske (resultat
+  // + hovedforklaring + de avgjørende faktorene + det kampen lærte deg), og
+  // folder den fulle datadumpen bak en details-skuff. Ingen informasjon fjernes —
+  // den prioriteres.
 
-  // Historisk arketyp-kontekst (Historical Opponent Archetypes v1).
-  if (report.opponentArchetype || report.opponentTacticalSchool) {
-    const histParts = [];
-    if (report.opponentArchetype) histParts.push(report.opponentArchetype);
-    if (report.opponentEra) histParts.push(report.opponentEra);
-    if (report.opponentTacticalSchool) histParts.push(report.opponentTacticalSchool);
-    appendMatchdayMeta(card, `Historisk stil: ${histParts.join(" · ")}`);
-  }
-
-  // Valgt formasjon med navn, grunnform, epoke og skole.
-  const formationParts = [report.formationName || "Ukjent formasjon"];
-  if (report.baseShape) {
-    formationParts.push(report.baseShape);
-  }
-  if (report.eraName) {
-    formationParts.push(report.eraName);
-  }
-  if (report.tacticalSchool) {
-    formationParts.push(report.tacticalSchool);
-  }
-  appendMatchdayMeta(card, `Formasjon: ${formationParts.join(" · ")}`);
-
-  if (report.tacticName) {
-    appendMatchdayMeta(card, `Taktikk: ${report.tacticName}`);
-  }
-
-  // Resultat (målscore).
+  // 1) Resultat øverst: stor score + fargekodet utfall.
   const score = document.createElement("p");
   score.className = "matchday-score";
   score.textContent = report.scoreLine || "0–0";
   card.append(score);
 
-  // Utfall med fargekoding via klasse.
   const outcome = document.createElement("p");
   outcome.className = `matchday-outcome is-${safeOutcome}`;
   outcome.textContent = safeOutcomeLabel;
   card.append(outcome);
 
-  appendMatchdayMeta(card, `Forventede mål (xG): ${report.expectedGoalsLine || "0 – 0"}`);
+  // 2) Kompakt kontekst: motstander (+ stil/arketyp) og eget system på to linjer.
+  const opponentParts = [report.opponentName || "Ukjent motstander"];
+  if (report.opponentStyle) opponentParts.push(report.opponentStyle);
+  if (report.opponentArchetype) opponentParts.push(report.opponentArchetype);
+  if (report.opponentTacticalSchool) opponentParts.push(report.opponentTacticalSchool);
+  appendMatchdayMeta(card, `Motstander: ${opponentParts.join(" · ")}`);
+
+  const formationParts = [report.formationName || "Ukjent formasjon"];
+  if (report.baseShape) formationParts.push(report.baseShape);
+  if (report.tacticName) formationParts.push(report.tacticName);
+  appendMatchdayMeta(card, `Ditt system: ${formationParts.join(" · ")}`);
+
   appendMatchdayMeta(
     card,
-    `Lagstyrke: ${Number.isFinite(Number(report.teamStrength)) ? report.teamStrength : 0}`
+    `xG ${report.expectedGoalsLine || "0 – 0"} · lagstyrke ${Number.isFinite(Number(report.teamStrength)) ? report.teamStrength : 0}`
   );
 
-  // Match Explanation v1.5: den forklarende, pedagogiske kampforklaringen øverst
-  // i rapporten — kort hovedforklaring, avgjørende faktorer, taktiske og
-  // menneskelige læringspunkter og forslag til neste uke. Binder sammen taktikk,
-  // relasjoner, trening og off-pitch. Vises kun når motoren har lagt den ved.
-  const explanation = report.explanation;
-  if (explanation && typeof explanation === "object") {
-    appendMatchdaySubheading(card, "Kampforklaring");
-
-    if (explanation.headline) {
-      const headline = document.createElement("p");
-      headline.className = "matchday-explanation-headline";
-      headline.textContent = explanation.headline;
-      card.append(headline);
-    }
-    if (explanation.resultSummary) {
-      appendMatchdayMeta(card, explanation.resultSummary);
-    }
-
-    const explanationSections = [
-      ["Avgjørende faktorer", explanation.decisiveFactors],
-      ["Taktisk bilde", explanation.tacticalFactors],
-      ["Historisk stil-matchup", explanation.historicalFactors],
-      ["Relasjoner", explanation.relationshipFactors],
-      ["Trening", explanation.trainingFactors],
-      ["Utenfor banen", explanation.offPitchFactors],
-      ["Læringspunkter", explanation.learningPoints],
-      ["Vurder til neste uke", explanation.nextWeekSuggestions]
-    ];
-    explanationSections.forEach(([title, items]) => {
-      if (Array.isArray(items) && items.length > 0) {
-        appendMatchdaySubheading(card, title);
-        appendMatchdayList(card, items);
-      }
-    });
+  // 3) Hovedforklaring (Match Explanation v1.5).
+  const explanation = report.explanation && typeof report.explanation === "object" ? report.explanation : null;
+  if (explanation?.headline) {
+    const headline = document.createElement("p");
+    headline.className = "matchday-explanation-headline";
+    headline.textContent = explanation.headline;
+    card.append(headline);
+  }
+  if (explanation?.resultSummary) {
+    appendMatchdayMeta(card, explanation.resultSummary);
   }
 
+  // 4) Tre avgjørende faktorer.
+  const decisiveFactors = Array.isArray(explanation?.decisiveFactors) ? explanation.decisiveFactors : [];
+  if (decisiveFactors.length > 0) {
+    appendMatchdaySubheading(card, "Avgjørende faktorer");
+    appendMatchdayList(card, decisiveFactors.slice(0, 3));
+  }
+
+  // 5) Det kampen lærte deg: én taktisk, én rolle-/relasjons- og én
+  // trenings-/off-pitch-læring, kuratert fra forklaringen.
+  if (explanation) {
+    const learnings = [];
+    const tacticLearn = (explanation.tacticalFactors || [])[0] || (explanation.historicalFactors || [])[0];
+    if (tacticLearn) learnings.push(`Taktisk: ${tacticLearn}`);
+    const relationLearn = (explanation.relationshipFactors || [])[0];
+    if (relationLearn) learnings.push(`Relasjoner: ${relationLearn}`);
+    const offPitchLearn = (explanation.trainingFactors || [])[0] || (explanation.offPitchFactors || [])[0];
+    if (offPitchLearn) learnings.push(`Trening/off-pitch: ${offPitchLearn}`);
+    if (!learnings.length && Array.isArray(explanation.learningPoints)) {
+      explanation.learningPoints.slice(0, 3).forEach((line) => learnings.push(line));
+    }
+    if (learnings.length > 0) {
+      appendMatchdaySubheading(card, "Det kampen lærte deg");
+      appendMatchdayList(card, learnings);
+    }
+  }
+
+  // 6) Neste uke bør du vurdere …
+  const nextWeek = [];
+  (Array.isArray(explanation?.nextWeekSuggestions) ? explanation.nextWeekSuggestions : []).slice(0, 2).forEach((line) => nextWeek.push(line));
+  if (!nextWeek.length && report.nextWeekAdvice) nextWeek.push(report.nextWeekAdvice);
+  if (nextWeek.length > 0) {
+    appendMatchdaySubheading(card, "Neste uke bør du vurdere");
+    appendMatchdayList(card, nextWeek);
+  }
+
+  // 7) Full kampanalyse i en foldet skuff: detaljene er der, men dominerer ikke.
+  const drawer = document.createElement("details");
+  drawer.className = "matchday-detail-drawer";
+  const drawerSummary = document.createElement("summary");
+  drawerSummary.textContent = "Full kampanalyse";
+  drawer.append(drawerSummary);
+  const body = document.createElement("div");
+  drawer.append(body);
+
+  if (report.eraName) {
+    appendMatchdayMeta(body, `Epoke: ${report.eraName}`);
+  }
+
+  // Fulle forklaringslister (kuraterte høydepunkter ligger over).
+  const explanationSections = [
+    ["Taktisk bilde", explanation?.tacticalFactors],
+    ["Historisk stil-matchup", explanation?.historicalFactors],
+    ["Relasjoner", explanation?.relationshipFactors],
+    ["Trening", explanation?.trainingFactors],
+    ["Utenfor banen", explanation?.offPitchFactors],
+    ["Læringspunkter", explanation?.learningPoints]
+  ];
+  explanationSections.forEach(([title, items]) => {
+    if (Array.isArray(items) && items.length > 0) {
+      appendMatchdaySubheading(body, title);
+      appendMatchdayList(body, items);
+    }
+  });
+
   // Managergrep med konsekvens (v0.2).
-  appendMatchdayDecisionLog(card, report.decisions, "Managergrep i kampen");
+  appendMatchdayDecisionLog(body, report.decisions, "Managergrep i kampen");
 
   // Beste/svakeste grep (v0.2).
   if (report.bestDecision || report.worstDecision) {
-    appendMatchdaySubheading(card, "Managerdommen");
+    appendMatchdaySubheading(body, "Managerdommen");
     const verdictLines = [];
     if (report.bestDecision) {
       verdictLines.push(`Beste grep: ${report.bestDecision.label} (${report.bestDecision.eventTitle}).`);
@@ -6529,57 +6889,46 @@ function renderMatchdayReport(container, lastMatch) {
     if (report.worstDecision) {
       verdictLines.push(`Svakeste grep: ${report.worstDecision.label} (${report.worstDecision.eventTitle}).`);
     }
-    appendMatchdayList(card, verdictLines);
+    appendMatchdayList(body, verdictLines);
   }
 
   // Hvorfor systemet fungerte eller ikke (v0.2).
   if (report.formationVerdict) {
-    appendMatchdaySubheading(card, "Systemdommen");
+    appendMatchdaySubheading(body, "Systemdommen");
     const verdict = document.createElement("p");
     verdict.className = "matchday-meta";
     verdict.textContent = report.formationVerdict;
-    card.append(verdict);
+    body.append(verdict);
   }
 
-  // Nøkkelfaktorer.
+  // Nøkkelfaktorer + kampanalyse.
   const keyFactors = Array.isArray(report.keyFactors) ? report.keyFactors : [];
   const analysis = Array.isArray(report.analysis) ? report.analysis : [];
-
   if (keyFactors.length > 0) {
-    appendMatchdaySubheading(card, "Nøkkelfaktorer");
-    appendMatchdayList(card, keyFactors);
+    appendMatchdaySubheading(body, "Nøkkelfaktorer");
+    appendMatchdayList(body, keyFactors);
   }
-
-  // Kampanalyse.
   if (analysis.length > 0) {
-    appendMatchdaySubheading(card, "Kampanalyse");
-    appendMatchdayList(card, analysis);
+    appendMatchdaySubheading(body, "Kampanalyse");
+    appendMatchdayList(body, analysis);
   }
 
   if (report.trainingFocus?.summary) {
-    appendMatchdaySubheading(card, "Ukens trening");
-    appendMatchdayList(card, [report.trainingFocus.summary]);
+    appendMatchdaySubheading(body, "Ukens trening");
+    appendMatchdayList(body, [report.trainingFocus.summary]);
   }
 
   // Veien videre: avgjørende lagdel, treningsråd og History Go-hint (v0.2).
   const nextLines = [];
-  if (report.decisiveUnit) {
-    nextLines.push(report.decisiveUnit);
-  }
-  if (report.nextWeekAdvice) {
-    nextLines.push(`Neste uke: ${report.nextWeekAdvice}`);
-  }
-  if (report.historyGoHint) {
-    nextLines.push(report.historyGoHint);
-  }
+  if (report.decisiveUnit) nextLines.push(report.decisiveUnit);
+  if (report.nextWeekAdvice) nextLines.push(`Neste uke: ${report.nextWeekAdvice}`);
+  if (report.historyGoHint) nextLines.push(report.historyGoHint);
   if (nextLines.length > 0) {
-    appendMatchdaySubheading(card, "Veien videre");
-    appendMatchdayList(card, nextLines);
+    appendMatchdaySubheading(body, "Veien videre");
+    appendMatchdayList(body, nextLines);
   }
 
-  // Kampkonsekvens (Club Week Consequence Loop v1): kort oppsummering av hva
-  // kampen gjorde med klubbverdiene og formasjonstilvenningen. Leses fra
-  // lastMatch (lagres ved kampslutt); gamle v1-kamper har den ikke.
+  // Kampkonsekvens (Club Week Consequence Loop v1).
   const clubConsequences = lastMatch?.clubConsequences;
   if (clubConsequences && typeof clubConsequences === "object") {
     const consequenceLines = [];
@@ -6594,9 +6943,14 @@ function renderMatchdayReport(container, lastMatch) {
       );
     }
     if (consequenceLines.length > 0) {
-      appendMatchdaySubheading(card, "Kampkonsekvens");
-      appendMatchdayList(card, consequenceLines);
+      appendMatchdaySubheading(body, "Kampkonsekvens");
+      appendMatchdayList(body, consequenceLines);
     }
+  }
+
+  // Bare ta med skuffen hvis den faktisk fikk innhold.
+  if (body.childNodes.length > 0) {
+    card.append(drawer);
   }
 
   container.append(card);
@@ -7116,17 +7470,31 @@ function buildTrainingProgramCard(program, context = {}) {
   summary.textContent = program.summary;
   card.append(summary);
 
+  // Playable Manager Flow Polish v1: kort, lesbar "Passer nå fordi"-etikett i
+  // stedet for et nøytralt avsnitt.
   if (program.recommendedBecause.length > 0) {
     const why = document.createElement("p");
     why.className = "training-program-why";
-    why.textContent = program.recommendedBecause[0];
+    why.textContent = `Passer nå fordi: ${program.recommendedBecause[0]}`;
     card.append(why);
   }
 
-  // Øktene i uka — kompakt liste.
-  const sessionLabel = document.createElement("p");
-  sessionLabel.className = "training-program-list-label";
-  sessionLabel.textContent = "Økter denne uka";
+  // Forbereder mot: matchup-relevansen mot neste motstander, vist når programmet
+  // er foreslått nettopp pga. motstanderen (sourceSignals inneholder "opponent").
+  const opponentName = context.opponentName;
+  if (opponentName && Array.isArray(program.sourceSignals) && program.sourceSignals.includes("opponent")) {
+    const prepares = document.createElement("p");
+    prepares.className = "training-program-prepares";
+    prepares.textContent = `Forbereder mot: ${opponentName}`;
+    card.append(prepares);
+  }
+
+  // Øktene i uka — kompakt, foldet liste så kortet ikke domineres av detaljene.
+  const sessionsDetails = document.createElement("details");
+  sessionsDetails.className = "training-program-sessions-details";
+  const sessionsSummary = document.createElement("summary");
+  sessionsSummary.textContent = `Økter denne uka (${program.sessions.length})`;
+  sessionsDetails.append(sessionsSummary);
   const sessions = document.createElement("ul");
   sessions.className = "training-program-sessions";
   program.sessions.forEach((session) => {
@@ -7134,7 +7502,8 @@ function buildTrainingProgramCard(program, context = {}) {
     li.textContent = `${session.day}: ${session.title} (${PROGRAM_INTENSITY_LABEL[session.intensity] || session.intensity})`;
     sessions.append(li);
   });
-  card.append(sessionLabel, sessions);
+  sessionsDetails.append(sessions);
+  card.append(sessionsDetails);
 
   if (program.risks.length > 0) {
     const riskLabel = document.createElement("p");
@@ -7253,7 +7622,8 @@ function renderTrainingProgramCompositions(teamFit) {
     container.append(
       buildTrainingProgramCard(program, {
         isSelected: program.id === selectedProgramId,
-        locked
+        locked,
+        opponentName: opponent?.name || null
       })
     )
   );
@@ -9794,6 +10164,7 @@ function renderApp() {
   renderRosterReadiness();
   renderTacticalSystemPanel();
   renderSidePanel(teamFit);
+  renderNextActionStrip(teamFit);
   renderDecisionCards(teamFit);
   renderSuggestedSetups(teamFit);
   renderContextPanel();
@@ -10116,6 +10487,13 @@ function activateTab(target) {
   sections.forEach((section) => {
     section.hidden = section.dataset.tabSection !== target;
   });
+
+  // Å åpne Kamp-flaten regnes som at manageren har sett kamprapporten — da
+  // forsvinner «Se kamprapporten» fra Neste handling-stripa. Stille persistens;
+  // selve rerendret skjer der navigasjonen utløses (initTabs / handlinger).
+  if (target === "kamp") {
+    markMatchReportSeen();
+  }
 }
 
 function initTabs() {
@@ -10123,7 +10501,15 @@ function initTabs() {
 
   tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      activateTab(button.dataset.tabTarget);
+      const target = button.dataset.tabTarget;
+      // Rerender bare når sett-flagget faktisk endrer noe (åpner Kamp med en
+      // ulest rapport), slik at Neste handling-stripa oppdateres uten å rendre
+      // hele appen på hvert fanetrykk.
+      const needsRender = target === "kamp" && hasUnseenMatchReport();
+      activateTab(target);
+      if (needsRender) {
+        renderApp();
+      }
     });
   });
 }

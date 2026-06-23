@@ -24,7 +24,9 @@
     "check:dom-ids": "node scripts/check-dom-ids.mjs",
     "audit:flow": "node scripts/audit-flow.mjs",
     "sim:role-learning": "node scripts/simulate-role-learning.mjs",
-    "sim:staff-identity": "node scripts/simulate-staff-identity.mjs"
+    "sim:staff-identity": "node scripts/simulate-staff-identity.mjs",
+    "sim:manager-flow-ui": "node scripts/simulate-manager-flow-ui.mjs",
+    "sim:role-familiarity": "node scripts/simulate-role-familiarity.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"
