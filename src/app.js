@@ -45,6 +45,13 @@ import {
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
+import {
+  normalizeRoleFamiliarity,
+  recordMatchRoleUsage,
+  summarizeLineupFamiliarity,
+  describeRoleFamiliarity,
+  getRoleFamiliarity
+} from "./football-role-familiarity-engine.js";
 import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";
 import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
 import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";
@@ -1075,6 +1082,10 @@ function normalizeTeamMerits(merits) {
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
     // verdier filtreres bort og manglende felt blir et tomt oppslag.
     formationFamiliarity: normalizeFormationFamiliarity(base.formationFamiliarity),
+    // Role Familiarity Engine v1: fortrolighet per spiller×rolle (0-100), bygget
+    // ved RIKTIG bruk over kamper. Bor i manager-staten (teamMerits), aldri i
+    // History Go-progresjonen. Robust mot gamle/korrupte data.
+    roleFamiliarity: normalizeRoleFamiliarity(base.roleFamiliarity),
     unlockedPlaceIds: Array.isArray(base.unlockedPlaceIds) ? base.unlockedPlaceIds : [],
     unlockedExpertiseIds: Array.isArray(base.unlockedExpertiseIds) ? base.unlockedExpertiseIds : [],
     earnedBadgeIds: Array.isArray(base.earnedBadgeIds) ? base.earnedBadgeIds : [],
@@ -3010,6 +3021,48 @@ function getStaffIdentitySummary() {
   });
 }
 
+// Role Familiarity Engine v1: manager-statens fortrolighetsoppslag (spiller×rolle).
+function getRoleFamiliarityStore() {
+  return state.teamMerits?.roleFamiliarity && typeof state.teamMerits.roleFamiliarity === "object"
+    ? state.teamMerits.roleFamiliarity
+    : {};
+}
+
+// Komplette spiller×rolle-par i den valgte startelleveren, med fit-status.
+// Grunnlag for både fortrolighets-bonusen og registreringen etter kamp.
+function getLineupRoleUsageEntries(teamFit) {
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  return assignments
+    .filter((item) => item.player && item.role)
+    .map((item) => ({
+      playerId: item.player.id,
+      roleId: item.role.id,
+      status: item.fit?.status || "brukbar"
+    }));
+}
+
+// Oppsummert fortrolighet for den valgte startelleveren (snitt, etablerte/ferske
+// og en liten, klampet kampstyrke-bonus). Ren visning + bonus, ingen mutasjon.
+function getLineupFamiliaritySummary(teamFit) {
+  const pairs = getLineupRoleUsageEntries(teamFit).map(({ playerId, roleId }) => ({ playerId, roleId }));
+  return summarizeLineupFamiliarity(getRoleFamiliarityStore(), pairs);
+}
+
+// Registrer den spilte startelleverens rollebruk: bygg fortrolighet ved riktig
+// bruk, forvitre litt ved feilbruk. Persisteres i teamMerits (aldri i History
+// Go-progresjonen). Idempotent nok: kalles én gang per fullført kamp.
+function recordRoleFamiliarityFromMatch(teamFit) {
+  if (!state.teamMerits) {
+    return;
+  }
+  const entries = getLineupRoleUsageEntries(teamFit);
+  if (!entries.length) {
+    return;
+  }
+  state.teamMerits.roleFamiliarity = recordMatchRoleUsage(getRoleFamiliarityStore(), entries);
+  saveTeamMerits();
+}
+
 // Bygg coachContext fra ansatt stab, staffRoles, valgt formasjon og team merits.
 // Alltid gyldig og nøytral/lav selv uten ansatt stab (ingen null-krasj).
 function getCoachContext() {
@@ -3266,7 +3319,10 @@ function playMatchday() {
     // og menneskene rundt laget.
     relationships: teamFit?.relationships || null,
     offPitchContext: buildMatchdayOffPitchSnapshot(),
-    staffIdentity: getStaffIdentitySummary()
+    staffIdentity: getStaffIdentitySummary(),
+    // Role Familiarity Engine v1: liten, klampet kampstyrke-bonus for kontinuitet
+    // i rollene. Beregnet utenfor fit-motoren og matet inn additivt.
+    roleFamiliarityBonus: getLineupFamiliaritySummary(teamFit).bonus
   });
 
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
@@ -3354,6 +3410,11 @@ function chooseMatchdayDecision(optionId) {
     // Mini Season v0.1: registrer resultatet i en aktiv prøveperiode (matchId
     // som idempotensnøkkel — reload/dobbeltkall gir aldri dobbel registrering).
     registerMatchInMiniSeason(state.matchday.lastMatch);
+    // Role Familiarity Engine v1: bygg spillernes rolle-fortrolighet ved riktig
+    // bruk (forvitre litt ved feilbruk). Startelleveren er låst gjennom sesjonen,
+    // så gjeldende teamFit speiler laget som spilte. Kjøres én gang per kamp
+    // (denne grenen treffes bare når siste hendelse er besvart).
+    recordRoleFamiliarityFromMatch(getTeamFit());
     state.matchday.session = null;
   }
 
@@ -5030,6 +5091,10 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
       </div>`;
   };
 
+  // Role Familiarity Engine v1: hvor godt denne spilleren kjenner denne rollen
+  // etter riktig bruk over kamper. Ren visning oppå rolleforståelseskortet.
+  const familiarity = describeRoleFamiliarity(getRoleFamiliarity(getRoleFamiliarityStore(), player.id, role.id));
+
   elements.roleLearningCard.hidden = false;
   elements.roleLearningCard.innerHTML = `
     <div class="role-learning-head">
@@ -5048,6 +5113,14 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
       ${vm.relationWarnings.length ? row("Relasjonsvarsel", vm.relationWarnings) : ""}
       ${vm.formationRoleHint ? row("Formasjon", [vm.formationRoleHint]) : ""}
     </dl>
+    <div class="role-learning-familiarity" data-level="${familiarity.level}">
+      <div class="role-learning-familiarity-head">
+        <span>Rolleerfaring</span>
+        <strong>${familiarity.value} · ${escapeHtml(familiarity.label)}</strong>
+      </div>
+      <div class="role-learning-familiarity-meter" aria-hidden="true"><span style="width:${familiarity.value}%"></span></div>
+      <p class="role-learning-familiarity-hint">${escapeHtml(familiarity.hint)}</p>
+    </div>
     <p class="role-learning-hint"><strong>Managerhint:</strong> ${escapeHtml(vm.managerHint)}</p>
     ${vm.alternativeRoles.length ? `<p class="role-learning-alt">Alternativer: ${escapeHtml(vm.alternativeRoles.join(", "))}</p>` : ""}
   `;
@@ -6578,6 +6651,12 @@ function renderMatchdaySessionPreMatch(container, session) {
     planLines.push(`Taktikk: ${session.tacticSnapshot.name}`);
   }
   planLines.push(`Lagstyrke: ${Number(session.strengthSnapshot?.finalStrength) || 0}`);
+  // Role Familiarity Engine v1: gjør den lille kontinuitetsbonusen synlig og
+  // forklart når den faktisk slår ut.
+  const familiarityBonus = Number(session.strengthSnapshot?.modifiers?.roleFamiliarityBonus) || 0;
+  if (familiarityBonus > 0) {
+    planLines.push(`Rolleerfaring: +${familiarityBonus} lagstyrke fra kontinuitet i rollene`);
+  }
   const coach = session.coachSnapshot;
   if (coach) {
     planLines.push(

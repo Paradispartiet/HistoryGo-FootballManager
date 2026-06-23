@@ -68,3 +68,4 @@ jobs:
           npm run sim:role-learning
           npm run sim:staff-identity
           npm run sim:manager-flow-ui
+          npm run sim:role-familiarity

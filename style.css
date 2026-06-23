@@ -1303,6 +1303,62 @@ select:focus-visible {
   line-height: 1.45;
 }
 
+/* Rolleerfaring (Role Familiarity Engine v1): liten meter + nivå som viser at
+   spilleren forstår rollen bedre ved riktig bruk over kamper. Grønntone først
+   når fortroligheten er etablert. */
+.role-learning-familiarity {
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 8px;
+}
+
+.role-learning-familiarity-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.82rem;
+}
+
+.role-learning-familiarity-head span {
+  color: var(--muted);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+}
+
+.role-learning-familiarity-head strong {
+  color: var(--text);
+}
+
+.role-learning-familiarity-meter {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.role-learning-familiarity-meter > span {
+  display: block;
+  height: 100%;
+  background: var(--muted);
+  transition: width 0.2s ease;
+}
+
+.role-learning-familiarity[data-level="etablert"] .role-learning-familiarity-meter > span,
+.role-learning-familiarity[data-level="mester"] .role-learning-familiarity-meter > span {
+  background: var(--good);
+}
+
+.role-learning-familiarity-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
 @media (max-width: 620px) {
   .role-learning-head,
   .role-learning-row {

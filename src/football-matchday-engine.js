@@ -97,7 +97,7 @@ export function createDefaultOpponent() {
 //   - historisk formasjonsfit gir en liten bonus/penalty,
 //   - matchEngineEffects gir kun en liten tendens,
 //   - aktive lagklasser gir en liten bonus.
-export function calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup } = {}) {
+export function calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus } = {}) {
   const fit = teamFit || {};
   const metrics = fit.metrics || {};
   const completeCount = num(fit.completeCount);
@@ -150,6 +150,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
         matchEngineTendency: 0,
         matchupTendency: 0,
         classificationBonus: 0,
+        roleFamiliarityBonus: 0,
         missing
       }
     };
@@ -184,12 +185,19 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
   const matchupScore = formationMatchup ? num(formationMatchup.score) : 0;
   const matchupTendency = clampRange(matchupScore * 1.5, -5, 5);
 
+  // Rolle-fortrolighet (Role Familiarity Engine v1): kontinuitet i rollene gir en
+  // liten, klampet identitetsbonus (maks +5), på linje med lagklassebonusen.
+  // Beregnes utenfor fit-motoren og mates inn additivt — den avgjør aldri et
+  // utfall alene.
+  const familiarityBonus = clampRange(num(roleFamiliarityBonus), 0, 5);
+
   let finalStrength = baseTeamScore;
   finalStrength -= incompletePenalty;
   finalStrength += historicalModifier;
   finalStrength += matchEngineTendency;
   finalStrength += matchupTendency;
   finalStrength += classificationBonus;
+  finalStrength += familiarityBonus;
   finalStrength = clamp(Math.round(finalStrength));
 
   return {
@@ -203,6 +211,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
       matchEngineTendency: Math.round(matchEngineTendency * 10) / 10,
       matchupTendency: Math.round(matchupTendency * 10) / 10,
       classificationBonus,
+      roleFamiliarityBonus: familiarityBonus,
       missing
     }
   };
@@ -1313,7 +1322,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
 
   // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
@@ -1337,7 +1346,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       })
     : null;
 
-  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup });
+  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus });
   const tp = strength.tacticalProfile;
 
   // roleFitAverage trengs av flere hendelses-sjekker, men er ikke del av v1-
