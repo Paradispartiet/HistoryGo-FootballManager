@@ -123,6 +123,23 @@
 
       <p id="clubWeekFeedback" class="club-week-feedback">Klubbuken er klar.</p>
 
+      <!-- Neste handling v1: én tydelig primærhandling + 1–2 sekundære, utledet
+           av eksisterende state (Club Week-fase, roster/kampklar, treningsvalg,
+           innboks, mini-sesong). Ingen ny motor — kun prioritert presentasjon av
+           hva treneren bør gjøre nå. -->
+      <section class="next-action-strip" id="nextActionStrip" aria-label="Neste handling" aria-live="polite">
+        <div class="next-action-head">
+          <p class="eyebrow">Neste handling</p>
+          <span class="next-action-phase" id="nextActionPhase">Uke 1 · Analyse</span>
+        </div>
+        <button type="button" class="next-action-primary" id="nextActionPrimary">
+          <span class="next-action-tag" id="nextActionPrimaryTag">Lag</span>
+          <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
+          <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
+        </button>
+        <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
+      </section>
+
       <div class="dashboard-grid">
 
         <!-- Managerinnsikt: sammendrag + prioriterte grep (fra teamFit) -->

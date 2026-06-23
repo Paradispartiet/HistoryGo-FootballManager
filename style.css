@@ -673,6 +673,111 @@ select:focus-visible {
   padding: 12px 14px;
 }
 
+/* Kamprapport (Playable Manager Flow Polish v1): det dramatiske leder, og den
+   fulle analysen ligger i en foldet skuff. Hovedforklaringen får tyngde. */
+.matchday-explanation-headline {
+  margin: 6px 0 2px;
+  color: var(--text);
+  font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.matchday-detail-drawer {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--hg-radius-sm);
+  background: var(--hg-panel-bg);
+  margin-top: 6px;
+}
+
+.matchday-detail-drawer > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.matchday-detail-drawer > summary::-webkit-details-marker {
+  display: none;
+}
+
+.matchday-detail-drawer > summary::after {
+  content: "▾";
+  float: right;
+  transition: transform 0.15s ease;
+}
+
+.matchday-detail-drawer[open] > summary::after {
+  transform: rotate(180deg);
+}
+
+.matchday-detail-drawer > div {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+/* Kampbrief (Playable Manager Flow Polish v1): kompakt scouting-utdrag før
+   avspark — motstander/stil/nøkkelduell/fare/mulighet/forberedelse + status. */
+.matchday-brief {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--hg-radius-sm);
+  background: var(--hg-panel-bg);
+  padding: 14px;
+}
+
+.matchday-brief-status {
+  justify-self: start;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.matchday-brief-status[data-tone="ready"] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.matchday-brief-status[data-tone="risk"] {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.matchday-brief-list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(120px, max-content) 1fr;
+  gap: 4px 14px;
+  align-items: baseline;
+}
+
+.matchday-brief-list dt {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.matchday-brief-list dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 /* ---------- Kampdag (v0.2): faser, hendelser og managergrep ---------- */
 .matchday-phase {
   margin: 0;
@@ -3278,6 +3383,145 @@ ul {
 }
 
 /* ---------- Statuskort: neste beslutninger (strip) ---------- */
+/* ---------- Neste handling-stripe (Playable Manager Flow Polish v1) ----------
+   Managerens tydelige startpunkt øverst på Oversikt: én stor, invertert
+   primærhandling + opptil to sekundære "chips". Holder seg i sort/hvitt-stilen
+   med tynne hvite rammer. */
+.next-action-strip {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-strong);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  margin-bottom: var(--gap);
+}
+
+.next-action-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.next-action-head .eyebrow {
+  margin: 0;
+}
+
+.next-action-phase {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+/* Primærhandlingen er invertert (hvit flate, sort tekst) for å lese som "gjør
+   dette nå". */
+.next-action-primary {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  border: 1px solid var(--text);
+  border-radius: var(--hg-radius-sm);
+  background: var(--text);
+  color: #000000;
+  padding: 18px 20px;
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.1s ease, opacity 0.12s ease;
+}
+
+.next-action-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.next-action-primary:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+.next-action-primary:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.next-action-tag {
+  justify-self: start;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+
+.next-action-title {
+  font-size: clamp(1.3rem, 3.4vw, 1.7rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.next-action-hint {
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: #2a2a2a;
+}
+
+.next-action-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.next-action-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 8px 14px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.12s ease, transform 0.1s ease;
+}
+
+.next-action-chip:hover:not(:disabled) {
+  border-color: var(--text);
+  transform: translateY(-1px);
+}
+
+.next-action-chip:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.next-action-chip:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.next-action-chip-tag {
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.next-action-chip-title {
+  font-weight: 800;
+}
+
 .decision-strip {
   display: grid;
   gap: 14px;
@@ -4961,6 +5205,40 @@ ul {
   margin: 0;
   font-size: 0.84rem;
   color: rgba(255, 255, 255, 0.78);
+}
+
+/* "Forbereder mot" + foldet økt-liste (Playable Manager Flow Polish v1): kort,
+   lesbar matchup-etikett og en kompakt details-skuff for øktene. */
+.training-program-prepares {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--hg-accent-tactics);
+}
+
+.training-program-sessions-details > summary {
+  cursor: pointer;
+  list-style: none;
+  margin: 4px 0 0;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.training-program-sessions-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.training-program-sessions-details > summary::after {
+  content: "▾";
+  margin-left: 6px;
+  transition: transform 0.15s ease;
+}
+
+.training-program-sessions-details[open] > summary::after {
+  transform: rotate(180deg);
 }
 
 .training-program-list-label {
