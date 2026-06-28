@@ -8837,6 +8837,53 @@ const INBOX_EVENT_STATUS_LABELS = {
   archived: "Arkivert"
 };
 
+const INBOX_EVENT_SENDER_ROLES = {
+  assistant: "Assistenttrener",
+  medical: "Fysio",
+  board: "Styret",
+  media: "Presse",
+  squad: "Spillergruppe",
+  training: "Trenerteam",
+  matchday: "Analytiker",
+  scouting: "Speider",
+  admin: "Klubbkontor"
+};
+
+const INBOX_EVENT_SIGNAL_LABELS = {
+  training: "Trening",
+  training_program: "Trening",
+  training_focus: "Trening",
+  matchday: "Kamp",
+  tacticalClarity: "Kampplan",
+  tactic: "Kampplan",
+  physical: "Slitasje",
+  fatigue: "Slitasje",
+  injury: "Slitasje",
+  injuryRisk: "Slitasje",
+  mental: "Moral",
+  dressingRoom: "Moral",
+  confidence: "Moral",
+  boardMedia: "Styrepress",
+  boardPressure: "Styrepress",
+  pressure: "Styrepress",
+  mediaPressure: "Styrepress",
+  staff: "Stab",
+  offPitch: "Kontekst",
+  roster: "Tropp"
+};
+
+function getInboxEventImpactLabels(thread) {
+  const labels = new Set();
+  (Array.isArray(thread?.sourceSignals) ? thread.sourceSignals : []).forEach((signal) => {
+    const label = INBOX_EVENT_SIGNAL_LABELS[signal];
+    if (label) labels.add(label);
+  });
+  if (thread?.type && INBOX_EVENT_SIGNAL_LABELS[thread.type]) {
+    labels.add(INBOX_EVENT_SIGNAL_LABELS[thread.type]);
+  }
+  return [...labels].slice(0, 4);
+}
+
 // Bygg/forny innboksens levende tråder fra gjeldende kontekst. Idempotent:
 // integrateInboxThreads dupliserer aldri tråder, og vi lagrer kun når noe faktisk
 // endret seg. Muterer ALDRI History Go-progresjon (kun teamMerits.inbox).
@@ -8941,7 +8988,8 @@ function createInboxEventThreadCard(thread, options = {}) {
 
   const from = document.createElement("span");
   from.className = "message-from";
-  from.textContent = thread.sender;
+  const senderRole = INBOX_EVENT_SENDER_ROLES[thread.type] || "Klubben";
+  from.textContent = `${senderRole}: ${thread.sender}`;
 
   const typeTag = document.createElement("span");
   typeTag.className = "message-tag";
@@ -8967,6 +9015,13 @@ function createInboxEventThreadCard(thread, options = {}) {
   const summary = document.createElement("p");
   summary.className = "inbox-thread-latest-title";
   summary.textContent = thread.summary;
+
+  const impactLabels = getInboxEventImpactLabels(thread);
+  const impact = document.createElement("p");
+  impact.className = "inbox-event-impact";
+  impact.textContent = impactLabels.length
+    ? `Betyr noe for: ${impactLabels.join(" · ")}`
+    : "Betyr noe for: managerens neste prioritering";
 
   // Ekspanderbart innhold samles i bodyNodes og vises bare når tråden er åpen.
   const bodyNodes = [];
@@ -9066,7 +9121,7 @@ function createInboxEventThreadCard(thread, options = {}) {
 
   makeThreadCollapsible(
     article,
-    [meta, title, summary],
+    [meta, title, summary, impact],
     bodyNodes,
     { threadId: thread.id, open: Boolean(options.open) }
   );
