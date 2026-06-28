@@ -1686,6 +1686,14 @@ ul {
   color: var(--muted);
 }
 
+.inbox-event-impact {
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
 .inbox-event-hidden-hint {
   margin: 2px 0 0;
   color: var(--muted);
