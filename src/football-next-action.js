@@ -167,7 +167,33 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 7) Uka mangler et treningsvalg.
+  // 7) I innboksfasen er klubbens puls den naturlige primærhandlingen før
+  // trenings-/kampvalg. Den samme tråden dyttes ikke inn to ganger senere.
+  if (!ctx.hasSession && clubWeek?.phase === "inbox" && ctx.unreadThreads > 0) {
+    push({
+      id: "read-inbox",
+      tag: "Innboks",
+      title: "Les innboksen",
+      hint:
+        ctx.unreadThreads === 1
+          ? "1 ulest tråd venter på et svar."
+          : `${ctx.unreadThreads} uleste tråder venter på et svar.`,
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "inbox" }
+    });
+  }
+
+  // 8) I review-fasen skal fersk kamprapport leses før ny kamp/ny uke.
+  if (!ctx.hasSession && clubWeek?.phase === "review" && ctx.hasUnseenReport) {
+    push({
+      id: "read-report",
+      tag: "Rapport",
+      title: "Se kamprapporten",
+      hint: "Les hvorfor kampen ble som den ble før du planlegger neste uke.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
+    });
+  }
+
+  // 9) Uka mangler et treningsvalg.
   if (!ctx.hasSession && !ctx.hasTrainingChoice) {
     push({
       id: "choose-training",
@@ -178,7 +204,7 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 8) Laget er kampklart — sett kampplan og spill.
+  // 10) Laget er kampklart — sett kampplan og spill.
   if (!ctx.hasSession && ctx.matchdayReady && !clubWeekGate.isBlocked) {
     push({
       id: "play-match",
@@ -189,7 +215,7 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 9) Uleste innbokstråder — klubbens puls venter på svar.
+  // 11) Uleste innbokstråder — klubbens puls venter på svar.
   if (ctx.unreadThreads > 0) {
     push({
       id: "read-inbox",
@@ -203,7 +229,7 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 10) Fersk, ulest kamprapport — se hva kampen lærte før neste uke planlegges.
+  // 12) Fersk, ulest kamprapport — se hva kampen lærte før neste uke planlegges.
   if (!ctx.hasSession && ctx.hasUnseenReport) {
     push({
       id: "read-report",
@@ -214,7 +240,7 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 11) Prøveperiode ikke aktiv, men laget er klart for de 5 kampene.
+  // 13) Prøveperiode ikke aktiv, men laget er klart for de 5 kampene.
   if (!ctx.hasSession && ctx.matchdayReady && !ctx.miniSeasonActive) {
     push({
       id: "start-mini-season",
@@ -225,7 +251,7 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 12) Fallback: driv klubbuken videre.
+  // 14) Fallback: driv klubbuken videre.
   if (clubWeek && !clubWeekGate.isBlocked) {
     const isReview = clubWeek.phase === "review";
     push({
