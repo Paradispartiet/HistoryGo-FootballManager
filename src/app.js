@@ -1381,7 +1381,8 @@ function getPublicStartAnchor() {
     placeName: anchor.placeName,
     latitude: anchor.latitude,
     longitude: anchor.longitude,
-    source: anchor.source
+    source: anchor.source,
+    createdAt: anchor.createdAt
   };
 }
 
