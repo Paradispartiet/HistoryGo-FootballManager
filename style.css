@@ -5527,3 +5527,61 @@ ul {
 .weekly-training-status[data-selected="true"]::before {
   content: "✓ ";
 }
+
+/* First-Time Playthrough v1 — kompakt førsteuke uten ny hovedfane. */
+.first-time-playthrough-card {
+  display: grid;
+  gap: 1rem;
+  border-color: rgba(255, 255, 255, 0.28);
+  background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+}
+
+.first-time-playthrough-card[hidden] {
+  display: none;
+}
+
+.first-time-playthrough-card h2 {
+  margin: 0.15rem 0 0.35rem;
+}
+
+.first-time-brief-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.first-time-brief-grid article {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.8rem;
+  padding: 0.8rem;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.first-time-brief-grid span,
+.first-time-brief-grid small {
+  display: block;
+  color: var(--muted-text, rgba(255, 255, 255, 0.68));
+}
+
+.first-time-brief-grid strong {
+  display: block;
+  margin: 0.25rem 0;
+  font-size: 0.98rem;
+}
+
+.assistant-note {
+  margin: 0;
+  border-left: 2px solid rgba(255, 255, 255, 0.62);
+  padding: 0.65rem 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.first-time-more p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .first-time-brief-grid {
+    grid-template-columns: 1fr;
+  }
+}

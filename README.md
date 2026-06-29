@@ -318,6 +318,19 @@ eller:
 node scripts/audit-hg-football-data.mjs
 ```
 
+
+## First-Time Playthrough v1
+
+Første spilløkt er nå styrt som en spillbar første uke, ikke som en popup-tour. Spilleren får jobben, starter en femkampers prøveperiode og ledes via **Neste handling** gjennom formasjon, startellever/roller, treningsvalg, ett innbokssignal, første kamp, kamprapport og et tydelig råd for uke 2.
+
+- Første kamp i første playthrough prioriterer den kuraterte historiske stil-motstanderen `ajax_1971_73_total_football` («Ajax 1971–73 — Totalfotball»).
+- Assistenttrener-stemmen gir korte råd i Oversikt og hjelper spilleren å starte enkelt: kampklar ellever, relevant trening mot høyt press og innboks før kamp.
+- Avansert læring, kampforklaring og eksisterende systemer fjernes ikke; de tones ned/foldes bak eksisterende kompakte paneler og `<details>` der førsteuka trenger mer ro.
+- State holdes minimal (`hgfm.firstTimePlaythrough.v1`) og avleder resten fra eksisterende lag-, trening-, innboks-, kamp- og mini-season-state. Den skriver ikke til History Go-progresjonen.
+- Målet er å gjøre de eksisterende motorene spillbare og forståelige fra første minutt — ikke å bygge ny hovedfane, liga, økonomi, transfermarked eller kampmotor.
+
+Validering: `npm run sim:first-time` dekker Next Action-stigen for første uke og at første mini-season-motstander er Ajax/totalfotball.
+
 ## HG Football Manager som læringsspill
 
 > **Designretning.** Denne seksjonen beskriver hva spillet skal være, ikke hva som er ferdig bygget. Mye av poeng-, forslags- og kontekstlogikken under er foreløpig **arkitekturkrav og retning**, ikke implementert motor. Den eksisterende fitmotoren, relasjonsmotoren, lagfitmotoren og det historiske formasjonsbiblioteket er grunnmuren dette skal bygges videre på.
