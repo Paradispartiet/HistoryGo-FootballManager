@@ -237,6 +237,9 @@ export function buildMiniSeasonSchedule(context = {}) {
     return [];
   }
 
+  const firstOpponentId = isNonEmptyString(context.firstOpponentId) ? context.firstOpponentId : null;
+  const firstOpponent = firstOpponentId ? opponents.find((opponent) => opponent.id === firstOpponentId) : null;
+
   const sorted = [...opponents].sort((a, b) => {
     const diff = num(a.strength) - num(b.strength);
     return diff !== 0 ? diff : String(a.id).localeCompare(String(b.id));
@@ -245,7 +248,7 @@ export function buildMiniSeasonSchedule(context = {}) {
 
   const schedule = [];
   for (let round = 1; round <= MINI_SEASON_TOTAL_WEEKS; round += 1) {
-    const opponent = waved[(round - 1) % waved.length];
+    const opponent = round === 1 && firstOpponent ? firstOpponent : waved[(round - 1) % waved.length];
     const difficulty = difficultyFromStrength(opponent.strength);
     // Sterkere lag spilles borte, svakere/jevne hjemme — slik styremålene
     // (seier hjemme, prestasjon borte) får en naturlig ramme.

@@ -181,6 +181,8 @@ const MATCHDAY_STATE_KEY = "hgfm.matchday.v1";
 // og sluttvurdering). Kun UI/progresjon i localStorage – ingen liga, tabell,
 // økonomi eller ny kampmotor. Selve logikken ligger i football-mini-season.js.
 const MINI_SEASON_KEY = MINI_SEASON_VERSION;
+const FIRST_TIME_PLAYTHROUGH_KEY = "hgfm.firstTimePlaythrough.v1";
+const FIRST_TIME_OPPONENT_ID = "ajax_1971_73_total_football";
 
 // Ekte History Go-progresjon i localStorage (skrives av History Go-appen, ikke
 // av Football Manager). Brukes som kilde til faktisk besøkte sportsteder.
@@ -316,7 +318,8 @@ const state = {
   matchday: { lastMatch: null, session: null },
   // Mini Season v0.1: aktiv/fullført 5-kampers prøveperiode, eller null når
   // ingen prøveperiode er startet. Kun UI/progresjon i localStorage.
-  miniSeason: null
+  miniSeason: null,
+  firstTimePlaythrough: { started: false, completed: false, currentStep: "start" }
 };
 
 const elements = {
@@ -359,6 +362,10 @@ const elements = {
   startMiniSeasonButton: document.querySelector("#startMiniSeasonButton"),
   resetMiniSeasonButton: document.querySelector("#resetMiniSeasonButton"),
   miniSeasonOverview: document.querySelector("#miniSeasonOverview"),
+  firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
+  firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
+  firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
+  firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
   weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
   weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
@@ -3585,6 +3592,93 @@ function resetMatchday() {
 
 // Les mini-sesong fra localStorage. Krasjer aldri: manglende nøkkel, ugyldig
 // JSON eller korrupt struktur gir null (= ingen prøveperiode startet).
+
+function normalizeFirstTimePlaythrough(value) {
+  const source = value && typeof value === "object" ? value : {};
+  return {
+    started: Boolean(source.started),
+    completed: Boolean(source.completed),
+    currentStep: typeof source.currentStep === "string" && source.currentStep ? source.currentStep : "start"
+  };
+}
+
+function loadFirstTimePlaythrough() {
+  try {
+    return normalizeFirstTimePlaythrough(JSON.parse(localStorage.getItem(FIRST_TIME_PLAYTHROUGH_KEY)));
+  } catch (error) {
+    return normalizeFirstTimePlaythrough(null);
+  }
+}
+
+function saveFirstTimePlaythrough() {
+  try {
+    localStorage.setItem(FIRST_TIME_PLAYTHROUGH_KEY, JSON.stringify(normalizeFirstTimePlaythrough(state.firstTimePlaythrough)));
+  } catch (error) {
+    // UI-progresjon kan feile i privat modus uten å stoppe førsteuka.
+  }
+}
+
+function isFirstTimePlaythroughActive() {
+  return !state.firstTimePlaythrough?.completed;
+}
+
+function getFirstTimeOpponentProfile() {
+  return getHistoricalOpponentProfile(FIRST_TIME_OPPONENT_ID) ||
+    HISTORICAL_OPPONENT_PROFILES.find((profile) => /ajax|total/i.test(`${profile.id} ${profile.displayName} ${profile.archetypeName}`)) ||
+    HISTORICAL_OPPONENT_PROFILES[0] ||
+    null;
+}
+
+function buildFirstTimeNextActionState(teamFit, readiness = null) {
+  const ft = normalizeFirstTimePlaythrough(state.firstTimePlaythrough);
+  if (ft.completed) return { active: false, started: ft.started, completed: true };
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const filled = assignments.filter((item) => item.player).length;
+  const misused = assignments.some((item) => item.player && item.fit?.status === "feilbrukt");
+  const opponent = getFirstTimeOpponentProfile();
+  const firstMatchPlayed = Boolean(state.miniSeason?.matchHistory?.length) || Boolean(state.matchday?.lastMatch);
+  const reportSeen = firstMatchPlayed && !hasUnseenMatchReport();
+  return {
+    active: true,
+    started: ft.started || state.miniSeason?.status === "active",
+    completed: ft.completed,
+    hasFormation: Boolean(state.selectedFormationId),
+    hasRoles: filled >= 11 && !misused,
+    hasReadInbox: (getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState())) === 0,
+    hasPlayedFirstMatch: firstMatchPlayed,
+    hasSeenReport: reportSeen,
+    opponentName: opponent?.displayName || "Ajax 1971–73 — Totalfotball",
+    readiness: readiness || (teamFit ? getMatchdayReadiness(teamFit) : { isReady: false })
+  };
+}
+
+function renderFirstTimePlaythrough(teamFit) {
+  const card = elements.firstTimePlaythroughCard;
+  if (!card) return;
+  const ft = buildFirstTimeNextActionState(teamFit);
+  card.hidden = !ft.active;
+  if (!ft.active) return;
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const filled = assignments.filter((item) => item.player).length;
+  const opponent = getFirstTimeOpponentProfile();
+  if (elements.firstTimeReadiness) {
+    const training = state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "valgt" : "mangler";
+    elements.firstTimeReadiness.textContent = `Startellever ${Math.min(filled, 11)}/11 · trening ${training} · rapport ${ft.hasSeenReport ? "sett" : "venter"}`;
+  }
+  if (elements.firstTimeOpponent && opponent) {
+    elements.firstTimeOpponent.textContent = `${opponent.displayName}: Fare — høyt press/høy linje. Mulighet — rom bak presset hvis oppbyggingen holder.`;
+  }
+  if (elements.firstTimeAssistant) {
+    let advice = "Start med å gjøre laget kampklart.";
+    if (filled < 11) advice = "Velg en formasjon laget forstår og fyll startelleveren.";
+    else if (!state.weeklyTrainingProgram?.programId && !state.weeklyTrainingFocus?.focusId) advice = "Motstanderen presser høyt. Tenk oppbygging under press eller en tryggere utvei.";
+    else if (!ft.hasReadInbox) advice = "Les innboksen før du spiller kamp.";
+    else if (!ft.hasPlayedFirstMatch) advice = "Spill kampen når readiness er grønn nok.";
+    else if (!ft.hasSeenReport) advice = "Etter kampen bør du lese rapporten før du går videre.";
+    elements.firstTimeAssistant.textContent = advice;
+  }
+}
+
 function loadMiniSeason() {
   try {
     return normalizeMiniSeasonState(JSON.parse(localStorage.getItem(MINI_SEASON_KEY)));
@@ -3605,6 +3699,7 @@ function getMiniSeasonContext() {
     // stil-lag (læringsmotstandere), ikke generiske roboter. Profilene er
     // runtime-kompatible med kampmotoren.
     opponents: HISTORICAL_OPPONENT_PROFILES,
+    firstOpponentId: isFirstTimePlaythroughActive() ? FIRST_TIME_OPPONENT_ID : null,
     teamName: "HG-laget"
   };
 }
@@ -3637,6 +3732,10 @@ function startMiniSeason() {
   }
 
   state.miniSeason = miniSeason;
+  if (!state.firstTimePlaythrough?.completed) {
+    state.firstTimePlaythrough = { ...normalizeFirstTimePlaythrough(state.firstTimePlaythrough), started: true, currentStep: "lineup" };
+    saveFirstTimePlaythrough();
+  }
   saveMiniSeason();
 
   addClubWeekEvent({
@@ -5882,6 +5981,7 @@ function buildNextActionContext(teamFit) {
     unreadThreads: getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState()),
     hasUnseenReport: hasUnseenMatchReport(),
     miniSeasonActive: state.miniSeason?.status === "active",
+    firstTime: buildFirstTimeNextActionState(teamFit, readiness),
     clubWeek: clubWeekState
       ? {
           week: clubWeekState.week,
@@ -5947,6 +6047,8 @@ function renderNextActionStrip(teamFit) {
       : "Oppsett";
     elements.nextActionPhase.textContent = `Uke ${week} · ${phaseLabel}`;
   }
+
+  renderFirstTimePlaythrough(teamFit);
 
   const actions = computeManagerNextActions(teamFit);
   const primary = actions[0] || {
@@ -10496,6 +10598,10 @@ async function advanceClubWeekPhaseAction() {
   const previous = state.clubWeekState;
   let next = await advanceClubWeekPhaseFromBrowser(previous);
   if (next.week !== previous.week) {
+    if (!state.firstTimePlaythrough?.completed && state.matchday?.lastMatch && !hasUnseenMatchReport()) {
+      state.firstTimePlaythrough = { started: true, completed: true, currentStep: "completed" };
+      saveFirstTimePlaythrough();
+    }
     state.weeklyTrainingFocus = null;
     saveWeeklyTrainingFocus();
     state.weeklyTrainingProgram = null;
@@ -10548,6 +10654,10 @@ function activateTab(target) {
   // selve rerendret skjer der navigasjonen utløses (initTabs / handlinger).
   if (target === "kamp") {
     markMatchReportSeen();
+    if (!state.firstTimePlaythrough?.completed && state.matchday?.lastMatch) {
+      state.firstTimePlaythrough = { ...normalizeFirstTimePlaythrough(state.firstTimePlaythrough), currentStep: "report" };
+      saveFirstTimePlaythrough();
+    }
   }
 }
 
@@ -10759,6 +10869,7 @@ async function init() {
     // Mini Season v0.1: hent eventuell prøveperiode fra localStorage. Korrupt
     // eller manglende state gir null (= ingen prøveperiode startet).
     state.miniSeason = loadMiniSeason();
+    state.firstTimePlaythrough = loadFirstTimePlaythrough();
 
     const dataWarnings = validateFootballData(state);
 

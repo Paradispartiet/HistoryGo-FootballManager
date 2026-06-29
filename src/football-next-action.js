@@ -76,6 +76,19 @@ function normalizeContext(context = {}) {
     unreadThreads: Math.max(0, toInt(context.unreadThreads)),
     hasUnseenReport: Boolean(context.hasUnseenReport),
     miniSeasonActive: Boolean(context.miniSeasonActive),
+    firstTime: context.firstTime && typeof context.firstTime === "object"
+      ? {
+          active: Boolean(context.firstTime.active),
+          started: Boolean(context.firstTime.started),
+          completed: Boolean(context.firstTime.completed),
+          hasFormation: context.firstTime.hasFormation !== false,
+          hasRoles: context.firstTime.hasRoles !== false,
+          hasReadInbox: Boolean(context.firstTime.hasReadInbox),
+          hasPlayedFirstMatch: Boolean(context.firstTime.hasPlayedFirstMatch),
+          hasSeenReport: Boolean(context.firstTime.hasSeenReport),
+          opponentName: asString(context.firstTime.opponentName, "Ajax 1971–73 — Totalfotball")
+        }
+      : null,
     clubWeek: clubWeek
       ? {
           week: toInt(clubWeek.week) || 1,
@@ -100,6 +113,78 @@ export function computeNextActions(context = {}) {
   };
 
   const { lineup, roster, clubWeekGate, clubWeek } = ctx;
+  const firstTime = ctx.firstTime;
+
+  // First-Time Playthrough v1: når første spilløkt er aktiv, prioriter den
+  // spillbare første uka før den generelle Next Action-stigen. Dette er ikke en
+  // separat tutorialmotor; den leser samme readiness-/trening-/inbox-/rapport-state.
+  if (!ctx.hasSession && firstTime?.active && !firstTime.completed) {
+    if (!firstTime.started) {
+      push({
+        id: "first-time-start",
+        tag: "Første uke",
+        title: "Start femkampers prøveperiode",
+        hint: "Styret gir deg fem kamper. Første test er en historisk stilkamp mot Ajax 1971–73.",
+        action: { type: NEXT_ACTION_TYPES.MINI_SEASON }
+      });
+    } else if (lineup.emptyCount > 0 || !firstTime.hasFormation) {
+      push({
+        id: "first-time-lineup",
+        tag: "Lag",
+        title: "Fullfør startellever",
+        hint: `${Math.max(0, lineup.totalSlots - lineup.emptyCount)}/${lineup.totalSlots} plasser klare. Velg en formasjon laget forstår.`,
+        action: { type: NEXT_ACTION_TYPES.SLOT, slotId: lineup.firstEmptySlotId }
+      });
+    } else if (!firstTime.hasRoles || lineup.misused) {
+      push({
+        id: "first-time-roles",
+        tag: "Roller",
+        title: "Velg nøkkelroller",
+        hint: "Sett spillerne i roller de kan løse før totalfotball-presset tester laget.",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "tactics" }
+      });
+    } else if (!ctx.hasTrainingChoice) {
+      push({
+        id: "first-time-training",
+        tag: "Trening",
+        title: "Velg trening for Ajax-kampen",
+        hint: "Motstanderen presser høyt. Prioriter oppbygging, formasjonstilvenning eller restitusjon.",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "trening" }
+      });
+    } else if (!firstTime.hasReadInbox && ctx.unreadThreads > 0) {
+      push({
+        id: "first-time-inbox",
+        tag: "Innboks",
+        title: "Les assistentens kampnotat",
+        hint: "Les ett viktig signal før du spiller første kamp.",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "inbox" }
+      });
+    } else if (!firstTime.hasPlayedFirstMatch && ctx.matchdayReady && !clubWeekGate.isBlocked) {
+      push({
+        id: "first-time-match",
+        tag: "Kampdag",
+        title: "Spill første kamp",
+        hint: `Laget er kampklart mot ${firstTime.opponentName}. Se om oppbyggingen tåler presset.`,
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
+      });
+    } else if (firstTime.hasPlayedFirstMatch && !firstTime.hasSeenReport) {
+      push({
+        id: "first-time-report",
+        tag: "Rapport",
+        title: "Les første kamprapport",
+        hint: "Se resultatet, hvorfor det skjedde og ett råd for neste uke.",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
+      });
+    } else if (firstTime.hasSeenReport) {
+      push({
+        id: "first-time-week-2",
+        tag: "Uke 2",
+        title: "Gå til uke 2",
+        hint: "Første spilløkt er forstått. Planlegg neste uke med de vanlige systemene.",
+        action: { type: NEXT_ACTION_TYPES.CLUB_WEEK }
+      });
+    }
+  }
 
   // 1) Pågående kamp vinner alltid — fullfør grepene først.
   if (ctx.hasSession) {
