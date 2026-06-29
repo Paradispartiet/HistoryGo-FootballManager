@@ -5585,3 +5585,93 @@ ul {
     grid-template-columns: 1fr;
   }
 }
+
+.nearby-recommendations {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--hg-surface-deep);
+  padding: 14px;
+}
+
+.nearby-recommendations h4 {
+  margin: 4px 0 6px;
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+.nearby-recommendations-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.nearby-recommendation-card {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+}
+
+.nearby-recommendation-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nearby-recommendation-head h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.nearby-recommendation-distance,
+.nearby-recommendation-status {
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 4px 9px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nearby-recommendation-status {
+  justify-self: start;
+  margin: 0;
+}
+
+.nearby-recommendation-status[data-unlocked="true"] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.nearby-recommendation-summary,
+.nearby-recommendation-reason,
+.nearby-recommendation-people {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.nearby-recommendation-summary {
+  color: var(--text);
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .nearby-recommendations-list {
+    grid-template-columns: 1fr;
+  }
+
+  .nearby-recommendation-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -450,6 +450,8 @@ const elements = {
   collectionMatchdayBadge: document.querySelector("#collectionMatchdayBadge"),
   collectionSourceNote: document.querySelector("#collectionSourceNote"),
   collectionNextStep: document.querySelector("#collectionNextStep"),
+  nearbyRecommendationsAnchor: document.querySelector("#nearbyRecommendationsAnchor"),
+  nearbyRecommendationsList: document.querySelector("#nearbyRecommendationsList"),
   startModePanel: document.querySelector("#startModePanel"),
   startModeChoices: document.querySelector("#startModeChoices"),
   activeLocalStart: document.querySelector("#activeLocalStart"),
@@ -1473,6 +1475,101 @@ function getPlaceLocationIndex(placeLocations = state.placeLocations) {
 
 // Returnerer stabile spillerkandidater sortert etter nærmeste kvalifiserte sted.
 // Samme spiller beholdes bare én gang, via stedet med kortest avstand.
+
+function getPersonNameById(collection, id) {
+  return (Array.isArray(collection) ? collection : []).find((item) => item?.id === id)?.name || null;
+}
+
+function normalizeRecommendationLimit(limit) {
+  return Number.isInteger(limit) && limit >= 0 ? limit : 6;
+}
+
+function describePlaceRecommendation(placeId) {
+  if (!placeId) {
+    return null;
+  }
+
+  const location = getPlaceLocationIndex().get(placeId);
+  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
+  const place = placeUnlocks.find((entry) => entry && entry.placeId === placeId) || null;
+  const report = getPlaceReport(placeId);
+  const unlockSummary = { players: 0, staff: 0, expertise: 0, training: 0 };
+  const playerNames = [];
+  const staffNames = [];
+
+  (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
+    if (!unlock || !unlock.type) {
+      return;
+    }
+    if (isPlayerUnlockType(unlock.type)) {
+      unlockSummary.players += 1;
+      const name = getPersonNameById(state.players, unlock.targetId);
+      if (name) {
+        playerNames.push(name);
+      }
+    } else if (isStaffUnlockType(unlock.type)) {
+      unlockSummary.staff += 1;
+      const name = getPersonNameById(state.staff, unlock.targetId);
+      if (name) {
+        staffNames.push(name);
+      }
+    } else if (unlock.type === "expertise") {
+      unlockSummary.expertise += 1;
+    } else if (unlock.type === "training_program" || unlock.type === "training_model") {
+      unlockSummary.training += 1;
+    }
+  });
+
+  const recommendedUse = Array.isArray(report?.recommendedUse) ? report.recommendedUse.filter(Boolean) : [];
+  return {
+    placeId,
+    placeName: place?.placeName || location?.placeName || report?.title || placeId,
+    isUnlocked: getUnlockedPlaceIds().has(placeId),
+    unlockSummary,
+    shortReason: report?.managerValue || report?.summary || "",
+    recommendedUse,
+    playerNames,
+    staffNames,
+    report
+  };
+}
+
+function getNearbyPlaceRecommendations(limit = 6) {
+  const anchor = getPublicStartAnchor();
+  if (!anchor) {
+    return [];
+  }
+
+  const safeLimit = normalizeRecommendationLimit(limit);
+  const locationIndex = getPlaceLocationIndex();
+  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
+  const orderedPlaceIds = new Set([
+    ...placeUnlocks.map((place) => place?.placeId).filter(Boolean),
+    ...locationIndex.keys()
+  ]);
+
+  return [...orderedPlaceIds]
+    .filter((placeId) => placeId !== anchor.placeId)
+    .map((placeId, order) => {
+      const location = locationIndex.get(placeId);
+      if (!location) {
+        return null;
+      }
+      const distanceKm = calculateDistanceKm(anchor, location);
+      if (!Number.isFinite(distanceKm)) {
+        return null;
+      }
+      const description = describePlaceRecommendation(placeId);
+      if (!description) {
+        return null;
+      }
+      return { ...description, distanceKm, order };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.distanceKm - b.distanceKm || a.order - b.order || a.placeName.localeCompare(b.placeName))
+    .slice(0, safeLimit);
+}
+
 function getNearestLocalStartPlayers({ players, placeUnlocks, placeLocations, startLocation, limit }) {
   const playerIndex = new Map(
     (Array.isArray(players) ? players : []).filter((player) => player?.id).map((player) => [player.id, player])
@@ -10201,6 +10298,72 @@ function renderCollectionSummary() {
   }
 }
 
+
+function renderNearbyRecommendations() {
+  if (!elements.nearbyRecommendationsAnchor || !elements.nearbyRecommendationsList) {
+    return;
+  }
+
+  const anchor = getPublicStartAnchor();
+  elements.nearbyRecommendationsList.innerHTML = "";
+  if (!anchor) {
+    elements.nearbyRecommendationsAnchor.textContent = "Velg et offentlig startsted for å se nærliggende fotballsteder.";
+    return;
+  }
+
+  elements.nearbyRecommendationsAnchor.textContent = `Basert på offentlig startsted: ${anchor.placeName}`;
+  const recommendations = getNearbyPlaceRecommendations(6);
+  if (!recommendations.length) {
+    renderUnlockEmpty(elements.nearbyRecommendationsList, "Ingen nærliggende fotballsteder med koordinater funnet ennå.");
+    return;
+  }
+
+  recommendations.forEach((recommendation) => {
+    const card = document.createElement("article");
+    card.className = "nearby-recommendation-card";
+
+    const head = document.createElement("div");
+    head.className = "nearby-recommendation-head";
+    const title = document.createElement("h4");
+    title.textContent = recommendation.placeName;
+    const distance = document.createElement("span");
+    distance.className = "nearby-recommendation-distance";
+    distance.textContent = `${recommendation.distanceKm.toFixed(1)} km`;
+    head.append(title, distance);
+    card.append(head);
+
+    const status = document.createElement("p");
+    status.className = "nearby-recommendation-status";
+    status.dataset.unlocked = recommendation.isUnlocked ? "true" : "false";
+    status.textContent = recommendation.isUnlocked ? "Samlet" : "Ikke samlet";
+    card.append(status);
+
+    const summary = document.createElement("p");
+    summary.className = "nearby-recommendation-summary";
+    const counts = recommendation.unlockSummary;
+    summary.textContent = `Spillere: ${counts.players} · Stab: ${counts.staff} · Ekspertise: ${counts.expertise} · Trening: ${counts.training}`;
+    card.append(summary);
+
+    const reasonText = recommendation.recommendedUse[0] || recommendation.shortReason;
+    if (reasonText) {
+      const reason = document.createElement("p");
+      reason.className = "nearby-recommendation-reason";
+      reason.textContent = reasonText;
+      card.append(reason);
+    }
+
+    const names = [...recommendation.playerNames.slice(0, 3), ...recommendation.staffNames.slice(0, 2)];
+    if (names.length) {
+      const people = document.createElement("p");
+      people.className = "nearby-recommendation-people";
+      people.textContent = `Profiler: ${names.join(", ")}`;
+      card.append(people);
+    }
+
+    elements.nearbyRecommendationsList.append(card);
+  });
+}
+
 // Statusfelt for ekte History Go-sync: hvor mange steder som er funnet i hver
 // kilde, og hvor mange relevante Football Manager-unlock-steder som er aktive.
 function renderHistoryGoSyncStatus() {
@@ -10344,6 +10507,7 @@ function renderApp() {
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
   renderCollectionSummary();
+  renderNearbyRecommendations();
   renderLocalStartStatus();
   renderUnlockPlaces();
   renderUnlockedPlayers();
