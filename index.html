@@ -745,21 +745,28 @@
           <div id="startModeChoices">
             <div class="local-start-heading">
               <p class="eyebrow">Startmodus</p>
-              <h4 id="localStartTitle">Hvordan vil du starte?</h4>
+              <h4 id="localStartTitle">Skaff spillbar tropp</h4>
+              <p id="startModeRosterNeed" class="muted-text">
+                Du trenger 15 spillere for å starte managerløkken: 11 startere + 4 benk.
+                Akkurat nå har du 0/15.
+              </p>
+              <p id="startModePlaceHint" class="muted-text">
+                Noen steder gir kompetanse, trenere eller formasjoner. For å starte kampen trenger du også spillersteder eller en starttropp.
+              </p>
             </div>
 
             <div class="start-mode-grid">
               <article class="start-mode-choice">
                 <div>
                   <h5>Bruk History Go-samlingen min</h5>
-                  <p class="muted-text">Bruk spillere, stab og steder du allerede har samlet.</p>
+                  <p class="muted-text">Bruk spillere, stab og steder du allerede har samlet. Dette skriver ikke til ekte History Go-progresjon.</p>
                 </div>
                 <button type="button" id="useHistoryGoCollection" class="unlock-card-action">Bruk samlingen min</button>
               </article>
 
               <article class="start-mode-choice">
                 <div>
-                  <h5>Start lokalt</h5>
+                  <h5>Finn nærmeste spillere</h5>
                   <p class="muted-text">Finn de nærmeste spillerne rundt deg og lag en starttropp uten å markere stedene som samlet.</p>
                 </div>
                 <button type="button" id="activateLocalStart" class="unlock-card-action">Finn nærmeste spillere</button>
@@ -793,6 +800,14 @@
           </div>
 
           <p id="localStartStatus" class="local-start-status" role="status">Ingen lokal starttropp valgt.</p>
+          <div id="playableSquadReady" class="active-local-start" hidden>
+            <div>
+              <p class="eyebrow">Troppen er spillbar</p>
+              <h4>Neste steg: Lag &amp; taktikk</h4>
+              <p class="muted-text">Du har minst 15 spillere. Sett startelleveren og benken før innboks, trening og kamp.</p>
+            </div>
+            <button type="button" class="unlock-card-action" data-tab-target="tactics">Gå til Lag &amp; taktikk</button>
+          </div>
         </div>
 
         <p id="collectionSourceNote" class="muted-text collection-source-note"></p>

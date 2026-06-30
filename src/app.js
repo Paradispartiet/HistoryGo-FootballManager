@@ -454,6 +454,8 @@ const elements = {
   nearbyRecommendationsList: document.querySelector("#nearbyRecommendationsList"),
   startModePanel: document.querySelector("#startModePanel"),
   startModeChoices: document.querySelector("#startModeChoices"),
+  startModeRosterNeed: document.querySelector("#startModeRosterNeed"),
+  playableSquadReady: document.querySelector("#playableSquadReady"),
   activeLocalStart: document.querySelector("#activeLocalStart"),
   localStartStatus: document.querySelector("#localStartStatus"),
   useHistoryGoCollection: document.querySelector("#useHistoryGoCollection"),
@@ -10198,15 +10200,25 @@ function renderLocalStartStatus() {
   const publicStartAnchor = getPublicStartAnchor();
   const readiness = getAvailability().rosterReadiness;
   const shouldShowChoices = !localStart.enabled && !readiness.hasEnoughUnlocked;
+  const shouldShowReady = readiness.hasEnoughUnlocked;
 
   if (elements.startModePanel) {
-    elements.startModePanel.hidden = !localStart.enabled && !shouldShowChoices && !publicStartAnchor;
+    elements.startModePanel.hidden = !localStart.enabled && !shouldShowChoices && !publicStartAnchor && !shouldShowReady;
   }
   if (elements.startModeChoices) {
     elements.startModeChoices.hidden = !shouldShowChoices;
   }
+  if (elements.startModeRosterNeed) {
+    elements.startModeRosterNeed.textContent =
+      `Du trenger ${REQUIRED_SQUAD_SIZE} spillere for å starte managerløkken: ` +
+      `${REQUIRED_STARTERS} startere + ${REQUIRED_BENCH} benk. ` +
+      `Akkurat nå har du ${readiness.unlockedCount}/${REQUIRED_SQUAD_SIZE}.`;
+  }
   if (elements.activeLocalStart) {
     elements.activeLocalStart.hidden = !localStart.enabled;
+  }
+  if (elements.playableSquadReady) {
+    elements.playableSquadReady.hidden = !shouldShowReady;
   }
 
   const publicPlaces = getPublicStartPlaces();
@@ -10234,6 +10246,8 @@ function renderLocalStartStatus() {
   elements.localStartStatus.textContent = state.localStartMessage ||
     (localStart.enabled
       ? `Lokal starttropp aktiv${activeSource}: ${localStart.playerIds.length} spillere.`
+      : shouldShowReady
+        ? "Troppen er spillbar. Neste steg er Lag & taktikk."
       : publicPlaces.length === 0 && shouldShowChoices
         ? "Ingen offentlige History Go-startsteder er tilgjengelige i stedslisten."
         : "Velg hvordan managerkarrieren skal starte.");
@@ -10303,7 +10317,7 @@ function renderCollectionSummary() {
     } else if (!readiness.hasEnoughBench || !readiness.hasEnoughUnlocked) {
       nextStep = "Neste: samle flere spillere til benken via History Go-steder.";
     } else {
-      nextStep = "Troppen er klar: gå til Kontoret, finjuster formasjonen og spill kamp.";
+      nextStep = "Troppen er spillbar. Neste steg: Lag & taktikk.";
     }
     elements.collectionNextStep.textContent = nextStep;
   }

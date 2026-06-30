@@ -14,6 +14,8 @@ const check = (label, ok) => { if (!ok) failures.push(label); };
 
 const merits = readJson("data/football_team_merits.example.json");
 const unlocks = readJson("data/football_unlocks.json");
+const indexHtml = fs.readFileSync(new URL("../index.html", import.meta.url), "utf8");
+const appJs = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 
 const unlockedPlaceIds = new Set(Array.isArray(merits.unlockedPlaceIds) ? merits.unlockedPlaceIds : []);
 const playerTypes = new Set(["player", "player_candidate"]);
@@ -49,6 +51,14 @@ check("kfum_arena-seed gir 0 spillere", seedPlayerIds.size === 0);
 const seedPrimary = primary(base);
 check("under 15 spillere gir Skaff spillbar tropp", seedPrimary?.title === "Skaff spillbar tropp");
 check("under 15 spillere peker til History Go/startmodus", seedPrimary?.tag === "History Go" && seedPrimary?.action?.tab === "historygo");
+check("History Go startstatus viser X/15", /Akkurat nå har du \$\{readiness\.unlockedCount\}\/\$\{REQUIRED_SQUAD_SIZE\}/.test(appJs));
+check("startmodus forklarer 15-spillerkravet", indexHtml.includes("Du trenger 15 spillere for å starte managerløkken"));
+check("KFUM-/kompetansested forklares som ikke spillersted", indexHtml.includes("Noen steder gir kompetanse, trenere eller formasjoner"));
+check("spillbar tropp har knapp til Lag & taktikk", /id=\"playableSquadReady\"[\s\S]*data-tab-target=\"tactics\"/.test(indexHtml));
+check(
+  "startmodus skriver ikke til ekte History Go-progresjon",
+  !/setItem\(\s*["'`](?:visited_places|hg_groundhopper_stats_v1)/.test(appJs)
+);
 check("under 15 spillere viser ikke Start prøveperiode", !actions(base).some((a) => a.title === "Start prøveperiode" || a.title === "Start femkampers prøveperiode"));
 check("under 15 spillere viser ikke kamp", !actions(base).some((a) => a.action?.tab === "kamp"));
 
