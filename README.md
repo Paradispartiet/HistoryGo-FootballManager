@@ -291,6 +291,54 @@ Ikke vis flere likeverdige «neste»-systemer samtidig.
 
 Kampforklaring, formation knowledge, staff identity, role familiarity og off-pitch er verdifulle. Men førsteuka skal bare vise det som hjelper spilleren til neste beslutning. Resten må ligge i `<details>` eller «Vis mer».
 
+
+## First Playthrough QA status (v1)
+
+QA-gjennomgangen av første spilløkt er verifisert gjennom seed- og sim-testene. Hovedveien er nå:
+
+```txt
+Oversikt
+  ↓
+Skaff spillbar tropp
+  ↓
+History Go / startmodus
+  ↓
+Lag & taktikk
+  ↓
+Innboks
+  ↓
+Trening
+  ↓
+Kamp
+  ↓
+Kamprapport
+  ↓
+Neste uke
+```
+
+Verifisert status:
+
+- Ny spiller med repository-seed havner ikke i prøveperiode før 15 spillere.
+- Repository-seeden (`kfum_arena`) gir 0 spillere og peker primærhandlingen til History Go/startmodus.
+- Når 15 spillere er tilgjengelige, peker flyten til Lag & taktikk.
+- Når 11 startere + 4 benk er klart, peker førsteuka til Innboks før Trening.
+- Etter innboks og treningsvalg peker flyten til Kamp.
+- Etter kamp peker flyten til Kamprapport.
+- Etter lest rapport peker flyten til neste uke.
+- Primærnavigasjonen holder spillbar løkke adskilt fra kontor-/senere-flater, og primærhandlingene peker ikke til future-flater.
+
+Kjørte QA-kommandoer:
+
+```txt
+npm run check:dom-ids
+npm run audit:flow
+npm run sim:first-run-real-seed
+npm run sim:first-time
+npm run sim:manager-flow-ui
+npm run sim:mini-season
+npm run sim:matchday
+```
+
 ## Viktige filer
 
 ```txt
