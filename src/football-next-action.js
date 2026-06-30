@@ -295,7 +295,21 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 9) Uka mangler et treningsvalg.
+  // 9) Uleste innbokstråder er signaler som skal leses før treningsvalg.
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.unreadThreads > 0) {
+    push({
+      id: "read-inbox",
+      tag: "Innboks",
+      title: "Les innboksen",
+      hint:
+        ctx.unreadThreads === 1
+          ? "1 ulest tråd venter på et svar."
+          : `${ctx.unreadThreads} uleste tråder venter på et svar.`,
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "inbox" }
+    });
+  }
+
+  // 10) Uka mangler et treningsvalg.
   if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && !ctx.hasTrainingChoice) {
     push({
       id: "choose-training",
@@ -306,7 +320,7 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 10) Laget er kampklart — sett kampplan og spill.
+  // 11) Laget er kampklart — sett kampplan og spill.
   if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.matchdayReady && !clubWeekGate.isBlocked) {
     push({
       id: "play-match",
@@ -314,20 +328,6 @@ export function computeNextActions(context = {}) {
       title: "Spill kamp",
       hint: "Laget er kampklart. Sett kampplan og test det historiske systemet i kamp.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
-    });
-  }
-
-  // 11) Uleste innbokstråder — klubbens puls venter på svar.
-  if (roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.unreadThreads > 0) {
-    push({
-      id: "read-inbox",
-      tag: "Innboks",
-      title: "Les innboksen",
-      hint:
-        ctx.unreadThreads === 1
-          ? "1 ulest tråd venter på et svar."
-          : `${ctx.unreadThreads} uleste tråder venter på et svar.`,
-      action: { type: NEXT_ACTION_TYPES.TAB, tab: "inbox" }
     });
   }
 
