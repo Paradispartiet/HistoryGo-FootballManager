@@ -65,7 +65,15 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
   check("rolle-handling peker på riktig slot", fix?.action?.slotId === "ST1");
 }
 
-// 5) Club Week-port stengt — spill ukens kamp, og «Spill kamp» (ready) undertrykkes.
+// 5) Duplikat og manglende benk er egne porter.
+{
+  const dup = ctx({ lineup: { totalSlots: 11, emptyCount: 0, firstEmptySlotId: null, misused: null, duplicate: { name: "Pelé", slotId: "ST2" } }, matchdayReady: false });
+  check("duplikat gir primær «Rett opp dobbeltbruk»", primary(dup) === "Rett opp dobbeltbruk");
+  const bench = ctx({ roster: { enoughUnlocked: true, enoughBench: false, unlockedCount: 15 }, matchdayReady: false });
+  check("11 startere men under 4 benk gir benk-gate via «Sett opp laget»", primary(bench) === "Sett opp laget");
+}
+
+// 6) Club Week-port stengt — spill ukens kamp, og «Spill kamp» (ready) undertrykkes.
 {
   const c = ctx({ clubWeekGate: { isBlocked: true, reason: "Kampdagfasen venter på en spilt kamp." } });
   check("stengt port gir primær «Spill ukens kamp»", primary(c) === "Spill ukens kamp");
@@ -73,19 +81,19 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
   check("stengt port undertrykker «Gå til neste fase»", !titles(c).includes("Gå til neste fase") && !titles(c).includes("Gå til neste uke"));
 }
 
-// 6) Club Week-fasen prioriterer innboksen når klubben faktisk står i innboksfasen.
+// 7) Club Week-fasen prioriterer innboksen når klubben faktisk står i innboksfasen.
 {
   const c = ctx({ clubWeek: { week: 2, phase: "inbox", phaseLabel: "Innboks" }, unreadThreads: 2 });
   check("innboksfase + ulest tråd gir primær «Les innboksen»", primary(c) === "Les innboksen");
 }
 
-// 7) Review-fasen prioriterer ulest kamprapport før ny uke.
+// 8) Review-fasen prioriterer ulest kamprapport før ny uke.
 {
   const c = ctx({ clubWeek: { week: 2, phase: "review", phaseLabel: "Oppsummering" }, hasUnseenReport: true });
   check("review-fase + ulest rapport gir primær «Se kamprapporten»", primary(c) === "Se kamprapporten");
 }
 
-// 8) Innboks er klubbens signalapparat og skal leses før treningsvalg også utenfor innboksfasen.
+// 9) Innboks er klubbens signalapparat og skal leses før treningsvalg også utenfor innboksfasen.
 {
   const c = ctx({ hasTrainingChoice: false, unreadThreads: 2, clubWeek: { week: 2, phase: "match_prep", phaseLabel: "Kampplan" } });
   const t = titles(c);
@@ -93,11 +101,13 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
   check("innboks prioriteres foran «Velg treningsprogram»", t.indexOf("Les innboksen") < t.indexOf("Velg treningsprogram"));
 }
 
-// 9) Manglende treningsvalg dukker opp før kampklar-handlingen når innboksen er lest.
+// 10) 11 + 4 klart går til Innboks før treningsvalg, deretter trening før kamp.
 {
   const c = ctx({ hasTrainingChoice: false, unreadThreads: 0 });
   const t = titles(c);
-  check("manglende treningsvalg gir «Velg treningsprogram»", t.includes("Velg treningsprogram"));
+  check("klart lag uten trening gir primær «Gå til Innboks»", primary(c) === "Gå til Innboks");
+  check("manglende treningsvalg gir fortsatt «Velg treningsprogram»", t.includes("Velg treningsprogram"));
+  check("innboks prioriteres foran trening", t.indexOf("Gå til Innboks") < t.indexOf("Velg treningsprogram"));
   check("treningsvalg prioriteres foran «Spill kamp»", t.indexOf("Velg treningsprogram") < t.indexOf("Spill kamp"));
 }
 

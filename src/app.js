@@ -467,6 +467,16 @@ const elements = {
   clearLocalStart: document.querySelector("#clearLocalStart"),
   // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
   matchdayReadiness: document.querySelector("#matchdayReadiness"),
+  // Lag & taktikk-gate: kompakt 11 + 4-sjekkliste og neste manageroppgave.
+  squadSetupGate: document.querySelector("#squadSetupGate"),
+  squadSetupGateTitle: document.querySelector("#squadSetupGateTitle"),
+  squadSetupGateHint: document.querySelector("#squadSetupGateHint"),
+  squadSetupGateAction: document.querySelector("#squadSetupGateAction"),
+  squadGateStarters: document.querySelector("#squadGateStarters"),
+  squadGateBench: document.querySelector("#squadGateBench"),
+  squadGateRoles: document.querySelector("#squadGateRoles"),
+  squadGateMisuse: document.querySelector("#squadGateMisuse"),
+  squadGateDuplicates: document.querySelector("#squadGateDuplicates"),
   // Tropp og benk (roster readiness): topbar-teller + statisk panel i Kontoret.
   // Rendres av app.js fra availability-snapshotet – ingen separat modul.
   rosterReadyCount: document.querySelector("#rosterReadyCount"),
@@ -10419,6 +10429,110 @@ function renderHistoryGoSyncStatus() {
 // Tropp og benk (roster readiness): rendres fra availability-snapshotet inn i
 // statisk HTML i index.html. Ingen egen modul, ingen egen JSON-/localStorage-
 // lesing og ingen CSS-injeksjon.
+function getSquadSetupGateState(teamFit) {
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const readiness = getAvailability().rosterReadiness;
+  const missingRole = assignments.find((item) => item.player && !item.role) || null;
+  const emptySlot = assignments.find((item) => !item.player || !item.role) || null;
+  const misused = assignments.find((item) => item.player && item.fit?.status === "feilbrukt") || null;
+  const duplicateIds = new Set((teamFit?.duplicatePlayers || []).map((player) => player.id));
+  const duplicate = assignments.find((item) => item.player && duplicateIds.has(item.player.id)) || null;
+  const duplicateCount = Array.isArray(teamFit?.duplicatePlayers) ? teamFit.duplicatePlayers.length : 0;
+  const misusedCount = assignments.filter((item) => item.player && item.fit?.status === "feilbrukt").length;
+  const completeStarters = Number(teamFit?.completeCount) || 0;
+
+  if (emptySlot) {
+    return {
+      title: completeStarters > 0 ? "Fyll neste ledige plass" : "Sett opp laget",
+      hint: `Startelleveren mangler ${Math.max(0, (teamFit?.totalSlots || REQUIRED_STARTERS) - completeStarters)} plass${(teamFit?.totalSlots || REQUIRED_STARTERS) - completeStarters === 1 ? "" : "er"}. Velg spiller og rolle — alle spillere er gode nok når treneren forstår bruken.`,
+      actionLabel: "Fyll neste ledige plass",
+      action: selectSlotDecision(emptySlot.slot.slotId),
+      tone: "needs-work",
+      completeStarters,
+      benchCount: readiness.benchCount,
+      rolesOk: !missingRole,
+      misusedCount,
+      duplicateCount
+    };
+  }
+
+  if (!readiness.hasEnoughBench) {
+    return {
+      title: "Legg minst 4 spillere på benken",
+      hint: `Benk ${Math.min(readiness.benchCount, REQUIRED_BENCH)}/${REQUIRED_BENCH}. La minst ${readiness.missingBench} opplåst spiller stå utenfor startelleveren som kampklar reserve.`,
+      actionLabel: "Vis benken",
+      action: () => elements.rosterReadinessNote?.scrollIntoView({ behavior: "smooth", block: "center" }),
+      tone: "needs-work",
+      completeStarters,
+      benchCount: readiness.benchCount,
+      rolesOk: !missingRole,
+      misusedCount,
+      duplicateCount
+    };
+  }
+
+  if (misused) {
+    return {
+      title: `Rett rolle/posisjon for ${misused.player.name}`,
+      hint: `${misused.player.name} har feil rolle i ${misused.slot.label}. Juster bruken — spilleren passer bedre når rollen stemmer med styrkene.`,
+      actionLabel: "Rett rolle/posisjon",
+      action: selectSlotDecision(misused.slot.slotId),
+      tone: "needs-work",
+      completeStarters,
+      benchCount: readiness.benchCount,
+      rolesOk: !missingRole,
+      misusedCount,
+      duplicateCount
+    };
+  }
+
+  if (duplicate) {
+    return {
+      title: `Rett dobbeltbruk av ${duplicate.player.name}`,
+      hint: `${duplicate.player.name} står på flere plasser. Velg en annen spiller slik at laget får balanse.`,
+      actionLabel: "Rett dobbeltbruk",
+      action: selectSlotDecision(duplicate.slot.slotId),
+      tone: "needs-work",
+      completeStarters,
+      benchCount: readiness.benchCount,
+      rolesOk: !missingRole,
+      misusedCount,
+      duplicateCount
+    };
+  }
+
+  return {
+    title: "Laget er klart",
+    hint: "11 startere, roller og minst 4 benkespillere er klare. Neste hovedsteg er Innboks før trening og kamp.",
+    actionLabel: "Gå til Innboks",
+    action: () => activateTab("inbox"),
+    tone: "ready",
+    completeStarters,
+    benchCount: readiness.benchCount,
+    rolesOk: true,
+    misusedCount,
+    duplicateCount
+  };
+}
+
+function renderSquadSetupGate(teamFit) {
+  if (!elements.squadSetupGate) return;
+  const state = getSquadSetupGateState(teamFit);
+  elements.squadSetupGate.dataset.ready = state.tone === "ready" ? "true" : "false";
+  if (elements.squadSetupGateTitle) elements.squadSetupGateTitle.textContent = state.title;
+  if (elements.squadSetupGateHint) elements.squadSetupGateHint.textContent = state.hint;
+  if (elements.squadGateStarters) elements.squadGateStarters.textContent = `${Math.min(state.completeStarters, REQUIRED_STARTERS)}/${REQUIRED_STARTERS}`;
+  if (elements.squadGateBench) elements.squadGateBench.textContent = `${Math.min(state.benchCount, REQUIRED_BENCH)}/${REQUIRED_BENCH}`;
+  if (elements.squadGateRoles) elements.squadGateRoles.textContent = state.rolesOk ? "OK" : "Trenger valg";
+  if (elements.squadGateMisuse) elements.squadGateMisuse.textContent = state.misusedCount === 0 ? "0" : String(state.misusedCount);
+  if (elements.squadGateDuplicates) elements.squadGateDuplicates.textContent = state.duplicateCount === 0 ? "0" : String(state.duplicateCount);
+  if (elements.squadSetupGateAction) {
+    elements.squadSetupGateAction.textContent = state.actionLabel;
+    elements.squadSetupGateAction.disabled = typeof state.action !== "function";
+    elements.squadSetupGateAction.onclick = typeof state.action === "function" ? state.action : null;
+  }
+}
+
 function renderRosterReadiness() {
   const readiness = getAvailability().rosterReadiness;
 
@@ -10507,6 +10621,7 @@ function renderApp() {
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
+  renderSquadSetupGate(teamFit);
   renderRosterReadiness();
   renderTacticalSystemPanel();
   renderSidePanel(teamFit);

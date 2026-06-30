@@ -5864,3 +5864,82 @@ ul {
   background: rgba(255, 255, 255, 0.06);
   color: var(--text);
 }
+
+/* ---------- Lag & taktikk: Kampklar 11 + 4-gate ---------- */
+.squad-setup-gate {
+  display: grid;
+  gap: 14px;
+  border: 2px solid var(--text);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), var(--panel-strong));
+}
+
+.squad-setup-gate[data-ready="true"] {
+  border-color: var(--good);
+}
+
+.squad-setup-gate-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.squad-setup-gate-head h2 {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+}
+
+.squad-setup-checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 10px;
+}
+
+.squad-setup-checklist article {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  padding: 12px 14px;
+}
+
+.squad-setup-checklist span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.squad-setup-checklist strong {
+  font-size: 1.15rem;
+  text-transform: uppercase;
+}
+
+.tactic-system-details {
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: var(--panel-strong);
+}
+
+.tactic-system-details summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  color: var(--text);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tactic-system-details .tactic-system {
+  border-width: 1px 0 0;
+  border-radius: 0 0 12px 12px;
+}
+
+@media (max-width: 760px) {
+  .squad-setup-gate-head {
+    display: grid;
+  }
+}
