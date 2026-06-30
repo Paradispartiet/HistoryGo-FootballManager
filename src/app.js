@@ -456,6 +456,7 @@ const elements = {
   collectionNextStep: document.querySelector("#collectionNextStep"),
   nearbyRecommendationsAnchor: document.querySelector("#nearbyRecommendationsAnchor"),
   nearbyRecommendationsList: document.querySelector("#nearbyRecommendationsList"),
+  nearbyFavoritesList: document.querySelector("#nearbyFavoritesList"),
   startModePanel: document.querySelector("#startModePanel"),
   startModeChoices: document.querySelector("#startModeChoices"),
   startModeRosterNeed: document.querySelector("#startModeRosterNeed"),
@@ -1057,6 +1058,19 @@ function normalizePublicStartAnchor(value) {
   };
 }
 
+function normalizeNearbyFavorites(value) {
+  const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const placeIds = Array.isArray(base.placeIds)
+    ? [...new Set(base.placeIds.filter((placeId) => typeof placeId === "string").map((placeId) => placeId.trim()))]
+        .filter(Boolean)
+    : [];
+
+  return {
+    placeIds,
+    updatedAt: typeof base.updatedAt === "string" ? base.updatedAt : null
+  };
+}
+
 function normalizeLocalStart(value) {
   const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
   const playerIds = Array.isArray(base.playerIds)
@@ -1102,6 +1116,7 @@ function normalizeTeamMerits(merits) {
       Number.isInteger(base.activeTrainingWeek) && base.activeTrainingWeek >= 1 ? base.activeTrainingWeek : 1,
     publicStartAnchor: migratedPublicStartAnchor,
     localStart,
+    nearbyFavorites: normalizeNearbyFavorites(base.nearbyFavorites),
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
     // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
@@ -1223,6 +1238,7 @@ function resetTeamMerits() {
   if (state.teamMerits) {
     state.teamMerits.localStart = normalizeLocalStart(null);
     state.teamMerits.publicStartAnchor = normalizePublicStartAnchor(null);
+    state.teamMerits.nearbyFavorites = normalizeNearbyFavorites(null);
   }
   state.localStartMessage = "";
   recomputeActiveClassifications();
@@ -1584,6 +1600,67 @@ function getNearbyPlaceRecommendations(limit = 6) {
     .filter(Boolean)
     .sort((a, b) => a.distanceKm - b.distanceKm || a.order - b.order || a.placeName.localeCompare(b.placeName))
     .slice(0, safeLimit);
+}
+
+function getNearbyFavoritePlaceIds() {
+  return normalizeNearbyFavorites(state.teamMerits?.nearbyFavorites).placeIds;
+}
+
+function isNearbyFavorite(placeId) {
+  return typeof placeId === "string" && getNearbyFavoritePlaceIds().includes(placeId);
+}
+
+function setNearbyFavoritePlaceIds(placeIds) {
+  if (!state.teamMerits) {
+    return;
+  }
+  state.teamMerits.nearbyFavorites = normalizeNearbyFavorites({
+    placeIds,
+    updatedAt: new Date().toISOString()
+  });
+  saveTeamMerits();
+}
+
+function toggleNearbyFavorite(placeId) {
+  if (!state.teamMerits || typeof placeId !== "string" || !placeId.trim()) {
+    return;
+  }
+  const normalizedPlaceId = placeId.trim();
+  const current = getNearbyFavoritePlaceIds();
+  setNearbyFavoritePlaceIds(
+    current.includes(normalizedPlaceId)
+      ? current.filter((favoriteId) => favoriteId !== normalizedPlaceId)
+      : [...current, normalizedPlaceId]
+  );
+  renderApp();
+}
+
+function removeNearbyFavorite(placeId) {
+  if (!state.teamMerits || typeof placeId !== "string" || !placeId.trim()) {
+    return;
+  }
+  setNearbyFavoritePlaceIds(getNearbyFavoritePlaceIds().filter((favoriteId) => favoriteId !== placeId.trim()));
+  renderApp();
+}
+
+function getNearbyFavoritePlaces() {
+  const anchor = getPublicStartAnchor();
+  const locationIndex = getPlaceLocationIndex();
+  return getNearbyFavoritePlaceIds()
+    .map((placeId, order) => {
+      const description = describePlaceRecommendation(placeId);
+      if (!description) {
+        return null;
+      }
+      const location = locationIndex.get(placeId);
+      const distanceKm = anchor && location ? calculateDistanceKm(anchor, location) : Number.POSITIVE_INFINITY;
+      return {
+        ...description,
+        distanceKm: Number.isFinite(distanceKm) ? distanceKm : null,
+        order
+      };
+    })
+    .filter(Boolean);
 }
 
 function getNearestLocalStartPlayers({ players, placeUnlocks, placeLocations, startLocation, limit }) {
@@ -10428,7 +10505,9 @@ function renderNearbyRecommendations() {
     const status = document.createElement("p");
     status.className = "nearby-recommendation-status";
     status.dataset.unlocked = recommendation.isUnlocked ? "true" : "false";
-    status.textContent = recommendation.isUnlocked ? "Samlet" : "Ikke samlet";
+    status.textContent = recommendation.isUnlocked
+      ? (isNearbyFavorite(recommendation.placeId) ? "Samlet · ★ Favoritt" : "Samlet")
+      : (isNearbyFavorite(recommendation.placeId) ? "Ikke samlet · ★ Favoritt" : "Ikke samlet");
     card.append(status);
 
     const summary = document.createElement("p");
@@ -10453,7 +10532,71 @@ function renderNearbyRecommendations() {
       card.append(people);
     }
 
+    const favoriteButton = document.createElement("button");
+    favoriteButton.type = "button";
+    favoriteButton.className = "unlock-card-action nearby-favorite-action";
+    favoriteButton.textContent = isNearbyFavorite(recommendation.placeId) ? "Fjern favoritt" : "Legg til favoritt";
+    favoriteButton.addEventListener("click", () => toggleNearbyFavorite(recommendation.placeId));
+    card.append(favoriteButton);
+
     elements.nearbyRecommendationsList.append(card);
+  });
+}
+
+function renderNearbyFavorites() {
+  if (!elements.nearbyFavoritesList) {
+    return;
+  }
+
+  elements.nearbyFavoritesList.innerHTML = "";
+  const favorites = getNearbyFavoritePlaces();
+  if (!favorites.length) {
+    renderUnlockEmpty(elements.nearbyFavoritesList, "Ingen favoritter ennå. Legg til steder fra nærliggende muligheter.");
+    return;
+  }
+
+  favorites.forEach((favorite) => {
+    const card = document.createElement("article");
+    card.className = "nearby-recommendation-card nearby-favorite-card";
+
+    const head = document.createElement("div");
+    head.className = "nearby-recommendation-head";
+    const title = document.createElement("h4");
+    title.textContent = favorite.placeName;
+    const distance = document.createElement("span");
+    distance.className = "nearby-recommendation-distance";
+    distance.textContent = favorite.distanceKm === null ? "–" : `${favorite.distanceKm.toFixed(1)} km`;
+    head.append(title, distance);
+    card.append(head);
+
+    const status = document.createElement("p");
+    status.className = "nearby-recommendation-status";
+    status.dataset.unlocked = favorite.isUnlocked ? "true" : "false";
+    status.textContent = favorite.isUnlocked ? "Samlet" : "Ikke samlet";
+    card.append(status);
+
+    const counts = favorite.unlockSummary;
+    const summary = document.createElement("p");
+    summary.className = "nearby-recommendation-summary";
+    summary.textContent = `Spillere: ${counts.players} · Stab: ${counts.staff} · Ekspertise: ${counts.expertise}`;
+    card.append(summary);
+
+    const reasonText = favorite.recommendedUse[0] || favorite.shortReason;
+    if (reasonText) {
+      const reason = document.createElement("p");
+      reason.className = "nearby-recommendation-reason";
+      reason.textContent = reasonText;
+      card.append(reason);
+    }
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "unlock-card-action nearby-favorite-action";
+    removeButton.textContent = "Fjern";
+    removeButton.addEventListener("click", () => removeNearbyFavorite(favorite.placeId));
+    card.append(removeButton);
+
+    elements.nearbyFavoritesList.append(card);
   });
 }
 
@@ -10706,6 +10849,7 @@ function renderApp() {
   renderHistoryGoSyncStatus();
   renderCollectionSummary();
   renderNearbyRecommendations();
+  renderNearbyFavorites();
   renderLocalStartStatus();
   renderUnlockPlaces();
   renderUnlockedPlayers();

@@ -57,5 +57,9 @@
     "longitude": null,
     "source": null,
     "createdAt": null
+  },
+  "nearbyFavorites": {
+    "placeIds": [],
+    "updatedAt": null
   }
 }
