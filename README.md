@@ -39,9 +39,11 @@ Skaff spillbar tropp
   ↓
 Lag & taktikk
   ↓
+Innboks
+  ↓
 Trening
   ↓
-Innboks
+Kampplan / kampforberedelse
   ↓
 Kamp
   ↓
@@ -96,20 +98,28 @@ Når 15-spillerkravet er mulig å oppfylle, skal spilleren gå til **Lag & takti
 
 Dette er kjernen i spillet: treneren forstår spilleren gjennom posisjon, rolle, taktikk og relasjon.
 
-### 4. Trening velges før kamp
+### 4. Innboks gir signaler før trening
 
-Når laget er kampklart, skal spilleren velge:
+Når laget er kampklart, skal spilleren lese de relevante signalene fra klubben før treningen låses inn. Innboksen er ikke “mail som bare ligger der”; den er klubbens signalapparat.
+
+Innboksen skal forklare:
+
+- hva assistenttreneren ser taktisk
+- hva fysio/medisinsk apparat ser av slitasje og risiko
+- hva garderoben signaliserer
+- hva styret og presse presser på med
+- hva scouting/History Go peker mot
+
+I første uke bør innboksen gi ett tydelig signal før kamp, ikke mange likeverdige tråder.
+
+### 5. Trening velges etter signalene
+
+Når spilleren har sett klubbens signaler, skal han velge:
 
 - ett ukentlig treningsfokus
 - ett treningsprogram / ukeprogram
 
 Forslagene skal være trygge standardvalg, men ikke fasit. Et bevisst kontekstuelt valg kan være bedre enn standardforslaget.
-
-### 5. Innboks er signal, ikke hovedvei
-
-Innboksen er klubbens puls. Den skal forklare press, slitasje, garderobe, styre, medisinsk apparat, trenerteam og scouting. Den skal ikke være et eget parallelt spill som stopper spilleren uten forklaring.
-
-I første uke bør innboksen gi ett tydelig signal før kamp, ikke mange likeverdige tråder.
 
 ### 6. Kamp og rapport avslutter uka
 
@@ -200,8 +210,8 @@ Disse flatene er del av spillbar hovedvei:
 1. **Oversikt** – start, status, Neste handling.
 2. **History Go** – tilgang, samling, startmodus, lokal/offentlig start.
 3. **Lag & taktikk** – formasjon, startellever, roller, benk.
-4. **Trening** – treningsfokus og treningsprogram.
-5. **Innboks** – relevante signaler og valg.
+4. **Innboks** – relevante signaler og valg.
+5. **Trening** – treningsfokus og treningsprogram.
 6. **Kamp** – kampbrief, kamp, rapport.
 
 ### Sekundær/fremtidig flyt
@@ -250,14 +260,14 @@ Minimumssjekker:
 - primærhandling peker til startmodus / History Go
 - offentlig start eller lokal start kan gi inntil 15 spillere
 - etter 15 spillere kan flyten gå videre til Lag & taktikk
-- etter 11 + 4 kan flyten gå til Trening / Innboks / Kamp
+- etter 11 + 4 kan flyten gå til Innboks / Trening / Kamp
 
 ### 3. Rydd primærnavigasjonen
 
 For v0.1 bør synlig hovedløype være:
 
 ```txt
-Oversikt · Lag & taktikk · Trening · Innboks · Kamp · History Go
+Oversikt · Lag & taktikk · Innboks · Trening · Kamp · History Go
 ```
 
 Fasiliteter, Admin, Marked, Styret og Formasjoner bør enten:
