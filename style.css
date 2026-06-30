@@ -1549,6 +1549,55 @@ ul {
   border-color: var(--line-soft);
 }
 
+.inbox-signal-gate {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+  border-color: rgba(117, 214, 156, 0.35);
+}
+
+.inbox-signal-gate h3,
+.inbox-signal-gate p {
+  margin: 0;
+}
+
+.inbox-signal-stats {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin: 0;
+}
+
+.inbox-signal-stats div {
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.inbox-signal-stats dt {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.inbox-signal-stats dd {
+  margin: 4px 0 0;
+  color: var(--text);
+  font-weight: 900;
+}
+
+.inbox-signal-status {
+  color: var(--green, #75d69c);
+  font-weight: 900;
+}
+
+.inbox-training-cta {
+  justify-self: start;
+}
+
 .inbox-thread-layout {
   display: grid;
   gap: 18px;
