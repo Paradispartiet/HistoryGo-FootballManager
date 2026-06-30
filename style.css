@@ -5538,8 +5538,24 @@ ul {
   color: rgba(255, 255, 255, 0.92);
 }
 
-.context-signals {
+.off-pitch-signal-card {
+  grid-column: 1 / -1;
+}
+
+.off-pitch-signal-card .panel-heading-row {
+  align-items: flex-start;
+  margin-bottom: 0.85rem;
+}
+
+.off-pitch-signal-card .shortcut-button {
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+.context-signals,
+.off-pitch-signal-grid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   border: 1px solid var(--line, rgba(255, 255, 255, 0.42));
   border-radius: var(--radius, 12px);
@@ -5551,7 +5567,7 @@ ul {
   grid-template-columns: 7.5rem 1fr;
   gap: 12px;
   align-items: baseline;
-  padding: 0.5rem 0.85rem;
+  padding: 0.62rem 0.85rem;
   background: rgba(0, 0, 0, 0.18);
   border-left: 2px solid rgba(255, 255, 255, 0.32);
 }
@@ -5591,7 +5607,18 @@ ul {
   color: rgba(255, 255, 255, 0.62);
 }
 
+@media (max-width: 760px) {
+  .context-signals,
+  .off-pitch-signal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 540px) {
+  .off-pitch-signal-card .panel-heading-row {
+    display: grid;
+  }
+
   .context-signal {
     grid-template-columns: 1fr;
     gap: 2px;
