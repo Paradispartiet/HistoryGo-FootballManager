@@ -6,6 +6,13 @@ HistoryGo Football Manager er en selvstendig managerprototype koblet til History
 
 Dette er ikke et vanlig ratingspill. `overall` beskriver klasse, ikke automatisk kampverdi. En spiller med lavere `overall` kan prestere bedre enn en høyere rated spiller dersom han brukes i riktigere posisjon, rolle, taktikk og relasjonelt mønster.
 
+
+## Dashboard-regel
+
+Når aktiv modus er `league`, skal dashboardet bare vise ligaspill-relevante handlinger. Scenario, Ajax, femkamper og mini-season skal ikke vises som hovedflyt. Scenarioer er valgfrie og skal startes fra `Scenarioer`-fanen.
+
+Første skjerm skal ha én primær handling. Forklaring og dybde skal foldes eller vises sekundært.
+
 ## Status 30.06.2026
 
 Prosjektet har mange virkende motorer, men README og UI har blitt for mye feature-logg og for lite spillkart. Denne README-en er derfor gjort om til en **spillbar flow-kontrakt**: hva spilleren skal gjøre, hvilke systemer som eier hvilke deler av flyten, og hvor dead ends oppstår.

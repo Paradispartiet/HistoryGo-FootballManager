@@ -121,9 +121,17 @@ check("etter kamp + ulest rapport gir primær «Se kamprapporten»", primary(ctx
 check("sett rapport skjuler «Se kamprapporten»", !titles(ctx({ hasUnseenReport: false })).includes("Se kamprapporten"));
 check("rapport sett peker videre mot «Gå til neste uke» i review", primary(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" }, hasUnseenReport: false })) === "Gå til neste uke");
 
-// 12) Prøveperiode foreslås når laget er klart og ingen er aktiv.
-check("inaktiv prøveperiode + klart lag gir «Start prøveperiode»", titles(ctx({ miniSeasonActive: false })).includes("Start prøveperiode"));
-check("aktiv prøveperiode skjuler «Start prøveperiode»", !titles(ctx({ miniSeasonActive: true })).includes("Start prøveperiode"));
+// 12) Ligaspill lekker ikke scenario-/mini-season-CTA-er inn i Neste handling.
+{
+  const leagueTitles = titles(ctx({ miniSeasonActive: false, firstTime: null }));
+  check("league mode gir ikke Ajax-scenario", !leagueTitles.includes("Start Ajax 1971–73-scenario"));
+  check("league mode gir ikke mini-season CTA", !leagueTitles.includes("Start prøveperiode") && !leagueTitles.includes("Start femkampers prøveperiode"));
+  const scenarioTitles = titles(ctx({
+    miniSeasonActive: false,
+    firstTime: { active: true, started: false, completed: false }
+  }));
+  check("scenario mode kan fortsatt gi Ajax-scenario", scenarioTitles.includes("Start Ajax 1971–73-scenario"));
+}
 
 // 13) Fallback: review-fasen gir «Gå til neste uke», ellers «Gå til neste fase».
 check("review-fase gir «Gå til neste uke»", titles(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" } })).includes("Gå til neste uke"));
@@ -137,7 +145,7 @@ check(
 
 // 15) Ryddige beskrivelser: ingen dupliserte titler, gyldige handlingstyper.
 {
-  const all = computeNextActions(ctx({ hasUnseenReport: true, unreadThreads: 2, miniSeasonActive: false }));
+  const all = computeNextActions(ctx({ hasUnseenReport: true, unreadThreads: 2, miniSeasonActive: false, firstTime: null }));
   const seen = new Set();
   let dup = false;
   for (const a of all) {
