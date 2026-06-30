@@ -3847,6 +3847,22 @@ ul {
   grid-column: 1 / -1;
 }
 
+.priority-actions-block {
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line-soft, rgba(255, 255, 255, 0.18));
+}
+
+.priority-actions-block h3 {
+  margin: 0 0 0.55rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.priority-actions-block ul {
+  margin: 0;
+}
+
 .dashboard-shortcuts .shortcut-buttons {
   display: flex;
   flex-wrap: wrap;
