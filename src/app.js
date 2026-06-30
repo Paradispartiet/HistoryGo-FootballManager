@@ -182,7 +182,9 @@ const MATCHDAY_STATE_KEY = "hgfm.matchday.v1";
 // økonomi eller ny kampmotor. Selve logikken ligger i football-mini-season.js.
 const MINI_SEASON_KEY = MINI_SEASON_VERSION;
 const FIRST_TIME_PLAYTHROUGH_KEY = "hgfm.firstTimePlaythrough.v1";
+const GAME_START_STATE_KEY = "hgfm.gameStartState.v1";
 const FIRST_TIME_OPPONENT_ID = "ajax_1971_73_total_football";
+const AJAX_SCENARIO_ID = "ajax_1971_73_totalfootball";
 
 // Ekte History Go-progresjon i localStorage (skrives av History Go-appen, ikke
 // av Football Manager). Brukes som kilde til faktisk besøkte sportsteder.
@@ -319,7 +321,8 @@ const state = {
   // Mini Season v0.1: aktiv/fullført 5-kampers prøveperiode, eller null når
   // ingen prøveperiode er startet. Kun UI/progresjon i localStorage.
   miniSeason: null,
-  firstTimePlaythrough: { started: false, completed: false, currentStep: "start" }
+  gameStartState: { selectedMode: "league", activeLeagueSaveId: "default-league", activeScenarioId: null },
+  firstTimePlaythrough: { started: false, completed: true, currentStep: "league" }
 };
 
 const elements = {
@@ -358,6 +361,7 @@ const elements = {
   resetMatchdayButton: document.querySelector("#resetMatchdayButton"),
   matchdayResult: document.querySelector("#matchdayResult"),
   // Mini Season v0.1: prøveperiodepanelet nær Club Week-topbaren.
+  miniSeasonPanel: document.querySelector("#miniSeasonPanel"),
   miniSeasonStatus: document.querySelector("#miniSeasonStatus"),
   startMiniSeasonButton: document.querySelector("#startMiniSeasonButton"),
   resetMiniSeasonButton: document.querySelector("#resetMiniSeasonButton"),
@@ -366,6 +370,9 @@ const elements = {
   firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
+  startLeagueModeButton: document.querySelector("#startLeagueModeButton"),
+  chooseScenarioButton: document.querySelector("#chooseScenarioButton"),
+  startAjaxScenarioButton: document.querySelector("#startAjaxScenarioButton"),
   trainingChoiceGate: document.querySelector("#trainingChoiceGate"),
   trainingChoiceStatus: document.querySelector("#trainingChoiceStatus"),
   trainingChoiceSignal: document.querySelector("#trainingChoiceSignal"),
@@ -3791,12 +3798,39 @@ function resetMatchday() {
 // Les mini-sesong fra localStorage. Krasjer aldri: manglende nøkkel, ugyldig
 // JSON eller korrupt struktur gir null (= ingen prøveperiode startet).
 
+function normalizeGameStartState(value) {
+  const source = value && typeof value === "object" ? value : {};
+  const selectedMode = ["league", "scenario", "training"].includes(source.selectedMode) ? source.selectedMode : "league";
+  return {
+    selectedMode,
+    activeLeagueSaveId: typeof source.activeLeagueSaveId === "string" && source.activeLeagueSaveId ? source.activeLeagueSaveId : "default-league",
+    activeScenarioId: typeof source.activeScenarioId === "string" && source.activeScenarioId ? source.activeScenarioId : null
+  };
+}
+
+function loadGameStartState() {
+  try {
+    return normalizeGameStartState(JSON.parse(localStorage.getItem(GAME_START_STATE_KEY)));
+  } catch (error) {
+    return normalizeGameStartState(null);
+  }
+}
+
+function saveGameStartState() {
+  try {
+    localStorage.setItem(GAME_START_STATE_KEY, JSON.stringify(normalizeGameStartState(state.gameStartState)));
+  } catch (error) {
+    // UI-progresjon kan feile i privat modus uten å stoppe ligaspillet.
+  }
+}
+
 function normalizeFirstTimePlaythrough(value) {
   const source = value && typeof value === "object" ? value : {};
+  const scenarioSelected = state.gameStartState?.selectedMode === "scenario" && state.gameStartState?.activeScenarioId === AJAX_SCENARIO_ID;
   return {
-    started: Boolean(source.started),
-    completed: Boolean(source.completed),
-    currentStep: typeof source.currentStep === "string" && source.currentStep ? source.currentStep : "start"
+    started: scenarioSelected && Boolean(source.started),
+    completed: !scenarioSelected || Boolean(source.completed),
+    currentStep: typeof source.currentStep === "string" && source.currentStep ? source.currentStep : (scenarioSelected ? "start" : "league")
   };
 }
 
@@ -3817,7 +3851,7 @@ function saveFirstTimePlaythrough() {
 }
 
 function isFirstTimePlaythroughActive() {
-  return !state.firstTimePlaythrough?.completed;
+  return state.gameStartState?.selectedMode === "scenario" && state.gameStartState?.activeScenarioId === AJAX_SCENARIO_ID && !state.firstTimePlaythrough?.completed;
 }
 
 function getFirstTimeOpponentProfile() {
@@ -3854,7 +3888,7 @@ function renderFirstTimePlaythrough(teamFit) {
   const card = elements.firstTimePlaythroughCard;
   if (!card) return;
   const ft = buildFirstTimeNextActionState(teamFit);
-  card.hidden = !ft.active;
+  card.hidden = false;
   if (!ft.active) return;
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   const filled = assignments.filter((item) => item.player).length;
@@ -3940,7 +3974,7 @@ function startMiniSeason() {
   }
 
   state.miniSeason = miniSeason;
-  if (!state.firstTimePlaythrough?.completed) {
+  if (isFirstTimePlaythroughActive()) {
     state.firstTimePlaythrough = { ...normalizeFirstTimePlaythrough(state.firstTimePlaythrough), started: true, currentStep: "lineup" };
     saveFirstTimePlaythrough();
   }
@@ -6190,7 +6224,7 @@ function buildNextActionContext(teamFit) {
     unreadThreads: getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState()),
     hasUnseenReport: hasUnseenMatchReport(),
     miniSeasonActive: state.miniSeason?.status === "active",
-    firstTime: buildFirstTimeNextActionState(teamFit, readiness),
+    firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
     clubWeek: clubWeekState
       ? {
           week: clubWeekState.week,
@@ -8065,6 +8099,11 @@ function renderMiniSeason() {
   const startButton = elements.startMiniSeasonButton;
   const resetButton = elements.resetMiniSeasonButton;
   const miniSeason = state.miniSeason;
+  const scenarioMode = state.gameStartState?.selectedMode === "scenario";
+
+  if (elements.miniSeasonPanel) {
+    elements.miniSeasonPanel.hidden = !scenarioMode && !miniSeason;
+  }
 
   if (startButton) {
     startButton.hidden = miniSeason?.status === "active";
@@ -11140,6 +11179,32 @@ function bindEvents() {
   }
 
   // Mini Season v0.1: start ny prøveperiode / nullstill kun mini-sesong-state.
+  if (elements.startLeagueModeButton) {
+    elements.startLeagueModeButton.addEventListener("click", () => {
+      state.gameStartState = { selectedMode: "league", activeLeagueSaveId: "default-league", activeScenarioId: null };
+      state.firstTimePlaythrough = { started: false, completed: true, currentStep: "league" };
+      saveGameStartState();
+      saveFirstTimePlaythrough();
+      activateTab("tactics");
+      renderApp();
+    });
+  }
+
+  if (elements.chooseScenarioButton) {
+    elements.chooseScenarioButton.addEventListener("click", () => activateTab("scenarios"));
+  }
+
+  if (elements.startAjaxScenarioButton) {
+    elements.startAjaxScenarioButton.addEventListener("click", () => {
+      state.gameStartState = { selectedMode: "scenario", activeLeagueSaveId: "default-league", activeScenarioId: AJAX_SCENARIO_ID };
+      state.firstTimePlaythrough = { started: false, completed: false, currentStep: "start" };
+      saveGameStartState();
+      saveFirstTimePlaythrough();
+      startMiniSeason();
+      renderApp();
+    });
+  }
+
   if (elements.startMiniSeasonButton) {
     elements.startMiniSeasonButton.addEventListener("click", () => {
       startMiniSeason();
@@ -11444,6 +11509,7 @@ async function init() {
     // Mini Season v0.1: hent eventuell prøveperiode fra localStorage. Korrupt
     // eller manglende state gir null (= ingen prøveperiode startet).
     state.miniSeason = loadMiniSeason();
+    state.gameStartState = loadGameStartState();
     state.firstTimePlaythrough = loadFirstTimePlaythrough();
 
     const dataWarnings = validateFootballData(state);

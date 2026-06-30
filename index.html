@@ -54,6 +54,12 @@
         </svg>
         <span class="nav-label">History Go</span>
       </button>
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="scenarios">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 6.5h16M4 12h16M4 17.5h10"/><path d="m16 15.5 2 2 3-4"/>
+        </svg>
+        <span class="nav-label">Scenarioer</span>
+      </button>
       <div class="nav-group-label nav-group-label-secondary" role="presentation">Kontor / senere</div>
       <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="facilities">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -118,22 +124,24 @@
         <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
       </section>
 
-      <section class="panel first-time-playthrough-card" id="firstTimePlaythroughCard" aria-label="Første spilløkt" aria-live="polite" hidden>
+      <section class="panel first-time-playthrough-card" id="firstTimePlaythroughCard" aria-label="Velg spillmodus" aria-live="polite">
         <div>
-          <p class="eyebrow">Hvorfor denne handlingen?</p>
-          <h2>Første spilløkt: rammen rundt neste steg</h2>
-          <p class="muted-text">Styret gir deg fem kamper. Første test er et lag inspirert av Ajax 1971–73: høy linje, press og totalfotball. Målet er å forstå formasjon, roller og trening — ikke bare å vinne.</p>
+          <p class="eyebrow">Velg spillmodus</p>
+          <h2>HG Football Manager starter som ligaspill</h2>
+          <p class="muted-text">Ta over en klubb, bygg laget gjennom sesongen, tren spillerne, velg taktikk og spill kamper i ligaen. Historiske og taktiske læringsopplegg er valgfrie scenarioer.</p>
         </div>
         <div class="first-time-brief-grid">
-          <article><span>Oppdrag</span><strong>Fem kamper</strong><small>Styret vurderer retningen.</small></article>
-          <article><span>Første test</span><strong id="firstTimeOpponent">Ajax 1971–73 — Totalfotball</strong><small>Høyt press, høy linje, rotasjoner.</small></article>
-          <article><span>Kampklar</span><strong id="firstTimeReadiness">Startellever 0/11</strong><small>Formasjon, roller, trening, innboks.</small></article>
+          <article><span>Hovedmodus</span><strong>Ligaspill</strong><small>Klubb · tropp · trening · terminliste · tabell · innboks · kampdag.</small></article>
+          <article><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer.</small></article>
+          <article><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten ligakonsekvens.</small></article>
         </div>
-        <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start enkelt: gjør laget kampklart.</span></p>
-        <details class="panel-details is-flush first-time-more">
-          <summary>Vis mer om første uke</summary>
-          <p>Velg/forstå formasjon, sett startellever og nøkkelroller, velg treningsuke, les ett innbokssignal, spill kamp og les rapporten før uke 2.</p>
-        </details>
+        <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start ligaspill for å gå til managerkontoret, eller velg et scenario når du vil ha en kort utfordring.</span></p>
+        <span id="firstTimeOpponent" hidden></span>
+        <span id="firstTimeReadiness" hidden></span>
+        <div class="mini-season-actions">
+          <button type="button" id="startLeagueModeButton" class="primary-button">Start ligaspill</button>
+          <button type="button" id="chooseScenarioButton">Velg scenario</button>
+        </div>
       </section>
 
       <!-- Toppstripe: klubbstatus -->
@@ -216,7 +224,7 @@
 
         <!-- Mini Season v1 / League Loop v1: 5-kampers prøveperiode (kamprekke,
              poeng, form, light-league-tabell, styrevurdering) oppå Club Week og Kampdag. -->
-        <section class="panel mini-season-panel dashboard-deep-panel" aria-label="Prøveperiode" aria-live="polite">
+        <section class="panel mini-season-panel dashboard-deep-panel" id="miniSeasonPanel" aria-label="Scenario-prøveperiode" aria-live="polite" hidden>
           <div class="mini-season-head">
             <div>
               <p class="eyebrow">Prøveperiode</p>
@@ -613,6 +621,36 @@
           <div id="inboxThreadArchive" class="message-list"></div>
         </section>
       </div>
+    </div>
+
+
+    <div class="tab-section" data-tab-section="scenarios" hidden>
+      <section class="panel first-time-playthrough-card" aria-label="Scenarioer">
+        <div>
+          <p class="eyebrow">Scenarioer</p>
+          <h2>Korte historiske og taktiske utfordringer</h2>
+          <p class="muted-text">Scenarioer er valgfrie. De erstatter ikke ligaspillet, men lar deg teste kjente lag, epoker og spillestiler i korte rammer.</p>
+        </div>
+        <div class="first-time-brief-grid">
+          <article>
+            <span>Ajax 1971–73</span>
+            <strong>Totalfotball under press</strong>
+            <small>5 kamper · høy linje · høyt press · rom bak presset</small>
+          </article>
+          <article>
+            <span>Modus</span>
+            <strong>Scenario</strong>
+            <small>Et valgfritt styreoppdrag, ikke obligatorisk start.</small>
+          </article>
+          <article>
+            <span>Læringsmål</span>
+            <strong>Fare og mulighet</strong>
+            <small>Forstå rotasjoner, oppbygging og trening mot press.</small>
+          </article>
+        </div>
+        <p class="muted-text">Møt et lag inspirert av Ajax 1971–73. Høy linje, høyt press, rotasjoner og rom bak presset.</p>
+        <button type="button" id="startAjaxScenarioButton" class="primary-button">Start Ajax 1971–73-scenario</button>
+      </section>
     </div>
 
     <!-- ============================ FASILITETER ============================ -->

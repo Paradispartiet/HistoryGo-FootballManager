@@ -327,7 +327,7 @@ export function computeNextActions(context = {}) {
       id: "play-match",
       tag: "Kampdag",
       title: "Spill kamp",
-      hint: "Laget er kampklart. Sett kampplan og test det historiske systemet i kamp.",
+      hint: "Laget er kampklart. Sett kampplan og spill neste ligakamp.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
     });
   }

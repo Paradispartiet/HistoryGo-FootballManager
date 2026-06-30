@@ -292,6 +292,23 @@ Ikke vis flere likeverdige «neste»-systemer samtidig.
 Kampforklaring, formation knowledge, staff identity, role familiarity og off-pitch er verdifulle. Men førsteuka skal bare vise det som hjelper spilleren til neste beslutning. Resten må ligge i `<details>` eller «Vis mer».
 
 
+
+## Spillmoduser
+
+### Ligaspill
+
+Hovedmodusen i HG Football Manager. Spilleren tar over en klubb og spiller en tradisjonell sesong med tropp, trening, terminliste, tabell, innboks og kampdag. Ligaspill er primærflyten fra start: velg eller bruk en startklubb, gå til managerkontoret, sett startellever, velg trening, spill neste ligakamp og les rapport/inbox før neste uke.
+
+### Scenarioer
+
+Valgfrie korte utfordringer basert på historiske lag, taktiske ideer eller bestemte læringsmål. Eksempel: Ajax 1971–73 / totalfotball som femkamper-scenario med høy linje, høyt press, rotasjoner og rom bak presset. Scenarioer skal velges eksplisitt fra Scenarioer-inngangen og skal ikke være obligatorisk første handling.
+
+### Treningsrom
+
+Lavrisiko-modus for å forstå formasjoner, roller og taktiske prinsipper uten at det påvirker ligasesongen. Treningsrommet kan bruke samme læringslogikk som scenarioer, men skal presenteres som øving, ikke som hovedstart.
+
+Standard start skal alltid være ligaspill eller valg av spillmodus. Et scenario skal aldri være hardkodet som første obligatoriske handling.
+
 ## First Playthrough QA status (v1)
 
 QA-gjennomgangen av første spilløkt er verifisert gjennom seed- og sim-testene. Hovedveien er nå:
