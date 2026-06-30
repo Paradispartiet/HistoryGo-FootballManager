@@ -366,6 +366,13 @@ const elements = {
   firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
+  trainingChoiceGate: document.querySelector("#trainingChoiceGate"),
+  trainingChoiceStatus: document.querySelector("#trainingChoiceStatus"),
+  trainingChoiceSignal: document.querySelector("#trainingChoiceSignal"),
+  trainingChoiceRecommended: document.querySelector("#trainingChoiceRecommended"),
+  trainingChoiceRisk: document.querySelector("#trainingChoiceRisk"),
+  trainingChoiceSelectedSummary: document.querySelector("#trainingChoiceSelectedSummary"),
+  trainingGoMatch: document.querySelector("#trainingGoMatch"),
   weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
   weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
@@ -7463,6 +7470,53 @@ function renderMiniSeasonVerdict(parent, finalVerdict) {
   parent.append(box);
 }
 
+
+function trainingChoiceRiskFromProgram(program) {
+  if (!program) return "Middels";
+  const sessions = Array.isArray(program.sessions) ? program.sessions : [];
+  const high = sessions.filter((session) => session.intensity === "high").length;
+  const risks = Array.isArray(program.risks) ? program.risks.length : 0;
+  if (high >= 2 || risks >= 3) return "Høy";
+  if (high === 0 && risks <= 1) return "Lav";
+  return "Middels";
+}
+
+function getSelectedTrainingLabel(programs = []) {
+  const selectedProgram = programs.find((program) => program.id === state.weeklyTrainingProgram?.programId) || null;
+  if (selectedProgram) return selectedProgram.title;
+  const focus = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
+  return focus?.name || null;
+}
+
+function renderTrainingChoiceGate({ recommendation, programs, selectedProgram }) {
+  if (!elements.trainingChoiceGate) return;
+  const selectedLabel = getSelectedTrainingLabel(programs);
+  const recommendedProgram = programs[0] || null;
+  const recommendedFocus = recommendation?.focusIds?.[0] ? getTrainingFocus(recommendation.focusIds[0]) : null;
+  const recommendedLabel = recommendedProgram?.title || recommendedFocus?.name || "Trygt basisfokus";
+  const signal = selectedProgram?.recommendedBecause?.[0]
+    || recommendedProgram?.recommendedBecause?.[0]
+    || recommendation?.reason
+    || summarizeOffPitchContext(getOffPitchState()).headline;
+  const risk = selectedProgram ? trainingChoiceRiskFromProgram(selectedProgram) : trainingChoiceRiskFromProgram(recommendedProgram);
+
+  if (elements.trainingChoiceStatus) {
+    elements.trainingChoiceStatus.textContent = selectedLabel ? "Treningsuke valgt" : "Ikke valgt";
+    elements.trainingChoiceStatus.dataset.selected = selectedLabel ? "true" : "false";
+  }
+  if (elements.trainingChoiceSignal) elements.trainingChoiceSignal.textContent = signal;
+  if (elements.trainingChoiceRecommended) elements.trainingChoiceRecommended.textContent = recommendedLabel;
+  if (elements.trainingChoiceRisk) elements.trainingChoiceRisk.textContent = risk;
+  if (elements.trainingChoiceSelectedSummary) {
+    elements.trainingChoiceSelectedSummary.textContent = selectedLabel
+      ? `Treningsuke valgt: ${selectedLabel}. Kort effekt/risiko: ${risk.toLowerCase()} risiko. Neste naturlige steg er Kamp.`
+      : "Velg anbefalt nå for en trygg uke, eller overstyr hvis innboks, slitasje, moral eller kampplan peker på noe annet.";
+  }
+  if (elements.trainingGoMatch) {
+    elements.trainingGoMatch.hidden = !selectedLabel;
+  }
+}
+
 function renderWeeklyTrainingFocus(teamFit) {
   const status = elements.weeklyTrainingStatus;
   const recommendationEl = elements.weeklyTrainingRecommendation;
@@ -7490,7 +7544,11 @@ function renderWeeklyTrainingFocus(teamFit) {
   recommendationEl.textContent = recommendation.reason;
 
   options.textContent = "";
-  TRAINING_FOCUSES.forEach((focus) => {
+  const orderedFocuses = [
+    ...TRAINING_FOCUSES.filter((focus) => recommendation.focusIds.includes(focus.id)),
+    ...TRAINING_FOCUSES.filter((focus) => !recommendation.focusIds.includes(focus.id))
+  ];
+  orderedFocuses.forEach((focus, index) => {
     const support = calculateTrainingStaffSupport({ focusId: focus.id, coachContext: getCoachContext() });
     const isSelected = selected?.id === focus.id;
     const isRecommended = recommendation.focusIds.includes(focus.id);
@@ -7500,6 +7558,9 @@ function renderWeeklyTrainingFocus(teamFit) {
     if (isSelected) card.classList.add("is-selected");
     if (isRecommended) card.classList.add("is-recommended");
 
+    const groupLabel = document.createElement("p");
+    groupLabel.className = "training-choice-card-label";
+    groupLabel.textContent = isRecommended && index === 0 ? "Anbefalt nå" : "Andre trygge valg";
     const heading = document.createElement("h3");
     heading.textContent = focus.name;
     const description = document.createElement("p");
@@ -7515,9 +7576,10 @@ function renderWeeklyTrainingFocus(teamFit) {
     button.textContent = isSelected ? "Valgt" : "Velg fokus";
     button.disabled = used || Boolean(state.matchday?.session) || isSelected;
     button.addEventListener("click", () => selectWeeklyTrainingFocus(focus.id));
-    card.append(heading, description, effect, meta, button);
+    card.append(groupLabel, heading, description, effect, meta, button);
     options.append(card);
   });
+  return recommendation;
 }
 
 // Suggested Setups v1: 2–4 forklarende oppsettforslag (formasjon, kampplan,
@@ -7889,6 +7951,7 @@ function renderTrainingProgramCompositions(teamFit) {
 
   if (!Array.isArray(programs) || programs.length === 0) {
     updateWeeklyTrainingProgramStatus(null);
+    renderTrainingChoiceGate({ recommendation: null, programs: [], selectedProgram: null });
     const empty = document.createElement("p");
     empty.className = "muted-text";
     empty.textContent = "Ingen treningsprogram akkurat nå – fyll laget for et bedre datagrunnlag.";
@@ -7921,16 +7984,21 @@ function renderTrainingProgramCompositions(teamFit) {
   }
 
   updateWeeklyTrainingProgramStatus(selectedProgram);
+  renderTrainingChoiceGate({ recommendation: null, programs: visiblePrograms, selectedProgram });
 
-  visiblePrograms.forEach((program) =>
+  visiblePrograms.forEach((program, index) => {
+    const sectionLabel = document.createElement("p");
+    sectionLabel.className = "training-program-section-label";
+    sectionLabel.textContent = index === 0 ? "Anbefalt nå" : index === 1 ? "Andre trygge valg" : "Dypere treningsprogram / historikk";
+    container.append(sectionLabel);
     container.append(
       buildTrainingProgramCard(program, {
         isSelected: program.id === selectedProgramId,
         locked,
         opponentName: opponent?.name || null
       })
-    )
-  );
+    );
+  });
 }
 
 // Kort oppsummering av ukens valgte treningsprogram på hovedflaten/treningsfanen.

@@ -5992,3 +5992,99 @@ ul {
     display: grid;
   }
 }
+
+/* Training Choice Polish v1 — tydelig valgport mellom Innboks og Kamp. */
+.training-choice-gate {
+  border: 1px solid var(--green, #75d69c);
+}
+
+.training-choice-gate-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.training-choice-gate-head h2 {
+  margin: 0.2rem 0 0;
+}
+
+.training-choice-status {
+  flex: none;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.72));
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffb59a;
+}
+
+.training-choice-status[data-selected="true"] {
+  border-color: var(--green, #75d69c);
+  color: var(--green, #75d69c);
+}
+
+.training-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.training-choice-grid article {
+  border: 1px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  border-radius: var(--radius, 12px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem;
+}
+
+.training-choice-grid span,
+.training-choice-card-label,
+.training-program-section-label {
+  display: block;
+  margin: 0 0 0.35rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.training-choice-grid strong {
+  display: block;
+  line-height: 1.35;
+}
+
+.training-choice-selected-summary {
+  margin: 1rem 0 0;
+  color: var(--text, #fff);
+  font-weight: 700;
+}
+
+.training-go-match {
+  margin-top: 0.9rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--green, #75d69c);
+  background: transparent;
+  color: var(--green, #75d69c);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.training-program-section-label {
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 720px) {
+  .training-choice-gate-head {
+    display: block;
+  }
+
+  .training-choice-status {
+    display: inline-block;
+    margin-top: 0.8rem;
+  }
+}
