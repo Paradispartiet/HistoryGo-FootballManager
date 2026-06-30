@@ -45,7 +45,8 @@ function normalizeContext(context = {}) {
     opponentName: asString(context.opponentName, "") || null,
     roster: {
       enoughUnlocked: roster.enoughUnlocked !== false,
-      enoughBench: roster.enoughBench !== false
+      enoughBench: roster.enoughBench !== false,
+      unlockedCount: Math.max(0, toInt(roster.unlockedCount))
     },
     lineup: {
       totalSlots: toInt(lineup.totalSlots) || 11,
@@ -115,10 +116,35 @@ export function computeNextActions(context = {}) {
   const { lineup, roster, clubWeekGate, clubWeek } = ctx;
   const firstTime = ctx.firstTime;
 
+  // Playable First Run Gate v1: ingen ny spiller skal kunne sendes til
+  // prøveperiode, kamp eller avansert managerflyt før spillerpoolen faktisk er
+  // spillbar. Under 15 opplåste spillere er eneste primærvei History Go/startmodus.
+  if (!ctx.hasSession && !roster.enoughUnlocked) {
+    push({
+      id: "first-run-collect-playable-squad",
+      tag: "History Go",
+      title: "Skaff spillbar tropp",
+      hint: "Du trenger 15 spillere: 11 startere + 4 benk. Bruk History Go/startmodus for å låse opp en spillbar tropp.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "historygo" }
+    });
+  }
+
+  // Når spillerpoolen er stor nok, men startellever/benk ikke er klar, skal
+  // spilleren til Lag & taktikk — ikke kamp, prøveperiode eller fallback-lister.
+  if (!ctx.hasSession && roster.enoughUnlocked && (lineup.emptyCount > 0 || !roster.enoughBench)) {
+    push({
+      id: "first-run-setup-team",
+      tag: "Lag & taktikk",
+      title: "Sett opp laget",
+      hint: "Du har nok spillere. Sett 11 startere og sørg for minst 4 spillere på benken før kampflyten åpnes.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "tactics" }
+    });
+  }
+
   // First-Time Playthrough v1: når første spilløkt er aktiv, prioriter den
   // spillbare første uka før den generelle Next Action-stigen. Dette er ikke en
   // separat tutorialmotor; den leser samme readiness-/trening-/inbox-/rapport-state.
-  if (!ctx.hasSession && firstTime?.active && !firstTime.completed) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && firstTime?.active && !firstTime.completed) {
     if (!firstTime.started) {
       push({
         id: "first-time-start",
@@ -143,14 +169,6 @@ export function computeNextActions(context = {}) {
         hint: "Sett spillerne i roller de kan løse før totalfotball-presset tester laget.",
         action: { type: NEXT_ACTION_TYPES.TAB, tab: "tactics" }
       });
-    } else if (!ctx.hasTrainingChoice) {
-      push({
-        id: "first-time-training",
-        tag: "Trening",
-        title: "Velg trening for Ajax-kampen",
-        hint: "Motstanderen presser høyt. Prioriter oppbygging, formasjonstilvenning eller restitusjon.",
-        action: { type: NEXT_ACTION_TYPES.TAB, tab: "trening" }
-      });
     } else if (!firstTime.hasReadInbox && ctx.unreadThreads > 0) {
       push({
         id: "first-time-inbox",
@@ -158,6 +176,14 @@ export function computeNextActions(context = {}) {
         title: "Les assistentens kampnotat",
         hint: "Les ett viktig signal før du spiller første kamp.",
         action: { type: NEXT_ACTION_TYPES.TAB, tab: "inbox" }
+      });
+    } else if (!ctx.hasTrainingChoice) {
+      push({
+        id: "first-time-training",
+        tag: "Trening",
+        title: "Velg trening for Ajax-kampen",
+        hint: "Motstanderen presser høyt. Prioriter oppbygging, formasjonstilvenning eller restitusjon.",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "trening" }
       });
     } else if (!firstTime.hasPlayedFirstMatch && ctx.matchdayReady && !clubWeekGate.isBlocked) {
       push({
@@ -198,18 +224,9 @@ export function computeNextActions(context = {}) {
   }
 
   // 2) Troppen mangler spillere (15-kravet) — blokkerer kampdelen.
-  if (!ctx.hasSession && (!roster.enoughUnlocked || !roster.enoughBench)) {
-    push({
-      id: "collect-players",
-      tag: "Samling",
-      title: "Samle flere spillere",
-      hint: "Troppen mangler spillere for 15-kravet. Synk History Go-steder og bruk opplåste spillere.",
-      action: { type: NEXT_ACTION_TYPES.TAB, tab: "historygo" }
-    });
-  }
 
   // 3) Tomme plasser i startelleveren.
-  if (!ctx.hasSession && lineup.emptyCount > 0) {
+  if (!ctx.hasSession && roster.enoughUnlocked && lineup.emptyCount > 0) {
     push({
       id: "fill-lineup",
       tag: "Lag",
@@ -242,7 +259,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 6) Club Week-porten krever en spilt kamp før uka kan rulle videre.
-  if (!ctx.hasSession && clubWeekGate.isBlocked) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && clubWeekGate.isBlocked) {
     push({
       id: "play-week-match",
       tag: "Kampdag",
@@ -254,7 +271,7 @@ export function computeNextActions(context = {}) {
 
   // 7) I innboksfasen er klubbens puls den naturlige primærhandlingen før
   // trenings-/kampvalg. Den samme tråden dyttes ikke inn to ganger senere.
-  if (!ctx.hasSession && clubWeek?.phase === "inbox" && ctx.unreadThreads > 0) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && clubWeek?.phase === "inbox" && ctx.unreadThreads > 0) {
     push({
       id: "read-inbox",
       tag: "Innboks",
@@ -268,7 +285,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 8) I review-fasen skal fersk kamprapport leses før ny kamp/ny uke.
-  if (!ctx.hasSession && clubWeek?.phase === "review" && ctx.hasUnseenReport) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && clubWeek?.phase === "review" && ctx.hasUnseenReport) {
     push({
       id: "read-report",
       tag: "Rapport",
@@ -279,7 +296,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 9) Uka mangler et treningsvalg.
-  if (!ctx.hasSession && !ctx.hasTrainingChoice) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && !ctx.hasTrainingChoice) {
     push({
       id: "choose-training",
       tag: "Trening",
@@ -290,7 +307,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 10) Laget er kampklart — sett kampplan og spill.
-  if (!ctx.hasSession && ctx.matchdayReady && !clubWeekGate.isBlocked) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.matchdayReady && !clubWeekGate.isBlocked) {
     push({
       id: "play-match",
       tag: "Kampdag",
@@ -301,7 +318,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 11) Uleste innbokstråder — klubbens puls venter på svar.
-  if (ctx.unreadThreads > 0) {
+  if (roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.unreadThreads > 0) {
     push({
       id: "read-inbox",
       tag: "Innboks",
@@ -315,7 +332,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 12) Fersk, ulest kamprapport — se hva kampen lærte før neste uke planlegges.
-  if (!ctx.hasSession && ctx.hasUnseenReport) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasUnseenReport) {
     push({
       id: "read-report",
       tag: "Rapport",
@@ -326,7 +343,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 13) Prøveperiode ikke aktiv, men laget er klart for de 5 kampene.
-  if (!ctx.hasSession && ctx.matchdayReady && !ctx.miniSeasonActive) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.matchdayReady && !ctx.miniSeasonActive) {
     push({
       id: "start-mini-season",
       tag: "Prøveperiode",
@@ -337,7 +354,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 14) Fallback: driv klubbuken videre.
-  if (clubWeek && !clubWeekGate.isBlocked) {
+  if (clubWeek && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && !clubWeekGate.isBlocked) {
     const isReview = clubWeek.phase === "review";
     push({
       id: "advance-club-week",

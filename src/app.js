@@ -3824,6 +3824,16 @@ function startMiniSeason() {
     return;
   }
 
+  const rosterReadiness = getAvailability().rosterReadiness;
+  if (!rosterReadiness.hasEnoughUnlocked) {
+    activateTab("historygo");
+    return;
+  }
+  if (!rosterReadiness.isReady) {
+    activateTab("tactics");
+    return;
+  }
+
   const miniSeason = createMiniSeasonStart(getMiniSeasonContext());
   if (!miniSeason) {
     return;
@@ -6055,7 +6065,8 @@ function buildNextActionContext(teamFit) {
     opponentName: state.matchday?.session?.opponent?.name || null,
     roster: {
       enoughUnlocked: Boolean(rosterReadiness.hasEnoughUnlocked),
-      enoughBench: Boolean(rosterReadiness.hasEnoughBench)
+      enoughBench: Boolean(rosterReadiness.hasEnoughBench),
+      unlockedCount: rosterReadiness.unlockedCount
     },
     lineup: {
       totalSlots: teamFit?.totalSlots || 11,
