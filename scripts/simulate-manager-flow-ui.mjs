@@ -47,12 +47,12 @@ const primary = (context) => titles(context)[0] || null;
 }
 
 // 2) Tom tropp (15-kravet) blokkerer — samling er primær.
-check("ufullstendig tropp gir primær «Samle flere spillere»", primary(ctx({ roster: { enoughUnlocked: false, enoughBench: true } })) === "Samle flere spillere");
+check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ roster: { enoughUnlocked: false, enoughBench: false, unlockedCount: 0 } })) === "Skaff spillbar tropp");
 
 // 3) Tomme plasser i startelleveren — fyll laget, med slot-handling.
 {
   const c = ctx({ lineup: { totalSlots: 11, emptyCount: 3, firstEmptySlotId: "CM2", misused: null, duplicate: null }, matchdayReady: false });
-  check("tomme plasser gir primær «Fullfør startelleveren»", primary(c) === "Fullfør startelleveren");
+  check("tomme plasser gir primær «Sett opp laget»", primary(c) === "Sett opp laget");
   const fill = computeNextActions(c).find((a) => a.title === "Fullfør startelleveren");
   check("fyll-handling peker på en slot", fill?.action?.type === NEXT_ACTION_TYPES.SLOT && fill.action.slotId === "CM2");
 }
