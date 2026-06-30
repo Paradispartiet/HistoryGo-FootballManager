@@ -5754,3 +5754,113 @@ ul {
     align-items: flex-start;
   }
 }
+
+/* Dashboard Declutter Pass v1 — Oversikt skal leses som én spillskjerm:
+   1) neste handling, 2) forklaring, 3) kritisk status, 4) klubbuke,
+   5) dypere analyser. Ingen nye motorer; kun prioritet og visuell vekt. */
+.dashboard-view {
+  gap: 14px;
+}
+
+.dashboard-view .next-action-strip {
+  position: relative;
+  border-width: 3px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.2), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), var(--panel-strong));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58);
+  padding: clamp(24px, 4vw, 38px);
+  margin-bottom: 0;
+}
+
+.dashboard-view .next-action-head h2 {
+  margin: 0.15rem 0 0;
+  font-size: clamp(1.75rem, 4.5vw, 3rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.dashboard-view .next-action-primary {
+  min-height: 148px;
+  padding: clamp(22px, 3.5vw, 34px);
+  border-width: 2px;
+  box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-view .next-action-title {
+  font-size: clamp(2rem, 6vw, 3.8rem);
+  letter-spacing: -0.045em;
+}
+
+.dashboard-view .next-action-hint {
+  max-width: 68ch;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 700;
+}
+
+.dashboard-view .next-action-secondary {
+  padding-top: 2px;
+}
+
+.dashboard-view .next-action-chip {
+  padding: 6px 11px;
+  font-size: 0.78rem;
+  opacity: 0.82;
+}
+
+.dashboard-view .first-time-playthrough-card,
+.dashboard-view .club-topbar,
+.dashboard-view .dashboard-support-panel,
+.dashboard-view .dashboard-deep-panel {
+  box-shadow: none;
+}
+
+.dashboard-view .first-time-playthrough-card {
+  margin-top: 0;
+  border-style: dashed;
+  background: rgba(15, 19, 27, 0.48);
+}
+
+.dashboard-view .first-time-playthrough-card h2,
+.dashboard-view .dashboard-support-panel h2,
+.dashboard-view .dashboard-deep-panel h2 {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+
+.dashboard-view .first-time-brief-grid article {
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.dashboard-view .club-topbar {
+  border-color: var(--line-soft);
+  background: rgba(15, 19, 27, 0.54);
+}
+
+.dashboard-view .dashboard-grid .panel.dashboard-support-panel {
+  background: rgba(15, 19, 27, 0.48);
+}
+
+.dashboard-view .dashboard-grid .panel.dashboard-deep-panel {
+  background: rgba(15, 19, 27, 0.34);
+  opacity: 0.92;
+}
+
+.dashboard-view .dashboard-deep-panel > .panel-details,
+.dashboard-view .dashboard-support-panel > .panel-details {
+  margin-top: 0;
+}
+
+.dashboard-view .mini-season-actions button,
+.dashboard-view .dashboard-shortcuts .shortcut-button,
+.dashboard-view .suggested-setup-apply {
+  background: transparent;
+  border-color: var(--line-soft);
+  color: var(--muted);
+}
+
+.dashboard-view .mini-season-actions button:hover,
+.dashboard-view .dashboard-shortcuts .shortcut-button:hover,
+.dashboard-view .suggested-setup-apply:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
