@@ -258,8 +258,9 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 6) Club Week-porten krever en spilt kamp før uka kan rulle videre.
-  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && clubWeekGate.isBlocked) {
+  // 6) Club Week-porten krever en spilt kamp før uka kan rulle videre, men
+  // kampflaten skal ikke bli primær før treningsuka faktisk er valgt.
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasTrainingChoice && clubWeekGate.isBlocked) {
     push({
       id: "play-week-match",
       tag: "Kampdag",
@@ -321,24 +322,24 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 11) Laget er kampklart — sett kampplan og spill.
-  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.matchdayReady && !clubWeekGate.isBlocked) {
-    push({
-      id: "play-match",
-      tag: "Kampdag",
-      title: "Spill kamp",
-      hint: "Laget er kampklart. Sett kampplan og test det historiske systemet i kamp.",
-      action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
-    });
-  }
-
-  // 12) Fersk, ulest kamprapport — se hva kampen lærte før neste uke planlegges.
+  // 11) Fersk, ulest kamprapport — se hva kampen lærte før neste uke planlegges.
   if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasUnseenReport) {
     push({
       id: "read-report",
       tag: "Rapport",
       title: "Se kamprapporten",
       hint: "Les hvorfor kampen ble som den ble før du planlegger neste uke.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
+    });
+  }
+
+  // 12) Laget er kampklart og treningsuka er valgt — sett kampplan og spill.
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasTrainingChoice && ctx.matchdayReady && !clubWeekGate.isBlocked && !ctx.hasUnseenReport && clubWeek?.phase !== "review") {
+    push({
+      id: "play-match",
+      tag: "Kampdag",
+      title: "Spill kamp",
+      hint: "Laget er kampklart. Sett kampplan og test det historiske systemet i kamp.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
     });
   }
