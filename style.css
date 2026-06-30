@@ -6088,3 +6088,48 @@ ul {
     margin-top: 0.8rem;
   }
 }
+
+.mode-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-color: var(--line-soft);
+  background: rgba(15, 19, 27, 0.52);
+}
+
+.mode-status-card[hidden] {
+  display: none;
+}
+
+.mode-status-card h2 {
+  margin: 0.15rem 0 0.25rem;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+
+.mode-status-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-end;
+}
+
+.mode-status-meta span {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  padding: 0.28rem 0.55rem;
+  color: var(--muted-text, rgba(255, 255, 255, 0.72));
+  background: rgba(0, 0, 0, 0.18);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 760px) {
+  .mode-status-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mode-status-meta {
+    justify-content: flex-start;
+  }
+}

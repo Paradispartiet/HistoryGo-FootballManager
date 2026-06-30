@@ -365,7 +365,20 @@ const elements = {
   startMiniSeasonButton: document.querySelector("#startMiniSeasonButton"),
   resetMiniSeasonButton: document.querySelector("#resetMiniSeasonButton"),
   miniSeasonOverview: document.querySelector("#miniSeasonOverview"),
+  // Legacy id: firstTimePlaythroughCard is now used as the game mode card.
+  // Do not treat it as mandatory onboarding.
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
+  gameModeStatusCard: document.querySelector("#gameModeStatusCard"),
+  gameModeStatusTitle: document.querySelector("#gameModeStatusTitle"),
+  gameModeStatusText: document.querySelector("#gameModeStatusText"),
+  changeGameModeButton: document.querySelector("#changeGameModeButton"),
+  leagueStatusWeek: document.querySelector("#leagueStatusWeek"),
+  leagueStatusNextMatch: document.querySelector("#leagueStatusNextMatch"),
+  leagueStatusSquad: document.querySelector("#leagueStatusSquad"),
+  leagueStatusLineup: document.querySelector("#leagueStatusLineup"),
+  leagueStatusBench: document.querySelector("#leagueStatusBench"),
+  leagueStatusTraining: document.querySelector("#leagueStatusTraining"),
+  leagueStatusInbox: document.querySelector("#leagueStatusInbox"),
   firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
@@ -3836,6 +3849,29 @@ function selectGameMode(mode, extras = {}) {
   saveGameStartState();
 }
 
+function isScenarioModeActive() {
+  return state.gameStartState?.selectedMode === "scenario";
+}
+
+function activateRecommendedLeagueTab(teamFit = null) {
+  const rosterReadiness = getAvailability().rosterReadiness;
+  if (!rosterReadiness.hasEnoughUnlocked) {
+    activateTab("historygo");
+    return;
+  }
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const filled = assignments.filter((item) => item.player).length;
+  if (!teamFit || filled < 11 || !rosterReadiness.hasEnoughBench) {
+    activateTab("tactics");
+    return;
+  }
+  if (!state.weeklyTrainingProgram?.programId && !state.weeklyTrainingFocus?.focusId) {
+    activateTab("trening");
+    return;
+  }
+  activateTab("kamp");
+}
+
 function loadFirstTimePlaythrough() {
   try {
     return normalizeFirstTimePlaythrough(JSON.parse(localStorage.getItem(FIRST_TIME_PLAYTHROUGH_KEY)));
@@ -3853,7 +3889,7 @@ function saveFirstTimePlaythrough() {
 }
 
 function isFirstTimePlaythroughActive() {
-  return state.gameStartState?.selectedMode === "scenario" &&
+  return isScenarioModeActive() &&
     state.gameStartState?.activeScenarioId === AJAX_TOTAL_FOOTBALL_SCENARIO_ID &&
     !state.firstTimePlaythrough?.completed;
 }
@@ -3888,11 +3924,47 @@ function buildFirstTimeNextActionState(teamFit, readiness = null) {
   };
 }
 
+function renderGameModeStatus(teamFit) {
+  const selectedMode = state.gameStartState?.selectedMode || null;
+  const chooser = elements.firstTimePlaythroughCard;
+  const status = elements.gameModeStatusCard;
+
+  if (chooser) chooser.hidden = selectedMode !== null;
+  if (status) status.hidden = selectedMode === null;
+
+  if (selectedMode === "league") {
+    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Ligaspill";
+    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Ligaspill aktivt. Bygg troppen, sett laget og spill neste ligakamp. Scenarioer ligger i egen fane.";
+  } else if (selectedMode === "scenario") {
+    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Scenario";
+    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Ajax 1971–73 er valgt. Scenarioer og prøveperiode styres fra scenarioflyten.";
+  } else if (selectedMode === "training") {
+    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Treningsrom";
+    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Treningsrommet er aktivt. Ligaspill kan velges når du er klar.";
+  }
+
+  const availability = getAvailability();
+  const roster = availability.rosterReadiness || {};
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const filled = assignments.filter((item) => item.player).length;
+  const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
+  const training = state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "valgt" : "mangler";
+  const unread = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
+  const nextMatch = state.matchday?.session?.opponent?.name || (teamFit && getMatchdayReadiness(teamFit).isReady ? "klar" : "låst");
+  if (elements.leagueStatusWeek) elements.leagueStatusWeek.textContent = `Uke ${Number(state.clubWeekState?.week) || 1}`;
+  if (elements.leagueStatusNextMatch) elements.leagueStatusNextMatch.textContent = `Neste kamp: ${nextMatch}`;
+  if (elements.leagueStatusSquad) elements.leagueStatusSquad.textContent = `Tropp: ${Number(roster.unlockedCount || 0)}/15`;
+  if (elements.leagueStatusLineup) elements.leagueStatusLineup.textContent = `Startellever: ${Math.min(filled, 11)}/11`;
+  if (elements.leagueStatusBench) elements.leagueStatusBench.textContent = `Benk: ${Math.min(bench, 4)}/4`;
+  if (elements.leagueStatusTraining) elements.leagueStatusTraining.textContent = `Trening: ${training}`;
+  if (elements.leagueStatusInbox) elements.leagueStatusInbox.textContent = `Innboks: ${unread > 0 ? `${unread} ulest` : "lest"}`;
+}
+
 function renderFirstTimePlaythrough(teamFit) {
+  renderGameModeStatus(teamFit);
   const card = elements.firstTimePlaythroughCard;
-  if (!card) return;
+  if (!card || card.hidden) return;
   const ft = buildFirstTimeNextActionState(teamFit);
-  card.hidden = false;
   if (!ft.active) {
     if (elements.firstTimeAssistant) {
       elements.firstTimeAssistant.textContent = "Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.";
@@ -6232,7 +6304,7 @@ function buildNextActionContext(teamFit) {
     matchdayReady: Boolean(readiness.isReady),
     unreadThreads: getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState()),
     hasUnseenReport: hasUnseenMatchReport(),
-    miniSeasonActive: state.miniSeason?.status === "active",
+    miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active",
     firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
     clubWeek: clubWeekState
       ? {
@@ -8216,6 +8288,12 @@ function renderMiniSeason() {
   const startButton = elements.startMiniSeasonButton;
   const resetButton = elements.resetMiniSeasonButton;
   const miniSeason = state.miniSeason;
+  const panel = statusEl?.closest(".mini-season-panel") || overview?.closest(".mini-season-panel") || null;
+  if (panel) panel.hidden = !isScenarioModeActive();
+  if (!isScenarioModeActive()) {
+    if (overview) overview.textContent = "";
+    return;
+  }
 
   if (startButton) {
     startButton.hidden = miniSeason?.status === "active";
@@ -11300,8 +11378,7 @@ function bindEvents() {
   if (elements.startLeagueModeButton) {
     elements.startLeagueModeButton.addEventListener("click", () => {
       selectGameMode("league", { activeLeagueSaveId: "default_league_save" });
-      const rosterReadiness = getAvailability().rosterReadiness;
-      activateTab(rosterReadiness.hasEnoughUnlocked ? "tactics" : "historygo");
+      activateRecommendedLeagueTab(getTeamFit());
       renderApp();
     });
   }
@@ -11309,6 +11386,19 @@ function bindEvents() {
   if (elements.chooseScenarioModeButton) {
     elements.chooseScenarioModeButton.addEventListener("click", () => {
       activateTab("scenarios");
+    });
+  }
+
+  if (elements.changeGameModeButton) {
+    elements.changeGameModeButton.addEventListener("click", () => {
+      if (isScenarioModeActive()) {
+        activateTab("scenarios");
+        return;
+      }
+      state.gameStartState = normalizeGameStartState(null);
+      saveGameStartState();
+      activateTab("dashboard");
+      renderApp();
     });
   }
 

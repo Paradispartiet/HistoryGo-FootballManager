@@ -142,6 +142,24 @@
         <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
       </section>
 
+      <section id="gameModeStatusCard" class="panel mode-status-card" hidden>
+        <div>
+          <p class="eyebrow">Spillmodus</p>
+          <h2 id="gameModeStatusTitle">Ligaspill</h2>
+          <p id="gameModeStatusText" class="muted-text">Du spiller vanlig ligaspill. Scenarioer er valgfrie.</p>
+        </div>
+        <div class="mode-status-meta" aria-label="Ligaspill-status">
+          <span id="leagueStatusWeek">Uke 1</span>
+          <span id="leagueStatusNextMatch">Neste kamp: låst</span>
+          <span id="leagueStatusSquad">Tropp: 0/15</span>
+          <span id="leagueStatusLineup">Startellever: 0/11</span>
+          <span id="leagueStatusBench">Benk: 0/4</span>
+          <span id="leagueStatusTraining">Trening: mangler</span>
+          <span id="leagueStatusInbox">Innboks: lest</span>
+        </div>
+        <button id="changeGameModeButton" type="button" class="shortcut-button">Bytt modus</button>
+      </section>
+
       <!-- Toppstripe: klubbstatus -->
       <section class="club-topbar" aria-label="Klubbstatus">
         <div class="topbar-identity">
@@ -181,8 +199,8 @@
           <p class="eyebrow">Forklaring</p>
           <h2>Hvorfor foreslås neste handling?</h2>
           <p id="managerSummary" class="muted-text">Fyll laget for å se managerinnsikt.</p>
-          <details class="panel-details is-flush" open>
-            <summary>Prioriterte tiltak</summary>
+          <details class="panel-details is-flush">
+            <summary>Vis prioriterte tiltak</summary>
             <ul id="managerTopActions"></ul>
           </details>
         </section>
