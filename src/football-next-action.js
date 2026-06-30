@@ -141,16 +141,16 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // First-Time Playthrough v1: når første spilløkt er aktiv, prioriter den
-  // spillbare første uka før den generelle Next Action-stigen. Dette er ikke en
-  // separat tutorialmotor; den leser samme readiness-/trening-/inbox-/rapport-state.
+  // Scenario Playthrough v1: Ajax/femkampers-opplegget prioriteres bare når
+  // spilleren eksplisitt har valgt scenario-modus. Ligaspill skal aldri arve
+  // dette som obligatorisk første handling.
   if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && firstTime?.active && !firstTime.completed) {
     if (!firstTime.started) {
       push({
         id: "first-time-start",
-        tag: "Første uke",
-        title: "Start femkampers prøveperiode",
-        hint: "Styret gir deg fem kamper. Første test er en historisk stilkamp mot Ajax 1971–73.",
+        tag: "Scenario",
+        title: "Start Ajax 1971–73-scenario",
+        hint: "Valgfri femkampers utfordring: totalfotball, høy linje og høyt press.",
         action: { type: NEXT_ACTION_TYPES.MINI_SEASON }
       });
     } else if (lineup.emptyCount > 0 || !firstTime.hasFormation) {
@@ -181,7 +181,7 @@ export function computeNextActions(context = {}) {
       push({
         id: "first-time-training",
         tag: "Trening",
-        title: "Velg trening for Ajax-kampen",
+        title: "Velg trening for scenario-kampen",
         hint: "Motstanderen presser høyt. Prioriter oppbygging, formasjonstilvenning eller restitusjon.",
         action: { type: NEXT_ACTION_TYPES.TAB, tab: "trening" }
       });
@@ -206,7 +206,7 @@ export function computeNextActions(context = {}) {
         id: "first-time-week-2",
         tag: "Uke 2",
         title: "Gå til uke 2",
-        hint: "Første spilløkt er forstått. Planlegg neste uke med de vanlige systemene.",
+        hint: "Scenarioet er forstått. Gå tilbake til ligaspillet eller planlegg neste uke.",
         action: { type: NEXT_ACTION_TYPES.CLUB_WEEK }
       });
     }
@@ -339,23 +339,12 @@ export function computeNextActions(context = {}) {
       id: "play-match",
       tag: "Kampdag",
       title: "Spill kamp",
-      hint: "Laget er kampklart. Sett kampplan og test det historiske systemet i kamp.",
+      hint: "Laget er kampklart. Sett kampplan og spill neste ligakamp.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
     });
   }
 
-  // 13) Prøveperiode ikke aktiv, men laget er klart for de 5 kampene.
-  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.matchdayReady && !ctx.miniSeasonActive) {
-    push({
-      id: "start-mini-season",
-      tag: "Prøveperiode",
-      title: "Start prøveperiode",
-      hint: "Bli vurdert av styret i en 5-kampers prøveperiode når du føler laget er klart.",
-      action: { type: NEXT_ACTION_TYPES.MINI_SEASON }
-    });
-  }
-
-  // 14) Fallback: driv klubbuken videre.
+  // 13) Fallback: driv klubbuken videre.
   if (clubWeek && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && !clubWeekGate.isBlocked) {
     const isReview = clubWeek.phase === "review";
     push({

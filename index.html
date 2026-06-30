@@ -54,6 +54,12 @@
         </svg>
         <span class="nav-label">History Go</span>
       </button>
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="scenarios">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 5.5h16"/><path d="M5.5 5.5v13"/><path d="M18.5 5.5v13"/><path d="M8 9h8"/><path d="M8 13h5"/>
+        </svg>
+        <span class="nav-label">Scenarioer</span>
+      </button>
       <div class="nav-group-label nav-group-label-secondary" role="presentation">Kontor / senere</div>
       <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="facilities">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -118,22 +124,22 @@
         <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
       </section>
 
-      <section class="panel first-time-playthrough-card" id="firstTimePlaythroughCard" aria-label="Første spilløkt" aria-live="polite" hidden>
+      <section class="panel first-time-playthrough-card mode-select-card" id="firstTimePlaythroughCard" aria-label="Velg spillmodus" aria-live="polite">
         <div>
-          <p class="eyebrow">Hvorfor denne handlingen?</p>
-          <h2>Første spilløkt: rammen rundt neste steg</h2>
-          <p class="muted-text">Styret gir deg fem kamper. Første test er et lag inspirert av Ajax 1971–73: høy linje, press og totalfotball. Målet er å forstå formasjon, roller og trening — ikke bare å vinne.</p>
+          <p class="eyebrow">Velg spillmodus</p>
+          <h2>Start som manager</h2>
+          <p class="muted-text">HG Football Manager starter som et ligaspill: ta over en klubb, bygg laget gjennom sesongen, tren spillerne, velg taktikk og kjemp om tabellen. Historiske og taktiske leksjoner ligger som valgfrie scenarioer.</p>
         </div>
-        <div class="first-time-brief-grid">
-          <article><span>Oppdrag</span><strong>Fem kamper</strong><small>Styret vurderer retningen.</small></article>
-          <article><span>Første test</span><strong id="firstTimeOpponent">Ajax 1971–73 — Totalfotball</strong><small>Høyt press, høy linje, rotasjoner.</small></article>
-          <article><span>Kampklar</span><strong id="firstTimeReadiness">Startellever 0/11</strong><small>Formasjon, roller, trening, innboks.</small></article>
+        <div class="first-time-brief-grid mode-choice-grid">
+          <article class="is-primary-mode"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></article>
+          <article><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></article>
+          <article><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten at det påvirker ligasesongen.</small></article>
         </div>
-        <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start enkelt: gjør laget kampklart.</span></p>
-        <details class="panel-details is-flush first-time-more">
-          <summary>Vis mer om første uke</summary>
-          <p>Velg/forstå formasjon, sett startellever og nøkkelroller, velg treningsuke, les ett innbokssignal, spill kamp og les rapporten før uke 2.</p>
-        </details>
+        <div class="mode-select-actions">
+          <button type="button" id="startLeagueModeButton" class="primary-action-button">Start ligaspill</button>
+          <button type="button" id="chooseScenarioModeButton" class="shortcut-button">Velg scenario</button>
+        </div>
+        <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
       </section>
 
       <!-- Toppstripe: klubbstatus -->
@@ -239,6 +245,7 @@
               <button type="button" class="shortcut-button" data-tab-target="tactics">Sett opp laget</button>
               <button type="button" class="shortcut-button" data-tab-target="kamp">Spill kamp</button>
               <button type="button" class="shortcut-button" data-tab-target="trening">Trening &amp; kunnskap</button>
+              <button type="button" class="shortcut-button" data-tab-target="scenarios">Scenarioer</button>
             </div>
           </details>
         </section>
@@ -251,6 +258,27 @@
           </details>
         </section>
       </div>
+    </div>
+
+
+    <!-- ============================ SCENARIOER ============================ -->
+    <div class="tab-section scenarios-view" data-tab-section="scenarios" hidden>
+      <section class="panel scenario-list-panel" aria-label="Scenarioer">
+        <p class="eyebrow">Scenarioer</p>
+        <h2>Valgfrie historiske og taktiske utfordringer</h2>
+        <p class="muted-text">Scenarioer er bonusmodus. De er korte tester inspirert av kjente lag, epoker og spillestiler — ikke obligatorisk start for ligaspillet.</p>
+        <div class="first-time-brief-grid mode-choice-grid">
+          <article class="scenario-card">
+            <span>5 kamper</span>
+            <strong>Ajax 1971–73</strong>
+            <small>Totalfotball: fare og mulighet · høy linje · høyt press · rom bak presset</small>
+            <p class="muted-text">Møt et lag inspirert av Ajax 1971–73. Høy linje, høyt press, rotasjoner og rom bak presset.</p>
+            <span id="firstTimeOpponent" hidden>Ajax 1971–73 — Totalfotball</span>
+            <span id="firstTimeReadiness" hidden>Startellever 0/11</span>
+            <button type="button" id="startAjaxScenarioButton" class="primary-action-button">Start scenario</button>
+          </article>
+        </div>
+      </section>
     </div>
 
     <!-- ============================ LAG & TAKTIKK ============================ -->
