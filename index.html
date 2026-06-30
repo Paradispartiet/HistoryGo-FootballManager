@@ -557,9 +557,9 @@
     <div class="tab-section dept dept-inbox" data-tab-section="inbox" hidden>
       <section class="dept-hero dept-hero-inbox">
         <div>
-          <p class="eyebrow">Klubbens puls</p>
+          <p class="eyebrow">Klubbens signaler før trening</p>
           <h2>Innboks</h2>
-          <p class="dept-hero-lede">Scouting, styret, medisinsk og presse melder inn. Hver tråd peker mot en beslutning.</p>
+          <p class="dept-hero-lede">Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
         </div>
         <div class="dept-hero-stat">
           <strong id="inboxPulseCount">0</strong>
@@ -567,14 +567,30 @@
         </div>
       </section>
 
+      <section class="panel inbox-signal-gate" aria-label="Klubbens signaler før trening">
+        <div>
+          <p class="eyebrow">Hvorfor nå?</p>
+          <h3>Klubbens signaler før trening</h3>
+          <p>Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
+        </div>
+        <dl class="inbox-signal-stats">
+          <div><dt>Uleste tråder</dt><dd id="inboxSignalUnread">0</dd></div>
+          <div><dt>Krever svar</dt><dd id="inboxSignalReplies">0</dd></div>
+          <div><dt>Påvirker</dt><dd>trening / slitasje / moral / taktisk klarhet / styrepress</dd></div>
+          <div><dt>Neste steg etter innboks</dt><dd>Trening</dd></div>
+        </dl>
+        <p id="inboxSignalStatus" class="inbox-signal-status">Ingen kritiske signaler nå</p>
+        <button type="button" class="primary-button inbox-training-cta" data-tab-target="trening" id="inboxGoTraining">Gå til Trening</button>
+      </section>
+
       <div class="inbox-thread-layout">
-        <section class="panel inbox-thread-panel" aria-label="Aktive tråder">
-          <h3>Aktive tråder</h3>
+        <section class="panel inbox-thread-panel" aria-label="Viktig nå">
+          <h3>Viktig nå</h3>
           <div id="inboxThreadList" class="message-list"></div>
         </section>
 
         <section class="panel inbox-thread-panel inbox-archive" aria-label="Trådarkiv">
-          <h3>Trådarkiv</h3>
+          <h3>Kan leses senere / Arkiv / historikk</h3>
           <div id="inboxThreadArchive" class="message-list"></div>
         </section>
       </div>

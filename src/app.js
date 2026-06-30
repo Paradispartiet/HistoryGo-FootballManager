@@ -420,6 +420,10 @@ const elements = {
   clubWeekEventLog: document.querySelector("#clubWeekEventLog"),
   inboxThreadList: document.querySelector("#inboxThreadList"),
   inboxThreadArchive: document.querySelector("#inboxThreadArchive"),
+  inboxSignalUnread: document.querySelector("#inboxSignalUnread"),
+  inboxSignalReplies: document.querySelector("#inboxSignalReplies"),
+  inboxSignalStatus: document.querySelector("#inboxSignalStatus"),
+  inboxGoTraining: document.querySelector("#inboxGoTraining"),
   // History Go-unlocks (v1).
   unlockPlacesList: document.querySelector("#unlockPlacesList"),
   unlockedPlayersStatus: document.querySelector("#unlockedPlayersStatus"),
@@ -8927,6 +8931,40 @@ function createInboxChoiceBlock(message) {
   return container;
 }
 
+function inboxThreadRequiresReply(threadGroup) {
+  return Boolean(threadGroup?.messages?.some((message) => {
+    const messageId = message?.id;
+    return typeof messageId === "string"
+      && getChoicesForMessage(messageId).length > 0
+      && !getSelectedChoiceForMessage(messageId);
+  }));
+}
+
+function getInboxThreadPriorityScore(threadGroup) {
+  const subject = `${threadGroup?.thread?.subject || ""} ${threadGroup?.latestMessage?.title || ""}`.toLowerCase();
+  let score = 0;
+  if (inboxThreadRequiresReply(threadGroup)) score += 30;
+  if (/assistent|kampnotat|trening|taktisk|fysio|belast|slitasje|garderobe|moral|styre/.test(subject)) score += 20;
+  score += Math.min(10, threadGroup?.unreadMessages?.length || 0);
+  return score;
+}
+
+function updateInboxSignalGate({ eventActive, activeThreads, visibleEventActive, visibleActiveThreads }) {
+  const unreadCount = eventActive.filter((thread) => thread.status === "unread").length
+    + activeThreads.reduce((sum, threadGroup) => sum + (threadGroup.unreadMessages?.length || 0), 0);
+  const requiresReplyCount = eventActive.filter((thread) => thread.status !== "resolved" && thread.choices?.length).length
+    + activeThreads.filter(inboxThreadRequiresReply).length;
+
+  if (elements.inboxSignalUnread) elements.inboxSignalUnread.textContent = String(unreadCount);
+  if (elements.inboxSignalReplies) elements.inboxSignalReplies.textContent = String(requiresReplyCount);
+  if (elements.inboxSignalStatus) {
+    const visibleCount = visibleEventActive.length + visibleActiveThreads.length;
+    elements.inboxSignalStatus.textContent = unreadCount > 0
+      ? `${visibleCount === 1 ? "Ett tydelig signal" : `${visibleCount} viktige signaler`} er nok før du går til trening.`
+      : "Ingen kritiske signaler nå";
+  }
+}
+
 // Bygg ett trådkort fra en trådgruppe. Bruker kun createElement/textContent og
 // gjenbruker message-card-CSS. options.showReadButton gir en "Marker tråd som
 // lest"-knapp som markerer alle uleste meldinger i tråden som lest.
@@ -9378,15 +9416,35 @@ function renderInboxThreads() {
       ? state.openInboxThreadId
       : activeThreadIds[0] || null;
 
-    eventActive.forEach((thread) => {
-      activeContainer.append(createInboxEventThreadCard(thread, { open: thread.id === openId }));
+    const sortedEventActive = [...eventActive].sort((a, b) => {
+      const pa = a.priority === "critical" ? 3 : a.priority === "high" ? 2 : 1;
+      const pb = b.priority === "critical" ? 3 : b.priority === "high" ? 2 : 1;
+      return pb - pa;
+    });
+    const sortedActiveThreads = [...activeThreads].sort((a, b) => getInboxThreadPriorityScore(b) - getInboxThreadPriorityScore(a));
+    const isFirstWeekBeforeTraining = (state.clubWeekState?.week || 1) === 1 && !state.weeklyTrainingProgram?.programId;
+    const visibleEventActive = isFirstWeekBeforeTraining ? sortedEventActive.slice(0, sortedEventActive.length ? 1 : 0) : sortedEventActive;
+    const visibleActiveThreads = isFirstWeekBeforeTraining && visibleEventActive.length
+      ? []
+      : (isFirstWeekBeforeTraining ? sortedActiveThreads.slice(0, 1) : sortedActiveThreads);
+
+    updateInboxSignalGate({ eventActive, activeThreads, visibleEventActive, visibleActiveThreads });
+
+    const visibleThreadIds = [
+      ...visibleEventActive.map((thread) => thread.id),
+      ...visibleActiveThreads.map((threadGroup) => getThreadGroupId(threadGroup))
+    ].filter(Boolean);
+    const effectiveOpenId = visibleThreadIds.includes(openId) ? openId : visibleThreadIds[0] || null;
+
+    visibleEventActive.forEach((thread) => {
+      activeContainer.append(createInboxEventThreadCard(thread, { open: thread.id === effectiveOpenId }));
     });
 
-    activeThreads.forEach((threadGroup) => {
+    visibleActiveThreads.forEach((threadGroup) => {
       activeContainer.append(
         createInboxThreadCard(threadGroup, {
           showReadButton: true,
-          open: getThreadGroupId(threadGroup) === openId
+          open: getThreadGroupId(threadGroup) === effectiveOpenId
         })
       );
     });

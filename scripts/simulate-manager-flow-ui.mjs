@@ -101,13 +101,15 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
   check("innboks prioriteres foran «Velg treningsprogram»", t.indexOf("Les innboksen") < t.indexOf("Velg treningsprogram"));
 }
 
-// 10) 11 + 4 klart går til Innboks før treningsvalg, deretter trening før kamp.
+// 10) 11 + 4 klart går via Innboks bare ved uleste signaler; lest/rolig innboks går til trening.
 {
-  const c = ctx({ hasTrainingChoice: false, unreadThreads: 0 });
-  const t = titles(c);
-  check("klart lag uten trening gir primær «Gå til Innboks»", primary(c) === "Gå til Innboks");
-  check("manglende treningsvalg gir fortsatt «Velg treningsprogram»", t.includes("Velg treningsprogram"));
-  check("innboks prioriteres foran trening", t.indexOf("Gå til Innboks") < t.indexOf("Velg treningsprogram"));
+  const unread = ctx({ hasTrainingChoice: false, unreadThreads: 1 });
+  check("komplett lag + ulest innboks + ingen trening gir «Les innboksen»", primary(unread) === "Les innboksen");
+
+  const read = ctx({ hasTrainingChoice: false, unreadThreads: 0 });
+  const t = titles(read);
+  check("innboks lest + ingen trening gir «Velg treningsprogram»", primary(read) === "Velg treningsprogram");
+  check("ingen uleste tråder + ingen trening gir «Velg treningsprogram»", primary(read) === "Velg treningsprogram");
   check("treningsvalg prioriteres foran «Spill kamp»", t.indexOf("Velg treningsprogram") < t.indexOf("Spill kamp"));
 }
 
@@ -150,6 +152,14 @@ check(
 // 16) Tom/tynn kontekst kaster ikke og gir alltid noe brukbart.
 check("tom kontekst kaster ikke", Array.isArray(computeNextActions({})));
 check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isArray(computeNextActions(undefined)));
+
+// 17) Innboksflaten forklarer signalporten og CTA bruker eksisterende tab-handler.
+{
+  const html = await import("node:fs").then(({ readFileSync }) => readFileSync(new URL("../index.html", import.meta.url), "utf8"));
+  const app = await import("node:fs").then(({ readFileSync }) => readFileSync(new URL("../src/app.js", import.meta.url), "utf8"));
+  check("første uke begrenser innboksen til ett tydelig signal før trening", app.includes("isFirstWeekBeforeTraining") && app.includes("slice(0, 1)"));
+  check("Innboks CTA peker til trening", html.includes('id="inboxGoTraining"') && html.includes('data-tab-target="trening"') && html.includes("Gå til Trening"));
+}
 
 if (failures.length) {
   console.error("✗ Manager Flow UI-sim feilet:");
