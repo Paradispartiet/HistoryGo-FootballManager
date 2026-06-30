@@ -16,72 +16,79 @@
   </header>
 
   <nav class="main-nav" aria-label="Hovednavigasjon">
-    <div class="main-nav-inner" role="tablist">
-      <button type="button" class="nav-tab is-active" role="tab" aria-selected="true" data-tab-target="dashboard">
+    <div class="main-nav-inner" role="tablist" aria-label="Spillbar løkke og kontorflater">
+      <div class="nav-group-label nav-group-label-primary" role="presentation">Spillbar løkke</div>
+      <button type="button" class="nav-tab nav-tab-primary is-active" role="tab" aria-selected="true" data-tab-target="dashboard">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="4" y="4" width="7" height="9" rx="1.5"/><rect x="13" y="4" width="7" height="5" rx="1.5"/><rect x="13" y="12" width="7" height="8" rx="1.5"/><rect x="4" y="16" width="7" height="4" rx="1.5"/>
         </svg>
         <span class="nav-label">Oversikt</span>
       </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="tactics">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="tactics">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M12 4.5v15"/><circle cx="12" cy="12" r="2.4"/><path d="M3.5 9h2.5v6H3.5"/><path d="M20.5 9H18v6h2.5"/>
         </svg>
         <span class="nav-label">Lag &amp; taktikk</span>
       </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="kamp">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="8"/><path d="m12 7 3 2.2-1.1 3.6h-3.8L9 9.2z"/><path d="M12 4v3M5 9.5l2.7 1.6M19 9.5l-2.7 1.6M8.2 19l1.1-3.4M15.8 19l-1.1-3.4"/>
-        </svg>
-        <span class="nav-label">Kamp</span>
-      </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="trening">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6H11v13H5.5A1.5 1.5 0 0 1 4 17.5z"/><path d="M20 7.5A1.5 1.5 0 0 0 18.5 6H13v13h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>
-        </svg>
-        <span class="nav-label">Trening</span>
-      </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="inbox">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="inbox">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3.5" y="6" width="17" height="13" rx="2"/><path d="m4.5 7.5 7.5 6 7.5-6"/>
         </svg>
         <span class="nav-label">Innboks</span>
       </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="facilities">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="trening">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3.5 9.5c0-1.7 3.8-3 8.5-3s8.5 1.3 8.5 3"/><path d="M3.5 9.5v6c0 1.7 3.8 3 8.5 3s8.5-1.3 8.5-3v-6"/><path d="M9.5 12.7v4.9"/><path d="M14.5 12.7v4.9"/>
+          <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6H11v13H5.5A1.5 1.5 0 0 1 4 17.5z"/><path d="M20 7.5A1.5 1.5 0 0 0 18.5 6H13v13h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>
         </svg>
-        <span class="nav-label">Fasiliteter</span>
+        <span class="nav-label">Trening</span>
       </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="admin">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="kamp">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2L11 7.5h7.5A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/>
+          <circle cx="12" cy="12" r="8"/><path d="m12 7 3 2.2-1.1 3.6h-3.8L9 9.2z"/><path d="M12 4v3M5 9.5l2.7 1.6M19 9.5l-2.7 1.6M8.2 19l1.1-3.4M15.8 19l-1.1-3.4"/>
         </svg>
-        <span class="nav-label">Admin</span>
+        <span class="nav-label">Kamp</span>
       </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="market">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 10.5v3h2.5L14 18V6l-7.5 4.5z"/><path d="M17 9.5a4 4 0 0 1 0 5"/>
-        </svg>
-        <span class="nav-label">Marked</span>
-      </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="board">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3.5 19 6v5.2c0 4.4-3 7.6-7 9.3-4-1.7-7-4.9-7-9.3V6z"/>
-        </svg>
-        <span class="nav-label">Styret</span>
-      </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="historygo">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="historygo">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 21c-4-3.8-6.5-7-6.5-10A6.5 6.5 0 0 1 12 4.5 6.5 6.5 0 0 1 18.5 11c0 3-2.5 6.2-6.5 10z"/><circle cx="12" cy="11" r="2.3"/>
         </svg>
         <span class="nav-label">History Go</span>
       </button>
-      <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab-target="hgfmLibrary">
+      <div class="nav-group-label nav-group-label-secondary" role="presentation">Kontor / senere</div>
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="facilities">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3.5 9.5c0-1.7 3.8-3 8.5-3s8.5 1.3 8.5 3"/><path d="M3.5 9.5v6c0 1.7 3.8 3 8.5 3s8.5-1.3 8.5-3v-6"/><path d="M9.5 12.7v4.9"/><path d="M14.5 12.7v4.9"/>
+        </svg>
+        <span class="nav-label">Fasiliteter</span>
+        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="admin">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2L11 7.5h7.5A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/>
+        </svg>
+        <span class="nav-label">Admin</span>
+        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="market">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 10.5v3h2.5L14 18V6l-7.5 4.5z"/><path d="M17 9.5a4 4 0 0 1 0 5"/>
+        </svg>
+        <span class="nav-label">Marked</span>
+        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="board">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3.5 19 6v5.2c0 4.4-3 7.6-7 9.3-4-1.7-7-4.9-7-9.3V6z"/>
+        </svg>
+        <span class="nav-label">Styret</span>
+        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="hgfmLibrary">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="4" y="4.5" width="16" height="15" rx="2"/><circle cx="9" cy="9.2" r="1.3"/><circle cx="15" cy="9.2" r="1.3"/><circle cx="12" cy="14.8" r="1.3"/>
         </svg>
         <span class="nav-label">Formasjoner</span>
+        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
       </button>
     </div>
   </nav>
@@ -548,6 +555,7 @@
           <p class="eyebrow">Klubbanlegg</p>
           <h2>Fasiliteter</h2>
           <p class="dept-hero-lede">Anleggene former spillerutvikling, kampdag og rekruttering. Utbygging kobles på senere.</p>
+          <p class="future-label">Kontorflate · ikke del av første spillbare løkke</p>
         </div>
       </section>
 
@@ -584,6 +592,7 @@
           <p class="eyebrow">Drift og økonomi</p>
           <h2>Administrasjon</h2>
           <p class="dept-hero-lede">Budsjett, kontrakter og stab. Full økonomimotor kommer – her er rammene.</p>
+          <p class="future-label">Kontorflate · ikke del av første spillbare løkke</p>
         </div>
         <div class="dept-hero-stat">
           <strong id="adminSquadCount">0</strong>
@@ -616,6 +625,7 @@
           <p class="eyebrow">Kommersiell utvikling</p>
           <h2>Markedsavdeling</h2>
           <p class="dept-hero-lede">Fans, sponsorer og omdømme. Medietrykket fra klubbuken styrer temperaturen.</p>
+          <p class="future-label">Kontorflate · kommer senere i full managerutgave</p>
         </div>
         <div class="dept-hero-stat dept-hero-stat-live">
           <strong id="marketMediaValue">–</strong>
@@ -647,6 +657,7 @@
           <p class="eyebrow">Boardroom</p>
           <h2>Styret</h2>
           <p class="dept-hero-lede">Tillit, budsjett og forventninger. Styretilliten beveger seg med klubbukene dine.</p>
+          <p class="future-label">Kontorflate · ikke nødvendig før første kamp</p>
         </div>
         <div class="dept-hero-stat dept-hero-stat-live">
           <strong id="boardTrustValue">–</strong>
@@ -869,6 +880,7 @@
             Bla gjennom fotballhistoriens taktiske systemer, epoke for epoke. Hver formasjon er et
             historisk system med faser, prinsipper og rollekrav – ikke bare tall.
           </p>
+          <p class="future-label">Støtteflate · ikke del av første spillbare løkke</p>
         </div>
         <div class="dept-hero-stat">
           <strong id="hgfmFormationCount">–</strong>
