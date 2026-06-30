@@ -205,6 +205,22 @@
           </section>
         </section>
 
+        <!-- Off-pitch Parameters v1: managerens kontekstlag. Lesbare signaler
+             (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet,
+             skadefare) — ikke rå tall. Forslagene ser ikke alt; manageren må
+             lese konteksten selv. -->
+        <section id="offPitchSignalCard" class="panel context-panel off-pitch-signal-card dashboard-support-panel" aria-label="Off-pitch-signaler" aria-live="polite">
+          <div class="panel-heading-row">
+            <div>
+              <p class="eyebrow">Status</p>
+              <h2>Kontekst som kan påvirke valget</h2>
+              <p id="contextHeadline" class="context-headline muted-text"></p>
+            </div>
+            <a class="shortcut-button" href="#gameModeStatusCard">Åpne status</a>
+          </div>
+          <div id="contextSignals" class="context-signals off-pitch-signal-grid"></div>
+        </section>
+
         <!-- Suggested Setups v1: 2–4 faglig logiske oppsett (formasjon, kampplan,
              treningsuke). Forklarende og additive — aldri en fasit eller lås. -->
         <section class="panel suggested-setups-panel dashboard-deep-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
@@ -212,20 +228,6 @@
             <summary>Foreslåtte oppsett og faglige valg</summary>
             <p class="muted-text suggested-setups-intro">Faglige standardforslag. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
             <div id="suggestedSetups" class="suggested-setups-groups"></div>
-          </details>
-        </section>
-
-        <!-- Off-pitch Parameters v1: managerens kontekstlag. Lesbare signaler
-             (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet,
-             skadefare) — ikke rå tall. Forslagene ser ikke alt; manageren må
-             lese konteksten selv. -->
-        <section class="panel context-panel dashboard-support-panel" aria-label="Kontekst" aria-live="polite">
-          <p class="eyebrow">Status</p>
-          <h2>Kontekst som kan påvirke valget</h2>
-          <p id="contextHeadline" class="context-headline"></p>
-          <details class="panel-details is-flush">
-            <summary>Vis off-pitch-signaler</summary>
-            <div id="contextSignals" class="context-signals"></div>
           </details>
         </section>
 

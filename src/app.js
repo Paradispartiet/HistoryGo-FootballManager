@@ -8256,7 +8256,7 @@ function renderContextPanel() {
 
   container.textContent = "";
   summary.visible.forEach((signal) => {
-    const row = document.createElement("div");
+    const row = document.createElement("article");
     row.className = "context-signal";
     row.dataset.severity = signal.severity;
 
