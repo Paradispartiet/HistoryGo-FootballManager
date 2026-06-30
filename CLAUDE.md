@@ -30,6 +30,7 @@ npm run audit:historical-opponents     # historical opponent archetypes
 # UI-/flyt-vakter (statisk, leser index.html + src/app.js)
 npm run check:dom-ids          # querySelector("#id")-oppslag finnes i index.html
 npm run audit:flow             # hele spilløkka (start → mini-sesong) er wiret
+npm run audit:dead-ends        # ingen blindveier i første spillbare løkke (deaktiverte «Senere»-faner, ankre, gating)
 
 # Simulations (exercise the live JS engines end-to-end, no DOM/localStorage)
 npm run sim:matchday           # matchday session loop (football-matchday-engine.js)
@@ -46,7 +47,7 @@ npm run sim:club-week          # Club Week consequences loop
 Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script.
 
 **Two CI workflows** (`.github/workflows/`):
-- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow`, `audit:historical-opponents`, `build`.
+- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `build`.
 - `ci.yml` (PRs + every non-`main` branch push) is the safety net that runs the **whole** suite — all `audit:*`, `check:*`, `build` **and** every `sim:*` script.
 
 So on a feature branch, expect the full suite to gate your PR; run the relevant scripts locally before pushing.

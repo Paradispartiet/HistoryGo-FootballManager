@@ -11505,6 +11505,10 @@ function initTabs() {
 
   tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      // «Senere»-flater er deaktiverte og skal aldri bytte fane. Disabled-knapper
+      // sender normalt ikke click, men aria-disabled gjør det – så vi vokter her
+      // slik at ingen kontorflate blir en aktiv blindvei.
+      if (button.disabled || button.getAttribute("aria-disabled") === "true") return;
       const target = button.dataset.tabTarget;
       // Rerender bare når sett-flagget faktisk endrer noe (åpner Kamp med en
       // ulest rapport), slik at Neste handling-stripa oppdateres uten å rendre

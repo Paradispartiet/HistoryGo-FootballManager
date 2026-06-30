@@ -44,6 +44,9 @@ jobs:
       - name: Flow-audit (spilløkka henger sammen)
         run: npm run audit:flow
 
+      - name: Dead-end-audit (ingen blindveier i første løkke)
+        run: npm run audit:dead-ends
+
       - name: Audit Historical Opponent Archetypes
         run: npm run audit:historical-opponents
 

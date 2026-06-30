@@ -23,6 +23,7 @@
     "sim:club-week": "node scripts/simulate-club-week-v01.mjs",
     "check:dom-ids": "node scripts/check-dom-ids.mjs",
     "audit:flow": "node scripts/audit-flow.mjs",
+    "audit:dead-ends": "node scripts/audit-dead-ends.mjs",
     "sim:role-learning": "node scripts/simulate-role-learning.mjs",
     "sim:staff-identity": "node scripts/simulate-staff-identity.mjs",
     "sim:manager-flow-ui": "node scripts/simulate-manager-flow-ui.mjs",
