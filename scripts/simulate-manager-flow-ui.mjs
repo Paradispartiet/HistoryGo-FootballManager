@@ -85,36 +85,44 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
   check("review-fase + ulest rapport gir primær «Se kamprapporten»", primary(c) === "Se kamprapporten");
 }
 
-// 8) Manglende treningsvalg dukker opp før kampklar-handlingen.
+// 8) Innboks er klubbens signalapparat og skal leses før treningsvalg også utenfor innboksfasen.
 {
-  const c = ctx({ hasTrainingChoice: false });
+  const c = ctx({ hasTrainingChoice: false, unreadThreads: 2, clubWeek: { week: 2, phase: "match_prep", phaseLabel: "Kampplan" } });
+  const t = titles(c);
+  check("ulest innboks før trening gir primær «Les innboksen»", primary(c) === "Les innboksen");
+  check("innboks prioriteres foran «Velg treningsprogram»", t.indexOf("Les innboksen") < t.indexOf("Velg treningsprogram"));
+}
+
+// 9) Manglende treningsvalg dukker opp før kampklar-handlingen når innboksen er lest.
+{
+  const c = ctx({ hasTrainingChoice: false, unreadThreads: 0 });
   const t = titles(c);
   check("manglende treningsvalg gir «Velg treningsprogram»", t.includes("Velg treningsprogram"));
   check("treningsvalg prioriteres foran «Spill kamp»", t.indexOf("Velg treningsprogram") < t.indexOf("Spill kamp"));
 }
 
-// 9) Alt klart → «Spill kamp» er primær.
+// 10) Alt klart → «Spill kamp» er primær.
 check("kampklart lag gir primær «Spill kamp»", primary(READY) === "Spill kamp");
 
-// 10) Sett-flagg for kamprapporten styrer «Se kamprapporten».
+// 11) Sett-flagg for kamprapporten styrer «Se kamprapporten».
 check("ulest rapport gir «Se kamprapporten»", titles(ctx({ hasUnseenReport: true })).includes("Se kamprapporten"));
 check("sett rapport skjuler «Se kamprapporten»", !titles(ctx({ hasUnseenReport: false })).includes("Se kamprapporten"));
 
-// 11) Prøveperiode foreslås når laget er klart og ingen er aktiv.
+// 12) Prøveperiode foreslås når laget er klart og ingen er aktiv.
 check("inaktiv prøveperiode + klart lag gir «Start prøveperiode»", titles(ctx({ miniSeasonActive: false })).includes("Start prøveperiode"));
 check("aktiv prøveperiode skjuler «Start prøveperiode»", !titles(ctx({ miniSeasonActive: true })).includes("Start prøveperiode"));
 
-// 12) Fallback: review-fasen gir «Gå til neste uke», ellers «Gå til neste fase».
+// 13) Fallback: review-fasen gir «Gå til neste uke», ellers «Gå til neste fase».
 check("review-fase gir «Gå til neste uke»", titles(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" } })).includes("Gå til neste uke"));
 check("ikke-review gir «Gå til neste fase»", titles(READY).includes("Gå til neste fase"));
 
-// 13) Determinisme: lik input gir byte-identisk output.
+// 14) Determinisme: lik input gir byte-identisk output.
 check(
   "determinisme: lik kontekst gir identisk resultat",
   JSON.stringify(computeNextActions(READY)) === JSON.stringify(computeNextActions(READY))
 );
 
-// 14) Ryddige beskrivelser: ingen dupliserte titler, gyldige handlingstyper.
+// 15) Ryddige beskrivelser: ingen dupliserte titler, gyldige handlingstyper.
 {
   const all = computeNextActions(ctx({ hasUnseenReport: true, unreadThreads: 2, miniSeasonActive: false }));
   const seen = new Set();
@@ -129,7 +137,7 @@ check(
   check("ingen dupliserte titler", !dup);
 }
 
-// 15) Tom/tynn kontekst kaster ikke og gir alltid noe brukbart.
+// 16) Tom/tynn kontekst kaster ikke og gir alltid noe brukbart.
 check("tom kontekst kaster ikke", Array.isArray(computeNextActions({})));
 check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isArray(computeNextActions(undefined)));
 
