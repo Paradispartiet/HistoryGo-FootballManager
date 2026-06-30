@@ -98,6 +98,44 @@
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
 
+      <!-- Neste handling v1: én tydelig primærhandling + 1–2 sekundære, utledet
+           av eksisterende state (Club Week-fase, roster/kampklar, treningsvalg,
+           innboks, mini-sesong). Ingen ny motor — kun prioritert presentasjon av
+           hva treneren bør gjøre nå. -->
+      <section class="next-action-strip" id="nextActionStrip" aria-label="Neste handling" aria-live="polite">
+        <div class="next-action-head">
+          <div>
+            <p class="eyebrow">Neste handling</p>
+            <h2>Dette gjør du nå</h2>
+          </div>
+          <span class="next-action-phase" id="nextActionPhase">Uke 1 · Analyse</span>
+        </div>
+        <button type="button" class="next-action-primary" id="nextActionPrimary">
+          <span class="next-action-tag" id="nextActionPrimaryTag">Lag</span>
+          <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
+          <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
+        </button>
+        <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
+      </section>
+
+      <section class="panel first-time-playthrough-card" id="firstTimePlaythroughCard" aria-label="Første spilløkt" aria-live="polite" hidden>
+        <div>
+          <p class="eyebrow">Hvorfor denne handlingen?</p>
+          <h2>Første spilløkt: rammen rundt neste steg</h2>
+          <p class="muted-text">Styret gir deg fem kamper. Første test er et lag inspirert av Ajax 1971–73: høy linje, press og totalfotball. Målet er å forstå formasjon, roller og trening — ikke bare å vinne.</p>
+        </div>
+        <div class="first-time-brief-grid">
+          <article><span>Oppdrag</span><strong>Fem kamper</strong><small>Styret vurderer retningen.</small></article>
+          <article><span>Første test</span><strong id="firstTimeOpponent">Ajax 1971–73 — Totalfotball</strong><small>Høyt press, høy linje, rotasjoner.</small></article>
+          <article><span>Kampklar</span><strong id="firstTimeReadiness">Startellever 0/11</strong><small>Formasjon, roller, trening, innboks.</small></article>
+        </div>
+        <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start enkelt: gjør laget kampklart.</span></p>
+        <details class="panel-details is-flush first-time-more">
+          <summary>Vis mer om første uke</summary>
+          <p>Velg/forstå formasjon, sett startellever og nøkkelroller, velg treningsuke, les ett innbokssignal, spill kamp og les rapporten før uke 2.</p>
+        </details>
+      </section>
+
       <!-- Toppstripe: klubbstatus -->
       <section class="club-topbar" aria-label="Klubbstatus">
         <div class="topbar-identity">
@@ -130,74 +168,45 @@
 
       <p id="clubWeekFeedback" class="club-week-feedback">Klubbuken er klar.</p>
 
-      <!-- Neste handling v1: én tydelig primærhandling + 1–2 sekundære, utledet
-           av eksisterende state (Club Week-fase, roster/kampklar, treningsvalg,
-           innboks, mini-sesong). Ingen ny motor — kun prioritert presentasjon av
-           hva treneren bør gjøre nå. -->
-      <section class="next-action-strip" id="nextActionStrip" aria-label="Neste handling" aria-live="polite">
-        <div class="next-action-head">
-          <p class="eyebrow">Neste handling</p>
-          <span class="next-action-phase" id="nextActionPhase">Uke 1 · Analyse</span>
-        </div>
-        <button type="button" class="next-action-primary" id="nextActionPrimary">
-          <span class="next-action-tag" id="nextActionPrimaryTag">Lag</span>
-          <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
-          <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
-        </button>
-        <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
-      </section>
-
-      <section class="panel first-time-playthrough-card" id="firstTimePlaythroughCard" aria-label="Første spilløkt" aria-live="polite" hidden>
-        <div>
-          <p class="eyebrow">First-Time Playthrough v1</p>
-          <h2>Du har fått jobben</h2>
-          <p class="muted-text">Styret gir deg fem kamper. Første test er et lag inspirert av Ajax 1971–73: høy linje, press og totalfotball. Målet er å forstå formasjon, roller og trening — ikke bare å vinne.</p>
-        </div>
-        <div class="first-time-brief-grid">
-          <article><span>Oppdrag</span><strong>Fem kamper</strong><small>Styret vurderer retningen.</small></article>
-          <article><span>Første test</span><strong id="firstTimeOpponent">Ajax 1971–73 — Totalfotball</strong><small>Høyt press, høy linje, rotasjoner.</small></article>
-          <article><span>Kampklar</span><strong id="firstTimeReadiness">Startellever 0/11</strong><small>Formasjon, roller, trening, innboks.</small></article>
-        </div>
-        <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start enkelt: gjør laget kampklart.</span></p>
-        <details class="panel-details is-flush first-time-more">
-          <summary>Vis mer om første uke</summary>
-          <p>Velg/forstå formasjon, sett startellever og nøkkelroller, velg treningsuke, les ett innbokssignal, spill kamp og les rapporten før uke 2.</p>
-        </details>
-      </section>
-
       <div class="dashboard-grid">
 
         <!-- Managerinnsikt: sammendrag + prioriterte grep (fra teamFit) -->
-        <section class="panel manager-actions-panel" aria-live="polite">
-          <p class="eyebrow">Managerinnsikt</p>
-          <h2>Hva bør treneren gjøre?</h2>
+        <section class="panel manager-actions-panel dashboard-support-panel" aria-live="polite">
+          <p class="eyebrow">Forklaring</p>
+          <h2>Hvorfor foreslås neste handling?</h2>
           <p id="managerSummary" class="muted-text">Fyll laget for å se managerinnsikt.</p>
-          <h3>Prioriterte tiltak</h3>
-          <ul id="managerTopActions"></ul>
+          <details class="panel-details is-flush" open>
+            <summary>Prioriterte tiltak</summary>
+            <ul id="managerTopActions"></ul>
+          </details>
         </section>
 
         <!-- Suggested Setups v1: 2–4 faglig logiske oppsett (formasjon, kampplan,
              treningsuke). Forklarende og additive — aldri en fasit eller lås. -->
-        <section class="panel suggested-setups-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
-          <p class="eyebrow">Forslag</p>
-          <h2>Foreslåtte oppsett</h2>
-          <p class="muted-text suggested-setups-intro">Faglige standardforslag. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
-          <div id="suggestedSetups" class="suggested-setups-groups"></div>
+        <section class="panel suggested-setups-panel dashboard-deep-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
+          <details class="panel-details is-flush">
+            <summary>Foreslåtte oppsett og faglige valg</summary>
+            <p class="muted-text suggested-setups-intro">Faglige standardforslag. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
+            <div id="suggestedSetups" class="suggested-setups-groups"></div>
+          </details>
         </section>
 
         <!-- Off-pitch Parameters v1: managerens kontekstlag. Lesbare signaler
              (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet,
              skadefare) — ikke rå tall. Forslagene ser ikke alt; manageren må
              lese konteksten selv. -->
-        <section class="panel context-panel" aria-label="Kontekst" aria-live="polite">
-          <p class="eyebrow">Off-pitch</p>
-          <h2>Kontekst</h2>
+        <section class="panel context-panel dashboard-support-panel" aria-label="Kontekst" aria-live="polite">
+          <p class="eyebrow">Status</p>
+          <h2>Kontekst som kan påvirke valget</h2>
           <p id="contextHeadline" class="context-headline"></p>
-          <div id="contextSignals" class="context-signals"></div>
+          <details class="panel-details is-flush">
+            <summary>Vis off-pitch-signaler</summary>
+            <div id="contextSignals" class="context-signals"></div>
+          </details>
         </section>
 
         <!-- Statuskort: neste beslutninger på tvers av klubben -->
-        <section class="panel decision-strip" aria-label="Neste beslutninger">
+        <section class="panel decision-strip dashboard-support-panel" aria-label="Neste beslutninger">
           <div class="decision-strip-head">
             <p class="eyebrow">Neste beslutninger</p>
             <h2>Hva venter på treneren?</h2>
@@ -207,7 +216,7 @@
 
         <!-- Mini Season v1 / League Loop v1: 5-kampers prøveperiode (kamprekke,
              poeng, form, light-league-tabell, styrevurdering) oppå Club Week og Kampdag. -->
-        <section class="panel mini-season-panel" aria-label="Prøveperiode" aria-live="polite">
+        <section class="panel mini-season-panel dashboard-deep-panel" aria-label="Prøveperiode" aria-live="polite">
           <div class="mini-season-head">
             <div>
               <p class="eyebrow">Prøveperiode</p>
@@ -223,14 +232,15 @@
         </section>
 
         <!-- Snarveier til arbeidsflatene -->
-        <section class="panel dashboard-shortcuts" aria-label="Snarveier">
-          <p class="eyebrow">Snarveier</p>
-          <h2>Hvor vil du jobbe?</h2>
-          <div class="shortcut-buttons">
-            <button type="button" class="shortcut-button" data-tab-target="tactics">Sett opp laget</button>
-            <button type="button" class="shortcut-button" data-tab-target="kamp">Spill kamp</button>
-            <button type="button" class="shortcut-button" data-tab-target="trening">Trening &amp; kunnskap</button>
-          </div>
+        <section class="panel dashboard-shortcuts dashboard-deep-panel" aria-label="Snarveier">
+          <details class="panel-details is-flush">
+            <summary>Snarveier til arbeidsflater</summary>
+            <div class="shortcut-buttons">
+              <button type="button" class="shortcut-button" data-tab-target="tactics">Sett opp laget</button>
+              <button type="button" class="shortcut-button" data-tab-target="kamp">Spill kamp</button>
+              <button type="button" class="shortcut-button" data-tab-target="trening">Trening &amp; kunnskap</button>
+            </div>
+          </details>
         </section>
 
         <!-- Klubbhendelser -->
