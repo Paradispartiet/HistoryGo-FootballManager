@@ -256,6 +256,25 @@
     <!-- ============================ LAG & TAKTIKK ============================ -->
     <div class="tab-section office" data-tab-section="tactics" hidden>
 
+      <!-- Kampklar-gate: kompakt 11 + 4-sjekkliste før dybdepanelene. -->
+      <section id="squadSetupGate" class="panel squad-setup-gate" aria-live="polite">
+        <div class="squad-setup-gate-head">
+          <div>
+            <p class="eyebrow">Kampklar tropp</p>
+            <h2 id="squadSetupGateTitle">Sett opp laget</h2>
+            <p id="squadSetupGateHint" class="muted-text">Fyll 11 startere, roller og minst 4 benkespillere før kampflyten åpnes.</p>
+          </div>
+          <button type="button" id="squadSetupGateAction" class="primary-action-button">Fyll neste ledige plass</button>
+        </div>
+        <div class="squad-setup-checklist" aria-label="Kampklar sjekkliste">
+          <article><span>Startellever</span><strong id="squadGateStarters">0/11</strong></article>
+          <article><span>Benk</span><strong id="squadGateBench">0/4</strong></article>
+          <article><span>Roller</span><strong id="squadGateRoles">Trenger valg</strong></article>
+          <article><span>Feilbruk</span><strong id="squadGateMisuse">0</strong></article>
+          <article><span>Duplikater</span><strong id="squadGateDuplicates">0</strong></article>
+        </div>
+      </section>
+
       <!-- Hovedflate: bane + dynamisk sidepanel -->
       <div class="office-main">
         <section class="panel pitch-stage" aria-label="Taktisk bane">
@@ -277,7 +296,10 @@
 
           <!-- Kompakt taktisk systempanel for valgt historisk formasjon. Fylles
                av app.js (renderTacticalSystemPanel) fra data/hgFootball. -->
-          <div class="tactic-system" id="tacticalSystemPanel" aria-live="polite"></div>
+          <details class="tactic-system-details">
+            <summary>Vis mer om formasjon, roller og historisk læring</summary>
+            <div class="tactic-system" id="tacticalSystemPanel" aria-live="polite"></div>
+          </details>
         </section>
 
         <aside class="panel side-panel" id="sidePanel" aria-live="polite">

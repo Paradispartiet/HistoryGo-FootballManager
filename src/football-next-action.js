@@ -309,7 +309,18 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 10) Uka mangler et treningsvalg.
+  // 10) Komplett 11 + 4 skal først innom Innboks før treningsvalg.
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && !ctx.hasTrainingChoice) {
+    push({
+      id: "lineup-ready-inbox-before-training",
+      tag: "Innboks",
+      title: "Gå til Innboks",
+      hint: "Laget er klart. Les klubbens signaler i Innboks før du velger trening.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "inbox" }
+    });
+  }
+
+  // 11) Uka mangler et treningsvalg etter innboksen.
   if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && !ctx.hasTrainingChoice) {
     push({
       id: "choose-training",
