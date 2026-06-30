@@ -498,6 +498,25 @@
     <!-- ============================ TRENING & KUNNSKAP ============================ -->
     <div class="tab-section trening-view" data-tab-section="trening" hidden>
 
+      <section class="panel training-choice-gate" id="trainingChoiceGate" aria-label="Velg treningsuke før kamp" aria-live="polite">
+        <div class="training-choice-gate-head">
+          <div>
+            <p class="eyebrow">Trening etter Innboks</p>
+            <h2>Velg treningsuke før kamp</h2>
+            <p class="muted-text">Du velger trening etter at klubbens signaler er lest. Forslagene hjelper, men de er ikke fasit.</p>
+          </div>
+          <span id="trainingChoiceStatus" class="training-choice-status" data-selected="false">Ikke valgt</span>
+        </div>
+        <div class="training-choice-grid">
+          <article><span>Viktigste signal</span><strong id="trainingChoiceSignal">Laster kontekst…</strong></article>
+          <article><span>Anbefalt standardvalg</span><strong id="trainingChoiceRecommended">Laster anbefaling…</strong></article>
+          <article><span>Risiko</span><strong id="trainingChoiceRisk">Middels</strong></article>
+          <article><span>Neste steg etter trening</span><strong>Kamp</strong></article>
+        </div>
+        <p id="trainingChoiceSelectedSummary" class="training-choice-selected-summary">Velg ett trygt standardvalg, eller overstyr med et kontekstuelt valg hvis signalene peker en annen vei.</p>
+        <button type="button" id="trainingGoMatch" class="training-go-match" data-tab-target="kamp" hidden>Gå til Kamp</button>
+      </section>
+
       <!-- Treningsuke v0.2: ett taktisk fokus bundet til gjeldende Club Week. -->
       <section class="panel weekly-training-panel" aria-label="Ukens treningsfokus" aria-live="polite">
         <div class="weekly-training-head">

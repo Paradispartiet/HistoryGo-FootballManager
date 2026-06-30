@@ -159,6 +159,11 @@ check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isA
   const app = await import("node:fs").then(({ readFileSync }) => readFileSync(new URL("../src/app.js", import.meta.url), "utf8"));
   check("første uke begrenser innboksen til ett tydelig signal før trening", app.includes("isFirstWeekBeforeTraining") && app.includes("slice(0, 1)"));
   check("Innboks CTA peker til trening", html.includes('id="inboxGoTraining"') && html.includes('data-tab-target="trening"') && html.includes("Gå til Trening"));
+  check("Trening forklarer hvorfor den kommer etter Innboks", html.includes("Du velger trening etter at klubbens signaler er lest"));
+  check("Trening har tydelig valgt/ikke valgt gate", html.includes('id="trainingChoiceGate"') && html.includes('id="trainingChoiceStatus"'));
+  check("Trening-panelet har CTA videre til Kamp når valgt", html.includes('id="trainingGoMatch"') && html.includes('data-tab-target="kamp"') && html.includes("Gå til Kamp"));
+  check("Trening skiller anbefalt, trygt og dypere valg", app.includes("Anbefalt nå") && app.includes("Andre trygge valg") && app.includes("Dypere treningsprogram / historikk"));
+  check("Trening gjør valgt uke tydelig", app.includes("Treningsuke valgt") && app.includes("Kort effekt/risiko"));
 }
 
 if (failures.length) {
