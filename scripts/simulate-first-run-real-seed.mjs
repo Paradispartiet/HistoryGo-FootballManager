@@ -59,7 +59,7 @@ check(
   "startmodus skriver ikke til ekte History Go-progresjon",
   !/setItem\(\s*["'`](?:visited_places|hg_groundhopper_stats_v1)/.test(appJs)
 );
-check("under 15 spillere viser ikke Start prøveperiode", !actions(base).some((a) => a.title === "Start prøveperiode" || a.title === "Start femkampers prøveperiode"));
+check("under 15 spillere viser ikke scenario-start", !actions(base).some((a) => /scenario|prøveperiode/i.test(a.title || "")));
 check("under 15 spillere viser ikke kamp", !actions(base).some((a) => a.action?.tab === "kamp"));
 
 const localPublicStart = {
@@ -79,7 +79,7 @@ const readyFirstStep = {
   firstTime: { ...base.firstTime, started: true, hasReadInbox: false }
 };
 check("11 + 4 klart går først til Innboks", primary(readyFirstStep)?.title === "Les assistentens kampnotat");
-check("etter innboks går flyten til Trening", primary({ ...readyFirstStep, unreadThreads: 0, firstTime: { ...readyFirstStep.firstTime, hasReadInbox: true } })?.title === "Velg trening for Ajax-kampen");
+check("etter innboks går flyten til Trening", primary({ ...readyFirstStep, unreadThreads: 0, firstTime: { ...readyFirstStep.firstTime, hasReadInbox: true } })?.title === "Velg trening for scenario-kampen");
 check("etter trening går flyten til Kamp", primary({ ...readyFirstStep, unreadThreads: 0, hasTrainingChoice: true, firstTime: { ...readyFirstStep.firstTime, hasReadInbox: true } })?.title === "Spill første kamp");
 
 if (failures.length) {

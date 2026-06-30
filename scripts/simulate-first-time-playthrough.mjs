@@ -21,10 +21,10 @@ const base = {
 };
 const primary = (ctx) => computeNextActions(ctx)[0]?.title;
 
-check("spillbar first-time state gir Start prøveperiode", primary(base) === "Start femkampers prøveperiode");
+check("spillbar first-time state gir Start Ajax 1971–73-scenario", primary(base) === "Start Ajax 1971–73-scenario");
 check("15 spillere men ikke 11 på banen gir Sett opp laget", primary({ ...base, miniSeasonActive: true, firstTime: { ...base.firstTime, started: true }, lineup: { ...base.lineup, emptyCount: 4, firstEmptySlotId: "CM2" } }) === "Sett opp laget");
 check("11 spillere men ulest innboks gir kampnotat før trening", primary({ ...base, miniSeasonActive: true, firstTime: { ...base.firstTime, started: true, hasRoles: true }, lineup: { ...base.lineup, emptyCount: 0 }, matchdayReady: true }) === "Les assistentens kampnotat");
-check("lest innboks men manglende trening gir Velg trening", primary({ ...base, miniSeasonActive: true, unreadThreads: 0, firstTime: { ...base.firstTime, started: true, hasRoles: true, hasReadInbox: true }, lineup: { ...base.lineup, emptyCount: 0 }, matchdayReady: true }) === "Velg trening for Ajax-kampen");
+check("lest innboks men manglende trening gir Velg trening", primary({ ...base, miniSeasonActive: true, unreadThreads: 0, firstTime: { ...base.firstTime, started: true, hasRoles: true, hasReadInbox: true }, lineup: { ...base.lineup, emptyCount: 0 }, matchdayReady: true }) === "Velg trening for scenario-kampen");
 check("etter trening men ulest innboks gir kampnotat", primary({ ...base, miniSeasonActive: true, hasTrainingChoice: true, firstTime: { ...base.firstTime, started: true, hasRoles: true }, lineup: { ...base.lineup, emptyCount: 0 }, matchdayReady: true }) === "Les assistentens kampnotat");
 check("etter lest innboks gir Spill første kamp", primary({ ...base, miniSeasonActive: true, hasTrainingChoice: true, unreadThreads: 0, firstTime: { ...base.firstTime, started: true, hasRoles: true, hasReadInbox: true }, lineup: { ...base.lineup, emptyCount: 0 }, matchdayReady: true }) === "Spill første kamp");
 check("etter kamp men rapport ikke sett gir Les første kamprapport", primary({ ...base, miniSeasonActive: true, hasTrainingChoice: true, unreadThreads: 0, firstTime: { ...base.firstTime, started: true, hasRoles: true, hasReadInbox: true, hasPlayedFirstMatch: true, hasSeenReport: false }, lineup: { ...base.lineup, emptyCount: 0 }, matchdayReady: true }) === "Les første kamprapport");

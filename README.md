@@ -22,11 +22,27 @@ Det som finnes nå:
 8. **Off-pitch Parameters** – slitasje, moral, garderobe, press, styre/media og taktisk klarhet.
 9. **Innboks / klubbuke** – levende tråder, svarvalg, kontekstsignaler og klubbverdier.
 10. **Kampdag** – historiske motstanderarketyper, managergrep og forklarende kamprapport.
-11. **Mini Season / prøveperiode** – fem kamper oppå Club Week, ikke full liga.
+11. **Scenarioer / prøveperiode** – fem kamper oppå Club Week når spilleren aktivt velger en scenario-utfordring, ikke som standard ligastart.
 12. **Role Familiarity** – spillere bygger rollefortrolighet ved riktig bruk over kamper.
 13. **Historisk formasjonsbibliotek** – `data/hgFootball/` med epoker, systemer, rolletyper og kunnskapslag.
 
-Dette er fortsatt ikke et ferdig Football Manager-spill. Full liga, overgangsmarked, økonomi, kontrakter, kalender, fasilitetsutbygging og lang sesong gjenstår. V0.1 må først bli lett å spille gjennom.
+Dette er fortsatt ikke et ferdig Football Manager-spill. Full ligadybde, overgangsmarked, økonomi, kontrakter, kalender, fasilitetsutbygging og lang sesong gjenstår. V0.1 må først bli lett å spille gjennom, men produktregelen er allerede fast: HG Football Manager skal starte som Football Manager, ikke som en taktisk historieleksjon.
+
+## Spillmoduser
+
+### Ligaspill
+
+Hovedmodusen i HG Football Manager. Spilleren tar over en klubb og spiller en tradisjonell sesong med tropp, trening, terminliste, tabell, innboks og kampdag. Ligaspill er primærvalget fra start, og første handling skal alltid peke mot spillbar tropp, startellever, trening eller neste ligakamp.
+
+### Scenarioer
+
+Valgfrie korte utfordringer basert på historiske lag, taktiske ideer eller bestemte læringsmål. Eksempel: Ajax 1971–73 / totalfotball. Scenarioer kan bruke eksisterende femkampers prøveperiode, styreoppdrag og læringslogikk, men de skal startes aktivt fra Scenarioer-valget.
+
+### Treningsrom
+
+Lavrisiko-modus for å forstå formasjoner, roller og taktiske prinsipper uten at det påvirker ligasesongen.
+
+Standard start skal alltid være ligaspill eller valg av spillmodus. Et scenario skal aldri være hardkodet som første obligatoriske handling.
 
 ## Spillbar hovedvei
 
