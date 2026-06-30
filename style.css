@@ -170,11 +170,33 @@ h3 {
 .main-nav-inner {
   display: flex;
   flex-wrap: nowrap;
+  align-items: stretch;
   gap: 4px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   padding: 2px;
+}
+
+.nav-group-label {
+  flex: 0 0 auto;
+  align-self: center;
+  color: var(--hg-text-muted);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  opacity: 0.82;
+  padding: 4px 5px;
+}
+
+.nav-group-label-secondary {
+  margin-left: 10px;
+  border-left: 1px solid var(--hg-border-soft);
+  padding-left: 12px;
 }
 
 .main-nav-inner::-webkit-scrollbar {
@@ -204,6 +226,28 @@ h3 {
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.nav-tab-secondary {
+  min-width: 82px;
+  color: rgba(153, 161, 173, 0.72);
+  background: rgba(255, 255, 255, 0.015);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab-secondary .nav-icon {
+  opacity: 0.72;
+}
+
+.nav-future-badge {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: var(--hg-text-muted);
+  font-size: 0.5rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 2px 6px;
 }
 
 .nav-icon {
@@ -246,7 +290,8 @@ h3 {
 }
 
 /* Funksjonelle fargeaksenter per managerområde. */
-.nav-tab[data-tab-target="team"] { --tab-accent: var(--hg-accent-tactics); }
+.nav-tab[data-tab-target="team"],
+.nav-tab[data-tab-target="tactics"] { --tab-accent: var(--hg-accent-tactics); }
 .nav-tab[data-tab-target="inbox"] { --tab-accent: var(--hg-accent-inbox); }
 .nav-tab[data-tab-target="facilities"] { --tab-accent: var(--hg-accent-facilities); }
 .nav-tab[data-tab-target="admin"] { --tab-accent: var(--hg-accent-admin); }
@@ -3454,12 +3499,12 @@ ul {
 .next-action-strip {
   display: grid;
   gap: 12px;
-  border: 1px solid var(--line);
+  border: 2px solid var(--text);
   border-radius: var(--radius);
-  background: var(--panel-strong);
-  box-shadow: var(--shadow);
-  padding: 18px 20px;
-  margin-bottom: var(--gap);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), var(--panel-strong));
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.48);
+  padding: clamp(20px, 3vw, 28px);
+  margin-bottom: calc(var(--gap) * 1.15);
 }
 
 .next-action-head {
@@ -3527,13 +3572,13 @@ ul {
 }
 
 .next-action-title {
-  font-size: clamp(1.3rem, 3.4vw, 1.7rem);
+  font-size: clamp(1.55rem, 4.2vw, 2.2rem);
   font-weight: 900;
   line-height: 1.1;
 }
 
 .next-action-hint {
-  font-size: 0.92rem;
+  font-size: 1rem;
   line-height: 1.4;
   color: #2a2a2a;
 }
@@ -3731,6 +3776,24 @@ ul {
   padding: 4px 0 22px;
 }
 
+.dashboard-view .dashboard-grid .panel {
+  background: rgba(15, 19, 27, 0.58);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
+}
+
+.dashboard-view .dashboard-grid .manager-actions-panel {
+  border-color: var(--line-soft);
+}
+
+.dashboard-view .decision-card.is-primary {
+  background: var(--panel-strong);
+  color: var(--text);
+}
+
+.dashboard-view .decision-card.is-primary .decision-card-detail {
+  color: var(--muted);
+}
+
 .dashboard-grid .manager-actions-panel {
   grid-column: 1 / -1;
 }
@@ -3769,6 +3832,22 @@ ul {
   padding: 22px 24px;
   position: relative;
   overflow: hidden;
+}
+
+.future-label {
+  display: inline-flex;
+  width: fit-content;
+  margin: 10px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: var(--hg-text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  padding: 6px 12px;
 }
 
 /* Funksjonell fargesignatur: tynn aksentkant + farget eyebrow per avdeling. */
