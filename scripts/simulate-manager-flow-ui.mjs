@@ -110,15 +110,16 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
   const t = titles(read);
   check("innboks lest + ingen trening gir «Velg treningsprogram»", primary(read) === "Velg treningsprogram");
   check("ingen uleste tråder + ingen trening gir «Velg treningsprogram»", primary(read) === "Velg treningsprogram");
-  check("treningsvalg prioriteres foran «Spill kamp»", t.indexOf("Velg treningsprogram") < t.indexOf("Spill kamp"));
+  check("ingen trening valgt viser ikke «Spill kamp» som kamp-CTA", !t.includes("Spill kamp"));
 }
 
 // 10) Alt klart → «Spill kamp» er primær.
 check("kampklart lag gir primær «Spill kamp»", primary(READY) === "Spill kamp");
 
 // 11) Sett-flagg for kamprapporten styrer «Se kamprapporten».
-check("ulest rapport gir «Se kamprapporten»", titles(ctx({ hasUnseenReport: true })).includes("Se kamprapporten"));
+check("etter kamp + ulest rapport gir primær «Se kamprapporten»", primary(ctx({ hasUnseenReport: true })) === "Se kamprapporten");
 check("sett rapport skjuler «Se kamprapporten»", !titles(ctx({ hasUnseenReport: false })).includes("Se kamprapporten"));
+check("rapport sett peker videre mot «Gå til neste uke» i review", primary(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" }, hasUnseenReport: false })) === "Gå til neste uke");
 
 // 12) Prøveperiode foreslås når laget er klart og ingen er aktiv.
 check("inaktiv prøveperiode + klart lag gir «Start prøveperiode»", titles(ctx({ miniSeasonActive: false })).includes("Start prøveperiode"));
@@ -164,6 +165,9 @@ check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isA
   check("Trening-panelet har CTA videre til Kamp når valgt", html.includes('id="trainingGoMatch"') && html.includes('data-tab-target="kamp"') && html.includes("Gå til Kamp"));
   check("Trening skiller anbefalt, trygt og dypere valg", app.includes("Anbefalt nå") && app.includes("Andre trygge valg") && app.includes("Dypere treningsprogram / historikk"));
   check("Trening gjør valgt uke tydelig", app.includes("Treningsuke valgt") && app.includes("Kort effekt/risiko"));
+  check("Kampfanen har tydelig kampdag-gate", app.includes("renderMatchdayGate") && app.includes("Kampklar:") && app.includes("Primærhandling:"));
+  check("Kampfanen viser CTA-er for states", app.includes("Spill kamp") && app.includes("Fortsett kampen") && app.includes("Gå til neste uke"));
+  check("Kamprapporten folder dybde i details", app.includes("matchday-detail-drawer") && app.includes("Full kampanalyse"));
 }
 
 if (failures.length) {
