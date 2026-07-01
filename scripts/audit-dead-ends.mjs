@@ -210,6 +210,36 @@ stage("9. Rapport → ny uke");
   check("ny uke ruller mini-sesongen", /advanceMiniSeasonForNewWeek\(\)/.test(app));
 }
 
+// ---- 10) Én primær vei videre ----------------------------------------------
+// «Neste handling» skal være den ENESTE alltid-synlige primære veien videre.
+// Konkurrerende «neste»-lister (Neste beslutninger) skal støtte den, ikke
+// konkurrere — de foldes bak en <details>, ikke stå åpne som en andre primær.
+stage("10. Én primær vei videre");
+{
+  const dashboard = html.match(/data-tab-section="dashboard"[\s\S]*?(?=<div class="tab-section)/);
+  const dashboardHtml = dashboard ? dashboard[0] : "";
+
+  const primaryCount = (dashboardHtml.match(/class="next-action-primary"/g) || []).length;
+  check("nøyaktig én primær «Neste handling»-knapp på dashboardet", primaryCount === 1, `antall=${primaryCount}`);
+
+  // «Neste handling»-stripa skal være alltid synlig — ikke gjemt bak <details>.
+  const strip = html.match(/<section\b[^>]*\bnext-action-strip\b[\s\S]*?<\/section>/);
+  check("«Neste handling»-stripa finnes", Boolean(strip));
+  check(
+    "«Neste handling»-stripa er ikke foldet bak <details>",
+    Boolean(strip) && !/<details/.test(strip[0])
+  );
+
+  // Konkurrerende «Neste beslutninger» skal være foldet (sekundær støtte).
+  const decision = html.match(/<section\b[^>]*\bdecision-strip\b[\s\S]*?<\/section>/);
+  check("«Neste beslutninger»-panelet finnes", Boolean(decision));
+  check(
+    "«Neste beslutninger» er foldet bak <details> (støtter, konkurrerer ikke)",
+    Boolean(decision) && /<details/.test(decision[0]),
+    "en andre alltid-åpen «neste»-liste konkurrerer med den primære veien"
+  );
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

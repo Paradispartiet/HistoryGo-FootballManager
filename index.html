@@ -231,13 +231,15 @@
           </details>
         </section>
 
-        <!-- Statuskort: neste beslutninger på tvers av klubben -->
-        <section class="panel decision-strip dashboard-support-panel" aria-label="Neste beslutninger">
-          <div class="decision-strip-head">
-            <p class="eyebrow">Neste beslutninger</p>
-            <h2>Hva venter på treneren?</h2>
-          </div>
-          <div id="decisionCards" class="decision-cards"></div>
+        <!-- Statuskort: øvrige åpne beslutninger på tvers av klubben. Foldet og
+             sekundært — «Neste handling» øverst er alltid den primære veien
+             videre; disse støtter den, konkurrerer ikke med den. -->
+        <section class="panel decision-strip dashboard-deep-panel" aria-label="Flere åpne beslutninger">
+          <details class="panel-details is-flush">
+            <summary>Flere åpne beslutninger</summary>
+            <p class="muted-text decision-strip-intro">«Neste handling» øverst er alltid det viktigste grepet. Her ligger de øvrige åpne beslutningene på tvers av klubben.</p>
+            <div id="decisionCards" class="decision-cards"></div>
+          </details>
         </section>
 
         <!-- Mini Season v1 / League Loop v1: 5-kampers prøveperiode (kamprekke,
