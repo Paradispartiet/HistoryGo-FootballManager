@@ -234,24 +234,25 @@ function createFallbackClubWeekSummary(state) {
   return `Uke ${current.week} · ${getFallbackClubWeekPhaseLabel(current.phase)}`;
 }
 
-export async function createInitialClubWeekStateFromBrowser(overrides = {}) {
+// Felles kjerne for Club Week-wrapperne under: kall motorens metode hvis den
+// er lastet og finnes, ellers den lokale fallback-implementasjonen. Holder
+// engine/fallback-grenen på ett sted i stedet for gjentatt i hver wrapper.
+async function callEngineOrFallback(methodName, fallbackFn, ...args) {
   const engine = await loadManagerEngine();
 
-  if (engine?.createInitialClubWeekState) {
-    return engine.createInitialClubWeekState(overrides);
+  if (engine?.[methodName]) {
+    return engine[methodName](...args);
   }
 
-  return createFallbackClubWeekState(overrides);
+  return fallbackFn(...args);
 }
 
-export async function advanceClubWeekPhaseFromBrowser(state) {
-  const engine = await loadManagerEngine();
+export function createInitialClubWeekStateFromBrowser(overrides = {}) {
+  return callEngineOrFallback("createInitialClubWeekState", createFallbackClubWeekState, overrides);
+}
 
-  if (engine?.advanceClubWeekPhase) {
-    return engine.advanceClubWeekPhase(state);
-  }
-
-  return advanceFallbackClubWeekPhase(state);
+export function advanceClubWeekPhaseFromBrowser(state) {
+  return callEngineOrFallback("advanceClubWeekPhase", advanceFallbackClubWeekPhase, state);
 }
 
 function applyFallbackClubWeekEffects(state, effects = {}) {
@@ -275,52 +276,22 @@ function applyFallbackClubWeekEffects(state, effects = {}) {
   };
 }
 
-export async function applyClubWeekEffectsFromBrowser(state, effects = {}) {
-  const engine = await loadManagerEngine();
-
-  if (engine?.applyClubWeekEffects) {
-    return engine.applyClubWeekEffects(state, effects);
-  }
-
-  return applyFallbackClubWeekEffects(state, effects);
+export function applyClubWeekEffectsFromBrowser(state, effects = {}) {
+  return callEngineOrFallback("applyClubWeekEffects", applyFallbackClubWeekEffects, state, effects);
 }
 
-export async function createClubWeekSummaryFromBrowser(state) {
-  const engine = await loadManagerEngine();
-
-  if (engine?.createClubWeekSummary) {
-    return engine.createClubWeekSummary(state);
-  }
-
-  return createFallbackClubWeekSummary(state);
+export function createClubWeekSummaryFromBrowser(state) {
+  return callEngineOrFallback("createClubWeekSummary", createFallbackClubWeekSummary, state);
 }
 
-export async function getClubWeekPhaseLabelFromBrowser(phase) {
-  const engine = await loadManagerEngine();
-
-  if (engine?.getClubWeekPhaseLabel) {
-    return engine.getClubWeekPhaseLabel(phase);
-  }
-
-  return getFallbackClubWeekPhaseLabel(phase);
+export function getClubWeekPhaseLabelFromBrowser(phase) {
+  return callEngineOrFallback("getClubWeekPhaseLabel", getFallbackClubWeekPhaseLabel, phase);
 }
 
-export async function getClubWeekPhaseGuidanceFromBrowser(phase) {
-  const engine = await loadManagerEngine();
-
-  if (engine?.getClubWeekPhaseGuidance) {
-    return engine.getClubWeekPhaseGuidance(phase);
-  }
-
-  return getFallbackClubWeekPhaseGuidance(phase);
+export function getClubWeekPhaseGuidanceFromBrowser(phase) {
+  return callEngineOrFallback("getClubWeekPhaseGuidance", getFallbackClubWeekPhaseGuidance, phase);
 }
 
-export async function listClubWeekPhasesFromBrowser() {
-  const engine = await loadManagerEngine();
-
-  if (engine?.listClubWeekPhases) {
-    return engine.listClubWeekPhases();
-  }
-
-  return listFallbackClubWeekPhases();
+export function listClubWeekPhasesFromBrowser() {
+  return callEngineOrFallback("listClubWeekPhases", listFallbackClubWeekPhases);
 }
