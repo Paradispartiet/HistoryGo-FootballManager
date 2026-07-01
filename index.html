@@ -75,12 +75,11 @@
         <span class="nav-label">Admin</span>
         <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-secondary is-disabled" role="tab" aria-selected="false" aria-disabled="true" disabled data-tab-target="market">
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="market">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 10.5v3h2.5L14 18V6l-7.5 4.5z"/><path d="M17 9.5a4 4 0 0 1 0 5"/>
         </svg>
         <span class="nav-label">Marked</span>
-        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
       </button>
       <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="board">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -735,13 +734,16 @@
     </div>
 
     <!-- ============================ MARKED ============================ -->
+    <!-- Marked v1: ekte kontorflate som leser klubbstate direkte (medietrykk,
+         moral, styretillit). Omdømme, fanstemning og sponsorinteresse er
+         lesbare kvalitative signaler avledet av eksisterende verdier — ingen ny
+         motor. Konkrete avtaler er ærlig merket som senere. -->
     <div class="tab-section dept dept-market" data-tab-section="market" hidden>
       <section class="dept-hero dept-hero-market">
         <div>
           <p class="eyebrow">Kommersiell utvikling</p>
           <h2>Markedsavdeling</h2>
           <p class="dept-hero-lede">Fans, sponsorer og omdømme. Medietrykket fra klubbuken styrer temperaturen.</p>
-          <p class="future-label">Kontorflate · kommer senere i full managerutgave</p>
         </div>
         <div class="dept-hero-stat dept-hero-stat-live">
           <strong id="marketMediaValue">–</strong>
@@ -754,14 +756,16 @@
           <p class="eyebrow">Omdømme</p>
           <h3>Klubbens temperatur</h3>
           <p id="marketReputationNote" class="muted-text">Omdømmet følger medietrykket fra styret og pressen.</p>
+          <ul id="marketSignals" class="board-metrics" aria-label="Kommersielle signaler"></ul>
         </article>
         <article class="panel market-side">
           <h3>Fans</h3>
-          <p class="facility-empty">Oppmøte og tilhørighet kobles på senere.</p>
+          <p id="marketFanMood" class="muted-text">Fanstemningen leses av moral og medietrykk.</p>
         </article>
         <article class="panel market-side">
           <h3>Sponsorer</h3>
-          <p class="facility-empty">Ingen aktive avtaler ennå.</p>
+          <p id="marketSponsorNote" class="muted-text">Sponsorinteressen følger omdømmet.</p>
+          <p class="facility-empty board-future-note">Konkrete avtaler kobles på i full managerutgave.</p>
         </article>
       </div>
     </div>
