@@ -545,7 +545,9 @@ const elements = {
   boardWeekNote: document.querySelector("#boardWeekNote"),
   marketSignals: document.querySelector("#marketSignals"),
   marketFanMood: document.querySelector("#marketFanMood"),
-  marketSponsorNote: document.querySelector("#marketSponsorNote")
+  marketSponsorNote: document.querySelector("#marketSponsorNote"),
+  adminDriftMetrics: document.querySelector("#adminDriftMetrics"),
+  adminStaffNote: document.querySelector("#adminStaffNote")
 };
 
 let managerEngineRenderId = 0;
@@ -6452,6 +6454,8 @@ function renderDepartments() {
     elements.adminStaffCount.textContent = `${count} ${count === 1 ? "ansatt" : "ansatte"}`;
   }
 
+  renderAdminRoom();
+
   const media = state.clubWeekState?.mediaPressure;
   if (elements.marketMediaValue) {
     elements.marketMediaValue.textContent = Number.isFinite(media) ? String(media) : "–";
@@ -6620,6 +6624,49 @@ function renderMarketRoom() {
     } else {
       elements.marketSponsorNote.textContent = "Sponsorinteressen er stabil og følger resultatene.";
     }
+  }
+}
+
+// Admin v1: administrasjonen — den operative driften rundt laget. Leser
+// tropp-/stab-state direkte (rosterReadiness, hired staff). Ingen ny motor og
+// ingen økonomital som ikke finnes; budsjett/kontrakter er ærlig senere.
+function renderAdminRoom() {
+  const roster = getAvailability().rosterReadiness || {};
+  const staffCount = getHiredStaff().length;
+
+  if (elements.adminDriftMetrics) {
+    elements.adminDriftMetrics.innerHTML = "";
+    const metrics = [
+      { label: "Spillere i stall", value: roster.unlockedCount, threshold: REQUIRED_SQUAD_SIZE },
+      { label: "Startellever satt", value: roster.starterCount, threshold: REQUIRED_STARTERS },
+      { label: "Benk", value: roster.benchCount, threshold: REQUIRED_BENCH },
+      { label: "Stab engasjert", value: staffCount, threshold: 1 }
+    ];
+    for (const metric of metrics) {
+      const value = Number(metric.value);
+      const li = document.createElement("li");
+      li.className = "board-metric";
+      const name = document.createElement("span");
+      name.className = "board-metric-label";
+      name.textContent = metric.label;
+      const num = document.createElement("strong");
+      num.className = "board-metric-value";
+      if (Number.isFinite(value)) {
+        num.textContent = `${value}/${metric.threshold}`;
+        num.dataset.tone = value >= metric.threshold ? "good" : value <= 0 ? "warn" : "neutral";
+      } else {
+        num.textContent = `–/${metric.threshold}`;
+        num.dataset.tone = "warn";
+      }
+      li.append(name, num);
+      elements.adminDriftMetrics.append(li);
+    }
+  }
+
+  if (elements.adminStaffNote) {
+    elements.adminStaffNote.textContent = staffCount > 0
+      ? "Staben støtter treningsuka og kampdagen."
+      : "Ingen stab engasjert ennå — stab hentes inn via History Go-progresjon.";
   }
 }
 
