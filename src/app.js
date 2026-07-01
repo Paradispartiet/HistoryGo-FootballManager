@@ -11490,6 +11490,18 @@ function renderApp() {
 }
 
 function bindEvents() {
+  bindFormationAndTacticControls();
+  bindLineupSlotControls();
+  bindTrainingAndKnowledgeControls();
+  bindTeamMeritsControls();
+  bindLocalStartControls();
+  bindHistoryGoSyncControls();
+  bindClubWeekControls();
+  bindMatchdayControls();
+  bindGameModeControls();
+}
+
+function bindFormationAndTacticControls() {
   elements.formationSelect.addEventListener("change", (event) => {
     const nextFormationId = event.target.value;
 
@@ -11510,7 +11522,9 @@ function bindEvents() {
     state.selectedTacticId = event.target.value;
     renderApp();
   });
+}
 
+function bindLineupSlotControls() {
   elements.slotPlayerSelect.addEventListener("change", (event) => {
     const slot = getSelectedSlot();
 
@@ -11545,7 +11559,9 @@ function bindEvents() {
 
     renderApp();
   });
+}
 
+function bindTrainingAndKnowledgeControls() {
   if (elements.clearKnowledgeFocus) {
     elements.clearKnowledgeFocus.addEventListener("click", () => {
       state.activeKnowledgeFocusId = null;
@@ -11567,13 +11583,17 @@ function bindEvents() {
       advanceHgTrainingWeek();
     });
   }
+}
 
+function bindTeamMeritsControls() {
   if (elements.resetHgTeamMerits) {
     elements.resetHgTeamMerits.addEventListener("click", () => {
       resetTeamMerits();
     });
   }
+}
 
+function bindLocalStartControls() {
   if (elements.useHistoryGoCollection) {
     elements.useHistoryGoCollection.addEventListener("click", () => {
       // Startvalget "Bruk History Go-samlingen min" er et rent UI-valg: det
@@ -11653,7 +11673,9 @@ function bindEvents() {
   if (elements.clearLocalStart) {
     elements.clearLocalStart.addEventListener("click", clearLocalStartSquad);
   }
+}
 
+function bindHistoryGoSyncControls() {
   // Manuell synk av ekte History Go-steder. Gjør testing enkel på iPad/GitHub Pages.
   if (elements.syncHistoryGoPlaces) {
     elements.syncHistoryGoPlaces.addEventListener("click", () => {
@@ -11679,13 +11701,17 @@ function bindEvents() {
       refreshAvailabilityFromHistoryGo();
     }
   });
+}
 
+function bindClubWeekControls() {
   if (elements.advanceClubWeekPhase) {
     elements.advanceClubWeekPhase.addEventListener("click", () => {
       advanceClubWeekPhaseAction().catch(console.error);
     });
   }
+}
 
+function bindMatchdayControls() {
   // Kampdag (v1): spill kamp med gjeldende laguttak / nullstill siste kamp.
   if (elements.playMatchdayButton) {
     elements.playMatchdayButton.addEventListener("click", () => {
@@ -11698,7 +11724,9 @@ function bindEvents() {
       resetMatchday();
     });
   }
+}
 
+function bindGameModeControls() {
   // Mini Season v0.1: start ny prøveperiode / nullstill kun mini-sesong-state.
   if (elements.startMiniSeasonButton) {
     elements.startMiniSeasonButton.addEventListener("click", () => {
@@ -11918,6 +11946,251 @@ function initOfficeMenu() {
   });
 }
 
+async function loadStartupData() {
+  const [
+    playersData,
+    playerArchetypesData,
+    rolesData,
+    tacticsData,
+    formationsData,
+    knowledgeData,
+    clubInboxSendersData,
+    clubInboxThreadsData,
+    unlocksData,
+    placeLocationsData,
+    staffData,
+    expertiseData,
+    trainingProgramsData,
+    trainingBadgesData,
+    teamClassificationsData,
+    placeReportsData,
+    teamMeritsData,
+    hgFormationErasData,
+    hgRoleTypesData,
+    hgRoleFitRulesData,
+    hgUnlockRulesData,
+    hgStaffRolesData,
+    legacyFormationsData,
+    hgFormationKnowledgeData
+  ] = await Promise.all([
+    loadJson(DATA_PATHS.players),
+    // Spillerarketyper er valgfrie for kjøring: hvis filen mangler, fortsetter
+    // appen med tom arketypeliste (kun validering varsler om brutte koblinger).
+    loadJson(DATA_PATHS.playerArchetypes).catch(() => null),
+    loadJson(DATA_PATHS.roles),
+    loadJson(DATA_PATHS.tactics),
+    // Primærkilde for taktikktavla: de historiske hgFootball-formasjonene.
+    loadJson(DATA_PATHS.hgFormations),
+    // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
+    loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
+    // Avsenderkatalogen er valgfri: hvis filen mangler, brukes fallback-avsendere.
+    loadJson(DATA_PATHS.clubInboxSenders).catch(() => null),
+    // Trådkatalogen er valgfri: hvis filen mangler, brukes fallback-tråder.
+    loadJson(DATA_PATHS.clubInboxThreads).catch(() => null),
+    // History Go-unlock-data er valgfri: hvis en fil mangler, fortsetter
+    // appen uten det aktuelle laget (prototype-robusthet).
+    loadJson(DATA_PATHS.unlocks).catch(() => null),
+    loadJson(DATA_PATHS.placeLocations).catch(() => null),
+    loadJson(DATA_PATHS.staff).catch(() => null),
+    loadJson(DATA_PATHS.expertise).catch(() => null),
+    loadJson(DATA_PATHS.trainingPrograms).catch(() => null),
+    loadJson(DATA_PATHS.trainingBadges).catch(() => null),
+    loadJson(DATA_PATHS.teamClassifications).catch(() => null),
+    // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
+    // tilbake til tom liste og bygger enkle fallback-kort fra placeUnlocks.
+    loadJson(DATA_PATHS.placeReports).catch(() => null),
+    loadJson(DATA_PATHS.teamMerits).catch(() => null),
+    // Historiske epoker (kreves for å vise epoke/skole på valgt formasjon).
+    loadJson(DATA_PATHS.hgFormationEras).catch(() => null),
+    // roleTypes/fit-regler/unlock-regler er valgfrie: ved feil faller appen
+    // tilbake til id-er / nøytrale hint uten å kaste.
+    loadJson(DATA_PATHS.hgRoleTypes).catch(() => null),
+    loadJson(DATA_PATHS.hgRoleFitRules).catch(() => null),
+    loadJson(DATA_PATHS.hgUnlockRules).catch(() => null),
+    // Stab-/trenerroller er valgfrie: ved feil faller coachContext tilbake til
+    // ren kategori-vekting uten staffRoles-affects, og krasjer ikke.
+    loadJson(DATA_PATHS.hgStaffRoles).catch(() => null),
+    // Gammel formasjonskatalog beholdes som trygg fallback.
+    loadJson(DATA_PATHS.legacyFormations).catch(() => null),
+    // Formasjonskunnskap er valgfri: mangler den, kjøres kampdag uten matchup.
+    loadJson(DATA_PATHS.hgFormationKnowledge).catch(() => null)
+  ]);
+
+  state.players = playersData.players || [];
+  state.playerArchetypes = playerArchetypesData?.archetypes || [];
+  state.roles = rolesData.roles;
+  state.tactics = tacticsData.tactics;
+
+  // Historisk hgFootball-grunnlag: rådata + oppslag. Taktikktavla bygges fra
+  // disse via adapteren (shape -> slots), ikke fra en hardkodet liste i JS.
+  state.hgFormations = Array.isArray(formationsData?.formations) ? formationsData.formations : [];
+  state.hgFormationEras = Array.isArray(hgFormationErasData?.eras) ? hgFormationErasData.eras : [];
+  state.hgRoleTypes = Array.isArray(hgRoleTypesData?.roleTypes) ? hgRoleTypesData.roleTypes : [];
+  state.hgRoleTypeIndex = buildRoleTypeIndex(hgRoleTypesData);
+  state.hgRoleFitRules = hgRoleFitRulesData || null;
+  state.hgUnlockRules = hgUnlockRulesData || null;
+  state.hgStaffRoles = Array.isArray(hgStaffRolesData?.staffRoles) ? hgStaffRolesData.staffRoles : [];
+  state.legacyFormations = Array.isArray(legacyFormationsData?.formations)
+    ? legacyFormationsData.formations
+    : [];
+
+  // Indekser formasjonskunnskap på formationId for raskt matchup-/UI-oppslag.
+  state.formationKnowledgeById = buildFormationKnowledgeIndex(hgFormationKnowledgeData);
+  state.historicalOpponentIndex = buildOpponentProfileIndex(HISTORICAL_OPPONENT_PROFILES);
+
+  // Oversett historiske formasjoner til runtime-format og fyll taktikktavla.
+  // Faller trygt tilbake til legacy-katalogen hvis hgFootball-data mangler.
+  state.formations = adaptHgFormations(formationsData, hgFormationErasData);
+  if (!state.formations.length) {
+    state.formations = state.legacyFormations;
+    console.warn("hgFootball-formasjoner mangler eller er ugyldige. Faller tilbake til legacy football_formations.json.");
+  }
+
+  if (Array.isArray(knowledgeData?.principles)) {
+    state.knowledgePrinciples = knowledgeData.principles;
+  } else {
+    state.knowledgePrinciples = [];
+    console.warn("Fotballkunnskap-data mangler eller har feil format. Fortsetter uten kunnskapsanbefalinger.");
+  }
+
+  // Innboks-meldinger lastes manifest-basert (én fil per avsender) med
+  // fallback til legacy samlefil og deretter hardkodede meldinger.
+  state.clubInboxMessages = await loadClubInboxMessages();
+
+  if (Array.isArray(clubInboxSendersData?.senders)) {
+    state.clubInboxSenders = clubInboxSendersData.senders;
+  } else {
+    state.clubInboxSenders = getFallbackInboxSenders();
+    console.warn("Innboks-avsendere mangler eller har feil format. Bruker fallback-avsendere.");
+  }
+
+  if (Array.isArray(clubInboxThreadsData?.threads)) {
+    state.clubInboxThreads = clubInboxThreadsData.threads;
+  } else {
+    state.clubInboxThreads = getFallbackInboxThreads();
+    console.warn("Innboks-tråder mangler eller har feil format. Bruker fallback-tråder.");
+  }
+
+  // History Go-unlocks (v1): normaliser hver fil til forventet form. Manglende
+  // eller feilformede filer faller tilbake til tomme strukturer, slik at
+  // resten av appen (fit-/lagfitmotor) er upåvirket.
+  state.unlocks = Array.isArray(unlocksData?.placeUnlocks) ? unlocksData : { placeUnlocks: [] };
+  state.placeLocations = Array.isArray(placeLocationsData?.places) ? placeLocationsData : { places: [] };
+  state.staff = Array.isArray(staffData?.staff) ? staffData.staff : [];
+  state.expertise = Array.isArray(expertiseData?.expertise) ? expertiseData.expertise : [];
+  state.trainingPrograms = Array.isArray(trainingProgramsData?.programs) ? trainingProgramsData.programs : [];
+  state.trainingBadges = Array.isArray(trainingBadgesData?.badgeFamilies) ? trainingBadgesData : { badgeFamilies: [] };
+  state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
+    ? teamClassificationsData
+    : { classifications: [] };
+  state.placeReports = Array.isArray(placeReportsData?.placeReports)
+    ? placeReportsData
+    : { placeReports: [] };
+  // Seed fra example-filen brukes ved første lasting; deretter persisteres
+  // brukerens egne endringer i localStorage (hgfm.teamMerits.v1).
+  const seedMerits = teamMeritsData && typeof teamMeritsData === "object" && !Array.isArray(teamMeritsData)
+    ? teamMeritsData
+    : null;
+  state.teamMerits = loadTeamMerits(seedMerits);
+
+  if (!state.teamMerits) {
+    console.warn("History Go team merits mangler eller har feil format. Unlock-laget vises tomt.");
+  } else {
+    // Ekte History Go-sync: unlock-data (state.unlocks) er nå lastet, så vi kan
+    // filtrere besøkte steder mot placeUnlocks og merge dem inn i team merits
+    // uten å overskrive eksisterende progresjon.
+    syncUnlockedPlacesFromHistoryGo();
+    // Hold lagklasser synk med opptjente badges fra start (seed kan ha
+    // utdaterte activeClassifications).
+    recomputeActiveClassifications();
+    saveTeamMerits();
+  }
+}
+
+// Hydrerer resten av state.* fra localStorage (formasjon-/taktikkvalg, trening,
+// innboks, kampdag, mini-sesong, first-time-playthrough). Må kjøre etter
+// loadStartupData(): getAvailability() under leser state.unlocks/state.teamMerits,
+// som først er satt der.
+async function hydratePersistedUiState() {
+  // Startvalg: første tilgjengelige (ulåste) formasjon, ikke bare første i
+  // listen. Team merits er lastet og History Go-synket over, så availability-
+  // snapshotet er gyldig her.
+  state.selectedFormationId = (getAvailability().unlockedFormations[0] || state.formations[0])?.id || null;
+  state.selectedTacticId = state.tactics[0]?.id || null;
+  state.trainingWeek = loadTrainingWeek();
+  state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
+  state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
+  state.readInboxMessageIds = loadReadInboxMessageIds();
+  state.deliveredInboxMessageIds = loadDeliveredInboxMessageIds();
+  // Innboks-svarvalg (v1): valgkatalog fra manifest + brukerens lagrede valg.
+  // loadClubInboxChoices kaster aldri – appen fungerer uten valg-manifest.
+  state.clubInboxChoices = await loadClubInboxChoices();
+  state.selectedInboxChoices = loadSelectedInboxChoices();
+  // Innboks-trådsvar (v1): reply-katalog fra manifest. loadClubInboxReplies
+  // kaster aldri – appen fungerer uten reply-manifest.
+  state.clubInboxReplies = await loadClubInboxReplies();
+  // Kampdag (v1): hent siste spilte kamp fra localStorage.
+  state.matchday = loadMatchdayState();
+  // Mini Season v0.1: hent eventuell prøveperiode fra localStorage. Korrupt
+  // eller manglende state gir null (= ingen prøveperiode startet).
+  state.miniSeason = loadMiniSeason();
+  state.gameStartState = loadGameStartState();
+  state.firstTimePlaythrough = loadFirstTimePlaythrough();
+}
+
+function runStartupValidation() {
+  const dataWarnings = validateFootballData(state);
+
+  if (dataWarnings.length > 0) {
+    console.warn("Football Manager-data har kvalitetsadvarsler:", dataWarnings);
+  }
+
+  const unlockWarnings = validateUnlockData();
+
+  if (unlockWarnings.length > 0) {
+    console.warn("History Go unlock-data har kvalitetsadvarsler:", unlockWarnings);
+  }
+
+  const placeReportWarnings = validatePlaceReportsData();
+
+  if (placeReportWarnings.length > 0) {
+    console.warn("Stedsrapport-data har kvalitetsadvarsler:", placeReportWarnings);
+  }
+
+  const classificationWarnings = validateTeamClassificationsData();
+
+  if (classificationWarnings.length > 0) {
+    console.warn("Lagklasse-data har kvalitetsadvarsler:", classificationWarnings);
+  }
+}
+
+async function bootstrapClubWeekState() {
+  // Club Week-tilstand: les lagret tilstand (fra merits, evt. migrert fra den
+  // gamle nøkkelen) og la engine/fallback normalisere den (ugyldig/gammel
+  // verdi blir uke 1 / analyse).
+  const storedClubWeekState = loadClubWeekState();
+  state.clubWeekState = await createInitialClubWeekStateFromBrowser(storedClubWeekState || {});
+  // Persister med én gang: skriver den kanoniske kopien inn i merits og rydder
+  // bort den gamle frittstående localStorage-nøkkelen (migrering).
+  saveClubWeekState(state.clubWeekState);
+  state.weeklyTrainingFocus = loadWeeklyTrainingFocus();
+  state.weeklyTrainingProgram = loadWeeklyTrainingProgram();
+  syncWeeklyTrainingFocusToClubWeek();
+  state.clubWeekFeedback = loadClubWeekFeedback();
+  state.clubWeekEventLog = loadClubWeekEventLog();
+}
+
+function finalizeStartupLineup() {
+  seedLineupForFormation();
+  // Saner lineup etter at players/unlocks/teamMerits er lastet og synket, slik
+  // at gamle valg ikke omgår unlock-regelen.
+  sanitizeLineupForUnlockedPlayers();
+  // Vern: skulle valgt formasjon likevel være låst, fall tilbake til første
+  // tilgjengelige formasjon.
+  sanitizeSelectedFormation();
+  ensurePositionsForFormation();
+}
+
 async function init() {
   initTabs();
   initOfficeMenu();
@@ -11928,236 +12201,11 @@ async function init() {
   const managerEngineReady = preloadManagerEngine();
 
   try {
-    const [
-      playersData,
-      playerArchetypesData,
-      rolesData,
-      tacticsData,
-      formationsData,
-      knowledgeData,
-      clubInboxSendersData,
-      clubInboxThreadsData,
-      unlocksData,
-      placeLocationsData,
-      staffData,
-      expertiseData,
-      trainingProgramsData,
-      trainingBadgesData,
-      teamClassificationsData,
-      placeReportsData,
-      teamMeritsData,
-      hgFormationErasData,
-      hgRoleTypesData,
-      hgRoleFitRulesData,
-      hgUnlockRulesData,
-      hgStaffRolesData,
-      legacyFormationsData,
-      hgFormationKnowledgeData
-    ] = await Promise.all([
-      loadJson(DATA_PATHS.players),
-      // Spillerarketyper er valgfrie for kjøring: hvis filen mangler, fortsetter
-      // appen med tom arketypeliste (kun validering varsler om brutte koblinger).
-      loadJson(DATA_PATHS.playerArchetypes).catch(() => null),
-      loadJson(DATA_PATHS.roles),
-      loadJson(DATA_PATHS.tactics),
-      // Primærkilde for taktikktavla: de historiske hgFootball-formasjonene.
-      loadJson(DATA_PATHS.hgFormations),
-      // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
-      loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
-      // Avsenderkatalogen er valgfri: hvis filen mangler, brukes fallback-avsendere.
-      loadJson(DATA_PATHS.clubInboxSenders).catch(() => null),
-      // Trådkatalogen er valgfri: hvis filen mangler, brukes fallback-tråder.
-      loadJson(DATA_PATHS.clubInboxThreads).catch(() => null),
-      // History Go-unlock-data er valgfri: hvis en fil mangler, fortsetter
-      // appen uten det aktuelle laget (prototype-robusthet).
-      loadJson(DATA_PATHS.unlocks).catch(() => null),
-      loadJson(DATA_PATHS.placeLocations).catch(() => null),
-      loadJson(DATA_PATHS.staff).catch(() => null),
-      loadJson(DATA_PATHS.expertise).catch(() => null),
-      loadJson(DATA_PATHS.trainingPrograms).catch(() => null),
-      loadJson(DATA_PATHS.trainingBadges).catch(() => null),
-      loadJson(DATA_PATHS.teamClassifications).catch(() => null),
-      // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
-      // tilbake til tom liste og bygger enkle fallback-kort fra placeUnlocks.
-      loadJson(DATA_PATHS.placeReports).catch(() => null),
-      loadJson(DATA_PATHS.teamMerits).catch(() => null),
-      // Historiske epoker (kreves for å vise epoke/skole på valgt formasjon).
-      loadJson(DATA_PATHS.hgFormationEras).catch(() => null),
-      // roleTypes/fit-regler/unlock-regler er valgfrie: ved feil faller appen
-      // tilbake til id-er / nøytrale hint uten å kaste.
-      loadJson(DATA_PATHS.hgRoleTypes).catch(() => null),
-      loadJson(DATA_PATHS.hgRoleFitRules).catch(() => null),
-      loadJson(DATA_PATHS.hgUnlockRules).catch(() => null),
-      // Stab-/trenerroller er valgfrie: ved feil faller coachContext tilbake til
-      // ren kategori-vekting uten staffRoles-affects, og krasjer ikke.
-      loadJson(DATA_PATHS.hgStaffRoles).catch(() => null),
-      // Gammel formasjonskatalog beholdes som trygg fallback.
-      loadJson(DATA_PATHS.legacyFormations).catch(() => null),
-      // Formasjonskunnskap er valgfri: mangler den, kjøres kampdag uten matchup.
-      loadJson(DATA_PATHS.hgFormationKnowledge).catch(() => null)
-    ]);
-
-    state.players = playersData.players || [];
-    state.playerArchetypes = playerArchetypesData?.archetypes || [];
-    state.roles = rolesData.roles;
-    state.tactics = tacticsData.tactics;
-
-    // Historisk hgFootball-grunnlag: rådata + oppslag. Taktikktavla bygges fra
-    // disse via adapteren (shape -> slots), ikke fra en hardkodet liste i JS.
-    state.hgFormations = Array.isArray(formationsData?.formations) ? formationsData.formations : [];
-    state.hgFormationEras = Array.isArray(hgFormationErasData?.eras) ? hgFormationErasData.eras : [];
-    state.hgRoleTypes = Array.isArray(hgRoleTypesData?.roleTypes) ? hgRoleTypesData.roleTypes : [];
-    state.hgRoleTypeIndex = buildRoleTypeIndex(hgRoleTypesData);
-    state.hgRoleFitRules = hgRoleFitRulesData || null;
-    state.hgUnlockRules = hgUnlockRulesData || null;
-    state.hgStaffRoles = Array.isArray(hgStaffRolesData?.staffRoles) ? hgStaffRolesData.staffRoles : [];
-    state.legacyFormations = Array.isArray(legacyFormationsData?.formations)
-      ? legacyFormationsData.formations
-      : [];
-
-    // Indekser formasjonskunnskap på formationId for raskt matchup-/UI-oppslag.
-    state.formationKnowledgeById = buildFormationKnowledgeIndex(hgFormationKnowledgeData);
-    state.historicalOpponentIndex = buildOpponentProfileIndex(HISTORICAL_OPPONENT_PROFILES);
-
-    // Oversett historiske formasjoner til runtime-format og fyll taktikktavla.
-    // Faller trygt tilbake til legacy-katalogen hvis hgFootball-data mangler.
-    state.formations = adaptHgFormations(formationsData, hgFormationErasData);
-    if (!state.formations.length) {
-      state.formations = state.legacyFormations;
-      console.warn("hgFootball-formasjoner mangler eller er ugyldige. Faller tilbake til legacy football_formations.json.");
-    }
-
-    if (Array.isArray(knowledgeData?.principles)) {
-      state.knowledgePrinciples = knowledgeData.principles;
-    } else {
-      state.knowledgePrinciples = [];
-      console.warn("Fotballkunnskap-data mangler eller har feil format. Fortsetter uten kunnskapsanbefalinger.");
-    }
-
-    // Innboks-meldinger lastes manifest-basert (én fil per avsender) med
-    // fallback til legacy samlefil og deretter hardkodede meldinger.
-    state.clubInboxMessages = await loadClubInboxMessages();
-
-    if (Array.isArray(clubInboxSendersData?.senders)) {
-      state.clubInboxSenders = clubInboxSendersData.senders;
-    } else {
-      state.clubInboxSenders = getFallbackInboxSenders();
-      console.warn("Innboks-avsendere mangler eller har feil format. Bruker fallback-avsendere.");
-    }
-
-    if (Array.isArray(clubInboxThreadsData?.threads)) {
-      state.clubInboxThreads = clubInboxThreadsData.threads;
-    } else {
-      state.clubInboxThreads = getFallbackInboxThreads();
-      console.warn("Innboks-tråder mangler eller har feil format. Bruker fallback-tråder.");
-    }
-
-    // History Go-unlocks (v1): normaliser hver fil til forventet form. Manglende
-    // eller feilformede filer faller tilbake til tomme strukturer, slik at
-    // resten av appen (fit-/lagfitmotor) er upåvirket.
-    state.unlocks = Array.isArray(unlocksData?.placeUnlocks) ? unlocksData : { placeUnlocks: [] };
-    state.placeLocations = Array.isArray(placeLocationsData?.places) ? placeLocationsData : { places: [] };
-    state.staff = Array.isArray(staffData?.staff) ? staffData.staff : [];
-    state.expertise = Array.isArray(expertiseData?.expertise) ? expertiseData.expertise : [];
-    state.trainingPrograms = Array.isArray(trainingProgramsData?.programs) ? trainingProgramsData.programs : [];
-    state.trainingBadges = Array.isArray(trainingBadgesData?.badgeFamilies) ? trainingBadgesData : { badgeFamilies: [] };
-    state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
-      ? teamClassificationsData
-      : { classifications: [] };
-    state.placeReports = Array.isArray(placeReportsData?.placeReports)
-      ? placeReportsData
-      : { placeReports: [] };
-    // Seed fra example-filen brukes ved første lasting; deretter persisteres
-    // brukerens egne endringer i localStorage (hgfm.teamMerits.v1).
-    const seedMerits = teamMeritsData && typeof teamMeritsData === "object" && !Array.isArray(teamMeritsData)
-      ? teamMeritsData
-      : null;
-    state.teamMerits = loadTeamMerits(seedMerits);
-
-    if (!state.teamMerits) {
-      console.warn("History Go team merits mangler eller har feil format. Unlock-laget vises tomt.");
-    } else {
-      // Ekte History Go-sync: unlock-data (state.unlocks) er nå lastet, så vi kan
-      // filtrere besøkte steder mot placeUnlocks og merge dem inn i team merits
-      // uten å overskrive eksisterende progresjon.
-      syncUnlockedPlacesFromHistoryGo();
-      // Hold lagklasser synk med opptjente badges fra start (seed kan ha
-      // utdaterte activeClassifications).
-      recomputeActiveClassifications();
-      saveTeamMerits();
-    }
-
-    // Startvalg: første tilgjengelige (ulåste) formasjon, ikke bare første i
-    // listen. Team merits er lastet og History Go-synket over, så availability-
-    // snapshotet er gyldig her.
-    state.selectedFormationId = (getAvailability().unlockedFormations[0] || state.formations[0])?.id || null;
-    state.selectedTacticId = state.tactics[0]?.id || null;
-    state.trainingWeek = loadTrainingWeek();
-    state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
-    state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
-    state.readInboxMessageIds = loadReadInboxMessageIds();
-    state.deliveredInboxMessageIds = loadDeliveredInboxMessageIds();
-    // Innboks-svarvalg (v1): valgkatalog fra manifest + brukerens lagrede valg.
-    // loadClubInboxChoices kaster aldri – appen fungerer uten valg-manifest.
-    state.clubInboxChoices = await loadClubInboxChoices();
-    state.selectedInboxChoices = loadSelectedInboxChoices();
-    // Innboks-trådsvar (v1): reply-katalog fra manifest. loadClubInboxReplies
-    // kaster aldri – appen fungerer uten reply-manifest.
-    state.clubInboxReplies = await loadClubInboxReplies();
-    // Kampdag (v1): hent siste spilte kamp fra localStorage.
-    state.matchday = loadMatchdayState();
-    // Mini Season v0.1: hent eventuell prøveperiode fra localStorage. Korrupt
-    // eller manglende state gir null (= ingen prøveperiode startet).
-    state.miniSeason = loadMiniSeason();
-    state.gameStartState = loadGameStartState();
-    state.firstTimePlaythrough = loadFirstTimePlaythrough();
-
-    const dataWarnings = validateFootballData(state);
-
-    if (dataWarnings.length > 0) {
-      console.warn("Football Manager-data har kvalitetsadvarsler:", dataWarnings);
-    }
-
-    const unlockWarnings = validateUnlockData();
-
-    if (unlockWarnings.length > 0) {
-      console.warn("History Go unlock-data har kvalitetsadvarsler:", unlockWarnings);
-    }
-
-    const placeReportWarnings = validatePlaceReportsData();
-
-    if (placeReportWarnings.length > 0) {
-      console.warn("Stedsrapport-data har kvalitetsadvarsler:", placeReportWarnings);
-    }
-
-    const classificationWarnings = validateTeamClassificationsData();
-
-    if (classificationWarnings.length > 0) {
-      console.warn("Lagklasse-data har kvalitetsadvarsler:", classificationWarnings);
-    }
-
-    // Club Week-tilstand: les lagret tilstand (fra merits, evt. migrert fra den
-    // gamle nøkkelen) og la engine/fallback normalisere den (ugyldig/gammel
-    // verdi blir uke 1 / analyse).
-    const storedClubWeekState = loadClubWeekState();
-    state.clubWeekState = await createInitialClubWeekStateFromBrowser(storedClubWeekState || {});
-    // Persister med én gang: skriver den kanoniske kopien inn i merits og rydder
-    // bort den gamle frittstående localStorage-nøkkelen (migrering).
-    saveClubWeekState(state.clubWeekState);
-    state.weeklyTrainingFocus = loadWeeklyTrainingFocus();
-    state.weeklyTrainingProgram = loadWeeklyTrainingProgram();
-    syncWeeklyTrainingFocusToClubWeek();
-    state.clubWeekFeedback = loadClubWeekFeedback();
-    state.clubWeekEventLog = loadClubWeekEventLog();
-
-    seedLineupForFormation();
-    // Saner lineup etter at players/unlocks/teamMerits er lastet og synket, slik
-    // at gamle valg ikke omgår unlock-regelen.
-    sanitizeLineupForUnlockedPlayers();
-    // Vern: skulle valgt formasjon likevel være låst, fall tilbake til første
-    // tilgjengelige formasjon.
-    sanitizeSelectedFormation();
-    ensurePositionsForFormation();
+    await loadStartupData();
+    await hydratePersistedUiState();
+    runStartupValidation();
+    await bootstrapClubWeekState();
+    finalizeStartupLineup();
     bindEvents();
 
     // Vent til TS-motoren er ferdig lastet (eller bekreftet utilgjengelig) før
