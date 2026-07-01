@@ -7135,7 +7135,15 @@ function getWeeklyTrainingChoiceLabel() {
 }
 
 function getMatchdayOpponentBrief(session) {
-  const opponent = session?.opponent || getMiniSeasonNextOpponent() || OPPONENT_PROFILES[0] || {};
+  // Under en aktiv sesjon vises den faktiske motstanderen; ellers evt. neste
+  // mini-sesong-motstander. En vanlig ligakamp trekker en historisk stil-
+  // motstander ved avspark (pickHistoricalOpponentProfile), så vi kan ikke
+  // navngi den på forhånd — vær ærlig i stedet for å love en generisk motstander
+  // spilleren aldri møter.
+  const opponent = session?.opponent || getMiniSeasonNextOpponent();
+  if (!opponent) {
+    return "Historisk stil-motstander · trekkes ved avspark";
+  }
   const parts = [opponent.name || "Ikke valgt"];
   if (opponent.style) parts.push(opponent.style);
   if (opponent.archetypeName) parts.push(opponent.archetypeName);
@@ -7178,6 +7186,15 @@ function renderMatchdayGate(container, teamFit) {
         ? "Spill kamp"
         : "Fullfør forberedelser";
 
+  // Når en ferdigspilt kamp vises som rapport (lastMatch uten aktiv sesjon), er
+  // rapporten selve innholdet. Da skal ikke pre-match-sjekklista gjentas over
+  // den — den viste en annen (neste/generisk) motstander enn den du nettopp
+  // spilte, og skapte forvirring. Er alt klart, hopper vi over hele gaten.
+  const showingFinishedReport = Boolean(lastMatch) && !session;
+  if (showingFinishedReport && isReady && hasTrainingChoice) {
+    return;
+  }
+
   const gate = document.createElement("article");
   gate.className = "matchday-gate";
 
@@ -7185,15 +7202,19 @@ function renderMatchdayGate(container, teamFit) {
   title.textContent = "Kampdag";
   gate.append(title);
 
-  const lines = [
-    `Kampklar: ${isReady ? "ja" : "nei"}`,
-    `Motstander: ${getMatchdayOpponentBrief(session)}`,
-    `Formasjon / kampplan: ${formation.name || "Ikke valgt"}${tactic.name ? ` · ${tactic.name}` : ""}`,
-    `Treningsuke valgt: ${getWeeklyTrainingChoiceLabel() || "mangler"}`,
-    `Siste signal: ${getLastInboxSignalText()}`,
-    `Primærhandling: ${primary}`
-  ];
-  appendMatchdayList(gate, lines);
+  // Pre-match-brief vises kun når vi forbereder eller er midt i en kamp — ikke
+  // stablet over en ferdig rapport.
+  if (!showingFinishedReport) {
+    const lines = [
+      `Kampklar: ${isReady ? "ja" : "nei"}`,
+      `Motstander: ${getMatchdayOpponentBrief(session)}`,
+      `Formasjon / kampplan: ${formation.name || "Ikke valgt"}${tactic.name ? ` · ${tactic.name}` : ""}`,
+      `Treningsuke valgt: ${getWeeklyTrainingChoiceLabel() || "mangler"}`,
+      `Siste signal: ${getLastInboxSignalText()}`,
+      `Primærhandling: ${primary}`
+    ];
+    appendMatchdayList(gate, lines);
+  }
 
   if (!isReady || !hasTrainingChoice) {
     appendMatchdaySubheading(gate, "Dette mangler før kamp");
