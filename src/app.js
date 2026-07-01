@@ -539,7 +539,10 @@ const elements = {
   marketReputationNote: document.querySelector("#marketReputationNote"),
   boardTrustValue: document.querySelector("#boardTrustValue"),
   boardTrustFill: document.querySelector("#boardTrustFill"),
-  boardTrustNote: document.querySelector("#boardTrustNote")
+  boardTrustNote: document.querySelector("#boardTrustNote"),
+  boardExpectationNote: document.querySelector("#boardExpectationNote"),
+  boardClubMetrics: document.querySelector("#boardClubMetrics"),
+  boardWeekNote: document.querySelector("#boardWeekNote")
 };
 
 let managerEngineRenderId = 0;
@@ -6473,6 +6476,75 @@ function renderDepartments() {
         : trust <= 35
           ? "Styret er bekymret. Tilliten er lav – det trengs resultater."
           : "Styret følger utviklingen tett. Tilliten er moderat.";
+  }
+
+  renderBoardRoom();
+}
+
+// Styret v1: den fyldige styreflaten. Leser klubbstate direkte
+// (styretillit, klubbverdier, ukerytme) — ingen ny motor, ingen History
+// Go-progresjon. I scenario-modus vises også prøveperiodens styreforventning.
+function renderBoardRoom() {
+  const club = state.clubWeekState;
+
+  // Styrets forventning: avledet av tilliten akkurat nå. Kort, kontekstuell
+  // retning — ikke en fasit, men det styret ser etter denne uka.
+  if (elements.boardExpectationNote) {
+    const miniExpectation = isScenarioModeActive() && state.miniSeason?.boardExpectation
+      ? state.miniSeason.boardExpectation
+      : null;
+    if (miniExpectation) {
+      elements.boardExpectationNote.textContent = `Prøveperioden: ${miniExpectation}`;
+    } else {
+      const trust = Number(club?.boardTrust);
+      elements.boardExpectationNote.textContent = !Number.isFinite(trust)
+        ? "Styret venter at du bygger laget og viser en tydelig retning."
+        : trust >= 65
+          ? "Styret forventer at du holder retningen og bygger videre på det som virker."
+          : trust <= 35
+            ? "Styret forventer tydelige grep og resultater som snur trenden."
+            : "Styret forventer jevn framgang: sett laget, tren målrettet og vinn kampene du bør vinne.";
+    }
+  }
+
+  // Klubbens temperatur: styrets lesning av klubbverdiene, som lesbare signaler
+  // med retning (høy/lav) i stedet for rå tall alene.
+  if (elements.boardClubMetrics) {
+    elements.boardClubMetrics.innerHTML = "";
+    const metrics = [
+      { label: "Moral", value: club?.playerMorale, highGood: true },
+      { label: "Taktisk klarhet", value: club?.tacticalClarity, highGood: true },
+      { label: "Treningskultur", value: club?.trainingCulture, highGood: true },
+      { label: "Medietrykk", value: club?.mediaPressure, highGood: false }
+    ];
+    for (const metric of metrics) {
+      const value = Number(metric.value);
+      const li = document.createElement("li");
+      li.className = "board-metric";
+      const name = document.createElement("span");
+      name.className = "board-metric-label";
+      name.textContent = metric.label;
+      const num = document.createElement("strong");
+      num.className = "board-metric-value";
+      if (Number.isFinite(value)) {
+        num.textContent = String(value);
+        const strong = metric.highGood ? value >= 60 : value <= 40;
+        const weak = metric.highGood ? value <= 40 : value >= 60;
+        num.dataset.tone = strong ? "good" : weak ? "warn" : "neutral";
+      } else {
+        num.textContent = "–";
+        num.dataset.tone = "neutral";
+      }
+      li.append(name, num);
+      elements.boardClubMetrics.append(li);
+    }
+  }
+
+  // Ukerytme: hvor i klubbuka styret ser laget akkurat nå.
+  if (elements.boardWeekNote) {
+    const week = Number(club?.week) || 1;
+    const phaseLabel = club ? CLUB_WEEK_PHASE_LABELS[club.phase] || club.phase : "Oppsett";
+    elements.boardWeekNote.textContent = `Uke ${week} · ${phaseLabel} — styret følger utviklingen.`;
   }
 }
 

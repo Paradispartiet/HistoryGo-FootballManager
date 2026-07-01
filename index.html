@@ -82,12 +82,11 @@
         <span class="nav-label">Marked</span>
         <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-secondary is-disabled" role="tab" aria-selected="false" aria-disabled="true" disabled data-tab-target="board">
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="board">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3.5 19 6v5.2c0 4.4-3 7.6-7 9.3-4-1.7-7-4.9-7-9.3V6z"/>
         </svg>
         <span class="nav-label">Styret</span>
-        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
       </button>
       <button type="button" class="nav-tab nav-tab-secondary is-disabled" role="tab" aria-selected="false" aria-disabled="true" disabled data-tab-target="hgfmLibrary">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -768,13 +767,16 @@
     </div>
 
     <!-- ============================ STYRET ============================ -->
+    <!-- Styret v1: en ekte kontorflate som leser klubbstate (styretillit,
+         klubbverdier, ukerytme) direkte. Ikke lenger en «Senere»-flate — alt
+         her er live via renderBoardRoom(). Budsjett/kontrakter er ærlig merket
+         som senere, som en liten sekundær note, ikke som hovedinnhold. -->
     <div class="tab-section dept dept-board" data-tab-section="board" hidden>
       <section class="dept-hero dept-hero-board">
         <div>
           <p class="eyebrow">Boardroom</p>
           <h2>Styret</h2>
-          <p class="dept-hero-lede">Tillit, budsjett og forventninger. Styretilliten beveger seg med klubbukene dine.</p>
-          <p class="future-label">Kontorflate · ikke nødvendig før første kamp</p>
+          <p class="dept-hero-lede">Tillit, forventninger og klubbens temperatur. Styret følger klubbukene dine — tilliten beveger seg med hvordan du driver laget.</p>
         </div>
         <div class="dept-hero-stat dept-hero-stat-live">
           <strong id="boardTrustValue">–</strong>
@@ -790,18 +792,17 @@
             <div class="board-trust-fill" id="boardTrustFill"></div>
           </div>
           <p id="boardTrustNote" class="muted-text">Tilliten oppdateres når du driver klubben gjennom ukene.</p>
+          <p id="boardExpectationNote" class="board-expectation">Styret venter at du bygger laget og viser en tydelig retning.</p>
         </article>
         <article class="panel board-side">
-          <h3>Sesongmål</h3>
-          <p class="facility-empty">Konkrete sesongmål er ikke satt ennå.</p>
+          <h3>Klubbens temperatur</h3>
+          <p class="muted-text">Styrets lesning av klubben akkurat nå.</p>
+          <ul id="boardClubMetrics" class="board-metrics" aria-label="Klubbverdier styret følger"></ul>
         </article>
         <article class="panel board-side">
-          <h3>Budsjett</h3>
-          <p class="facility-empty">Styret har ikke tildelt budsjett ennå.</p>
-        </article>
-        <article class="panel board-side">
-          <h3>Forventninger</h3>
-          <p class="facility-empty">Forventninger følges opp gjennom sesongen.</p>
+          <h3>Denne uka</h3>
+          <p id="boardWeekNote" class="muted-text">Uke 1 · styret følger utviklingen.</p>
+          <p class="facility-empty board-future-note">Budsjett og kontrakter kobles på i full managerutgave.</p>
         </article>
       </div>
     </div>

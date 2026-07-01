@@ -123,6 +123,31 @@ stage("3. Primær nav → spillflate");
   }
 }
 
+// ---- 3b) Aktive faner leder ikke til en «senere»-placeholder ---------------
+// En fane som er klikkbar (ikke disabled, ikke «Senere»-badge) må lede til en
+// seksjon med ekte innhold — ikke en flate som fortsatt er merket som senere
+// (`future-label`). Å åpne en fane krever altså at placeholderen fjernes.
+stage("3b. Aktive faner har ekte innhold");
+{
+  const sectionBlock = (target) => {
+    const re = new RegExp(
+      `data-tab-section="${target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[\\s\\S]*?(?=<div class="tab-section|</main>)`
+    );
+    const m = html.match(re);
+    return m ? m[0] : "";
+  };
+  const buttons = navTabButtons();
+  const active = buttons.filter((b) => !b.isDisabled && !b.isFuture);
+  for (const b of active) {
+    const block = sectionBlock(b.target);
+    check(
+      `aktiv fane ${b.target} leder ikke til en «senere»-placeholder`,
+      block !== "" && !/class="future-label"/.test(block),
+      "seksjonen er fortsatt merket future-label → åpnet, men uferdig"
+    );
+  }
+}
+
 // ---- 4) Alle querySelector("#id") i app.js finnes i DOM ---------------------
 stage("4. JS-id-oppslag finnes");
 {
