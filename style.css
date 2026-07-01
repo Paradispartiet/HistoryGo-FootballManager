@@ -4117,6 +4117,62 @@ ul {
   transition: width 0.3s ease;
 }
 
+/* Styret v1: to sidekort under tillitskortet deler raden likt. */
+.board-board .board-side {
+  grid-column: span 2;
+}
+
+.board-expectation {
+  margin: 4px 0 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* Klubbens temperatur: styrets lesning av klubbverdiene. */
+.board-metrics {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.board-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--hg-radius-sm);
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.board-metric-label {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.board-metric-value {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+}
+
+.board-metric-value[data-tone="good"] { color: var(--hg-accent-board, #6ee7b7); }
+.board-metric-value[data-tone="warn"] { color: #f6a96b; }
+.board-metric-value[data-tone="neutral"] { color: var(--text); }
+
+.board-future-note {
+  margin-top: 2px;
+}
+
+@media (max-width: 720px) {
+  .board-board .board-side {
+    grid-column: span 4;
+  }
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   padding: 8px 0 40px;
