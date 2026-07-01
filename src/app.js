@@ -1808,6 +1808,10 @@ function activateLocalStartSquad(startLocation, startSource = {}) {
   saveTeamMerits();
   invalidateAvailability();
   sanitizeLineupForUnlockedPlayers();
+  // Ny starttropp: fyll de tomme plassene automatisk slik at manageren lander
+  // på en ferdig startellever i stedet for en tom bane. Bare tomme plasser
+  // fylles — eventuelle egne valg beholdes.
+  fillEmptyLineupSlots(true);
   renderApp();
 }
 
@@ -11213,6 +11217,26 @@ function getSquadSetupGateState(teamFit) {
   const misusedCount = assignments.filter((item) => item.player && item.fit?.status === "feilbrukt").length;
   const completeStarters = Number(teamFit?.completeCount) || 0;
 
+  // Ingen spillere låst opp ennå: «Fyll neste ledige plass» er en død handling
+  // (det finnes ingen å sette inn). Led i stedet manageren dit troppen faktisk
+  // skaffes — History Go-startmodus (bruk samlingen, velg startsted eller finn
+  // nærmeste spillere). Uten dette møter en fersk spiller en tom bane med en
+  // knapp som ikke gjør noe.
+  if (readiness.unlockedCount === 0) {
+    return {
+      title: "Skaff en starttropp",
+      hint: "Du har ingen spillere ennå. Skaff en spillbar tropp i History Go — bruk samlingen din, velg et offentlig startsted eller finn de nærmeste spillerne.",
+      actionLabel: "Skaff spillere i History Go",
+      action: () => activateTab("historygo"),
+      tone: "needs-work",
+      completeStarters,
+      benchCount: readiness.benchCount,
+      rolesOk: !missingRole,
+      misusedCount,
+      duplicateCount
+    };
+  }
+
   if (emptySlot) {
     return {
       title: completeStarters > 0 ? "Fyll neste ledige plass" : "Sett opp laget",
@@ -11529,6 +11553,8 @@ function bindEvents() {
       invalidateAvailability();
       sanitizeLineupForUnlockedPlayers();
       sanitizeSelectedFormation();
+      // Fyll tomme plasser fra samlingen slik at banen ikke står tom etterpå.
+      fillEmptyLineupSlots(true);
       renderApp();
     });
   }
