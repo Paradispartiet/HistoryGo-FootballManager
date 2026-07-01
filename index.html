@@ -355,6 +355,18 @@
             <h2 id="selectedSlotTitle">Velg en plass</h2>
           </div>
 
+          <!-- Handlinger: velg spiller og rolle for den valgte plassen. Ligger
+               øverst så det alltid er tydelig HVORDAN man setter laget — selve
+               grepet, ikke gjemt under profilinfo. -->
+          <form id="slotEditor" class="slot-editor">
+            <p class="side-actions-label">Sett spiller på denne plassen</p>
+            <label for="slotPlayerSelect">Spiller</label>
+            <select id="slotPlayerSelect" name="slotPlayer"></select>
+            <label for="slotRoleSelect">Rolle</label>
+            <select id="slotRoleSelect" name="slotRole"></select>
+            <p class="slot-editor-hint muted-text">Velg en spiller fra troppen, så en rolle. Tomme plasser fylles automatisk med «Fyll neste ledige plass» øverst.</p>
+          </form>
+
           <!-- Spillerprofil: vises når plassen har en spiller -->
           <div class="side-profile" id="sideProfile" hidden>
             <div class="profile-identity">
@@ -397,15 +409,6 @@
             <p class="eyebrow">Neste beslutninger</p>
             <ul id="sideDecisionsList" class="decision-list"></ul>
           </div>
-
-          <!-- Handlinger: alltid tilgjengelig -->
-          <form id="slotEditor" class="slot-editor">
-            <p class="side-actions-label">Handlinger</p>
-            <label for="slotPlayerSelect">Spiller</label>
-            <select id="slotPlayerSelect" name="slotPlayer"></select>
-            <label for="slotRoleSelect">Rolle</label>
-            <select id="slotRoleSelect" name="slotRole"></select>
-          </form>
         </aside>
       </div>
 
