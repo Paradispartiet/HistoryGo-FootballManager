@@ -3479,6 +3479,27 @@ ul {
   color: var(--muted);
 }
 
+/* Slot-editoren ligger nå øverst i sidepanelet som det primære grepet: velg
+   spiller og rolle for valgt plass. Fremhevet som et lite kort så det er
+   åpenbart HVORDAN man setter laget. */
+.side-panel > .slot-editor {
+  padding: 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: var(--hg-surface-deep);
+}
+
+.side-panel > .slot-editor .side-actions-label {
+  color: var(--text);
+  font-size: 0.78rem;
+}
+
+.slot-editor-hint {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
 /* ---------- Tropp og benk (roster readiness) ---------- */
 /* 15-spillerkravet: 11 i startelleveren + minst 4 på benken. Statisk panel i
    index.html som rendres av app.js fra availability-snapshotet. */

@@ -4295,6 +4295,78 @@ function seedLineupForFormation() {
   });
 }
 
+// Fyll tomme plasser i startelleveren automatisk fra opplåste spillere. Dette
+// gjør «Fyll neste ledige plass»-knappen til en ekte handling i stedet for bare
+// å velge plassen (den gamle oppførselen var et løftebrudd: knappen «fylte»
+// ingenting). En plass uten spiller får beste ledige spiller + standardrolle; en
+// plass med spiller men uten rolle får standardrollen. Manageren kan alltid
+// endre valget etterpå — dette er et startpunkt, ikke en fasit.
+//
+// `fillAll = false` fyller kun neste ledige plass (og velger den, så editoren
+// øverst peker på den). `fillAll = true` fyller alle ledige plasser i én omgang.
+// Returnerer antall plasser som ble fylt. Er ingen spillere ledige, gjøres
+// ingenting her — kalleren faller tilbake til å bare velge plassen.
+function fillEmptyLineupSlots(fillAll = false) {
+  const formation = getFormation();
+  if (!formation) {
+    return 0;
+  }
+
+  const availablePlayers = getUnlockedPlayers();
+  let filled = 0;
+  let firstFilledSlotId = null;
+
+  for (const slot of formation.slots) {
+    const slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
+
+    // Har plassen allerede spiller, men mangler rolle: sett standardrollen.
+    if (slotState.playerId) {
+      if (!slotState.roleId) {
+        const player = availablePlayers.find((item) => item.id === slotState.playerId) || null;
+        state.lineup[slot.slotId] = { playerId: slotState.playerId, roleId: getDefaultRoleForPlayer(player, slot) };
+        filled += 1;
+        if (!firstFilledSlotId) firstFilledSlotId = slot.slotId;
+        if (!fillAll) break;
+      }
+      continue;
+    }
+
+    // Tom plass: finn beste ledige spiller (respekterer naturlig posisjon først).
+    const usedPlayerIds = getUsedPlayerIds(slot.slotId);
+    const player = findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers);
+    if (!player) {
+      continue;
+    }
+
+    state.lineup[slot.slotId] = { playerId: player.id, roleId: getDefaultRoleForPlayer(player, slot) };
+    filled += 1;
+    if (!firstFilledSlotId) firstFilledSlotId = slot.slotId;
+    if (!fillAll) break;
+  }
+
+  if (filled > 0) {
+    if (firstFilledSlotId) state.selectedSlotId = firstFilledSlotId;
+    invalidateAvailability();
+  }
+
+  return filled;
+}
+
+// Handling bak «Fyll neste ledige plass»-knappen: fyll neste tomme plass hvis
+// mulig, ellers pek manageren på plassen (og troppen mangler da spillere —
+// «Neste beslutninger» guider videre til History Go-samlingen).
+function fillNextEmptySlotAction(slotId) {
+  return () => {
+    const filled = fillEmptyLineupSlots(false);
+    if (filled === 0) {
+      // Ingen ledige spillere å fylle med: velg plassen så editoren øverst vises.
+      state.selectedSlotId = slotId;
+    }
+    activateTab("tactics");
+    renderApp();
+  };
+}
+
 // Saner gjeldende lineup mot opplåste spillere. Gamle valg i localStorage/state
 // skal ikke kunne omgå unlock-regelen: en plass som peker på en spiller som ikke
 // lenger er opplåst, beholder rollen sin men mister playerId. Returnerer true
@@ -6054,14 +6126,22 @@ function buildNextDecisions(teamFit) {
 
   const assignments = Array.isArray(teamFit.assignments) ? teamFit.assignments : [];
 
-  // 1) Tomme plasser i startelleveren.
+  // 1) Tomme plasser i startelleveren. Fyller alle ledige plasser i ett klikk
+  //    når det finnes spillere; ellers velges plassen (troppen mangler spillere).
   const emptySlots = assignments.filter((item) => !item.player);
   if (emptySlots.length) {
+    const hasPlayersToPlace = getUnlockedPlayers().length > 0;
     decisions.push({
       tag: "Lag",
       title: emptySlots.length === 1 ? "Fyll én tom plass" : `Fyll ${emptySlots.length} tomme plasser`,
       detail: `Startelleveren mangler ${emptySlots.length} av ${teamFit.totalSlots} spillere.`,
-      action: selectSlotDecision(emptySlots[0].slot.slotId)
+      action: hasPlayersToPlace
+        ? () => {
+            fillEmptyLineupSlots(true);
+            activateTab("tactics");
+            renderApp();
+          }
+        : selectSlotDecision(emptySlots[0].slot.slotId)
     });
   }
 
@@ -11138,7 +11218,7 @@ function getSquadSetupGateState(teamFit) {
       title: completeStarters > 0 ? "Fyll neste ledige plass" : "Sett opp laget",
       hint: `Startelleveren mangler ${Math.max(0, (teamFit?.totalSlots || REQUIRED_STARTERS) - completeStarters)} plass${(teamFit?.totalSlots || REQUIRED_STARTERS) - completeStarters === 1 ? "" : "er"}. Velg spiller og rolle — alle spillere er gode nok når treneren forstår bruken.`,
       actionLabel: "Fyll neste ledige plass",
-      action: selectSlotDecision(emptySlot.slot.slotId),
+      action: fillNextEmptySlotAction(emptySlot.slot.slotId),
       tone: "needs-work",
       completeStarters,
       benchCount: readiness.benchCount,
