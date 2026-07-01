@@ -542,7 +542,10 @@ const elements = {
   boardTrustNote: document.querySelector("#boardTrustNote"),
   boardExpectationNote: document.querySelector("#boardExpectationNote"),
   boardClubMetrics: document.querySelector("#boardClubMetrics"),
-  boardWeekNote: document.querySelector("#boardWeekNote")
+  boardWeekNote: document.querySelector("#boardWeekNote"),
+  marketSignals: document.querySelector("#marketSignals"),
+  marketFanMood: document.querySelector("#marketFanMood"),
+  marketSponsorNote: document.querySelector("#marketSponsorNote")
 };
 
 let managerEngineRenderId = 0;
@@ -6462,6 +6465,8 @@ function renderDepartments() {
           : "Medietrykket er normalt. Omdømmet følger resultatene dine.";
   }
 
+  renderMarketRoom();
+
   const trust = state.clubWeekState?.boardTrust;
   if (elements.boardTrustValue) {
     elements.boardTrustValue.textContent = Number.isFinite(trust) ? String(trust) : "–";
@@ -6545,6 +6550,76 @@ function renderBoardRoom() {
     const week = Number(club?.week) || 1;
     const phaseLabel = club ? CLUB_WEEK_PHASE_LABELS[club.phase] || club.phase : "Oppsett";
     elements.boardWeekNote.textContent = `Uke ${week} · ${phaseLabel} — styret følger utviklingen.`;
+  }
+}
+
+// Marked v1: markedsavdelingen. Leser klubbstate direkte (medietrykk, moral,
+// styretillit) og presenterer omdømme, fanstemning og sponsorinteresse som
+// lesbare kvalitative signaler — ingen ny motor, ingen tall som ikke finnes.
+function renderMarketRoom() {
+  const club = state.clubWeekState;
+  const media = Number(club?.mediaPressure);
+  const morale = Number(club?.playerMorale);
+  const trust = Number(club?.boardTrust);
+
+  // Kommersielle signaler: de klubbverdiene som faktisk driver marked/omdømme.
+  if (elements.marketSignals) {
+    elements.marketSignals.innerHTML = "";
+    const signals = [
+      { label: "Medietrykk", value: media, highGood: false },
+      { label: "Moral", value: morale, highGood: true },
+      { label: "Styretillit", value: trust, highGood: true }
+    ];
+    for (const signal of signals) {
+      const value = Number(signal.value);
+      const li = document.createElement("li");
+      li.className = "board-metric";
+      const name = document.createElement("span");
+      name.className = "board-metric-label";
+      name.textContent = signal.label;
+      const num = document.createElement("strong");
+      num.className = "board-metric-value";
+      if (Number.isFinite(value)) {
+        num.textContent = String(value);
+        const strong = signal.highGood ? value >= 60 : value <= 40;
+        const weak = signal.highGood ? value <= 40 : value >= 60;
+        num.dataset.tone = strong ? "good" : weak ? "warn" : "neutral";
+      } else {
+        num.textContent = "–";
+        num.dataset.tone = "neutral";
+      }
+      li.append(name, num);
+      elements.marketSignals.append(li);
+    }
+  }
+
+  // Fanstemning: avledet av moral og medietrykk. En lesbar temperatur, ikke et
+  // oppmøtetall — oppmøte-/lojalitetsmotor finnes ikke ennå.
+  if (elements.marketFanMood) {
+    if (!Number.isFinite(morale) && !Number.isFinite(media)) {
+      elements.marketFanMood.textContent = "Fanstemningen leses av moral og medietrykk.";
+    } else if (Number.isFinite(media) && media >= 65) {
+      elements.marketFanMood.textContent = "Medietrykket smitter over på tribunen. Fansen er utålmodige.";
+    } else if (Number.isFinite(morale) && morale >= 60) {
+      elements.marketFanMood.textContent = "Fansen er med laget. Stemningen på tribunen er god.";
+    } else if (Number.isFinite(morale) && morale <= 40) {
+      elements.marketFanMood.textContent = "Lav moral demper stemningen. Fansen venter på et løft.";
+    } else {
+      elements.marketFanMood.textContent = "Fanstemningen er avventende — resultatene avgjør temperaturen.";
+    }
+  }
+
+  // Sponsorinteresse: følger omdømmet (styretillit + medietrykk). Kvalitativ,
+  // konkrete avtaler kobles på senere (ærlig merket i UI).
+  if (elements.marketSponsorNote) {
+    const calm = !Number.isFinite(media) || media < 65;
+    if (Number.isFinite(trust) && trust >= 65 && calm) {
+      elements.marketSponsorNote.textContent = "Omdømmet er attraktivt. Sponsorinteressen er stigende.";
+    } else if ((Number.isFinite(trust) && trust <= 35) || (Number.isFinite(media) && media >= 65)) {
+      elements.marketSponsorNote.textContent = "Uro rundt klubben demper sponsorinteressen.";
+    } else {
+      elements.marketSponsorNote.textContent = "Sponsorinteressen er stabil og følger resultatene.";
+    }
   }
 }
 
