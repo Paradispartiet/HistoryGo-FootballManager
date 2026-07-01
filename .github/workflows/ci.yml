@@ -53,6 +53,7 @@ jobs:
         run: |
           npm run check:dom-ids
           npm run audit:flow
+          npm run audit:dead-ends
 
       - name: Simuleringer (motorer ende-til-ende)
         run: |
