@@ -68,12 +68,11 @@
         <span class="nav-label">Fasiliteter</span>
         <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-secondary is-disabled" role="tab" aria-selected="false" aria-disabled="true" disabled data-tab-target="admin">
+      <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="admin">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2L11 7.5h7.5A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/>
         </svg>
         <span class="nav-label">Admin</span>
-        <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
       </button>
       <button type="button" class="nav-tab nav-tab-secondary" role="tab" aria-selected="false" data-tab-target="market">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -701,15 +700,17 @@
     </div>
 
     <!-- ============================ ADMINISTRASJON ============================ -->
+    <!-- Admin v1: ekte kontorflate — den operative driften rundt laget. Leser
+         tropp-/stab-state direkte (rosterReadiness, hired staff) via
+         renderAdminRoom(). Økonomi/kontrakter er ærlig merket som senere. -->
     <div class="tab-section dept dept-admin" data-tab-section="admin" hidden>
       <section class="dept-hero dept-hero-admin">
         <div>
           <p class="eyebrow">Drift og økonomi</p>
           <h2>Administrasjon</h2>
-          <p class="dept-hero-lede">Budsjett, kontrakter og stab. Full økonomimotor kommer – her er rammene.</p>
-          <p class="future-label">Kontorflate · ikke del av første spillbare løkke</p>
+          <p class="dept-hero-lede">Stall, stab og drift. Full økonomimotor kommer — her er den operative rammen rundt laget.</p>
         </div>
-        <div class="dept-hero-stat">
+        <div class="dept-hero-stat dept-hero-stat-live">
           <strong id="adminSquadCount">0</strong>
           <span>spillere i stallen</span>
         </div>
@@ -717,18 +718,21 @@
 
       <div class="admin-board">
         <article class="panel admin-feature">
-          <p class="eyebrow">Økonomi</p>
-          <h3>Budsjett og balanse</h3>
-          <p class="facility-empty">Økonomimotoren er ikke koblet på ennå. Budsjett, lønnstak og balanse vises her.</p>
-        </article>
-        <article class="panel admin-side">
-          <h3>Kontrakter</h3>
-          <p class="facility-empty">Ingen kontraktsdata ennå. Lengde, klausuler og fornyelser kommer.</p>
+          <p class="eyebrow">Drift</p>
+          <h3>Stall og kampklar tropp</h3>
+          <p class="muted-text">Den operative statusen på troppen akkurat nå.</p>
+          <ul id="adminDriftMetrics" class="board-metrics" aria-label="Driftsstatus"></ul>
         </article>
         <article class="panel admin-side">
           <h3>Stab og drift</h3>
           <p class="muted-text">Engasjert stab styres via History Go.</p>
           <p id="adminStaffCount" class="facility-level">0 ansatte</p>
+          <p id="adminStaffNote" class="muted-text">Stab hentes inn via History Go-progresjon.</p>
+        </article>
+        <article class="panel admin-side">
+          <h3>Økonomi &amp; kontrakter</h3>
+          <p id="adminEconomyNote" class="muted-text">Budsjett, lønnstak og kontrakter kobles på i full managerutgave.</p>
+          <p class="facility-empty board-future-note">Økonomimotoren er ikke koblet på ennå.</p>
         </article>
       </div>
     </div>
