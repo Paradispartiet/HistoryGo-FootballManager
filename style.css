@@ -101,7 +101,7 @@ h3 {
 .site-header,
 .site-footer,
 .app-shell,
-.main-nav-inner {
+.main-nav-layout {
   width: min(1240px, calc(100% - 32px));
   margin-inline: auto;
 }
@@ -167,8 +167,16 @@ h3 {
   padding: 8px 0;
 }
 
+.main-nav-layout {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+
 .main-nav-inner {
   display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
   flex-wrap: nowrap;
   align-items: stretch;
   gap: 4px;
@@ -300,6 +308,102 @@ h3 {
 .nav-tab:focus-visible {
   outline: 2px solid var(--text);
   outline-offset: 2px;
+}
+
+/* ---------- «Kontor»-meny: samler sekundærfanene bak én knapp ---------- */
+.nav-office {
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: 10px;
+  padding-left: 12px;
+  border-left: 1px solid var(--hg-border-soft);
+  display: flex;
+  align-items: stretch;
+}
+
+.nav-office-toggle {
+  flex: 0 0 auto;
+  min-width: 82px;
+  min-height: var(--hg-menu-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--hg-radius-sm);
+  background: rgba(255, 255, 255, 0.015);
+  color: rgba(153, 161, 173, 0.72);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 7px 10px 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.nav-office-toggle .nav-icon {
+  opacity: 0.72;
+}
+
+.nav-office-toggle:hover {
+  color: var(--hg-text-main);
+  border-color: var(--hg-border-soft);
+}
+
+.nav-office-toggle[aria-expanded="true"],
+.nav-office-toggle.has-active-tab {
+  color: var(--hg-text-main);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--hg-border-soft);
+}
+
+.nav-office-toggle-caret {
+  font-size: 0.6rem;
+  line-height: 1;
+  transition: transform 0.12s ease;
+}
+
+.nav-office-toggle[aria-expanded="true"] .nav-office-toggle-caret {
+  transform: rotate(180deg);
+}
+
+.nav-office-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 40;
+  display: grid;
+  gap: 6px;
+  min-width: 220px;
+  padding: 10px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: var(--radius);
+  background: var(--hg-panel-bg-strong);
+  box-shadow: var(--shadow);
+}
+
+.nav-office-menu[hidden] {
+  display: none;
+}
+
+.nav-office-menu .nav-group-label {
+  writing-mode: initial;
+  transform: none;
+  padding: 0 2px 2px;
+  border-left: none;
+  margin-left: 0;
+}
+
+.nav-office-menu .nav-tab {
+  flex: 1 1 auto;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  min-height: auto;
+  padding: 9px 10px;
 }
 
 /* Funksjonelle fargeaksenter per managerområde. */
@@ -4295,6 +4399,19 @@ ul {
     min-width: 64px;
     font-size: 0.58rem;
     padding: 6px 6px 10px;
+  }
+
+  .nav-office-toggle {
+    min-width: 64px;
+    font-size: 0.58rem;
+    padding: 6px 6px 10px;
+  }
+
+  /* Nav er festet nederst på mobil, så menyen må åpne oppover for å ikke havne utenfor viewport. */
+  .nav-office-menu {
+    top: auto;
+    bottom: calc(100% + 8px);
+    right: 8px;
   }
 
   .site-header {

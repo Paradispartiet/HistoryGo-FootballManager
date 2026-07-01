@@ -11803,6 +11803,9 @@ async function advanceClubWeekPhaseAction() {
   setClubWeekState(next);
 }
 
+// Fanene som bor bak "Kontor"-menyen i hovednavigasjonen (nav-office-menu i index.html).
+const OFFICE_TAB_TARGETS = new Set(["facilities", "admin", "market", "board", "hgfmLibrary"]);
+
 // Aktiver en fane programmatisk: brukes av fane-knappene og av "Neste
 // beslutninger" som navigerer brukeren til riktig avdeling.
 function activateTab(target) {
@@ -11818,6 +11821,20 @@ function activateTab(target) {
   sections.forEach((section) => {
     section.hidden = section.dataset.tabSection !== target;
   });
+
+  // Kontor-menyen er lukket som standard – vis hvilken kontorflate som er
+  // aktiv på selve togglen, slik at valget ikke forsvinner når menyen lukkes.
+  const officeToggle = document.querySelector("#navOfficeToggle");
+  const officeToggleLabel = document.querySelector("#navOfficeToggleLabel");
+  if (officeToggle && officeToggleLabel) {
+    const activeOfficeButton = tabButtons.find(
+      (button) => OFFICE_TAB_TARGETS.has(button.dataset.tabTarget) && button.dataset.tabTarget === target
+    );
+    officeToggle.classList.toggle("has-active-tab", Boolean(activeOfficeButton));
+    officeToggleLabel.textContent = activeOfficeButton
+      ? activeOfficeButton.querySelector(".nav-label")?.textContent || "Kontor"
+      : "Kontor";
+  }
 
   // Å åpne Kamp-flaten regnes som at manageren har sett kamprapporten — da
   // forsvinner «Se kamprapporten» fra Neste handling-stripa. Stille persistens;
@@ -11853,8 +11870,57 @@ function initTabs() {
   });
 }
 
+// Kontor-menyen samler de sekundære fanene (Fasiliteter/Admin/Marked/Styret/
+// Formasjoner) bak én knapp i stedet for at de alltid opptar plass i
+// hovednavigasjonen. Fane-bytte-logikken ligger fortsatt i initTabs/activateTab
+// over – dette wirer bare opp åpne/lukke for selve menyen.
+function initOfficeMenu() {
+  const toggle = document.querySelector("#navOfficeToggle");
+  const menu = document.querySelector("#navOfficeMenu");
+  if (!toggle || !menu) return;
+
+  function closeMenu() {
+    menu.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  function openMenu() {
+    menu.hidden = false;
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (menu.hidden) {
+      openMenu();
+    } else {
+      closeMenu();
+    }
+  });
+
+  menu.addEventListener("click", (event) => {
+    if (event.target.closest(".nav-tab")) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!menu.hidden && !menu.contains(event.target) && !toggle.contains(event.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !menu.hidden) {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+}
+
 async function init() {
   initTabs();
+  initOfficeMenu();
 
   // Start lasting av TS-motoren parallelt med datafilene. Vi venter på den før
   // første render, slik at manager-detalj-panelet kan bygges synkront i
