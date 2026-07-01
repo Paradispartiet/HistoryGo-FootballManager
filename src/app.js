@@ -405,8 +405,6 @@ const elements = {
   // Relasjoner (synlig metrikk + forklarende liste i lagrapporten).
   relationshipHeadline: document.querySelector("#relationshipHeadline"),
   relationshipList: document.querySelector("#relationshipList"),
-  managerSummary: document.querySelector("#managerSummary"),
-  managerTopActions: document.querySelector("#managerTopActions"),
   // Neste handling-stripe (Playable Manager Flow Polish v1): prioritert
   // primærhandling + sekundære steg utledet av eksisterende state.
   nextActionStrip: document.querySelector("#nextActionStrip"),
@@ -528,7 +526,6 @@ const elements = {
   profileStrengths: document.querySelector("#profileStrengths"),
   profileNeeds: document.querySelector("#profileNeeds"),
   sideDecisions: document.querySelector("#sideDecisions"),
-  sideDecisionsList: document.querySelector("#sideDecisionsList"),
   // Fase 2: statuskort med neste beslutninger på hovedskjermen.
   decisionCards: document.querySelector("#decisionCards"),
   // Fase 2: avdelinger med levende status.
@@ -5524,8 +5521,8 @@ function renderSidePanel(teamFit) {
   renderHistoricalRoleHint(slot, slotState);
   renderRoleLearningCard({ slot, slotState, assignment, teamFit });
 
-  // Dynamisk sidepanel: spillerprofil når plassen har en spiller, ellers
-  // "Neste beslutninger". Selve handlingene (spiller-/rollevalg) vises alltid.
+  // Dynamisk sidepanel: spillerprofil når plassen har en spiller, ellers en
+  // kort henvisning til Oversikt. Selve handlingene (spiller-/rollevalg) vises alltid.
   const player =
     assignment?.player || state.players.find((item) => item.id === slotState.playerId) || null;
 
@@ -5542,7 +5539,7 @@ function renderSidePanel(teamFit) {
     renderPlayerProfile(player, slot);
   } else {
     if (elements.sidePanelKicker) {
-      elements.sidePanelKicker.textContent = "Neste beslutninger";
+      elements.sidePanelKicker.textContent = "Velg en plass";
     }
     if (elements.sideProfile) {
       elements.sideProfile.hidden = true;
@@ -5550,7 +5547,6 @@ function renderSidePanel(teamFit) {
     if (elements.sideDecisions) {
       elements.sideDecisions.hidden = false;
     }
-    renderSideDecisions(teamFit);
   }
 }
 
@@ -6305,9 +6301,8 @@ function buildNextDecisions(teamFit) {
   return decisions;
 }
 
-// Bygg ett beslutningselement. baseClass "decision-card" gir statuskort,
-// "decision-item" gir den kompakte sidepanel-varianten. Beslutninger uten
-// handling rendres som ikke-klikkbare kort.
+// Bygg ett beslutningselement. baseClass "decision-card" gir statuskort.
+// Beslutninger uten handling rendres som ikke-klikkbare kort.
 function createDecisionElement(decision, baseClass) {
   const isCard = baseClass === "decision-card";
   const isStatic = typeof decision.action !== "function";
@@ -6334,21 +6329,6 @@ function createDecisionElement(decision, baseClass) {
 
   el.append(tag, title, detail);
   return el;
-}
-
-// Sidepanel-variant: kompakt liste med de viktigste beslutningene.
-function renderSideDecisions(teamFit) {
-  const list = elements.sideDecisionsList;
-  if (!list) {
-    return;
-  }
-
-  list.innerHTML = "";
-  buildNextDecisions(teamFit).slice(0, 6).forEach((decision) => {
-    const li = document.createElement("li");
-    li.append(createDecisionElement(decision, "decision-item"));
-    list.append(li);
-  });
 }
 
 // Bygg det rene kontekstobjektet som Next Action-motoren leser. Trekker kun ut
@@ -8792,21 +8772,6 @@ function getBrowserManagerStateArgs() {
 // Uten bygget dist/ (motor ikke lastet) lar vi panelet stå som det er.
 function renderManagerDetailFromTeamFit(teamFit) {
   const engine = getLoadedManagerEngine();
-
-  if (engine?.createTeamFitManagerInsight && teamFit) {
-    const insight = engine.createTeamFitManagerInsight(teamFit, { tactic: getTactic(), roles: state.roles });
-
-    if (elements.managerSummary) {
-      elements.managerSummary.textContent = insight.summary;
-    }
-
-    renderTextList(
-      elements.managerTopActions,
-      insight.topActions,
-      (action) => `${action.priorityText}: ${action.label}`,
-      "Ingen prioriterte grep akkurat nå.",
-    );
-  }
 
   if (elements.managerRoleChanges && engine?.recommendRoleChangesFromTeamFit && teamFit) {
     const recommendations = engine
