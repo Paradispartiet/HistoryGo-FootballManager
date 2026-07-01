@@ -3851,6 +3851,13 @@ ul {
   grid-column: 1 / -1;
 }
 
+/* Kamp-fanen: kampdagpanelet (med rapport) er høyt, badge-panelet kort. Uten
+   dette strekkes badge-panelet til samme høyde og etterlater en stor tom boks.
+   Topp-juster så høyre kolonne følger sitt eget innhold. */
+.kamp-view .insight-grid {
+  align-items: start;
+}
+
 /* Dashboard (oversikt): kompakt kortrutenett i stedet for en lang feed. */
 .dashboard-grid {
   display: grid;

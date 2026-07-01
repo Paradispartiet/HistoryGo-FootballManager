@@ -6999,9 +6999,19 @@ function renderBadgeEffects(teamFit) {
     Object.values(badgeEffects).some((amount) => Number(amount) > 0);
 
   if (!hasActiveEffects) {
+    // Panelet stod nesten tomt med bare én linje. Vis heller lagscoren uten
+    // badge-bonus (en konkret referanse) + hvordan badges tjenes opp, så
+    // kolonnen er informativ i stedet for død plass.
+    if (Number.isFinite(teamFit?.baseTeamScore)) {
+      const base = document.createElement("p");
+      base.className = "badge-effect-meta";
+      base.textContent = `Lagscore uten badge-bonus: ${teamFit.baseTeamScore}`;
+      panel.append(base);
+    }
     const empty = document.createElement("p");
     empty.className = "badge-effect-empty";
-    empty.textContent = "Ingen badge-effekter aktive ennå.";
+    empty.textContent =
+      "Ingen badge-effekter aktive ennå. Tren spillerne og fullfør treningsbadges via History Go — opptjente badges gir små, additive bonuser til lagets taktiske metrics her.";
     panel.append(empty);
     return;
   }
