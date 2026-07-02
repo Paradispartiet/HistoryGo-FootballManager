@@ -2915,7 +2915,7 @@ function selectTrainingProgram(programId) {
   renderApp();
 }
 
-// Avanser treningsuke: øk uketeller, gi hver aktiv progresjon +1 uke, tildel
+// Avanser badge-uke: øk uketeller, gi hver aktiv progresjon +1 uke, tildel
 // badge når requiredWeeks er nådd (uten duplikater), oppdater lagklasser fra
 // earned badges, lagre og rerender.
 function advanceHgTrainingWeek() {
@@ -8651,12 +8651,12 @@ function getActiveKnowledgeRecommendation(viewModel) {
   ) || null;
 }
 
-// Treningsuke-tellere leses fra state (ikke fra viewModel) og hører derfor
+// Kunnskapsuke-tellere leses fra state (ikke fra viewModel) og hører derfor
 // hjemme i den synkrone render-stien, ikke bak den async TS-broen. Ellers
 // sluttet de å oppdatere seg når dist/ ikke var bygget.
 function renderTrainingWeekCounters() {
   if (elements.trainingWeekStatus) {
-    elements.trainingWeekStatus.textContent = `Treningsuke ${state.trainingWeek}`;
+    elements.trainingWeekStatus.textContent = `Kunnskapsuke ${state.trainingWeek}`;
   }
 
   if (elements.knowledgeCompletedThisWeek) {
@@ -10634,13 +10634,13 @@ function renderEarnedBadges() {
   });
 }
 
-// Treningsuke-status og aktive badge-progresjoner i History Go-fanen.
+// Badge-uke-status og aktive badge-progresjoner i History Go-fanen.
 function renderHgTrainingWeek() {
   if (elements.hgTrainingWeekStatus) {
     const week = Number.isInteger(state.teamMerits?.activeTrainingWeek)
       ? state.teamMerits.activeTrainingWeek
       : 1;
-    elements.hgTrainingWeekStatus.textContent = `Treningsuke ${week}`;
+    elements.hgTrainingWeekStatus.textContent = `Badge-uke ${week}`;
   }
 
   renderBadgeProgress();
@@ -11534,7 +11534,7 @@ function bindTrainingAndKnowledgeControls() {
     });
   }
 
-  // History Go-progresjon: avanser treningsuke og nullstill lagstate.
+  // History Go-progresjon: avanser badge-uke og nullstill lagstate.
   if (elements.advanceHgTrainingWeek) {
     elements.advanceHgTrainingWeek.addEventListener("click", () => {
       advanceHgTrainingWeek();
