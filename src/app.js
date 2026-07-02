@@ -6408,6 +6408,7 @@ function buildNextActionContext(teamFit) {
     unreadThreads: getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState()),
     hasUnseenReport: hasUnseenMatchReport(),
     miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active",
+    scenarioModeActive: isScenarioModeActive(),
     firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
     clubWeek: clubWeekState
       ? {
