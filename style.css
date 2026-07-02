@@ -3056,6 +3056,7 @@ ul {
 }
 
 .topbar-score {
+  position: relative;
   display: grid;
   justify-items: center;
   gap: 2px;
@@ -3064,10 +3065,24 @@ ul {
   padding-inline: 22px;
 }
 
+/* Lagfit-tallet er sidens viktigste ett tall: det får et mykt lysglimt bak
+   seg slik at blikket lander der først, i stedet for å konkurrere jevnt
+   med de sju metrikk-boksene ved siden av. */
+.topbar-score::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  z-index: -1;
+  background: radial-gradient(60px 60px at 50% 42%, rgba(70, 214, 140, 0.16), transparent 72%);
+}
+
 .topbar-score .score-ring {
   width: 96px;
   height: 96px;
   font-size: 2rem;
+  border-width: 2px;
+  border-color: var(--hg-accent-tactics);
+  box-shadow: 0 0 0 4px rgba(70, 214, 140, 0.08);
 }
 
 .score-ring-label {
@@ -3093,12 +3108,32 @@ ul {
 }
 
 .topbar-metrics article {
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--hg-surface-deep);
   padding: 10px 8px;
   text-align: center;
 }
+
+/* Hvert nøkkeltall får en egen aksentfarge i stedet for sju identiske grå
+   bokser: fargen sier hva slags tilstand tallet beskriver, ikke bare hva
+   det heter. */
+.topbar-metrics article::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--tile-accent, var(--hg-border-strong));
+  opacity: 0.85;
+}
+
+.topbar-metrics article:has(#clubBoardTrust) { --tile-accent: var(--hg-accent-board); }
+.topbar-metrics article:has(#clubPlayerMorale) { --tile-accent: var(--good); }
+.topbar-metrics article:has(#clubTacticalClarity) { --tile-accent: var(--hg-accent-tactics); }
+.topbar-metrics article:has(#clubTrainingCulture) { --tile-accent: var(--hg-accent-facilities); }
+.topbar-metrics article:has(#clubMediaPressure) { --tile-accent: var(--hg-accent-market); }
 
 .topbar-metrics span {
   display: block;
@@ -3974,10 +4009,38 @@ ul {
   padding: 4px 0 22px;
 }
 
+/* Kontekst og hendelseslogg får full bredde: de er lesestoff, ikke
+   like store beslutningskort som snarveiene/beslutningene ved siden av.
+   Dette bryter 2×2-rutenettet som gjorde alle kortene identiske. */
+.dashboard-grid .off-pitch-signal-card,
+.dashboard-grid .club-week-event-log-panel {
+  grid-column: 1 / -1;
+}
+
 .dashboard-view .dashboard-grid .panel {
+  position: relative;
+  overflow: hidden;
   background: rgba(15, 19, 27, 0.58);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
 }
+
+/* Samme visuelle språk som club-topbar sin venstrestripe: hvert
+   dashboard-kort signerer seg med en egen aksentfarge i stedet for å
+   flyte sammen som samme grå boks fem ganger på rad. */
+.dashboard-view .dashboard-grid .panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--card-accent, var(--hg-border-strong));
+  opacity: 0.85;
+}
+
+.dashboard-grid .off-pitch-signal-card { --card-accent: var(--hg-accent-inbox); }
+.dashboard-grid .decision-strip { --card-accent: var(--hg-accent-board); }
+.dashboard-grid .mini-season-panel { --card-accent: var(--hg-accent-tactics); }
+.dashboard-grid .dashboard-shortcuts { --card-accent: var(--hg-accent-facilities); }
+.dashboard-grid .club-week-event-log-panel { --card-accent: var(--hg-accent-history); }
 
 .dashboard-view .dashboard-grid .manager-actions-panel {
   border-color: var(--line-soft);
