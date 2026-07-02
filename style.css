@@ -26,6 +26,7 @@
   --hg-accent-board: #b48cff;
   --hg-accent-history: #4dd8e6;
   --hg-accent-library: #f2f4f7;
+  --hg-accent-kamp: #ff6b5e;
 
   /* Form og rytme. */
   --hg-radius: 14px;
@@ -687,10 +688,40 @@ select:focus-visible {
 
 /* ---------- Kampdag (v1) ---------- */
 .matchday-panel {
+  position: relative;
+  overflow: hidden;
   display: grid;
   gap: 16px;
   align-content: start;
-  background: var(--panel);
+  border-color: var(--hg-border-strong);
+  background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+}
+
+/* Kampdagpanelet er hovedhandlingen på fanen; badge-panelet er støtteinfo.
+   Samme signaturfarge-mønster som avdelingene (dept-hero), men her markerer
+   det også at kampdag veier tyngre enn badge-effektene ved siden av. */
+.matchday-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-kamp);
+  opacity: 0.85;
+}
+
+.badge-effects-panel {
+  position: relative;
+  overflow: hidden;
+  background: rgba(15, 19, 27, 0.5);
+}
+
+.badge-effects-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-kamp);
+  opacity: 0.4;
 }
 
 .matchday-actions {
@@ -725,6 +756,32 @@ select:focus-visible {
 .matchday-actions button:disabled:hover {
   background: var(--hg-surface-deep);
   color: var(--muted);
+}
+
+/* "Spill kamp" og "Nullstill kamp" så identiske ut — samme vekt for
+   hovedhandlingen og en destruktiv sekundærhandling. Inverter primærknappen
+   som next-action-primary, og la reset være en dempet ghost-knapp. */
+.matchday-actions button.is-primary {
+  border-color: var(--text);
+  background: var(--text);
+  color: #04060b;
+}
+
+.matchday-actions button.is-primary:hover:not(:disabled) {
+  background: var(--hg-accent-kamp);
+  border-color: var(--hg-accent-kamp);
+  color: #04060b;
+}
+
+.matchday-actions button.is-reset {
+  border-color: var(--line-soft);
+  background: transparent;
+  color: var(--muted);
+}
+
+.matchday-actions button.is-reset:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
 }
 
 /* Kampklar-status: grønn når laget kan spille, hvit/dempet med forklaring når
@@ -1692,6 +1749,29 @@ ul {
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* De to første er korte tall og leser fint som kompakte metrikk-tiles. De to
+   siste er beskrivende tekst ("trening / slitasje / moral / …") som ble
+   klemt inn i samme smale format — gi dem full bredde og roligere vekt så
+   de leses som forklaring, ikke som et tall som ikke stemmer. */
+.inbox-signal-stats div:nth-child(1),
+.inbox-signal-stats div:nth-child(2) {
+  border-color: var(--hg-accent-inbox);
+  background: rgba(77, 163, 255, 0.08);
+}
+
+.inbox-signal-stats div:nth-child(3),
+.inbox-signal-stats div:nth-child(4) {
+  grid-column: 1 / -1;
+  background: transparent;
+}
+
+.inbox-signal-stats div:nth-child(3) dd,
+.inbox-signal-stats div:nth-child(4) dd {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
 .inbox-signal-stats dt {
   color: var(--muted);
   font-size: 0.72rem;
@@ -1704,6 +1784,11 @@ ul {
   margin: 4px 0 0;
   color: var(--text);
   font-weight: 900;
+}
+
+.inbox-signal-stats div:nth-child(1) dd,
+.inbox-signal-stats div:nth-child(2) dd {
+  font-size: 1.5rem;
 }
 
 .inbox-signal-status {
@@ -2431,7 +2516,51 @@ ul {
    myke kort, ingen gul flate. Matcher resten av prototypen. */
 .unlock-panel {
   display: grid;
-  gap: 22px;
+  gap: 30px;
+}
+
+/* Elleve like seksjoner leste som én lang vegg. Grupperer dem i de seks
+   stegene fra kjerneløkka (Sted → Person → Ekspertise → Trening → Badge →
+   Lagklasse), med en tallmerket steg-header som viser hvor i pipelinen du
+   er — samme nummererte-chip-språk som club-week-steps bruker for ukerytmen. */
+.unlock-stage {
+  display: grid;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.unlock-stage:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.unlock-stage-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.unlock-stage-number {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--hg-accent-history);
+  color: #04060b;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.unlock-stage-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hg-accent-history);
 }
 
 .unlock-block {
@@ -2439,7 +2568,7 @@ ul {
   gap: 12px;
 }
 
-.unlock-block h3 {
+.unlock-block h4 {
   margin: 0;
   font-size: 1.15rem;
   color: var(--text);
@@ -2650,7 +2779,7 @@ ul {
   font-weight: 700;
 }
 
-.unlock-subhead {
+.unlock-block h4.unlock-subhead {
   margin: 8px 0 0;
   font-size: 1rem;
   color: var(--text);
@@ -3056,6 +3185,7 @@ ul {
 }
 
 .topbar-score {
+  position: relative;
   display: grid;
   justify-items: center;
   gap: 2px;
@@ -3064,10 +3194,24 @@ ul {
   padding-inline: 22px;
 }
 
+/* Lagfit-tallet er sidens viktigste ett tall: det får et mykt lysglimt bak
+   seg slik at blikket lander der først, i stedet for å konkurrere jevnt
+   med de sju metrikk-boksene ved siden av. */
+.topbar-score::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  z-index: -1;
+  background: radial-gradient(60px 60px at 50% 42%, rgba(70, 214, 140, 0.16), transparent 72%);
+}
+
 .topbar-score .score-ring {
   width: 96px;
   height: 96px;
   font-size: 2rem;
+  border-width: 2px;
+  border-color: var(--hg-accent-tactics);
+  box-shadow: 0 0 0 4px rgba(70, 214, 140, 0.08);
 }
 
 .score-ring-label {
@@ -3093,12 +3237,32 @@ ul {
 }
 
 .topbar-metrics article {
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--hg-surface-deep);
   padding: 10px 8px;
   text-align: center;
 }
+
+/* Hvert nøkkeltall får en egen aksentfarge i stedet for sju identiske grå
+   bokser: fargen sier hva slags tilstand tallet beskriver, ikke bare hva
+   det heter. */
+.topbar-metrics article::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--tile-accent, var(--hg-border-strong));
+  opacity: 0.85;
+}
+
+.topbar-metrics article:has(#clubBoardTrust) { --tile-accent: var(--hg-accent-board); }
+.topbar-metrics article:has(#clubPlayerMorale) { --tile-accent: var(--good); }
+.topbar-metrics article:has(#clubTacticalClarity) { --tile-accent: var(--hg-accent-tactics); }
+.topbar-metrics article:has(#clubTrainingCulture) { --tile-accent: var(--hg-accent-facilities); }
+.topbar-metrics article:has(#clubMediaPressure) { --tile-accent: var(--hg-accent-market); }
 
 .topbar-metrics span {
   display: block;
@@ -3955,7 +4119,8 @@ ul {
 }
 
 .insight-grid .manager-detail-panel,
-.insight-grid .manager-knowledge-panel {
+.insight-grid .manager-knowledge-panel,
+.insight-grid .suggested-setups-panel {
   grid-column: 1 / -1;
 }
 
@@ -3966,6 +4131,24 @@ ul {
   align-items: start;
 }
 
+/* Lag & taktikk-fanens dybdepaneler deler én signaturfarge (samme grønn som
+   fanen selv) i stedet for å være fire identiske grå bokser. Oversikt bruker
+   flere farger fordi den viser flere avdelinger samtidig; her er alt tema
+   tydelig taktikk, så én farge er riktigere enn et regnbueoppsett. */
+.office .insight-grid .panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.office .insight-grid .panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-tactics);
+  opacity: 0.7;
+}
+
 /* Dashboard (oversikt): kompakt kortrutenett i stedet for en lang feed. */
 .dashboard-grid {
   display: grid;
@@ -3974,10 +4157,38 @@ ul {
   padding: 4px 0 22px;
 }
 
+/* Kontekst og hendelseslogg får full bredde: de er lesestoff, ikke
+   like store beslutningskort som snarveiene/beslutningene ved siden av.
+   Dette bryter 2×2-rutenettet som gjorde alle kortene identiske. */
+.dashboard-grid .off-pitch-signal-card,
+.dashboard-grid .club-week-event-log-panel {
+  grid-column: 1 / -1;
+}
+
 .dashboard-view .dashboard-grid .panel {
+  position: relative;
+  overflow: hidden;
   background: rgba(15, 19, 27, 0.58);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
 }
+
+/* Samme visuelle språk som club-topbar sin venstrestripe: hvert
+   dashboard-kort signerer seg med en egen aksentfarge i stedet for å
+   flyte sammen som samme grå boks fem ganger på rad. */
+.dashboard-view .dashboard-grid .panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--card-accent, var(--hg-border-strong));
+  opacity: 0.85;
+}
+
+.dashboard-grid .off-pitch-signal-card { --card-accent: var(--hg-accent-inbox); }
+.dashboard-grid .decision-strip { --card-accent: var(--hg-accent-board); }
+.dashboard-grid .mini-season-panel { --card-accent: var(--hg-accent-tactics); }
+.dashboard-grid .dashboard-shortcuts { --card-accent: var(--hg-accent-facilities); }
+.dashboard-grid .club-week-event-log-panel { --card-accent: var(--hg-accent-history); }
 
 .dashboard-view .dashboard-grid .manager-actions-panel {
   border-color: var(--line-soft);
@@ -4193,8 +4404,17 @@ ul {
   color: var(--text);
 }
 
+/* Arkivet er "kan leses senere" — 0.92 opacity skilte det knapt fra
+   "Viktig nå" over. Dempet bakgrunn og tynnere ramme gjør at blikket
+   lander på det aktive panelet først. */
 .inbox-archive {
-  opacity: 0.92;
+  border-color: var(--line-soft);
+  background: rgba(15, 19, 27, 0.4);
+  opacity: 0.85;
+}
+
+.inbox-archive h3 {
+  color: var(--muted);
 }
 
 /* ---------- Administrasjon: ledger-tavle ---------- */
@@ -5344,6 +5564,46 @@ ul {
 
 
 /* ---------- Treningsuke v0.2 ---------- */
+/* Trening-fanen delte fem identiske fulbredde grå bokser på rad. Ukefokus og
+   treningsprogram er nå sidestilte valg (parret i insight-grid over) og deler
+   én signaturfarge, samme mønster som Lag & taktikk og Kamp bruker. */
+/* Ukefokus og treningsprogram er ofte ulikt høye (ett har 8 korte valg, det
+   andre 3 fyldige programkort) — topp-juster som Kamp-fanen gjør, i stedet
+   for å strekke det korteste panelet til å etterlate et tomt felt nederst. */
+.trening-view .insight-grid {
+  align-items: start;
+}
+
+.trening-view .weekly-training-panel,
+.trening-view .training-programs-panel,
+.trening-view .manager-training-panel,
+.trening-view .manager-knowledge-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.trening-view .weekly-training-panel::before,
+.trening-view .training-programs-panel::before,
+.trening-view .manager-training-panel::before,
+.trening-view .manager-knowledge-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-facilities);
+  opacity: 0.7;
+}
+
+/* Managerinnsikt er et sammendrag av valg tatt over — dempes så det leses
+   som bakgrunnsstøtte, ikke som en femte likestilt handling. */
+.trening-view .manager-training-panel {
+  background: rgba(15, 19, 27, 0.5);
+}
+
+.trening-view .manager-training-panel::before {
+  opacity: 0.4;
+}
+
 .weekly-training-panel {
   border: 1px solid var(--line-strong, #fff);
 }
@@ -6226,6 +6486,22 @@ ul {
 .squad-setup-checklist strong {
   font-size: 1.15rem;
   text-transform: uppercase;
+}
+
+/* Feilbruk/duplikater/roller er ikke nøytrale tellere som Startellever/Benk —
+   de er signaler om at manageren må rette opp noe. Fargen sier det tydelig i
+   stedet for å gjemme det i identiske grå bokser. */
+.squad-setup-checklist strong[data-tone="warn"] {
+  color: var(--danger);
+}
+
+.squad-setup-checklist article:has(strong[data-tone="warn"]) {
+  border-color: var(--danger);
+  background: rgba(255, 107, 94, 0.08);
+}
+
+.squad-setup-checklist strong[data-tone="ok"] {
+  color: var(--good);
 }
 
 .tactic-system-details {

@@ -11398,9 +11398,18 @@ function renderSquadSetupGate(teamFit) {
   if (elements.squadSetupGateHint) elements.squadSetupGateHint.textContent = state.hint;
   if (elements.squadGateStarters) elements.squadGateStarters.textContent = `${Math.min(state.completeStarters, REQUIRED_STARTERS)}/${REQUIRED_STARTERS}`;
   if (elements.squadGateBench) elements.squadGateBench.textContent = `${Math.min(state.benchCount, REQUIRED_BENCH)}/${REQUIRED_BENCH}`;
-  if (elements.squadGateRoles) elements.squadGateRoles.textContent = state.rolesOk ? "OK" : "Trenger valg";
-  if (elements.squadGateMisuse) elements.squadGateMisuse.textContent = state.misusedCount === 0 ? "0" : String(state.misusedCount);
-  if (elements.squadGateDuplicates) elements.squadGateDuplicates.textContent = state.duplicateCount === 0 ? "0" : String(state.duplicateCount);
+  if (elements.squadGateRoles) {
+    elements.squadGateRoles.textContent = state.rolesOk ? "OK" : "Trenger valg";
+    elements.squadGateRoles.dataset.tone = state.rolesOk ? "ok" : "warn";
+  }
+  if (elements.squadGateMisuse) {
+    elements.squadGateMisuse.textContent = state.misusedCount === 0 ? "0" : String(state.misusedCount);
+    elements.squadGateMisuse.dataset.tone = state.misusedCount === 0 ? "ok" : "warn";
+  }
+  if (elements.squadGateDuplicates) {
+    elements.squadGateDuplicates.textContent = state.duplicateCount === 0 ? "0" : String(state.duplicateCount);
+    elements.squadGateDuplicates.dataset.tone = state.duplicateCount === 0 ? "ok" : "warn";
+  }
   if (elements.squadSetupGateAction) {
     elements.squadSetupGateAction.textContent = state.actionLabel;
     elements.squadSetupGateAction.disabled = typeof state.action !== "function";
