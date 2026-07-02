@@ -220,16 +220,6 @@
           <div id="contextSignals" class="context-signals off-pitch-signal-grid"></div>
         </section>
 
-        <!-- Suggested Setups v1: 2–4 faglig logiske oppsett (formasjon, kampplan,
-             treningsuke). Forklarende og additive — aldri en fasit eller lås. -->
-        <section class="panel suggested-setups-panel dashboard-deep-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
-          <details class="panel-details is-flush">
-            <summary>Foreslåtte oppsett og faglige valg</summary>
-            <p class="muted-text suggested-setups-intro">Faglige standardforslag. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
-            <div id="suggestedSetups" class="suggested-setups-groups"></div>
-          </details>
-        </section>
-
         <!-- Statuskort: øvrige åpne beslutninger på tvers av klubben. Foldet og
              sekundært — «Neste handling» øverst er alltid den primære veien
              videre; disse støtter den, konkurrerer ikke med den. -->
@@ -508,6 +498,18 @@
               <ul id="managerWeakPoints"></ul>
             </section>
           </div>
+        </section>
+
+        <!-- Suggested Setups v1 (flyttet fra Oversikt): formasjons-/kampplanforslag
+             hører hjemme her, ved siden av de faktiske valgene. Treningsuke-delen er
+             bevisst utelatt — Trening-fanens egen "Anbefalt nå"-merking i
+             weekly-training-panel dekker allerede det behovet. -->
+        <section class="panel suggested-setups-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
+          <details class="panel-details is-flush">
+            <summary>Foreslått formasjon og kampplan</summary>
+            <p class="muted-text suggested-setups-intro">Faglige standardforslag basert på motstander og lagfit. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
+            <div id="suggestedSetupsTactics" class="suggested-setups-groups"></div>
+          </details>
         </section>
       </div>
     </div>

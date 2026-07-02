@@ -414,7 +414,7 @@ const elements = {
   nextActionPrimaryTitle: document.querySelector("#nextActionPrimaryTitle"),
   nextActionPrimaryHint: document.querySelector("#nextActionPrimaryHint"),
   nextActionSecondary: document.querySelector("#nextActionSecondary"),
-  suggestedSetups: document.querySelector("#suggestedSetups"),
+  suggestedSetupsTactics: document.querySelector("#suggestedSetupsTactics"),
   contextSignals: document.querySelector("#contextSignals"),
   contextHeadline: document.querySelector("#contextHeadline"),
   trainingPrograms: document.querySelector("#trainingPrograms"),
@@ -8092,15 +8092,17 @@ function renderWeeklyTrainingFocus(teamFit) {
   return recommendation;
 }
 
-// Suggested Setups v1: 2–4 forklarende oppsettforslag (formasjon, kampplan,
-// treningsuke) på dashbordet. Bygger på samme motorer som resten av appen
-// (teamFit, formasjonskunnskap, motstander, coachContext) og degraderer trygt.
+// Suggested Setups v1: forklarende oppsettforslag (formasjon, kampplan) i
+// Taktikk-fanen. Bygger på samme motorer som resten av appen (teamFit,
+// formasjonskunnskap, motstander, coachContext) og degraderer trygt.
 // Forslagene er additive: de låser ikke spilleren, men forklarer
 // standardforståelsen slik at egne kontekstuelle valg kan slå dem.
+// Treningsuke-gruppen fra createSuggestedSetups() rendres bevisst ikke her —
+// Trening-fanens weekly-training-panel har allerede sin egen "Anbefalt nå"-
+// merking integrert i selve valget, og en egen liste ville duplisert den.
 const SUGGESTED_SETUP_GROUPS = [
   { type: "formation", label: "Formasjon" },
-  { type: "match_plan", label: "Kampplan" },
-  { type: "training_week", label: "Treningsuke" }
+  { type: "match_plan", label: "Kampplan" }
 ];
 
 function suggestedSetupConfidenceLabel(confidence) {
@@ -8228,7 +8230,7 @@ function buildSuggestedSetupCard(suggestion) {
 }
 
 function renderSuggestedSetups(teamFit) {
-  const container = elements.suggestedSetups;
+  const container = elements.suggestedSetupsTactics;
   if (!container) return;
 
   container.textContent = "";
