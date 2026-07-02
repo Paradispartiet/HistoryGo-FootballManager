@@ -132,6 +132,7 @@ const DATA_PATHS = {
   // formasjon. Driver formasjons-matchup mot motstanderprofiler på kampdag.
   hgFormationKnowledge: "data/hgFootball/formationKnowledge.json",
   knowledgePrinciples: "data/football_knowledge_principles.json",
+  footballBookKnowledgeIndex: "data/football_book_knowledge_principles.json",
   clubInboxMessages: "data/club_inbox_messages.json",
   clubInboxMessageManifest: "data/club_inbox_messages/manifest.json",
   clubInboxSenders: "data/club_inbox_senders.json",
@@ -5123,6 +5124,9 @@ function renderKnowledgeCards(list, items, emptyText) {
 
     const title = document.createElement("strong");
     title.textContent = item.title;
+    if (item.tooltipText) {
+      title.title = item.tooltipText;
+    }
 
     const meta = document.createElement("span");
     meta.textContent = `${item.priorityText} · ${item.categoryText}`;
@@ -5142,6 +5146,17 @@ function renderKnowledgeCards(list, items, emptyText) {
     session.textContent = `Økt: ${item.trainingSession}`;
 
     card.append(header, reason, advice, session);
+
+    if (item.handbookText) {
+      const handbook = document.createElement("details");
+      handbook.className = "knowledge-handbook";
+      const handbookSummary = document.createElement("summary");
+      handbookSummary.textContent = "Mer forklaring";
+      const handbookText = document.createElement("p");
+      handbookText.textContent = item.handbookText;
+      handbook.append(handbookSummary, handbookText);
+      card.append(handbook);
+    }
 
     if (isActiveFocus) {
       const status = document.createElement("p");
@@ -6773,12 +6788,46 @@ function renderTeamSummary(teamFit) {
   elements.relationshipScore.textContent = teamFit.metrics.relationshipScore;
 }
 
+
+function getFootballBookSurfaceText(surface, { weakPoints = [], trainingAreas = [], relatedTags = [], phase = null } = {}) {
+  const engine = getLoadedManagerEngine();
+  if (!engine?.getFootballBookGameText || !Array.isArray(state.knowledgePrinciples)) {
+    return null;
+  }
+
+  const matches = engine.getFootballBookGameText({
+    principles: state.knowledgePrinciples,
+    weakPoints,
+    trainingAreas,
+    relatedTags,
+    phase,
+    surface,
+    maxResults: 1,
+  });
+
+  return matches[0]?.text || null;
+}
+
+function getTeamFitWeakPointsForBook(teamFit) {
+  const engine = getLoadedManagerEngine();
+  if (!engine?.analyzeWeakPointsFromTeamFit || !teamFit) {
+    return [];
+  }
+  return engine.analyzeWeakPointsFromTeamFit(teamFit);
+}
+
 function renderReport(teamFit) {
   if (!teamFit) {
     return;
   }
 
-  elements.reportSummary.textContent = teamFit.report.summary;
+  const reportWeakPoints = getTeamFitWeakPointsForBook(teamFit);
+  const reportBookText = getFootballBookSurfaceText("matchReport", {
+    weakPoints: reportWeakPoints.map((weakPoint) => weakPoint.code),
+  });
+  elements.reportSummary.textContent = reportBookText
+    ? `${teamFit.report.summary} Fotballboka: ${reportBookText}`
+    : teamFit.report.summary;
   renderList(elements.strengthsList, teamFit.report.strengths);
   renderList(elements.issuesList, teamFit.report.issues);
   renderCoachContextStatus(teamFit.coachContext);
@@ -8719,10 +8768,16 @@ function renderManagerDashboardViewModel(viewModel, teamFit = null) {
       principleId: activeKnowledge.principleId,
       text: `Valgt ukesøkt: ${activeKnowledge.title} — ${activeKnowledge.trainingSession}`
     }] : []),
-    ...teamFitFocus.map((item) => ({
-      type: "engine_training",
-      text: `${item.areaText}: ${item.suggestedSession}`
-    }))
+    ...teamFitFocus.map((item) => {
+      const trainingText = getFootballBookSurfaceText("training", {
+        trainingAreas: [item.areaText],
+        relatedTags: [item.areaText],
+      });
+      return {
+        type: "engine_training",
+        text: `${item.areaText}: ${trainingText || item.suggestedSession}`
+      };
+    })
   ];
 
   renderTrainingFocusList(
@@ -8811,7 +8866,15 @@ function renderManagerDetailFromTeamFit(teamFit) {
     renderTextList(
       elements.managerWeakPoints,
       weakPoints,
-      (weakPoint) => `${weakPoint.categoryText}: ${weakPoint.label} — ${weakPoint.suggestedAction}`,
+      (weakPoint) => {
+        const assistantText = getFootballBookSurfaceText("assistant", {
+          weakPoints: [weakPoint.code],
+          relatedTags: [weakPoint.categoryText],
+        });
+        return assistantText
+          ? `${weakPoint.categoryText}: ${weakPoint.label} — ${assistantText}`
+          : `${weakPoint.categoryText}: ${weakPoint.label} — ${weakPoint.suggestedAction}`;
+      },
       "Ingen tydelige svakheter i denne vurderingen.",
     );
   }
@@ -11959,7 +12022,7 @@ async function loadStartupData() {
     // Primærkilde for taktikktavla: de historiske hgFootball-formasjonene.
     loadJson(DATA_PATHS.hgFormations),
     // Kunnskapsdata er valgfri: hvis filen mangler, fortsetter demoen uten den.
-    loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null),
+    loadFootballBookKnowledgePrinciples().then((data) => data || loadJson(DATA_PATHS.knowledgePrinciples).catch(() => null)),
     // Avsenderkatalogen er valgfri: hvis filen mangler, brukes fallback-avsendere.
     loadJson(DATA_PATHS.clubInboxSenders).catch(() => null),
     // Trådkatalogen er valgfri: hvis filen mangler, brukes fallback-tråder.
@@ -12166,6 +12229,26 @@ function finalizeStartupLineup() {
   // tilgjengelige formasjon.
   sanitizeSelectedFormation();
   ensurePositionsForFormation();
+}
+
+
+async function loadFootballBookKnowledgePrinciples() {
+  const index = await loadJson(DATA_PATHS.footballBookKnowledgeIndex).catch(() => null);
+  if (!Array.isArray(index?.files)) {
+    return null;
+  }
+
+  const parts = await Promise.all(
+    index.files.map((path) => loadJson(path).catch(() => null))
+  );
+
+  const principles = parts.flatMap((part) => Array.isArray(part?.principles) ? part.principles : []);
+
+  if (principles.length === 0) {
+    return null;
+  }
+
+  return { principles };
 }
 
 async function init() {

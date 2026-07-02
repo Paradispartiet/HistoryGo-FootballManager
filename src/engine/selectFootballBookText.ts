@@ -1,41 +1,153 @@
 // src/engine/selectFootballBookText.ts
 
-import type { FootballKnowledgePrinciple } from "../domain/footballKnowledgeTypes.js";
+import type { FootballKnowledgePhase, FootballKnowledgePrinciple } from "../domain/footballKnowledgeTypes.js";
 
-export type FootballBookTextContext =
+export type FootballBookTextSurface =
   | "tooltip"
   | "assistant"
   | "training"
   | "matchReport"
   | "handbook";
 
-const textFieldByContext = {
+export type FootballBookTextContext = FootballBookTextSurface;
+
+const textFieldBySurface = {
   tooltip: "tooltipText",
   assistant: "assistantText",
   training: "trainingText",
   matchReport: "matchReportText",
   handbook: "handbookText",
-} as const satisfies Record<FootballBookTextContext, keyof FootballKnowledgePrinciple>;
+} as const satisfies Record<FootballBookTextSurface, keyof FootballKnowledgePrinciple>;
+
+export type FootballBookGameTextContext = {
+  principles?: FootballKnowledgePrinciple[];
+  weakPoints?: readonly string[];
+  trainingAreas?: readonly string[];
+  relatedTags?: readonly string[];
+  phase?: FootballKnowledgePhase | null;
+  surface: FootballBookTextSurface;
+  existingFeedback?: string;
+  maxResults?: number;
+};
+
+export type FootballBookGameTextMatch = {
+  principleId: string;
+  title: string;
+  text: string;
+  score: number;
+  matchType: "weakPoint" | "trainingArea" | "tag";
+};
 
 export type SelectFootballBookTextInput = {
   principle?: FootballKnowledgePrinciple | null;
-  context: FootballBookTextContext;
+  context: FootballBookTextSurface;
   existingFeedback: string;
+};
+
+const WEAK_POINT_ALIASES: Record<string, string[]> = {
+  pressing_weak: ["pressing_coherence_weak", "weak_pressing_coherence"],
+  press_weak: ["pressing_coherence_weak", "weak_pressing_coherence"],
+  rest_defense_weak: ["defensive_balance_weak", "weak_defensive_balance", "risk_balance_weak"],
+  team_balance_weak: ["defensive_balance_weak", "weak_defensive_balance", "risk_balance_weak"],
+  relationships_weak: ["role_balance_weak", "role_understanding_weak", "team_balance_weak"],
+  role_fit_weak: ["average_role_fit_weak", "individual_role_fit_weak", "weak_average_role_fit"],
+  attack_weak: ["attacking_balance_weak"],
+  build_up_weak: ["midfield_control_weak", "build_up_weak"],
+  width_weak: ["width_balance_weak", "weak_width_balance"],
 };
 
 function hasText(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function normalize(value: string): string {
+  return value.trim().toLowerCase();
+}
+
+function expandWeakPointCodes(codes: readonly string[] = []): Set<string> {
+  const result = new Set<string>();
+  for (const code of codes) {
+    const normalized = normalize(code);
+    result.add(normalized);
+    for (const alias of WEAK_POINT_ALIASES[normalized] ?? []) {
+      result.add(normalize(alias));
+    }
+  }
+  return result;
+}
+
+function toNormalizedSet(values: readonly string[] = []): Set<string> {
+  return new Set(values.map(normalize).filter(Boolean));
+}
+
+function hasIntersection(values: readonly string[], candidates: Set<string>): boolean {
+  return values.some((value) => candidates.has(normalize(value)));
+}
+
+function scorePrinciple(
+  principle: FootballKnowledgePrinciple,
+  context: FootballBookGameTextContext,
+): FootballBookGameTextMatch["matchType"] | null {
+  const weakPoints = expandWeakPointCodes(context.weakPoints);
+  if (weakPoints.size > 0 && hasIntersection(principle.appliesToWeakPoints, weakPoints)) {
+    return "weakPoint";
+  }
+
+  const trainingAreas = toNormalizedSet(context.trainingAreas);
+  if (trainingAreas.size > 0 && hasIntersection(principle.appliesToTrainingAreas, trainingAreas)) {
+    return "trainingArea";
+  }
+
+  const tags = toNormalizedSet(context.relatedTags);
+  if (tags.size > 0 && hasIntersection(principle.relatedTags, tags)) {
+    return "tag";
+  }
+
+  return null;
+}
+
+function matchScore(matchType: FootballBookGameTextMatch["matchType"], principle: FootballKnowledgePrinciple, context: FootballBookGameTextContext): number {
+  const base = matchType === "weakPoint" ? 300 : matchType === "trainingArea" ? 200 : 100;
+  const phaseBonus = context.phase && principle.phase === context.phase ? 25 : 0;
+  return base + phaseBonus;
+}
+
 /**
- * Henter spilltilpasset Fotballboka-tekst for en konkret flate.
- *
- * Selector-en gjør ingen matching og finner ikke på teori selv: hvis prinsippet
- * mangler tekstvarianten for konteksten, returneres eksisterende feedback fra
- * taktikkmotoren/managerinnsikten.
+ * Matcher tilpasset Fotballboka-spilltekst mot eksisterende spillkontekst.
+ * Prioritet er bevisst: weak points først, deretter training areas, deretter
+ * tags. Uten eksplisitt match returneres ingen teori, bare eksisterende fallback.
+ */
+export function getFootballBookGameText(context: FootballBookGameTextContext): FootballBookGameTextMatch[] {
+  const field = textFieldBySurface[context.surface];
+  const maxResults = context.maxResults ?? (context.surface === "handbook" ? 2 : 1);
+  const principles = context.principles ?? [];
+
+  return principles
+    .map((principle) => {
+      const text = principle[field];
+      if (!hasText(text)) return null;
+
+      const matchType = scorePrinciple(principle, context);
+      if (!matchType) return null;
+
+      return {
+        principleId: principle.id,
+        title: principle.title,
+        text,
+        score: matchScore(matchType, principle, context),
+        matchType,
+      } satisfies FootballBookGameTextMatch;
+    })
+    .filter((match): match is FootballBookGameTextMatch => match !== null)
+    .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+    .slice(0, Math.max(0, maxResults));
+}
+
+/**
+ * Bakoverkompatibel helper for kode som allerede har valgt et prinsipp.
  */
 export function selectFootballBookText(input: SelectFootballBookTextInput): string {
-  const field = textFieldByContext[input.context];
+  const field = textFieldBySurface[input.context];
   const value = input.principle?.[field];
 
   if (hasText(value)) {

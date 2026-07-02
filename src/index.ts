@@ -297,6 +297,14 @@ export type {
 } from "./engine/createFootballKnowledgeRecommendations.js";
 
 export type {
+  FootballBookGameTextContext,
+  FootballBookGameTextMatch,
+  FootballBookTextContext,
+  FootballBookTextSurface,
+  SelectFootballBookTextInput,
+} from "./engine/selectFootballBookText.js";
+
+export type {
   AdaptLegacyTacticInput,
   AdaptLegacyTeamInput,
   LegacyFootballFormation,
@@ -334,6 +342,7 @@ export { createManagerDashboardData } from "./engine/createManagerDashboardData.
 export { createManagerDashboardViewModel } from "./engine/createManagerDashboardViewModel.js";
 export { createManagerAppState } from "./engine/createManagerAppState.js";
 export { createFootballKnowledgeRecommendations } from "./engine/createFootballKnowledgeRecommendations.js";
+export { getFootballBookGameText, selectFootballBookText } from "./engine/selectFootballBookText.js";
 
 export {
   adaptLegacyPlayers,
