@@ -26,6 +26,7 @@
   --hg-accent-board: #b48cff;
   --hg-accent-history: #4dd8e6;
   --hg-accent-library: #f2f4f7;
+  --hg-accent-kamp: #ff6b5e;
 
   /* Form og rytme. */
   --hg-radius: 14px;
@@ -687,10 +688,40 @@ select:focus-visible {
 
 /* ---------- Kampdag (v1) ---------- */
 .matchday-panel {
+  position: relative;
+  overflow: hidden;
   display: grid;
   gap: 16px;
   align-content: start;
-  background: var(--panel);
+  border-color: var(--hg-border-strong);
+  background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+}
+
+/* Kampdagpanelet er hovedhandlingen på fanen; badge-panelet er støtteinfo.
+   Samme signaturfarge-mønster som avdelingene (dept-hero), men her markerer
+   det også at kampdag veier tyngre enn badge-effektene ved siden av. */
+.matchday-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-kamp);
+  opacity: 0.85;
+}
+
+.badge-effects-panel {
+  position: relative;
+  overflow: hidden;
+  background: rgba(15, 19, 27, 0.5);
+}
+
+.badge-effects-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-kamp);
+  opacity: 0.4;
 }
 
 .matchday-actions {
@@ -725,6 +756,32 @@ select:focus-visible {
 .matchday-actions button:disabled:hover {
   background: var(--hg-surface-deep);
   color: var(--muted);
+}
+
+/* "Spill kamp" og "Nullstill kamp" så identiske ut — samme vekt for
+   hovedhandlingen og en destruktiv sekundærhandling. Inverter primærknappen
+   som next-action-primary, og la reset være en dempet ghost-knapp. */
+.matchday-actions button.is-primary {
+  border-color: var(--text);
+  background: var(--text);
+  color: #04060b;
+}
+
+.matchday-actions button.is-primary:hover:not(:disabled) {
+  background: var(--hg-accent-kamp);
+  border-color: var(--hg-accent-kamp);
+  color: #04060b;
+}
+
+.matchday-actions button.is-reset {
+  border-color: var(--line-soft);
+  background: transparent;
+  color: var(--muted);
+}
+
+.matchday-actions button.is-reset:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
 }
 
 /* Kampklar-status: grønn når laget kan spille, hvit/dempet med forklaring når
@@ -1692,6 +1749,29 @@ ul {
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* De to første er korte tall og leser fint som kompakte metrikk-tiles. De to
+   siste er beskrivende tekst ("trening / slitasje / moral / …") som ble
+   klemt inn i samme smale format — gi dem full bredde og roligere vekt så
+   de leses som forklaring, ikke som et tall som ikke stemmer. */
+.inbox-signal-stats div:nth-child(1),
+.inbox-signal-stats div:nth-child(2) {
+  border-color: var(--hg-accent-inbox);
+  background: rgba(77, 163, 255, 0.08);
+}
+
+.inbox-signal-stats div:nth-child(3),
+.inbox-signal-stats div:nth-child(4) {
+  grid-column: 1 / -1;
+  background: transparent;
+}
+
+.inbox-signal-stats div:nth-child(3) dd,
+.inbox-signal-stats div:nth-child(4) dd {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
 .inbox-signal-stats dt {
   color: var(--muted);
   font-size: 0.72rem;
@@ -1704,6 +1784,11 @@ ul {
   margin: 4px 0 0;
   color: var(--text);
   font-weight: 900;
+}
+
+.inbox-signal-stats div:nth-child(1) dd,
+.inbox-signal-stats div:nth-child(2) dd {
+  font-size: 1.5rem;
 }
 
 .inbox-signal-status {
@@ -3990,7 +4075,8 @@ ul {
 }
 
 .insight-grid .manager-detail-panel,
-.insight-grid .manager-knowledge-panel {
+.insight-grid .manager-knowledge-panel,
+.insight-grid .suggested-setups-panel {
   grid-column: 1 / -1;
 }
 
@@ -3999,6 +4085,24 @@ ul {
    Topp-juster så høyre kolonne følger sitt eget innhold. */
 .kamp-view .insight-grid {
   align-items: start;
+}
+
+/* Lag & taktikk-fanens dybdepaneler deler én signaturfarge (samme grønn som
+   fanen selv) i stedet for å være fire identiske grå bokser. Oversikt bruker
+   flere farger fordi den viser flere avdelinger samtidig; her er alt tema
+   tydelig taktikk, så én farge er riktigere enn et regnbueoppsett. */
+.office .insight-grid .panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.office .insight-grid .panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-tactics);
+  opacity: 0.7;
 }
 
 /* Dashboard (oversikt): kompakt kortrutenett i stedet for en lang feed. */
@@ -4256,8 +4360,17 @@ ul {
   color: var(--text);
 }
 
+/* Arkivet er "kan leses senere" — 0.92 opacity skilte det knapt fra
+   "Viktig nå" over. Dempet bakgrunn og tynnere ramme gjør at blikket
+   lander på det aktive panelet først. */
 .inbox-archive {
-  opacity: 0.92;
+  border-color: var(--line-soft);
+  background: rgba(15, 19, 27, 0.4);
+  opacity: 0.85;
+}
+
+.inbox-archive h3 {
+  color: var(--muted);
 }
 
 /* ---------- Administrasjon: ledger-tavle ---------- */
@@ -6289,6 +6402,22 @@ ul {
 .squad-setup-checklist strong {
   font-size: 1.15rem;
   text-transform: uppercase;
+}
+
+/* Feilbruk/duplikater/roller er ikke nøytrale tellere som Startellever/Benk —
+   de er signaler om at manageren må rette opp noe. Fargen sier det tydelig i
+   stedet for å gjemme det i identiske grå bokser. */
+.squad-setup-checklist strong[data-tone="warn"] {
+  color: var(--danger);
+}
+
+.squad-setup-checklist article:has(strong[data-tone="warn"]) {
+  border-color: var(--danger);
+  background: rgba(255, 107, 94, 0.08);
+}
+
+.squad-setup-checklist strong[data-tone="ok"] {
+  color: var(--good);
 }
 
 .tactic-system-details {
