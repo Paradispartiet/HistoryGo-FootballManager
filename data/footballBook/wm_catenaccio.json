@@ -1,1 +1,66 @@
-{"schema":"historygo-football-manager.football-book-knowledge-principles.v1","version":1,"sourceId":"fotballboka_pages_2026_07_02","principles":[{"id":"wm_requires_clear_marking_and_support","title":"WM lærer laget balanse mellom markering og støtte","category":"rolleforståelse","phase":"general","summary":"WM-logikken fra Fotballboka viser hvordan et system kan fordele ansvar tydeligere mellom forsvar, midtbane og angrep. Poenget for spillet er ikke å lage ny WM-motor, men å forklare rollebalanse, markering og støtte.","appliesToWeakPoints":["team_balance_weak","average_role_fit_weak","weak_average_role_fit"],"appliesToTrainingAreas":["rolleforståelse","lagstruktur","kampanalyse"],"relatedTags":["WM","formasjonshistorie","rollebalanse"],"coachAdvice":"Når laget blir uklart, tenk WM-prinsipp: hvem markerer, hvem støtter, hvem gir dybde, og hvem binder leddene sammen? Uklar rollefordeling gjør selv gode spillere dårligere.","trainingSession":"Rollebalanseøkt: del laget i ledd og tren på hvem som støtter ballfører, hvem som sikrer bak, og hvem som holder trussel fremover."},{"id":"catenaccio_is_control_not_only_defence","title":"Catenaccio handler om kontroll, ikke bare lavt forsvar","category":"forsvar","phase":"defence","summary":"Catenaccio og sweeper-logikk brukes som historisk eksempel på sikring, tålmodighet og romkontroll. I spillet skal dette forklare lavere risiko, tydelig sikring og kontringsberedskap, ikke bli et separat system.","appliesToWeakPoints":["defensive_balance_weak","weak_defensive_balance","risk_balance_weak","weak_risk_balance"],"appliesToTrainingAreas":["forsvar","restforsvar","risikobalanse"],"relatedTags":["catenaccio","sweeper","sikring"],"coachAdvice":"Hvis laget må tåle press, gi én spiller tydelig sikringsansvar og tren laget på når det skal falle, stenge sentrum og kontre når rommet åpner seg.","trainingSession":"Kontrolløkt: tren lavere blokk med sikringsspiller, klareringsrom og første pasning ut etter ballvinning."}]}
+{
+  "schema": "historygo-football-manager.football-book-knowledge-principles.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principles": [
+    {
+      "id": "wm_requires_clear_marking_and_support",
+      "title": "WM lærer laget balanse mellom markering og støtte",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "WM-logikken fra Fotballboka viser hvordan et system kan fordele ansvar tydeligere mellom forsvar, midtbane og angrep. Poenget for spillet er ikke å lage ny WM-motor, men å forklare rollebalanse, markering og støtte.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "average_role_fit_weak",
+        "weak_average_role_fit"
+      ],
+      "appliesToTrainingAreas": [
+        "rolleforståelse",
+        "lagstruktur",
+        "kampanalyse"
+      ],
+      "relatedTags": [
+        "WM",
+        "formasjonshistorie",
+        "rollebalanse"
+      ],
+      "coachAdvice": "Når laget blir uklart, tenk WM-prinsipp: hvem markerer, hvem støtter, hvem gir dybde, og hvem binder leddene sammen? Uklar rollefordeling gjør selv gode spillere dårligere.",
+      "trainingSession": "Rollebalanseøkt: del laget i ledd og tren på hvem som støtter ballfører, hvem som sikrer bak, og hvem som holder trussel fremover.",
+      "tooltipText": "WM-prinsippet minner laget om balanse mellom markering, støtte og dybde.",
+      "assistantText": "Rollefordelingen vår er uklar: noen markerer, men for få støtter eller binder leddene sammen.",
+      "trainingText": "Tren leddvis rollebalanse med tydelig ansvar for markering, støtte bak ballen og trussel fremover.",
+      "matchReportText": "Vi tapte kontroll fordi avstanden mellom ansvarene i laget ble for stor.",
+      "handbookText": "WM brukes her som historisk forklaring, ikke som ny motor. Verdien ligger i å gjøre ansvarsfordelingen tydelig: hvem markerer, hvem støtter, og hvem holder laget sammen."
+    },
+    {
+      "id": "catenaccio_is_control_not_only_defence",
+      "title": "Catenaccio handler om kontroll, ikke bare lavt forsvar",
+      "category": "forsvar",
+      "phase": "defence",
+      "summary": "Catenaccio og sweeper-logikk brukes som historisk eksempel på sikring, tålmodighet og romkontroll. I spillet skal dette forklare lavere risiko, tydelig sikring og kontringsberedskap, ikke bli et separat system.",
+      "appliesToWeakPoints": [
+        "defensive_balance_weak",
+        "weak_defensive_balance",
+        "risk_balance_weak",
+        "weak_risk_balance"
+      ],
+      "appliesToTrainingAreas": [
+        "forsvar",
+        "restforsvar",
+        "risikobalanse"
+      ],
+      "relatedTags": [
+        "catenaccio",
+        "sweeper",
+        "sikring"
+      ],
+      "coachAdvice": "Hvis laget må tåle press, gi én spiller tydelig sikringsansvar og tren laget på når det skal falle, stenge sentrum og kontre når rommet åpner seg.",
+      "trainingSession": "Kontrolløkt: tren lavere blokk med sikringsspiller, klareringsrom og første pasning ut etter ballvinning.",
+      "tooltipText": "Catenaccio handler om sikring, romkontroll og tålmodig kontringsberedskap.",
+      "assistantText": "Når vi ligger lavere, må sikringsspilleren og første pasning ut være tydeligere.",
+      "trainingText": "Tren lavere blokk med sikringsansvar, klareringsrom og første pasning etter ballvinning.",
+      "matchReportText": "Vi forsvarte lavt uten nok kontroll, så klareringene ble bare nye angrep imot.",
+      "handbookText": "Lavt forsvar er ikke det samme som passivitet. Catenaccio-prinsippet handler om å beskytte farlige rom, ha en tydelig sikring og være klar til å angripe rommet som åpner seg."
+    }
+  ]
+}

@@ -47,6 +47,11 @@ export type FootballKnowledgePrinciple = {
   relatedTags: string[];
   coachAdvice: string;
   trainingSession: string;
+  tooltipText: string;
+  assistantText: string;
+  trainingText: string;
+  matchReportText: string;
+  handbookText: string;
 };
 
 export type FootballKnowledgeRecommendation = {
@@ -57,4 +62,9 @@ export type FootballKnowledgeRecommendation = {
   reason: string;
   coachAdvice: string;
   trainingSession: string;
+  tooltipText: string;
+  assistantText: string;
+  trainingText: string;
+  matchReportText: string;
+  handbookText: string;
 };
