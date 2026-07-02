@@ -16,6 +16,7 @@ const base = {
   unreadThreads: 1,
   hasUnseenReport: false,
   miniSeasonActive: false,
+  scenarioModeActive: true,
   clubWeek: { week: 1, phase: "analysis", phaseLabel: "Analyse" },
   firstTime: { active: true, started: false, completed: false, hasFormation: true, hasRoles: false, hasReadInbox: false, hasPlayedFirstMatch: false, hasSeenReport: false }
 };

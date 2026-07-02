@@ -77,6 +77,7 @@ function normalizeContext(context = {}) {
     unreadThreads: Math.max(0, toInt(context.unreadThreads)),
     hasUnseenReport: Boolean(context.hasUnseenReport),
     miniSeasonActive: Boolean(context.miniSeasonActive),
+    scenarioModeActive: Boolean(context.scenarioModeActive) || context.selectedMode === "scenario",
     firstTime: context.firstTime && typeof context.firstTime === "object"
       ? {
           active: Boolean(context.firstTime.active),
@@ -144,7 +145,7 @@ export function computeNextActions(context = {}) {
   // Scenario Playthrough v1: Ajax/femkampers-opplegget prioriteres bare når
   // spilleren eksplisitt har valgt scenario-modus. Ligaspill skal aldri arve
   // dette som obligatorisk første handling.
-  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && firstTime?.active && !firstTime.completed) {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && ctx.scenarioModeActive && firstTime?.active && !firstTime.completed) {
     if (!firstTime.started) {
       push({
         id: "first-time-start",

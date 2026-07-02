@@ -78,9 +78,9 @@ const readyFirstStep = {
   unreadThreads: 1,
   firstTime: { ...base.firstTime, started: true, hasReadInbox: false }
 };
-check("11 + 4 klart går først til Innboks", primary(readyFirstStep)?.title === "Les assistentens kampnotat");
-check("etter innboks går flyten til Trening", primary({ ...readyFirstStep, unreadThreads: 0, firstTime: { ...readyFirstStep.firstTime, hasReadInbox: true } })?.title === "Velg trening for scenario-kampen");
-check("etter trening går flyten til Kamp", primary({ ...readyFirstStep, unreadThreads: 0, hasTrainingChoice: true, firstTime: { ...readyFirstStep.firstTime, hasReadInbox: true } })?.title === "Spill første kamp");
+check("11 + 4 klart går først til Innboks", primary(readyFirstStep)?.title === "Les innboksen");
+check("etter innboks går flyten til Trening", primary({ ...readyFirstStep, unreadThreads: 0, firstTime: { ...readyFirstStep.firstTime, hasReadInbox: true } })?.title === "Velg treningsprogram");
+check("etter trening går flyten til Kamp", primary({ ...readyFirstStep, unreadThreads: 0, hasTrainingChoice: true, firstTime: { ...readyFirstStep.firstTime, hasReadInbox: true } })?.title === "Spill kamp");
 
 if (failures.length) {
   console.error("✗ First-run real-seed-sim feilet:");

@@ -128,7 +128,8 @@ check("rapport sett peker videre mot «Gå til neste uke» i review", primary(ct
   check("league mode gir ikke mini-season CTA", !leagueTitles.includes("Start prøveperiode") && !leagueTitles.includes("Start femkampers prøveperiode"));
   const scenarioTitles = titles(ctx({
     miniSeasonActive: false,
-    firstTime: { active: true, started: false, completed: false }
+    firstTime: { active: true, started: false, completed: false },
+    scenarioModeActive: true
   }));
   check("scenario mode kan fortsatt gi Ajax-scenario", scenarioTitles.includes("Start Ajax 1971–73-scenario"));
 }
