@@ -7,6 +7,12 @@ HistoryGo Football Manager er en selvstendig managerprototype koblet til History
 Dette er ikke et vanlig ratingspill. `overall` beskriver klasse, ikke automatisk kampverdi. En spiller med lavere `overall` kan prestere bedre enn en høyere rated spiller dersom han brukes i riktigere posisjon, rolle, taktikk og relasjonelt mønster.
 
 
+## Taktisk kunnskapslag
+
+Taktikkmotoren finnes allerede og er fortsatt sannheten for kamp, lagfit og resultater. Det nye taktiske kunnskapslaget er kun pedagogisk: det leser eksisterende taktikkdata og forklarer hva valg som lav blokk, høyt press, høy linje, 4-3-3, sonepress, mann-mot-mann-press, inverterte backer og korte cornere betyr for manageren.
+
+Laget skal brukes til UI-tekster, tooltips, assistentfeedback, kampanalyse og dokumentasjon — ikke til å bygge en ny motor eller parallelle taktikkvalg. Se [`docs/TACTICAL_KNOWLEDGE_LAYER.md`](docs/TACTICAL_KNOWLEDGE_LAYER.md).
+
 ## Dashboard-regel
 
 Når aktiv modus er `league`, skal dashboardet bare vise ligaspill-relevante handlinger. Scenario, Ajax, femkamper og mini-season skal ikke vises som hovedflyt. Scenarioer er valgfrie og skal startes fra `Scenarioer`-fanen.
