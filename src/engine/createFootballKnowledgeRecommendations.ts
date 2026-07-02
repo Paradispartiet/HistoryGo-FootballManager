@@ -103,9 +103,10 @@ function buildReason(
 /**
  * Kobler fotballfaglige prinsipper mot managerinnsikten.
  *
- * Funksjonen leser svakhetsanalysen og treningsfokuset i innsikten, matcher
- * prinsipper på weakPoint-koder og treningsområder, deduplikerer på prinsipp-id
- * og prioriterer hver anbefaling.
+ * Funksjonen leser svakhetsanalysen og treningsfokuset i innsikten, men viser
+ * bare Fotballboka når et prinsipp faktisk treffer en weakPoint fra motoren.
+ * Treningsområdet kan løfte og forklare anbefalingen, men kan ikke alene fylle
+ * plassen med teori. Det bevarer eksisterende feedback som trygg fallback.
  */
 export function createFootballKnowledgeRecommendations(
   input: FootballKnowledgeRecommendationInput,
@@ -131,7 +132,7 @@ export function createFootballKnowledgeRecommendations(
     const matchedWeak = matchedWeakPoints(principle, weakPoints);
     const matchedTraining = matchedTrainingFocus(principle, weeklyPlan);
 
-    if (matchedWeak.length === 0 && matchedTraining.length === 0) {
+    if (matchedWeak.length === 0) {
       continue;
     }
 

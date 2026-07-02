@@ -89,7 +89,7 @@ for (const scenario of scenarios) {
 const noMatchBase = {
   principles,
   weakPoints: ["no_matching_weak_point"],
-  trainingAreas: ["Ukjent område"],
+  trainingAreas: ["Restforsvar"],
   relatedTags: ["tilfeldig teori"],
   maxResults: 1,
 };
@@ -97,6 +97,18 @@ for (const surface of ["assistant", "training", "matchReport", "tooltip", "handb
   const matches = getFootballBookGameText({ ...noMatchBase, surface });
   check(matches.length === 0, `no_matching_weak_point: ${surface} viser Fotballboka-tekst uten match`);
 }
+
+const mismatchedTraining = getFootballBookGameText({
+  principles,
+  weakPoints: ["pressing_coherence_weak"],
+  trainingAreas: ["Keeper"],
+  surface: "training",
+  maxResults: 1,
+});
+check(
+  mismatchedTraining.length === 0,
+  "training: viser Fotballboka-tekst når weakPoint og eksisterende training area peker i ulike retninger",
+);
 
 console.log("Fotballboka UX QA Audit");
 console.log(`Principles: ${principles.length}`);

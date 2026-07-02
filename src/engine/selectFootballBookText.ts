@@ -113,12 +113,27 @@ function scorePrinciple(
   context: FootballBookGameTextContext,
 ): FootballBookGameTextMatch["matchType"] | null {
   const weakPoints = expandWeakPointCodes(context.weakPoints);
-  if (weakPoints.size > 0 && hasIntersection(principle.appliesToWeakPoints, weakPoints)) {
+  const matchesWeakPoint = weakPoints.size > 0 && hasIntersection(principle.appliesToWeakPoints, weakPoints);
+  const trainingAreas = toNormalizedSet(context.trainingAreas);
+  const matchesTrainingArea = trainingAreas.size > 0 && hasIntersection(principle.appliesToTrainingAreas, trainingAreas);
+
+  if (weakPoints.size > 0 && !matchesWeakPoint) {
+    return null;
+  }
+
+  if (context.surface === "training" && weakPoints.size > 0 && trainingAreas.size > 0) {
+    if (matchesWeakPoint && matchesTrainingArea) {
+      return "weakPoint";
+    }
+
+    return null;
+  }
+
+  if (matchesWeakPoint) {
     return surfaceAllowsMatch(context.surface, "weakPoint") ? "weakPoint" : null;
   }
 
-  const trainingAreas = toNormalizedSet(context.trainingAreas);
-  if (trainingAreas.size > 0 && hasIntersection(principle.appliesToTrainingAreas, trainingAreas)) {
+  if (matchesTrainingArea) {
     return surfaceAllowsMatch(context.surface, "trainingArea") ? "trainingArea" : null;
   }
 
@@ -139,7 +154,10 @@ function matchScore(matchType: FootballBookGameTextMatch["matchType"], principle
 /**
  * Matcher tilpasset Fotballboka-spilltekst mot eksisterende spillkontekst.
  * Prioritet er bevisst: weak points først, deretter training areas, deretter
- * tags. Uten eksplisitt match returneres ingen teori, bare eksisterende fallback.
+ * tags. På treningsflaten må en oppgitt weakPoint og en oppgitt øktflate
+ * peke på samme prinsipp, slik at teksten både forklarer problemet og passer
+ * eksisterende treningsområde. Uten eksplisitt match returneres ingen teori,
+ * bare eksisterende fallback.
  */
 export function getFootballBookGameText(context: FootballBookGameTextContext): FootballBookGameTextMatch[] {
   const field = textFieldBySurface[context.surface];
