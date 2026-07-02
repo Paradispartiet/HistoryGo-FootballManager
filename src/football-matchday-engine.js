@@ -1,6 +1,7 @@
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
+import { buildTacticalKnowledgeFeedback } from "./football-tactical-knowledge.js";
 
 // HG Football Manager — Matchday Engine (v1)
 //
@@ -1711,6 +1712,12 @@ export function finalizeMatchdaySession(session) {
   if (historicalMatchup && typeof historicalMatchup === "object") {
     analysis.push(historicalMatchup.summary);
   }
+
+  buildTacticalKnowledgeFeedback({
+    tactic: session.tacticSnapshot,
+    tacticalProfile: tp,
+    xgAgainst: expectedGoalsAgainst
+  }).forEach((line) => analysis.push(line));
 
   const keyFactors = [];
   const strengthGap = baseXg.strengthGap;

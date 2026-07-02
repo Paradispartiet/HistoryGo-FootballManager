@@ -1,4 +1,5 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
+import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
 import {
@@ -5991,6 +5992,23 @@ function renderTacticalSystemPanel() {
   const knowledgeCard = createFormationKnowledgeMiniCard(formation);
   if (knowledgeCard) {
     panel.append(knowledgeCard);
+  }
+
+  const tacticKnowledge = getTacticalKnowledgeForTactic(getTactic()).slice(0, 3);
+  if (tacticKnowledge.length) {
+    const knowledgeBlock = document.createElement("div");
+    knowledgeBlock.className = "tactic-system-block";
+    const knowledgeLabel = document.createElement("p");
+    knowledgeLabel.className = "tactic-system-block-label";
+    knowledgeLabel.textContent = "Assistentens taktikkforklaring";
+    knowledgeBlock.append(knowledgeLabel);
+    tacticKnowledge.forEach((item) => {
+      const note = document.createElement("p");
+      note.className = "muted-text";
+      note.textContent = `${item.title}: ${item.explanation} Spillerkrav: ${item.requirements.join(", ")}.`;
+      knowledgeBlock.append(note);
+    });
+    panel.append(knowledgeBlock);
   }
 
   // Faseformasjoner: grunnform + de fem fasene i kompakte bokser.
