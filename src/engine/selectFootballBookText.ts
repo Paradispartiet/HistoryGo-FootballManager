@@ -44,17 +44,26 @@ export type SelectFootballBookTextInput = {
   existingFeedback: string;
 };
 
-const WEAK_POINT_ALIASES: Record<string, string[]> = {
-  pressing_weak: ["pressing_coherence_weak", "weak_pressing_coherence"],
-  press_weak: ["pressing_coherence_weak", "weak_pressing_coherence"],
-  rest_defense_weak: ["defensive_balance_weak", "weak_defensive_balance", "risk_balance_weak"],
-  team_balance_weak: ["defensive_balance_weak", "weak_defensive_balance", "risk_balance_weak"],
-  relationships_weak: ["role_balance_weak", "role_understanding_weak", "team_balance_weak"],
-  role_fit_weak: ["average_role_fit_weak", "individual_role_fit_weak", "weak_average_role_fit"],
-  attack_weak: ["attacking_balance_weak"],
-  build_up_weak: ["midfield_control_weak", "build_up_weak"],
-  width_weak: ["width_balance_weak", "weak_width_balance"],
-};
+const WEAK_POINT_ALIAS_GROUPS = [
+  ["pressing_weak", "press_weak", "pressing_coherence_weak", "weak_pressing_coherence"],
+  ["rest_defense_weak", "defensive_balance_weak", "weak_defensive_balance", "risk_balance_weak", "weak_risk_balance"],
+  ["team_balance_weak", "defensive_balance_weak", "weak_defensive_balance", "risk_balance_weak", "weak_risk_balance"],
+  ["relationships_weak", "role_balance_weak", "role_understanding_weak", "team_balance_weak"],
+  ["role_fit_weak", "average_role_fit_weak", "individual_role_fit_weak", "weak_average_role_fit"],
+  ["attack_weak", "attacking_balance_weak"],
+  ["build_up_weak", "midfield_control_weak"],
+  ["width_weak", "width_balance_weak", "weak_width_balance"],
+] as const;
+
+const WEAK_POINT_ALIASES: Record<string, string[]> = WEAK_POINT_ALIAS_GROUPS.reduce(
+  (aliases, group) => {
+    for (const code of group) {
+      aliases[code] = group.filter((candidate) => candidate !== code);
+    }
+    return aliases;
+  },
+  {} as Record<string, string[]>,
+);
 
 function hasText(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
@@ -84,23 +93,38 @@ function hasIntersection(values: readonly string[], candidates: Set<string>): bo
   return values.some((value) => candidates.has(normalize(value)));
 }
 
+function surfaceAllowsMatch(
+  surface: FootballBookTextSurface,
+  matchType: FootballBookGameTextMatch["matchType"],
+): boolean {
+  if (surface === "assistant" || surface === "matchReport") {
+    return matchType === "weakPoint";
+  }
+
+  if (surface === "training") {
+    return matchType === "weakPoint" || matchType === "trainingArea";
+  }
+
+  return true;
+}
+
 function scorePrinciple(
   principle: FootballKnowledgePrinciple,
   context: FootballBookGameTextContext,
 ): FootballBookGameTextMatch["matchType"] | null {
   const weakPoints = expandWeakPointCodes(context.weakPoints);
   if (weakPoints.size > 0 && hasIntersection(principle.appliesToWeakPoints, weakPoints)) {
-    return "weakPoint";
+    return surfaceAllowsMatch(context.surface, "weakPoint") ? "weakPoint" : null;
   }
 
   const trainingAreas = toNormalizedSet(context.trainingAreas);
   if (trainingAreas.size > 0 && hasIntersection(principle.appliesToTrainingAreas, trainingAreas)) {
-    return "trainingArea";
+    return surfaceAllowsMatch(context.surface, "trainingArea") ? "trainingArea" : null;
   }
 
   const tags = toNormalizedSet(context.relatedTags);
   if (tags.size > 0 && hasIntersection(principle.relatedTags, tags)) {
-    return "tag";
+    return surfaceAllowsMatch(context.surface, "tag") ? "tag" : null;
   }
 
   return null;

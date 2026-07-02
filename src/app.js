@@ -8759,7 +8759,8 @@ function renderManagerDashboardViewModel(viewModel, teamFit = null) {
     ? trainingEngine.createTrainingFocusFromTeamFit(teamFit)
     : viewModel.trainingPlan.map((item) => ({
         areaText: item.areaText,
-        suggestedSession: item.suggestedSession
+        suggestedSession: item.suggestedSession,
+        weakPointCode: item.area
       }));
 
   const trainingItems = [
@@ -8770,8 +8771,8 @@ function renderManagerDashboardViewModel(viewModel, teamFit = null) {
     }] : []),
     ...teamFitFocus.map((item) => {
       const trainingText = getFootballBookSurfaceText("training", {
+        weakPoints: item.weakPointCode ? [item.weakPointCode] : [],
         trainingAreas: [item.areaText],
-        relatedTags: [item.areaText],
       });
       return {
         type: "engine_training",
