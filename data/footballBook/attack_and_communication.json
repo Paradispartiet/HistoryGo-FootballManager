@@ -1,1 +1,64 @@
-{"schema":"historygo-football-manager.football-book-knowledge-principles.v1","version":1,"sourceId":"fotballboka_pages_2026_07_02","principles":[{"id":"attacking_patterns_need_timing","title":"Angrepsmønstre lever av timing","category":"angrepsstruktur","phase":"attack","summary":"Opp-tilbake-gjennom, bueløp, spillvending og tredjemannsløp virker bare når bevegelsen kommer i riktig øyeblikk. For tidlig løp blir markert bort, for sent løp mister rommet.","appliesToWeakPoints":["attacking_balance_weak","midfield_control_weak"],"appliesToTrainingAreas":["angrepsstruktur","midtbanekontroll","rolleforståelse"],"relatedTags":["timing","gjennombrudd","tredjemann"],"coachAdvice":"Når laget mangler gjennombrudd, se på timing før du bytter formasjon. Riktig løp i riktig sekund kan åpne samme struktur som før virket låst.","trainingSession":"Timingøkt: tren opp-tilbake-gjennom og tredjemannsløp med krav om at pasningen først kommer når løperen har skapt feilvendt forsvarer."},{"id":"short_commands_create_team_speed","title":"Korte kommandoer gjør laget raskere","category":"rolleforståelse","phase":"general","summary":"Kommunikasjonsdelen i Fotballboka legger vekt på verbale signaler, kroppsspråk og kampklima. Gode lag bruker korte beskjeder som flytter handlingen videre: vend, tid, rygg, press, fall, sikre.","appliesToWeakPoints":["team_balance_weak","pressing_coherence_weak","weak_pressing_coherence"],"appliesToTrainingAreas":["rolleforståelse","lagstruktur","press"],"relatedTags":["kommunikasjon","kroppsspråk","kampklima"],"coachAdvice":"Bygg et enkelt språk for laget. Lange forklaringer midt i kamp skaper treghet; korte kommandoer skaper felles handling.","trainingSession":"Kommunikasjonslek: småspill der spillerne må gi riktig ettordsbeskjed før mottak, press eller sikring for at målet skal telle."}]}
+{
+  "schema": "historygo-football-manager.football-book-knowledge-principles.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principles": [
+    {
+      "id": "attacking_patterns_need_timing",
+      "title": "Angrepsmønstre lever av timing",
+      "category": "angrepsstruktur",
+      "phase": "attack",
+      "summary": "Opp-tilbake-gjennom, bueløp, spillvending og tredjemannsløp virker bare når bevegelsen kommer i riktig øyeblikk. For tidlig løp blir markert bort, for sent løp mister rommet.",
+      "appliesToWeakPoints": [
+        "attacking_balance_weak",
+        "midfield_control_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "angrepsstruktur",
+        "midtbanekontroll",
+        "rolleforståelse"
+      ],
+      "relatedTags": [
+        "timing",
+        "gjennombrudd",
+        "tredjemann"
+      ],
+      "coachAdvice": "Når laget mangler gjennombrudd, se på timing før du bytter formasjon. Riktig løp i riktig sekund kan åpne samme struktur som før virket låst.",
+      "trainingSession": "Timingøkt: tren opp-tilbake-gjennom og tredjemannsløp med krav om at pasningen først kommer når løperen har skapt feilvendt forsvarer.",
+      "tooltipText": "Angrepsmønstre virker først når løp og pasning kommer i samme øyeblikk.",
+      "assistantText": "Vi har riktige bevegelser, men de starter for tidlig eller for sent til å åpne motstanderen.",
+      "trainingText": "Tren opp-tilbake-gjennom og tredjemannsløp med krav om riktig pasningsøyeblikk.",
+      "matchReportText": "Angrepene stoppet fordi timing mellom ballfører, støtte og gjennombruddsløp ikke satt.",
+      "handbookText": "Et mønster er ikke bare en tegning. Bueløp, spillvending og tredjemannsløp trenger riktig sekund, ellers blir løpet markert bort eller pasningen for sen."
+    },
+    {
+      "id": "short_commands_create_team_speed",
+      "title": "Korte kommandoer gjør laget raskere",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "Kommunikasjonsdelen i Fotballboka legger vekt på verbale signaler, kroppsspråk og kampklima. Gode lag bruker korte beskjeder som flytter handlingen videre: vend, tid, rygg, press, fall, sikre.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "pressing_coherence_weak",
+        "weak_pressing_coherence"
+      ],
+      "appliesToTrainingAreas": [
+        "rolleforståelse",
+        "lagstruktur",
+        "press"
+      ],
+      "relatedTags": [
+        "kommunikasjon",
+        "kroppsspråk",
+        "kampklima"
+      ],
+      "coachAdvice": "Bygg et enkelt språk for laget. Lange forklaringer midt i kamp skaper treghet; korte kommandoer skaper felles handling.",
+      "trainingSession": "Kommunikasjonslek: småspill der spillerne må gi riktig ettordsbeskjed før mottak, press eller sikring for at målet skal telle.",
+      "tooltipText": "Korte kommandoer gjør valgene raskere: vend, tid, rygg, press, fall, sikre.",
+      "assistantText": "Laget taper tempo fordi beskjedene kommer sent eller er for lange i kampsituasjonen.",
+      "trainingText": "Tren småspill der mål bare teller etter riktig ettordsbeskjed før mottak, press eller sikring.",
+      "matchReportText": "Vi reagerte tregt fordi spillerne manglet felles korte signaler i press og oppbygging.",
+      "handbookText": "God kommunikasjon er ikke lange forklaringer under spill. Et felles sett med korte kommandoer flytter laget raskere og gjør neste handling tydelig."
+    }
+  ]
+}

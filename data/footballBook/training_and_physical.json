@@ -1,1 +1,66 @@
-{"schema":"historygo-football-manager.football-book-knowledge-principles.v1","version":1,"sourceId":"fotballboka_pages_2026_07_02","principles":[{"id":"guided_discovery_makes_training_stick","title":"Guided discovery gjør læringen sterkere","category":"treningsmetodikk","phase":"general","summary":"Treningskapitlene i Fotballboka peker mot constraints-led approach, deliberate play/practice og guided discovery. Spilleren lærer bedre når øvelsen tvinger frem prinsippet, ikke bare når treneren forklarer det.","appliesToWeakPoints":["average_role_fit_weak","weak_average_role_fit","team_balance_weak"],"appliesToTrainingAreas":["treningsmetodikk","rolleforståelse","lagstruktur"],"relatedTags":["constraints-led","guided discovery","pedagogikk"],"coachAdvice":"Lag øvelser der spillerne må oppdage løsningen: smal bane for spillvending, poeng for scanning, tidsgrense for gjenvinning. Regelen skal lære prinsippet.","trainingSession":"Constraints-økt: velg én begrensning som fremtvinger ønsket spillprinsipp og avslutt med refleksjon over hvorfor løsningen fungerte."},{"id":"physical_capacity_sets_tactical_ceiling","title":"Fysisk kapasitet setter taktisk tak","category":"treningsmetodikk","phase":"general","summary":"Utholdenhet, hurtighet, styrke, spenst, bevegelighet, balanse og propriosepsjon avgjør hvilke taktiske krav laget kan tåle. Høyt press, høy linje og intense overganger faller sammen uten fysisk grunnlag.","appliesToWeakPoints":["pressing_coherence_weak","weak_pressing_coherence","risk_balance_weak","weak_risk_balance"],"appliesToTrainingAreas":["treningsmetodikk","press","risikobalanse"],"relatedTags":["fysiologi","utholdenhet","hurtighet"],"coachAdvice":"Ikke velg mer intensitet enn laget kan bære. Hvis spillerne ikke har kapasitet, må taktikken justeres eller treningen bygges gradvis mot kravet.","trainingSession":"Taktisk fysisk økt: tren press og overgang i korte blokker med tydelig pause, slik at fysisk belastning kobles til spillprinsippet."}]}
+{
+  "schema": "historygo-football-manager.football-book-knowledge-principles.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principles": [
+    {
+      "id": "guided_discovery_makes_training_stick",
+      "title": "Guided discovery gjør læringen sterkere",
+      "category": "treningsmetodikk",
+      "phase": "general",
+      "summary": "Treningskapitlene i Fotballboka peker mot constraints-led approach, deliberate play/practice og guided discovery. Spilleren lærer bedre når øvelsen tvinger frem prinsippet, ikke bare når treneren forklarer det.",
+      "appliesToWeakPoints": [
+        "average_role_fit_weak",
+        "weak_average_role_fit",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "treningsmetodikk",
+        "rolleforståelse",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "constraints-led",
+        "guided discovery",
+        "pedagogikk"
+      ],
+      "coachAdvice": "Lag øvelser der spillerne må oppdage løsningen: smal bane for spillvending, poeng for scanning, tidsgrense for gjenvinning. Regelen skal lære prinsippet.",
+      "trainingSession": "Constraints-økt: velg én begrensning som fremtvinger ønsket spillprinsipp og avslutt med refleksjon over hvorfor løsningen fungerte.",
+      "tooltipText": "Spillere lærer bedre når øvelsen tvinger frem løsningen, ikke bare forklarer den.",
+      "assistantText": "Treningen bør gjøre problemet synlig slik at spillerne selv finner riktig valg oftere.",
+      "trainingText": "Bruk én begrensning: smal bane, tidsgrense eller poengregel som fremtvinger ønsket prinsipp.",
+      "matchReportText": "Forbedringen uteble fordi økten forklarte prinsippet, men spillsituasjonen krevde det ikke.",
+      "handbookText": "Guided discovery betyr at treneren designer rammene slik at spillerne oppdager løsningen i spill. Da sitter læringen bedre enn ved rene instruksjoner."
+    },
+    {
+      "id": "physical_capacity_sets_tactical_ceiling",
+      "title": "Fysisk kapasitet setter taktisk tak",
+      "category": "treningsmetodikk",
+      "phase": "general",
+      "summary": "Utholdenhet, hurtighet, styrke, spenst, bevegelighet, balanse og propriosepsjon avgjør hvilke taktiske krav laget kan tåle. Høyt press, høy linje og intense overganger faller sammen uten fysisk grunnlag.",
+      "appliesToWeakPoints": [
+        "pressing_coherence_weak",
+        "weak_pressing_coherence",
+        "risk_balance_weak",
+        "weak_risk_balance"
+      ],
+      "appliesToTrainingAreas": [
+        "treningsmetodikk",
+        "press",
+        "risikobalanse"
+      ],
+      "relatedTags": [
+        "fysiologi",
+        "utholdenhet",
+        "hurtighet"
+      ],
+      "coachAdvice": "Ikke velg mer intensitet enn laget kan bære. Hvis spillerne ikke har kapasitet, må taktikken justeres eller treningen bygges gradvis mot kravet.",
+      "trainingSession": "Taktisk fysisk økt: tren press og overgang i korte blokker med tydelig pause, slik at fysisk belastning kobles til spillprinsippet.",
+      "tooltipText": "Fysikken setter taket for hvor intensiv taktikken kan være over tid.",
+      "assistantText": "Vi ber laget presse og løpe mer enn kapasiteten tåler akkurat nå.",
+      "trainingText": "Tren press og overgang i korte blokker med pauser, og øk belastningen gradvis.",
+      "matchReportText": "Intensiteten falt fordi den fysiske kapasiteten ikke bar kravene i press og overganger.",
+      "handbookText": "Høyt press, høy linje og raske overganger krever utholdenhet, hurtighet og gjentatt aksjonsevne. Hvis kroppen ikke tåler kravet, må taktikken eller treningsbelastningen justeres."
+    }
+  ]
+}

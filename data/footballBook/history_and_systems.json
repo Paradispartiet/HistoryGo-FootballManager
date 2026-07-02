@@ -1,1 +1,65 @@
-{"schema":"historygo-football-manager.football-book-knowledge-principles.v1","version":1,"sourceId":"fotballboka_pages_2026_07_02","principles":[{"id":"football_history_explains_formations","title":"Historien forklarer hvorfor formasjoner finnes","category":"kampanalyse","phase":"general","summary":"Formasjoner er ikke pynt eller tallrekker, men svar på konkrete problemer i spillets utvikling: offside, banekvalitet, profesjonalisering, teknikk, press og behovet for balanse mellom frihet og struktur.","appliesToWeakPoints":["team_balance_weak","average_role_fit_weak","weak_average_role_fit"],"appliesToTrainingAreas":["kampanalyse","rolleforståelse","lagstruktur"],"relatedTags":["fotballhistorie","formasjon","spillmodell"],"coachAdvice":"Forklar formasjonen som en løsning på et problem: hva beskytter den, hva åpner den, og hvilke spillertyper trenger den? Ikke la tallrekken bli viktigere enn oppgavene.","trainingSession":"Formasjonsverksted: sammenlign to historiske formasjonsideer i samme økt og la laget kjenne forskjellen i avstander, roller og støttevinkler."},{"id":"combination_game_beats_isolated_dribbling","title":"Kombinasjonsspill slår isolert dribling","category":"oppbygging","phase":"attack","summary":"Fotballboka skiller mellom dribling game og combination game. Individuell ferdighet er verdifull, men laget blir først vanskelig å forsvare når pasninger, støtte, timing og tredjemann gjør ferdigheten kollektiv.","appliesToWeakPoints":["midfield_control_weak","attacking_balance_weak","team_balance_weak"],"appliesToTrainingAreas":["oppbygging","midtbanekontroll","angrepsstruktur"],"relatedTags":["kombinasjonsspill","pasning","dribling"],"coachAdvice":"Bruk dribleren som del av en relasjon, ikke som ensom løsning. Sørg for støttevinkel, veggspiller og løp bak motstanderen når han utfordrer.","trainingSession":"Kombinasjonsøkt: tren 3v2 og 4v3 der dribling bare teller når den kobles til støttepasning, veggspill eller tredjemannsløp."}]}
+{
+  "schema": "historygo-football-manager.football-book-knowledge-principles.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principles": [
+    {
+      "id": "football_history_explains_formations",
+      "title": "Historien forklarer hvorfor formasjoner finnes",
+      "category": "kampanalyse",
+      "phase": "general",
+      "summary": "Formasjoner er ikke pynt eller tallrekker, men svar på konkrete problemer i spillets utvikling: offside, banekvalitet, profesjonalisering, teknikk, press og behovet for balanse mellom frihet og struktur.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "average_role_fit_weak",
+        "weak_average_role_fit"
+      ],
+      "appliesToTrainingAreas": [
+        "kampanalyse",
+        "rolleforståelse",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "fotballhistorie",
+        "formasjon",
+        "spillmodell"
+      ],
+      "coachAdvice": "Forklar formasjonen som en løsning på et problem: hva beskytter den, hva åpner den, og hvilke spillertyper trenger den? Ikke la tallrekken bli viktigere enn oppgavene.",
+      "trainingSession": "Formasjonsverksted: sammenlign to historiske formasjonsideer i samme økt og la laget kjenne forskjellen i avstander, roller og støttevinkler.",
+      "tooltipText": "Formasjoner er løsninger på problemer, ikke bare tallrekker.",
+      "assistantText": "Oppsettet vårt må forklares gjennom hvilke rom og roller det skal løse.",
+      "trainingText": "Kjør formasjonsverksted der laget sammenligner avstander, støtte og ansvar i to oppsett.",
+      "matchReportText": "Formasjonen ga lite effekt fordi rollene ikke løste kampens konkrete problem.",
+      "handbookText": "Fotballhistorien viser at formasjoner oppstår for å håndtere rom, offside, press og balanse. Manageren bør bruke tallrekken som startpunkt for oppgaver, ikke som fasit."
+    },
+    {
+      "id": "combination_game_beats_isolated_dribbling",
+      "title": "Kombinasjonsspill slår isolert dribling",
+      "category": "oppbygging",
+      "phase": "attack",
+      "summary": "Fotballboka skiller mellom dribling game og combination game. Individuell ferdighet er verdifull, men laget blir først vanskelig å forsvare når pasninger, støtte, timing og tredjemann gjør ferdigheten kollektiv.",
+      "appliesToWeakPoints": [
+        "midfield_control_weak",
+        "attacking_balance_weak",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "oppbygging",
+        "midtbanekontroll",
+        "angrepsstruktur"
+      ],
+      "relatedTags": [
+        "kombinasjonsspill",
+        "pasning",
+        "dribling"
+      ],
+      "coachAdvice": "Bruk dribleren som del av en relasjon, ikke som ensom løsning. Sørg for støttevinkel, veggspiller og løp bak motstanderen når han utfordrer.",
+      "trainingSession": "Kombinasjonsøkt: tren 3v2 og 4v3 der dribling bare teller når den kobles til støttepasning, veggspill eller tredjemannsløp.",
+      "tooltipText": "Dribling blir farligere når den kobles til pasning, støtte og tredjemann.",
+      "assistantText": "Vi lar enkeltspillere løse for mye alene i stedet for å gi dem støtte rundt ballen.",
+      "trainingText": "Tren 3v2 og 4v3 der dribling må følges av veggspill, støttepasning eller tredjemannsløp.",
+      "matchReportText": "Angrepene stoppet fordi ballfører ble isolert uten relasjoner rundt seg.",
+      "handbookText": "Individuell ferdighet er viktig, men kombinasjonsspillet gjør laget vanskeligere å lese. Dribleren trenger støttevinkel, timing og løp som utnytter ubalansen han skaper."
+    }
+  ]
+}

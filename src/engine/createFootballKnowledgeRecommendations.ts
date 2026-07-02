@@ -152,6 +152,11 @@ export function createFootballKnowledgeRecommendations(
       reason: buildReason(matchedWeak, matchedTraining),
       coachAdvice: principle.coachAdvice,
       trainingSession: principle.trainingSession,
+      tooltipText: principle.tooltipText,
+      assistantText: principle.assistantText,
+      trainingText: principle.trainingText,
+      matchReportText: principle.matchReportText,
+      handbookText: principle.handbookText,
     });
   }
 

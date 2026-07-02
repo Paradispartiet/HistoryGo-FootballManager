@@ -12,7 +12,8 @@ const expectedIndexSchema = "historygo-football-manager.football-book-knowledge-
 const expectedChunkSchema = "historygo-football-manager.football-book-knowledge-principles.v1";
 const validCategories = new Set(["keeper", "forsvar", "press", "bredde", "dybde", "oppbygging", "midtbanekontroll", "angrepsstruktur", "restforsvar", "rolleforståelse", "kampanalyse", "treningsmetodikk"]);
 const validPhases = new Set(["attack", "defence", "transition", "set_piece", "general"]);
-const requiredFields = ["id", "title", "category", "phase", "summary", "appliesToWeakPoints", "appliesToTrainingAreas", "relatedTags", "coachAdvice", "trainingSession"];
+const requiredFields = ["id", "title", "category", "phase", "summary", "appliesToWeakPoints", "appliesToTrainingAreas", "relatedTags", "coachAdvice", "trainingSession", "tooltipText", "assistantText", "trainingText", "matchReportText", "handbookText"];
+const gameTextFields = ["tooltipText", "assistantText", "trainingText", "matchReportText", "handbookText"];
 const errors = [];
 
 function readJson(path) {
@@ -38,8 +39,11 @@ function validatePrinciple(principle, sourceFile, seenIds) {
   seenIds.add(id);
   if (!validCategories.has(principle.category)) errors.push(`${sourceFile}:${id}: ugyldig category ${principle.category}`);
   if (!validPhases.has(principle.phase)) errors.push(`${sourceFile}:${id}: ugyldig phase ${principle.phase}`);
-  for (const field of ["title", "summary", "coachAdvice", "trainingSession"]) {
+  for (const field of ["title", "summary", "coachAdvice", "trainingSession", ...gameTextFields]) {
     if (!isNonEmptyString(principle[field])) errors.push(`${sourceFile}:${id}: ${field} må være tekst`);
+  }
+  if (isNonEmptyString(principle.tooltipText) && principle.tooltipText.split(/[.!?]+/).filter(Boolean).length > 2) {
+    errors.push(`${sourceFile}:${id}: tooltipText skal være 1-2 korte setninger`);
   }
   for (const field of ["appliesToWeakPoints", "appliesToTrainingAreas", "relatedTags"]) {
     if (!Array.isArray(principle[field])) errors.push(`${sourceFile}:${id}: ${field} må være array`);

@@ -1,1 +1,65 @@
-{"schema":"historygo-football-manager.football-book-knowledge-principles.v1","version":1,"sourceId":"fotballboka_pages_2026_07_02","principles":[{"id":"confidence_is_built_by_clear_tasks","title":"Selvtillit bygges av tydelige oppgaver","category":"rolleforståelse","phase":"general","summary":"Psykologidelen i Fotballboka gjør mentalitet konkret: motivasjon, fokus, stress og vinnermentalitet blir håndterbart når spilleren vet neste handling. Uklar rolle skaper ofte mer nervøsitet enn svak moral.","appliesToWeakPoints":["average_role_fit_weak","weak_average_role_fit","team_balance_weak"],"appliesToTrainingAreas":["rolleforståelse","treningsmetodikk","kampanalyse"],"relatedTags":["selvtillit","fokus","mentalitet"],"coachAdvice":"Gi usikre spillere én konkret oppgave de kan lykkes med. Tydelig oppgave fører ofte til bedre fokus enn generelle krav om å være modig.","trainingSession":"Trygghetsøkt: spillsekvenser med individuelle mikromål, for eksempel første pasning fremover, riktig sikring eller tre scanninger før mottak."},{"id":"football_culture_shapes_playing_style","title":"Fotballkultur former spillestil","category":"kampanalyse","phase":"general","summary":"Fotballboka bruker kultur, estetikk og filosofi til å vise at spillestil også er identitet. Futebol d'arte, catenaccio, totalfotball og britisk kollektivitet er ulike svar på hva fotball skal være.","appliesToWeakPoints":["team_balance_weak","average_role_fit_weak","weak_average_role_fit"],"appliesToTrainingAreas":["kampanalyse","rolleforståelse","lagstruktur"],"relatedTags":["fotballkultur","spillestil","identitet"],"coachAdvice":"Bruk kultur som forklaring, ikke fasit. En klubbidentitet bør hjelpe manageren å velge prinsipper, men kampen avgjøres fortsatt av roller, rom og gjennomføring.","trainingSession":"Spillestilverksted: la laget sammenligne to fotballkulturer i samme formasjonsramme og diskutere hvilke valg som endrer uttrykket."}]}
+{
+  "schema": "historygo-football-manager.football-book-knowledge-principles.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principles": [
+    {
+      "id": "confidence_is_built_by_clear_tasks",
+      "title": "Selvtillit bygges av tydelige oppgaver",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "Psykologidelen i Fotballboka gjør mentalitet konkret: motivasjon, fokus, stress og vinnermentalitet blir håndterbart når spilleren vet neste handling. Uklar rolle skaper ofte mer nervøsitet enn svak moral.",
+      "appliesToWeakPoints": [
+        "average_role_fit_weak",
+        "weak_average_role_fit",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "rolleforståelse",
+        "treningsmetodikk",
+        "kampanalyse"
+      ],
+      "relatedTags": [
+        "selvtillit",
+        "fokus",
+        "mentalitet"
+      ],
+      "coachAdvice": "Gi usikre spillere én konkret oppgave de kan lykkes med. Tydelig oppgave fører ofte til bedre fokus enn generelle krav om å være modig.",
+      "trainingSession": "Trygghetsøkt: spillsekvenser med individuelle mikromål, for eksempel første pasning fremover, riktig sikring eller tre scanninger før mottak.",
+      "tooltipText": "Selvtillit vokser når spilleren vet neste konkrete oppgave.",
+      "assistantText": "Usikre spillere trenger enklere handlingsmål, ikke bare beskjed om å være modige.",
+      "trainingText": "Gi hver nøkkelspiller ett mikromål i økten, som scanning, første pasning frem eller riktig sikring.",
+      "matchReportText": "Feilene økte fordi uklare roller gjorde spillerne nølende i neste handling.",
+      "handbookText": "Mentalitet blir håndterbar når den kobles til oppgaver. En spiller som vet nøyaktig hva han skal lykkes med, får bedre fokus og mer trygghet i rollen."
+    },
+    {
+      "id": "football_culture_shapes_playing_style",
+      "title": "Fotballkultur former spillestil",
+      "category": "kampanalyse",
+      "phase": "general",
+      "summary": "Fotballboka bruker kultur, estetikk og filosofi til å vise at spillestil også er identitet. Futebol d'arte, catenaccio, totalfotball og britisk kollektivitet er ulike svar på hva fotball skal være.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "average_role_fit_weak",
+        "weak_average_role_fit"
+      ],
+      "appliesToTrainingAreas": [
+        "kampanalyse",
+        "rolleforståelse",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "fotballkultur",
+        "spillestil",
+        "identitet"
+      ],
+      "coachAdvice": "Bruk kultur som forklaring, ikke fasit. En klubbidentitet bør hjelpe manageren å velge prinsipper, men kampen avgjøres fortsatt av roller, rom og gjennomføring.",
+      "trainingSession": "Spillestilverksted: la laget sammenligne to fotballkulturer i samme formasjonsramme og diskutere hvilke valg som endrer uttrykket.",
+      "tooltipText": "Spillestil er også identitet, men den må oversettes til roller og rom.",
+      "assistantText": "Klubbidentiteten hjelper lite hvis prinsippene ikke blir konkrete kampvalg.",
+      "trainingText": "La laget teste to spillestiler i samme formasjon og diskutere hvilke valg som endrer uttrykket.",
+      "matchReportText": "Uttrykket vårt ble uklart fordi identitet og kampplan ikke pekte på samme handlinger.",
+      "handbookText": "Fotballkultur kan forklare hvorfor et lag vil spille på en bestemt måte. I spillet må kulturen likevel bli konkrete valg om roller, risiko, tempo og rom."
+    }
+  ]
+}

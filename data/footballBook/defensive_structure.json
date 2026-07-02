@@ -1,1 +1,67 @@
-{"schema":"historygo-football-manager.football-book-knowledge-principles.v1","version":1,"sourceId":"fotballboka_pages_2026_07_02","principles":[{"id":"defending_uses_first_second_third_defender","title":"Forsvar organiseres gjennom 1F, 2F og 3F","category":"forsvar","phase":"defence","summary":"Fotballboka beskriver forsvar som samspill mellom førsteforsvarer, sikring og romkontroll. 1F presser, 2F sikrer, og 3F dekker neste rom eller passering. Uten denne kjeden blir laget enten passivt eller lett å spille gjennom.","appliesToWeakPoints":["pressing_coherence_weak","weak_pressing_coherence","defensive_balance_weak"],"appliesToTrainingAreas":["forsvar","press","lagstruktur"],"relatedTags":["1F","2F","3F","soneforsvar"],"coachAdvice":"Når presset ryker, spør ikke bare hvem som presset. Sjekk om 2F sikret riktig vinkel og om 3F dekket neste pasningsrom.","trainingSession":"1F-2F-3F-økt: tren 3v3 og 4v4 der poeng gis for pressvinkel, sikring og kollektiv flytting, ikke bare ballvinning."},{"id":"defensive_block_must_choose_risk_level","title":"Forsvarsblokken må velge risikonivå","category":"forsvar","phase":"defence","summary":"Fotballboka skiller mellom høyt, medium, lavt og hvile/ultralavt forsvar. Poenget er at laget må vite hvorfor det står der det står, hvilke rom det gir bort, og når det skal støte eller falle.","appliesToWeakPoints":["defensive_balance_weak","weak_defensive_balance","risk_balance_weak","weak_risk_balance"],"appliesToTrainingAreas":["forsvar","risikobalanse","press"],"relatedTags":["presshøyde","lav blokk","risiko"],"coachAdvice":"Velg presshøyde etter spillerprofil og kampbilde. Høyt press uten fart bak og lav blokk uten konsentrasjon gir bare ulike typer risiko.","trainingSession":"Blokkøkt: tren samme forsvarssituasjon i høy, medium og lav blokk, og la laget evaluere hvilke rom som åpnes i hver variant."}]}
+{
+  "schema": "historygo-football-manager.football-book-knowledge-principles.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principles": [
+    {
+      "id": "defending_uses_first_second_third_defender",
+      "title": "Forsvar organiseres gjennom 1F, 2F og 3F",
+      "category": "forsvar",
+      "phase": "defence",
+      "summary": "Fotballboka beskriver forsvar som samspill mellom førsteforsvarer, sikring og romkontroll. 1F presser, 2F sikrer, og 3F dekker neste rom eller passering. Uten denne kjeden blir laget enten passivt eller lett å spille gjennom.",
+      "appliesToWeakPoints": [
+        "pressing_coherence_weak",
+        "weak_pressing_coherence",
+        "defensive_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "forsvar",
+        "press",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "1F",
+        "2F",
+        "3F",
+        "soneforsvar"
+      ],
+      "coachAdvice": "Når presset ryker, spør ikke bare hvem som presset. Sjekk om 2F sikret riktig vinkel og om 3F dekket neste pasningsrom.",
+      "trainingSession": "1F-2F-3F-økt: tren 3v3 og 4v4 der poeng gis for pressvinkel, sikring og kollektiv flytting, ikke bare ballvinning.",
+      "tooltipText": "1F presser ballfører, 2F sikrer, og 3F dekker neste rom.",
+      "assistantText": "Presset vårt ryker fordi førsteforsvarer går uten nok sikring bak seg.",
+      "trainingText": "Tren 1F-2F-3F i småspill med pressvinkel, sikring og kollektiv flytting.",
+      "matchReportText": "Motstanderen spilte gjennom oss fordi avstanden mellom press og sikring ble for stor.",
+      "handbookText": "Et godt forsvar handler om mer enn å løpe mot ballen. Førsteforsvarer styrer presset, andreforsvarer gjør presset trygt, og tredjeforsvarer beskytter neste rom."
+    },
+    {
+      "id": "defensive_block_must_choose_risk_level",
+      "title": "Forsvarsblokken må velge risikonivå",
+      "category": "forsvar",
+      "phase": "defence",
+      "summary": "Fotballboka skiller mellom høyt, medium, lavt og hvile/ultralavt forsvar. Poenget er at laget må vite hvorfor det står der det står, hvilke rom det gir bort, og når det skal støte eller falle.",
+      "appliesToWeakPoints": [
+        "defensive_balance_weak",
+        "weak_defensive_balance",
+        "risk_balance_weak",
+        "weak_risk_balance"
+      ],
+      "appliesToTrainingAreas": [
+        "forsvar",
+        "risikobalanse",
+        "press"
+      ],
+      "relatedTags": [
+        "presshøyde",
+        "lav blokk",
+        "risiko"
+      ],
+      "coachAdvice": "Velg presshøyde etter spillerprofil og kampbilde. Høyt press uten fart bak og lav blokk uten konsentrasjon gir bare ulike typer risiko.",
+      "trainingSession": "Blokkøkt: tren samme forsvarssituasjon i høy, medium og lav blokk, og la laget evaluere hvilke rom som åpnes i hver variant.",
+      "tooltipText": "Presshøyden bestemmer hvilke rom laget forsvarer og hvilke rom det gir bort.",
+      "assistantText": "Blokken vår blir uklar: vi presser ikke høyt nok til å vinne ballen og faller ikke lavt nok til å stenge rommet.",
+      "trainingText": "Tren høy, medium og lav blokk i samme situasjon, med tydelige signaler for støt og fall.",
+      "matchReportText": "Vi slapp til sjanser fordi risikonivået i blokken ikke passet avstandene og spillerprofilene våre.",
+      "handbookText": "En forsvarsblokk må ha et valgt risikonivå. Høyt press kan gi ballvinning, lav blokk kan gi kontroll, men mellomløsninger uten felles signaler åpner farlige rom."
+    }
+  ]
+}
