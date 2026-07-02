@@ -104,6 +104,8 @@ export type DashboardKnowledgeCard = {
   reason: string;
   coachAdvice: string;
   trainingSession: string;
+  tooltipText: string;
+  handbookText: string;
 };
 
 export type ManagerDashboardData = {
@@ -189,6 +191,8 @@ function toKnowledgeCard(
     reason: recommendation.reason,
     coachAdvice: recommendation.coachAdvice,
     trainingSession: recommendation.trainingSession,
+    tooltipText: recommendation.tooltipText,
+    handbookText: recommendation.handbookText,
   };
 }
 

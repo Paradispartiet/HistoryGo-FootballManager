@@ -96,6 +96,8 @@ export type DashboardKnowledgeViewModel = {
   reason: string;
   coachAdvice: string;
   trainingSession: string;
+  tooltipText: string;
+  handbookText: string;
 };
 
 export type ManagerDashboardViewModel = {
@@ -286,6 +288,8 @@ function toKnowledgeViewModel(card: DashboardKnowledgeCard): DashboardKnowledgeV
     reason: card.reason,
     coachAdvice: card.coachAdvice,
     trainingSession: card.trainingSession,
+    tooltipText: card.tooltipText,
+    handbookText: card.handbookText,
   };
 }
 
