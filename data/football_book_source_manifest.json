@@ -1,0 +1,67 @@
+{
+  "schema": "historygo-football-manager.football-book-source-manifest.v1",
+  "version": 1,
+  "canonicalSource": {
+    "sourceId": "fotballboka_pages_2026_07_02",
+    "title": "Fotballboka.pages",
+    "sourceType": "pages_manuscript",
+    "status": "canonical_import_source",
+    "notes": [
+      "Bruk Fotballboka.pages som eneste kanoniske kilde for denne importen.",
+      "Ikke importer Fotballteori.one parallelt; den overlapper tematisk og fungerer som arbeidsmappe/råbank.",
+      "Innholdet skal inn som kunnskapslag oppå eksisterende taktikkmotor, ikke som ny motor eller nye hovedsystemer."
+    ]
+  },
+  "importedPrincipleIds": [
+    "football_history_explains_formations",
+    "combination_game_beats_isolated_dribbling",
+    "wm_requires_clear_marking_and_support",
+    "catenaccio_is_control_not_only_defence",
+    "total_football_needs_role_flexibility",
+    "technical_skill_must_survive_pressure",
+    "dribbling_needs_purpose_and_cover",
+    "keeper_communication_organizes_the_block",
+    "defending_uses_first_second_third_defender",
+    "defensive_block_must_choose_risk_level",
+    "attacking_patterns_need_timing",
+    "short_commands_create_team_speed",
+    "guided_discovery_makes_training_stick",
+    "physical_capacity_sets_tactical_ceiling",
+    "confidence_is_built_by_clear_tasks",
+    "football_culture_shapes_playing_style"
+  ],
+  "coverage": [
+    "historisk utvikling",
+    "formasjoner og spillmodell",
+    "WM, catenaccio, totalfotball",
+    "tekniske ferdigheter under press",
+    "dribling, pasning, kombinasjonsspill og avslutning",
+    "keeperkommunikasjon",
+    "1F, 2F, 3F, presshøyder og forsvarsblokk",
+    "angrepsmønstre og timing",
+    "kommunikasjon og kampklima",
+    "trening, pedagogikk og constraints-led learning",
+    "fysiologi og taktisk belastning",
+    "psykologi, fokus og rolletrygghet",
+    "fotballkultur, estetikk og spillestil"
+  ],
+  "enginePolicy": {
+    "sourceOfTruth": "existing_tactics_engine",
+    "allowedUse": [
+      "tooltips",
+      "manager handbook",
+      "assistant feedback",
+      "match analysis",
+      "training explanation",
+      "role requirement explanation",
+      "docs",
+      "Botballboka text"
+    ],
+    "forbiddenUse": [
+      "new tactics engine",
+      "parallel tactical menu",
+      "duplicate formation system",
+      "dead-end knowledge screen without connection to gameplay"
+    ]
+  }
+}
