@@ -3619,6 +3619,10 @@ ul {
   gap: 18px;
 }
 
+.roster-readiness-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .roster-readiness-head h2,
 .roster-readiness-panel h3 {
   margin: 0;
