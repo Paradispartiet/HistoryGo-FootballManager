@@ -511,8 +511,6 @@ const elements = {
   rosterReadyCount: document.querySelector("#rosterReadyCount"),
   rosterReadinessBadge: document.querySelector("#rosterReadinessBadge"),
   rosterUnlockedCount: document.querySelector("#rosterUnlockedCount"),
-  rosterStarterCount: document.querySelector("#rosterStarterCount"),
-  rosterBenchCount: document.querySelector("#rosterBenchCount"),
   rosterReadyStatus: document.querySelector("#rosterReadyStatus"),
   rosterReadinessNote: document.querySelector("#rosterReadinessNote"),
   benchPlayersList: document.querySelector("#benchPlayersList"),
@@ -11333,12 +11331,6 @@ function renderRosterReadiness() {
   }
   if (elements.rosterUnlockedCount) {
     elements.rosterUnlockedCount.textContent = `${readiness.unlockedCount}/${REQUIRED_SQUAD_SIZE}`;
-  }
-  if (elements.rosterStarterCount) {
-    elements.rosterStarterCount.textContent = `${readiness.starterCount}/${REQUIRED_STARTERS}`;
-  }
-  if (elements.rosterBenchCount) {
-    elements.rosterBenchCount.textContent = `${Math.min(readiness.benchCount, REQUIRED_BENCH)}/${REQUIRED_BENCH}`;
   }
   if (elements.rosterReadyStatus) {
     elements.rosterReadyStatus.textContent = readiness.isReady ? "Åpen" : "Låst";
