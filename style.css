@@ -2516,7 +2516,51 @@ ul {
    myke kort, ingen gul flate. Matcher resten av prototypen. */
 .unlock-panel {
   display: grid;
-  gap: 22px;
+  gap: 30px;
+}
+
+/* Elleve like seksjoner leste som én lang vegg. Grupperer dem i de seks
+   stegene fra kjerneløkka (Sted → Person → Ekspertise → Trening → Badge →
+   Lagklasse), med en tallmerket steg-header som viser hvor i pipelinen du
+   er — samme nummererte-chip-språk som club-week-steps bruker for ukerytmen. */
+.unlock-stage {
+  display: grid;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.unlock-stage:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.unlock-stage-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.unlock-stage-number {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--hg-accent-history);
+  color: #04060b;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.unlock-stage-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hg-accent-history);
 }
 
 .unlock-block {
@@ -2524,7 +2568,7 @@ ul {
   gap: 12px;
 }
 
-.unlock-block h3 {
+.unlock-block h4 {
   margin: 0;
   font-size: 1.15rem;
   color: var(--text);
@@ -2735,7 +2779,7 @@ ul {
   font-weight: 700;
 }
 
-.unlock-subhead {
+.unlock-block h4.unlock-subhead {
   margin: 8px 0 0;
   font-size: 1rem;
   color: var(--text);
@@ -5520,6 +5564,46 @@ ul {
 
 
 /* ---------- Treningsuke v0.2 ---------- */
+/* Trening-fanen delte fem identiske fulbredde grå bokser på rad. Ukefokus og
+   treningsprogram er nå sidestilte valg (parret i insight-grid over) og deler
+   én signaturfarge, samme mønster som Lag & taktikk og Kamp bruker. */
+/* Ukefokus og treningsprogram er ofte ulikt høye (ett har 8 korte valg, det
+   andre 3 fyldige programkort) — topp-juster som Kamp-fanen gjør, i stedet
+   for å strekke det korteste panelet til å etterlate et tomt felt nederst. */
+.trening-view .insight-grid {
+  align-items: start;
+}
+
+.trening-view .weekly-training-panel,
+.trening-view .training-programs-panel,
+.trening-view .manager-training-panel,
+.trening-view .manager-knowledge-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.trening-view .weekly-training-panel::before,
+.trening-view .training-programs-panel::before,
+.trening-view .manager-training-panel::before,
+.trening-view .manager-knowledge-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--hg-accent-facilities);
+  opacity: 0.7;
+}
+
+/* Managerinnsikt er et sammendrag av valg tatt over — dempes så det leses
+   som bakgrunnsstøtte, ikke som en femte likestilt handling. */
+.trening-view .manager-training-panel {
+  background: rgba(15, 19, 27, 0.5);
+}
+
+.trening-view .manager-training-panel::before {
+  opacity: 0.4;
+}
+
 .weekly-training-panel {
   border: 1px solid var(--line-strong, #fff);
 }
