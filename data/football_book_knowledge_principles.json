@@ -1,0 +1,394 @@
+{
+  "schema": "historygo-football-manager.football-book-knowledge-principles.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principles": [
+    {
+      "id": "football_history_explains_formations",
+      "title": "Historien forklarer hvorfor formasjoner finnes",
+      "category": "kampanalyse",
+      "phase": "general",
+      "summary": "Formasjoner er ikke pynt eller tallrekker, men svar på konkrete problemer i spillets utvikling: offside, banekvalitet, profesjonalisering, teknikk, press og behovet for balanse mellom frihet og struktur.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "average_role_fit_weak",
+        "weak_average_role_fit"
+      ],
+      "appliesToTrainingAreas": [
+        "kampanalyse",
+        "rolleforståelse",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "fotballhistorie",
+        "formasjon",
+        "spillmodell"
+      ],
+      "coachAdvice": "Forklar formasjonen som en løsning på et problem: hva beskytter den, hva åpner den, og hvilke spillertyper trenger den? Ikke la tallrekken bli viktigere enn oppgavene.",
+      "trainingSession": "Formasjonsverksted: sammenlign to historiske formasjonsideer i samme økt og la laget kjenne forskjellen i avstander, roller og støttevinkler."
+    },
+    {
+      "id": "combination_game_beats_isolated_dribbling",
+      "title": "Kombinasjonsspill slår isolert dribling",
+      "category": "oppbygging",
+      "phase": "attack",
+      "summary": "Fotballboka skiller mellom dribling game og combination game. Individuell ferdighet er verdifull, men laget blir først vanskelig å forsvare når pasninger, støtte, timing og tredjemann gjør ferdigheten kollektiv.",
+      "appliesToWeakPoints": [
+        "midfield_control_weak",
+        "attacking_balance_weak",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "oppbygging",
+        "midtbanekontroll",
+        "angrepsstruktur"
+      ],
+      "relatedTags": [
+        "kombinasjonsspill",
+        "pasning",
+        "dribling"
+      ],
+      "coachAdvice": "Bruk dribleren som del av en relasjon, ikke som ensom løsning. Sørg for støttevinkel, veggspiller og løp bak motstanderen når han utfordrer.",
+      "trainingSession": "Kombinasjonsøkt: tren 3v2 og 4v3 der dribling bare teller når den kobles til støttepasning, veggspill eller tredjemannsløp."
+    },
+    {
+      "id": "wm_requires_clear_marking_and_support",
+      "title": "WM lærer laget balanse mellom markering og støtte",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "WM-logikken fra Fotballboka viser hvordan et system kan fordele ansvar tydeligere mellom forsvar, midtbane og angrep. Poenget for spillet er ikke å lage ny WM-motor, men å forklare rollebalanse, markering og støtte.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "average_role_fit_weak",
+        "weak_average_role_fit"
+      ],
+      "appliesToTrainingAreas": [
+        "rolleforståelse",
+        "lagstruktur",
+        "kampanalyse"
+      ],
+      "relatedTags": [
+        "WM",
+        "formasjonshistorie",
+        "rollebalanse"
+      ],
+      "coachAdvice": "Når laget blir uklart, tenk WM-prinsipp: hvem markerer, hvem støtter, hvem gir dybde, og hvem binder leddene sammen? Uklar rollefordeling gjør selv gode spillere dårligere.",
+      "trainingSession": "Rollebalanseøkt: del laget i ledd og tren på hvem som støtter ballfører, hvem som sikrer bak, og hvem som holder trussel fremover."
+    },
+    {
+      "id": "catenaccio_is_control_not_only_defence",
+      "title": "Catenaccio handler om kontroll, ikke bare lavt forsvar",
+      "category": "forsvar",
+      "phase": "defence",
+      "summary": "Catenaccio og sweeper-logikk brukes som historisk eksempel på sikring, tålmodighet og romkontroll. I spillet skal dette forklare lavere risiko, tydelig sikring og kontringsberedskap, ikke bli et separat system.",
+      "appliesToWeakPoints": [
+        "defensive_balance_weak",
+        "weak_defensive_balance",
+        "risk_balance_weak",
+        "weak_risk_balance"
+      ],
+      "appliesToTrainingAreas": [
+        "forsvar",
+        "restforsvar",
+        "risikobalanse"
+      ],
+      "relatedTags": [
+        "catenaccio",
+        "sweeper",
+        "sikring"
+      ],
+      "coachAdvice": "Hvis laget må tåle press, gi én spiller tydelig sikringsansvar og tren laget på når det skal falle, stenge sentrum og kontre når rommet åpner seg.",
+      "trainingSession": "Kontrolløkt: tren lavere blokk med sikringsspiller, klareringsrom og første pasning ut etter ballvinning."
+    },
+    {
+      "id": "total_football_needs_role_flexibility",
+      "title": "Totalfotball krever rollefleksibilitet",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "Cruyff, Ajax og totalfotball viser at frihet bare fungerer når spillerne forstår struktur. Rollebytter, posisjonsrotasjon og press krever felles spillmodell, teknikk og taktisk disiplin.",
+      "appliesToWeakPoints": [
+        "average_role_fit_weak",
+        "weak_average_role_fit",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "rolleforståelse",
+        "lagstruktur",
+        "press"
+      ],
+      "relatedTags": [
+        "totalfotball",
+        "posisjonsspill",
+        "rollefleksibilitet"
+      ],
+      "coachAdvice": "Ikke gi laget frihet før rolleforståelsen er sterk nok. Rotasjon må ha sikring: når én går ut av posisjon, må en annen fylle rommet.",
+      "trainingSession": "Rotasjonsøkt: tren småspill med krav om at posisjoner kan byttes, men at laget alltid må beholde bredde, dybde og sikring."
+    },
+    {
+      "id": "technical_skill_must_survive_pressure",
+      "title": "Teknikk må fungere under press",
+      "category": "treningsmetodikk",
+      "phase": "general",
+      "summary": "Ballkontroll, førsteberøring, pasning, mottak, skudd og dribling har først kampverdi når de fungerer med tidspress, kroppspress og taktisk konsekvens. Isolert teknikk må derfor kobles til rom, valg og motstander.",
+      "appliesToWeakPoints": [
+        "individual_role_fit_weak",
+        "average_role_fit_weak",
+        "midfield_control_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "treningsmetodikk",
+        "rolleforståelse",
+        "oppbygging"
+      ],
+      "relatedTags": [
+        "teknikk",
+        "førsteberøring",
+        "press"
+      ],
+      "coachAdvice": "Når en teknisk spiller ikke får effekt, se på rammene: mottar han ballen feilvendt, uten støtte eller med for lite rom? Teknikken må få riktig situasjon.",
+      "trainingSession": "Teknikk-under-press-økt: tren mottak, vending og pasning med aktiv presspiller, begrenset tid og krav om neste handling."
+    },
+    {
+      "id": "dribbling_needs_purpose_and_cover",
+      "title": "Dribling må ha hensikt og sikring",
+      "category": "angrepsstruktur",
+      "phase": "attack",
+      "summary": "Fotballboka behandler dribling og finter som verktøy for å skape ubalanse, ikke som pynt. En god dribling angriper et rom, lokker press eller åpner pasning, men laget må sikre bak dribleren.",
+      "appliesToWeakPoints": [
+        "attacking_balance_weak",
+        "risk_balance_weak",
+        "width_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "angrepsstruktur",
+        "bredde",
+        "risikobalanse"
+      ],
+      "relatedTags": [
+        "dribling",
+        "1v1",
+        "sikring"
+      ],
+      "coachAdvice": "La dribleren utfordre der gevinsten er stor nok, men plasser støtte og restforsvar rundt ham. Balltap etter uforberedt dribling er ofte et strukturproblem.",
+      "trainingSession": "1v1-med-sikring: tren kant- og mellomromsdueller der laget får poeng for både vellykket utfordring og riktig sikring ved balltap."
+    },
+    {
+      "id": "keeper_communication_organizes_the_block",
+      "title": "Keeperkommunikasjon organiserer blokken",
+      "category": "keeper",
+      "phase": "defence",
+      "summary": "Keeperkapitlet i Fotballboka legger vekt på posisjonering, dødball, distribusjon og klare beskjeder. Keeperen ser hele banen og må derfor gjøre forsvarsarbeidet tydeligere før skuddet kommer.",
+      "appliesToWeakPoints": [
+        "defensive_balance_weak",
+        "weak_defensive_balance",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "forsvar",
+        "lagstruktur",
+        "rolleforståelse"
+      ],
+      "relatedTags": [
+        "keeper",
+        "kommunikasjon",
+        "dødball"
+      ],
+      "coachAdvice": "Gi keeperen ansvar for korte signaler om press, fall, markering og bakrom. En stille keeper gjør resten av forsvaret tregere.",
+      "trainingSession": "Keeperdirigering: tren innlegg, dødball og bakrom der keeperen må styre stopperne med korte kommandoer før handling."
+    },
+    {
+      "id": "defending_uses_first_second_third_defender",
+      "title": "Forsvar organiseres gjennom 1F, 2F og 3F",
+      "category": "forsvar",
+      "phase": "defence",
+      "summary": "Fotballboka beskriver forsvar som samspill mellom førsteforsvarer, sikring og romkontroll. 1F presser, 2F sikrer, og 3F dekker neste rom eller passering. Uten denne kjeden blir laget enten passivt eller lett å spille gjennom.",
+      "appliesToWeakPoints": [
+        "pressing_coherence_weak",
+        "weak_pressing_coherence",
+        "defensive_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "forsvar",
+        "press",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "1F",
+        "2F",
+        "3F",
+        "soneforsvar"
+      ],
+      "coachAdvice": "Når presset ryker, spør ikke bare hvem som presset. Sjekk om 2F sikret riktig vinkel og om 3F dekket neste pasningsrom.",
+      "trainingSession": "1F-2F-3F-økt: tren 3v3 og 4v4 der poeng gis for pressvinkel, sikring og kollektiv flytting, ikke bare ballvinning."
+    },
+    {
+      "id": "defensive_block_must_choose_risk_level",
+      "title": "Forsvarsblokken må velge risikonivå",
+      "category": "forsvar",
+      "phase": "defence",
+      "summary": "Fotballboka skiller mellom høyt, medium, lavt og hvile/ultralavt forsvar. Poenget er at laget må vite hvorfor det står der det står, hvilke rom det gir bort, og når det skal støte eller falle.",
+      "appliesToWeakPoints": [
+        "defensive_balance_weak",
+        "weak_defensive_balance",
+        "risk_balance_weak",
+        "weak_risk_balance"
+      ],
+      "appliesToTrainingAreas": [
+        "forsvar",
+        "risikobalanse",
+        "press"
+      ],
+      "relatedTags": [
+        "presshøyde",
+        "lav blokk",
+        "risiko"
+      ],
+      "coachAdvice": "Velg presshøyde etter spillerprofil og kampbilde. Høyt press uten fart bak og lav blokk uten konsentrasjon gir bare ulike typer risiko.",
+      "trainingSession": "Blokkøkt: tren samme forsvarssituasjon i høy, medium og lav blokk, og la laget evaluere hvilke rom som åpnes i hver variant."
+    },
+    {
+      "id": "attacking_patterns_need_timing",
+      "title": "Angrepsmønstre lever av timing",
+      "category": "angrepsstruktur",
+      "phase": "attack",
+      "summary": "Opp-tilbake-gjennom, bueløp, spillvending og tredjemannsløp virker bare når bevegelsen kommer i riktig øyeblikk. For tidlig løp blir markert bort, for sent løp mister rommet.",
+      "appliesToWeakPoints": [
+        "attacking_balance_weak",
+        "midfield_control_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "angrepsstruktur",
+        "midtbanekontroll",
+        "rolleforståelse"
+      ],
+      "relatedTags": [
+        "timing",
+        "gjennombrudd",
+        "tredjemann"
+      ],
+      "coachAdvice": "Når laget mangler gjennombrudd, se på timing før du bytter formasjon. Riktig løp i riktig sekund kan åpne samme struktur som før virket låst.",
+      "trainingSession": "Timingøkt: tren opp-tilbake-gjennom og tredjemannsløp med krav om at pasningen først kommer når løperen har skapt feilvendt forsvarer."
+    },
+    {
+      "id": "short_commands_create_team_speed",
+      "title": "Korte kommandoer gjør laget raskere",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "Kommunikasjonsdelen i Fotballboka legger vekt på verbale signaler, kroppsspråk og kampklima. Gode lag bruker korte beskjeder som flytter handlingen videre: vend, tid, rygg, press, fall, sikre.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "pressing_coherence_weak",
+        "weak_pressing_coherence"
+      ],
+      "appliesToTrainingAreas": [
+        "rolleforståelse",
+        "lagstruktur",
+        "press"
+      ],
+      "relatedTags": [
+        "kommunikasjon",
+        "kroppsspråk",
+        "kampklima"
+      ],
+      "coachAdvice": "Bygg et enkelt språk for laget. Lange forklaringer midt i kamp skaper treghet; korte kommandoer skaper felles handling.",
+      "trainingSession": "Kommunikasjonslek: småspill der spillerne må gi riktig ettordsbeskjed før mottak, press eller sikring for at målet skal telle."
+    },
+    {
+      "id": "guided_discovery_makes_training_stick",
+      "title": "Guided discovery gjør læringen sterkere",
+      "category": "treningsmetodikk",
+      "phase": "general",
+      "summary": "Treningskapitlene i Fotballboka peker mot constraints-led approach, deliberate play/practice og guided discovery. Spilleren lærer bedre når øvelsen tvinger frem prinsippet, ikke bare når treneren forklarer det.",
+      "appliesToWeakPoints": [
+        "average_role_fit_weak",
+        "weak_average_role_fit",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "treningsmetodikk",
+        "rolleforståelse",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "constraints-led",
+        "guided discovery",
+        "pedagogikk"
+      ],
+      "coachAdvice": "Lag øvelser der spillerne må oppdage løsningen: smal bane for spillvending, poeng for scanning, tidsgrense for gjenvinning. Regelen skal lære prinsippet.",
+      "trainingSession": "Constraints-økt: velg én begrensning som fremtvinger ønsket spillprinsipp og avslutt med refleksjon over hvorfor løsningen fungerte."
+    },
+    {
+      "id": "physical_capacity_sets_tactical_ceiling",
+      "title": "Fysisk kapasitet setter taktisk tak",
+      "category": "treningsmetodikk",
+      "phase": "general",
+      "summary": "Utholdenhet, hurtighet, styrke, spenst, bevegelighet, balanse og propriosepsjon avgjør hvilke taktiske krav laget kan tåle. Høyt press, høy linje og intense overganger faller sammen uten fysisk grunnlag.",
+      "appliesToWeakPoints": [
+        "pressing_coherence_weak",
+        "weak_pressing_coherence",
+        "risk_balance_weak",
+        "weak_risk_balance"
+      ],
+      "appliesToTrainingAreas": [
+        "treningsmetodikk",
+        "press",
+        "risikobalanse"
+      ],
+      "relatedTags": [
+        "fysiologi",
+        "utholdenhet",
+        "hurtighet"
+      ],
+      "coachAdvice": "Ikke velg mer intensitet enn laget kan bære. Hvis spillerne ikke har kapasitet, må taktikken justeres eller treningen bygges gradvis mot kravet.",
+      "trainingSession": "Taktisk fysisk økt: tren press og overgang i korte blokker med tydelig pause, slik at fysisk belastning kobles til spillprinsippet."
+    },
+    {
+      "id": "confidence_is_built_by_clear_tasks",
+      "title": "Selvtillit bygges av tydelige oppgaver",
+      "category": "rolleforståelse",
+      "phase": "general",
+      "summary": "Psykologidelen i Fotballboka gjør mentalitet konkret: motivasjon, fokus, stress og vinnermentalitet blir håndterbart når spilleren vet neste handling. Uklar rolle skaper ofte mer nervøsitet enn svak moral.",
+      "appliesToWeakPoints": [
+        "average_role_fit_weak",
+        "weak_average_role_fit",
+        "team_balance_weak"
+      ],
+      "appliesToTrainingAreas": [
+        "rolleforståelse",
+        "treningsmetodikk",
+        "kampanalyse"
+      ],
+      "relatedTags": [
+        "selvtillit",
+        "fokus",
+        "mentalitet"
+      ],
+      "coachAdvice": "Gi usikre spillere én konkret oppgave de kan lykkes med. Tydelig oppgave fører ofte til bedre fokus enn generelle krav om å være modig.",
+      "trainingSession": "Trygghetsøkt: spillsekvenser med individuelle mikromål, for eksempel første pasning fremover, riktig sikring eller tre scanninger før mottak."
+    },
+    {
+      "id": "football_culture_shapes_playing_style",
+      "title": "Fotballkultur former spillestil",
+      "category": "kampanalyse",
+      "phase": "general",
+      "summary": "Fotballboka bruker kultur, estetikk og filosofi til å vise at spillestil også er identitet. Futebol d'arte, catenaccio, totalfotball og britisk kollektivitet er ulike svar på hva fotball skal være.",
+      "appliesToWeakPoints": [
+        "team_balance_weak",
+        "average_role_fit_weak",
+        "weak_average_role_fit"
+      ],
+      "appliesToTrainingAreas": [
+        "kampanalyse",
+        "rolleforståelse",
+        "lagstruktur"
+      ],
+      "relatedTags": [
+        "fotballkultur",
+        "spillestil",
+        "identitet"
+      ],
+      "coachAdvice": "Bruk kultur som forklaring, ikke fasit. En klubbidentitet bør hjelpe manageren å velge prinsipper, men kampen avgjøres fortsatt av roller, rom og gjennomføring.",
+      "trainingSession": "Spillestilverksted: la laget sammenligne to fotballkulturer i samme formasjonsramme og diskutere hvilke valg som endrer uttrykket."
+    }
+  ]
+}
