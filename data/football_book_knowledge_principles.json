@@ -1,0 +1,21 @@
+{
+  "schema": "historygo-football-manager.football-book-knowledge-index.v1",
+  "version": 1,
+  "sourceId": "fotballboka_pages_2026_07_02",
+  "principlesCount": 16,
+  "files": [
+    "data/footballBook/history_and_systems.json",
+    "data/footballBook/wm_catenaccio.json",
+    "data/footballBook/total_and_technique.json",
+    "data/footballBook/dribbling_and_keeper.json",
+    "data/footballBook/defensive_structure.json",
+    "data/footballBook/attack_and_communication.json",
+    "data/footballBook/training_and_physical.json",
+    "data/footballBook/psychology_and_culture.json"
+  ],
+  "notes": [
+    "Fotballboka.pages er kanonisk kilde.",
+    "Splittene gjør importen lett å inspisere og hindrer én stor tekstblob.",
+    "Dette er et kunnskapslag oppå eksisterende taktikkmotor, ikke ny motor."
+  ]
+}
