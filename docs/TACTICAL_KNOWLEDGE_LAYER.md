@@ -9,6 +9,12 @@ HG Football Manager har allerede en taktikkmotor. Dette dokumentet beskriver et 
 - Eksisterende felt som `pressing`, `defensiveLine`, `formation`, `buildUp`, `chanceCreation` og `tags` er sannheten.
 - Kunnskapslaget oversetter disse feltene til tekst: forklaring, spillerkrav, risiko og assistentfeedback.
 
+## Fotballboka som kanonisk importkilde
+
+`Fotballboka.pages` brukes som kanonisk kilde for football knowledge import. `Fotballteori.one` skal ikke importeres parallelt i denne runden, fordi den overlapper tematisk og fungerer mer som arbeidsmappe/råbank.
+
+Importen skal følge `docs/FOOTBALL_KNOWLEDGE_INTEGRATION.md` og kildepolicyen i `data/football_book_source_manifest.json`.
+
 ## Managerhåndbok
 
 ### Lav blokk
@@ -46,6 +52,28 @@ Korte cornere beholder ballen, skaper bedre vinkler og kan trekke forsvarere ut.
 ### 4-3-3 som grunnstruktur
 
 4-3-3 kan gi bredde, midtbanekontroll og pressmuligheter, men kan være sårbar bredt og rundt en enslig sekser.
+
+## Fotballboka-importerte prinsipper
+
+Fotballboka-importen utvider håndboka med forklaringer av historiske og pedagogiske prinsipper som allerede kan mappes til eksisterende spillflater:
+
+- formasjonshistorie som forklaring på rollebalanse
+- dribling game vs. combination game
+- WM som rolle- og støtteprinsipp
+- catenaccio som sikring og romkontroll
+- totalfotball som rollefleksibilitet med struktur
+- teknikk under press
+- keeperkommunikasjon
+- 1F, 2F og 3F
+- presshøyder og risikobalanse
+- angrepsmønstre og timing
+- korte handlingskommandoer
+- guided discovery og constraints-led trening
+- fysisk kapasitet som taktisk tak
+- selvtillit gjennom tydelige oppgaver
+- kultur og spillestil som identitet
+
+Dette ligger som data i `data/football_book_knowledge_principles.json` og som importpolicy i `data/football_book_source_manifest.json`.
 
 ## Tekst til fotballboka
 
