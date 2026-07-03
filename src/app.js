@@ -9931,17 +9931,49 @@ function updateInboxSignalGate({ visibleEventActive, visibleActiveThreads }) {
   // teller kun tråder som faktisk vises nå, så tallet aldri peker på tråder
   // spilleren ikke ser.
   const unreadCount = getInboxAttentionCount();
-  const requiresReplyCount = visibleEventActive.filter((thread) => thread.status !== "resolved" && thread.choices?.length).length
-    + visibleActiveThreads.filter(inboxThreadRequiresReply).length;
+  // Avsendere som venter på et svar akkurat nå — brukt både til «Krever svar»-
+  // tallet og til å navngi hvem som venter i statuslinjen.
+  const replySenders = [
+    ...visibleEventActive
+      .filter((thread) => thread.status !== "resolved" && thread.choices?.length)
+      .map((thread) => thread.sender || INBOX_EVENT_SENDER_ROLES[thread.type] || "Klubben"),
+    ...visibleActiveThreads
+      .filter(inboxThreadRequiresReply)
+      .map((threadGroup) => threadGroup.sender?.name || threadGroup.latestMessage?.from || "Klubbkontoret")
+  ];
+  const requiresReplyCount = replySenders.length;
 
   if (elements.inboxSignalUnread) elements.inboxSignalUnread.textContent = String(unreadCount);
-  if (elements.inboxSignalReplies) elements.inboxSignalReplies.textContent = String(requiresReplyCount);
+  // «Krever svar» peker på avsenderen som venter, ikke bare et tall.
+  if (elements.inboxSignalReplies) {
+    elements.inboxSignalReplies.textContent = requiresReplyCount === 0
+      ? "0"
+      : requiresReplyCount === 1
+        ? `1 · ${replySenders[0]}`
+        : `${requiresReplyCount} · ${formatSenderList(replySenders)}`;
+  }
   if (elements.inboxSignalStatus) {
     const visibleCount = visibleEventActive.length + visibleActiveThreads.length;
-    elements.inboxSignalStatus.textContent = unreadCount > 0
-      ? `${visibleCount === 1 ? "Ett tydelig signal" : `${visibleCount} viktige signaler`} er nok før du går til trening.`
-      : "Ingen kritiske signaler nå";
+    if (unreadCount <= 0) {
+      elements.inboxSignalStatus.textContent = "Ingen kritiske signaler nå";
+    } else if (requiresReplyCount > 0) {
+      elements.inboxSignalStatus.textContent =
+        `${formatSenderList(replySenders)} venter på et svar før du går til trening.`;
+    } else {
+      elements.inboxSignalStatus.textContent =
+        `${visibleCount === 1 ? "Ett tydelig signal" : `${visibleCount} viktige signaler`} er nok før du går til trening.`;
+    }
   }
+}
+
+// Kort norsk oppramsing av avsendere: «Styret», «Styret og Fysio», «Styret,
+// Fysio og Lagkaptein». Dedupliserer så samme avsender ikke gjentas.
+function formatSenderList(senders) {
+  const unique = [...new Set(senders.filter(Boolean))];
+  if (unique.length === 0) return "Ingen";
+  if (unique.length === 1) return unique[0];
+  if (unique.length === 2) return `${unique[0]} og ${unique[1]}`;
+  return `${unique.slice(0, -1).join(", ")} og ${unique[unique.length - 1]}`;
 }
 
 // Bygg ett trådkort fra en trådgruppe. Bruker kun createElement/textContent og
@@ -10231,8 +10263,11 @@ function createInboxEventThreadCard(thread, options = {}) {
 
   const from = document.createElement("span");
   from.className = "message-from";
-  const senderRole = INBOX_EVENT_SENDER_ROLES[thread.type] || "Klubben";
-  from.textContent = `${senderRole}: ${thread.sender}`;
+  // thread.sender er allerede en lesbar avsenderetikett («Assistenttrener»,
+  // «Styret», «Lagkaptein»). Type/kategori vises i egen tag under, så vi dropper
+  // det gamle «Rolle: Avsender»-prefikset som doblet etiketten
+  // («Assistenttrener: Assistenttrener», «Styret: Styret»).
+  from.textContent = thread.sender || INBOX_EVENT_SENDER_ROLES[thread.type] || "Klubben";
 
   const typeTag = document.createElement("span");
   typeTag.className = "message-tag";
