@@ -203,6 +203,26 @@ stage("6. Mini-sesong isolert fra liga");
     "renderMiniSeason returnerer tidlig utenfor scenario-modus",
     /if\s*\(!isScenarioModeActive\(\)\)\s*\{[\s\S]{0,200}return;/.test(app)
   );
+
+  // League Loop v0.2: ligasesong-panelet er speilbildet — hidden by default i
+  // markup og gatet på ligamodus i app.js, så liga- og scenarioflatene aldri
+  // vises samtidig.
+  const leaguePanel = html.match(/<section\b[^>]*\bleague-season-panel\b[^>]*>/);
+  check("ligasesong-panelet finnes i markup", Boolean(leaguePanel));
+  check(
+    "ligasesong-panelet er hidden by default",
+    Boolean(leaguePanel) && /\shidden(?=[\s>])/.test(leaguePanel[0]),
+    "uten default-hidden kan panelet lekke inn i scenariomodus ved render-feil"
+  );
+  check(
+    "renderLeagueSeason gater panelet på ligamodus",
+    /panel\.hidden\s*=\s*!isLeagueModeActive\(\)/.test(app)
+  );
+  check(
+    "ligasesongen starter automatisk uten scenario-sideeffekter",
+    /function ensureLeagueSeason\(\)[\s\S]{0,800}createMiniSeasonStart\(getMiniSeasonContext\(\)\)/.test(app)
+      && !/function ensureLeagueSeason\(\)[\s\S]{0,1200}firstTimePlaythrough/.test(app)
+  );
 }
 
 // ---- 7) Kamp kan ikke startes uten lag + trening ---------------------------

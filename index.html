@@ -231,6 +231,25 @@
           </details>
         </section>
 
+        <!-- League Loop v0.2: ligasesongen i ligamodus. Samme motor som
+             prøveperioden (football-mini-season.js) — terminliste, poeng, form,
+             tabell og styredom — men startes automatisk når troppen er spillbar
+             og presenteres som liga, ikke som scenario. Hidden by default;
+             renderLeagueSeason viser den kun i ligamodus. -->
+        <section class="panel league-season-panel dashboard-deep-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
+          <div class="mini-season-head">
+            <div>
+              <p class="eyebrow">Ligasesong</p>
+              <h2>Terminliste og tabell</h2>
+              <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
+            </div>
+            <div class="mini-season-actions">
+              <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
+            </div>
+          </div>
+          <div id="leagueSeasonOverview" class="mini-season-overview"></div>
+        </section>
+
         <!-- Mini Season v1 / League Loop v1: 5-kampers prøveperiode (kamprekke,
              poeng, form, light-league-tabell, styrevurdering) oppå Club Week og Kampdag. -->
         <section class="panel mini-season-panel dashboard-deep-panel" aria-label="Prøveperiode" aria-live="polite" hidden>
