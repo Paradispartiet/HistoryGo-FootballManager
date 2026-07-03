@@ -164,6 +164,11 @@ requireImport("advanceClubWeekPhaseFromBrowser");
 requireHandler("getClubWeekMatchdayGate");
 check("ny uke nullstiller ukens trening", /weeklyTrainingFocus\s*=\s*null/.test(app) && /weeklyTrainingProgram\s*=\s*null/.test(app));
 check("ny uke ruller mini-sesongen", /advanceMiniSeasonForNewWeek\(\)/.test(app));
+// Club Week Orchestrator v1.1: handlingene driver fasen framover (gate-sikkert).
+requireHandler("syncClubWeekPhaseToProgress");
+requireHandler("clubWeekPhaseTargetFromProgress");
+check("fase-synk går aldri forbi kampdag-porten", /if\s*\(getClubWeekMatchdayGate\(\)\.isBlocked\)\s*break;/.test(app));
+check("fase-synk stopper på review (ruller ikke til ny uke)", /clubWeekPhaseTargetFromProgress[\s\S]{0,400}return "review";/.test(app));
 
 // ---- 8) Innboks -------------------------------------------------------------
 stage("8. Innboks");
