@@ -3925,7 +3925,7 @@ function buildFirstTimeNextActionState(teamFit, readiness = null) {
     completed: ft.completed,
     hasFormation: Boolean(state.selectedFormationId),
     hasRoles: filled >= 11 && !misused,
-    hasReadInbox: (getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState())) === 0,
+    hasReadInbox: getInboxAttentionCount() === 0,
     hasPlayedFirstMatch: firstMatchPlayed,
     hasSeenReport: reportSeen,
     opponentName: opponent?.displayName || "Ajax 1971–73 — Totalfotball",
@@ -3958,7 +3958,7 @@ function renderGameModeStatus(teamFit) {
   const filled = assignments.filter((item) => item.player).length;
   const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
   const training = state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "valgt" : "mangler";
-  const unread = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
+  const unread = getInboxAttentionCount();
   const nextMatch = state.matchday?.session?.opponent?.name || (teamFit && getMatchdayReadiness(teamFit).isReady ? "klar" : "låst");
   if (elements.leagueStatusWeek) elements.leagueStatusWeek.textContent = `Uke ${Number(state.clubWeekState?.week) || 1}`;
   if (elements.leagueStatusNextMatch) elements.leagueStatusNextMatch.textContent = `Neste kamp: ${nextMatch}`;
@@ -6276,7 +6276,7 @@ function buildNextDecisions(teamFit) {
   }
 
   // 8) Uleste innbokstråder (statiske JSON-tråder + levende kontekst-tråder).
-  const unreadThreads = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
+  const unreadThreads = getInboxAttentionCount();
   if (unreadThreads > 0) {
     decisions.push({
       tag: "Innboks",
@@ -6405,7 +6405,7 @@ function buildNextActionContext(teamFit) {
     hasTrainingChoice:
       Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId),
     matchdayReady: Boolean(readiness.isReady),
-    unreadThreads: getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState()),
+    unreadThreads: getInboxAttentionCount(),
     hasUnseenReport: hasUnseenMatchReport(),
     miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active",
     scenarioModeActive: isScenarioModeActive(),
@@ -6536,9 +6536,8 @@ function renderDecisionCards(teamFit) {
 // styretillit. Leser eksisterende state direkte. Trygg mot manglende elementer.
 function renderDepartments() {
   if (elements.inboxPulseCount) {
-    // Uleste tråder = statiske JSON-tråder + levende kontekst-tråder (Inbox Event v1).
-    const unread = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
-    elements.inboxPulseCount.textContent = String(unread);
+    // Tråder som krever oppmerksomhet nå (i første uke: ett tydelig signal).
+    elements.inboxPulseCount.textContent = String(getInboxAttentionCount());
   }
 
   if (elements.adminSquadCount) {
@@ -7727,9 +7726,13 @@ function renderMatchdayReport(container, lastMatch) {
   nextWeekButton.textContent = "Gå til neste uke";
   nextWeekButton.addEventListener("click", async () => {
     markMatchReportSeen();
+    // Kampen er spilt og rapporten lest: rull ukas gjenværende faser helt til
+    // ny uke, uansett hvilken fase kampen ble spilt i. Kampdag-porten er åpen
+    // (kampen finnes), så løkka terminerer alltid; grensen er et sikkerhetsnett.
     const currentWeek = state.clubWeekState?.week;
-    await advanceClubWeekPhaseAction();
-    if (state.clubWeekState?.week === currentWeek && state.clubWeekState?.phase === "review") {
+    for (let i = 0; i <= CLUB_WEEK_PHASE_IDS.length; i++) {
+      if (state.clubWeekState?.week !== currentWeek) break;
+      if (getClubWeekMatchdayGate().isBlocked) break;
       await advanceClubWeekPhaseAction();
     }
   });
@@ -9517,6 +9520,34 @@ function getActiveInboxThreads() {
   return groupInboxMessagesByThread(unreadActiveMessages);
 }
 
+// Første uke: innboksen skal være ETT tydelig signal, ikke en vegg av tråder
+// (jf. «Klubbens signaler før trening» og «få, relevante meldinger» i første
+// uke). Delt regel for både visningskurateringen i renderInboxThreads og
+// gating-/telleverket, slik at «Neste handling» og pulstallet aldri krever mer
+// lesing enn flaten viser — heller ikke etter at treningsuka er valgt.
+function isFirstWeekInboxCuration() {
+  return (Number(state.clubWeekState?.week) || 1) === 1;
+}
+
+// Har manageren håndtert ukas signal? Lest/besvart minst én tråd (statisk
+// JSON-tråd eller levende kontekst-tråd) teller som håndtert.
+function hasHandledFirstWeekInboxSignal() {
+  if (state.readInboxMessageIds.size > 0) return true;
+  if (getSelectedInboxChoiceIds().size > 0) return true;
+  const eventThreads = getInboxState()?.threads;
+  return Array.isArray(eventThreads) && eventThreads.some((thread) => thread?.status && thread.status !== "unread");
+}
+
+// Uleste tråder som faktisk KREVER oppmerksomhet nå. I hele første uke er ett
+// lest signal nok — resten ligger som «kan leses senere» i arkivet og skal
+// ikke sperre veien til trening eller kamp. Fra uke 2 teller alle uleste
+// aktive tråder som vanlig.
+function getInboxAttentionCount() {
+  const total = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
+  if (!isFirstWeekInboxCuration()) return total;
+  return hasHandledFirstWeekInboxSignal() ? 0 : Math.min(1, total);
+}
+
 // Trådarkiv: levert historikk som ikke er ulest-aktiv. En melding som fortsatt
 // er aktiv og ulest hører hjemme i Innboks, ikke i arkivet.
 function getArchivedInboxThreads() {
@@ -9681,10 +9712,16 @@ function getInboxThreadPriorityScore(threadGroup) {
 }
 
 function updateInboxSignalGate({ eventActive, activeThreads, visibleEventActive, visibleActiveThreads }) {
-  const unreadCount = eventActive.filter((thread) => thread.status === "unread").length
-    + activeThreads.reduce((sum, threadGroup) => sum + (threadGroup.unreadMessages?.length || 0), 0);
-  const requiresReplyCount = eventActive.filter((thread) => thread.status !== "resolved" && thread.choices?.length).length
-    + activeThreads.filter(inboxThreadRequiresReply).length;
+  // Teller TRÅDER (ikke enkeltmeldinger), i tråd med etiketten «Uleste tråder»,
+  // og følger samme første uke-regel som pulsen og «Neste handling». «Krever
+  // svar» teller kun tråder som faktisk vises nå, så tallet aldri peker på
+  // tråder spilleren ikke ser.
+  const unreadCount = getInboxAttentionCount();
+  const firstWeek = isFirstWeekInboxCuration();
+  const replyEvents = firstWeek ? visibleEventActive : eventActive;
+  const replyThreads = firstWeek ? visibleActiveThreads : activeThreads;
+  const requiresReplyCount = replyEvents.filter((thread) => thread.status !== "resolved" && thread.choices?.length).length
+    + replyThreads.filter(inboxThreadRequiresReply).length;
 
   if (elements.inboxSignalUnread) elements.inboxSignalUnread.textContent = String(unreadCount);
   if (elements.inboxSignalReplies) elements.inboxSignalReplies.textContent = String(requiresReplyCount);
@@ -10131,41 +10168,48 @@ function renderInboxThreads() {
   const inboxState = getInboxState();
   const eventActive = getActiveInboxEventThreads(inboxState);
   const eventArchived = getArchivedInboxEventThreads(inboxState);
+  const activeThreads = getActiveInboxThreads();
+
+  const sortedEventActive = [...eventActive].sort((a, b) => {
+    const pa = a.priority === "critical" ? 3 : a.priority === "high" ? 2 : 1;
+    const pb = b.priority === "critical" ? 3 : b.priority === "high" ? 2 : 1;
+    return pb - pa;
+  });
+  const sortedActiveThreads = [...activeThreads].sort((a, b) => getInboxThreadPriorityScore(b) - getInboxThreadPriorityScore(a));
+
+  // Første uke før treningsvalg: «Viktig nå» er ETT tydelig signal. Er det
+  // håndtert, er lista tom (med vei videre til Trening) — resten av de uleste
+  // trådene ligger som «kan leses senere» i arkivkolonnen, aldri usynlige.
+  const firstWeek = isFirstWeekInboxCuration();
+  const signalHandled = firstWeek && hasHandledFirstWeekInboxSignal();
+  const visibleEventActive = firstWeek
+    ? (signalHandled ? [] : sortedEventActive.slice(0, 1))
+    : sortedEventActive;
+  const visibleActiveThreads = firstWeek
+    ? (signalHandled || visibleEventActive.length ? [] : sortedActiveThreads.slice(0, 1))
+    : sortedActiveThreads;
+
+  const visibleThreadIds = [
+    ...visibleEventActive.map((thread) => thread.id),
+    ...visibleActiveThreads.map((threadGroup) => getThreadGroupId(threadGroup))
+  ].filter(Boolean);
+  const visibleIdSet = new Set(visibleThreadIds);
+
+  // Uleste aktive tråder som første uke-kurateringen holder utenfor «Viktig nå».
+  const laterEventThreads = firstWeek ? sortedEventActive.filter((thread) => !visibleIdSet.has(thread.id)) : [];
+  const laterThreads = firstWeek ? sortedActiveThreads.filter((threadGroup) => !visibleIdSet.has(getThreadGroupId(threadGroup))) : [];
 
   if (activeContainer) {
     activeContainer.innerHTML = "";
 
-    const activeThreads = getActiveInboxThreads();
-
-    // Hvilken tråd er åpen? Brukerens valg vinner; ellers åpnes den første aktive
-    // tråden som standard slik at det alltid er én lesbar tråd uten ekstra klikk.
-    const activeThreadIds = [
-      ...eventActive.map((thread) => thread.id),
-      ...activeThreads.map((threadGroup) => getThreadGroupId(threadGroup))
-    ].filter(Boolean);
-    const openId = activeThreadIds.includes(state.openInboxThreadId)
+    // Hvilken tråd er åpen? Brukerens valg vinner; ellers åpnes den første
+    // synlige tråden som standard slik at det alltid er én lesbar tråd uten
+    // ekstra klikk.
+    const effectiveOpenId = visibleIdSet.has(state.openInboxThreadId)
       ? state.openInboxThreadId
-      : activeThreadIds[0] || null;
-
-    const sortedEventActive = [...eventActive].sort((a, b) => {
-      const pa = a.priority === "critical" ? 3 : a.priority === "high" ? 2 : 1;
-      const pb = b.priority === "critical" ? 3 : b.priority === "high" ? 2 : 1;
-      return pb - pa;
-    });
-    const sortedActiveThreads = [...activeThreads].sort((a, b) => getInboxThreadPriorityScore(b) - getInboxThreadPriorityScore(a));
-    const isFirstWeekBeforeTraining = (state.clubWeekState?.week || 1) === 1 && !state.weeklyTrainingProgram?.programId;
-    const visibleEventActive = isFirstWeekBeforeTraining ? sortedEventActive.slice(0, sortedEventActive.length ? 1 : 0) : sortedEventActive;
-    const visibleActiveThreads = isFirstWeekBeforeTraining && visibleEventActive.length
-      ? []
-      : (isFirstWeekBeforeTraining ? sortedActiveThreads.slice(0, 1) : sortedActiveThreads);
+      : visibleThreadIds[0] || null;
 
     updateInboxSignalGate({ eventActive, activeThreads, visibleEventActive, visibleActiveThreads });
-
-    const visibleThreadIds = [
-      ...visibleEventActive.map((thread) => thread.id),
-      ...visibleActiveThreads.map((threadGroup) => getThreadGroupId(threadGroup))
-    ].filter(Boolean);
-    const effectiveOpenId = visibleThreadIds.includes(openId) ? openId : visibleThreadIds[0] || null;
 
     visibleEventActive.forEach((thread) => {
       activeContainer.append(createInboxEventThreadCard(thread, { open: thread.id === effectiveOpenId }));
@@ -10180,18 +10224,36 @@ function renderInboxThreads() {
       );
     });
 
-    if (!eventActive.length && !activeThreads.length) {
+    if (!visibleEventActive.length && !visibleActiveThreads.length) {
       activeContainer.append(createMessageCard({
         from: "Klubbkontoret",
         tag: "Ingen uleste tråder",
-        title: "Innboksen er rolig",
-        body: "Det er ingen aktive uleste tråder akkurat nå."
+        title: signalHandled ? "Ukas signal er håndtert" : "Innboksen er rolig",
+        body: signalHandled
+          ? `Du har lest det viktigste. Resten ligger i arkivet — neste steg er ${state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "kampdagen" : "å velge treningsuke"}.`
+          : "Det er ingen aktive uleste tråder akkurat nå."
       }, true));
     }
   }
 
   if (archiveContainer) {
     archiveContainer.innerHTML = "";
+
+    // Første uke: uleste tråder utenfor «Viktig nå» er lesbare her — de er
+    // nedprioritert, ikke borte.
+    laterEventThreads.slice(0, 12).forEach((thread) => {
+      archiveContainer.append(
+        createInboxEventThreadCard(thread, { archived: true, open: thread.id === state.openInboxThreadId })
+      );
+    });
+    laterThreads.slice(0, 12).forEach((threadGroup) => {
+      archiveContainer.append(
+        createInboxThreadCard(threadGroup, {
+          showReadButton: false,
+          open: getThreadGroupId(threadGroup) === state.openInboxThreadId
+        })
+      );
+    });
 
     eventArchived.slice(-12).forEach((thread) => {
       archiveContainer.append(
@@ -10209,7 +10271,7 @@ function renderInboxThreads() {
       );
     });
 
-    if (!eventArchived.length && !archivedThreads.length) {
+    if (!eventArchived.length && !archivedThreads.length && !laterEventThreads.length && !laterThreads.length) {
       archiveContainer.append(createMessageCard({
         from: "Klubbkontoret",
         tag: "Arkiv",
