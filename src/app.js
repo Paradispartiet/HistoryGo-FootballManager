@@ -3616,6 +3616,7 @@ function chooseMatchdayDecision(optionId) {
     return;
   }
 
+  let matchJustFinished = false;
   const resolution = resolveMatchdayDecision({
     event,
     option,
@@ -3660,10 +3661,17 @@ function chooseMatchdayDecision(optionId) {
     // (denne grenen treffes bare når siste hendelse er besvart).
     recordRoleFamiliarityFromMatch(getTeamFit());
     state.matchday.session = null;
+    matchJustFinished = true;
   }
 
   saveMatchdayState();
   renderApp();
+  // Club Week Orchestrator v1.1: spilt kamp nudger uka til Oppsummering-fasen
+  // (gate-sikkert — kampdag→oppsummering krever nettopp en spilt kamp). Selve
+  // uke-rullen skjer fortsatt via «Gå til neste uke».
+  if (matchJustFinished) {
+    syncClubWeekPhaseToProgress().catch(console.error);
+  }
 }
 
 // Norske etiketter og kort tekst for kampkonsekvenser, f.eks.
@@ -4593,6 +4601,8 @@ function selectWeeklyTrainingFocus(focusId) {
   }
 
   renderApp();
+  // Valgt trening nudger uka til Kampplan-fasen (gate-sikkert).
+  syncClubWeekPhaseToProgress().catch(console.error);
 }
 
 function syncWeeklyTrainingFocusToClubWeek() {
@@ -4670,6 +4680,8 @@ function selectWeeklyTrainingProgram(program) {
   saveWeeklyTrainingProgram();
 
   renderApp();
+  // Valgt treningsprogram nudger uka til Kampplan-fasen (gate-sikkert).
+  syncClubWeekPhaseToProgress().catch(console.error);
 }
 
 // Gyldige fase-ID-er i den nye 6-fase-rytmen. Brukes til sanering av lagret
@@ -4814,6 +4826,42 @@ function getClubWeekMatchdayGate() {
     lastMatch: state.matchday?.lastMatch || null,
     hasActiveSession: Boolean(state.matchday?.session)
   });
+}
+
+// Club Week Orchestrator v1.1: hvilken fase spillerens FAKTISKE fremdrift denne
+// uka tilsier. Ren avlesning av state (ingen ny motor): spilt kamp → Oppsummering,
+// valgt trening → Kampplan, håndtert innboks → Trening. Null når ingen handling
+// ennå tilsier en fremrykning (da styrer «Neste fase»-knappen manuelt).
+function clubWeekPhaseTargetFromProgress() {
+  const week = Number(state.clubWeekState?.week) || 1;
+  if (state.matchday?.lastMatch?.playedInClubWeek === week) return "review";
+  if (state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId) return "match_prep";
+  if (hasAcknowledgedInboxThisWeek()) return "training";
+  return null;
+}
+
+// Rull klubbukens fase FRAMOVER til den fasen spillerens handlinger tilsier, via
+// den eksisterende fasemotoren (advanceClubWeekPhaseAction). Gate-sikker
+// (kampdag→oppsummering krever spilt kamp, som nettopp er oppfylt når
+// target=review), går aldri bakover, ruller aldri over til ny uke (stopper på
+// review), og er idempotent når fasen alt er på/forbi målet. Orkestrering, ikke
+// en ny motor — samme transitions/konsekvenser som «Neste fase»-knappen.
+async function syncClubWeekPhaseToProgress() {
+  if (!state.clubWeekState) return;
+  const target = clubWeekPhaseTargetFromProgress();
+  if (!target) return;
+  const targetIdx = CLUB_WEEK_PHASE_IDS.indexOf(target);
+  if (targetIdx < 0) return;
+
+  for (let i = 0; i < CLUB_WEEK_PHASE_IDS.length; i++) {
+    const before = state.clubWeekState;
+    const currentIdx = CLUB_WEEK_PHASE_IDS.indexOf(before?.phase);
+    if (currentIdx < 0 || currentIdx >= targetIdx) break;
+    if (getClubWeekMatchdayGate().isBlocked) break;
+    await advanceClubWeekPhaseAction();
+    // Stopp hvis fasen ikke beveget seg eller uka rullet over (sikkerhetsnett).
+    if (state.clubWeekState === before || state.clubWeekState?.week !== before.week) break;
+  }
 }
 
 // Kort norsk effekt-fras per treningsfokus: hva treningen faktisk gjorde med
@@ -9699,6 +9747,10 @@ function acknowledgeInboxThisWeek() {
   } catch (error) {
     // Privat modus e.l.: kuratering fungerer fortsatt innen økta.
   }
+  // Club Week Orchestrator v1.1: håndtert innboks nudger uka til Trening-fasen,
+  // så toppstripa speiler det spilleren nettopp gjorde. Gate-sikkert; fire-and-
+  // forget siden kalleren allerede rendrer.
+  syncClubWeekPhaseToProgress().catch(console.error);
 }
 
 // Uleste tråder som faktisk KREVER oppmerksomhet nå: opptil ukas kvote, og null
