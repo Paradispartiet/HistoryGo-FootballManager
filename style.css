@@ -4186,7 +4186,8 @@ ul {
 
 .dashboard-grid .off-pitch-signal-card { --card-accent: var(--hg-accent-inbox); }
 .dashboard-grid .decision-strip { --card-accent: var(--hg-accent-board); }
-.dashboard-grid .mini-season-panel { --card-accent: var(--hg-accent-tactics); }
+.dashboard-grid .mini-season-panel,
+.dashboard-grid .league-season-panel { --card-accent: var(--hg-accent-tactics); }
 .dashboard-grid .dashboard-shortcuts { --card-accent: var(--hg-accent-facilities); }
 .dashboard-grid .club-week-event-log-panel { --card-accent: var(--hg-accent-history); }
 
@@ -5166,8 +5167,11 @@ ul {
   padding: 18px;
 }
 
-/* ---------- Mini Season v0.1: 5-kampers prøveperiode ---------- */
-.mini-season-panel {
+/* ---------- Mini Season v0.1: 5-kampers prøveperiode ----------
+   League Loop v0.2: ligasesong-panelet gjenbruker samme visning (samme motor),
+   så det arver mini-season-stilene via delte klasser. */
+.mini-season-panel,
+.league-season-panel {
   display: grid;
   gap: 14px;
 }

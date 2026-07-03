@@ -367,6 +367,11 @@ const elements = {
   startMiniSeasonButton: document.querySelector("#startMiniSeasonButton"),
   resetMiniSeasonButton: document.querySelector("#resetMiniSeasonButton"),
   miniSeasonOverview: document.querySelector("#miniSeasonOverview"),
+  // League Loop v0.2: ligasesong-panelet (samme motor, liga-presentasjon).
+  leagueSeasonPanel: document.querySelector("#leagueSeasonPanel"),
+  leagueSeasonStatus: document.querySelector("#leagueSeasonStatus"),
+  leagueSeasonOverview: document.querySelector("#leagueSeasonOverview"),
+  startNewLeagueSeasonButton: document.querySelector("#startNewLeagueSeasonButton"),
   // Legacy id: firstTimePlaythroughCard is now used as the game mode card.
   // Do not treat it as mandatory onboarding.
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
@@ -3862,6 +3867,10 @@ function isScenarioModeActive() {
   return state.gameStartState?.selectedMode === "scenario";
 }
 
+function isLeagueModeActive() {
+  return state.gameStartState?.selectedMode === "league";
+}
+
 function activateRecommendedLeagueTab(teamFit = null) {
   const rosterReadiness = getAvailability().rosterReadiness;
   if (!rosterReadiness.hasEnoughUnlocked) {
@@ -3959,7 +3968,12 @@ function renderGameModeStatus(teamFit) {
   const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
   const training = state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "valgt" : "mangler";
   const unread = getInboxAttentionCount();
-  const nextMatch = state.matchday?.session?.opponent?.name || (teamFit && getMatchdayReadiness(teamFit).isReady ? "klar" : "låst");
+  // Neste kamp: pågående kampsesjon vinner; ellers terminlistas neste
+  // motstander; ellers klar/låst-status.
+  const scheduledOpponent = getMiniSeasonNextOpponent();
+  const nextMatch = state.matchday?.session?.opponent?.name
+    || scheduledOpponent?.name
+    || (teamFit && getMatchdayReadiness(teamFit).isReady ? "klar" : "låst");
   if (elements.leagueStatusWeek) elements.leagueStatusWeek.textContent = `Uke ${Number(state.clubWeekState?.week) || 1}`;
   if (elements.leagueStatusNextMatch) elements.leagueStatusNextMatch.textContent = `Neste kamp: ${nextMatch}`;
   if (elements.leagueStatusSquad) elements.leagueStatusSquad.textContent = `Tropp: ${Number(roster.unlockedCount || 0)}/15`;
@@ -4089,6 +4103,47 @@ function resetMiniSeason() {
   }
   state.miniSeason = null;
   saveMiniSeason();
+  renderApp();
+}
+
+// League Loop v0.2: i ligamodus ER sesongen terminlista. Den startes automatisk
+// (uten knapp) så snart troppen er kampklar, med samme rene motor som
+// prøveperioden — men uten scenario-sideeffekter (rører aldri
+// firstTimePlaythrough). Aktiv/fullført sesong røres ikke.
+function ensureLeagueSeason() {
+  if (!isLeagueModeActive() || state.miniSeason) {
+    return;
+  }
+  if (!getAvailability().rosterReadiness.isReady) {
+    return;
+  }
+
+  const season = createMiniSeasonStart(getMiniSeasonContext());
+  if (!season) {
+    return;
+  }
+
+  state.miniSeason = season;
+  saveMiniSeason();
+
+  addClubWeekEvent({
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    week: state.clubWeekState?.week ?? "?",
+    phase: state.clubWeekState?.phase || "analysis",
+    phaseLabel: "Ligasesong",
+    message: `Ligasesongen er i gang: ${MINI_SEASON_TOTAL_WEEKS} kamper står på terminlista. Sesongmål: ${season.seasonGoal}.`
+  });
+}
+
+// Etter fullført ligasesong: legg den bak deg og start neste. Rører kun
+// mini-sesong-state — aldri History Go-unlocks, merits eller Club Week.
+function startNewLeagueSeason() {
+  if (!isLeagueModeActive() || state.miniSeason?.status === "active") {
+    return;
+  }
+  state.miniSeason = null;
+  saveMiniSeason();
+  ensureLeagueSeason();
   renderApp();
 }
 
@@ -7949,13 +8004,15 @@ function renderMiniSeasonStanding(parent, summary, formGuide) {
   }
 }
 
-// Prøveperiode-tabell (light league): HG-laget mot rivaler. Deterministisk.
-function renderMiniSeasonTable(parent, table) {
+// Tabell (light league): HG-laget mot rivaler. Deterministisk. Overskriften er
+// kontekstavhengig (prøveperiode vs ligasesong) siden samme motor og render
+// deles av begge modiene.
+function renderMiniSeasonTable(parent, table, caption = "Prøveperiode-tabell") {
   if (!table || !Array.isArray(table.rows) || table.rows.length === 0) {
     return;
   }
 
-  appendMatchdaySubheading(parent, "Prøveperiode-tabell");
+  appendMatchdaySubheading(parent, caption);
   const wrap = document.createElement("div");
   wrap.className = "mini-season-table-wrap";
   const tableEl = document.createElement("table");
@@ -8712,6 +8769,74 @@ function renderMiniSeason() {
 
   if (miniSeason.status === "completed") {
     renderMiniSeasonVerdict(overview, miniSeason.finalReview);
+  }
+}
+
+// League Loop v0.2: ligasesong-panelet på Oversikt. Samme motor og
+// visningshjelpere som prøveperioden, men liga-presentasjon: auto-startet
+// sesong, terminliste (neste kamp), tabell, form, resultater og styredom ved
+// sesongslutt. Vises KUN i ligamodus; prøveperiodepanelet er fortsatt
+// scenario-isolert i renderMiniSeason.
+function renderLeagueSeason() {
+  const panel = elements.leagueSeasonPanel;
+  if (!panel) return;
+
+  panel.hidden = !isLeagueModeActive();
+  if (!isLeagueModeActive()) {
+    if (elements.leagueSeasonOverview) elements.leagueSeasonOverview.textContent = "";
+    return;
+  }
+
+  ensureLeagueSeason();
+
+  const season = state.miniSeason;
+  const statusEl = elements.leagueSeasonStatus;
+  const overview = elements.leagueSeasonOverview;
+  const newSeasonButton = elements.startNewLeagueSeasonButton;
+  const summary = season ? summarizeMiniSeason(season) : null;
+
+  if (newSeasonButton) {
+    newSeasonButton.hidden = season?.status !== "completed";
+  }
+
+  if (statusEl) {
+    if (!season || !summary) {
+      statusEl.textContent = "Ligasesongen starter automatisk når troppen er kampklar (11 startere + 4 benk).";
+    } else if (season.status === "completed") {
+      statusEl.textContent = `Sesongen er fullført: ${summary.points} poeng på ${season.totalWeeks} kamper. Styret har gjort opp sin dom.`;
+    } else {
+      statusEl.textContent = `Runde ${Math.min(season.weekIndex + 1, season.totalWeeks)} av ${season.totalWeeks} · ${summary.points} poeng så langt.`;
+    }
+  }
+
+  if (!overview) return;
+  overview.textContent = "";
+  if (!season || !summary) return;
+
+  appendMiniSeasonMeta(overview, `Sesongmål: ${season.seasonGoal}`, "mini-season-goal");
+  if (season.boardExpectation) {
+    appendMiniSeasonMeta(overview, season.boardExpectation);
+  }
+
+  if (season.status === "active") {
+    const nextMatch = getCurrentMiniSeasonMatch(season);
+    if (nextMatch) {
+      const venue = nextMatch.homeAway === "home" ? "Hjemme" : "Borte";
+      appendMiniSeasonMeta(
+        overview,
+        `Neste kamp — runde ${nextMatch.round}/${season.totalWeeks}: ${nextMatch.opponentName} · ${venue}`,
+        "mini-season-next-opponent"
+      );
+      appendMiniSeasonMeta(overview, nextMatch.narrativeHook);
+    }
+  }
+
+  renderMiniSeasonStanding(overview, summary, createMiniSeasonFormGuide(season));
+  renderMiniSeasonTable(overview, createMiniSeasonTable(season, getMiniSeasonContext()), "Ligatabell");
+  renderMiniSeasonResults(overview, season);
+
+  if (season.status === "completed") {
+    renderMiniSeasonVerdict(overview, season.finalReview);
   }
 }
 
@@ -11558,6 +11683,11 @@ function renderApp() {
 
   const teamFit = getTeamFit();
 
+  // League Loop v0.2: sørg for at ligasesongen er startet FØR panelene leser
+  // den, slik at «Neste kamp» i statuskortet og terminlista er i takt allerede
+  // på renderen der troppen blir kampklar (ikke først på neste render).
+  ensureLeagueSeason();
+
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
@@ -11573,6 +11703,7 @@ function renderApp() {
   renderBadgeEffects(teamFit);
   renderMatchday(teamFit);
   renderMiniSeason();
+  renderLeagueSeason();
   renderWeeklyTrainingFocus(teamFit);
   renderTrainingProgramCompositions(teamFit);
 
@@ -11876,9 +12007,22 @@ function bindGameModeControls() {
 
   if (elements.startAjaxScenarioButton) {
     elements.startAjaxScenarioButton.addEventListener("click", () => {
+      // En auto-startet ligasesong uten spilte kamper skal ikke blokkere
+      // scenariostarten (som trenger Ajax som første motstander). En sesong
+      // med spilte kamper beholdes — da fortsetter scenarioet uten omstart.
+      if (state.miniSeason?.status === "active" && !(state.miniSeason.matchHistory?.length > 0)) {
+        state.miniSeason = null;
+        saveMiniSeason();
+      }
       selectGameMode("scenario", { activeScenarioId: AJAX_TOTAL_FOOTBALL_SCENARIO_ID });
       startMiniSeason();
       activateTab("dashboard");
+    });
+  }
+
+  if (elements.startNewLeagueSeasonButton) {
+    elements.startNewLeagueSeasonButton.addEventListener("click", () => {
+      startNewLeagueSeason();
     });
   }
 
