@@ -167,8 +167,10 @@ check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isA
 {
   const html = await import("node:fs").then(({ readFileSync }) => readFileSync(new URL("../index.html", import.meta.url), "utf8"));
   const app = await import("node:fs").then(({ readFileSync }) => readFileSync(new URL("../src/app.js", import.meta.url), "utf8"));
-  check("første uke begrenser innboksen til ett tydelig signal", app.includes("isFirstWeekInboxCuration") && app.includes("slice(0, 1)"));
-  check("første uke-gatingen deler regel med visningen", app.includes("getInboxAttentionCount"));
+  check("innboksen kurateres til ukas kvote (få, relevante signaler)", app.includes("getInboxWeeklyCap") && app.includes("slice(0, cap)"));
+  check("ukekvoten kvitteres ut per uke og løftes ved ny uke", app.includes("hasAcknowledgedInboxThisWeek") && app.includes("acknowledgeInboxThisWeek"));
+  check("kuratering og telleverk deler samme regel", app.includes("getInboxAttentionCount"));
+  check("innboksmeldinger kan bindes til ukevindu (datavask)", app.includes("message.minWeek") && app.includes("message.maxWeek"));
   check("Innboks CTA peker til trening", html.includes('id="inboxGoTraining"') && html.includes('data-tab-target="trening"') && html.includes("Gå til Trening"));
   check("Trening forklarer hvorfor den kommer etter Innboks", html.includes("Du velger trening etter at klubbens signaler er lest"));
   check("Trening har tydelig valgt/ikke valgt gate", html.includes('id="trainingChoiceGate"') && html.includes('id="trainingChoiceStatus"'));
