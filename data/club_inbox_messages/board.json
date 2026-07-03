@@ -18,6 +18,7 @@
         "match_prep",
         "matchday"
       ],
+      "maxWeek": 1,
       "conditions": {}
     },
     {
