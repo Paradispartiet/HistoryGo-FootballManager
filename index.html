@@ -121,13 +121,9 @@
           <p class="muted-text">HG Football Manager starter som et ligaspill: ta over en klubb, bygg laget gjennom sesongen, tren spillerne, velg taktikk og kjemp om tabellen. Historiske og taktiske leksjoner ligger som valgfrie scenarioer.</p>
         </div>
         <div class="first-time-brief-grid mode-choice-grid">
-          <article class="is-primary-mode"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></article>
-          <article><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></article>
-          <article><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten at det påvirker ligasesongen.</small></article>
-        </div>
-        <div class="mode-select-actions">
-          <button type="button" id="startLeagueModeButton" class="primary-action-button">Start ligaspill</button>
-          <button type="button" id="chooseScenarioModeButton" class="shortcut-button">Velg scenario</button>
+          <button type="button" class="mode-choice-card is-primary-mode" data-start-mode="league" aria-describedby="firstTimeAssistant"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></button>
+          <button type="button" class="mode-choice-card" data-start-mode="scenario" aria-describedby="firstTimeAssistant"><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></button>
+          <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten at det påvirker ligasesongen.</small></button>
         </div>
         <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
       </section>
