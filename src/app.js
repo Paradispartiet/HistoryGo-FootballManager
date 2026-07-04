@@ -6567,9 +6567,9 @@ function computeManagerNextActions(teamFit) {
   }));
 }
 
-// Render "Neste handling"-stripen øverst på Oversikt: én tydelig primærhandling
-// (stor, invertert knapp) + opptil to sekundære steg. Faseteksten viser hvor i
-// uka treneren er. Alt er utledet av computeManagerNextActions.
+// Render "Neste handling" i manager-footeren: én kompakt primærhandling
+// + opptil to sekundære steg. Faseteksten viser hvor i uka treneren er.
+// Alt er utledet av computeManagerNextActions.
 function renderNextActionStrip(teamFit) {
   const primaryButton = elements.nextActionPrimary;
   const secondaryContainer = elements.nextActionSecondary;

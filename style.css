@@ -421,7 +421,7 @@ h3 {
 /* ---------- App shell + tab sections ---------- */
 .app-shell {
   padding-top: 14px;
-  padding-bottom: 32px;
+  padding-bottom: clamp(104px, 14vh, 164px);
 }
 
 .tab-section {
@@ -3847,62 +3847,62 @@ ul {
 }
 
 /* ---------- Statuskort: neste beslutninger (strip) ---------- */
-/* ---------- Neste handling-stripe (Playable Manager Flow Polish v1) ----------
-   Managerens tydelige startpunkt øverst på Oversikt: én stor, invertert
-   primærhandling + opptil to sekundære "chips". Holder seg i sort/hvitt-stilen
-   med tynne hvite rammer. */
+/* ---------- Neste handling-footerkort (Playable Manager Flow Polish v1) ----------
+   Kompakt managerbeskjed nederst til høyre. Kortet beholder eksisterende
+   rendering/id-er fra Neste handling, men er ikke lenger en hero i hovedkolonnen. */
 .next-action-strip {
   display: grid;
-  gap: 12px;
-  border: 2px solid var(--text);
+  gap: 10px;
+  width: min(100%, 390px);
+  margin-left: auto;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), var(--panel-strong));
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.48);
-  padding: clamp(20px, 3vw, 28px);
-  margin-bottom: calc(var(--gap) * 1.15);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), var(--panel-strong));
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
+  padding: 14px;
 }
 
 .next-action-head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .next-action-head .eyebrow {
   margin: 0;
+  font-size: 0.66rem;
 }
 
 .next-action-phase {
-  font-size: 0.78rem;
+  flex: 0 0 auto;
+  font-size: 0.66rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
   border: 1px solid var(--line-soft);
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 3px 9px;
 }
 
-/* Primærhandlingen er invertert (hvit flate, sort tekst) for å lese som "gjør
-   dette nå". */
 .next-action-primary {
   display: grid;
-  gap: 6px;
+  gap: 5px;
   text-align: left;
-  border: 1px solid var(--text);
+  border: 1px solid var(--line);
   border-radius: var(--hg-radius-sm);
-  background: var(--text);
-  color: #000000;
-  padding: 18px 20px;
+  background: rgba(4, 6, 11, 0.72);
+  color: var(--text);
+  padding: 12px;
   cursor: pointer;
   font: inherit;
-  transition: transform 0.1s ease, opacity 0.12s ease;
+  transition: transform 0.1s ease, border-color 0.12s ease, opacity 0.12s ease;
 }
 
 .next-action-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
+  border-color: var(--text);
+  transform: translateY(-1px);
 }
 
 .next-action-primary:focus-visible {
@@ -3919,43 +3919,48 @@ ul {
   justify-self: start;
   border: 1px solid currentColor;
   border-radius: 999px;
-  font-size: 0.62rem;
+  color: var(--muted);
+  font-size: 0.58rem;
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 3px 10px;
+  padding: 2px 8px;
 }
 
 .next-action-title {
-  font-size: clamp(1.55rem, 4.2vw, 2.2rem);
+  font-size: clamp(1.05rem, 2vw, 1.22rem);
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 1.12;
 }
 
 .next-action-hint {
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #2a2a2a;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--muted);
 }
 
 .next-action-secondary {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .next-action-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  border: 1px solid var(--line);
+  gap: 6px;
+  border: 1px solid var(--line-soft);
   border-radius: 999px;
   background: var(--panel);
   color: var(--text);
-  padding: 8px 14px;
+  padding: 6px 10px;
   cursor: pointer;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.76rem;
   transition: border-color 0.12s ease, transform 0.1s ease;
 }
 
@@ -3975,7 +3980,7 @@ ul {
 }
 
 .next-action-chip-tag {
-  font-size: 0.6rem;
+  font-size: 0.56rem;
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -4532,8 +4537,33 @@ ul {
 
 /* ---------- Footer ---------- */
 .site-footer {
-  padding: 8px 0 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+  align-items: end;
+  gap: 16px;
+  padding: 8px 0 max(40px, calc(24px + env(safe-area-inset-bottom)));
   color: var(--muted);
+}
+
+.site-footer > p {
+  margin: 0 0 4px;
+}
+
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding-bottom: clamp(132px, 20vh, 220px);
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr;
+    padding-bottom: max(28px, calc(18px + env(safe-area-inset-bottom)));
+  }
+
+  .next-action-strip {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 /* ---------- Responsive ---------- */
