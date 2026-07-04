@@ -395,8 +395,7 @@ const elements = {
   firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
-  startLeagueModeButton: document.querySelector("#startLeagueModeButton"),
-  chooseScenarioModeButton: document.querySelector("#chooseScenarioModeButton"),
+  modeChoiceCards: Array.from(document.querySelectorAll("[data-start-mode]")),
   startAjaxScenarioButton: document.querySelector("#startAjaxScenarioButton"),
   trainingChoiceGate: document.querySelector("#trainingChoiceGate"),
   trainingChoiceStatus: document.querySelector("#trainingChoiceStatus"),
@@ -12103,19 +12102,40 @@ function bindGameModeControls() {
     });
   }
 
-  if (elements.startLeagueModeButton) {
-    elements.startLeagueModeButton.addEventListener("click", () => {
-      selectGameMode("league", { activeLeagueSaveId: "default_league_save" });
-      activateRecommendedLeagueTab(getTeamFit());
-      renderApp();
-    });
+  const assistantByStartMode = {
+    league: "Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.",
+    scenario: "Velg et scenario for å spille en kort historisk eller taktisk utfordring.",
+    training: "Test formasjoner, roller og kampprinsipper uten risiko for ligasesongen."
+  };
+
+  function setStartModeAssistant(mode) {
+    if (!elements.firstTimeAssistant) return;
+    elements.firstTimeAssistant.textContent = assistantByStartMode[mode] || assistantByStartMode.league;
   }
 
-  if (elements.chooseScenarioModeButton) {
-    elements.chooseScenarioModeButton.addEventListener("click", () => {
-      activateTab("scenarios");
+  elements.modeChoiceCards.forEach((card) => {
+    card.addEventListener("mouseenter", () => setStartModeAssistant(card.dataset.startMode));
+    card.addEventListener("focus", () => setStartModeAssistant(card.dataset.startMode));
+    card.addEventListener("click", () => {
+      const mode = card.dataset.startMode;
+      setStartModeAssistant(mode);
+      if (mode === "league") {
+        selectGameMode("league", { activeLeagueSaveId: "default_league_save" });
+        activateRecommendedLeagueTab(getTeamFit());
+        renderApp();
+        return;
+      }
+      if (mode === "scenario") {
+        activateTab("scenarios");
+        return;
+      }
+      if (mode === "training") {
+        selectGameMode("training", {});
+        activateTab("trening");
+        renderApp();
+      }
     });
-  }
+  });
 
   if (elements.changeGameModeButton) {
     elements.changeGameModeButton.addEventListener("click", () => {
