@@ -114,26 +114,6 @@
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
 
-      <!-- Neste handling v1: én tydelig primærhandling + 1–2 sekundære, utledet
-           av eksisterende state (Club Week-fase, roster/kampklar, treningsvalg,
-           innboks, mini-sesong). Ingen ny motor — kun prioritert presentasjon av
-           hva treneren bør gjøre nå. -->
-      <section class="next-action-strip" id="nextActionStrip" aria-label="Neste handling" aria-live="polite">
-        <div class="next-action-head">
-          <div>
-            <p class="eyebrow">Neste handling</p>
-            <h2>Dette gjør du nå</h2>
-          </div>
-          <span class="next-action-phase" id="nextActionPhase">Uke 1 · Analyse</span>
-        </div>
-        <button type="button" class="next-action-primary" id="nextActionPrimary">
-          <span class="next-action-tag" id="nextActionPrimaryTag">Lag</span>
-          <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
-          <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
-        </button>
-        <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
-      </section>
-
       <section class="panel first-time-playthrough-card mode-select-card" id="firstTimePlaythroughCard" aria-label="Velg spillmodus" aria-live="polite">
         <div>
           <p class="eyebrow">Velg spillmodus</p>
@@ -1121,6 +1101,22 @@
 
   <footer class="site-footer">
     <p>HG Football Manager — managerkontor, startellever og samlet lagfit. Fortsatt ikke full kampmotor.</p>
+
+    <!-- Neste handling v1: kompakt handlingspåminnelse i manager-footeren.
+         Bruker samme id-er og rendering som tidligere hero-plassering, slik at
+         state, handlere og aria-live fortsatt drives av eksisterende logikk. -->
+    <section class="next-action-strip" id="nextActionStrip" aria-label="Neste handling" aria-live="polite">
+      <div class="next-action-head">
+        <p class="eyebrow">Neste handling</p>
+        <span class="next-action-phase" id="nextActionPhase">Uke 1 · Analyse</span>
+      </div>
+      <button type="button" class="next-action-primary" id="nextActionPrimary">
+        <span class="next-action-tag" id="nextActionPrimaryTag">Lag</span>
+        <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
+        <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
+      </button>
+      <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
+    </section>
   </footer>
 
   <script type="module" src="src/app.js"></script>

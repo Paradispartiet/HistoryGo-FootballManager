@@ -256,16 +256,17 @@ stage("9. Rapport → ny uke");
 }
 
 // ---- 10) Én primær vei videre ----------------------------------------------
-// «Neste handling» skal være den ENESTE alltid-synlige primære veien videre.
+// «Neste handling» skal være den ENESTE alltid-synlige primære veien videre,
+// men den bor nå kompakt i manager-footeren i stedet for som hero på Oversikt.
 // Konkurrerende «neste»-lister (Neste beslutninger) skal støtte den, ikke
 // konkurrere — de foldes bak en <details>, ikke stå åpne som en andre primær.
 stage("10. Én primær vei videre");
 {
-  const dashboard = html.match(/data-tab-section="dashboard"[\s\S]*?(?=<div class="tab-section)/);
-  const dashboardHtml = dashboard ? dashboard[0] : "";
+  const primaryCount = (html.match(/class="next-action-primary"/g) || []).length;
+  check("nøyaktig én primær «Neste handling»-knapp i managerkontoret", primaryCount === 1, `antall=${primaryCount}`);
 
-  const primaryCount = (dashboardHtml.match(/class="next-action-primary"/g) || []).length;
-  check("nøyaktig én primær «Neste handling»-knapp på dashboardet", primaryCount === 1, `antall=${primaryCount}`);
+  const footer = html.match(/<footer\b[^>]*class="site-footer"[\s\S]*?<\/footer>/);
+  check("«Neste handling» ligger i manager-footeren", Boolean(footer) && /next-action-strip/.test(footer[0]));
 
   // «Neste handling»-stripa skal være alltid synlig — ikke gjemt bak <details>.
   const strip = html.match(/<section\b[^>]*\bnext-action-strip\b[\s\S]*?<\/section>/);
