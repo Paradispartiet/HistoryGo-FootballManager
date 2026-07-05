@@ -213,6 +213,16 @@ for (const [name, save, load] of stores) {
 check("reset-sti finnes (localStorage.removeItem)", /localStorage\.removeItem\(/.test(app));
 requireHandler("resetMiniSeason");
 
+
+// ---- 12) Ligaspill før-sesong gate -----------------------------------------
+stage("12. Ligaspill før-sesong gate");
+check("onboarding bruker valgt stab, ikke bare tilgjengelig stab", app.includes("hiredStaff >= REQUIRED_STAFF_SIZE") && app.includes("Tilgjengelig stab teller først når du faktisk engasjerer dem"));
+check("klubbidentitet krever eksplisitt klubbanker eller aktiv league-save", app.includes("hasClubIdentity = hasPublicStart || (isLeagueSeasonActive()"));
+check("sesongstart bruker eksplisitt league-save/status", app.includes("activeLeagueSaveId") && app.includes("leagueSeasonStatus") && app.includes("isLeagueSeasonActive"));
+check("onboarding har egne steg for trening og sesongstart", app.includes('id: "trening"') && app.includes('id: "sesong"'));
+check("CTA ruter til konkrete flater", app.includes("activateLeagueOnboardingTarget") && app.includes("#unlockedPlayersList") && app.includes("#availableStaffList") && app.includes("#weeklyTrainingOptions"));
+check("kampdag gates av aktiv ligasesong i next-action", readFileSync(join(root, "src/football-next-action.js"), "utf8").includes("(!ctx.leagueModeActive || ctx.leagueSeasonActive)"));
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);
