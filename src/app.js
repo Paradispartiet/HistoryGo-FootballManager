@@ -209,6 +209,7 @@ const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
 const REQUIRED_SQUAD_SIZE = 15;
 const REQUIRED_STARTERS = 11;
 const REQUIRED_BENCH = 4;
+const REQUIRED_STAFF_SIZE = 3;
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -3855,7 +3856,8 @@ function normalizeGameStartState(value) {
   return {
     selectedMode,
     activeLeagueSaveId: typeof value?.activeLeagueSaveId === "string" ? value.activeLeagueSaveId : undefined,
-    activeScenarioId: typeof value?.activeScenarioId === "string" ? value.activeScenarioId : undefined
+    activeScenarioId: typeof value?.activeScenarioId === "string" ? value.activeScenarioId : undefined,
+    leagueSeasonStatus: typeof value?.leagueSeasonStatus === "string" ? value.leagueSeasonStatus : undefined
   };
 }
 
@@ -3886,6 +3888,32 @@ function isScenarioModeActive() {
 
 function isLeagueModeActive() {
   return state.gameStartState?.selectedMode === "league";
+}
+
+function isLeagueSeasonActive() {
+  return isLeagueModeActive() &&
+    Boolean(state.gameStartState?.activeLeagueSaveId) &&
+    state.gameStartState?.leagueSeasonStatus === "active" &&
+    state.miniSeason?.status === "active";
+}
+
+function activateLeagueOnboardingTarget(step) {
+  const targetByStep = {
+    startsted: { tab: "historygo", selector: "#publicStartPlaceSelect" },
+    klubb: { tab: "historygo", selector: "#publicStartAnchorStatus" },
+    spillere: { tab: "historygo", selector: "#unlockedPlayersList" },
+    stab: { tab: "historygo", selector: "#availableStaffList" },
+    ellever: { tab: "tactics", selector: "#formationSelect" },
+    formasjon: { tab: "tactics", selector: "#formationSelect" },
+    trening: { tab: "trening", selector: "#weeklyTrainingOptions" },
+    sesong: { tab: "dashboard", selector: "#leagueSeasonPanel", startSeason: true }
+  };
+  const target = targetByStep[step?.id] || { tab: step?.tab || "dashboard" };
+  if (target.startSeason) startLeagueSeasonFromOnboarding();
+  activateTab(target.tab);
+  if (target.selector) {
+    window.requestAnimationFrame(() => document.querySelector(target.selector)?.scrollIntoView({ behavior: "smooth", block: "center" }));
+  }
 }
 
 function activateRecommendedLeagueTab(teamFit = null) {
@@ -3967,19 +3995,26 @@ function getLeagueOnboardingSteps(teamFit) {
   const filled = assignments.filter((item) => item.player).length;
   const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
   const hasPublicStart = Boolean(getPublicStartAnchor());
-  const hasClubIdentity = hasPublicStart || normalizeLocalStart(state.teamMerits?.localStart).enabled || Number(availability.unlockedPlaceIds?.size || 0) > 0;
+  const hasClubIdentity = hasPublicStart || (isLeagueSeasonActive() && Boolean(state.gameStartState?.activeLeagueSaveId));
   const hiredStaff = Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds.length : 0;
   const hasFormation = Boolean(state.selectedFormationId);
   const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
+  const leagueActive = isLeagueSeasonActive();
   return [
-    { id: "startsted", title: "Velg offentlig startsted / klubbanker", done: hasPublicStart, detail: hasPublicStart ? `Startsted: ${getPublicStartAnchor().placeName}` : "Velg et offentlig History Go-sted – aldri privat adresse.", tab: "historygo" },
-    { id: "klubb", title: "Velg klubb / lagidentitet", done: hasClubIdentity, detail: hasClubIdentity ? "Klubbtilhørighet er knyttet til samling eller startsted." : "Startstedet gir lokal identitet, anbefalinger og klubbfølelse.", tab: "historygo" },
+    { id: "startsted", title: "Velg offentlig klubbanker", done: hasPublicStart, detail: hasPublicStart ? `Klubbanker: ${getPublicStartAnchor().placeName}` : "Velg et offentlig History Go-sted som klubbens trygge startpunkt – aldri privat adresse.", tab: "historygo" },
+    { id: "klubb", title: "Bekreft klubbidentitet", done: hasClubIdentity, detail: hasClubIdentity ? "Klubben har en eksplisitt valgt startanker for ligaspillet." : "Bekreft et klubbanker før laget behandles som en aktiv ligaklubb.", tab: "historygo" },
     { id: "spillere", title: "Hent spillere", done: Number(roster.unlockedCount || 0) >= REQUIRED_SQUAD_SIZE, detail: `${Number(roster.unlockedCount || 0)}/${REQUIRED_SQUAD_SIZE} spillere tilgjengelig. Bruk samling, nærområde, klubblink eller auto-fyll.`, tab: "historygo" },
-    { id: "stab", title: "Velg stab", done: hiredStaff >= 3 || Number(availability.unlockedStaff?.length || 0) >= 3, detail: `${Math.max(hiredStaff, Number(availability.unlockedStaff?.length || 0))} stabsvalg tilgjengelig – assistent, trenere, fysio og keepertrener støtter laget.`, tab: "historygo" },
+    { id: "stab", title: "Velg stab", done: hiredStaff >= REQUIRED_STAFF_SIZE, detail: `${hiredStaff}/${REQUIRED_STAFF_SIZE} stabsmedlemmer valgt. Tilgjengelig stab teller først når du faktisk engasjerer dem.`, tab: "historygo" },
     { id: "ellever", title: "Sett førsteellever og benk", done: filled >= REQUIRED_STARTERS && bench >= REQUIRED_BENCH, detail: `Startellever ${Math.min(filled, REQUIRED_STARTERS)}/${REQUIRED_STARTERS} · benk ${Math.min(bench, REQUIRED_BENCH)}/${REQUIRED_BENCH}.`, tab: "tactics" },
-    { id: "formasjon", title: "Velg formasjon", done: hasFormation, detail: hasFormation ? "Formasjonen er valgt og forklares på taktikkbrettet." : "Kun opplåste formasjoner kan brukes; låste valg forklares i formasjonspanelet.", tab: "tactics" },
-    { id: "sesong", title: "Start sesongen", done: Boolean(state.miniSeason), detail: state.miniSeason ? "Terminliste og tabell er aktive." : hasTraining ? "Klar til første ligakamp når oppsettet er komplett." : "Velg ukentlig treningsfokus før kampuka låses inn.", tab: hasTraining ? "kamp" : "trening" }
+    { id: "formasjon", title: "Velg formasjon", done: hasFormation, detail: hasFormation ? "Formasjonen er valgt og forklares på taktikkbrettet." : "Velg en spillbar formasjon før treningsuka låses inn.", tab: "tactics" },
+    { id: "trening", title: "Velg trening", done: hasTraining, detail: hasTraining ? "Ukas treningsprogram er valgt." : "Velg treningsfokus eller program slik at laget går inn i serieåpningen med en plan.", tab: "trening" },
+    { id: "sesong", title: "Start sesongen", done: leagueActive, detail: leagueActive ? "League-save, terminliste og tabell er aktive." : "Opprett league-save og terminliste når alle før-sesongsgrepene er klare.", tab: "dashboard" }
   ];
+}
+
+function isLeaguePreseasonReady(teamFit) {
+  const steps = getLeagueOnboardingSteps(teamFit);
+  return steps.filter((step) => step.id !== "sesong").every((step) => step.done);
 }
 
 function renderLeagueOnboarding(teamFit) {
@@ -3994,11 +4029,11 @@ function renderLeagueOnboarding(teamFit) {
   if (panel.hidden) return;
   const next = steps.find((step) => !step.done) || steps[steps.length - 1];
   if (elements.leagueOnboardingLead) {
-    elements.leagueOnboardingLead.textContent = `Pre-season setup: ${complete}/${steps.length} steg klare. Neste steg: ${next.title.toLowerCase()}.`;
+    elements.leagueOnboardingLead.textContent = `Før seriestart: ${complete}/${steps.length} managergrep klare. Neste steg: ${next.title.toLowerCase()}.`;
   }
   if (elements.leagueOnboardingPrimary) {
     elements.leagueOnboardingPrimary.textContent = next.title;
-    elements.leagueOnboardingPrimary.onclick = () => activateTab(next.tab);
+    elements.leagueOnboardingPrimary.onclick = () => activateLeagueOnboardingTarget(next);
   }
   list.replaceChildren();
   steps.forEach((step, index) => {
@@ -4181,15 +4216,18 @@ function resetMiniSeason() {
   renderApp();
 }
 
-// League Loop v0.2: i ligamodus ER sesongen terminlista. Den startes automatisk
-// (uten knapp) så snart troppen er kampklar, med samme rene motor som
-// prøveperioden — men uten scenario-sideeffekter (rører aldri
+// League Loop v0.2: i ligamodus ER sesongen terminlista. Den opprettes først
+// når før-sesongsgaten har eksplisitt aktivert en league-save, med samme rene
+// motor som prøveperioden — men uten scenario-sideeffekter (rører aldri
 // firstTimePlaythrough). Aktiv/fullført sesong røres ikke.
 function ensureLeagueSeason() {
-  if (!isLeagueModeActive() || state.miniSeason) {
+  if (!isLeagueModeActive() || state.miniSeason || !state.gameStartState?.activeLeagueSaveId) {
     return;
   }
-  if (!getAvailability().rosterReadiness.isReady) {
+  if (state.gameStartState?.leagueSeasonStatus !== "active") {
+    return;
+  }
+  if (!isLeaguePreseasonReady(getTeamFit())) {
     return;
   }
 
@@ -4212,10 +4250,27 @@ function ensureLeagueSeason() {
 
 // Etter fullført ligasesong: legg den bak deg og start neste. Rører kun
 // mini-sesong-state — aldri History Go-unlocks, merits eller Club Week.
+function startLeagueSeasonFromOnboarding() {
+  if (!isLeagueModeActive() || state.miniSeason?.status === "active") {
+    return;
+  }
+  if (!isLeaguePreseasonReady(getTeamFit())) {
+    return;
+  }
+  const saveId = state.gameStartState?.activeLeagueSaveId || `league_save_${Date.now()}`;
+  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, activeLeagueSaveId: saveId, leagueSeasonStatus: "active" });
+  saveGameStartState();
+  ensureLeagueSeason();
+  renderApp();
+}
+
 function startNewLeagueSeason() {
   if (!isLeagueModeActive() || state.miniSeason?.status === "active") {
     return;
   }
+  const saveId = state.gameStartState?.activeLeagueSaveId || `league_save_${Date.now()}`;
+  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, activeLeagueSaveId: saveId, leagueSeasonStatus: "active" });
+  saveGameStartState();
   state.miniSeason = null;
   saveMiniSeason();
   ensureLeagueSeason();
@@ -6577,7 +6632,10 @@ function buildNextActionContext(teamFit) {
     matchdayReady: Boolean(readiness.isReady),
     unreadThreads: getInboxAttentionCount(),
     hasUnseenReport: hasUnseenMatchReport(),
-    miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active",
+    miniSeasonActive: (isScenarioModeActive() || isLeagueModeActive()) && state.miniSeason?.status === "active",
+    leagueModeActive: isLeagueModeActive(),
+    leagueSeasonActive: isLeagueSeasonActive(),
+    leaguePreseasonReady: isLeagueModeActive() ? isLeaguePreseasonReady(teamFit) : true,
     scenarioModeActive: isScenarioModeActive(),
     firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
     clubWeek: clubWeekState
@@ -8916,7 +8974,7 @@ function renderLeagueSeason() {
 
   if (statusEl) {
     if (!season || !summary) {
-      statusEl.textContent = "Ligasesongen starter automatisk når troppen er kampklar (11 startere + 4 benk).";
+      statusEl.textContent = "Ligasesongen starter når før-sesongen er bekreftet: klubbanker, tropp, stab, ellever, formasjon og trening.";
     } else if (season.status === "completed") {
       statusEl.textContent = `Sesongen er fullført: ${summary.points} poeng på ${season.totalWeeks} kamper. Styret har gjort opp sin dom.`;
     } else {
@@ -12183,7 +12241,7 @@ function bindGameModeControls() {
       const mode = card.dataset.startMode;
       setStartModeAssistant(mode);
       if (mode === "league") {
-        selectGameMode("league", { activeLeagueSaveId: "default_league_save" });
+        selectGameMode("league", {});
         activateRecommendedLeagueTab(getTeamFit());
         renderApp();
         return;

@@ -77,6 +77,9 @@ function normalizeContext(context = {}) {
     unreadThreads: Math.max(0, toInt(context.unreadThreads)),
     hasUnseenReport: Boolean(context.hasUnseenReport),
     miniSeasonActive: Boolean(context.miniSeasonActive),
+    leagueModeActive: Boolean(context.leagueModeActive) || context.selectedMode === "league",
+    leagueSeasonActive: Boolean(context.leagueSeasonActive),
+    leaguePreseasonReady: Boolean(context.leaguePreseasonReady),
     scenarioModeActive: Boolean(context.scenarioModeActive) || context.selectedMode === "scenario",
     firstTime: context.firstTime && typeof context.firstTime === "object"
       ? {
@@ -335,7 +338,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 12) Laget er kampklart og treningsuka er valgt — sett kampplan og spill.
-  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasTrainingChoice && ctx.matchdayReady && !clubWeekGate.isBlocked && !ctx.hasUnseenReport && clubWeek?.phase !== "review") {
+  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasTrainingChoice && ctx.matchdayReady && (!ctx.leagueModeActive || ctx.leagueSeasonActive) && !clubWeekGate.isBlocked && !ctx.hasUnseenReport && clubWeek?.phase !== "review") {
     push({
       id: "play-match",
       tag: "Kampdag",

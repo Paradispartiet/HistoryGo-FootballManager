@@ -134,6 +134,15 @@ check("rapport sett peker videre mot «Gå til neste uke» i review", primary(ct
   check("scenario mode kan fortsatt gi Ajax-scenario", scenarioTitles.includes("Start Ajax 1971–73-scenario"));
 }
 
+
+// 12b) Ligaspill er en ekte pre-season gate: kampdag blir ikke primær før league-save/sesong er aktiv.
+{
+  const gated = ctx({ miniSeasonActive: false, leagueModeActive: true, leagueSeasonActive: false, leaguePreseasonReady: true });
+  check("ligaspill uten aktiv league-save gir ikke primær «Spill kamp»", primary(gated) !== "Spill kamp");
+  const active = ctx({ miniSeasonActive: true, leagueModeActive: true, leagueSeasonActive: true, leaguePreseasonReady: true });
+  check("ligaspill med aktiv league-save kan gi primær «Spill kamp»", primary(active) === "Spill kamp");
+}
+
 // 13) Fallback: review-fasen gir «Gå til neste uke», ellers «Gå til neste fase».
 check("review-fase gir «Gå til neste uke»", titles(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" } })).includes("Gå til neste uke"));
 check("ikke-review gir «Gå til neste fase»", titles(READY).includes("Gå til neste fase"));
