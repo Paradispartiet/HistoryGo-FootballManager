@@ -381,6 +381,10 @@ const elements = {
   // Legacy id: firstTimePlaythroughCard is now used as the game mode card.
   // Do not treat it as mandatory onboarding.
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
+  leagueOnboardingPanel: document.querySelector("#leagueOnboardingPanel"),
+  leagueOnboardingLead: document.querySelector("#leagueOnboardingLead"),
+  leagueOnboardingPrimary: document.querySelector("#leagueOnboardingPrimary"),
+  leagueOnboardingSteps: document.querySelector("#leagueOnboardingSteps"),
   gameModeStatusCard: document.querySelector("#gameModeStatusCard"),
   gameModeStatusTitle: document.querySelector("#gameModeStatusTitle"),
   gameModeStatusText: document.querySelector("#gameModeStatusText"),
@@ -3953,6 +3957,64 @@ function buildFirstTimeNextActionState(teamFit, readiness = null) {
     opponentName: opponent?.displayName || "Ajax 1971–73 — Totalfotball",
     readiness: readiness || (teamFit ? getMatchdayReadiness(teamFit) : { isReady: false })
   };
+}
+
+
+function getLeagueOnboardingSteps(teamFit) {
+  const availability = getAvailability();
+  const roster = availability.rosterReadiness || {};
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const filled = assignments.filter((item) => item.player).length;
+  const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
+  const hasPublicStart = Boolean(getPublicStartAnchor());
+  const hasClubIdentity = hasPublicStart || normalizeLocalStart(state.teamMerits?.localStart).enabled || Number(availability.unlockedPlaceIds?.size || 0) > 0;
+  const hiredStaff = Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds.length : 0;
+  const hasFormation = Boolean(state.selectedFormationId);
+  const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
+  return [
+    { id: "startsted", title: "Velg offentlig startsted / klubbanker", done: hasPublicStart, detail: hasPublicStart ? `Startsted: ${getPublicStartAnchor().placeName}` : "Velg et offentlig History Go-sted – aldri privat adresse.", tab: "historygo" },
+    { id: "klubb", title: "Velg klubb / lagidentitet", done: hasClubIdentity, detail: hasClubIdentity ? "Klubbtilhørighet er knyttet til samling eller startsted." : "Startstedet gir lokal identitet, anbefalinger og klubbfølelse.", tab: "historygo" },
+    { id: "spillere", title: "Hent spillere", done: Number(roster.unlockedCount || 0) >= REQUIRED_SQUAD_SIZE, detail: `${Number(roster.unlockedCount || 0)}/${REQUIRED_SQUAD_SIZE} spillere tilgjengelig. Bruk samling, nærområde, klubblink eller auto-fyll.`, tab: "historygo" },
+    { id: "stab", title: "Velg stab", done: hiredStaff >= 3 || Number(availability.unlockedStaff?.length || 0) >= 3, detail: `${Math.max(hiredStaff, Number(availability.unlockedStaff?.length || 0))} stabsvalg tilgjengelig – assistent, trenere, fysio og keepertrener støtter laget.`, tab: "historygo" },
+    { id: "ellever", title: "Sett førsteellever og benk", done: filled >= REQUIRED_STARTERS && bench >= REQUIRED_BENCH, detail: `Startellever ${Math.min(filled, REQUIRED_STARTERS)}/${REQUIRED_STARTERS} · benk ${Math.min(bench, REQUIRED_BENCH)}/${REQUIRED_BENCH}.`, tab: "tactics" },
+    { id: "formasjon", title: "Velg formasjon", done: hasFormation, detail: hasFormation ? "Formasjonen er valgt og forklares på taktikkbrettet." : "Kun opplåste formasjoner kan brukes; låste valg forklares i formasjonspanelet.", tab: "tactics" },
+    { id: "sesong", title: "Start sesongen", done: Boolean(state.miniSeason), detail: state.miniSeason ? "Terminliste og tabell er aktive." : hasTraining ? "Klar til første ligakamp når oppsettet er komplett." : "Velg ukentlig treningsfokus før kampuka låses inn.", tab: hasTraining ? "kamp" : "trening" }
+  ];
+}
+
+function renderLeagueOnboarding(teamFit) {
+  const panel = elements.leagueOnboardingPanel;
+  const list = elements.leagueOnboardingSteps;
+  if (!panel || !list) return;
+  const active = isLeagueModeActive();
+  const steps = getLeagueOnboardingSteps(teamFit);
+  const complete = steps.filter((step) => step.done).length;
+  const done = complete === steps.length;
+  panel.hidden = !active || done;
+  if (panel.hidden) return;
+  const next = steps.find((step) => !step.done) || steps[steps.length - 1];
+  if (elements.leagueOnboardingLead) {
+    elements.leagueOnboardingLead.textContent = `Pre-season setup: ${complete}/${steps.length} steg klare. Neste steg: ${next.title.toLowerCase()}.`;
+  }
+  if (elements.leagueOnboardingPrimary) {
+    elements.leagueOnboardingPrimary.textContent = next.title;
+    elements.leagueOnboardingPrimary.onclick = () => activateTab(next.tab);
+  }
+  list.replaceChildren();
+  steps.forEach((step, index) => {
+    const item = document.createElement("li");
+    item.className = step.done ? "is-done" : "";
+    const number = document.createElement("span");
+    number.textContent = step.done ? "✓" : String(index + 1);
+    const body = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = step.title;
+    const detail = document.createElement("small");
+    detail.textContent = step.detail;
+    body.append(title, detail);
+    item.append(number, body);
+    list.append(item);
+  });
 }
 
 function renderGameModeStatus(teamFit) {
@@ -11819,6 +11881,7 @@ function renderApp() {
   renderRosterReadiness();
   renderTacticalSystemPanel();
   renderSidePanel(teamFit);
+  renderLeagueOnboarding(teamFit);
   renderNextActionStrip(teamFit);
   renderDecisionCards(teamFit);
   renderSuggestedSetups(teamFit);
