@@ -386,6 +386,14 @@ const elements = {
   leagueOnboardingLead: document.querySelector("#leagueOnboardingLead"),
   leagueOnboardingPrimary: document.querySelector("#leagueOnboardingPrimary"),
   leagueOnboardingSteps: document.querySelector("#leagueOnboardingSteps"),
+  leagueClubCard: document.querySelector("#leagueClubCard"),
+  leagueClubName: document.querySelector("#leagueClubName"),
+  leagueClubAnchor: document.querySelector("#leagueClubAnchor"),
+  leagueClubStatus: document.querySelector("#leagueClubStatus"),
+  leagueClubCompetition: document.querySelector("#leagueClubCompetition"),
+  leagueClubBoardGoal: document.querySelector("#leagueClubBoardGoal"),
+  leagueClubObjective: document.querySelector("#leagueClubObjective"),
+  leagueClubNextAction: document.querySelector("#leagueClubNextAction"),
   gameModeStatusCard: document.querySelector("#gameModeStatusCard"),
   gameModeStatusTitle: document.querySelector("#gameModeStatusTitle"),
   gameModeStatusText: document.querySelector("#gameModeStatusText"),
@@ -3857,7 +3865,13 @@ function normalizeGameStartState(value) {
     selectedMode,
     activeLeagueSaveId: typeof value?.activeLeagueSaveId === "string" ? value.activeLeagueSaveId : undefined,
     activeScenarioId: typeof value?.activeScenarioId === "string" ? value.activeScenarioId : undefined,
-    leagueSeasonStatus: typeof value?.leagueSeasonStatus === "string" ? value.leagueSeasonStatus : undefined
+    leagueSeasonStatus: typeof value?.leagueSeasonStatus === "string" ? value.leagueSeasonStatus : undefined,
+    clubName: typeof value?.clubName === "string" ? value.clubName : undefined,
+    leagueName: typeof value?.leagueName === "string" ? value.leagueName : undefined,
+    seasonLabel: typeof value?.seasonLabel === "string" ? value.seasonLabel : undefined,
+    boardExpectation: typeof value?.boardExpectation === "string" ? value.boardExpectation : undefined,
+    seasonObjective: typeof value?.seasonObjective === "string" ? value.seasonObjective : undefined,
+    createdAt: typeof value?.createdAt === "string" ? value.createdAt : undefined
   };
 }
 
@@ -3895,6 +3909,58 @@ function isLeagueSeasonActive() {
     Boolean(state.gameStartState?.activeLeagueSaveId) &&
     state.gameStartState?.leagueSeasonStatus === "active" &&
     state.miniSeason?.status === "active";
+}
+
+function getLeagueStatusLabel(status = state.gameStartState?.leagueSeasonStatus, season = state.miniSeason) {
+  if (status === "completed" || season?.status === "completed") return "Fullført sesong";
+  if (status === "active" && season?.status === "active") return "Aktiv sesong";
+  return "Før sesong";
+}
+
+function getTemporaryClubName(anchor = getPublicStartAnchor()) {
+  const raw = state.gameStartState?.clubName;
+  if (typeof raw === "string" && raw.trim()) return { name: raw.trim(), temporary: false };
+  const placeName = anchor?.placeName || "History Go";
+  const safePlace = String(placeName).replace(/\s*\([^)]*\)\s*/g, " ").replace(/[^\p{L}0-9 .'-]/gu, "").trim() || "History Go";
+  return { name: `${safePlace} FK`, temporary: true };
+}
+
+function getLeagueSaveModel() {
+  const anchor = getPublicStartAnchor();
+  const season = state.miniSeason;
+  const club = getTemporaryClubName(anchor);
+  const status = getLeagueStatusLabel(state.gameStartState?.leagueSeasonStatus, season);
+  return {
+    activeLeagueSaveId: state.gameStartState?.activeLeagueSaveId || null,
+    leagueSeasonStatus: status,
+    clubName: club.name,
+    temporaryClubName: club.temporary,
+    publicStartAnchor: anchor,
+    placeName: anchor?.placeName || "Klubbanker ikke valgt",
+    leagueName: state.gameStartState?.leagueName || "HG Liga",
+    seasonLabel: state.gameStartState?.seasonLabel || "Sesong 1",
+    boardExpectation: state.gameStartState?.boardExpectation || season?.boardExpectation || "Styret vil se en tydelig klubbidentitet og et kampklart lag.",
+    seasonObjective: state.gameStartState?.seasonObjective || season?.seasonGoal || "Fullfør før-sesong og gjør klubben klar for serieåpning.",
+    createdAt: state.gameStartState?.createdAt || null
+  };
+}
+
+function createLeagueSaveExtras() {
+  const model = getLeagueSaveModel();
+  return {
+    activeLeagueSaveId: model.activeLeagueSaveId || `league_save_${Date.now()}`,
+    leagueSeasonStatus: "active",
+    clubName: model.clubName,
+    leagueName: model.leagueName,
+    seasonLabel: model.seasonLabel,
+    boardExpectation: model.boardExpectation,
+    seasonObjective: model.seasonObjective,
+    createdAt: model.createdAt || new Date().toISOString()
+  };
+}
+
+function clearLeagueSaveState() {
+  state.gameStartState = normalizeGameStartState({ selectedMode: state.gameStartState?.selectedMode || null });
 }
 
 function activateLeagueOnboardingTarget(step) {
@@ -4052,6 +4118,27 @@ function renderLeagueOnboarding(teamFit) {
   });
 }
 
+function renderLeagueClubCard(teamFit) {
+  const card = elements.leagueClubCard;
+  if (!card) return;
+  card.hidden = !isLeagueModeActive();
+  if (card.hidden) return;
+  const model = getLeagueSaveModel();
+  const nextMatch = getCurrentMiniSeasonMatch(state.miniSeason);
+  const nextAction = state.miniSeason?.status === "active" && nextMatch
+    ? `Neste kamp: ${nextMatch.opponentName} (runde ${nextMatch.round})`
+    : isLeaguePreseasonReady(teamFit)
+      ? "Start sesongen fra før-sesongspanelet"
+      : "Fullfør før-sesong: klubbanker, tropp, stab, ellever og trening";
+  if (elements.leagueClubName) elements.leagueClubName.textContent = model.temporaryClubName ? `${model.clubName} (midlertidig navn)` : model.clubName;
+  if (elements.leagueClubAnchor) elements.leagueClubAnchor.textContent = model.publicStartAnchor ? `Klubbanker / hjemsted: ${model.placeName}` : "Klubbanker / hjemsted: ikke valgt ennå";
+  if (elements.leagueClubStatus) elements.leagueClubStatus.textContent = model.leagueSeasonStatus;
+  if (elements.leagueClubCompetition) elements.leagueClubCompetition.textContent = `${model.leagueName} · ${model.seasonLabel}`;
+  if (elements.leagueClubBoardGoal) elements.leagueClubBoardGoal.textContent = model.boardExpectation;
+  if (elements.leagueClubObjective) elements.leagueClubObjective.textContent = model.seasonObjective;
+  if (elements.leagueClubNextAction) elements.leagueClubNextAction.textContent = nextAction;
+}
+
 function renderGameModeStatus(teamFit) {
   const selectedMode = state.gameStartState?.selectedMode || null;
   const chooser = elements.firstTimePlaythroughCard;
@@ -4061,8 +4148,11 @@ function renderGameModeStatus(teamFit) {
   if (status) status.hidden = selectedMode === null;
 
   if (selectedMode === "league") {
+    const leagueStatus = getLeagueStatusLabel();
     if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Ligaspill";
-    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Ligaspill aktivt. Bygg troppen, sett laget og spill neste ligakamp. Scenarioer ligger i egen fane.";
+    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = leagueStatus === "Før sesong"
+      ? "Før sesong: bygg klubbidentitet, tropp, stab, startellever og trening før league-save aktiveres."
+      : "Aktiv klubb-save: følg terminlista, tren laget og spill neste ligakamp. Scenarioer ligger i egen fane.";
   } else if (selectedMode === "scenario") {
     if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Scenario";
     if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Ajax 1971–73 er valgt. Scenarioer og prøveperiode styres fra scenarioflyten.";
@@ -4094,6 +4184,7 @@ function renderGameModeStatus(teamFit) {
 }
 
 function renderFirstTimePlaythrough(teamFit) {
+  renderLeagueClubCard(teamFit);
   renderGameModeStatus(teamFit);
   const card = elements.firstTimePlaythroughCard;
   if (!card || card.hidden) return;
@@ -4212,6 +4303,10 @@ function resetMiniSeason() {
     return;
   }
   state.miniSeason = null;
+  if (isLeagueModeActive()) {
+    clearLeagueSaveState();
+    saveGameStartState();
+  }
   saveMiniSeason();
   renderApp();
 }
@@ -4257,8 +4352,7 @@ function startLeagueSeasonFromOnboarding() {
   if (!isLeaguePreseasonReady(getTeamFit())) {
     return;
   }
-  const saveId = state.gameStartState?.activeLeagueSaveId || `league_save_${Date.now()}`;
-  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, activeLeagueSaveId: saveId, leagueSeasonStatus: "active" });
+  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, ...createLeagueSaveExtras() });
   saveGameStartState();
   ensureLeagueSeason();
   renderApp();
@@ -4268,8 +4362,7 @@ function startNewLeagueSeason() {
   if (!isLeagueModeActive() || state.miniSeason?.status === "active") {
     return;
   }
-  const saveId = state.gameStartState?.activeLeagueSaveId || `league_save_${Date.now()}`;
-  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, activeLeagueSaveId: saveId, leagueSeasonStatus: "active" });
+  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, ...createLeagueSaveExtras() });
   saveGameStartState();
   state.miniSeason = null;
   saveMiniSeason();
@@ -12264,6 +12357,7 @@ function bindGameModeControls() {
         activateTab("scenarios");
         return;
       }
+      clearLeagueSaveState();
       state.gameStartState = normalizeGameStartState(null);
       saveGameStartState();
       activateTab("dashboard");

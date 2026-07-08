@@ -8,7 +8,14 @@
 // Motoren er ren (ingen DOM/fetch/localStorage), så den testes isolert uten et
 // nettleser-DOM. Standardbibliotek, ingen avhengigheter. Exit 1 ved brudd.
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { computeNextActions, NEXT_ACTION_TYPES } from "../src/football-next-action.js";
+
+const root = join(fileURLToPath(new URL("..", import.meta.url)));
+const appSource = readFileSync(join(root, "src/app.js"), "utf8");
+const htmlSource = readFileSync(join(root, "index.html"), "utf8");
 
 const failures = [];
 const check = (label, ok) => {
@@ -142,6 +149,13 @@ check("rapport sett peker videre mot «Gå til neste uke» i review", primary(ct
   const active = ctx({ miniSeasonActive: true, leagueModeActive: true, leagueSeasonActive: true, leaguePreseasonReady: true });
   check("ligaspill med aktiv league-save kan gi primær «Spill kamp»", primary(active) === "Spill kamp");
 }
+
+// 12c) Klubb-save-kortet er wiret i ligamodus uten å åpne kampdag før aktiv save.
+check("league save får id når sesong starter", appSource.includes("activeLeagueSaveId: model.activeLeagueSaveId || `league_save_${Date.now()}`"));
+check("klubbkort vises i ligamodus", htmlSource.includes('id="leagueClubCard"') && appSource.includes("card.hidden = !isLeagueModeActive()"));
+check("klubbkort viser klubbanker", htmlSource.includes('id="leagueClubAnchor"') && appSource.includes("Klubbanker / hjemsted"));
+check("leagueSeasonStatus vises som norsk managerstatus", appSource.includes("Før sesong") && appSource.includes("Aktiv sesong") && appSource.includes("Fullført sesong"));
+check("aktiv save viser ligastatus/terminliste", htmlSource.includes("Terminliste og tabell") && appSource.includes("getCurrentMiniSeasonMatch(state.miniSeason)"));
 
 // 13) Fallback: review-fasen gir «Gå til neste uke», ellers «Gå til neste fase».
 check("review-fase gir «Gå til neste uke»", titles(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" } })).includes("Gå til neste uke"));

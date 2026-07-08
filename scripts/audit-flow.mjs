@@ -222,6 +222,11 @@ check("sesongstart bruker eksplisitt league-save/status", app.includes("activeLe
 check("onboarding har egne steg for trening og sesongstart", app.includes('id: "trening"') && app.includes('id: "sesong"'));
 check("CTA ruter til konkrete flater", app.includes("activateLeagueOnboardingTarget") && app.includes("#unlockedPlayersList") && app.includes("#availableStaffList") && app.includes("#weeklyTrainingOptions"));
 check("kampdag gates av aktiv ligasesong i next-action", readFileSync(join(root, "src/football-next-action.js"), "utf8").includes("(!ctx.leagueModeActive || ctx.leagueSeasonActive)"));
+check("league-save-modell får id og norsk status", app.includes("function getLeagueSaveModel") && app.includes("activeLeagueSaveId") && app.includes("Før sesong") && app.includes("Aktiv sesong") && app.includes("Fullført sesong"));
+check("klubbkort vises i ligamodus", html.includes('id="leagueClubCard"') && app.includes("renderLeagueClubCard(teamFit)") && app.includes("card.hidden = !isLeagueModeActive()"));
+check("klubbkort viser klubbanker", html.includes('id="leagueClubAnchor"') && app.includes("Klubbanker / hjemsted") && app.includes("model.placeName"));
+check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getCurrentMiniSeasonMatch(state.miniSeason)"));
+check("nullstilling rydder league-save-data uten unlock-reset", app.includes("function clearLeagueSaveState") && app.includes("if (isLeagueModeActive())") && !app.includes("placeUnlocks = []"));
 
 // ---- Rapport ----------------------------------------------------------------
 
