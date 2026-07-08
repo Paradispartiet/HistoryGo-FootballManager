@@ -405,6 +405,13 @@ const elements = {
   leagueStatusBench: document.querySelector("#leagueStatusBench"),
   leagueStatusTraining: document.querySelector("#leagueStatusTraining"),
   leagueStatusInbox: document.querySelector("#leagueStatusInbox"),
+  portalNextMatch: document.querySelector("#portalNextMatch"),
+  portalMatchHint: document.querySelector("#portalMatchHint"),
+  portalPriorityAction: document.querySelector("#portalPriorityAction"),
+  portalPriorityTag: document.querySelector("#portalPriorityTag"),
+  portalPriorityTitle: document.querySelector("#portalPriorityTitle"),
+  portalPriorityHint: document.querySelector("#portalPriorityHint"),
+  portalInboxStatus: document.querySelector("#portalInboxStatus"),
   firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
@@ -4176,11 +4183,14 @@ function renderGameModeStatus(teamFit) {
     || (teamFit && getMatchdayReadiness(teamFit).isReady ? "klar" : "låst");
   if (elements.leagueStatusWeek) elements.leagueStatusWeek.textContent = `Uke ${Number(state.clubWeekState?.week) || 1}`;
   if (elements.leagueStatusNextMatch) elements.leagueStatusNextMatch.textContent = `Neste kamp: ${nextMatch}`;
+  if (elements.portalNextMatch) elements.portalNextMatch.textContent = `Neste kamp: ${nextMatch}`;
+  if (elements.portalMatchHint) elements.portalMatchHint.textContent = scheduledOpponent?.homeAway ? `${scheduledOpponent.homeAway === "home" ? "Hjemme" : "Borte"} · klargjør kampplan og kamptropp.` : "Sett startellever, benk og kampplan før kampdag.";
   if (elements.leagueStatusSquad) elements.leagueStatusSquad.textContent = `Tropp: ${Number(roster.unlockedCount || 0)}/15`;
   if (elements.leagueStatusLineup) elements.leagueStatusLineup.textContent = `Startellever: ${Math.min(filled, 11)}/11`;
   if (elements.leagueStatusBench) elements.leagueStatusBench.textContent = `Benk: ${Math.min(bench, 4)}/4`;
   if (elements.leagueStatusTraining) elements.leagueStatusTraining.textContent = `Trening: ${training}`;
   if (elements.leagueStatusInbox) elements.leagueStatusInbox.textContent = `Innboks: ${unread > 0 ? `${unread} ulest` : "lest"}`;
+  if (elements.portalInboxStatus) elements.portalInboxStatus.textContent = `Assistentråd: ${unread > 0 ? `${unread} ulest` : "rolig"}`;
 }
 
 function renderFirstTimePlaythrough(teamFit) {
@@ -6810,6 +6820,13 @@ function renderNextActionStrip(teamFit) {
   if (elements.nextActionPrimaryTag) elements.nextActionPrimaryTag.textContent = primary.tag;
   if (elements.nextActionPrimaryTitle) elements.nextActionPrimaryTitle.textContent = primary.title;
   if (elements.nextActionPrimaryHint) elements.nextActionPrimaryHint.textContent = primary.hint;
+  if (elements.portalPriorityTag) elements.portalPriorityTag.textContent = primary.tag || "Prioritet";
+  if (elements.portalPriorityTitle) elements.portalPriorityTitle.textContent = primary.title;
+  if (elements.portalPriorityHint) elements.portalPriorityHint.textContent = primary.hint;
+  if (elements.portalPriorityAction) {
+    elements.portalPriorityAction.disabled = typeof primary.run !== "function";
+    elements.portalPriorityAction.onclick = typeof primary.run === "function" ? primary.run : null;
+  }
   primaryButton.disabled = typeof primary.run !== "function";
   // Onclick-property (ikke addEventListener) hindrer at handlere hoper seg opp
   // mellom renders.

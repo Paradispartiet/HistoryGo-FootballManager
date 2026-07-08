@@ -175,6 +175,30 @@
         <button id="changeGameModeButton" type="button" class="shortcut-button">Bytt modus</button>
       </section>
 
+
+      <section class="manager-portal" aria-label="Manager Portal">
+        <article class="portal-card portal-club-card">
+          <p class="eyebrow">Klubbkontor</p>
+          <h2>Manager Portal</h2>
+          <p class="muted-text">Start dagen her: klubbstatus, neste kamp, assistentråd og ukas tydeligste valg.</p>
+        </article>
+        <button type="button" class="portal-card portal-match-card" data-tab-target="kamp">
+          <span class="eyebrow">Neste kamp</span>
+          <strong id="portalNextMatch">Neste kamp: låst</strong>
+          <small id="portalMatchHint">Sett startellever, benk og kampplan før kampdag.</small>
+        </button>
+        <button type="button" class="portal-card portal-priority-card" id="portalPriorityAction">
+          <span class="eyebrow" id="portalPriorityTag">Prioritet</span>
+          <strong id="portalPriorityTitle">Gjør laget klart</strong>
+          <small id="portalPriorityHint">Følg assistentens anbefalte neste handling.</small>
+        </button>
+        <button type="button" class="portal-card portal-inbox-card" data-tab-target="inbox">
+          <span class="eyebrow">Assistentråd</span>
+          <strong id="portalInboxStatus">Innboks: lest</strong>
+          <small>Stab, styre, speiding og garderobe samles som meldingskort.</small>
+        </button>
+      </section>
+
       <!-- Toppstripe: klubbstatus -->
       <section class="club-topbar" aria-label="Klubbstatus">
         <div class="topbar-identity">
@@ -354,7 +378,7 @@
             </form>
           </div>
 
-          <p class="pitch-hint">Dra spillerne for å endre posisjon. Klikk en spiller for å åpne profilen til høyre.</p>
+          <p class="pitch-hint">Taktikkrom: dra spillerbrikkene på banen, klikk for rollefit og bruk benken som kamptropp.</p>
           <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
 
           <!-- Kompakt taktisk systempanel for valgt historisk formasjon. Fylles
@@ -434,9 +458,9 @@
         <div class="roster-readiness-head">
           <div>
             <p class="eyebrow">Tropp og benk</p>
-            <h2>Krav: 15 spillere</h2>
+            <h2>Squad wall · kamptropp</h2>
             <p class="muted-text">
-              Du må ha 11 spillere i startelleveren og minst 4 benkespillere før manager-/kampdelen kan starte.
+              Spillerkortene under viser benk og reserver. Du trenger 11 i startelleveren og minst 4 kampklare benkespillere.
             </p>
           </div>
           <div id="rosterReadinessBadge" class="roster-readiness-badge">Låst</div>
@@ -447,7 +471,7 @@
           <article><span>Status</span><strong id="rosterReadyStatus">Låst</strong></article>
         </div>
 
-        <h3>Benk</h3>
+        <h3>Benk / reserver</h3>
         <div id="benchPlayersList" class="bench-player-list"></div>
         <p id="rosterReadinessNote" class="muted-text roster-readiness-note">Samle flere spillere via History Go-steder.</p>
       </section>
@@ -658,7 +682,7 @@
       <section class="dept-hero dept-hero-inbox">
         <div>
           <p class="eyebrow">Klubbens signaler før trening</p>
-          <h2>Innboks</h2>
+          <h2>Assistentråd</h2>
           <p class="dept-hero-lede">Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
         </div>
         <div class="dept-hero-stat">
