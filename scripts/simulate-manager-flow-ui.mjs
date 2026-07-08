@@ -85,7 +85,7 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
   const c = ctx({ clubWeekGate: { isBlocked: true, reason: "Kampdagfasen venter på en spilt kamp." } });
   check("stengt port gir primær «Spill ukens kamp»", primary(c) === "Spill ukens kamp");
   check("stengt port undertrykker «Spill kamp»", !titles(c).includes("Spill kamp"));
-  check("stengt port undertrykker «Gå til neste fase»", !titles(c).includes("Gå til neste fase") && !titles(c).includes("Gå til neste uke"));
+  check("stengt port undertrykker «Gå til neste fase»", !titles(c).includes("Gå til neste fase") && !titles(c).includes("Forbered neste kamp"));
 }
 
 // 7) Club Week-fasen prioriterer innboksen når klubben faktisk står i innboksfasen.
@@ -97,7 +97,7 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
 // 8) Review-fasen prioriterer ulest kamprapport før ny uke.
 {
   const c = ctx({ clubWeek: { week: 2, phase: "review", phaseLabel: "Oppsummering" }, hasUnseenReport: true });
-  check("review-fase + ulest rapport gir primær «Se kamprapporten»", primary(c) === "Se kamprapporten");
+  check("review-fase + ulest rapport gir primær «Se kampanalyse»", primary(c) === "Se kampanalyse");
 }
 
 // 9) Innboks er klubbens signalapparat og skal leses før treningsvalg også utenfor innboksfasen.
@@ -123,10 +123,10 @@ check("ufullstendig tropp gir primær «Skaff spillbar tropp»", primary(ctx({ r
 // 10) Alt klart → «Spill kamp» er primær.
 check("kampklart lag gir primær «Spill kamp»", primary(READY) === "Spill kamp");
 
-// 11) Sett-flagg for kamprapporten styrer «Se kamprapporten».
-check("etter kamp + ulest rapport gir primær «Se kamprapporten»", primary(ctx({ hasUnseenReport: true })) === "Se kamprapporten");
-check("sett rapport skjuler «Se kamprapporten»", !titles(ctx({ hasUnseenReport: false })).includes("Se kamprapporten"));
-check("rapport sett peker videre mot «Gå til neste uke» i review", primary(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" }, hasUnseenReport: false })) === "Gå til neste uke");
+// 11) Sett-flagg for kamprapporten styrer «Se kampanalyse».
+check("etter kamp + ulest rapport gir primær «Se kampanalyse»", primary(ctx({ hasUnseenReport: true })) === "Se kampanalyse");
+check("sett rapport skjuler «Se kampanalyse»", !titles(ctx({ hasUnseenReport: false })).includes("Se kampanalyse"));
+check("rapport sett peker videre mot «Forbered neste kamp» i review", primary(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" }, hasUnseenReport: false })) === "Forbered neste kamp");
 
 // 12) Ligaspill lekker ikke scenario-/mini-season-CTA-er inn i Neste handling.
 {
@@ -157,8 +157,8 @@ check("klubbkort viser klubbanker", htmlSource.includes('id="leagueClubAnchor"')
 check("leagueSeasonStatus vises som norsk managerstatus", appSource.includes("Før sesong") && appSource.includes("Aktiv sesong") && appSource.includes("Fullført sesong"));
 check("aktiv save viser ligastatus/terminliste", htmlSource.includes("Terminliste og tabell") && appSource.includes("getCurrentMiniSeasonMatch(state.miniSeason)"));
 
-// 13) Fallback: review-fasen gir «Gå til neste uke», ellers «Gå til neste fase».
-check("review-fase gir «Gå til neste uke»", titles(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" } })).includes("Gå til neste uke"));
+// 13) Fallback: review-fasen gir «Forbered neste kamp», ellers «Gå til neste fase».
+check("review-fase gir «Forbered neste kamp»", titles(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" } })).includes("Forbered neste kamp"));
 check("ikke-review gir «Gå til neste fase»", titles(READY).includes("Gå til neste fase"));
 
 // 14) Determinisme: lik input gir byte-identisk output.
@@ -201,7 +201,7 @@ check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isA
   check("Trening skiller anbefalt, trygt og dypere valg", app.includes("Anbefalt nå") && app.includes("Andre trygge valg") && app.includes("Dypere treningsprogram / historikk"));
   check("Trening gjør valgt uke tydelig", app.includes("Treningsuke valgt") && app.includes("Kort effekt/risiko"));
   check("Kampfanen har tydelig kampdag-gate", app.includes("renderMatchdayGate") && app.includes("Kampklar:") && app.includes("Primærhandling:"));
-  check("Kampfanen viser CTA-er for states", app.includes("Spill kamp") && app.includes("Fortsett kampen") && app.includes("Gå til neste uke"));
+  check("Kampfanen viser CTA-er for states", app.includes("Spill kamp") && app.includes("Fortsett kampen") && app.includes("Forbered neste kamp"));
   check("Kamprapporten folder dybde i details", app.includes("matchday-detail-drawer") && app.includes("Full kampanalyse"));
 }
 
