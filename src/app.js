@@ -3484,7 +3484,7 @@ function ensureMatchdayState() {
 
 // Sett-flagg for kamprapporten: en fersk kamp regnes som "ulest" til manageren
 // faktisk har åpnet Kamp-flaten. Brukes av Neste handling-stripa slik at
-// «Se kamprapporten» forsvinner når rapporten er sett.
+// «Se kampanalyse» forsvinner når rapporten er sett.
 function hasUnseenMatchReport() {
   const lastMatch = state.matchday?.lastMatch || null;
   if (!lastMatch) {
@@ -3687,7 +3687,7 @@ function chooseMatchdayDecision(optionId) {
   renderApp();
   // Club Week Orchestrator v1.1: spilt kamp nudger uka til Oppsummering-fasen
   // (gate-sikkert — kampdag→oppsummering krever nettopp en spilt kamp). Selve
-  // uke-rullen skjer fortsatt via «Gå til neste uke».
+  // uke-rullen skjer fortsatt via «Til managerkontoret».
   if (matchJustFinished) {
     syncClubWeekPhaseToProgress().catch(console.error);
   }
@@ -4135,7 +4135,7 @@ function renderLeagueClubCard(teamFit) {
   const nextAction = state.miniSeason?.status === "active" && nextMatch
     ? `Neste kamp: ${nextMatch.opponentName} (runde ${nextMatch.round})`
     : isLeaguePreseasonReady(teamFit)
-      ? "Start sesongen fra før-sesongspanelet"
+      ? "Start ligaspill fra før-sesongspanelet"
       : "Fullfør før-sesong: klubbanker, tropp, stab, ellever og trening";
   if (elements.leagueClubName) elements.leagueClubName.textContent = model.temporaryClubName ? `${model.clubName} (midlertidig navn)` : model.clubName;
   if (elements.leagueClubAnchor) elements.leagueClubAnchor.textContent = model.publicStartAnchor ? `Klubbanker / hjemsted: ${model.placeName}` : "Klubbanker / hjemsted: ikke valgt ennå";
@@ -4158,8 +4158,8 @@ function renderGameModeStatus(teamFit) {
     const leagueStatus = getLeagueStatusLabel();
     if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Ligaspill";
     if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = leagueStatus === "Før sesong"
-      ? "Før sesong: bygg klubbidentitet, tropp, stab, startellever og trening før league-save aktiveres."
-      : "Aktiv klubb-save: følg terminlista, tren laget og spill neste ligakamp. Scenarioer ligger i egen fane.";
+      ? "Før sesong: bygg klubbidentitet, tropp, stab, startellever og trening før ligaspillet åpner."
+      : "Aktiv ligasesong: følg terminlista, tren laget og spill neste ligakamp. Scenarioer ligger i egen fane.";
   } else if (selectedMode === "scenario") {
     if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Scenario";
     if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Ajax 1971–73 er valgt. Scenarioer og prøveperiode styres fra scenarioflyten.";
@@ -7574,7 +7574,7 @@ function renderMatchdayGate(container, teamFit) {
   const primary = session
     ? "Fortsett kampen"
     : lastMatch
-      ? (hasUnseenMatchReport() ? "Les rapport" : "Gå til neste uke")
+      ? (hasUnseenMatchReport() ? "Se kampanalyse" : "Forbered neste kamp")
       : isReady && hasTrainingChoice
         ? "Spill kamp"
         : "Fullfør forberedelser";
@@ -8061,7 +8061,7 @@ function renderMatchdayReport(container, lastMatch) {
   const nextWeekButton = document.createElement("button");
   nextWeekButton.type = "button";
   nextWeekButton.className = "matchday-next-week-button";
-  nextWeekButton.textContent = "Gå til neste uke";
+  nextWeekButton.textContent = "Til managerkontoret";
   nextWeekButton.addEventListener("click", async () => {
     markMatchReportSeen();
     // Kampen er spilt og rapporten lest: rull ukas gjenværende faser helt til
@@ -8073,6 +8073,8 @@ function renderMatchdayReport(container, lastMatch) {
       if (getClubWeekMatchdayGate().isBlocked) break;
       await advanceClubWeekPhaseAction();
     }
+    activateTab("dashboard");
+    renderApp();
   });
   card.append(nextWeekButton);
 
@@ -11968,7 +11970,7 @@ function renderRosterReadiness() {
     elements.rosterUnlockedCount.textContent = `${readiness.unlockedCount}/${REQUIRED_SQUAD_SIZE}`;
   }
   if (elements.rosterReadyStatus) {
-    elements.rosterReadyStatus.textContent = readiness.isReady ? "Åpen" : "Låst";
+    elements.rosterReadyStatus.textContent = readiness.isReady ? "Klar for kamp" : "Mangler spillere";
   }
 
   if (elements.rosterReadinessBadge) {
@@ -11989,7 +11991,7 @@ function renderRosterReadiness() {
     }
 
     elements.rosterReadinessNote.textContent = readiness.isReady
-      ? "Troppen er spillklar: 11 på banen og minst 4 på benken. Neste steg er kampmotor/motstanderprofil."
+      ? "Troppen er spillklar: 11 på banen og minst 4 på benken. Neste steg er å forberede kamp i Taktikkrommet."
       : `Ikke spillklar ennå: ${noteParts.join(", ") || "mangler troppsgrunnlag"}.`;
   }
 
@@ -12009,7 +12011,7 @@ function renderBenchList(players) {
   if (players.length === 0) {
     const empty = document.createElement("p");
     empty.className = "bench-empty muted-text";
-    empty.textContent = "Ingen benkespillere tilgjengelig ennå.";
+    empty.textContent = "Ingen kampklare benkespillere ennå. Hent flere spillere via History Go eller lokal starttropp.";
     list.append(empty);
     return;
   }
@@ -12499,7 +12501,7 @@ function activateTab(target) {
   }
 
   // Å åpne Kamp-flaten regnes som at manageren har sett kamprapporten — da
-  // forsvinner «Se kamprapporten» fra Neste handling-stripa. Stille persistens;
+  // forsvinner «Se kampanalyse» fra Neste handling-stripa. Stille persistens;
   // selve rerendret skjer der navigasjonen utløses (initTabs / handlinger).
   if (target === "kamp") {
     markMatchReportSeen();

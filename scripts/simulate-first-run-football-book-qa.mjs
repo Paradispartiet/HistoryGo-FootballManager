@@ -43,7 +43,7 @@ check("league first run does not expose Ajax scenario as next action", !titles(b
 check("scenario remains optional when explicitly selected", titles({ ...baseLeague, scenarioModeActive: true }).includes("Start Ajax 1971–73-scenario"));
 check("first-time player without enough players is routed to playable squad", primary({ ...baseLeague, roster: { enoughUnlocked: false, enoughBench: false, unlockedCount: 0 }, lineup: { ...baseLeague.lineup, emptyCount: 11, firstEmptySlotId: "GK" } })?.title === "Skaff spillbar tropp");
 check("local/public start with 15 players routes to team setup", primary({ ...baseLeague, roster: { enoughUnlocked: true, enoughBench: false, unlockedCount: 15 }, lineup: { ...baseLeague.lineup, emptyCount: 11, firstEmptySlotId: "GK" } })?.title === "Sett opp laget");
-check("after match report points to next week", primary({ ...baseLeague, hasTrainingChoice: true, hasUnseenReport: false, clubWeek: { week: 1, phase: "review", phaseLabel: "Oppsummering" } })?.title === "Gå til neste uke");
+check("after match report points to next match preparation", primary({ ...baseLeague, hasTrainingChoice: true, hasUnseenReport: false, clubWeek: { week: 1, phase: "review", phaseLabel: "Oppsummering" } })?.title === "Forbered neste kamp");
 
 const weakPointScenarios = [
   ["pressing_coherence_weak", "Press"],

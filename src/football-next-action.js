@@ -294,8 +294,8 @@ export function computeNextActions(context = {}) {
     push({
       id: "read-report",
       tag: "Rapport",
-      title: "Se kamprapporten",
-      hint: "Les hvorfor kampen ble som den ble før du planlegger neste uke.",
+      title: "Se kampanalyse",
+      hint: "Les resultat, nøkkelfaktorer og trenergrepet før du planlegger neste uke.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
     });
   }
@@ -331,8 +331,8 @@ export function computeNextActions(context = {}) {
     push({
       id: "read-report",
       tag: "Rapport",
-      title: "Se kamprapporten",
-      hint: "Les hvorfor kampen ble som den ble før du planlegger neste uke.",
+      title: "Se kampanalyse",
+      hint: "Les resultat, nøkkelfaktorer og trenergrepet før du planlegger neste uke.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
     });
   }
@@ -354,9 +354,9 @@ export function computeNextActions(context = {}) {
     push({
       id: "advance-club-week",
       tag: "Klubbuke",
-      title: isReview ? "Gå til neste uke" : "Gå til neste fase",
+      title: isReview ? "Forbered neste kamp" : "Gå til neste fase",
       hint: isReview
-        ? "Oppsummer uka og rull klubben videre."
+        ? "Oppsummer uka på kontoret og rull klubben videre mot neste kamp."
         : "Ingen åpne grep akkurat nå. Driv klubbuken videre.",
       action: { type: NEXT_ACTION_TYPES.CLUB_WEEK }
     });
