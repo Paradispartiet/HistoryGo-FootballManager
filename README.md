@@ -454,3 +454,14 @@ Ikke bygg flere likeverdige paneler før hovedveien er spillbar.
 Alt videre arbeid skal bevare denne setningen:
 
 > Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
+
+## Informasjonsnivåer i manager-UI
+
+HG Football Manager bruker progressiv visning for å holde toppflatene korte:
+
+1. **Beslutningslag** – hovedskjermene viser først hva som skjer nå, hva det betyr og én tydelig neste handling.
+2. **Romoversikt** – hvert rom grupperer innhold i få kort: lag, taktikk, kampdag, stab og klubb.
+3. **Detaljer** – rapporter, spillerprofiler, stabstekst og kampbrief åpnes med «Se detaljer», «Åpne rapport» eller tilsvarende utvidelser.
+4. **Analyse/rådata** – lange lister, tabeller og motorverdier ligger sekundært bak «Analyse», «Full rapport» eller «Se hele …».
+
+Målet er at ingen toppnivåflate skal være en database som default. Informasjon beholdes, men flyttes ned i nivåer slik at manageren først ser beslutningen og deretter kan åpne detaljer ved behov.

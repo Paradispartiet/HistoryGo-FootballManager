@@ -29,19 +29,19 @@
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M12 4.5v15"/><circle cx="12" cy="12" r="2.4"/><path d="M3.5 9h2.5v6H3.5"/><path d="M20.5 9H18v6h2.5"/>
         </svg>
-        <span class="nav-label">Taktikkrom</span>
+        <span class="nav-label">Lag</span>
       </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="inbox">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3.5" y="6" width="17" height="13" rx="2"/><path d="m4.5 7.5 7.5 6 7.5-6"/>
         </svg>
-        <span class="nav-label">Assistentråd</span>
+        <span class="nav-label">Stab</span>
       </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="trening">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6H11v13H5.5A1.5 1.5 0 0 1 4 17.5z"/><path d="M20 7.5A1.5 1.5 0 0 0 18.5 6H13v13h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>
         </svg>
-        <span class="nav-label">Trening</span>
+        <span class="nav-label">Klubb</span>
       </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="kamp">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -59,7 +59,7 @@
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 5.5h16"/><path d="M5.5 5.5v13"/><path d="M18.5 5.5v13"/><path d="M8 9h8"/><path d="M8 13h5"/>
         </svg>
-        <span class="nav-label">Scenarioer</span>
+        <span class="nav-label">Analyse</span>
       </button>
     </div>
       <div class="nav-office" role="presentation">
@@ -311,8 +311,8 @@
 
         <!-- Klubbhendelser -->
         <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
-          <details class="panel-details is-flush" open>
-            <summary>Klubbhendelser</summary>
+          <details class="panel-details is-flush">
+            <summary>Klubbhendelser · detaljer</summary>
             <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
           </details>
         </section>
@@ -378,7 +378,7 @@
             </form>
           </div>
 
-          <p class="pitch-hint">Taktikkrom: dra spillerbrikkene på banen, klikk for rollefit og bruk benken som kamptropp.</p>
+          <p class="pitch-hint">Visuelt først: sett brikker, formasjon og kampplan.</p>
           <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
 
           <!-- Kompakt taktisk systempanel for valgt historisk formasjon. Fylles
@@ -460,7 +460,7 @@
             <p class="eyebrow">Tropp og benk</p>
             <h2>Squad wall · kamptropp</h2>
             <p class="muted-text">
-              Spillerkortene under viser benk og reserver. Du trenger 11 i startelleveren og minst 4 kampklare benkespillere.
+              Benk og reserver ligger her. Full tropp vises ved behov.
             </p>
           </div>
           <div id="rosterReadinessBadge" class="roster-readiness-badge">Låst</div>
@@ -471,12 +471,15 @@
           <article><span>Kamptropp</span><strong id="rosterReadyStatus">Låst</strong></article>
         </div>
 
+        <details class="panel-details is-flush"><summary>Se hele troppen</summary>
         <h3>Spillerkort · benk og reserver</h3>
         <div id="benchPlayersList" class="bench-player-list"></div>
         <p id="rosterReadinessNote" class="muted-text roster-readiness-note">Samle flere spillere via History Go-steder.</p>
+        </details>
       </section>
 
       <!-- Sekundær innsikt: lagrapport + profil + motorens vurdering -->
+      <details class="panel panel-details-wrap"><summary>Analyse · full rapport</summary>
       <div class="insight-grid">
         <section class="panel report-panel">
           <p class="eyebrow">Lagrapport</p>
@@ -560,6 +563,7 @@
           </details>
         </section>
       </div>
+      </details>
     </div>
 
     <!-- ============================ KAMP ============================ -->
@@ -569,7 +573,7 @@
           <p class="eyebrow">Kampdag</p>
           <h2>Spill kamp</h2>
           <details class="panel-details">
-            <summary>Slik fungerer kampen</summary>
+            <summary>Se full kampbrief</summary>
             <p class="muted-text">
               Test det valgte historiske systemet mot en motstanderprofil. Kampen gir 3 hendelser
               der du tar managergrep med lesbar konsekvens, før resultatet og rapporten beregnes
@@ -586,11 +590,11 @@
           <div id="matchdayResult"></div>
         </section>
 
-        <section class="panel badge-effects-panel" aria-live="polite">
+        <section class="panel badge-effects-panel" aria-live="polite"><details class="panel-details is-flush"><summary>Analyse · badge-effekter</summary>
           <p class="eyebrow">History Go</p>
           <h2>Badge-effekter</h2>
           <p class="muted-text">Opptjente treningsbadges kan gi små bonuser til lagets taktiske metrics.</p>
-          <div id="badgeEffectsSummary" class="badge-effects-list"></div>
+          <div id="badgeEffectsSummary" class="badge-effects-list"></div></details>
         </section>
       </div>
     </div>
@@ -714,8 +718,10 @@
         </section>
 
         <section class="panel inbox-thread-panel inbox-archive" aria-label="Trådarkiv">
+          <details class="panel-details is-flush"><summary>Se hele innboksen</summary>
           <h3>Kan leses senere / Arkiv / historikk</h3>
           <div id="inboxThreadArchive" class="message-list"></div>
+          </details>
         </section>
       </div>
     </div>
@@ -785,7 +791,7 @@
           <h3>Stab og drift</h3>
           <p class="muted-text">Engasjert stab styres via History Go.</p>
           <p id="adminStaffCount" class="facility-level">0 ansatte</p>
-          <p id="adminStaffNote" class="muted-text">Stab hentes inn via History Go-progresjon.</p>
+          <details class="panel-details is-flush"><summary>Åpne rapport</summary><p id="adminStaffNote" class="muted-text">Stab hentes inn via History Go-progresjon.</p></details>
         </article>
         <article class="panel admin-side">
           <h3>Økonomi &amp; kontrakter</h3>
@@ -817,8 +823,10 @@
         <article class="panel market-feature">
           <p class="eyebrow">Omdømme</p>
           <h3>Klubbens temperatur</h3>
-          <p id="marketReputationNote" class="muted-text">Omdømmet følger medietrykket fra styret og pressen.</p>
-          <ul id="marketSignals" class="board-metrics" aria-label="Kommersielle signaler"></ul>
+          <p id="marketReputationNote" class="muted-text">Omdømmet følger medietrykket.</p>
+          <button type="button" class="shortcut-button" data-tab-target="board">Se styremål</button>
+          <details class="panel-details is-flush"><summary>Se detaljer</summary>
+          <ul id="marketSignals" class="board-metrics" aria-label="Kommersielle signaler"></ul></details>
         </article>
         <article class="panel market-side">
           <h3>Fans</h3>

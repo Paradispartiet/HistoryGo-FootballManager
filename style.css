@@ -7134,3 +7134,58 @@ button.portal-card:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* Information Hierarchy Pass v1: toppflater skal være korte, visuelle og handlingsrettede. */
+.panel > p.muted-text,
+.portal-card small,
+.dept-hero-lede,
+.facility-card .muted-text,
+.market-side .muted-text,
+.board-side .muted-text,
+.admin-side .muted-text,
+.inbox-signal-gate p,
+.pitch-hint {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.panel-details-wrap {
+  margin-top: var(--gap);
+}
+
+.panel-details-wrap > summary,
+.panel-details > summary {
+  cursor: pointer;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.dashboard-deep-panel,
+.club-week-event-log-panel,
+.manager-training-panel,
+.manager-knowledge-panel {
+  margin-top: 0;
+}
+
+.manager-portal,
+.squad-setup-checklist,
+.training-choice-grid,
+.facility-board,
+.admin-board,
+.market-board,
+.board-board {
+  align-items: stretch;
+}
+
+.matchday-actions .is-primary,
+.primary-action-button,
+.primary-button {
+  box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 10px 24px rgba(0,0,0,.25);
+}
+
+.inbox-archive .message-list,
+.panel-details-wrap .insight-grid {
+  margin-top: 14px;
+}
