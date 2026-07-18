@@ -21,6 +21,7 @@ export const NEXT_ACTION_TYPES = Object.freeze({
   TAB: "tab",
   SLOT: "slot",
   MINI_SEASON: "miniSeason",
+  LEAGUE_SEASON: "leagueSeason",
   CLUB_WEEK: "clubWeek"
 });
 
@@ -80,6 +81,9 @@ function normalizeContext(context = {}) {
     leagueModeActive: Boolean(context.leagueModeActive) || context.selectedMode === "league",
     leagueSeasonActive: Boolean(context.leagueSeasonActive),
     leaguePreseasonReady: Boolean(context.leaguePreseasonReady),
+    leaguePreseasonStep: context.leaguePreseasonStep && typeof context.leaguePreseasonStep === "object"
+      ? context.leaguePreseasonStep
+      : null,
     scenarioModeActive: Boolean(context.scenarioModeActive) || context.selectedMode === "scenario",
     firstTime: context.firstTime && typeof context.firstTime === "object"
       ? {
@@ -119,6 +123,25 @@ export function computeNextActions(context = {}) {
 
   const { lineup, roster, clubWeekGate, clubWeek } = ctx;
   const firstTime = ctx.firstTime;
+
+  if (!ctx.leagueModeActive && !ctx.scenarioModeActive && context.selectedMode === null) {
+    return [{ id: "choose-game-mode", tag: "Kom i gang", title: "Velg spillmodus", hint: "Velg Ligaspill, Scenario eller Treningsrom.", action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" } }];
+  }
+
+  // I ligamodus er før-sesongens første uferdige steg øverste sannhet. Club
+  // Week, innboks og kamp får ikke konkurrere før en aktiv terminliste finnes.
+  if (ctx.leagueModeActive && !ctx.leagueSeasonActive && ctx.leaguePreseasonStep) {
+    const step = ctx.leaguePreseasonStep;
+    return [{
+      id: `league-preseason-${step.id}`,
+      tag: "Før sesong",
+      title: step.title,
+      hint: step.detail || "Fullfør neste før-sesongsteg.",
+      action: step.id === "sesong"
+        ? { type: NEXT_ACTION_TYPES.LEAGUE_SEASON }
+        : { type: NEXT_ACTION_TYPES.TAB, tab: step.tab || "dashboard" }
+    }];
+  }
 
   // Playable First Run Gate v1: ingen ny spiller skal kunne sendes til
   // prøveperiode, kamp eller avansert managerflyt før spillerpoolen faktisk er

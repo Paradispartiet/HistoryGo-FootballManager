@@ -31,6 +31,26 @@ Det som finnes nå:
 4. **Relasjonsmotor** – forklarer hvilke roller som hjelper eller blokkerer hverandre.
 5. **History Go-unlocks** – steder gir spillere, stab, ekspertise, treningsprogrammer, badges og formasjoner.
 6. **Lokal/offentlig start** – kan gi en spillbar starttropp uten å skrive til ekte History Go-progresjon.
+
+### First-run Truth Pass v1
+
+En tom nettleser har nå én eksplisitt ligakontrakt: velg **Ligaspill**, velg et
+offentlig klubbanker, bekreft den save-lokale starttroppen (15 spillere, 11+4),
+engasjer tre tilgjengelige steds-/klubblinkede stabsprofiler, bekreft ellever,
+benk og formasjon, velg trening og start sesongen. Først da opprettes
+`activeLeagueSaveId`, en aktiv terminliste og en navngitt første ligakamp.
+
+Offentlig starttilgang er ikke en History Go-opplåsing. Den avleder midlertidig
+tilgang i den aktuelle manager-saven fra eksisterende `sourcePlaceIds` ved
+ankeret og de nærmeste koordinatfestede fotballstedene. Kandidatene er ekte
+profiler fra staff-katalogen, må engasjeres manuelt og deres steder blir aldri
+skrevet til `visited_places`, `hg_groundhopper_stats_v1` eller samlet-status.
+Ekte History Go-besøk eier fortsatt permanente unlocks.
+
+Før aktiv sesong bruker onboarding, ligastatus, Managerportalen og **Neste
+handling** det samme første uferdige før-sesongsteget. Innboks, Club Week og
+kamp kan derfor ikke overstyre porten, og «Neste kamp» vises bare for en aktiv
+sesong med en faktisk terminfestet motstander.
 7. **Stab, ekspertise og trening** – staff og ekspertise påvirker treningsprogrammer og læringsstøtte.
 8. **Off-pitch Parameters** – slitasje, moral, garderobe, press, styre/media og taktisk klarhet.
 9. **Innboks / klubbuke** – levende tråder, svarvalg, kontekstsignaler og klubbverdier.
@@ -259,7 +279,7 @@ Disse skal ikke være blokkere i v0.1:
 
 De kan være synlige som miljø/managerkontor, men de må merkes som **ikke del av første spillbare løkke** til de faktisk har interaksjon.
 
-## Umiddelbar ryddeplan
+## First-run-audit (historikk)
 
 ### 1. Fiks første handling
 
@@ -269,8 +289,8 @@ Når spillet starter, bygg Next Action-konteksten fra faktisk availability:
 if unlockedPlayers < 15:
   primary = "Skaff spillbar tropp"
   action = History Go / startmodus
-else if miniSeason not started:
-  primary = "Start prøveperiode"
+else if leagueSeason not active:
+  primary = firstIncompletePreseasonStep
 ```
 
 ### 2. Fiks First-Time-testen
@@ -281,13 +301,17 @@ Legg til en test/sim som bruker ekte seed-data:
 npm run sim:first-run-real-seed
 ```
 
-Den bør feile hvis første handling blir prøveperiode før spillerpoolen er klar.
+Den feiler hvis før-sesongen kan forbigås eller real-seed ikke gir en komplett,
+save-lokal vei til aktiv ligasesong.
 
 Minimumssjekker:
 
 - seed med bare KFUM Arena gir ikke kampklar tropp
 - primærhandling peker til startmodus / History Go
-- offentlig start eller lokal start kan gi inntil 15 spillere
+- alle offentlige starter gir 15 spillere og minst tre valgbare,
+  stedstilknyttede stabsprofiler
+- tre profiler må engasjeres eksplisitt før sesongen kan startes
+- aktiv league-save har en navngitt, terminfestet første motstander
 - etter 15 spillere kan flyten gå videre til Lag & taktikk
 - etter 11 + 4 kan flyten gå til Innboks / Trening / Kamp
 

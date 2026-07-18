@@ -46,6 +46,7 @@ import {
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
+import { getPublicStartStaffCandidates } from "./football-public-start-staff.js";
 import {
   normalizeRoleFamiliarity,
   recordMatchRoleUsage,
@@ -1959,13 +1960,24 @@ function computeAvailability() {
   });
 
   const staff = Array.isArray(state.staff) ? state.staff : [];
-  const unlockedStaff = staff.filter((member) => {
+  const normallyUnlockedStaff = staff.filter((member) => {
     if (!member || !member.id) {
       return false;
     }
     const sources = Array.isArray(member.sourcePlaceIds) ? member.sourcePlaceIds : [];
     return sources.some((placeId) => unlockedPlaceIds.has(placeId)) || explicitStaffIds.has(member.id);
   });
+  // Et offentlig klubbanker gir kun denne saven tilgang til nærmeste
+  // stedstilknyttede kandidater. Stedene legges aldri i unlockedPlaceIds eller
+  // History Go-lagring, og spilleren må fortsatt engasjere tre personer selv.
+  const publicStartStaff = getPublicStartStaffCandidates(
+    getPublicStartAnchor(),
+    staff,
+    Array.isArray(state.placeLocations?.places) ? state.placeLocations.places : [],
+    REQUIRED_STAFF_SIZE
+  );
+  const staffById = new Map([...normallyUnlockedStaff, ...publicStartStaff].map((member) => [member.id, member]));
+  const unlockedStaff = [...staffById.values()];
 
   // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
   // vurdert mot samlingen (steder, spillere, stab, badges).
@@ -4069,7 +4081,7 @@ function getLeagueOnboardingSteps(teamFit) {
   const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
   const hasPublicStart = Boolean(getPublicStartAnchor());
   const hasClubIdentity = hasPublicStart || (isLeagueSeasonActive() && Boolean(state.gameStartState?.activeLeagueSaveId));
-  const hiredStaff = Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds.length : 0;
+  const hiredStaff = getHiredStaff().length;
   const hasFormation = Boolean(state.selectedFormationId);
   const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
   const leagueActive = isLeagueSeasonActive();
@@ -4132,11 +4144,10 @@ function renderLeagueClubCard(teamFit) {
   if (card.hidden) return;
   const model = getLeagueSaveModel();
   const nextMatch = getCurrentMiniSeasonMatch(state.miniSeason);
-  const nextAction = state.miniSeason?.status === "active" && nextMatch
+  const preseasonStep = getLeagueOnboardingSteps(teamFit).find((step) => !step.done);
+  const nextAction = isLeagueSeasonActive() && nextMatch
     ? `Neste kamp: ${nextMatch.opponentName} (runde ${nextMatch.round})`
-    : isLeaguePreseasonReady(teamFit)
-      ? "Start ligaspill fra før-sesongspanelet"
-      : "Fullfør før-sesong: klubbanker, tropp, stab, ellever og trening";
+    : preseasonStep?.title || "Sesongen er ikke startet";
   if (elements.leagueClubName) elements.leagueClubName.textContent = model.temporaryClubName ? `${model.clubName} (midlertidig navn)` : model.clubName;
   if (elements.leagueClubAnchor) elements.leagueClubAnchor.textContent = model.publicStartAnchor ? `Klubbanker / hjemsted: ${model.placeName}` : "Klubbanker / hjemsted: ikke valgt ennå";
   if (elements.leagueClubStatus) elements.leagueClubStatus.textContent = model.leagueSeasonStatus;
@@ -4175,12 +4186,15 @@ function renderGameModeStatus(teamFit) {
   const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
   const training = state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "valgt" : "mangler";
   const unread = getInboxAttentionCount();
-  // Neste kamp: pågående kampsesjon vinner; ellers terminlistas neste
-  // motstander; ellers klar/låst-status.
+  // En kamp finnes for UI-et først når league-save og terminliste er aktive.
+  // Før det bruker status og portal samme første steg som onboarding/footeren.
   const scheduledOpponent = getMiniSeasonNextOpponent();
-  const nextMatch = state.matchday?.session?.opponent?.name
-    || scheduledOpponent?.name
-    || (teamFit && getMatchdayReadiness(teamFit).isReady ? "klar" : "låst");
+  const preseasonStep = isLeagueModeActive() && !isLeagueSeasonActive()
+    ? getLeagueOnboardingSteps(teamFit).find((step) => !step.done)
+    : null;
+  const nextMatch = isLeagueSeasonActive()
+    ? state.matchday?.session?.opponent?.name || scheduledOpponent?.name || "ikke terminfestet"
+    : preseasonStep?.title || "Sesongen er ikke startet";
   if (elements.leagueStatusWeek) elements.leagueStatusWeek.textContent = `Uke ${Number(state.clubWeekState?.week) || 1}`;
   if (elements.leagueStatusNextMatch) elements.leagueStatusNextMatch.textContent = `Neste kamp: ${nextMatch}`;
   if (elements.portalNextMatch) elements.portalNextMatch.textContent = `Neste kamp: ${nextMatch}`;
@@ -6706,7 +6720,11 @@ function buildNextActionContext(teamFit) {
   const gate = getClubWeekMatchdayGate();
   const clubWeekState = state.clubWeekState || null;
 
+  const leaguePreseasonStep = isLeagueModeActive() && !isLeagueSeasonActive()
+    ? getLeagueOnboardingSteps(teamFit).find((step) => !step.done) || null
+    : null;
   return {
+    selectedMode: state.gameStartState?.selectedMode || null,
     hasSession: Boolean(state.matchday?.session),
     opponentName: state.matchday?.session?.opponent?.name || null,
     roster: {
@@ -6739,6 +6757,7 @@ function buildNextActionContext(teamFit) {
     leagueModeActive: isLeagueModeActive(),
     leagueSeasonActive: isLeagueSeasonActive(),
     leaguePreseasonReady: isLeagueModeActive() ? isLeaguePreseasonReady(teamFit) : true,
+    leaguePreseasonStep,
     scenarioModeActive: isScenarioModeActive(),
     firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
     clubWeek: clubWeekState
@@ -6767,6 +6786,8 @@ function resolveNextActionRun(action) {
       return () => {
         startMiniSeason();
       };
+    case NEXT_ACTION_TYPES.LEAGUE_SEASON:
+      return () => startLeagueSeasonFromOnboarding();
     case NEXT_ACTION_TYPES.CLUB_WEEK:
       return () => {
         advanceClubWeekPhaseAction().catch(console.error);
