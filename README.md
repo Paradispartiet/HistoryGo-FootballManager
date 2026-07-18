@@ -83,6 +83,34 @@ aktiv modus.
 
 Hovedmodusen i HG Football Manager. Spilleren tar over en klubb og spiller en tradisjonell sesong med tropp, trening, terminliste, tabell, innboks og kampdag. Ligaspill er primærvalget fra start, og første handling skal alltid peke mot spillbar tropp, startellever, trening eller neste ligakamp.
 
+**Real League Season v1** består av åtte klubber, 14 serierunder og fire
+kamper per runde. En deterministisk circle-method lager først sju runder før
+returoppgjørene speiler hjemme/borte; den lagrede seed-en gir identisk
+terminliste etter refresh. Når managerkampen er ferdig, registreres den én
+gang og de tre andre kampene i runden simuleres deterministisk med klubbenes
+lette styrkeprofiler. Tabellen beregnes fra de 56 registrerte kampene etter
+3–1–0-regelen.
+
+Managerklubben kommer fra brukerens eksisterende league-save. De sju
+motstanderprofilene i `football-league-season.js` er FM-eide
+konkurranseprofiler med stabile klubb-ID-er, presentasjonsnavn, hjemmebane,
+styrke/form og taktisk identitet. De er ikke nye canonical History Go-data og
+påstår ingen historiske spillerrelasjoner eller tropper. Ligaflyten skriver
+aldri `visited_places`, `hg_groundhopper_stats_v1` eller andre History Go-
+unlocks.
+
+Ligaen lagres som `historygo-football-manager.league-season.v2` og snapshots
+som `leagueSeason` i den eksisterende mode-envelope. Scenario beholder sin
+separate `miniSeason` på fem kamper; treningsrommet får ingen ligatilstand.
+En eldre femukers league-mini-season beholdes urørt som legacy-historikk og
+tolkes aldri som en ny liga. Ny v2-liga opprettes separat når league-save-en
+er klar. Dermed er migreringen kopierende, idempotent og uten tap av manager,
+klubb, tropp, stab, laguttak eller taktikk.
+
+V1 har ikke opprykk/nedrykk, cuper, overganger, kontrakter, økonomi,
+stadionøkonomi eller komplette AI-spillertropper. Kampdag og taktikk bruker
+fortsatt de eksisterende motorene; ligaen eier bare konkurransestrukturen.
+
 ### Scenarioer
 
 Valgfrie korte utfordringer basert på historiske lag, taktiske ideer eller bestemte læringsmål. Eksempel: Ajax 1971–73 / totalfotball. Scenarioer kan bruke eksisterende femkampers prøveperiode, styreoppdrag og læringslogikk, men de skal startes aktivt fra Scenarioer-valget.

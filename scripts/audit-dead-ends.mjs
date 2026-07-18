@@ -220,7 +220,7 @@ stage("6. Mini-sesong isolert fra liga");
   );
   check(
     "ligasesongen starter automatisk uten scenario-sideeffekter",
-    /function ensureLeagueSeason\(\)[\s\S]{0,800}createMiniSeasonStart\(getMiniSeasonContext\(\)\)/.test(app)
+    /function ensureLeagueSeason\(\)[\s\S]{0,1200}createLeagueSeason\(\{/.test(app)
       && !/function ensureLeagueSeason\(\)[\s\S]{0,1200}firstTimePlaythrough/.test(app)
   );
 }

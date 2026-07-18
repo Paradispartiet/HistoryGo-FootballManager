@@ -201,6 +201,7 @@ requireImport("applyMiniSeasonMatchResult");
 // ---- 11) State lagres / nullstilles ----------------------------------------
 stage("11. State save/reset");
 const stores = [
+  ["leagueSeason", "saveLeagueSeason", "loadLeagueSeason"],
   ["miniSeason", "saveMiniSeason", "loadMiniSeason"],
   ["matchday", "saveMatchdayState", "loadMatchdayState"],
   ["clubWeekState", "saveClubWeekState", "loadClubWeekState"],
@@ -225,7 +226,7 @@ check("kampdag gates av aktiv ligasesong i next-action", readFileSync(join(root,
 check("league-save-modell får id og norsk status", app.includes("function getLeagueSaveModel") && app.includes("activeLeagueSaveId") && app.includes("Før sesong") && app.includes("Aktiv sesong") && app.includes("Fullført sesong"));
 check("klubbkort vises i ligamodus", html.includes('id="leagueClubCard"') && app.includes("renderLeagueClubCard(teamFit)") && app.includes("card.hidden = !isLeagueModeActive()"));
 check("klubbkort viser klubbanker", html.includes('id="leagueClubAnchor"') && app.includes("Klubbanker / hjemsted") && app.includes("model.placeName"));
-check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getCurrentMiniSeasonMatch(state.miniSeason)"));
+check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getNextLeagueOpponent(state.leagueSeason)"));
 check("nullstilling er namespacet og rydder aldri league-save", app.includes("resetSecondarySession") && !/function resetMiniSeason\(\)[\s\S]{0,300}clearLeagueSaveState/.test(app) && !app.includes("placeUnlocks = []"));
 
 // ---- Rapport ----------------------------------------------------------------
