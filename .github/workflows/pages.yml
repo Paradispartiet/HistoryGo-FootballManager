@@ -53,10 +53,15 @@ jobs:
       - name: Build TypeScript engine
         run: npm run build
 
+      - name: Stage and audit Pages artifact
+        run: |
+          npm run stage:pages
+          npm run audit:pages-artifact
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
   deploy:
     environment:

@@ -4,9 +4,7 @@
   "teamId": "browser_legacy_team",
   "teamName": "Browser Legacy Team",
   "activeTrainingWeek": 1,
-  "hiredStaffIds": [
-    "jorgen_isnes"
-  ],
+  "hiredStaffIds": [],
   "unlockedPlaceIds": [
     "kfum_arena"
   ],

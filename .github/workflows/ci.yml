@@ -40,6 +40,11 @@ jobs:
       - name: Build TypeScript engine
         run: npm run build
 
+      - name: Audit Pages artifact
+        run: |
+          npm run stage:pages
+          npm run audit:pages-artifact
+
       - name: Data audits
         run: |
           npm run audit:knowledge
