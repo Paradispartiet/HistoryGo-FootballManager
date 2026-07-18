@@ -107,6 +107,14 @@ import {
   getClubWeekPhaseGuidanceFromBrowser,
   listClubWeekPhasesFromBrowser,
 } from "./app-manager-engine-bridge.js";
+import {
+  migrateModeSessions,
+  persistModeEnvelope,
+  switchModeSession,
+  resetSecondarySession,
+  captureModeSession,
+  applyModeSession
+} from "./football-mode-sessions.js";
 
 const DATA_PATHS = {
   players: "data/football_players.json",
@@ -331,6 +339,8 @@ const state = {
   // Mini Season v0.1: aktiv/fullført 5-kampers prøveperiode, eller null når
   // ingen prøveperiode er startet. Kun UI/progresjon i localStorage.
   miniSeason: null,
+  modeEnvelope: null,
+  modeChooserOpen: false,
   firstTimePlaythrough: { started: false, completed: false, currentStep: "start" },
   gameStartState: { selectedMode: null, activeLeagueSaveId: undefined, activeScenarioId: undefined }
 };
@@ -1278,6 +1288,7 @@ function loadTeamMerits(seedMerits) {
 
 // Lagre gjeldende team merits til localStorage. Stille no-op hvis lagring feiler.
 function saveTeamMerits() {
+  if (state.modeEnvelope && !isLeagueModeActive()) return;
   if (!state.teamMerits) {
     return;
   }
@@ -3437,6 +3448,7 @@ function loadMatchdayState() {
 
 // Lagre gjeldende kampdag-state. Stille no-op hvis lagring feiler (privat modus).
 function saveMatchdayState() {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     localStorage.setItem(MATCHDAY_STATE_KEY, JSON.stringify(state.matchday));
   } catch (error) {
@@ -3911,16 +3923,30 @@ function saveGameStartState() {
 }
 
 function selectGameMode(mode, extras = {}) {
-  state.gameStartState = normalizeGameStartState({ selectedMode: mode, ...extras });
+  if (state.modeEnvelope) {
+    state.modeEnvelope = switchModeSession(state.modeEnvelope, state, mode);
+    persistModeEnvelope(localStorage, state.modeEnvelope);
+  }
+  // Mode is owned by modeEnvelope. gameStartState keeps league/scenario
+  // metadata for backward compatibility, without discarding the league save.
+  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, selectedMode: mode, ...extras });
   saveGameStartState();
 }
 
 function isScenarioModeActive() {
-  return state.gameStartState?.selectedMode === "scenario";
+  return state.modeEnvelope?.activeMode === "scenario";
 }
 
 function isLeagueModeActive() {
-  return state.gameStartState?.selectedMode === "league";
+  return state.modeEnvelope?.activeMode === "league";
+}
+
+function isTrainingModeActive() {
+  return state.modeEnvelope?.activeMode === "training";
+}
+
+function shouldWriteLegacyLeagueStorage() {
+  return !state.modeEnvelope || isLeagueModeActive();
 }
 
 function isLeagueSeasonActive() {
@@ -4029,6 +4055,7 @@ function loadFirstTimePlaythrough() {
 }
 
 function saveFirstTimePlaythrough() {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     localStorage.setItem(FIRST_TIME_PLAYTHROUGH_KEY, JSON.stringify(normalizeFirstTimePlaythrough(state.firstTimePlaythrough)));
   } catch (error) {
@@ -4158,11 +4185,11 @@ function renderLeagueClubCard(teamFit) {
 }
 
 function renderGameModeStatus(teamFit) {
-  const selectedMode = state.gameStartState?.selectedMode || null;
+  const selectedMode = state.modeEnvelope?.activeMode || null;
   const chooser = elements.firstTimePlaythroughCard;
   const status = elements.gameModeStatusCard;
 
-  if (chooser) chooser.hidden = selectedMode !== null;
+  if (chooser) chooser.hidden = selectedMode !== null && !state.modeChooserOpen;
   if (status) status.hidden = selectedMode === null;
 
   if (selectedMode === "league") {
@@ -4173,11 +4200,16 @@ function renderGameModeStatus(teamFit) {
       : "Aktiv ligasesong: følg terminlista, tren laget og spill neste ligakamp. Scenarioer ligger i egen fane.";
   } else if (selectedMode === "scenario") {
     if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Scenario";
-    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Ajax 1971–73 er valgt. Scenarioer og prøveperiode styres fra scenarioflyten.";
+    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = state.gameStartState?.activeScenarioId
+      ? "Ajax 1971–73 er aktivt. Neste handling gjelder bare den separate femkampers scenarioøkten."
+      : "Velg scenario. Ingen ligadata brukes eller endres her.";
   } else if (selectedMode === "training") {
     if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Treningsrom";
-    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Treningsrommet er aktivt. Ligaspill kan velges når du er klar.";
+    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Risikofri sandkasse: oppsett og trening lagres bare i treningsrommet.";
   }
+
+  const leagueMeta = elements.gameModeStatusCard?.querySelector(".mode-status-meta");
+  if (leagueMeta) leagueMeta.hidden = selectedMode !== "league";
 
   const availability = getAvailability();
   const roster = availability.rosterReadiness || {};
@@ -4205,6 +4237,30 @@ function renderGameModeStatus(teamFit) {
   if (elements.leagueStatusTraining) elements.leagueStatusTraining.textContent = `Trening: ${training}`;
   if (elements.leagueStatusInbox) elements.leagueStatusInbox.textContent = `Innboks: ${unread > 0 ? `${unread} ulest` : "lest"}`;
   if (elements.portalInboxStatus) elements.portalInboxStatus.textContent = `Assistentråd: ${unread > 0 ? `${unread} ulest` : "rolig"}`;
+}
+
+function renderModeIsolation() {
+  const mode = state.modeEnvelope?.activeMode || "league";
+  document.documentElement.dataset.activeMode = mode;
+  document.querySelectorAll("[data-league-only]").forEach((node) => { node.hidden = mode !== "league"; });
+  document.querySelectorAll(".manager-portal, .club-topbar, #clubWeekFeedback, #offPitchSignalCard, .club-week-event-log-panel")
+    .forEach((node) => { node.hidden = mode !== "league"; });
+  if (mode !== "league") {
+    document.querySelectorAll(".league-season-panel, .league-onboarding-panel, .league-club-card")
+      .forEach((node) => { node.hidden = true; });
+  }
+  const bar = document.querySelector("#secondaryModeBar");
+  if (bar) {
+    bar.hidden = mode === "league";
+    const title = bar.querySelector("#secondaryModeTitle");
+    const hint = bar.querySelector("#secondaryModeHint");
+    if (title) title.textContent = mode === "scenario" ? "Scenario" : "Treningsrom";
+    if (hint) hint.textContent = mode === "scenario"
+      ? (state.gameStartState?.activeScenarioId ? "Spill neste scenariokamp" : "Velg scenario")
+      : "Velg formasjon · Plasser spillere · Test oppsett · Nullstill";
+    const reset = bar.querySelector("#resetTrainingRoomButton");
+    if (reset) reset.hidden = mode !== "training";
+  }
 }
 
 function renderFirstTimePlaythrough(teamFit) {
@@ -4267,6 +4323,7 @@ function getMiniSeasonContext() {
 
 // Lagre gjeldende mini-sesong. Stille no-op hvis lagring feiler (privat modus).
 function saveMiniSeason() {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     if (state.miniSeason) {
       localStorage.setItem(MINI_SEASON_KEY, JSON.stringify(state.miniSeason));
@@ -4327,10 +4384,6 @@ function resetMiniSeason() {
     return;
   }
   state.miniSeason = null;
-  if (isLeagueModeActive()) {
-    clearLeagueSaveState();
-    saveGameStartState();
-  }
   saveMiniSeason();
   renderApp();
 }
@@ -4727,6 +4780,7 @@ function loadStoredPositions() {
 }
 
 function saveStoredPositions(all) {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     localStorage.setItem(POSITIONS_KEY, JSON.stringify(all));
   } catch (error) {
@@ -4745,6 +4799,7 @@ function loadActiveKnowledgeFocus() {
 }
 
 function saveActiveKnowledgeFocus(principleId) {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     localStorage.setItem(ACTIVE_KNOWLEDGE_FOCUS_KEY, principleId);
   } catch (error) {
@@ -4753,6 +4808,7 @@ function saveActiveKnowledgeFocus(principleId) {
 }
 
 function clearActiveKnowledgeFocus() {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     localStorage.removeItem(ACTIVE_KNOWLEDGE_FOCUS_KEY);
   } catch (error) {
@@ -4772,6 +4828,7 @@ function loadTrainingWeek() {
 }
 
 function saveTrainingWeek(week) {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     localStorage.setItem(TRAINING_WEEK_KEY, JSON.stringify(week));
   } catch (error) {
@@ -4800,6 +4857,7 @@ function loadWeeklyTrainingFocus() {
 }
 
 function saveWeeklyTrainingFocus() {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     if (state.weeklyTrainingFocus) {
       localStorage.setItem(WEEKLY_TRAINING_FOCUS_KEY, JSON.stringify(state.weeklyTrainingFocus));
@@ -4874,6 +4932,7 @@ function loadWeeklyTrainingProgram() {
 }
 
 function saveWeeklyTrainingProgram() {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     if (state.weeklyTrainingProgram) {
       localStorage.setItem(WEEKLY_TRAINING_PROGRAM_KEY, JSON.stringify(state.weeklyTrainingProgram));
@@ -5001,6 +5060,7 @@ function loadClubWeekFeedback() {
 }
 
 function saveClubWeekFeedback(message) {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     localStorage.setItem(CLUB_WEEK_FEEDBACK_KEY, message);
   } catch (error) {
@@ -5025,6 +5085,7 @@ function loadClubWeekEventLog() {
 }
 
 function saveClubWeekEventLog(events) {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     const list = Array.isArray(events) ? events.slice(0, CLUB_WEEK_EVENT_LOG_LIMIT) : [];
     localStorage.setItem(CLUB_WEEK_EVENT_LOG_KEY, JSON.stringify(list));
@@ -5243,6 +5304,7 @@ function loadCompletedKnowledgeFocusIds() {
 }
 
 function saveCompletedKnowledgeFocusIds(ids) {
+  if (!shouldWriteLegacyLeagueStorage()) return;
   try {
     const store = readCompletedKnowledgeFocusStore();
     store[String(state.trainingWeek)] = Array.from(ids);
@@ -12109,6 +12171,17 @@ function renderApp() {
   renderEarnedBadges();
   renderTeamClassifications();
   renderTeamIdentityPanel();
+  renderGameModeStatus(teamFit);
+  renderLeagueClubCard(teamFit);
+  renderModeIsolation();
+
+  // Persist only the active namespace. Visiting a secondary mode therefore
+  // cannot overwrite the league snapshot, even though all modes reuse the
+  // same lineup, training, matchday and mini-season engines in memory.
+  if (state.modeEnvelope) {
+    state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+    try { state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope); } catch (_) { /* memory-only */ }
+  }
 }
 
 function bindEvents() {
@@ -12372,6 +12445,7 @@ function bindGameModeControls() {
     card.addEventListener("focus", () => setStartModeAssistant(card.dataset.startMode));
     card.addEventListener("click", () => {
       const mode = card.dataset.startMode;
+      state.modeChooserOpen = false;
       setStartModeAssistant(mode);
       if (mode === "league") {
         selectGameMode("league", {});
@@ -12380,7 +12454,9 @@ function bindGameModeControls() {
         return;
       }
       if (mode === "scenario") {
+        selectGameMode("scenario", { activeScenarioId: undefined });
         activateTab("scenarios");
+        renderApp();
         return;
       }
       if (mode === "training") {
@@ -12393,13 +12469,7 @@ function bindGameModeControls() {
 
   if (elements.changeGameModeButton) {
     elements.changeGameModeButton.addEventListener("click", () => {
-      if (isScenarioModeActive()) {
-        activateTab("scenarios");
-        return;
-      }
-      clearLeagueSaveState();
-      state.gameStartState = normalizeGameStartState(null);
-      saveGameStartState();
+      state.modeChooserOpen = true;
       activateTab("dashboard");
       renderApp();
     });
@@ -12407,13 +12477,6 @@ function bindGameModeControls() {
 
   if (elements.startAjaxScenarioButton) {
     elements.startAjaxScenarioButton.addEventListener("click", () => {
-      // En auto-startet ligasesong uten spilte kamper skal ikke blokkere
-      // scenariostarten (som trenger Ajax som første motstander). En sesong
-      // med spilte kamper beholdes — da fortsetter scenarioet uten omstart.
-      if (state.miniSeason?.status === "active" && !(state.miniSeason.matchHistory?.length > 0)) {
-        state.miniSeason = null;
-        saveMiniSeason();
-      }
       selectGameMode("scenario", { activeScenarioId: AJAX_TOTAL_FOOTBALL_SCENARIO_ID });
       startMiniSeason();
       activateTab("dashboard");
@@ -12431,6 +12494,19 @@ function bindGameModeControls() {
       resetMiniSeason();
     });
   }
+
+  document.querySelector("#returnToLeagueButton")?.addEventListener("click", () => {
+    selectGameMode("league");
+    activateRecommendedLeagueTab(getTeamFit());
+    renderApp();
+  });
+  document.querySelector("#resetTrainingRoomButton")?.addEventListener("click", () => {
+    if (!isTrainingModeActive()) return;
+    state.modeEnvelope = resetSecondarySession(state.modeEnvelope, state, "training");
+    persistModeEnvelope(localStorage, state.modeEnvelope);
+    activateTab("trening");
+    renderApp();
+  });
 }
 
 // Avanser klubbukens fase med konsekvenser, logg og feedback. Delt mellom
@@ -12796,6 +12872,25 @@ async function hydratePersistedUiState() {
   state.firstTimePlaythrough = loadFirstTimePlaythrough();
 }
 
+function hydrateModeSessions() {
+  state.modeEnvelope = migrateModeSessions(localStorage);
+  state.modeEnvelope.sessions.league = {
+    ...captureModeSession(state),
+    ...state.modeEnvelope.sessions.league
+  };
+  const mode = state.modeEnvelope.activeMode;
+  // The migration may only contain the old league snapshot. Secondary modes
+  // are lazily cloned from it, never the other way around.
+  if (mode !== "league" && !state.modeEnvelope.sessions[mode]) {
+    state.modeEnvelope = resetSecondarySession(state.modeEnvelope, state, mode);
+  } else {
+    applyModeSession(state, state.modeEnvelope.sessions[mode]);
+  }
+  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, selectedMode: mode });
+  persistModeEnvelope(localStorage, state.modeEnvelope);
+  saveGameStartState();
+}
+
 function runStartupValidation() {
   const dataWarnings = validateFootballData(state);
 
@@ -12883,6 +12978,7 @@ async function init() {
     await hydratePersistedUiState();
     runStartupValidation();
     await bootstrapClubWeekState();
+    hydrateModeSessions();
     finalizeStartupLineup();
     bindEvents();
 

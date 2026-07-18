@@ -63,6 +63,22 @@ Dette er fortsatt ikke et ferdig Football Manager-spill. Full ligadybde, overgan
 
 ## Spillmoduser
 
+### Mode Isolation v1 – tilstand og lagring
+
+Aktiv modus har én sannhetskilde: `hgfm.modeSessions.v1`. Lagringen er en
+versjonert envelope med `activeMode` (`league`, `scenario` eller `training`) og
+tre adskilte snapshots under `sessions`. Ligaspillet er den varige sesjonen;
+scenarioet har sin egen femkampers mini-season, og treningsrommet er en
+midlertidig kopi som kan nullstilles uten å berøre ligaen. Alle tre bruker de
+eksisterende formasjons-, taktikk-, trenings-, kamp- og mini-season-motorene.
+
+Ved første lasting migreres eksisterende league-nøkler kopierende inn i
+`sessions.league`. Migreringen er idempotent, og gamle nøkler slettes ikke før
+en gyldig envelope er skrevet. Scenario- og treningsdata kan derfor aldri
+erstatte en gyldig ligasnapshot. `hgfm.gameStartState.v1` beholdes som
+bakoverkompatibel metadata for klubb/save og scenario-id, men eier ikke lenger
+aktiv modus.
+
 ### Ligaspill
 
 Hovedmodusen i HG Football Manager. Spilleren tar over en klubb og spiller en tradisjonell sesong med tropp, trening, terminliste, tabell, innboks og kampdag. Ligaspill er primærvalget fra start, og første handling skal alltid peke mot spillbar tropp, startellever, trening eller neste ligakamp.

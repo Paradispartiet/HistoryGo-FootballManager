@@ -226,7 +226,7 @@ check("league-save-modell får id og norsk status", app.includes("function getLe
 check("klubbkort vises i ligamodus", html.includes('id="leagueClubCard"') && app.includes("renderLeagueClubCard(teamFit)") && app.includes("card.hidden = !isLeagueModeActive()"));
 check("klubbkort viser klubbanker", html.includes('id="leagueClubAnchor"') && app.includes("Klubbanker / hjemsted") && app.includes("model.placeName"));
 check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getCurrentMiniSeasonMatch(state.miniSeason)"));
-check("nullstilling rydder league-save-data uten unlock-reset", app.includes("function clearLeagueSaveState") && app.includes("if (isLeagueModeActive())") && !app.includes("placeUnlocks = []"));
+check("nullstilling er namespacet og rydder aldri league-save", app.includes("resetSecondarySession") && !/function resetMiniSeason\(\)[\s\S]{0,300}clearLeagueSaveState/.test(app) && !app.includes("placeUnlocks = []"));
 
 // ---- Rapport ----------------------------------------------------------------
 

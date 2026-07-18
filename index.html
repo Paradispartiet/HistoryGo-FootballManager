@@ -110,6 +110,17 @@
   </nav>
 
   <main class="app-shell" id="app">
+    <section id="secondaryModeBar" class="panel mode-status-card secondary-mode-bar" aria-live="polite" hidden>
+      <div>
+        <p class="eyebrow">Aktiv modus</p>
+        <h2 id="secondaryModeTitle">Treningsrom</h2>
+        <p id="secondaryModeHint" class="muted-text">Velg formasjon · Plasser spillere · Test oppsett</p>
+      </div>
+      <div class="mini-season-actions">
+        <button type="button" id="resetTrainingRoomButton" class="is-reset">Nullstill</button>
+        <button type="button" id="returnToLeagueButton" class="primary-action-button">Tilbake til ligaspill</button>
+      </div>
+    </section>
     <!-- ============================ KONTORET (LAG / TAKTIKK) ============================ -->
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
