@@ -16,7 +16,7 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "activeKnowledgeFocusId", "completedKnowledgeFocusIds", "clubWeekState",
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
-  "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits"
+  "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason"
 ]);
 
 const LEGACY_KEYS = Object.freeze({
@@ -72,6 +72,7 @@ export function createSecondarySession(league, mode) {
   const session = cloneSessionValue(isObject(league) ? league : {});
   session.matchday = { lastMatch: null, session: null };
   session.miniSeason = null;
+  session.leagueSeason = null;
   session.clubWeekState = { week: 1, phase: mode === "scenario" ? "analysis" : "training" };
   session.clubWeekFeedback = mode === "scenario" ? "Velg scenario." : "Treningsrommet er klart.";
   session.clubWeekEventLog = [];

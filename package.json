@@ -14,6 +14,7 @@
     "audit:historical-opponents": "node scripts/audit-historical-opponents.mjs",
     "sim:matchday": "node scripts/simulate-matchday-v02.mjs",
     "sim:mini-season": "node scripts/simulate-mini-season.mjs",
+    "sim:league-season": "node scripts/simulate-real-league-season.mjs",
     "sim:mode-isolation": "node scripts/simulate-mode-isolation.mjs",
     "build": "tsc",
     "stage:pages": "node scripts/stage-pages-artifact.mjs",

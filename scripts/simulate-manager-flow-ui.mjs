@@ -155,7 +155,7 @@ check("league save får id når sesong starter", appSource.includes("activeLeagu
 check("klubbkort vises i ligamodus", htmlSource.includes('id="leagueClubCard"') && appSource.includes("card.hidden = !isLeagueModeActive()"));
 check("klubbkort viser klubbanker", htmlSource.includes('id="leagueClubAnchor"') && appSource.includes("Klubbanker / hjemsted"));
 check("leagueSeasonStatus vises som norsk managerstatus", appSource.includes("Før sesong") && appSource.includes("Aktiv sesong") && appSource.includes("Fullført sesong"));
-check("aktiv save viser ligastatus/terminliste", htmlSource.includes("Terminliste og tabell") && appSource.includes("getCurrentMiniSeasonMatch(state.miniSeason)"));
+check("aktiv save viser ligastatus/terminliste", htmlSource.includes("Terminliste og tabell") && appSource.includes("getNextLeagueOpponent(state.leagueSeason)"));
 
 // 13) Fallback: review-fasen gir «Forbered neste kamp», ellers «Gå til neste fase».
 check("review-fase gir «Forbered neste kamp»", titles(ctx({ clubWeek: { week: 3, phase: "review", phaseLabel: "Oppsummering" } })).includes("Forbered neste kamp"));
