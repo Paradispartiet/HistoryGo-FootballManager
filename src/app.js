@@ -208,6 +208,9 @@ const MINI_SEASON_KEY = MINI_SEASON_VERSION;
 const LEAGUE_SEASON_KEY = LEAGUE_SEASON_VERSION;
 const FIRST_TIME_PLAYTHROUGH_KEY = "hgfm.firstTimePlaythrough.v1";
 const GAME_START_STATE_KEY = "hgfm.gameStartState.v1";
+// Onboarding v2: egen startskjerm. `onboarded` = spilleren har valgt spillmodus
+// minst én gang, så startskjermen ikke legger seg over spillet ved hver last.
+const ONBOARDED_KEY = "hgfm.onboarded.v1";
 const AJAX_TOTAL_FOOTBALL_SCENARIO_ID = "ajax_1971_73_totalfootball";
 const FIRST_TIME_OPPONENT_ID = "ajax_1971_73_total_football";
 
@@ -353,6 +356,8 @@ const state = {
   leagueSeason: null,
   modeEnvelope: null,
   modeChooserOpen: false,
+  // Onboarding v2: har spilleren valgt modus på egen startskjerm minst én gang?
+  onboarded: false,
   firstTimePlaythrough: { started: false, completed: false, currentStep: "start" },
   gameStartState: { selectedMode: null, activeLeagueSaveId: undefined, activeScenarioId: undefined }
 };
@@ -404,6 +409,7 @@ const elements = {
   startNewLeagueSeasonButton: document.querySelector("#startNewLeagueSeasonButton"),
   // Legacy id: firstTimePlaythroughCard is now used as the game mode card.
   // Do not treat it as mandatory onboarding.
+  onboardingScreen: document.querySelector("#onboardingScreen"),
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
   leagueOnboardingPanel: document.querySelector("#leagueOnboardingPanel"),
   leagueOnboardingLead: document.querySelector("#leagueOnboardingLead"),
@@ -4196,12 +4202,28 @@ function renderLeagueClubCard(teamFit) {
   if (elements.leagueClubNextAction) elements.leagueClubNextAction.textContent = nextAction;
 }
 
+function loadOnboarded() {
+  try { return localStorage.getItem(ONBOARDED_KEY) === "1"; } catch (_) { return false; }
+}
+
+function saveOnboarded() {
+  try { localStorage.setItem(ONBOARDED_KEY, state.onboarded ? "1" : "0"); } catch (_) { /* privat modus */ }
+}
+
+// Onboarding v2: egen startskjerm styres uavhengig av spillflaten. Den vises til
+// spilleren har valgt modus (`onboarded`), og igjen når «Bytt modus» åpner den.
+function renderOnboardingScreen() {
+  const screen = elements.onboardingScreen;
+  if (!screen) return;
+  screen.hidden = state.onboarded && !state.modeChooserOpen;
+  document.body.classList.toggle("is-onboarding", !screen.hidden);
+}
+
 function renderGameModeStatus(teamFit) {
   const selectedMode = state.modeEnvelope?.activeMode || null;
-  const chooser = elements.firstTimePlaythroughCard;
   const status = elements.gameModeStatusCard;
 
-  if (chooser) chooser.hidden = selectedMode !== null && !state.modeChooserOpen;
+  renderOnboardingScreen();
   if (status) status.hidden = selectedMode === null;
 
   if (selectedMode === "league") {
@@ -12496,6 +12518,8 @@ function bindGameModeControls() {
     card.addEventListener("click", () => {
       const mode = card.dataset.startMode;
       state.modeChooserOpen = false;
+      state.onboarded = true;
+      saveOnboarded();
       setStartModeAssistant(mode);
       if (mode === "league") {
         selectGameMode("league", {});
@@ -12921,6 +12945,7 @@ async function hydratePersistedUiState() {
   state.leagueSeason = loadLeagueSeason();
   state.gameStartState = loadGameStartState();
   state.firstTimePlaythrough = loadFirstTimePlaythrough();
+  state.onboarded = loadOnboarded();
 }
 
 function hydrateModeSessions() {

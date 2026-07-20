@@ -7,6 +7,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- ============================ ONBOARDING (EGEN SKJERM) ============================
+       Egen fullskjerm-startskjerm der spilleren velger hva slags spill de vil
+       starte. Ligger UTENFOR app-rammen (header/nav/main/footer) og legger seg
+       over alt til et valg er tatt — aldri på selve spillflaten. -->
+  <div class="onboarding-screen" id="onboardingScreen" role="dialog" aria-modal="true" aria-label="Velg spillmodus">
+    <section class="onboarding-card first-time-playthrough-card mode-select-card" id="firstTimePlaythroughCard" aria-live="polite">
+      <div class="onboarding-brand">
+        <p class="eyebrow">HG Football Manager</p>
+        <h1>Start som manager</h1>
+        <p class="muted-text">Velg hvordan du vil spille. Du kan bytte modus når som helst fra kontoret.</p>
+      </div>
+      <div class="first-time-brief-grid mode-choice-grid">
+        <button type="button" class="mode-choice-card is-primary-mode" data-start-mode="league" aria-describedby="firstTimeAssistant"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></button>
+        <button type="button" class="mode-choice-card" data-start-mode="scenario" aria-describedby="firstTimeAssistant"><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></button>
+        <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten at det påvirker ligasesongen.</small></button>
+      </div>
+      <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
+    </section>
+  </div>
+
   <header class="site-header">
     <div class="header-inner">
       <p class="eyebrow">HG Football Manager</p>
@@ -124,20 +144,6 @@
     <!-- ============================ KONTORET (LAG / TAKTIKK) ============================ -->
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
-
-      <section class="panel first-time-playthrough-card mode-select-card" id="firstTimePlaythroughCard" aria-label="Velg spillmodus" aria-live="polite">
-        <div>
-          <p class="eyebrow">Velg spillmodus</p>
-          <h2>Start som manager</h2>
-          <p class="muted-text">HG Football Manager starter som et ligaspill: ta over en klubb, bygg laget gjennom sesongen, tren spillerne, velg taktikk og kjemp om tabellen. Historiske og taktiske leksjoner ligger som valgfrie scenarioer.</p>
-        </div>
-        <div class="first-time-brief-grid mode-choice-grid">
-          <button type="button" class="mode-choice-card is-primary-mode" data-start-mode="league" aria-describedby="firstTimeAssistant"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></button>
-          <button type="button" class="mode-choice-card" data-start-mode="scenario" aria-describedby="firstTimeAssistant"><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></button>
-          <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten at det påvirker ligasesongen.</small></button>
-        </div>
-        <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
-      </section>
 
       <section class="panel league-onboarding-panel" id="leagueOnboardingPanel" aria-label="Før sesong: bygg klubben" hidden>
         <div class="league-onboarding-head">

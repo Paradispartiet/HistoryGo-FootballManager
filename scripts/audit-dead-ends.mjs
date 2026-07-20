@@ -311,6 +311,32 @@ stage("11. `hidden` vinner over display");
   );
 }
 
+// ---- 12) Onboarding er en egen skjerm, ikke på spillflaten -----------------
+// Krav (bruker): valg av spillmodus skal skje på en EGEN startskjerm, aldri
+// oppå selve spillflaten. `#onboardingScreen` må ligge utenfor app-rammen
+// (<main class="app-shell">), og mode-valg-knappene (`data-start-mode`) må bo i
+// den skjermen — ikke inne i en spillbar fane.
+stage("12. Onboarding er egen skjerm");
+{
+  const onboarding = html.match(/<div\b[^>]*\bid="onboardingScreen"[^>]*>[\s\S]*?<\/div>\s*<\/div>/);
+  check("#onboardingScreen finnes i markup", htmlIds.has("onboardingScreen"));
+  const main = html.match(/<main\b[^>]*class="app-shell"[\s\S]*?<\/main>/);
+  check("app-rammen (<main class=\"app-shell\">) finnes", Boolean(main));
+  check(
+    "ingen mode-valg (data-start-mode) inne i spillflaten <main>",
+    Boolean(main) && !/data-start-mode=/.test(main[0]),
+    "modusvalg på spillflaten er nettopp det brukeren ba oss fjerne"
+  );
+  check(
+    "mode-valg-knappene bor i onboarding-skjermen",
+    Boolean(onboarding) && /data-start-mode=/.test(onboarding[0])
+  );
+  check(
+    "renderOnboardingScreen styrer startskjermen på `onboarded`",
+    /screen\.hidden\s*=\s*state\.onboarded\s*&&\s*!state\.modeChooserOpen/.test(app)
+  );
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

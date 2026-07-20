@@ -7200,3 +7200,186 @@ button.portal-card:hover {
 .panel-details-wrap .insight-grid {
   margin-top: 14px;
 }
+
+/* ==================================================================
+   APP SHELL v2 — telefon-app: fast ramme, én skjerm per seksjon
+   ------------------------------------------------------------------
+   Valgt retning (bruker): phone-style, topp-faner, streng «én skjerm».
+   Selve siden ruller aldri (fast header + nav + footer). Hver seksjon
+   er én full skjerm; skjermer får kontrollert intern scroll KUN som
+   sikring mot avkutting (aldri web-scroll på hele siden). Lagt sist i
+   fila så app-rammen vinner over den eldre web-layouten.
+   ================================================================== */
+
+:root { --app-max: 460px; }
+
+html { height: 100%; }
+
+body {
+  height: 100dvh;
+  min-height: 0;
+  max-width: var(--app-max);
+  margin-inline: auto;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  border-inline: 1px solid var(--hg-border-soft);
+  background: transparent;
+}
+
+/* Full bredde innenfor rammen (overstyrer web-bredden på 1240px). */
+.site-header,
+.site-footer,
+.app-shell,
+.main-nav-layout {
+  width: 100% !important;
+  margin-inline: 0 !important;
+}
+
+/* Header: kompakt app-topplinje. */
+.site-header { padding: 8px 10px 2px; }
+.site-header .header-inner { padding: 8px 12px; row-gap: 0; }
+.site-header .eyebrow { font-size: 0.62rem; }
+.site-header h1 { font-size: 1.05rem; }
+.site-header .lede { display: none; }
+
+/* Nav: faste, kompakte topp-faner som fyller bredden. */
+.main-nav { padding: 4px 6px; }
+.main-nav-inner { gap: 2px; }
+.main-nav .nav-group-label { display: none; }
+.main-nav .nav-tab { padding: 6px 4px; min-width: 0; flex: 1 1 0; }
+.main-nav .nav-tab .nav-label { font-size: 0.58rem; }
+.main-nav .nav-icon { width: 20px; height: 20px; }
+
+/* Skjermområdet: fast; ingen egen scroll på app-shell. */
+.app-shell {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}
+
+/* Hver seksjon = én full skjerm i skjermområdet. */
+.app-shell > .tab-section {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+}
+.app-shell > .tab-section[hidden] { display: none !important; }
+
+/* Paneler tettere i app-rammen. */
+.app-shell .panel { padding: 12px; border-radius: 12px; }
+.app-shell .panel h2 { font-size: 1.05rem; }
+
+/* Footer: fast bunnstripe (Neste handling). */
+.site-footer { padding: 6px 10px 9px; }
+.site-footer > p { display: none; }
+.site-footer .next-action-strip { margin: 0; }
+
+/* Onboarding: egen fullskjerm over hele rammen. */
+.onboarding-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  overflow-y: auto;
+  background:
+    radial-gradient(900px 480px at 50% -140px, var(--hg-bg-glow), transparent 70%),
+    linear-gradient(180deg, #0a0e16 0%, #05070c 100%);
+}
+.onboarding-screen[hidden] { display: none !important; }
+.onboarding-card {
+  width: min(100%, var(--app-max));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 16px;
+  background: var(--hg-panel-bg);
+  padding: 20px 18px;
+}
+.onboarding-brand h1 { font-size: clamp(1.5rem, 7vw, 2rem); margin: 4px 0 2px; }
+.onboarding-screen .mode-choice-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.onboarding-screen .mode-choice-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(0,0,0,.16);
+}
+.onboarding-screen .mode-choice-card.is-primary-mode {
+  border-color: var(--hg-accent-tactics);
+  background: rgba(70,214,140,.08);
+}
+.onboarding-screen .mode-choice-card strong { font-size: 1.1rem; }
+.onboarding-screen .mode-choice-card span { font-size: 0.6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--hg-text-muted); }
+.onboarding-screen .assistant-note { font-size: 0.8rem; margin: 0; color: var(--hg-text-muted); }
+
+/* App-rammen bruker topp-faner (brukervalg): nøytraliser den gamle mobile
+   «fast bunn-nav»-regelen så navet blir værende i topp-rekka i grid-rammen. */
+body { padding-bottom: 0 !important; }
+.main-nav {
+  position: static !important;
+  inset: auto !important;
+  border-top: none;
+  border-bottom: 1px solid var(--hg-border-soft);
+  background: transparent;
+}
+.nav-office-menu {
+  top: calc(100% + 6px) !important;
+  bottom: auto !important;
+  right: 8px !important;
+}
+.nav-tab { min-width: 0 !important; padding: 6px 3px !important; }
+
+/* Grid-/flex-barn må kunne krympe under egen min-content, ellers sprenger et
+   bredt panel hele app-rammen (horisontal overflow → avkuttet innhold). */
+body { grid-template-columns: minmax(0, 1fr); }
+.app-shell { min-width: 0; }
+.app-shell > .tab-section { min-width: 0; }
+
+/* Topp-faner i 400px: la etikettene krympe/klippe i stedet for å overlappe. */
+.main-nav-inner { gap: 0; }
+.main-nav .nav-tab {
+  min-width: 0 !important;
+  overflow: hidden;
+  padding: 6px 2px !important;
+  gap: 2px;
+}
+.main-nav .nav-tab .nav-label {
+  font-size: 0.48rem !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.main-nav .nav-icon { width: 19px; height: 19px; }
+/* Kontor-/senere-menyen: kompakt ikon-knapp, ikke bred tekstknapp. */
+.nav-office { flex: 0 0 auto; }
+.nav-office-toggle { padding: 6px 6px !important; }
+.nav-office-toggle .nav-label { display: none; }
+.nav-office-toggle-caret { font-size: 0.7rem; }
+
+/* Gi tab-rekka mest mulig plass: minimer «senere»-menyknappen. */
+.nav-office-toggle { min-width: 0 !important; }
+.main-nav .nav-tab { padding-inline: 1px !important; }
