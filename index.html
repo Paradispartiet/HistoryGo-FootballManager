@@ -496,7 +496,15 @@
       </section>
 
       <!-- Sekundær innsikt: lagrapport + profil + motorens vurdering -->
-      <details class="panel panel-details-wrap"><summary>Analyse · full rapport</summary>
+      <div class="popup-actions" aria-label="Analyse">
+        <button type="button" data-modal-open="modalAnalysis">Analyse · full rapport</button>
+      </div>
+      <div class="modal-overlay" id="modalAnalysis" role="dialog" aria-modal="true" aria-label="Analyse · full rapport" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Lagrapport</p><h3>Analyse · full rapport</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
       <div class="insight-grid">
         <section class="panel report-panel">
           <p class="eyebrow">Lagrapport</p>
@@ -580,7 +588,8 @@
           </details>
         </section>
       </div>
-      </details>
+        </div>
+      </div>
     </div>
 
     <!-- ============================ KAMP ============================ -->
@@ -606,13 +615,20 @@
           </div>
           <div id="matchdayResult"></div>
         </section>
+      </div>
 
-        <section class="panel badge-effects-panel" aria-live="polite"><details class="panel-details is-flush"><summary>Analyse · badge-effekter</summary>
-          <p class="eyebrow">History Go</p>
-          <h2>Badge-effekter</h2>
+      <div class="popup-actions" aria-label="Mer">
+        <button type="button" data-modal-open="modalBadgeEffects">Analyse · badge-effekter</button>
+      </div>
+      <div class="modal-overlay" id="modalBadgeEffects" role="dialog" aria-modal="true" aria-label="Badge-effekter" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">History Go</p><h3>Badge-effekter</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
           <p class="muted-text">Opptjente treningsbadges kan gi små bonuser til lagets taktiske metrics.</p>
-          <div id="badgeEffectsSummary" class="badge-effects-list"></div></details>
-        </section>
+          <div id="badgeEffectsSummary" class="badge-effects-list"></div>
+        </div>
       </div>
     </div>
 

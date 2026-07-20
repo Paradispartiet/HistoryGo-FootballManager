@@ -7516,3 +7516,11 @@ body { grid-template-columns: minmax(0, 1fr); }
 .dashboard-view .mode-status-card {
   display: inline-block;
 }
+
+/* Popup-innhold puster: stables i én kolonne så tette rutenett (metrics) får
+   full bredde i stedet for å brekke etikettene tegn for tegn. */
+.modal .insight-grid { grid-template-columns: 1fr; gap: 12px; }
+.modal .report-columns { grid-template-columns: 1fr 1fr; }
+.modal .metric-grid,
+.modal .detail-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.modal .panel { padding: 12px; }
