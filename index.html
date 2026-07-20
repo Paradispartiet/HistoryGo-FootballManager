@@ -266,36 +266,6 @@
           <div id="contextSignals" class="context-signals off-pitch-signal-grid"></div>
         </section>
 
-        <!-- Statuskort: øvrige åpne beslutninger på tvers av klubben. Foldet og
-             sekundært — «Neste handling» øverst er alltid den primære veien
-             videre; disse støtter den, konkurrerer ikke med den. -->
-        <section class="panel decision-strip dashboard-deep-panel" aria-label="Flere åpne beslutninger">
-          <details class="panel-details is-flush">
-            <summary>Flere åpne beslutninger</summary>
-            <p class="muted-text decision-strip-intro">«Neste handling» øverst er alltid det viktigste grepet. Her ligger de øvrige åpne beslutningene på tvers av klubben.</p>
-            <div id="decisionCards" class="decision-cards"></div>
-          </details>
-        </section>
-
-        <!-- League Loop v0.2: ligasesongen i ligamodus. Samme motor som
-             prøveperioden (football-mini-season.js) — terminliste, poeng, form,
-             tabell og styredom — men startes automatisk når troppen er spillbar
-             og presenteres som liga, ikke som scenario. Hidden by default;
-             renderLeagueSeason viser den kun i ligamodus. -->
-        <section class="panel league-season-panel dashboard-deep-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
-          <div class="mini-season-head">
-            <div>
-              <p class="eyebrow">Ligasesong</p>
-              <h2>Neste kamp · Terminliste og tabell</h2>
-              <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
-            </div>
-            <div class="mini-season-actions">
-              <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
-            </div>
-          </div>
-          <div id="leagueSeasonOverview" class="mini-season-overview"></div>
-        </section>
-
         <!-- Mini Season v1 / League Loop v1: 5-kampers prøveperiode (kamprekke,
              poeng, form, light-league-tabell, styrevurdering) oppå Club Week og Kampdag. -->
         <section class="panel mini-season-panel dashboard-deep-panel" aria-label="Prøveperiode" aria-live="polite" hidden>
@@ -312,27 +282,80 @@
           </div>
           <div id="miniSeasonOverview" class="mini-season-overview"></div>
         </section>
+      </div>
 
-        <!-- Snarveier til arbeidsflatene -->
-        <section class="panel dashboard-shortcuts dashboard-deep-panel" aria-label="Snarveier">
-          <details class="panel-details is-flush">
-            <summary>Gå til rom</summary>
-            <div class="shortcut-buttons">
-              <button type="button" class="shortcut-button" data-tab-target="tactics">Taktikkrom</button>
-              <button type="button" class="shortcut-button" data-tab-target="kamp">Kampdag</button>
-              <button type="button" class="shortcut-button" data-tab-target="trening">Trening &amp; kunnskap</button>
-              <button type="button" class="shortcut-button" data-tab-target="scenarios">Scenarioer</button>
+      <!-- Kontor: dype paneler bak popup-er i stedet for en vegg av kort. -->
+      <div class="popup-actions kontor-deep-actions" aria-label="Mer fra klubben">
+        <button type="button" data-modal-open="modalLeagueTable">Tabell &amp; terminliste</button>
+        <button type="button" class="kontor-deep-decisions" data-modal-open="modalDecisions">Flere beslutninger</button>
+        <button type="button" data-modal-open="modalClubEvents">Klubbhendelser</button>
+        <button type="button" data-modal-open="modalRooms">Gå til rom</button>
+      </div>
+
+      <!-- ===== POPUP: TABELL & TERMINLISTE ===== -->
+      <div class="modal-overlay" id="modalLeagueTable" role="dialog" aria-modal="true" aria-label="Tabell og terminliste" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Ligasesong</p><h3>Terminliste og tabell</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <section class="panel league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
+            <div class="mini-season-head">
+              <div>
+                <p class="eyebrow">Ligasesong</p>
+                <h2>Neste kamp · Terminliste og tabell</h2>
+                <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
+              </div>
+              <div class="mini-season-actions">
+                <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
+              </div>
             </div>
-          </details>
-        </section>
+            <div id="leagueSeasonOverview" class="mini-season-overview"></div>
+          </section>
+        </div>
+      </div>
 
-        <!-- Klubbhendelser -->
-        <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
-          <details class="panel-details is-flush">
-            <summary>Klubbhendelser · detaljer</summary>
+      <!-- ===== POPUP: FLERE ÅPNE BESLUTNINGER ===== -->
+      <div class="modal-overlay" id="modalDecisions" role="dialog" aria-modal="true" aria-label="Flere åpne beslutninger" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Beslutninger</p><h3>Flere åpne beslutninger</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <section class="panel decision-strip" aria-label="Flere åpne beslutninger">
+            <p class="muted-text decision-strip-intro">«Neste handling» i footeren er alltid det viktigste grepet. Her ligger de øvrige åpne beslutningene på tvers av klubben.</p>
+            <div id="decisionCards" class="decision-cards"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ===== POPUP: KLUBBHENDELSER ===== -->
+      <div class="modal-overlay" id="modalClubEvents" role="dialog" aria-modal="true" aria-label="Klubbhendelser" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Logg</p><h3>Klubbhendelser</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
             <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
-          </details>
-        </section>
+          </section>
+        </div>
+      </div>
+
+      <!-- ===== POPUP: GÅ TIL ROM ===== -->
+      <div class="modal-overlay" id="modalRooms" role="dialog" aria-modal="true" aria-label="Gå til rom" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Snarveier</p><h3>Gå til rom</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <div class="shortcut-buttons">
+            <button type="button" class="shortcut-button" data-modal-close data-tab-target="tactics">Taktikkrom</button>
+            <button type="button" class="shortcut-button" data-modal-close data-tab-target="kamp">Kampdag</button>
+            <button type="button" class="shortcut-button" data-modal-close data-tab-target="trening">Trening &amp; kunnskap</button>
+            <button type="button" class="shortcut-button" data-modal-close data-tab-target="scenarios">Scenarioer</button>
+          </div>
+        </div>
       </div>
     </div>
 

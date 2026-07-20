@@ -277,12 +277,17 @@ stage("10. Én primær vei videre");
     Boolean(strip) && !/<details/.test(strip[0])
   );
 
-  // Konkurrerende «Neste beslutninger» skal være foldet (sekundær støtte).
+  // Konkurrerende «Neste beslutninger» skal ikke være en andre alltid-åpen
+  // primær. Godkjent hvis den enten er foldet bak <details> ELLER flyttet inn i
+  // en popup (skjult til man åpner den) — en popup skjuler den enda tydeligere.
   const decision = html.match(/<section\b[^>]*\bdecision-strip\b[\s\S]*?<\/section>/);
   check("«Neste beslutninger»-panelet finnes", Boolean(decision));
+  const decisionInDetails = Boolean(decision) && /<details/.test(decision[0]);
+  const decisionInPopup = /data-modal-open="modalDecisions"/.test(html)
+    && /<div\b[^>]*\bmodal-overlay\b[^>]*\bid="modalDecisions"[\s\S]*?\bdecision-strip\b/.test(html);
   check(
-    "«Neste beslutninger» er foldet bak <details> (støtter, konkurrerer ikke)",
-    Boolean(decision) && /<details/.test(decision[0]),
+    "«Neste beslutninger» konkurrerer ikke (foldet bak <details> eller i popup)",
+    decisionInDetails || decisionInPopup,
     "en andre alltid-åpen «neste»-liste konkurrerer med den primære veien"
   );
 }

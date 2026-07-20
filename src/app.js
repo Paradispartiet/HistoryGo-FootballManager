@@ -4290,6 +4290,12 @@ function renderModeIsolation() {
     .forEach((node) => { node.hidden = !leagueMode; });
   document.querySelectorAll(".manager-portal, #offPitchSignalCard, .decision-strip")
     .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
+  // Kontor: knapperaden med dype popup-er hører til ligamodus; «Flere
+  // beslutninger» er fortsatt prematur i før-sesong.
+  document.querySelectorAll(".kontor-deep-actions")
+    .forEach((node) => { node.hidden = !leagueMode; });
+  document.querySelectorAll(".kontor-deep-decisions")
+    .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
   if (mode !== "league") {
     document.querySelectorAll(".league-season-panel, .league-onboarding-panel, .league-club-card")
       .forEach((node) => { node.hidden = true; });
