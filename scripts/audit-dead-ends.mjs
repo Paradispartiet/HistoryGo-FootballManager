@@ -21,6 +21,7 @@ import { dirname, join } from "node:path";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(root, "index.html"), "utf8");
 const app = readFileSync(join(root, "src/app.js"), "utf8");
+const css = readFileSync(join(root, "style.css"), "utf8");
 
 // ---- HTML-hjelpere ----------------------------------------------------------
 
@@ -283,6 +284,30 @@ stage("10. Én primær vei videre");
     "«Neste beslutninger» er foldet bak <details> (støtter, konkurrerer ikke)",
     Boolean(decision) && /<details/.test(decision[0]),
     "en andre alltid-åpen «neste»-liste konkurrerer med den primære veien"
+  );
+}
+
+// ---- 11) `hidden` vinner alltid over author-`display:` ----------------------
+// Blindvei-klassen bak flere paneler: et panel gates bort i JS/markup med
+// `hidden`, men en author-regel som `.mini-season-panel { display: grid }` slår
+// nettleserens svake `[hidden] { display:none }`, så panelet lekker likevel inn
+// på flaten (scenario-prøveperiode i ligamodus, ligasesong i treningsrommet,
+// side-/rollekort som aldri skjules). Én autoritativ global regel må sikre at
+// `hidden` alltid betyr «ikke vist», ellers gjeninnfører neste panel med en
+// egen `display:` blindveien. Vi krever regelen framfor å telle per-panel-vakter.
+stage("11. `hidden` vinner over display");
+{
+  // Fjern kommentarer først, slik at et eksempel i en kommentar ikke teller.
+  const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  // En regel der selektor-lista inneholder et bart `[hidden]` (ikke `.x[hidden]`)
+  // og deklarasjonen er `display:none !important`.
+  const globalHiddenRule = new RegExp(
+    "(^|[,{}])\\s*\\[hidden\\]\\s*(,[^{]*)?\\{[^}]*display\\s*:\\s*none\\s*!important[^}]*\\}"
+  );
+  check(
+    "style.css har en global `[hidden] { display: none !important }`-regel",
+    globalHiddenRule.test(cssNoComments),
+    "uten den slår enhver author-`display:` over `hidden` og panelet lekker inn på flaten"
   );
 }
 
