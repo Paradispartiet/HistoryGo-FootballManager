@@ -58,6 +58,17 @@
   box-sizing: border-box;
 }
 
+/* `hidden`-attributtet skal alltid bety «ikke vist». Uten dette vinner en hvilken
+   som helst author-`display:` (f.eks. `.mini-season-panel { display: grid }`) over
+   nettleserens svake `[hidden] { display:none }`, og et panel som er gatet bort i
+   JS/markup lekker likevel inn på flaten (scenario-prøveperiode i ligamodus,
+   ligasesong i treningsrommet, side-/rollekort som aldri skjules). Én
+   autoritativ regel her fjerner behovet for per-panel `[hidden]`-vakter og
+   hindrer at nye paneler gjeninnfører blindveien. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   font-size: 17px;
 }
