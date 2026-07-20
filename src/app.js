@@ -12273,6 +12273,88 @@ function bindEvents() {
   bindMatchdayControls();
   bindGameModeControls();
   bindModals();
+  bindSettings();
+}
+
+// Manuell lagring: fanger gjeldende modus-sesong og persisterer envelope +
+// gameStartState + onboarded. (Alt lagres også automatisk på slutten av
+// renderApp; dette er den eksplisitte «Lagre»-knappen i innstillinger.)
+function persistAllState() {
+  try {
+    if (state.modeEnvelope) {
+      state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+      state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+    }
+    saveGameStartState();
+    saveOnboarded();
+  } catch (_) { /* privat modus – kjører videre i minnet */ }
+}
+
+// «Start på nytt»: nullstiller HELE managerspillet (tropp, oppsett, sesong,
+// Club Week, innboks, badges, onboarding). Rører ALDRI ekte History
+// Go-progresjon (visited_places / hg_groundhopper_stats_v1), jf. CLAUDE.md.
+function resetGame() {
+  try {
+    const preserve = new Set([
+      HISTORY_GO_VISITED_PLACES_KEY,
+      HISTORY_GO_GROUNDHOPPER_STATS_KEY
+    ]);
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key) keys.push(key);
+    }
+    keys.forEach((key) => { if (!preserve.has(key)) localStorage.removeItem(key); });
+  } catch (_) { /* privat modus */ }
+  location.reload();
+}
+
+// Innstillinger-popup: tannhjulet i headeren åpner modalen (via data-modal-open);
+// her bindes handlingene inni.
+function bindSettings() {
+  const modal = document.querySelector("#modalSettings");
+  if (!modal) return;
+  const statusEl = document.querySelector("#settingsStatus");
+  const confirmEl = document.querySelector("#settingsResetConfirm");
+  const closeSettings = () => {
+    modal.hidden = true;
+    document.body.classList.remove("has-modal-open");
+    if (confirmEl) confirmEl.hidden = true;
+    if (statusEl) statusEl.hidden = true;
+  };
+  // Nullstill bekreftelses-/status-tilstand hver gang popupen åpnes.
+  document.querySelector("#settingsButton")?.addEventListener("click", () => {
+    if (confirmEl) confirmEl.hidden = true;
+    if (statusEl) statusEl.hidden = true;
+  });
+  modal.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-settings-action]");
+    if (!button) return;
+    switch (button.dataset.settingsAction) {
+      case "mode":
+        closeSettings();
+        state.modeChooserOpen = true;
+        renderApp();
+        break;
+      case "formations":
+        closeSettings();
+        activateTab("hgfmLibrary");
+        break;
+      case "save":
+        persistAllState();
+        if (statusEl) { statusEl.textContent = "Spillet er lagret."; statusEl.hidden = false; }
+        break;
+      case "reset":
+        if (confirmEl) confirmEl.hidden = false;
+        break;
+      case "reset-cancel":
+        if (confirmEl) confirmEl.hidden = true;
+        break;
+      case "reset-confirm":
+        resetGame();
+        break;
+    }
+  });
 }
 
 // Popup/modal-system: generisk, hendelsesdelegert håndtering. Åpne med et

@@ -7524,3 +7524,51 @@ body { grid-template-columns: minmax(0, 1fr); }
 .modal .metric-grid,
 .modal .detail-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .modal .panel { padding: 12px; }
+
+/* ---------- Innstillinger (tannhjul i header + popup-liste) ---------- */
+.site-header .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.header-title { min-width: 0; }
+.settings-button {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.settings-button:hover { background: rgba(255, 255, 255, 0.08); }
+.settings-list { display: flex; flex-direction: column; gap: 8px; }
+.settings-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  cursor: pointer;
+}
+.settings-item:hover { background: rgba(255, 255, 255, 0.07); }
+.settings-item strong { font-size: 1rem; }
+.settings-item small { color: var(--hg-text-muted); }
+.settings-item.is-danger { border-color: rgba(255, 107, 94, 0.4); }
+.settings-item.is-danger strong { color: var(--hg-accent-kamp, #ff6b5e); }
+.settings-status { margin: 12px 0 0; color: var(--hg-accent-tactics); font-weight: 700; }
+.settings-reset-confirm {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255, 107, 94, 0.4);
+  border-radius: 12px;
+}
+.settings-reset-actions { display: flex; gap: 8px; margin-top: 10px; }

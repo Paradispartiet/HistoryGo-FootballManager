@@ -29,9 +29,17 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <p class="eyebrow">HG Football Manager</p>
-      <h1>Managerkontoret</h1>
-      <p class="lede">Treneren avgjør. Les klubbens puls, bygg laget på banen og ta de neste beslutningene.</p>
+      <div class="header-title">
+        <p class="eyebrow">HG Football Manager</p>
+        <h1>Managerkontoret</h1>
+        <p class="lede">Treneren avgjør. Les klubbens puls, bygg laget på banen og ta de neste beslutningene.</p>
+      </div>
+      <button type="button" class="settings-button" id="settingsButton" data-modal-open="modalSettings" aria-label="Innstillinger" title="Innstillinger">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -706,35 +714,48 @@
         </section>
       </div>
 
-      <!-- Treningsfokus fra motoren (teamFit-svakheter) -->
-      <section class="panel manager-training-panel" aria-live="polite">
-        <p class="eyebrow">Managerinnsikt</p>
-        <h2>Treningsfokus</h2>
-        <ul id="managerTrainingPlan"></ul>
-      </section>
+      <!-- Detaljene (managerinnsikt + kunnskapsmotor) ligger i popup-er. -->
+      <div class="popup-actions" aria-label="Mer om trening">
+        <button type="button" data-modal-open="modalTrainingFocus">Treningsfokus</button>
+        <button type="button" data-modal-open="modalKnowledge">Fotballkunnskap</button>
+      </div>
 
-      <section class="panel manager-knowledge-panel">
-        <p class="eyebrow">Football Knowledge Engine</p>
-        <h2>Fotballkunnskap</h2>
-        <p class="muted-text">
-          Kunnskapsmotoren kobler lagets svakheter til fotballfaglige prinsipper, trenergrep og økter.
-        </p>
-        <p id="trainingWeekStatus" class="training-week-status">Kunnskapsuke 1</p>
-        <div class="knowledge-progress-grid" aria-label="Football Knowledge-progresjon">
-          <article><span>Denne uken</span><strong id="knowledgeCompletedThisWeek">0</strong></article>
-          <article><span>Totalt</span><strong id="knowledgeCompletedTotal">0</strong></article>
+      <div class="modal-overlay" id="modalTrainingFocus" role="dialog" aria-modal="true" aria-label="Treningsfokus" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Managerinnsikt</p><h3>Treningsfokus</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <ul id="managerTrainingPlan"></ul>
         </div>
-        <button type="button" id="advanceTrainingWeek" class="advance-training-week-button">
-          Gå til neste kunnskapsuke
-        </button>
-        <p id="activeKnowledgeFocus" class="active-knowledge-focus">Ingen aktiv kunnskapsøkt valgt.</p>
-        <button type="button" id="clearKnowledgeFocus" class="clear-knowledge-focus-button">Fjern aktivt fokus</button>
-        <ul id="managerKnowledgeRecommendations" class="knowledge-card-list"></ul>
-        <details class="panel-details is-flush training-history-panel">
-          <summary>Treningshistorikk</summary>
-          <ul id="trainingHistoryList" class="training-history-list"></ul>
-        </details>
-      </section>
+      </div>
+
+      <div class="modal-overlay" id="modalKnowledge" role="dialog" aria-modal="true" aria-label="Fotballkunnskap" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Football Knowledge Engine</p><h3>Fotballkunnskap</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <p class="muted-text">
+            Kunnskapsmotoren kobler lagets svakheter til fotballfaglige prinsipper, trenergrep og økter.
+          </p>
+          <p id="trainingWeekStatus" class="training-week-status">Kunnskapsuke 1</p>
+          <div class="knowledge-progress-grid" aria-label="Football Knowledge-progresjon">
+            <article><span>Denne uken</span><strong id="knowledgeCompletedThisWeek">0</strong></article>
+            <article><span>Totalt</span><strong id="knowledgeCompletedTotal">0</strong></article>
+          </div>
+          <button type="button" id="advanceTrainingWeek" class="advance-training-week-button">
+            Gå til neste kunnskapsuke
+          </button>
+          <p id="activeKnowledgeFocus" class="active-knowledge-focus">Ingen aktiv kunnskapsøkt valgt.</p>
+          <button type="button" id="clearKnowledgeFocus" class="clear-knowledge-focus-button">Fjern aktivt fokus</button>
+          <ul id="managerKnowledgeRecommendations" class="knowledge-card-list"></ul>
+          <details class="panel-details is-flush training-history-panel">
+            <summary>Treningshistorikk</summary>
+            <ul id="trainingHistoryList" class="training-history-list"></ul>
+          </details>
+        </div>
+      </div>
     </div>
 
     <!-- ============================ INNBOKS ============================ -->
@@ -751,34 +772,42 @@
         </div>
       </section>
 
-      <section class="panel inbox-signal-gate" aria-label="Klubbens signaler før trening">
-        <div>
-          <p class="eyebrow">Hvorfor nå?</p>
-          <h3>Klubbens signaler før trening</h3>
-          <p>Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
-        </div>
-        <dl class="inbox-signal-stats">
-          <div><dt>Uleste tråder</dt><dd id="inboxSignalUnread">0</dd></div>
-          <div><dt>Krever svar</dt><dd id="inboxSignalReplies">0</dd></div>
-          <div><dt>Påvirker</dt><dd>trening / slitasje / moral / taktisk klarhet / styrepress</dd></div>
-          <div><dt>Neste steg etter innboks</dt><dd>Trening</dd></div>
-        </dl>
-        <p id="inboxSignalStatus" class="inbox-signal-status">Ingen kritiske signaler nå</p>
-        <button type="button" class="primary-button inbox-training-cta" data-tab-target="trening" id="inboxGoTraining">Gå til Trening</button>
+      <div class="popup-actions" aria-label="Innboks">
+        <button type="button" class="inbox-training-cta" data-tab-target="trening" id="inboxGoTraining">Gå til Trening</button>
+        <button type="button" data-modal-open="modalInboxWhy">Hvorfor nå?</button>
+        <button type="button" data-modal-open="modalInboxArchive">Hele innboksen</button>
+      </div>
+
+      <section class="panel inbox-thread-panel" aria-label="Viktig nå">
+        <h3>Viktig nå</h3>
+        <div id="inboxThreadList" class="message-list"></div>
       </section>
 
-      <div class="inbox-thread-layout">
-        <section class="panel inbox-thread-panel" aria-label="Viktig nå">
-          <h3>Viktig nå</h3>
-          <div id="inboxThreadList" class="message-list"></div>
-        </section>
+      <div class="modal-overlay" id="modalInboxWhy" role="dialog" aria-modal="true" aria-label="Hvorfor nå?" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Hvorfor nå?</p><h3>Klubbens signaler før trening</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <p class="muted-text">Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
+          <dl class="inbox-signal-stats">
+            <div><dt>Uleste tråder</dt><dd id="inboxSignalUnread">0</dd></div>
+            <div><dt>Krever svar</dt><dd id="inboxSignalReplies">0</dd></div>
+            <div><dt>Påvirker</dt><dd>trening / slitasje / moral / taktisk klarhet / styrepress</dd></div>
+            <div><dt>Neste steg etter innboks</dt><dd>Trening</dd></div>
+          </dl>
+          <p id="inboxSignalStatus" class="inbox-signal-status">Ingen kritiske signaler nå</p>
+        </div>
+      </div>
 
-        <section class="panel inbox-thread-panel inbox-archive" aria-label="Trådarkiv">
-          <details class="panel-details is-flush"><summary>Se hele innboksen</summary>
-          <h3>Kan leses senere / Arkiv / historikk</h3>
+      <div class="modal-overlay" id="modalInboxArchive" role="dialog" aria-modal="true" aria-label="Hele innboksen" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Arkiv</p><h3>Hele innboksen</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
           <div id="inboxThreadArchive" class="message-list"></div>
-          </details>
-        </section>
+        </div>
       </div>
     </div>
 
@@ -1210,6 +1239,45 @@
       <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
     </section>
   </footer>
+
+  <!-- ============================ INNSTILLINGER (POPUP) ============================
+       Egen innstillingsknapp (tannhjul i headeren) → endre spillmodus, gå til
+       formasjoner, lagre, eller starte spillet på nytt. Toppnivå-element så den
+       er tilgjengelig fra alle flater. -->
+  <div class="modal-overlay" id="modalSettings" role="dialog" aria-modal="true" aria-label="Innstillinger" hidden>
+    <div class="modal">
+      <div class="modal-head">
+        <div><p class="eyebrow">Innstillinger</p><h3>Spill og lagring</h3></div>
+        <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+      </div>
+      <div class="settings-list">
+        <button type="button" class="settings-item" data-settings-action="mode">
+          <strong>Endre spillmodus</strong>
+          <small>Bytt mellom Ligaspill, Scenarioer og Treningsrom.</small>
+        </button>
+        <button type="button" class="settings-item" data-settings-action="formations">
+          <strong>Formasjoner</strong>
+          <small>Åpne formasjonsbiblioteket.</small>
+        </button>
+        <button type="button" class="settings-item" data-settings-action="save">
+          <strong>Lagre spillet</strong>
+          <small>Spillet lagres automatisk, men du kan lagre manuelt her.</small>
+        </button>
+        <button type="button" class="settings-item is-danger" data-settings-action="reset">
+          <strong>Start på nytt</strong>
+          <small>Nullstiller managerspillet. History Go-stedene dine røres ikke.</small>
+        </button>
+      </div>
+      <p id="settingsStatus" class="settings-status" role="status" aria-live="polite" hidden></p>
+      <div id="settingsResetConfirm" class="settings-reset-confirm" hidden>
+        <p class="muted-text">Sikker? Dette sletter tropp, oppsett, sesong og progresjon i managerspillet (ikke besøkte steder i History Go).</p>
+        <div class="settings-reset-actions">
+          <button type="button" class="unlock-card-action is-secondary" data-settings-action="reset-cancel">Avbryt</button>
+          <button type="button" class="unlock-card-action is-reset" data-settings-action="reset-confirm">Ja, start på nytt</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="src/app.js"></script>
   <script type="module" src="src/hg-formation-library.js"></script>
