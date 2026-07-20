@@ -4254,9 +4254,20 @@ function renderGameModeStatus(teamFit) {
 function renderModeIsolation() {
   const mode = state.modeEnvelope?.activeMode || "league";
   document.documentElement.dataset.activeMode = mode;
-  document.querySelectorAll("[data-league-only]").forEach((node) => { node.hidden = mode !== "league"; });
-  document.querySelectorAll(".manager-portal, .club-topbar, #clubWeekFeedback, #offPitchSignalCard, .club-week-event-log-panel")
-    .forEach((node) => { node.hidden = mode !== "league"; });
+  const leagueMode = mode === "league";
+  // Før-sesong-fokus: så lenge ligasesongen ikke er aktiv ennå (før-sesong)
+  // skal Oversikt ha ÉN tydelig vei videre — før-sesong-sjekklista, klubbkortet
+  // og footerens «Neste handling». De rene in-season-/kampflatene lekker inn som
+  // en vegg av konkurrerende «neste»-kort før laget er bygd og terminlista
+  // finnes: managerportalen («Neste kamp: låst», «Neste beslutning»),
+  // off-pitch-signalene og «Flere åpne beslutninger». De er premature nå og
+  // kommer tilbake automatisk når sesongen er aktiv.
+  const leaguePreseason = leagueMode && !isLeagueSeasonActive();
+  document.querySelectorAll("[data-league-only]").forEach((node) => { node.hidden = !leagueMode; });
+  document.querySelectorAll(".club-topbar, #clubWeekFeedback, .club-week-event-log-panel")
+    .forEach((node) => { node.hidden = !leagueMode; });
+  document.querySelectorAll(".manager-portal, #offPitchSignalCard, .decision-strip")
+    .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
   if (mode !== "league") {
     document.querySelectorAll(".league-season-panel, .league-onboarding-panel, .league-club-card")
       .forEach((node) => { node.hidden = true; });

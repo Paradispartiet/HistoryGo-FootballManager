@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import {
   MODE_SESSION_KEY,
+  SET_STATE_FIELDS,
+  applyModeSession,
   captureModeSession,
   migrateModeSessions,
   persistModeEnvelope,
@@ -125,9 +127,45 @@ check("footer, status og panelguard følger den ene aktive modusen", async () =>
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   assert.match(app, /state\.modeEnvelope\?\.activeMode/);
-  assert.match(app, /\.manager-portal, \.club-topbar/);
+  // Panelguarden er nå delt: alltid-league-flater vs. flater som også gates bort
+  // i før-sesong (managerportal, off-pitch, «flere åpne beslutninger»).
+  assert.match(app, /\.club-topbar, #clubWeekFeedback/);
+  assert.match(app, /\.manager-portal, #offPitchSignalCard, \.decision-strip/);
+  assert.match(app, /const leaguePreseason = leagueMode && !isLeagueSeasonActive\(\)/);
   assert.match(html, /id="secondaryModeBar"/);
   assert.match(html, /Tilbake til ligaspill/);
+});
+
+// Regresjonsvakt: Set-felt (lest/levert innboks, fullførte kunnskapsfokus) er
+// `Set` i app-staten. En naiv JSON-runde gjorde dem til `{}`, og neste
+// `.has(...)` kastet «has is not a function» — renderApp stoppet og appen ble
+// stående i «Feil» ved hver last. Capture→apply må bevare `Set`-typen.
+check("Set-felt overlever capture→apply-runden (ingen `.has is not a function`)", () => {
+  assert.ok(Array.isArray(SET_STATE_FIELDS) && SET_STATE_FIELDS.length > 0);
+  const source = {
+    readInboxMessageIds: new Set(["m1", "m2"]),
+    deliveredInboxMessageIds: new Set(["m1"]),
+    completedKnowledgeFocusIds: new Set(["k1"])
+  };
+  const snapshot = captureModeSession(source);
+  // Snapshotet må være JSON-trygt (arrays, ikke Set/{}).
+  for (const field of SET_STATE_FIELDS) {
+    assert.ok(Array.isArray(snapshot[field]), `${field} skal serialiseres som array`);
+  }
+  const roundTripped = JSON.parse(JSON.stringify(snapshot));
+  const target = {};
+  applyModeSession(target, roundTripped);
+  for (const field of SET_STATE_FIELDS) {
+    assert.ok(target[field] instanceof Set, `${field} skal rehydreres til Set`);
+    assert.doesNotThrow(() => target[field].has("x"));
+  }
+  assert.deepEqual([...target.readInboxMessageIds].sort(), ["m1", "m2"]);
+  assert.deepEqual([...target.deliveredInboxMessageIds], ["m1"]);
+  // Korrupt lagret verdi (Set lagret som `{}` av gammel build) må heles til tomt Set.
+  const healed = {};
+  applyModeSession(healed, { deliveredInboxMessageIds: {} });
+  assert.ok(healed.deliveredInboxMessageIds instanceof Set);
+  assert.doesNotThrow(() => healed.deliveredInboxMessageIds.has("x"));
 });
 
 console.log(`\nAlle ${checks.length} modusisolasjonssjekker besto.`);

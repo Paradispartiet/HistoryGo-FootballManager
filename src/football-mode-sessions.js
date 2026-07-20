@@ -19,6 +19,20 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason"
 ]);
 
+// Set-felt: disse er `Set` i app-staten, men `JSON.stringify(new Set())` gir
+// `"{}"` — så en naiv JSON-runde (captureModeSession → applyModeSession) gjorde
+// dem om til tomme objekter. Neste `state.deliveredInboxMessageIds.has(...)`
+// kastet da «has is not a function», renderApp stoppet, og appen ble stående i
+// «Feil». Vi serialiserer dem som arrays og rehydrerer til `Set` igjen.
+export const SET_STATE_FIELDS = Object.freeze([
+  "readInboxMessageIds", "deliveredInboxMessageIds", "completedKnowledgeFocusIds"
+]);
+
+function toIdArray(value) {
+  if (value instanceof Set || Array.isArray(value)) return Array.from(value);
+  return [];
+}
+
 const LEGACY_KEYS = Object.freeze({
   selectedFormationId: "hgfm.selectedFormation.v1",
   selectedTacticId: "hgfm.selectedTactic.v1",
@@ -51,7 +65,10 @@ export function normalizeMode(value, fallback = "league") {
 export function captureModeSession(state) {
   const snapshot = {};
   SESSION_STATE_FIELDS.forEach((field) => {
-    if (state[field] !== undefined) snapshot[field] = cloneSessionValue(state[field]);
+    if (state[field] === undefined) return;
+    snapshot[field] = SET_STATE_FIELDS.includes(field)
+      ? toIdArray(state[field])
+      : cloneSessionValue(state[field]);
   });
   return snapshot;
 }
@@ -60,7 +77,9 @@ export function applyModeSession(state, session) {
   if (!isObject(session)) return state;
   SESSION_STATE_FIELDS.forEach((field) => {
     if (Object.prototype.hasOwnProperty.call(session, field)) {
-      state[field] = cloneSessionValue(session[field]);
+      state[field] = SET_STATE_FIELDS.includes(field)
+        ? new Set(toIdArray(session[field]))
+        : cloneSessionValue(session[field]);
     } else {
       delete state[field];
     }
