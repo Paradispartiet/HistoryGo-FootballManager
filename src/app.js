@@ -12266,6 +12266,37 @@ function bindEvents() {
   bindClubWeekControls();
   bindMatchdayControls();
   bindGameModeControls();
+  bindModals();
+}
+
+// Popup/modal-system: generisk, hendelsesdelegert håndtering. Åpne med et
+// element som har data-modal-open="modalId", lukk med data-modal-close,
+// backdrop-klikk eller Esc. Bindes én gang på document, så renderApp aldri
+// dobbeltbinder.
+function bindModals() {
+  const closeAll = () => {
+    document.querySelectorAll(".modal-overlay:not([hidden])").forEach((m) => { m.hidden = true; });
+    document.body.classList.remove("has-modal-open");
+  };
+  document.addEventListener("click", (event) => {
+    const opener = event.target.closest("[data-modal-open]");
+    if (opener) {
+      const modal = document.getElementById(opener.getAttribute("data-modal-open"));
+      if (modal) {
+        closeAll();
+        modal.hidden = false;
+        document.body.classList.add("has-modal-open");
+        modal.querySelector(".modal-close, [data-modal-close]")?.focus();
+      }
+      return;
+    }
+    if (event.target.closest("[data-modal-close]")) { closeAll(); return; }
+    // Backdrop: klikk direkte på overlay (ikke på .modal inni).
+    if (event.target.classList?.contains("modal-overlay")) { closeAll(); }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeAll();
+  });
 }
 
 function bindFormationAndTacticControls() {

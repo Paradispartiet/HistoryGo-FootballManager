@@ -7211,7 +7211,10 @@ button.portal-card:hover {
    fila så app-rammen vinner over den eldre web-layouten.
    ================================================================== */
 
-:root { --app-max: 460px; }
+/* Bredere app-ramme: fyll skjermen opp til en komfortabel maksbredde i stedet
+   for en smal telefonkolonne. Detaljer flyttes til popup-er, så flatene kan
+   puste. */
+:root { --app-max: 1080px; }
 
 html { height: 100%; }
 
@@ -7383,3 +7386,76 @@ body { grid-template-columns: minmax(0, 1fr); }
 /* Gi tab-rekka mest mulig plass: minimer «senere»-menyknappen. */
 .nav-office-toggle { min-width: 0 !important; }
 .main-nav .nav-tab { padding-inline: 1px !important; }
+
+/* ==================================================================
+   POPUP / MODAL-SYSTEM
+   Detaljer flyttes ut av flatene og inn i popup-er, så hver skjerm
+   viser lite og er lett å lese. Åpnes med [data-modal-open="id"],
+   lukkes med [data-modal-close], backdrop-klikk eller Esc.
+   ================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(3, 5, 10, 0.72);
+}
+.modal-overlay[hidden] { display: none !important; }
+.modal {
+  width: min(94vw, 680px);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--hg-panel-bg-strong);
+  border: 1px solid var(--hg-border-strong);
+  border-radius: 16px;
+  padding: 16px 18px 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+.modal-head {
+  position: sticky;
+  top: -16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -16px -18px 12px;
+  padding: 14px 18px 10px;
+  background: var(--hg-panel-bg-strong);
+  border-bottom: 1px solid var(--hg-border-soft);
+}
+.modal-head h3 { margin: 0; font-size: 1.15rem; }
+.modal-head .eyebrow { margin: 0 0 2px; }
+.modal-close {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--hg-border-soft);
+  background: transparent;
+  color: var(--text);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.modal-close:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* Knapperad som åpner popup-er. */
+.popup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.popup-actions button {
+  flex: 1 1 auto;
+  padding: 11px 14px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+.popup-actions button:hover { background: rgba(255, 255, 255, 0.07); }
