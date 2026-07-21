@@ -1,5 +1,15 @@
 # Formation Unlock Bridge v1 — mapping-audit
 
+> **Oppdatert kontrakt (formasjoner alltid spillbare):** Formasjoner er
+> managerens taktiske verktøy, ikke samleobjekter. `evaluateFormationUnlock`
+> returnerer nå `unlocked: true` for ALLE formasjoner — alle 46 kan velges og
+> tas i bruk uavhengig av History Go. Kravsevalueringen under avgjør fortsatt
+> `collected` (er systemet oppdaget/samlet via History Go), som brukes til
+> samlingstelleren og til bibliotekets kunnskapslinje ("Samlet via …" vs "Fritt
+> spillbart. Samles i History Go via …") — men aldri lenger som en spillås.
+> History Go samler fortsatt **spillere og støtteapparat**; formasjoner gjør det
+> ikke. Beskrivelsen under gjelder derfor nå `collected`-flagget, ikke `unlocked`.
+
 ## Runtime-kontrakt
 
 `src/app.js` behandler `start` og `early` som baseline-tier og åpner dem uten at et konkret krav må være oppfylt. For øvrige tier kan runtime evaluere krav med en konkret `ref` for disse kildene:

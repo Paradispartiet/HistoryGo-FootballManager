@@ -7621,3 +7621,7 @@ body { grid-template-columns: minmax(0, 1fr); }
 /* «Bruk formasjon»-status (låst-tilbakemelding). */
 .hgfm-apply-status { margin: 4px 0 0; font-size: 0.85rem; color: var(--hg-text-muted); min-height: 1em; }
 .hgfm-apply-status[data-tone="warn"] { color: var(--hg-accent-market, #ff9d4d); }
+
+/* Auto-fyll tropp (never-stuck-uten-History-Go). */
+.autofill-squad { width: 100%; margin: 4px 0 4px; }
+.autofill-squad-note { margin: 0 0 8px; font-size: 0.8rem; }

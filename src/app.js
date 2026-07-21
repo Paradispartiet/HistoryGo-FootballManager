@@ -2022,13 +2022,18 @@ function computeAvailability() {
     earnedBadgeIds: new Set(Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [])
   };
 
+  // Alle formasjoner er spillbare (unlockedFormations = alle). History Go styrer
+  // bare hva som er SAMLET/oppdaget (collectedFormations) — brukt til
+  // samlingstelleren og bibliotekets kunnskapslinje, ikke som spillås.
   const unlockedFormations = [];
+  const collectedFormations = [];
   const lockedFormations = [];
   const formationStatusById = new Map();
   (Array.isArray(state.formations) ? state.formations : []).forEach((formation) => {
     const status = evaluateFormationUnlock(formation, collectedPools);
     formationStatusById.set(formation.id, status);
-    (status.unlocked ? unlockedFormations : lockedFormations).push(formation);
+    unlockedFormations.push(formation);
+    (status.collected ? collectedFormations : lockedFormations).push(formation);
   });
 
   // 5) Roster readiness (15-spillerkravet) fra opplåste spillere + lineup.
@@ -2046,6 +2051,7 @@ function computeAvailability() {
     unlockedStaff,
     unlockedStaffIds: collectedPools.unlockedStaffIds,
     unlockedFormations,
+    collectedFormations,
     lockedFormations,
     formationStatusById,
     rosterReadiness
@@ -2129,9 +2135,14 @@ function findSatisfiedUnlockRequirement(requires, pools) {
 // tilgang/kunnskap/samlekilde – aldri om kvalitet. Alle formasjoner blir stående
 // i det historiske formasjonsbiblioteket uansett status. satisfiedBy er det
 // konkrete kravet (sted/spiller/stab/badge) som åpnet systemet, til UI-visning.
+// Formasjoner er managerens taktiske verktøy, ikke samleobjekter: ALLE er
+// alltid spillbare (`unlocked: true`). Det History Go styrer er hva du har
+// SAMLET/oppdaget (`collected`) — den historiske opplåsingslinjen vises i
+// formasjonsbiblioteket som kunnskap, ikke som en lås. Spillere og
+// støtteapparat samles fortsatt via History Go; formasjoner gjør det ikke.
 function evaluateFormationUnlock(formation, pools) {
   if (!formation || !formation.id) {
-    return { unlocked: true, tier: null, reason: "Ukjent formasjon – behandles som åpen.", satisfiedBy: null };
+    return { unlocked: true, collected: true, tier: null, reason: "Åpent system.", satisfiedBy: null };
   }
 
   const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
@@ -2140,21 +2151,22 @@ function evaluateFormationUnlock(formation, pools) {
   const tier = rule?.tier || null;
   const links = Array.isArray(formation.unlockLinks) ? formation.unlockLinks : [];
 
-  // Grunntilgang: start-/early-tier er managerens basissystemer.
+  // Grunntilgang: start-/early-tier er managerens basissystemer (alltid «samlet»).
   if (tier && FORMATION_BASELINE_TIERS.has(tier)) {
-    return { unlocked: true, tier, reason: "Grunntilgang (start-/tidligformasjon).", satisfiedBy: null };
+    return { unlocked: true, collected: true, tier, reason: "Grunnsystem (start-/tidligformasjon).", satisfiedBy: null };
   }
 
-  // Ingen registrert regel og ingen unlockLinks: ingen kjent låsekilde.
+  // Ingen registrert regel og ingen unlockLinks: åpent system.
   if (!rule && !links.length) {
-    return { unlocked: true, tier, reason: "Ingen opplåsingsregel registrert – åpen.", satisfiedBy: null };
+    return { unlocked: true, collected: true, tier, reason: "Åpent system uten egen historisk kilde.", satisfiedBy: null };
   }
 
   if (rule && isUnlockRequiresSatisfied(rule.requires, pools)) {
     return {
       unlocked: true,
+      collected: true,
       tier,
-      reason: "Låst opp via History Go-samling (unlock-regel).",
+      reason: "Samlet via History Go.",
       satisfiedBy: findSatisfiedUnlockRequirement(rule.requires, pools)
     };
   }
@@ -2163,13 +2175,15 @@ function evaluateFormationUnlock(formation, pools) {
   if (satisfiedLink) {
     return {
       unlocked: true,
+      collected: true,
       tier,
-      reason: "Låst opp via History Go-samling (unlock-kobling).",
+      reason: "Samlet via History Go.",
       satisfiedBy: satisfiedLink.ref ? satisfiedLink : null
     };
   }
 
-  return { unlocked: false, tier, reason: buildFormationUnlockNote(formation), satisfiedBy: null };
+  // Ikke samlet i History Go ennå — men fortsatt fritt spillbar som taktisk valg.
+  return { unlocked: true, collected: false, tier, reason: buildFormationUnlockNote(formation), satisfiedBy: null };
 }
 
 // Roster readiness (15-spillerkravet): 11 i startelleveren + minst 4 på benken.
@@ -6354,9 +6368,10 @@ function getFormationUnlockRequirements(formation) {
   return concrete.length ? concrete : all;
 }
 
-// Kort tilgangstekst for én formasjon: "Ulåst via sted: Highbury …" for ulåste
-// systemer der availability-snapshotet kan forklare kilden, og "Låst – åpnes
-// via …" med konkrete krav for låste. Kun visning – ingen unlock-beregning.
+// Kort tilgangstekst for én formasjon. Alle formasjoner er spillbare; teksten
+// forklarer bare History Go-samlestatusen: "Samlet via sted: Highbury" for
+// oppdagede systemer, og "Fritt spillbart. Samles i History Go via …" for de du
+// ennå ikke har oppdaget. Kun visning – ingen unlock-beregning.
 function buildFormationAccessText(formation) {
   const status = formation ? getAvailability().formationStatusById.get(formation.id) : null;
 
@@ -6364,14 +6379,14 @@ function buildFormationAccessText(formation) {
     return "";
   }
 
-  if (status.unlocked) {
-    if (status.satisfiedBy) {
-      const source = describeUnlockRequirementShort(status.satisfiedBy);
-      return source ? `Ulåst via ${source}.` : status.reason;
-    }
-    if (status.tier && FORMATION_BASELINE_TIERS.has(status.tier)) {
-      return "Ulåst som grunnsystem (start-/tidligformasjon).";
-    }
+  if (status.satisfiedBy) {
+    const source = describeUnlockRequirementShort(status.satisfiedBy);
+    return source ? `Samlet via ${source}.` : status.reason;
+  }
+  if (status.tier && FORMATION_BASELINE_TIERS.has(status.tier)) {
+    return "Grunnsystem (start-/tidligformasjon).";
+  }
+  if (status.collected) {
     return status.reason;
   }
 
@@ -6379,11 +6394,9 @@ function buildFormationAccessText(formation) {
     .map((requirement) => describeUnlockRequirementShort(requirement))
     .filter(Boolean);
 
-  if (!requirements.length) {
-    return "Låst. Ingen kjent opplåsingskilde registrert ennå.";
-  }
-
-  return `Låst – åpnes via ${requirements.slice(0, 3).join(" eller ")}.`;
+  return requirements.length
+    ? `Fritt spillbart. Samles i History Go via ${requirements.slice(0, 3).join(" eller ")}.`
+    : "Fritt spillbart historisk system.";
 }
 
 function appendFormationKnowledgeList(root, label, items, className = "") {
@@ -11852,8 +11865,10 @@ function renderCollectionSummary() {
     elements.collectionStaffCount.textContent = String(snapshot.unlockedStaff.length);
   }
   if (elements.collectionFormationsCount) {
+    // Alle formasjoner er spillbare; telleren viser hvor mange du har SAMLET/
+    // oppdaget via History Go (discovery), ikke hvor mange som er spillbare.
     elements.collectionFormationsCount.textContent =
-      `${snapshot.unlockedFormations.length}/${state.formations.length}`;
+      `${snapshot.collectedFormations.length}/${state.formations.length}`;
   }
 
   if (elements.collectionMatchdayBadge) {
@@ -12618,6 +12633,34 @@ function bindLocalStartControls() {
           renderLocalStartStatus();
         },
         { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    });
+  }
+
+  // «Never stuck without History Go»: ett klikk fyller 15 spillere fra et
+  // standard offentlig startsted, så en helt fersk manager uten HG-data aldri
+  // står på 0/15. Gjenbruker samme lokal-start-motor som stedvalget — ingen ny
+  // unlock-vei, og skriver aldri til ekte History Go-progresjon.
+  const autoFillSquad = document.querySelector("#autoFillSquad");
+  if (autoFillSquad) {
+    autoFillSquad.addEventListener("click", () => {
+      const places = getPublicStartPlaces();
+      const place = places.find((entry) => entry.placeId === elements.publicStartPlaceSelect?.value) || places[0];
+      if (!place) {
+        state.localStartMessage = "Ingen offentlige startsteder er tilgjengelige i datasettet.";
+        renderLocalStartStatus();
+        return;
+      }
+      const anchor = setPublicStartAnchor(place.placeId);
+      if (!anchor) {
+        state.localStartMessage = "Startstedet mangler gyldige koordinater og ble ikke lagret.";
+        renderLocalStartStatus();
+        return;
+      }
+      if (elements.publicStartPlaceSelect) elements.publicStartPlaceSelect.value = anchor.placeId;
+      activateLocalStartSquad(
+        { latitude: anchor.latitude, longitude: anchor.longitude },
+        { source: "chosen_place", chosenPlaceId: anchor.placeId, chosenPlaceName: anchor.placeName }
       );
     });
   }
