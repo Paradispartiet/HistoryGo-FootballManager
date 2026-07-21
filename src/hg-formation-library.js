@@ -230,6 +230,24 @@ function renderDetail(root, model) {
     ])
   );
 
+  // «Bruk denne formasjonen»: kobler biblioteket til det spillbare valget.
+  // Setter lagets formasjon (samme selectedFormationId som formationSelect på
+  // Lag bruker) via en CustomEvent app.js lytter på — ingen egen datakopi.
+  const applyBtn = el(
+    "button",
+    { type: "button", class: "hgfm-apply-formation", dataset: { applyFormationId: formation.id } },
+    [el("span", { text: `Bruk ${formation.name} i laget` })]
+  );
+  applyBtn.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("hgfm:apply-formation", {
+      detail: { formationId: formation.id, name: formation.name }
+    }));
+  });
+  detail.append(applyBtn);
+  // app.js skriver hit hvis formasjonen ikke er låst opp ennå (klar
+  // tilbakemelding i stedet for en stille blindvei).
+  detail.append(el("p", { class: "hgfm-apply-status", id: "hgfmApplyStatus" }));
+
   if (formation.notes) {
     detail.append(el("p", { class: "hgfm-detail-notes", text: formation.notes }));
   }

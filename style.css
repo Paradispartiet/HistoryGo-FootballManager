@@ -7572,3 +7572,52 @@ body { grid-template-columns: minmax(0, 1fr); }
   border-radius: 12px;
 }
 .settings-reset-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+/* «Bruk denne formasjonen» i formasjonsbiblioteket. */
+.hgfm-apply-formation {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--hg-accent-tactics);
+  border-radius: 12px;
+  background: rgba(70, 214, 140, 0.12);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+.hgfm-apply-formation:hover { background: rgba(70, 214, 140, 0.2); }
+
+/* ---------- Kontorets avdelinger (kontorfunksjonene tilbake på Kontor) ---------- */
+.kontor-departments { margin: 0; }
+.kontor-departments-label { margin: 0 0 8px; }
+.kontor-departments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.dept-link-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+  padding: 13px 15px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  cursor: pointer;
+}
+.dept-link-card:hover { background: rgba(255, 255, 255, 0.07); border-color: var(--hg-border-strong); }
+.dept-link-card .eyebrow { margin: 0; }
+.dept-link-card strong { font-size: 1.05rem; }
+.dept-link-card small { color: var(--hg-text-muted); }
+
+/* Fasiliteter: live status-linje + nivå-tone. */
+.facility-status { margin: 6px 0 0; font-size: 0.85rem; color: var(--hg-text-muted); }
+.facility-level[data-tone="good"] { color: var(--hg-accent-tactics); }
+.facility-level[data-tone="warn"] { color: var(--hg-accent-market, #ff9d4d); }
+
+/* «Bruk formasjon»-status (låst-tilbakemelding). */
+.hgfm-apply-status { margin: 4px 0 0; font-size: 0.85rem; color: var(--hg-text-muted); min-height: 1em; }
+.hgfm-apply-status[data-tone="warn"] { color: var(--hg-accent-market, #ff9d4d); }

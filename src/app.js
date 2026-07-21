@@ -411,10 +411,6 @@ const elements = {
   // Do not treat it as mandatory onboarding.
   onboardingScreen: document.querySelector("#onboardingScreen"),
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
-  leagueOnboardingPanel: document.querySelector("#leagueOnboardingPanel"),
-  leagueOnboardingLead: document.querySelector("#leagueOnboardingLead"),
-  leagueOnboardingPrimary: document.querySelector("#leagueOnboardingPrimary"),
-  leagueOnboardingSteps: document.querySelector("#leagueOnboardingSteps"),
   leagueClubCard: document.querySelector("#leagueClubCard"),
   leagueClubName: document.querySelector("#leagueClubName"),
   leagueClubAnchor: document.querySelector("#leagueClubAnchor"),
@@ -591,6 +587,15 @@ const elements = {
   inboxPulseCount: document.querySelector("#inboxPulseCount"),
   adminSquadCount: document.querySelector("#adminSquadCount"),
   adminStaffCount: document.querySelector("#adminStaffCount"),
+  facilityOverallValue: document.querySelector("#facilityOverallValue"),
+  facilityTrainingLevel: document.querySelector("#facilityTrainingLevel"),
+  facilityTrainingStatus: document.querySelector("#facilityTrainingStatus"),
+  facilityStadiumLevel: document.querySelector("#facilityStadiumLevel"),
+  facilityStadiumStatus: document.querySelector("#facilityStadiumStatus"),
+  facilityAcademyLevel: document.querySelector("#facilityAcademyLevel"),
+  facilityAcademyStatus: document.querySelector("#facilityAcademyStatus"),
+  facilityMedicalLevel: document.querySelector("#facilityMedicalLevel"),
+  facilityMedicalStatus: document.querySelector("#facilityMedicalStatus"),
   marketMediaValue: document.querySelector("#marketMediaValue"),
   marketReputationNote: document.querySelector("#marketReputationNote"),
   boardTrustValue: document.querySelector("#boardTrustValue"),
@@ -4286,7 +4291,7 @@ function renderModeIsolation() {
   // kommer tilbake automatisk når sesongen er aktiv.
   const leaguePreseason = leagueMode && !isLeagueSeasonActive();
   document.querySelectorAll("[data-league-only]").forEach((node) => { node.hidden = !leagueMode; });
-  document.querySelectorAll(".club-topbar, #clubWeekFeedback, .club-week-event-log-panel")
+  document.querySelectorAll(".club-topbar, #clubWeekFeedback, .club-week-event-log-panel, .kontor-departments")
     .forEach((node) => { node.hidden = !leagueMode; });
   document.querySelectorAll(".manager-portal, #offPitchSignalCard, .decision-strip")
     .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
@@ -7052,6 +7057,7 @@ function renderDepartments() {
   }
 
   renderAdminRoom();
+  renderFacilities();
 
   const media = state.clubWeekState?.mediaPressure;
   if (elements.marketMediaValue) {
@@ -7090,6 +7096,64 @@ function renderDepartments() {
 // Styret v1: den fyldige styreflaten. Leser klubbstate direkte
 // (styretillit, klubbverdier, ukerytme) — ingen ny motor, ingen History
 // Go-progresjon. I scenario-modus vises også prøveperiodens styreforventning.
+// Fasiliteter v1: ekte, lesbar kontorflate — ingen ny motor. Anleggsstanden
+// avledes av verdier som allerede finnes (treningskultur, medietrykk, opplåste
+// spillere, engasjert stab), på samme måte som Styret og Klubbrom leser klubben.
+function renderFacilities() {
+  const club = state.clubWeekState || {};
+  const bandFromScore = (value, t2, t3) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return { level: 0, label: "Nivå –", tone: "neutral" };
+    if (n >= t3) return { level: 3, label: "Nivå 3", tone: "good" };
+    if (n >= t2) return { level: 2, label: "Nivå 2", tone: "neutral" };
+    return { level: 1, label: "Nivå 1", tone: "warn" };
+  };
+  const bandFromCount = (count, t1, t2, t3) => {
+    if (count >= t3) return { level: 3, label: "Nivå 3", tone: "good" };
+    if (count >= t2) return { level: 2, label: "Nivå 2", tone: "neutral" };
+    if (count >= t1) return { level: 1, label: "Nivå 1", tone: "warn" };
+    return { level: 0, label: "Nivå –", tone: "neutral" };
+  };
+  const apply = (levelEl, statusEl, band, text) => {
+    if (levelEl) { levelEl.textContent = band.label; levelEl.dataset.tone = band.tone; }
+    if (statusEl) statusEl.textContent = text;
+  };
+
+  const culture = Number(club.trainingCulture);
+  const training = bandFromScore(culture, 45, 65);
+  apply(elements.facilityTrainingLevel, elements.facilityTrainingStatus, training,
+    !Number.isFinite(culture) ? "Treningskulturen er ikke lest ennå."
+      : culture >= 65 ? `Sterk treningskultur (${culture}) – anlegget driver rask utvikling.`
+        : culture <= 40 ? `Svak treningskultur (${culture}) – anlegget holder laget så vidt i gang.`
+          : `Treningskultur ${culture} – solid grunnlag for utvikling.`);
+
+  const media = Number(club.mediaPressure);
+  const stadium = bandFromScore(media, 45, 65);
+  apply(elements.facilityStadiumLevel, elements.facilityStadiumStatus, stadium,
+    !Number.isFinite(media) ? "Medietrykket er ikke lest ennå."
+      : media >= 65 ? `Stor kampdagsramme – medietrykket (${media}) fyller stadion.`
+        : media <= 40 ? `Rolig ramme – lavt medietrykk (${media}).`
+          : `Medietrykk ${media} – jevn kampdagsstemning.`);
+
+  const players = getUnlockedPlayers().length;
+  const academy = bandFromCount(players, 1, 8, 15);
+  apply(elements.facilityAcademyLevel, elements.facilityAcademyStatus, academy,
+    players === 0 ? "Ingen spillere hentet inn ennå – besøk steder i History Go."
+      : `${players} klassespillere i samlingen mater akademiet.`);
+
+  const staff = getHiredStaff().length;
+  const medical = bandFromCount(staff, 1, 1, 3);
+  apply(elements.facilityMedicalLevel, elements.facilityMedicalStatus, medical,
+    staff === 0 ? "Ingen stab engasjert – begrenset skadeforebygging."
+      : `${staff} i staben støtter restitusjon og skadeforebygging.`);
+
+  if (elements.facilityOverallValue) {
+    const levels = [training, stadium, academy, medical].map((b) => b.level);
+    const avg = levels.reduce((a, b) => a + b, 0) / levels.length;
+    elements.facilityOverallValue.textContent = avg >= 2.5 ? "Sterk" : avg >= 1.5 ? "Solid" : avg > 0 ? "Grunnleggende" : "–";
+  }
+}
+
 function renderBoardRoom() {
   const club = state.clubWeekState;
 
@@ -12274,6 +12338,37 @@ function bindEvents() {
   bindGameModeControls();
   bindModals();
   bindSettings();
+  bindFormationLibraryApply();
+}
+
+// Formasjonsbibliotek → spillbart valg: «Bruk denne formasjonen» i biblioteket
+// (hg-formation-library.js) sender en CustomEvent. Her settes lagets formasjon
+// (samme selectedFormationId som formationSelect på Lag) og vi går til Lag.
+// Samme unlock-gating som dropdownen: en låst formasjon tas ikke i bruk.
+function bindFormationLibraryApply() {
+  window.addEventListener("hgfm:apply-formation", (event) => {
+    const formationId = event.detail?.formationId;
+    if (!formationId) return;
+    const statusEl = document.getElementById("hgfmApplyStatus");
+    // Spillbar = formasjonen finnes som et aktivt (ikke deaktivert) valg i
+    // formationSelect på Lag. Biblioteket viser alle 46 historiske systemer, men
+    // bare de spillbare kan settes på laget. Ikke bytt lag i stillhet ellers.
+    const option = elements.formationSelect?.querySelector(`option[value="${formationId}"]`);
+    const playable = Boolean(option) && !option.disabled;
+    if (!playable) {
+      if (statusEl) {
+        statusEl.textContent = `«${event.detail?.name || "Formasjonen"}» er ikke spillbar for laget ennå — låses opp via History Go-progresjon.`;
+        statusEl.dataset.tone = "warn";
+      }
+      return;
+    }
+    state.selectedFormationId = formationId;
+    seedLineupForFormation();
+    ensurePositionsForFormation();
+    if (statusEl) statusEl.textContent = "";
+    activateTab("tactics");
+    renderApp();
+  });
 }
 
 // Manuell lagring: fanger gjeldende modus-sesong og persisterer envelope +

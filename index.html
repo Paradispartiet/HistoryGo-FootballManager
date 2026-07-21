@@ -152,18 +152,6 @@
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
 
-      <section class="panel league-onboarding-panel" id="leagueOnboardingPanel" aria-label="Før sesong: bygg klubben" hidden>
-        <div class="league-onboarding-head">
-          <div>
-            <p class="eyebrow">Før ligaspill</p>
-            <h2>Bygg klubben før sesongstart</h2>
-            <p id="leagueOnboardingLead" class="muted-text">Velg startsted, hent spillere, sett stab, førsteellever, formasjon og trening før første seriekamp.</p>
-          </div>
-          <button type="button" id="leagueOnboardingPrimary" class="primary-action-button">Fortsett oppsett</button>
-        </div>
-        <ol id="leagueOnboardingSteps" class="league-onboarding-steps" aria-label="Før seriestart"></ol>
-      </section>
-
       <section id="leagueClubCard" class="panel league-club-card" aria-label="Klubbkort for ligaspill" aria-live="polite" hidden>
         <div class="league-club-card-head">
           <div>
@@ -221,6 +209,34 @@
           <strong id="portalInboxStatus">Ingen nye assistentråd</strong>
           <small>Stab, styre, speiding og garderobe samles som meldingskort.</small>
         </button>
+      </section>
+
+      <!-- Kontorets avdelinger: kontorfunksjonene er nå tilbake på selve Kontor
+           i stedet for gjemt i «senere»-menyen. Hver åpner sin flate. -->
+      <section class="kontor-departments" aria-label="Kontorets avdelinger">
+        <p class="kontor-departments-label eyebrow">Kontorets avdelinger</p>
+        <div class="kontor-departments-grid">
+          <button type="button" class="dept-link-card" data-tab-target="admin">
+            <span class="eyebrow">Drift</span><strong>Stabskontor</strong>
+            <small>Stab, kampklar tropp og drift rundt laget.</small>
+          </button>
+          <button type="button" class="dept-link-card" data-tab-target="market">
+            <span class="eyebrow">Kommersielt</span><strong>Klubbrom</strong>
+            <small>Fans, sponsorer og omdømme fra medietrykket.</small>
+          </button>
+          <button type="button" class="dept-link-card" data-tab-target="board">
+            <span class="eyebrow">Boardroom</span><strong>Styret</strong>
+            <small>Styretillit, forventninger og klubbens temperatur.</small>
+          </button>
+          <button type="button" class="dept-link-card" data-tab-target="facilities">
+            <span class="eyebrow">Anlegg</span><strong>Fasiliteter</strong>
+            <small>Treningsanlegg, stadion, akademi og medisinsk.</small>
+          </button>
+          <button type="button" class="dept-link-card" data-tab-target="hgfmLibrary">
+            <span class="eyebrow">Taktikk</span><strong>Formasjoner</strong>
+            <small>Historisk formasjonsbibliotek – bruk dem i laget.</small>
+          </button>
+        </div>
       </section>
 
       <!-- Toppstripe: klubbstatus -->
@@ -816,8 +832,11 @@
         <div>
           <p class="eyebrow">Klubbanlegg</p>
           <h2>Fasiliteter</h2>
-          <p class="dept-hero-lede">Anleggene former spillerutvikling, kampdag og rekruttering. Utbygging kobles på senere.</p>
-          <p class="future-label">Kontorflate · ikke del av første spillbare løkke</p>
+          <p class="dept-hero-lede">Anleggene former spillerutvikling, kampdag og rekruttering. Standen leses av klubbens treningskultur, tropp, stab og medietrykk.</p>
+        </div>
+        <div class="dept-hero-stat dept-hero-stat-live">
+          <strong id="facilityOverallValue">–</strong>
+          <span>anleggsstand</span>
         </div>
       </section>
 
@@ -825,24 +844,27 @@
         <article class="facility-card facility-feature">
           <p class="eyebrow">Hovedanlegg</p>
           <h3>Treningsanlegg</h3>
-          <p class="facility-level">Nivå 1</p>
-          <p class="muted-text">Grunnlaget for spillerutvikling og treningsfokus. Oppgradering gir raskere badge-progresjon.</p>
-          <p class="facility-empty">Utbygging ikke åpnet ennå.</p>
+          <p class="facility-level" id="facilityTrainingLevel">Nivå –</p>
+          <p class="muted-text">Grunnlaget for spillerutvikling og treningsfokus.</p>
+          <p class="facility-status" id="facilityTrainingStatus">Leser treningskultur…</p>
         </article>
         <article class="facility-card">
           <h3>Stadion</h3>
-          <p class="facility-level">Nivå 1</p>
-          <p class="muted-text">Kapasitet og kampdagsinntekter.</p>
+          <p class="facility-level" id="facilityStadiumLevel">Nivå –</p>
+          <p class="muted-text">Ramme og temperatur på kampdag.</p>
+          <p class="facility-status" id="facilityStadiumStatus">Leser medietrykk…</p>
         </article>
         <article class="facility-card">
           <h3>Akademi</h3>
-          <p class="facility-level">Nivå –</p>
-          <p class="facility-empty">Henter frem unge klassespillere. Ikke bygget ennå.</p>
+          <p class="facility-level" id="facilityAcademyLevel">Nivå –</p>
+          <p class="muted-text">Bredden av klassespillere du har hentet inn.</p>
+          <p class="facility-status" id="facilityAcademyStatus">Leser samlingen…</p>
         </article>
         <article class="facility-card">
           <h3>Medisinsk avdeling</h3>
-          <p class="facility-level">Nivå –</p>
-          <p class="facility-empty">Skadeforebygging og rehabilitering. Ikke bygget ennå.</p>
+          <p class="facility-level" id="facilityMedicalLevel">Nivå –</p>
+          <p class="muted-text">Skadeforebygging og restitusjon.</p>
+          <p class="facility-status" id="facilityMedicalStatus">Leser stab og slitasje…</p>
         </article>
       </div>
     </div>
