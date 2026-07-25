@@ -1,14 +1,20 @@
-# Lokal starttropp
+# Starttropp uten History Go
 
-HG Football Manager skal støtte et valgfritt startvalg: **Start lokalt**.
+HG Football Manager skal kunne spilles uavhengig av History Go. Derfor finnes
+**Auto-fyll tropp**: ett klikk bygger en spillbar starttropp, slik at en helt
+fersk manager aldri står på 0/15 spillere.
 
-Når spilleren velger dette, skal spillet finne de nærmeste kvalifiserte fotballspillerne ut fra nåværende lokasjon eller valgt offentlig startsted. Målet er at manageren kan begynne lokalt med en spillbar tropp på opptil 15 spillere.
+> **Historikk / endring:** Denne funksjonen het tidligere «lokal starttropp» og
+> fant de *nærmeste* spillerne ut fra geolokasjon eller et valgt offentlig
+> «klubbanker» (stedsanker). Stedsankeret er nå **faset ut** – både som
+> klubbidentitet og som kilde til spillere. Modellen under er den gjeldende.
 
 ## Fast regel
 
-Lokal starttropp er en startsnarvei, ikke ekte History Go-samling.
+Auto-troppen er en startsnarvei, ikke ekte History Go-samling.
 
-Spillere som kommer inn via lokal start skal kunne brukes i HG Football Manager, men stedene deres skal ikke automatisk markeres som besøkt eller samlet i History Go.
+Spillere som kommer inn slik skal kunne brukes i HG Football Manager, men
+stedene deres skal ikke markeres som besøkt eller samlet i History Go.
 
 Bruk egen kilde:
 
@@ -23,77 +29,77 @@ visited_places
 hg_groundhopper_stats_v1
 ```
 
-Lokal start må derfor ikke skrive til disse nøklene.
+Auto-troppen må derfor aldri skrive til disse nøklene.
 
 ## Datamodell
 
-Lagre lokal start under eksisterende `teamMerits`, for eksempel:
+Lagres under eksisterende `teamMerits.localStart`:
 
 ```json
 {
   "localStart": {
     "enabled": true,
-    "source": "current_location",
-    "latitude": 59.924,
-    "longitude": 10.734,
+    "source": "auto_squad",
+    "latitude": null,
+    "longitude": null,
     "chosenPlaceId": null,
     "chosenPlaceName": null,
-    "playerIds": [
-      "player_id_1",
-      "player_id_2"
-    ],
-    "createdAt": "2026-06-12T00:00:00.000Z"
+    "playerIds": ["player_id_1", "player_id_2"],
+    "createdAt": "2026-07-25T00:00:00.000Z"
   }
 }
 ```
 
-`playerIds` skal beregnes én gang når brukeren velger lokal start, og deretter lagres stabilt. Listen skal ikke beregnes på nytt ved hver render.
+`playerIds` beregnes én gang når brukeren trykker auto-fyll, og lagres deretter
+stabilt. Listen beregnes ikke på nytt ved hver render. Koordinatfeltene beholdes
+i skjemaet kun for bakoverkompatibilitet med gamle lagringer, og er alltid
+`null` i nye tropper.
 
-Når brukeren velger et offentlig startsted, lagres `chosenPlaceId` og `chosenPlaceName` fra `football_place_locations.json`. Det finnes ikke noe fritekstfelt for adresse, og privat adresse skal aldri lagres.
+## Utvelgelse (`getStarterSquadPlayerIds`)
 
-## Utvelgelse
+Ingen geografi, ingen koordinater, ingen posisjonstilgang:
 
-1. Finn koordinatfestede fotballsteder med `player_candidate`-unlocks.
-2. Regn avstand fra startlokasjon til hvert sted.
-3. Hent spillerne fra de nærmeste stedene.
-4. Dedupiser spillerne på `player.id`.
-5. Hvis samme spiller finnes på flere steder, behold nærmeste kilde.
-6. Sorter etter avstand.
-7. Lagre de første 15 spillerne i `teamMerits.localStart.playerIds`.
+1. Les spillerkatalogen (`data/football_players.json` via `state.players`).
+2. Prioriter spillere som faktisk kan låses opp via `player_candidate`-unlocks;
+   deretter resten av katalogen.
+3. Sorter deterministisk (unlockbare først, så på `id`).
+4. Dekk posisjonsgruppene (keeper / forsvar / midtbane / angrep) slik at troppen
+   kan settes opp på banen.
+5. Fyll opp til 15 spillere med de gjenværende kandidatene.
 
-Avstand skal beregnes med Haversine, ikke enkel streng-/by-matching.
+## Stab
+
+`getStarterSquadStaffCandidates()` gir et deterministisk utvalg stabskandidater
+så lenge auto-troppen er aktiv, slik at «Velg stab» (3 stk.) er mulig uten
+History Go-samling. Manageren må fortsatt engasjere dem selv.
 
 ## Integrasjon i appen
 
-Endringen skal inn i `computeAvailability()` i `src/app.js`, som allerede er sentral kilde for tilgjengelige spillere, steder, stab og formasjoner.
+Endringen bor i `computeAvailability()` i `src/app.js`, som er sentral kilde for
+tilgjengelige spillere, steder, stab og formasjoner. Auto-troppen skal ikke bli
+en parallell unlock-motor: etter vanlige place-based unlocks legges
+`teamMerits.localStart.playerIds` til i `unlockedPlayerIds` når
+`localStart.enabled === true`.
 
-Lokal start skal ikke bli en parallell unlock-motor.
-
-Etter at vanlige place-based player unlocks er lest, legges `teamMerits.localStart.playerIds` til i `unlockedPlayerIds` dersom `localStart.enabled === true`.
-
-Disse spillerne skal telle mot `REQUIRED_SQUAD_SIZE = 15`, kunne velges i startellever/benk, og vises med kilde `Lokal starttropp`.
+Disse spillerne teller mot `REQUIRED_SQUAD_SIZE = 15`, kan velges i
+startellever/benk, og vises med egen kilde.
 
 ## UI
 
-Legg et kompakt panel i History Go-fanen ved `Din fotballsamling`. Når laget mangler 15 tilgjengelige spillere og ingen lokal starttropp er aktiv, skal panelet tilby tre innganger til det eksisterende availability-systemet:
-
-- bruk eksisterende History Go-samling
-- start lokalt med nettleserens geolokasjon
-- velg et offentlig History Go-sted fra `football_place_locations.json`
-
-Aktiv lokal start skal fortsatt kunne fjernes, og statusfeltet skal vise hvor mange spillere starttroppen ga. Nettleseren skal først be om geolokasjon etter at brukeren klikker på lokal start. Offentlig startsted velges fra en liste; det skal ikke finnes fritekst-adressefelt.
+Auto-fyll ligger i **Startvalg**-popupen på Speiding, ved siden av «Bruk
+History Go-samlingen min». Det finnes ikke lenger geolokasjonsknapp,
+stedsvelger eller «klubbanker»-status. Aktiv starttropp kan fjernes igjen.
 
 ## Nullstilling
 
-`resetTeamMerits()` skal også fjerne lokal starttropp, siden den ligger under `teamMerits`.
+`resetTeamMerits()` fjerner også starttroppen, siden den ligger under
+`teamMerits`.
 
 ## Akseptansekriterier
 
-- Brukeren kan velge lokal start.
-- Nærmeste kvalifiserte spillere lagres som lokal starttropp.
-- Spillere fra lokal start teller mot 15-spillerkravet.
-- Spillere fra lokal start kan brukes på banen.
-- Kilde vises som `Lokal starttropp`.
+- Brukeren kan fylle troppen med ett klikk, uten History Go og uten posisjon.
+- Auto-troppen gir 15 spillere og nok stabskandidater til å velge 3.
+- Spillere fra auto-troppen kan brukes på banen.
 - Steder markeres ikke som samlet uten ekte History Go-progresjon.
 - Eksisterende History Go-unlocks fungerer uendret.
 - Ingen spillerdata eller koordinater hardkodes i `app.js`.

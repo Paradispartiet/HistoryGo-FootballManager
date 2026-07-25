@@ -112,13 +112,24 @@ check("minst én fane finnes", tabTargets.size > 0, `targets=${tabTargets.size}`
 requireHandler("activateTab");
 requireHandler("initTabs");
 
-// ---- 3) Lokal starttropp ----------------------------------------------------
-stage("3. Lokal starttropp");
-requireId("activateLocalStart");
+// ---- 3) Starttropp uten History Go ------------------------------------------
+// Stedsanker og geolokasjon er faset ut: starttroppen bygges nå direkte fra
+// spillerkatalogen (auto-fyll), uten koordinater, sted eller posisjonstilgang.
+stage("3. Starttropp uten History Go");
+requireId("autoFillSquad");
 requireId("clearLocalStart");
-requireId("activatePublicPlaceStart");
 requireHandler("getLocalStartPlayerIds");
 requireHandler("clearLocalStartSquad");
+requireHandler("getStarterSquadPlayerIds");
+requireHandler("activateStarterSquad");
+check(
+  "auto-troppen gir også stabskandidater (så «Velg stab» er mulig uten samling)",
+  app.includes("getStarterSquadStaffCandidates(staff, REQUIRED_STAFF_SIZE")
+);
+check(
+  "ingen geolokasjon eller stedsanker i starttroppen",
+  !app.includes("navigator.geolocation") && !app.includes("getPublicStartAnchor") && !html.includes('id="publicStartPlaceSelect"')
+);
 check(
   "computeAvailability() trekker inn lokal tropp",
   /getLocalStartPlayerIds\(\)\.forEach/.test(app) ||

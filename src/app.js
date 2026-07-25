@@ -55,7 +55,6 @@ import {
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
-import { getPublicStartStaffCandidates } from "./football-public-start-staff.js";
 import {
   normalizeRoleFamiliarity,
   recordMatchRoleUsage,
@@ -535,9 +534,6 @@ const elements = {
   collectionMatchdayBadge: document.querySelector("#collectionMatchdayBadge"),
   collectionSourceNote: document.querySelector("#collectionSourceNote"),
   collectionNextStep: document.querySelector("#collectionNextStep"),
-  nearbyRecommendationsAnchor: document.querySelector("#nearbyRecommendationsAnchor"),
-  nearbyRecommendationsList: document.querySelector("#nearbyRecommendationsList"),
-  nearbyFavoritesList: document.querySelector("#nearbyFavoritesList"),
   startModePanel: document.querySelector("#startModePanel"),
   startModeChoices: document.querySelector("#startModeChoices"),
   startModeRosterNeed: document.querySelector("#startModeRosterNeed"),
@@ -545,11 +541,6 @@ const elements = {
   activeLocalStart: document.querySelector("#activeLocalStart"),
   localStartStatus: document.querySelector("#localStartStatus"),
   useHistoryGoCollection: document.querySelector("#useHistoryGoCollection"),
-  activateLocalStart: document.querySelector("#activateLocalStart"),
-  publicStartPlaceSelect: document.querySelector("#publicStartPlaceSelect"),
-  activatePublicPlaceStart: document.querySelector("#activatePublicPlaceStart"),
-  publicStartAnchorStatus: document.querySelector("#publicStartAnchorStatus"),
-  clearPublicStartAnchor: document.querySelector("#clearPublicStartAnchor"),
   clearLocalStart: document.querySelector("#clearLocalStart"),
   // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
   matchdayReadiness: document.querySelector("#matchdayReadiness"),
@@ -1501,64 +1492,8 @@ function getLocalStartPlayerIds() {
   return localStart.enabled ? localStart.playerIds : [];
 }
 
-function getPublicStartAnchor() {
-  const anchor = normalizePublicStartAnchor(state.teamMerits?.publicStartAnchor);
-  if (!anchor.enabled) {
-    return null;
-  }
-  return {
-    placeId: anchor.placeId,
-    placeName: anchor.placeName,
-    latitude: anchor.latitude,
-    longitude: anchor.longitude,
-    source: anchor.source,
-    createdAt: anchor.createdAt
-  };
-}
 
-function setPublicStartAnchor(placeId) {
-  if (!state.teamMerits || typeof placeId !== "string" || !placeId.trim()) {
-    return null;
-  }
 
-  const place = getPlaceLocationIndex().get(placeId.trim());
-  const isPublicPlace = getPublicStartPlaces().some((entry) => entry.placeId === placeId.trim());
-  if (!place || !isPublicPlace || !isValidLatitude(place.latitude) || !isValidLongitude(place.longitude)) {
-    state.teamMerits.publicStartAnchor = normalizePublicStartAnchor(null);
-    saveTeamMerits();
-    return null;
-  }
-
-  state.teamMerits.publicStartAnchor = normalizePublicStartAnchor({
-    enabled: true,
-    placeId: place.placeId,
-    placeName: place.placeName,
-    latitude: place.latitude,
-    longitude: place.longitude,
-    source: "public_history_go_place",
-    createdAt: new Date().toISOString()
-  });
-  saveTeamMerits();
-  return getPublicStartAnchor();
-}
-
-function clearPublicStartAnchor() {
-  if (!state.teamMerits) {
-    return;
-  }
-  const anchor = getPublicStartAnchor();
-  state.teamMerits.publicStartAnchor = normalizePublicStartAnchor(null);
-  const localStart = normalizeLocalStart(state.teamMerits.localStart);
-  if (anchor && localStart.source === "chosen_place" && localStart.chosenPlaceId === anchor.placeId) {
-    state.teamMerits.localStart = normalizeLocalStart(null);
-    invalidateAvailability();
-    sanitizeLineupForUnlockedPlayers();
-    sanitizeSelectedFormation();
-  }
-  state.localStartMessage = "Offentlig startsted er fjernet.";
-  saveTeamMerits();
-  renderApp();
-}
 
 // Haversine-avstand mellom to { latitude, longitude }-punkter, i kilometer.
 function calculateDistanceKm(a, b) {
@@ -1662,41 +1597,6 @@ function describePlaceRecommendation(placeId) {
   };
 }
 
-function getNearbyPlaceRecommendations(limit = 6) {
-  const anchor = getPublicStartAnchor();
-  if (!anchor) {
-    return [];
-  }
-
-  const safeLimit = normalizeRecommendationLimit(limit);
-  const locationIndex = getPlaceLocationIndex();
-  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
-  const orderedPlaceIds = new Set([
-    ...placeUnlocks.map((place) => place?.placeId).filter(Boolean),
-    ...locationIndex.keys()
-  ]);
-
-  return [...orderedPlaceIds]
-    .filter((placeId) => placeId !== anchor.placeId)
-    .map((placeId, order) => {
-      const location = locationIndex.get(placeId);
-      if (!location) {
-        return null;
-      }
-      const distanceKm = calculateDistanceKm(anchor, location);
-      if (!Number.isFinite(distanceKm)) {
-        return null;
-      }
-      const description = describePlaceRecommendation(placeId);
-      if (!description) {
-        return null;
-      }
-      return { ...description, distanceKm, order };
-    })
-    .filter(Boolean)
-    .sort((a, b) => a.distanceKm - b.distanceKm || a.order - b.order || a.placeName.localeCompare(b.placeName))
-    .slice(0, safeLimit);
-}
 
 function getNearbyFavoritePlaceIds() {
   return normalizeNearbyFavorites(state.teamMerits?.nearbyFavorites).placeIds;
@@ -1739,140 +1639,119 @@ function removeNearbyFavorite(placeId) {
   renderApp();
 }
 
-function getNearbyFavoritePlaces() {
-  const anchor = getPublicStartAnchor();
-  const locationIndex = getPlaceLocationIndex();
-  return getNearbyFavoritePlaceIds()
-    .map((placeId, order) => {
-      const description = describePlaceRecommendation(placeId);
-      if (!description) {
-        return null;
-      }
-      const location = locationIndex.get(placeId);
-      const distanceKm = anchor && location ? calculateDistanceKm(anchor, location) : Number.POSITIVE_INFINITY;
-      return {
-        ...description,
-        distanceKm: Number.isFinite(distanceKm) ? distanceKm : null,
-        order
-      };
-    })
-    .filter(Boolean);
-}
 
-function getNearestLocalStartPlayers({ players, placeUnlocks, placeLocations, startLocation, limit }) {
-  const playerIndex = new Map(
-    (Array.isArray(players) ? players : []).filter((player) => player?.id).map((player) => [player.id, player])
-  );
-  const locationIndex = getPlaceLocationIndex(placeLocations);
-  const nearestByPlayerId = new Map();
 
-  (Array.isArray(placeUnlocks) ? placeUnlocks : []).forEach((place, placeOrder) => {
-    const location = locationIndex.get(place?.placeId);
-    if (!location) {
-      return;
-    }
-    const distanceKm = calculateDistanceKm(startLocation, location);
-    if (!Number.isFinite(distanceKm)) {
-      return;
-    }
 
-    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock, unlockOrder) => {
-      if (!unlock || !isPlayerUnlockType(unlock.type) || !playerIndex.has(unlock.targetId)) {
-        return;
-      }
-      const candidate = {
-        player: playerIndex.get(unlock.targetId),
-        playerId: unlock.targetId,
-        placeId: place.placeId,
-        placeName: place.placeName || location.placeName || place.placeId,
-        distanceKm,
-        order: placeOrder * 1000 + unlockOrder
-      };
-      const current = nearestByPlayerId.get(candidate.playerId);
-      if (!current || candidate.distanceKm < current.distanceKm) {
-        nearestByPlayerId.set(candidate.playerId, candidate);
+
+// Auto-tropp UTEN sted/koordinater. Erstatter den gamle geografiske «nærmeste
+// spillere»-modellen: stedsanker og geolokasjon er faset ut. Bygger en
+// balansert 15-spillertropp rett fra spillerkatalogen (data/football_players.json),
+// med spillere som faktisk kan låses opp via player_candidate-unlocks først.
+// Ingen spillerdata hardkodes her, og ekte History Go-progresjon røres aldri.
+const STARTER_SQUAD_GROUPS = [
+  { positions: ["GK"], count: 2 },
+  { positions: ["CB", "LB", "RB", "LWB", "RWB", "SW"], count: 5 },
+  { positions: ["DM", "CM", "AM", "LM", "RM"], count: 5 },
+  { positions: ["ST", "CF", "LW", "RW", "SS"], count: 3 }
+];
+
+function getStarterSquadPlayerIds(limit = REQUIRED_SQUAD_SIZE) {
+  const players = Array.isArray(state.players) ? state.players : [];
+  if (!players.length) return [];
+
+  const candidateIds = new Set();
+  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
+    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
+        candidateIds.add(unlock.targetId);
       }
     });
   });
 
-  const safeLimit = Number.isInteger(limit) && limit >= 0 ? limit : REQUIRED_SQUAD_SIZE;
-  return [...nearestByPlayerId.values()]
-    .sort((a, b) => a.distanceKm - b.distanceKm || a.order - b.order || a.playerId.localeCompare(b.playerId))
-    .slice(0, safeLimit);
-}
-
-// Offentlige startsteder kommer bare fra den versjonerte History Go-stedslisten
-// og må også finnes i unlock-katalogen. UI-et tilbyr aldri fritekst eller adresse.
-function getPublicStartPlaces() {
-  const knownHistoryGoPlaceIds = new Set(
-    (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [])
-      .map((place) => place?.placeId)
-      .filter(Boolean)
-  );
-
-  return (Array.isArray(state.placeLocations?.places) ? state.placeLocations.places : [])
-    .filter((place) =>
-      place &&
-      knownHistoryGoPlaceIds.has(place.placeId) &&
-      typeof place.placeName === "string" &&
-      place.placeName.trim() &&
-      isValidLatitude(place.latitude) &&
-      isValidLongitude(place.longitude)
-    )
-    .map((place) => ({
-      placeId: place.placeId,
-      placeName: place.placeName.trim(),
-      latitude: place.latitude,
-      longitude: place.longitude
-    }))
-    .sort((a, b) => a.placeName.localeCompare(b.placeName, "nb"));
-}
-
-function activateLocalStartSquad(startLocation, startSource = {}) {
-  if (!isValidLatitude(startLocation?.latitude) || !isValidLongitude(startLocation?.longitude)) {
-    state.localStartMessage = "Kunne ikke starte lokalt fordi posisjonen har ugyldige koordinater.";
-    renderApp();
-    return;
-  }
-
-  if (!state.teamMerits) {
-    state.localStartMessage = "Kunne ikke starte lokalt fordi lagprogresjonen ikke er tilgjengelig.";
-    renderApp();
-    return;
-  }
-
-  const candidates = getNearestLocalStartPlayers({
-    players: state.players,
-    placeUnlocks: state.unlocks?.placeUnlocks,
-    placeLocations: state.placeLocations,
-    startLocation,
-    limit: REQUIRED_SQUAD_SIZE
+  // Deterministisk rekkefølge: unlockbare spillere først, deretter id-sortert.
+  const ordered = [...players].sort((a, b) => {
+    const aRank = candidateIds.has(a.id) ? 0 : 1;
+    const bRank = candidateIds.has(b.id) ? 0 : 1;
+    if (aRank !== bRank) return aRank - bRank;
+    return String(a.id).localeCompare(String(b.id));
   });
 
-  if (!candidates.length) {
-    state.localStartMessage = "Fant ingen kvalifiserte spillere ved koordinatfestede fotballsteder.";
+  const playsIn = (player, positions) => {
+    const natural = Array.isArray(player?.naturalPositions) ? player.naturalPositions : [];
+    const usable = Array.isArray(player?.usablePositions) ? player.usablePositions : [];
+    return [...natural, ...usable].some((position) => positions.includes(position));
+  };
+
+  const picked = [];
+  const takenIds = new Set();
+  // 1) Dekk posisjonsgruppene, slik at troppen faktisk kan settes opp på banen.
+  STARTER_SQUAD_GROUPS.forEach((group) => {
+    let need = group.count;
+    ordered.forEach((player) => {
+      if (need <= 0 || takenIds.has(player.id) || picked.length >= limit) return;
+      if (!playsIn(player, group.positions)) return;
+      picked.push(player.id);
+      takenIds.add(player.id);
+      need -= 1;
+    });
+  });
+  // 2) Fyll opp til 15 med de gjenværende beste kandidatene.
+  ordered.forEach((player) => {
+    if (picked.length >= limit || takenIds.has(player.id)) return;
+    picked.push(player.id);
+    takenIds.add(player.id);
+  });
+
+  return picked.slice(0, limit);
+}
+
+// Er auto-starttroppen aktiv (starttropp uten History Go)?
+function isStarterSquadActive() {
+  const localStart = normalizeLocalStart(state.teamMerits?.localStart);
+  return localStart.enabled && localStart.playerIds.length > 0;
+}
+
+// Stabskandidater som følger auto-troppen: deterministisk utvalg fra
+// stabskatalogen, slik at «Velg stab» er mulig uten History Go-samling.
+// Manageren må fortsatt engasjere dem selv. Ingen stabsdata hardkodes her.
+function getStarterSquadStaffCandidates(staff, limit = REQUIRED_STAFF_SIZE) {
+  if (!isStarterSquadActive()) return [];
+  const list = Array.isArray(staff) ? staff.filter((member) => member && member.id) : [];
+  return [...list]
+    .sort((a, b) => String(a.id).localeCompare(String(b.id)))
+    .slice(0, Math.max(0, limit));
+}
+
+// Aktiver auto-troppen. Samme lagringsmodell som før (teamMerits.localStart med
+// unlockSource local_start), men uten koordinater eller valgt sted.
+function activateStarterSquad() {
+  if (!state.teamMerits) {
+    state.localStartMessage = "Kunne ikke fylle troppen fordi lagprogresjonen ikke er tilgjengelig.";
     renderApp();
     return;
   }
 
-  const isPublicPlaceStart = startSource.source === "chosen_place";
+  const playerIds = getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE);
+  if (!playerIds.length) {
+    state.localStartMessage = "Fant ingen spillere å fylle troppen med.";
+    renderApp();
+    return;
+  }
+
   state.teamMerits.localStart = normalizeLocalStart({
     enabled: true,
-    source: isPublicPlaceStart ? "chosen_place" : "current_location",
-    latitude: startLocation.latitude,
-    longitude: startLocation.longitude,
-    chosenPlaceId: isPublicPlaceStart ? startSource.chosenPlaceId : null,
-    chosenPlaceName: isPublicPlaceStart ? startSource.chosenPlaceName : null,
-    playerIds: candidates.map((candidate) => candidate.playerId),
+    source: "auto_squad",
+    latitude: null,
+    longitude: null,
+    chosenPlaceId: null,
+    chosenPlaceName: null,
+    playerIds,
     createdAt: new Date().toISOString()
   });
   state.localStartMessage = "";
   saveTeamMerits();
   invalidateAvailability();
   sanitizeLineupForUnlockedPlayers();
-  // Ny starttropp: fyll de tomme plassene automatisk slik at manageren lander
-  // på en ferdig startellever i stedet for en tom bane. Bare tomme plasser
-  // fylles — eventuelle egne valg beholdes.
   fillEmptyLineupSlots(true);
   renderApp();
 }
@@ -2001,16 +1880,12 @@ function computeAvailability() {
     const sources = Array.isArray(member.sourcePlaceIds) ? member.sourcePlaceIds : [];
     return sources.some((placeId) => unlockedPlaceIds.has(placeId)) || explicitStaffIds.has(member.id);
   });
-  // Et offentlig klubbanker gir kun denne saven tilgang til nærmeste
-  // stedstilknyttede kandidater. Stedene legges aldri i unlockedPlaceIds eller
-  // History Go-lagring, og spilleren må fortsatt engasjere tre personer selv.
-  const publicStartStaff = getPublicStartStaffCandidates(
-    getPublicStartAnchor(),
-    staff,
-    Array.isArray(state.placeLocations?.places) ? state.placeLocations.places : [],
-    REQUIRED_STAFF_SIZE
-  );
-  const staffById = new Map([...normallyUnlockedStaff, ...publicStartStaff].map((member) => [member.id, member]));
+  // Auto-troppen (starttropp uten History Go) gir også et minimum av
+  // stabskandidater, slik at «Velg stab» er mulig uten samling. Stedene legges
+  // aldri i unlockedPlaceIds eller History Go-lagring, og manageren må fortsatt
+  // engasjere personene selv. Erstatter den gamle stedsanker-baserte kilden.
+  const starterStaff = getStarterSquadStaffCandidates(staff, REQUIRED_STAFF_SIZE + 2);
+  const staffById = new Map([...normallyUnlockedStaff, ...starterStaff].map((member) => [member.id, member]));
   const unlockedStaff = [...staffById.values()];
 
   // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
@@ -4560,7 +4435,7 @@ function ensureLeagueSeason() {
 
   const club = getTemporaryClubName();
   state.leagueSeason = createLeagueSeason({
-    managerClub: { id: state.gameStartState.activeLeagueSaveId, name: club.name, ground: getPublicStartAnchor()?.placeName || "Klubbankeret", strength: 75, form: 55, tacticalIdentity: "managerens taktiske valg" },
+    managerClub: { id: state.gameStartState.activeLeagueSaveId, name: club.name, ground: `${club.name} stadion`, strength: 75, form: 55, tacticalIdentity: "managerens taktiske valg" },
     seed: `${state.gameStartState.activeLeagueSaveId}-season-1`
   });
   saveLeagueSeason();
@@ -11854,13 +11729,12 @@ function renderLocalStartStatus() {
   }
 
   const localStart = normalizeLocalStart(state.teamMerits?.localStart);
-  const publicStartAnchor = getPublicStartAnchor();
   const readiness = getAvailability().rosterReadiness;
   const shouldShowChoices = !localStart.enabled && !readiness.hasEnoughUnlocked;
   const shouldShowReady = readiness.hasEnoughUnlocked;
 
   if (elements.startModePanel) {
-    elements.startModePanel.hidden = !localStart.enabled && !shouldShowChoices && !publicStartAnchor && !shouldShowReady;
+    elements.startModePanel.hidden = !localStart.enabled && !shouldShowChoices && !shouldShowReady;
   }
   if (elements.startModeChoices) {
     elements.startModeChoices.hidden = !shouldShowChoices;
@@ -11878,46 +11752,13 @@ function renderLocalStartStatus() {
     elements.playableSquadReady.hidden = !shouldShowReady;
   }
 
-  const publicPlaces = getPublicStartPlaces();
-  if (elements.publicStartPlaceSelect) {
-    const selectedPlaceId = elements.publicStartPlaceSelect.value;
-    elements.publicStartPlaceSelect.replaceChildren();
-    publicPlaces.forEach((place) => {
-      const option = document.createElement("option");
-      option.value = place.placeId;
-      option.textContent = place.placeName;
-      elements.publicStartPlaceSelect.append(option);
-    });
-    if (publicPlaces.some((place) => place.placeId === selectedPlaceId)) {
-      elements.publicStartPlaceSelect.value = selectedPlaceId;
-    }
-    elements.publicStartPlaceSelect.disabled = publicPlaces.length === 0;
-  }
-  if (elements.activatePublicPlaceStart) {
-    elements.activatePublicPlaceStart.disabled = publicPlaces.length === 0;
-  }
-
-  const activeSource = localStart.source === "chosen_place" && localStart.chosenPlaceName
-    ? ` via ${localStart.chosenPlaceName}`
-    : "";
   elements.localStartStatus.textContent = state.localStartMessage ||
     (localStart.enabled
-      ? `Lokal starttropp aktiv${activeSource}: ${localStart.playerIds.length} spillere.`
+      ? `Starttropp aktiv: ${localStart.playerIds.length} spillere.`
       : shouldShowReady
         ? "Troppen er spillbar. Neste steg er Lag & taktikk."
-      : publicPlaces.length === 0 && shouldShowChoices
-        ? "Ingen offentlige History Go-startsteder er tilgjengelige i stedslisten."
         : "Velg hvordan managerkarrieren skal starte.");
 
-  if (elements.publicStartAnchorStatus) {
-    elements.publicStartAnchorStatus.textContent = publicStartAnchor
-      ? `Offentlig startsted: ${publicStartAnchor.placeName}`
-      : "Ingen offentlig startposisjon valgt.";
-  }
-  if (elements.clearPublicStartAnchor) {
-    elements.clearPublicStartAnchor.hidden = !publicStartAnchor;
-    elements.clearPublicStartAnchor.disabled = !publicStartAnchor;
-  }
   if (elements.clearLocalStart) {
     elements.clearLocalStart.disabled = !localStart.enabled;
   }
@@ -11983,136 +11824,7 @@ function renderCollectionSummary() {
 }
 
 
-function renderNearbyRecommendations() {
-  if (!elements.nearbyRecommendationsAnchor || !elements.nearbyRecommendationsList) {
-    return;
-  }
 
-  const anchor = getPublicStartAnchor();
-  elements.nearbyRecommendationsList.innerHTML = "";
-  if (!anchor) {
-    elements.nearbyRecommendationsAnchor.textContent = "Velg et offentlig startsted for å se nærliggende fotballsteder.";
-    return;
-  }
-
-  elements.nearbyRecommendationsAnchor.textContent = `Basert på offentlig startsted: ${anchor.placeName}`;
-  const recommendations = getNearbyPlaceRecommendations(6);
-  if (!recommendations.length) {
-    renderUnlockEmpty(elements.nearbyRecommendationsList, "Ingen nærliggende fotballsteder med koordinater funnet ennå.");
-    return;
-  }
-
-  recommendations.forEach((recommendation) => {
-    const card = document.createElement("article");
-    card.className = "nearby-recommendation-card";
-
-    const head = document.createElement("div");
-    head.className = "nearby-recommendation-head";
-    const title = document.createElement("h4");
-    title.textContent = recommendation.placeName;
-    const distance = document.createElement("span");
-    distance.className = "nearby-recommendation-distance";
-    distance.textContent = `${recommendation.distanceKm.toFixed(1)} km`;
-    head.append(title, distance);
-    card.append(head);
-
-    const status = document.createElement("p");
-    status.className = "nearby-recommendation-status";
-    status.dataset.unlocked = recommendation.isUnlocked ? "true" : "false";
-    status.textContent = recommendation.isUnlocked
-      ? (isNearbyFavorite(recommendation.placeId) ? "Samlet · ★ Favoritt" : "Samlet")
-      : (isNearbyFavorite(recommendation.placeId) ? "Ikke samlet · ★ Favoritt" : "Ikke samlet");
-    card.append(status);
-
-    const summary = document.createElement("p");
-    summary.className = "nearby-recommendation-summary";
-    const counts = recommendation.unlockSummary;
-    summary.textContent = `Spillere: ${counts.players} · Stab: ${counts.staff} · Ekspertise: ${counts.expertise} · Trening: ${counts.training}`;
-    card.append(summary);
-
-    const reasonText = recommendation.recommendedUse[0] || recommendation.shortReason;
-    if (reasonText) {
-      const reason = document.createElement("p");
-      reason.className = "nearby-recommendation-reason";
-      reason.textContent = reasonText;
-      card.append(reason);
-    }
-
-    const names = [...recommendation.playerNames.slice(0, 3), ...recommendation.staffNames.slice(0, 2)];
-    if (names.length) {
-      const people = document.createElement("p");
-      people.className = "nearby-recommendation-people";
-      people.textContent = `Profiler: ${names.join(", ")}`;
-      card.append(people);
-    }
-
-    const favoriteButton = document.createElement("button");
-    favoriteButton.type = "button";
-    favoriteButton.className = "unlock-card-action nearby-favorite-action";
-    favoriteButton.textContent = isNearbyFavorite(recommendation.placeId) ? "Fjern favoritt" : "Legg til favoritt";
-    favoriteButton.addEventListener("click", () => toggleNearbyFavorite(recommendation.placeId));
-    card.append(favoriteButton);
-
-    elements.nearbyRecommendationsList.append(card);
-  });
-}
-
-function renderNearbyFavorites() {
-  if (!elements.nearbyFavoritesList) {
-    return;
-  }
-
-  elements.nearbyFavoritesList.innerHTML = "";
-  const favorites = getNearbyFavoritePlaces();
-  if (!favorites.length) {
-    renderUnlockEmpty(elements.nearbyFavoritesList, "Ingen favoritter ennå. Legg til steder fra nærliggende muligheter.");
-    return;
-  }
-
-  favorites.forEach((favorite) => {
-    const card = document.createElement("article");
-    card.className = "nearby-recommendation-card nearby-favorite-card";
-
-    const head = document.createElement("div");
-    head.className = "nearby-recommendation-head";
-    const title = document.createElement("h4");
-    title.textContent = favorite.placeName;
-    const distance = document.createElement("span");
-    distance.className = "nearby-recommendation-distance";
-    distance.textContent = favorite.distanceKm === null ? "–" : `${favorite.distanceKm.toFixed(1)} km`;
-    head.append(title, distance);
-    card.append(head);
-
-    const status = document.createElement("p");
-    status.className = "nearby-recommendation-status";
-    status.dataset.unlocked = favorite.isUnlocked ? "true" : "false";
-    status.textContent = favorite.isUnlocked ? "Samlet" : "Ikke samlet";
-    card.append(status);
-
-    const counts = favorite.unlockSummary;
-    const summary = document.createElement("p");
-    summary.className = "nearby-recommendation-summary";
-    summary.textContent = `Spillere: ${counts.players} · Stab: ${counts.staff} · Ekspertise: ${counts.expertise}`;
-    card.append(summary);
-
-    const reasonText = favorite.recommendedUse[0] || favorite.shortReason;
-    if (reasonText) {
-      const reason = document.createElement("p");
-      reason.className = "nearby-recommendation-reason";
-      reason.textContent = reasonText;
-      card.append(reason);
-    }
-
-    const removeButton = document.createElement("button");
-    removeButton.type = "button";
-    removeButton.className = "unlock-card-action nearby-favorite-action";
-    removeButton.textContent = "Fjern";
-    removeButton.addEventListener("click", () => removeNearbyFavorite(favorite.placeId));
-    card.append(removeButton);
-
-    elements.nearbyFavoritesList.append(card);
-  });
-}
 
 // Statusfelt for ekte History Go-sync: hvor mange steder som er funnet i hver
 // kilde, og hvor mange relevante Football Manager-unlock-steder som er aktive.
@@ -12392,8 +12104,6 @@ function renderApp() {
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
   renderCollectionSummary();
-  renderNearbyRecommendations();
-  renderNearbyFavorites();
   renderLocalStartStatus();
   renderUnlockPlaces();
   renderUnlockedPlayers();
@@ -12722,92 +12432,15 @@ function bindLocalStartControls() {
     });
   }
 
-  if (elements.activateLocalStart) {
-    elements.activateLocalStart.addEventListener("click", () => {
-      if (!navigator.geolocation) {
-        state.localStartMessage = "Geolokasjon støttes ikke av denne nettleseren.";
-        renderLocalStartStatus();
-        return;
-      }
-
-      state.localStartMessage = "Henter posisjonen din …";
-      renderLocalStartStatus();
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          activateLocalStartSquad({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-        },
-        (error) => {
-          const messages = {
-            1: "Tilgang til geolokasjon ble avslått. Tillat posisjonstilgang og prøv igjen.",
-            2: "Kunne ikke finne posisjonen din. Kontroller posisjonstjenestene og prøv igjen.",
-            3: "Posisjonsforespørselen tok for lang tid. Prøv igjen."
-          };
-          state.localStartMessage = messages[error.code] || "Kunne ikke hente posisjonen din.";
-          renderLocalStartStatus();
-        },
-        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
-      );
-    });
-  }
-
-  // «Never stuck without History Go»: ett klikk fyller 15 spillere fra et
-  // standard offentlig startsted, så en helt fersk manager uten HG-data aldri
-  // står på 0/15. Gjenbruker samme lokal-start-motor som stedvalget — ingen ny
-  // unlock-vei, og skriver aldri til ekte History Go-progresjon.
+  // «Never stuck without History Go»: ett klikk bygger en balansert 15-spiller
+  // starttropp rett fra spillerkatalogen — uten sted, koordinater eller
+  // geolokasjon (stedsanker er faset ut). Skriver aldri til ekte History
+  // Go-progresjon.
   const autoFillSquad = document.querySelector("#autoFillSquad");
   if (autoFillSquad) {
     autoFillSquad.addEventListener("click", () => {
-      const places = getPublicStartPlaces();
-      const place = places.find((entry) => entry.placeId === elements.publicStartPlaceSelect?.value) || places[0];
-      if (!place) {
-        state.localStartMessage = "Ingen offentlige startsteder er tilgjengelige i datasettet.";
-        renderLocalStartStatus();
-        return;
-      }
-      const anchor = setPublicStartAnchor(place.placeId);
-      if (!anchor) {
-        state.localStartMessage = "Startstedet mangler gyldige koordinater og ble ikke lagret.";
-        renderLocalStartStatus();
-        return;
-      }
-      if (elements.publicStartPlaceSelect) elements.publicStartPlaceSelect.value = anchor.placeId;
-      activateLocalStartSquad(
-        { latitude: anchor.latitude, longitude: anchor.longitude },
-        { source: "chosen_place", chosenPlaceId: anchor.placeId, chosenPlaceName: anchor.placeName }
-      );
+      activateStarterSquad();
     });
-  }
-
-  if (elements.activatePublicPlaceStart) {
-    elements.activatePublicPlaceStart.addEventListener("click", () => {
-      const place = getPublicStartPlaces().find(
-        (entry) => entry.placeId === elements.publicStartPlaceSelect?.value
-      );
-      if (!place) {
-        state.localStartMessage = "Velg et offentlig History Go-sted fra listen.";
-        renderLocalStartStatus();
-        return;
-      }
-
-      const anchor = setPublicStartAnchor(place.placeId);
-      if (!anchor) {
-        state.localStartMessage = "Startstedet mangler gyldige koordinater og ble ikke lagret.";
-        renderLocalStartStatus();
-        return;
-      }
-
-      activateLocalStartSquad(
-        { latitude: anchor.latitude, longitude: anchor.longitude },
-        { source: "chosen_place", chosenPlaceId: anchor.placeId, chosenPlaceName: anchor.placeName }
-      );
-    });
-  }
-
-  if (elements.clearPublicStartAnchor) {
-    elements.clearPublicStartAnchor.addEventListener("click", clearPublicStartAnchor);
   }
 
   if (elements.clearLocalStart) {
