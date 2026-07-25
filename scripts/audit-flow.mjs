@@ -13,7 +13,7 @@
 //
 // Standardbibliotek, ingen avhengigheter. Exit 1 ved brudd, 0 ellers.
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -137,6 +137,34 @@ check(
 check(
   "landslagsarena gir ikke klubbspillere (isNationalArenaPlace)",
   app.includes("function isNationalArenaPlace") && app.includes("nationalOnlyPlayerIds")
+);
+
+// Quiz-porten: besøk gjør spilleren speidet, quiz gjør ham signerbar. Kilden er
+// History Gos læringslogg (verifisert mot Paradispartiet/History-Go).
+check(
+  "quiz-porten leser History Gos læringslogg (ikke quiz_progress, som er per kategori)",
+  app.includes('HISTORY_GO_LEARNING_LOG_KEY = "hg_learning_log_v1"')
+    && app.includes('"quiz_perfect"') && app.includes('"quiz_set_complete"') && app.includes('"quiz_legacy"')
+    && app.includes("parentTargetId")
+);
+check(
+  "quiz-porten gjelder kun ekte History Go-steder",
+  /const needsQuiz =[\s\S]{0,200}historyGoPlaceIds\.has\(place\.placeId\)/.test(app)
+);
+// Sikring mot blindvei: mangler læringsloggen, skal porten IKKE håndheves.
+check(
+  "manglende læringslogg slår AV quiz-porten (ingen blindvei)",
+  /function getHistoryGoQuizCompletedPlaceIds\(\)[\s\S]{0,600}return null;/.test(app)
+    && app.includes("const quizGateActive = quizCompletedPlaceIds !== null")
+);
+check(
+  "Football Manager skriver aldri til History Gos læringslogg",
+  !new RegExp("setItem\\(\\s*HISTORY_GO_LEARNING_LOG_KEY").test(app)
+    && !app.includes('setItem("hg_learning_log_v1"')
+);
+check(
+  "quiz-porten er dokumentert",
+  existsSync(join(root, "docs/HISTORY_GO_QUIZ_GATE.md"))
 );
 check(
   "auto-troppen hopper over landslagsarenaer",

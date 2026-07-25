@@ -220,6 +220,17 @@ const FIRST_TIME_OPPONENT_ID = "ajax_1971_73_total_football";
 //                               visited_groundhopper_places er hovedlisten.
 const HISTORY_GO_VISITED_PLACES_KEY = "visited_places";
 const HISTORY_GO_GROUNDHOPPER_STATS_KEY = "hg_groundhopper_stats_v1";
+// Quiz-status fra History Go. Kilden er verifisert mot History Go-repoet
+// (Paradispartiet/History-Go):
+//   js/quizzes.js:     HG_LEARNING_LOG_KEY = "hg_learning_log_v1"
+//                      // «eneste sannhet: quiz + observasjoner»
+//   js/learningLog.js: isQuizEvent() => type === "quiz_perfect"
+//                      || "quiz_set_complete" || "quiz_legacy"
+//   Radene bærer `parentTargetId` = stedets id (jf. quizzes.js og
+//   tests/knowledge-v2-model.test.js: parentTargetId: "torggata").
+// Vi LESER kun denne nøkkelen – Football Manager skriver aldri til den.
+const HISTORY_GO_LEARNING_LOG_KEY = "hg_learning_log_v1";
+const HISTORY_GO_QUIZ_EVENT_TYPES = new Set(["quiz_perfect", "quiz_set_complete", "quiz_legacy"]);
 
 // Maks antall klubbhendelser som beholdes i loggen (nyeste først).
 const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
@@ -1428,6 +1439,34 @@ function getHistoryGoGroundhopperPlaceIds() {
 // Manager. Slår sammen Groundhopper-steder og generelt besøkte steder, og
 // filtrerer til placeId-er som finnes i state.unlocks.placeUnlocks. Dermed bryr
 // Football Manager seg bare om History Go-steder den selv har innhold for.
+// Steder der spilleren faktisk har tatt quizen i History Go.
+// Returnerer `null` når læringsloggen ikke finnes/ikke er lesbar – da vet vi
+// ingenting om quiz, og quiz-porten skal IKKE håndheves (ellers ville spillere
+// blitt låst ute av spillere de umulig kunne låst opp).
+function getHistoryGoQuizCompletedPlaceIds() {
+  const raw = readJsonLocalStorage(HISTORY_GO_LEARNING_LOG_KEY, null);
+  if (raw === null || raw === undefined) {
+    return null;
+  }
+  if (!Array.isArray(raw)) {
+    console.warn("History Go-sync: hg_learning_log_v1 har ugyldig format (forventet array).");
+    return null;
+  }
+
+  const ids = new Set();
+  raw.forEach((event) => {
+    if (!event || typeof event !== "object") return;
+    if (!HISTORY_GO_QUIZ_EVENT_TYPES.has(event.type)) return;
+    // parentTargetId er stedets id; targetId er en sammensatt set-id som
+    // starter med stedet. Godta begge, slik at små formatvarianter tåles.
+    const parent = typeof event.parentTargetId === "string" ? event.parentTargetId.trim() : "";
+    if (parent) ids.add(parent);
+    const target = typeof event.targetId === "string" ? event.targetId.trim() : "";
+    if (target) ids.add(target.split("::")[0].split("__")[0]);
+  });
+  return ids;
+}
+
 function getHistoryGoCollectedSportPlaceIds() {
   const collected = new Set();
   getHistoryGoGroundhopperPlaceIds().forEach((id) => collected.add(id));
@@ -1871,8 +1910,18 @@ function computeAvailability() {
   // sikre hele Norges beste. Spilleren blir speidet/synlig, men kan bare
   // signeres hvis du også har besøkt et KLUBBanlegg som har ham/henne.
   const nationalOnlyPlayerIds = new Set();
+  // Quiz-porten: for steder som kommer fra EKTE History Go-progresjon holder det
+  // ikke å ha vært der – du må ha tatt quizen for å kunne signere spillerne.
+  // `null` = ingen læringslogg tilgjengelig => porten håndheves ikke.
+  const quizCompletedPlaceIds = getHistoryGoQuizCompletedPlaceIds();
+  const quizGateActive = quizCompletedPlaceIds !== null;
+  const quizPendingPlayerIds = new Set();
   placeUnlocks.forEach((place) => {
     const nationalArena = isNationalArenaPlace(place);
+    // Kun ekte History Go-steder kvalifiserer for quiz-porten. Manager-/demo-
+    // steder (og auto-troppen) er upåvirket, så spillet står aldri fast.
+    const needsQuiz =
+      quizGateActive && historyGoPlaceIds.has(place.placeId) && !quizCompletedPlaceIds.has(place.placeId);
     (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
       if (!unlock || !unlock.targetId) {
         return;
@@ -1880,6 +1929,10 @@ function computeAvailability() {
       if (isPlayerUnlockType(unlock.type)) {
         if (nationalArena) {
           nationalOnlyPlayerIds.add(unlock.targetId);
+          return;
+        }
+        if (needsQuiz) {
+          quizPendingPlayerIds.add(unlock.targetId);
           return;
         }
         unlockedPlayerIds.add(unlock.targetId);
@@ -1893,7 +1946,11 @@ function computeAvailability() {
   });
   // Speidet på landslagsarena, men signerbar via klubbanlegg: da er den
   // allerede i unlockedPlayerIds og skal ikke telles som «kun landslag».
-  unlockedPlayerIds.forEach((playerId) => nationalOnlyPlayerIds.delete(playerId));
+  // Samme for quiz: er spilleren signerbar fra et annet sted, er den ikke ventende.
+  unlockedPlayerIds.forEach((playerId) => {
+    nationalOnlyPlayerIds.delete(playerId);
+    quizPendingPlayerIds.delete(playerId);
+  });
 
   // Lokal start utvider bare spillerpoolen. Den åpner ingen steder og skriver
   // aldri til History Go-progresjonen (visited_places/groundhopper-state).
@@ -1968,6 +2025,7 @@ function computeAvailability() {
     unlockedPlayers,
     unlockedPlayerIds,
     nationalOnlyPlayerIds,
+    quizPendingPlayerIds,
     playerSourceById,
     unlockedStaff,
     unlockedStaffIds: collectedPools.unlockedStaffIds,
@@ -11109,15 +11167,21 @@ function renderUnlockedPlayers() {
     // Landslagsspillere speidet på en landslagsarena (Ullevaal/Maracanã) kan
     // ikke signeres til klubblaget – si det tydelig i stedet for å la
     // spilleren lure på hvorfor besøket «ikke ga noe».
-    const scouted = getAvailability().nationalOnlyPlayerIds?.size || 0;
+    const snapshot = getAvailability();
+    const scouted = snapshot.nationalOnlyPlayerIds?.size || 0;
     const scoutedNote = scouted > 0
       ? ` ${scouted} landslagsspiller${scouted === 1 ? "" : "e"} er speidet på landslagsarena – de kan bare signeres via et klubbanlegg.`
       : "";
+    // Quiz-porten: besøkt stedet, men ikke tatt quizen ennå.
+    const pending = snapshot.quizPendingPlayerIds?.size || 0;
+    const pendingNote = pending > 0
+      ? ` ${pending} spiller${pending === 1 ? "" : "e"} venter på at du tar quizen på stedet i History Go.`
+      : "";
     if (players.length > 0) {
-      elements.unlockedPlayersStatus.textContent = `Klubbspillere du kan bruke: ${players.length}.${scoutedNote}`;
+      elements.unlockedPlayersStatus.textContent = `Klubbspillere du kan bruke: ${players.length}.${pendingNote}${scoutedNote}`;
     } else {
       elements.unlockedPlayersStatus.textContent =
-        `Ingen klubbspillere ennå. Besøk/synk et klubbanlegg (Intility, Lerkendal, Brann, Aspmyra, Åråsen, Aker eller Nadderud).${scoutedNote}`;
+        `Ingen klubbspillere ennå. Besøk/synk et klubbanlegg (Intility, Lerkendal, Brann, Aspmyra, Åråsen, Aker eller Nadderud).${pendingNote}${scoutedNote}`;
     }
   }
 
