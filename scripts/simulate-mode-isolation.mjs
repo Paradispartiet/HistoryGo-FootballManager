@@ -1,9 +1,12 @@
 import assert from "node:assert/strict";
 import {
+  MODES,
   MODE_SESSION_KEY,
+  SESSION_STATE_FIELDS,
   SET_STATE_FIELDS,
   applyModeSession,
   captureModeSession,
+  createSecondarySession,
   migrateModeSessions,
   persistModeEnvelope,
   resetSecondarySession,
@@ -166,6 +169,66 @@ check("Set-felt overlever capture→apply-runden (ingen `.has is not a function`
   applyModeSession(healed, { deliveredInboxMessageIds: {} });
   assert.ok(healed.deliveredInboxMessageIds instanceof Set);
   assert.doesNotThrow(() => healed.deliveredInboxMessageIds.has("x"));
+});
+
+// Landslagsmodus: nasjonen og troppen er landslagets egne, og skal aldri lekke
+// inn i klubblagringen. Å besøke Ullevål gir deg landslagsspillere du kan lede
+// i landslagsmodus – ikke signere til klubblaget ditt.
+check("landslagsmodus er en egen modus med egen nasjon og tropp", () => {
+  assert.ok(MODES.includes("national"), "«national» må være en registrert modus");
+  assert.ok(SESSION_STATE_FIELDS.includes("nationalTeam"), "nationalTeam må være et sesjonsfelt");
+  const fresh = createSecondarySession({ selectedFormationId: "modern_433" }, "national");
+  assert.deepEqual(fresh.nationalTeam, { nationality: null, squadPlayerIds: [] });
+  assert.equal(fresh.firstTimePlaythrough.currentStep, "nation_select");
+  assert.equal(fresh.miniSeason, null);
+  assert.equal(fresh.leagueSeason, null);
+});
+
+check("landslagstroppen lekker ikke inn i klubblagringen", () => {
+  envelope = switchModeSession(envelope, state, "league");
+  const leagueSnapshot = JSON.stringify(envelope.sessions.league);
+  envelope = switchModeSession(envelope, state, "national", { reset: true });
+  state.nationalTeam = { nationality: "Norge", squadPlayerIds: ["haaland", "odegaard"] };
+  state.selectedFormationId = "classic_442";
+  envelope = switchModeSession(envelope, state, "league");
+  assert.equal(JSON.stringify(envelope.sessions.league), leagueSnapshot);
+  assert.equal(envelope.sessions.league.nationalTeam, undefined);
+  // Klubbstaten må være tilbake, og landslagsfeltet borte fra den aktive staten.
+  assert.equal(state.selectedFormationId, "modern_433");
+  assert.equal(state.nationalTeam, undefined);
+});
+
+check("valgt nasjon huskes ved retur og over refresh", () => {
+  envelope = switchModeSession(envelope, state, "national");
+  assert.deepEqual(state.nationalTeam, { nationality: "Norge", squadPlayerIds: ["haaland", "odegaard"] });
+  const storage = memoryStorage();
+  persistModeEnvelope(storage, envelope);
+  const resumed = migrateModeSessions(storage);
+  assert.equal(resumed.activeMode, "national");
+  assert.equal(resumed.sessions.national.nationalTeam.nationality, "Norge");
+  assert.equal(JSON.stringify(resumed.sessions.league), leagueBefore);
+});
+
+check("nullstilling av landslaget rører ikke klubblaget", () => {
+  envelope = resetSecondarySession(envelope, state, "national");
+  assert.deepEqual(state.nationalTeam, { nationality: null, squadPlayerIds: [] });
+  assert.equal(JSON.stringify(envelope.sessions.league), leagueBefore);
+  envelope = switchModeSession(envelope, state, "league");
+});
+
+check("landslagsspillere er kun tilgjengelige i landslagsmodus", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  // Speidede landslagsspillere slippes inn i troppen kun når modusen er aktiv …
+  assert.match(app, /if \(isNationalModeActive\(\)\) \{[\s\S]{0,400}nationalOnlyPlayerIds\.forEach/);
+  // … og da filtrert på den valgte nasjonen.
+  assert.match(app, /getNationalTeamNationality\(\)/);
+  assert.match(app, /nationality !== nationality/);
+  assert.match(app, /function isNationalModeActive\(\)\s*\{\s*return state\.modeEnvelope\?\.activeMode === "national";/);
+  // Panelet finnes, og er skjult utenfor landslagsmodus.
+  assert.match(html, /id="nationalTeamPanel"/);
+  assert.match(html, /data-start-mode="national"/);
+  assert.match(app, /panel\.hidden = !isNationalModeActive\(\)/);
 });
 
 console.log(`\nAlle ${checks.length} modusisolasjonssjekker besto.`);
