@@ -7725,3 +7725,61 @@ body { grid-template-columns: minmax(0, 1fr); }
 .nation-card.is-locked { opacity: 0.55; cursor: not-allowed; }
 .nation-card strong { font-size: 1.05rem; }
 .nation-card small { color: var(--hg-text-muted); }
+
+/* ---------- Mesterskap: EM og VM ---------- */
+.tournament-panel[hidden] { display: none !important; }
+.tournament-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.tournament-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding: 14px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  cursor: pointer;
+  min-width: 0;
+}
+.tournament-choice:hover { background: rgba(255, 255, 255, 0.07); border-color: var(--hg-accent-tactics); }
+.tournament-choice strong { font-size: 1.05rem; }
+.tournament-choice small { color: var(--hg-text-muted); font-size: 0.78rem; }
+.tournament-choice-frame { color: var(--hg-text-muted); font-size: 0.8rem; line-height: 1.35; }
+
+.tournament-active { display: grid; gap: 12px; margin-top: 10px; min-width: 0; }
+.tournament-group { min-width: 0; overflow-x: auto; }
+.tournament-group h3 { margin: 0 0 6px; font-size: 0.95rem; }
+.tournament-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.tournament-table th,
+.tournament-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--hg-border-soft);
+  white-space: nowrap;
+}
+.tournament-table th { color: var(--hg-text-muted); font-weight: 500; font-size: 0.75rem; }
+.tournament-table tr.is-manager td { background: rgba(70, 214, 140, 0.12); font-weight: 600; }
+
+.tournament-bracket {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+.tournament-bracket-stage { min-width: 0; }
+.tournament-bracket-stage h4 { margin: 0 0 4px; font-size: 0.8rem; color: var(--hg-text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.tournament-bracket-match { margin: 0 0 3px; font-size: 0.82rem; color: var(--hg-text-muted); }
+.tournament-bracket-match.is-manager { color: var(--text); font-weight: 600; }
+
+.tournament-actions { display: flex; gap: 8px; }
+.tournament-history { margin-top: 12px; }
+.tournament-history h3 { margin: 0 0 6px; font-size: 0.95rem; }
+.tournament-history ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.tournament-history li { display: flex; justify-content: space-between; gap: 10px; font-size: 0.85rem; }
+.tournament-history li span { color: var(--hg-text-muted); }

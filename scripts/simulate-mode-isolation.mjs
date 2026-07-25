@@ -216,6 +216,36 @@ check("nullstilling av landslaget rører ikke klubblaget", () => {
   envelope = switchModeSession(envelope, state, "league");
 });
 
+check("mesterskapet er landslagets, ikke klubbens", () => {
+  assert.ok(SESSION_STATE_FIELDS.includes("tournament"), "tournament må være et sesjonsfelt");
+  assert.ok(SESSION_STATE_FIELDS.includes("tournamentHistory"), "tournamentHistory må være et sesjonsfelt");
+  const fresh = createSecondarySession({ selectedFormationId: "modern_433" }, "national");
+  assert.equal(fresh.tournament, null);
+  assert.deepEqual(fresh.tournamentHistory, []);
+  // Et scenariorom eller treningsrom skal ikke få mesterskapsfelter i det hele tatt.
+  assert.equal(createSecondarySession({}, "training").tournament, undefined);
+  assert.equal(createSecondarySession({}, "scenario").tournamentHistory, undefined);
+});
+
+check("et pågående mesterskap lekker ikke inn i klubblagringen", () => {
+  envelope = switchModeSession(envelope, state, "league");
+  const leagueSnapshot = JSON.stringify(envelope.sessions.league);
+  envelope = switchModeSession(envelope, state, "national", { reset: true });
+  state.nationalTeam = { nationality: "Norge", squadPlayerIds: ["haaland"] };
+  state.tournament = { version: "historygo-football-manager.tournament.v1", tournamentId: "vm", stage: "quarterfinal" };
+  state.tournamentHistory = [{ tournamentId: "em", placement: "Mester" }];
+  envelope = switchModeSession(envelope, state, "league");
+  assert.equal(JSON.stringify(envelope.sessions.league), leagueSnapshot);
+  assert.equal(envelope.sessions.league.tournament, undefined);
+  assert.equal(envelope.sessions.league.tournamentHistory, undefined);
+  assert.equal(state.tournament, undefined);
+  // Tilbake i landslagsmodus står mesterskapet der det sto.
+  envelope = switchModeSession(envelope, state, "national");
+  assert.equal(state.tournament.stage, "quarterfinal");
+  assert.equal(state.tournamentHistory[0].placement, "Mester");
+  envelope = switchModeSession(envelope, state, "league");
+});
+
 check("landslagsspillere er kun tilgjengelige i landslagsmodus", async () => {
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");

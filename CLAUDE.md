@@ -26,6 +26,7 @@ npm run audit:hg-historical-fit
 npm run audit:hg-coach-context
 npm run audit:hg-formation-knowledge   # data/hgFootball/formationKnowledge.json
 npm run audit:historical-opponents     # historical opponent archetypes
+npm run audit:tournaments              # data/football_tournaments.json (EM/VM)
 
 # UI-/flyt-vakter (statisk, leser index.html + src/app.js)
 npm run check:dom-ids          # querySelector("#id")-oppslag finnes i index.html
@@ -35,6 +36,7 @@ npm run audit:dead-ends        # ingen blindveier i første spillbare løkke (de
 # Simulations (exercise the live JS engines end-to-end, no DOM/localStorage)
 npm run sim:matchday           # matchday session loop (football-matchday-engine.js)
 npm run sim:mini-season        # mini-season loop
+npm run sim:tournament         # EM/VM i landslagsmodus (gruppespill → finale)
 npm run sim:training-week      # weekly training focus
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
 npm run sim:suggested-setups   # self-explaining suggested setups
@@ -47,7 +49,7 @@ npm run sim:club-week          # Club Week consequences loop
 Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script.
 
 **Two CI workflows** (`.github/workflows/`):
-- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `build`.
+- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `audit:tournaments`, `build`.
 - `ci.yml` (PRs + every non-`main` branch push) is the safety net that runs the **whole** suite — all `audit:*`, `check:*`, `build` **and** every `sim:*` script.
 
 So on a feature branch, expect the full suite to gate your PR; run the relevant scripts locally before pushing.
@@ -132,6 +134,8 @@ The game must stay playable **relatively independently of History Go** — Histo
 ### Modes
 
 `src/football-mode-sessions.js` is the single owner of the active mode and of per-mode session snapshots: `league`, `national`, `scenario`, `training`. Secondary modes never write into the league save. **Landslagsmodus** (national-team mode) is where the scouted national-arena players are actually played — its squad is the nation's base tier plus whatever you have collected, filtered by the chosen nation. See `docs/landslagsmodus.md`; guarded by `sim:mode-isolation`, `audit:flow` (stage 13) and `audit:dead-ends` (stage 13).
+
+What national mode plays *for* is a tournament: **EM and VM** (`src/football-tournament.js` + `data/football_tournaments.json`) — group stage into knockouts, opponents being nations that play as the existing historical style archetypes. Like the mini-season and league-season engines, it never simulates the manager's own match: it consumes the Kampdag result and only decides the tournament's progression. See `docs/mesterskap.md`; guarded by `sim:tournament`, `audit:tournaments` and `audit:flow` (stage 14).
 
 ## Git workflow
 

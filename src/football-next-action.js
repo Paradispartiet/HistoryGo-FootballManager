@@ -87,6 +87,8 @@ function normalizeContext(context = {}) {
     scenarioModeActive: Boolean(context.scenarioModeActive) || context.selectedMode === "scenario",
     nationalModeActive: Boolean(context.nationalModeActive) || context.selectedMode === "national",
     nationalNationChosen: Boolean(context.nationalNationChosen),
+    nationalTournamentActive: Boolean(context.nationalTournamentActive),
+    nationalTournamentAvailable: Boolean(context.nationalTournamentAvailable),
     firstTime: context.firstTime && typeof context.firstTime === "object"
       ? {
           active: Boolean(context.firstTime.active),
@@ -140,6 +142,20 @@ export function computeNextActions(context = {}) {
       hint: "Velg hvilket landslag du vil lede. Grunnstammen er klar; stjernene samler du i History Go.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" }
     }];
+  }
+
+  // Nasjon valgt, men ingen turnering: uten et mesterskap har landslaget
+  // ingenting å spille om. Påmeldingen er da neste steg – men først når laget
+  // faktisk er satt, ellers hopper vi over lagbyggingen.
+  if (ctx.nationalModeActive && !ctx.nationalTournamentActive && ctx.nationalTournamentAvailable
+      && lineup.emptyCount === 0) {
+    push({
+      id: "national-enter-tournament",
+      tag: "Mesterskap",
+      title: "Meld på til EM eller VM",
+      hint: "Laget er satt. Velg mesterskap – gruppespill først, så utslagsrunder.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" }
+    });
   }
 
   // I ligamodus er før-sesongens første uferdige steg øverste sannhet. Club

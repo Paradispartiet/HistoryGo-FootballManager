@@ -36,7 +36,9 @@
     "sim:first-time": "node scripts/simulate-first-time-playthrough.mjs",
     "sim:first-run-real-seed": "node scripts/simulate-first-run-real-seed.mjs",
     "audit:football-book-ux": "node scripts/audit-football-book-ux.mjs",
-    "sim:first-run-football-book-qa": "node scripts/simulate-first-run-football-book-qa.mjs"
+    "sim:first-run-football-book-qa": "node scripts/simulate-first-run-football-book-qa.mjs",
+    "sim:tournament": "node scripts/simulate-tournament.mjs",
+    "audit:tournaments": "node scripts/audit-tournaments.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

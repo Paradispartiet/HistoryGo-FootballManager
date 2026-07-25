@@ -195,6 +195,44 @@
         </div>
       </section>
 
+      <section id="tournamentPanel" class="panel tournament-panel" aria-label="Mesterskap" aria-live="polite" hidden>
+        <div class="league-club-card-head">
+          <div>
+            <p class="eyebrow">Mesterskap</p>
+            <h2 id="tournamentTitle">Meld på til mesterskap</h2>
+            <p id="tournamentLead" class="muted-text">Velg EM eller VM. Gruppespill først, så utslagsrunder.</p>
+          </div>
+          <span id="tournamentStatus" class="league-club-status">Ikke påmeldt</span>
+        </div>
+        <div id="tournamentChoices" class="tournament-choices"></div>
+        <div id="tournamentActive" class="tournament-active" hidden>
+          <div class="league-club-card-grid" aria-label="Mesterskapsstatus">
+            <article><span>Steg</span><strong id="tournamentStage">Gruppespill</strong></article>
+            <article><span>Neste motstander</span><strong id="tournamentNextOpponent">–</strong></article>
+            <article><span>Spilt</span><strong id="tournamentRecord">0 kamper</strong></article>
+            <article><span>Målforskjell</span><strong id="tournamentGoals">0–0</strong></article>
+          </div>
+          <p id="tournamentNextHook" class="muted-text"></p>
+          <div class="tournament-group">
+            <h3 id="tournamentGroupTitle">Gruppe</h3>
+            <table class="tournament-table">
+              <thead>
+                <tr><th scope="col">#</th><th scope="col">Nasjon</th><th scope="col">K</th><th scope="col">+/–</th><th scope="col">P</th></tr>
+              </thead>
+              <tbody id="tournamentGroupTable"></tbody>
+            </table>
+          </div>
+          <div id="tournamentBracket" class="tournament-bracket"></div>
+          <div class="tournament-actions">
+            <button type="button" id="tournamentAbandon" class="unlock-card-action is-secondary">Trekk laget</button>
+          </div>
+        </div>
+        <div id="tournamentHistory" class="tournament-history" hidden>
+          <h3>Merittliste</h3>
+          <ul id="tournamentHistoryList"></ul>
+        </div>
+      </section>
+
       <section id="leagueClubCard" class="panel league-club-card" aria-label="Klubbkort for ligaspill" aria-live="polite" hidden>
         <div class="league-club-card-head">
           <div>
