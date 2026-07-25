@@ -8,7 +8,7 @@
 
 export const MODE_SESSION_KEY = "hgfm.modeSessions.v1";
 export const MODE_SESSION_VERSION = "mode-sessions.v1";
-export const MODES = Object.freeze(["league", "scenario", "training"]);
+export const MODES = Object.freeze(["league", "scenario", "training", "national"]);
 
 export const SESSION_STATE_FIELDS = Object.freeze([
   "selectedFormationId", "selectedTacticId", "lineup", "slotPositions",
@@ -16,7 +16,8 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "activeKnowledgeFocusId", "completedKnowledgeFocusIds", "clubWeekState",
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
-  "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason"
+  "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason",
+  "nationalTeam"
 ]);
 
 // Set-felt: disse er `Set` i app-staten, men `JSON.stringify(new Set())` gir
@@ -92,14 +93,20 @@ export function createSecondarySession(league, mode) {
   session.matchday = { lastMatch: null, session: null };
   session.miniSeason = null;
   session.leagueSeason = null;
+  const feedbackByMode = {
+    scenario: "Velg scenario.",
+    national: "Velg nasjon og ta ut landslagstroppen.",
+    training: "Treningsrommet er klart."
+  };
   session.clubWeekState = { week: 1, phase: mode === "scenario" ? "analysis" : "training" };
-  session.clubWeekFeedback = mode === "scenario" ? "Velg scenario." : "Treningsrommet er klart.";
+  session.clubWeekFeedback = feedbackByMode[mode] || feedbackByMode.training;
+  // Landslagsmodus har sin egen nasjon og tropp, isolert fra klubblaget.
+  if (mode === "national") session.nationalTeam = { nationality: null, squadPlayerIds: [] };
   session.clubWeekEventLog = [];
   session.weeklyTrainingFocus = null;
   session.weeklyTrainingProgram = null;
-  session.firstTimePlaythrough = mode === "scenario"
-    ? { started: false, completed: false, currentStep: "scenario_select" }
-    : { started: false, completed: false, currentStep: "training" };
+  const firstStepByMode = { scenario: "scenario_select", national: "nation_select", training: "training" };
+  session.firstTimePlaythrough = { started: false, completed: false, currentStep: firstStepByMode[mode] || "training" };
   return session;
 }
 
@@ -112,7 +119,8 @@ export function normalizeModeEnvelope(value) {
     sessions: {
       league: isObject(sessions.league) ? cloneSessionValue(sessions.league) : {},
       scenario: isObject(sessions.scenario) ? cloneSessionValue(sessions.scenario) : null,
-      training: isObject(sessions.training) ? cloneSessionValue(sessions.training) : null
+      training: isObject(sessions.training) ? cloneSessionValue(sessions.training) : null,
+      national: isObject(sessions.national) ? cloneSessionValue(sessions.national) : null
     }
   };
 }

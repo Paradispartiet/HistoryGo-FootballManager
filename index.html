@@ -20,6 +20,7 @@
       </div>
       <div class="first-time-brief-grid mode-choice-grid">
         <button type="button" class="mode-choice-card is-primary-mode" data-start-mode="league" aria-describedby="firstTimeAssistant"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></button>
+        <button type="button" class="mode-choice-card" data-start-mode="national" aria-describedby="firstTimeAssistant"><span>Landslag</span><strong>Landslagssjef</strong><small>Ta ut landslagstroppen av spillerne du har samlet – inkludert stjernene fra landslagsarenaene.</small></button>
         <button type="button" class="mode-choice-card" data-start-mode="scenario" aria-describedby="firstTimeAssistant"><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></button>
         <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten at det påvirker ligasesongen.</small></button>
       </div>
@@ -174,6 +175,25 @@
     <!-- ============================ KONTORET (LAG / TAKTIKK) ============================ -->
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
+
+      <!-- Landslagsmodus: velg nasjon og se troppen. Vises kun i landslagsmodus. -->
+      <section id="nationalTeamPanel" class="panel national-team-panel" aria-label="Landslag" aria-live="polite" hidden>
+        <div class="league-club-card-head">
+          <div>
+            <p class="eyebrow">Landslagssjef</p>
+            <h2 id="nationalTeamTitle">Velg nasjon</h2>
+            <p id="nationalTeamLead" class="muted-text">Du kan lede nasjonene du har samlet nok spillere fra.</p>
+          </div>
+          <span id="nationalTeamStatus" class="league-club-status">Ingen nasjon valgt</span>
+        </div>
+        <div id="nationalNationList" class="national-nation-list"></div>
+        <div id="nationalSquadSummary" class="league-club-card-grid" aria-label="Landslagstropp" hidden>
+          <article><span>Nasjon</span><strong id="nationalSquadNation">–</strong></article>
+          <article><span>Spillere tilgjengelig</span><strong id="nationalSquadCount">0</strong></article>
+          <article><span>Beste spiller</span><strong id="nationalSquadBest">–</strong></article>
+          <article><span>Neste steg</span><strong id="nationalSquadNext">Sett laget</strong></article>
+        </div>
+      </section>
 
       <section id="leagueClubCard" class="panel league-club-card" aria-label="Klubbkort for ligaspill" aria-live="polite" hidden>
         <div class="league-club-card-head">

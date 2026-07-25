@@ -342,6 +342,27 @@ stage("12. Onboarding er egen skjerm");
   );
 }
 
+// ---- 13) Startelleveren kan alltid fylles ------------------------------------
+// Krever formasjonen flere av en posisjon enn troppen har (1-1-8 med åtte
+// spisser er det verste tilfellet), sto manageren igjen med tomme plasser,
+// beskjeden «Fyll 2 plasser» og ingen spiller å fylle dem med. Feilbruk er lov
+// – motoren forklarer den. Auto-fyll må derfor ha et siste «hvem som helst»-
+// nivå, ellers er kampdagen låst.
+stage("13. Startelleveren kan alltid fylles");
+{
+  const picker = app.match(/function findBestAvailablePlayerForSlot\([\s\S]*?\n\}/);
+  check("findBestAvailablePlayerForSlot finnes", Boolean(picker));
+  check(
+    "auto-fyll har et siste nivå som tar hvilken som helst ledig spiller",
+    Boolean(picker) && /\(\)\s*=>\s*true/.test(picker[0]),
+    "uten det blir plasser stående tomme når troppen mangler posisjonen"
+  );
+  check(
+    "fallbacken er begrunnet i koden (feilbruk er lov, ikke en feil)",
+    Boolean(picker) && /Feilbruk er lov/.test(picker[0])
+  );
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

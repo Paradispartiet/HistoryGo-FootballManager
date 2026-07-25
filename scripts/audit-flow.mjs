@@ -317,6 +317,87 @@ check("klubbkortet har ikke stedsanker eller sesongoppdrag", !html.includes('id=
 check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getNextLeagueOpponent(state.leagueSeason)"));
 check("nullstilling er namespacet og rydder aldri league-save", app.includes("resetSecondarySession") && !/function resetMiniSeason\(\)[\s\S]{0,300}clearLeagueSaveState/.test(app) && !app.includes("placeUnlocks = []"));
 
+// ---- 13) Landslagsmodus ------------------------------------------------------
+// Landslagsspillerne du speider på Ullevaal kan ikke signeres til klubblaget,
+// men de er hele poenget med landslagsmodus: der leder du nasjonen du har
+// samlet nok spillere fra. Modusen har egen nasjon og tropp, isolert fra klubben.
+stage("13. Landslagsmodus");
+{
+  const modes = readFileSync(join(root, "src/football-mode-sessions.js"), "utf8");
+  check(
+    "«national» er en registrert modus med egen sesjon",
+    /MODES = Object\.freeze\(\[[^\]]*"national"/.test(modes)
+      && modes.includes('SESSION_STATE_FIELDS') && /"nationalTeam"/.test(modes)
+      && /national: isObject\(sessions\.national\)/.test(modes)
+  );
+  check(
+    "ny landslagssesjon starter uten nasjon og uten tropp",
+    /if \(mode === "national"\) session\.nationalTeam = \{ nationality: null, squadPlayerIds: \[\] \};/.test(modes)
+  );
+}
+check(
+  "landslagsmodus kan startes fra onboardingen",
+  html.includes('data-start-mode="national"')
+);
+check(
+  "landslagsspillere blir tilgjengelige kun i landslagsmodus",
+  /if \(isNationalModeActive\(\)\) \{[\s\S]{0,400}nationalOnlyPlayerIds\.forEach/.test(app)
+    && app.includes('function isNationalModeActive() {')
+);
+check(
+  "troppen filtreres på valgt nasjon",
+  /getNationalTeamNationality\(\)[\s\S]{0,400}nationality !== nationality/.test(app)
+);
+check(
+  "nasjonsvelgeren teller spillerne og krever full tropp",
+  app.includes("function getAvailableNations")
+    && /playable: record\.ids\.size >= REQUIRED_SQUAD_SIZE/.test(app)
+);
+// Blindveivakt: landslagsmodus må være spillbar uten History Go-progresjon,
+// ellers møter en ny manager et tomt landslag og ingen vei videre.
+check(
+  "landslaget har en spillbar grunnstamme uten History Go",
+  app.includes("function getNationalBasePlayers") && app.includes("function getNationalBasePlayerIds")
+    && /getNationalBasePlayerIds\(nationality\)\.forEach/.test(app)
+);
+check(
+  "grunnstammen er grunnsjiktet – stjernene må fortsatt samles",
+  /function getNationalBasePlayers\(\)[\s\S]{0,900}Number\(player\.overall\) < NAME_TIER_MIN/.test(app)
+);
+check(
+  "nasjonskortet skiller grunnstamme fra samlede spillere",
+  /spillere å velge blant[\s\S]{0,40}samlet i History Go/.test(app)
+);
+// Blindveivakt: uten nasjoner må panelet forklare hvor man får spillere.
+check(
+  "tom nasjonsliste forklarer hvordan man samler spillere",
+  /Ingen nasjoner er tilgjengelige ennå[\s\S]{0,160}Ullevaal/.test(app)
+);
+check(
+  "«national» er en gyldig spillmodus i gameStartState",
+  /\["league", "national", "scenario", "training"\]\.includes\(value\?\.selectedMode\)/.test(app)
+);
+check(
+  "neste handling ber om nasjonsvalg før alt annet i landslagsmodus",
+  readFileSync(join(root, "src/football-next-action.js"), "utf8").includes("national-choose-nation")
+    && app.includes("nationalModeActive: isNationalModeActive()")
+    && app.includes("nationalNationChosen: Boolean(getNationalTeamNationality())")
+);
+check(
+  "landslagspanelet finnes og er skjult utenfor modusen",
+  html.includes('id="nationalTeamPanel"') && html.includes('id="nationalNationList"')
+    && app.includes("panel.hidden = !isNationalModeActive()")
+    && app.includes("renderNationalTeamPanel()")
+);
+check(
+  "landslagsmodus er dokumentert",
+  existsSync(join(root, "docs/landslagsmodus.md"))
+);
+check(
+  "nytt nasjonsvalg nullstiller troppen (spillerpoolen endres)",
+  /function selectNationalTeamNation\([\s\S]{0,400}state\.nationalTeam = \{ nationality: nation, squadPlayerIds: \[\] \}/.test(app)
+);
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

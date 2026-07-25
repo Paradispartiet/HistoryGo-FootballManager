@@ -7699,3 +7699,29 @@ body { grid-template-columns: minmax(0, 1fr); }
 .draft-actions { display: flex; gap: 8px; }
 .draft-actions .primary-action-button { flex: 1 1 auto; }
 .draft-actions .primary-action-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- Landslagsmodus: nasjonsvalg ---------- */
+.national-team-panel[hidden] { display: none !important; }
+.national-nation-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.nation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  cursor: pointer;
+}
+.nation-card:hover:not(:disabled) { background: rgba(255, 255, 255, 0.07); }
+.nation-card.is-selected { border-color: var(--hg-accent-tactics); background: rgba(70, 214, 140, 0.12); }
+.nation-card.is-locked { opacity: 0.55; cursor: not-allowed; }
+.nation-card strong { font-size: 1.05rem; }
+.nation-card small { color: var(--hg-text-muted); }

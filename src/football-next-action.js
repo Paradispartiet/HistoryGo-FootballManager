@@ -85,6 +85,8 @@ function normalizeContext(context = {}) {
       ? context.leaguePreseasonStep
       : null,
     scenarioModeActive: Boolean(context.scenarioModeActive) || context.selectedMode === "scenario",
+    nationalModeActive: Boolean(context.nationalModeActive) || context.selectedMode === "national",
+    nationalNationChosen: Boolean(context.nationalNationChosen),
     firstTime: context.firstTime && typeof context.firstTime === "object"
       ? {
           active: Boolean(context.firstTime.active),
@@ -124,8 +126,20 @@ export function computeNextActions(context = {}) {
   const { lineup, roster, clubWeekGate, clubWeek } = ctx;
   const firstTime = ctx.firstTime;
 
-  if (!ctx.leagueModeActive && !ctx.scenarioModeActive && context.selectedMode === null) {
-    return [{ id: "choose-game-mode", tag: "Kom i gang", title: "Velg spillmodus", hint: "Velg Ligaspill, Scenario eller Treningsrom.", action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" } }];
+  if (!ctx.leagueModeActive && !ctx.scenarioModeActive && !ctx.nationalModeActive && context.selectedMode === null) {
+    return [{ id: "choose-game-mode", tag: "Kom i gang", title: "Velg spillmodus", hint: "Velg Ligaspill, Landslag, Scenario eller Treningsrom.", action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" } }];
+  }
+
+  // Landslagsmodus: uten valgt nasjon finnes det ingen tropp å ta ut, så
+  // nasjonsvalget er alltid første handling.
+  if (ctx.nationalModeActive && !ctx.nationalNationChosen) {
+    return [{
+      id: "national-choose-nation",
+      tag: "Landslag",
+      title: "Velg nasjon",
+      hint: "Velg hvilket landslag du vil lede. Grunnstammen er klar; stjernene samler du i History Go.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" }
+    }];
   }
 
   // I ligamodus er før-sesongens første uferdige steg øverste sannhet. Club

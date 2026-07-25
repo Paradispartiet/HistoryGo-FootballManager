@@ -124,6 +124,15 @@ Sted → Person → Ekspertise → Trening → Badge → Lagklasse
 
 Players/staff are **not** freely available — they are gated by real History Go progression read from `localStorage` (`visited_places`, `hg_groundhopper_stats_v1`). Available players come from `player_candidate` unlocks on collected places. The optional **local start squad** (15 nearest qualified players, see `docs/local-start-squad.md`) is a playable shortcut that must integrate into `computeAvailability()` and must **never** write to `visited_places` / `hg_groundhopper_stats_v1` or hardcode player data.
 
+The game must stay playable **relatively independently of History Go** — History Go is where you *collect*, not a precondition for playing. Every mode therefore has a playable base, with the collection as the upside. Two rules follow, and both are audited:
+
+- **Club vs national players.** A place whose `placeRole` contains `national` (Ullevaal, Maracanã) never hands players to your club side — one visit must not secure a nation's best. Those players are *scouted*, and playable only in national-team mode.
+- **No empty starting XI.** `findBestAvailablePlayerForSlot()` ends in an "any free player" tier. When a formation demands more of a position than the squad has (1-1-8 with eight forwards), misuse is the correct outcome — the engine flags and explains it. Leaving slots unfillable would be a dead end, and contradicts the core principle.
+
+### Modes
+
+`src/football-mode-sessions.js` is the single owner of the active mode and of per-mode session snapshots: `league`, `national`, `scenario`, `training`. Secondary modes never write into the league save. **Landslagsmodus** (national-team mode) is where the scouted national-arena players are actually played — its squad is the nation's base tier plus whatever you have collected, filtered by the chosen nation. See `docs/landslagsmodus.md`; guarded by `sim:mode-isolation`, `audit:flow` (stage 13) and `audit:dead-ends` (stage 13).
+
 ## Git workflow
 
 - Develop on the assigned feature branch; create it locally if absent. Never push to `main` without explicit permission (pushing to `main` triggers a Pages deploy).

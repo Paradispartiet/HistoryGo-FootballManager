@@ -366,6 +366,8 @@ const state = {
   leagueSeason: null,
   modeEnvelope: null,
   modeChooserOpen: false,
+  // Landslagsmodus: valgt nasjon + uttatt landslagstropp (isolert per modus).
+  nationalTeam: { nationality: null, squadPlayerIds: [] },
   // Onboarding v2: har spilleren valgt modus på egen startskjerm minst én gang?
   onboarded: false,
   firstTimePlaythrough: { started: false, completed: false, currentStep: "start" },
@@ -1790,6 +1792,35 @@ function getDraftPoolPlayers() {
     });
 }
 
+// Landslagsmodus skal kunne spilles uten History Go-progresjon, på samme måte
+// som klubblaget har en spillbar starttropp. Grunnpoolen er nasjonens jevne
+// klubbspillere (under NAME_TIER_MIN) – landslagsstjernene fra Ullevaal og
+// Maracanã er fortsatt noe du må samle. Uttaket blir dermed en reell jobb:
+// grunnstammen er der, forskjellen gjør du ved å samle.
+function getNationalBasePlayers() {
+  const players = Array.isArray(state.players) ? state.players : [];
+  const clubIds = new Set();
+  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
+    if (isNationalArenaPlace(place)) return;
+    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
+        clubIds.add(unlock.targetId);
+      }
+    });
+  });
+  return players.filter(
+    (player) => player && clubIds.has(player.id) && Number(player.overall) < NAME_TIER_MIN
+  );
+}
+
+function getNationalBasePlayerIds(nationality) {
+  const nation = typeof nationality === "string" ? nationality.trim() : "";
+  if (!nation) return [];
+  return getNationalBasePlayers()
+    .filter((player) => String(player.nationality || "").trim() === nation)
+    .map((player) => player.id);
+}
+
 // Aktiver auto-troppen. Samme lagringsmodell som før (teamMerits.localStart med
 // unlockSource local_start), men uten koordinater eller valgt sted.
 function activateStarterSquad(chosenPlayerIds = null) {
@@ -1963,6 +1994,25 @@ function computeAvailability() {
 
   const players = Array.isArray(state.players) ? state.players : [];
   const playersById = new Map(players.filter((player) => player && player.id).map((player) => [player.id, player]));
+
+  // Landslagsmodus: her ER landslagsspillerne poenget. De speidede spillerne
+  // fra landslagsarena blir tilgjengelige, men HELE troppen filtreres på den
+  // valgte nasjonen – du kan ikke ta ut en brasilianer på Norges landslag.
+  // Klubblagets tropp røres ikke; modusene har hver sin sesjon.
+  if (isNationalModeActive()) {
+    nationalOnlyPlayerIds.forEach((playerId) => unlockedPlayerIds.add(playerId));
+    nationalOnlyPlayerIds.clear();
+    const nationality = getNationalTeamNationality();
+    if (nationality) {
+      // Grunnstammen er alltid tilgjengelig, ellers ville en ny manager stått
+      // med et tomt landslag og ingen vei videre.
+      getNationalBasePlayerIds(nationality).forEach((playerId) => unlockedPlayerIds.add(playerId));
+      [...unlockedPlayerIds].forEach((playerId) => {
+        if (playersById.get(playerId)?.nationality !== nationality) unlockedPlayerIds.delete(playerId);
+      });
+    }
+  }
+
   const unlockedPlayers = [];
   unlockedPlayerIds.forEach((playerId) => {
     const player = playersById.get(playerId);
@@ -3939,7 +3989,7 @@ function normalizeFirstTimePlaythrough(value) {
 }
 
 function normalizeGameStartState(value) {
-  const selectedMode = ["league", "scenario", "training"].includes(value?.selectedMode) ? value.selectedMode : null;
+  const selectedMode = ["league", "national", "scenario", "training"].includes(value?.selectedMode) ? value.selectedMode : null;
   return {
     selectedMode,
     activeLeagueSaveId: typeof value?.activeLeagueSaveId === "string" ? value.activeLeagueSaveId : undefined,
@@ -3988,6 +4038,89 @@ function isScenarioModeActive() {
 
 function isLeagueModeActive() {
   return state.modeEnvelope?.activeMode === "league";
+}
+
+// ---------------------------------------------------------------------------
+// Landslagsmodus: du tar over et landslag i stedet for en klubb. Troppen er
+// spillerne du har SAMLET fra den nasjonen – inkludert landslagsarena-spillerne
+// (Ullevaal/Maracanã) som klubblaget aldri får signere. Egen modus-sesjon, så
+// klubbsaven aldri påvirkes.
+// ---------------------------------------------------------------------------
+
+function getNationalTeamState() {
+  const raw = state.nationalTeam;
+  return {
+    nationality: typeof raw?.nationality === "string" && raw.nationality.trim() ? raw.nationality.trim() : null,
+    squadPlayerIds: Array.isArray(raw?.squadPlayerIds) ? raw.squadPlayerIds.filter((id) => typeof id === "string") : []
+  };
+}
+
+function getNationalTeamNationality() {
+  return getNationalTeamState().nationality;
+}
+
+// Hvilke spillere har du samlet, uavhengig av klubb/landslag-skillet OG av
+// hvilken nasjon som er valgt nå? Leses fra de opplåste stedene direkte, ikke
+// fra den nasjonsfiltrerte spillerlista – ellers ville nasjonsvelgeren bare
+// vist nasjonen du allerede har valgt.
+function getCollectedPlayersForNations() {
+  const unlockedPlaceIds = getAvailability().unlockedPlaceIds;
+  const byId = new Map((Array.isArray(state.players) ? state.players : []).map((p) => [p.id, p]));
+  const ids = new Set(getLocalStartPlayerIds());
+  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
+    if (!place || !unlockedPlaceIds.has(place.placeId)) return;
+    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (unlock && isPlayerUnlockType(unlock.type) && unlock.targetId) ids.add(unlock.targetId);
+    });
+  });
+  return [...ids].map((id) => byId.get(id)).filter(Boolean);
+}
+
+// Nasjoner du kan lede. Troppen er grunnstammen (nasjonens jevne klubbspillere,
+// alltid tilgjengelig) pluss spillerne du faktisk har samlet – inkludert
+// landslagsstjernene som klubblaget ditt aldri får signere. `collected` telles
+// separat, så det synes hva samlingen din tilfører.
+function getAvailableNations() {
+  const nations = new Map();
+  const entry = (nation) => {
+    if (!nations.has(nation)) nations.set(nation, { ids: new Set(), collected: new Set() });
+    return nations.get(nation);
+  };
+  getNationalBasePlayers().forEach((player) => {
+    const nation = typeof player.nationality === "string" ? player.nationality.trim() : "";
+    if (!nation) return;
+    entry(nation).ids.add(player.id);
+  });
+  getCollectedPlayersForNations().forEach((player) => {
+    const nation = typeof player.nationality === "string" ? player.nationality.trim() : "";
+    if (!nation) return;
+    const record = entry(nation);
+    record.ids.add(player.id);
+    record.collected.add(player.id);
+  });
+  return [...nations.entries()]
+    .map(([nationality, record]) => ({
+      nationality,
+      count: record.ids.size,
+      collected: record.collected.size,
+      playable: record.ids.size >= REQUIRED_SQUAD_SIZE
+    }))
+    .sort((a, b) => b.count - a.count || a.nationality.localeCompare(b.nationality, "no"));
+}
+
+// Velg nasjon å lede. Nullstiller troppen, siden spillerpoolen endres.
+function selectNationalTeamNation(nationality) {
+  const nation = typeof nationality === "string" ? nationality.trim() : "";
+  if (!nation) return;
+  state.nationalTeam = { nationality: nation, squadPlayerIds: [] };
+  invalidateAvailability();
+  sanitizeLineupForUnlockedPlayers();
+  fillEmptyLineupSlots(true);
+  renderApp();
+}
+
+function isNationalModeActive() {
+  return state.modeEnvelope?.activeMode === "national";
 }
 
 function isTrainingModeActive() {
@@ -4299,6 +4432,69 @@ function renderOnboardingScreen() {
   if (screen.hidden) showOnboardingModeStep();
 }
 
+// Landslagspanelet: nasjonsvalg + troppsoppsummering. Kun i landslagsmodus.
+function renderNationalTeamPanel() {
+  const panel = document.querySelector("#nationalTeamPanel");
+  if (!panel) return;
+  panel.hidden = !isNationalModeActive();
+  if (panel.hidden) return;
+
+  const nations = getAvailableNations();
+  const chosen = getNationalTeamNationality();
+  const listEl = document.querySelector("#nationalNationList");
+  const titleEl = document.querySelector("#nationalTeamTitle");
+  const leadEl = document.querySelector("#nationalTeamLead");
+  const statusEl = document.querySelector("#nationalTeamStatus");
+  const summaryEl = document.querySelector("#nationalSquadSummary");
+
+  if (titleEl) titleEl.textContent = chosen ? `${chosen}s landslag` : "Velg nasjon";
+  if (statusEl) statusEl.textContent = chosen ? "Nasjon valgt" : "Ingen nasjon valgt";
+
+  if (listEl) {
+    listEl.replaceChildren();
+    if (!nations.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted-text";
+      empty.textContent = "Ingen nasjoner er tilgjengelige ennå. Besøk fotballsteder i History Go – landslagsarenaer som Ullevaal gir landslagsspillerne.";
+      listEl.append(empty);
+    }
+    nations.forEach((nation) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `nation-card${nation.nationality === chosen ? " is-selected" : ""}${nation.playable ? "" : " is-locked"}`;
+      button.disabled = !nation.playable;
+      const name = document.createElement("strong");
+      name.textContent = nation.nationality;
+      const meta = document.createElement("small");
+      meta.textContent = nation.playable
+        ? `${nation.count} spillere å velge blant · ${nation.collected} samlet i History Go`
+        : `${nation.count}/${REQUIRED_SQUAD_SIZE} spillere – samle flere fra ${nation.nationality}`;
+      button.append(name, meta);
+      button.addEventListener("click", () => selectNationalTeamNation(nation.nationality));
+      listEl.append(button);
+    });
+  }
+
+  if (leadEl) {
+    leadEl.textContent = chosen
+      ? "Troppen er nasjonens grunnstamme pluss spillerne du har samlet – også landslagsstjernene du aldri får signere til klubblaget."
+      : "Grunnstammen får du gratis. Stjernene samler du i History Go.";
+  }
+
+  if (summaryEl) {
+    summaryEl.hidden = !chosen;
+    if (chosen) {
+      const squad = getUnlockedPlayers();
+      const best = [...squad].sort((a, b) => (Number(b.overall) || 0) - (Number(a.overall) || 0))[0];
+      const set = (id, text) => { const el = document.querySelector(id); if (el) el.textContent = text; };
+      set("#nationalSquadNation", chosen);
+      set("#nationalSquadCount", String(squad.length));
+      set("#nationalSquadBest", best ? `${best.name} (${best.overall})` : "–");
+      set("#nationalSquadNext", squad.length >= REQUIRED_STARTERS ? "Sett laget på Lag" : "Samle flere spillere");
+    }
+  }
+}
+
 function renderGameModeStatus(teamFit) {
   const selectedMode = state.modeEnvelope?.activeMode || null;
   const status = elements.gameModeStatusCard;
@@ -4380,15 +4576,27 @@ function renderModeIsolation() {
     document.querySelectorAll(".league-season-panel, .league-onboarding-panel, .league-club-card")
       .forEach((node) => { node.hidden = true; });
   }
+  if (mode !== "national") {
+    document.querySelectorAll(".national-team-panel").forEach((node) => { node.hidden = true; });
+  }
   const bar = document.querySelector("#secondaryModeBar");
   if (bar) {
     bar.hidden = mode === "league";
     const title = bar.querySelector("#secondaryModeTitle");
     const hint = bar.querySelector("#secondaryModeHint");
-    if (title) title.textContent = mode === "scenario" ? "Scenario" : "Treningsrom";
-    if (hint) hint.textContent = mode === "scenario"
-      ? (state.gameStartState?.activeScenarioId ? "Spill neste scenariokamp" : "Velg scenario")
-      : "Velg formasjon · Plasser spillere · Test oppsett · Nullstill";
+    const barTitle = { scenario: "Scenario", national: "Landslag", training: "Treningsrom" };
+    if (title) title.textContent = barTitle[mode] || "Treningsrom";
+    if (hint) {
+      if (mode === "scenario") {
+        hint.textContent = state.gameStartState?.activeScenarioId ? "Spill neste scenariokamp" : "Velg scenario";
+      } else if (mode === "national") {
+        hint.textContent = getNationalTeamNationality()
+          ? `${getNationalTeamNationality()}s landslag · ta ut troppen`
+          : "Velg nasjon";
+      } else {
+        hint.textContent = "Velg formasjon · Plasser spillere · Test oppsett · Nullstill";
+      }
+    }
     const reset = bar.querySelector("#resetTrainingRoomButton");
     if (reset) reset.hidden = mode !== "training";
   }
@@ -4396,6 +4604,7 @@ function renderModeIsolation() {
 
 function renderFirstTimePlaythrough(teamFit) {
   renderLeagueClubCard(teamFit);
+  renderNationalTeamPanel();
   renderGameModeStatus(teamFit);
   const card = elements.firstTimePlaythroughCard;
   if (!card || card.hidden) return;
@@ -4761,10 +4970,17 @@ function getDefaultRoleForPlayer(player, slot) {
 }
 
 function findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers) {
+  // Siste nivå er bevisst «hvem som helst som er ledig». Krever formasjonen
+  // flere av en posisjon enn troppen har (f.eks. 1-1-8), ville et hardt filter
+  // etterlate tomme plasser og en blindvei: manageren fikk beskjed om å fylle
+  // dem, men ingen kunne fylles. Feilbruk er lov – det er nettopp det spillet
+  // handler om: motoren merker plassen som feilbrukt og forklarer hvorfor,
+  // i stedet for å blokkere. Manageren kan alltid bytte selv.
   const tiers = [
     (candidate) => candidate.naturalPositions.includes(slot.position),
     (candidate) => candidate.usablePositions.includes(slot.position),
-    (candidate) => !candidate.poorFits.includes(slot.position)
+    (candidate) => !candidate.poorFits.includes(slot.position),
+    () => true
   ];
 
   for (const matches of tiers) {
@@ -6985,6 +7201,8 @@ function buildNextActionContext(teamFit) {
     leaguePreseasonReady: isLeagueModeActive() ? isLeaguePreseasonReady(teamFit) : true,
     leaguePreseasonStep,
     scenarioModeActive: isScenarioModeActive(),
+    nationalModeActive: isNationalModeActive(),
+    nationalNationChosen: Boolean(getNationalTeamNationality()),
     firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
     clubWeek: clubWeekState
       ? {
@@ -12703,6 +12921,7 @@ function bindGameModeControls() {
   const assistantByStartMode = {
     league: "Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.",
     scenario: "Velg et scenario for å spille en kort historisk eller taktisk utfordring.",
+    national: "Ta over et landslag: troppen er spillerne du har samlet fra nasjonen – også landslagsstjernene.",
     training: "Test formasjoner, roller og kampprinsipper uten risiko for ligasesongen."
   };
 
@@ -12735,6 +12954,12 @@ function bindGameModeControls() {
       if (mode === "scenario") {
         selectGameMode("scenario", { activeScenarioId: undefined });
         activateTab("scenarios");
+        renderApp();
+        return;
+      }
+      if (mode === "national") {
+        selectGameMode("national", {});
+        activateTab("dashboard");
         renderApp();
         return;
       }
