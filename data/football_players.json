@@ -7,18 +7,61 @@
       "name": "Martin Ødegaard",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 96,
-      "naturalPositions": ["AM", "CM"],
-      "usablePositions": ["RW"],
-      "poorFits": ["CB", "ST", "GK"],
-      "archetypeIds": ["classic_ten", "deep_playmaker"],
-      "archetypes": ["creator", "between_lines", "tempo_setter", "pressing_intelligence"],
-      "strengths": ["vision", "final_pass", "tempo_control", "pressing_intelligence", "combination_play"],
-      "needs": ["passing_options", "runners_ahead", "central_space", "structured_build_up"],
-      "preferredRoles": ["classic_ten", "free_creator", "deep_playmaker"],
-      "likesTactics": ["possession", "central_combinations", "high_press", "structured_build_up"],
-      "dislikesTactics": ["long_ball_only", "isolated_midfield", "static_crossing"],
+      "naturalPositions": [
+        "AM",
+        "CM"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "tempo_setter",
+        "pressing_intelligence"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "tempo_control",
+        "pressing_intelligence",
+        "combination_play"
+      ],
+      "needs": [
+        "passing_options",
+        "runners_ahead",
+        "central_space",
+        "structured_build_up"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations",
+        "high_press",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield",
+        "static_crossing"
+      ],
       "warningWhenMisused": "Ødegaard trenger relasjoner, pasningsvinkler og spillere som angriper rom foran ham."
     },
     {
@@ -26,18 +69,59 @@
       "name": "Erling Haaland",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 98,
-      "naturalPositions": ["ST"],
+      "naturalPositions": [
+        "ST"
+      ],
       "usablePositions": [],
-      "poorFits": ["CM", "DM", "CB", "GK"],
-      "archetypeIds": ["channel_runner", "target_striker"],
-      "archetypes": ["runner", "depth_threat", "box_presence", "finisher"],
-      "strengths": ["acceleration", "off_ball_runs", "finishing", "box_finishing", "power"],
-      "needs": ["space_behind", "early_through_balls", "box_service", "vertical_support"],
-      "preferredRoles": ["channel_runner", "advanced_forward", "box_striker"],
-      "likesTactics": ["direct_counter", "fast_transitions", "vertical_play", "central_combinations"],
-      "dislikesTactics": ["isolated_striker", "static_crossing", "slow_possession_without_runs"],
+      "poorFits": [
+        "CM",
+        "DM",
+        "CB",
+        "GK"
+      ],
+      "archetypeIds": [
+        "channel_runner",
+        "target_striker"
+      ],
+      "archetypes": [
+        "runner",
+        "depth_threat",
+        "box_presence",
+        "finisher"
+      ],
+      "strengths": [
+        "acceleration",
+        "off_ball_runs",
+        "finishing",
+        "box_finishing",
+        "power"
+      ],
+      "needs": [
+        "space_behind",
+        "early_through_balls",
+        "box_service",
+        "vertical_support"
+      ],
+      "preferredRoles": [
+        "channel_runner",
+        "advanced_forward",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "direct_counter",
+        "fast_transitions",
+        "vertical_play",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "static_crossing",
+        "slow_possession_without_runs"
+      ],
       "warningWhenMisused": "Haaland må få angripe rom og boks. Brukt som lav møtende playmaker mister han hovedstyrken."
     },
     {
@@ -45,18 +129,62 @@
       "name": "Caroline Graham Hansen",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 97,
-      "naturalPositions": ["RW", "LW"],
-      "usablePositions": ["AM"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["wide_dribbler_right", "wide_dribbler_left", "classic_ten"],
-      "archetypes": ["dribbler", "wide_creator", "one_vs_one", "final_pass"],
-      "strengths": ["dribbling", "agility", "isolation", "chance_creation", "final_pass"],
-      "needs": ["wide_space", "one_vs_one", "overlapping_fullback", "creative_freedom"],
-      "preferredRoles": ["wide_dribbler", "inverted_winger", "free_creator"],
-      "likesTactics": ["wide_attack", "isolate_wingers", "creative_freedom", "possession"],
-      "dislikesTactics": ["static_crossing", "back_to_goal_striker", "rigid_wide_only"],
+      "naturalPositions": [
+        "RW",
+        "LW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right",
+        "wide_dribbler_left",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "final_pass"
+      ],
+      "strengths": [
+        "dribbling",
+        "agility",
+        "isolation",
+        "chance_creation",
+        "final_pass"
+      ],
+      "needs": [
+        "wide_space",
+        "one_vs_one",
+        "overlapping_fullback",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "isolate_wingers",
+        "creative_freedom",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "static_crossing",
+        "back_to_goal_striker",
+        "rigid_wide_only"
+      ],
       "warningWhenMisused": "Graham Hansen trenger rom til å utfordre, kombinere og skape ubalanse fra kant."
     },
     {
@@ -64,18 +192,59 @@
       "name": "Ada Hegerberg",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 96,
-      "naturalPositions": ["ST"],
+      "naturalPositions": [
+        "ST"
+      ],
       "usablePositions": [],
-      "poorFits": ["CM", "DM", "CB", "GK"],
-      "archetypeIds": ["target_striker", "linking_nine"],
-      "archetypes": ["box_presence", "finisher", "link_player", "aerial"],
-      "strengths": ["box_finishing", "heading", "combination_play", "positioning", "hold_up_play"],
-      "needs": ["box_service", "close_support", "crossing", "central_space"],
-      "preferredRoles": ["box_striker", "target_striker", "linking_striker"],
-      "likesTactics": ["crossing", "central_combinations", "possession", "box_service"],
-      "dislikesTactics": ["isolated_striker", "wide_direct_only", "no_box_presence"],
+      "poorFits": [
+        "CM",
+        "DM",
+        "CB",
+        "GK"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "box_presence",
+        "finisher",
+        "link_player",
+        "aerial"
+      ],
+      "strengths": [
+        "box_finishing",
+        "heading",
+        "combination_play",
+        "positioning",
+        "hold_up_play"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crossing",
+        "central_space"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "target_striker",
+        "linking_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "central_combinations",
+        "possession",
+        "box_service"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "wide_direct_only",
+        "no_box_presence"
+      ],
       "warningWhenMisused": "Hegerberg må brukes nær boksen med service og relasjoner rundt seg."
     },
     {
@@ -83,18 +252,58 @@
       "name": "Mohammed Abdellaoue",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["intility_arena"],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
       "overall": 92,
-      "naturalPositions": ["ST"],
-      "usablePositions": ["AM"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["linking_nine", "channel_runner"],
-      "archetypes": ["finisher", "link_player", "movement", "box_presence"],
-      "strengths": ["finishing", "off_ball_runs", "combination_play", "box_movement"],
-      "needs": ["close_support", "central_space", "runners_around", "box_service"],
-      "preferredRoles": ["linking_striker", "advanced_forward", "box_striker"],
-      "likesTactics": ["central_combinations", "fast_transitions", "fluid_attack"],
-      "dislikesTactics": ["isolated_striker", "crossing_only", "deep_block_no_support"],
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "channel_runner"
+      ],
+      "archetypes": [
+        "finisher",
+        "link_player",
+        "movement",
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "off_ball_runs",
+        "combination_play",
+        "box_movement"
+      ],
+      "needs": [
+        "close_support",
+        "central_space",
+        "runners_around",
+        "box_service"
+      ],
+      "preferredRoles": [
+        "linking_striker",
+        "advanced_forward",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "central_combinations",
+        "fast_transitions",
+        "fluid_attack"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "crossing_only",
+        "deep_block_no_support"
+      ],
       "warningWhenMisused": "Abdellaoue fungerer best med relasjoner rundt seg og bevegelser inn i boks."
     },
     {
@@ -102,18 +311,60 @@
       "name": "Ghayas Zahid",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["intility_arena"],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
       "overall": 90,
-      "naturalPositions": ["AM", "CM"],
-      "usablePositions": ["RW", "LW"],
-      "poorFits": ["CB", "ST", "GK"],
-      "archetypeIds": ["classic_ten", "deep_playmaker"],
-      "archetypes": ["creator", "between_lines", "passer", "combination_player"],
-      "strengths": ["vision", "final_pass", "first_touch", "combination_play"],
-      "needs": ["central_space", "passing_options", "runners_ahead", "creative_freedom"],
-      "preferredRoles": ["classic_ten", "free_creator", "deep_playmaker"],
-      "likesTactics": ["possession", "central_combinations", "creative_freedom"],
-      "dislikesTactics": ["long_ball_only", "isolated_midfield", "static_low_tempo"],
+      "naturalPositions": [
+        "AM",
+        "CM"
+      ],
+      "usablePositions": [
+        "RW",
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "passer",
+        "combination_player"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "runners_ahead",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations",
+        "creative_freedom"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield",
+        "static_low_tempo"
+      ],
       "warningWhenMisused": "Zahid trenger ballkontakt, vinkler og frihet mellom ledd."
     },
     {
@@ -121,18 +372,58 @@
       "name": "Stefan Strandberg",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["intility_arena", "ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "intility_arena",
+        "ullevaal_stadion"
+      ],
       "overall": 90,
-      "naturalPositions": ["CB"],
+      "naturalPositions": [
+        "CB"
+      ],
       "usablePositions": [],
-      "poorFits": ["ST", "LW", "RW", "GK"],
-      "archetypeIds": ["duel_centre_back"],
-      "archetypes": ["duel", "leader", "box_defender", "defensive_presence"],
-      "strengths": ["duels", "heading", "leadership", "defensive_reading", "blocking"],
-      "needs": ["compact_shape", "clear_duel_zone", "covering_partner", "box_protection"],
-      "preferredRoles": ["duel_centre_back", "stopper"],
-      "likesTactics": ["compact_shape", "low_block", "medium_press", "cross_defense"],
-      "dislikesTactics": ["very_high_line", "constant_open_space", "isolated_wide_defending"],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW",
+        "GK"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "leader",
+        "box_defender",
+        "defensive_presence"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "leadership",
+        "defensive_reading",
+        "blocking"
+      ],
+      "needs": [
+        "compact_shape",
+        "clear_duel_zone",
+        "covering_partner",
+        "box_protection"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "compact_shape",
+        "low_block",
+        "medium_press",
+        "cross_defense"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "constant_open_space",
+        "isolated_wide_defending"
+      ],
       "warningWhenMisused": "Strandberg bør ikke isoleres i enorme rom bak en ekstremt høy linje."
     },
     {
@@ -140,18 +431,60 @@
       "name": "Jørgen Juve",
       "nationality": "Norge",
       "era": "historical",
-      "sourcePlaceIds": ["gressbanen", "ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "gressbanen",
+        "ullevaal_stadion"
+      ],
       "overall": 94,
-      "naturalPositions": ["ST"],
-      "usablePositions": ["AM"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["target_striker", "linking_nine"],
-      "archetypes": ["finisher", "leader", "box_presence", "link_player"],
-      "strengths": ["finishing", "heading", "leadership", "hold_up_play", "box_movement"],
-      "needs": ["box_service", "central_space", "close_support", "crossing"],
-      "preferredRoles": ["box_striker", "target_striker", "linking_striker"],
-      "likesTactics": ["crossing", "central_combinations", "direct_play"],
-      "dislikesTactics": ["isolated_striker", "no_box_presence", "wide_isolation_only"],
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "finisher",
+        "leader",
+        "box_presence",
+        "link_player"
+      ],
+      "strengths": [
+        "finishing",
+        "heading",
+        "leadership",
+        "hold_up_play",
+        "box_movement"
+      ],
+      "needs": [
+        "box_service",
+        "central_space",
+        "close_support",
+        "crossing"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "target_striker",
+        "linking_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "central_combinations",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_box_presence",
+        "wide_isolation_only"
+      ],
       "warningWhenMisused": "Juve må brukes som mål- og boksorientert lederfigur, ikke trekkes for langt bort fra avslutningsrommene."
     },
     {
@@ -159,18 +492,61 @@
       "name": "Arne Brustad",
       "nationality": "Norge",
       "era": "historical",
-      "sourcePlaceIds": ["gressbanen", "ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "gressbanen",
+        "ullevaal_stadion"
+      ],
       "overall": 93,
-      "naturalPositions": ["LW", "RW", "ST"],
-      "usablePositions": ["AM"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["wide_dribbler_left", "channel_runner"],
-      "archetypes": ["runner", "wide_creator", "finisher", "movement"],
-      "strengths": ["off_ball_runs", "finishing", "wide_movement", "acceleration"],
-      "needs": ["space_behind", "wide_space", "early_through_balls", "central_support"],
-      "preferredRoles": ["wide_dribbler", "channel_runner", "advanced_forward"],
-      "likesTactics": ["fast_transitions", "vertical_play", "wide_attack"],
-      "dislikesTactics": ["static_low_tempo", "back_to_goal_striker", "deep_block_no_space"],
+      "naturalPositions": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left",
+        "channel_runner"
+      ],
+      "archetypes": [
+        "runner",
+        "wide_creator",
+        "finisher",
+        "movement"
+      ],
+      "strengths": [
+        "off_ball_runs",
+        "finishing",
+        "wide_movement",
+        "acceleration"
+      ],
+      "needs": [
+        "space_behind",
+        "wide_space",
+        "early_through_balls",
+        "central_support"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "channel_runner",
+        "advanced_forward"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "vertical_play",
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "back_to_goal_striker",
+        "deep_block_no_space"
+      ],
       "warningWhenMisused": "Brustad trenger fart, rom og bevegelse, ikke statisk posisjonsspill uten gjennombrudd."
     },
     {
@@ -178,18 +554,62 @@
       "name": "Oscar Bobb",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ekebergsletta", "ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ekebergsletta",
+        "ullevaal_stadion"
+      ],
       "overall": 91,
-      "naturalPositions": ["RW", "AM"],
-      "usablePositions": ["LW", "CM"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["wide_dribbler_right", "classic_ten"],
-      "archetypes": ["dribbler", "wide_creator", "between_lines", "combination_player"],
-      "strengths": ["dribbling", "first_touch", "combination_play", "chance_creation"],
-      "needs": ["wide_space", "creative_freedom", "passing_options", "runners_ahead"],
-      "preferredRoles": ["wide_dribbler", "inverted_winger", "free_creator"],
-      "likesTactics": ["wide_attack", "possession", "central_combinations", "creative_freedom"],
-      "dislikesTactics": ["long_ball_only", "static_crossing", "rigid_wide_only"],
+      "naturalPositions": [
+        "RW",
+        "AM"
+      ],
+      "usablePositions": [
+        "LW",
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "between_lines",
+        "combination_player"
+      ],
+      "strengths": [
+        "dribbling",
+        "first_touch",
+        "combination_play",
+        "chance_creation"
+      ],
+      "needs": [
+        "wide_space",
+        "creative_freedom",
+        "passing_options",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "possession",
+        "central_combinations",
+        "creative_freedom"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "static_crossing",
+        "rigid_wide_only"
+      ],
       "warningWhenMisused": "Bobb trenger tekniske relasjoner og rom til å vende opp, ikke bare løpe i kanal."
     },
     {
@@ -197,18 +617,62 @@
       "name": "Antonio Nusa",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ekebergsletta", "ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ekebergsletta",
+        "ullevaal_stadion"
+      ],
       "overall": 91,
-      "naturalPositions": ["LW", "RW"],
-      "usablePositions": ["AM"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["wide_dribbler_left", "wide_dribbler_right", "channel_runner"],
-      "archetypes": ["dribbler", "pace", "wide_creator", "one_vs_one"],
-      "strengths": ["dribbling", "acceleration", "isolation", "chance_creation"],
-      "needs": ["wide_space", "one_vs_one", "quick_switches", "space_behind"],
-      "preferredRoles": ["wide_dribbler", "inverted_winger", "channel_runner"],
-      "likesTactics": ["wide_attack", "fast_transitions", "isolate_wingers", "creative_freedom"],
-      "dislikesTactics": ["static_crossing", "slow_possession_without_width", "central_target_play"],
+      "naturalPositions": [
+        "LW",
+        "RW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left",
+        "wide_dribbler_right",
+        "channel_runner"
+      ],
+      "archetypes": [
+        "dribbler",
+        "pace",
+        "wide_creator",
+        "one_vs_one"
+      ],
+      "strengths": [
+        "dribbling",
+        "acceleration",
+        "isolation",
+        "chance_creation"
+      ],
+      "needs": [
+        "wide_space",
+        "one_vs_one",
+        "quick_switches",
+        "space_behind"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger",
+        "channel_runner"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions",
+        "isolate_wingers",
+        "creative_freedom"
+      ],
+      "dislikesTactics": [
+        "static_crossing",
+        "slow_possession_without_width",
+        "central_target_play"
+      ],
       "warningWhenMisused": "Nusa må få utfordre og true rom. For statisk bruk fjerner eksplosiviteten hans."
     },
     {
@@ -216,18 +680,62 @@
       "name": "Sander Berge",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 92,
-      "naturalPositions": ["CM", "DM"],
-      "usablePositions": ["CB"],
-      "poorFits": ["ST", "LW", "RW", "GK"],
-      "archetypeIds": ["deep_playmaker", "box_to_box_runner", "balancing_six"],
-      "archetypes": ["controller", "runner", "tempo_setter", "transition_midfielder"],
-      "strengths": ["ball_carrying", "passing_range", "physical_presence", "tempo_control"],
-      "needs": ["central_angles", "passing_options", "cover_behind", "structured_build_up"],
-      "preferredRoles": ["deep_playmaker", "box_to_box", "holding_midfielder"],
-      "likesTactics": ["possession", "structured_build_up", "vertical_play", "central_control"],
-      "dislikesTactics": ["isolated_midfield", "chaos", "constant_second_balls"],
+      "naturalPositions": [
+        "CM",
+        "DM"
+      ],
+      "usablePositions": [
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW",
+        "GK"
+      ],
+      "archetypeIds": [
+        "deep_playmaker",
+        "box_to_box_runner",
+        "balancing_six"
+      ],
+      "archetypes": [
+        "controller",
+        "runner",
+        "tempo_setter",
+        "transition_midfielder"
+      ],
+      "strengths": [
+        "ball_carrying",
+        "passing_range",
+        "physical_presence",
+        "tempo_control"
+      ],
+      "needs": [
+        "central_angles",
+        "passing_options",
+        "cover_behind",
+        "structured_build_up"
+      ],
+      "preferredRoles": [
+        "deep_playmaker",
+        "box_to_box",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "vertical_play",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield",
+        "chaos",
+        "constant_second_balls"
+      ],
       "warningWhenMisused": "Berge trenger en rolle der fysikk, føring og pasningsvalg får arbeide sammen."
     },
     {
@@ -235,18 +743,55 @@
       "name": "Erik Thorstvedt",
       "nationality": "Norge",
       "era": "historical",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 93,
-      "naturalPositions": ["GK"],
+      "naturalPositions": [
+        "GK"
+      ],
       "usablePositions": [],
-      "poorFits": ["CB", "DM", "ST"],
-      "archetypeIds": ["line_keeper"],
-      "archetypes": ["shot_stopper", "line_keeper", "box_presence", "leader"],
-      "strengths": ["shot_stopping", "reflexes", "box_presence", "positioning", "leadership"],
-      "needs": ["compact_defense", "protected_box", "cross_defense", "medium_or_low_line"],
-      "preferredRoles": ["line_keeper"],
-      "likesTactics": ["low_block", "compact_shape", "cross_defense", "medium_press"],
-      "dislikesTactics": ["very_high_line", "high_line", "large_space_behind"],
+      "poorFits": [
+        "CB",
+        "DM",
+        "ST"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "line_keeper",
+        "box_presence",
+        "leader"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "box_presence",
+        "positioning",
+        "leadership"
+      ],
+      "needs": [
+        "compact_defense",
+        "protected_box",
+        "cross_defense",
+        "medium_or_low_line"
+      ],
+      "preferredRoles": [
+        "line_keeper"
+      ],
+      "likesTactics": [
+        "low_block",
+        "compact_shape",
+        "cross_defense",
+        "medium_press"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "high_line",
+        "large_space_behind"
+      ],
       "warningWhenMisused": "Thorstvedt passer best når laget beskytter boksen og ikke ber ham dekke enorme rom bak en høy linje."
     },
     {
@@ -254,18 +799,56 @@
       "name": "Rune Jarstein",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 91,
-      "naturalPositions": ["GK"],
+      "naturalPositions": [
+        "GK"
+      ],
       "usablePositions": [],
-      "poorFits": ["CB", "DM", "ST"],
-      "archetypeIds": ["sweeperkeeper", "line_keeper"],
-      "archetypes": ["shot_stopper", "distribution", "composure", "box_presence"],
-      "strengths": ["shot_stopping", "distribution", "positioning", "composure"],
-      "needs": ["protected_box", "passing_options", "structured_build_up", "defensive_depth_control"],
-      "preferredRoles": ["sweeperkeeper", "line_keeper"],
-      "likesTactics": ["possession", "structured_build_up", "medium_press", "keeper_support"],
-      "dislikesTactics": ["clearance_only", "constant_open_space", "chaos"],
+      "poorFits": [
+        "CB",
+        "DM",
+        "ST"
+      ],
+      "archetypeIds": [
+        "sweeper_keeper",
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "distribution",
+        "composure",
+        "box_presence"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "distribution",
+        "positioning",
+        "composure"
+      ],
+      "needs": [
+        "protected_box",
+        "passing_options",
+        "structured_build_up",
+        "defensive_depth_control"
+      ],
+      "preferredRoles": [
+        "sweeperkeeper",
+        "line_keeper"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "medium_press",
+        "keeper_support"
+      ],
+      "dislikesTactics": [
+        "clearance_only",
+        "constant_open_space",
+        "chaos"
+      ],
       "warningWhenMisused": "Jarstein bør få tydelige valg foran seg, enten som trygg linjekeeper eller som keeper i kontrollert oppbygging."
     },
     {
@@ -273,18 +856,60 @@
       "name": "John Arne Riise",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 94,
-      "naturalPositions": ["LB", "WB"],
-      "usablePositions": ["LW"],
-      "poorFits": ["CB", "ST", "GK"],
-      "archetypeIds": ["overlapping_fullback", "wingback"],
-      "archetypes": ["overlap", "wide_support", "power", "crossing"],
-      "strengths": ["overlapping_runs", "crossing", "stamina", "wide_support", "power"],
-      "needs": ["wide_lane", "cover_from_midfield", "attacking_width", "box_service"],
-      "preferredRoles": ["overlapping_fullback", "wingback"],
-      "likesTactics": ["wide_attack", "crossing", "high_width", "overloads"],
-      "dislikesTactics": ["narrow_fullback", "no_cover", "static_back_four"],
+      "naturalPositions": [
+        "LB",
+        "WB"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback",
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "power",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "power"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_from_midfield",
+        "attacking_width",
+        "box_service"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "crossing",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_cover",
+        "static_back_four"
+      ],
       "warningWhenMisused": "Riise trenger korridor, fart og sikring bak seg. Som passiv støtteback mister han mye av gjennombruddskraften."
     },
     {
@@ -292,18 +917,60 @@
       "name": "Omar Elabdellaoui",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 90,
-      "naturalPositions": ["RB", "WB"],
-      "usablePositions": ["RW"],
-      "poorFits": ["CB", "ST", "GK"],
-      "archetypeIds": ["overlapping_fullback", "support_fullback"],
-      "archetypes": ["wide_support", "overlap", "stamina", "defensive_balance"],
-      "strengths": ["stamina", "wide_support", "overlapping_runs", "positioning"],
-      "needs": ["wide_lane", "cover_from_midfield", "attacking_width", "rest_defense"],
-      "preferredRoles": ["overlapping_fullback", "support_fullback", "wingback"],
-      "likesTactics": ["wide_attack", "medium_press", "rest_defense", "overloads"],
-      "dislikesTactics": ["no_cover", "chaos", "constant_open_space"],
+      "naturalPositions": [
+        "RB",
+        "WB"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback",
+        "inverted_fullback"
+      ],
+      "archetypes": [
+        "wide_support",
+        "overlap",
+        "stamina",
+        "defensive_balance"
+      ],
+      "strengths": [
+        "stamina",
+        "wide_support",
+        "overlapping_runs",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_from_midfield",
+        "attacking_width",
+        "rest_defense"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "medium_press",
+        "rest_defense",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "no_cover",
+        "chaos",
+        "constant_open_space"
+      ],
       "warningWhenMisused": "Elabdellaoui fungerer best når han får bidra bredt uten at siden bak ham blir helt åpen."
     },
     {
@@ -311,18 +978,58 @@
       "name": "Brede Hangeland",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 93,
-      "naturalPositions": ["CB"],
+      "naturalPositions": [
+        "CB"
+      ],
       "usablePositions": [],
-      "poorFits": ["ST", "LW", "RW", "GK"],
-      "archetypeIds": ["duel_centre_back", "stopper"],
-      "archetypes": ["duel", "aerial", "box_defender", "leader"],
-      "strengths": ["heading", "duels", "blocking", "leadership", "defensive_reading"],
-      "needs": ["compact_shape", "box_protection", "clear_duel_zone", "covering_partner"],
-      "preferredRoles": ["duel_centre_back", "stopper"],
-      "likesTactics": ["compact_shape", "low_block", "cross_defense", "second_balls"],
-      "dislikesTactics": ["very_high_line", "constant_open_space", "isolated_wide_defending"],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW",
+        "GK"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "aerial",
+        "box_defender",
+        "leader"
+      ],
+      "strengths": [
+        "heading",
+        "duels",
+        "blocking",
+        "leadership",
+        "defensive_reading"
+      ],
+      "needs": [
+        "compact_shape",
+        "box_protection",
+        "clear_duel_zone",
+        "covering_partner"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "compact_shape",
+        "low_block",
+        "cross_defense",
+        "second_balls"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "constant_open_space",
+        "isolated_wide_defending"
+      ],
       "warningWhenMisused": "Hangeland er sterkest når laget kan forsvare boks og duellsoner, ikke når han må dekke store rom alene."
     },
     {
@@ -330,18 +1037,61 @@
       "name": "Ronny Johnsen",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 93,
-      "naturalPositions": ["CB", "DM"],
-      "usablePositions": ["CM"],
-      "poorFits": ["LW", "RW", "ST", "GK"],
-      "archetypeIds": ["ball_playing_centre_back", "balancing_six"],
-      "archetypes": ["build_up_defender", "balance", "positioning", "composure"],
-      "strengths": ["defensive_reading", "passing_range", "positioning", "composure"],
-      "needs": ["structured_build_up", "passing_options", "stable_rest_defense", "compact_midfield"],
-      "preferredRoles": ["ball_playing_centre_back", "holding_midfielder", "balancing_six"],
-      "likesTactics": ["possession", "structured_build_up", "rest_defense", "central_control"],
-      "dislikesTactics": ["chaos", "constant_open_space", "all_out_attack"],
+      "naturalPositions": [
+        "CB",
+        "DM"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "ball_playing_centre_back",
+        "balancing_six"
+      ],
+      "archetypes": [
+        "build_up_defender",
+        "balance",
+        "positioning",
+        "composure"
+      ],
+      "strengths": [
+        "defensive_reading",
+        "passing_range",
+        "positioning",
+        "composure"
+      ],
+      "needs": [
+        "structured_build_up",
+        "passing_options",
+        "stable_rest_defense",
+        "compact_midfield"
+      ],
+      "preferredRoles": [
+        "ball_playing_centre_back",
+        "holding_midfielder",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "rest_defense",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "constant_open_space",
+        "all_out_attack"
+      ],
       "warningWhenMisused": "Johnsen bør brukes som balanserende forsvars-/midtbanespiller, ikke som fri offensiv løper."
     },
     {
@@ -349,18 +1099,64 @@
       "name": "Maren Mjelde",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 94,
-      "naturalPositions": ["CB", "DM", "RB"],
-      "usablePositions": ["CM"],
-      "poorFits": ["ST", "LW", "RW", "GK"],
-      "archetypeIds": ["ball_playing_centre_back", "balancing_six", "support_fullback"],
-      "archetypes": ["leader", "build_up_defender", "balance", "defensive_reading"],
-      "strengths": ["positioning", "passing_range", "leadership", "defensive_reading", "simple_passing"],
-      "needs": ["structured_build_up", "stable_rest_defense", "passing_options", "clear_structure"],
-      "preferredRoles": ["ball_playing_centre_back", "holding_midfielder", "support_fullback"],
-      "likesTactics": ["possession", "structured_build_up", "rest_defense", "medium_press"],
-      "dislikesTactics": ["chaos", "all_out_attack", "constant_forward_runs"],
+      "naturalPositions": [
+        "CB",
+        "DM",
+        "RB"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW",
+        "GK"
+      ],
+      "archetypeIds": [
+        "ball_playing_centre_back",
+        "balancing_six",
+        "inverted_fullback"
+      ],
+      "archetypes": [
+        "leader",
+        "build_up_defender",
+        "balance",
+        "defensive_reading"
+      ],
+      "strengths": [
+        "positioning",
+        "passing_range",
+        "leadership",
+        "defensive_reading",
+        "simple_passing"
+      ],
+      "needs": [
+        "structured_build_up",
+        "stable_rest_defense",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "ball_playing_centre_back",
+        "holding_midfielder",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "rest_defense",
+        "medium_press"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "all_out_attack",
+        "constant_forward_runs"
+      ],
       "warningWhenMisused": "Mjelde gir laget struktur og ledelse. Hun bør ikke brukes i roller som trekker henne bort fra balanse og organisering."
     },
     {
@@ -368,18 +1164,62 @@
       "name": "Hege Riise",
       "nationality": "Norge",
       "era": "historical",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 97,
-      "naturalPositions": ["CM", "AM"],
-      "usablePositions": ["DM"],
-      "poorFits": ["CB", "ST", "GK"],
-      "archetypeIds": ["classic_ten", "deep_playmaker", "box_to_box_runner"],
-      "archetypes": ["creator", "controller", "leader", "transition_midfielder"],
-      "strengths": ["vision", "final_pass", "tempo_control", "leadership", "ball_carrying"],
-      "needs": ["passing_options", "central_space", "runners_ahead", "structured_build_up"],
-      "preferredRoles": ["classic_ten", "deep_playmaker", "box_to_box"],
-      "likesTactics": ["possession", "central_combinations", "structured_build_up", "vertical_play"],
-      "dislikesTactics": ["isolated_midfield", "long_ball_only", "chaos"],
+      "naturalPositions": [
+        "CM",
+        "AM"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "CB",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "deep_playmaker",
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "creator",
+        "controller",
+        "leader",
+        "transition_midfielder"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "tempo_control",
+        "leadership",
+        "ball_carrying"
+      ],
+      "needs": [
+        "passing_options",
+        "central_space",
+        "runners_ahead",
+        "structured_build_up"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "deep_playmaker",
+        "box_to_box"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations",
+        "structured_build_up",
+        "vertical_play"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield",
+        "long_ball_only",
+        "chaos"
+      ],
       "warningWhenMisused": "Riise må få styre og forbinde laget. Brukt uten pasningsvinkler mister hun innflytelse."
     },
     {
@@ -387,18 +1227,61 @@
       "name": "Solveig Gulbrandsen",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 92,
-      "naturalPositions": ["CM", "AM"],
-      "usablePositions": ["LW", "RW"],
-      "poorFits": ["CB", "ST", "GK"],
-      "archetypeIds": ["classic_ten", "box_to_box_runner"],
-      "archetypes": ["creator", "runner", "between_lines", "combination_player"],
-      "strengths": ["late_runs", "combination_play", "vision", "stamina"],
-      "needs": ["central_space", "runners_ahead", "vertical_space", "creative_freedom"],
-      "preferredRoles": ["classic_ten", "box_to_box", "free_creator"],
-      "likesTactics": ["central_combinations", "fluid_attack", "fast_transitions", "possession"],
-      "dislikesTactics": ["static_low_tempo", "deep_defensive_role", "isolated_midfield"],
+      "naturalPositions": [
+        "CM",
+        "AM"
+      ],
+      "usablePositions": [
+        "LW",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "creator",
+        "runner",
+        "between_lines",
+        "combination_player"
+      ],
+      "strengths": [
+        "late_runs",
+        "combination_play",
+        "vision",
+        "stamina"
+      ],
+      "needs": [
+        "central_space",
+        "runners_ahead",
+        "vertical_space",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "box_to_box",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "central_combinations",
+        "fluid_attack",
+        "fast_transitions",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "deep_defensive_role",
+        "isolated_midfield"
+      ],
       "warningWhenMisused": "Gulbrandsen trenger rom til å komme mellom ledd og i andre bølge, ikke en låst defensiv rolle."
     },
     {
@@ -406,18 +1289,60 @@
       "name": "Isabell Herlovsen",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 92,
-      "naturalPositions": ["ST"],
-      "usablePositions": ["LW", "RW"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["channel_runner", "box_striker"],
-      "archetypes": ["runner", "finisher", "box_presence", "movement"],
-      "strengths": ["off_ball_runs", "finishing", "box_finishing", "acceleration"],
-      "needs": ["space_behind", "box_service", "early_through_balls", "runners_around"],
-      "preferredRoles": ["channel_runner", "advanced_forward", "box_striker"],
-      "likesTactics": ["fast_transitions", "vertical_play", "central_combinations", "direct_counter"],
-      "dislikesTactics": ["static_low_tempo", "isolated_striker", "deep_block_no_space"],
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "channel_runner",
+        "channel_runner"
+      ],
+      "archetypes": [
+        "runner",
+        "finisher",
+        "box_presence",
+        "movement"
+      ],
+      "strengths": [
+        "off_ball_runs",
+        "finishing",
+        "box_finishing",
+        "acceleration"
+      ],
+      "needs": [
+        "space_behind",
+        "box_service",
+        "early_through_balls",
+        "runners_around"
+      ],
+      "preferredRoles": [
+        "channel_runner",
+        "advanced_forward",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "vertical_play",
+        "central_combinations",
+        "direct_counter"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "isolated_striker",
+        "deep_block_no_space"
+      ],
       "warningWhenMisused": "Herlovsen trenger løp, boks og gjennombruddsmuligheter. Statisk feilvendt rolle svekker henne."
     },
     {
@@ -425,18 +1350,59 @@
       "name": "John Carew",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 94,
-      "naturalPositions": ["ST"],
+      "naturalPositions": [
+        "ST"
+      ],
       "usablePositions": [],
-      "poorFits": ["CM", "DM", "CB", "GK"],
-      "archetypeIds": ["target_striker", "linking_nine"],
-      "archetypes": ["target", "aerial", "link_player", "box_presence"],
-      "strengths": ["heading", "hold_up_play", "duels", "box_finishing", "power"],
-      "needs": ["crossing", "second_ball_support", "box_service", "close_support"],
-      "preferredRoles": ["target_striker", "linking_striker", "box_striker"],
-      "likesTactics": ["crossing", "direct_play", "second_balls", "central_combinations"],
-      "dislikesTactics": ["no_crosses", "wide_isolation_only", "isolated_striker"],
+      "poorFits": [
+        "CM",
+        "DM",
+        "CB",
+        "GK"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "target",
+        "aerial",
+        "link_player",
+        "box_presence"
+      ],
+      "strengths": [
+        "heading",
+        "hold_up_play",
+        "duels",
+        "box_finishing",
+        "power"
+      ],
+      "needs": [
+        "crossing",
+        "second_ball_support",
+        "box_service",
+        "close_support"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "linking_striker",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "direct_play",
+        "second_balls",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "no_crosses",
+        "wide_isolation_only",
+        "isolated_striker"
+      ],
       "warningWhenMisused": "Carew må få bruke kraft, duellspill og relasjoner rundt seg. Uten service blir han isolert."
     },
     {
@@ -444,18 +1410,61 @@
       "name": "Tore André Flo",
       "nationality": "Norge",
       "era": "modern",
-      "sourcePlaceIds": ["ullevaal_stadion"],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
       "overall": 93,
-      "naturalPositions": ["ST"],
-      "usablePositions": ["LW", "RW"],
-      "poorFits": ["CM", "DM", "CB", "GK"],
-      "archetypeIds": ["target_striker", "linking_nine"],
-      "archetypes": ["target", "link_player", "aerial", "movement"],
-      "strengths": ["heading", "hold_up_play", "combination_play", "box_movement"],
-      "needs": ["crossing", "close_support", "central_space", "box_service"],
-      "preferredRoles": ["target_striker", "linking_striker", "box_striker"],
-      "likesTactics": ["crossing", "central_combinations", "direct_play", "fluid_attack"],
-      "dislikesTactics": ["isolated_striker", "no_crosses", "static_low_tempo"],
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW",
+        "RW"
+      ],
+      "poorFits": [
+        "CM",
+        "DM",
+        "CB",
+        "GK"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "target",
+        "link_player",
+        "aerial",
+        "movement"
+      ],
+      "strengths": [
+        "heading",
+        "hold_up_play",
+        "combination_play",
+        "box_movement"
+      ],
+      "needs": [
+        "crossing",
+        "close_support",
+        "central_space",
+        "box_service"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "linking_striker",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "central_combinations",
+        "direct_play",
+        "fluid_attack"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_crosses",
+        "static_low_tempo"
+      ],
       "warningWhenMisused": "Flo trenger innlegg, kombinasjoner og boksnærvær. For langt fra mål mister han sluttpunktet sitt."
     },
     {
@@ -463,18 +1472,68 @@
       "name": "Johan Cruyff",
       "nationality": "Nederland",
       "era": "historical",
-      "sourcePlaceIds": ["ajax_amsterdam"],
+      "sourcePlaceIds": [
+        "ajax_amsterdam"
+      ],
       "overall": 99,
-      "naturalPositions": ["ST", "AM"],
-      "usablePositions": ["LW", "RW", "CM"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["linking_nine", "classic_ten", "deep_playmaker"],
-      "archetypes": ["creator", "false_nine", "tempo_setter", "pressing_intelligence", "positional_freedom"],
-      "strengths": ["vision", "first_touch", "tempo_control", "dribbling", "pressing_intelligence", "positional_intelligence"],
-      "needs": ["positional_freedom", "technical_teammates", "passing_options", "collective_pressing"],
-      "preferredRoles": ["false_nine", "free_creator", "deep_playmaker"],
-      "likesTactics": ["possession", "high_press", "fluid_attack", "central_combinations", "creative_freedom"],
-      "dislikesTactics": ["rigid_positional_locks", "long_ball_only", "isolated_striker", "low_block"],
+      "naturalPositions": [
+        "ST",
+        "AM"
+      ],
+      "usablePositions": [
+        "LW",
+        "RW",
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "classic_ten",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "creator",
+        "false_nine",
+        "tempo_setter",
+        "pressing_intelligence",
+        "positional_freedom"
+      ],
+      "strengths": [
+        "vision",
+        "first_touch",
+        "tempo_control",
+        "dribbling",
+        "pressing_intelligence",
+        "positional_intelligence"
+      ],
+      "needs": [
+        "positional_freedom",
+        "technical_teammates",
+        "passing_options",
+        "collective_pressing"
+      ],
+      "preferredRoles": [
+        "false_nine",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession",
+        "high_press",
+        "fluid_attack",
+        "central_combinations",
+        "creative_freedom"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "isolated_striker",
+        "low_block"
+      ],
       "warningWhenMisused": "Cruyff må få bevege seg fritt mellom ledd og styre laget. Som låst, statisk spiss mister totalfotballen dirigenten sin."
     },
     {
@@ -482,19 +1541,1192 @@
       "name": "Pelé",
       "nationality": "Brasil",
       "era": "historical",
-      "sourcePlaceIds": ["maracana"],
+      "sourcePlaceIds": [
+        "maracana"
+      ],
       "overall": 99,
-      "naturalPositions": ["ST", "AM"],
-      "usablePositions": ["LW"],
-      "poorFits": ["CB", "DM", "GK"],
-      "archetypeIds": ["linking_nine", "classic_ten"],
-      "archetypes": ["finisher", "creator", "dribbler", "box_presence", "movement"],
-      "strengths": ["finishing", "dribbling", "vision", "off_ball_runs", "combination_play", "box_finishing"],
-      "needs": ["close_support", "central_space", "creative_freedom", "runners_around"],
-      "preferredRoles": ["second_striker", "linking_striker", "free_creator"],
-      "likesTactics": ["fluid_attack", "central_combinations", "wide_attack", "creative_freedom"],
-      "dislikesTactics": ["isolated_striker", "long_ball_only", "static_crossing"],
+      "naturalPositions": [
+        "ST",
+        "AM"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "DM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "finisher",
+        "creator",
+        "dribbler",
+        "box_presence",
+        "movement"
+      ],
+      "strengths": [
+        "finishing",
+        "dribbling",
+        "vision",
+        "off_ball_runs",
+        "combination_play",
+        "box_finishing"
+      ],
+      "needs": [
+        "close_support",
+        "central_space",
+        "creative_freedom",
+        "runners_around"
+      ],
+      "preferredRoles": [
+        "linking_striker",
+        "linking_striker",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "fluid_attack",
+        "central_combinations",
+        "wide_attack",
+        "creative_freedom"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "long_ball_only",
+        "static_crossing"
+      ],
       "warningWhenMisused": "Pelé må få kombinere, utfordre og avslutte nær boksen. Som ren målspiss uten relasjoner forsvinner mye av spillet hans."
+    },
+    {
+      "id": "andre_hansen",
+      "name": "André Hansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "ST",
+        "AM"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "positioning",
+        "command_of_area",
+        "distribution"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "calm_build_up",
+        "protection_in_box"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "calm_build_up"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_long_balls"
+      ],
+      "warningWhenMisused": "Hansen trenger en organisert bakre linje – ikke kaos foran seg."
+    },
+    {
+      "id": "erik_hoftun",
+      "name": "Erik Hoftun",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "tackling"
+      ],
+      "needs": [
+        "defensive_support",
+        "clear_marking_scheme",
+        "protected_space_behind"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block"
+      ],
+      "dislikesTactics": [
+        "isolated_high_line",
+        "constant_man_marking_wide"
+      ],
+      "warningWhenMisused": "Hoftun er en dueller: isolér ham høyt, og styrken forsvinner."
+    },
+    {
+      "id": "birger_meling",
+      "name": "Birger Meling",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "WB",
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "ST",
+        "GK"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "crossing",
+        "overlapping_runs",
+        "recovery_speed"
+      ],
+      "needs": [
+        "width",
+        "runners_ahead",
+        "rest_defence_cover"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "wingback",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support"
+      ],
+      "warningWhenMisused": "Meling trenger bredde og løp foran seg – ikke en trang firer."
+    },
+    {
+      "id": "roar_strand",
+      "name": "Roar Strand",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM",
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "running_power",
+        "duels",
+        "late_runs"
+      ],
+      "needs": [
+        "space_to_run",
+        "midfield_partner",
+        "clear_task"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "high_tempo",
+        "pressing"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "deep_passive_block"
+      ],
+      "warningWhenMisused": "Strand lever av løpskraft og oppgaver – ikke statisk lavt tempo."
+    },
+    {
+      "id": "bent_skammelsrud",
+      "name": "Bent Skammelsrud",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Skammelsrud trenger ballkontakt og rom mellom ledd."
+    },
+    {
+      "id": "harald_brattbakk",
+      "name": "Harald Brattbakk",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "channel_runner"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "finishing",
+        "movement",
+        "runs_behind",
+        "first_touch"
+      ],
+      "needs": [
+        "service",
+        "space_behind",
+        "supporting_runners"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "box_striker",
+        "pressing_forward"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "wide_attacks"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "no_service"
+      ],
+      "warningWhenMisused": "Brattbakk lever av rom bak – uten service forsvinner han."
+    },
+    {
+      "id": "hakon_opdal",
+      "name": "Håkon Opdal",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "ST",
+        "AM"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "positioning",
+        "command_of_area",
+        "distribution"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "calm_build_up",
+        "protection_in_box"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "calm_build_up"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_long_balls"
+      ],
+      "warningWhenMisused": "Opdal trenger en rolig oppbygging foran seg."
+    },
+    {
+      "id": "thorstein_helstad",
+      "name": "Thorstein Helstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "hold_up_play",
+        "heading",
+        "strength",
+        "link_play"
+      ],
+      "needs": [
+        "service",
+        "midfield_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "linking_striker"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "isolated_front"
+      ],
+      "warningWhenMisused": "Helstad må ha service og støtte – ikke stå alene."
+    },
+    {
+      "id": "erik_huseklepp",
+      "name": "Erik Huseklepp",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "dribbling",
+        "acceleration",
+        "one_v_one",
+        "crossing"
+      ],
+      "needs": [
+        "width",
+        "isolation_duels",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "slow_build_up"
+      ],
+      "warningWhenMisused": "Huseklepp trenger bredde og en-mot-en – ikke en trang midtbane."
+    },
+    {
+      "id": "marius_lode",
+      "name": "Marius Lode",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "RB"
+      ],
+      "poorFits": [
+        "ST",
+        "AM",
+        "GK"
+      ],
+      "archetypeIds": [
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "passing_range",
+        "composure",
+        "first_touch",
+        "reading_game"
+      ],
+      "needs": [
+        "passing_options",
+        "time_on_ball",
+        "space_to_step_in"
+      ],
+      "preferredRoles": [
+        "ball_playing_centre_back",
+        "libero"
+      ],
+      "likesTactics": [
+        "possession",
+        "calm_build_up"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "Lode trenger tid på ball – panikkclearinger dreper spillet hans."
+    },
+    {
+      "id": "patrick_berg",
+      "name": "Patrick Berg",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "DM",
+        "CM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "positioning",
+        "interceptions",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "clear_defensive_reference",
+        "passing_options",
+        "midfield_partner"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "possession",
+        "compact_block"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "Berg trenger en makker og pasningsvinkler – ikke ende-til-ende-kaos."
+    },
+    {
+      "id": "hugo_vetlesen",
+      "name": "Hugo Vetlesen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "vision",
+        "passing_range",
+        "tempo_control",
+        "composure"
+      ],
+      "needs": [
+        "time_on_ball",
+        "passing_options",
+        "protection_behind"
+      ],
+      "preferredRoles": [
+        "deep_playmaker",
+        "regista"
+      ],
+      "likesTactics": [
+        "possession",
+        "calm_build_up"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "constant_pressing_chaos"
+      ],
+      "warningWhenMisused": "Vetlesen trenger tid på ball og støtte bak seg."
+    },
+    {
+      "id": "amahl_pellegrino",
+      "name": "Amahl Pellegrino",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "dribbling",
+        "acceleration",
+        "one_v_one",
+        "crossing"
+      ],
+      "needs": [
+        "width",
+        "isolation_duels",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "slow_build_up"
+      ],
+      "warningWhenMisused": "Pellegrino trenger bredde og fart framover – ikke treg oppbygging."
+    },
+    {
+      "id": "tom_lund",
+      "name": "Tom Lund",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "overall": 92,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Lund trenger frihet mellom ledd – han er ingen løpsmaskin."
+    },
+    {
+      "id": "frode_kippe",
+      "name": "Frode Kippe",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "overall": 86,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "tackling"
+      ],
+      "needs": [
+        "defensive_support",
+        "clear_marking_scheme",
+        "protected_space_behind"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block"
+      ],
+      "dislikesTactics": [
+        "isolated_high_line",
+        "constant_man_marking_wide"
+      ],
+      "warningWhenMisused": "Kippe vil ha en tydelig markeringsplan og beskyttet rom bak."
+    },
+    {
+      "id": "vegard_forren",
+      "name": "Vegard Forren",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "tackling"
+      ],
+      "needs": [
+        "defensive_support",
+        "clear_marking_scheme",
+        "protected_space_behind"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block"
+      ],
+      "dislikesTactics": [
+        "isolated_high_line",
+        "constant_man_marking_wide"
+      ],
+      "warningWhenMisused": "Forren trenger defensiv støtte – ikke en isolert høy linje."
+    },
+    {
+      "id": "martin_linnes",
+      "name": "Martin Linnes",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "overall": 86,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "WB"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "crossing",
+        "overlapping_runs",
+        "recovery_speed"
+      ],
+      "needs": [
+        "width",
+        "runners_ahead",
+        "rest_defence_cover"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "wingback",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support"
+      ],
+      "warningWhenMisused": "Linnes trenger bredde og hvilestilling bak seg."
+    },
+    {
+      "id": "daniel_berg_hestad",
+      "name": "Daniel Berg Hestad",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM",
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "vision",
+        "passing_range",
+        "tempo_control",
+        "composure"
+      ],
+      "needs": [
+        "time_on_ball",
+        "passing_options",
+        "protection_behind"
+      ],
+      "preferredRoles": [
+        "deep_playmaker",
+        "regista"
+      ],
+      "likesTactics": [
+        "possession",
+        "calm_build_up"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "constant_pressing_chaos"
+      ],
+      "warningWhenMisused": "Berg Hestad styrer tempo – han skal ikke jage i kaos."
+    },
+    {
+      "id": "magne_hoseth",
+      "name": "Magne Hoseth",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Hoseth trenger sentralt rom og kreativ frihet."
+    },
+    {
+      "id": "ole_gunnar_solskjaer",
+      "name": "Ole Gunnar Solskjær",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "channel_runner"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "finishing",
+        "movement",
+        "runs_behind",
+        "first_touch"
+      ],
+      "needs": [
+        "service",
+        "space_behind",
+        "supporting_runners"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "box_striker",
+        "pressing_forward"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "wide_attacks"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "no_service"
+      ],
+      "warningWhenMisused": "Solskjær lever av bevegelse i boks – uten service ser du ham ikke."
+    },
+    {
+      "id": "daniel_nannskog",
+      "name": "Daniel Nannskog",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "nadderud_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "hold_up_play",
+        "heading",
+        "strength",
+        "link_play"
+      ],
+      "needs": [
+        "service",
+        "midfield_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "linking_striker"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "isolated_front"
+      ],
+      "warningWhenMisused": "Nannskog må ha innlegg og støtte – ikke stå isolert."
+    },
+    {
+      "id": "veigar_pall_gunnarsson",
+      "name": "Veigar Páll Gunnarsson",
+      "nationality": "Island",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "nadderud_stadion"
+      ],
+      "overall": 86,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "ST",
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Gunnarsson trenger rom mellom ledd og pasningsvalg."
     }
   ]
 }

@@ -417,6 +417,142 @@
         }
       ],
       "notes": "Hampden Park i Glasgow er Queen's Parks hjemmebane. Queen's Park utviklet det skotske kombinasjons-/pasningsspillet på 1870–80-tallet, og stedet er kilde til den skotske skolen."
+    },
+    {
+      "placeId": "lerkendal_stadion",
+      "placeName": "Lerkendal Stadion",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "andre_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_hoftun"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "birger_meling"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "roar_strand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bent_skammelsrud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_brattbakk"
+        }
+      ],
+      "notes": "Klubbanlegg: Rosenborgs hjemmebane som kilde til klubbspillere."
+    },
+    {
+      "placeId": "brann_stadion",
+      "placeName": "Brann Stadion",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "hakon_opdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thorstein_helstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_huseklepp"
+        }
+      ],
+      "notes": "Klubbanlegg: Branns hjemmebane i Bergen."
+    },
+    {
+      "placeId": "aspmyra_stadion",
+      "placeName": "Aspmyra Stadion",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "marius_lode"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "patrick_berg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hugo_vetlesen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "amahl_pellegrino"
+        }
+      ],
+      "notes": "Klubbanlegg: Bodø/Glimts hjemmebane."
+    },
+    {
+      "placeId": "araasen_stadion",
+      "placeName": "Åråsen Stadion",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "tom_lund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frode_kippe"
+        }
+      ],
+      "notes": "Klubbanlegg: Lillestrøms hjemmebane."
+    },
+    {
+      "placeId": "aker_stadion",
+      "placeName": "Aker Stadion",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_forren"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_linnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_berg_hestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magne_hoseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_gunnar_solskjaer"
+        }
+      ],
+      "notes": "Klubbanlegg: Moldes hjemmebane."
+    },
+    {
+      "placeId": "nadderud_stadion",
+      "placeName": "Nadderud Stadion",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_nannskog"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "veigar_pall_gunnarsson"
+        }
+      ],
+      "notes": "Klubbanlegg: Stabæks hjemmebane i Bærum."
     }
   ]
 }

@@ -1650,17 +1650,20 @@ function removeNearbyFavorite(placeId) {
 // Ingen spillerdata hardkodes her, og ekte History Go-progresjon røres aldri.
 const STARTER_SQUAD_GROUPS = [
   { positions: ["GK"], count: 2 },
-  { positions: ["CB", "LB", "RB", "LWB", "RWB", "SW"], count: 5 },
-  { positions: ["DM", "CM", "AM", "LM", "RM"], count: 5 },
-  { positions: ["ST", "CF", "LW", "RW", "SS"], count: 3 }
+  { positions: ["CB", "LB", "RB", "WB"], count: 5 },
+  { positions: ["DM", "CM", "AM"], count: 5 },
+  { positions: ["ST", "LW", "RW"], count: 3 }
 ];
 
 function getStarterSquadPlayerIds(limit = REQUIRED_SQUAD_SIZE) {
   const players = Array.isArray(state.players) ? state.players : [];
   if (!players.length) return [];
 
+  // Kun KLUBBspillere: auto-troppen skal aldri dele ut landslagsstjernene
+  // (Ullevaal/Maracanã). De er belønningen for å samle i History Go.
   const candidateIds = new Set();
   (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
+    if (isNationalArenaPlace(place)) return;
     (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
       if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
         candidateIds.add(unlock.targetId);
@@ -1668,11 +1671,11 @@ function getStarterSquadPlayerIds(limit = REQUIRED_SQUAD_SIZE) {
     });
   });
 
-  // Deterministisk rekkefølge: unlockbare spillere først, deretter id-sortert.
-  const ordered = [...players].sort((a, b) => {
-    const aRank = candidateIds.has(a.id) ? 0 : 1;
-    const bRank = candidateIds.has(b.id) ? 0 : 1;
-    if (aRank !== bRank) return aRank - bRank;
+  // Jevne klubbspillere først (lavest overall), så toppsjiktet er noe du samler
+  // deg til – ikke noe auto-fyll deler ut gratis. Alle er gode nok (85+).
+  const ordered = [...players].filter((player) => candidateIds.has(player.id)).sort((a, b) => {
+    const diff = (Number(a.overall) || 0) - (Number(b.overall) || 0);
+    if (diff !== 0) return diff;
     return String(a.id).localeCompare(String(b.id));
   });
 
@@ -1834,12 +1837,22 @@ function computeAvailability() {
   const unlockedPlayerIds = new Set();
   const playerSourceById = new Map();
   const explicitStaffIds = new Set();
+  // Klubbspillere vs landslagsspillere: en landslagsarena (Ullevaal, Maracanã)
+  // gir deg IKKE spillere til klubblaget – ellers kunne ett besøk på Ullevaal
+  // sikre hele Norges beste. Spilleren blir speidet/synlig, men kan bare
+  // signeres hvis du også har besøkt et KLUBBanlegg som har ham/henne.
+  const nationalOnlyPlayerIds = new Set();
   placeUnlocks.forEach((place) => {
+    const nationalArena = isNationalArenaPlace(place);
     (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
       if (!unlock || !unlock.targetId) {
         return;
       }
       if (isPlayerUnlockType(unlock.type)) {
+        if (nationalArena) {
+          nationalOnlyPlayerIds.add(unlock.targetId);
+          return;
+        }
         unlockedPlayerIds.add(unlock.targetId);
         const sources = playerSourceById.get(unlock.targetId) || { placeIds: new Set(), localStart: false };
         sources.placeIds.add(place.placeId);
@@ -1849,6 +1862,9 @@ function computeAvailability() {
       }
     });
   });
+  // Speidet på landslagsarena, men signerbar via klubbanlegg: da er den
+  // allerede i unlockedPlayerIds og skal ikke telles som «kun landslag».
+  unlockedPlayerIds.forEach((playerId) => nationalOnlyPlayerIds.delete(playerId));
 
   // Lokal start utvider bare spillerpoolen. Den åpner ingen steder og skriver
   // aldri til History Go-progresjonen (visited_places/groundhopper-state).
@@ -1922,6 +1938,7 @@ function computeAvailability() {
     placeUnlocks,
     unlockedPlayers,
     unlockedPlayerIds,
+    nationalOnlyPlayerIds,
     playerSourceById,
     unlockedStaff,
     unlockedStaffIds: collectedPools.unlockedStaffIds,
@@ -2137,6 +2154,15 @@ function getUnlockedStaff() {
 // player_candidate-unlock på et opplåst sted.
 function getUnlockedPlayers() {
   return getAvailability().unlockedPlayers;
+}
+
+// Landslagsarena? Stedsrollen i football_unlocks.json skiller allerede
+// landslagsarenaer (national_arena_/national_stadium_) fra klubbanlegg.
+// Spillere herfra er landslagsspillere: speidet, men ikke signerbare til
+// klubblaget. Ingen sted-id-er hardkodes her – kun rollen leses.
+function isNationalArenaPlace(place) {
+  const role = typeof place?.placeRole === "string" ? place.placeRole : "";
+  return role.includes("national");
 }
 
 // Er en formasjon tilgjengelig som aktiv managerformasjon?
@@ -11051,11 +11077,18 @@ function renderUnlockedPlayers() {
   const players = getUnlockedPlayers();
 
   if (elements.unlockedPlayersStatus) {
+    // Landslagsspillere speidet på en landslagsarena (Ullevaal/Maracanã) kan
+    // ikke signeres til klubblaget – si det tydelig i stedet for å la
+    // spilleren lure på hvorfor besøket «ikke ga noe».
+    const scouted = getAvailability().nationalOnlyPlayerIds?.size || 0;
+    const scoutedNote = scouted > 0
+      ? ` ${scouted} landslagsspiller${scouted === 1 ? "" : "e"} er speidet på landslagsarena – de kan bare signeres via et klubbanlegg.`
+      : "";
     if (players.length > 0) {
-      elements.unlockedPlayersStatus.textContent = `Opplåste spillere: ${players.length}`;
+      elements.unlockedPlayersStatus.textContent = `Klubbspillere du kan bruke: ${players.length}.${scoutedNote}`;
     } else {
       elements.unlockedPlayersStatus.textContent =
-        "Ingen spillere låst opp ennå. Besøk/synk fotballsteder som Ullevaal, Intility, Gressbanen eller Ekebergsletta.";
+        `Ingen klubbspillere ennå. Besøk/synk et klubbanlegg (Intility, Lerkendal, Brann, Aspmyra, Åråsen, Aker eller Nadderud).${scoutedNote}`;
     }
   }
 

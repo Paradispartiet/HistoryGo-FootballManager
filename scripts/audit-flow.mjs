@@ -130,6 +130,47 @@ check(
   "ingen geolokasjon eller stedsanker i starttroppen",
   !app.includes("navigator.geolocation") && !app.includes("getPublicStartAnchor") && !html.includes('id="publicStartPlaceSelect"')
 );
+
+// Klubbspillere vs landslagsspillere: en landslagsarena (Ullevaal, Maracanã)
+// skal aldri gi spillere til klubblaget – ellers kunne ett besøk sikre hele
+// Norges beste. Landslagsspillere er speidet, men må signeres via klubbanlegg.
+check(
+  "landslagsarena gir ikke klubbspillere (isNationalArenaPlace)",
+  app.includes("function isNationalArenaPlace") && app.includes("nationalOnlyPlayerIds")
+);
+check(
+  "auto-troppen hopper over landslagsarenaer",
+  /const candidateIds = new Set\(\);[\s\S]{0,320}if \(isNationalArenaPlace\(place\)\) return;/.test(app)
+);
+check(
+  "auto-troppen tar de jevne klubbspillerne først (stjerner må samles)",
+  /const ordered = \[\.\.\.players\][\s\S]{0,260}Number\(a\.overall\)[\s\S]{0,40}Number\(b\.overall\)/.test(app)
+);
+{
+  // Datakontrakt: klubbanleggene må ha nok spillere til en spillbar tropp,
+  // ellers blir skillet en blindvei.
+  const players = JSON.parse(readFileSync(join(root, "data/football_players.json"), "utf8")).players || [];
+  const placeUnlocks = JSON.parse(readFileSync(join(root, "data/football_unlocks.json"), "utf8")).placeUnlocks || [];
+  const clubIds = new Set();
+  const natIds = new Set();
+  for (const place of placeUnlocks) {
+    const isNat = String(place?.placeRole || "").includes("national");
+    for (const unlock of place?.unlocks || []) {
+      if (!String(unlock?.type || "").includes("player")) continue;
+      (isNat ? natIds : clubIds).add(unlock.targetId);
+    }
+  }
+  const byId = new Map(players.map((p) => [p.id, p]));
+  const posCount = (positions) =>
+    [...clubIds].filter((id) => (byId.get(id)?.naturalPositions || []).some((p) => positions.includes(p))).length;
+  check("nok klubbspillere til en spillbar tropp (>=15)", clubIds.size >= 15, `klubb-scope=${clubIds.size}`);
+  check("klubb-scope har minst 2 keepere", posCount(["GK"]) >= 2, `GK=${posCount(["GK"])}`);
+  check("landslagsstjerner finnes som eksklusiv samlebelønning", [...natIds].some((id) => !clubIds.has(id)));
+  check(
+    "alle spillere er gode (overall 85-100)",
+    players.every((p) => Number(p.overall) >= 85 && Number(p.overall) <= 100)
+  );
+}
 check(
   "computeAvailability() trekker inn lokal tropp",
   /getLocalStartPlayerIds\(\)\.forEach/.test(app) ||
