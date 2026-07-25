@@ -2273,6 +2273,25 @@ function isFormationUnlocked(formationId) {
   return status ? status.unlocked : true;
 }
 
+// Samlebelønning for formasjoner: ALLE formasjoner er fritt spillbare, men et
+// system du har samlet/oppdaget via History Go setter seg raskere — laget og
+// trenerteamet kjenner allerede systemets historie og idé. Dette er gulroten
+// for å samle, i stedet for en lås: et ikke-samlet system er like spillbart,
+// det tar bare litt lengre tid å lære inn.
+const COLLECTED_FORMATION_FAMILIARITY_BONUS = 1;
+
+function isFormationCollected(formationId) {
+  if (!formationId) {
+    return false;
+  }
+  return Boolean(getAvailability().formationStatusById.get(formationId)?.collected);
+}
+
+// Ekstra tilvenning per treningsuke/kamp for samlede formasjoner (0 ellers).
+function getCollectedFormationFamiliarityBonus(formationId) {
+  return isFormationCollected(formationId) ? COLLECTED_FORMATION_FAMILIARITY_BONUS : 0;
+}
+
 // Er en spiller låst opp (kan velges)?
 function isPlayerUnlocked(playerId) {
   if (!playerId) {
@@ -3064,8 +3083,9 @@ function advanceHgTrainingWeek() {
       // Start fra dynamisk staff-verdi første gang, deretter fra lagret verdi.
       const current = Number.isFinite(stored) ? stored : Number(coachContext.formationFamiliarity) || 45;
       const learn = Math.max(0, Math.min(100, Number(coachContext.tacticalLearningSpeed) || 0));
-      // +1 til +4 per uke basert på taktisk læringsfart.
-      const gain = 1 + Math.round((learn / 100) * 3);
+      // +1 til +4 per uke basert på taktisk læringsfart, pluss samlebonus for
+      // formasjoner du har oppdaget via History Go (raskere tilvenning).
+      const gain = 1 + Math.round((learn / 100) * 3) + getCollectedFormationFamiliarityBonus(formation.id);
       merits.formationFamiliarity[formation.id] = Math.max(0, Math.min(100, Math.round(current + gain)));
     }
   } catch (error) {
@@ -3831,7 +3851,10 @@ function applyMatchdayConsequences(lastMatch, session) {
       ? stored
       : Number(session?.coachSnapshot?.formationFamiliarity) || 45;
     const startValue = Math.max(0, Math.min(100, Math.round(current)));
-    const nextValue = Math.max(0, Math.min(100, Math.round(startValue + consequences.familiarityGain)));
+    // Samlebonus: et system oppdaget via History Go setter seg raskere også
+    // gjennom kamp.
+    const collectedBonus = getCollectedFormationFamiliarityBonus(consequences.formationId);
+    const nextValue = Math.max(0, Math.min(100, Math.round(startValue + consequences.familiarityGain + collectedBonus)));
     merits.formationFamiliarity[consequences.formationId] = nextValue;
     saveTeamMerits();
     familiarityApplied = {
@@ -6379,15 +6402,19 @@ function buildFormationAccessText(formation) {
     return "";
   }
 
+  // Samlede systemer setter seg raskere – si det, slik at samlebelønningen er
+  // synlig og forklart i stedet for skjult i motoren.
+  const fasterNote = "Laget kjenner systemet – raskere taktisk tilvenning.";
+
   if (status.satisfiedBy) {
     const source = describeUnlockRequirementShort(status.satisfiedBy);
-    return source ? `Samlet via ${source}.` : status.reason;
+    return source ? `Samlet via ${source}. ${fasterNote}` : `${status.reason} ${fasterNote}`;
   }
   if (status.tier && FORMATION_BASELINE_TIERS.has(status.tier)) {
-    return "Grunnsystem (start-/tidligformasjon).";
+    return `Grunnsystem (start-/tidligformasjon). ${fasterNote}`;
   }
   if (status.collected) {
-    return status.reason;
+    return `${status.reason} ${fasterNote}`;
   }
 
   const requirements = getFormationUnlockRequirements(formation)
@@ -6395,7 +6422,7 @@ function buildFormationAccessText(formation) {
     .filter(Boolean);
 
   return requirements.length
-    ? `Fritt spillbart. Samles i History Go via ${requirements.slice(0, 3).join(" eller ")}.`
+    ? `Fritt spillbart, men tar lengre tid å lære inn. Samle det i History Go via ${requirements.slice(0, 3).join(" eller ")} for raskere tilvenning.`
     : "Fritt spillbart historisk system.";
 }
 
