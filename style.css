@@ -7656,3 +7656,46 @@ body { grid-template-columns: minmax(0, 1fr); }
 .club-form-error[hidden] { display: none !important; }
 .club-form-actions { display: flex; gap: 8px; margin-top: 4px; }
 .club-form-actions .primary-action-button { flex: 1 1 auto; }
+
+/* ---------- Draft: velg troppen din ---------- */
+.draft-status-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.draft-count { margin: 0; font-weight: 800; font-size: 1.05rem; }
+.draft-positions { margin: 0; font-size: 0.85rem; }
+.draft-pool {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.draft-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "pos name" "pos meta";
+  column-gap: 10px;
+  align-items: center;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  cursor: pointer;
+}
+.draft-card:hover { background: rgba(255, 255, 255, 0.07); }
+.draft-card.is-selected { border-color: var(--hg-accent-tactics); background: rgba(70, 214, 140, 0.12); }
+.draft-card-pos {
+  grid-area: pos;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 5px 7px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 8px;
+  color: var(--hg-text-muted);
+}
+.draft-card.is-selected .draft-card-pos { color: var(--hg-accent-tactics); border-color: var(--hg-accent-tactics); }
+.draft-card strong { grid-area: name; font-size: 0.95rem; }
+.draft-card small { grid-area: meta; color: var(--hg-text-muted); font-size: 0.75rem; }
+.draft-actions { display: flex; gap: 8px; }
+.draft-actions .primary-action-button { flex: 1 1 auto; }
+.draft-actions .primary-action-button:disabled { opacity: 0.5; cursor: not-allowed; }

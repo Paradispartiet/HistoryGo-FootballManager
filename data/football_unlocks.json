@@ -446,6 +446,14 @@
         {
           "type": "player_candidate",
           "targetId": "harald_brattbakk"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_svensson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mike_jensen"
         }
       ],
       "notes": "Klubbanlegg: Rosenborgs hjemmebane som kilde til klubbspillere."
@@ -466,6 +474,10 @@
         {
           "type": "player_candidate",
           "targetId": "erik_huseklepp"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sivert_heltne_nilsen"
         }
       ],
       "notes": "Klubbanlegg: Branns hjemmebane i Bergen."
@@ -490,6 +502,14 @@
         {
           "type": "player_candidate",
           "targetId": "amahl_pellegrino"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ulrik_saltnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alfons_sampsted"
         }
       ],
       "notes": "Klubbanlegg: Bodø/Glimts hjemmebane."
@@ -506,6 +526,10 @@
         {
           "type": "player_candidate",
           "targetId": "frode_kippe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erling_knudtzon"
         }
       ],
       "notes": "Klubbanlegg: Lillestrøms hjemmebane."
@@ -534,6 +558,10 @@
         {
           "type": "player_candidate",
           "targetId": "ole_gunnar_solskjaer"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_hestad"
         }
       ],
       "notes": "Klubbanlegg: Moldes hjemmebane."
@@ -550,6 +578,10 @@
         {
           "type": "player_candidate",
           "targetId": "veigar_pall_gunnarsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_skjonsberg"
         }
       ],
       "notes": "Klubbanlegg: Stabæks hjemmebane i Bærum."

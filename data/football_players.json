@@ -2727,6 +2727,420 @@
         "isolated_midfield"
       ],
       "warningWhenMisused": "Gunnarsson trenger rom mellom ledd og pasningsvalg."
+    },
+    {
+      "id": "jonas_svensson",
+      "name": "Jonas Svensson",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "WB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "crossing",
+        "overlapping_runs",
+        "recovery_speed"
+      ],
+      "needs": [
+        "width",
+        "runners_ahead",
+        "rest_defence_cover"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "wingback",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support"
+      ],
+      "warningWhenMisused": "Svensson trenger bredde og hvilestilling bak seg."
+    },
+    {
+      "id": "mike_jensen",
+      "name": "Mike Jensen",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "ST"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "running_power",
+        "duels",
+        "late_runs"
+      ],
+      "needs": [
+        "space_to_run",
+        "midfield_partner",
+        "clear_task"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "high_tempo",
+        "pressing"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "deep_passive_block"
+      ],
+      "warningWhenMisused": "Jensen trenger klare oppgaver og en makker på midten."
+    },
+    {
+      "id": "sivert_heltne_nilsen",
+      "name": "Sivert Heltne Nilsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [
+        "CM",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "LW"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "positioning",
+        "interceptions",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "clear_defensive_reference",
+        "passing_options",
+        "midfield_partner"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "possession",
+        "compact_block"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "Heltne Nilsen vil ha en tydelig defensiv referanse – ikke ende-til-ende-kaos."
+    },
+    {
+      "id": "ulrik_saltnes",
+      "name": "Ulrik Saltnes",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "ST"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "running_power",
+        "duels",
+        "late_runs"
+      ],
+      "needs": [
+        "space_to_run",
+        "midfield_partner",
+        "clear_task"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "high_tempo",
+        "pressing"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "deep_passive_block"
+      ],
+      "warningWhenMisused": "Saltnes lever av løp og rom – ikke statisk lavt tempo."
+    },
+    {
+      "id": "alfons_sampsted",
+      "name": "Alfons Sampsted",
+      "nationality": "Island",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "overall": 86,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "WB",
+        "RW"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "ST"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "crossing",
+        "overlapping_runs",
+        "recovery_speed"
+      ],
+      "needs": [
+        "width",
+        "runners_ahead",
+        "rest_defence_cover"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "wingback",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support"
+      ],
+      "warningWhenMisused": "Sampsted trenger bredde og løp foran seg."
+    },
+    {
+      "id": "erling_knudtzon",
+      "name": "Erling Knudtzon",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "RW",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "dribbling",
+        "acceleration",
+        "one_v_one",
+        "crossing"
+      ],
+      "needs": [
+        "width",
+        "isolation_duels",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "slow_build_up"
+      ],
+      "warningWhenMisused": "Knudtzon må ha bredde og en-mot-en – ikke en trang midtbane."
+    },
+    {
+      "id": "eirik_hestad",
+      "name": "Eirik Hestad",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "overall": 86,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "LW",
+        "CM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "ST"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Hestad trenger sentralt rom og pasningsvalg."
+    },
+    {
+      "id": "morten_skjonsberg",
+      "name": "Morten Morisbak Skjønsberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "nadderud_stadion"
+      ],
+      "overall": 86,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "club_professional"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "tackling"
+      ],
+      "needs": [
+        "defensive_support",
+        "clear_marking_scheme",
+        "protected_space_behind"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block"
+      ],
+      "dislikesTactics": [
+        "isolated_high_line",
+        "constant_man_marking_wide"
+      ],
+      "warningWhenMisused": "Skjønsberg vil ha en tydelig markeringsplan og støtte bak."
     }
   ]
 }

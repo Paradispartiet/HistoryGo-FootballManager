@@ -1725,16 +1725,45 @@ function getStarterSquadStaffCandidates(staff, limit = REQUIRED_STAFF_SIZE) {
     .slice(0, Math.max(0, limit));
 }
 
+// Draft-pool: grunnsjiktet av klubbspillere (under NAME_TIER_MIN). De store
+// navnene og landslagsspillerne er bevisst utenfor – de samles i History Go.
+const NAME_TIER_MIN = 90;
+
+function getDraftPoolPlayers() {
+  const players = Array.isArray(state.players) ? state.players : [];
+  const clubIds = new Set();
+  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
+    if (isNationalArenaPlace(place)) return;
+    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
+        clubIds.add(unlock.targetId);
+      }
+    });
+  });
+  return players
+    .filter((player) => clubIds.has(player.id) && Number(player.overall) < NAME_TIER_MIN)
+    .sort((a, b) => {
+      const order = { GK: 0, CB: 1, LB: 2, RB: 3, WB: 4, DM: 5, CM: 6, AM: 7, LW: 8, RW: 9, ST: 10 };
+      const ap = order[(a.naturalPositions || [])[0]] ?? 99;
+      const bp = order[(b.naturalPositions || [])[0]] ?? 99;
+      if (ap !== bp) return ap - bp;
+      return String(a.name).localeCompare(String(b.name), "no");
+    });
+}
+
 // Aktiver auto-troppen. Samme lagringsmodell som før (teamMerits.localStart med
 // unlockSource local_start), men uten koordinater eller valgt sted.
-function activateStarterSquad() {
+function activateStarterSquad(chosenPlayerIds = null) {
   if (!state.teamMerits) {
     state.localStartMessage = "Kunne ikke fylle troppen fordi lagprogresjonen ikke er tilgjengelig.";
     renderApp();
     return;
   }
 
-  const playerIds = getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE);
+  // Draften sender spillerens eget utvalg; ellers bygges en balansert tropp.
+  const playerIds = Array.isArray(chosenPlayerIds) && chosenPlayerIds.length
+    ? chosenPlayerIds.slice(0, REQUIRED_SQUAD_SIZE)
+    : getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE);
   if (!playerIds.length) {
     state.localStartMessage = "Fant ingen spillere å fylle troppen med.";
     renderApp();
@@ -12177,6 +12206,82 @@ function bindEvents() {
   bindOnboardingClub();
 }
 
+// «Velg troppen din» (draft): spilleren setter sammen sin egen starttropp fra
+// grunnsjiktet av klubbspillere. Erstatter auto-fyll som hovedvei — men
+// «Fyll resten» sikrer at ingen står fast. De store navnene er ikke i poolen;
+// de samles i History Go.
+function bindSquadDraft() {
+  const poolEl = document.querySelector("#draftPool");
+  const countEl = document.querySelector("#draftCount");
+  const posEl = document.querySelector("#draftPositions");
+  const confirmButton = document.querySelector("#draftConfirm");
+  const fillButton = document.querySelector("#draftFillRest");
+  if (!poolEl) return;
+
+  const selected = new Set();
+
+  const renderDraft = () => {
+    const pool = getDraftPoolPlayers();
+    if (countEl) countEl.textContent = `${selected.size}/${REQUIRED_SQUAD_SIZE} valgt`;
+    if (posEl) {
+      const counts = {};
+      pool.forEach((player) => {
+        if (!selected.has(player.id)) return;
+        (player.naturalPositions || []).slice(0, 1).forEach((pos) => {
+          counts[pos] = (counts[pos] || 0) + 1;
+        });
+      });
+      const summary = Object.entries(counts).map(([pos, n]) => `${pos} ${n}`).join(" · ");
+      posEl.textContent = summary || "Dekk keeper, forsvar, midtbane og angrep.";
+    }
+    if (confirmButton) confirmButton.disabled = selected.size !== REQUIRED_SQUAD_SIZE;
+
+    poolEl.replaceChildren();
+    pool.forEach((player) => {
+      const isOn = selected.has(player.id);
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = `draft-card${isOn ? " is-selected" : ""}`;
+      card.setAttribute("aria-pressed", isOn ? "true" : "false");
+      const pos = document.createElement("span");
+      pos.className = "draft-card-pos";
+      pos.textContent = (player.naturalPositions || [])[0] || "–";
+      const name = document.createElement("strong");
+      name.textContent = player.name;
+      const meta = document.createElement("small");
+      meta.textContent = `${player.overall} · ${(player.preferredRoles || []).slice(0, 2).join(", ")}`;
+      card.append(pos, name, meta);
+      card.addEventListener("click", () => {
+        if (selected.has(player.id)) selected.delete(player.id);
+        else if (selected.size < REQUIRED_SQUAD_SIZE) selected.add(player.id);
+        renderDraft();
+      });
+      poolEl.append(card);
+    });
+  };
+
+  // Åpning: nullstill valget og bygg poolen på nytt.
+  document.querySelector("#autoFillSquad")?.addEventListener("click", () => {
+    selected.clear();
+    renderDraft();
+  });
+
+  fillButton?.addEventListener("click", () => {
+    // Fyll resten med posisjonsbalanserte kandidater, så ingen står fast.
+    getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE).forEach((playerId) => {
+      if (selected.size < REQUIRED_SQUAD_SIZE) selected.add(playerId);
+    });
+    renderDraft();
+  });
+
+  confirmButton?.addEventListener("click", () => {
+    if (selected.size !== REQUIRED_SQUAD_SIZE) return;
+    activateStarterSquad([...selected]);
+    document.querySelectorAll(".modal-overlay:not([hidden])").forEach((m) => { m.hidden = true; });
+    document.body.classList.remove("has-modal-open");
+  });
+}
+
 // Onboarding steg 2: opprett klubben (navn + valgfritt managernavn). Setter
 // klubbidentiteten eksplisitt i gameStartState og starter ligaspillet.
 function bindOnboardingClub() {
@@ -12465,16 +12570,7 @@ function bindLocalStartControls() {
     });
   }
 
-  // «Never stuck without History Go»: ett klikk bygger en balansert 15-spiller
-  // starttropp rett fra spillerkatalogen — uten sted, koordinater eller
-  // geolokasjon (stedsanker er faset ut). Skriver aldri til ekte History
-  // Go-progresjon.
-  const autoFillSquad = document.querySelector("#autoFillSquad");
-  if (autoFillSquad) {
-    autoFillSquad.addEventListener("click", () => {
-      activateStarterSquad();
-    });
-  }
+  bindSquadDraft();
 
   if (elements.clearLocalStart) {
     elements.clearLocalStart.addEventListener("click", clearLocalStartSquad);

@@ -1113,8 +1113,8 @@
             <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
           </div>
           <p class="muted-text">Vanligvis kommer troppen fra stedene du har besøkt. Trenger du en rask start, kan du bruke samlingen din, finne de nærmeste spillerne, eller sette et offentlig hjemsted.</p>
-          <button type="button" id="autoFillSquad" class="primary-action-button autofill-squad">Auto-fyll tropp (raskest – uten History Go)</button>
-          <p class="muted-text autofill-squad-note">Fyller 15 spillere fra et offentlig startsted med ett klikk. Du kan alltid bytte til din egen History Go-samling senere.</p>
+          <button type="button" id="autoFillSquad" class="primary-action-button autofill-squad" data-modal-open="modalDraft">Velg troppen din</button>
+          <p class="muted-text autofill-squad-note">Sett sammen din egen starttropp fra klubbspillerne. De store navnene samler du i History Go.</p>
           <div id="startModePanel" class="local-start-panel" aria-label="Startmodus">
             <div id="startModeChoices">
               <div class="local-start-heading">
@@ -1161,6 +1161,28 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- ===== POPUP: VELG TROPPEN DIN (draft) =====
+           Du setter sammen din egen starttropp fra klubbspillerne. De store
+           navnene (90+) og landslagsspillerne er bevisst IKKE i poolen – de
+           samles i History Go. -->
+      <div class="modal-overlay" id="modalDraft" role="dialog" aria-modal="true" aria-label="Velg troppen din" hidden>
+        <div class="modal">
+          <div class="modal-head">
+            <div><p class="eyebrow">Ny tropp</p><h3>Velg troppen din</h3></div>
+            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+          </div>
+          <p class="muted-text">Velg 15 spillere. Alle er gode nok – spørsmålet er om du forstår dem. De store navnene samler du i History Go.</p>
+          <div class="draft-status-row">
+            <p id="draftCount" class="draft-count">0/15 valgt</p>
+            <p id="draftPositions" class="draft-positions muted-text"></p>
+          </div>
+          <div id="draftPool" class="draft-pool"></div>
+          <div class="draft-actions">
+            <button type="button" id="draftFillRest" class="unlock-card-action is-secondary">Fyll resten</button>
+            <button type="button" id="draftConfirm" class="primary-action-button">Bekreft troppen</button>
+          </div>
       </div>
 
       <!-- ===== POPUP: EKSPERTISE · TRENING · BADGES · LAGKLASSE ===== -->
