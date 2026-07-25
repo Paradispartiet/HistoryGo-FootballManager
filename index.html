@@ -25,6 +25,29 @@
       </div>
       <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
     </section>
+
+    <!-- Steg 2 (kun ligaspill): opprett klubben. Klubbidentiteten er noe du
+         LAGER her – navn, kortnavn og managernavn – ikke noe som avledes av et
+         History Go-sted. -->
+    <section class="onboarding-card onboarding-club-step" id="onboardingClubStep" aria-label="Opprett klubb" hidden>
+      <div class="onboarding-brand">
+        <p class="eyebrow">Ny klubb</p>
+        <h1>Lag klubben din</h1>
+        <p class="muted-text">Gi klubben et navn. Dette er klubben du tar over som manager – du kan endre den senere i innstillinger.</p>
+      </div>
+      <div class="club-form">
+        <label class="club-form-label" for="onboardingClubName">Klubbnavn</label>
+        <input type="text" id="onboardingClubName" class="club-form-input" maxlength="40" placeholder="F.eks. Bislett FK" autocomplete="off">
+        <p id="onboardingClubNameError" class="club-form-error" role="alert" hidden>Skriv inn et klubbnavn.</p>
+
+        <label class="club-form-label" for="onboardingManagerName">Managernavn <span class="club-form-optional">(valgfritt)</span></label>
+        <input type="text" id="onboardingManagerName" class="club-form-input" maxlength="40" placeholder="Ditt navn" autocomplete="off">
+      </div>
+      <div class="club-form-actions">
+        <button type="button" id="onboardingClubBack" class="unlock-card-action is-secondary">Tilbake</button>
+        <button type="button" id="onboardingCreateClub" class="primary-action-button">Start klubben</button>
+      </div>
+    </section>
   </div>
 
   <header class="site-header">
@@ -155,17 +178,17 @@
       <section id="leagueClubCard" class="panel league-club-card" aria-label="Klubbkort for ligaspill" aria-live="polite" hidden>
         <div class="league-club-card-head">
           <div>
-            <p class="eyebrow">Klubb-save</p>
-            <h2 id="leagueClubName">Midlertidig klubb</h2>
-            <p id="leagueClubAnchor" class="muted-text">Velg klubbanker før klubben aktiveres.</p>
+            <p class="eyebrow">Klubben din</p>
+            <h2 id="leagueClubName">Klubben</h2>
+            <p id="leagueClubManager" class="muted-text">Manager</p>
           </div>
           <span id="leagueClubStatus" class="league-club-status">Før sesong</span>
         </div>
         <div class="league-club-card-grid" aria-label="Klubbstatus">
           <article><span>Liga og sesong</span><strong id="leagueClubCompetition">HG Liga · Sesong 1</strong></article>
+          <article><span>Tabell</span><strong id="leagueClubStanding">Sesongen er ikke startet</strong></article>
           <article><span>Styrets mål</span><strong id="leagueClubBoardGoal">Bygg klubben</strong></article>
-          <article><span>Sesongoppdrag</span><strong id="leagueClubObjective">Gjør laget kampklart</strong></article>
-          <article><span>Neste managergrep</span><strong id="leagueClubNextAction">Fullfør før-sesong</strong></article>
+          <article><span>Neste managergrep</span><strong id="leagueClubNextAction">Gjør laget kampklart</strong></article>
         </div>
       </section>
 

@@ -7625,3 +7625,34 @@ body { grid-template-columns: minmax(0, 1fr); }
 /* Auto-fyll tropp (never-stuck-uten-History-Go). */
 .autofill-squad { width: 100%; margin: 4px 0 4px; }
 .autofill-squad-note { margin: 0 0 8px; font-size: 0.8rem; }
+
+/* ---------- Onboarding steg 2: opprett klubb ---------- */
+.onboarding-club-step[hidden] { display: none !important; }
+.club-form { display: flex; flex-direction: column; gap: 6px; }
+.club-form-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hg-text-muted);
+  margin-top: 6px;
+}
+.club-form-optional { text-transform: none; letter-spacing: 0; }
+.club-form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.05rem;
+}
+.club-form-input:focus {
+  outline: none;
+  border-color: var(--hg-accent-tactics);
+  background: rgba(70, 214, 140, 0.06);
+}
+.club-form-error { margin: 2px 0 0; color: var(--hg-accent-kamp, #ff6b5e); font-size: 0.85rem; }
+.club-form-error[hidden] { display: none !important; }
+.club-form-actions { display: flex; gap: 8px; margin-top: 4px; }
+.club-form-actions .primary-action-button { flex: 1 1 auto; }

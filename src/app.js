@@ -413,11 +413,11 @@ const elements = {
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
   leagueClubCard: document.querySelector("#leagueClubCard"),
   leagueClubName: document.querySelector("#leagueClubName"),
-  leagueClubAnchor: document.querySelector("#leagueClubAnchor"),
+  leagueClubManager: document.querySelector("#leagueClubManager"),
   leagueClubStatus: document.querySelector("#leagueClubStatus"),
   leagueClubCompetition: document.querySelector("#leagueClubCompetition"),
   leagueClubBoardGoal: document.querySelector("#leagueClubBoardGoal"),
-  leagueClubObjective: document.querySelector("#leagueClubObjective"),
+  leagueClubStanding: document.querySelector("#leagueClubStanding"),
   leagueClubNextAction: document.querySelector("#leagueClubNextAction"),
   gameModeStatusCard: document.querySelector("#gameModeStatusCard"),
   gameModeStatusTitle: document.querySelector("#gameModeStatusTitle"),
@@ -3958,6 +3958,7 @@ function normalizeGameStartState(value) {
     activeScenarioId: typeof value?.activeScenarioId === "string" ? value.activeScenarioId : undefined,
     leagueSeasonStatus: typeof value?.leagueSeasonStatus === "string" ? value.leagueSeasonStatus : undefined,
     clubName: typeof value?.clubName === "string" ? value.clubName : undefined,
+    managerName: typeof value?.managerName === "string" ? value.managerName : undefined,
     leagueName: typeof value?.leagueName === "string" ? value.leagueName : undefined,
     seasonLabel: typeof value?.seasonLabel === "string" ? value.seasonLabel : undefined,
     boardExpectation: typeof value?.boardExpectation === "string" ? value.boardExpectation : undefined,
@@ -4022,26 +4023,27 @@ function getLeagueStatusLabel(status = state.gameStartState?.leagueSeasonStatus,
   return "Før sesong";
 }
 
-function getTemporaryClubName(anchor = getPublicStartAnchor()) {
+// Klubbnavnet er noe spilleren setter selv i onboardingen. Faller tilbake på et
+// nøytralt midlertidig navn hvis klubben ikke er opprettet ennå — aldri avledet
+// av et History Go-sted (stedsanker er faset ut som identitetskilde).
+function getTemporaryClubName() {
   const raw = state.gameStartState?.clubName;
   if (typeof raw === "string" && raw.trim()) return { name: raw.trim(), temporary: false };
-  const placeName = anchor?.placeName || "History Go";
-  const safePlace = String(placeName).replace(/\s*\([^)]*\)\s*/g, " ").replace(/[^\p{L}0-9 .'-]/gu, "").trim() || "History Go";
-  return { name: `${safePlace} FK`, temporary: true };
+  return { name: "Ny klubb", temporary: true };
 }
 
 function getLeagueSaveModel() {
-  const anchor = getPublicStartAnchor();
   const season = state.leagueSeason;
-  const club = getTemporaryClubName(anchor);
+  // Klubbidentiteten kommer fra klubben spilleren opprettet (onboarding), ikke
+  // fra et History Go-sted. Stedsanker er faset ut som identitetskilde.
+  const club = getTemporaryClubName();
   const status = getLeagueStatusLabel(state.gameStartState?.leagueSeasonStatus, season);
   return {
     activeLeagueSaveId: state.gameStartState?.activeLeagueSaveId || null,
     leagueSeasonStatus: status,
     clubName: club.name,
     temporaryClubName: club.temporary,
-    publicStartAnchor: anchor,
-    placeName: anchor?.placeName || "Klubbanker ikke valgt",
+    managerName: state.gameStartState?.managerName || "",
     leagueName: state.gameStartState?.leagueName || "HG Liga",
     seasonLabel: state.gameStartState?.seasonLabel || "Sesong 1",
     boardExpectation: state.gameStartState?.boardExpectation || season?.boardExpectation || "Styret vil se en tydelig klubbidentitet og et kampklart lag.",
@@ -4070,8 +4072,7 @@ function clearLeagueSaveState() {
 
 function activateLeagueOnboardingTarget(step) {
   const targetByStep = {
-    startsted: { tab: "historygo", selector: "#publicStartPlaceSelect" },
-    klubb: { tab: "historygo", selector: "#publicStartAnchorStatus" },
+    klubb: { tab: "dashboard", selector: "#leagueClubCard", openClubStep: true },
     spillere: { tab: "historygo", selector: "#unlockedPlayersList" },
     stab: { tab: "historygo", selector: "#availableStaffList" },
     ellever: { tab: "tactics", selector: "#formationSelect" },
@@ -4081,6 +4082,13 @@ function activateLeagueOnboardingTarget(step) {
   };
   const target = targetByStep[step?.id] || { tab: step?.tab || "dashboard" };
   if (target.startSeason) startLeagueSeasonFromOnboarding();
+  // Mangler klubben navn, åpner vi klubb-opprettelsen i startskjermen.
+  if (target.openClubStep && !getSavedClubName()) {
+    state.modeChooserOpen = true;
+    renderApp();
+    showOnboardingClubStep();
+    return;
+  }
   activateTab(target.tab);
   if (target.selector) {
     window.requestAnimationFrame(() => document.querySelector(target.selector)?.scrollIntoView({ behavior: "smooth", block: "center" }));
@@ -4166,15 +4174,15 @@ function getLeagueOnboardingSteps(teamFit) {
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   const filled = assignments.filter((item) => item.player).length;
   const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
-  const hasPublicStart = Boolean(getPublicStartAnchor());
-  const hasClubIdentity = hasPublicStart || (isLeagueSeasonActive() && Boolean(state.gameStartState?.activeLeagueSaveId));
+  // Klubbidentitet = klubben du opprettet i onboardingen (navn), ikke et
+  // stedsanker. Stedsanker er faset ut som identitetskilde.
+  const hasClubIdentity = Boolean(getSavedClubName()) || (isLeagueSeasonActive() && Boolean(state.gameStartState?.activeLeagueSaveId));
   const hiredStaff = getHiredStaff().length;
   const hasFormation = Boolean(state.selectedFormationId);
   const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
   const leagueActive = isLeagueSeasonActive();
   return [
-    { id: "startsted", title: "Velg offentlig klubbanker", done: hasPublicStart, detail: hasPublicStart ? `Klubbanker: ${getPublicStartAnchor().placeName}` : "Velg et offentlig History Go-sted som klubbens trygge startpunkt – aldri privat adresse.", tab: "historygo" },
-    { id: "klubb", title: "Bekreft klubbidentitet", done: hasClubIdentity, detail: hasClubIdentity ? "Klubben har en eksplisitt valgt startanker for ligaspillet." : "Bekreft et klubbanker før laget behandles som en aktiv ligaklubb.", tab: "historygo" },
+    { id: "klubb", title: "Opprett klubben", done: hasClubIdentity, detail: hasClubIdentity ? `Klubben er opprettet: ${getTemporaryClubName().name}.` : "Gi klubben et navn i startskjermen før laget behandles som en aktiv ligaklubb.", tab: "dashboard" },
     { id: "spillere", title: "Hent spillere", done: Number(roster.unlockedCount || 0) >= REQUIRED_SQUAD_SIZE, detail: `${Number(roster.unlockedCount || 0)}/${REQUIRED_SQUAD_SIZE} spillere tilgjengelig. Bruk samling, nærområde, klubblink eller auto-fyll.`, tab: "historygo" },
     { id: "stab", title: "Velg stab", done: hiredStaff >= REQUIRED_STAFF_SIZE, detail: `${hiredStaff}/${REQUIRED_STAFF_SIZE} stabsmedlemmer valgt. Tilgjengelig stab teller først når du faktisk engasjerer dem.`, tab: "historygo" },
     { id: "ellever", title: "Sett førsteellever og benk", done: filled >= REQUIRED_STARTERS && bench >= REQUIRED_BENCH, detail: `Startellever ${Math.min(filled, REQUIRED_STARTERS)}/${REQUIRED_STARTERS} · benk ${Math.min(bench, REQUIRED_BENCH)}/${REQUIRED_BENCH}.`, tab: "tactics" },
@@ -4236,12 +4244,51 @@ function renderLeagueClubCard(teamFit) {
     ? `Neste kamp: ${nextMatch.name} (${nextMatch.homeAway === "home" ? "hjemme" : "borte"}, serierunde ${nextMatch.round})`
     : preseasonStep?.title || "Sesongen er ikke startet";
   if (elements.leagueClubName) elements.leagueClubName.textContent = model.temporaryClubName ? `${model.clubName} (midlertidig navn)` : model.clubName;
-  if (elements.leagueClubAnchor) elements.leagueClubAnchor.textContent = model.publicStartAnchor ? `Klubbanker / hjemsted: ${model.placeName}` : "Klubbanker / hjemsted: ikke valgt ennå";
+  if (elements.leagueClubManager) {
+    elements.leagueClubManager.textContent = model.managerName ? `Manager: ${model.managerName}` : "Manager: deg";
+  }
   if (elements.leagueClubStatus) elements.leagueClubStatus.textContent = model.leagueSeasonStatus;
   if (elements.leagueClubCompetition) elements.leagueClubCompetition.textContent = `${model.leagueName} · ${model.seasonLabel}`;
   if (elements.leagueClubBoardGoal) elements.leagueClubBoardGoal.textContent = model.boardExpectation;
-  if (elements.leagueClubObjective) elements.leagueClubObjective.textContent = model.seasonObjective;
+  // Tabell i stedet for «sesongoppdrag»: i ligaspill er tabellen fasiten, ikke
+  // et oppdrag som skal fullføres.
+  if (elements.leagueClubStanding) {
+    let standing = "Sesongen er ikke startet";
+    if (isLeagueSeasonActive() && state.leagueSeason) {
+      const table = createLeagueTable(state.leagueSeason);
+      const managerRow = Array.isArray(table) ? table.find((row) => row.isManager) : null;
+      if (managerRow) {
+        standing = `${managerRow.position}. plass · ${managerRow.points} poeng`;
+      }
+    }
+    elements.leagueClubStanding.textContent = standing;
+  }
   if (elements.leagueClubNextAction) elements.leagueClubNextAction.textContent = nextAction;
+}
+
+// Klubbnavnet spilleren selv har satt (tom => klubb ikke opprettet ennå).
+function getSavedClubName() {
+  const raw = state.gameStartState?.clubName;
+  return typeof raw === "string" && raw.trim() ? raw.trim() : "";
+}
+
+// Onboarding steg 2: vis klubb-opprettelsen, skjul modusvalget.
+function showOnboardingClubStep() {
+  const chooser = elements.firstTimePlaythroughCard;
+  const clubStep = document.querySelector("#onboardingClubStep");
+  if (chooser) chooser.hidden = true;
+  if (clubStep) {
+    clubStep.hidden = false;
+    document.querySelector("#onboardingClubName")?.focus();
+  }
+}
+
+// Tilbake til modusvalget fra klubb-steget.
+function showOnboardingModeStep() {
+  const chooser = elements.firstTimePlaythroughCard;
+  const clubStep = document.querySelector("#onboardingClubStep");
+  if (clubStep) clubStep.hidden = true;
+  if (chooser) chooser.hidden = false;
 }
 
 function loadOnboarded() {
@@ -4259,6 +4306,9 @@ function renderOnboardingScreen() {
   if (!screen) return;
   screen.hidden = state.onboarded && !state.modeChooserOpen;
   document.body.classList.toggle("is-onboarding", !screen.hidden);
+  // Startskjermen åpner alltid på modusvalget; klubb-steget vises kun når
+  // ligaspill velges uten at en klubb er opprettet.
+  if (screen.hidden) showOnboardingModeStep();
 }
 
 function renderGameModeStatus(teamFit) {
@@ -12381,6 +12431,45 @@ function bindEvents() {
   bindModals();
   bindSettings();
   bindFormationLibraryApply();
+  bindOnboardingClub();
+}
+
+// Onboarding steg 2: opprett klubben (navn + valgfritt managernavn). Setter
+// klubbidentiteten eksplisitt i gameStartState og starter ligaspillet.
+function bindOnboardingClub() {
+  const nameInput = document.querySelector("#onboardingClubName");
+  const managerInput = document.querySelector("#onboardingManagerName");
+  const errorEl = document.querySelector("#onboardingClubNameError");
+  const createButton = document.querySelector("#onboardingCreateClub");
+  const backButton = document.querySelector("#onboardingClubBack");
+
+  backButton?.addEventListener("click", () => {
+    if (errorEl) errorEl.hidden = true;
+    showOnboardingModeStep();
+  });
+
+  const createClub = () => {
+    const clubName = String(nameInput?.value || "").trim();
+    if (!clubName) {
+      if (errorEl) errorEl.hidden = false;
+      nameInput?.focus();
+      return;
+    }
+    if (errorEl) errorEl.hidden = true;
+    const managerName = String(managerInput?.value || "").trim();
+    state.modeChooserOpen = false;
+    state.onboarded = true;
+    saveOnboarded();
+    selectGameMode("league", managerName ? { clubName, managerName } : { clubName });
+    showOnboardingModeStep();
+    activateRecommendedLeagueTab(getTeamFit());
+    renderApp();
+  };
+
+  createButton?.addEventListener("click", createClub);
+  nameInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") createClub();
+  });
 }
 
 // Formasjonsbibliotek → spillbart valg: «Bruk denne formasjonen» i biblioteket
@@ -12801,10 +12890,16 @@ function bindGameModeControls() {
     card.addEventListener("focus", () => setStartModeAssistant(card.dataset.startMode));
     card.addEventListener("click", () => {
       const mode = card.dataset.startMode;
+      setStartModeAssistant(mode);
+      // Ligaspill uten klubb ennå: gå til steg 2 (opprett klubben) i stedet for
+      // å hoppe rett inn. Klubbidentiteten lages her – den avledes ikke av et sted.
+      if (mode === "league" && !getSavedClubName()) {
+        showOnboardingClubStep();
+        return;
+      }
       state.modeChooserOpen = false;
       state.onboarded = true;
       saveOnboarded();
-      setStartModeAssistant(mode);
       if (mode === "league") {
         selectGameMode("league", {});
         activateRecommendedLeagueTab(getTeamFit());

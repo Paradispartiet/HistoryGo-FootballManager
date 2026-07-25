@@ -218,14 +218,22 @@ requireHandler("resetMiniSeason");
 // ---- 12) Ligaspill før-sesong gate -----------------------------------------
 stage("12. Ligaspill før-sesong gate");
 check("onboarding bruker valgt stab, ikke bare tilgjengelig stab", app.includes("hiredStaff >= REQUIRED_STAFF_SIZE") && app.includes("Tilgjengelig stab teller først når du faktisk engasjerer dem"));
-check("klubbidentitet krever eksplisitt klubbanker eller aktiv league-save", app.includes("hasClubIdentity = hasPublicStart || (isLeagueSeasonActive()"));
+// Klubbidentitet kommer nå fra klubben spilleren OPPRETTER i onboardingen
+// (navn), ikke fra et History Go-stedsanker. Stedsanker er faset ut som
+// identitetskilde.
+check("klubbidentitet krever opprettet klubb (navn) eller aktiv league-save", app.includes("hasClubIdentity = Boolean(getSavedClubName()) || (isLeagueSeasonActive()"));
+check("klubben opprettes i onboardingen med eget navn", app.includes("function bindOnboardingClub") && html.includes('id="onboardingClubName"') && app.includes("selectGameMode(\"league\", managerName ? { clubName, managerName } : { clubName })"));
+check("klubbnavn avledes ikke av et History Go-sted", !/function getTemporaryClubName\([\s\S]{0,400}placeName/.test(app));
 check("sesongstart bruker eksplisitt league-save/status", app.includes("activeLeagueSaveId") && app.includes("leagueSeasonStatus") && app.includes("isLeagueSeasonActive"));
 check("onboarding har egne steg for trening og sesongstart", app.includes('id: "trening"') && app.includes('id: "sesong"'));
 check("CTA ruter til konkrete flater", app.includes("activateLeagueOnboardingTarget") && app.includes("#unlockedPlayersList") && app.includes("#availableStaffList") && app.includes("#weeklyTrainingOptions"));
 check("kampdag gates av aktiv ligasesong i next-action", readFileSync(join(root, "src/football-next-action.js"), "utf8").includes("(!ctx.leagueModeActive || ctx.leagueSeasonActive)"));
 check("league-save-modell får id og norsk status", app.includes("function getLeagueSaveModel") && app.includes("activeLeagueSaveId") && app.includes("Før sesong") && app.includes("Aktiv sesong") && app.includes("Fullført sesong"));
 check("klubbkort vises i ligamodus", html.includes('id="leagueClubCard"') && app.includes("renderLeagueClubCard(teamFit)") && app.includes("card.hidden = !isLeagueModeActive()"));
-check("klubbkort viser klubbanker", html.includes('id="leagueClubAnchor"') && app.includes("Klubbanker / hjemsted") && app.includes("model.placeName"));
+// Klubbkortet viser klubbens identitet (navn + manager) og ligastatus — ikke
+// et stedsanker, og ikke et «sesongoppdrag» (i ligaspill er tabellen fasiten).
+check("klubbkort viser klubbidentitet og tabell", html.includes('id="leagueClubManager"') && html.includes('id="leagueClubStanding"') && app.includes("model.managerName"));
+check("klubbkortet har ikke stedsanker eller sesongoppdrag", !html.includes('id="leagueClubAnchor"') && !html.includes("Sesongoppdrag") && !app.includes("Klubbanker / hjemsted"));
 check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getNextLeagueOpponent(state.leagueSeason)"));
 check("nullstilling er namespacet og rydder aldri league-save", app.includes("resetSecondarySession") && !/function resetMiniSeason\(\)[\s\S]{0,300}clearLeagueSaveState/.test(app) && !app.includes("placeUnlocks = []"));
 
