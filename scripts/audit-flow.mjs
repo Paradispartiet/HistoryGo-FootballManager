@@ -331,8 +331,8 @@ stage("13. Landslagsmodus");
       && /national: isObject\(sessions\.national\)/.test(modes)
   );
   check(
-    "ny landslagssesjon starter uten nasjon og uten tropp",
-    /if \(mode === "national"\) session\.nationalTeam = \{ nationality: null, squadPlayerIds: \[\] \};/.test(modes)
+    "ny landslagssesjon starter uten nasjon, tropp og mesterskap",
+    /if \(mode === "national"\) \{[\s\S]{0,400}session\.nationalTeam = \{ nationality: null, squadPlayerIds: \[\] \};[\s\S]{0,200}session\.tournament = null;[\s\S]{0,200}session\.tournamentHistory = \[\];/.test(modes)
   );
 }
 check(
@@ -396,6 +396,84 @@ check(
 check(
   "nytt nasjonsvalg nullstiller troppen (spillerpoolen endres)",
   /function selectNationalTeamNation\([\s\S]{0,400}state\.nationalTeam = \{ nationality: nation, squadPlayerIds: \[\] \}/.test(app)
+);
+
+// ---- 14) Mesterskap (EM/VM) -------------------------------------------------
+// Landslaget hadde spillere, men ingenting å spille om. Mesterskapet er det som
+// gjør landslagsmodus til et spill: gruppespill, utslagsrunder og en vei som kan
+// ta slutt. Motoren er ren; app.js kobler den til kampdagen.
+stage("14. Mesterskap (EM/VM)");
+check(
+  "mesterskapsdata finnes og lastes fra data (ingen nasjoner hardkodet i JS)",
+  existsSync(join(root, "data/football_tournaments.json"))
+    && app.includes('tournaments: "data/football_tournaments.json"')
+    && app.includes("state.tournamentDefinitions")
+    && app.includes("state.tournamentNations")
+);
+check(
+  "turneringsmotoren er ren ESM uten DOM/lagring/tilfeldighet",
+  (() => {
+    // Kommentarene i motoren OMTALER det den ikke gjør («ingen localStorage»),
+    // så vi må måle koden – ikke prosaen – for å unngå en falsk alarm.
+    const engine = readFileSync(join(root, "src/football-tournament.js"), "utf8")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/(^|[^:])\/\/.*$/gm, "$1");
+    return !/document\.|localStorage|sessionStorage|window\.|fetch\(|Math\.random|Date\.now/.test(engine);
+  })()
+);
+check(
+  "app.js bruker motoren, og duplikerer den ikke",
+  app.includes("from \"./football-tournament.js\"")
+    && app.includes("createTournament(") && app.includes("applyTournamentMatchResult(")
+);
+check(
+  "mesterskapet gir kampdagen motstanderen i landslagsmodus",
+  /if \(isNationalModeActive\(\)\) \{\s*\n\s*return getTournamentMatchdayOpponent\(\);/.test(app)
+    && app.includes("function getTournamentMatchdayOpponent")
+);
+check(
+  "kampresultatet registreres i mesterskapet",
+  /function registerMatchInMiniSeason\(lastMatch\) \{\s*\n\s*if \(isNationalModeActive\(\)\) \{\s*\n\s*registerMatchInTournament\(lastMatch\);/.test(app)
+);
+check(
+  "motstanderen arver en historisk stil-arketype (ikke en generisk bot)",
+  /getHistoricalOpponentProfile\(next\.styleProfileId\)/.test(app)
+);
+check(
+  "mesterskapspanelet finnes og er skjult utenfor landslagsmodus",
+  html.includes('id="tournamentPanel"') && html.includes('id="tournamentChoices"')
+    && html.includes('id="tournamentGroupTable"') && html.includes('id="tournamentBracket"')
+    && /panel\.hidden = !isNationalModeActive\(\) \|\| !nationality/.test(app)
+);
+check(
+  "påmelding, gruppetabell, bracket og merittliste rendres",
+  app.includes("function renderTournamentPanel")
+    && app.includes("createTournamentGroupTable(tournament")
+    && app.includes("createTournamentBracket(tournament")
+    && html.includes('id="tournamentHistoryList"')
+);
+// Blindveivakt: nasjonsbytte må ikke etterlate et mesterskap med feil nasjon.
+check(
+  "nytt nasjonsvalg avslutter et mesterskap som tilhørte forrige nasjon",
+  /if \(previous !== nation\) state\.tournament = null;/.test(app)
+);
+// Blindveivakt: manglende mesterskapsdata skal ikke låse landslagsmodus.
+check(
+  "manglende mesterskapsdata gir enkeltkamper, ikke en låst modus",
+  /loadJson\(DATA_PATHS\.tournaments\)\.catch\(\(\) => null\)/.test(app)
+    && app.includes("Landslagsmodus spilles som enkeltkamper")
+);
+check(
+  "du kan trekke laget og melde på igjen",
+  html.includes('id="tournamentAbandon"') && app.includes("function abandonTournament")
+);
+check(
+  "neste handling foreslår påmelding når laget er satt",
+  readFileSync(join(root, "src/football-next-action.js"), "utf8").includes("national-enter-tournament")
+);
+check(
+  "mesterskapet er dokumentert",
+  existsSync(join(root, "docs/mesterskap.md"))
 );
 
 // ---- Rapport ----------------------------------------------------------------

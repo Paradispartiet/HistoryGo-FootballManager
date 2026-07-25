@@ -41,6 +41,18 @@ import {
   startNextLeagueSeason
 } from "./football-league-season.js";
 import {
+  TOURNAMENT_STAGE_LABELS,
+  createTournament,
+  normalizeTournamentState,
+  getEligibleTournaments,
+  getTournamentNextOpponent,
+  applyTournamentMatchResult,
+  createTournamentGroupTable,
+  createTournamentBracket,
+  getTournamentTeam,
+  summarizeTournament
+} from "./football-tournament.js";
+import {
   computeMatchdayConsequences,
   evaluateClubWeekMatchdayGate
 } from "./football-match-consequences.js";
@@ -158,6 +170,9 @@ const DATA_PATHS = {
   clubInboxReplyManifest: "data/club_inbox_replies/manifest.json",
   // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
   unlocks: "data/football_unlocks.json",
+  // Mesterskap (EM/VM) for landslagsmodus: turneringsstruktur + nasjoner med
+  // historisk stil-arketype. Ingen nasjoner eller mesterskap hardkodes i JS.
+  tournaments: "data/football_tournaments.json",
   placeLocations: "data/football_place_locations.json",
   staff: "data/football_staff.json",
   expertise: "data/football_expertise.json",
@@ -368,6 +383,11 @@ const state = {
   modeChooserOpen: false,
   // Landslagsmodus: valgt nasjon + uttatt landslagstropp (isolert per modus).
   nationalTeam: { nationality: null, squadPlayerIds: [] },
+  // Aktivt mesterskap (EM/VM) i landslagsmodus, eller null før du melder på.
+  tournament: null,
+  // Ferdigspilte mesterskap: nasjon, mesterskap og plassering. Landslagets
+  // merittliste, adskilt fra klubbens.
+  tournamentHistory: [],
   // Onboarding v2: har spilleren valgt modus på egen startskjerm minst én gang?
   onboarded: false,
   firstTimePlaythrough: { started: false, completed: false, currentStep: "start" },
@@ -4108,15 +4128,175 @@ function getAvailableNations() {
     .sort((a, b) => b.count - a.count || a.nationality.localeCompare(b.nationality, "no"));
 }
 
-// Velg nasjon å lede. Nullstiller troppen, siden spillerpoolen endres.
+// Velg nasjon å lede. Nullstiller troppen, siden spillerpoolen endres — og et
+// pågående mesterskap, siden det tilhørte den forrige nasjonen.
 function selectNationalTeamNation(nationality) {
   const nation = typeof nationality === "string" ? nationality.trim() : "";
   if (!nation) return;
+  const previous = getNationalTeamNationality();
   state.nationalTeam = { nationality: nation, squadPlayerIds: [] };
+  if (previous !== nation) state.tournament = null;
   invalidateAvailability();
   sanitizeLineupForUnlockedPlayers();
   fillEmptyLineupSlots(true);
   renderApp();
+}
+
+// ---------------------------------------------------------------------------
+// Mesterskap (EM/VM). Motoren bor i football-tournament.js; her bor bare
+// koblingen til app-state, lagring og UI. Ingen nasjoner, mesterskap eller
+// motstandere hardkodes — alt leses fra data/football_tournaments.json.
+// ---------------------------------------------------------------------------
+function getActiveTournament() {
+  return normalizeTournamentState(state.tournament);
+}
+
+function isTournamentActive() {
+  const tournament = getActiveTournament();
+  return Boolean(tournament && tournament.status === "active");
+}
+
+// Hvilke mesterskap kan nasjonen din melde seg på? Tom liste betyr at
+// mesterskapsdataen mangler — da spilles landslagsmodus som enkeltkamper.
+function getAvailableTournaments() {
+  const nationality = getNationalTeamNationality();
+  if (!nationality) return [];
+  return getEligibleTournaments(
+    state.tournamentDefinitions || [],
+    state.tournamentNations || [],
+    nationality
+  );
+}
+
+// Seed: nasjon + mesterskap + antall tidligere mesterskap. Deterministisk, men
+// et nytt mesterskap gir en ny trekning.
+function buildTournamentSeed(tournamentId, nationality) {
+  const previous = (state.tournamentHistory || []).length;
+  return `${tournamentId}-${slugifyNationSeed(nationality)}-${previous + 1}`;
+}
+
+function slugifyNationSeed(nationality) {
+  return String(nationality || "nasjon")
+    .toLowerCase()
+    .replace(/æ/g, "ae").replace(/ø/g, "o").replace(/å/g, "a")
+    .replace(/[^a-z0-9]+/g, "-");
+}
+
+function startTournament(tournamentId) {
+  const nationality = getNationalTeamNationality();
+  if (!nationality) return;
+  const definition = getAvailableTournaments().find((entry) => entry.id === tournamentId);
+  if (!definition) return;
+  const source = (state.tournamentDefinitions || []).find((entry) => entry.id === tournamentId) || definition;
+  try {
+    state.tournament = createTournament({
+      definition: source,
+      nations: state.tournamentNations || [],
+      managerNationality: nationality,
+      seed: buildTournamentSeed(tournamentId, nationality)
+    });
+  } catch (error) {
+    console.warn(`Kunne ikke starte mesterskap: ${error.message}`);
+    state.tournament = null;
+    return;
+  }
+  const opponent = getTournamentNextOpponent(state.tournament);
+  addClubWeekEvent({
+    id: `tournament-start-${state.tournament.seed}`,
+    week: state.clubWeekState?.week || 1,
+    phase: "matchday",
+    phaseLabel: state.tournament.name,
+    message: opponent
+      ? `${state.tournament.fullName} er i gang. Første kamp: ${opponent.nationality}.`
+      : `${state.tournament.fullName} er i gang.`
+  });
+  persistTournament();
+  renderApp();
+}
+
+function abandonTournament() {
+  state.tournament = null;
+  persistTournament();
+  renderApp();
+}
+
+function persistTournament() {
+  // Mesterskapet bor i modus-sesjonen (landslagsmodus), ikke i en egen
+  // legacy-nøkkel: det skal aldri kunne lekke inn i klubblagringen.
+  if (!state.modeEnvelope) return;
+  state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+  try {
+    state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+  } catch (_) { /* memory-only fallback */ }
+}
+
+// Neste motstander i mesterskapet som en full motstanderprofil kampdagen kan
+// bruke. Nasjonen er identiteten; stilen er den historiske arketypen den spiller
+// med — samme kontrakt som de øvrige motstanderne.
+function getTournamentMatchdayOpponent() {
+  const tournament = getActiveTournament();
+  if (!tournament) return null;
+  const next = getTournamentNextOpponent(tournament);
+  if (!next) return null;
+  const profile =
+    getHistoricalOpponentProfile(next.styleProfileId) ||
+    OPPONENT_PROFILES.find((candidate) => candidate.id === next.styleProfileId) ||
+    OPPONENT_PROFILES[0];
+  if (!profile) return null;
+  return {
+    ...profile,
+    id: `tournament-${next.id}`,
+    // Navnet er nasjonen, ikke «nasjon — steg»: displayName brukes inne i
+    // kampbriefens setninger, og et steg midt i en setning ble uleselig
+    // («Italia — Gruppespill · Gruppe A truet i overgang»).
+    name: next.nationality,
+    displayName: next.nationality,
+    strength: next.strength,
+    homeAway: next.homeAway,
+    // Utslagskamp er alltid en «må vinne»-ramme; gruppespill tåler et poeng.
+    boardExpectation: next.knockout ? "win" : "avoid_loss",
+    narrativeHook: next.narrativeHook,
+    tournamentStage: next.stage,
+    tournamentStageLabel: next.stageLabel
+  };
+}
+
+// Registrer et fullført kampresultat i mesterskapet. Idempotent via motoren:
+// er kampen allerede registrert, returnerer den samme state.
+function registerMatchInTournament(lastMatch) {
+  if (!isNationalModeActive() || !isTournamentActive() || !lastMatch) return;
+  const before = state.tournament;
+  const updated = applyTournamentMatchResult(before, lastMatch);
+  if (updated === before) return;
+  state.tournament = updated;
+
+  const summary = summarizeTournament(updated);
+  if (updated.status === "completed") {
+    state.tournamentHistory = [
+      ...(Array.isArray(state.tournamentHistory) ? state.tournamentHistory : []),
+      {
+        tournamentId: updated.tournamentId,
+        name: updated.name,
+        nationality: updated.managerNationality,
+        placement: updated.outcome?.placement || "Ferdig",
+        champion: updated.outcome?.champion || null,
+        played: summary.played,
+        won: summary.won,
+        drawn: summary.drawn,
+        lost: summary.lost
+      }
+    ];
+  }
+  (updated.log || []).slice(-1).forEach((message, index) => {
+    addClubWeekEvent({
+      id: `tournament-${updated.seed}-${updated.stage}-${index}`,
+      week: state.clubWeekState?.week || 1,
+      phase: "matchday",
+      phaseLabel: updated.name,
+      message
+    });
+  });
+  persistTournament();
 }
 
 function isNationalModeActive() {
@@ -4495,6 +4675,138 @@ function renderNationalTeamPanel() {
   }
 }
 
+// Mesterskapspanelet: enten påmelding (EM/VM), eller den aktive turneringen med
+// gruppetabell, bracket og neste motstander. Merittlista står under.
+function renderTournamentPanel() {
+  const panel = document.querySelector("#tournamentPanel");
+  if (!panel) return;
+  const nationality = getNationalTeamNationality();
+  panel.hidden = !isNationalModeActive() || !nationality;
+  if (panel.hidden) return;
+
+  const set = (id, text) => { const el = document.querySelector(id); if (el) el.textContent = text; };
+  const tournament = getActiveTournament();
+  const choicesEl = document.querySelector("#tournamentChoices");
+  const activeEl = document.querySelector("#tournamentActive");
+  const historyEl = document.querySelector("#tournamentHistory");
+
+  const history = Array.isArray(state.tournamentHistory) ? state.tournamentHistory : [];
+  if (historyEl) {
+    historyEl.hidden = history.length === 0;
+    const list = document.querySelector("#tournamentHistoryList");
+    if (list) {
+      list.replaceChildren();
+      history.slice().reverse().forEach((entry) => {
+        const item = document.createElement("li");
+        const name = document.createElement("strong");
+        name.textContent = `${entry.name} · ${entry.nationality}`;
+        const placement = document.createElement("span");
+        placement.textContent = `${entry.placement} · ${entry.won}-${entry.drawn}-${entry.lost}`;
+        item.append(name, placement);
+        list.append(item);
+      });
+    }
+  }
+
+  // Ingen aktiv turnering: vis påmelding.
+  if (!tournament || tournament.status !== "active") {
+    if (activeEl) activeEl.hidden = true;
+    set("#tournamentTitle", "Meld på til mesterskap");
+    set("#tournamentStatus", "Ikke påmeldt");
+    const available = getAvailableTournaments();
+    set("#tournamentLead", available.length
+      ? `${nationality} kan melde seg på. Gruppespill først, så utslagsrunder – ett tap for mye og du er ute.`
+      : "Mesterskapsdata mangler. Landslagsmodus spilles som enkeltkamper inntil videre.");
+    if (choicesEl) {
+      choicesEl.hidden = false;
+      choicesEl.replaceChildren();
+      available.forEach((definition) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "tournament-choice";
+        const title = document.createElement("strong");
+        title.textContent = definition.fullName;
+        const meta = document.createElement("small");
+        meta.textContent = `${definition.teamCount} nasjoner · ${definition.groupCount} grupper · ${definition.managerMatches} kamper`;
+        const frame = document.createElement("span");
+        frame.className = "tournament-choice-frame";
+        frame.textContent = definition.learningFrame || definition.summary;
+        button.append(title, meta, frame);
+        button.addEventListener("click", () => startTournament(definition.id));
+        choicesEl.append(button);
+      });
+    }
+    return;
+  }
+
+  // Aktiv turnering.
+  if (choicesEl) choicesEl.hidden = true;
+  if (activeEl) activeEl.hidden = false;
+  const summary = summarizeTournament(tournament);
+  set("#tournamentTitle", `${tournament.fullName} · ${nationality}`);
+  set("#tournamentStatus", summary.stageLabel);
+  set("#tournamentLead", tournament.learningFrame || tournament.summary);
+  set("#tournamentStage", summary.groupName && tournament.stage === "group"
+    ? `${summary.stageLabel} · ${summary.groupName}`
+    : summary.stageLabel);
+  set("#tournamentNextOpponent", summary.nextOpponent
+    ? `${summary.nextOpponent.nationality} (${summary.nextOpponent.homeAway === "home" ? "hjemme" : "borte"})`
+    : "–");
+  set("#tournamentRecord", `${summary.played} kamper · ${summary.won}-${summary.drawn}-${summary.lost}`);
+  set("#tournamentGoals", `${summary.goalsFor}–${summary.goalsAgainst}`);
+  const hookEl = document.querySelector("#tournamentNextHook");
+  if (hookEl) {
+    const next = getTournamentNextOpponent(tournament);
+    hookEl.textContent = next ? next.narrativeHook : "";
+  }
+
+  const managerTeam = getTournamentTeam(tournament, tournament.managerTeamId);
+  set("#tournamentGroupTitle", summary.groupName || "Gruppe");
+  const tableBody = document.querySelector("#tournamentGroupTable");
+  if (tableBody) {
+    tableBody.replaceChildren();
+    createTournamentGroupTable(tournament, managerTeam?.groupId).forEach((row) => {
+      const tr = document.createElement("tr");
+      if (row.isManager) tr.className = "is-manager";
+      [
+        String(row.position),
+        row.nationality,
+        String(row.played),
+        row.goalDifference > 0 ? `+${row.goalDifference}` : String(row.goalDifference),
+        String(row.points)
+      ].forEach((value) => {
+        const td = document.createElement("td");
+        td.textContent = value;
+        tr.append(td);
+      });
+      tableBody.append(tr);
+    });
+  }
+
+  const bracketEl = document.querySelector("#tournamentBracket");
+  if (bracketEl) {
+    bracketEl.replaceChildren();
+    const bracket = createTournamentBracket(tournament).filter((stage) => stage.matches.length > 0);
+    bracket.forEach((stage) => {
+      const block = document.createElement("div");
+      block.className = "tournament-bracket-stage";
+      const heading = document.createElement("h4");
+      heading.textContent = stage.label;
+      block.append(heading);
+      stage.matches.forEach((match) => {
+        const line = document.createElement("p");
+        line.className = `tournament-bracket-match${match.involvesManager ? " is-manager" : ""}`;
+        const score = match.score
+          ? `${match.score}${match.penalties ? ` (str. ${match.penalties})` : ""}`
+          : "ikke spilt";
+        line.textContent = `${match.home} – ${match.away} · ${score}`;
+        block.append(line);
+      });
+      bracketEl.append(block);
+    });
+  }
+}
+
 function renderGameModeStatus(teamFit) {
   const selectedMode = state.modeEnvelope?.activeMode || null;
   const status = elements.gameModeStatusCard;
@@ -4513,6 +4825,14 @@ function renderGameModeStatus(teamFit) {
     if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = state.gameStartState?.activeScenarioId
       ? "Ajax 1971–73 er aktivt. Neste handling gjelder bare den separate femkampers scenarioøkten."
       : "Velg scenario. Ingen ligadata brukes eller endres her.";
+  } else if (selectedMode === "national") {
+    const tournament = getActiveTournament();
+    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Landslagssjef";
+    if (elements.gameModeStatusText) {
+      elements.gameModeStatusText.textContent = tournament?.status === "active"
+        ? `${tournament.fullName} pågår: ${TOURNAMENT_STAGE_LABELS[tournament.stage] || tournament.stage}. Klubblaget ditt er urørt.`
+        : "Velg nasjon, ta ut troppen og meld på til EM eller VM. Klubblaget ditt er urørt.";
+    }
   } else if (selectedMode === "training") {
     if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Treningsrom";
     if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Risikofri sandkasse: oppsett og trening lagres bare i treningsrommet.";
@@ -4605,6 +4925,7 @@ function renderModeIsolation() {
 function renderFirstTimePlaythrough(teamFit) {
   renderLeagueClubCard(teamFit);
   renderNationalTeamPanel();
+  renderTournamentPanel();
   renderGameModeStatus(teamFit);
   const card = elements.firstTimePlaythroughCard;
   if (!card || card.hidden) return;
@@ -4801,6 +5122,10 @@ function startNewLeagueSeason() {
 // Neste planlagte motstander som full motstanderprofil, eller null når ingen
 // mini-sesong er aktiv (da beholder kampdagen dagens tilfeldige motstander).
 function getMiniSeasonNextOpponent() {
+  // Landslagsmodus med aktivt mesterskap: terminlisten er turneringens.
+  if (isNationalModeActive()) {
+    return getTournamentMatchdayOpponent();
+  }
   if (isLeagueModeActive()) {
     const opponent = getNextLeagueOpponent(state.leagueSeason);
     if (!opponent) return null;
@@ -4830,6 +5155,10 @@ function getMiniSeasonNextOpponent() {
 // registreringen idempotent (reload/dobbeltkall gir aldri dobbel registrering).
 // Selve uke-rullen skjer når Club Week går fra oppsummering til ny uke.
 function registerMatchInMiniSeason(lastMatch) {
+  if (isNationalModeActive()) {
+    registerMatchInTournament(lastMatch);
+    return;
+  }
   if (isLeagueModeActive() && state.leagueSeason?.status === "active" && lastMatch) {
     const previousRound = state.leagueSeason.currentRound;
     const updated = completeLeagueRound(state.leagueSeason, lastMatch);
@@ -7203,6 +7532,8 @@ function buildNextActionContext(teamFit) {
     scenarioModeActive: isScenarioModeActive(),
     nationalModeActive: isNationalModeActive(),
     nationalNationChosen: Boolean(getNationalTeamNationality()),
+    nationalTournamentActive: isNationalModeActive() && isTournamentActive(),
+    nationalTournamentAvailable: isNationalModeActive() && getAvailableTournaments().length > 0,
     firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
     clubWeek: clubWeekState
       ? {
@@ -13011,6 +13342,12 @@ function bindGameModeControls() {
     activateTab("trening");
     renderApp();
   });
+  // Trekk laget fra mesterskapet. Merittlista beholdes; bare den pågående
+  // turneringen avsluttes, slik at du kan melde på igjen.
+  document.querySelector("#tournamentAbandon")?.addEventListener("click", () => {
+    if (!isNationalModeActive()) return;
+    abandonTournament();
+  });
 }
 
 // Avanser klubbukens fase med konsekvenser, logg og feedback. Delt mellom
@@ -13208,7 +13545,8 @@ async function loadStartupData() {
     hgUnlockRulesData,
     hgStaffRolesData,
     legacyFormationsData,
-    hgFormationKnowledgeData
+    hgFormationKnowledgeData,
+    tournamentsData
   ] = await Promise.all([
     loadJson(DATA_PATHS.players),
     // Spillerarketyper er valgfrie for kjøring: hvis filen mangler, fortsetter
@@ -13250,10 +13588,15 @@ async function loadStartupData() {
     // Gammel formasjonskatalog beholdes som trygg fallback.
     loadJson(DATA_PATHS.legacyFormations).catch(() => null),
     // Formasjonskunnskap er valgfri: mangler den, kjøres kampdag uten matchup.
-    loadJson(DATA_PATHS.hgFormationKnowledge).catch(() => null)
+    loadJson(DATA_PATHS.hgFormationKnowledge).catch(() => null),
+    // Mesterskapsdata er valgfri: mangler den, spilles landslagsmodus som
+    // enkeltkamper i stedet for EM/VM. Ingen blindvei.
+    loadJson(DATA_PATHS.tournaments).catch(() => null)
   ]);
 
   state.players = playersData.players || [];
+  state.tournamentDefinitions = Array.isArray(tournamentsData?.tournaments) ? tournamentsData.tournaments : [];
+  state.tournamentNations = Array.isArray(tournamentsData?.nations) ? tournamentsData.nations : [];
   state.playerArchetypes = playerArchetypesData?.archetypes || [];
   state.roles = rolesData.roles;
   state.tactics = tacticsData.tactics;

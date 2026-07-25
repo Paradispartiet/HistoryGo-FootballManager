@@ -53,6 +53,7 @@ jobs:
           npm run audit:hg-coach-context
           npm run audit:hg-formation-knowledge
           npm run audit:historical-opponents
+          npm run audit:tournaments
 
       - name: UI-/flyt-vakter
         run: |
@@ -64,6 +65,7 @@ jobs:
         run: |
           npm run sim:matchday
           npm run sim:mini-season
+          npm run sim:tournament
           npm run sim:training-week
           npm run sim:formation-matchup
           npm run sim:suggested-setups

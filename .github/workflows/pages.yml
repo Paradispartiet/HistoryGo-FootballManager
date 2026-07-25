@@ -50,6 +50,9 @@ jobs:
       - name: Audit Historical Opponent Archetypes
         run: npm run audit:historical-opponents
 
+      - name: Mesterskapsdata (EM/VM)
+        run: npm run audit:tournaments
+
       - name: Build TypeScript engine
         run: npm run build
 

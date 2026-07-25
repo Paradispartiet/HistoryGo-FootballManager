@@ -17,7 +17,7 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
   "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason",
-  "nationalTeam"
+  "nationalTeam", "tournament", "tournamentHistory"
 ]);
 
 // Set-felt: disse er `Set` i app-staten, men `JSON.stringify(new Set())` gir
@@ -100,8 +100,13 @@ export function createSecondarySession(league, mode) {
   };
   session.clubWeekState = { week: 1, phase: mode === "scenario" ? "analysis" : "training" };
   session.clubWeekFeedback = feedbackByMode[mode] || feedbackByMode.training;
-  // Landslagsmodus har sin egen nasjon og tropp, isolert fra klubblaget.
-  if (mode === "national") session.nationalTeam = { nationality: null, squadPlayerIds: [] };
+  // Landslagsmodus har sin egen nasjon, tropp og mesterskap, isolert fra
+  // klubblaget. Merittlisten starter tom.
+  if (mode === "national") {
+    session.nationalTeam = { nationality: null, squadPlayerIds: [] };
+    session.tournament = null;
+    session.tournamentHistory = [];
+  }
   session.clubWeekEventLog = [];
   session.weeklyTrainingFocus = null;
   session.weeklyTrainingProgram = null;
