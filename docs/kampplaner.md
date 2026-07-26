@@ -58,20 +58,34 @@ Byttene bærer **samme effektform som managergrepene**
 tacticalClarityDelta }`), så `finalizeMatchdaySession` summerer dem i samme
 regnestykke. Et bytte er en beslutning, ikke en knapp ved siden av spillet.
 
-## Kampbildet
+## Kampbildet og den løpende stillingen
 
-Kampmodellen har ingen løpende resultattavle — målene rulles fra xG ved
-kampslutt. «Kampbildet» leses derfor av **kampens gang**: momentum fra grepene
-så langt.
+Kampen spilles **periode for periode**. Med tre hendelser gir det fire perioder:
+avspark → hendelse 1, mellom hendelsene, og fra siste hendelse til full tid.
+Hver periode avgjør sine egne mål fra xG-raten *slik den er akkurat da* — så et
+grep eller planbytte tidlig i kampen virker gjennom flere perioder enn et sent.
 
-| Momentum | Bilde |
+Stillingen bygges underveis og vises i kampen med minutt og målliste
+(`18' 0–0 · 39' 1–1 · 62' 2–2`). **Sluttresultatet ER stillingen du så** — å
+rulle et nytt resultat ved kampslutt ville gjort den løpende stillingen til en
+løgn.
+
+Kampbildet leser stillingen når den finnes:
+
+| Situasjon | Bilde |
 |---|---|
-| ≥ +2 | Du styrer bildet |
-| −2 … +2 | Jevnt |
-| ≤ −2 | Du er under |
+| Du leder på mål | Du leder |
+| Du ligger under på mål | Du ligger under |
+| Likt, momentum ≥ +2 | Jevnt – du har taket |
+| Likt, momentum ≤ −2 | Jevnt – de har taket |
+| Likt ellers | Jevnt |
 
-Det er ærligere enn å finne på en resultattavle, og det er den lesningen en
-manager faktisk gjør: har vi tak i kampen eller ikke?
+Etiketten skal aldri motsi tavla den står ved siden av: «Du leder» ved 1–1 var
+en direkte løgn, og er nå «Jevnt – du har taket».
+
+En kamp som avsluttes uten at klokka har gått (eldre lagring, motoren brukt
+direkte) faller tilbake til det gamle sluttkastet, så ingenting mister et
+resultat.
 
 ## Mot motstanderen
 
@@ -139,6 +153,6 @@ vil ha støtte nær seg, en løper vil ha rom bak.
 
 | Skript | Dekker |
 |---|---|
-| `npm run sim:match-plan` | 28 sjekker: familier, avstand, omstillingskostnad, kampbilde, matchup fra avspark, motstanderens justeringer, redningsbelønning, effekt på resultatet |
+| `npm run sim:match-plan` | 38 sjekker: kampklokke og løpende stilling, familier, avstand, omstillingskostnad, kampbilde, matchup fra avspark, motstanderens justeringer, redningsbelønning, effekt på resultatet |
 | `npm run audit:tactics` | dataskjema, at hver plan forklarer seg, at ingen plan passer alt, at taggene treffer spillerdataen |
 | `npm run audit:flow` (steg 16) | motoren er ren, byttet er wiret i kampflyten og summeres i resultatet |

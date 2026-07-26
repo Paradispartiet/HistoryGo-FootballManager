@@ -26,6 +26,7 @@ import {
   readGameState
 } from "../src/football-match-plan.js";
 import {
+  advanceMatchClock,
   applyMatchPlanChange,
   applyOpponentAdaptation,
   createMatchdaySession,
@@ -200,9 +201,16 @@ check("planlista sorteres etter hva som passer situasjonen", () => {
 // Hele veien gjennom en kamp.
 function buildSession(planId) {
   return createMatchdaySession({
+    // Merk nøklene: motoren leser `*Score` (balanceScore, widthScore, ...).
+    // Med `balance`/`width` ble hele metrikkbildet 0 og xG klemt i bunn.
     teamFit: {
       teamScore: 72,
-      metrics: { balance: 70, width: 68, depth: 66, buildUp: 71, press: 69, restDefense: 67 },
+      completeCount: 11,
+      totalSlots: 11,
+      metrics: {
+        balanceScore: 70, widthScore: 68, depthScore: 66,
+        buildUpScore: 71, pressScore: 69, restDefenseScore: 67
+      },
       assignments: []
     },
     formation: { id: "modern_433", name: "Modern 4-3-3", slots: [] },
@@ -431,6 +439,157 @@ check("motstanderens justeringer havner i sluttrapporten", () => {
   const report = finalizeMatchdaySession(session);
   assert.equal(report.opponentAdjustments.length, 1);
   assert.ok(report.opponentAdjustments[0].label.length > 3);
+});
+
+
+// ---------------------------------------------------------------------------
+// Kampklokka: ekte løpende stilling gjennom kampen.
+// ---------------------------------------------------------------------------
+function playFullMatch(planId, { opponent } = {}) {
+  let session = buildSession(planId);
+  if (opponent) session = { ...session, opponent };
+  const total = session.events.length + 1;
+  session = advanceMatchClock(session);           // avspark -> hendelse 1
+  for (let i = 0; i < session.events.length; i += 1) {
+    session = { ...session, phase: `event_${i + 1}` };
+    session = advanceMatchClock(session);
+  }
+  return { session, total };
+}
+
+check("kampen spilles periode for periode, med stilling underveis", () => {
+  const before = buildSession("central_possession_4231");
+  assert.deepEqual(before.score, { for: 0, against: 0 }, "0-0 før avspark");
+  assert.deepEqual(before.timeline, []);
+
+  const first = advanceMatchClock(before);
+  assert.notEqual(first, before, "avspark må spille første periode");
+  assert.equal(first.timeline.length, 1);
+  assert.ok(first.timeline[0].minute > 0 && first.timeline[0].minute < 90);
+  assert.ok(first.timeline[0].note.length > 5, "perioden må forklare seg");
+  assert.deepEqual(first.score, {
+    for: first.timeline[0].goalsFor,
+    against: first.timeline[0].goalsAgainst
+  });
+  // Motoren muterer ikke sesjonen den fikk.
+  assert.deepEqual(before.timeline, []);
+});
+
+check("klokka stopper ved full tid", () => {
+  const { session, total } = playFullMatch("central_possession_4231");
+  assert.equal(session.timeline.length, total, `forventet ${total} perioder`);
+  assert.equal(advanceMatchClock(session), session, "ingen perioder igjen");
+});
+
+check("stillingen er summen av periodene", () => {
+  const { session } = playFullMatch("high_press_343");
+  const sumFor = session.timeline.reduce((n, e) => n + e.goalsFor, 0);
+  const sumAgainst = session.timeline.reduce((n, e) => n + e.goalsAgainst, 0);
+  assert.deepEqual(session.score, { for: sumFor, against: sumAgainst });
+  // Hver tidslinjepost bærer stillingen slik den var da.
+  let running = { for: 0, against: 0 };
+  session.timeline.forEach((entry) => {
+    running = { for: running.for + entry.goalsFor, against: running.against + entry.goalsAgainst };
+    assert.deepEqual(entry.scoreAfter, running, `stillingen i ${entry.minute}' stemmer ikke`);
+  });
+});
+
+check("sluttresultatet ER stillingen du så underveis", () => {
+  // Å rulle et nytt sluttresultat oppå ville gjort den løpende stillingen til
+  // en løgn: manageren så 2-1 og fikk 0-3 i rapporten.
+  const { session } = playFullMatch("central_possession_4231");
+  const report = finalizeMatchdaySession(session);
+  assert.deepEqual(report.score, session.score);
+  assert.equal(report.timeline.length, session.timeline.length);
+  const expected = report.score.for > report.score.against
+    ? "win" : report.score.for < report.score.against ? "loss" : "draw";
+  assert.equal(report.outcome, expected);
+});
+
+check("en kamp uten klokke får fortsatt et resultat (bakoverkompatibelt)", () => {
+  const report = finalizeMatchdaySession(buildSession("high_press_343"));
+  assert.ok(Number.isFinite(report.score.for) && Number.isFinite(report.score.against));
+  assert.deepEqual(report.timeline, []);
+});
+
+check("«du ligger under» betyr at du faktisk ligger under", () => {
+  const base = buildSession("central_possession_4231");
+  const behind = { ...base, timeline: [{ minute: 18 }], score: { for: 0, against: 1 } };
+  assert.equal(readGameState(behind).state, "behind");
+  assert.equal(readGameState(behind).scoreKnown, true);
+  assert.deepEqual(readGameState(behind).score, { for: 0, against: 1 });
+
+  const leading = { ...base, timeline: [{ minute: 18 }], score: { for: 2, against: 1 } };
+  assert.equal(readGameState(leading).state, "leading");
+
+  // Står det likt, er det spillet som forteller hvor kampen bærer.
+  const levelButSinking = {
+    ...base, timeline: [{ minute: 18 }], score: { for: 1, against: 1 },
+    decisions: [{ effects: { momentumDelta: -3 } }]
+  };
+  assert.equal(readGameState(levelButSinking).state, "behind");
+});
+
+check("etiketten lyver aldri mot resultattavla", () => {
+  // «Du leder 1–1» sto en gang rett ved siden av stillingen 1–1. Går spillet
+  // din vei uten at tavla viser det, må etiketten si nettopp det.
+  const t = [{ minute: 18 }];
+  const levelButOnTop = readGameState({
+    timeline: t, score: { for: 1, against: 1 }, decisions: [{ effects: { momentumDelta: 3 } }]
+  });
+  assert.equal(levelButOnTop.state, "leading");
+  assert.ok(levelButOnTop.label.startsWith("Jevnt"), `fikk «${levelButOnTop.label}» ved 1-1`);
+  assert.ok(!levelButOnTop.label.includes("Du leder"));
+
+  const actuallyLeading = readGameState({ timeline: t, score: { for: 2, against: 1 }, decisions: [] });
+  assert.equal(actuallyLeading.label, "Du leder");
+  const actuallyBehind = readGameState({ timeline: t, score: { for: 0, against: 2 }, decisions: [] });
+  assert.equal(actuallyBehind.label, "Du ligger under");
+});
+
+check("planvalget følger den ekte stillingen", () => {
+  // Ligger du under, skal «Jag utligningen» passe og «Lukk kampen» ikke.
+  const base = buildSession("central_possession_4231");
+  const behind = { ...base, timeline: [{ minute: 18 }], score: { for: 0, against: 2 } };
+  const state = readGameState(behind).state;
+  assert.equal(state, "behind");
+  assert.equal(evaluatePlanForGameState(byId.get("chase_the_equaliser"), state).fits, true);
+  assert.equal(evaluatePlanForGameState(byId.get("see_out_the_game"), state).fits, false);
+});
+
+check("motstanderen svarer på den ekte stillingen", () => {
+  const base = buildSession("high_press_343");
+  // Du leder 2-0: de må ta sjansen.
+  const leading = { ...base, timeline: [{ minute: 18 }], score: { for: 2, against: 0 } };
+  const adapted = applyOpponentAdaptation(leading);
+  assert.equal(adapted.opponentAdjustments[0].id, "push_up");
+  // Du ligger under 0-2: de sikrer det de har.
+  const behind = { ...base, timeline: [{ minute: 18 }], score: { for: 0, against: 2 } };
+  assert.equal(applyOpponentAdaptation(behind).opponentAdjustments[0].id, "sit_back");
+});
+
+check("tidlige grep teller i flere perioder enn sene", () => {
+  // Et grep som løfter xG tidlig får virke gjennom resten av kampen; det samme
+  // grepet i siste periode rekker bare å påvirke sluttminuttene.
+  const boost = { effects: { xgDeltaFor: 1.2, momentumDelta: 2 } };
+  let early = buildSession("central_possession_4231");
+  early = { ...early, decisions: [boost] };
+  const earlySegments = [];
+  for (let i = 0; i <= early.events.length; i += 1) {
+    early = advanceMatchClock(early);
+    earlySegments.push(early.timeline[early.timeline.length - 1].expectedGoals.for);
+  }
+  let late = buildSession("central_possession_4231");
+  const lateSegments = [];
+  for (let i = 0; i <= late.events.length; i += 1) {
+    if (i === late.events.length) late = { ...late, decisions: [boost] };
+    late = advanceMatchClock(late);
+    lateSegments.push(late.timeline[late.timeline.length - 1].expectedGoals.for);
+  }
+  const earlyTotal = earlySegments.reduce((a, b) => a + b, 0);
+  const lateTotal = lateSegments.reduce((a, b) => a + b, 0);
+  assert.ok(earlyTotal > lateTotal,
+    `tidlig grep (${earlyTotal.toFixed(2)}) må gi mer enn sent (${lateTotal.toFixed(2)})`);
 });
 
 console.log(`\nAlle ${checks.length} kampplansjekker besto (${plans.length} planer).`);

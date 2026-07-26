@@ -39,6 +39,9 @@ jobs:
         run: npm run audit:knowledge
 
       - name: Check DOM ids (UI-lim)
+        run: npm run check:syntax
+
+      - name: DOM-id-sjekk
         run: npm run check:dom-ids
 
       - name: Flow-audit (spilløkka henger sammen)

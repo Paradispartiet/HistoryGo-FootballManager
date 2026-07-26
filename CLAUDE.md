@@ -30,6 +30,7 @@ npm run audit:tournaments              # data/football_tournaments.json (EM/VM)
 npm run audit:tactics                  # data/football_tactics.json (kampplaner)
 
 # UI-/flyt-vakter (statisk, leser index.html + src/app.js)
+npm run check:syntax           # alle live JS-moduler parser (fanger død kode som «ser riktig ut»)
 npm run check:dom-ids          # querySelector("#id")-oppslag finnes i index.html
 npm run audit:flow             # hele spilløkka (start → mini-sesong) er wiret
 npm run audit:dead-ends        # ingen blindveier i første spillbare løkke (deaktiverte «Senere»-faner, ankre, gating)
@@ -52,7 +53,7 @@ npm run sim:club-week          # Club Week consequences loop
 Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script.
 
 **Two CI workflows** (`.github/workflows/`):
-- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `audit:tournaments`, `audit:tactics`, `build`.
+- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:syntax`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `audit:tournaments`, `audit:tactics`, `build`.
 - `ci.yml` (PRs + every non-`main` branch push) is the safety net that runs the **whole** suite — all `audit:*`, `check:*`, `build` **and** every `sim:*` script.
 
 So on a feature branch, expect the full suite to gate your PR; run the relevant scripts locally before pushing.
