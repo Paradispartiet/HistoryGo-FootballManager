@@ -27,6 +27,7 @@ import {
 } from "../src/football-match-plan.js";
 import {
   advanceMatchClock,
+  logMatchMoment,
   applyMatchPlanChange,
   applyOpponentAdaptation,
   createMatchdaySession,
@@ -590,6 +591,128 @@ check("tidlige grep teller i flere perioder enn sene", () => {
   const lateTotal = lateSegments.reduce((a, b) => a + b, 0);
   assert.ok(earlyTotal > lateTotal,
     `tidlig grep (${earlyTotal.toFixed(2)}) må gi mer enn sent (${lateTotal.toFixed(2)})`);
+});
+
+
+// ---------------------------------------------------------------------------
+// Minutt for minutt.
+// ---------------------------------------------------------------------------
+check("kampen logges minutt for minutt, ikke bare i perioder", () => {
+  const { session } = playFullMatch("central_possession_4231");
+  assert.ok(Array.isArray(session.minuteLog), "sesjonen må ha en minuttlogg");
+  assert.ok(session.minuteLog.length >= session.timeline.length,
+    "minuttloggen må være finere enn periodelista");
+  session.minuteLog.forEach((entry) => {
+    assert.ok(entry.minute >= 1 && entry.minute <= 90, `minutt utenfor kampen: ${entry.minute}`);
+    assert.ok(["goal", "chance", "decision", "plan", "opponent", "manager"].includes(entry.type),
+      `ukjent type ${entry.type}`);
+    assert.ok(entry.scoreAfter && Number.isFinite(entry.scoreAfter.for));
+  });
+});
+
+check("målene faller ut av sjansene, ikke ved siden av dem", () => {
+  // Før ble målene rullet direkte fra xG og sjansene fantes ikke. Nå må hvert
+  // mål i loggen svare til en sjanse som gikk inn.
+  const { session } = playFullMatch("high_press_343");
+  const goalsFor = session.minuteLog.filter((e) => e.type === "goal" && e.side === "for").length;
+  const goalsAgainst = session.minuteLog.filter((e) => e.type === "goal" && e.side === "against").length;
+  assert.equal(goalsFor, session.score.for, "mål i loggen må stemme med stillingen");
+  assert.equal(goalsAgainst, session.score.against);
+});
+
+check("stillingen i loggen er riktig ved hvert mål", () => {
+  const { session } = playFullMatch("wide_fast_433");
+  let running = { for: 0, against: 0 };
+  [...session.minuteLog].sort((a, b) => a.minute - b.minute).forEach((entry) => {
+    if (entry.type === "goal") {
+      if (entry.side === "for") running.for += 1; else running.against += 1;
+      assert.deepEqual(entry.scoreAfter, running, `feil stilling i ${entry.minute}'`);
+    }
+  });
+  assert.deepEqual(session.score, running);
+});
+
+check("minuttene går framover gjennom kampen", () => {
+  const { session } = playFullMatch("central_possession_4231");
+  const minutes = session.minuteLog.map((e) => e.minute);
+  const sorted = [...minutes].sort((a, b) => a - b);
+  assert.deepEqual(minutes, sorted, "loggen må være kronologisk");
+  // Kampen skal dekke mer enn bare de siste minuttene.
+  if (minutes.length > 1) {
+    assert.ok(minutes[minutes.length - 1] - minutes[0] > 20,
+      `kampen dekker bare ${minutes[0]}'-${minutes[minutes.length - 1]}'`);
+  }
+});
+
+check("en sjanse som ikke går inn blir forklart", () => {
+  const { session } = playFullMatch("wide_fast_433");
+  session.minuteLog.filter((e) => e.type === "chance").forEach((entry) => {
+    assert.ok(entry.detail && entry.detail.length > 3, `sjanse uten forklaring i ${entry.minute}'`);
+    assert.notEqual(entry.detail, "MÅL");
+  });
+});
+
+check("managergrep og motstanderens svar står i samme spor", () => {
+  let session = buildSession("central_possession_4231");
+  session = advanceMatchClock(session);
+  session = logMatchMoment(session, { type: "decision", side: "for", detail: "Ditt grep: Press høyere" });
+  const withMove = session.minuteLog.filter((e) => e.type === "decision");
+  assert.equal(withMove.length, 1);
+  assert.ok(withMove[0].detail.includes("Press høyere"));
+  assert.ok(withMove[0].minute >= 1 && withMove[0].minute <= 90);
+
+  // Motstanderens justering logges automatisk.
+  const leading = { ...session, decisions: [{ effects: { momentumDelta: 3 } }] };
+  const adapted = applyOpponentAdaptation(leading);
+  const oppEntries = adapted.minuteLog.filter((e) => e.type === "opponent");
+  assert.equal(oppEntries.length, 1);
+  assert.ok(oppEntries[0].detail.length > 3);
+});
+
+check("flere hendelser rundt samme pause klumper seg ikke på ett minutt", () => {
+  // Grep, planbytte og motstanderens svar skjer i samme pause. Uten forskyvning
+  // sto alle tre på 45' og rekkefølgen ble uleselig.
+  let session = buildSession("central_possession_4231");
+  session = advanceMatchClock(session);
+  session = { ...session, decisions: [{ effects: { momentumDelta: 3 } }] };
+  session = applyOpponentAdaptation(session);
+  session = applyMatchPlanChange(session, byId.get("all_out_attack"));
+  session = logMatchMoment(session, { type: "decision", side: "for", detail: "Ditt grep: Press høyere" });
+
+  const moments = session.minuteLog.filter((e) => ["decision", "plan", "opponent"].includes(e.type));
+  assert.equal(moments.length, 3);
+  const minutes = moments.map((e) => e.minute);
+  assert.equal(new Set(minutes).size, minutes.length, `klumpet: ${minutes.join(", ")}`);
+  assert.deepEqual(minutes, [...minutes].sort((a, b) => a - b), "rekkefølgen må være kronologisk");
+  minutes.forEach((m) => assert.ok(m >= 1 && m <= 90));
+});
+
+check("en bom blir forklart på flere måter", () => {
+  // Én variant om og om igjen leser som en bug. Over mange kamper må
+  // forklaringene variere.
+  const seen = new Set();
+  for (let i = 0; i < 30; i += 1) {
+    const { session } = playFullMatch("wide_fast_433");
+    session.minuteLog.filter((e) => e.type === "chance").forEach((e) => seen.add(e.detail));
+  }
+  assert.ok(seen.size >= 3, `bare ${seen.size} ulike forklaringer: ${[...seen].join(", ")}`);
+});
+
+check("planbytte står i minuttloggen", () => {
+  let session = buildSession("central_possession_4231");
+  session = advanceMatchClock(session);
+  session = applyMatchPlanChange(session, byId.get("all_out_attack"));
+  const planEntries = session.minuteLog.filter((e) => e.type === "plan");
+  assert.equal(planEntries.length, 1);
+  assert.ok(planEntries[0].detail.includes("Alt frem"));
+});
+
+check("minuttloggen følger med i sluttrapporten", () => {
+  const { session } = playFullMatch("high_press_343");
+  const report = finalizeMatchdaySession(session);
+  assert.equal(report.minuteLog.length, session.minuteLog.length);
+  const reportGoals = report.minuteLog.filter((e) => e.type === "goal").length;
+  assert.equal(reportGoals, report.score.for + report.score.against);
 });
 
 console.log(`\nAlle ${checks.length} kampplansjekker besto (${plans.length} planer).`);

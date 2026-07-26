@@ -586,6 +586,27 @@ stage("16. Kampplan");
     "stillingen vises i kampen",
     app.includes("function appendMatchScoreboard") && app.includes("matchday-scoreboard")
   );
+  // Minutt for minutt: fire perioder var fire tall, ikke en kamp.
+  check(
+    "kampen logges minutt for minutt",
+    matchdayEngine.includes("minuteLog: []")
+      && matchdayEngine.includes("function buildChances")
+      && matchdayEngine.includes("export function logMatchMoment")
+  );
+  check(
+    "målene faller ut av sjansene",
+    /const goalsFor = chances\.filter\(\(c\) => c\.side === "for" && c\.scored\)\.length/.test(matchdayEngine)
+  );
+  check(
+    "grep, planbytte og motstanderens svar står i samme spor",
+    app.includes('type: "decision"') && matchdayEngine.includes('type: "plan"')
+      && matchdayEngine.includes('type: "opponent"')
+  );
+  check(
+    "minuttloggen vises i kampen og i rapporten",
+    app.includes("function appendMatchMinuteLog") && app.includes("Kampen minutt for minutt")
+  );
+  check("logMatchMoment er importert i app.js", importedNames.has("logMatchMoment"));
   check(
     "kampplanene er dokumentert",
     existsSync(join(root, "docs/kampplaner.md"))
