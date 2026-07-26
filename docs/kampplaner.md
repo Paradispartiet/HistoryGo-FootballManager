@@ -75,6 +75,10 @@ manager faktisk gjør: har vi tak i kampen eller ikke?
 
 ## Mot motstanderen
 
+Planen du **velger** måles mot motstanderen fra avspark — den teller i xG
+(`planEdge`), ikke bare hvis du tilfeldigvis bytter underveis. Før var
+planvalget gratis så lenge du lot det stå.
+
 Planen vurderes mot motstanderens `styleTraits` — de samme tallene de
 historiske arketypene allerede bærer, ingen ny motstanderdata:
 
@@ -87,6 +91,40 @@ historiske arketypene allerede bærer, ingen ny motstanderdata:
 Dette er forklaring, ikke fasit. En plan som er «gunstig mot dem» kan fortsatt
 straffe deg hvis troppen ikke passer den — taggene scorer mot spillernes
 `likesTactics`/`dislikesTactics` som før.
+
+## Motstanderen svarer
+
+Motstanderen sitter ikke stille. Ser de at kampen glipper, **skyver de laget
+opp** (høyere linje, mer press); leder de bildet, **trekker de seg ned**
+(dypere blokk, kontring som plan). Justeringen skjer én gang per type, den
+vises i kampen, og den står i sluttrapporten under «Motstanderens grep».
+
+Da regnes planens matchup om mot det de faktisk gjør nå. Rolig oppbygging som
+var trygg mot en passiv motstander er ikke like trygg når de plutselig presser.
+**Det er dette som gjør at kampen må leses på nytt** i stedet for å velges
+riktig én gang.
+
+Justeringen er deterministisk og forklart — ingen skjult motstanderintelligens.
+
+## Å rette opp en kamp som glipper
+
+Et planbytte belønnes for **forbedringen**, ikke for å «passe». Motoren regner
+ut hvor godt den gamle og den nye planen passer situasjonen (`scorePlanNow`:
+kampbildet veier tyngst, motstanderens stil kommer i tillegg) og belønner
+differansen.
+
+Oppå det kommer en **redningsbonus** som skalerer med hvor dypt i trøbbel du er:
+jo mer kampen glipper, jo mer er den riktige lesningen verdt. Et konkret
+eksempel, med momentum −4 mot et kontringslag:
+
+| Grep | Forbedring | Netto (momentum + klarhet) |
+|---|---|---|
+| Jag utligningen (riktig) | +0.90 | **+2.45** |
+| Midtbanepress (nøytralt) | 0 | −0.15 |
+| Lukk kampen (feil) | 0 | −0.32 |
+
+Og motsatt: bytter du bort en plan som passet bedre, er `improvement` negativ og
+grepet straffes — selv om den nye planen «ser riktig ut» isolert sett.
 
 ## Taggene må bety noe
 
@@ -101,6 +139,6 @@ vil ha støtte nær seg, en løper vil ha rom bak.
 
 | Skript | Dekker |
 |---|---|
-| `npm run sim:match-plan` | 19 sjekker: familier, avstand, omstillingskostnad, kampbilde, matchup, bytte i sesjon, effekt på resultatet |
+| `npm run sim:match-plan` | 28 sjekker: familier, avstand, omstillingskostnad, kampbilde, matchup fra avspark, motstanderens justeringer, redningsbelønning, effekt på resultatet |
 | `npm run audit:tactics` | dataskjema, at hver plan forklarer seg, at ingen plan passer alt, at taggene treffer spillerdataen |
 | `npm run audit:flow` (steg 16) | motoren er ren, byttet er wiret i kampflyten og summeres i resultatet |

@@ -1,7 +1,13 @@
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
-import { createPlanChange, readGameState } from "./football-match-plan.js";
+import {
+  applyOpponentAdjustment,
+  createPlanChange,
+  deriveOpponentAdjustment,
+  evaluatePlanVsOpponent,
+  readGameState
+} from "./football-match-plan.js";
 import { buildTacticalKnowledgeFeedback } from "./football-tactical-knowledge.js";
 
 // HG Football Manager — Matchday Engine (v1)
@@ -333,7 +339,7 @@ function buildKeyFactors({ tacticalProfile, strengthGap, isIncomplete }) {
 // styrkeforskjell + offensive metrikker styrer xG for, restforsvar/balanse/
 // relasjoner demper xG mot. Returnerer urundede basisverdier slik at v0.2 kan
 // legge beslutningsdeltaer oppå før klamping.
-function computeBaseExpectedGoals({ tp, historicalScore, opponent, teamStrength, isIncomplete, missing }) {
+function computeBaseExpectedGoals({ tp, historicalScore, opponent, teamStrength, isIncomplete, missing, planEdge = 0 }) {
   const strengthGap = teamStrength - num(opponent.strength);
 
   let expectedGoalsFor = 1.15;
@@ -350,6 +356,9 @@ function computeBaseExpectedGoals({ tp, historicalScore, opponent, teamStrength,
   if (isIncomplete) {
     expectedGoalsFor -= 0.3;
   }
+  // Kampplanen mot motstanderens stil. Merkbar, men aldri avgjørende alene:
+  // en plan som treffer dem hjelper deg, den vinner ikke kampen for deg.
+  expectedGoalsFor += num(planEdge) * 0.09;
 
   let expectedGoalsAgainst = 1.15;
   expectedGoalsAgainst -= strengthGap * 0.01;
@@ -364,6 +373,7 @@ function computeBaseExpectedGoals({ tp, historicalScore, opponent, teamStrength,
   if (isIncomplete) {
     expectedGoalsAgainst += 0.4 + missing * 0.05;
   }
+  expectedGoalsAgainst -= num(planEdge) * 0.06;
 
   return { expectedGoalsFor, expectedGoalsAgainst, strengthGap };
 }
@@ -1448,7 +1458,13 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     decisions: [],
     // Kampplanen kan byttes underveis. Byttene ligger her og summeres sammen
     // med managergrepene — de er beslutninger på lik linje, med en pris.
-    planChanges: []
+    planChanges: [],
+    // Planen du VELGER skal telle mot denne motstanderen fra avspark, ikke bare
+    // hvis du tilfeldigvis bytter underveis. Uten dette var kampplanvalget
+    // gratis så lenge du lot det stå.
+    planMatchup: evaluatePlanVsOpponent(tactic, matchOpponent),
+    // Motstanderens egne justeringer gjennom kampen.
+    opponentAdjustments: []
   };
 }
 
@@ -1477,6 +1493,7 @@ export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
   const next = { ...session };
   next.planChanges = [...asArray(session.planChanges), { ...change, atPhase: session.phase }];
   next.selectedTacticId = nextPlan?.id || next.selectedTacticId;
+  next.planMatchup = evaluatePlanVsOpponent(nextPlan, next.opponent);
   next.activePlanSnapshot = {
     id: nextPlan?.id || null,
     name: nextPlan?.name || "",
@@ -1494,6 +1511,36 @@ export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
 // Kampbildet slik det leses akkurat nå (momentum fra grepene så langt).
 export function getMatchdayGameState(session) {
   return readGameState(session);
+}
+
+// Motstanderen svarer. Ser de at kampen glipper, skyver de laget opp; leder de,
+// trekker de seg ned. Da er ikke planen din like god lenger — og planens
+// matchup regnes om mot den justerte motstanderen.
+//
+// Dette er det som gjør at kampen må LESES på nytt i stedet for å velges riktig
+// én gang. Justeringen er deterministisk og forklart, ikke skjult intelligens.
+// Returnerer samme sesjon når bildet ikke gir grunn til å justere.
+export function applyOpponentAdaptation(session) {
+  if (!session || typeof session !== "object") return session;
+  if (session.phase === "resolved") return session;
+
+  const done = asArray(session.opponentAdjustments).map((entry) => entry.id);
+  const adjustment = deriveOpponentAdjustment(readGameState(session), { alreadyAdjusted: done });
+  if (!adjustment) return session;
+
+  const opponent = applyOpponentAdjustment(session.opponent, adjustment);
+  const activePlan = session.activePlanSnapshot || session.tacticSnapshot || null;
+
+  return {
+    ...session,
+    opponent,
+    // Planen din måles nå mot det de faktisk gjør, ikke mot det de gjorde.
+    planMatchup: evaluatePlanVsOpponent(activePlan, opponent),
+    opponentAdjustments: [
+      ...asArray(session.opponentAdjustments),
+      { id: adjustment.id, label: adjustment.label, note: adjustment.note, atPhase: session.phase }
+    ]
+  };
 }
 
 // Hvilket hendelsesindeks (0-basert) en event-fase peker på, ellers null.
@@ -1677,7 +1724,9 @@ export function finalizeMatchdaySession(session) {
     opponent,
     teamStrength,
     isIncomplete,
-    missing
+    missing,
+    // Kampplanen mot motstanderens stil: den valgte planen teller fra avspark.
+    planEdge: num(session.planMatchup?.edge)
   });
 
   const decisions = asArray(session.decisions);
@@ -1845,6 +1894,7 @@ export function finalizeMatchdaySession(session) {
     // Planbyttene står for seg i rapporten: manageren skal kunne lese hva
     // omstillingen faktisk kostet og ga.
     planChanges: planChanges.map((change) => ({ ...change })),
+    opponentAdjustments: asArray(session.opponentAdjustments).map((entry) => ({ ...entry })),
     activePlanSnapshot: session.activePlanSnapshot || session.tacticSnapshot || null,
     decisionTotals: totals,
     bestDecision: bestDecision

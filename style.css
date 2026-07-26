@@ -8004,3 +8004,15 @@ body { grid-template-columns: minmax(0, 1fr); }
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
+
+/* Motstanderens justering: den viktigste nye opplysningen i kampen, så den
+   står øverst i hendelsen og ikke gjemt i en logg. */
+.matchday-opponent-shift {
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--hg-accent-tactics);
+  border-radius: 8px;
+  background: rgba(70, 214, 140, 0.08);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
