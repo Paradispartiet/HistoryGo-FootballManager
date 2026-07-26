@@ -98,7 +98,7 @@ export function createSecondarySession(league, mode) {
   const feedbackByMode = {
     scenario: "Velg scenario.",
     national: "Velg nasjon og ta ut landslagstroppen.",
-    training: "Treningsrommet er klart."
+    training: "Fotballvitenskap er klar."
   };
   session.clubWeekState = { week: 1, phase: mode === "scenario" ? "analysis" : "training" };
   session.clubWeekFeedback = feedbackByMode[mode] || feedbackByMode.training;

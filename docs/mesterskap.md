@@ -64,7 +64,7 @@ trekningen er stabil gjennom et mesterskap, men et nytt gir en ny gruppe.
 
 `tournament` og `tournamentHistory` er sesjonsfelt i modus-konvolutten, som
 `nationalTeam`. Et pågående mesterskap lekker aldri inn i klubblagringen, og et
-scenariorom eller treningsrom får ikke mesterskapsfelter i det hele tatt.
+scenariorom eller Fotballvitenskap får ikke mesterskapsfelter i det hele tatt.
 Bytter du nasjon, avsluttes et pågående mesterskap — det tilhørte den forrige
 nasjonen. Merittlisten beholdes.
 

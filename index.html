@@ -22,7 +22,7 @@
         <button type="button" class="mode-choice-card is-primary-mode" data-start-mode="league" aria-describedby="firstTimeAssistant"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></button>
         <button type="button" class="mode-choice-card" data-start-mode="national" aria-describedby="firstTimeAssistant"><span>Landslag</span><strong>Landslagssjef</strong><small>Ta ut landslagstroppen av spillerne du har samlet – inkludert stjernene fra landslagsarenaene.</small></button>
         <button type="button" class="mode-choice-card" data-start-mode="scenario" aria-describedby="firstTimeAssistant"><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></button>
-        <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>Lav risiko</span><strong>Treningsrom</strong><small>Lær formasjoner, roller og kampprinsipper uten at det påvirker ligasesongen.</small></button>
+        <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>Egen modul</span><strong>Fotballvitenskap</strong><small>Lær fotball: formasjonsbiblioteket epoke for epoke. Helt uavhengig av spillet – ingenting her rører klubben din.</small></button>
       </div>
       <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
     </section>
@@ -67,96 +67,64 @@
     </div>
   </header>
 
+  <!-- HOVEDMENY
+       Én meny, én rekkefølge — slik en manageruke faktisk går:
+       Kontor → Trening → Taktikk → Kamp → Analyse.
+       Ingen fane sender deg et annet sted enn etiketten sin sier. Kontorets
+       avdelinger (speiding, stab, klubb, styret, fasiliteter) ligger PÅ Kontor,
+       ikke i en egen nedtrekksmeny som duplikat av de samme navnene.
+
+       `data-nav-modes` sier hvilke modi fanen hører hjemme i. Scenario-fanen
+       finnes bare i scenariomodus, og Fotballvitenskap er en egen modul utenfor
+       spillet — den deler derfor ikke meny med ligaspillet.
+       renderModeIsolation() i app.js er det som skjuler/viser dem. -->
   <nav class="main-nav" aria-label="Hovednavigasjon">
     <div class="main-nav-layout">
-    <div class="main-nav-inner" role="tablist" aria-label="Spillbar løkke">
-      <div class="nav-group-label nav-group-label-primary" role="presentation">Spillbar løkke</div>
-      <button type="button" class="nav-tab nav-tab-primary is-active" role="tab" aria-selected="true" data-tab-target="dashboard">
+    <div class="main-nav-inner" role="tablist" aria-label="Manageruka">
+      <div class="nav-group-label nav-group-label-primary" role="presentation">Manageruka</div>
+      <button type="button" class="nav-tab nav-tab-primary is-active" role="tab" aria-selected="true" data-tab-target="dashboard" data-nav-modes="league national scenario">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="4" y="4" width="7" height="9" rx="1.5"/><rect x="13" y="4" width="7" height="5" rx="1.5"/><rect x="13" y="12" width="7" height="8" rx="1.5"/><rect x="4" y="16" width="7" height="4" rx="1.5"/>
+          <path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2L11 7.5h7.5A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/>
         </svg>
         <span class="nav-label">Kontor</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="tactics">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M12 4.5v15"/><circle cx="12" cy="12" r="2.4"/><path d="M3.5 9h2.5v6H3.5"/><path d="M20.5 9H18v6h2.5"/>
-        </svg>
-        <span class="nav-label">Lag</span>
-      </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="inbox">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3.5" y="6" width="17" height="13" rx="2"/><path d="m4.5 7.5 7.5 6 7.5-6"/>
-        </svg>
-        <span class="nav-label">Stab</span>
-      </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="trening">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="trening" data-nav-modes="league national scenario">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6H11v13H5.5A1.5 1.5 0 0 1 4 17.5z"/><path d="M20 7.5A1.5 1.5 0 0 0 18.5 6H13v13h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>
         </svg>
-        <span class="nav-label">Klubb</span>
+        <span class="nav-label">Trening</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="kamp">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="tactics" data-nav-modes="league national scenario">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M12 4.5v15"/><circle cx="12" cy="12" r="2.4"/><path d="M3.5 9h2.5v6H3.5"/><path d="M20.5 9H18v6h2.5"/>
+        </svg>
+        <span class="nav-label">Taktikk</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="kamp" data-nav-modes="league national scenario">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="8"/><path d="m12 7 3 2.2-1.1 3.6h-3.8L9 9.2z"/><path d="M12 4v3M5 9.5l2.7 1.6M19 9.5l-2.7 1.6M8.2 19l1.1-3.4M15.8 19l-1.1-3.4"/>
         </svg>
-        <span class="nav-label">Kampdag</span>
+        <span class="nav-label">Kamp</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="historygo">
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="analyse" data-nav-modes="league national scenario">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 21c-4-3.8-6.5-7-6.5-10A6.5 6.5 0 0 1 12 4.5 6.5 6.5 0 0 1 18.5 11c0 3-2.5 6.2-6.5 10z"/><circle cx="12" cy="11" r="2.3"/>
-        </svg>
-        <span class="nav-label">Speiding</span>
-      </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="scenarios">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 5.5h16"/><path d="M5.5 5.5v13"/><path d="M18.5 5.5v13"/><path d="M8 9h8"/><path d="M8 13h5"/>
+          <path d="M4 19.5h16"/><rect x="5.5" y="12" width="3.4" height="5.5" rx="1"/><rect x="10.3" y="8" width="3.4" height="9.5" rx="1"/><rect x="15.1" y="4.5" width="3.4" height="13" rx="1"/>
         </svg>
         <span class="nav-label">Analyse</span>
       </button>
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="scenarios" data-nav-modes="scenario" hidden>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 5.5h16"/><path d="M5.5 5.5v13"/><path d="M18.5 5.5v13"/><path d="M8 9h8"/><path d="M8 13h5"/>
+        </svg>
+        <span class="nav-label">Scenario</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="hgfmLibrary" data-nav-modes="training" data-nav-section-modes="league national scenario training" hidden>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="4" y="4.5" width="16" height="15" rx="2"/><circle cx="9" cy="9.2" r="1.3"/><circle cx="15" cy="9.2" r="1.3"/><circle cx="12" cy="14.8" r="1.3"/>
+        </svg>
+        <span class="nav-label">Fotballvitenskap</span>
+      </button>
     </div>
-      <div class="nav-office" role="presentation">
-        <button type="button" class="nav-office-toggle" id="navOfficeToggle" aria-haspopup="true" aria-expanded="false" aria-controls="navOfficeMenu">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2L11 7.5h7.5A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/>
-          </svg>
-          <span class="nav-label" id="navOfficeToggleLabel">Kontor</span>
-          <span class="nav-office-toggle-caret" aria-hidden="true">▾</span>
-        </button>
-        <div class="nav-office-menu" id="navOfficeMenu" role="menu" aria-label="Kontor / senere" hidden>
-          <div class="nav-group-label nav-group-label-secondary" role="presentation">Kontor / senere</div>
-          <button type="button" class="nav-tab nav-tab-secondary is-disabled" role="menuitem" aria-selected="false" aria-disabled="true" disabled data-tab-target="facilities">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3.5 9.5c0-1.7 3.8-3 8.5-3s8.5 1.3 8.5 3"/><path d="M3.5 9.5v6c0 1.7 3.8 3 8.5 3s8.5-1.3 8.5-3v-6"/><path d="M9.5 12.7v4.9"/><path d="M14.5 12.7v4.9"/>
-            </svg>
-            <span class="nav-label">Fasiliteter</span>
-            <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
-          </button>
-          <button type="button" class="nav-tab nav-tab-secondary" role="menuitem" aria-selected="false" data-tab-target="admin">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2L11 7.5h7.5A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/>
-            </svg>
-            <span class="nav-label">Stab</span>
-          </button>
-          <button type="button" class="nav-tab nav-tab-secondary" role="menuitem" aria-selected="false" data-tab-target="market">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 10.5v3h2.5L14 18V6l-7.5 4.5z"/><path d="M17 9.5a4 4 0 0 1 0 5"/>
-            </svg>
-            <span class="nav-label">Klubb</span>
-          </button>
-          <button type="button" class="nav-tab nav-tab-secondary" role="menuitem" aria-selected="false" data-tab-target="board">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3.5 19 6v5.2c0 4.4-3 7.6-7 9.3-4-1.7-7-4.9-7-9.3V6z"/>
-            </svg>
-            <span class="nav-label">Styret</span>
-          </button>
-          <button type="button" class="nav-tab nav-tab-secondary" role="menuitem" aria-selected="false" data-tab-target="hgfmLibrary">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="4" y="4.5" width="16" height="15" rx="2"/><circle cx="9" cy="9.2" r="1.3"/><circle cx="15" cy="9.2" r="1.3"/><circle cx="12" cy="14.8" r="1.3"/>
-            </svg>
-            <span class="nav-label">Formasjoner</span>
-          </button>
-        </div>
-      </div>
     </div>
   </nav>
 
@@ -167,11 +135,10 @@
   <section id="secondaryModeBar" class="panel mode-status-card secondary-mode-bar" aria-live="polite" hidden>
     <div>
       <p class="eyebrow">Aktiv modus</p>
-      <h2 id="secondaryModeTitle">Treningsrom</h2>
+      <h2 id="secondaryModeTitle">Fotballvitenskap</h2>
       <p id="secondaryModeHint" class="muted-text">Velg formasjon · Plasser spillere · Test oppsett</p>
     </div>
     <div class="mini-season-actions">
-      <button type="button" id="resetTrainingRoomButton" class="is-reset">Nullstill</button>
       <button type="button" id="returnToLeagueButton" class="primary-action-button">Tilbake til ligaspill</button>
     </div>
   </section>
@@ -300,9 +267,17 @@
       <section class="kontor-departments" aria-label="Kontorets avdelinger">
         <p class="kontor-departments-label eyebrow">Kontorets avdelinger</p>
         <div class="kontor-departments-grid">
+          <button type="button" class="dept-link-card" data-tab-target="historygo">
+            <span class="eyebrow">Speiding</span><strong>Speiderrapporten</strong>
+            <small>Spillerne History Go har låst opp — det du gjør fra kontoret.</small>
+          </button>
           <button type="button" class="dept-link-card" data-tab-target="admin">
             <span class="eyebrow">Drift</span><strong>Stabskontor</strong>
             <small>Stab, kampklar tropp og drift rundt laget.</small>
+          </button>
+          <button type="button" class="dept-link-card" data-tab-target="inbox">
+            <span class="eyebrow">Apparatet</span><strong>Assistentråd</strong>
+            <small>Stab, styre, speiding og garderobe som meldingskort.</small>
           </button>
           <button type="button" class="dept-link-card" data-tab-target="market">
             <span class="eyebrow">Kommersielt</span><strong>Klubbrom</strong>
@@ -312,13 +287,13 @@
             <span class="eyebrow">Boardroom</span><strong>Styret</strong>
             <small>Styretillit, forventninger og klubbens temperatur.</small>
           </button>
-          <button type="button" class="dept-link-card" data-tab-target="facilities">
+          <!-- Fasiliteter er ikke bygd ennå. Kortet er derfor deaktivert og
+               merket «Senere» på samme måte som fanen var det — ellers er
+               kontoret en dør inn til en tom flate. -->
+          <button type="button" class="dept-link-card is-disabled" aria-disabled="true" disabled data-tab-target="facilities">
             <span class="eyebrow">Anlegg</span><strong>Fasiliteter</strong>
             <small>Treningsanlegg, stadion, akademi og medisinsk.</small>
-          </button>
-          <button type="button" class="dept-link-card" data-tab-target="hgfmLibrary">
-            <span class="eyebrow">Taktikk</span><strong>Formasjoner</strong>
-            <small>Historisk formasjonsbibliotek – bruk dem i laget.</small>
+            <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
           </button>
         </div>
       </section>
@@ -475,7 +450,11 @@
             </form>
           </div>
 
-          <p class="pitch-hint">Visuelt først: sett brikker, formasjon og kampplan.</p>
+          <p class="pitch-hint">Visuelt først: sett brikker, formasjon og kampplan.
+            <!-- Formasjonsbiblioteket hører hjemme der du faktisk velger
+                 formasjon, ikke som en «kontoravdeling». -->
+            <button type="button" class="shortcut-button" data-tab-target="hgfmLibrary">Slå opp formasjonen i biblioteket</button>
+          </p>
           <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
 
           <!-- Kompakt taktisk systempanel for valgt historisk formasjon. Fylles
@@ -575,11 +554,6 @@
         </details>
       </section>
 
-      <!-- Sekundær innsikt: lagrapport + profil + motorens vurdering -->
-      <div class="popup-actions" aria-label="Analyse">
-        <button type="button" data-modal-open="modalAnalysis">Analyse · full rapport</button>
-      </div>
-
     </div>
 
     <!-- ============================ KAMP ============================ -->
@@ -607,8 +581,42 @@
         </section>
       </div>
 
-      <div class="popup-actions" aria-label="Mer">
-        <button type="button" data-modal-open="modalBadgeEffects">Analyse · badge-effekter</button>
+    </div>
+
+    <!-- ============================ ANALYSE ============================ -->
+    <!-- Analyse er ettertanken, ikke en ekstra spillflate: hva skjedde i kampen,
+         og hva sier vurderingen av laget nå. Her lå tidligere Scenarioer — de
+         er flyttet til sin egen modus fra forsiden, slik at fanen faktisk viser
+         det navnet lover.
+
+         Listene bruker de samme motorene som elleveren (calculateTeamFit), så
+         tallene her kan aldri motsi Taktikk. -->
+    <div class="tab-section analyse-view" data-tab-section="analyse" hidden>
+      <section class="panel" aria-label="Kampanalyse" aria-live="polite">
+        <p class="eyebrow">Etter kampen</p>
+        <h2>Kampanalyse</h2>
+        <p class="muted-text">Hele forklaringen på siste kamp: kampbildet, grepene dine, motstanderens svar og hvorfor resultatet ble som det ble.</p>
+        <div id="analyseMatchReport"></div>
+      </section>
+
+      <div class="insight-grid">
+        <section class="panel" aria-label="Rollebytter">
+          <p class="eyebrow">Laget nå</p>
+          <h3>Rollebytter å vurdere</h3>
+          <p class="muted-text">Feilbruk er en trenerfeil, ikke en spillersvakhet. Dette er spillerne som står i en rolle de ikke får utfolde seg i.</p>
+          <ul id="analyseRoleChanges"></ul>
+        </section>
+        <section class="panel" aria-label="Svake punkter">
+          <p class="eyebrow">Laget nå</p>
+          <h3>Svake punkter</h3>
+          <p class="muted-text">Hvor oppsettet lekker — med grepet som retter det.</p>
+          <ul id="analyseWeakPoints"></ul>
+        </section>
+      </div>
+
+      <div class="popup-actions" aria-label="Dypere analyse">
+        <button type="button" data-modal-open="modalAnalysis">Full rapport</button>
+        <button type="button" data-modal-open="modalBadgeEffects">Badge-effekter</button>
       </div>
 
     </div>
@@ -673,7 +681,7 @@
     </div>
 
     <!-- ============================ INNBOKS ============================ -->
-    <div class="tab-section dept dept-inbox" data-tab-section="inbox" hidden>
+    <div class="tab-section dept dept-inbox" data-tab-section="inbox" data-tab-parent="dashboard" hidden>
       <section class="dept-hero dept-hero-inbox">
         <div>
           <p class="eyebrow">Klubbens signaler før trening</p>
@@ -700,7 +708,7 @@
     </div>
 
     <!-- ============================ FASILITETER ============================ -->
-    <div class="tab-section dept dept-facilities" data-tab-section="facilities" hidden>
+    <div class="tab-section dept dept-facilities" data-tab-section="facilities" data-tab-parent="dashboard" hidden>
       <section class="dept-hero dept-hero-facilities">
         <div>
           <p class="eyebrow">Klubbanlegg</p>
@@ -746,7 +754,7 @@
     <!-- Admin v1: ekte kontorflate — den operative driften rundt laget. Leser
          tropp-/stab-state direkte (rosterReadiness, hired staff) via
          renderAdminRoom(). Økonomi/kontrakter er ærlig merket som senere. -->
-    <div class="tab-section dept dept-admin" data-tab-section="admin" hidden>
+    <div class="tab-section dept dept-admin" data-tab-section="admin" data-tab-parent="dashboard" hidden>
       <section class="dept-hero dept-hero-admin">
         <div>
           <p class="eyebrow">Drift og økonomi</p>
@@ -785,7 +793,7 @@
          moral, styretillit). Omdømme, fanstemning og sponsorinteresse er
          lesbare kvalitative signaler avledet av eksisterende verdier — ingen ny
          motor. Konkrete avtaler er ærlig merket som senere. -->
-    <div class="tab-section dept dept-market" data-tab-section="market" hidden>
+    <div class="tab-section dept dept-market" data-tab-section="market" data-tab-parent="dashboard" hidden>
       <section class="dept-hero dept-hero-market">
         <div>
           <p class="eyebrow">Kommersiell utvikling</p>
@@ -824,7 +832,7 @@
          klubbverdier, ukerytme) direkte. Ikke lenger en «Senere»-flate — alt
          her er live via renderBoardRoom(). Budsjett/kontrakter er ærlig merket
          som senere, som en liten sekundær note, ikke som hovedinnhold. -->
-    <div class="tab-section dept dept-board" data-tab-section="board" hidden>
+    <div class="tab-section dept dept-board" data-tab-section="board" data-tab-parent="dashboard" hidden>
       <section class="dept-hero dept-hero-board">
         <div>
           <p class="eyebrow">Boardroom</p>
@@ -861,7 +869,7 @@
     </div>
 
     <!-- ============================ HISTORY GO ============================ -->
-    <div class="tab-section dept dept-historygo" data-tab-section="historygo" hidden>
+    <div class="tab-section dept dept-historygo" data-tab-section="historygo" data-tab-parent="dashboard" hidden>
       <section class="dept-hero dept-hero-historygo">
         <div>
           <p class="eyebrow">Speiding</p>
@@ -934,7 +942,7 @@
     </div>
 
     <!-- ============================ FORMASJONSBIBLIOTEK (HG FOOTBALL MANAGER) ============================ -->
-    <div class="tab-section dept dept-hgfm" data-tab-section="hgfmLibrary" hidden>
+    <div class="tab-section dept dept-hgfm" data-tab-section="hgfmLibrary" data-tab-parent="tactics" hidden>
       <section class="dept-hero dept-hero-hgfm">
         <div>
           <p class="eyebrow">HG Football Manager</p>
@@ -947,6 +955,12 @@
         <div class="dept-hero-stat">
           <strong id="hgfmFormationCount">–</strong>
           <span>formasjoner</span>
+        </div>
+        <!-- I spillet er biblioteket et oppslagsverk du åpner fra Taktikk, så
+             det må ha en vei tilbake. I Fotballvitenskap ER biblioteket flaten
+             — da finnes det ingen taktikkflate å gå tilbake til. -->
+        <div class="dept-hero-actions" data-nav-modes="league national scenario">
+          <button type="button" class="shortcut-button" data-tab-target="tactics">← Tilbake til Taktikk</button>
         </div>
       </section>
 
@@ -1336,7 +1350,7 @@
         <div class="settings-list">
           <button type="button" class="settings-item" data-settings-action="mode">
             <strong>Endre spillmodus</strong>
-            <small>Bytt mellom Ligaspill, Landslag, Scenarioer og Treningsrom.</small>
+            <small>Bytt mellom Ligaspill, Landslag, Scenarioer og Fotballvitenskap.</small>
           </button>
           <button type="button" class="settings-item" data-settings-action="formations">
             <strong>Formasjoner</strong>

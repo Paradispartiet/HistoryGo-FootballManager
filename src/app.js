@@ -532,6 +532,11 @@ const elements = {
   managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
   managerRoleChanges: document.querySelector("#managerRoleChanges"),
   managerWeakPoints: document.querySelector("#managerWeakPoints"),
+  // Analyse-fanen viser de samme to listene som den dype rapporten, fra samme
+  // motorkall — ikke en egen beregning som kunne begynt å motsi den.
+  analyseMatchReport: document.querySelector("#analyseMatchReport"),
+  analyseRoleChanges: document.querySelector("#analyseRoleChanges"),
+  analyseWeakPoints: document.querySelector("#analyseWeakPoints"),
   managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations"),
   activeKnowledgeFocus: document.querySelector("#activeKnowledgeFocus"),
   clearKnowledgeFocus: document.querySelector("#clearKnowledgeFocus"),
@@ -4895,8 +4900,8 @@ function renderGameModeStatus(teamFit) {
         : "Velg nasjon, ta ut troppen og meld på til EM eller VM. Klubblaget ditt er urørt.";
     }
   } else if (selectedMode === "training") {
-    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Treningsrom";
-    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Risikofri sandkasse: oppsett og trening lagres bare i treningsrommet.";
+    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Fotballvitenskap";
+    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Egen læremodul: formasjonshistorien, epoke for epoke. Ingenting her rører klubben din.";
   }
 
   const leagueMeta = elements.gameModeStatusCard?.querySelector(".mode-status-meta");
@@ -4960,13 +4965,20 @@ function renderModeIsolation() {
   if (mode !== "national") {
     document.querySelectorAll(".national-team-panel").forEach((node) => { node.hidden = true; });
   }
+  // Menyen skal si sannheten om hvilken modus du er i. Hver nav-fane (og noen
+  // få flater) bærer `data-nav-modes` med modiene den hører hjemme i:
+  // Scenario-fanen finnes bare i scenariomodus, Fotballvitenskap bare i sin
+  // egen modul. Å la alle fanene stå framme i alle modi var halve grunnen til
+  // at navigasjonen føltes tilfeldig.
+  applyModeScopedNav(mode);
+
   const bar = document.querySelector("#secondaryModeBar");
   if (bar) {
     bar.hidden = mode === "league";
     const title = bar.querySelector("#secondaryModeTitle");
     const hint = bar.querySelector("#secondaryModeHint");
-    const barTitle = { scenario: "Scenario", national: "Landslag", training: "Treningsrom" };
-    if (title) title.textContent = barTitle[mode] || "Treningsrom";
+    const barTitle = { scenario: "Scenario", national: "Landslag", training: "Fotballvitenskap" };
+    if (title) title.textContent = barTitle[mode] || "Fotballvitenskap";
     if (hint) {
       if (mode === "scenario") {
         hint.textContent = state.gameStartState?.activeScenarioId ? "Spill neste scenariokamp" : "Velg scenario";
@@ -4975,12 +4987,49 @@ function renderModeIsolation() {
           ? `${getNationalTeamNationality()}s landslag · ta ut troppen`
           : "Velg nasjon";
       } else {
-        hint.textContent = "Velg formasjon · Plasser spillere · Test oppsett · Nullstill";
+        hint.textContent = "Lær fotball · formasjonsbiblioteket epoke for epoke · ingenting her rører klubben din";
       }
     }
-    const reset = bar.querySelector("#resetTrainingRoomButton");
-    if (reset) reset.hidden = mode !== "training";
   }
+}
+
+// Vis bare de nav-fanene som hører til den aktive modusen, og sørg for at den
+// aktive fanen faktisk er en av dem. Uten det siste kunne en modusbytte etterlate
+// deg stående på en flate hvis fane nettopp forsvant fra menyen — synlig innhold
+// uten en meny som forklarer hvor du er.
+function applyModeScopedNav(mode) {
+  const scoped = Array.from(document.querySelectorAll("[data-nav-modes]"));
+  scoped.forEach((node) => {
+    node.hidden = !String(node.dataset.navModes || "").split(/\s+/).includes(mode);
+  });
+
+  const allowedTabs = new Set(
+    scoped
+      .filter((node) => !node.hidden && node.dataset.tabTarget)
+      .map((node) => node.dataset.tabTarget)
+  );
+  if (allowedTabs.size === 0) return;
+
+  const activeSection = document.querySelector("[data-tab-section]:not([hidden])");
+  const activeTarget = activeSection?.dataset.tabSection;
+  if (!activeTarget) return;
+
+  // Kontorets avdelinger har ingen egen fane og skal aldri tvinges bort.
+  const activeTab = document.querySelector(`.nav-tab[data-tab-target="${activeTarget}"]`);
+  if (!activeTab) return;
+
+  // `data-nav-section-modes` skiller «hvor fanen vises» fra «hvor flaten er
+  // lovlig». Formasjonsbiblioteket har bare fane i Fotballvitenskap, men åpnes
+  // som oppslagsverk fra Taktikk i spillet — da skal du få bli der.
+  const sectionModes = String(activeTab.dataset.navSectionModes || activeTab.dataset.navModes || "").split(/\s+/);
+  if (!sectionModes.includes(mode)) {
+    activateTab(allowedTabs.has("dashboard") ? "dashboard" : [...allowedTabs][0]);
+    return;
+  }
+
+  // Synligheten kan nettopp ha endret seg (biblioteket får egen fane i
+  // Fotballvitenskap), så markeringen må regnes om etterpå.
+  highlightActiveTab();
 }
 
 function renderFirstTimePlaythrough(teamFit) {
@@ -7785,6 +7834,15 @@ function renderNextActionStrip(teamFit) {
   const secondaryContainer = elements.nextActionSecondary;
   if (!primaryButton || !secondaryContainer) {
     return;
+  }
+
+  // Fotballvitenskap er en læremodul, ikke en manageruke. «Neste handling:
+  // skaff spillbar tropp» i bunnen motsa flatens eget løfte om at ingenting her
+  // rører klubben din — og pekte på en flate modusen ikke engang har meny til.
+  // Vi skjuler bare stripa — resten av funksjonen kjører videre, siden den også
+  // driver onboarding-skjermen og modusstatusen.
+  if (elements.nextActionStrip) {
+    elements.nextActionStrip.hidden = isTrainingModeActive();
   }
 
   if (elements.nextActionPhase) {
@@ -10754,25 +10812,29 @@ function getBrowserManagerStateArgs() {
 function renderManagerDetailFromTeamFit(teamFit) {
   const engine = getLoadedManagerEngine();
 
-  if (elements.managerRoleChanges && engine?.recommendRoleChangesFromTeamFit && teamFit) {
+  // Samme motorkall, to visninger: den dype rapporten (modal) og Analyse-fanen.
+  const roleChangeTargets = [elements.managerRoleChanges, elements.analyseRoleChanges].filter(Boolean);
+  const weakPointTargets = [elements.managerWeakPoints, elements.analyseWeakPoints].filter(Boolean);
+
+  if (roleChangeTargets.length > 0 && engine?.recommendRoleChangesFromTeamFit && teamFit) {
     const recommendations = engine
       .recommendRoleChangesFromTeamFit(teamFit, { tactic: getTactic(), roles: state.roles })
       .filter((recommendation) => recommendation.status !== "keep_role")
       .sort((a, b) => (b.candidates[0]?.improvement ?? 0) - (a.candidates[0]?.improvement ?? 0));
 
-    renderTextList(
-      elements.managerRoleChanges,
+    roleChangeTargets.forEach((target) => renderTextList(
+      target,
       recommendations,
       (recommendation) => recommendation.label,
       "Ingen tydelige rollebytter akkurat nå. Rollebruken bør i hovedsak beholdes.",
-    );
+    ));
   }
 
-  if (elements.managerWeakPoints && engine?.analyzeWeakPointsFromTeamFit && teamFit) {
+  if (weakPointTargets.length > 0 && engine?.analyzeWeakPointsFromTeamFit && teamFit) {
     const weakPoints = engine.analyzeWeakPointsFromTeamFit(teamFit);
 
-    renderTextList(
-      elements.managerWeakPoints,
+    weakPointTargets.forEach((target) => renderTextList(
+      target,
       weakPoints,
       (weakPoint) => {
         const assistantText = getFootballBookSurfaceText("assistant", {
@@ -10784,8 +10846,28 @@ function renderManagerDetailFromTeamFit(teamFit) {
           : `${weakPoint.categoryText}: ${weakPoint.label} — ${weakPoint.suggestedAction}`;
       },
       "Ingen tydelige svakheter i denne vurderingen.",
-    );
+    ));
   }
+}
+
+// Analyse-fanen: ettertanken etter kampen. Kamprapporten er den samme som på
+// Kamp-flaten — Analyse er stedet du går tilbake til den, ikke en ny beregning.
+function renderAnalyse() {
+  const container = elements.analyseMatchReport;
+  if (!container) return;
+
+  container.textContent = "";
+
+  const lastMatch = state.matchday?.lastMatch || null;
+  if (!lastMatch) {
+    const empty = document.createElement("p");
+    empty.className = "matchday-empty muted-text";
+    empty.textContent = "Ingen kamp spilt ennå. Spill en kamp under Kamp, så ligger hele forklaringen her etterpå.";
+    container.append(empty);
+    return;
+  }
+
+  renderMatchdayReport(container, lastMatch);
 }
 
 function renderManagerEngineBridge(teamFit) {
@@ -13412,6 +13494,7 @@ function renderApp() {
   renderTrainingWeekCounters();
   renderManagerEngineBridge(teamFit);
   renderManagerDetailFromTeamFit(teamFit);
+  renderAnalyse();
   renderClubWeek().catch(console.error);
   refreshInboxEvents(teamFit);
   renderInboxThreads();
@@ -13894,7 +13977,7 @@ function bindGameModeControls() {
     league: "Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.",
     scenario: "Velg et scenario for å spille en kort historisk eller taktisk utfordring.",
     national: "Ta over et landslag: troppen er spillerne du har samlet fra nasjonen – også landslagsstjernene.",
-    training: "Test formasjoner, roller og kampprinsipper uten risiko for ligasesongen."
+    training: "Lær fotball: bla i formasjonsbiblioteket, epoke for epoke. Egen modul – den rører ikke klubben din."
   };
 
   function setStartModeAssistant(mode) {
@@ -13936,8 +14019,11 @@ function bindGameModeControls() {
         return;
       }
       if (mode === "training") {
+        // Fotballvitenskap er IKKE lagets treningsuke. Den sendte deg tidligere
+        // rett inn i Trening-fanen, som gjorde en «uavhengig læremodul» til en
+        // gjenvei inn i spillet. Nå åpner den formasjonsbiblioteket.
         selectGameMode("training", {});
-        activateTab("trening");
+        activateTab("hgfmLibrary");
         renderApp();
       }
     });
@@ -13974,13 +14060,6 @@ function bindGameModeControls() {
   document.querySelector("#returnToLeagueButton")?.addEventListener("click", () => {
     selectGameMode("league");
     activateRecommendedLeagueTab(getTeamFit());
-    renderApp();
-  });
-  document.querySelector("#resetTrainingRoomButton")?.addEventListener("click", () => {
-    if (!isTrainingModeActive()) return;
-    state.modeEnvelope = resetSecondarySession(state.modeEnvelope, state, "training");
-    persistModeEnvelope(localStorage, state.modeEnvelope);
-    activateTab("trening");
     renderApp();
   });
   // Trekk laget fra mesterskapet. Merittlista beholdes; bare den pågående
@@ -14046,8 +14125,33 @@ async function advanceClubWeekPhaseAction() {
   setClubWeekState(next);
 }
 
-// Fanene som bor bak "Kontor"-menyen i hovednavigasjonen (nav-office-menu i index.html).
-const OFFICE_TAB_TARGETS = new Set(["facilities", "admin", "market", "board", "hgfmLibrary"]);
+// Marker riktig fane som aktiv ut fra hvilken seksjon som faktisk er synlig.
+//
+// Kontorets avdelinger (Speiding, Stabskontor, Assistentråd, Klubbrom, Styret)
+// har ingen egen fane — de åpnes FRA Kontor. Uten dette sto hele menyen
+// umarkert når du var inne i en avdeling: innhold på skjermen, men ingenting i
+// menyen som sa hvor du var. `data-tab-parent` på seksjonen sier hvilken fane
+// som eier flaten. Har flaten sin egen SYNLIGE fane (formasjonsbiblioteket i
+// Fotballvitenskap), vinner den.
+function highlightActiveTab() {
+  const activeSection = document.querySelector("[data-tab-section]:not([hidden])");
+  const target = activeSection?.dataset.tabSection;
+  if (!target) return;
+
+  const buttons = Array.from(document.querySelectorAll("[data-tab-target]"));
+  const ownTab = buttons.find(
+    (button) => button.dataset.tabTarget === target && button.classList.contains("nav-tab") && !button.hidden
+  );
+  const highlighted = ownTab ? target : activeSection.dataset.tabParent || target;
+
+  buttons.forEach((button) => {
+    const isActive = button.classList.contains("nav-tab")
+      ? button.dataset.tabTarget === highlighted
+      : button.dataset.tabTarget === target;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+}
 
 // Aktiver en fane programmatisk: brukes av fane-knappene og av "Neste
 // beslutninger" som navigerer brukeren til riktig avdeling.
@@ -14055,32 +14159,13 @@ function activateTab(target) {
   // Forlater du kampflaten, skal klokka stoppe. Ellers ville en usynlig timer
   // fortsatt tikke og skrive til en sesjon ingen ser.
   if (target !== "kamp") stopMatchLive();
-  const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
   const sections = Array.from(document.querySelectorAll("[data-tab-section]"));
-
-  tabButtons.forEach((button) => {
-    const isActive = button.dataset.tabTarget === target;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-selected", isActive ? "true" : "false");
-  });
 
   sections.forEach((section) => {
     section.hidden = section.dataset.tabSection !== target;
   });
 
-  // Kontor-menyen er lukket som standard – vis hvilken kontorflate som er
-  // aktiv på selve togglen, slik at valget ikke forsvinner når menyen lukkes.
-  const officeToggle = document.querySelector("#navOfficeToggle");
-  const officeToggleLabel = document.querySelector("#navOfficeToggleLabel");
-  if (officeToggle && officeToggleLabel) {
-    const activeOfficeButton = tabButtons.find(
-      (button) => OFFICE_TAB_TARGETS.has(button.dataset.tabTarget) && button.dataset.tabTarget === target
-    );
-    officeToggle.classList.toggle("has-active-tab", Boolean(activeOfficeButton));
-    officeToggleLabel.textContent = activeOfficeButton
-      ? activeOfficeButton.querySelector(".nav-label")?.textContent || "Kontor"
-      : "Kontor";
-  }
+  highlightActiveTab();
 
   // Å åpne Kamp-flaten regnes som at manageren har sett kamprapporten — da
   // forsvinner «Se kampanalyse» fra Neste handling-stripa. Stille persistens;
@@ -14113,54 +14198,6 @@ function initTabs() {
         renderApp();
       }
     });
-  });
-}
-
-// Kontor-menyen samler de sekundære fanene (Fasiliteter/Admin/Marked/Styret/
-// Formasjoner) bak én knapp i stedet for at de alltid opptar plass i
-// hovednavigasjonen. Fane-bytte-logikken ligger fortsatt i initTabs/activateTab
-// over – dette wirer bare opp åpne/lukke for selve menyen.
-function initOfficeMenu() {
-  const toggle = document.querySelector("#navOfficeToggle");
-  const menu = document.querySelector("#navOfficeMenu");
-  if (!toggle || !menu) return;
-
-  function closeMenu() {
-    menu.hidden = true;
-    toggle.setAttribute("aria-expanded", "false");
-  }
-
-  function openMenu() {
-    menu.hidden = false;
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  toggle.addEventListener("click", (event) => {
-    event.stopPropagation();
-    if (menu.hidden) {
-      openMenu();
-    } else {
-      closeMenu();
-    }
-  });
-
-  menu.addEventListener("click", (event) => {
-    if (event.target.closest(".nav-tab")) {
-      closeMenu();
-    }
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!menu.hidden && !menu.contains(event.target) && !toggle.contains(event.target)) {
-      closeMenu();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !menu.hidden) {
-      closeMenu();
-      toggle.focus();
-    }
   });
 }
 
@@ -14459,8 +14496,6 @@ async function loadFootballBookKnowledgePrinciples() {
 
 async function init() {
   initTabs();
-  initOfficeMenu();
-
   // Start lasting av TS-motoren parallelt med datafilene. Vi venter på den før
   // første render, slik at manager-detalj-panelet kan bygges synkront i
   // renderApp i stedet for å skrive seg inn en tikk senere (ingen blink).
