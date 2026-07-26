@@ -8141,3 +8141,63 @@ body > nav { grid-row: 2; }
 body > .secondary-mode-bar { grid-row: 3; }
 body > .app-shell { grid-row: 4; }
 body > .site-footer { grid-row: 5; }
+
+/* ---------- Live-avspilling av kampen ---------- */
+.matchday-live-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+.matchday-live-button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-strong);
+  color: var(--text);
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.matchday-live-button:hover { border-color: var(--text); }
+.matchday-live-button.is-secondary { color: var(--muted); }
+
+.matchday-live-speeds {
+  display: flex;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.matchday-live-speed {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: 4px 9px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.matchday-live-speed.is-active {
+  border-color: var(--hg-accent-tactics);
+  color: var(--text);
+}
+
+/* Klokka pulserer mens kampen går, så det er tydelig at den lever. */
+.matchday-clock[data-running="true"] {
+  color: var(--good);
+  animation: matchday-clock-tick 1s ease-in-out infinite;
+}
+
+@keyframes matchday-clock-tick {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matchday-clock[data-running="true"] { animation: none; }
+}

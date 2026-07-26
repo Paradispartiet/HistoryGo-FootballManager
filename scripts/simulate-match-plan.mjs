@@ -707,6 +707,35 @@ check("planbytte står i minuttloggen", () => {
   assert.ok(planEntries[0].detail.includes("Alt frem"));
 });
 
+check("sesjonen bærer det avspillingen trenger", () => {
+  // UI-et avdekker kampen minutt for minutt. Da må motoren fortelle hvor
+  // perioden slutter, og hvor langt manageren har sett.
+  const session = buildSession("central_possession_4231");
+  assert.equal(session.liveMinute, 0, "kampen starter usett");
+  const played = advanceMatchClock(session);
+  const last = played.timeline[played.timeline.length - 1];
+  assert.ok(last.range && Number.isFinite(last.range.from) && Number.isFinite(last.range.to),
+    "perioden må oppgi sitt minuttspenn");
+  assert.ok(last.range.to > last.range.from);
+  assert.ok(last.range.to <= 90);
+  // Alle minuttene i perioden ligger innenfor spennet.
+  played.minuteLog.forEach((entry) => {
+    assert.ok(entry.minute >= last.range.from && entry.minute <= last.range.to,
+      `${entry.minute}' utenfor ${last.range.from}-${last.range.to}`);
+  });
+});
+
+check("periodene dekker hele kampen uten hull", () => {
+  const { session } = playFullMatch("high_press_343");
+  const ranges = session.timeline.map((t) => t.range);
+  assert.equal(ranges[0].from, 1, "kampen må starte i 1. minutt");
+  assert.equal(ranges[ranges.length - 1].to, 90, "kampen må gå til 90.");
+  for (let i = 1; i < ranges.length; i += 1) {
+    assert.equal(ranges[i].from, ranges[i - 1].to + 1,
+      `hull mellom ${ranges[i - 1].to}' og ${ranges[i].from}'`);
+  }
+});
+
 check("minuttloggen følger med i sluttrapporten", () => {
   const { session } = playFullMatch("high_press_343");
   const report = finalizeMatchdaySession(session);

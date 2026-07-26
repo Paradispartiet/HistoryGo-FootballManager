@@ -1469,7 +1469,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     score: { for: 0, against: 0 },
     timeline: [],
     // Minutt for minutt: hver sjanse og hvert mål, med minutt og stilling.
-    minuteLog: []
+    minuteLog: [],
+    // Live-avspilling: hvor langt kampklokka er SETT av manageren. Perioden er
+    // ferdig avgjort i motoren; dette er bare hvor mye som er avdekket.
+    liveMinute: 0
   };
 }
 
