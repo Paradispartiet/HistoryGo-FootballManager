@@ -1,6 +1,7 @@
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
+import { createPlanChange, readGameState } from "./football-match-plan.js";
 import { buildTacticalKnowledgeFeedback } from "./football-tactical-knowledge.js";
 
 // HG Football Manager — Matchday Engine (v1)
@@ -1444,8 +1445,55 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     relationshipSnapshot,
     offPitchSnapshot,
     events,
-    decisions: []
+    decisions: [],
+    // Kampplanen kan byttes underveis. Byttene ligger her og summeres sammen
+    // med managergrepene — de er beslutninger på lik linje, med en pris.
+    planChanges: []
   };
+}
+
+// Bytt kampplan midt i kampen. Returnerer en NY sesjon (motoren muterer ikke),
+// eller den samme sesjonen når byttet ikke gir mening (ferdig kamp, samme plan).
+export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
+  if (!session || typeof session !== "object") return session;
+  if (session.phase === "resolved") return session;
+
+  const currentPlan = session.activePlanSnapshot || session.tacticSnapshot || null;
+  const eventIndex = getSessionEventIndex(session);
+  const totalEvents = asArray(session.events).length;
+  const eventsRemaining = eventIndex === null
+    ? totalEvents
+    : Math.max(0, totalEvents - (eventIndex + 1));
+
+  const change = createPlanChange({
+    fromPlan: currentPlan,
+    toPlan: nextPlan,
+    session,
+    opponent: opponent || session.opponent,
+    eventsRemaining
+  });
+  if (!change) return session;
+
+  const next = { ...session };
+  next.planChanges = [...asArray(session.planChanges), { ...change, atPhase: session.phase }];
+  next.selectedTacticId = nextPlan?.id || next.selectedTacticId;
+  next.activePlanSnapshot = {
+    id: nextPlan?.id || null,
+    name: nextPlan?.name || "",
+    family: nextPlan?.family || "",
+    intent: nextPlan?.intent || "",
+    pressing: nextPlan?.pressing || "",
+    tempo: nextPlan?.tempo || "",
+    width: nextPlan?.width || "",
+    buildUp: nextPlan?.buildUp || "",
+    defensiveLine: nextPlan?.defensiveLine || ""
+  };
+  return next;
+}
+
+// Kampbildet slik det leses akkurat nå (momentum fra grepene så langt).
+export function getMatchdayGameState(session) {
+  return readGameState(session);
 }
 
 // Hvilket hendelsesindeks (0-basert) en event-fase peker på, ellers null.
@@ -1633,7 +1681,10 @@ export function finalizeMatchdaySession(session) {
   });
 
   const decisions = asArray(session.decisions);
-  const totals = sumDecisionEffects(decisions);
+  // Planbytter bærer samme effektform som managergrepene, så de summeres i
+  // samme regnestykke. Et bytte er en beslutning – med gevinst og pris.
+  const planChanges = asArray(session.planChanges);
+  const totals = sumDecisionEffects([...decisions, ...planChanges]);
 
   // Beslutningseffekter oppå basis-xG: momentum løfter egen trussel litt,
   // risiko og tapt taktisk klarhet øker trykket mot eget mål.
@@ -1791,6 +1842,10 @@ export function finalizeMatchdaySession(session) {
     keyFactors: keyFactors.slice(0, 4),
     analysis: analysis.slice(0, 6),
     decisions: decisions.map((decision) => ({ ...decision })),
+    // Planbyttene står for seg i rapporten: manageren skal kunne lese hva
+    // omstillingen faktisk kostet og ga.
+    planChanges: planChanges.map((change) => ({ ...change })),
+    activePlanSnapshot: session.activePlanSnapshot || session.tacticSnapshot || null,
     decisionTotals: totals,
     bestDecision: bestDecision
       ? { label: bestDecision.optionLabel, eventTitle: bestDecision.eventTitle, tone: bestDecision.tone }

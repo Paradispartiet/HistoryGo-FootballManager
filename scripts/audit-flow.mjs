@@ -476,6 +476,61 @@ check(
   existsSync(join(root, "docs/mesterskap.md"))
 );
 
+// ---- 16) Kampplan: strategi, og bytte underveis -----------------------------
+// Kampplanen var fem valg låst før avspark. Nå er den et strategivalg med
+// familier, og den kan byttes midt i kampen — med en pris, ellers er byttet
+// bare en gratis knapp og ikke en managerbeslutning.
+stage("16. Kampplan");
+{
+  const tactics = JSON.parse(readFileSync(join(root, "data/football_tactics.json"), "utf8"));
+  check("kampplankatalogen er utvidet og gruppert", 
+    (tactics.tactics || []).length >= 15 && (tactics.families || []).length >= 5,
+    `${(tactics.tactics || []).length} planer i ${(tactics.families || []).length} familier`);
+  check(
+    "planmotoren er ren ESM uten DOM/lagring/tilfeldighet",
+    (() => {
+      const engine = readFileSync(join(root, "src/football-match-plan.js"), "utf8")
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/(^|[^:])\/\/.*$/gm, "$1");
+      return !/document\.|localStorage|sessionStorage|window\.|fetch\(|Math\.random|Date\.now/.test(engine);
+    })()
+  );
+  check(
+    "kampdagsmotoren kan bytte plan underveis",
+    readFileSync(join(root, "src/football-matchday-engine.js"), "utf8").includes("export function applyMatchPlanChange")
+  );
+  // Byttet må koste noe, ellers er det ikke en beslutning.
+  check(
+    "omstillingen koster taktisk klarhet",
+    readFileSync(join(root, "src/football-match-plan.js"), "utf8").includes("clarityCost")
+      && readFileSync(join(root, "src/football-match-plan.js"), "utf8").includes("calculateSwitchCost")
+  );
+  // Og byttet må faktisk telle i resultatet, ikke bare stå i loggen.
+  check(
+    "planbytter summeres inn i kampresultatet",
+    /sumDecisionEffects\(\[\.\.\.decisions, \.\.\.planChanges\]\)/.test(
+      readFileSync(join(root, "src/football-matchday-engine.js"), "utf8")
+    )
+  );
+  check(
+    "planbytteren finnes i kampflyten",
+    app.includes("function appendMatchPlanSwitcher") && app.includes("function switchMatchPlanDuringMatch")
+      && app.includes("rankPlansForSituation")
+  );
+  check(
+    "rapporten forteller hva byttet kostet",
+    app.includes("function appendMatchPlanChangeLog") && app.includes("Kampplan underveis")
+  );
+  check(
+    "kampbildet leses av kampens gang, ikke av en resultattavle",
+    readFileSync(join(root, "src/football-match-plan.js"), "utf8").includes("export function readGameState")
+  );
+  check(
+    "kampplanene er dokumentert",
+    existsSync(join(root, "docs/kampplaner.md"))
+  );
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

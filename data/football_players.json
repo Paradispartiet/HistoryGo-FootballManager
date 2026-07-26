@@ -238,7 +238,8 @@
         "crossing",
         "central_combinations",
         "possession",
-        "box_service"
+        "box_service",
+        "close_support"
       ],
       "dislikesTactics": [
         "isolated_striker",
@@ -540,7 +541,8 @@
       "likesTactics": [
         "fast_transitions",
         "vertical_play",
-        "wide_attack"
+        "wide_attack",
+        "space_behind"
       ],
       "dislikesTactics": [
         "static_low_tempo",
@@ -666,7 +668,8 @@
         "wide_attack",
         "fast_transitions",
         "isolate_wingers",
-        "creative_freedom"
+        "creative_freedom",
+        "space_behind"
       ],
       "dislikesTactics": [
         "static_crossing",
@@ -785,7 +788,9 @@
         "low_block",
         "compact_shape",
         "cross_defense",
-        "medium_press"
+        "medium_press",
+        "protected_box",
+        "medium_or_low_line"
       ],
       "dislikesTactics": [
         "very_high_line",
@@ -1023,7 +1028,9 @@
         "compact_shape",
         "low_block",
         "cross_defense",
-        "second_balls"
+        "second_balls",
+        "protected_box",
+        "medium_or_low_line"
       ],
       "dislikesTactics": [
         "very_high_line",
@@ -1641,7 +1648,9 @@
       ],
       "likesTactics": [
         "organised_defence",
-        "calm_build_up"
+        "calm_build_up",
+        "protected_box",
+        "medium_or_low_line"
       ],
       "dislikesTactics": [
         "chaotic_high_line",
@@ -1692,7 +1701,9 @@
       ],
       "likesTactics": [
         "organised_defence",
-        "compact_block"
+        "compact_block",
+        "protected_box",
+        "medium_or_low_line"
       ],
       "dislikesTactics": [
         "isolated_high_line",
@@ -1745,7 +1756,8 @@
       ],
       "likesTactics": [
         "wide_attacks",
-        "possession"
+        "possession",
+        "close_support"
       ],
       "dislikesTactics": [
         "narrow_shape",
@@ -1848,7 +1860,8 @@
       ],
       "likesTactics": [
         "possession",
-        "central_combinations"
+        "central_combinations",
+        "close_support"
       ],
       "dislikesTactics": [
         "long_ball_only",
@@ -2256,7 +2269,8 @@
       ],
       "likesTactics": [
         "wide_attacks",
-        "fast_transitions"
+        "fast_transitions",
+        "space_behind"
       ],
       "dislikesTactics": [
         "narrow_shape",
@@ -2668,7 +2682,8 @@
       ],
       "likesTactics": [
         "wide_attacks",
-        "direct_play"
+        "direct_play",
+        "space_behind"
       ],
       "dislikesTactics": [
         "no_service",
@@ -2979,7 +2994,8 @@
       ],
       "likesTactics": [
         "wide_attacks",
-        "possession"
+        "possession",
+        "close_support"
       ],
       "dislikesTactics": [
         "narrow_shape",

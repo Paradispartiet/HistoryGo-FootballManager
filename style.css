@@ -7919,3 +7919,88 @@ body { grid-template-columns: minmax(0, 1fr); }
 .tournament-history ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .tournament-history li { display: flex; justify-content: space-between; gap: 10px; font-size: 0.85rem; }
 .tournament-history li span { color: var(--hg-text-muted); }
+
+/* ---------- Kampplan: bytte underveis i kampen ---------- */
+/* Planbyttet står UNDER managergrepene: det er det større taktiske valget, ikke
+   et alternativ til hendelsen foran deg. Sammenslått som standard, slik at
+   kampen fortsatt har én tydelig vei videre. */
+.match-plan-switcher {
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: var(--panel-strong);
+  margin-top: 10px;
+  min-width: 0;
+}
+
+.match-plan-switcher > summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 800;
+  font-size: 0.88rem;
+}
+
+.match-plan-lead {
+  margin: 0;
+  padding: 0 14px 8px;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.match-plan-log {
+  list-style: none;
+  margin: 0;
+  padding: 0 14px 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.match-plan-log li {
+  display: grid;
+  gap: 2px;
+  border-left: 3px solid var(--line);
+  padding-left: 8px;
+  font-size: 0.78rem;
+}
+
+.match-plan-log li.is-positive { border-left-color: var(--good); }
+.match-plan-log li.is-negative { border-left-color: var(--danger); }
+.match-plan-log li span { color: var(--muted); }
+
+.match-plan-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.match-plan-option {
+  display: grid;
+  gap: 3px;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  min-width: 0;
+}
+
+.match-plan-option:hover:not(:disabled) { border-color: var(--text); }
+.match-plan-option.is-fitting { border-color: var(--good); }
+.match-plan-option.is-current {
+  background: rgba(70, 214, 140, 0.12);
+  border-color: var(--good);
+  cursor: default;
+}
+
+.match-plan-option strong { font-size: 0.9rem; }
+.match-plan-option small { color: var(--muted); font-size: 0.75rem; line-height: 1.3; }
+
+.match-plan-meta {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}

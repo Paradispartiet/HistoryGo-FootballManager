@@ -1,26 +1,46 @@
 {
-  "schema": "historygo-football-manager.tactics.v1",
-  "version": 1,
-  "tactics": [
+  "schema": "historygo-football-manager.tactics.v2",
+  "version": 2,
+  "note": "Kampplaner er STRATEGI, ikke rangering. Ingen plan er best i seg selv — den passer eller passer ikke til spillerne dine, motstanderens stil og kampbildet. `formation` er planens formasjonsarv (vises som opplysning), ikke et krav om å spille den formasjonen. `gameStates` sier når planen gir mening, `intensity` (0-100) hvor mye den koster i beina.",
+  "families": [
     {
-      "id": "wide_fast_433",
-      "name": "Bredt og hurtig",
-      "formation": "4-3-3",
-      "pressing": "high",
-      "tempo": "fast",
-      "width": "wide",
-      "buildUp": "direct_wide",
-      "chanceCreation": "isolate_wingers",
-      "defensiveLine": "medium_high",
-      "tags": [
-        "wide_attack",
-        "fast_transitions",
-        "isolate_wingers",
-        "high_width",
-        "overloads",
-        "vertical_play"
-      ]
+      "id": "kontroll",
+      "name": "Kontroll",
+      "summary": "Ha ballen, styr tempoet, bryt dem ned tålmodig.",
+      "risk": "Mister du ballen høyt, ligger rommet bak åpent."
     },
+    {
+      "id": "press",
+      "name": "Press",
+      "summary": "Vinn ballen høyt og angrip før de er organisert.",
+      "risk": "Krever kondisjon og samtidighet. Brytes pressen, er du utspilt."
+    },
+    {
+      "id": "kontring",
+      "name": "Kontring",
+      "summary": "Gi dem ballen, hold formen, straff dem i overgangen.",
+      "risk": "Du overlater initiativet. Scorer de først, må planen byttes."
+    },
+    {
+      "id": "direkte",
+      "name": "Direkte",
+      "summary": "Kort vei fram, andreballer og press på deres siste linje.",
+      "risk": "Uten mottakspiller og andreballvinnere gir du bare ballen bort."
+    },
+    {
+      "id": "bredde",
+      "name": "Bredde",
+      "summary": "Strekk dem i bredden, angrip kanalene og boksen.",
+      "risk": "Blir kantene isolert, blir angrepet forutsigbart."
+    },
+    {
+      "id": "kampsituasjon",
+      "name": "Kampsituasjon",
+      "summary": "Planer for et kampbilde som har endret seg — ikke for hele kampen.",
+      "risk": "De er reaksjoner. Starter du kampen her, gir du fra deg initiativet."
+    }
+  ],
+  "tactics": [
     {
       "id": "central_possession_4231",
       "name": "Sentralt possession-spill",
@@ -38,25 +58,92 @@
         "central_control",
         "close_support",
         "fluid_attack"
+      ],
+      "family": "kontroll",
+      "intent": "Kontroller kampen sentralt og bryt dem ned med kombinasjoner.",
+      "strengths": [
+        "Høy ballkontroll",
+        "Trygg oppbygging",
+        "Sentrale overtall"
+      ],
+      "risks": [
+        "Blir statisk uten løp i dybden",
+        "Sårbar i omstilling høyt"
+      ],
+      "gameStates": [
+        "leading",
+        "level"
+      ],
+      "intensity": 55
+    },
+    {
+      "id": "patient_build_up",
+      "name": "Tålmodig oppbygging",
+      "formation": "4-2-3-1",
+      "family": "kontroll",
+      "intent": "Bygg rolig bakfra, ta ingen sjanser, vent på at de åpner seg.",
+      "strengths": [
+        "Svært lav balltapsrisiko",
+        "Sparer krefter",
+        "Trygt restforsvar"
+      ],
+      "risks": [
+        "Skaper lite av seg selv",
+        "Gir dem tid til å organisere seg"
+      ],
+      "gameStates": [
+        "leading",
+        "level"
+      ],
+      "intensity": 35,
+      "pressing": "medium_low",
+      "tempo": "controlled",
+      "width": "medium",
+      "buildUp": "secure_first",
+      "chanceCreation": "central_combinations",
+      "defensiveLine": "medium",
+      "tags": [
+        "possession",
+        "calm_build_up",
+        "structured_build_up",
+        "central_control",
+        "rest_defense",
+        "keeper_support"
       ]
     },
     {
-      "id": "direct_counter_442",
-      "name": "Direkte kontringer",
-      "formation": "4-4-2",
-      "pressing": "medium_low",
-      "tempo": "fast",
+      "id": "positional_overloads",
+      "name": "Posisjonsspill med overtall",
+      "formation": "4-3-3",
+      "family": "kontroll",
+      "intent": "Skap overtall i én sone, flytt dem, og angrip sonen de forlot.",
+      "strengths": [
+        "Trekker motstanderen ut av form",
+        "Frigjør den ledige mannen"
+      ],
+      "risks": [
+        "Krever presise relasjoner",
+        "Straffes hardt av feilplassering"
+      ],
+      "gameStates": [
+        "leading",
+        "level",
+        "behind"
+      ],
+      "intensity": 60,
+      "pressing": "medium",
+      "tempo": "controlled",
       "width": "medium_wide",
-      "buildUp": "direct_play",
-      "chanceCreation": "early_through_balls",
-      "defensiveLine": "medium_low",
+      "buildUp": "structured_build_up",
+      "chanceCreation": "central_combinations",
+      "defensiveLine": "medium_high",
       "tags": [
-        "direct_counter",
-        "fast_transitions",
-        "vertical_play",
-        "space_behind",
-        "second_balls",
-        "direct_play"
+        "possession",
+        "overloads",
+        "structured_build_up",
+        "fluid_attack",
+        "central_combinations",
+        "close_support"
       ]
     },
     {
@@ -76,7 +163,125 @@
         "high_line",
         "pressing",
         "overloads"
+      ],
+      "family": "press",
+      "intent": "Vinn ballen på deres halvdel og angrip umiddelbart.",
+      "strengths": [
+        "Høy gjenvinning",
+        "Kort vei til mål",
+        "Setter dem under trykk"
+      ],
+      "risks": [
+        "Stort rom bak",
+        "Krever at alle presser samtidig"
+      ],
+      "gameStates": [
+        "level",
+        "behind"
+      ],
+      "intensity": 90
+    },
+    {
+      "id": "counter_press_recovery",
+      "name": "Gjenvinningspress",
+      "formation": "4-3-3",
+      "family": "press",
+      "intent": "Vinn ballen tilbake i de fem sekundene etter at dere mistet den.",
+      "strengths": [
+        "Kveler omstillingene deres",
+        "Holder trykket oppe"
+      ],
+      "risks": [
+        "Brytes første press, er dere åpne",
+        "Dyrt i beina"
+      ],
+      "gameStates": [
+        "level",
+        "behind"
+      ],
+      "intensity": 95,
+      "pressing": "very_high",
+      "tempo": "fast",
+      "width": "medium",
+      "buildUp": "aggressive_build_up",
+      "chanceCreation": "pressing_waves",
+      "defensiveLine": "high",
+      "tags": [
+        "high_press",
+        "pressing",
+        "fast_transitions",
+        "high_tempo",
+        "vertical_play",
+        "high_line"
       ]
+    },
+    {
+      "id": "midfield_press_trap",
+      "name": "Midtbanepress",
+      "formation": "4-4-2",
+      "family": "press",
+      "intent": "Slipp dem over midtstreken, og lukk fella der.",
+      "strengths": [
+        "Mindre rom bak enn høyt press",
+        "Vinner ballen sentralt"
+      ],
+      "risks": [
+        "Gir dem oppbyggingen gratis",
+        "Krever disiplinerte utløsere"
+      ],
+      "gameStates": [
+        "leading",
+        "level"
+      ],
+      "intensity": 70,
+      "pressing": "medium",
+      "tempo": "controlled",
+      "width": "medium",
+      "buildUp": "structured_build_up",
+      "chanceCreation": "pressing_waves",
+      "defensiveLine": "medium",
+      "tags": [
+        "medium_press",
+        "pressing",
+        "compact_shape",
+        "organised_defence",
+        "second_balls",
+        "central_control"
+      ]
+    },
+    {
+      "id": "direct_counter_442",
+      "name": "Direkte kontringer",
+      "formation": "4-4-2",
+      "pressing": "medium_low",
+      "tempo": "fast",
+      "width": "medium_wide",
+      "buildUp": "direct_play",
+      "chanceCreation": "early_through_balls",
+      "defensiveLine": "medium_low",
+      "tags": [
+        "direct_counter",
+        "fast_transitions",
+        "vertical_play",
+        "space_behind",
+        "second_balls",
+        "direct_play"
+      ],
+      "family": "kontring",
+      "intent": "Vent i form, og gå rett i rommet når de har gitt fra seg ballen.",
+      "strengths": [
+        "Farlig i overgang",
+        "Krever lite ballinnehav"
+      ],
+      "risks": [
+        "Overlater initiativet",
+        "Fungerer dårlig når du må jage"
+      ],
+      "gameStates": [
+        "leading",
+        "level"
+      ],
+      "intensity": 65
     },
     {
       "id": "low_block_transition_541",
@@ -95,6 +300,355 @@
         "direct_counter",
         "protected_box",
         "medium_or_low_line"
+      ],
+      "family": "kontring",
+      "intent": "Stå dypt og kompakt, og bruk de få sjansene dere får.",
+      "strengths": [
+        "Svært få sjanser imot",
+        "Trygt mot sterkere lag"
+      ],
+      "risks": [
+        "Nesten ingen egen kontroll",
+        "Ett balltap kan bli avgjørende"
+      ],
+      "gameStates": [
+        "leading"
+      ],
+      "intensity": 45
+    },
+    {
+      "id": "deep_block_long_release",
+      "name": "Dyp blokk og lang utløsning",
+      "formation": "5-4-1",
+      "family": "kontring",
+      "intent": "Forsvar boksen, og slipp spissen i gang med én lang ball.",
+      "strengths": [
+        "Ekstremt kompakt",
+        "Trenger få spillere fremover"
+      ],
+      "risks": [
+        "Spissen blir isolert",
+        "Gir bort hele banen"
+      ],
+      "gameStates": [
+        "leading"
+      ],
+      "intensity": 40,
+      "pressing": "low",
+      "tempo": "direct_when_possible",
+      "width": "compact",
+      "buildUp": "direct_play",
+      "chanceCreation": "counter_from_deep",
+      "defensiveLine": "low",
+      "tags": [
+        "low_block",
+        "compact_block",
+        "organised_defence",
+        "direct_counter",
+        "space_behind",
+        "protected_box"
+      ]
+    },
+    {
+      "id": "direct_second_balls",
+      "name": "Direkte spill og andreballer",
+      "formation": "4-4-2",
+      "family": "direkte",
+      "intent": "Kort vei fram, og vinn kampen om andreballene.",
+      "strengths": [
+        "Omgår presset deres",
+        "Flytter spillet høyt fort"
+      ],
+      "risks": [
+        "Gir ballen bort uten duellvinnere",
+        "Sliter mot en høy, sterk blokk"
+      ],
+      "gameStates": [
+        "level",
+        "behind"
+      ],
+      "intensity": 75,
+      "pressing": "medium",
+      "tempo": "direct_when_possible",
+      "width": "medium_wide",
+      "buildUp": "direct_play",
+      "chanceCreation": "early_through_balls",
+      "defensiveLine": "medium",
+      "tags": [
+        "direct_play",
+        "second_balls",
+        "vertical_play",
+        "high_tempo",
+        "space_behind",
+        "fast_transitions"
+      ]
+    },
+    {
+      "id": "target_man_focus",
+      "name": "Spill på målspissen",
+      "formation": "4-4-2",
+      "family": "direkte",
+      "intent": "Finn spissen tidlig, hold ballen der oppe, og spill på avlegg.",
+      "strengths": [
+        "Trygg utgang under press",
+        "Skaper festepunkt høyt"
+      ],
+      "risks": [
+        "Blir ensformig",
+        "Dør uten støtte rundt spissen"
+      ],
+      "gameStates": [
+        "level",
+        "behind"
+      ],
+      "intensity": 60,
+      "pressing": "medium_low",
+      "tempo": "direct_when_possible",
+      "width": "medium",
+      "buildUp": "direct_play",
+      "chanceCreation": "early_through_balls",
+      "defensiveLine": "medium",
+      "tags": [
+        "direct_play",
+        "box_service",
+        "second_balls",
+        "close_support",
+        "vertical_play",
+        "crossing"
+      ]
+    },
+    {
+      "id": "wide_fast_433",
+      "name": "Bredt og hurtig",
+      "formation": "4-3-3",
+      "pressing": "high",
+      "tempo": "fast",
+      "width": "wide",
+      "buildUp": "direct_wide",
+      "chanceCreation": "isolate_wingers",
+      "defensiveLine": "medium_high",
+      "tags": [
+        "wide_attack",
+        "fast_transitions",
+        "isolate_wingers",
+        "high_width",
+        "overloads",
+        "vertical_play"
+      ],
+      "family": "bredde",
+      "intent": "Strekk dem i bredden og la kantene angripe én mot én.",
+      "strengths": [
+        "Isolerer kantspillerne",
+        "Rask vei fra bakre til fremre tredel"
+      ],
+      "risks": [
+        "Forutsigbart uten variasjon",
+        "Tomt sentralt hvis boksen ikke fylles"
+      ],
+      "gameStates": [
+        "level",
+        "behind"
+      ],
+      "intensity": 80
+    },
+    {
+      "id": "crossing_box_presence",
+      "name": "Innlegg og boksnærvær",
+      "formation": "4-4-2",
+      "family": "bredde",
+      "intent": "Kom til grunnlinja, og fyll boksen med folk.",
+      "strengths": [
+        "Mange avslutninger",
+        "Farlig på andreball i boksen"
+      ],
+      "risks": [
+        "Bortkastet uten hodespill",
+        "Åpner for kontringer på tapte innlegg"
+      ],
+      "gameStates": [
+        "behind"
+      ],
+      "intensity": 75,
+      "pressing": "medium",
+      "tempo": "fast",
+      "width": "wide",
+      "buildUp": "direct_wide",
+      "chanceCreation": "isolate_wingers",
+      "defensiveLine": "medium_high",
+      "tags": [
+        "crossing",
+        "box_service",
+        "wide_attack",
+        "high_width",
+        "second_balls",
+        "wide_attacks"
+      ]
+    },
+    {
+      "id": "overlap_channels",
+      "name": "Overlapp og kanaler",
+      "formation": "3-4-3",
+      "family": "bredde",
+      "intent": "Backene løper forbi, og angrep kanalen mellom back og stopper.",
+      "strengths": [
+        "Skaper overtall ute",
+        "Angriper den vanskeligste sonen å forsvare"
+      ],
+      "risks": [
+        "Restforsvaret blir tynt",
+        "Krever timing mellom back og kant"
+      ],
+      "gameStates": [
+        "level",
+        "behind"
+      ],
+      "intensity": 80,
+      "pressing": "medium",
+      "tempo": "fast",
+      "width": "wide",
+      "buildUp": "direct_wide",
+      "chanceCreation": "isolate_wingers",
+      "defensiveLine": "medium_high",
+      "tags": [
+        "wide_attack",
+        "wide_attacks",
+        "overloads",
+        "high_width",
+        "fluid_attack",
+        "crossing"
+      ]
+    },
+    {
+      "id": "see_out_the_game",
+      "name": "Lukk kampen",
+      "formation": "5-4-1",
+      "family": "kampsituasjon",
+      "intent": "Ta tempoet ut av kampen og la dem spille foran blokka.",
+      "strengths": [
+        "Svært få sjanser imot",
+        "Roer ned et kaotisk bilde"
+      ],
+      "risks": [
+        "Inviterer trykk",
+        "Ett øyeblikks uoppmerksomhet koster alt"
+      ],
+      "gameStates": [
+        "leading"
+      ],
+      "intensity": 35,
+      "pressing": "low",
+      "tempo": "controlled",
+      "width": "compact",
+      "buildUp": "secure_first",
+      "chanceCreation": "counter_from_deep",
+      "defensiveLine": "low",
+      "tags": [
+        "low_block",
+        "compact_block",
+        "compact_shape",
+        "organised_defence",
+        "rest_defense",
+        "protected_box"
+      ]
+    },
+    {
+      "id": "chase_the_equaliser",
+      "name": "Jag utligningen",
+      "formation": "4-2-3-1",
+      "family": "kampsituasjon",
+      "intent": "Flytt laget høyt, ta risiko i oppbyggingen, og press dem tilbake.",
+      "strengths": [
+        "Mye trykk fremover",
+        "Tvinger fram feil hos dem"
+      ],
+      "risks": [
+        "Rom bak forsvaret",
+        "Sliter ut laget fort"
+      ],
+      "gameStates": [
+        "behind"
+      ],
+      "intensity": 90,
+      "pressing": "high",
+      "tempo": "fast",
+      "width": "wide",
+      "buildUp": "aggressive_build_up",
+      "chanceCreation": "early_through_balls",
+      "defensiveLine": "high",
+      "tags": [
+        "high_press",
+        "high_line",
+        "high_tempo",
+        "wide_attack",
+        "vertical_play",
+        "fast_transitions"
+      ]
+    },
+    {
+      "id": "slow_it_down",
+      "name": "Ro ned tempoet",
+      "formation": "4-3-3",
+      "family": "kampsituasjon",
+      "intent": "Bryt rytmen deres, hold ballen, og la kampen falle til ro.",
+      "strengths": [
+        "Stopper momentum hos motstanderen",
+        "Gir laget pusterom"
+      ],
+      "risks": [
+        "Skaper nesten ingenting",
+        "Publikum og styret blir utålmodige"
+      ],
+      "gameStates": [
+        "leading",
+        "level"
+      ],
+      "intensity": 30,
+      "pressing": "medium_low",
+      "tempo": "controlled",
+      "width": "medium",
+      "buildUp": "secure_first",
+      "chanceCreation": "central_combinations",
+      "defensiveLine": "medium",
+      "tags": [
+        "possession",
+        "calm_build_up",
+        "central_control",
+        "rest_defense",
+        "structured_build_up",
+        "keeper_support"
+      ]
+    },
+    {
+      "id": "all_out_attack",
+      "name": "Alt frem",
+      "formation": "3-4-3",
+      "family": "kampsituasjon",
+      "intent": "Siste utvei: alle mann frem, godta at det blir åpent.",
+      "strengths": [
+        "Maksimalt press i sluttminuttene",
+        "Kan redde en tapt kamp"
+      ],
+      "risks": [
+        "Helt åpent bakover",
+        "Straffes brutalt av en god kontring"
+      ],
+      "gameStates": [
+        "behind"
+      ],
+      "intensity": 100,
+      "pressing": "very_high",
+      "tempo": "fast",
+      "width": "wide",
+      "buildUp": "aggressive_build_up",
+      "chanceCreation": "early_through_balls",
+      "defensiveLine": "high",
+      "tags": [
+        "all_out_attack",
+        "high_press",
+        "high_line",
+        "chaos",
+        "high_tempo",
+        "wide_attack"
       ]
     }
   ]
