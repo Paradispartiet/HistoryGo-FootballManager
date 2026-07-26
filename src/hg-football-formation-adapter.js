@@ -22,10 +22,47 @@ const DEF_Y = 72;
 const ATT_Y = 24;
 const MID_Y = 48;
 
-// Horisontal spredning per linje (samme som app.js sin computeDefaultPositions:
-// x = 14 + 72 * index / (count - 1)).
+// Utvidet bånd for formasjoner med mange linjer (se lineY): forsvaret trekkes
+// litt lenger bak, angrepet litt lenger fram, og keeperen følger med.
+// 92, ikke 94: på 94 stakk keeperbrikka nedenfor sidelinja.
+const DEEP_KEEPER_Y = 92;
+const DEEP_DEF_Y = 78;
+const HIGH_ATT_Y = 16;
+
+// Horisontal spredning per linje. Ytterkantene er forbeholdt spillere som
+// FAKTISK spiller bredt (back, vingback, kant).
 const SPREAD_MIN = 14;
 const SPREAD_RANGE = 72;
+
+// Sentrale linjer skal ikke strekkes ut til sidelinja. En naiv «fordel jevnt
+// over hele bredden» plasserte spissparet i 4-4-2 på 14 % og 86 % – ute på
+// vingen, der ingen spiss står. Sentrale linjer får derfor et fast steg rundt
+// midten: to spisser havner på 39/61, en midtbanetrio på 28/50/72.
+const CENTRAL_STEP = 22;
+const WIDE_POSITIONS = new Set(["LB", "RB", "WB", "LW", "RW"]);
+
+// Er dette en bred linje? Ja hvis minst én spiller på linja spiller bredt.
+export function isWideLine(positions) {
+  return (Array.isArray(positions) ? positions : []).some((position) => WIDE_POSITIONS.has(position));
+}
+
+// x-koordinater (i prosent) for én linje, gitt posisjonene på den.
+// Bred linje: full bredde (14 → 86). Sentral linje: sentrert rundt 50.
+export function lineXPositions(positions) {
+  const list = Array.isArray(positions) ? positions : [];
+  const count = list.length;
+  if (count === 0) return [];
+  if (count === 1) return [50];
+
+  if (isWideLine(list)) {
+    return list.map((_, index) => round1(SPREAD_MIN + (SPREAD_RANGE * index) / (count - 1)));
+  }
+
+  // Sentrert, men aldri bredere enn ytterkantene.
+  const span = Math.min(CENTRAL_STEP * (count - 1), SPREAD_RANGE);
+  const start = 50 - span / 2;
+  return list.map((_, index) => round1(start + (span * index) / (count - 1)));
+}
 
 // Norske visningsetiketter per posisjon.
 const POSITION_LABELS = {
@@ -123,7 +160,22 @@ function lineY(lineIndex, lineCount) {
     return MID_Y;
   }
 
-  return DEF_Y - ((DEF_Y - ATT_Y) * lineIndex) / (lineCount - 1);
+  // Mange linjer (diamant, 2-3-2-3, WM-varianter) skal ikke klemmes inn i det
+  // samme båndet som en 4-4-2 bruker på tre — da havnet radene så tett at
+  // brikkene la seg oppå hverandre. Fra fire linjer og oppover tar vi i bruk
+  // mer av banens dybde i stedet for å krympe brikkene til uleselighet.
+  const stretch = Math.max(0, Math.min(1, (lineCount - 3) / 2));
+  const defY = DEF_Y + (DEEP_DEF_Y - DEF_Y) * stretch;
+  const attY = ATT_Y + (HIGH_ATT_Y - ATT_Y) * stretch;
+
+  return defY - ((defY - attY) * lineIndex) / (lineCount - 1);
+}
+
+// Keeperen følger med når forsvarslinja trekkes bakover, slik at avstanden
+// keeper–forsvar holder seg.
+export function keeperY(lineCount) {
+  const stretch = Math.max(0, Math.min(1, (lineCount - 3) / 2));
+  return round1(KEEPER_Y + (DEEP_KEEPER_Y - KEEPER_Y) * stretch);
 }
 
 // Tildeler et taktisk bånd (DEF/DM/CM/AM/ATT) til hver utespillerlinje. Bakerste
@@ -248,7 +300,7 @@ export function buildFormationSlots(baseShape, options = {}) {
   const bands = assignBands(counts, liberoLead);
 
   const slots = [
-    { slotId: "gk", label: POSITION_LABELS.GK, position: "GK", line: "keeper", x: 50, y: KEEPER_Y }
+    { slotId: "gk", label: POSITION_LABELS.GK, position: "GK", line: "keeper", x: 50, y: keeperY(lineCount) }
   ];
 
   const idCounters = {};
@@ -262,15 +314,15 @@ export function buildFormationSlots(baseShape, options = {}) {
     const y = lineY(lineIndex, lineCount);
     const isLiberoLine = liberoLead && lineIndex === 0;
     const positions = linePositions(band, count, { liberoLine: isLiberoLine });
+    const xs = lineXPositions(positions);
 
     positions.forEach((position, index) => {
-      const x = count === 1 ? 50 : SPREAD_MIN + (SPREAD_RANGE * index) / (count - 1);
       slots.push({
         slotId: makeId(position),
         label: slotLabel(position, index, count, isLiberoLine),
         position,
         line: BAND_LINE[band] || "midfield",
-        x: round1(x),
+        x: xs[index],
         y: round1(y)
       });
     });

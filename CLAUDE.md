@@ -37,6 +37,7 @@ npm run audit:dead-ends        # ingen blindveier i første spillbare løkke (de
 npm run sim:matchday           # matchday session loop (football-matchday-engine.js)
 npm run sim:mini-season        # mini-season loop
 npm run sim:tournament         # EM/VM i landslagsmodus (gruppespill → finale)
+npm run sim:pitch-layout       # brikkefordelingen på taktikktavla (alle formasjoner)
 npm run sim:training-week      # weekly training focus
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
 npm run sim:suggested-setups   # self-explaining suggested setups

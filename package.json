@@ -38,7 +38,8 @@
     "audit:football-book-ux": "node scripts/audit-football-book-ux.mjs",
     "sim:first-run-football-book-qa": "node scripts/simulate-first-run-football-book-qa.mjs",
     "sim:tournament": "node scripts/simulate-tournament.mjs",
-    "audit:tournaments": "node scripts/audit-tournaments.mjs"
+    "audit:tournaments": "node scripts/audit-tournaments.mjs",
+    "sim:pitch-layout": "node scripts/simulate-pitch-layout.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

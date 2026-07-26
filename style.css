@@ -1186,11 +1186,17 @@ select:focus-visible {
 /* ---------- Football pitch ---------- */
 .pitch {
   position: relative;
-  width: 100%;
-  max-width: 640px;
+  /* Banen skal få plass i skjermen sammen med formasjonsvelgeren, ikke fylle
+     den. Bredden er derfor også bundet til høyden (46vh × 4/5), slik at
+     forholdet 4:5 alltid holder og brikkene aldri forskyves. */
+  width: min(100%, 460px, max(320px, calc(46vh * 4 / 5)));
   aspect-ratio: 4 / 5;
-  min-height: 420px;
+  min-height: 0;
   margin-inline: auto;
+  /* Brikkene måles mot BANEN, ikke mot skjermen. Med en px-basert minstebredde
+     ble de like store uansett hvor stor banen var: på telefon endte fire
+     brikker på rad med å overlappe hverandre og henge utenfor sidelinja. */
+  container-type: inline-size;
   border: 1px solid var(--hg-border-strong);
   border-radius: 18px;
   overflow: hidden;
@@ -1265,16 +1271,16 @@ select:focus-visible {
   transform: translate(-50%, -50%);
   z-index: 2;
   display: grid;
-  gap: 3px;
+  gap: 2px;
   justify-items: center;
-  width: clamp(78px, 14%, 116px);
+  width: clamp(30px, var(--chip-w, 21cqw), 108px);
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 12px;
   background: rgba(3, 6, 10, 0.88);
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   color: var(--text);
-  padding: 9px 7px 8px;
+  padding: 4px 5px 4px;
   text-align: center;
   cursor: grab;
   touch-action: none;
@@ -1332,13 +1338,13 @@ select:focus-visible {
 .chip-token {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: clamp(18px, 8.5cqw, 34px);
+  height: clamp(18px, 8.5cqw, 34px);
   border-radius: 50%;
   border: 1px solid var(--line);
   background: var(--text);
   color: #000000;
-  font-size: 0.95rem;
+  font-size: clamp(0.62rem, 3.2cqw, 0.95rem);
   font-weight: 900;
   line-height: 1;
 }
@@ -1349,15 +1355,25 @@ select:focus-visible {
 }
 
 .chip-name {
-  font-size: 0.86rem;
+  font-size: clamp(0.55rem, 2.9cqw, 0.86rem);
   font-weight: 800;
   line-height: 1.05;
+  /* Ett navn = én linje. Ellers ble brikkene ulikt høye og la seg oppå
+     hverandre i linja over. */
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .chip-role {
-  font-size: 0.7rem;
+  font-size: clamp(0.48rem, 2.4cqw, 0.7rem);
   color: var(--muted);
   line-height: 1.1;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .player-chip.is-selected .chip-role {
@@ -1366,28 +1382,60 @@ select:focus-visible {
 
 .chip-foot {
   display: flex;
-  gap: 5px;
+  gap: clamp(2px, 1.2cqw, 4px);
   align-items: center;
   justify-content: center;
-  margin-top: 1px;
+  max-width: 100%;
 }
 
 .chip-pos {
   border-radius: 999px;
   background: var(--text);
   color: #000000;
-  font-size: 0.66rem;
+  font-size: clamp(0.46rem, 2.2cqw, 0.66rem);
   font-weight: 900;
   letter-spacing: 0.04em;
-  padding: 2px 7px;
+  /* Bunnraden må kunne krympe med brikka. Med fast padding ble den bredere enn
+     brikka selv på en liten bane, og dyttet naboene inn i hverandre. */
+  padding: 2px clamp(3px, 1.8cqw, 7px);
 }
 
 .chip-score {
   border-radius: 999px;
   border: 1px solid var(--line-soft);
-  font-size: 0.66rem;
+  font-size: clamp(0.46rem, 2.2cqw, 0.66rem);
   font-weight: 900;
-  padding: 1px 7px;
+  padding: 1px clamp(3px, 1.8cqw, 7px);
+}
+
+/* Tette formasjoner (mange rader, eller mange brikker på samme rad) må ha
+   lavere brikker, ellers kolliderer radene. Rolleteksten går først, så navnet.
+   Token, posisjon og matchScore blir alltid stående — og fullt navn ligger i
+   aria-label og i sidepanelet, så ingenting går tapt. */
+.pitch[data-density="middels"] .chip-role,
+.pitch[data-density="hoy"] .chip-role {
+  display: none;
+}
+
+/* Navnet er den viktigste opplysningen på brikka etter tallet. Vi strammer
+   heller token og luft på «middels» enn å miste navnet ett nivå for tidlig. */
+.pitch[data-density="middels"] .player-chip {
+  gap: 1px;
+  padding: 3px 4px;
+}
+
+.pitch[data-density="middels"] .chip-token {
+  width: clamp(16px, 7.5cqw, 30px);
+  height: clamp(16px, 7.5cqw, 30px);
+}
+
+.pitch[data-density="hoy"] .chip-name {
+  display: none;
+}
+
+.pitch[data-density="hoy"] .player-chip {
+  gap: 1px;
+  padding: 3px;
 }
 
 /* ---------- Slot editor + report boxes ---------- */
@@ -4722,12 +4770,15 @@ ul {
   }
 
   .pitch {
+    /* Litt smalere format på telefon, men fortsatt høydebundet: uten det
+       vokste banen (3:4 er høyere enn 4:5) og dyttet resten ut av skjermen. */
     aspect-ratio: 3 / 4;
-    min-height: 380px;
+    width: min(100%, max(300px, calc(46vh * 3 / 4)));
+    min-height: 0;
   }
 
   .player-chip {
-    width: clamp(70px, 22%, 104px);
+    width: clamp(30px, var(--chip-w, 21cqw), 96px);
   }
 
   .facility-board,
@@ -6588,6 +6639,45 @@ ul {
   color: var(--good);
 }
 
+/* Er laget klart, er sjekklista en KVITTERING – ikke dagens hovedsak. I full
+   størrelse spiste den hele førsteskjermen på telefon, så formasjonsvelgeren
+   og banen havnet under skjermkanten: det så ut som formasjonene var borte.
+   Trenger laget fortsatt grep, beholder kortet full størrelse — da ER det
+   hovedsaken. */
+.squad-setup-gate[data-ready="true"] {
+  gap: 10px;
+}
+
+.squad-setup-gate[data-ready="true"] .squad-setup-gate-head h2 {
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+}
+
+.squad-setup-gate[data-ready="true"] #squadSetupGateHint {
+  display: none;
+}
+
+.squad-setup-gate[data-ready="true"] .squad-setup-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.squad-setup-gate[data-ready="true"] .squad-setup-checklist article {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+
+.squad-setup-gate[data-ready="true"] .squad-setup-checklist span {
+  font-size: 0.68rem;
+}
+
+.squad-setup-gate[data-ready="true"] .squad-setup-checklist strong {
+  font-size: 0.9rem;
+}
+
 .tactic-system-details {
   border: 1px solid var(--line-soft);
   border-radius: 12px;
@@ -7013,7 +7103,6 @@ button.portal-card:hover {
 }
 
 .pitch {
-  max-width: 720px;
   border-width: 2px;
   box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.55), 0 20px 50px rgba(0, 0, 0, 0.42);
 }
