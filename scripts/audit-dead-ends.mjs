@@ -363,6 +363,91 @@ stage("13. Startelleveren kan alltid fylles");
   );
 }
 
+// ---- 14) Struktur: seksjoner og popuper ligger der de kan vises -------------
+// To ekte blindveier bodde i markupen, og begge ga BLANK skjerm:
+//   1) Én manglende </div> gjorde at hele formasjonsbiblioteket havnet INNI
+//      Speiding-seksjonen. Biblioteket ble 0x0 fordi forelderen var display:none.
+//   2) Alle popuper lå inne i hver sin faneseksjon. En popup som åpnes fra en
+//      ANNEN skjerm kunne derfor ikke tegnes: `position: fixed` slipper unna
+//      `overflow`, men ikke unna at en forelder er `display: none`.
+//      Innstillinger (åpnes fra toppen på hver skjerm) og troppevalget (åpnes
+//      fra Lag) var begge døde.
+// Ingen av dem gir feilmelding i konsollen — bare tomt bilde. Derfor denne vakta.
+stage("14. Struktur: seksjoner og popuper");
+{
+  // Enkel, avhengighetsfri div-teller: er markupen balansert?
+  const divOpen = (html.match(/<div\b/g) || []).length;
+  const divClose = (html.match(/<\/div>/g) || []).length;
+  check(
+    "div-taggene er balanserte",
+    divOpen === divClose,
+    `${divOpen} åpne mot ${divClose} lukkede`
+  );
+
+  // Hver faneseksjon må starte på toppnivå i <main>, ikke inne i en annen.
+  // Vi måler nestingdybden ved å telle div-balansen fram til hver seksjon.
+  const sectionRe = /<div\b[^>]*data-tab-section="([a-zA-Z]+)"/g;
+  const depthAt = (index) => {
+    const before = html.slice(0, index);
+    return (before.match(/<div\b/g) || []).length - (before.match(/<\/div>/g) || []).length;
+  };
+  const sections = [];
+  let match;
+  while ((match = sectionRe.exec(html)) !== null) {
+    sections.push({ name: match[1], depth: depthAt(match.index) });
+  }
+  check("alle faneseksjoner er funnet", sections.length >= 10, `${sections.length} seksjoner`);
+  const baseDepth = sections.length ? sections[0].depth : 0;
+  const nested = sections.filter((section) => section.depth !== baseDepth);
+  check(
+    "ingen faneseksjon ligger inne i en annen seksjon",
+    nested.length === 0,
+    nested.map((s) => `${s.name} (dybde ${s.depth}, forventet ${baseDepth})`).join(", ")
+  );
+
+  // Popuper må ligge UTENFOR faneseksjonene, ellers kan de bare vises på «sin»
+  // egen skjerm. Vi regner ut hver seksjons faktiske spenn (fra åpningstaggen
+  // til den matchende </div>) og sjekker at ingen popup starter inni et av dem.
+  const sectionSpans = [];
+  sectionRe.lastIndex = 0;
+  while ((match = sectionRe.exec(html)) !== null) {
+    const from = match.index;
+    let depth = 0;
+    const tagRe = /<div\b|<\/div>/g;
+    tagRe.lastIndex = from;
+    let tag;
+    while ((tag = tagRe.exec(html)) !== null) {
+      depth += tag[0] === "</div>" ? -1 : 1;
+      if (depth === 0) break;
+    }
+    sectionSpans.push({ name: match[1], from, to: tag ? tagRe.lastIndex : html.length });
+  }
+
+  const modalRe = /<div\b[^>]*class="modal-overlay"[^>]*id="([a-zA-Z]+)"/g;
+  const modals = [];
+  while ((match = modalRe.exec(html)) !== null) {
+    const inside = sectionSpans.find((span) => match.index > span.from && match.index < span.to);
+    modals.push({ id: match[1], inside: inside ? inside.name : null });
+  }
+  check("popupene er funnet", modals.length >= 10, `${modals.length} popuper`);
+  const buried = modals.filter((modal) => modal.inside);
+  check(
+    "ingen popup ligger inne i en faneseksjon",
+    buried.length === 0,
+    buried.map((m) => `${m.id} i ${m.inside}`).join(", ")
+  );
+
+  // Konkret regresjonsvakt for de to som faktisk var døde.
+  check(
+    "innstillinger kan åpnes fra alle skjermer",
+    modals.some((modal) => modal.id === "modalSettings" && !modal.inside)
+  );
+  check(
+    "troppevalget kan åpnes fra Lag",
+    modals.some((modal) => modal.id === "modalDraft" && !modal.inside)
+  );
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);
