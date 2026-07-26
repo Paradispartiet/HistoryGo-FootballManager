@@ -160,18 +160,22 @@
     </div>
   </nav>
 
+  <!-- Aktiv modus-linje. Ligger UTENFOR app-rammen: hver faneseksjon er
+       `position: absolute; inset: 0` inne i rammen, så et søsken i normal flyt
+       ble tegnet oppå av den aktive skjermen. Her er linja en egen rad i
+       body-gridet, over skjermområdet. -->
+  <section id="secondaryModeBar" class="panel mode-status-card secondary-mode-bar" aria-live="polite" hidden>
+    <div>
+      <p class="eyebrow">Aktiv modus</p>
+      <h2 id="secondaryModeTitle">Treningsrom</h2>
+      <p id="secondaryModeHint" class="muted-text">Velg formasjon · Plasser spillere · Test oppsett</p>
+    </div>
+    <div class="mini-season-actions">
+      <button type="button" id="resetTrainingRoomButton" class="is-reset">Nullstill</button>
+      <button type="button" id="returnToLeagueButton" class="primary-action-button">Tilbake til ligaspill</button>
+    </div>
+  </section>
   <main class="app-shell" id="app">
-    <section id="secondaryModeBar" class="panel mode-status-card secondary-mode-bar" aria-live="polite" hidden>
-      <div>
-        <p class="eyebrow">Aktiv modus</p>
-        <h2 id="secondaryModeTitle">Treningsrom</h2>
-        <p id="secondaryModeHint" class="muted-text">Velg formasjon · Plasser spillere · Test oppsett</p>
-      </div>
-      <div class="mini-season-actions">
-        <button type="button" id="resetTrainingRoomButton" class="is-reset">Nullstill</button>
-        <button type="button" id="returnToLeagueButton" class="primary-action-button">Tilbake til ligaspill</button>
-      </div>
-    </section>
     <!-- ============================ KONTORET (LAG / TAKTIKK) ============================ -->
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
@@ -455,11 +459,19 @@
               <p class="eyebrow">Startellever</p>
               <h2 id="formationTitle">Formasjon</h2>
             </div>
+            <!-- To ULIKE valg: hvor spillerne står (formasjon) og hvordan de
+                 skal spille (kampplan). Etikettene var sr-only, så de så ut som
+                 to formasjonsvelgere ved siden av hverandre. -->
             <form class="pitch-controls" id="teamForm">
-              <label class="sr-only" for="formationSelect">Formasjon</label>
-              <select id="formationSelect" name="formation" aria-label="Formasjon"></select>
-              <label class="sr-only" for="tacticSelect">Taktikk</label>
-              <select id="tacticSelect" name="tactic" aria-label="Taktikk"></select>
+              <p class="pitch-control-field">
+                <label for="formationSelect">Formasjon</label>
+                <select id="formationSelect" name="formation" aria-label="Formasjon"></select>
+              </p>
+              <p class="pitch-control-field">
+                <label for="tacticSelect">Kampplan</label>
+                <select id="tacticSelect" name="tactic" aria-label="Kampplan"></select>
+                <small id="tacticOriginHint" class="pitch-control-hint"></small>
+              </p>
             </form>
           </div>
 

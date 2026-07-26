@@ -1271,6 +1271,10 @@ select:focus-visible {
   transform: translate(-50%, -50%);
   z-index: 2;
   display: grid;
+  /* minmax(0, 1fr): uten dette gulver grid-sporet seg på innholdets
+     min-content-bredde, og bunnraden dyttet HELE brikka bredere enn den skulle
+     være. Boksene kolliderte ikke, men innholdet rant ut i sidene. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 2px;
   justify-items: center;
   width: clamp(30px, var(--chip-w, 21cqw), 108px);
@@ -1288,6 +1292,10 @@ select:focus-visible {
   -webkit-user-select: none;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
   transition: border-color 0.12s ease, transform 0.08s ease;
+  /* Ingenting skal kunne renne ut av brikka. Uten dette rant bunnraden ut i
+     sidene på smale brikker, og brikkene så ut til å kollidere selv om boksene
+     ikke gjorde det — noe en ren boks-måling aldri fanget. */
+  overflow: hidden;
 }
 
 .player-chip:hover {
@@ -1386,6 +1394,7 @@ select:focus-visible {
   align-items: center;
   justify-content: center;
   max-width: 100%;
+  min-width: 0;
 }
 
 .chip-pos {
@@ -1436,6 +1445,16 @@ select:focus-visible {
 .pitch[data-density="hoy"] .player-chip {
   gap: 1px;
   padding: 3px;
+}
+
+/* Smal brikke: posisjonsmerket vikes for matchScore. Posisjonen er allerede
+   gitt av plassen på banen og står i sidepanelet; tallet er det du leser her. */
+.pitch[data-narrow="true"] .chip-role {
+  display: none;
+}
+
+.pitch[data-narrow="true"] .chip-pos {
+  display: none;
 }
 
 /* ---------- Slot editor + report boxes ---------- */
@@ -3378,9 +3397,35 @@ ul {
   max-width: 360px;
 }
 
+/* Hvert valg får en synlig etikett, ellers står to nedtrekk side om side uten
+   at noe sier hva de styrer. */
+.pitch-control-field {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.pitch-control-field label {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pitch-control-hint {
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+
 .pitch-controls select {
   padding: 10px 12px;
   font-size: 0.95rem;
+  width: 100%;
+  min-width: 0;
 }
 
 /* ---------- Taktisk systempanel (valgt historisk formasjon) ---------- */
@@ -7314,7 +7359,9 @@ body {
   margin-inline: auto;
   overflow: hidden;
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  /* header · nav · modus-linje · skjermområde · fotnote. Er modus-linja
+     skjult, forsvinner raden med den (display:none). */
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
   border-inline: 1px solid var(--hg-border-soft);
   background: transparent;
 }
