@@ -100,7 +100,8 @@ import {
   adaptHgFormations,
   buildRoleTypeIndex,
   getRoleDisplayNames,
-  getHistoricalFormationRoleHint
+  getHistoricalFormationRoleHint,
+  lineXPositions
 } from "./hg-football-formation-adapter.js";
 import {
   buildFormationKnowledgeIndex,
@@ -189,6 +190,17 @@ const DATA_PATHS = {
 
 const EMPTY_VALUE = "__empty__";
 const POSITIONS_KEY = "hgfm.slotPositions.v1";
+
+// Brikkefordelingen på banen er versjonert i selve dataene, ikke i nøkkelen.
+// Layout 1 strakk HVER linje ut til sidelinja (spissparet i 4-4-2 havnet på
+// 14 % og 86 %) og klemte tette formasjoner inn i det samme smale båndet.
+// Lagrede layout 1-koordinater ville overstyrt den rettede fordelingen for alle
+// som allerede har spilt — også via modus-konvoluttens sesjoner, som en ren
+// nøkkelbump ikke ville nådd. Derfor stemples settet, og et umerket/utdatert
+// sett forkastes én gang. Manuelt flyttede brikker nullstilles da; alt annet i
+// lagringen er urørt.
+const PITCH_LAYOUT_VERSION = 3;
+const PITCH_LAYOUT_FIELD = "__layout";
 const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
 const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
 const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
@@ -5479,10 +5491,20 @@ function sanitizeSelectedFormation() {
 
 function loadStoredPositions() {
   try {
-    return JSON.parse(localStorage.getItem(POSITIONS_KEY)) || {};
+    return withCurrentPitchLayout(JSON.parse(localStorage.getItem(POSITIONS_KEY)));
   } catch (error) {
     return {};
   }
+}
+
+// Forkast koordinatsett fra en eldre banelayout. Returnerer alltid et objekt
+// stemplet med gjeldende layoutversjon.
+function withCurrentPitchLayout(value) {
+  const isObject = Boolean(value) && typeof value === "object" && !Array.isArray(value);
+  if (!isObject || value[PITCH_LAYOUT_FIELD] !== PITCH_LAYOUT_VERSION) {
+    return { [PITCH_LAYOUT_FIELD]: PITCH_LAYOUT_VERSION };
+  }
+  return value;
 }
 
 function saveStoredPositions(all) {
@@ -6059,11 +6081,13 @@ function computeDefaultPositions(formation) {
 
   Object.entries(byLine).forEach(([line, slots]) => {
     const y = LINE_Y[line] ?? 50;
-    const count = slots.length;
+    // Samme regel som adapteren: bare linjer med ekte breddespillere strekkes
+    // ut til sidelinja. Ellers ville et sentralt par (to spisser, to stoppere)
+    // havnet på 14 % og 86 % – ute på vingen.
+    const xs = lineXPositions(slots.map((slot) => slot.position));
 
     slots.forEach((slot, index) => {
-      const x = count === 1 ? 50 : 14 + (72 * index) / (count - 1);
-      positions[slot.slotId] = { x, y };
+      positions[slot.slotId] = { x: xs[index], y };
     });
   });
 
@@ -6079,16 +6103,26 @@ function ensurePositionsForFormation() {
     return;
   }
 
+  // Sesjonen (modus-konvolutten) kan bære et koordinatsett fra en eldre
+  // banelayout. Er stempelet borte eller utdatert, forkastes settet her – ellers
+  // ville et lagret spill beholdt den gamle, feilaktige plasseringen.
+  if (state.slotPositions && state.slotPositions[PITCH_LAYOUT_FIELD] !== PITCH_LAYOUT_VERSION) {
+    state.slotPositions = {};
+  }
+
   const all = loadStoredPositions();
   const defaults = computeDefaultPositions(formation);
   const stored = all[formation.id] || {};
+
   const merged = {};
 
   formation.slots.forEach((slot) => {
     merged[slot.slotId] = stored[slot.slotId] || defaults[slot.slotId];
   });
 
+  merged[PITCH_LAYOUT_FIELD] = PITCH_LAYOUT_VERSION;
   all[formation.id] = merged;
+  all[PITCH_LAYOUT_FIELD] = PITCH_LAYOUT_VERSION;
   saveStoredPositions(all);
   state.slotPositions = merged;
 }
@@ -6423,6 +6457,84 @@ function renderControls() {
   elements.tacticSelect.value = state.selectedTacticId;
 }
 
+// Hvor stor plass har én brikke på banen? Det avhenger av formasjonen, ikke av
+// skjermen: en 4-4-2 har fire på bredeste rad og 24 % mellom radene, mens en
+// 1-1-8 har åtte på rad. Med én fast brikkestørrelse la de tette formasjonene
+// brikkene oppå hverandre.
+//
+// Bredden regnes ut eksakt (vi kjenner avstanden mellom naboene). Høyden kan vi
+// ikke regne oss fram til: brikkas innhold har minstestørrelser i piksler, så på
+// en liten bane blir den relativt høyere enn matematikken tilsier. Derfor MÅLER
+// vi den etterpå — se fitPitchDensity().
+const PITCH_DENSITY_STEPS = ["lav", "middels", "hoy"];
+const PITCH_ROW_CLEARANCE = 2;
+
+function getPitchRowGeometry(formation) {
+  const slots = Array.isArray(formation?.slots) ? formation.slots : [];
+  const rows = new Map();
+  slots.forEach((slot) => {
+    const point = state.slotPositions[slot.slotId] || { x: slot.x, y: slot.y };
+    const y = Math.round(Number(point?.y ?? 50));
+    if (!rows.has(y)) rows.set(y, []);
+    rows.get(y).push(Number(point?.x ?? 50));
+  });
+
+  let minGapX = 100;
+  rows.forEach((xs) => {
+    const sorted = [...xs].sort((a, b) => a - b);
+    for (let i = 1; i < sorted.length; i += 1) {
+      minGapX = Math.min(minGapX, sorted[i] - sorted[i - 1]);
+    }
+  });
+
+  const ys = [...rows.keys()].sort((a, b) => a - b);
+  let minGapY = 100;
+  for (let i = 1; i < ys.length; i += 1) {
+    minGapY = Math.min(minGapY, ys[i] - ys[i - 1]);
+  }
+
+  return { minGapX, minGapY };
+}
+
+function applyPitchDensity(formation) {
+  const pitch = elements.lineupSlots;
+  if (!pitch) return;
+  const { minGapX } = getPitchRowGeometry(formation);
+  // 92 % av avstanden gir litt luft mellom naboene; 21 cqw er taket.
+  pitch.style.setProperty("--chip-w", `${Math.min(21, minGapX * 0.92)}cqw`);
+  // Start åpent. fitPitchDensity() strammer inn hvis brikkene faktisk ikke får
+  // plass i høyden.
+  pitch.dataset.density = PITCH_DENSITY_STEPS[0];
+}
+
+// Velg det mest informative tetthetsnivået brikkene faktisk får plass til.
+// «lav» viser navn og rolle, «middels» dropper rollen, «hoy» viser bare token,
+// posisjon og matchScore. Fullt navn ligger uansett i aria-label og sidepanelet.
+function fitPitchDensity(formation) {
+  const pitch = elements.lineupSlots;
+  if (!pitch) return;
+  const chip = pitch.querySelector(".player-chip");
+  if (!chip) return;
+  const box = pitch.getBoundingClientRect();
+  if (!(box.height > 0)) return;
+
+  const { minGapY } = getPitchRowGeometry(formation);
+  const gapPx = (minGapY / 100) * box.height;
+
+  // Litt luft mellom radene: uten margin ble «akkurat like høy som avstanden»
+  // godtatt, og avrunding ga én piksel overlapp.
+  const budget = gapPx - PITCH_ROW_CLEARANCE;
+
+  for (const step of PITCH_DENSITY_STEPS) {
+    pitch.dataset.density = step;
+    // Måler faktisk høyde etter at nivået er satt — minstestørrelsene i piksler
+    // gjør at den ikke kan regnes ut på forhånd.
+    if (chip.getBoundingClientRect().height <= budget) return;
+  }
+  // Selv det tetteste nivået kan være for høyt på en veldig liten skjerm.
+  // Da står vi igjen med «hoy» — bedre litt trangt enn uleselig.
+}
+
 function renderLineup(teamFit) {
   const formation = getFormation();
 
@@ -6432,6 +6544,8 @@ function renderLineup(teamFit) {
   if (!formation || !teamFit) {
     return;
   }
+
+  applyPitchDensity(formation);
 
   formation.slots.forEach((slot) => {
     const assignment = teamFit.assignments.find((item) => item.slot.slotId === slot.slotId);
@@ -6459,13 +6573,18 @@ function renderLineup(teamFit) {
 
     const player = assignment?.player || null;
     const playerName = player?.name || "Tom plass";
+    // Brikka er smal (den skal få plass elleve ganger på banen), så fornavnet
+    // ble kuttet midt i: «Daniel N…». Etternavnet identifiserer spilleren
+    // bedre på like liten plass. Fullt navn ligger fortsatt i aria-label og i
+    // sidepanelet.
+    const chipName = playerName.split(" ").filter(Boolean).pop() || playerName;
     const roleName = assignment?.role?.name || "Ingen rolle";
     const score = assignment?.fit?.matchScore ?? "–";
     const overall = Number.isFinite(player?.overall) ? player.overall : null;
 
     chip.innerHTML = `
       <span class="chip-token${overall === null ? " is-empty" : ""}">${overall ?? slot.position}</span>
-      <span class="chip-name">${playerName}</span>
+      <span class="chip-name">${chipName}</span>
       <span class="chip-role">${roleName}</span>
       <span class="chip-foot">
         <span class="chip-pos">${slot.position}</span>
@@ -6479,6 +6598,9 @@ function renderLineup(teamFit) {
 
     elements.lineupSlots.append(chip);
   });
+
+  // Brikkene er i DOM-en nå, så høyden kan måles og tetthetsnivået strammes inn.
+  fitPitchDensity(formation);
 }
 
 // Drag-and-drop med pointer events: fungerer med mus og touch (også iPad).

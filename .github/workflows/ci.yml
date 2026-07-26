@@ -66,6 +66,7 @@ jobs:
           npm run sim:matchday
           npm run sim:mini-season
           npm run sim:tournament
+          npm run sim:pitch-layout
           npm run sim:training-week
           npm run sim:formation-matchup
           npm run sim:suggested-setups

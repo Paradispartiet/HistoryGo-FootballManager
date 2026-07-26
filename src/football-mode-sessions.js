@@ -38,7 +38,9 @@ const LEGACY_KEYS = Object.freeze({
   selectedFormationId: "hgfm.selectedFormation.v1",
   selectedTacticId: "hgfm.selectedTactic.v1",
   lineup: "hgfm.lineup.v1",
-  slotPositions: "hgfm.slotPositions.v1",
+  // v2: v1 bar den gamle, feilaktige brikkefordelingen (se POSITIONS_KEY i
+  // app.js). Migrering fra v1 ville dratt feilen inn i modus-konvolutten.
+  slotPositions: "hgfm.slotPositions.v2",
   weeklyTrainingFocus: "hgfm.weeklyTrainingFocus.v1",
   weeklyTrainingProgram: "hgfm.weeklyTrainingProgram.v1",
   trainingWeek: "hgfm.trainingWeek.v1",
