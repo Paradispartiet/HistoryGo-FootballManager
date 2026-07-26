@@ -3,7 +3,7 @@
 > Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
 
 Landslagsmodus er den fjerde spillmodusen ved siden av ligaspill, scenarioer og
-treningsrommet. Den svarer på et konkret problem i samlemodellen: en
+Fotballvitenskap. Den svarer på et konkret problem i samlemodellen: en
 landslagsarena som Ullevaal skal **ikke** kunne gi klubblaget ditt hele Norges
 beste på ett besøk – men de spillerne må ha et sted å bli spilt. Det stedet er
 landslagsmodus.
@@ -30,7 +30,7 @@ mangler i stedet for at de forsvinner.
 ## Isolasjon fra klubblaget
 
 Landslagsmodus er en egen sesjon i modus-konvolutten
-(`src/football-mode-sessions.js`), på linje med scenario og treningsrom:
+(`src/football-mode-sessions.js`), på linje med scenario og Fotballvitenskap:
 
 - `MODES` inneholder `"national"`, og `nationalTeam: { nationality, squadPlayerIds }`
   er et `SESSION_STATE_FIELDS`-felt.

@@ -8201,3 +8201,21 @@ body > .site-footer { grid-row: 5; }
 @media (prefers-reduced-motion: reduce) {
   .matchday-clock[data-running="true"] { animation: none; }
 }
+
+/* ============================================================
+   Faneflater skal RULLE, ikke krympe.
+
+   `.app-shell > .tab-section` er `height: 100%` + `display: flex;
+   flex-direction: column` + `overflow-y: auto`. I en kolonne-flexboks med fast
+   høyde har hvert barn `flex-shrink: 1` som standard — så når innholdet var
+   høyere enn skjermen, ble panelene klemt sammen i stedet for at flata rullet.
+   Verst på avdelingene: `.dept-hero` har `overflow: hidden`, så den falt til
+   38px (bare padding) og spiste både overskrift, ingress og knappene sine. Det
+   så ut som en tynn stripe med bare en eyebrow — ingen feilmelding, ingenting
+   i DOM-en som manglet.
+
+   Barna skal beholde sin naturlige høyde; det er seksjonen som ruller.
+   ============================================================ */
+.app-shell > .tab-section > * {
+  flex: 0 0 auto;
+}

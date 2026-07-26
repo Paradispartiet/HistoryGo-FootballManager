@@ -68,7 +68,7 @@ Dette er fortsatt ikke et ferdig Football Manager-spill. Full ligadybde, overgan
 Aktiv modus har én sannhetskilde: `hgfm.modeSessions.v1`. Lagringen er en
 versjonert envelope med `activeMode` (`league`, `scenario` eller `training`) og
 tre adskilte snapshots under `sessions`. Ligaspillet er den varige sesjonen;
-scenarioet har sin egen femkampers mini-season, og treningsrommet er en
+scenarioet har sin egen femkampers mini-season, og Fotballvitenskap er en
 midlertidig kopi som kan nullstilles uten å berøre ligaen. Alle tre bruker de
 eksisterende formasjons-, taktikk-, trenings-, kamp- og mini-season-motorene.
 
@@ -101,7 +101,7 @@ unlocks.
 
 Ligaen lagres som `historygo-football-manager.league-season.v2` og snapshots
 som `leagueSeason` i den eksisterende mode-envelope. Scenario beholder sin
-separate `miniSeason` på fem kamper; treningsrommet får ingen ligatilstand.
+separate `miniSeason` på fem kamper; Fotballvitenskap får ingen ligatilstand.
 En eldre femukers league-mini-season beholdes urørt som legacy-historikk og
 tolkes aldri som en ny liga. Ny v2-liga opprettes separat når league-save-en
 er klar. Dermed er migreringen kopierende, idempotent og uten tap av manager,
@@ -115,9 +115,13 @@ fortsatt de eksisterende motorene; ligaen eier bare konkurransestrukturen.
 
 Valgfrie korte utfordringer basert på historiske lag, taktiske ideer eller bestemte læringsmål. Eksempel: Ajax 1971–73 / totalfotball. Scenarioer kan bruke eksisterende femkampers prøveperiode, styreoppdrag og læringslogikk, men de skal startes aktivt fra Scenarioer-valget.
 
-### Treningsrom
+### Fotballvitenskap
 
-Lavrisiko-modus for å forstå formasjoner, roller og taktiske prinsipper uten at det påvirker ligasesongen.
+Egen læremodul, ikke en spillmodus: formasjonsbiblioteket epoke for epoke, der
+du kan lære om fotball uavhengig av spillet. Den het tidligere «Treningsrom» og
+sendte deg rett inn i lagets treningsuke — altså inn i spillet den påsto å stå
+utenfor. Nå åpner den formasjonsbiblioteket, har sin egen ene fane, og skriver
+ingenting til klubben din.
 
 Standard start skal alltid være ligaspill eller valg av spillmodus. Et scenario skal aldri være hardkodet som første obligatoriske handling.
 

@@ -33,7 +33,7 @@ npm run audit:tactics                  # data/football_tactics.json (kampplaner)
 npm run check:syntax           # alle live JS-moduler parser (fanger død kode som «ser riktig ut»)
 npm run check:dom-ids          # querySelector("#id")-oppslag finnes i index.html
 npm run audit:flow             # hele spilløkka (start → mini-sesong) er wiret
-npm run audit:dead-ends        # ingen blindveier i første spillbare løkke (deaktiverte «Senere»-faner, ankre, gating)
+npm run audit:dead-ends        # ingen blindveier i første spillbare løkke («Senere»-flater, ankre, gating, menykontrakt)
 
 # Simulations (exercise the live JS engines end-to-end, no DOM/localStorage)
 npm run sim:matchday           # matchday session loop (football-matchday-engine.js)
@@ -139,7 +139,17 @@ The game must stay playable **relatively independently of History Go** — Histo
 
 `src/football-mode-sessions.js` is the single owner of the active mode and of per-mode session snapshots: `league`, `national`, `scenario`, `training`. Secondary modes never write into the league save. **Landslagsmodus** (national-team mode) is where the scouted national-arena players are actually played — its squad is the nation's base tier plus whatever you have collected, filtered by the chosen nation. See `docs/landslagsmodus.md`; guarded by `sim:mode-isolation`, `audit:flow` (stage 13) and `audit:dead-ends` (stage 13).
 
+The `training` mode id is a **storage name only** — in the UI it is **Fotballvitenskap**, a learn-about-football module that opens the historical formation library and is deliberately *outside* the game. It must never route into the team's Trening screen.
+
 What national mode plays *for* is a tournament: **EM and VM** (`src/football-tournament.js` + `data/football_tournaments.json`) — group stage into knockouts, opponents being nations that play as the existing historical style archetypes. Like the mini-season and league-season engines, it never simulates the manager's own match: it consumes the Kampdag result and only decides the tournament's progression. See `docs/mesterskap.md`; guarded by `sim:tournament`, `audit:tournaments` and `audit:flow` (stage 14).
+
+### Navigation contract
+
+The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse**, in that order, and no label may point at a section its name does not describe. Office surfaces (Speiding, Stab, Assistentråd, Klubbrom, Styret, Fasiliteter) live *on* Kontor as department cards, not as their own tabs — `data-tab-parent` on the section tells `highlightActiveTab()` which tab to light up. Scenarioer is a mode reached from the onboarding page, never a tab inside the league game.
+
+Each nav tab carries `data-nav-modes` (which modes show it) and optionally `data-nav-section-modes` (which modes may have the surface open at all); `applyModeScopedNav()` in `renderModeIsolation` enforces both. See `docs/meny.md`; guarded by `audit:dead-ends` stage 17.
+
+Tab surfaces scroll — they must not shrink. `.app-shell > .tab-section` is a fixed-height column flexbox, so its children need `flex: 0 0 auto` or they get crushed instead of scrolled (`.dept-hero` has `overflow: hidden` and collapsed to 38px of padding). Guarded by `audit:dead-ends` stage 16.
 
 ## Git workflow
 

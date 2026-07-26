@@ -1,0 +1,119 @@
+# Menyen
+
+> Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
+
+Samme krav gjelder huset spilleren står i: **du skal kunne lære deg det.** En
+meny som sender deg et annet sted enn navnet sitt sier, er ikke et smaksspørsmål
+— det er en blindvei med innhold i.
+
+## Hva som var galt
+
+Tre av sju hovedfaner løy om hvor de sendte deg:
+
+| Etikett | Åpnet faktisk |
+|---|---|
+| Stab | Assistentråd (innboksen) |
+| Klubb | Trening |
+| Analyse | Scenarioer |
+
+Samtidig lå «Stab» og «Klubb» **også** i en nedtrekksmeny bak «Kontor», der de
+pekte på *helt andre* flater (`admin` og `market`). To knapper med samme navn og
+ulikt mål: da hjelper det ikke at hver enkelt flate finnes, for du kan ikke
+bygge en modell av huset.
+
+## Hovedmenyen: manageruka
+
+Menyen følger nå rekkefølgen en manageruke faktisk går i:
+
+```
+Kontor → Trening → Taktikk → Kamp → Analyse
+```
+
+- **Kontor** — der du sitter. Neste kamp, ukas beslutning, assistentrådet, og
+  *Kontorets avdelinger*: Speiderrapporten, Stabskontor, Assistentråd, Klubbrom,
+  Styret, Fasiliteter (merket «Senere» og deaktivert).
+- **Trening** — ukas treningsprogram og fotballkunnskapen som hører til laget.
+- **Taktikk** — formasjon, kampplan, brikker, roller, benk. Formasjons­biblioteket
+  er et oppslagsverk du åpner herfra.
+- **Kamp** — kampdagen: brief, grep, klokke, live stilling.
+- **Analyse** — ettertanken: kamprapporten, rollebytter å vurdere, svake punkter,
+  og inngangen til den dype rapporten.
+
+**Speiding** ligger på Kontor, ikke som egen fane — det er jo det du gjør fra
+kontoret. Det samme gjelder **Stab**. Nedtrekksmenyen som duplikerte navnene er
+borte.
+
+### Avdelinger markerer fanen sin
+
+Kontorets avdelinger har ingen egen fane. Uten hjelp sto derfor hele menyen
+umarkert når du var inne i Speiding eller Stabskontor — innhold på skjermen, men
+ingenting som sa hvor du var. `data-tab-parent` på seksjonen sier hvilken fane
+som eier flaten, og `highlightActiveTab()` i `app.js` markerer den.
+
+## Modusene eier hver sin meny
+
+Hver nav-fane bærer `data-nav-modes` med modiene den hører hjemme i.
+`applyModeScopedNav(mode)` (kalt fra `renderModeIsolation`) viser og skjuler dem.
+
+| Modus | Meny |
+|---|---|
+| Ligaspill | Kontor · Trening · Taktikk · Kamp · Analyse |
+| Landslag | Kontor · Trening · Taktikk · Kamp · Analyse |
+| Scenario | + Scenario |
+| Fotballvitenskap | Fotballvitenskap (alene) |
+
+**Scenarioer er en egen modus fra forsiden**, ikke en fane inne i ligaspillet.
+Den lå tidligere bak etiketten «Analyse», som både skjulte scenarioene og stjal
+navnet fra analysen.
+
+`data-nav-section-modes` skiller «hvor fanen vises» fra «hvor flaten er lovlig»:
+formasjonsbiblioteket har bare fane i Fotballvitenskap, men åpnes som oppslagsverk
+fra Taktikk i spillet — da skal du få bli der, med «← Tilbake til Taktikk».
+
+## Fotballvitenskap
+
+Het tidligere **Treningsrom** og sendte deg rett inn i lagets treningsuke —
+altså inn i spillet den påsto å stå utenfor. Nå er den det den sier den er: et
+sted å lære fotball, uavhengig av spillet. Den åpner formasjonsbiblioteket, har
+sin egen ene fane, og «Neste handling»-stripa i bunnen skjules — en læremodul
+skal ikke mase om å skaffe spillbar tropp.
+
+Modusen beholder id-en `training` i `src/football-mode-sessions.js`, slik at
+lagrede konvolutter fortsatt leses. Det er bare et lagringsnavn; ingenting i
+UI-et heter Treningsrom lenger.
+
+## Flatene ruller, de krymper ikke
+
+En feil av samme familie som den kollapsede app-rammen, ett nivå ned:
+
+`.app-shell > .tab-section` er `height: 100%` + `display: flex; flex-direction:
+column` + `overflow-y: auto`. I en kolonne-flexboks med fast høyde har hvert barn
+`flex-shrink: 1` som standard — så når innholdet var høyere enn skjermen, ble
+panelene **klemt sammen** i stedet for at flata rullet. Verst på avdelingene:
+`.dept-hero` har `overflow: hidden` og falt til 38 piksler, bare padding. Igjen
+sto en tynn stripe med en eyebrow; overskrift, ingress, tellere og knapper var
+borte.
+
+Ingen feilmelding. Ingenting manglet i DOM-en — elementene lå der, med riktige
+mål, utenfor en skjult overflow. Bare et blikk på skjermen avslørte det.
+
+Rettelsen er én regel: `.app-shell > .tab-section > * { flex: 0 0 auto; }`.
+
+## Vakter
+
+`npm run audit:dead-ends` steg 17 låser menykontrakten:
+
+- hovedmenyen i ligaspill er nøyaktig Kontor → Trening → Taktikk → Kamp → Analyse
+- ingen navigasjonsetikett finnes to steder med ulikt mål
+- hver nav-fane bærer `data-nav-modes`, og `app.js` håndhever dem
+- Scenario-fanen finnes bare i scenariomodus; Scenarioer er et modusvalg på forsiden
+- Fotballvitenskap-fanen finnes bare i sin egen modus, heter ikke Treningsrom,
+  og åpner formasjonsbiblioteket — ikke Trening
+- Kontorets avdelinger inneholder speiding, stab, klubb og styret
+- den duplikate kontor-nedtrekksmenyen finnes ikke
+
+Steg 16 dekker i tillegg at faneflatas barn ikke krymper.
+
+Auditen ser også på **avdelingskortene**, ikke bare `.nav-tab`. Kortene er nå den
+ekte veien inn til avdelingene; så lenge vakta bare kikket på hovedmenyen, kunne
+en «Senere»-flate stå åpen som et fullt klikkbart kort.

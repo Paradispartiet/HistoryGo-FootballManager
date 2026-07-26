@@ -34,17 +34,26 @@ for (const match of html.matchAll(/data-tab-target="([^"]+)"/g)) tabTargets.add(
 const tabSections = new Set();
 for (const match of html.matchAll(/data-tab-section="([^"]+)"/g)) tabSections.add(match[1]);
 
-// Alle nav-fane-knapper i hovednav, med rå åpningstag-tekst, slik at vi kan se
-// hvilke som er primære/sekundære, deaktiverte og merket «Senere».
+// Alle fane-knapper som faktisk navigerer: hovedmenyen OG kortene i «Kontorets
+// avdelinger». Avdelingskortene er nå den ekte veien inn til stab, speiding,
+// klubb, styret og fasiliteter — de lå tidligere i en nedtrekksmeny som
+// duplikerte navnene i hovedmenyen. Ser auditen bare på .nav-tab, slipper en
+// deaktivert-regel som «Senere» rett gjennom på kortene.
 function navTabButtons() {
   const buttons = [];
   for (const m of html.matchAll(/<button\b[^>]*\bdata-tab-target="([^"]+)"[^>]*>([\s\S]*?)<\/button>/g)) {
     const openTag = m[0].slice(0, m[0].indexOf(">") + 1);
-    if (!/\bnav-tab\b/.test(openTag)) continue;
+    const isNavTab = /\bnav-tab\b/.test(openTag);
+    const isDepartment = /\bdept-link-card\b/.test(openTag);
+    if (!isNavTab && !isDepartment) continue;
     buttons.push({
       target: m[1],
       openTag,
       inner: m[2],
+      label: (m[2].match(/<span class="nav-label">([^<]+)<\/span>/) || m[2].match(/<strong>([^<]+)<\/strong>/) || [])[1] || "",
+      navModes: (openTag.match(/data-nav-modes="([^"]*)"/) || [, ""])[1].split(/\s+/).filter(Boolean),
+      isNavTab,
+      isDepartment,
       isPrimary: /\bnav-tab-primary\b/.test(openTag),
       isSecondary: /\bnav-tab-secondary\b/.test(openTag),
       isDisabled: /\sdisabled(?=[\s>])/.test(openTag) || /aria-disabled="true"/.test(openTag),
@@ -537,6 +546,98 @@ stage("16. App-rammen kan ikke kollapse");
     const block = index >= 0 ? css.slice(index, css.indexOf("}", index)) : "";
     check(`${selector} har eksplisitt rad ${row}`, block.includes(`grid-row: ${row}`), block.trim().slice(0, 60));
   });
+
+  // Samme familie av feil ett nivå ned: faneflata er en kolonne-flexboks med
+  // `height: 100%` og `overflow-y: auto`. Uten `flex: 0 0 auto` på barna har de
+  // `flex-shrink: 1` — og da KLEMMES panelene sammen i stedet for at flata
+  // ruller. `.dept-hero` har `overflow: hidden` og falt til 38px: bare en
+  // eyebrow igjen, overskrift, ingress og knapper borte. Ingen feilmelding,
+  // ingenting som manglet i DOM-en.
+  const sectionRule = css.indexOf(".app-shell > .tab-section > * {");
+  const sectionBlock = sectionRule >= 0 ? css.slice(sectionRule, css.indexOf("}", sectionRule)) : "";
+  check(
+    "faneflatas barn krymper ikke (flex: 0 0 auto) — flata ruller i stedet",
+    /flex:\s*0\s+0\s+auto/.test(sectionBlock),
+    sectionBlock.trim().slice(0, 60) || "regelen mangler"
+  );
+}
+
+// ---- 17) Menyen lyver ikke -------------------------------------------------
+// Den verste blindveien er ikke en tom flate — det er en fane som sender deg et
+// annet sted enn navnet sitt sier. «Stab» åpnet Assistentråd, «Klubb» åpnet
+// Trening og «Analyse» åpnet Scenarioer, samtidig som «Stab» og «Klubb» også
+// fantes i en nedtrekksmeny og pekte på HELT andre flater. Da hjelper det ikke
+// at hver enkelt flate finnes: du kan ikke lære deg huset.
+stage("17. Menyen lyver ikke");
+{
+  const buttons = navTabButtons();
+  const navTabs = buttons.filter((b) => b.isNavTab);
+  const departments = buttons.filter((b) => b.isDepartment);
+
+  // 17a) Manageruka i spillet: nøyaktig disse fem, i denne rekkefølgen.
+  const gameLoop = navTabs.filter((b) => b.navModes.includes("league"));
+  const expected = [
+    ["Kontor", "dashboard"],
+    ["Trening", "trening"],
+    ["Taktikk", "tactics"],
+    ["Kamp", "kamp"],
+    ["Analyse", "analyse"]
+  ];
+  check(
+    "hovedmenyen i ligaspill er Kontor → Trening → Taktikk → Kamp → Analyse",
+    gameLoop.length === expected.length &&
+      gameLoop.every((b, i) => b.label === expected[i][0] && b.target === expected[i][1]),
+    gameLoop.map((b) => `${b.label}→${b.target}`).join(", ")
+  );
+
+  // 17b) Ingen etikett to steder. To «Stab» som peker på hver sin flate er en
+  // meny du ikke kan stole på.
+  const labels = buttons.filter((b) => b.label).map((b) => b.label);
+  const duplicated = labels.filter((label, i) => labels.indexOf(label) !== i);
+  check(
+    "ingen navigasjonsetikett finnes to steder med ulikt mål",
+    duplicated.length === 0,
+    [...new Set(duplicated)].join(", ")
+  );
+
+  // 17c) Hver nav-fane sier hvilke modi den hører hjemme i, og app.js håndhever det.
+  const missingModes = navTabs.filter((b) => b.navModes.length === 0);
+  check(
+    "hver nav-fane bærer data-nav-modes",
+    missingModes.length === 0,
+    missingModes.map((b) => b.target).join(", ")
+  );
+  check("app.js har applyModeScopedNav", /function applyModeScopedNav\(/.test(app));
+  check("renderModeIsolation kaller applyModeScopedNav", /applyModeScopedNav\(mode\)/.test(app));
+
+  // 17d) Scenarioer er en egen modus fra forsiden, ikke en fane i spillet.
+  const scenarioTab = navTabs.find((b) => b.target === "scenarios");
+  check("Scenario-fanen finnes bare i scenariomodus", Boolean(scenarioTab) && scenarioTab.navModes.join(" ") === "scenario",
+    scenarioTab ? scenarioTab.navModes.join(" ") : "fanen mangler");
+  check("Scenarioer er et eget modusvalg på forsiden", /data-start-mode="scenario"/.test(html));
+
+  // 17e) Fotballvitenskap er en læremodul utenfor spillet: egen modus, og den
+  // åpner formasjonsbiblioteket — ikke lagets treningsuke.
+  const scienceTab = navTabs.find((b) => b.target === "hgfmLibrary");
+  check("Fotballvitenskap-fanen finnes bare i sin egen modus", Boolean(scienceTab) && scienceTab.navModes.join(" ") === "training",
+    scienceTab ? scienceTab.navModes.join(" ") : "fanen mangler");
+  check("Fotballvitenskap heter ikke lenger Treningsrom", !/Treningsrom/.test(html) && !/Treningsrom/.test(app));
+  check(
+    "Fotballvitenskap-modus åpner formasjonsbiblioteket, ikke Trening",
+    /mode === "training"[\s\S]{0,400}?activateTab\("hgfmLibrary"\)/.test(app),
+    "modusvalget sendte deg tidligere rett inn i lagets treningsflate"
+  );
+
+  // 17f) Kontoret er der du gjør kontorarbeidet: speiding og stab ligger der.
+  const deptTargets = new Set(departments.map((b) => b.target));
+  for (const target of ["historygo", "admin", "market", "board"]) {
+    check(`Kontorets avdelinger inneholder ${target}`, deptTargets.has(target));
+  }
+  check("Speiding er ikke lenger en egen hovedfane", !navTabs.some((b) => b.target === "historygo"));
+  check("Stab er ikke lenger en hovedfane som åpner innboksen", !navTabs.some((b) => b.label === "Stab"));
+
+  // 17g) Nedtrekksmenyen som duplikerte kontorflatene er borte.
+  check("den duplikate kontor-nedtrekksmenyen er fjernet", !/navOfficeMenu/.test(html) && !/navOfficeMenu/.test(app));
 }
 
 // ---- Rapport ----------------------------------------------------------------

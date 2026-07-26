@@ -129,7 +129,7 @@ export function computeNextActions(context = {}) {
   const firstTime = ctx.firstTime;
 
   if (!ctx.leagueModeActive && !ctx.scenarioModeActive && !ctx.nationalModeActive && context.selectedMode === null) {
-    return [{ id: "choose-game-mode", tag: "Kom i gang", title: "Velg spillmodus", hint: "Velg Ligaspill, Landslag, Scenario eller Treningsrom.", action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" } }];
+    return [{ id: "choose-game-mode", tag: "Kom i gang", title: "Velg spillmodus", hint: "Velg Ligaspill, Landslag, Scenario eller Fotballvitenskap.", action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" } }];
   }
 
   // Landslagsmodus: uten valgt nasjon finnes det ingen tropp å ta ut, så
