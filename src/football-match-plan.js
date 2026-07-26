@@ -21,9 +21,9 @@
 export const MATCH_PLAN_VERSION = "historygo-football-manager.match-plan.v1";
 
 export const GAME_STATE_LABELS = Object.freeze({
-  leading: "Du styrer bildet",
+  leading: "Du leder",
   level: "Jevnt",
-  behind: "Du er under"
+  behind: "Du ligger under"
 });
 
 // Kampbildet leses av kampens gang, ikke av en resultattavle: momentum og
@@ -111,14 +111,41 @@ export function readGameState(session) {
     { momentum: 0, risk: 0, clarity: 0 }
   );
 
-  const state = totals.momentum >= 2 ? "leading" : totals.momentum <= -2 ? "behind" : "level";
+  // Stillingen er fasit når kampen faktisk er i gang: «du er under» skal bety
+  // at du ligger under, ikke bare at det føles tungt. Momentum avgjør når det
+  // står likt — da er det spillet, ikke tavla, som forteller hvor kampen bærer.
+  const played = asArray(session?.timeline).length > 0;
+  const goalsFor = num(session?.score?.for);
+  const goalsAgainst = num(session?.score?.against);
+  const goalDiff = goalsFor - goalsAgainst;
+
+  let state;
+  let label;
+  if (played && goalDiff !== 0) {
+    state = goalDiff > 0 ? "leading" : "behind";
+    label = GAME_STATE_LABELS[state];
+  } else {
+    state = totals.momentum >= 2 ? "leading" : totals.momentum <= -2 ? "behind" : "level";
+    // Står det likt, er det SPILLET som går din vei — ikke tavla. «Du leder»
+    // ved 1-1 var en direkte løgn mot resultattavla ved siden av.
+    label = state === "leading"
+      ? "Jevnt – du har taket"
+      : state === "behind"
+        ? "Jevnt – de har taket"
+        : GAME_STATE_LABELS.level;
+  }
+
   return {
     state,
-    label: GAME_STATE_LABELS[state],
+    label,
     momentum: round2(totals.momentum),
     risk: round2(totals.risk),
     clarity: round2(totals.clarity),
-    decisionsMade: decisions.length
+    decisionsMade: decisions.length,
+    // Stillingen slik den står nå (0-0 før avspark).
+    score: { for: goalsFor, against: goalsAgainst },
+    goalDifference: goalDiff,
+    scoreKnown: played
   };
 }
 

@@ -8016,3 +8016,48 @@ body { grid-template-columns: minmax(0, 1fr); }
   font-size: 0.82rem;
   line-height: 1.35;
 }
+
+/* ---------- Resultattavle i kampen ---------- */
+.matchday-scoreboard {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-strong);
+}
+
+.matchday-score {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.matchday-score[data-state="leading"] { color: var(--good); }
+.matchday-score[data-state="behind"] { color: var(--danger); }
+
+.matchday-clock {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.matchday-goal-list {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.matchday-goal-list li {
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--muted);
+}

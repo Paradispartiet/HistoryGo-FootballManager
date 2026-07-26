@@ -553,6 +553,39 @@ stage("16. Kampplan");
       && matchPlanEngine.includes("const improvement =")
       && matchPlanEngine.includes("rescueBonus")
   );
+  // Ekte løpende stilling: kampen spilles periode for periode, og
+  // sluttresultatet ER stillingen manageren så underveis.
+  check(
+    "kampen har en løpende stilling (kampklokke)",
+    matchdayEngine.includes("export function advanceMatchClock")
+      && /score: \{ for: 0, against: 0 \}/.test(matchdayEngine)
+      && matchdayEngine.includes("timeline: []")
+  );
+  check(
+    "sluttresultatet er stillingen, ikke et nytt terningkast",
+    matchdayEngine.includes("const playedByClock = timeline.length > 0")
+      && /playedByClock \? num\(session\.score\?\.for\)/.test(matchdayEngine)
+  );
+  // Kallstedene ALENE er ikke nok: `advanceMatchClock(session)` sto tre steder
+  // i app.js uten at funksjonen var importert. Modulen parset fint, men kallet
+  // kastet ReferenceError i nettleseren og kampen startet aldri. Krev derfor at
+  // hver motor-API app.js bruker faktisk er importert.
+  check(
+    "klokka går ved avspark og etter hvert grep",
+    (app.match(/advanceMatchClock\(session\)/g) || []).length >= 3
+  );
+  ["advanceMatchClock", "applyMatchPlanChange", "applyOpponentAdaptation"].forEach((name) => {
+    check(`${name} er importert i app.js`, importedNames.has(name));
+  });
+  check(
+    "kampbildet leser den ekte stillingen",
+    matchPlanEngine.includes("const played = asArray(session?.timeline).length > 0")
+      && matchPlanEngine.includes("scoreKnown")
+  );
+  check(
+    "stillingen vises i kampen",
+    app.includes("function appendMatchScoreboard") && app.includes("matchday-scoreboard")
+  );
   check(
     "kampplanene er dokumentert",
     existsSync(join(root, "docs/kampplaner.md"))

@@ -8,6 +8,7 @@ import {
   resolveMatchdayDecision,
   finalizeMatchdaySession,
   getSessionEventIndex,
+  advanceMatchClock,
   applyMatchPlanChange,
   applyOpponentAdaptation,
   OPPONENT_PROFILES,
@@ -3770,6 +3771,9 @@ function startMatchdayKickoff() {
   }
 
   session.phase = "event_1";
+  // Første periode: fra avspark til første hendelse. Kampen har en stilling
+  // allerede før du tar ditt første grep — akkurat som en ekte kamp.
+  state.matchday.session = advanceMatchClock(session);
   saveMatchdayState();
   renderApp();
 }
@@ -3822,15 +3826,21 @@ function chooseMatchdayDecision(optionId) {
 
   if (eventIndex + 1 < session.events.length) {
     session.phase = `event_${eventIndex + 2}`;
-    // Motstanderen svarer på kampbildet. Skyver de laget opp eller trekker de
-    // seg ned, er ikke planen din like god lenger — og det skal manageren se,
-    // slik at kampen må leses på nytt i stedet for å velges riktig én gang.
+    // Spill ferdig perioden fram til neste hendelse. Grepet du nettopp tok
+    // gjelder for den — derfor teller tidlige grep i flere perioder enn sene.
+    session = advanceMatchClock(session);
+    state.matchday.session = session;
+    // Motstanderen svarer på kampbildet — nå den ekte stillingen. Skyver de
+    // laget opp eller trekker de seg ned, er ikke planen din like god lenger.
     const adapted = applyOpponentAdaptation(session);
     if (adapted !== session) {
       state.matchday.session = adapted;
       session = adapted;
     }
   } else {
+    // Siste periode: fra siste hendelse til full tid.
+    session = advanceMatchClock(session);
+    state.matchday.session = session;
     // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
     state.matchday.lastMatch = finalizeMatchdaySession(session);
     // Kampdag ↔ Club Week: merk resultatet med uka det ble spilt i, slik at
@@ -8929,6 +8939,10 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   phase.textContent = `Hendelse ${eventIndex + 1} av ${session.events.length}`;
   card.append(phase);
 
+  // Stillingen. Kampen har en resultattavle nå, og den er det første manageren
+  // skal se — alt annet (kampplan, motstanderens grep) leses i lys av den.
+  appendMatchScoreboard(card, session);
+
   // Tidligere grep med kort konsekvens.
   appendMatchdayDecisionLog(card, session.decisions, "Grep så langt");
 
@@ -9038,6 +9052,45 @@ function appendMatchPlanChangeLog(parent, lastMatch) {
   });
 }
 
+// Resultattavla med tidslinje: stillingen nå, og når målene falt.
+function appendMatchScoreboard(parent, session) {
+  const timeline = Array.isArray(session.timeline) ? session.timeline : [];
+  const score = session.score || { for: 0, against: 0 };
+
+  const board = document.createElement("div");
+  board.className = "matchday-scoreboard";
+
+  const line = document.createElement("p");
+  line.className = "matchday-score";
+  const diff = Number(score.for) - Number(score.against);
+  line.dataset.state = diff > 0 ? "leading" : diff < 0 ? "behind" : "level";
+  line.textContent = `${session.teamName || "Ditt lag"} ${score.for} – ${score.against} ${session.opponent?.name || "Motstander"}`;
+  board.append(line);
+
+  const played = timeline[timeline.length - 1];
+  if (played) {
+    const clock = document.createElement("p");
+    clock.className = "matchday-clock";
+    clock.textContent = `${played.minute}' · ${played.note}`;
+    board.append(clock);
+  }
+
+  // Målene som faktisk har falt, med minutt.
+  const goals = timeline.filter((entry) => entry.goalsFor > 0 || entry.goalsAgainst > 0);
+  if (goals.length) {
+    const list = document.createElement("ul");
+    list.className = "matchday-goal-list";
+    goals.forEach((entry) => {
+      const item = document.createElement("li");
+      item.textContent = `${entry.minute}' ${entry.scoreAfter.for}–${entry.scoreAfter.against}`;
+      list.append(item);
+    });
+    board.append(list);
+  }
+
+  parent.append(board);
+}
+
 // Bytt kampplan underveis. Viser kampbildet slik det leses nå, gjeldende plan,
 // og planene rangert etter hva som passer situasjonen — med prisen synlig.
 function appendMatchPlanSwitcher(card, session) {
@@ -9054,16 +9107,19 @@ function appendMatchPlanSwitcher(card, session) {
   wrap.addEventListener("toggle", () => { state.matchPlanSwitcherOpen = wrap.open; });
 
   const summary = document.createElement("summary");
-  summary.textContent = `Kampplan: ${currentPlan?.name || "ikke valgt"} · ${gameState.label}`;
+  const standing = gameState.scoreKnown
+    ? `${gameState.label} ${gameState.score.for}–${gameState.score.against}`
+    : gameState.label;
+  summary.textContent = `Kampplan: ${currentPlan?.name || "ikke valgt"} · ${standing}`;
   wrap.append(summary);
 
   const lead = document.createElement("p");
   lead.className = "muted-text match-plan-lead";
   const matchupNow = session.planMatchup?.verdict;
-  const standing = matchupNow && matchupNow !== "nøytral"
+  const matchupNote = matchupNow && matchupNow !== "nøytral"
     ? ` Slik de spiller nå, er planen din ${matchupNow} mot dem.`
     : "";
-  lead.textContent = `${currentPlan?.intent ? currentPlan.intent + " " : ""}${standing} Et bytte koster omstilling – laget må finne formen på nytt.`.trim();
+  lead.textContent = `${currentPlan?.intent ? currentPlan.intent + " " : ""}${matchupNote} Et bytte koster omstilling – laget må finne formen på nytt.`.trim();
   wrap.append(lead);
 
   const changes = Array.isArray(session.planChanges) ? session.planChanges : [];

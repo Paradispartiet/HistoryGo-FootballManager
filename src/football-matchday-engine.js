@@ -1464,7 +1464,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // gratis så lenge du lot det stå.
     planMatchup: evaluatePlanVsOpponent(tactic, matchOpponent),
     // Motstanderens egne justeringer gjennom kampen.
-    opponentAdjustments: []
+    opponentAdjustments: [],
+    // Løpende stilling og periodevis tidslinje. Kampen har en resultattavle nå.
+    score: { for: 0, against: 0 },
+    timeline: []
   };
 }
 
@@ -1508,7 +1511,88 @@ export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
   return next;
 }
 
-// Kampbildet slik det leses akkurat nå (momentum fra grepene så langt).
+// ----------------------------------------------------------------------------
+// Kampklokka. Kampen deles i perioder rundt hendelsene: én før første hendelse,
+// én mellom hver, og én etter den siste. Hver periode avgjør sine egne mål fra
+// xG-raten SLIK DEN ER AKKURAT DA — så grep og planbytter tidlig i kampen
+// påvirker flere perioder enn de sene. Det gir en ekte løpende stilling, og
+// «du er under» betyr endelig at du faktisk ligger under.
+// ----------------------------------------------------------------------------
+const SEGMENT_MINUTES = [18, 39, 62, 84];
+
+function segmentMinute(index, total) {
+  if (index < SEGMENT_MINUTES.length) return SEGMENT_MINUTES[index];
+  return Math.min(90, 18 + Math.round((72 * index) / Math.max(1, total - 1)));
+}
+
+// xG-raten akkurat nå: basis pluss alt som er bestemt så langt i kampen.
+function currentExpectedGoalRate(session) {
+  const tp = session.teamFitSnapshot?.tacticalProfile || {};
+  const opponent = session.opponent || createDefaultOpponent();
+  const missing = num(session.strengthSnapshot?.modifiers?.missing);
+  const base = computeBaseExpectedGoals({
+    tp,
+    historicalScore: num(session.teamFitSnapshot?.historicalScore),
+    opponent,
+    teamStrength: num(session.strengthSnapshot?.finalStrength),
+    isIncomplete: missing > 0,
+    missing,
+    planEdge: num(session.planMatchup?.edge)
+  });
+  const totals = sumDecisionEffects([...asArray(session.decisions), ...asArray(session.planChanges)]);
+  return {
+    for: base.expectedGoalsFor + totals.xgDeltaFor + totals.momentumDelta * 0.04,
+    against:
+      base.expectedGoalsAgainst + totals.xgDeltaAgainst + totals.riskDelta * 0.05 - totals.tacticalClarityDelta * 0.04
+  };
+}
+
+// Spill ferdig neste periode. Returnerer en NY sesjon med stillingen oppdatert.
+export function advanceMatchClock(session) {
+  if (!session || typeof session !== "object") return session;
+  const totalSegments = asArray(session.events).length + 1;
+  const played = asArray(session.timeline).length;
+  if (played >= totalSegments) return session;
+
+  const rate = currentExpectedGoalRate(session);
+  const share = 1 / totalSegments;
+  const segmentXgFor = clampRange(round2(rate.for * share), 0, 3);
+  const segmentXgAgainst = clampRange(round2(rate.against * share), 0, 3);
+
+  const goalsFor = rollGoals(segmentXgFor);
+  const goalsAgainst = rollGoals(segmentXgAgainst);
+
+  const before = session.score || { for: 0, against: 0 };
+  const score = { for: num(before.for) + goalsFor, against: num(before.against) + goalsAgainst };
+
+  const note = goalsFor > 0 && goalsAgainst > 0
+    ? "Mål i begge ender."
+    : goalsFor > 0
+      ? goalsFor > 1 ? `${goalsFor} mål for laget.` : "Mål for laget."
+      : goalsAgainst > 0
+        ? goalsAgainst > 1 ? `${goalsAgainst} mål imot.` : "Mål imot."
+        : "Ingen mål i denne perioden.";
+
+  return {
+    ...session,
+    score,
+    timeline: [
+      ...asArray(session.timeline),
+      {
+        segment: played,
+        minute: segmentMinute(played, totalSegments),
+        goalsFor,
+        goalsAgainst,
+        scoreAfter: { ...score },
+        expectedGoals: { for: segmentXgFor, against: segmentXgAgainst },
+        note
+      }
+    ]
+  };
+}
+
+// Kampbildet slik det leses akkurat nå. Stillingen er fasit når kampen er i
+// gang; momentum avgjør bare når det står likt.
 export function getMatchdayGameState(session) {
   return readGameState(session);
 }
@@ -1744,8 +1828,13 @@ export function finalizeMatchdaySession(session) {
   expectedGoalsFor = clampRange(round2(expectedGoalsFor), 0.2, 4.0);
   expectedGoalsAgainst = clampRange(round2(expectedGoalsAgainst), 0.1, 4.0);
 
-  const goalsFor = rollGoals(expectedGoalsFor);
-  const goalsAgainst = rollGoals(expectedGoalsAgainst);
+  // Er kampen spilt periode for periode, ER stillingen resultatet — den ble
+  // bygget underveis og manageren har sett den. Å rulle et nytt sluttresultat
+  // oppå ville gjort den løpende stillingen til en løgn.
+  const timeline = asArray(session.timeline);
+  const playedByClock = timeline.length > 0;
+  const goalsFor = playedByClock ? num(session.score?.for) : rollGoals(expectedGoalsFor);
+  const goalsAgainst = playedByClock ? num(session.score?.against) : rollGoals(expectedGoalsAgainst);
 
   let outcome = "draw";
   if (goalsFor > goalsAgainst) {
@@ -1895,6 +1984,8 @@ export function finalizeMatchdaySession(session) {
     // omstillingen faktisk kostet og ga.
     planChanges: planChanges.map((change) => ({ ...change })),
     opponentAdjustments: asArray(session.opponentAdjustments).map((entry) => ({ ...entry })),
+    // Tidslinja: når målene falt, og hva stillingen var da.
+    timeline: timeline.map((entry) => ({ ...entry })),
     activePlanSnapshot: session.activePlanSnapshot || session.tacticSnapshot || null,
     decisionTotals: totals,
     bestDecision: bestDecision

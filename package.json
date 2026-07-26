@@ -41,7 +41,8 @@
     "audit:tournaments": "node scripts/audit-tournaments.mjs",
     "sim:pitch-layout": "node scripts/simulate-pitch-layout.mjs",
     "sim:match-plan": "node scripts/simulate-match-plan.mjs",
-    "audit:tactics": "node scripts/audit-tactics.mjs"
+    "audit:tactics": "node scripts/audit-tactics.mjs",
+    "check:syntax": "node scripts/check-syntax.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"
