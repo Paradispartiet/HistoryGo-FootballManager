@@ -6455,6 +6455,18 @@ function renderControls() {
 
   elements.formationSelect.value = state.selectedFormationId;
   elements.tacticSelect.value = state.selectedTacticId;
+
+  // Kampplanens formasjonsarv sto tidligere i selve navnet («Bredt og hurtig
+  // 4-3-3»), og fikk kampplanvelgeren til å se ut som en formasjonsvelger nummer
+  // to — med et tall som motsa den valgte formasjonen. Arven hører hjemme som en
+  // opplysning under valget, ikke i navnet.
+  const originHint = document.querySelector("#tacticOriginHint");
+  if (originHint) {
+    const tactic = getTactic();
+    const origin = typeof tactic?.formation === "string" ? tactic.formation.trim() : "";
+    originHint.textContent = origin ? `Fra ${origin}-tradisjonen` : "";
+    originHint.hidden = !origin;
+  }
 }
 
 // Hvor stor plass har én brikke på banen? Det avhenger av formasjonen, ikke av
@@ -6468,6 +6480,8 @@ function renderControls() {
 // vi den etterpå — se fitPitchDensity().
 const PITCH_DENSITY_STEPS = ["lav", "middels", "hoy"];
 const PITCH_ROW_CLEARANCE = 2;
+// Under denne bredden får ikke bunnraden plass i brikka.
+const PITCH_NARROW_CHIP_PX = 70;
 
 function getPitchRowGeometry(formation) {
   const slots = Array.isArray(formation?.slots) ? formation.slots : [];
@@ -6518,8 +6532,15 @@ function fitPitchDensity(formation) {
   const box = pitch.getBoundingClientRect();
   if (!(box.height > 0)) return;
 
-  const { minGapY } = getPitchRowGeometry(formation);
+  const { minGapX, minGapY } = getPitchRowGeometry(formation);
   const gapPx = (minGapY / 100) * box.height;
+
+  // Smal brikke: bunnraden (posisjon + matchScore) har en minstebredde i
+  // piksler og RANT UT av brikka når den ble smal nok — brikkene så ut til å
+  // kollidere selv om boksene ikke gjorde det. Da faller posisjonsmerket bort;
+  // det står uansett i sidepanelet og er gitt av plassen på banen.
+  const chipWidthPx = (minGapX / 100) * box.width * 0.92;
+  pitch.dataset.narrow = chipWidthPx < PITCH_NARROW_CHIP_PX ? "true" : "false";
 
   // Litt luft mellom radene: uten margin ble «akkurat like høy som avstanden»
   // godtatt, og avrunding ga én piksel overlapp.

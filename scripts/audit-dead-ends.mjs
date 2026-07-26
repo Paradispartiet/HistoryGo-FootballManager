@@ -448,6 +448,68 @@ stage("14. Struktur: seksjoner og popuper");
   );
 }
 
+// ---- 15) Taktikktavla: to ULIKE valg, og ingenting oppå hverandre -----------
+// «Hvorfor har vi to formasjonsvelgere?» — det hadde vi ikke. Vi hadde én
+// formasjonsvelger og én kampplanvelger, men begge etikettene var sr-only og
+// hver kampplan het noe som «Bredt og hurtig 4-3-3». Tallet i navnet motsa den
+// valgte formasjonen, og de leste som to av samme sort.
+stage("15. Taktikktavla");
+{
+  const tactics = JSON.parse(readFileSync(join(root, "data/football_tactics.json"), "utf8")).tactics || [];
+  check("kampplaner finnes", tactics.length >= 3, `${tactics.length} kampplaner`);
+  const numbered = tactics.filter((tactic) => /\d\s*-\s*\d/.test(String(tactic.name || "")));
+  check(
+    "ingen kampplan har et formasjonstall i navnet",
+    numbered.length === 0,
+    numbered.map((t) => t.name).join(", ")
+  );
+  check(
+    "formasjonsarven er beholdt som data",
+    tactics.every((tactic) => typeof tactic.formation === "string" && tactic.formation.length > 0)
+  );
+  check(
+    "arven vises som opplysning under valget, ikke i navnet",
+    html.includes('id="tacticOriginHint"') && app.includes("-tradisjonen")
+  );
+
+  // Synlige etiketter: sr-only sa ingenting til den som ser skjermen.
+  const controls = html.match(/<form class="pitch-controls"[\s\S]*?<\/form>/);
+  check("taktikkontrollene finnes", Boolean(controls));
+  check(
+    "begge valgene har en synlig etikett",
+    Boolean(controls) &&
+      /<label for="formationSelect">Formasjon<\/label>/.test(controls[0]) &&
+      /<label for="tacticSelect">Kampplan<\/label>/.test(controls[0]) &&
+      !/class="sr-only"/.test(controls[0])
+  );
+
+  // Modus-linja må ligge utenfor <main>: hver faneseksjon er absolutt posisjonert
+  // og dekker hele app-rammen, så et søsken i normal flyt ble tegnet oppå.
+  const mainBlock = html.match(/<main\s+class="app-shell"[\s\S]*?<\/main>/);
+  check("app-rammen finnes", Boolean(mainBlock));
+  check(
+    "modus-linja ligger utenfor app-rammen",
+    Boolean(mainBlock) && !mainBlock[0].includes('id="secondaryModeBar"') && html.includes('id="secondaryModeBar"')
+  );
+
+  // Brikkene må kunne krympe: uten disse rant innholdet ut i sidene selv om
+  // boksene ikke kolliderte — noe en ren boks-måling aldri fanget.
+  const chipRule = css.match(/\.player-chip \{[\s\S]*?\n\}/);
+  check("brikkeregelen finnes i CSS", Boolean(chipRule));
+  check(
+    "brikka kan krympe under innholdets minstebredde",
+    Boolean(chipRule) && /grid-template-columns:\s*minmax\(0,\s*1fr\)/.test(chipRule[0])
+  );
+  check(
+    "ingenting kan renne ut av brikka",
+    Boolean(chipRule) && /overflow:\s*hidden/.test(chipRule[0])
+  );
+  check(
+    "smal brikke dropper posisjonsmerket",
+    css.includes('.pitch[data-narrow="true"] .chip-pos') && app.includes("PITCH_NARROW_CHIP_PX")
+  );
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);
