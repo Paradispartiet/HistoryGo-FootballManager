@@ -89,6 +89,30 @@ sporet**, så kampen leses som én fortelling:
 Skjer flere ting rundt samme pause, forskyves de ett minutt hver — ellers
 klumpet hele pausen seg på samme minutt og rekkefølgen ble uleselig.
 
+### Live
+
+Kampen **spilles av mens du ser på**. Klokka teller, sjansene dukker opp
+etter hvert som minuttene går, og stillingen oppdaterer seg når målet faller.
+
+Perioden er ferdig avgjort i motoren i det øyeblikket den spilles — det må den
+være, siden utfallet henger på grepet du nettopp tok. Det som skjer i UI-et er
+at kampen **avdekkes** minutt for minutt. Motoren forblir ren og deterministisk;
+avspillingen er ren visning.
+
+To regler følger av det:
+
+- **Stillingen følger avspillingen, ikke fasiten.** Viste tavla sluttstillingen
+  fra første minutt, avslørte den målet før du rakk å se det falle.
+- **Grepet åpner først når perioden er spilt av.** Å kunne gripe inn i et
+  minutt du ennå ikke har sett ville gjort avspillingen meningsløs.
+
+Du styrer tempoet (Rolig / Normal / Rask), kan pause, og kan hoppe rett til
+pausen — manageren skal aldri måtte vente på klokka. En refresh midt i kampen
+beholder stillingen og loggen, med klokka på pause.
+
+Forlater du kampflaten eller nullstiller, stoppes klokka. En usynlig timer som
+tikker videre ville skrevet til en sesjon ingen ser.
+
 **Sluttresultatet ER stillingen du så** — å rulle et nytt resultat ved
 kampslutt ville gjort den løpende stillingen til en løgn.
 
@@ -175,6 +199,6 @@ vil ha støtte nær seg, en løper vil ha rom bak.
 
 | Skript | Dekker |
 |---|---|
-| `npm run sim:match-plan` | 48 sjekker: minutt-for-minutt-logg, kampklokke og løpende stilling, familier, avstand, omstillingskostnad, kampbilde, matchup fra avspark, motstanderens justeringer, redningsbelønning, effekt på resultatet |
+| `npm run sim:match-plan` | 50 sjekker: minutt-for-minutt-logg, kampklokke og løpende stilling, familier, avstand, omstillingskostnad, kampbilde, matchup fra avspark, motstanderens justeringer, redningsbelønning, effekt på resultatet |
 | `npm run audit:tactics` | dataskjema, at hver plan forklarer seg, at ingen plan passer alt, at taggene treffer spillerdataen |
 | `npm run audit:flow` (steg 16) | motoren er ren, byttet er wiret i kampflyten og summeres i resultatet |

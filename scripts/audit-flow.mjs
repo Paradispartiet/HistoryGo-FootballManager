@@ -607,6 +607,38 @@ stage("16. Kampplan");
     app.includes("function appendMatchMinuteLog") && app.includes("Kampen minutt for minutt")
   );
   check("logMatchMoment er importert i app.js", importedNames.has("logMatchMoment"));
+
+  // Live-avspilling: kampen skal kunne SES mens den spilles, ikke bare leses
+  // etterpå. Perioden er avgjort i motoren; UI-et avdekker den minutt for minutt.
+  check(
+    "sesjonen holder styr på hvor langt kampen er sett",
+    matchdayEngine.includes("liveMinute: 0")
+      && /range,/.test(matchdayEngine)
+  );
+  check(
+    "avspillingen kan startes, pauses og hoppes over",
+    app.includes("function startMatchLive") && app.includes("function stopMatchLive")
+      && app.includes("function skipMatchLive") && app.includes("function toggleMatchLive")
+  );
+  // Blindveivakt: en usynlig timer som tikker videre etter at du har forlatt
+  // kampflaten ville skrevet til en sesjon ingen ser.
+  check(
+    "klokka stoppes når man forlater kampen eller nullstiller",
+    /if \(target !== "kamp"\) stopMatchLive\(\);/.test(app)
+      && /function resetMatchday\(\) \{[\s\S]{0,200}stopMatchLive\(\);/.test(app)
+  );
+  // Stillingen må følge avspillingen, ellers avslører tavla målet før du ser det.
+  check(
+    "stillingen følger avspillingen, ikke fasiten",
+    app.includes("function visibleScore") && app.includes("function visibleMinuteLog")
+      && /const score = visibleScore\(session\);/.test(app)
+  );
+  // Beslutningen skal ikke kunne tas i et minutt du ikke har sett.
+  check(
+    "grepet åpner først når perioden er spilt av",
+    /const periodSeen = Number\(session\.liveMinute\) >= currentPeriodEndMinute\(session\)/.test(app)
+      && app.includes("button.disabled = !periodSeen")
+  );
   check(
     "kampplanene er dokumentert",
     existsSync(join(root, "docs/kampplaner.md"))

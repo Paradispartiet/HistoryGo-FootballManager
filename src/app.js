@@ -3775,8 +3775,11 @@ function startMatchdayKickoff() {
   // Første periode: fra avspark til første hendelse. Kampen har en stilling
   // allerede før du tar ditt første grep — akkurat som en ekte kamp.
   state.matchday.session = advanceMatchClock(session);
+  // Kampen starter fra 0 og spilles av minutt for minutt.
+  state.matchday.session.liveMinute = 0;
   saveMatchdayState();
   renderApp();
+  startMatchLive();
 }
 
 // Ta et managergrep for gjeldende hendelse: vurder valget mot sesjonens
@@ -3801,6 +3804,7 @@ function chooseMatchdayDecision(optionId) {
   }
 
   let matchJustFinished = false;
+  let startNextPeriodPlayback = false;
   const resolution = resolveMatchdayDecision({
     event,
     option,
@@ -3837,7 +3841,10 @@ function chooseMatchdayDecision(optionId) {
     session.phase = `event_${eventIndex + 2}`;
     // Spill ferdig perioden fram til neste hendelse. Grepet du nettopp tok
     // gjelder for den — derfor teller tidlige grep i flere perioder enn sene.
+    const periodStart = currentPeriodEndMinute(session);
     session = advanceMatchClock(session);
+    // Neste periode spilles av fra der den forrige sluttet.
+    session.liveMinute = periodStart;
     state.matchday.session = session;
     // Motstanderen svarer på kampbildet — nå den ekte stillingen. Skyver de
     // laget opp eller trekker de seg ned, er ikke planen din like god lenger.
@@ -3846,9 +3853,11 @@ function chooseMatchdayDecision(optionId) {
       state.matchday.session = adapted;
       session = adapted;
     }
+    startNextPeriodPlayback = true;
   } else {
     // Siste periode: fra siste hendelse til full tid.
     session = advanceMatchClock(session);
+    session.liveMinute = 90;
     state.matchday.session = session;
     // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
     state.matchday.lastMatch = finalizeMatchdaySession(session);
@@ -3872,6 +3881,8 @@ function chooseMatchdayDecision(optionId) {
 
   saveMatchdayState();
   renderApp();
+  // Neste periode spilles av med det samme, så kampen føles sammenhengende.
+  if (startNextPeriodPlayback) startMatchLive();
   // Club Week Orchestrator v1.1: spilt kamp nudger uka til Oppsummering-fasen
   // (gate-sikkert — kampdag→oppsummering krever nettopp en spilt kamp). Selve
   // uke-rullen skjer fortsatt via «Til managerkontoret».
@@ -4028,6 +4039,8 @@ function applyMatchdayConsequences(lastMatch, session) {
 
 // Nullstill kampdag: fjern både siste kamp og eventuell pågående sesjon.
 function resetMatchday() {
+  // Nullstilling stopper også klokka.
+  stopMatchLive();
   ensureMatchdayState();
   state.matchday.lastMatch = null;
   state.matchday.session = null;
@@ -8950,7 +8963,11 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
 
   // Stillingen. Kampen har en resultattavle nå, og den er det første manageren
   // skal se — alt annet (kampplan, motstanderens grep) leses i lys av den.
-  appendMatchScoreboard(card, session);
+  // Egen beholder, så live-avspillingen kan oppdatere bare denne per minutt.
+  const liveView = document.createElement("div");
+  liveView.className = "matchday-live-view";
+  appendMatchScoreboard(liveView, session);
+  card.append(liveView);
 
   // Tidligere grep med kort konsekvens.
   appendMatchdayDecisionLog(card, session.decisions, "Grep så langt");
@@ -8986,6 +9003,10 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   text.textContent = event.text;
   eventCard.append(text);
 
+  // Beslutningen står for tur når perioden er spilt av. Å kunne gripe inn i et
+  // minutt du ennå ikke har sett ville gjort avspillingen meningsløs.
+  const periodSeen = Number(session.liveMinute) >= currentPeriodEndMinute(session);
+
   const options = document.createElement("div");
   options.className = "matchday-decision-options";
   (event.options || []).forEach((option) => {
@@ -8993,6 +9014,7 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
     button.type = "button";
     button.className = "matchday-decision-button";
     button.textContent = option.label;
+    button.disabled = !periodSeen;
     button.addEventListener("click", () => {
       chooseMatchdayDecision(option.id);
     });
@@ -9003,7 +9025,9 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   card.append(eventCard);
   const continueHint = document.createElement("p");
   continueHint.className = "matchday-meta";
-  continueHint.textContent = "Fortsett kampen ved å velge ett managergrep over.";
+  continueHint.textContent = periodSeen
+    ? "Fortsett kampen ved å velge ett managergrep over."
+    : "Kampen pågår. Grepet åpner når perioden er spilt — eller hopp til pausen.";
   card.append(continueHint);
 
   // Kampplanen kan byttes midt i kampen. Den står under grepene fordi den er
@@ -9061,10 +9085,133 @@ function appendMatchPlanChangeLog(parent, lastMatch) {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Live-avspilling. Perioden er ferdig AVGJORT i motoren i det øyeblikket den
+// spilles — det må den være, for utfallet henger på grepet du nettopp tok.
+// Det som skjer her er at kampen AVDEKKES minutt for minutt, så manageren ser
+// den utspille seg i stedet for å få fire tall servert.
+//
+// Klokka stopper når perioden er ferdig avdekket: da står beslutningen for tur.
+// ---------------------------------------------------------------------------
+const MATCH_LIVE_SPEEDS = [
+  { id: "rolig", label: "Rolig", msPerMinute: 260 },
+  { id: "normal", label: "Normal", msPerMinute: 130 },
+  { id: "rask", label: "Rask", msPerMinute: 45 }
+];
+
+let matchLiveTimer = null;
+
+function getMatchLiveSpeed() {
+  return MATCH_LIVE_SPEEDS.find((speed) => speed.id === state.matchLiveSpeedId) || MATCH_LIVE_SPEEDS[1];
+}
+
+// Hvor langt ut i kampen perioden som nettopp ble spilt rekker.
+function currentPeriodEndMinute(session) {
+  const timeline = Array.isArray(session?.timeline) ? session.timeline : [];
+  const last = timeline[timeline.length - 1];
+  return last?.range?.to ?? last?.minute ?? 0;
+}
+
+function isMatchLiveRunning() {
+  return matchLiveTimer !== null;
+}
+
+function stopMatchLive() {
+  if (matchLiveTimer !== null) {
+    clearInterval(matchLiveTimer);
+    matchLiveTimer = null;
+  }
+}
+
+// Start avdekkingen av perioden som nettopp ble spilt.
+function startMatchLive() {
+  stopMatchLive();
+  const session = state.matchday?.session;
+  if (!session || session.phase === "resolved") return;
+  const target = currentPeriodEndMinute(session);
+  if (Number(session.liveMinute) >= target) {
+    renderMatchLive();
+    return;
+  }
+  const { msPerMinute } = getMatchLiveSpeed();
+  matchLiveTimer = setInterval(() => {
+    const live = state.matchday?.session;
+    if (!live) { stopMatchLive(); return; }
+    const end = currentPeriodEndMinute(live);
+    live.liveMinute = Math.min(end, Number(live.liveMinute || 0) + 1);
+    if (live.liveMinute >= end) {
+      stopMatchLive();
+      saveMatchdayState();
+      // Perioden er sett: nå skal beslutningen fram, så hele kortet tegnes på nytt.
+      renderApp();
+      return;
+    }
+    renderMatchLive();
+  }, msPerMinute);
+  renderMatchLive();
+}
+
+// Hopp til slutten av perioden. Manageren skal aldri måtte vente på klokka.
+function skipMatchLive() {
+  stopMatchLive();
+  const session = state.matchday?.session;
+  if (!session) return;
+  session.liveMinute = currentPeriodEndMinute(session);
+  saveMatchdayState();
+  renderApp();
+}
+
+function toggleMatchLive() {
+  if (isMatchLiveRunning()) {
+    stopMatchLive();
+    renderApp();
+    return;
+  }
+  startMatchLive();
+}
+
+function setMatchLiveSpeed(speedId) {
+  state.matchLiveSpeedId = speedId;
+  if (isMatchLiveRunning()) startMatchLive();
+  else renderApp();
+}
+
+// Oppdater KUN kampbildet mellom minuttene. renderApp() på hvert minutt ville
+// bygget hele skjermen på nytt og gjort avspillingen hakkete.
+function renderMatchLive() {
+  const session = state.matchday?.session;
+  // Klasse, ikke id: beholderen lages av JS og finnes ikke i index.html.
+  const host = document.querySelector(".matchday-live-view");
+  if (!session || !host) return;
+  host.replaceChildren();
+  appendMatchScoreboard(host, session);
+}
+
+// Stillingen slik den står i det minuttet som er avdekket.
+function visibleScore(session) {
+  const visible = visibleMinuteLog(session);
+  const last = [...visible].reverse().find((entry) => entry.scoreAfter);
+  if (last) return { ...last.scoreAfter };
+  // Ingenting avdekket ennå: kampen står 0-0 til første hendelse spilles av.
+  const live = Number(session?.liveMinute);
+  if (Number.isFinite(live) && live > 0) return { for: 0, against: 0 };
+  return session?.score || { for: 0, against: 0 };
+}
+
+// Hvilke minutter er avdekket? Er kampen ferdig, vises alt.
+function visibleMinuteLog(session) {
+  const log = Array.isArray(session?.minuteLog) ? session.minuteLog : [];
+  const live = Number(session?.liveMinute);
+  if (!Number.isFinite(live) || live <= 0) return session?.phase === "resolved" ? log : [];
+  return log.filter((entry) => Number(entry.minute) <= live);
+}
+
 // Resultattavla med tidslinje: stillingen nå, og når målene falt.
 function appendMatchScoreboard(parent, session) {
   const timeline = Array.isArray(session.timeline) ? session.timeline : [];
-  const score = session.score || { for: 0, against: 0 };
+  // Stillingen skal følge AVSPILLINGEN, ikke fasiten. Viste vi sluttstillingen
+  // fra første minutt, avslørte tavla målet før du rakk å se det falle.
+  const score = visibleScore(session);
 
   const board = document.createElement("div");
   board.className = "matchday-scoreboard";
@@ -9076,16 +9223,67 @@ function appendMatchScoreboard(parent, session) {
   line.textContent = `${session.teamName || "Ditt lag"} ${score.for} – ${score.against} ${session.opponent?.name || "Motstander"}`;
   board.append(line);
 
+  // Kampklokka. Under avspilling teller den, og stopper når perioden er sett.
+  const live = Number(session.liveMinute) || 0;
+  const periodEnd = currentPeriodEndMinute(session);
   const played = timeline[timeline.length - 1];
   if (played) {
     const clock = document.createElement("p");
     clock.className = "matchday-clock";
-    clock.textContent = `${played.minute}' · ${played.note}`;
+    const running = isMatchLiveRunning();
+    clock.textContent = live > 0 && live < periodEnd
+      ? `${live}' — kampen pågår`
+      : `${live || played.minute}' · ${played.note}`;
+    // Notaten oppsummerer perioden, og skal bare stå når perioden ER sett.
+    if (running) clock.dataset.running = "true";
     board.append(clock);
   }
 
   parent.append(board);
+  appendMatchLiveControls(parent, session);
   appendMatchMinuteLog(parent, session);
+}
+
+// Kontrollene for avspillingen: pause, hastighet og «hopp til slutten».
+// Manageren skal aldri måtte vente på klokka for å ta et grep.
+function appendMatchLiveControls(parent, session) {
+  if (session.phase === "resolved") return;
+  const periodEnd = currentPeriodEndMinute(session);
+  const live = Number(session.liveMinute) || 0;
+  if (periodEnd <= 0) return;
+
+  const bar = document.createElement("div");
+  bar.className = "matchday-live-controls";
+
+  if (live < periodEnd) {
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "matchday-live-button";
+    toggle.textContent = isMatchLiveRunning() ? "Pause" : "Spill av";
+    toggle.addEventListener("click", toggleMatchLive);
+    bar.append(toggle);
+
+    const skip = document.createElement("button");
+    skip.type = "button";
+    skip.className = "matchday-live-button is-secondary";
+    skip.textContent = "Hopp til pausen";
+    skip.addEventListener("click", skipMatchLive);
+    bar.append(skip);
+  }
+
+  const speeds = document.createElement("div");
+  speeds.className = "matchday-live-speeds";
+  MATCH_LIVE_SPEEDS.forEach((speed) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `matchday-live-speed${getMatchLiveSpeed().id === speed.id ? " is-active" : ""}`;
+    button.textContent = speed.label;
+    button.addEventListener("click", () => setMatchLiveSpeed(speed.id));
+    speeds.append(button);
+  });
+  bar.append(speeds);
+
+  parent.append(bar);
 }
 
 // Kampen minutt for minutt: hver sjanse, hvert mål, hvert grep — i ett spor.
@@ -9099,7 +9297,9 @@ const MINUTE_LOG_TYPE_LABELS = {
 };
 
 function appendMatchMinuteLog(parent, session) {
-  const log = Array.isArray(session.minuteLog) ? session.minuteLog : [];
+  // Bare minuttene som faktisk er spilt av. Under avspilling vokser loggen
+  // mens du ser på; er kampen ferdig, vises hele kampen.
+  const log = visibleMinuteLog(session);
   if (!log.length) return;
 
   const wrap = document.createElement("details");
@@ -13852,6 +14052,9 @@ const OFFICE_TAB_TARGETS = new Set(["facilities", "admin", "market", "board", "h
 // Aktiver en fane programmatisk: brukes av fane-knappene og av "Neste
 // beslutninger" som navigerer brukeren til riktig avdeling.
 function activateTab(target) {
+  // Forlater du kampflaten, skal klokka stoppe. Ellers ville en usynlig timer
+  // fortsatt tikke og skrive til en sesjon ingen ser.
+  if (target !== "kamp") stopMatchLive();
   const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
   const sections = Array.from(document.querySelectorAll("[data-tab-section]"));
 
