@@ -8,6 +8,7 @@ import {
   resolveMatchdayDecision,
   finalizeMatchdaySession,
   getSessionEventIndex,
+  applyMatchPlanChange,
   OPPONENT_PROFILES,
   evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
@@ -67,6 +68,11 @@ import {
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
+import {
+  GAME_STATE_LABELS,
+  rankPlansForSituation,
+  readGameState
+} from "./football-match-plan.js";
 import {
   normalizeRoleFamiliarity,
   recordMatchRoleUsage,
@@ -8954,7 +8960,139 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   continueHint.className = "matchday-meta";
   continueHint.textContent = "Fortsett kampen ved å velge ett managergrep over.";
   card.append(continueHint);
+
+  // Kampplanen kan byttes midt i kampen. Den står under grepene fordi den er
+  // det større taktiske valget, ikke et alternativ til hendelsen foran deg.
+  appendMatchPlanSwitcher(card, session);
   container.append(card);
+}
+
+// Planbyttene i sluttrapporten: hva omstillingen kostet, og hva den ga.
+// Byttet er en beslutning på linje med managergrepene, og skal leses som det.
+function appendMatchPlanChangeLog(parent, lastMatch) {
+  const changes = Array.isArray(lastMatch?.planChanges) ? lastMatch.planChanges : [];
+  if (!changes.length) return;
+
+  appendMatchdaySubheading(parent, "Kampplan underveis");
+
+  changes.forEach((change) => {
+    const entry = document.createElement("div");
+    entry.className = `matchday-decision-entry is-${change.tone || "neutral"}`;
+
+    const title = document.createElement("p");
+    title.className = "matchday-decision-title";
+    title.textContent = `${change.fromPlanName || "Start"} → ${change.toPlanName}`;
+    entry.append(title);
+
+    const detail = document.createElement("p");
+    detail.className = "matchday-decision-detail";
+    const clarity = Number(change.effects?.tacticalClarityDelta) || 0;
+    const cost = clarity < 0 ? ` Omstillingen kostet ${Math.abs(clarity).toFixed(2)} taktisk klarhet.` : "";
+    detail.textContent = `${change.feedback || ""}${cost}`;
+    entry.append(detail);
+
+    parent.append(entry);
+  });
+}
+
+// Bytt kampplan underveis. Viser kampbildet slik det leses nå, gjeldende plan,
+// og planene rangert etter hva som passer situasjonen — med prisen synlig.
+function appendMatchPlanSwitcher(card, session) {
+  const plans = Array.isArray(state.tactics) ? state.tactics : [];
+  if (!plans.length) return;
+
+  const currentId = session.activePlanSnapshot?.id || session.selectedTacticId || null;
+  const currentPlan = plans.find((plan) => plan.id === currentId) || null;
+  const gameState = readGameState(session);
+
+  const wrap = document.createElement("details");
+  wrap.className = "match-plan-switcher";
+  wrap.open = Boolean(state.matchPlanSwitcherOpen);
+  wrap.addEventListener("toggle", () => { state.matchPlanSwitcherOpen = wrap.open; });
+
+  const summary = document.createElement("summary");
+  summary.textContent = `Kampplan: ${currentPlan?.name || "ikke valgt"} · ${gameState.label}`;
+  wrap.append(summary);
+
+  const lead = document.createElement("p");
+  lead.className = "muted-text match-plan-lead";
+  lead.textContent = currentPlan?.intent
+    ? `${currentPlan.intent} Et bytte koster omstilling – laget må finne formen på nytt.`
+    : "Et bytte koster omstilling – laget må finne formen på nytt.";
+  wrap.append(lead);
+
+  const changes = Array.isArray(session.planChanges) ? session.planChanges : [];
+  if (changes.length) {
+    const log = document.createElement("ul");
+    log.className = "match-plan-log";
+    changes.forEach((change) => {
+      const item = document.createElement("li");
+      item.className = `is-${change.tone || "neutral"}`;
+      const head = document.createElement("strong");
+      head.textContent = `${change.fromPlanName || "Start"} → ${change.toPlanName}`;
+      const why = document.createElement("span");
+      why.textContent = change.feedback || "";
+      item.append(head, why);
+      log.append(item);
+    });
+    wrap.append(log);
+  }
+
+  const list = document.createElement("div");
+  list.className = "match-plan-options";
+  const ranked = rankPlansForSituation(plans, {
+    currentPlan,
+    gameState: gameState.state,
+    opponent: session.opponent
+  });
+
+  ranked.forEach((entry) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `match-plan-option${entry.isCurrent ? " is-current" : ""}${entry.fitsGameState ? " is-fitting" : ""}`;
+    button.disabled = entry.isCurrent;
+
+    const name = document.createElement("strong");
+    name.textContent = entry.plan.name;
+    const intent = document.createElement("small");
+    intent.textContent = entry.plan.intent;
+
+    const meta = document.createElement("span");
+    meta.className = "match-plan-meta";
+    const bits = [];
+    if (entry.isCurrent) bits.push("Aktiv nå");
+    else bits.push(entry.fitsGameState ? "Passer bildet" : "For et annet bilde");
+    if (!entry.isCurrent) {
+      bits.push(entry.distance >= 55 ? "stor omstilling" : entry.distance >= 25 ? "merkbar omstilling" : "liten omstilling");
+    }
+    if (entry.matchupVerdict !== "nøytral") bits.push(`${entry.matchupVerdict} mot dem`);
+    meta.textContent = bits.join(" · ");
+
+    button.append(name, intent, meta);
+    if (!entry.isCurrent) {
+      button.addEventListener("click", () => switchMatchPlanDuringMatch(entry.plan.id));
+    }
+    list.append(button);
+  });
+  wrap.append(list);
+  card.append(wrap);
+}
+
+// Utfør planbyttet på den aktive kampsesjonen.
+function switchMatchPlanDuringMatch(planId) {
+  const session = state.matchday?.session;
+  if (!session || session.phase === "resolved") return;
+  const plan = (Array.isArray(state.tactics) ? state.tactics : []).find((item) => item.id === planId);
+  if (!plan) return;
+  const next = applyMatchPlanChange(session, plan, { opponent: session.opponent });
+  if (next === session) return;
+  state.matchday.session = next;
+  // Kampplanen utenfor kampen følger med, slik at neste kamp starter der du
+  // faktisk endte opp — ikke på planen du forlot. Valget lagres av
+  // modus-sesjonen i renderApp, som all annen oppsettstate.
+  state.selectedTacticId = planId;
+  saveMatchdayState();
+  renderApp();
 }
 
 // Sluttrapport: v1-kjernen (resultat, xG, nøkkelfaktorer, analyse) pluss
@@ -9107,6 +9245,7 @@ function renderMatchdayReport(container, lastMatch) {
 
   // Managergrep med konsekvens (v0.2).
   appendMatchdayDecisionLog(body, report.decisions, "Managergrep i kampen");
+  appendMatchPlanChangeLog(body, lastMatch);
 
   // Beste/svakeste grep (v0.2).
   if (report.bestDecision || report.worstDecision) {

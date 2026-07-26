@@ -39,7 +39,9 @@
     "sim:first-run-football-book-qa": "node scripts/simulate-first-run-football-book-qa.mjs",
     "sim:tournament": "node scripts/simulate-tournament.mjs",
     "audit:tournaments": "node scripts/audit-tournaments.mjs",
-    "sim:pitch-layout": "node scripts/simulate-pitch-layout.mjs"
+    "sim:pitch-layout": "node scripts/simulate-pitch-layout.mjs",
+    "sim:match-plan": "node scripts/simulate-match-plan.mjs",
+    "audit:tactics": "node scripts/audit-tactics.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

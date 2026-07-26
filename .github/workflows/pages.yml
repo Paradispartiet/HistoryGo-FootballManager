@@ -53,6 +53,9 @@ jobs:
       - name: Mesterskapsdata (EM/VM)
         run: npm run audit:tournaments
 
+      - name: Kampplandata
+        run: npm run audit:tactics
+
       - name: Build TypeScript engine
         run: npm run build
 
