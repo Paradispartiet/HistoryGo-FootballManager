@@ -268,7 +268,6 @@
         <button id="changeGameModeButton" type="button" class="shortcut-button">Bytt modus</button>
       </section>
 
-
       <section class="manager-portal" aria-label="Managerkontor">
         <article class="portal-card portal-club-card">
           <p class="eyebrow">Klubbkontor</p>
@@ -397,72 +396,14 @@
       </div>
 
       <!-- ===== POPUP: TABELL & TERMINLISTE ===== -->
-      <div class="modal-overlay" id="modalLeagueTable" role="dialog" aria-modal="true" aria-label="Tabell og terminliste" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Ligasesong</p><h3>Terminliste og tabell</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <section class="panel league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
-            <div class="mini-season-head">
-              <div>
-                <p class="eyebrow">Ligasesong</p>
-                <h2>Neste kamp · Terminliste og tabell</h2>
-                <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
-              </div>
-              <div class="mini-season-actions">
-                <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
-              </div>
-            </div>
-            <div id="leagueSeasonOverview" class="mini-season-overview"></div>
-          </section>
-        </div>
-      </div>
 
       <!-- ===== POPUP: FLERE ÅPNE BESLUTNINGER ===== -->
-      <div class="modal-overlay" id="modalDecisions" role="dialog" aria-modal="true" aria-label="Flere åpne beslutninger" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Beslutninger</p><h3>Flere åpne beslutninger</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <section class="panel decision-strip" aria-label="Flere åpne beslutninger">
-            <p class="muted-text decision-strip-intro">«Neste handling» i footeren er alltid det viktigste grepet. Her ligger de øvrige åpne beslutningene på tvers av klubben.</p>
-            <div id="decisionCards" class="decision-cards"></div>
-          </section>
-        </div>
-      </div>
 
       <!-- ===== POPUP: KLUBBHENDELSER ===== -->
-      <div class="modal-overlay" id="modalClubEvents" role="dialog" aria-modal="true" aria-label="Klubbhendelser" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Logg</p><h3>Klubbhendelser</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
-            <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
-          </section>
-        </div>
-      </div>
 
       <!-- ===== POPUP: GÅ TIL ROM ===== -->
-      <div class="modal-overlay" id="modalRooms" role="dialog" aria-modal="true" aria-label="Gå til rom" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Snarveier</p><h3>Gå til rom</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <div class="shortcut-buttons">
-            <button type="button" class="shortcut-button" data-modal-close data-tab-target="tactics">Taktikkrom</button>
-            <button type="button" class="shortcut-button" data-modal-close data-tab-target="kamp">Kampdag</button>
-            <button type="button" class="shortcut-button" data-modal-close data-tab-target="trening">Trening &amp; kunnskap</button>
-            <button type="button" class="shortcut-button" data-modal-close data-tab-target="scenarios">Scenarioer</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
+    </div>
 
     <!-- ============================ SCENARIOER ============================ -->
     <div class="tab-section scenarios-view" data-tab-section="scenarios" hidden>
@@ -626,97 +567,7 @@
       <div class="popup-actions" aria-label="Analyse">
         <button type="button" data-modal-open="modalAnalysis">Analyse · full rapport</button>
       </div>
-      <div class="modal-overlay" id="modalAnalysis" role="dialog" aria-modal="true" aria-label="Analyse · full rapport" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Lagrapport</p><h3>Analyse · full rapport</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-      <div class="insight-grid">
-        <section class="panel report-panel">
-          <p class="eyebrow">Lagrapport</p>
-          <h2>Hva fungerer?</h2>
-          <p id="reportSummary" class="muted-text">Fyll laget for å se rapport.</p>
 
-          <div class="coach-context-status" aria-label="Trenerteamets støtte til formasjonen">
-            <p id="coachContextHeadline" class="coach-context-headline muted-text">
-              Engasjer stab for å se hvordan trenerteamet støtter formasjonen.
-            </p>
-            <div class="coach-context-metrics">
-              <article><span>Formasjonstilvenning</span><strong id="coachContextFamiliarity">–</strong></article>
-              <article><span>Trenerforståelse</span><strong id="coachContextUnderstanding">–</strong></article>
-              <article><span>Taktisk læringsfart</span><strong id="coachContextLearning">–</strong></article>
-              <article><span>Stab</span><strong id="coachContextStaff">–</strong></article>
-            </div>
-          </div>
-
-          <div class="report-columns">
-            <section>
-              <h3>Styrker</h3>
-              <ul id="strengthsList"></ul>
-            </section>
-            <section>
-              <h3>Problemer</h3>
-              <ul id="issuesList"></ul>
-            </section>
-          </div>
-
-          <!-- Relasjoner: hvilke roller hjelper eller blokkerer hverandre.
-               Rendres av app.js (renderRelationships) fra teamFit.relationships. -->
-          <div class="relationship-block" aria-label="Hvordan rollene støtter eller blokkerer hverandre">
-            <h3>Relasjoner mellom rollene</h3>
-            <p id="relationshipHeadline" class="relationship-headline muted-text">
-              Fyll laget for å se hvordan rollene støtter hverandre.
-            </p>
-            <div id="relationshipList" class="relationship-list"></div>
-          </div>
-        </section>
-
-        <section class="panel detail-metrics-panel">
-          <p class="eyebrow">Analysevisning</p>
-          <h2>Sekundære detaljer</h2>
-          <div class="metric-grid detail-metrics">
-            <article><span>Rollefit</span><strong id="roleFitAverage">–</strong></article>
-            <article><span>Taktikk</span><strong id="tacticFitAverage">–</strong></article>
-            <article><span>Balanse</span><strong id="balanceScore">–</strong></article>
-            <article><span>Restforsvar</span><strong id="restDefenseScore">–</strong></article>
-            <article><span>Bredde</span><strong id="widthScore">–</strong></article>
-            <article><span>Dybde</span><strong id="depthScore">–</strong></article>
-            <article><span>Oppbygging</span><strong id="buildUpScore">–</strong></article>
-            <article><span>Press</span><strong id="pressScore">–</strong></article>
-            <article><span>Relasjoner</span><strong id="relationshipScore">–</strong></article>
-          </div>
-        </section>
-
-        <section class="panel manager-detail-panel" aria-live="polite">
-          <p class="eyebrow">Managerinnsikt</p>
-          <h2>Assistentens analyse</h2>
-          <div class="report-columns">
-            <section>
-              <h3>Rolleforslag</h3>
-              <ul id="managerRoleChanges"></ul>
-            </section>
-            <section>
-              <h3>Svakheter</h3>
-              <ul id="managerWeakPoints"></ul>
-            </section>
-          </div>
-        </section>
-
-        <!-- Suggested Setups v1 (flyttet fra Kontor): formasjons-/kampplanforslag
-             hører hjemme her, ved siden av de faktiske valgene. Treningsuke-delen er
-             bevisst utelatt — Trening-fanens egen "Anbefalt nå"-merking i
-             weekly-training-panel dekker allerede det behovet. -->
-        <section class="panel suggested-setups-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
-          <details class="panel-details is-flush">
-            <summary>Foreslått formasjon og kampplan</summary>
-            <p class="muted-text suggested-setups-intro">Faglige standardforslag basert på motstander og lagfit. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
-            <div id="suggestedSetupsTactics" class="suggested-setups-groups"></div>
-          </details>
-        </section>
-      </div>
-        </div>
-      </div>
     </div>
 
     <!-- ============================ KAMP ============================ -->
@@ -747,16 +598,7 @@
       <div class="popup-actions" aria-label="Mer">
         <button type="button" data-modal-open="modalBadgeEffects">Analyse · badge-effekter</button>
       </div>
-      <div class="modal-overlay" id="modalBadgeEffects" role="dialog" aria-modal="true" aria-label="Badge-effekter" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">History Go</p><h3>Badge-effekter</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <p class="muted-text">Opptjente treningsbadges kan gi små bonuser til lagets taktiske metrics.</p>
-          <div id="badgeEffectsSummary" class="badge-effects-list"></div>
-        </div>
-      </div>
+
     </div>
 
     <!-- ============================ TRENING & KUNNSKAP ============================ -->
@@ -816,42 +658,6 @@
         <button type="button" data-modal-open="modalKnowledge">Fotballkunnskap</button>
       </div>
 
-      <div class="modal-overlay" id="modalTrainingFocus" role="dialog" aria-modal="true" aria-label="Treningsfokus" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Managerinnsikt</p><h3>Treningsfokus</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <ul id="managerTrainingPlan"></ul>
-        </div>
-      </div>
-
-      <div class="modal-overlay" id="modalKnowledge" role="dialog" aria-modal="true" aria-label="Fotballkunnskap" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Football Knowledge Engine</p><h3>Fotballkunnskap</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <p class="muted-text">
-            Kunnskapsmotoren kobler lagets svakheter til fotballfaglige prinsipper, trenergrep og økter.
-          </p>
-          <p id="trainingWeekStatus" class="training-week-status">Kunnskapsuke 1</p>
-          <div class="knowledge-progress-grid" aria-label="Football Knowledge-progresjon">
-            <article><span>Denne uken</span><strong id="knowledgeCompletedThisWeek">0</strong></article>
-            <article><span>Totalt</span><strong id="knowledgeCompletedTotal">0</strong></article>
-          </div>
-          <button type="button" id="advanceTrainingWeek" class="advance-training-week-button">
-            Gå til neste kunnskapsuke
-          </button>
-          <p id="activeKnowledgeFocus" class="active-knowledge-focus">Ingen aktiv kunnskapsøkt valgt.</p>
-          <button type="button" id="clearKnowledgeFocus" class="clear-knowledge-focus-button">Fjern aktivt fokus</button>
-          <ul id="managerKnowledgeRecommendations" class="knowledge-card-list"></ul>
-          <details class="panel-details is-flush training-history-panel">
-            <summary>Treningshistorikk</summary>
-            <ul id="trainingHistoryList" class="training-history-list"></ul>
-          </details>
-        </div>
-      </div>
     </div>
 
     <!-- ============================ INNBOKS ============================ -->
@@ -879,32 +685,6 @@
         <div id="inboxThreadList" class="message-list"></div>
       </section>
 
-      <div class="modal-overlay" id="modalInboxWhy" role="dialog" aria-modal="true" aria-label="Hvorfor nå?" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Hvorfor nå?</p><h3>Klubbens signaler før trening</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <p class="muted-text">Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
-          <dl class="inbox-signal-stats">
-            <div><dt>Uleste tråder</dt><dd id="inboxSignalUnread">0</dd></div>
-            <div><dt>Krever svar</dt><dd id="inboxSignalReplies">0</dd></div>
-            <div><dt>Påvirker</dt><dd>trening / slitasje / moral / taktisk klarhet / styrepress</dd></div>
-            <div><dt>Neste steg etter innboks</dt><dd>Trening</dd></div>
-          </dl>
-          <p id="inboxSignalStatus" class="inbox-signal-status">Ingen kritiske signaler nå</p>
-        </div>
-      </div>
-
-      <div class="modal-overlay" id="modalInboxArchive" role="dialog" aria-modal="true" aria-label="Hele innboksen" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Arkiv</p><h3>Hele innboksen</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <div id="inboxThreadArchive" class="message-list"></div>
-        </div>
-      </div>
     </div>
 
     <!-- ============================ FASILITETER ============================ -->
@@ -1127,161 +907,18 @@
       </div>
 
       <!-- ===== POPUP: STAB ===== -->
-      <div class="modal-overlay" id="modalStaff" role="dialog" aria-modal="true" aria-label="Stab" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Person</p><h3>Stab</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <div class="unlock-block">
-            <h4>Tilgjengelig stab</h4>
-            <div id="availableStaffList" class="unlock-grid"></div>
-          </div>
-          <div class="unlock-block">
-            <h4>Engasjert stab</h4>
-            <div id="hiredStaffList" class="unlock-grid"></div>
-          </div>
-        </div>
-      </div>
 
       <!-- ===== POPUP: STEDER & RAPPORTER ===== -->
-      <div class="modal-overlay" id="modalPlaces" role="dialog" aria-modal="true" aria-label="Steder og rapporter" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Sted</p><h3>Steder &amp; rapporter</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <p class="muted-text">Stedene du har besøkt i History Go. Hvert sted låser opp ulike ressurser: spillere, stab, ekspertise, trening og lagidentitet.</p>
-          <div class="unlock-block">
-            <h4>Samlede sportsteder</h4>
-            <div id="unlockPlacesList" class="unlock-grid"></div>
-          </div>
-          <div class="unlock-block">
-            <h4>Stedsrapporter</h4>
-            <div id="placeReportsList" class="place-report-grid"></div>
-          </div>
-        </div>
-      </div>
 
       <!-- ===== POPUP: STARTVALG / HURTIGSTART ===== -->
-      <div class="modal-overlay" id="modalStart" role="dialog" aria-modal="true" aria-label="Startvalg" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Hurtigstart</p><h3>Startvalg</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <p class="muted-text">Vanligvis kommer troppen fra stedene du har besøkt. Trenger du en rask start, kan du bruke samlingen din, finne de nærmeste spillerne, eller sette et offentlig hjemsted.</p>
-          <button type="button" id="autoFillSquad" class="primary-action-button autofill-squad" data-modal-open="modalDraft">Velg troppen din</button>
-          <p class="muted-text autofill-squad-note">Sett sammen din egen starttropp fra klubbspillerne. De store navnene samler du i History Go.</p>
-          <div id="startModePanel" class="local-start-panel" aria-label="Startmodus">
-            <div id="startModeChoices">
-              <div class="local-start-heading">
-                <p class="eyebrow">Startmodus</p>
-                <h4 id="localStartTitle">Skaff spillbar tropp</h4>
-                <p id="startModeRosterNeed" class="muted-text">
-                  Du trenger 15 spillere for å starte managerløkken: 11 startere + 4 benk.
-                  Akkurat nå har du 0/15.
-                </p>
-                <p id="startModePlaceHint" class="muted-text">
-                  Noen steder gir kompetanse, trenere eller formasjoner. For å starte kampen trenger du også spillersteder eller en starttropp.
-                </p>
-              </div>
-
-              <div class="start-mode-grid">
-                <article class="start-mode-choice">
-                  <div>
-                    <h5>Bruk History Go-samlingen min</h5>
-                    <p class="muted-text">Bruk spillere, stab og steder du allerede har samlet. Dette skriver ikke til ekte History Go-progresjon.</p>
-                  </div>
-                  <button type="button" id="useHistoryGoCollection" class="unlock-card-action">Bruk samlingen min</button>
-                </article>
-
-              </div>
-            </div>
-
-            <div id="activeLocalStart" class="active-local-start" hidden>
-              <div>
-                <p class="eyebrow">Aktiv startmodus</p>
-                <h4>Auto-fylt starttropp</h4>
-                <p class="muted-text">Starttroppen er tilgjengelig i managerdelen, men ingenting er markert som samlet i History Go.</p>
-              </div>
-              <button type="button" id="clearLocalStart" class="unlock-card-action is-secondary">Fjern starttropp</button>
-            </div>
-
-            <p id="localStartStatus" class="local-start-status" role="status">Ingen starttropp valgt.</p>
-            <div id="playableSquadReady" class="active-local-start" hidden>
-              <div>
-                <p class="eyebrow">Troppen er spillbar</p>
-                <h4>Neste steg: Taktikkrom</h4>
-                <p class="muted-text">Du har minst 15 spillere. Sett startelleveren og benken før innboks, trening og kamp.</p>
-              </div>
-              <button type="button" class="unlock-card-action" data-modal-close data-tab-target="tactics">Gå til Taktikkrom</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- ===== POPUP: VELG TROPPEN DIN (draft) =====
            Du setter sammen din egen starttropp fra klubbspillerne. De store
            navnene (90+) og landslagsspillerne er bevisst IKKE i poolen – de
            samles i History Go. -->
-      <div class="modal-overlay" id="modalDraft" role="dialog" aria-modal="true" aria-label="Velg troppen din" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Ny tropp</p><h3>Velg troppen din</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <p class="muted-text">Velg 15 spillere. Alle er gode nok – spørsmålet er om du forstår dem. De store navnene samler du i History Go.</p>
-          <div class="draft-status-row">
-            <p id="draftCount" class="draft-count">0/15 valgt</p>
-            <p id="draftPositions" class="draft-positions muted-text"></p>
-          </div>
-          <div id="draftPool" class="draft-pool"></div>
-          <div class="draft-actions">
-            <button type="button" id="draftFillRest" class="unlock-card-action is-secondary">Fyll resten</button>
-            <button type="button" id="draftConfirm" class="primary-action-button">Bekreft troppen</button>
-          </div>
-      </div>
 
       <!-- ===== POPUP: EKSPERTISE · TRENING · BADGES · LAGKLASSE ===== -->
-      <div class="modal-overlay" id="modalProgress" role="dialog" aria-modal="true" aria-label="Progresjon" hidden>
-        <div class="modal">
-          <div class="modal-head">
-            <div><p class="eyebrow">Progresjon</p><h3>Ekspertise · Trening · Badges · Lagklasse</h3></div>
-            <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-          </div>
-          <div class="unlock-block">
-            <h4>Tilgjengelig ekspertise</h4>
-            <div id="unlockedExpertiseList" class="unlock-grid"></div>
-          </div>
-          <div class="unlock-block">
-            <h4>Treningsprogrammer</h4>
-            <div id="availableTrainingProgramsList" class="unlock-grid"></div>
-          </div>
-          <div class="unlock-block">
-            <h4>Badge-uke</h4>
-            <p id="hgTrainingWeekStatus" class="training-week-status">Badge-uke 1</p>
-            <div class="unlock-actions">
-              <button type="button" id="advanceHgTrainingWeek" class="unlock-card-action">Avanser badge-uke</button>
-              <button type="button" id="resetHgTeamMerits" class="unlock-card-action is-reset">Nullstill HGFM-progresjon</button>
-            </div>
-            <h4 class="unlock-subhead">Aktive treningsprogresjoner</h4>
-            <div id="badgeProgressList" class="unlock-grid"></div>
-          </div>
-          <div class="unlock-block">
-            <h4>Opptjente badges</h4>
-            <div id="earnedBadgesList" class="unlock-badge-list"></div>
-          </div>
-          <div class="unlock-block">
-            <h4>Lagklasser</h4>
-            <div id="teamClassificationsList" class="unlock-grid"></div>
-          </div>
-          <div class="unlock-block">
-            <h4>Lagidentitet</h4>
-            <div id="teamIdentityPanel" class="team-identity-panel"></div>
-          </div>
-        </div>
-      </div>
+
     </div>
 
     <!-- ============================ FORMASJONSBIBLIOTEK (HG FOOTBALL MANAGER) ============================ -->
@@ -1307,6 +944,413 @@
     </div>
   </main>
 
+  <!-- ===================== POPUPER =====================
+       Alle modaler bor HER, som direkte barn av <body> – ikke inne i en
+       faneseksjon. En modal inne i en seksjon kan bare vises når nettopp den
+       seksjonen er aktiv: `position: fixed` slipper unna `overflow`, men ikke
+       unna at en forelder er `display: none`. Innstillinger åpnes fra toppen på
+       hver eneste skjerm, og troppevalget åpnes fra Lag – begge lå inne i andre
+       seksjoner og kunne derfor ikke tegnes. -->
+  <div class="modal-overlay" id="modalLeagueTable" role="dialog" aria-modal="true" aria-label="Tabell og terminliste" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Ligasesong</p><h3>Terminliste og tabell</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <section class="panel league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
+              <div class="mini-season-head">
+                <div>
+                  <p class="eyebrow">Ligasesong</p>
+                  <h2>Neste kamp · Terminliste og tabell</h2>
+                  <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
+                </div>
+                <div class="mini-season-actions">
+                  <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
+                </div>
+              </div>
+              <div id="leagueSeasonOverview" class="mini-season-overview"></div>
+            </section>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalDecisions" role="dialog" aria-modal="true" aria-label="Flere åpne beslutninger" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Beslutninger</p><h3>Flere åpne beslutninger</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <section class="panel decision-strip" aria-label="Flere åpne beslutninger">
+              <p class="muted-text decision-strip-intro">«Neste handling» i footeren er alltid det viktigste grepet. Her ligger de øvrige åpne beslutningene på tvers av klubben.</p>
+              <div id="decisionCards" class="decision-cards"></div>
+            </section>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalClubEvents" role="dialog" aria-modal="true" aria-label="Klubbhendelser" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Logg</p><h3>Klubbhendelser</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
+              <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
+            </section>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalRooms" role="dialog" aria-modal="true" aria-label="Gå til rom" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Snarveier</p><h3>Gå til rom</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <div class="shortcut-buttons">
+              <button type="button" class="shortcut-button" data-modal-close data-tab-target="tactics">Taktikkrom</button>
+              <button type="button" class="shortcut-button" data-modal-close data-tab-target="kamp">Kampdag</button>
+              <button type="button" class="shortcut-button" data-modal-close data-tab-target="trening">Trening &amp; kunnskap</button>
+              <button type="button" class="shortcut-button" data-modal-close data-tab-target="scenarios">Scenarioer</button>
+            </div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalAnalysis" role="dialog" aria-modal="true" aria-label="Analyse · full rapport" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Lagrapport</p><h3>Analyse · full rapport</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+        <div class="insight-grid">
+          <section class="panel report-panel">
+            <p class="eyebrow">Lagrapport</p>
+            <h2>Hva fungerer?</h2>
+            <p id="reportSummary" class="muted-text">Fyll laget for å se rapport.</p>
+  
+            <div class="coach-context-status" aria-label="Trenerteamets støtte til formasjonen">
+              <p id="coachContextHeadline" class="coach-context-headline muted-text">
+                Engasjer stab for å se hvordan trenerteamet støtter formasjonen.
+              </p>
+              <div class="coach-context-metrics">
+                <article><span>Formasjonstilvenning</span><strong id="coachContextFamiliarity">–</strong></article>
+                <article><span>Trenerforståelse</span><strong id="coachContextUnderstanding">–</strong></article>
+                <article><span>Taktisk læringsfart</span><strong id="coachContextLearning">–</strong></article>
+                <article><span>Stab</span><strong id="coachContextStaff">–</strong></article>
+              </div>
+            </div>
+  
+            <div class="report-columns">
+              <section>
+                <h3>Styrker</h3>
+                <ul id="strengthsList"></ul>
+              </section>
+              <section>
+                <h3>Problemer</h3>
+                <ul id="issuesList"></ul>
+              </section>
+            </div>
+  
+            <!-- Relasjoner: hvilke roller hjelper eller blokkerer hverandre.
+                 Rendres av app.js (renderRelationships) fra teamFit.relationships. -->
+            <div class="relationship-block" aria-label="Hvordan rollene støtter eller blokkerer hverandre">
+              <h3>Relasjoner mellom rollene</h3>
+              <p id="relationshipHeadline" class="relationship-headline muted-text">
+                Fyll laget for å se hvordan rollene støtter hverandre.
+              </p>
+              <div id="relationshipList" class="relationship-list"></div>
+            </div>
+          </section>
+  
+          <section class="panel detail-metrics-panel">
+            <p class="eyebrow">Analysevisning</p>
+            <h2>Sekundære detaljer</h2>
+            <div class="metric-grid detail-metrics">
+              <article><span>Rollefit</span><strong id="roleFitAverage">–</strong></article>
+              <article><span>Taktikk</span><strong id="tacticFitAverage">–</strong></article>
+              <article><span>Balanse</span><strong id="balanceScore">–</strong></article>
+              <article><span>Restforsvar</span><strong id="restDefenseScore">–</strong></article>
+              <article><span>Bredde</span><strong id="widthScore">–</strong></article>
+              <article><span>Dybde</span><strong id="depthScore">–</strong></article>
+              <article><span>Oppbygging</span><strong id="buildUpScore">–</strong></article>
+              <article><span>Press</span><strong id="pressScore">–</strong></article>
+              <article><span>Relasjoner</span><strong id="relationshipScore">–</strong></article>
+            </div>
+          </section>
+  
+          <section class="panel manager-detail-panel" aria-live="polite">
+            <p class="eyebrow">Managerinnsikt</p>
+            <h2>Assistentens analyse</h2>
+            <div class="report-columns">
+              <section>
+                <h3>Rolleforslag</h3>
+                <ul id="managerRoleChanges"></ul>
+              </section>
+              <section>
+                <h3>Svakheter</h3>
+                <ul id="managerWeakPoints"></ul>
+              </section>
+            </div>
+          </section>
+  
+          <!-- Suggested Setups v1 (flyttet fra Kontor): formasjons-/kampplanforslag
+               hører hjemme her, ved siden av de faktiske valgene. Treningsuke-delen er
+               bevisst utelatt — Trening-fanens egen "Anbefalt nå"-merking i
+               weekly-training-panel dekker allerede det behovet. -->
+          <section class="panel suggested-setups-panel" aria-label="Foreslåtte oppsett" aria-live="polite">
+            <details class="panel-details is-flush">
+              <summary>Foreslått formasjon og kampplan</summary>
+              <p class="muted-text suggested-setups-intro">Faglige standardforslag basert på motstander og lagfit. Du kan alltid velge selv — et bevisst kontekstuelt valg kan gi bedre uttelling.</p>
+              <div id="suggestedSetupsTactics" class="suggested-setups-groups"></div>
+            </details>
+          </section>
+        </div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalBadgeEffects" role="dialog" aria-modal="true" aria-label="Badge-effekter" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">History Go</p><h3>Badge-effekter</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <p class="muted-text">Opptjente treningsbadges kan gi små bonuser til lagets taktiske metrics.</p>
+            <div id="badgeEffectsSummary" class="badge-effects-list"></div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalTrainingFocus" role="dialog" aria-modal="true" aria-label="Treningsfokus" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Managerinnsikt</p><h3>Treningsfokus</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <ul id="managerTrainingPlan"></ul>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalKnowledge" role="dialog" aria-modal="true" aria-label="Fotballkunnskap" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Football Knowledge Engine</p><h3>Fotballkunnskap</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <p class="muted-text">
+              Kunnskapsmotoren kobler lagets svakheter til fotballfaglige prinsipper, trenergrep og økter.
+            </p>
+            <p id="trainingWeekStatus" class="training-week-status">Kunnskapsuke 1</p>
+            <div class="knowledge-progress-grid" aria-label="Football Knowledge-progresjon">
+              <article><span>Denne uken</span><strong id="knowledgeCompletedThisWeek">0</strong></article>
+              <article><span>Totalt</span><strong id="knowledgeCompletedTotal">0</strong></article>
+            </div>
+            <button type="button" id="advanceTrainingWeek" class="advance-training-week-button">
+              Gå til neste kunnskapsuke
+            </button>
+            <p id="activeKnowledgeFocus" class="active-knowledge-focus">Ingen aktiv kunnskapsøkt valgt.</p>
+            <button type="button" id="clearKnowledgeFocus" class="clear-knowledge-focus-button">Fjern aktivt fokus</button>
+            <ul id="managerKnowledgeRecommendations" class="knowledge-card-list"></ul>
+            <details class="panel-details is-flush training-history-panel">
+              <summary>Treningshistorikk</summary>
+              <ul id="trainingHistoryList" class="training-history-list"></ul>
+            </details>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalInboxWhy" role="dialog" aria-modal="true" aria-label="Hvorfor nå?" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Hvorfor nå?</p><h3>Klubbens signaler før trening</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <p class="muted-text">Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
+            <dl class="inbox-signal-stats">
+              <div><dt>Uleste tråder</dt><dd id="inboxSignalUnread">0</dd></div>
+              <div><dt>Krever svar</dt><dd id="inboxSignalReplies">0</dd></div>
+              <div><dt>Påvirker</dt><dd>trening / slitasje / moral / taktisk klarhet / styrepress</dd></div>
+              <div><dt>Neste steg etter innboks</dt><dd>Trening</dd></div>
+            </dl>
+            <p id="inboxSignalStatus" class="inbox-signal-status">Ingen kritiske signaler nå</p>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalInboxArchive" role="dialog" aria-modal="true" aria-label="Hele innboksen" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Arkiv</p><h3>Hele innboksen</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <div id="inboxThreadArchive" class="message-list"></div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalStaff" role="dialog" aria-modal="true" aria-label="Stab" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Person</p><h3>Stab</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <div class="unlock-block">
+              <h4>Tilgjengelig stab</h4>
+              <div id="availableStaffList" class="unlock-grid"></div>
+            </div>
+            <div class="unlock-block">
+              <h4>Engasjert stab</h4>
+              <div id="hiredStaffList" class="unlock-grid"></div>
+            </div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalPlaces" role="dialog" aria-modal="true" aria-label="Steder og rapporter" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Sted</p><h3>Steder &amp; rapporter</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <p class="muted-text">Stedene du har besøkt i History Go. Hvert sted låser opp ulike ressurser: spillere, stab, ekspertise, trening og lagidentitet.</p>
+            <div class="unlock-block">
+              <h4>Samlede sportsteder</h4>
+              <div id="unlockPlacesList" class="unlock-grid"></div>
+            </div>
+            <div class="unlock-block">
+              <h4>Stedsrapporter</h4>
+              <div id="placeReportsList" class="place-report-grid"></div>
+            </div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalStart" role="dialog" aria-modal="true" aria-label="Startvalg" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Hurtigstart</p><h3>Startvalg</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <p class="muted-text">Vanligvis kommer troppen fra stedene du har besøkt. Trenger du en rask start, kan du bruke samlingen din, finne de nærmeste spillerne, eller sette et offentlig hjemsted.</p>
+            <button type="button" id="autoFillSquad" class="primary-action-button autofill-squad" data-modal-open="modalDraft">Velg troppen din</button>
+            <p class="muted-text autofill-squad-note">Sett sammen din egen starttropp fra klubbspillerne. De store navnene samler du i History Go.</p>
+            <div id="startModePanel" class="local-start-panel" aria-label="Startmodus">
+              <div id="startModeChoices">
+                <div class="local-start-heading">
+                  <p class="eyebrow">Startmodus</p>
+                  <h4 id="localStartTitle">Skaff spillbar tropp</h4>
+                  <p id="startModeRosterNeed" class="muted-text">
+                    Du trenger 15 spillere for å starte managerløkken: 11 startere + 4 benk.
+                    Akkurat nå har du 0/15.
+                  </p>
+                  <p id="startModePlaceHint" class="muted-text">
+                    Noen steder gir kompetanse, trenere eller formasjoner. For å starte kampen trenger du også spillersteder eller en starttropp.
+                  </p>
+                </div>
+  
+                <div class="start-mode-grid">
+                  <article class="start-mode-choice">
+                    <div>
+                      <h5>Bruk History Go-samlingen min</h5>
+                      <p class="muted-text">Bruk spillere, stab og steder du allerede har samlet. Dette skriver ikke til ekte History Go-progresjon.</p>
+                    </div>
+                    <button type="button" id="useHistoryGoCollection" class="unlock-card-action">Bruk samlingen min</button>
+                  </article>
+  
+                </div>
+              </div>
+  
+              <div id="activeLocalStart" class="active-local-start" hidden>
+                <div>
+                  <p class="eyebrow">Aktiv startmodus</p>
+                  <h4>Auto-fylt starttropp</h4>
+                  <p class="muted-text">Starttroppen er tilgjengelig i managerdelen, men ingenting er markert som samlet i History Go.</p>
+                </div>
+                <button type="button" id="clearLocalStart" class="unlock-card-action is-secondary">Fjern starttropp</button>
+              </div>
+  
+              <p id="localStartStatus" class="local-start-status" role="status">Ingen starttropp valgt.</p>
+              <div id="playableSquadReady" class="active-local-start" hidden>
+                <div>
+                  <p class="eyebrow">Troppen er spillbar</p>
+                  <h4>Neste steg: Taktikkrom</h4>
+                  <p class="muted-text">Du har minst 15 spillere. Sett startelleveren og benken før innboks, trening og kamp.</p>
+                </div>
+                <button type="button" class="unlock-card-action" data-modal-close data-tab-target="tactics">Gå til Taktikkrom</button>
+              </div>
+            </div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalDraft" role="dialog" aria-modal="true" aria-label="Velg troppen din" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Ny tropp</p><h3>Velg troppen din</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <p class="muted-text">Velg 15 spillere. Alle er gode nok – spørsmålet er om du forstår dem. De store navnene samler du i History Go.</p>
+            <div class="draft-status-row">
+              <p id="draftCount" class="draft-count">0/15 valgt</p>
+              <p id="draftPositions" class="draft-positions muted-text"></p>
+            </div>
+            <div id="draftPool" class="draft-pool"></div>
+            <div class="draft-actions">
+              <button type="button" id="draftFillRest" class="unlock-card-action is-secondary">Fyll resten</button>
+              <button type="button" id="draftConfirm" class="primary-action-button">Bekreft troppen</button>
+            </div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalProgress" role="dialog" aria-modal="true" aria-label="Progresjon" hidden>
+          <div class="modal">
+            <div class="modal-head">
+              <div><p class="eyebrow">Progresjon</p><h3>Ekspertise · Trening · Badges · Lagklasse</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <div class="unlock-block">
+              <h4>Tilgjengelig ekspertise</h4>
+              <div id="unlockedExpertiseList" class="unlock-grid"></div>
+            </div>
+            <div class="unlock-block">
+              <h4>Treningsprogrammer</h4>
+              <div id="availableTrainingProgramsList" class="unlock-grid"></div>
+            </div>
+            <div class="unlock-block">
+              <h4>Badge-uke</h4>
+              <p id="hgTrainingWeekStatus" class="training-week-status">Badge-uke 1</p>
+              <div class="unlock-actions">
+                <button type="button" id="advanceHgTrainingWeek" class="unlock-card-action">Avanser badge-uke</button>
+                <button type="button" id="resetHgTeamMerits" class="unlock-card-action is-reset">Nullstill HGFM-progresjon</button>
+              </div>
+              <h4 class="unlock-subhead">Aktive treningsprogresjoner</h4>
+              <div id="badgeProgressList" class="unlock-grid"></div>
+            </div>
+            <div class="unlock-block">
+              <h4>Opptjente badges</h4>
+              <div id="earnedBadgesList" class="unlock-badge-list"></div>
+            </div>
+            <div class="unlock-block">
+              <h4>Lagklasser</h4>
+              <div id="teamClassificationsList" class="unlock-grid"></div>
+            </div>
+            <div class="unlock-block">
+              <h4>Lagidentitet</h4>
+              <div id="teamIdentityPanel" class="team-identity-panel"></div>
+            </div>
+          </div>
+        </div>
+  <div class="modal-overlay" id="modalSettings" role="dialog" aria-modal="true" aria-label="Innstillinger" hidden>
+      <div class="modal">
+        <div class="modal-head">
+          <div><p class="eyebrow">Innstillinger</p><h3>Spill og lagring</h3></div>
+          <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+        </div>
+        <div class="settings-list">
+          <button type="button" class="settings-item" data-settings-action="mode">
+            <strong>Endre spillmodus</strong>
+            <small>Bytt mellom Ligaspill, Landslag, Scenarioer og Treningsrom.</small>
+          </button>
+          <button type="button" class="settings-item" data-settings-action="formations">
+            <strong>Formasjoner</strong>
+            <small>Åpne formasjonsbiblioteket.</small>
+          </button>
+          <button type="button" class="settings-item" data-settings-action="save">
+            <strong>Lagre spillet</strong>
+            <small>Spillet lagres automatisk, men du kan lagre manuelt her.</small>
+          </button>
+          <button type="button" class="settings-item is-danger" data-settings-action="reset">
+            <strong>Start på nytt</strong>
+            <small>Nullstiller managerspillet. History Go-stedene dine røres ikke.</small>
+          </button>
+        </div>
+        <p id="settingsStatus" class="settings-status" role="status" aria-live="polite" hidden></p>
+        <div id="settingsResetConfirm" class="settings-reset-confirm" hidden>
+          <p class="muted-text">Sikker? Dette sletter tropp, oppsett, sesong og progresjon i managerspillet (ikke besøkte steder i History Go).</p>
+          <div class="settings-reset-actions">
+            <button type="button" class="unlock-card-action is-secondary" data-settings-action="reset-cancel">Avbryt</button>
+            <button type="button" class="unlock-card-action is-reset" data-settings-action="reset-confirm">Ja, start på nytt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   <footer class="site-footer">
     <p>HG Football Manager — managerkontor, startellever og samlet lagfit. Fortsatt ikke full kampmotor.</p>
 
@@ -1331,40 +1375,6 @@
        Egen innstillingsknapp (tannhjul i headeren) → endre spillmodus, gå til
        formasjoner, lagre, eller starte spillet på nytt. Toppnivå-element så den
        er tilgjengelig fra alle flater. -->
-  <div class="modal-overlay" id="modalSettings" role="dialog" aria-modal="true" aria-label="Innstillinger" hidden>
-    <div class="modal">
-      <div class="modal-head">
-        <div><p class="eyebrow">Innstillinger</p><h3>Spill og lagring</h3></div>
-        <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-      </div>
-      <div class="settings-list">
-        <button type="button" class="settings-item" data-settings-action="mode">
-          <strong>Endre spillmodus</strong>
-          <small>Bytt mellom Ligaspill, Landslag, Scenarioer og Treningsrom.</small>
-        </button>
-        <button type="button" class="settings-item" data-settings-action="formations">
-          <strong>Formasjoner</strong>
-          <small>Åpne formasjonsbiblioteket.</small>
-        </button>
-        <button type="button" class="settings-item" data-settings-action="save">
-          <strong>Lagre spillet</strong>
-          <small>Spillet lagres automatisk, men du kan lagre manuelt her.</small>
-        </button>
-        <button type="button" class="settings-item is-danger" data-settings-action="reset">
-          <strong>Start på nytt</strong>
-          <small>Nullstiller managerspillet. History Go-stedene dine røres ikke.</small>
-        </button>
-      </div>
-      <p id="settingsStatus" class="settings-status" role="status" aria-live="polite" hidden></p>
-      <div id="settingsResetConfirm" class="settings-reset-confirm" hidden>
-        <p class="muted-text">Sikker? Dette sletter tropp, oppsett, sesong og progresjon i managerspillet (ikke besøkte steder i History Go).</p>
-        <div class="settings-reset-actions">
-          <button type="button" class="unlock-card-action is-secondary" data-settings-action="reset-cancel">Avbryt</button>
-          <button type="button" class="unlock-card-action is-reset" data-settings-action="reset-confirm">Ja, start på nytt</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <script type="module" src="src/app.js"></script>
   <script type="module" src="src/hg-formation-library.js"></script>
