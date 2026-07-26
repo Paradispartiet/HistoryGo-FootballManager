@@ -9,6 +9,7 @@ import {
   finalizeMatchdaySession,
   getSessionEventIndex,
   applyMatchPlanChange,
+  applyOpponentAdaptation,
   OPPONENT_PROFILES,
   evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
@@ -3778,7 +3779,9 @@ function startMatchdayKickoff() {
 // hendelse — eller avslutt kampen og bygg sluttrapporten.
 function chooseMatchdayDecision(optionId) {
   ensureMatchdayState();
-  const session = state.matchday.session;
+  // `let`: motstanderens tilpasning gir en NY sesjon (motorene muterer ikke),
+  // og resten av funksjonen må jobbe videre på den.
+  let session = state.matchday.session;
   const eventIndex = getSessionEventIndex(session);
 
   if (session === null || eventIndex === null) {
@@ -3819,6 +3822,14 @@ function chooseMatchdayDecision(optionId) {
 
   if (eventIndex + 1 < session.events.length) {
     session.phase = `event_${eventIndex + 2}`;
+    // Motstanderen svarer på kampbildet. Skyver de laget opp eller trekker de
+    // seg ned, er ikke planen din like god lenger — og det skal manageren se,
+    // slik at kampen må leses på nytt i stedet for å velges riktig én gang.
+    const adapted = applyOpponentAdaptation(session);
+    if (adapted !== session) {
+      state.matchday.session = adapted;
+      session = adapted;
+    }
   } else {
     // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
     state.matchday.lastMatch = finalizeMatchdaySession(session);
@@ -8923,6 +8934,17 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
 
   const event = session.events[eventIndex];
 
+  // Har motstanderen justert seg, er det den viktigste nye opplysningen i
+  // kampen: planen din måles nå mot noe annet enn den gjorde ved avspark.
+  const adjustments = Array.isArray(session.opponentAdjustments) ? session.opponentAdjustments : [];
+  const lastAdjustment = adjustments[adjustments.length - 1] || null;
+  if (lastAdjustment) {
+    const alert = document.createElement("p");
+    alert.className = "matchday-opponent-shift";
+    alert.textContent = `${lastAdjustment.label}: ${lastAdjustment.note}`;
+    card.append(alert);
+  }
+
   const eventCard = document.createElement("div");
   eventCard.className = `matchday-event-card is-pressure-${event.pressure || "medium"}`;
 
@@ -8965,6 +8987,27 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   // det større taktiske valget, ikke et alternativ til hendelsen foran deg.
   appendMatchPlanSwitcher(card, session);
   container.append(card);
+}
+
+// Hva motstanderen gjorde med kampen. Uten dette ser det ut som om planen din
+// «sluttet å virke» av seg selv.
+function appendOpponentAdjustmentLog(parent, lastMatch) {
+  const adjustments = Array.isArray(lastMatch?.opponentAdjustments) ? lastMatch.opponentAdjustments : [];
+  if (!adjustments.length) return;
+
+  appendMatchdaySubheading(parent, "Motstanderens grep");
+  adjustments.forEach((entry) => {
+    const item = document.createElement("div");
+    item.className = "matchday-decision-entry";
+    const title = document.createElement("p");
+    title.className = "matchday-decision-title";
+    title.textContent = entry.label || "Motstanderen justerte seg";
+    const detail = document.createElement("p");
+    detail.className = "matchday-decision-detail";
+    detail.textContent = entry.note || "";
+    item.append(title, detail);
+    parent.append(item);
+  });
 }
 
 // Planbyttene i sluttrapporten: hva omstillingen kostet, og hva den ga.
@@ -9016,9 +9059,11 @@ function appendMatchPlanSwitcher(card, session) {
 
   const lead = document.createElement("p");
   lead.className = "muted-text match-plan-lead";
-  lead.textContent = currentPlan?.intent
-    ? `${currentPlan.intent} Et bytte koster omstilling – laget må finne formen på nytt.`
-    : "Et bytte koster omstilling – laget må finne formen på nytt.";
+  const matchupNow = session.planMatchup?.verdict;
+  const standing = matchupNow && matchupNow !== "nøytral"
+    ? ` Slik de spiller nå, er planen din ${matchupNow} mot dem.`
+    : "";
+  lead.textContent = `${currentPlan?.intent ? currentPlan.intent + " " : ""}${standing} Et bytte koster omstilling – laget må finne formen på nytt.`.trim();
   wrap.append(lead);
 
   const changes = Array.isArray(session.planChanges) ? session.planChanges : [];
@@ -9246,6 +9291,7 @@ function renderMatchdayReport(container, lastMatch) {
   // Managergrep med konsekvens (v0.2).
   appendMatchdayDecisionLog(body, report.decisions, "Managergrep i kampen");
   appendMatchPlanChangeLog(body, lastMatch);
+  appendOpponentAdjustmentLog(body, lastMatch);
 
   // Beste/svakeste grep (v0.2).
   if (report.bestDecision || report.worstDecision) {

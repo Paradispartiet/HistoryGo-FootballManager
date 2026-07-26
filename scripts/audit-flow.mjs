@@ -483,6 +483,8 @@ check(
 stage("16. Kampplan");
 {
   const tactics = JSON.parse(readFileSync(join(root, "data/football_tactics.json"), "utf8"));
+  const matchdayEngine = readFileSync(join(root, "src/football-matchday-engine.js"), "utf8");
+  const matchPlanEngine = readFileSync(join(root, "src/football-match-plan.js"), "utf8");
   check("kampplankatalogen er utvidet og gruppert", 
     (tactics.tactics || []).length >= 15 && (tactics.families || []).length >= 5,
     `${(tactics.tactics || []).length} planer i ${(tactics.families || []).length} familier`);
@@ -524,6 +526,32 @@ stage("16. Kampplan");
   check(
     "kampbildet leses av kampens gang, ikke av en resultattavle",
     readFileSync(join(root, "src/football-match-plan.js"), "utf8").includes("export function readGameState")
+  );
+  // Planen du VELGER må telle mot motstanderen fra avspark. Uten dette var
+  // planvalget gratis så lenge du lot det stå.
+  check(
+    "valgt kampplan teller mot motstanderen fra avspark",
+    /planMatchup: evaluatePlanVsOpponent\(tactic, matchOpponent\)/.test(matchdayEngine)
+      && /planEdge: num\(session\.planMatchup\?\.edge\)/.test(matchdayEngine)
+      && matchdayEngine.includes("expectedGoalsFor += num(planEdge)")
+  );
+  // Motstanderen må svare, ellers holder det å lese kampen riktig én gang.
+  check(
+    "motstanderen justerer seg etter kampbildet",
+    matchdayEngine.includes("export function applyOpponentAdaptation")
+      && matchPlanEngine.includes("export function deriveOpponentAdjustment")
+      && app.includes("applyOpponentAdaptation(session)")
+  );
+  check(
+    "motstanderens grep vises i kampen og i rapporten",
+    app.includes("matchday-opponent-shift") && app.includes("function appendOpponentAdjustmentLog")
+  );
+  // Å rette opp et dårlig kampbilde må lønne seg, ellers er byttet bare en straff.
+  check(
+    "planbytte belønnes for FORBEDRING, ikke bare for å passe",
+    matchPlanEngine.includes("export function scorePlanNow")
+      && matchPlanEngine.includes("const improvement =")
+      && matchPlanEngine.includes("rescueBonus")
   );
   check(
     "kampplanene er dokumentert",

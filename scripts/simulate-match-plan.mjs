@@ -13,6 +13,9 @@ import { dirname, join } from "node:path";
 import {
   GAME_STATES,
   MATCH_PLAN_VERSION,
+  applyOpponentAdjustment,
+  deriveOpponentAdjustment,
+  scorePlanNow,
   calculateSwitchCost,
   createPlanChange,
   evaluatePlanForGameState,
@@ -24,6 +27,7 @@ import {
 } from "../src/football-match-plan.js";
 import {
   applyMatchPlanChange,
+  applyOpponentAdaptation,
   createMatchdaySession,
   finalizeMatchdaySession,
   getMatchdayGameState
@@ -279,6 +283,154 @@ check("planene normaliseres trygt", () => {
   assert.equal(safe.intensity, 60);
   assert.deepEqual(safe.gameStates, []);
   assert.ok(MATCH_PLAN_VERSION.startsWith("historygo-football-manager."));
+});
+
+
+// ---------------------------------------------------------------------------
+// Tre spørsmål som avdekket ekte hull: står planen i forhold til motstanderen,
+// svarer motstanderen, og lønner det seg å rette opp et dårlig kampbilde?
+// ---------------------------------------------------------------------------
+check("planen du VELGER teller mot motstanderen fra avspark", () => {
+  // Før: matchupen mot motstanderen slo bare inn hvis du tilfeldigvis byttet
+  // plan underveis. Lot du planen stå, var valget gratis.
+  const shortBuildUpSide = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const build = (planId) => createMatchdaySession({
+    teamFit: {
+      teamScore: 72, completeCount: 11, totalSlots: 11,
+      metrics: { balanceScore: 70, widthScore: 68, depthScore: 66, buildUpScore: 71, pressScore: 69, restDefenseScore: 67 },
+      assignments: []
+    },
+    formation: { id: "modern_433", name: "Modern 4-3-3", slots: [] },
+    tactic: byId.get(planId),
+    opponent: shortBuildUpSide,
+    coachContext: { coachUnderstanding: 60, formationFamiliarity: 55 }
+  });
+
+  const pressing = build("counter_press_recovery");
+  assert.ok(pressing.planMatchup, "sesjonen må bære planens matchup");
+  assert.ok(pressing.planMatchup.edge > 0, "press mot kort oppbygging må være gunstig");
+
+  const pressResult = finalizeMatchdaySession(pressing);
+  const patientResult = finalizeMatchdaySession(build("patient_build_up"));
+  assert.notDeepEqual(pressResult.expectedGoals, patientResult.expectedGoals,
+    "planvalget må gi utslag i xG uten at man bytter");
+  assert.ok(pressResult.expectedGoals.for > patientResult.expectedGoals.for,
+    "planen som treffer motstanderen må gi mer trussel");
+  assert.ok(pressResult.expectedGoals.against < patientResult.expectedGoals.against);
+});
+
+check("motstanderen svarer på kampbildet", () => {
+  assert.equal(deriveOpponentAdjustment("level"), null, "et jevnt bilde gir ingen grunn til å justere");
+  const pushUp = deriveOpponentAdjustment("leading");
+  assert.equal(pushUp.id, "push_up", "styrer du bildet, må de ta sjansen");
+  const sitBack = deriveOpponentAdjustment("behind");
+  assert.equal(sitBack.id, "sit_back", "leder de, sikrer de det de har");
+  // Samme justering skjer bare én gang.
+  assert.equal(deriveOpponentAdjustment("leading", { alreadyAdjusted: ["push_up"] }), null);
+});
+
+check("justeringen endrer motstanderen uten å mutere profilen", () => {
+  const base = getHistoricalOpponentProfile("inter_1960s_catenaccio");
+  const before = JSON.stringify(base);
+  const shifted = applyOpponentAdjustment(base, deriveOpponentAdjustment("leading"));
+  assert.equal(JSON.stringify(base), before, "motstanderprofilen skal ikke muteres");
+  assert.ok(shifted.styleTraits.pressIntensity > base.styleTraits.pressIntensity);
+  assert.ok(shifted.styleTraits.highLine > base.styleTraits.highLine);
+  assert.equal(shifted.adjustmentId, "push_up");
+});
+
+check("planen din måles på nytt når motstanderen har justert seg", () => {
+  const session = buildSession("patient_build_up");
+  // Kampen glipper for dem: momentum i din favør.
+  const leading = { ...session, decisions: [{ effects: { momentumDelta: 3 } }] };
+  const adapted = applyOpponentAdaptation(leading);
+  assert.notEqual(adapted, leading, "bildet gir grunn til justering");
+  assert.equal(adapted.opponentAdjustments.length, 1);
+  assert.ok(adapted.opponentAdjustments[0].note.length > 20, "justeringen må forklares");
+  // Rolig oppbygging mot et lag som nå presser høyt er dyrere enn før.
+  assert.ok(adapted.planMatchup.edge <= leading.planMatchup.edge,
+    "planen skal ikke bli bedre av at de presser hardere mot den");
+  // Og den skjer bare én gang per type.
+  assert.equal(applyOpponentAdaptation(adapted), adapted);
+});
+
+check("å rette opp et dårlig kampbilde lønner seg", () => {
+  const opponent = getHistoricalOpponentProfile("leicester_2015_16_direct_transition");
+  const struggling = {
+    decisions: [{ effects: { momentumDelta: -4, riskDelta: 2 } }],
+    coachSnapshot: { coachUnderstanding: 60, formationFamiliarity: 55 },
+    opponent,
+    events: [1, 2, 3]
+  };
+  const rescue = createPlanChange({
+    fromPlan: byId.get("patient_build_up"),
+    toPlan: byId.get("chase_the_equaliser"),
+    session: struggling, opponent, eventsRemaining: 2
+  });
+  const wrong = createPlanChange({
+    fromPlan: byId.get("patient_build_up"),
+    toPlan: byId.get("see_out_the_game"),
+    session: struggling, opponent, eventsRemaining: 2
+  });
+
+  assert.ok(rescue.improvement > 0, "riktig grep må registreres som en forbedring");
+  assert.equal(rescue.tone, "positive");
+  const rescueNet = rescue.effects.momentumDelta + rescue.effects.tacticalClarityDelta;
+  const wrongNet = wrong.effects.momentumDelta + wrong.effects.tacticalClarityDelta;
+  assert.ok(rescueNet > 0, `redningen må lønne seg netto (fikk ${rescueNet})`);
+  assert.ok(rescueNet > wrongNet, "riktig grep må slå feil grep");
+  assert.ok(rescue.rescueBonus > 0, "dyp trøbbel skal gi en redningsbonus");
+});
+
+check("samme grep er verdt mer når kampen glipper enn når alt flyter", () => {
+  const opponent = getHistoricalOpponentProfile("leicester_2015_16_direct_transition");
+  const make = (momentum) => createPlanChange({
+    fromPlan: byId.get("patient_build_up"),
+    toPlan: byId.get("chase_the_equaliser"),
+    session: {
+      decisions: [{ effects: { momentumDelta: momentum } }],
+      coachSnapshot: { coachUnderstanding: 60, formationFamiliarity: 55 },
+      opponent, events: [1, 2, 3]
+    },
+    opponent, eventsRemaining: 2
+  });
+  const deepTrouble = make(-5);
+  const mildTrouble = make(-2);
+  assert.ok(deepTrouble.rescueBonus > mildTrouble.rescueBonus,
+    "jo dypere trøbbel, jo mer er den riktige lesningen verdt");
+});
+
+check("å bytte bort en plan som passet bedre straffes", () => {
+  const opponent = getHistoricalOpponentProfile("milan_1988_90_sacchi");
+  const downgrade = createPlanChange({
+    fromPlan: byId.get("chase_the_equaliser"),
+    toPlan: byId.get("see_out_the_game"),
+    session: {
+      decisions: [{ effects: { momentumDelta: -4 } }],
+      coachSnapshot: { coachUnderstanding: 60, formationFamiliarity: 55 },
+      opponent, events: [1, 2, 3]
+    },
+    opponent, eventsRemaining: 1
+  });
+  assert.ok(downgrade.improvement < 0, "å forlate en plan som passet må telle negativt");
+  assert.equal(downgrade.tone, "negative");
+  assert.ok(downgrade.feedback.includes("bytter bort"));
+});
+
+check("scorePlanNow rangerer planer i en gitt situasjon", () => {
+  const opponent = getHistoricalOpponentProfile("leicester_2015_16_direct_transition");
+  const chasing = scorePlanNow(byId.get("chase_the_equaliser"), { gameState: "behind", opponent });
+  const closing = scorePlanNow(byId.get("see_out_the_game"), { gameState: "behind", opponent });
+  assert.ok(chasing > closing, "å jage utligning må slå å lukke kampen når du er under");
+});
+
+check("motstanderens justeringer havner i sluttrapporten", () => {
+  let session = buildSession("high_press_343");
+  session = { ...session, decisions: [{ effects: { momentumDelta: 3 } }] };
+  session = applyOpponentAdaptation(session);
+  const report = finalizeMatchdaySession(session);
+  assert.equal(report.opponentAdjustments.length, 1);
+  assert.ok(report.opponentAdjustments[0].label.length > 3);
 });
 
 console.log(`\nAlle ${checks.length} kampplansjekker besto (${plans.length} planer).`);

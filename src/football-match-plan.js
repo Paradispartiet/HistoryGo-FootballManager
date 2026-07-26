@@ -170,6 +170,19 @@ export function calculateSwitchCost({ fromPlan, toPlan, coachSnapshot, eventsRem
 // Passer planen kampbildet? Rent forklarende — ingen plan blir «riktig» av
 // dette alene, men en plan som er laget for et annet bilde koster deg noe.
 // ----------------------------------------------------------------------------
+// Hvor godt passer planen akkurat nå? Kampbildet og motstanderen i ett tall
+// (-100..100). Dette er grunnlaget for å belønne en FORBEDRING: spiller du
+// dårlig og bytter til noe som faktisk passer bedre, skal det lønne seg.
+export function scorePlanNow(plan, { gameState = "level", opponent } = {}) {
+  const normalized = normalizeMatchPlan(plan);
+  if (!normalized) return 0;
+  const stateFit = evaluatePlanForGameState(normalized, gameState);
+  const matchup = evaluatePlanVsOpponent(normalized, opponent);
+  // Kampbildet veier tyngst: en plan for feil bilde er feil plan, uansett hvor
+  // fin den ser ut mot motstanderens stil.
+  return clamp(num(stateFit?.fits ? 45 : -45) + num(matchup?.edge) * 18, -100, 100);
+}
+
 export function evaluatePlanForGameState(plan, gameState) {
   const normalized = normalizeMatchPlan(plan);
   if (!normalized) return null;
@@ -261,14 +274,26 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
   const stateFit = evaluatePlanForGameState(to, gameState.state);
   const matchup = evaluatePlanVsOpponent(to, opponent || session?.opponent);
 
-  // Effektene: omstillingen koster klarhet og legger på risiko. Treffer planen
-  // bildet og motstanderen, henter du det inn igjen — og mer til.
+  // Effektene: omstillingen koster klarhet og legger på risiko. Men det som
+  // faktisk belønnes er FORBEDRINGEN — hvor mye bedre den nye planen passer
+  // bildet og motstanderen enn den du forlot. Å bytte fra noe som virker til
+  // noe som ikke virker skal svi, selv om den nye planen «ser riktig ut».
   const edge = num(matchup?.edge);
+  const context = { gameState: gameState.state, opponent: opponent || session?.opponent };
+  const scoreBefore = from ? scorePlanNow(from, context) : 0;
+  const scoreAfter = scorePlanNow(to, context);
+  const improvement = round2((scoreAfter - scoreBefore) / 100);
+
+  // En redning i en kamp som glipper er verdt mer enn en finjustering når alt
+  // flyter. Jo dypere trøbbel, jo større er gevinsten ved å lese det riktig.
+  const trouble = clamp(-num(gameState.momentum), 0, 6) / 6;
+  const rescueBonus = improvement > 0 ? round2(improvement * trouble * 1.8) : 0;
+
   const effects = {
     eventScoreDelta: 0,
-    xgDeltaFor: round2(edge * 0.08 + (stateFit?.fits ? 0.05 : -0.04)),
-    xgDeltaAgainst: round2(cost.riskCost * 0.06 - edge * 0.05 + (stateFit?.fits ? -0.03 : 0.05)),
-    momentumDelta: round2(num(stateFit?.momentumDelta) + edge * 0.5),
+    xgDeltaFor: round2(improvement * 0.22 + edge * 0.05 + rescueBonus * 0.12),
+    xgDeltaAgainst: round2(cost.riskCost * 0.06 - improvement * 0.16 - edge * 0.03),
+    momentumDelta: round2(improvement * 2.4 + rescueBonus * 1.2 + edge * 0.25),
     riskDelta: cost.riskCost,
     tacticalClarityDelta: cost.clarityCost
   };
@@ -279,8 +304,15 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
       ? "negative"
       : "neutral";
 
+  const verdict = improvement > 0.15
+    ? (rescueBonus > 0.1 ? "Grepet leser kampen: laget får et bilde som passer bedre." : "Planen passer situasjonen bedre enn den du forlot.")
+    : improvement < -0.15
+      ? "Du bytter bort noe som passet bedre enn dette."
+      : "Omtrent samme verdi i denne situasjonen.";
+
   const feedback = [
     cost.explanation,
+    verdict,
     stateFit?.note,
     ...asArray(matchup?.notes)
   ].filter(Boolean).join(" ");
@@ -295,6 +327,8 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
     gameStateLabel: gameState.label,
     distance: cost.distance,
     matchupVerdict: matchup?.verdict || "nøytral",
+    improvement,
+    rescueBonus,
     tone,
     effects,
     feedback
@@ -328,4 +362,55 @@ export function rankPlansForSituation(plans, { currentPlan, gameState = "level",
       if (a.distance !== b.distance) return a.distance - b.distance;
       return a.plan.id.localeCompare(b.plan.id);
     });
+}
+
+// ----------------------------------------------------------------------------
+// Motstanderen sitter ikke stille. Leser de at kampen glipper, justerer de seg —
+// og da er ikke planen din like god lenger. Det er dette som gjør at man må
+// LESE kampen på nytt, ikke bare velge riktig én gang.
+//
+// Justeringen er deterministisk og forklart: ingen skjult motstanderintelligens,
+// bare en lesbar reaksjon på kampbildet.
+// ----------------------------------------------------------------------------
+export const OPPONENT_ADJUSTMENTS = Object.freeze({
+  // Du styrer bildet -> de tar mer risiko for å komme tilbake i kampen.
+  push_up: {
+    id: "push_up",
+    label: "De skyver laget opp",
+    note: "Motstanderen tar sjansen: høyere linje og mer press for å komme tilbake i kampen.",
+    traitShift: { pressIntensity: 18, highLine: 20, defensiveCompactness: -12, transitionThreat: 8 }
+  },
+  // Du er under -> de sikrer det de har.
+  sit_back: {
+    id: "sit_back",
+    label: "De trekker seg ned",
+    note: "Motstanderen sikrer forspranget: dypere blokk, tettere rom, og kontring som plan.",
+    traitShift: { pressIntensity: -16, highLine: -22, defensiveCompactness: 16, transitionThreat: 12 }
+  }
+});
+
+// Hvilken justering gjør motstanderen nå? Null når bildet ikke gir grunn til det.
+export function deriveOpponentAdjustment(gameState, { alreadyAdjusted = [] } = {}) {
+  const state = typeof gameState === "string" ? gameState : gameState?.state;
+  const done = new Set(asArray(alreadyAdjusted));
+  if (state === "leading" && !done.has("push_up")) return OPPONENT_ADJUSTMENTS.push_up;
+  if (state === "behind" && !done.has("sit_back")) return OPPONENT_ADJUSTMENTS.sit_back;
+  return null;
+}
+
+// Bruk justeringen på en motstanderprofil. Returnerer en NY profil — motoren
+// muterer aldri motstanderdataen.
+export function applyOpponentAdjustment(opponent, adjustment) {
+  if (!isObject(opponent) || !isObject(adjustment)) return opponent;
+  const traits = isObject(opponent.styleTraits) ? opponent.styleTraits : {};
+  const shifted = { ...traits };
+  Object.entries(adjustment.traitShift || {}).forEach(([key, delta]) => {
+    shifted[key] = clamp(num(traits[key], 50) + num(delta));
+  });
+  return {
+    ...opponent,
+    styleTraits: shifted,
+    adjustmentId: adjustment.id,
+    adjustmentLabel: adjustment.label
+  };
 }
