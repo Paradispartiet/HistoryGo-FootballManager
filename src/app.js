@@ -9,6 +9,7 @@ import {
   finalizeMatchdaySession,
   getSessionEventIndex,
   advanceMatchClock,
+  logMatchMoment,
   applyMatchPlanChange,
   applyOpponentAdaptation,
   OPPONENT_PROFILES,
@@ -3812,6 +3813,14 @@ function chooseMatchdayDecision(optionId) {
   if (!resolution) {
     return;
   }
+
+  // Grepet inn i minuttloggen, så kampen leses som én sammenhengende fortelling.
+  state.matchday.session = logMatchMoment(session, {
+    type: "decision",
+    side: "for",
+    detail: `Ditt grep: ${option.label}`
+  });
+  session = state.matchday.session;
 
   session.decisions.push({
     eventId: event.id,
@@ -9075,20 +9084,64 @@ function appendMatchScoreboard(parent, session) {
     board.append(clock);
   }
 
-  // Målene som faktisk har falt, med minutt.
-  const goals = timeline.filter((entry) => entry.goalsFor > 0 || entry.goalsAgainst > 0);
-  if (goals.length) {
-    const list = document.createElement("ul");
-    list.className = "matchday-goal-list";
-    goals.forEach((entry) => {
-      const item = document.createElement("li");
-      item.textContent = `${entry.minute}' ${entry.scoreAfter.for}–${entry.scoreAfter.against}`;
-      list.append(item);
-    });
-    board.append(list);
-  }
-
   parent.append(board);
+  appendMatchMinuteLog(parent, session);
+}
+
+// Kampen minutt for minutt: hver sjanse, hvert mål, hvert grep — i ett spor.
+// Perioder ga fire tall; dette er kampen slik den faktisk ble spilt.
+const MINUTE_LOG_TYPE_LABELS = {
+  goal: "MÅL",
+  chance: "Sjanse",
+  decision: "Grep",
+  plan: "Kampplan",
+  opponent: "Motstander"
+};
+
+function appendMatchMinuteLog(parent, session) {
+  const log = Array.isArray(session.minuteLog) ? session.minuteLog : [];
+  if (!log.length) return;
+
+  const wrap = document.createElement("details");
+  wrap.className = "matchday-minutes";
+  // Åpen som standard: kampen er det manageren vil se.
+  wrap.open = state.matchMinuteLogOpen !== false;
+  wrap.addEventListener("toggle", () => { state.matchMinuteLogOpen = wrap.open; });
+
+  const summary = document.createElement("summary");
+  const goals = log.filter((entry) => entry.type === "goal").length;
+  const chances = log.filter((entry) => entry.type === "chance").length;
+  summary.textContent = `Kampen minutt for minutt · ${goals} mål, ${chances} sjanser`;
+  wrap.append(summary);
+
+  const list = document.createElement("ol");
+  list.className = "matchday-minute-list";
+  // Nyeste nederst, som en ekte kamplogg.
+  [...log].sort((a, b) => a.minute - b.minute).forEach((entry) => {
+    const item = document.createElement("li");
+    item.className = `matchday-minute is-${entry.type} is-${entry.side}`;
+
+    const minute = document.createElement("span");
+    minute.className = "matchday-minute-clock";
+    minute.textContent = `${entry.minute}'`;
+
+    const body = document.createElement("span");
+    body.className = "matchday-minute-text";
+    if (entry.type === "goal") {
+      const who = entry.side === "for" ? "Mål for laget" : "Mål imot";
+      body.textContent = `${who} — ${entry.scoreAfter.for}–${entry.scoreAfter.against}`;
+    } else if (entry.type === "chance") {
+      const who = entry.side === "for" ? "Sjanse" : "Sjanse imot";
+      body.textContent = `${who}: ${entry.detail}`;
+    } else {
+      body.textContent = entry.detail || MINUTE_LOG_TYPE_LABELS[entry.type] || "";
+    }
+
+    item.append(minute, body);
+    list.append(item);
+  });
+  wrap.append(list);
+  parent.append(wrap);
 }
 
 // Bytt kampplan underveis. Viser kampbildet slik det leses nå, gjeldende plan,
@@ -9348,6 +9401,10 @@ function renderMatchdayReport(container, lastMatch) {
   appendMatchdayDecisionLog(body, report.decisions, "Managergrep i kampen");
   appendMatchPlanChangeLog(body, lastMatch);
   appendOpponentAdjustmentLog(body, lastMatch);
+  if (Array.isArray(lastMatch?.minuteLog) && lastMatch.minuteLog.length) {
+    appendMatchdaySubheading(body, "Kampen minutt for minutt");
+    appendMatchMinuteLog(body, lastMatch);
+  }
 
   // Beste/svakeste grep (v0.2).
   if (report.bestDecision || report.worstDecision) {

@@ -510,6 +510,35 @@ stage("15. Taktikktavla");
   );
 }
 
+// ---- 16) App-rammen kan ikke kollapse ---------------------------------------
+// Body er et grid med faste rader. Uten EKSPLISITT radplassering tildeles de
+// etter rekkefølgen av SYNLIGE barn — og da flyttet en skjult modus-linje (og
+// de seksten popupene som bor på body-nivå) hele oppsettet: footeren fikk den
+// fleksible raden, og spillflaten kollapset til 20 piksler. DOM-en så helt
+// riktig ut; skjermen var tom.
+stage("16. App-rammen kan ikke kollapse");
+{
+  const bodyRule = css.match(/\nbody \{[\s\S]*?\n\}/g)?.find((rule) => rule.includes("grid-template-rows"));
+  check("body er et grid med faste rader", Boolean(bodyRule));
+  check(
+    "skjermområdet har en fleksibel rad",
+    Boolean(bodyRule) && /minmax\(0,\s*1fr\)/.test(bodyRule)
+  );
+  // Hver ramme-del må ha sin egen rad, uansett hva som er skjult.
+  const explicitRows = [
+    ["body > .site-header", 1],
+    ["body > nav", 2],
+    ["body > .secondary-mode-bar", 3],
+    ["body > .app-shell", 4],
+    ["body > .site-footer", 5]
+  ];
+  explicitRows.forEach(([selector, row]) => {
+    const index = css.indexOf(`${selector} {`);
+    const block = index >= 0 ? css.slice(index, css.indexOf("}", index)) : "";
+    check(`${selector} har eksplisitt rad ${row}`, block.includes(`grid-row: ${row}`), block.trim().slice(0, 60));
+  });
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

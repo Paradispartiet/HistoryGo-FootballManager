@@ -1467,7 +1467,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     opponentAdjustments: [],
     // Løpende stilling og periodevis tidslinje. Kampen har en resultattavle nå.
     score: { for: 0, against: 0 },
-    timeline: []
+    timeline: [],
+    // Minutt for minutt: hver sjanse og hvert mål, med minutt og stilling.
+    minuteLog: []
   };
 }
 
@@ -1497,6 +1499,11 @@ export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
   next.planChanges = [...asArray(session.planChanges), { ...change, atPhase: session.phase }];
   next.selectedTacticId = nextPlan?.id || next.selectedTacticId;
   next.planMatchup = evaluatePlanVsOpponent(nextPlan, next.opponent);
+  next.minuteLog = logMatchMoment(next, {
+    type: "plan",
+    side: "for",
+    detail: `Kampplan: ${change.fromPlanName || "start"} → ${change.toPlanName}`
+  }).minuteLog;
   next.activePlanSnapshot = {
     id: nextPlan?.id || null,
     name: nextPlan?.name || "",
@@ -1523,6 +1530,53 @@ const SEGMENT_MINUTES = [18, 39, 62, 84];
 function segmentMinute(index, total) {
   if (index < SEGMENT_MINUTES.length) return SEGMENT_MINUTES[index];
   return Math.min(90, 18 + Math.round((72 * index) / Math.max(1, total - 1)));
+}
+
+// Minuttspennet en periode dekker. Fire perioder over 90 minutter gir
+// 1-23, 24-45, 46-68, 69-90.
+function segmentRange(index, total) {
+  const per = 90 / Math.max(1, total);
+  const from = Math.max(1, Math.round(index * per) + 1);
+  const to = Math.min(90, Math.round((index + 1) * per));
+  return { from, to: Math.max(from, to) };
+}
+
+// Hva slags sjanse ble det? Utfallet henger på kvaliteten, ikke på flaks alene:
+// en stor sjanse som ikke går inn blir reddet eller treffer stolpen, en halv
+// sjanse blir blokkert eller går utenfor.
+const CHANCE_MISS_HIGH = ["reddet av keeper", "i stolpen", "reddet på streken"];
+const CHANCE_MISS_LOW = ["blokkert", "utenfor", "for svakt avslutta", "avblåst for offside"];
+
+function describeChance(quality, seed) {
+  const pool = quality >= 0.22 ? CHANCE_MISS_HIGH : CHANCE_MISS_LOW;
+  return pool[Math.floor(seed * pool.length) % pool.length];
+}
+
+// Gjør en xG-mengde om til enkeltsjanser. Mer xG = flere OG bedre sjanser, slik
+// at et lag som dominerer både kommer oftere til og kommer nærmere.
+function buildChances(xg, { from, to, side }) {
+  const total = clampRange(num(xg), 0, 4);
+  if (total <= 0.02) return [];
+  const count = Math.max(1, Math.min(6, Math.round(total * 3)));
+  const quality = total / count;
+  const span = Math.max(1, to - from);
+  const chances = [];
+  for (let i = 0; i < count; i += 1) {
+    // Sjansene spres jevnt i perioden, med en liten forskyvning så de to
+    // lagenes sjanser ikke havner på nøyaktig samme minutt.
+    const offset = side === "for" ? 0.28 : 0.68;
+    const minute = Math.min(to, Math.max(from, from + Math.round(span * ((i + offset) / count))));
+    const roll = Math.random();
+    const scored = roll < quality;
+    chances.push({
+      minute,
+      side,
+      quality: round2(quality),
+      scored,
+      detail: scored ? "MÅL" : describeChance(quality, Math.random())
+    });
+  }
+  return chances;
 }
 
 // xG-raten akkurat nå: basis pluss alt som er bestemt så langt i kampen.
@@ -1559,11 +1613,39 @@ export function advanceMatchClock(session) {
   const segmentXgFor = clampRange(round2(rate.for * share), 0, 3);
   const segmentXgAgainst = clampRange(round2(rate.against * share), 0, 3);
 
-  const goalsFor = rollGoals(segmentXgFor);
-  const goalsAgainst = rollGoals(segmentXgAgainst);
+  // Minutt for minutt: xG-en blir til enkeltsjanser, og MÅLENE FALLER UT AV
+  // SJANSENE. Før ble målene rullet direkte fra xG, og «kampen» var fire tall.
+  // Nå ser manageren de samme tallene som fotball: hvem som kom til, når, og
+  // hva som skjedde.
+  const range = segmentRange(played, totalSegments);
+  const chances = [
+    ...buildChances(segmentXgFor, { ...range, side: "for" }),
+    ...buildChances(segmentXgAgainst, { ...range, side: "against" })
+  ].sort((a, b) => a.minute - b.minute || (a.side === "for" ? -1 : 1));
+
+  const goalsFor = chances.filter((c) => c.side === "for" && c.scored).length;
+  const goalsAgainst = chances.filter((c) => c.side === "against" && c.scored).length;
 
   const before = session.score || { for: 0, against: 0 };
   const score = { for: num(before.for) + goalsFor, against: num(before.against) + goalsAgainst };
+
+  // Bygg minuttloggen med løpende stilling på hvert mål.
+  let running = { ...before };
+  const minutes = chances.map((chance) => {
+    if (chance.scored) {
+      running = chance.side === "for"
+        ? { for: running.for + 1, against: running.against }
+        : { for: running.for, against: running.against + 1 };
+    }
+    return {
+      minute: chance.minute,
+      side: chance.side,
+      type: chance.scored ? "goal" : "chance",
+      quality: chance.quality,
+      detail: chance.detail,
+      scoreAfter: { ...running }
+    };
+  });
 
   const note = goalsFor > 0 && goalsAgainst > 0
     ? "Mål i begge ender."
@@ -1571,21 +1653,60 @@ export function advanceMatchClock(session) {
       ? goalsFor > 1 ? `${goalsFor} mål for laget.` : "Mål for laget."
       : goalsAgainst > 0
         ? goalsAgainst > 1 ? `${goalsAgainst} mål imot.` : "Mål imot."
-        : "Ingen mål i denne perioden.";
+        : chances.length
+          ? "Sjanser, men ingen mål."
+          : "Rolig periode.";
 
   return {
     ...session,
     score,
+    // Flat minutt-for-minutt-logg for hele kampen.
+    minuteLog: [...asArray(session.minuteLog), ...minutes],
     timeline: [
       ...asArray(session.timeline),
       {
         segment: played,
         minute: segmentMinute(played, totalSegments),
+        range,
         goalsFor,
         goalsAgainst,
+        chances: chances.length,
         scoreAfter: { ...score },
         expectedGoals: { for: segmentXgFor, against: segmentXgAgainst },
         note
+      }
+    ]
+  };
+}
+
+// Legg en managerhendelse inn i minuttloggen — et grep, et planbytte eller
+// motstanderens justering. Da leser feeden som en ekte kamp: hva som skjedde,
+// og hva DU gjorde med det, i samme spor.
+export function logMatchMoment(session, moment) {
+  if (!session || typeof session !== "object" || !moment) return session;
+  const log = asArray(session.minuteLog);
+  // Minuttet er «nå»: der perioden som nettopp ble spilt sluttet. Skjer flere
+  // ting rundt samme pause (grep, planbytte, motstanderens svar), forskyves de
+  // ett minutt hver — ellers klumpet hele pausen seg på samme minutt og
+  // rekkefølgen ble uleselig.
+  const totalSegments = asArray(session.events).length + 1;
+  const played = asArray(session.timeline).length;
+  const range = segmentRange(Math.max(0, played - 1), totalSegments);
+  const lastMinute = log.length ? num(log[log.length - 1].minute) : 0;
+  const taken = new Set(log.map((entry) => num(entry.minute)));
+  let minute = Math.min(90, Math.max(lastMinute, range.to));
+  while (taken.has(minute) && minute < 90) minute += 1;
+
+  return {
+    ...session,
+    minuteLog: [
+      ...log,
+      {
+        minute,
+        side: moment.side || "manager",
+        type: moment.type || "manager",
+        detail: moment.detail || "",
+        scoreAfter: { ...(session.score || { for: 0, against: 0 }) }
       }
     ]
   };
@@ -1615,7 +1736,7 @@ export function applyOpponentAdaptation(session) {
   const opponent = applyOpponentAdjustment(session.opponent, adjustment);
   const activePlan = session.activePlanSnapshot || session.tacticSnapshot || null;
 
-  return {
+  const adapted = {
     ...session,
     opponent,
     // Planen din måles nå mot det de faktisk gjør, ikke mot det de gjorde.
@@ -1625,6 +1746,7 @@ export function applyOpponentAdaptation(session) {
       { id: adjustment.id, label: adjustment.label, note: adjustment.note, atPhase: session.phase }
     ]
   };
+  return logMatchMoment(adapted, { type: "opponent", side: "against", detail: adjustment.label });
 }
 
 // Hvilket hendelsesindeks (0-basert) en event-fase peker på, ellers null.
@@ -1986,6 +2108,7 @@ export function finalizeMatchdaySession(session) {
     opponentAdjustments: asArray(session.opponentAdjustments).map((entry) => ({ ...entry })),
     // Tidslinja: når målene falt, og hva stillingen var da.
     timeline: timeline.map((entry) => ({ ...entry })),
+    minuteLog: asArray(session.minuteLog).map((entry) => ({ ...entry })),
     activePlanSnapshot: session.activePlanSnapshot || session.tacticSnapshot || null,
     decisionTotals: totals,
     bestDecision: bestDecision
