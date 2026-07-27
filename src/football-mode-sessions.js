@@ -18,7 +18,7 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
   "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason",
   "nationalTeam", "tournament", "tournamentHistory", "playerSeasonStats",
-  "playerCondition", "playerConditionMatchIds"
+  "playerCondition", "playerConditionMatchIds", "seasonArchive", "seasonReview"
 ]);
 
 // Set-felt: disse er `Set` i app-staten, men `JSON.stringify(new Set())` gir
@@ -51,6 +51,7 @@ const LEGACY_KEYS = Object.freeze({
   matchday: "hgfm.matchday.v1",
   playerSeasonStats: "hgfm.playerSeasonStats.v1",
   playerCondition: "hgfm.playerCondition.v1",
+  seasonArchive: "hgfm.seasonArchive.v1",
   miniSeason: "historygo-football-manager.mini-season.v1",
   firstTimePlaythrough: "hgfm.firstTimePlaythrough.v1"
 });
@@ -102,6 +103,10 @@ export function createSecondarySession(league, mode) {
   // landslaget: det er en annen tropp og en annen kalender.
   session.playerCondition = [];
   session.playerConditionMatchIds = [];
+  // Merittlista tilhører klubbkarrieren. Et scenario eller landslag arver den
+  // ikke — og bygger heller ikke sin egen.
+  session.seasonArchive = [];
+  session.seasonReview = null;
   session.miniSeason = null;
   session.leagueSeason = null;
   const feedbackByMode = {

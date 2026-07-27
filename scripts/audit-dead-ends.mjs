@@ -769,6 +769,34 @@ stage("21. Scenarioer");
   check("scenariolista rendres fra renderApp", /\n  renderScenarioList\(\);/.test(app));
 }
 
+// ---- 22) Sesongen får en slutt som betyr noe ------------------------------
+// Ligasesongen KUNNE avsluttes — status ble «completed», og en «Start ny
+// sesong»-knapp dukket opp. Men styrets forventning var en setning satt da
+// klubben ble opprettet, som ingen målte deg mot, og sesong 2 startet som om
+// sesong 1 aldri hadde skjedd.
+stage("22. Sesongdom");
+{
+  const review = readFileSync(join(root, "src/football-season-review.js"), "utf8");
+
+  check("sesongdom-motoren finnes og er ren", /export function createSeasonReview/.test(review) && !/document\.|localStorage/.test(review));
+  check("styrets mål er en tabellplass, ikke en stemning", /targetPosition/.test(review) && /export function deriveSeasonTarget/.test(review));
+  check("dommen felles når sesongen fullføres", /registerSeasonReview\(updated\)/.test(app));
+  check("dommen vises på Statistikk", /id="seasonReviewPanel"/.test(html) && /function renderSeasonReview/.test(app));
+  check("dommen rendres fra render-løypa", /\n  renderSeasonReview\(\);/.test(app));
+
+  // Sesongen skal huskes.
+  check("merittlista finnes", /id="seasonArchiveTable"/.test(html) && /appendSeasonArchive\(/.test(app));
+  check("merittlista er isolert per modus", /"seasonArchive"/.test(modeSessions));
+
+  // Rullen til neste sesong må faktisk rulle.
+  check("ny sesong nullstiller spillerstatistikken", /state\.playerSeasonStats = \{ rows: \[\], matchIds: \[\] \};[\s\S]{0,200}savePlayerSeasonStats\(\)/.test(app));
+  check("ny sesong gir troppen sommerferie", /applySummerBreak\(getPlayerCondition\(\)\)/.test(app));
+  check("sesongen arkiveres før rullen", /registerSeasonReview\(state\.leagueSeason\)/.test(app));
+
+  // Og ingen skal sparkes av ett uhell.
+  check("advarselen kommer før sparken", /const sacked = verdict === "failed" && hadWarning/.test(review));
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

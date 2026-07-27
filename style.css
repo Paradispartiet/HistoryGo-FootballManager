@@ -8470,3 +8470,44 @@ body > .site-footer { grid-row: 5; }
 .scenario-learning,
 .scenario-opponents { font-size: 0.76rem; }
 .scenario-card button { margin-top: 6px; }
+
+/* ============================================================
+   Sesongdom og merittliste. Fargen sier hva styret mener — aldri
+   hva spillerne er verdt.
+   ============================================================ */
+.season-review-panel { border-left: 3px solid var(--hg-border-soft); }
+.season-review-panel[data-verdict="triumph"],
+.season-review-panel[data-verdict="exceeded"] { border-left-color: var(--good); }
+.season-review-panel[data-verdict="below"] { border-left-color: var(--warn, #d8a13a); }
+.season-review-panel[data-verdict="failed"] { border-left-color: var(--bad); }
+
+.season-review-board {
+  margin: 8px 0 0;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.season-review-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.season-review-list li {
+  border-left: 2px solid var(--hg-border-soft);
+  padding-left: 9px;
+  font-size: 0.83rem;
+}
+
+.season-review-list.is-highlights li {
+  border-left-color: var(--hg-accent-tactics);
+  color: var(--muted);
+}
+
+.season-archive-table { margin-top: 12px; overflow-x: auto; }
+.season-archive-table .is-warning th,
+.season-archive-table .is-warning td { color: var(--warn, #d8a13a); }
+.season-archive-table .is-sacked th,
+.season-archive-table .is-sacked td { color: var(--bad); }
