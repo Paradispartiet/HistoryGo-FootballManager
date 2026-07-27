@@ -8511,3 +8511,68 @@ body > .site-footer { grid-row: 5; }
 .season-archive-table .is-warning td { color: var(--warn, #d8a13a); }
 .season-archive-table .is-sacked th,
 .season-archive-table .is-sacked td { color: var(--bad); }
+
+/* ============================================================
+   Før-sesong-stegene: navigasjon, ikke en oppsummeringsboks.
+   Panelet skjuler seg selv når alle stegene er klare.
+   ============================================================ */
+.league-onboarding-steps {
+  list-style: none;
+  counter-reset: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.league-onboarding-step {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 10px;
+  align-items: start;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  padding: 9px 11px;
+  cursor: pointer;
+}
+
+.league-onboarding-step > span {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--hg-border-soft);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.league-onboarding-step small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.league-onboarding-steps .is-done .league-onboarding-step { opacity: 0.62; }
+.league-onboarding-steps .is-done .league-onboarding-step > span {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+/* Forbundets dom: samme språk som styrets sesongdom. */
+.federation-verdict {
+  margin-top: 12px;
+  border-left: 3px solid var(--hg-border-soft);
+  padding-left: 11px;
+}
+.federation-verdict[data-verdict="triumph"],
+.federation-verdict[data-verdict="exceeded"] { border-left-color: var(--good); }
+.federation-verdict[data-verdict="below"] { border-left-color: var(--warn, #d8a13a); }
+.federation-verdict[data-verdict="failed"] { border-left-color: var(--bad); }
+.federation-verdict-message { margin: 6px 0 0; font-weight: 700; font-size: 0.85rem; }

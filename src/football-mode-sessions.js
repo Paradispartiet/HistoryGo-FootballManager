@@ -18,7 +18,7 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
   "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason",
   "nationalTeam", "tournament", "tournamentHistory", "playerSeasonStats",
-  "playerCondition", "playerConditionMatchIds", "seasonArchive", "seasonReview"
+  "playerCondition", "playerConditionMatchIds", "seasonArchive", "seasonReview", "federationVerdict", "federationTrust"
 ]);
 
 // Set-felt: disse er `Set` i app-staten, men `JSON.stringify(new Set())` gir
@@ -122,6 +122,8 @@ export function createSecondarySession(league, mode) {
     session.nationalTeam = { nationality: null, squadPlayerIds: [] };
     session.tournament = null;
     session.tournamentHistory = [];
+    session.federationVerdict = null;
+    session.federationTrust = 50;
   }
   session.clubWeekEventLog = [];
   session.weeklyTrainingFocus = null;
