@@ -1,0 +1,116 @@
+{
+  "schema": "historygo-football-manager.scenarios.v1",
+  "version": 1,
+  "note": "Scenarioer er korte, valgfrie utfordringer på fem kamper. Hver bygger på de historiske motstanderarketypene i src/football-historical-opponent-profiles.js — motstanderne er taktiske skoler, ikke roboter. Ingen scenariodata hardkodes i app.js eller index.html.",
+  "scenarios": [
+    {
+      "id": "ajax_1971_73_totalfootball",
+      "name": "Totalfotball",
+      "era": "1971–1974",
+      "subtitle": "Ajax 1971–73 og arven etter dem",
+      "lede": "Høy linje, høyt press og spillere som bytter posisjon hele tiden. Rommet bak dem finnes — spørsmålet er om laget ditt kan nå det før de vinner ballen tilbake.",
+      "challenge": "Fem lag som alle vil ha ballen og presse deg høyt. Du må velge: møte dem i deres eget spill, eller angripe rommet de legger igjen.",
+      "learningFocus": "Hvordan en høy linje skaper både trussel og sårbarhet, og hva rotasjon gjør med markeringsansvaret ditt.",
+      "firstOpponentId": "ajax_1971_73_total_football",
+      "opponentIds": [
+        "ajax_1971_73_total_football",
+        "netherlands_1974_total_football",
+        "barcelona_2008_12_positional_play",
+        "man_city_2022_23_325_control",
+        "brazil_1970_creative_424"
+      ]
+    },
+    {
+      "id": "muren_catenaccio",
+      "name": "Muren",
+      "era": "1965–2017",
+      "subtitle": "Catenaccio og den kompakte blokka",
+      "lede": "De gir deg ballen med vilje. Fem lag som forsvarer dypt, tett og disiplinert — og som straffer deg i det sekundet du mister den.",
+      "challenge": "Å ha ballen er ikke det samme som å komme til. Du må åpne en blokk som ikke vil åpne seg, uten å stå ubalansert når de vinner den.",
+      "learningFocus": "Bredde, tålmodighet og restforsvar: hvorfor et lag som dominerer ballen kan tape på tre kontringer.",
+      "firstOpponentId": "inter_1960s_catenaccio",
+      "opponentIds": [
+        "inter_1960s_catenaccio",
+        "conte_chelsea_2016_17_343",
+        "leicester_2015_16_direct_transition",
+        "milan_1988_90_sacchi",
+        "arsenal_2003_04_invincibles"
+      ]
+    },
+    {
+      "id": "pressets_tiar",
+      "name": "Pressets tiår",
+      "era": "1988–2023",
+      "subtitle": "Fra Sacchi til gegenpressing",
+      "lede": "Fra Sacchis sonepress til Klopps gjenvinning: fem lag som jager ballen der du helst vil bygge fra.",
+      "challenge": "Hver eneste oppbygging blir testet. Spiller du deg gjennom presset, eller går du over det — og hva koster hvert av valgene?",
+      "learningFocus": "Oppbygging under press: når kort spill er mot, og når det bare er risiko uten gevinst.",
+      "firstOpponentId": "milan_1988_90_sacchi",
+      "opponentIds": [
+        "milan_1988_90_sacchi",
+        "liverpool_2018_20_gegenpress",
+        "man_city_2022_23_325_control",
+        "barcelona_2008_12_positional_play",
+        "ajax_1971_73_total_football"
+      ]
+    },
+    {
+      "id": "kontringens_kunst",
+      "name": "Kontringens kunst",
+      "era": "1965–2016",
+      "subtitle": "Leicester 2015–16 og overgangsspillets lag",
+      "lede": "Lag som lever i sekundet etter at du mister ballen. De trenger ikke mye — de trenger bare at du står feil én gang.",
+      "challenge": "Du kommer til å ha mest ball i alle fem kampene. Det er nettopp derfor du kan tape dem.",
+      "learningFocus": "Restforsvar og balanse: hva som må stå igjen bak ballen mens resten av laget angriper.",
+      "firstOpponentId": "leicester_2015_16_direct_transition",
+      "opponentIds": [
+        "leicester_2015_16_direct_transition",
+        "inter_1960s_catenaccio",
+        "conte_chelsea_2016_17_343",
+        "brazil_1970_creative_424",
+        "liverpool_2018_20_gegenpress"
+      ]
+    },
+    {
+      "id": "de_uovervinnelige",
+      "name": "De uovervinnelige",
+      "era": "1953–2004",
+      "subtitle": "Arsenal 2003–04 og lagene som hadde alt",
+      "lede": "Lag som verken ga fra seg ballen eller rommet: kontroll og overgang i samme lag. De har ingen åpenbar svakhet — du må lage en.",
+      "challenge": "Ingen enkel plan holder i fem kamper. Du må lese hver enkelt motstander og våge å endre det som virket sist.",
+      "learningFocus": "Balanse: å holde kontroll og trussel samtidig, i stedet for å velge én av dem.",
+      "firstOpponentId": "arsenal_2003_04_invincibles",
+      "opponentIds": [
+        "arsenal_2003_04_invincibles",
+        "brazil_1970_creative_424",
+        "hungary_1953_mighty_magyars",
+        "milan_1988_90_sacchi",
+        "netherlands_1974_total_football"
+      ]
+    },
+    {
+      "id": "taktikkens_historie",
+      "name": "Taktikkens historie",
+      "era": "1953–2012",
+      "subtitle": "Fem kamper, seksti år",
+      "lede": "Den dype nieren, den kreative firer-toeren, totalfotballen, sonepresset og posisjonsspillet — i den rekkefølgen de faktisk kom.",
+      "challenge": "Hver motstander svarer på den forrige. Det som holdt i kamp én er nettopp det kamp to er bygd for å slå.",
+      "learningFocus": "Hvorfor taktikk utvikler seg: hvert system er et svar på problemet det forrige skapte.",
+      "firstOpponentId": "hungary_1953_mighty_magyars",
+      "opponentIds": [
+        "hungary_1953_mighty_magyars",
+        "brazil_1970_creative_424",
+        "ajax_1971_73_total_football",
+        "milan_1988_90_sacchi",
+        "barcelona_2008_12_positional_play"
+      ],
+      "opponentOrder": [
+        "hungary_1953_mighty_magyars",
+        "brazil_1970_creative_424",
+        "ajax_1971_73_total_football",
+        "milan_1988_90_sacchi",
+        "barcelona_2008_12_positional_play"
+      ]
+    }
+  ]
+}

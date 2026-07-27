@@ -240,15 +240,33 @@ export function buildMiniSeasonSchedule(context = {}) {
   const firstOpponentId = isNonEmptyString(context.firstOpponentId) ? context.firstOpponentId : null;
   const firstOpponent = firstOpponentId ? opponents.find((opponent) => opponent.id === firstOpponentId) : null;
 
+  // Noen scenarioer ER en rekkefølge: «Taktikkens historie» går kronologisk,
+  // fordi hvert system er et svar på problemet det forrige skapte. Da skal ikke
+  // styrkesorteringen stokke om på fortellingen.
+  const explicitOrder = asArray(context?.opponentOrder)
+    .map((id) => opponents.find((opponent) => opponent.id === id))
+    .filter(Boolean);
+
   const sorted = [...opponents].sort((a, b) => {
     const diff = num(a.strength) - num(b.strength);
     return diff !== 0 ? diff : String(a.id).localeCompare(String(b.id));
   });
-  const waved = arrangeOpponentWave(sorted);
+  const waved = explicitOrder.length > 0 ? explicitOrder : arrangeOpponentWave(sorted);
+
+  // Den valgte første motstanderen løftes til FRONTEN av rekkefølgen — den
+  // erstatter ikke bare runde 1.
+  //
+  // Før ble runde 1 overstyrt mens resten fortsatte fra `waved[1]`. Da forsvant
+  // `waved[0]` helt, og førstemotstanderen dukket opp igjen senere i lista.
+  // «Kontringens kunst» endte med å spille Leicester to ganger og Inter aldri —
+  // et scenario som lovet fem motstandere leverte fire.
+  const order = firstOpponent && explicitOrder.length === 0
+    ? [firstOpponent, ...waved.filter((opponent) => opponent.id !== firstOpponent.id)]
+    : waved;
 
   const schedule = [];
   for (let round = 1; round <= MINI_SEASON_TOTAL_WEEKS; round += 1) {
-    const opponent = round === 1 && firstOpponent ? firstOpponent : waved[(round - 1) % waved.length];
+    const opponent = order[(round - 1) % order.length];
     const difficulty = difficultyFromStrength(opponent.strength);
     // Sterkere lag spilles borte, svakere/jevne hjemme — slik styremålene
     // (seier hjemme, prestasjon borte) får en naturlig ramme.
