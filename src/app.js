@@ -37,6 +37,13 @@ import {
   createMiniSeasonOffPitchEvent
 } from "./football-mini-season.js";
 import {
+  appendSeasonArchive,
+  createSeasonArchiveEntry,
+  createSeasonReview,
+  deriveSeasonTarget,
+  summarizeSeasonHistory
+} from "./football-season-review.js";
+import {
   createScenarioMiniSeasonContext,
   describeScenario,
   getScenario,
@@ -57,6 +64,7 @@ import {
   injuredPlayerIds,
   isInjured,
   playersNeedingRest,
+  applySummerBreak,
   summarizeSquadCondition
 } from "./football-player-condition.js";
 import {
@@ -558,6 +566,14 @@ const elements = {
   headerClubName: document.querySelector("#headerClubName"),
   headerClubManager: document.querySelector("#headerClubManager"),
   playerStatsTable: document.querySelector("#playerStatsTable"),
+  seasonReviewPanel: document.querySelector("#seasonReviewPanel"),
+  seasonReviewVerdict: document.querySelector("#seasonReviewVerdict"),
+  seasonReviewHeadline: document.querySelector("#seasonReviewHeadline"),
+  seasonReviewBoard: document.querySelector("#seasonReviewBoard"),
+  seasonReviewReasons: document.querySelector("#seasonReviewReasons"),
+  seasonReviewHighlights: document.querySelector("#seasonReviewHighlights"),
+  seasonArchiveSummary: document.querySelector("#seasonArchiveSummary"),
+  seasonArchiveTable: document.querySelector("#seasonArchiveTable"),
   squadConditionSummary: document.querySelector("#squadConditionSummary"),
   squadConditionList: document.querySelector("#squadConditionList"),
   analyseRoleChanges: document.querySelector("#analyseRoleChanges"),
@@ -5366,12 +5382,108 @@ function startLeagueSeasonFromOnboarding() {
   renderApp();
 }
 
+const SEASON_ARCHIVE_KEY = "hgfm.seasonArchive.v1";
+
+// ---------------------------------------------------------------------------
+// Sesongdom og merittliste
+// Motoren (`football-season-review.js`) er ren; her ligger lagringen, koblingen
+// til styretilliten og sesongrullen.
+// ---------------------------------------------------------------------------
+
+function normalizeSeasonArchive(value) {
+  return Array.isArray(value) ? value.filter((entry) => Number.isFinite(Number(entry?.seasonNumber))) : [];
+}
+
+function loadSeasonArchive() {
+  try {
+    return normalizeSeasonArchive(JSON.parse(localStorage.getItem(SEASON_ARCHIVE_KEY) || "null"));
+  } catch (error) {
+    console.error("Kunne ikke lese merittlista", error);
+    return [];
+  }
+}
+
+function saveSeasonArchive() {
+  try {
+    localStorage.setItem(SEASON_ARCHIVE_KEY, JSON.stringify(normalizeSeasonArchive(state.seasonArchive)));
+  } catch (error) {
+    console.error("Kunne ikke lagre merittlista", error);
+  }
+}
+
+function getSeasonArchive() {
+  return normalizeSeasonArchive(state.seasonArchive);
+}
+
+// Målet styret setter for inneværende sesong: en tabellplass, avledet av der du
+// endte sist. Brukes både til dommen og til å vise forventningen underveis.
+function getSeasonTarget() {
+  const archive = getSeasonArchive();
+  const previous = archive[archive.length - 1] || null;
+  return deriveSeasonTarget({
+    clubCount: state.leagueSeason?.clubs?.length || 8,
+    seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
+    previousPosition: previous ? Number(previous.position) : null
+  });
+}
+
+// Sesongen er ferdig: bygg dommen, flytt styretilliten og arkiver sesongen.
+// Idempotent på sesongnummer, så reload aldri dømmer samme sesong to ganger.
+function registerSeasonReview(season) {
+  if (!season || season.status !== "completed") return;
+  const seasonNumber = Number(season.seasonNumber) || 1;
+  if (getSeasonArchive().some((entry) => Number(entry.seasonNumber) === seasonNumber)) return;
+
+  const review = createSeasonReview({
+    season,
+    table: createLeagueTable(season),
+    target: getSeasonTarget(),
+    playerStats: state.playerSeasonStats?.rows || [],
+    previousReviews: getSeasonArchive(),
+    boardTrust: Number(getOffPitchState()?.boardTrust) || 50
+  });
+  if (!review) return;
+
+  state.seasonReview = review;
+  state.seasonArchive = appendSeasonArchive(getSeasonArchive(), createSeasonArchiveEntry(review, {
+    playerStats: state.playerSeasonStats?.rows || []
+  }));
+  saveSeasonArchive();
+
+  addClubWeekEvent({
+    id: `season-review-${seasonNumber}`,
+    week: state.clubWeekState?.week ?? "?",
+    phase: "review",
+    phaseLabel: "Sesongslutt",
+    message: `${review.headline} ${review.boardMessage}`
+  });
+}
+
 function startNewLeagueSeason() {
   if (!isLeagueModeActive() || state.leagueSeason?.status === "active") {
     return;
   }
+  // Sørg for at sesongen som avsluttes faktisk er dømt og arkivert før vi
+  // ruller videre — ellers ville en sesong kunne forsvinne uten spor.
+  registerSeasonReview(state.leagueSeason);
+
   state.gameStartState = normalizeGameStartState({ ...state.gameStartState, ...createLeagueSaveExtras() });
   saveGameStartState();
+
+  // Ny sesong = ny statistikk. Uten dette bar toppscorerlista på fjorårets mål
+  // i det uendelige, og «kamper spilt» ble et karrieretall forkledd som en
+  // sesong.
+  state.playerSeasonStats = { rows: [], matchIds: [] };
+  savePlayerSeasonStats();
+
+  // Sommerferie: troppen hviler ut mellom sesongene.
+  state.playerCondition = applySummerBreak(getPlayerCondition());
+  state.playerConditionMatchIds = [];
+  savePlayerCondition();
+
+  // Dommen er lest; den nye sesongen starter uten den hengende over seg.
+  state.seasonReview = null;
+
   state.leagueSeason = state.leagueSeason ? startNextLeagueSeason(state.leagueSeason) : null;
   saveLeagueSeason();
   if (!state.leagueSeason) ensureLeagueSeason();
@@ -5423,7 +5535,13 @@ function registerMatchInMiniSeason(lastMatch) {
     const updated = completeLeagueRound(state.leagueSeason, lastMatch);
     if (updated !== state.leagueSeason) {
       state.leagueSeason = updated;
-      if (updated.status === "completed") state.gameStartState.leagueSeasonStatus = "completed";
+      if (updated.status === "completed") {
+        state.gameStartState.leagueSeasonStatus = "completed";
+        // Styret gjør opp regnskapet. Før sa statuslinja bare hvem som ble
+        // seriemester — forventningen de satte da klubben ble opprettet ble
+        // aldri målt mot noe.
+        registerSeasonReview(updated);
+      }
       saveLeagueSeason(); saveGameStartState();
       addClubWeekEvent({ id: `league-r${previousRound}`, week: previousRound, phase: "matchday", phaseLabel: "Ligaspill", message: `Serierunde ${previousRound} er ferdig. Alle fire resultater er registrert.` });
       window.dispatchEvent(new Event("updateProfile"));
@@ -11178,6 +11296,85 @@ function renderManagerDetailFromTeamFit(teamFit) {
   }
 }
 
+// Sesongdommen og merittlista på Statistikk. Dommen vises bare når sesongen
+// faktisk er ferdig; merittlista står alltid, som karrieren din.
+function renderSeasonReview() {
+  const panel = elements.seasonReviewPanel;
+  const review = state.seasonReview || null;
+
+  if (panel) {
+    panel.hidden = !isLeagueModeActive() || !review;
+    if (review && !panel.hidden) {
+      panel.dataset.verdict = review.verdict;
+      if (elements.seasonReviewVerdict) {
+        elements.seasonReviewVerdict.textContent = review.sacked
+          ? "Sesongdom · sparket"
+          : review.warning
+            ? "Sesongdom · advarsel"
+            : `Sesongdom · ${review.verdictLabel}`;
+      }
+      if (elements.seasonReviewHeadline) elements.seasonReviewHeadline.textContent = review.headline;
+      if (elements.seasonReviewBoard) {
+        const trend = review.boardTrustDelta >= 0 ? `+${review.boardTrustDelta}` : `${review.boardTrustDelta}`;
+        elements.seasonReviewBoard.textContent = `${review.boardMessage} Styretillit ${trend} (nå ${review.boardTrustAfter}).`;
+      }
+      renderTextList(elements.seasonReviewReasons, review.reasons, (line) => line, "");
+      renderTextList(elements.seasonReviewHighlights, review.highlights, (line) => line, "");
+    }
+  }
+
+  const archive = getSeasonArchive();
+  const summary = summarizeSeasonHistory(archive);
+  if (elements.seasonArchiveSummary) {
+    const target = isLeagueModeActive() && state.leagueSeason?.status === "active" ? getSeasonTarget() : null;
+    elements.seasonArchiveSummary.textContent = target
+      ? `${summary.headline} Denne sesongen: ${target.description}`
+      : summary.headline;
+  }
+
+  const container = elements.seasonArchiveTable;
+  if (!container) return;
+  container.textContent = "";
+  if (archive.length === 0) return;
+
+  const table = document.createElement("table");
+  table.className = "stats-table";
+  const head = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  ["Sesong", "Plass", "P", "Mål", "Dom", "Toppscorer"].forEach((label) => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = label;
+    headRow.append(th);
+  });
+  head.append(headRow);
+
+  const body = document.createElement("tbody");
+  [...archive].reverse().forEach((entry) => {
+    const row = document.createElement("tr");
+    if (entry.sacked) row.className = "is-sacked";
+    else if (entry.warning) row.className = "is-warning";
+    const cells = [
+      String(entry.seasonNumber),
+      `${entry.position}.`,
+      String(entry.points),
+      `${entry.goalsFor}–${entry.goalsAgainst}`,
+      entry.verdictLabel || "",
+      entry.topScorer ? `${entry.topScorer.name} (${entry.topScorer.goals})` : "–"
+    ];
+    cells.forEach((value, index) => {
+      const cell = document.createElement(index === 0 ? "th" : "td");
+      if (index === 0) cell.scope = "row";
+      cell.textContent = value;
+      row.append(cell);
+    });
+    body.append(row);
+  });
+
+  table.append(head, body);
+  container.append(table);
+}
+
 // Scenariolista, bygget fra data. Hvert kort forklarer seg selv: hva epoken er,
 // hva utfordringen består i, og hva du skal lære av den — ikke bare et navn og
 // en «Start»-knapp.
@@ -11260,11 +11457,16 @@ function renderSquadCondition() {
   const summary = summarizeSquadCondition(conditions);
 
   if (elements.squadConditionSummary) {
+    // Etter sommerferien er alle uthvilte fordi kalenderen sa det — ikke fordi
+    // manageren roterte. Å rose ham for det ville vært en liten løgn.
+    const playedThisSeason = conditions.some((entry) => Number(entry.matchesPlayed) > 0);
     elements.squadConditionSummary.textContent = summary.tracked === 0
       ? "Ingen kamper spilt ennå — troppen er uthvilt."
-      : summary.injuredCount === 0 && summary.tiredCount === 0
-        ? `${summary.tracked} spillere fulgt. Ingen slitne, ingen skadde — du har rotert godt.`
-        : `${summary.tiredCount} sliten${summary.tiredCount === 1 ? "" : "e"}, ${summary.injuredCount} skadd${summary.injuredCount === 1 ? "" : "e"}. Treningsuka du velger avgjør hvor mye laget henter inn igjen.`;
+      : !playedThisSeason
+        ? `Troppen er uthvilt etter oppholdet. Belastningen bygger seg opp igjen fra første kamp.`
+        : summary.injuredCount === 0 && summary.tiredCount === 0
+          ? `${summary.tracked} spillere fulgt. Ingen slitne, ingen skadde — du har rotert godt.`
+          : `${summary.tiredCount} sliten${summary.tiredCount === 1 ? "" : "e"}, ${summary.injuredCount} skadd${summary.injuredCount === 1 ? "" : "e"}. Treningsuka du velger avgjør hvor mye laget henter inn igjen.`;
   }
 
   const list = elements.squadConditionList;
@@ -14101,6 +14303,7 @@ function renderApp() {
   renderPlayerStats();
   renderSquadCondition();
   renderScenarioList();
+  renderSeasonReview();
   renderClubWeek().catch(console.error);
   refreshInboxEvents(teamFit);
   renderInboxThreads();
@@ -14994,6 +15197,8 @@ async function hydratePersistedUiState() {
   state.playerSeasonStats = loadPlayerSeasonStats();
   // Spillerform og slitasje (v1): troppens tilstand mellom kampene.
   state.playerCondition = loadPlayerCondition();
+  // Merittlista: sesongene som er spilt ferdig.
+  state.seasonArchive = loadSeasonArchive();
   // Mini Season v0.1: hent eventuell prøveperiode fra localStorage. Korrupt
   // eller manglende state gir null (= ingen prøveperiode startet).
   state.miniSeason = loadMiniSeason();

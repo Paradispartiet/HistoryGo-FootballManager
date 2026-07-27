@@ -610,6 +610,24 @@
         <div id="playerStatsTable" class="player-stats-table"></div>
       </section>
 
+      <!-- Sesongdommen: styrets regnskap etter fjorten runder. Vises bare når
+           sesongen faktisk er ferdig. -->
+      <section class="panel season-review-panel" id="seasonReviewPanel" aria-label="Sesongdom" aria-live="polite" hidden>
+        <p class="eyebrow" id="seasonReviewVerdict">Sesongdom</p>
+        <h2 id="seasonReviewHeadline">Sesongen er fullført</h2>
+        <p id="seasonReviewBoard" class="season-review-board"></p>
+        <ul id="seasonReviewReasons" class="season-review-list"></ul>
+        <ul id="seasonReviewHighlights" class="season-review-list is-highlights"></ul>
+      </section>
+
+      <!-- Merittlista: sesongene huskes. -->
+      <section class="panel season-archive-panel" aria-label="Merittliste" aria-live="polite">
+        <p class="eyebrow">Karrieren</p>
+        <h3>Merittliste</h3>
+        <p id="seasonArchiveSummary" class="muted-text">Ingen fullførte sesonger ennå.</p>
+        <div id="seasonArchiveTable" class="season-archive-table"></div>
+      </section>
+
       <section class="panel league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
         <div class="mini-season-head">
           <div>

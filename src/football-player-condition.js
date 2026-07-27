@@ -269,6 +269,26 @@ export function applyWeeklyRecovery(conditions, { trainingIntensity = 1 } = {}) 
   return [...map.values()];
 }
 
+// Sommerferie: mellom to sesonger hviler laget ordentlig. Belastningen nulles,
+// skader gror ferdig, og formen faller tilbake mot normalen — en ny sesong
+// starter ikke der forrige sluttet.
+//
+// Uten dette startet sesong 2 med den samme utkjørte troppen som avsluttet
+// sesong 1, som om sommeren ikke fantes.
+export function applySummerBreak(conditions) {
+  return asArray(conditions).map((entry) => ({
+    ...entry,
+    load: 0,
+    consecutiveFullMatches: 0,
+    // Formen er midlertidig og skal ikke bæres over et helt opphold — men den
+    // nulles heller ikke helt: en spiller i storform kommer tilbake med noe.
+    form: round2(num(entry?.form) * 0.35),
+    matchesPlayed: 0,
+    minutesPlayed: 0,
+    injury: null
+  }));
+}
+
 // ---------------------------------------------------------------------------
 // Oppslag for resten av spillet
 // ---------------------------------------------------------------------------
