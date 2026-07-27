@@ -566,6 +566,10 @@ const elements = {
   headerClubName: document.querySelector("#headerClubName"),
   headerClubManager: document.querySelector("#headerClubManager"),
   playerStatsTable: document.querySelector("#playerStatsTable"),
+  leagueOnboardingPanel: document.querySelector("#leagueOnboardingPanel"),
+  leagueOnboardingLead: document.querySelector("#leagueOnboardingLead"),
+  leagueOnboardingPrimary: document.querySelector("#leagueOnboardingPrimary"),
+  leagueOnboardingSteps: document.querySelector("#leagueOnboardingSteps"),
   seasonReviewPanel: document.querySelector("#seasonReviewPanel"),
   seasonReviewVerdict: document.querySelector("#seasonReviewVerdict"),
   seasonReviewHeadline: document.querySelector("#seasonReviewHeadline"),
@@ -4778,6 +4782,12 @@ function renderLeagueOnboarding(teamFit) {
   steps.forEach((step, index) => {
     const item = document.createElement("li");
     item.className = step.done ? "is-done" : "";
+    // Hvert steg er en knapp til flata steget faktisk skjer på. Et steg som
+    // bare beskriver seg selv er et skilt uten dør — samme feil som klubbukas
+    // fasestripe hadde.
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "league-onboarding-step";
     const number = document.createElement("span");
     number.textContent = step.done ? "✓" : String(index + 1);
     const body = document.createElement("div");
@@ -4786,7 +4796,9 @@ function renderLeagueOnboarding(teamFit) {
     const detail = document.createElement("small");
     detail.textContent = step.detail;
     body.append(title, detail);
-    item.append(number, body);
+    button.append(number, body);
+    button.addEventListener("click", () => activateLeagueOnboardingTarget(step));
+    item.append(button);
     list.append(item);
   });
 }

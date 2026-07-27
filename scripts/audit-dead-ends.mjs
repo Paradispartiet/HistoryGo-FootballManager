@@ -797,6 +797,49 @@ stage("22. Sesongdom");
   check("advarselen kommer før sparken", /const sacked = verdict === "failed" && hadWarning/.test(review));
 }
 
+// ---- 23) Ingen render-funksjon skriver til luft ----------------------------
+// `renderLeagueOnboarding()` skrev til fire `elements.leagueOnboarding*` som
+// ALDRI ble definert i elements-objektet, og til fire id-er som ikke fantes i
+// index.html. Funksjonen returnerte stille, og hele før-sesong-sjekklista var
+// usynlig — eneste vei til seriestart var «Neste handling» i footeren.
+//
+// `check:dom-ids` så det ikke: den sjekker `querySelector("#id")`-oppslag, og
+// her fantes ingen oppslag i det hele tatt. Dette er den generelle regelen som
+// fanger hele klassen.
+stage("23. Ingen render skriver til luft");
+{
+  const used = new Set([...app.matchAll(/\belements\.([A-Za-z0-9_]+)/g)].map((m) => m[1]));
+
+  // Hent ut elements-objektet ved å telle klammer, ikke med regex.
+  const start = app.indexOf("const elements = {");
+  let defined = new Set();
+  if (start >= 0) {
+    let depth = 0;
+    let i = start + "const elements = {".length - 1;
+    for (; i < app.length; i += 1) {
+      if (app[i] === "{") depth += 1;
+      else if (app[i] === "}") {
+        depth -= 1;
+        if (depth === 0) break;
+      }
+    }
+    const block = app.slice(start, i + 1);
+    defined = new Set([...block.matchAll(/^\s{2}([A-Za-z0-9_]+):/gm)].map((m) => m[1]));
+  }
+
+  const missing = [...used].filter((name) => !defined.has(name)).sort();
+  check(
+    "hver elements.X som brukes er faktisk definert",
+    missing.length === 0,
+    missing.map((name) => `elements.${name}`).join(", ")
+  );
+
+  // Og selve før-sesong-panelet skal finnes, med steg som navigerer.
+  check("før-sesong-panelet finnes i DOM", /id="leagueOnboardingPanel"/.test(html) && /id="leagueOnboardingSteps"/.test(html));
+  check("hvert før-sesong-steg er en knapp som navigerer", /button\.addEventListener\("click", \(\) => activateLeagueOnboardingTarget\(step\)\)/.test(app));
+  check("panelet skjuler seg selv når alt er klart", /panel\.hidden = !active \|\| done/.test(app));
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

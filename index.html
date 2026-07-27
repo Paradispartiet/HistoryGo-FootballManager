@@ -212,6 +212,22 @@
         </div>
       </section>
 
+      <!-- FØR-SESONG: veien fra opprettet klubb til seriestart.
+           Panelet skjuler seg selv når alle stegene er klare, så det blir aldri
+           en permanent oppsummeringsboks på Kontor — det er en vei videre.
+           Hvert steg er en KNAPP til flata steget skjer på.
+
+           Markupen manglet helt: renderLeagueOnboarding() skrev til fire
+           elementer som ikke fantes, returnerte stille, og eneste vei til
+           seriestart var «Neste handling» i footeren. -->
+      <section id="leagueOnboardingPanel" class="panel league-onboarding-panel" aria-label="Før sesongstart" aria-live="polite" hidden>
+        <p class="eyebrow">Før sesongstart</p>
+        <h2>Gjør klubben klar for serien</h2>
+        <p id="leagueOnboardingLead" class="muted-text">Før seriestart: 0/7 managergrep klare.</p>
+        <button type="button" id="leagueOnboardingPrimary" class="primary-action-button">Neste steg</button>
+        <ol id="leagueOnboardingSteps" class="league-onboarding-steps"></ol>
+      </section>
+
       <section class="manager-portal" aria-label="Managerkontor">
         <article class="portal-card portal-club-card">
           <p class="eyebrow">Klubbkontor</p>
