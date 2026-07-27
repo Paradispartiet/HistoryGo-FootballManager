@@ -152,10 +152,12 @@ check("rapport sett peker videre mot «Forbered neste kamp» i review", primary(
 
 // 12c) Klubb-save-kortet er wiret i ligamodus uten å åpne kampdag før aktiv save.
 check("league save får id når sesong starter", appSource.includes("activeLeagueSaveId: model.activeLeagueSaveId || `league_save_${Date.now()}`"));
-check("klubbkort vises i ligamodus", htmlSource.includes('id="leagueClubCard"') && appSource.includes("card.hidden = !isLeagueModeActive()"));
-// Klubbidentitet er nå klubben spilleren opprettet (navn + manager), ikke et
-// History Go-stedsanker. Stedsanker er faset ut som identitetskilde.
-check("klubbkort viser klubbidentitet (navn + manager)", htmlSource.includes('id="leagueClubManager"') && appSource.includes("model.managerName"));
+// Klubbidentitet er klubben spilleren opprettet (navn + manager), ikke et
+// History Go-stedsanker. Den står nå i toppen i stedet for i en egen boks på
+// Kontor, som gjentok tall managerportalen og klubbuka allerede viste.
+check("klubbidentiteten står i toppen", htmlSource.includes('id="headerClubName"') && appSource.includes("function renderHeaderClubIdentity"));
+check("klubbidentiteten viser navn og manager", htmlSource.includes('id="headerClubManager"') && appSource.includes("model.managerName"));
+check("klubbkortet på Kontor er borte", !htmlSource.includes('id="leagueClubCard"'));
 check("klubbkort bruker ikke stedsanker", !htmlSource.includes('id="leagueClubAnchor"') && !appSource.includes("Klubbanker / hjemsted"));
 check("leagueSeasonStatus vises som norsk managerstatus", appSource.includes("Før sesong") && appSource.includes("Aktiv sesong") && appSource.includes("Fullført sesong"));
 check("aktiv save viser ligastatus/terminliste", htmlSource.includes("Terminliste og tabell") && appSource.includes("getNextLeagueOpponent(state.leagueSeason)"));

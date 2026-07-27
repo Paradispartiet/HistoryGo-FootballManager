@@ -42,7 +42,8 @@
     "sim:pitch-layout": "node scripts/simulate-pitch-layout.mjs",
     "sim:match-plan": "node scripts/simulate-match-plan.mjs",
     "audit:tactics": "node scripts/audit-tactics.mjs",
-    "check:syntax": "node scripts/check-syntax.mjs"
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "sim:player-stats": "node scripts/simulate-player-stats.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

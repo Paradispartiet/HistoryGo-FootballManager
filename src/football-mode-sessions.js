@@ -17,7 +17,7 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
   "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason",
-  "nationalTeam", "tournament", "tournamentHistory"
+  "nationalTeam", "tournament", "tournamentHistory", "playerSeasonStats"
 ]);
 
 // Set-felt: disse er `Set` i app-staten, men `JSON.stringify(new Set())` gir
@@ -48,6 +48,7 @@ const LEGACY_KEYS = Object.freeze({
   clubWeekFeedback: "hgfm.clubWeekFeedback.v1",
   clubWeekEventLog: "hgfm.clubWeekEventLog.v1",
   matchday: "hgfm.matchday.v1",
+  playerSeasonStats: "hgfm.playerSeasonStats.v1",
   miniSeason: "historygo-football-manager.mini-season.v1",
   firstTimePlaythrough: "hgfm.firstTimePlaythrough.v1"
 });
@@ -93,6 +94,8 @@ export function applyModeSession(state, session) {
 export function createSecondarySession(league, mode) {
   const session = cloneSessionValue(isObject(league) ? league : {});
   session.matchday = { lastMatch: null, session: null };
+  // En scenario- eller landslagsøkt arver ikke klubbens scoringsliste.
+  session.playerSeasonStats = { rows: [], matchIds: [] };
   session.miniSeason = null;
   session.leagueSeason = null;
   const feedbackByMode = {

@@ -22,6 +22,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(root, "index.html"), "utf8");
 const app = readFileSync(join(root, "src/app.js"), "utf8");
 const css = readFileSync(join(root, "style.css"), "utf8");
+const engine = readFileSync(join(root, "src/football-matchday-engine.js"), "utf8");
+const modeSessions = readFileSync(join(root, "src/football-mode-sessions.js"), "utf8");
 
 // ---- HTML-hjelpere ----------------------------------------------------------
 
@@ -581,10 +583,11 @@ stage("17. Menyen lyver ikke");
     ["Trening", "trening"],
     ["Taktikk", "tactics"],
     ["Kamp", "kamp"],
-    ["Analyse", "analyse"]
+    ["Analyse", "analyse"],
+    ["Statistikk", "statistikk"]
   ];
   check(
-    "hovedmenyen i ligaspill er Kontor → Trening → Taktikk → Kamp → Analyse",
+    "hovedmenyen i ligaspill er Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk",
     gameLoop.length === expected.length &&
       gameLoop.every((b, i) => b.label === expected[i][0] && b.target === expected[i][1]),
     gameLoop.map((b) => `${b.label}→${b.target}`).join(", ")
@@ -638,6 +641,38 @@ stage("17. Menyen lyver ikke");
 
   // 17g) Nedtrekksmenyen som duplikerte kontorflatene er borte.
   check("den duplikate kontor-nedtrekksmenyen er fjernet", !/navOfficeMenu/.test(html) && !/navOfficeMenu/.test(app));
+}
+
+// ---- 18) Statistikken har et sted, og et innhold ---------------------------
+// Tabellen lå i en popup bak en knapp på Kontor, og prøveperioden som et kort
+// i dashbordet. To flater med sesongtall, ingen av dem der du ville lett.
+stage("18. Statistikk");
+{
+  check("Statistikk er en egen faneseksjon", tabSections.has("statistikk"));
+  check("tabellen ligger ikke lenger i en popup på Kontor", !/modalLeagueTable/.test(html) && !/modalLeagueTable/.test(app));
+  const section = (() => {
+    const i = html.indexOf('data-tab-section="statistikk"');
+    if (i < 0) return "";
+    const end = html.indexOf('<div class="tab-section', i + 10);
+    return html.slice(i, end > 0 ? end : html.length);
+  })();
+  check("ligatabell og terminliste ligger på Statistikk", /id="leagueSeasonOverview"/.test(section));
+  check("spillerstatistikken har en tabellflate", /id="playerStatsTable"/.test(section));
+
+  // Motoren må faktisk kreditere målene, ellers er scoringslista alltid tom.
+  check("kampmotoren attribuerer mål til en spiller", /attributeGoal\(/.test(engine));
+  check("kampmotoren tar vare på elleveren ved avspark", /lineupSnapshot: createLineupSnapshot\(teamFit\)/.test(engine));
+  check("kampresultatet bærer spillerstatistikk", /playerStats: createMatchPlayerStats\(/.test(engine));
+  check("app.js akkumulerer statistikken per sesong", /registerMatchInPlayerStats\(/.test(app));
+  check("statistikken er isolert per modus", /"playerSeasonStats"/.test(modeSessions));
+
+  // Klubbuka skal sende deg et sted.
+  check("klubbukens faser navigerer", /CLUB_WEEK_PHASE_TABS/.test(app) && /activateTab\(target\)/.test(app));
+
+  // Boksene som skulle bort.
+  check("«Klubben din»-boksen er fjernet fra Kontor", !/id="leagueClubCard"/.test(html));
+  check("«Spillmodus»-boksen er fjernet fra Kontor", !/id="gameModeStatusCard"/.test(html));
+  check("modusbyttet finnes fortsatt i Innstillinger", /data-settings-action="mode"/.test(html));
 }
 
 // ---- Rapport ----------------------------------------------------------------

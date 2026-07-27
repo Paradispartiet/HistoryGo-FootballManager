@@ -1,3 +1,4 @@
+import { createLineupSnapshot, attributeGoal, createMatchPlayerStats } from "./football-player-stats.js";
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
@@ -1437,6 +1438,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       tacticalProfile,
       historicalScore: num(historical.historicalScore)
     },
+    // Elleveren slik den står ved avspark. Uten den tilhørte målene ingen, og
+    // sesongen kunne ikke fortelle hvem som faktisk leverte.
+    lineupSnapshot: createLineupSnapshot(teamFit),
     strengthSnapshot: {
       finalStrength: strength.finalStrength,
       baseTeamScore: strength.baseTeamScore,
@@ -1465,6 +1469,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     planMatchup: evaluatePlanVsOpponent(tactic, matchOpponent),
     // Motstanderens egne justeringer gjennom kampen.
     opponentAdjustments: [],
+    // Målene laget scorer, med scorer og målgivende. Fylles av kampklokka.
+    goalCredits: [],
     // Løpende stilling og periodevis tidslinje. Kampen har en resultattavle nå.
     score: { for: 0, against: 0 },
     timeline: [],
@@ -1632,13 +1638,22 @@ export function advanceMatchClock(session) {
   const before = session.score || { for: 0, against: 0 };
   const score = { for: num(before.for) + goalsFor, against: num(before.against) + goalsAgainst };
 
-  // Bygg minuttloggen med løpende stilling på hvert mål.
+  // Bygg minuttloggen med løpende stilling på hvert mål. Egne mål får en scorer
+  // og som regel en målgivende, vektet av posisjon, rolle og passform — ikke av
+  // `overall`. Motstanderens mål attribueres ikke: vi kjenner ikke deres tropp.
+  const lineup = asArray(session.lineupSnapshot);
   let running = { ...before };
+  const goalCredits = [];
   const minutes = chances.map((chance) => {
+    let credit = null;
     if (chance.scored) {
       running = chance.side === "for"
         ? { for: running.for + 1, against: running.against }
         : { for: running.for, against: running.against + 1 };
+      if (chance.side === "for") {
+        credit = attributeGoal(lineup);
+        if (credit) goalCredits.push({ minute: chance.minute, ...credit });
+      }
     }
     return {
       minute: chance.minute,
@@ -1646,6 +1661,8 @@ export function advanceMatchClock(session) {
       type: chance.scored ? "goal" : "chance",
       quality: chance.quality,
       detail: chance.detail,
+      scorer: credit?.scorer?.name || null,
+      assist: credit?.assist?.name || null,
       scoreAfter: { ...running }
     };
   });
@@ -1663,6 +1680,8 @@ export function advanceMatchClock(session) {
   return {
     ...session,
     score,
+    // Målene laget har scoret, med scorer og målgivende.
+    goalCredits: [...asArray(session.goalCredits), ...goalCredits],
     // Flat minutt-for-minutt-logg for hele kampen.
     minuteLog: [...asArray(session.minuteLog), ...minutes],
     timeline: [
@@ -1915,6 +1934,22 @@ function buildFormationVerdict({ session, totals, positiveCount, negativeCount }
 
 // Avslutter en kampdagsesjon: base-xG fra v1-modellen + summerte
 // beslutningseffekter → mål, utfall og forklarende sluttrapport.
+// Målene som skal krediteres i sluttrapporten. Normalt er de allerede attribuert
+// minutt for minutt; faller kampen tilbake til sluttkastet, attribueres de her.
+function goalCreditsForResult(session, goalsFor) {
+  const credits = asArray(session.goalCredits);
+  if (credits.length > 0) return credits;
+
+  const lineup = asArray(session.lineupSnapshot);
+  if (lineup.length === 0 || goalsFor <= 0) return [];
+  const out = [];
+  for (let i = 0; i < goalsFor; i += 1) {
+    const credit = attributeGoal(lineup);
+    if (credit) out.push({ minute: 0, ...credit });
+  }
+  return out;
+}
+
 export function finalizeMatchdaySession(session) {
   if (!session || typeof session !== "object") {
     return null;
@@ -2111,6 +2146,13 @@ export function finalizeMatchdaySession(session) {
     opponentAdjustments: asArray(session.opponentAdjustments).map((entry) => ({ ...entry })),
     // Tidslinja: når målene falt, og hva stillingen var da.
     timeline: timeline.map((entry) => ({ ...entry })),
+    // Hvem spilte, hvem scoret, hvem la den fram. Er kampen avgjort uten klokka
+    // (eldre lagring, motoren brukt direkte), attribueres sluttresultatets mål
+    // her i stedet — ellers ville en kamp med mål gitt en tom scoringsliste.
+    playerStats: createMatchPlayerStats(
+      asArray(session.lineupSnapshot),
+      goalCreditsForResult(session, goalsFor)
+    ),
     minuteLog: asArray(session.minuteLog).map((entry) => ({ ...entry })),
     activePlanSnapshot: session.activePlanSnapshot || session.tacticSnapshot || null,
     decisionTotals: totals,

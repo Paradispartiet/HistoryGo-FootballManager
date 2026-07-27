@@ -8219,3 +8219,122 @@ body > .site-footer { grid-row: 5; }
 .app-shell > .tab-section > * {
   flex: 0 0 auto;
 }
+
+/* ============================================================
+   Statistikk-flata og klikkbar ukerytme.
+   ============================================================ */
+.stats-highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.stats-highlight-grid article {
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.stats-highlight-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.stats-highlight-grid strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.15rem;
+}
+
+.stats-sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stats-sort-button {
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: 4px 11px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.stats-sort-button.is-active {
+  border-color: var(--hg-accent-tactics);
+  color: var(--text);
+}
+
+/* Brede tabeller ruller i sin egen boks — flata skal aldri rulle sidelengs. */
+.player-stats-table {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.stats-table th,
+.stats-table td {
+  border-bottom: 1px solid var(--hg-border-soft);
+  padding: 7px 5px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Navnekolonnen får plassen som blir til overs, og kutter heller enn å skyve
+   mål/målgivende ut av skjermen på en telefon. */
+.stats-table th:nth-child(2),
+.stats-table td:nth-child(2) {
+  max-width: 42vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats-board-goal {
+  margin-top: 10px;
+  font-size: 0.82rem;
+}
+
+.stats-table thead th {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stats-table th:nth-child(2),
+.stats-table td:nth-child(2),
+.stats-table th:nth-child(3),
+.stats-table td:nth-child(3) {
+  text-align: left;
+}
+
+/* Ukerytmen er navigasjon, ikke pynt: stegene ser ut som det de er. */
+.club-week-step-label {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.club-week-step-label:hover,
+.club-week-step-label:focus-visible {
+  text-decoration: underline;
+}
