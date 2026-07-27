@@ -8564,3 +8564,15 @@ body > .site-footer { grid-row: 5; }
   border-color: var(--good);
   color: var(--good);
 }
+
+/* Forbundets dom: samme språk som styrets sesongdom. */
+.federation-verdict {
+  margin-top: 12px;
+  border-left: 3px solid var(--hg-border-soft);
+  padding-left: 11px;
+}
+.federation-verdict[data-verdict="triumph"],
+.federation-verdict[data-verdict="exceeded"] { border-left-color: var(--good); }
+.federation-verdict[data-verdict="below"] { border-left-color: var(--warn, #d8a13a); }
+.federation-verdict[data-verdict="failed"] { border-left-color: var(--bad); }
+.federation-verdict-message { margin: 6px 0 0; font-weight: 700; font-size: 0.85rem; }

@@ -840,6 +840,23 @@ stage("23. Ingen render skriver til luft");
   check("panelet skjuler seg selv når alt er klart", /panel\.hidden = !active \|\| done/.test(app));
 }
 
+// ---- 24) Mesterskapet gjøres opp -------------------------------------------
+// Landslagsmodus HADDE en merittliste, men ingen hadde en mening om den: å ryke
+// i gruppa med Brasil og å nå semifinalen med Norge sto som samme slags linje.
+stage("24. Forbundets dom");
+{
+  const fed = readFileSync(join(root, "src/football-federation-verdict.js"), "utf8");
+
+  check("dom-motoren finnes og er ren", /export function createFederationVerdict/.test(fed) && !/document\.|localStorage/.test(fed));
+  check("forventningen følger nasjonens styrke", /export function deriveFederationExpectation/.test(fed) && /minStrength/.test(fed));
+  check("dommen felles når mesterskapet er ferdig", /createFederationVerdict\(\{/.test(app) && /state\.federationVerdict = verdict/.test(app));
+  check("dommen vises i landslagsflata", /id="federationVerdict"/.test(html) && /#federationVerdictHeadline/.test(app));
+  check("merittlista viser dommen", /entry\.verdictLabel/.test(app));
+  check("forbundets tillit er modus-isolert", /"federationTrust"/.test(modeSessions));
+  check("advarselen kommer før avskjed", /const sacked = verdict === "failed" && hadWarning/.test(fed));
+  check("dommen leser ikke overall", !/\boverall\b/.test(fed.replace(/\/\/.*$/gm, "")));
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

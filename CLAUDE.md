@@ -46,6 +46,7 @@ npm run sim:substitutions      # innbytte underveis: benken kommer på banen
 npm run sim:player-condition   # form og slitasje mellom kampene (inkl. balansen)
 npm run sim:scenarios          # scenarioene former hvem du møter
 npm run sim:season-review      # styrets dom, merittlista og sesongskiftet
+npm run sim:federation-verdict # forbundets dom etter EM/VM
 npm run sim:pitch-layout       # brikkefordelingen på taktikktavla (alle formasjoner)
 npm run sim:training-week      # weekly training focus
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
@@ -93,6 +94,7 @@ The single most important thing to understand is that this repo contains **two i
 - `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
 - `football-suggested-setups.js` — self-explaining 2–4 logical setups (formation / match plan / training week) that advise without replacing the manager's own choice.
 - `football-off-pitch-parameters.js` — the human context layer: fatigue, injury risk, morale, confidence, autonomy, dressing-room mood, media/board/family pressure, hidden mental state.
+- `football-federation-verdict.js` — the federation's verdict after a tournament. Unlike the club, the expectation comes from the **nation's strength**: a semi-final is a triumph with a minnow and a failure with Brazil. Same warning-before-sacking shape. See `docs/forbundsdom.md`.
 - `football-season-review.js` — the board's verdict after 14 rounds: a **numeric** table target that grows one step per season, the verdict, board-trust consequence, warning-before-sacking, and the merit archive. Every reason points at a manager decision, never at the players. See `docs/sesongdom.md`.
 - `football-player-condition.js` — load, freshness, form and injuries **between** matches. Never reads `overall`; every explanation points at how the manager used the player. Injuries never make the starting XI unfillable. See `docs/form-og-slitasje.md`.
 - `football-substitutions.js` — substitutions during a match. The incoming player takes the **slot** (position + role) of the one going off and is measured on how well he fits *there* — never on `overall`. Bench fit against all eleven slots is computed once at kickoff. See `docs/innbytte.md`.

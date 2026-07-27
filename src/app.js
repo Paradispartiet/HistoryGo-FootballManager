@@ -37,6 +37,11 @@ import {
   createMiniSeasonOffPitchEvent
 } from "./football-mini-season.js";
 import {
+  createFederationArchiveEntry,
+  createFederationVerdict,
+  deriveFederationExpectation
+} from "./football-federation-verdict.js";
+import {
   appendSeasonArchive,
   createSeasonArchiveEntry,
   createSeasonReview,
@@ -4534,6 +4539,28 @@ function registerMatchInTournament(lastMatch) {
 
   const summary = summarizeTournament(updated);
   if (updated.status === "completed") {
+    // Forbundet gjør opp. Merittlista fantes fra før, men ingen hadde en mening
+    // om den: å ryke i gruppa med Brasil og å nå semifinalen med Norge sto som
+    // samme slags linje.
+    const nation = (Array.isArray(state.tournamentNations) ? state.tournamentNations : [])
+      .find((entry) => entry.nationality === updated.managerNationality) || null;
+    const verdict = createFederationVerdict({
+      tournament: updated,
+      summary,
+      expectation: deriveFederationExpectation({
+        strength: Number(nation?.strength) || 70,
+        knockoutStages: updated.knockoutStages
+      }),
+      previousVerdicts: (Array.isArray(state.tournamentHistory) ? state.tournamentHistory : [])
+        .map((entry) => entry.verdict ? entry : null)
+        .filter(Boolean),
+      federationTrust: Number(state.federationTrust) || 50
+    });
+    if (verdict) {
+      state.federationVerdict = verdict;
+      state.federationTrust = verdict.trustAfter;
+    }
+
     state.tournamentHistory = [
       ...(Array.isArray(state.tournamentHistory) ? state.tournamentHistory : []),
       {
@@ -4545,7 +4572,8 @@ function registerMatchInTournament(lastMatch) {
         played: summary.played,
         won: summary.won,
         drawn: summary.drawn,
-        lost: summary.lost
+        lost: summary.lost,
+        ...(createFederationArchiveEntry(verdict) || {})
       }
     ];
   }
@@ -4926,6 +4954,25 @@ function renderTournamentPanel() {
   const activeEl = document.querySelector("#tournamentActive");
   const historyEl = document.querySelector("#tournamentHistory");
 
+  // Forbundets dom over det siste fullførte mesterskapet.
+  const verdictEl = document.querySelector("#federationVerdict");
+  if (verdictEl) {
+    const verdict = state.federationVerdict || null;
+    verdictEl.hidden = !verdict;
+    if (verdict) {
+      verdictEl.dataset.verdict = verdict.verdict;
+      set("#federationVerdictLabel", verdict.sacked
+        ? "Forbundets dom · avskjediget"
+        : verdict.warning
+          ? "Forbundets dom · advarsel"
+          : `Forbundets dom · ${verdict.verdictLabel}`);
+      set("#federationVerdictHeadline", verdict.headline);
+      const trend = verdict.trustDelta >= 0 ? `+${verdict.trustDelta}` : `${verdict.trustDelta}`;
+      set("#federationVerdictMessage", `${verdict.federationMessage} Forbundets tillit ${trend} (nå ${verdict.trustAfter}).`);
+      renderTextList(document.querySelector("#federationVerdictReasons"), verdict.reasons, (line) => line, "");
+    }
+  }
+
   const history = Array.isArray(state.tournamentHistory) ? state.tournamentHistory : [];
   if (historyEl) {
     historyEl.hidden = history.length === 0;
@@ -4937,7 +4984,9 @@ function renderTournamentPanel() {
         const name = document.createElement("strong");
         name.textContent = `${entry.name} · ${entry.nationality}`;
         const placement = document.createElement("span");
-        placement.textContent = `${entry.placement} · ${entry.won}-${entry.drawn}-${entry.lost}`;
+        placement.textContent = entry.verdictLabel
+          ? `${entry.placement} · ${entry.won}-${entry.drawn}-${entry.lost} · ${entry.verdictLabel}`
+          : `${entry.placement} · ${entry.won}-${entry.drawn}-${entry.lost}`;
         item.append(name, placement);
         list.append(item);
       });
