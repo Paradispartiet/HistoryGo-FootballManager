@@ -121,7 +121,7 @@ export function positionGroup(position) {
 // Elleveren slik statistikkmotoren trenger den: id, navn, posisjon, rolle og
 // hvor godt spilleren passer der. Bygges fra teamFit én gang ved avspark, så
 // kampmotoren slipper å bære hele teamFit videre inn i lagringen.
-export function createLineupSnapshot(teamFit) {
+export function createLineupSnapshot(teamFit, { freshnessByPlayerId = {} } = {}) {
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   return assignments
     .filter((assignment) => assignment?.player?.id)
@@ -136,6 +136,9 @@ export function createLineupSnapshot(teamFit) {
       roleName: str(assignment.role?.name),
       // Fra hvilket minutt spilleren har vært på banen. Startellever: 0.
       onFrom: 0,
+      // Friskheten han STARTET kampen med. En som allerede var sliten før
+      // avspark er tommere etter 70 minutter enn en uthvilt.
+      startFreshness: num(freshnessByPlayerId[str(assignment.player.id)], 100),
       // matchScore er lagets egen «passer han her»-måling. Den er grunnen til at
       // riktig brukt spiller leverer mer enn feilbrukt klasse.
       matchScore: num(assignment.fit?.matchScore, 60)

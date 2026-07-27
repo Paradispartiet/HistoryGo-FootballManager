@@ -42,6 +42,18 @@ import {
   summarizePlayerStats
 } from "./football-player-stats.js";
 import {
+  applyMatchToConditions,
+  applyWeeklyRecovery,
+  conditionFor,
+  describeCondition,
+  fatigueFactorFor,
+  freshnessFor,
+  injuredPlayerIds,
+  isInjured,
+  playersNeedingRest,
+  summarizeSquadCondition
+} from "./football-player-condition.js";
+import {
   MAX_SUBSTITUTIONS,
   availableSubstitutions,
   rankSubstitutionsForSlot,
@@ -538,6 +550,8 @@ const elements = {
   headerClubName: document.querySelector("#headerClubName"),
   headerClubManager: document.querySelector("#headerClubManager"),
   playerStatsTable: document.querySelector("#playerStatsTable"),
+  squadConditionSummary: document.querySelector("#squadConditionSummary"),
+  squadConditionList: document.querySelector("#squadConditionList"),
   analyseRoleChanges: document.querySelector("#analyseRoleChanges"),
   analyseWeakPoints: document.querySelector("#analyseWeakPoints"),
   managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations"),
@@ -3598,6 +3612,96 @@ function loadMatchdayState() {
 // ---------------------------------------------------------------------------
 
 const PLAYER_STATS_KEY = "hgfm.playerSeasonStats.v1";
+const PLAYER_CONDITION_KEY = "hgfm.playerCondition.v1";
+
+// ---------------------------------------------------------------------------
+// Spillerform og slitasje: troppen mellom kampene
+// Motoren (`football-player-condition.js`) er ren; her ligger akkumuleringen,
+// lagringen og hvile-steget når uka ruller.
+// ---------------------------------------------------------------------------
+
+function normalizePlayerCondition(value) {
+  return Array.isArray(value) ? value.filter((entry) => entry?.playerId) : [];
+}
+
+function loadPlayerCondition() {
+  try {
+    return normalizePlayerCondition(JSON.parse(localStorage.getItem(PLAYER_CONDITION_KEY) || "null"));
+  } catch (error) {
+    console.error("Kunne ikke lese spillerform", error);
+    return [];
+  }
+}
+
+function savePlayerCondition() {
+  try {
+    localStorage.setItem(PLAYER_CONDITION_KEY, JSON.stringify(normalizePlayerCondition(state.playerCondition)));
+  } catch (error) {
+    console.error("Kunne ikke lagre spillerform", error);
+  }
+}
+
+function getPlayerCondition() {
+  return normalizePlayerCondition(state.playerCondition);
+}
+
+// Hvor hardt kampplanen tok på beina. Kampplanene bærer sin egen `intensity`;
+// uten en valgt plan er den nøytral.
+function getMatchIntensityFactor() {
+  const intensity = getTactic()?.intensity;
+  const byLevel = { lav: 0.75, moderat: 1, hoy: 1.35, "høy": 1.35, ekstrem: 1.55 };
+  if (typeof intensity === "number") return Math.max(0.6, Math.min(1.6, intensity));
+  return byLevel[String(intensity).toLowerCase()] || 1;
+}
+
+// Etter kampen: belastning fra minuttene, form fra det som skjedde, og
+// skaderisiko fra belastning som har fått stå. Idempotent på matchId.
+function registerMatchInPlayerCondition(lastMatch) {
+  const played = Array.isArray(lastMatch?.playerStats?.appearances) ? lastMatch.playerStats.appearances : [];
+  if (played.length === 0) return;
+  const matchId = String(lastMatch.id || "");
+  if (matchId && Array.isArray(state.playerConditionMatchIds) && state.playerConditionMatchIds.includes(matchId)) return;
+
+  state.playerCondition = applyMatchToConditions(getPlayerCondition(), {
+    played,
+    goals: lastMatch.playerStats?.goals || [],
+    outcome: lastMatch.outcome,
+    intensity: getMatchIntensityFactor()
+  });
+  state.playerConditionMatchIds = [...(state.playerConditionMatchIds || []), matchId].slice(-60);
+  savePlayerCondition();
+}
+
+// Uka ruller: laget hviler. Hvor mye avhenger av treningsuka du valgte —
+// restitusjon henter mer enn en pressuke.
+function applyWeeklyPlayerRecovery() {
+  const focus = state.weeklyTrainingFocus || state.weeklyTrainingProgram || null;
+  const load = Number(focus?.fatigueLoad ?? focus?.intensity);
+  const trainingIntensity = Number.isFinite(load) ? Math.max(0.5, Math.min(1.6, load)) : 1;
+  state.playerCondition = applyWeeklyRecovery(getPlayerCondition(), { trainingIntensity });
+  savePlayerCondition();
+}
+
+// Snittet av startelleverens slitasje, som en liten lagstyrke-penalty.
+// Klampet i motoren til maks −6: den avgjør aldri en kamp alene.
+function getSquadFatiguePenalty(teamFit) {
+  const conditions = getPlayerCondition();
+  if (conditions.length === 0) return 0;
+  const starters = (Array.isArray(teamFit?.assignments) ? teamFit.assignments : [])
+    .map((assignment) => assignment?.player?.id)
+    .filter(Boolean);
+  if (starters.length === 0) return 0;
+  const average = starters.reduce((sum, id) => sum + fatigueFactorFor(conditionFor(conditions, id)), 0) / starters.length;
+  return Math.round((1 - average) * 100 * 0.9 * 10) / 10;
+}
+
+// Friskheten per spiller, slik kampmotoren og innbyttemotoren trenger den.
+function getFreshnessByPlayerId() {
+  const map = {};
+  getPlayerCondition().forEach((entry) => { map[entry.playerId] = freshnessFor(entry); });
+  return map;
+}
+
 
 function normalizePlayerSeasonStats(value) {
   if (!value || typeof value !== "object") return { rows: [], matchIds: [] };
@@ -3803,6 +3907,10 @@ function playMatchday() {
     // plassene ved avspark.
     benchPlayers: getAvailability().rosterReadiness?.benchCandidates || [],
     roles: state.roles,
+    // Slitasje: en tropp som er kjørt hardt leverer mindre, og en spiller som
+    // startet sliten er tom tidligere.
+    conditionPenalty: getSquadFatiguePenalty(teamFit),
+    conditionByPlayerId: getFreshnessByPlayerId(),
     // Role Familiarity Engine v1: liten, klampet kampstyrke-bonus for kontinuitet
     // i rollene. Beregnet utenfor fit-motoren og matet inn additivt.
     roleFamiliarityBonus: getLineupFamiliaritySummary(teamFit).bonus
@@ -3933,6 +4041,8 @@ function chooseMatchdayDecision(optionId) {
     // Spillerstatistikk: legg kampens kamper, mål og målgivende til sesongen.
     // Idempotent på matchId, så reload/dobbeltkall aldri teller dobbelt.
     registerMatchInPlayerStats(state.matchday.lastMatch);
+    // Bruken får konsekvenser: belastning, form og skaderisiko bæres videre.
+    registerMatchInPlayerCondition(state.matchday.lastMatch);
     // Role Familiarity Engine v1: bygg spillernes rolle-fortrolighet ved riktig
     // bruk (forvitre litt ved feilbruk). Startelleveren er låst gjennom sesjonen,
     // så gjeldende teamFit speiler laget som spilte. Kjøres én gang per kamp
@@ -5436,10 +5546,17 @@ function findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers) {
   // dem, men ingen kunne fylles. Feilbruk er lov – det er nettopp det spillet
   // handler om: motoren merker plassen som feilbrukt og forklarer hvorfor,
   // i stedet for å blokkere. Manageren kan alltid bytte selv.
+  // Skadde spillere holdes utenfor de tre første nivåene, men IKKE det siste.
+  // Har skadene tømt troppen, må elleveren fortsatt kunne fylles — ellers er en
+  // skade en blindvei i stedet for et problem å løse. Å spille en skadet mann
+  // er da managerens valg, og flaten sier det.
+  const injured = injuredPlayerIds(getPlayerCondition());
+  const fit = (candidate) => !injured.has(candidate.id);
   const tiers = [
-    (candidate) => candidate.naturalPositions.includes(slot.position),
-    (candidate) => candidate.usablePositions.includes(slot.position),
-    (candidate) => !candidate.poorFits.includes(slot.position),
+    (candidate) => fit(candidate) && candidate.naturalPositions.includes(slot.position),
+    (candidate) => fit(candidate) && candidate.usablePositions.includes(slot.position),
+    (candidate) => fit(candidate) && !candidate.poorFits.includes(slot.position),
+    (candidate) => fit(candidate),
     () => true
   ];
 
@@ -11043,6 +11160,61 @@ function renderManagerDetailFromTeamFit(teamFit) {
   }
 }
 
+// Troppens tilstand på Trening-flata: hvem er sliten, hvem er skadet, og hvem
+// bør hviles. Formuleringene peker alltid på BRUKEN — en sliten spiller er ikke
+// en dårlig spiller, han er en spiller manageren har brukt hardt.
+function renderSquadCondition() {
+  const conditions = getPlayerCondition();
+  const summary = summarizeSquadCondition(conditions);
+
+  if (elements.squadConditionSummary) {
+    elements.squadConditionSummary.textContent = summary.tracked === 0
+      ? "Ingen kamper spilt ennå — troppen er uthvilt."
+      : summary.injuredCount === 0 && summary.tiredCount === 0
+        ? `${summary.tracked} spillere fulgt. Ingen slitne, ingen skadde — du har rotert godt.`
+        : `${summary.tiredCount} sliten${summary.tiredCount === 1 ? "" : "e"}, ${summary.injuredCount} skadd${summary.injuredCount === 1 ? "" : "e"}. Treningsuka du velger avgjør hvor mye laget henter inn igjen.`;
+  }
+
+  const list = elements.squadConditionList;
+  if (!list) return;
+  list.textContent = "";
+
+  const injured = conditions.filter((entry) => isInjured(entry));
+  const rest = playersNeedingRest(conditions);
+
+  if (injured.length === 0 && rest.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "muted-text";
+    empty.textContent = summary.tracked === 0
+      ? "Spill en kamp, så følger belastning, form og skaderisiko troppen videre."
+      : "Ingen som trenger avlastning akkurat nå.";
+    list.append(empty);
+    return;
+  }
+
+  injured.forEach((entry) => {
+    const item = document.createElement("li");
+    item.className = "is-injured";
+    const who = document.createElement("strong");
+    who.textContent = entry.name || entry.playerId;
+    const why = document.createElement("span");
+    why.textContent = describeCondition(entry);
+    item.append(who, why);
+    list.append(item);
+  });
+
+  rest.forEach((entry) => {
+    const item = document.createElement("li");
+    item.className = "is-tired";
+    const who = document.createElement("strong");
+    who.textContent = entry.name || entry.playerId;
+    const why = document.createElement("span");
+    why.textContent = entry.advice;
+    item.append(who, why);
+    list.append(item);
+  });
+}
+
 // Statistikk-fanen: sesongens tall. Tabellen og terminlista rendres av sine
 // egne funksjoner (renderLeagueSeasonPanel / renderMiniSeason) — de flyttet bare
 // hit fra en popup på Kontor. Dette er spillerdelen.
@@ -13783,6 +13955,17 @@ function renderBenchList(players) {
     meta.textContent = `${positions} · ${Number.isFinite(player.overall) ? player.overall : "–"}`;
 
     card.append(name, meta);
+
+    // Tilstanden hører hjemme DER du velger laget. Skjult slitasje er en felle,
+    // ikke en avveining.
+    const condition = conditionFor(getPlayerCondition(), player.id);
+    if (isInjured(condition) || freshnessFor(condition) < 100) {
+      const state_ = document.createElement("small");
+      state_.className = `player-condition${isInjured(condition) ? " is-injured" : freshnessFor(condition) < 55 ? " is-tired" : ""}`;
+      state_.textContent = describeCondition(condition);
+      card.append(state_);
+    }
+
     list.append(card);
   });
 }
@@ -13824,6 +14007,7 @@ function renderApp() {
   renderManagerDetailFromTeamFit(teamFit);
   renderAnalyse();
   renderPlayerStats();
+  renderSquadCondition();
   renderClubWeek().catch(console.error);
   refreshInboxEvents(teamFit);
   renderInboxThreads();
@@ -14422,6 +14606,8 @@ async function advanceClubWeekPhaseAction() {
     // Mini Season v1 / League Loop v1: en ny Club Week-uke ruller mini-sesongen
     // til neste kamp (eller fullfører den etter femte kamp).
     advanceMiniSeasonForNewWeek();
+    // Ny uke = hvile. Uten dette bygde belastningen seg opp for alltid.
+    applyWeeklyPlayerRecovery();
   }
   const consequences = getClubWeekTransitionConsequences(previous, next);
 
@@ -14716,6 +14902,8 @@ async function hydratePersistedUiState() {
   state.matchday = loadMatchdayState();
   // Spillerstatistikk (v1): sesongens mål, målgivende og kamper per spiller.
   state.playerSeasonStats = loadPlayerSeasonStats();
+  // Spillerform og slitasje (v1): troppens tilstand mellom kampene.
+  state.playerCondition = loadPlayerCondition();
   // Mini Season v0.1: hent eventuell prøveperiode fra localStorage. Korrupt
   // eller manglende state gir null (= ingen prøveperiode startet).
   state.miniSeason = loadMiniSeason();

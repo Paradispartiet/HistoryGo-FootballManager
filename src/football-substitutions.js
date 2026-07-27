@@ -113,7 +113,11 @@ export function substitutionsRemaining(session) {
 function tirednessOf(entry, minute) {
   const playedFrom = num(entry?.onFrom, 0);
   const played = Math.max(0, num(minute, 0) - playedFrom);
-  return clamp((played - 55) / 35, 0, 1);
+  // Kom han sliten inn i kampen, er han tom tidligere. Friskhet 100 = full
+  // terskel på 55 minutter; friskhet 40 = terskelen faller til rundt 28.
+  const startFreshness = clamp(num(entry?.startFreshness, 100), 0, 100);
+  const threshold = 20 + (startFreshness / 100) * 35;
+  return clamp((played - threshold) / 35, 0, 1);
 }
 
 // Svarer byttet på kampbildet? Å sende inn en angriper når du jager, eller å

@@ -648,6 +648,16 @@
     <!-- ============================ TRENING & KUNNSKAP ============================ -->
     <div class="tab-section trening-view" data-tab-section="trening" hidden>
 
+      <!-- Troppens tilstand: slitasje og skader er en følge av HVORDAN du har
+           brukt spillerne, ikke av hvor gode de er. Den hører her, ved siden av
+           treningsuka som avgjør hvor mye laget henter inn igjen. -->
+      <section class="panel squad-condition-panel" aria-label="Troppens tilstand" aria-live="polite">
+        <p class="eyebrow">Troppen</p>
+        <h2>Form og slitasje</h2>
+        <p id="squadConditionSummary" class="muted-text">Ingen kamper spilt ennå — troppen er uthvilt.</p>
+        <ul id="squadConditionList" class="squad-condition-list"></ul>
+      </section>
+
       <section class="panel training-choice-gate" id="trainingChoiceGate" aria-label="Velg treningsuke før kamp" aria-live="polite">
         <div class="training-choice-gate-head">
           <div>
