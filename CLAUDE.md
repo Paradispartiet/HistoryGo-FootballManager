@@ -28,6 +28,7 @@ npm run audit:hg-formation-knowledge   # data/hgFootball/formationKnowledge.json
 npm run audit:historical-opponents     # historical opponent archetypes
 npm run audit:tournaments              # data/football_tournaments.json (EM/VM)
 npm run audit:tactics                  # data/football_tactics.json (kampplaner)
+npm run audit:scenarios                # data/football_scenarios.json (scenarioer)
 
 # UI-/flyt-vakter (statisk, leser index.html + src/app.js)
 npm run check:syntax           # alle live JS-moduler parser (fanger død kode som «ser riktig ut»)
@@ -43,6 +44,7 @@ npm run sim:match-plan         # kampplaner som strategi + bytte underveis
 npm run sim:player-stats       # spillerstatistikk: hvem scoret, hvem la den fram
 npm run sim:substitutions      # innbytte underveis: benken kommer på banen
 npm run sim:player-condition   # form og slitasje mellom kampene (inkl. balansen)
+npm run sim:scenarios          # scenarioene former hvem du møter
 npm run sim:pitch-layout       # brikkefordelingen på taktikktavla (alle formasjoner)
 npm run sim:training-week      # weekly training focus
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
@@ -151,7 +153,7 @@ What national mode plays *for* is a tournament: **EM and VM** (`src/football-tou
 
 ### Navigation contract
 
-The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk**, in that order, and no label may point at a section its name does not describe. Office surfaces (Speiding, Stab, Assistentråd, Klubbrom, Styret, Fasiliteter) live *on* Kontor as department cards, not as their own tabs — `data-tab-parent` on the section tells `highlightActiveTab()` which tab to light up. Scenarioer is a mode reached from the onboarding page, never a tab inside the league game.
+The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk**, in that order, and no label may point at a section its name does not describe. Office surfaces (Speiding, Stab, Assistentråd, Klubbrom, Styret, Fasiliteter) live *on* Kontor as department cards, not as their own tabs — `data-tab-parent` on the section tells `highlightActiveTab()` which tab to light up. Scenarioer is a mode reached from the onboarding page, never a tab inside the league game. The scenario catalogue is data (`data/football_scenarios.json`) — six curated five-match challenges built from the existing historical archetypes; never hardcode a scenario card in `index.html`. See `docs/scenarioer.md`.
 
 Each nav tab carries `data-nav-modes` (which modes show it) and optionally `data-nav-section-modes` (which modes may have the surface open at all); `applyModeScopedNav()` in `renderModeIsolation` enforces both. See `docs/meny.md`; guarded by `audit:dead-ends` stage 17.
 

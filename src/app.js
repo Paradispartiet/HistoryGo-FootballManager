@@ -37,6 +37,12 @@ import {
   createMiniSeasonOffPitchEvent
 } from "./football-mini-season.js";
 import {
+  createScenarioMiniSeasonContext,
+  describeScenario,
+  getScenario,
+  normalizeScenarios
+} from "./football-scenarios.js";
+import {
   applyMatchPlayerStats,
   rankPlayerStats,
   summarizePlayerStats
@@ -177,6 +183,8 @@ const DATA_PATHS = {
   playerArchetypes: "data/football_player_archetypes.json",
   roles: "data/football_roles.json",
   tactics: "data/football_tactics.json",
+  // Scenarioer: korte historiske utfordringer bygget på arketypene.
+  scenarios: "data/football_scenarios.json",
   // Gammel formasjonskatalog beholdes som legacy/fallback. Taktikktavla på
   // forsiden drives nå av de historiske hgFootball-formasjonene under, men
   // filen slettes ikke: den er trygg fallback hvis hgFootball-data mangler.
@@ -499,7 +507,7 @@ const elements = {
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
   modeChoiceCards: Array.from(document.querySelectorAll("[data-start-mode]")),
-  startAjaxScenarioButton: document.querySelector("#startAjaxScenarioButton"),
+  scenarioList: document.querySelector("#scenarioList"),
   trainingChoiceGate: document.querySelector("#trainingChoiceGate"),
   trainingChoiceStatus: document.querySelector("#trainingChoiceStatus"),
   trainingChoiceSignal: document.querySelector("#trainingChoiceSignal"),
@@ -5113,7 +5121,8 @@ function renderModeIsolation() {
     if (title) title.textContent = barTitle[mode] || "Fotballvitenskap";
     if (hint) {
       if (mode === "scenario") {
-        hint.textContent = state.gameStartState?.activeScenarioId ? "Spill neste scenariokamp" : "Velg scenario";
+        const active = getScenario(state.scenarios, state.gameStartState?.activeScenarioId);
+        hint.textContent = active ? `${active.name} · spill neste scenariokamp` : "Velg scenario";
       } else if (mode === "national") {
         hint.textContent = getNationalTeamNationality()
           ? `${getNationalTeamNationality()}s landslag · ta ut troppen`
@@ -5222,7 +5231,7 @@ function saveLeagueSeason() {
 // brukes til å avlede sesongmål/styreforventning og til kontekstuell vurdering.
 // Leser kun manager-state — aldri History Go-progresjon.
 function getMiniSeasonContext() {
-  return {
+  const base = {
     seasonId: `mini-season-${Date.now()}`,
     offPitch: getOffPitchState(),
     clubWeekState: state.clubWeekState,
@@ -5233,6 +5242,15 @@ function getMiniSeasonContext() {
     firstOpponentId: isFirstTimePlaythroughActive() ? FIRST_TIME_OPPONENT_ID : null,
     teamName: "HG-laget"
   };
+
+  // Et scenario er nettopp et UTVALG av disse motstanderne, med sin egen
+  // fortelling. Uten dette møtte alle scenarioer det samme feltet, og
+  // «Kontringens kunst» var ikke annerledes enn «Pressets tiår».
+  const scenario = getScenario(state.scenarios, state.gameStartState?.activeScenarioId);
+  if (isScenarioModeActive() && scenario) {
+    return createScenarioMiniSeasonContext(scenario, base) || base;
+  }
+  return base;
 }
 
 // Lagre gjeldende mini-sesong. Stille no-op hvis lagring feiler (privat modus).
@@ -11160,6 +11178,80 @@ function renderManagerDetailFromTeamFit(teamFit) {
   }
 }
 
+// Scenariolista, bygget fra data. Hvert kort forklarer seg selv: hva epoken er,
+// hva utfordringen består i, og hva du skal lære av den — ikke bare et navn og
+// en «Start»-knapp.
+function renderScenarioList() {
+  const list = elements.scenarioList;
+  if (!list) return;
+
+  const scenarios = Array.isArray(state.scenarios) ? state.scenarios : [];
+  list.textContent = "";
+
+  if (scenarios.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Scenariokatalogen kunne ikke lastes. Ligaspill og landslag virker som normalt.";
+    list.append(empty);
+    return;
+  }
+
+  const activeId = state.gameStartState?.activeScenarioId || null;
+
+  scenarios.forEach((scenario) => {
+    const info = describeScenario(scenario);
+    const card = document.createElement("article");
+    card.className = `scenario-card${info.id === activeId ? " is-active" : ""}`;
+
+    const era = document.createElement("span");
+    era.textContent = `${info.era} · ${info.matchCount} kamper`;
+
+    const name = document.createElement("strong");
+    name.textContent = info.name;
+
+    const subtitle = document.createElement("small");
+    subtitle.textContent = info.subtitle;
+
+    const lede = document.createElement("p");
+    lede.className = "muted-text";
+    lede.textContent = info.lede;
+
+    const challenge = document.createElement("p");
+    challenge.className = "scenario-challenge";
+    challenge.textContent = info.challenge;
+
+    const learn = document.createElement("p");
+    learn.className = "scenario-learning muted-text";
+    learn.textContent = `Du lærer: ${info.learningFocus}`;
+
+    const opponents = document.createElement("p");
+    opponents.className = "scenario-opponents muted-text";
+    opponents.textContent = `${info.isOrdered ? "I rekkefølge" : "Motstandere"}: ${info.opponentNames.join(" · ")}`;
+
+    const action = document.createElement("button");
+    action.type = "button";
+    action.className = "primary-action-button";
+    action.textContent = info.id === activeId ? "Aktivt scenario" : "Start scenario";
+    action.disabled = info.id === activeId;
+    if (info.id !== activeId) {
+      action.addEventListener("click", () => startScenario(info.id));
+    }
+
+    card.append(era, name, subtitle, lede, challenge, learn, opponents, action);
+    list.append(card);
+  });
+}
+
+// Start et scenario: låser motstanderne til scenarioets utvalg og setter i gang
+// den separate femkampersøkta. Ligaspillet røres ikke.
+function startScenario(scenarioId) {
+  const scenario = getScenario(state.scenarios, scenarioId);
+  if (!scenario) return;
+  selectGameMode("scenario", { activeScenarioId: scenario.id });
+  startMiniSeason();
+  activateTab("dashboard");
+}
+
 // Troppens tilstand på Trening-flata: hvem er sliten, hvem er skadet, og hvem
 // bør hviles. Formuleringene peker alltid på BRUKEN — en sliten spiller er ikke
 // en dårlig spiller, han er en spiller manageren har brukt hardt.
@@ -14008,6 +14100,7 @@ function renderApp() {
   renderAnalyse();
   renderPlayerStats();
   renderSquadCondition();
+  renderScenarioList();
   renderClubWeek().catch(console.error);
   refreshInboxEvents(teamFit);
   renderInboxThreads();
@@ -14542,14 +14635,6 @@ function bindGameModeControls() {
     });
   });
 
-  if (elements.startAjaxScenarioButton) {
-    elements.startAjaxScenarioButton.addEventListener("click", () => {
-      selectGameMode("scenario", { activeScenarioId: AJAX_TOTAL_FOOTBALL_SCENARIO_ID });
-      startMiniSeason();
-      activateTab("dashboard");
-    });
-  }
-
   if (elements.startNewLeagueSeasonButton) {
     elements.startNewLeagueSeasonButton.addEventListener("click", () => {
       startNewLeagueSeason();
@@ -14734,7 +14819,8 @@ async function loadStartupData() {
     hgStaffRolesData,
     legacyFormationsData,
     hgFormationKnowledgeData,
-    tournamentsData
+    tournamentsData,
+    scenariosData
   ] = await Promise.all([
     loadJson(DATA_PATHS.players),
     // Spillerarketyper er valgfrie for kjøring: hvis filen mangler, fortsetter
@@ -14779,10 +14865,14 @@ async function loadStartupData() {
     loadJson(DATA_PATHS.hgFormationKnowledge).catch(() => null),
     // Mesterskapsdata er valgfri: mangler den, spilles landslagsmodus som
     // enkeltkamper i stedet for EM/VM. Ingen blindvei.
-    loadJson(DATA_PATHS.tournaments).catch(() => null)
+    loadJson(DATA_PATHS.tournaments).catch(() => null),
+    // Scenariokatalogen er valgfri: mangler den, viser flata det i stedet for
+    // å krasje modusen.
+    loadJson(DATA_PATHS.scenarios).catch(() => null)
   ]);
 
   state.players = playersData.players || [];
+  state.scenarios = normalizeScenarios(scenariosData);
   state.tournamentDefinitions = Array.isArray(tournamentsData?.tournaments) ? tournamentsData.tournaments : [];
   state.tournamentNations = Array.isArray(tournamentsData?.nations) ? tournamentsData.nations : [];
   state.playerArchetypes = playerArchetypesData?.archetypes || [];

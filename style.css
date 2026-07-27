@@ -8434,3 +8434,39 @@ body > .site-footer { grid-row: 5; }
 
 .player-condition.is-tired { color: var(--warn, #d8a13a); }
 .player-condition.is-injured { color: var(--bad); }
+
+/* ============================================================
+   Scenariokort: hvert kort forklarer seg selv — epoke, utfordring
+   og hva du skal lære — ikke bare et navn og en knapp.
+   ============================================================ */
+.scenario-card {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: var(--radius);
+  background: var(--panel);
+  padding: 14px 16px;
+}
+
+.scenario-card.is-active { border-color: var(--good); }
+.scenario-card > span:first-child {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scenario-card strong { font-size: 1.15rem; }
+.scenario-card > small { color: var(--muted); font-size: 0.78rem; }
+.scenario-card p { margin: 0; font-size: 0.84rem; }
+
+.scenario-challenge {
+  border-left: 3px solid var(--hg-accent-tactics);
+  padding-left: 9px;
+}
+
+.scenario-learning,
+.scenario-opponents { font-size: 0.76rem; }
+.scenario-card button { margin-top: 6px; }

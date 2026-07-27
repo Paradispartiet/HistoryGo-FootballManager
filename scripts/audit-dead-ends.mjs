@@ -753,6 +753,22 @@ stage("20. Form og slitasje");
   );
 }
 
+// ---- 21) Scenarioer er flertall ------------------------------------------
+// Scenarioer var en hel spillmodus med ETT innhold: Ajax 1971–73, hardkodet som
+// et kort i HTML og en id i app.js. Overskriften lovet «historiske og taktiske
+// utfordringer» i flertall og leverte én.
+stage("21. Scenarioer");
+{
+  const scenarios = JSON.parse(readFileSync(join(root, "data/football_scenarios.json"), "utf8"));
+  check("katalogen har flere scenarioer", (scenarios.scenarios || []).length > 1, `antall=${(scenarios.scenarios || []).length}`);
+  check("scenariolista bygges fra data", /id="scenarioList"/.test(html) && /function renderScenarioList/.test(app));
+  check("ingen scenario-kort er hardkodet i HTML", !/class="scenario-card"/.test(html));
+  check("den hardkodede Ajax-knappen er borte", !/startAjaxScenarioButton/.test(html) && !/startAjaxScenarioButton/.test(app));
+  check("hvert scenario kan startes fra kortet sitt", /function startScenario\(/.test(app) && /startScenario\(info\.id\)/.test(app));
+  check("scenarioet former hvem du møter", /createScenarioMiniSeasonContext\(scenario, base\)/.test(app));
+  check("scenariolista rendres fra renderApp", /\n  renderScenarioList\(\);/.test(app));
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

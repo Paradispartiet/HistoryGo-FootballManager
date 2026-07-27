@@ -346,17 +346,12 @@
         <p class="eyebrow">Scenarioer</p>
         <h2>Valgfrie historiske og taktiske utfordringer</h2>
         <p class="muted-text">Scenarioer er bonusmodus. De er korte tester inspirert av kjente lag, epoker og spillestiler — ikke obligatorisk start for ligaspillet.</p>
-        <div class="first-time-brief-grid mode-choice-grid">
-          <article class="scenario-card">
-            <span>5 kamper</span>
-            <strong>Ajax 1971–73</strong>
-            <small>Totalfotball: fare og mulighet · høy linje · høyt press · rom bak presset</small>
-            <p class="muted-text">Møt et lag inspirert av Ajax 1971–73. Høy linje, høyt press, rotasjoner og rom bak presset.</p>
-            <span id="firstTimeOpponent" hidden>Ajax 1971–73 — Totalfotball</span>
-            <span id="firstTimeReadiness" hidden>Startellever 0/11</span>
-            <button type="button" id="startAjaxScenarioButton" class="primary-action-button">Start scenario</button>
-          </article>
-        </div>
+        <!-- Scenariokortene bygges av app.js fra data/football_scenarios.json.
+             Før lå ett scenario hardkodet her, mens overskriften lovet dem i
+             flertall. -->
+        <div id="scenarioList" class="first-time-brief-grid mode-choice-grid"></div>
+        <span id="firstTimeOpponent" hidden>Ajax 1971–73 — Totalfotball</span>
+        <span id="firstTimeReadiness" hidden>Startellever 0/11</span>
       </section>
     </div>
 
