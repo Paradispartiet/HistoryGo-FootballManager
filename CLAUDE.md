@@ -165,6 +165,16 @@ Kontor is the office, not a dashboard: **do not re-add summary boxes there.** Cl
 
 Tab surfaces scroll — they must not shrink. `.app-shell > .tab-section` is a fixed-height column flexbox, so its children need `flex: 0 0 auto` or they get crushed instead of scrolled (`.dept-hero` has `overflow: hidden` and collapsed to 38px of padding). Guarded by `audit:dead-ends` stage 16.
 
+### Scale mismatches (the bug class that keeps recurring)
+
+**A clamp that always bites is a scale mismatch.** Data and code can each look correct while disagreeing about units, and no existing guard sees it:
+
+- `intensity` in `data/football_tactics.json` is **30–100**; `getMatchIntensityFactor()` clamped it into `[0.6, 1.6]`, so every match plan became maximum intensity and injuries were ~10× too common.
+- `getSquadFatiguePenalty()` produced up to 18 against a `[0, 6]` clamp, so a tired squad and a burnt-out squad scored identically.
+- `applyWeeklyPlayerRecovery()` read `fatigueLoad`/`intensity` off a training focus — fields that don't exist — and silently did nothing.
+
+When you feed a data value into a bounded engine input, **normalise explicitly against the source range** (`(value - min) / (max - min) * cap`) rather than letting the clamp do the work. Then measure: run the real data through the mapping and check that the outputs spread across the range instead of piling on the ceiling. `sim:player-condition` stage 11 does exactly this and is the template for new mappings.
+
 ## Git workflow
 
 - Develop on the assigned feature branch; create it locally if absent. Never push to `main` without explicit permission (pushing to `main` triggers a Pages deploy).

@@ -3741,7 +3741,16 @@ function getSquadFatiguePenalty(teamFit) {
     .filter(Boolean);
   if (starters.length === 0) return 0;
   const average = starters.reduce((sum, id) => sum + fatigueFactorFor(conditionFor(conditions, id)), 0) / starters.length;
-  return Math.round((1 - average) * 100 * 0.9 * 10) / 10;
+  // `fatigueFactorFor` går fra 1.0 (uthvilt) til 0.78 (utkjørt). Motoren klamper
+  // straffen til [0, 6], så mappingen må treffe NØYAKTIG det området.
+  //
+  // Første forsøk regnet `(1 - snitt) * 90`, som gir 18 ved full utmattelse.
+  // Da lå straffen fast på taket fra og med load 70: en sliten tropp og en
+  // utkjørt tropp ble behandlet likt, og gradvisheten forsvant nettopp der den
+  // betyr mest. Samme feil som kampplanenes intensitet — klampen gjorde jobben
+  // som mappingen skulle gjort.
+  const spenn = 1 - 0.78;
+  return Math.round(Math.min(1, (1 - average) / spenn) * 6 * 10) / 10;
 }
 
 // Friskheten per spiller, slik kampmotoren og innbyttemotoren trenger den.

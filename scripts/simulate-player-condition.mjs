@@ -374,6 +374,23 @@ console.log("\n11. Skalaene stemmer");
     check("den roligste planen koster mindre enn den hardeste", Math.min(...verdier) < Math.max(...verdier));
   }
 
+  // Slitasje-straffen mot lagstyrken: motoren klamper den til [0, 6], så
+  // mappingen må treffe nøyaktig det området. Første forsøk regnet
+  // `(1 - snitt) * 90` = opptil 18, og straffen lå da fast på taket fra og med
+  // load 70 — en sliten og en utkjørt tropp ble behandlet likt.
+  //
+  // Regelen som fanger hele klassen: EN KLAMP SOM ALLTID BITER ER EN SKALAFEIL.
+  {
+    const spenn = 1 - 0.78;
+    const penalty = (snitt) => Math.round(Math.min(1, (1 - snitt) / spenn) * 6 * 10) / 10;
+    const verdier = [0, 50, 60, 70, 80, 90, 100].map((load) => penalty(fatigueFactorFor({ load })));
+    const påTaket = verdier.filter((v) => v >= 6).length;
+    check("slitasje-straffen metter ikke klampen", påTaket <= 1, `${påTaket} av ${verdier.length} på taket: ${verdier.join(", ")}`);
+    check("straffen skiller sliten fra utkjørt", penalty(fatigueFactorFor({ load: 100 })) > penalty(fatigueFactorFor({ load: 70 })) + 1);
+    check("uthvilt tropp gir ingen straff", penalty(fatigueFactorFor({ load: 0 })) === 0);
+    check("app.js bruker den normaliserte mappingen", /\(1 - average\) \/ spenn/.test(app));
+  }
+
   // Treningsfokusets belastning må komme fra motoren som faktisk eier tallet.
   check("app.js henter treningsbelastningen fra treningsmotoren", /getTrainingFocusFatigue\(/.test(app));
   check("treningsmotoren eksporterer den", /export function getTrainingFocusFatigue/.test(
