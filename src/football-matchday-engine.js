@@ -107,7 +107,7 @@ export function createDefaultOpponent() {
 //   - historisk formasjonsfit gir en liten bonus/penalty,
 //   - matchEngineEffects gir kun en liten tendens,
 //   - aktive lagklasser gir en liten bonus.
-export function calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus } = {}) {
+export function calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus, conditionPenalty } = {}) {
   const fit = teamFit || {};
   const metrics = fit.metrics || {};
   const completeCount = num(fit.completeCount);
@@ -161,6 +161,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
         matchupTendency: 0,
         classificationBonus: 0,
         roleFamiliarityBonus: 0,
+        fatiguePenalty: 0,
         missing
       }
     };
@@ -201,7 +202,14 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
   // utfall alene.
   const familiarityBonus = clampRange(num(roleFamiliarityBonus), 0, 5);
 
+  // Slitasje (Player Condition v1): en tropp som er kjørt hardt leverer mindre.
+  // Trekket er lite og klampet (maks −6) — det avgjør aldri en kamp alene, men
+  // det gjør rotasjon til en ekte avveining i stedet for noe du kan la være.
+  // Dette sier ingenting om spillerne: det sier hvordan de er brukt.
+  const fatiguePenalty = clampRange(num(conditionPenalty), 0, 6);
+
   let finalStrength = baseTeamScore;
+  finalStrength -= fatiguePenalty;
   finalStrength -= incompletePenalty;
   finalStrength += historicalModifier;
   finalStrength += matchEngineTendency;
@@ -222,6 +230,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
       matchupTendency: Math.round(matchupTendency * 10) / 10,
       classificationBonus,
       roleFamiliarityBonus: familiarityBonus,
+      fatiguePenalty,
       missing
     }
   };
@@ -1336,7 +1345,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus, benchPlayers, roles } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus, benchPlayers, roles, conditionPenalty, conditionByPlayerId } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
 
   // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
@@ -1360,7 +1369,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       })
     : null;
 
-  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus });
+  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus, conditionPenalty });
   const tp = strength.tacticalProfile;
 
   // roleFitAverage trengs av flere hendelses-sjekker, men er ikke del av v1-
@@ -1441,7 +1450,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     },
     // Elleveren slik den står ved avspark. Uten den tilhørte målene ingen, og
     // sesongen kunne ikke fortelle hvem som faktisk leverte.
-    lineupSnapshot: createLineupSnapshot(teamFit),
+    lineupSnapshot: createLineupSnapshot(teamFit, { freshnessByPlayerId: conditionByPlayerId || {} }),
     // Benken, med hvor godt hver spiller ville passet på hver av de elleve
     // plassene. Regnet én gang her, slik at et innbytte kan vurderes uten at
     // sesjonen må bære roller og taktikk videre.

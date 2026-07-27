@@ -662,7 +662,10 @@ stage("18. Statistikk");
 
   // Motoren må faktisk kreditere målene, ellers er scoringslista alltid tom.
   check("kampmotoren attribuerer mål til en spiller", /attributeGoal\(/.test(engine));
-  check("kampmotoren tar vare på elleveren ved avspark", /lineupSnapshot: createLineupSnapshot\(teamFit\)/.test(engine));
+  // Sjekker INTENSJONEN, ikke den nøyaktige teksten: snapshotet bygges fra
+  // teamFit. Argumentlista utvides når nye lag kobles på (friskhet ved avspark),
+  // uten at noe faktisk er galt.
+  check("kampmotoren tar vare på elleveren ved avspark", /lineupSnapshot: createLineupSnapshot\(teamFit[,)]/.test(engine));
   check("kampresultatet bærer spillerstatistikk", /playerStats: createMatchPlayerStats\(/.test(engine));
   check("app.js akkumulerer statistikken per sesong", /registerMatchInPlayerStats\(/.test(app));
   check("statistikken er isolert per modus", /"playerSeasonStats"/.test(modeSessions));
@@ -708,6 +711,45 @@ stage("19. Innbytte");
   check(
     "minuttloggen vises i sluttrapporten, ikke bare under avspilling",
     /if \(session\?\.outcome \|\| session\?\.phase === "resolved"\) return log;/.test(app)
+  );
+}
+
+// ---- 20) Bruken har en pris ------------------------------------------------
+// Innbytte gjorde benken til en mulighet, men det var fortsatt gratis å la
+// stjernen stå 90 minutter hver uke: ingen ble sliten, ingen skadet, ingen
+// mistet form. Da er ikke rotasjon en avveining — bare noe du KAN gjøre.
+stage("20. Form og slitasje");
+{
+  const condition = readFileSync(join(root, "src/football-player-condition.js"), "utf8");
+
+  check("tilstandsmotoren finnes og er ren", /export function applyMatchToConditions/.test(condition) && !/document\.|localStorage/.test(condition));
+  check("motoren dømmer ikke spilleren på overall", !/\boverall\b/.test(condition.replace(/\/\/.*$/gm, "")));
+  check("skader er deterministiske (injisert rng)", /rng = Math\.random/.test(condition) && !/[^.]Math\.random\(\)/.test(condition.replace(/rng = Math\.random/g, "")));
+
+  check("kampen legger belastning på troppen", /registerMatchInPlayerCondition\(/.test(app));
+  check("uka gir hvile", /applyWeeklyPlayerRecovery\(\)/.test(app) && /applyWeeklyRecovery\(/.test(app));
+  check("slitasjen virker inn på lagstyrken", /conditionPenalty: getSquadFatiguePenalty\(teamFit\)/.test(app) && /finalStrength -= fatiguePenalty/.test(engine));
+  check("en sliten starter er tommere tidligere", /startFreshness/.test(readFileSync(join(root, "src/football-substitutions.js"), "utf8")));
+  check("tilstanden er isolert per modus", /"playerCondition"/.test(modeSessions));
+
+  // Synlighet: skjult slitasje er en felle, ikke en avveining.
+  // At funksjonen FINNES er ikke nok — den må kalles fra render-løypa. Første
+  // forsøk havnet inne i en klikk-handler, så flata oppdaterte seg bare hvis du
+  // tilfeldigvis trykket på en sorteringsknapp. Vakta så bare at kallet fantes.
+  check("tilstanden vises der du velger laget", /function renderSquadCondition/.test(app) && /className = `player-condition/.test(app));
+  check(
+    "tilstandsflata rendres fra renderApp, ikke bare fra en klikk-handler",
+    /\n  renderPlayerStats\(\);\n  renderSquadCondition\(\);/.test(app),
+    "kallet må stå i render-løypa"
+  );
+  check("Trening har en tilstandsflate", /id="squadConditionList"/.test(html));
+
+  // Og den viktigste regelen av alle: skader skal aldri kunne tømme elleveren.
+  check(
+    "skader kan aldri gjøre startelleveren ufyllbar",
+    /const injured = injuredPlayerIds\(getPlayerCondition\(\)\)/.test(app) &&
+      /\(candidate\) => fit\(candidate\),\s*\n\s*\(\) => true/.test(app),
+    "siste nivå må slippe gjennom alle, også skadde"
   );
 }
 
