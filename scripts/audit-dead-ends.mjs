@@ -24,6 +24,7 @@ const app = readFileSync(join(root, "src/app.js"), "utf8");
 const css = readFileSync(join(root, "style.css"), "utf8");
 const engine = readFileSync(join(root, "src/football-matchday-engine.js"), "utf8");
 const modeSessions = readFileSync(join(root, "src/football-mode-sessions.js"), "utf8");
+const subsEngine = readFileSync(join(root, "src/football-substitutions.js"), "utf8");
 
 // ---- HTML-hjelpere ----------------------------------------------------------
 
@@ -673,6 +674,41 @@ stage("18. Statistikk");
   check("«Klubben din»-boksen er fjernet fra Kontor", !/id="leagueClubCard"/.test(html));
   check("«Spillmodus»-boksen er fjernet fra Kontor", !/id="gameModeStatusCard"/.test(html));
   check("modusbyttet finnes fortsatt i Innstillinger", /data-settings-action="mode"/.test(html));
+}
+
+// ---- 19) Benken er en mulighet, ikke bare et krav --------------------------
+// Spillet KREVDE fire benkespillere før du fikk spille, og så kom ingen av dem
+// noen gang inn. En tvungen input uten konsekvens er samme blindvei som en fane
+// som ikke sender deg noe sted — den ser bare ut som en beslutning.
+stage("19. Innbytte");
+{
+  check("spillet krever fortsatt en benk", /REQUIRED_BENCH\s*=\s*4/.test(app));
+  check("innbyttemotoren finnes og er ren", /export function applySubstitution/.test(subsEngine) && !/document\.|localStorage/.test(subsEngine));
+  check("benken vurderes mot hver plass ved avspark", /benchSnapshot: createBenchSnapshot\(/.test(engine));
+  check("app.js sender faktisk benken inn i kampen", /benchPlayers: getAvailability\(\)/.test(app));
+  check("byttet er wiret i kampflaten", /appendMatchSubstitutions\(card, session\)/.test(app) && /function makeSubstitution\(/.test(app));
+  check("byttet summeres i resultatet som grepene", /sumDecisionEffects\(\[\.\.\.decisions, \.\.\.planChanges, \.\.\.substitutions\]\)/.test(engine));
+  check("byttet står i kamprapporten", /function appendSubstitutionLog/.test(app));
+  check("byttet står i minuttloggen", /type: "substitution"/.test(engine) && /substitution: "Innbytte"/.test(app));
+
+  // Spilletid: en innbytter må få kampen sin, ellers er statistikken en løgn.
+  check("statistikken teller alle som var på banen", /playedPlayersFor\(session, 90\)/.test(engine));
+  check("statistikken fører minutter", /row\.minutes \+=/.test(readFileSync(join(root, "src/football-player-stats.js"), "utf8")));
+
+  // Byttet skal måles på PLASSEN, ikke på klassen.
+  check(
+    "innbyttet vurderes mot plassen spilleren går inn i",
+    /fitBySlot/.test(subsEngine) && /matchScoreBefore/.test(subsEngine) && /matchScoreAfter/.test(subsEngine)
+  );
+  check("innbyttemotoren avgjør ikke på overall", !/\boverall\b/.test(subsEngine.replace(/\/\/.*$/gm, "")));
+
+  // Sluttrapporten viste overskriften «Kampen minutt for minutt» med ingenting
+  // under: en ferdig kamp har ikke klokke (`liveMinute`), så avdekkingsfilteret
+  // strøk hele loggen. Overskrift uten innhold er en blindvei i miniatyr.
+  check(
+    "minuttloggen vises i sluttrapporten, ikke bare under avspilling",
+    /if \(session\?\.outcome \|\| session\?\.phase === "resolved"\) return log;/.test(app)
+  );
 }
 
 // ---- Rapport ----------------------------------------------------------------

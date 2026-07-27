@@ -41,6 +41,7 @@ npm run sim:mini-season        # mini-season loop
 npm run sim:tournament         # EM/VM i landslagsmodus (gruppespill → finale)
 npm run sim:match-plan         # kampplaner som strategi + bytte underveis
 npm run sim:player-stats       # spillerstatistikk: hvem scoret, hvem la den fram
+npm run sim:substitutions      # innbytte underveis: benken kommer på banen
 npm run sim:pitch-layout       # brikkefordelingen på taktikktavla (alle formasjoner)
 npm run sim:training-week      # weekly training focus
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
@@ -88,6 +89,7 @@ The single most important thing to understand is that this repo contains **two i
 - `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
 - `football-suggested-setups.js` — self-explaining 2–4 logical setups (formation / match plan / training week) that advise without replacing the manager's own choice.
 - `football-off-pitch-parameters.js` — the human context layer: fatigue, injury risk, morale, confidence, autonomy, dressing-room mood, media/board/family pressure, hidden mental state.
+- `football-substitutions.js` — substitutions during a match. The incoming player takes the **slot** (position + role) of the one going off and is measured on how well he fits *there* — never on `overall`. Bench fit against all eleven slots is computed once at kickoff. See `docs/innbytte.md`.
 - `football-player-stats.js` — attributes goals and assists to players from the lineup snapshot, weighted by **position, role and fit — never `overall`** — and aggregates the season table. See `docs/statistikk.md`.
 - `football-inbox-events.js` — wires the Inbox ("Klubbens puls") to the context engines (off-pitch params, training programs, matchday, decisions), turning a static UI into live events.
 - `football-relationship-metric-ui.js` — thin UI bridge that surfaces the relationship score (engine lives in `football-relationship-engine.js`) without touching `app.js`.

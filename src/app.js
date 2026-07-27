@@ -11,6 +11,7 @@ import {
   advanceMatchClock,
   logMatchMoment,
   applyMatchPlanChange,
+  applyMatchdaySubstitution,
   applyOpponentAdaptation,
   OPPONENT_PROFILES,
   evaluateFormationMatchupVsOpponent
@@ -40,6 +41,12 @@ import {
   rankPlayerStats,
   summarizePlayerStats
 } from "./football-player-stats.js";
+import {
+  MAX_SUBSTITUTIONS,
+  availableSubstitutions,
+  rankSubstitutionsForSlot,
+  substitutionsRemaining
+} from "./football-substitutions.js";
 import {
   LEAGUE_SEASON_VERSION,
   createLeagueSeason,
@@ -3791,6 +3798,11 @@ function playMatchday() {
     relationships: teamFit?.relationships || null,
     offPitchContext: buildMatchdayOffPitchSnapshot(),
     staffIdentity: getStaffIdentitySummary(),
+    // Benken er ikke lenger pynt: de fire spillerne spillet krever av deg kan
+    // faktisk komme inn. Motoren regner passformen deres mot hver av de elleve
+    // plassene ved avspark.
+    benchPlayers: getAvailability().rosterReadiness?.benchCandidates || [],
+    roles: state.roles,
     // Role Familiarity Engine v1: liten, klampet kampstyrke-bonus for kontinuitet
     // i rollene. Beregnet utenfor fit-motoren og matet inn additivt.
     roleFamiliarityBonus: getLineupFamiliaritySummary(teamFit).bonus
@@ -9100,11 +9112,32 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   // Kampplanen kan byttes midt i kampen. Den står under grepene fordi den er
   // det større taktiske valget, ikke et alternativ til hendelsen foran deg.
   appendMatchPlanSwitcher(card, session);
+  appendMatchSubstitutions(card, session);
   container.append(card);
 }
 
 // Hva motstanderen gjorde med kampen. Uten dette ser det ut som om planen din
 // «sluttet å virke» av seg selv.
+// Byttene i sluttrapporten: hva omstillingen kostet og ga, som planbyttene.
+function appendSubstitutionLog(parent, lastMatch) {
+  const subs = Array.isArray(lastMatch?.substitutions) ? lastMatch.substitutions : [];
+  if (!subs.length) return;
+
+  appendMatchdaySubheading(parent, "Dine bytter");
+  subs.forEach((entry) => {
+    const item = document.createElement("div");
+    item.className = `matchday-decision-entry is-${entry.tone || "neutral"}`;
+    const title = document.createElement("p");
+    title.className = "matchday-decision-title";
+    title.textContent = `${entry.minute}' ${entry.outName} → ${entry.inName} (${entry.roleName || entry.position})`;
+    const detail = document.createElement("p");
+    detail.className = "matchday-decision-detail";
+    detail.textContent = (entry.reasons || []).join(" ");
+    item.append(title, detail);
+    parent.append(item);
+  });
+}
+
 function appendOpponentAdjustmentLog(parent, lastMatch) {
   const adjustments = Array.isArray(lastMatch?.opponentAdjustments) ? lastMatch.opponentAdjustments : [];
   if (!adjustments.length) return;
@@ -9268,8 +9301,13 @@ function visibleScore(session) {
 // Hvilke minutter er avdekket? Er kampen ferdig, vises alt.
 function visibleMinuteLog(session) {
   const log = Array.isArray(session?.minuteLog) ? session.minuteLog : [];
+  // En FERDIG kamp (`lastMatch`) har ikke klokke: den bærer `outcome`, ikke
+  // `liveMinute`. Uten dette falt hele loggen bort i sluttrapporten, og
+  // overskriften «Kampen minutt for minutt» sto igjen med ingenting under seg.
+  // Avdekkingsregelen gjelder bare mens kampen faktisk spilles av.
+  if (session?.outcome || session?.phase === "resolved") return log;
   const live = Number(session?.liveMinute);
-  if (!Number.isFinite(live) || live <= 0) return session?.phase === "resolved" ? log : [];
+  if (!Number.isFinite(live) || live <= 0) return [];
   return log.filter((entry) => Number(entry.minute) <= live);
 }
 
@@ -9360,7 +9398,8 @@ const MINUTE_LOG_TYPE_LABELS = {
   chance: "Sjanse",
   decision: "Grep",
   plan: "Kampplan",
-  opponent: "Motstander"
+  opponent: "Motstander",
+  substitution: "Innbytte"
 };
 
 function appendMatchMinuteLog(parent, session) {
@@ -9395,8 +9434,16 @@ function appendMatchMinuteLog(parent, session) {
     const body = document.createElement("span");
     body.className = "matchday-minute-text";
     if (entry.type === "goal") {
-      const who = entry.side === "for" ? "Mål for laget" : "Mål imot";
+      // Målene tilhører noen nå. Egne mål har en scorer og som regel en
+      // målgivende; motstanderens har det ikke — vi kjenner ikke troppen deres.
+      const who = entry.side === "for"
+        ? entry.scorer
+          ? entry.assist ? `Mål: ${entry.scorer} (${entry.assist})` : `Mål: ${entry.scorer}`
+          : "Mål for laget"
+        : "Mål imot";
       body.textContent = `${who} — ${entry.scoreAfter.for}–${entry.scoreAfter.against}`;
+    } else if (entry.type === "substitution") {
+      body.textContent = `Innbytte: ${entry.detail || ""}`;
     } else if (entry.type === "chance") {
       const who = entry.side === "for" ? "Sjanse" : "Sjanse imot";
       body.textContent = `${who}: ${entry.detail}`;
@@ -9497,6 +9544,142 @@ function appendMatchPlanSwitcher(card, session) {
   });
   wrap.append(list);
   card.append(wrap);
+}
+
+// Innbytte underveis. Benken har alltid vært et krav (fire spillere før du får
+// spille) uten å være en mulighet — de kom aldri inn. Her er de.
+//
+// Flyten er to steg, som på ekte: velg hvem som skal AV, så ser du hvem på
+// benken som passer den plassen best. Rangeringen er råd, ikke automatikk.
+function appendMatchSubstitutions(card, session) {
+  const { bench, onPitch, remaining } = availableSubstitutions(session);
+  if (!Array.isArray(onPitch) || onPitch.length === 0) return;
+
+  const wrap = document.createElement("details");
+  wrap.className = "match-subs";
+  wrap.open = Boolean(state.matchSubsOpen);
+  wrap.addEventListener("toggle", () => { state.matchSubsOpen = wrap.open; });
+
+  const summary = document.createElement("summary");
+  summary.textContent = `Innbytte · ${remaining} av ${MAX_SUBSTITUTIONS} igjen`;
+  wrap.append(summary);
+
+  const done = Array.isArray(session.substitutions) ? session.substitutions : [];
+  if (done.length) {
+    const log = document.createElement("ul");
+    log.className = "match-subs-log";
+    done.forEach((entry) => {
+      const item = document.createElement("li");
+      item.className = `is-${entry.tone || "neutral"}`;
+      const head = document.createElement("strong");
+      head.textContent = `${entry.minute}' ${entry.outName} → ${entry.inName}`;
+      const why = document.createElement("span");
+      why.textContent = entry.reasons?.[0] || "";
+      item.append(head, why);
+      log.append(item);
+    });
+    wrap.append(log);
+  }
+
+  if (remaining <= 0) {
+    const spent = document.createElement("p");
+    spent.className = "muted-text";
+    spent.textContent = "Byttekvoten er brukt opp. Laget du har på banen er laget du avslutter med.";
+    wrap.append(spent);
+    card.append(wrap);
+    return;
+  }
+  if (bench.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Ingen på benken som kan komme inn.";
+    wrap.append(empty);
+    card.append(wrap);
+    return;
+  }
+
+  // Steg 1: hvem går av?
+  const outRow = document.createElement("div");
+  outRow.className = "match-subs-out";
+  const outLabel = document.createElement("p");
+  outLabel.className = "muted-text";
+  outLabel.textContent = "Hvem går av?";
+  outRow.append(outLabel);
+
+  const outList = document.createElement("div");
+  outList.className = "match-subs-options";
+  onPitch.forEach((entry) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `match-subs-player${state.matchSubOutId === entry.playerId ? " is-current" : ""}`;
+    const name = document.createElement("strong");
+    name.textContent = entry.name;
+    const meta = document.createElement("small");
+    meta.textContent = `${entry.position} · ${entry.roleName || "rolle"} · passform ${entry.matchScore}`;
+    button.append(name, meta);
+    button.addEventListener("click", () => {
+      state.matchSubOutId = state.matchSubOutId === entry.playerId ? null : entry.playerId;
+      state.matchSubsOpen = true;
+      renderApp();
+    });
+    outList.append(button);
+  });
+  outRow.append(outList);
+  wrap.append(outRow);
+
+  // Steg 2: hvem kommer inn på nettopp den plassen?
+  if (state.matchSubOutId && onPitch.some((entry) => entry.playerId === state.matchSubOutId)) {
+    const gameState = readGameState(session);
+    const ranked = rankSubstitutionsForSlot({
+      session,
+      outPlayerId: state.matchSubOutId,
+      minute: currentPeriodEndMinute(session),
+      gameState: gameState.state
+    });
+
+    const inLabel = document.createElement("p");
+    inLabel.className = "muted-text";
+    const out = onPitch.find((entry) => entry.playerId === state.matchSubOutId);
+    inLabel.textContent = `Hvem inn som ${out?.roleName || out?.position}? Passformen gjelder PLASSEN – ikke spillerens klasse.`;
+    wrap.append(inLabel);
+
+    const inList = document.createElement("div");
+    inList.className = "match-subs-options";
+    ranked.forEach((entry) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `match-subs-player${entry.improvement > 0.05 ? " is-fitting" : ""}`;
+      const name = document.createElement("strong");
+      name.textContent = entry.inName;
+      const meta = document.createElement("small");
+      const arrow = entry.fitDelta > 0 ? `+${entry.fitDelta}` : `${entry.fitDelta}`;
+      meta.textContent = `passform ${entry.matchScoreAfter} (${arrow}) · ${entry.reasons[0] || ""}`;
+      button.append(name, meta);
+      button.addEventListener("click", () => makeSubstitution(state.matchSubOutId, entry.inPlayerId));
+      inList.append(button);
+    });
+    wrap.append(inList);
+  }
+
+  card.append(wrap);
+}
+
+// Utfør byttet på den aktive kampsesjonen.
+function makeSubstitution(outPlayerId, inPlayerId) {
+  const session = state.matchday?.session;
+  if (!session || session.phase === "resolved") return;
+  const gameState = readGameState(session);
+  const next = applyMatchdaySubstitution(session, {
+    outPlayerId,
+    inPlayerId,
+    minute: currentPeriodEndMinute(session),
+    gameState: gameState.state
+  });
+  if (next === session) return;
+  state.matchday.session = next;
+  state.matchSubOutId = null;
+  saveMatchdayState();
+  renderApp();
 }
 
 // Utfør planbyttet på den aktive kampsesjonen.
@@ -9667,6 +9850,7 @@ function renderMatchdayReport(container, lastMatch) {
   // Managergrep med konsekvens (v0.2).
   appendMatchdayDecisionLog(body, report.decisions, "Managergrep i kampen");
   appendMatchPlanChangeLog(body, lastMatch);
+  appendSubstitutionLog(body, lastMatch);
   appendOpponentAdjustmentLog(body, lastMatch);
   if (Array.isArray(lastMatch?.minuteLog) && lastMatch.minuteLog.length) {
     appendMatchdaySubheading(body, "Kampen minutt for minutt");
@@ -10913,7 +11097,7 @@ function renderPlayerStats() {
   table.className = "stats-table";
   const head = document.createElement("thead");
   const headRow = document.createElement("tr");
-  ["#", "Spiller", "Pos", "K", "M", "A", "M+A"].forEach((label) => {
+  ["#", "Spiller", "Pos", "K", "Min", "M", "A", "M+A"].forEach((label) => {
     const th = document.createElement("th");
     th.scope = "col";
     th.textContent = label;
@@ -10929,6 +11113,7 @@ function renderPlayerStats() {
       row.name,
       row.position || "–",
       String(row.appearances),
+      String(row.minutes ?? row.appearances * 90),
       String(row.goals),
       String(row.assists),
       String(row.points)

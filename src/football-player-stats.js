@@ -128,9 +128,14 @@ export function createLineupSnapshot(teamFit) {
     .map((assignment) => ({
       playerId: str(assignment.player.id),
       name: str(assignment.player.name) || str(assignment.player.id),
+      // slotId identifiserer PLASSEN. Innbytte bytter spiller på en plass —
+      // posisjonen og rollen blir stående.
+      slotId: str(assignment.slot?.slotId),
       position: str(assignment.slot?.position).toUpperCase(),
       roleId: str(assignment.role?.id),
       roleName: str(assignment.role?.name),
+      // Fra hvilket minutt spilleren har vært på banen. Startellever: 0.
+      onFrom: 0,
       // matchScore er lagets egen «passer han her»-måling. Den er grunnen til at
       // riktig brukt spiller leverer mer enn feilbrukt klasse.
       matchScore: num(assignment.fit?.matchScore, 60)
@@ -186,20 +191,26 @@ function emptyRow(entry) {
     position: entry.position,
     positionGroup: positionGroup(entry.position),
     appearances: 0,
+    minutes: 0,
     goals: 0,
     assists: 0,
     points: 0
   };
 }
 
-// Én kamps bidrag: hvem spilte, hvem scoret, hvem la den fram.
+// Én kamps bidrag: hvem spilte, hvor lenge, hvem scoret, hvem la den fram.
+//
+// `lineup` er alle som VAR PÅ BANEN i løpet av kampen — ikke bare de som
+// startet. En innbytter som kom inn i det 60. har spilt kampen sin, og skal ha
+// den. Bærer oppføringen `minutes`, brukes den; ellers antas 90.
 export function createMatchPlayerStats(lineup, goals) {
   const entries = (Array.isArray(lineup) ? lineup : []).filter((entry) => entry?.playerId);
   return {
     appearances: entries.map((entry) => ({
       playerId: entry.playerId,
       name: entry.name,
-      position: entry.position
+      position: entry.position,
+      minutes: Number.isFinite(Number(entry.minutes)) ? num(entry.minutes) : 90
     })),
     goals: (Array.isArray(goals) ? goals : [])
       .filter((goal) => goal?.scorer?.playerId)
@@ -232,7 +243,9 @@ export function applyMatchPlayerStats(previous, matchStats) {
 
   (matchStats?.appearances || []).forEach((entry) => {
     if (!entry?.playerId) return;
-    ensure(entry.playerId, entry.name, entry.position).appearances += 1;
+    const row = ensure(entry.playerId, entry.name, entry.position);
+    row.appearances += 1;
+    row.minutes += Number.isFinite(Number(entry.minutes)) ? num(entry.minutes) : 90;
   });
 
   (matchStats?.goals || []).forEach((goal) => {
@@ -240,7 +253,7 @@ export function applyMatchPlayerStats(previous, matchStats) {
     if (goal?.assistId) ensure(goal.assistId, goal.assistName, "").assists += 1;
   });
 
-  return [...rows.values()].map((row) => ({ ...row, points: row.goals + row.assists }));
+  return [...rows.values()].map((row) => ({ ...row, minutes: num(row.minutes), points: row.goals + row.assists }));
 }
 
 // Sortert visning. Rekkefølgen er stabil: valgt kolonne først, så FÆRREST
@@ -269,8 +282,10 @@ export function summarizePlayerStats(rows) {
   const totalGoals = list.reduce((sum, row) => sum + num(row.goals), 0);
   const totalAssists = list.reduce((sum, row) => sum + num(row.assists), 0);
   const matches = list.reduce((max, row) => Math.max(max, num(row.appearances)), 0);
+  const totalMinutes = list.reduce((sum, row) => sum + num(row.minutes), 0);
   return {
     matches,
+    totalMinutes,
     totalGoals,
     totalAssists,
     topScorer: ranked[0]?.goals > 0 ? ranked[0] : null,

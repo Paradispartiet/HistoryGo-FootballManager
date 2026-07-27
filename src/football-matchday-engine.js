@@ -1,4 +1,5 @@
 import { createLineupSnapshot, attributeGoal, createMatchPlayerStats } from "./football-player-stats.js";
+import { applySubstitution, createBenchSnapshot, playedPlayersFor } from "./football-substitutions.js";
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
@@ -1335,7 +1336,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus, benchPlayers, roles } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
 
   // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
@@ -1441,6 +1442,12 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // Elleveren slik den står ved avspark. Uten den tilhørte målene ingen, og
     // sesongen kunne ikke fortelle hvem som faktisk leverte.
     lineupSnapshot: createLineupSnapshot(teamFit),
+    // Benken, med hvor godt hver spiller ville passet på hver av de elleve
+    // plassene. Regnet én gang her, slik at et innbytte kan vurderes uten at
+    // sesjonen må bære roller og taktikk videre.
+    benchSnapshot: createBenchSnapshot({ benchPlayers, teamFit, tactic, roles }),
+    substitutions: [],
+    playedPlayers: [],
     strengthSnapshot: {
       finalStrength: strength.finalStrength,
       baseTeamScore: strength.baseTeamScore,
@@ -1934,6 +1941,35 @@ function buildFormationVerdict({ session, totals, positiveCount, negativeCount }
 
 // Avslutter en kampdagsesjon: base-xG fra v1-modellen + summerte
 // beslutningseffekter → mål, utfall og forklarende sluttrapport.
+// Hvor langt er kampen kommet? Slutten av siste spilte periode — det samme
+// minuttet manageren ser på tavla når han tar grepet.
+export function currentMatchMinute(session) {
+  const totalSegments = asArray(session?.events).length + 1;
+  const played = asArray(session?.timeline).length;
+  if (played <= 0) return 0;
+  return segmentRange(Math.max(0, played - 1), totalSegments).to;
+}
+
+// Gjør et innbytte OG legg det i minuttloggen, slik at kampen leses som én
+// fortelling: sjanser, mål, grep, planbytter, motstanderens svar og byttene dine
+// i samme spor.
+export function applyMatchdaySubstitution(session, { outPlayerId, inPlayerId, minute, gameState } = {}) {
+  // Byttet skjer «nå»: der perioden som nettopp ble spilt sluttet. Uten det
+  // ville minuttet i loggen og minuttet spilleren faktisk kom inn spriket, og
+  // spilletiden hans blitt feil.
+  const at = Number.isFinite(Number(minute)) ? num(minute) : currentMatchMinute(session);
+  const next = applySubstitution(session, { outPlayerId, inPlayerId, minute: at, gameState });
+  if (next === session) return session;
+  const done = asArray(next.substitutions);
+  const latest = done[done.length - 1];
+  return logMatchMoment(next, {
+    minute: at,
+    type: "substitution",
+    side: "for",
+    detail: latest ? latest.summary : "Innbytte"
+  });
+}
+
 // Målene som skal krediteres i sluttrapporten. Normalt er de allerede attribuert
 // minutt for minutt; faller kampen tilbake til sluttkastet, attribueres de her.
 function goalCreditsForResult(session, goalsFor) {
@@ -1977,7 +2013,11 @@ export function finalizeMatchdaySession(session) {
   // Planbytter bærer samme effektform som managergrepene, så de summeres i
   // samme regnestykke. Et bytte er en beslutning – med gevinst og pris.
   const planChanges = asArray(session.planChanges);
-  const totals = sumDecisionEffects([...decisions, ...planChanges]);
+  // Innbyttene bærer samme effektform, så de summeres i samme regnestykke som
+  // grepene og planbyttene. Et bytte er en beslutning, ikke en knapp ved siden
+  // av spillet.
+  const substitutions = asArray(session.substitutions);
+  const totals = sumDecisionEffects([...decisions, ...planChanges, ...substitutions]);
 
   // Beslutningseffekter oppå basis-xG: momentum løfter egen trussel litt,
   // risiko og tapt taktisk klarhet øker trykket mot eget mål.
@@ -2150,9 +2190,13 @@ export function finalizeMatchdaySession(session) {
     // (eldre lagring, motoren brukt direkte), attribueres sluttresultatets mål
     // her i stedet — ellers ville en kamp med mål gitt en tom scoringsliste.
     playerStats: createMatchPlayerStats(
-      asArray(session.lineupSnapshot),
+      // Alle som var på banen, med minuttene sine — ikke bare de som startet.
+      playedPlayersFor(session, 90),
       goalCreditsForResult(session, goalsFor)
     ),
+    // Byttene står for seg i rapporten, som planbyttene: manageren skal kunne
+    // lese hva omstillingen kostet og ga.
+    substitutions: substitutions.map((entry) => ({ ...entry })),
     minuteLog: asArray(session.minuteLog).map((entry) => ({ ...entry })),
     activePlanSnapshot: session.activePlanSnapshot || session.tacticSnapshot || null,
     decisionTotals: totals,
