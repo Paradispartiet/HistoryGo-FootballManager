@@ -269,6 +269,18 @@ const FOCUS_OFFPITCH_EFFECTS = {
   formation_familiarity: { tacticalClarity: 5, cohesion: 4, trainingHappiness: 2 }
 };
 
+// Hvor hardt et treningsfokus tar på beina. Dette tallet fantes allerede i
+// FOCUS_OFFPITCH_EFFECTS, men lå innelåst: `applyWeeklyPlayerRecovery` i app.js
+// lette etter `fatigueLoad`/`intensity` på fokus-objektet — felter som ikke
+// finnes — og falt derfor alltid tilbake til nøytralt. Treningsvalget påvirket
+// aldri hvor mye laget hentet inn igjen.
+//
+// Skalaen er den samme som i tabellen: −4 (restitusjonspreget) til +6 (press).
+export function getTrainingFocusFatigue(focusId) {
+  const effects = FOCUS_OFFPITCH_EFFECTS[focusId];
+  return effects && Number.isFinite(Number(effects.fatigue)) ? Number(effects.fatigue) : 0;
+}
+
 // Bygg en off-pitch-hendelse for et valgt treningsfokus (stabil event-form for
 // applyOffPitchEvent: { id, type, title, description, effects }). Returnerer
 // null hvis fokuset er ukjent eller mangler definerte effekter.

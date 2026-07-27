@@ -308,8 +308,77 @@ console.log("\n10. Balansen");
   for (let i = 0; i < 200; i += 1) {
     if (isInjured(conditionFor(rollInjuries(utkjørt, { played: fullMatch(["z"]), rng: rng4 }), "z"))) treff += 1;
   }
-  check("selv en utkjørt spiller skades sjelden i én enkelt kamp (under 20 %)", treff / 200 < 0.2, `andel=${(treff / 200).toFixed(2)}`);
-  check("men risikoen er reell (over 2 %)", treff / 200 > 0.02, `andel=${(treff / 200).toFixed(2)}`);
+  check("selv en utkjørt spiller skades sjelden i én enkelt kamp (under 4 %)", treff / 200 < 0.04, `andel=${(treff / 200).toFixed(3)}`);
+  check("men risikoen er reell (over 0,5 %)", treff / 200 > 0.005, `andel=${(treff / 200).toFixed(3)}`);
+
+  // Skaderaten over en HEL sesong er det tallet som avgjør om spillet er til å
+  // leve med. Den ble målt, ikke gjettet: med en lineær kurve og 10 % tak ble
+  // det ~10 skader per sesong for en manager som kjørte press hver uke — hele
+  // elleveren ute, flere ganger.
+  const sesongSkader = (intensity, trainingIntensity, seeds = 200) => {
+    let total = 0;
+    for (let seed = 1; seed <= seeds; seed += 1) {
+      const r = makeRng(seed * 7919);
+      let squad = [];
+      let skader = 0;
+      for (let runde = 0; runde < 14; runde += 1) {
+        const før = squad.filter((entry) => isInjured(entry)).length;
+        squad = applyMatchToConditions(squad, { played: fullMatch(xi), outcome: "draw", intensity, rng: r });
+        skader += squad.filter((entry) => isInjured(entry)).length - før;
+        squad = applyWeeklyRecovery(squad, { trainingIntensity });
+      }
+      total += skader;
+    }
+    return total / seeds;
+  };
+
+  const normalRate = sesongSkader(1, 1);
+  const verstRate = sesongSkader(1.3, 1.45);
+  check("normal drift gir under én skade per sesong", normalRate < 1, `${normalRate.toFixed(2)} skader/sesong`);
+  check("normal drift gir ikke null heller — risikoen finnes", normalRate > 0.02, `${normalRate.toFixed(2)}`);
+  check("verste tenkelige drift gir under fem skader per sesong", verstRate < 5, `${verstRate.toFixed(2)} skader/sesong`);
+  check("men den er merkbart verre enn normal drift", verstRate > normalRate * 3, `${verstRate.toFixed(2)} mot ${normalRate.toFixed(2)}`);
+}
+
+// ---- 11) Skalaene i data og kode må stemme --------------------------------
+// Den verste feilen i denne motoren var ikke i motoren: kampplanenes
+// `intensity` i data/football_tactics.json går fra 30 til 100, mens app.js
+// klampet tallet rett inn i [0.6, 1.6]. ENHVER kampplan ble dermed maksimal
+// intensitet, og skadene eksploderte. Tallene så riktige ut på begge sider.
+console.log("\n11. Skalaene stemmer");
+{
+  const app = readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
+  const tactics = JSON.parse(readFileSync(new URL("../data/football_tactics.json", import.meta.url), "utf8"));
+  const intensities = (tactics.tactics || tactics.items || [])
+    .map((tactic) => Number(tactic.intensity))
+    .filter((value) => Number.isFinite(value));
+
+  check("kampplanene har en intensitet", intensities.length > 0);
+  check(
+    "intensiteten i data ligger på 0–100-skalaen",
+    Math.max(...intensities) > 10,
+    `maks=${Math.max(...intensities)}`
+  );
+
+  // Les mappingen ut av app.js og kjør den på ekte data.
+  const match = app.match(/1 \+ \(raw - (\d+)\) \/ (\d+) \* ([\d.]+)/);
+  check("app.js mapper intensiteten eksplisitt", Boolean(match), "fant ingen mapping");
+  if (match) {
+    const [, midt, del, spenn] = match;
+    const faktor = (raw) => Math.max(0.8, Math.min(1.3, 1 + (raw - Number(midt)) / Number(del) * Number(spenn)));
+    const verdier = intensities.map(faktor);
+    const unike = new Set(verdier.map((v) => v.toFixed(3)));
+    check("ulike kampplaner gir ULIKE belastningsfaktorer", unike.size > 3, `${unike.size} unike av ${verdier.length}`);
+    check("ingen kampplan metter faktoren på maks", verdier.filter((v) => v >= 1.3).length < verdier.length / 2,
+      `${verdier.filter((v) => v >= 1.3).length} av ${verdier.length} på taket`);
+    check("den roligste planen koster mindre enn den hardeste", Math.min(...verdier) < Math.max(...verdier));
+  }
+
+  // Treningsfokusets belastning må komme fra motoren som faktisk eier tallet.
+  check("app.js henter treningsbelastningen fra treningsmotoren", /getTrainingFocusFatigue\(/.test(app));
+  check("treningsmotoren eksporterer den", /export function getTrainingFocusFatigue/.test(
+    readFileSync(new URL("../src/football-training-week.js", import.meta.url), "utf8")
+  ));
 }
 
 console.log(`\n${passed}/${passed + failed} sjekker bestått.`);

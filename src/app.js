@@ -110,7 +110,8 @@ import {
   calculateTrainingStaffSupport,
   recommendTrainingFocus,
   createTrainingMatchdaySnapshot,
-  buildTrainingFocusOffPitchEvent
+  buildTrainingFocusOffPitchEvent,
+  getTrainingFocusFatigue
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
@@ -3680,11 +3681,19 @@ function getPlayerCondition() {
 
 // Hvor hardt kampplanen tok på beina. Kampplanene bærer sin egen `intensity`;
 // uten en valgt plan er den nøytral.
+// Kampplanenes `intensity` i data/football_tactics.json går fra 30 til 100 —
+// IKKE fra 0.6 til 1.6. Den gamle koden klampet tallet direkte inn i
+// [0.6, 1.6], så ENHVER kampplan ble maksimal intensitet: hver kamp la på 1.6
+// ganger normal belastning. Det er hele grunnen til at skadene eksploderte.
+//
+// 60 er nøytralt. En lav blokk (30) koster ~0.82, alt frem (100) ~1.24.
 function getMatchIntensityFactor() {
-  const intensity = getTactic()?.intensity;
-  const byLevel = { lav: 0.75, moderat: 1, hoy: 1.35, "høy": 1.35, ekstrem: 1.55 };
-  if (typeof intensity === "number") return Math.max(0.6, Math.min(1.6, intensity));
-  return byLevel[String(intensity).toLowerCase()] || 1;
+  const raw = getTactic()?.intensity;
+  const byLevel = { lav: 0.85, moderat: 1, hoy: 1.15, "høy": 1.15, ekstrem: 1.25 };
+  if (typeof raw === "number" && Number.isFinite(raw)) {
+    return Math.max(0.8, Math.min(1.3, 1 + (raw - 60) / 100 * 0.6));
+  }
+  return byLevel[String(raw).toLowerCase()] || 1;
 }
 
 // Etter kampen: belastning fra minuttene, form fra det som skjedde, og
@@ -3707,10 +3716,17 @@ function registerMatchInPlayerCondition(lastMatch) {
 
 // Uka ruller: laget hviler. Hvor mye avhenger av treningsuka du valgte —
 // restitusjon henter mer enn en pressuke.
+// Treningsuka avgjør hvor mye laget henter inn igjen. Belastningen fra fokuset
+// er et tall mellom −4 (restitusjonspreget) og +6 (press) i treningsmotoren.
+//
+// Den gamle koden lette etter `fatigueLoad`/`intensity` på fokus-objektet —
+// felter som ikke finnes — og falt alltid tilbake til nøytralt. Treningsvalget
+// gjorde altså ingenting for restitusjonen.
 function applyWeeklyPlayerRecovery() {
-  const focus = state.weeklyTrainingFocus || state.weeklyTrainingProgram || null;
-  const load = Number(focus?.fatigueLoad ?? focus?.intensity);
-  const trainingIntensity = Number.isFinite(load) ? Math.max(0.5, Math.min(1.6, load)) : 1;
+  const focusId = state.weeklyTrainingFocus?.focusId || null;
+  const fatigue = focusId ? getTrainingFocusFatigue(focusId) : 0;
+  // −4 → 0.7 (henter mye), 0 → 1, +6 → 1.45 (henter lite).
+  const trainingIntensity = Math.max(0.6, Math.min(1.5, 1 + fatigue * 0.075));
   state.playerCondition = applyWeeklyRecovery(getPlayerCondition(), { trainingIntensity });
   savePlayerCondition();
 }

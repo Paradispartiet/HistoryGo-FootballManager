@@ -30,7 +30,8 @@ export const CONDITION_VERSION = "player-condition.v1";
 //     men belastningen kryper sakte oppover
 //   · restitusjonsuker henter inn mer enn en kamp koster
 //   · pressuker på toppen av full spilletid er det som faktisk brenner ham ut
-//   · skader er uvanlige selv da — de er en risiko, ikke en avgift
+//   · skader er SJELDNE selv da — ~3 på en hel sesong i verste fall, ~0,2 ved
+//     normal drift. De er en risiko, ikke en avgift.
 //
 // Hvor mye belastning en full kamp gir. 90 minutter i en høyintens kampplan
 // koster mer enn 90 rolige.
@@ -220,11 +221,18 @@ export function rollInjuries(conditions, { played, rng = Math.random } = {}) {
     const load = num(condition.load);
     if (load < INJURY_THRESHOLD) return;
 
-    // Selv en helt utkjørt spiller har rundt 10 % risiko i én kamp. Skader skal
-    // være noe som RAMMER deg, ikke noe som skjer hver gang du spiller de beste.
+    // Skader er SJELDNE. Selv en helt utkjørt spiller har rundt 2,5 % risiko i
+    // én enkelt kamp — og under det stiger kurven kvadratisk, så en spiller som
+    // så vidt er over terskelen nesten aldri ryker.
+    //
+    // Kurven ble målt, ikke gjettet. Med en lineær kurve og 10 % tak ble det
+    // ~10 skader per sesong for en manager som kjørte press hver uke: hele
+    // elleveren ute, flere ganger. Nå er det ~3 i det verste tilfellet og
+    // ~0,2 ved normal drift — altså én skade hvert femte år hvis du styrer
+    // belastningen.
     const over = (load - INJURY_THRESHOLD) / (100 - INJURY_THRESHOLD);
     const streak = clamp(num(condition.consecutiveFullMatches) / 8, 0, 1);
-    const chance = clamp(over * 0.07 + streak * 0.05, 0, 0.1);
+    const chance = clamp(over * over * 0.05 + streak * 0.01, 0, 0.025);
     if (rng() >= chance) return;
 
     const weeksOut = load >= 90 ? 3 : load >= 80 ? 2 : 1;

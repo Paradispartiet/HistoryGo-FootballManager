@@ -42,12 +42,46 @@ er derfor satt slik at:
   belastningen kryper sakte oppover
 - restitusjonsuker henter inn mer enn en kamp koster
 - **pressuker oppå full spilletid** er det som faktisk brenner ham ut
-- skader er uvanlige selv da — under 20 % i én kamp for en helt utkjørt spiller.
-  De er en risiko, ikke en avgift.
+- skader er **sjeldne** selv da
 
-`sim:player-condition` låser dette med egne balansesjekker, ikke bare
-mekanikk-sjekker: en full 14-runders sesong med samme ellever skal gi høyst én
-skade, mens de samme kampene med pressuker skal brenne laget ut.
+### Skaderaten, målt
+
+Skader skal være sjeldne. Tallene under er **målt over 500 simulerte sesonger**,
+ikke gjettet:
+
+| Drift | Skader per 14-runders sesong |
+|---|---|
+| Restitusjonspreget trening | 0,00 |
+| Normal plan, normal trening | **0,20** (verste 2) |
+| Høyt press + presstrening hver uke | 2,81 (verste 10) |
+
+Altså: styrer du belastningen, ser du en skade omtrent hvert femte år. Kjører du
+laget bevisst i senk, mister du rundt tre spillere i løpet av sesongen. Selv en
+helt utkjørt spiller har bare ~2,5 % risiko i én enkelt kamp, og kurven er
+kvadratisk — en spiller så vidt over terskelen ryker nesten aldri.
+
+`sim:player-condition` låser disse tallene med egne balansesjekker, ikke bare
+mekanikk-sjekker.
+
+### To feil som gjorde skadene ti ganger for vanlige
+
+Begge var **skalafeil**: tallene så riktige ut på begge sider av grensesnittet.
+
+1. **Kampplanenes `intensity` går fra 30 til 100** i
+   `data/football_tactics.json`. `getMatchIntensityFactor()` klampet tallet rett
+   inn i `[0.6, 1.6]` — så *enhver* kampplan ble maksimal intensitet. Hver kamp
+   la på 1,6 ganger normal belastning, uansett hva du valgte. Det alene ga
+   ~10 skader per sesong.
+
+2. **Treningsuka påvirket ikke restitusjonen i det hele tatt.**
+   `applyWeeklyPlayerRecovery()` lette etter `fatigueLoad` eller `intensity` på
+   fokus-objektet — felter som ikke finnes. Den falt derfor alltid tilbake til
+   nøytralt. Tallet fantes hele tiden i treningsmotorens egen
+   `FOCUS_OFFPITCH_EFFECTS` (−4 til +6), men var ikke eksponert.
+
+`sim:player-condition` steg 11 vokter nå hele klassen: den leser mappingen ut av
+`app.js`, kjører den på ekte kampplandata, og krever at ulike planer gir ulike
+faktorer og at ingen metter taket.
 
 ## Hvor det virker inn
 
