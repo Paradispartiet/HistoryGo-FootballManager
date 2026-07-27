@@ -10,8 +10,9 @@ Den inneholder:
 
 - **Sesongsammendrag** — kamper, mål, målgivende, toppscorer, tabellplassering
   og styrets forventning.
-- **Spillerstatistikk** — mål, målgivende og kamper per spiller, sorterbar på
-  mål, målgivende eller poeng (M+A).
+- **Spillerstatistikk** — mål, målgivende, kamper og **minutter** per spiller,
+  sorterbar på mål, målgivende eller poeng (M+A). Innbyttere får kampen sin og
+  minuttene sine — se `docs/innbytte.md`.
 - **Ligatabell og terminliste** — flyttet hit fra popup-en på Kontor.
 - **Prøveperiode** — de fem kampene for styret, flyttet hit fra dashbordet.
 

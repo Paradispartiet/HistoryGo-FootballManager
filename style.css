@@ -8338,3 +8338,64 @@ body > .site-footer { grid-row: 5; }
 .club-week-step-label:focus-visible {
   text-decoration: underline;
 }
+
+/* ============================================================
+   Innbytte underveis. Samme visuelle språk som kampplan-velgeren:
+   et grep, ikke en innstilling.
+   ============================================================ */
+.match-subs {
+  margin-top: 10px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.match-subs > summary {
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.86rem;
+}
+
+.match-subs-log {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.match-subs-log li {
+  border-left: 3px solid var(--hg-border-soft);
+  padding-left: 9px;
+  font-size: 0.8rem;
+  display: grid;
+  gap: 2px;
+}
+
+.match-subs-log li.is-positive { border-left-color: var(--good); }
+.match-subs-log li.is-negative { border-left-color: var(--bad); }
+.match-subs-log li span { color: var(--muted); }
+
+.match-subs-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 6px;
+  margin: 8px 0 4px;
+}
+
+.match-subs-player {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.match-subs-player small { color: var(--muted); font-size: 0.7rem; }
+.match-subs-player.is-current { border-color: var(--hg-accent-tactics); }
+.match-subs-player.is-fitting { border-color: var(--good); }

@@ -511,9 +511,12 @@ stage("16. Kampplan");
       && readFileSync(join(root, "src/football-match-plan.js"), "utf8").includes("calculateSwitchCost")
   );
   // Og byttet må faktisk telle i resultatet, ikke bare stå i loggen.
+  // Sjekker INTENSJONEN (planbyttene er med i summeringen), ikke den nøyaktige
+  // listen — ellers brekker vakta hver gang en ny beslutningstype legges til,
+  // uten at noe faktisk er galt. Innbyttene kom inn i samme kall.
   check(
     "planbytter summeres inn i kampresultatet",
-    /sumDecisionEffects\(\[\.\.\.decisions, \.\.\.planChanges\]\)/.test(
+    /sumDecisionEffects\(\[[^\]]*\.\.\.planChanges[^\]]*\]\)/.test(
       readFileSync(join(root, "src/football-matchday-engine.js"), "utf8")
     )
   );
