@@ -40,6 +40,7 @@ npm run sim:matchday           # matchday session loop (football-matchday-engine
 npm run sim:mini-season        # mini-season loop
 npm run sim:tournament         # EM/VM i landslagsmodus (gruppespill → finale)
 npm run sim:match-plan         # kampplaner som strategi + bytte underveis
+npm run sim:player-stats       # spillerstatistikk: hvem scoret, hvem la den fram
 npm run sim:pitch-layout       # brikkefordelingen på taktikktavla (alle formasjoner)
 npm run sim:training-week      # weekly training focus
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
@@ -87,6 +88,7 @@ The single most important thing to understand is that this repo contains **two i
 - `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
 - `football-suggested-setups.js` — self-explaining 2–4 logical setups (formation / match plan / training week) that advise without replacing the manager's own choice.
 - `football-off-pitch-parameters.js` — the human context layer: fatigue, injury risk, morale, confidence, autonomy, dressing-room mood, media/board/family pressure, hidden mental state.
+- `football-player-stats.js` — attributes goals and assists to players from the lineup snapshot, weighted by **position, role and fit — never `overall`** — and aggregates the season table. See `docs/statistikk.md`.
 - `football-inbox-events.js` — wires the Inbox ("Klubbens puls") to the context engines (off-pitch params, training programs, matchday, decisions), turning a static UI into live events.
 - `football-relationship-metric-ui.js` — thin UI bridge that surfaces the relationship score (engine lives in `football-relationship-engine.js`) without touching `app.js`.
 - `hg-formation-library.js`, `hg-football-formation-adapter.js`, `hg-football-coach-context-engine.js`, `hg-football-historical-fit-engine.js` — the historical formation library (`data/hgFootball/`) and its adapters.
@@ -145,9 +147,11 @@ What national mode plays *for* is a tournament: **EM and VM** (`src/football-tou
 
 ### Navigation contract
 
-The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse**, in that order, and no label may point at a section its name does not describe. Office surfaces (Speiding, Stab, Assistentråd, Klubbrom, Styret, Fasiliteter) live *on* Kontor as department cards, not as their own tabs — `data-tab-parent` on the section tells `highlightActiveTab()` which tab to light up. Scenarioer is a mode reached from the onboarding page, never a tab inside the league game.
+The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk**, in that order, and no label may point at a section its name does not describe. Office surfaces (Speiding, Stab, Assistentråd, Klubbrom, Styret, Fasiliteter) live *on* Kontor as department cards, not as their own tabs — `data-tab-parent` on the section tells `highlightActiveTab()` which tab to light up. Scenarioer is a mode reached from the onboarding page, never a tab inside the league game.
 
 Each nav tab carries `data-nav-modes` (which modes show it) and optionally `data-nav-section-modes` (which modes may have the surface open at all); `applyModeScopedNav()` in `renderModeIsolation` enforces both. See `docs/meny.md`; guarded by `audit:dead-ends` stage 17.
+
+Kontor is the office, not a dashboard: **do not re-add summary boxes there.** Club identity lives in the site header, league standing and the board's expectation live on Statistikk, and mode switching lives in Innstillinger. The Klubbuke phase pills are navigation — each opens the surface that phase happens on (`CLUB_WEEK_PHASE_TABS`).
 
 Tab surfaces scroll — they must not shrink. `.app-shell > .tab-section` is a fixed-height column flexbox, so its children need `flex: 0 0 auto` or they get crushed instead of scrolled (`.dept-hero` has `overflow: hidden` and collapsed to 38px of padding). Guarded by `audit:dead-ends` stage 16.
 

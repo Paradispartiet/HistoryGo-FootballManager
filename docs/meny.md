@@ -26,7 +26,7 @@ bygge en modell av huset.
 Menyen følger nå rekkefølgen en manageruke faktisk går i:
 
 ```
-Kontor → Trening → Taktikk → Kamp → Analyse
+Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk
 ```
 
 - **Kontor** — der du sitter. Neste kamp, ukas beslutning, assistentrådet, og
@@ -38,6 +38,8 @@ Kontor → Trening → Taktikk → Kamp → Analyse
 - **Kamp** — kampdagen: brief, grep, klokke, live stilling.
 - **Analyse** — ettertanken: kamprapporten, rollebytter å vurdere, svake punkter,
   og inngangen til den dype rapporten.
+- **Statistikk** — tallene: ligatabell, terminliste og hvem som leverer (mål,
+  målgivende, kamper). Se `docs/statistikk.md`.
 
 **Speiding** ligger på Kontor, ikke som egen fane — det er jo det du gjør fra
 kontoret. Det samme gjelder **Stab**. Nedtrekksmenyen som duplikerte navnene er
@@ -57,8 +59,8 @@ Hver nav-fane bærer `data-nav-modes` med modiene den hører hjemme i.
 
 | Modus | Meny |
 |---|---|
-| Ligaspill | Kontor · Trening · Taktikk · Kamp · Analyse |
-| Landslag | Kontor · Trening · Taktikk · Kamp · Analyse |
+| Ligaspill | Kontor · Trening · Taktikk · Kamp · Analyse · Statistikk |
+| Landslag | Kontor · Trening · Taktikk · Kamp · Analyse · Statistikk |
 | Scenario | + Scenario |
 | Fotballvitenskap | Fotballvitenskap (alene) |
 
@@ -103,7 +105,7 @@ Rettelsen er én regel: `.app-shell > .tab-section > * { flex: 0 0 auto; }`.
 
 `npm run audit:dead-ends` steg 17 låser menykontrakten:
 
-- hovedmenyen i ligaspill er nøyaktig Kontor → Trening → Taktikk → Kamp → Analyse
+- hovedmenyen i ligaspill er nøyaktig Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk
 - ingen navigasjonsetikett finnes to steder med ulikt mål
 - hver nav-fane bærer `data-nav-modes`, og `app.js` håndhever dem
 - Scenario-fanen finnes bare i scenariomodus; Scenarioer er et modusvalg på forsiden
@@ -117,3 +119,29 @@ Steg 16 dekker i tillegg at faneflatas barn ikke krymper.
 Auditen ser også på **avdelingskortene**, ikke bare `.nav-tab`. Kortene er nå den
 ekte veien inn til avdelingene; så lenge vakta bare kikket på hovedmenyen, kunne
 en «Senere»-flate stå åpen som et fullt klikkbart kort.
+
+## Kontor er kontoret, ikke et dashbord
+
+To bokser gjentok tall som allerede sto i managerportalen, klubbuka og footeren,
+og skjøv de faktiske handlingene nedover:
+
+- **«Klubben din»** — klubbnavn, manager, liga, tabellplassering, styremål og
+  «neste managergrep». Identiteten hører i **toppen**, over alt du gjør; den skal
+  ikke presenteres på nytt hver gang du kommer innom Kontor. Plassering og
+  styrets forventning hører på **Statistikk**, ved siden av tabellen de leses av.
+- **«Spillmodus»** — hvilken modus du er i, pluss sju statuslinjer. Modusen står
+  allerede i modusstripa når den er noe annet enn ligaspill, og modusbyttet
+  ligger i **Innstillinger**, der teksten alltid har lovet det.
+
+**Klubbuka** ble stående — men fasene er nå knapper. Ukerytmen fortalte hvor du
+var i uka uten å ta deg dit; et skilt uten dør. Hver fase åpner flaten der
+arbeidet faktisk gjøres:
+
+| Fase | Åpner |
+|---|---|
+| Analyse | Analyse |
+| Innboks | Assistentråd |
+| Trening | Trening |
+| Kampplan | Taktikk |
+| Kampdag | Kamp |
+| Oppsummering | Statistikk |

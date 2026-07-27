@@ -36,6 +36,11 @@ import {
   createMiniSeasonOffPitchEvent
 } from "./football-mini-season.js";
 import {
+  applyMatchPlayerStats,
+  rankPlayerStats,
+  summarizePlayerStats
+} from "./football-player-stats.js";
+import {
   LEAGUE_SEASON_VERSION,
   createLeagueSeason,
   normalizeLeagueSeason,
@@ -464,25 +469,6 @@ const elements = {
   // Do not treat it as mandatory onboarding.
   onboardingScreen: document.querySelector("#onboardingScreen"),
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
-  leagueClubCard: document.querySelector("#leagueClubCard"),
-  leagueClubName: document.querySelector("#leagueClubName"),
-  leagueClubManager: document.querySelector("#leagueClubManager"),
-  leagueClubStatus: document.querySelector("#leagueClubStatus"),
-  leagueClubCompetition: document.querySelector("#leagueClubCompetition"),
-  leagueClubBoardGoal: document.querySelector("#leagueClubBoardGoal"),
-  leagueClubStanding: document.querySelector("#leagueClubStanding"),
-  leagueClubNextAction: document.querySelector("#leagueClubNextAction"),
-  gameModeStatusCard: document.querySelector("#gameModeStatusCard"),
-  gameModeStatusTitle: document.querySelector("#gameModeStatusTitle"),
-  gameModeStatusText: document.querySelector("#gameModeStatusText"),
-  changeGameModeButton: document.querySelector("#changeGameModeButton"),
-  leagueStatusWeek: document.querySelector("#leagueStatusWeek"),
-  leagueStatusNextMatch: document.querySelector("#leagueStatusNextMatch"),
-  leagueStatusSquad: document.querySelector("#leagueStatusSquad"),
-  leagueStatusLineup: document.querySelector("#leagueStatusLineup"),
-  leagueStatusBench: document.querySelector("#leagueStatusBench"),
-  leagueStatusTraining: document.querySelector("#leagueStatusTraining"),
-  leagueStatusInbox: document.querySelector("#leagueStatusInbox"),
   portalNextMatch: document.querySelector("#portalNextMatch"),
   portalMatchHint: document.querySelector("#portalMatchHint"),
   portalPriorityAction: document.querySelector("#portalPriorityAction"),
@@ -535,6 +521,16 @@ const elements = {
   // Analyse-fanen viser de samme to listene som den dype rapporten, fra samme
   // motorkall — ikke en egen beregning som kunne begynt å motsi den.
   analyseMatchReport: document.querySelector("#analyseMatchReport"),
+  statsSummary: document.querySelector("#statsSummary"),
+  statsMatches: document.querySelector("#statsMatches"),
+  statsGoals: document.querySelector("#statsGoals"),
+  statsAssists: document.querySelector("#statsAssists"),
+  statsTopScorer: document.querySelector("#statsTopScorer"),
+  statsStanding: document.querySelector("#statsStanding"),
+  statsBoardGoal: document.querySelector("#statsBoardGoal"),
+  headerClubName: document.querySelector("#headerClubName"),
+  headerClubManager: document.querySelector("#headerClubManager"),
+  playerStatsTable: document.querySelector("#playerStatsTable"),
   analyseRoleChanges: document.querySelector("#analyseRoleChanges"),
   analyseWeakPoints: document.querySelector("#analyseWeakPoints"),
   managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations"),
@@ -3588,6 +3584,53 @@ function loadMatchdayState() {
 }
 
 // Lagre gjeldende kampdag-state. Stille no-op hvis lagring feiler (privat modus).
+// ---------------------------------------------------------------------------
+// Spillerstatistikk: sesongens mål, målgivende og kamper
+// Motoren (`football-player-stats.js`) er ren; her ligger bare akkumuleringen
+// og lagringen, per modus som alt annet.
+// ---------------------------------------------------------------------------
+
+const PLAYER_STATS_KEY = "hgfm.playerSeasonStats.v1";
+
+function normalizePlayerSeasonStats(value) {
+  if (!value || typeof value !== "object") return { rows: [], matchIds: [] };
+  return {
+    rows: Array.isArray(value.rows) ? value.rows : [],
+    matchIds: Array.isArray(value.matchIds) ? value.matchIds : []
+  };
+}
+
+function loadPlayerSeasonStats() {
+  try {
+    return normalizePlayerSeasonStats(JSON.parse(localStorage.getItem(PLAYER_STATS_KEY) || "null"));
+  } catch (error) {
+    console.error("Kunne ikke lese spillerstatistikk", error);
+    return { rows: [], matchIds: [] };
+  }
+}
+
+function savePlayerSeasonStats() {
+  try {
+    localStorage.setItem(PLAYER_STATS_KEY, JSON.stringify(normalizePlayerSeasonStats(state.playerSeasonStats)));
+  } catch (error) {
+    console.error("Kunne ikke lagre spillerstatistikk", error);
+  }
+}
+
+function registerMatchInPlayerStats(lastMatch) {
+  const matchStats = lastMatch?.playerStats;
+  if (!matchStats) return;
+  const current = normalizePlayerSeasonStats(state.playerSeasonStats);
+  const matchId = String(lastMatch.id || "");
+  if (matchId && current.matchIds.includes(matchId)) return;
+
+  state.playerSeasonStats = {
+    rows: applyMatchPlayerStats(current.rows, matchStats),
+    matchIds: matchId ? [...current.matchIds, matchId] : current.matchIds
+  };
+  savePlayerSeasonStats();
+}
+
 function saveMatchdayState() {
   if (!shouldWriteLegacyLeagueStorage()) return;
   try {
@@ -3875,6 +3918,9 @@ function chooseMatchdayDecision(optionId) {
     // Mini Season v0.1: registrer resultatet i en aktiv prøveperiode (matchId
     // som idempotensnøkkel — reload/dobbeltkall gir aldri dobbel registrering).
     registerMatchInMiniSeason(state.matchday.lastMatch);
+    // Spillerstatistikk: legg kampens kamper, mål og målgivende til sesongen.
+    // Idempotent på matchId, så reload/dobbeltkall aldri teller dobbelt.
+    registerMatchInPlayerStats(state.matchday.lastMatch);
     // Role Familiarity Engine v1: bygg spillernes rolle-fortrolighet ved riktig
     // bruk (forvitre litt ved feilbruk). Startelleveren er låst gjennom sesjonen,
     // så gjeldende teamFit speiler laget som spilte. Kjøres én gang per kamp
@@ -4439,7 +4485,7 @@ function clearLeagueSaveState() {
 
 function activateLeagueOnboardingTarget(step) {
   const targetByStep = {
-    klubb: { tab: "dashboard", selector: "#leagueClubCard", openClubStep: true },
+    klubb: { tab: "dashboard", selector: ".manager-portal", openClubStep: true },
     spillere: { tab: "historygo", selector: "#unlockedPlayersList" },
     stab: { tab: "historygo", selector: "#availableStaffList" },
     ellever: { tab: "tactics", selector: "#formationSelect" },
@@ -4597,40 +4643,6 @@ function renderLeagueOnboarding(teamFit) {
     item.append(number, body);
     list.append(item);
   });
-}
-
-function renderLeagueClubCard(teamFit) {
-  const card = elements.leagueClubCard;
-  if (!card) return;
-  card.hidden = !isLeagueModeActive();
-  if (card.hidden) return;
-  const model = getLeagueSaveModel();
-  const nextMatch = getNextLeagueOpponent(state.leagueSeason);
-  const preseasonStep = getLeagueOnboardingSteps(teamFit).find((step) => !step.done);
-  const nextAction = isLeagueSeasonActive() && nextMatch
-    ? `Neste kamp: ${nextMatch.name} (${nextMatch.homeAway === "home" ? "hjemme" : "borte"}, serierunde ${nextMatch.round})`
-    : preseasonStep?.title || "Sesongen er ikke startet";
-  if (elements.leagueClubName) elements.leagueClubName.textContent = model.temporaryClubName ? `${model.clubName} (midlertidig navn)` : model.clubName;
-  if (elements.leagueClubManager) {
-    elements.leagueClubManager.textContent = model.managerName ? `Manager: ${model.managerName}` : "Manager: deg";
-  }
-  if (elements.leagueClubStatus) elements.leagueClubStatus.textContent = model.leagueSeasonStatus;
-  if (elements.leagueClubCompetition) elements.leagueClubCompetition.textContent = `${model.leagueName} · ${model.seasonLabel}`;
-  if (elements.leagueClubBoardGoal) elements.leagueClubBoardGoal.textContent = model.boardExpectation;
-  // Tabell i stedet for «sesongoppdrag»: i ligaspill er tabellen fasiten, ikke
-  // et oppdrag som skal fullføres.
-  if (elements.leagueClubStanding) {
-    let standing = "Sesongen er ikke startet";
-    if (isLeagueSeasonActive() && state.leagueSeason) {
-      const table = createLeagueTable(state.leagueSeason);
-      const managerRow = Array.isArray(table) ? table.find((row) => row.isManager) : null;
-      if (managerRow) {
-        standing = `${managerRow.position}. plass · ${managerRow.points} poeng`;
-      }
-    }
-    elements.leagueClubStanding.textContent = standing;
-  }
-  if (elements.leagueClubNextAction) elements.leagueClubNextAction.textContent = nextAction;
 }
 
 // Klubbnavnet spilleren selv har satt (tom => klubb ikke opprettet ennå).
@@ -4873,49 +4885,43 @@ function renderTournamentPanel() {
   }
 }
 
-function renderGameModeStatus(teamFit) {
-  const selectedMode = state.modeEnvelope?.activeMode || null;
-  const status = elements.gameModeStatusCard;
+// Klubben du leder står i toppen, over alt du gjør. Utenfor ligamodus står den
+// generiske tittelen, slik at landslag og Fotballvitenskap ikke later som de er
+// klubben din.
+function renderHeaderClubIdentity() {
+  const name = elements.headerClubName;
+  const manager = elements.headerClubManager;
+  if (!name || !manager) return;
 
-  renderOnboardingScreen();
-  if (status) status.hidden = selectedMode === null;
-
-  if (selectedMode === "league") {
-    const leagueStatus = getLeagueStatusLabel();
-    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Ligaspill";
-    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = leagueStatus === "Før sesong"
-      ? "Før sesong: bygg klubbidentitet, tropp, stab, startellever og trening før ligaspillet åpner."
-      : "Aktiv ligasesong: følg terminlista, tren laget og spill neste ligakamp. Scenarioer ligger i egen fane.";
-  } else if (selectedMode === "scenario") {
-    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Scenario";
-    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = state.gameStartState?.activeScenarioId
-      ? "Ajax 1971–73 er aktivt. Neste handling gjelder bare den separate femkampers scenarioøkten."
-      : "Velg scenario. Ingen ligadata brukes eller endres her.";
-  } else if (selectedMode === "national") {
-    const tournament = getActiveTournament();
-    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Landslagssjef";
-    if (elements.gameModeStatusText) {
-      elements.gameModeStatusText.textContent = tournament?.status === "active"
-        ? `${tournament.fullName} pågår: ${TOURNAMENT_STAGE_LABELS[tournament.stage] || tournament.stage}. Klubblaget ditt er urørt.`
-        : "Velg nasjon, ta ut troppen og meld på til EM eller VM. Klubblaget ditt er urørt.";
-    }
-  } else if (selectedMode === "training") {
-    if (elements.gameModeStatusTitle) elements.gameModeStatusTitle.textContent = "Fotballvitenskap";
-    if (elements.gameModeStatusText) elements.gameModeStatusText.textContent = "Egen læremodul: formasjonshistorien, epoke for epoke. Ingenting her rører klubben din.";
+  if (!isLeagueModeActive() || !getSavedClubName()) {
+    name.textContent = "HG Football Manager";
+    manager.textContent = "Treneren avgjør. Les klubbens puls, bygg laget på banen og ta de neste beslutningene.";
+    return;
   }
 
-  const leagueMeta = elements.gameModeStatusCard?.querySelector(".mode-status-meta");
-  if (leagueMeta) leagueMeta.hidden = selectedMode !== "league";
+  const model = getLeagueSaveModel();
+  name.textContent = model.temporaryClubName ? `${model.clubName} (midlertidig navn)` : model.clubName;
+  manager.textContent = model.managerName
+    ? `${model.managerName} · ${model.leagueName} · ${model.leagueSeasonStatus}`
+    : `${model.leagueName} · ${model.leagueSeasonStatus}`;
+}
+
+// «Klubben din» og «Spillmodus» er borte fra Kontor: to bokser som gjentok tall
+// managerportalen, klubbuka og footeren allerede viste, og som skjøv de faktiske
+// handlingene nedover. Modusbyttet ligger i Innstillinger, der det hører hjemme.
+// Det som var ekte her — portalens neste kamp og assistentrådets status — lever
+// videre.
+function renderGameModeStatus(teamFit) {
+  renderOnboardingScreen();
+  renderHeaderClubIdentity();
 
   const availability = getAvailability();
   const roster = availability.rosterReadiness || {};
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   const filled = assignments.filter((item) => item.player).length;
-  const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
-  const training = state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "valgt" : "mangler";
   const unread = getInboxAttentionCount();
   // En kamp finnes for UI-et først når league-save og terminliste er aktive.
-  // Før det bruker status og portal samme første steg som onboarding/footeren.
+  // Før det bruker portalen samme første steg som onboarding/footeren.
   const scheduledOpponent = getMiniSeasonNextOpponent();
   const preseasonStep = isLeagueModeActive() && !isLeagueSeasonActive()
     ? getLeagueOnboardingSteps(teamFit).find((step) => !step.done)
@@ -4923,16 +4929,20 @@ function renderGameModeStatus(teamFit) {
   const nextMatch = isLeagueSeasonActive()
     ? state.matchday?.session?.opponent?.name || scheduledOpponent?.name || "ikke terminfestet"
     : preseasonStep?.title || "Sesongen er ikke startet";
-  if (elements.leagueStatusWeek) elements.leagueStatusWeek.textContent = `Uke ${Number(state.clubWeekState?.week) || 1}`;
-  if (elements.leagueStatusNextMatch) elements.leagueStatusNextMatch.textContent = `Neste kamp: ${nextMatch}`;
+
   if (elements.portalNextMatch) elements.portalNextMatch.textContent = `Neste kamp: ${nextMatch}`;
-  if (elements.portalMatchHint) elements.portalMatchHint.textContent = scheduledOpponent?.homeAway ? `${scheduledOpponent.homeAway === "home" ? "Hjemme" : "Borte"} · klargjør kampplan og kamptropp.` : "Sett startellever, benk og kampplan før kampdag.";
-  if (elements.leagueStatusSquad) elements.leagueStatusSquad.textContent = `Tropp: ${Number(roster.unlockedCount || 0)}/15`;
-  if (elements.leagueStatusLineup) elements.leagueStatusLineup.textContent = `Startellever: ${Math.min(filled, 11)}/11`;
-  if (elements.leagueStatusBench) elements.leagueStatusBench.textContent = `Benk: ${Math.min(bench, 4)}/4`;
-  if (elements.leagueStatusTraining) elements.leagueStatusTraining.textContent = `Trening: ${training}`;
-  if (elements.leagueStatusInbox) elements.leagueStatusInbox.textContent = `Innboks: ${unread > 0 ? `${unread} ulest` : "lest"}`;
-  if (elements.portalInboxStatus) elements.portalInboxStatus.textContent = `Assistentråd: ${unread > 0 ? `${unread} ulest` : "rolig"}`;
+  if (elements.portalMatchHint) {
+    elements.portalMatchHint.textContent = scheduledOpponent?.homeAway
+      ? `${scheduledOpponent.homeAway === "home" ? "Hjemme" : "Borte"} · klargjør kampplan og kamptropp.`
+      : "Sett startellever, benk og kampplan før kampdag.";
+  }
+  if (elements.portalInboxStatus) {
+    elements.portalInboxStatus.textContent = `Assistentråd: ${unread > 0 ? `${unread} ulest` : "rolig"}`;
+  }
+  // Troppstallene lever videre i klubbuka sine målere (completeCount/
+  // rosterReadyCount); her trengs bare at de er lest ut én gang.
+  void roster;
+  void filled;
 }
 
 function renderModeIsolation() {
@@ -5033,7 +5043,6 @@ function applyModeScopedNav(mode) {
 }
 
 function renderFirstTimePlaythrough(teamFit) {
-  renderLeagueClubCard(teamFit);
   renderNationalTeamPanel();
   renderTournamentPanel();
   renderGameModeStatus(teamFit);
@@ -10850,6 +10859,105 @@ function renderManagerDetailFromTeamFit(teamFit) {
   }
 }
 
+// Statistikk-fanen: sesongens tall. Tabellen og terminlista rendres av sine
+// egne funksjoner (renderLeagueSeasonPanel / renderMiniSeason) — de flyttet bare
+// hit fra en popup på Kontor. Dette er spillerdelen.
+let playerStatsSort = "goals";
+
+function renderPlayerStats() {
+  const rows = Array.isArray(state.playerSeasonStats?.rows) ? state.playerSeasonStats.rows : [];
+  const summary = summarizePlayerStats(rows);
+
+  // Plassering og styremål lå i «Klubben din»-boksen på Kontor. De hører her,
+  // ved siden av tabellen de leses av.
+  if (elements.statsStanding) {
+    let standing = "Ikke startet";
+    if (isLeagueSeasonActive() && state.leagueSeason) {
+      const table = createLeagueTable(state.leagueSeason);
+      const managerRow = Array.isArray(table) ? table.find((row) => row.isManager) : null;
+      if (managerRow) standing = `${managerRow.position}. plass · ${managerRow.points} poeng`;
+    }
+    elements.statsStanding.textContent = standing;
+  }
+  if (elements.statsBoardGoal) elements.statsBoardGoal.textContent = getLeagueSaveModel().boardExpectation;
+
+  if (elements.statsMatches) elements.statsMatches.textContent = String(summary.matches);
+  if (elements.statsGoals) elements.statsGoals.textContent = String(summary.totalGoals);
+  if (elements.statsAssists) elements.statsAssists.textContent = String(summary.totalAssists);
+  if (elements.statsTopScorer) {
+    elements.statsTopScorer.textContent = summary.topScorer
+      ? `${summary.topScorer.name} (${summary.topScorer.goals})`
+      : "–";
+  }
+  if (elements.statsSummary) {
+    elements.statsSummary.textContent = summary.matches === 0
+      ? "Ingen kamper spilt ennå. Statistikken fylles etter hvert som du spiller."
+      : summary.topAssist
+        ? `${summary.matches} kamper spilt. ${summary.topScorer?.name || "Ingen"} leder scoringslista, ${summary.topAssist.name} leder på målgivende.`
+        : `${summary.matches} kamper spilt.`;
+  }
+
+  const container = elements.playerStatsTable;
+  if (!container) return;
+  container.textContent = "";
+
+  if (rows.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Ingen spillerstatistikk ennå. Spill en kamp, så føres kamper, mål og målgivende her.";
+    container.append(empty);
+    return;
+  }
+
+  const table = document.createElement("table");
+  table.className = "stats-table";
+  const head = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  ["#", "Spiller", "Pos", "K", "M", "A", "M+A"].forEach((label) => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = label;
+    headRow.append(th);
+  });
+  head.append(headRow);
+
+  const body = document.createElement("tbody");
+  rankPlayerStats(rows, { sortBy: playerStatsSort }).forEach((row, index) => {
+    const tr = document.createElement("tr");
+    const cells = [
+      String(index + 1),
+      row.name,
+      row.position || "–",
+      String(row.appearances),
+      String(row.goals),
+      String(row.assists),
+      String(row.points)
+    ];
+    cells.forEach((value, cellIndex) => {
+      const cell = document.createElement(cellIndex === 1 ? "th" : "td");
+      if (cellIndex === 1) cell.scope = "row";
+      cell.textContent = value;
+      tr.append(cell);
+    });
+    body.append(tr);
+  });
+
+  table.append(head, body);
+  container.append(table);
+}
+
+function initPlayerStatsSort() {
+  document.querySelectorAll("[data-stats-sort]").forEach((button) => {
+    button.addEventListener("click", () => {
+      playerStatsSort = button.dataset.statsSort || "goals";
+      document.querySelectorAll("[data-stats-sort]").forEach((other) => {
+        other.classList.toggle("is-active", other === button);
+      });
+      renderPlayerStats();
+    });
+  });
+}
+
 // Analyse-fanen: ettertanken etter kampen. Kamprapporten er den samme som på
 // Kamp-flaten — Analyse er stedet du går tilbake til den, ikke en ny beregning.
 function renderAnalyse() {
@@ -10939,6 +11047,26 @@ function renderClubWeekEventLog(list) {
 // hentes via bridge (engine eller fallback). Påvirker ikke resten av renderApp.
 // Tegn fase-stripa: én bolk per fase i rekkefølge, gjeldende fase markert og
 // allerede passerte faser dempet. Rent visningslag — ingen state-endring.
+// Hver klubbukefase hører til en flate i menyen. Uten denne koblingen var
+// ukerytmen i Kontor bare en stripe med ord.
+const CLUB_WEEK_PHASE_TABS = Object.freeze({
+  analysis: "analyse",
+  inbox: "inbox",
+  training: "trening",
+  match_prep: "tactics",
+  matchday: "kamp",
+  review: "statistikk"
+});
+
+const CLUB_WEEK_PHASE_TAB_LABELS = Object.freeze({
+  analyse: "Analyse",
+  inbox: "Assistentråd",
+  trening: "Trening",
+  tactics: "Taktikk",
+  kamp: "Kamp",
+  statistikk: "Statistikk"
+});
+
 function renderClubWeekPhaseSteps(container, phaseList, currentPhase) {
   if (!container) {
     return;
@@ -10956,10 +11084,25 @@ function renderClubWeekPhaseSteps(container, phaseList, currentPhase) {
     } else if (currentIndex >= 0 && index < currentIndex) {
       item.classList.add("is-done");
     }
-    item.textContent = entry.label;
-    if (entry.guidance) {
-      item.title = entry.guidance;
+    // Fasene skal SENDE deg et sted. Ukerytmen sto som ren pynt i Kontor: den
+    // fortalte hvor du var i uka, men å trykke på den gjorde ingenting — og da
+    // er den bare et skilt uten dør. Hver fase har en flate der arbeidet
+    // faktisk gjøres; nå er steget knappen dit.
+    const target = CLUB_WEEK_PHASE_TABS[entry.phase];
+    const label = document.createElement(target ? "button" : "span");
+    label.className = "club-week-step-label";
+    label.textContent = entry.label;
+    if (target) {
+      label.type = "button";
+      label.dataset.tabTarget = target;
+      label.title = entry.guidance
+        ? `${entry.guidance} — åpne ${CLUB_WEEK_PHASE_TAB_LABELS[target] || target}`
+        : `Åpne ${CLUB_WEEK_PHASE_TAB_LABELS[target] || target}`;
+      label.addEventListener("click", () => activateTab(target));
+    } else if (entry.guidance) {
+      label.title = entry.guidance;
     }
+    item.append(label);
     container.append(item);
   });
 }
@@ -13495,6 +13638,7 @@ function renderApp() {
   renderManagerEngineBridge(teamFit);
   renderManagerDetailFromTeamFit(teamFit);
   renderAnalyse();
+  renderPlayerStats();
   renderClubWeek().catch(console.error);
   refreshInboxEvents(teamFit);
   renderInboxThreads();
@@ -13515,7 +13659,6 @@ function renderApp() {
   renderTeamClassifications();
   renderTeamIdentityPanel();
   renderGameModeStatus(teamFit);
-  renderLeagueClubCard(teamFit);
   renderModeIsolation();
 
   // Persist only the active namespace. Visiting a secondary mode therefore
@@ -13745,6 +13888,7 @@ function bindSettings() {
       case "mode":
         closeSettings();
         state.modeChooserOpen = true;
+        activateTab("dashboard");
         renderApp();
         break;
       case "formations":
@@ -14028,14 +14172,6 @@ function bindGameModeControls() {
       }
     });
   });
-
-  if (elements.changeGameModeButton) {
-    elements.changeGameModeButton.addEventListener("click", () => {
-      state.modeChooserOpen = true;
-      activateTab("dashboard");
-      renderApp();
-    });
-  }
 
   if (elements.startAjaxScenarioButton) {
     elements.startAjaxScenarioButton.addEventListener("click", () => {
@@ -14393,6 +14529,8 @@ async function hydratePersistedUiState() {
   state.clubInboxReplies = await loadClubInboxReplies();
   // Kampdag (v1): hent siste spilte kamp fra localStorage.
   state.matchday = loadMatchdayState();
+  // Spillerstatistikk (v1): sesongens mål, målgivende og kamper per spiller.
+  state.playerSeasonStats = loadPlayerSeasonStats();
   // Mini Season v0.1: hent eventuell prøveperiode fra localStorage. Korrupt
   // eller manglende state gir null (= ingen prøveperiode startet).
   state.miniSeason = loadMiniSeason();
@@ -14496,6 +14634,7 @@ async function loadFootballBookKnowledgePrinciples() {
 
 async function init() {
   initTabs();
+  initPlayerStatsSort();
   // Start lasting av TS-motoren parallelt med datafilene. Vi venter på den før
   // første render, slik at manager-detalj-panelet kan bygges synkront i
   // renderApp i stedet for å skrive seg inn en tikk senere (ingen blink).

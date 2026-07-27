@@ -309,10 +309,13 @@ check("onboarding har egne steg for trening og sesongstart", app.includes('id: "
 check("CTA ruter til konkrete flater", app.includes("activateLeagueOnboardingTarget") && app.includes("#unlockedPlayersList") && app.includes("#availableStaffList") && app.includes("#weeklyTrainingOptions"));
 check("kampdag gates av aktiv ligasesong i next-action", readFileSync(join(root, "src/football-next-action.js"), "utf8").includes("(!ctx.leagueModeActive || ctx.leagueSeasonActive)"));
 check("league-save-modell får id og norsk status", app.includes("function getLeagueSaveModel") && app.includes("activeLeagueSaveId") && app.includes("Før sesong") && app.includes("Aktiv sesong") && app.includes("Fullført sesong"));
-check("klubbkort vises i ligamodus", html.includes('id="leagueClubCard"') && app.includes("renderLeagueClubCard(teamFit)") && app.includes("card.hidden = !isLeagueModeActive()"));
-// Klubbkortet viser klubbens identitet (navn + manager) og ligastatus — ikke
-// et stedsanker, og ikke et «sesongoppdrag» (i ligaspill er tabellen fasiten).
-check("klubbkort viser klubbidentitet og tabell", html.includes('id="leagueClubManager"') && html.includes('id="leagueClubStanding"') && app.includes("model.managerName"));
+check("klubbidentiteten står i toppen, ikke i en egen boks på Kontor", html.includes('id="headerClubName"') && html.includes('id="headerClubManager"') && app.includes("function renderHeaderClubIdentity"));
+// «Klubben din» gjentok tall som allerede sto i managerportalen, klubbuka og
+// footeren. Identiteten flyttet til toppen; plassering og styremål til
+// Statistikk, ved siden av tabellen de leses av.
+check("klubbkortet på Kontor er fjernet", !html.includes('id="leagueClubCard"') && !app.includes("renderLeagueClubCard"));
+check("plassering og styremål ligger på Statistikk", html.includes('id="statsStanding"') && html.includes('id="statsBoardGoal"') && app.includes("managerRow.position"));
+check("klubbidentiteten viser navn og manager utenfor ligamodus også", app.includes("model.managerName"));
 check("klubbkortet har ikke stedsanker eller sesongoppdrag", !html.includes('id="leagueClubAnchor"') && !html.includes("Sesongoppdrag") && !app.includes("Klubbanker / hjemsted"));
 check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getNextLeagueOpponent(state.leagueSeason)"));
 check("nullstilling er namespacet og rydder aldri league-save", app.includes("resetSecondarySession") && !/function resetMiniSeason\(\)[\s\S]{0,300}clearLeagueSaveState/.test(app) && !app.includes("placeUnlocks = []"));

@@ -53,10 +53,12 @@
 
   <header class="site-header">
     <div class="header-inner">
+      <!-- Klubbidentiteten hører hjemme i toppen, over alt du gjør — ikke i en
+           egen boks på Kontor som gjentok den hver gang du kom innom. -->
       <div class="header-title">
-        <p class="eyebrow">HG Football Manager</p>
+        <p class="eyebrow" id="headerClubName">HG Football Manager</p>
         <h1>Managerkontoret</h1>
-        <p class="lede">Treneren avgjør. Les klubbens puls, bygg laget på banen og ta de neste beslutningene.</p>
+        <p class="lede" id="headerClubManager">Treneren avgjør. Les klubbens puls, bygg laget på banen og ta de neste beslutningene.</p>
       </div>
       <button type="button" class="settings-button" id="settingsButton" data-modal-open="modalSettings" aria-label="Innstillinger" title="Innstillinger">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -111,6 +113,12 @@
           <path d="M4 19.5h16"/><rect x="5.5" y="12" width="3.4" height="5.5" rx="1"/><rect x="10.3" y="8" width="3.4" height="9.5" rx="1"/><rect x="15.1" y="4.5" width="3.4" height="13" rx="1"/>
         </svg>
         <span class="nav-label">Analyse</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="statistikk" data-nav-modes="league national scenario">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M9 9.5v10"/><path d="M3.5 14.5h17"/>
+        </svg>
+        <span class="nav-label">Statistikk</span>
       </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="scenarios" data-nav-modes="scenario" hidden>
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -202,41 +210,6 @@
           <h3>Merittliste</h3>
           <ul id="tournamentHistoryList"></ul>
         </div>
-      </section>
-
-      <section id="leagueClubCard" class="panel league-club-card" aria-label="Klubbkort for ligaspill" aria-live="polite" hidden>
-        <div class="league-club-card-head">
-          <div>
-            <p class="eyebrow">Klubben din</p>
-            <h2 id="leagueClubName">Klubben</h2>
-            <p id="leagueClubManager" class="muted-text">Manager</p>
-          </div>
-          <span id="leagueClubStatus" class="league-club-status">Før sesong</span>
-        </div>
-        <div class="league-club-card-grid" aria-label="Klubbstatus">
-          <article><span>Liga og sesong</span><strong id="leagueClubCompetition">HG Liga · Sesong 1</strong></article>
-          <article><span>Tabell</span><strong id="leagueClubStanding">Sesongen er ikke startet</strong></article>
-          <article><span>Styrets mål</span><strong id="leagueClubBoardGoal">Bygg klubben</strong></article>
-          <article><span>Neste managergrep</span><strong id="leagueClubNextAction">Gjør laget kampklart</strong></article>
-        </div>
-      </section>
-
-      <section id="gameModeStatusCard" class="panel mode-status-card" hidden>
-        <div>
-          <p class="eyebrow">Spillmodus</p>
-          <h2 id="gameModeStatusTitle">Ligaspill</h2>
-          <p id="gameModeStatusText" class="muted-text">Du spiller vanlig ligaspill. Scenarioer er valgfrie.</p>
-        </div>
-        <div class="mode-status-meta" aria-label="Ligaspill-status">
-          <span id="leagueStatusWeek">Uke 1</span>
-          <span id="leagueStatusNextMatch">Neste kamp: låst</span>
-          <span id="leagueStatusSquad">Tropp: 0/15</span>
-          <span id="leagueStatusLineup">Startellever: 0/11</span>
-          <span id="leagueStatusBench">Benk: 0/4</span>
-          <span id="leagueStatusTraining">Trening: mangler</span>
-          <span id="leagueStatusInbox">Assistentråd: lest</span>
-        </div>
-        <button id="changeGameModeButton" type="button" class="shortcut-button">Bytt modus</button>
       </section>
 
       <section class="manager-portal" aria-label="Managerkontor">
@@ -350,31 +323,14 @@
 
         <!-- Mini Season v1 / League Loop v1: 5-kampers prøveperiode (kamprekke,
              poeng, form, light-league-tabell, styrevurdering) oppå Club Week og Kampdag. -->
-        <section class="panel mini-season-panel dashboard-deep-panel" aria-label="Prøveperiode" aria-live="polite" hidden>
-          <div class="mini-season-head">
-            <div>
-              <p class="eyebrow">Prøveperiode</p>
-              <h2>5 kamper for styret</h2>
-              <p id="miniSeasonStatus" class="muted-text">Laster prøveperiode…</p>
-            </div>
-            <div class="mini-season-actions">
-              <button type="button" id="startMiniSeasonButton">Start prøveperiode</button>
-              <button type="button" id="resetMiniSeasonButton" class="is-reset" hidden>Nullstill prøveperiode</button>
-            </div>
-          </div>
-          <div id="miniSeasonOverview" class="mini-season-overview"></div>
-        </section>
       </div>
 
       <!-- Kontor: dype paneler bak popup-er i stedet for en vegg av kort. -->
       <div class="popup-actions kontor-deep-actions" aria-label="Mer fra klubben">
-        <button type="button" data-modal-open="modalLeagueTable">Tabell &amp; terminliste</button>
         <button type="button" class="kontor-deep-decisions" data-modal-open="modalDecisions">Flere beslutninger</button>
         <button type="button" data-modal-open="modalClubEvents">Klubbhendelser</button>
         <button type="button" data-modal-open="modalRooms">Gå til rom</button>
       </div>
-
-      <!-- ===== POPUP: TABELL & TERMINLISTE ===== -->
 
       <!-- ===== POPUP: FLERE ÅPNE BESLUTNINGER ===== -->
 
@@ -619,6 +575,74 @@
         <button type="button" data-modal-open="modalBadgeEffects">Badge-effekter</button>
       </div>
 
+    </div>
+
+
+    <!-- ============================ STATISTIKK ============================ -->
+    <!-- Tallene som forteller hvordan sesongen faktisk går: tabellen, terminlista
+         og hvem som leverer. De lå spredt i en popup på Kontor og som et kort i
+         dashbordet — altså ikke der du ville lett etter dem. -->
+    <div class="tab-section statistikk-view" data-tab-section="statistikk" hidden>
+      <section class="panel" aria-label="Sesongsammendrag" aria-live="polite">
+        <p class="eyebrow">Sesongen</p>
+        <h2>Statistikk</h2>
+        <p id="statsSummary" class="muted-text">Ingen kamper spilt ennå.</p>
+        <div class="stats-highlight-grid">
+          <article><span>Kamper</span><strong id="statsMatches">0</strong></article>
+          <article><span>Mål</span><strong id="statsGoals">0</strong></article>
+          <article><span>Målgivende</span><strong id="statsAssists">0</strong></article>
+          <article><span>Toppscorer</span><strong id="statsTopScorer">–</strong></article>
+          <article><span>Plassering</span><strong id="statsStanding">Ikke startet</strong></article>
+        </div>
+        <!-- Styrets forventning er en setning, ikke et tall. Den sto som en
+             målerboks og sprengte raden med brødtekst. -->
+        <p class="stats-board-goal muted-text"><strong>Styret venter:</strong> <span id="statsBoardGoal">Bygg klubben</span></p>
+      </section>
+
+      <section class="panel" aria-label="Spillerstatistikk" aria-live="polite">
+        <div class="panel-heading-row">
+          <div>
+            <p class="eyebrow">Spillerne</p>
+            <h3>Mål, målgivende og kamper</h3>
+          </div>
+          <div class="stats-sort" role="group" aria-label="Sorter spillerstatistikk">
+            <button type="button" class="stats-sort-button is-active" data-stats-sort="goals">Mål</button>
+            <button type="button" class="stats-sort-button" data-stats-sort="assists">Målgivende</button>
+            <button type="button" class="stats-sort-button" data-stats-sort="points">Poeng</button>
+          </div>
+        </div>
+        <p class="muted-text">Hvem som scorer avhenger av posisjonen, rollen og hvor godt spilleren passer der – ikke av <em>overall</em>. Setter du en midtstopper på topp, havner han på lista.</p>
+        <div id="playerStatsTable" class="player-stats-table"></div>
+      </section>
+
+      <section class="panel league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
+        <div class="mini-season-head">
+          <div>
+            <p class="eyebrow">Ligasesong</p>
+            <h2>Neste kamp · Terminliste og tabell</h2>
+            <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
+          </div>
+          <div class="mini-season-actions">
+            <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
+          </div>
+        </div>
+        <div id="leagueSeasonOverview" class="mini-season-overview"></div>
+      </section>
+
+      <section class="panel mini-season-panel" aria-label="Prøveperiode" aria-live="polite" hidden>
+        <div class="mini-season-head">
+          <div>
+            <p class="eyebrow">Prøveperiode</p>
+            <h2>5 kamper for styret</h2>
+            <p id="miniSeasonStatus" class="muted-text">Laster prøveperiode…</p>
+          </div>
+          <div class="mini-season-actions">
+            <button type="button" id="startMiniSeasonButton">Start prøveperiode</button>
+            <button type="button" id="resetMiniSeasonButton" class="is-reset" hidden>Nullstill prøveperiode</button>
+          </div>
+        </div>
+        <div id="miniSeasonOverview" class="mini-season-overview"></div>
+      </section>
     </div>
 
     <!-- ============================ TRENING & KUNNSKAP ============================ -->
@@ -977,27 +1001,6 @@
        unna at en forelder er `display: none`. Innstillinger åpnes fra toppen på
        hver eneste skjerm, og troppevalget åpnes fra Lag – begge lå inne i andre
        seksjoner og kunne derfor ikke tegnes. -->
-  <div class="modal-overlay" id="modalLeagueTable" role="dialog" aria-modal="true" aria-label="Tabell og terminliste" hidden>
-          <div class="modal">
-            <div class="modal-head">
-              <div><p class="eyebrow">Ligasesong</p><h3>Terminliste og tabell</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <section class="panel league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
-              <div class="mini-season-head">
-                <div>
-                  <p class="eyebrow">Ligasesong</p>
-                  <h2>Neste kamp · Terminliste og tabell</h2>
-                  <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
-                </div>
-                <div class="mini-season-actions">
-                  <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
-                </div>
-              </div>
-              <div id="leagueSeasonOverview" class="mini-season-overview"></div>
-            </section>
-          </div>
-        </div>
   <div class="modal-overlay" id="modalDecisions" role="dialog" aria-modal="true" aria-label="Flere åpne beslutninger" hidden>
           <div class="modal">
             <div class="modal-head">
