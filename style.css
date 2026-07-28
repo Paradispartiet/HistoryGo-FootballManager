@@ -8137,13 +8137,13 @@ body { grid-template-columns: minmax(0, 1fr); }
 
 /* Eksplisitt radplassering i app-rammen. Popupene er `position: fixed` og
    deltar ikke i gridet; alt annet har sin faste rad, uansett hva som er skjult.
-   Merk `nav.main-nav` og `nav.kontor-subnav` hver for seg: en generisk
-   `body > nav` ga kontorets underfanestripe samme rad som hovedmenyen, og
-   stripa ble tegnet OPPÅ den. Skjermområdet forsvant i samme slengen. */
+   Merk `nav.main-nav` og `nav.app-subnav` hver for seg: en generisk
+   `body > nav` ga underfanestripa samme rad som hovedmenyen, og stripa ble
+   tegnet OPPÅ den. Skjermområdet forsvant i samme slengen. */
 body > .site-header { grid-row: 1; }
 body > nav.main-nav { grid-row: 2; }
 body > .secondary-mode-bar { grid-row: 3; }
-body > nav.kontor-subnav { grid-row: 4; }
+body > nav.app-subnav { grid-row: 4; }
 body > .app-shell { grid-row: 5; }
 body > .site-footer { grid-row: 6; }
 
@@ -8857,9 +8857,9 @@ body > .site-footer { grid-row: 6; }
 }
 
 /* ============================================================================
-   KONTORETS UNDERFANER — kontoret er åtte flater, ikke én lang side
+   UNDERFANER — én stripe for alle hovedfaner med underinndeling
    ========================================================================== */
-.kontor-subnav {
+.app-subnav {
   display: flex;
   gap: 0.4rem;
   overflow-x: auto;
@@ -8869,9 +8869,9 @@ body > .site-footer { grid-row: 6; }
   flex: 0 0 auto;
 }
 
-.kontor-subnav::-webkit-scrollbar { display: none; }
+.app-subnav::-webkit-scrollbar { display: none; }
 
-.kontor-subtab {
+.app-subtab {
   flex: 0 0 auto;
   padding: 0.4rem 0.8rem;
   border: 1px solid transparent;
@@ -8885,15 +8885,15 @@ body > .site-footer { grid-row: 6; }
   cursor: pointer;
 }
 
-.kontor-subtab:hover:not(:disabled) { color: #fff; background: rgba(255, 255, 255, 0.06); }
+.app-subtab:hover:not(:disabled) { color: #fff; background: rgba(255, 255, 255, 0.06); }
 
-.kontor-subtab.is-active {
+.app-subtab.is-active {
   color: #fff;
   border-color: var(--line, rgba(255, 255, 255, 0.5));
   background: rgba(255, 255, 255, 0.08);
 }
 
-.kontor-subtab:disabled { opacity: 0.4; cursor: not-allowed; }
+.app-subtab:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ============================================================================
    KLUBBUTVIKLING — kjeden fra sted til lagklasse

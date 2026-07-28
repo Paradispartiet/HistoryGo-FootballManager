@@ -167,7 +167,11 @@ The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse
 
 Each nav tab carries `data-nav-modes` (which modes show it) and optionally `data-nav-section-modes` (which modes may have the surface open at all); `applyModeScopedNav()` in `renderModeIsolation` enforces both. See `docs/meny.md`; guarded by `audit:dead-ends` stage 17.
 
-Kontor is **not one page**: it has a sub-tab strip (`#kontorSubnav`, `renderKontorSubtabs()`) covering *Oversikt · Assistentråd · Speiding · Klubbutvikling · Stab & drift · Fasiliteter · Klubbrom · Styret*. Each is a real section with `data-tab-parent="dashboard"`; the strip only shows while an office surface is open. The old department card grid is gone — don't re-add it. **Klubbutvikling** is the History Go chain (Sted → Person → Ekspertise → Utviklingsprogram → Badge → Lagklasse) shown as the chain it is; note that HG badge progressions are called **utviklingsprogrammer**, never "treningsprogrammer", so *trening* means exactly one thing in the UI.
+Two primary tabs are split into sub-tabs, sharing **one** strip (`#appSubnav`, `renderSubtabs()`): each button carries `data-subnav-parent` naming its primary tab, and only that group is shown. Adding sub-tabs to another tab is markup only — never add a second strip, since each strip needs its own body-grid row (see below).
+
+**Taktikk** is split into *Oppstilling · Tropp & benk · Systemet* — the board is where you work; the squad and the system panel are lookups you go to, not things that lengthen the pitch page.
+
+Kontor is **not one page**: it covers *Oversikt · Assistentråd · Speiding · Klubbutvikling · Stab & drift · Fasiliteter · Klubbrom · Styret*. Each is a real section with `data-tab-parent="dashboard"`; the strip only shows when the active surface's parent actually has sub-tabs. The old department card grid is gone — don't re-add it. **Klubbutvikling** is the History Go chain (Sted → Person → Ekspertise → Utviklingsprogram → Badge → Lagklasse) shown as the chain it is; note that HG badge progressions are called **utviklingsprogrammer**, never "treningsprogrammer", so *trening* means exactly one thing in the UI.
 
 `body` is a grid with **explicitly assigned rows** — one per frame part (header, main nav, mode bar, office sub-nav, screen area, footer). A selector that matches two frame parts (a bare `body > nav`) silently stacks them and collapses the screen area. Guarded by `audit:dead-ends` stage 16.
 

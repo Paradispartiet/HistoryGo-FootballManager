@@ -51,7 +51,7 @@ function navTabButtons() {
     // Kontorets underfaner er også navigasjon, og skal derfor følge de samme
     // reglene: en «Senere»-flate må være deaktivert, og ingen etikett skal peke
     // to steder. Uten dette var stripa et blindsonefelt for hele vakten.
-    const isSubtab = /\bkontor-subtab\b/.test(openTag);
+    const isSubtab = /\bapp-subtab\b/.test(openTag);
     if (!isNavTab && !isDepartment && !isSubtab) continue;
     buttons.push({
       target: m[1],
@@ -548,7 +548,7 @@ stage("16. App-rammen kan ikke kollapse");
     ["body > .site-header", 1],
     ["body > nav.main-nav", 2],
     ["body > .secondary-mode-bar", 3],
-    ["body > nav.kontor-subnav", 4],
+    ["body > nav.app-subnav", 4],
     ["body > .app-shell", 5],
     ["body > .site-footer", 6]
   ];
@@ -580,7 +580,7 @@ stage("16. App-rammen kan ikke kollapse");
   // Hvert <nav> i rammen må faktisk ha fått en rad tildelt.
   const bodyNavClasses = [...html.matchAll(/<nav class="([^"]+)"/g)]
     .map((m) => m[1].split(/\s+/)[0])
-    .filter((cls) => cls === "main-nav" || cls === "kontor-subnav");
+    .filter((cls) => cls === "main-nav" || cls === "app-subnav");
   check(
     "hver meny i rammen har sin egen eksplisitte rad",
     bodyNavClasses.every((cls) => css.includes(`body > nav.${cls} {`)),
@@ -673,13 +673,27 @@ stage("17. Menyen lyver ikke");
   // i stedet for i en vegg av kort. Vakten måler intensjonen — at hver
   // kontorflate er direkte tilgjengelig fra Kontor — ikke hvilken widget som
   // brukes til å komme dit.
-  const subtabs = [...html.matchAll(/<button\b[^>]*\bclass="[^"]*kontor-subtab[^"]*"[^>]*\bdata-tab-target="([^"]+)"/g)].map((m) => m[1]);
+  const subtabs = [...html.matchAll(/<button\b[^>]*\bclass="[^"]*app-subtab[^"]*"[^>]*\bdata-tab-target="([^"]+)"/g)].map((m) => m[1]);
   const officeTargets = new Set([...subtabs, ...departments.map((b) => b.target)]);
   for (const target of ["dashboard", "historygo", "progression", "admin", "inbox", "market", "board", "facilities"]) {
     check(`Kontorflaten ${target} er en underfane på Kontor`, officeTargets.has(target));
   }
-  check("underfanestripa finnes", /id="kontorSubnav"/.test(html) && /function renderKontorSubtabs\(/.test(app));
-  check("stripa vises bare på kontorflater", /subnav\.hidden = !onOffice/.test(app));
+  // Taktikk er delt på samme måte: tavla, troppen og systemet.
+  for (const target of ["tactics", "squad", "system"]) {
+    check(`Taktikkflaten ${target} er en underfane på Taktikk`, officeTargets.has(target));
+  }
+  check("underfanestripa finnes", /id="appSubnav"/.test(html) && /function renderSubtabs\(/.test(app));
+  check("stripa vises bare når flata faktisk har underfaner", /subnav\.hidden = group\.length === 0/.test(app));
+  // Én stripe for hele appen. En stripe til ville krevd en rad til i
+  // body-gridet — nøyaktig fella som alt har kostet oss én gang.
+  check(
+    "det finnes bare ÉN underfanestripe",
+    (html.match(/<nav class="app-subnav"/g) || []).length === 1
+  );
+  check(
+    "hver underfane sier hvilken hovedfane den hører til",
+    subtabs.length > 0 && (html.match(/class="app-subtab[^"]*"[^>]*data-subnav-parent="/g) || []).length === subtabs.length
+  );
   check(
     "hver underfane peker på en seksjon som faktisk finnes",
     subtabs.every((target) => new RegExp(`data-tab-section="${target}"`).test(html)),
@@ -689,6 +703,12 @@ stage("17. Menyen lyver ikke");
     "hver kontorflate sier at Kontor eier den",
     ["historygo", "progression", "admin", "inbox", "market", "board", "facilities"].every(
       (target) => new RegExp(`data-tab-section="${target}"[^>]*data-tab-parent="dashboard"`).test(html)
+    )
+  );
+  check(
+    "hver taktikkflate sier at Taktikk eier den",
+    ["squad", "system"].every(
+      (target) => new RegExp(`data-tab-section="${target}"[^>]*data-tab-parent="tactics"`).test(html)
     )
   );
   check("Speiding er ikke lenger en egen hovedfane", !navTabs.some((b) => b.target === "historygo"));

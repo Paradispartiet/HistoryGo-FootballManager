@@ -150,22 +150,32 @@
       <button type="button" id="returnToLeagueButton" class="primary-action-button">Tilbake til ligaspill</button>
     </div>
   </section>
-  <!-- KONTORETS UNDERFANER. Kontoret er ikke én lang side, men åtte flater
-       med hver sin jobb. Stripa er navigasjon: hver knapp åpner seksjonen som
-       hører til, og `data-tab-parent="dashboard"` på seksjonene sørger for at
-       Kontor lyser i hovedmenyen mens du er der. -->
-  <nav class="kontor-subnav" id="kontorSubnav" aria-label="Kontorets flater" hidden>
-    <button type="button" class="kontor-subtab" data-tab-target="dashboard">Oversikt</button>
-    <button type="button" class="kontor-subtab" data-tab-target="inbox">Assistentråd</button>
-    <button type="button" class="kontor-subtab" data-tab-target="historygo">Speiding</button>
-    <button type="button" class="kontor-subtab" data-tab-target="progression">Klubbutvikling</button>
-    <button type="button" class="kontor-subtab" data-tab-target="admin">Stab &amp; drift</button>
-  <!-- Fasiliteter er ikke bygd ferdig. Underfanen er derfor deaktivert og
+  <!-- UNDERFANER. Én stripe for hele appen: hver knapp bærer
+       `data-subnav-parent` med hovedfanen den hører til, og renderSubtabs()
+       viser bare gruppa som hører til flata du står på. Én stripe (og én rad i
+       body-gridet) uansett hvor mange faner som får underinndeling.
+
+       Seksjonene på sin side bærer `data-tab-parent`, som er det som får
+       hovedfanen til å lyse mens du er inne på en underflate. -->
+  <nav class="app-subnav" id="appSubnav" aria-label="Underfaner" hidden>
+    <!-- Kontoret: åtte flater med hver sin jobb. -->
+    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="dashboard">Oversikt</button>
+    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="inbox">Assistentråd</button>
+    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="historygo">Speiding</button>
+    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="progression">Klubbutvikling</button>
+    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="admin">Stab &amp; drift</button>
+    <!-- Fasiliteter er ikke bygd ferdig. Underfanen er derfor deaktivert og
          merket «Senere», akkurat som avdelingskortet var — ellers er den en
          dør inn til en halvferdig flate. -->
-    <button type="button" class="kontor-subtab is-disabled" aria-disabled="true" disabled data-tab-target="facilities">Fasiliteter <span class="nav-future-badge">Senere</span></button>
-    <button type="button" class="kontor-subtab" data-tab-target="market">Klubbrom</button>
-    <button type="button" class="kontor-subtab" data-tab-target="board">Styret</button>
+    <button type="button" class="app-subtab is-disabled" aria-disabled="true" disabled data-subnav-parent="dashboard" data-tab-target="facilities">Fasiliteter <span class="nav-future-badge">Senere</span></button>
+    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="market">Klubbrom</button>
+    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="board">Styret</button>
+
+    <!-- Taktikk: tre flater. Tavla er der du jobber; troppen og systemet er
+         oppslag du går til, ikke ting som skal ligge og forlenge tavla. -->
+    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="tactics">Oppstilling</button>
+    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="squad">Tropp &amp; benk</button>
+    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="system">Systemet</button>
   </nav>
 
   <main class="app-shell" id="app">
@@ -416,12 +426,6 @@
           </p>
           <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
 
-          <!-- Kompakt taktisk systempanel for valgt historisk formasjon. Fylles
-               av app.js (renderTacticalSystemPanel) fra data/hgFootball. -->
-          <details class="tactic-system-details">
-            <summary>Vis mer om formasjon, roller og historisk læring</summary>
-            <div class="tactic-system" id="tacticalSystemPanel" aria-live="polite"></div>
-          </details>
         </section>
 
         <aside class="panel side-panel" id="sidePanel" aria-live="polite">
@@ -489,6 +493,12 @@
 
       <!-- Tropp og benk: 15-spillerkravet (11 i startelleveren + minst 4 på
            benken). Rendres av app.js fra availability-snapshotet. -->
+    </div>
+
+    <!-- ============================ TROPP & BENK ============================ -->
+    <!-- Lå nederst på taktikkflata og gjorde tavla til en scrollside. Troppen er
+         et oppslag du går til, ikke noe som skal forlenge banen. -->
+    <div class="tab-section office" data-tab-section="squad" data-tab-parent="tactics" hidden>
       <section id="rosterReadinessPanel" class="panel roster-readiness-panel" aria-live="polite">
         <div class="roster-readiness-head">
           <div>
@@ -513,6 +523,25 @@
         </details>
       </section>
 
+    </div>
+
+    <!-- ============================ SYSTEMET ============================ -->
+    <!-- Det taktiske systempanelet lå bak en <details> midt på tavla, så den
+         historiske læringen om formasjonen var i praksis skjult. Her er den en
+         egen flate ved siden av valget den handler om. -->
+    <div class="tab-section office" data-tab-section="system" data-tab-parent="tactics" hidden>
+      <section class="dept-hero dept-hero-system">
+        <div>
+          <p class="eyebrow">Formasjonen du har valgt</p>
+          <h2 id="systemTitle">Systemet</h2>
+          <p class="dept-hero-lede">Faser, rollekjeder og den historiske læringen bak formasjonen. Dette er oppslagsverket til valget du gjør på Oppstilling.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="tactic-system" id="tacticalSystemPanel" aria-live="polite"></div>
+        <button type="button" class="shortcut-button" data-tab-target="hgfmLibrary">Slå opp hele formasjonsbiblioteket</button>
+      </section>
     </div>
 
     <!-- ============================ KAMP ============================ -->

@@ -588,8 +588,8 @@ const elements = {
   // Svake sider (football-player-weaknesses.js).
   weaknessWorkSummary: document.querySelector("#weaknessWorkSummary"),
   weaknessList: document.querySelector("#weaknessList"),
-  // Kontorets underfaner.
-  kontorSubnav: document.querySelector("#kontorSubnav"),
+  // Appens underfanestripe (én for alle hovedfaner som har underinndeling).
+  appSubnav: document.querySelector("#appSubnav"),
   progressionBadgeCount: document.querySelector("#progressionBadgeCount"),
   weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
@@ -15640,8 +15640,8 @@ async function advanceClubWeekPhaseAction() {
 // Fotballvitenskap), vinner den.
 function highlightActiveTab() {
   // Underfanestripa må oppdateres i samme øyeblikk som en flate byttes, ikke
-  // bare ved neste renderApp() — ellers henger den igjen på forrige kontorflate.
-  renderKontorSubtabs();
+  // bare ved neste renderApp() — ellers henger den igjen på forrige flate.
+  renderSubtabs();
   const activeSection = document.querySelector("[data-tab-section]:not([hidden])");
   const target = activeSection?.dataset.tabSection;
   if (!target) return;
@@ -15661,40 +15661,47 @@ function highlightActiveTab() {
   });
 }
 
-// Kontorets underfaner. Stripa vises kun når du faktisk står på en kontorflate
-// — ellers ville den vært støy på Trening, Taktikk og Kamp. Hvilken knapp som
-// lyser settes av highlightActiveTab(), som allerede merker alle
-// [data-tab-target] etter den åpne seksjonen.
+// Underfaner. ÉN stripe for hele appen: hver knapp bærer `data-subnav-parent`
+// med hovedfanen den hører til, og her vises bare gruppa som hører til flata du
+// står på. Får en ny hovedfane underinndeling, er det bare markup — ingen ny
+// stripe, og ingen ny rad i body-gridet (den fella har alt kostet oss én gang).
 //
-// Fasiliteter er ikke bygd ennå, så den underfanen deaktiveres på samme måte
-// som kortet var det — ellers er den en dør inn til en tom flate.
-function renderKontorSubtabs() {
-  const subnav = elements.kontorSubnav;
+// Hvilken knapp som lyser settes av highlightActiveTab(), som allerede merker
+// alle [data-tab-target] etter den åpne seksjonen.
+function renderSubtabs() {
+  const subnav = elements.appSubnav;
   if (!subnav) return;
 
   const activeSection = document.querySelector("[data-tab-section]:not([hidden])");
   const target = activeSection?.dataset.tabSection;
-  const parent = activeSection?.dataset.tabParent;
-  const onOffice = target === "dashboard" || parent === "dashboard";
+  // En underflate peker på forelderen sin; en hovedflate er sin egen forelder.
+  const parent = activeSection?.dataset.tabParent || target;
+  const group = Array.from(subnav.querySelectorAll(`.app-subtab[data-subnav-parent="${parent}"]`));
+
+  subnav.hidden = group.length === 0;
+  if (subnav.hidden) return;
+
   const mode = state.modeEnvelope?.activeMode || "league";
   const leagueMode = mode === "league";
 
-  subnav.hidden = !onOffice;
-  if (!onOffice) return;
-
-  subnav.querySelectorAll(".kontor-subtab").forEach((button) => {
+  subnav.querySelectorAll(".app-subtab").forEach((button) => {
+    if (button.dataset.subnavParent !== parent) {
+      button.hidden = true;
+      return;
+    }
     const section = document.querySelector(`[data-tab-section="${button.dataset.tabTarget}"]`);
     // En underfane til en flate som ikke finnes i denne modusen skal ikke stå
-    // der og love noe. Speiding/utvikling/klubbrom/styret er ligaflater.
+    // der og love noe. Kontorets speidings-/utviklingsflater er ligaflater.
     const sectionModes = String(section?.dataset.navSectionModes || "").split(/\s+/).filter(Boolean);
     const allowed = sectionModes.length === 0 ? true : sectionModes.includes(mode);
-    button.hidden = !allowed || (!leagueMode && button.dataset.tabTarget !== "dashboard");
+    const officeOnlyInLeague = parent === "dashboard" && !leagueMode && button.dataset.tabTarget !== "dashboard";
+    button.hidden = !allowed || officeOnlyInLeague;
   });
 
-  // Med åtte underfaner på en telefonbredde kan den aktive ligge utenfor
+  // Med mange underfaner på en telefonbredde kan den aktive ligge utenfor
   // synsfeltet — da ser stripa ut som om ingenting er valgt. `inline: nearest`
   // ruller bare stripa vannrett, aldri siden.
-  const active = subnav.querySelector(`.kontor-subtab[data-tab-target="${target}"]`);
+  const active = subnav.querySelector(`.app-subtab[data-tab-target="${target}"]`);
   if (active && !active.hidden) {
     active.scrollIntoView({ block: "nearest", inline: "nearest" });
   }

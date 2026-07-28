@@ -32,8 +32,7 @@ Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk
 - **Kontor** — der du sitter. Ikke én lang side, men **åtte flater i
   underfaner** (se under).
 - **Trening** — ukas treningsprogram og fotballkunnskapen som hører til laget.
-- **Taktikk** — formasjon, kampplan, brikker, roller, benk. Formasjons­biblioteket
-  er et oppslagsverk du åpner herfra.
+- **Taktikk** — tavla, troppen og systemet, i **tre underfaner** (se under).
 - **Kamp** — kampdagen: brief, grep, klokke, live stilling.
 - **Analyse** — ettertanken: kamprapporten, rollebytter å vurdere, svake punkter,
   og inngangen til den dype rapporten.
@@ -43,6 +42,16 @@ Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk
 **Speiding** ligger på Kontor, ikke som egen fane — det er jo det du gjør fra
 kontoret. Det samme gjelder **Stab**. Nedtrekksmenyen som duplikerte navnene er
 borte.
+
+## Underfaner: én stripe, flere hovedfaner
+
+To hovedfaner er delt opp. Stripa ligger rett under hovedmenyen og er **den
+samme** for begge — hver knapp bærer `data-subnav-parent` med hovedfanen den
+hører til, og `renderSubtabs()` viser bare gruppa som hører til flata du står
+på. Får en ny hovedfane underinndeling senere, er det bare markup.
+
+Én stripe er ikke en detalj: hver stripe ville krevd sin egen rad i
+body-gridet, og nettopp den fella har alt kostet oss én gang (se under).
 
 ## Kontor har underfaner
 
@@ -74,11 +83,33 @@ apparatet → anlegg → kommersielt → eierne.*
 Stripa vises **bare** når du står på en kontorflate. Kortveggen er borte —
 underfanene gjør den jobben bedre, og med ett trykk i stedet for to.
 
+## Taktikk har underfaner
+
+Taktikkflata var tavla *pluss* hele troppen *pluss* systempanelet, under
+hverandre. Systempanelet lå til og med bak en `<details>` midt på siden, så den
+historiske læringen om formasjonen var i praksis skjult.
+
+```
+Oppstilling · Tropp & benk · Systemet
+```
+
+| Underfane | Jobb |
+|---|---|
+| **Oppstilling** | tavla: kampklar-gate, formasjon, kampplan, brikker og den valgte plassen |
+| **Tropp & benk** | squad wall — benk, reserver og hele troppen |
+| **Systemet** | faser, rollekjeder og historisk læring for formasjonen du har valgt, med vei videre til formasjonsbiblioteket |
+
+Tavla er der du jobber. Troppen og systemet er oppslag du *går til* — de skal
+ikke ligge og forlenge banen.
+
 ### En felle i app-rammen, nå vaktet
 
 `body` er et grid med **eksplisitt tildelte rader**. Underfanestripa er et
 `<nav>`, og regelen som ga hovedmenyen rad 2 var en bar `body > nav` — så stripa
 arvet samme rad og ble tegnet oppå hovedmenyen. Skjermområdet forsvant.
+
+Det er også grunnen til at det er **én** stripe og ikke én per hovedfane:
+vakten krever nå eksplisitt at det bare finnes én `nav.app-subnav`.
 
 Det er andre gang samme felle slår til (første gang flyttet en skjult modus-linje
 alle radene). `audit:dead-ends` steg 16 krever nå at antall rader stemmer med
