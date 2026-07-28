@@ -1,0 +1,93 @@
+{
+  "schema": "historygo-football-manager.individual-training.v1",
+  "version": 1,
+  "note": "Individuell trening er managerens arbeid med ÉN spiller ved siden av lagsøkta. Ingen av sporene hever `overall` — de bygger fortrolighet i en rolle, henter inn belastning, skjerper formen eller trener en skadet mann tilbake. Data er kilden: verken app.js eller index.html skal hardkode et spor.",
+  "capacity": {
+    "base": 1,
+    "perStaffMember": 1,
+    "max": 5,
+    "note": "Du kan følge opp én spiller alene. Hver relevant trener i staben gir én plass til, opp til fem. Kapasiteten er derfor et argument for å bygge stab — ikke en lås som gjør flata uspillbar."
+  },
+  "tracks": [
+    {
+      "id": "role_drills",
+      "name": "Rolletrening",
+      "shortDescription": "Spilleren jobber med én bestemt rolle: ansvar, posisjoner og valg.",
+      "managerNote": "Dette gjør ikke spilleren bedre. Det gjør at han forstår rollen du vil bruke ham i.",
+      "requires": "role",
+      "familiarityGrowth": 7,
+      "loadDelta": 3,
+      "formDelta": 0,
+      "rehabWeeks": 0,
+      "relatedStaffTypes": [
+        "assistant_coach",
+        "tactical_coach",
+        "technical_coach",
+        "first_team_coach",
+        "coach",
+        "training_coach"
+      ],
+      "effectText": "Bygger rollefortrolighet uten at spilleren må spille kampen først.",
+      "riskText": "Koster litt beinarbeid, og fortroligheten forvitrer igjen hvis du aldri bruker ham der."
+    },
+    {
+      "id": "recovery",
+      "name": "Egen restitusjon",
+      "shortDescription": "Spilleren tas ut av full lagsøkt og kjører eget restitusjonsopplegg.",
+      "managerNote": "En sliten spiller er ikke en dårlig spiller. Han er en spiller du har brukt for hardt.",
+      "requires": "none",
+      "familiarityGrowth": 0,
+      "loadDelta": -12,
+      "formDelta": 0,
+      "rehabWeeks": 0,
+      "relatedStaffTypes": [
+        "fitness_coach",
+        "physical_coach",
+        "physio",
+        "doctor",
+        "training_coach"
+      ],
+      "effectText": "Henter inn merkbart mer belastning enn en vanlig treningsuke.",
+      "riskText": "Han er borte fra lagsøkta — uka gir ham ingen taktisk læring."
+    },
+    {
+      "id": "sharpness",
+      "name": "Skarphet",
+      "shortDescription": "Ekstra avslutnings- og tempoarbeid for å få formen tilbake.",
+      "managerNote": "Form er ferskvare og alltid midlertidig. Den sier ingenting om spillerens klasse.",
+      "requires": "none",
+      "familiarityGrowth": 0,
+      "loadDelta": 5,
+      "formDelta": 0.5,
+      "rehabWeeks": 0,
+      "relatedStaffTypes": [
+        "technical_coach",
+        "first_team_coach",
+        "coach",
+        "training_coach",
+        "fitness_coach"
+      ],
+      "effectText": "Løfter formen litt inn mot neste kamp.",
+      "riskText": "Den hardeste økta i uka. På en sliten mann er det å be om en skade."
+    },
+    {
+      "id": "rehab",
+      "name": "Opptrening",
+      "shortDescription": "Styrt opptrening for en skadet spiller.",
+      "managerNote": "Skaden kom av hvordan han ble brukt. Opptreningen er ditt ansvar, ikke hans.",
+      "requires": "injured",
+      "familiarityGrowth": 0,
+      "loadDelta": -6,
+      "formDelta": 0,
+      "rehabWeeks": 1,
+      "relatedStaffTypes": [
+        "physio",
+        "doctor",
+        "fitness_coach",
+        "physical_coach"
+      ],
+      "effectText": "Korter ned skaden med én uke ekstra.",
+      "riskText": "Bruker en av plassene dine på en spiller som uansett ikke kan spille denne uka."
+    }
+  ]
+}

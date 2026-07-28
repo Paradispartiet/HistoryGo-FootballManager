@@ -70,6 +70,7 @@ import {
   isInjured,
   playersNeedingRest,
   applySummerBreak,
+  applyIndividualTrainingEffects,
   summarizeSquadCondition
 } from "./football-player-condition.js";
 import {
@@ -110,8 +111,7 @@ import {
   calculateTrainingStaffSupport,
   recommendTrainingFocus,
   createTrainingMatchdaySnapshot,
-  buildTrainingFocusOffPitchEvent,
-  getTrainingFocusFatigue
+  buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
@@ -125,10 +125,30 @@ import {
   recordMatchRoleUsage,
   summarizeLineupFamiliarity,
   describeRoleFamiliarity,
-  getRoleFamiliarity
+  getRoleFamiliarity,
+  applyTrainingRoleGrowth
 } from "./football-role-familiarity-engine.js";
 import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";
-import { createTrainingProgramCompositions } from "./football-training-program-compositions.js";
+import {
+  createTrainingProgramCompositions,
+  getTrainingProgramCompositionById
+} from "./football-training-program-compositions.js";
+// Ukens plan: den ene modellen som binder ramme, tema og enkeltspiller sammen.
+import {
+  createWeeklyTrainingPlan,
+  calculateWeeklyTrainingIntensity,
+  evaluateProgramFocusCoherence,
+  describeWeeklyLoad
+} from "./football-training-plan.js";
+import {
+  normalizeIndividualTrainingCatalogue,
+  getIndividualTrack,
+  calculateIndividualCapacity,
+  sanitizeIndividualAssignments,
+  evaluateIndividualAssignment,
+  resolveIndividualTrainingWeek,
+  summarizeIndividualTraining
+} from "./football-individual-training.js";
 import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";
 import {
   createDefaultOffPitchState,
@@ -233,6 +253,9 @@ const DATA_PATHS = {
   staff: "data/football_staff.json",
   expertise: "data/football_expertise.json",
   trainingPrograms: "data/football_training_programs.json",
+  // Individuell trening: sporene en enkeltspiller kan settes på ved siden av
+  // lagsøkta. Ingen av dem hever `overall` — se docs/trening.md.
+  individualTraining: "data/football_individual_training.json",
   trainingBadges: "data/football_training_badges.json",
   teamClassifications: "data/football_team_classifications.json",
   // Stedsrapporter (v1): forklarer hva hvert sportsted gir manageren. Rent
@@ -263,6 +286,8 @@ const WEEKLY_TRAINING_FOCUS_KEY = "hgfm.weeklyTrainingFocus.v1";
 // Ukens valgte treningsprogram (komposisjon). Holdes adskilt fra treningsfokus
 // og HG-badge-programmer. Kun UI/progresjon + engangs off-pitch-effekt per uke.
 const WEEKLY_TRAINING_PROGRAM_KEY = "hgfm.weeklyTrainingProgram.v1";
+// Ukas individuelle oppfølging: { week, assignments: [{playerId, trackId, roleId}] }.
+const INDIVIDUAL_TRAINING_KEY = "hgfm.individualTraining.v1";
 const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
 const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
 const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
@@ -376,6 +401,10 @@ const state = {
   // Ukens valgte treningsprogram (komposisjon). { programId, week, applied }.
   // Adskilt fra treningsfokus; brukes til valgt-tilstand og engangs off-pitch-effekt.
   weeklyTrainingProgram: null,
+  // Katalogen over individuelle treningsspor (fra datafil, normalisert).
+  individualTrainingCatalogue: { capacity: { base: 1, perStaffMember: 1, max: 5 }, tracks: [] },
+  // Ukas individuelle oppfølging: { week, assignments: [] }.
+  individualTraining: { week: null, assignments: [] },
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
@@ -527,8 +556,18 @@ const elements = {
   trainingChoiceSignal: document.querySelector("#trainingChoiceSignal"),
   trainingChoiceRecommended: document.querySelector("#trainingChoiceRecommended"),
   trainingChoiceRisk: document.querySelector("#trainingChoiceRisk"),
-  trainingChoiceSelectedSummary: document.querySelector("#trainingChoiceSelectedSummary"),
   trainingGoMatch: document.querySelector("#trainingGoMatch"),
+  // Ukens plan (football-training-plan.js): fire steg i fast rekkefølge.
+  trainingPlanHeadline: document.querySelector("#trainingPlanHeadline"),
+  trainingPlanCoherence: document.querySelector("#trainingPlanCoherence"),
+  trainingPlanLoad: document.querySelector("#trainingPlanLoad"),
+  trainingPlanSteps: document.querySelector("#trainingPlanSteps"),
+  trainingPlanNext: document.querySelector("#trainingPlanNext"),
+  trainingProgramLoadValue: document.querySelector("#trainingProgramLoadValue"),
+  // Individuell trening (football-individual-training.js).
+  individualTrainingCapacity: document.querySelector("#individualTrainingCapacity"),
+  individualTrainingAssignments: document.querySelector("#individualTrainingAssignments"),
+  individualTrainingPicker: document.querySelector("#individualTrainingPicker"),
   weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
   weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
@@ -3722,13 +3761,23 @@ function registerMatchInPlayerCondition(lastMatch) {
 // Den gamle koden lette etter `fatigueLoad`/`intensity` på fokus-objektet —
 // felter som ikke finnes — og falt alltid tilbake til nøytralt. Treningsvalget
 // gjorde altså ingenting for restitusjonen.
+// Uka gjøres opp i den rekkefølgen den faktisk skjer:
+//
+//   1. LAGET hviler — hvor mye avgjøres av ukas RAMME (treningsprogrammet), med
+//      fokuset som modulering. Tidligere leste denne kun fokuset, mens
+//      programmets egne `fatigueLoad`-tall (6–19 for en hel uke) lå ubrukt. Ukas
+//      faktiske arbeidsmengde var altså mekanisk uten virkning — samme klasse
+//      feil som resten av skalafeilene i CLAUDE.md.
+//   2. ENKELTSPILLERNE følges opp — egen restitusjon legger seg OPPÅ lagets
+//      hvile, rolletrening bygger fortrolighet, opptrening korter ned skader.
 function applyWeeklyPlayerRecovery() {
-  const focusId = state.weeklyTrainingFocus?.focusId || null;
-  const fatigue = focusId ? getTrainingFocusFatigue(focusId) : 0;
-  // −4 → 0.7 (henter mye), 0 → 1, +6 → 1.45 (henter lite).
-  const trainingIntensity = Math.max(0.6, Math.min(1.5, 1 + fatigue * 0.075));
+  const trainingIntensity = calculateWeeklyTrainingIntensity({
+    program: getSelectedTrainingProgramComposition(),
+    focusId: state.weeklyTrainingFocus?.focusId || null
+  });
   state.playerCondition = applyWeeklyRecovery(getPlayerCondition(), { trainingIntensity });
   savePlayerCondition();
+  applyIndividualTrainingWeek();
 }
 
 // Snittet av startelleverens slitasje, som en liten lagstyrke-penalty.
@@ -3937,7 +3986,13 @@ function playMatchday() {
     // (proaktiv kontekst). Null hvis motstander/kunnskap mangler.
     formationMatchup: getFormationMatchupVsOpponent(opponent),
     // Reaktiv kontekst: å trene det forrige kamp avslørte som svakest belønnes òg.
-    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null
+    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
+    // Samsvar mellom ukas ramme og ukas tema: lå fokuset inne i treningsprogrammet
+    // (+1), eller trente laget én ting mens kampplanen krevde en annen (−1)?
+    coherenceBonus: evaluateProgramFocusCoherence(
+      getSelectedTrainingProgramComposition(),
+      state.weeklyTrainingFocus?.focusId || null
+    ).metricBonusDelta
   });
 
   state.matchday.session = createMatchdaySession({
@@ -10490,16 +10545,270 @@ function trainingChoiceRiskFromProgram(program) {
   return "Middels";
 }
 
-function getSelectedTrainingLabel(programs = []) {
-  const selectedProgram = programs.find((program) => program.id === state.weeklyTrainingProgram?.programId) || null;
-  if (selectedProgram) return selectedProgram.title;
-  const focus = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
-  return focus?.name || null;
+function getRoleById(roleId) {
+  return (Array.isArray(state.roles) ? state.roles : []).find((role) => role?.id === roleId) || null;
 }
 
-function renderTrainingChoiceGate({ recommendation, programs, selectedProgram }) {
-  if (!elements.trainingChoiceGate) return;
-  const selectedLabel = getSelectedTrainingLabel(programs);
+// ---------------------------------------------------------------------------
+// Individuell trening: steg 4 i uka
+//
+// Lagsøkta treffer alle elleve likt. Her gjør manageren noe med ÉN spiller.
+// Ingen av sporene rører `overall` — de bygger rollefortrolighet, henter inn
+// belastning, skjerper form eller trener en skadet mann tilbake. Motoren ligger
+// i football-individual-training.js; app.js eier lagring og flate.
+// ---------------------------------------------------------------------------
+
+// Hvilke roller det gir mening å trene for denne spilleren: den han skal spille
+// på lørdag først, så rollene han allerede foretrekker. Listen er aldri tom for
+// en spiller med data — å tilby rolletrening uten en eneste rolle ville vært en
+// blindvei.
+function getIndividualRoleCandidates(player, plannedRoleId) {
+  const ids = [plannedRoleId, ...(Array.isArray(player?.preferredRoles) ? player.preferredRoles : [])].filter(Boolean);
+  const roles = [...new Set(ids)].map((id) => getRoleById(id)).filter(Boolean);
+  return roles.length > 0 ? roles : (Array.isArray(state.roles) ? state.roles.slice(0, 6) : []);
+}
+
+// Kapasiteten er 1 + relevant stab (maks 5). Alltid minst én plass, ellers
+// ville flata vært en blindvei for en manager uten stab.
+function getIndividualTrainingCapacity() {
+  const categories = (getCoachContext()?.activeStaff || [])
+    .map((member) => member?.category)
+    .filter(Boolean);
+  return calculateIndividualCapacity(state.individualTrainingCatalogue, { staffCategories: categories });
+}
+
+// Ukas tildelinger. Ruller automatisk når Club Week bytter uke — individuell
+// oppfølging er en ukesbeslutning, ikke en permanent innstilling.
+function getIndividualAssignments() {
+  const week = Number(state.clubWeekState?.week) || 1;
+  if (Number(state.individualTraining?.week) !== week) return [];
+  return Array.isArray(state.individualTraining?.assignments) ? state.individualTraining.assignments : [];
+}
+
+function loadIndividualTraining() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(INDIVIDUAL_TRAINING_KEY) || "null");
+    if (!raw || typeof raw !== "object") return { week: null, assignments: [] };
+    const sanitized = sanitizeIndividualAssignments(raw.assignments, {
+      catalogue: state.individualTrainingCatalogue,
+      capacity: 11
+    });
+    const week = Number(raw.week);
+    return { week: Number.isInteger(week) ? week : null, assignments: sanitized.assignments };
+  } catch (error) {
+    return { week: null, assignments: [] };
+  }
+}
+
+function saveIndividualTraining() {
+  if (!shouldWriteLegacyLeagueStorage()) return;
+  try {
+    localStorage.setItem(
+      INDIVIDUAL_TRAINING_KEY,
+      JSON.stringify(state.individualTraining || { week: null, assignments: [] })
+    );
+  } catch (error) {
+    // Privat modus e.l.: appen fortsetter uten persistens.
+  }
+}
+
+function setIndividualAssignment(playerId, trackId, roleId = null) {
+  const week = Number(state.clubWeekState?.week) || 1;
+  const current = getIndividualAssignments().filter((entry) => entry.playerId !== playerId);
+  const next = trackId ? [...current, { playerId, trackId, roleId }] : current;
+  const sanitized = sanitizeIndividualAssignments(next, {
+    catalogue: state.individualTrainingCatalogue,
+    capacity: getIndividualTrainingCapacity(),
+    week
+  });
+  state.individualTraining = { week, assignments: sanitized.assignments };
+  saveIndividualTraining();
+  renderApp();
+}
+
+// Hvem spiller hvilken rolle på lørdag? Å trene rollen han faktisk skal spille
+// gir full uttelling — læringen festes av repetisjonen i kamp.
+function getPlannedRoleByPlayerId() {
+  const map = {};
+  getLineupRoleUsageEntries(getTeamFit()).forEach((entry) => {
+    map[entry.playerId] = entry.roleId;
+  });
+  return map;
+}
+
+// Uka gjøres opp: belastning/form/skade til tilstandsmotoren, rollefortrolighet
+// til fortrolighetsmotoren. Kalles fra applyWeeklyPlayerRecovery, etter lagets
+// hvile — egen restitusjon skal legge seg OPPÅ den, ikke bli spist av den.
+function applyIndividualTrainingWeek() {
+  const assignments = getIndividualAssignments();
+  if (assignments.length === 0) return [];
+
+  const conditions = getPlayerCondition();
+  const conditionsById = {};
+  conditions.forEach((entry) => { conditionsById[entry.playerId] = entry; });
+  const playersById = {};
+  getUnlockedPlayers().forEach((player) => { playersById[player.id] = player; });
+
+  const resolved = resolveIndividualTrainingWeek({
+    catalogue: state.individualTrainingCatalogue,
+    assignments,
+    playersById,
+    conditionsById,
+    staffCategories: (getCoachContext()?.activeStaff || []).map((member) => member?.category).filter(Boolean),
+    playsRoleThisWeek: getPlannedRoleByPlayerId()
+  });
+
+  state.playerCondition = applyIndividualTrainingEffects(conditions, resolved);
+  savePlayerCondition();
+
+  if (state.teamMerits && resolved.familiarityGains.length > 0) {
+    state.teamMerits.roleFamiliarity = applyTrainingRoleGrowth(getRoleFamiliarityStore(), resolved.familiarityGains);
+    saveTeamMerits();
+  }
+
+  return resolved.reports;
+}
+
+function renderIndividualTraining() {
+  const capacity = getIndividualTrainingCapacity();
+  const assignments = getIndividualAssignments();
+  const catalogue = state.individualTrainingCatalogue;
+  const summary = summarizeIndividualTraining({ catalogue, assignments, capacity });
+
+  if (elements.individualTrainingCapacity) {
+    elements.individualTrainingCapacity.textContent = `${summary.headline} ${catalogue?.capacity?.note || ""}`.trim();
+    elements.individualTrainingCapacity.dataset.selected = summary.used > 0 ? "true" : "false";
+  }
+
+  const conditions = getPlayerCondition();
+  const players = getUnlockedPlayers();
+  const plannedRoles = getPlannedRoleByPlayerId();
+
+  const chosen = elements.individualTrainingAssignments;
+  if (chosen) {
+    chosen.textContent = "";
+    if (assignments.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "muted-text";
+      empty.textContent = "Ingen spillere følges opp individuelt denne uka.";
+      chosen.append(empty);
+    }
+    assignments.forEach((assignment) => {
+      const track = getIndividualTrack(catalogue, assignment.trackId);
+      const player = players.find((item) => item.id === assignment.playerId) || null;
+      if (!track) return;
+      const card = document.createElement("article");
+      card.className = "individual-training-card is-selected";
+
+      const title = document.createElement("h5");
+      title.textContent = `${player?.name || assignment.playerId} · ${track.name}`;
+      const note = document.createElement("p");
+      note.className = "muted-text";
+      const role = assignment.roleId ? getRoleById(assignment.roleId) : null;
+      note.textContent = role
+        ? `Lærer rollen ${role.name}. ${plannedRoles[assignment.playerId] === assignment.roleId ? "Han spiller den på lørdag — læringen festes." : "Han spiller den ikke denne uka, så læringen fester seg saktere."}`
+        : track.effectText;
+      const risk = document.createElement("p");
+      risk.className = "individual-training-risk";
+      risk.textContent = track.riskText;
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "individual-training-remove";
+      remove.textContent = "Avslutt oppfølging";
+      remove.addEventListener("click", () => setIndividualAssignment(assignment.playerId, null));
+
+      card.append(title, note, risk, remove);
+      chosen.append(card);
+    });
+  }
+
+  const picker = elements.individualTrainingPicker;
+  if (!picker) return;
+  picker.textContent = "";
+
+  if (assignments.length >= capacity) {
+    const full = document.createElement("p");
+    full.className = "muted-text";
+    full.textContent = "Alle plassene er brukt. Avslutt en oppfølging for å flytte den til en annen spiller — eller hent inn mer stab for å få flere plasser.";
+    picker.append(full);
+    return;
+  }
+
+  const assignedIds = new Set(assignments.map((entry) => entry.playerId));
+  // Sorter dem som trenger noe av deg først: skadde, så slitne, så resten.
+  const ranked = players
+    .filter((player) => !assignedIds.has(player.id))
+    .map((player) => ({ player, condition: conditionFor(conditions, player.id) }))
+    .sort((a, b) => {
+      const score = (entry) => (isInjured(entry.condition) ? 0 : freshnessFor(entry.condition));
+      return score(a) - score(b);
+    })
+    .slice(0, 8);
+
+  if (ranked.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Ingen ledige spillere å følge opp.";
+    picker.append(empty);
+    return;
+  }
+
+  ranked.forEach(({ player, condition }) => {
+    const card = document.createElement("article");
+    card.className = "individual-training-card";
+
+    const title = document.createElement("h5");
+    title.textContent = player.name || player.id;
+    const status = document.createElement("p");
+    status.className = "muted-text";
+    status.textContent = describeCondition(condition);
+    card.append(title, status);
+
+    // Rolletrening trenger et mål. Valget er managerens: rollen han skal spille
+    // på lørdag, eller en han skal lære til senere.
+    const roleCandidates = getIndividualRoleCandidates(player, plannedRoles[player.id] || null);
+    const roleSelect = document.createElement("select");
+    roleSelect.className = "individual-training-role";
+    roleSelect.setAttribute("aria-label", `Rolle å trene for ${player.name || player.id}`);
+    roleCandidates.forEach((role) => {
+      const option = document.createElement("option");
+      option.value = role.id;
+      option.textContent = role.id === plannedRoles[player.id] ? `${role.name} (spiller den på lørdag)` : role.name;
+      roleSelect.append(option);
+    });
+    if (roleCandidates.length > 0) card.append(roleSelect);
+
+    const options = document.createElement("div");
+    options.className = "individual-training-tracks";
+    (catalogue?.tracks || []).forEach((track) => {
+      const roleId = track.requires === "role" ? (roleSelect.value || roleCandidates[0]?.id || null) : null;
+      const check = evaluateIndividualAssignment({ track, player, condition, roleId });
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "individual-training-track";
+      button.textContent = track.name;
+      button.title = `${track.shortDescription} ${check.valid ? track.effectText : check.reason}`;
+      button.disabled = !check.valid;
+      if (check.valid) {
+        button.addEventListener("click", () => setIndividualAssignment(
+          player.id,
+          track.id,
+          track.requires === "role" ? (roleSelect.value || roleCandidates[0]?.id || null) : null
+        ));
+      }
+      options.append(button);
+    });
+    card.append(options);
+    picker.append(card);
+  });
+}
+
+// Signal/anbefaling/risiko hører hjemme der du velger RAMMEN — i
+// programpopupen. De sto tidligere på selve Trening-flata, som en fjerde boks
+// ved siden av tre andre; det var en del av grunnen til at flata leste som en
+// vegg uten rekkefølge.
+function renderTrainingProgramContext({ recommendation, programs, selectedProgram }) {
   const recommendedProgram = programs[0] || null;
   const recommendedFocus = recommendation?.focusIds?.[0] ? getTrainingFocus(recommendation.focusIds[0]) : null;
   const recommendedLabel = recommendedProgram?.title || recommendedFocus?.name || "Trygt basisfokus";
@@ -10509,20 +10818,130 @@ function renderTrainingChoiceGate({ recommendation, programs, selectedProgram })
     || summarizeOffPitchContext(getOffPitchState()).headline;
   const risk = selectedProgram ? trainingChoiceRiskFromProgram(selectedProgram) : trainingChoiceRiskFromProgram(recommendedProgram);
 
-  if (elements.trainingChoiceStatus) {
-    elements.trainingChoiceStatus.textContent = selectedLabel ? "Treningsuke valgt" : "Ikke valgt";
-    elements.trainingChoiceStatus.dataset.selected = selectedLabel ? "true" : "false";
-  }
   if (elements.trainingChoiceSignal) elements.trainingChoiceSignal.textContent = signal;
   if (elements.trainingChoiceRecommended) elements.trainingChoiceRecommended.textContent = recommendedLabel;
   if (elements.trainingChoiceRisk) elements.trainingChoiceRisk.textContent = risk;
-  if (elements.trainingChoiceSelectedSummary) {
-    elements.trainingChoiceSelectedSummary.textContent = selectedLabel
-      ? `Treningsuke valgt: ${selectedLabel}. Kort effekt/risiko: ${risk.toLowerCase()} risiko. Neste naturlige steg er Kamp.`
-      : "Velg anbefalt nå for en trygg uke, eller overstyr hvis innboks, slitasje, moral eller kampplan peker på noe annet.";
+  if (elements.trainingProgramLoadValue) {
+    const load = describeWeeklyLoad(
+      calculateWeeklyTrainingIntensity({
+        program: selectedProgram || recommendedProgram,
+        focusId: state.weeklyTrainingFocus?.focusId || null
+      })
+    );
+    elements.trainingProgramLoadValue.textContent = selectedProgram
+      ? load.label
+      : `${load.label} (hvis du velger anbefalt)`;
   }
-  if (elements.trainingGoMatch) {
-    elements.trainingGoMatch.hidden = !selectedLabel;
+}
+
+// ---------------------------------------------------------------------------
+// Ukens plan: den ene flata som gjør rekkefølgen tydelig
+// ---------------------------------------------------------------------------
+
+// Ukas valgte program som en full komposisjon. Rammen (økter, belastning,
+// relaterte fokus) er kontekstuavhengig, så et tomt kontekstobjekt holder — vi
+// bruker den kun til belastning og samsvar, ikke til poeng.
+function getSelectedTrainingProgramComposition() {
+  const programId = state.weeklyTrainingProgram?.programId;
+  if (!programId) return null;
+  return getTrainingProgramCompositionById(programId, {});
+}
+
+function getWeeklyTrainingPlan() {
+  return createWeeklyTrainingPlan({
+    week: Number(state.clubWeekState?.week) || 1,
+    inboxRead: hasAcknowledgedInboxThisWeek(),
+    program: getSelectedTrainingProgramComposition(),
+    focusId: state.weeklyTrainingFocus?.focusId || null,
+    individualSummary: summarizeIndividualTraining({
+      catalogue: state.individualTrainingCatalogue,
+      assignments: getIndividualAssignments(),
+      capacity: getIndividualTrainingCapacity()
+    }),
+    conditionSummary: null
+  });
+}
+
+function renderWeeklyTrainingPlan() {
+  if (!elements.trainingChoiceGate) return;
+  const plan = getWeeklyTrainingPlan();
+
+  if (elements.trainingPlanHeadline) elements.trainingPlanHeadline.textContent = plan.headline;
+  if (elements.trainingPlanCoherence) {
+    elements.trainingPlanCoherence.textContent = plan.coherence.note;
+    elements.trainingPlanCoherence.dataset.level = plan.coherence.level;
+  }
+  if (elements.trainingPlanLoad) {
+    elements.trainingPlanLoad.textContent = `${plan.load.label} · intensitet ${plan.intensity}`;
+    elements.trainingPlanLoad.dataset.level = plan.load.level;
+  }
+  if (elements.trainingChoiceStatus) {
+    elements.trainingChoiceStatus.textContent = plan.ready ? "Treningsuke valgt" : "Ikke valgt";
+    elements.trainingChoiceStatus.dataset.selected = plan.ready ? "true" : "false";
+  }
+  if (elements.trainingGoMatch) elements.trainingGoMatch.hidden = !plan.ready;
+
+  const list = elements.trainingPlanSteps;
+  if (list) {
+    list.textContent = "";
+    plan.steps.forEach((step) => {
+      const item = document.createElement("li");
+      item.className = "training-plan-step";
+      item.dataset.done = step.done ? "true" : "false";
+      if (step.id === plan.nextStepId) item.classList.add("is-next");
+
+      const head = document.createElement("div");
+      head.className = "training-plan-step-head";
+      const title = document.createElement("h3");
+      title.textContent = `${step.order}. ${step.title}`;
+      const status = document.createElement("span");
+      status.className = "training-plan-step-status";
+      status.textContent = step.status;
+      head.append(title, status);
+
+      const role = document.createElement("p");
+      role.className = "training-plan-step-role";
+      role.textContent = step.role;
+
+      const detail = document.createElement("p");
+      detail.className = "training-plan-step-detail";
+      detail.textContent = step.detail;
+
+      const action = document.createElement("button");
+      action.type = "button";
+      action.className = "training-plan-step-action";
+      action.textContent = step.done ? "Endre" : "Velg";
+      if (step.modal) {
+        action.dataset.modalOpen = step.modal;
+      } else {
+        action.addEventListener("click", () => activateTab(step.target));
+      }
+
+      item.append(head, role, detail, action);
+      list.append(item);
+    });
+  }
+
+  if (elements.trainingPlanNext) {
+    const next = plan.steps.find((step) => step.id === plan.nextStepId) || null;
+    elements.trainingPlanNext.hidden = false;
+    if (next) {
+      elements.trainingPlanNext.textContent = `Neste: ${next.title.toLowerCase()}`;
+      elements.trainingPlanNext.onclick = () => {
+        if (next.modal) {
+          const modal = document.getElementById(next.modal);
+          if (modal) {
+            modal.hidden = false;
+            document.body.classList.add("has-modal-open");
+          }
+        } else {
+          activateTab(next.target);
+        }
+      };
+    } else {
+      elements.trainingPlanNext.textContent = "Uka er planlagt — gå til Kamp";
+      elements.trainingPlanNext.onclick = () => activateTab("kamp");
+    }
   }
 }
 
@@ -10962,7 +11381,7 @@ function renderTrainingProgramCompositions(teamFit) {
 
   if (!Array.isArray(programs) || programs.length === 0) {
     updateWeeklyTrainingProgramStatus(null);
-    renderTrainingChoiceGate({ recommendation: null, programs: [], selectedProgram: null });
+    renderTrainingProgramContext({ recommendation: null, programs: [], selectedProgram: null });
     const empty = document.createElement("p");
     empty.className = "muted-text";
     empty.textContent = "Ingen treningsprogram akkurat nå – fyll laget for et bedre datagrunnlag.";
@@ -10995,7 +11414,7 @@ function renderTrainingProgramCompositions(teamFit) {
   }
 
   updateWeeklyTrainingProgramStatus(selectedProgram);
-  renderTrainingChoiceGate({ recommendation: null, programs: visiblePrograms, selectedProgram });
+  renderTrainingProgramContext({ recommendation: null, programs: visiblePrograms, selectedProgram });
 
   visiblePrograms.forEach((program, index) => {
     const sectionLabel = document.createElement("p");
@@ -14381,6 +14800,10 @@ function renderApp() {
   renderLeagueSeason();
   renderWeeklyTrainingFocus(teamFit);
   renderTrainingProgramCompositions(teamFit);
+  // Ukens plan må rendres ETTER programkomposisjonene: de setter valgt-tilstand
+  // og kontekstboksene som planen leser.
+  renderIndividualTraining();
+  renderWeeklyTrainingPlan();
 
   renderTrainingWeekCounters();
   renderManagerEngineBridge(teamFit);
@@ -15097,6 +15520,7 @@ async function loadStartupData() {
     staffData,
     expertiseData,
     trainingProgramsData,
+    individualTrainingData,
     trainingBadgesData,
     teamClassificationsData,
     placeReportsData,
@@ -15132,6 +15556,9 @@ async function loadStartupData() {
     loadJson(DATA_PATHS.staff).catch(() => null),
     loadJson(DATA_PATHS.expertise).catch(() => null),
     loadJson(DATA_PATHS.trainingPrograms).catch(() => null),
+    // Individuell trening: katalogen er valgfri på samme måte som resten —
+    // uten den faller flata tilbake til en tom, men gyldig, sporliste.
+    loadJson(DATA_PATHS.individualTraining).catch(() => null),
     loadJson(DATA_PATHS.trainingBadges).catch(() => null),
     loadJson(DATA_PATHS.teamClassifications).catch(() => null),
     // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
@@ -15226,6 +15653,9 @@ async function loadStartupData() {
   state.staff = Array.isArray(staffData?.staff) ? staffData.staff : [];
   state.expertise = Array.isArray(expertiseData?.expertise) ? expertiseData.expertise : [];
   state.trainingPrograms = Array.isArray(trainingProgramsData?.programs) ? trainingProgramsData.programs : [];
+  // Individuell trening: katalogen normaliseres av motoren, som degraderer til
+  // en tom, gyldig struktur hvis filen mangler.
+  state.individualTrainingCatalogue = normalizeIndividualTrainingCatalogue(individualTrainingData);
   state.trainingBadges = Array.isArray(trainingBadgesData?.badgeFamilies) ? trainingBadgesData : { badgeFamilies: [] };
   state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
     ? teamClassificationsData
@@ -15350,6 +15780,8 @@ async function bootstrapClubWeekState() {
   saveClubWeekState(state.clubWeekState);
   state.weeklyTrainingFocus = loadWeeklyTrainingFocus();
   state.weeklyTrainingProgram = loadWeeklyTrainingProgram();
+  // Krever at katalogen er lastet (over) — lagrede tildelinger saneres mot den.
+  state.individualTraining = loadIndividualTraining();
   syncWeeklyTrainingFocusToClubWeek();
   state.clubWeekFeedback = loadClubWeekFeedback();
   state.clubWeekEventLog = loadClubWeekEventLog();

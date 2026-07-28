@@ -8576,3 +8576,216 @@ body > .site-footer { grid-row: 5; }
 .federation-verdict[data-verdict="below"] { border-left-color: var(--warn, #d8a13a); }
 .federation-verdict[data-verdict="failed"] { border-left-color: var(--bad); }
 .federation-verdict-message { margin: 6px 0 0; font-weight: 700; font-size: 0.85rem; }
+
+/* ============================================================================
+   UKENS PLAN — treningsuka som fire steg, ikke tre parallelle lister
+   ========================================================================== */
+.training-plan-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.training-plan-head h2 {
+  margin: 0.2rem 0 0;
+}
+
+.training-plan-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.training-plan-load {
+  flex: none;
+  border: 1px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+}
+
+.training-plan-load[data-level="lett"] { border-color: var(--green, #75d69c); color: var(--green, #75d69c); }
+.training-plan-load[data-level="hard"] { border-color: var(--warn, #d8a13a); color: var(--warn, #d8a13a); }
+.training-plan-load[data-level="svært_hard"] { border-color: var(--bad, #e2765f); color: var(--bad, #e2765f); }
+
+/* Samsvaret mellom ramme og tema er den viktigste setningen på flata. */
+.training-plan-coherence {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.85rem;
+  border-left: 3px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  background: rgba(0, 0, 0, 0.18);
+  line-height: 1.45;
+}
+
+.training-plan-coherence[data-level="samsvar"] { border-left-color: var(--green, #75d69c); }
+.training-plan-coherence[data-level="sprik"] { border-left-color: var(--warn, #d8a13a); }
+
+.training-plan-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.training-plan-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border: 1px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  border-radius: var(--radius, 12px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.85rem;
+}
+
+.training-plan-step[data-done="true"] { border-color: rgba(117, 214, 156, 0.5); }
+.training-plan-step.is-next { border-color: var(--accent, #ffb59a); box-shadow: 0 0 0 1px rgba(255, 181, 154, 0.25); }
+
+.training-plan-step-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.training-plan-step-head h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.training-plan-step-status {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: right;
+}
+
+.training-plan-step[data-done="true"] .training-plan-step-status { color: var(--green, #75d69c); }
+
+.training-plan-step-role,
+.training-plan-step-detail {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--muted, rgba(255, 255, 255, 0.68));
+}
+
+.training-plan-step-detail { color: rgba(255, 255, 255, 0.85); }
+
+.training-plan-step-action {
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.5));
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.training-plan-step-action:hover { background: rgba(255, 255, 255, 0.07); }
+
+.training-plan-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.training-plan-next {
+  margin-top: 0.9rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--accent, #ffb59a);
+  background: transparent;
+  color: var(--accent, #ffb59a);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.modal-wide { width: min(96vw, 860px); }
+
+/* ============================================================================
+   INDIVIDUELL TRENING — én spiller av gangen
+   ========================================================================== */
+.individual-training-assignments,
+.individual-training-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  margin: 0.6rem 0 1rem;
+}
+
+.individual-training-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border: 1px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  border-radius: var(--radius, 12px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem;
+}
+
+.individual-training-card.is-selected { border-color: var(--green, #75d69c); }
+
+.individual-training-card h5 {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.individual-training-card p { margin: 0; font-size: 0.8rem; line-height: 1.45; }
+
+.individual-training-risk { color: var(--warn, #d8a13a); }
+
+.individual-training-role {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.individual-training-tracks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.individual-training-track,
+.individual-training-remove {
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.5));
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.76rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.individual-training-track:hover:not(:disabled),
+.individual-training-remove:hover { background: rgba(255, 255, 255, 0.07); }
+
+.individual-training-track:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.individual-training-remove {
+  align-self: flex-start;
+  border-color: var(--bad, #e2765f);
+  color: var(--bad, #e2765f);
+}

@@ -99,6 +99,29 @@ export function recordMatchRoleUsage(store, entries) {
   return next;
 }
 
+// Individuell rolletrening: fortrolighet kan også bygges på treningsfeltet, ikke
+// bare i kamp. Det er den samme læringen — treneren jobber med spilleren i
+// rollen — så den havner i det samme oppslaget.
+//
+// Veksten regnes ut i football-individual-training.js (der stab og «spiller han
+// rollen på lørdag?» hører hjemme); her anvendes den. Kun positiv vekst: en
+// treningsuke forvitrer ikke fortrolighet, den bygger den saktere enn kamp.
+// `gains` = [{ playerId, roleId, growth }].
+export function applyTrainingRoleGrowth(store, gains) {
+  const next = { ...normalizeRoleFamiliarity(store) };
+  if (!Array.isArray(gains)) return next;
+
+  for (const gain of gains) {
+    if (!gain || typeof gain !== "object") continue;
+    const { playerId, roleId } = gain;
+    const growth = Number(gain.growth);
+    if (!playerId || !roleId || !Number.isFinite(growth) || growth <= 0) continue;
+    const key = familiarityKey(playerId, roleId);
+    next[key] = clampValue((next[key] || 0) + growth);
+  }
+  return next;
+}
+
 // Lesbar nivåbeskrivelse for ett spiller×rolle-par.
 export function describeRoleFamiliarity(value) {
   const v = clampValue(value);

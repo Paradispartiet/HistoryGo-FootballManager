@@ -391,9 +391,19 @@ console.log("\n11. Skalaene stemmer");
     check("app.js bruker den normaliserte mappingen", /\(1 - average\) \/ spenn/.test(app));
   }
 
-  // Treningsfokusets belastning må komme fra motoren som faktisk eier tallet.
-  check("app.js henter treningsbelastningen fra treningsmotoren", /getTrainingFocusFatigue\(/.test(app));
-  check("treningsmotoren eksporterer den", /export function getTrainingFocusFatigue/.test(
+  // Ukas belastning må komme fra motorene som faktisk eier tallene, ikke
+  // gjenutledes i app.js. Etter at treningsuka ble til én plan er rammen
+  // (programmets egne fatigueLoad) det dominerende tallet, med fokusets fatigue
+  // som modulering — begge leses av football-training-plan.js.
+  //
+  // Vakten er skrevet mot INTENSJONEN, ikke mot et bestemt kallsted: en tidligere
+  // utgave pinnet `getTrainingFocusFatigue(` til app.js og ble rød da logikken
+  // flyttet dit den hørte hjemme, uten at noe var galt.
+  const planEngine = readFileSync(new URL("../src/football-training-plan.js", import.meta.url), "utf8");
+  check("app.js gjenutleder ikke belastningen selv", /calculateWeeklyTrainingIntensity\(\{/.test(app));
+  check("planmotoren leser fokusets belastning fra treningsmotoren", /getTrainingFocusFatigue\(/.test(planEngine));
+  check("planmotoren leser programmets egen belastning", /fatigueLoad/.test(planEngine));
+  check("treningsmotoren eksporterer fokusets belastning", /export function getTrainingFocusFatigue/.test(
     readFileSync(new URL("../src/football-training-week.js", import.meta.url), "utf8")
   ));
 }

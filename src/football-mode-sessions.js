@@ -12,7 +12,7 @@ export const MODES = Object.freeze(["league", "scenario", "training", "national"
 
 export const SESSION_STATE_FIELDS = Object.freeze([
   "selectedFormationId", "selectedTacticId", "lineup", "slotPositions",
-  "weeklyTrainingFocus", "weeklyTrainingProgram", "trainingWeek",
+  "weeklyTrainingFocus", "weeklyTrainingProgram", "individualTraining", "trainingWeek",
   "activeKnowledgeFocusId", "completedKnowledgeFocusIds", "clubWeekState",
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
@@ -43,6 +43,9 @@ const LEGACY_KEYS = Object.freeze({
   // app.js). Migrering fra v1 ville dratt feilen inn i modus-konvolutten.
   slotPositions: "hgfm.slotPositions.v2",
   weeklyTrainingFocus: "hgfm.weeklyTrainingFocus.v1",
+  // Ukas individuelle oppfølging. Isolert per modus som resten: slitasje og
+  // rolletrening fra klubbsesongen følger ikke med inn i et scenario.
+  individualTraining: "hgfm.individualTraining.v1",
   weeklyTrainingProgram: "hgfm.weeklyTrainingProgram.v1",
   trainingWeek: "hgfm.trainingWeek.v1",
   clubWeekState: "hgfm.clubWeekState.v1",

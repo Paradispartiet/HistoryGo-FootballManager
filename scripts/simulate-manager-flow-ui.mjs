@@ -200,11 +200,26 @@ check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isA
   check("kuratering og telleverk deler samme regel", app.includes("getInboxAttentionCount"));
   check("innboksmeldinger kan bindes til ukevindu (datavask)", app.includes("message.minWeek") && app.includes("message.maxWeek"));
   check("Innboks CTA peker til trening", html.includes('id="inboxGoTraining"') && html.includes('data-tab-target="trening"') && html.includes("Gå til Trening"));
-  check("Trening forklarer hvorfor den kommer etter Innboks", html.includes("Du velger trening etter at klubbens signaler er lest"));
+  // Rekkefølgen forklares nå av planmotoren (fire nummererte steg) i stedet for
+  // én setning i markupen. Vakten er derfor skrevet mot INTENSJONEN — at flata
+  // sier at Innboks kommer først og hvorfor — ikke mot en bestemt formulering.
+  const planEngine = readFileSync(join(root, "src/football-training-plan.js"), "utf8");
+  check(
+    "Trening forklarer hvorfor den kommer etter Innboks",
+    /id: "inbox"/.test(planEngine)
+      && /Innboksen er ikke et treningsvalg/.test(planEngine)
+      && /order: 1/.test(planEngine)
+      && html.includes('id="trainingPlanSteps"')
+  );
   check("Trening har tydelig valgt/ikke valgt gate", html.includes('id="trainingChoiceGate"') && html.includes('id="trainingChoiceStatus"'));
   check("Trening-panelet har CTA videre til Kamp når valgt", html.includes('id="trainingGoMatch"') && html.includes('data-tab-target="kamp"') && html.includes("Gå til Kamp"));
   check("Trening skiller anbefalt, trygt og dypere valg", app.includes("Anbefalt nå") && app.includes("Andre trygge valg") && app.includes("Dypere treningsprogram / historikk"));
-  check("Trening gjør valgt uke tydelig", app.includes("Treningsuke valgt") && app.includes("Kort effekt/risiko"));
+  check(
+    "Trening gjør valgt uke tydelig",
+    app.includes("Treningsuke valgt")
+      && app.includes("elements.trainingPlanHeadline")
+      && app.includes("elements.trainingPlanLoad")
+  );
   check("Kampfanen har tydelig kampdag-gate", app.includes("renderMatchdayGate") && app.includes("Kampklar:") && app.includes("Primærhandling:"));
   check("Kampfanen viser CTA-er for states", app.includes("Spill kamp") && app.includes("Fortsett kampen") && app.includes("Forbered neste kamp"));
   check("Kamprapporten folder dybde i details", app.includes("matchday-detail-drawer") && app.includes("Full kampanalyse"));

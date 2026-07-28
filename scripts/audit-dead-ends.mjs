@@ -857,6 +857,45 @@ stage("24. Forbundets dom");
   check("dommen leser ikke overall", !/\boverall\b/.test(fed.replace(/\/\/.*$/gm, "")));
 }
 
+stage("25. Treningsuka har én rekkefølge");
+{
+  // Flata hadde tre treningsvalg som så sidestilte ut: «Trening etter Innboks»
+  // (en overskrift uten noe å velge i), ukens treningsfokus og treningsprogram.
+  // To av dem gjorde overlappende ting, og ingenting sa hvilken rekkefølge de
+  // hørte hjemme i. Det er en blindvei av forvirring, ikke av manglende knapper:
+  // du kan trykke overalt uten å forstå hva du nettopp gjorde.
+  const plan = readFileSync(join(root, "src/football-training-plan.js"), "utf8");
+  const individual = readFileSync(join(root, "src/football-individual-training.js"), "utf8");
+
+  check("planmotoren finnes og er ren", /export function createWeeklyTrainingPlan/.test(plan) && !/document\.|localStorage/.test(plan.replace(/\/\/.*$/gm, "")));
+  check("uka har fire steg i fast rekkefølge", /id: "inbox"[\s\S]{0,2000}id: "program"[\s\S]{0,2000}id: "focus"[\s\S]{0,2000}id: "individual"/.test(plan));
+  check("hvert steg peker videre (popup eller fane)", /modal: "modalTrainingProgram"/.test(plan) && /target: "inbox"/.test(plan));
+  check("planen viser alltid neste steg", /nextStepId/.test(plan) && /elements\.trainingPlanNext/.test(app));
+  check("planflata finnes og rendres fra render-løypa", /id="trainingPlanSteps"/.test(html) && /\n  renderWeeklyTrainingPlan\(\);/.test(app));
+
+  // Rammen og temaet må henge sammen — og spriket må forklares som et
+  // managervalg, ikke som en spillersvakhet.
+  check("samsvar ramme/tema er en ekte regel", /export function evaluateProgramFocusCoherence/.test(plan) && /metricBonusDelta/.test(plan));
+  check("samsvaret når kampdagen", /coherenceBonus: evaluateProgramFocusCoherence\(/.test(app));
+  check("et sprik nuller aldri ut treningsuka", /Math\.max\(1, \(contextRelevant/.test(readFileSync(join(root, "src/football-training-week.js"), "utf8")));
+
+  // Programmets egne belastningstall må faktisk brukes. Lå de ubrukt, var ukas
+  // ramme mekanisk uten virkning — samme klasse feil som skalafeilene.
+  check("programmets belastning normaliseres mot kildens spenn", /PROGRAM_LOAD_MIN/.test(plan) && /PROGRAM_LOAD_MAX/.test(plan) && /- PROGRAM_LOAD_MIN\) \/ \(PROGRAM_LOAD_MAX - PROGRAM_LOAD_MIN\)/.test(plan));
+  check("belastningen styrer restitusjonen", /calculateWeeklyTrainingIntensity\(\{[\s\S]{0,200}\}\);\n  state\.playerCondition = applyWeeklyRecovery/.test(app));
+
+  // Individuell trening: en manager uten stab må fortsatt kunne følge opp noen.
+  check("individuell trening finnes og er datadrevet", /export function resolveIndividualTrainingWeek/.test(individual) && !/role_drills/.test(individual));
+  check("kapasiteten er aldri null", /base: 1/.test(individual) || /clamp\(Math\.trunc\(num\(rawCapacity\.base, DEFAULT_CAPACITY\.base\)\), 1, 5\)/.test(individual));
+  check("individuell trening hever aldri overall", !/\boverall\b/.test(individual.replace(/\/\/.*$/gm, "")));
+  check("et avvist spor har alltid en grunn", /valid: false, reason:/.test(individual));
+  check("flata for individuell trening finnes", /id="individualTrainingPicker"/.test(html) && /renderIndividualTraining/.test(app));
+
+  // Detaljene ligger i popup-er, ikke som en scrollevegg av like store bokser.
+  check("valgene ligger i popup-er", /data-modal-open="modalTrainingProgram"/.test(html) && /data-modal-open="modalTrainingFocusPick"/.test(html) && /data-modal-open="modalIndividualTraining"/.test(html));
+  check("Trening-flata er ikke lenger en vegg av paneler", (html.match(/<div class="tab-section trening-view"[\s\S]*?\n    <\/div>/)?.[0]?.match(/<section class="panel/g) || []).length <= 2);
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

@@ -49,7 +49,9 @@
     "audit:scenarios": "node scripts/audit-scenarios.mjs",
     "sim:scenarios": "node scripts/simulate-scenarios.mjs",
     "sim:season-review": "node scripts/simulate-season-review.mjs",
-    "sim:federation-verdict": "node scripts/simulate-federation-verdict.mjs"
+    "sim:federation-verdict": "node scripts/simulate-federation-verdict.mjs",
+    "sim:training-plan": "node scripts/simulate-training-plan.mjs",
+    "sim:individual-training": "node scripts/simulate-individual-training.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"
