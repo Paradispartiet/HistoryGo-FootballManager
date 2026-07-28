@@ -299,7 +299,12 @@ export function buildTrainingFocusOffPitchEvent(focusId) {
   };
 }
 
-export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachContext, opponent, formationMatchup, lastMatchWeaknessMetric } = {}) {
+// `coherenceBonus` kommer fra football-training-plan.js: la fokuset inne i ukas
+// treningsprogram (+1), eller utenfor det (−1). Rammen og temaet skal henge
+// sammen — trener du press hele uka og prioriterer oppbygging på kampdag, får
+// laget mindre ut av begge. Default 0 gjør parameteren additiv: en kaller som
+// ikke kjenner programmet får nøyaktig samme tall som før.
+export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachContext, opponent, formationMatchup, lastMatchWeaknessMetric, coherenceBonus = 0 } = {}) {
   const stored = sanitizeWeeklyTrainingFocus(selection);
   const week = Number(clubWeek);
   if (!stored || !Number.isInteger(week) || stored.week !== week || stored.appliedSessionId) return null;
@@ -315,7 +320,11 @@ export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachConte
   const addressesMatchup = getMatchupRelevantFocusIds(formationMatchup).includes(focus.id);
   const addressesLastWeakness = getWeaknessRelevantFocusId(lastMatchWeaknessMetric) === focus.id;
   const contextRelevant = addressesMatchup || addressesLastWeakness;
-  const metricBonus = contextRelevant ? baseBonus + 1 : baseBonus;
+  const coherence = Math.max(-1, Math.min(1, Math.round(Number(coherenceBonus) || 0)));
+  // Gulv på 1: et sprik mellom program og fokus skal koste, men aldri nulle ut
+  // treningsuka helt — da ville et feilvalg vært en blindvei i stedet for en
+  // dyrere vei.
+  const metricBonus = Math.max(1, (contextRelevant ? baseBonus + 1 : baseBonus) + coherence);
   const metricBonuses = {};
   focus.affectedMetrics.forEach((metric) => {
     if (!["formationFamiliarity", "coachUnderstanding"].includes(metric)) metricBonuses[metric] = metricBonus;
@@ -331,6 +340,7 @@ export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachConte
     opponentFit: focus.bestAgainstOpponentStyles.includes(opponent?.id),
     contextRelevant,
     contextReason: addressesMatchup ? "matchup" : addressesLastWeakness ? "forrige_kamp" : null,
+    coherenceBonus: coherence,
     metricBonuses,
     coachBonuses: focus.id === "formation_familiarity"
       ? { formationFamiliarity: metricBonus, coachUnderstanding: Math.max(1, metricBonus - 1) }

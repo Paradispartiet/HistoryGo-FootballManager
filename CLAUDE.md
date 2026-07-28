@@ -49,6 +49,9 @@ npm run sim:season-review      # styrets dom, merittlista og sesongskiftet
 npm run sim:federation-verdict # forbundets dom etter EM/VM
 npm run sim:pitch-layout       # brikkefordelingen på taktikktavla (alle formasjoner)
 npm run sim:training-week      # weekly training focus
+npm run sim:training-plan      # ukas plan: ramme + tema + individuell, og samsvaret mellom dem
+npm run sim:individual-training # individuell oppfølging av én spiller
+npm run sim:player-weaknesses  # svake sider: identifisering, trening og uttelling
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
 npm run sim:suggested-setups   # self-explaining suggested setups
 npm run sim:training-programs   # weekly training-program compositions
@@ -92,6 +95,9 @@ The single most important thing to understand is that this repo contains **two i
 - `football-historical-opponent-profiles.js` — opponents are historical style-teams (taktiske arketyper) used as learning opponents, not generic bots.
 - `football-mini-season.js`, `football-match-consequences.js`, `football-training-week.js` — mini-season, Club Week consequences, weekly training focus.
 - `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
+- `football-training-plan.js` — the one model that binds the training layers into **one week with four steps**: Inbox (signals) → Program (the week's *frame*, i.e. load) → Focus (the *match theme*, i.e. metric bonus) → Individual. Its central rule is that the focus should sit *inside* the chosen program; a mismatch costs a point of metric bonus and is explained as a manager decision. It also normalises the programs' own `fatigueLoad` (6–19 per week) into the recovery input — those numbers existed but were never read. See `docs/trening.md`.
+- `football-player-weaknesses.js` — every player has weak sides, and they are *why* position/role fit matters. **Identified from data that already existed** (`role.requires` + data-authored `positionDemands`, minus the player's `strengths`, with `coveredBy` handling overlapping tokens) — never invented claims about a real footballer. A weakness **never subtracts** from anything: the only number it can produce is a small capped bonus (max +4), and only when the manager has *trained* it **and then played him in a role that demands it*. Training opens doors; it does not raise class. See `docs/svake-sider.md`.
+- `football-individual-training.js` — per-player training beside the team session: role drills (builds role familiarity), personal recovery, sharpness, rehab. **No track touches `overall` or `matchScore`** — they change what a player *fits*, not how good he is. Catalogue is data (`data/football_individual_training.json`); capacity is `1 + relevant staff`, capped at 5 and never zero.
 - `football-suggested-setups.js` — self-explaining 2–4 logical setups (formation / match plan / training week) that advise without replacing the manager's own choice.
 - `football-off-pitch-parameters.js` — the human context layer: fatigue, injury risk, morale, confidence, autonomy, dressing-room mood, media/board/family pressure, hidden mental state.
 - `football-federation-verdict.js` — the federation's verdict after a tournament. Unlike the club, the expectation comes from the **nation's strength**: a semi-final is a triumph with a minnow and a failure with Brazil. Same warning-before-sacking shape. See `docs/forbundsdom.md`.
@@ -160,6 +166,10 @@ What national mode plays *for* is a tournament: **EM and VM** (`src/football-tou
 The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk**, in that order, and no label may point at a section its name does not describe. Office surfaces (Speiding, Stab, Assistentråd, Klubbrom, Styret, Fasiliteter) live *on* Kontor as department cards, not as their own tabs — `data-tab-parent` on the section tells `highlightActiveTab()` which tab to light up. Scenarioer is a mode reached from the onboarding page, never a tab inside the league game. The scenario catalogue is data (`data/football_scenarios.json`) — six curated five-match challenges built from the existing historical archetypes; never hardcode a scenario card in `index.html`. See `docs/scenarioer.md`.
 
 Each nav tab carries `data-nav-modes` (which modes show it) and optionally `data-nav-section-modes` (which modes may have the surface open at all); `applyModeScopedNav()` in `renderModeIsolation` enforces both. See `docs/meny.md`; guarded by `audit:dead-ends` stage 17.
+
+Kontor is **not one page**: it has a sub-tab strip (`#kontorSubnav`, `renderKontorSubtabs()`) covering *Oversikt · Assistentråd · Speiding · Klubbutvikling · Stab & drift · Fasiliteter · Klubbrom · Styret*. Each is a real section with `data-tab-parent="dashboard"`; the strip only shows while an office surface is open. The old department card grid is gone — don't re-add it. **Klubbutvikling** is the History Go chain (Sted → Person → Ekspertise → Utviklingsprogram → Badge → Lagklasse) shown as the chain it is; note that HG badge progressions are called **utviklingsprogrammer**, never "treningsprogrammer", so *trening* means exactly one thing in the UI.
+
+`body` is a grid with **explicitly assigned rows** — one per frame part (header, main nav, mode bar, office sub-nav, screen area, footer). A selector that matches two frame parts (a bare `body > nav`) silently stacks them and collapses the screen area. Guarded by `audit:dead-ends` stage 16.
 
 Kontor is the office, not a dashboard: **do not re-add summary boxes there.** Club identity lives in the site header, league standing and the board's expectation live on Statistikk, and mode switching lives in Innstillinger. The Klubbuke phase pills are navigation — each opens the surface that phase happens on (`CLUB_WEEK_PHASE_TABS`).
 

@@ -48,15 +48,22 @@ function navTabButtons() {
     const openTag = m[0].slice(0, m[0].indexOf(">") + 1);
     const isNavTab = /\bnav-tab\b/.test(openTag);
     const isDepartment = /\bdept-link-card\b/.test(openTag);
-    if (!isNavTab && !isDepartment) continue;
+    // Kontorets underfaner er også navigasjon, og skal derfor følge de samme
+    // reglene: en «Senere»-flate må være deaktivert, og ingen etikett skal peke
+    // to steder. Uten dette var stripa et blindsonefelt for hele vakten.
+    const isSubtab = /\bkontor-subtab\b/.test(openTag);
+    if (!isNavTab && !isDepartment && !isSubtab) continue;
     buttons.push({
       target: m[1],
       openTag,
       inner: m[2],
-      label: (m[2].match(/<span class="nav-label">([^<]+)<\/span>/) || m[2].match(/<strong>([^<]+)<\/strong>/) || [])[1] || "",
+      label: (m[2].match(/<span class="nav-label">([^<]+)<\/span>/) || m[2].match(/<strong>([^<]+)<\/strong>/) || [])[1]
+        || (isSubtab ? m[2].replace(/<[^>]*>[\s\S]*?<\/[^>]*>/g, "").replace(/<[^>]*>/g, "").trim() : "")
+        || "",
       navModes: (openTag.match(/data-nav-modes="([^"]*)"/) || [, ""])[1].split(/\s+/).filter(Boolean),
       isNavTab,
       isDepartment,
+      isSubtab,
       isPrimary: /\bnav-tab-primary\b/.test(openTag),
       isSecondary: /\bnav-tab-secondary\b/.test(openTag),
       isDisabled: /\sdisabled(?=[\s>])/.test(openTag) || /aria-disabled="true"/.test(openTag),
@@ -539,16 +546,46 @@ stage("16. App-rammen kan ikke kollapse");
   // Hver ramme-del må ha sin egen rad, uansett hva som er skjult.
   const explicitRows = [
     ["body > .site-header", 1],
-    ["body > nav", 2],
+    ["body > nav.main-nav", 2],
     ["body > .secondary-mode-bar", 3],
-    ["body > .app-shell", 4],
-    ["body > .site-footer", 5]
+    ["body > nav.kontor-subnav", 4],
+    ["body > .app-shell", 5],
+    ["body > .site-footer", 6]
   ];
   explicitRows.forEach(([selector, row]) => {
     const index = css.indexOf(`${selector} {`);
     const block = index >= 0 ? css.slice(index, css.indexOf("}", index)) : "";
     check(`${selector} har eksplisitt rad ${row}`, block.includes(`grid-row: ${row}`), block.trim().slice(0, 60));
   });
+
+  // Denne fella har nå slått til to ganger: først da en skjult modus-linje
+  // flyttet alle radene, så da kontorets underfanestripe (også en <nav>) arvet
+  // hovedmenyens rad fra en generisk `body > nav` og ble tegnet oppå den —
+  // skjermområdet forsvant helt. Derfor to strukturelle krav:
+  //
+  //   a) ANTALL rader i grid-template-rows må stemme med antall ramme-deler.
+  //   b) INGEN selektor får treffe to ramme-deler (ingen bar `body > nav`).
+  const rowSpec = (bodyRule || "").match(/grid-template-rows:\s*([^;]+);/)?.[1]?.trim() || "";
+  const rowCount = rowSpec.split(/\s+(?![^(]*\))/).filter(Boolean).length;
+  check(
+    `grid-template-rows har én rad per ramme-del (${rowCount} rader, ${explicitRows.length} deler)`,
+    rowCount === explicitRows.length,
+    rowSpec
+  );
+  check(
+    "ingen generisk `body > nav`-regel som kan treffe to menyer",
+    !/\nbody > nav \{/.test(css),
+    "en bar `body > nav` ga underfanestripa samme rad som hovedmenyen"
+  );
+  // Hvert <nav> i rammen må faktisk ha fått en rad tildelt.
+  const bodyNavClasses = [...html.matchAll(/<nav class="([^"]+)"/g)]
+    .map((m) => m[1].split(/\s+/)[0])
+    .filter((cls) => cls === "main-nav" || cls === "kontor-subnav");
+  check(
+    "hver meny i rammen har sin egen eksplisitte rad",
+    bodyNavClasses.every((cls) => css.includes(`body > nav.${cls} {`)),
+    bodyNavClasses.join(", ")
+  );
 
   // Samme familie av feil ett nivå ned: faneflata er en kolonne-flexboks med
   // `height: 100%` og `overflow-y: auto`. Uten `flex: 0 0 auto` på barna har de
@@ -632,11 +669,28 @@ stage("17. Menyen lyver ikke");
     "modusvalget sendte deg tidligere rett inn i lagets treningsflate"
   );
 
-  // 17f) Kontoret er der du gjør kontorarbeidet: speiding og stab ligger der.
-  const deptTargets = new Set(departments.map((b) => b.target));
-  for (const target of ["historygo", "admin", "market", "board"]) {
-    check(`Kontorets avdelinger inneholder ${target}`, deptTargets.has(target));
+  // 17f) Kontoret er der du gjør kontorarbeidet, og flatene ligger i UNDERFANER
+  // i stedet for i en vegg av kort. Vakten måler intensjonen — at hver
+  // kontorflate er direkte tilgjengelig fra Kontor — ikke hvilken widget som
+  // brukes til å komme dit.
+  const subtabs = [...html.matchAll(/<button\b[^>]*\bclass="[^"]*kontor-subtab[^"]*"[^>]*\bdata-tab-target="([^"]+)"/g)].map((m) => m[1]);
+  const officeTargets = new Set([...subtabs, ...departments.map((b) => b.target)]);
+  for (const target of ["dashboard", "historygo", "progression", "admin", "inbox", "market", "board", "facilities"]) {
+    check(`Kontorflaten ${target} er en underfane på Kontor`, officeTargets.has(target));
   }
+  check("underfanestripa finnes", /id="kontorSubnav"/.test(html) && /function renderKontorSubtabs\(/.test(app));
+  check("stripa vises bare på kontorflater", /subnav\.hidden = !onOffice/.test(app));
+  check(
+    "hver underfane peker på en seksjon som faktisk finnes",
+    subtabs.every((target) => new RegExp(`data-tab-section="${target}"`).test(html)),
+    subtabs.filter((target) => !new RegExp(`data-tab-section="${target}"`).test(html)).join(", ")
+  );
+  check(
+    "hver kontorflate sier at Kontor eier den",
+    ["historygo", "progression", "admin", "inbox", "market", "board", "facilities"].every(
+      (target) => new RegExp(`data-tab-section="${target}"[^>]*data-tab-parent="dashboard"`).test(html)
+    )
+  );
   check("Speiding er ikke lenger en egen hovedfane", !navTabs.some((b) => b.target === "historygo"));
   check("Stab er ikke lenger en hovedfane som åpner innboksen", !navTabs.some((b) => b.label === "Stab"));
 
@@ -855,6 +909,68 @@ stage("24. Forbundets dom");
   check("forbundets tillit er modus-isolert", /"federationTrust"/.test(modeSessions));
   check("advarselen kommer før avskjed", /const sacked = verdict === "failed" && hadWarning/.test(fed));
   check("dommen leser ikke overall", !/\boverall\b/.test(fed.replace(/\/\/.*$/gm, "")));
+}
+
+stage("25. Treningsuka har én rekkefølge");
+{
+  // Flata hadde tre treningsvalg som så sidestilte ut: «Trening etter Innboks»
+  // (en overskrift uten noe å velge i), ukens treningsfokus og treningsprogram.
+  // To av dem gjorde overlappende ting, og ingenting sa hvilken rekkefølge de
+  // hørte hjemme i. Det er en blindvei av forvirring, ikke av manglende knapper:
+  // du kan trykke overalt uten å forstå hva du nettopp gjorde.
+  const plan = readFileSync(join(root, "src/football-training-plan.js"), "utf8");
+  const individual = readFileSync(join(root, "src/football-individual-training.js"), "utf8");
+
+  check("planmotoren finnes og er ren", /export function createWeeklyTrainingPlan/.test(plan) && !/document\.|localStorage/.test(plan.replace(/\/\/.*$/gm, "")));
+  check("uka har fire steg i fast rekkefølge", /id: "inbox"[\s\S]{0,2000}id: "program"[\s\S]{0,2000}id: "focus"[\s\S]{0,2000}id: "individual"/.test(plan));
+  check("hvert steg peker videre (popup eller fane)", /modal: "modalTrainingProgram"/.test(plan) && /target: "inbox"/.test(plan));
+  check("planen viser alltid neste steg", /nextStepId/.test(plan) && /elements\.trainingPlanNext/.test(app));
+  check("planflata finnes og rendres fra render-løypa", /id="trainingPlanSteps"/.test(html) && /\n  renderWeeklyTrainingPlan\(\);/.test(app));
+
+  // Rammen og temaet må henge sammen — og spriket må forklares som et
+  // managervalg, ikke som en spillersvakhet.
+  check("samsvar ramme/tema er en ekte regel", /export function evaluateProgramFocusCoherence/.test(plan) && /metricBonusDelta/.test(plan));
+  check("samsvaret når kampdagen", /coherenceBonus: evaluateProgramFocusCoherence\(/.test(app));
+  check("et sprik nuller aldri ut treningsuka", /Math\.max\(1, \(contextRelevant/.test(readFileSync(join(root, "src/football-training-week.js"), "utf8")));
+
+  // Programmets egne belastningstall må faktisk brukes. Lå de ubrukt, var ukas
+  // ramme mekanisk uten virkning — samme klasse feil som skalafeilene.
+  check("programmets belastning normaliseres mot kildens spenn", /PROGRAM_LOAD_MIN/.test(plan) && /PROGRAM_LOAD_MAX/.test(plan) && /- PROGRAM_LOAD_MIN\) \/ \(PROGRAM_LOAD_MAX - PROGRAM_LOAD_MIN\)/.test(plan));
+  check("belastningen styrer restitusjonen", /calculateWeeklyTrainingIntensity\(\{[\s\S]{0,200}\}\);\n  state\.playerCondition = applyWeeklyRecovery/.test(app));
+
+  // Individuell trening: en manager uten stab må fortsatt kunne følge opp noen.
+  check("individuell trening finnes og er datadrevet", /export function resolveIndividualTrainingWeek/.test(individual) && !/role_drills/.test(individual));
+  check("kapasiteten er aldri null", /base: 1/.test(individual) || /clamp\(Math\.trunc\(num\(rawCapacity\.base, DEFAULT_CAPACITY\.base\)\), 1, 5\)/.test(individual));
+  check("individuell trening hever aldri overall", !/\boverall\b/.test(individual.replace(/\/\/.*$/gm, "")));
+  check("et avvist spor har alltid en grunn", /valid: false, reason:/.test(individual));
+  check("flata for individuell trening finnes", /id="individualTrainingPicker"/.test(html) && /renderIndividualTraining/.test(app));
+
+  // Detaljene ligger i popup-er, ikke som en scrollevegg av like store bokser.
+  check("valgene ligger i popup-er", /data-modal-open="modalTrainingProgram"/.test(html) && /data-modal-open="modalTrainingFocusPick"/.test(html) && /data-modal-open="modalIndividualTraining"/.test(html));
+  check("Trening-flata er ikke lenger en vegg av paneler", (html.match(/<div class="tab-section trening-view"[\s\S]*?\n    <\/div>/)?.[0]?.match(/<section class="panel/g) || []).length <= 2);
+}
+
+stage("26. Svake sider er en dør, ikke en dom");
+{
+  // «Alle spillere har svakheter» er én setning unna «noen spillere er
+  // dårligere». Denne vakten holder den setningen på riktig side: svake sider
+  // trekker aldri fra, de identifiseres ut av data som allerede fantes, og
+  // arbeidet med dem åpner roller i stedet for å heve klasse.
+  const weak = readFileSync(join(root, "src/football-player-weaknesses.js"), "utf8");
+  const weakCode = weak.replace(/\/\/.*$/gm, "");
+  const matchday = readFileSync(join(root, "src/football-matchday-engine.js"), "utf8");
+
+  check("motoren finnes og er ren", /export function identifyPlayerWeaknesses/.test(weak) && !/document\.|localStorage/.test(weakCode));
+  check("den leser aldri overall eller matchScore", !/\boverall\b/.test(weakCode) && !/matchScore/.test(weakCode));
+  check("svakhetene er data, ikke hardkodet", /id="modalWeaknesses"/.test(html) && !/weaknessLabel:/.test(app));
+  check("uttellingen er en BONUS, aldri et fratrekk", /finalStrength \+= weaknessBonus/.test(matchday) && !/finalStrength -= weaknessBonus/.test(matchday));
+  check("bonusen er liten og klampet", /clampRange\(num\(weaknessWorkBonus\), 0, 4\)/.test(matchday));
+  check("den betaler bare når spilleren står i rollen som krever det", /export function summarizeLineupWeaknessWork/.test(weak) && /openedDoors/.test(weak));
+  check("ubrukt arbeid skjules ikke", /idleWork/.test(weak) && /idleWork/.test(app));
+  check("hver spiller kan gjøre noe med dem", /export function applyWeaknessTraining/.test(weak) && /requires === "weakness"/.test(readFileSync(join(root, "src/football-individual-training.js"), "utf8")));
+  check("et avvist svakhetsvalg har en grunn", /Dette er ikke en av hans svake sider/.test(readFileSync(join(root, "src/football-individual-training.js"), "utf8")));
+  check("framgangen er modus-uavhengig lagret i teamMerits, ikke i History Go", /state\.teamMerits\.weaknessProgress = applyWeaknessTraining/.test(app) && !/visited_places[\s\S]{0,80}weakness/.test(app));
+  check("flata forklarer at det ikke er en dom", /ikke en dom over dem/.test(html));
 }
 
 // ---- Rapport ----------------------------------------------------------------

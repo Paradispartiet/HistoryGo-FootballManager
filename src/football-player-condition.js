@@ -277,6 +277,41 @@ export function applyWeeklyRecovery(conditions, { trainingIntensity = 1 } = {}) 
   return [...map.values()];
 }
 
+// Individuell trening (football-individual-training.js) treffer ÉN spiller om
+// gangen, ved siden av lagsøkta. Motoren der regner ut hva uka ga; her anvendes
+// det på tilstanden, fordi det er denne modulen som eier belastning, form og
+// skade. Effektene kommer inn som rene oppslag playerId → tall.
+//
+// Merk rekkefølgen i app.js: dette kjøres ETTER `applyWeeklyRecovery`, slik at
+// egen restitusjon legger seg oppå lagets hvile i stedet for å bli spist av den.
+export function applyIndividualTrainingEffects(conditions, { loadDeltas = {}, formDeltas = {}, rehabWeeks = {} } = {}) {
+  const map = toMap(conditions);
+
+  map.forEach((condition) => {
+    const id = condition.playerId;
+
+    const loadDelta = num(loadDeltas?.[id]);
+    if (loadDelta !== 0) {
+      condition.load = round1(clamp(condition.load + loadDelta, 0, 100));
+    }
+
+    const formDelta = num(formDeltas?.[id]);
+    if (formDelta !== 0) {
+      condition.form = round2(clamp(condition.form + formDelta, -3, 3));
+    }
+
+    const weeks = Math.trunc(num(rehabWeeks?.[id]));
+    if (weeks > 0 && isInjured(condition)) {
+      const weeksOut = num(condition.injury.weeksOut) - weeks;
+      condition.injury = weeksOut > 0 ? { ...condition.injury, weeksOut } : null;
+      // Samme regel som ellers: tilbake fra skade er ikke tilbake i toppform.
+      if (!condition.injury) condition.form = round2(clamp(condition.form - 0.4, -3, 3));
+    }
+  });
+
+  return [...map.values()];
+}
+
 // Sommerferie: mellom to sesonger hviler laget ordentlig. Belastningen nulles,
 // skader gror ferdig, og formen faller tilbake mot normalen — en ny sesong
 // starter ikke der forrige sluttet.

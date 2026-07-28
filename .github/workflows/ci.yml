@@ -71,6 +71,9 @@ jobs:
           npm run sim:match-plan
           npm run sim:pitch-layout
           npm run sim:training-week
+          npm run sim:training-plan
+          npm run sim:individual-training
+          npm run sim:player-weaknesses
           npm run sim:formation-matchup
           npm run sim:suggested-setups
           npm run sim:training-programs

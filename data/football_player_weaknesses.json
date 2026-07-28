@@ -1,0 +1,529 @@
+{
+  "schema": "historygo-football-manager.player-weaknesses.v1",
+  "version": 1,
+  "note": "Svake sider er IKKE en dom over spilleren. Alle spillere gjennom historien har hatt dem — Haaland var lenge svak med ryggen mot mål, Hoftun spilte ikke laget opp bakfra. En svak side sier hvor du IKKE kan bruke ham uten å betale for det, og derfor er den nøyaktig grunnen til at posisjon og rolle betyr noe. Svakhetene identifiseres ut av dataene som allerede finnes (rollens `requires` og posisjonens krav under, minus spillerens `strengths`) — ingen spiller får påstander som ikke allerede står i spillerdataene. Ingen svak side trekker fra `overall`. `coveredBy` er beslektede styrker som dekker kravet: har spilleren `box_finishing`, er det feil å kalle ham svak på `finishing`.",
+  "training": {
+    "maxProgress": 100,
+    "biteReliefCap": 4,
+    "note": "Trening på en svak side gjør ikke spilleren bedre. Den åpner dører: en spiller som har jobbet med førstetouchen kan brukes i roller som krever den, uten at klassen hans er rørt. Uttellingen kommer først når du faktisk bruker ham der."
+  },
+  "difficulty": {
+    "lett": {
+      "growthPerWeek": 9,
+      "note": "Ren repetisjon. Dette flytter seg raskt."
+    },
+    "moderat": {
+      "growthPerWeek": 6,
+      "note": "Tar noen uker, men det kommer."
+    },
+    "hard": {
+      "growthPerWeek": 3,
+      "note": "Fysikk og instinkt flytter seg sakte. Regn med en halv sesong."
+    }
+  },
+  "attributes": [
+    {
+      "id": "acceleration",
+      "name": "Akselerasjon",
+      "weaknessLabel": "Kommer treigt i gang",
+      "category": "fysisk",
+      "difficulty": "hard",
+      "note": "De første tre meterne. Kan trenes, men aldri langt — dette er kroppen hans.",
+      "coveredBy": [
+        "recovery_speed",
+        "agility",
+        "running_power"
+      ]
+    },
+    {
+      "id": "stamina",
+      "name": "Utholdenhet",
+      "weaknessLabel": "Går tom før slutt",
+      "category": "fysisk",
+      "difficulty": "moderat",
+      "note": "Den mest trenbare fysiske egenskapen. Kostnaden er beina hans i mellomtiden.",
+      "coveredBy": [
+        "running_power"
+      ]
+    },
+    {
+      "id": "duels",
+      "name": "Duellspill",
+      "weaknessLabel": "Taper for mange dueller",
+      "category": "fysisk",
+      "difficulty": "hard",
+      "note": "Timing kan læres, kroppen kan ikke byttes.",
+      "coveredBy": [
+        "strength",
+        "power",
+        "physical_presence",
+        "tackling"
+      ]
+    },
+    {
+      "id": "heading",
+      "name": "Hodespill",
+      "weaknessLabel": "Svak i luftduellene",
+      "category": "fysisk",
+      "difficulty": "moderat",
+      "note": "Mest timing og posisjonering — mer trenbart enn de fleste tror.",
+      "coveredBy": [
+        "physical_presence",
+        "command_of_area",
+        "power",
+        "strength"
+      ]
+    },
+    {
+      "id": "blocking",
+      "name": "Blokkeringer",
+      "weaknessLabel": "Kaster seg ikke foran skudd",
+      "category": "fysisk",
+      "difficulty": "lett",
+      "note": "Vilje og lesning. Trenes på feltet, ikke i vektrommet.",
+      "coveredBy": [
+        "tackling",
+        "interceptions",
+        "defensive_reading"
+      ]
+    },
+    {
+      "id": "first_touch",
+      "name": "Førstetouch",
+      "weaknessLabel": "Ustø første touch",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Å ta imot ballen under press, uansett hvor på banen. Ren repetisjon virker.",
+      "coveredBy": [
+        "combination_play"
+      ]
+    },
+    {
+      "id": "dribbling",
+      "name": "Dribling",
+      "weaknessLabel": "Går sjelden forbi mann",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Kan bygges, men blir sjelden en hovedstyrke sent i karrieren.",
+      "coveredBy": [
+        "one_v_one",
+        "ball_carrying",
+        "agility"
+      ]
+    },
+    {
+      "id": "ball_carrying",
+      "name": "Ballføring",
+      "weaknessLabel": "Driver ikke laget framover med ballen",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Å bære ballen gjennom ledd er noe annet enn å drible forbi én mann.",
+      "coveredBy": [
+        "dribbling",
+        "one_v_one"
+      ]
+    },
+    {
+      "id": "crossing",
+      "name": "Innlegg",
+      "weaknessLabel": "Upresise innlegg",
+      "category": "teknisk",
+      "difficulty": "lett",
+      "note": "Ren repetisjon. Blant de mest trenbare tingene i fotball.",
+      "coveredBy": [
+        "wide_movement"
+      ]
+    },
+    {
+      "id": "finishing",
+      "name": "Avslutninger",
+      "weaknessLabel": "Setter ikke sjansene",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Avslutningsform er ferskvare, men teknikken bak kan bygges.",
+      "coveredBy": [
+        "box_finishing"
+      ]
+    },
+    {
+      "id": "box_finishing",
+      "name": "Avslutning i boks",
+      "weaknessLabel": "Bommer fra kort hold",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Timing og rolige valg i kaos.",
+      "coveredBy": [
+        "finishing"
+      ]
+    },
+    {
+      "id": "simple_passing",
+      "name": "Enkle pasninger",
+      "weaknessLabel": "Roter bort de enkle",
+      "category": "teknisk",
+      "difficulty": "lett",
+      "note": "Den letteste svakheten å trene bort — og den dyreste å la stå.",
+      "coveredBy": [
+        "passing_range",
+        "distribution",
+        "final_pass"
+      ]
+    },
+    {
+      "id": "passing_range",
+      "name": "Pasningsregister",
+      "weaknessLabel": "Har ikke den lange pasningen",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Vendinger og lange diagonaler. Åpner oppspill bakfra.",
+      "coveredBy": [
+        "distribution"
+      ]
+    },
+    {
+      "id": "final_pass",
+      "name": "Siste pasning",
+      "weaknessLabel": "Finner ikke den siste pasningen",
+      "category": "teknisk",
+      "difficulty": "hard",
+      "note": "Halvt teknikk, halvt lesning. Flytter seg sakte.",
+      "coveredBy": [
+        "chance_creation",
+        "vision"
+      ]
+    },
+    {
+      "id": "distribution",
+      "name": "Igangsetting",
+      "weaknessLabel": "Utrygg med ballen i beina",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Keeperens svakeste side i generasjoner — og fullt trenbar.",
+      "coveredBy": [
+        "passing_range",
+        "simple_passing"
+      ]
+    },
+    {
+      "id": "shot_stopping",
+      "name": "Skuddredninger",
+      "weaknessLabel": "Redder for få skudd",
+      "category": "teknisk",
+      "difficulty": "hard",
+      "note": "Fotarbeid og posisjon kan trenes; hendene er hans egne.",
+      "coveredBy": [
+        "reflexes"
+      ]
+    },
+    {
+      "id": "reflexes",
+      "name": "Reflekser",
+      "weaknessLabel": "Treg på refleksredningene",
+      "category": "fysisk",
+      "difficulty": "hard",
+      "note": "Nesten helt medfødt. Trening gir marginer, ikke forvandling.",
+      "coveredBy": [
+        "shot_stopping"
+      ]
+    },
+    {
+      "id": "positioning",
+      "name": "Posisjonering",
+      "weaknessLabel": "Står feil for ofte",
+      "category": "taktisk",
+      "difficulty": "lett",
+      "note": "Rent trenerarbeid. Dette er der en manager tjener mest.",
+      "coveredBy": [
+        "positional_intelligence",
+        "reading_game",
+        "defensive_reading"
+      ]
+    },
+    {
+      "id": "defensive_reading",
+      "name": "Defensiv lesning",
+      "weaknessLabel": "Leser ikke faren tidlig nok",
+      "category": "taktisk",
+      "difficulty": "moderat",
+      "note": "Kommer med repetisjon i samme rolle.",
+      "coveredBy": [
+        "reading_game",
+        "positional_intelligence",
+        "interceptions"
+      ]
+    },
+    {
+      "id": "movement",
+      "name": "Bevegelse",
+      "weaknessLabel": "Står stille for mye",
+      "category": "taktisk",
+      "difficulty": "lett",
+      "note": "Mønstre kan innøves.",
+      "coveredBy": [
+        "off_ball_runs",
+        "late_runs",
+        "box_movement",
+        "wide_movement"
+      ]
+    },
+    {
+      "id": "off_ball_runs",
+      "name": "Løp uten ball",
+      "weaknessLabel": "Løper lite uten ball",
+      "category": "taktisk",
+      "difficulty": "moderat",
+      "note": "Slitsomt å endre, men fullt mulig.",
+      "coveredBy": [
+        "movement",
+        "late_runs",
+        "runs_behind",
+        "box_movement"
+      ]
+    },
+    {
+      "id": "late_runs",
+      "name": "Sene løp",
+      "weaknessLabel": "Kommer aldri i andrebølgen",
+      "category": "taktisk",
+      "difficulty": "lett",
+      "note": "Timing inn i boksen. Innøves på en uke eller tre.",
+      "coveredBy": [
+        "off_ball_runs",
+        "movement",
+        "box_movement"
+      ]
+    },
+    {
+      "id": "overlapping_runs",
+      "name": "Overlappsløp",
+      "weaknessLabel": "Går ikke i overlapp",
+      "category": "taktisk",
+      "difficulty": "lett",
+      "note": "Mønster og mot. Krever at noen holder rommet.",
+      "coveredBy": [
+        "wide_movement",
+        "wide_support"
+      ]
+    },
+    {
+      "id": "box_presence",
+      "name": "Boksnærvær",
+      "weaknessLabel": "Er sjelden der ballen faller",
+      "category": "taktisk",
+      "difficulty": "moderat",
+      "note": "Å være på rett sted når det smeller.",
+      "coveredBy": [
+        "box_movement",
+        "box_finishing",
+        "physical_presence"
+      ]
+    },
+    {
+      "id": "wide_support",
+      "name": "Kantstøtte",
+      "weaknessLabel": "Støtter ikke kanten",
+      "category": "taktisk",
+      "difficulty": "lett",
+      "note": "Rene relasjonsmønstre mellom back og kant.",
+      "coveredBy": [
+        "wide_movement",
+        "overlapping_runs"
+      ]
+    },
+    {
+      "id": "isolation",
+      "name": "Isolasjonsspill",
+      "weaknessLabel": "Klarer ikke stå alene mot back",
+      "category": "taktisk",
+      "difficulty": "moderat",
+      "note": "Å tåle å bli isolert ute på kanten er en ferdighet i seg selv.",
+      "coveredBy": [
+        "one_v_one",
+        "dribbling"
+      ]
+    },
+    {
+      "id": "hold_up_play",
+      "name": "Ryggen mot mål",
+      "weaknessLabel": "Svak med ryggen mot mål",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Å holde på ballen med en stopper i ryggen. Klassisk spissvakhet.",
+      "coveredBy": [
+        "strength",
+        "physical_presence",
+        "link_play"
+      ]
+    },
+    {
+      "id": "combination_play",
+      "name": "Kombinasjonsspill",
+      "weaknessLabel": "Spiller lite med de rundt seg",
+      "category": "taktisk",
+      "difficulty": "moderat",
+      "note": "Krever relasjoner — og at manageren gir ham noen å spille med.",
+      "coveredBy": [
+        "link_play"
+      ]
+    },
+    {
+      "id": "vision",
+      "name": "Spilleforståelse",
+      "weaknessLabel": "Ser ikke bildet tidlig nok",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Det som skiller en god spiller fra en dirigent. Flytter seg sakte.",
+      "coveredBy": [
+        "reading_game",
+        "chance_creation"
+      ]
+    },
+    {
+      "id": "composure",
+      "name": "Ro på ballen",
+      "weaknessLabel": "Stresser under press",
+      "category": "mental",
+      "difficulty": "moderat",
+      "note": "Kommer med trygghet, kamper og en manager som ikke skjeller.",
+      "coveredBy": [
+        "leadership"
+      ]
+    },
+    {
+      "id": "tempo_control",
+      "name": "Tempokontroll",
+      "weaknessLabel": "Styrer ikke tempoet",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Å vite når laget skal roe ned. Erfaring mer enn trening.",
+      "coveredBy": [
+        "reading_game"
+      ]
+    },
+    {
+      "id": "chance_creation",
+      "name": "Sjanseskaping",
+      "weaknessLabel": "Skaper lite selv",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Å finne på noe når det ikke er noe der.",
+      "coveredBy": [
+        "final_pass",
+        "vision"
+      ]
+    }
+  ],
+  "positionDemands": {
+    "GK": [
+      "shot_stopping",
+      "reflexes",
+      "distribution",
+      "positioning",
+      "composure",
+      "first_touch",
+      "simple_passing",
+      "passing_range"
+    ],
+    "CB": [
+      "duels",
+      "heading",
+      "positioning",
+      "defensive_reading",
+      "simple_passing",
+      "composure",
+      "blocking",
+      "passing_range"
+    ],
+    "LB": [
+      "stamina",
+      "crossing",
+      "overlapping_runs",
+      "defensive_reading",
+      "wide_support",
+      "duels",
+      "positioning",
+      "heading"
+    ],
+    "RB": [
+      "stamina",
+      "crossing",
+      "overlapping_runs",
+      "defensive_reading",
+      "wide_support",
+      "duels",
+      "positioning",
+      "heading"
+    ],
+    "WB": [
+      "stamina",
+      "crossing",
+      "overlapping_runs",
+      "acceleration",
+      "wide_support",
+      "duels",
+      "defensive_reading",
+      "first_touch"
+    ],
+    "DM": [
+      "positioning",
+      "defensive_reading",
+      "simple_passing",
+      "duels",
+      "composure",
+      "passing_range",
+      "blocking",
+      "tempo_control"
+    ],
+    "CM": [
+      "stamina",
+      "passing_range",
+      "vision",
+      "positioning",
+      "combination_play",
+      "first_touch",
+      "duels",
+      "late_runs"
+    ],
+    "AM": [
+      "final_pass",
+      "vision",
+      "first_touch",
+      "combination_play",
+      "movement",
+      "composure",
+      "dribbling",
+      "late_runs"
+    ],
+    "LW": [
+      "dribbling",
+      "acceleration",
+      "isolation",
+      "crossing",
+      "off_ball_runs",
+      "first_touch",
+      "stamina",
+      "final_pass"
+    ],
+    "RW": [
+      "dribbling",
+      "acceleration",
+      "isolation",
+      "crossing",
+      "off_ball_runs",
+      "first_touch",
+      "stamina",
+      "final_pass"
+    ],
+    "ST": [
+      "finishing",
+      "box_finishing",
+      "off_ball_runs",
+      "hold_up_play",
+      "box_presence",
+      "first_touch",
+      "heading",
+      "composure"
+    ]
+  },
+  "positionDemandsNote": "Hva posisjonen KREVER, uavhengig av hvilke roller som finnes for den. Dette er gulvet som gjør at enhver spiller får en profil — en keeper har bare én gyldig rolle, og ville ellers stått uten svake sider."
+}
