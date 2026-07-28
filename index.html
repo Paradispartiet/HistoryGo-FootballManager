@@ -728,6 +728,7 @@
         <button type="button" data-modal-open="modalTrainingProgram">Ukas ramme</button>
         <button type="button" data-modal-open="modalTrainingFocusPick">Ukas tema</button>
         <button type="button" data-modal-open="modalIndividualTraining">Individuell trening</button>
+        <button type="button" data-modal-open="modalWeaknesses">Svake sider</button>
         <button type="button" data-modal-open="modalTrainingFocus">Managerinnsikt</button>
         <button type="button" data-modal-open="modalKnowledge">Fotballkunnskap</button>
       </div>
@@ -1201,6 +1202,23 @@
             <p id="weeklyTrainingStatus" class="weekly-training-status">Velg ett fokus før kamp.</p>
             <p id="weeklyTrainingRecommendation" class="weekly-training-recommendation">Laster anbefaling…</p>
             <div id="weeklyTrainingOptions" class="weekly-training-options"></div>
+          </div>
+        </div>
+
+  <!-- SVAKE SIDER: alle spillere gjennom historien har hatt dem. Lista er ikke
+       en dom over spillerne — den sier hvor det koster noe å bruke dem, og er
+       dermed selve begrunnelsen for at posisjon og rolle betyr mer enn
+       `overall`. Identifiseres av src/football-player-weaknesses.js ut av data
+       som allerede finnes i spillerfila. -->
+  <div class="modal-overlay" id="modalWeaknesses" role="dialog" aria-modal="true" aria-label="Svake sider" hidden>
+          <div class="modal modal-wide">
+            <div class="modal-head">
+              <div><p class="eyebrow">Troppen</p><h3>Svake sider</h3></div>
+              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
+            </div>
+            <p class="muted-text">Alle spillere gjennom historien har hatt svake sider. Dette er ikke en dom over dem — det er svaret på hvor det koster deg noe å bruke dem. En svak side trekker aldri fra klassen deres; den sier hvilke roller som er stengt til du gjør noe med det.</p>
+            <p id="weaknessWorkSummary" class="weekly-training-status" data-selected="false">Laster troppen…</p>
+            <div id="weaknessList" class="weakness-list"></div>
           </div>
         </div>
 

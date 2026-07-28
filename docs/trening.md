@@ -24,7 +24,7 @@ rekkefølge de hørte hjemme i.
 1. INNBOKS       les signalene            ikke et treningsvalg — det du leser FØR
 2. PROGRAM       ukas RAMME               → belastning: hvor mye kroppene henter inn
 3. FOKUS         kampens TEMA             → metrikkbonus på kampdag
-4. INDIVIDUELL   ENKELTSPILLEREN          → rollefortrolighet, restitusjon, form, opptrening
+4. INDIVIDUELL   ENKELTSPILLEREN          → svake sider, rollefortrolighet, restitusjon, form
 ```
 
 Hvert lag har nå én jobb, og de overlapper ikke. Flata viser stegene som en
@@ -91,6 +91,7 @@ ikke: **ingen av sporene rører `overall` eller `matchScore`.**
 | Spor | Krever | Gjør |
 |---|---|---|
 | **Rolletrening** | en rolle | bygger rollefortrolighet (samme oppslag som kamperfaring) |
+| **Svakhetstrening** | en av *hans* svake sider | åpner rollene den svake siden stengte — se `docs/svake-sider.md` |
 | **Egen restitusjon** | – | henter inn belastning, oppå lagets hvile |
 | **Skarphet** | – | løfter formen litt, koster bein |
 | **Opptrening** | at han er skadet | korter ned skaden med én uke |
@@ -143,6 +144,7 @@ Rolletrening fra klubbsesongen følger ikke med inn i et scenario.
 | Ukas ramme | `src/football-training-program-compositions.js` |
 | Belastning/form/skade | `src/football-player-condition.js` |
 | Rollefortrolighet | `src/football-role-familiarity-engine.js` |
+| Svake sider | `src/football-player-weaknesses.js` + `data/football_player_weaknesses.json` |
 
 Sporene er **data**. Verken `app.js` eller `index.html` nevner en eneste
 spor-id — det er vaktet.

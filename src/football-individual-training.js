@@ -9,6 +9,7 @@
 // `overall`, `matchScore` eller fit-motoren. De gjør fire helt andre ting:
 //
 //   ROLLETRENING      spilleren forstår en rolle bedre (rollefortrolighet)
+//   SVAKHETSTRENING   en av hans identifiserte svake sider bearbeides
 //   EGEN RESTITUSJON  belastningen hentes inn raskere
 //   SKARPHET          formen løftes litt — midlertidig, som all form
 //   OPPTRENING        en skadet mann kommer raskere tilbake
@@ -72,7 +73,7 @@ export function normalizeIndividualTrainingCatalogue(data) {
       name: str(track.name),
       shortDescription: str(track.shortDescription),
       managerNote: str(track.managerNote),
-      requires: ["role", "injured", "none"].includes(str(track.requires)) ? str(track.requires) : "none",
+      requires: ["role", "weakness", "injured", "none"].includes(str(track.requires)) ? str(track.requires) : "none",
       familiarityGrowth: clamp(num(track.familiarityGrowth), 0, 20),
       loadDelta: clamp(num(track.loadDelta), -30, 15),
       formDelta: clamp(num(track.formDelta), -1, 1),
@@ -117,8 +118,10 @@ export function sanitizeIndividualAssignments(value, { catalogue, capacity = 5, 
     if (!playerId || !track || seen.has(playerId)) continue;
     const roleId = track.requires === "role" ? str(entry.roleId) : "";
     if (track.requires === "role" && !roleId) continue;
+    const attributeId = track.requires === "weakness" ? str(entry.attributeId) : "";
+    if (track.requires === "weakness" && !attributeId) continue;
     seen.add(playerId);
-    result.push({ playerId, trackId: track.id, roleId: roleId || null });
+    result.push({ playerId, trackId: track.id, roleId: roleId || null, attributeId: attributeId || null });
     if (result.length >= clamp(Math.trunc(num(capacity, 5)), 1, 11)) break;
   }
   if (Number.isInteger(week)) return { week, assignments: result };
@@ -127,7 +130,10 @@ export function sanitizeIndividualAssignments(value, { catalogue, capacity = 5, 
 
 // Kan denne spilleren settes på dette sporet? Returnerer alltid en forklaring —
 // et «nei» uten grunn ville vært en blindvei.
-export function evaluateIndividualAssignment({ track, player, condition, roleId = null } = {}) {
+// `weaknesses` er spillerens identifiserte svake sider (fra
+// football-player-weaknesses.js). Svakhetstrening godtas bare mot én av dem —
+// du kan ikke trene bort noe han ikke sliter med.
+export function evaluateIndividualAssignment({ track, player, condition, roleId = null, attributeId = null, weaknesses = [] } = {}) {
   if (!track) return { valid: false, reason: "Ukjent treningsspor." };
   if (!player || !str(player.id)) return { valid: false, reason: "Ingen spiller valgt." };
 
@@ -140,6 +146,18 @@ export function evaluateIndividualAssignment({ track, player, condition, roleId 
   }
   if (track.requires === "role" && !str(roleId)) {
     return { valid: false, reason: "Rolletrening krever at du velger hvilken rolle han skal lære." };
+  }
+  if (track.requires === "weakness") {
+    const list = asArray(weaknesses);
+    if (list.length === 0) {
+      return { valid: false, reason: `${player.name || "Spilleren"} har ingen svake sider innenfor rekkevidde å jobbe med.` };
+    }
+    if (!str(attributeId)) {
+      return { valid: false, reason: "Velg hvilken svak side han skal jobbe med." };
+    }
+    if (!list.some((weakness) => str(weakness?.attributeId) === str(attributeId))) {
+      return { valid: false, reason: "Dette er ikke en av hans svake sider — det er ingenting å hente der." };
+    }
   }
 
   return { valid: true, reason: track.effectText || "" };
@@ -172,12 +190,17 @@ export function resolveIndividualTrainingWeek({
   playersById = {},
   conditionsById = {},
   staffCategories = [],
-  playsRoleThisWeek = {}
+  playsRoleThisWeek = {},
+  weaknessesByPlayerId = {}
 } = {}) {
   const loadDeltas = {};
   const formDeltas = {};
   const rehabWeeks = {};
   const familiarityGains = [];
+  // Svakhetstrening gir MÅL, ikke tall: hvor fort en svak side flytter seg eies
+  // av football-player-weaknesses.js (vanskelighetsgrad per attributt). Samme
+  // arbeidsdeling som for belastning og fortrolighet.
+  const weaknessTargets = [];
   const reports = [];
 
   for (const assignment of asArray(assignments)) {
@@ -187,7 +210,14 @@ export function resolveIndividualTrainingWeek({
 
     const player = playersById[playerId] || { id: playerId, name: playerId };
     const condition = conditionsById[playerId] || null;
-    const check = evaluateIndividualAssignment({ track, player, condition, roleId: assignment.roleId });
+    const check = evaluateIndividualAssignment({
+      track,
+      player,
+      condition,
+      roleId: assignment.roleId,
+      attributeId: assignment.attributeId,
+      weaknesses: weaknessesByPlayerId[playerId]
+    });
     if (!check.valid) {
       reports.push({
         playerId,
@@ -230,6 +260,16 @@ export function resolveIndividualTrainingWeek({
         : `Rollefortrolighet +${growth} — han spiller ikke rollen denne uka, så læringen fester seg saktere.`);
     }
 
+    if (track.requires === "weakness" && assignment.attributeId) {
+      const weakness = asArray(weaknessesByPlayerId[playerId])
+        .find((entry) => str(entry?.attributeId) === str(assignment.attributeId)) || null;
+      weaknessTargets.push({ playerId, attributeId: assignment.attributeId, staffFactor: support.factor });
+      explanation.push(weakness
+        ? `Jobber med «${weakness.label.toLowerCase()}». ${weakness.note || ""}`.trim()
+        : "Jobber med en av hans svake sider.");
+      explanation.push("Dette gjør ham ikke bedre — det åpner rollene som krever det. Uttellingen kommer når du bruker ham der.");
+    }
+
     explanation.push(`Stabsstøtte: ${support.label.toLowerCase()}. ${track.managerNote}`);
 
     reports.push({
@@ -238,6 +278,7 @@ export function resolveIndividualTrainingWeek({
       trackId: track.id,
       trackName: track.name,
       roleId: assignment.roleId || null,
+      attributeId: assignment.attributeId || null,
       applied: true,
       staffSupport: support.label,
       headline: `${str(player.name) || playerId}: ${track.name}`,
@@ -245,7 +286,7 @@ export function resolveIndividualTrainingWeek({
     });
   }
 
-  return { loadDeltas, formDeltas, rehabWeeks, familiarityGains, reports };
+  return { loadDeltas, formDeltas, rehabWeeks, familiarityGains, weaknessTargets, reports };
 }
 
 // Kort oppsummering til flata. Sier alltid hvor mange plasser du har igjen —

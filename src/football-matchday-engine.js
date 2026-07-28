@@ -107,7 +107,7 @@ export function createDefaultOpponent() {
 //   - historisk formasjonsfit gir en liten bonus/penalty,
 //   - matchEngineEffects gir kun en liten tendens,
 //   - aktive lagklasser gir en liten bonus.
-export function calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus, conditionPenalty } = {}) {
+export function calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus, conditionPenalty, weaknessWorkBonus } = {}) {
   const fit = teamFit || {};
   const metrics = fit.metrics || {};
   const completeCount = num(fit.completeCount);
@@ -161,6 +161,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
         matchupTendency: 0,
         classificationBonus: 0,
         roleFamiliarityBonus: 0,
+        weaknessWorkBonus: 0,
         fatiguePenalty: 0,
         missing
       }
@@ -208,6 +209,13 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
   // Dette sier ingenting om spillerne: det sier hvordan de er brukt.
   const fatiguePenalty = clampRange(num(conditionPenalty), 0, 6);
 
+  // Svake sider (Player Weaknesses v1): alle spillere har dem. Har manageren
+  // jobbet med en av dem OG satt spilleren i rollen som krever nettopp det,
+  // betaler arbeidet — lite og klampet (maks +4). Har han trent noe han ikke
+  // bruker, er dette null. Bonusen sier ingenting om spillerens klasse; den
+  // sier at treneren har åpnet en dør og gått gjennom den.
+  const weaknessBonus = clampRange(num(weaknessWorkBonus), 0, 4);
+
   let finalStrength = baseTeamScore;
   finalStrength -= fatiguePenalty;
   finalStrength -= incompletePenalty;
@@ -216,6 +224,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
   finalStrength += matchupTendency;
   finalStrength += classificationBonus;
   finalStrength += familiarityBonus;
+  finalStrength += weaknessBonus;
   finalStrength = clamp(Math.round(finalStrength));
 
   return {
@@ -230,6 +239,7 @@ export function calculateMatchStrength({ teamFit, formation, activeClassificatio
       matchupTendency: Math.round(matchupTendency * 10) / 10,
       classificationBonus,
       roleFamiliarityBonus: familiarityBonus,
+      weaknessWorkBonus: weaknessBonus,
       fatiguePenalty,
       missing
     }
@@ -1345,7 +1355,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus, benchPlayers, roles, conditionPenalty, conditionByPlayerId } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus, weaknessWorkBonus, benchPlayers, roles, conditionPenalty, conditionByPlayerId } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
 
   // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
@@ -1369,7 +1379,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       })
     : null;
 
-  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus, conditionPenalty });
+  const strength = calculateMatchStrength({ teamFit, formation, activeClassifications, formationMatchup, roleFamiliarityBonus, weaknessWorkBonus, conditionPenalty });
   const tp = strength.tacticalProfile;
 
   // roleFitAverage trengs av flere hendelses-sjekker, men er ikke del av v1-

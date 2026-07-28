@@ -48,10 +48,10 @@ stage("1. Katalogen");
 
 check("versjonen er stemplet", INDIVIDUAL_TRAINING_VERSION === "individual-training.v1");
 check("datafilen har sitt eget skjema", raw.schema === "historygo-football-manager.individual-training.v1");
-check("fire spor er lastet", catalogue.tracks.length === 4);
+check(`sporene er lastet (${catalogue.tracks.length})`, catalogue.tracks.length >= 4);
 check(
-  "sporene dekker de fire jobbene",
-  ["role_drills", "recovery", "sharpness", "rehab"].every((id) => Boolean(getIndividualTrack(catalogue, id)))
+  "sporene dekker jobbene: rolle, svak side, kropp, form og skade",
+  ["role_drills", "weakness_work", "recovery", "sharpness", "rehab"].every((id) => Boolean(getIndividualTrack(catalogue, id)))
 );
 check("hvert spor forklarer effekten sin", catalogue.tracks.every((track) => track.effectText.length > 10));
 check("hvert spor forklarer risikoen sin", catalogue.tracks.every((track) => track.riskText.length > 10));
@@ -270,7 +270,33 @@ const html = fs.readFileSync(new URL("../index.html", import.meta.url), "utf8");
 check("katalogen lastes fra datafil", /individualTraining: "data\/football_individual_training\.json"/.test(app));
 check("ingen spor er hardkodet i app.js", !/role_drills|"sharpness"/.test(app));
 check("uka anvendes fra restitusjonssteget", /applyWeeklyRecovery\([\s\S]{0,220}applyIndividualTrainingWeek\(\)/.test(app));
-check("flata rendres fra render-løypa", /\n  renderIndividualTraining\(\);\n  renderWeeklyTrainingPlan\(\);/.test(app));
+
+// REKKEFØLGE-VAKT. Tildelingene er nøklet på Club Week-uka, og
+// `getIndividualAssignments()` returnerer tom liste hvis uka ikke stemmer.
+// Ukesoppgjøret må derfor kjøre MENS `state.clubWeekState` fortsatt peker på
+// uka som avsluttes — altså før `setClubWeekState(next)`.
+//
+// Flytter noen på de to linjene, slutter individuell trening å virke helt
+// stille: ingen feil, ingen unntak, bare en uke som ikke gjorde noe. Ingen
+// annen vakt ville sett det.
+{
+  const rollover = app.slice(app.indexOf("if (next.week !== previous.week)"));
+  const recoveryAt = rollover.indexOf("applyWeeklyPlayerRecovery()");
+  const commitAt = rollover.indexOf("setClubWeekState(next)");
+  check(
+    "ukesoppgjøret kjører før den nye uka settes (ellers er tildelingene borte)",
+    recoveryAt > -1 && commitAt > -1 && recoveryAt < commitAt
+  );
+}
+// Vakten er skrevet mot INTENSJONEN: begge kallene skal stå i render-løypa.
+// En tidligere utgave krevde at de sto på HVER SIN LINJE rett etter hverandre,
+// og ble rød da et tredje render-kall (svake sider) kom imellom — uten at noe
+// var galt. Render-løypa er kroppen til renderApp().
+{
+  const renderApp = app.slice(app.indexOf("function renderApp()"));
+  check("individuell trening rendres fra render-løypa", /\n  renderIndividualTraining\(\);/.test(renderApp));
+  check("ukens plan rendres fra render-løypa", /\n  renderWeeklyTrainingPlan\(\);/.test(renderApp));
+}
 check("popupen finnes", /id="modalIndividualTraining"/.test(html));
 check("tildelinger er modus-isolert", /"individualTraining"/.test(fs.readFileSync(new URL("../src/football-mode-sessions.js", import.meta.url), "utf8")));
 

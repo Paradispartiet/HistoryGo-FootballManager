@@ -51,6 +51,7 @@ npm run sim:pitch-layout       # brikkefordelingen på taktikktavla (alle formas
 npm run sim:training-week      # weekly training focus
 npm run sim:training-plan      # ukas plan: ramme + tema + individuell, og samsvaret mellom dem
 npm run sim:individual-training # individuell oppfølging av én spiller
+npm run sim:player-weaknesses  # svake sider: identifisering, trening og uttelling
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
 npm run sim:suggested-setups   # self-explaining suggested setups
 npm run sim:training-programs   # weekly training-program compositions
@@ -95,6 +96,7 @@ The single most important thing to understand is that this repo contains **two i
 - `football-mini-season.js`, `football-match-consequences.js`, `football-training-week.js` — mini-season, Club Week consequences, weekly training focus.
 - `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
 - `football-training-plan.js` — the one model that binds the training layers into **one week with four steps**: Inbox (signals) → Program (the week's *frame*, i.e. load) → Focus (the *match theme*, i.e. metric bonus) → Individual. Its central rule is that the focus should sit *inside* the chosen program; a mismatch costs a point of metric bonus and is explained as a manager decision. It also normalises the programs' own `fatigueLoad` (6–19 per week) into the recovery input — those numbers existed but were never read. See `docs/trening.md`.
+- `football-player-weaknesses.js` — every player has weak sides, and they are *why* position/role fit matters. **Identified from data that already existed** (`role.requires` + data-authored `positionDemands`, minus the player's `strengths`, with `coveredBy` handling overlapping tokens) — never invented claims about a real footballer. A weakness **never subtracts** from anything: the only number it can produce is a small capped bonus (max +4), and only when the manager has *trained* it **and then played him in a role that demands it*. Training opens doors; it does not raise class. See `docs/svake-sider.md`.
 - `football-individual-training.js` — per-player training beside the team session: role drills (builds role familiarity), personal recovery, sharpness, rehab. **No track touches `overall` or `matchScore`** — they change what a player *fits*, not how good he is. Catalogue is data (`data/football_individual_training.json`); capacity is `1 + relevant staff`, capped at 5 and never zero.
 - `football-suggested-setups.js` — self-explaining 2–4 logical setups (formation / match plan / training week) that advise without replacing the manager's own choice.
 - `football-off-pitch-parameters.js` — the human context layer: fatigue, injury risk, morale, confidence, autonomy, dressing-room mood, media/board/family pressure, hidden mental state.

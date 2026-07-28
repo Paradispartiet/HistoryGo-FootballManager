@@ -141,6 +141,18 @@ import {
   describeWeeklyLoad
 } from "./football-training-plan.js";
 import {
+  PLAYER_WEAKNESS_VERSION,
+  normalizeWeaknessCatalogue,
+  normalizeWeaknessProgress,
+  identifyPlayerWeaknesses,
+  getWeaknessProgress,
+  describeWeaknessProgress,
+  applyWeaknessTraining,
+  weeklyWeaknessGrowth,
+  summarizeLineupWeaknessWork,
+  getWeaknessAttribute
+} from "./football-player-weaknesses.js";
+import {
   normalizeIndividualTrainingCatalogue,
   getIndividualTrack,
   calculateIndividualCapacity,
@@ -256,6 +268,9 @@ const DATA_PATHS = {
   // Individuell trening: sporene en enkeltspiller kan settes på ved siden av
   // lagsøkta. Ingen av dem hever `overall` — se docs/trening.md.
   individualTraining: "data/football_individual_training.json",
+  // Svake sider: attributtkatalog + posisjonskrav. Svakhetene identifiseres ut
+  // av spillerdataene som allerede finnes — se docs/svake-sider.md.
+  playerWeaknesses: "data/football_player_weaknesses.json",
   trainingBadges: "data/football_training_badges.json",
   teamClassifications: "data/football_team_classifications.json",
   // Stedsrapporter (v1): forklarer hva hvert sportsted gir manageren. Rent
@@ -405,6 +420,8 @@ const state = {
   individualTrainingCatalogue: { capacity: { base: 1, perStaffMember: 1, max: 5 }, tracks: [] },
   // Ukas individuelle oppfølging: { week, assignments: [] }.
   individualTraining: { week: null, assignments: [] },
+  // Katalogen over svake sider (fra datafil, normalisert).
+  weaknessCatalogue: { attributes: [], positionDemands: {}, difficulty: {}, biteReliefCap: 4 },
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
@@ -568,6 +585,9 @@ const elements = {
   individualTrainingCapacity: document.querySelector("#individualTrainingCapacity"),
   individualTrainingAssignments: document.querySelector("#individualTrainingAssignments"),
   individualTrainingPicker: document.querySelector("#individualTrainingPicker"),
+  // Svake sider (football-player-weaknesses.js).
+  weaknessWorkSummary: document.querySelector("#weaknessWorkSummary"),
+  weaknessList: document.querySelector("#weaknessList"),
   weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
   weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
@@ -1361,6 +1381,9 @@ function normalizeTeamMerits(merits) {
     // ved RIKTIG bruk over kamper. Bor i manager-staten (teamMerits), aldri i
     // History Go-progresjonen. Robust mot gamle/korrupte data.
     roleFamiliarity: normalizeRoleFamiliarity(base.roleFamiliarity),
+    // Framgang på svake sider, spiller×attributt → 0–100. Persisteres sammen med
+    // rollefortroligheten, aldri i History Go-progresjonen.
+    weaknessProgress: normalizeWeaknessProgress(base.weaknessProgress),
     unlockedPlaceIds: Array.isArray(base.unlockedPlaceIds) ? base.unlockedPlaceIds : [],
     unlockedExpertiseIds: Array.isArray(base.unlockedExpertiseIds) ? base.unlockedExpertiseIds : [],
     earnedBadgeIds: Array.isArray(base.earnedBadgeIds) ? base.earnedBadgeIds : [],
@@ -3558,6 +3581,43 @@ function getLineupRoleUsageEntries(teamFit) {
     }));
 }
 
+// ---------------------------------------------------------------------------
+// Svake sider
+//
+// Identifiseres ut av spillerdataene (rollens `requires` + posisjonens krav,
+// minus spillerens `strengths`). Memoisert per spiller: listen er ren funksjon
+// av data som ikke endrer seg i en økt, og den bygges i hver render.
+// ---------------------------------------------------------------------------
+const weaknessCache = new Map();
+
+function getPlayerWeaknesses(player) {
+  const id = player?.id;
+  if (!id) return [];
+  if (weaknessCache.has(id)) return weaknessCache.get(id);
+  const list = identifyPlayerWeaknesses(player, {
+    roles: state.roles,
+    catalogue: state.weaknessCatalogue
+  });
+  weaknessCache.set(id, list);
+  return list;
+}
+
+function getWeaknessProgressStore() {
+  return state.teamMerits?.weaknessProgress && typeof state.teamMerits.weaknessProgress === "object"
+    ? state.teamMerits.weaknessProgress
+    : {};
+}
+
+// Hva svakhetsarbeidet er verdt i denne elleveren: én liten bonus per spiller
+// som står i en rolle han har trent seg til. Trent, men ikke brukt, gir null —
+// og det sies rett ut i stedet for å skjules.
+function getLineupWeaknessWork(teamFit) {
+  return summarizeLineupWeaknessWork(getWeaknessProgressStore(), teamFit?.assignments, {
+    roles: state.roles,
+    catalogue: state.weaknessCatalogue
+  });
+}
+
 // Oppsummert fortrolighet for den valgte startelleveren (snitt, etablerte/ferske
 // og en liten, klampet kampstyrke-bonus). Ren visning + bonus, ingen mutasjon.
 function getLineupFamiliaritySummary(teamFit) {
@@ -4026,7 +4086,9 @@ function playMatchday() {
     conditionByPlayerId: getFreshnessByPlayerId(),
     // Role Familiarity Engine v1: liten, klampet kampstyrke-bonus for kontinuitet
     // i rollene. Beregnet utenfor fit-motoren og matet inn additivt.
-    roleFamiliarityBonus: getLineupFamiliaritySummary(teamFit).bonus
+    roleFamiliarityBonus: getLineupFamiliaritySummary(teamFit).bonus,
+    // Svakhetstrening betaler kun når spilleren står i rollen han trente seg til.
+    weaknessWorkBonus: getLineupWeaknessWork(teamFit).bonus
   });
 
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
@@ -10612,10 +10674,10 @@ function saveIndividualTraining() {
   }
 }
 
-function setIndividualAssignment(playerId, trackId, roleId = null) {
+function setIndividualAssignment(playerId, trackId, roleId = null, attributeId = null) {
   const week = Number(state.clubWeekState?.week) || 1;
   const current = getIndividualAssignments().filter((entry) => entry.playerId !== playerId);
-  const next = trackId ? [...current, { playerId, trackId, roleId }] : current;
+  const next = trackId ? [...current, { playerId, trackId, roleId, attributeId }] : current;
   const sanitized = sanitizeIndividualAssignments(next, {
     catalogue: state.individualTrainingCatalogue,
     capacity: getIndividualTrainingCapacity(),
@@ -10655,7 +10717,10 @@ function applyIndividualTrainingWeek() {
     playersById,
     conditionsById,
     staffCategories: (getCoachContext()?.activeStaff || []).map((member) => member?.category).filter(Boolean),
-    playsRoleThisWeek: getPlannedRoleByPlayerId()
+    playsRoleThisWeek: getPlannedRoleByPlayerId(),
+    weaknessesByPlayerId: Object.fromEntries(
+      assignments.map((assignment) => [assignment.playerId, getPlayerWeaknesses(playersById[assignment.playerId])])
+    )
   });
 
   state.playerCondition = applyIndividualTrainingEffects(conditions, resolved);
@@ -10666,7 +10731,99 @@ function applyIndividualTrainingWeek() {
     saveTeamMerits();
   }
 
+  // Svakhetstrening: individuell-trening-motoren leverer MÅL, ikke tall. Hvor
+  // fort en svak side flytter seg eies av svakhetsmotoren — posisjonering går
+  // fort, akselerasjon nesten ikke.
+  if (state.teamMerits && resolved.weaknessTargets.length > 0) {
+    const gains = resolved.weaknessTargets.map((target) => ({
+      playerId: target.playerId,
+      attributeId: target.attributeId,
+      growth: weeklyWeaknessGrowth(state.weaknessCatalogue, target.attributeId, target.staffFactor)
+    }));
+    state.teamMerits.weaknessProgress = applyWeaknessTraining(getWeaknessProgressStore(), gains);
+    saveTeamMerits();
+  }
+
   return resolved.reports;
+}
+
+// Troppens svake sider, med framgangen på hver. Flata sier eksplisitt når et
+// ferdig arbeid ligger ubrukt — å trene noe du aldri tar i bruk er en av de få
+// måtene å kaste bort en uke på, og det skal ikke være skjult.
+function renderPlayerWeaknesses(teamFit) {
+  const list = elements.weaknessList;
+  if (!list) return;
+
+  const work = getLineupWeaknessWork(teamFit);
+  if (elements.weaknessWorkSummary) {
+    const idle = work.idleWork.length > 0
+      ? ` ${work.idleWork.length} ferdig arbeid ligger ubrukt — sett spilleren i en rolle som krever det.`
+      : "";
+    elements.weaknessWorkSummary.textContent = `${work.headline}${idle}`;
+    elements.weaknessWorkSummary.dataset.selected = work.bonus > 0 ? "true" : "false";
+  }
+
+  list.textContent = "";
+  const store = getWeaknessProgressStore();
+  const players = getUnlockedPlayers();
+
+  if (players.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted-text";
+    empty.textContent = "Hent spillere først, så tegner vi profilene deres.";
+    list.append(empty);
+    return;
+  }
+
+  players.forEach((player) => {
+    const weaknesses = getPlayerWeaknesses(player);
+    const card = document.createElement("article");
+    card.className = "weakness-card";
+
+    const title = document.createElement("h5");
+    title.textContent = player.name || player.id;
+    card.append(title);
+
+    if (weaknesses.length === 0) {
+      const none = document.createElement("p");
+      none.className = "muted-text";
+      none.textContent = "Ingen svake sider innenfor rekkevidde — styrkene hans dekker det posisjonene krever.";
+      card.append(none);
+      list.append(card);
+      return;
+    }
+
+    const rows = document.createElement("ul");
+    rows.className = "weakness-rows";
+    weaknesses.forEach((weakness) => {
+      const progress = describeWeaknessProgress(getWeaknessProgress(store, player.id, weakness.attributeId));
+      const row = document.createElement("li");
+      row.dataset.level = progress.level;
+
+      const label = document.createElement("strong");
+      label.textContent = weakness.label;
+      const meta = document.createElement("span");
+      meta.textContent = `${weakness.category} · ${weakness.difficulty} å trene · ${progress.label}`;
+      const bar = document.createElement("div");
+      bar.className = "weakness-bar";
+      const fill = document.createElement("i");
+      fill.style.width = `${progress.value}%`;
+      bar.append(fill);
+
+      row.append(label, meta, bar);
+      // Hvilke dører den stenger. Er det ingen rolle i rekkevidde, kommer kravet
+      // fra selve posisjonen — da sier vi det i stedet for å la linja stå tom.
+      const bites = document.createElement("span");
+      bites.className = "weakness-bites";
+      bites.textContent = weakness.bitesInRoles.length > 0
+        ? `Stenger: ${weakness.bitesInRoles.slice(0, 3).map((role) => role.name).join(", ")}`
+        : weakness.note || "Kreves av posisjonen han spiller.";
+      row.append(bites);
+      rows.append(row);
+    });
+    card.append(rows);
+    list.append(card);
+  });
 }
 
 function renderIndividualTraining() {
@@ -10705,9 +10862,17 @@ function renderIndividualTraining() {
       const note = document.createElement("p");
       note.className = "muted-text";
       const role = assignment.roleId ? getRoleById(assignment.roleId) : null;
-      note.textContent = role
-        ? `Lærer rollen ${role.name}. ${plannedRoles[assignment.playerId] === assignment.roleId ? "Han spiller den på lørdag — læringen festes." : "Han spiller den ikke denne uka, så læringen fester seg saktere."}`
-        : track.effectText;
+      const attribute = assignment.attributeId ? getWeaknessAttribute(state.weaknessCatalogue, assignment.attributeId) : null;
+      if (attribute) {
+        const progress = describeWeaknessProgress(
+          getWeaknessProgress(getWeaknessProgressStore(), assignment.playerId, assignment.attributeId)
+        );
+        note.textContent = `${attribute.weaknessLabel} → ${attribute.name}. ${progress.label} (${progress.value}/100). ${progress.hint}`;
+      } else if (role) {
+        note.textContent = `Lærer rollen ${role.name}. ${plannedRoles[assignment.playerId] === assignment.roleId ? "Han spiller den på lørdag — læringen festes." : "Han spiller den ikke denne uka, så læringen fester seg saktere."}`;
+      } else {
+        note.textContent = track.effectText;
+      }
       const risk = document.createElement("p");
       risk.className = "individual-training-risk";
       risk.textContent = track.riskText;
@@ -10765,6 +10930,29 @@ function renderIndividualTraining() {
     status.textContent = describeCondition(condition);
     card.append(title, status);
 
+    // Svake sider er ikke en dom over spilleren — de er svaret på «hvor koster
+    // det noe å bruke ham?». Derfor står de synlig på kortet der du velger hva
+    // han skal jobbe med, ikke gjemt bak en forklaring.
+    const weaknesses = getPlayerWeaknesses(player);
+    const weaknessLine = document.createElement("p");
+    weaknessLine.className = "individual-training-weaknesses";
+    weaknessLine.textContent = weaknesses.length > 0
+      ? `Svake sider: ${weaknesses.map((weakness) => weakness.label.toLowerCase()).join(" · ")}`
+      : "Ingen svake sider innenfor rekkevidde.";
+    card.append(weaknessLine);
+
+    const weaknessSelect = document.createElement("select");
+    weaknessSelect.className = "individual-training-role";
+    weaknessSelect.setAttribute("aria-label", `Svak side å jobbe med for ${player.name || player.id}`);
+    weaknesses.forEach((weakness) => {
+      const progress = getWeaknessProgress(getWeaknessProgressStore(), player.id, weakness.attributeId);
+      const option = document.createElement("option");
+      option.value = weakness.attributeId;
+      option.textContent = `${weakness.label} — ${weakness.difficulty}${progress > 0 ? ` (${progress}/100)` : ""}`;
+      weaknessSelect.append(option);
+    });
+    if (weaknesses.length > 0) card.append(weaknessSelect);
+
     // Rolletrening trenger et mål. Valget er managerens: rollen han skal spille
     // på lørdag, eller en han skal lære til senere.
     const roleCandidates = getIndividualRoleCandidates(player, plannedRoles[player.id] || null);
@@ -10783,7 +10971,10 @@ function renderIndividualTraining() {
     options.className = "individual-training-tracks";
     (catalogue?.tracks || []).forEach((track) => {
       const roleId = track.requires === "role" ? (roleSelect.value || roleCandidates[0]?.id || null) : null;
-      const check = evaluateIndividualAssignment({ track, player, condition, roleId });
+      const attributeId = track.requires === "weakness"
+        ? (weaknessSelect.value || weaknesses[0]?.attributeId || null)
+        : null;
+      const check = evaluateIndividualAssignment({ track, player, condition, roleId, attributeId, weaknesses });
       const button = document.createElement("button");
       button.type = "button";
       button.className = "individual-training-track";
@@ -10794,7 +10985,8 @@ function renderIndividualTraining() {
         button.addEventListener("click", () => setIndividualAssignment(
           player.id,
           track.id,
-          track.requires === "role" ? (roleSelect.value || roleCandidates[0]?.id || null) : null
+          track.requires === "role" ? (roleSelect.value || roleCandidates[0]?.id || null) : null,
+          track.requires === "weakness" ? (weaknessSelect.value || weaknesses[0]?.attributeId || null) : null
         ));
       }
       options.append(button);
@@ -14803,6 +14995,7 @@ function renderApp() {
   // Ukens plan må rendres ETTER programkomposisjonene: de setter valgt-tilstand
   // og kontekstboksene som planen leser.
   renderIndividualTraining();
+  renderPlayerWeaknesses(teamFit);
   renderWeeklyTrainingPlan();
 
   renderTrainingWeekCounters();
@@ -15521,6 +15714,7 @@ async function loadStartupData() {
     expertiseData,
     trainingProgramsData,
     individualTrainingData,
+    playerWeaknessesData,
     trainingBadgesData,
     teamClassificationsData,
     placeReportsData,
@@ -15559,6 +15753,7 @@ async function loadStartupData() {
     // Individuell trening: katalogen er valgfri på samme måte som resten —
     // uten den faller flata tilbake til en tom, men gyldig, sporliste.
     loadJson(DATA_PATHS.individualTraining).catch(() => null),
+    loadJson(DATA_PATHS.playerWeaknesses).catch(() => null),
     loadJson(DATA_PATHS.trainingBadges).catch(() => null),
     loadJson(DATA_PATHS.teamClassifications).catch(() => null),
     // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
@@ -15656,6 +15851,7 @@ async function loadStartupData() {
   // Individuell trening: katalogen normaliseres av motoren, som degraderer til
   // en tom, gyldig struktur hvis filen mangler.
   state.individualTrainingCatalogue = normalizeIndividualTrainingCatalogue(individualTrainingData);
+  state.weaknessCatalogue = normalizeWeaknessCatalogue(playerWeaknessesData);
   state.trainingBadges = Array.isArray(trainingBadgesData?.badgeFamilies) ? trainingBadgesData : { badgeFamilies: [] };
   state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
     ? teamClassificationsData

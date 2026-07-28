@@ -31,6 +31,29 @@
       "riskText": "Koster litt beinarbeid, og fortroligheten forvitrer igjen hvis du aldri bruker ham der."
     },
     {
+      "id": "weakness_work",
+      "name": "Svakhetstrening",
+      "shortDescription": "Spilleren jobber målrettet med én av sine identifiserte svake sider.",
+      "managerNote": "Alle spillere gjennom historien har hatt svake sider. Dette retter dem ikke opp — det åpner dørene de stengte.",
+      "requires": "weakness",
+      "familiarityGrowth": 0,
+      "loadDelta": 2,
+      "formDelta": 0,
+      "rehabWeeks": 0,
+      "relatedStaffTypes": [
+        "assistant_coach",
+        "tactical_coach",
+        "technical_coach",
+        "first_team_coach",
+        "coach",
+        "training_coach",
+        "fitness_coach",
+        "goalkeeper_coach"
+      ],
+      "effectText": "Bygger framgang på én svak side. Takten avhenger av hvor trenbar den er.",
+      "riskText": "Uttellingen kommer først når du faktisk bruker ham i en rolle som krever det. Trener du noe du aldri tar i bruk, er uka kastet bort."
+    },
+    {
       "id": "recovery",
       "name": "Egen restitusjon",
       "shortDescription": "Spilleren tas ut av full lagsøkt og kjører eget restitusjonsopplegg.",

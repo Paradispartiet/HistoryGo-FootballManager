@@ -8789,3 +8789,64 @@ body > .site-footer { grid-row: 5; }
   border-color: var(--bad, #e2765f);
   color: var(--bad, #e2765f);
 }
+
+/* ============================================================================
+   SVAKE SIDER — ikke en dom over spilleren, men hvor det koster å bruke ham
+   ========================================================================== */
+.individual-training-weaknesses {
+  color: var(--warn, #d8a13a);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.weakness-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 0.8rem;
+}
+
+.weakness-card {
+  border: 1px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  border-radius: var(--radius, 12px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem;
+}
+
+.weakness-card h5 { margin: 0 0 0.5rem; font-size: 0.92rem; }
+
+.weakness-rows {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.weakness-rows li {
+  display: grid;
+  gap: 0.2rem;
+  border-left: 3px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  padding-left: 0.6rem;
+}
+
+.weakness-rows li[data-level="påbegynt"] { border-left-color: var(--warn, #d8a13a); }
+.weakness-rows li[data-level="bedret"] { border-left-color: #8fc7ff; }
+.weakness-rows li[data-level="løst"] { border-left-color: var(--green, #75d69c); }
+
+.weakness-rows strong { font-size: 0.85rem; }
+.weakness-rows span { color: var(--muted, rgba(255, 255, 255, 0.66)); font-size: 0.74rem; }
+.weakness-bites { color: rgba(255, 255, 255, 0.5) !important; font-style: italic; }
+
+.weakness-bar {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.weakness-bar i {
+  display: block;
+  height: 100%;
+  background: var(--green, #75d69c);
+}

@@ -896,6 +896,29 @@ stage("25. Treningsuka har én rekkefølge");
   check("Trening-flata er ikke lenger en vegg av paneler", (html.match(/<div class="tab-section trening-view"[\s\S]*?\n    <\/div>/)?.[0]?.match(/<section class="panel/g) || []).length <= 2);
 }
 
+stage("26. Svake sider er en dør, ikke en dom");
+{
+  // «Alle spillere har svakheter» er én setning unna «noen spillere er
+  // dårligere». Denne vakten holder den setningen på riktig side: svake sider
+  // trekker aldri fra, de identifiseres ut av data som allerede fantes, og
+  // arbeidet med dem åpner roller i stedet for å heve klasse.
+  const weak = readFileSync(join(root, "src/football-player-weaknesses.js"), "utf8");
+  const weakCode = weak.replace(/\/\/.*$/gm, "");
+  const matchday = readFileSync(join(root, "src/football-matchday-engine.js"), "utf8");
+
+  check("motoren finnes og er ren", /export function identifyPlayerWeaknesses/.test(weak) && !/document\.|localStorage/.test(weakCode));
+  check("den leser aldri overall eller matchScore", !/\boverall\b/.test(weakCode) && !/matchScore/.test(weakCode));
+  check("svakhetene er data, ikke hardkodet", /id="modalWeaknesses"/.test(html) && !/weaknessLabel:/.test(app));
+  check("uttellingen er en BONUS, aldri et fratrekk", /finalStrength \+= weaknessBonus/.test(matchday) && !/finalStrength -= weaknessBonus/.test(matchday));
+  check("bonusen er liten og klampet", /clampRange\(num\(weaknessWorkBonus\), 0, 4\)/.test(matchday));
+  check("den betaler bare når spilleren står i rollen som krever det", /export function summarizeLineupWeaknessWork/.test(weak) && /openedDoors/.test(weak));
+  check("ubrukt arbeid skjules ikke", /idleWork/.test(weak) && /idleWork/.test(app));
+  check("hver spiller kan gjøre noe med dem", /export function applyWeaknessTraining/.test(weak) && /requires === "weakness"/.test(readFileSync(join(root, "src/football-individual-training.js"), "utf8")));
+  check("et avvist svakhetsvalg har en grunn", /Dette er ikke en av hans svake sider/.test(readFileSync(join(root, "src/football-individual-training.js"), "utf8")));
+  check("framgangen er modus-uavhengig lagret i teamMerits, ikke i History Go", /state\.teamMerits\.weaknessProgress = applyWeaknessTraining/.test(app) && !/visited_places[\s\S]{0,80}weakness/.test(app));
+  check("flata forklarer at det ikke er en dom", /ikke en dom over dem/.test(html));
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);
