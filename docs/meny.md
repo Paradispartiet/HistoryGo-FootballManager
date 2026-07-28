@@ -29,9 +29,8 @@ Menyen følger nå rekkefølgen en manageruke faktisk går i:
 Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk
 ```
 
-- **Kontor** — der du sitter. Neste kamp, ukas beslutning, assistentrådet, og
-  *Kontorets avdelinger*: Speiderrapporten, Stabskontor, Assistentråd, Klubbrom,
-  Styret, Fasiliteter (merket «Senere» og deaktivert).
+- **Kontor** — der du sitter. Ikke én lang side, men **åtte flater i
+  underfaner** (se under).
 - **Trening** — ukas treningsprogram og fotballkunnskapen som hører til laget.
 - **Taktikk** — formasjon, kampplan, brikker, roller, benk. Formasjons­biblioteket
   er et oppslagsverk du åpner herfra.
@@ -44,6 +43,69 @@ Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk
 **Speiding** ligger på Kontor, ikke som egen fane — det er jo det du gjør fra
 kontoret. Det samme gjelder **Stab**. Nedtrekksmenyen som duplikerte navnene er
 borte.
+
+## Kontor har underfaner
+
+Kontoret var en scrollevegg: managerportalen, en rutenett-vegg med seks
+avdelingskort, klubbuke-stripa og off-pitch-signalene under hverandre — og
+avdelingene nådde du bare ved å scrolle ned til kortene og trykke.
+
+Nå er kontorarbeidet delt i flater med hver sin jobb, i en underfanestripe rett
+under hovedmenyen:
+
+```
+Oversikt · Assistentråd · Speiding · Klubbutvikling · Stab & drift · Fasiliteter · Klubbrom · Styret
+```
+
+| Underfane | Jobb |
+|---|---|
+| **Oversikt** | hva nå: neste kamp, ukas beslutning, klubbuka, signalene |
+| **Assistentråd** | innboksen — signalene du leser før du velger trening |
+| **Speiding** | samlingen din: spillere, stab og steder fra History Go |
+| **Klubbutvikling** | kjeden fra sted til lagklasse (se under) |
+| **Stab & drift** | stabskontoret og kampklar tropp |
+| **Fasiliteter** | anleggene — merket «Senere» og deaktivert |
+| **Klubbrom** | fans, sponsorer, omdømme |
+| **Styret** | styretillit og forventninger |
+
+Rekkefølgen er kontorets egen logikk: *hva nå → signaler → hente inn → utvikle →
+apparatet → anlegg → kommersielt → eierne.*
+
+Stripa vises **bare** når du står på en kontorflate. Kortveggen er borte —
+underfanene gjør den jobben bedre, og med ett trykk i stedet for to.
+
+### En felle i app-rammen, nå vaktet
+
+`body` er et grid med **eksplisitt tildelte rader**. Underfanestripa er et
+`<nav>`, og regelen som ga hovedmenyen rad 2 var en bar `body > nav` — så stripa
+arvet samme rad og ble tegnet oppå hovedmenyen. Skjermområdet forsvant.
+
+Det er andre gang samme felle slår til (første gang flyttet en skjult modus-linje
+alle radene). `audit:dead-ends` steg 16 krever nå at antall rader stemmer med
+antall ramme-deler, at ingen selektor treffer to av dem, og at hver meny har sin
+egen rad.
+
+## Klubbutvikling: én kjede, ikke fire ting
+
+Popupen het «Ekspertise · Trening · Badges · Lagklasse» og var seks flate lister
+etter hverandre. Den så ut som fire urelaterte systemer stablet i én skuff.
+
+Det er den ikke — det er **ett kjede**, det samme som står i CLAUDE.md:
+
+```
+Sted → Person → Ekspertise → Utviklingsprogram → Badge → Lagklasse
+```
+
+Flata viser nå kjeden, og hvert ledd er nummerert som steget det er. Det som
+manglet var ikke innhold, men sammenhengen.
+
+Ett navn måtte også bort: «Treningsprogrammer» het det samme som lagets
+treningsuke, men er noe helt annet — flerukers progresjoner som tjener badges.
+De heter nå **utviklingsprogrammer**, og «badge-uke» heter **utviklingsuke**, så
+ordet *trening* bare betyr én ting i appen: det laget gjør denne uka.
+
+«Nullstill klubbutvikling» sto midt i flata. Det er verktøy, ikke spill, og
+ligger nå i Innstillinger sammen med de andre nullstillingene.
 
 ### Avdelinger markerer fanen sin
 

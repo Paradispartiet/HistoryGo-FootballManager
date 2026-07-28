@@ -588,6 +588,9 @@ const elements = {
   // Svake sider (football-player-weaknesses.js).
   weaknessWorkSummary: document.querySelector("#weaknessWorkSummary"),
   weaknessList: document.querySelector("#weaknessList"),
+  // Kontorets underfaner.
+  kontorSubnav: document.querySelector("#kontorSubnav"),
+  progressionBadgeCount: document.querySelector("#progressionBadgeCount"),
   weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
   weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
@@ -5307,7 +5310,7 @@ function renderModeIsolation() {
   // kommer tilbake automatisk når sesongen er aktiv.
   const leaguePreseason = leagueMode && !isLeagueSeasonActive();
   document.querySelectorAll("[data-league-only]").forEach((node) => { node.hidden = !leagueMode; });
-  document.querySelectorAll(".club-topbar, #clubWeekFeedback, .club-week-event-log-panel, .kontor-departments")
+  document.querySelectorAll(".club-topbar, #clubWeekFeedback, .club-week-event-log-panel")
     .forEach((node) => { node.hidden = !leagueMode; });
   document.querySelectorAll(".manager-portal, #offPitchSignalCard, .decision-strip")
     .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
@@ -14263,7 +14266,7 @@ function renderTrainingPrograms() {
   const entries = getAvailableTrainingPrograms();
 
   if (!entries.length) {
-    renderUnlockEmpty(list, "Ingen treningsprogrammer er innen rekkevidde ennå.");
+    renderUnlockEmpty(list, "Ingen utviklingsprogrammer er innen rekkevidde ennå.");
     return;
   }
 
@@ -14328,6 +14331,11 @@ function renderEarnedBadges() {
   list.innerHTML = "";
   const badges = getEarnedBadges();
 
+  // Tallet i utviklingsflatas hero. Settes her, der badgene faktisk telles.
+  if (elements.progressionBadgeCount) {
+    elements.progressionBadgeCount.textContent = String(badges.length);
+  }
+
   if (!badges.length) {
     renderUnlockEmpty(list, "Ingen opptjente badges ennå.");
     return;
@@ -14347,7 +14355,7 @@ function renderHgTrainingWeek() {
     const week = Number.isInteger(state.teamMerits?.activeTrainingWeek)
       ? state.teamMerits.activeTrainingWeek
       : 1;
-    elements.hgTrainingWeekStatus.textContent = `Badge-uke ${week}`;
+    elements.hgTrainingWeekStatus.textContent = `Utviklingsuke ${week}`;
   }
 
   renderBadgeProgress();
@@ -14559,7 +14567,7 @@ function createNearIdentityCard(entry) {
     });
   });
 
-  appendIdentityRecommendation(card, "Treningsprogrammer", Array.from(programNames));
+  appendIdentityRecommendation(card, "Utviklingsprogrammer", Array.from(programNames));
   appendIdentityRecommendation(card, "Steder", Array.from(placeNames));
 
   const players = getRelevantPlayersForClassification(classification.id);
@@ -15631,6 +15639,9 @@ async function advanceClubWeekPhaseAction() {
 // som eier flaten. Har flaten sin egen SYNLIGE fane (formasjonsbiblioteket i
 // Fotballvitenskap), vinner den.
 function highlightActiveTab() {
+  // Underfanestripa må oppdateres i samme øyeblikk som en flate byttes, ikke
+  // bare ved neste renderApp() — ellers henger den igjen på forrige kontorflate.
+  renderKontorSubtabs();
   const activeSection = document.querySelector("[data-tab-section]:not([hidden])");
   const target = activeSection?.dataset.tabSection;
   if (!target) return;
@@ -15648,6 +15659,45 @@ function highlightActiveTab() {
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-selected", isActive ? "true" : "false");
   });
+}
+
+// Kontorets underfaner. Stripa vises kun når du faktisk står på en kontorflate
+// — ellers ville den vært støy på Trening, Taktikk og Kamp. Hvilken knapp som
+// lyser settes av highlightActiveTab(), som allerede merker alle
+// [data-tab-target] etter den åpne seksjonen.
+//
+// Fasiliteter er ikke bygd ennå, så den underfanen deaktiveres på samme måte
+// som kortet var det — ellers er den en dør inn til en tom flate.
+function renderKontorSubtabs() {
+  const subnav = elements.kontorSubnav;
+  if (!subnav) return;
+
+  const activeSection = document.querySelector("[data-tab-section]:not([hidden])");
+  const target = activeSection?.dataset.tabSection;
+  const parent = activeSection?.dataset.tabParent;
+  const onOffice = target === "dashboard" || parent === "dashboard";
+  const mode = state.modeEnvelope?.activeMode || "league";
+  const leagueMode = mode === "league";
+
+  subnav.hidden = !onOffice;
+  if (!onOffice) return;
+
+  subnav.querySelectorAll(".kontor-subtab").forEach((button) => {
+    const section = document.querySelector(`[data-tab-section="${button.dataset.tabTarget}"]`);
+    // En underfane til en flate som ikke finnes i denne modusen skal ikke stå
+    // der og love noe. Speiding/utvikling/klubbrom/styret er ligaflater.
+    const sectionModes = String(section?.dataset.navSectionModes || "").split(/\s+/).filter(Boolean);
+    const allowed = sectionModes.length === 0 ? true : sectionModes.includes(mode);
+    button.hidden = !allowed || (!leagueMode && button.dataset.tabTarget !== "dashboard");
+  });
+
+  // Med åtte underfaner på en telefonbredde kan den aktive ligge utenfor
+  // synsfeltet — da ser stripa ut som om ingenting er valgt. `inline: nearest`
+  // ruller bare stripa vannrett, aldri siden.
+  const active = subnav.querySelector(`.kontor-subtab[data-tab-target="${target}"]`);
+  if (active && !active.hidden) {
+    active.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
 }
 
 // Aktiver en fane programmatisk: brukes av fane-knappene og av "Neste

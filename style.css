@@ -7364,7 +7364,8 @@ body {
      av synlige barn — og da flyttet en skjult modus-linje (eller de seksten
      popupene som bor på body-nivå) hele oppsettet: footeren fikk den
      fleksible raden, og skjermområdet kollapset til 0 piksler. */
-  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  /* header · hovedmeny · modus-linje · kontorets underfaner · skjermområde · fotnote */
+  grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
   border-inline: 1px solid var(--hg-border-soft);
   background: transparent;
 }
@@ -8135,12 +8136,16 @@ body { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* Eksplisitt radplassering i app-rammen. Popupene er `position: fixed` og
-   deltar ikke i gridet; alt annet har sin faste rad, uansett hva som er skjult. */
+   deltar ikke i gridet; alt annet har sin faste rad, uansett hva som er skjult.
+   Merk `nav.main-nav` og `nav.kontor-subnav` hver for seg: en generisk
+   `body > nav` ga kontorets underfanestripe samme rad som hovedmenyen, og
+   stripa ble tegnet OPPÅ den. Skjermområdet forsvant i samme slengen. */
 body > .site-header { grid-row: 1; }
-body > nav { grid-row: 2; }
+body > nav.main-nav { grid-row: 2; }
 body > .secondary-mode-bar { grid-row: 3; }
-body > .app-shell { grid-row: 4; }
-body > .site-footer { grid-row: 5; }
+body > nav.kontor-subnav { grid-row: 4; }
+body > .app-shell { grid-row: 5; }
+body > .site-footer { grid-row: 6; }
 
 /* ---------- Live-avspilling av kampen ---------- */
 .matchday-live-controls {
@@ -8850,3 +8855,82 @@ body > .site-footer { grid-row: 5; }
   height: 100%;
   background: var(--green, #75d69c);
 }
+
+/* ============================================================================
+   KONTORETS UNDERFANER — kontoret er åtte flater, ikke én lang side
+   ========================================================================== */
+.kontor-subnav {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.9rem;
+  border-bottom: 1px solid var(--line-soft, rgba(255, 255, 255, 0.18));
+  scrollbar-width: none;
+  flex: 0 0 auto;
+}
+
+.kontor-subnav::-webkit-scrollbar { display: none; }
+
+.kontor-subtab {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted, rgba(255, 255, 255, 0.62));
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.kontor-subtab:hover:not(:disabled) { color: #fff; background: rgba(255, 255, 255, 0.06); }
+
+.kontor-subtab.is-active {
+  color: #fff;
+  border-color: var(--line, rgba(255, 255, 255, 0.5));
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.kontor-subtab:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ============================================================================
+   KLUBBUTVIKLING — kjeden fra sted til lagklasse
+   ========================================================================== */
+.progression-chain {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  flex: 0 0 auto;
+}
+
+.progression-chain li {
+  display: grid;
+  gap: 0.25rem;
+  border: 1px solid var(--line-soft, rgba(255, 255, 255, 0.2));
+  border-radius: var(--radius, 12px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.7rem;
+}
+
+.progression-chain span {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.progression-chain strong { font-size: 0.88rem; }
+.progression-chain small { color: var(--muted, rgba(255, 255, 255, 0.62)); line-height: 1.4; }
+
+.progression-step { flex: 0 0 auto; }
+.progression-step .eyebrow { margin-bottom: 0.15rem; }
+.progression-step h3 { margin: 0 0 0.3rem; }

@@ -150,6 +150,24 @@
       <button type="button" id="returnToLeagueButton" class="primary-action-button">Tilbake til ligaspill</button>
     </div>
   </section>
+  <!-- KONTORETS UNDERFANER. Kontoret er ikke én lang side, men åtte flater
+       med hver sin jobb. Stripa er navigasjon: hver knapp åpner seksjonen som
+       hører til, og `data-tab-parent="dashboard"` på seksjonene sørger for at
+       Kontor lyser i hovedmenyen mens du er der. -->
+  <nav class="kontor-subnav" id="kontorSubnav" aria-label="Kontorets flater" hidden>
+    <button type="button" class="kontor-subtab" data-tab-target="dashboard">Oversikt</button>
+    <button type="button" class="kontor-subtab" data-tab-target="inbox">Assistentråd</button>
+    <button type="button" class="kontor-subtab" data-tab-target="historygo">Speiding</button>
+    <button type="button" class="kontor-subtab" data-tab-target="progression">Klubbutvikling</button>
+    <button type="button" class="kontor-subtab" data-tab-target="admin">Stab &amp; drift</button>
+  <!-- Fasiliteter er ikke bygd ferdig. Underfanen er derfor deaktivert og
+         merket «Senere», akkurat som avdelingskortet var — ellers er den en
+         dør inn til en halvferdig flate. -->
+    <button type="button" class="kontor-subtab is-disabled" aria-disabled="true" disabled data-tab-target="facilities">Fasiliteter <span class="nav-future-badge">Senere</span></button>
+    <button type="button" class="kontor-subtab" data-tab-target="market">Klubbrom</button>
+    <button type="button" class="kontor-subtab" data-tab-target="board">Styret</button>
+  </nav>
+
   <main class="app-shell" id="app">
     <!-- ============================ KONTORET (LAG / TAKTIKK) ============================ -->
     <!-- ============================ DASHBOARD (OVERSIKT) ============================ -->
@@ -261,40 +279,6 @@
 
       <!-- Kontorets avdelinger: kontorfunksjonene er nå tilbake på selve Kontor
            i stedet for gjemt i «senere»-menyen. Hver åpner sin flate. -->
-      <section class="kontor-departments" aria-label="Kontorets avdelinger">
-        <p class="kontor-departments-label eyebrow">Kontorets avdelinger</p>
-        <div class="kontor-departments-grid">
-          <button type="button" class="dept-link-card" data-tab-target="historygo">
-            <span class="eyebrow">Speiding</span><strong>Speiderrapporten</strong>
-            <small>Spillerne History Go har låst opp — det du gjør fra kontoret.</small>
-          </button>
-          <button type="button" class="dept-link-card" data-tab-target="admin">
-            <span class="eyebrow">Drift</span><strong>Stabskontor</strong>
-            <small>Stab, kampklar tropp og drift rundt laget.</small>
-          </button>
-          <button type="button" class="dept-link-card" data-tab-target="inbox">
-            <span class="eyebrow">Apparatet</span><strong>Assistentråd</strong>
-            <small>Stab, styre, speiding og garderobe som meldingskort.</small>
-          </button>
-          <button type="button" class="dept-link-card" data-tab-target="market">
-            <span class="eyebrow">Kommersielt</span><strong>Klubbrom</strong>
-            <small>Fans, sponsorer og omdømme fra medietrykket.</small>
-          </button>
-          <button type="button" class="dept-link-card" data-tab-target="board">
-            <span class="eyebrow">Boardroom</span><strong>Styret</strong>
-            <small>Styretillit, forventninger og klubbens temperatur.</small>
-          </button>
-          <!-- Fasiliteter er ikke bygd ennå. Kortet er derfor deaktivert og
-               merket «Senere» på samme måte som fanen var det — ellers er
-               kontoret en dør inn til en tom flate. -->
-          <button type="button" class="dept-link-card is-disabled" aria-disabled="true" disabled data-tab-target="facilities">
-            <span class="eyebrow">Anlegg</span><strong>Fasiliteter</strong>
-            <small>Treningsanlegg, stadion, akademi og medisinsk.</small>
-            <span class="nav-future-badge" aria-label="Ikke del av første spillbare løkke">Senere</span>
-          </button>
-        </div>
-      </section>
-
       <!-- Toppstripe: klubbstatus -->
       <section class="club-topbar" aria-label="Klubbstatus">
         <div class="topbar-identity">
@@ -762,6 +746,74 @@
 
     </div>
 
+    <!-- ============================ KLUBBUTVIKLING ============================ -->
+    <!-- Dette var popupen «Ekspertise · Trening · Badges · Lagklasse»: seks
+         flate lister uten noe som fortalte at de henger sammen. De gjør det —
+         de er stegene i History Go-kjeden fra CLAUDE.md:
+             Sted → Person → Ekspertise → Utviklingsprogram → Badge → Lagklasse
+         Så flata viser kjeden i stedet for å dumpe leddene.
+
+         «Treningsprogrammer» het det samme som lagets treningsuke, men er noe
+         helt annet: flerukers progresjoner som tjener badges. De heter nå
+         UTVIKLINGSPROGRAMMER, så ordet «trening» bare betyr én ting i appen. -->
+    <div class="tab-section dept dept-progression" data-tab-section="progression" data-tab-parent="dashboard" hidden>
+      <section class="dept-hero dept-hero-progression">
+        <div>
+          <p class="eyebrow">Klubbutvikling</p>
+          <h2>Fra sted til lagklasse</h2>
+          <p class="dept-hero-lede">Alt du samler i History Go blir til noe her. Dette er ikke fire adskilte ting — det er ett kjede, og hvert ledd låser opp det neste.</p>
+        </div>
+        <div class="dept-hero-stat dept-hero-stat-live">
+          <strong id="progressionBadgeCount">0</strong>
+          <span>opptjente badges</span>
+        </div>
+      </section>
+
+      <ol class="progression-chain" aria-label="Utviklingskjeden">
+        <li><span>1</span><strong>Sted</strong><small>Du besøker et sportssted i History Go.</small></li>
+        <li><span>2</span><strong>Person</strong><small>Stedet låser opp spillere og trenere.</small></li>
+        <li><span>3</span><strong>Ekspertise</strong><small>Stedet gir også fagfelt — de åpner hvilke programmer du kan kjøre.</small></li>
+        <li><span>4</span><strong>Utviklingsprogram</strong><small>Flerukers progresjon. Krever ekspertise og riktig stab.</small></li>
+        <li><span>5</span><strong>Badge</strong><small>Fullført program gir en badge.</small></li>
+        <li><span>6</span><strong>Lagklasse</strong><small>Badges til sammen gir laget en klasse — og en identitet.</small></li>
+      </ol>
+
+      <section class="panel progression-step" aria-label="Ekspertise">
+        <p class="eyebrow">Steg 3</p>
+        <h3>Ekspertise du har</h3>
+        <p class="muted-text">Fagfeltene stedene dine har gitt deg. De avgjør hvilke utviklingsprogrammer som er åpne.</p>
+        <div id="unlockedExpertiseList" class="unlock-grid"></div>
+      </section>
+
+      <section class="panel progression-step" aria-label="Utviklingsprogrammer">
+        <p class="eyebrow">Steg 4</p>
+        <h3>Utviklingsprogrammer</h3>
+        <p class="muted-text">Flerukers progresjoner som tjener badges. <strong>Ikke det samme som lagets treningsuke</strong> — den ligger på Trening-fanen. Et program krever ekspertise og riktig stab, og går over flere utviklingsuker.</p>
+        <p id="hgTrainingWeekStatus" class="training-week-status">Utviklingsuke 1</p>
+        <div class="unlock-actions">
+          <button type="button" id="advanceHgTrainingWeek" class="unlock-card-action">Avanser utviklingsuke</button>
+        </div>
+        <div id="availableTrainingProgramsList" class="unlock-grid"></div>
+        <h4 class="unlock-subhead">Aktive progresjoner</h4>
+        <div id="badgeProgressList" class="unlock-grid"></div>
+      </section>
+
+      <section class="panel progression-step" aria-label="Badges">
+        <p class="eyebrow">Steg 5</p>
+        <h3>Opptjente badges</h3>
+        <p class="muted-text">Beviset på et fullført program. Badges nudger lagets metrikker og teller mot lagklassen.</p>
+        <div id="earnedBadgesList" class="unlock-badge-list"></div>
+      </section>
+
+      <section class="panel progression-step" aria-label="Lagklasse">
+        <p class="eyebrow">Steg 6</p>
+        <h3>Lagklasse og identitet</h3>
+        <p class="muted-text">Badgene dine til sammen gir laget en klasse. Det er her samlingen din blir til en spillestil.</p>
+        <div id="teamClassificationsList" class="unlock-grid"></div>
+        <div id="teamIdentityPanel" class="team-identity-panel"></div>
+      </section>
+    </div>
+
     <!-- ============================ FASILITETER ============================ -->
     <div class="tab-section dept dept-facilities" data-tab-section="facilities" data-tab-parent="dashboard" hidden>
       <section class="dept-hero dept-hero-facilities">
@@ -978,7 +1030,7 @@
         <button type="button" data-modal-open="modalStaff">Stab</button>
         <button type="button" data-modal-open="modalPlaces">Steder &amp; rapporter</button>
         <button type="button" data-modal-open="modalStart">Startvalg / hurtigstart</button>
-        <button type="button" data-modal-open="modalProgress">Ekspertise · Trening · Badges · Lagklasse</button>
+        <button type="button" data-tab-target="progression">Klubbutvikling</button>
       </div>
 
       <!-- ===== POPUP: STAB ===== -->
@@ -1406,44 +1458,6 @@
             </div>
           </div>
         </div>
-  <div class="modal-overlay" id="modalProgress" role="dialog" aria-modal="true" aria-label="Progresjon" hidden>
-          <div class="modal">
-            <div class="modal-head">
-              <div><p class="eyebrow">Progresjon</p><h3>Ekspertise · Trening · Badges · Lagklasse</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <div class="unlock-block">
-              <h4>Tilgjengelig ekspertise</h4>
-              <div id="unlockedExpertiseList" class="unlock-grid"></div>
-            </div>
-            <div class="unlock-block">
-              <h4>Treningsprogrammer</h4>
-              <div id="availableTrainingProgramsList" class="unlock-grid"></div>
-            </div>
-            <div class="unlock-block">
-              <h4>Badge-uke</h4>
-              <p id="hgTrainingWeekStatus" class="training-week-status">Badge-uke 1</p>
-              <div class="unlock-actions">
-                <button type="button" id="advanceHgTrainingWeek" class="unlock-card-action">Avanser badge-uke</button>
-                <button type="button" id="resetHgTeamMerits" class="unlock-card-action is-reset">Nullstill HGFM-progresjon</button>
-              </div>
-              <h4 class="unlock-subhead">Aktive treningsprogresjoner</h4>
-              <div id="badgeProgressList" class="unlock-grid"></div>
-            </div>
-            <div class="unlock-block">
-              <h4>Opptjente badges</h4>
-              <div id="earnedBadgesList" class="unlock-badge-list"></div>
-            </div>
-            <div class="unlock-block">
-              <h4>Lagklasser</h4>
-              <div id="teamClassificationsList" class="unlock-grid"></div>
-            </div>
-            <div class="unlock-block">
-              <h4>Lagidentitet</h4>
-              <div id="teamIdentityPanel" class="team-identity-panel"></div>
-            </div>
-          </div>
-        </div>
   <div class="modal-overlay" id="modalSettings" role="dialog" aria-modal="true" aria-label="Innstillinger" hidden>
       <div class="modal">
         <div class="modal-head">
@@ -1466,6 +1480,13 @@
           <button type="button" class="settings-item is-danger" data-settings-action="reset">
             <strong>Start på nytt</strong>
             <small>Nullstiller managerspillet. History Go-stedene dine røres ikke.</small>
+          </button>
+          <!-- Nullstilling av HG-progresjonen sto midt i utviklingsflata. Det er
+               verktøy, ikke spill — det hører hjemme her sammen med de andre
+               nullstillingene. -->
+          <button type="button" class="settings-item is-danger" id="resetHgTeamMerits">
+            <strong>Nullstill klubbutvikling</strong>
+            <small>Sletter ekspertise, programmer, badges og lagklasse. Rører ikke besøkte steder i History Go.</small>
           </button>
         </div>
         <p id="settingsStatus" class="settings-status" role="status" aria-live="polite" hidden></p>

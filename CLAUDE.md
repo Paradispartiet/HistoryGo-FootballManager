@@ -167,6 +167,10 @@ The primary nav is exactly **Kontor → Trening → Taktikk → Kamp → Analyse
 
 Each nav tab carries `data-nav-modes` (which modes show it) and optionally `data-nav-section-modes` (which modes may have the surface open at all); `applyModeScopedNav()` in `renderModeIsolation` enforces both. See `docs/meny.md`; guarded by `audit:dead-ends` stage 17.
 
+Kontor is **not one page**: it has a sub-tab strip (`#kontorSubnav`, `renderKontorSubtabs()`) covering *Oversikt · Assistentråd · Speiding · Klubbutvikling · Stab & drift · Fasiliteter · Klubbrom · Styret*. Each is a real section with `data-tab-parent="dashboard"`; the strip only shows while an office surface is open. The old department card grid is gone — don't re-add it. **Klubbutvikling** is the History Go chain (Sted → Person → Ekspertise → Utviklingsprogram → Badge → Lagklasse) shown as the chain it is; note that HG badge progressions are called **utviklingsprogrammer**, never "treningsprogrammer", so *trening* means exactly one thing in the UI.
+
+`body` is a grid with **explicitly assigned rows** — one per frame part (header, main nav, mode bar, office sub-nav, screen area, footer). A selector that matches two frame parts (a bare `body > nav`) silently stacks them and collapses the screen area. Guarded by `audit:dead-ends` stage 16.
+
 Kontor is the office, not a dashboard: **do not re-add summary boxes there.** Club identity lives in the site header, league standing and the board's expectation live on Statistikk, and mode switching lives in Innstillinger. The Klubbuke phase pills are navigation — each opens the surface that phase happens on (`CLUB_WEEK_PHASE_TABS`).
 
 Tab surfaces scroll — they must not shrink. `.app-shell > .tab-section` is a fixed-height column flexbox, so its children need `flex: 0 0 auto` or they get crushed instead of scrolled (`.dept-hero` has `overflow: hidden` and collapsed to 38px of padding). Guarded by `audit:dead-ends` stage 16.
