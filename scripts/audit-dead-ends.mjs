@@ -1046,7 +1046,16 @@ stage("27. Ingen funksjon to steder");
   //    Oversikt, og Klubbutvikling hadde alt sin egen underfane.
   check("stabslistene ligger på Stab & drift", /data-tab-section="admin"[\s\S]*?id="availableStaffList"[\s\S]*?id="hiredStaffList"[\s\S]*?<!-- =+ MARKED/.test(html));
   check("stedene ligger på Speiding", /data-tab-section="historygo"[\s\S]*?id="unlockPlacesList"[\s\S]*?id="placeReportsList"/.test(html));
-  check("startvalget ligger i før-sesong-panelet på Oversikt", /id="leagueOnboardingPanel"[\s\S]*?id="startModePanel"/.test(html));
+  // Startvalget skal ligge SYNLIG i før-sesong-panelet. Første forsøk la det
+  // riktig sted, men bak en sammenslått <details> — altså fortsatt ett trykk
+  // unna, og dermed like usynlig som popupen det kom fra. «Rett sted» er ikke
+  // nok hvis du ikke ser det.
+  {
+    const panel = html.slice(html.indexOf('id="leagueOnboardingPanel"'), html.indexOf('class="manager-portal"'));
+    const body = panel.replace(/<!--[\s\S]*?-->/g, "");
+    check("startvalget ligger i før-sesong-panelet på Oversikt", body.includes('id="startModePanel"') && body.includes('id="autoFillSquad"'));
+    check("startvalget er ikke gjemt bak en nedtrekksboks", !body.includes("<details"));
+  }
   check("de gamle popupene er borte", !/modalStaff|modalPlaces|modalStart\b|modalRooms/.test(html) && !/modalStaff|modalPlaces|modalRooms/.test(app));
   check("onboarding-steget for stab peker på flata der staben faktisk er", /stab: \{ tab: "admin", selector: "#availableStaffList" \}/.test(app));
 }
