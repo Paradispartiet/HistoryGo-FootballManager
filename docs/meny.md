@@ -102,6 +102,34 @@ Oppstilling · Tropp & benk · Systemet
 Tavla er der du jobber. Troppen og systemet er oppslag du *går til* — de skal
 ikke ligge og forlenge banen.
 
+## Ingen funksjon to steder
+
+Snarveiene nederst på Speiding — **Stab · Steder & rapporter · Startvalg /
+hurtigstart · Klubbutvikling** — lå feil. De er flyttet dit de hører hjemme:
+
+| Snarvei | Nå |
+|---|---|
+| **Stab** | på **Stab & drift**. Den flata hadde et tomt plassholderkort som *pekte* på staben, mens selve listene lå i en popup på en annen flate. |
+| **Steder & rapporter** | inline på **Speiding**. Flata heter «Speiderrapporten» — stedene du har besøkt *er* rapporten. |
+| **Startvalg / hurtigstart** | i før-sesong-panelet på **Oversikt**, der du faktisk starter. Det skjuler seg selv sammen med sjekklista når troppen er på plass. |
+| **Klubbutvikling** | slettet — den hadde alt sin egen underfane. Ren dublett. |
+
+To ekte dubletter til ble funnet i samme slengen:
+
+- **«Gå til rom»** var en popup med snarveier til fire hovedfaner. Det er
+  hovedmenyen én gang til, i en skuff — og «Scenarioer» der inne var dessuten
+  feil, siden det er en egen modus fra forsiden. Slettet.
+- **To knapper åpnet formasjonsbiblioteket** fra samme hovedfane. Nå er de en
+  kjede i stedet: tavla → *Les om systemet* → *Slå opp hele biblioteket*. Hver
+  knapp gjør noe eget.
+
+Onboarding-steget «Velg stab» pekte forresten på `#availableStaffList` **inne i
+en lukket popup**, så «scroll hit» gjorde ingenting. Det steget virker nå.
+
+`audit:dead-ends` steg 27 vokter hele regelen: ingen popup som kopierer
+hovedmenyen, ingen flate med to knapper til samme sted, ingen id to ganger,
+ingen popup åpnet fra to steder.
+
 ### En felle i app-rammen, nå vaktet
 
 `body` er et grid med **eksplisitt tildelte rader**. Underfanestripa er et

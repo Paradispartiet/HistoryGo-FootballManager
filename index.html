@@ -262,6 +262,63 @@
         <p id="leagueOnboardingLead" class="muted-text">Før seriestart: 0/7 managergrep klare.</p>
         <button type="button" id="leagueOnboardingPrimary" class="primary-action-button">Neste steg</button>
         <ol id="leagueOnboardingSteps" class="league-onboarding-steps"></ol>
+
+        <!-- STARTVALG. Lå som en popup-snarvei nede på Speiding — langt fra der
+             du faktisk starter. Det hører hjemme her, ved siden av
+             før-sesong-sjekklista, og forsvinner sammen med den når troppen er
+             på plass. -->
+        <details class="panel-details is-flush league-onboarding-start">
+          <summary>Trenger du en rask start?</summary>
+      <p class="muted-text">Vanligvis kommer troppen fra stedene du har besøkt. Trenger du en rask start, kan du bruke samlingen din, finne de nærmeste spillerne, eller sette et offentlig hjemsted.</p>
+      <button type="button" id="autoFillSquad" class="primary-action-button autofill-squad" data-modal-open="modalDraft">Velg troppen din</button>
+      <p class="muted-text autofill-squad-note">Sett sammen din egen starttropp fra klubbspillerne. De store navnene samler du i History Go.</p>
+      <div id="startModePanel" class="local-start-panel" aria-label="Startmodus">
+        <div id="startModeChoices">
+          <div class="local-start-heading">
+            <p class="eyebrow">Startmodus</p>
+            <h4 id="localStartTitle">Skaff spillbar tropp</h4>
+            <p id="startModeRosterNeed" class="muted-text">
+              Du trenger 15 spillere for å starte managerløkken: 11 startere + 4 benk.
+              Akkurat nå har du 0/15.
+            </p>
+            <p id="startModePlaceHint" class="muted-text">
+              Noen steder gir kompetanse, trenere eller formasjoner. For å starte kampen trenger du også spillersteder eller en starttropp.
+            </p>
+          </div>
+  
+          <div class="start-mode-grid">
+            <article class="start-mode-choice">
+              <div>
+                <h5>Bruk History Go-samlingen min</h5>
+                <p class="muted-text">Bruk spillere, stab og steder du allerede har samlet. Dette skriver ikke til ekte History Go-progresjon.</p>
+              </div>
+              <button type="button" id="useHistoryGoCollection" class="unlock-card-action">Bruk samlingen min</button>
+            </article>
+  
+          </div>
+        </div>
+  
+        <div id="activeLocalStart" class="active-local-start" hidden>
+          <div>
+            <p class="eyebrow">Aktiv startmodus</p>
+            <h4>Auto-fylt starttropp</h4>
+            <p class="muted-text">Starttroppen er tilgjengelig i managerdelen, men ingenting er markert som samlet i History Go.</p>
+          </div>
+          <button type="button" id="clearLocalStart" class="unlock-card-action is-secondary">Fjern starttropp</button>
+        </div>
+  
+        <p id="localStartStatus" class="local-start-status" role="status">Ingen starttropp valgt.</p>
+        <div id="playableSquadReady" class="active-local-start" hidden>
+          <div>
+            <p class="eyebrow">Troppen er spillbar</p>
+            <h4>Neste steg: Taktikkrom</h4>
+            <p class="muted-text">Du har minst 15 spillere. Sett startelleveren og benken før innboks, trening og kamp.</p>
+          </div>
+          <button type="button" class="unlock-card-action" data-modal-close data-tab-target="tactics">Gå til Taktikkrom</button>
+        </div>
+      </div>
+    
+        </details>
       </section>
 
       <section class="manager-portal" aria-label="Managerkontor">
@@ -347,7 +404,6 @@
       <div class="popup-actions kontor-deep-actions" aria-label="Mer fra klubben">
         <button type="button" class="kontor-deep-decisions" data-modal-open="modalDecisions">Flere beslutninger</button>
         <button type="button" data-modal-open="modalClubEvents">Klubbhendelser</button>
-        <button type="button" data-modal-open="modalRooms">Gå til rom</button>
       </div>
 
       <!-- ===== POPUP: FLERE ÅPNE BESLUTNINGER ===== -->
@@ -422,7 +478,7 @@
           <p class="pitch-hint">Visuelt først: sett brikker, formasjon og kampplan.
             <!-- Formasjonsbiblioteket hører hjemme der du faktisk velger
                  formasjon, ikke som en «kontoravdeling». -->
-            <button type="button" class="shortcut-button" data-tab-target="hgfmLibrary">Slå opp formasjonen i biblioteket</button>
+            <button type="button" class="shortcut-button" data-tab-target="system">Les om systemet</button>
           </p>
           <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
 
@@ -910,11 +966,19 @@
           <p class="muted-text">Slik ser kamptroppen ut før neste kamp.</p>
           <ul id="adminDriftMetrics" class="board-metrics" aria-label="Driftsstatus"></ul>
         </article>
-        <article class="panel admin-side">
-          <h3>Stab og drift</h3>
-          <p class="muted-text">Engasjert stab styres via History Go.</p>
+        <article class="panel admin-side admin-staff">
+          <h3>Stab</h3>
           <p id="adminStaffCount" class="facility-level">0 ansatte</p>
-          <details class="panel-details is-flush"><summary>Åpne rapport</summary><p id="adminStaffNote" class="muted-text">Stab hentes inn via History Go-progresjon.</p></details>
+          <p id="adminStaffNote" class="muted-text">Stab hentes inn via History Go-progresjon.</p>
+        <div class="unlock-block">
+          <h4>Tilgjengelig stab</h4>
+          <div id="availableStaffList" class="unlock-grid"></div>
+        </div>
+        <div class="unlock-block">
+          <h4>Engasjert stab</h4>
+          <div id="hiredStaffList" class="unlock-grid"></div>
+        </div>
+      
         </article>
         <article class="panel admin-side">
           <h3>Økonomi &amp; kontrakter</h3>
@@ -1054,13 +1118,24 @@
         <div id="unlockedPlayersList" class="unlock-grid"></div>
       </section>
 
-      <!-- Popup-triggere: detaljene ligger i modaler, ikke på flaten. -->
-      <div class="popup-actions" aria-label="Mer fra samlingen">
-        <button type="button" data-modal-open="modalStaff">Stab</button>
-        <button type="button" data-modal-open="modalPlaces">Steder &amp; rapporter</button>
-        <button type="button" data-modal-open="modalStart">Startvalg / hurtigstart</button>
-        <button type="button" data-tab-target="progression">Klubbutvikling</button>
+      <!-- STEDENE. Speiding heter «Speiderrapporten» — stedene du har besøkt ER
+           rapporten. De lå i en popup bak en snarvei på denne flata, altså ett
+           trykk unna innholdet de hører til. Nå ligger de her. -->
+      <section class="panel unlock-primary" aria-label="Steder og rapporter">
+        <p class="eyebrow">Sted</p>
+        <h3>Steder &amp; rapporter</h3>
+        <p class="muted-text">Stedene du har besøkt i History Go. Hvert sted låser opp ulike ressurser: spillere, stab, ekspertise, utvikling og lagidentitet.</p>
+      <p class="muted-text">Stedene du har besøkt i History Go. Hvert sted låser opp ulike ressurser: spillere, stab, ekspertise, trening og lagidentitet.</p>
+      <div class="unlock-block">
+        <h4>Samlede sportsteder</h4>
+        <div id="unlockPlacesList" class="unlock-grid"></div>
       </div>
+      <div class="unlock-block">
+        <h4>Stedsrapporter</h4>
+        <div id="placeReportsList" class="place-report-grid"></div>
+      </div>
+    
+      </section>
 
       <!-- ===== POPUP: STAB ===== -->
 
@@ -1134,20 +1209,6 @@
             <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
               <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
             </section>
-          </div>
-        </div>
-  <div class="modal-overlay" id="modalRooms" role="dialog" aria-modal="true" aria-label="Gå til rom" hidden>
-          <div class="modal">
-            <div class="modal-head">
-              <div><p class="eyebrow">Snarveier</p><h3>Gå til rom</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <div class="shortcut-buttons">
-              <button type="button" class="shortcut-button" data-modal-close data-tab-target="tactics">Taktikkrom</button>
-              <button type="button" class="shortcut-button" data-modal-close data-tab-target="kamp">Kampdag</button>
-              <button type="button" class="shortcut-button" data-modal-close data-tab-target="trening">Trening &amp; kunnskap</button>
-              <button type="button" class="shortcut-button" data-modal-close data-tab-target="scenarios">Scenarioer</button>
-            </div>
           </div>
         </div>
   <div class="modal-overlay" id="modalAnalysis" role="dialog" aria-modal="true" aria-label="Analyse · full rapport" hidden>
@@ -1378,95 +1439,6 @@
               <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
             </div>
             <div id="inboxThreadArchive" class="message-list"></div>
-          </div>
-        </div>
-  <div class="modal-overlay" id="modalStaff" role="dialog" aria-modal="true" aria-label="Stab" hidden>
-          <div class="modal">
-            <div class="modal-head">
-              <div><p class="eyebrow">Person</p><h3>Stab</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <div class="unlock-block">
-              <h4>Tilgjengelig stab</h4>
-              <div id="availableStaffList" class="unlock-grid"></div>
-            </div>
-            <div class="unlock-block">
-              <h4>Engasjert stab</h4>
-              <div id="hiredStaffList" class="unlock-grid"></div>
-            </div>
-          </div>
-        </div>
-  <div class="modal-overlay" id="modalPlaces" role="dialog" aria-modal="true" aria-label="Steder og rapporter" hidden>
-          <div class="modal">
-            <div class="modal-head">
-              <div><p class="eyebrow">Sted</p><h3>Steder &amp; rapporter</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <p class="muted-text">Stedene du har besøkt i History Go. Hvert sted låser opp ulike ressurser: spillere, stab, ekspertise, trening og lagidentitet.</p>
-            <div class="unlock-block">
-              <h4>Samlede sportsteder</h4>
-              <div id="unlockPlacesList" class="unlock-grid"></div>
-            </div>
-            <div class="unlock-block">
-              <h4>Stedsrapporter</h4>
-              <div id="placeReportsList" class="place-report-grid"></div>
-            </div>
-          </div>
-        </div>
-  <div class="modal-overlay" id="modalStart" role="dialog" aria-modal="true" aria-label="Startvalg" hidden>
-          <div class="modal">
-            <div class="modal-head">
-              <div><p class="eyebrow">Hurtigstart</p><h3>Startvalg</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <p class="muted-text">Vanligvis kommer troppen fra stedene du har besøkt. Trenger du en rask start, kan du bruke samlingen din, finne de nærmeste spillerne, eller sette et offentlig hjemsted.</p>
-            <button type="button" id="autoFillSquad" class="primary-action-button autofill-squad" data-modal-open="modalDraft">Velg troppen din</button>
-            <p class="muted-text autofill-squad-note">Sett sammen din egen starttropp fra klubbspillerne. De store navnene samler du i History Go.</p>
-            <div id="startModePanel" class="local-start-panel" aria-label="Startmodus">
-              <div id="startModeChoices">
-                <div class="local-start-heading">
-                  <p class="eyebrow">Startmodus</p>
-                  <h4 id="localStartTitle">Skaff spillbar tropp</h4>
-                  <p id="startModeRosterNeed" class="muted-text">
-                    Du trenger 15 spillere for å starte managerløkken: 11 startere + 4 benk.
-                    Akkurat nå har du 0/15.
-                  </p>
-                  <p id="startModePlaceHint" class="muted-text">
-                    Noen steder gir kompetanse, trenere eller formasjoner. For å starte kampen trenger du også spillersteder eller en starttropp.
-                  </p>
-                </div>
-  
-                <div class="start-mode-grid">
-                  <article class="start-mode-choice">
-                    <div>
-                      <h5>Bruk History Go-samlingen min</h5>
-                      <p class="muted-text">Bruk spillere, stab og steder du allerede har samlet. Dette skriver ikke til ekte History Go-progresjon.</p>
-                    </div>
-                    <button type="button" id="useHistoryGoCollection" class="unlock-card-action">Bruk samlingen min</button>
-                  </article>
-  
-                </div>
-              </div>
-  
-              <div id="activeLocalStart" class="active-local-start" hidden>
-                <div>
-                  <p class="eyebrow">Aktiv startmodus</p>
-                  <h4>Auto-fylt starttropp</h4>
-                  <p class="muted-text">Starttroppen er tilgjengelig i managerdelen, men ingenting er markert som samlet i History Go.</p>
-                </div>
-                <button type="button" id="clearLocalStart" class="unlock-card-action is-secondary">Fjern starttropp</button>
-              </div>
-  
-              <p id="localStartStatus" class="local-start-status" role="status">Ingen starttropp valgt.</p>
-              <div id="playableSquadReady" class="active-local-start" hidden>
-                <div>
-                  <p class="eyebrow">Troppen er spillbar</p>
-                  <h4>Neste steg: Taktikkrom</h4>
-                  <p class="muted-text">Du har minst 15 spillere. Sett startelleveren og benken før innboks, trening og kamp.</p>
-                </div>
-                <button type="button" class="unlock-card-action" data-modal-close data-tab-target="tactics">Gå til Taktikkrom</button>
-              </div>
-            </div>
           </div>
         </div>
   <div class="modal-overlay" id="modalDraft" role="dialog" aria-modal="true" aria-label="Velg troppen din" hidden>

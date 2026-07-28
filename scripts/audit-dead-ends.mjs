@@ -683,7 +683,10 @@ stage("17. Menyen lyver ikke");
     check(`Taktikkflaten ${target} er en underfane på Taktikk`, officeTargets.has(target));
   }
   check("underfanestripa finnes", /id="appSubnav"/.test(html) && /function renderSubtabs\(/.test(app));
-  check("stripa vises bare når flata faktisk har underfaner", /subnav\.hidden = group\.length === 0/.test(app));
+  check(
+    "stripa vises bare når du står på én av flatene den lister",
+    /subnav\.hidden = group\.length === 0 \|\| !onGroupSurface/.test(app)
+  );
   // Én stripe for hele appen. En stripe til ville krevd en rad til i
   // body-gridet — nøyaktig fella som alt har kostet oss én gang.
   check(
@@ -991,6 +994,61 @@ stage("26. Svake sider er en dør, ikke en dom");
   check("et avvist svakhetsvalg har en grunn", /Dette er ikke en av hans svake sider/.test(readFileSync(join(root, "src/football-individual-training.js"), "utf8")));
   check("framgangen er modus-uavhengig lagret i teamMerits, ikke i History Go", /state\.teamMerits\.weaknessProgress = applyWeaknessTraining/.test(app) && !/visited_places[\s\S]{0,80}weakness/.test(app));
   check("flata forklarer at det ikke er en dom", /ikke en dom over dem/.test(html));
+}
+
+stage("27. Ingen funksjon to steder");
+{
+  // «Pass på at vi ikke har doble funksjoner, altså samme funksjon to
+  // forskjellige steder.» To knapper som gjør det samme er ikke dobbelt så
+  // hjelpsomt — det er to modeller av huset du må holde i hodet samtidig.
+
+  // a) Snarveier til HOVEDFANER hører hjemme i hovedmenyen. En popup full av
+  //    dem er menyen én gang til, i en skuff. («Gå til rom» var nettopp det.)
+  const primaryTargets = new Set(
+    [...html.matchAll(/<button\b[^>]*\bclass="[^"]*nav-tab-primary[^"]*"[^>]*\bdata-tab-target="([^"]+)"/g)].map((m) => m[1])
+  );
+  const modalShortcutsToPrimary = [...html.matchAll(/<div class="modal-overlay"[\s\S]*?<\/div>\s*<\/div>/g)]
+    .flatMap((m) => [...m[0].matchAll(/data-tab-target="([^"]+)"/g)].map((t) => t[1]))
+    .filter((target) => primaryTargets.has(target));
+  check(
+    "ingen popup er en kopi av hovedmenyen",
+    modalShortcutsToPrimary.length <= 2,
+    `popup-snarveier til hovedfaner: ${[...new Set(modalShortcutsToPrimary)].join(", ")}`
+  );
+
+  // b) Samme flate skal ikke ha to knapper til samme sted.
+  const sections = [...html.matchAll(/<div class="tab-section[^"]*" data-tab-section="([^"]+)"[\s\S]*?(?=\n    <!-- =====|\n  <div class="modal-overlay")/g)];
+  const dupes = [];
+  for (const section of sections) {
+    const targets = [...section[0].matchAll(/data-tab-target="([^"]+)"/g)].map((m) => m[1]);
+    const seen = new Set();
+    for (const target of targets) {
+      if (seen.has(target) && !dupes.includes(`${section[1]}→${target}`)) dupes.push(`${section[1]}→${target}`);
+      seen.add(target);
+    }
+  }
+  check("ingen flate har to knapper til samme sted", dupes.length === 0, dupes.join(", "));
+
+  // c) Én id = ett sted. Duplikate id-er betyr at samme kontroll er tegnet to
+  //    ganger, og at app.js bare finner den ene av dem.
+  const ids = [...html.matchAll(/\sid="([A-Za-z0-9_-]+)"/g)].map((m) => m[1]);
+  const dupIds = [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
+  check("ingen id finnes to ganger i markupen", dupIds.length === 0, dupIds.join(", "));
+
+  // d) Én popup åpnes fra ett sted. Åpnes den fra to, er den to innganger til
+  //    samme funksjon — og da hører innholdet trolig hjemme på en flate.
+  const openers = [...html.matchAll(/data-modal-open="([A-Za-z0-9_-]+)"/g)].map((m) => m[1]);
+  const dupOpeners = [...new Set(openers.filter((id, i) => openers.indexOf(id) !== i))];
+  check("ingen popup åpnes fra to steder", dupOpeners.length === 0, dupOpeners.join(", "));
+
+  // e) De tre snarveiene som lå på Speiding skal være borte for godt: staben
+  //    hører til Stab & drift, stedene til Speiding selv, startvalget til
+  //    Oversikt, og Klubbutvikling hadde alt sin egen underfane.
+  check("stabslistene ligger på Stab & drift", /data-tab-section="admin"[\s\S]*?id="availableStaffList"[\s\S]*?id="hiredStaffList"[\s\S]*?<!-- =+ MARKED/.test(html));
+  check("stedene ligger på Speiding", /data-tab-section="historygo"[\s\S]*?id="unlockPlacesList"[\s\S]*?id="placeReportsList"/.test(html));
+  check("startvalget ligger i før-sesong-panelet på Oversikt", /id="leagueOnboardingPanel"[\s\S]*?id="startModePanel"/.test(html));
+  check("de gamle popupene er borte", !/modalStaff|modalPlaces|modalStart\b|modalRooms/.test(html) && !/modalStaff|modalPlaces|modalRooms/.test(app));
+  check("onboarding-steget for stab peker på flata der staben faktisk er", /stab: \{ tab: "admin", selector: "#availableStaffList" \}/.test(app));
 }
 
 // ---- Rapport ----------------------------------------------------------------

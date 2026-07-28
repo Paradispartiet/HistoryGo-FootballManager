@@ -4810,7 +4810,10 @@ function activateLeagueOnboardingTarget(step) {
   const targetByStep = {
     klubb: { tab: "dashboard", selector: ".manager-portal", openClubStep: true },
     spillere: { tab: "historygo", selector: "#unlockedPlayersList" },
-    stab: { tab: "historygo", selector: "#availableStaffList" },
+    // Staben flyttet fra en popup på Speiding til Stab & drift-flata. Ruta
+    // pekte på et element inne i en LUKKET modal, så «scroll hit» gjorde
+    // ingenting — steget så ut som en blindvei.
+    stab: { tab: "admin", selector: "#availableStaffList" },
     ellever: { tab: "tactics", selector: "#formationSelect" },
     formasjon: { tab: "tactics", selector: "#formationSelect" },
     trening: { tab: "trening", selector: "#weeklyTrainingOptions" },
@@ -15678,7 +15681,13 @@ function renderSubtabs() {
   const parent = activeSection?.dataset.tabParent || target;
   const group = Array.from(subnav.querySelectorAll(`.app-subtab[data-subnav-parent="${parent}"]`));
 
-  subnav.hidden = group.length === 0;
+  // Stripa skal bare stå der når du faktisk er på én av flatene den lister.
+  // Formasjonsbiblioteket har `data-tab-parent="tactics"` (så Taktikk lyser i
+  // hovedmenyen), men er ikke én av Taktikks tre underfaner — da sto stripa der
+  // med ingenting markert, som om valget var borte. Biblioteket har sin egen
+  // «← Tilbake til Taktikk».
+  const onGroupSurface = group.some((button) => button.dataset.tabTarget === target);
+  subnav.hidden = group.length === 0 || !onGroupSurface;
   if (subnav.hidden) return;
 
   const mode = state.modeEnvelope?.activeMode || "league";

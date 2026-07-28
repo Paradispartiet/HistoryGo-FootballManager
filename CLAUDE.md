@@ -175,6 +175,8 @@ Kontor is **not one page**: it covers *Oversikt · Assistentråd · Speiding · 
 
 `body` is a grid with **explicitly assigned rows** — one per frame part (header, main nav, mode bar, office sub-nav, screen area, footer). A selector that matches two frame parts (a bare `body > nav`) silently stacks them and collapses the screen area. Guarded by `audit:dead-ends` stage 16.
 
+**No function in two places** (audited by `audit:dead-ends` stage 27): no popup that duplicates the primary nav, no surface with two buttons to the same target, no duplicate ids, no modal opened from two triggers. Staff lists live on *Stab & drift*, places on *Speiding*, the quick-start flow inside Oversikt's pre-season panel — not as shortcut popups somewhere else.
+
 Kontor is the office, not a dashboard: **do not re-add summary boxes there.** Club identity lives in the site header, league standing and the board's expectation live on Statistikk, and mode switching lives in Innstillinger. The Klubbuke phase pills are navigation — each opens the surface that phase happens on (`CLUB_WEEK_PHASE_TABS`).
 
 Tab surfaces scroll — they must not shrink. `.app-shell > .tab-section` is a fixed-height column flexbox, so its children need `flex: 0 0 auto` or they get crushed instead of scrolled (`.dept-hero` has `overflow: hidden` and collapsed to 38px of padding). Guarded by `audit:dead-ends` stage 16.
