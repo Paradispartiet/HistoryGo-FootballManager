@@ -271,6 +271,9 @@ const DATA_PATHS = {
   // Svake sider: attributtkatalog + posisjonskrav. Svakhetene identifiseres ut
   // av spillerdataene som allerede finnes — se docs/svake-sider.md.
   playerWeaknesses: "data/football_player_weaknesses.json",
+  // Ligaklubbenes spillestil, tegnet på klubbenes egen tradisjon. Klubben eier
+  // identitet og nivå (football-league-season.js); dette eier fotballen.
+  leagueClubProfiles: "data/football_league_club_profiles.json",
   trainingBadges: "data/football_training_badges.json",
   teamClassifications: "data/football_team_classifications.json",
   // Stedsrapporter (v1): forklarer hva hvert sportsted gir manageren. Rent
@@ -422,6 +425,8 @@ const state = {
   individualTraining: { week: null, assignments: [] },
   // Katalogen over svake sider (fra datafil, normalisert).
   weaknessCatalogue: { attributes: [], positionDemands: {}, difficulty: {}, biteReliefCap: 4 },
+  // Spillestilprofiler for ligaklubbene, keyet på klubb-id.
+  leagueClubProfiles: {},
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
@@ -5709,27 +5714,32 @@ function getMiniSeasonNextOpponent() {
   if (isLeagueModeActive()) {
     const opponent = getNextLeagueOpponent(state.leagueSeason);
     if (!opponent) return null;
-    // Klubben eier identiteten, arketypen eier fotballen.
+    // Klubben eier identitet og nivå; profilen eier fotballen.
     //
     // Her lette koden før etter klubb-id-en (`molde`, `brann` …) blant de fem
     // GENERISKE profilene, som heter `high_press_opponent` og lignende. Den
     // kunne aldri treffe, så `|| OPPONENT_PROFILES[0]` slo inn hver gang: alle
     // fjorten serierunder ble spilt mot samme profil med byttet navnelapp.
-    const base =
-      getHistoricalOpponentProfile(opponent.archetypeId) ||
-      OPPONENT_PROFILES.find((profile) => profile.id === opponent.archetypeId) ||
-      OPPONENT_PROFILES[0];
+    //
+    // Profilene er tegnet på klubbenes EGEN spilletradisjon, ikke på historiske
+    // arketyper. Arketypene hører til scenarioer og mesterskap — møter du dem
+    // fjorten ganger i serien, slutter de å være noe.
+    const clubProfile = state.leagueClubProfiles[opponent.id] || null;
+    const base = clubProfile || OPPONENT_PROFILES[0];
     return {
       ...base,
       id: opponent.id,
       name: opponent.name,
       displayName: opponent.name,
-      // Klubbens egen styrke gjelder — arketypen leverer stilen, ikke nivået.
+      // Klubbens egen styrke gjelder — profilen leverer stilen, ikke nivået.
       strength: opponent.strength,
       homeAway: opponent.homeAway,
       ground: opponent.ground,
       tacticalIdentity: opponent.tacticalIdentity,
-      archetypeId: opponent.archetypeId || null
+      // Kampbriefen leser `archetypeName`; for en klubb er det spillestilen
+      // hennes, ikke en historisk arketyp.
+      archetypeName: clubProfile?.styleName || base.archetypeName || null,
+      isClubProfile: Boolean(clubProfile)
     };
   }
   const match = getCurrentMiniSeasonMatch(state.miniSeason);
@@ -9358,10 +9368,13 @@ function renderMatchdaySessionPreMatch(container, session) {
   // taktisk skole, nøkkelduell, managerhint) FØR den ordinære profilen. Rent
   // tekstlig/faglig referanse — ingen logoer/drakter/emblemer.
   if (opponent.archetypeName || opponent.tacticalSchool) {
-    appendMatchdaySubheading(card, "Historisk stil-motstander");
+    // En ligaklubb spiller SIN EGEN stil; en scenario-/mesterskapsmotstander er
+    // en historisk arketyp. Overskriften må si hvilken av delene du møter —
+    // ellers ser det ut som Molde ER en historisk skole.
+    appendMatchdaySubheading(card, opponent.isClubProfile ? "Klubbens spillestil" : "Historisk stil-motstander");
     const histLines = [];
-    if (opponent.archetypeName) histLines.push(`Arketyp: ${opponent.archetypeName}`);
-    if (opponent.era) histLines.push(`Epoke: ${opponent.era}`);
+    if (opponent.archetypeName) histLines.push(`${opponent.isClubProfile ? "Spillestil" : "Arketyp"}: ${opponent.archetypeName}`);
+    if (opponent.era) histLines.push(`${opponent.isClubProfile ? "Tradisjon" : "Epoke"}: ${opponent.era}`);
     if (opponent.tacticalSchool) histLines.push(`Taktisk skole: ${opponent.tacticalSchool}`);
     if (opponent.inPossessionShape) histLines.push(`Med ball: ${opponent.inPossessionShape}`);
     if (opponent.outOfPossessionShape) histLines.push(`Uten ball: ${opponent.outOfPossessionShape}`);
@@ -9371,7 +9384,7 @@ function renderMatchdaySessionPreMatch(container, session) {
     (Array.isArray(opponent.managerHints) ? opponent.managerHints : []).slice(0, 2).forEach((line) => {
       histLines.push(`Managerhint: ${line}`);
     });
-    if (opponent.historicalNote) histLines.push(`Historisk: ${opponent.historicalNote}`);
+    if (opponent.historicalNote) histLines.push(`${opponent.isClubProfile ? "Tradisjon" : "Historisk"}: ${opponent.historicalNote}`);
     appendMatchdayList(card, histLines);
 
     const opponentFormation = state.formations.find((candidate) => candidate.id === opponent.formationId) || null;
@@ -15801,6 +15814,7 @@ async function loadStartupData() {
     trainingProgramsData,
     individualTrainingData,
     playerWeaknessesData,
+    leagueClubProfilesData,
     trainingBadgesData,
     teamClassificationsData,
     placeReportsData,
@@ -15840,6 +15854,7 @@ async function loadStartupData() {
     // uten den faller flata tilbake til en tom, men gyldig, sporliste.
     loadJson(DATA_PATHS.individualTraining).catch(() => null),
     loadJson(DATA_PATHS.playerWeaknesses).catch(() => null),
+    loadJson(DATA_PATHS.leagueClubProfiles).catch(() => null),
     loadJson(DATA_PATHS.trainingBadges).catch(() => null),
     loadJson(DATA_PATHS.teamClassifications).catch(() => null),
     // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
@@ -15938,6 +15953,13 @@ async function loadStartupData() {
   // en tom, gyldig struktur hvis filen mangler.
   state.individualTrainingCatalogue = normalizeIndividualTrainingCatalogue(individualTrainingData);
   state.weaknessCatalogue = normalizeWeaknessCatalogue(playerWeaknessesData);
+  // Keyet på clubId. Mangler fila, faller ligamotstanderen tilbake til de
+  // generiske profilene — spillet står ikke.
+  state.leagueClubProfiles = Object.fromEntries(
+    (Array.isArray(leagueClubProfilesData?.profiles) ? leagueClubProfilesData.profiles : [])
+      .filter((profile) => profile && typeof profile.clubId === "string")
+      .map((profile) => [profile.clubId, profile])
+  );
   state.trainingBadges = Array.isArray(trainingBadgesData?.badgeFamilies) ? trainingBadgesData : { badgeFamilies: [] };
   state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
     ? teamClassificationsData

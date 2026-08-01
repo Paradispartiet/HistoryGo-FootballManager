@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createLeagueSeason, createLeagueTable, completeLeagueRound, getNextLeagueOpponent, startNextLeagueSeason, normalizeLeagueSeason, LEAGUE_OPPONENT_PROFILES } from "../src/football-league-season.js";
-import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
+import { getHistoricalOpponentProfileIds } from "../src/football-historical-opponent-profiles.js";
 import fs from "node:fs";
 
 const managerClub = { id: "manager-fk", name: "Manager FK", ground: "Klubbankeret", strength: 75, form: 55, tacticalIdentity: "managerens valg" };
@@ -42,55 +42,79 @@ assert.deepEqual(next.clubs, played.clubs); assert.notDeepEqual(next.fixtures, p
 // ---------------------------------------------------------------------------
 // Ligaen skal være fotball, ikke aritmetikk
 //
-// Hver klubb spiller en historisk taktisk skole. Dette steget måler at en HEL
-// sesong faktisk byr på ulike motstandere — det er den målingen som mangler
-// når feilen er «alt ser riktig ut, men alle er like».
+// Hver klubb spiller SIN EGEN stil, tegnet på klubbens spilletradisjon. Dette
+// steget måler at en HEL sesong faktisk byr på ulike motstandere — det er den
+// målingen som mangler når feilen er «alt ser riktig ut, men alle er like».
 //
 // Feilen den ville fanget: oppslaget i app.js lette etter klubb-id-en blant de
 // fem GENERISKE profilene (`high_press_opponent` …), der en klubb-id aldri kan
 // finnes. Fallbacken slo derfor inn hver eneste gang, og alle fjorten runder
 // ble spilt mot samme profil med byttet navnelapp. Ingen feilmelding, ingen
 // rød vakt — bare en sesong uten variasjon.
+//
+// Og feilen ETTER den: første retting ga klubbene HISTORISKE arketyper, så
+// Molde «var» Barcelona 2008–12. Det brant opp arketypene, som hører til
+// scenarioer og mesterskap. Derfor krever vakten nå at ligaprofilene er
+// klubbenes egne — ingen av dem får peke på en historisk arketyp.
 // ---------------------------------------------------------------------------
+const clubProfilesFile = JSON.parse(
+  fs.readFileSync(new URL("../data/football_league_club_profiles.json", import.meta.url), "utf8")
+);
+const clubProfiles = new Map(clubProfilesFile.profiles.map((profile) => [profile.clubId, profile]));
+const archetypeIds = new Set(getHistoricalOpponentProfileIds());
+
 for (const club of LEAGUE_OPPONENT_PROFILES) {
-  assert.ok(club.archetypeId, `${club.name} mangler archetypeId`);
-  assert.ok(getHistoricalOpponentProfile(club.archetypeId), `${club.name} peker på en arketype som ikke finnes: ${club.archetypeId}`);
+  const profile = clubProfiles.get(club.id);
+  assert.ok(profile, `${club.name} mangler spillestilprofil`);
+  assert.ok(profile.styleName, `${club.name} mangler styleName`);
+  assert.ok(profile.matchupStyles?.length >= 2, `${club.name} har for få matchupStyles`);
+  assert.ok(profile.styleTraits && Object.keys(profile.styleTraits).length >= 8, `${club.name} har for tynne styleTraits`);
+  assert.ok(profile.keyBattles?.length >= 1 && profile.managerHints?.length >= 1, `${club.name} forklarer ikke hva du møter`);
+  // Klubben spiller seg selv, ikke et kostyme.
+  assert.ok(!archetypeIds.has(profile.styleName), `${club.name} bruker en historisk arketyp som stil`);
+  assert.ok(!("archetypeId" in profile), `${club.name} peker på en historisk arketyp`);
+  // Profilen leverer stilen, ikke nivået.
+  assert.ok(!("strength" in profile), `${club.name} setter styrke i profilen — nivået eies av klubben`);
 }
 assert.equal(
-  new Set(LEAGUE_OPPONENT_PROFILES.map((club) => club.archetypeId)).size,
+  new Set(LEAGUE_OPPONENT_PROFILES.map((club) => clubProfiles.get(club.id).styleName)).size,
   LEAGUE_OPPONENT_PROFILES.length,
-  "to ligaklubber deler taktisk skole — da mister sesongen variasjon"
+  "to ligaklubber deler spillestil — da mister sesongen variasjon"
 );
 
 // Gå gjennom en hel sesong og se hvem du faktisk møter.
-const schools = new Map();
+const styles = new Map();
 const styleTokens = new Set();
 let walk = fresh();
 for (let round = 1; round <= 14; round += 1) {
   const opponent = getNextLeagueOpponent(walk);
   assert.ok(opponent, `runde ${round} har ingen motstander`);
-  const profile = getHistoricalOpponentProfile(opponent.archetypeId);
-  assert.ok(profile, `runde ${round}: ${opponent.name} har ingen arketypeprofil`);
-  schools.set(profile.id, (schools.get(profile.id) || 0) + 1);
+  const profile = clubProfiles.get(opponent.id);
+  assert.ok(profile, `runde ${round}: ${opponent.name} har ingen spillestilprofil`);
+  styles.set(profile.styleName, (styles.get(profile.styleName) || 0) + 1);
   profile.matchupStyles.forEach((token) => styleTokens.add(token));
   walk = completeLeagueRound(walk, { score: { for: 1, against: 1 } });
 }
-assert.equal(schools.size, 7, `sesongen bød på ${schools.size} ulike taktiske skoler, ikke 7`);
-for (const [id, count] of schools) assert.equal(count, 2, `${id} møtes ${count} ganger, ikke to (hjemme + borte)`);
+assert.equal(styles.size, 7, `sesongen bød på ${styles.size} ulike spillestiler, ikke 7`);
+for (const [name, count] of styles) assert.equal(count, 2, `${name} møtes ${count} ganger, ikke to (hjemme + borte)`);
 assert.ok(styleTokens.size >= 8, `bare ${styleTokens.size} ulike spillestil-tokens i sesongen`);
 
-// Og at app.js faktisk slår opp arketypen — ikke klubb-id-en.
+// Og at app.js faktisk slår opp klubbprofilen — ikke klubb-id blant de generiske.
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 assert.ok(
-  /getHistoricalOpponentProfile\(opponent\.archetypeId\)/.test(app),
-  "app.js slår ikke opp ligamotstanderens arketype"
+  /state\.leagueClubProfiles\[opponent\.id\]/.test(app),
+  "app.js slår ikke opp ligaklubbens egen spillestilprofil"
 );
 assert.ok(
   !/OPPONENT_PROFILES\.find\(\(profile\) => profile\.id === opponent\.id\)/.test(app),
   "app.js leter fortsatt etter klubb-id blant de generiske profilene — den kan aldri treffe"
 );
+assert.ok(
+  /opponent\.isClubProfile \? "Klubbens spillestil" : "Historisk stil-motstander"/.test(app),
+  "kampbriefen skiller ikke klubbstil fra historisk arketyp"
+);
 
 console.log(JSON.stringify({
   ok: true, clubs: 8, rounds: 14, matches: 56, completed: played.completedMatchIds.length,
-  taktiskeSkolerPerSesong: schools.size, spillestilTokens: styleTokens.size
+  spillestilerPerSesong: styles.size, spillestilTokens: styleTokens.size
 }, null, 2));

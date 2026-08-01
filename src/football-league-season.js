@@ -8,26 +8,25 @@ export const LEAGUE_COMPETITION = Object.freeze({
   homeAndAway: true, points: Object.freeze({ win: 3, draw: 1, loss: 0 }), version: 2
 });
 
-// Hver ligaklubb SPILLER en historisk taktisk skole. `tacticalIdentity` sto her
-// fra før, men bare som en tekststreng ingen leste — og oppslaget i app.js lette
-// etter klubb-id-en blant de fem generiske profilene, der den aldri kunne
-// finnes. Resultatet: ALLE fjorten serierunder brukte samme profil
-// (`high_press_opponent`), med bare navn og styrke byttet ut. Ingen feilmelding,
-// ingen rød vakt — bare en sesong der motstanderen aldri endret seg.
+// Ligaklubbene: identitet og nivå. Selve FOTBALLEN — hvordan klubben spiller —
+// ligger i data/football_league_club_profiles.json, tegnet på klubbens egen
+// spilletradisjon.
 //
-// `archetypeId` peker nå på en ekte profil i
-// football-historical-opponent-profiles.js. Klubben eier identiteten (navn,
-// bane, styrke); arketypen eier fotballen. Da blir hver serierunde en lesning
-// i stedet for en tallsammenligning — og de tolv arketypene, som er det beste
-// i spillet, brukes også der du spiller mest.
+// Første forsøk ga klubbene historiske arketyper (Molde som Barcelona 2008–12).
+// Det var en kategorifeil: styrketallet sa 78 mens etiketten sa «du møter
+// Barcelona», og arketypene — som er det du spiller scenarioer FOR — ble til
+// tapet i serien. Klubbene spiller nå seg selv.
+//
+// `tacticalIdentity` er den korte lesbare merkelappen; profilen i datafila er
+// den motoren faktisk regner på.
 export const LEAGUE_OPPONENT_PROFILES = Object.freeze([
-  { id: "valerenga", name: "Vålerenga", ground: "Intility Arena", strength: 74, form: 55, tacticalIdentity: "høyt press", archetypeId: "liverpool_2018_20_gegenpress" },
-  { id: "brann", name: "Brann", ground: "Brann stadion", strength: 76, form: 58, tacticalIdentity: "bredt angrepsspill", archetypeId: "arsenal_2003_04_invincibles" },
-  { id: "rosenborg", name: "Rosenborg", ground: "Lerkendal", strength: 77, form: 56, tacticalIdentity: "4-3-3 og gjenvinning", archetypeId: "ajax_1971_73_total_football" },
-  { id: "viking", name: "Viking", ground: "Lyse Arena", strength: 75, form: 57, tacticalIdentity: "direkte overganger", archetypeId: "leicester_2015_16_direct_transition" },
-  { id: "lillestrom", name: "Lillestrøm", ground: "Åråsen", strength: 73, form: 53, tacticalIdentity: "duellkraft", archetypeId: "conte_chelsea_2016_17_343" },
-  { id: "tromso", name: "Tromsø", ground: "Romssa Arena", strength: 72, form: 54, tacticalIdentity: "kompakt struktur", archetypeId: "inter_1960s_catenaccio" },
-  { id: "molde", name: "Molde", ground: "Aker stadion", strength: 78, form: 59, tacticalIdentity: "posisjonsspill", archetypeId: "barcelona_2008_12_positional_play" }
+  { id: "valerenga", name: "Vålerenga", ground: "Intility Arena", strength: 74, form: 55, tacticalIdentity: "høyt press og dueller" },
+  { id: "brann", name: "Brann", ground: "Brann stadion", strength: 76, form: 58, tacticalIdentity: "direkte kantspill" },
+  { id: "rosenborg", name: "Rosenborg", ground: "Lerkendal", strength: 77, form: 56, tacticalIdentity: "godfoten · bredt 4-3-3" },
+  { id: "viking", name: "Viking", ground: "Lyse Arena", strength: 75, form: 57, tacticalIdentity: "solid bakover, direkte framover" },
+  { id: "lillestrom", name: "Lillestrøm", ground: "Åråsen", strength: 73, form: 53, tacticalIdentity: "raske vendinger" },
+  { id: "tromso", name: "Tromsø", ground: "Romssa Arena", strength: 72, form: 54, tacticalIdentity: "kompakt lav blokk" },
+  { id: "molde", name: "Molde", ground: "Aker stadion", strength: 78, form: 59, tacticalIdentity: "kontrollert posisjonsspill" }
 ]);
 
 function hash(text) {
