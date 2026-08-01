@@ -190,7 +190,12 @@ const clubProfilesFile = JSON.parse(
 const clubProfiles = new Map(clubProfilesFile.profiles.map((profile) => [profile.clubId, profile]));
 const archetypeIds = new Set(getHistoricalOpponentProfileIds());
 
-for (const club of LEAGUE_OPPONENT_PROFILES) {
+// Vaktene gjelder HELE pyramiden, ikke bare toppnivået. Rykker du ned, møter du
+// de klubbene tretti runder i strekk — ensartethet der er nøyaktig like ille.
+// Første forslag var generiske «stilfamilier» for de lavere nivåene; det var
+// feil, for klubbene der nede har storhetstider også (Moss 1987, Stabæk 2008,
+// Strømsgodset 1970 og 2013, Lyn 1964/68, Skeid åtte cupgull, Odd tolv).
+for (const club of allClubs) {
   const profile = clubProfiles.get(club.id);
   assert.ok(profile, `${club.name} mangler spillestilprofil`);
   assert.ok(profile.styleName, `${club.name} mangler styleName`);
@@ -203,24 +208,31 @@ for (const club of LEAGUE_OPPONENT_PROFILES) {
   // Profilen leverer stilen, ikke nivået.
   assert.ok(!("strength" in profile), `${club.name} setter styrke i profilen — nivået eies av klubben`);
 }
-assert.equal(
-  new Set(LEAGUE_OPPONENT_PROFILES.map((club) => clubProfiles.get(club.id).styleName)).size,
-  LEAGUE_OPPONENT_PROFILES.length,
-  "to ligaklubber deler spillestil — da mister sesongen variasjon"
-);
-// Ulikt NAVN er ikke nok: to klubber kan hete forskjellig og likevel spille helt
-// likt for motorene. Det er selve stil-fingeravtrykket som må være unikt.
-assert.equal(
-  new Set(LEAGUE_OPPONENT_PROFILES.map((club) => [...clubProfiles.get(club.id).matchupStyles].sort().join("+"))).size,
-  LEAGUE_OPPONENT_PROFILES.length,
-  "to ligaklubber har identisk matchupStyles — ulikt navn, samme fotball"
-);
+// Unikhet måles PER AVDELING — det er der du møter alle to ganger. To klubber i
+// hver sin divisjon kan gjerne ligne; de deler aldri en sesong.
+const groupsOfClubs = new Map();
+for (const club of allClubs) {
+  const key = club.group ? `${club.tier}/${club.group}` : club.tier;
+  groupsOfClubs.set(key, [...(groupsOfClubs.get(key) || []), club]);
+}
+for (const [key, group] of groupsOfClubs) {
+  assert.equal(
+    new Set(group.map((club) => clubProfiles.get(club.id).styleName)).size, group.length,
+    `${key}: to klubber deler spillestil — da mister sesongen variasjon`
+  );
+  // Ulikt NAVN er ikke nok: to klubber kan hete forskjellig og likevel spille
+  // helt likt for motorene. Det er stil-fingeravtrykket som må være unikt.
+  assert.equal(
+    new Set(group.map((club) => [...clubProfiles.get(club.id).matchupStyles].sort().join("+"))).size, group.length,
+    `${key}: to klubber har identisk matchupStyles — ulikt navn, samme fotball`
+  );
+}
 
 // Er du usikker på hvordan en klubb spilte, ta utgangspunkt i storhetstiden —
 // den da de faktisk vant. «tradisjon» er ikke en epoke, det er en unnvikelse:
 // det er nettopp den formuleringen som lot Vålerenga og Lillestrøm gli sammen
 // til det samme duellslaget. Derfor må hver profil peke på et konkret årstall.
-for (const club of LEAGUE_OPPONENT_PROFILES) {
+for (const club of allClubs) {
   assert.ok(
     /\b(18|19|20)\d{2}\b/.test(String(clubProfiles.get(club.id).era)),
     `${club.name}: era «${clubProfiles.get(club.id).era}» navngir ingen storhetstid`
@@ -232,7 +244,7 @@ for (const club of LEAGUE_OPPONENT_PROFILES) {
 const styleVocab = new Set(
   JSON.parse(fs.readFileSync(new URL("../data/hgFootball/formationKnowledge.json", import.meta.url), "utf8")).vocab.opponentStyles
 );
-for (const club of LEAGUE_OPPONENT_PROFILES) {
+for (const club of allClubs) {
   for (const token of clubProfiles.get(club.id).matchupStyles) {
     assert.ok(styleVocab.has(token), `${club.name}: ukjent spillestil-token «${token}»`);
   }
@@ -247,7 +259,7 @@ for (const club of allClubs) {
   assert.ok(!("tacticalIdentity" in club), `${club.name}: klubbdataene har fått en stil-etikett igjen — den hører i profilen, ellers driver de fra hverandre`);
 }
 const IDENTITY_STOPWORDS = new Set(["ballen", "vinnes", "deres", "eller", "gjennom", "andre", "uten"]);
-for (const club of LEAGUE_OPPONENT_PROFILES) {
+for (const club of allClubs) {
   const profile = clubProfiles.get(club.id);
   assert.ok(profile.shortLabel, `${club.name}: mangler kort etikett`);
   const blob = [profile.styleName, profile.tacticalSchool, profile.style, profile.historicalNote, profile.inPossessionShape, profile.outOfPossessionShape, profile.buildUpStyle, profile.attackingStyle].join(" ").toLowerCase();
@@ -259,12 +271,12 @@ for (const club of LEAGUE_OPPONENT_PROFILES) {
   );
 }
 
-// Alle 16 eliteserieklubbene skal ha profil — ikke bare de sju vi startet med.
 assert.equal(LEAGUE_OPPONENT_PROFILES.length, 16, "Eliteserien har ikke 16 klubber");
+assert.equal(clubProfilesFile.profiles.length, allClubs.length, "ikke alle klubbene i pyramiden har spillestilprofil");
 // `styleBasis` skiller dokumentert spilletradisjon fra klubbkarakter. En klubb
 // som aldri har vunnet noe har ingen tradisjon å slå opp, og da er det ærligere
-// å si det enn å dikte opp en. Men da må `era` og notatet SI at det er karakter.
-for (const club of LEAGUE_OPPONENT_PROFILES) {
+// å si det enn å dikte opp en. Men da må notatet SI at det er karakter.
+for (const club of allClubs) {
   const profile = clubProfiles.get(club.id);
   assert.ok(["tradisjon", "klubbkarakter"].includes(profile.styleBasis), `${club.name}: styleBasis må være tradisjon eller klubbkarakter`);
   if (profile.styleBasis === "klubbkarakter") {
@@ -293,6 +305,37 @@ assert.equal(styles.size, OPPONENT_COUNT, `sesongen bød på ${styles.size} ulik
 for (const [name, count] of styles) assert.equal(count, 2, `${name} møtes ${count} ganger, ikke to (hjemme + borte)`);
 assert.equal(styleTokens.size, 16, `bare ${styleTokens.size} ulike spillestil-tokens i sesongen — hele vokabularet skal være i bruk`);
 
+// Og det samme målt på HVERT nivå, ikke bare toppen. Rykker du ned i OBOS,
+// spiller du tretti runder der — en divisjon med generiske klubber ville vært
+// nøyaktig den ensartetheten denne vakten finnes for, bare ett hakk lenger ned.
+const perTier = {};
+for (const tier of tiers) {
+  let tierWalk = fresh(tier);
+  const tierStyles = new Set();
+  const tierTokens = new Set();
+  const rounds = roundsForClubCount(tier.groupSize);
+  for (let round = 1; round <= rounds; round += 1) {
+    const opponent = getNextLeagueOpponent(tierWalk);
+    const profile = clubProfiles.get(opponent.id);
+    assert.ok(profile, `${tier.name} runde ${round}: ${opponent.name} har ingen spillestilprofil`);
+    tierStyles.add(profile.styleName);
+    profile.matchupStyles.forEach((token) => tierTokens.add(token));
+    tierWalk = completeLeagueRound(tierWalk, { score: { for: 1, against: 1 } });
+  }
+  assert.equal(tierStyles.size, tier.groupSize - 1, `${tier.name}: ${tierStyles.size} ulike stiler, ikke ${tier.groupSize - 1}`);
+  assert.ok(tierTokens.size >= 12, `${tier.name}: bare ${tierTokens.size} spillestil-tokens på en hel sesong`);
+  perTier[tier.name] = `${tierStyles.size} stiler / ${tierTokens.size} tokens`;
+}
+
+// De avledede styleTraits må SPRE seg. Tall som klumper seg på midten beskriver
+// ingenting — det er samme klasse som skalafeilene: en modell som ser ut til å
+// virke fordi ingen har målt spredningen.
+for (const key of ["pressIntensity", "defensiveCompactness", "possessionControl", "shortBuildUp", "transitionThreat"]) {
+  const values = clubProfilesFile.profiles.map((profile) => profile.styleTraits[key]);
+  const spread = Math.max(...values) - Math.min(...values);
+  assert.ok(spread >= 30, `styleTraits.${key} spenner bare ${spread} poeng over 60 klubber — tallene beskriver ikke ulik fotball`);
+}
+
 // Og at app.js faktisk slår opp klubbprofilen — ikke klubb-id blant de generiske.
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 assert.ok(
@@ -316,6 +359,7 @@ console.log(JSON.stringify({
   lengsteBanestrekk: Math.max(...season.clubs.map((club) => longestVenueRun(season, club.id))),
   spillestilerPerSesong: styles.size,
   spillestilTokens: styleTokens.size,
+  perNivå: perTier,
   stigenOpp: climbed.join(" → "),
   stigenNed: fell.join(" → ")
 }, null, 2));

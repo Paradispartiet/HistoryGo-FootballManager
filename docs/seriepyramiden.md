@@ -89,11 +89,16 @@ ville lesing av profilen ikke kunne skille et oppslag fra en påstand.
 - klubbstyrke ligger i nivåets bånd
 - klubbdata har **ingen** stil-felter (`tacticalIdentity`, `matchupStyles`,
   `styleName`, `styleTraits`, `archetypeId`) — de hører i profilen
-- hver eliteserieklubb har profil
+- **hver** klubb i pyramiden har profil — ikke bare toppnivået
 
 `sim:league-season` spiller pyramiden:
 
 - 16 lag, 30 runder, 240 kamper, alle 16 spillestil-tokens i bruk på én sesong
+- **hvert nivå** målt for seg: en hel sesong i OBOS og i 2. divisjon gir like
+  mange ulike stiler som det er motstandere
+- unike spillestiler og unike matchupStyles-sett **per avdeling** — det er der du
+  møter alle to ganger; to klubber i hver sin divisjon deler aldri en sesong
+- de avledede styleTraits sprer seg minst 30 poeng over pyramiden
 - lengste banestrekk ≤ 2 på hvert nivå, ingen møter samme motstander to runder på rad
 - hver plassering på hvert nivå har en dom, og antallet opp-/nedrykksplasser
   stemmer med pyramidens egne regler
@@ -103,12 +108,42 @@ ville lesing av profilen ikke kunne skille et oppslag fra en påstand.
 En avdeling med 15 klubber feiler ikke høylytt. Den feiler ved at et opprykk
 lander på et nivå som kaster sesongen — midt i en karriere.
 
+## Hele pyramiden spiller sin egen fotball
+
+Alle 60 klubbene har spillestilprofil, ikke bare toppnivået.
+
+Første forslag for de lavere nivåene var **generiske «stilfamilier»**: et lite
+sett divisjonsstiler klubbene kunne peke på. Det var feil, og det ble sagt fra om
+det. Klubbene der nede har storhetstider også:
+
+- **Moss** vant serien i 1987 — under Nils Arne Eggen.
+- **Stabæk** vant i 2008 med det som ble regnet som landets peneste fotball.
+- **Strømsgodset** vant i 1970 (Eggen selv) og 2013 (Deila, som har sagt at det
+  meste han kan om fotball kom fra Eggen). Godset er den andre greina på
+  godfot-treet.
+- **Lyn** vant serien i 1964 og 1968 og cupen i 1967 og 1968, midt i det NFF
+  kaller Oslo-fotballens storhetstid.
+- **Skeid** har åtte cupgull mellom 1947 og 1974 — nesten alt i cup, nesten
+  ingenting i serien, som sier noe ekte om laget.
+- **Odd** er Norges eldste klubb og har tolv cupgull, delt rekord med Rosenborg
+  og Fredrikstad.
+
+Storhetstid-regelen gjelder altså hele pyramiden. 23 klubber har `tradisjon`, 37
+har `klubbkarakter`.
+
+### styleTraits avledes, ikke settes for hånd
+
+For de 44 nye klubbene beregnes `styleTraits` **fra `matchupStyles`** via en
+tokenvekttabell. 44 × 9 håndsatte tall ville vært falsk presisjon, og verre: de
+ville drevet fra fotballen de skal beskrive.
+
+Målt over alle 60 klubbene spenner de avledede tallene 37–66 poeng
+(`possessionControl` 23–89, `shortBuildUp` 23–87). Vakten krever minst 30 poengs
+spenn — det er nøyaktig den målingen som ville avslørt en generisk stilfamilie,
+der alle klubbene lander på midten og ingenting beskriver noe.
+
 ## Ikke gjort ennå
 
-- **OBOS-ligaen og 2. divisjon mangler spillestilprofiler.** 44 klubber. De er
-  kartlagt som klubber (navn, bane, by, nivå, styrke), men rykker du ned i dag,
-  møter du klubber uten egen fotball. Det er den samme ensartetheten
-  `sim:league-season` finnes for å hindre — bare ett nivå ned.
 - **Kvalifiseringskampene spilles ikke.** 3. plass i OBOS gir
   `promotion_playoff`, men kampen finnes ikke ennå — plasseringen er en plass,
   ikke en dom, og manageren skal spille den.

@@ -105,11 +105,11 @@ for (const tier of doc.tiers) {
 }
 
 // --- Kobling til spillestilprofilene ---------------------------------------
-// Toppnivået møter du to ganger i året. Der er en manglende profil det samme som
-// en klubb uten fotball, og da faller den tilbake på noe generisk uten å si fra.
+// HVER klubb i pyramiden må ha fotball, ikke bare toppnivået. En klubb uten
+// profil faller tilbake på noe generisk uten å si fra — og rykker du ned, er det
+// tretti runder mot klubber som ikke spiller noe.
 const profileIds = new Set(profilesDoc.profiles.map((profile) => profile.clubId));
-const topTier = doc.tiers.find((tier) => tier.level === 1);
-for (const club of doc.clubs.filter((entry) => entry.tier === topTier.id)) {
+for (const club of doc.clubs) {
   check(`${club.name}: har spillestilprofil`, profileIds.has(club.id));
 }
 for (const profile of profilesDoc.profiles) {

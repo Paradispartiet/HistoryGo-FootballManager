@@ -1,7 +1,7 @@
 {
   "schema": "historygo-football-manager.league-club-profiles.v1",
-  "version": 3,
-  "note": "Ligaklubbene spiller SEG SELV, ikke kostymer. Første forsøk ga dem historiske arketyper (Molde som Barcelona 2008–12), men det var en kategorifeil: styrketallet sa 78 mens etiketten sa «du møter Barcelona». Det brant også opp arketypene, som er det du spiller scenarioer for. Her er profilene tegnet på klubbenes EGEN spilletradisjon i stedet. v3: Eliteserien har 16 klubber, og alle 16 har profil. `styleBasis` skiller de klubbene som har en dokumentert spilletradisjon fra dem som ikke har det — noen klubber har aldri vunnet noe, og da er det ærligere å beskrive klubbens karakter enn å dikte opp en tradisjon. v2: profilene er skrevet om etter faktisk oppslag i stedet for hukommelse — se docs/liga-arketyper.md for kildene. Dette er stiliserte karakteristikker av hvordan klubbene tradisjonelt har spilt, ikke påstander om dagens tropp eller trener.",
+  "version": 4,
+  "note": "Ligaklubbene spiller SEG SELV, ikke kostymer. Første forsøk ga dem historiske arketyper (Molde som Barcelona 2008–12), men det var en kategorifeil: styrketallet sa 78 mens etiketten sa «du møter Barcelona». Det brant også opp arketypene, som er det du spiller scenarioer for. Her er profilene tegnet på klubbenes EGEN spilletradisjon i stedet. v4: OBOS-ligaen og 2. divisjon har også profiler. Første forslag var generiske «stilfamilier» for de lavere nivåene — det var feil: Moss vant serien i 1987, Stabæk i 2008, Strømsgodset i 1970 og 2013, Lyn i 1964 og 1968, Skeid har åtte cupgull og Odd tolv. Storhetstid-regelen gjelder hele pyramiden. styleTraits for disse klubbene AVLEDES fra matchupStyles i stedet for å settes for hånd, slik at tallene ikke kan drive fra fotballen de beskriver. v3: Eliteserien har 16 klubber, og alle 16 har profil. `styleBasis` skiller de klubbene som har en dokumentert spilletradisjon fra dem som ikke har det — noen klubber har aldri vunnet noe, og da er det ærligere å beskrive klubbens karakter enn å dikte opp en tradisjon. v2: profilene er skrevet om etter faktisk oppslag i stedet for hukommelse — se docs/liga-arketyper.md for kildene. Dette er stiliserte karakteristikker av hvordan klubbene tradisjonelt har spilt, ikke påstander om dagens tropp eller trener.",
   "profiles": [
     {
       "clubId": "rosenborg",
@@ -1058,6 +1058,2910 @@
         "Stenger du kantene, har de ingen andre veier."
       ],
       "shortLabel": "rolig blokk, ball ut på kant"
+    },
+    {
+      "clubId": "odd",
+      "styleName": "Odd-tradisjonen",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Norges eldste klubb · teknisk skolering",
+      "era": "1903–1931 · og Odd-modellen fra 2010",
+      "style": "Kontrollert, teknisk fotball fra landets eldste klubb — tålmodig, og alltid med en ung spiller som skal fram",
+      "historicalNote": "Norges eldste eksisterende fotballklubb, og med tolv cupgull den mest titteltunge sammen med Rosenborg og Fredrikstad — fire strake i 1903–1906 og elleve før 1931. Den moderne Odd-modellen har samme kjerne: teknisk skolering, tålmodighet med ballen, og en klubb som utvikler spillerne sine i stedet for å kjøpe dem.",
+      "inPossessionShape": "4-3-3 med kontrollert oppbygging",
+      "outOfPossessionShape": "4-1-4-1 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Jevnt",
+      "riskLevel": "medium",
+      "baseStyleId": "possession_opponent",
+      "matchupStyles": [
+        "possession_positional",
+        "build_from_back",
+        "switching_play"
+      ],
+      "shortLabel": "ballbesittelse og teknisk skolering",
+      "pressResistance": 84,
+      "defensiveStructure": 63,
+      "transitionThreat": 54,
+      "chanceConversion": 59,
+      "styleTraits": {
+        "pressIntensity": 51,
+        "transitionThreat": 54,
+        "defensiveCompactness": 63,
+        "highLine": 55,
+        "shortBuildUp": 87,
+        "possessionControl": 89,
+        "tacticalComplexity": 79,
+        "relationDemand": 63,
+        "intensity": 65
+      },
+      "strengths": [
+        "bryter du formen for å ta ballen, har de allerede vunnet",
+        "stilen er tydelig: kontrollert, teknisk fotball fra landets eldste klubb"
+      ],
+      "weaknesses": [
+        "omstillingen etter eget balltap",
+        "egen oppbygging hvis du tør å presse den"
+      ],
+      "vulnerableZones": [
+        "omstillingen etter eget balltap",
+        "siden de nettopp forlot"
+      ],
+      "dangerZones": [
+        "mellomrommet mellom ledd",
+        "sonen der de vender oppspillet innover"
+      ],
+      "keyBattles": [
+        "din midtbane mot deres tålmodighet",
+        "din laglinje mot vendingene deres"
+      ],
+      "pressurePoints": [
+        "hold formen, ikke jag ballen",
+        "press oppbyggingen høyt og tidlig"
+      ],
+      "managerHints": [
+        "Bryter du formen for å ta ballen, har de allerede vunnet.",
+        "Henger laget etter på vendingene, taper du kampen i bredden."
+      ]
+    },
+    {
+      "clubId": "stromsgodset",
+      "styleName": "Godset-fotball",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Eggen-skolen i Drammen",
+      "era": "1970 · og 2013",
+      "style": "Offensivt 4-3-3 i høyt tempo — angrip med mange, alltid framover",
+      "historicalNote": "Begge seriegullene tilhører samme skole. Nils Arne Eggen selv sto for 1970-gullet; Ronny Deila, som tok 2013-gullet, har sagt at det meste han kan om fotball kom fra Eggen og Rosenborgs storhetstid. Godset er den andre greina på godfot-treet: samme offensive 4-3-3, men spilt i høyere tempo og med yngre bein.",
+      "inPossessionShape": "4-3-3 med brede kanter og høye backer",
+      "outOfPossessionShape": "4-5-1 som gjenvinner høyt",
+      "defensiveBlock": "Høy blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "high",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "wide_overload",
+        "high_press",
+        "fast_runners_in_behind"
+      ],
+      "shortLabel": "offensivt 4-3-3 i høyt tempo",
+      "pressResistance": 69,
+      "defensiveStructure": 55,
+      "transitionThreat": 72,
+      "chanceConversion": 59,
+      "styleTraits": {
+        "pressIntensity": 75,
+        "transitionThreat": 72,
+        "defensiveCompactness": 55,
+        "highLine": 75,
+        "shortBuildUp": 57,
+        "possessionControl": 59,
+        "tacticalComplexity": 63,
+        "relationDemand": 73,
+        "intensity": 75
+      },
+      "strengths": [
+        "vinner du førsteballen i boksen, dør angrepene deres",
+        "stilen er tydelig: offensivt 4-3-3 i høyt tempo"
+      ],
+      "weaknesses": [
+        "midten når begge kanter er høye",
+        "bakrommet bak den høye linja"
+      ],
+      "vulnerableZones": [
+        "midten når begge kanter er høye",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "dangerZones": [
+        "begge felt for innlegg",
+        "din egen 16-meter i oppbyggingen"
+      ],
+      "keyBattles": [
+        "dine backer mot overtallet ute på kant",
+        "dine stoppere mot fart i bakrom"
+      ],
+      "pressurePoints": [
+        "doble opp på kant før innlegget",
+        "finn den frie mannen bak første pressledd"
+      ],
+      "managerHints": [
+        "Vinner du førsteballen i boksen, dør angrepene deres.",
+        "Står du høyt, har de akkurat spillerne til å straffe det."
+      ]
+    },
+    {
+      "clubId": "stabak",
+      "styleName": "Nadderud-fotballen",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Teknisk angrepsfotball",
+      "era": "1995–2008",
+      "style": "Landets peneste fotball, spilt av et lag som heller taper pent enn vinner stygt",
+      "historicalNote": "Seriegullet i 2008 under Jan Jönsson kom med det som ble regnet som den peneste fotballen i Norge. Stabæk har aldri vunnet noe på å være vanskelig å slå — klubben har vunnet, og tapt, på å spille.",
+      "inPossessionShape": "4-3-3 med teknikere i alle ledd",
+      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Jevnt",
+      "riskLevel": "medium",
+      "baseStyleId": "possession_opponent",
+      "matchupStyles": [
+        "possession_positional",
+        "wide_overload",
+        "fast_runners_in_behind"
+      ],
+      "shortLabel": "teknisk angrepsfotball med bredde",
+      "pressResistance": 76,
+      "defensiveStructure": 62,
+      "transitionThreat": 65,
+      "chanceConversion": 57,
+      "styleTraits": {
+        "pressIntensity": 54,
+        "transitionThreat": 65,
+        "defensiveCompactness": 62,
+        "highLine": 60,
+        "shortBuildUp": 68,
+        "possessionControl": 74,
+        "tacticalComplexity": 74,
+        "relationDemand": 72,
+        "intensity": 64
+      },
+      "strengths": [
+        "bryter du formen for å ta ballen, har de allerede vunnet",
+        "stilen er tydelig: landets peneste fotball, spilt av et lag som heller taper pent enn vinner stygt"
+      ],
+      "weaknesses": [
+        "omstillingen etter eget balltap",
+        "midten når begge kanter er høye"
+      ],
+      "vulnerableZones": [
+        "omstillingen etter eget balltap",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "dangerZones": [
+        "mellomrommet mellom ledd",
+        "begge felt for innlegg"
+      ],
+      "keyBattles": [
+        "din midtbane mot deres tålmodighet",
+        "dine stoppere mot fart i bakrom"
+      ],
+      "pressurePoints": [
+        "hold formen, ikke jag ballen",
+        "doble opp på kant før innlegget"
+      ],
+      "managerHints": [
+        "Bryter du formen for å ta ballen, har de allerede vunnet.",
+        "Står du høyt, har de akkurat spillerne til å straffe det."
+      ]
+    },
+    {
+      "clubId": "lyn",
+      "styleName": "Bislett-Lyn",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Oslo-fotballens storhetstid",
+      "era": "1964–1968",
+      "style": "Direkte og rett fram — et Oslo-lag som gikk for kampen, ikke for kontrollen",
+      "historicalNote": "To seriegull (1964, 1968) og to cupgull (1967, 1968) midt i det som kalles Oslo-fotballens storhetstid. Lyn var byens lag i et tiår da hovedstaden eide norsk fotball, og de vant på å gå rett på.",
+      "inPossessionShape": "4-4-2 med to spisser",
+      "outOfPossessionShape": "4-4-2 som setter trykket høyt",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "medium",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "two_striker_press",
+        "direct_counter",
+        "wide_overload"
+      ],
+      "shortLabel": "to spisser og rett fram",
+      "pressResistance": 63,
+      "defensiveStructure": 62,
+      "transitionThreat": 75,
+      "chanceConversion": 57,
+      "styleTraits": {
+        "pressIntensity": 66,
+        "transitionThreat": 75,
+        "defensiveCompactness": 62,
+        "highLine": 60,
+        "shortBuildUp": 44,
+        "possessionControl": 48,
+        "tacticalComplexity": 62,
+        "relationDemand": 66,
+        "intensity": 72
+      },
+      "strengths": [
+        "har du en rolig oppbygger, får han avgjøre denne kampen",
+        "stilen er tydelig: direkte og rett fram"
+      ],
+      "weaknesses": [
+        "rommet bak de to spissene",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "vulnerableZones": [
+        "rommet bak de to spissene",
+        "midten når begge kanter er høye"
+      ],
+      "dangerZones": [
+        "bakrommet rett etter balltap",
+        "ditt eget bakrom hver gang du mister ballen høyt"
+      ],
+      "keyBattles": [
+        "dine stoppere mot to jagende spisser",
+        "dine backer mot overtallet ute på kant"
+      ],
+      "pressurePoints": [
+        "spill deg forbi første pressledd",
+        "hold restforsvar selv når du dominerer"
+      ],
+      "managerHints": [
+        "Har du en rolig oppbygger, får han avgjøre denne kampen.",
+        "Vinner du førsteballen i boksen, dør angrepene deres."
+      ]
+    },
+    {
+      "clubId": "moss",
+      "styleName": "Mossefotballen",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Eggens system i en liten klubb",
+      "era": "1983–1987",
+      "style": "Eggens 4-3-3 spilt av en tropp som måtte jobbe dobbelt for det",
+      "historicalNote": "Moss' eneste seriegull kom i 1987 — under Nils Arne Eggen. Det er samme skole som Godset i 1970 og Rosenborg etterpå, men spilt av en langt mindre klubb: strukturen var Eggens, ressursene var ikke det, og laget måtte forsvare mer og gå fortere framover enn forbildet.",
+      "inPossessionShape": "3-5-2 med vingbacker som gir bredden",
+      "outOfPossessionShape": "5-3-2 i kompakt blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "direct_counter_opponent",
+      "matchupStyles": [
+        "compact_532",
+        "fast_transition",
+        "wide_overload"
+      ],
+      "shortLabel": "innøvd struktur, hurtig framover",
+      "pressResistance": 68,
+      "defensiveStructure": 77,
+      "transitionThreat": 76,
+      "chanceConversion": 54,
+      "styleTraits": {
+        "pressIntensity": 53,
+        "transitionThreat": 76,
+        "defensiveCompactness": 77,
+        "highLine": 45,
+        "shortBuildUp": 55,
+        "possessionControl": 57,
+        "tacticalComplexity": 63,
+        "relationDemand": 65,
+        "intensity": 71
+      },
+      "strengths": [
+        "gjennom midten kommer du ikke. Flytt dem i stedet",
+        "stilen er tydelig: eggens 4-3-3 spilt av en tropp som måtte jobbe dobbelt for det"
+      ],
+      "weaknesses": [
+        "siderommene utenfor de tre stopperne",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "vulnerableZones": [
+        "siderommene utenfor de tre stopperne",
+        "midten når begge kanter er høye"
+      ],
+      "dangerZones": [
+        "bakrommet ditt i det de vinner ballen",
+        "kontringssonen i midten"
+      ],
+      "keyBattles": [
+        "din kant mot vingbacken deres",
+        "dine backer mot overtallet ute på kant"
+      ],
+      "pressurePoints": [
+        "dra vingbacken ut og angrip rommet han forlot",
+        "still deg opp igjen før de rekker å gå"
+      ],
+      "managerHints": [
+        "Gjennom midten kommer du ikke. Flytt dem i stedet.",
+        "Vinner du førsteballen i boksen, dør angrepene deres."
+      ]
+    },
+    {
+      "clubId": "bryne",
+      "styleName": "Jærbuen",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Fysisk arbeidslag fra Jæren",
+      "era": "1980–1987",
+      "style": "Hardtarbeidende og direkte — et bygdelag som aldri lot storklubbene få det lett",
+      "historicalNote": "Sølv i serien i 1980-årene og cupgull i 1987 er Brynes storhetstid: et lag fra Jæren som slo seg opp på arbeidskapasitet og fysikk, ikke på finesse, og som ble ubehagelig for hvem som helst på Bryne stadion.",
+      "inPossessionShape": "4-4-2 med langt framspill",
+      "outOfPossessionShape": "4-4-2 i smal blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "low",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "target_man_direct",
+        "narrow_442",
+        "fast_transition"
+      ],
+      "shortLabel": "fysisk, direkte, hardtarbeidende",
+      "pressResistance": 58,
+      "defensiveStructure": 73,
+      "transitionThreat": 82,
+      "chanceConversion": 55,
+      "styleTraits": {
+        "pressIntensity": 53,
+        "transitionThreat": 82,
+        "defensiveCompactness": 73,
+        "highLine": 53,
+        "shortBuildUp": 33,
+        "possessionControl": 39,
+        "tacticalComplexity": 51,
+        "relationDemand": 49,
+        "intensity": 77
+      },
+      "strengths": [
+        "har du ikke en stopper som eier lufta, taper du i nedfallssonen",
+        "stilen er tydelig: hardtarbeidende og direkte"
+      ],
+      "weaknesses": [
+        "bakrommet når langballen er slått og de er høye",
+        "begge kantsoner"
+      ],
+      "vulnerableZones": [
+        "bakrommet når langballen er slått og de er høye",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "dangerZones": [
+        "nedfallssonen rundt targetspissen",
+        "midtsonen på andreballer"
+      ],
+      "keyBattles": [
+        "dine stoppere mot targetspissen i lufta",
+        "din sekser mot omstillingsfarten"
+      ],
+      "pressurePoints": [
+        "vinn førsteballen, så har de ingen plan B",
+        "hold banen bred fra første minutt"
+      ],
+      "managerHints": [
+        "Har du ikke en stopper som eier lufta, taper du i nedfallssonen.",
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder."
+      ]
+    },
+    {
+      "clubId": "hodd",
+      "styleName": "Høddvoll-cupen",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Cuplag i en liten by",
+      "era": "2012",
+      "style": "Kompakt og disiplinert, med én plan: overleve til kampen kan vinnes i én situasjon",
+      "historicalNote": "Cupgullet i 2012 er klubbens storhetstid og hele identiteten: Hødd slo seg gjennom mot større klubber ved å være vanskeligere å slå enn troppen tilsa, og ta den ene sjansen som kom.",
+      "inPossessionShape": "5-3-2 med to spisser i bakrom",
+      "outOfPossessionShape": "5-3-2 i lav blokk",
+      "defensiveBlock": "Lav blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "deep_low_block",
+        "compact_532",
+        "direct_counter"
+      ],
+      "shortLabel": "lav blokk og én sjanse",
+      "pressResistance": 59,
+      "defensiveStructure": 90,
+      "transitionThreat": 74,
+      "chanceConversion": 54,
+      "styleTraits": {
+        "pressIntensity": 43,
+        "transitionThreat": 74,
+        "defensiveCompactness": 90,
+        "highLine": 27,
+        "shortBuildUp": 43,
+        "possessionControl": 31,
+        "tacticalComplexity": 61,
+        "relationDemand": 53,
+        "intensity": 63
+      },
+      "strengths": [
+        "du får ballen. Spørsmålet er om du har bredde nok til å bruke den",
+        "stilen er tydelig: kompakt og disiplinert, med én plan: overleve til kampen kan vinnes i én situasjon"
+      ],
+      "weaknesses": [
+        "utsiden av blokken",
+        "siderommene utenfor de tre stopperne"
+      ],
+      "vulnerableZones": [
+        "utsiden av blokken",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "egen boks på dødball",
+        "bakrommet ditt i det de vinner ballen"
+      ],
+      "keyBattles": [
+        "din bredde mot deres smale blokk",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "bruk hele banens bredde",
+        "dra vingbacken ut og angrip rommet han forlot"
+      ],
+      "managerHints": [
+        "Du får ballen. Spørsmålet er om du har bredde nok til å bruke den.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
+    },
+    {
+      "clubId": "haugesund",
+      "styleName": "Haugesund-strukturen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Organisert klubb på Vestlandet",
+      "era": "2010–2019",
+      "style": "Ryddig og forutsigbar i egen struktur, farlig på omstilling",
+      "historicalNote": "FKH har ingen titler; storhetstiden er et tiår i Eliteserien og cupfinalen i 2019. Karakteren er en klubb som holder nivået på organisering og kontinuitet framfor kvalitet. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med direkte framspill",
+      "outOfPossessionShape": "4-4-2 i passiv middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "passive_mid_block",
+        "direct_counter",
+        "target_man_direct"
+      ],
+      "shortLabel": "ryddig blokk, farlig på omstilling",
+      "pressResistance": 54,
+      "defensiveStructure": 73,
+      "transitionThreat": 82,
+      "chanceConversion": 59,
+      "styleTraits": {
+        "pressIntensity": 41,
+        "transitionThreat": 82,
+        "defensiveCompactness": 73,
+        "highLine": 47,
+        "shortBuildUp": 23,
+        "possessionControl": 31,
+        "tacticalComplexity": 57,
+        "relationDemand": 55,
+        "intensity": 71
+      },
+      "strengths": [
+        "de gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg",
+        "stilen er tydelig: ryddig og forutsigbar i egen struktur, farlig på omstilling"
+      ],
+      "weaknesses": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "vulnerableZones": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "bakrommet når langballen er slått og de er høye"
+      ],
+      "dangerZones": [
+        "andreballer rundt boksen",
+        "ditt eget bakrom hver gang du mister ballen høyt"
+      ],
+      "keyBattles": [
+        "din tier i rommet foran blokken",
+        "dine stoppere mot targetspissen i lufta"
+      ],
+      "pressurePoints": [
+        "bruk tida de gir deg",
+        "hold restforsvar selv når du dominerer"
+      ],
+      "managerHints": [
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg.",
+        "Har du ikke en stopper som eier lufta, taper du i nedfallssonen."
+      ]
+    },
+    {
+      "clubId": "sogndal",
+      "styleName": "Sogndalsmodellen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Egne spillere fra en liten bygd",
+      "era": "1982–2017",
+      "style": "Ungt lag som spiller framover fordi det er slik de utvikles",
+      "historicalNote": "Sogndal har ingen titler, men en usannsynlig lang tid på øverste nivå for en bygd på 8 000. Modellen er hele karakteren: utvikle egne spillere, selge dem, gjøre det igjen. Laget spiller deretter — ungt, framoverlent, med feil. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med unge spillere høyt",
+      "outOfPossessionShape": "4-3-3 som presser høyt",
+      "defensiveBlock": "Høy blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "high",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "build_from_back",
+        "high_press",
+        "fast_runners_in_behind"
+      ],
+      "shortLabel": "ungt lag som spiller framover",
+      "pressResistance": 74,
+      "defensiveStructure": 54,
+      "transitionThreat": 71,
+      "chanceConversion": 56,
+      "styleTraits": {
+        "pressIntensity": 70,
+        "transitionThreat": 71,
+        "defensiveCompactness": 54,
+        "highLine": 74,
+        "shortBuildUp": 74,
+        "possessionControl": 62,
+        "tacticalComplexity": 56,
+        "relationDemand": 60,
+        "intensity": 74
+      },
+      "strengths": [
+        "de vil bygge kort. Nekt dem det, så har de ingen plan",
+        "stilen er tydelig: ungt lag som spiller framover fordi det er slik de utvikles"
+      ],
+      "weaknesses": [
+        "egen oppbygging hvis du tør å presse den",
+        "bakrommet bak den høye linja"
+      ],
+      "vulnerableZones": [
+        "egen oppbygging hvis du tør å presse den",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "dangerZones": [
+        "sonen der de vender oppspillet innover",
+        "din egen 16-meter i oppbyggingen"
+      ],
+      "keyBattles": [
+        "din spiss mot deres oppbygging",
+        "dine stoppere mot fart i bakrom"
+      ],
+      "pressurePoints": [
+        "press oppbyggingen høyt og tidlig",
+        "finn den frie mannen bak første pressledd"
+      ],
+      "managerHints": [
+        "De vil bygge kort. Nekt dem det, så har de ingen plan.",
+        "Står du høyt, har de akkurat spillerne til å straffe det."
+      ]
+    },
+    {
+      "clubId": "kongsvinger",
+      "styleName": "Gjemselund-motstand",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Vanskelig hjemmebane",
+      "era": "1984–1996",
+      "style": "Kompakt og ubehagelig, særlig på Gjemselund",
+      "historicalNote": "KIL har ingen titler, men tolv år på øverste nivå fra midten av 80-tallet. Karakteren er en klubb som alltid har vært større hjemme enn borte, og som har vunnet poeng på å gjøre kampen ufyselig. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med korte framrykk",
+      "outOfPossessionShape": "4-4-2 i smal middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "narrow_442",
+        "passive_mid_block",
+        "direct_counter"
+      ],
+      "shortLabel": "smal blokk, sterk hjemme",
+      "pressResistance": 62,
+      "defensiveStructure": 83,
+      "transitionThreat": 74,
+      "chanceConversion": 54,
+      "styleTraits": {
+        "pressIntensity": 39,
+        "transitionThreat": 74,
+        "defensiveCompactness": 83,
+        "highLine": 45,
+        "shortBuildUp": 43,
+        "possessionControl": 43,
+        "tacticalComplexity": 55,
+        "relationDemand": 49,
+        "intensity": 63
+      },
+      "strengths": [
+        "de stenger midten med vilje. Ikke tving pasningen gjennom",
+        "stilen er tydelig: kompakt og ubehagelig, særlig på gjemselund"
+      ],
+      "weaknesses": [
+        "begge kantsoner",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "vulnerableZones": [
+        "begge kantsoner",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "midtsonen på andreballer",
+        "andreballer rundt boksen"
+      ],
+      "keyBattles": [
+        "dine kanter mot en smal blokk",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "hold banen bred fra første minutt",
+        "bruk tida de gir deg"
+      ],
+      "managerHints": [
+        "De stenger midten med vilje. Ikke tving pasningen gjennom.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
+    },
+    {
+      "clubId": "ranheim",
+      "styleName": "Ranheim-veien",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bydelsklubb med egne spillere",
+      "era": "2017–2019",
+      "style": "Uredd ballbesittelse fra en klubb som ikke burde hatt råd til den",
+      "historicalNote": "Ranheim har ingen titler; bragden er to sesonger i Eliteserien med en bydelsklubb fra Trondheim. Karakteren var påfallende: de spilte ballbesittende og uredd i stedet for å parkere bussen. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i smal blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "possession_opponent",
+      "matchupStyles": [
+        "possession_positional",
+        "build_from_back",
+        "narrow_442"
+      ],
+      "shortLabel": "uredd ballbesittelse",
+      "pressResistance": 81,
+      "defensiveStructure": 73,
+      "transitionThreat": 52,
+      "chanceConversion": 55,
+      "styleTraits": {
+        "pressIntensity": 49,
+        "transitionThreat": 52,
+        "defensiveCompactness": 73,
+        "highLine": 53,
+        "shortBuildUp": 85,
+        "possessionControl": 77,
+        "tacticalComplexity": 67,
+        "relationDemand": 49,
+        "intensity": 63
+      },
+      "strengths": [
+        "bryter du formen for å ta ballen, har de allerede vunnet",
+        "stilen er tydelig: uredd ballbesittelse fra en klubb som ikke burde hatt råd til den"
+      ],
+      "weaknesses": [
+        "omstillingen etter eget balltap",
+        "egen oppbygging hvis du tør å presse den"
+      ],
+      "vulnerableZones": [
+        "omstillingen etter eget balltap",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "mellomrommet mellom ledd",
+        "sonen der de vender oppspillet innover"
+      ],
+      "keyBattles": [
+        "din midtbane mot deres tålmodighet",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "hold formen, ikke jag ballen",
+        "press oppbyggingen høyt og tidlig"
+      ],
+      "managerHints": [
+        "Bryter du formen for å ta ballen, har de allerede vunnet.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "asane",
+      "styleName": "Åsane-tålmodighet",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bergens andre klubb",
+      "era": "2015–",
+      "style": "Tålmodig og lite risikovillig — venter på at motstanderen skal kjede seg",
+      "historicalNote": "Åsane har ingen titler og har aldri spilt i Eliteserien. Karakteren er tålmodighet: en klubb som har brukt et tiår på å bli stabil i nest øverste divisjon, og som spiller deretter. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i passiv blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "passive_mid_block",
+        "build_from_back",
+        "narrow_442"
+      ],
+      "shortLabel": "tålmodig blokk, kort oppbygging",
+      "pressResistance": 74,
+      "defensiveStructure": 83,
+      "transitionThreat": 58,
+      "chanceConversion": 55,
+      "styleTraits": {
+        "pressIntensity": 35,
+        "transitionThreat": 58,
+        "defensiveCompactness": 83,
+        "highLine": 45,
+        "shortBuildUp": 73,
+        "possessionControl": 61,
+        "tacticalComplexity": 55,
+        "relationDemand": 49,
+        "intensity": 63
+      },
+      "strengths": [
+        "de gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg",
+        "stilen er tydelig: tålmodig og lite risikovillig"
+      ],
+      "weaknesses": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "egen oppbygging hvis du tør å presse den"
+      ],
+      "vulnerableZones": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "andreballer rundt boksen",
+        "sonen der de vender oppspillet innover"
+      ],
+      "keyBattles": [
+        "din tier i rommet foran blokken",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "bruk tida de gir deg",
+        "press oppbyggingen høyt og tidlig"
+      ],
+      "managerHints": [
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "egersund",
+      "styleName": "Egersund-trass",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Liten by, stort trykk",
+      "era": "2019–",
+      "style": "Aggressivt og fysisk fra en klubb som vet at den er minst",
+      "historicalNote": "Egersund har ingen titler. Karakteren er en liten sørvestlandsklubb som har klatret på trass og fysikk. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med to spisser",
+      "outOfPossessionShape": "4-4-2 som presser med to",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "medium",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "two_striker_press",
+        "target_man_direct",
+        "fast_transition"
+      ],
+      "shortLabel": "fysisk press og direkte spill",
+      "pressResistance": 58,
+      "defensiveStructure": 61,
+      "transitionThreat": 82,
+      "chanceConversion": 55,
+      "styleTraits": {
+        "pressIntensity": 65,
+        "transitionThreat": 82,
+        "defensiveCompactness": 61,
+        "highLine": 59,
+        "shortBuildUp": 33,
+        "possessionControl": 39,
+        "tacticalComplexity": 51,
+        "relationDemand": 53,
+        "intensity": 85
+      },
+      "strengths": [
+        "har du en rolig oppbygger, får han avgjøre denne kampen",
+        "stilen er tydelig: aggressivt og fysisk fra en klubb som vet at den er minst"
+      ],
+      "weaknesses": [
+        "rommet bak de to spissene",
+        "bakrommet når langballen er slått og de er høye"
+      ],
+      "vulnerableZones": [
+        "rommet bak de to spissene",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "dangerZones": [
+        "bakrommet rett etter balltap",
+        "nedfallssonen rundt targetspissen"
+      ],
+      "keyBattles": [
+        "dine stoppere mot to jagende spisser",
+        "din sekser mot omstillingsfarten"
+      ],
+      "pressurePoints": [
+        "spill deg forbi første pressledd",
+        "vinn førsteballen, så har de ingen plan B"
+      ],
+      "managerHints": [
+        "Har du en rolig oppbygger, får han avgjøre denne kampen.",
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder."
+      ]
+    },
+    {
+      "clubId": "raufoss",
+      "styleName": "Raufoss-disiplin",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Industristed med et lite lag",
+      "era": "2019–",
+      "style": "Innøvd og disiplinert — et lite lag som holder formen lenger enn du orker",
+      "historicalNote": "Raufoss har ingen titler; klubben er et industristed med et lag som har overlevd i nest øverste divisjon på ren organisering. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "5-3-2 med to spisser",
+      "outOfPossessionShape": "5-3-2 i kompakt blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "compact_532",
+        "passive_mid_block",
+        "fast_runners_in_behind"
+      ],
+      "shortLabel": "innøvd kompakt blokk",
+      "pressResistance": 67,
+      "defensiveStructure": 87,
+      "transitionThreat": 70,
+      "chanceConversion": 55,
+      "styleTraits": {
+        "pressIntensity": 39,
+        "transitionThreat": 70,
+        "defensiveCompactness": 87,
+        "highLine": 43,
+        "shortBuildUp": 55,
+        "possessionControl": 53,
+        "tacticalComplexity": 61,
+        "relationDemand": 59,
+        "intensity": 63
+      },
+      "strengths": [
+        "gjennom midten kommer du ikke. Flytt dem i stedet",
+        "stilen er tydelig: innøvd og disiplinert"
+      ],
+      "weaknesses": [
+        "siderommene utenfor de tre stopperne",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "vulnerableZones": [
+        "siderommene utenfor de tre stopperne",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "dangerZones": [
+        "bakrommet ditt i det de vinner ballen",
+        "andreballer rundt boksen"
+      ],
+      "keyBattles": [
+        "din kant mot vingbacken deres",
+        "dine stoppere mot fart i bakrom"
+      ],
+      "pressurePoints": [
+        "dra vingbacken ut og angrip rommet han forlot",
+        "bruk tida de gir deg"
+      ],
+      "managerHints": [
+        "Gjennom midten kommer du ikke. Flytt dem i stedet.",
+        "Står du høyt, har de akkurat spillerne til å straffe det."
+      ]
+    },
+    {
+      "clubId": "sandnes_ulf",
+      "styleName": "Sandnes-bredde",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Jærens andre klubb",
+      "era": "2012–2014",
+      "style": "Ball ut på kant og innlegg — enkelt, men gjennomført",
+      "historicalNote": "Sandnes Ulf har ingen titler; storhetstiden er tre sesonger i Eliteserien. Karakteren er et enkelt og gjennomført kantspill. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med tidlig ball ut på kant",
+      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "wide_overload",
+        "target_man_direct",
+        "passive_mid_block"
+      ],
+      "shortLabel": "kantspill og innlegg",
+      "pressResistance": 59,
+      "defensiveStructure": 71,
+      "transitionThreat": 64,
+      "chanceConversion": 54,
+      "styleTraits": {
+        "pressIntensity": 39,
+        "transitionThreat": 64,
+        "defensiveCompactness": 71,
+        "highLine": 45,
+        "shortBuildUp": 33,
+        "possessionControl": 43,
+        "tacticalComplexity": 61,
+        "relationDemand": 65,
+        "intensity": 69
+      },
+      "strengths": [
+        "vinner du førsteballen i boksen, dør angrepene deres",
+        "stilen er tydelig: ball ut på kant og innlegg"
+      ],
+      "weaknesses": [
+        "midten når begge kanter er høye",
+        "bakrommet når langballen er slått og de er høye"
+      ],
+      "vulnerableZones": [
+        "midten når begge kanter er høye",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "dangerZones": [
+        "begge felt for innlegg",
+        "nedfallssonen rundt targetspissen"
+      ],
+      "keyBattles": [
+        "dine backer mot overtallet ute på kant",
+        "din tier i rommet foran blokken"
+      ],
+      "pressurePoints": [
+        "doble opp på kant før innlegget",
+        "vinn førsteballen, så har de ingen plan B"
+      ],
+      "managerHints": [
+        "Vinner du førsteballen i boksen, dør angrepene deres.",
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg."
+      ]
+    },
+    {
+      "clubId": "strommen",
+      "styleName": "Strømmen-vilje",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Liten klubb i Lillestrøms skygge",
+      "era": "2013–",
+      "style": "Løper mer enn troppen tilsier, og gir aldri en billig kamp",
+      "historicalNote": "Strømmen har ingen titler og har alltid stått i skyggen av naboen. Karakteren er løpsvilje framfor kvalitet. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med hurtige framrykk",
+      "outOfPossessionShape": "4-4-2 som presser samlet",
+      "defensiveBlock": "Høy blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "high",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "high_press",
+        "narrow_442",
+        "direct_counter"
+      ],
+      "shortLabel": "løpsvilje og smal blokk",
+      "pressResistance": 61,
+      "defensiveStructure": 64,
+      "transitionThreat": 73,
+      "chanceConversion": 52,
+      "styleTraits": {
+        "pressIntensity": 72,
+        "transitionThreat": 73,
+        "defensiveCompactness": 64,
+        "highLine": 66,
+        "shortBuildUp": 42,
+        "possessionControl": 42,
+        "tacticalComplexity": 54,
+        "relationDemand": 48,
+        "intensity": 72
+      },
+      "strengths": [
+        "kommer du gjennom presset én gang, ligger halve banen åpen",
+        "stilen er tydelig: løper mer enn troppen tilsier, og gir aldri en billig kamp"
+      ],
+      "weaknesses": [
+        "bakrommet bak den høye linja",
+        "begge kantsoner"
+      ],
+      "vulnerableZones": [
+        "bakrommet bak den høye linja",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "din egen 16-meter i oppbyggingen",
+        "midtsonen på andreballer"
+      ],
+      "keyBattles": [
+        "din keeper og stoppere mot første pressledd",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "finn den frie mannen bak første pressledd",
+        "hold banen bred fra første minutt"
+      ],
+      "managerHints": [
+        "Kommer du gjennom presset én gang, ligger halve banen åpen.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
+    },
+    {
+      "clubId": "mjondalen",
+      "styleName": "Nedre Eiker-kraft",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Bygdelag som slo storklubbene",
+      "era": "1930-tallet · og 2015–2021",
+      "style": "Fysisk, direkte og uredd — et bygdelag som aldri har brydd seg om hvem som står på motsatt side",
+      "historicalNote": "Mjøndalen sto i tre cupfinaler på 1930-tallet, mot Odd i både 1931 og 1937, og har siden vært innom Eliteserien flere ganger. Identiteten har vært den samme hele veien: fysisk kraft, direkte spill og et bygdelag som ikke lar seg imponere.",
+      "inPossessionShape": "5-3-2 med langt framspill",
+      "outOfPossessionShape": "5-3-2 i kompakt blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "low",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "target_man_direct",
+        "compact_532",
+        "fast_transition"
+      ],
+      "shortLabel": "fysisk og direkte fra Nedre Eiker",
+      "pressResistance": 57,
+      "defensiveStructure": 75,
+      "transitionThreat": 80,
+      "chanceConversion": 51,
+      "styleTraits": {
+        "pressIntensity": 51,
+        "transitionThreat": 80,
+        "defensiveCompactness": 75,
+        "highLine": 43,
+        "shortBuildUp": 31,
+        "possessionControl": 37,
+        "tacticalComplexity": 55,
+        "relationDemand": 51,
+        "intensity": 75
+      },
+      "strengths": [
+        "har du ikke en stopper som eier lufta, taper du i nedfallssonen",
+        "stilen er tydelig: fysisk, direkte og uredd"
+      ],
+      "weaknesses": [
+        "bakrommet når langballen er slått og de er høye",
+        "siderommene utenfor de tre stopperne"
+      ],
+      "vulnerableZones": [
+        "bakrommet når langballen er slått og de er høye",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "dangerZones": [
+        "nedfallssonen rundt targetspissen",
+        "bakrommet ditt i det de vinner ballen"
+      ],
+      "keyBattles": [
+        "dine stoppere mot targetspissen i lufta",
+        "din sekser mot omstillingsfarten"
+      ],
+      "pressurePoints": [
+        "vinn førsteballen, så har de ingen plan B",
+        "dra vingbacken ut og angrip rommet han forlot"
+      ],
+      "managerHints": [
+        "Har du ikke en stopper som eier lufta, taper du i nedfallssonen.",
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder."
+      ]
+    },
+    {
+      "clubId": "pors",
+      "styleName": "Porsgrunn-stoltheten",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Gammel klubb i Grenland",
+      "era": "1950-tallet",
+      "style": "Kort spill langs bakken fra en gammel Grenlandsklubb",
+      "historicalNote": "Pors er en av Norges eldste klubber og hadde sin storhetstid på øverste nivå på 1950-tallet, i skyggen av naboen Odd. Grenlandstradisjonen deler de: kort spill, teknikk og skolering.",
+      "inPossessionShape": "4-3-3 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Kontrollert",
+      "riskLevel": "low",
+      "baseStyleId": "possession_opponent",
+      "matchupStyles": [
+        "build_from_back",
+        "possession_positional",
+        "narrow_442"
+      ],
+      "shortLabel": "kort spill langs bakken",
+      "pressResistance": 80,
+      "defensiveStructure": 71,
+      "transitionThreat": 50,
+      "chanceConversion": 50,
+      "styleTraits": {
+        "pressIntensity": 47,
+        "transitionThreat": 50,
+        "defensiveCompactness": 71,
+        "highLine": 51,
+        "shortBuildUp": 83,
+        "possessionControl": 75,
+        "tacticalComplexity": 65,
+        "relationDemand": 47,
+        "intensity": 61
+      },
+      "strengths": [
+        "de vil bygge kort. Nekt dem det, så har de ingen plan",
+        "stilen er tydelig: kort spill langs bakken fra en gammel grenlandsklubb"
+      ],
+      "weaknesses": [
+        "egen oppbygging hvis du tør å presse den",
+        "omstillingen etter eget balltap"
+      ],
+      "vulnerableZones": [
+        "egen oppbygging hvis du tør å presse den",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "sonen der de vender oppspillet innover",
+        "mellomrommet mellom ledd"
+      ],
+      "keyBattles": [
+        "din spiss mot deres oppbygging",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "press oppbyggingen høyt og tidlig",
+        "hold formen, ikke jag ballen"
+      ],
+      "managerHints": [
+        "De vil bygge kort. Nekt dem det, så har de ingen plan.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "jerv",
+      "styleName": "Jerv-trassen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Grimstad mot alle odds",
+      "era": "2022",
+      "style": "Kompakt, disiplinert og fullstendig uimponert av hvem som helst",
+      "historicalNote": "Jerv har ingen titler; bragden er opprykket til Eliteserien i 2022 med en av landets minste klubber. Karakteren er trass satt i system. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med korte framrykk",
+      "outOfPossessionShape": "4-4-2 i lav, smal blokk",
+      "defensiveBlock": "Lav blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "deep_low_block",
+        "narrow_442",
+        "direct_counter"
+      ],
+      "shortLabel": "lav blokk og trass",
+      "pressResistance": 58,
+      "defensiveStructure": 90,
+      "transitionThreat": 73,
+      "chanceConversion": 52,
+      "styleTraits": {
+        "pressIntensity": 42,
+        "transitionThreat": 73,
+        "defensiveCompactness": 90,
+        "highLine": 34,
+        "shortBuildUp": 42,
+        "possessionControl": 30,
+        "tacticalComplexity": 54,
+        "relationDemand": 48,
+        "intensity": 62
+      },
+      "strengths": [
+        "du får ballen. Spørsmålet er om du har bredde nok til å bruke den",
+        "stilen er tydelig: kompakt, disiplinert og fullstendig uimponert av hvem som helst"
+      ],
+      "weaknesses": [
+        "utsiden av blokken",
+        "begge kantsoner"
+      ],
+      "vulnerableZones": [
+        "utsiden av blokken",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "egen boks på dødball",
+        "midtsonen på andreballer"
+      ],
+      "keyBattles": [
+        "din bredde mot deres smale blokk",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "bruk hele banens bredde",
+        "hold banen bred fra første minutt"
+      ],
+      "managerHints": [
+        "Du får ballen. Spørsmålet er om du har bredde nok til å bruke den.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
+    },
+    {
+      "clubId": "notodden",
+      "styleName": "Notodden-strukturen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Telemark bak Odd",
+      "era": "2010–",
+      "style": "Ryddig og forutsigbar, uten ambisjon om å eie kampen",
+      "historicalNote": "Notodden har ingen titler. Karakteren er en stabil klubb i tredje og andre divisjon som spiller innenfor sine midler. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med langt framspill",
+      "outOfPossessionShape": "4-4-2 i passiv blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "passive_mid_block",
+        "target_man_direct",
+        "narrow_442"
+      ],
+      "shortLabel": "passiv blokk og langt fram",
+      "pressResistance": 57,
+      "defensiveStructure": 81,
+      "transitionThreat": 62,
+      "chanceConversion": 51,
+      "styleTraits": {
+        "pressIntensity": 37,
+        "transitionThreat": 62,
+        "defensiveCompactness": 81,
+        "highLine": 43,
+        "shortBuildUp": 31,
+        "possessionControl": 37,
+        "tacticalComplexity": 53,
+        "relationDemand": 47,
+        "intensity": 67
+      },
+      "strengths": [
+        "de gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg",
+        "stilen er tydelig: ryddig og forutsigbar, uten ambisjon om å eie kampen"
+      ],
+      "weaknesses": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "bakrommet når langballen er slått og de er høye"
+      ],
+      "vulnerableZones": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "andreballer rundt boksen",
+        "nedfallssonen rundt targetspissen"
+      ],
+      "keyBattles": [
+        "din tier i rommet foran blokken",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "bruk tida de gir deg",
+        "vinn førsteballen, så har de ingen plan B"
+      ],
+      "managerHints": [
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "arendal",
+      "styleName": "Arendal-oppbygging",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Sørlandsklubb i Starts skygge",
+      "era": "2016–",
+      "style": "Prøver å spille seg ut bakfra, også når det koster",
+      "historicalNote": "Arendal har ingen titler. Karakteren er en klubb som har valgt å spille seg ut bakfra selv på et nivå der de fleste slår langt. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "build_from_back",
+        "switching_play",
+        "passive_mid_block"
+      ],
+      "shortLabel": "spiller seg ut bakfra",
+      "pressResistance": 76,
+      "defensiveStructure": 70,
+      "transitionThreat": 57,
+      "chanceConversion": 52,
+      "styleTraits": {
+        "pressIntensity": 34,
+        "transitionThreat": 57,
+        "defensiveCompactness": 70,
+        "highLine": 44,
+        "shortBuildUp": 72,
+        "possessionControl": 70,
+        "tacticalComplexity": 64,
+        "relationDemand": 60,
+        "intensity": 62
+      },
+      "strengths": [
+        "de vil bygge kort. Nekt dem det, så har de ingen plan",
+        "stilen er tydelig: prøver å spille seg ut bakfra, også når det koster"
+      ],
+      "weaknesses": [
+        "egen oppbygging hvis du tør å presse den",
+        "siden de nettopp forlot"
+      ],
+      "vulnerableZones": [
+        "egen oppbygging hvis du tør å presse den",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "dangerZones": [
+        "sonen der de vender oppspillet innover",
+        "motsatt kant etter en vending"
+      ],
+      "keyBattles": [
+        "din spiss mot deres oppbygging",
+        "din tier i rommet foran blokken"
+      ],
+      "pressurePoints": [
+        "press oppbyggingen høyt og tidlig",
+        "flytt laget samlet, ikke enkeltvis"
+      ],
+      "managerHints": [
+        "De vil bygge kort. Nekt dem det, så har de ingen plan.",
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg."
+      ]
+    },
+    {
+      "clubId": "kvik_halden",
+      "styleName": "Halden-tradisjonen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Gammel østfoldklubb",
+      "era": "1930-tallet",
+      "style": "Enkelt og fysisk, med et publikum som forventer kamp",
+      "historicalNote": "Kvik Halden er en gammel østfoldklubb med en fjern tid på øverste nivå, og uten titler. Karakteren er enkel, fysisk fotball for et publikum som vil se innsats. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med to spisser",
+      "outOfPossessionShape": "4-4-2 i smal blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Høyt",
+      "riskLevel": "low",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "two_striker_press",
+        "narrow_442",
+        "target_man_direct"
+      ],
+      "shortLabel": "enkelt, fysisk, med publikum i ryggen",
+      "pressResistance": 57,
+      "defensiveStructure": 70,
+      "transitionThreat": 61,
+      "chanceConversion": 48,
+      "styleTraits": {
+        "pressIntensity": 62,
+        "transitionThreat": 61,
+        "defensiveCompactness": 70,
+        "highLine": 56,
+        "shortBuildUp": 30,
+        "possessionControl": 36,
+        "tacticalComplexity": 52,
+        "relationDemand": 46,
+        "intensity": 74
+      },
+      "strengths": [
+        "har du en rolig oppbygger, får han avgjøre denne kampen",
+        "stilen er tydelig: enkelt og fysisk, med et publikum som forventer kamp"
+      ],
+      "weaknesses": [
+        "rommet bak de to spissene",
+        "begge kantsoner"
+      ],
+      "vulnerableZones": [
+        "rommet bak de to spissene",
+        "bakrommet når langballen er slått og de er høye"
+      ],
+      "dangerZones": [
+        "bakrommet rett etter balltap",
+        "midtsonen på andreballer"
+      ],
+      "keyBattles": [
+        "dine stoppere mot to jagende spisser",
+        "dine stoppere mot targetspissen i lufta"
+      ],
+      "pressurePoints": [
+        "spill deg forbi første pressledd",
+        "hold banen bred fra første minutt"
+      ],
+      "managerHints": [
+        "Har du en rolig oppbygger, får han avgjøre denne kampen.",
+        "Har du ikke en stopper som eier lufta, taper du i nedfallssonen."
+      ]
+    },
+    {
+      "clubId": "eik_tonsberg",
+      "styleName": "Eik-bredde",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Tønsbergs klubb",
+      "era": "2010–",
+      "style": "Ball ut på kant, og så inn i boksen",
+      "historicalNote": "Eik Tønsberg har ingen titler. Karakteren er enkelt kantspill. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med ball ut på kant",
+      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "medium",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "wide_overload",
+        "passive_mid_block",
+        "fast_transition"
+      ],
+      "shortLabel": "kantspill og innlegg",
+      "pressResistance": 67,
+      "defensiveStructure": 68,
+      "transitionThreat": 73,
+      "chanceConversion": 49,
+      "styleTraits": {
+        "pressIntensity": 36,
+        "transitionThreat": 73,
+        "defensiveCompactness": 68,
+        "highLine": 42,
+        "shortBuildUp": 52,
+        "possessionControl": 54,
+        "tacticalComplexity": 54,
+        "relationDemand": 62,
+        "intensity": 68
+      },
+      "strengths": [
+        "vinner du førsteballen i boksen, dør angrepene deres",
+        "stilen er tydelig: ball ut på kant, og så inn i boksen"
+      ],
+      "weaknesses": [
+        "midten når begge kanter er høye",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "vulnerableZones": [
+        "midten når begge kanter er høye",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "dangerZones": [
+        "begge felt for innlegg",
+        "andreballer rundt boksen"
+      ],
+      "keyBattles": [
+        "dine backer mot overtallet ute på kant",
+        "din sekser mot omstillingsfarten"
+      ],
+      "pressurePoints": [
+        "doble opp på kant før innlegget",
+        "bruk tida de gir deg"
+      ],
+      "managerHints": [
+        "Vinner du førsteballen i boksen, dør angrepene deres.",
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder."
+      ]
+    },
+    {
+      "clubId": "brattvag",
+      "styleName": "Brattvåg-utholdenhet",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bygdelag på Sunnmøre",
+      "era": "2018–",
+      "style": "Løper hele kampen og gir ikke fra seg noe gratis",
+      "historicalNote": "Brattvåg har ingen titler; bragden er å holde et bygdelag i andre divisjon. Karakteren er utholdenhet. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "5-3-2 med to spisser",
+      "outOfPossessionShape": "5-3-2 i kompakt blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Kontrollert",
+      "riskLevel": "low",
+      "baseStyleId": "direct_counter_opponent",
+      "matchupStyles": [
+        "compact_532",
+        "direct_counter",
+        "fast_runners_in_behind"
+      ],
+      "shortLabel": "utholdenhet og kontringer",
+      "pressResistance": 60,
+      "defensiveStructure": 74,
+      "transitionThreat": 83,
+      "chanceConversion": 49,
+      "styleTraits": {
+        "pressIntensity": 50,
+        "transitionThreat": 83,
+        "defensiveCompactness": 74,
+        "highLine": 48,
+        "shortBuildUp": 40,
+        "possessionControl": 40,
+        "tacticalComplexity": 58,
+        "relationDemand": 56,
+        "intensity": 60
+      },
+      "strengths": [
+        "gjennom midten kommer du ikke. Flytt dem i stedet",
+        "stilen er tydelig: løper hele kampen og gir ikke fra seg noe gratis"
+      ],
+      "weaknesses": [
+        "siderommene utenfor de tre stopperne",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "vulnerableZones": [
+        "siderommene utenfor de tre stopperne",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "dangerZones": [
+        "bakrommet ditt i det de vinner ballen",
+        "ditt eget bakrom hver gang du mister ballen høyt"
+      ],
+      "keyBattles": [
+        "din kant mot vingbacken deres",
+        "dine stoppere mot fart i bakrom"
+      ],
+      "pressurePoints": [
+        "dra vingbacken ut og angrip rommet han forlot",
+        "hold restforsvar selv når du dominerer"
+      ],
+      "managerHints": [
+        "Gjennom midten kommer du ikke. Flytt dem i stedet.",
+        "Står du høyt, har de akkurat spillerne til å straffe det."
+      ]
+    },
+    {
+      "clubId": "vidar",
+      "styleName": "Midjord-nærhet",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bydelsklubb på Storhaug",
+      "era": "2015–",
+      "style": "Kort spill i trange rom, slik det spilles på et lite anlegg",
+      "historicalNote": "Vidar har ingen titler. Karakteren er en bydelsklubb i Stavanger som spiller kort og tett. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i smal blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "build_from_back",
+        "narrow_442",
+        "two_striker_press"
+      ],
+      "shortLabel": "kort spill i trange rom",
+      "pressResistance": 72,
+      "defensiveStructure": 70,
+      "transitionThreat": 55,
+      "chanceConversion": 48,
+      "styleTraits": {
+        "pressIntensity": 58,
+        "transitionThreat": 55,
+        "defensiveCompactness": 70,
+        "highLine": 56,
+        "shortBuildUp": 70,
+        "possessionControl": 58,
+        "tacticalComplexity": 52,
+        "relationDemand": 46,
+        "intensity": 68
+      },
+      "strengths": [
+        "de vil bygge kort. Nekt dem det, så har de ingen plan",
+        "stilen er tydelig: kort spill i trange rom, slik det spilles på et lite anlegg"
+      ],
+      "weaknesses": [
+        "egen oppbygging hvis du tør å presse den",
+        "begge kantsoner"
+      ],
+      "vulnerableZones": [
+        "egen oppbygging hvis du tør å presse den",
+        "rommet bak de to spissene"
+      ],
+      "dangerZones": [
+        "sonen der de vender oppspillet innover",
+        "midtsonen på andreballer"
+      ],
+      "keyBattles": [
+        "din spiss mot deres oppbygging",
+        "dine stoppere mot to jagende spisser"
+      ],
+      "pressurePoints": [
+        "press oppbyggingen høyt og tidlig",
+        "hold banen bred fra første minutt"
+      ],
+      "managerHints": [
+        "De vil bygge kort. Nekt dem det, så har de ingen plan.",
+        "Har du en rolig oppbygger, får han avgjøre denne kampen."
+      ]
+    },
+    {
+      "clubId": "sandviken",
+      "styleName": "Sandviken-oppdragelsen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bergens tredje klubb",
+      "era": "2015–",
+      "style": "Ungt og teknisk, men uten erfaringen til å styre en kamp",
+      "historicalNote": "Sandviken har ingen titler. Karakteren er en utviklingsklubb i Bergen. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med unge spillere",
+      "outOfPossessionShape": "4-3-3 som presser høyt",
+      "defensiveBlock": "Høy blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Jevnt",
+      "riskLevel": "high",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "possession_positional",
+        "high_press",
+        "switching_play"
+      ],
+      "shortLabel": "ungt og teknisk",
+      "pressResistance": 75,
+      "defensiveStructure": 50,
+      "transitionThreat": 49,
+      "chanceConversion": 48,
+      "styleTraits": {
+        "pressIntensity": 70,
+        "transitionThreat": 49,
+        "defensiveCompactness": 50,
+        "highLine": 64,
+        "shortBuildUp": 64,
+        "possessionControl": 76,
+        "tacticalComplexity": 74,
+        "relationDemand": 58,
+        "intensity": 70
+      },
+      "strengths": [
+        "bryter du formen for å ta ballen, har de allerede vunnet",
+        "stilen er tydelig: ungt og teknisk, men uten erfaringen til å styre en kamp"
+      ],
+      "weaknesses": [
+        "omstillingen etter eget balltap",
+        "bakrommet bak den høye linja"
+      ],
+      "vulnerableZones": [
+        "omstillingen etter eget balltap",
+        "siden de nettopp forlot"
+      ],
+      "dangerZones": [
+        "mellomrommet mellom ledd",
+        "din egen 16-meter i oppbyggingen"
+      ],
+      "keyBattles": [
+        "din midtbane mot deres tålmodighet",
+        "din laglinje mot vendingene deres"
+      ],
+      "pressurePoints": [
+        "hold formen, ikke jag ballen",
+        "finn den frie mannen bak første pressledd"
+      ],
+      "managerHints": [
+        "Bryter du formen for å ta ballen, har de allerede vunnet.",
+        "Henger laget etter på vendingene, taper du kampen i bredden."
+      ]
+    },
+    {
+      "clubId": "lysekloster",
+      "styleName": "Lyseklosterviljen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bygdelag i Bjørnafjorden",
+      "era": "2020–",
+      "style": "Tett, arbeidsomt og vanskelig å bryte ned",
+      "historicalNote": "Lysekloster har ingen titler; bragden er å ha tatt et bygdelag opp i andre divisjon. Karakteren er arbeid. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "5-3-2 med langt framspill",
+      "outOfPossessionShape": "5-3-2 i lav blokk",
+      "defensiveBlock": "Lav blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "deep_low_block",
+        "target_man_direct",
+        "compact_532"
+      ],
+      "shortLabel": "tett blokk og langt fram",
+      "pressResistance": 53,
+      "defensiveStructure": 90,
+      "transitionThreat": 60,
+      "chanceConversion": 47,
+      "styleTraits": {
+        "pressIntensity": 39,
+        "transitionThreat": 60,
+        "defensiveCompactness": 90,
+        "highLine": 23,
+        "shortBuildUp": 29,
+        "possessionControl": 23,
+        "tacticalComplexity": 57,
+        "relationDemand": 49,
+        "intensity": 65
+      },
+      "strengths": [
+        "du får ballen. Spørsmålet er om du har bredde nok til å bruke den",
+        "stilen er tydelig: tett, arbeidsomt og vanskelig å bryte ned"
+      ],
+      "weaknesses": [
+        "utsiden av blokken",
+        "bakrommet når langballen er slått og de er høye"
+      ],
+      "vulnerableZones": [
+        "utsiden av blokken",
+        "siderommene utenfor de tre stopperne"
+      ],
+      "dangerZones": [
+        "egen boks på dødball",
+        "nedfallssonen rundt targetspissen"
+      ],
+      "keyBattles": [
+        "din bredde mot deres smale blokk",
+        "din kant mot vingbacken deres"
+      ],
+      "pressurePoints": [
+        "bruk hele banens bredde",
+        "vinn førsteballen, så har de ingen plan B"
+      ],
+      "managerHints": [
+        "Du får ballen. Spørsmålet er om du har bredde nok til å bruke den.",
+        "Gjennom midten kommer du ikke. Flytt dem i stedet."
+      ]
+    },
+    {
+      "clubId": "sotra",
+      "styleName": "Sotra-tempo",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Klubb vest for Bergen",
+      "era": "2019–",
+      "style": "Enkelt og fort framover, uten mye mellomregning",
+      "historicalNote": "Sotra har ingen titler. Karakteren er direkte spill i høyt tempo. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med raske framrykk",
+      "outOfPossessionShape": "4-4-2 som presser med to",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "medium",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "fast_transition",
+        "two_striker_press",
+        "wide_overload"
+      ],
+      "shortLabel": "fort framover",
+      "pressResistance": 66,
+      "defensiveStructure": 57,
+      "transitionThreat": 72,
+      "chanceConversion": 46,
+      "styleTraits": {
+        "pressIntensity": 61,
+        "transitionThreat": 72,
+        "defensiveCompactness": 57,
+        "highLine": 55,
+        "shortBuildUp": 51,
+        "possessionControl": 53,
+        "tacticalComplexity": 53,
+        "relationDemand": 61,
+        "intensity": 75
+      },
+      "strengths": [
+        "de trenger ikke ballen lenge. De trenger bare tre sekunder",
+        "stilen er tydelig: enkelt og fort framover, uten mye mellomregning"
+      ],
+      "weaknesses": [
+        "egen struktur rett etter at de har gått fram",
+        "rommet bak de to spissene"
+      ],
+      "vulnerableZones": [
+        "egen struktur rett etter at de har gått fram",
+        "midten når begge kanter er høye"
+      ],
+      "dangerZones": [
+        "kontringssonen i midten",
+        "bakrommet rett etter balltap"
+      ],
+      "keyBattles": [
+        "din sekser mot omstillingsfarten",
+        "dine backer mot overtallet ute på kant"
+      ],
+      "pressurePoints": [
+        "still deg opp igjen før de rekker å gå",
+        "spill deg forbi første pressledd"
+      ],
+      "managerHints": [
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder.",
+        "Vinner du førsteballen i boksen, dør angrepene deres."
+      ]
+    },
+    {
+      "clubId": "traff",
+      "styleName": "Træff-rutinen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Moldes andre klubb",
+      "era": "2015–",
+      "style": "Rolig og ryddig, uten å ta sjanser",
+      "historicalNote": "Træff har ingen titler og har alltid stått i skyggen av naboen. Karakteren er ryddighet. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i passiv blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Kontrollert",
+      "riskLevel": "medium",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "passive_mid_block",
+        "build_from_back",
+        "direct_counter"
+      ],
+      "shortLabel": "rolig og ryddig",
+      "pressResistance": 66,
+      "defensiveStructure": 67,
+      "transitionThreat": 70,
+      "chanceConversion": 45,
+      "styleTraits": {
+        "pressIntensity": 31,
+        "transitionThreat": 70,
+        "defensiveCompactness": 67,
+        "highLine": 41,
+        "shortBuildUp": 57,
+        "possessionControl": 47,
+        "tacticalComplexity": 51,
+        "relationDemand": 49,
+        "intensity": 59
+      },
+      "strengths": [
+        "de gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg",
+        "stilen er tydelig: rolig og ryddig, uten å ta sjanser"
+      ],
+      "weaknesses": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "egen oppbygging hvis du tør å presse den"
+      ],
+      "vulnerableZones": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "andreballer rundt boksen",
+        "sonen der de vender oppspillet innover"
+      ],
+      "keyBattles": [
+        "din tier i rommet foran blokken",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "bruk tida de gir deg",
+        "press oppbyggingen høyt og tidlig"
+      ],
+      "managerHints": [
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
+    },
+    {
+      "clubId": "bjarg",
+      "styleName": "Bjarg-sjansen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Liten Bergensklubb",
+      "era": "2022–",
+      "style": "Ungt lag som presser høyt fordi det ikke har noe å tape",
+      "historicalNote": "Bjarg har ingen titler og er en av de minste klubbene på nivået. Karakteren er ungdom uten hemninger. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med unge spillere høyt",
+      "outOfPossessionShape": "4-3-3 som presser høyt",
+      "defensiveBlock": "Høy blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Jevnt",
+      "riskLevel": "high",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "high_press",
+        "fast_runners_in_behind",
+        "narrow_442"
+      ],
+      "shortLabel": "ungt høypress",
+      "pressResistance": 65,
+      "defensiveStructure": 60,
+      "transitionThreat": 65,
+      "chanceConversion": 45,
+      "styleTraits": {
+        "pressIntensity": 68,
+        "transitionThreat": 65,
+        "defensiveCompactness": 60,
+        "highLine": 68,
+        "shortBuildUp": 50,
+        "possessionControl": 48,
+        "tacticalComplexity": 50,
+        "relationDemand": 50,
+        "intensity": 68
+      },
+      "strengths": [
+        "kommer du gjennom presset én gang, ligger halve banen åpen",
+        "stilen er tydelig: ungt lag som presser høyt fordi det ikke har noe å tape"
+      ],
+      "weaknesses": [
+        "bakrommet bak den høye linja",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "vulnerableZones": [
+        "bakrommet bak den høye linja",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "din egen 16-meter i oppbyggingen",
+        "bakrommet ditt på løp fra kant"
+      ],
+      "keyBattles": [
+        "din keeper og stoppere mot første pressledd",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "finn den frie mannen bak første pressledd",
+        "senk linja så løpene ikke får rom"
+      ],
+      "managerHints": [
+        "Kommer du gjennom presset én gang, ligger halve banen åpen.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "skeid",
+      "styleName": "Skeid-cupen",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "Oslos cuplag",
+      "era": "1947–1974",
+      "style": "Direkte, uredd angrepsfotball fra en klubb som alltid har vært best i cup",
+      "historicalNote": "Åtte cupgull mellom 1947 og 1974 gjør Skeid til en av Norges mest titteltunge klubber — nesten alt vunnet i cup, nesten ingenting i serien. Det sier noe om laget: Skeid var alltid best i én kamp, med et direkte og uredd angrepsspill som passet bedre til utslagsrunder enn til et maratonløp.",
+      "inPossessionShape": "4-4-2 med to spisser og brede kanter",
+      "outOfPossessionShape": "4-4-2 som setter trykket",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "medium",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "wide_overload",
+        "two_striker_press",
+        "fast_transition"
+      ],
+      "shortLabel": "direkte angrepsfotball · cuplag",
+      "pressResistance": 68,
+      "defensiveStructure": 60,
+      "transitionThreat": 75,
+      "chanceConversion": 52,
+      "styleTraits": {
+        "pressIntensity": 64,
+        "transitionThreat": 75,
+        "defensiveCompactness": 60,
+        "highLine": 58,
+        "shortBuildUp": 54,
+        "possessionControl": 56,
+        "tacticalComplexity": 56,
+        "relationDemand": 64,
+        "intensity": 78
+      },
+      "strengths": [
+        "vinner du førsteballen i boksen, dør angrepene deres",
+        "stilen er tydelig: direkte, uredd angrepsfotball fra en klubb som alltid har vært best i cup"
+      ],
+      "weaknesses": [
+        "midten når begge kanter er høye",
+        "rommet bak de to spissene"
+      ],
+      "vulnerableZones": [
+        "midten når begge kanter er høye",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "dangerZones": [
+        "begge felt for innlegg",
+        "bakrommet rett etter balltap"
+      ],
+      "keyBattles": [
+        "dine backer mot overtallet ute på kant",
+        "din sekser mot omstillingsfarten"
+      ],
+      "pressurePoints": [
+        "doble opp på kant før innlegget",
+        "spill deg forbi første pressledd"
+      ],
+      "managerHints": [
+        "Vinner du førsteballen i boksen, dør angrepene deres.",
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder."
+      ]
+    },
+    {
+      "clubId": "eidsvold_turn",
+      "styleName": "Eidsvold Turn-arven",
+      "styleBasis": "tradisjon",
+      "tacticalSchool": "En av landets eldste",
+      "era": "1920-tallet",
+      "style": "Gammeldags kort kombinasjonsspill fra en av landets eldste klubber",
+      "historicalNote": "Eidsvold Turn er en av Norges eldste fotballklubber, med sin storhetstid på 1920-tallet da klubben var blant landets beste. Tradisjonen er kort kombinasjonsspill fra en tid før langballen kom til norsk fotball.",
+      "inPossessionShape": "2-3-5 med korte kombinasjoner",
+      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Jevnt",
+      "riskLevel": "medium",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "build_from_back",
+        "possession_positional",
+        "two_striker_press"
+      ],
+      "shortLabel": "kort kombinasjonsspill",
+      "pressResistance": 79,
+      "defensiveStructure": 57,
+      "transitionThreat": 48,
+      "chanceConversion": 46,
+      "styleTraits": {
+        "pressIntensity": 57,
+        "transitionThreat": 48,
+        "defensiveCompactness": 57,
+        "highLine": 55,
+        "shortBuildUp": 81,
+        "possessionControl": 73,
+        "tacticalComplexity": 63,
+        "relationDemand": 49,
+        "intensity": 67
+      },
+      "strengths": [
+        "de vil bygge kort. Nekt dem det, så har de ingen plan",
+        "stilen er tydelig: gammeldags kort kombinasjonsspill fra en av landets eldste klubber"
+      ],
+      "weaknesses": [
+        "egen oppbygging hvis du tør å presse den",
+        "omstillingen etter eget balltap"
+      ],
+      "vulnerableZones": [
+        "egen oppbygging hvis du tør å presse den",
+        "rommet bak de to spissene"
+      ],
+      "dangerZones": [
+        "sonen der de vender oppspillet innover",
+        "mellomrommet mellom ledd"
+      ],
+      "keyBattles": [
+        "din spiss mot deres oppbygging",
+        "dine stoppere mot to jagende spisser"
+      ],
+      "pressurePoints": [
+        "press oppbyggingen høyt og tidlig",
+        "hold formen, ikke jag ballen"
+      ],
+      "managerHints": [
+        "De vil bygge kort. Nekt dem det, så har de ingen plan.",
+        "Har du en rolig oppbygger, får han avgjøre denne kampen."
+      ]
+    },
+    {
+      "clubId": "honefoss",
+      "styleName": "Hønefoss-strukturen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Ringerike i Eliteserien",
+      "era": "2010–2013",
+      "style": "Organisert og lavmælt — tar poengene der de finnes",
+      "historicalNote": "Hønefoss har ingen titler; storhetstiden er fire sesonger i Eliteserien. Karakteren er organisering framfor kvalitet. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "5-3-2 med direkte framspill",
+      "outOfPossessionShape": "5-3-2 i middels blokk",
+      "defensiveBlock": "Lav blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Kontrollert",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "passive_mid_block",
+        "compact_532",
+        "direct_counter"
+      ],
+      "shortLabel": "organisert og lavmælt",
+      "pressResistance": 61,
+      "defensiveStructure": 85,
+      "transitionThreat": 72,
+      "chanceConversion": 51,
+      "styleTraits": {
+        "pressIntensity": 37,
+        "transitionThreat": 72,
+        "defensiveCompactness": 85,
+        "highLine": 35,
+        "shortBuildUp": 41,
+        "possessionControl": 41,
+        "tacticalComplexity": 59,
+        "relationDemand": 51,
+        "intensity": 61
+      },
+      "strengths": [
+        "de gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg",
+        "stilen er tydelig: organisert og lavmælt"
+      ],
+      "weaknesses": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "siderommene utenfor de tre stopperne"
+      ],
+      "vulnerableZones": [
+        "rommet foran blokken — de kommer ikke ut i det",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "andreballer rundt boksen",
+        "bakrommet ditt i det de vinner ballen"
+      ],
+      "keyBattles": [
+        "din tier i rommet foran blokken",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "bruk tida de gir deg",
+        "dra vingbacken ut og angrip rommet han forlot"
+      ],
+      "managerHints": [
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
+    },
+    {
+      "clubId": "ull_kisa",
+      "styleName": "Jessheim-arbeidet",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Romerike bak Lillestrøm",
+      "era": "2013–2014",
+      "style": "Fysisk og arbeidsomt, alltid i Lillestrøms skygge",
+      "historicalNote": "Ullensaker/Kisa har ingen titler; storhetstiden er to sesonger i Eliteserien. Karakteren er arbeid og fysikk. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med langt framspill",
+      "outOfPossessionShape": "4-4-2 i smal blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Høyt",
+      "riskLevel": "low",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "target_man_direct",
+        "two_striker_press",
+        "narrow_442"
+      ],
+      "shortLabel": "fysisk arbeid og langt fram",
+      "pressResistance": 57,
+      "defensiveStructure": 71,
+      "transitionThreat": 62,
+      "chanceConversion": 51,
+      "styleTraits": {
+        "pressIntensity": 63,
+        "transitionThreat": 62,
+        "defensiveCompactness": 71,
+        "highLine": 57,
+        "shortBuildUp": 31,
+        "possessionControl": 37,
+        "tacticalComplexity": 53,
+        "relationDemand": 47,
+        "intensity": 75
+      },
+      "strengths": [
+        "har du ikke en stopper som eier lufta, taper du i nedfallssonen",
+        "stilen er tydelig: fysisk og arbeidsomt, alltid i lillestrøms skygge"
+      ],
+      "weaknesses": [
+        "bakrommet når langballen er slått og de er høye",
+        "rommet bak de to spissene"
+      ],
+      "vulnerableZones": [
+        "bakrommet når langballen er slått og de er høye",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "nedfallssonen rundt targetspissen",
+        "bakrommet rett etter balltap"
+      ],
+      "keyBattles": [
+        "dine stoppere mot targetspissen i lufta",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "vinn førsteballen, så har de ingen plan B",
+        "spill deg forbi første pressledd"
+      ],
+      "managerHints": [
+        "Har du ikke en stopper som eier lufta, taper du i nedfallssonen.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "follo",
+      "styleName": "Follo-cupen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Cupfinalisten fra Ski",
+      "era": "2010",
+      "style": "Kompakt og kynisk — laget som en gang gikk hele veien til finalen",
+      "historicalNote": "Follo har ingen titler, men spilte cupfinale i 2010 med et lag fra nivået under. Karakteren er kynisme og kompakthet. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med korte framrykk",
+      "outOfPossessionShape": "4-4-2 i lav blokk",
+      "defensiveBlock": "Lav blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Kontrollert",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "deep_low_block",
+        "direct_counter",
+        "narrow_442"
+      ],
+      "shortLabel": "kompakt og kynisk",
+      "pressResistance": 57,
+      "defensiveStructure": 87,
+      "transitionThreat": 70,
+      "chanceConversion": 45,
+      "styleTraits": {
+        "pressIntensity": 39,
+        "transitionThreat": 70,
+        "defensiveCompactness": 87,
+        "highLine": 31,
+        "shortBuildUp": 39,
+        "possessionControl": 27,
+        "tacticalComplexity": 51,
+        "relationDemand": 45,
+        "intensity": 59
+      },
+      "strengths": [
+        "du får ballen. Spørsmålet er om du har bredde nok til å bruke den",
+        "stilen er tydelig: kompakt og kynisk"
+      ],
+      "weaknesses": [
+        "utsiden av blokken",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "vulnerableZones": [
+        "utsiden av blokken",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "egen boks på dødball",
+        "ditt eget bakrom hver gang du mister ballen høyt"
+      ],
+      "keyBattles": [
+        "din bredde mot deres smale blokk",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "bruk hele banens bredde",
+        "hold restforsvar selv når du dominerer"
+      ],
+      "managerHints": [
+        "Du får ballen. Spørsmålet er om du har bredde nok til å bruke den.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "tromsdalen",
+      "styleName": "Tromsdalen-cupen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Nabo til TIL",
+      "era": "2012",
+      "style": "Uredd og direkte, med lite å tape mot større naboer",
+      "historicalNote": "Tromsdalen har ingen titler, men spilte cupfinale i 2012. Karakteren er å være den lille i eget nabolag. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "5-3-2 med to spisser i bakrom",
+      "outOfPossessionShape": "5-3-2 i kompakt blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "direct_counter_opponent",
+      "matchupStyles": [
+        "fast_transition",
+        "compact_532",
+        "fast_runners_in_behind"
+      ],
+      "shortLabel": "uredd og direkte",
+      "pressResistance": 66,
+      "defensiveStructure": 74,
+      "transitionThreat": 85,
+      "chanceConversion": 48,
+      "styleTraits": {
+        "pressIntensity": 50,
+        "transitionThreat": 85,
+        "defensiveCompactness": 74,
+        "highLine": 48,
+        "shortBuildUp": 52,
+        "possessionControl": 50,
+        "tacticalComplexity": 54,
+        "relationDemand": 56,
+        "intensity": 68
+      },
+      "strengths": [
+        "de trenger ikke ballen lenge. De trenger bare tre sekunder",
+        "stilen er tydelig: uredd og direkte, med lite å tape mot større naboer"
+      ],
+      "weaknesses": [
+        "egen struktur rett etter at de har gått fram",
+        "siderommene utenfor de tre stopperne"
+      ],
+      "vulnerableZones": [
+        "egen struktur rett etter at de har gått fram",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "dangerZones": [
+        "kontringssonen i midten",
+        "bakrommet ditt i det de vinner ballen"
+      ],
+      "keyBattles": [
+        "din sekser mot omstillingsfarten",
+        "dine stoppere mot fart i bakrom"
+      ],
+      "pressurePoints": [
+        "still deg opp igjen før de rekker å gå",
+        "dra vingbacken ut og angrip rommet han forlot"
+      ],
+      "managerHints": [
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder.",
+        "Står du høyt, har de akkurat spillerne til å straffe det."
+      ]
+    },
+    {
+      "clubId": "kjelsas",
+      "styleName": "Kjelsås-skolen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Oslo nord, egne spillere",
+      "era": "2016–",
+      "style": "Teknisk og tålmodig — en klubb som spiller for å utvikle, ikke bare vinne",
+      "historicalNote": "Kjelsås har ingen titler. Karakteren er en utviklingsklubb i Oslo som holder på ballen også når det koster poeng. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Kontrollert",
+      "riskLevel": "medium",
+      "baseStyleId": "possession_opponent",
+      "matchupStyles": [
+        "possession_positional",
+        "build_from_back",
+        "passive_mid_block"
+      ],
+      "shortLabel": "teknisk og tålmodig",
+      "pressResistance": 80,
+      "defensiveStructure": 69,
+      "transitionThreat": 50,
+      "chanceConversion": 50,
+      "styleTraits": {
+        "pressIntensity": 33,
+        "transitionThreat": 50,
+        "defensiveCompactness": 69,
+        "highLine": 43,
+        "shortBuildUp": 83,
+        "possessionControl": 75,
+        "tacticalComplexity": 65,
+        "relationDemand": 51,
+        "intensity": 61
+      },
+      "strengths": [
+        "bryter du formen for å ta ballen, har de allerede vunnet",
+        "stilen er tydelig: teknisk og tålmodig"
+      ],
+      "weaknesses": [
+        "omstillingen etter eget balltap",
+        "egen oppbygging hvis du tør å presse den"
+      ],
+      "vulnerableZones": [
+        "omstillingen etter eget balltap",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "dangerZones": [
+        "mellomrommet mellom ledd",
+        "sonen der de vender oppspillet innover"
+      ],
+      "keyBattles": [
+        "din midtbane mot deres tålmodighet",
+        "din tier i rommet foran blokken"
+      ],
+      "pressurePoints": [
+        "hold formen, ikke jag ballen",
+        "press oppbyggingen høyt og tidlig"
+      ],
+      "managerHints": [
+        "Bryter du formen for å ta ballen, har de allerede vunnet.",
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg."
+      ]
+    },
+    {
+      "clubId": "grorud",
+      "styleName": "Grorud-tempoet",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Groruddalens klubb",
+      "era": "2019–",
+      "style": "Fart og fysikk fra en dal som ikke har hatt et toppnivålag",
+      "historicalNote": "Grorud har ingen titler. Karakteren er fart og fysikk fra Groruddalen. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med høye backer",
+      "outOfPossessionShape": "4-3-3 som presser høyt",
+      "defensiveBlock": "Høy blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "high",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "high_press",
+        "fast_transition",
+        "wide_overload"
+      ],
+      "shortLabel": "fart og fysikk",
+      "pressResistance": 67,
+      "defensiveStructure": 50,
+      "transitionThreat": 73,
+      "chanceConversion": 49,
+      "styleTraits": {
+        "pressIntensity": 70,
+        "transitionThreat": 73,
+        "defensiveCompactness": 50,
+        "highLine": 64,
+        "shortBuildUp": 52,
+        "possessionControl": 54,
+        "tacticalComplexity": 54,
+        "relationDemand": 62,
+        "intensity": 78
+      },
+      "strengths": [
+        "kommer du gjennom presset én gang, ligger halve banen åpen",
+        "stilen er tydelig: fart og fysikk fra en dal som ikke har hatt et toppnivålag"
+      ],
+      "weaknesses": [
+        "bakrommet bak den høye linja",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "vulnerableZones": [
+        "bakrommet bak den høye linja",
+        "midten når begge kanter er høye"
+      ],
+      "dangerZones": [
+        "din egen 16-meter i oppbyggingen",
+        "kontringssonen i midten"
+      ],
+      "keyBattles": [
+        "din keeper og stoppere mot første pressledd",
+        "dine backer mot overtallet ute på kant"
+      ],
+      "pressurePoints": [
+        "finn den frie mannen bak første pressledd",
+        "still deg opp igjen før de rekker å gå"
+      ],
+      "managerHints": [
+        "Kommer du gjennom presset én gang, ligger halve banen åpen.",
+        "Vinner du førsteballen i boksen, dør angrepene deres."
+      ]
+    },
+    {
+      "clubId": "levanger",
+      "styleName": "Levanger-tålmodighet",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Trøndelags tredje",
+      "era": "2015–",
+      "style": "Ryddig og kort — trøndersk skolering i mindre målestokk",
+      "historicalNote": "Levanger har ingen titler. Karakteren er trøndersk skolering: kort spill og samhandling, på et lavere nivå. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i smal blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
+      "tempo": "Kontrollert",
+      "riskLevel": "low",
+      "baseStyleId": "direct_counter_opponent",
+      "matchupStyles": [
+        "build_from_back",
+        "switching_play",
+        "narrow_442"
+      ],
+      "shortLabel": "kort spill og samhandling",
+      "pressResistance": 75,
+      "defensiveStructure": 71,
+      "transitionThreat": 56,
+      "chanceConversion": 50,
+      "styleTraits": {
+        "pressIntensity": 47,
+        "transitionThreat": 56,
+        "defensiveCompactness": 71,
+        "highLine": 51,
+        "shortBuildUp": 71,
+        "possessionControl": 69,
+        "tacticalComplexity": 63,
+        "relationDemand": 55,
+        "intensity": 61
+      },
+      "strengths": [
+        "de vil bygge kort. Nekt dem det, så har de ingen plan",
+        "stilen er tydelig: ryddig og kort"
+      ],
+      "weaknesses": [
+        "egen oppbygging hvis du tør å presse den",
+        "siden de nettopp forlot"
+      ],
+      "vulnerableZones": [
+        "egen oppbygging hvis du tør å presse den",
+        "begge kantsoner"
+      ],
+      "dangerZones": [
+        "sonen der de vender oppspillet innover",
+        "motsatt kant etter en vending"
+      ],
+      "keyBattles": [
+        "din spiss mot deres oppbygging",
+        "dine kanter mot en smal blokk"
+      ],
+      "pressurePoints": [
+        "press oppbyggingen høyt og tidlig",
+        "flytt laget samlet, ikke enkeltvis"
+      ],
+      "managerHints": [
+        "De vil bygge kort. Nekt dem det, så har de ingen plan.",
+        "De stenger midten med vilje. Ikke tving pasningen gjennom."
+      ]
+    },
+    {
+      "clubId": "stjordals_blink",
+      "styleName": "Blink-arbeidet",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Stjørdal ved siden av RBK",
+      "era": "2018–",
+      "style": "Arbeidsomt og direkte, uten pretensjoner",
+      "historicalNote": "Stjørdals-Blink har ingen titler. Karakteren er arbeid. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med langt framspill",
+      "outOfPossessionShape": "4-4-2 i passiv blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Høyt",
+      "riskLevel": "medium",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "target_man_direct",
+        "passive_mid_block",
+        "fast_transition"
+      ],
+      "shortLabel": "arbeidsomt og direkte",
+      "pressResistance": 57,
+      "defensiveStructure": 68,
+      "transitionThreat": 79,
+      "chanceConversion": 48,
+      "styleTraits": {
+        "pressIntensity": 36,
+        "transitionThreat": 79,
+        "defensiveCompactness": 68,
+        "highLine": 42,
+        "shortBuildUp": 30,
+        "possessionControl": 36,
+        "tacticalComplexity": 48,
+        "relationDemand": 50,
+        "intensity": 74
+      },
+      "strengths": [
+        "har du ikke en stopper som eier lufta, taper du i nedfallssonen",
+        "stilen er tydelig: arbeidsomt og direkte, uten pretensjoner"
+      ],
+      "weaknesses": [
+        "bakrommet når langballen er slått og de er høye",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "vulnerableZones": [
+        "bakrommet når langballen er slått og de er høye",
+        "egen struktur rett etter at de har gått fram"
+      ],
+      "dangerZones": [
+        "nedfallssonen rundt targetspissen",
+        "andreballer rundt boksen"
+      ],
+      "keyBattles": [
+        "dine stoppere mot targetspissen i lufta",
+        "din sekser mot omstillingsfarten"
+      ],
+      "pressurePoints": [
+        "vinn førsteballen, så har de ingen plan B",
+        "bruk tida de gir deg"
+      ],
+      "managerHints": [
+        "Har du ikke en stopper som eier lufta, taper du i nedfallssonen.",
+        "De trenger ikke ballen lenge. De trenger bare tre sekunder."
+      ]
+    },
+    {
+      "clubId": "rana",
+      "styleName": "Rana-viljen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Mo i Rana mot reiseveien",
+      "era": "2020–",
+      "style": "Sterk hjemme, sliten borte — nordnorsk reisevei satt i system",
+      "historicalNote": "Rana har ingen titler. Karakteren er en nordnorsk klubb der reiseveien er en motstander i seg selv, og hjemmebanen tilsvarende viktig. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "5-3-2 med to spisser",
+      "outOfPossessionShape": "5-3-2 i kompakt blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Langt fram, over midtbanen",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Jevnt",
+      "riskLevel": "low",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "compact_532",
+        "two_striker_press",
+        "direct_counter"
+      ],
+      "shortLabel": "sterk hjemme, kompakt borte",
+      "pressResistance": 60,
+      "defensiveStructure": 74,
+      "transitionThreat": 71,
+      "chanceConversion": 48,
+      "styleTraits": {
+        "pressIntensity": 62,
+        "transitionThreat": 71,
+        "defensiveCompactness": 74,
+        "highLine": 48,
+        "shortBuildUp": 40,
+        "possessionControl": 40,
+        "tacticalComplexity": 58,
+        "relationDemand": 50,
+        "intensity": 68
+      },
+      "strengths": [
+        "gjennom midten kommer du ikke. Flytt dem i stedet",
+        "stilen er tydelig: sterk hjemme, sliten borte"
+      ],
+      "weaknesses": [
+        "siderommene utenfor de tre stopperne",
+        "rommet bak de to spissene"
+      ],
+      "vulnerableZones": [
+        "siderommene utenfor de tre stopperne",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "bakrommet ditt i det de vinner ballen",
+        "bakrommet rett etter balltap"
+      ],
+      "keyBattles": [
+        "din kant mot vingbacken deres",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "dra vingbacken ut og angrip rommet han forlot",
+        "spill deg forbi første pressledd"
+      ],
+      "managerHints": [
+        "Gjennom midten kommer du ikke. Flytt dem i stedet.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
+    },
+    {
+      "clubId": "junkeren",
+      "styleName": "Junkeren-trassen",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bodøs andre klubb",
+      "era": "2018–",
+      "style": "Liten klubb i skyggen av en stor, og spiller deretter",
+      "historicalNote": "Junkeren har ingen titler og står i skyggen av Bodø/Glimt. Karakteren er trass. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med løp i bakrom",
+      "outOfPossessionShape": "4-4-2 i lav blokk",
+      "defensiveBlock": "Lav blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Kontrollert",
+      "riskLevel": "low",
+      "baseStyleId": "low_block_opponent",
+      "matchupStyles": [
+        "deep_low_block",
+        "fast_runners_in_behind",
+        "passive_mid_block"
+      ],
+      "shortLabel": "lav blokk og løp i bakrom",
+      "pressResistance": 62,
+      "defensiveStructure": 85,
+      "transitionThreat": 66,
+      "chanceConversion": 47,
+      "styleTraits": {
+        "pressIntensity": 25,
+        "transitionThreat": 66,
+        "defensiveCompactness": 85,
+        "highLine": 29,
+        "shortBuildUp": 51,
+        "possessionControl": 37,
+        "tacticalComplexity": 51,
+        "relationDemand": 55,
+        "intensity": 59
+      },
+      "strengths": [
+        "du får ballen. Spørsmålet er om du har bredde nok til å bruke den",
+        "stilen er tydelig: liten klubb i skyggen av en stor, og spiller deretter"
+      ],
+      "weaknesses": [
+        "utsiden av blokken",
+        "de har lite mellom leddene når løpene ikke går"
+      ],
+      "vulnerableZones": [
+        "utsiden av blokken",
+        "rommet foran blokken — de kommer ikke ut i det"
+      ],
+      "dangerZones": [
+        "egen boks på dødball",
+        "bakrommet ditt på løp fra kant"
+      ],
+      "keyBattles": [
+        "din bredde mot deres smale blokk",
+        "din tier i rommet foran blokken"
+      ],
+      "pressurePoints": [
+        "bruk hele banens bredde",
+        "senk linja så løpene ikke får rom"
+      ],
+      "managerHints": [
+        "Du får ballen. Spørsmålet er om du har bredde nok til å bruke den.",
+        "De gir deg tid til å tenke. Bruk den på noe bedre enn et innlegg."
+      ]
+    },
+    {
+      "clubId": "lorenskog",
+      "styleName": "Lørenskog-bredden",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Romerike, ung tropp",
+      "era": "2020–",
+      "style": "Ungt lag som bruker bredden fordi midten er for trang",
+      "historicalNote": "Lørenskog har ingen titler. Karakteren er en ung tropp på Romerike. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-3-3 med brede kanter",
+      "outOfPossessionShape": "4-3-3 som presser høyt",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Kort bakfra, gjennom leddene",
+      "attackingStyle": "Direkte spill mot boksen",
+      "tempo": "Jevnt",
+      "riskLevel": "high",
+      "baseStyleId": "high_press_opponent",
+      "matchupStyles": [
+        "wide_overload",
+        "build_from_back",
+        "high_press"
+      ],
+      "shortLabel": "bredde og ungt press",
+      "pressResistance": 73,
+      "defensiveStructure": 49,
+      "transitionThreat": 54,
+      "chanceConversion": 47,
+      "styleTraits": {
+        "pressIntensity": 65,
+        "transitionThreat": 54,
+        "defensiveCompactness": 49,
+        "highLine": 63,
+        "shortBuildUp": 69,
+        "possessionControl": 61,
+        "tacticalComplexity": 57,
+        "relationDemand": 61,
+        "intensity": 69
+      },
+      "strengths": [
+        "vinner du førsteballen i boksen, dør angrepene deres",
+        "stilen er tydelig: ungt lag som bruker bredden fordi midten er for trang"
+      ],
+      "weaknesses": [
+        "midten når begge kanter er høye",
+        "egen oppbygging hvis du tør å presse den"
+      ],
+      "vulnerableZones": [
+        "midten når begge kanter er høye",
+        "bakrommet bak den høye linja"
+      ],
+      "dangerZones": [
+        "begge felt for innlegg",
+        "sonen der de vender oppspillet innover"
+      ],
+      "keyBattles": [
+        "dine backer mot overtallet ute på kant",
+        "din keeper og stoppere mot første pressledd"
+      ],
+      "pressurePoints": [
+        "doble opp på kant før innlegget",
+        "press oppbyggingen høyt og tidlig"
+      ],
+      "managerHints": [
+        "Vinner du førsteballen i boksen, dør angrepene deres.",
+        "Kommer du gjennom presset én gang, ligger halve banen åpen."
+      ]
+    },
+    {
+      "clubId": "trygg_lade",
+      "styleName": "Trygg/Lade-nærheten",
+      "styleBasis": "klubbkarakter",
+      "tacticalSchool": "Bydelsklubb i Trondheim",
+      "era": "2021–",
+      "style": "Kort og tett, med lite marginer å gå på",
+      "historicalNote": "Trygg/Lade har ingen titler. Karakteren er en bydelsklubb i Trondheim. Dette er klubbkarakter, ikke en spilletradisjon slått opp i historien.",
+      "inPossessionShape": "4-4-2 med kort oppbygging",
+      "outOfPossessionShape": "4-4-2 i smal blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Enkelt ut, så framover",
+      "attackingStyle": "Hurtige omstillinger",
+      "tempo": "Kontrollert",
+      "riskLevel": "medium",
+      "baseStyleId": "direct_counter_opponent",
+      "matchupStyles": [
+        "narrow_442",
+        "build_from_back",
+        "direct_counter"
+      ],
+      "shortLabel": "kort og tett",
+      "pressResistance": 66,
+      "defensiveStructure": 68,
+      "transitionThreat": 69,
+      "chanceConversion": 45,
+      "styleTraits": {
+        "pressIntensity": 44,
+        "transitionThreat": 69,
+        "defensiveCompactness": 68,
+        "highLine": 48,
+        "shortBuildUp": 56,
+        "possessionControl": 46,
+        "tacticalComplexity": 50,
+        "relationDemand": 44,
+        "intensity": 58
+      },
+      "strengths": [
+        "de stenger midten med vilje. Ikke tving pasningen gjennom",
+        "stilen er tydelig: kort og tett, med lite marginer å gå på"
+      ],
+      "weaknesses": [
+        "begge kantsoner",
+        "egen oppbygging hvis du tør å presse den"
+      ],
+      "vulnerableZones": [
+        "begge kantsoner",
+        "sonen foran blokken når de ikke har ballen"
+      ],
+      "dangerZones": [
+        "midtsonen på andreballer",
+        "sonen der de vender oppspillet innover"
+      ],
+      "keyBattles": [
+        "dine kanter mot en smal blokk",
+        "ditt restforsvar mot omstillingene"
+      ],
+      "pressurePoints": [
+        "hold banen bred fra første minutt",
+        "press oppbyggingen høyt og tidlig"
+      ],
+      "managerHints": [
+        "De stenger midten med vilje. Ikke tving pasningen gjennom.",
+        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
+      ]
     }
   ]
 }
