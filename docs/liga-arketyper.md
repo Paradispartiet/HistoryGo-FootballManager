@@ -40,10 +40,15 @@ Feilen i resonnementet var å hoppe fra «arketypene er det beste vi har» til
 
 ## Nå: klubbenes egen tradisjon
 
-Klubben eier **identitet og nivå** (`LEAGUE_OPPONENT_PROFILES` i
-`football-league-season.js`). Profilen eier **fotballen**
+Klubben eier **identitet og nivå** (`data/football_clubs.json`).
+Profilen eier **fotballen**
 (`data/football_league_club_profiles.json`), tegnet på hvordan klubben
 tradisjonelt har spilt.
+
+Serien har nå 16 klubber, slik den faktisk spilles — se `docs/seriepyramiden.md`
+for nivåene og opp-/nedrykket. Alle 16 har profil.
+
+### De sju første (skrevet fra hukommelse, så rettet)
 
 | Klubb | Spillestil | Hva du møter |
 |---|---|---|
@@ -89,6 +94,31 @@ Så ble de seks andre slått opp:
   Eggens møte med Rinus Michels og at det er kantspillerne som bryter gjennom;
   Molde fikk halvrommene og de høye, brede backene inn i beskrivelsen.
 
+### De ni andre
+
+| Klubb | Spillestil | Grunnlag | Hva du møter |
+|---|---|---|---|
+| Bodø/Glimt | Glimt-modellen | tradisjon 2020–2024 | 60 % ball og rotasjoner — men en smal, sentral 4-4-2-blokk uten ball |
+| Fredrikstad | Wienerstil | tradisjon 1938–1961 | korte pasninger langs bakken, hentet fra østerriksk fotball |
+| Start | Sørlandsprofesjonalitet | tradisjon 1978–1980 | ingen finesse, bare bedre forberedt enn deg i nitti minutter |
+| Aalesund | Sunnmørsk kontring | tradisjon 2009–2011 | kompakt femmer som straffer det ene øyeblikket du åpner deg |
+| Sarpsborg 08 | Sarpsborg-strukturen | tradisjon 2015–2019 | organisert 5-3-2, hurtig i det kampen snur |
+| KFUM Oslo | Ekebergsjansen | klubbkarakter | ungt høypress som ikke har råd til å spille redd |
+| Kristiansund | Nordmørstrass | klubbkarakter | smal lav blokk; du får ballen, ikke rommene |
+| Sandefjord | Vestfold-pragmatisme | klubbkarakter | passiv blokk, langt fram, alt på dødball |
+| HamKam | Briskeby-bredde | klubbkarakter | rolig blokk som venter, og innlegg fra begge sider |
+
+Fire av dem har **ingen storhetstid og ingen taktisk tradisjon å slå opp** — de
+har aldri vunnet noe. Da er det ærligere å beskrive hva klubben faktisk *er* enn
+å dikte opp en tradisjon, og `styleBasis: "klubbkarakter"` sier det i dataene.
+Vakten krever at profilteksten sier det også, så en leser kan skille et oppslag
+fra en påstand.
+
+Fredrikstad er funnet i denne runden: ni seriegull mellom 1938 og 1961, og en
+stil som faktisk har navn — «wienerstil», adoptert etter at klubben ble
+fascinert av østerrikske lag på besøk. Korte pasninger langs bakken i en norsk
+fotballkultur som ellers slo langt.
+
 ### Regelen når kilden er tynn: gå til storhetstiden
 
 Norske klubbers *taktiske* tradisjon er dårligere dokumentert enn europeiske
@@ -116,10 +146,10 @@ Kampbriefen sier hvilken av delene du møter: «Klubbens spillestil» for en
 ligaklubb, «Historisk stil-motstander» for en arketyp i scenario eller
 mesterskap. Ellers ville det sett ut som Molde *er* en historisk skole.
 
-Målt over en hel sesong: **7 ulike spillestiler**, hver møtt hjemme og borte,
-15 ulike spillestil-tokens. Kjørt mot formasjonskunnskapens 46 formasjoner gir de
-sju klubbene sju *forskjellige* verste formasjoner — profilene er altså ulike
-også der motorene faktisk leser dem, ikke bare i teksten.
+Målt over en hel sesong: **15 ulike spillestiler**, hver møtt hjemme og borte, og
+**alle 16** spillestil-tokens i vokabularet i bruk. Ingen to klubber har samme
+matchupStyles-sett — ulikt navn er ikke nok, det er fingeravtrykket motorene
+leser som må være unikt.
 
 ## Vakten
 

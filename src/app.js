@@ -82,6 +82,7 @@ import {
 import {
   LEAGUE_SEASON_VERSION,
   createLeagueSeason,
+  DEFAULT_LEAGUE_TIER,
   normalizeLeagueSeason,
   getNextLeagueOpponent,
   completeLeagueRound,
@@ -272,8 +273,11 @@ const DATA_PATHS = {
   // av spillerdataene som allerede finnes — se docs/svake-sider.md.
   playerWeaknesses: "data/football_player_weaknesses.json",
   // Ligaklubbenes spillestil, tegnet på klubbenes egen tradisjon. Klubben eier
-  // identitet og nivå (football-league-season.js); dette eier fotballen.
+  // identitet og nivå (football_clubs.json); dette eier fotballen.
   leagueClubProfiles: "data/football_league_club_profiles.json",
+  // Seriepyramiden: Eliteserien / OBOS-ligaen / 2. divisjon med klubber, nivåer
+  // og opp-/nedrykksregler. Kilden for HVEM du møter og HVOR du står.
+  clubs: "data/football_clubs.json",
   trainingBadges: "data/football_training_badges.json",
   teamClassifications: "data/football_team_classifications.json",
   // Stedsrapporter (v1): forklarer hva hvert sportsted gir manageren. Rent
@@ -427,6 +431,9 @@ const state = {
   weaknessCatalogue: { attributes: [], positionDemands: {}, difficulty: {}, biteReliefCap: 4 },
   // Spillestilprofiler for ligaklubbene, keyet på klubb-id.
   leagueClubProfiles: {},
+  // Seriepyramiden: { tiers, clubs }. Tom pyramide betyr at motoren faller
+  // tilbake på standardnivået — spillet står ikke, men karrierestigen mangler.
+  leaguePyramid: { tiers: [], clubs: [] },
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
@@ -5566,19 +5573,36 @@ function ensureLeagueSeason() {
   }
 
   const club = getTemporaryClubName();
+  const start = getLeagueStartTier();
   state.leagueSeason = createLeagueSeason({
-    managerClub: { id: state.gameStartState.activeLeagueSaveId, name: club.name, ground: `${club.name} stadion`, strength: 75, form: 55, tacticalIdentity: "managerens taktiske valg" },
+    managerClub: { id: state.gameStartState.activeLeagueSaveId, name: club.name, ground: `${club.name} stadion`, tier: start.tier.id, strength: 75, form: 55, tacticalIdentity: "managerens taktiske valg" },
+    opponents: start.opponents,
+    tier: start.tier,
     seed: `${state.gameStartState.activeLeagueSaveId}-season-1`
   });
   saveLeagueSeason();
 
+  const rounds = state.leagueSeason.competition.rounds;
+  const matches = state.leagueSeason.fixtures.reduce((sum, entry) => sum + entry.matches.length, 0);
   addClubWeekEvent({
     id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     week: state.clubWeekState?.week ?? "?",
     phase: state.clubWeekState?.phase || "analysis",
     phaseLabel: "Ligasesong",
-    message: "Ligasesongen er i gang: 14 serierunder og 56 kamper står på terminlista."
+    message: `${start.tier.name} er i gang: ${rounds} serierunder og ${matches} kamper står på terminlista.`
   });
+}
+
+// Nivået manageren starter på, og motstanderne der. Uten pyramiden faller vi
+// tilbake på motorens standardnivå — men da uten klubber, så sesongen kastes
+// heller enn å bli spilt mot ingen. Derfor: pyramiden er kilden.
+function getLeagueStartTier() {
+  const tiers = state.leaguePyramid?.tiers || [];
+  const clubs = state.leaguePyramid?.clubs || [];
+  const tier = tiers.find((entry) => entry.level === 1) || tiers[0] || DEFAULT_LEAGUE_TIER;
+  const pool = clubs.filter((entry) => entry.tier === tier.id);
+  const group = tier.groups > 1 ? [...new Set(pool.map((entry) => entry.group))].sort()[0] : null;
+  return { tier, opponents: group ? pool.filter((entry) => entry.group === group) : pool };
 }
 
 // Etter fullført ligasesong: legg den bak deg og start neste. Rører kun
@@ -5698,7 +5722,11 @@ function startNewLeagueSeason() {
   // Dommen er lest; den nye sesongen starter uten den hengende over seg.
   state.seasonReview = null;
 
-  state.leagueSeason = state.leagueSeason ? startNextLeagueSeason(state.leagueSeason) : null;
+  // Pyramiden inn: uten den blir neste sesong samme nivå med samme klubber,
+  // og opp-/nedrykket manageren nettopp spilte for skjer ikke.
+  state.leagueSeason = state.leagueSeason
+    ? startNextLeagueSeason(state.leagueSeason, { allClubs: state.leaguePyramid?.clubs || null, tiers: state.leaguePyramid?.tiers || null })
+    : null;
   saveLeagueSeason();
   if (!state.leagueSeason) ensureLeagueSeason();
   renderApp();
@@ -15815,6 +15843,7 @@ async function loadStartupData() {
     individualTrainingData,
     playerWeaknessesData,
     leagueClubProfilesData,
+    clubsData,
     trainingBadgesData,
     teamClassificationsData,
     placeReportsData,
@@ -15855,6 +15884,7 @@ async function loadStartupData() {
     loadJson(DATA_PATHS.individualTraining).catch(() => null),
     loadJson(DATA_PATHS.playerWeaknesses).catch(() => null),
     loadJson(DATA_PATHS.leagueClubProfiles).catch(() => null),
+    loadJson(DATA_PATHS.clubs).catch(() => null),
     loadJson(DATA_PATHS.trainingBadges).catch(() => null),
     loadJson(DATA_PATHS.teamClassifications).catch(() => null),
     // Stedsrapporter er valgfrie: hvis filen mangler/er ugyldig, faller appen
@@ -15960,6 +15990,12 @@ async function loadStartupData() {
       .filter((profile) => profile && typeof profile.clubId === "string")
       .map((profile) => [profile.clubId, profile])
   );
+  // Seriepyramiden. Uten fila står spillet fortsatt, men da finnes det ingen
+  // nivåer å rykke opp eller ned mellom.
+  state.leaguePyramid = {
+    tiers: Array.isArray(clubsData?.tiers) ? clubsData.tiers : [],
+    clubs: Array.isArray(clubsData?.clubs) ? clubsData.clubs : []
+  };
   state.trainingBadges = Array.isArray(trainingBadgesData?.badgeFamilies) ? trainingBadgesData : { badgeFamilies: [] };
   state.teamClassifications = Array.isArray(teamClassificationsData?.classifications)
     ? teamClassificationsData

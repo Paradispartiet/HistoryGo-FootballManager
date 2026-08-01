@@ -1,0 +1,117 @@
+# Seriepyramiden
+
+> Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
+
+Det samme gjelder karrieren: den skal ha et sted å gå. En manager som spiller
+samme nivå mot samme sytten motstandere sesong etter sesong har ikke en karriere,
+han har en løkke.
+
+## Slik seriene faktisk spilles
+
+| Nivå | Serie | Klubber | Runder | Opp | Ned |
+|---|---|---:|---:|---|---|
+| 1 | Eliteserien | 16 | 30 | — (seriegull) | 2 direkte + 1 kvalifisering |
+| 2 | OBOS-ligaen | 16 | 30 | 2 direkte + 1 kvalifisering | 2 direkte + 1 kvalifisering |
+| 3 | 2. divisjon | 28 (2 × 14) | 26 | avdelingsvinner + kvalifisering | bunnen (ingen 4. nivå i spillet) |
+
+60 klubber i `data/football_clubs.json`. Sammensetningen er et øyeblikksbilde av
+2026-sesongen; opp- og nedrykk i spillet flytter manageren mellom nivåene uten at
+fila endres.
+
+**Klubben eier identitet og nivå** (navn, bane, by, styrke). **Profilen eier
+fotballen** (`data/football_league_club_profiles.json`). Det skillet er ikke
+kosmetisk — se «Etiketten som løy» nedenfor.
+
+## Terminlisten: feilen som ville blitt fjorten strake
+
+Den gamle terminlisten ga **hver klubb sju strake bortekamper og så sju strake
+hjemmekamper**. Det er ikke en serie, det er to turneringer. Ingenting sa fra:
+tabellen summerte riktig, hvert par møttes to ganger, hver klubb spilte én kamp
+per runde. Ingen vakt så på *rekkefølgen*.
+
+Feilen lå i hjemme/borte-regelen:
+
+```js
+if ((round + index) % 2 === 0) [homeClubId, awayClubId] = [awayClubId, homeClubId];
+```
+
+Sirkelmetoden roterer alle lag unntatt det på plass 0. `index` betyr derfor noe
+helt annet for et lag som flytter seg gjennom rotasjonen enn for det faste. Målt
+med 16 klubber ble strekket **fjorten kamper**.
+
+Rettingen: hjemme/borte settes på det faste laget etter rundeparitet og på resten
+etter parets plass, og returrunden roteres én runde før den legges på (ellers blir
+skjøten mellom halvsesongene et dobbelt strekk). Målt gir det **lengste strekk på
+2 kamper** for 8, 14 og 16 klubber, og ingen møter samme motstander to runder på
+rad.
+
+Dette er samme klasse som skalafeilene i CLAUDE.md: koden så riktig ut, og bare en
+**måling** avslørte den. `longestVenueRun()` er derfor eksportert fra motoren —
+den er en måling, ikke en detalj, og vakten kjører den på hver klubb på hvert nivå.
+
+## Etiketten som løy
+
+Den korte stil-etiketten spilleren ser først (`tacticalIdentity`) bodde på
+klubben — altså i en **annen fil** enn fotballen den beskrev. De drev fra
+hverandre: Lillestrøm sto med «raske vendinger» i klubblista lenge etter at
+profilen var rettet til langball og dueller.
+
+Etiketten heter nå `shortLabel` og bor i profilen. Én kilde, ingen drift. Vakten
+avviser `tacticalIdentity` på klubbdata, så duplikatet ikke sniker seg tilbake.
+
+## Tradisjon eller karakter
+
+Alle 16 eliteserieklubbene har profil. Men de er ikke like: noen har en
+storhetstid med dokumentert fotball, andre har aldri vunnet noe.
+
+`styleBasis` sier hvilken det er:
+
+- **`tradisjon`** (12 klubber) — en storhetstid med fotball som lar seg slå opp.
+  Fredrikstads «wienerstil», Bodø/Glimts fire gull på 4-3-3 med 60 % ball,
+  Starts profesjonalitet i 1978/80.
+- **`klubbkarakter`** (4 klubber) — KFUM, Kristiansund, Sandefjord, HamKam. Ingen
+  titler, ingen taktisk tradisjon å slå opp. Da er det ærligere å beskrive hva
+  klubben faktisk **er** — Oslos minste eliteserieklubb med egne unge spillere;
+  klubben som holder seg oppe på ren organisering — enn å dikte opp en tradisjon.
+
+Vakten krever at en `klubbkarakter`-profil **sier det i notatet sitt**. Ellers
+ville lesing av profilen ikke kunne skille et oppslag fra en påstand.
+
+## Vaktene
+
+`audit:clubs` (632 sjekker) på pyramiden:
+
+- nivåene er sammenhengende fra 1, og peker på hverandre **begge veier** — rykker
+  du opp fra B til A, må A kunne sende deg ned til B igjen
+- opprykk peker oppover, nedrykk nedover, begge på nivåer som finnes
+- opp- og nedrykksplasser overlapper ikke i tabellen
+- runder = (avdelingsstørrelse − 1) × 2, og hver avdeling er nøyaktig full
+- klubbstyrke ligger i nivåets bånd
+- klubbdata har **ingen** stil-felter (`tacticalIdentity`, `matchupStyles`,
+  `styleName`, `styleTraits`, `archetypeId`) — de hører i profilen
+- hver eliteserieklubb har profil
+
+`sim:league-season` spiller pyramiden:
+
+- 16 lag, 30 runder, 240 kamper, alle 16 spillestil-tokens i bruk på én sesong
+- lengste banestrekk ≤ 2 på hvert nivå, ingen møter samme motstander to runder på rad
+- hver plassering på hvert nivå har en dom, og antallet opp-/nedrykksplasser
+  stemmer med pyramidens egne regler
+- hele stigen spilt: vinn alt fra 2. divisjon → OBOS → Eliteserien; tap alt fra
+  Eliteserien → OBOS
+
+En avdeling med 15 klubber feiler ikke høylytt. Den feiler ved at et opprykk
+lander på et nivå som kaster sesongen — midt i en karriere.
+
+## Ikke gjort ennå
+
+- **OBOS-ligaen og 2. divisjon mangler spillestilprofiler.** 44 klubber. De er
+  kartlagt som klubber (navn, bane, by, nivå, styrke), men rykker du ned i dag,
+  møter du klubber uten egen fotball. Det er den samme ensartetheten
+  `sim:league-season` finnes for å hindre — bare ett nivå ned.
+- **Kvalifiseringskampene spilles ikke.** 3. plass i OBOS gir
+  `promotion_playoff`, men kampen finnes ikke ennå — plasseringen er en plass,
+  ikke en dom, og manageren skal spille den.
+- **Å velge en etablert klubb** i stedet for å opprette sin egen. Pyramiden gjør
+  det mulig (16 klubber betyr at det er 15 igjen når du tar én), men valget er
+  ikke bygget.

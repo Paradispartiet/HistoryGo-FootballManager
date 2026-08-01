@@ -21,6 +21,7 @@ npm run build              # tsc — compile src/**/*.ts to dist/
 
 # Data audits (validate JSON schemas / referential integrity)
 npm run audit:knowledge          # football_knowledge_principles.json
+npm run audit:clubs              # data/football_clubs.json (seriepyramiden)
 npm run audit:hg-football        # data/hgFootball/ historical formation module
 npm run audit:hg-historical-fit
 npm run audit:hg-coach-context
@@ -58,6 +59,7 @@ npm run sim:training-programs   # weekly training-program compositions
 npm run sim:off-pitch          # off-pitch context parameters
 npm run sim:inbox              # inbox events wired to the context engines
 npm run sim:club-week          # Club Week consequences loop
+npm run sim:league-season      # seriepyramiden: 16 lag/30 runder, terminliste, opp- og nedrykk
 ```
 
 Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script.
@@ -94,6 +96,7 @@ The single most important thing to understand is that this repo contains **two i
 - `football-match-explanation-engine.js` — takes the finished matchday result + session snapshots and builds a structured, pedagogical explanation of **why** the outcome happened.
 - `football-historical-opponent-profiles.js` — opponents are historical style-teams (taktiske arketyper) used as learning opponents, not generic bots. **League clubs are NOT archetypes** — they play their own club tradition, from `data/football_league_club_profiles.json` (the club owns identity and strength; the profile owns the football). Giving them historical archetypes was tried and reverted: it made Molde "be" Barcelona 2008–12, and burned the archetypes that scenarios exist for. Before either, the lookup searched for the *club id* among the five generic profiles where it could never match, so all 14 league rounds silently used the same profile. `sim:league-season` walks a whole season and asserts 7 distinct club styles, no `archetypeId` on any club profile, and that the match brief distinguishes club style from historical archetype. See `docs/liga-arketyper.md`.
 - `football-mini-season.js`, `football-match-consequences.js`, `football-training-week.js` — mini-season, Club Week consequences, weekly training focus.
+- `football-league-season.js` — the league as it is actually played: **Eliteserien 16 clubs / 30 rounds**, OBOS-ligaen the same, 2. divisjon two groups of 14 / 26 rounds, with **promotion and relegation** between them. The pyramid (60 clubs, tiers, promotion/relegation rules) is data — `data/football_clubs.json` — and the engine takes it in; it does not own it. The club owns identity and level, the profile owns the football, and the short style label lives **only** in the profile (it used to live on the club, in a different file from the football it described, and drifted). The fixture generator was rewritten because the old home/away rule gave every club a **fourteen-match** venue streak at 16 clubs; `longestVenueRun()` is exported because it is the measurement that caught it. See `docs/seriepyramiden.md`; guarded by `audit:clubs` and `sim:league-season`.
 - `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
 - `football-training-plan.js` — the one model that binds the training layers into **one week with four steps**: Inbox (signals) → Program (the week's *frame*, i.e. load) → Focus (the *match theme*, i.e. metric bonus) → Individual. Its central rule is that the focus should sit *inside* the chosen program; a mismatch costs a point of metric bonus and is explained as a manager decision. It also normalises the programs' own `fatigueLoad` (6–19 per week) into the recovery input — those numbers existed but were never read. See `docs/trening.md`.
 - `football-player-weaknesses.js` — every player has weak sides, and they are *why* position/role fit matters. **Identified from data that already existed** (`role.requires` + data-authored `positionDemands`, minus the player's `strengths`, with `coveredBy` handling overlapping tokens) — never invented claims about a real footballer. A weakness **never subtracts** from anything: the only number it can produce is a small capped bonus (max +4), and only when the manager has *trained* it **and then played him in a role that demands it*. Training opens doors; it does not raise class. See `docs/svake-sider.md`.

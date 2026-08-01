@@ -1,0 +1,651 @@
+{
+  "schema": "historygo-football-manager.clubs.v1",
+  "version": 1,
+  "snapshot": "2026",
+  "note": "Seriepyramiden slik den faktisk spilles: Eliteserien 16 lag / 30 runder, OBOS-ligaen 16 lag / 30 runder, 2. divisjon to avdelinger à 14 lag / 26 runder. Klubben eier IDENTITET og NIVÅ (navn, bane, by, styrke). Selve FOTBALLEN — hvordan klubben spiller — ligger i data/football_league_club_profiles.json. Sammensetningen er et øyeblikksbilde av 2026-sesongen; opp- og nedrykk i spillet flytter klubber mellom nivåene uten at fila må endres. Banenavn følger sponsorer og skifter oftere enn klubbene gjør.",
+  "tiers": [
+    {
+      "id": "eliteserien",
+      "level": 1,
+      "name": "Eliteserien",
+      "shortName": "Eliteserien",
+      "clubCount": 16,
+      "groups": 1,
+      "groupSize": 16,
+      "rounds": 30,
+      "promotion": null,
+      "relegation": {
+        "toTier": "obosligaen",
+        "direct": 2,
+        "playoff": 1
+      },
+      "strengthBand": [
+        70,
+        84
+      ],
+      "description": "Øverste nivå. Ingen vei opp — her spilles det om gull og om Europa."
+    },
+    {
+      "id": "obosligaen",
+      "level": 2,
+      "name": "OBOS-ligaen",
+      "shortName": "1. divisjon",
+      "clubCount": 16,
+      "groups": 1,
+      "groupSize": 16,
+      "rounds": 30,
+      "promotion": {
+        "toTier": "eliteserien",
+        "direct": 2,
+        "playoff": 1
+      },
+      "relegation": {
+        "toTier": "andredivisjon",
+        "direct": 2,
+        "playoff": 1
+      },
+      "strengthBand": [
+        58,
+        70
+      ],
+      "description": "To rykker direkte opp, nummer tre går kvalifisering mot Eliteserien."
+    },
+    {
+      "id": "andredivisjon",
+      "level": 3,
+      "name": "2. divisjon",
+      "shortName": "2. divisjon",
+      "clubCount": 28,
+      "groups": 2,
+      "groupSize": 14,
+      "rounds": 26,
+      "promotion": {
+        "toTier": "obosligaen",
+        "direct": 1,
+        "playoff": 1,
+        "perGroup": true
+      },
+      "relegation": {
+        "toTier": null,
+        "direct": 3,
+        "playoff": 0,
+        "perGroup": true
+      },
+      "strengthBand": [
+        46,
+        58
+      ],
+      "description": "To avdelinger à 14. Avdelingsvinneren rykker direkte opp; toerne møtes i kvalifisering."
+    }
+  ],
+  "clubs": [
+    {
+      "id": "bodo_glimt",
+      "name": "Bodø/Glimt",
+      "ground": "Aspmyra stadion",
+      "city": "Bodø",
+      "tier": "eliteserien",
+      "strength": 84,
+      "form": 57
+    },
+    {
+      "id": "viking",
+      "name": "Viking",
+      "ground": "Lyse Arena",
+      "city": "Stavanger",
+      "tier": "eliteserien",
+      "strength": 82,
+      "form": 55
+    },
+    {
+      "id": "brann",
+      "name": "Brann",
+      "ground": "Brann Stadion",
+      "city": "Bergen",
+      "tier": "eliteserien",
+      "strength": 79,
+      "form": 52
+    },
+    {
+      "id": "molde",
+      "name": "Molde",
+      "ground": "Aker stadion",
+      "city": "Molde",
+      "tier": "eliteserien",
+      "strength": 78,
+      "form": 51
+    },
+    {
+      "id": "rosenborg",
+      "name": "Rosenborg",
+      "ground": "Lerkendal",
+      "city": "Trondheim",
+      "tier": "eliteserien",
+      "strength": 76,
+      "form": 60
+    },
+    {
+      "id": "tromso",
+      "name": "Tromsø",
+      "ground": "Romssa Arena",
+      "city": "Tromsø",
+      "tier": "eliteserien",
+      "strength": 76,
+      "form": 60
+    },
+    {
+      "id": "fredrikstad",
+      "name": "Fredrikstad",
+      "ground": "Fredrikstad stadion",
+      "city": "Fredrikstad",
+      "tier": "eliteserien",
+      "strength": 74,
+      "form": 58
+    },
+    {
+      "id": "valerenga",
+      "name": "Vålerenga",
+      "ground": "Intility Arena",
+      "city": "Oslo",
+      "tier": "eliteserien",
+      "strength": 73,
+      "form": 57
+    },
+    {
+      "id": "lillestrom",
+      "name": "Lillestrøm",
+      "ground": "Åråsen",
+      "city": "Lillestrøm",
+      "tier": "eliteserien",
+      "strength": 73,
+      "form": 57
+    },
+    {
+      "id": "sarpsborg08",
+      "name": "Sarpsborg 08",
+      "ground": "Sarpsborg stadion",
+      "city": "Sarpsborg",
+      "tier": "eliteserien",
+      "strength": 72,
+      "form": 56
+    },
+    {
+      "id": "kristiansund",
+      "name": "Kristiansund",
+      "ground": "Nordmøre stadion",
+      "city": "Kristiansund",
+      "tier": "eliteserien",
+      "strength": 71,
+      "form": 55
+    },
+    {
+      "id": "start",
+      "name": "Start",
+      "ground": "Sparebanken Sør Arena",
+      "city": "Kristiansand",
+      "tier": "eliteserien",
+      "strength": 71,
+      "form": 55
+    },
+    {
+      "id": "aalesund",
+      "name": "Aalesund",
+      "ground": "Color Line Stadion",
+      "city": "Ålesund",
+      "tier": "eliteserien",
+      "strength": 71,
+      "form": 55
+    },
+    {
+      "id": "hamkam",
+      "name": "HamKam",
+      "ground": "Briskeby",
+      "city": "Hamar",
+      "tier": "eliteserien",
+      "strength": 70,
+      "form": 54
+    },
+    {
+      "id": "sandefjord",
+      "name": "Sandefjord",
+      "ground": "Jotun Arena",
+      "city": "Sandefjord",
+      "tier": "eliteserien",
+      "strength": 70,
+      "form": 54
+    },
+    {
+      "id": "kfum",
+      "name": "KFUM Oslo",
+      "ground": "KFUM Arena",
+      "city": "Oslo",
+      "tier": "eliteserien",
+      "strength": 70,
+      "form": 54
+    },
+    {
+      "id": "odd",
+      "name": "Odd",
+      "ground": "Skagerak Arena",
+      "city": "Skien",
+      "tier": "obosligaen",
+      "strength": 68,
+      "form": 52
+    },
+    {
+      "id": "stromsgodset",
+      "name": "Strømsgodset",
+      "ground": "Marienlyst",
+      "city": "Drammen",
+      "tier": "obosligaen",
+      "strength": 68,
+      "form": 52
+    },
+    {
+      "id": "haugesund",
+      "name": "Haugesund",
+      "ground": "Haugesund stadion",
+      "city": "Haugesund",
+      "tier": "obosligaen",
+      "strength": 67,
+      "form": 51
+    },
+    {
+      "id": "stabak",
+      "name": "Stabæk",
+      "ground": "Nadderud",
+      "city": "Bærum",
+      "tier": "obosligaen",
+      "strength": 65,
+      "form": 60
+    },
+    {
+      "id": "lyn",
+      "name": "Lyn",
+      "ground": "Bislett",
+      "city": "Oslo",
+      "tier": "obosligaen",
+      "strength": 64,
+      "form": 59
+    },
+    {
+      "id": "sogndal",
+      "name": "Sogndal",
+      "ground": "Fosshaugane Campus",
+      "city": "Sogndal",
+      "tier": "obosligaen",
+      "strength": 63,
+      "form": 58
+    },
+    {
+      "id": "ranheim",
+      "name": "Ranheim",
+      "ground": "Extra Arena",
+      "city": "Trondheim",
+      "tier": "obosligaen",
+      "strength": 62,
+      "form": 57
+    },
+    {
+      "id": "bryne",
+      "name": "Bryne",
+      "ground": "Bryne stadion",
+      "city": "Bryne",
+      "tier": "obosligaen",
+      "strength": 62,
+      "form": 57
+    },
+    {
+      "id": "egersund",
+      "name": "Egersund",
+      "ground": "Egersund Arena",
+      "city": "Egersund",
+      "tier": "obosligaen",
+      "strength": 62,
+      "form": 57
+    },
+    {
+      "id": "asane",
+      "name": "Åsane",
+      "ground": "Myrdal",
+      "city": "Bergen",
+      "tier": "obosligaen",
+      "strength": 61,
+      "form": 56
+    },
+    {
+      "id": "raufoss",
+      "name": "Raufoss",
+      "ground": "Raufoss Arena",
+      "city": "Raufoss",
+      "tier": "obosligaen",
+      "strength": 61,
+      "form": 56
+    },
+    {
+      "id": "kongsvinger",
+      "name": "Kongsvinger",
+      "ground": "Gjemselund",
+      "city": "Kongsvinger",
+      "tier": "obosligaen",
+      "strength": 60,
+      "form": 55
+    },
+    {
+      "id": "hodd",
+      "name": "Hødd",
+      "ground": "Høddvoll",
+      "city": "Ulsteinvik",
+      "tier": "obosligaen",
+      "strength": 60,
+      "form": 55
+    },
+    {
+      "id": "moss",
+      "name": "Moss",
+      "ground": "Melløs",
+      "city": "Moss",
+      "tier": "obosligaen",
+      "strength": 60,
+      "form": 55
+    },
+    {
+      "id": "sandnes_ulf",
+      "name": "Sandnes Ulf",
+      "ground": "Øster Hus Arena",
+      "city": "Sandnes",
+      "tier": "obosligaen",
+      "strength": 60,
+      "form": 55
+    },
+    {
+      "id": "strommen",
+      "name": "Strømmen",
+      "ground": "Strømmen stadion",
+      "city": "Strømmen",
+      "tier": "obosligaen",
+      "strength": 58,
+      "form": 53
+    },
+    {
+      "id": "arendal",
+      "name": "Arendal Fotball",
+      "ground": "Norac stadion",
+      "city": "Arendal",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 57,
+      "form": 52
+    },
+    {
+      "id": "jerv",
+      "name": "Jerv",
+      "ground": "Levermyr",
+      "city": "Grimstad",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 57,
+      "form": 52
+    },
+    {
+      "id": "notodden",
+      "name": "Notodden",
+      "ground": "Notodden stadion",
+      "city": "Notodden",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 56,
+      "form": 51
+    },
+    {
+      "id": "mjondalen",
+      "name": "Mjøndalen",
+      "ground": "Consto Arena",
+      "city": "Mjøndalen",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 56,
+      "form": 51
+    },
+    {
+      "id": "pors",
+      "name": "Pors",
+      "ground": "Pors stadion",
+      "city": "Porsgrunn",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 54,
+      "form": 60
+    },
+    {
+      "id": "brattvag",
+      "name": "Brattvåg",
+      "ground": "Brattvåg stadion",
+      "city": "Brattvåg",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 53,
+      "form": 59
+    },
+    {
+      "id": "eik_tonsberg",
+      "name": "Eik Tønsberg",
+      "ground": "Eik stadion",
+      "city": "Tønsberg",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 53,
+      "form": 59
+    },
+    {
+      "id": "vidar",
+      "name": "Vidar",
+      "ground": "Midjord",
+      "city": "Stavanger",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 52,
+      "form": 58
+    },
+    {
+      "id": "kvik_halden",
+      "name": "Kvik Halden",
+      "ground": "Halden stadion",
+      "city": "Halden",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 51,
+      "form": 57
+    },
+    {
+      "id": "sandviken",
+      "name": "Sandviken",
+      "ground": "Stemmemyren",
+      "city": "Bergen",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 51,
+      "form": 57
+    },
+    {
+      "id": "lysekloster",
+      "name": "Lysekloster",
+      "ground": "Lysekloster idrettspark",
+      "city": "Os",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 50,
+      "form": 56
+    },
+    {
+      "id": "sotra",
+      "name": "Sotra",
+      "ground": "Straume idrettspark",
+      "city": "Straume",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 49,
+      "form": 55
+    },
+    {
+      "id": "traff",
+      "name": "Træff",
+      "ground": "Molde idrettspark",
+      "city": "Molde",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 48,
+      "form": 54
+    },
+    {
+      "id": "bjarg",
+      "name": "Bjarg",
+      "ground": "Bjarg kunstgress",
+      "city": "Bergen",
+      "tier": "andredivisjon",
+      "group": "avdeling1",
+      "strength": 47,
+      "form": 53
+    },
+    {
+      "id": "skeid",
+      "name": "Skeid",
+      "ground": "Nordre Åsen",
+      "city": "Oslo",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 57,
+      "form": 52
+    },
+    {
+      "id": "honefoss",
+      "name": "Hønefoss",
+      "ground": "AKA Arena",
+      "city": "Hønefoss",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 56,
+      "form": 51
+    },
+    {
+      "id": "ull_kisa",
+      "name": "Ullensaker/Kisa",
+      "ground": "Jessheim stadion",
+      "city": "Jessheim",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 56,
+      "form": 51
+    },
+    {
+      "id": "levanger",
+      "name": "Levanger",
+      "ground": "Levanger stadion",
+      "city": "Levanger",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 55,
+      "form": 50
+    },
+    {
+      "id": "kjelsas",
+      "name": "Kjelsås",
+      "ground": "Grefsen stadion",
+      "city": "Oslo",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 54,
+      "form": 60
+    },
+    {
+      "id": "grorud",
+      "name": "Grorud",
+      "ground": "Grorud idrettspark",
+      "city": "Oslo",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 53,
+      "form": 59
+    },
+    {
+      "id": "tromsdalen",
+      "name": "Tromsdalen",
+      "ground": "Tromsdalen kunstgress",
+      "city": "Tromsdalen",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 52,
+      "form": 58
+    },
+    {
+      "id": "stjordals_blink",
+      "name": "Stjørdals-Blink",
+      "ground": "Øverlands Minde",
+      "city": "Stjørdal",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 52,
+      "form": 58
+    },
+    {
+      "id": "rana",
+      "name": "Rana",
+      "ground": "Sagbakken",
+      "city": "Mo i Rana",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 51,
+      "form": 57
+    },
+    {
+      "id": "junkeren",
+      "name": "Junkeren",
+      "ground": "Bodø Spektrum kunstgress",
+      "city": "Bodø",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 50,
+      "form": 56
+    },
+    {
+      "id": "lorenskog",
+      "name": "Lørenskog",
+      "ground": "Lørenskog stadion",
+      "city": "Lørenskog",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 50,
+      "form": 56
+    },
+    {
+      "id": "eidsvold_turn",
+      "name": "Eidsvold Turn",
+      "ground": "Myhrer stadion",
+      "city": "Eidsvoll",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 49,
+      "form": 55
+    },
+    {
+      "id": "follo",
+      "name": "Follo",
+      "ground": "Ski stadion",
+      "city": "Ski",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 48,
+      "form": 54
+    },
+    {
+      "id": "trygg_lade",
+      "name": "Trygg/Lade",
+      "ground": "Lade idrettsanlegg",
+      "city": "Trondheim",
+      "tier": "andredivisjon",
+      "group": "avdeling2",
+      "strength": 47,
+      "form": 53
+    }
+  ]
+}

@@ -48,6 +48,7 @@ jobs:
       - name: Data audits
         run: |
           npm run audit:knowledge
+          npm run audit:clubs
           npm run audit:hg-football
           npm run audit:hg-historical-fit
           npm run audit:hg-coach-context

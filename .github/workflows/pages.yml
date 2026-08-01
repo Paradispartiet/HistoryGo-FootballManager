@@ -38,6 +38,9 @@ jobs:
       - name: Audit Football Knowledge data
         run: npm run audit:knowledge
 
+      - name: Audit seriepyramiden (nivåer, klubber, opp-/nedrykk)
+        run: npm run audit:clubs
+
       - name: Check DOM ids (UI-lim)
         run: npm run check:syntax
 

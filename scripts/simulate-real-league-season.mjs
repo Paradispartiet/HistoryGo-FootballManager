@@ -1,43 +1,170 @@
 import assert from "node:assert/strict";
-import { createLeagueSeason, createLeagueTable, completeLeagueRound, getNextLeagueOpponent, startNextLeagueSeason, normalizeLeagueSeason, LEAGUE_OPPONENT_PROFILES } from "../src/football-league-season.js";
+import {
+  createLeagueSeason, createLeagueTable, completeLeagueRound, getNextLeagueOpponent,
+  startNextLeagueSeason, normalizeLeagueSeason, roundsForClubCount, longestVenueRun,
+  classifyLeaguePosition, resolveLeagueOutcome
+} from "../src/football-league-season.js";
 import { getHistoricalOpponentProfileIds } from "../src/football-historical-opponent-profiles.js";
 import fs from "node:fs";
 
-const managerClub = { id: "manager-fk", name: "Manager FK", ground: "Klubbankeret", strength: 75, form: 55, tacticalIdentity: "managerens valg" };
-const fresh = () => createLeagueSeason({ managerClub, seed: "qa-seed" });
+// ---------------------------------------------------------------------------
+// Seriepyramiden er kilden: Eliteserien / OBOS-ligaen / 2. divisjon.
+// Motoren eier FORMATET, datafila eier klubbene og nivåene.
+// ---------------------------------------------------------------------------
+const pyramid = JSON.parse(fs.readFileSync(new URL("../data/football_clubs.json", import.meta.url), "utf8"));
+const { tiers, clubs: allClubs } = pyramid;
+const topTier = tiers.find((tier) => tier.level === 1);
+const LEAGUE_OPPONENT_PROFILES = allClubs.filter((club) => club.tier === topTier.id);
+
+const managerClub = { id: "manager-fk", name: "Manager FK", ground: "Klubbankeret", city: "Testby", strength: 75, form: 55, tacticalIdentity: "managerens valg" };
+const opponentsFor = (tier) => {
+  const pool = allClubs.filter((club) => club.tier === tier.id);
+  if (tier.groups <= 1) return pool;
+  const group = [...new Set(pool.map((club) => club.group))].sort()[0];
+  return pool.filter((club) => club.group === group);
+};
+const fresh = (tier = topTier) => createLeagueSeason({ managerClub, opponents: opponentsFor(tier), tier, seed: "qa-seed" });
+
+// Serien spilles slik den faktisk spilles: 16 lag, 30 runder, 240 kamper.
 const season = fresh();
-assert.equal(season.clubs.length, 8); assert.equal(season.fixtures.length, 14);
-assert.equal(season.fixtures.flatMap((round) => round.matches).length, 56);
+const TOP_CLUBS = topTier.groupSize;
+const TOP_ROUNDS = roundsForClubCount(TOP_CLUBS);
+assert.equal(TOP_CLUBS, 16, "Eliteserien skal ha 16 lag, slik den spilles i dag");
+assert.equal(TOP_ROUNDS, 30, "16 lag hjemme og borte er 30 runder");
+assert.equal(season.clubs.length, TOP_CLUBS);
+assert.equal(season.fixtures.length, TOP_ROUNDS);
+assert.equal(season.fixtures.flatMap((round) => round.matches).length, TOP_ROUNDS * (TOP_CLUBS / 2));
 for (const round of season.fixtures) {
-  assert.equal(round.matches.length, 4);
-  assert.equal(new Set(round.matches.flatMap((match) => [match.homeClubId, match.awayClubId])).size, 8);
+  assert.equal(round.matches.length, TOP_CLUBS / 2);
+  assert.equal(new Set(round.matches.flatMap((match) => [match.homeClubId, match.awayClubId])).size, TOP_CLUBS);
   assert.ok(round.matches.every((match) => match.homeClubId !== match.awayClubId));
 }
 const matches = season.fixtures.flatMap((round) => round.matches);
-assert.equal(new Set(matches.map((match) => match.id)).size, 56);
-assert.deepEqual(fresh().fixtures, season.fixtures);
+assert.equal(new Set(matches.map((match) => match.id)).size, matches.length);
+assert.deepEqual(fresh().fixtures, season.fixtures, "terminlisten er ikke deterministisk");
 const pairs = new Map();
 for (const match of matches) {
   const key = [match.homeClubId, match.awayClubId].sort().join(":");
   pairs.set(key, [...(pairs.get(key) || []), `${match.homeClubId}>${match.awayClubId}`]);
 }
-assert.equal(pairs.size, 28);
-for (const meetings of pairs.values()) assert.equal(new Set(meetings).size, 2);
+assert.equal(pairs.size, (TOP_CLUBS * (TOP_CLUBS - 1)) / 2);
+for (const meetings of pairs.values()) assert.equal(new Set(meetings).size, 2, "et par møtes ikke én gang hver vei");
+
+// ---------------------------------------------------------------------------
+// Terminlisten: ingen lange hjemme-/bortestrekk
+//
+// Den gamle terminlisten ga HVER klubb sju strake bortekamper og så sju strake
+// hjemmekamper. Ingen feilmelding — tabellen summerte riktig, hver motstander
+// ble møtt to ganger, og ingen vakt så på rekkefølgen. Med 16 lag ville det
+// blitt femten strake. Feilen lå i hjemme/borte-regelen: den brukte plassen i
+// rotasjonen, som betyr noe helt annet for et lag som roterer enn for det faste.
+//
+// Dette er samme klasse som skalafeilene i CLAUDE.md: bare en MÅLING avslører
+// den. Så her måles den, på hvert nivå, for hver klubb.
+// ---------------------------------------------------------------------------
+const MAX_VENUE_RUN = 2;
+for (const tier of tiers) {
+  const tierSeason = fresh(tier);
+  for (const club of tierSeason.clubs) {
+    const run = longestVenueRun(tierSeason, club.id);
+    assert.ok(run <= MAX_VENUE_RUN, `${tier.name}: ${club.name} har ${run} kamper på rad på samme bane`);
+  }
+  // Og ingen møter samme motstander to runder på rad (skjøten mellom halvsesongene).
+  for (const club of tierSeason.clubs) {
+    let previous = null;
+    for (const round of tierSeason.fixtures) {
+      const match = round.matches.find((entry) => entry.homeClubId === club.id || entry.awayClubId === club.id);
+      const opponent = match.homeClubId === club.id ? match.awayClubId : match.homeClubId;
+      assert.notEqual(opponent, previous, `${tier.name}: ${club.name} møter ${opponent} to runder på rad`);
+      previous = opponent;
+    }
+  }
+}
+
+// Hvert nivå spilles med sitt eget format.
+for (const tier of tiers) {
+  const tierSeason = fresh(tier);
+  assert.equal(tierSeason.clubs.length, tier.groupSize, `${tier.name} har feil antall klubber`);
+  assert.equal(tierSeason.competition.rounds, roundsForClubCount(tier.groupSize), `${tier.name} har feil antall runder`);
+  assert.equal(tierSeason.competition.tierId, tier.id);
+}
 
 const firstOpponent = getNextLeagueOpponent(season);
 let played = completeLeagueRound(season, { score: { for: 2, against: 1 } });
-assert.equal(played.currentRound, 2); assert.equal(played.fixtures[0].status, "completed"); assert.equal(played.fixtures[0].matches.filter((match) => match.status === "completed").length, 4);
-assert.equal(played.completedMatchIds.length, 4); assert.equal(completeLeagueRound(season, { score: { for: 2, against: 1 } }).fixtures[0].matches.length, 4);
+assert.equal(played.currentRound, 2); assert.equal(played.fixtures[0].status, "completed");
+assert.equal(played.fixtures[0].matches.filter((match) => match.status === "completed").length, TOP_CLUBS / 2);
+assert.equal(played.completedMatchIds.length, TOP_CLUBS / 2);
 assert.notEqual(getNextLeagueOpponent(played).matchId, firstOpponent.matchId);
-let table = createLeagueTable(played); assert.equal(table.length, 8); assert.equal(table.reduce((sum, row) => sum + row.played, 0), 8);
+let table = createLeagueTable(played); assert.equal(table.length, TOP_CLUBS); assert.equal(table.reduce((sum, row) => sum + row.played, 0), TOP_CLUBS);
 assert.ok(table.every((row) => row.goalDifference === row.goalsFor - row.goalsAgainst));
 assert.equal(table.reduce((sum, row) => sum + row.won, 0), table.reduce((sum, row) => sum + row.lost, 0));
 assert.deepEqual(createLeagueTable(played), table);
-for (let round = 2; round <= 14; round++) played = completeLeagueRound(played, { score: { for: round % 3, against: (round + 1) % 3 } });
-assert.equal(played.status, "completed"); assert.equal(played.currentRound, 14); assert.equal(played.completedMatchIds.length, 56); assert.equal(getNextLeagueOpponent(played), null);
+for (let round = 2; round <= TOP_ROUNDS; round++) played = completeLeagueRound(played, { score: { for: round % 3, against: (round + 1) % 3 } });
+assert.equal(played.status, "completed"); assert.equal(played.currentRound, TOP_ROUNDS);
+assert.equal(played.completedMatchIds.length, TOP_ROUNDS * (TOP_CLUBS / 2));
+assert.equal(getNextLeagueOpponent(played), null);
 assert.deepEqual(normalizeLeagueSeason(JSON.parse(JSON.stringify(played))), played);
-const next = startNextLeagueSeason(played); assert.equal(next.status, "active"); assert.equal(next.currentRound, 1); assert.equal(createLeagueTable(next).every((row) => row.played === 0), true); assert.equal(next.managerClubId, played.managerClubId);
-assert.deepEqual(next.clubs, played.clubs); assert.notDeepEqual(next.fixtures, played.fixtures);
+// En lagret sesong der format og klubbtall ikke henger sammen skal forkastes,
+// ikke lastes inn halvveis.
+assert.equal(normalizeLeagueSeason({ ...played, clubs: played.clubs.slice(0, 15) }), null);
+
+const next = startNextLeagueSeason(played, { allClubs, tiers });
+assert.equal(next.status, "active"); assert.equal(next.currentRound, 1);
+assert.equal(createLeagueTable(next).every((row) => row.played === 0), true);
+assert.equal(next.managerClubId, played.managerClubId);
+assert.notDeepEqual(next.fixtures, played.fixtures);
+
+// ---------------------------------------------------------------------------
+// Opp- og nedrykk: karrieren har et sted å gå
+//
+// Uten dette er en managerkarriere en flat linje — samme nivå, samme sytten
+// motstandere, sesong etter sesong. Reglene kommer fra pyramiden, ikke fra
+// motoren, og de skal stemme med hvordan seriene faktisk spilles.
+// ---------------------------------------------------------------------------
+for (const tier of tiers) {
+  const size = tier.groupSize;
+  const verdicts = Array.from({ length: size }, (_, index) => classifyLeaguePosition(index + 1, size, tier));
+  // Hver plass må ha en dom — ingen udefinerte hull.
+  assert.ok(verdicts.every((verdict) => verdict.movement && verdict.reason), `${tier.name}: en plassering mangler dom`);
+  const directUp = verdicts.filter((verdict) => verdict.movement === "promoted").length;
+  const playoffUp = verdicts.filter((verdict) => verdict.movement === "promotion_playoff").length;
+  const directDown = verdicts.filter((verdict) => verdict.movement === "relegated").length;
+  const playoffDown = verdicts.filter((verdict) => verdict.movement === "relegation_playoff").length;
+  assert.equal(directUp, Number(tier.promotion?.direct) || 0, `${tier.name}: feil antall direkte opprykk`);
+  assert.equal(playoffUp, Number(tier.promotion?.playoff) || 0, `${tier.name}: feil antall opprykkskvalifiseringer`);
+  assert.equal(directDown, tier.relegation?.toTier ? Number(tier.relegation.direct) || 0 : 0, `${tier.name}: feil antall direkte nedrykk`);
+  assert.equal(playoffDown, tier.relegation?.toTier ? Number(tier.relegation.playoff) || 0 : 0, `${tier.name}: feil antall nedrykkskvalifiseringer`);
+  // Toppen har ingen vei opp, bunnen ingen vei ned — og begge deler skal SIES.
+  if (!tier.promotion) assert.equal(verdicts[0].movement, "champion", `${tier.name}: førsteplassen er ikke seriegull`);
+  if (!tier.relegation?.toTier) assert.equal(verdicts[size - 1].movement, "bottom", `${tier.name}: bunnplassen later som den er grei`);
+  // Opprykk peker oppover, nedrykk nedover.
+  for (const verdict of verdicts) {
+    if (verdict.movement === "promoted") assert.ok(tiers.find((entry) => entry.id === verdict.toTierId).level < tier.level, `${tier.name}: opprykk peker ikke oppover`);
+    if (verdict.movement === "relegated") assert.ok(tiers.find((entry) => entry.id === verdict.toTierId).level > tier.level, `${tier.name}: nedrykk peker ikke nedover`);
+  }
+}
+
+// Hele stigen, spilt: fra bunnen til toppen og ned igjen.
+const bottomTier = tiers.find((tier) => tier.level === Math.max(...tiers.map((entry) => entry.level)));
+const climbStart = { ...managerClub, tier: bottomTier.id, group: "avdeling1" };
+let climb = createLeagueSeason({ managerClub: climbStart, opponents: opponentsFor(bottomTier), tier: bottomTier, seed: "stige" });
+const climbed = [];
+for (let seasonIndex = 0; seasonIndex < 3; seasonIndex += 1) {
+  while (climb.status === "active") climb = completeLeagueRound(climb, { score: { for: 4, against: 0 } });
+  climbed.push(resolveLeagueOutcome(climb).tierId);
+  climb = startNextLeagueSeason(climb, { allClubs, tiers });
+}
+assert.deepEqual(climbed, ["andredivisjon", "obosligaen", "eliteserien"], `vinner du alt, skal du klatre — fikk ${climbed.join(" → ")}`);
+assert.equal(climb.competition.tierId, "eliteserien", "manageren havnet ikke i Eliteserien etter to opprykk");
+
+let fall = createLeagueSeason({ managerClub: { ...managerClub, tier: topTier.id }, opponents: opponentsFor(topTier), tier: topTier, seed: "fall" });
+const fell = [];
+for (let seasonIndex = 0; seasonIndex < 2; seasonIndex += 1) {
+  while (fall.status === "active") fall = completeLeagueRound(fall, { score: { for: 0, against: 4 } });
+  fell.push(resolveLeagueOutcome(fall).tierId);
+  fall = startNextLeagueSeason(fall, { allClubs, tiers });
+}
+assert.deepEqual(fell, ["eliteserien", "obosligaen"], `taper du alt, skal du falle — fikk ${fell.join(" → ")}`);
 
 // ---------------------------------------------------------------------------
 // Ligaen skal være fotball, ikke aritmetikk
@@ -111,26 +238,49 @@ for (const club of LEAGUE_OPPONENT_PROFILES) {
   }
 }
 
-// Etiketten i klubblista og profilen må beskrive SAMME fotball. Lillestrøm sto
-// lenge med «raske vendinger» i lista mens profilen sa langball og dueller —
-// spilleren ser etiketten først, og den løy.
-const IDENTITY_STOPWORDS = new Set(["ballen", "vinnes", "deres", "eller", "gjennom", "andre"]);
+// Den korte etiketten spilleren ser først må beskrive SAMME fotball som profilen.
+// Den bodde tidligere på klubben, i en annen fil enn fotballen den beskrev, og
+// drev fra hverandre: Lillestrøm sto med «raske vendinger» i lista lenge etter
+// at profilen var rettet til langball og dueller. Nå bor den i profilen — og
+// vakten sørger for at duplikatet ikke sniker seg tilbake.
+for (const club of allClubs) {
+  assert.ok(!("tacticalIdentity" in club), `${club.name}: klubbdataene har fått en stil-etikett igjen — den hører i profilen, ellers driver de fra hverandre`);
+}
+const IDENTITY_STOPWORDS = new Set(["ballen", "vinnes", "deres", "eller", "gjennom", "andre", "uten"]);
 for (const club of LEAGUE_OPPONENT_PROFILES) {
   const profile = clubProfiles.get(club.id);
-  const blob = [profile.styleName, profile.tacticalSchool, profile.style, profile.historicalNote, profile.inPossessionShape, profile.buildUpStyle, profile.attackingStyle].join(" ").toLowerCase();
-  const words = String(club.tacticalIdentity).toLowerCase().split(/[^0-9a-zæøå-]+/).filter((word) => word.length >= 4 && !IDENTITY_STOPWORDS.has(word));
-  assert.ok(words.length >= 1, `${club.name}: tacticalIdentity er for tynn til å si noe`);
+  assert.ok(profile.shortLabel, `${club.name}: mangler kort etikett`);
+  const blob = [profile.styleName, profile.tacticalSchool, profile.style, profile.historicalNote, profile.inPossessionShape, profile.outOfPossessionShape, profile.buildUpStyle, profile.attackingStyle].join(" ").toLowerCase();
+  const words = String(profile.shortLabel).toLowerCase().split(/[^0-9a-zæøå-]+/).filter((word) => word.length >= 4 && !IDENTITY_STOPWORDS.has(word));
+  assert.ok(words.length >= 1, `${club.name}: etiketten er for tynn til å si noe`);
   assert.ok(
     words.some((word) => blob.includes(word)),
-    `${club.name}: etiketten «${club.tacticalIdentity}» beskriver ikke stilen i profilen`
+    `${club.name}: etiketten «${profile.shortLabel}» beskriver ikke stilen i profilen`
   );
+}
+
+// Alle 16 eliteserieklubbene skal ha profil — ikke bare de sju vi startet med.
+assert.equal(LEAGUE_OPPONENT_PROFILES.length, 16, "Eliteserien har ikke 16 klubber");
+// `styleBasis` skiller dokumentert spilletradisjon fra klubbkarakter. En klubb
+// som aldri har vunnet noe har ingen tradisjon å slå opp, og da er det ærligere
+// å si det enn å dikte opp en. Men da må `era` og notatet SI at det er karakter.
+for (const club of LEAGUE_OPPONENT_PROFILES) {
+  const profile = clubProfiles.get(club.id);
+  assert.ok(["tradisjon", "klubbkarakter"].includes(profile.styleBasis), `${club.name}: styleBasis må være tradisjon eller klubbkarakter`);
+  if (profile.styleBasis === "klubbkarakter") {
+    assert.ok(
+      /klubbkarakter/.test(profile.historicalNote),
+      `${club.name}: profilen er klubbkarakter, men notatet later som den er en spilletradisjon`
+    );
+  }
 }
 
 // Gå gjennom en hel sesong og se hvem du faktisk møter.
 const styles = new Map();
 const styleTokens = new Set();
 let walk = fresh();
-for (let round = 1; round <= 14; round += 1) {
+const OPPONENT_COUNT = TOP_CLUBS - 1;
+for (let round = 1; round <= TOP_ROUNDS; round += 1) {
   const opponent = getNextLeagueOpponent(walk);
   assert.ok(opponent, `runde ${round} har ingen motstander`);
   const profile = clubProfiles.get(opponent.id);
@@ -139,9 +289,9 @@ for (let round = 1; round <= 14; round += 1) {
   profile.matchupStyles.forEach((token) => styleTokens.add(token));
   walk = completeLeagueRound(walk, { score: { for: 1, against: 1 } });
 }
-assert.equal(styles.size, 7, `sesongen bød på ${styles.size} ulike spillestiler, ikke 7`);
+assert.equal(styles.size, OPPONENT_COUNT, `sesongen bød på ${styles.size} ulike spillestiler, ikke ${OPPONENT_COUNT}`);
 for (const [name, count] of styles) assert.equal(count, 2, `${name} møtes ${count} ganger, ikke to (hjemme + borte)`);
-assert.ok(styleTokens.size >= 8, `bare ${styleTokens.size} ulike spillestil-tokens i sesongen`);
+assert.equal(styleTokens.size, 16, `bare ${styleTokens.size} ulike spillestil-tokens i sesongen — hele vokabularet skal være i bruk`);
 
 // Og at app.js faktisk slår opp klubbprofilen — ikke klubb-id blant de generiske.
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
@@ -159,6 +309,13 @@ assert.ok(
 );
 
 console.log(JSON.stringify({
-  ok: true, clubs: 8, rounds: 14, matches: 56, completed: played.completedMatchIds.length,
-  spillestilerPerSesong: styles.size, spillestilTokens: styleTokens.size
+  ok: true,
+  pyramide: tiers.map((tier) => `${tier.name}: ${tier.clubCount} klubber / ${roundsForClubCount(tier.groupSize)} runder`),
+  klubberTotalt: allClubs.length,
+  eliteserien: { klubber: TOP_CLUBS, runder: TOP_ROUNDS, kamper: played.completedMatchIds.length },
+  lengsteBanestrekk: Math.max(...season.clubs.map((club) => longestVenueRun(season, club.id))),
+  spillestilerPerSesong: styles.size,
+  spillestilTokens: styleTokens.size,
+  stigenOpp: climbed.join(" → "),
+  stigenNed: fell.join(" → ")
 }, null, 2));
