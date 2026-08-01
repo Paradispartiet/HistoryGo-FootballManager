@@ -81,6 +81,39 @@ assert.equal(
   LEAGUE_OPPONENT_PROFILES.length,
   "to ligaklubber deler spillestil — da mister sesongen variasjon"
 );
+// Ulikt NAVN er ikke nok: to klubber kan hete forskjellig og likevel spille helt
+// likt for motorene. Det er selve stil-fingeravtrykket som må være unikt.
+assert.equal(
+  new Set(LEAGUE_OPPONENT_PROFILES.map((club) => [...clubProfiles.get(club.id).matchupStyles].sort().join("+"))).size,
+  LEAGUE_OPPONENT_PROFILES.length,
+  "to ligaklubber har identisk matchupStyles — ulikt navn, samme fotball"
+);
+
+// Hvert token må finnes i formasjonskunnskapens vokabular. En skrivefeil her gir
+// ingen feilmelding — matchupen scorer bare stille null på det tokenet.
+const styleVocab = new Set(
+  JSON.parse(fs.readFileSync(new URL("../data/hgFootball/formationKnowledge.json", import.meta.url), "utf8")).vocab.opponentStyles
+);
+for (const club of LEAGUE_OPPONENT_PROFILES) {
+  for (const token of clubProfiles.get(club.id).matchupStyles) {
+    assert.ok(styleVocab.has(token), `${club.name}: ukjent spillestil-token «${token}»`);
+  }
+}
+
+// Etiketten i klubblista og profilen må beskrive SAMME fotball. Lillestrøm sto
+// lenge med «raske vendinger» i lista mens profilen sa langball og dueller —
+// spilleren ser etiketten først, og den løy.
+const IDENTITY_STOPWORDS = new Set(["ballen", "vinnes", "deres", "eller", "gjennom", "andre"]);
+for (const club of LEAGUE_OPPONENT_PROFILES) {
+  const profile = clubProfiles.get(club.id);
+  const blob = [profile.styleName, profile.tacticalSchool, profile.style, profile.historicalNote, profile.inPossessionShape, profile.buildUpStyle, profile.attackingStyle].join(" ").toLowerCase();
+  const words = String(club.tacticalIdentity).toLowerCase().split(/[^0-9a-zæøå-]+/).filter((word) => word.length >= 4 && !IDENTITY_STOPWORDS.has(word));
+  assert.ok(words.length >= 1, `${club.name}: tacticalIdentity er for tynn til å si noe`);
+  assert.ok(
+    words.some((word) => blob.includes(word)),
+    `${club.name}: etiketten «${club.tacticalIdentity}» beskriver ikke stilen i profilen`
+  );
+}
 
 // Gå gjennom en hel sesong og se hvem du faktisk møter.
 const styles = new Map();

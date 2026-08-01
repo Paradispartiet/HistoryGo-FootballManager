@@ -1,15 +1,15 @@
 {
   "schema": "historygo-football-manager.league-club-profiles.v1",
-  "version": 1,
-  "note": "Ligaklubbene spiller SEG SELV, ikke kostymer. Første forsøk ga dem historiske arketyper (Molde som Barcelona 2008–12), men det var en kategorifeil: styrketallet sa 78 mens etiketten sa «du møter Barcelona». Det brant også opp arketypene, som er det du spiller scenarioer for. Her er profilene tegnet på klubbenes EGEN spilletradisjon i stedet. Dette er stiliserte karakteristikker av hvordan klubbene tradisjonelt har spilt — ikke påstander om dagens tropp eller trener.",
+  "version": 2,
+  "note": "Ligaklubbene spiller SEG SELV, ikke kostymer. Første forsøk ga dem historiske arketyper (Molde som Barcelona 2008–12), men det var en kategorifeil: styrketallet sa 78 mens etiketten sa «du møter Barcelona». Det brant også opp arketypene, som er det du spiller scenarioer for. Her er profilene tegnet på klubbenes EGEN spilletradisjon i stedet. v2: profilene er skrevet om etter faktisk oppslag i stedet for hukommelse — se docs/liga-arketyper.md for kildene. Dette er stiliserte karakteristikker av hvordan klubbene tradisjonelt har spilt, ikke påstander om dagens tropp eller trener.",
   "profiles": [
     {
       "clubId": "rosenborg",
       "styleName": "Godfoten",
       "tacticalSchool": "Trønderfotball · Eggens samhandlingslære",
       "era": "1988–2002",
-      "style": "Offensivt 4-3-3 der kantene holder bredden og alt hviler på relasjoner",
-      "historicalNote": "Nils Arne Eggens godfotteori gjorde RBK til den mest gjennomførte spillestilen norsk fotball har hatt: gjøre hverandre gode, holde bredden, angripe med mange.",
+      "style": "Offensivt 4-3-3 der kantene bryter gjennom og alt hviler på relasjoner",
+      "historicalNote": "Etter Nils Arne Eggens møte med Rinus Michels ble Rosenborg synonymt med 4-3-3. Kantspillerne er de som bryter gjennom, backene går høyt og hurtig, og godfotteorien sier at laget er mer enn summen av spillerne: du blir god av å gjøre andre gode. Angrepene kommer fort og med mange spillere.",
       "inPossessionShape": "4-3-3 med høye backer og brede kanter",
       "outOfPossessionShape": "4-5-1 som gjenvinner høyt",
       "defensiveBlock": "Middels til høy blokk",
@@ -69,144 +69,144 @@
     },
     {
       "clubId": "brann",
-      "styleName": "Bergensk temperament",
-      "tacticalSchool": "Direkte kantspill med publikum i ryggen",
-      "era": "tradisjon",
-      "style": "Direkte spill ut på kant, tidlige innlegg og et trykk som stiger med tribunen",
-      "historicalNote": "Brann har alltid vært et lag som lever på temperament og hjemmebane mer enn på system — når Stadion koker, spiller de fortere enn de egentlig kan.",
-      "inPossessionShape": "4-4-2 med tidlig ball ut på kant",
-      "outOfPossessionShape": "4-4-2 i middels blokk",
-      "defensiveBlock": "Middels blokk",
-      "buildUpStyle": "Kort til back, så tidlig og direkte framover",
-      "attackingStyle": "Innlegg fra begge sider mot to spisser",
-      "tempo": "Høyt i perioder",
+      "styleName": "Fotballrepublikken",
+      "tacticalSchool": "Høyt press i 4-3-3 med Stadion i ryggen",
+      "era": "tradisjon · pressutgaven fra 2022",
+      "style": "Intenst 4-3-3 som presser høyt, tvinger deg langt og går rett fram når ballen vinnes",
+      "historicalNote": "Brann har alltid levd på temperament og hjemmebane, men den moderne utgaven har gjort trykket til et system: aggressivt høypress i 4-3-3, backene sendt høyt opp i pressleddet, og en klar plan om å tvinge motstanderen til å slå langt i midten — der Brann har tre sterke sentrale å møte ballen med.",
+      "inPossessionShape": "4-3-3 med høye backer",
+      "outOfPossessionShape": "4-3-3 som presser høyt og mannsorientert",
+      "defensiveBlock": "Høy blokk",
+      "buildUpStyle": "Kort bakfra, men uten tålmodighet — fort vertikalt",
+      "attackingStyle": "Vertikale angrep rett etter gjenvinning",
+      "tempo": "Svært høyt",
       "riskLevel": "high",
-      "baseStyleId": "physical_set_piece_opponent",
+      "baseStyleId": "high_press_opponent",
       "matchupStyles": [
-        "wide_overload",
-        "direct_counter",
+        "high_press",
+        "aggressive_man_press",
         "fast_transition"
       ],
-      "pressResistance": 52,
-      "defensiveStructure": 54,
-      "transitionThreat": 68,
-      "chanceConversion": 64,
+      "pressResistance": 56,
+      "defensiveStructure": 52,
+      "transitionThreat": 74,
+      "chanceConversion": 66,
       "styleTraits": {
-        "pressIntensity": 60,
-        "transitionThreat": 68,
-        "defensiveCompactness": 52,
-        "highLine": 52,
-        "shortBuildUp": 42,
-        "possessionControl": 48,
-        "tacticalComplexity": 45,
-        "relationDemand": 50,
-        "intensity": 74
+        "pressIntensity": 82,
+        "transitionThreat": 74,
+        "defensiveCompactness": 46,
+        "highLine": 76,
+        "shortBuildUp": 56,
+        "possessionControl": 52,
+        "tacticalComplexity": 58,
+        "relationDemand": 56,
+        "intensity": 84
       },
       "strengths": [
-        "innlegg i mengde mot en boks de fyller godt",
-        "trykket stiger og river med seg kampen"
+        "presset starter hos spissen og slutter hos backen — hele laget er med",
+        "gjenvinner høyt og er i boksen din før du rekker å stå"
       ],
       "weaknesses": [
-        "strukturen forvitrer når det går imot",
-        "sliter med å bygge kort under press"
+        "rommet bak den høye linja er alltid åpent",
+        "presset koster krefter, og siste halvtime merkes"
       ],
       "vulnerableZones": [
-        "egen oppbygging under press",
-        "midtbanen når kantene er høye"
+        "bakrommet bak de høye backene",
+        "sonen bak midtbanen når presset først er brutt"
       ],
       "dangerZones": [
-        "begge felt for innlegg",
-        "andreballer rundt boksen"
+        "din egen 16-meter i oppbyggingen",
+        "kantsonene der de dobler opp på ballfører"
       ],
       "keyBattles": [
-        "dine stoppere i lufta",
-        "din sekser på andreballene"
+        "din keeper og stoppere mot første pressledd",
+        "din sekser mot mannsorienteringen deres"
       ],
       "pressurePoints": [
-        "press oppbyggingen deres høyt",
-        "ta bort tida på kant før innlegget"
+        "finn den frie mannen bak første pressledd",
+        "vent på at tempoet deres faller"
       ],
       "managerHints": [
-        "Vinn førsteballen i boksen, så dør angrepene deres.",
-        "Får du stille kampen, stilner tribunen med den."
+        "De vil at du skal slå langt i midten. Ikke gjør dem den tjenesten.",
+        "Kommer du gjennom presset én gang, ligger halve banen åpen."
       ]
     },
     {
       "clubId": "valerenga",
-      "styleName": "Oslo-kampvilje",
-      "tacticalSchool": "Duellspill og direkte framrykk",
-      "era": "tradisjon",
-      "style": "Aggressivt, fysisk og direkte — kamp om hver ball før noe annet",
-      "historicalNote": "VIF har tradisjonelt vunnet på vilje og dueller mer enn på oppbygging. Laget setter tonen fysisk og lever på at motstanderen ikke tåler tempoet.",
-      "inPossessionShape": "4-4-2 med to spisser som jager",
-      "outOfPossessionShape": "4-4-2 som presser mannsorientert",
+      "styleName": "Bohemene",
+      "tacticalSchool": "Offensivt spill båret av personligheter",
+      "era": "1965–1984",
+      "style": "Offensivt og dynamisk — midtbanen dras med i angrepene og trykket på motstanderen er konstant",
+      "historicalNote": "Vålerenga fikk kallenavnet «Bohemene» for de fargerike spillertypene og den offensive spillestilen: farlige angrep og konstant press på motstanderen. Angrepet går gjennom midtbanen, ikke utenom den, og hurtig ballsirkulasjon skal skape rommene. Klubben er tuftet på Oslos østkant, og viljen er aldri langt unna — men tradisjonen er offensiv fotball, ikke kynisk fotball.",
+      "inPossessionShape": "4-4-2 der begge indreløpere går med i angrepet",
+      "outOfPossessionShape": "4-4-2 med to spisser som setter trykket",
       "defensiveBlock": "Middels til høy blokk",
-      "buildUpStyle": "Direkte framover, gjerne over midtbanen",
-      "attackingStyle": "Andreballer, dueller og løp inn i bakrommet",
+      "buildUpStyle": "Hurtig ballsirkulasjon gjennom midtbanen",
+      "attackingStyle": "Mange spillere framover, løp i bakrom og individuelle avgjørelser",
       "tempo": "Høyt",
       "riskLevel": "high",
       "baseStyleId": "high_press_opponent",
       "matchupStyles": [
         "two_striker_press",
-        "direct_counter",
-        "aggressive_man_press"
+        "switching_play",
+        "fast_runners_in_behind"
       ],
-      "pressResistance": 50,
-      "defensiveStructure": 60,
-      "transitionThreat": 64,
-      "chanceConversion": 60,
+      "pressResistance": 62,
+      "defensiveStructure": 52,
+      "transitionThreat": 68,
+      "chanceConversion": 70,
       "styleTraits": {
-        "pressIntensity": 68,
-        "transitionThreat": 64,
-        "defensiveCompactness": 58,
-        "highLine": 55,
-        "shortBuildUp": 40,
-        "possessionControl": 45,
-        "tacticalComplexity": 44,
-        "relationDemand": 46,
-        "intensity": 78
+        "pressIntensity": 70,
+        "transitionThreat": 68,
+        "defensiveCompactness": 46,
+        "highLine": 64,
+        "shortBuildUp": 58,
+        "possessionControl": 58,
+        "tacticalComplexity": 56,
+        "relationDemand": 62,
+        "intensity": 76
       },
       "strengths": [
-        "to spisser som jager stopperne dine hele kampen",
-        "vinner andreballene og spiller på dem"
+        "to spisser setter trykket og en midtbane som følger med opp",
+        "enkeltspillere som avgjør uten at systemet må gjøre jobben først"
       ],
       "weaknesses": [
-        "teknisk presisjon faller når tempoet stiger",
-        "mannsorientert press åpner rom når det brytes"
+        "mange framover betyr få igjen",
+        "strukturen er underordnet initiativet"
       ],
       "vulnerableZones": [
-        "rommet bak presset",
-        "siderommene når spissene har jaget innover"
+        "restforsvaret når indreløperne er høye",
+        "siderommene bak backene"
       ],
       "dangerZones": [
-        "midtsonen på andreballer",
-        "bakrommet rett etter balltap"
+        "mellomrommet foran stopperne dine",
+        "bakrommet på hurtige vendinger"
       ],
       "keyBattles": [
-        "dine stoppere mot to jagende spisser",
-        "din keeper som første oppspiller"
+        "din sekser mot deres to indreløpere",
+        "ditt restforsvar mot omstillingene"
       ],
       "pressurePoints": [
-        "spill deg forbi første pressledd, så er de åpne",
-        "flytt ballen raskt til motsatt side"
+        "vinn ballen når midtbanen deres er høy",
+        "flytt spillet dit spissene nettopp jaget fra"
       ],
       "managerHints": [
-        "Har du en rolig oppbygger, får han avgjøre denne kampen.",
-        "Tåler ikke laget presset, slå det over — ikke gjennom."
+        "Tør du holde ballen, gir de deg rommet bakover.",
+        "Stopper du ballsirkulasjonen deres, stopper hele laget."
       ]
     },
     {
       "clubId": "molde",
       "styleName": "Romsdalsk struktur",
-      "tacticalSchool": "Moderne ballbesittelse med rask vertikalitet",
+      "tacticalSchool": "Moderne ballbesittelse med halvrom og høye backer",
       "era": "2011–",
       "style": "Organisert ballbesittelse som venter på øyeblikket og går fort når det kommer",
-      "historicalNote": "Molde er den mest gjennomorganiserte klubben i norsk toppfotball i moderne tid: tålmodig med ballen, presis i sonene, og brutalt rask når åpningen kommer.",
-      "inPossessionShape": "4-3-3 med kontrollert oppbygging",
+      "historicalNote": "Molde er den mest gjennomorganiserte klubben i norsk toppfotball i moderne tid: lite risiko tidlig, middels blokk med variert presshøyde, og et angrepsspill der kantene går innover og backene høyt og bredt slik at halvrommene åpner seg. Tålmodig med ballen, presis i sonene, brutalt rask når åpningen kommer.",
+      "inPossessionShape": "4-3-3 som blir 4-2-2-2 — kanter innover, backer høyt og bredt",
       "outOfPossessionShape": "4-1-4-1 i middels blokk",
-      "defensiveBlock": "Middels blokk",
-      "buildUpStyle": "Kort bakfra, tålmodig til rommet finnes",
-      "attackingStyle": "Vertikal pasning i det forsvaret glipper",
+      "defensiveBlock": "Middels blokk med variert presshøyde",
+      "buildUpStyle": "Kort bakfra, tålmodig til halvrommet åpner seg",
+      "attackingStyle": "Kombinasjoner i halvrommet, innlegg fra backene",
       "tempo": "Variabelt",
       "riskLevel": "medium",
       "baseStyleId": "possession_opponent",
@@ -261,66 +261,66 @@
     },
     {
       "clubId": "viking",
-      "styleName": "Siddis-solid",
-      "tacticalSchool": "Defensiv organisering og direkte framspill",
-      "era": "1972–1991",
-      "style": "Godt organisert bakover, fysisk sterk og direkte når ballen vinnes",
-      "historicalNote": "Vikings storhetstid var bygget bakfra: et forsvar som ikke gikk i stykker, og et lag som slo direkte framover når ballen først var vunnet.",
-      "inPossessionShape": "5-3-2 med direkte framspill",
-      "outOfPossessionShape": "5-3-2 i kompakt blokk",
-      "defensiveBlock": "Lav til middels blokk",
-      "buildUpStyle": "Trygt bakover, langt framover",
-      "attackingStyle": "Direkte mot spissene og løp i bakrom",
-      "tempo": "Lavt til middels",
+      "styleName": "Siddis-disiplin",
+      "tacticalSchool": "Innøvde bevegelsesmønstre og korte avstander mellom leddene",
+      "era": "1972–1975 · og igjen i moderne tid",
+      "style": "Gjennomorganisert blokk med korte avstander — kontroll først, direkte når ballen vinnes",
+      "historicalNote": "Kjell Schou-Andreassen bygde Vikings fire strake seriegull på daglig trening, detaljer, øving i reelle kampsituasjoner og innøvde bevegelsesmønstre — og på hurtige, offensive backer. Den moderne klubben har samme signatur: koordinerte ledd, korte avstander som hindrer deg i å vende innover, regulert aggressivitet og kontroll i halvrommene. Det er ikke en parkert buss, det er et innøvd apparat.",
+      "inPossessionShape": "5-3-2 der vingbackene gir bredden",
+      "outOfPossessionShape": "5-3-2 i kompakt middels blokk",
+      "defensiveBlock": "Middels blokk med korte avstander",
+      "buildUpStyle": "Kontrollert bakfra, framover når mønsteret sitter",
+      "attackingStyle": "Vingbackene høyt, direkte framspill i det ballen vinnes",
+      "tempo": "Kontrollert",
       "riskLevel": "low",
       "baseStyleId": "direct_counter_opponent",
       "matchupStyles": [
         "compact_532",
-        "direct_counter",
-        "deep_low_block"
+        "narrow_442",
+        "direct_counter"
       ],
-      "pressResistance": 58,
-      "defensiveStructure": 74,
+      "pressResistance": 64,
+      "defensiveStructure": 76,
       "transitionThreat": 62,
-      "chanceConversion": 60,
+      "chanceConversion": 58,
       "styleTraits": {
-        "pressIntensity": 48,
+        "pressIntensity": 54,
         "transitionThreat": 62,
-        "defensiveCompactness": 74,
-        "highLine": 40,
-        "shortBuildUp": 44,
-        "possessionControl": 46,
-        "tacticalComplexity": 52,
-        "relationDemand": 48,
+        "defensiveCompactness": 78,
+        "highLine": 46,
+        "shortBuildUp": 56,
+        "possessionControl": 54,
+        "tacticalComplexity": 66,
+        "relationDemand": 58,
         "intensity": 62
       },
       "strengths": [
-        "fem bakover som ikke rives fra hverandre",
-        "straffer hvert balltap med et direkte framspill"
+        "avstandene mellom leddene lukker seg før du rekker å vende",
+        "vingbackene gir bredde uten at blokken åpner seg"
       ],
       "weaknesses": [
-        "gir fra seg ballen og initiativet",
-        "får lite ut av lang besittelse"
+        "gir fra seg initiativet i lange perioder",
+        "få løsninger når mønsteret ikke sitter"
       ],
       "vulnerableZones": [
-        "siderommene utenfor de tre stopperne",
-        "rommet foran blokken"
+        "utsiden når vingbacken har gått høyt",
+        "rommet foran de tre stopperne"
       ],
       "dangerZones": [
-        "bakrommet ditt ved eget angrep",
-        "andreballer etter langspill"
+        "halvrommene innenfor backen din",
+        "bakrommet ditt i det de vinner ballen"
       ],
       "keyBattles": [
-        "dine kanter mot vingbackene",
-        "ditt restforsvar mot det direkte framspillet"
+        "din kant mot vingbacken deres",
+        "din tier mot de korte avstandene"
       ],
       "pressurePoints": [
-        "dra dem ut på sidene",
-        "hold en mann ekstra bak ved eget angrep"
+        "dra vingbacken ut, angrip rommet han forlot",
+        "vend spillet før leddene rekker å flytte seg"
       ],
       "managerHints": [
-        "Du får ballen — spørsmålet er hva du gjør med den.",
-        "Uten restforsvar blir hvert eget angrep en risiko."
+        "Du kommer ikke gjennom midten. Spørsmålet er om du orker å flytte dem.",
+        "De venter på ditt ene feilsteg — hold restforsvaret."
       ]
     },
     {
@@ -389,66 +389,66 @@
     },
     {
       "clubId": "tromso",
-      "styleName": "Nordlyskampen",
-      "tacticalSchool": "Kompakt arbeidslag på hjemmebane",
-      "era": "tradisjon",
-      "style": "Kompakt, arbeidsom og ubehagelig — særlig når kulda og underlaget gjør sitt",
-      "historicalNote": "Tromsø har alltid vært et lag ingen liker å reise til: kompakt, løpsvillig og fullt villig til å la kampen bli stygg.",
-      "inPossessionShape": "4-4-2 med korte framrykk",
-      "outOfPossessionShape": "4-4-2 i lav, smal blokk",
-      "defensiveBlock": "Lav blokk",
-      "buildUpStyle": "Enkelt og trygt, sjelden gjennom midten",
-      "attackingStyle": "Dødballer og direkte spill mot boksen",
-      "tempo": "Lavt",
-      "riskLevel": "low",
-      "baseStyleId": "low_block_opponent",
+      "styleName": "Nordlyset",
+      "tacticalSchool": "Posisjonsspill i 3-5-2 med vingbacker",
+      "era": "1986– · tydeligst i moderne tid",
+      "style": "Rolig med ballen, kontrollert framrykk og et etablert angrep de faktisk har en plan for",
+      "historicalNote": "TIL har aldri vært et lag som legger seg bakover — cupgullene i 1986 og 1996 og 3-2 mot Chelsea i snødrevet på Alfheim i 1997 ble tatt med mot. Den moderne utgaven har satt system på motet: 3-5-2, rolig i besittelse, framrykk gjennom skapte fordeler i stedet for tilfeldigheter, og et etablert angrep som er blant ligaens mest gjennomarbeidede. Kulda og underlaget kommer i tillegg, ikke i stedet for.",
+      "inPossessionShape": "3-5-2 med vingbacker som holder bredden",
+      "outOfPossessionShape": "5-3-2 som faller sammen i middels blokk",
+      "defensiveBlock": "Middels blokk",
+      "buildUpStyle": "Rolig bakfra med tre stoppere, opp gjennom skapte fordeler",
+      "attackingStyle": "Etablert angrep — bredde fra vingbackene, to spisser i boksen",
+      "tempo": "Kontrollert, stigende",
+      "riskLevel": "medium",
+      "baseStyleId": "possession_opponent",
       "matchupStyles": [
-        "deep_low_block",
-        "compact_532",
-        "narrow_442"
+        "three_at_back",
+        "build_from_back",
+        "wide_overload"
       ],
-      "pressResistance": 52,
-      "defensiveStructure": 76,
+      "pressResistance": 68,
+      "defensiveStructure": 66,
       "transitionThreat": 56,
-      "chanceConversion": 56,
+      "chanceConversion": 60,
       "styleTraits": {
-        "pressIntensity": 44,
+        "pressIntensity": 54,
         "transitionThreat": 56,
-        "defensiveCompactness": 78,
-        "highLine": 36,
-        "shortBuildUp": 40,
-        "possessionControl": 42,
-        "tacticalComplexity": 48,
-        "relationDemand": 44,
-        "intensity": 66
+        "defensiveCompactness": 62,
+        "highLine": 56,
+        "shortBuildUp": 70,
+        "possessionControl": 68,
+        "tacticalComplexity": 68,
+        "relationDemand": 64,
+        "intensity": 64
       },
       "strengths": [
-        "stenger midten fullstendig",
-        "løper mer enn du orker"
+        "tre stoppere gjør at de alltid har en fri mann i oppbyggingen",
+        "vingbackene strekker deg bredt før de går inn i boksen"
       ],
       "weaknesses": [
-        "gir fra seg alt av ball og territorium",
-        "skaper lite utenom dødballer"
+        "to spisser mot tre bakerst gir deg overtall i din egen oppbygging",
+        "rommet ved siden av vingbacken er alltid der"
       ],
       "vulnerableZones": [
-        "utsiden av blokken",
-        "bakre stolpe på innlegg"
+        "rommet bak vingbacken",
+        "kantsonen når de er etablert i angrep"
       ],
       "dangerZones": [
-        "egen boks på dødball",
-        "kontringer etter langvarig press"
+        "begge bokssider på innlegg",
+        "halvrommet mellom back og stopper"
       ],
       "keyBattles": [
-        "din bredde mot deres smale blokk",
-        "ditt restforsvar mot kontringene"
+        "din back mot vingbacken deres",
+        "dine stoppere mot to spisser i boksen"
       ],
       "pressurePoints": [
-        "bruk hele banens bredde",
-        "tålmodighet — ikke tving pasningen gjennom midten"
+        "press den frie stopperen så de må velge",
+        "angrip rommet vingbacken forlot"
       ],
       "managerHints": [
-        "Du får ballen i 70 minutter. Spørsmålet er om du har bredde nok.",
-        "Mister du den høyt oppe, går de rett i bakrommet ditt."
+        "Presser du ikke den tredje stopperen, får de bygge i fred hele kampen.",
+        "Bredden deres kommer fra vingbackene — tar du dem, tar du angrepet."
       ]
     }
   ]

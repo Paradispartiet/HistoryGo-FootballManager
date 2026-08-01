@@ -47,29 +47,61 @@ tradisjonelt har spilt.
 
 | Klubb | Spillestil | Hva du møter |
 |---|---|---|
-| Rosenborg | Godfoten | bredt 4-3-3, korte kombinasjoner, høy linje — rom bak backene |
-| Molde | Romsdalsk struktur | tålmodig posisjonsspill som går fort i det du glipper |
+| Rosenborg | Godfoten | bredt 4-3-3, kantene bryter gjennom, høye backer — rom bak sidene |
+| Molde | Romsdalsk struktur | tålmodig posisjonsspill i halvrommene som går fort i det du glipper |
 | Lillestrøm | Åråsen-kynisme | langt fram mot targetspissen, krig om andreballen, dødballer |
-| Brann | Bergensk temperament | direkte kantspill og innlegg, trykk som stiger med tribunen |
-| Vålerenga | Oslo-kampvilje | to jagende spisser, dueller og andreballer |
-| Viking | Siddis-solid | 5-3-2, kompakt bakover, direkte når ballen vinnes |
-| Tromsø | Nordlyskampen | lav og smal blokk; du får ballen i 70 minutter |
+| Brann | Fotballrepublikken | aggressivt høypress i 4-3-3, vertikalt rett etter gjenvinning |
+| Vålerenga | Bohemene | offensivt og dynamisk, midtbanen med i angrepet, konstant trykk |
+| Viking | Siddis-disiplin | 5-3-2 med korte avstander mellom leddene, direkte når ballen vinnes |
+| Tromsø | Nordlyset | 3-5-2, rolig oppbygging med tre stoppere, bredde fra vingbackene |
 
 Profilene er **stiliserte karakteristikker av spilletradisjon** — ikke påstander
 om dagens tropp eller trener. Det står i datafilas `note`.
 
-Første utgave ga Lillestrøm «Kanarifuglene»: raske vendinger og teknisk
-kombinasjonsspill, lest av 70-/80-tallslaget. Det var feil. LSK-tradisjonen er
-kynisk og fysisk: langt fram, dueller over hele banen, dødballer, og full vilje
-til å bryte rytmen. Profilen er rettet, og targetspill (`target_man_direct`) er
-nå LSKs signatur alene — Brann lever på bredde og trykk i stedet.
+### v2: slått opp i stedet for husket
+
+Første utgave av profilene var skrevet fra hukommelse, og fire av sju var skjeve.
+Lillestrøm ble rettet først: utgaven het «Kanarifuglene» og beskrev raske
+vendinger og teknisk kombinasjonsspill, lest av 70-/80-tallslaget. LSK-tradisjonen
+er kynisk og fysisk — langt fram, dueller over hele banen, dødballer.
+
+Så ble de seks andre slått opp:
+
+- **Vålerenga** var skrevet som et duell- og langballslag, altså nesten samme lag
+  som Lillestrøm. Kallenavnet **Bohemene** kom av fargerike spillertyper og en
+  *offensiv* spillestil: farlige angrep og konstant press på motstanderen,
+  angrep som går gjennom midtbanen med hurtig ballsirkulasjon. Viljen fra Oslos
+  østkant er ekte, men tradisjonen er offensiv fotball, ikke kynisk fotball.
+- **Tromsø** var skrevet som en lav, smal blokk. Det er nesten motsatt av TIL:
+  cupgullene i 1986 og 1996 og 3-2 mot Chelsea i snødrevet i 1997 ble tatt med
+  mot, og den moderne klubben spiller 3-5-2 med rolig besittelse, kontrollert
+  framrykk og et av ligaens mest gjennomarbeidede etablerte angrep.
+- **Brann** var «direkte kantspill». Temperamentet og hjemmebanen stemmer, men
+  den moderne signaturen er et *system*: aggressivt høypress i 4-3-3, backene
+  høyt opp i pressleddet, og en plan om å tvinge motstanderen til å slå langt i
+  midten der Brann er sterkest.
+- **Viking** var en lav blokk med langt framspill. Nærmere sannheten er et
+  innøvd apparat: Kjell Schou-Andreassen bygde de fire strake seriegullene på
+  daglig trening, detaljer, innøvde bevegelsesmønstre og hurtige, offensive
+  backer, og den moderne klubben har samme signatur — koordinerte ledd, korte
+  avstander, regulert aggressivitet, kontroll i halvrommene.
+- **Rosenborg** og **Molde** sto seg. RBK fikk lagt til at 4-3-3-en kom etter
+  Eggens møte med Rinus Michels og at det er kantspillerne som bryter gjennom;
+  Molde fikk halvrommene og de høye, brede backene inn i beskrivelsen.
+
+Konsekvens for tokenene: `target_man_direct` er LSKs signatur alene,
+`aggressive_man_press` er Branns, `two_striker_press` er Vålerengas, og
+`three_at_back` er Tromsøs. Ingen ligaklubb er lenger en ren lav blokk — Viking
+med `compact_532` + `narrow_442` er det nærmeste du kommer.
 
 Kampbriefen sier hvilken av delene du møter: «Klubbens spillestil» for en
 ligaklubb, «Historisk stil-motstander» for en arketyp i scenario eller
 mesterskap. Ellers ville det sett ut som Molde *er* en historisk skole.
 
 Målt over en hel sesong: **7 ulike spillestiler**, hver møtt hjemme og borte,
-13 ulike spillestil-tokens.
+15 ulike spillestil-tokens. Kjørt mot formasjonskunnskapens 46 formasjoner gir de
+sju klubbene sju *forskjellige* verste formasjoner — profilene er altså ulike
+også der motorene faktisk leser dem, ikke bare i teksten.
 
 ## Vakten
 
@@ -80,12 +112,20 @@ Målt over en hel sesong: **7 ulike spillestiler**, hver møtt hjemme og borte,
 - ingen profil peker på en historisk arketyp (`archetypeId` er forbudt)
 - ingen profil setter `strength` — nivået eies av klubben
 - ingen to klubber deler spillestil
+- ingen to klubber deler **matchupStyles** — ulikt navn er ikke nok, det er
+  fingeravtrykket motorene leser som må være unikt
+- hvert matchupStyles-token finnes i formasjonskunnskapens vokabular; en
+  skrivefeil scorer stille null i stedet for å si fra
+- etiketten i klubblista (`tacticalIdentity`) beskriver **samme fotball** som
+  profilen; Lillestrøm sto lenge med «raske vendinger» i lista mens profilen sa
+  langball og dueller, og spilleren ser etiketten først
 - sesongen byr på nøyaktig 7 stiler, hver møtt to ganger
 - app.js slår opp **klubbprofilen**, ikke klubb-id blant de generiske
 - kampbriefen skiller klubbstil fra historisk arketyp
 
 De tre siste er de som fanger hver sin utgave av feilen: den opprinnelige
-bugen, arketyp-rettingen, og presentasjonen.
+bugen, arketyp-rettingen, og presentasjonen. De tre nye fanger *sameness*: at
+klubbene bare later som de er forskjellige.
 
 ## Én ting til, ikke fikset
 

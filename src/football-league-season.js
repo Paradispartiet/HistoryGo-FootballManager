@@ -20,13 +20,13 @@ export const LEAGUE_COMPETITION = Object.freeze({
 // `tacticalIdentity` er den korte lesbare merkelappen; profilen i datafila er
 // den motoren faktisk regner på.
 export const LEAGUE_OPPONENT_PROFILES = Object.freeze([
-  { id: "valerenga", name: "Vålerenga", ground: "Intility Arena", strength: 74, form: 55, tacticalIdentity: "høyt press og dueller" },
-  { id: "brann", name: "Brann", ground: "Brann stadion", strength: 76, form: 58, tacticalIdentity: "direkte kantspill" },
+  { id: "valerenga", name: "Vålerenga", ground: "Intility Arena", strength: 74, form: 55, tacticalIdentity: "bohemene · offensivt trykk" },
+  { id: "brann", name: "Brann", ground: "Brann stadion", strength: 76, form: 58, tacticalIdentity: "høyt press og vertikale angrep" },
   { id: "rosenborg", name: "Rosenborg", ground: "Lerkendal", strength: 77, form: 56, tacticalIdentity: "godfoten · bredt 4-3-3" },
-  { id: "viking", name: "Viking", ground: "Lyse Arena", strength: 75, form: 57, tacticalIdentity: "solid bakover, direkte framover" },
-  { id: "lillestrom", name: "Lillestrøm", ground: "Åråsen", strength: 73, form: 53, tacticalIdentity: "raske vendinger" },
-  { id: "tromso", name: "Tromsø", ground: "Romssa Arena", strength: 72, form: 54, tacticalIdentity: "kompakt lav blokk" },
-  { id: "molde", name: "Molde", ground: "Aker stadion", strength: 78, form: 59, tacticalIdentity: "kontrollert posisjonsspill" }
+  { id: "viking", name: "Viking", ground: "Lyse Arena", strength: 75, form: 57, tacticalIdentity: "korte avstander, direkte når ballen vinnes" },
+  { id: "lillestrom", name: "Lillestrøm", ground: "Åråsen", strength: 73, form: 53, tacticalIdentity: "langball, dueller og andreballer" },
+  { id: "tromso", name: "Tromsø", ground: "Romssa Arena", strength: 72, form: 54, tacticalIdentity: "3-5-2 · rolig oppbygging, bredde fra vingbackene" },
+  { id: "molde", name: "Molde", ground: "Aker stadion", strength: 78, form: 59, tacticalIdentity: "kontrollert ballbesittelse i halvrommene" }
 ]);
 
 function hash(text) {
