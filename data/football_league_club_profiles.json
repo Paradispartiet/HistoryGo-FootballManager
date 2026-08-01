@@ -18,7 +18,11 @@
       "tempo": "Høyt",
       "riskLevel": "medium",
       "baseStyleId": "possession_opponent",
-      "matchupStyles": ["possession_positional", "wide_overload", "high_press"],
+      "matchupStyles": [
+        "possession_positional",
+        "wide_overload",
+        "high_press"
+      ],
       "pressResistance": 70,
       "defensiveStructure": 58,
       "transitionThreat": 58,
@@ -34,13 +38,34 @@
         "relationDemand": 78,
         "intensity": 66
       },
-      "strengths": ["kantene holder banen bred og trekker forsvaret fra hverandre", "samhandlingen gjør at tredjemann alltid er tilgjengelig"],
-      "weaknesses": ["høye backer gir rom bak sidene", "sårbare i overgang når midtbanen er passert"],
-      "vulnerableZones": ["rommet bak backene", "sonen foran egne stoppere ved balltap"],
-      "dangerZones": ["begge kantsoner", "bakre stolpe på innlegg"],
-      "keyBattles": ["dine backer mot kantene deres", "din sekser mot deres kombinasjonsspill"],
-      "pressurePoints": ["press dem når backen er høy", "bryt trekanten på midten"],
-      "managerHints": ["Bredde mot bredde koster deg midten — vurder en ekstra sentral.", "Vinner du ballen når backene er oppe, ligger rommet der."]
+      "strengths": [
+        "kantene holder banen bred og trekker forsvaret fra hverandre",
+        "samhandlingen gjør at tredjemann alltid er tilgjengelig"
+      ],
+      "weaknesses": [
+        "høye backer gir rom bak sidene",
+        "sårbare i overgang når midtbanen er passert"
+      ],
+      "vulnerableZones": [
+        "rommet bak backene",
+        "sonen foran egne stoppere ved balltap"
+      ],
+      "dangerZones": [
+        "begge kantsoner",
+        "bakre stolpe på innlegg"
+      ],
+      "keyBattles": [
+        "dine backer mot kantene deres",
+        "din sekser mot deres kombinasjonsspill"
+      ],
+      "pressurePoints": [
+        "press dem når backen er høy",
+        "bryt trekanten på midten"
+      ],
+      "managerHints": [
+        "Bredde mot bredde koster deg midten — vurder en ekstra sentral.",
+        "Vinner du ballen når backene er oppe, ligger rommet der."
+      ]
     },
     {
       "clubId": "brann",
@@ -57,7 +82,11 @@
       "tempo": "Høyt i perioder",
       "riskLevel": "high",
       "baseStyleId": "physical_set_piece_opponent",
-      "matchupStyles": ["wide_overload", "direct_counter", "target_man_direct"],
+      "matchupStyles": [
+        "wide_overload",
+        "direct_counter",
+        "fast_transition"
+      ],
       "pressResistance": 52,
       "defensiveStructure": 54,
       "transitionThreat": 68,
@@ -73,13 +102,34 @@
         "relationDemand": 50,
         "intensity": 74
       },
-      "strengths": ["innlegg i mengde mot en boks de fyller godt", "trykket stiger og river med seg kampen"],
-      "weaknesses": ["strukturen forvitrer når det går imot", "sliter med å bygge kort under press"],
-      "vulnerableZones": ["egen oppbygging under press", "midtbanen når kantene er høye"],
-      "dangerZones": ["begge felt for innlegg", "andreballer rundt boksen"],
-      "keyBattles": ["dine stoppere i lufta", "din sekser på andreballene"],
-      "pressurePoints": ["press oppbyggingen deres høyt", "ta bort tida på kant før innlegget"],
-      "managerHints": ["Vinn førsteballen i boksen, så dør angrepene deres.", "Får du stille kampen, stilner tribunen med den."]
+      "strengths": [
+        "innlegg i mengde mot en boks de fyller godt",
+        "trykket stiger og river med seg kampen"
+      ],
+      "weaknesses": [
+        "strukturen forvitrer når det går imot",
+        "sliter med å bygge kort under press"
+      ],
+      "vulnerableZones": [
+        "egen oppbygging under press",
+        "midtbanen når kantene er høye"
+      ],
+      "dangerZones": [
+        "begge felt for innlegg",
+        "andreballer rundt boksen"
+      ],
+      "keyBattles": [
+        "dine stoppere i lufta",
+        "din sekser på andreballene"
+      ],
+      "pressurePoints": [
+        "press oppbyggingen deres høyt",
+        "ta bort tida på kant før innlegget"
+      ],
+      "managerHints": [
+        "Vinn førsteballen i boksen, så dør angrepene deres.",
+        "Får du stille kampen, stilner tribunen med den."
+      ]
     },
     {
       "clubId": "valerenga",
@@ -96,7 +146,11 @@
       "tempo": "Høyt",
       "riskLevel": "high",
       "baseStyleId": "high_press_opponent",
-      "matchupStyles": ["two_striker_press", "direct_counter", "aggressive_man_press"],
+      "matchupStyles": [
+        "two_striker_press",
+        "direct_counter",
+        "aggressive_man_press"
+      ],
       "pressResistance": 50,
       "defensiveStructure": 60,
       "transitionThreat": 64,
@@ -112,13 +166,34 @@
         "relationDemand": 46,
         "intensity": 78
       },
-      "strengths": ["to spisser som jager stopperne dine hele kampen", "vinner andreballene og spiller på dem"],
-      "weaknesses": ["teknisk presisjon faller når tempoet stiger", "mannsorientert press åpner rom når det brytes"],
-      "vulnerableZones": ["rommet bak presset", "siderommene når spissene har jaget innover"],
-      "dangerZones": ["midtsonen på andreballer", "bakrommet rett etter balltap"],
-      "keyBattles": ["dine stoppere mot to jagende spisser", "din keeper som første oppspiller"],
-      "pressurePoints": ["spill deg forbi første pressledd, så er de åpne", "flytt ballen raskt til motsatt side"],
-      "managerHints": ["Har du en rolig oppbygger, får han avgjøre denne kampen.", "Tåler ikke laget presset, slå det over — ikke gjennom."]
+      "strengths": [
+        "to spisser som jager stopperne dine hele kampen",
+        "vinner andreballene og spiller på dem"
+      ],
+      "weaknesses": [
+        "teknisk presisjon faller når tempoet stiger",
+        "mannsorientert press åpner rom når det brytes"
+      ],
+      "vulnerableZones": [
+        "rommet bak presset",
+        "siderommene når spissene har jaget innover"
+      ],
+      "dangerZones": [
+        "midtsonen på andreballer",
+        "bakrommet rett etter balltap"
+      ],
+      "keyBattles": [
+        "dine stoppere mot to jagende spisser",
+        "din keeper som første oppspiller"
+      ],
+      "pressurePoints": [
+        "spill deg forbi første pressledd, så er de åpne",
+        "flytt ballen raskt til motsatt side"
+      ],
+      "managerHints": [
+        "Har du en rolig oppbygger, får han avgjøre denne kampen.",
+        "Tåler ikke laget presset, slå det over — ikke gjennom."
+      ]
     },
     {
       "clubId": "molde",
@@ -135,7 +210,11 @@
       "tempo": "Variabelt",
       "riskLevel": "medium",
       "baseStyleId": "possession_opponent",
-      "matchupStyles": ["possession_positional", "build_from_back", "switching_play"],
+      "matchupStyles": [
+        "possession_positional",
+        "build_from_back",
+        "switching_play"
+      ],
       "pressResistance": 74,
       "defensiveStructure": 64,
       "transitionThreat": 62,
@@ -151,13 +230,34 @@
         "relationDemand": 66,
         "intensity": 60
       },
-      "strengths": ["holder ballen til du bryter formen din", "straffer det første steget du tar feil"],
-      "weaknesses": ["kan bli for tålmodig mot en lav blokk", "få egne løp i bakrom når rommet er stengt"],
-      "vulnerableZones": ["rommet bak backene ved egen besittelse", "omstillingen etter eget balltap"],
-      "dangerZones": ["mellomrommet mellom ledd", "halvrommene innenfor backen din"],
-      "keyBattles": ["din midtbane mot deres tålmodighet", "dine backer mot halvromsløpene"],
-      "pressurePoints": ["hold formen, ikke jag ballen", "press i det de vender innover"],
-      "managerHints": ["Bryter du formen for å ta ballen, har de allerede vunnet.", "En lav og tålmodig blokk er ubehagelig for dem."]
+      "strengths": [
+        "holder ballen til du bryter formen din",
+        "straffer det første steget du tar feil"
+      ],
+      "weaknesses": [
+        "kan bli for tålmodig mot en lav blokk",
+        "få egne løp i bakrom når rommet er stengt"
+      ],
+      "vulnerableZones": [
+        "rommet bak backene ved egen besittelse",
+        "omstillingen etter eget balltap"
+      ],
+      "dangerZones": [
+        "mellomrommet mellom ledd",
+        "halvrommene innenfor backen din"
+      ],
+      "keyBattles": [
+        "din midtbane mot deres tålmodighet",
+        "dine backer mot halvromsløpene"
+      ],
+      "pressurePoints": [
+        "hold formen, ikke jag ballen",
+        "press i det de vender innover"
+      ],
+      "managerHints": [
+        "Bryter du formen for å ta ballen, har de allerede vunnet.",
+        "En lav og tålmodig blokk er ubehagelig for dem."
+      ]
     },
     {
       "clubId": "viking",
@@ -174,7 +274,11 @@
       "tempo": "Lavt til middels",
       "riskLevel": "low",
       "baseStyleId": "direct_counter_opponent",
-      "matchupStyles": ["compact_532", "direct_counter", "deep_low_block"],
+      "matchupStyles": [
+        "compact_532",
+        "direct_counter",
+        "deep_low_block"
+      ],
       "pressResistance": 58,
       "defensiveStructure": 74,
       "transitionThreat": 62,
@@ -190,52 +294,98 @@
         "relationDemand": 48,
         "intensity": 62
       },
-      "strengths": ["fem bakover som ikke rives fra hverandre", "straffer hvert balltap med et direkte framspill"],
-      "weaknesses": ["gir fra seg ballen og initiativet", "får lite ut av lang besittelse"],
-      "vulnerableZones": ["siderommene utenfor de tre stopperne", "rommet foran blokken"],
-      "dangerZones": ["bakrommet ditt ved eget angrep", "andreballer etter langspill"],
-      "keyBattles": ["dine kanter mot vingbackene", "ditt restforsvar mot det direkte framspillet"],
-      "pressurePoints": ["dra dem ut på sidene", "hold en mann ekstra bak ved eget angrep"],
-      "managerHints": ["Du får ballen — spørsmålet er hva du gjør med den.", "Uten restforsvar blir hvert eget angrep en risiko."]
+      "strengths": [
+        "fem bakover som ikke rives fra hverandre",
+        "straffer hvert balltap med et direkte framspill"
+      ],
+      "weaknesses": [
+        "gir fra seg ballen og initiativet",
+        "får lite ut av lang besittelse"
+      ],
+      "vulnerableZones": [
+        "siderommene utenfor de tre stopperne",
+        "rommet foran blokken"
+      ],
+      "dangerZones": [
+        "bakrommet ditt ved eget angrep",
+        "andreballer etter langspill"
+      ],
+      "keyBattles": [
+        "dine kanter mot vingbackene",
+        "ditt restforsvar mot det direkte framspillet"
+      ],
+      "pressurePoints": [
+        "dra dem ut på sidene",
+        "hold en mann ekstra bak ved eget angrep"
+      ],
+      "managerHints": [
+        "Du får ballen — spørsmålet er hva du gjør med den.",
+        "Uten restforsvar blir hvert eget angrep en risiko."
+      ]
     },
     {
       "clubId": "lillestrom",
-      "styleName": "Kanarifuglene",
-      "tacticalSchool": "Hurtig kombinasjonsspill på kunstgress",
-      "era": "1976–1989",
-      "style": "Raske kombinasjoner, vendinger og kantspill på et underlag som belønner tempo",
-      "historicalNote": "LSK var på sitt beste et teknisk lag som brukte underlaget: ballen gikk fort, vendingene kom tidlig, og kantene ble sluppet løs.",
-      "inPossessionShape": "4-3-3 med raske vendinger",
-      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "styleName": "Åråsen-kynisme",
+      "tacticalSchool": "Langt fram, dueller og andreballer",
+      "era": "tradisjon",
+      "style": "Kynisk og direkte — langt fram mot en targetspiss, og så krig om andreballen",
+      "historicalNote": "LSK har tradisjonelt vunnet på å gjøre kampen fysisk og lite pen: langt fram, dueller over hele banen, dødballer, og full vilje til å bryte rytmen når det passer dem.",
+      "inPossessionShape": "4-4-2 med langt framspill mot targetspissen",
+      "outOfPossessionShape": "4-4-2 i smal middels blokk",
       "defensiveBlock": "Middels blokk",
-      "buildUpStyle": "Korte, raske pasninger og tidlige vendinger",
-      "attackingStyle": "Vending til motsatt kant og løp i rommet",
-      "tempo": "Høyt",
-      "riskLevel": "medium",
-      "baseStyleId": "possession_opponent",
-      "matchupStyles": ["switching_play", "wide_overload", "fast_transition"],
-      "pressResistance": 64,
-      "defensiveStructure": 56,
-      "transitionThreat": 70,
-      "chanceConversion": 66,
+      "buildUpStyle": "Hopper over midtbanen — langt fram og krig om nedfallet",
+      "attackingStyle": "Andreballer, dødballer og direkte innlegg",
+      "tempo": "Brutt opp med vilje",
+      "riskLevel": "low",
+      "baseStyleId": "physical_set_piece_opponent",
+      "matchupStyles": [
+        "target_man_direct",
+        "passive_mid_block",
+        "direct_counter"
+      ],
+      "pressResistance": 44,
+      "defensiveStructure": 64,
+      "transitionThreat": 62,
+      "chanceConversion": 62,
       "styleTraits": {
-        "pressIntensity": 55,
-        "transitionThreat": 70,
-        "defensiveCompactness": 50,
-        "highLine": 58,
-        "shortBuildUp": 60,
-        "possessionControl": 58,
-        "tacticalComplexity": 58,
-        "relationDemand": 62,
-        "intensity": 64
+        "pressIntensity": 50,
+        "transitionThreat": 62,
+        "defensiveCompactness": 62,
+        "highLine": 44,
+        "shortBuildUp": 28,
+        "possessionControl": 36,
+        "tacticalComplexity": 42,
+        "relationDemand": 38,
+        "intensity": 72
       },
-      "strengths": ["vender spillet før du rekker å flytte deg", "kantene får ballen i fart"],
-      "weaknesses": ["blokken glir fra hverandre når tempoet faller", "lite tyngde sentralt"],
-      "vulnerableZones": ["sentralt foran eget forsvar", "rommet bak kantene når de er høye"],
-      "dangerZones": ["motsatt kant etter vending", "halvrommene i fart"],
-      "keyBattles": ["din back mot kanten i fart", "din sekser mot vendingene"],
-      "pressurePoints": ["steng vendingen, ikke ballen", "angrip sentralt der de er tynnest"],
-      "managerHints": ["Jager du ballen på én side, ligger den på den andre.", "Sentralt overtall gjør vondt på dette laget."]
+      "strengths": [
+        "eier lufta og andreballene rundt targetspissen",
+        "dødballer i mengde, og de er farlige på hver eneste"
+      ],
+      "weaknesses": [
+        "gir fra seg ballen og skaper lite når langballen ikke fester",
+        "få løsninger hvis du vinner førsteballen"
+      ],
+      "vulnerableZones": [
+        "bakrommet når langballen er slått og de er høye",
+        "siderommene utenfor den smale blokken"
+      ],
+      "dangerZones": [
+        "nedfallssonen rundt targetspissen",
+        "egen boks på hver dødball"
+      ],
+      "keyBattles": [
+        "dine stoppere mot targetspissen i lufta",
+        "din sekser på andreballene"
+      ],
+      "pressurePoints": [
+        "vinn førsteballen, så har de ingen plan B",
+        "gi dem færrest mulig dødballer"
+      ],
+      "managerHints": [
+        "Har du ikke en stopper som eier lufta, taper du denne kampen i nedfallssonen.",
+        "De vil at kampen skal bli stygg og oppstykket. Ikke bli med på det."
+      ]
     },
     {
       "clubId": "tromso",
@@ -252,7 +402,11 @@
       "tempo": "Lavt",
       "riskLevel": "low",
       "baseStyleId": "low_block_opponent",
-      "matchupStyles": ["deep_low_block", "compact_532", "narrow_442"],
+      "matchupStyles": [
+        "deep_low_block",
+        "compact_532",
+        "narrow_442"
+      ],
       "pressResistance": 52,
       "defensiveStructure": 76,
       "transitionThreat": 56,
@@ -268,13 +422,34 @@
         "relationDemand": 44,
         "intensity": 66
       },
-      "strengths": ["stenger midten fullstendig", "løper mer enn du orker"],
-      "weaknesses": ["gir fra seg alt av ball og territorium", "skaper lite utenom dødballer"],
-      "vulnerableZones": ["utsiden av blokken", "bakre stolpe på innlegg"],
-      "dangerZones": ["egen boks på dødball", "kontringer etter langvarig press"],
-      "keyBattles": ["din bredde mot deres smale blokk", "ditt restforsvar mot kontringene"],
-      "pressurePoints": ["bruk hele banens bredde", "tålmodighet — ikke tving pasningen gjennom midten"],
-      "managerHints": ["Du får ballen i 70 minutter. Spørsmålet er om du har bredde nok.", "Mister du den høyt oppe, går de rett i bakrommet ditt."]
+      "strengths": [
+        "stenger midten fullstendig",
+        "løper mer enn du orker"
+      ],
+      "weaknesses": [
+        "gir fra seg alt av ball og territorium",
+        "skaper lite utenom dødballer"
+      ],
+      "vulnerableZones": [
+        "utsiden av blokken",
+        "bakre stolpe på innlegg"
+      ],
+      "dangerZones": [
+        "egen boks på dødball",
+        "kontringer etter langvarig press"
+      ],
+      "keyBattles": [
+        "din bredde mot deres smale blokk",
+        "ditt restforsvar mot kontringene"
+      ],
+      "pressurePoints": [
+        "bruk hele banens bredde",
+        "tålmodighet — ikke tving pasningen gjennom midten"
+      ],
+      "managerHints": [
+        "Du får ballen i 70 minutter. Spørsmålet er om du har bredde nok.",
+        "Mister du den høyt oppe, går de rett i bakrommet ditt."
+      ]
     }
   ]
 }

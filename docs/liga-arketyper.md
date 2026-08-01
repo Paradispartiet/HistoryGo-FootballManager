@@ -49,7 +49,7 @@ tradisjonelt har spilt.
 |---|---|---|
 | Rosenborg | Godfoten | bredt 4-3-3, korte kombinasjoner, høy linje — rom bak backene |
 | Molde | Romsdalsk struktur | tålmodig posisjonsspill som går fort i det du glipper |
-| Lillestrøm | Kanarifuglene | raske vendinger og kantspill; tynne sentralt |
+| Lillestrøm | Åråsen-kynisme | langt fram mot targetspissen, krig om andreballen, dødballer |
 | Brann | Bergensk temperament | direkte kantspill og innlegg, trykk som stiger med tribunen |
 | Vålerenga | Oslo-kampvilje | to jagende spisser, dueller og andreballer |
 | Viking | Siddis-solid | 5-3-2, kompakt bakover, direkte når ballen vinnes |
@@ -57,6 +57,12 @@ tradisjonelt har spilt.
 
 Profilene er **stiliserte karakteristikker av spilletradisjon** — ikke påstander
 om dagens tropp eller trener. Det står i datafilas `note`.
+
+Første utgave ga Lillestrøm «Kanarifuglene»: raske vendinger og teknisk
+kombinasjonsspill, lest av 70-/80-tallslaget. Det var feil. LSK-tradisjonen er
+kynisk og fysisk: langt fram, dueller over hele banen, dødballer, og full vilje
+til å bryte rytmen. Profilen er rettet, og targetspill (`target_man_direct`) er
+nå LSKs signatur alene — Brann lever på bredde og trykk i stedet.
 
 Kampbriefen sier hvilken av delene du møter: «Klubbens spillestil» for en
 ligaklubb, «Historisk stil-motstander» for en arketyp i scenario eller
