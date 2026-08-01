@@ -5709,8 +5709,28 @@ function getMiniSeasonNextOpponent() {
   if (isLeagueModeActive()) {
     const opponent = getNextLeagueOpponent(state.leagueSeason);
     if (!opponent) return null;
-    const base = OPPONENT_PROFILES.find((profile) => profile.id === opponent.id) || OPPONENT_PROFILES[0];
-    return { ...base, id: opponent.id, name: opponent.name, displayName: opponent.name, strength: opponent.strength, homeAway: opponent.homeAway, ground: opponent.ground };
+    // Klubben eier identiteten, arketypen eier fotballen.
+    //
+    // Her lette koden før etter klubb-id-en (`molde`, `brann` …) blant de fem
+    // GENERISKE profilene, som heter `high_press_opponent` og lignende. Den
+    // kunne aldri treffe, så `|| OPPONENT_PROFILES[0]` slo inn hver gang: alle
+    // fjorten serierunder ble spilt mot samme profil med byttet navnelapp.
+    const base =
+      getHistoricalOpponentProfile(opponent.archetypeId) ||
+      OPPONENT_PROFILES.find((profile) => profile.id === opponent.archetypeId) ||
+      OPPONENT_PROFILES[0];
+    return {
+      ...base,
+      id: opponent.id,
+      name: opponent.name,
+      displayName: opponent.name,
+      // Klubbens egen styrke gjelder — arketypen leverer stilen, ikke nivået.
+      strength: opponent.strength,
+      homeAway: opponent.homeAway,
+      ground: opponent.ground,
+      tacticalIdentity: opponent.tacticalIdentity,
+      archetypeId: opponent.archetypeId || null
+    };
   }
   const match = getCurrentMiniSeasonMatch(state.miniSeason);
   if (!match) {

@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { createLeagueSeason, createLeagueTable, completeLeagueRound, getNextLeagueOpponent, startNextLeagueSeason, normalizeLeagueSeason } from "../src/football-league-season.js";
+import { createLeagueSeason, createLeagueTable, completeLeagueRound, getNextLeagueOpponent, startNextLeagueSeason, normalizeLeagueSeason, LEAGUE_OPPONENT_PROFILES } from "../src/football-league-season.js";
+import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
+import fs from "node:fs";
 
 const managerClub = { id: "manager-fk", name: "Manager FK", ground: "Klubbankeret", strength: 75, form: 55, tacticalIdentity: "managerens valg" };
 const fresh = () => createLeagueSeason({ managerClub, seed: "qa-seed" });
@@ -36,4 +38,59 @@ assert.equal(played.status, "completed"); assert.equal(played.currentRound, 14);
 assert.deepEqual(normalizeLeagueSeason(JSON.parse(JSON.stringify(played))), played);
 const next = startNextLeagueSeason(played); assert.equal(next.status, "active"); assert.equal(next.currentRound, 1); assert.equal(createLeagueTable(next).every((row) => row.played === 0), true); assert.equal(next.managerClubId, played.managerClubId);
 assert.deepEqual(next.clubs, played.clubs); assert.notDeepEqual(next.fixtures, played.fixtures);
-console.log(JSON.stringify({ ok: true, clubs: 8, rounds: 14, matches: 56, completed: played.completedMatchIds.length }, null, 2));
+
+// ---------------------------------------------------------------------------
+// Ligaen skal være fotball, ikke aritmetikk
+//
+// Hver klubb spiller en historisk taktisk skole. Dette steget måler at en HEL
+// sesong faktisk byr på ulike motstandere — det er den målingen som mangler
+// når feilen er «alt ser riktig ut, men alle er like».
+//
+// Feilen den ville fanget: oppslaget i app.js lette etter klubb-id-en blant de
+// fem GENERISKE profilene (`high_press_opponent` …), der en klubb-id aldri kan
+// finnes. Fallbacken slo derfor inn hver eneste gang, og alle fjorten runder
+// ble spilt mot samme profil med byttet navnelapp. Ingen feilmelding, ingen
+// rød vakt — bare en sesong uten variasjon.
+// ---------------------------------------------------------------------------
+for (const club of LEAGUE_OPPONENT_PROFILES) {
+  assert.ok(club.archetypeId, `${club.name} mangler archetypeId`);
+  assert.ok(getHistoricalOpponentProfile(club.archetypeId), `${club.name} peker på en arketype som ikke finnes: ${club.archetypeId}`);
+}
+assert.equal(
+  new Set(LEAGUE_OPPONENT_PROFILES.map((club) => club.archetypeId)).size,
+  LEAGUE_OPPONENT_PROFILES.length,
+  "to ligaklubber deler taktisk skole — da mister sesongen variasjon"
+);
+
+// Gå gjennom en hel sesong og se hvem du faktisk møter.
+const schools = new Map();
+const styleTokens = new Set();
+let walk = fresh();
+for (let round = 1; round <= 14; round += 1) {
+  const opponent = getNextLeagueOpponent(walk);
+  assert.ok(opponent, `runde ${round} har ingen motstander`);
+  const profile = getHistoricalOpponentProfile(opponent.archetypeId);
+  assert.ok(profile, `runde ${round}: ${opponent.name} har ingen arketypeprofil`);
+  schools.set(profile.id, (schools.get(profile.id) || 0) + 1);
+  profile.matchupStyles.forEach((token) => styleTokens.add(token));
+  walk = completeLeagueRound(walk, { score: { for: 1, against: 1 } });
+}
+assert.equal(schools.size, 7, `sesongen bød på ${schools.size} ulike taktiske skoler, ikke 7`);
+for (const [id, count] of schools) assert.equal(count, 2, `${id} møtes ${count} ganger, ikke to (hjemme + borte)`);
+assert.ok(styleTokens.size >= 8, `bare ${styleTokens.size} ulike spillestil-tokens i sesongen`);
+
+// Og at app.js faktisk slår opp arketypen — ikke klubb-id-en.
+const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
+assert.ok(
+  /getHistoricalOpponentProfile\(opponent\.archetypeId\)/.test(app),
+  "app.js slår ikke opp ligamotstanderens arketype"
+);
+assert.ok(
+  !/OPPONENT_PROFILES\.find\(\(profile\) => profile\.id === opponent\.id\)/.test(app),
+  "app.js leter fortsatt etter klubb-id blant de generiske profilene — den kan aldri treffe"
+);
+
+console.log(JSON.stringify({
+  ok: true, clubs: 8, rounds: 14, matches: 56, completed: played.completedMatchIds.length,
+  taktiskeSkolerPerSesong: schools.size, spillestilTokens: styleTokens.size
+}, null, 2));
