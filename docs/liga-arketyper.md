@@ -89,6 +89,24 @@ Så ble de seks andre slått opp:
   Eggens møte med Rinus Michels og at det er kantspillerne som bryter gjennom;
   Molde fikk halvrommene og de høye, brede backene inn i beskrivelsen.
 
+### Regelen når kilden er tynn: gå til storhetstiden
+
+Norske klubbers *taktiske* tradisjon er dårligere dokumentert enn europeiske
+storlags. Når kilden ikke rekker, er regelen å ta utgangspunkt i **storhetstiden
+— den da klubben faktisk vant**, ikke i et generelt inntrykk av klubben. Det er
+nettopp det generelle inntrykket som lot Vålerenga og Lillestrøm gli sammen til
+det samme duellslaget.
+
+Derfor må `era` navngi et konkret årstall. «tradisjon» er ikke en epoke, det er
+en unnvikelse, og `sim:league-season` avviser den nå. Lillestrøm sto med
+«tradisjon» og har fått 1976–1989 (fire seriegull); Brann har fått 1961–1963.
+
+Brann er den ene der de to reglene peker hver sin vei, og det står i profilen:
+storhetstiden er Oddvar Hansens seriegull i 1961/62 og 1963 med Roald «Kniksen»
+Jensen foran 15 000 på Stadion — mens den dokumenterte *taktikken* tilhører
+pressutgaven fra 2022. Profilen bruker den moderne fotballen og lar Kniksen-arven
+forklare hvorfor klubben er slik: publikum og enkeltspilleren avgjør.
+
 Konsekvens for tokenene: `target_man_direct` er LSKs signatur alene,
 `aggressive_man_press` er Branns, `two_striker_press` er Vålerengas, og
 `three_at_back` er Tromsøs. Ingen ligaklubb er lenger en ren lav blokk — Viking

@@ -89,6 +89,17 @@ assert.equal(
   "to ligaklubber har identisk matchupStyles — ulikt navn, samme fotball"
 );
 
+// Er du usikker på hvordan en klubb spilte, ta utgangspunkt i storhetstiden —
+// den da de faktisk vant. «tradisjon» er ikke en epoke, det er en unnvikelse:
+// det er nettopp den formuleringen som lot Vålerenga og Lillestrøm gli sammen
+// til det samme duellslaget. Derfor må hver profil peke på et konkret årstall.
+for (const club of LEAGUE_OPPONENT_PROFILES) {
+  assert.ok(
+    /\b(18|19|20)\d{2}\b/.test(String(clubProfiles.get(club.id).era)),
+    `${club.name}: era «${clubProfiles.get(club.id).era}» navngir ingen storhetstid`
+  );
+}
+
 // Hvert token må finnes i formasjonskunnskapens vokabular. En skrivefeil her gir
 // ingen feilmelding — matchupen scorer bare stille null på det tokenet.
 const styleVocab = new Set(
