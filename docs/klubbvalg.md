@@ -167,12 +167,29 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Bodø/Glimt | Aspmyra | 6 |
 | Molde | Aker stadion | 6 |
 | Brann | Brann Stadion | 4 |
+| Viking | Lyse Arena | 3 |
+| Tromsø | Romssa Arena | 3 |
 | Vålerenga | Intility Arena | 3 |
 | Lillestrøm | Åråsen | 3 |
 | Stabæk | Nadderud | 3 |
+| Start | Sparebanken Sør Arena | 1 |
+| Aalesund | Color Line Stadion | 1 |
+| Fredrikstad, Sarpsborg 08, Kristiansund, HamKam, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-De øvrige 52 klubbene har ingen bane i History Go ennå. Profilen sier det rett
-ut i stedet for å late som — du får grunntroppen og samler videre.
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk. De 43 klubbene i OBOS og
+2. divisjon har det ikke, og profilen sier det rett ut i stedet for å late som —
+du får grunntroppen og samler videre.
+
+Seks klubber har bane men ingen navn i katalogen. Det er et bevisst valg:
+søkene ga ikke pålitelige legendelister for de minste klubbene, og et halvhusket
+navn med gal posisjon er verre enn et ærlig «ingen historiske spillere i
+katalogen ennå». Alle navnene som ER lagt inn har fått posisjonen slått opp —
+Kvia (midtbane), Nevland (spiss), Hangeland (midtstopper), Rushfeldt (spiss),
+Gamst Pedersen (venstreving), Årst (spiss), Mykland (midtbane).
+
+Brede Hangeland lå allerede på Ullevaal som landslagsspiller. Han kom gjennom
+Viking, så han står nå på begge steder — og fordi han har en landslagsarena i
+`sourcePlaceIds`, holdes han fortsatt utenfor grunntroppene.
 
 ### Grunntroppen er et gulv, ikke en snarvei
 

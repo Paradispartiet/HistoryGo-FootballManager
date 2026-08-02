@@ -100,7 +100,8 @@
       "city": "Stavanger",
       "tier": "eliteserien",
       "strength": 82,
-      "form": 55
+      "form": 55,
+      "homePlaceId": "lyse_arena"
     },
     {
       "id": "brann",
@@ -139,7 +140,8 @@
       "city": "Tromsø",
       "tier": "eliteserien",
       "strength": 76,
-      "form": 60
+      "form": 60,
+      "homePlaceId": "romssa_arena"
     },
     {
       "id": "fredrikstad",
@@ -148,7 +150,8 @@
       "city": "Fredrikstad",
       "tier": "eliteserien",
       "strength": 74,
-      "form": 58
+      "form": 58,
+      "homePlaceId": "fredrikstad_stadion"
     },
     {
       "id": "valerenga",
@@ -177,7 +180,8 @@
       "city": "Sarpsborg",
       "tier": "eliteserien",
       "strength": 72,
-      "form": 56
+      "form": 56,
+      "homePlaceId": "sarpsborg_stadion"
     },
     {
       "id": "kristiansund",
@@ -186,7 +190,8 @@
       "city": "Kristiansund",
       "tier": "eliteserien",
       "strength": 71,
-      "form": 55
+      "form": 55,
+      "homePlaceId": "nordmore_stadion"
     },
     {
       "id": "start",
@@ -195,7 +200,8 @@
       "city": "Kristiansand",
       "tier": "eliteserien",
       "strength": 71,
-      "form": 55
+      "form": 55,
+      "homePlaceId": "sor_arena"
     },
     {
       "id": "aalesund",
@@ -204,7 +210,8 @@
       "city": "Ålesund",
       "tier": "eliteserien",
       "strength": 71,
-      "form": 55
+      "form": 55,
+      "homePlaceId": "color_line_stadion"
     },
     {
       "id": "hamkam",
@@ -213,7 +220,8 @@
       "city": "Hamar",
       "tier": "eliteserien",
       "strength": 70,
-      "form": 54
+      "form": 54,
+      "homePlaceId": "briskeby_stadion"
     },
     {
       "id": "sandefjord",
@@ -222,7 +230,8 @@
       "city": "Sandefjord",
       "tier": "eliteserien",
       "strength": 70,
-      "form": 54
+      "form": 54,
+      "homePlaceId": "jotun_arena"
     },
     {
       "id": "kfum",

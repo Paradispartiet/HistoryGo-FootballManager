@@ -42,6 +42,33 @@ for (const club of withGround) {
 }
 check("ingen to klubber deler bane", new Set(withGround.map((club) => club.homePlaceId)).size === withGround.length);
 
+// Et sted som låser opp en spiller må stå i spillerens EGNE sourcePlaceIds.
+// Ellers lyver stedet: unlocken lover en spiller som aldri dukker opp som
+// klubbarv, fordi arven leses fra spilleren. Gikk rett på den da Brede
+// Hangeland ble lagt til Vikings bane mens han bare pekte på Ullevaal.
+const playerById = new Map(players.map((player) => [player.id, player]));
+for (const place of placeUnlocks) {
+  for (const unlock of place.unlocks || []) {
+    if (!/player/.test(unlock.type || "")) continue;
+    const player = playerById.get(unlock.targetId);
+    check(`${place.placeId}: «${unlock.targetId}» finnes i spillerkatalogen`, Boolean(player));
+    if (!player) continue;
+    check(`${place.placeId}: «${player.name}» peker tilbake på stedet`,
+      (player.sourcePlaceIds || []).includes(place.placeId),
+      (player.sourcePlaceIds || []).join(", "));
+  }
+}
+
+// Og motsatt vei: en klubbs arvespillere må faktisk låses opp av banen, ellers
+// er de synlige i lista men ikke samlebare.
+for (const club of clubs.filter((entry) => entry.homePlaceId)) {
+  const place = placeUnlocks.find((entry) => entry.placeId === club.homePlaceId);
+  const unlocked = new Set((place?.unlocks || []).filter((u) => /player/.test(u.type || "")).map((u) => u.targetId));
+  for (const player of listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players })) {
+    check(`${club.name}: «${player.name}» låses faktisk opp av banen`, unlocked.has(player.id));
+  }
+}
+
 // ---------------------------------------------------------------------------
 // 2. Arven utledes av data som allerede fantes
 //

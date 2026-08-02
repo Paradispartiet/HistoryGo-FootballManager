@@ -984,7 +984,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "ullevaal_stadion"
+        "ullevaal_stadion",
+        "lyse_arena"
       ],
       "overall": 93,
       "naturalPositions": [
@@ -3157,6 +3158,425 @@
         "constant_man_marking_wide"
       ],
       "warningWhenMisused": "Skjønsberg vil ha en tydelig markeringsplan og støtte bak."
+    },
+    {
+      "id": "svein_kvia",
+      "name": "Svein Kvia",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lyse_arena"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CM",
+        "DM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "balancing_six",
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "controller",
+        "stamina",
+        "leader",
+        "club_professional"
+      ],
+      "strengths": [
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "leadership",
+        "duels",
+        "running_power"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "box_to_box",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "compact_shape",
+        "organised_defence"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "constant_pressing_chaos",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Uten en tydelig oppgave på midtbanen forsvinner han i rollen — han levde på struktur, ikke improvisasjon."
+    },
+    {
+      "id": "erik_nevland",
+      "name": "Erik Nevland",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lyse_arena"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "channel_runner"
+      ],
+      "archetypes": [
+        "movement",
+        "finisher",
+        "link_player",
+        "runner"
+      ],
+      "strengths": [
+        "movement",
+        "runs_behind",
+        "box_finishing",
+        "off_ball_runs",
+        "link_play",
+        "first_touch"
+      ],
+      "needs": [
+        "runners_around",
+        "space_behind",
+        "early_through_balls"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "linking_striker",
+        "channel_runner"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "space_behind",
+        "vertical_play"
+      ],
+      "dislikesTactics": [
+        "deep_block_no_space",
+        "back_to_goal_striker",
+        "isolated_striker"
+      ],
+      "warningWhenMisused": "Låser du ham som ren målspiss med ryggen til, tar du fra ham løpene han levde av."
+    },
+    {
+      "id": "sigurd_rushfeldt",
+      "name": "Sigurd Rushfeldt",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "heading",
+        "positioning",
+        "hold_up_play"
+      ],
+      "needs": [
+        "box_service",
+        "crosses",
+        "supporting_runners"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "target_striker",
+        "advanced_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "box_service",
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "no_crosses",
+        "isolated_front"
+      ],
+      "warningWhenMisused": "Uten innlegg og tilførsel i boksen står han stille — han levde på service, ikke på å skape selv."
+    },
+    {
+      "id": "morten_gamst_pedersen",
+      "name": "Morten Gamst Pedersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "AM",
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "wide_creator",
+        "crossing",
+        "creator",
+        "dribbler"
+      ],
+      "strengths": [
+        "crossing",
+        "final_pass",
+        "dribbling",
+        "wide_movement",
+        "passing_range",
+        "chance_creation"
+      ],
+      "needs": [
+        "wide_lane",
+        "runners_inside",
+        "time_on_ball"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger",
+        "classic_ten"
+      ],
+      "likesTactics": [
+        "high_width",
+        "crossing",
+        "wide_attacks"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Klemmer du ham inn i en smal form, forsvinner både innlegget og siste pasning."
+    },
+    {
+      "id": "ole_martin_arst",
+      "name": "Ole Martin Årst",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "RB"
+      ],
+      "archetypeIds": [
+        "linking_nine"
+      ],
+      "archetypes": [
+        "link_player",
+        "finisher",
+        "movement",
+        "composure"
+      ],
+      "strengths": [
+        "link_play",
+        "box_finishing",
+        "hold_up_play",
+        "first_touch",
+        "composure"
+      ],
+      "needs": [
+        "close_support",
+        "runners_around",
+        "central_support"
+      ],
+      "preferredRoles": [
+        "linking_striker",
+        "advanced_forward",
+        "false_nine"
+      ],
+      "likesTactics": [
+        "central_combinations",
+        "possession",
+        "close_support"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_striker",
+        "clearance_only"
+      ],
+      "warningWhenMisused": "Alene på topp uten støtte blir han en spiss uten fotball — han er et bindeledd først."
+    },
+    {
+      "id": "erik_mykland",
+      "name": "Erik Mykland",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "overall": 92,
+      "naturalPositions": [
+        "AM",
+        "CM"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "tempo_setter",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "tempo_control",
+        "combination_play",
+        "composure"
+      ],
+      "needs": [
+        "time_on_ball",
+        "passing_options",
+        "technical_teammates",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations",
+        "creative_freedom"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "constant_second_balls",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Tar du fra ham tid på ballen og friheten, tar du fra ham alt han var."
+    },
+    {
+      "id": "tor_hogne_aaroy",
+      "name": "Tor Hogne Aarøy",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "color_line_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "RB"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "target",
+        "aerial",
+        "box_presence",
+        "power"
+      ],
+      "strengths": [
+        "heading",
+        "hold_up_play",
+        "physical_presence",
+        "box_presence",
+        "strength"
+      ],
+      "needs": [
+        "crosses",
+        "second_ball_support",
+        "box_service"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "direct_play",
+        "second_balls",
+        "box_service"
+      ],
+      "dislikesTactics": [
+        "no_crosses",
+        "slow_possession_without_width",
+        "no_service"
+      ],
+      "warningWhenMisused": "Uten innlegg og andreballer rundt seg blir en targetspiss stående alene i boksen."
     }
   ]
 }

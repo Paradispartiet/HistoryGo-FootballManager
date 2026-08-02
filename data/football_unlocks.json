@@ -585,6 +585,105 @@
         }
       ],
       "notes": "Klubbanlegg: Stabæks hjemmebane i Bærum."
+    },
+    {
+      "placeId": "lyse_arena",
+      "placeName": "Lyse Arena",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "svein_kvia"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_nevland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brede_hangeland"
+        }
+      ],
+      "notes": "Klubbanlegg: Vikings hjemmebane i Stavanger."
+    },
+    {
+      "placeId": "romssa_arena",
+      "placeName": "Romssa Arena",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "sigurd_rushfeldt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_gamst_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_martin_arst"
+        }
+      ],
+      "notes": "Klubbanlegg: Tromsøs hjemmebane, nordligste toppklubbanlegg i Norge."
+    },
+    {
+      "placeId": "sor_arena",
+      "placeName": "Sparebanken Sør Arena",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "erik_mykland"
+        }
+      ],
+      "notes": "Klubbanlegg: Starts hjemmebane i Kristiansand."
+    },
+    {
+      "placeId": "color_line_stadion",
+      "placeName": "Color Line Stadion",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "tor_hogne_aaroy"
+        }
+      ],
+      "notes": "Klubbanlegg: Aalesunds hjemmebane på Sunnmøre."
+    },
+    {
+      "placeId": "fredrikstad_stadion",
+      "placeName": "Fredrikstad stadion",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [],
+      "notes": "Klubbanlegg: hjemmebanen til Norges mest titteltunge klubb på 1950-tallet."
+    },
+    {
+      "placeId": "sarpsborg_stadion",
+      "placeName": "Sarpsborg stadion",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [],
+      "notes": "Klubbanlegg: Sarpsborg 08s hjemmebane i Østfold."
+    },
+    {
+      "placeId": "nordmore_stadion",
+      "placeName": "Nordmøre stadion",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [],
+      "notes": "Klubbanlegg: Kristiansunds hjemmebane på Nordmøre."
+    },
+    {
+      "placeId": "briskeby_stadion",
+      "placeName": "Briskeby",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [],
+      "notes": "Klubbanlegg: HamKams hjemmebane på Hamar."
+    },
+    {
+      "placeId": "jotun_arena",
+      "placeName": "Jotun Arena",
+      "placeRole": "modern_club_ground_source",
+      "unlocks": [],
+      "notes": "Klubbanlegg: Sandefjords hjemmebane i Vestfold."
     }
   ]
 }
