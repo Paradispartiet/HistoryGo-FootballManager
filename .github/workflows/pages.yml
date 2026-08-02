@@ -41,6 +41,9 @@ jobs:
       - name: Audit seriepyramiden (nivåer, klubber, opp-/nedrykk)
         run: npm run audit:clubs
 
+      - name: Audit CI-dekning (kjører suiten faktisk alt?)
+        run: npm run audit:ci-coverage
+
       - name: Check DOM ids (UI-lim)
         run: npm run check:syntax
 

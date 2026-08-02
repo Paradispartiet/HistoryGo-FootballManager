@@ -53,7 +53,9 @@
     "sim:training-plan": "node scripts/simulate-training-plan.mjs",
     "sim:individual-training": "node scripts/simulate-individual-training.mjs",
     "sim:player-weaknesses": "node scripts/simulate-player-weaknesses.mjs",
-    "audit:clubs": "node scripts/audit-clubs.mjs"
+    "audit:clubs": "node scripts/audit-clubs.mjs",
+    "sim:league-playoff": "node scripts/simulate-league-playoff.mjs",
+    "audit:ci-coverage": "node scripts/audit-ci-coverage.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

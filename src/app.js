@@ -83,12 +83,23 @@ import {
   LEAGUE_SEASON_VERSION,
   createLeagueSeason,
   DEFAULT_LEAGUE_TIER,
+  isPlayoffPending,
+  resolveLeagueOutcome,
   normalizeLeagueSeason,
   getNextLeagueOpponent,
   completeLeagueRound,
   createLeagueTable,
   startNextLeagueSeason
 } from "./football-league-season.js";
+import {
+  createLeaguePlayoff,
+  completePlayoffLeg,
+  resolveLeaguePlayoff,
+  describePlayoff,
+  getPlayoffMatchdayOpponent,
+  normalizeLeaguePlayoff,
+  LEAGUE_PLAYOFF_VERSION
+} from "./football-league-playoff.js";
 import {
   TOURNAMENT_STAGE_LABELS,
   createTournament,
@@ -334,6 +345,7 @@ const MATCHDAY_STATE_KEY = "hgfm.matchday.v1";
 // økonomi eller ny kampmotor. Selve logikken ligger i football-mini-season.js.
 const MINI_SEASON_KEY = MINI_SEASON_VERSION;
 const LEAGUE_SEASON_KEY = LEAGUE_SEASON_VERSION;
+const LEAGUE_PLAYOFF_KEY = LEAGUE_PLAYOFF_VERSION;
 const FIRST_TIME_PLAYTHROUGH_KEY = "hgfm.firstTimePlaythrough.v1";
 const GAME_START_STATE_KEY = "hgfm.gameStartState.v1";
 // Onboarding v2: egen startskjerm. `onboarded` = spilleren har valgt spillmodus
@@ -434,6 +446,9 @@ const state = {
   // Seriepyramiden: { tiers, clubs }. Tom pyramide betyr at motoren faller
   // tilbake på standardnivået — spillet står ikke, men karrierestigen mangler.
   leaguePyramid: { tiers: [], clubs: [] },
+  // Aktiv kvalifisering (opp-/nedrykkskamper). Null når sesongen ikke endte på
+  // en kvalifiseringsplass.
+  leaguePlayoff: null,
   // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
   clubWeekState: null,
   // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
@@ -5464,6 +5479,55 @@ function saveLeagueSeason() {
   } catch (_) { /* memory-only fallback */ }
 }
 
+function loadLeaguePlayoff() {
+  try { return normalizeLeaguePlayoff(JSON.parse(localStorage.getItem(LEAGUE_PLAYOFF_KEY))); }
+  catch (_) { return null; }
+}
+
+function saveLeaguePlayoff() {
+  try {
+    if (state.leaguePlayoff) localStorage.setItem(LEAGUE_PLAYOFF_KEY, JSON.stringify(state.leaguePlayoff));
+    else localStorage.removeItem(LEAGUE_PLAYOFF_KEY);
+  } catch (_) { /* memory-only fallback */ }
+}
+
+// Sesongen endte på en kvalifiseringsplass: sett opp kampene. Idempotent på
+// sesongnummer, så en omlasting aldri lager kvalifiseringen på nytt.
+function ensureLeaguePlayoff() {
+  const season = state.leagueSeason;
+  if (!season || season.status !== "completed") return;
+  if (state.leaguePlayoff) return;
+  if (!isPlayoffPending(season)) return;
+
+  const outcome = resolveLeagueOutcome(season);
+  const playoff = createLeaguePlayoff({
+    outcome: { ...outcome, seasonNumber: season.seasonNumber },
+    managerClub: season.clubs.find((club) => club.id === season.managerClubId),
+    allClubs: state.leaguePyramid?.clubs || [],
+    tiers: state.leaguePyramid?.tiers || [],
+    seed: `${season.seed}-kval-${season.seasonNumber}`
+  });
+  if (!playoff) return;
+
+  state.leaguePlayoff = playoff;
+  saveLeaguePlayoff();
+  const described = describePlayoff(playoff);
+  addClubWeekEvent({
+    id: `kval-${season.seasonNumber}`,
+    week: state.clubWeekState?.week ?? "?",
+    phase: "matchday",
+    phaseLabel: "Kvalifisering",
+    message: `${outcome.position}. plass ga kvalifisering. ${described.headline} mot ${described.opponentName}.`
+  });
+}
+
+// Kvalifiseringen er spilt ferdig: gi utfallet videre og rydd den bort.
+function consumeLeaguePlayoffResolution() {
+  const playoff = state.leaguePlayoff;
+  if (!playoff || playoff.status === "active") return null;
+  return resolveLeaguePlayoff(playoff);
+}
+
 // Manager-kontekst som mini-sesongen leser (off-pitch + Club Week-verdier). Den
 // brukes til å avlede sesongmål/styreforventning og til kontekstuell vurdering.
 // Leser kun manager-state — aldri History Go-progresjon.
@@ -5701,6 +5765,12 @@ function startNewLeagueSeason() {
   if (!isLeagueModeActive() || state.leagueSeason?.status === "active") {
     return;
   }
+  // Står kvalifiseringen uspilt, er sesongen ikke ferdig avgjort. Å rulle videre
+  // her ville sluppet manageren forbi kampene som avgjør nivået hans.
+  ensureLeaguePlayoff();
+  if (state.leaguePlayoff?.status === "active") {
+    return;
+  }
   // Sørg for at sesongen som avsluttes faktisk er dømt og arkivert før vi
   // ruller videre — ellers ville en sesong kunne forsvinne uten spor.
   registerSeasonReview(state.leagueSeason);
@@ -5724,9 +5794,17 @@ function startNewLeagueSeason() {
 
   // Pyramiden inn: uten den blir neste sesong samme nivå med samme klubber,
   // og opp-/nedrykket manageren nettopp spilte for skjer ikke.
+  const playoffResolution = consumeLeaguePlayoffResolution();
   state.leagueSeason = state.leagueSeason
-    ? startNextLeagueSeason(state.leagueSeason, { allClubs: state.leaguePyramid?.clubs || null, tiers: state.leaguePyramid?.tiers || null })
+    ? startNextLeagueSeason(state.leagueSeason, {
+      allClubs: state.leaguePyramid?.clubs || null,
+      tiers: state.leaguePyramid?.tiers || null,
+      playoffResolution
+    })
     : null;
+  // Kvalifiseringen er brukt opp; den skal ikke henge igjen i neste sesong.
+  state.leaguePlayoff = null;
+  saveLeaguePlayoff();
   saveLeagueSeason();
   if (!state.leagueSeason) ensureLeagueSeason();
   renderApp();
@@ -5740,6 +5818,26 @@ function getMiniSeasonNextOpponent() {
     return getTournamentMatchdayOpponent();
   }
   if (isLeagueModeActive()) {
+    // Kvalifiseringen går foran serien: er den aktiv, er DEN kampen som skal
+    // spilles. Uten dette ville kvalifiseringsplassen vært en plass uten kamper.
+    const playoffOpponent = getPlayoffMatchdayOpponent(state.leaguePlayoff);
+    if (playoffOpponent) {
+      const playoffProfile = state.leagueClubProfiles[playoffOpponent.id] || null;
+      const playoffBase = playoffProfile || OPPONENT_PROFILES[0];
+      return {
+        ...playoffBase,
+        id: playoffOpponent.id,
+        name: playoffOpponent.name,
+        displayName: playoffOpponent.name,
+        strength: playoffOpponent.strength,
+        homeAway: playoffOpponent.homeAway,
+        ground: playoffOpponent.ground,
+        archetypeName: playoffProfile?.styleName || playoffBase.archetypeName || null,
+        isClubProfile: Boolean(playoffProfile),
+        isPlayoff: true,
+        playoffRoundName: playoffOpponent.playoffRoundName
+      };
+    }
     const opponent = getNextLeagueOpponent(state.leagueSeason);
     if (!opponent) return null;
     // Klubben eier identitet og nivå; profilen eier fotballen.
@@ -5797,6 +5895,24 @@ function registerMatchInMiniSeason(lastMatch) {
     registerMatchInTournament(lastMatch);
     return;
   }
+  // Kvalifiseringen først: er den aktiv, er det den som skal ha resultatet.
+  if (isLeagueModeActive() && state.leaguePlayoff?.status === "active" && lastMatch) {
+    const updatedPlayoff = completePlayoffLeg(state.leaguePlayoff, lastMatch);
+    if (updatedPlayoff !== state.leaguePlayoff) {
+      state.leaguePlayoff = updatedPlayoff;
+      saveLeaguePlayoff();
+      const described = describePlayoff(updatedPlayoff);
+      addClubWeekEvent({
+        id: `kval-${state.leagueSeason?.seasonNumber ?? "x"}-${updatedPlayoff.currentRoundIndex}-${updatedPlayoff.rounds[updatedPlayoff.currentRoundIndex]?.legs.filter((leg) => leg.status === "completed").length ?? 0}`,
+        week: state.clubWeekState?.week ?? "?",
+        phase: "matchday",
+        phaseLabel: "Kvalifisering",
+        message: `${described.headline} ${described.detail}`
+      });
+      window.dispatchEvent(new Event("updateProfile"));
+    }
+    return;
+  }
   if (isLeagueModeActive() && state.leagueSeason?.status === "active" && lastMatch) {
     const previousRound = state.leagueSeason.currentRound;
     const updated = completeLeagueRound(state.leagueSeason, lastMatch);
@@ -5808,6 +5924,9 @@ function registerMatchInMiniSeason(lastMatch) {
         // seriemester — forventningen de satte da klubben ble opprettet ble
         // aldri målt mot noe.
         registerSeasonReview(updated);
+        // Endte sesongen på en kvalifiseringsplass, skal kampene spilles før
+        // noen ny sesong kan starte.
+        ensureLeaguePlayoff();
       }
       saveLeagueSeason(); saveGameStartState();
       addClubWeekEvent({ id: `league-r${previousRound}`, week: previousRound, phase: "matchday", phaseLabel: "Ligaspill", message: `Serierunde ${previousRound} er ferdig. Alle fire resultater er registrert.` });
@@ -16059,6 +16178,9 @@ async function hydratePersistedUiState() {
   // eller manglende state gir null (= ingen prøveperiode startet).
   state.miniSeason = loadMiniSeason();
   state.leagueSeason = loadLeagueSeason();
+  // Kvalifiseringen må overleve en omlasting — ellers ville en halvspilt
+  // opprykkskvalifisering forsvinne og sesongen rulle videre uten den.
+  state.leaguePlayoff = loadLeaguePlayoff();
   state.gameStartState = loadGameStartState();
   state.firstTimePlaythrough = loadFirstTimePlaythrough();
   state.onboarded = loadOnboarded();

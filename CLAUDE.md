@@ -22,6 +22,7 @@ npm run build              # tsc — compile src/**/*.ts to dist/
 # Data audits (validate JSON schemas / referential integrity)
 npm run audit:knowledge          # football_knowledge_principles.json
 npm run audit:clubs              # data/football_clubs.json (seriepyramiden)
+npm run audit:ci-coverage        # kjører CI-workflowene faktisk hele suiten?
 npm run audit:hg-football        # data/hgFootball/ historical formation module
 npm run audit:hg-historical-fit
 npm run audit:hg-coach-context
@@ -66,7 +67,7 @@ Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. Whe
 
 **Two CI workflows** (`.github/workflows/`):
 - `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:syntax`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `audit:tournaments`, `audit:tactics`, `build`.
-- `ci.yml` (PRs + every non-`main` branch push) is the safety net that runs the **whole** suite — all `audit:*`, `check:*`, `build` **and** every `sim:*` script.
+- `ci.yml` (PRs + every non-`main` branch push) is the safety net that runs the **whole** suite — all `audit:*`, `check:*`, `build` **and** every `sim:*` script. That claim used to be false: 15 of 48 scripts were never listed, including the entire league guard, so they only ran when someone ran them by hand. `audit:ci-coverage` now compares `package.json` against both workflows and fails if a script is missing from `ci.yml` or if the pages gate loses one of its core checks — add a script, and CI must list it.
 
 So on a feature branch, expect the full suite to gate your PR; run the relevant scripts locally before pushing.
 

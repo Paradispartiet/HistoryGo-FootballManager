@@ -108,7 +108,18 @@ assert.deepEqual(normalizeLeagueSeason(JSON.parse(JSON.stringify(played))), play
 // ikke lastes inn halvveis.
 assert.equal(normalizeLeagueSeason({ ...played, clubs: played.clubs.slice(0, 15) }), null);
 
-const next = startNextLeagueSeason(played, { allClubs, tiers });
+// Endte den sesongen på en kvalifiseringsplass, SKAL den ikke kunne rulles
+// videre — kvalifiseringen er kampene som avgjør nivået (sim:league-playoff
+// spiller dem). Her holder det å vite at sperren står.
+const playedOutcome = resolveLeagueOutcome(played);
+const playedNeedsPlayoff = ["promotion_playoff", "relegation_playoff"].includes(playedOutcome.movement);
+if (playedNeedsPlayoff) {
+  assert.throws(() => startNextLeagueSeason(played, { allClubs, tiers }), /Kvalifiseringen er ikke spilt/);
+}
+const next = startNextLeagueSeason(played, {
+  allClubs, tiers,
+  playoffResolution: playedNeedsPlayoff ? { movement: "stay", toTierId: playedOutcome.tierId, reason: "kvalifisering spilt i sim:league-playoff" } : null
+});
 assert.equal(next.status, "active"); assert.equal(next.currentRound, 1);
 assert.equal(createLeagueTable(next).every((row) => row.played === 0), true);
 assert.equal(next.managerClubId, played.managerClubId);

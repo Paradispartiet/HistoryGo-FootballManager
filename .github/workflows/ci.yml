@@ -48,7 +48,11 @@ jobs:
       - name: Data audits
         run: |
           npm run audit:knowledge
+          npm run audit:ci-coverage
           npm run audit:clubs
+          npm run audit:football-book-knowledge
+          npm run audit:football-book-ux
+          npm run audit:scenarios
           npm run audit:hg-football
           npm run audit:hg-historical-fit
           npm run audit:hg-coach-context
@@ -85,3 +89,15 @@ jobs:
           npm run sim:staff-identity
           npm run sim:manager-flow-ui
           npm run sim:role-familiarity
+          npm run sim:league-season
+          npm run sim:mode-isolation
+          npm run sim:first-time
+          npm run sim:first-run-real-seed
+          npm run sim:first-run-football-book-qa
+          npm run sim:player-stats
+          npm run sim:substitutions
+          npm run sim:player-condition
+          npm run sim:scenarios
+          npm run sim:season-review
+          npm run sim:federation-verdict
+          npm run sim:league-playoff

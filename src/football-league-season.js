@@ -269,11 +269,27 @@ export function resolveLeagueOutcome(season) {
 // Neste sesong. Uten nytt nivå/klubbutvalg blir det samme nivå med samme
 // klubber — men får motoren pyramiden inn (`allClubs` + `tiers`), flyttes
 // manageren dit sesongen sa han skulle.
-export function startNextLeagueSeason(season, { allClubs = null, tiers = null } = {}) {
+//
+// `playoffResolution` er utfallet av kvalifiseringen (football-league-playoff.js)
+// når sesongen endte på en kvalifiseringsplass. Uten den ville plassen vært en
+// plass spillet nevnte og aldri gjorde noe med: 3. plass i OBOS ville betydd
+// nøyaktig det samme som 4.
+export function startNextLeagueSeason(season, { allClubs = null, tiers = null, playoffResolution = null } = {}) {
   const managerClub = season.clubs.find((club) => club.id === season.managerClubId);
   const seasonNumber = season.seasonNumber + 1;
   const seed = `season-${seasonNumber}`;
-  const outcome = resolveLeagueOutcome(season);
+  const seasonOutcome = resolveLeagueOutcome(season);
+  // Kvalifiseringen overstyrer plasseringen — den ER avgjørelsen plasseringen
+  // bare ga deg sjansen til.
+  const outcome = seasonOutcome && playoffResolution
+    ? { ...seasonOutcome, movement: playoffResolution.movement, toTierId: playoffResolution.toTierId, reason: playoffResolution.reason, viaPlayoff: true }
+    : seasonOutcome;
+
+  // Står kvalifiseringen uspilt, er sesongen ikke ferdig avgjort. Å rulle videre
+  // her ville stille sluppet manageren forbi kampene han skulle spilt.
+  if (isPlayoffPending(season, playoffResolution)) {
+    throw new Error("Kvalifiseringen er ikke spilt — sesongen kan ikke rulles videre ennå.");
+  }
 
   if (!Array.isArray(allClubs) || !Array.isArray(tiers) || !outcome) {
     return createLeagueSeason({ managerClub, opponents: season.clubs.filter((club) => club.id !== season.managerClubId), tier: season.tier || DEFAULT_LEAGUE_TIER, seed, seasonNumber });
@@ -291,6 +307,13 @@ export function startNextLeagueSeason(season, { allClubs = null, tiers = null } 
     ...createLeagueSeason({ managerClub: { ...managerClub, tier: nextTier.id, ...(group ? { group } : {}) }, opponents, tier: nextTier, seed, seasonNumber }),
     previousOutcome: outcome
   };
+}
+
+// Endte sesongen på en kvalifiseringsplass som ennå ikke er spilt?
+export function isPlayoffPending(season, playoffResolution = null) {
+  if (playoffResolution) return false;
+  const outcome = resolveLeagueOutcome(season);
+  return outcome ? ["promotion_playoff", "relegation_playoff"].includes(outcome.movement) : false;
 }
 
 export function normalizeLeagueSeason(value) {

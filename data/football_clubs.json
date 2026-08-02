@@ -2,7 +2,7 @@
   "schema": "historygo-football-manager.clubs.v1",
   "version": 1,
   "snapshot": "2026",
-  "note": "Seriepyramiden slik den faktisk spilles: Eliteserien 16 lag / 30 runder, OBOS-ligaen 16 lag / 30 runder, 2. divisjon to avdelinger à 14 lag / 26 runder. Klubben eier IDENTITET og NIVÅ (navn, bane, by, styrke). Selve FOTBALLEN — hvordan klubben spiller — ligger i data/football_league_club_profiles.json. Sammensetningen er et øyeblikksbilde av 2026-sesongen; opp- og nedrykk i spillet flytter klubber mellom nivåene uten at fila må endres. Banenavn følger sponsorer og skifter oftere enn klubbene gjør.",
+  "note": "Seriepyramiden slik den faktisk spilles: Eliteserien 16 lag / 30 runder, OBOS-ligaen 16 lag / 30 runder, 2. divisjon to avdelinger à 14 lag / 26 runder. Klubben eier IDENTITET og NIVÅ (navn, bane, by, styrke). Selve FOTBALLEN — hvordan klubben spiller — ligger i data/football_league_club_profiles.json. Sammensetningen er et øyeblikksbilde av 2026-sesongen; opp- og nedrykk i spillet flytter klubber mellom nivåene uten at fila må endres. Kvalifiseringsplassene spilles: playoffRounds sier hvor mange toveis-oppgjør de er. Banenavn følger sponsorer og skifter oftere enn klubbene gjør.",
   "tiers": [
     {
       "id": "eliteserien",
@@ -17,7 +17,8 @@
       "relegation": {
         "toTier": "obosligaen",
         "direct": 2,
-        "playoff": 1
+        "playoff": 1,
+        "playoffRounds": 1
       },
       "strengthBand": [
         70,
@@ -37,12 +38,14 @@
       "promotion": {
         "toTier": "eliteserien",
         "direct": 2,
-        "playoff": 1
+        "playoff": 1,
+        "playoffRounds": 1
       },
       "relegation": {
         "toTier": "andredivisjon",
         "direct": 2,
-        "playoff": 1
+        "playoff": 1,
+        "playoffRounds": 1
       },
       "strengthBand": [
         58,
@@ -63,7 +66,8 @@
         "toTier": "obosligaen",
         "direct": 1,
         "playoff": 1,
-        "perGroup": true
+        "perGroup": true,
+        "playoffRounds": 2
       },
       "relegation": {
         "toTier": null,
