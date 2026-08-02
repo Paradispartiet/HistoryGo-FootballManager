@@ -27,23 +27,39 @@
       <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
     </section>
 
-    <!-- Steg 2 (kun ligaspill): opprett klubben. Klubbidentiteten er noe du
-         LAGER her – navn, kortnavn og managernavn – ikke noe som avledes av et
-         History Go-sted. -->
-    <section class="onboarding-card onboarding-club-step" id="onboardingClubStep" aria-label="Opprett klubb" hidden>
+    <!-- Steg 2 (kun ligaspill): velg klubb. Enten lager du en egen, eller du tar
+         over en som finnes. Klubblista er DATA (data/football_clubs.json) og
+         rendres av app.js — ingen klubb står hardkodet her. -->
+    <section class="onboarding-card onboarding-club-step" id="onboardingClubStep" aria-label="Velg klubb" hidden>
       <div class="onboarding-brand">
         <p class="eyebrow">Ny klubb</p>
-        <h1>Lag klubben din</h1>
-        <p class="muted-text">Gi klubben et navn. Dette er klubben du tar over som manager – du kan endre den senere i innstillinger.</p>
+        <h1>Velg klubben din</h1>
+        <p class="muted-text">Lag en klubb fra bunnen, eller ta over en som finnes. Tar du over, arver du klubbens nivå, tradisjon og styrets forventning — men aldri troppen.</p>
       </div>
-      <div class="club-form">
+
+      <div class="club-choice-switch" role="tablist" aria-label="Slik velger du klubb">
+        <button type="button" id="onboardingClubModeOwn" class="club-choice-tab is-active" role="tab" aria-selected="true" aria-controls="onboardingOwnClubPanel">Lag din egen</button>
+        <button type="button" id="onboardingClubModeTakeover" class="club-choice-tab" role="tab" aria-selected="false" aria-controls="onboardingTakeoverPanel">Ta over en klubb</button>
+      </div>
+
+      <div class="club-form" id="onboardingOwnClubPanel" role="tabpanel">
         <label class="club-form-label" for="onboardingClubName">Klubbnavn</label>
         <input type="text" id="onboardingClubName" class="club-form-input" maxlength="40" placeholder="F.eks. Bislett FK" autocomplete="off">
         <p id="onboardingClubNameError" class="club-form-error" role="alert" hidden>Skriv inn et klubbnavn.</p>
+      </div>
 
+      <div class="club-takeover" id="onboardingTakeoverPanel" role="tabpanel" hidden>
+        <label class="club-form-label" for="onboardingClubSearch">Søk etter klubb</label>
+        <input type="search" id="onboardingClubSearch" class="club-form-input" maxlength="40" placeholder="Klubb, by eller divisjon" autocomplete="off">
+        <div class="club-takeover-list" id="onboardingClubList" role="listbox" aria-label="Klubber å ta over"></div>
+        <div class="club-takeover-summary" id="onboardingClubSummary" hidden></div>
+      </div>
+
+      <div class="club-form">
         <label class="club-form-label" for="onboardingManagerName">Managernavn <span class="club-form-optional">(valgfritt)</span></label>
         <input type="text" id="onboardingManagerName" class="club-form-input" maxlength="40" placeholder="Ditt navn" autocomplete="off">
       </div>
+
       <div class="club-form-actions">
         <button type="button" id="onboardingClubBack" class="unlock-card-action is-secondary">Tilbake</button>
         <button type="button" id="onboardingCreateClub" class="primary-action-button">Start klubben</button>

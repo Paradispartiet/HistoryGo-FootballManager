@@ -180,8 +180,9 @@ avgjørelsesmåtene i begge retninger, to-omgangs-kvalifiseringen med tapt og vu
 første omgang, alle fire utfallene mot nivået neste sesong, lagring over
 omlasting, og at app.js faktisk spiller kampene i stedet for å hoppe over dem.
 
-## Ikke gjort ennå
+## Klubbvalget
 
-- **Å velge en etablert klubb** i stedet for å opprette sin egen. Pyramiden gjør
-  det mulig (16 klubber betyr at det er 15 igjen når du tar én), men valget er
-  ikke bygget.
+Pyramiden gjorde det mulig å **ta over en etablert klubb** i stedet for å
+opprette sin egen — 16 klubber betyr at det står 15 igjen når du tar én. Valget
+er bygget: du arver identitet, nivå, tradisjon og styrets forventning, men aldri
+troppen. Se `docs/klubbvalg.md`.

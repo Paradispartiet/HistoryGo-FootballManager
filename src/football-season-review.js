@@ -55,11 +55,23 @@ function asArray(value) {
 // Første sesong er styret tålmodig: midt på tabellen holder. Etterpå måles du
 // mot der du selv endte sist — klarte du femteplass, vil de ha fjerde.
 // Forventningen vokser, men aldri raskere enn ett steg per sesong.
-export function deriveSeasonTarget({ clubCount = 8, seasonNumber = 1, previousPosition = null } = {}) {
+export function deriveSeasonTarget({ clubCount = 8, seasonNumber = 1, previousPosition = null, clubExpectation = null } = {}) {
   const clubs = Math.max(2, num(clubCount, 8));
   const midtre = Math.ceil(clubs / 2);
 
   if (!previousPosition || seasonNumber <= 1) {
+    // Tar du over en etablert klubb, arver du styret dens. Rosenborg-styret
+    // godtar ikke midt på tabellen første sesong slik en nyopprettet klubbs
+    // styre gjør — forventningen følger klubbens standing, ikke spillerne.
+    // (Den avgjør ingen kamp; den setter bare hva du måles mot.)
+    if (clubExpectation?.targetPosition) {
+      return {
+        targetPosition: clamp(num(clubExpectation.targetPosition), 1, clubs),
+        label: clubExpectation.label || `Topp ${clubExpectation.targetPosition}`,
+        description: clubExpectation.description || `Styret venter ${clubExpectation.label}.`,
+        fromClub: true
+      };
+    }
     return {
       targetPosition: midtre,
       label: `Topp ${midtre}`,

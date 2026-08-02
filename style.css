@@ -8934,3 +8934,74 @@ body > .site-footer { grid-row: 6; }
 .progression-step { flex: 0 0 auto; }
 .progression-step .eyebrow { margin-bottom: 0.15rem; }
 .progression-step h3 { margin: 0 0 0.3rem; }
+
+/* --- Klubbvalg i onboardingen ------------------------------------------- */
+/* To veier inn i ligaspillet: lag din egen klubb, eller ta over en som finnes.
+   Lista er data — den fylles av app.js fra data/football_clubs.json. */
+.club-choice-switch {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+}
+.club-choice-tab {
+  flex: 1 1 0;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.16));
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.club-choice-tab.is-active {
+  background: var(--accent-soft, rgba(120, 180, 255, 0.16));
+  border-color: var(--accent, #6aa9ff);
+}
+.club-takeover { display: flex; flex-direction: column; gap: 0.6rem; }
+.club-takeover-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 15rem;
+  overflow-y: auto;
+  padding: 0.25rem;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+}
+.club-takeover-tier {
+  padding: 0.4rem 0.5rem 0.15rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.club-takeover-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.club-takeover-option:hover { background: rgba(127, 127, 127, 0.12); }
+.club-takeover-option.is-selected {
+  background: var(--accent-soft, rgba(120, 180, 255, 0.16));
+  border-color: var(--accent, #6aa9ff);
+}
+.club-takeover-option strong { font-size: 0.95rem; }
+.club-takeover-option small { opacity: 0.75; font-size: 0.78rem; }
+.club-takeover-summary {
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+  font-size: 0.85rem;
+}
+.club-takeover-summary ul { margin: 0.35rem 0 0; padding-left: 1.1rem; }
+.club-takeover-summary li { margin: 0.15rem 0; }
+.club-takeover-warning { margin-top: 0.5rem; opacity: 0.85; }

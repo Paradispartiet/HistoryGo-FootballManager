@@ -1060,6 +1060,33 @@ stage("27. Ingen funksjon to steder");
   check("onboarding-steget for stab peker på flata der staben faktisk er", /stab: \{ tab: "admin", selector: "#availableStaffList" \}/.test(app));
 }
 
+// ---- 28) Klubbvalget er nåbart ---------------------------------------------
+//
+// Onboardingens klubbsteg vokste da klubblista og oppsummeringen kom til: målt
+// i et 930px vindu havnet «Start klubben» på y=1255. Kortet SCROLLER, så det er
+// ingen blindvei — men det holder bare så lenge to ting stemmer:
+//
+//   1. klubblista har en TAK-høyde og scroller selv (uten det vokser kortet med
+//      antall klubber, og 60 klubber ville dyttet knappen vilkårlig langt ned)
+//   2. onboardingflata er den som scroller
+//
+// Mister vi én av dem, blir valget en blindvei: du velger klubb og finner aldri
+// knappen som starter den.
+stage("28. Klubbvalget i onboardingen er nåbart");
+{
+  check("klubblista har en tak-høyde", /\.club-takeover-list[^}]*max-height:/.test(css));
+  check("klubblista scroller selv", /\.club-takeover-list[^}]*overflow-y:\s*auto/.test(css));
+  check("onboardingflata scroller", /#onboardingScreen[^}]*overflow-y:\s*auto/.test(css) || /\.onboarding-screen[^}]*overflow-y:\s*auto/.test(css));
+  // Og at valget faktisk fører videre: knappen finnes, og den er den ENESTE
+  // som starter klubben (ingen dobbel funksjon).
+  const starters = [...html.matchAll(/id="(onboardingCreateClub)"/g)];
+  check("det finnes nøyaktig én «start klubben»-knapp", starters.length === 1, String(starters.length));
+  check("klubbvalget scroller handlingen fram etter valg", /scrollIntoView\(\{ block: "nearest" \}\)/.test(app));
+  // Begge veier inn må finnes — ellers er «ta over en klubb» en fane uten innhold.
+  check("begge klubbvalgene har en fane", html.includes('id="onboardingClubModeOwn"') && html.includes('id="onboardingClubModeTakeover"'));
+  check("hver fane har sitt panel", html.includes('id="onboardingOwnClubPanel"') && html.includes('id="onboardingTakeoverPanel"'));
+}
+
 // ---- Rapport ----------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

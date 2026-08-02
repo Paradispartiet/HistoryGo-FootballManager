@@ -92,6 +92,14 @@ import {
   startNextLeagueSeason
 } from "./football-league-season.js";
 import {
+  listSelectableClubs,
+  resolveStartTier,
+  describeClubSelection,
+  deriveClubExpectation,
+  createManagerClubFromSelection,
+  createOwnManagerClub
+} from "./football-club-selection.js";
+import {
   createLeaguePlayoff,
   completePlayoffLeg,
   resolveLeaguePlayoff,
@@ -4455,6 +4463,9 @@ function normalizeGameStartState(value) {
     activeScenarioId: typeof value?.activeScenarioId === "string" ? value.activeScenarioId : undefined,
     leagueSeasonStatus: typeof value?.leagueSeasonStatus === "string" ? value.leagueSeasonStatus : undefined,
     clubName: typeof value?.clubName === "string" ? value.clubName : undefined,
+  // Tok manageren over en etablert klubb? Da eier klubben nivået, tradisjonen
+  // og styrets forventning — men aldri troppen.
+  takeoverClubId: typeof value?.takeoverClubId === "string" ? value.takeoverClubId : undefined,
     managerName: typeof value?.managerName === "string" ? value.managerName : undefined,
     leagueName: typeof value?.leagueName === "string" ? value.leagueName : undefined,
     seasonLabel: typeof value?.seasonLabel === "string" ? value.seasonLabel : undefined,
@@ -5636,10 +5647,11 @@ function ensureLeagueSeason() {
     return;
   }
 
-  const club = getTemporaryClubName();
   const start = getLeagueStartTier();
+  const managerClub = buildManagerClubForSeason(start.tier);
+  if (!managerClub) return;
   state.leagueSeason = createLeagueSeason({
-    managerClub: { id: state.gameStartState.activeLeagueSaveId, name: club.name, ground: `${club.name} stadion`, tier: start.tier.id, strength: 75, form: 55, tacticalIdentity: "managerens taktiske valg" },
+    managerClub,
     opponents: start.opponents,
     tier: start.tier,
     seed: `${state.gameStartState.activeLeagueSaveId}-season-1`
@@ -5660,13 +5672,51 @@ function ensureLeagueSeason() {
 // Nivået manageren starter på, og motstanderne der. Uten pyramiden faller vi
 // tilbake på motorens standardnivå — men da uten klubber, så sesongen kastes
 // heller enn å bli spilt mot ingen. Derfor: pyramiden er kilden.
+//
+// Tok manageren over en etablert klubb, starter han der KLUBBEN står — tar du
+// over Skeid, begynner du i 2. divisjon. Det er ikke en straff, det er hvor
+// klubben er.
 function getLeagueStartTier() {
-  const tiers = state.leaguePyramid?.tiers || [];
-  const clubs = state.leaguePyramid?.clubs || [];
-  const tier = tiers.find((entry) => entry.level === 1) || tiers[0] || DEFAULT_LEAGUE_TIER;
-  const pool = clubs.filter((entry) => entry.tier === tier.id);
-  const group = tier.groups > 1 ? [...new Set(pool.map((entry) => entry.group))].sort()[0] : null;
-  return { tier, opponents: group ? pool.filter((entry) => entry.group === group) : pool };
+  return resolveStartTier({
+    takeoverClub: getTakeoverClub(),
+    tiers: state.leaguePyramid?.tiers || [],
+    clubs: state.leaguePyramid?.clubs || []
+  }) || { tier: DEFAULT_LEAGUE_TIER, group: null, opponents: [] };
+}
+
+// Den etablerte klubben manageren tok over, eller null når klubben er egenlaget.
+function getTakeoverClub() {
+  const id = state.gameStartState?.takeoverClubId;
+  if (!id) return null;
+  return (state.leaguePyramid?.clubs || []).find((club) => club.id === id) || null;
+}
+
+// Managerklubben slik ligamotoren vil ha den: enten den etablerte klubben, eller
+// den egenopprettede.
+function buildManagerClubForSeason(tier) {
+  const takeover = getTakeoverClub();
+  if (takeover) {
+    return createManagerClubFromSelection({
+      club: takeover,
+      profile: state.leagueClubProfiles[takeover.id] || null,
+      managerName: state.gameStartState?.managerName || ""
+    });
+  }
+  return createOwnManagerClub({
+    clubName: getTemporaryClubName().name,
+    saveId: state.gameStartState.activeLeagueSaveId,
+    tier,
+    managerName: state.gameStartState?.managerName || ""
+  });
+}
+
+// Styrets forventning første sesong. En egenopprettet klubb har ingen historie
+// og får det tålmodige målet; tar du over en storklubb, arver du styret dens.
+function getClubExpectation() {
+  const takeover = getTakeoverClub();
+  if (!takeover) return null;
+  const tier = (state.leaguePyramid?.tiers || []).find((entry) => entry.id === takeover.tier);
+  return tier ? deriveClubExpectation(takeover, state.leaguePyramid?.clubs || [], tier) : null;
 }
 
 // Etter fullført ligasesong: legg den bak deg og start neste. Rører kun
@@ -5725,7 +5775,9 @@ function getSeasonTarget() {
   return deriveSeasonTarget({
     clubCount: state.leagueSeason?.clubs?.length || 8,
     seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
-    previousPosition: previous ? Number(previous.position) : null
+    previousPosition: previous ? Number(previous.position) : null,
+    // Tok du over en etablert klubb, arver du styrets forventning fra dag én.
+    clubExpectation: getClubExpectation()
   });
 }
 
@@ -15334,15 +15386,158 @@ function bindOnboardingClub() {
     showOnboardingModeStep();
   });
 
+  // To veier inn: lag din egen klubb, eller ta over en som finnes. Klubblista
+  // er DATA — den bygges av football-club-selection.js fra pyramiden, aldri
+  // hardkodet i markupen.
+  const ownTab = document.querySelector("#onboardingClubModeOwn");
+  const takeoverTab = document.querySelector("#onboardingClubModeTakeover");
+  const ownPanel = document.querySelector("#onboardingOwnClubPanel");
+  const takeoverPanel = document.querySelector("#onboardingTakeoverPanel");
+  const listEl = document.querySelector("#onboardingClubList");
+  const searchEl = document.querySelector("#onboardingClubSearch");
+  const summaryEl = document.querySelector("#onboardingClubSummary");
+  let takeoverMode = false;
+  let selectedClubId = null;
+
+  const renderClubList = () => {
+    if (!listEl) return;
+    const query = String(searchEl?.value || "").trim().toLowerCase();
+    const groups = listSelectableClubs({
+      clubs: state.leaguePyramid?.clubs || [],
+      tiers: state.leaguePyramid?.tiers || [],
+      profiles: state.leagueClubProfiles || {}
+    });
+    listEl.textContent = "";
+    let shown = 0;
+    for (const group of groups) {
+      const matches = group.clubs.filter((club) => !query
+        || club.name.toLowerCase().includes(query)
+        || String(club.city || "").toLowerCase().includes(query)
+        || group.tierName.toLowerCase().includes(query));
+      if (matches.length === 0) continue;
+      const heading = document.createElement("p");
+      heading.className = "club-takeover-tier";
+      heading.textContent = group.tierName;
+      listEl.append(heading);
+      for (const club of matches) {
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = `club-takeover-option${club.id === selectedClubId ? " is-selected" : ""}`;
+        option.setAttribute("role", "option");
+        option.setAttribute("aria-selected", club.id === selectedClubId ? "true" : "false");
+        option.dataset.clubId = club.id;
+        const title = document.createElement("strong");
+        title.textContent = club.name;
+        const detail = document.createElement("small");
+        detail.textContent = [club.ground, club.shortLabel, club.expectationLabel ? `styret: ${club.expectationLabel.toLowerCase()}` : null]
+          .filter(Boolean).join(" · ");
+        option.append(title, detail);
+        listEl.append(option);
+        shown += 1;
+      }
+    }
+    if (shown === 0) {
+      const empty = document.createElement("p");
+      empty.className = "club-takeover-tier";
+      empty.textContent = (state.leaguePyramid?.clubs || []).length
+        ? "Ingen klubber passer søket."
+        : "Klubblista er ikke lastet ennå.";
+      listEl.append(empty);
+    }
+  };
+
+  const renderClubSummary = () => {
+    if (!summaryEl) return;
+    const club = (state.leaguePyramid?.clubs || []).find((entry) => entry.id === selectedClubId);
+    const tier = (state.leaguePyramid?.tiers || []).find((entry) => entry.id === club?.tier);
+    const summary = club && tier
+      ? describeClubSelection({ club, tier, allClubs: state.leaguePyramid?.clubs || [], profile: state.leagueClubProfiles[club.id] || null })
+      : null;
+    summaryEl.hidden = !summary;
+    summaryEl.textContent = "";
+    if (!summary) return;
+    const heading = document.createElement("strong");
+    heading.textContent = `${summary.clubName} — ${summary.tierName}`;
+    summaryEl.append(heading);
+    if (summary.styleName) {
+      const style = document.createElement("p");
+      style.className = "muted-text";
+      style.textContent = `${summary.styleName}${summary.era ? ` (${summary.era})` : ""}. ${summary.styleDescription || ""}`.trim();
+      summaryEl.append(style);
+    }
+    const inherits = document.createElement("ul");
+    for (const line of summary.inherits) {
+      const item = document.createElement("li");
+      item.textContent = line;
+      inherits.append(item);
+    }
+    summaryEl.append(inherits);
+    // Det viktigste å si tydelig FØR valget: troppen følger ikke med.
+    const warning = document.createElement("p");
+    warning.className = "muted-text club-takeover-warning";
+    warning.textContent = `Du arver ikke: ${summary.doesNotInherit[0]}`;
+    summaryEl.append(warning);
+  };
+
+  const setTakeoverMode = (next) => {
+    takeoverMode = next;
+    ownTab?.classList.toggle("is-active", !next);
+    takeoverTab?.classList.toggle("is-active", next);
+    ownTab?.setAttribute("aria-selected", next ? "false" : "true");
+    takeoverTab?.setAttribute("aria-selected", next ? "true" : "false");
+    if (ownPanel) ownPanel.hidden = next;
+    if (takeoverPanel) takeoverPanel.hidden = !next;
+    if (errorEl) errorEl.hidden = true;
+    if (next) { renderClubList(); renderClubSummary(); }
+  };
+
+  ownTab?.addEventListener("click", () => setTakeoverMode(false));
+  takeoverTab?.addEventListener("click", () => setTakeoverMode(true));
+  searchEl?.addEventListener("input", renderClubList);
+  listEl?.addEventListener("click", (event) => {
+    const option = event.target.closest(".club-takeover-option");
+    if (!option) return;
+    selectedClubId = option.dataset.clubId;
+    renderClubList();
+    renderClubSummary();
+    // Oppsummeringen skyver «Start klubben» under skjermkanten på en telefon
+    // (målt: knappen havnet på y=1255 i et 930px vindu). Kortet SCROLLER, så
+    // det er ingen blindvei — men den som nettopp valgte klubb skal slippe å
+    // lete etter knappen.
+    document.querySelector("#onboardingCreateClub")?.scrollIntoView({ block: "nearest" });
+  });
+
   const createClub = () => {
+    const managerName = String(managerInput?.value || "").trim();
+
+    if (takeoverMode) {
+      const club = (state.leaguePyramid?.clubs || []).find((entry) => entry.id === selectedClubId);
+      if (!club) {
+        if (errorEl) { errorEl.hidden = false; errorEl.textContent = "Velg en klubb å ta over."; }
+        return;
+      }
+      if (errorEl) errorEl.hidden = true;
+      state.modeChooserOpen = false;
+      state.onboarded = true;
+      saveOnboarded();
+      selectGameMode("league", {
+        clubName: club.name,
+        takeoverClubId: club.id,
+        ...(managerName ? { managerName } : {})
+      });
+      showOnboardingModeStep();
+      activateRecommendedLeagueTab(getTeamFit());
+      renderApp();
+      return;
+    }
+
     const clubName = String(nameInput?.value || "").trim();
     if (!clubName) {
-      if (errorEl) errorEl.hidden = false;
+      if (errorEl) { errorEl.hidden = false; errorEl.textContent = "Skriv inn et klubbnavn."; }
       nameInput?.focus();
       return;
     }
     if (errorEl) errorEl.hidden = true;
-    const managerName = String(managerInput?.value || "").trim();
     state.modeChooserOpen = false;
     state.onboarded = true;
     saveOnboarded();
