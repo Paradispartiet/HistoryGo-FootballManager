@@ -2,7 +2,7 @@
   "schema": "historygo-football-manager.clubs.v1",
   "version": 1,
   "snapshot": "2026",
-  "note": "Seriepyramiden slik den faktisk spilles: Eliteserien 16 lag / 30 runder, OBOS-ligaen 16 lag / 30 runder, 2. divisjon to avdelinger à 14 lag / 26 runder. Klubben eier IDENTITET og NIVÅ (navn, bane, by, styrke). Selve FOTBALLEN — hvordan klubben spiller — ligger i data/football_league_club_profiles.json. Sammensetningen er et øyeblikksbilde av 2026-sesongen; opp- og nedrykk i spillet flytter klubber mellom nivåene uten at fila må endres. Kvalifiseringsplassene spilles: playoffRounds sier hvor mange toveis-oppgjør de er. Banenavn følger sponsorer og skifter oftere enn klubbene gjør.",
+  "note": "Seriepyramiden slik den faktisk spilles: Eliteserien 16 lag / 30 runder, OBOS-ligaen 16 lag / 30 runder, 2. divisjon to avdelinger à 14 lag / 26 runder. Klubben eier IDENTITET og NIVÅ (navn, bane, by, styrke). Selve FOTBALLEN — hvordan klubben spiller — ligger i data/football_league_club_profiles.json. Sammensetningen er et øyeblikksbilde av 2026-sesongen; opp- og nedrykk i spillet flytter klubber mellom nivåene uten at fila må endres. `homePlaceId` kobler klubben til banen sin i History Go: har du vært der, åpner klubbens historiske spillere seg. Har du ikke det, får du en automatisk grunntropp og samler resten selv. Kvalifiseringsplassene spilles: playoffRounds sier hvor mange toveis-oppgjør de er. Banenavn følger sponsorer og skifter oftere enn klubbene gjør.",
   "tiers": [
     {
       "id": "eliteserien",
@@ -90,7 +90,8 @@
       "city": "Bodø",
       "tier": "eliteserien",
       "strength": 84,
-      "form": 57
+      "form": 57,
+      "homePlaceId": "aspmyra_stadion"
     },
     {
       "id": "viking",
@@ -108,7 +109,8 @@
       "city": "Bergen",
       "tier": "eliteserien",
       "strength": 79,
-      "form": 52
+      "form": 52,
+      "homePlaceId": "brann_stadion"
     },
     {
       "id": "molde",
@@ -117,7 +119,8 @@
       "city": "Molde",
       "tier": "eliteserien",
       "strength": 78,
-      "form": 51
+      "form": 51,
+      "homePlaceId": "aker_stadion"
     },
     {
       "id": "rosenborg",
@@ -126,7 +129,8 @@
       "city": "Trondheim",
       "tier": "eliteserien",
       "strength": 76,
-      "form": 60
+      "form": 60,
+      "homePlaceId": "lerkendal_stadion"
     },
     {
       "id": "tromso",
@@ -153,7 +157,8 @@
       "city": "Oslo",
       "tier": "eliteserien",
       "strength": 73,
-      "form": 57
+      "form": 57,
+      "homePlaceId": "intility_arena"
     },
     {
       "id": "lillestrom",
@@ -162,7 +167,8 @@
       "city": "Lillestrøm",
       "tier": "eliteserien",
       "strength": 73,
-      "form": 57
+      "form": 57,
+      "homePlaceId": "araasen_stadion"
     },
     {
       "id": "sarpsborg08",
@@ -225,7 +231,8 @@
       "city": "Oslo",
       "tier": "eliteserien",
       "strength": 70,
-      "form": 54
+      "form": 54,
+      "homePlaceId": "kfum_arena"
     },
     {
       "id": "odd",
@@ -261,7 +268,8 @@
       "city": "Bærum",
       "tier": "obosligaen",
       "strength": 65,
-      "form": 60
+      "form": 60,
+      "homePlaceId": "nadderud_stadion"
     },
     {
       "id": "lyn",

@@ -140,3 +140,60 @@ Vakten krever at forklaringene aldri skylder på spillerne, og at sesongdommen e
 
 `sim:club-tradition`: 1189 sjekker. Fem vakter bittestet, og bitetest 2
 reproduserte nøyaktig feilen første utgave hadde.
+
+## Klubbens spillere ligger på banen
+
+Å ta over Rosenborg deler **ikke** ut Eggens lag. Du kan heller ikke plukke en
+bestemt historisk utgave av klubben. Det du får, avhenger av én ting: **har du
+vært på Lerkendal?**
+
+| | Du får |
+|---|---|
+| **Har vært på banen** | Klubbens historiske spillere er dine å velge blant. Du plukker selv hvem du bygger laget rundt. |
+| **Har ikke vært der** | En automatisk grunntropp, og klubbens spillere åpner seg når du besøker banen. |
+
+Det er kjernesløyfen brukt **på** klubbovertakelsen i stedet for å omgå den —
+samme form som landslagsmodus, der nasjonens grunntropp er bunnen og samlingen
+er oppsiden.
+
+Ingen ny gate er funnet opp: spillerne var allerede knyttet til steder gjennom
+`sourcePlaceIds`, og `computeAvailability()` gatet dem allerede på besøkte
+steder. Det som manglet var koblingen **klubb → bane** (`homePlaceId`) og en
+grunntropp så et klubbvalg aldri blir en blindvei.
+
+| Klubb | Bane | Historiske spillere |
+|---|---|---:|
+| Rosenborg | Lerkendal | 8 |
+| Bodø/Glimt | Aspmyra | 6 |
+| Molde | Aker stadion | 6 |
+| Brann | Brann Stadion | 4 |
+| Vålerenga | Intility Arena | 3 |
+| Lillestrøm | Åråsen | 3 |
+| Stabæk | Nadderud | 3 |
+
+De øvrige 52 klubbene har ingen bane i History Go ennå. Profilen sier det rett
+ut i stedet for å late som — du får grunntroppen og samler videre.
+
+### Grunntroppen er et gulv, ikke en snarvei
+
+- Den inneholder **aldri** klubbens egne historiske spillere. Gjorde den det,
+  ville gaten vært pynt: du fikk Brattbakk uten å gå til Lerkendal.
+- Den deler aldri ut landslagsarena-spillere (Ullevaal, Maracanã) — én visit
+  skal ikke sikre en nasjons beste.
+- Den plukker de **jevneste**, ikke toppsjiktet. Målt: 86,8 i snitt mot et
+  poolsnitt på 88,5; snur man sorteringen havner den på 90,0.
+
+Den siste målingen avslørte en for svak vakt. Første grense var «≤ snitt + 1»,
+og en bitetest som snudde sorteringen gikk **rett gjennom**. Terskelen måtte
+ligge mellom de to målte verdiene, ikke i nærheten av den ene.
+
+### Motoren rører aldri progresjonen
+
+`football-club-squad.js` **leser** besøkte steder som en liste inn og skriver
+aldri til `visited_places` eller `hg_groundhopper_stats_v1`. Vakten sjekker at
+navnene ikke engang forekommer i kilden.
+
+`sim:club-squad`: 172 sjekker, seks vakter bittestet. Verifisert i nettleser i
+begge tilstander — der oppdaget jeg at `visited_places` er et **objekt**, ikke en
+array, så den første testen min leste ingenting og ga samme svar i begge
+tilfeller.

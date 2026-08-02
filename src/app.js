@@ -92,6 +92,7 @@ import {
   startNextLeagueSeason
 } from "./football-league-season.js";
 import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";
+import { resolveClubSquadAccess, listClubHeritagePlayers } from "./football-club-squad.js";
 import {
   listSelectableClubs,
   resolveStartTier,
@@ -5683,6 +5684,32 @@ function getLeagueStartTier() {
     tiers: state.leaguePyramid?.tiers || [],
     clubs: state.leaguePyramid?.clubs || []
   }) || { tier: DEFAULT_LEAGUE_TIER, group: null, opponents: [] };
+}
+
+// Hva klubbvalget gir deg av spillere: klubbens historiske navn hvis du har vært
+// på banen, ellers en automatisk grunntropp og en oppfordring om å samle.
+//
+// Motoren LESER History Go-progresjonen (besøkte steder) — den skriver aldri.
+function getClubSquadAccess(club) {
+  if (!club) return null;
+  // Kun klubbspillere er kandidater til grunntroppen: landslagsarenaene
+  // (Ullevaal, Maracanã) er noe du samler, ikke noe du får utdelt.
+  const candidateIds = new Set();
+  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
+    if (isNationalArenaPlace(place)) return;
+    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
+      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
+        candidateIds.add(unlock.targetId);
+      }
+    });
+  });
+  return resolveClubSquadAccess({
+    club,
+    players: Array.isArray(state.players) ? state.players : [],
+    unlockedPlaceIds: getHistoryGoCollectedSportPlaceIds(),
+    candidateIds,
+    squadSize: REQUIRED_SQUAD_SIZE
+  });
 }
 
 // Den etablerte klubben manageren tok over, eller null når klubben er egenlaget.
@@ -15504,11 +15531,22 @@ function bindOnboardingClub() {
       inherits.append(item);
     }
     summaryEl.append(inherits);
-    // Det viktigste å si tydelig FØR valget: troppen følger ikke med.
+    // Det viktigste å si tydelig FØR valget: hva du faktisk får av spillere.
+    // Har du vært på klubbens bane, er klubbens historiske navn dine å velge
+    // blant. Har du ikke det, får du en grunntropp og må samle resten selv.
+    const access = getClubSquadAccess(club);
     const warning = document.createElement("p");
     warning.className = "muted-text club-takeover-warning";
-    warning.textContent = `Du arver ikke: ${summary.doesNotInherit[0]}`;
+    warning.textContent = access
+      ? `${access.headline} ${access.detail}`
+      : `Du arver ikke: ${summary.doesNotInherit[0]}`;
     summaryEl.append(warning);
+    if (access?.heritage?.length) {
+      const names = document.createElement("p");
+      names.className = "muted-text club-takeover-warning";
+      names.textContent = `Klubbens spillere: ${access.heritage.map((entry) => entry.name).join(", ")}.`;
+      summaryEl.append(names);
+    }
   };
 
   const setTakeoverMode = (next) => {
@@ -15557,6 +15595,15 @@ function bindOnboardingClub() {
         takeoverClubId: club.id,
         ...(managerName ? { managerName } : {})
       });
+      // Har du ikke vært på klubbens bane, får du grunntroppen med én gang —
+      // ellers ville klubbvalget etterlatt deg uten spillere i det hele tatt.
+      // Har du vært der, er klubbens spillere allerede tilgjengelige gjennom
+      // den vanlige samlingen, og du velger dem selv.
+      const access = getClubSquadAccess(club);
+      const alreadyHasSquad = (state.teamMerits?.localStart?.playerIds || []).length > 0;
+      if (access?.mode === "base" && access.baseSquad.length && !alreadyHasSquad) {
+        activateStarterSquad(access.baseSquad);
+      }
       showOnboardingModeStep();
       activateRecommendedLeagueTab(getTeamFit());
       renderApp();
