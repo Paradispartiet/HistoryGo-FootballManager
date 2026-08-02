@@ -142,11 +142,46 @@ Målt over alle 60 klubbene spenner de avledede tallene 37–66 poeng
 spenn — det er nøyaktig den målingen som ville avslørt en generisk stilfamilie,
 der alle klubbene lander på midten og ingenting beskriver noe.
 
+## Kvalifiseringen
+
+En kvalifiseringsplass er en **plass, ikke en dom** — så manageren spiller den.
+Før dette var `promotion_playoff` en streng uten kamper bak seg: 3. plass i OBOS
+betydde nøyaktig det samme som 4., og 14. i Eliteserien det samme som 13.
+Ingenting feilet; det skjedde bare ikke noe.
+
+`src/football-league-playoff.js` eier progresjonen. Som serien, mini-sesongen og
+mesterskapet simulerer den **aldri managerens egen kamp** — den tar imot
+Kampdag-resultatet og bestemmer hva som skjer videre.
+
+**Formatet er det norske:** to kamper, sammenlagt.
+
+- **Utfordreren nedenfra** åpner hjemme og avslutter borte.
+- **Den som forsvarer plassen** åpner borte og avslutter hjemme — det er en reell
+  fordel, og den må ligge riktig vei.
+- Likt sammenlagt → **bortemål**. Fortsatt likt → **straffer**, avgjort på seed
+  så en omlasting aldri endrer utfallet.
+
+**Hvem møter du?** Managerens egen serie er den eneste som spilles, så motparten
+velges fra nabonivået — der den faktisk ville kommet fra. Skal du opp, møter du
+**bunnsjiktet** i divisjonen over (det er der 14.-plassen er). Forsvarer du
+plassen, møter du **toppsjiktet** i divisjonen under (det er den som har spilt
+seg fram). Utvalget er seedet, ikke tilfeldig.
+
+**2. divisjon har to omganger.** Nivået er delt i to avdelinger, så toerne møtes
+først; vinneren går videre mot OBOS-ligaen. Antallet ligger i pyramiden
+(`playoffRounds`), ikke i motoren.
+
+Og sperren som gjør at det betyr noe: `startNextLeagueSeason` **kaster** hvis
+kvalifiseringen står uspilt. Uten den ville plassen stille sluppet manageren forbi
+kampene som avgjør nivået hans — nøyaktig den feilen som var der før.
+
+`sim:league-playoff` (70 sjekker) prøver hver vei: begge baneretninger, alle tre
+avgjørelsesmåtene i begge retninger, to-omgangs-kvalifiseringen med tapt og vunnet
+første omgang, alle fire utfallene mot nivået neste sesong, lagring over
+omlasting, og at app.js faktisk spiller kampene i stedet for å hoppe over dem.
+
 ## Ikke gjort ennå
 
-- **Kvalifiseringskampene spilles ikke.** 3. plass i OBOS gir
-  `promotion_playoff`, men kampen finnes ikke ennå — plasseringen er en plass,
-  ikke en dom, og manageren skal spille den.
 - **Å velge en etablert klubb** i stedet for å opprette sin egen. Pyramiden gjør
   det mulig (16 klubber betyr at det er 15 igjen når du tar én), men valget er
   ikke bygget.
