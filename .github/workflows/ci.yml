@@ -102,3 +102,4 @@ jobs:
           npm run sim:federation-verdict
           npm run sim:league-playoff
           npm run sim:club-selection
+          npm run sim:club-tradition

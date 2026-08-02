@@ -84,3 +84,59 @@ lag. Det er en egen og mye større datajobb: ~15 ekte fotballspillere per klubb,
 hver med posisjoner, roller og styrker — og svakhetsmotoren utleder svake sider
 fra nettopp de feltene, med regelen om at den *aldri* skal finne på påstander om
 en ekte spiller.
+
+## Tradisjonen måles nå
+
+Klubbvalget lovet noe spillet ikke holdt. Onboardingen sa «Tradisjon: Godfoten.
+Styret venter at du spiller klubbens fotball» — og `inheritedStyleName` ble satt
+og **aldri lest av noe**. Et løfte uten dekning, og ingenting feilet.
+
+`src/football-club-tradition.js` måler det. Både klubbens tradisjon og hver av de
+46 formasjonene er allerede beskrevet på **de samme ni aksene**
+(`parameterProfile`: presshøyde, forsvarslinje, bredde, ballbesittelse, tempo,
+omstilling, restforsvar, pressform, risiko). Klubbens akser utledes av
+`styleTraits` og `matchupStyles` som allerede fantes — ingenting er funnet på.
+
+Treff på en akse = 2 poeng, nabo = 1, motsatt ende = 0.
+
+### Tersiler, ikke faste grenser
+
+Aksene har vidt forskjellige spenn: `pressIntensity` går 25–82, `intensity` går
+52–85. Én fast grense (45/60) ville dyttet `tempo` til **54 av 60 klubber i «høy»**
+— målt, ikke antatt. Terskelverdiene er derfor **tersiler regnet ut av korpuset**.
+Vakten krever at hver akse bruker alle tre bøttene og at ingen bøtte tar mer enn
+70 %.
+
+### Dommen må kunne oppnås
+
+Første utgave målte mot 100 %. Målt mot de 46 formasjonene kunne da **44 av 60
+klubber aldri nå toppdommen**, uansett hva manageren valgte — biblioteket har
+ingen perfekt kopi av hver klubbs tradisjon, og manageren ble straffet for det.
+
+En dom ingen kan få er ingen dom. Nå måles den mot klubbens **oppnåelige spenn**:
+100 % betyr «du valgte det beste systemet denne klubben faktisk kan spilles med».
+Vakten krever at hver klubb kan nå både topp- og bunndommen.
+
+| Klubb + system | Dom |
+|---|---|
+| Godfoten + Possession 4-3-3 | Klubbens fotball (100 %) |
+| Godfoten + Catenaccio 5-3-2 | Fremmed for klubben (0 %) |
+| Åråsen-kynisme + Classic 4-4-2 | Klubbens fotball (100 %) |
+
+Kontrollert som fotball: ingen ballbesittende klubb får en lav blokk som sitt
+beste system, og ingen lavblokk-klubb får et høypressystem.
+
+### Den rører aldri en kamp
+
+Dette er en **styredom**, på linje med sesongdommen — den legger én linje til
+styrets begrunnelse og ingenting mer. Den leser ikke `overall`, ikke
+`matchScore`, ikke `finalStrength`, og hver forklaring peker på et **systemvalg**:
+
+> «forsvarslinje: klubben spiller «high», Catenaccio 5-3-2 gir «deep». Det er et
+> systemvalg, ikke en spillersvakhet.»
+
+Vakten krever at forklaringene aldri skylder på spillerne, og at sesongdommen er
+**bit-identisk** for en egenopprettet klubb — den har ingen tradisjon å svikte.
+
+`sim:club-tradition`: 1189 sjekker. Fem vakter bittestet, og bitetest 2
+reproduserte nøyaktig feilen første utgave hadde.

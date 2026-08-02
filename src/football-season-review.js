@@ -177,7 +177,11 @@ export function createSeasonReview({
   target,
   playerStats = [],
   previousReviews = [],
-  boardTrust = 50
+  boardTrust = 50,
+  // Overtok manageren en etablert klubb, dømmer styret også på OM han spilte
+  // klubbens fotball (football-club-tradition.js). Rent additivt: uten en
+  // overtatt klubb er dette null og dommen er nøyaktig som før.
+  tradition = null
 } = {}) {
   const rows = asArray(table);
   const manager = rows.find((row) => row?.isManager);
@@ -237,7 +241,14 @@ export function createSeasonReview({
     warning,
     sacked,
     managerSafe: !sacked,
-    reasons: buildReasons(verdict, { position, targetPosition: seasonTarget.targetPosition, table: rows, playerStats }),
+    // Overtok du en klubb, dømmer styret også på om du spilte klubbens fotball.
+    // Linja legges SIST og bare når tradisjonen faktisk er målt — uten den er
+    // dommen bit-identisk med før.
+    reasons: [
+      ...buildReasons(verdict, { position, targetPosition: seasonTarget.targetPosition, table: rows, playerStats }),
+      ...(tradition ? [`${tradition.headline} ${tradition.reasons[0] || ""}`.trim()] : [])
+    ],
+    tradition: tradition || null,
     highlights: buildHighlights(playerStats, rows)
   };
 }

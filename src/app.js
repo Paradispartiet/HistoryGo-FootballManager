@@ -91,6 +91,7 @@ import {
   createLeagueTable,
   startNextLeagueSeason
 } from "./football-league-season.js";
+import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";
 import {
   listSelectableClubs,
   resolveStartTier,
@@ -5781,6 +5782,35 @@ function getSeasonTarget() {
   });
 }
 
+// Spilte manageren klubbens fotball? Bare aktuelt for en overtatt klubb — en
+// egenopprettet klubb har ingen tradisjon å svikte.
+//
+// Dommen er en STYREDOM, ikke en motor: den rører aldri en kamp, en spiller
+// eller en score. Uten den var «Styret venter at du spiller klubbens fotball»
+// i onboardingen et løfte ingenting leste.
+function getClubTraditionVerdict() {
+  const takeover = getTakeoverClub();
+  if (!takeover) return null;
+  const clubProfile = state.leagueClubProfiles[takeover.id] || null;
+  const formation = state.formations?.find((entry) => entry.id === state.selectedFormationId) || null;
+  const knowledge = state.formationKnowledgeById[state.selectedFormationId] || null;
+  if (!clubProfile || !knowledge?.parameterProfile) return null;
+
+  const profiles = Object.values(state.leagueClubProfiles || {});
+  return judgeClubTradition({
+    clubProfile,
+    formationProfile: knowledge.parameterProfile,
+    formationName: formation?.name || knowledge.displayName || "systemet ditt",
+    thresholds: buildTraditionThresholds(profiles),
+    profiles,
+    // Dommen måles mot det som er OPPNÅELIG for klubben — ellers ville 44 av 60
+    // klubber aldri kunne nå toppdommen uansett hva manageren valgte.
+    formationProfiles: Object.values(state.formationKnowledgeById || {})
+      .map((entry) => entry?.parameterProfile)
+      .filter(Boolean)
+  });
+}
+
 // Sesongen er ferdig: bygg dommen, flytt styretilliten og arkiver sesongen.
 // Idempotent på sesongnummer, så reload aldri dømmer samme sesong to ganger.
 function registerSeasonReview(season) {
@@ -5794,7 +5824,9 @@ function registerSeasonReview(season) {
     target: getSeasonTarget(),
     playerStats: state.playerSeasonStats?.rows || [],
     previousReviews: getSeasonArchive(),
-    boardTrust: Number(getOffPitchState()?.boardTrust) || 50
+    boardTrust: Number(getOffPitchState()?.boardTrust) || 50,
+    // Overtok du en klubb, dømmer styret også på om du spilte klubbens fotball.
+    tradition: getClubTraditionVerdict()
   });
   if (!review) return;
 
