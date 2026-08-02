@@ -3577,6 +3577,311 @@
         "no_service"
       ],
       "warningWhenMisused": "Uten innlegg og andreballer rundt seg blir en targetspiss stående alene i boksen."
+    },
+    {
+      "id": "per_kristoffersen",
+      "name": "Per «Snæbbus» Kristoffersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "dribbler",
+        "positioning",
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing",
+        "dribbling",
+        "positioning",
+        "first_touch",
+        "box_movement",
+        "composure"
+      ],
+      "needs": [
+        "close_support",
+        "box_service",
+        "technical_teammates"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "linking_striker"
+      ],
+      "likesTactics": [
+        "central_combinations",
+        "possession",
+        "close_support",
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_striker",
+        "clearance_only"
+      ],
+      "warningWhenMisused": "Setter du ham alene på topp uten kombinasjonsspill rundt, tar du fra ham både dribling og avslutning."
+    },
+    {
+      "id": "arne_pedersen",
+      "name": "Arne Pedersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "AM",
+        "CM"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "creator",
+        "tempo_setter",
+        "between_lines",
+        "passer"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "tempo_control",
+        "passing_range",
+        "combination_play",
+        "first_touch"
+      ],
+      "needs": [
+        "time_on_ball",
+        "passing_options",
+        "runners_ahead",
+        "technical_teammates"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "deep_playmaker",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations",
+        "calm_build_up",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "constant_second_balls",
+        "chaos"
+      ],
+      "warningWhenMisused": "Uten tid på ballen blir en oppspiller til en tilskuer — han styrte tempoet, han jaget det ikke."
+    },
+    {
+      "id": "bjorn_borgen",
+      "name": "Bjørn Borgen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "RW",
+        "LW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "wide_creator",
+        "dribbler",
+        "crossing",
+        "one_vs_one"
+      ],
+      "strengths": [
+        "dribbling",
+        "crossing",
+        "wide_movement",
+        "one_v_one",
+        "acceleration"
+      ],
+      "needs": [
+        "wide_lane",
+        "isolation_duels",
+        "overlapping_fullback"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "high_width",
+        "wide_attacks",
+        "isolate_wingers",
+        "crossing"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "roar_johansen",
+      "name": "Roar «Pontus» Johansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "leader",
+        "build_up_defender"
+      ],
+      "strengths": [
+        "duels",
+        "reading_game",
+        "positioning",
+        "leadership",
+        "simple_passing",
+        "heading"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "ball_playing_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "Uten en tydelig forsvarslinje å lese blir styrken hans — plasseringen — verdiløs."
+    },
+    {
+      "id": "svein_mathisen",
+      "name": "Svein «Matta» Mathisen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "ST",
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "creator",
+        "finisher",
+        "between_lines",
+        "runner"
+      ],
+      "strengths": [
+        "box_finishing",
+        "late_runs",
+        "final_pass",
+        "off_ball_runs",
+        "chance_creation",
+        "composure"
+      ],
+      "needs": [
+        "central_space",
+        "runners_ahead",
+        "time_on_ball"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "box_to_box",
+        "advanced_forward"
+      ],
+      "likesTactics": [
+        "central_combinations",
+        "vertical_play",
+        "possession",
+        "fluid_attack"
+      ],
+      "dislikesTactics": [
+        "deep_defensive_role",
+        "long_ball_only",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Låser du ham defensivt, mister du det han faktisk var: en midtbanespiller som scoret over hundre mål."
     }
   ]
 }

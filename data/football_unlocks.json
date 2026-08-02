@@ -634,6 +634,10 @@
         {
           "type": "player_candidate",
           "targetId": "erik_mykland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "svein_mathisen"
         }
       ],
       "notes": "Klubbanlegg: Starts hjemmebane i Kristiansand."
@@ -654,7 +658,24 @@
       "placeId": "fredrikstad_stadion",
       "placeName": "Fredrikstad stadion",
       "placeRole": "historical_club_ground_source",
-      "unlocks": [],
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "per_kristoffersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arne_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_borgen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "roar_johansen"
+        }
+      ],
       "notes": "Klubbanlegg: hjemmebanen til Norges mest titteltunge klubb på 1950-tallet."
     },
     {
