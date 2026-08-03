@@ -43,10 +43,21 @@ export const FOOTBALL_POSITIONS = [
 
 export type PlayerMatchFitStatus = "feilbrukt" | "perfekt" | "god" | "brukbar";
 
+/** Ferdighetsprofilen slik den henges på spilleren ved innlasting. */
+export type FitAttributeProfile = {
+  values: Record<string, number>;
+};
+
 export type FitPlayer = {
   id: string;
   name: string;
-  overall: number;
+  /**
+   * Klassehøyde — hvor høyt kilden bærer spilleren. Dette er en INPUT til
+   * ferdighetsprofilen, aldri en score: klassen manageren ser regnes ut mot en
+   * posisjon eller en rolle. Feltet het `overall` og var nettopp ratingen.
+   */
+  classHeight: number;
+  attributes?: FitAttributeProfile;
   naturalPositions: string[];
   usablePositions: string[];
   poorFits: string[];
@@ -65,6 +76,14 @@ export type FitRole = {
   validPositions: string[];
   positionGroup?: string;
   requires?: string[];
+  /**
+   * Rollens ferdighetskrav, løst opp ved innlasting. `requires` blander
+   * ferdigheter spilleren må ha (`crossing`) med FORHOLD systemet må gi ham
+   * (`space_behind`, `wide_lane`) — målt over de 27 rollene er 96 krav
+   * ferdigheter og 38 forhold. Bare de første hører hjemme i en vurdering av
+   * spilleren; forholdene eies av lag- og relasjonsmotorene.
+   */
+  requiredSkills?: string[];
   tacticalLikes?: string[];
   tacticalDislikes?: string[];
   badFor?: string[];
@@ -84,7 +103,9 @@ export type PlayerMatchFit = {
   roleId: string;
   tacticId: string;
   position: string;
-  overall: number;
+  classHeight: number;
+  /** Rollens andel av kampscoren — måles på nytt for hver rolle. */
+  roleClassBonus: number;
   positionFit: number;
   roleFit: number;
   tacticFit: number;
@@ -322,6 +343,27 @@ function buildExplanation(input: {
   return `${player.name} brukes på en måte som skjuler for mange av styrkene hans. Feilbruk-penalty er ${misusePenalty}. Treneren bør vurdere annen rolle, annen posisjon eller en taktikk som bedre treffer spillerens behov.`;
 }
 
+export const CLASS_BONUS_MAX = 7.7;
+
+/**
+ * Mangler ferdighetsprofilen — usammensatt testdata, eller demoen før dataene
+ * er lastet — faller vi tilbake på klassehøyden alene. Fallbacket er bevisst
+ * det gamle uttrykket, så gammel og ny vei er sammenlignbare.
+ */
+export function calculateClassBonus(player: FitPlayer, role: FitRole): number {
+  const values = player.attributes?.values;
+  const skills = Array.isArray(role.requiredSkills) ? role.requiredSkills : [];
+  if (!values || skills.length === 0) {
+    return ((Number.isFinite(player.classHeight) ? player.classHeight : 85) - 85) * 0.55;
+  }
+  const total = skills.reduce((sum, id) => {
+    const value = values[id];
+    return sum + (typeof value === "number" && Number.isFinite(value) ? value : 4);
+  }, 0);
+  // Eksplisitt normalisering fra ferdighetsskalaen (1–20) til bonusspennet.
+  return (total / skills.length / 20) * CLASS_BONUS_MAX;
+}
+
 export function calculatePlayerMatchFit(
   player: FitPlayer,
   assignment: FitAssignment,
@@ -334,7 +376,10 @@ export function calculatePlayerMatchFit(
   const tacticFit = calculateTacticFit(player, tactic, role);
   const misusePenalty = calculateMisusePenalty(player, assignment, role, tactic);
 
-  const classBonus = (player.overall - 85) * 0.55;
+  // Speiler football-fit-engine.js nøyaktig: bonusen er ikke lenger et flatt
+  // løft spilleren bærer med seg overalt, men hvor godt ferdighetene hans
+  // treffer det NETTOPP DENNE rollen krever.
+  const classBonus = calculateClassBonus(player, role);
   const rawScore = 35 + classBonus + positionFit * 0.2 + roleFit * 0.27 + tacticFit * 0.25 - misusePenalty * 0.65;
   const matchScore = clamp(Math.round(rawScore), 1, 100);
   const status = getStatus(matchScore, misusePenalty);
@@ -356,7 +401,8 @@ export function calculatePlayerMatchFit(
     roleId: role.id,
     tacticId: tactic.id,
     position: assignment.position,
-    overall: player.overall,
+    classHeight: player.classHeight,
+    roleClassBonus: Math.round(classBonus * 10) / 10,
     positionFit,
     roleFit,
     tacticFit,

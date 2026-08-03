@@ -16,6 +16,10 @@ function clamp(value, min = 0, max = 100) {
   return Math.max(min, Math.min(max, value));
 }
 
+function num(value, fallback = 0) {
+  return Number.isFinite(Number(value)) ? Number(value) : fallback;
+}
+
 function unique(values) {
   return [...new Set(values.filter(Boolean))];
 }
@@ -223,13 +227,43 @@ function buildExplanation({ player, assignment, role, tactic, positionFit, roleF
   return `${player.name} brukes på en måte som skjuler for mange av styrkene hans. Feilbruk-penalty er ${misusePenalty}. Treneren bør vurdere annen rolle, annen posisjon eller en taktikk som bedre treffer spillerens behov.`;
 }
 
+// Ferdighetsprofilen henges på spilleren ved innlasting
+// (`football-player-attributes.js`). Mangler den — usammensatt TS-testdata,
+// eller demoen før dataene er lastet — faller vi tilbake på klassehøyden alene.
+// Fallbacket er bevisst det gamle uttrykket, så gammel og ny vei er
+// sammenlignbare i stedet for stilltiende ulike.
+export const CLASS_BONUS_MAX = 7.7;
+
+export function calculateClassBonus(player, role) {
+  const values = player?.attributes?.values;
+  const skills = Array.isArray(role?.requiredSkills) ? role.requiredSkills : [];
+  if (!values || skills.length === 0) {
+    return (num(player?.classHeight, 85) - 85) * 0.55;
+  }
+  const total = skills.reduce((sum, id) => sum + (Number.isFinite(values[id]) ? values[id] : 4), 0);
+  // Eksplisitt normalisering fra ferdighetsskalaen (1–20) til bonusspennet,
+  // ikke et klem. Skala-mismatch er husets tilbakevendende bug.
+  return (total / skills.length / 20) * CLASS_BONUS_MAX;
+}
+
 export function calculatePlayerMatchFit(player, assignment, role, tactic, roles = []) {
   const positionFit = calculatePositionFit(player, assignment);
   const roleFit = calculateRoleFit(player, role);
   const tacticFit = calculateTacticFit(player, tactic, role);
   const misusePenalty = calculateMisusePenalty(player, assignment, role, tactic);
 
-  const classBonus = (player.overall - 85) * 0.55;
+  // Klassebonusen er ikke lenger et flatt løft spilleren bærer med seg overalt.
+  // Den måles på nytt for HVER rolle: hvor godt treffer ferdighetene hans det
+  // nettopp denne rollen krever? Det er derfor en spiller med lavere
+  // klassehøyde kan slå en med høyere — målt over de 27 rollene har 23 av dem
+  // en annen best-treffende spiller enn den med høyest klassehøyde.
+  //
+  // Spennet er bevisst identisk med det gamle (0–7,7), så resten av
+  // matchScore-kalibreringen står. `role.requiredSkills` er rollens
+  // ferdighetskrav, løst opp ved innlasting — rollens `requires` blander
+  // ferdigheter med FORHOLD systemet må gi (`space_behind`), og bare de første
+  // hører hjemme i en spillervurdering.
+  const classBonus = calculateClassBonus(player, role);
   const rawScore = 35 + classBonus + positionFit * 0.2 + roleFit * 0.27 + tacticFit * 0.25 - misusePenalty * 0.65;
   const matchScore = clamp(Math.round(rawScore), 1, 100);
   const status = getStatus(matchScore, misusePenalty);
@@ -252,7 +286,8 @@ export function calculatePlayerMatchFit(player, assignment, role, tactic, roles 
     roleId: role.id,
     tacticId: tactic.id,
     position: assignment.position,
-    overall: player.overall,
+    classHeight: player.classHeight,
+    roleClassBonus: Math.round(classBonus * 10) / 10,
     positionFit,
     roleFit,
     tacticFit,

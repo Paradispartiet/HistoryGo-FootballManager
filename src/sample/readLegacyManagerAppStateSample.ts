@@ -41,7 +41,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_gk_01",
     name: "Legacy Sweeperkeeper",
-    overall: 92,
+    classHeight: 92,
     naturalPositions: ["GK"],
     usablePositions: [],
     poorFits: ["CB", "DM", "ST"],
@@ -56,7 +56,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_lb_01",
     name: "Legacy Venstreback",
-    overall: 88,
+    classHeight: 88,
     naturalPositions: ["LB"],
     usablePositions: ["RB"],
     poorFits: ["CB", "ST"],
@@ -71,7 +71,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_lcb_01",
     name: "Legacy Ballspillende stopper",
-    overall: 91,
+    classHeight: 91,
     naturalPositions: ["CB"],
     usablePositions: ["DM"],
     poorFits: ["ST", "LW", "RW"],
@@ -86,7 +86,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_rcb_01",
     name: "Legacy Duellstopper",
-    overall: 89,
+    classHeight: 89,
     naturalPositions: ["CB"],
     usablePositions: [],
     poorFits: ["DM", "CM", "ST"],
@@ -101,7 +101,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_rb_01",
     name: "Legacy Høyreback",
-    overall: 88,
+    classHeight: 88,
     naturalPositions: ["RB"],
     usablePositions: ["LB"],
     poorFits: ["CB", "ST"],
@@ -116,7 +116,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_dm_01",
     name: "Legacy Balanserende sekser",
-    overall: 90,
+    classHeight: 90,
     naturalPositions: ["DM"],
     usablePositions: ["CM"],
     poorFits: ["ST", "LW", "RW"],
@@ -131,7 +131,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_lcm_01",
     name: "Legacy Dyp playmaker",
-    overall: 93,
+    classHeight: 93,
     naturalPositions: ["CM", "DM"],
     usablePositions: [],
     poorFits: ["ST", "LW", "RW"],
@@ -146,7 +146,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_rcm_01",
     name: "Legacy Boks-til-boks",
-    overall: 90,
+    classHeight: 90,
     naturalPositions: ["CM"],
     usablePositions: ["AM", "DM"],
     poorFits: ["CB", "ST"],
@@ -161,7 +161,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_lw_01",
     name: "Legacy Venstrekant",
-    overall: 91,
+    classHeight: 91,
     naturalPositions: ["LW"],
     usablePositions: ["RW", "AM"],
     poorFits: ["ST", "DM", "CB"],
@@ -176,7 +176,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_st_01",
     name: "Legacy Presspiss",
-    overall: 90,
+    classHeight: 90,
     naturalPositions: ["ST"],
     usablePositions: ["LW", "RW"],
     poorFits: ["CB", "DM"],
@@ -191,7 +191,7 @@ export const legacySamplePlayers: LegacyFootballPlayer[] = [
   {
     id: "legacy_rw_01",
     name: "Legacy Høyrekant",
-    overall: 92,
+    classHeight: 92,
     naturalPositions: ["RW"],
     usablePositions: ["LW", "AM"],
     poorFits: ["ST", "DM", "CB"],

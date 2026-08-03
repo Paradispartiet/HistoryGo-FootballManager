@@ -1,6 +1,6 @@
 {
-  "schema": "historygo-football-manager.players.v2",
-  "version": 2,
+  "schema": "historygo-football-manager.players.v3",
+  "version": 3,
   "players": [
     {
       "id": "martin_odegaard",
@@ -10,7 +10,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 96,
+      "classHeight": 96,
       "naturalPositions": [
         "AM",
         "CM"
@@ -72,7 +72,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 98,
+      "classHeight": 98,
       "naturalPositions": [
         "ST"
       ],
@@ -132,7 +132,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 97,
+      "classHeight": 97,
       "naturalPositions": [
         "RW",
         "LW"
@@ -195,7 +195,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 96,
+      "classHeight": 96,
       "naturalPositions": [
         "ST"
       ],
@@ -256,7 +256,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "ST"
       ],
@@ -315,7 +315,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "AM",
         "CM"
@@ -378,7 +378,7 @@
         "ullevaal_stadion",
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -437,7 +437,7 @@
         "gressbanen",
         "ullevaal_stadion"
       ],
-      "overall": 94,
+      "classHeight": 94,
       "naturalPositions": [
         "ST"
       ],
@@ -498,7 +498,7 @@
         "gressbanen",
         "ullevaal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "LW",
         "RW",
@@ -561,7 +561,7 @@
         "ekebergsletta",
         "ullevaal_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "RW",
         "AM"
@@ -624,7 +624,7 @@
         "ekebergsletta",
         "ullevaal_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "LW",
         "RW"
@@ -688,7 +688,7 @@
         "ullevaal_stadion",
         "intility_arena"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "CM",
         "DM"
@@ -751,7 +751,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "GK"
       ],
@@ -809,7 +809,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "GK"
       ],
@@ -866,7 +866,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 94,
+      "classHeight": 94,
       "naturalPositions": [
         "LB",
         "WB"
@@ -927,7 +927,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "RB",
         "WB"
@@ -989,7 +989,7 @@
         "ullevaal_stadion",
         "lyse_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CB"
       ],
@@ -1051,7 +1051,7 @@
         "ullevaal_stadion",
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CB",
         "DM"
@@ -1113,7 +1113,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 94,
+      "classHeight": 94,
       "naturalPositions": [
         "CB",
         "DM",
@@ -1178,7 +1178,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 97,
+      "classHeight": 97,
       "naturalPositions": [
         "CM",
         "AM"
@@ -1241,7 +1241,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "CM",
         "AM"
@@ -1303,7 +1303,7 @@
       "sourcePlaceIds": [
         "ullevaal_stadion"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "ST"
       ],
@@ -1366,7 +1366,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 94,
+      "classHeight": 94,
       "naturalPositions": [
         "ST"
       ],
@@ -1427,7 +1427,7 @@
         "ullevaal_stadion",
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "ST"
       ],
@@ -1489,7 +1489,7 @@
       "sourcePlaceIds": [
         "ajax_amsterdam"
       ],
-      "overall": 99,
+      "classHeight": 99,
       "naturalPositions": [
         "ST",
         "AM"
@@ -1558,7 +1558,7 @@
       "sourcePlaceIds": [
         "maracana"
       ],
-      "overall": 99,
+      "classHeight": 99,
       "naturalPositions": [
         "ST",
         "AM"
@@ -1622,7 +1622,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "GK"
       ],
@@ -1673,7 +1673,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CB"
       ],
@@ -1726,7 +1726,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LB"
       ],
@@ -1780,7 +1780,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CM"
       ],
@@ -1832,7 +1832,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "AM"
       ],
@@ -1884,7 +1884,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "ST"
       ],
@@ -1936,7 +1936,7 @@
       "sourcePlaceIds": [
         "brann_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -1987,7 +1987,7 @@
         "briskeby_stadion",
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -2038,7 +2038,7 @@
       "sourcePlaceIds": [
         "brann_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RW"
       ],
@@ -2089,7 +2089,7 @@
       "sourcePlaceIds": [
         "aspmyra_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -2140,7 +2140,7 @@
       "sourcePlaceIds": [
         "aspmyra_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "DM",
         "CM"
@@ -2192,7 +2192,7 @@
       "sourcePlaceIds": [
         "aspmyra_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM"
       ],
@@ -2243,7 +2243,7 @@
       "sourcePlaceIds": [
         "aspmyra_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "LW"
       ],
@@ -2295,7 +2295,7 @@
       "sourcePlaceIds": [
         "araasen_stadion"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "AM"
       ],
@@ -2346,7 +2346,7 @@
       "sourcePlaceIds": [
         "araasen_stadion"
       ],
-      "overall": 86,
+      "classHeight": 86,
       "naturalPositions": [
         "CB"
       ],
@@ -2397,7 +2397,7 @@
       "sourcePlaceIds": [
         "aker_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CB"
       ],
@@ -2448,7 +2448,7 @@
       "sourcePlaceIds": [
         "aker_stadion"
       ],
-      "overall": 86,
+      "classHeight": 86,
       "naturalPositions": [
         "RB"
       ],
@@ -2500,7 +2500,7 @@
       "sourcePlaceIds": [
         "aker_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM"
       ],
@@ -2553,7 +2553,7 @@
         "aker_stadion",
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "AM"
       ],
@@ -2604,7 +2604,7 @@
       "sourcePlaceIds": [
         "aker_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "ST"
       ],
@@ -2657,7 +2657,7 @@
       "sourcePlaceIds": [
         "nadderud_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -2709,7 +2709,7 @@
       "sourcePlaceIds": [
         "nadderud_stadion"
       ],
-      "overall": 86,
+      "classHeight": 86,
       "naturalPositions": [
         "AM"
       ],
@@ -2761,7 +2761,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -2813,7 +2813,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -2864,7 +2864,7 @@
       "sourcePlaceIds": [
         "brann_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -2916,7 +2916,7 @@
       "sourcePlaceIds": [
         "aspmyra_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM"
       ],
@@ -2967,7 +2967,7 @@
       "sourcePlaceIds": [
         "aspmyra_stadion"
       ],
-      "overall": 86,
+      "classHeight": 86,
       "naturalPositions": [
         "RB"
       ],
@@ -3021,7 +3021,7 @@
       "sourcePlaceIds": [
         "araasen_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -3073,7 +3073,7 @@
       "sourcePlaceIds": [
         "aker_stadion"
       ],
-      "overall": 86,
+      "classHeight": 86,
       "naturalPositions": [
         "AM"
       ],
@@ -3125,7 +3125,7 @@
       "sourcePlaceIds": [
         "nadderud_stadion"
       ],
-      "overall": 86,
+      "classHeight": 86,
       "naturalPositions": [
         "CB"
       ],
@@ -3176,7 +3176,7 @@
       "sourcePlaceIds": [
         "lyse_arena"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CM",
         "DM"
@@ -3237,7 +3237,7 @@
       "sourcePlaceIds": [
         "lyse_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -3299,7 +3299,7 @@
         "romssa_arena",
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -3358,7 +3358,7 @@
       "sourcePlaceIds": [
         "romssa_arena"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "LW"
       ],
@@ -3419,7 +3419,7 @@
       "sourcePlaceIds": [
         "romssa_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -3477,7 +3477,7 @@
       "sourcePlaceIds": [
         "sor_arena"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "AM",
         "CM"
@@ -3539,7 +3539,7 @@
       "sourcePlaceIds": [
         "color_line_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -3596,7 +3596,7 @@
       "sourcePlaceIds": [
         "fredrikstad_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "ST"
       ],
@@ -3657,7 +3657,7 @@
       "sourcePlaceIds": [
         "fredrikstad_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "AM",
         "CM"
@@ -3720,7 +3720,7 @@
       "sourcePlaceIds": [
         "fredrikstad_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "RW",
         "LW"
@@ -3779,7 +3779,7 @@
       "sourcePlaceIds": [
         "fredrikstad_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CB"
       ],
@@ -3839,7 +3839,7 @@
       "sourcePlaceIds": [
         "sor_arena"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "AM"
       ],
@@ -3901,7 +3901,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 94,
+      "classHeight": 94,
       "naturalPositions": [
         "DM",
         "CB"
@@ -3962,7 +3962,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CM"
       ],
@@ -4023,7 +4023,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "LW",
         "RW"
@@ -4086,7 +4086,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "ST"
       ],
@@ -4147,7 +4147,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "RW"
       ],
@@ -4209,7 +4209,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "GK"
       ],
@@ -4264,7 +4264,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "ST"
       ],
@@ -4322,7 +4322,7 @@
         "sarpsborg_stadion",
         "lerkendal_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "ST"
       ],
@@ -4382,7 +4382,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "LB"
       ],
@@ -4441,7 +4441,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "LW",
         "ST"
@@ -4501,7 +4501,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LW",
         "RW"
@@ -4559,7 +4559,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RW",
         "LW"
@@ -4617,7 +4617,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CB"
       ],
@@ -4676,7 +4676,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CM",
         "AM"
@@ -4736,7 +4736,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -4793,7 +4793,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -4850,7 +4850,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM",
         "CM"
@@ -4907,7 +4907,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LW",
         "RW"
@@ -4965,7 +4965,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -5025,7 +5025,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST",
         "LW"
@@ -5085,7 +5085,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM",
         "DM"
@@ -5144,7 +5144,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -5203,7 +5203,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB",
         "WB"
@@ -5264,7 +5264,7 @@
         "sarpsborg_stadion",
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -5323,7 +5323,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -5381,7 +5381,7 @@
         "sarpsborg_stadion",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -5440,7 +5440,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -5500,7 +5500,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -5561,7 +5561,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CB"
       ],
@@ -5621,7 +5621,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -5675,7 +5675,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LB",
         "WB"
@@ -5734,7 +5734,7 @@
       "sourcePlaceIds": [
         "sarpsborg_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "ST"
       ],
@@ -5793,7 +5793,7 @@
         "briskeby_stadion",
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "RW",
         "LW"
@@ -5856,7 +5856,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "CB"
       ],
@@ -5916,7 +5916,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "CB"
       ],
@@ -5975,7 +5975,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 91,
+      "classHeight": 91,
       "naturalPositions": [
         "CM",
         "AM"
@@ -6036,7 +6036,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 92,
+      "classHeight": 92,
       "naturalPositions": [
         "ST"
       ],
@@ -6097,7 +6097,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -6155,7 +6155,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "GK"
       ],
@@ -6210,7 +6210,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CB"
       ],
@@ -6269,7 +6269,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CM"
       ],
@@ -6329,7 +6329,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CB"
       ],
@@ -6387,7 +6387,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM"
       ],
@@ -6449,7 +6449,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -6508,7 +6508,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "CM",
         "DM"
@@ -6569,7 +6569,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 89,
+      "classHeight": 89,
       "naturalPositions": [
         "AM",
         "LW"
@@ -6630,7 +6630,7 @@
         "briskeby_stadion",
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RW",
         "LW"
@@ -6689,7 +6689,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM",
         "LB"
@@ -6750,7 +6750,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -6810,7 +6810,7 @@
         "briskeby_stadion",
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LB",
         "CB"
@@ -6871,7 +6871,7 @@
         "briskeby_stadion",
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -6929,7 +6929,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -6986,7 +6986,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -7043,7 +7043,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -7103,7 +7103,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -7161,7 +7161,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST",
         "AM"
@@ -7221,7 +7221,7 @@
       "sourcePlaceIds": [
         "briskeby_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -7278,7 +7278,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CB"
       ],
@@ -7337,7 +7337,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CM"
       ],
@@ -7397,7 +7397,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -7456,7 +7456,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "GK"
       ],
@@ -7509,7 +7509,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CM"
       ],
@@ -7568,7 +7568,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "ST"
       ],
@@ -7626,7 +7626,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "ST"
       ],
@@ -7684,7 +7684,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -7743,7 +7743,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CM"
       ],
@@ -7802,7 +7802,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CM"
       ],
@@ -7861,7 +7861,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CM"
       ],
@@ -7920,7 +7920,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -7978,7 +7978,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "GK"
       ],
@@ -8031,7 +8031,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -8088,7 +8088,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "RB"
       ],
@@ -8147,7 +8147,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -8204,7 +8204,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -8263,7 +8263,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -8321,7 +8321,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -8380,7 +8380,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -8437,7 +8437,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CB"
       ],
@@ -8494,7 +8494,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CB"
       ],
@@ -8551,7 +8551,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -8610,7 +8610,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "ST"
       ],
@@ -8669,7 +8669,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -8728,7 +8728,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -8785,7 +8785,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -8842,7 +8842,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -8900,7 +8900,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -8958,7 +8958,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9017,7 +9017,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RW"
       ],
@@ -9074,7 +9074,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -9131,7 +9131,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "GK"
       ],
@@ -9184,7 +9184,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -9241,7 +9241,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM"
       ],
@@ -9299,7 +9299,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9356,7 +9356,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -9413,7 +9413,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -9470,7 +9470,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9528,7 +9528,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -9585,7 +9585,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9642,7 +9642,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9699,7 +9699,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9758,7 +9758,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -9815,7 +9815,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9872,7 +9872,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -9929,7 +9929,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -9986,7 +9986,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -10043,7 +10043,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RW"
       ],
@@ -10100,7 +10100,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RB"
       ],
@@ -10158,7 +10158,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RW"
       ],
@@ -10216,7 +10216,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CB"
       ],
@@ -10273,7 +10273,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -10331,7 +10331,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -10384,7 +10384,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -10440,7 +10440,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -10497,7 +10497,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -10555,7 +10555,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -10612,7 +10612,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -10670,7 +10670,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -10727,7 +10727,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -10780,7 +10780,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -10837,7 +10837,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -10896,7 +10896,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -10952,7 +10952,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -11009,7 +11009,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -11066,7 +11066,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -11123,7 +11123,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -11182,7 +11182,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -11239,7 +11239,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -11296,7 +11296,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -11352,7 +11352,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -11410,7 +11410,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -11463,7 +11463,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -11516,7 +11516,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -11574,7 +11574,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -11631,7 +11631,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -11686,7 +11686,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -11745,7 +11745,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -11802,7 +11802,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -11859,7 +11859,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -11916,7 +11916,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -11973,7 +11973,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -12032,7 +12032,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -12089,7 +12089,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -12145,7 +12145,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -12203,7 +12203,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -12256,7 +12256,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -12313,7 +12313,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -12369,7 +12369,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -12427,7 +12427,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -12484,7 +12484,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -12541,7 +12541,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -12597,7 +12597,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -12653,7 +12653,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -12709,7 +12709,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -12764,7 +12764,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -12821,7 +12821,7 @@
         "intility_arena",
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -12878,7 +12878,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -12934,7 +12934,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -12992,7 +12992,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -13049,7 +13049,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -13104,7 +13104,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -13160,7 +13160,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -13215,7 +13215,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -13274,7 +13274,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -13333,7 +13333,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -13388,7 +13388,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -13447,7 +13447,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -13504,7 +13504,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -13563,7 +13563,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -13620,7 +13620,7 @@
       "sourcePlaceIds": [
         "intility_arena"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -13677,7 +13677,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CB"
       ],
@@ -13736,7 +13736,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CM"
       ],
@@ -13795,7 +13795,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "LB"
       ],
@@ -13851,7 +13851,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "LB"
       ],
@@ -13909,7 +13909,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -13966,7 +13966,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "RW"
       ],
@@ -14023,7 +14023,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "GK"
       ],
@@ -14076,7 +14076,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CM"
       ],
@@ -14135,7 +14135,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 93,
+      "classHeight": 93,
       "naturalPositions": [
         "CB"
       ],
@@ -14194,7 +14194,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "RW"
       ],
@@ -14251,7 +14251,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -14310,7 +14310,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "RB"
       ],
@@ -14366,7 +14366,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "GK"
       ],
@@ -14419,7 +14419,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "DM"
       ],
@@ -14475,7 +14475,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CM"
       ],
@@ -14532,7 +14532,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -14589,7 +14589,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -14646,7 +14646,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -14703,7 +14703,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "GK"
       ],
@@ -14756,7 +14756,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -14813,7 +14813,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "AM"
       ],
@@ -14871,7 +14871,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LB"
       ],
@@ -14927,7 +14927,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -14985,7 +14985,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -15042,7 +15042,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -15099,7 +15099,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -15156,7 +15156,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -15211,7 +15211,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -15270,7 +15270,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -15328,7 +15328,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -15385,7 +15385,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -15438,7 +15438,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM"
       ],
@@ -15495,7 +15495,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -15552,7 +15552,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -15609,7 +15609,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -15667,7 +15667,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -15724,7 +15724,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -15781,7 +15781,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -15838,7 +15838,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -15895,7 +15895,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -15952,7 +15952,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CM"
       ],
@@ -16010,7 +16010,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CB"
       ],
@@ -16067,7 +16067,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -16126,7 +16126,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -16185,7 +16185,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CB"
       ],
@@ -16244,7 +16244,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "CB"
       ],
@@ -16301,7 +16301,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -16360,7 +16360,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LB"
       ],
@@ -16416,7 +16416,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RB"
       ],
@@ -16474,7 +16474,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CM"
       ],
@@ -16533,7 +16533,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -16592,7 +16592,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -16650,7 +16650,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -16707,7 +16707,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -16766,7 +16766,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -16823,7 +16823,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "RB"
       ],
@@ -16881,7 +16881,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "LB"
       ],
@@ -16939,7 +16939,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -16996,7 +16996,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -17051,7 +17051,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -17106,7 +17106,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -17163,7 +17163,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -17221,7 +17221,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -17274,7 +17274,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -17327,7 +17327,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -17384,7 +17384,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "RW"
       ],
@@ -17441,7 +17441,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "LB"
       ],
@@ -17497,7 +17497,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -17553,7 +17553,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -17609,7 +17609,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -17667,7 +17667,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -17726,7 +17726,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -17783,7 +17783,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -17840,7 +17840,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -17897,7 +17897,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -17954,7 +17954,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "CB"
       ],
@@ -18011,7 +18011,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -18068,7 +18068,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -18125,7 +18125,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -18182,7 +18182,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -18235,7 +18235,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -18288,7 +18288,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -18344,7 +18344,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -18400,7 +18400,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -18458,7 +18458,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -18515,7 +18515,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -18572,7 +18572,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -18628,7 +18628,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -18685,7 +18685,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -18741,7 +18741,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "RW"
       ],
@@ -18796,7 +18796,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -18851,7 +18851,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -18906,7 +18906,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -18964,7 +18964,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -19021,7 +19021,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -19079,7 +19079,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -19134,7 +19134,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -19189,7 +19189,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -19246,7 +19246,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -19303,7 +19303,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 88,
+      "classHeight": 88,
       "naturalPositions": [
         "ST"
       ],
@@ -19360,7 +19360,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -19417,7 +19417,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 90,
+      "classHeight": 90,
       "naturalPositions": [
         "ST"
       ],
@@ -19474,7 +19474,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -19531,7 +19531,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -19588,7 +19588,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -19647,7 +19647,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -19704,7 +19704,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -19761,7 +19761,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -19818,7 +19818,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -19877,7 +19877,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -19934,7 +19934,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LW"
       ],
@@ -19989,7 +19989,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -20046,7 +20046,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "GK"
       ],
@@ -20099,7 +20099,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -20158,7 +20158,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -20214,7 +20214,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "AM"
       ],
@@ -20272,7 +20272,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -20330,7 +20330,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -20389,7 +20389,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CB"
       ],
@@ -20446,7 +20446,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -20501,7 +20501,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -20558,7 +20558,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -20615,7 +20615,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -20672,7 +20672,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "CM"
       ],
@@ -20731,7 +20731,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -20788,7 +20788,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RB"
       ],
@@ -20846,7 +20846,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "DM"
       ],
@@ -20902,7 +20902,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "ST"
       ],
@@ -20959,7 +20959,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "LB"
       ],
@@ -21015,7 +21015,7 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "overall": 87,
+      "classHeight": 87,
       "naturalPositions": [
         "RW"
       ],
@@ -21064,5 +21064,6 @@
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
     }
-  ]
+  ],
+  "note": "classHeight erstattet overall i v3. Feltet er en INPUT til ferdighetsprofilen (hvor høyt kilden bærer spilleren), aldri en score: klassen manageren ser regnes ut mot en posisjon eller en rolle av src/football-player-attributes.js. Et felt som het overall og ikke lenger var det, ville drevet."
 }

@@ -36,7 +36,17 @@ function check(label, condition) {
 function stage(title) { console.log(`\n${title}`); }
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url), "utf8"));
-const rawCatalogue = read("../data/football_player_weaknesses.json");
+// Ferdighetsvokabularet og posisjonskravene bor i football_attributes.json;
+// svakhetsfila eier bare TRENINGEN av dem. Slås sammen her på nøyaktig samme
+// måte som app.js gjør det, ellers måler vakten en katalog produksjonen aldri
+// ser.
+const rawWeaknesses = read("../data/football_player_weaknesses.json");
+const rawAttributes = read("../data/football_attributes.json");
+const rawCatalogue = {
+  ...rawWeaknesses,
+  attributes: rawAttributes.attributes,
+  positionDemands: rawAttributes.positionDemands
+};
 const catalogue = normalizeWeaknessCatalogue(rawCatalogue);
 const playersData = read("../data/football_players.json");
 const players = Array.isArray(playersData) ? playersData : playersData.players;
@@ -60,11 +70,20 @@ check(
   "alle posisjonskrav peker på kjente attributter",
   Object.values(catalogue.positionDemands).every((tokens) => tokens.every((t) => Boolean(getWeaknessAttribute(catalogue, t))))
 );
+// Dekningen må være nåbar fra ekte spillerdata, ellers er den pynt. Etter at
+// ferdighetskatalogen fikk kanoniske ider, går veien ofte gjennom aliaslista:
+// spillerne har `reading_game`, ferdigheten heter `game_reading`. Vakten må
+// løse akkurat som motoren gjør — ellers måler den noe produksjonen ikke ser.
 check(
-  "alle coveredBy peker på ekte spillerstyrker",
+  "alle coveredBy er nåbare fra ekte spillerstyrker",
   (() => {
     const strengths = new Set(players.flatMap((p) => p.strengths));
-    return catalogue.attributes.every((a) => a.coveredBy.every((t) => strengths.has(t)));
+    const aliasesTo = {};
+    for (const [token, target] of Object.entries(rawAttributes.strengthAliases || {})) {
+      (aliasesTo[target] = aliasesTo[target] || []).push(token);
+    }
+    const reachable = (token) => strengths.has(token) || (aliasesTo[token] || []).some((t) => strengths.has(t));
+    return catalogue.attributes.every((a) => a.coveredBy.every(reachable));
   })()
 );
 check("en manglende fil degraderer til gyldig, tom katalog", normalizeWeaknessCatalogue(null).attributes.length === 0);
@@ -235,7 +254,7 @@ check(
 check(
   "en spiller med høy overall har like gjerne svake sider som en med lav",
   (() => {
-    const sorted = [...players].sort((a, b) => b.overall - a.overall);
+    const sorted = [...players].sort((a, b) => b.classHeight - a.classHeight);
     const top = sorted.slice(0, 10).filter((p) => weaknessesFor(p).length > 0).length;
     const bottom = sorted.slice(-10).filter((p) => weaknessesFor(p).length > 0).length;
     return top === bottom;

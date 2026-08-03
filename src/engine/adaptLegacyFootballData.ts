@@ -23,7 +23,8 @@ import type {
 export type LegacyFootballPlayer = {
   id: string;
   name: string;
-  overall: number;
+  /** Het `overall` til og med v2 av spillerskjemaet. Se football_attributes.json. */
+  classHeight: number;
   naturalPositions: string[];
   usablePositions?: string[];
   poorFits?: string[];
@@ -318,7 +319,7 @@ function attributesFromLegacyPlayer(player: LegacyFootballPlayer): PlayerAttribu
     applyLegacyTagToAttributes(attributes, tag);
   }
 
-  const classLift = Math.max(0, player.overall - 85);
+  const classLift = Math.max(0, player.classHeight - 85);
 
   for (const key of Object.keys(attributes) as PlayerAttribute[]) {
     attributes[key] = clampScore(attributes[key] + classLift * 0.4);
@@ -427,7 +428,7 @@ function preferredTraitsFromLegacyRole(role: LegacyFootballRole): PlayerTrait[] 
   const fakePlayer: LegacyFootballPlayer = {
     id: role.id,
     name: role.name,
-    overall: 90,
+    classHeight: 90,
     naturalPositions: role.validPositions,
     archetypes: role.requires ?? [],
     strengths: role.goodWith ?? [],
@@ -538,7 +539,7 @@ export function adaptLegacyPlayers(players: LegacyFootballPlayer[]): Player[] {
   return players.map((player) => ({
     id: player.id,
     name: player.name,
-    overall: clampScore(player.overall),
+    overall: clampScore(player.classHeight),
     naturalPositions: toPositions(player.naturalPositions),
     attributes: attributesFromLegacyPlayer(player),
     traits: traitsFromLegacyPlayer(player),

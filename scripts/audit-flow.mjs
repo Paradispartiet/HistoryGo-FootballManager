@@ -172,7 +172,7 @@ check(
 );
 check(
   "auto-troppen tar de jevne klubbspillerne først (stjerner må samles)",
-  /const ordered = \[\.\.\.players\][\s\S]{0,260}Number\(a\.overall\)[\s\S]{0,40}Number\(b\.overall\)/.test(app)
+  /const ordered = \[\.\.\.players\][\s\S]{0,260}Number\(a\.classHeight\)[\s\S]{0,40}Number\(b\.classHeight\)/.test(app)
 );
 {
   // Datakontrakt: klubbanleggene må ha nok spillere til en spillbar tropp,
@@ -195,8 +195,8 @@ check(
   check("klubb-scope har minst 2 keepere", posCount(["GK"]) >= 2, `GK=${posCount(["GK"])}`);
   check("landslagsstjerner finnes som eksklusiv samlebelønning", [...natIds].some((id) => !clubIds.has(id)));
   check(
-    "alle spillere er gode (overall 85-100)",
-    players.every((p) => Number(p.overall) >= 85 && Number(p.overall) <= 100)
+    "alle spillere er gode (classHeight 85-100)",
+    players.every((p) => Number(p.classHeight) >= 85 && Number(p.classHeight) <= 100)
   );
 }
 check(
@@ -365,7 +365,7 @@ check(
 );
 check(
   "grunnstammen er grunnsjiktet – stjernene må fortsatt samles",
-  /function getNationalBasePlayers\(\)[\s\S]{0,900}Number\(player\.overall\) < NAME_TIER_MIN/.test(app)
+  /function getNationalBasePlayers\(\)[\s\S]{0,900}Number\(player\.classHeight\) < NAME_TIER_MIN/.test(app)
 );
 check(
   "nasjonskortet skiller grunnstamme fra samlede spillere",

@@ -7,7 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 > Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
 > ("Every player is good enough. The question is whether the manager understands them.")
 
-This is **not** a rating game. `overall` describes a player's class, not their match value. A lower-`overall` player can outperform a higher one if used in the right position, role, tactic and relational pattern. Misuse must always be explained as a **manager error**, never a player weakness. Do not add features that turn the project into a conventional rating game — `overall` must never decide an outcome alone. Role fit, tactic fit, position fit, relationships, team balance and misuse penalties must weigh more heavily.
+This is **not** a rating game. Misuse must always be explained as a **manager error**, never a player weakness. Role fit, tactic fit, position fit, relationships, team balance and misuse penalties must weigh more heavily than class.
+
+**There is no single number for a player.** `overall` is gone: players carry a 42-skill profile (1–20 per skill, `data/football_attributes.json`) plus `classHeight`, which is an **input** to that profile and never a score. The class the manager sees is always computed **against a position or a role** — Ødegaard is 85 as AM and 46 as CB — so there is no column to sort the squad by and the ranking dies structurally rather than by rule. The match engine's class bonus is likewise recomputed **per role**: measured, 26 of 27 roles are won by someone who is *not* the highest-`classHeight` player. Do not reintroduce an authored, position-independent player score. See `docs/ferdigheter.md`.
 
 The codebase, docs, comments, commit history and data are written in **Norwegian**. Follow that convention when editing user-facing text, data labels and comments.
 
@@ -30,6 +32,7 @@ npm run audit:hg-formation-knowledge   # data/hgFootball/formationKnowledge.json
 npm run audit:historical-opponents     # historical opponent archetypes
 npm run audit:tournaments              # data/football_tournaments.json (EM/VM)
 npm run audit:tactics                  # data/football_tactics.json (kampplaner)
+npm run audit:attributes               # data/football_attributes.json (ferdighetsvokabularet)
 npm run audit:scenarios                # data/football_scenarios.json (scenarioer)
 
 # UI-/flyt-vakter (statisk, leser index.html + src/app.js)
@@ -54,6 +57,7 @@ npm run sim:training-week      # weekly training focus
 npm run sim:training-plan      # ukas plan: ramme + tema + individuell, og samsvaret mellom dem
 npm run sim:individual-training # individuell oppfølging av én spiller
 npm run sim:player-weaknesses  # svake sider: identifisering, trening og uttelling
+npm run sim:player-attributes  # ferdighetsprofilene: sprik, posisjonsklasse, kjerneprinsippet
 npm run sim:formation-matchup  # formation-vs-formation knowledge engine
 npm run sim:suggested-setups   # self-explaining suggested setups
 npm run sim:training-programs   # weekly training-program compositions
@@ -108,6 +112,7 @@ The single most important thing to understand is that this repo contains **two i
 - `football-league-playoff.js` — the qualification ties. A playoff place is a **place, not a verdict**, so the manager plays it: two legs on aggregate, the challenger opening at home, then away goals, then seeded penalties. Like the league engine it never simulates the manager's own match. The opponent is drawn from the adjacent tier where it would actually come from (bottom band above when going up, top band below when defending), and 2. divisjon gets two rounds because the level is split — the count lives in the pyramid (`playoffRounds`), not the engine. `startNextLeagueSeason` **throws** while a playoff is unplayed; without that the place would silently let the manager past the matches that decide his level. See `docs/seriepyramiden.md`; guarded by `sim:league-playoff`.
 - `football-training-program-compositions.js` — full weekly training **programs** (multi-session compositions) layered on top of the single-focus training week, each self-explaining.
 - `football-training-plan.js` — the one model that binds the training layers into **one week with four steps**: Inbox (signals) → Program (the week's *frame*, i.e. load) → Focus (the *match theme*, i.e. metric bonus) → Individual. Its central rule is that the focus should sit *inside* the chosen program; a mismatch costs a point of metric bonus and is explained as a manager decision. It also normalises the programs' own `fatigueLoad` (6–19 per week) into the recovery input — those numbers existed but were never read. See `docs/trening.md`.
+- `football-player-attributes.js` — the 42-skill profile. **Derived, never authored**: 367 real, named footballers cannot carry ~15 000 hand-checked numbers, so values come from data that already existed (position demands, `strengths`, archetypes, preferred roles) and each one records its `provenance` (`belagt` = the source said so; `utledet` = the game inferred it). Realism is **spikiness, not lowering** — the floor is a professional's floor, because a low number about a real person is a claim we have no source for. `deriveClassForPosition()` is what the UI shows and `calculateClassBonus()` is what the match reads, both position/role-relative. Note that `role.requires` mixes *skills the player needs* with *conditions the system must provide* (96 vs 38 across the 27 roles); `splitRoleRequirements()` separates them, because conflating them turns a system failure into a player weakness. See `docs/ferdigheter.md`; guarded by `audit:attributes` and `sim:player-attributes`.
 - `football-player-weaknesses.js` — every player has weak sides, and they are *why* position/role fit matters. **Identified from data that already existed** (`role.requires` + data-authored `positionDemands`, minus the player's `strengths`, with `coveredBy` handling overlapping tokens) — never invented claims about a real footballer. A weakness **never subtracts** from anything: the only number it can produce is a small capped bonus (max +4), and only when the manager has *trained* it **and then played him in a role that demands it*. Training opens doors; it does not raise class. See `docs/svake-sider.md`.
 - `football-individual-training.js` — per-player training beside the team session: role drills (builds role familiarity), personal recovery, sharpness, rehab. **No track touches `overall` or `matchScore`** — they change what a player *fits*, not how good he is. Catalogue is data (`data/football_individual_training.json`); capacity is `1 + relevant staff`, capped at 5 and never zero.
 - `football-suggested-setups.js` — self-explaining 2–4 logical setups (formation / match plan / training week) that advise without replacing the manager's own choice.
@@ -147,7 +152,8 @@ Alongside these two paths sit a few **additive TS engines** with their own scope
 `data/*.json` is the source of truth — **never hardcode players, roles, formations or coordinates in `app.js` or the UI**. Files carry a `schema`/`version` field (e.g. `historygo-football-manager.players.v2`). Key referential rules enforced by the audits and expected of new data:
 
 - Player role/archetype references must point at existing role/archetype ids. Player unlocks must point at real **player** ids, not archetype ids.
-- Players should sit in the high-class band (≈85–100). There are no "bad" players by design.
+- `classHeight` (formerly `overall`, renamed in players schema **v3**) sits in the high-class band (≈85–100). There are no "bad" players by design. It is an input to the skill profile, not a score — never read it as one.
+- The skill vocabulary lives in `data/football_attributes.json` and **only** there. It used to live inside `football_player_weaknesses.json`, which then owned two things at once; that file now owns only the *training* of skills and points at the catalogue via `attributesSource`.
 - `data/hgFootball/` is an **additive** historical module under its own schema namespace `history-go.hg-football.*`, living beside the `historygo-football-manager.*` files. Load it via its `manifest.json`; every formation must define all six phase shapes (base / inPossession / outOfPossession / press / lowBlock / restDefence). Read `data/hgFootball/README.md` and `README_HGFM_DATA_V1.md` before touching it.
 - The Inbox ("Klubbens puls") is data-driven too: `data/club_inbox_*.json` plus the `club_inbox_messages/`, `club_inbox_replies/`, `club_inbox_choices/` directories, each loaded via a `manifest.json` and keyed by sender. New messages/replies/choices go in these files, not in `app.js`.
 

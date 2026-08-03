@@ -18,7 +18,7 @@
 // og en grunntropp så et klubbvalg aldri blir en blindvei.
 //
 // Grunntroppen er et GULV, ikke en snarvei: den plukker de jevneste spillerne
-// (lavest `overall`) og aldri klubbens egne historiske navn — de er nettopp det
+// (lavest `classHeight`) og aldri klubbens egne historiske navn — de er nettopp det
 // du går til Lerkendal for. Den deler heller aldri ut landslagsarena-spillere.
 //
 // Ren ESM: ingen DOM, fetch, localStorage, Date.now eller Math.random. Motoren
@@ -53,7 +53,7 @@ export function listClubHeritagePlayers({ homePlaceId = null, players = [] } = {
   return asArray(players)
     .filter((player) => asArray(player.sourcePlaceIds).includes(homePlaceId))
     .slice()
-    .sort((a, b) => num(b.overall) - num(a.overall) || String(a.id).localeCompare(String(b.id)));
+    .sort((a, b) => num(b.classHeight) - num(a.classHeight) || String(a.id).localeCompare(String(b.id)));
 }
 
 // Har manageren vært på klubbens bane? Leser en liste — skriver aldri.
@@ -76,7 +76,7 @@ export function buildClubBaseSquad({
   const ordered = asArray(players)
     .filter((player) => player && !excluded.has(player.id) && (!allowed || allowed.has(player.id)))
     .slice()
-    .sort((a, b) => num(a.overall) - num(b.overall) || String(a.id).localeCompare(String(b.id)));
+    .sort((a, b) => num(a.classHeight) - num(b.classHeight) || String(a.id).localeCompare(String(b.id)));
 
   const picked = [];
   const taken = new Set();
@@ -129,7 +129,7 @@ export function resolveClubSquadAccess({
       version: CLUB_SQUAD_VERSION,
       clubId: club.id, homePlaceId, groundName, visited: true,
       mode: "heritage",
-      heritage: heritage.map((player) => ({ id: player.id, name: player.name, era: player.era, overall: num(player.overall) })),
+      heritage: heritage.map((player) => ({ id: player.id, name: player.name, era: player.era, classHeight: num(player.classHeight) })),
       heritageCount: heritage.length,
       baseSquad: [],
       headline: heritage.length

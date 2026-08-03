@@ -94,6 +94,13 @@ import {
 import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";
 import { resolveClubSquadAccess, listClubHeritagePlayers } from "./football-club-squad.js";
 import {
+  normalizeAttributeCatalogue,
+  derivePlayerAttributeIndex,
+  deriveClassForPosition,
+  splitRoleRequirements,
+  resolveAttributeToken
+} from "./football-player-attributes.js";
+import {
   listSelectableClubs,
   resolveStartTier,
   describeClubSelection,
@@ -293,6 +300,10 @@ const DATA_PATHS = {
   // Svake sider: attributtkatalog + posisjonskrav. Svakhetene identifiseres ut
   // av spillerdataene som allerede finnes — se docs/svake-sider.md.
   playerWeaknesses: "data/football_player_weaknesses.json",
+  // Ferdighetsvokabularet: de 42 ferdighetene spillere måles på, aliasene som
+  // binder eldre tokens til dem, og posisjonenes RANGERTE kravlister. Lå
+  // tidligere inne i svakhetsfila, som da eide to ting samtidig.
+  attributes: "data/football_attributes.json",
   // Ligaklubbenes spillestil, tegnet på klubbenes egen tradisjon. Klubben eier
   // identitet og nivå (football_clubs.json); dette eier fotballen.
   leagueClubProfiles: "data/football_league_club_profiles.json",
@@ -778,6 +789,9 @@ const elements = {
   profileName: document.querySelector("#profileName"),
   profilePositions: document.querySelector("#profilePositions"),
   profileSource: document.querySelector("#profileSource"),
+  profileAttributes: document.querySelector("#profileAttributes"),
+  profileAttributeList: document.querySelector("#profileAttributeList"),
+  profileAttributeNote: document.querySelector("#profileAttributeNote"),
   profileStrengths: document.querySelector("#profileStrengths"),
   profileNeeds: document.querySelector("#profileNeeds"),
   sideDecisions: document.querySelector("#sideDecisions"),
@@ -1150,7 +1164,7 @@ function validateFootballData({ players, playerArchetypes = [], roles, tactics, 
       warnings.push("En spiller mangler id eller name.");
     }
 
-    if (typeof player.overall !== "number" || player.overall < 85 || player.overall > 100) {
+    if (typeof player.classHeight !== "number" || player.classHeight < 85 || player.classHeight > 100) {
       warnings.push(`${player.name || player.id} har overall utenfor 85–100.`);
     }
 
@@ -1914,7 +1928,7 @@ function getStarterSquadPlayerIds(limit = REQUIRED_SQUAD_SIZE) {
   // Jevne klubbspillere først (lavest overall), så toppsjiktet er noe du samler
   // deg til – ikke noe auto-fyll deler ut gratis. Alle er gode nok (85+).
   const ordered = [...players].filter((player) => candidateIds.has(player.id)).sort((a, b) => {
-    const diff = (Number(a.overall) || 0) - (Number(b.overall) || 0);
+    const diff = (Number(a.classHeight) || 0) - (Number(b.classHeight) || 0);
     if (diff !== 0) return diff;
     return String(a.id).localeCompare(String(b.id));
   });
@@ -1981,7 +1995,7 @@ function getDraftPoolPlayers() {
     });
   });
   return players
-    .filter((player) => clubIds.has(player.id) && Number(player.overall) < NAME_TIER_MIN)
+    .filter((player) => clubIds.has(player.id) && Number(player.classHeight) < NAME_TIER_MIN)
     .sort((a, b) => {
       const order = { GK: 0, CB: 1, LB: 2, RB: 3, WB: 4, DM: 5, CM: 6, AM: 7, LW: 8, RW: 9, ST: 10 };
       const ap = order[(a.naturalPositions || [])[0]] ?? 99;
@@ -2008,7 +2022,7 @@ function getNationalBasePlayers() {
     });
   });
   return players.filter(
-    (player) => player && clubIds.has(player.id) && Number(player.overall) < NAME_TIER_MIN
+    (player) => player && clubIds.has(player.id) && Number(player.classHeight) < NAME_TIER_MIN
   );
 }
 
@@ -5117,11 +5131,11 @@ function renderNationalTeamPanel() {
     summaryEl.hidden = !chosen;
     if (chosen) {
       const squad = getUnlockedPlayers();
-      const best = [...squad].sort((a, b) => (Number(b.overall) || 0) - (Number(a.overall) || 0))[0];
+      const best = [...squad].sort((a, b) => (Number(b.classHeight) || 0) - (Number(a.classHeight) || 0))[0];
       const set = (id, text) => { const el = document.querySelector(id); if (el) el.textContent = text; };
       set("#nationalSquadNation", chosen);
       set("#nationalSquadCount", String(squad.length));
-      set("#nationalSquadBest", best ? `${best.name} (${best.overall})` : "–");
+      set("#nationalSquadBest", best ? `${best.name} (${best.classHeight})` : "–");
       set("#nationalSquadNext", squad.length >= REQUIRED_STARTERS ? "Sett laget på Lag" : "Samle flere spillere");
     }
   }
@@ -7470,7 +7484,7 @@ function renderLineup(teamFit) {
     const chipName = playerName.split(" ").filter(Boolean).pop() || playerName;
     const roleName = assignment?.role?.name || "Ingen rolle";
     const score = assignment?.fit?.matchScore ?? "–";
-    const overall = Number.isFinite(player?.overall) ? player.overall : null;
+    const overall = Number.isFinite(player?.classHeight) ? player.classHeight : null;
 
     chip.innerHTML = `
       <span class="chip-token${overall === null ? " is-empty" : ""}">${overall ?? slot.position}</span>
@@ -7623,7 +7637,7 @@ function renderSidePanel(teamFit) {
       elements.slotPlayerSelect,
       availablePlayers,
       (player) => player.id,
-      (player) => `${player.name} · ${player.overall}`,
+      (player) => `${player.name} · ${player.classHeight}`,
       "Tom plass",
       (player) => usedPlayerIds.has(player.id)
     );
@@ -7764,12 +7778,88 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
   `;
 }
 
+// Ferdighetsprofilen i sidepanelet. To ting gjør at dette ikke er en rating:
+//
+//   1. Vi viser de ferdighetene POSISJONEN krever — rangert som posisjonen
+//      rangerer dem — ikke spillerens beste tall. Da leser manageren «passer
+//      han her», ikke «hvor god er han».
+//   2. Hver verdi viser HVOR den kom fra. `belagt` betyr at kilden faktisk sa
+//      det om denne spilleren; `utledet` betyr at spillet har regnet seg fram.
+//      Dette er 367 ekte, navngitte fotballspillere, og forskjellen mellom hva
+//      vi vet og hva vi antar skal stå i klartekst.
+function renderPlayerAttributes(player, position) {
+  const section = elements.profileAttributes;
+  const list = elements.profileAttributeList;
+  if (!section || !list) return;
+
+  const profile = player?.attributes;
+  const demands = position ? (state.attributeCatalogue?.positionDemands?.[position] || []) : [];
+  if (!profile || demands.length === 0) {
+    section.hidden = true;
+    return;
+  }
+
+  const SOURCE_LABEL = { belagt: "belagt i kilden", posisjon: "fra posisjonen", rolle: "fra rollene hans", utledet: "utledet" };
+  list.innerHTML = "";
+  for (const token of demands) {
+    const id = resolveAttributeToken(state.attributeCatalogue, token);
+    if (!id) continue;
+    const value = profile.values[id];
+    if (!Number.isFinite(value)) continue;
+    const attribute = state.attributeCatalogue.byId.get(id);
+    const source = profile.provenance[id] || "utledet";
+
+    const item = document.createElement("li");
+    item.className = "attribute-row";
+    item.dataset.source = source;
+    item.title = `${attribute?.name || id}: ${value} av 20 — ${SOURCE_LABEL[source] || source}.`;
+
+    const name = document.createElement("span");
+    name.className = "attribute-name";
+    name.textContent = attribute?.name || id;
+
+    const bar = document.createElement("span");
+    bar.className = "attribute-bar";
+    const fill = document.createElement("span");
+    fill.className = "attribute-bar-fill";
+    fill.style.width = `${Math.round((value / 20) * 100)}%`;
+    bar.appendChild(fill);
+
+    const number = document.createElement("strong");
+    number.className = "attribute-value";
+    number.textContent = value;
+
+    item.append(name, bar, number);
+    list.appendChild(item);
+  }
+
+  if (elements.profileAttributeNote) {
+    elements.profileAttributeNote.textContent =
+      `Rangert etter hva ${position} krever. ${profile.sourcedCount} av ferdighetene er belagt i kilden, resten er utledet av posisjon, roller og arketype.`;
+  }
+  section.hidden = list.childElementCount === 0;
+}
+
 // Fyll spillerprofilen i sidepanelet: rating, navn, posisjoner, samlet History
 // Go-sted, styrker og behov. Taktisk samsvar settes allerede over (fit-boksen).
 function renderPlayerProfile(player, slot) {
+  // Ratingen er POSISJONSAVHENGIG. Står spilleren på en plass, vises klassen
+  // hans NETTOPP DER — samme spiller får et annet tall som CB enn som ST. Det
+  // er hele forskjellen fra `overall`: det finnes ikke ett tall for spilleren,
+  // bare et tall for en bruk av ham.
+  const ratingPosition = slot?.position || player.naturalPositions?.[0] || null;
+  const positionalClass = player.attributes && ratingPosition
+    ? deriveClassForPosition(player.attributes, ratingPosition, state.attributeCatalogue)
+    : null;
   if (elements.profileRating) {
-    elements.profileRating.textContent = Number.isFinite(player.overall) ? player.overall : "–";
+    elements.profileRating.textContent = Number.isFinite(positionalClass)
+      ? positionalClass
+      : (Number.isFinite(player.classHeight) ? player.classHeight : "–");
+    elements.profileRating.title = Number.isFinite(positionalClass)
+      ? `Klasse som ${ratingPosition}. Samme spiller får et annet tall i en annen posisjon.`
+      : "";
   }
+  renderPlayerAttributes(player, ratingPosition);
   if (elements.profileName) {
     elements.profileName.textContent = player.name || player.id;
   }
@@ -14265,8 +14355,8 @@ function renderUnlockedPlayers() {
       appendUnlockMeta(card, `Posisjoner: ${positions.join(", ")}`);
     }
 
-    if (Number.isFinite(player.overall)) {
-      appendUnlockMeta(card, `Overall: ${player.overall}`);
+    if (Number.isFinite(player.classHeight)) {
+      appendUnlockMeta(card, `Overall: ${player.classHeight}`);
     }
 
     const sources = getPlayerSourcePlaces(player.id);
@@ -15245,7 +15335,7 @@ function renderBenchList(players) {
 
     const meta = document.createElement("span");
     const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions.join(", ") : "–";
-    meta.textContent = `${positions} · ${Number.isFinite(player.overall) ? player.overall : "–"}`;
+    meta.textContent = `${positions} · ${Number.isFinite(player.classHeight) ? player.classHeight : "–"}`;
 
     card.append(name, meta);
 
@@ -15398,7 +15488,7 @@ function bindSquadDraft() {
       const name = document.createElement("strong");
       name.textContent = player.name;
       const meta = document.createElement("small");
-      meta.textContent = `${player.overall} · ${(player.preferredRoles || []).slice(0, 2).join(", ")}`;
+      meta.textContent = `${player.classHeight} · ${(player.preferredRoles || []).slice(0, 2).join(", ")}`;
       card.append(pos, name, meta);
       card.addEventListener("click", () => {
         if (selected.has(player.id)) selected.delete(player.id);
@@ -16235,6 +16325,7 @@ async function loadStartupData() {
     trainingProgramsData,
     individualTrainingData,
     playerWeaknessesData,
+    attributesData,
     leagueClubProfilesData,
     clubsData,
     trainingBadgesData,
@@ -16276,6 +16367,7 @@ async function loadStartupData() {
     // uten den faller flata tilbake til en tom, men gyldig, sporliste.
     loadJson(DATA_PATHS.individualTraining).catch(() => null),
     loadJson(DATA_PATHS.playerWeaknesses).catch(() => null),
+    loadJson(DATA_PATHS.attributes).catch(() => null),
     loadJson(DATA_PATHS.leagueClubProfiles).catch(() => null),
     loadJson(DATA_PATHS.clubs).catch(() => null),
     loadJson(DATA_PATHS.trainingBadges).catch(() => null),
@@ -16313,6 +16405,29 @@ async function loadStartupData() {
   state.playerArchetypes = playerArchetypesData?.archetypes || [];
   state.roles = rolesData.roles;
   state.tactics = tacticsData.tactics;
+
+  // ---------------------------------------------------------------------
+  // Ferdighetsprofilene. Utledes ÉN gang her, av data som allerede står i
+  // spillerfila, og henges på spiller- og rolleobjektene så motorene slipper
+  // å tre katalogen gjennom hver eneste kallkjede.
+  //
+  // `role.requiredSkills` er rollens krav som faktisk er FERDIGHETER. Resten
+  // av `requires` er forhold systemet må gi spilleren (`space_behind`), og de
+  // eies av lag- og relasjonsmotorene. Å blande dem ville gjort en systemsvikt
+  // om til en spillersvakhet — stikk i strid med kjerneprinsippet.
+  // ---------------------------------------------------------------------
+  state.attributeCatalogue = normalizeAttributeCatalogue(attributesData);
+  for (const role of state.roles) {
+    role.requiredSkills = splitRoleRequirements(state.attributeCatalogue, role).skills;
+  }
+  const attributeIndex = derivePlayerAttributeIndex(state.players, {
+    catalogue: state.attributeCatalogue,
+    roles: state.roles
+  });
+  state.attributeScaling = attributeIndex.scaling;
+  for (const player of state.players) {
+    player.attributes = attributeIndex.profiles[player.id] || null;
+  }
 
   // Historisk hgFootball-grunnlag: rådata + oppslag. Taktikktavla bygges fra
   // disse via adapteren (shape -> slots), ikke fra en hardkodet liste i JS.
@@ -16375,7 +16490,14 @@ async function loadStartupData() {
   // Individuell trening: katalogen normaliseres av motoren, som degraderer til
   // en tom, gyldig struktur hvis filen mangler.
   state.individualTrainingCatalogue = normalizeIndividualTrainingCatalogue(individualTrainingData);
-  state.weaknessCatalogue = normalizeWeaknessCatalogue(playerWeaknessesData);
+  // Svakhetsfila eier bare TRENINGEN av ferdighetene nå; vokabularet og
+  // posisjonskravene kommer fra ferdighetskatalogen. Slås sammen her, så
+  // svakhetsmotoren beholder sin egen signatur.
+  state.weaknessCatalogue = normalizeWeaknessCatalogue({
+    ...(playerWeaknessesData || {}),
+    attributes: attributesData?.attributes || [],
+    positionDemands: attributesData?.positionDemands || {}
+  });
   // Keyet på clubId. Mangler fila, faller ligamotstanderen tilbake til de
   // generiske profilene — spillet står ikke.
   state.leagueClubProfiles = Object.fromEntries(

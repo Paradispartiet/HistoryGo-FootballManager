@@ -80,7 +80,7 @@ const rosenborg = byId.get("rosenborg");
 const heritage = listClubHeritagePlayers({ homePlaceId: rosenborg.homePlaceId, players });
 check("Rosenborg har historiske spillere på Lerkendal", heritage.length >= 5, String(heritage.length));
 check("alle er faktisk knyttet til Lerkendal", heritage.every((player) => player.sourcePlaceIds.includes("lerkendal_stadion")));
-check("lista er sortert sterkest først", heritage.every((player, i) => i === 0 || player.overall <= heritage[i - 1].overall));
+check("lista er sortert sterkest først", heritage.every((player, i) => i === 0 || player.classHeight <= heritage[i - 1].classHeight));
 check("uten bane finnes ingen arv", listClubHeritagePlayers({ homePlaceId: null, players }).length === 0);
 
 // ---------------------------------------------------------------------------
@@ -132,11 +132,11 @@ check("grunntroppen deler ikke ut landslagsarena-spillere",
 // sorteringen gikk rett gjennom en «<= snitt + 1»-grense).
 const pool = players.filter((player) => clubCandidateIds.has(player.id));
 const mean = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
-const squadAvg = mean(squadPlayers.map((player) => player.overall));
-const poolAvg = mean(pool.map((player) => player.overall));
+const squadAvg = mean(squadPlayers.map((player) => player.classHeight));
+const poolAvg = mean(pool.map((player) => player.classHeight));
 check("grunntroppen ligger UNDER snittet i katalogen", squadAvg < poolAvg, `${squadAvg.toFixed(2)} mot ${poolAvg.toFixed(2)}`);
 // Og nær gulvet, ikke midt i mellom: den skal ikke være et kompromiss.
-const floor = Math.min(...pool.map((player) => player.overall));
+const floor = Math.min(...pool.map((player) => player.classHeight));
 check("grunntroppen ligger nærmere gulvet enn snittet",
   squadAvg - floor < poolAvg - squadAvg,
   `snitt ${squadAvg.toFixed(2)}, gulv ${floor}, pool ${poolAvg.toFixed(2)}`);
