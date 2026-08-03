@@ -375,7 +375,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "intility_arena",
-        "ullevaal_stadion"
+        "ullevaal_stadion",
+        "lerkendal_stadion"
       ],
       "overall": 90,
       "naturalPositions": [
@@ -1362,7 +1363,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "ullevaal_stadion",
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 94,
       "naturalPositions": [
@@ -1982,7 +1984,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "brann_stadion",
-        "briskeby_stadion"
+        "briskeby_stadion",
+        "lerkendal_stadion"
       ],
       "overall": 88,
       "naturalPositions": [
@@ -3293,7 +3296,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "romssa_arena"
+        "romssa_arena",
+        "lerkendal_stadion"
       ],
       "overall": 90,
       "naturalPositions": [
@@ -4315,7 +4319,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "sarpsborg_stadion"
+        "sarpsborg_stadion",
+        "lerkendal_stadion"
       ],
       "overall": 91,
       "naturalPositions": [
@@ -5373,7 +5378,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "sarpsborg_stadion"
+        "sarpsborg_stadion",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -6440,7 +6446,8 @@
       "era": "historical",
       "sourcePlaceIds": [
         "briskeby_stadion",
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 90,
       "naturalPositions": [
@@ -7387,7 +7394,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 90,
       "naturalPositions": [
@@ -7615,7 +7623,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 93,
       "naturalPositions": [
@@ -7672,7 +7681,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 90,
       "naturalPositions": [
@@ -7965,7 +7975,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 90,
       "naturalPositions": [
@@ -8133,7 +8144,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -8306,7 +8318,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -8364,7 +8377,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -8883,7 +8897,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -11392,7 +11407,8 @@
       "nationality": "Island",
       "era": "modern",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -12184,7 +12200,8 @@
       "nationality": "Canada",
       "era": "modern",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -12801,7 +12818,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "lerkendal_stadion"
       ],
       "overall": 87,
       "naturalPositions": [
@@ -13650,6 +13668,7401 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "rune_bratseth",
+      "name": "Rune Bratseth",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "oyvind_leonhardsen",
+      "name": "Øyvind Leonhardsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "stig_inge_bjornebye",
+      "name": "Stig Inge Bjørnebye",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "svein_grondalen",
+      "name": "Svein Grøndalen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "goran_sorloth",
+      "name": "Gøran Sørloth",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "mini_jakobsen",
+      "name": "Jahn Ivar «Mini» Jakobsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "ola_by_rise",
+      "name": "Ola By Rise",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "sverre_brandhaug",
+      "name": "Sverre Brandhaug",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "kare_ronnes",
+      "name": "Kåre Rønnes",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "RB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "harald_sunde",
+      "name": "Harald Sunde",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "vidar_riseth",
+      "name": "Vidar Riseth",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "mikael_lustig",
+      "name": "Mikael Lustig",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "rune_almenning_jarstein",
+      "name": "Rune Almenning Jarstein",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "alexander_tettey",
+      "name": "Alexander Tettey",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "LW"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "controller",
+        "defensive_balance",
+        "positioning",
+        "duel"
+      ],
+      "strengths": [
+        "positioning",
+        "interceptions",
+        "duels",
+        "simple_passing",
+        "tackling"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "compact_midfield"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "compact_shape",
+        "medium_press",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaos",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "En sekser alene foran en høy linje får et rom han ikke kan dekke."
+    },
+    {
+      "id": "per_ciljan_skjelbred",
+      "name": "Per Ciljan Skjelbred",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "harald_petersen",
+      "name": "Harald Petersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "ragnar_iversen",
+      "name": "Ragnar Iversen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "sigurd_larsen",
+      "name": "Sigurd Larsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "sverre_fornes",
+      "name": "Sverre Fornes",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "eldar_hansen",
+      "name": "Eldar Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "birger_tingstad",
+      "name": "Birger Tingstad",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "kjell_hvidsand",
+      "name": "Kjell Hvidsand",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "olav_wang",
+      "name": "Olav Wang",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "egil_nygaard",
+      "name": "Egil Nygaard",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "harald_gulbrandsen",
+      "name": "Harald Gulbrandsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "paul_fornes",
+      "name": "Paul Fornes",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "svein_erik_jakobsen",
+      "name": "Svein Erik Jakobsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "knut_jenssen",
+      "name": "Knut Jenssen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "RB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "tore_pedersen_rbk",
+      "name": "Tore Pedersen (RBK)",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "tor_kleveland",
+      "name": "Tor Kleveland",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "tor_roste_fossen",
+      "name": "Tor Røste Fossen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "jan_christiansen",
+      "name": "Jan Christiansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "svein_haagenrud",
+      "name": "Svein Haagenrud",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "bjorn_rime",
+      "name": "Bjørn Rime",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "erling_meirik",
+      "name": "Erling Meirik",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "erling_naess",
+      "name": "Erling Næss",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "tore_lindseth",
+      "name": "Tore Lindseth",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "bjorn_wirkola",
+      "name": "Bjørn Wirkola",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "arne_hanssen",
+      "name": "Arne Hanssen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "terje_morkved",
+      "name": "Terje Mørkved",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "jan_hansen",
+      "name": "Jan Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "knut_torbjorn_eggen",
+      "name": "Knut Torbjørn Eggen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "oystein_wormdal",
+      "name": "Øystein Wormdal",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "magnar_florholmen",
+      "name": "Magnar Florholmen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "trond_henriksen",
+      "name": "Trond Henriksen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "RB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "bjorn_otto_bragstad",
+      "name": "Bjørn Otto Bragstad",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "bjorn_tore_kvarme",
+      "name": "Bjørn Tore Kvarme",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "RB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "stale_stensaas",
+      "name": "Ståle Stensaas",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "ole_christer_basma",
+      "name": "Ole Christer Basma",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "orjan_berg",
+      "name": "Ørjan Berg",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "runar_berg",
+      "name": "Runar Berg",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "kare_ingebrigtsen",
+      "name": "Kåre Ingebrigtsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "trond_sollied",
+      "name": "Trond Sollied",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "tom_kare_staurvik",
+      "name": "Tom Kåre Staurvik",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "trond_egil_soltvedt",
+      "name": "Trond Egil Soltvedt",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "vegard_heggem",
+      "name": "Vegard Heggem",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "andre_bergdolmo",
+      "name": "André Bergdølmo",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "tore_andre_dahlum",
+      "name": "Tore André Dahlum",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "dagfinn_enerly",
+      "name": "Dagfinn Enerly",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "oyvind_storflor",
+      "name": "Øyvind Storflor",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "christer_george",
+      "name": "Christer George",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "azar_karadas",
+      "name": "Azar Karadas",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "CB"
+      ],
+      "poorFits": [
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "jorn_jamtfall",
+      "name": "Jørn Jamtfall",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "espen_johnsen",
+      "name": "Espen Johnsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "frode_johnsen",
+      "name": "Frode Johnsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "daniel_braaten",
+      "name": "Daniel Braaten",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "mikael_dorsin",
+      "name": "Mikael Dorsin",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "christian_gamboa",
+      "name": "Christian Gamboa",
+      "nationality": "Costa Rica",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "peter_ankersen",
+      "name": "Peter Ankersen",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "vegar_eggen_hedenstad",
+      "name": "Vegar Eggen Hedenstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "LB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "jorgen_skjelvik",
+      "name": "Jørgen Skjelvik",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "LB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "alejandro_lago",
+      "name": "Alejandro Lago",
+      "nationality": "Uruguay",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "miika_koppinen",
+      "name": "Miika Koppinen",
+      "nationality": "Finland",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "kris_stadsgaard",
+      "name": "Kris Stadsgaard",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "mattias_bjarsmyr",
+      "name": "Mattias Bjärsmyr",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "tore_reginiussen",
+      "name": "Tore Reginiussen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "holmar_orn_eyjolfsson",
+      "name": "Hólmar Örn Eyjólfsson",
+      "nationality": "Island",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "johan_laedre_bjordal",
+      "name": "Johan Lædre Bjørdal",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "even_hovland",
+      "name": "Even Hovland",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "daniel_orlund",
+      "name": "Daniel Örlund",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "alexander_lund_hansen",
+      "name": "Alexander Lund Hansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "marek_sapara",
+      "name": "Marek Sapara",
+      "nationality": "Slovakia",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "anthony_annan",
+      "name": "Anthony Annan",
+      "nationality": "Ghana",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "LW"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "controller",
+        "defensive_balance",
+        "positioning",
+        "duel"
+      ],
+      "strengths": [
+        "positioning",
+        "interceptions",
+        "duels",
+        "simple_passing",
+        "tackling"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "compact_midfield"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "compact_shape",
+        "medium_press",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaos",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "En sekser alene foran en høy linje får et rom han ikke kan dekke."
+    },
+    {
+      "id": "borek_dockal",
+      "name": "Borek Dočkal",
+      "nationality": "Tsjekkia",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "mix_diskerud",
+      "name": "Mix Diskerud",
+      "nationality": "USA",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "fredrik_midtsjo",
+      "name": "Fredrik Midtsjø",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "ole_selnaes",
+      "name": "Ole Selnæs",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "LW"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "controller",
+        "defensive_balance",
+        "positioning",
+        "duel"
+      ],
+      "strengths": [
+        "positioning",
+        "interceptions",
+        "duels",
+        "simple_passing",
+        "tackling"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "compact_midfield"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "compact_shape",
+        "medium_press",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaos",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "En sekser alene foran en høy linje får et rom han ikke kan dekke."
+    },
+    {
+      "id": "anders_konradsen",
+      "name": "Anders Konradsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "marius_lundemo",
+      "name": "Marius Lundemo",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "LW"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "controller",
+        "defensive_balance",
+        "positioning",
+        "duel"
+      ],
+      "strengths": [
+        "positioning",
+        "interceptions",
+        "duels",
+        "simple_passing",
+        "tackling"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "compact_midfield"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "compact_shape",
+        "medium_press",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaos",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "En sekser alene foran en høy linje får et rom han ikke kan dekke."
+    },
+    {
+      "id": "pal_andre_helland",
+      "name": "Pål André Helland",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "samuel_adegbenro",
+      "name": "Samuel Adegbenro",
+      "nationality": "Nigeria",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "yann_erik_de_lanlay",
+      "name": "Yann-Erik de Lanlay",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "didier_konan_ya",
+      "name": "Didier Konan Ya",
+      "nationality": "Elfenbenskysten",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "abdou_razack_traore",
+      "name": "Abdou Razack Traoré",
+      "nationality": "Burkina Faso",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "john_chibuike",
+      "name": "John Chibuike",
+      "nationality": "Nigeria",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "tobias_mikkelsen",
+      "name": "Tobias Mikkelsen",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "riku_riski",
+      "name": "Riku Riski",
+      "nationality": "Finland",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "rade_prica",
+      "name": "Rade Prica",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "yssouf_kone",
+      "name": "Yssouf Koné",
+      "nationality": "Burkina Faso",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "alexander_soderlund",
+      "name": "Alexander Søderlund",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "mushaga_bakenga",
+      "name": "Mushaga Bakenga",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "nicklas_bendtner",
+      "name": "Nicklas Bendtner",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "tarik_elyounoussi",
+      "name": "Tarik Elyounoussi",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "christian_gytkjaer",
+      "name": "Christian Gytkjær",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "matthias_vilhjalmsson",
+      "name": "Matthías Vilhjálmsson",
+      "nationality": "Island",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "nicki_bille_nielsen",
+      "name": "Nicki Bille Nielsen",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "trond_olsen",
+      "name": "Trond Olsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "morten_moldskred",
+      "name": "Morten Moldskred",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "sverre_nypan",
+      "name": "Sverre Nypan",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "marius_broholm",
+      "name": "Marius Broholm",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "emil_konradsen_ceide",
+      "name": "Emil Konradsen Ceïde",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "erik_botheim",
+      "name": "Erik Botheim",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "sander_tangvik",
+      "name": "Sander Tangvik",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "CM",
+        "LW"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "torbjorn_lysaker_heggem",
+      "name": "Torbjørn Lysaker Heggem",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "LB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "aslak_fonn_witry",
+      "name": "Aslak Fonn Witry",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "carlo_holse",
+      "name": "Carlo Holse",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "final_pass",
+        "composure"
+      ],
+      "strengths": [
+        "vision",
+        "final_pass",
+        "first_touch",
+        "chance_creation",
+        "combination_play"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "erlend_dahl_reitan",
+      "name": "Erlend Dahl Reitan",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "edvard_sandvik_tagseth",
+      "name": "Edvard Sandvik Tagseth",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "LB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "mikkel_konradsen_ceide",
+      "name": "Mikkel Konradsen Ceïde",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_reading",
+        "aerial",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "jesper_reitan_sunde",
+      "name": "Jesper Reitan-Sunde",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
+    },
+    {
+      "id": "ole_saeter",
+      "name": "Ole Sæter",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "noah_jean_holm",
+      "name": "Noah Jean Holm",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "dino_islamovic",
+      "name": "Dino Islamović",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "roger_albertsen",
+      "name": "Roger Albertsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "arne_dokken",
+      "name": "Arne Dokken",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "hassan_el_fakiri",
+      "name": "Hassan El Fakiri",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "sebastian_eguren",
+      "name": "Sebastián Eguren",
+      "nationality": "Uruguay",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "LW"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "controller",
+        "defensive_balance",
+        "positioning",
+        "duel"
+      ],
+      "strengths": [
+        "positioning",
+        "interceptions",
+        "duels",
+        "simple_passing",
+        "tackling"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "compact_midfield"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "compact_shape",
+        "medium_press",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaos",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "En sekser alene foran en høy linje får et rom han ikke kan dekke."
+    },
+    {
+      "id": "besart_berisha",
+      "name": "Besart Berisha",
+      "nationality": "Albania",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "janne_saarinen",
+      "name": "Janne Saarinen",
+      "nationality": "Finland",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg."
+    },
+    {
+      "id": "karim_essediri",
+      "name": "Karim Essediri",
+      "nationality": "Tunisia",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "RB"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "crossing"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball."
     }
   ]
 }

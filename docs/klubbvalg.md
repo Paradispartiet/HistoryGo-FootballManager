@@ -163,25 +163,28 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
+| Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
-| Rosenborg | Lerkendal | 8 |
 | Bodø/Glimt | Aspmyra stadion | 6 |
 | Molde | Aker stadion | 6 |
 | Brann | Brann Stadion | 4 |
 | Fredrikstad | Fredrikstad stadion | 4 |
-| Viking | Lyse Arena | 3 |
-| Tromsø | Romssa Arena | 3 |
 | Lillestrøm | Åråsen | 3 |
 | Stabæk | Nadderud | 3 |
+| Tromsø | Romssa Arena | 3 |
+| Viking | Lyse Arena | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 227 arvespillere fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 375 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
+
+Summen er *plasser*, ikke personer: 32 spillere står på to eller tre baner fordi
+de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
 stemmer, en klubb som står to ganger, eller en klubb med spillere plassert i
@@ -224,14 +227,28 @@ HamKam viste seg like sterk: 26 navn fra Pål Jacobsen og Terje Kojedal via Finn
 Thorsen og Jan Åge Fjørtoft til Cato Erstads klubbrekord på 506 kamper.
 Kriteriet er at spilleren har **representert klubben** — det holder.
 
-Det gir en **skjevhet som er blitt betydelig**: Intility Arena åpner 126 navn,
-Sarpsborg stadion 32 og Briskeby 26 — mens Lerkendal åpner 8 og Color Line
-Stadion 1.
+### Rosenborg: 156 navn, og samme mal
+
+Rosenborg-arven er nå den største: 156 navn, fra Odd Iversens 1960- og 70-tall
+gjennom Eggens gullrekke 1992–2004 til dagens lag. Den er generert med **samme
+posisjonsmal som Vålerenga** — kilden oppgir primærposisjon for hvert navn, og
+det er den som styrer arketyper, styrker, behov, roller og taktikkpreferanser.
+
+**Atten navn lå allerede i katalogen og ble koblet på, ikke kopiert.** Det er den
+faktiske faren ved en liste på 156: Odd Iversen og Steffen Iversen lå på Intility,
+Sigurd Rushfeldt på Romssa, Karl-Petter Løken og Anders Trondsen på Sarpsborg,
+Thorstein Helstad på Brann og Briskeby. Generatoren stopper på duplikat mot både
+sin egen liste og katalogen, så et navn kan få en ny `sourcePlaceId`, men aldri en
+ny oppføring.
+
+Det gir en **skjevhet som er blitt betydelig**: Lerkendal åpner 156 navn,
+Intility Arena 126, Sarpsborg stadion 32 og Briskeby 26 — mens Color Line Stadion
+åpner 1.
 
 Poolen er hva du kan *velge blant* — du stiller fortsatt elleve — men en større
 pool betyr mer valgfrihet til å finne spillere som passer systemet ditt. Med
-126 mot 8 er det ikke lenger en nyanse: å ta over Vålerenga og besøke Intility
-gir vesentlig mer å bygge på enn å ta over Rosenborg og besøke Lerkendal.
+156 mot 1 er det ikke lenger en nyanse: å ta over Rosenborg og besøke Lerkendal
+gir vesentlig mer å bygge på enn å ta over Aalesund og besøke Color Line.
 
 Skjevheten løses ved å **utvide de andre klubbene**, ikke ved å beskjære
 Vålerenga. Dekningen er et spørsmål om hvor godt klubben er kartlagt, ikke om
@@ -242,10 +259,11 @@ midtbane, kant og spiss.
 
 ### Spillere som tilhører flere klubber
 
-Tretten spillere står på to baner, fordi de faktisk spilte begge steder — blant
-dem **Brede Hangeland** (Ullevaal + Lyse Arena), **Thorstein Helstad** (Brann +
-Briskeby), **Ronny Johnsen**, **John Carew**, **Tore André Flo** og **Sander
-Berge** (Ullevaal + Intility), og **Pål Jacobsen** (Briskeby + Intility).
+32 spillere står på to eller tre baner, fordi de faktisk spilte begge steder —
+blant dem **Brede Hangeland** (Ullevaal + Lyse Arena), **Thorstein Helstad**
+(Brann + Briskeby + Lerkendal), **Ronny Johnsen**, **John Carew**, **Tore André
+Flo** og **Sander Berge** (Ullevaal + Intility), **Pål Jacobsen** (Briskeby +
+Intility) og **Odd Iversen** (Intility + Lerkendal).
 
 Det er ikke duplikater, og vakten skiller dem fra ekte duplikater: en spiller kan
 ha flere `sourcePlaceIds`, men aldri to oppføringer. De som har en landslagsarena
@@ -271,11 +289,12 @@ femmannsrekke. Da står han bredt som spiss, med tom `usablePositions` — spill
 dikter ikke opp en rolle han kanskje aldri hadde. Advarselen hans sier det rett
 ut i stedet for å skjule det.
 
-### Fire klubber uten navn
+### Tre klubber uten navn
 
-Kristiansund, HamKam, Sandefjord og KFUM har bane men ingen navn. Oppslagene ga
-ingen pålitelig legendeliste, og et halvhusket navn med gal posisjon er verre
-enn et ærlig «ingen historiske spillere i katalogen ennå».
+Kristiansund, Sandefjord og KFUM har bane men ingen navn. Oppslagene ga ingen
+pålitelig legendeliste, og et halvhusket navn med gal posisjon er verre enn et
+ærlig «ingen historiske spillere i katalogen ennå». (HamKam sto i denne raden
+til klubben ble kartlagt — 26 navn.)
 
 **Hvert eneste navn har fått posisjonen slått opp før det ble lagt inn:**
 
