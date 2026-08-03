@@ -825,7 +825,112 @@
       "placeId": "briskeby_stadion",
       "placeName": "Briskeby",
       "placeRole": "historical_club_ground_source",
-      "unlocks": [],
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "pal_jacobsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "terje_kojedal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "finn_thorsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stale_solbakken"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_age_fjortoft"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stein_karlsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tore_antonsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "cato_erstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tom_jacobsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leif_hagelund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_skogheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_belsvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_michaelsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_vaagan_moen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aron_donnum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ramiro_corrales"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "roman_kienast"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jarl_andre_storbaek"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marcus_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "geir_frigard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "juha_pasoja"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "olivier_karekezi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_lehne_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "pal_alexander_kirkevold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thorstein_helstad"
+        }
+      ],
       "notes": "Klubbanlegg: HamKams hjemmebane på Hamar."
     },
     {

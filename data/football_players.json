@@ -1977,7 +1977,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "brann_stadion"
+        "brann_stadion",
+        "briskeby_stadion"
       ],
       "overall": 88,
       "naturalPositions": [
@@ -5770,6 +5771,1486 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En rendyrket måljeger — toppscorer med 18 mål da Moss ble seriemester i 1987. Trekker du ham ut av boksen, tar du fra ham jobben."
+    },
+    {
+      "id": "pal_jacobsen",
+      "name": "Pål Jacobsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "RW",
+        "LW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "creator"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "final_pass",
+        "wide_movement",
+        "acceleration",
+        "chance_creation"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "time_on_ball"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger",
+        "classic_ten"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width",
+        "creative_freedom"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "rigid_positional_locks",
+        "no_wide_support"
+      ],
+      "warningWhenMisused": "Klubbens beste gjennom tidene levde på duellen ute på kanten. Uten bredde og frihet er han en annen spiller."
+    },
+    {
+      "id": "terje_kojedal",
+      "name": "Terje Kojedal",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 92,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "line_keeper"
+      ],
+      "archetypes": [
+        "duel",
+        "leader",
+        "defensive_reading",
+        "aerial"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "leadership",
+        "physical_presence"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "line_keeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "En OL-kaptein i forsvaret trenger en linje å styre. Uten struktur foran seg blir han bare en som rydder opp."
+    },
+    {
+      "id": "finn_thorsen",
+      "name": "Finn Thorsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "defensive_reading",
+        "leader",
+        "positioning",
+        "build_up_defender"
+      ],
+      "strengths": [
+        "positioning",
+        "reading_game",
+        "duels",
+        "simple_passing",
+        "leadership"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "calm_build_up"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "ball_playing_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "structured_build_up",
+        "compact_block"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "constant_open_space"
+      ],
+      "warningWhenMisused": "Klubbens første landslagsspiller var en midtstopper som leste spillet. Uten en linje å lese forsvinner styrken hans."
+    },
+    {
+      "id": "stale_solbakken",
+      "name": "Ståle Solbakken",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "CM",
+        "AM"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "leader",
+        "passer",
+        "tempo_setter"
+      ],
+      "strengths": [
+        "passing_range",
+        "positioning",
+        "leadership",
+        "tempo_control",
+        "late_runs",
+        "composure"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "possession",
+        "medium_press"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En midtbanespiller som styrer kampen trenger ball og struktur — ikke en rolle der han bare skal jage."
+    },
+    {
+      "id": "jan_age_fjortoft",
+      "name": "Jan Åge Fjørtoft",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 92,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "channel_runner"
+      ],
+      "archetypes": [
+        "target",
+        "aerial",
+        "runner",
+        "power",
+        "depth_threat"
+      ],
+      "strengths": [
+        "heading",
+        "hold_up_play",
+        "runs_behind",
+        "physical_presence",
+        "box_finishing",
+        "strength"
+      ],
+      "needs": [
+        "crosses",
+        "space_behind",
+        "supporting_runners"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "advanced_forward",
+        "channel_runner"
+      ],
+      "likesTactics": [
+        "direct_play",
+        "crossing",
+        "space_behind",
+        "vertical_play"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "isolated_striker",
+        "slow_possession_without_runs"
+      ],
+      "warningWhenMisused": "En stor spiss som både holder ballen og løper i bakrom trenger tilførsel begge veier. Får han ingen av delene, står han bare der."
+    },
+    {
+      "id": "stein_karlsen",
+      "name": "Stein Karlsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "heading",
+        "composure"
+      ],
+      "needs": [
+        "box_service",
+        "crosses",
+        "supporting_runners"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "Klubbrekorden på 47 mål i øverste divisjon kom i boksen. Trekker du ham ut av den, tar du fra ham jobben."
+    },
+    {
+      "id": "tore_antonsen",
+      "name": "Tore Antonsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "ST",
+        "CM"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "command_of_area",
+        "positioning",
+        "leader"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning",
+        "leadership"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "Klubbens keeperrekord på 175 kamper i eliten ble tatt bak et forsvar som sto. Uten struktur blir en keeper målt på andres feil."
+    },
+    {
+      "id": "cato_erstad",
+      "name": "Cato Erstad",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "RB",
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "positioning",
+        "club_professional",
+        "defensive_presence"
+      ],
+      "strengths": [
+        "duels",
+        "positioning",
+        "reading_game",
+        "stamina",
+        "tackling"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_task"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_press"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "chaos"
+      ],
+      "warningWhenMisused": "506 kamper for klubben kom av å gjøre jobben i et system, kamp etter kamp. Ta bort systemet, og du tar bort det han var god på."
+    },
+    {
+      "id": "tom_jacobsen",
+      "name": "Tom Jacobsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM",
+        "DM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "runner",
+        "balance"
+      ],
+      "strengths": [
+        "passing_range",
+        "positioning",
+        "stamina",
+        "simple_passing",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "clear_task"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "chaos",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Landslagsspiller allerede som sytten. En ung midtbanespiller trenger en makker, ikke hele midtbanen alene."
+    },
+    {
+      "id": "leif_hagelund",
+      "name": "Leif Hagelund",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "leader",
+        "aerial",
+        "defensive_presence"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "leadership",
+        "positioning",
+        "strength",
+        "blocking"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "compact_shape"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaotic_high_line",
+        "constant_open_space"
+      ],
+      "warningWhenMisused": "Kapteinen på bronselaget fra 1970 var en forsvarsklippe. En veldig høy linje tar fra ham duellene han vant kampene på."
+    },
+    {
+      "id": "vegard_skogheim",
+      "name": "Vegard Skogheim",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "balancing_six",
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "controller",
+        "stamina",
+        "club_professional",
+        "balance"
+      ],
+      "strengths": [
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "running_power",
+        "duels"
+      ],
+      "needs": [
+        "midfield_partner",
+        "clear_task",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "balancing_six",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "compact_shape",
+        "medium_press"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "constant_pressing_chaos",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "25 sesonger og 468 kamper kom av å være der laget trengte ham. Gi ham en rolle, ikke et frirom."
+    },
+    {
+      "id": "petter_belsvik",
+      "name": "Petter Belsvik",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "channel_runner"
+      ],
+      "archetypes": [
+        "finisher",
+        "movement",
+        "depth_threat",
+        "link_player"
+      ],
+      "strengths": [
+        "box_finishing",
+        "movement",
+        "runs_behind",
+        "off_ball_runs",
+        "first_touch"
+      ],
+      "needs": [
+        "space_behind",
+        "box_service",
+        "close_support"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "box_striker",
+        "channel_runner"
+      ],
+      "likesTactics": [
+        "vertical_play",
+        "fast_transitions",
+        "box_service"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "deep_block_no_space",
+        "no_service"
+      ],
+      "warningWhenMisused": "159 mål i øverste divisjon er tredje mest i norsk toppseriehistorie. Den slags kommer av bevegelse i boksen, ikke av å hente ballen på midten."
+    },
+    {
+      "id": "jan_michaelsen",
+      "name": "Jan Michaelsen",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CM",
+        "DM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "balancing_six",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "leader",
+        "defensive_balance"
+      ],
+      "strengths": [
+        "positioning",
+        "passing_range",
+        "duels",
+        "tempo_control",
+        "leadership",
+        "interceptions"
+      ],
+      "needs": [
+        "midfield_partner",
+        "clear_structure",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "compact_shape",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "end_to_end_chaos",
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "En Champions League-midtbanespiller trenger et system å styre. Uten det blir han bare en av elleve som løper."
+    },
+    {
+      "id": "petter_vaagan_moen",
+      "name": "Petter Vaagan Moen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "AM",
+        "LW"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten",
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines",
+        "dribbler",
+        "final_pass"
+      ],
+      "strengths": [
+        "final_pass",
+        "dribbling",
+        "vision",
+        "chance_creation",
+        "first_touch"
+      ],
+      "needs": [
+        "time_on_ball",
+        "central_space",
+        "runners_ahead"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator",
+        "wide_dribbler"
+      ],
+      "likesTactics": [
+        "creative_freedom",
+        "central_combinations",
+        "possession"
+      ],
+      "dislikesTactics": [
+        "rigid_positional_locks",
+        "long_ball_only",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En skapende spiller uten frihet og tid blir en som bare flytter ballen videre."
+    },
+    {
+      "id": "aron_donnum",
+      "name": "Aron Dønnum",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "RW",
+        "LW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "dribbler",
+        "one_vs_one",
+        "pace",
+        "wide_creator"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "agility"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "fast_transitions",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En dribler trenger en mann å gå på. I en smal form møter han tre."
+    },
+    {
+      "id": "ramiro_corrales",
+      "name": "Ramiro Corrales",
+      "nationality": "USA",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "CM",
+        "LB"
+      ],
+      "usablePositions": [
+        "DM",
+        "WB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "balancing_six",
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "balance",
+        "stamina",
+        "passer",
+        "wide_support"
+      ],
+      "strengths": [
+        "stamina",
+        "simple_passing",
+        "positioning",
+        "wide_support",
+        "crossing"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "support_fullback",
+        "box_to_box"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "possession",
+        "compact_shape"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "isolated_wide_defending",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Årets spiller i 2006 var en som løste flere roller. Låser du ham i én uten å si hvilken, løser han ingen."
+    },
+    {
+      "id": "roman_kienast",
+      "name": "Roman Kienast",
+      "nationality": "Østerrike",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "target",
+        "power",
+        "finisher",
+        "aerial"
+      ],
+      "strengths": [
+        "hold_up_play",
+        "heading",
+        "strength",
+        "box_finishing",
+        "physical_presence"
+      ],
+      "needs": [
+        "crosses",
+        "close_support",
+        "box_service"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "box_striker",
+        "linking_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "direct_play",
+        "box_service"
+      ],
+      "dislikesTactics": [
+        "no_crosses",
+        "isolated_striker",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En landslagsspiss uten innlegg blir en spiss uten sjanser."
+    },
+    {
+      "id": "jarl_andre_storbaek",
+      "name": "Jarl-André Storbæk",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LB",
+        "CB"
+      ],
+      "usablePositions": [
+        "WB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback",
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "wide_support",
+        "stamina",
+        "defensive_balance"
+      ],
+      "strengths": [
+        "duels",
+        "tackling",
+        "stamina",
+        "positioning",
+        "overlapping_runs"
+      ],
+      "needs": [
+        "cover_behind",
+        "clear_task",
+        "wide_lane"
+      ],
+      "preferredRoles": [
+        "support_fullback",
+        "duel_centre_back",
+        "overlapping_fullback"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "wide_attacks"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "isolated_wide_defending",
+        "constant_open_space"
+      ],
+      "warningWhenMisused": "En back som både forsvarer og går fram må vite hvilken av delene som gjelder i dag."
+    },
+    {
+      "id": "marcus_pedersen",
+      "name": "Marcus Pedersen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "channel_runner"
+      ],
+      "archetypes": [
+        "pace",
+        "runner",
+        "finisher",
+        "depth_threat"
+      ],
+      "strengths": [
+        "runs_behind",
+        "acceleration",
+        "box_finishing",
+        "off_ball_runs",
+        "movement"
+      ],
+      "needs": [
+        "space_behind",
+        "early_through_balls",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "channel_runner",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "space_behind",
+        "vertical_play"
+      ],
+      "dislikesTactics": [
+        "deep_block_no_space",
+        "slow_build_up",
+        "back_to_goal_striker"
+      ],
+      "warningWhenMisused": "Fart uten rom er ingen fart. Mot en lav blokk må laget lage rommet for ham."
+    },
+    {
+      "id": "geir_frigard",
+      "name": "Geir Frigård",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "target",
+        "finisher",
+        "box_presence",
+        "power"
+      ],
+      "strengths": [
+        "box_finishing",
+        "heading",
+        "hold_up_play",
+        "box_presence",
+        "strength"
+      ],
+      "needs": [
+        "box_service",
+        "crosses",
+        "second_ball_support"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "box_service",
+        "direct_play",
+        "second_balls"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "no_crosses",
+        "isolated_striker"
+      ],
+      "warningWhenMisused": "En boksspiss lever på tilførsel. Uten innlegg står han alene mellom to stoppere."
+    },
+    {
+      "id": "juha_pasoja",
+      "name": "Juha Pasoja",
+      "nationality": "Finland",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "aerial",
+        "positioning",
+        "defensive_presence"
+      ],
+      "strengths": [
+        "heading",
+        "duels",
+        "positioning",
+        "blocking",
+        "strength"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line",
+        "compact_shape"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaotic_high_line",
+        "constant_open_space"
+      ],
+      "warningWhenMisused": "En dueller i lufta trenger en kompakt blokk rundt seg. Alene mot rommet taper han kampen han er god i."
+    },
+    {
+      "id": "olivier_karekezi",
+      "name": "Olivier Karekezi",
+      "nationality": "Rwanda",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "channel_runner",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "pace",
+        "runner",
+        "movement",
+        "finisher"
+      ],
+      "strengths": [
+        "acceleration",
+        "runs_behind",
+        "movement",
+        "box_finishing",
+        "off_ball_runs"
+      ],
+      "needs": [
+        "space_behind",
+        "space_to_run",
+        "runners_around"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "channel_runner",
+        "pressing_forward"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "space_behind",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "deep_block_no_space",
+        "slow_possession_without_runs",
+        "back_to_goal_striker"
+      ],
+      "warningWhenMisused": "Løpsspissen trenger noe å løpe i. Mot en parkert buss står han stille."
+    },
+    {
+      "id": "thomas_lehne_olsen",
+      "name": "Thomas Lehne Olsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "DM"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "target"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "hold_up_play",
+        "composure"
+      ],
+      "needs": [
+        "box_service",
+        "close_support",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En målscorer måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er."
+    },
+    {
+      "id": "espen_olsen",
+      "name": "Espen Olsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST",
+        "AM"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "finisher",
+        "link_player",
+        "movement",
+        "combination_player"
+      ],
+      "strengths": [
+        "box_finishing",
+        "link_play",
+        "movement",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "close_support",
+        "central_support",
+        "technical_teammates"
+      ],
+      "preferredRoles": [
+        "linking_striker",
+        "advanced_forward",
+        "classic_ten"
+      ],
+      "likesTactics": [
+        "central_combinations",
+        "possession",
+        "fluid_attack"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_striker",
+        "clearance_only"
+      ],
+      "warningWhenMisused": "48 mål på 152 kamper kom av samspill. Setter du ham alene på topp, får han ingen å spille med."
+    },
+    {
+      "id": "pal_alexander_kirkevold",
+      "name": "Pål Alexander Kirkevold",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "target",
+        "power",
+        "finisher",
+        "box_presence"
+      ],
+      "strengths": [
+        "hold_up_play",
+        "strength",
+        "box_finishing",
+        "physical_presence",
+        "heading"
+      ],
+      "needs": [
+        "crosses",
+        "close_support",
+        "box_service"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "direct_play",
+        "crossing",
+        "box_service",
+        "second_balls"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "isolated_striker",
+        "slow_possession_without_runs"
+      ],
+      "warningWhenMisused": "En fysisk spiss uten tilførsel blir en som bare kjemper — og aldri scorer."
     }
   ]
 }

@@ -163,40 +163,63 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
+| Sarpsborg 08 | Sarpsborg stadion | 32 |
+| HamKam | Briskeby | 26 |
 | Rosenborg | Lerkendal | 8 |
-| Bodø/Glimt | Aspmyra | 6 |
+| Bodø/Glimt | Aspmyra stadion | 6 |
 | Molde | Aker stadion | 6 |
 | Brann | Brann Stadion | 4 |
+| Fredrikstad | Fredrikstad stadion | 4 |
 | Viking | Lyse Arena | 3 |
 | Tromsø | Romssa Arena | 3 |
 | Vålerenga | Intility Arena | 3 |
 | Lillestrøm | Åråsen | 3 |
-| Sarpsborg | Sarpsborg stadion | 32 |
-| Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
-| Kristiansund, HamKam, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
+| Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 78 arvespillere fordelt
-på 13 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 104 arvespillere fordelt
+på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-### Sarpsborg er nå den best dekkede klubben
+Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
+stemmer, en klubb som står to ganger, eller en klubb med spillere plassert i
+null-raden, faller. Den vakten finnes fordi arvetabellen drev fra dataene tre
+ganger — et redigeringsskript som avbrøt midtveis, en delvis redigering som ga
+Rosenborg to rader, og HamKam som sto både med 26 spillere og som tom. Ingenting
+feilet, for dokumentasjon leses ikke av noen vakt. Nå gjør den det.
+
+### Sarpsborg og HamKam er de best dekkede klubbene
 
 Arven på Sarpsborg stadion dekker **byens fotball**, ikke ett klubbnummer:
 Sarpsborg FK og Sarpsborg 08 deler bane i spillet, så Asbjørn Halvorsen (cupgull
 1917, senere tysk mester med HSV) ligger i samme pool som Krépin Diatta og
 Jørgen Strand Larsen.
 
-Det gir en **skjevhet som er verdt å vite om**: å besøke Sarpsborg stadion åpner
-32 navn, Lerkendal åpner 8. Poolen er hva du kan *velge blant* — du stiller
-fortsatt elleve — men en større pool betyr mer valgfrihet til å finne spillere
-som passer systemet ditt. Skjevheten løses ved å utvide de andre klubbene, ikke
-ved å beskjære Sarpsborg.
+HamKam viste seg like sterk: 26 navn fra Pål Jacobsen og Terje Kojedal via Finn
+Thorsen og Jan Åge Fjørtoft til Cato Erstads klubbrekord på 506 kamper.
+Kriteriet er at spilleren har **representert klubben** — det holder.
 
-Posisjonsdekningen er komplett: keeper, back, stopper, seksser, midtbane, kant
-og spiss.
+Det gir en **skjevhet som er verdt å vite om**: Sarpsborg stadion åpner 32 navn
+og Briskeby 26, mens Lerkendal åpner 8. Poolen er hva du kan *velge blant* — du
+stiller fortsatt elleve — men en større pool betyr mer valgfrihet til å finne
+spillere som passer systemet ditt. Skjevheten løses ved å utvide de andre
+klubbene, ikke ved å beskjære de to.
+
+Posisjonsdekningen er komplett i begge: keeper, back, stopper, seksser,
+midtbane, kant og spiss.
+
+### Spillere som tilhører to klubber
+
+To spillere står på to baner, fordi de faktisk spilte begge steder:
+
+- **Brede Hangeland** — Ullevaal (landslag) + Lyse Arena (Viking)
+- **Thorstein Helstad** — Brann Stadion + Briskeby (startet seniorkarrieren i HamKam)
+
+Det er ikke duplikater, og vakten skiller dem fra ekte duplikater: en spiller kan
+ha flere `sourcePlaceIds`, men aldri to oppføringer. Hangeland holdes fortsatt
+utenfor grunntroppene fordi han har en landslagsarena blant kildene sine.
 
 ### Når kilden ikke rekker: bredt, ikke oppdiktet
 

@@ -161,6 +161,49 @@ check("klubb uten bane sier det rett ut", /ingen bane i History Go/.test(noGroun
 check("klubb uten bane får likevel en tropp", noGround.baseSquad.length === REQUIRED);
 
 // ---------------------------------------------------------------------------
+// 5b. Dokumentasjonen må stemme med dataene
+//
+// Arvetabellen i docs/klubbvalg.md har drevet fra dataene tre ganger: et
+// redigeringsskript avbrøt midtveis, en delvis redigering ga Rosenborg to rader,
+// og HamKam sto både med 26 spillere og i «ingen navn ennå»-raden. Ingenting
+// feilet — dokumentasjon leses ikke av noen vakt.
+//
+// Nå gjør den det. Hver klubb med navn i tabellen må ha nøyaktig det antallet i
+// dataene, ingen klubb kan stå to ganger, og en klubb med spillere kan ikke
+// samtidig stå oppført som tom.
+{
+  const docs = fs.readFileSync(new URL("../docs/klubbvalg.md", import.meta.url), "utf8");
+  const table = docs.slice(docs.indexOf("| Klubb | Bane | Historiske spillere |"));
+  const rows = [...table.matchAll(/^\| ([^|]+?) \| ([^|]+?) \| (\d+) \|$/gm)].map((m) => ({
+    clubs: m[1].split(",").map((x) => x.trim()), count: Number(m[3])
+  }));
+  check("arvetabellen i docs finnes og har rader", rows.length >= 10, String(rows.length));
+
+  const named = rows.filter((row) => row.count > 0);
+  const listedTwice = named.flatMap((row) => row.clubs).filter((name, i, all) => all.indexOf(name) !== i);
+  check("ingen klubb står to ganger i arvetabellen", listedTwice.length === 0, listedTwice.join(", "));
+
+  const heritageByName = new Map(clubs.filter((club) => club.homePlaceId).map((club) =>
+    [club.name, listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players }).length]));
+  for (const row of named) {
+    for (const name of row.clubs) {
+      check(`docs: «${name}» er en klubb med bane`, heritageByName.has(name), name);
+      if (!heritageByName.has(name)) continue;
+      check(`docs: ${name} står med ${row.count} arvespillere`, heritageByName.get(name) === row.count,
+        `dataene sier ${heritageByName.get(name)}`);
+    }
+  }
+  // Og null-raden må faktisk være tom i dataene.
+  for (const row of rows.filter((entry) => entry.count === 0)) {
+    for (const name of row.clubs) {
+      if (!heritageByName.has(name)) continue;
+      check(`docs: ${name} er oppført som tom og er det`, heritageByName.get(name) === 0,
+        `dataene sier ${heritageByName.get(name)}`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // 6. Motoren rører aldri History Go-progresjonen
 // ---------------------------------------------------------------------------
 const engineSource = fs.readFileSync(new URL("../src/football-club-squad.js", import.meta.url), "utf8")
