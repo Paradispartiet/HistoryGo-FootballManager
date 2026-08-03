@@ -682,8 +682,117 @@
       "placeId": "sarpsborg_stadion",
       "placeName": "Sarpsborg stadion",
       "placeRole": "modern_club_ground_source",
-      "unlocks": [],
-      "notes": "Klubbanlegg: Sarpsborg 08s hjemmebane i Østfold."
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "asbjorn_halvorsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stefan_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohamed_elyounoussi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_strand_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "krepin_diatta"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "asbjorn_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "odd_wang_sorensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "karl_petter_loken"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jeremy_berthod"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jo_inge_berget"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "egil_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harry_kure"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sigurd_rosted"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_zachariassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_jorgen_halvorsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "patrick_mortensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "makhtar_thioune"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "raymond_kvisvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_pereira"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "guillermo_molins"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anton_saletros"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aaron_samuel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gudmundur_thorarinsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harmeet_singh"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erton_fejzullahu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_trondsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mustafa_abdellaoue"
+        }
+      ],
+      "notes": "Klubbanlegg: Sarpsborg 08s hjemmebane i Østfold. Arven dekker byens fotball — både Sarpsborg FK og Sarpsborg 08."
     },
     {
       "placeId": "nordmore_stadion",

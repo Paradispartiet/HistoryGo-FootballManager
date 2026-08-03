@@ -3882,6 +3882,1602 @@
         "rigid_positional_locks"
       ],
       "warningWhenMisused": "Låser du ham defensivt, mister du det han faktisk var: en midtbanespiller som scoret over hundre mål."
+    },
+    {
+      "id": "asbjorn_halvorsen",
+      "name": "Asbjørn Halvorsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 94,
+      "naturalPositions": [
+        "DM",
+        "CB"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "balancing_six",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "controller",
+        "leader",
+        "defensive_reading",
+        "build_up_defender"
+      ],
+      "strengths": [
+        "positioning",
+        "reading_game",
+        "leadership",
+        "simple_passing",
+        "duels",
+        "composure"
+      ],
+      "needs": [
+        "clear_structure",
+        "clear_task",
+        "midfield_partner"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "ball_playing_centre_back"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "organised_defence",
+        "compact_shape"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "constant_pressing_chaos",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "Centerhalfen var lagets midtpunkt. Skyver du ham ut av sentrum, mister laget den som holdt det sammen."
+    },
+    {
+      "id": "stefan_johansen",
+      "name": "Stefan Johansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 93,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "AM",
+        "DM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "controller",
+        "runner",
+        "leader",
+        "passer"
+      ],
+      "strengths": [
+        "passing_range",
+        "stamina",
+        "late_runs",
+        "leadership",
+        "tempo_control",
+        "positioning"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options",
+        "vertical_support"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "possession",
+        "structured_build_up",
+        "vertical_play"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield",
+        "chaos"
+      ],
+      "warningWhenMisused": "En kaptein som styrer kampen trenger ball og medspillere — ikke en rolle der han bare skal løpe."
+    },
+    {
+      "id": "mohamed_elyounoussi",
+      "name": "Mohamed Elyounoussi",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 92,
+      "naturalPositions": [
+        "LW",
+        "RW"
+      ],
+      "usablePositions": [
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "movement",
+        "one_vs_one"
+      ],
+      "strengths": [
+        "dribbling",
+        "acceleration",
+        "final_pass",
+        "wide_movement",
+        "one_v_one",
+        "first_touch"
+      ],
+      "needs": [
+        "wide_lane",
+        "isolation_duels",
+        "space_to_run"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger",
+        "classic_ten"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "isolate_wingers",
+        "fast_transitions",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "static_crossing",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Klemt inn i en smal form mister han både dribleduellen og siste pasning."
+    },
+    {
+      "id": "jorgen_strand_larsen",
+      "name": "Jørgen Strand Larsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 92,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "target",
+        "aerial",
+        "link_player",
+        "power"
+      ],
+      "strengths": [
+        "hold_up_play",
+        "heading",
+        "physical_presence",
+        "box_finishing",
+        "link_play",
+        "strength"
+      ],
+      "needs": [
+        "close_support",
+        "crosses",
+        "runners_around"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "linking_striker",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "direct_play",
+        "crossing",
+        "box_service",
+        "vertical_play"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "isolated_striker",
+        "slow_possession_without_runs"
+      ],
+      "warningWhenMisused": "En stor spiss uten støtte i nærheten blir en vegg uten noen å spille veggen med."
+    },
+    {
+      "id": "krepin_diatta",
+      "name": "Krépin Diatta",
+      "nationality": "Senegal",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "RB",
+        "WB"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right",
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "pace",
+        "dribbler",
+        "runner",
+        "one_vs_one"
+      ],
+      "strengths": [
+        "acceleration",
+        "dribbling",
+        "running_power",
+        "one_v_one",
+        "wide_movement",
+        "recovery_speed"
+      ],
+      "needs": [
+        "wide_space",
+        "space_to_run",
+        "wide_lane"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "wingback",
+        "overlapping_fullback"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "wide_attacks",
+        "high_width",
+        "space_behind"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "slow_possession_without_width",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "Setter du en løper uten rom å løpe i, har du tatt fra ham alt."
+    },
+    {
+      "id": "asbjorn_hansen",
+      "name": "Asbjørn Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "ST",
+        "CM"
+      ],
+      "archetypeIds": [
+        "line_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper",
+        "positioning",
+        "leader",
+        "command_of_area"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "reflexes",
+        "command_of_area",
+        "positioning",
+        "leadership"
+      ],
+      "needs": [
+        "protected_box",
+        "clear_defensive_line",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "line_keeper",
+        "sweeperkeeper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "protected_box"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "no_cover"
+      ],
+      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil."
+    },
+    {
+      "id": "odd_wang_sorensen",
+      "name": "Odd Wang Sørensen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "power",
+        "aerial"
+      ],
+      "strengths": [
+        "box_finishing",
+        "heading",
+        "positioning",
+        "strength",
+        "box_movement"
+      ],
+      "needs": [
+        "box_service",
+        "crosses",
+        "supporting_runners"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "target_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "box_service",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "isolated_striker",
+        "no_crosses"
+      ],
+      "warningWhenMisused": "Sytten mål på tjuefem landskamper kom fra service inn i boksen, ikke fra å hente ballen selv."
+    },
+    {
+      "id": "karl_petter_loken",
+      "name": "Karl-Petter «Kalle» Løken",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 91,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "channel_runner",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "runner",
+        "finisher",
+        "movement",
+        "depth_threat"
+      ],
+      "strengths": [
+        "runs_behind",
+        "box_finishing",
+        "off_ball_runs",
+        "movement",
+        "acceleration"
+      ],
+      "needs": [
+        "space_behind",
+        "early_through_balls",
+        "runners_around"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "channel_runner",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "space_behind",
+        "vertical_play",
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "deep_block_no_space",
+        "slow_possession_without_runs",
+        "back_to_goal_striker"
+      ],
+      "warningWhenMisused": "En løpsspiss mot en lav blokk får ingenting å løpe i — da må laget lage rommet for ham."
+    },
+    {
+      "id": "jeremy_berthod",
+      "name": "Jérémy Berthod",
+      "nationality": "Frankrike",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "WB",
+        "LW"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "crossing",
+        "stamina",
+        "wide_support"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "support_fullback",
+        "wingback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En overlappende back uten kant å samhandle med løper alene og etterlater rommet bak seg."
+    },
+    {
+      "id": "jo_inge_berget",
+      "name": "Jo Inge Berget",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "LW",
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "channel_runner",
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "movement",
+        "runner",
+        "finisher",
+        "pace"
+      ],
+      "strengths": [
+        "runs_behind",
+        "off_ball_runs",
+        "acceleration",
+        "box_finishing",
+        "wide_movement"
+      ],
+      "needs": [
+        "space_behind",
+        "wide_space",
+        "early_through_balls"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "wide_dribbler",
+        "channel_runner"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "space_behind",
+        "wide_attacks"
+      ],
+      "dislikesTactics": [
+        "deep_block_no_space",
+        "slow_build_up",
+        "static_crossing"
+      ],
+      "warningWhenMisused": "Uten rom bak forsvaret står en løper stille — og da ser han ut som en dårlig spiller han ikke er."
+    },
+    {
+      "id": "egil_olsen",
+      "name": "Egil «Drillo» Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LW",
+        "RW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "dribbler",
+        "wide_creator",
+        "one_vs_one",
+        "crossing"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "crossing",
+        "wide_movement",
+        "agility"
+      ],
+      "needs": [
+        "wide_lane",
+        "isolation_duels",
+        "time_on_ball"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "isolate_wingers",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_wide_support",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Vingen trenger en duell å vinne. Tar du bort en-mot-en-situasjonen, tar du bort ham."
+    },
+    {
+      "id": "harry_kure",
+      "name": "Harry Kure",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "RW",
+        "LW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_right"
+      ],
+      "archetypes": [
+        "crossing",
+        "wide_creator",
+        "dribbler"
+      ],
+      "strengths": [
+        "crossing",
+        "dribbling",
+        "wide_movement",
+        "chance_creation",
+        "final_pass"
+      ],
+      "needs": [
+        "wide_lane",
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "crossing",
+        "wide_attacks",
+        "high_width",
+        "box_service"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "no_crosses",
+        "central_target_play"
+      ],
+      "warningWhenMisused": "En kantspiller berømt for å score direkte fra corner trenger bredden — og dødballene."
+    },
+    {
+      "id": "sigurd_rosted",
+      "name": "Sigurd Rosted",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "aerial",
+        "build_up_defender",
+        "positioning"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "simple_passing"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line",
+        "calm_build_up"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "ball_playing_centre_back",
+        "stopper"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "panic_clearances",
+        "constant_open_space"
+      ],
+      "warningWhenMisused": "En stopper som leser spillet trenger en linje å lese. Uten struktur blir han bare en som løper etter."
+    },
+    {
+      "id": "kristoffer_zachariassen",
+      "name": "Kristoffer Zachariassen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CM",
+        "AM"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner",
+        "classic_ten"
+      ],
+      "archetypes": [
+        "runner",
+        "creator",
+        "between_lines",
+        "transition_midfielder"
+      ],
+      "strengths": [
+        "late_runs",
+        "final_pass",
+        "off_ball_runs",
+        "passing_range",
+        "stamina"
+      ],
+      "needs": [
+        "central_space",
+        "runners_ahead",
+        "vertical_support"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "classic_ten",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "vertical_play",
+        "central_combinations",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "deep_defensive_role",
+        "static_low_tempo",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Låser du en boks-til-boks-spiller foran forsvaret, forsvinner løpene som var poenget hans."
+    },
+    {
+      "id": "ole_jorgen_halvorsen",
+      "name": "Ole Jørgen Halvorsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "controller",
+        "passer",
+        "balance"
+      ],
+      "strengths": [
+        "simple_passing",
+        "positioning",
+        "stamina",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "clear_task",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "balancing_six",
+        "holding_midfielder",
+        "box_to_box"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "possession",
+        "compact_shape"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "end_to_end_chaos",
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "En balanserende midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt."
+    },
+    {
+      "id": "patrick_mortensen",
+      "name": "Patrick Mortensen",
+      "nationality": "Danmark",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "RB"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "target",
+        "aerial",
+        "box_presence",
+        "power"
+      ],
+      "strengths": [
+        "heading",
+        "hold_up_play",
+        "box_presence",
+        "strength",
+        "box_finishing"
+      ],
+      "needs": [
+        "crosses",
+        "box_service",
+        "second_ball_support"
+      ],
+      "preferredRoles": [
+        "target_striker",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "crossing",
+        "box_service",
+        "direct_play",
+        "second_balls"
+      ],
+      "dislikesTactics": [
+        "no_crosses",
+        "no_service",
+        "slow_possession_without_width"
+      ],
+      "warningWhenMisused": "En targetspiss uten innlegg er en spiss uten fotball."
+    },
+    {
+      "id": "makhtar_thioune",
+      "name": "Makhtar Thioune",
+      "nationality": "Senegal",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "DM",
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "GK",
+        "LW"
+      ],
+      "archetypeIds": [
+        "balancing_six"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_balance",
+        "stamina",
+        "defensive_presence"
+      ],
+      "strengths": [
+        "duels",
+        "tackling",
+        "interceptions",
+        "stamina",
+        "physical_presence"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "compact_midfield"
+      ],
+      "preferredRoles": [
+        "holding_midfielder",
+        "balancing_six",
+        "pressing_midfielder"
+      ],
+      "likesTactics": [
+        "compact_block",
+        "medium_press",
+        "organised_defence"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "isolated_midfield",
+        "chaos"
+      ],
+      "warningWhenMisused": "En seksser alene foran en høy linje får et rom han ikke kan dekke."
+    },
+    {
+      "id": "raymond_kvisvik",
+      "name": "Raymond Kvisvik",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LW",
+        "RW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "dribbler",
+        "one_vs_one",
+        "wide_creator",
+        "pace"
+      ],
+      "strengths": [
+        "dribbling",
+        "one_v_one",
+        "acceleration",
+        "wide_movement",
+        "agility"
+      ],
+      "needs": [
+        "isolation_duels",
+        "wide_lane",
+        "time_on_ball"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "isolate_wingers",
+        "wide_attacks",
+        "high_width"
+      ],
+      "dislikesTactics": [
+        "narrow_shape",
+        "rigid_wide_only",
+        "no_wide_support"
+      ],
+      "warningWhenMisused": "En dribler trenger en mann å drible forbi. I en smal form møter han tre."
+    },
+    {
+      "id": "thomas_pereira",
+      "name": "Thomas Pereira",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "balancing_six",
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "controller",
+        "stamina",
+        "club_professional",
+        "balance"
+      ],
+      "strengths": [
+        "stamina",
+        "positioning",
+        "simple_passing",
+        "duels",
+        "running_power"
+      ],
+      "needs": [
+        "clear_task",
+        "midfield_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "balancing_six",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "structured_build_up",
+        "compact_shape",
+        "medium_press"
+      ],
+      "dislikesTactics": [
+        "chaos",
+        "constant_pressing_chaos",
+        "rigid_positional_locks"
+      ],
+      "warningWhenMisused": "Over fire hundre kamper kom av å gjøre jobben sin i et system — ikke av å improvisere utenfor det."
+    },
+    {
+      "id": "guillermo_molins",
+      "name": "Guillermo Molins",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "ST",
+        "LW"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "linking_nine",
+        "wide_dribbler_left"
+      ],
+      "archetypes": [
+        "movement",
+        "link_player",
+        "finisher",
+        "combination_player"
+      ],
+      "strengths": [
+        "movement",
+        "first_touch",
+        "link_play",
+        "box_finishing",
+        "combination_play"
+      ],
+      "needs": [
+        "close_support",
+        "technical_teammates",
+        "central_support"
+      ],
+      "preferredRoles": [
+        "linking_striker",
+        "false_nine",
+        "advanced_forward"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations",
+        "fluid_attack"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_striker",
+        "clearance_only"
+      ],
+      "warningWhenMisused": "En kombinasjonsspiller alene på topp får ingen å kombinere med."
+    },
+    {
+      "id": "anton_saletros",
+      "name": "Anton Salétros",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM",
+        "DM"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "deep_playmaker",
+        "balancing_six"
+      ],
+      "archetypes": [
+        "passer",
+        "controller",
+        "tempo_setter"
+      ],
+      "strengths": [
+        "passing_range",
+        "tempo_control",
+        "positioning",
+        "simple_passing",
+        "composure"
+      ],
+      "needs": [
+        "time_on_ball",
+        "passing_options",
+        "midfield_partner"
+      ],
+      "preferredRoles": [
+        "deep_playmaker",
+        "regista",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "calm_build_up",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "constant_pressing_chaos",
+        "long_ball_only",
+        "end_to_end_chaos"
+      ],
+      "warningWhenMisused": "En dyp oppspiller uten tid på ballen blir tvunget til å slå langt — og da er han ikke seg selv."
+    },
+    {
+      "id": "aaron_samuel",
+      "name": "Aaron Samuel",
+      "nationality": "Nigeria",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "channel_runner"
+      ],
+      "archetypes": [
+        "pace",
+        "runner",
+        "power",
+        "depth_threat"
+      ],
+      "strengths": [
+        "acceleration",
+        "runs_behind",
+        "strength",
+        "off_ball_runs",
+        "running_power"
+      ],
+      "needs": [
+        "space_behind",
+        "space_to_run",
+        "early_through_balls"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "channel_runner",
+        "pressing_forward"
+      ],
+      "likesTactics": [
+        "fast_transitions",
+        "space_behind",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "deep_block_no_space",
+        "slow_build_up",
+        "back_to_goal_striker"
+      ],
+      "warningWhenMisused": "Fart uten rom er ingen fart. Mot en lav blokk må laget skape rommet han skal inn i."
+    },
+    {
+      "id": "gudmundur_thorarinsson",
+      "name": "Guðmundur Þórarinsson",
+      "nationality": "Island",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "LB",
+        "WB"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "crossing",
+        "wide_support",
+        "stamina"
+      ],
+      "strengths": [
+        "crossing",
+        "overlapping_runs",
+        "wide_support",
+        "stamina",
+        "passing_range"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "wingback",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads",
+        "crossing"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "En back som lever på innlegg må ha en å legge dem til — og dekning bak seg."
+    },
+    {
+      "id": "harmeet_singh",
+      "name": "Harmeet Singh",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "ST"
+      ],
+      "archetypeIds": [
+        "deep_playmaker"
+      ],
+      "archetypes": [
+        "passer",
+        "controller",
+        "composure",
+        "tempo_setter"
+      ],
+      "strengths": [
+        "simple_passing",
+        "tempo_control",
+        "first_touch",
+        "positioning",
+        "composure"
+      ],
+      "needs": [
+        "time_on_ball",
+        "passing_options",
+        "close_support"
+      ],
+      "preferredRoles": [
+        "deep_playmaker",
+        "regista",
+        "balancing_six"
+      ],
+      "likesTactics": [
+        "possession",
+        "calm_build_up",
+        "central_control"
+      ],
+      "dislikesTactics": [
+        "constant_second_balls",
+        "long_ball_only",
+        "chaos"
+      ],
+      "warningWhenMisused": "En rolig oppspiller i et kaotisk lag får aldri satt tempoet han skulle sette."
+    },
+    {
+      "id": "erton_fejzullahu",
+      "name": "Erton Fejzullahu",
+      "nationality": "Sverige",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "linking_nine"
+      ],
+      "archetypes": [
+        "finisher",
+        "movement",
+        "link_player"
+      ],
+      "strengths": [
+        "box_finishing",
+        "movement",
+        "first_touch",
+        "link_play",
+        "box_movement"
+      ],
+      "needs": [
+        "close_support",
+        "box_service",
+        "runners_around"
+      ],
+      "preferredRoles": [
+        "advanced_forward",
+        "linking_striker",
+        "box_striker"
+      ],
+      "likesTactics": [
+        "central_combinations",
+        "box_service",
+        "fluid_attack"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "long_ball_only",
+        "no_service"
+      ],
+      "warningWhenMisused": "En spiss som lever i boksen må få ballen dit — ikke tretti meter fra den."
+    },
+    {
+      "id": "anders_trondsen",
+      "name": "Anders Trondsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "LB",
+        "DM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "box_to_box_runner"
+      ],
+      "archetypes": [
+        "runner",
+        "stamina",
+        "balance",
+        "transition_midfielder"
+      ],
+      "strengths": [
+        "stamina",
+        "running_power",
+        "off_ball_runs",
+        "simple_passing",
+        "positioning"
+      ],
+      "needs": [
+        "midfield_partner",
+        "clear_task",
+        "vertical_support"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "pressing_midfielder",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "vertical_play",
+        "fast_transitions",
+        "medium_press"
+      ],
+      "dislikesTactics": [
+        "static_low_tempo",
+        "slow_possession_without_runs",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En løpende midtbanespiller i et stillestående lag ser ut som han løper i feil retning."
+    },
+    {
+      "id": "mustafa_abdellaoue",
+      "name": "Mustafa Abdellaoue",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 87,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "power",
+        "box_presence",
+        "finisher",
+        "target"
+      ],
+      "strengths": [
+        "strength",
+        "hold_up_play",
+        "box_finishing",
+        "physical_presence",
+        "box_presence"
+      ],
+      "needs": [
+        "close_support",
+        "box_service",
+        "second_ball_support"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "target_striker",
+        "linking_striker"
+      ],
+      "likesTactics": [
+        "direct_play",
+        "box_service",
+        "second_balls",
+        "crossing"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "slow_possession_without_runs"
+      ],
+      "warningWhenMisused": "En fysisk spiss uten tilførsel blir en spiss som bare kjemper — og aldri scorer."
     }
   ]
 }

@@ -171,20 +171,45 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Tromsø | Romssa Arena | 3 |
 | Vålerenga | Intility Arena | 3 |
 | Lillestrøm | Åråsen | 3 |
+| Sarpsborg | Sarpsborg stadion | 27 |
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
-| Sarpsborg 08, Kristiansund, HamKam, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
+| Kristiansund, HamKam, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 46 arvespillere fordelt
-på 12 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 73 arvespillere fordelt
+på 13 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Fem klubber har bane men ingen navn i katalogen. Det er et bevisst valg:
-oppslagene ga ingen pålitelig legendeliste for Sarpsborg 08, Kristiansund,
-HamKam, Sandefjord og KFUM, og et halvhusket navn med gal posisjon er verre enn
-et ærlig «ingen historiske spillere i katalogen ennå».
+### Sarpsborg er nå den best dekkede klubben
+
+Arven på Sarpsborg stadion dekker **byens fotball**, ikke ett klubbnummer:
+Sarpsborg FK og Sarpsborg 08 deler bane i spillet, så Asbjørn Halvorsen (cupgull
+1917, senere tysk mester med HSV) ligger i samme pool som Krépin Diatta og
+Jørgen Strand Larsen.
+
+Det gir en **skjevhet som er verdt å vite om**: å besøke Sarpsborg stadion åpner
+27 navn, Lerkendal åpner 8. Poolen er hva du kan *velge blant* — du stiller
+fortsatt elleve — men en større pool betyr mer valgfrihet til å finne spillere
+som passer systemet ditt. Skjevheten løses ved å utvide de andre klubbene, ikke
+ved å beskjære Sarpsborg.
+
+Posisjonsdekningen er komplett: keeper, back, stopper, seksser, midtbane, kant
+og spiss.
+
+### Fire klubber uten navn — og fem navn uten posisjon
+
+Kristiansund, HamKam, Sandefjord og KFUM har bane men ingen navn. Oppslagene ga
+ingen pålitelig legendeliste, og et halvhusket navn med gal posisjon er verre
+enn et ærlig «ingen historiske spillere i katalogen ennå».
+
+Fem Sarpsborg-navn står **utenfor** katalogen fordi posisjonen ikke lot seg slå
+opp: **Kristian Henriksen**, **Thor Spydevold**, **Harry Yven**, **Joachim
+Thomassen** og **Jan Kristian Fjærestad**. Alle fire første er ekte profiler
+(Henriksen 28 landskamper og VM 1938, Spydevold 28 landskamper, Yven med i
+1939-laget, Thomassen en 08-legende), men uten posisjon kan de ikke få en
+rolleprofil som betyr noe. De legges inn straks posisjonen er kjent.
 
 **Hvert eneste navn har fått posisjonen slått opp før det ble lagt inn:**
 
