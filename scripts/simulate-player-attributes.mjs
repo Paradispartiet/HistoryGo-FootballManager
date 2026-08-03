@@ -21,7 +21,7 @@ import {
   normalizeAttributeCatalogue,
   derivePlayerAttributes,
   derivePlayerAttributeIndex,
-  deriveClassForPosition,
+  describePositionDemands,
   calculateRoleAttributeFit,
   splitRoleRequirements,
   ATTRIBUTE_SCALE
@@ -89,36 +89,48 @@ check("ingen verdi over taket", Math.max(...allValues) <= ATTRIBUTE_SCALE.max);
 check("skaleringen ble målt av korpuset", scaling.sampled === players.length * catalogue.attributes.length);
 
 // ---------------------------------------------------------------------------
-// 4. Klassen er POSISJONSAVHENGIG — det finnes ikke ett tall for en spiller
+// 4. Det finnes INGEN samlescore — heller ikke en posisjonsvektet
 // ---------------------------------------------------------------------------
+// Første utgave hadde `deriveClassForPosition()`: ferdighetene vektet etter
+// posisjonens krav, ett tall ut. Den var `overall` på nytt med posisjon limt
+// på, og ga Ødegaard 46 som midtstopper — en posisjon han aldri skal spille.
+// Ferdighetene ER scoren; en spiller skal aldri kunne oppsummeres i ett tall.
 const POSITIONS = ["GK", "CB", "LB", "RB", "WB", "DM", "CM", "AM", "LW", "RW", "ST"];
-let movers = 0;
-for (const player of players) {
-  const perPosition = POSITIONS.map((position) => deriveClassForPosition(profiles[player.id], position, catalogue));
-  const spread = Math.max(...perPosition) - Math.min(...perPosition);
-  if (spread >= 15) movers += 1;
-}
-check("nesten alle spillere endrer klasse med posisjonen", movers / players.length > 0.9,
-  `${movers} av ${players.length}`);
+// Kommentarene strippes: motoren FORKLARER hvorfor samlescoren ble fjernet, og
+// en vakt som leser prosa ville falt på sin egen begrunnelse.
+const attributeSource = fs.readFileSync(new URL("../src/football-player-attributes.js", import.meta.url), "utf8")
+  .replace(/\/\*[\s\S]*?\*\//g, "").split("\n").map((line) => line.replace(/\/\/.*$/, "")).join("\n");
+check("ingen posisjonsvektet samlescore i motoren", !/deriveClassForPosition/.test(attributeSource));
+check("motoren eksporterer ingen samlescore-funksjon",
+  !/export function derive(Class|Overall|Rating)/.test(attributeSource));
 
-// Og konkret: en playmaker er ikke en keeper.
+// Det posisjonen krever uttrykkes som KONKRETE ferdigheter med tall, ikke som
+// et snitt. «CB krever hodespill, han har 6» er et faktum om en ferdighet.
 const odegaard = profiles["martin_odegaard"];
 if (odegaard) {
-  const asAM = deriveClassForPosition(odegaard, "AM", catalogue);
-  const asGK = deriveClassForPosition(odegaard, "GK", catalogue);
-  check("Ødegaard er verdt mer som AM enn som GK", asAM > asGK + 25, `${asAM} vs ${asGK}`);
+  const asCB = describePositionDemands(odegaard, "CB", catalogue);
+  check("posisjonskrav returnerer ferdigheter, ikke ett tall", typeof asCB === "object" && Array.isArray(asCB.missing));
+  check("Ødegaard mangler noe CB krever", asCB.missing.length > 0);
+  check("hvert manglende krav er en navngitt ferdighet med tall",
+    asCB.missing.every((entry) => entry.name && Number.isFinite(entry.value)));
+  check("beskrivelsen har ingen samlescore",
+    !("class" in asCB) && !("score" in asCB) && !("rating" in asCB));
+
+  // Og det viktigste: ferdighetene hans er DE SAMME uansett hvor han står.
+  const asAM = describePositionDemands(odegaard, "AM", catalogue);
+  const vision = odegaard.values.vision;
+  check("Ødegaard har samme spilleforståelse uansett posisjon",
+    [...asCB.met, ...asCB.missing, ...asAM.met, ...asAM.missing]
+      .filter((entry) => entry.id === "vision").every((entry) => entry.value === vision));
+  check("Ødegaard er sterk på spilleforståelse", vision >= 16, String(vision));
 }
 
-// Klassen i egen posisjon må spre seg. Det gamle `overall` gjorde det ikke:
-// 204 av 367 spillere sto på nøyaktig 87.
-const own = players
-  .map((player) => deriveClassForPosition(profiles[player.id], player.naturalPositions[0], catalogue))
-  .filter(Number.isFinite);
-check("klassen i egen posisjon sprer seg", new Set(own).size >= 20, `${new Set(own).size} ulike verdier`);
-const topValue = [...own].sort((a, b) =>
-  own.filter((v) => v === b).length - own.filter((v) => v === a).length)[0];
-const share = own.filter((value) => value === topValue).length / own.length;
-check("ingen enkeltverdi tar over halve katalogen", share < 0.25, `${(share * 100).toFixed(1)} % på ${topValue}`);
+// Profilens topp er spillerens egen, og endrer seg ikke med plasseringen.
+for (const player of players.slice(0, 40)) {
+  const profile = profiles[player.id];
+  check(`${player.name}s toppferdigheter er sortert synkende`,
+    profile.top.every((entry, i) => i === 0 || entry.value <= profile.top[i - 1].value));
+}
 
 // ---------------------------------------------------------------------------
 // 5. KJERNEPRINSIPPET: klassehøyde avgjør ikke
@@ -225,7 +237,12 @@ check("motoren hardkoder ingen ferdighetsliste",
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 check("app.js utleder ferdighetsprofilene", /derivePlayerAttributeIndex\(/.test(app));
 check("app.js løser rollenes ferdighetskrav", /role\.requiredSkills = splitRoleRequirements\(/.test(app));
-check("app.js viser posisjonsavhengig klasse", /deriveClassForPosition\(player\.attributes, ratingPosition/.test(app));
+check("app.js viser en FERDIGHET i sirkelen, ikke en samlescore",
+  /const signature = player\.attributes\?\.top\?\.\[0\]/.test(app));
+check("app.js navngir ferdigheten under tallet", /profileSignature/.test(app));
+check("app.js sorterer profilen etter spillerens egne toppferdigheter",
+  /for \(const entry of profile\.top\.slice\(0, PROFILE_TOP_SKILLS\)\)/.test(app));
+check("app.js regner ingen posisjonsvektet klasse", !/deriveClassForPosition/.test(app));
 check("app.js viser ferdighetsprofilen", /renderPlayerAttributes\(/.test(app));
 
 const sample = profiles["martin_odegaard"] || profiles[players[0].id];
@@ -241,7 +258,8 @@ console.log(JSON.stringify({
   eksempel: {
     spiller: sample.playerId,
     topp: sample.top.map((entry) => `${entry.name} ${entry.value} (${entry.source})`),
-    klassePerPosisjon: Object.fromEntries(POSITIONS.map((position) =>
-      [position, deriveClassForPosition(sample, position, catalogue)]))
+    manglerSomCB: (describePositionDemands(sample, "CB", catalogue)?.missing || [])
+      .map((entry) => `${entry.name} ${entry.value}`),
+    posisjonerMålt: POSITIONS.length
   }
 }, null, 2));

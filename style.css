@@ -3797,6 +3797,28 @@ ul {
 .attribute-row[data-source="posisjon"] .attribute-bar-fill { opacity: 0.7; }
 .attribute-row[data-source="utledet"] { opacity: 0.72; }
 
+.attribute-subhead {
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(127, 127, 127, 0.22);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.65;
+}
+
+/* Ferdigheter plassen krever og han mangler. De står som FAKTA om ferdigheter,
+   ikke som en samlet dom — derfor dempet, ikke rødmerket. */
+.attribute-row[data-demand="mangler"] .attribute-bar-fill { opacity: 0.4; }
+
+.profile-signature {
+  margin: 0.15rem 0 0;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.68;
+}
+
 .attribute-value {
   text-align: right;
   font-variant-numeric: tabular-nums;

@@ -26,10 +26,34 @@ En profil på 42 akser gjør to ting et enkelttall ikke kan:
 1. **Det finnes ikke lenger ett tall.** En spiller er 42 verdier som spriker
    (median 16 av 20 mellom høyeste og laveste). Han er 18 i hodespill og 6 i
    akselerasjon — det sier hva han **er**, ikke hvor god han er.
-2. **Klassen er posisjonsavhengig.** Tallet manageren ser regnes ut mot
-   posisjonen han står i. Ødegaard er 85 som AM, 78 som CM, 46 som CB og 42 som
-   spiss. Da finnes det ingen kolonne å sortere troppen etter, og rangeringen
-   dør **strukturelt** i stedet for ved regel.
+2. **Det lages aldri en ny samlescore av dem.** Ferdighetene *er* scoren.
+
+### Den feilen vi gjorde først
+
+Første utgave hadde `deriveClassForPosition()`: ferdighetene vektet etter
+posisjonens krav, ett tall ut. Tanken var at en posisjonsavhengig score ikke er
+en rating, siden samme spiller får ulikt tall ulike steder.
+
+Den var feil, og den ble fjernet. Et posisjonsvektet snitt **er** en samlescore
+— å gjøre den posisjonsavhengig fjerner ikke ratingen, den lager én rating per
+posisjon. Og verre: den ga **«Ødegaard som midtstopper = 46»**, et lavt tall i
+en posisjon han aldri skal spille. Ødegaard er ikke «en 46». Han har 20 i siste
+pasning og 20 i spilleforståelse, overalt, alltid.
+
+Det manageren trenger å vite om en plassering er ikke et snitt, men **hvilke
+konkrete ferdigheter posisjonen krever og hvor han står på dem**:
+
+> CM krever i tillegg posisjonering (10), duellspill (9), sene løp (8) — se om
+> systemet ditt dekker det.
+
+Det er et faktum om ferdigheter. Det forklarer feilbruk uten å felle en dom over
+spilleren, og det er den eneste formen posisjonen får lov til å ta.
+`describePositionDemands()` returnerer ferdigheter med tall og **aldri et
+sammendrag**; vakten faller hvis noen legger `class`, `score` eller `rating` på
+den.
+
+Det eneste tallet som måles mot en *bruk* av spilleren er **fiten** — om
+treneren bruker ham riktig — aldri en ny rating av ham.
 
 `overall` er borte fra dataene. Feltet heter nå `classHeight` og er en **input**
 til profilen — hvor høyt kilden bærer spilleren — aldri en score. Et felt som het
@@ -81,6 +105,22 @@ verdi bærer med seg **hvor den kom fra**:
 Sidepanelet viser forskjellen: belagte verdier tegnes tydelig, utledede dempet.
 **Det spillet ikke vet, later det ikke som om det vet.**
 
+Sirkelen øverst i profilen viser spillerens **sterkeste ferdighet med navn** —
+«20 · Siste pasning» — ikke et sammendrag. Listen under står sortert etter hva
+han selv er best til, og er den **samme uansett hvilken plass han står på**.
+
+### Dekning graderes etter vanskelighet
+
+`coveredBy` fantes fra før: har spilleren `box_finishing`, er `finishing` dekket.
+Dekningen ga først et flatt løft, og da ble Ødegaard stående på 10 av 20 i
+*enkle pasninger* — mens han er belagt elite på *siste pasning*. Det er feil
+fotball: er du elite på den vanskelige pasningen, er du ikke middels på den
+enkle.
+
+Løftet vektes nå av `difficulty`, som allerede sto i katalogen. Dekker en
+**vanskeligere** ferdighet en lettere, teller den fullt ut. Ingenting er funnet
+på — den ene datafeltet vekter det andre.
+
 `sim:player-attributes` sjekker hver eneste `belagt`-verdi mot spillerens egne
 `strengths`. Finner motoren på en påstand om en ekte fotballspiller, faller
 vakten. Bittestet: legger man inn `finishing` som belagt for alle, faller den.
@@ -117,8 +157,7 @@ rolle.
 |---|---|
 | Roller der beste rollefit ikke har høyest klassehøyde | **23 av 27** |
 | Roller der beste `matchScore` ikke har høyest klassehøyde | **26 av 27** |
-| Klasse i egen posisjon | sprer seg 64–93 |
-| De 204 spillerne som alle sto på 87 | fordeler seg nå på **22 ulike verdier** |
+| Sprik i profilen, median spiller | **16 av 20** |
 
 En spiller med lavere klasse slår en med høyere når treneren bruker ham riktig.
 Det står ikke lenger bare i en kommentar.
@@ -156,9 +195,11 @@ peker på en ferdighet som finnes, at alle 11 posisjoner har rangerte kravlister
 at hvert eneste styrke-token i spillerdataene løser til et tall, at hver rolle
 har minst ett ferdighetskrav, og at `overall` er borte fra spillerskjemaet.
 
-`sim:player-attributes` (1947 sjekker) — sprik, skalabruk,
-posisjonsavhengighet, at klassehøyde ikke avgjør, at klassebonusen varierer per
-rolle, og at ingen `belagt`-verdi mangler dekning i kilden.
+`sim:player-attributes` — sprik, skalabruk, **at ingen samlescore finnes**, at
+klassehøyde ikke avgjør, at klassebonusen varierer per rolle, og at ingen
+`belagt`-verdi mangler dekning i kilden. Vakten leser motoren med kommentarene
+strippet: motoren *forklarer* hvorfor samlescoren ble fjernet, og en vakt som
+leser prosa ville falt på sin egen begrunnelse.
 
 Fire bitetester, alle bekreftet:
 
@@ -168,3 +209,5 @@ Fire bitetester, alle bekreftet:
 | Flat klassebonus som før | «matchScore lar lavere klassehøyde vinne» |
 | Alias peker på ferdighet som ikke finnes | `audit:attributes` |
 | Oppdiktet `belagt`-påstand | provenance-sjekken mot `strengths` |
+| Samlescoren gjeninnført i motoren | «ingen posisjonsvektet samlescore» |
+| Profilen sortert etter posisjonen igjen | «app.js sorterer etter spillerens egne toppferdigheter» |

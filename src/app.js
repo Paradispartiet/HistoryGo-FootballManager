@@ -96,7 +96,7 @@ import { resolveClubSquadAccess, listClubHeritagePlayers } from "./football-club
 import {
   normalizeAttributeCatalogue,
   derivePlayerAttributeIndex,
-  deriveClassForPosition,
+  describePositionDemands,
   splitRoleRequirements,
   resolveAttributeToken
 } from "./football-player-attributes.js";
@@ -789,6 +789,7 @@ const elements = {
   profileName: document.querySelector("#profileName"),
   profilePositions: document.querySelector("#profilePositions"),
   profileSource: document.querySelector("#profileSource"),
+  profileSignature: document.querySelector("#profileSignature"),
   profileAttributes: document.querySelector("#profileAttributes"),
   profileAttributeList: document.querySelector("#profileAttributeList"),
   profileAttributeNote: document.querySelector("#profileAttributeNote"),
@@ -7778,64 +7779,94 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
   `;
 }
 
-// Ferdighetsprofilen i sidepanelet. To ting gjør at dette ikke er en rating:
+// Ferdighetsprofilen i sidepanelet.
 //
-//   1. Vi viser de ferdighetene POSISJONEN krever — rangert som posisjonen
-//      rangerer dem — ikke spillerens beste tall. Da leser manageren «passer
-//      han her», ikke «hvor god er han».
-//   2. Hver verdi viser HVOR den kom fra. `belagt` betyr at kilden faktisk sa
-//      det om denne spilleren; `utledet` betyr at spillet har regnet seg fram.
-//      Dette er 367 ekte, navngitte fotballspillere, og forskjellen mellom hva
-//      vi vet og hva vi antar skal stå i klartekst.
+// Den viser SPILLERENS egne sterkeste ferdigheter, sortert etter hva han faktisk
+// er god til — ikke etter hva plassen han tilfeldigvis står på krever. Ødegaard
+// har 20 i spilleforståelse enten han står som tier eller er feilplassert som
+// midtstopper, og profilen skal si det samme begge steder.
+//
+// Under den kommer det plassen krever OG han mangler, som konkrete ferdigheter
+// med tall. Det forklarer feilbruk uten å felle en samlet dom: «CB krever
+// hodespill, han har 6» er et faktum om en ferdighet. «Ødegaard som CB = 46» er
+// en rating, og en fornærmelse.
+//
+// Hver verdi viser dessuten HVOR den kom fra. `belagt` betyr at kilden faktisk
+// sa det om denne spilleren; `utledet` betyr at spillet har regnet seg fram.
+// Dette er 367 ekte, navngitte fotballspillere, og forskjellen mellom hva vi vet
+// og hva vi antar skal stå i klartekst.
+const ATTRIBUTE_SOURCE_LABEL = {
+  belagt: "belagt i kilden",
+  posisjon: "fra posisjonen han spiller",
+  rolle: "fra rollene hans",
+  utledet: "utledet"
+};
+const PROFILE_TOP_SKILLS = 8;
+
+function appendAttributeRow(list, entry, { muted = false } = {}) {
+  const item = document.createElement("li");
+  item.className = "attribute-row";
+  item.dataset.source = entry.source || "utledet";
+  if (muted) item.dataset.demand = "mangler";
+  item.title = `${entry.name}: ${entry.value} av 20 — ${ATTRIBUTE_SOURCE_LABEL[entry.source] || entry.source || "utledet"}.`;
+
+  const name = document.createElement("span");
+  name.className = "attribute-name";
+  name.textContent = entry.name;
+
+  const bar = document.createElement("span");
+  bar.className = "attribute-bar";
+  const fill = document.createElement("span");
+  fill.className = "attribute-bar-fill";
+  fill.style.width = `${Math.round((entry.value / 20) * 100)}%`;
+  bar.appendChild(fill);
+
+  const number = document.createElement("strong");
+  number.className = "attribute-value";
+  number.textContent = entry.value;
+
+  item.append(name, bar, number);
+  list.appendChild(item);
+}
+
 function renderPlayerAttributes(player, position) {
   const section = elements.profileAttributes;
   const list = elements.profileAttributeList;
   if (!section || !list) return;
 
   const profile = player?.attributes;
-  const demands = position ? (state.attributeCatalogue?.positionDemands?.[position] || []) : [];
-  if (!profile || demands.length === 0) {
+  if (!profile) {
     section.hidden = true;
     return;
   }
 
-  const SOURCE_LABEL = { belagt: "belagt i kilden", posisjon: "fra posisjonen", rolle: "fra rollene hans", utledet: "utledet" };
   list.innerHTML = "";
-  for (const token of demands) {
-    const id = resolveAttributeToken(state.attributeCatalogue, token);
-    if (!id) continue;
-    const value = profile.values[id];
-    if (!Number.isFinite(value)) continue;
-    const attribute = state.attributeCatalogue.byId.get(id);
-    const source = profile.provenance[id] || "utledet";
+  // Dette er han. Alltid det samme, uansett hvor han står.
+  for (const entry of profile.top.slice(0, PROFILE_TOP_SKILLS)) {
+    appendAttributeRow(list, entry);
+  }
 
-    const item = document.createElement("li");
-    item.className = "attribute-row";
-    item.dataset.source = source;
-    item.title = `${attribute?.name || id}: ${value} av 20 — ${SOURCE_LABEL[source] || source}.`;
-
-    const name = document.createElement("span");
-    name.className = "attribute-name";
-    name.textContent = attribute?.name || id;
-
-    const bar = document.createElement("span");
-    bar.className = "attribute-bar";
-    const fill = document.createElement("span");
-    fill.className = "attribute-bar-fill";
-    fill.style.width = `${Math.round((value / 20) * 100)}%`;
-    bar.appendChild(fill);
-
-    const number = document.createElement("strong");
-    number.className = "attribute-value";
-    number.textContent = value;
-
-    item.append(name, bar, number);
-    list.appendChild(item);
+  // Og hva plassen krever som han ikke har. Bare ferdigheter, bare tall.
+  const demands = position
+    ? describePositionDemands(profile, position, state.attributeCatalogue)
+    : null;
+  const shownIds = new Set(profile.top.slice(0, PROFILE_TOP_SKILLS).map((entry) => entry.id));
+  const gaps = (demands?.missing || []).filter((entry) => !shownIds.has(entry.id)).slice(0, 4);
+  if (gaps.length) {
+    const heading = document.createElement("li");
+    heading.className = "attribute-subhead";
+    heading.textContent = `${position} krever også`;
+    list.appendChild(heading);
+    for (const entry of gaps) {
+      appendAttributeRow(list, { ...entry, source: profile.provenance[entry.id] }, { muted: true });
+    }
   }
 
   if (elements.profileAttributeNote) {
-    elements.profileAttributeNote.textContent =
-      `Rangert etter hva ${position} krever. ${profile.sourcedCount} av ferdighetene er belagt i kilden, resten er utledet av posisjon, roller og arketype.`;
+    const base = `${profile.sourcedCount} av ferdighetene er belagt i kilden, resten er utledet av posisjon, roller og arketype.`;
+    elements.profileAttributeNote.textContent = gaps.length
+      ? `Sterkeste ferdigheter først. ${position} krever i tillegg ${gaps.map((entry) => entry.name.toLowerCase()).join(", ")} — se om systemet ditt dekker det. ${base}`
+      : `Sterkeste ferdigheter først. ${base}`;
   }
   section.hidden = list.childElementCount === 0;
 }
@@ -7843,21 +7874,22 @@ function renderPlayerAttributes(player, position) {
 // Fyll spillerprofilen i sidepanelet: rating, navn, posisjoner, samlet History
 // Go-sted, styrker og behov. Taktisk samsvar settes allerede over (fit-boksen).
 function renderPlayerProfile(player, slot) {
-  // Ratingen er POSISJONSAVHENGIG. Står spilleren på en plass, vises klassen
-  // hans NETTOPP DER — samme spiller får et annet tall som CB enn som ST. Det
-  // er hele forskjellen fra `overall`: det finnes ikke ett tall for spilleren,
-  // bare et tall for en bruk av ham.
+  // Sirkelen viser spillerens STERKESTE FERDIGHET, ikke en samlet score.
+  // Her sto det tidligere en posisjonsvektet klasse, og den var `overall` på
+  // nytt: den ga Ødegaard 46 som midtstopper — en posisjon han aldri skal
+  // spille — og gjorde et tall om til en dom over spilleren. Ferdighetene ER
+  // scoren, så det er en av dem som står her.
+  const signature = player.attributes?.top?.[0] || null;
   const ratingPosition = slot?.position || player.naturalPositions?.[0] || null;
-  const positionalClass = player.attributes && ratingPosition
-    ? deriveClassForPosition(player.attributes, ratingPosition, state.attributeCatalogue)
-    : null;
   if (elements.profileRating) {
-    elements.profileRating.textContent = Number.isFinite(positionalClass)
-      ? positionalClass
-      : (Number.isFinite(player.classHeight) ? player.classHeight : "–");
-    elements.profileRating.title = Number.isFinite(positionalClass)
-      ? `Klasse som ${ratingPosition}. Samme spiller får et annet tall i en annen posisjon.`
+    elements.profileRating.textContent = signature ? signature.value : "–";
+    elements.profileRating.title = signature
+      ? `${signature.name}: ${signature.value} av 20 — spillerens sterkeste ferdighet. Den følger ham uansett hvilken plass han står på.`
       : "";
+  }
+  if (elements.profileSignature) {
+    elements.profileSignature.textContent = signature ? signature.name : "";
+    elements.profileSignature.hidden = !signature;
   }
   renderPlayerAttributes(player, ratingPosition);
   if (elements.profileName) {

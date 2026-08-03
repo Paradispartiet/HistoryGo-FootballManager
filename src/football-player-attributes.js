@@ -10,16 +10,17 @@
 //      hodespill og 6 i akselerasjon — det sier hva han ER, ikke hvor god han
 //      er. Nettopp fordi profilen spriker, kan to spillere med samme klasse
 //      være helt ulike lagdeler.
-//   2. Klassen er POSISJONSAVHENGIG. `deriveClassForPosition()` vekter
-//      ferdighetene etter hva posisjonen faktisk krever, så samme spiller får
-//      ulikt tall som CB og som ST. Da finnes det ingen kolonne å sortere
-//      troppen etter, og rangeringen dør strukturelt i stedet for ved regel.
+//   2. Det lages ALDRI en ny samlescore av dem. Ferdighetene er scoren. Et
+//      posisjonsvektet snitt ville bare vært `overall` på nytt, med posisjon
+//      limt på — og verre: det ville gitt Ødegaard et lavt tall som midtstopper,
+//      en posisjon han aldri skal spille. Han er ikke «en 46». Han har 20 i
+//      spilleforståelse, overalt, alltid.
 //
 // Hvorfor dette gjør spillet MER tro mot prinsippet, ikke mindre: `overall` var
 // selve ratingen. Ett tall, forfattet, og 204 av 367 spillere sto på nøyaktig
 // 87 — det skilte ikke engang. Nå er `classHeight` bare en INPUT (hvor høyt
-// kilden bærer spilleren), og det manageren ser og motoren leser er alltid
-// regnet ut mot en posisjon eller en rolle.
+// kilden bærer spilleren), og det eneste tallet som måles mot en bruk av ham er
+// FITEN — om treneren bruker ham riktig — aldri en ny rating av spilleren.
 //
 // PÅSTANDER OM EKTE SPILLERE. Dette er 367 navngitte fotballspillere. Vi kan
 // ikke slå opp 42 tall for hver. Derfor UTLEDES tallene av data som allerede
@@ -45,6 +46,7 @@ export const ATTRIBUTE_SCALE = Object.freeze({ min: 1, max: 20, floor: 4 });
 const LIFT = Object.freeze({
   strength: 6,        // står i spillerens egne `strengths`
   coveredBy: 3,       // dekkes av en styrke som overlapper (box_finishing → finishing)
+  coveredByHarder: 5, // ... og den dekkende styrken er den vanskeligere av de to
   naturalTop: 7,      // fremste krav i en naturlig posisjon
   naturalLow: 3,      // bakerste krav i en naturlig posisjon
   usableFactor: 0.5,  // samme krav i en brukbar posisjon teller halvt
@@ -141,6 +143,8 @@ function demandLift(rank, total) {
   return LIFT.naturalTop - share * (LIFT.naturalTop - LIFT.naturalLow);
 }
 
+const DIFFICULTY_RANK = Object.freeze({ lett: 0, moderat: 1, hard: 2 });
+
 function collectStrengthIds(catalogue, player) {
   const direct = new Set();
   for (const token of asArray(player?.strengths)) {
@@ -148,12 +152,28 @@ function collectStrengthIds(catalogue, player) {
     if (resolved) direct.add(resolved);
   }
   // Overlappende vokabular: har han `box_finishing`, er `finishing` dekket.
-  const covered = new Set();
+  //
+  // Dekningen graderes etter vanskelighet, som allerede står i katalogen. Er
+  // spilleren belagt elite på den VANSKELIGE ferdigheten, kan han ikke være
+  // middels på den lette den forutsetter: Ødegaard er belagt på `final_pass`
+  // (hard), og da er `simple_passing` (lett) ikke en tier av tjue. Med flat
+  // dekning ble han nettopp det.
+  //
+  // Dette finner ikke på noe. Det leser `difficulty` og `coveredBy` som
+  // allerede lå der, og bruker den ene til å vekte den andre.
+  const covered = new Map();
   for (const attribute of catalogue.attributes) {
     if (direct.has(attribute.id)) continue;
-    if (attribute.coveredBy.some((token) => direct.has(resolveAttributeToken(catalogue, token) || token))) {
-      covered.add(attribute.id);
+    let best = 0;
+    for (const token of attribute.coveredBy) {
+      const source = resolveAttributeToken(catalogue, token) || token;
+      if (!direct.has(source)) continue;
+      const sourceRank = DIFFICULTY_RANK[catalogue.byId.get(source)?.difficulty] ?? 1;
+      const ownRank = DIFFICULTY_RANK[attribute.difficulty] ?? 1;
+      // Dekker en vanskeligere ferdighet en lettere, teller den fullt ut.
+      best = Math.max(best, sourceRank > ownRank ? LIFT.coveredByHarder : LIFT.coveredBy);
     }
+    if (best > 0) covered.set(attribute.id, best);
   }
   return { direct, covered };
 }
@@ -269,7 +289,7 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     if (positionLift.has(id)) { raw += positionLift.get(id); source = "posisjon"; }
     if (roleWanted.has(id)) { raw += LIFT.preferredRole; if (source === "utledet") source = "rolle"; }
     if (archetypeTokens.has(id)) raw += LIFT.archetype;
-    if (covered.has(id)) raw += LIFT.coveredBy;
+    if (covered.has(id)) raw += covered.get(id);
     // Belagt sist og tyngst: det er det eneste kilden faktisk har sagt om ham.
     if (direct.has(id)) { raw += LIFT.strength; source = "belagt"; }
     if (poorOnly.has(id)) raw += LIFT.poorFitOnly;
@@ -295,36 +315,47 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
       max: Math.max(...numbers),
       range: Math.max(...numbers) - Math.min(...numbers)
     }),
-    top: Object.freeze(ranked.slice(0, 6)),
+    // Åtte, ikke seks: sidepanelet viser `top` direkte, og en konstant som
+    // ber om åtte mens profilen bærer seks er nettopp den stille uenigheten
+    // huset blir bitt av.
+    top: Object.freeze(ranked.slice(0, 8)),
     weak: Object.freeze(ranked.slice(-6).reverse()),
     sourcedCount: ranked.filter((entry) => entry.source === "belagt").length
   });
 }
 
 // ---------------------------------------------------------------------------
-// Klassen manageren ser — alltid mot en posisjon eller en rolle
+// Hva posisjonen krever — som FAKTA om ferdigheter, ikke som en samlescore
 // ---------------------------------------------------------------------------
-
-// Samme spiller, ulikt tall som CB og som ST. Det er hele forskjellen fra
-// `overall`: det finnes ikke ett tall for spilleren, bare et tall for en bruk
-// av ham. Vektet av posisjonens egen rangerte kravliste.
-export function deriveClassForPosition(attributes, position, catalogue) {
+//
+// Det fantes en `deriveClassForPosition()` her som vektet ferdighetene etter
+// posisjonens krav og ga ett tall: «Ødegaard som CB = 46». Den er fjernet, og
+// grunnen er verdt å skrive ned, for feilen var lett å gjøre igjen:
+//
+// Et posisjonsvektet snitt ER en samlescore. Å gjøre den posisjonsavhengig
+// fjerner ikke ratingen — den lager én rating per posisjon, og gir dessuten
+// spilleren et lavt tall i en posisjon han aldri skal spille. Ødegaard er ikke
+// «en 46». Han har 20 i spilleforståelse og 20 i siste pasning, overalt, alltid.
+//
+// Det manageren trenger å vite om en plassering er ikke et snitt, men hvilke
+// KONKRETE ferdigheter posisjonen krever og hvor han står på dem. Det er et
+// faktum om ferdigheter, ikke en dom over spilleren — og det forklarer feilbruk
+// uten å påstå at spilleren er dårlig.
+export function describePositionDemands(attributes, position, catalogue, { gap = 12 } = {}) {
   const values = attributes?.values;
   const demands = catalogue?.positionDemands?.[str(position)] || [];
   if (!values || demands.length === 0) return null;
 
-  let weighted = 0;
-  let weightSum = 0;
+  const met = [];
+  const missing = [];
   demands.forEach((token, rank) => {
     const id = resolveAttributeToken(catalogue, token);
     if (!id || !(id in values)) return;
-    const weight = demands.length - rank;
-    weighted += values[id] * weight;
-    weightSum += weight;
+    const entry = { id, name: catalogue.byId.get(id)?.name || id, value: values[id], rank };
+    (values[id] >= gap ? met : missing).push(entry);
   });
-  if (weightSum === 0) return null;
-  // 1–20 → 1–100. Normalisert eksplisitt mot kildespennet, ikke klemt av et tak.
-  return Math.round((weighted / weightSum / ATTRIBUTE_SCALE.max) * 100);
+  missing.sort((a, b) => a.rank - b.rank);
+  return { position, met, missing, demandCount: met.length + missing.length };
 }
 
 // Hvor godt treffer spilleren det DENNE rollen krever? Dette er tallet som
