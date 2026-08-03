@@ -7846,11 +7846,26 @@ function renderPlayerAttributes(player, position) {
     appendAttributeRow(list, entry);
   }
 
+  // ... og det han er svakest på. En FM-profil viser begge ender: uten den
+  // nedre er det ikke en profil, bare en liste over høydepunkter. At en tier
+  // takler lite er like mye informasjon som at han ser pasningen.
+  const weakest = profile.weak.slice(0, 4);
+  if (weakest.length) {
+    const heading = document.createElement("li");
+    heading.className = "attribute-subhead";
+    heading.textContent = "Svakest";
+    list.appendChild(heading);
+    for (const entry of weakest) appendAttributeRow(list, entry, { muted: true });
+  }
+
   // Og hva plassen krever som han ikke har. Bare ferdigheter, bare tall.
   const demands = position
     ? describePositionDemands(profile, position, state.attributeCatalogue)
     : null;
-  const shownIds = new Set(profile.top.slice(0, PROFILE_TOP_SKILLS).map((entry) => entry.id));
+  const shownIds = new Set([
+    ...profile.top.slice(0, PROFILE_TOP_SKILLS).map((entry) => entry.id),
+    ...weakest.map((entry) => entry.id)
+  ]);
   const gaps = (demands?.missing || []).filter((entry) => !shownIds.has(entry.id)).slice(0, 4);
   if (gaps.length) {
     const heading = document.createElement("li");

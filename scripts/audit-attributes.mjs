@@ -29,7 +29,7 @@ const weaknesses = read("data/football_player_weaknesses.json");
 // ---------------------------------------------------------------------------
 check("skjemanavn", catalogue.schema === "historygo-football-manager.attributes.v1", catalogue.schema);
 check("skalaen er 1–20", catalogue.scale?.min === 1 && catalogue.scale?.max === 20);
-check("katalogen har ferdigheter", catalogue.attributes.length >= 40, String(catalogue.attributes.length));
+check("katalogen har ferdigheter", catalogue.attributes.length >= 55, String(catalogue.attributes.length));
 
 const ids = new Set();
 for (const attribute of catalogue.attributes) {
@@ -47,6 +47,50 @@ for (const attribute of catalogue.attributes) {
 for (const category of ["fysisk", "teknisk", "taktisk", "mental"]) {
   check(`kategorien «${category}» er i bruk`, catalogue.attributes.some((entry) => entry.category === category));
 }
+
+// Hver ferdighet må høre til en JOBB på banen, ellers får den ingen grunnlinje
+// og faller tilbake på et gjennomsnitt — nøyaktig det flate gulvet
+// posisjonsprofilen finnes for å fjerne.
+const groups = Object.keys(catalogue.groups || {});
+check("gruppene er navngitt", groups.length >= 6, groups.join(", "));
+for (const attribute of catalogue.attributes) {
+  check(`«${attribute.id}» hører til en jobbgruppe`, groups.includes(attribute.group), attribute.group);
+}
+for (const group of groups) {
+  check(`gruppa «${group}» er i bruk`, catalogue.attributes.some((entry) => entry.group === group));
+}
+
+// ---------------------------------------------------------------------------
+// 1b. Posisjonsprofilene
+// ---------------------------------------------------------------------------
+for (const position of ["GK", "CB", "LB", "RB", "WB", "DM", "CM", "AM", "LW", "RW", "ST"]) {
+  const profile = catalogue.positionProfiles[position];
+  check(`${position} har en jobbprofil`, Boolean(profile));
+  if (!profile) continue;
+  for (const group of groups) {
+    check(`${position} vekter «${group}»`, Number.isFinite(profile[group]), String(profile[group]));
+    check(`${position}.${group} er 0–100`, profile[group] >= 0 && profile[group] <= 100);
+  }
+  // En profil der alt veier likt er ingen profil.
+  const values = groups.map((group) => profile[group]);
+  check(`${position} skiller mellom jobbene`, Math.max(...values) - Math.min(...values) >= 40,
+    `spenn ${Math.max(...values) - Math.min(...values)}`);
+}
+
+// Og fotballen må stemme: en tier forsvarer mindre enn en midtstopper, en
+// midtstopper skaper mindre enn en tier, og bare keeperen er keeper.
+check("CB forsvarer mer enn AM",
+  catalogue.positionProfiles.CB.forsvar > catalogue.positionProfiles.AM.forsvar + 40);
+check("AM skaper mer enn CB",
+  catalogue.positionProfiles.AM.kreativitet > catalogue.positionProfiles.CB.kreativitet + 40);
+check("ST angriper mer enn CB",
+  catalogue.positionProfiles.ST.angrep > catalogue.positionProfiles.CB.angrep + 40);
+check("bare GK har keeperspill",
+  Object.entries(catalogue.positionProfiles).every(([position, profile]) =>
+    position === "GK" ? profile.gk >= 90 : profile.gk <= 20));
+check("kantene er bredere enn de sentrale",
+  Math.min(catalogue.positionProfiles.LW.bredde, catalogue.positionProfiles.RW.bredde)
+    > Math.max(catalogue.positionProfiles.CB.bredde, catalogue.positionProfiles.DM.bredde) + 40);
 
 // ---------------------------------------------------------------------------
 // 2. Aliasene peker på noe som finnes
@@ -122,6 +166,8 @@ console.log(JSON.stringify({
   ok: true,
   sjekker: checks,
   ferdigheter: catalogue.attributes.length,
+  grupper: Object.fromEntries(Object.keys(catalogue.groups).map((group) =>
+    [group, catalogue.attributes.filter((entry) => entry.group === group).length])),
   aliaser: Object.keys(catalogue.strengthAliases).length,
   kategorier: Object.fromEntries(["fysisk", "teknisk", "taktisk", "mental"].map((category) =>
     [category, catalogue.attributes.filter((entry) => entry.category === category).length])),

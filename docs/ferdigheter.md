@@ -2,7 +2,7 @@
 
 > Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
 
-Spillet gir nå karakter på 42 ferdigheter per spiller, på skalaen 1–20. Det ser
+Spillet gir nå karakter på 58 ferdigheter per spiller, på skalaen 1–20. Det ser
 ut som et ratingspill. Det er det motsatte, og hele dokumentet handler om
 hvorfor.
 
@@ -68,14 +68,77 @@ bare **binært**: du hadde `crossing` i `strengths`, eller ikke.
 
 **81 % av spillernes styrke-tokens var allerede attributt-ider.** De 18 som ikke
 var det (`tackling`, `interceptions`, `strength`, `agility`, `leadership` …) var
-åpenbart ferdigheter også. Katalogen står nå på **42**, i fire kategorier:
+åpenbart ferdigheter også. Katalogen står nå på **58** — samme størrelsesorden som FM — i fire kategorier:
 
 | Kategori | Antall | Hva den beskriver |
 |---|---:|---|
-| fysisk | 9 | Kroppen han har |
-| teknisk | 13 | Det han kan med ballen |
-| taktisk | 14 | Det han forstår uten ballen |
-| mental | 6 | Hodet han spiller med |
+| fysisk | 13 | Kroppen han har |
+| teknisk | 15 | Det han kan med ballen |
+| taktisk | 15 | Det han forstår uten ballen |
+| mental | 15 | Hodet han spiller med |
+
+De 16 som kom til i runde to er FM-standarden som manglet: markering, langskudd,
+dødball, aggressivitet, foregripelse, mot, konsentrasjon, beslutninger,
+vinnervilje, lagarbeid, arbeidskapasitet, balanse, hoppstyrke, toppfart,
+naturlig form og frekkhet.
+
+## Posisjonsprofilen — den ekte forskjellen
+
+`category` sier hva slags ferdighet noe er. Den sier ikke hvilken **jobb på
+banen** den hører til, og det er jobben som avgjør hva en spiller uten belagt
+kilde skal ha. Hver ferdighet har derfor også en `group`:
+
+| Gruppe | Antall | |
+|---|---:|---|
+| forsvar | 11 | takling, markering, dueller, hodespill, mot … |
+| hode | 10 | beslutninger, konsentrasjon, lagarbeid, vinnervilje … |
+| teknikk | 9 | førstetouch, dribling, pasningsregister, dødball … |
+| angrep | 8 | avslutninger, boksnærvær, løp i bakrom … |
+| fysikk | 7 | toppfart, styrke, balanse, hoppstyrke … |
+| kreativitet | 6 | spilleforståelse, siste pasning, frekkhet … |
+| gk | 4 | skuddredninger, reflekser, styring av feltet … |
+| bredde | 3 | overlappsløp, kantstøtte, isolasjonsspill |
+
+`positionProfiles` vekter hver jobb 0–100 per posisjon, og **det er grunnlinja
+hver eneste ferdighet får før spillerens egne styrker legges på**.
+
+Uten den fikk alt spillet ikke hadde kilde på nøyaktig samme tall: **21 % av alle
+verdier lå på gulvet**, og en offensiv midtbanespiller hadde like «ukjente»
+forsvarstall som en midtstopper. En tier har ikke ukjente forsvarstall. Han har
+lave.
+
+| Målt over hele katalogen | | |
+|---|---:|---:|
+| Forsvarsarbeid, CB mot AM | 15,4 | 6,9 |
+| Kreativitet, AM mot CB | 15,9 | 6,9 |
+| Angrepsspill, ST mot CB | 16,7 | 5,6 |
+| Keeperspill, GK mot ST | 17,8 | 4,8 |
+
+Ødegaard leser nå slik han skal: takling 9, markering 9, hodespill 8,
+blokkeringer 8 — og spilleforståelse 20, siste pasning 20, førstetouch 19.
+Strandberg omvendt: hodespill 20, duellspill 20, blokkeringer 18, men
+spilleforståelse 6.
+
+Dette er påstander om **posisjoner**, ikke om personer. At en offensiv
+midtbanespiller takler mindre enn en midtstopper er allmenn fotball, ikke en dom
+over en navngitt spiller — og det er nettopp derfor det kan utledes uten kilde
+per spiller.
+
+### Marginene i vakten er målt, ikke gjettet
+
+Vakten som måler dette sto først på «+3». Bitetesten som ga tieren
+midtstopperens forsvarsvekt slapp rett gjennom: AM-snittet steg fra 6,9 til
+10,2 mens CB lå på 15,4, og 15,4 > 10,2 + 3. Auditen fanget datafeilen, men
+denne vakten påsto å måle utslaget på ekte spillere og gjorde det ikke.
+Grensene står nå like under de ekte avstandene (8,5 / 9,0 / 11,1 / 13,0).
+
+### Svakhet måles bare der den betyr noe
+
+Første utgave av «svakest» viste at Ghayas Zahid er dårlig til å redde skudd.
+Sant, og fullstendig ubrukelig. En utespiller som ikke redder skudd er ikke svak,
+han er utespiller. Svake sider rangeres nå bare blant grupper som veier minst 25
+for posisjonen hans, så lista er ting manageren faktisk kan gjøre noe med:
+kantstøtte 7, hodespill 7, avslutninger 7.
 
 Vokabularet bor nå i **`data/football_attributes.json`**, ikke i svakhetsfila.
 Den fila eide to ting samtidig; nå eier den bare **treningen** av ferdighetene.

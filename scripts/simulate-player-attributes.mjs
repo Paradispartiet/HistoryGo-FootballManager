@@ -133,6 +133,72 @@ for (const player of players.slice(0, 40)) {
 }
 
 // ---------------------------------------------------------------------------
+// 4b. Posisjonsprofilen slår faktisk ut på ekte spillere
+// ---------------------------------------------------------------------------
+// Grunnlinja er den ekte forskjellen på en profil og en halv profil. Uten den
+// fikk alt spillet ikke hadde kilde på nøyaktig samme tall, og en tier hadde
+// like «ukjente» forsvarstall som en midtstopper. Her måles at den slår ut på
+// hele katalogen — ikke bare at tallene finnes i datafila.
+const groupMean = (player, group) => {
+  const ids = catalogue.attributes.filter((entry) => entry.group === group).map((entry) => entry.id);
+  const values = ids.map((id) => profiles[player.id].values[id]);
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+};
+const inPosition = (position) => players.filter((player) => player.naturalPositions[0] === position);
+const cohortMean = (position, group) => {
+  const cohort = inPosition(position);
+  return cohort.reduce((sum, player) => sum + groupMean(player, group), 0) / cohort.length;
+};
+
+check("det finnes nok midtstoppere og offensive til å måle", inPosition("CB").length >= 5 && inPosition("AM").length >= 5,
+  `CB ${inPosition("CB").length}, AM ${inPosition("AM").length}`);
+// Marginene er MÅLT, ikke gjettet. Første utgave sto på +3, og bitetesten som
+// ga tieren midtstopperens forsvarsvekt slapp rett gjennom: AM-snittet steg fra
+// 6,9 til 10,2 mens CB lå på 15,4, og 15,4 > 10,2 + 3. Auditen fanget
+// datafeilen, men denne vakten påsto å måle utslaget på ekte spillere og gjorde
+// det ikke. Ekte avstander er 8,5 / 9,0 / 11,1 / 13,0, så grensene står like
+// under dem — nær nok til å bite, med margin nok til å ikke være sprø.
+check("midtstoppere forsvarer mer enn offensive midtbanespillere",
+  cohortMean("CB", "forsvar") > cohortMean("AM", "forsvar") + 7,
+  `${cohortMean("CB", "forsvar").toFixed(1)} mot ${cohortMean("AM", "forsvar").toFixed(1)}`);
+check("offensive midtbanespillere skaper mer enn midtstoppere",
+  cohortMean("AM", "kreativitet") > cohortMean("CB", "kreativitet") + 7,
+  `${cohortMean("AM", "kreativitet").toFixed(1)} mot ${cohortMean("CB", "kreativitet").toFixed(1)}`);
+check("spisser angriper mer enn midtstoppere",
+  cohortMean("ST", "angrep") > cohortMean("CB", "angrep") + 9,
+  `${cohortMean("ST", "angrep").toFixed(1)} mot ${cohortMean("CB", "angrep").toFixed(1)}`);
+check("bare keepere har keeperferdigheter",
+  cohortMean("GK", "gk") > cohortMean("ST", "gk") + 11,
+  `${cohortMean("GK", "gk").toFixed(1)} mot ${cohortMean("ST", "gk").toFixed(1)}`);
+
+// Og konkret om spilleren dette handlet om.
+if (odegaard) {
+  const defending = ["tackling", "marking", "heading", "blocking"].map((id) => odegaard.values[id]);
+  const creating = ["vision", "final_pass", "tempo_control"].map((id) => odegaard.values[id]);
+  check("Ødegaard har lave forsvarsferdigheter", Math.max(...defending) <= 11, JSON.stringify(defending));
+  check("Ødegaard har høye kreative ferdigheter", Math.min(...creating) >= 15, JSON.stringify(creating));
+  check("avstanden er stor", Math.min(...creating) - Math.max(...defending) >= 4);
+}
+
+// Gulvet skal ikke lenger være en haug. Med flat grunnlinje lå 21 % av alle
+// verdier på ett og samme tall.
+const floorShare = allValues.filter((value) => value === ATTRIBUTE_SCALE.floor).length / allValues.length;
+check("gulvet er ikke lenger en haug", floorShare < 0.10, `${(floorShare * 100).toFixed(1)} %`);
+const topBucket = Math.max(...[...new Set(allValues)].map((value) =>
+  allValues.filter((other) => other === value).length)) / allValues.length;
+check("ingen enkeltverdi tar mer enn en femtedel", topBucket < 0.20, `${(topBucket * 100).toFixed(1)} %`);
+
+// Svake sider måles bare der de betyr noe. En utespiller som ikke redder skudd
+// er ikke svak, han er utespiller — og en «svakest»-liste full av
+// keeperferdigheter forteller manageren ingenting han kan gjøre noe med.
+const gkIds = new Set(catalogue.attributes.filter((entry) => entry.group === "gk").map((entry) => entry.id));
+for (const player of players.filter((entry) => !entry.naturalPositions.includes("GK"))) {
+  check(`${player.name} får ikke keeperferdigheter som svakhet`,
+    profiles[player.id].weak.every((entry) => !gkIds.has(entry.id)),
+    profiles[player.id].weak.map((entry) => entry.id).join(", "));
+}
+
+// ---------------------------------------------------------------------------
 // 5. KJERNEPRINSIPPET: klassehøyde avgjør ikke
 // ---------------------------------------------------------------------------
 // «Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.» Det må

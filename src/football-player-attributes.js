@@ -52,7 +52,8 @@ const LIFT = Object.freeze({
   usableFactor: 0.5,  // samme krav i en brukbar posisjon teller halvt
   preferredRole: 3,   // krevd av en rolle spilleren selv foretrekker
   archetype: 2,       // ligger i arketypen hans
-  poorFitOnly: -2     // bare krevd av posisjoner han uttrykkelig ikke passer i
+  poorFitOnly: -2,    // bare krevd av posisjoner han uttrykkelig ikke passer i
+  positionBaseline: 8 // spennet posisjonens jobbprofil alene kan flytte
 });
 
 const asArray = (value) => (Array.isArray(value) ? value : []);
@@ -77,6 +78,7 @@ export function normalizeAttributeCatalogue(data) {
       category: ["fysisk", "teknisk", "taktisk", "mental"].includes(str(entry.category)) ? str(entry.category) : "teknisk",
       difficulty: ["lett", "moderat", "hard"].includes(str(entry.difficulty)) ? str(entry.difficulty) : "moderat",
       coveredBy: Object.freeze(asArray(entry.coveredBy).map(str).filter(Boolean)),
+      group: str(entry.group) || "hode",
       note: str(entry.note)
     }));
 
@@ -92,12 +94,22 @@ export function normalizeAttributeCatalogue(data) {
     positionDemands[position] = Object.freeze(asArray(tokens).map(str).filter(Boolean));
   }
 
+  const positionProfiles = {};
+  for (const [position, weights] of Object.entries(data?.positionProfiles || {})) {
+    if (!str(position) || !weights) continue;
+    const entry = {};
+    for (const [group, weight] of Object.entries(weights)) entry[str(group)] = clamp(num(weight, 0), 0, 100);
+    positionProfiles[position] = Object.freeze(entry);
+  }
+
   return Object.freeze({
     version: PLAYER_ATTRIBUTES_VERSION,
     attributes: Object.freeze(attributes),
     byId,
     aliases: Object.freeze(aliases),
     positionDemands: Object.freeze(positionDemands),
+    positionProfiles: Object.freeze(positionProfiles),
+    groups: Object.freeze({ ...(data?.groups || {}) }),
     scale: ATTRIBUTE_SCALE
   });
 }
@@ -193,6 +205,10 @@ function collectStrengthIds(catalogue, player) {
 // persentil, ellers ville én ekstrem spiller presset alle andre sammen.
 const SCALE_PERCENTILE = 0.02;
 
+// Hvor viktig en jobbgruppe må være for posisjonen før en lav verdi der teller
+// som en SVAKHET. Under dette er den bare irrelevant.
+const RELEVANT_GROUP_WEIGHT = 25;
+
 function percentile(sorted, share) {
   if (sorted.length === 0) return 0;
   const index = clamp(Math.round((sorted.length - 1) * share), 0, sorted.length - 1);
@@ -242,6 +258,29 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
   // skiller spillere er hvor profilen topper seg, ikke hvor høyt den ligger.
   const classLift = clamp(Math.round(((num(player.classHeight, 87) - 85) / 14) * 4), 0, 4);
 
+  // ---------------------------------------------------------------------
+  // Grunnlinja: hva posisjonen HANS tilsier på hver eneste ferdighet.
+  //
+  // Dette er forskjellen på en profil og en halv profil. Uten den fikk alt
+  // spillet ikke hadde kilde på nøyaktig samme tall — 21 % av alle verdier lå
+  // på gulvet — og en offensiv midtbanespiller hadde like «ukjente»
+  // forsvarstall som en midtstopper. En tier har ikke ukjente forsvarstall.
+  // Han har lave, og det er en helt vanlig fotballopplysning.
+  //
+  // Grunnlinja er en påstand om POSISJONEN, ikke om personen. Spiller han
+  // flere posisjoner, teller den beste — en spiller straffes ikke for å være
+  // allsidig.
+  // ---------------------------------------------------------------------
+  const profilePositions = natural.length ? natural : usable;
+  const groupBaseline = new Map();
+  for (const position of profilePositions) {
+    const weights = catalogue.positionProfiles?.[position];
+    if (!weights) continue;
+    for (const [group, weight] of Object.entries(weights)) {
+      groupBaseline.set(group, Math.max(groupBaseline.get(group) ?? 0, weight));
+    }
+  }
+
   const positionLift = new Map();
   const addPositionLift = (positions, factor) => {
     for (const position of positions) {
@@ -283,7 +322,12 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
   const provenance = {};
   for (const attribute of catalogue.attributes) {
     const id = attribute.id;
-    let raw = classLift;
+    // Grunnlinja skalerer 0–100-vekten inn i det samme råspennet som resten
+    // av signalene, eksplisitt — ikke ved å la et klem gjøre jobben.
+    const baseline = groupBaseline.has(attribute.group)
+      ? (groupBaseline.get(attribute.group) / 100) * LIFT.positionBaseline
+      : LIFT.positionBaseline * 0.5;
+    let raw = classLift + baseline;
     let source = "utledet";
 
     if (positionLift.has(id)) { raw += positionLift.get(id); source = "posisjon"; }
@@ -303,6 +347,15 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([id, value]) => ({ id, value, name: catalogue.byId.get(id)?.name || id, source: provenance[id] }));
 
+  // Svake sider måles bare blant ferdigheter som betyr noe for posisjonen hans.
+  // At en midtbanespiller ikke redder skudd er ikke en svakhet, det er en
+  // kategorifeil — og en «svakest»-liste full av keeperferdigheter forteller
+  // manageren ingenting han kan gjøre noe med.
+  const relevant = ranked.filter((entry) => {
+    const group = catalogue.byId.get(entry.id)?.group;
+    return (groupBaseline.get(group) ?? 50) >= RELEVANT_GROUP_WEIGHT;
+  });
+
   return Object.freeze({
     version: PLAYER_ATTRIBUTES_VERSION,
     playerId: str(player.id),
@@ -319,7 +372,7 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     // ber om åtte mens profilen bærer seks er nettopp den stille uenigheten
     // huset blir bitt av.
     top: Object.freeze(ranked.slice(0, 8)),
-    weak: Object.freeze(ranked.slice(-6).reverse()),
+    weak: Object.freeze(relevant.slice(-6).reverse()),
     sourcedCount: ranked.filter((entry) => entry.source === "belagt").length
   });
 }

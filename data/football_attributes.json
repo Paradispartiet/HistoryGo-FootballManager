@@ -1,6 +1,6 @@
 {
   "schema": "historygo-football-manager.attributes.v1",
-  "version": 1,
+  "version": 2,
   "note": "Ferdighetsvokabularet spillet måler spillere på. Skalaen er 1–20 som i sjangeren, men den beskriver PROFIL, ikke rang: tallene sier hva en spiller er god til, aldri hvor god han er. Katalogen lå tidligere i football_player_weaknesses.json og eide da to ting samtidig; den bor her nå, og svakhetsfila leser den herfra.",
   "scale": {
     "min": 1,
@@ -25,7 +25,8 @@
         "recovery_speed",
         "agility",
         "running_power"
-      ]
+      ],
+      "group": "fysikk"
     },
     {
       "id": "agility",
@@ -36,7 +37,21 @@
       "note": "Vendinger på liten plass. Trenbar et stykke, aldri langt.",
       "coveredBy": [
         "acceleration"
-      ]
+      ],
+      "group": "fysikk"
+    },
+    {
+      "id": "balance",
+      "name": "Balanse",
+      "weaknessLabel": "Går lett i bakken",
+      "category": "fysisk",
+      "difficulty": "hard",
+      "note": "Å bli stående i duellen. Kroppen hans, ikke viljen.",
+      "coveredBy": [
+        "agility",
+        "strength"
+      ],
+      "group": "fysikk"
     },
     {
       "id": "blocking",
@@ -49,7 +64,8 @@
         "tackling",
         "interceptions",
         "defensive_reading"
-      ]
+      ],
+      "group": "forsvar"
     },
     {
       "id": "duels",
@@ -63,7 +79,8 @@
         "power",
         "physical_presence",
         "tackling"
-      ]
+      ],
+      "group": "forsvar"
     },
     {
       "id": "heading",
@@ -77,7 +94,45 @@
         "command_of_area",
         "power",
         "strength"
-      ]
+      ],
+      "group": "forsvar"
+    },
+    {
+      "id": "jumping",
+      "name": "Hoppstyrke",
+      "weaknessLabel": "Vinner ingen hodedueller",
+      "category": "fysisk",
+      "difficulty": "hard",
+      "note": "Høyde er gitt. Timing er ikke — men den bærer bare et stykke.",
+      "coveredBy": [
+        "heading",
+        "strength"
+      ],
+      "group": "forsvar"
+    },
+    {
+      "id": "natural_fitness",
+      "name": "Naturlig form",
+      "weaknessLabel": "Bruker lang tid på å komme tilbake",
+      "category": "fysisk",
+      "difficulty": "hard",
+      "note": "Hvor fort han restituerer og hvor lenge karrieren varer.",
+      "coveredBy": [
+        "stamina"
+      ],
+      "group": "fysikk"
+    },
+    {
+      "id": "pace",
+      "name": "Toppfart",
+      "weaknessLabel": "Blir løpt fra",
+      "category": "fysisk",
+      "difficulty": "hard",
+      "note": "De siste tjue meterne. Dette er kroppen han fikk.",
+      "coveredBy": [
+        "acceleration"
+      ],
+      "group": "fysikk"
     },
     {
       "id": "reflexes",
@@ -88,7 +143,8 @@
       "note": "Nesten helt medfødt. Trening gir marginer, ikke forvandling.",
       "coveredBy": [
         "shot_stopping"
-      ]
+      ],
+      "group": "gk"
     },
     {
       "id": "stamina",
@@ -99,7 +155,8 @@
       "note": "Den mest trenbare fysiske egenskapen. Kostnaden er beina hans i mellomtiden.",
       "coveredBy": [
         "running_power"
-      ]
+      ],
+      "group": "fysikk"
     },
     {
       "id": "strength",
@@ -111,7 +168,8 @@
       "coveredBy": [
         "duels",
         "tackling"
-      ]
+      ],
+      "group": "fysikk"
     },
     {
       "id": "tackling",
@@ -123,7 +181,8 @@
       "coveredBy": [
         "duels",
         "strength"
-      ]
+      ],
+      "group": "forsvar"
     },
     {
       "id": "ball_carrying",
@@ -135,7 +194,8 @@
       "coveredBy": [
         "dribbling",
         "one_v_one"
-      ]
+      ],
+      "group": "teknikk"
     },
     {
       "id": "box_finishing",
@@ -146,7 +206,8 @@
       "note": "Timing og rolige valg i kaos.",
       "coveredBy": [
         "finishing"
-      ]
+      ],
+      "group": "angrep"
     },
     {
       "id": "crossing",
@@ -157,7 +218,8 @@
       "note": "Ren repetisjon. Blant de mest trenbare tingene i fotball.",
       "coveredBy": [
         "wide_movement"
-      ]
+      ],
+      "group": "teknikk"
     },
     {
       "id": "distribution",
@@ -169,7 +231,8 @@
       "coveredBy": [
         "passing_range",
         "simple_passing"
-      ]
+      ],
+      "group": "gk"
     },
     {
       "id": "dribbling",
@@ -182,7 +245,8 @@
         "one_v_one",
         "ball_carrying",
         "agility"
-      ]
+      ],
+      "group": "teknikk"
     },
     {
       "id": "final_pass",
@@ -194,7 +258,8 @@
       "coveredBy": [
         "chance_creation",
         "vision"
-      ]
+      ],
+      "group": "kreativitet"
     },
     {
       "id": "finishing",
@@ -205,7 +270,8 @@
       "note": "Avslutningsform er ferskvare, men teknikken bak kan bygges.",
       "coveredBy": [
         "box_finishing"
-      ]
+      ],
+      "group": "angrep"
     },
     {
       "id": "first_touch",
@@ -216,7 +282,8 @@
       "note": "Å ta imot ballen under press, uansett hvor på banen. Ren repetisjon virker.",
       "coveredBy": [
         "combination_play"
-      ]
+      ],
+      "group": "teknikk"
     },
     {
       "id": "hold_up_play",
@@ -229,7 +296,20 @@
         "strength",
         "physical_presence",
         "link_play"
-      ]
+      ],
+      "group": "angrep"
+    },
+    {
+      "id": "long_shots",
+      "name": "Langskudd",
+      "weaknessLabel": "Skyter aldri utenfra",
+      "category": "teknisk",
+      "difficulty": "moderat",
+      "note": "Ren repetisjon på treningsfeltet, men treffet er hans eget.",
+      "coveredBy": [
+        "finishing"
+      ],
+      "group": "teknikk"
     },
     {
       "id": "one_vs_one",
@@ -242,7 +322,8 @@
         "dribbling",
         "isolation",
         "acceleration"
-      ]
+      ],
+      "group": "teknikk"
     },
     {
       "id": "passing_range",
@@ -253,7 +334,21 @@
       "note": "Vendinger og lange diagonaler. Åpner oppspill bakfra.",
       "coveredBy": [
         "distribution"
-      ]
+      ],
+      "group": "teknikk"
+    },
+    {
+      "id": "set_pieces",
+      "name": "Dødball",
+      "weaknessLabel": "Slår dårlige dødballer",
+      "category": "teknisk",
+      "difficulty": "lett",
+      "note": "Den mest trenbare ferdigheten som finnes. Ingen forsvarer stopper repetisjon.",
+      "coveredBy": [
+        "crossing",
+        "passing_range"
+      ],
+      "group": "teknikk"
     },
     {
       "id": "shot_stopping",
@@ -264,7 +359,8 @@
       "note": "Fotarbeid og posisjon kan trenes; hendene er hans egne.",
       "coveredBy": [
         "reflexes"
-      ]
+      ],
+      "group": "gk"
     },
     {
       "id": "simple_passing",
@@ -277,7 +373,8 @@
         "passing_range",
         "distribution",
         "final_pass"
-      ]
+      ],
+      "group": "teknikk"
     },
     {
       "id": "box_presence",
@@ -290,7 +387,8 @@
         "box_movement",
         "box_finishing",
         "physical_presence"
-      ]
+      ],
+      "group": "angrep"
     },
     {
       "id": "combination_play",
@@ -301,7 +399,8 @@
       "note": "Krever relasjoner — og at manageren gir ham noen å spille med.",
       "coveredBy": [
         "link_play"
-      ]
+      ],
+      "group": "kreativitet"
     },
     {
       "id": "command_of_area",
@@ -313,7 +412,8 @@
       "coveredBy": [
         "positioning",
         "reflexes"
-      ]
+      ],
+      "group": "gk"
     },
     {
       "id": "defensive_reading",
@@ -326,7 +426,8 @@
         "reading_game",
         "positional_intelligence",
         "interceptions"
-      ]
+      ],
+      "group": "forsvar"
     },
     {
       "id": "interceptions",
@@ -338,7 +439,8 @@
       "coveredBy": [
         "defensive_reading",
         "game_reading"
-      ]
+      ],
+      "group": "forsvar"
     },
     {
       "id": "isolation",
@@ -350,7 +452,8 @@
       "coveredBy": [
         "one_v_one",
         "dribbling"
-      ]
+      ],
+      "group": "bredde"
     },
     {
       "id": "late_runs",
@@ -363,7 +466,22 @@
         "off_ball_runs",
         "movement",
         "box_movement"
-      ]
+      ],
+      "group": "angrep"
+    },
+    {
+      "id": "marking",
+      "name": "Markering",
+      "weaknessLabel": "Mister mannen sin",
+      "category": "taktisk",
+      "difficulty": "moderat",
+      "note": "Å følge en mann er skolearbeid. Å vite når man slipper ham, er ikke.",
+      "coveredBy": [
+        "defensive_reading",
+        "positioning",
+        "interceptions"
+      ],
+      "group": "forsvar"
     },
     {
       "id": "movement",
@@ -377,7 +495,8 @@
         "late_runs",
         "box_movement",
         "wide_movement"
-      ]
+      ],
+      "group": "angrep"
     },
     {
       "id": "off_ball_runs",
@@ -391,7 +510,8 @@
         "late_runs",
         "runs_behind",
         "box_movement"
-      ]
+      ],
+      "group": "angrep"
     },
     {
       "id": "overlapping_runs",
@@ -403,7 +523,8 @@
       "coveredBy": [
         "wide_movement",
         "wide_support"
-      ]
+      ],
+      "group": "bredde"
     },
     {
       "id": "positioning",
@@ -416,7 +537,8 @@
         "positional_intelligence",
         "reading_game",
         "defensive_reading"
-      ]
+      ],
+      "group": "forsvar"
     },
     {
       "id": "pressing",
@@ -429,7 +551,8 @@
         "stamina",
         "defensive_reading",
         "game_reading"
-      ]
+      ],
+      "group": "hode"
     },
     {
       "id": "runs_behind",
@@ -442,7 +565,8 @@
         "off_ball_runs",
         "movement",
         "acceleration"
-      ]
+      ],
+      "group": "angrep"
     },
     {
       "id": "wide_support",
@@ -454,7 +578,48 @@
       "coveredBy": [
         "wide_movement",
         "overlapping_runs"
-      ]
+      ],
+      "group": "bredde"
+    },
+    {
+      "id": "aggression",
+      "name": "Aggressivitet",
+      "weaknessLabel": "Går ikke inn i det",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Temperament, ikke teknikk. Kan styres, ikke skapes.",
+      "coveredBy": [
+        "duels",
+        "tackling"
+      ],
+      "group": "forsvar"
+    },
+    {
+      "id": "anticipation",
+      "name": "Foregripelse",
+      "weaknessLabel": "Reagerer i stedet for å forutse",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Å være der før ballen. Erfaring mer enn økter.",
+      "coveredBy": [
+        "game_reading",
+        "defensive_reading",
+        "interceptions"
+      ],
+      "group": "hode"
+    },
+    {
+      "id": "bravery",
+      "name": "Mot",
+      "weaknessLabel": "Vegrer seg i duellen",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Å legge hodet der andre setter foten. Dette er hvem han er.",
+      "coveredBy": [
+        "duels",
+        "tackling"
+      ],
+      "group": "forsvar"
     },
     {
       "id": "chance_creation",
@@ -466,7 +631,8 @@
       "coveredBy": [
         "final_pass",
         "vision"
-      ]
+      ],
+      "group": "kreativitet"
     },
     {
       "id": "composure",
@@ -477,7 +643,60 @@
       "note": "Kommer med trygghet, kamper og en manager som ikke skjeller.",
       "coveredBy": [
         "leadership"
-      ]
+      ],
+      "group": "hode"
+    },
+    {
+      "id": "concentration",
+      "name": "Konsentrasjon",
+      "weaknessLabel": "Faller ut av kampen",
+      "category": "mental",
+      "difficulty": "moderat",
+      "note": "De ti minuttene ingen husker at han var borte. Trenbar, men treg.",
+      "coveredBy": [
+        "composure",
+        "positioning"
+      ],
+      "group": "hode"
+    },
+    {
+      "id": "decisions",
+      "name": "Beslutninger",
+      "weaknessLabel": "Velger feil løsning",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Ikke om han ser det, men hva han gjør med det. Den tyngste å flytte.",
+      "coveredBy": [
+        "game_reading",
+        "vision",
+        "composure"
+      ],
+      "group": "hode"
+    },
+    {
+      "id": "determination",
+      "name": "Vinnervilje",
+      "weaknessLabel": "Gir opp løpet",
+      "category": "mental",
+      "difficulty": "moderat",
+      "note": "Vokser med miljø og ansvar mer enn med trening.",
+      "coveredBy": [
+        "leadership"
+      ],
+      "group": "hode"
+    },
+    {
+      "id": "flair",
+      "name": "Frekkhet",
+      "weaknessLabel": "Prøver aldri det uventede",
+      "category": "mental",
+      "difficulty": "hard",
+      "note": "Løsningen ingen så komme. Kan ikke læres bort — bare tillates.",
+      "coveredBy": [
+        "dribbling",
+        "chance_creation"
+      ],
+      "group": "kreativitet"
     },
     {
       "id": "game_reading",
@@ -490,7 +709,8 @@
         "vision",
         "defensive_reading",
         "positioning"
-      ]
+      ],
+      "group": "hode"
     },
     {
       "id": "leadership",
@@ -501,7 +721,21 @@
       "note": "Vokser med ansvar. Gis ikke bort på treningsfeltet.",
       "coveredBy": [
         "composure"
-      ]
+      ],
+      "group": "hode"
+    },
+    {
+      "id": "teamwork",
+      "name": "Lagarbeid",
+      "weaknessLabel": "Spiller sitt eget spill",
+      "category": "mental",
+      "difficulty": "lett",
+      "note": "Oppgaven kan læres på en uke. Å ville den tar lengre tid.",
+      "coveredBy": [
+        "pressing",
+        "combination_play"
+      ],
+      "group": "hode"
     },
     {
       "id": "tempo_control",
@@ -512,7 +746,8 @@
       "note": "Å vite når laget skal roe ned. Erfaring mer enn trening.",
       "coveredBy": [
         "reading_game"
-      ]
+      ],
+      "group": "kreativitet"
     },
     {
       "id": "vision",
@@ -524,7 +759,21 @@
       "coveredBy": [
         "reading_game",
         "chance_creation"
-      ]
+      ],
+      "group": "kreativitet"
+    },
+    {
+      "id": "work_rate",
+      "name": "Arbeidskapasitet",
+      "weaknessLabel": "Jobber ikke defensivt",
+      "category": "mental",
+      "difficulty": "moderat",
+      "note": "Viljen til å løpe uten ball. Trenes, men aldri gratis.",
+      "coveredBy": [
+        "stamina",
+        "pressing"
+      ],
+      "group": "hode"
     }
   ],
   "strengthAliases": {
@@ -663,5 +912,129 @@
       "composure"
     ]
   },
-  "strengthAliasesNote": "Tokens som betyr det samme som en ferdighet i katalogen. De sto allerede i spillerdata og rolledata; aliaslista gjør dem lesbare og finner ikke opp noe. Uten den ville f.eks. «short_passing» i en rolle aldri møtt «simple_passing» hos spilleren."
+  "strengthAliasesNote": "Tokens som betyr det samme som en ferdighet i katalogen. De sto allerede i spillerdata og rolledata; aliaslista gjør dem lesbare og finner ikke opp noe. Uten den ville f.eks. «short_passing» i en rolle aldri møtt «simple_passing» hos spilleren.",
+  "groups": {
+    "gk": "Keeperspill",
+    "forsvar": "Forsvarsarbeid",
+    "fysikk": "Fysikk",
+    "teknikk": "Teknikk",
+    "kreativitet": "Kreativitet",
+    "angrep": "Angrepsspill",
+    "hode": "Hode og innstilling",
+    "bredde": "Kantspill"
+  },
+  "groupsNote": "Hvilken JOBB på banen ferdigheten hører til. Ikke det samme som `category`, som sier hva slags ferdighet det er. Posisjonsprofilen vekter gruppene.",
+  "positionProfiles": {
+    "GK": {
+      "gk": 100,
+      "forsvar": 35,
+      "fysikk": 40,
+      "teknikk": 40,
+      "kreativitet": 20,
+      "angrep": 10,
+      "hode": 70,
+      "bredde": 10
+    },
+    "CB": {
+      "gk": 5,
+      "forsvar": 100,
+      "fysikk": 75,
+      "teknikk": 45,
+      "kreativitet": 25,
+      "angrep": 25,
+      "hode": 75,
+      "bredde": 15
+    },
+    "LB": {
+      "gk": 5,
+      "forsvar": 75,
+      "fysikk": 80,
+      "teknikk": 60,
+      "kreativitet": 35,
+      "angrep": 35,
+      "hode": 65,
+      "bredde": 90
+    },
+    "RB": {
+      "gk": 5,
+      "forsvar": 75,
+      "fysikk": 80,
+      "teknikk": 60,
+      "kreativitet": 35,
+      "angrep": 35,
+      "hode": 65,
+      "bredde": 90
+    },
+    "WB": {
+      "gk": 5,
+      "forsvar": 60,
+      "fysikk": 90,
+      "teknikk": 65,
+      "kreativitet": 40,
+      "angrep": 45,
+      "hode": 60,
+      "bredde": 100
+    },
+    "DM": {
+      "gk": 5,
+      "forsvar": 85,
+      "fysikk": 70,
+      "teknikk": 65,
+      "kreativitet": 45,
+      "angrep": 25,
+      "hode": 85,
+      "bredde": 25
+    },
+    "CM": {
+      "gk": 5,
+      "forsvar": 60,
+      "fysikk": 70,
+      "teknikk": 75,
+      "kreativitet": 70,
+      "angrep": 45,
+      "hode": 80,
+      "bredde": 35
+    },
+    "AM": {
+      "gk": 5,
+      "forsvar": 30,
+      "fysikk": 55,
+      "teknikk": 90,
+      "kreativitet": 100,
+      "angrep": 70,
+      "hode": 70,
+      "bredde": 40
+    },
+    "LW": {
+      "gk": 5,
+      "forsvar": 30,
+      "fysikk": 80,
+      "teknikk": 90,
+      "kreativitet": 70,
+      "angrep": 70,
+      "hode": 60,
+      "bredde": 90
+    },
+    "RW": {
+      "gk": 5,
+      "forsvar": 30,
+      "fysikk": 80,
+      "teknikk": 90,
+      "kreativitet": 70,
+      "angrep": 70,
+      "hode": 60,
+      "bredde": 90
+    },
+    "ST": {
+      "gk": 5,
+      "forsvar": 25,
+      "fysikk": 75,
+      "teknikk": 75,
+      "kreativitet": 50,
+      "angrep": 100,
+      "hode": 65,
+      "bredde": 30
+    }
+  },
+  "positionProfilesNote": "Hvor viktig hver jobb er for hver posisjon, 0–100. Dette er grunnlinja hver ferdighet får FØR spillerens egne styrker legges på: en offensiv midtbanespiller får genuint lave forsvarstall, ikke «ukjent». Påstander om posisjoner, ikke om navngitte personer."
 }
