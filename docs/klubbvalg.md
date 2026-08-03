@@ -163,6 +163,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
+| Vålerenga | Intility Arena | 126 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 | Rosenborg | Lerkendal | 8 |
@@ -172,14 +173,13 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Viking | Lyse Arena | 3 |
 | Tromsø | Romssa Arena | 3 |
-| Vålerenga | Intility Arena | 3 |
 | Lillestrøm | Åråsen | 3 |
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 104 arvespillere fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 227 arvespillere fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
@@ -190,7 +190,30 @@ ganger — et redigeringsskript som avbrøt midtveis, en delvis redigering som g
 Rosenborg to rader, og HamKam som sto både med 26 spillere og som tom. Ingenting
 feilet, for dokumentasjon leses ikke av noen vakt. Nå gjør den det.
 
-### Sarpsborg og HamKam er de best dekkede klubbene
+### Vålerenga: 126 navn, og en mal i stedet for 126 håndskrevne varianter
+
+Vålerenga-arven er den desidert største: 126 navn fra Henry «Tippen» Johansen og
+Einar «Bruno» Larsens klubbrekord på 99 mål, gjennom gullalderen 1980–1984, til
+akademiet som har solgt Sahraoui, Odin Thiago Holm og Jones El-Abdellaoui.
+
+Profilene er **generert fra posisjon**, ikke skrevet én og én. Kilden oppgir
+primærposisjon for hver eneste spiller, og det er den som styrer arketyper,
+styrker, behov, roller og taktikkpreferanser. 126 håndskrevne varianter ville
+vært falsk presisjon — og verre: de ville drevet fra posisjonen de skulle
+beskrive. Det unike per spiller er posisjon, epoke, nasjon og nivå, som er
+nøyaktig det kilden faktisk oppgir.
+
+**Joshua King er bevisst utelatt.** Kilden sier at han spilte i ungdomsavdelingen
+og aldri på A-laget. Å legge ham inn som arvespiller ville vært å påstå noe
+kilden uttrykkelig avviser. Han hører hjemme i en egen akademikategori, og den
+finnes ikke i datamodellen ennå.
+
+Elleve spillere som allerede lå på andre baner ble **koblet på** i stedet for
+kopiert: Ronny Johnsen, John Carew, Tore André Flo og Sander Berge fra Ullevaal,
+Pål Jacobsen, Petter Belsvik, Marcus Pedersen, Jarl-André Storbæk og Aron Dønnum
+fra Briskeby, Harmeet Singh fra Sarpsborg og Magne Hoseth fra Aker stadion.
+
+### Sarpsborg og HamKam
 
 Arven på Sarpsborg stadion dekker **byens fotball**, ikke ett klubbnummer:
 Sarpsborg FK og Sarpsborg 08 deler bane i spillet, så Asbjørn Halvorsen (cupgull
@@ -201,25 +224,33 @@ HamKam viste seg like sterk: 26 navn fra Pål Jacobsen og Terje Kojedal via Finn
 Thorsen og Jan Åge Fjørtoft til Cato Erstads klubbrekord på 506 kamper.
 Kriteriet er at spilleren har **representert klubben** — det holder.
 
-Det gir en **skjevhet som er verdt å vite om**: Sarpsborg stadion åpner 32 navn
-og Briskeby 26, mens Lerkendal åpner 8. Poolen er hva du kan *velge blant* — du
-stiller fortsatt elleve — men en større pool betyr mer valgfrihet til å finne
-spillere som passer systemet ditt. Skjevheten løses ved å utvide de andre
-klubbene, ikke ved å beskjære de to.
+Det gir en **skjevhet som er blitt betydelig**: Intility Arena åpner 126 navn,
+Sarpsborg stadion 32 og Briskeby 26 — mens Lerkendal åpner 8 og Color Line
+Stadion 1.
 
-Posisjonsdekningen er komplett i begge: keeper, back, stopper, seksser,
+Poolen er hva du kan *velge blant* — du stiller fortsatt elleve — men en større
+pool betyr mer valgfrihet til å finne spillere som passer systemet ditt. Med
+126 mot 8 er det ikke lenger en nyanse: å ta over Vålerenga og besøke Intility
+gir vesentlig mer å bygge på enn å ta over Rosenborg og besøke Lerkendal.
+
+Skjevheten løses ved å **utvide de andre klubbene**, ikke ved å beskjære
+Vålerenga. Dekningen er et spørsmål om hvor godt klubben er kartlagt, ikke om
+hvor god klubben er — og den forskjellen bør ikke gjøres om til spillbalanse.
+
+Posisjonsdekningen er komplett i alle tre: keeper, back, stopper, seksser,
 midtbane, kant og spiss.
 
-### Spillere som tilhører to klubber
+### Spillere som tilhører flere klubber
 
-To spillere står på to baner, fordi de faktisk spilte begge steder:
-
-- **Brede Hangeland** — Ullevaal (landslag) + Lyse Arena (Viking)
-- **Thorstein Helstad** — Brann Stadion + Briskeby (startet seniorkarrieren i HamKam)
+Tretten spillere står på to baner, fordi de faktisk spilte begge steder — blant
+dem **Brede Hangeland** (Ullevaal + Lyse Arena), **Thorstein Helstad** (Brann +
+Briskeby), **Ronny Johnsen**, **John Carew**, **Tore André Flo** og **Sander
+Berge** (Ullevaal + Intility), og **Pål Jacobsen** (Briskeby + Intility).
 
 Det er ikke duplikater, og vakten skiller dem fra ekte duplikater: en spiller kan
-ha flere `sourcePlaceIds`, men aldri to oppføringer. Hangeland holdes fortsatt
-utenfor grunntroppene fordi han har en landslagsarena blant kildene sine.
+ha flere `sourcePlaceIds`, men aldri to oppføringer. De som har en landslagsarena
+blant kildene sine holdes fortsatt utenfor grunntroppene — én visit skal ikke
+sikre en nasjons beste.
 
 ### Når kilden ikke rekker: bredt, ikke oppdiktet
 
