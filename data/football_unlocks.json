@@ -790,6 +790,26 @@
         {
           "type": "player_candidate",
           "targetId": "mustafa_abdellaoue"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_henriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thor_spydevold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harry_yven"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joachim_thomassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_kristian_fjaerestad"
         }
       ],
       "notes": "Klubbanlegg: Sarpsborg 08s hjemmebane i Østfold. Arven dekker byens fotball — både Sarpsborg FK og Sarpsborg 08."

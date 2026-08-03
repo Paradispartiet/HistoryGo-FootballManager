@@ -171,14 +171,14 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Tromsø | Romssa Arena | 3 |
 | Vålerenga | Intility Arena | 3 |
 | Lillestrøm | Åråsen | 3 |
-| Sarpsborg | Sarpsborg stadion | 27 |
+| Sarpsborg | Sarpsborg stadion | 32 |
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, HamKam, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 73 arvespillere fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 78 arvespillere fordelt
 på 13 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
@@ -190,7 +190,7 @@ Sarpsborg FK og Sarpsborg 08 deler bane i spillet, så Asbjørn Halvorsen (cupgu
 Jørgen Strand Larsen.
 
 Det gir en **skjevhet som er verdt å vite om**: å besøke Sarpsborg stadion åpner
-27 navn, Lerkendal åpner 8. Poolen er hva du kan *velge blant* — du stiller
+32 navn, Lerkendal åpner 8. Poolen er hva du kan *velge blant* — du stiller
 fortsatt elleve — men en større pool betyr mer valgfrihet til å finne spillere
 som passer systemet ditt. Skjevheten løses ved å utvide de andre klubbene, ikke
 ved å beskjære Sarpsborg.
@@ -198,18 +198,30 @@ ved å beskjære Sarpsborg.
 Posisjonsdekningen er komplett: keeper, back, stopper, seksser, midtbane, kant
 og spiss.
 
-### Fire klubber uten navn — og fem navn uten posisjon
+### Når kilden ikke rekker: bredt, ikke oppdiktet
+
+Fem Sarpsborg-navn sto en periode utenfor katalogen fordi posisjonen ikke lot
+seg slå opp. De er inne nå, og hvordan de ble registrert er verdt å merke seg:
+
+| Spiller | Registrering | Hvorfor |
+|---|---|---|
+| Kristian Henriksen | CB, sekundært DM/CM | «Half» i datidens system er omtrent defensiv/sentral midtbane — ikke en moderne kantrolle |
+| Thor Spydevold | CB, sekundært DM/CM | Debuterte på landslaget som midtstopper; FFK-historikken fører ham også som midtbanespiller |
+| Harry Yven | **ST, uten sekundærposisjon** | Kildene sier «angrepsspiller» og ikke mer |
+| Joachim Thomassen | LB/WB, sekundært LW | Primært venstreback, også vingback og venstre midtbane |
+| Jan Kristian Fjærestad | ST | Rendyrket måljeger — toppscorer med 18 mål da Moss ble seriemester i 1987 |
+
+**Harry Yven er regelen i miniatyr.** Dokumentasjonen rekker til «angrepsspiller»
+og ikke til om han var senterløper, indreløper eller ving i datidens
+femmannsrekke. Da står han bredt som spiss, med tom `usablePositions` — spillet
+dikter ikke opp en rolle han kanskje aldri hadde. Advarselen hans sier det rett
+ut i stedet for å skjule det.
+
+### Fire klubber uten navn
 
 Kristiansund, HamKam, Sandefjord og KFUM har bane men ingen navn. Oppslagene ga
 ingen pålitelig legendeliste, og et halvhusket navn med gal posisjon er verre
 enn et ærlig «ingen historiske spillere i katalogen ennå».
-
-Fem Sarpsborg-navn står **utenfor** katalogen fordi posisjonen ikke lot seg slå
-opp: **Kristian Henriksen**, **Thor Spydevold**, **Harry Yven**, **Joachim
-Thomassen** og **Jan Kristian Fjærestad**. Alle fire første er ekte profiler
-(Henriksen 28 landskamper og VM 1938, Spydevold 28 landskamper, Yven med i
-1939-laget, Thomassen en 08-legende), men uten posisjon kan de ikke få en
-rolleprofil som betyr noe. De legges inn straks posisjonen er kjent.
 
 **Hvert eneste navn har fått posisjonen slått opp før det ble lagt inn:**
 

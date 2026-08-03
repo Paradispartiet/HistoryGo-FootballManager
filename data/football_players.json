@@ -5478,6 +5478,298 @@
         "slow_possession_without_runs"
       ],
       "warningWhenMisused": "En fysisk spiss uten tilførsel blir en spiss som bare kjemper — og aldri scorer."
+    },
+    {
+      "id": "kristian_henriksen",
+      "name": "Kristian Henriksen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 90,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back",
+        "ball_playing_centre_back"
+      ],
+      "archetypes": [
+        "defensive_reading",
+        "duel",
+        "leader",
+        "build_up_defender"
+      ],
+      "strengths": [
+        "positioning",
+        "reading_game",
+        "duels",
+        "simple_passing",
+        "leadership",
+        "heading"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "clear_structure"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "ball_playing_centre_back",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "chaotic_high_line",
+        "constant_open_space",
+        "panic_clearances"
+      ],
+      "warningWhenMisused": "«Half»-rollen hans lå mellom stopper og sentral midtbane. Skyver du ham ut på kanten, står han i en rolle systemet hans aldri hadde."
+    },
+    {
+      "id": "thor_spydevold",
+      "name": "Thor Spydevold",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "duel_centre_back"
+      ],
+      "archetypes": [
+        "duel",
+        "defensive_presence",
+        "positioning",
+        "leader"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "reading_game",
+        "strength",
+        "leadership"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "covering_partner",
+        "compact_shape"
+      ],
+      "preferredRoles": [
+        "duel_centre_back",
+        "stopper",
+        "holding_midfielder"
+      ],
+      "likesTactics": [
+        "organised_defence",
+        "compact_block",
+        "medium_or_low_line"
+      ],
+      "dislikesTactics": [
+        "very_high_line",
+        "chaotic_high_line",
+        "constant_open_space"
+      ],
+      "warningWhenMisused": "Han debuterte på landslaget som midtstopper. Bruker du ham offensivt, bruker du ham som noe han ikke var."
+    },
+    {
+      "id": "harry_yven",
+      "name": "Harry Yven",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "RB"
+      ],
+      "archetypeIds": [
+        "target_striker"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "heading"
+      ],
+      "needs": [
+        "box_service",
+        "crosses",
+        "supporting_runners"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "no_service",
+        "isolated_striker",
+        "no_crosses"
+      ],
+      "warningWhenMisused": "Kildene sier «angrepsspiller» og ikke mer. Han står bredt som spiss — spillet dikter ikke opp en rolle han kanskje aldri hadde."
+    },
+    {
+      "id": "joachim_thomassen",
+      "name": "Joachim Thomassen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 88,
+      "naturalPositions": [
+        "LB",
+        "WB"
+      ],
+      "usablePositions": [
+        "LW"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "CB"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "overlap",
+        "wide_support",
+        "stamina",
+        "crossing"
+      ],
+      "strengths": [
+        "overlapping_runs",
+        "crossing",
+        "stamina",
+        "wide_support",
+        "positioning"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "wingback",
+        "support_fullback"
+      ],
+      "likesTactics": [
+        "wide_attacks",
+        "high_width",
+        "overloads"
+      ],
+      "dislikesTactics": [
+        "narrow_fullback",
+        "no_wide_support",
+        "isolated_wide_defending"
+      ],
+      "warningWhenMisused": "Han eide venstresiden i hele sin lengde. Låser du ham lavt og smalt, tar du bort halve rollen."
+    },
+    {
+      "id": "jan_kristian_fjaerestad",
+      "name": "Jan Kristian Fjærestad",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "overall": 89,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "LB",
+        "DM"
+      ],
+      "archetypeIds": [
+        "target_striker",
+        "linking_nine"
+      ],
+      "archetypes": [
+        "finisher",
+        "box_presence",
+        "movement",
+        "depth_threat"
+      ],
+      "strengths": [
+        "box_finishing",
+        "box_movement",
+        "positioning",
+        "movement",
+        "composure"
+      ],
+      "needs": [
+        "box_service",
+        "supporting_runners",
+        "crosses"
+      ],
+      "preferredRoles": [
+        "box_striker",
+        "advanced_forward"
+      ],
+      "likesTactics": [
+        "box_service",
+        "crossing",
+        "vertical_play",
+        "direct_play"
+      ],
+      "dislikesTactics": [
+        "isolated_striker",
+        "no_service",
+        "deep_defensive_role"
+      ],
+      "warningWhenMisused": "En rendyrket måljeger — toppscorer med 18 mål da Moss ble seriemester i 1987. Trekker du ham ut av boksen, tar du fra ham jobben."
     }
   ]
 }
