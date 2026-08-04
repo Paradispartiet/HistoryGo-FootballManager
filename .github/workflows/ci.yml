@@ -61,6 +61,7 @@ jobs:
           npm run audit:tournaments
           npm run audit:tactics
           npm run audit:attributes
+          npm run audit:rosenborg-profiles
 
       - name: UI-/flyt-vakter
         run: |
