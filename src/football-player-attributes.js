@@ -102,6 +102,14 @@ export function normalizeAttributeCatalogue(data) {
     positionProfiles[position] = Object.freeze(entry);
   }
 
+  const eraProfiles = {};
+  for (const [era, weights] of Object.entries(data?.eraProfiles || {})) {
+    if (!str(era) || !weights) continue;
+    const entry = {};
+    for (const [group, delta] of Object.entries(weights)) entry[str(group)] = clamp(num(delta, 0), -40, 40);
+    eraProfiles[era] = Object.freeze(entry);
+  }
+
   return Object.freeze({
     version: PLAYER_ATTRIBUTES_VERSION,
     attributes: Object.freeze(attributes),
@@ -109,6 +117,7 @@ export function normalizeAttributeCatalogue(data) {
     aliases: Object.freeze(aliases),
     positionDemands: Object.freeze(positionDemands),
     positionProfiles: Object.freeze(positionProfiles),
+    eraProfiles: Object.freeze(eraProfiles),
     groups: Object.freeze({ ...(data?.groups || {}) }),
     scale: ATTRIBUTE_SCALE
   });
@@ -341,6 +350,22 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     if (!weights) continue;
     for (const [group, weight] of Object.entries(weights)) {
       groupBaseline.set(group, Math.max(groupBaseline.get(group) ?? 0, weight));
+    }
+  }
+
+  // Epoken justerer jobbvektene. `era` sto på hver eneste spiller og ble aldri
+  // lest av denne motoren — og uten den fikk spillere med samme posisjon og
+  // samme nivå bokstavelig talt identiske profiler. Målt: 333 av 528 delte
+  // profil med minst én annen, og den største identiske gruppa var på 26.
+  //
+  // Som posisjonsprofilen er dette en påstand om EPOKEN, ikke om personen:
+  // press, arbeidskapasitet og lagarbeid er systematisert i moderne fotball, og
+  // atletikken er en annen.
+  const eraShift = catalogue.eraProfiles?.[str(player.era)];
+  if (eraShift) {
+    for (const [group, delta] of Object.entries(eraShift)) {
+      if (!groupBaseline.has(group)) continue;
+      groupBaseline.set(group, clamp(groupBaseline.get(group) + delta, 0, 100));
     }
   }
 

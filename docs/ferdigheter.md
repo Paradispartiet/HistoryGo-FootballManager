@@ -246,6 +246,30 @@ fordi klemmingen skjuler seg selv. Det som avslører den, er at nivåene *under*
 det gamle båndet må skilles fra hverandre — klemmes de, kollapser 78–84 til én
 eneste faktor. Bittestet.
 
+## Epoken er en akse
+
+`era` sto på hver eneste spiller og ble aldri lest av ferdighetsmotoren. Det
+kostet, og klubbimportene gjorde det synlig: posisjonsmal + nivå ga spillere med
+samme posisjon og samme nivå **bokstavelig talt identiske profiler**. Målt på 528
+spillere delte **333 profil med minst én annen**, og den største identiske gruppa
+var på **26**. Å velge mellom dem var meningsløst.
+
+`eraProfiles` justerer jobbvektene etter epoke. Press, arbeidskapasitet og
+lagarbeid er systematisert i moderne fotball, og atletikken er en annen — mens
+den tekniske og kreative individualisten hadde mer plass før. Som
+posisjonsprofilen er dette en påstand om **epoken**, ikke om en navngitt spiller.
+
+| | Før | Etter |
+|---|---:|---:|
+| Unike profiler | 265 av 528 | **310 av 528** |
+| Største identiske gruppe | 26 | **15** |
+| Største verdibøtte | 22,9 % | **18,1 %** |
+
+Det som gjenstår er en ekte begrensning i kildene, ikke en feil. Flere ulike
+profiler krever **mer kildemateriale per spiller** — ikke mer oppdiktet
+variasjon. Vakten måler nå uniktheten direkte i stedet for å bruke
+verdifordelingen som proxy.
+
 ## Påstander om ekte spillere
 
 Dette er **367 navngitte fotballspillere**. 42 tall hver er ~15 000

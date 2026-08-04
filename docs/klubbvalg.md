@@ -165,13 +165,13 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
+| Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
 | Lillestrøm | Åråsen | 56 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 | Bodø/Glimt | Aspmyra stadion | 6 |
 | Molde | Aker stadion | 6 |
-| Brann | Brann Stadion | 4 |
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Tromsø | Romssa Arena | 3 |
@@ -179,11 +179,11 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 495 arveplasser fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 566 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 45 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 57 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -250,6 +250,23 @@ en Premier League-karriere og et landslagsopphold. Svein Kvia er hevet fra 83 ti
 
 Det er hele poenget med `classSource`: en `utledet` verdi er ikke en påstand, den
 er en plassholder som venter på en kilde. Når kilden kommer, flyttes den.
+
+### Brann: 75 navn, og seks nivåer som ventet på en kilde
+
+Brann-arven går fra cupmesterne på 1920-tallet med Alexander Nagelsett Olsen og
+Finn Berstad, gjennom Kniksen og seriegullene i 1961/62 og 1963, til seriegullet
+i 2007 og sølvlagene i 2023 og 2024.
+
+55 nye navn. **Tjue lå allerede i katalogen** — flere enn i noen tidligere import,
+fordi Brann-spillere går igjen på Lerkendal, Intility og Briskeby. Alle ble
+koblet på, ingen kopiert.
+
+Tolv nivåer er rettet mot kilden, og seks av dem sto som **`utledet`**: Azar
+Karadas, Hassan El Fakiri, Raymond Kvisvik, Kjetil Løvvik, Jan Gunnar Solli,
+Ruben Kristiansen og Felix Horn Myhre lå i grunnsjiktet malen aldri skilte, mens
+kilden belegger 263 Brann-kamper, en Monaco-karriere, en cupfinale og en
+landslagsdebut. Det er tredje import på rad der `utledet`-merkelappen peker rett
+på hvem som fortsatt mangler kildedekning.
 
 ### Sarpsborg og HamKam
 

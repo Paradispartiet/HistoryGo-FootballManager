@@ -1036,5 +1036,28 @@
       "bredde": 30
     }
   },
-  "positionProfilesNote": "Hvor viktig hver jobb er for hver posisjon, 0–100. Dette er grunnlinja hver ferdighet får FØR spillerens egne styrker legges på: en offensiv midtbanespiller får genuint lave forsvarstall, ikke «ukjent». Påstander om posisjoner, ikke om navngitte personer."
+  "positionProfilesNote": "Hvor viktig hver jobb er for hver posisjon, 0–100. Dette er grunnlinja hver ferdighet får FØR spillerens egne styrker legges på: en offensiv midtbanespiller får genuint lave forsvarstall, ikke «ukjent». Påstander om posisjoner, ikke om navngitte personer.",
+  "eraProfiles": {
+    "historical": {
+      "fysikk": -10,
+      "hode": -12,
+      "teknikk": 6,
+      "kreativitet": 4,
+      "angrep": 2,
+      "forsvar": 0,
+      "bredde": -4,
+      "gk": 0
+    },
+    "modern": {
+      "fysikk": 8,
+      "hode": 8,
+      "teknikk": -2,
+      "kreativitet": -2,
+      "angrep": 0,
+      "forsvar": 2,
+      "bredde": 4,
+      "gk": 0
+    }
+  },
+  "eraProfilesNote": "Justering av jobbvektene etter epoke, i prosentpoeng. Fotballen endret seg: press, arbeidskapasitet og lagarbeid er systematisert i moderne fotball, og atletikken er en annen — mens den tekniske og kreative individualisten hadde mer plass før. Dette er en påstand om EPOKEN, ikke om en navngitt spiller, på samme måte som posisjonsprofilen er en påstand om posisjonen. Uten den fikk spillere med samme posisjon og samme nivå bokstavelig talt identiske profiler: 333 av 528 delte profil med minst én annen."
 }

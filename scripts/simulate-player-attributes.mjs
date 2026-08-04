@@ -274,6 +274,46 @@ check("klassen rører ikke bunnen",
   Math.abs(meanWeakest(highClass) - meanWeakest(lowClass)) <= 1.5,
   `høy ${meanWeakest(highClass).toFixed(1)}, lav ${meanWeakest(lowClass).toFixed(1)}`);
 
+// Profilene må faktisk skille spillere fra hverandre. Dette er den ekte
+// målingen bak «ingen enkeltverdi tar mer enn en femtedel» — den var bare en
+// proxy. Med posisjonsmal og nivå alene fikk spillere med samme posisjon og
+// samme nivå BOKSTAVELIG TALT identiske profiler: 333 av 528 delte profil med
+// minst én annen, og den største identiske gruppa var 26 spillere. Å velge
+// mellom dem var meningsløst.
+//
+// `era` sto på hver eneste spiller og ble aldri lest. Den er nå en akse, og
+// halverte problemet. Det som gjenstår er en ekte begrensning i kildene, ikke
+// en feil: flere ulike profiler krever mer kildemateriale per spiller, ikke mer
+// oppdiktet variasjon.
+const signatures = new Map();
+for (const player of players) {
+  const key = JSON.stringify(profiles[player.id].values);
+  signatures.set(key, (signatures.get(key) || 0) + 1);
+}
+const uniqueShare = signatures.size / players.length;
+const largestClone = Math.max(...signatures.values());
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.55,
+  `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
+check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 20, String(largestClone));
+
+// Og epoken må faktisk slå ut: to spillere med samme posisjon og nivå, men ulik
+// epoke, skal ikke være like.
+check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length >= 2,
+  Object.keys(catalogue.eraProfiles).join(", "));
+const eraPairs = [];
+for (const player of players) {
+  const twin = players.find((other) =>
+    other.id !== player.id && other.era !== player.era
+    && other.classHeight === player.classHeight
+    && other.naturalPositions[0] === player.naturalPositions[0]);
+  if (twin) { eraPairs.push([player, twin]); if (eraPairs.length > 8) break; }
+}
+check("det finnes par å måle epoken på", eraPairs.length > 0, String(eraPairs.length));
+for (const [a, b] of eraPairs) {
+  check(`${a.name} (${a.era}) og ${b.name} (${b.era}) har ulik profil`,
+    JSON.stringify(profiles[a.id].values) !== JSON.stringify(profiles[b.id].values));
+}
+
 // ---------------------------------------------------------------------------
 // 5. KJERNEPRINSIPPET: klassehøyde avgjør ikke
 // ---------------------------------------------------------------------------
