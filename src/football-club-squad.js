@@ -39,14 +39,16 @@ function playsIn(player, positions) {
 // Klubbens historiske spillere: de som er knyttet til klubbens egen bane.
 // sourcePlaceIds er fortsatt sannhetskilden. Profilberikelsen endrer ikke hvem
 // som tilhører klubbarven; den gjør bare den eksisterende spilleren lesbar.
+// Sorteringen beholder classHeight som første nøkkel: eksisterende klubb- og
+// testkontrakter skal ikke endres bare fordi statusfeltet blir rikere.
 export function listClubHeritagePlayers({ homePlaceId = null, players = [] } = {}) {
   if (!homePlaceId) return [];
   return enrichClubPlayerProfiles(players, { homePlaceId })
     .filter((player) => asArray(player.sourcePlaceIds).includes(homePlaceId))
     .slice()
     .sort((a, b) =>
-      num(b.clubProfile?.statusRank) - num(a.clubProfile?.statusRank)
-      || num(b.classHeight) - num(a.classHeight)
+      num(b.classHeight) - num(a.classHeight)
+      || num(b.clubProfile?.statusRank) - num(a.clubProfile?.statusRank)
       || String(a.id).localeCompare(String(b.id))
     );
 }
@@ -149,7 +151,8 @@ export function resolveClubSquadAccess({
         : "Grunntroppen holder klubben spillbar til flere spillere kommer til.",
       todo: heritage.length
         ? ["Velg blant klubbens historiske spillere når du setter troppen."]
-        : ["Samle flere spillere gjennom stedene du besøker."]
+        : ["Samle flere spillere gjennom stedene du besøker."
+        ]
     };
   }
 
