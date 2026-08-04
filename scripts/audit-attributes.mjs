@@ -244,9 +244,65 @@ for (const file of fs.readdirSync(engineDir).filter((name) => name.endsWith(".js
     hits.slice(0, 4).map((player) => player.name).join(", "));
 }
 
+// ---------------------------------------------------------------------------
+// Nær-duplikate navn: samme spiller lagt inn to ganger, eller to menn?
+// ---------------------------------------------------------------------------
+// Stabæk-kilden oppga 76 navn, men «Franck Boli» sto i elitelista og «Frank
+// Boli» i samlingslista — samme spiller, to stavemåter. Det ville blitt to
+// spillere i katalogen, med hver sin halve karriere, og ingenting ville feilet:
+// id-ene er forskjellige, så kollisjonsvakten i importskriptet ser dem ikke.
+//
+// Denne vakten flagger navnepar som er identiske eller skiller seg med ett
+// tegn. Den kan ikke avgjøre hvem som er hvem — det er et kildespørsmål — så
+// hvert par må stå i lista under med en begrunnelse. Et NYTT par feller
+// auditen, og det er hele poenget: det tvinger fram avgjørelsen i stedet for
+// å la den passere i stillhet.
+const REVIEWED_NAME_PAIRS = new Map([
+  // Brann-stopper med landskamper (86) mot Tromsø-stopper (82). To menn,
+  // hver navngitt av sin egen klubbkilde.
+  ["tor pedersen|tore pedersen", "to ulike midtstoppere, Brann og Tromsø"],
+  // Stabæks keeper er moderne, Branns er historisk. To menn.
+  ["jan knudsen|jon knudsen", "to ulike keepere, Brann (historisk) og Stabæk (moderne)"],
+  // Molde-kilden og Lyn-kilden beskriver hver sin indreløper. Kallenavnet er
+  // det eneste som skiller dem, og det er derfor Lyns står med det.
+  ["jan berg|jan berg", "Molde-spilleren og Lyns «Julle» Berg, to ulike menn"]
+]);
+
+const nameKey = (name) => String(name).toLowerCase()
+  .replace(/«[^»]*»/g, " ").replace(/[^a-zà-ÿ ]/g, "").replace(/\s+/g, " ").trim();
+
+function editDistanceAtMostOne(a, b) {
+  if (Math.abs(a.length - b.length) > 1) return false;
+  const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+  let i = 0;
+  let j = 0;
+  let diff = 0;
+  while (i < short.length && j < long.length) {
+    if (short[i] === long[j]) { i += 1; j += 1; continue; }
+    diff += 1;
+    if (diff > 1) return false;
+    if (short.length === long.length) { i += 1; j += 1; } else { j += 1; }
+  }
+  return diff + (long.length - j) + (short.length - i) <= 1;
+}
+
+const keyed = players.map((player) => ({ name: player.name, key: nameKey(player.name) }));
+const nearPairs = [];
+for (let i = 0; i < keyed.length; i += 1) {
+  for (let j = i + 1; j < keyed.length; j += 1) {
+    if (!editDistanceAtMostOne(keyed[i].key, keyed[j].key)) continue;
+    const pair = [keyed[i].key, keyed[j].key].sort().join("|");
+    if (REVIEWED_NAME_PAIRS.has(pair)) continue;
+    nearPairs.push(`${keyed[i].name} / ${keyed[j].name}`);
+  }
+}
+check("ingen ugjennomgåtte nær-duplikate spillernavn", nearPairs.length === 0,
+  nearPairs.slice(0, 5).join(" · "));
+
 console.log(JSON.stringify({
   ok: true,
   sjekker: checks,
+  gjennomgåtteNavnepar: REVIEWED_NAME_PAIRS.size,
   ferdigheter: catalogue.attributes.length,
   grupper: Object.fromEntries(Object.keys(catalogue.groups).map((group) =>
     [group, catalogue.attributes.filter((entry) => entry.group === group).length])),

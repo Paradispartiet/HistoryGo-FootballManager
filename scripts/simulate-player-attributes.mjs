@@ -296,7 +296,7 @@ const largestClone = Math.max(...signatures.values());
 // uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
 // importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
 // er oppnådd — neste malgenererte import ville dratt den ned igjen uten at noe
-// feilet. Målt: 710 unike av 955 (74 %), største klon 12.
+// feilet. Målt: 743 unike av 1008 (74 %), største klon 12.
 //
 // Sandefjord var testen på om det holder uten epokeaksen: klubben ble stiftet i
 // 1998, så alle 68 navnene er `modern`, og epoken — som var det som reddet
@@ -310,7 +310,14 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 20, Strin
 // å reversere Brann til malstyrker koster bare 2 poeng (75 % → 73 %), fordi
 // epoke og nivå fortsatt skiller spillerne. Den følsomme målingen ligger
 // oppstrøms — i styrke-settene selv, som er nettopp det en malimport gjør likt.
-// Målt: 454 unike styrke-sett av 955 (48 %), 44 % med én klubb reversert.
+// Målt: 473 unike styrke-sett av 1008 (47 %), 45 % med Stabæk reversert.
+//
+// Marginen til grensa er nå under ett prosentpoeng, og grunnen er kjent og
+// målt: de to største kollisjonsgruppene er på 34 og 27 spillere og kommer
+// begge fra Rosenborg- og Vålerenga-importene, som ble malgenerert fordi jeg
+// ikke hadde kildebeskrivelser for dem. Grensa skal **ikke** senkes for å gi
+// plass — den skal stå til de to arvene er lest fra kilder, slik de fem andre
+// er. Å senke den ville vært å gi opp nettopp det den vokter.
 const strengthSets = new Map();
 for (const player of players) {
   const key = JSON.stringify(player.strengths);
