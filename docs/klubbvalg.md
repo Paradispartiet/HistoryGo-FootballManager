@@ -165,6 +165,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
+| Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
@@ -172,18 +173,17 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Lillestrøm | Åråsen | 56 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
-| Bodø/Glimt | Aspmyra stadion | 6 |
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 727 arveplasser fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 810 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 74 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 90 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -314,6 +314,28 @@ Stavrum, Sindre Rekdal, Berdon Sønderland og Øystein Neerland fra cupfinalene 
 Molde-navnene som står som **`utledet`**: kilden gir posisjon og cupfinalelag,
 men ingen spillerbeskrivelse, og da skal styrkene bli stående på posisjonsmalen.
 Fofana beskrives («stort gjennombrudd før overgang til Chelsea») og er `belagt`.
+
+### Bodø/Glimt: 89 navn, og sju `utledet` løftet på én gang
+
+Glimt-arven går fra Harald «Dutte» Berg — kåret til tidenes norske fotballspiller
+i 1976 — via cupgullet i 1975 og cupmesterlaget fra 1993, til de fire
+seriegullene og Champions League-åttendedelsfinalen i 2026.
+
+64 nye navn, 19 koblet på. **Elleve nivåer rettet, sju av dem fra `utledet`**:
+Arne Hanssen, Tom Kåre Staurvik, Terje Mørkved, Trond Sollied, Jan-Derek
+Sørensen, Anders Konradsen og Trond Olsen lå alle i grunnsjiktet malen aldri
+skilte — mens kilden belegger klubbens mestscorende spiller gjennom tidene, to
+cupfinalescoringer, en Dortmund-karriere og en landslagsspiller.
+
+Det er den største enkeltrettelsen så langt, og den kom fordi Glimt-spillere går
+igjen på Lerkendal: sju av dem lå der som navn uten karriere.
+
+Alle 64 nye fikk styrkene lest fra kildens beskrivelser fra start — samme
+framgangsmåte som Molde, ikke som de fire første importene.
+
+Kildens europagenerasjon-avsnitt sier «bør også inn i spillerpoolen» om fem navn
+utenfor den anbefalte poolen på 84 (Elias Hagen, Isak Dybvik Määttä, Joel Mvuka,
+Tobias Gulliksen, Sondre Sørli). De er med — samme avklaring som for Molde.
 
 ### Klubbstatus bor på spilleren
 
