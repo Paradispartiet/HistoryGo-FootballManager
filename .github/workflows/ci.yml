@@ -62,6 +62,7 @@ jobs:
           npm run audit:tactics
           npm run audit:attributes
           npm run audit:rosenborg-profiles
+          npm run audit:valerenga-profiles
 
       - name: UI-/flyt-vakter
         run: |

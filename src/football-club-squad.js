@@ -14,8 +14,11 @@
 
 import {
   CLUB_PLAYER_PROFILE_VERSION,
-  enrichClubPlayerProfiles
+  enrichClubPlayerProfiles as enrichDefaultClubPlayerProfiles
 } from "./football-club-player-profiles.js";
+import {
+  enrichValerengaPlayerProfiles
+} from "./football-valerenga-player-profiles.js";
 
 export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v2";
 
@@ -36,6 +39,13 @@ function playsIn(player, positions) {
     .some((position) => positions.includes(position));
 }
 
+function enrichHeritagePlayers(players, homePlaceId) {
+  if (homePlaceId === "intility_arena") {
+    return enrichValerengaPlayerProfiles(players, { homePlaceId });
+  }
+  return enrichDefaultClubPlayerProfiles(players, { homePlaceId });
+}
+
 // Klubbens historiske spillere: de som er knyttet til klubbens egen bane.
 // sourcePlaceIds er fortsatt sannhetskilden. Profilberikelsen endrer ikke hvem
 // som tilhører klubbarven; den gjør bare den eksisterende spilleren lesbar.
@@ -43,7 +53,7 @@ function playsIn(player, positions) {
 // testkontrakter skal ikke endres bare fordi statusfeltet blir rikere.
 export function listClubHeritagePlayers({ homePlaceId = null, players = [] } = {}) {
   if (!homePlaceId) return [];
-  return enrichClubPlayerProfiles(players, { homePlaceId })
+  return enrichHeritagePlayers(players, homePlaceId)
     .filter((player) => asArray(player.sourcePlaceIds).includes(homePlaceId))
     .slice()
     .sort((a, b) =>
@@ -151,8 +161,7 @@ export function resolveClubSquadAccess({
         : "Grunntroppen holder klubben spillbar til flere spillere kommer til.",
       todo: heritage.length
         ? ["Velg blant klubbens historiske spillere når du setter troppen."]
-        : ["Samle flere spillere gjennom stedene du besøker."
-        ]
+        : ["Samle flere spillere gjennom stedene du besøker."]
     };
   }
 

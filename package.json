@@ -44,6 +44,7 @@
     "audit:tactics": "node scripts/audit-tactics.mjs",
     "audit:attributes": "node scripts/audit-attributes.mjs",
     "audit:rosenborg-profiles": "node scripts/audit-rosenborg-player-profiles.mjs",
+    "audit:valerenga-profiles": "node scripts/audit-valerenga-player-profiles.mjs",
     "check:syntax": "node scripts/check-syntax.mjs",
     "sim:player-stats": "node scripts/simulate-player-stats.mjs",
     "sim:substitutions": "node scripts/simulate-substitutions.mjs",
