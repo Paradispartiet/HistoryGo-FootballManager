@@ -48,7 +48,9 @@ const ROSENBORG_STATUS_GROUPS = Object.freeze({
     "Bent Skammelsrud",
     "Ola By Rise",
     "Sverre Brandhaug",
-    "Karl-Petter «Kalle» Løken"
+    "Karl-Petter «Kalle» Løken",
+    "Karl-Petter Løken",
+    "Mini Jakobsen"
   ]),
   club_legend: setOf([
     "Rune Bratseth",
@@ -69,6 +71,7 @@ const ROSENBORG_STATUS_GROUPS = Object.freeze({
     "Frode Johnsen",
     "Rade Prica",
     "Alexander Søderlund",
+    "Alexander Toft Søderlund",
     "Jan Christiansen",
     "Sverre Fornes",
     "Birger Tingstad",
@@ -101,7 +104,9 @@ const ROSENBORG_STATUS_GROUPS = Object.freeze({
     "Roger Albertsen",
     "Hassan El Fakiri",
     "Sebastián Eguren",
-    "Besart Berisha"
+    "Besart Berisha",
+    "Christian Gytkjær",
+    "Christian Lund Gytkjær"
   ]),
   golden_era_core: setOf([
     "Bjørn Tore Kvarme",
@@ -121,6 +126,7 @@ const ROSENBORG_STATUS_GROUPS = Object.freeze({
   ]),
   academy_export: setOf([
     "Sverre Nypan",
+    "Sverre Halseth Nypan",
     "Marius Broholm",
     "Marius Sivertsen Broholm",
     "Emil Konradsen Ceïde",
@@ -141,7 +147,9 @@ const ROSENBORG_STATUS_GROUPS = Object.freeze({
     "Janne Saarinen",
     "Karim Essediri",
     "Sebastián Eguren",
-    "Besart Berisha"
+    "Besart Berisha",
+    "Christian Gytkjær",
+    "Christian Lund Gytkjær"
   ])
 });
 
@@ -149,6 +157,11 @@ const ROSENBORG_STATUS_GROUPS = Object.freeze({
 // Posisjonskodene er de samme som resten av spillet bruker.
 const ROSENBORG_POSITION_OVERRIDES = new Map(Object.entries({
   "Karl-Petter «Kalle» Løken": {
+    naturalPositions: ["RW", "RB"],
+    usablePositions: ["ST"],
+    note: "Høyresideprofil: ving/angriper i toppscorersesongen, senere også back."
+  },
+  "Karl-Petter Løken": {
     naturalPositions: ["RW", "RB"],
     usablePositions: ["ST"],
     note: "Høyresideprofil: ving/angriper i toppscorersesongen, senere også back."
