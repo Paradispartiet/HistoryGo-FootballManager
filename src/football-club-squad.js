@@ -1,31 +1,23 @@
 // ============================================================================
-// Klubbtropp v1 — arven ligger på banen, ikke i klubbvalget
+// Klubbtropp v2 — arven ligger på banen, ikke i klubbvalget
 //
 // Tar du over Rosenborg, får du IKKE Eggens lag utdelt. Du får tilgang til
 // klubbens historiske spillere — men bare hvis du faktisk har vært på Lerkendal.
 // Har du ikke det, får du en automatisk tropp som holder klubben spillbar, og
 // resten må du samle selv.
 //
-// Det er hele kjernesløyfen brukt på klubbovertakelsen i stedet for å omgå den:
-//
-//   Har vært på banen   → klubbens historiske spillere er dine å velge blant
-//   Har ikke vært der   → automatisk grunntropp + «gå og samle»
-//
-// Samme form som landslagsmodus, der nasjonens grunntropp er bunnen og
-// samlingen er oppsiden. Ingen ny gate er funnet opp: spillerne er allerede
-// knyttet til steder gjennom `sourcePlaceIds`, og `computeAvailability()` gater
-// dem allerede på besøkte steder. Det som manglet var koblingen KLUBB → BANE,
-// og en grunntropp så et klubbvalg aldri blir en blindvei.
-//
-// Grunntroppen er et GULV, ikke en snarvei: den plukker de jevneste spillerne
-// (lavest `classHeight`) og aldri klubbens egne historiske navn — de er nettopp det
-// du går til Lerkendal for. Den deler heller aldri ut landslagsarena-spillere.
-//
-// Ren ESM: ingen DOM, fetch, localStorage, Date.now eller Math.random. Motoren
-// LESER History Go-progresjon som en liste inn; den skriver aldri til den.
+// v2 beriker klubbens historiske spillere med den profilen spillet allerede
+// eier: dokumenterte posisjoner, styrker, brukskostnader og klubbstatus.
+// Berikelsen endrer ikke klasse, fit eller kampmotor og lager ingen parallell
+// spillerkatalog.
 // ============================================================================
 
-export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v1";
+import {
+  CLUB_PLAYER_PROFILE_VERSION,
+  enrichClubPlayerProfiles
+} from "./football-club-player-profiles.js";
+
+export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v2";
 
 // Samme posisjonsfordeling som autofyll-troppen ellers i spillet: en tropp som
 // faktisk kan settes opp på banen.
@@ -45,15 +37,18 @@ function playsIn(player, positions) {
 }
 
 // Klubbens historiske spillere: de som er knyttet til klubbens egen bane.
-// Utledet av data som allerede fantes (`sourcePlaceIds`) — ingen ny liste, og
-// ingen påstander om hvilken klubb en ekte spiller «egentlig» tilhørte utover
-// det stedet dataene allerede sier.
+// sourcePlaceIds er fortsatt sannhetskilden. Profilberikelsen endrer ikke hvem
+// som tilhører klubbarven; den gjør bare den eksisterende spilleren lesbar.
 export function listClubHeritagePlayers({ homePlaceId = null, players = [] } = {}) {
   if (!homePlaceId) return [];
-  return asArray(players)
+  return enrichClubPlayerProfiles(players, { homePlaceId })
     .filter((player) => asArray(player.sourcePlaceIds).includes(homePlaceId))
     .slice()
-    .sort((a, b) => num(b.classHeight) - num(a.classHeight) || String(a.id).localeCompare(String(b.id)));
+    .sort((a, b) =>
+      num(b.clubProfile?.statusRank) - num(a.clubProfile?.statusRank)
+      || num(b.classHeight) - num(a.classHeight)
+      || String(a.id).localeCompare(String(b.id))
+    );
 }
 
 // Har manageren vært på klubbens bane? Leser en liste — skriver aldri.
@@ -71,8 +66,6 @@ export function buildClubBaseSquad({
   const excluded = excludePlayerIds instanceof Set ? excludePlayerIds : new Set(asArray(excludePlayerIds));
   const allowed = candidateIds instanceof Set ? candidateIds : (candidateIds ? new Set(candidateIds) : null);
 
-  // Jevne spillere først: toppsjiktet skal være noe du samler deg til, ikke noe
-  // grunntroppen deler ut gratis. Alle er gode nok uansett (85+ i katalogen).
   const ordered = asArray(players)
     .filter((player) => player && !excluded.has(player.id) && (!allowed || allowed.has(player.id)))
     .slice()
@@ -99,6 +92,22 @@ export function buildClubBaseSquad({
   return picked;
 }
 
+function heritageSummary(player) {
+  return {
+    id: player.id,
+    name: player.name,
+    era: player.era,
+    classHeight: num(player.classHeight),
+    naturalPositions: asArray(player.naturalPositions),
+    usablePositions: asArray(player.usablePositions),
+    strengths: asArray(player.strengths),
+    poorFits: asArray(player.poorFits),
+    tacticalDislikes: asArray(player.dislikesTactics),
+    usageWarning: player.warningWhenMisused || "",
+    clubProfile: player.clubProfile || null
+  };
+}
+
 // Hva klubbvalget faktisk gir deg, og hva du må gjøre for å få resten.
 export function resolveClubSquadAccess({
   club = null, players = [], unlockedPlaceIds = [], candidateIds = null, squadSize = 15
@@ -110,10 +119,9 @@ export function resolveClubSquadAccess({
   const groundName = club.ground || "klubbens bane";
 
   if (!homePlaceId) {
-    // Klubben har ingen bane i History Go ennå. Da finnes det ingen arv å låse
-    // opp, og grunntroppen er hele tilbudet — sagt rett ut, ikke skjult.
     return {
       version: CLUB_SQUAD_VERSION,
+      profileVersion: CLUB_PLAYER_PROFILE_VERSION,
       clubId: club.id, homePlaceId: null, groundName, visited: false,
       mode: "base",
       heritage: [], heritageCount: 0,
@@ -127,16 +135,17 @@ export function resolveClubSquadAccess({
   if (visited) {
     return {
       version: CLUB_SQUAD_VERSION,
+      profileVersion: CLUB_PLAYER_PROFILE_VERSION,
       clubId: club.id, homePlaceId, groundName, visited: true,
       mode: "heritage",
-      heritage: heritage.map((player) => ({ id: player.id, name: player.name, era: player.era, classHeight: num(player.classHeight) })),
+      heritage: heritage.map(heritageSummary),
       heritageCount: heritage.length,
       baseSquad: [],
       headline: heritage.length
         ? `Du har vært på ${groundName}. ${heritage.length} historiske ${club.name}-spillere er dine å velge blant.`
         : `Du har vært på ${groundName}, men klubben har ingen historiske spillere i katalogen ennå.`,
       detail: heritage.length
-        ? "Du plukker selv hvem av dem du vil bygge laget rundt — ingen ferdig utgave av klubben deles ut."
+        ? "Du plukker selv hvem av dem du vil bygge laget rundt — hver spiller har posisjon, styrker, brukskostnader og klubbstatus."
         : "Grunntroppen holder klubben spillbar til flere spillere kommer til.",
       todo: heritage.length
         ? ["Velg blant klubbens historiske spillere når du setter troppen."]
@@ -144,11 +153,10 @@ export function resolveClubSquadAccess({
     };
   }
 
-  // Ikke besøkt: grunntropp, og klubbens egne navn holdes utenfor. De er
-  // nettopp det du går til banen for.
   const heritageIds = new Set(heritage.map((player) => player.id));
   return {
     version: CLUB_SQUAD_VERSION,
+    profileVersion: CLUB_PLAYER_PROFILE_VERSION,
     clubId: club.id, homePlaceId, groundName, visited: false,
     mode: "base",
     heritage: [],
