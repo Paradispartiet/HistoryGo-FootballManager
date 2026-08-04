@@ -148,6 +148,55 @@ Det er husregelen om at ingen funksjon skal finnes to steder.
 `game_reading`, `power` → `strength`). Uten den ville en rolle som krever
 `short_passing` aldri møtt en spiller som har `simple_passing`.
 
+## Form og nivå er to akser
+
+`strengths` og posisjonen sier hva en spiller er god **til**. De sier ingenting
+om hvor høyt det rekker — og i første utgave var det alt som fantes.
+
+Ghayas Zahid og Martin Ødegaard har begge `vision` og `final_pass` blant
+styrkene sine. Begge fikk derfor **20**. Katalogen kunne skille en tier fra en
+stopper, men ikke en eliteseriespiller fra en landslagskaptein. `classHeight` lå
+som et lite additivt ledd inne i formen og druknet fullstendig.
+
+`classHeight` setter nå **taket**, multiplikativt på hele profilen. Formen
+bevares — Zahid er fortsatt en skapende midtbanespiller — men den når ikke like
+høyt:
+
+| Spiller | classHeight | Toppferdighet |
+|---|---:|---:|
+| Ghayas Zahid | 90 | 16 |
+| Martin Ødegaard | 96 | 18 |
+| Erling Haaland | 98 | 19 |
+| Cruyff, Pelé | 99 | 20 |
+
+Bare `classHeight` 98+ når 20. Det er vaktet.
+
+### Bare oppsiden røres
+
+Taket komprimerer mot et **proff-midtpunkt** (10), og bare verdier *over* det.
+En lavere klasse gjør ikke svake sider mindre svake — en eliteseriestopper og en
+verdensstopper har begge dårlig avslutning; forskjellen ligger i taklingen.
+
+Begge feilene ble målt før de ble rettet. Komprimering mot **gulvet** la 67 % av
+alle verdier på 4–7, og katalogen leste som om alle var middelmådige. Komprimering
+**begge veier** samlet 34 % på nøyaktig 9, og profilene sluttet å sprike.
+Midtpunktet ble valgt ved å måle 7, 8, 9 og 10: største bøtte 26,7 / 27,5 / 23,1
+/ **18,5 %**.
+
+### Marginene måtte måles på nytt
+
+Taket senker toppene, så posisjonsavstandene krympet fra 8,5 / 9,0 / 11,1 / 13,0
+til **6,0 / 6,2 / 8,0 / 9,5**. Vaktene som målte dem ble satt på nytt og
+bittestet på nytt. En margin som ikke følger med en slik endring slutter å bite
+uten at noe feiler — og det er den stilleste feilen som finnes.
+
+### Det som gjenstår er dataene, ikke motoren
+
+Zahid leser nå 16 og ikke 20. At han ikke leser lavere, er dataenes verk:
+**`classHeight` 90 plasserer ham over 74 % av katalogen.** Motoren gjør nå
+jobben sin; spørsmålet om Zahid faktisk hører hjemme over 273 av 367 spillere er
+et spørsmål om `classHeight`-verdiene, ikke om utledningen.
+
 ## Påstander om ekte spillere
 
 Dette er **367 navngitte fotballspillere**. 42 tall hver er ~15 000

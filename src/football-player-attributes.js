@@ -215,6 +215,57 @@ function percentile(sorted, share) {
   return sorted[index];
 }
 
+// ---------------------------------------------------------------------------
+// Form og NIVÅ er to akser
+// ---------------------------------------------------------------------------
+//
+// `strengths` og posisjonen sier hva en spiller er god TIL — formen på profilen.
+// De sier ingenting om hvor høyt det rekker. Ghayas Zahid og Martin Ødegaard har
+// begge `vision` og `final_pass` blant styrkene sine, og fikk derfor begge 20:
+// katalogen kunne skille en tier fra en stopper, men ikke en landslagskaptein
+// fra en eliteseriespiller.
+//
+// `classHeight` setter derfor TAKET, multiplikativt på hele profilen. Formen
+// bevares — Zahid er fortsatt en skapende midtbanespiller — men den når ikke
+// like høyt.
+//
+// Kurven er bevisst hard i midten og flat i toppen. Klassebåndet er smalt
+// (86–99) fordi vi har valgt mange gode spillere, så alle skal være ganske gode;
+// men uten en kurve ville 90 og 96 blitt nesten like. Med den lander en typisk
+// eliteseriespiller på 13–14 der han er best, og bare de aller ypperste når 19–20.
+//
+// Kompresjonen går mot et PROFF-MIDTPUNKT, ikke mot gulvet. Første forsøk klemte
+// hele profilen ned mot 4, og da havnet 67 % av alle verdier på 4–7: katalogen
+// leste som om alle var middelmådige, stikk i strid med at dette er utvalgte,
+// gode spillere. En eliteseriestopper takler ikke som en amatør fordi han ikke er
+// Maldini — han takler litt dårligere. Klassen senker TOPPEN og løfter ikke
+// bunnen; grunnkompetansen står.
+const CLASS_CEILING = Object.freeze({
+  midpoint: 10, // det en proff behersker uansett klasse
+  base: 0.40,   // hvor mye av avstanden fra midtpunktet den laveste klassen beholder
+  curve: 1.25   // > 1 skiller midten; < 1 ville klemt alle mot toppen
+});
+
+export function classCeilingFactor(classHeight) {
+  const t = clamp((num(classHeight, 87) - 85) / 14, 0, 1);
+  return CLASS_CEILING.base + (1 - CLASS_CEILING.base) * Math.pow(t, CLASS_CEILING.curve);
+}
+
+// Taket komprimerer mot GULVET, ikke mot null: en lavere klassehøyde gjør
+// profilen lavere, aldri en annen form. Gulvet er fortsatt en proff spillers
+// gulv — dette er spillere som har spilt A-lagsfotball.
+function applyClassCeiling(value, factor) {
+  const { floor, max } = ATTRIBUTE_SCALE;
+  const { midpoint } = CLASS_CEILING;
+  // Bare OPPSIDEN røres. En lavere klassehøyde gjør ikke svake sider mindre
+  // svake — en eliteseriestopper og en verdensstopper har begge dårlig
+  // avslutning; forskjellen ligger i taklingen. Komprimerte vi begge veier,
+  // konvergerte hele katalogen mot midtpunktet: 34 % av alle verdier havnet på
+  // nøyaktig 9, og profilene sluttet å sprike.
+  if (value <= midpoint) return clamp(Math.round(value), floor, max);
+  return clamp(Math.round(midpoint + (value - midpoint) * factor), floor, max);
+}
+
 function scaleRawValue(raw, scaling) {
   const { low, high } = scaling || {};
   const { floor, max } = ATTRIBUTE_SCALE;
@@ -253,10 +304,10 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
   const usable = asArray(player.usablePositions).map(str).filter(Boolean);
   const poor = asArray(player.poorFits).map(str).filter(Boolean);
 
-  // Klassehøyden er en INPUT, ikke en score: den løfter hele profilen litt, og
-  // avgjør ingenting alene. Spennet er bevisst lite (0–4 av 20) — det som
-  // skiller spillere er hvor profilen topper seg, ikke hvor høyt den ligger.
-  const classLift = clamp(Math.round(((num(player.classHeight, 87) - 85) / 14) * 4), 0, 4);
+  // Klassehøyden ligger IKKE her. Den er ikke en del av formen — se
+  // `classCeilingFactor` nedenfor. Å legge den til her var feilen som ga Ghayas
+  // Zahid 20 i siste pasning: han har `final_pass` blant styrkene sine, og et
+  // lite additivt klasseledd druknet fullstendig i det.
 
   // ---------------------------------------------------------------------
   // Grunnlinja: hva posisjonen HANS tilsier på hver eneste ferdighet.
@@ -318,6 +369,9 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     }
   }
 
+  // Formen regnes ut først, så senkes hele profilen av klassehøyden.
+  const ceiling = classCeilingFactor(player.classHeight);
+
   const values = {};
   const provenance = {};
   for (const attribute of catalogue.attributes) {
@@ -327,7 +381,7 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     const baseline = groupBaseline.has(attribute.group)
       ? (groupBaseline.get(attribute.group) / 100) * LIFT.positionBaseline
       : LIFT.positionBaseline * 0.5;
-    let raw = classLift + baseline;
+    let raw = baseline;
     let source = "utledet";
 
     if (positionLift.has(id)) { raw += positionLift.get(id); source = "posisjon"; }
@@ -338,7 +392,7 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     if (direct.has(id)) { raw += LIFT.strength; source = "belagt"; }
     if (poorOnly.has(id)) raw += LIFT.poorFitOnly;
 
-    values[id] = rawOnly ? raw : scaleRawValue(raw, scaling);
+    values[id] = rawOnly ? raw : applyClassCeiling(scaleRawValue(raw, scaling), ceiling);
     provenance[id] = source;
   }
 

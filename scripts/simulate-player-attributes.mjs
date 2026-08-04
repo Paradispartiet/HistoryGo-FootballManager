@@ -152,23 +152,25 @@ const cohortMean = (position, group) => {
 
 check("det finnes nok midtstoppere og offensive til å måle", inPosition("CB").length >= 5 && inPosition("AM").length >= 5,
   `CB ${inPosition("CB").length}, AM ${inPosition("AM").length}`);
-// Marginene er MÅLT, ikke gjettet. Første utgave sto på +3, og bitetesten som
-// ga tieren midtstopperens forsvarsvekt slapp rett gjennom: AM-snittet steg fra
-// 6,9 til 10,2 mens CB lå på 15,4, og 15,4 > 10,2 + 3. Auditen fanget
-// datafeilen, men denne vakten påsto å måle utslaget på ekte spillere og gjorde
-// det ikke. Ekte avstander er 8,5 / 9,0 / 11,1 / 13,0, så grensene står like
-// under dem — nær nok til å bite, med margin nok til å ikke være sprø.
+// Marginene er MÅLT, ikke gjettet, og de er målt PÅ NYTT etter at klassetaket
+// kom til — taket senker toppen, så avstandene krympet fra 8,5/9,0/11,1/13,0 til
+// 6,0/6,2/8,0/9,5. En margin som ikke følger med en slik endring slutter å bite
+// uten at noe feiler.
+//
+// Første utgave sto på +3 og slapp bitetesten som ga tieren midtstopperens
+// forsvarsvekt: AM-snittet steg til 10,2 mens CB lå på 15,4. Grensene står nå
+// like under de ekte avstandene, og bitetesten er kjørt på nytt mot dem.
 check("midtstoppere forsvarer mer enn offensive midtbanespillere",
-  cohortMean("CB", "forsvar") > cohortMean("AM", "forsvar") + 7,
+  cohortMean("CB", "forsvar") > cohortMean("AM", "forsvar") + 4,
   `${cohortMean("CB", "forsvar").toFixed(1)} mot ${cohortMean("AM", "forsvar").toFixed(1)}`);
 check("offensive midtbanespillere skaper mer enn midtstoppere",
-  cohortMean("AM", "kreativitet") > cohortMean("CB", "kreativitet") + 7,
+  cohortMean("AM", "kreativitet") > cohortMean("CB", "kreativitet") + 4,
   `${cohortMean("AM", "kreativitet").toFixed(1)} mot ${cohortMean("CB", "kreativitet").toFixed(1)}`);
 check("spisser angriper mer enn midtstoppere",
-  cohortMean("ST", "angrep") > cohortMean("CB", "angrep") + 9,
+  cohortMean("ST", "angrep") > cohortMean("CB", "angrep") + 6,
   `${cohortMean("ST", "angrep").toFixed(1)} mot ${cohortMean("CB", "angrep").toFixed(1)}`);
 check("bare keepere har keeperferdigheter",
-  cohortMean("GK", "gk") > cohortMean("ST", "gk") + 11,
+  cohortMean("GK", "gk") > cohortMean("ST", "gk") + 8,
   `${cohortMean("GK", "gk").toFixed(1)} mot ${cohortMean("ST", "gk").toFixed(1)}`);
 
 // Og konkret om spilleren dette handlet om.
@@ -197,6 +199,39 @@ for (const player of players.filter((entry) => !entry.naturalPositions.includes(
     profiles[player.id].weak.every((entry) => !gkIds.has(entry.id)),
     profiles[player.id].weak.map((entry) => entry.id).join(", "));
 }
+
+// ---------------------------------------------------------------------------
+// 4c. Klassehøyden setter NIVÅET — form og nivå er to akser
+// ---------------------------------------------------------------------------
+// Feilen dette retter: `strengths` og posisjon sa hva en spiller var god TIL,
+// og ingenting sa hvor høyt det rakk. Ghayas Zahid og Martin Ødegaard har begge
+// `vision` og `final_pass` blant styrkene sine, og fikk derfor begge 20 — en
+// eliteseriespiller og en landslagskaptein, likt.
+const peak = (player) => profiles[player.id].top[0].value;
+const byClass = [...players].sort((a, b) => a.classHeight - b.classHeight);
+const lowClass = byClass.slice(0, 60);
+const highClass = byClass.slice(-20);
+const mean = (list) => list.reduce((sum, player) => sum + peak(player), 0) / list.length;
+// Målt: 17,6 mot 14,6. Grensen står på 2,5 — spennet er begrenset av at
+// klassebåndet i dataene bare er 86–99, og at vi med vilje har valgt gode
+// spillere. Et større sprik ville krevd at dataene sa noe annet enn de gjør.
+check("de høyeste klassene topper høyere enn de laveste",
+  mean(highClass) > mean(lowClass) + 2.5,
+  `${mean(highClass).toFixed(1)} mot ${mean(lowClass).toFixed(1)}`);
+check("bare de aller ypperste når 20",
+  players.filter((player) => peak(player) >= 20).every((player) => player.classHeight >= 98),
+  players.filter((player) => peak(player) >= 20).map((player) => `${player.name} ${player.classHeight}`).join(", "));
+check("toppferdigheten følger klassehøyden monotont nok",
+  peak(byClass[byClass.length - 1]) > peak(byClass[0]) + 3);
+
+// Men NIVÅ må ikke bli FORM: en lavere klasse skal ikke gjøre svake sider
+// mindre svake, bare toppene lavere. Ellers konvergerer hele katalogen mot
+// midten — målt ga tosidig kompresjon 34 % av alle verdier på nøyaktig 9.
+const weakestOf = (player) => profiles[player.id].spread.min;
+const meanWeakest = (list) => list.reduce((sum, player) => sum + weakestOf(player), 0) / list.length;
+check("klassen rører ikke bunnen",
+  Math.abs(meanWeakest(highClass) - meanWeakest(lowClass)) <= 1.5,
+  `høy ${meanWeakest(highClass).toFixed(1)}, lav ${meanWeakest(lowClass).toFixed(1)}`);
 
 // ---------------------------------------------------------------------------
 // 5. KJERNEPRINSIPPET: klassehøyde avgjør ikke
