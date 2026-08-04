@@ -22224,10 +22224,9 @@
         "box_presence"
       ],
       "strengths": [
+        "hold_up_play",
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "strength"
       ],
       "needs": [
         "box_service",
@@ -22324,10 +22323,9 @@
         "box_presence"
       ],
       "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "pace",
+        "acceleration",
+        "pressing"
       ],
       "needs": [
         "box_service",
@@ -22712,9 +22710,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "strength",
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -35714,6 +35711,249 @@
         "isolated_midfield"
       ],
       "warningWhenMisused": "Fuglset blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt"
+    },
+    {
+      "id": "ole_erik_stavrum",
+      "name": "Ole Erik Stavrum",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing",
+        "movement",
+        "positioning",
+        "box_movement"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Stavrum blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet"
+    },
+    {
+      "id": "sindre_rekdal",
+      "name": "Sindre Rekdal",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [
+        "CM",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "holding_midfielder"
+      ],
+      "archetypes": [
+        "ball_winner"
+      ],
+      "strengths": [
+        "positioning",
+        "tackling",
+        "interceptions",
+        "simple_passing"
+      ],
+      "needs": [
+        "clear_structure",
+        "midfield_partner"
+      ],
+      "preferredRoles": [
+        "holding_midfielder",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "chaotic_transitions"
+      ],
+      "warningWhenMisused": "Rekdal trenger en tydelig oppgave og en makker ved siden av seg.",
+      "classSource": "utledet"
+    },
+    {
+      "id": "berdon_sonderland",
+      "name": "Berdon Sønderland",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "duels",
+        "heading",
+        "positioning",
+        "blocking",
+        "defensive_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Sønderland blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet"
+    },
+    {
+      "id": "oystein_neerland",
+      "name": "Øystein Neerland",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing",
+        "movement",
+        "positioning",
+        "box_movement"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Neerland blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet"
+    },
+    {
+      "id": "david_datro_fofana",
+      "name": "David Datro Fofana",
+      "nationality": "Elfenbenskysten",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "pace",
+        "acceleration",
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Fofana blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt"
     }
   ],

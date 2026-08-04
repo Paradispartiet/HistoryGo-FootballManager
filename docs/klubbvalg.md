@@ -165,7 +165,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
-| Molde | Aker stadion | 84 |
+| Molde | Aker stadion | 89 |
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
@@ -179,7 +179,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 722 arveplasser fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 727 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
@@ -306,6 +306,14 @@ europakamper» — i stedet for malens generiske sett.
 Utslaget er målt: uniktheten i ferdighetsprofilene **steg fra 58 % til 61 %**.
 Hver tidligere import senket den. Det er forskjellen på å importere en liste og å
 lese den.
+
+**Fem navn kom til i en andre runde.** Kildens epokeavsnitt sier «bør også inn i
+spillerpoolen» om spillere som ikke står i den anbefalte poolen på 84 — Ole Erik
+Stavrum, Sindre Rekdal, Berdon Sønderland og Øystein Neerland fra cupfinalene i
+1982 og 1989, og David Datro Fofana fra 2022-laget. De fire første er de eneste
+Molde-navnene som står som **`utledet`**: kilden gir posisjon og cupfinalelag,
+men ingen spillerbeskrivelse, og da skal styrkene bli stående på posisjonsmalen.
+Fofana beskrives («stort gjennombrudd før overgang til Chelsea») og er `belagt`.
 
 ### Sarpsborg og HamKam
 

@@ -2454,6 +2454,26 @@
         {
           "type": "player_candidate",
           "targetId": "tor_fuglset"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_erik_stavrum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sindre_rekdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "berdon_sonderland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oystein_neerland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "david_datro_fofana"
         }
       ],
       "notes": "Klubbanlegg: Moldes hjemmebane."
