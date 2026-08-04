@@ -193,27 +193,45 @@ check("en vesentlig andel nivåer er belagt", sourced / players.length > 0.3,
 // spilleren nå, og vokabularet valideres her.
 const CLUB_STATUSES = new Set(["club_icon", "club_legend", "elite_career", "golden_era_core",
   "key_player", "club_profile", "academy_export", "short_stay_star", "squad_profile"]);
-const withStatus = players.filter((player) => player.clubStatus);
+// Statusen er PER BANE. Den sto først som ett felt per spiller, og det kunne
+// ikke bære at Henning Berg er elitekarriere i Vålerenga og kortvarig gjest i
+// KFUM — noe kilden uttrykkelig krevde.
+const withStatus = players.filter((player) => player.clubStatus && typeof player.clubStatus === "object");
 check("klubbstatus er satt på klubbspillerne", withStatus.length > 400, String(withStatus.length));
 for (const player of withStatus) {
-  check(`«${player.name}» har gyldig klubbstatus`, CLUB_STATUSES.has(player.clubStatus), player.clubStatus);
-  check(`«${player.name}» vet om statusen er belagt`,
-    ["belagt", "utledet"].includes(player.clubStatusSource), String(player.clubStatusSource));
+  check(`«${player.name}» har status for hver bane han er knyttet til`,
+    player.sourcePlaceIds.every((place) => player.clubStatus[place]),
+    player.sourcePlaceIds.filter((place) => !player.clubStatus[place]).join(", "));
+  for (const [place, status] of Object.entries(player.clubStatus)) {
+    check(`«${player.name}» @${place} har gyldig klubbstatus`, CLUB_STATUSES.has(status), status);
+    check(`«${player.name}» @${place} vet om statusen er belagt`,
+      ["belagt", "utledet"].includes(player.clubStatusSource?.[place]), String(player.clubStatusSource?.[place]));
+    check(`«${player.name}» @${place} har statusen på en bane han faktisk spilte på`,
+      player.sourcePlaceIds.includes(place), place);
+  }
 }
+// Og det som var hele poenget: en spiller kan ha ULIK status i ulike klubber.
+const varying = withStatus.filter((player) =>
+  new Set(Object.values(player.clubStatus)).size > 1);
+check("noen spillere har ulik status i ulike klubber", varying.length > 0,
+  varying.slice(0, 3).map((player) => player.name).join(", "));
 // Hver status må være i bruk — en status ingen har er en status som ikke betyr noe.
 for (const status of CLUB_STATUSES) {
-  check(`statusen «${status}» er i bruk`, withStatus.some((player) => player.clubStatus === status));
+  check(`statusen «${status}» er i bruk`,
+    withStatus.some((player) => Object.values(player.clubStatus).includes(status)));
 }
 // Og statusen må SKILLE. Får alle samme, er den ingen status.
+const allStatuses = withStatus.flatMap((player) => Object.values(player.clubStatus));
 const statusCounts = [...CLUB_STATUSES].map((status) =>
-  withStatus.filter((player) => player.clubStatus === status).length);
+  allStatuses.filter((entry) => entry === status).length);
 check("klubbstatusen skiller mellom spillere",
-  Math.max(...statusCounts) / withStatus.length < 0.6,
-  `${Math.round((Math.max(...statusCounts) / withStatus.length) * 100)} % på største`);
+  Math.max(...statusCounts) / allStatuses.length < 0.6,
+  `${Math.round((Math.max(...statusCounts) / allStatuses.length) * 100)} % på største`);
 // En kuratert status skal være et mindretall — ellers er «belagt» en tom merkelapp.
-const curated = withStatus.filter((player) => player.clubStatusSource === "belagt").length;
+const curated = withStatus.flatMap((player) => Object.values(player.clubStatusSource || {}))
+  .filter((source) => source === "belagt").length;
 check("kuratert klubbstatus er en reell, avgrenset andel",
-  curated > 50 && curated / withStatus.length < 0.5, `${curated} av ${withStatus.length}`);
+  curated > 50 && curated / allStatuses.length < 0.5, `${curated} av ${allStatuses.length}`);
 
 // Ingen spillerkatalog forkledd som kode: motorene skal ikke inneholde
 // spillernavn. Det var nettopp det de to profilmodulene gjorde.
@@ -237,5 +255,5 @@ console.log(JSON.stringify({
     [category, catalogue.attributes.filter((entry) => entry.category === category).length])),
   posisjoner: Object.keys(catalogue.positionDemands).length,
   klubbstatus: Object.fromEntries([...CLUB_STATUSES].map((status) =>
-    [status, withStatus.filter((player) => player.clubStatus === status).length]))
+    [status, allStatuses.filter((entry) => entry === status).length]))
 }, null, 2));

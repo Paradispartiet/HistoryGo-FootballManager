@@ -79,8 +79,23 @@ function playsIn(player, positions) {
     .some((position) => positions.includes(position));
 }
 
-export function clubStatusRank(player) {
-  return CLUB_STATUS_RANK[player?.clubStatus] ?? 0;
+// Statusen er PER KLUBB, ikke per spiller. Den sto først som ett felt, og det
+// var feil modellering: Henning Berg er elitekarriere for Vålerenga og en
+// kortvarig gjest i KFUM. Ett felt kan ikke bære begge, og kilden krevde begge.
+export function clubStatusFor(player, homePlaceId) {
+  const status = player?.clubStatus;
+  if (!status || typeof status !== "object") return null;
+  return status[homePlaceId] || null;
+}
+
+export function clubStatusSourceFor(player, homePlaceId) {
+  const source = player?.clubStatusSource;
+  if (!source || typeof source !== "object") return "utledet";
+  return source[homePlaceId] || "utledet";
+}
+
+export function clubStatusRank(player, homePlaceId) {
+  return CLUB_STATUS_RANK[clubStatusFor(player, homePlaceId)] ?? 0;
 }
 
 // Klubbens historiske spillere: de som er knyttet til klubbens egen bane.
@@ -93,7 +108,7 @@ export function listClubHeritagePlayers({ homePlaceId = null, players = [] } = {
     .slice()
     .sort((a, b) =>
       num(b.classHeight) - num(a.classHeight)
-      || clubStatusRank(b) - clubStatusRank(a)
+      || clubStatusRank(b, homePlaceId) - clubStatusRank(a, homePlaceId)
       || String(a.id).localeCompare(String(b.id))
     );
 }
@@ -139,7 +154,8 @@ export function buildClubBaseSquad({
   return picked;
 }
 
-function heritageSummary(player) {
+function heritageSummary(player, homePlaceId) {
+  const status = clubStatusFor(player, homePlaceId);
   return {
     id: player.id,
     name: player.name,
@@ -151,9 +167,9 @@ function heritageSummary(player) {
     poorFits: asArray(player.poorFits),
     tacticalDislikes: asArray(player.dislikesTactics),
     usageWarning: player.warningWhenMisused || "",
-    clubStatus: player.clubStatus || null,
-    clubStatusLabel: CLUB_STATUS_LABEL[player.clubStatus] || "",
-    clubStatusSource: player.clubStatusSource || "utledet"
+    clubStatus: status,
+    clubStatusLabel: CLUB_STATUS_LABEL[status] || "",
+    clubStatusSource: clubStatusSourceFor(player, homePlaceId)
   };
 }
 
@@ -185,7 +201,7 @@ export function resolveClubSquadAccess({
       version: CLUB_SQUAD_VERSION,
       clubId: club.id, homePlaceId, groundName, visited: true,
       mode: "heritage",
-      heritage: heritage.map(heritageSummary),
+      heritage: heritage.map((player) => heritageSummary(player, homePlaceId)),
       heritageCount: heritage.length,
       baseSquad: [],
       headline: heritage.length

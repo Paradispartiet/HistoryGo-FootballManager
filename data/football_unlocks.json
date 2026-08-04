@@ -30,6 +30,270 @@
         {
           "type": "training_model",
           "targetId": "small_club_structure_to_elite"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henning_berg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_fredheim_holm"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "amin_nouri"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_hirschfeld"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_wolff_eikrem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "haitam_aleesami"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eivind_arnevag"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stian_sortevik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "robin_rasch"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "klaus_odden"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tore_arnevag"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonathan_parr"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christoffer_dahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tor_oyvind_reinemo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eivind_saether"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "conrad_aslund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "pal_pernes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hakon_haga"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_rasmussen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_jonvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_frode_torp"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jon_andre_saether"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_dymbe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "cato_valoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "knut_lie"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_nunez"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_hestnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "emil_odegaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hakon_helland_hoseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_hammer"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dadi_dodou_gaye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stale_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_musaeus"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "carl_erik_torp"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "moses_mawa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_olden_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_nosakhare_dahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jesper_taaje"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_nakkim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mansour_sinyan"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "akinsola_akinyemi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlend_skaga"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_saether"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dennis_obeng"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sindre_ek"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nicolai_bonke_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ivar_stromsmo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_brevig"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oyvind_monn_iversen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magne_mogstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kenneth_rakvaag"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stian_dewahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arnstein_langnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "remi_andre_svindland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tore_andre_soras"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "momodou_lion_njie"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sverre_sandal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "moussa_njie"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bilal_njie"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "teodor_berg_haltvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ayoub_aleesami"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "david_hickson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "obilor_denzel_okeke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torstein_andersen_aase"
         }
       ],
       "notes": "KFUM Arena skal ikke være spillerkilde i v1. Stedet låser opp trenerkandidater, klubbbygging og treningskultur."

@@ -10,7 +10,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
-  listClubHeritagePlayers, hasVisitedClubGround, buildClubBaseSquad, resolveClubSquadAccess, clubStatusRank
+  listClubHeritagePlayers, hasVisitedClubGround, buildClubBaseSquad, resolveClubSquadAccess, clubStatusRank, clubStatusFor
 } from "../src/football-club-squad.js";
 
 const clubs = JSON.parse(fs.readFileSync(new URL("../data/football_clubs.json", import.meta.url), "utf8")).clubs;
@@ -213,16 +213,16 @@ const num = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
 for (const club of clubs.filter((entry) => entry.homePlaceId)) {
   const heritage = listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players });
   if (heritage.length === 0) continue;
-  check(`${club.name}: alle arvespillere har klubbstatus`,
-    heritage.every((player) => player.clubStatus),
-    heritage.filter((player) => !player.clubStatus).map((player) => player.name).join(", "));
+  check(`${club.name}: alle arvespillere har klubbstatus for DENNE banen`,
+    heritage.every((player) => clubStatusFor(player, club.homePlaceId)),
+    heritage.filter((player) => !clubStatusFor(player, club.homePlaceId)).map((player) => player.name).join(", "));
   // Sorteringen: klassehøyde først, status som skille ved likhet.
   check(`${club.name}: arven er sortert på klassehøyde først`,
     heritage.every((player, i) => i === 0 || num(player.classHeight) <= num(heritage[i - 1].classHeight)));
   for (let i = 1; i < heritage.length; i += 1) {
     if (num(heritage[i].classHeight) !== num(heritage[i - 1].classHeight)) continue;
     check(`${club.name}: lik klassehøyde skilles av status`,
-      clubStatusRank(heritage[i]) <= clubStatusRank(heritage[i - 1]));
+      clubStatusRank(heritage[i], club.homePlaceId) <= clubStatusRank(heritage[i - 1], club.homePlaceId));
   }
 }
 

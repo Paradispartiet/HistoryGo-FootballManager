@@ -170,6 +170,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
+| KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
 | Kristiansund | Nordmøre stadion | 49 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
@@ -178,13 +179,13 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
-| Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
+| Sandefjord | Jotun Arena | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 859 arveplasser fordelt
-på 15 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 925 arveplasser fordelt
+på 16 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 95 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 99 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -354,14 +355,55 @@ stadion. Importskriptet kaster hvis han blir det.
 Magne Hoseth kvalifiserer derimot på to obligatoriske kamper i 2017 — kriteriet
 er at spilleren har representert A-laget, ikke hvor lenge.
 
-Med Kristiansund inne står bare **Sandefjord og KFUM** igjen uten navn.
+Med Kristiansund inne står bare **Sandefjord** igjen uten navn.
 
-### Klubbstatus bor på spilleren
+### KFUM Oslo: 66 navn, og statusen som måtte flyttes
 
-Hver arvespiller har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
+KFUM er den yngste eliteserieklubben i katalogen — opprykket kom i 2023, og
+arven er derfor kort i tid og bred i bredde: 60 nye navn på KFUM Arena, 6 koblet
+på fra andre baner.
+
+Kilden ga selv den avgjørende avklaringen, og den brøt datamodellen:
+
+> Henning Berg bør ha høyest samlet internasjonalt toppnivå, men lavere
+> KFUM-lojalitet enn de egentlige klubblegendene.
+
+Henning Berg er `elite_career` på Intility og Åråsen og `short_stay_star` på
+KFUM Arena. Magnus Wolff Eikrem har den sterkeste tekniske grunnprofilen i
+troppen og lav KFUM-status, fordi oppholdet startet i 2026. Det er ikke to
+motstridende påstander om samme person — det er **to klubbers forhold til
+ham**, og de er begge riktige.
+
+`clubStatus` lå som ett felt per spiller, altså som en påstand om personen. Den
+er nå et **kart per bane**, og det er der den hører hjemme (se under). Ett
+nivå rettet fra `utledet` 79 til `belagt` 82: Amin Nouri.
+
+### Klubbstatus hører til klubben, ikke spilleren
+
+Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** (172 spillere) fra **utledet** (495).
+**kuratert klubbhistorie** fra **utledet**. 953 statusoppføringer på 834
+spillere, 295 belagte og 658 utledede.
+
+Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
+
+```json
+"clubStatus": {
+  "intility_arena": "elite_career",
+  "araasen_stadion": "elite_career",
+  "kfum_arena": "short_stay_star"
+}
+```
+
+Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
+sto på én bane. Det er ikke lenger sant for 99 av dem, og KFUM gjorde det
+umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
+gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
+er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Fem
+spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
+det tallet er større enn null: faller det til null, er migreringen reversert.
 
 Statusen lå en periode i to egne motorfiler, `football-club-player-profiles.js`
 og `football-valerenga-player-profiles.js`, som ~900 linjer hardkodede
@@ -456,12 +498,12 @@ femmannsrekke. Da står han bredt som spiss, med tom `usablePositions` — spill
 dikter ikke opp en rolle han kanskje aldri hadde. Advarselen hans sier det rett
 ut i stedet for å skjule det.
 
-### Tre klubber uten navn
+### Klubbene uten navn
 
-Kristiansund, Sandefjord og KFUM har bane men ingen navn. Oppslagene ga ingen
-pålitelig legendeliste, og et halvhusket navn med gal posisjon er verre enn et
-ærlig «ingen historiske spillere i katalogen ennå». (HamKam sto i denne raden
-til klubben ble kartlagt — 26 navn.)
+Sandefjord har bane men ingen navn. Oppslagene ga ingen pålitelig legendeliste,
+og et halvhusket navn med gal posisjon er verre enn et ærlig «ingen historiske
+spillere i katalogen ennå». (HamKam, Kristiansund og KFUM sto i denne raden til
+klubbene ble kartlagt — 26, 49 og 66 navn.)
 
 **Hvert eneste navn har fått posisjonen slått opp før det ble lagt inn:**
 
