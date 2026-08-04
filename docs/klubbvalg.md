@@ -165,6 +165,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
+| Viking | Lyse Arena | 70 |
 | Lillestrøm | Åråsen | 56 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
@@ -174,16 +175,15 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Tromsø | Romssa Arena | 3 |
-| Viking | Lyse Arena | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 428 arveplasser fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 495 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 40 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 45 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -233,6 +233,23 @@ Importen avdekket en referansefeil jeg selv innførte: spillerne fikk `araasen_
 stadion` i `sourcePlaceIds`, men stedet fikk aldri spillerne i `unlocks`. Arven
 ville da stått i klubblista uten å kunne samles — synlig, men ikke oppnåelig.
 `sim:club-squad` sjekker begge retninger og tok den umiddelbart.
+
+### Viking: 70 navn, fra Bronselaget til seriegullet i 2025
+
+Viking-arven spenner videst i tid av alle: fra Reidar Kvammens 202 klubbmål og
+OL-bronsen i 1936, gjennom fire strake seriegull 1972–75 og The Double i 1979,
+til mesterlaget fra 2025.
+
+62 nye navn. Fem lå allerede i katalogen og ble koblet på — Erik Thorstvedt,
+Brede Hangeland, Martin Andresen, Thomas Pereira, Trond Egil Soltvedt og
+Yann-Erik de Lanlay. Fem nivåer er rettet mot kilden, og tre av dem er den samme
+rettelsen: Pereira, Soltvedt og de Lanlay sto som **`utledet` 79** — de lå i
+grunnsjiktet malen aldri skilte — mens kilden belegger dem med 433 Viking-kamper,
+en Premier League-karriere og et landslagsopphold. Svein Kvia er hevet fra 83 til
+86 (551 kamper, fire strake gull, tre ganger årets spiller i Norge).
+
+Det er hele poenget med `classSource`: en `utledet` verdi er ikke en påstand, den
+er en plassholder som venter på en kilde. Når kilden kommer, flyttes den.
 
 ### Sarpsborg og HamKam
 
