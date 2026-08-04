@@ -165,6 +165,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
+| Molde | Aker stadion | 84 |
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
@@ -172,18 +173,17 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 | Bodø/Glimt | Aspmyra stadion | 6 |
-| Molde | Aker stadion | 6 |
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 644 arveplasser fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 722 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 64 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 74 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -287,6 +287,25 @@ aldri hadde.
 Kilden inneholdt også en **rettelse**: Yngvar Håkonsen skal ikke regnes blant
 1996-legendene — han kom til klubben først i 2006. Han var ikke i katalogen, så
 rettelsen betyr at han ikke legges inn.
+
+### Molde: 84 navn, og den første importen som ikke fortynnet
+
+Molde-arven går fra Arne Legernes og 1950-tallet, via sølvlaget i 1974 og
+cupgullet i 1994, gjennom Champions League-laget i 1999, til seriegullene fra
+2011 og framover.
+
+66 nye navn, 12 koblet på. Seks nivåer rettet, to av dem fra `utledet` — Makhtar
+Thioune og Harmeet Singh. Daniel Berg Hestad er hevet til 86: 666 offisielle
+kamper og sju titler er klubbrekord.
+
+**Dette er den første importen som brukte lærdommen fra Tromsø fra start.** Alle
+66 nye fikk styrkene lest ut av kildens egne beskrivelser — «klubbens historiske
+toppscorer», «drivkraften på sølvlaget», «forsvarsleder», «klubbrekord med 75
+europakamper» — i stedet for malens generiske sett.
+
+Utslaget er målt: uniktheten i ferdighetsprofilene **steg fra 58 % til 61 %**.
+Hver tidligere import senket den. Det er forskjellen på å importere en liste og å
+lese den.
 
 ### Sarpsborg og HamKam
 

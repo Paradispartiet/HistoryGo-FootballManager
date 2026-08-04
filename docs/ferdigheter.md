@@ -287,6 +287,10 @@ profiler krever mer kildemateriale per spiller, aldri mer oppdiktet variasjon.**
 Der kilden beskriver spilleren, skal beskrivelsen inn. Der den ikke gjør det,
 skal profilen forbli utledet — og merket som det.
 
+Molde-importen er beviset. Alle 66 nye navn fikk styrkene lest ut av kildens egne
+beskrivelser fra start, og uniktheten **steg fra 58 % til 61 %** — den første
+importen som ikke fortynnet. Hver tidligere import senket den.
+
 ## Påstander om ekte spillere
 
 Dette er **367 navngitte fotballspillere**. 42 tall hver er ~15 000
