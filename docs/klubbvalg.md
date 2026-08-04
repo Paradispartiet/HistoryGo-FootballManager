@@ -165,13 +165,13 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
+| Lillestrøm | Åråsen | 56 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 | Bodø/Glimt | Aspmyra stadion | 6 |
 | Molde | Aker stadion | 6 |
 | Brann | Brann Stadion | 4 |
 | Fredrikstad | Fredrikstad stadion | 4 |
-| Lillestrøm | Åråsen | 3 |
 | Stabæk | Nadderud | 3 |
 | Tromsø | Romssa Arena | 3 |
 | Viking | Lyse Arena | 3 |
@@ -179,11 +179,11 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 375 arveplasser fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 428 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 32 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 40 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -215,6 +215,24 @@ Elleve spillere som allerede lå på andre baner ble **koblet på** i stedet for
 kopiert: Ronny Johnsen, John Carew, Tore André Flo og Sander Berge fra Ullevaal,
 Pål Jacobsen, Petter Belsvik, Marcus Pedersen, Jarl-André Storbæk og Aron Dønnum
 fra Briskeby, Harmeet Singh fra Sarpsborg og Magne Hoseth fra Aker stadion.
+
+### Lillestrøm: 56 navn, og en referansefeil vakten tok
+
+LSK-arven dekker klubbens vei fra nivå tre til to seriegull og tre cupgull: Tom
+Lund, som VG rangerte som **tidenes beste spiller i norsk klubbfotball**, gjennom
+dobbeltlaget fra 1977 og gullaget i 1989 til Kippe, Bjarmann, Sundgot og Lehne
+Olsen.
+
+Ni navn lå allerede i katalogen og ble **koblet på**: Henning Berg og Ronny
+Johnsen, John Arne Riise, Ståle Solbakken, Jan Åge Fjørtoft, André Bergdølmo,
+Thomas Lehne Olsen, Arne Dokken og Geir Frigård. Seks fikk samtidig **nivået
+rettet mot kilden** — Tom Lund sto på 88 og er hevet til 91, og Arne Dokken sto
+som `utledet` 79 selv om kilden belegger ham som landslagsspiss.
+
+Importen avdekket en referansefeil jeg selv innførte: spillerne fikk `araasen_
+stadion` i `sourcePlaceIds`, men stedet fikk aldri spillerne i `unlocks`. Arven
+ville da stått i klubblista uten å kunne samles — synlig, men ikke oppnåelig.
+`sim:club-squad` sjekker begge retninger og tok den umiddelbart.
 
 ### Sarpsborg og HamKam
 
