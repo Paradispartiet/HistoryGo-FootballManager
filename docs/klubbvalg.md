@@ -170,6 +170,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
+| Sandefjord | Jotun Arena | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
 | Kristiansund | Nordmøre stadion | 49 |
@@ -179,14 +180,14 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
-| Sandefjord | Jotun Arena | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 925 arveplasser fordelt
-på 16 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
-sier det rett ut i stedet for å late som.
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 993 arveplasser fordelt
+på alle 17. **Ingen klubb med bane står lenger uten navn.** De 43 klubbene i
+OBOS og 2. divisjon har ikke bane, og profilen sier det rett ut i stedet for å
+late som.
 
-Summen er *plasser*, ikke personer: 99 spillere står på to eller tre baner fordi
-de faktisk spilte begge steder, og teller derfor hos hver klubb.
+Summen er *plasser*, ikke personer: 106 spillere står på to eller tre baner
+fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
 stemmer, en klubb som står to ganger, eller en klubb med spillere plassert i
@@ -355,8 +356,6 @@ stadion. Importskriptet kaster hvis han blir det.
 Magne Hoseth kvalifiserer derimot på to obligatoriske kamper i 2017 — kriteriet
 er at spilleren har representert A-laget, ikke hvor lenge.
 
-Med Kristiansund inne står bare **Sandefjord** igjen uten navn.
-
 ### KFUM Oslo: 66 navn, og statusen som måtte flyttes
 
 KFUM er den yngste eliteserieklubben i katalogen — opprykket kom i 2023, og
@@ -378,13 +377,56 @@ ham**, og de er begge riktige.
 er nå et **kart per bane**, og det er der den hører hjemme (se under). Ett
 nivå rettet fra `utledet` 79 til `belagt` 82: Amin Nouri.
 
+### Sandefjord: 68 navn, og den siste banen uten arv
+
+Sandefjord Fotball ble stiftet i 1998 som et samarbeid mellom IL Runar og
+Sandefjord Ballklubb, og kilden trekker samme grense som for KBK og KFUM:
+spilleren må ha representert **Sandefjord Fotballs A-lag**. Prestasjoner for
+Runar, Sandefjord Ballklubb eller Eik teller ikke alene.
+
+58 nye navn, 10 koblet på. Klubbens alder gir én konsekvens som ser ut som en
+forenkling, men ikke er det: **alle 68 er `modern`**. Epokeaksen skiller ikke
+noe her, fordi klubben ikke har noen historisk epoke å skille på. Profilene
+skiller seg da på det som faktisk varierer — posisjon, nivå og styrkene lest
+fra kildens egne beskrivelser.
+
+**Kilden oppgir sitt eget antall**, og jeg fulgte det: «Den anbefalte
+Sandefjord-poolen består av 68 unike herrespillere.» Tre navn står i tabellene
+uten å være i poolen — Hugo Keto, Tom Kristoffersen og Per Stensrud — og de er
+utelatt. Det er samme disiplin som for Solskjær og KBK: der kilden trekker en
+grense, trekker importen den også. (For Molde og Bodø/Glimt sa kilden
+uttrykkelig at navn utenfor poolen «bør også inn»; her sier den det ikke.)
+
+To nivåer rettet fra `utledet` 79, begge fordi denne kilden bærer karrieren de
+gamle oppføringene manglet: Vadim Demidov til `belagt` 83 (landslag, La Liga,
+Bundesliga, MLS) og Jørgen Jalland til `belagt` 81 (31 mål på 75 kamper,
+deretter Vålerenga og Rubin Kazan).
+
+**Én kobling er usikker, og står det.** Katalogen hadde en «Fredrik Thorsen» fra
+Vålerenga-lista: `utledet` 79, epoke `historical`, og styrker rett fra
+spissmalen — altså et bart navn uten karrierepåstand. Sandefjord-kilden
+beskriver en spiss som scoret i kvalifiseringen i 2003 og i cupsemifinalen i
+2006, altså `modern`. Jeg har koblet dem til én spiller og skrevet inn den
+dokumenterte karrieren, fordi katalogen holder én person per navn overalt
+ellers, og fordi VIF-oppføringen uttrykkelig ikke påsto noe. Er det to
+forskjellige menn, er det denne oppføringen som er feil.
+
+Martin Andresen er den skarpeste testen på at klubbstatus ligger per bane: han
+har **høyest samlet karrierenivå** av alle som har spilt for Sandefjord, og
+`short_stay_star` på Jotun Arena — tre kamper. Kilden sier det selv.
+
+Med Sandefjord inne har **ingen klubb med bane lenger tom arv**. Null-raden i
+tabellen over er borte, og vakten som sjekket den gikk dermed tom. Den er
+erstattet med det motsatte kravet — hver klubb med bane *må* stå i tabellen —
+fordi en vakt som slutter å ha noe å sjekke, slutter å beskytte.
+
 ### Klubbstatus hører til klubben, ikke spilleren
 
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 953 statusoppføringer på 834
-spillere, 295 belagte og 658 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1021 statusoppføringer på 892
+spillere, 363 belagte og 658 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
@@ -397,11 +439,11 @@ Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 ```
 
 Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
-sto på én bane. Det er ikke lenger sant for 99 av dem, og KFUM gjorde det
+sto på én bane. Det er ikke lenger sant for 106 av dem, og KFUM gjorde det
 umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
 gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
 er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
-motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Fem
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Fjorten
 spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
 det tallet er større enn null: faller det til null, er migreringen reversert.
 
@@ -498,12 +540,13 @@ femmannsrekke. Da står han bredt som spiss, med tom `usablePositions` — spill
 dikter ikke opp en rolle han kanskje aldri hadde. Advarselen hans sier det rett
 ut i stedet for å skjule det.
 
-### Klubbene uten navn
+### Klubbene som en periode sto uten navn
 
-Sandefjord har bane men ingen navn. Oppslagene ga ingen pålitelig legendeliste,
-og et halvhusket navn med gal posisjon er verre enn et ærlig «ingen historiske
-spillere i katalogen ennå». (HamKam, Kristiansund og KFUM sto i denne raden til
-klubbene ble kartlagt — 26, 49 og 66 navn.)
+Fire klubber sto lenge med bane og ingen navn: HamKam, Kristiansund, KFUM og
+Sandefjord. Begrunnelsen var at oppslagene ikke ga noen pålitelig legendeliste,
+og at et halvhusket navn med gal posisjon er verre enn et ærlig «ingen
+historiske spillere i katalogen ennå». Alle fire er nå kartlagt fra kilder —
+26, 49, 66 og 68 navn — og raden finnes ikke lenger.
 
 **Hvert eneste navn har fått posisjonen slått opp før det ble lagt inn:**
 

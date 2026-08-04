@@ -201,6 +201,16 @@ check("klubb uten bane får likevel en tropp", noGround.baseSquad.length === REQ
         `dataene sier ${heritageByName.get(name)}`);
     }
   }
+
+  // Med Sandefjord inne er null-raden borte, og løkka over sjekker ingenting.
+  // En vakt som går tom når feilen den beskytter mot forsvinner, slutter å
+  // beskytte — den *neste* klubben med bane kan da legges inn uten at tabellen
+  // nevner den. Så snu kravet: hver klubb med bane må stå i tabellen.
+  const listed = new Set(rows.flatMap((row) => row.clubs));
+  const mangler = [...heritageByName.keys()].filter((name) => !listed.has(name));
+  check("alle klubber med bane står i arvetabellen", mangler.length === 0, mangler.join(", "));
+  check("arvetabellen dekker like mange klubber som dataene",
+    listed.size === heritageByName.size, `docs ${listed.size} mot data ${heritageByName.size}`);
 }
 
 // ---------------------------------------------------------------------------
