@@ -190,12 +190,61 @@ til **6,0 / 6,2 / 8,0 / 9,5**. Vaktene som målte dem ble satt på nytt og
 bittestet på nytt. En margin som ikke følger med en slik endring slutter å bite
 uten at noe feiler — og det er den stilleste feilen som finnes.
 
-### Det som gjenstår er dataene, ikke motoren
+### Nivåene er satt per spiller
 
-Zahid leser nå 16 og ikke 20. At han ikke leser lavere, er dataenes verk:
-**`classHeight` 90 plasserer ham over 74 % av katalogen.** Motoren gjør nå
-jobben sin; spørsmålet om Zahid faktisk hører hjemme over 273 av 367 spillere er
-et spørsmål om `classHeight`-verdiene, ikke om utledningen.
+Motoren var på plass, men dataene sa fortsatt at Zahid lå over 74 % av
+katalogen. Verdiene var malgenerert — 87 for grunntroppen, 88 for klubbspillere,
+90 for elite, 93 for legender — og beskrev sjiktet malen plasserte dem i, ikke
+karrieren de faktisk hadde.
+
+Alle 367 er tiered på nytt, mot et bånd som betyr noe:
+
+| Nivå | Bånd | Kriterium |
+|---|---|---|
+| `all_time` | 97–99 | Blant de aller største gjennom tidene |
+| `verdensklasse` | 92–96 | Verdensklasse i sin tid |
+| `landslag` | 87–91 | Etablert landslagsspiller / stor liga |
+| `eliteserie_topp` | 83–86 | Toneangivende i Eliteserien / klubblegende |
+| `eliteserie` | 79–82 | Solid toppdivisjonsspiller |
+| `bredde` | 75–78 | Begrenset fotavtrykk i toppen |
+
+Stigen leser nå slik den skal:
+
+| | Nivå | Toppferdighet |
+|---|---:|---:|
+| Pelé, Cruyff | 99 | 20 |
+| Erling Haaland | 97 | 19 |
+| Martin Ødegaard | 95 | 18 |
+| Rune Bratseth | 92 | 17 |
+| Jan Åge Fjørtoft | 89 | 16 |
+| Roar Strand | 86 | 15 |
+| Ghayas Zahid | 81 | 14 |
+| ukjent grunnspiller | 79 | 13 |
+
+### `classSource`: belagt eller utledet
+
+Samme regel som for ferdighetene selv. **162 nivåer er `belagt`** — spillerens
+karriere er allment kjent og plasserer ham. **205 er `utledet`**: kilden rekker
+ikke til en karrierepåstand, og nivået er avledet av signalet som allerede lå i
+dataene (malens eget skille mellom grunn, klubb, elite og legende), komprimert
+inn i det nye båndet. Det legger ingen ny påstand til; det bevarer den som fantes.
+
+**167 spillere deler nivå 79.** Det er ærlig, ikke slurv: det er
+grunntroppsspillerne malen aldri skilte fra hverandre, og vi har ingen kilde som
+gjør det. Profilene deres skiller seg fortsatt fullstendig — på **form**, som er
+det posisjon og styrker faktisk sier noe om.
+
+### Båndet leses, det hardkodes ikke
+
+`classCeilingFactor` sto på `(ch - 85) / 14` mens nivåene lå i 86–99. Da
+spillerne ble tiered til 78–99, ville alt under 85 blitt **klemt til null** — og
+et klem som alltid biter ser ut som en grense og er en skala-mismatch.
+
+Båndet leses nå av korpuset. Vakten mot dette måtte skrives om: første utgave
+sjekket bare at faktoren var større enn null, og et hardkodet bånd **består** den,
+fordi klemmingen skjuler seg selv. Det som avslører den, er at nivåene *under*
+det gamle båndet må skilles fra hverandre — klemmes de, kollapser 78–84 til én
+eneste faktor. Bittestet.
 
 ## Påstander om ekte spillere
 

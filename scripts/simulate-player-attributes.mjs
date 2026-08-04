@@ -24,6 +24,7 @@ import {
   describePositionDemands,
   calculateRoleAttributeFit,
   splitRoleRequirements,
+  classCeilingFactor,
   ATTRIBUTE_SCALE
 } from "../src/football-player-attributes.js";
 import { calculatePlayerMatchFit, calculateClassBonus, CLASS_BONUS_MAX } from "../src/football-fit-engine.js";
@@ -66,8 +67,48 @@ for (const player of players.slice(0, 40)) {
 // ---------------------------------------------------------------------------
 const ranges = players.map((player) => profiles[player.id].spread.range).sort((a, b) => a - b);
 const medianRange = ranges[Math.floor(ranges.length / 2)];
-check("median spiller spriker minst 10 av 20", medianRange >= 10, `median ${medianRange}`);
-check("ingen spiller er flat", ranges[0] >= 6, `laveste sprik ${ranges[0]}`);
+// Grensen er 8, ikke 10. Klassetaket senker toppene, og etter at spillerne ble
+// tiered på ekte nivå (78–99 i stedet for 86–99) har bunnsjiktet mindre spenn å
+// sprike i — en 79-spiller KAN ikke sprike 16 når taket hans er 13. Målt median
+// er 9. Det som må holde er at profilen bruker det spennet han HAR.
+check("median spiller spriker minst 8 av 20", medianRange >= 8, `median ${medianRange}`);
+check("ingen spiller er flat", ranges[0] >= 5, `laveste sprik ${ranges[0]}`);
+
+// Det absolutte spriket er ikke lenger den ærlige testen: en spiller med lavt
+// tak KAN ikke sprike 16. Det som må holde er at han bruker det spennet han
+// HAR — ellers er profilen flat uansett hva taket sier.
+const usage = players.map((player) => {
+  const profile = profiles[player.id];
+  const available = (ATTRIBUTE_SCALE.max - ATTRIBUTE_SCALE.floor)
+    * classCeilingFactor(player.classHeight, scaling.classBand);
+  return profile.spread.range / available;
+}).sort((a, b) => a - b);
+const medianUsage = usage[Math.floor(usage.length / 2)];
+check("median spiller bruker det meste av sitt eget spenn", medianUsage > 0.7,
+  `${(medianUsage * 100).toFixed(0)} %`);
+check("ingen spiller bruker under en tredel", usage[0] > 0.33, `${(usage[0] * 100).toFixed(0)} %`);
+
+// Klassebåndet leses av korpuset, ikke hardkodet. Sto det fast på 85–99 ville
+// hele bunnsjiktet blitt klemt til null da spillerne ble tiered til 78–99.
+check("klassebåndet er målt av korpuset",
+  scaling.classBand.low === Math.min(...players.map((p) => p.classHeight))
+  && scaling.classBand.high === Math.max(...players.map((p) => p.classHeight)),
+  JSON.stringify(scaling.classBand));
+// Denne vakten måtte skrives om. Første utgave sjekket bare at faktoren var
+// > 0 — og et hardkodet bånd på 85–99 består den, fordi alt under 85 klemmes
+// til bunnfaktoren i stedet for å feile. Et klem som alltid biter ser ut som en
+// grense og er en skala-mismatch.
+//
+// Det som avslører den er at nivåene UNDER det gamle båndet må skilles fra
+// hverandre. Klemmes de, kollapser 78–84 til én eneste faktor.
+const belowOldBand = players.filter((player) => player.classHeight < 85);
+check("det finnes spillere under det gamle båndet", belowOldBand.length > 50, String(belowOldBand.length));
+const factorsBelow = new Set(belowOldBand.map((player) =>
+  classCeilingFactor(player.classHeight, scaling.classBand).toFixed(4)));
+check("nivåene under 85 skilles fra hverandre", factorsBelow.size >= 4,
+  `${factorsBelow.size} ulike faktorer`);
+check("båndets topp gir full faktor",
+  Math.abs(classCeilingFactor(scaling.classBand.high, scaling.classBand) - 1) < 0.001);
 
 // ---------------------------------------------------------------------------
 // 3. Skalaen brukes — taket biter ikke

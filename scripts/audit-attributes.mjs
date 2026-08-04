@@ -156,11 +156,33 @@ check("svakhetsfila eier fortsatt treningen", Boolean(weaknesses.training) && Bo
 // 6. Spillerskjemaet: overall er borte, classHeight er inne
 // ---------------------------------------------------------------------------
 const playersFile = read("data/football_players.json");
-check("spillerskjemaet er v3", playersFile.schema === "historygo-football-manager.players.v3", playersFile.schema);
+check("spillerskjemaet er v4", playersFile.schema === "historygo-football-manager.players.v4", playersFile.schema);
 check("ingen spiller har «overall»", players.every((player) => player.overall === undefined),
   players.find((player) => player.overall !== undefined)?.id || "");
 check("alle spillere har classHeight", players.every((player) => Number.isFinite(player.classHeight)));
-check("classHeight ligger i klassebåndet", players.every((player) => player.classHeight >= 85 && player.classHeight <= 100));
+// Båndet er ikke lenger 85–100. Spillerne er tiered på nivå, ikke på «alle er
+// gode», så en solid toppdivisjonsspiller ligger rundt 79 og bare de aller
+// største når 99. Grensene leses av nivåtabellen i dataene — en hardkodet
+// grense her ville drevet fra den.
+const tiers = Object.values(playersFile.classTiers || {});
+check("nivåtabellen finnes", tiers.length >= 5, String(tiers.length));
+const bandLow = Math.min(...tiers.map((tier) => tier.min));
+const bandHigh = Math.max(...tiers.map((tier) => tier.max));
+check("classHeight ligger i nivåbåndet",
+  players.every((player) => player.classHeight >= bandLow && player.classHeight <= bandHigh),
+  `${bandLow}–${bandHigh}`);
+check("hver spiller vet om nivået er belagt eller utledet",
+  players.every((player) => ["belagt", "utledet"].includes(player.classSource)));
+// Nivået må FAKTISK skille. Et bånd der alle ligger likt er ikke et nivå.
+const heights = players.map((player) => player.classHeight);
+const modal = Math.max(...[...new Set(heights)].map((value) => heights.filter((other) => other === value).length));
+check("ingen enkelt nivåverdi tar over halve katalogen", modal / players.length < 0.5,
+  `${Math.round((modal / players.length) * 100)} %`);
+check("nivåene sprer seg", new Set(heights).size >= 12, `${new Set(heights).size} ulike`);
+// Og de belagte må være en reell andel — ellers er «belagt» en tom merkelapp.
+const sourced = players.filter((player) => player.classSource === "belagt").length;
+check("en vesentlig andel nivåer er belagt", sourced / players.length > 0.3,
+  `${sourced} av ${players.length}`);
 
 console.log(JSON.stringify({
   ok: true,

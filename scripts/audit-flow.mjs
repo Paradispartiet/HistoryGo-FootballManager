@@ -177,7 +177,8 @@ check(
 {
   // Datakontrakt: klubbanleggene må ha nok spillere til en spillbar tropp,
   // ellers blir skillet en blindvei.
-  const players = JSON.parse(readFileSync(join(root, "data/football_players.json"), "utf8")).players || [];
+  const playersData = JSON.parse(readFileSync(join(root, "data/football_players.json"), "utf8"));
+  const players = playersData.players || [];
   const placeUnlocks = JSON.parse(readFileSync(join(root, "data/football_unlocks.json"), "utf8")).placeUnlocks || [];
   const clubIds = new Set();
   const natIds = new Set();
@@ -194,10 +195,21 @@ check(
   check("nok klubbspillere til en spillbar tropp (>=15)", clubIds.size >= 15, `klubb-scope=${clubIds.size}`);
   check("klubb-scope har minst 2 keepere", posCount(["GK"]) >= 2, `GK=${posCount(["GK"])}`);
   check("landslagsstjerner finnes som eksklusiv samlebelønning", [...natIds].some((id) => !clubIds.has(id)));
+  // Båndet er ikke lenger 85–100. Spillerne er tiered på ekte nivå, så en solid
+  // toppdivisjonsspiller ligger rundt 79 og bare de aller største når 99.
+  // Grensene leses av nivåtabellen i dataene — en hardkodet grense her ville
+  // drevet fra den, og det var nettopp det som skjedde.
+  const tiers = Object.values(playersData.classTiers || {});
+  const bandLow = Math.min(...tiers.map((tier) => tier.min));
+  const bandHigh = Math.max(...tiers.map((tier) => tier.max));
+  check("nivåtabellen finnes i spillerdataene", tiers.length >= 5, String(tiers.length));
   check(
-    "alle spillere er gode (classHeight 85-100)",
-    players.every((p) => Number(p.classHeight) >= 85 && Number(p.classHeight) <= 100)
+    `alle spillere ligger i nivåbåndet (${bandLow}-${bandHigh})`,
+    players.every((p) => Number(p.classHeight) >= bandLow && Number(p.classHeight) <= bandHigh)
   );
+  // Og det var poenget med båndet i utgangspunktet: ingen spiller er dårlig.
+  check("ingen spiller ligger under bredde-nivået",
+    players.every((p) => Number(p.classHeight) >= 75));
 }
 check(
   "computeAvailability() trekker inn lokal tropp",

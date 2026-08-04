@@ -242,12 +242,19 @@ function percentile(sorted, share) {
 // bunnen; grunnkompetansen står.
 const CLASS_CEILING = Object.freeze({
   midpoint: 10, // det en proff behersker uansett klasse
-  base: 0.40,   // hvor mye av avstanden fra midtpunktet den laveste klassen beholder
+  base: 0.30,   // hvor mye av avstanden fra midtpunktet den laveste klassen beholder
   curve: 1.25   // > 1 skiller midten; < 1 ville klemt alle mot toppen
 });
 
-export function classCeilingFactor(classHeight) {
-  const t = clamp((num(classHeight, 87) - 85) / 14, 0, 1);
+// Båndet LESES av korpuset, det er ikke hardkodet. Det sto `(ch - 85) / 14` her
+// mens nivåene ennå lå i 86–99; da spillerne ble tiered på nytt til 78–99 ville
+// alt under 85 blitt klemt til null — nøyaktig skala-mismatchen huset blir bitt
+// av. Et bånd som endrer seg i dataene må endre seg her.
+export function classCeilingFactor(classHeight, band = null) {
+  const low = Number.isFinite(band?.low) ? band.low : 85;
+  const high = Number.isFinite(band?.high) ? band.high : 99;
+  const span = high - low;
+  const t = span > 0 ? clamp((num(classHeight, low) - low) / span, 0, 1) : 1;
   return CLASS_CEILING.base + (1 - CLASS_CEILING.base) * Math.pow(t, CLASS_CEILING.curve);
 }
 
@@ -287,10 +294,15 @@ export function buildAttributeScaling(players, { catalogue, roles = [] } = {}) {
     if (profile) raws.push(...Object.values(profile.values));
   }
   raws.sort((a, b) => a - b);
+  const heights = asArray(players).map((player) => num(player?.classHeight, 0)).filter((value) => value > 0);
   return Object.freeze({
     low: percentile(raws, SCALE_PERCENTILE),
     high: percentile(raws, 1 - SCALE_PERCENTILE),
-    sampled: raws.length
+    sampled: raws.length,
+    // Klassebåndet korpuset faktisk bruker — inn i `classCeilingFactor`.
+    classBand: Object.freeze(heights.length
+      ? { low: Math.min(...heights), high: Math.max(...heights) }
+      : { low: 85, high: 99 })
   });
 }
 
@@ -370,7 +382,7 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
   }
 
   // Formen regnes ut først, så senkes hele profilen av klassehøyden.
-  const ceiling = classCeilingFactor(player.classHeight);
+  const ceiling = classCeilingFactor(player.classHeight, scaling?.classBand);
 
   const values = {};
   const provenance = {};
