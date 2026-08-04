@@ -10,7 +10,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
-  listClubHeritagePlayers, hasVisitedClubGround, buildClubBaseSquad, resolveClubSquadAccess
+  listClubHeritagePlayers, hasVisitedClubGround, buildClubBaseSquad, resolveClubSquadAccess, clubStatusRank
 } from "../src/football-club-squad.js";
 
 const clubs = JSON.parse(fs.readFileSync(new URL("../data/football_clubs.json", import.meta.url), "utf8")).clubs;
@@ -202,6 +202,34 @@ check("klubb uten bane får likevel en tropp", noGround.baseSquad.length === REQ
     }
   }
 }
+
+// ---------------------------------------------------------------------------
+// 5b. Klubbstatus følger med arven — fra dataene, ikke fra en egen motor
+// ---------------------------------------------------------------------------
+const num = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
+// Statusen lå en periode i to parallelle profilmotorer med hardkodede
+// navnelister. Den bor på spilleren nå, og arven skal bære den videre uten at
+// klubbtroppmotoren eier en eneste spiller.
+for (const club of clubs.filter((entry) => entry.homePlaceId)) {
+  const heritage = listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players });
+  if (heritage.length === 0) continue;
+  check(`${club.name}: alle arvespillere har klubbstatus`,
+    heritage.every((player) => player.clubStatus),
+    heritage.filter((player) => !player.clubStatus).map((player) => player.name).join(", "));
+  // Sorteringen: klassehøyde først, status som skille ved likhet.
+  check(`${club.name}: arven er sortert på klassehøyde først`,
+    heritage.every((player, i) => i === 0 || num(player.classHeight) <= num(heritage[i - 1].classHeight)));
+  for (let i = 1; i < heritage.length; i += 1) {
+    if (num(heritage[i].classHeight) !== num(heritage[i - 1].classHeight)) continue;
+    check(`${club.name}: lik klassehøyde skilles av status`,
+      clubStatusRank(heritage[i]) <= clubStatusRank(heritage[i - 1]));
+  }
+}
+
+// Og motoren skal ikke lenger importere noen spillerkatalog.
+const squadSource = fs.readFileSync(new URL("../src/football-club-squad.js", import.meta.url), "utf8");
+check("klubbtroppmotoren importerer ingen profilkatalog",
+  !/player-profiles/.test(squadSource));
 
 // ---------------------------------------------------------------------------
 // 6. Motoren rører aldri History Go-progresjonen

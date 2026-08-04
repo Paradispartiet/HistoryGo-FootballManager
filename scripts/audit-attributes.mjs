@@ -184,6 +184,48 @@ const sourced = players.filter((player) => player.classSource === "belagt").leng
 check("en vesentlig andel nivåer er belagt", sourced / players.length > 0.3,
   `${sourced} av ${players.length}`);
 
+// ---------------------------------------------------------------------------
+// 7. Klubbstatus
+// ---------------------------------------------------------------------------
+// Statusen lå en periode som normaliserte navnelister i to egne motorfiler, med
+// aliaser som «Karl-Petter Løken» ved siden av «Karl-Petter «Kalle» Løken» —
+// et sikkert tegn på at oppslaget skjedde på navn i stedet for id. Den bor på
+// spilleren nå, og vokabularet valideres her.
+const CLUB_STATUSES = new Set(["club_icon", "club_legend", "elite_career", "golden_era_core",
+  "key_player", "club_profile", "academy_export", "short_stay_star", "squad_profile"]);
+const withStatus = players.filter((player) => player.clubStatus);
+check("klubbstatus er satt på klubbspillerne", withStatus.length > 400, String(withStatus.length));
+for (const player of withStatus) {
+  check(`«${player.name}» har gyldig klubbstatus`, CLUB_STATUSES.has(player.clubStatus), player.clubStatus);
+  check(`«${player.name}» vet om statusen er belagt`,
+    ["belagt", "utledet"].includes(player.clubStatusSource), String(player.clubStatusSource));
+}
+// Hver status må være i bruk — en status ingen har er en status som ikke betyr noe.
+for (const status of CLUB_STATUSES) {
+  check(`statusen «${status}» er i bruk`, withStatus.some((player) => player.clubStatus === status));
+}
+// Og statusen må SKILLE. Får alle samme, er den ingen status.
+const statusCounts = [...CLUB_STATUSES].map((status) =>
+  withStatus.filter((player) => player.clubStatus === status).length);
+check("klubbstatusen skiller mellom spillere",
+  Math.max(...statusCounts) / withStatus.length < 0.6,
+  `${Math.round((Math.max(...statusCounts) / withStatus.length) * 100)} % på største`);
+// En kuratert status skal være et mindretall — ellers er «belagt» en tom merkelapp.
+const curated = withStatus.filter((player) => player.clubStatusSource === "belagt").length;
+check("kuratert klubbstatus er en reell, avgrenset andel",
+  curated > 50 && curated / withStatus.length < 0.5, `${curated} av ${withStatus.length}`);
+
+// Ingen spillerkatalog forkledd som kode: motorene skal ikke inneholde
+// spillernavn. Det var nettopp det de to profilmodulene gjorde.
+const engineDir = new URL("../src/", import.meta.url);
+for (const file of fs.readdirSync(engineDir).filter((name) => name.endsWith(".js"))) {
+  if (file === "app.js") continue;
+  const source = fs.readFileSync(new URL(file, engineDir), "utf8");
+  const hits = players.filter((player) => source.includes(`"${player.name}"`));
+  check(`src/${file} hardkoder ingen spillernavn`, hits.length < 3,
+    hits.slice(0, 4).map((player) => player.name).join(", "));
+}
+
 console.log(JSON.stringify({
   ok: true,
   sjekker: checks,
@@ -193,5 +235,7 @@ console.log(JSON.stringify({
   aliaser: Object.keys(catalogue.strengthAliases).length,
   kategorier: Object.fromEntries(["fysisk", "teknisk", "taktisk", "mental"].map((category) =>
     [category, catalogue.attributes.filter((entry) => entry.category === category).length])),
-  posisjoner: Object.keys(catalogue.positionDemands).length
+  posisjoner: Object.keys(catalogue.positionDemands).length,
+  klubbstatus: Object.fromEntries([...CLUB_STATUSES].map((status) =>
+    [status, withStatus.filter((player) => player.clubStatus === status).length]))
 }, null, 2));

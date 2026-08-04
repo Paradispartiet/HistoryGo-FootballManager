@@ -6,21 +6,61 @@
 // Har du ikke det, får du en automatisk tropp som holder klubben spillbar, og
 // resten må du samle selv.
 //
-// v2 beriker klubbens historiske spillere med den profilen spillet allerede
-// eier: dokumenterte posisjoner, styrker, brukskostnader og klubbstatus.
-// Berikelsen endrer ikke klasse, fit eller kampmotor og lager ingen parallell
-// spillerkatalog.
+// Det er hele kjernesløyfen brukt på klubbovertakelsen i stedet for å omgå den:
+//
+//   Har vært på banen   → klubbens historiske spillere er dine å velge blant
+//   Har ikke vært der   → automatisk grunntropp + «gå og samle»
+//
+// Samme form som landslagsmodus, der nasjonens grunntropp er bunnen og
+// samlingen er oppsiden. Ingen ny gate er funnet opp: spillerne er allerede
+// knyttet til steder gjennom `sourcePlaceIds`, og `computeAvailability()` gater
+// dem allerede på besøkte steder. Det som manglet var koblingen KLUBB → BANE,
+// og en grunntropp så et klubbvalg aldri blir en blindvei.
+//
+// Grunntroppen er et GULV, ikke en snarvei: den plukker de jevneste spillerne
+// (lavest `classHeight`) og aldri klubbens egne historiske navn — de er nettopp
+// det du går til Lerkendal for. Den deler heller aldri ut landslagsarena-spillere.
+//
+// v3 leser spillerens KLUBBSTATUS (`clubStatus`) fra spillerdataene. Den lå en
+// periode som navnelister i to egne motorfiler — én for Rosenborg og én for
+// Vålerenga — med normalisert navnematching og aliaser som «Karl-Petter Løken»
+// ved siden av «Karl-Petter «Kalle» Løken». Det er husregelen snudd på hodet:
+// `data/*.json` er fasit, og en motor som inneholder 900 linjer spillernavn er
+// en katalog forkledd som kode. Statusen bor nå på spilleren, og rangeringen
+// leses av `CLUB_STATUS_RANK`.
+//
+// Ren ESM: ingen DOM, fetch, localStorage, Date.now eller Math.random. Motoren
+// LESER History Go-progresjon som en liste inn; den skriver aldri til den.
 // ============================================================================
 
-import {
-  CLUB_PLAYER_PROFILE_VERSION,
-  enrichClubPlayerProfiles as enrichDefaultClubPlayerProfiles
-} from "./football-club-player-profiles.js";
-import {
-  enrichValerengaPlayerProfiles
-} from "./football-valerenga-player-profiles.js";
+export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v3";
 
-export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v2";
+// Hvor tungt en klubbstatus veier når arven sorteres. Vokabularet er det samme
+// som `clubStatus` i spillerdataene; rekkefølgen er den eneste tolkningen
+// motoren gjør av det.
+export const CLUB_STATUS_RANK = Object.freeze({
+  club_icon: 7,
+  club_legend: 6,
+  elite_career: 5,
+  golden_era_core: 5,
+  key_player: 4,
+  club_profile: 3,
+  academy_export: 3,
+  short_stay_star: 3,
+  squad_profile: 2
+});
+
+export const CLUB_STATUS_LABEL = Object.freeze({
+  club_icon: "Klubbikon",
+  club_legend: "Klubblegende",
+  elite_career: "Elitekarriere",
+  golden_era_core: "Gullalderens kjerne",
+  key_player: "Nøkkelspiller",
+  club_profile: "Klubbprofil",
+  academy_export: "Akademi / eksport",
+  short_stay_star: "Stjerne med kortere opphold",
+  squad_profile: "Troppsprofil"
+});
 
 // Samme posisjonsfordeling som autofyll-troppen ellers i spillet: en tropp som
 // faktisk kan settes opp på banen.
@@ -39,26 +79,21 @@ function playsIn(player, positions) {
     .some((position) => positions.includes(position));
 }
 
-function enrichHeritagePlayers(players, homePlaceId) {
-  if (homePlaceId === "intility_arena") {
-    return enrichValerengaPlayerProfiles(players, { homePlaceId });
-  }
-  return enrichDefaultClubPlayerProfiles(players, { homePlaceId });
+export function clubStatusRank(player) {
+  return CLUB_STATUS_RANK[player?.clubStatus] ?? 0;
 }
 
 // Klubbens historiske spillere: de som er knyttet til klubbens egen bane.
-// sourcePlaceIds er fortsatt sannhetskilden. Profilberikelsen endrer ikke hvem
-// som tilhører klubbarven; den gjør bare den eksisterende spilleren lesbar.
-// Sorteringen beholder classHeight som første nøkkel: eksisterende klubb- og
-// testkontrakter skal ikke endres bare fordi statusfeltet blir rikere.
+// `sourcePlaceIds` er sannhetskilden. Sorteringen beholder classHeight som
+// første nøkkel — klubbstatus skiller bare mellom like klassehøyder.
 export function listClubHeritagePlayers({ homePlaceId = null, players = [] } = {}) {
   if (!homePlaceId) return [];
-  return enrichHeritagePlayers(players, homePlaceId)
+  return asArray(players)
     .filter((player) => asArray(player.sourcePlaceIds).includes(homePlaceId))
     .slice()
     .sort((a, b) =>
       num(b.classHeight) - num(a.classHeight)
-      || num(b.clubProfile?.statusRank) - num(a.clubProfile?.statusRank)
+      || clubStatusRank(b) - clubStatusRank(a)
       || String(a.id).localeCompare(String(b.id))
     );
 }
@@ -116,7 +151,9 @@ function heritageSummary(player) {
     poorFits: asArray(player.poorFits),
     tacticalDislikes: asArray(player.dislikesTactics),
     usageWarning: player.warningWhenMisused || "",
-    clubProfile: player.clubProfile || null
+    clubStatus: player.clubStatus || null,
+    clubStatusLabel: CLUB_STATUS_LABEL[player.clubStatus] || "",
+    clubStatusSource: player.clubStatusSource || "utledet"
   };
 }
 
@@ -133,7 +170,6 @@ export function resolveClubSquadAccess({
   if (!homePlaceId) {
     return {
       version: CLUB_SQUAD_VERSION,
-      profileVersion: CLUB_PLAYER_PROFILE_VERSION,
       clubId: club.id, homePlaceId: null, groundName, visited: false,
       mode: "base",
       heritage: [], heritageCount: 0,
@@ -147,7 +183,6 @@ export function resolveClubSquadAccess({
   if (visited) {
     return {
       version: CLUB_SQUAD_VERSION,
-      profileVersion: CLUB_PLAYER_PROFILE_VERSION,
       clubId: club.id, homePlaceId, groundName, visited: true,
       mode: "heritage",
       heritage: heritage.map(heritageSummary),
@@ -168,7 +203,6 @@ export function resolveClubSquadAccess({
   const heritageIds = new Set(heritage.map((player) => player.id));
   return {
     version: CLUB_SQUAD_VERSION,
-    profileVersion: CLUB_PLAYER_PROFILE_VERSION,
     clubId: club.id, homePlaceId, groundName, visited: false,
     mode: "base",
     heritage: [],

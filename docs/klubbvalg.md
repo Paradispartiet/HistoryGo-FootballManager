@@ -315,6 +315,33 @@ Molde-navnene som står som **`utledet`**: kilden gir posisjon og cupfinalelag,
 men ingen spillerbeskrivelse, og da skal styrkene bli stående på posisjonsmalen.
 Fofana beskrives («stort gjennombrudd før overgang til Chelsea») og er `belagt`.
 
+### Klubbstatus bor på spilleren
+
+Hver arvespiller har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
+gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
+kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
+**kuratert klubbhistorie** (172 spillere) fra **utledet** (495).
+
+Statusen lå en periode i to egne motorfiler, `football-club-player-profiles.js`
+og `football-valerenga-player-profiles.js`, som ~900 linjer hardkodede
+navnelister med normalisert navnematching. Symptomet sto i lista selv: den måtte
+inneholde «Karl-Petter «Kalle» Løken», «Karl-Petter Løken» *og* «Mini Jakobsen»
+som separate oppslag, fordi matchingen skjedde på navn i stedet for id.
+
+Det er husregelen snudd på hodet. `data/*.json` er fasit; en motor med 900
+linjer spillernavn er en katalog forkledd som kode. De to modulene er borte,
+innholdet ligger i spillerdataene, og `listClubHeritagePlayers()` sorterer på
+klassehøyde med status som skille ved likhet.
+
+De 53 posisjonskorreksjonene modulene bar med seg er skrevet inn i
+spillerpostene, der de hører hjemme. Resten av det de produserte — `strengths`,
+`classSource`, `documentedPositions` — var gjenfortelling av felter spilleren
+allerede hadde, og er droppet.
+
+`audit:attributes` vokter nå både vokabularet, at hver status er i bruk, at ingen
+enkeltstatus tar mer enn 60 %, og at **ingen motorfil hardkoder spillernavn**.
+Alle tre bittestet.
+
 ### Sarpsborg og HamKam
 
 Arven på Sarpsborg stadion dekker **byens fotball**, ikke ett klubbnummer:
