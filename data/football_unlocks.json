@@ -3642,7 +3642,204 @@
       "placeId": "nordmore_stadion",
       "placeName": "Nordmøre stadion",
       "placeRole": "modern_club_ground_source",
-      "unlocks": [],
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "amahl_pellegrino"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magne_hoseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_broholm"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stian_gregersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "faris_pemi_moumbagna"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_sorli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "liridon_kalludra"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dan_peter_ulvestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_hopmark"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tor_erik_torske"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aliou_coly"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_rodsand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlend_sivertsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "roger_berntzen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daouda_bamba"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sean_mcdermott"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torgil_gjertsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jean_alassane_mendy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bendik_bye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "amidou_diop"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christoffer_aasbak"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "flamur_kastrati"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nikita_baranov"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kamer_qaka"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brynjolfur_willumsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "amin_askar"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kris_bright"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "meinhard_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sverre_okland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "pal_erik_ulvestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torbjorn_vik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jesper_isaksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_ronningen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christope_psyche"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_michelsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mikkel_rakneberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "snorre_strand_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mahmoud_el_haj"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "conny_mansson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bent_sormo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "benjamin_stokke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_erik_kartum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_naess_lund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_edvardsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oskar_sivertsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "max_normann_williamsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjornar_bugge"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_erik_klinge"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "roar_henden"
+        }
+      ],
       "notes": "Klubbanlegg: Kristiansunds hjemmebane på Nordmøre."
     },
     {

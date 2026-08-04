@@ -171,19 +171,20 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
 | Lillestrøm | Åråsen | 56 |
+| Kristiansund | Nordmøre stadion | 49 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
-| Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
+| Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 810 arveplasser fordelt
-på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 859 arveplasser fordelt
+på 15 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 90 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 95 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -336,6 +337,24 @@ framgangsmåte som Molde, ikke som de fire første importene.
 Kildens europagenerasjon-avsnitt sier «bør også inn i spillerpoolen» om fem navn
 utenfor den anbefalte poolen på 84 (Elias Hagen, Isak Dybvik Määttä, Joel Mvuka,
 Tobias Gulliksen, Sondre Sørli). De er med — samme avklaring som for Molde.
+
+### Kristiansund: 49 navn, og en grense kilden trakk selv
+
+KBK ble stiftet i 2003 og har ni sesonger på øverste nivå. Arven er derfor
+mindre, og nivåbåndet ligger lavere enn hos klubbene med gullaldere — det er
+hva kilden bærer, ikke en nedvurdering.
+
+43 nye navn, 6 koblet på. Ett nivå rettet fra `utledet`: Marius Broholm.
+
+**Kilden trakk en avgrensning jeg fulgte.** Ole Gunnar Solskjær spilte for
+Clausenengen før KBK ble stiftet, og skal derfor ikke være KBK-spiller. Han
+ligger på Aker stadion som Molde-spiller og er *ikke* knyttet til Nordmøre
+stadion. Importskriptet kaster hvis han blir det.
+
+Magne Hoseth kvalifiserer derimot på to obligatoriske kamper i 2017 — kriteriet
+er at spilleren har representert A-laget, ikke hvor lenge.
+
+Med Kristiansund inne står bare **Sandefjord og KFUM** igjen uten navn.
 
 ### Klubbstatus bor på spilleren
 
