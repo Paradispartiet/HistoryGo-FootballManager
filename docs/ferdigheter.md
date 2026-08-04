@@ -287,9 +287,36 @@ profiler krever mer kildemateriale per spiller, aldri mer oppdiktet variasjon.**
 Der kilden beskriver spilleren, skal beskrivelsen inn. Der den ikke gjør det,
 skal profilen forbli utledet — og merket som det.
 
-Molde-importen er beviset. Alle 66 nye navn fikk styrkene lest ut av kildens egne
-beskrivelser fra start, og uniktheten **steg fra 58 % til 61 %** — den første
-importen som ikke fortynnet. Hver tidligere import senket den.
+Molde-importen var beviset. Alle 66 nye navn fikk styrkene lest ut av kildens
+egne beskrivelser fra start, og uniktheten **steg fra 58 % til 61 %** — den
+første importen som ikke fortynnet. Hver tidligere import senket den.
+
+Deretter ble de fem foregående importene gått gjennom på nytt:
+
+| | |
+|---|---:|
+| Unike ferdighetsprofiler | 405 → **496 av 662 (75 %)** |
+| Unike styrke-sett | 192 → **321** |
+| Største delte styrke-sett | 52 → **37** |
+
+For Lillestrøm, Viking og Brann var kildetekstene tilgjengelige, og
+formuleringene ble lest direkte: «teknisk geni», «arbeidssterk midtbanegeneral»,
+«dødballspesialist», «ekstremt hurtig målscorer», «forsvarssjef». For Rosenborg
+og Vålerenga fantes bare navnelistene, så der er bare spillere med **allment
+kjent karriere** gitt styrker — samme grunnlag som `classHeight` allerede står
+på. Resten står fortsatt på malen, og det er riktig: uten kilde skal profilen
+være utledet.
+
+### Grensa er en ratchet, og den måtte måles to ganger
+
+Profilgrensa ble flyttet fra 55 % til 70 % da uniktheten var vunnet — en grense
+som blir stående lavt beskytter ikke det som er oppnådd.
+
+Men bitetesten avslørte at den fortsatt var for treg: å reversere **én** klubb
+til malstyrker koster bare 2 poeng (75 % → 73 %), fordi epoke og nivå fortsatt
+skiller spillerne. Den følsomme målingen ligger **oppstrøms**, i styrke-settene
+selv — det er nettopp dem en malimport gjør like. Med en egen grense der (48 %
+målt, 46 % satt) faller en enkelt malgenerert klubb umiddelbart.
 
 ## Påstander om ekte spillere
 

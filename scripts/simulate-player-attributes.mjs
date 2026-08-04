@@ -292,9 +292,28 @@ for (const player of players) {
 }
 const uniqueShare = signatures.size / players.length;
 const largestClone = Math.max(...signatures.values());
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.55,
+// Grensa er en RATCHET og flyttes opp når den er vunnet. Den sto på 0,55 da
+// uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
+// importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
+// er oppnådd — neste malgenererte import ville dratt den ned igjen uten at noe
+// feilet. Målt: 496 unike av 662.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.70,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 20, String(largestClone));
+
+// Profilandelen alene er for treg til å fange EN klubb importert på mal. Målt:
+// å reversere Brann til malstyrker koster bare 2 poeng (75 % → 73 %), fordi
+// epoke og nivå fortsatt skiller spillerne. Den følsomme målingen ligger
+// oppstrøms — i styrke-settene selv, som er nettopp det en malimport gjør likt.
+// Målt: 48 % nå, 44 % med én klubb reversert.
+const strengthSets = new Map();
+for (const player of players) {
+  const key = JSON.stringify(player.strengths);
+  strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
+}
+const strengthShare = strengthSets.size / players.length;
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.46,
+  `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // Og epoken må faktisk slå ut: to spillere med samme posisjon og nivå, men ulik
 // epoke, skal ikke være like.

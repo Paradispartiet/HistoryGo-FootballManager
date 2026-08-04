@@ -283,10 +283,9 @@
         "box_presence"
       ],
       "strengths": [
-        "finishing",
-        "off_ball_runs",
-        "combination_play",
-        "box_movement"
+        "box_finishing",
+        "movement",
+        "strength"
       ],
       "needs": [
         "close_support",
@@ -407,7 +406,6 @@
       "strengths": [
         "duels",
         "heading",
-        "leadership",
         "defensive_reading",
         "blocking"
       ],
@@ -906,11 +904,10 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
+        "long_shots",
         "crossing",
         "stamina",
-        "wide_support",
-        "power"
+        "strength"
       ],
       "needs": [
         "wide_lane",
@@ -1671,8 +1668,7 @@
       ],
       "strengths": [
         "shot_stopping",
-        "positioning",
-        "command_of_area",
+        "reflexes",
         "distribution"
       ],
       "needs": [
@@ -1726,8 +1722,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "tackling"
+        "leadership"
       ],
       "needs": [
         "defensive_support",
@@ -1779,10 +1774,9 @@
         "club_professional"
       ],
       "strengths": [
-        "stamina",
+        "pace",
         "crossing",
-        "overlapping_runs",
-        "recovery_speed"
+        "stamina"
       ],
       "needs": [
         "width",
@@ -1835,9 +1829,9 @@
       ],
       "strengths": [
         "stamina",
-        "running_power",
-        "duels",
-        "late_runs"
+        "teamwork",
+        "simple_passing",
+        "determination"
       ],
       "needs": [
         "space_to_run",
@@ -1886,10 +1880,10 @@
         "club_professional"
       ],
       "strengths": [
-        "vision",
         "final_pass",
-        "first_touch",
-        "combination_play"
+        "vision",
+        "set_pieces",
+        "tempo_control"
       ],
       "needs": [
         "central_space",
@@ -1939,10 +1933,9 @@
         "club_professional"
       ],
       "strengths": [
-        "finishing",
+        "box_finishing",
         "movement",
-        "runs_behind",
-        "first_touch"
+        "finishing"
       ],
       "needs": [
         "service",
@@ -2834,9 +2827,8 @@
       ],
       "strengths": [
         "stamina",
-        "crossing",
         "overlapping_runs",
-        "recovery_speed"
+        "positioning"
       ],
       "needs": [
         "width",
@@ -2886,10 +2878,9 @@
         "club_professional"
       ],
       "strengths": [
+        "long_shots",
         "stamina",
-        "running_power",
-        "duels",
-        "late_runs"
+        "set_pieces"
       ],
       "needs": [
         "space_to_run",
@@ -4426,9 +4417,7 @@
         "depth_threat"
       ],
       "strengths": [
-        "runs_behind",
         "box_finishing",
-        "off_ball_runs",
         "movement",
         "acceleration"
       ],
@@ -5931,10 +5920,7 @@
       "strengths": [
         "dribbling",
         "one_v_one",
-        "final_pass",
-        "wide_movement",
-        "acceleration",
-        "chance_creation"
+        "crossing"
       ],
       "needs": [
         "isolation_duels",
@@ -6597,10 +6583,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "runs_behind",
-        "off_ball_runs",
-        "first_touch"
+        "heading",
+        "hold_up_play"
       ],
       "needs": [
         "space_behind",
@@ -6782,10 +6766,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement",
-        "agility"
+        "crossing"
       ],
       "needs": [
         "isolation_duels",
@@ -7567,10 +7549,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "movement",
+        "first_touch"
       ],
       "needs": [
         "box_service",
@@ -7624,8 +7604,8 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "bravery"
       ],
       "needs": [
         "protected_box",
@@ -7680,11 +7660,9 @@
         "balance"
       ],
       "strengths": [
+        "long_shots",
         "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "first_touch"
       ],
       "needs": [
         "midfield_partner",
@@ -7739,10 +7717,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "heading",
+        "strength"
       ],
       "needs": [
         "box_service",
@@ -7798,9 +7774,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "finishing",
         "movement"
       ],
       "needs": [
@@ -7858,11 +7832,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "reading_game",
-        "blocking"
+        "leadership"
       ],
       "needs": [
         "clear_defensive_line",
@@ -7918,11 +7890,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
         "simple_passing",
-        "tempo_control"
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -8100,9 +8070,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -8213,9 +8181,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "strength"
       ],
       "needs": [
         "clear_defensive_line",
@@ -8270,11 +8236,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "box_finishing",
+        "movement",
+        "acceleration"
       ],
       "needs": [
         "wide_lane",
@@ -8330,11 +8294,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "box_finishing",
+        "movement",
+        "first_touch"
       ],
       "needs": [
         "isolation_duels",
@@ -8390,10 +8352,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "strength",
+        "aggression"
       ],
       "needs": [
         "clear_defensive_line",
@@ -8509,11 +8469,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
         "stamina",
-        "wide_support",
-        "positioning"
+        "crossing",
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -8568,11 +8526,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
         "simple_passing",
-        "tempo_control"
+        "teamwork",
+        "positioning"
       ],
       "needs": [
         "midfield_partner",
@@ -8744,11 +8700,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
+        "box_finishing",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "movement"
       ],
       "needs": [
         "clear_defensive_line",
@@ -8805,9 +8759,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "finishing",
         "movement"
       ],
       "needs": [
@@ -10261,11 +10213,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "stamina",
+        "crossing",
+        "teamwork"
       ],
       "needs": [
         "isolation_duels",
@@ -10319,11 +10269,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "dribbling",
+        "long_shots",
+        "first_touch"
       ],
       "needs": [
         "wide_lane",
@@ -10379,11 +10327,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "late_runs",
+        "stamina",
+        "box_finishing"
       ],
       "needs": [
         "isolation_duels",
@@ -10606,11 +10552,9 @@
         "composure"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
+        "dribbling",
         "first_touch",
-        "chance_creation",
-        "combination_play"
+        "final_pass"
       ],
       "needs": [
         "time_on_ball",
@@ -11361,11 +11305,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
         "simple_passing",
-        "tempo_control"
+        "tackling"
       ],
       "needs": [
         "midfield_partner",
@@ -11596,9 +11538,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -11653,8 +11593,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "command_of_area",
-        "positioning"
+        "command_of_area"
       ],
       "needs": [
         "protected_box",
@@ -12112,10 +12051,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "strength",
+        "hold_up_play"
       ],
       "needs": [
         "box_service",
@@ -12229,11 +12166,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "pace",
+        "acceleration",
+        "box_finishing"
       ],
       "needs": [
         "box_service",
@@ -12517,11 +12452,9 @@
         "pace"
       ],
       "strengths": [
+        "crossing",
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "set_pieces"
       ],
       "needs": [
         "isolation_duels",
@@ -12919,11 +12852,9 @@
         "crossing"
       ],
       "strengths": [
+        "pace",
         "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "stamina"
       ],
       "needs": [
         "wide_lane",
@@ -12977,10 +12908,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement",
-        "crossing"
+        "one_v_one"
       ],
       "needs": [
         "isolation_duels",
@@ -13032,11 +12961,9 @@
         "duel"
       ],
       "strengths": [
-        "positioning",
-        "interceptions",
-        "duels",
-        "simple_passing",
-        "tackling"
+        "stamina",
+        "tackling",
+        "determination"
       ],
       "needs": [
         "clear_task",
@@ -13091,11 +13018,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "duels",
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -13208,11 +13133,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
         "crossing",
         "stamina",
-        "wide_support",
-        "positioning"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -13267,10 +13190,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "movement",
+        "pace"
       ],
       "needs": [
         "box_service",
@@ -13496,10 +13417,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "movement",
+        "acceleration"
       ],
       "needs": [
         "box_service",
@@ -13615,9 +13534,7 @@
       "strengths": [
         "dribbling",
         "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "acceleration"
       ],
       "needs": [
         "isolation_duels",
@@ -13731,11 +13648,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
         "simple_passing",
-        "tempo_control"
+        "first_touch",
+        "stamina"
       ],
       "needs": [
         "midfield_partner",
@@ -13850,11 +13765,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "box_finishing",
+        "movement",
+        "acceleration"
       ],
       "needs": [
         "isolation_duels",
@@ -13967,11 +13880,10 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "defensive_reading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "composure",
+        "anticipation"
       ],
       "needs": [
         "clear_defensive_line",
@@ -14085,11 +13997,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
         "crossing",
         "stamina",
-        "wide_support",
-        "positioning"
+        "set_pieces"
       ],
       "needs": [
         "wide_lane",
@@ -14144,11 +14054,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "duels",
+        "heading",
+        "bravery"
       ],
       "needs": [
         "wide_lane",
@@ -14203,10 +14111,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "heading",
+        "hold_up_play"
       ],
       "needs": [
         "box_service",
@@ -14261,11 +14167,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement",
-        "crossing"
+        "dribbling",
+        "one_v_one"
       ],
       "needs": [
         "isolation_duels",
@@ -14317,9 +14221,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
         "command_of_area",
-        "positioning"
+        "leadership"
       ],
       "needs": [
         "protected_box",
@@ -14374,11 +14277,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
         "positioning",
-        "simple_passing",
-        "tempo_control"
+        "duels",
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -14493,11 +14394,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "positioning",
+        "heading",
+        "leadership"
       ],
       "needs": [
         "isolation_duels",
@@ -14552,11 +14451,9 @@
         "positioning"
       ],
       "strengths": [
+        "tackling",
         "duels",
-        "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "aggression"
       ],
       "needs": [
         "clear_defensive_line",
@@ -14609,11 +14506,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
+        "positioning",
         "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "heading"
       ],
       "needs": [
         "wide_lane",
@@ -14667,7 +14562,6 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "command_of_area",
         "positioning"
       ],
       "needs": [
@@ -14720,11 +14614,9 @@
         "duel"
       ],
       "strengths": [
-        "positioning",
+        "tackling",
         "interceptions",
-        "duels",
-        "simple_passing",
-        "tackling"
+        "strength"
       ],
       "needs": [
         "clear_task",
@@ -14778,11 +14670,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
         "simple_passing",
-        "tempo_control"
+        "tackling"
       ],
       "needs": [
         "midfield_partner",
@@ -16578,11 +16468,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "duels",
+        "strength"
       ],
       "needs": [
         "clear_defensive_line",
@@ -16638,11 +16526,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels",
+        "pace"
       ],
       "needs": [
         "clear_defensive_line",
@@ -16814,11 +16700,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "vision",
+        "final_pass",
+        "first_touch"
       ],
       "needs": [
         "midfield_partner",
@@ -16934,11 +16818,9 @@
         "composure"
       ],
       "strengths": [
-        "vision",
         "final_pass",
         "first_touch",
-        "chance_creation",
-        "combination_play"
+        "vision"
       ],
       "needs": [
         "time_on_ball",
@@ -17171,11 +17053,9 @@
         "crossing"
       ],
       "strengths": [
+        "pace",
         "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "stamina"
       ],
       "needs": [
         "wide_lane",
@@ -17686,9 +17566,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "heading",
         "movement"
       ],
       "needs": [
@@ -17744,10 +17622,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement",
+        "dribbling",
         "crossing"
       ],
       "needs": [
@@ -17800,11 +17676,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
+        "positioning",
         "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "concentration"
       ],
       "needs": [
         "wide_lane",
@@ -18325,11 +18199,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "duels",
+        "set_pieces"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18500,11 +18372,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "duels",
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18722,11 +18592,9 @@
         "duel"
       ],
       "strengths": [
-        "positioning",
+        "tackling",
         "interceptions",
-        "duels",
-        "simple_passing",
-        "tackling"
+        "stamina"
       ],
       "needs": [
         "clear_task",
@@ -18897,11 +18765,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
         "simple_passing",
-        "tempo_control"
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -18954,11 +18820,9 @@
         "duel"
       ],
       "strengths": [
-        "positioning",
-        "interceptions",
-        "duels",
-        "simple_passing",
-        "tackling"
+        "passing_range",
+        "tempo_control",
+        "simple_passing"
       ],
       "needs": [
         "clear_task",
@@ -19127,10 +18991,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "crossing",
+        "long_shots"
       ],
       "needs": [
         "isolation_duels",
@@ -19701,9 +19563,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "strength",
         "movement"
       ],
       "needs": [
@@ -19816,11 +19676,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
+        "heading",
         "hold_up_play",
-        "movement"
+        "box_finishing"
       ],
       "needs": [
         "box_service",
@@ -19933,10 +19791,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "movement",
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -20400,10 +20256,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "movement",
+        "first_touch"
       ],
       "needs": [
         "box_service",
@@ -21096,11 +20950,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "dribbling",
+        "crossing",
+        "acceleration"
       ],
       "needs": [
         "midfield_partner",
@@ -21331,10 +21183,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "determination",
+        "strength"
       ],
       "needs": [
         "box_service",
@@ -21503,8 +21353,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -21552,8 +21401,7 @@
       "strengths": [
         "stamina",
         "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -21600,9 +21448,8 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
+        "first_touch",
+        "passing_range",
         "tempo_control"
       ],
       "needs": [
@@ -21647,10 +21494,9 @@
         "box_presence"
       ],
       "strengths": [
+        "heading",
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "bravery"
       ],
       "needs": [
         "box_service",
@@ -21699,10 +21545,9 @@
         "between_lines"
       ],
       "strengths": [
-        "vision",
+        "dribbling",
         "final_pass",
-        "first_touch",
-        "combination_play"
+        "first_touch"
       ],
       "needs": [
         "central_space",
@@ -21752,10 +21597,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "passing_range",
+        "long_shots",
+        "leadership"
       ],
       "needs": [
         "midfield_partner",
@@ -21800,9 +21644,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "heading",
+        "determination"
       ],
       "needs": [
         "box_service",
@@ -21848,9 +21691,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "strength"
       ],
       "needs": [
         "box_service",
@@ -21898,10 +21740,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "passing_range",
+        "tempo_control",
+        "stamina"
       ],
       "needs": [
         "midfield_partner",
@@ -21947,11 +21788,9 @@
         "duel_winner"
       ],
       "strengths": [
+        "leadership",
         "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "heading"
       ],
       "needs": [
         "covering_partner",
@@ -21998,10 +21837,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "vision",
+        "final_pass",
+        "dribbling"
       ],
       "needs": [
         "midfield_partner",
@@ -22049,10 +21887,9 @@
         "tempo_setter"
       ],
       "strengths": [
+        "crossing",
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "long_shots"
       ],
       "needs": [
         "midfield_partner",
@@ -22097,9 +21934,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "strength",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -22148,9 +21984,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -22198,10 +22032,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
-        "crossing",
         "overlapping_runs",
-        "defensive_reading"
+        "crossing",
+        "stamina"
       ],
       "needs": [
         "wide_lane",
@@ -22247,10 +22080,8 @@
         "duel_winner"
       ],
       "strengths": [
+        "leadership",
         "duels",
-        "heading",
-        "positioning",
-        "blocking",
         "defensive_reading"
       ],
       "needs": [
@@ -22297,11 +22128,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "leadership",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels"
       ],
       "needs": [
         "covering_partner",
@@ -22346,9 +22175,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -22448,9 +22276,8 @@
       ],
       "strengths": [
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "dribbling",
+        "long_shots"
       ],
       "needs": [
         "midfield_partner",
@@ -22549,9 +22376,8 @@
       ],
       "strengths": [
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "tackling",
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -22597,11 +22423,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "leadership",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "determination"
       ],
       "needs": [
         "covering_partner",
@@ -22648,11 +22472,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "teamwork"
       ],
       "needs": [
         "covering_partner",
@@ -22700,10 +22522,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
-        "crossing",
+        "first_touch",
         "overlapping_runs",
-        "defensive_reading"
+        "crossing"
       ],
       "needs": [
         "wide_lane",
@@ -22749,8 +22570,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -22847,7 +22667,6 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
         "command_of_area"
       ],
       "needs": [
@@ -22943,10 +22762,9 @@
         "ball_winner"
       ],
       "strengths": [
-        "positioning",
         "tackling",
         "interceptions",
-        "simple_passing"
+        "stamina"
       ],
       "needs": [
         "clear_structure",
@@ -22991,9 +22809,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "strength",
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -23041,10 +22858,9 @@
         "dribbler"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
+        "pace",
         "acceleration",
-        "wide_movement"
+        "dribbling"
       ],
       "needs": [
         "wide_space",
@@ -23089,10 +22905,9 @@
         "box_presence"
       ],
       "strengths": [
+        "strength",
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -23140,11 +22955,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "leadership",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "concentration"
       ],
       "needs": [
         "covering_partner",
@@ -23190,9 +23003,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
         "positioning",
-        "command_of_area"
+        "concentration"
       ],
       "needs": [
         "clear_defensive_line",
@@ -23236,9 +23048,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "acceleration",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -23287,10 +23098,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "crossing",
+        "dribbling",
+        "stamina"
       ],
       "needs": [
         "midfield_partner",
@@ -23338,9 +23148,8 @@
       ],
       "strengths": [
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "tackling",
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -23385,9 +23194,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "bravery"
       ],
       "needs": [
         "box_service",
@@ -23436,10 +23244,9 @@
         "between_lines"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
-        "first_touch",
-        "combination_play"
+        "long_shots",
+        "stamina",
+        "late_runs"
       ],
       "needs": [
         "central_space",
@@ -23489,10 +23296,9 @@
         "ball_winner"
       ],
       "strengths": [
-        "positioning",
+        "stamina",
         "tackling",
-        "interceptions",
-        "simple_passing"
+        "work_rate"
       ],
       "needs": [
         "clear_structure",
@@ -23541,9 +23347,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "first_touch"
       ],
       "needs": [
         "wide_space",
@@ -23588,10 +23393,9 @@
         "box_presence"
       ],
       "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "pace",
+        "acceleration",
+        "box_finishing"
       ],
       "needs": [
         "box_service",
@@ -23638,8 +23442,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "composure"
       ],
       "needs": [
         "box_service",
@@ -23689,10 +23492,9 @@
         "between_lines"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
-        "first_touch",
-        "combination_play"
+        "box_finishing",
+        "finishing",
+        "vision"
       ],
       "needs": [
         "central_space",
@@ -23742,8 +23544,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -23787,9 +23588,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -23837,7 +23637,6 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
         "command_of_area"
       ],
       "needs": [
@@ -23883,11 +23682,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -23935,9 +23732,8 @@
       ],
       "strengths": [
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "long_shots",
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -23983,11 +23779,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "tackling",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -24087,9 +23881,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -24135,8 +23927,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "composure"
       ],
       "needs": [
         "box_service",
@@ -24184,10 +23975,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "leadership",
+        "teamwork",
+        "positioning"
       ],
       "needs": [
         "midfield_partner",
@@ -24235,10 +24025,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
+        "set_pieces",
         "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "stamina"
       ],
       "needs": [
         "wide_lane",
@@ -24286,10 +24075,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "stamina"
       ],
       "needs": [
         "covering_partner",
@@ -24334,9 +24121,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -24384,10 +24170,9 @@
         "dribbler"
       ],
       "strengths": [
+        "final_pass",
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "leadership"
       ],
       "needs": [
         "wide_space",
@@ -24434,8 +24219,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "strength"
       ],
       "needs": [
         "box_service",
@@ -24482,10 +24266,9 @@
         "box_presence"
       ],
       "strengths": [
+        "strength",
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "work_rate"
       ],
       "needs": [
         "box_service",
@@ -24533,7 +24316,6 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
         "command_of_area"
       ],
       "needs": [
@@ -24580,10 +24362,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "passing_range",
+        "tempo_control",
+        "long_shots"
       ],
       "needs": [
         "midfield_partner",
@@ -24629,9 +24410,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "positioning",
-        "command_of_area"
+        "command_of_area",
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -24676,11 +24456,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -24727,10 +24505,9 @@
         "ball_winner"
       ],
       "strengths": [
-        "positioning",
-        "tackling",
-        "interceptions",
-        "simple_passing"
+        "simple_passing",
+        "tempo_control",
+        "stamina"
       ],
       "needs": [
         "clear_structure",
@@ -24777,9 +24554,8 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
+        "leadership",
+        "passing_range",
         "tempo_control"
       ],
       "needs": [
@@ -24828,9 +24604,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "box_finishing"
       ],
       "needs": [
         "wide_space",
@@ -24879,9 +24654,8 @@
       ],
       "strengths": [
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "teamwork",
+        "simple_passing"
       ],
       "needs": [
         "midfield_partner",
@@ -24929,9 +24703,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "final_pass"
       ],
       "needs": [
         "wide_space",
@@ -25078,9 +24851,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
         "positioning",
-        "command_of_area"
+        "concentration"
       ],
       "needs": [
         "clear_defensive_line",
@@ -25126,10 +24898,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
-        "crossing",
         "overlapping_runs",
-        "defensive_reading"
+        "crossing",
+        "stamina"
       ],
       "needs": [
         "wide_lane",
@@ -25175,11 +24946,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
+        "leadership",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -25226,10 +24995,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "final_pass",
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -25276,10 +25044,9 @@
         "dribbler"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "box_finishing",
+        "stamina"
       ],
       "needs": [
         "wide_space",
@@ -25327,10 +25094,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "pace",
+        "positioning",
+        "duels"
       ],
       "needs": [
         "wide_lane",
@@ -25378,10 +25144,9 @@
         "between_lines"
       ],
       "strengths": [
-        "vision",
+        "dribbling",
         "final_pass",
-        "first_touch",
-        "combination_play"
+        "crossing"
       ],
       "needs": [
         "central_space",
@@ -25431,8 +25196,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -25479,9 +25243,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "acceleration"
       ],
       "needs": [
         "wide_space",
@@ -25530,9 +25293,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement"
+        "one_v_one"
       ],
       "needs": [
         "wide_space",
@@ -25934,10 +25696,9 @@
         "dribbler"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement"
+        "box_finishing",
+        "dribbling"
       ],
       "needs": [
         "wide_space",
@@ -26135,9 +25896,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "strength",
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -26537,9 +26297,8 @@
       ],
       "strengths": [
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "teamwork",
+        "leadership"
       ],
       "needs": [
         "midfield_partner",
@@ -26682,9 +26441,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "composure",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -26732,10 +26490,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
+        "composure",
         "simple_passing",
-        "positioning",
-        "tempo_control"
+        "determination"
       ],
       "needs": [
         "midfield_partner",
@@ -26784,10 +26541,10 @@
         "between_lines"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
+        "dribbling",
         "first_touch",
-        "combination_play"
+        "vision",
+        "one_v_one"
       ],
       "needs": [
         "central_space",
@@ -26836,11 +26593,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
         "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -26886,11 +26641,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -26937,10 +26690,9 @@
         "ball_winner"
       ],
       "strengths": [
-        "positioning",
         "tackling",
-        "interceptions",
-        "simple_passing"
+        "stamina",
+        "heading"
       ],
       "needs": [
         "clear_structure",
@@ -26987,10 +26739,9 @@
         "ball_winner"
       ],
       "strengths": [
-        "positioning",
+        "heading",
         "tackling",
-        "interceptions",
-        "simple_passing"
+        "long_shots"
       ],
       "needs": [
         "clear_structure",
@@ -27038,9 +26789,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -27088,10 +26837,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "vision",
+        "passing_range"
       ],
       "needs": [
         "midfield_partner",
@@ -27137,10 +26885,9 @@
         "box_presence"
       ],
       "strengths": [
+        "leadership",
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "determination"
       ],
       "needs": [
         "box_service",
@@ -27188,9 +26935,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -27238,10 +26984,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
-        "crossing",
         "overlapping_runs",
-        "defensive_reading"
+        "crossing",
+        "stamina"
       ],
       "needs": [
         "wide_lane",
@@ -27288,11 +27033,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -27341,9 +27084,8 @@
       ],
       "strengths": [
         "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "positioning",
+        "crossing"
       ],
       "needs": [
         "wide_lane",
@@ -27391,9 +27133,8 @@
       ],
       "strengths": [
         "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "positioning",
+        "teamwork"
       ],
       "needs": [
         "wide_lane",
@@ -27440,10 +27181,9 @@
         "ball_winner"
       ],
       "strengths": [
-        "positioning",
+        "strength",
         "tackling",
-        "interceptions",
-        "simple_passing"
+        "long_shots"
       ],
       "needs": [
         "clear_structure",
@@ -27488,9 +27228,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -27537,7 +27276,6 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
         "positioning",
         "command_of_area"
       ],
@@ -27584,11 +27322,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
+        "leadership",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -27635,8 +27371,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "distribution"
       ],
       "needs": [
         "clear_defensive_line",
@@ -27682,10 +27417,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "positioning",
+        "teamwork",
+        "concentration"
       ],
       "needs": [
         "wide_lane",
@@ -27731,8 +27465,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "finishing"
       ],
       "needs": [
         "box_service",
@@ -27778,9 +27511,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "composure"
       ],
       "needs": [
         "box_service",
@@ -27828,9 +27560,8 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
+        "leadership",
+        "passing_range",
         "tempo_control"
       ],
       "needs": [
@@ -27878,10 +27609,9 @@
         "wide_support"
       ],
       "strengths": [
+        "positioning",
         "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "leadership"
       ],
       "needs": [
         "wide_lane",
@@ -27928,10 +27658,9 @@
         "tempo_setter"
       ],
       "strengths": [
+        "leadership",
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "simple_passing"
       ],
       "needs": [
         "midfield_partner",
@@ -27980,8 +27709,7 @@
       "strengths": [
         "stamina",
         "simple_passing",
-        "positioning",
-        "tempo_control"
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -28027,11 +27755,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "leadership",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "tackling"
       ],
       "needs": [
         "covering_partner",
@@ -28077,11 +27803,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -28129,10 +27853,9 @@
         "between_lines"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
         "first_touch",
-        "combination_play"
+        "final_pass",
+        "set_pieces"
       ],
       "needs": [
         "central_space",
@@ -28182,8 +27905,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -28228,11 +27950,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "heading"
       ],
       "needs": [
         "covering_partner",
@@ -28279,10 +27999,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "final_pass",
+        "vision",
+        "set_pieces"
       ],
       "needs": [
         "midfield_partner",
@@ -28328,11 +28047,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "leadership",
+        "set_pieces"
       ],
       "needs": [
         "covering_partner",
@@ -28376,10 +28093,9 @@
         "box_presence"
       ],
       "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "strength",
+        "heading",
+        "hold_up_play"
       ],
       "needs": [
         "box_service",
@@ -28428,10 +28144,9 @@
         "wide_support"
       ],
       "strengths": [
+        "leadership",
         "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "teamwork"
       ],
       "needs": [
         "wide_lane",
@@ -28478,7 +28193,6 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
         "command_of_area"
       ],
       "needs": [
@@ -28523,9 +28237,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "movement"
       ],
       "needs": [
         "box_service",
@@ -28573,10 +28286,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
+        "teamwork",
         "simple_passing",
-        "positioning",
-        "tempo_control"
+        "stamina"
       ],
       "needs": [
         "midfield_partner",
@@ -28622,8 +28334,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "finishing"
       ],
       "needs": [
         "box_service",
@@ -28771,10 +28482,9 @@
         "dribbler"
       ],
       "strengths": [
+        "crossing",
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "acceleration"
       ],
       "needs": [
         "wide_space",
@@ -28822,8 +28532,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -28869,10 +28578,9 @@
         "dribbler"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement"
+        "box_finishing",
+        "dribbling"
       ],
       "needs": [
         "wide_space",
@@ -29020,10 +28728,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "tempo_control",
+        "passing_range",
+        "leadership"
       ],
       "needs": [
         "midfield_partner",
@@ -29069,8 +28776,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "finishing"
       ],
       "needs": [
         "box_service",
@@ -29117,11 +28823,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "heading"
       ],
       "needs": [
         "covering_partner",
@@ -29167,11 +28871,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
+        "leadership",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -29219,10 +28921,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "late_runs",
+        "long_shots",
+        "stamina"
       ],
       "needs": [
         "midfield_partner",
@@ -29268,11 +28969,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "teamwork"
       ],
       "needs": [
         "covering_partner",
@@ -29320,10 +29019,9 @@
         "tempo_setter"
       ],
       "strengths": [
+        "teamwork",
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "positioning"
       ],
       "needs": [
         "midfield_partner",
@@ -29369,11 +29067,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "concentration"
       ],
       "needs": [
         "covering_partner",
@@ -29421,9 +29117,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "acceleration"
       ],
       "needs": [
         "wide_space",
@@ -29471,11 +29166,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "hold_up_play"
       ],
       "needs": [
         "covering_partner",
