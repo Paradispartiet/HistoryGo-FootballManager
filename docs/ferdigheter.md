@@ -265,10 +265,27 @@ posisjonsprofilen er dette en påstand om **epoken**, ikke om en navngitt spille
 | Største identiske gruppe | 26 | **15** |
 | Største verdibøtte | 22,9 % | **18,1 %** |
 
-Det som gjenstår er en ekte begrensning i kildene, ikke en feil. Flere ulike
-profiler krever **mer kildemateriale per spiller** — ikke mer oppdiktet
-variasjon. Vakten måler nå uniktheten direkte i stedet for å bruke
-verdifordelingen som proxy.
+Det som gjenstår er en ekte begrensning i kildene, ikke en feil. Vakten måler nå
+uniktheten direkte i stedet for å bruke verdifordelingen som proxy — og den fyrte
+allerede ved neste import.
+
+### Vakten fyrte, og fasiten var i kilden
+
+Tromsø-importen dro uniktheten fra 58 % til **54 %**, under grensa. Roten lot seg
+måle presist: 596 spillere delte bare **146 ulike `strengths`-sett**, og det
+største ble delt av **52 spillere**. Posisjonsmalen gir hver spiller i samme
+posisjon identiske styrker — det er malen, ikke motoren.
+
+Løsningen var ikke å løsne grensa. Kildelistene *beskriver* spillerne — «teknisk
+driblekonge», «hurtig og teknisk måltyv», «forsvarsleder», «54 mål på 151
+kamper» — og den informasjonen ble kastet ved import. 31 Tromsø-spillere fikk
+styrkene lest **rett ut av kildens egne formuleringer**, og uniktheten gikk til
+**58 %**.
+
+Det er den generelle fasiten, og den er verdt å skrive ned: **flere ulike
+profiler krever mer kildemateriale per spiller, aldri mer oppdiktet variasjon.**
+Der kilden beskriver spilleren, skal beskrivelsen inn. Der den ikke gjør det,
+skal profilen forbli utledet — og merket som det.
 
 ## Påstander om ekte spillere
 

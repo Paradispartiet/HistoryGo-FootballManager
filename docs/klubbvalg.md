@@ -165,6 +165,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Vålerenga | Intility Arena | 126 |
+| Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
 | Lillestrøm | Åråsen | 56 |
@@ -174,16 +175,15 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Molde | Aker stadion | 6 |
 | Fredrikstad | Fredrikstad stadion | 4 |
 | Stabæk | Nadderud | 3 |
-| Tromsø | Romssa Arena | 3 |
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 | Kristiansund, Sandefjord, KFUM | (bane, ingen navn ennå) | 0 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 566 arveplasser fordelt
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 644 arveplasser fordelt
 på 14 klubber. De 43 klubbene i OBOS og 2. divisjon har ikke bane, og profilen
 sier det rett ut i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 57 spillere står på to eller tre baner fordi
+Summen er *plasser*, ikke personer: 64 spillere står på to eller tre baner fordi
 de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -267,6 +267,26 @@ Ruben Kristiansen og Felix Horn Myhre lå i grunnsjiktet malen aldri skilte, men
 kilden belegger 263 Brann-kamper, en Monaco-karriere, en cupfinale og en
 landslagsdebut. Det er tredje import på rad der `utledet`-merkelappen peker rett
 på hvem som fortsatt mangler kildedekning.
+
+### Tromsø: 81 navn, og fire som står bredt
+
+TIL-arven begynner ikke kunstig med opprykket i 1985. Den går fra
+stiftelsesgenerasjonen og Sverre Isaksen via de nordnorske mesterskapene i 1931,
+1949 og 1956, gjennom cupgullene i 1986 og 1996, til medaljelagene og dagens
+generasjon.
+
+68 nye navn, 10 koblet på. Seks nivåer rettet fra `utledet`: Koppinen, Rune
+Lange, Hirschfeld, Essediri, Moldskred og Runar Berg.
+
+**Fire spillere står bredt.** Roald Jan Pedersen, Trond Steinar Albertsen,
+Sigmund Forfang og Erik Pedersen lot seg ikke posisjonsbestemme pålitelig, og da
+er regelen den samme som for Harry Yven: bred posisjon, tom `usablePositions`, og
+en advarsel som sier det rett ut. Spillet dikter ikke opp en rolle de kanskje
+aldri hadde.
+
+Kilden inneholdt også en **rettelse**: Yngvar Håkonsen skal ikke regnes blant
+1996-legendene — han kom til klubben først i 2006. Han var ikke i katalogen, så
+rettelsen betyr at han ikke legges inn.
 
 ### Sarpsborg og HamKam
 
