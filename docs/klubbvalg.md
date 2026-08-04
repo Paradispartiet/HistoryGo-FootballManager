@@ -167,6 +167,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Vålerenga | Intility Arena | 126 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
+| Lyn | Bislett Stadion | 82 |
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Viking | Lyse Arena | 70 |
@@ -181,12 +182,15 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk — 993 arveplasser fordelt
-på alle 17. **Ingen klubb med bane står lenger uten navn.** De 43 klubbene i
-OBOS og 2. divisjon har ikke bane, og profilen sier det rett ut i stedet for å
-late som.
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk og Lyn — 1075 arveplasser
+fordelt på alle 18. **Ingen klubb med bane står uten navn.** De 42 klubbene som
+mangler bane sier det rett ut i profilen i stedet for å late som.
 
-Summen er *plasser*, ikke personer: 106 spillere står på to eller tre baner
+Arven er ikke lenger et eliteserieprivilegium: Lyn ligger i OBOS-ligaen og har
+den femte største arven i katalogen. Det er riktig — arv er klubbens historie,
+ikke dens tabellplass i dag.
+
+Summen er *plasser*, ikke personer: 117 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -377,7 +381,55 @@ ham**, og de er begge riktige.
 er nå et **kart per bane**, og det er der den hører hjemme (se under). Ett
 nivå rettet fra `utledet` 79 til `belagt` 82: Amin Nouri.
 
-### Sandefjord: 68 navn, og den siste banen uten arv
+### Lyn: 82 navn, og arven flytter ut av Eliteserien
+
+Lyn er den første klubben utenfor Eliteserien som får arv, og den fjerner en
+antakelse som aldri var uttalt: at arv følger tabellplass. Lyn ligger i
+OBOS-ligaen og har likevel den femte største historien i katalogen — stiftet
+1896, med på å etablere NFF, to seriemesterskap, åtte cupmesterskap, **seks
+spillere på OL-bronselaget i 1936**, The Double i 1968 og europeisk kvartfinale
+mot Barcelona i 1969.
+
+63 nye navn, 19 koblet på — den høyeste koblingsandelen så langt, fordi Lyn
+leverte spillere til nesten alle de andre klubbene i katalogen.
+
+**Banen fantes allerede.** `data/football_clubs.json` sa `ground: "Bislett"`, og
+`bislett_stadion` lå i unlocks som *fysisk treningskilde* — hurtighet og
+utholdenhet. Den er fortsatt det; treningsunlockene er urørt. Rollen sier nå
+begge deler (`historical_club_ground_and_physical_training_source`), og
+importskriptet kaster hvis banen den kobles til er en nasjonalarena — det er
+regelen om at ett besøk på Ullevaal ikke skal sikre en nasjons beste spillere.
+
+Jørgen Juve og Arne Brustad lå fra før på Gressbanen og Ullevaal. De er Lyns to
+største, og først nå er de faktisk plukkbare for klubben som eide dem.
+
+**Nivåbåndets bunn tas i bruk for første gang.** `classTiers` har hatt en
+`bredde`-bøtte (75–78) med **én** spiller i seg. Etter konkursen startet Lyn på
+nivå sju, og gjenreisningsgenerasjonen — Schneider, Bydal, Sell, Breistøl,
+Joakim Pedersen Strand — hører hjemme der. Det er ikke en nedvurdering, det er
+divisjonen de faktisk spilte i, og båndet fantes nettopp for dette.
+
+**To navn er utelatt, og det er verdt å si hvorfor.** Kilden anbefaler 84;
+importen la inn 82. Mame Alassane Niang og Diego Guastavino står bare i
+navnelista i avsnitt 8 og har **ingen posisjon noe sted i dokumentet**. Posisjon
+er det mest bærende feltet i datamodellen — den styrer arketyper, roller,
+styrker og svake sider — så å gjette den er en påstand om en ekte spiller. De
+går inn i det øyeblikket kilden sier hva de spilte.
+
+**To koblinger er usikre, og står som det.** Knut Berg lå som spiss på Aspmyra;
+Lyn-kilden identifiserer ham som bror av Harald «Dutte» Berg og som
+«balanserende midtbanespiller», så posisjonen er rettet til CM — denne kilden er
+den som sier hva han spilte. Kristian Henriksen lå som `utledet` på Sarpsborg
+stadion fra Fredrikstad-lista; begge kilder beskriver en «half» fra
+1930-tallet med VM i 1938, så de er koblet til én spiller og nivået satt til
+`belagt`. Er det to menn, er det den oppføringen som er feil. Samme forbehold
+som for Fredrik Thorsen.
+
+John Obi Mikel er Lyns versjon av Martin Andresen-testen: **høyest samlet
+karrierenivå i katalogen etter Juve og Ronny Johnsen**, og `short_stay_star` på
+Bislett på seks kamper. Matías Almeyda står ved siden av ham på fire.
+
+### Sandefjord: 68 navn, og den siste eliteserieklubben uten arv
 
 Sandefjord Fotball ble stiftet i 1998 som et samarbeid mellom IL Runar og
 Sandefjord Ballklubb, og kilden trekker samme grense som for KBK og KFUM:
@@ -415,18 +467,22 @@ Martin Andresen er den skarpeste testen på at klubbstatus ligger per bane: han
 har **høyest samlet karrierenivå** av alle som har spilt for Sandefjord, og
 `short_stay_star` på Jotun Arena — tre kamper. Kilden sier det selv.
 
-Med Sandefjord inne har **ingen klubb med bane lenger tom arv**. Null-raden i
-tabellen over er borte, og vakten som sjekket den gikk dermed tom. Den er
-erstattet med det motsatte kravet — hver klubb med bane *må* stå i tabellen —
-fordi en vakt som slutter å ha noe å sjekke, slutter å beskytte.
+Med Sandefjord inne har **ingen klubb med bane tom arv**. Null-raden i tabellen
+over er borte, og vakten som sjekket den gikk dermed tom. Den er erstattet med
+det motsatte kravet — hver klubb med bane *må* stå i tabellen — fordi en vakt
+som slutter å ha noe å sjekke, slutter å beskytte.
+
+Den erstatningen betalte seg med én gang: **Lyn var neste import**, og den nye
+vakten felte den umiddelbart fordi klubben fikk bane og 82 navn uten at
+tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 
 ### Klubbstatus hører til klubben, ikke spilleren
 
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1021 statusoppføringer på 892
-spillere, 363 belagte og 658 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1103 statusoppføringer på 955
+spillere, 445 belagte og 658 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
@@ -439,11 +495,11 @@ Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 ```
 
 Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
-sto på én bane. Det er ikke lenger sant for 106 av dem, og KFUM gjorde det
+sto på én bane. Det er ikke lenger sant for 117 av dem, og KFUM gjorde det
 umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
 gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
 er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
-motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Fjorten
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Tretti
 spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
 det tallet er større enn null: faller det til null, er migreringen reversert.
 

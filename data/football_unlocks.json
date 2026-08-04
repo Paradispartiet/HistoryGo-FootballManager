@@ -301,7 +301,7 @@
     {
       "placeId": "bislett_stadion",
       "placeName": "Bislett Stadion",
-      "placeRole": "physical_training_source",
+      "placeRole": "historical_club_ground_and_physical_training_source",
       "unlocks": [
         {
           "type": "staff_candidate",
@@ -326,9 +326,337 @@
         {
           "type": "training_program",
           "targetId": "program_team_stamina"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ola_dybwad_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gunnar_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_skou"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oivind_holmsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnar_isaksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_stavrum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_morisbak"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frithjof_ulleberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marlow_braathen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tom_blohm"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_berntsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_agdestein"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_julle_berg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_rodvang"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "helge_ostvold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "knut_kolle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jon_p_austnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_bjorntvedt_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_obi_mikel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "matias_almeyda"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ali_al_habsi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "odion_ighalo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "chinedu_obasi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jim_mccalliog"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "adama_diomande"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steven_lustu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "indridi_sigurdsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stefan_gislason"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johan_dahlin"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "theodor_elmar_bjarnason"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "svein_bjorn_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_sveinsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "karl_johan_johannessen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_horn"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_hoff"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "knut_osnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "trygve_christophersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aasmund_sandland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arild_gulden"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "axel_kolle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stale_oldeide"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tomasz_sokolowski"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_skjonsberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dulee_johnson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sveinung_aarnseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_egil_swift"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_brink"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_kristian_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_hellum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "endre_fotland_knudsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mads_dahm"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_elvevold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ibba_laajab"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "even_bydal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "herman_solberg_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "william_sell"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "julius_skaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_breistol"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_haugstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_schneider"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joakim_pedersen_strand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_juve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arne_brustad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_dutte_berg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ronny_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oyvind_leonhardsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_bohinen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tom_sundby"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_derek_sorensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jo_tessem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjetil_waehler"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jo_inge_berget"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_gulbrandsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_botheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mounir_hamoud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erling_knudtzon"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eddie_gustafsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_bjorn_sundgot"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "knut_berg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_henriksen"
         }
       ],
-      "notes": "Bislett brukes som kilde til fysisk treningslære, særlig hurtighet og utholdenhet."
+      "notes": "Bislett er Lyns bane, og brukes i tillegg som kilde til fysisk treningslære, særlig hurtighet og utholdenhet."
     },
     {
       "placeId": "ullevaal_stadion",

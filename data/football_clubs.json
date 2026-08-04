@@ -287,7 +287,8 @@
       "city": "Oslo",
       "tier": "obosligaen",
       "strength": 64,
-      "form": 59
+      "form": 59,
+      "homePlaceId": "bislett_stadion"
     },
     {
       "id": "sogndal",
