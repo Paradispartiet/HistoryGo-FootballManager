@@ -1,0 +1,37 @@
+name: Update Office Mode Isolation Check
+
+on:
+  push:
+    branches:
+      - agent/manager-office-inbox-v1
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Update obsolete portal assertion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          path = Path("scripts/simulate-mode-isolation.mjs")
+          text = path.read_text()
+          old = '  assert.match(app, /\\.manager-portal, #offPitchSignalCard, \\.decision-strip/);'
+          new = '  assert.match(app, /\\.office-command-panel, \\.office-depth, #offPitchSignalCard, \\.decision-strip/);'
+          if old not in text:
+              raise SystemExit("obsolete manager portal assertion not found")
+          path.write_text(text.replace(old, new, 1))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/simulate-mode-isolation.mjs
+          git commit -m "Update office mode-isolation contract"
+          git push origin HEAD:${GITHUB_REF_NAME}
