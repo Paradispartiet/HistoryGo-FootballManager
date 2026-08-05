@@ -70,6 +70,31 @@ body > manager-next-action > .site-footer { grid-row: 6; }
   line-height: 1.35;
 }
 
+/* The legacy onboarding buttons relied on transparent user-agent button
+   backgrounds. Give the route an explicit dark canvas so text contrast is
+   stable in every browser and completed rows do not become faded controls. */
+#leagueOnboardingPanel {
+  background: #080c13;
+  color: var(--text);
+}
+
+#leagueOnboardingPanel .league-onboarding-step {
+  background: #080c13;
+  color: var(--text);
+}
+
+#leagueOnboardingPanel .league-onboarding-steps .is-done .league-onboarding-step {
+  background: #0b1714;
+  opacity: 1;
+}
+
+#leagueOnboardingPanel .league-onboarding-step small,
+#leagueOnboardingPanel .muted-text,
+#leagueOnboardingPanel .authoritative-action-note,
+#leagueOnboardingPanel .eyebrow {
+  color: #bac3ce;
+}
+
 .topbar-team-reading {
   align-content: center;
   min-width: 150px;

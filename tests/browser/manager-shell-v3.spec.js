@@ -8,7 +8,14 @@ const VIEWPORTS = [
 ];
 
 async function openArea(page, name) {
-  await page.getByRole("tab", { name, exact: true }).click();
+  const targetByArea = {
+    Kontor: "dashboard",
+    Lag: "tactics",
+    Kamp: "kamp",
+    Sesong: "statistikk",
+    Klubb: "board"
+  };
+  await page.locator(`.main-nav [role="tab"][data-tab-target="${targetByArea[name]}"]`).click();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -78,13 +85,14 @@ test("trening viser nøyaktig ett utvidet arbeidssteg", async ({ page }) => {
   await page.getByRole("button", { name: "Trening", exact: true }).click();
   const toggles = page.locator("[data-training-step-toggle]");
   await expect(toggles).toHaveCount(3);
-  await expect(toggles.locator('[aria-expanded="true"]')).toHaveCount(1);
+  await expect(page.locator('[data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
 
   await toggles.nth(2).click();
   await expect(toggles.nth(2)).toHaveAttribute("aria-expanded", "true");
-  await expect(toggles.locator('[aria-expanded="true"]')).toHaveCount(1);
+  await expect(page.locator('[data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
   await expect(page.locator("#individualTrainingStepBody")).toBeVisible();
-  await expect(page.locator("#trainingProgramStepBody, #trainingFocusStepBody")).toBeHidden();
+  await expect(page.locator("#trainingProgramStepBody")).toBeHidden();
+  await expect(page.locator("#trainingFocusStepBody")).toBeHidden();
   await expect(page.locator("#modalTrainingProgram, #modalTrainingFocusPick, #modalIndividualTraining")).toHaveCount(0);
 });
 
