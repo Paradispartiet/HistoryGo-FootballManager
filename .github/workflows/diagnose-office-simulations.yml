@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build TypeScript engine
+        run: npm run build
+
       - name: Record first failing simulation
         shell: bash
         run: |
