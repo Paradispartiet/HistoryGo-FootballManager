@@ -296,13 +296,13 @@ const largestClone = Math.max(...signatures.values());
 // uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
 // importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
 // er oppnådd — neste malgenererte import ville dratt den ned igjen uten at noe
-// feilet. Målt: 792 unike av 1008 (79 %), største klon 10.
+// feilet. Målt: 798 unike av 1007 (79 %), største klon 10.
 //
 // Grensa er flyttet fra 0,70 til 0,76 fordi Vålerenga-arven nå er lest fra
 // kilde i stedet for malgenerert. Det ER en ratchet: reverteres VIF til mal,
 // faller andelen til 74,4 %, og vakten feller det. Sto grensa på 0,70 ville
 // nøyaktig den reverteringen passert i stillhet.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.76,
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.78,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Også en ratchet: største klon gikk 12 -> 10 med VIF-kilden, så taket
 // senkes fra 20 til 14.
@@ -312,7 +312,13 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // å reversere Brann til malstyrker koster bare 2 poeng (75 % → 73 %), fordi
 // epoke og nivå fortsatt skiller spillerne. Den følsomme målingen ligger
 // oppstrøms — i styrke-settene selv, som er nettopp det en malimport gjør likt.
-// Målt: 569 unike styrke-sett av 1008 (56 %), 44,4 % med VIF reversert til mal.
+// Målt: 576 unike styrke-sett av 1007 (57 %), 51,7 % med Rosenborg reversert.
+//
+// Rosenborg-kilden ga en mindre gevinst enn Vålerenga-kilden, og det er en
+// egenskap ved kilden, ikke ved importen: RBK-dokumentet har 42 unike
+// styrkesetninger for 156 spillere (27 %), mot VIFs 127 av 127 (100 %). Det
+// grupperer etter rolle — tolv offensive backer deler én setning. Grensa
+// flyttes derfor til 0,55, ikke lenger.
 //
 // Grensa sto på 0,46 med under ett prosentpoengs margin, og de to største
 // kollisjonsgruppene var på 34 og 27 — begge fra Vålerenga- og
@@ -326,7 +332,7 @@ for (const player of players) {
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.52,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.55,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // Og epoken må faktisk slå ut: to spillere med samme posisjon og nivå, men ulik

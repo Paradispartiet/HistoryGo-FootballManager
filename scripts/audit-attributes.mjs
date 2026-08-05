@@ -227,11 +227,32 @@ const statusCounts = [...CLUB_STATUSES].map((status) =>
 check("klubbstatusen skiller mellom spillere",
   Math.max(...statusCounts) / allStatuses.length < 0.6,
   `${Math.round((Math.max(...statusCounts) / allStatuses.length) * 100)} % på største`);
-// En kuratert status skal være et mindretall — ellers er «belagt» en tom merkelapp.
-const curated = withStatus.flatMap((player) => Object.values(player.clubStatusSource || {}))
-  .filter((source) => source === "belagt").length;
-check("kuratert klubbstatus er en reell, avgrenset andel",
-  curated > 50 && curated / allStatuses.length < 0.5, `${curated} av ${allStatuses.length}`);
+// «belagt» skal ikke bli en tom merkelapp. Vakten sto opprinnelig med et TAK:
+// kuratert status måtte være under 50 % av alle. Den premissen holdt ikke.
+// Etter at elleve klubbarver ble lest fra kilder som dokumenterer status —
+// Rosenborg, Vålerenga, Lyn, Stabæk, Sandefjord, KFUM — passerte kuratert
+// andel 50 %, og vakten felte arbeidet den var satt til å beskytte. Et tak som
+// utløses av at jobben lykkes måler feil ting.
+//
+// Det som faktisk må holde er at SKILLET lever: begge verdiene i reell bruk, og
+// på flere baner hver. En blankt omdøpt katalog feller fortsatt vakten, mens en
+// katalog der stadig flere klubber faktisk er kildebelagt, gjør det ikke.
+const statusSources = withStatus.flatMap((player) => Object.values(player.clubStatusSource || {}));
+const curated = statusSources.filter((source) => source === "belagt").length;
+const derived = statusSources.filter((source) => source === "utledet").length;
+check("kuratert klubbstatus er en reell andel", curated > 50, `${curated} av ${statusSources.length}`);
+check("utledet klubbstatus er fortsatt en reell andel",
+  derived / statusSources.length > 0.2, `${derived} av ${statusSources.length}`);
+
+const placesByStatusSource = { belagt: new Set(), utledet: new Set() };
+for (const player of withStatus) {
+  for (const [placeId, source] of Object.entries(player.clubStatusSource || {})) {
+    placesByStatusSource[source]?.add(placeId);
+  }
+}
+check("begge kildegradene er i bruk på flere baner",
+  placesByStatusSource.belagt.size >= 3 && placesByStatusSource.utledet.size >= 3,
+  `belagt på ${placesByStatusSource.belagt.size} baner, utledet på ${placesByStatusSource.utledet.size}`);
 
 // Ingen spillerkatalog forkledd som kode: motorene skal ikke inneholde
 // spillernavn. Det var nettopp det de to profilmodulene gjorde.
@@ -270,7 +291,17 @@ const REVIEWED_NAME_PAIRS = new Map([
   // offensiv midtbane (79), Branns er midtstopper med landskamper (86) — to
   // menn, og RBK-importen disambiguerte seg ut av navnekollisjonen. Suffikset
   // står derfor med vilje; det er ikke en duplikat som Tom Jacobsen var.
-  ["tore pedersen|tore pedersen rbk", "RBKs offensive midtbane mot Branns midtstopper"]
+  ["tore pedersen|tore pedersen rbk", "RBKs offensive midtbane mot Branns midtstopper"],
+  // Mellomnavn-regelen (under) fant disse fem. Alle er ekte forskjellige menn,
+  // og hver av dem er navngitt av sin egen klubbkilde.
+  ["morten gamst pedersen|morten pedersen", "Tromsøs venstreving mot Tromsøs spiss"],
+  ["tom jacobsen|tom r jacobsen", "VIF-kilden sier det selv: midtbanespiller mot keeper"],
+  ["tom helge jacobsen|tom jacobsen", "Sandefjords målrekordholder mot VIF/HamKams midtbanespiller"],
+  ["marcus holmgren pedersen|marcus pedersen", "Moldes høyreback mot VIF/HamKams spiss"],
+  // To spisser fra samme tiår, hver dokumentert av sin klubbkilde: Lyns
+  // Ole Stavrum (121 mål, gullet i 1964) og Moldes Ole Erik Stavrum. Å slå dem
+  // sammen ville smeltet to dokumenterte klubbkarrierer til én.
+  ["ole erik stavrum|ole stavrum", "Lyns spiss mot Moldes spiss"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()
@@ -300,14 +331,32 @@ function editDistanceAtMostOne(a, b) {
 // ut av kollisjonen.
 const bareName = (name) => nameKey(String(name).replace(/\([^)]*\)/g, " "));
 
+// Tredje variant av samme feil, funnet av Rosenborg-kilden: «Rune Jarstein» og
+// «Rune Almenning Jarstein» er Norges landslagskeeper, ført med og uten
+// mellomnavn. Et mellomnavn legger ti tegn til navnet, så verken
+// ett-tegns-regelen eller klubbsuffiks-regelen ser ham.
+//
+// Regelen er derfor: samme fornavn, samme etternavn, ett navneledd i forskjell.
+// Den flagger fem ekte forskjellige menn i tillegg, og de står gjennomgått
+// over — det er prisen, og den er riktig vei å ta feil på.
+function middleNameVariant(a, b) {
+  const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+  if (long.length - short.length !== 1 || short.length < 2) return false;
+  return short[0] === long[0] && short[short.length - 1] === long[long.length - 1];
+}
+
 const keyed = players.map((player) => ({
-  name: player.name, key: nameKey(player.name), bare: bareName(player.name)
+  name: player.name,
+  key: nameKey(player.name),
+  bare: bareName(player.name),
+  words: bareName(player.name).split(" ").filter(Boolean)
 }));
 const nearPairs = [];
 for (let i = 0; i < keyed.length; i += 1) {
   for (let j = i + 1; j < keyed.length; j += 1) {
     const suffixDupe = keyed[i].key !== keyed[j].key && keyed[i].bare === keyed[j].bare;
-    if (!suffixDupe && !editDistanceAtMostOne(keyed[i].key, keyed[j].key)) continue;
+    const middleDupe = middleNameVariant(keyed[i].words, keyed[j].words);
+    if (!suffixDupe && !middleDupe && !editDistanceAtMostOne(keyed[i].key, keyed[j].key)) continue;
     const pair = [keyed[i].key, keyed[j].key].sort().join("|");
     if (REVIEWED_NAME_PAIRS.has(pair)) continue;
     nearPairs.push(`${keyed[i].name} / ${keyed[j].name}`);

@@ -190,7 +190,7 @@ Arven er ikke lenger et eliteserieprivilegium: Lyn ligger i OBOS-ligaen og har
 den femte største arven i katalogen. Det er riktig — arv er klubbens historie,
 ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 131 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 132 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -572,8 +572,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1176 statusoppføringer på 1008
-spillere, 553 belagte og 623 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1176 statusoppføringer på 1007
+spillere, 602 belagte og 574 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
@@ -586,11 +586,11 @@ Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 ```
 
 Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
-sto på én bane. Det er ikke lenger sant for 131 av dem, og KFUM gjorde det
+sto på én bane. Det er ikke lenger sant for 132 av dem, og KFUM gjorde det
 umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
 gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
 er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
-motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Førtiseks
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Førtisju
 spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
 det tallet er større enn null: faller det til null, er migreringen reversert.
 
@@ -625,12 +625,67 @@ HamKam viste seg like sterk: 26 navn fra Pål Jacobsen og Terje Kojedal via Finn
 Thorsen og Jan Åge Fjørtoft til Cato Erstads klubbrekord på 506 kamper.
 Kriteriet er at spilleren har **representert klubben** — det holder.
 
-### Rosenborg: 156 navn, og samme mal
+### Rosenborg: 156 navn, og en kilde som beskriver roller, ikke spillere
 
-Rosenborg-arven er nå den største: 156 navn, fra Odd Iversens 1960- og 70-tall
-gjennom Eggens gullrekke 1992–2004 til dagens lag. Den er generert med **samme
-posisjonsmal som Vålerenga** — kilden oppgir primærposisjon for hvert navn, og
-det er den som styrer arketyper, styrker, behov, roller og taktikkpreferanser.
+Rosenborg-arven er den største: 156 navn, fra Odd Iversens 1960- og 70-tall
+gjennom Eggens gullrekke 1992–2004 til dagens lag. Den var den siste
+malgenererte arven, og kilden kom sist.
+
+**Kilden er målt tynnere enn Vålerengas, og det styrte hele importen.** Den har
+samme form — Styrker, Begrensninger og Kildegrad per navn (A: 63, B: 78, C: 15)
+— men **42 unike styrkesetninger for 156 spillere (27 %)**, mot Vålerengas 127
+av 127 (100 %). Den grupperer etter rolle: tolv offensive backer deler én
+setning, elleve allsidige forsvarsspillere en annen.
+
+Det betyr at kilden ikke uten videre er mer spesifikk enn det katalogen
+allerede hadde. 26 av de 156 er beskrevet **individuelt av en annen
+klubbkilde** — Carew og Steffen Iversen fra Vålerenga-lista, Rushfeldt fra
+Tromsø, Hoftun fra Bodø/Glimt. Regelen ble derfor: **den mer spesifikke kilden
+vinner.**
+
+Tre strategier, målt før valget:
+
+| Strategi | Unike styrke-sett |
+|---|---:|
+| Overskriv alle 156 | 56,3 % |
+| Bare de malgenererte settene | **59,2 %** |
+| Mer spesifikk kilde vinner | 57,8 % |
+
+Den valgte regelen scorer 1,4 poeng lavere enn den beste. Den beste beholdt
+sett for spillere der RBK-dokumentet er **eneste** kilde — Roar Strand, Bent
+Skammelsrud, André Hansen — og der er katalogens gamle verdier mine, ikke
+kildens. Å velge det høyeste tallet ville vært å optimalisere vakten i stedet
+for dataene.
+
+**En delt setning gir tre tokens, ikke fem.** Fem forutsetter at kilden beskrev
+*spilleren*; her beskriver den ofte *rollen*. Det er ikke kosmetikk: med fem
+tokens dekket én delt keeperbeskrivelse hele GK-kravlista, og ni spillere endte
+med **under tre svake sider**. `sim:player-weaknesses` felte det. En profil uten
+svake sider er nettopp utflatingen hele modellen jobber mot — vakten fanget en
+ekte modelleringsfeil, ikke en terskel.
+
+Resultat: profiluniktheten **78,6 % → 79,2 %** og styrke-settene
+**56,4 % → 57,2 %**. Mindre løft enn Vålerenga ga, og det er kildens
+egenskap, ikke importens. Grensene er ratchetet til 0,78 og 0,55.
+
+**«Rune Jarstein» og «Rune Almenning Jarstein» var samme mann** — Norges
+landslagskeeper, ført med mellomnavn på Lerkendal og uten på Ullevaal. Det er
+tredje variant av samme feil, og igjen så vakten den ikke: et mellomnavn legger
+ti tegn til navnet, så verken ett-tegns-regelen eller klubbsuffiks-regelen slår
+inn. Regelen er utvidet med **samme fornavn, samme etternavn, ett navneledd i
+forskjell**. Den flagger fem ekte forskjellige menn i tillegg — Morten Gamst
+Pedersen mot Morten Pedersen, Marcus Holmgren Pedersen mot Marcus Pedersen, Tom
+Helge Jacobsen mot Tom Jacobsen mot Tom R. Jacobsen, og Lyns Ole Stavrum mot
+Moldes Ole Erik Stavrum — som alle står gjennomgått med begrunnelse. Det er
+prisen, og den er riktig vei å ta feil på.
+
+**Én vakt måtte skrives om fordi premissen var utdatert.** `audit:attributes`
+krevde at kuratert klubbstatus var **under 50 %** av alle statusoppføringer,
+ellers var «belagt» en tom merkelapp. Med elleve klubbarver lest fra kilder som
+dokumenterer status passerte andelen 50 %, og vakten felte arbeidet den skulle
+beskytte. Et tak som utløses av at jobben lykkes måler feil ting. Kravet er nå
+at **skillet lever**: begge verdier i reell bruk, hver på minst tre baner. En
+blankt omdøpt katalog feller den fortsatt — bittestet begge veier.
 
 **Atten navn lå allerede i katalogen og ble koblet på, ikke kopiert.** Det er den
 faktiske faren ved en liste på 156: Odd Iversen og Steffen Iversen lå på Intility,

@@ -918,7 +918,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "ullevaal_stadion"
+        "ullevaal_stadion",
+        "lerkendal_stadion"
       ],
       "classHeight": 87,
       "naturalPositions": [
@@ -970,10 +971,12 @@
       "warningWhenMisused": "Jarstein bør få tydelige valg foran seg, enten som trygg linjekeeper eller som keeper i kontrollert oppbygging.",
       "classSource": "belagt",
       "clubStatus": {
-        "ullevaal_stadion": "key_player"
+        "ullevaal_stadion": "key_player",
+        "lerkendal_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "ullevaal_stadion": "utledet"
+        "ullevaal_stadion": "utledet",
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -1863,8 +1866,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "distribution"
+        "positioning",
+        "command_of_area"
       ],
       "needs": [
         "clear_defensive_line",
@@ -2048,10 +2051,10 @@
         "club_professional"
       ],
       "strengths": [
-        "stamina",
+        "late_runs",
+        "work_rate",
         "teamwork",
-        "simple_passing",
-        "determination"
+        "long_shots"
       ],
       "needs": [
         "space_to_run",
@@ -2107,10 +2110,11 @@
         "club_professional"
       ],
       "strengths": [
-        "final_pass",
-        "vision",
+        "passing_range",
         "set_pieces",
-        "tempo_control"
+        "tempo_control",
+        "long_shots",
+        "vision"
       ],
       "needs": [
         "central_space",
@@ -2167,8 +2171,10 @@
         "club_professional"
       ],
       "strengths": [
-        "box_finishing",
+        "late_runs",
         "movement",
+        "composure",
+        "runs_behind",
         "finishing"
       ],
       "needs": [
@@ -2196,7 +2202,7 @@
         "aspmyra_stadion": "key_player"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -3182,8 +3188,8 @@
       ],
       "strengths": [
         "stamina",
-        "overlapping_runs",
-        "positioning"
+        "wide_support",
+        "overlapping_runs"
       ],
       "needs": [
         "width",
@@ -3239,9 +3245,9 @@
         "club_professional"
       ],
       "strengths": [
-        "long_shots",
         "stamina",
-        "set_pieces"
+        "late_runs",
+        "work_rate"
       ],
       "needs": [
         "space_to_run",
@@ -6179,14 +6185,14 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En løpende midtbanespiller i et stillestående lag ser ut som han løper i feil retning.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "sarpsborg_stadion": "squad_profile",
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
         "sarpsborg_stadion": "utledet",
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -9101,8 +9107,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area"
+        "positioning",
+        "reflexes"
       ],
       "needs": [
         "protected_box",
@@ -10121,24 +10127,22 @@
       ],
       "classHeight": 79,
       "naturalPositions": [
-        "CM"
+        "AM"
       ],
       "usablePositions": [
-        "CB"
+        "CM"
       ],
       "poorFits": [
-        "ST",
-        "GK"
+        "CB",
+        "GK",
+        "DM"
       ],
       "archetypeIds": [
-        "box_to_box_runner",
-        "deep_playmaker"
+        "classic_ten"
       ],
       "archetypes": [
-        "controller",
-        "passer",
-        "runner",
-        "balance"
+        "creator",
+        "between_lines"
       ],
       "strengths": [
         "game_reading",
@@ -10146,27 +10150,24 @@
         "leadership"
       ],
       "needs": [
-        "midfield_partner",
+        "central_space",
         "passing_options",
-        "clear_structure"
+        "creative_freedom"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker",
-        "balancing_six"
+        "classic_ten",
+        "free_creator"
       ],
       "likesTactics": [
         "possession",
-        "structured_build_up",
-        "central_control"
+        "central_combinations"
       ],
       "dislikesTactics": [
-        "chaos",
         "long_ball_only",
-        "end_to_end_chaos"
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt.",
-      "classSource": "utledet",
+      "warningWhenMisused": "Jørum trenger frihet mellom ledd og folk som angriper rom foran ham.",
+      "classSource": "belagt",
       "clubStatus": {
         "intility_arena": "club_legend",
         "lerkendal_stadion": "club_legend"
@@ -13759,7 +13760,7 @@
       },
       "clubStatusSource": {
         "intility_arena": "belagt",
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "romssa_arena": "utledet",
         "kfum_arena": "belagt"
       }
@@ -14459,7 +14460,7 @@
       },
       "clubStatusSource": {
         "intility_arena": "belagt",
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "jotun_arena": "belagt"
       }
     },
@@ -15398,10 +15399,11 @@
         "positioning"
       ],
       "strengths": [
-        "defensive_reading",
-        "positioning",
-        "composure",
-        "anticipation"
+        "acceleration",
+        "movement",
+        "ball_carrying",
+        "duels",
+        "leadership"
       ],
       "needs": [
         "clear_defensive_line",
@@ -15465,11 +15467,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "late_runs",
+        "work_rate"
       ],
       "needs": [
         "midfield_partner",
@@ -15534,9 +15534,9 @@
         "crossing"
       ],
       "strengths": [
-        "crossing",
         "stamina",
-        "set_pieces"
+        "wide_support",
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -15597,8 +15597,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "bravery"
+        "positioning",
+        "composure"
       ],
       "needs": [
         "wide_lane",
@@ -15658,9 +15658,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
         "heading",
-        "hold_up_play"
+        "strength",
+        "duels"
       ],
       "needs": [
         "box_service",
@@ -15785,8 +15785,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "command_of_area",
-        "leadership"
+        "positioning",
+        "reflexes"
       ],
       "needs": [
         "protected_box",
@@ -15848,9 +15848,9 @@
         "balance"
       ],
       "strengths": [
-        "positioning",
-        "duels",
-        "teamwork"
+        "first_touch",
+        "passing_range",
+        "set_pieces"
       ],
       "needs": [
         "midfield_partner",
@@ -15913,11 +15913,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -15979,9 +15977,9 @@
         "pace"
       ],
       "strengths": [
-        "positioning",
-        "heading",
-        "leadership"
+        "pace",
+        "runs_behind",
+        "one_vs_one"
       ],
       "needs": [
         "isolation_duels",
@@ -16043,9 +16041,9 @@
         "positioning"
       ],
       "strengths": [
-        "tackling",
-        "duels",
-        "aggression"
+        "teamwork",
+        "positioning",
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -16107,9 +16105,9 @@
         "crossing"
       ],
       "strengths": [
-        "positioning",
-        "crossing",
-        "heading"
+        "stamina",
+        "wide_support",
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -16133,65 +16131,6 @@
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
       "classSource": "belagt",
-      "clubStatus": {
-        "lerkendal_stadion": "elite_career"
-      },
-      "clubStatusSource": {
-        "lerkendal_stadion": "belagt"
-      }
-    },
-    {
-      "id": "rune_almenning_jarstein",
-      "name": "Rune Almenning Jarstein",
-      "nationality": "Norge",
-      "era": "modern",
-      "sourcePlaceIds": [
-        "lerkendal_stadion"
-      ],
-      "classHeight": 83,
-      "naturalPositions": [
-        "GK"
-      ],
-      "usablePositions": [],
-      "poorFits": [
-        "ST",
-        "CM",
-        "LW"
-      ],
-      "archetypeIds": [
-        "line_keeper"
-      ],
-      "archetypes": [
-        "shot_stopper",
-        "command_of_area",
-        "positioning"
-      ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
-      "needs": [
-        "protected_box",
-        "clear_defensive_line",
-        "cover_behind"
-      ],
-      "preferredRoles": [
-        "line_keeper",
-        "sweeperkeeper"
-      ],
-      "likesTactics": [
-        "organised_defence",
-        "compact_block",
-        "protected_box"
-      ],
-      "dislikesTactics": [
-        "chaotic_high_line",
-        "panic_clearances",
-        "no_cover"
-      ],
-      "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
       "clubStatus": {
         "lerkendal_stadion": "elite_career"
       },
@@ -16230,9 +16169,9 @@
         "duel"
       ],
       "strengths": [
-        "tackling",
         "interceptions",
-        "strength"
+        "duels",
+        "pressing"
       ],
       "needs": [
         "clear_task",
@@ -16296,9 +16235,9 @@
         "balance"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "tackling"
+        "first_touch",
+        "vision",
+        "simple_passing"
       ],
       "needs": [
         "midfield_partner",
@@ -16359,10 +16298,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "runs_behind",
+        "late_runs"
       ],
       "needs": [
         "box_service",
@@ -16423,10 +16360,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "runs_behind",
+        "late_runs"
       ],
       "needs": [
         "box_service",
@@ -16487,10 +16422,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "runs_behind",
+        "late_runs"
       ],
       "needs": [
         "box_service",
@@ -16549,9 +16482,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "reflexes"
       ],
       "needs": [
         "protected_box",
@@ -16573,7 +16505,7 @@
         "no_cover"
       ],
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -16611,9 +16543,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "box_presence",
         "movement"
       ],
       "needs": [
@@ -16637,12 +16567,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -16675,11 +16605,9 @@
         "composure"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
-        "first_touch",
-        "chance_creation",
-        "combination_play"
+        "combination_play",
+        "late_runs",
+        "finishing"
       ],
       "needs": [
         "time_on_ball",
@@ -16702,7 +16630,7 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -16738,11 +16666,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "duels",
+        "positioning",
+        "composure"
       ],
       "needs": [
         "wide_lane",
@@ -16765,7 +16691,7 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -16803,11 +16729,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "teamwork",
+        "positioning",
+        "duels"
       ],
       "needs": [
         "wide_lane",
@@ -16830,12 +16754,12 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -16867,11 +16791,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "work_rate",
+        "balance",
+        "positioning"
       ],
       "needs": [
         "midfield_partner",
@@ -16932,10 +16854,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "composure"
       ],
       "needs": [
         "clear_defensive_line",
@@ -16996,10 +16916,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "runs_behind",
+        "late_runs"
       ],
       "needs": [
         "box_service",
@@ -17058,10 +16976,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "wide_support",
+        "runs_behind",
         "crossing"
       ],
       "needs": [
@@ -17124,10 +17040,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "composure"
       ],
       "needs": [
         "clear_defensive_line",
@@ -17188,11 +17102,9 @@
         "composure"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
-        "first_touch",
-        "chance_creation",
-        "combination_play"
+        "combination_play",
+        "late_runs",
+        "finishing"
       ],
       "needs": [
         "time_on_ball",
@@ -17215,12 +17127,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -17253,10 +17165,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "wide_support",
+        "runs_behind",
         "crossing"
       ],
       "needs": [
@@ -17279,12 +17189,12 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -17315,9 +17225,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "reflexes"
       ],
       "needs": [
         "protected_box",
@@ -17339,12 +17248,12 @@
         "no_cover"
       ],
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -17376,11 +17285,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "work_rate",
+        "balance",
+        "positioning"
       ],
       "needs": [
         "midfield_partner",
@@ -17403,7 +17310,7 @@
         "end_to_end_chaos"
       ],
       "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -17441,10 +17348,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "composure"
       ],
       "needs": [
         "clear_defensive_line",
@@ -17505,10 +17410,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "composure"
       ],
       "needs": [
         "clear_defensive_line",
@@ -17531,12 +17434,12 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -17569,11 +17472,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "duels",
+        "positioning",
+        "composure"
       ],
       "needs": [
         "wide_lane",
@@ -17633,11 +17534,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "work_rate",
+        "balance",
+        "positioning"
       ],
       "needs": [
         "midfield_partner",
@@ -17698,10 +17597,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "wide_support",
+        "runs_behind",
         "crossing"
       ],
       "needs": [
@@ -17762,10 +17659,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "wide_support",
+        "runs_behind",
         "crossing"
       ],
       "needs": [
@@ -17793,7 +17688,7 @@
         "lerkendal_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -17857,7 +17752,7 @@
         "aspmyra_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -17891,9 +17786,9 @@
         "target"
       ],
       "strengths": [
-        "dribbling",
-        "crossing",
-        "acceleration"
+        "box_finishing",
+        "runs_behind",
+        "late_runs"
       ],
       "needs": [
         "box_service",
@@ -17956,11 +17851,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "late_runs",
+        "work_rate"
       ],
       "needs": [
         "midfield_partner",
@@ -17983,7 +17876,7 @@
         "end_to_end_chaos"
       ],
       "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -18020,11 +17913,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18047,7 +17938,7 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -18086,11 +17977,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18152,11 +18041,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "pace",
+        "runs_behind",
+        "one_vs_one"
       ],
       "needs": [
         "box_service",
@@ -18219,10 +18106,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "aggression",
+        "heading"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18245,7 +18130,7 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -18284,7 +18169,7 @@
       "strengths": [
         "heading",
         "duels",
-        "strength"
+        "blocking"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18307,7 +18192,7 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -18346,9 +18231,9 @@
         "positioning"
       ],
       "strengths": [
+        "defensive_reading",
         "positioning",
-        "duels",
-        "pace"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18407,11 +18292,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
         "stamina",
         "wide_support",
-        "positioning"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -18434,7 +18317,7 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -18472,11 +18355,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "teamwork",
+        "positioning",
+        "duels"
       ],
       "needs": [
         "wide_lane",
@@ -18499,7 +18380,7 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -18675,9 +18556,9 @@
         "composure"
       ],
       "strengths": [
-        "final_pass",
         "first_touch",
-        "vision"
+        "passing_range",
+        "set_pieces"
       ],
       "needs": [
         "time_on_ball",
@@ -18700,7 +18581,7 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "golden_era_core"
       },
@@ -18738,9 +18619,9 @@
         "positioning"
       ],
       "strengths": [
-        "leadership",
-        "positioning",
-        "defensive_reading"
+        "heading",
+        "duels",
+        "blocking"
       ],
       "needs": [
         "clear_defensive_line",
@@ -18836,7 +18717,7 @@
         "aspmyra_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -18871,11 +18752,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "late_runs",
+        "work_rate"
       ],
       "needs": [
         "midfield_partner",
@@ -18940,9 +18819,9 @@
         "crossing"
       ],
       "strengths": [
-        "pace",
-        "overlapping_runs",
-        "stamina"
+        "stamina",
+        "wide_support",
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -19004,11 +18883,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "teamwork",
+        "positioning",
+        "duels"
       ],
       "needs": [
         "wide_lane",
@@ -19071,9 +18948,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "box_presence",
         "movement"
       ],
       "needs": [
@@ -19097,7 +18972,7 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "golden_era_core"
       },
@@ -19133,10 +19008,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "first_touch",
+        "combination_play",
         "crossing"
       ],
       "needs": [
@@ -19159,7 +19032,7 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "golden_era_core"
       },
@@ -19195,10 +19068,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "first_touch",
+        "combination_play",
         "crossing"
       ],
       "needs": [
@@ -19221,7 +19092,7 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "golden_era_core"
       },
@@ -19259,11 +19130,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "pace",
+        "runs_behind",
+        "one_vs_one"
       ],
       "needs": [
         "isolation_duels",
@@ -19285,12 +19154,12 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -19324,11 +19193,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "heading",
+        "strength",
+        "duels"
       ],
       "needs": [
         "box_service",
@@ -19357,7 +19224,7 @@
         "brann_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "brann_stadion": "utledet"
       }
     },
@@ -19389,9 +19256,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "reflexes"
       ],
       "needs": [
         "protected_box",
@@ -19413,7 +19279,7 @@
         "no_cover"
       ],
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "golden_era_core"
       },
@@ -19449,9 +19315,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "command_of_area"
       ],
       "needs": [
         "protected_box",
@@ -19473,7 +19338,7 @@
         "no_cover"
       ],
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "golden_era_core"
       },
@@ -19510,9 +19375,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
+        "strength",
         "heading",
-        "movement"
+        "hold_up_play"
       ],
       "needs": [
         "box_service",
@@ -19573,9 +19438,11 @@
         "pace"
       ],
       "strengths": [
+        "strength",
+        "pace",
+        "ball_carrying",
         "acceleration",
-        "dribbling",
-        "crossing"
+        "teamwork"
       ],
       "needs": [
         "isolation_duels",
@@ -19597,7 +19464,7 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "elite_career"
       },
@@ -19633,9 +19500,9 @@
         "crossing"
       ],
       "strengths": [
-        "positioning",
-        "crossing",
-        "concentration"
+        "stamina",
+        "wide_support",
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -19658,7 +19525,7 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -19694,11 +19561,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
         "stamina",
         "wide_support",
-        "positioning"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -19721,12 +19586,12 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -19757,11 +19622,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
         "stamina",
         "wide_support",
-        "positioning"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -19784,12 +19647,12 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -19822,11 +19685,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
         "stamina",
         "wide_support",
-        "positioning"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -19849,12 +19710,12 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -19888,11 +19749,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -19915,12 +19774,12 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -19953,10 +19812,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning",
-        "reading_game",
-        "blocking"
+        "aggression",
+        "heading"
       ],
       "needs": [
         "clear_defensive_line",
@@ -19979,12 +19836,12 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20017,10 +19874,8 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "reading_game",
+        "duels",
         "blocking"
       ],
       "needs": [
@@ -20050,7 +19905,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "romssa_arena": "utledet"
       }
     },
@@ -20083,11 +19938,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "defensive_reading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -20110,12 +19963,12 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20147,11 +20000,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "defensive_reading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -20174,12 +20025,12 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20214,7 +20065,7 @@
       "strengths": [
         "heading",
         "duels",
-        "set_pieces"
+        "blocking"
       ],
       "needs": [
         "clear_defensive_line",
@@ -20276,10 +20127,8 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "reading_game",
+        "duels",
         "blocking"
       ],
       "needs": [
@@ -20303,12 +20152,12 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20340,10 +20189,8 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
         "heading",
-        "positioning",
-        "reading_game",
+        "duels",
         "blocking"
       ],
       "needs": [
@@ -20367,12 +20214,12 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20407,7 +20254,7 @@
       "strengths": [
         "heading",
         "duels",
-        "positioning"
+        "blocking"
       ],
       "needs": [
         "clear_defensive_line",
@@ -20436,7 +20283,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "aker_stadion": "utledet"
       }
     },
@@ -20468,9 +20315,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "reflexes"
       ],
       "needs": [
         "protected_box",
@@ -20492,12 +20338,12 @@
         "no_cover"
       ],
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20528,9 +20374,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "reflexes"
       ],
       "needs": [
         "protected_box",
@@ -20552,12 +20397,12 @@
         "no_cover"
       ],
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20588,11 +20433,11 @@
         "composure"
       ],
       "strengths": [
+        "set_pieces",
+        "long_shots",
+        "passing_range",
         "vision",
-        "final_pass",
-        "first_touch",
-        "chance_creation",
-        "combination_play"
+        "late_runs"
       ],
       "needs": [
         "time_on_ball",
@@ -20615,12 +20460,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -20717,11 +20562,9 @@
         "composure"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
         "first_touch",
-        "chance_creation",
-        "combination_play"
+        "passing_range",
+        "set_pieces"
       ],
       "needs": [
         "time_on_ball",
@@ -20744,7 +20587,7 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "elite_career"
       },
@@ -20782,11 +20625,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "late_runs",
+        "work_rate"
       ],
       "needs": [
         "midfield_partner",
@@ -20815,7 +20656,7 @@
         "nadderud_stadion": "academy_export"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "nadderud_stadion": "belagt"
       }
     },
@@ -20848,9 +20689,9 @@
         "balance"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "teamwork"
+        "first_touch",
+        "vision",
+        "simple_passing"
       ],
       "needs": [
         "midfield_partner",
@@ -20910,8 +20751,8 @@
       ],
       "strengths": [
         "passing_range",
-        "tempo_control",
-        "simple_passing"
+        "vision",
+        "tempo_control"
       ],
       "needs": [
         "clear_task",
@@ -20972,11 +20813,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
         "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "late_runs",
+        "work_rate"
       ],
       "needs": [
         "midfield_partner",
@@ -21005,7 +20844,7 @@
         "aspmyra_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -21037,11 +20876,9 @@
         "duel"
       ],
       "strengths": [
-        "positioning",
         "interceptions",
         "duels",
-        "simple_passing",
-        "tackling"
+        "pressing"
       ],
       "needs": [
         "clear_task",
@@ -21064,12 +20901,12 @@
         "isolated_midfield"
       ],
       "warningWhenMisused": "En sekser alene foran en høy linje får et rom han ikke kan dekke.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21100,9 +20937,11 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
+        "first_touch",
+        "long_shots",
         "crossing",
-        "long_shots"
+        "set_pieces",
+        "finishing"
       ],
       "needs": [
         "isolation_duels",
@@ -21160,11 +20999,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "pace",
+        "runs_behind",
+        "one_vs_one"
       ],
       "needs": [
         "isolation_duels",
@@ -21186,12 +21023,12 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21223,10 +21060,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "first_touch",
+        "combination_play",
         "crossing"
       ],
       "needs": [
@@ -21255,7 +21090,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "lyse_arena": "utledet"
       }
     },
@@ -21289,10 +21124,8 @@
         "composure"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
+        "movement",
         "first_touch",
-        "chance_creation",
         "combination_play"
       ],
       "needs": [
@@ -21316,12 +21149,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21354,10 +21187,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "first_touch",
+        "combination_play",
         "crossing"
       ],
       "needs": [
@@ -21380,12 +21211,12 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21418,10 +21249,8 @@
         "composure"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
+        "movement",
         "first_touch",
-        "chance_creation",
         "combination_play"
       ],
       "needs": [
@@ -21445,12 +21274,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21481,10 +21310,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
+        "first_touch",
+        "combination_play",
         "crossing"
       ],
       "needs": [
@@ -21507,12 +21334,12 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21543,11 +21370,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "pace",
+        "runs_behind",
+        "one_vs_one"
       ],
       "needs": [
         "isolation_duels",
@@ -21569,12 +21394,12 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21606,11 +21431,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "finishing",
+        "movement",
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -21633,7 +21456,7 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
       },
@@ -21670,11 +21493,8 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "pace",
+        "runs_behind"
       ],
       "needs": [
         "box_service",
@@ -21697,12 +21517,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21734,9 +21554,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
+        "heading",
         "strength",
-        "movement"
+        "duels"
       ],
       "needs": [
         "box_service",
@@ -21797,9 +21617,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "box_presence",
         "movement"
       ],
       "needs": [
@@ -21823,12 +21641,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -21860,9 +21678,9 @@
         "target"
       ],
       "strengths": [
+        "strength",
         "heading",
-        "hold_up_play",
-        "box_finishing"
+        "hold_up_play"
       ],
       "needs": [
         "box_service",
@@ -21923,11 +21741,11 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "wide_support",
+        "long_shots",
+        "combination_play",
+        "finishing",
+        "teamwork"
       ],
       "needs": [
         "isolation_duels",
@@ -21986,9 +21804,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
+        "finishing",
         "movement",
-        "heading"
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -22050,11 +21868,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "movement",
+        "first_touch",
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -22077,12 +21893,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -22114,11 +21930,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "finishing",
+        "movement",
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -22141,12 +21955,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -22181,8 +21995,7 @@
       ],
       "strengths": [
         "pace",
-        "acceleration",
-        "box_finishing"
+        "runs_behind"
       ],
       "needs": [
         "isolation_duels",
@@ -22210,7 +22023,7 @@
         "aspmyra_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -22245,11 +22058,8 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "pace",
+        "runs_behind"
       ],
       "needs": [
         "isolation_duels",
@@ -22277,7 +22087,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet",
+        "lerkendal_stadion": "belagt",
         "romssa_arena": "utledet"
       }
     },
@@ -22312,11 +22122,11 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "vision",
+        "first_touch",
+        "late_runs",
+        "ball_carrying",
+        "passing_range"
       ],
       "needs": [
         "midfield_partner",
@@ -22378,10 +22188,10 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement",
+        "runs_behind",
+        "ball_carrying",
+        "wide_support",
         "crossing"
       ],
       "needs": [
@@ -22442,11 +22252,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "pace",
+        "runs_behind",
+        "one_vs_one"
       ],
       "needs": [
         "isolation_duels",
@@ -22468,7 +22276,7 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -22507,9 +22315,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
+        "finishing",
         "movement",
-        "first_touch"
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -22572,9 +22380,8 @@
       ],
       "strengths": [
         "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "positioning"
+        "positioning",
+        "command_of_area"
       ],
       "needs": [
         "protected_box",
@@ -22596,7 +22403,7 @@
         "no_cover"
       ],
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -22635,11 +22442,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -22662,7 +22467,7 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -22698,11 +22503,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
         "stamina",
         "wide_support",
-        "positioning"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -22725,7 +22528,7 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -22763,11 +22566,9 @@
         "composure"
       ],
       "strengths": [
-        "vision",
-        "final_pass",
         "first_touch",
-        "chance_creation",
-        "combination_play"
+        "passing_range",
+        "set_pieces"
       ],
       "needs": [
         "time_on_ball",
@@ -22790,12 +22591,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -22828,11 +22629,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "teamwork",
+        "positioning",
+        "duels"
       ],
       "needs": [
         "wide_lane",
@@ -22855,7 +22654,7 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -22894,11 +22693,9 @@
         "balance"
       ],
       "strengths": [
-        "passing_range",
-        "stamina",
-        "positioning",
-        "simple_passing",
-        "tempo_control"
+        "first_touch",
+        "vision",
+        "simple_passing"
       ],
       "needs": [
         "midfield_partner",
@@ -22921,7 +22718,7 @@
         "end_to_end_chaos"
       ],
       "warningWhenMisused": "En sentral midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -22958,11 +22755,9 @@
         "positioning"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "defensive_reading",
         "positioning",
-        "reading_game",
-        "blocking"
+        "duels"
       ],
       "needs": [
         "clear_defensive_line",
@@ -22985,7 +22780,7 @@
         "panic_clearances"
       ],
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -23021,11 +22816,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "pace",
+        "runs_behind",
+        "one_vs_one"
       ],
       "needs": [
         "isolation_duels",
@@ -23047,7 +22840,7 @@
         "slow_possession_without_width"
       ],
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export"
       },
@@ -23085,9 +22878,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "box_presence",
         "movement"
       ],
       "needs": [
@@ -23111,12 +22902,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -23148,11 +22939,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "strength",
+        "heading",
+        "hold_up_play"
       ],
       "needs": [
         "box_service",
@@ -23175,12 +22964,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -23212,11 +23001,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "movement"
+        "heading",
+        "strength",
+        "duels"
       ],
       "needs": [
         "box_service",
@@ -23239,12 +23026,12 @@
         "deep_defensive_role"
       ],
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       }
     },
     {
@@ -23278,9 +23065,9 @@
         "balance"
       ],
       "strengths": [
-        "dribbling",
-        "crossing",
-        "acceleration"
+        "interceptions",
+        "duels",
+        "pressing"
       ],
       "needs": [
         "midfield_partner",
@@ -23342,9 +23129,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
+        "box_presence",
         "movement"
       ],
       "needs": [
@@ -23409,11 +23194,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina",
-        "wide_support",
-        "positioning"
+        "teamwork",
+        "positioning",
+        "duels"
       ],
       "needs": [
         "wide_lane",
@@ -23474,11 +23257,9 @@
         "duel"
       ],
       "strengths": [
-        "positioning",
         "interceptions",
         "duels",
-        "simple_passing",
-        "tackling"
+        "pressing"
       ],
       "needs": [
         "clear_task",
@@ -23501,7 +23282,7 @@
         "isolated_midfield"
       ],
       "warningWhenMisused": "En sekser alene foran en høy linje får et rom han ikke kan dekke.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "elite_career"
       },
@@ -23538,9 +23319,9 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "determination",
-        "strength"
+        "finishing",
+        "movement",
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -23599,11 +23380,9 @@
         "crossing"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
         "stamina",
         "wide_support",
-        "positioning"
+        "overlapping_runs"
       ],
       "needs": [
         "wide_lane",
@@ -23626,7 +23405,7 @@
         "isolated_wide_defending"
       ],
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "utledet",
+      "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "short_stay_star"
       },
@@ -23665,11 +23444,9 @@
         "pace"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement",
-        "crossing"
+        "stamina",
+        "teamwork",
+        "wide_support"
       ],
       "needs": [
         "isolation_duels",

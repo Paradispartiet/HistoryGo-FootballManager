@@ -323,15 +323,23 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før | Etter | Grense |
-|---|---:|---:|---:|
-| Unike profiler | 73,7 % | **78,6 %** | 0,76 |
-| Unike styrke-sett | 46,9 % | **56,4 %** | 0,52 |
-| Største klon | 12 | **10** | ≤ 14 |
+| | Før VIF | Etter VIF | Etter RBK | Grense |
+|---|---:|---:|---:|---:|
+| Unike profiler | 73,7 % | 78,6 % | **79,2 %** | 0,78 |
+| Unike styrke-sett | 46,9 % | 56,4 % | **57,2 %** | 0,55 |
+| Største klon | 12 | 10 | **10** | ≤ 14 |
 
-Bitetesten er å reversere VIF til mal: da faller de til 74,4 % og 44,4 %, og
-begge vaktene feller det. Sto grensene der de sto, ville nøyaktig den
-reverteringen passert i stillhet.
+Bitetesten er å reversere klubben til mal: VIF falt til 74,4 % og 44,4 %, RBK
+til 77,2 % og 51,7 %, og vaktene feller begge. Sto grensene der de sto, ville
+nøyaktig de reverteringene passert i stillhet.
+
+**Rosenborg ga et mye mindre løft enn Vålerenga, og det er kildens egenskap.**
+VIF-dokumentet har 127 unike styrkesetninger for 127 spillere; RBK-dokumentet
+har 42 for 156. Det grupperer etter rolle — tolv offensive backer deler én
+setning. En delt setning gir derfor tre tokens og ikke fem: med fem dekket én
+delt keeperbeskrivelse hele GK-kravlista, og ni spillere endte med under tre
+svake sider.  felte det, og det var en ekte
+modelleringsfeil, ikke en for streng terskel.
 
 En ting måtte holdes ren for at tallene skal bety noe. Vokabularet har aliaser —
 `power` og `physical_presence` peker begge på `strength` — og lagres aliasene
