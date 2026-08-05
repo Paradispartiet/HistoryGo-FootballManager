@@ -296,24 +296,36 @@ const largestClone = Math.max(...signatures.values());
 // uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
 // importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
 // er oppnådd — neste malgenererte import ville dratt den ned igjen uten at noe
-// feilet. Målt: 883 unike av 1117 (79 %), største klon 9.
+// feilet. Målt: 914 unike av 1117 (82 %), største klon 12.
 //
 // Grensa er flyttet fra 0,70 til 0,76 fordi Vålerenga-arven nå er lest fra
 // kilde i stedet for malgenerert. Det ER en ratchet: reverteres VIF til mal,
 // faller andelen til 74,4 %, og vakten feller det. Sto grensa på 0,70 ville
 // nøyaktig den reverteringen passert i stillhet.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.78,
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.81,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
-// Også en ratchet: største klon gikk 12 -> 10 med VIF-kilden, så taket
-// senkes fra 20 til 14.
-check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 12, String(largestClone));
+// Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
+// klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
+// beskriver med de samme tre ordene — hodespill, duellspill,
+// posisjonering — og som ligger på samme klassenivå. Det er en grense for
+// hva kildene sier, ikke en malimport, og et tak på 12 ville felt neste
+// ekte import av en midtstopper. Det som faktisk fanger en malgenerert arv
+// er per-klubb-målingen lenger ned.
+check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, String(largestClone));
 
 // Profilandelen alene er for treg til å fange EN klubb importert på mal. Målt:
 // å reversere Brann til malstyrker koster bare 2 poeng (75 % → 73 %), fordi
 // epoke og nivå fortsatt skiller spillerne. Den følsomme målingen ligger
 // oppstrøms — i styrke-settene selv, som er nettopp det en malimport gjør likt.
-// Målt: 637 unike styrke-sett av 1117 (57 %). Viking-kilden løftet den fra
-// 54,1 % til 57,0 % og fjernet den nest største malgjelden i katalogen.
+// Målt: 576 unike styrke-sett av 1117 (51,6 %) — og det tallet FALT da
+// målingen ble ærlig. Settene sorteres nå før de telles, fordi tolv
+// midtstoppere med «heading, duels, positioning» i ulik rekkefølge er
+// bit-identiske profiler. Ti prosentpoeng av den gamle «variasjonen» var
+// permutasjoner, og grensene på 0,52 og 0,55 hvilte delvis på den støyen.
+//
+// Grensa er derfor satt på nytt fra bitetester på den ærlige målingen:
+// reverteres Tromsø til mal faller den til 44,6 %, Vålerenga til 41,5 %
+// og Rosenborg til 48,0 %. 0,49 feller alle tre, med 2,6 poengs margin.
 //
 // Rosenborg-kilden ga en mindre gevinst enn Vålerenga-kilden, og det er en
 // egenskap ved kilden, ikke ved importen: RBK-dokumentet har 42 unike
@@ -327,13 +339,18 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 12, Strin
 // VIF-kilden kom, begge gruppene er borte, og grensa flyttes til 0,52.
 // Rosenborg står igjen som den siste malimporten; når den lista kommer,
 // skal grensa opp igjen.
+// Settet SORTERES før det telles. Uten det teller målingen permutasjoner som
+// variasjon: tolv moderne midtstoppere har «heading, duels, positioning» i
+// ulik rekkefølge fra hver sin klubbkilde, og de er bit-identiske profiler.
+// Rekkefølgen betyr ingenting for utledningen, så den skal ikke bety noe for
+// målingen heller — ellers pynter tallet på seg selv.
 const strengthSets = new Map();
 for (const player of players) {
-  const key = JSON.stringify(player.strengths);
+  const key = JSON.stringify([...player.strengths].sort());
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.55,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.49,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // ---------------------------------------------------------------------------
@@ -384,16 +401,12 @@ for (const [placeId, squad] of heritagePlaces) {
 check("hver klubbarv er målt mot posisjonsmalen", malandeler.length >= 10,
   `${malandeler.length} arver med minst 20 spillere`);
 
-// Tromsø bærer fortsatt malgenerert gjeld, og tallet er MÅLT, ikke satt.
-// Viking sto her med 0,32 til kildelista kom; da falt den til 0 av 70, og
-// raden er fjernet i stedet for å bli stående som et tak ingen trenger.
-// Retro-fitten som leste styrker inn i de fem første importene dekket bare de
-// navnene kildene faktisk beskrev — resten ble stående. Grensene her er tak som
-// bare kan gå NED: kommer Tromsø- eller Viking-lista med beskrivelser, skal
-// tallet under settes til det nye, lavere målet.
-const KJENT_MALGJELD = {
-  romssa_arena: 0.48    // Tromsø: 38 av 81 (47 %) — den siste arven uten kildeliste
-};
+// Ingen arv bærer lenger malgenerert gjeld. Tabellen sto med Tromsø (38 av 81)
+// og Viking (22 av 70) da vakten ble skrevet; begge kildelistene kom, og begge
+// falt til null. Den står tom med vilje — kommer en ny klubb inn på mal, er
+// taket 10 % for alle, og det feller den.
+const KJENT_MALGJELD = {};
+
 for (const [placeId, andel, antall, total] of malandeler) {
   const tak = KJENT_MALGJELD[placeId] ?? 0.1;
   check(`${placeId} er ikke malgenerert`, andel < tak,

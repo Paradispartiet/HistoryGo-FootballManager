@@ -323,11 +323,29 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter VIF | Etter RBK | Etter SIF+VIK | Grense |
-|---|---:|---:|---:|---:|---:|
-| Unike profiler | 73,7 % | 78,6 % | 79,2 % | **79,1 %** | 0,78 |
-| Unike styrke-sett | 46,9 % | 56,4 % | 57,2 % | **57,0 %** | 0,55 |
-| Største klon | 12 | 10 | 10 | **9** | ≤ 12 |
+| | Før VIF | Etter alle sju kildene | Grense |
+|---|---:|---:|---:|
+| Unike profiler | 73,7 % | **81,8 %** | 0,81 |
+| Unike styrke-sett | 46,9 %* | **51,6 %** | 0,49 |
+| Største klon | 12 | 12 | ≤ 14 |
+
+\* Tallene for styrke-sett er ikke sammenlignbare på tvers av kolonnene.
+Målingen ble endret da Tromsø kom inn: settene **sorteres** nå før de telles.
+Uten sortering teller `[heading,duels,positioning]` og
+`[duels,positioning,heading]` som to unike sett — og tolv moderne
+midtstoppere har nøyaktig de tre ordene fra tolv forskjellige klubbkilder, i
+ulik rekkefølge. Rekkefølgen betyr ingenting for utledningen, så den skal ikke
+bety noe for målingen.
+
+**Ti prosentpoeng av den gamle «variasjonen» var permutasjoner** (62,0 % →
+51,6 %), og grensene på 0,52 og 0,55 hvilte delvis på den støyen. Det er samme
+feil som alias-kanoniseringen ble innført for å hindre, ett ledd lenger ut.
+Grensa er satt på nytt fra bitetester på den ærlige målingen: Tromsø til mal
+gir 44,6 %, Vålerenga 41,5 %, Rosenborg 48,0 %, så 0,49 feller alle tre.
+
+Klontaket er **hevet** fra 12 til 14. De tolv midtstopperne er en grense for
+hva kildene sier, ikke en malimport, og et tak på 12 ville felt neste ekte
+import av en midtstopper.
 
 Strømsgodset senket begge andelene (kilden har 48 unike styrkesetninger for 144
 spillere), Viking løftet dem igjen. Netto står de på stedet hvil mens katalogen

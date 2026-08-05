@@ -1654,9 +1654,10 @@
       ],
       "strengths": [
         "heading",
+        "agility",
+        "first_touch",
         "finishing",
-        "hold_up_play",
-        "box_presence"
+        "combination_play"
       ],
       "needs": [
         "crossing",
@@ -3801,10 +3802,10 @@
       ],
       "strengths": [
         "box_finishing",
-        "box_movement",
+        "composure",
         "heading",
-        "positioning",
-        "hold_up_play"
+        "hold_up_play",
+        "game_reading"
       ],
       "needs": [
         "box_service",
@@ -3829,7 +3830,7 @@
       "warningWhenMisused": "Uten innlegg og tilførsel i boksen står han stille — han levde på service, ikke på å skape selv.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "key_player",
+        "romssa_arena": "club_icon",
         "lerkendal_stadion": "key_player"
       },
       "clubStatusSource": {
@@ -3869,12 +3870,11 @@
         "dribbler"
       ],
       "strengths": [
+        "first_touch",
+        "set_pieces",
         "crossing",
-        "final_pass",
-        "dribbling",
-        "wide_movement",
-        "passing_range",
-        "chance_creation"
+        "long_shots",
+        "work_rate"
       ],
       "needs": [
         "wide_lane",
@@ -3899,10 +3899,10 @@
       "warningWhenMisused": "Klemmer du ham inn i en smal form, forsvinner både innlegget og siste pasning.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "key_player"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -3935,11 +3935,11 @@
         "composure"
       ],
       "strengths": [
-        "link_play",
+        "box_presence",
         "box_finishing",
-        "hold_up_play",
-        "first_touch",
-        "composure"
+        "heading",
+        "strength",
+        "finishing"
       ],
       "needs": [
         "close_support",
@@ -3964,10 +3964,10 @@
       "warningWhenMisused": "Alene på topp uten støtte blir han en spiss uten fotball — han er et bindeledd først.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -8109,11 +8109,10 @@
         "target"
       ],
       "strengths": [
-        "box_finishing",
-        "box_movement",
-        "positioning",
-        "hold_up_play",
-        "composure"
+        "finishing",
+        "box_presence",
+        "pressing",
+        "work_rate"
       ],
       "needs": [
         "box_service",
@@ -8140,13 +8139,13 @@
       "clubStatus": {
         "briskeby_stadion": "club_profile",
         "araasen_stadion": "club_profile",
-        "romssa_arena": "club_profile",
+        "romssa_arena": "elite_career",
         "marienlyst_stadion": "golden_era_core"
       },
       "clubStatusSource": {
         "briskeby_stadion": "utledet",
         "araasen_stadion": "utledet",
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "marienlyst_stadion": "belagt"
       }
     },
@@ -12662,10 +12661,10 @@
         "target"
       ],
       "strengths": [
+        "finishing",
         "strength",
         "heading",
-        "finishing",
-        "hold_up_play"
+        "box_presence"
       ],
       "needs": [
         "box_service",
@@ -12691,7 +12690,7 @@
       "classSource": "belagt",
       "clubStatus": {
         "intility_arena": "short_stay_star",
-        "romssa_arena": "short_stay_star"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
         "intility_arena": "belagt",
@@ -13739,9 +13738,9 @@
       ],
       "strengths": [
         "reflexes",
-        "shot_stopping",
-        "game_reading",
-        "leadership"
+        "one_vs_one",
+        "bravery",
+        "determination"
       ],
       "needs": [
         "protected_box",
@@ -13767,13 +13766,13 @@
       "clubStatus": {
         "intility_arena": "club_profile",
         "lerkendal_stadion": "club_profile",
-        "romssa_arena": "club_profile",
+        "romssa_arena": "elite_career",
         "kfum_arena": "short_stay_star"
       },
       "clubStatusSource": {
         "intility_arena": "belagt",
         "lerkendal_stadion": "belagt",
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "kfum_arena": "belagt"
       }
     },
@@ -18507,9 +18506,10 @@
         "balance"
       ],
       "strengths": [
+        "first_touch",
         "vision",
-        "final_pass",
-        "first_touch"
+        "dribbling",
+        "chance_creation"
       ],
       "needs": [
         "midfield_partner",
@@ -18535,7 +18535,7 @@
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "golden_era_core",
-        "romssa_arena": "golden_era_core",
+        "romssa_arena": "club_profile",
         "aspmyra_stadion": "golden_era_core"
       },
       "clubStatusSource": {
@@ -19902,9 +19902,11 @@
         "positioning"
       ],
       "strengths": [
-        "heading",
         "duels",
-        "blocking"
+        "positioning",
+        "long_shots",
+        "leadership",
+        "heading"
       ],
       "needs": [
         "clear_defensive_line",
@@ -19930,11 +19932,11 @@
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_profile",
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt",
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -20093,7 +20095,9 @@
       "strengths": [
         "heading",
         "duels",
-        "blocking"
+        "positioning",
+        "leadership",
+        "set_pieces"
       ],
       "needs": [
         "clear_defensive_line",
@@ -20119,7 +20123,7 @@
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend",
-        "romssa_arena": "club_legend"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt",
@@ -22070,10 +22074,10 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "RW"
+        "ST"
       ],
       "usablePositions": [
-        "ST"
+        "RW"
       ],
       "poorFits": [
         "CB",
@@ -22081,38 +22085,34 @@
         "DM"
       ],
       "archetypeIds": [
-        "wide_dribbler_right"
+        "poacher"
       ],
       "archetypes": [
-        "dribbler",
-        "wide_creator",
-        "one_vs_one",
-        "pace"
+        "box_presence"
       ],
       "strengths": [
         "pace",
-        "runs_behind"
+        "runs_behind",
+        "agility",
+        "finishing",
+        "combination_play"
       ],
       "needs": [
-        "isolation_duels",
-        "wide_lane",
-        "space_to_run"
+        "box_service",
+        "runners_inside"
       ],
       "preferredRoles": [
-        "wide_dribbler",
-        "inverted_winger"
+        "poacher",
+        "complete_forward"
       ],
       "likesTactics": [
-        "isolate_wingers",
-        "wide_attacks",
-        "high_width"
+        "crossing",
+        "fast_transitions"
       ],
       "dislikesTactics": [
-        "narrow_shape",
-        "no_wide_support",
-        "slow_possession_without_width"
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
+      "warningWhenMisused": "Moldskred blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_profile",
@@ -22120,7 +22120,7 @@
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt",
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -23479,8 +23479,10 @@
         "pace"
       ],
       "strengths": [
-        "stamina",
-        "teamwork",
+        "pace",
+        "first_touch",
+        "runs_behind",
+        "crossing",
         "wide_support"
       ],
       "needs": [
@@ -23506,7 +23508,7 @@
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "short_stay_star",
-        "romssa_arena": "short_stay_star"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt",
@@ -26353,10 +26355,11 @@
         "wide_support"
       ],
       "strengths": [
+        "pace",
+        "aggression",
         "duels",
-        "stamina",
-        "positioning",
-        "tackling"
+        "wide_support",
+        "game_reading"
       ],
       "needs": [
         "wide_lane",
@@ -26376,12 +26379,12 @@
       "classSource": "belagt",
       "clubStatus": {
         "lyse_arena": "key_player",
-        "romssa_arena": "key_player",
+        "romssa_arena": "elite_career",
         "aker_stadion": "key_player"
       },
       "clubStatusSource": {
         "lyse_arena": "belagt",
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "aker_stadion": "utledet"
       }
     },
@@ -32407,9 +32410,11 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "tackling",
-        "simple_passing"
+        "first_touch",
+        "passing_range",
+        "vision",
+        "composure",
+        "tempo_control"
       ],
       "needs": [
         "midfield_partner",
@@ -32428,10 +32433,10 @@
       "warningWhenMisused": "Jenssen forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "key_player"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -32444,49 +32449,52 @@
       ],
       "classHeight": 84,
       "naturalPositions": [
-        "ST"
+        "CM"
       ],
       "usablePositions": [
-        "AM"
+        "DM",
+        "AM",
+        "ST"
       ],
       "poorFits": [
-        "CB",
         "GK",
-        "DM"
+        "CB",
+        "LW"
       ],
       "archetypeIds": [
-        "poacher"
+        "box_to_box"
       ],
       "archetypes": [
-        "box_presence"
+        "tempo_setter"
       ],
       "strengths": [
-        "box_finishing",
-        "positioning",
-        "stamina"
+        "game_reading",
+        "balance",
+        "ball_carrying",
+        "duels",
+        "heading"
       ],
       "needs": [
-        "box_service",
-        "runners_inside"
+        "midfield_partner",
+        "passing_options"
       ],
       "preferredRoles": [
-        "poacher",
-        "complete_forward"
+        "box_to_box",
+        "deep_playmaker"
       ],
       "likesTactics": [
-        "crossing",
-        "fast_transitions"
+        "possession"
       ],
       "dislikesTactics": [
-        "isolated_midfield"
+        "long_ball_only"
       ],
-      "warningWhenMisused": "Johansen blir usynlig uten tilførsel inn i boksen.",
+      "warningWhenMisused": "Johansen forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -32517,9 +32525,11 @@
         "duel_winner"
       ],
       "strengths": [
-        "defensive_reading",
         "duels",
-        "leadership"
+        "pace",
+        "long_shots",
+        "set_pieces",
+        "aggression"
       ],
       "needs": [
         "covering_partner",
@@ -32538,10 +32548,10 @@
       "warningWhenMisused": "Nilsen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -32554,63 +32564,12 @@
       ],
       "classHeight": 83,
       "naturalPositions": [
-        "GK"
-      ],
-      "usablePositions": [],
-      "poorFits": [
-        "ST",
-        "AM",
-        "LW",
-        "RW"
-      ],
-      "archetypeIds": [
-        "classic_keeper"
-      ],
-      "archetypes": [
-        "shot_stopper"
-      ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
-      "needs": [
-        "clear_defensive_line",
-        "protected_box"
-      ],
-      "preferredRoles": [
-        "classic_keeper"
-      ],
-      "likesTactics": [
-        "structured_build_up"
-      ],
-      "dislikesTactics": [
-        "high_line"
-      ],
-      "warningWhenMisused": "Rismo trenger en tydelig forsvarslinje foran seg.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "romssa_arena": "club_profile"
-      },
-      "clubStatusSource": {
-        "romssa_arena": "utledet"
-      }
-    },
-    {
-      "id": "bjarte_flem",
-      "name": "Bjarte Flem",
-      "nationality": "Norge",
-      "era": "historical",
-      "sourcePlaceIds": [
-        "romssa_arena"
-      ],
-      "classHeight": 83,
-      "naturalPositions": [
         "CM"
       ],
       "usablePositions": [
         "DM",
-        "AM"
+        "AM",
+        "GK"
       ],
       "poorFits": [
         "GK",
@@ -32624,10 +32583,10 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "passing_range",
+        "late_runs",
+        "composure"
       ],
       "needs": [
         "midfield_partner",
@@ -32643,13 +32602,69 @@
       "dislikesTactics": [
         "long_ball_only"
       ],
-      "warningWhenMisused": "Flem forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Rismo forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
+      }
+    },
+    {
+      "id": "bjarte_flem",
+      "name": "Bjarte Flem",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "shot_stopping",
+        "determination",
+        "reflexes",
+        "bravery",
+        "one_vs_one"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Flem trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "romssa_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -32662,10 +32677,69 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "CB"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "duels",
+        "late_runs",
+        "simple_passing",
+        "heading",
+        "tackling"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Espejord forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "romssa_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "romssa_arena": "belagt"
+      }
+    },
+    {
+      "id": "tore_nilsen",
+      "name": "Tore Nilsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
         "CB"
       ],
       "usablePositions": [
-        "DM"
+        "DM",
+        "RB"
       ],
       "poorFits": [
         "LW",
@@ -32680,10 +32754,9 @@
       ],
       "strengths": [
         "duels",
+        "strength",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "concentration"
       ],
       "needs": [
         "covering_partner",
@@ -32699,66 +32772,10 @@
       "dislikesTactics": [
         "high_line"
       ],
-      "warningWhenMisused": "Espejord blir utsatt i høy linje med mye rom bak.",
+      "warningWhenMisused": "Nilsen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
-      },
-      "clubStatusSource": {
-        "romssa_arena": "utledet"
-      }
-    },
-    {
-      "id": "tore_nilsen",
-      "name": "Tore Nilsen",
-      "nationality": "Norge",
-      "era": "historical",
-      "sourcePlaceIds": [
-        "romssa_arena"
-      ],
-      "classHeight": 82,
-      "naturalPositions": [
-        "RB"
-      ],
-      "usablePositions": [
-        "RW",
-        "CB"
-      ],
-      "poorFits": [
-        "ST",
-        "GK",
-        "AM"
-      ],
-      "archetypeIds": [
-        "overlapping_fullback"
-      ],
-      "archetypes": [
-        "wide_support"
-      ],
-      "strengths": [
-        "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
-      ],
-      "needs": [
-        "wide_lane",
-        "cover_behind"
-      ],
-      "preferredRoles": [
-        "overlapping_fullback",
-        "defensive_fullback"
-      ],
-      "likesTactics": [
-        "wide_attack"
-      ],
-      "dislikesTactics": [
-        "narrow_low_tempo"
-      ],
-      "warningWhenMisused": "Nilsen mister verdien sin uten bredde å angripe.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -32792,10 +32809,11 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "passing_range",
+        "long_shots",
+        "game_reading",
+        "determination"
       ],
       "needs": [
         "midfield_partner",
@@ -32814,10 +32832,10 @@
       "warningWhenMisused": "Jenssen forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -32830,47 +32848,47 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CM"
+        "CB"
       ],
       "usablePositions": [
         "DM",
-        "AM"
+        "CM"
       ],
       "poorFits": [
-        "GK",
-        "CB",
-        "LW"
+        "LW",
+        "RW",
+        "ST"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "duel_stopper"
       ],
       "archetypes": [
-        "tempo_setter"
+        "duel_winner"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "duels",
+        "determination",
+        "heading",
+        "set_pieces"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "covering_partner",
+        "clear_defensive_line"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "duel_stopper",
+        "ball_playing_defender"
       ],
       "likesTactics": [
-        "possession"
+        "compact_defense"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "high_line"
       ],
-      "warningWhenMisused": "Moen forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Moen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -32903,11 +32921,10 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
+        "strength",
         "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "composure"
       ],
       "needs": [
         "covering_partner",
@@ -32926,7 +32943,7 @@
       "warningWhenMisused": "Pedersen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -32942,121 +32959,11 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
         "CM"
       ],
-      "usablePositions": [
-        "DM",
-        "AM"
-      ],
-      "poorFits": [
-        "GK",
-        "CB",
-        "LW"
-      ],
-      "archetypeIds": [
-        "box_to_box"
-      ],
-      "archetypes": [
-        "tempo_setter"
-      ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
-      ],
-      "needs": [
-        "midfield_partner",
-        "passing_options"
-      ],
-      "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
-      ],
-      "likesTactics": [
-        "possession"
-      ],
-      "dislikesTactics": [
-        "long_ball_only"
-      ],
-      "warningWhenMisused": "Johansen forsvinner hvis midtbanen blir isolert.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "romssa_arena": "club_profile"
-      },
-      "clubStatusSource": {
-        "romssa_arena": "utledet"
-      }
-    },
-    {
-      "id": "nils_solstad",
-      "name": "Nils Solstad",
-      "nationality": "Norge",
-      "era": "historical",
-      "sourcePlaceIds": [
-        "romssa_arena"
-      ],
-      "classHeight": 82,
-      "naturalPositions": [
-        "CB"
-      ],
-      "usablePositions": [
-        "DM"
-      ],
-      "poorFits": [
-        "LW",
-        "RW",
-        "ST"
-      ],
-      "archetypeIds": [
-        "duel_stopper"
-      ],
-      "archetypes": [
-        "duel_winner"
-      ],
-      "strengths": [
-        "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
-      ],
-      "needs": [
-        "covering_partner",
-        "clear_defensive_line"
-      ],
-      "preferredRoles": [
-        "duel_stopper",
-        "ball_playing_defender"
-      ],
-      "likesTactics": [
-        "compact_defense"
-      ],
-      "dislikesTactics": [
-        "high_line"
-      ],
-      "warningWhenMisused": "Solstad blir utsatt i høy linje med mye rom bak.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "romssa_arena": "club_profile"
-      },
-      "clubStatusSource": {
-        "romssa_arena": "utledet"
-      }
-    },
-    {
-      "id": "arne_andreassen",
-      "name": "Arne Andreassen",
-      "nationality": "Norge",
-      "era": "historical",
-      "sourcePlaceIds": [
-        "romssa_arena"
-      ],
-      "classHeight": 82,
-      "naturalPositions": [
-        "ST"
-      ],
-      "usablePositions": [],
       "poorFits": [
         "CB",
         "GK",
@@ -33069,10 +32976,11 @@
         "box_presence"
       ],
       "strengths": [
+        "long_shots",
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "strength",
+        "bravery",
+        "determination"
       ],
       "needs": [
         "box_service",
@@ -33089,13 +32997,129 @@
       "dislikesTactics": [
         "isolated_midfield"
       ],
-      "warningWhenMisused": "Andreassen blir usynlig uten tilførsel inn i boksen.",
+      "warningWhenMisused": "Johansen blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
+      }
+    },
+    {
+      "id": "nils_solstad",
+      "name": "Nils Solstad",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "tackling",
+        "work_rate",
+        "positioning",
+        "long_shots",
+        "determination"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Solstad mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "romssa_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "romssa_arena": "belagt"
+      }
+    },
+    {
+      "id": "arne_andreassen",
+      "name": "Arne Andreassen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB",
+        "CM",
+        "ST"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "teamwork",
+        "determination",
+        "passing_range",
+        "stamina",
+        "leadership"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Andreassen mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "romssa_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33108,47 +33132,51 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [
-        "DM",
         "AM"
       ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
       "poorFits": [
-        "GK",
         "CB",
-        "LW"
+        "GK",
+        "DM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "classic_ten"
       ],
       "archetypes": [
-        "tempo_setter"
+        "creator",
+        "between_lines"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "movement",
+        "combination_play",
+        "work_rate"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "central_space",
+        "passing_options",
+        "creative_freedom"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "classic_ten",
+        "free_creator"
       ],
       "likesTactics": [
-        "possession"
+        "possession",
+        "central_combinations"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "long_ball_only",
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "Hafstad forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Hafstad trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -33164,67 +33192,13 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [
-        "DM",
-        "AM"
-      ],
-      "poorFits": [
-        "GK",
-        "CB",
-        "LW"
-      ],
-      "archetypeIds": [
-        "box_to_box"
-      ],
-      "archetypes": [
-        "tempo_setter"
-      ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
-      ],
-      "needs": [
-        "midfield_partner",
-        "passing_options"
-      ],
-      "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
-      ],
-      "likesTactics": [
-        "possession"
-      ],
-      "dislikesTactics": [
-        "long_ball_only"
-      ],
-      "warningWhenMisused": "Andersen forsvinner hvis midtbanen blir isolert.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "romssa_arena": "club_profile"
-      },
-      "clubStatusSource": {
-        "romssa_arena": "utledet"
-      }
-    },
-    {
-      "id": "kent_are_antonsen",
-      "name": "Kent-Are Antonsen",
-      "nationality": "Norge",
-      "era": "modern",
-      "sourcePlaceIds": [
-        "romssa_arena"
-      ],
-      "classHeight": 82,
-      "naturalPositions": [
         "RW"
       ],
       "usablePositions": [
         "ST",
-        "AM"
+        "AM",
+        "WB",
+        "CM"
       ],
       "poorFits": [
         "CB",
@@ -33238,10 +33212,11 @@
         "dribbler"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "stamina",
+        "late_runs",
+        "crossing",
+        "box_finishing",
+        "runs_behind"
       ],
       "needs": [
         "wide_space",
@@ -33258,13 +33233,73 @@
       "dislikesTactics": [
         "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Antonsen mister 1v1-situasjonene sine i et trangt system.",
+      "warningWhenMisused": "Andersen mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
+      }
+    },
+    {
+      "id": "kent_are_antonsen",
+      "name": "Kent-Are Antonsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB",
+        "WB",
+        "CM",
+        "RW"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "stamina",
+        "determination",
+        "teamwork",
+        "first_touch",
+        "aggression"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Antonsen mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "romssa_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33277,45 +33312,48 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB",
         "ST"
       ],
-      "usablePositions": [],
       "poorFits": [
-        "CB",
+        "ST",
         "GK",
-        "DM"
+        "AM"
       ],
       "archetypeIds": [
-        "poacher"
+        "overlapping_fullback"
       ],
       "archetypes": [
-        "box_presence"
+        "wide_support"
       ],
       "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "pace",
+        "determination",
+        "crossing",
+        "teamwork"
       ],
       "needs": [
-        "box_service",
-        "runners_inside"
+        "wide_lane",
+        "cover_behind"
       ],
       "preferredRoles": [
-        "poacher",
-        "complete_forward"
+        "overlapping_fullback",
+        "defensive_fullback"
       ],
       "likesTactics": [
-        "crossing",
-        "fast_transitions"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "isolated_midfield"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Christensen blir usynlig uten tilførsel inn i boksen.",
+      "warningWhenMisused": "Christensen mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_icon"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -33331,11 +33369,12 @@
       ],
       "classHeight": 85,
       "naturalPositions": [
-        "LB"
+        "RB"
       ],
       "usablePositions": [
-        "LW",
-        "CB"
+        "RW",
+        "CB",
+        "LB"
       ],
       "poorFits": [
         "ST",
@@ -33349,9 +33388,11 @@
         "wide_support"
       ],
       "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina"
+        "positioning",
+        "stamina",
+        "one_vs_one",
+        "determination",
+        "simple_passing"
       ],
       "needs": [
         "wide_lane",
@@ -33370,10 +33411,10 @@
       "warningWhenMisused": "Høgli mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "key_player"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33404,9 +33445,11 @@
         "wide_support"
       ],
       "strengths": [
-        "pace",
-        "overlapping_runs",
-        "stamina"
+        "acceleration",
+        "stamina",
+        "aggression",
+        "ball_carrying",
+        "pressing"
       ],
       "needs": [
         "wide_lane",
@@ -33425,10 +33468,10 @@
       "warningWhenMisused": "Pedersen mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "key_player"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33441,48 +33484,51 @@
       ],
       "classHeight": 85,
       "naturalPositions": [
-        "CB"
-      ],
-      "usablePositions": [
         "DM"
       ],
+      "usablePositions": [
+        "CM",
+        "CB"
+      ],
       "poorFits": [
+        "ST",
         "LW",
-        "RW",
-        "ST"
+        "RW"
       ],
       "archetypeIds": [
-        "duel_stopper"
+        "holding_midfielder"
       ],
       "archetypes": [
-        "duel_winner"
+        "ball_winner"
       ],
       "strengths": [
-        "duels",
+        "strength",
+        "tackling",
         "heading",
-        "strength"
+        "reflexes",
+        "interceptions"
       ],
       "needs": [
-        "covering_partner",
-        "clear_defensive_line"
+        "clear_structure",
+        "midfield_partner"
       ],
       "preferredRoles": [
-        "duel_stopper",
-        "ball_playing_defender"
+        "holding_midfielder",
+        "deep_playmaker"
       ],
       "likesTactics": [
-        "compact_defense"
+        "structured_build_up"
       ],
       "dislikesTactics": [
-        "high_line"
+        "chaotic_transitions"
       ],
-      "warningWhenMisused": "Mbodj blir utsatt i høy linje med mye rom bak.",
+      "warningWhenMisused": "Mbodj trenger en tydelig oppgave og en makker ved siden av seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "key_player"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33510,9 +33556,11 @@
         "box_presence"
       ],
       "strengths": [
-        "box_finishing",
-        "finishing",
-        "hold_up_play"
+        "strength",
+        "aggression",
+        "heading",
+        "box_presence",
+        "pressing"
       ],
       "needs": [
         "box_service",
@@ -33532,10 +33580,10 @@
       "warningWhenMisused": "Ondrášek blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "key_player"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33566,9 +33614,11 @@
         "tempo_setter"
       ],
       "strengths": [
+        "composure",
+        "balance",
         "passing_range",
-        "tempo_control",
-        "long_shots"
+        "ball_carrying",
+        "game_reading"
       ],
       "needs": [
         "midfield_partner",
@@ -33587,10 +33637,10 @@
       "warningWhenMisused": "Bernier forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33623,8 +33673,10 @@
       ],
       "strengths": [
         "stamina",
-        "dribbling",
-        "wide_movement"
+        "first_touch",
+        "aggression",
+        "teamwork",
+        "tempo_control"
       ],
       "needs": [
         "wide_space",
@@ -33644,10 +33696,10 @@
       "warningWhenMisused": "Lindpere mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33678,9 +33730,11 @@
         "ball_winner"
       ],
       "strengths": [
+        "work_rate",
         "tackling",
         "positioning",
-        "stamina"
+        "simple_passing",
+        "determination"
       ],
       "needs": [
         "clear_structure",
@@ -33699,10 +33753,10 @@
       "warningWhenMisused": "Valakari trenger en tydelig oppgave og en makker ved siden av seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33733,9 +33787,11 @@
         "dribbler"
       ],
       "strengths": [
-        "dribbling",
-        "crossing",
-        "acceleration"
+        "first_touch",
+        "long_shots",
+        "combination_play",
+        "movement",
+        "teamwork"
       ],
       "needs": [
         "wide_space",
@@ -33755,10 +33811,10 @@
       "warningWhenMisused": "Taylor mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33790,8 +33846,10 @@
       ],
       "strengths": [
         "pace",
+        "stamina",
         "overlapping_runs",
-        "duels"
+        "one_vs_one",
+        "ball_carrying"
       ],
       "needs": [
         "wide_lane",
@@ -33810,10 +33868,10 @@
       "warningWhenMisused": "Ciss mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33827,48 +33885,53 @@
       ],
       "classHeight": 84,
       "naturalPositions": [
-        "ST"
+        "LW"
       ],
-      "usablePositions": [],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
       "poorFits": [
         "CB",
         "GK",
         "DM"
       ],
       "archetypeIds": [
-        "poacher"
+        "wide_dribbler"
       ],
       "archetypes": [
-        "box_presence"
+        "dribbler"
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "hold_up_play"
+        "first_touch",
+        "agility",
+        "pace",
+        "runs_behind"
       ],
       "needs": [
-        "box_service",
-        "runners_inside"
+        "wide_space",
+        "isolation_duels"
       ],
       "preferredRoles": [
-        "poacher",
-        "complete_forward"
+        "wide_dribbler",
+        "inverted_winger"
       ],
       "likesTactics": [
-        "crossing",
+        "wide_attack",
         "fast_transitions"
       ],
       "dislikesTactics": [
-        "isolated_midfield"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Guðmundsson blir usynlig uten tilførsel inn i boksen.",
+      "warningWhenMisused": "Guðmundsson mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile",
+        "romssa_arena": "elite_career",
         "nadderud_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "nadderud_stadion": "belagt"
       }
     },
@@ -33898,9 +33961,10 @@
         "shot_stopper"
       ],
       "strengths": [
+        "reflexes",
         "shot_stopping",
         "command_of_area",
-        "distribution"
+        "concentration"
       ],
       "needs": [
         "clear_defensive_line",
@@ -33918,10 +33982,10 @@
       "warningWhenMisused": "Rossbach trenger en tydelig forsvarslinje foran seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -33951,9 +34015,11 @@
         "duel_winner"
       ],
       "strengths": [
-        "heading",
+        "positioning",
         "duels",
-        "positioning"
+        "heading",
+        "leadership",
+        "determination"
       ],
       "needs": [
         "covering_partner",
@@ -33972,10 +34038,10 @@
       "warningWhenMisused": "Björck blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34004,6 +34070,7 @@
       ],
       "strengths": [
         "box_finishing",
+        "positioning",
         "finishing",
         "movement"
       ],
@@ -34025,10 +34092,10 @@
       "warningWhenMisused": "Brandeggen blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34059,9 +34126,11 @@
         "tempo_setter"
       ],
       "strengths": [
+        "game_reading",
+        "work_rate",
         "leadership",
-        "tempo_control",
-        "simple_passing"
+        "determination",
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -34080,10 +34149,10 @@
       "warningWhenMisused": "Nilsen forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34112,7 +34181,7 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
+        "chance_creation",
         "first_touch"
       ],
       "needs": [
@@ -34133,7 +34202,7 @@
       "warningWhenMisused": "Jensen blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -34149,48 +34218,50 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CB"
+        "RB"
       ],
       "usablePositions": [
-        "DM"
+        "RW",
+        "CB"
       ],
       "poorFits": [
-        "LW",
-        "RW",
-        "ST"
+        "ST",
+        "GK",
+        "AM"
       ],
       "archetypeIds": [
-        "duel_stopper"
+        "overlapping_fullback"
       ],
       "archetypes": [
-        "duel_winner"
+        "wide_support"
       ],
       "strengths": [
         "leadership",
+        "bravery",
         "positioning",
-        "duels"
+        "strength"
       ],
       "needs": [
-        "covering_partner",
-        "clear_defensive_line"
+        "wide_lane",
+        "cover_behind"
       ],
       "preferredRoles": [
-        "duel_stopper",
-        "ball_playing_defender"
+        "overlapping_fullback",
+        "defensive_fullback"
       ],
       "likesTactics": [
-        "compact_defense"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "high_line"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Isaksen blir utsatt i høy linje med mye rom bak.",
+      "warningWhenMisused": "Isaksen mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34219,9 +34290,11 @@
         "shot_stopper"
       ],
       "strengths": [
-        "shot_stopping",
         "reflexes",
-        "command_of_area"
+        "bravery",
+        "concentration",
+        "composure",
+        "determination"
       ],
       "needs": [
         "clear_defensive_line",
@@ -34239,10 +34312,10 @@
       "warningWhenMisused": "Brandeggen trenger en tydelig forsvarslinje foran seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34270,9 +34343,10 @@
         "box_presence"
       ],
       "strengths": [
-        "acceleration",
+        "pace",
         "dribbling",
-        "box_finishing"
+        "finishing",
+        "runs_behind"
       ],
       "needs": [
         "box_service",
@@ -34292,7 +34366,7 @@
       "warningWhenMisused": "Ingebrigtsen blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -34326,9 +34400,10 @@
         "duel_winner"
       ],
       "strengths": [
-        "simple_passing",
-        "positioning",
-        "long_shots"
+        "teamwork",
+        "stamina",
+        "determination",
+        "late_runs"
       ],
       "needs": [
         "covering_partner",
@@ -34347,7 +34422,7 @@
       "warningWhenMisused": "Kristoffersen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -34381,8 +34456,9 @@
       ],
       "strengths": [
         "leadership",
-        "defensive_reading",
-        "positioning"
+        "determination",
+        "duels",
+        "tackling"
       ],
       "needs": [
         "covering_partner",
@@ -34401,7 +34477,7 @@
       "warningWhenMisused": "Olsen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -34417,44 +34493,45 @@
       ],
       "classHeight": 80,
       "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [
         "CM"
       ],
-      "usablePositions": [],
       "poorFits": [
-        "GK",
-        "CB",
-        "LW"
+        "ST",
+        "AM",
+        "LW",
+        "RW"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "classic_keeper"
       ],
       "archetypes": [
-        "tempo_setter"
+        "shot_stopper"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "determination",
+        "shot_stopping",
+        "concentration"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "clear_defensive_line",
+        "protected_box"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "classic_keeper"
       ],
       "likesTactics": [
-        "possession"
+        "structured_build_up"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "high_line"
       ],
-      "warningWhenMisused": "Pedersen er registrert bredt — kilden oppgir ikke en mer presis posisjon.",
+      "warningWhenMisused": "Pedersen trenger en tydelig forsvarslinje foran seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -34470,62 +34547,12 @@
       ],
       "classHeight": 80,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [],
-      "poorFits": [
-        "GK",
-        "CB",
-        "LW"
-      ],
-      "archetypeIds": [
-        "box_to_box"
-      ],
-      "archetypes": [
-        "tempo_setter"
-      ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
-      ],
-      "needs": [
-        "midfield_partner",
-        "passing_options"
-      ],
-      "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
-      ],
-      "likesTactics": [
-        "possession"
-      ],
-      "dislikesTactics": [
-        "long_ball_only"
-      ],
-      "warningWhenMisused": "Albertsen er registrert bredt — kilden oppgir ikke en mer presis posisjon.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "romssa_arena": "club_profile"
-      },
-      "clubStatusSource": {
-        "romssa_arena": "utledet"
-      }
-    },
-    {
-      "id": "sigmund_forfang",
-      "name": "Sigmund Forfang",
-      "nationality": "Norge",
-      "era": "historical",
-      "sourcePlaceIds": [
-        "romssa_arena"
-      ],
-      "classHeight": 80,
-      "naturalPositions": [
         "CB"
       ],
-      "usablePositions": [],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
       "poorFits": [
         "LW",
         "RW",
@@ -34538,11 +34565,10 @@
         "duel_winner"
       ],
       "strengths": [
+        "teamwork",
+        "work_rate",
         "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "determination"
       ],
       "needs": [
         "covering_partner",
@@ -34558,10 +34584,69 @@
       "dislikesTactics": [
         "high_line"
       ],
-      "warningWhenMisused": "Forfang er registrert bredt — kilden oppgir ikke en mer presis posisjon.",
+      "warningWhenMisused": "Albertsen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
+      },
+      "clubStatusSource": {
+        "romssa_arena": "utledet"
+      }
+    },
+    {
+      "id": "sigmund_forfang",
+      "name": "Sigmund Forfang",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM",
+        "LB",
+        "CB"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "pace",
+        "runs_behind",
+        "crossing",
+        "teamwork"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Forfang mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -34577,45 +34662,48 @@
       ],
       "classHeight": 80,
       "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
         "ST"
       ],
-      "usablePositions": [],
       "poorFits": [
-        "CB",
         "GK",
-        "DM"
+        "CB",
+        "LW"
       ],
       "archetypeIds": [
-        "poacher"
+        "box_to_box"
       ],
       "archetypes": [
-        "box_presence"
+        "tempo_setter"
       ],
       "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "stamina",
+        "interceptions",
+        "passing_range",
+        "pressing"
       ],
       "needs": [
-        "box_service",
-        "runners_inside"
+        "midfield_partner",
+        "passing_options"
       ],
       "preferredRoles": [
-        "poacher",
-        "complete_forward"
+        "box_to_box",
+        "deep_playmaker"
       ],
       "likesTactics": [
-        "crossing",
-        "fast_transitions"
+        "possession"
       ],
       "dislikesTactics": [
-        "isolated_midfield"
+        "long_ball_only"
       ],
-      "warningWhenMisused": "Pedersen er registrert bredt — kilden oppgir ikke en mer presis posisjon.",
+      "warningWhenMisused": "Pedersen forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_legend"
       },
       "clubStatusSource": {
         "romssa_arena": "utledet"
@@ -34649,9 +34737,11 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "tackling",
-        "simple_passing"
+        "passing_range",
+        "set_pieces",
+        "vision",
+        "crossing",
+        "chance_creation"
       ],
       "needs": [
         "midfield_partner",
@@ -34673,7 +34763,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34702,9 +34792,11 @@
         "box_presence"
       ],
       "strengths": [
-        "heading",
-        "hold_up_play",
-        "box_finishing"
+        "movement",
+        "combination_play",
+        "first_touch",
+        "finishing",
+        "teamwork"
       ],
       "needs": [
         "box_service",
@@ -34728,7 +34820,7 @@
         "aspmyra_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -34742,50 +34834,55 @@
       ],
       "classHeight": 83,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [
-        "DM",
         "AM"
       ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
       "poorFits": [
-        "GK",
         "CB",
-        "LW"
+        "GK",
+        "DM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "classic_ten"
       ],
       "archetypes": [
-        "tempo_setter"
+        "creator",
+        "between_lines"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "long_shots",
+        "combination_play",
+        "movement",
+        "composure"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "central_space",
+        "passing_options",
+        "creative_freedom"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "classic_ten",
+        "free_creator"
       ],
       "likesTactics": [
-        "possession"
+        "possession",
+        "central_combinations"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "long_ball_only",
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "Valakari forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Valakari trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34814,10 +34911,10 @@
         "shot_stopper"
       ],
       "strengths": [
-        "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "command_of_area",
+        "leadership",
+        "shot_stopping"
       ],
       "needs": [
         "clear_defensive_line",
@@ -34838,7 +34935,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -34851,66 +34948,11 @@
       ],
       "classHeight": 83,
       "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
         "LB"
-      ],
-      "usablePositions": [
-        "LW",
-        "CB"
-      ],
-      "poorFits": [
-        "ST",
-        "GK",
-        "AM"
-      ],
-      "archetypeIds": [
-        "overlapping_fullback"
-      ],
-      "archetypes": [
-        "wide_support"
-      ],
-      "strengths": [
-        "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
-      ],
-      "needs": [
-        "wide_lane",
-        "cover_behind"
-      ],
-      "preferredRoles": [
-        "overlapping_fullback",
-        "defensive_fullback"
-      ],
-      "likesTactics": [
-        "wide_attack"
-      ],
-      "dislikesTactics": [
-        "narrow_low_tempo"
-      ],
-      "warningWhenMisused": "Sequeira mister verdien sin uten bredde å angripe.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "romssa_arena": "club_profile"
-      },
-      "clubStatusSource": {
-        "romssa_arena": "utledet"
-      }
-    },
-    {
-      "id": "per_mathias_hogmo",
-      "name": "Per-Mathias Høgmo",
-      "nationality": "Norge",
-      "era": "historical",
-      "sourcePlaceIds": [
-        "romssa_arena"
-      ],
-      "classHeight": 82,
-      "naturalPositions": [
-        "CB"
-      ],
-      "usablePositions": [
-        "DM"
       ],
       "poorFits": [
         "LW",
@@ -34924,9 +34966,11 @@
         "duel_winner"
       ],
       "strengths": [
-        "leadership",
-        "positioning",
-        "defensive_reading"
+        "strength",
+        "duels",
+        "heading",
+        "game_reading",
+        "teamwork"
       ],
       "needs": [
         "covering_partner",
@@ -34942,19 +34986,19 @@
       "dislikesTactics": [
         "high_line"
       ],
-      "warningWhenMisused": "Høgmo blir utsatt i høy linje med mye rom bak.",
+      "warningWhenMisused": "Sequeira blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
-      "id": "mike_mccabe",
-      "name": "Mike McCabe",
-      "nationality": "Skottland",
+      "id": "per_mathias_hogmo",
+      "name": "Per-Mathias Høgmo",
+      "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
         "romssa_arena"
@@ -34965,7 +35009,8 @@
       ],
       "usablePositions": [
         "DM",
-        "AM"
+        "AM",
+        "CB"
       ],
       "poorFits": [
         "GK",
@@ -34979,10 +35024,10 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "game_reading",
+        "work_rate",
+        "teamwork",
+        "leadership"
       ],
       "needs": [
         "midfield_partner",
@@ -34998,7 +35043,64 @@
       "dislikesTactics": [
         "long_ball_only"
       ],
-      "warningWhenMisused": "McCabe forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Høgmo forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "romssa_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "romssa_arena": "belagt"
+      }
+    },
+    {
+      "id": "mike_mccabe",
+      "name": "Mike McCabe",
+      "nationality": "Skottland",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM",
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "first_touch",
+        "chance_creation",
+        "box_finishing",
+        "combination_play"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "McCabe blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
@@ -35036,8 +35138,9 @@
       ],
       "strengths": [
         "first_touch",
-        "crossing",
-        "stamina"
+        "passing_range",
+        "teamwork",
+        "combination_play"
       ],
       "needs": [
         "wide_lane",
@@ -35088,9 +35191,11 @@
         "shot_stopper"
       ],
       "strengths": [
-        "shot_stopping",
-        "positioning",
-        "reflexes"
+        "reflexes",
+        "command_of_area",
+        "determination",
+        "leadership",
+        "game_reading"
       ],
       "needs": [
         "clear_defensive_line",
@@ -35111,7 +35216,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35142,9 +35247,11 @@
         "tempo_setter"
       ],
       "strengths": [
+        "stamina",
+        "teamwork",
         "late_runs",
         "long_shots",
-        "stamina"
+        "work_rate"
       ],
       "needs": [
         "midfield_partner",
@@ -35166,7 +35273,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35196,11 +35303,11 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
+        "leadership",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "determination",
+        "tackling"
       ],
       "needs": [
         "covering_partner",
@@ -35222,7 +35329,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35254,10 +35361,10 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "aggression",
+        "ball_carrying",
+        "passing_range",
+        "heading"
       ],
       "needs": [
         "covering_partner",
@@ -35280,7 +35387,7 @@
         "aspmyra_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -35312,9 +35419,11 @@
         "dribbler"
       ],
       "strengths": [
-        "movement",
-        "box_finishing",
-        "acceleration"
+        "pace",
+        "runs_behind",
+        "finishing",
+        "aggression",
+        "teamwork"
       ],
       "needs": [
         "wide_space",
@@ -35337,7 +35446,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35351,11 +35460,11 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "RW"
+        "AM"
       ],
       "usablePositions": [
-        "ST",
-        "AM"
+        "CM",
+        "RW"
       ],
       "poorFits": [
         "CB",
@@ -35363,40 +35472,44 @@
         "DM"
       ],
       "archetypeIds": [
-        "wide_dribbler"
+        "classic_ten"
       ],
       "archetypes": [
-        "dribbler"
+        "creator",
+        "between_lines"
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "balance",
+        "agility",
+        "chance_creation",
+        "long_shots"
       ],
       "needs": [
-        "wide_space",
-        "isolation_duels"
+        "central_space",
+        "passing_options",
+        "creative_freedom"
       ],
       "preferredRoles": [
-        "wide_dribbler",
-        "inverted_winger"
+        "classic_ten",
+        "free_creator"
       ],
       "likesTactics": [
-        "wide_attack",
-        "fast_transitions"
+        "possession",
+        "central_combinations"
       ],
       "dislikesTactics": [
-        "narrow_low_tempo"
+        "long_ball_only",
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "Mikkelsen mister 1v1-situasjonene sine i et trangt system.",
+      "warningWhenMisused": "Mikkelsen trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile",
         "aspmyra_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "aspmyra_stadion": "utledet"
       }
     },
@@ -35410,50 +35523,55 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [
-        "DM",
         "AM"
       ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
       "poorFits": [
-        "GK",
         "CB",
-        "LW"
+        "GK",
+        "DM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "classic_ten"
       ],
       "archetypes": [
-        "tempo_setter"
+        "creator",
+        "between_lines"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "pace",
+        "ball_carrying",
+        "pressing",
+        "acceleration",
+        "teamwork"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "central_space",
+        "passing_options",
+        "creative_freedom"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "classic_ten",
+        "free_creator"
       ],
       "likesTactics": [
-        "possession"
+        "possession",
+        "central_combinations"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "long_ball_only",
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "Romsaas forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Romsaas trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35484,10 +35602,11 @@
         "wide_support"
       ],
       "strengths": [
+        "pace",
         "stamina",
-        "crossing",
+        "runs_behind",
         "overlapping_runs",
-        "defensive_reading"
+        "wide_support"
       ],
       "needs": [
         "wide_lane",
@@ -35509,7 +35628,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35540,10 +35659,11 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "vision",
+        "passing_range",
+        "ball_carrying",
+        "set_pieces",
+        "movement"
       ],
       "needs": [
         "midfield_partner",
@@ -35565,7 +35685,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35595,11 +35715,10 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
+        "strength",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "tackling",
+        "aggression"
       ],
       "needs": [
         "covering_partner",
@@ -35621,7 +35740,7 @@
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35652,10 +35771,11 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "strength",
+        "reflexes",
+        "ball_carrying",
+        "passing_range"
       ],
       "needs": [
         "midfield_partner",
@@ -35674,10 +35794,10 @@
       "warningWhenMisused": "Hjertø-Dahl forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "academy_export"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -35690,44 +35810,42 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CM"
+        "GK"
       ],
       "usablePositions": [
-        "DM",
-        "AM"
+        "CM"
       ],
       "poorFits": [
-        "GK",
-        "CB",
-        "LW"
+        "ST",
+        "AM",
+        "LW",
+        "RW"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "classic_keeper"
       ],
       "archetypes": [
-        "tempo_setter"
+        "shot_stopper"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "determination",
+        "shot_stopping",
+        "reflexes"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "clear_defensive_line",
+        "protected_box"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "classic_keeper"
       ],
       "likesTactics": [
-        "possession"
+        "structured_build_up"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "high_line"
       ],
-      "warningWhenMisused": "Isaksen forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Isaksen trenger en tydelig forsvarslinje foran seg.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
@@ -35747,51 +35865,57 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [
-        "DM",
         "AM"
       ],
+      "usablePositions": [
+        "CM",
+        "RW",
+        "ST"
+      ],
       "poorFits": [
-        "GK",
         "CB",
-        "LW"
+        "GK",
+        "DM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "classic_ten"
       ],
       "archetypes": [
-        "tempo_setter"
+        "creator",
+        "between_lines"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "finishing",
+        "chance_creation",
+        "movement",
+        "long_shots"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "central_space",
+        "passing_options",
+        "creative_freedom"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "classic_ten",
+        "free_creator"
       ],
       "likesTactics": [
-        "possession"
+        "possession",
+        "central_combinations"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "long_ball_only",
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "Strand forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Strand trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile",
         "jotun_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet",
+        "romssa_arena": "belagt",
         "jotun_arena": "belagt"
       }
     },
@@ -35805,44 +35929,44 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CM"
+        "LB"
       ],
       "usablePositions": [
-        "DM",
-        "AM"
+        "LW",
+        "CB",
+        "CM"
       ],
       "poorFits": [
+        "ST",
         "GK",
-        "CB",
-        "LW"
+        "AM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "overlapping_fullback"
       ],
       "archetypes": [
-        "tempo_setter"
+        "wide_support"
       ],
       "strengths": [
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "determination",
+        "positioning"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "wide_lane",
+        "cover_behind"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "overlapping_fullback",
+        "defensive_fullback"
       ],
       "likesTactics": [
-        "possession"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Yndestad forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Yndestad mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
@@ -35861,44 +35985,45 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CM"
+        "LB"
       ],
       "usablePositions": [
-        "DM",
-        "AM"
+        "LW",
+        "CB",
+        "CM"
       ],
       "poorFits": [
+        "ST",
         "GK",
-        "CB",
-        "LW"
+        "AM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "overlapping_fullback"
       ],
       "archetypes": [
-        "tempo_setter"
+        "wide_support"
       ],
       "strengths": [
+        "determination",
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "teamwork",
+        "leadership"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "wide_lane",
+        "cover_behind"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "overlapping_fullback",
+        "defensive_fullback"
       ],
       "likesTactics": [
-        "possession"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Kræmer forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Kræmer mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
@@ -35917,42 +36042,44 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM",
         "ST"
       ],
-      "usablePositions": [],
       "poorFits": [
-        "CB",
-        "GK",
-        "DM"
+        "LW",
+        "RW",
+        "ST"
       ],
       "archetypeIds": [
-        "poacher"
+        "duel_stopper"
       ],
       "archetypes": [
-        "box_presence"
+        "duel_winner"
       ],
       "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "teamwork",
+        "determination",
+        "work_rate"
       ],
       "needs": [
-        "box_service",
-        "runners_inside"
+        "covering_partner",
+        "clear_defensive_line"
       ],
       "preferredRoles": [
-        "poacher",
-        "complete_forward"
+        "duel_stopper",
+        "ball_playing_defender"
       ],
       "likesTactics": [
-        "crossing",
-        "fast_transitions"
+        "compact_defense"
       ],
       "dislikesTactics": [
-        "isolated_midfield"
+        "high_line"
       ],
-      "warningWhenMisused": "Johansen blir usynlig uten tilførsel inn i boksen.",
+      "warningWhenMisused": "Johansen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
@@ -35971,42 +36098,45 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB",
         "ST"
       ],
-      "usablePositions": [],
       "poorFits": [
-        "CB",
+        "ST",
         "GK",
-        "DM"
+        "AM"
       ],
       "archetypeIds": [
-        "poacher"
+        "overlapping_fullback"
       ],
       "archetypes": [
-        "box_presence"
+        "wide_support"
       ],
       "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "wide_support",
+        "work_rate",
+        "crossing",
+        "teamwork"
       ],
       "needs": [
-        "box_service",
-        "runners_inside"
+        "wide_lane",
+        "cover_behind"
       ],
       "preferredRoles": [
-        "poacher",
-        "complete_forward"
+        "overlapping_fullback",
+        "defensive_fullback"
       ],
       "likesTactics": [
-        "crossing",
-        "fast_transitions"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "isolated_midfield"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Pedersen blir usynlig uten tilførsel inn i boksen.",
+      "warningWhenMisused": "Pedersen mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
@@ -36025,50 +36155,52 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CM"
+        "RB"
       ],
       "usablePositions": [
-        "DM",
-        "AM"
+        "RW",
+        "CB",
+        "CM"
       ],
       "poorFits": [
+        "ST",
         "GK",
-        "CB",
-        "LW"
+        "AM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "overlapping_fullback"
       ],
       "archetypes": [
-        "tempo_setter"
+        "wide_support"
       ],
       "strengths": [
+        "pace",
         "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "overlapping_runs",
+        "aggression",
+        "positioning"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "wide_lane",
+        "cover_behind"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "overlapping_fullback",
+        "defensive_fullback"
       ],
       "likesTactics": [
-        "possession"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Norbye forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Norbye mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {
@@ -36081,50 +36213,53 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [
-        "DM",
-        "AM"
-      ],
-      "poorFits": [
-        "GK",
-        "CB",
         "LW"
       ],
+      "usablePositions": [
+        "ST",
+        "AM",
+        "CM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
       "archetypeIds": [
-        "box_to_box"
+        "wide_dribbler"
       ],
       "archetypes": [
-        "tempo_setter"
+        "dribbler"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "dribbling",
+        "crossing",
+        "set_pieces",
+        "chance_creation"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "wide_space",
+        "isolation_duels"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "wide_dribbler",
+        "inverted_winger"
       ],
       "likesTactics": [
-        "possession"
+        "wide_attack",
+        "fast_transitions"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Drage forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Drage mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "belagt"
       }
     },
     {

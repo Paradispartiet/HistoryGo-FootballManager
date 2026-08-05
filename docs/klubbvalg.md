@@ -474,6 +474,58 @@ levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
 
+### Tromsø: 81 profiler, to byttede posisjoner, og en måling som pyntet på seg selv
+
+Tromsø var den siste malgenererte arven — 38 av 81 på posisjonsmalen. Kilden
+er den mest spesifikke i hele arbeidet: **81 unike kvalitetssetninger for 81
+spillere (100 %)**, på linje med Vålerenga og bedre enn Rosenborg og
+Strømsgodset. Alle 81 fikk styrker lest fra sin egen setning, og arven står
+nå på 0 av 81.
+
+**Trettiseks posisjoner var gale, og to av dem var byttet om.** Katalogen
+hadde Tore Rismo som keeper og Bjarte Flem som midtbanespiller. Kilden sier
+det motsatte, og sier det utvetydig: Flem «reddet straffe i opprykkskampen mot
+Moss og var førstekeeper på cupmesterlaget i 1986», mens Rismo var «teknisk
+nøkkelspiller» og «målscorer til 4–1 i cupfinalen i 1986». To spillere hadde
+byttet rolle med hverandre, og ingen vakt kan se det — posisjon er en påstand
+bare en kilde kan avgjøre.
+
+Kilden brukte også **«kant»** der de andre skrev «ving», og posisjonstolkeren
+min hadde ingen regel for det. «Høyrekant» og «Venstrekant» falt gjennom til
+neste ledd i setningen, så tre spillere fikk sekundærposisjonen sin som
+primær. Feilen ble synlig fordi jeg leste gjennom alle 37 endringene i stedet
+for å telle dem — det var også slik Rismo/Flem-byttet ble oppdaget.
+
+Malen manglet dessuten **WB** helt. Den ble skrevet for de ti posisjonene de
+tidligere kildene brukte, og «vingback» dukket først opp her. Den arver
+backmalen: samme krav, mer bane å dekke.
+
+### Målingen som pyntet på seg selv
+
+Etter importen sto styrke-settene på **62,0 %** — det høyeste noensinne. Så så
+jeg på den største klongruppen, og den var tolv moderne midtstoppere med
+«hodespill, duellspill, posisjonering» — de samme tre ordene fra **tolv
+forskjellige klubbkilder**, i ulik rekkefølge.
+
+Rekkefølgen betyr ingenting for utledningen. Den betydde alt for målingen:
+settene ble talt som strenger, så `[heading,duels,positioning]` og
+`[duels,positioning,heading]` var to «unike» sett. Sorteres settene før de
+telles, faller tallet fra 62,0 % til **51,6 %**.
+
+**Ti prosentpoeng av variasjonen var permutasjoner**, og grensene jeg hadde
+ratchetet til 0,52 og 0,55 hvilte delvis på den støyen. Det er samme feil som
+alias-kanoniseringen ble innført for å hindre, ett ledd lenger ut: en måling
+som teller synonymer eller rekkefølge i stedet for spillere.
+
+Grensa er satt på nytt fra bitetester på den ærlige målingen — Tromsø til mal
+gir 44,6 %, Vålerenga 41,5 %, Rosenborg 48,0 % — så 0,49 feller alle tre med
+2,6 poengs margin. Uniktheten står på **81,8 %** med grense 0,81.
+
+Klontaket er **hevet** fra 12 til 14, og det er en bevisst lettelse: de tolv
+midtstopperne er en grense for hva kildene sier, ikke en malimport, og et tak
+på 12 ville felt neste ekte import av en midtstopper. Det som faktisk fanger
+en malgenerert arv er per-klubb-målingen.
+
 ### Lyn: 82 navn, og arven flytter ut av Eliteserien
 
 Lyn er den første klubben utenfor Eliteserien som får arv, og den fjerner en
@@ -680,11 +732,16 @@ aldri systematisk, uansett hvor grovt den grupperer.
 
 Den nye vakten fant to reelle hull med én gang:
 
-| Arv | På posisjonsmalen |
-|---|---:|
-| Tromsø | 38 av 81 (47 %) |
-| ~~Viking~~ | ~~22 av 70 (31 %)~~ → **0 av 70** |
-| alle andre | 0–8 % |
+| Arv | På posisjonsmalen | Etter kildelista |
+|---|---:|---:|
+| Tromsø | 38 av 81 (47 %) | **0 av 81** |
+| Viking | 22 av 70 (31 %) | **0 av 70** |
+| alle andre | 0–8 % | uendret |
+
+**Begge kildelistene kom, og gjeldstabellen i vakten står nå tom.** Ingen arv i
+katalogen er lenger malgenerert. Taket er 10 % for alle, og en ny klubb importert
+på mal feller vakten umiddelbart — bittestet ved å reversere Tromsø, Viking og
+KFUM hver for seg.
 
 Retro-fitten som leste styrker inn i de fem første importene dekket bare de
 navnene kildene faktisk beskrev — resten ble stående. Tallene står som **tak som
