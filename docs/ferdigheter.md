@@ -323,11 +323,17 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter VIF | Etter RBK | Grense |
-|---|---:|---:|---:|---:|
-| Unike profiler | 73,7 % | 78,6 % | **79,2 %** | 0,78 |
-| Unike styrke-sett | 46,9 % | 56,4 % | **57,2 %** | 0,55 |
-| Største klon | 12 | 10 | **10** | ≤ 14 |
+| | Før VIF | Etter VIF | Etter RBK | Etter SIF+VIK | Grense |
+|---|---:|---:|---:|---:|---:|
+| Unike profiler | 73,7 % | 78,6 % | 79,2 % | **79,1 %** | 0,78 |
+| Unike styrke-sett | 46,9 % | 56,4 % | 57,2 % | **57,0 %** | 0,55 |
+| Største klon | 12 | 10 | 10 | **9** | ≤ 12 |
+
+Strømsgodset senket begge andelene (kilden har 48 unike styrkesetninger for 144
+spillere), Viking løftet dem igjen. Netto står de på stedet hvil mens katalogen
+har vokst fra 1007 til 1117 spillere — og det er nettopp derfor den
+korpusbrede målingen ble supplert med en **per klubb**-måling: den blir ikke
+uskarpere av at katalogen vokser.
 
 Bitetesten er å reversere klubben til mal: VIF falt til 74,4 % og 44,4 %, RBK
 til 77,2 % og 51,7 %, og vaktene feller begge. Sto grensene der de sto, ville

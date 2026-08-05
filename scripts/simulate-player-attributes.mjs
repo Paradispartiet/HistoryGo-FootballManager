@@ -296,23 +296,24 @@ const largestClone = Math.max(...signatures.values());
 // uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
 // importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
 // er oppnådd — neste malgenererte import ville dratt den ned igjen uten at noe
-// feilet. Målt: 798 unike av 1007 (79 %), største klon 10.
+// feilet. Målt: 883 unike av 1117 (79 %), største klon 9.
 //
 // Grensa er flyttet fra 0,70 til 0,76 fordi Vålerenga-arven nå er lest fra
 // kilde i stedet for malgenerert. Det ER en ratchet: reverteres VIF til mal,
 // faller andelen til 74,4 %, og vakten feller det. Sto grensa på 0,70 ville
 // nøyaktig den reverteringen passert i stillhet.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.76,
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.78,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Også en ratchet: største klon gikk 12 -> 10 med VIF-kilden, så taket
 // senkes fra 20 til 14.
-check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, String(largestClone));
+check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 12, String(largestClone));
 
 // Profilandelen alene er for treg til å fange EN klubb importert på mal. Målt:
 // å reversere Brann til malstyrker koster bare 2 poeng (75 % → 73 %), fordi
 // epoke og nivå fortsatt skiller spillerne. Den følsomme målingen ligger
 // oppstrøms — i styrke-settene selv, som er nettopp det en malimport gjør likt.
-// Målt: 576 unike styrke-sett av 1007 (57 %), 51,7 % med Rosenborg reversert.
+// Målt: 637 unike styrke-sett av 1117 (57 %). Viking-kilden løftet den fra
+// 54,1 % til 57,0 % og fjernet den nest største malgjelden i katalogen.
 //
 // Rosenborg-kilden ga en mindre gevinst enn Vålerenga-kilden, og det er en
 // egenskap ved kilden, ikke ved importen: RBK-dokumentet har 42 unike
@@ -332,7 +333,7 @@ for (const player of players) {
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.53,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.55,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // ---------------------------------------------------------------------------
@@ -383,14 +384,15 @@ for (const [placeId, squad] of heritagePlaces) {
 check("hver klubbarv er målt mot posisjonsmalen", malandeler.length >= 10,
   `${malandeler.length} arver med minst 20 spillere`);
 
-// To arver bærer fortsatt malgenerert gjeld, og tallene er MÅLT, ikke satt.
+// Tromsø bærer fortsatt malgenerert gjeld, og tallet er MÅLT, ikke satt.
+// Viking sto her med 0,32 til kildelista kom; da falt den til 0 av 70, og
+// raden er fjernet i stedet for å bli stående som et tak ingen trenger.
 // Retro-fitten som leste styrker inn i de fem første importene dekket bare de
 // navnene kildene faktisk beskrev — resten ble stående. Grensene her er tak som
 // bare kan gå NED: kommer Tromsø- eller Viking-lista med beskrivelser, skal
 // tallet under settes til det nye, lavere målet.
 const KJENT_MALGJELD = {
-  romssa_arena: 0.48,   // Tromsø: 38 av 81 (47 %) — mangler kildeliste
-  lyse_arena: 0.32      // Viking: 22 av 70 (31 %) — mangler kildeliste
+  romssa_arena: 0.48    // Tromsø: 38 av 81 (47 %) — den siste arven uten kildeliste
 };
 for (const [placeId, andel, antall, total] of malandeler) {
   const tak = KJENT_MALGJELD[placeId] ?? 0.1;

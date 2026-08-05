@@ -878,9 +878,8 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "box_presence",
-        "positioning",
-        "leadership"
+        "command_of_area",
+        "bravery"
       ],
       "needs": [
         "compact_defense",
@@ -912,7 +911,7 @@
       },
       "clubStatusSource": {
         "ullevaal_stadion": "utledet",
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -1152,10 +1151,10 @@
       ],
       "strengths": [
         "heading",
-        "duels",
-        "blocking",
+        "positioning",
         "leadership",
-        "defensive_reading"
+        "duels",
+        "composure"
       ],
       "needs": [
         "compact_shape",
@@ -1188,7 +1187,7 @@
       },
       "clubStatusSource": {
         "ullevaal_stadion": "utledet",
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -3669,12 +3668,10 @@
         "club_professional"
       ],
       "strengths": [
-        "stamina",
-        "positioning",
-        "simple_passing",
+        "passing_range",
+        "tempo_control",
         "leadership",
-        "duels",
-        "running_power"
+        "game_reading"
       ],
       "needs": [
         "clear_task",
@@ -3702,7 +3699,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -3737,12 +3734,10 @@
         "runner"
       ],
       "strengths": [
+        "box_finishing",
         "movement",
         "runs_behind",
-        "box_finishing",
-        "off_ball_runs",
-        "link_play",
-        "first_touch"
+        "acceleration"
       ],
       "needs": [
         "runners_around",
@@ -3770,7 +3765,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -5680,55 +5675,45 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CM"
+        "LB"
       ],
       "usablePositions": [
-        "DM",
-        "AM"
+        "LW",
+        "CB",
+        "CM"
       ],
       "poorFits": [
-        "CB",
+        "ST",
         "GK",
-        "ST"
+        "AM"
       ],
       "archetypeIds": [
-        "balancing_six",
-        "box_to_box_runner"
+        "overlapping_fullback"
       ],
       "archetypes": [
-        "controller",
-        "stamina",
-        "club_professional",
-        "balance"
+        "wide_support"
       ],
       "strengths": [
         "stamina",
         "positioning",
-        "simple_passing",
-        "duels",
-        "running_power"
+        "determination",
+        "teamwork"
       ],
       "needs": [
-        "clear_task",
-        "midfield_partner",
-        "clear_structure"
+        "wide_lane",
+        "cover_behind"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "balancing_six",
-        "holding_midfielder"
+        "overlapping_fullback",
+        "defensive_fullback"
       ],
       "likesTactics": [
-        "structured_build_up",
-        "compact_shape",
-        "medium_press"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "chaos",
-        "constant_pressing_chaos",
-        "rigid_positional_locks"
+        "narrow_low_tempo"
       ],
-      "warningWhenMisused": "Over fire hundre kamper kom av å gjøre jobben sin i et system — ikke av å improvisere utenfor det.",
+      "warningWhenMisused": "Pereira mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
         "sarpsborg_stadion": "club_profile",
@@ -5736,7 +5721,7 @@
       },
       "clubStatusSource": {
         "sarpsborg_stadion": "utledet",
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -18786,8 +18771,9 @@
       ],
       "strengths": [
         "stamina",
+        "work_rate",
         "late_runs",
-        "work_rate"
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -21105,9 +21091,10 @@
         "pace"
       ],
       "strengths": [
-        "first_touch",
-        "combination_play",
-        "crossing"
+        "dribbling",
+        "crossing",
+        "acceleration",
+        "teamwork"
       ],
       "needs": [
         "isolation_duels",
@@ -21136,7 +21123,7 @@
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt",
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -25974,8 +25961,10 @@
       ],
       "strengths": [
         "box_finishing",
-        "finishing",
-        "vision"
+        "final_pass",
+        "leadership",
+        "game_reading",
+        "finishing"
       ],
       "needs": [
         "central_space",
@@ -26000,7 +25989,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26031,7 +26020,8 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning"
+        "distribution",
+        "composure"
       ],
       "needs": [
         "clear_defensive_line",
@@ -26052,7 +26042,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26082,7 +26072,9 @@
       "strengths": [
         "box_finishing",
         "finishing",
-        "movement"
+        "movement",
+        "strength",
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -26105,7 +26097,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26136,7 +26128,9 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "command_of_area"
+        "positioning",
+        "command_of_area",
+        "bravery"
       ],
       "needs": [
         "clear_defensive_line",
@@ -26157,7 +26151,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26188,8 +26182,9 @@
       ],
       "strengths": [
         "heading",
-        "duels",
-        "leadership"
+        "positioning",
+        "leadership",
+        "duels"
       ],
       "needs": [
         "covering_partner",
@@ -26211,7 +26206,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26282,48 +26277,50 @@
       ],
       "classHeight": 85,
       "naturalPositions": [
-        "CB"
-      ],
-      "usablePositions": [
         "DM"
       ],
+      "usablePositions": [
+        "CM",
+        "CB"
+      ],
       "poorFits": [
+        "ST",
         "LW",
-        "RW",
-        "ST"
+        "RW"
       ],
       "archetypeIds": [
-        "duel_stopper"
+        "holding_midfielder"
       ],
       "archetypes": [
-        "duel_winner"
+        "ball_winner"
       ],
       "strengths": [
-        "tackling",
         "positioning",
-        "leadership"
+        "tackling",
+        "leadership",
+        "interceptions"
       ],
       "needs": [
-        "covering_partner",
-        "clear_defensive_line"
+        "clear_structure",
+        "midfield_partner"
       ],
       "preferredRoles": [
-        "duel_stopper",
-        "ball_playing_defender"
+        "holding_midfielder",
+        "deep_playmaker"
       ],
       "likesTactics": [
-        "compact_defense"
+        "structured_build_up"
       ],
       "dislikesTactics": [
-        "high_line"
+        "chaotic_transitions"
       ],
-      "warningWhenMisused": "Berntsen blir utsatt i høy linje med mye rom bak.",
+      "warningWhenMisused": "Berntsen trenger en tydelig oppgave og en makker ved siden av seg.",
       "classSource": "belagt",
       "clubStatus": {
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26356,10 +26353,10 @@
         "wide_support"
       ],
       "strengths": [
+        "duels",
         "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "positioning",
+        "tackling"
       ],
       "needs": [
         "wide_lane",
@@ -26383,7 +26380,7 @@
         "aker_stadion": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet",
+        "lyse_arena": "belagt",
         "romssa_arena": "utledet",
         "aker_stadion": "utledet"
       }
@@ -26416,8 +26413,9 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning"
+        "positioning",
+        "leadership",
+        "interceptions"
       ],
       "needs": [
         "covering_partner",
@@ -26439,7 +26437,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26468,8 +26466,9 @@
       ],
       "strengths": [
         "box_finishing",
+        "finishing",
         "movement",
-        "composure"
+        "heading"
       ],
       "needs": [
         "box_service",
@@ -26492,7 +26491,7 @@
         "lyse_arena": "key_player"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26524,6 +26523,7 @@
       ],
       "strengths": [
         "leadership",
+        "determination",
         "teamwork",
         "positioning"
       ],
@@ -26547,7 +26547,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26580,8 +26580,9 @@
       ],
       "strengths": [
         "set_pieces",
-        "crossing",
-        "stamina"
+        "stamina",
+        "leadership",
+        "crossing"
       ],
       "needs": [
         "wide_lane",
@@ -26603,7 +26604,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26636,7 +26637,8 @@
       "strengths": [
         "duels",
         "positioning",
-        "stamina"
+        "determination",
+        "heading"
       ],
       "needs": [
         "covering_partner",
@@ -26658,7 +26660,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26711,7 +26713,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26742,9 +26744,11 @@
         "dribbler"
       ],
       "strengths": [
-        "final_pass",
         "dribbling",
-        "leadership"
+        "final_pass",
+        "leadership",
+        "box_finishing",
+        "chance_creation"
       ],
       "needs": [
         "wide_space",
@@ -26767,7 +26771,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26796,7 +26800,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
+        "finishing",
         "strength"
       ],
       "needs": [
@@ -26820,7 +26824,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26850,9 +26854,10 @@
         "box_presence"
       ],
       "strengths": [
-        "strength",
         "box_finishing",
-        "work_rate"
+        "aggression",
+        "movement",
+        "strength"
       ],
       "needs": [
         "box_service",
@@ -26875,7 +26880,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26906,7 +26911,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "command_of_area"
+        "bravery"
       ],
       "needs": [
         "clear_defensive_line",
@@ -26927,7 +26932,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -26959,8 +26964,9 @@
       ],
       "strengths": [
         "passing_range",
+        "set_pieces",
         "tempo_control",
-        "long_shots"
+        "leadership"
       ],
       "needs": [
         "midfield_partner",
@@ -26982,7 +26988,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27071,8 +27077,9 @@
       ],
       "strengths": [
         "positioning",
+        "leadership",
         "duels",
-        "leadership"
+        "heading"
       ],
       "needs": [
         "covering_partner",
@@ -27094,7 +27101,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27125,9 +27132,10 @@
         "ball_winner"
       ],
       "strengths": [
-        "simple_passing",
+        "passing_range",
+        "positioning",
         "tempo_control",
-        "stamina"
+        "interceptions"
       ],
       "needs": [
         "clear_structure",
@@ -27149,7 +27157,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27182,7 +27190,8 @@
       "strengths": [
         "leadership",
         "passing_range",
-        "tempo_control"
+        "tempo_control",
+        "determination"
       ],
       "needs": [
         "midfield_partner",
@@ -27204,7 +27213,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27237,7 +27246,8 @@
       "strengths": [
         "dribbling",
         "crossing",
-        "box_finishing"
+        "box_finishing",
+        "acceleration"
       ],
       "needs": [
         "wide_space",
@@ -27260,7 +27270,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27293,7 +27303,8 @@
       "strengths": [
         "stamina",
         "teamwork",
-        "simple_passing"
+        "simple_passing",
+        "positioning"
       ],
       "needs": [
         "midfield_partner",
@@ -27315,7 +27326,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27346,8 +27357,8 @@
         "dribbler"
       ],
       "strengths": [
+        "chance_creation",
         "dribbling",
-        "crossing",
         "final_pass"
       ],
       "needs": [
@@ -27371,7 +27382,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27402,9 +27413,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "movement",
-        "positioning",
-        "box_movement"
+        "finishing",
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -27427,7 +27437,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27457,11 +27467,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -27483,7 +27491,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27514,7 +27522,8 @@
       "strengths": [
         "shot_stopping",
         "positioning",
-        "concentration"
+        "concentration",
+        "reflexes"
       ],
       "needs": [
         "clear_defensive_line",
@@ -27535,7 +27544,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27590,7 +27599,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27621,8 +27630,9 @@
       ],
       "strengths": [
         "leadership",
+        "positioning",
         "heading",
-        "positioning"
+        "duels"
       ],
       "needs": [
         "covering_partner",
@@ -27644,7 +27654,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27657,49 +27667,53 @@
       ],
       "classHeight": 83,
       "naturalPositions": [
-        "CM"
-      ],
-      "usablePositions": [
-        "DM",
         "AM"
       ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
       "poorFits": [
-        "GK",
         "CB",
-        "LW"
+        "GK",
+        "DM"
       ],
       "archetypeIds": [
-        "box_to_box"
+        "classic_ten"
       ],
       "archetypes": [
-        "tempo_setter"
+        "creator",
+        "between_lines"
       ],
       "strengths": [
+        "chance_creation",
         "first_touch",
-        "final_pass",
         "teamwork"
       ],
       "needs": [
-        "midfield_partner",
-        "passing_options"
+        "central_space",
+        "passing_options",
+        "creative_freedom"
       ],
       "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
+        "classic_ten",
+        "free_creator"
       ],
       "likesTactics": [
-        "possession"
+        "possession",
+        "central_combinations"
       ],
       "dislikesTactics": [
-        "long_ball_only"
+        "long_ball_only",
+        "isolated_midfield"
       ],
-      "warningWhenMisused": "Paulsen forsvinner hvis midtbanen blir isolert.",
+      "warningWhenMisused": "Paulsen trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27730,8 +27744,9 @@
         "dribbler"
       ],
       "strengths": [
-        "crossing",
         "box_finishing",
+        "determination",
+        "movement",
         "stamina"
       ],
       "needs": [
@@ -27755,7 +27770,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27768,49 +27783,50 @@
       ],
       "classHeight": 83,
       "naturalPositions": [
-        "LB"
-      ],
-      "usablePositions": [
-        "LW",
         "CB"
       ],
+      "usablePositions": [
+        "DM",
+        "LB"
+      ],
       "poorFits": [
-        "ST",
-        "GK",
-        "AM"
+        "LW",
+        "RW",
+        "ST"
       ],
       "archetypeIds": [
-        "overlapping_fullback"
+        "duel_stopper"
       ],
       "archetypes": [
-        "wide_support"
+        "duel_winner"
       ],
       "strengths": [
         "pace",
+        "acceleration",
         "positioning",
         "duels"
       ],
       "needs": [
-        "wide_lane",
-        "cover_behind"
+        "covering_partner",
+        "clear_defensive_line"
       ],
       "preferredRoles": [
-        "overlapping_fullback",
-        "defensive_fullback"
+        "duel_stopper",
+        "ball_playing_defender"
       ],
       "likesTactics": [
-        "wide_attack"
+        "compact_defense"
       ],
       "dislikesTactics": [
-        "narrow_low_tempo"
+        "high_line"
       ],
-      "warningWhenMisused": "Meinseth mister verdien sin uten bredde å angripe.",
+      "warningWhenMisused": "Meinseth blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27842,9 +27858,9 @@
         "between_lines"
       ],
       "strengths": [
+        "chance_creation",
         "dribbling",
-        "final_pass",
-        "crossing"
+        "final_pass"
       ],
       "needs": [
         "central_space",
@@ -27869,7 +27885,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -27956,7 +27972,7 @@
       ],
       "strengths": [
         "dribbling",
-        "crossing",
+        "box_finishing",
         "acceleration"
       ],
       "needs": [
@@ -27980,7 +27996,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28011,9 +28027,9 @@
         "dribbler"
       ],
       "strengths": [
+        "first_touch",
         "dribbling",
-        "acceleration",
-        "one_v_one"
+        "one_vs_one"
       ],
       "needs": [
         "wide_space",
@@ -28036,7 +28052,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28068,9 +28084,8 @@
       ],
       "strengths": [
         "stamina",
-        "crossing",
         "overlapping_runs",
-        "defensive_reading"
+        "determination"
       ],
       "needs": [
         "wide_lane",
@@ -28092,7 +28107,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28123,10 +28138,9 @@
         "dribbler"
       ],
       "strengths": [
-        "dribbling",
-        "one_v_one",
         "acceleration",
-        "wide_movement"
+        "dribbling",
+        "box_finishing"
       ],
       "needs": [
         "wide_space",
@@ -28149,7 +28163,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28179,11 +28193,10 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
+        "leadership",
         "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels"
       ],
       "needs": [
         "covering_partner",
@@ -28205,7 +28218,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28237,10 +28250,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "teamwork",
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -28262,7 +28273,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28294,10 +28305,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "teamwork",
+        "simple_passing"
       ],
       "needs": [
         "covering_partner",
@@ -28319,7 +28328,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28349,11 +28358,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "determination"
       ],
       "needs": [
         "covering_partner",
@@ -28375,7 +28382,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28407,9 +28414,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "box_finishing"
       ],
       "needs": [
         "wide_space",
@@ -28432,7 +28438,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28463,9 +28469,9 @@
         "dribbler"
       ],
       "strengths": [
-        "acceleration",
+        "pace",
         "box_finishing",
-        "dribbling"
+        "acceleration"
       ],
       "needs": [
         "wide_space",
@@ -28488,7 +28494,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28520,9 +28526,8 @@
       ],
       "strengths": [
         "dribbling",
-        "one_v_one",
-        "acceleration",
-        "wide_movement"
+        "crossing",
+        "movement"
       ],
       "needs": [
         "wide_space",
@@ -28545,7 +28550,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28577,9 +28582,7 @@
       "strengths": [
         "duels",
         "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "determination"
       ],
       "needs": [
         "covering_partner",
@@ -28601,7 +28604,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28632,11 +28635,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "simple_passing"
       ],
       "needs": [
         "covering_partner",
@@ -28658,7 +28659,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28687,8 +28688,8 @@
       ],
       "strengths": [
         "box_finishing",
-        "strength",
-        "heading"
+        "finishing",
+        "strength"
       ],
       "needs": [
         "box_service",
@@ -28711,7 +28712,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28742,8 +28743,7 @@
       "strengths": [
         "shot_stopping",
         "reflexes",
-        "positioning",
-        "command_of_area"
+        "positioning"
       ],
       "needs": [
         "clear_defensive_line",
@@ -28764,7 +28764,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28794,11 +28794,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "duels",
+        "teamwork"
       ],
       "needs": [
         "covering_partner",
@@ -28820,7 +28818,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28851,9 +28849,8 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
+        "first_touch",
         "simple_passing",
-        "positioning",
         "tempo_control"
       ],
       "needs": [
@@ -28876,7 +28873,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28908,10 +28905,9 @@
         "tempo_setter"
       ],
       "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
+        "first_touch",
+        "teamwork",
+        "combination_play"
       ],
       "needs": [
         "midfield_partner",
@@ -28933,7 +28929,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -28964,11 +28960,9 @@
         "duel_winner"
       ],
       "strengths": [
-        "duels",
-        "heading",
+        "teamwork",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "determination"
       ],
       "needs": [
         "covering_partner",
@@ -28990,7 +28984,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -29022,10 +29016,9 @@
         "wide_support"
       ],
       "strengths": [
-        "stamina",
-        "crossing",
-        "overlapping_runs",
-        "defensive_reading"
+        "positioning",
+        "leadership",
+        "teamwork"
       ],
       "needs": [
         "wide_lane",
@@ -29048,7 +29041,7 @@
         "brann_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet",
+        "lyse_arena": "belagt",
         "brann_stadion": "utledet"
       }
     },
@@ -29081,10 +29074,8 @@
       ],
       "strengths": [
         "duels",
-        "heading",
         "positioning",
-        "blocking",
-        "defensive_reading"
+        "heading"
       ],
       "needs": [
         "covering_partner",
@@ -29106,7 +29097,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -29137,9 +29128,10 @@
         "tempo_setter"
       ],
       "strengths": [
+        "work_rate",
+        "leadership",
         "stamina",
-        "teamwork",
-        "leadership"
+        "teamwork"
       ],
       "needs": [
         "midfield_partner",
@@ -29161,7 +29153,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -29191,8 +29183,7 @@
       "strengths": [
         "box_finishing",
         "movement",
-        "positioning",
-        "box_movement"
+        "combination_play"
       ],
       "needs": [
         "box_service",
@@ -29215,7 +29206,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -29246,10 +29237,7 @@
       ],
       "strengths": [
         "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
+        "positioning"
       ],
       "needs": [
         "covering_partner",
@@ -29271,7 +29259,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -29300,7 +29288,7 @@
       ],
       "strengths": [
         "box_finishing",
-        "composure",
+        "determination",
         "movement"
       ],
       "needs": [
@@ -29324,7 +29312,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {
@@ -29356,8 +29344,8 @@
       ],
       "strengths": [
         "composure",
-        "simple_passing",
-        "determination"
+        "set_pieces",
+        "simple_passing"
       ],
       "needs": [
         "midfield_partner",
@@ -29379,7 +29367,7 @@
         "lyse_arena": "club_profile"
       },
       "clubStatusSource": {
-        "lyse_arena": "utledet"
+        "lyse_arena": "belagt"
       }
     },
     {

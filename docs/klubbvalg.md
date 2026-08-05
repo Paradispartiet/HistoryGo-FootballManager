@@ -683,13 +683,30 @@ Den nye vakten fant to reelle hull med én gang:
 | Arv | På posisjonsmalen |
 |---|---:|
 | Tromsø | 38 av 81 (47 %) |
-| Viking | 22 av 70 (31 %) |
+| ~~Viking~~ | ~~22 av 70 (31 %)~~ → **0 av 70** |
 | alle andre | 0–8 % |
 
 Retro-fitten som leste styrker inn i de fem første importene dekket bare de
-navnene kildene faktisk beskrev — resten ble stående. Tallene står nå som **tak
-som bare kan gå ned**: kommer Tromsø- eller Viking-lista med beskrivelser, skal
-de settes til det nye, lavere målet. Bittestet ved å reversere KFUM til mal.
+navnene kildene faktisk beskrev — resten ble stående. Tallene står som **tak som
+bare kan gå ned**. Bittestet ved å reversere KFUM til mal.
+
+**Viking-lista kom, og taket falt til null.** Kilden beskriver hver spiller for
+seg — «dødballspesialist», «rask forsvarsspiller», «hurtig og målfarlig», «en
+offensiv og moderne backtype» — så gjelden ble betalt med kilde og ikke med mal.
+66 spillere fikk styrker lest fra sin egen setning, fire ble hoppet over fordi
+en annen klubbkilde allerede hadde beskrevet dem, og **fire posisjoner var
+gale**: Thomas Pereira sto som sentral midtbane der kilden sier venstreback med
+433 kamper, Bjarne Berntsen som stopper der kilden sier defensiv midtbane, Hans
+Edgar Paulsen som CM der kilden sier offensiv, og Børre Meinseth som venstreback
+der kilden sier «rask forsvarsspiller» i midten.
+
+Raden for Viking er fjernet fra gjeldstabellen i vakten i stedet for å bli
+stående som et tak ingen trenger — bittestet ved å reversere Viking til mal på
+nytt, som nå feller den. **Tromsø er den siste arven uten kildeliste.**
+
+Korpuset løftet seg med: profiluniktheten **77,6 % → 79,1 %**, styrke-settene
+**54,1 % → 57,0 %**, og største klon fra 10 til 9. Grensene er ratchetet til
+0,78, 0,55 og ≤ 12.
 
 ### Rosenborg: 156 navn, og en kilde som beskriver roller, ikke spillere
 
