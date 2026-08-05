@@ -164,6 +164,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
+| Strømsgodset | Marienlyst stadion | 143 |
 | Vålerenga | Intility Arena | 127 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
@@ -182,15 +183,16 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk og Lyn — 1148 arveplasser
-fordelt på alle 18. **Ingen klubb med bane står uten navn.** De 42 klubbene som
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn og Strømsgodset —
+1291 arveplasser fordelt på alle 19. **Ingen klubb med bane står uten navn.** De 41 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som.
 
-Arven er ikke lenger et eliteserieprivilegium: Lyn ligger i OBOS-ligaen og har
-den femte største arven i katalogen. Det er riktig — arv er klubbens historie,
+Arven er ikke lenger et eliteserieprivilegium: Strømsgodset og Lyn ligger begge
+i OBOS-ligaen og har henholdsvis den nest største og den sjette største arven i
+katalogen. Det er riktig — arv er klubbens historie,
 ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 132 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 150 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -572,8 +574,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1176 statusoppføringer på 1007
-spillere, 602 belagte og 574 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1319 statusoppføringer på 1117
+spillere, 718 belagte og 601 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
@@ -586,11 +588,11 @@ Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 ```
 
 Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
-sto på én bane. Det er ikke lenger sant for 132 av dem, og KFUM gjorde det
+sto på én bane. Det er ikke lenger sant for 150 av dem, og KFUM gjorde det
 umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
 gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
 er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
-motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Førtisju
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Sekstini
 spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
 det tallet er større enn null: faller det til null, er migreringen reversert.
 
@@ -624,6 +626,70 @@ Jørgen Strand Larsen.
 HamKam viste seg like sterk: 26 navn fra Pål Jacobsen og Terje Kojedal via Finn
 Thorsen og Jan Åge Fjørtoft til Cato Erstads klubbrekord på 506 kamper.
 Kriteriet er at spilleren har **representert klubben** — det holder.
+
+### Strømsgodset: 143 navn, en helt ny bane, og en vakt som byttet form
+
+Strømsgodset er den første klubben som får arv uten å ha en bane i katalogen fra
+før. Klubbdataene har hele tiden sagt `ground: "Marienlyst"`, men det fantes
+ingen `placeId`, så arven hadde ingenting å feste seg i. Stedet er lagt til med
+id-en de andre banene bruker (`marienlyst_stadion`). **Treffer den ikke History
+Gos egen id, er klubben fortsatt spillbar på grunntroppen** — det blir ingen
+blindvei, men koblingen bør verifiseres mot History Go.
+
+111 nye navn, 32 koblet på. Martin Ødegaard lå bare på Ullevaal, altså en
+nasjonalarena, og var dermed *speidet* og ikke signerbar til en klubbtropp. Med
+Marienlyst er han endelig plukkbar for klubben som utviklet ham.
+
+**Kilden leverer klubbstatusen selv**, som den første av alle: en egen
+`Klubbstatus`-linje per spiller — «Absolutt klubbikon», «Cupmester og
+eksportprofil», «Korttidsprofil». Den er lest direkte inn i `clubStatus` i
+stedet for utledet av kamptall og meritter.
+
+**Ett navn står utenfor, og kilden ba om det.** Rolf Halvorsen er ført med
+«Uavklart historisk hovedposisjon», og kilden slår fast prinsippet selv: «for
+eldre eller svakt dokumenterte spillere er det bedre å skrive at noe er uavklart
+enn å dikte». Posisjon styrer arketyper, roller, styrker og svake sider, så en
+gjettet posisjon er en påstand om en ekte spiller. Samme avgjørelse som for Lyns
+to navn uten posisjon.
+
+**Nær-duplikat-vakten fant fire par på én gang** — som er nettopp det en fersk
+arv på 144 navn skal utløse. Tobias Fjeld Gulliksen og Tobias Gulliksen var
+samme mann og er slått sammen. De tre andre er ekte forskjellige menn og står
+gjennomgått: André Hansen (RBK-keeper) mot André Hanssen (SIF-midtbane), Helge
+Karlsen (Brann) mot Helge Widemann Karlsen (SIF), og Bjørn **Odd**mar Andersen
+(Brann) mot Bjørn Odmar Andersen (SIF). Det siste paret er én bokstav fra
+hverandre og fristelsen til å slå dem sammen var stor — men begge er navngitt av
+sin egen klubbkilde med hver sin posisjon, og å smelte to dokumenterte
+klubbkarrierer sammen er den ene feilen som ikke kan angres.
+
+### Vakten som målte feil ting, og fant to reelle hull da den ble rettet
+
+Strømsgodset-kilden har **48 unike styrkesetninger for 144 spillere (33 %)** —
+samme rollegruppering som Rosenborg. Å importere den senket de to korpusbrede
+andelene under grensene jeg akkurat hadde ratchetet opp.
+
+Det var ikke fordi noen malgenererte noe. Det var fordi en stor klubb med tynn
+kilde kom inn. **En korpusbred andel kan ikke skille «noen malgenererte en
+klubb» fra «en ny klubb har tynnere kilde enn snittet»**, og den blir svakere jo
+større katalogen blir. Å senke grensen for å få plass ville vært å gi opp det
+den vokter; å beholde den ville felt en ekte kildeimport.
+
+Målingen som faktisk treffer er **per klubb**: en malgenerert arv har spillere
+hvis styrker er *bit-identiske* med posisjonsmalen. En ekte kilde treffer den
+aldri systematisk, uansett hvor grovt den grupperer.
+
+Den nye vakten fant to reelle hull med én gang:
+
+| Arv | På posisjonsmalen |
+|---|---:|
+| Tromsø | 38 av 81 (47 %) |
+| Viking | 22 av 70 (31 %) |
+| alle andre | 0–8 % |
+
+Retro-fitten som leste styrker inn i de fem første importene dekket bare de
+navnene kildene faktisk beskrev — resten ble stående. Tallene står nå som **tak
+som bare kan gå ned**: kommer Tromsø- eller Viking-lista med beskrivelser, skal
+de settes til det nye, lavere målet. Bittestet ved å reversere KFUM til mal.
 
 ### Rosenborg: 156 navn, og en kilde som beskriver roller, ikke spillere
 

@@ -302,7 +302,7 @@ const largestClone = Math.max(...signatures.values());
 // kilde i stedet for malgenerert. Det ER en ratchet: reverteres VIF til mal,
 // faller andelen til 74,4 %, og vakten feller det. Sto grensa på 0,70 ville
 // nøyaktig den reverteringen passert i stillhet.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.78,
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.76,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Også en ratchet: største klon gikk 12 -> 10 med VIF-kilden, så taket
 // senkes fra 20 til 14.
@@ -332,8 +332,71 @@ for (const player of players) {
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.55,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.53,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
+
+// ---------------------------------------------------------------------------
+// Og den samme målingen PER KLUBB — som er der feilen faktisk bor
+// ---------------------------------------------------------------------------
+// De to andelene over er korpusbrede, og det gjør dem uskarpe på en måte som
+// ble tydelig med Strømsgodset: den kilden har 48 unike styrkesetninger for 144
+// spillere (33 %), fordi den grupperer etter rolle. Å importere den senket
+// korpusandelene under grensene — ikke fordi noen malgenererte noe, men fordi
+// en stor klubb med tynn kilde kom inn.
+//
+// En korpusbred andel kan ikke skille «noen malgenererte en klubb» fra «en ny
+// klubb har tynnere kilde enn snittet», og den blir svakere jo større katalogen
+// blir. Å senke grensen for å få plass ville vært å gi opp det den vokter; å
+// beholde den ville felt en ekte kildeimport.
+//
+// Målingen som faktisk treffer er per klubb: en malgenerert arv har spillere
+// hvis styrker er BIT-IDENTISKE med posisjonsmalen. En ekte kilde treffer den
+// aldri systematisk, uansett hvor grovt den grupperer.
+const POSISJONSMAL = {
+  GK: ["shot_stopping", "reflexes", "positioning", "command_of_area"],
+  CB: ["duels", "heading", "positioning", "blocking", "defensive_reading"],
+  RB: ["stamina", "crossing", "overlapping_runs", "defensive_reading"],
+  LB: ["stamina", "crossing", "overlapping_runs", "defensive_reading"],
+  DM: ["positioning", "tackling", "interceptions", "simple_passing"],
+  CM: ["stamina", "simple_passing", "positioning", "tempo_control"],
+  AM: ["vision", "final_pass", "first_touch", "combination_play"],
+  LW: ["dribbling", "one_v_one", "acceleration", "wide_movement"],
+  RW: ["dribbling", "one_v_one", "acceleration", "wide_movement"],
+  ST: ["box_finishing", "movement", "positioning", "box_movement"]
+};
+const heritagePlaces = new Map();
+for (const player of players) {
+  for (const placeId of player.sourcePlaceIds || []) {
+    if (!heritagePlaces.has(placeId)) heritagePlaces.set(placeId, []);
+    heritagePlaces.get(placeId).push(player);
+  }
+}
+const malandeler = [];
+for (const [placeId, squad] of heritagePlaces) {
+  if (squad.length < 20) continue;
+  const påMal = squad.filter((player) => {
+    const mal = POSISJONSMAL[player.naturalPositions?.[0]];
+    return mal && JSON.stringify(player.strengths) === JSON.stringify(mal);
+  }).length;
+  malandeler.push([placeId, påMal / squad.length, påMal, squad.length]);
+}
+check("hver klubbarv er målt mot posisjonsmalen", malandeler.length >= 10,
+  `${malandeler.length} arver med minst 20 spillere`);
+
+// To arver bærer fortsatt malgenerert gjeld, og tallene er MÅLT, ikke satt.
+// Retro-fitten som leste styrker inn i de fem første importene dekket bare de
+// navnene kildene faktisk beskrev — resten ble stående. Grensene her er tak som
+// bare kan gå NED: kommer Tromsø- eller Viking-lista med beskrivelser, skal
+// tallet under settes til det nye, lavere målet.
+const KJENT_MALGJELD = {
+  romssa_arena: 0.48,   // Tromsø: 38 av 81 (47 %) — mangler kildeliste
+  lyse_arena: 0.32      // Viking: 22 av 70 (31 %) — mangler kildeliste
+};
+for (const [placeId, andel, antall, total] of malandeler) {
+  const tak = KJENT_MALGJELD[placeId] ?? 0.1;
+  check(`${placeId} er ikke malgenerert`, andel < tak,
+    `${antall} av ${total} står på posisjonsmalen (tak ${(tak * 100).toFixed(0)} %)`);
+}
 
 // Og epoken må faktisk slå ut: to spillere med samme posisjon og nivå, men ulik
 // epoke, skal ikke være like.

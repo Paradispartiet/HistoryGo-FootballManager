@@ -301,7 +301,16 @@ const REVIEWED_NAME_PAIRS = new Map([
   // To spisser fra samme tiår, hver dokumentert av sin klubbkilde: Lyns
   // Ole Stavrum (121 mål, gullet i 1964) og Moldes Ole Erik Stavrum. Å slå dem
   // sammen ville smeltet to dokumenterte klubbkarrierer til én.
-  ["ole erik stavrum|ole stavrum", "Lyns spiss mot Moldes spiss"]
+  ["ole erik stavrum|ole stavrum", "Lyns spiss mot Moldes spiss"],
+  // Strømsgodset-importen utløste fire nye par på én gang, og det er vakten som
+  // virker: en fersk klubbarv på 144 navn er nettopp der kollisjonene oppstår.
+  ["andré hansen|andré hanssen", "RBKs keeper mot Strømsgodsets defensive midtbane"],
+  ["helge karlsen|helge widemann karlsen", "Branns høyreback mot Strømsgodsets stopper"],
+  // “Oddmar” mot “Odmar” er én bokstav, og fristelsen til å slå dem sammen er
+  // stor. Men begge er navngitt av sin egen klubbkilde med hver sin posisjon —
+  // Branns høyreving mot Strømsgodsets midtbanespiller — og å smelte to
+  // dokumenterte klubbkarrierer sammen er den ene feilen som ikke kan angres.
+  ["bjørn oddmar andersen|bjørn odmar andersen", "Branns ving mot Strømsgodsets midtbanespiller"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

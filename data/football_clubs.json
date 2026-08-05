@@ -259,7 +259,8 @@
       "city": "Drammen",
       "tier": "obosligaen",
       "strength": 68,
-      "form": 52
+      "form": 52,
+      "homePlaceId": "marienlyst_stadion"
     },
     {
       "id": "haugesund",
