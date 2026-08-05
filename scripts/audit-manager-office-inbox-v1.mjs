@@ -36,7 +36,7 @@ check("simulering og audit er i package", /sim:manager-office-inbox-v1/.test(pac
 check("simulering og audit kjører i CI", /npm run sim:manager-office-inbox-v1/.test(workflow) && /npm run audit:manager-office-inbox-v1/.test(workflow));
 check("nettleservakten dekker fokus, navigasjon og mobil", /office-status-card/.test(browser) && /inboxThreadList/.test(browser) && /inboxGoTraining/.test(browser) && /width: 390/.test(browser) && /scrollWidth - document\.documentElement\.clientWidth/.test(browser));
 check("tilgjengelighet testes på assistentråden", /AxeBuilder/.test(browser) && /wcag2aa/.test(browser));
-check("dokumentasjonen låser motorgrensene", /Ingen ny/.test(docs) && /football-next-action\.js/.test(docs) && /football-inbox-events\.js/.test(docs));
+check("dokumentasjonen låser motorgrensene", /(uten å bygge nye motorer|Ingen ny motor)/i.test(docs) && /football-next-action\.js/.test(docs) && /football-inbox-events\.js/.test(docs));
 
 const failed = checks.filter((entry) => !entry.ok);
 console.log("Managerkontor og Assistentråd v1-audit\n");
