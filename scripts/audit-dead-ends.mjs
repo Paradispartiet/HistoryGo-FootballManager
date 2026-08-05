@@ -1085,7 +1085,9 @@ stage("27. Ingen funksjon to steder");
   // unna, og dermed like usynlig som popupen det kom fra. «Rett sted» er ikke
   // nok hvis du ikke ser det.
   {
-    const panel = html.slice(html.indexOf('id="leagueOnboardingPanel"'), html.indexOf('class="manager-portal"'));
+    const panelStart = html.indexOf('id="leagueOnboardingPanel"');
+    const panelEnd = html.indexOf('id="officeCommandPanel"', panelStart);
+    const panel = panelStart >= 0 && panelEnd > panelStart ? html.slice(panelStart, panelEnd) : "";
     const body = panel.replace(/<!--[\s\S]*?-->/g, "");
     check("startvalget ligger i før-sesong-panelet på Oversikt", body.includes('id="startModePanel"') && body.includes('id="autoFillSquad"'));
     check("startvalget er ikke gjemt bak en nedtrekksboks", !body.includes("<details"));
