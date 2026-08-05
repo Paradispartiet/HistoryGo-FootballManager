@@ -1,0 +1,28 @@
+name: Diagnose Season Command
+
+on:
+  push:
+    branches:
+      - agent/manager-season-command-v1
+    paths:
+      - .github/workflows/diagnose-season-command.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/manager-season-command-v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Manager flow UI
+        run: node scripts/simulate-manager-flow-ui.mjs
+      - name: Manager ground flow
+        run: node scripts/simulate-manager-ground-flow-v1.mjs
+      - name: Manager season scene
+        run: node scripts/simulate-manager-season-scene-v1.mjs
