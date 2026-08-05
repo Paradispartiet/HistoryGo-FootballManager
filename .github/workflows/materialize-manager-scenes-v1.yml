@@ -54,19 +54,51 @@ jobs:
 
           path = Path("tests/browser/manager-shell-v3.spec.js")
           source = path.read_text(encoding="utf-8")
-          old = '''  await page.locator('.app-subtab[data-tab-target="trening"]').click();
+
+          before_each_old = 'test.beforeEach(async ({ page }) => {'
+          before_each_new = 'test.beforeEach(async ({ page }, testInfo) => {'
+          if before_each_old not in source:
+              raise SystemExit("Expected beforeEach signature was not found")
+          source = source.replace(before_each_old, before_each_new, 1)
+
+          goto_old = '''  });
+            await page.goto("/");
+          '''
+          goto_new = '''  });
+            if (testInfo.title === "Kamp i gang · 1280") {
+              await page.addInitScript(() => {
+                localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
+                  focusId: "role_understanding",
+                  week: 1,
+                  appliedSessionId: null
+                }));
+              });
+            }
+            await page.goto("/");
+          '''
+          if goto_old not in source:
+              raise SystemExit("Expected page.goto setup block was not found")
+          source = source.replace(goto_old, goto_new, 1)
+
+          training_old = '''  await page.locator('.app-subtab[data-tab-target="trening"]').click();
             const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
             await expect(focusButton).toBeVisible();
+            await focusButton.click();
           '''
-          new = '''  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]:visible').first();
-            await expect(trainingTab).toBeVisible();
-            await trainingTab.click();
-            const focusButton = page.locator("#weeklyTrainingOptions:visible button:not([disabled]):visible").first();
-            await expect(focusButton).toBeVisible();
+          training_new = '''  const storedFocus = await page.evaluate(() => {
+              try {
+                return JSON.parse(localStorage.getItem("hgfm.weeklyTrainingFocus.v1") || "null");
+              } catch (error) {
+                return null;
+              }
+            });
+            expect(storedFocus).toMatchObject({ focusId: "role_understanding", week: 1, appliedSessionId: null });
           '''
-          if old not in source:
+          if training_old not in source:
               raise SystemExit("Expected training helper block was not found")
-          path.write_text(source.replace(old, new, 1), encoding="utf-8")
+          source = source.replace(training_old, training_new, 1)
+
+          path.write_text(source, encoding="utf-8")
           PY
 
           git status --short
