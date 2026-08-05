@@ -1,0 +1,121 @@
+name: Materialize manager scenes v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/matchday-lineup-scenes-v1-clean
+    paths:
+      - .github/workflows/materialize-manager-scenes-v1.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: materialize-manager-scenes-v1-final
+  cancel-in-progress: false
+
+jobs:
+  materialize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout clean branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/matchday-lineup-scenes-v1-clean
+          fetch-depth: 0
+
+      - name: Apply validated manager scenes patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_REF="origin/agent/matchday-lineup-scenes-v1"
+          git fetch --no-tags origin \
+            agent/matchday-lineup-scenes-v1 \
+            agent/matchday-lineup-scenes-v1-clean
+
+          git checkout "${SOURCE_REF}" -- \
+            docs/MANAGER_SCENES_V1.md \
+            scripts/audit-manager-scenes.mjs \
+            scripts/simulate-manager-scenes.mjs \
+            src/football-office-ui.js \
+            src/football-scene-schema.js \
+            src/football-scene-state.js \
+            src/football-section-cards.js
+
+          git show "${SOURCE_REF}:.github/manager-scenes-v1.diff.b64" \
+            | tr -d '\n\r ' \
+            | base64 --decode \
+            | gunzip > /tmp/manager-scenes-v1.diff
+          git apply --3way /tmp/manager-scenes-v1.diff
+          git status --short
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run full validation
+        run: |
+          npm run validate:script-syntax
+          npm run build
+          npm run verify:pages-artifact
+          npm run test:data
+          npm run audit:club-data
+          npm run sim:promoted-clubs
+          npm run audit:unlock-data
+          npm run audit:club-selection
+          npm run audit:data-sources
+          npm run verify:historygo-flow
+          npm run audit:dead-ends
+          npm run audit:ui-flow
+          npm run audit:manager-ground-flow
+          npm run audit:manager-scenes
+          npm run sim:historygo-flow
+          npm run sim:manager-ground-flow
+          npm run sim:manager-scenes
+          npm run sim:first-season
+          npm run sim:match-flow
+          npm run sim:club-mode
+          npm run sim:league-mode
+          npm run sim:training-room
+          npm run sim:match-tactics
+          npm run sim:academic-4-2-4
+          npx playwright install --with-deps chromium
+          npm run test:responsive
+
+      - name: Commit and push permanent changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH="agent/matchday-lineup-scenes-v1-clean"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch --no-tags origin "${BRANCH}"
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/${BRANCH})" ]; then
+            echo "Remote branch changed during validation; refusing a non-fast-forward push."
+            exit 1
+          fi
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No permanent changes to commit."
+            exit 1
+          fi
+
+          if git diff --cached --name-only | grep -Eq \
+            '(^|/)(manager-scenes-v1\.diff\.b64|materialize-payload\.yml|reapply-manager-scenes\.yml)$'; then
+            echo "Temporary materialization artifacts were staged."
+            exit 1
+          fi
+
+          git commit -m "Build manager lineup and matchday scenes v1"
+          git push origin "HEAD:${BRANCH}"
