@@ -73,18 +73,20 @@ jobs:
       - name: Commit and push clean scene pass
         run: |
           rm -f .github/workflows/manager-scenes-v1-build.yml
-          git rm .github/workflows/materialize-manager-scenes-v1.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          if find .github/workflows -maxdepth 1 -type f -name '*manager-scenes-v1*' | grep -q .; then
+          git reset -- .github/workflows/materialize-manager-scenes-v1.yml
+          remaining_workflows=$(find .github/workflows -maxdepth 1 -type f -name '*manager-scenes-v1*' ! -name 'materialize-manager-scenes-v1.yml' -print)
+          if [ -n "$remaining_workflows" ]; then
             echo "Temporary scene workflows remain:"
-            find .github/workflows -maxdepth 1 -type f -name '*manager-scenes-v1*' -print
+            printf '%s\n' "$remaining_workflows"
             exit 1
           fi
-          if find .github -maxdepth 1 -type f -name '*.diff.b64' | grep -q .; then
+          remaining_payloads=$(find .github -maxdepth 1 -type f -name '*.diff.b64' -print)
+          if [ -n "$remaining_payloads" ]; then
             echo "Temporary patch payload remains:"
-            find .github -maxdepth 1 -type f -name '*.diff.b64' -print
+            printf '%s\n' "$remaining_payloads"
             exit 1
           fi
           git diff --cached --check
