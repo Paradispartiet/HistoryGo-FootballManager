@@ -48,6 +48,28 @@ jobs:
             | base64 --decode \
             | gunzip > /tmp/manager-scenes-v1.diff
           git apply --3way /tmp/manager-scenes-v1.diff
+
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("tests/browser/manager-shell-v3.spec.js")
+          source = path.read_text(encoding="utf-8")
+          old = '''  await page.locator('.app-subtab[data-tab-target="trening"]').click();
+            const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
+            await expect(focusButton).toBeVisible();
+          '''
+          new = '''  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]:visible').first();
+            await expect(trainingTab).toBeVisible();
+            await trainingTab.click();
+            await expect(page.locator("#trainingWorkspace")).toBeVisible();
+            const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled]):visible").first();
+            await expect(focusButton).toBeVisible();
+          '''
+          if old not in source:
+              raise SystemExit("Expected training helper block was not found")
+          path.write_text(source.replace(old, new, 1), encoding="utf-8")
+          PY
+
           git status --short
 
       - name: Set up Node.js
