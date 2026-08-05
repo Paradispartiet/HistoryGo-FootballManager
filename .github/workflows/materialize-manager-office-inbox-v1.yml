@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Apply source patch and wire permanent checks
+      - name: Apply source patch and wire package checks
         shell: bash
         run: |
           set -euo pipefail
@@ -42,24 +42,13 @@ jobs:
               sim_anchor + '    "sim:manager-office-inbox-v1": "node scripts/simulate-manager-office-inbox-v1.mjs",\n',
           )
           package_path.write_text(package)
-
-          ci_path = Path(".github/workflows/ci.yml")
-          ci = ci_path.read_text()
-          audit_ci_anchor = "          npm run audit:manager-shell-v3\n"
-          sim_ci_anchor = "          npm run sim:manager-season-scene-v1\n"
-          assert ci.count(audit_ci_anchor) == 1
-          assert ci.count(sim_ci_anchor) == 1
-          ci = ci.replace(audit_ci_anchor, audit_ci_anchor + "          npm run audit:manager-office-inbox-v1\n")
-          ci = ci.replace(sim_ci_anchor, sim_ci_anchor + "          npm run sim:manager-office-inbox-v1\n")
-          ci_path.write_text(ci)
           PY
 
-      - name: Remove temporary materializer and publish implementation
+      - name: Remove patch payload and publish implementation
         shell: bash
         run: |
           set -euo pipefail
           rm -rf .github/materialize
-          rm -f .github/workflows/materialize-manager-office-inbox-v1.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
