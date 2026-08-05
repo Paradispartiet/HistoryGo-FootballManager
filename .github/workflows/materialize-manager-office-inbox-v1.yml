@@ -1,0 +1,67 @@
+name: Materialize Manager Office Inbox v1
+
+on:
+  push:
+    branches:
+      - agent/manager-office-inbox-v1
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply source patch and wire permanent checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .github/materialize/manager-office-inbox-v1.patch.b64.* | base64 --decode > /tmp/manager-office-inbox-v1.patch
+          git apply --check /tmp/manager-office-inbox-v1.patch
+          git apply /tmp/manager-office-inbox-v1.patch
+          python3 <<'PY'
+          from pathlib import Path
+
+          package_path = Path("package.json")
+          package = package_path.read_text()
+          audit_anchor = '    "audit:manager-shell-v3": "node scripts/audit-manager-shell-v3.mjs",\n'
+          sim_anchor = '    "sim:manager-season-scene-v1": "node scripts/simulate-manager-season-scene-v1.mjs",\n'
+          assert package.count(audit_anchor) == 1
+          assert package.count(sim_anchor) == 1
+          package = package.replace(
+              audit_anchor,
+              audit_anchor + '    "audit:manager-office-inbox-v1": "node scripts/audit-manager-office-inbox-v1.mjs",\n',
+          )
+          package = package.replace(
+              sim_anchor,
+              sim_anchor + '    "sim:manager-office-inbox-v1": "node scripts/simulate-manager-office-inbox-v1.mjs",\n',
+          )
+          package_path.write_text(package)
+
+          ci_path = Path(".github/workflows/ci.yml")
+          ci = ci_path.read_text()
+          audit_ci_anchor = "          npm run audit:manager-shell-v3\n"
+          sim_ci_anchor = "          npm run sim:manager-season-scene-v1\n"
+          assert ci.count(audit_ci_anchor) == 1
+          assert ci.count(sim_ci_anchor) == 1
+          ci = ci.replace(audit_ci_anchor, audit_ci_anchor + "          npm run audit:manager-office-inbox-v1\n")
+          ci = ci.replace(sim_ci_anchor, sim_ci_anchor + "          npm run sim:manager-office-inbox-v1\n")
+          ci_path.write_text(ci)
+          PY
+
+      - name: Remove temporary materializer and publish implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .github/materialize
+          rm -f .github/workflows/materialize-manager-office-inbox-v1.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Bygg managerkontor og assistentråd v1"
+          git push origin HEAD:${GITHUB_REF_NAME}
