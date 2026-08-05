@@ -61,6 +61,11 @@ jobs:
               raise SystemExit("Expected beforeEach signature was not found")
           source = source.replace(before_each_old, before_each_new, 1)
 
+          season_old = 'leagueSeasonStatus: "preseason"'
+          if season_old not in source:
+              raise SystemExit("Expected preseason fixture state was not found")
+          source = source.replace(season_old, 'leagueSeasonStatus: "active"', 1)
+
           goto_old = '''  });
             await page.goto("/");
           '''
@@ -71,6 +76,15 @@ jobs:
                   focusId: "role_understanding",
                   week: 1,
                   appliedSessionId: null
+                }));
+                localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify({
+                  week: 1,
+                  phase: "matchday",
+                  boardTrust: 50,
+                  playerMorale: 50,
+                  tacticalClarity: 50,
+                  trainingCulture: 50,
+                  mediaPressure: 50
                 }));
               });
             }
