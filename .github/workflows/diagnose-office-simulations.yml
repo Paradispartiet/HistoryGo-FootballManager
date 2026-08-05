@@ -35,10 +35,11 @@ jobs:
           from pathlib import Path
           path = Path("scripts/simulate-mode-isolation.mjs")
           lines = path.read_text().splitlines()
-          index = next((i for i, line in enumerate(lines) if "assert.match(app" in line and "manager-portal" in line and "offPitchSignalCard" in line), None)
+          expected = '  assert.match(app, /\\.office-command-panel, \\.office-depth, #offPitchSignalCard, \\.decision-strip/);'
+          index = next((i for i, line in enumerate(lines) if "assert.match(app" in line and "offPitchSignalCard" in line), None)
           if index is None:
-              raise SystemExit("obsolete manager portal assertion not found")
-          lines[index] = '  assert.match(app, /\\.office-command-panel, \\.office-depth, #offPitchSignalCard, \\.decision-strip/);'
+              raise SystemExit("mode isolation panel assertion not found")
+          lines[index] = expected
           path.write_text("\n".join(lines) + "\n")
           PY
 
@@ -53,5 +54,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scripts/simulate-mode-isolation.mjs
-          git commit -m "Update office mode-isolation contract"
-          git push origin HEAD:${GITHUB_REF_NAME}
+          if git diff --cached --quiet; then
+            echo "Mode-isolation contract already current."
+          else
+            git commit -m "Update office mode-isolation contract"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
