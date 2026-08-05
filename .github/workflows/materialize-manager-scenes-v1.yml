@@ -76,20 +76,17 @@ jobs:
           git rm .github/workflows/materialize-manager-scenes-v1.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- \
-            .github/workflows/ci.yml \
-            docs/MATCHDAY_LINEUP_SCENES_V1.md \
-            index.html \
-            package.json \
-            scripts/audit-manager-shell-v3.mjs \
-            scripts/simulate-manager-flow-ui.mjs \
-            scripts/simulate-manager-scenes-v1.mjs \
-            src/app.js \
-            src/ui/manager-lineup-presentation.js \
-            src/ui/manager-matchday-presentation.js \
-            style.css \
-            tests/browser/manager-shell-v3.spec.js \
-            tests/browser/manager-shell-v3.spec.js-snapshots/*.png
+          git add -A
+          if find .github/workflows -maxdepth 1 -type f -name '*manager-scenes-v1*' | grep -q .; then
+            echo "Temporary scene workflows remain:"
+            find .github/workflows -maxdepth 1 -type f -name '*manager-scenes-v1*' -print
+            exit 1
+          fi
+          if find .github -maxdepth 1 -type f -name '*.diff.b64' | grep -q .; then
+            echo "Temporary patch payload remains:"
+            find .github -maxdepth 1 -type f -name '*.diff.b64' -print
+            exit 1
+          fi
           git diff --cached --check
           git commit -m "Build matchday and lineup as manager scenes"
           git push origin HEAD:agent/matchday-lineup-scenes-v1-clean
