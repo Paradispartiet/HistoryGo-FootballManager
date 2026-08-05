@@ -148,6 +148,8 @@ import {
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
+import { selectDefaultFormation, selectDefaultMatchPlan } from "./football-default-formation.js";
+import { evaluateMatchdayReadiness } from "./football-matchday-readiness.js";
 import {
   GAME_STATE_LABELS,
   rankPlansForSituation,
@@ -3971,41 +3973,54 @@ function saveMatchdayState() {
   }
 }
 
-// Kampklar-status: samler hvorfor laget eventuelt ikke kan spille kampdag.
-// Leser kun teamFit og availability-snapshotets roster readiness – ingen ny
-// motor, ingen egne unlock-beregninger. Returnerer { isReady, reasons }.
+// Kampklar-status: én autoritativ port for alle flater og handlere. Den rene
+// motoren eier status, blokkeringer, rekkefølge og canStartMatch. App-laget
+// oversetter bare eksisterende state til et rent inputobjekt.
 function getMatchdayReadiness(teamFit) {
-  const readiness = getAvailability().rosterReadiness;
-  const reasons = [];
+  const roster = getAvailability().rosterReadiness || {};
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const selectedMode = state.gameStartState?.selectedMode || state.modeEnvelope?.activeMode || null;
+  const hasPlayableMatch = isLeagueModeActive()
+    ? isLeagueSeasonActive()
+    : isScenarioModeActive()
+      ? state.miniSeason?.status === "active"
+      : isNationalModeActive()
+        ? isTournamentActive()
+        : false;
 
-  if (!teamFit) {
-    reasons.push("Lagdata er ikke lastet ennå.");
-    return { isReady: false, reasons };
-  }
+  // clubWeekMatchdayGate.isBlocked betyr at kampdagfasen VENTER på kampen før
+  // uka kan gå videre. Det er derfor ikke et forbud mot avspark. Kampstart er
+  // blokkert når klubben står i en annen fase enn kampdag.
+  const clubWeekPhase = state.clubWeekState?.phase || null;
+  const clubWeekBlocked = Boolean(
+    selectedMode === "league" && clubWeekPhase && clubWeekPhase !== "matchday"
+  );
 
-  const missingStarters = teamFit.totalSlots - teamFit.completeCount;
-  if (missingStarters > 0) {
-    reasons.push(
-      `Fyll ${missingStarters} plass${missingStarters === 1 ? "" : "er"} i startelleveren (spiller og rolle).`
-    );
-  }
-
-  const duplicates = Array.isArray(teamFit.duplicatePlayers) ? teamFit.duplicatePlayers : [];
-  if (duplicates.length > 0) {
-    reasons.push(`Samme spiller står på flere plasser: ${duplicates.map((player) => player.name).join(", ")}.`);
-  }
-
-  if (!readiness.hasEnoughBench) {
-    reasons.push(`Mangler ${readiness.missingBench} benkespiller${readiness.missingBench === 1 ? "" : "e"} (krav: ${REQUIRED_BENCH}).`);
-  }
-
-  if (!readiness.hasEnoughUnlocked) {
-    reasons.push(
-      `Samle ${readiness.missingUnlocked} spiller${readiness.missingUnlocked === 1 ? "" : "e"} til via History Go-steder (krav: ${REQUIRED_SQUAD_SIZE} i troppen).`
-    );
-  }
-
-  return { isReady: reasons.length === 0, reasons };
+  return evaluateMatchdayReadiness({
+    dataLoaded: Boolean(teamFit),
+    starterAssignments: assignments.map((item) => ({
+      playerId: item.player?.id || null,
+      roleId: item.role?.id || null
+    })),
+    duplicatePlayerIds: (Array.isArray(teamFit?.duplicatePlayers) ? teamFit.duplicatePlayers : [])
+      .map((player) => player?.id)
+      .filter(Boolean),
+    unlockedPlayerCount: roster.unlockedCount,
+    benchCount: roster.benchCount,
+    expectedStarters: REQUIRED_STARTERS,
+    minimumBench: REQUIRED_BENCH,
+    minimumSquadSize: REQUIRED_SQUAD_SIZE,
+    hasTrainingChoice:
+      Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId),
+    selectedMode,
+    hasPlayableMatch,
+    leagueSeasonActive: !isLeagueModeActive() || isLeagueSeasonActive(),
+    clubWeekBlocked,
+    clubWeekReason: clubWeekBlocked
+      ? `Klubbuka står i «${CLUB_WEEK_PHASE_LABELS[clubWeekPhase] || clubWeekPhase}». Gå videre til kampdag.`
+      : "",
+    matchInProgress: Boolean(state.matchday?.session)
+  });
 }
 
 // Sørg for at matchday-state alltid har riktig form før den brukes.
@@ -4062,6 +4077,19 @@ function getFormationMatchupVsOpponent(opponent) {
 function playMatchday() {
   const teamFit = getTeamFit();
   const formation = getFormation();
+  const readiness = getMatchdayReadiness(teamFit);
+
+  // Den samme autoritative porten som driver status, knapp og Neste handling
+  // vokter også selve handleren. Alternative UI-veier kan dermed ikke omgå den.
+  if (!readiness.canStartMatch) {
+    if (elements.matchdayReadiness) {
+      elements.matchdayReadiness.dataset.ready = "false";
+      elements.matchdayReadiness.dataset.status = readiness.status;
+      elements.matchdayReadiness.textContent = readiness.summary;
+    }
+    renderApp();
+    return;
+  }
 
   if (!teamFit || !formation) {
     return;
@@ -4076,7 +4104,7 @@ function playMatchday() {
 
   // Kampdag-gating: ikke spill med ufullstendig eller ugyldig lag. Statusfeltet
   // i kampdagpanelet (renderMatchdayReadiness) forklarer hva som mangler.
-  if (!getMatchdayReadiness(teamFit).isReady || (!state.weeklyTrainingProgram?.programId && !state.weeklyTrainingFocus?.focusId)) {
+  if (!getMatchdayReadiness(teamFit).canStartMatch || (!state.weeklyTrainingProgram?.programId && !state.weeklyTrainingFocus?.focusId)) {
     renderApp();
     return;
   }
@@ -8534,7 +8562,7 @@ function buildNextDecisions(teamFit) {
 
   // 5) Kampdag når laget er kampklart (samme gating som kampdagpanelet:
   // komplett ellever, ingen duplikater, full benk og 15-spillerkravet).
-  if (getMatchdayReadiness(teamFit).isReady && !state.matchday?.session) {
+  if (getMatchdayReadiness(teamFit).canStartMatch && !state.matchday?.session) {
     decisions.push({
       tag: "Kampdag",
       title: "Spill neste kamp",
@@ -8687,7 +8715,7 @@ function buildNextActionContext(teamFit) {
     assignments.find((item) => item.player && duplicateIds.has(item.player.id)) || null;
 
   const rosterReadiness = getAvailability().rosterReadiness;
-  const readiness = teamFit ? getMatchdayReadiness(teamFit) : { isReady: false };
+  const readiness = getMatchdayReadiness(teamFit);
   const gate = getClubWeekMatchdayGate();
   const clubWeekState = state.clubWeekState || null;
 
@@ -8721,7 +8749,8 @@ function buildNextActionContext(teamFit) {
     clubWeekGate: { isBlocked: Boolean(gate.isBlocked), reason: gate.reason || "" },
     hasTrainingChoice:
       Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId),
-    matchdayReady: Boolean(readiness.isReady),
+    matchdayReadiness: readiness,
+    matchdayReady: Boolean(readiness.canStartMatch),
     unreadThreads: getInboxAttentionCount(),
     hasUnseenReport: hasUnseenMatchReport(),
     miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active" || isLeagueModeActive() && state.leagueSeason?.status === "active",
@@ -8825,6 +8854,7 @@ function renderNextActionStrip(teamFit) {
   if (elements.nextActionPrimaryTag) elements.nextActionPrimaryTag.textContent = primary.tag;
   if (elements.nextActionPrimaryTitle) elements.nextActionPrimaryTitle.textContent = primary.title;
   if (elements.nextActionPrimaryHint) elements.nextActionPrimaryHint.textContent = primary.hint;
+  primaryButton.setAttribute("aria-label", `${primary.tag}: ${primary.title}. ${primary.hint}`);
   primaryButton.disabled = typeof primary.run !== "function";
   // Onclick-property (ikke addEventListener) hindrer at handlere hoper seg opp
   // mellom renders.
@@ -9521,29 +9551,33 @@ function renderBadgeEffects(teamFit) {
   });
 }
 
-// Kampklar-status i kampdagpanelet: grønn "Klar for kampdag" når laget er
-// gyldig, ellers en tydelig forklaring på hva som mangler. Spill kamp-knappen
-// følger samme status, og deaktiveres også mens en kamp pågår.
+// Kampklar-status i kampdagpanelet. Status, tekst og disabled-verdi kommer fra
+// samme readiness-resultat; ingen parallelle trening-/troppsbetingelser her.
 function renderMatchdayReadiness(teamFit) {
   const el = elements.matchdayReadiness;
-  const { isReady, reasons } = getMatchdayReadiness(teamFit);
+  const readiness = getMatchdayReadiness(teamFit);
   const session = state.matchday?.session || null;
-  const hasTrainingChoice = Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId);
 
   if (el) {
-    if (session) {
-      el.dataset.ready = "true";
-      el.textContent = `Kamp pågår mot ${session.opponent?.name || "ukjent motstander"}. Ta managergrepene under.`;
+    el.dataset.ready = readiness.canStartMatch ? "true" : "false";
+    el.dataset.status = readiness.status;
+    if (readiness.status === "in_progress") {
+      el.textContent = `Kamp pågår mot ${session?.opponent?.name || "ukjent motstander"}. Ta managergrepene under.`;
+    } else if (readiness.status === "ready") {
+      el.textContent = "Kampklar: startelleveren, troppen, treningsuka og kampporten er klare.";
+    } else if (readiness.status === "loading") {
+      el.textContent = readiness.summary;
     } else {
-      el.dataset.ready = isReady ? "true" : "false";
-      el.textContent = isReady && hasTrainingChoice
-        ? "Klar for kampdag: 11 gyldige startere, minst 4 på benken og treningsuka er valgt."
-        : `Ikke kampklar ennå: ${[...reasons, ...(!hasTrainingChoice ? ["Velg treningsuke før kamp."] : [])].join(" ")}`;
+      el.textContent = `Ikke kampklar: ${readiness.primaryBlocker?.message || readiness.summary}`;
     }
   }
 
   if (elements.playMatchdayButton) {
-    elements.playMatchdayButton.disabled = !isReady || !hasTrainingChoice || Boolean(session);
+    elements.playMatchdayButton.disabled = !readiness.canStartMatch;
+    elements.playMatchdayButton.setAttribute(
+      "aria-describedby",
+      elements.matchdayReadiness?.id || "matchdayReadiness"
+    );
   }
 }
 
@@ -9621,28 +9655,21 @@ function appendMatchdayNavButton(parent, label, tab) {
 }
 
 function renderMatchdayGate(container, teamFit) {
-  const { isReady, reasons } = getMatchdayReadiness(teamFit);
+  const readiness = getMatchdayReadiness(teamFit);
   const session = state.matchday?.session || null;
   const lastMatch = state.matchday?.lastMatch || null;
-  const hasTrainingChoice = Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId);
   const formation = session?.formationSnapshot || getFormation() || {};
   const tactic = session?.tacticSnapshot || getTactic() || {};
   const primary = session
     ? "Fortsett kampen"
     : lastMatch
       ? (hasUnseenMatchReport() ? "Se kampanalyse" : "Forbered neste kamp")
-      : isReady && hasTrainingChoice
+      : readiness.canStartMatch
         ? "Spill kamp"
         : "Fullfør forberedelser";
 
-  // Når en ferdigspilt kamp vises som rapport (lastMatch uten aktiv sesjon), er
-  // rapporten selve innholdet. Da skal ikke pre-match-sjekklista gjentas over
-  // den — den viste en annen (neste/generisk) motstander enn den du nettopp
-  // spilte, og skapte forvirring. Er alt klart, hopper vi over hele gaten.
   const showingFinishedReport = Boolean(lastMatch) && !session;
-  if (showingFinishedReport && isReady && hasTrainingChoice) {
-    return;
-  }
+  if (showingFinishedReport && readiness.canStartMatch) return;
 
   const gate = document.createElement("article");
   gate.className = "matchday-gate";
@@ -9651,32 +9678,30 @@ function renderMatchdayGate(container, teamFit) {
   title.textContent = "Kampdag";
   gate.append(title);
 
-  // Pre-match-brief vises kun når vi forbereder eller er midt i en kamp — ikke
-  // stablet over en ferdig rapport.
   if (!showingFinishedReport) {
-    const lines = [
-      `Kampklar: ${isReady ? "ja" : "nei"}`,
+    appendMatchdayList(gate, [
+      `Kampklar: ${readiness.canStartMatch ? "ja" : "nei"}`,
       `Motstander: ${getMatchdayOpponentBrief(session)}`,
       `Formasjon / kampplan: ${formation.name || "Ikke valgt"}${tactic.name ? ` · ${tactic.name}` : ""}`,
       `Treningsuke valgt: ${getWeeklyTrainingChoiceLabel() || "mangler"}`,
       `Siste signal: ${getLastInboxSignalText()}`,
       `Primærhandling: ${primary}`
-    ];
-    appendMatchdayList(gate, lines);
+    ]);
   }
 
-  if (!isReady || !hasTrainingChoice) {
+  if (!readiness.canStartMatch && readiness.status !== "in_progress") {
     appendMatchdaySubheading(gate, "Dette mangler før kamp");
-    const missing = [...reasons];
-    if (!hasTrainingChoice) missing.push("Velg treningsprogram eller treningsfokus før Kamp blir primærhandling.");
-    appendMatchdayList(gate, missing);
+    appendMatchdayList(gate, readiness.blockers.map((item) => item.message));
+
     const actions = document.createElement("div");
     actions.className = "matchday-gate-actions";
-    if (!getAvailability().rosterReadiness.hasEnoughUnlocked) appendMatchdayNavButton(actions, "Gå til History Go", "historygo");
-    if (!isReady) appendMatchdayNavButton(actions, "Gå til Lag & taktikk", "tactics");
-    if (getActiveInboxThreads().length > 0) appendMatchdayNavButton(actions, "Gå til Innboks", "inbox");
-    if (!hasTrainingChoice) appendMatchdayNavButton(actions, "Gå til Trening", "trening");
-    gate.append(actions);
+    const targets = new Set(readiness.blockers.map((item) => item.target));
+    if (targets.has("historygo")) appendMatchdayNavButton(actions, "Gå til History Go", "historygo");
+    if (targets.has("tactics")) appendMatchdayNavButton(actions, "Gå til Lag", "tactics");
+    if (targets.has("trening")) appendMatchdayNavButton(actions, "Gå til Trening", "trening");
+    if (targets.has("statistikk")) appendMatchdayNavButton(actions, "Gå til Sesong", "statistikk");
+    if (targets.has("dashboard")) appendMatchdayNavButton(actions, "Gå til Kontor", "dashboard");
+    if (actions.childElementCount) gate.append(actions);
   }
 
   container.append(gate);
@@ -15185,13 +15210,14 @@ function renderLocalStartStatus() {
 // Din fotballsamling: oppsummering av hva samlingen gir laget akkurat nå.
 // Leser kun availability-snapshotet (getAvailability) – steder, spillere, stab,
 // ulåste formasjoner og roster readiness. Beregner ingen egne unlocks.
-function renderCollectionSummary() {
+function renderCollectionSummary(teamFit) {
   if (!elements.collectionPlacesCount) {
     return;
   }
 
   const snapshot = getAvailability();
   const readiness = snapshot.rosterReadiness;
+  const matchdayReadiness = getMatchdayReadiness(teamFit);
 
   elements.collectionPlacesCount.textContent = String(snapshot.unlockedPlaceIds.size);
   if (elements.collectionPlayersCount) {
@@ -15208,8 +15234,14 @@ function renderCollectionSummary() {
   }
 
   if (elements.collectionMatchdayBadge) {
-    elements.collectionMatchdayBadge.dataset.ready = readiness.isReady ? "true" : "false";
-    elements.collectionMatchdayBadge.textContent = readiness.isReady ? "Klar for kampdag" : "Ikke kampklar";
+    elements.collectionMatchdayBadge.dataset.ready = matchdayReadiness.canStartMatch ? "true" : "false";
+    elements.collectionMatchdayBadge.dataset.status = matchdayReadiness.status;
+    elements.collectionMatchdayBadge.textContent = matchdayReadiness.status === "in_progress"
+      ? "Kamp pågår"
+      : matchdayReadiness.canStartMatch
+        ? "Kampklar"
+        : "Ikke kampklar";
+    elements.collectionMatchdayBadge.title = matchdayReadiness.summary;
   }
 
   // Kildeskille for utvikling/test: hva som kommer fra ekte History Go-progresjon
@@ -15367,8 +15399,8 @@ function getSquadSetupGateState(teamFit) {
   }
 
   return {
-    title: "Laget er klart",
-    hint: "11 startere, roller og minst 4 benkespillere er klare. Neste hovedsteg er Innboks før trening og kamp.",
+    title: "Troppen er klar",
+    hint: "Startelleveren og benken er klare. Laget blir først kampklart når trening, terminliste og klubbuke også er klare.",
     actionLabel: "Gå til Innboks",
     action: () => activateTab("inbox"),
     tone: "ready",
@@ -15417,11 +15449,11 @@ function renderRosterReadiness() {
     elements.rosterUnlockedCount.textContent = `${readiness.unlockedCount}/${REQUIRED_SQUAD_SIZE}`;
   }
   if (elements.rosterReadyStatus) {
-    elements.rosterReadyStatus.textContent = readiness.isReady ? "Klar for kamp" : "Mangler spillere";
+    elements.rosterReadyStatus.textContent = readiness.isReady ? "Troppen er klar" : "Troppen mangler spillere";
   }
 
   if (elements.rosterReadinessBadge) {
-    elements.rosterReadinessBadge.textContent = readiness.isReady ? "Spillklar" : "Låst";
+    elements.rosterReadinessBadge.textContent = readiness.isReady ? "Tropp klar" : "Tropp ikke klar";
     elements.rosterReadinessBadge.dataset.ready = readiness.isReady ? "true" : "false";
   }
 
@@ -15438,7 +15470,7 @@ function renderRosterReadiness() {
     }
 
     elements.rosterReadinessNote.textContent = readiness.isReady
-      ? "Troppen er spillklar: 11 på banen og minst 4 på benken. Neste steg er å forberede kamp i Taktikkrommet."
+      ? "Troppen er klar: 11 på banen og minst 4 på benken. Kampklarhet krever også trening, aktiv kamp og riktig klubbukefase."
       : `Ikke spillklar ennå: ${noteParts.join(", ") || "mangler troppsgrunnlag"}.`;
   }
 
@@ -15545,7 +15577,7 @@ function renderApp() {
 
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
-  renderCollectionSummary();
+  renderCollectionSummary(teamFit);
   renderLocalStartStatus();
   renderUnlockPlaces();
   renderUnlockedPlayers();
@@ -16671,11 +16703,19 @@ async function loadStartupData() {
 // loadStartupData(): getAvailability() under leser state.unlocks/state.teamMerits,
 // som først er satt der.
 async function hydratePersistedUiState() {
-  // Startvalg: første tilgjengelige (ulåste) formasjon, ikke bare første i
-  // listen. Team merits er lastet og History Go-synket over, så availability-
-  // snapshotet er gyldig her.
-  state.selectedFormationId = (getAvailability().unlockedFormations[0] || state.formations[0])?.id || null;
-  state.selectedTacticId = state.tactics[0]?.id || null;
+  // Et nytt ligaspill starter eksplisitt i en moderne 4-2-3-1. Et lagret
+  // modus-snapshot legges på etterpå i hydrateModeSessions(), og beholder dermed
+  // eksisterende formasjon. Katalogrekkefølgen er bare siste fallback.
+  const availableFormations = getAvailability().unlockedFormations.length
+    ? getAvailability().unlockedFormations
+    : state.formations;
+  state.selectedFormationId = selectDefaultFormation({
+    mode: "league",
+    availableFormations
+  });
+  state.selectedTacticId = selectDefaultMatchPlan({
+    availableMatchPlans: state.tactics
+  });
   state.trainingWeek = loadTrainingWeek();
   state.activeKnowledgeFocusId = loadActiveKnowledgeFocus();
   state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
