@@ -86,12 +86,4 @@ if "sim:manager-season-scene-v1" not in scripts:
     package["scripts"] = rebuilt
 package_path.write_text(json.dumps(package, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-ci_path = ROOT / ".github/workflows/ci.yml"
-ci = ci_path.read_text(encoding="utf-8")
-needle = "          npm run sim:manager-ground-flow-v1\n"
-if "npm run sim:manager-season-scene-v1" not in ci:
-    if ci.count(needle) != 1:
-        raise SystemExit("ci.yml: insertion point missing")
-    ci_path.write_text(ci.replace(needle, needle + "          npm run sim:manager-season-scene-v1\n", 1), encoding="utf-8")
-
 print("Manager Season Command v1 materialized")
