@@ -25,17 +25,17 @@ jobs:
           from pathlib import Path
 
           path = Path("scripts/audit-dead-ends.mjs")
-          text = path.read_text()
-          old = "    const panel = html.slice(html.indexOf('id=\"leagueOnboardingPanel\"'), html.indexOf('class=\"manager-portal\"'));\n"
-          new = "\n".join([
-              "    const panelStart = html.indexOf('id=\"leagueOnboardingPanel\"');",
-              "    const panelEnd = html.indexOf('id=\"officeCommandPanel\"', panelStart);",
-              "    const panel = panelStart >= 0 && panelEnd > panelStart ? html.slice(panelStart, panelEnd) : \"\";",
-              "",
-          ])
-          if old not in text:
+          lines = path.read_text().splitlines()
+          match = next((i for i, line in enumerate(lines) if "const panel = html.slice" in line and "leagueOnboardingPanel" in line and "manager-portal" in line), None)
+          if match is None:
               raise SystemExit("expected dead-end audit boundary not found")
-          path.write_text(text.replace(old, new, 1))
+          indent = lines[match][:len(lines[match]) - len(lines[match].lstrip())]
+          lines[match:match + 1] = [
+              f"{indent}const panelStart = html.indexOf('id=\"leagueOnboardingPanel\"');",
+              f"{indent}const panelEnd = html.indexOf('id=\"officeCommandPanel\"', panelStart);",
+              f"{indent}const panel = panelStart >= 0 && panelEnd > panelStart ? html.slice(panelStart, panelEnd) : \"\";",
+          ]
+          path.write_text("\n".join(lines) + "\n")
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
