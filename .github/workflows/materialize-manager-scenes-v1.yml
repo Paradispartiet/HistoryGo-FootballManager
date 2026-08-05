@@ -142,12 +142,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git fetch --no-tags origin "${BRANCH}"
-          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/${BRANCH})" ]; then
-            echo "Remote branch changed during validation; refusing a non-fast-forward push."
-            exit 1
-          fi
-
           git add -A
 
           if git diff --cached --quiet; then
@@ -162,4 +156,16 @@ jobs:
           fi
 
           git commit -m "Build manager lineup and matchday scenes v1"
-          git push origin "HEAD:${BRANCH}"
+
+          for attempt in 1 2 3; do
+            git fetch --no-tags origin "${BRANCH}"
+            git rebase "origin/${BRANCH}"
+            if git push origin "HEAD:${BRANCH}"; then
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed; retrying against latest branch head."
+            sleep 3
+          done
+
+          echo "Unable to push permanent manager scenes changes after three attempts."
+          exit 1
