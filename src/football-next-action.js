@@ -40,6 +40,10 @@ function normalizeContext(context = {}) {
   const roster = context.roster && typeof context.roster === "object" ? context.roster : {};
   const gate = context.clubWeekGate && typeof context.clubWeekGate === "object" ? context.clubWeekGate : {};
   const clubWeek = context.clubWeek && typeof context.clubWeek === "object" ? context.clubWeek : null;
+  const hasAuthoritativeReadiness = Boolean(
+    context.matchdayReadiness && typeof context.matchdayReadiness === "object"
+  );
+  const readiness = hasAuthoritativeReadiness ? context.matchdayReadiness : {};
 
   return {
     hasSession: Boolean(context.hasSession),
@@ -74,7 +78,25 @@ function normalizeContext(context = {}) {
       reason: asString(gate.reason, "")
     },
     hasTrainingChoice: Boolean(context.hasTrainingChoice),
-    matchdayReady: Boolean(context.matchdayReady),
+    matchdayReadiness: {
+      isAuthoritative: hasAuthoritativeReadiness,
+      status: asString(readiness.status, context.hasSession ? "in_progress" : context.matchdayReady ? "ready" : "blocked"),
+      canStartMatch: hasAuthoritativeReadiness
+        ? Boolean(readiness.canStartMatch)
+        : Boolean(
+            context.matchdayReady &&
+            context.hasTrainingChoice &&
+            (!context.leagueModeActive || context.leagueSeasonActive)
+          ),
+      primaryBlocker: readiness.primaryBlocker && typeof readiness.primaryBlocker === "object"
+        ? {
+            code: asString(readiness.primaryBlocker.code, ""),
+            message: asString(readiness.primaryBlocker.message, "Fullfør kampforberedelsene."),
+            target: asString(readiness.primaryBlocker.target, "dashboard")
+          }
+        : null
+    },
+    matchdayReady: Boolean(readiness.canStartMatch ?? context.matchdayReady),
     unreadThreads: Math.max(0, toInt(context.unreadThreads)),
     hasUnseenReport: Boolean(context.hasUnseenReport),
     miniSeasonActive: Boolean(context.miniSeasonActive),
@@ -127,6 +149,7 @@ export function computeNextActions(context = {}) {
 
   const { lineup, roster, clubWeekGate, clubWeek } = ctx;
   const firstTime = ctx.firstTime;
+  const leagueSeasonGateOpen = (!ctx.leagueModeActive || ctx.leagueSeasonActive);
 
   if (!ctx.leagueModeActive && !ctx.scenarioModeActive && !ctx.nationalModeActive && context.selectedMode === null) {
     return [{ id: "choose-game-mode", tag: "Kom i gang", title: "Velg spillmodus", hint: "Velg Ligaspill, Landslag, Scenario eller Fotballvitenskap.", action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" } }];
@@ -156,6 +179,49 @@ export function computeNextActions(context = {}) {
       hint: "Laget er satt. Velg mesterskap – gruppespill først, så utslagsrunder.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" }
     });
+  }
+
+  // Autoritativ kampklarhet: når en konkret kampblokkering finnes, peker
+  // primærhandlingen direkte på den første mangelen i readiness-rekkefølgen.
+  // Før-sesong, kampknapp og footer kan dermed ikke motsi hverandre.
+  const readinessBlocker = ctx.matchdayReadiness.primaryBlocker;
+  if (!ctx.hasSession && readinessBlocker) {
+    const byCode = {
+      lineup_incomplete: {
+        id: "readiness-lineup",
+        tag: "Lag",
+        title: "Fullfør startelleveren",
+        action: { type: NEXT_ACTION_TYPES.SLOT, slotId: lineup.firstEmptySlotId }
+      },
+      duplicate_player: {
+        id: "readiness-duplicate",
+        tag: "Lag",
+        title: "Rett opp dobbeltbruk",
+        action: { type: NEXT_ACTION_TYPES.SLOT, slotId: lineup.duplicate?.slotId || lineup.firstEmptySlotId }
+      },
+      bench_incomplete: {
+        id: "readiness-bench",
+        tag: "Lag",
+        title: "Fyll benken",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "tactics" }
+      },
+      squad_too_small: {
+        id: "readiness-squad",
+        tag: "History Go",
+        title: "Skaff spillbar tropp",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "historygo" }
+      },
+      training_missing: {
+        id: "readiness-training",
+        tag: "Trening",
+        title: "Velg treningsprogram",
+        action: { type: NEXT_ACTION_TYPES.TAB, tab: "trening" }
+      }
+    };
+    const descriptor = byCode[readinessBlocker.code];
+    if (descriptor) {
+      return [{ ...descriptor, hint: readinessBlocker.message }];
+    }
   }
 
   // I ligamodus er før-sesongens første uferdige steg øverste sannhet. Club
@@ -315,14 +381,14 @@ export function computeNextActions(context = {}) {
     });
   }
 
-  // 6) Club Week-porten krever en spilt kamp før uka kan rulle videre, men
-  // kampflaten skal ikke bli primær før treningsuka faktisk er valgt.
-  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasTrainingChoice && clubWeekGate.isBlocked) {
+  // 6) Club Week-porten kan vente på at kampen spilles. Readiness avgjør om
+  // avspark faktisk er lov; gate-signalet bidrar bare med kontekst i teksten.
+  if (!ctx.hasSession && leagueSeasonGateOpen && ctx.matchdayReadiness.canStartMatch && clubWeekGate.isBlocked) {
     push({
       id: "play-week-match",
       tag: "Kampdag",
-      title: "Spill ukens kamp",
-      hint: clubWeekGate.reason || "Kampdagfasen venter på en spilt kamp.",
+      title: ctx.matchdayReadiness.isAuthoritative ? "Spill kamp" : "Spill ukens kamp",
+      hint: clubWeekGate.reason || "Laget er kampklart. Spill ukens kamp.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
     });
   }
@@ -391,7 +457,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 12) Laget er kampklart og treningsuka er valgt — sett kampplan og spill.
-  if (!ctx.hasSession && roster.enoughUnlocked && roster.enoughBench && lineup.emptyCount === 0 && ctx.hasTrainingChoice && ctx.matchdayReady && (!ctx.leagueModeActive || ctx.leagueSeasonActive) && !clubWeekGate.isBlocked && !ctx.hasUnseenReport && clubWeek?.phase !== "review") {
+  if (!ctx.hasSession && leagueSeasonGateOpen && ctx.matchdayReadiness.canStartMatch && !clubWeekGate.isBlocked && !ctx.hasUnseenReport && clubWeek?.phase !== "review") {
     push({
       id: "play-match",
       tag: "Kampdag",

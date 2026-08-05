@@ -39,7 +39,7 @@ class ManagerNextAction extends HTMLElement {
             <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
             <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
           </button>
-          <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
+          <div class="next-action-secondary" id="nextActionSecondary" role="group" aria-label="Andre naturlige steg"></div>
         </section>
       </footer>`;
   }

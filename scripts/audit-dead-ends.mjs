@@ -28,6 +28,7 @@ const domSource = `${html}\n${shellElements}`;
 const engine = readFileSync(join(root, "src/football-matchday-engine.js"), "utf8");
 const modeSessions = readFileSync(join(root, "src/football-mode-sessions.js"), "utf8");
 const subsEngine = readFileSync(join(root, "src/football-substitutions.js"), "utf8");
+const readinessEngine = readFileSync(join(root, "src/football-matchday-readiness.js"), "utf8");
 
 // ---- HTML-hjelpere ----------------------------------------------------------
 
@@ -260,8 +261,12 @@ stage("6. Mini-sesong isolert fra liga");
 stage("7. Kamp-gating");
 {
   check(
-    "playMatchday krever kampklar tropp + valgt trening",
-    /getMatchdayReadiness\([^)]*\)\.isReady\s*\|\|\s*\(!state\.weeklyTrainingProgram\?\.programId\s*&&\s*!state\.weeklyTrainingFocus\?\.focusId\)/.test(app)
+    "playMatchday bruker den autoritative kampklarhetsporten",
+    /function playMatchday\(\)\s*\{[\s\S]{0,320}const readiness = getMatchdayReadiness\(teamFit\);[\s\S]{0,360}if\s*\(!readiness\.canStartMatch\)/.test(app)
+  );
+  check(
+    "kampklarhetsmotoren blokkerer manglende trening",
+    /if\s*\(!input\.hasTrainingChoice\)\s*\{[\s\S]{0,220}"training_missing"/.test(readinessEngine)
   );
 }
 

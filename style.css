@@ -9051,3 +9051,198 @@ body > .site-footer { grid-row: 6; }
 .club-takeover-summary ul { margin: 0.35rem 0 0; padding-left: 1.1rem; }
 .club-takeover-summary li { margin: 0.15rem 0; }
 .club-takeover-warning { margin-top: 0.5rem; opacity: 0.85; }
+
+
+/* ========================================================================== 
+   Manager grunnflyt v1 — lesbar handling og ett mørkt knappesystem
+   ========================================================================== */
+
+/* Felles sikkerhetsnett for statiske og dynamisk opprettede handlingsknapper. */
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid var(--hg-border-strong);
+  border-radius: var(--hg-radius-sm);
+  background: var(--hg-surface-deep);
+  color: var(--hg-text-main);
+  min-height: 44px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, opacity 0.12s ease, transform 0.1s ease;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--hg-text-main);
+  background: var(--hg-panel-bg-strong);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--hg-text-main);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+/* Primær, sekundær, ghost og fare deler samme mørke grunnsystem. */
+.next-action-primary,
+.matchday-actions button.is-primary,
+#playMatchdayButton,
+.button-primary,
+.btn-primary {
+  border-color: var(--hg-text-main) !important;
+  background: #05070b !important;
+  color: var(--hg-text-main) !important;
+}
+
+.button-secondary,
+.btn-secondary,
+.matchday-nav-button,
+.squad-setup-gate-action {
+  background: var(--hg-panel-bg-strong);
+  color: var(--hg-text-main);
+}
+
+.button-ghost,
+.btn-ghost,
+.matchday-actions button:not(.is-primary),
+.next-action-chip {
+  background: transparent;
+  color: var(--hg-text-main);
+}
+
+.button-danger,
+.btn-danger,
+[data-action="reset"],
+.reset-button {
+  border-color: rgba(255, 107, 94, 0.72);
+  background: rgba(255, 107, 94, 0.08);
+  color: var(--hg-text-main);
+}
+
+/* Den autoritative handlingen får bruke høyden teksten trenger. */
+.site-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 25;
+  width: 100%;
+  max-width: none;
+  background: rgba(4, 6, 10, 0.96);
+  border-top: 1px solid var(--hg-border-strong);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.site-footer .next-action-strip {
+  width: min(1240px, calc(100% - 32px)) !important;
+  margin-inline: auto !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.next-action-strip .next-action-head {
+  min-width: max-content;
+  justify-content: center;
+}
+
+.next-action-strip .next-action-primary {
+  min-width: 0;
+  min-height: 58px;
+  display: grid !important;
+  grid-template-columns: auto minmax(10rem, auto) minmax(14rem, 1fr);
+  align-items: center;
+  gap: 8px 14px;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.next-action-strip .next-action-primary .next-action-tag,
+.next-action-strip .next-action-primary .next-action-title,
+.next-action-strip .next-action-primary .next-action-hint {
+  min-width: 0;
+  max-width: none;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.next-action-strip .next-action-primary .next-action-title {
+  line-height: 1.2;
+}
+
+.next-action-strip .next-action-primary .next-action-hint {
+  line-height: 1.35;
+}
+
+.next-action-strip .next-action-secondary {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.next-action-strip .next-action-chip,
+.next-action-strip .next-action-chip-title {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .site-footer {
+    bottom: calc(var(--hg-menu-height) + env(safe-area-inset-bottom));
+    padding-inline: 12px;
+  }
+
+  .site-footer .next-action-strip {
+    width: 100% !important;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 7px 0;
+  }
+
+  .next-action-strip .next-action-head {
+    min-width: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .next-action-strip .next-action-primary {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 4px;
+    min-height: 0;
+    padding: 10px 12px;
+  }
+
+  .next-action-strip .next-action-primary .next-action-tag {
+    font-size: 0.66rem;
+  }
+
+  .next-action-strip .next-action-primary .next-action-title {
+    font-size: 1rem;
+  }
+
+  .next-action-strip .next-action-primary .next-action-hint {
+    font-size: 0.78rem;
+  }
+
+  .next-action-strip .next-action-secondary {
+    justify-content: stretch;
+  }
+
+  .next-action-strip .next-action-chip {
+    flex: 1 1 9rem;
+  }
+}

@@ -146,6 +146,97 @@ test("hovedskallet har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) 
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 });
 
+
+test("ny ligalagring velger moderne 4-2-3-1 eksplisitt", async ({ page }) => {
+  await openArea(page, "Lag");
+  await expect(page.locator("#formationSelect")).toHaveValue("modern_4231");
+  await expect(page.locator("#formationSelect option:checked")).toContainText("Modern 4-2-3-1");
+  await expect(page.locator("#formationSelect option:checked")).not.toContainText("Pre-modern Rush 1-1-8");
+});
+
+for (const viewport of VIEWPORTS) {
+  test(`Neste handling viser full tittel og forklaring ved ${viewport.width}px`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    const button = page.locator("#nextActionPrimary");
+    const title = page.locator("#nextActionPrimaryTitle");
+    const hint = page.locator("#nextActionPrimaryHint");
+    await expect(button).toBeVisible();
+    await expect(title).toBeVisible();
+    await expect(hint).toBeVisible();
+    const values = await page.evaluate(() => {
+      const button = document.querySelector("#nextActionPrimary");
+      const title = document.querySelector("#nextActionPrimaryTitle");
+      const hint = document.querySelector("#nextActionPrimaryHint");
+      const titleStyle = getComputedStyle(title);
+      const hintStyle = getComputedStyle(hint);
+      return {
+        titleOverflow: titleStyle.textOverflow,
+        titleWhiteSpace: titleStyle.whiteSpace,
+        hintOverflow: hintStyle.textOverflow,
+        hintWhiteSpace: hintStyle.whiteSpace,
+        titleInside: title.getBoundingClientRect().right <= button.getBoundingClientRect().right + 1,
+        hintInside: hint.getBoundingClientRect().right <= button.getBoundingClientRect().right + 1,
+        aria: button.getAttribute("aria-label") || ""
+      };
+    });
+    expect(values.titleOverflow).not.toBe("ellipsis");
+    expect(values.hintOverflow).not.toBe("ellipsis");
+    expect(values.titleWhiteSpace).not.toBe("nowrap");
+    expect(values.hintWhiteSpace).not.toBe("nowrap");
+    expect(values.titleInside).toBe(true);
+    expect(values.hintInside).toBe(true);
+    expect(values.aria).toContain((await title.textContent()).trim());
+    expect(values.aria).toContain((await hint.textContent()).trim());
+    await expectNoHorizontalOverflow(page);
+  });
+}
+
+test("kampknapp og kampklar-status bruker samme autoritative resultat", async ({ page }) => {
+  await openArea(page, "Kamp");
+  const readiness = page.locator("#matchdayReadiness");
+  const play = page.locator("#playMatchdayButton");
+  await expect(readiness).toBeVisible();
+  const canStart = await readiness.getAttribute("data-ready") === "true";
+  expect(await play.isDisabled()).toBe(!canStart);
+});
+
+test("sentrale handlingsknapper er mørke og har synlig tastaturfokus", async ({ page }) => {
+  async function expectDarkButton(button) {
+    await expect(button).toBeVisible();
+    const appearance = await button.evaluate((node) => {
+      const style = getComputedStyle(node);
+      const box = node.getBoundingClientRect();
+      return {
+        background: style.backgroundColor,
+        color: style.color,
+        outlineStyle: style.outlineStyle,
+        outlineWidth: style.outlineWidth,
+        height: box.height,
+        disabled: node.disabled
+      };
+    });
+    expect(appearance.background).not.toBe("rgb(255, 255, 255)");
+    expect(appearance.color).not.toBe("rgb(0, 0, 0)");
+    expect(appearance.height).toBeGreaterThanOrEqual(44);
+
+    if (!appearance.disabled) {
+      await button.focus();
+      const focus = await button.evaluate((node) => {
+        const style = getComputedStyle(node);
+        return { width: style.outlineWidth, style: style.outlineStyle };
+      });
+      expect(focus.style).not.toBe("none");
+      expect(parseFloat(focus.width)).toBeGreaterThan(0);
+    }
+  }
+
+  await expectDarkButton(page.locator("#nextActionPrimary"));
+  await expectDarkButton(page.locator("#settingsButton"));
+  await openArea(page, "Kamp");
+  await expectDarkButton(page.locator("#playMatchdayButton"));
+});
+
+
 test.describe("visuelle baseliner", () => {
   test("Kontor · 1280", async ({ page }) => {
     await expect(page).toHaveScreenshot("office-1280.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
