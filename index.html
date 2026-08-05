@@ -691,6 +691,15 @@
          og hvem som leverer. De lå spredt i en popup på Kontor og som et kort i
          dashbordet — altså ikke der du ville lett etter dem. -->
     <div class="tab-section statistikk-view" data-tab-section="statistikk" hidden>
+      <section class="manager-surface league-season-panel season-command-panel" id="leagueSeasonPanel" aria-label="Sesongkontroll" aria-live="polite" hidden>
+        <div id="seasonCommand" class="season-command"></div>
+        <div class="season-command-support">
+          <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
+          <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
+        </div>
+        <div id="leagueSeasonOverview" class="mini-season-overview season-league-overview"></div>
+      </section>
+
       <section class="panel" aria-label="Sesongsammendrag" aria-live="polite">
         <p class="eyebrow">Sesongen</p>
         <h2>Statistikk</h2>
@@ -723,7 +732,7 @@
         <div id="playerStatsTable" class="player-stats-table"></div>
       </section>
 
-      <!-- Sesongdommen: styrets regnskap etter fjorten runder. Vises bare når
+      <!-- Sesongdommen: styrets regnskap etter ligarundene. Vises bare når
            sesongen faktisk er ferdig. -->
       <section class="manager-surface season-review-panel" id="seasonReviewPanel" aria-label="Sesongdom" aria-live="polite" hidden>
         <p class="eyebrow" id="seasonReviewVerdict">Sesongdom</p>
@@ -741,19 +750,6 @@
         <div id="seasonArchiveTable" class="season-archive-table"></div>
       </section>
 
-      <section class="manager-surface league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
-        <div class="mini-season-head">
-          <div>
-            <p class="eyebrow">Ligasesong</p>
-            <h2>Neste kamp · Terminliste og tabell</h2>
-            <p id="leagueSeasonStatus" class="muted-text">Ligasesongen starter når troppen er spillbar.</p>
-          </div>
-          <div class="mini-season-actions">
-            <button type="button" id="startNewLeagueSeasonButton" hidden>Start ny sesong</button>
-          </div>
-        </div>
-        <div id="leagueSeasonOverview" class="mini-season-overview"></div>
-      </section>
 
       <section class="manager-surface mini-season-panel" aria-label="Prøveperiode" aria-live="polite" hidden>
         <div class="mini-season-head">

@@ -5,6 +5,7 @@ import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-id
 import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";
 import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-presentation.js";
 import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js";
+import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -606,6 +607,7 @@ const elements = {
   // League Loop v0.2: ligasesong-panelet (samme motor, liga-presentasjon).
   leagueSeasonPanel: document.querySelector("#leagueSeasonPanel"),
   leagueSeasonStatus: document.querySelector("#leagueSeasonStatus"),
+  seasonCommand: document.querySelector("#seasonCommand"),
   leagueSeasonOverview: document.querySelector("#leagueSeasonOverview"),
   startNewLeagueSeasonButton: document.querySelector("#startNewLeagueSeasonButton"),
   // Legacy id: firstTimePlaythroughCard is now used as the game mode card.
@@ -12365,6 +12367,7 @@ function renderLeagueSeason() {
 
   panel.hidden = !isLeagueModeActive();
   if (!isLeagueModeActive()) {
+    if (elements.seasonCommand) elements.seasonCommand.textContent = "";
     if (elements.leagueSeasonOverview) elements.leagueSeasonOverview.textContent = "";
     return;
   }
@@ -12377,6 +12380,18 @@ function renderLeagueSeason() {
   const newSeasonButton = elements.startNewLeagueSeasonButton;
   const table = season ? createLeagueTable(season) : [];
   const managerRow = table.find((row) => row.isManager);
+  const nextMatch = season?.status === "active" ? getNextLeagueOpponent(season) : null;
+  const scene = createSeasonSceneModel({
+    season,
+    table,
+    nextMatch,
+    boardExpectation: getLeagueSaveModel().boardExpectation
+  });
+
+  renderSeasonCommand(elements.seasonCommand, scene, {
+    onOpenMatch: () => activateTab("kamp"),
+    onOpenTeam: () => activateTab("tactics")
+  });
 
   if (newSeasonButton) {
     newSeasonButton.hidden = season?.status !== "completed";
@@ -12384,39 +12399,18 @@ function renderLeagueSeason() {
 
   if (statusEl) {
     if (!season) {
-      statusEl.textContent = "Ligasesongen starter når før-sesongen er bekreftet: klubbanker, tropp, stab, ellever, formasjon og trening.";
+      statusEl.textContent = "Sesongkontrollen åpner når før-sesongen er bekreftet: klubbanker, tropp, stab, ellever, formasjon og trening.";
     } else if (season.status === "completed") {
-      statusEl.textContent = `Sesongen er fullført. ${table[0]?.club || "Ligamesteren"} er seriemester; ${managerRow?.club} endte på ${managerRow?.position}. plass med ${managerRow?.points} poeng.`;
+      statusEl.textContent = `${table[0]?.club || "Ligamesteren"} er seriemester. ${managerRow?.club || "Managerklubben"} endte på ${managerRow?.position || "–"}. plass med ${managerRow?.points || 0} poeng.`;
     } else {
-      statusEl.textContent = `Serierunde ${season.currentRound} av 14 · ${managerRow?.position}. plass · ${managerRow?.points} poeng.`;
+      statusEl.textContent = `${scene.statusLabel} · ${managerRow?.position || "–"}. plass · ${managerRow?.points || 0} poeng · styrets mål: ${scene.boardExpectation}`;
     }
   }
 
   if (!overview) return;
   overview.textContent = "";
   if (!season) return;
-
-  if (season.status === "active") {
-    const nextMatch = getNextLeagueOpponent(season);
-    if (nextMatch) {
-      const venue = nextMatch.homeAway === "home" ? "Hjemme" : "Borte";
-      appendMiniSeasonMeta(
-        overview,
-        `Neste kamp — serierunde ${nextMatch.round}/14: ${nextMatch.name} · ${venue}${nextMatch.ground ? ` · ${nextMatch.ground}` : ""}`,
-        "mini-season-next-opponent"
-      );
-    }
-  }
-  const wrap = document.createElement("div"); wrap.className = "mini-season-table-wrap";
-  const tableEl = document.createElement("table"); tableEl.className = "mini-season-table";
-  tableEl.innerHTML = "<caption>Ligatabell</caption><thead><tr><th>#</th><th>Klubb</th><th>S</th><th>V</th><th>U</th><th>T</th><th>MF</th><th>MM</th><th>±</th><th>P</th></tr></thead>";
-  const body = document.createElement("tbody");
-  table.forEach((row) => { const tr = document.createElement("tr"); if (row.isManager) tr.className = "is-manager-club"; [row.position, row.club, row.played, row.won, row.drawn, row.lost, row.goalsFor, row.goalsAgainst, row.goalDifference, row.points].forEach((value) => { const cell = document.createElement("td"); cell.textContent = String(value); tr.append(cell); }); body.append(tr); });
-  tableEl.append(body); wrap.append(tableEl); overview.append(wrap);
-  const details = document.createElement("details"); details.className = "league-fixtures-details";
-  const detailsSummary = document.createElement("summary"); detailsSummary.textContent = "Se full terminliste og alle resultater"; details.append(detailsSummary);
-  season.fixtures.forEach((round) => { const section = document.createElement("section"); const heading = document.createElement("h4"); heading.textContent = `Serierunde ${round.round}`; section.append(heading); round.matches.forEach((match) => { const home = season.clubs.find((club) => club.id === match.homeClubId)?.name; const away = season.clubs.find((club) => club.id === match.awayClubId)?.name; const p = document.createElement("p"); p.textContent = `${home} – ${away}${match.result ? `  ${match.result.homeGoals}–${match.result.awayGoals}` : ""}`; section.append(p); }); details.append(section); });
-  overview.append(details);
+  renderSeasonLeagueOverview(overview, scene, season);
 }
 
 // Finn aktiv kunnskapsanbefaling i gjeldende viewModel, eller null hvis ingen er valgt

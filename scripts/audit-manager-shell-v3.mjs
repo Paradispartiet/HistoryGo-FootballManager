@@ -9,8 +9,11 @@ const html = read("index.html");
 const app = read("src/app.js");
 const css = `${read("style.css")}\n${read("src/ui/manager-shell-v3.css")}\n${read("src/ui/manager-shell-foundation.css")}`;
 const browser = read("tests/browser/manager-shell-v3.spec.js");
+const seasonBrowser = read("tests/browser/manager-season-scene-v1.spec.js");
 const shellElements = read("src/ui/manager-shell-elements.js");
 const workflow = read(".github/workflows/ci.yml");
+const packageJson = read("package.json");
+const seasonPresentation = read("src/ui/manager-season-presentation.js");
 const snapshotDir = join(root, "tests/browser/manager-shell-v3.spec.js-snapshots");
 const snapshots = existsSync(snapshotDir) ? readdirSync(snapshotDir).filter((name) => name.endsWith("-chromium-linux.png")) : [];
 const visualTests = (browser.match(/toHaveScreenshot\(/g) || []).length;
@@ -44,6 +47,32 @@ check("horisontal overflow testes", /scrollWidth - document\.documentElement\.cl
 check("primærhandling uten scroll testes", /expectPrimaryActionInViewport/.test(browser));
 check("modalene har fokusfelle i appen", /event\.key !== "Tab"/.test(app) && /lastModalOpener\.focus/.test(app));
 check("foreldet portal-/fase-CSS er fjernet", !/portal-priority-card|#advanceClubWeekPhase/.test(css));
+check(
+  "sesongkontrollen har egen presentasjonsmodul",
+  /manager-season-presentation\.js/.test(app)
+    && /createSeasonSceneModel/.test(seasonPresentation)
+    && /renderSeasonCommand/.test(seasonPresentation)
+    && /renderSeasonLeagueOverview/.test(seasonPresentation)
+);
+check(
+  "sesongflaten prioriterer kommando før statistikk",
+  html.indexOf('id="seasonCommand"') > -1
+    && html.indexOf('id="seasonCommand"') < html.indexOf('id="statsSummary"')
+    && /season-workspace-grid/.test(css)
+);
+check(
+  "sesongkontrollen har permanent simulering i CI",
+  /sim:manager-season-scene-v1/.test(packageJson)
+    && /npm run sim:manager-season-scene-v1/.test(workflow)
+    && existsSync(join(root, "scripts/simulate-manager-season-scene-v1.mjs"))
+);
+check(
+  "sesongkontrollen har nettleservakt for handling og mobil",
+  /Gå til kamp/.test(seasonBrowser)
+    && /data-tab-section="kamp"/.test(seasonBrowser)
+    && /width: 390/.test(seasonBrowser)
+    && /scrollWidth - document\.documentElement\.clientWidth/.test(seasonBrowser)
+);
 
 const failed = checks.filter((entry) => !entry.ok);
 console.log("Manager Shell v3 completion-audit\n");

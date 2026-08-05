@@ -9844,3 +9844,402 @@ button:disabled {
     width: 100%;
   }
 }
+
+/* ============================================================
+   Sesongkontroll v1
+
+   Sesongflaten er en manager-scene, ikke en tabellside. Den viser først hva
+   manageren trenger nå (runde, plass, form og neste kamp), deretter tabellbildet
+   rundt egen klubb og kamprytmen. Full tabell og terminliste ligger ett nivå
+   dypere. Motor, konkurransedata og lagring er uendret.
+   ============================================================ */
+.statistikk-view {
+  gap: 14px;
+}
+
+.season-command-panel {
+  display: grid;
+  gap: 14px;
+  border-color: var(--line);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 52%),
+    var(--panel);
+}
+
+.season-command {
+  display: grid;
+  gap: 14px;
+}
+
+.season-command-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.season-command-head h2 {
+  margin: 3px 0 4px;
+  font-size: clamp(1.45rem, 2.4vw, 2.2rem);
+}
+
+.season-command-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.season-command-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.season-command-actions button,
+.season-command-support button {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--hg-surface-deep);
+  color: var(--text);
+  padding: 9px 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.season-command-actions button.is-primary {
+  background: var(--text);
+  color: #000000;
+}
+
+.season-command-actions button:hover:not(:disabled),
+.season-command-actions button:focus-visible,
+.season-command-support button:hover:not(:disabled),
+.season-command-support button:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+.season-command-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.season-command-grid {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.8fr) minmax(0, 1.2fr);
+  gap: 12px;
+}
+
+.season-next-match {
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  min-height: 128px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--hg-surface-deep);
+  padding: 16px 18px;
+}
+
+.season-next-match > span,
+.season-command-metrics span,
+.season-card-heading span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.season-next-match > strong {
+  font-size: clamp(1.25rem, 2.1vw, 1.8rem);
+  line-height: 1.1;
+}
+
+.season-next-match > small {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.season-command-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.season-command-metrics article {
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  min-height: 128px;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  padding: 13px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.season-command-metrics strong {
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.season-command[data-position-tone="positive"] .season-command-metrics article:first-child {
+  border-color: var(--good);
+}
+
+.season-command[data-position-tone="negative"] .season-command-metrics article:first-child {
+  border-color: var(--bad);
+}
+
+.season-command-support {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 12px;
+}
+
+.season-command-support .muted-text {
+  margin: 0;
+  max-width: 76ch;
+  font-size: 0.8rem;
+}
+
+.season-league-overview {
+  gap: 12px;
+}
+
+.season-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  gap: 12px;
+}
+
+.season-standings-card,
+.season-fixtures-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.16);
+  padding: 13px;
+}
+
+.season-card-heading {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.season-card-heading strong {
+  font-size: 1rem;
+}
+
+.season-compact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.season-compact-table th,
+.season-compact-table td {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 7px 6px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.season-compact-table thead th {
+  color: var(--muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.season-compact-table th:nth-child(2),
+.season-compact-table td:nth-child(2) {
+  text-align: left;
+}
+
+.season-compact-table tr.is-manager-club th,
+.season-compact-table tr.is-manager-club td {
+  border-bottom-color: var(--text);
+  font-weight: 900;
+}
+
+.season-compact-table tr.is-manager-club th {
+  border-left: 3px solid var(--text);
+  padding-left: 9px;
+}
+
+.season-table-gap td {
+  border: 0;
+  color: var(--muted);
+  text-align: center;
+  padding: 2px;
+}
+
+.season-fixture-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.season-fixture-columns h4 {
+  margin: 0 0 7px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.season-fixture-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.season-fixture {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 2px 8px;
+  border-left: 3px solid var(--line-soft);
+  padding: 7px 8px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.season-fixture > span {
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.season-fixture > strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.82rem;
+}
+
+.season-fixture > small {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.season-fixture.is-win { border-left-color: var(--good); }
+.season-fixture.is-loss { border-left-color: var(--bad); }
+.season-fixture.is-draw { border-left-color: var(--line); }
+.season-fixture.is-upcoming:first-child { border-left-color: var(--text); }
+
+.season-fixture-empty {
+  color: var(--muted);
+  border: 1px dashed var(--line-soft);
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 0.78rem;
+}
+
+.season-depth {
+  border-top: 1px solid var(--line-soft);
+  padding-top: 10px;
+}
+
+.season-depth > summary,
+.season-all-fixtures > summary {
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 0.84rem;
+}
+
+.season-depth-content {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.season-full-table .mini-season-table tr.is-manager-club th,
+.season-full-table .mini-season-table tr.is-manager-club td {
+  color: var(--text);
+  font-weight: 900;
+  border-bottom-color: var(--line);
+}
+
+.season-all-fixtures {
+  display: grid;
+  gap: 8px;
+}
+
+.season-all-fixtures section {
+  border-top: 1px solid var(--line-soft);
+  padding-top: 8px;
+}
+
+.season-all-fixtures h4 {
+  margin: 0 0 5px;
+}
+
+.season-all-fixtures p {
+  margin: 0;
+  padding: 3px 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.season-all-fixtures p.is-manager-fixture {
+  color: var(--text);
+  font-weight: 900;
+}
+
+@media (max-width: 900px) {
+  .season-command-grid,
+  .season-workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .season-command-metrics article {
+    min-height: 96px;
+  }
+}
+
+@media (max-width: 620px) {
+  .season-command-head,
+  .season-command-support {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .season-command-actions {
+    justify-content: stretch;
+  }
+
+  .season-command-actions button {
+    flex: 1 1 130px;
+  }
+
+  .season-command-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .season-command-metrics article {
+    min-height: 82px;
+  }
+
+  .season-fixture-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .season-compact-table th:nth-child(3),
+  .season-compact-table td:nth-child(3) {
+    display: none;
+  }
+}
