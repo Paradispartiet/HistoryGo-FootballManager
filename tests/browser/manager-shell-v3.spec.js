@@ -82,7 +82,7 @@ test("lagflaten bruker bare direkte uttak og holder banen i arbeidsområdet", as
 
 test("trening viser nøyaktig ett utvidet arbeidssteg", async ({ page }) => {
   await openArea(page, "Lag");
-  await page.getByRole("button", { name: "Trening", exact: true }).click();
+  await page.locator('.app-subtab[data-tab-target="trening"]').click();
   const toggles = page.locator("[data-training-step-toggle]");
   await expect(toggles).toHaveCount(3);
   await expect(page.locator('[data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
@@ -159,7 +159,7 @@ test.describe("visuelle baseliner", () => {
   test("Trening · 768", async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await openArea(page, "Lag");
-    await page.getByRole("button", { name: "Trening", exact: true }).click();
+    await page.locator('.app-subtab[data-tab-target="trening"]').click();
     await expect(page).toHaveScreenshot("training-768.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
   });
 
