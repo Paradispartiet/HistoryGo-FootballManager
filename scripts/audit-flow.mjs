@@ -332,7 +332,13 @@ check("klubbkortet på Kontor er fjernet", !html.includes('id="leagueClubCard"')
 check("plassering og styremål ligger på Statistikk", html.includes('id="statsStanding"') && html.includes('id="statsBoardGoal"') && app.includes("managerRow.position"));
 check("klubbidentiteten viser navn og manager utenfor ligamodus også", app.includes("model.managerName"));
 check("klubbkortet har ikke stedsanker eller sesongoppdrag", !html.includes('id="leagueClubAnchor"') && !html.includes("Sesongoppdrag") && !app.includes("Klubbanker / hjemsted"));
-check("aktiv save viser ligastatus og terminliste", html.includes("Terminliste og tabell") && app.includes("Neste kamp:") && app.includes("getNextLeagueOpponent(state.leagueSeason)"));
+check(
+  "aktiv save viser sesongkontroll og ligadata",
+  html.includes('id="seasonCommand"')
+    && app.includes("createSeasonSceneModel({")
+    && app.includes("renderSeasonCommand(elements.seasonCommand, scene")
+    && app.includes("renderSeasonLeagueOverview(overview, scene, season)")
+);
 check("nullstilling er namespacet og rydder aldri league-save", app.includes("resetSecondarySession") && !/function resetMiniSeason\(\)[\s\S]{0,300}clearLeagueSaveState/.test(app) && !app.includes("placeUnlocks = []"));
 
 // ---- 13) Landslagsmodus ------------------------------------------------------
