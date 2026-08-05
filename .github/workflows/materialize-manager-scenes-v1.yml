@@ -61,22 +61,12 @@ jobs:
               raise SystemExit("Expected beforeEach signature was not found")
           source = source.replace(before_each_old, before_each_new, 1)
 
-          season_old = 'leagueSeasonStatus: "preseason"'
-          if season_old not in source:
-              raise SystemExit("Expected preseason fixture state was not found")
-          source = source.replace(season_old, 'leagueSeasonStatus: "active"', 1)
-
           goto_old = '''  });
             await page.goto("/");
           '''
           goto_new = '''  });
             if (testInfo.title === "Kamp i gang · 1280") {
               await page.addInitScript(() => {
-                localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
-                  focusId: "role_understanding",
-                  week: 1,
-                  appliedSessionId: null
-                }));
                 localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify({
                   week: 1,
                   phase: "matchday",
@@ -105,6 +95,9 @@ jobs:
             const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
             await expect(focusButton).toBeAttached();
             await focusButton.evaluate((node) => node.click());
+            const startSeasonAction = page.locator("#nextActionPrimary");
+            await expect(startSeasonAction).toBeEnabled();
+            await startSeasonAction.click();
           '''
           if training_old not in source:
               raise SystemExit("Expected training helper block was not found")
@@ -114,7 +107,6 @@ jobs:
           readiness_new = '''  const readinessNode = page.locator("#matchdayReadiness");
             const readinessText = (await readinessNode.textContent() || "").trim();
             const readinessData = await readinessNode.evaluate((node) => ({ ...node.dataset }));
-            console.log("MATCHDAY_READINESS", JSON.stringify({ readinessText, readinessData }));
             await expect(page.locator("#playMatchdayButton"), `${readinessText} | ${JSON.stringify(readinessData)}`).toBeEnabled();'''
           if readiness_old not in source:
               raise SystemExit("Expected matchday enabled assertion was not found")
