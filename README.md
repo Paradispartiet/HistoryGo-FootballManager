@@ -2,6 +2,9 @@
 
 HistoryGo Football Manager er en selvstendig managerprototype koblet til History Go / Civication.
 
+Det nåværende managerskallet og den responsive flytkontrakten er dokumentert i
+[`docs/MANAGER_SHELL_V3.md`](docs/MANAGER_SHELL_V3.md).
+
 > Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
 
 Dette er ikke et vanlig ratingspill. `overall` beskriver klasse, ikke automatisk kampverdi. En spiller med lavere `overall` kan prestere bedre enn en høyere rated spiller dersom han brukes i riktigere posisjon, rolle, taktikk og relasjonelt mønster.

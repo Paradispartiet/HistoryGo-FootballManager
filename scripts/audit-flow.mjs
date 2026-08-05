@@ -30,7 +30,9 @@ const tabTargets = new Set();
 for (const match of html.matchAll(/data-tab-target="([^"]+)"/g)) tabTargets.add(match[1]);
 
 const tabSections = new Set();
-for (const match of html.matchAll(/data-tab-section="([^"]+)"/g)) tabSections.add(match[1]);
+for (const match of html.matchAll(/<[^>]*data-tab-section="([^"]+)"[^>]*>/g)) {
+  if (!/\bdata-shell-hidden\b/.test(match[0])) tabSections.add(match[1]);
+}
 
 const hasId = (id) => htmlIds.has(id);
 

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>HG Football Manager</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="src/ui/manager-shell-v3.css">
 </head>
 <body>
   <!-- ============================ ONBOARDING (EGEN SKJERM) ============================
@@ -85,12 +86,9 @@
     </div>
   </header>
 
-  <!-- HOVEDMENY
-       Én meny, én rekkefølge — slik en manageruke faktisk går:
-       Kontor → Trening → Taktikk → Kamp → Analyse.
-       Ingen fane sender deg et annet sted enn etiketten sin sier. Kontorets
-       avdelinger (speiding, stab, klubb, styret, fasiliteter) ligger PÅ Kontor,
-       ikke i en egen nedtrekksmeny som duplikat av de samme navnene.
+  <!-- HOVEDMENY · MANAGER SHELL V3
+       Fem stabile arbeidsområder: Kontor → Lag → Kamp → Sesong → Klubb.
+       På mobil heter den siste inngangen «Mer», men eier fortsatt klubbflatene.
 
        `data-nav-modes` sier hvilke modi fanen hører hjemme i. Scenario-fanen
        finnes bare i scenariomodus, og Fotballvitenskap er en egen modul utenfor
@@ -106,17 +104,11 @@
         </svg>
         <span class="nav-label">Kontor</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="trening" data-nav-modes="league national scenario">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6H11v13H5.5A1.5 1.5 0 0 1 4 17.5z"/><path d="M20 7.5A1.5 1.5 0 0 0 18.5 6H13v13h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>
-        </svg>
-        <span class="nav-label">Trening</span>
-      </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="tactics" data-nav-modes="league national scenario">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M12 4.5v15"/><circle cx="12" cy="12" r="2.4"/><path d="M3.5 9h2.5v6H3.5"/><path d="M20.5 9H18v6h2.5"/>
         </svg>
-        <span class="nav-label">Taktikk</span>
+        <span class="nav-label">Lag</span>
       </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="kamp" data-nav-modes="league national scenario">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -124,17 +116,17 @@
         </svg>
         <span class="nav-label">Kamp</span>
       </button>
-      <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="analyse" data-nav-modes="league national scenario">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 19.5h16"/><rect x="5.5" y="12" width="3.4" height="5.5" rx="1"/><rect x="10.3" y="8" width="3.4" height="9.5" rx="1"/><rect x="15.1" y="4.5" width="3.4" height="13" rx="1"/>
-        </svg>
-        <span class="nav-label">Analyse</span>
-      </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="statistikk" data-nav-modes="league national scenario">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M9 9.5v10"/><path d="M3.5 14.5h17"/>
         </svg>
-        <span class="nav-label">Statistikk</span>
+        <span class="nav-label">Sesong</span>
+      </button>
+      <button type="button" class="nav-tab nav-tab-primary nav-tab-club" role="tab" aria-selected="false" data-tab-target="board" data-nav-modes="league national scenario">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 20V8l8-4 8 4v12"/><path d="M8 20v-6h8v6"/><path d="M3 20h18"/>
+        </svg>
+        <span class="nav-label">Klubb</span>
       </button>
       <button type="button" class="nav-tab nav-tab-primary" role="tab" aria-selected="false" data-tab-target="scenarios" data-nav-modes="scenario" hidden>
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -174,24 +166,26 @@
        Seksjonene på sin side bærer `data-tab-parent`, som er det som får
        hovedfanen til å lyse mens du er inne på en underflate. -->
   <nav class="app-subnav" id="appSubnav" aria-label="Underfaner" hidden>
-    <!-- Kontoret: åtte flater med hver sin jobb. -->
+    <!-- Kontor: det du må håndtere nå. -->
     <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="dashboard">Oversikt</button>
     <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="inbox">Assistentråd</button>
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="historygo">Speiding</button>
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="progression">Klubbutvikling</button>
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="admin">Stab &amp; drift</button>
-    <!-- Fasiliteter er ikke bygd ferdig. Underfanen er derfor deaktivert og
-         merket «Senere», akkurat som avdelingskortet var — ellers er den en
-         dør inn til en halvferdig flate. -->
-    <button type="button" class="app-subtab is-disabled" aria-disabled="true" disabled data-subnav-parent="dashboard" data-tab-target="facilities">Fasiliteter <span class="nav-future-badge">Senere</span></button>
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="market">Klubbrom</button>
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="board">Styret</button>
 
-    <!-- Taktikk: tre flater. Tavla er der du jobber; troppen og systemet er
-         oppslag du går til, ikke ting som skal ligge og forlenge tavla. -->
+    <!-- Lag: uttak, benk, trening og systemkunnskap i samme arbeidsområde. -->
     <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="tactics">Oppstilling</button>
     <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="squad">Tropp &amp; benk</button>
+    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="trening">Trening</button>
     <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="system">Systemet</button>
+
+    <!-- Kamp: forberedelse, kamp og etterarbeid. -->
+    <button type="button" class="app-subtab" data-subnav-parent="kamp" data-tab-target="kamp">Kampdag</button>
+    <button type="button" class="app-subtab" data-subnav-parent="kamp" data-tab-target="analyse">Analyse</button>
+
+    <!-- Klubb/Mer: varige klubbfunksjoner. Uferdig økonomi, marked og
+         fasiliteter er bevisst ikke navigerbare. -->
+    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="board">Styret</button>
+    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
+    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
+    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="admin">Stab &amp; drift</button>
   </nav>
 
   <main class="app-shell" id="app">
@@ -500,6 +494,26 @@
           </p>
           <div class="pitch" id="lineupSlots" aria-label="Fotballbane med spillerbrikker"></div>
 
+          <section class="lineup-direct-editor" aria-label="Direkte laguttak">
+            <div class="lineup-direct-head">
+              <div>
+                <p class="eyebrow">Valgt plass</p>
+                <h3>Velg spiller og rolle direkte</h3>
+              </div>
+              <p class="muted-text">Trykk på en brikke på banen, velg spillerkort og deretter rolle. Dra en brikke over en annen for å bytte spillerne.</p>
+            </div>
+            <div id="lineupPlayerChoices" class="lineup-player-choices" aria-label="Spillere til valgt plass"></div>
+            <div id="lineupRoleChoices" class="lineup-role-choices" aria-label="Roller til valgt plass"></div>
+          </section>
+
+          <section class="pitch-bench" aria-label="Synlig benk">
+            <div class="pitch-bench-head">
+              <div><p class="eyebrow">Kamptropp</p><h3>Benk og reserver</h3></div>
+              <p class="muted-text">Trykk på en spiller for å sette ham inn på valgt plass.</p>
+            </div>
+            <div id="benchPlayersList" class="bench-player-list"></div>
+          </section>
+
         </section>
 
         <aside class="panel side-panel" id="sidePanel" aria-live="polite">
@@ -523,7 +537,6 @@
           <!-- Spillerprofil: vises når plassen har en spiller -->
           <div class="side-profile" id="sideProfile" hidden>
             <div class="profile-identity">
-              <div class="profile-rating" id="profileRating">–</div>
               <div class="profile-identity-text">
                 <h3 id="profileName">–</h3>
                 <p id="profilePositions" class="profile-positions"></p>
@@ -604,8 +617,8 @@
         </div>
 
         <details class="panel-details is-flush"><summary>Se hele troppen</summary>
-        <h3>Spillerkort · benk og reserver</h3>
-        <div id="benchPlayersList" class="bench-player-list"></div>
+        <h3>Spillerkort · hele troppen</h3>
+        <p class="muted-text">Benk og reserver er synlige ved siden av banen på Oppstilling, slik at du kan gjøre bytter uten å forlate arbeidsflaten.</p>
         <p id="rosterReadinessNote" class="muted-text roster-readiness-note">Samle flere spillere via History Go-steder.</p>
         </details>
       </section>
@@ -666,7 +679,7 @@
 
          Listene bruker de samme motorene som elleveren (calculateTeamFit), så
          tallene her kan aldri motsi Taktikk. -->
-    <div class="tab-section analyse-view" data-tab-section="analyse" hidden>
+    <div class="tab-section analyse-view" data-tab-section="analyse" data-tab-parent="kamp" hidden>
       <section class="panel" aria-label="Kampanalyse" aria-live="polite">
         <p class="eyebrow">Etter kampen</p>
         <h2>Kampanalyse</h2>
@@ -783,7 +796,7 @@
     </div>
 
     <!-- ============================ TRENING & KUNNSKAP ============================ -->
-    <div class="tab-section trening-view" data-tab-section="trening" hidden>
+    <div class="tab-section trening-view" data-tab-section="trening" data-tab-parent="tactics" hidden>
 
       <!-- UKENS PLAN: fire steg i fast rekkefølge, ikke tre parallelle lister.
            Innboks leverer signalene, programmet er ukas RAMME (belastning),
@@ -823,11 +836,41 @@
         <ul id="squadConditionList" class="squad-condition-list"></ul>
       </section>
 
-      <!-- Detaljene ligger i popup-er. -->
-      <div class="popup-actions" aria-label="Mer om trening">
-        <button type="button" data-modal-open="modalTrainingProgram">Ukas ramme</button>
-        <button type="button" data-modal-open="modalTrainingFocusPick">Ukas tema</button>
-        <button type="button" data-modal-open="modalIndividualTraining">Individuell trening</button>
+      <!-- Kjernevalgene ligger i én sammenhengende arbeidsflate. Det gjør
+           treningsuka lesbar og redigerbar uten en kjede av modaler. -->
+      <div class="training-workspace" id="trainingWorkspace" aria-label="Treningsarbeidsflate">
+        <section class="panel training-workspace-step" id="trainingProgramStep" tabindex="-1">
+          <div class="training-workspace-step-head"><div><p class="eyebrow">Steg 2 · ukas ramme</p><h3>Treningsprogram</h3></div><span>Lagbelastning</span></div>
+          <p class="muted-text">Fire økter som henger sammen. Rammen setter ukas arbeidsmengde: en restitusjonsuke henter inn mer enn kampen kostet, en pressuke mindre.</p>
+          <div class="training-choice-grid">
+            <article><span>Viktigste signal</span><strong id="trainingChoiceSignal">Laster kontekst…</strong></article>
+            <article><span>Anbefalt nå</span><strong id="trainingChoiceRecommended">Laster anbefaling…</strong></article>
+            <article><span>Risiko</span><strong id="trainingChoiceRisk">Middels</strong></article>
+            <article><span>Ukas belastning</span><strong id="trainingProgramLoadValue">–</strong></article>
+          </div>
+          <p id="weeklyTrainingProgramStatus" class="weekly-training-status" data-selected="false">Velg ett treningsprogram for uka.</p>
+          <div id="trainingPrograms" class="training-programs-list"></div>
+        </section>
+
+        <section class="panel training-workspace-step" id="trainingFocusStep" tabindex="-1">
+          <div class="training-workspace-step-head"><div><p class="eyebrow">Steg 3 · kampens tema</p><h3>Ukens treningsfokus</h3></div><span>Kampbonus</span></div>
+          <p class="muted-text">Velg ett taktisk tema. Når temaet finnes i programmet, får laget mer ut av begge valgene.</p>
+          <p id="weeklyTrainingStatus" class="weekly-training-status">Velg ett fokus før kamp.</p>
+          <p id="weeklyTrainingRecommendation" class="weekly-training-recommendation">Laster anbefaling…</p>
+          <div id="weeklyTrainingOptions" class="weekly-training-options"></div>
+        </section>
+
+        <section class="panel training-workspace-step" id="individualTrainingStep" tabindex="-1">
+          <div class="training-workspace-step-head"><div><p class="eyebrow">Steg 4 · enkeltspilleren</p><h3>Individuell trening</h3></div><span>Oppfølging</span></div>
+          <p class="muted-text">Lær en rolle, hent inn belastning, skjerp formen eller tren en spiller tilbake fra skade. Treningen endrer bruk og beredskap, ikke en kunstig samlet rating.</p>
+          <p id="individualTrainingCapacity" class="weekly-training-status" data-selected="false">Laster kapasitet…</p>
+          <div id="individualTrainingAssignments" class="individual-training-assignments"></div>
+          <h4>Legg til oppfølging</h4>
+          <div id="individualTrainingPicker" class="individual-training-picker"></div>
+        </section>
+      </div>
+
+      <div class="popup-actions training-support-actions" aria-label="Fordypning om trening">
         <button type="button" data-modal-open="modalWeaknesses">Svake sider</button>
         <button type="button" data-modal-open="modalTrainingFocus">Managerinnsikt</button>
         <button type="button" data-modal-open="modalKnowledge">Fotballkunnskap</button>
@@ -872,7 +915,7 @@
          «Treningsprogrammer» het det samme som lagets treningsuke, men er noe
          helt annet: flerukers progresjoner som tjener badges. De heter nå
          UTVIKLINGSPROGRAMMER, så ordet «trening» bare betyr én ting i appen. -->
-    <div class="tab-section dept dept-progression" data-tab-section="progression" data-tab-parent="dashboard" hidden>
+    <div class="tab-section dept dept-progression" data-tab-section="progression" data-tab-parent="board" hidden>
       <section class="dept-hero dept-hero-progression">
         <div>
           <p class="eyebrow">Klubbutvikling</p>
@@ -931,7 +974,7 @@
     </div>
 
     <!-- ============================ FASILITETER ============================ -->
-    <div class="tab-section dept dept-facilities" data-tab-section="facilities" data-tab-parent="dashboard" hidden>
+    <div class="tab-section dept dept-facilities" data-tab-section="facilities" data-tab-parent="board" data-shell-hidden hidden>
       <section class="dept-hero dept-hero-facilities">
         <div>
           <p class="eyebrow">Klubbanlegg</p>
@@ -977,7 +1020,7 @@
     <!-- Admin v1: ekte kontorflate — den operative driften rundt laget. Leser
          tropp-/stab-state direkte (rosterReadiness, hired staff) via
          renderAdminRoom(). Økonomi/kontrakter er ærlig merket som senere. -->
-    <div class="tab-section dept dept-admin" data-tab-section="admin" data-tab-parent="dashboard" hidden>
+    <div class="tab-section dept dept-admin" data-tab-section="admin" data-tab-parent="board" hidden>
       <section class="dept-hero dept-hero-admin">
         <div>
           <p class="eyebrow">Drift og økonomi</p>
@@ -1024,7 +1067,7 @@
          moral, styretillit). Omdømme, fanstemning og sponsorinteresse er
          lesbare kvalitative signaler avledet av eksisterende verdier — ingen ny
          motor. Konkrete avtaler er ærlig merket som senere. -->
-    <div class="tab-section dept dept-market" data-tab-section="market" data-tab-parent="dashboard" hidden>
+    <div class="tab-section dept dept-market" data-tab-section="market" data-tab-parent="board" data-shell-hidden hidden>
       <section class="dept-hero dept-hero-market">
         <div>
           <p class="eyebrow">Kommersiell utvikling</p>
@@ -1063,7 +1106,7 @@
          klubbverdier, ukerytme) direkte. Ikke lenger en «Senere»-flate — alt
          her er live via renderBoardRoom(). Budsjett/kontrakter er ærlig merket
          som senere, som en liten sekundær note, ikke som hovedinnhold. -->
-    <div class="tab-section dept dept-board" data-tab-section="board" data-tab-parent="dashboard" hidden>
+    <div class="tab-section dept dept-board" data-tab-section="board" hidden>
       <section class="dept-hero dept-hero-board">
         <div>
           <p class="eyebrow">Boardroom</p>
@@ -1100,7 +1143,7 @@
     </div>
 
     <!-- ============================ HISTORY GO ============================ -->
-    <div class="tab-section dept dept-historygo" data-tab-section="historygo" data-tab-parent="dashboard" hidden>
+    <div class="tab-section dept dept-historygo" data-tab-section="historygo" data-tab-parent="board" hidden>
       <section class="dept-hero dept-hero-historygo">
         <div>
           <p class="eyebrow">Speiding</p>
@@ -1343,41 +1386,6 @@
             <div id="badgeEffectsSummary" class="badge-effects-list"></div>
           </div>
         </div>
-  <!-- STEG 2: ukas ramme. Programmet er hva laget bruker uka på — det avgjør
-       belastningen, altså hvor mye kroppene henter inn igjen. -->
-  <div class="modal-overlay" id="modalTrainingProgram" role="dialog" aria-modal="true" aria-label="Ukas ramme" hidden>
-          <div class="modal modal-wide">
-            <div class="modal-head">
-              <div><p class="eyebrow">Steg 2 · ukas ramme</p><h3>Treningsprogram</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <p class="muted-text">Fire økter som henger sammen. Rammen setter ukas arbeidsmengde: en restitusjonsuke henter inn mer enn kampen kostet, en pressuke mindre. Forslagene forklarer seg selv, men de er ikke fasit — leser du troppen bedre enn motoren, skal ditt valg kunne slå standarden.</p>
-            <div class="training-choice-grid">
-              <article><span>Viktigste signal</span><strong id="trainingChoiceSignal">Laster kontekst…</strong></article>
-              <article><span>Anbefalt nå</span><strong id="trainingChoiceRecommended">Laster anbefaling…</strong></article>
-              <article><span>Risiko</span><strong id="trainingChoiceRisk">Middels</strong></article>
-              <article><span>Ukas belastning</span><strong id="trainingProgramLoadValue">–</strong></article>
-            </div>
-            <p id="weeklyTrainingProgramStatus" class="weekly-training-status" data-selected="false">Velg ett treningsprogram for uka.</p>
-            <div id="trainingPrograms" class="training-programs-list"></div>
-          </div>
-        </div>
-
-  <!-- STEG 3: ukas tema. Fokuset er det ene du tar med inn i kampen — det er
-       dette som gir utslag på kampdag. Bør ligge inne i programmet du valgte. -->
-  <div class="modal-overlay" id="modalTrainingFocusPick" role="dialog" aria-modal="true" aria-label="Ukas tema" hidden>
-          <div class="modal modal-wide">
-            <div class="modal-head">
-              <div><p class="eyebrow">Steg 3 · kampens tema</p><h3>Ukens treningsfokus</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <p class="muted-text">Ett av åtte taktiske temaer. Dette er det som gir metrikkbonus på kampdag. Ligger temaet inne i ukas program, får laget mer ut av begge — spriker de, får det mindre.</p>
-            <p id="weeklyTrainingStatus" class="weekly-training-status">Velg ett fokus før kamp.</p>
-            <p id="weeklyTrainingRecommendation" class="weekly-training-recommendation">Laster anbefaling…</p>
-            <div id="weeklyTrainingOptions" class="weekly-training-options"></div>
-          </div>
-        </div>
-
   <!-- SVAKE SIDER: alle spillere gjennom historien har hatt dem. Lista er ikke
        en dom over spillerne — den sier hvor det koster noe å bruke dem, og er
        dermed selve begrunnelsen for at posisjon og rolle betyr mer enn
@@ -1392,23 +1400,6 @@
             <p class="muted-text">Alle spillere gjennom historien har hatt svake sider. Dette er ikke en dom over dem — det er svaret på hvor det koster deg noe å bruke dem. En svak side trekker aldri fra klassen deres; den sier hvilke roller som er stengt til du gjør noe med det.</p>
             <p id="weaknessWorkSummary" class="weekly-training-status" data-selected="false">Laster troppen…</p>
             <div id="weaknessList" class="weakness-list"></div>
-          </div>
-        </div>
-
-  <!-- STEG 4: enkeltspilleren. Ingen av sporene hever `overall` — de bygger
-       rollefortrolighet, henter inn belastning, skjerper form eller trener en
-       skadet mann tilbake. Motor: src/football-individual-training.js. -->
-  <div class="modal-overlay" id="modalIndividualTraining" role="dialog" aria-modal="true" aria-label="Individuell trening" hidden>
-          <div class="modal modal-wide">
-            <div class="modal-head">
-              <div><p class="eyebrow">Steg 4 · enkeltspilleren</p><h3>Individuell trening</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <p class="muted-text">Lagsøkta treffer alle elleve likt. Her gjør du noe med én spiller: lærer ham en rolle, henter ham inn igjen, skjerper formen eller trener ham tilbake fra skade. Ingenting av dette gjør spilleren bedre — det gjør at han passer til det du vil bruke ham til.</p>
-            <p id="individualTrainingCapacity" class="weekly-training-status" data-selected="false">Laster kapasitet…</p>
-            <div id="individualTrainingAssignments" class="individual-training-assignments"></div>
-            <h4>Legg til oppfølging</h4>
-            <div id="individualTrainingPicker" class="individual-training-picker"></div>
           </div>
         </div>
 
