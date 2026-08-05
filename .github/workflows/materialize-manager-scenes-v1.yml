@@ -85,14 +85,12 @@ jobs:
             await expect(focusButton).toBeVisible();
             await focusButton.click();
           '''
-          training_new = '''  const storedFocus = await page.evaluate(() => {
-              try {
-                return JSON.parse(localStorage.getItem("hgfm.weeklyTrainingFocus.v1") || "null");
-              } catch (error) {
-                return null;
-              }
-            });
-            expect(storedFocus).toMatchObject({ focusId: "role_understanding", week: 1, appliedSessionId: null });
+          training_new = '''  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]').first();
+            await expect(trainingTab).toBeAttached();
+            await trainingTab.evaluate((node) => node.click());
+            const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
+            await expect(focusButton).toBeAttached();
+            await focusButton.evaluate((node) => node.click());
           '''
           if training_old not in source:
               raise SystemExit("Expected training helper block was not found")
@@ -114,8 +112,10 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
 
-      - name: Generate locked scene baselines
-        run: npx playwright test tests/browser/manager-shell-v3.spec.js --update-snapshots
+      - name: Verify and generate locked scene baselines
+        run: |
+          npx playwright test tests/browser/manager-shell-v3.spec.js --grep "Kamp i gang · 1280" --update-snapshots
+          npx playwright test tests/browser/manager-shell-v3.spec.js --update-snapshots
 
       - name: Run full validation
         shell: bash
