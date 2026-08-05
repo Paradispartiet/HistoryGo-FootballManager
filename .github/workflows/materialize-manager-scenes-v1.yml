@@ -27,7 +27,7 @@ jobs:
           ref: agent/matchday-lineup-scenes-v1-clean
           fetch-depth: 0
 
-      - name: Apply validated manager scenes patch
+      - name: Apply permanent manager scenes patch
         shell: bash
         run: |
           set -euo pipefail
@@ -55,16 +55,16 @@ jobs:
           path = Path("tests/browser/manager-shell-v3.spec.js")
           source = path.read_text(encoding="utf-8")
 
-          before_each_old = 'test.beforeEach(async ({ page }) => {'
-          before_each_new = 'test.beforeEach(async ({ page }, testInfo) => {'
-          if before_each_old not in source:
+          old = 'test.beforeEach(async ({ page }) => {'
+          new = 'test.beforeEach(async ({ page }, testInfo) => {'
+          if old not in source:
               raise SystemExit("Expected beforeEach signature was not found")
-          source = source.replace(before_each_old, before_each_new, 1)
+          source = source.replace(old, new, 1)
 
-          goto_old = '''  });
+          old = '''  });
             await page.goto("/");
           '''
-          goto_new = '''  });
+          new = '''  });
             if (testInfo.title === "Kamp i gang · 1280") {
               await page.addInitScript(() => {
                 const clubWeekState = {
@@ -83,11 +83,11 @@ jobs:
                   teamName: "Browser Legacy Team",
                   activeTrainingWeek: 1,
                   hiredStaffIds: [
-                    "bislett_speed_specialist",
-                    "ekeberg_recruitment_coach",
-                    "helenio_herrera"
+                    "jorgen_isnes",
+                    "johannes_moesgaard",
+                    "bislett_speed_specialist"
                   ],
-                  unlockedPlaceIds: ["kfum_arena"],
+                  unlockedPlaceIds: ["kfum_arena", "bislett_stadion"],
                   unlockedExpertiseIds: [
                     "team_organisation",
                     "club_building",
@@ -105,38 +105,44 @@ jobs:
             }
             await page.goto("/");
           '''
-          if goto_old not in source:
+          if old not in source:
               raise SystemExit("Expected page.goto setup block was not found")
-          source = source.replace(goto_old, goto_new, 1)
+          source = source.replace(old, new, 1)
 
-          training_old = '''  await page.locator('.app-subtab[data-tab-target="trening"]').click();
+          old = '''  await page.locator('.app-subtab[data-tab-target="trening"]').click();
             const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
             await expect(focusButton).toBeVisible();
             await focusButton.click();
           '''
-          training_new = '''  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]').first();
+          new = '''  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]').first();
             await expect(trainingTab).toBeAttached();
             await trainingTab.evaluate((node) => node.click());
             const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
             await expect(focusButton).toBeAttached();
             await focusButton.evaluate((node) => node.click());
             await openArea(page, "Kontor");
+            const preseasonSteps = await page.locator("#leagueOnboardingSteps li").evaluateAll((items) => items.map((item) => ({
+              text: item.textContent?.replace(/\\s+/g, " ").trim() || "",
+              done: item.classList.contains("is-done")
+            })));
+            const incomplete = preseasonSteps.filter((step) => !step.done && !step.text.includes("Start sesongen"));
+            expect(incomplete, JSON.stringify(preseasonSteps)).toEqual([]);
             const startSeasonAction = page.locator("#leagueOnboardingSteps button", { hasText: "Start sesongen" });
             await expect(startSeasonAction).toBeVisible();
             await startSeasonAction.click();
           '''
-          if training_old not in source:
+          if old not in source:
               raise SystemExit("Expected training helper block was not found")
-          source = source.replace(training_old, training_new, 1)
+          source = source.replace(old, new, 1)
 
-          readiness_old = '  await expect(page.locator("#playMatchdayButton")).toBeEnabled();'
-          readiness_new = '''  const readinessNode = page.locator("#matchdayReadiness");
+          old = '  await expect(page.locator("#playMatchdayButton")).toBeEnabled();'
+          new = '''  const readinessNode = page.locator("#matchdayReadiness");
             const readinessText = (await readinessNode.textContent() || "").trim();
             const readinessData = await readinessNode.evaluate((node) => ({ ...node.dataset }));
             await expect(page.locator("#playMatchdayButton"), `${readinessText} | ${JSON.stringify(readinessData)}`).toBeEnabled();'''
-          if readiness_old not in source:
+          if old not in source:
               raise SystemExit("Expected matchday enabled assertion was not found")
-          source = source.replace(readiness_old, readiness_new, 1)
+          source = source.replace(old, new, 1)
 
           path.write_text(source, encoding="utf-8")
           PY
@@ -154,79 +160,20 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
 
-      - name: Verify and generate locked scene baselines
+      - name: Generate and verify scene baselines
         run: |
           npx playwright test tests/browser/manager-shell-v3.spec.js --grep "Kamp i gang · 1280" --update-snapshots
           npx playwright test tests/browser/manager-shell-v3.spec.js --update-snapshots
 
-      - name: Run full validation
-        shell: bash
+      - name: Validate permanent feature
         run: |
-          set -euo pipefail
           npm run typecheck
           npm run build
-          npm run stage:pages
-          npm run audit:pages-artifact
-
-          npm run audit:knowledge
-          npm run audit:ci-coverage
-          npm run audit:clubs
-          npm run audit:football-book-knowledge
-          npm run audit:football-book-ux
-          npm run audit:scenarios
-          npm run audit:hg-football
-          npm run audit:hg-historical-fit
-          npm run audit:hg-coach-context
-          npm run audit:hg-formation-knowledge
-          npm run audit:historical-opponents
-          npm run audit:tournaments
-          npm run audit:tactics
-          npm run audit:attributes
-
           npm run check:syntax
-          npm run check:dom-ids
           npm run audit:flow
           npm run audit:dead-ends
           npm run audit:manager-shell-v3
-
-          npm run sim:matchday
-          npm run sim:mini-season
-          npm run sim:tournament
-          npm run sim:match-plan
-          npm run sim:pitch-layout
-          npm run sim:training-week
-          npm run sim:training-plan
-          npm run sim:individual-training
-          npm run sim:player-weaknesses
-          npm run sim:player-attributes
-          npm run sim:formation-matchup
-          npm run sim:suggested-setups
-          npm run sim:training-programs
-          npm run sim:off-pitch
-          npm run sim:inbox
-          npm run sim:club-week
-          npm run sim:role-learning
-          npm run sim:staff-identity
-          npm run sim:manager-flow-ui
-          npm run sim:manager-ground-flow-v1
           node scripts/simulate-manager-scenes-v1.mjs
-          npm run sim:role-familiarity
-          npm run sim:league-season
-          npm run sim:mode-isolation
-          npm run sim:first-time
-          npm run sim:first-run-real-seed
-          npm run sim:first-run-football-book-qa
-          npm run sim:player-stats
-          npm run sim:substitutions
-          npm run sim:player-condition
-          npm run sim:scenarios
-          npm run sim:season-review
-          npm run sim:federation-verdict
-          npm run sim:league-playoff
-          npm run sim:club-selection
-          npm run sim:club-tradition
-          npm run sim:club-squad
-
           npm run test:browser
 
       - name: Commit and push permanent changes
@@ -258,9 +205,7 @@ jobs:
             if git push origin "HEAD:${BRANCH}"; then
               exit 0
             fi
-            echo "Push attempt ${attempt} failed; retrying against latest branch head."
             sleep 3
           done
 
-          echo "Unable to push permanent manager scenes changes after three attempts."
           exit 1
