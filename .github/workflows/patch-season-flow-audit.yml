@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       - name: Update season flow contract
         run: python3 tools/patch-season-flow-audit.py
-      - name: Verify flow audit
+      - name: Verify exact season overview contract
         run: node scripts/audit-flow.mjs
       - name: Publish patch
         run: |
