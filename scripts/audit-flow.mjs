@@ -20,6 +20,7 @@ import { dirname, join } from "node:path";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(root, "index.html"), "utf8");
 const app = readFileSync(join(root, "src/app.js"), "utf8");
+const shellElements = readFileSync(join(root, "src/ui/manager-shell-elements.js"), "utf8");
 
 // ---- Hjelpere ---------------------------------------------------------------
 
@@ -233,8 +234,9 @@ requireHandler("getMatchdayReadiness");
 stage("5. Formasjon & rolle");
 requireId("formationSelect");
 requireId("tacticSelect");
-requireId("slotPlayerSelect");
-requireId("slotRoleSelect");
+requireId("lineupPlayerChoices");
+requireId("lineupRoleChoices");
+check("gamle spiller-/rolle-selecter er fjernet", !html.includes('id="slotPlayerSelect"') && !html.includes('id="slotRoleSelect"'));
 requireHandler("seedLineupForFormation");
 requireHandler("getDefaultRoleForPlayer");
 requireHandler("sanitizeLineupForUnlockedPlayers");
@@ -251,7 +253,6 @@ requireImport("createTrainingProgramCompositions");
 
 // ---- 7) Club Week-faser -----------------------------------------------------
 stage("7. Club Week-faser");
-requireId("advanceClubWeekPhase");
 requireHandler("advanceClubWeekPhaseAction");
 requireImport("createInitialClubWeekStateFromBrowser");
 requireImport("advanceClubWeekPhaseFromBrowser");
@@ -323,7 +324,7 @@ check("onboarding har egne steg for trening og sesongstart", app.includes('id: "
 check("CTA ruter til konkrete flater", app.includes("activateLeagueOnboardingTarget") && app.includes("#unlockedPlayersList") && app.includes("#availableStaffList") && app.includes("#weeklyTrainingOptions"));
 check("kampdag gates av aktiv ligasesong i next-action", readFileSync(join(root, "src/football-next-action.js"), "utf8").includes("(!ctx.leagueModeActive || ctx.leagueSeasonActive)"));
 check("league-save-modell får id og norsk status", app.includes("function getLeagueSaveModel") && app.includes("activeLeagueSaveId") && app.includes("Før sesong") && app.includes("Aktiv sesong") && app.includes("Fullført sesong"));
-check("klubbidentiteten står i toppen, ikke i en egen boks på Kontor", html.includes('id="headerClubName"') && html.includes('id="headerClubManager"') && app.includes("function renderHeaderClubIdentity"));
+check("klubbidentiteten står i toppen, ikke i en egen boks på Kontor", shellElements.includes('id="headerClubName"') && shellElements.includes('id="headerClubManager"') && app.includes("function renderHeaderClubIdentity"));
 // «Klubben din» gjentok tall som allerede sto i managerportalen, klubbuka og
 // footeren. Identiteten flyttet til toppen; plassering og styremål til
 // Statistikk, ved siden av tabellen de leses av.

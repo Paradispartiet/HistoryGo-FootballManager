@@ -68,6 +68,7 @@ jobs:
           npm run check:dom-ids
           npm run audit:flow
           npm run audit:dead-ends
+          npm run audit:manager-shell-v3
 
       - name: Simuleringer (motorer ende-til-ende)
         run: |
@@ -110,5 +111,11 @@ jobs:
       - name: Installer Chromium for nettleservakter
         run: npx playwright install --with-deps chromium
 
-      - name: Responsive nettleservakter
-        run: npm run test:browser
+      - name: Generer kontrollerte visuelle baseliner
+        run: npm run test:browser -- --update-snapshots
+
+      - name: Last opp visuelle baseliner
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-shell-v3-visual-baselines
+          path: tests/browser/manager-shell-v3.spec.js-snapshots

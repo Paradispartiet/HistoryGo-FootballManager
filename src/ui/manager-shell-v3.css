@@ -1,3 +1,5 @@
+@import url("./manager-shell-foundation.css");
+
 /* Manager Shell v3: presentation-only layer. Engines and persisted state stay
    in their existing modules; this file owns the five-area shell and its direct
    work surfaces. */
@@ -42,7 +44,7 @@
 
 .lineup-direct-head h3,
 .pitch-bench-head h3,
-.training-workspace-step-head h3 {
+.training-workspace-step-head strong {
   margin: 0;
 }
 
@@ -164,12 +166,51 @@
   outline: none;
 }
 
+.training-workspace-step-head {
+  appearance: none;
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.training-workspace-step-head > span:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.training-workspace-step-head > span:first-child > strong {
+  font-size: 1.05rem;
+}
+
+.training-workspace-step-head::after {
+  content: "+";
+  align-self: center;
+  font-size: 1.25rem;
+}
+
+.training-workspace-step-head[aria-expanded="true"]::after {
+  content: "–";
+}
+
+.training-workspace-step-body {
+  padding-top: 12px;
+}
+
+.training-workspace-step-body[hidden] {
+  display: none !important;
+}
+
 .training-workspace-step:focus {
   border-color: #fff;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
 }
 
-.training-workspace-step-head > span {
+.training-workspace-step-head > span:last-of-type {
   padding: 5px 8px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 999px;

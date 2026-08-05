@@ -1,0 +1,98 @@
+/* Manager Shell primitives live outside the legacy stylesheet. These are
+   semantic scenes and dividers, not a new card around every block. */
+manager-club-header,
+manager-next-action {
+  display: contents;
+}
+
+body > manager-club-header > .site-header { grid-row: 1; }
+body > manager-next-action > .site-footer { grid-row: 6; }
+
+.manager-surface {
+  min-width: 0;
+  padding: clamp(14px, 2vw, 22px) 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.manager-surface[hidden] {
+  display: none !important;
+}
+
+.club-identity-mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  aspect-ratio: 0.82;
+  border: 2px solid var(--club-accent, #fff);
+  border-radius: 45% 45% 52% 52% / 30% 30% 68% 68%;
+  background: var(--club-accent, #fff);
+  color: var(--club-ink, #050706);
+  font-size: 0.92rem;
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 28px color-mix(in srgb, var(--club-accent, #fff) 24%, transparent);
+}
+
+#clubIdentityHeader {
+  position: relative;
+  overflow: hidden;
+  border-bottom-color: color-mix(in srgb, var(--club-accent, #fff) 58%, transparent);
+}
+
+#clubIdentityHeader::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--club-accent, #fff), transparent 72%);
+}
+
+#clubIdentityHeader .header-inner {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.club-ground-line {
+  margin: 0.25rem 0 0;
+  color: var(--club-accent, #fff);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.authoritative-action-note {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.topbar-team-reading {
+  align-content: center;
+  min-width: 150px;
+}
+
+.topbar-team-reading .topbar-status {
+  max-width: 22ch;
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.slot-editor-direct-note {
+  border: 0;
+  background: transparent;
+}
+
+@media (max-width: 620px) {
+  .club-identity-mark {
+    width: 42px;
+  }
+
+  #clubIdentityHeader .header-inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}

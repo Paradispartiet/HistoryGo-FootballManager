@@ -1,13 +1,3 @@
-export const TRAINING_WORKSPACE_TARGETS = Object.freeze({
-  modalTrainingProgram: "trainingProgramStep",
-  modalTrainingFocusPick: "trainingFocusStep",
-  modalIndividualTraining: "individualTrainingStep"
-});
-
-export function getTrainingWorkspaceTarget(legacyModalId) {
-  return TRAINING_WORKSPACE_TARGETS[legacyModalId] || null;
-}
-
 export function createMatchFlowSnapshot(session, visibleLog = []) {
   const log = Array.isArray(visibleLog) ? visibleLog : [];
   let ownThreat = 1;
