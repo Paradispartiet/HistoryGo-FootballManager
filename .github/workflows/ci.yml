@@ -92,6 +92,7 @@ jobs:
           npm run sim:staff-identity
           npm run sim:manager-flow-ui
           npm run sim:manager-ground-flow-v1
+          npm run sim:manager-season-scene-v1
           npm run sim:role-familiarity
           npm run sim:league-season
           npm run sim:mode-isolation
