@@ -9,7 +9,7 @@ new = '''check(
   html.includes('id="seasonCommand"')
     && app.includes("createSeasonSceneModel({")
     && app.includes("renderSeasonCommand(elements.seasonCommand, scene")
-    && app.includes("renderSeasonLeagueOverview(overview, scene)")
+    && app.includes("renderSeasonLeagueOverview(overview, scene, season)")
 );'''
 if old not in text:
     raise SystemExit("Expected legacy season-flow assertion was not found")
