@@ -33,7 +33,6 @@ jobs:
         run: |
           rm -rf tools/.season-command-payload
           rm -f tools/materialize-manager-season-command-v1.py
-          rm -f .github/workflows/materialize-manager-season-command-v1.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
