@@ -160,6 +160,7 @@ test.describe("visuelle baseliner", () => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await openArea(page, "Lag");
     await page.locator('.app-subtab[data-tab-target="trening"]').click();
+    await page.locator("#trainingWorkspace").scrollIntoViewIfNeeded();
     await expect(page).toHaveScreenshot("training-768.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
   });
 

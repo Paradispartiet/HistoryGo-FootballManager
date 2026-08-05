@@ -553,12 +553,12 @@ stage("16. App-rammen kan ikke kollapse");
   );
   // Hver ramme-del må ha sin egen rad, uansett hva som er skjult.
   const explicitRows = [
-    ["body > manager-club-header > .site-header", 1],
+    ["body > manager-club-header", 1],
     ["body > nav.main-nav", 2],
     ["body > .secondary-mode-bar", 3],
     ["body > nav.app-subnav", 4],
     ["body > .app-shell", 5],
-    ["body > manager-next-action > .site-footer", 6]
+    ["body > manager-next-action", 6]
   ];
   explicitRows.forEach(([selector, row]) => {
     const combinedCss = `${css}\n${shellCss}`;
