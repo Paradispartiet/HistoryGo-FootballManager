@@ -27,37 +27,36 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-
           path = Path('scripts/audit-dead-ends.mjs')
           source = path.read_text()
-
           anchor = 'const subsEngine = readFileSync(join(root, "src/football-substitutions.js"), "utf8");\n'
           replacement = anchor + 'const readinessEngine = readFileSync(join(root, "src/football-matchday-readiness.js"), "utf8");\n'
           assert source.count(anchor) == 1
           source = source.replace(anchor, replacement)
-
-          old = '''// ---- 7) Kamp kan ikke startes uten lag + trening ---------------------------
-stage("7. Kamp-gating");
-{
-  check(
-    "playMatchday krever kampklar tropp + valgt trening",
-    /getMatchdayReadiness\\([^)]*\\)\\.isReady\\s*\\|\\|\\s*\\(!state\\.weeklyTrainingProgram\\?\\.programId\\s*&&\\s*!state\\.weeklyTrainingFocus\\?\\.focusId\\)/.test(app)
-  );
-}
-'''
-          new = '''// ---- 7) Kamp kan ikke startes uten lag + trening ---------------------------
-stage("7. Kamp-gating");
-{
-  check(
-    "playMatchday bruker den autoritative kampklarhetsporten",
-    /function playMatchday\\(\\)\\s*\\{[\\s\\S]{0,320}const readiness = getMatchdayReadiness\\(teamFit\\);[\\s\\S]{0,360}if\\s*\\(!readiness\\.canStartMatch\\)/.test(app)
-  );
-  check(
-    "kampklarhetsmotoren blokkerer manglende trening",
-    /if\\s*\\(!input\\.hasTrainingChoice\\)\\s*\\{[\\s\\S]{0,220}"training_missing"/.test(readinessEngine)
-  );
-}
-'''
+          old = (
+              '// ---- 7) Kamp kan ikke startes uten lag + trening ---------------------------\n'
+              'stage("7. Kamp-gating");\n'
+              '{\n'
+              '  check(\n'
+              '    "playMatchday krever kampklar tropp + valgt trening",\n'
+              '    /getMatchdayReadiness\\([^)]*\\)\\.isReady\\s*\\|\\|\\s*\\(!state\\.weeklyTrainingProgram\\?\\.programId\\s*&&\\s*!state\\.weeklyTrainingFocus\\?\\.focusId\\)/.test(app)\n'
+              '  );\n'
+              '}\n'
+          )
+          new = (
+              '// ---- 7) Kamp kan ikke startes uten lag + trening ---------------------------\n'
+              'stage("7. Kamp-gating");\n'
+              '{\n'
+              '  check(\n'
+              '    "playMatchday bruker den autoritative kampklarhetsporten",\n'
+              '    /function playMatchday\\(\\)\\s*\\{[\\s\\S]{0,320}const readiness = getMatchdayReadiness\\(teamFit\\);[\\s\\S]{0,360}if\\s*\\(!readiness\\.canStartMatch\\)/.test(app)\n'
+              '  );\n'
+              '  check(\n'
+              '    "kampklarhetsmotoren blokkerer manglende trening",\n'
+              '    /if\\s*\\(!input\\.hasTrainingChoice\\)\\s*\\{[\\s\\S]{0,220}"training_missing"/.test(readinessEngine)\n'
+              '  );\n'
+              '}\n'
+          )
           assert source.count(old) == 1
           source = source.replace(old, new)
           path.write_text(source)
