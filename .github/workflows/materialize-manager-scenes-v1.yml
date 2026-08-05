@@ -37,13 +37,11 @@ jobs:
             agent/matchday-lineup-scenes-v1-clean
 
           git checkout "${SOURCE_REF}" -- \
-            docs/MANAGER_SCENES_V1.md \
-            scripts/audit-manager-scenes.mjs \
-            scripts/simulate-manager-scenes.mjs \
-            src/football-office-ui.js \
-            src/football-scene-schema.js \
-            src/football-scene-state.js \
-            src/football-section-cards.js
+            docs/MATCHDAY_LINEUP_SCENES_V1.md \
+            scripts/audit-manager-shell-v3.mjs \
+            scripts/simulate-manager-scenes-v1.mjs \
+            src/ui/manager-lineup-presentation.js \
+            src/ui/manager-matchday-presentation.js
 
           git show "${SOURCE_REF}:.github/manager-scenes-v1.diff.b64" \
             | tr -d '\n\r ' \
@@ -112,7 +110,7 @@ jobs:
           fi
 
           if git diff --cached --name-only | grep -Eq \
-            '(^|/)(manager-scenes-v1\.diff\.b64|materialize-payload\.yml|reapply-manager-scenes\.yml)$'; then
+            '(^|/)(manager-scenes-v1\.diff\.b64|export-manager-scenes-source\.yml|inspect-manager-scenes-test\.yml|manager-scenes-v1-apply\.yml|manager-scenes-v1-build(-retry)?\.yml|manager-scenes-v1-finalize\.yml)$'; then
             echo "Temporary materialization artifacts were staged."
             exit 1
           fi
