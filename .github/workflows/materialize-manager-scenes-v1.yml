@@ -95,8 +95,9 @@ jobs:
             const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
             await expect(focusButton).toBeAttached();
             await focusButton.evaluate((node) => node.click());
-            const startSeasonAction = page.locator("#nextActionPrimary");
-            await expect(startSeasonAction).toBeEnabled();
+            await openArea(page, "Kontor");
+            const startSeasonAction = page.locator("#leagueOnboardingSteps button", { hasText: "Start sesongen" });
+            await expect(startSeasonAction).toBeVisible();
             await startSeasonAction.click();
           '''
           if training_old not in source:
