@@ -1,0 +1,695 @@
+=== npm run sim:matchday ===
+
+> historygo-football-manager@0.1.0 sim:matchday
+> node scripts/simulate-matchday-v02.mjs
+
+Kampdag v0.2-simulering
+
+Motstanderprofiler:
+  ok   5 motstanderprofiler finnes
+  ok   alle profiler har id/name/style/strengths/weaknesses/pressurePoints
+  ok   pickOpponentProfile(2) er deterministisk
+
+Formasjonsfamilier og hendelser:
+  ok   wm_3223 → familie wm
+  ok   catenaccio_1432 → familie catenaccio
+  ok   total_433 → familie total
+  ok   brazil_424 → familie brazil
+  ok   scottish_combination_235 → familie pyramid
+  ok   gegen_4222 → familie press
+  ok   positional_325 → familie rest
+  ok   classic_442 → familie modern
+  ok   wm_3223: 3 hendelser med 2-4 valg
+  ok   wm_3223: motstanderhendelsen er med
+  ok   catenaccio_1432: 3 hendelser med 2-4 valg
+  ok   catenaccio_1432: motstanderhendelsen er med
+  ok   total_433: 3 hendelser med 2-4 valg
+  ok   total_433: motstanderhendelsen er med
+  ok   brazil_424: 3 hendelser med 2-4 valg
+  ok   brazil_424: motstanderhendelsen er med
+  ok   scottish_combination_235: 3 hendelser med 2-4 valg
+  ok   scottish_combination_235: motstanderhendelsen er med
+  ok   gegen_4222: 3 hendelser med 2-4 valg
+  ok   gegen_4222: motstanderhendelsen er med
+  ok   positional_325: 3 hendelser med 2-4 valg
+  ok   positional_325: motstanderhendelsen er med
+  ok   classic_442: 3 hendelser med 2-4 valg
+  ok   classic_442: motstanderhendelsen er med
+  ok   WM, catenaccio og totalfotball gir ulike hendelser
+
+Sesjonsløkke (sterkt lag, sterk stab):
+  ok   sesjonen starter i pre_match
+  ok   sesjonen har motstander, formasjon og taktikk
+  ok   teamFitSnapshot har tacticalProfile med roleFitAverage
+  ok   3 hendelser generert
+  ok   hendelse 1: beslutning gir tone og effekter
+  ok   hendelse 2: beslutning gir tone og effekter
+  ok   hendelse 3: beslutning gir tone og effekter
+  ok   alle 3 beslutninger registrert
+  ok   sluttresultat har score og utfall
+  ok   decisionTotals er summert
+  ok   beste grep finnes i rapporten
+  ok   systemdom finnes
+  ok   avgjørende lagdel finnes
+  ok   råd for neste uke finnes
+  ok   History Go-hint finnes
+  ok   createMatchReport tar med v0.2-feltene
+
+Kampforklaring (Match Explanation v1.5):
+  ok   kampresultatet har en explanation
+  ok   explanation har alle forventede felter
+  ok   headline og resultSummary er ikke tomme
+  ok   decisiveFactors er ikke tom
+  ok   learningPoints er ikke tom
+  ok   createMatchReport tar med explanation
+  ok   buildMatchExplanation er deterministisk
+  ok   sesjonen lagrer relationshipSnapshot
+  ok   sesjonen lagrer offPitchSnapshot
+  ok   rik sesjon: offPitchFactors dukker opp
+  ok   rik sesjon: relationshipFactors dukker opp
+  ok   rik sesjon: trainingFactors dukker opp
+  ok   rik sesjon: tynn-input gir færre off-pitch-faktorer enn rik input
+
+Forutsetninger (sterkt vs. svakt lag):
+  ok   sterkt lag får flere positive grep (71 vs 1)
+  ok   svakt lag får flere negative grep (64 vs 0)
+  ok   sterk stab mildner svakt lag (16 < 64 negative)
+
+Kampkonsekvenser (Club Week Consequence Loop v1):
+  ok   fullført kamp gir konsekvens
+  ok   konsekvensen peker på brukt formationId
+  ok   formationFamiliarity-økningen er 1-6
+  ok   alle klubbeffekter er små (maks ±4)
+  ok   seier gir positiv moral og styretillit og lavere medietrykk
+  ok   tap gir negativ moral/styretillit og økt medietrykk
+  ok   god beslutningsrekke gir taktisk klarhet
+  ok   høy risiko som feiler gir ekstra medietrykk
+  ok   god kamp gir mer formasjonstilvenning enn dårlig (5 > 1)
+  ok   resultat med consequencesApplied gir ingen ny konsekvens
+  ok   gammelt v1-resultat (uten version 2) gir ingen konsekvens
+  ok   manglende resultat gir ingen konsekvens
+
+Kampdag ↔ Club Week-port (kampdagfasen krever spilt kamp):
+  ok   uten Club Week-state er porten åpen
+  ok   utenfor kampdagfasen er porten åpen
+  ok   kampdagfase uten spilt kamp stenger porten
+  ok   pågående kampsesjon stenger porten
+  ok   kamp fra en tidligere uke teller ikke som ukens kamp
+  ok   gammelt resultat uten ukemerke teller ikke som ukens kamp
+  ok   kamp spilt denne uka åpner porten
+  ok   stengt port har en norsk begrunnelse
+
+Historiske stil-motstandere:
+  ok   historisk profil kan hentes
+  ok   kampdag kan bruke en historisk motstander
+  ok   sesjonen bærer en historisk stil-matchup
+  ok   historisk matchup har advantages/vulnerabilities og læringspunkt
+  ok   historisk motstander gir likevel en motstanderhendelse (via baseStyleId)
+  ok   historisk resultat bærer historicalMatchup
+  ok   kampforklaringen får en historisk stil-faktor
+  ok   rapporten eksponerer arketyp/epoke/skole
+
+Kampdag v1 (regresjon):
+  ok   simulateMatchday gir fortsatt gyldig resultat
+  ok   v1-resultat gir fortsatt gyldig rapport (uten v0.2-felter)
+
+Alle sjekker besto.
+EXIT=0
+=== npm run sim:mini-season ===
+
+> historygo-football-manager@0.1.0 sim:mini-season
+> node scripts/simulate-mini-season.mjs
+
+Mini Season v1 / League Loop v1 — simulering
+
+Schema og sesongstart:
+  ok   versjon er mini-season.v1
+  ok   ny state er not_started
+  ok   totalWeeks er 5
+  ok   alle nøkkelfelt finnes med riktig type
+  ok   startMiniSeason gir active
+  ok   schedule har nøyaktig 5 runder
+  ok   hver schedule-oppføring er komplett
+  ok   schedule bruker eksisterende motstanderprofiler
+  ok   schedule inneholder ulike vanskelighetsgrader
+
+Kamprekke-navigasjon:
+  ok   gjeldende kamp er runde 1
+  ok   ingen kamp før sesongstart (not_started)
+
+Resultatregistrering:
+  ok   seier gir 3 poeng
+  ok   mål registreres (3–1)
+  ok   form får W
+  ok   weekIndex uendret før advance
+  ok   kampen er markert spilt
+  ok   matchHistory har én oppføring
+  ok   samme runde registreres ikke på nytt
+
+Uke-rull og fullføring:
+  ok   advance øker weekIndex til 1
+  ok   ny gjeldende kamp er runde 2
+  ok   advance uten spilt kamp er no-op
+  ok   status completed etter 5 kamper
+  ok   weekIndex er 5 etter fullføring
+  ok   5 kamper i matchHistory
+  ok   poeng beregnes (W3/D1/L0): 8 === 8
+  ok   poengtabellen er 3/1/0
+  ok   finalReview bygges ved fullføring
+  ok   ingen kamp igjen i fullført sesong
+  ok   fullført sesong avviser nye resultater
+
+Oppsummering, tabell og formkurve:
+  ok   summarizeMiniSeason er lesbar
+  ok   oppsummering speiler poeng og form
+  ok   tabell har HG-laget + rivaler
+  ok   tabellradene har P/W/D/L/GF/GA/GD/Pts og posisjon
+  ok   tabellen er sortert på poeng (synkende)
+  ok   tabellen er deterministisk
+  ok   formkurve gir bokstaver, trend og notat
+
+Kontekstuell styrevurdering:
+  ok   tap hjemme mot svak straffes hardere (-3) enn tap borte mot elite (0)
+  ok   sterk periode med identitet → trusted (trusted)
+  ok   kaotisk tapsperiode → failed (failed)
+  ok   ujevn periode → pressure (pressure)
+  ok   samme resultater gir samme poeng uansett kontekst
+  ok   høy belastning/uro senker contextStabilityScore
+
+Off-pitch-kobling (komponerer, dupliserer ikke):
+  ok   god prestasjon foreslår en off-pitch-hendelse
+  ok   god prestasjon løfter selvtillit/moral
+  ok   svak prestasjon øker press/uro
+
+Determinisme og robusthet:
+  ok   to like fulle gjennomspillinger gir byte-identisk JSON
+  ok   korrupt state (ikke-objekt) gir null
+  ok   korrupt state (null) gir null
+  ok   lagring/reload er idempotent
+  ok   completeMiniSeason på halvspilt sesong oppsummerer det spilte
+
+Mini Season sammen med Club Week (porten + testkamp):
+  ok   mini-sesongen kan styre kampens motstander
+  ok   matchday uten spilt kamp stenger Club Week-porten
+  ok   kamp spilt denne uka åpner porten
+
+Alle sjekker besto.
+EXIT=0
+=== npm run sim:tournament ===
+
+> historygo-football-manager@0.1.0 sim:tournament
+> node scripts/simulate-tournament.mjs
+
+Mesterskap v1 — EM og VM i landslagsmodus
+
+  ok   Norge kan spille både EM og VM
+  ok   en ikke-europeisk nasjon får VM, men ikke EM
+  ok   en ukjent nasjon faller trygt tilbake til VM (ingen blindvei)
+  ok   EM: fem kamper fra gruppespill til mestertittel
+  ok   VM: seks kamper fra gruppespill til mestertittel
+  ok   tre tap i gruppespillet betyr exit — turneringen er over
+  ok   finaletap gir finaleplass, ikke mestertittel
+  ok   uavgjort i utslagsrunde avgjøres på straffer (aldri uavklart)
+  ok   gruppetabellen stemmer med de spilte kampene
+  ok   alle grupper spilles ferdig, ikke bare managerens
+  ok   hver nasjon er med i nøyaktig én gruppe
+  ok   managerens nasjon er med — og aldri som motstander
+  ok   hver motstander møtes bare én gang i gruppespillet
+  ok   motstanderen bærer en historisk stilprofil og en forklaring
+  ok   sammendraget teller kamper, mål og neste motstander
+  ok   bracketen viser utslagsrundene med resultat
+  ok   motoren er deterministisk (samme seed gir byte-identisk turnering)
+  ok   ulik seed gir ulik trekning
+  ok   registrering er idempotent (reload gir aldri dobbel kamp)
+  ok   ferdig turnering tar ikke imot flere resultater
+  ok   lagret turnering overlever en JSON-runde
+  ok   `overall`/styrke avgjør aldri managerens egen kamp
+
+Alle 22 mesterskapssjekker besto.
+EXIT=0
+=== npm run sim:match-plan ===
+
+> historygo-football-manager@0.1.0 sim:match-plan
+> node scripts/simulate-match-plan.mjs
+
+Kampplan v1 — strategi og bytte underveis
+
+  ok   katalogen er utvidet og organisert i familier
+  ok   hver plan forklarer seg selv (intensjon, styrker, risiko)
+  ok   ingen plan passer alle kampbilder alene
+  ok   avstanden mellom planer speiler hvor stort spranget er
+  ok   bytte koster taktisk klarhet — og et stort bytte koster mer
+  ok   treneren som forstår systemet betaler mindre for omstillingen
+  ok   sent bytte koster mer enn tidlig bytte
+  ok   kampbildet leses av grepene, ikke av en resultattavle
+  ok   en plan for et annet kampbilde blir sagt ifra om
+  ok   planen vurderes mot motstanderens historiske stil
+  ok   planlista sorteres etter hva som passer situasjonen
+  ok   en ny sesjon starter med planen du valgte, og uten bytter
+  ok   planbytte registreres på sesjonen uten å mutere den gamle
+  ok   bytte til samme plan gjør ingenting
+  ok   flere bytter i samme kamp stables
+  ok   byttet havner i kampresultatet og i rapporten
+  ok   en ferdigspilt kamp tar ikke imot flere planbytter
+  ok   motoren er deterministisk
+  ok   planene normaliseres trygt
+  ok   planen du VELGER teller mot motstanderen fra avspark
+  ok   motstanderen svarer på kampbildet
+  ok   justeringen endrer motstanderen uten å mutere profilen
+  ok   planen din måles på nytt når motstanderen har justert seg
+  ok   å rette opp et dårlig kampbilde lønner seg
+  ok   samme grep er verdt mer når kampen glipper enn når alt flyter
+  ok   å bytte bort en plan som passet bedre straffes
+  ok   scorePlanNow rangerer planer i en gitt situasjon
+  ok   motstanderens justeringer havner i sluttrapporten
+  ok   kampen spilles periode for periode, med stilling underveis
+  ok   klokka stopper ved full tid
+  ok   stillingen er summen av periodene
+  ok   sluttresultatet ER stillingen du så underveis
+  ok   en kamp uten klokke får fortsatt et resultat (bakoverkompatibelt)
+  ok   «du ligger under» betyr at du faktisk ligger under
+  ok   etiketten lyver aldri mot resultattavla
+  ok   planvalget følger den ekte stillingen
+  ok   motstanderen svarer på den ekte stillingen
+  ok   tidlige grep teller i flere perioder enn sene
+  ok   kampen logges minutt for minutt, ikke bare i perioder
+  ok   målene faller ut av sjansene, ikke ved siden av dem
+  ok   stillingen i loggen er riktig ved hvert mål
+  ok   minuttene går framover gjennom kampen
+  ok   en sjanse som ikke går inn blir forklart
+  ok   managergrep og motstanderens svar står i samme spor
+  ok   flere hendelser rundt samme pause klumper seg ikke på ett minutt
+  ok   en bom blir forklart på flere måter
+  ok   planbytte står i minuttloggen
+  ok   sesjonen bærer det avspillingen trenger
+  ok   periodene dekker hele kampen uten hull
+  ok   minuttloggen følger med i sluttrapporten
+
+Alle 50 kampplansjekker besto (18 planer).
+EXIT=0
+=== npm run sim:pitch-layout ===
+
+> historygo-football-manager@0.1.0 sim:pitch-layout
+> node scripts/simulate-pitch-layout.mjs
+
+Banelayout — brikkefordeling for alle historiske formasjoner
+
+  ok   en sentral linje strekkes ikke ut til sidelinja
+  ok   en linje med breddespillere bruker hele bredden
+  ok   classic_442 gir en ekte 4-4-2 (spissene sentralt)
+  ok   alle formasjoner gir elleve brikker
+  ok   ingen brikke havner utenfor banen
+  ok   bare breddespillere står helt ute ved sidelinja
+  ok   naboer på samme rad har nok avstand
+  ok   radene har nok avstand — også i formasjoner med mange linjer
+  ok   mange linjer tar i bruk mer av banens dybde
+  ok   keeperen står alene nederst, sentralt
+  ok   fordelingen er deterministisk
+
+Alle 11 layoutsjekker besto (46 formasjoner).
+EXIT=0
+=== npm run sim:training-week ===
+
+> historygo-football-manager@0.1.0 sim:training-week
+> node scripts/simulate-training-week.mjs
+
+Treningsuke v0.2-simulering
+
+Modell og lagring:
+  ok   8 små fokusvalg finnes
+  ok   reload beholder fokus og uke
+  ok   ugyldig fokus forkastes
+  ok   relevant stab gir minst middels støtte
+
+Motstanderforberedelse:
+  ok   kjent high-press-motstander anbefaler oppbygging/dybdeløp
+  ok   uten mini-season gis generelt team-fit-råd
+
+Effekt i Kampdag v0.2:
+  ok   riktig uke lager låst kampdagssnapshot
+  ok   feil uke gir ingen treningsbonus
+  ok   pressing-fokus hjelper pressing-beslutning
+  ok   rest_defence demper negativ kontringseffekt
+  ok   feil fokus gir ingen effekt
+
+Tilvenning og idempotens:
+  ok   formation_familiarity øker tilvenning litt ekstra
+  ok   samme kamp får ikke dobbel progresjon
+  ok   brukt fokus kan ikke lage nytt snapshot etter reload/reset
+
+Sluttrapport:
+  ok   hjelpsomt fokus forklares som dempet risiko
+  ok   dårlig tilpasset fokus forklares kort i sluttrapport
+
+Testkamp uten mini-season:
+  ok   testkamp fungerer og beholder treningssnapshot
+
+Matchup-bevisst trening (Formation Knowledge Engine):
+  ok   matchup-risiko mapper til relevant fokus
+  ok   rad er matchup-bevisst (anbefaler oppbygging)
+  ok   relevant fokus er kontekstuelt relevant
+  ok   irrelevant fokus er ikke kontekstuelt relevant
+  ok   relevant fokus gir storre uttelling enn irrelevant
+  ok   uten matchup er ingen fokus spesielt relevant (additivt)
+
+Reaktiv kontekst (forrige kamps avslorte svakhet):
+  ok   svakhetsmetrikk mapper til fokus
+  ok   rad er reaktivt (anbefaler restforsvar fra forrige kamp)
+  ok   fokus som fikser forrige kamps svakhet er kontekstuelt relevant
+  ok   urelevant fokus er ikke reaktivt relevant
+  ok   matchup prioriteres over forrige-kamp i rad
+
+Alle treningsuke-sjekker bestått.
+EXIT=0
+=== npm run sim:training-plan ===
+
+> historygo-football-manager@0.1.0 sim:training-plan
+> node scripts/simulate-training-plan.mjs
+
+
+1. Rammen har en ekte belastning
+  ok   versjonen er stemplet
+  ok   alle programmer er byggbare
+  ok   hvert program har en positiv ukebelastning
+     belastning per program: recovery_prevention 6 · defensive_structure 15 · finishing_week 14 · buildup_vs_press 14 · press_week 19 · formation_familiarisation 12 · balanced_learning 14
+  ok   restitusjonsuka er lettest (6)
+  ok   pressuka er hardest (19)
+
+2. Skalaen: konstantene stemmer med ekte programdata
+  ok   PROGRAM_LOAD_MIN (6) = laveste faktiske belastning (6)
+  ok   PROGRAM_LOAD_MAX (19) = høyeste faktiske belastning (19)
+     intensitet: recovery_prevention 0.75 · defensive_structure 1.23 · finishing_week 1.18 · buildup_vs_press 1.18 · press_week 1.45 · formation_familiarisation 1.07 · balanced_learning 1.18
+  ok   ulike programmer gir ulik intensitet
+  ok   ingen intensitet metter gulvet på 0.6
+  ok   ingen intensitet metter taket på 1.6
+  ok   spennet er reelt (høyeste minst 0.4 over laveste)
+  ok   fokuset flytter intensiteten litt
+  ok   men rammen dominerer: en pressuke med hvilefokus er fortsatt hardere enn en restitusjonsuke med pressfokus
+  ok   uten program faller vi tilbake til fokuset alene, rundt nøytralt
+
+3. Belastningen virker faktisk på restitusjonen
+     load 70 → restitusjonsuke 47.5 · pressuke 60.1
+  ok   en restitusjonsuke henter inn mer enn en pressuke
+  ok   forskjellen er merkbar (minst 8 belastningspoeng)
+  ok   selv en pressuke henter inn noe
+  ok   en lett uke merkes som lett
+  ok   en pressuke merkes som svært hard
+     etiketter: recovery_prevention lett · defensive_structure hard · finishing_week hard · buildup_vs_press hard · press_week svært_hard · formation_familiarisation normal · balanced_learning hard
+  ok   etikettene sprer seg over minst tre nivåer (4)
+  ok   ingen etikett dekker mer enn to tredjedeler av programmene (4/7)
+
+4. Koblingen: ligger temaet inne i rammen?
+  ok   hvert program peker på minst ett ekte treningsfokus
+  ok   alle programmenes fokus finnes i TRAINING_FOCUSES
+  ok   samsvar gir +1
+  ok   sprik gir −1
+  ok   sprik forklares med et managervalg, ikke en spillersvakhet
+  ok   uten program er samsvaret ufullstendig, ikke straffet
+  ok   uten fokus er samsvaret ufullstendig, ikke straffet
+  ok   hvert program kan treffes med minst ett fokus
+  ok   hvert program kan også bommes på
+
+5. Samsvaret når faktisk kampdagen
+  ok   samsvar løfter metrikkbonusen
+  ok   sprik senker metrikkbonusen
+  ok   bonusen er stemplet i snapshotet
+  ok   et sprik nuller aldri ut treningsuka (8 fokus × 3 stabsnivå, laveste bonus 1)
+  ok   uten argumentet er tallene identiske med før (additiv endring)
+
+6. Uka som fire steg
+  ok   tom uke gir fire steg
+  ok   stegene er nummerert i rekkefølge
+  ok   rekkefølgen er innboks → program → fokus → individuell
+  ok   tom uke er ikke klar for kamp
+  ok   tom uke peker på første steg
+  ok   hvert steg sier hva laget det gjør
+  ok   hvert steg har et sted å gå
+  ok   valgt ramme merkes som gjort
+  ok   neste steg blir da temaet
+  ok   ramme alene gjør uka spillbar
+  ok   full uke har ingen gjenstående steg
+  ok   full uke med samsvar sier det i overskriften
+  ok   forklaringen nevner både ramme, tema og enkeltspillere
+  ok   sprik løftes i overskriften
+
+7. Renhet
+  ok   ingen DOM
+  ok   ingen lagring
+  ok   ingen nettverk
+  ok   ingen tilfeldighet
+  ok   leser aldri overall
+  ok   deterministisk: samme input gir byte-identisk output
+  ok   anbefalte programmer kan brukes som ramme uten videre
+
+✓ Ukens plan: alle sjekker bestått.
+EXIT=0
+=== npm run sim:individual-training ===
+
+> historygo-football-manager@0.1.0 sim:individual-training
+> node scripts/simulate-individual-training.mjs
+
+
+1. Katalogen
+  ok   versjonen er stemplet
+  ok   datafilen har sitt eget skjema
+  ok   sporene er lastet (5)
+  ok   sporene dekker jobbene: rolle, svak side, kropp, form og skade
+  ok   hvert spor forklarer effekten sin
+  ok   hvert spor forklarer risikoen sin
+  ok   hvert spor har en managernote som peker på treneren, ikke spilleren
+  ok   en tom/ukjent katalog degraderer til gyldig struktur
+  ok   en tom katalog har fortsatt minst én plass
+
+2. Kapasitet: stab gir plasser, men aldri null
+     kapasitet: uten stab 1 · to trenere 3 · full stab 5
+  ok   uten stab kan du fortsatt følge opp én spiller
+  ok   stab gir flere plasser
+  ok   kapasiteten er kappet
+  ok   irrelevant stab gir ingen plasser
+
+3. Tildelinger saneres
+  ok   duplikat spiller droppes
+  ok   ukjent spor droppes
+  ok   tildeling uten spiller droppes
+  ok   rolletrening uten rolle droppes
+  ok   gyldig rolletrening beholdes
+  ok   uka følger med
+  ok   kapasiteten kapper lagrede tildelinger
+
+4. Et «nei» har alltid en grunn
+  ok   opptrening på en frisk spiller avvises
+  ok   … med en forklaring
+  ok   skarphet på en skadet spiller avvises
+  ok   … og peker på opptrening i stedet
+  ok   rolletrening uten rolle avvises med grunn
+  ok   opptrening på en skadet spiller godtas
+  ok   rolletrening med rolle godtas
+
+5. Uka gjøres opp
+  ok   alle fire ble gjennomført
+  ok   hver rapport forklarer seg
+  ok   restitusjon gir negativ belastning
+  ok   skarphet koster belastning
+  ok   skarphet løfter formen
+  ok   rolletrening gir vekst
+  ok   opptrening korter ned skaden
+     sliten: load 54 → 39 · skadet: 2 → 1 uker
+  ok   egen restitusjon legger seg OPPÅ lagets hvile
+  ok   skarphet drar belastningen opp igjen
+  ok   formen løftes
+  ok   opptreningen korter ned skaden ut over den vanlige uketellingen
+  ok   belastningen holder seg innenfor 0–100
+  ok   formen holder seg innenfor ±3
+  ok   fortroligheten havner i det felles oppslaget
+  ok   fortroligheten er kappet på 100
+  ok   negativ vekst ignoreres — trening forvitrer ikke
+  ok   å trene rollen han faktisk spiller gir mer
+  ok   men å trene en rolle han ikke spiller gir fortsatt noe
+  ok   stab gjør økta bedre
+  ok   uten stab skjer det fortsatt noe
+  ok   ugyldig tildeling rapporteres, ikke kastes
+  ok   resten av uka gjennomføres likevel
+
+6. Dette er ikke et ratingspill
+  ok   motoren leser aldri overall
+  ok   motoren rører aldri matchScore
+  ok   datafilen har ingen overall-felter
+  ok   ingen spor kan heve en spillers klasse — kun fortrolighet, belastning, form og skade
+  ok   formutslaget er lite og midlertidig (maks 0.5 per uke)
+  ok   rollefortrolighet fra trening er mindre enn fra en godt spilt kamp (9)
+
+7. Renhet og data
+  ok   ingen DOM
+  ok   ingen lagring
+  ok   ingen nettverk
+  ok   ingen tilfeldighet
+  ok   ingen hardkodede spor i motoren
+  ok   deterministisk: samme input gir byte-identisk output
+  ok   muterer ikke inn-tilstanden
+  ok   rolle-id-en i testen finnes i rolledataene
+  ok   tom uke sier hvor mange plasser du har
+  ok   tom uke er ingen feil, bare en ubrukt mulighet
+  ok   brukt uke teller riktig
+
+8. Wiret i appen
+  ok   katalogen lastes fra datafil
+  ok   ingen spor er hardkodet i app.js
+  ok   uka anvendes fra restitusjonssteget
+  ok   ukesoppgjøret kjører før den nye uka settes (ellers er tildelingene borte)
+  ok   individuell trening rendres fra render-løypa
+  ok   ukens plan rendres fra render-løypa
+  ok   inline-steget finnes
+  ok   den gamle popupen er fjernet
+  ok   tildelinger er modus-isolert
+
+✓ Individuell trening: alle sjekker bestått.
+EXIT=0
+=== npm run sim:player-weaknesses ===
+
+> historygo-football-manager@0.1.0 sim:player-weaknesses
+> node scripts/simulate-player-weaknesses.mjs
+
+
+1. Katalogen
+  ok   versjonen er stemplet
+  ok   datafilen har sitt eget skjema
+  ok   attributtene er lastet
+  ok   hver har en lesbar svakhetsetikett på norsk
+  ok   hver har en kategori
+  ok   hver har en vanskelighetsgrad
+  ok   alle posisjoner har krav
+  ok   alle posisjonskrav peker på kjente attributter
+  ok   alle coveredBy er nåbare fra ekte spillerstyrker
+  ok   en manglende fil degraderer til gyldig, tom katalog
+
+2. Alle spillere har svake sider
+     svake sider per spiller: min 2 · maks 3 · uten 0
+     færre enn tre: Rune Jarstein
+  ok   ingen spiller står helt uten svake sider
+  ok   de aller fleste har tre
+  ok   ingen får flere enn grensen
+     27 ulike svakheter i bruk
+  ok   svakhetene er varierte, ikke samme tre for alle
+     vanligste svakhet dekker 451/1260 spillere
+  ok   ingen enkelt svakhet dekker mer enn halvparten (451/1260)
+
+3. Identifiseringen er riktig — og ikke oppfunnet
+  ok   en svakhet er aldri noe han allerede har som styrke
+  ok   en svakhet er aldri dekket av en beslektet styrke
+  ok   alle svakheter er krav han faktisk møter i sine egne posisjoner
+  ok   deterministisk: samme spiller gir alltid samme liste
+     Erik Thorstvedt: Stresser under press · Utrygg med ballen i beina · Står feil for ofte
+  ok   en keeper får ikke markspiller-svakheter fra poorFits
+  ok   Ada Hegerberg meldes ikke svak på avslutninger (har box_finishing)
+
+4. Trening: dører åpnes, klasse røres ikke
+     vekst per uke: posisjonering 9 · akselerasjon 3
+  ok   lette svakheter flytter seg raskere enn harde
+  ok   selv en hard svakhet flytter seg litt
+  ok   stab øker takten
+  ok   framgangen lagres
+  ok   framgangen er kappet på 100
+  ok   negativ vekst ignoreres
+  ok   muterer ikke inn-staten
+     uker til «merkbart bedre»: posisjonering 6 · akselerasjon 17
+  ok   en lett svakhet tar noen uker, ikke én (6)
+  ok   en hard svakhet tar mesteparten av en sesong (17)
+  ok   nivåene leses
+  ok   et løst arbeid minner deg på å bruke ham
+  ok   saneringen tåler skrot
+
+5. Uttellingen kommer bare når du bruker ham der
+  ok   trent + brukt i rollen som krever det gir bonus
+  ok   … og sier hvem det gjaldt
+  ok   trent, men ikke brukt gir ingenting
+  ok   … og det SIES, i stedet for å skjules
+  ok   utrent gir ingenting
+  ok   bonusen er kappet
+  ok   bonusen når kampstyrken
+  ok   bonusen er klampet til 4
+  ok   den er liten nok til aldri å avgjøre alene
+  ok   den er stemplet i modifikatorene
+
+6. Dette er ikke et ratingspill
+  ok   motoren leser aldri overall
+  ok   motoren rører aldri matchScore
+  ok   datafilen har ingen tallverdier per spiller
+  ok   katalogen nevner ingen spiller ved id
+  ok   en svak side er aldri et fratrekk — bonusen kan bare være 0 eller positiv
+  ok   en spiller med høy overall har like gjerne svake sider som en med lav
+
+7. Svakhetstrening som treningsspor
+  ok   sporet finnes i katalogen
+  ok   sporet hever ingenting
+  ok   sporet koster litt bein
+  ok   risikoteksten sier at ubrukt arbeid er bortkastet
+  ok   kan ikke trene noe som ikke er hans svake side
+  ok   må velge en svak side
+  ok   en av hans egne svake sider godtas
+  ok   uka gir et mål, ikke et tall
+  ok   målet bærer stabsfaktoren
+  ok   rapporten forklarer at det åpner dører, ikke hever klassen
+
+8. Wiret i appen
+  ok   katalogen lastes fra datafil
+  ok   ingen svakheter er hardkodet i app.js
+  ok   framgangen persisteres i teamMerits
+  ok   uttellingen mates inn i kampdagen
+  ok   svakhetstrening anvendes fra ukesoppgjøret
+  ok   flata rendres fra render-løypa
+  ok   popupen finnes
+  ok   svake sider vises der du velger treningen
+
+✓ Svake sider: alle sjekker bestått.
+EXIT=0
+=== npm run sim:player-attributes ===
+
+> historygo-football-manager@0.1.0 sim:player-attributes
+> node scripts/simulate-player-attributes.mjs
+
+{
+  "ok": true,
+  "sjekker": 5880,
+  "ferdigheter": 58,
+  "skalering": {
+    "low": -1.6,
+    "high": 20.42857142857143,
+    "sampled": 73080,
+    "classBand": {
+      "low": 77,
+      "high": 99
+    }
+  },
+  "sprikMedian": 10,
+  "påTaket": "0.0 %",
+  "rollerVunnetAvLavereKlasse": "22 av 27",
+  "kampRollerVunnetAvLavereKlasse": "26 av 27",
+  "eksempel": {
+    "spiller": "martin_odegaard",
+    "topp": [
+      "Kombinasjonsspill 18 (belagt)",
+      "Siste pasning 18 (belagt)",
+      "Førstetouch 18 (posisjon)",
+      "Spilleforståelse 18 (belagt)",
+      "Pasningsregister 16 (posisjon)",
+      "Tempokontroll 16 (belagt)",
+      "Press 15 (belagt)",
+      "Sjanseskaping 14 (rolle)"
+    ],
+    "manglerSomCB": [
+      "Duellspill 11",
+      "Hodespill 7",
+      "Defensiv lesning 7",
+      "Blokkeringer 7"
+    ],
+    "posisjonerMålt": 11
+  }
+}
+EXIT=0
+=== npm run sim:formation-matchup ===
+
+> historygo-football-manager@0.1.0 sim:formation-matchup
+> node scripts/simulate-formation-matchup.mjs
+
+Kunne ikke laste dist/. Kjor `npm run build` forst. Cannot find module '/home/runner/work/HistoryGo-FootballManager/HistoryGo-FootballManager/dist/index.js' imported from /home/runner/work/HistoryGo-FootballManager/HistoryGo-FootballManager/scripts/simulate-formation-matchup.mjs
+EXIT=1
