@@ -1,0 +1,95 @@
+name: Materialize manager scenes v1
+
+on:
+  push:
+    branches:
+      - agent/matchday-lineup-scenes-v1-clean
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/matchday-lineup-scenes-v1-clean
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Restore validated scene sources
+        env:
+          SOURCE_ROOT: https://raw.githubusercontent.com/Paradispartiet/HistoryGo-FootballManager/agent/matchday-lineup-scenes-v1
+        run: |
+          mkdir -p docs scripts src/ui .github/workflows
+          curl -fsSL "$SOURCE_ROOT/docs/MATCHDAY_LINEUP_SCENES_V1.md" -o docs/MATCHDAY_LINEUP_SCENES_V1.md
+          curl -fsSL "$SOURCE_ROOT/scripts/audit-manager-shell-v3.mjs" -o scripts/audit-manager-shell-v3.mjs
+          curl -fsSL "$SOURCE_ROOT/scripts/simulate-manager-scenes-v1.mjs" -o scripts/simulate-manager-scenes-v1.mjs
+          curl -fsSL "$SOURCE_ROOT/src/ui/manager-lineup-presentation.js" -o src/ui/manager-lineup-presentation.js
+          curl -fsSL "$SOURCE_ROOT/src/ui/manager-matchday-presentation.js" -o src/ui/manager-matchday-presentation.js
+          curl -fsSL "$SOURCE_ROOT/.github/workflows/manager-scenes-v1-apply.yml" -o /tmp/manager-scenes-v1-apply.yml
+          curl -fsSL "$SOURCE_ROOT/.github/workflows/manager-scenes-v1-build.yml" -o .github/workflows/manager-scenes-v1-build.yml
+
+      - name: Apply validated scene implementation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          lines = Path('/tmp/manager-scenes-v1-apply.yml').read_text().splitlines()
+          start = lines.index('      - name: Apply scene implementation')
+          run_line = next(i for i in range(start + 1, len(lines)) if lines[i] == '        run: |')
+          body = []
+          for line in lines[run_line + 1:]:
+              if line.startswith('      - name: '):
+                  break
+              body.append(line[10:] if line.startswith('          ') else '')
+          Path('/tmp/apply-manager-scenes.sh').write_text('\n'.join(body) + '\n')
+          PY
+          bash /tmp/apply-manager-scenes.sh
+
+      - name: Verify permanent implementation
+        run: |
+          npm ci
+          npm run check:syntax
+          npm run check:dom-ids
+          npm run audit:flow
+          npm run audit:dead-ends
+          npm run sim:manager-scenes-v1
+          npm run sim:manager-ground-flow-v1
+          npm run sim:manager-flow-ui
+          npm run typecheck
+          npm run build
+          npx playwright install --with-deps chromium
+          npm run test:browser -- --update-snapshots
+          npm run audit:manager-shell-v3
+          npm run test:browser
+
+      - name: Commit and push clean scene pass
+        run: |
+          rm -f .github/workflows/manager-scenes-v1-build.yml
+          git rm .github/workflows/materialize-manager-scenes-v1.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- \
+            .github/workflows/ci.yml \
+            docs/MATCHDAY_LINEUP_SCENES_V1.md \
+            index.html \
+            package.json \
+            scripts/audit-manager-shell-v3.mjs \
+            scripts/simulate-manager-flow-ui.mjs \
+            scripts/simulate-manager-scenes-v1.mjs \
+            src/app.js \
+            src/ui/manager-lineup-presentation.js \
+            src/ui/manager-matchday-presentation.js \
+            style.css \
+            tests/browser/manager-shell-v3.spec.js \
+            tests/browser/manager-shell-v3.spec.js-snapshots/*.png
+          git diff --cached --check
+          git commit -m "Build matchday and lineup as manager scenes"
+          git push origin HEAD:agent/matchday-lineup-scenes-v1-clean
