@@ -221,7 +221,7 @@ check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isA
       && app.includes("elements.trainingPlanHeadline")
       && app.includes("elements.trainingPlanLoad")
   );
-  check("Kampfanen har tydelig kampdag-gate", app.includes("renderMatchdayGate") && app.includes("Kampklar:") && app.includes("Primærhandling:"));
+  check("Kampfanen har tydelig kampdag-gate", app.includes("renderMatchdayGate") && app.includes("createMatchdaySceneModel") && app.includes("scene.primaryAction") && app.includes("scene.statusLabel"));
   check("Kampfanen viser CTA-er for states", app.includes("Spill kamp") && app.includes("Fortsett kampen") && app.includes("Forbered neste kamp"));
   check("Kamprapporten folder dybde i details", app.includes("matchday-detail-drawer") && app.includes("Full kampanalyse"));
 }

@@ -3,6 +3,8 @@ import "./ui/manager-shell-elements.js";
 import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
 import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";
+import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-presentation.js";
+import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -7515,23 +7517,23 @@ function renderLineup(teamFit) {
 
     const player = assignment?.player || null;
     const playerName = player?.name || "Tom plass";
-    // Brikka er smal (den skal få plass elleve ganger på banen), så fornavnet
-    // ble kuttet midt i: «Daniel N…». Etternavnet identifiserer spilleren
-    // bedre på like liten plass. Fullt navn ligger fortsatt i aria-label og i
-    // sidepanelet.
-    const chipName = playerName.split(" ").filter(Boolean).pop() || playerName;
+    const chipName = compactPlayerName(playerName);
     const roleName = assignment?.role?.name || "Ingen rolle";
-    const score = assignment?.fit?.matchScore ?? "–";
+    const fitView = describeTacticalFit(assignment?.fit);
+    chip.dataset.fitTone = fitView.tone;
     chip.innerHTML = `
-      <span class="chip-name">${chipName}</span>
-      <span class="chip-role">${roleName}</span>
+      <span class="chip-name">${escapeHtml(chipName)}</span>
+      <span class="chip-role">${escapeHtml(roleName)}</span>
       <span class="chip-foot">
-        <span class="chip-pos">${slot.position}</span>
-        <span class="chip-score">${score}</span>
+        <span class="chip-pos">${escapeHtml(slot.position)}</span>
+        <span class="chip-fit" data-tone="${escapeHtml(fitView.tone)}">${escapeHtml(fitView.shortLabel)}</span>
       </span>
     `;
 
-    chip.setAttribute("aria-label", `${slot.label}: ${playerName}. Dra for å flytte, klikk for å velge.`);
+    chip.setAttribute(
+      "aria-label",
+      `${slot.label}: ${playerName}. ${fitView.label}. Dra for å flytte, klikk for å velge.`
+    );
 
     attachChipDrag(chip, slot.slotId);
 
@@ -7743,13 +7745,18 @@ function renderSidePanel(teamFit) {
   // Sidepanelet forklarer den samme staten uten et parallelt skjema.
 
   if (assignment?.fit) {
-    elements.selectedMatchScore.textContent = assignment.fit.matchScore;
-    elements.selectedFitStatus.textContent = assignment.fit.status;
-    elements.selectedFitExplanation.textContent = assignment.fit.explanation;
+    const fitView = describeTacticalFit(assignment.fit);
+    elements.selectedMatchScore.textContent = fitView.label;
+    elements.selectedMatchScore.dataset.tone = fitView.tone;
+    elements.selectedFitStatus.textContent = assignment?.role?.name
+      ? `${assignment.role.name} · ${slot.position}`
+      : `Rolle ikke valgt · ${slot.position}`;
+    elements.selectedFitExplanation.textContent = fitView.explanation;
   } else {
-    elements.selectedMatchScore.textContent = "–";
+    elements.selectedMatchScore.textContent = "Ikke vurdert";
+    elements.selectedMatchScore.dataset.tone = "empty";
     elements.selectedFitStatus.textContent = "Ufullstendig plass";
-    elements.selectedFitExplanation.textContent = "Velg både spiller og rolle for å se om denne plassen fungerer.";
+    elements.selectedFitExplanation.textContent = "Velg både spiller og rolle for å se hvordan rollekravene passer spillerprofilen.";
   }
 
   // Additivt historisk rollefit-hint: forklarer om valgt rolle passer det valgte
@@ -7832,6 +7839,7 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
   // Role Familiarity Engine v1: hvor godt denne spilleren kjenner denne rollen
   // etter riktig bruk over kamper. Ren visning oppå rolleforståelseskortet.
   const familiarity = describeRoleFamiliarity(getRoleFamiliarity(getRoleFamiliarityStore(), player.id, role.id));
+  const roleFitView = describeTacticalFit({ matchScore: vm.fitScore, status: vm.fitLabel });
 
   elements.roleLearningCard.hidden = false;
   elements.roleLearningCard.innerHTML = `
@@ -7840,7 +7848,7 @@ function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
         <p class="eyebrow">Rolleforståelse</p>
         <h4>${escapeHtml(vm.playerName)} som ${escapeHtml(vm.roleName)}</h4>
       </div>
-      <span class="role-learning-badge" data-status="${escapeHtml(vm.fitLabel)}">${vm.fitScore ?? "–"} · ${escapeHtml(vm.fitLabel)}</span>
+      <span class="role-learning-badge" data-status="${escapeHtml(roleFitView.tone)}">${escapeHtml(roleFitView.label)}</span>
     </div>
     <p class="role-learning-type">${escapeHtml(vm.playerType)}</p>
     <dl class="role-learning-list">
@@ -9671,37 +9679,79 @@ function renderMatchdayGate(container, teamFit) {
   const showingFinishedReport = Boolean(lastMatch) && !session;
   if (showingFinishedReport && readiness.canStartMatch) return;
 
+  const scene = createMatchdaySceneModel({
+    teamName: session?.teamName || getTemporaryClubName().name,
+    opponentBrief: getMatchdayOpponentBrief(session),
+    formationName: formation.name,
+    tacticName: tactic.name,
+    trainingLabel: getWeeklyTrainingChoiceLabel(),
+    lastSignal: getLastInboxSignalText(),
+    primaryAction: primary,
+    readiness
+  });
+
   const gate = document.createElement("article");
-  gate.className = "matchday-gate";
+  gate.className = "matchday-command";
+  gate.dataset.status = scene.statusTone;
+  gate.innerHTML = `
+    <header class="matchday-command-head">
+      <div>
+        <p class="eyebrow">Kampkommando</p>
+        <h3>${escapeHtml(scene.primaryAction)}</h3>
+      </div>
+      <span class="matchday-command-status" data-tone="${escapeHtml(scene.statusTone)}">${escapeHtml(scene.statusLabel)}</span>
+    </header>
+    <div class="matchday-versus" aria-label="Neste kamp">
+      <section class="matchday-team is-home">
+        <span class="matchday-team-side">Hjemme</span>
+        <strong>${escapeHtml(scene.teamName)}</strong>
+        <small>Managerens lag</small>
+      </section>
+      <div class="matchday-kickoff" data-tone="${escapeHtml(scene.statusTone)}">
+        <span>${escapeHtml(scene.kickoffLabel)}</span>
+        <strong>VS</strong>
+        <small>Kampdag</small>
+      </div>
+      <section class="matchday-team is-away">
+        <span class="matchday-team-side">Motstander</span>
+        <strong>${escapeHtml(scene.opponentName)}</strong>
+        <small>${escapeHtml(scene.opponentContext)}</small>
+      </section>
+    </div>
+    <div class="matchday-command-plan">
+      <article><span>Formasjon og kampplan</span><strong>${escapeHtml(scene.planLabel)}</strong></article>
+      <article><span>Treningsuke</span><strong>${escapeHtml(scene.trainingLabel)}</strong></article>
+      <article><span>Siste signal</span><strong>${escapeHtml(scene.signalLabel)}</strong></article>
+    </div>
+    <p class="matchday-command-summary">${escapeHtml(scene.summary)}</p>
+  `;
 
-  const title = document.createElement("h3");
-  title.textContent = "Kampdag";
-  gate.append(title);
+  if (!scene.canStart && readiness.status !== "in_progress") {
+    const blockerSection = document.createElement("section");
+    blockerSection.className = "matchday-command-blockers";
+    const heading = document.createElement("div");
+    heading.className = "matchday-command-blockers-head";
+    heading.innerHTML = `<span>Neste krav</span><strong>${scene.blockers.length}</strong>`;
+    blockerSection.append(heading);
 
-  if (!showingFinishedReport) {
-    appendMatchdayList(gate, [
-      `Kampklar: ${readiness.canStartMatch ? "ja" : "nei"}`,
-      `Motstander: ${getMatchdayOpponentBrief(session)}`,
-      `Formasjon / kampplan: ${formation.name || "Ikke valgt"}${tactic.name ? ` · ${tactic.name}` : ""}`,
-      `Treningsuke valgt: ${getWeeklyTrainingChoiceLabel() || "mangler"}`,
-      `Siste signal: ${getLastInboxSignalText()}`,
-      `Primærhandling: ${primary}`
-    ]);
-  }
-
-  if (!readiness.canStartMatch && readiness.status !== "in_progress") {
-    appendMatchdaySubheading(gate, "Dette mangler før kamp");
-    appendMatchdayList(gate, readiness.blockers.map((item) => item.message));
+    const list = document.createElement("ol");
+    scene.blockers.forEach((blocker, index) => {
+      const item = document.createElement("li");
+      item.innerHTML = `<span>${index + 1}</span><p>${escapeHtml(blocker.message)}</p>`;
+      list.append(item);
+    });
+    blockerSection.append(list);
 
     const actions = document.createElement("div");
     actions.className = "matchday-gate-actions";
-    const targets = new Set(readiness.blockers.map((item) => item.target));
-    if (targets.has("historygo")) appendMatchdayNavButton(actions, "Gå til History Go", "historygo");
-    if (targets.has("tactics")) appendMatchdayNavButton(actions, "Gå til Lag", "tactics");
-    if (targets.has("trening")) appendMatchdayNavButton(actions, "Gå til Trening", "trening");
-    if (targets.has("statistikk")) appendMatchdayNavButton(actions, "Gå til Sesong", "statistikk");
-    if (targets.has("dashboard")) appendMatchdayNavButton(actions, "Gå til Kontor", "dashboard");
-    if (actions.childElementCount) gate.append(actions);
+    const targets = new Set(scene.blockers.map((item) => item.target));
+    if (targets.has("historygo")) appendMatchdayNavButton(actions, "Åpne samlingen", "historygo");
+    if (targets.has("tactics")) appendMatchdayNavButton(actions, "Gå til laguttak", "tactics");
+    if (targets.has("trening")) appendMatchdayNavButton(actions, "Planlegg trening", "trening");
+    if (targets.has("statistikk")) appendMatchdayNavButton(actions, "Åpne sesongen", "statistikk");
+    if (targets.has("dashboard")) appendMatchdayNavButton(actions, "Gå til kontoret", "dashboard");
+    if (actions.childElementCount) blockerSection.append(actions);
+    gate.append(blockerSection);
   }
 
   container.append(gate);
