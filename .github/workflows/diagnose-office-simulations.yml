@@ -1,0 +1,90 @@
+name: Diagnose Office Simulations
+
+on:
+  push:
+    branches:
+      - agent/manager-office-inbox-v1
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Record first failing simulation
+        shell: bash
+        run: |
+          set +e
+          mkdir -p diagnostics
+          output="diagnostics/office-sim-failures.txt"
+          : > "$output"
+          commands=(
+            "npm run sim:matchday"
+            "npm run sim:mini-season"
+            "npm run sim:tournament"
+            "npm run sim:match-plan"
+            "npm run sim:pitch-layout"
+            "npm run sim:training-week"
+            "npm run sim:training-plan"
+            "npm run sim:individual-training"
+            "npm run sim:player-weaknesses"
+            "npm run sim:player-attributes"
+            "npm run sim:formation-matchup"
+            "npm run sim:suggested-setups"
+            "npm run sim:training-programs"
+            "npm run sim:off-pitch"
+            "npm run sim:inbox"
+            "npm run sim:club-week"
+            "npm run sim:role-learning"
+            "npm run sim:staff-identity"
+            "npm run sim:manager-flow-ui"
+            "npm run sim:manager-ground-flow-v1"
+            "npm run sim:manager-season-scene-v1"
+            "npm run sim:manager-office-inbox-v1"
+            "npm run sim:role-familiarity"
+            "npm run sim:league-season"
+            "npm run sim:mode-isolation"
+            "npm run sim:first-time"
+            "npm run sim:first-run-real-seed"
+            "npm run sim:first-run-football-book-qa"
+            "npm run sim:player-stats"
+            "npm run sim:substitutions"
+            "npm run sim:player-condition"
+            "npm run sim:scenarios"
+            "npm run sim:season-review"
+            "npm run sim:federation-verdict"
+            "npm run sim:league-playoff"
+            "npm run sim:club-selection"
+            "npm run sim:club-tradition"
+            "npm run sim:club-squad"
+          )
+          for command in "${commands[@]}"; do
+            echo "=== $command ===" >> "$output"
+            bash -lc "$command" >> "$output" 2>&1
+            status=$?
+            echo "EXIT=$status" >> "$output"
+            if [ "$status" -ne 0 ]; then
+              break
+            fi
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$output"
+          git commit -m "Record office simulation failure"
+          git push origin HEAD:${GITHUB_REF_NAME}
