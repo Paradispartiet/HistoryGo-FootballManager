@@ -13,6 +13,7 @@ const shellElements = read("src/ui/manager-shell-elements.js");
 const workflow = read(".github/workflows/ci.yml");
 const snapshotDir = join(root, "tests/browser/manager-shell-v3.spec.js-snapshots");
 const snapshots = existsSync(snapshotDir) ? readdirSync(snapshotDir).filter((name) => name.endsWith("-chromium-linux.png")) : [];
+const visualTests = (browser.match(/toHaveScreenshot\(/g) || []).length;
 
 const checks = [];
 const check = (label, ok, detail = "") => checks.push({ label, ok: Boolean(ok), detail });
@@ -31,7 +32,11 @@ check("klubbidentiteten bruker egen presentasjonsmodul", /manager-club-identity\
 check("HTML-skallet er modulert i egne custom elements", /<manager-club-header>/.test(html) && /<manager-next-action>/.test(html) && existsSync(join(root, "src/ui/manager-shell-elements.js")));
 check("CSS-skallet har egen foundation", /manager-shell-foundation\.css/.test(read("src/ui/manager-shell-v3.css")) && existsSync(join(root, "src/ui/manager-shell-foundation.css")));
 check("responsive nettleservakter dekker 390/768/1280", [390, 768, 1280].every((width) => browser.includes(`width: ${width}`)));
-check("fem visuelle differansetester er låst", (browser.match(/toHaveScreenshot\(/g) || []).length === 5 && snapshots.length === 5);
+check(
+  "minst åtte visuelle differansetester er låst",
+  visualTests >= 8 && snapshots.length >= 8 && visualTests === snapshots.length,
+  `tester=${visualTests}, baseliner=${snapshots.length}`
+);
 check("CI sammenligner mot baseliner uten å omskrive dem", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
 check("tilgjengelighet testes med axe", /AxeBuilder/.test(browser) && /wcag2aa/.test(browser));
 check("tastatur og fokusfelle testes", /Shift\+Tab/.test(browser) && /toBeFocused/.test(browser));
