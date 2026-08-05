@@ -34,6 +34,7 @@
     "sim:staff-identity": "node scripts/simulate-staff-identity.mjs",
     "sim:manager-flow-ui": "node scripts/simulate-manager-flow-ui.mjs",
     "sim:manager-ground-flow-v1": "node scripts/simulate-manager-ground-flow-v1.mjs",
+    "sim:manager-season-scene-v1": "node scripts/simulate-manager-season-scene-v1.mjs",
     "sim:role-familiarity": "node scripts/simulate-role-familiarity.mjs",
     "sim:first-time": "node scripts/simulate-first-time-playthrough.mjs",
     "sim:first-run-real-seed": "node scripts/simulate-first-run-real-seed.mjs",
