@@ -297,7 +297,8 @@ check("uka anvendes fra restitusjonssteget", /applyWeeklyRecovery\([\s\S]{0,220}
   check("individuell trening rendres fra render-løypa", /\n  renderIndividualTraining\(\);/.test(renderApp));
   check("ukens plan rendres fra render-løypa", /\n  renderWeeklyTrainingPlan\(\);/.test(renderApp));
 }
-check("popupen finnes", /id="modalIndividualTraining"/.test(html));
+check("inline-steget finnes", /id="individualTrainingStep"/.test(html) && /id="individualTrainingPicker"/.test(html));
+check("den gamle popupen er fjernet", !/id="modalIndividualTraining"/.test(html));
 check("tildelinger er modus-isolert", /"individualTraining"/.test(fs.readFileSync(new URL("../src/football-mode-sessions.js", import.meta.url), "utf8")));
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,39 @@
+export const TRAINING_WORKSPACE_TARGETS = Object.freeze({
+  modalTrainingProgram: "trainingProgramStep",
+  modalTrainingFocusPick: "trainingFocusStep",
+  modalIndividualTraining: "individualTrainingStep"
+});
+
+export function getTrainingWorkspaceTarget(legacyModalId) {
+  return TRAINING_WORKSPACE_TARGETS[legacyModalId] || null;
+}
+
+export function createMatchFlowSnapshot(session, visibleLog = []) {
+  const log = Array.isArray(visibleLog) ? visibleLog : [];
+  let ownThreat = 1;
+  let opponentThreat = 1;
+
+  log.forEach((entry) => {
+    const weight = entry?.type === "goal" ? 3 : entry?.type === "chance" ? 1 : 0;
+    if (entry?.side === "for") ownThreat += weight;
+    if (entry?.side === "against") opponentThreat += weight;
+  });
+
+  const total = ownThreat + opponentThreat;
+  const ownShare = Math.round((ownThreat / total) * 100);
+  const opponentShare = 100 - ownShare;
+  const neutralShare = Math.max(12, 34 - Math.round(Math.abs(ownShare - 50) / 2));
+  const attackingShare = Math.round((ownShare * (100 - neutralShare)) / 100);
+  const defensiveShare = 100 - neutralShare - attackingShare;
+  const diff = ownThreat - opponentThreat;
+
+  return {
+    defensiveShare,
+    neutralShare,
+    attackingShare,
+    momentum: diff >= 3 ? "Vi presser" : diff <= -3 ? "Motstanderen presser" : "Kampen er i balanse",
+    tone: diff >= 3 ? "positive" : diff <= -3 ? "negative" : "neutral",
+    minute: Number(session?.liveMinute) || 0,
+    opponentShare
+  };
+}

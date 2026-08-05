@@ -106,3 +106,9 @@ jobs:
           npm run sim:club-selection
           npm run sim:club-tradition
           npm run sim:club-squad
+
+      - name: Installer Chromium for nettleservakter
+        run: npx playwright install --with-deps chromium
+
+      - name: Responsive nettleservakter
+        run: npm run test:browser

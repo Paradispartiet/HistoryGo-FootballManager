@@ -1,4 +1,5 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
+import { createMatchFlowSnapshot, getTrainingWorkspaceTarget } from "./ui/manager-shell-view.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -567,6 +568,8 @@ const elements = {
   formationTitle: document.querySelector("#formationTitle"),
   completeCount: document.querySelector("#completeCount"),
   lineupSlots: document.querySelector("#lineupSlots"),
+  lineupPlayerChoices: document.querySelector("#lineupPlayerChoices"),
+  lineupRoleChoices: document.querySelector("#lineupRoleChoices"),
   // Kompakt taktisk systempanel for valgt historisk formasjon (nær banen).
   tacticalSystemPanel: document.querySelector("#tacticalSystemPanel"),
   // Additivt historisk rollefit-hint i sidepanelet.
@@ -785,7 +788,6 @@ const elements = {
   // Fase 2: dynamisk sidepanel (spillerprofil vs. neste beslutninger).
   sidePanelKicker: document.querySelector("#sidePanelKicker"),
   sideProfile: document.querySelector("#sideProfile"),
-  profileRating: document.querySelector("#profileRating"),
   profileName: document.querySelector("#profileName"),
   profilePositions: document.querySelector("#profilePositions"),
   profileSource: document.querySelector("#profileSource"),
@@ -7485,10 +7487,7 @@ function renderLineup(teamFit) {
     const chipName = playerName.split(" ").filter(Boolean).pop() || playerName;
     const roleName = assignment?.role?.name || "Ingen rolle";
     const score = assignment?.fit?.matchScore ?? "–";
-    const overall = Number.isFinite(player?.classHeight) ? player.classHeight : null;
-
     chip.innerHTML = `
-      <span class="chip-token${overall === null ? " is-empty" : ""}">${overall ?? slot.position}</span>
       <span class="chip-name">${chipName}</span>
       <span class="chip-role">${roleName}</span>
       <span class="chip-foot">
@@ -7582,6 +7581,26 @@ function attachChipDrag(chip, slotId) {
     }
 
     if (moved && pendingPosition) {
+      // Slipp over en annen brikke = bytt spiller/rolle mellom plassene. Dette
+      // er raskere og mer manageraktig enn å åpne to nedtrekkslister.
+      const swapTarget = Array.from(elements.lineupSlots.querySelectorAll(".player-chip"))
+        .filter((candidate) => candidate !== chip)
+        .find((candidate) => {
+          const rect = candidate.getBoundingClientRect();
+          return event.clientX >= rect.left && event.clientX <= rect.right
+            && event.clientY >= rect.top && event.clientY <= rect.bottom;
+        });
+      const targetSlotId = swapTarget?.dataset.slotId || null;
+      if (targetSlotId && targetSlotId !== slotId) {
+        const sourceAssignment = state.lineup[slotId] || { playerId: null, roleId: null };
+        const targetAssignment = state.lineup[targetSlotId] || { playerId: null, roleId: null };
+        state.lineup[slotId] = targetAssignment;
+        state.lineup[targetSlotId] = sourceAssignment;
+        state.selectedSlotId = targetSlotId;
+        renderApp();
+        return;
+      }
+
       state.slotPositions[slotId] = pendingPosition;
       persistCurrentPositions();
       // Behold valgt plass i sync slik at editoren peker på spilleren som ble flyttet.
@@ -7599,6 +7618,69 @@ function attachChipDrag(chip, slotId) {
   chip.addEventListener("pointermove", onPointerMove);
   chip.addEventListener("pointerup", onPointerUp);
   chip.addEventListener("pointercancel", onPointerUp);
+}
+
+function setSelectedSlotPlayer(nextPlayerId) {
+  const slot = getSelectedSlot();
+  if (!slot) return;
+
+  const player = state.players.find((item) => item.id === nextPlayerId) || null;
+  const currentRoleId = state.lineup[slot.slotId]?.roleId || null;
+  const currentRole = state.roles.find((role) => role.id === currentRoleId);
+  state.lineup[slot.slotId] = {
+    playerId: nextPlayerId || null,
+    roleId: currentRole?.validPositions.includes(slot.position)
+      ? currentRoleId
+      : getDefaultRoleForPlayer(player, slot)
+  };
+  renderApp();
+}
+
+function setSelectedSlotRole(nextRoleId) {
+  const slot = getSelectedSlot();
+  if (!slot) return;
+  state.lineup[slot.slotId] = {
+    playerId: state.lineup[slot.slotId]?.playerId || null,
+    roleId: nextRoleId || null
+  };
+  renderApp();
+}
+
+function renderDirectLineupEditor() {
+  const playerHost = elements.lineupPlayerChoices;
+  const roleHost = elements.lineupRoleChoices;
+  const slot = getSelectedSlot();
+  if (!playerHost || !roleHost || !slot) return;
+
+  const slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
+  const usedPlayerIds = getUsedPlayerIds(slot.slotId);
+  const available = getUnlockedPlayers();
+  const current = available.find((player) => player.id === slotState.playerId);
+  const choices = [current, ...available.filter((player) => player.id !== current?.id)]
+    .filter(Boolean)
+    .slice(0, 16);
+
+  playerHost.replaceChildren();
+  choices.forEach((player) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `lineup-player-card${player.id === slotState.playerId ? " is-selected" : ""}`;
+    button.disabled = usedPlayerIds.has(player.id);
+    const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions.join(" / ") : "–";
+    button.innerHTML = `<strong>${player.name || player.id}</strong><span>${positions}</span>`;
+    button.addEventListener("click", () => setSelectedSlotPlayer(player.id));
+    playerHost.append(button);
+  });
+
+  roleHost.replaceChildren();
+  state.roles.filter((role) => role.validPositions.includes(slot.position)).forEach((role) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `lineup-role-chip${role.id === slotState.roleId ? " is-selected" : ""}`;
+    button.textContent = role.name;
+    button.addEventListener("click", () => setSelectedSlotRole(role.id));
+    roleHost.append(button);
+  });
 }
 
 function renderSidePanel(teamFit) {
@@ -7896,12 +7978,6 @@ function renderPlayerProfile(player, slot) {
   // scoren, så det er en av dem som står her.
   const signature = player.attributes?.top?.[0] || null;
   const ratingPosition = slot?.position || player.naturalPositions?.[0] || null;
-  if (elements.profileRating) {
-    elements.profileRating.textContent = signature ? signature.value : "–";
-    elements.profileRating.title = signature
-      ? `${signature.name}: ${signature.value} av 20 — spillerens sterkeste ferdighet. Den følger ham uansett hvilken plass han står på.`
-      : "";
-  }
   if (elements.profileSignature) {
     elements.profileSignature.textContent = signature ? signature.name : "";
     elements.profileSignature.hidden = !signature;
@@ -10235,8 +10311,42 @@ function appendMatchScoreboard(parent, session) {
   }
 
   parent.append(board);
+  appendMatchFlow(parent, session);
   appendMatchLiveControls(parent, session);
   appendMatchMinuteLog(parent, session);
+}
+
+function appendMatchFlow(parent, session) {
+  const snapshot = createMatchFlowSnapshot(session, visibleMinuteLog(session));
+  const panel = document.createElement("section");
+  panel.className = "match-flow";
+  panel.setAttribute("aria-label", "Kampbilde og momentum");
+
+  const head = document.createElement("div");
+  head.className = "match-flow-head";
+  const title = document.createElement("strong");
+  title.textContent = "Kampbildet";
+  const momentum = document.createElement("span");
+  momentum.className = "match-flow-momentum";
+  momentum.dataset.tone = snapshot.tone;
+  momentum.textContent = snapshot.momentum;
+  head.append(title, momentum);
+
+  const zones = document.createElement("div");
+  zones.className = "match-flow-zones";
+  zones.innerHTML = `
+    <span class="is-defensive" style="--zone-share:${snapshot.defensiveShare}%"><small>Egen tredel</small></span>
+    <span class="is-neutral" style="--zone-share:${snapshot.neutralShare}%"><small>Midtbane</small></span>
+    <span class="is-attacking" style="--zone-share:${snapshot.attackingShare}%"><small>Siste tredel</small></span>
+  `;
+
+  const hint = document.createElement("p");
+  hint.className = "match-flow-hint";
+  hint.textContent = snapshot.minute > 0
+    ? `Basert på sjanser og mål som er avdekket til ${snapshot.minute}. minutt.`
+    : "Kampbildet formes når sjanser og mål avdekkes.";
+  panel.append(head, zones, hint);
+  parent.append(panel);
 }
 
 // Kontrollene for avspillingen: pause, hastighet og «hopp til slutten».
@@ -11488,6 +11598,17 @@ function getWeeklyTrainingPlan() {
   });
 }
 
+function focusTrainingWorkspace(legacyModalId) {
+  const targetId = getTrainingWorkspaceTarget(legacyModalId);
+  const target = targetId ? document.getElementById(targetId) : null;
+  if (!target) return;
+  activateTab("trening");
+  requestAnimationFrame(() => {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    target.focus({ preventScroll: true });
+  });
+}
+
 function renderWeeklyTrainingPlan() {
   if (!elements.trainingChoiceGate) return;
   const plan = getWeeklyTrainingPlan();
@@ -11538,7 +11659,7 @@ function renderWeeklyTrainingPlan() {
       action.className = "training-plan-step-action";
       action.textContent = step.done ? "Endre" : "Velg";
       if (step.modal) {
-        action.dataset.modalOpen = step.modal;
+        action.addEventListener("click", () => focusTrainingWorkspace(step.modal));
       } else {
         action.addEventListener("click", () => activateTab(step.target));
       }
@@ -11555,11 +11676,7 @@ function renderWeeklyTrainingPlan() {
       elements.trainingPlanNext.textContent = `Neste: ${next.title.toLowerCase()}`;
       elements.trainingPlanNext.onclick = () => {
         if (next.modal) {
-          const modal = document.getElementById(next.modal);
-          if (modal) {
-            modal.hidden = false;
-            document.body.classList.add("has-modal-open");
-          }
+          focusTrainingWorkspace(next.modal);
         } else {
           activateTab(next.target);
         }
@@ -15374,15 +15491,17 @@ function renderBenchList(players) {
   }
 
   players.slice(0, Math.max(REQUIRED_BENCH, 8)).forEach((player, index) => {
-    const card = document.createElement("article");
+    const card = document.createElement("button");
+    card.type = "button";
     card.className = index < REQUIRED_BENCH ? "bench-player-card is-registered" : "bench-player-card";
+    card.addEventListener("click", () => setSelectedSlotPlayer(player.id));
 
     const name = document.createElement("strong");
     name.textContent = player.name || player.id;
 
     const meta = document.createElement("span");
     const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions.join(", ") : "–";
-    meta.textContent = `${positions} · ${Number.isFinite(player.classHeight) ? player.classHeight : "–"}`;
+    meta.textContent = `${positions} · ${index < REQUIRED_BENCH ? "Benk" : "Reserve"}`;
 
     card.append(name, meta);
 
@@ -15415,6 +15534,7 @@ function renderApp() {
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
+  renderDirectLineupEditor();
   renderSquadSetupGate(teamFit);
   renderRosterReadiness();
   renderTacticalSystemPanel();
@@ -15936,38 +16056,12 @@ function bindFormationAndTacticControls() {
 
 function bindLineupSlotControls() {
   elements.slotPlayerSelect.addEventListener("change", (event) => {
-    const slot = getSelectedSlot();
-
-    if (!slot) {
-      return;
-    }
-
     const nextPlayerId = event.target.value === EMPTY_VALUE ? null : event.target.value;
-    const player = state.players.find((item) => item.id === nextPlayerId) || null;
-    const currentRoleId = state.lineup[slot.slotId]?.roleId || null;
-    const currentRole = state.roles.find((role) => role.id === currentRoleId);
-
-    state.lineup[slot.slotId] = {
-      playerId: nextPlayerId,
-      roleId: currentRole?.validPositions.includes(slot.position) ? currentRoleId : getDefaultRoleForPlayer(player, slot)
-    };
-
-    renderApp();
+    setSelectedSlotPlayer(nextPlayerId);
   });
 
   elements.slotRoleSelect.addEventListener("change", (event) => {
-    const slot = getSelectedSlot();
-
-    if (!slot) {
-      return;
-    }
-
-    state.lineup[slot.slotId] = {
-      playerId: state.lineup[slot.slotId]?.playerId || null,
-      roleId: event.target.value === EMPTY_VALUE ? null : event.target.value
-    };
-
-    renderApp();
+    setSelectedSlotRole(event.target.value === EMPTY_VALUE ? null : event.target.value);
   });
 }
 

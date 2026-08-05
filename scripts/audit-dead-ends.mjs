@@ -35,7 +35,9 @@ const tabTargets = new Set();
 for (const match of html.matchAll(/data-tab-target="([^"]+)"/g)) tabTargets.add(match[1]);
 
 const tabSections = new Set();
-for (const match of html.matchAll(/data-tab-section="([^"]+)"/g)) tabSections.add(match[1]);
+for (const match of html.matchAll(/<[^>]*data-tab-section="([^"]+)"[^>]*>/g)) {
+  if (!/\bdata-shell-hidden\b/.test(match[0])) tabSections.add(match[1]);
+}
 
 // Alle fane-knapper som faktisk navigerer: hovedmenyen OG kortene i «Kontorets
 // avdelinger». Avdelingskortene er nå den ekte veien inn til stab, speiding,
@@ -115,7 +117,13 @@ stage("2. «Senere»-faner deaktivert");
 {
   const buttons = navTabButtons();
   const futureButtons = buttons.filter((b) => b.isFuture);
-  check("minst én «Senere»-knapp finnes (ellers er regelen tom)", futureButtons.length > 0, `antall=${futureButtons.length}`);
+  check(
+    "uferdige økonomi-, marked- og fasilitetsflater er skjult fra skallet",
+    /data-tab-section="facilities"[^>]*data-shell-hidden/.test(html)
+      && /data-tab-section="market"[^>]*data-shell-hidden/.test(html)
+      && !buttons.some((b) => ["facilities", "market"].includes(b.target)),
+    `synlige senere-knapper=${futureButtons.length}`
+  );
   for (const b of futureButtons) {
     check(
       `«Senere»-fane ${b.target} er deaktivert (disabled/aria-disabled)`,
@@ -614,18 +622,17 @@ stage("17. Menyen lyver ikke");
   const navTabs = buttons.filter((b) => b.isNavTab);
   const departments = buttons.filter((b) => b.isDepartment);
 
-  // 17a) Manageruka i spillet: nøyaktig disse fem, i denne rekkefølgen.
+  // 17a) Manager Shell v3: nøyaktig fem stabile hovedområder.
   const gameLoop = navTabs.filter((b) => b.navModes.includes("league"));
   const expected = [
     ["Kontor", "dashboard"],
-    ["Trening", "trening"],
-    ["Taktikk", "tactics"],
+    ["Lag", "tactics"],
     ["Kamp", "kamp"],
-    ["Analyse", "analyse"],
-    ["Statistikk", "statistikk"]
+    ["Sesong", "statistikk"],
+    ["Klubb", "board"]
   ];
   check(
-    "hovedmenyen i ligaspill er Kontor → Trening → Taktikk → Kamp → Analyse → Statistikk",
+    "hovedmenyen i ligaspill er Kontor → Lag → Kamp → Sesong → Klubb",
     gameLoop.length === expected.length &&
       gameLoop.every((b, i) => b.label === expected[i][0] && b.target === expected[i][1]),
     gameLoop.map((b) => `${b.label}→${b.target}`).join(", ")
@@ -669,18 +676,20 @@ stage("17. Menyen lyver ikke");
     "modusvalget sendte deg tidligere rett inn i lagets treningsflate"
   );
 
-  // 17f) Kontoret er der du gjør kontorarbeidet, og flatene ligger i UNDERFANER
-  // i stedet for i en vegg av kort. Vakten måler intensjonen — at hver
-  // kontorflate er direkte tilgjengelig fra Kontor — ikke hvilken widget som
-  // brukes til å komme dit.
+  // 17f) Underflatene eies av ett forståelig hovedområde.
   const subtabs = [...html.matchAll(/<button\b[^>]*\bclass="[^"]*app-subtab[^"]*"[^>]*\bdata-tab-target="([^"]+)"/g)].map((m) => m[1]);
   const officeTargets = new Set([...subtabs, ...departments.map((b) => b.target)]);
-  for (const target of ["dashboard", "historygo", "progression", "admin", "inbox", "market", "board", "facilities"]) {
+  for (const target of ["dashboard", "inbox"]) {
     check(`Kontorflaten ${target} er en underfane på Kontor`, officeTargets.has(target));
   }
-  // Taktikk er delt på samme måte: tavla, troppen og systemet.
-  for (const target of ["tactics", "squad", "system"]) {
-    check(`Taktikkflaten ${target} er en underfane på Taktikk`, officeTargets.has(target));
+  for (const target of ["tactics", "squad", "trening", "system"]) {
+    check(`Lagflaten ${target} er en underfane på Lag`, officeTargets.has(target));
+  }
+  for (const target of ["kamp", "analyse"]) {
+    check(`Kampflaten ${target} er en underfane på Kamp`, officeTargets.has(target));
+  }
+  for (const target of ["board", "historygo", "progression", "admin"]) {
+    check(`Klubbflaten ${target} er en underfane på Klubb`, officeTargets.has(target));
   }
   check("underfanestripa finnes", /id="appSubnav"/.test(html) && /function renderSubtabs\(/.test(app));
   check(
@@ -703,15 +712,22 @@ stage("17. Menyen lyver ikke");
     subtabs.filter((target) => !new RegExp(`data-tab-section="${target}"`).test(html)).join(", ")
   );
   check(
-    "hver kontorflate sier at Kontor eier den",
-    ["historygo", "progression", "admin", "inbox", "market", "board", "facilities"].every(
+    "Kontor eier assistentråden",
+    ["inbox"].every(
       (target) => new RegExp(`data-tab-section="${target}"[^>]*data-tab-parent="dashboard"`).test(html)
     )
   );
   check(
-    "hver taktikkflate sier at Taktikk eier den",
-    ["squad", "system"].every(
+    "hver lagflate sier at Lag eier den",
+    ["squad", "trening", "system"].every(
       (target) => new RegExp(`data-tab-section="${target}"[^>]*data-tab-parent="tactics"`).test(html)
+    )
+  );
+  check("Analyse eies av Kamp", /data-tab-section="analyse"[^>]*data-tab-parent="kamp"/.test(html));
+  check(
+    "varige klubbflater eies av Klubb",
+    ["historygo", "progression", "admin"].every(
+      (target) => new RegExp(`data-tab-section="${target}"[^>]*data-tab-parent="board"`).test(html)
     )
   );
   check("Speiding er ikke lenger en egen hovedfane", !navTabs.some((b) => b.target === "historygo"));
@@ -968,9 +984,21 @@ stage("25. Treningsuka har én rekkefølge");
   check("et avvist spor har alltid en grunn", /valid: false, reason:/.test(individual));
   check("flata for individuell trening finnes", /id="individualTrainingPicker"/.test(html) && /renderIndividualTraining/.test(app));
 
-  // Detaljene ligger i popup-er, ikke som en scrollevegg av like store bokser.
-  check("valgene ligger i popup-er", /data-modal-open="modalTrainingProgram"/.test(html) && /data-modal-open="modalTrainingFocusPick"/.test(html) && /data-modal-open="modalIndividualTraining"/.test(html));
-  check("Trening-flata er ikke lenger en vegg av paneler", (html.match(/<div class="tab-section trening-view"[\s\S]*?\n    <\/div>/)?.[0]?.match(/<section class="panel/g) || []).length <= 2);
+  // Kjernevalgene skal ligge i én inline arbeidsflate, ikke i tre modaler.
+  check(
+    "program, fokus og individuell trening ligger inline",
+    /id="trainingWorkspace"/.test(html)
+      && /id="trainingProgramStep"/.test(html)
+      && /id="trainingFocusStep"/.test(html)
+      && /id="individualTrainingStep"/.test(html)
+  );
+  check(
+    "de gamle treningsmodalene er fjernet",
+    !/id="modalTrainingProgram"/.test(html)
+      && !/id="modalTrainingFocusPick"/.test(html)
+      && !/id="modalIndividualTraining"/.test(html)
+      && /getTrainingWorkspaceTarget/.test(app)
+  );
 }
 
 stage("26. Svake sider er en dør, ikke en dom");
