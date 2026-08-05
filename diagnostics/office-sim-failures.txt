@@ -73,7 +73,7 @@ Kampforklaring (Match Explanation v1.5):
 Forutsetninger (sterkt vs. svakt lag):
   ok   sterkt lag får flere positive grep (71 vs 1)
   ok   svakt lag får flere negative grep (64 vs 0)
-  ok   sterk stab mildner svakt lag (16 < 64 negative)
+  ok   sterk stab mildner svakt lag (16 < 63 negative)
 
 Kampkonsekvenser (Club Week Consequence Loop v1):
   ok   fullført kamp gir konsekvens
@@ -691,5 +691,3310 @@ EXIT=0
 > historygo-football-manager@0.1.0 sim:formation-matchup
 > node scripts/simulate-formation-matchup.mjs
 
-Kunne ikke laste dist/. Kjor `npm run build` forst. Cannot find module '/home/runner/work/HistoryGo-FootballManager/HistoryGo-FootballManager/dist/index.js' imported from /home/runner/work/HistoryGo-FootballManager/HistoryGo-FootballManager/scripts/simulate-formation-matchup.mjs
+Formation matchup – lean-matrise (rad = ditt system, kolonne = motstander)
+        rush_1 rush_1 early_ pyrami scotti direct metodo danubi early_ wm_322 wm_cou wm_mid hungar brazil early_ verrou catena catena low_bl libero defens creato attack total_ total_ ajax_d classi englis pressi diamon second defens modern modern posses gegen_ narrow modern conte_ modern alonso positi invert box_mi modern modern
+rush_1   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·    
+rush_1   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·    
+early_   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      ·      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+pyrami   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      -      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      ·    
+scotti   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      ·      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+direct   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      ·      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+metodo   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      +      +      +      ·      ·      ·      ·      ·      ·      ·      +      +      ·      +      ·      ·      +      +      +      +      ·      ·      +    
+danubi   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      +      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+early_   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+wm_322   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      ·      -      ·      ·      -      -      -      -      ·      ·      -    
+wm_cou   ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·    
+wm_mid   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+hungar   ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      +      +      ·      ·      ·      ·      ·      ·      -      -      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·    
+brazil   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·    
+early_   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+verrou   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      ·      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+catena   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·    
+catena   ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      +      +      ·      ·      ·      ·      ·      ·      ·      +      +      +      +      ·      ·      ·      ·      +      ·      ·      ·      ·    
+low_bl   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      ·      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+libero   -      -      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      ·      ·      ·      ·      -      -      -      -      ·      ·      -    
+defens   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+creato   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+attack   ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·    
+total_   ·      ·      +      ·      +      +      -      +      +      +      ·      +      ·      ·      +      +      ·      -      +      +      +      +      ·      ·      ·      +      +      +      ·      +      +      +      ·      ·      ·      -      ·      ·      ·      ·      +      ·      +      +      +      +    
+total_   +      +      +      +      +      +      -      +      +      +      +      +      +      ·      +      +      +      -      +      +      +      +      +      ·      ·      ·      ·      +      +      +      +      +      ·      ·      ·      -      ·      +      +      ·      +      ·      +      +      +      +    
+ajax_d   ·      ·      +      ·      +      +      -      +      +      +      ·      +      ·      ·      +      +      ·      -      +      +      +      +      ·      -      ·      ·      ·      +      ·      +      +      +      ·      -      ·      -      ·      ·      ·      ·      ·      -      ·      +      +      ·    
+classi   ·      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      -      ·      -      -      -      -      ·      -      ·      ·      -      ·      -      -      -      -      -    
+englis   -      -      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      -      -      ·      ·      -      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      ·      ·      -      -      -      -      -      -      ·      -      -      -      -      ·      ·      -    
+pressi   ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·    
+diamon   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      +      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+second   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      ·      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+defens   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      +      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+modern   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      +      +      ·      ·      ·      ·      ·      ·      +      +      +      ·      ·      ·      ·      ·      ·      ·      ·    
+modern   ·      ·      +      ·      +      +      -      +      +      +      ·      +      ·      ·      +      +      ·      -      +      +      +      +      ·      ·      ·      +      +      +      ·      +      +      +      ·      ·      +      -      ·      ·      ·      ·      +      ·      +      +      +      +    
+posses   +      +      +      ·      +      +      -      +      +      +      ·      +      +      ·      +      +      +      -      +      +      +      +      ·      ·      ·      ·      +      +      ·      +      +      +      ·      -      ·      -      ·      ·      ·      +      +      ·      +      +      +      +    
+gegen_   ·      ·      ·      +      ·      ·      ·      +      +      ·      ·      +      +      ·      +      ·      ·      -      ·      ·      +      +      ·      +      +      +      ·      +      ·      +      +      +      -      +      +      ·      +      ·      ·      +      +      +      +      +      +      +    
+narrow   ·      ·      +      +      +      +      -      +      +      +      ·      +      ·      ·      +      +      ·      -      +      ·      +      +      ·      ·      ·      ·      +      +      ·      +      +      +      -      ·      ·      -      ·      ·      ·      ·      ·      ·      ·      +      +      ·    
+modern   ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·    
+conte_   -      -      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      ·      ·      ·      ·      ·      ·      ·      -      ·      -      ·      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      -      -      ·      -      ·      ·      -    
+modern   ·      ·      +      ·      +      +      -      +      +      +      ·      +      ·      ·      +      +      ·      ·      +      +      +      +      ·      ·      ·      ·      +      +      ·      +      +      +      ·      ·      -      -      ·      ·      +      ·      ·      ·      ·      +      +      ·    
+alonso   ·      ·      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      -      -      ·      ·      +      ·      ·      ·      ·      ·      -      -      -      ·      ·      +      ·      ·      -      ·      ·      ·      ·    
+positi   ·      ·      +      ·      +      +      -      +      +      +      ·      +      ·      ·      +      +      ·      -      +      +      +      +      ·      ·      ·      +      +      +      ·      +      +      +      ·      ·      ·      -      ·      ·      ·      ·      +      ·      +      +      +      +    
+invert   ·      ·      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      -      -      ·      +      +      ·      ·      ·      ·      ·      -      -      -      ·      ·      +      ·      ·      -      ·      ·      ·      ·    
+box_mi   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      +      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+modern   ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      ·      -      -      -      +      ·      ·      ·      ·      ·      ·      -      -      -      -      ·      ·      -      ·      -      ·      ·      ·      ·    
+modern   ·      ·      ·      ·      ·      ·      -      ·      ·      +      ·      ·      ·      ·      ·      ·      ·      ·      ·      +      ·      ·      ·      -      -      ·      +      +      ·      ·      ·      ·      ·      -      -      -      ·      ·      +      ·      ·      -      ·      ·      ·      ·    
+
+Par vurdert: 2116 (formasjon vs formasjon) + 230 (formasjon vs motstanderprofil, TS/JS-paritet) + 552 (formasjon vs historisk stil-profil)
+Historiske formation knowledge-koblinger: 11
+Eksempel – possession_433 mot gegen_4222:
+  Risikabel matchup mot 4-2-2-2 Press: motstanderens stil treffer systemets svakheter. Vurder kontekstuelle justeringer.
+   • Motstanderen er sterk mot «build_from_back» – din spillestil.
+   • Motstanderen er sterk mot «possession_positional» – din spillestil.
+   • Ditt system sliter mot «high_press» – slik motstanderen spiller.
+   • Ditt system sliter mot «direct_counter» – slik motstanderen spiller.
+
+Alle matchup-sjekker besto.
+EXIT=0
+=== npm run sim:suggested-setups ===
+
+> historygo-football-manager@0.1.0 sim:suggested-setups
+> node scripts/simulate-suggested-setups.mjs
+
+Suggested Setups v1 — simulering
+
+Fullt datagrunnlag (formasjon + kunnskap + motstander + stab + teamFit):
+  ok   full.formation er array
+  ok   full.formation har 0–4 forslag
+  ok   full.formation[0]: id er ikke-tom streng
+  ok   full.formation[0]: title er ikke-tom streng
+  ok   full.formation[0]: type === formation
+  ok   full.formation[0]: summary er ikke-tom streng
+  ok   full.formation[0]: why er strengarray
+  ok   full.formation[0]: recommendedBecause er strengarray
+  ok   full.formation[0]: risks er strengarray
+  ok   full.formation[0]: suggestedAdjustments er strengarray
+  ok   full.formation[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.formation[0]: confidence i [0,1]
+  ok   full.formation[0]: sourceSignals er strengarray
+  ok   full.formation[1]: id er ikke-tom streng
+  ok   full.formation[1]: title er ikke-tom streng
+  ok   full.formation[1]: type === formation
+  ok   full.formation[1]: summary er ikke-tom streng
+  ok   full.formation[1]: why er strengarray
+  ok   full.formation[1]: recommendedBecause er strengarray
+  ok   full.formation[1]: risks er strengarray
+  ok   full.formation[1]: suggestedAdjustments er strengarray
+  ok   full.formation[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.formation[1]: confidence i [0,1]
+  ok   full.formation[1]: sourceSignals er strengarray
+  ok   full.formation[2]: id er ikke-tom streng
+  ok   full.formation[2]: title er ikke-tom streng
+  ok   full.formation[2]: type === formation
+  ok   full.formation[2]: summary er ikke-tom streng
+  ok   full.formation[2]: why er strengarray
+  ok   full.formation[2]: recommendedBecause er strengarray
+  ok   full.formation[2]: risks er strengarray
+  ok   full.formation[2]: suggestedAdjustments er strengarray
+  ok   full.formation[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.formation[2]: confidence i [0,1]
+  ok   full.formation[2]: sourceSignals er strengarray
+  ok   full.formation[3]: id er ikke-tom streng
+  ok   full.formation[3]: title er ikke-tom streng
+  ok   full.formation[3]: type === formation
+  ok   full.formation[3]: summary er ikke-tom streng
+  ok   full.formation[3]: why er strengarray
+  ok   full.formation[3]: recommendedBecause er strengarray
+  ok   full.formation[3]: risks er strengarray
+  ok   full.formation[3]: suggestedAdjustments er strengarray
+  ok   full.formation[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.formation[3]: confidence i [0,1]
+  ok   full.formation[3]: sourceSignals er strengarray
+  ok   full.formation har unike id-er
+  ok   full.match_plan er array
+  ok   full.match_plan har 0–4 forslag
+  ok   full.match_plan[0]: id er ikke-tom streng
+  ok   full.match_plan[0]: title er ikke-tom streng
+  ok   full.match_plan[0]: type === match_plan
+  ok   full.match_plan[0]: summary er ikke-tom streng
+  ok   full.match_plan[0]: why er strengarray
+  ok   full.match_plan[0]: recommendedBecause er strengarray
+  ok   full.match_plan[0]: risks er strengarray
+  ok   full.match_plan[0]: suggestedAdjustments er strengarray
+  ok   full.match_plan[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.match_plan[0]: confidence i [0,1]
+  ok   full.match_plan[0]: sourceSignals er strengarray
+  ok   full.match_plan[1]: id er ikke-tom streng
+  ok   full.match_plan[1]: title er ikke-tom streng
+  ok   full.match_plan[1]: type === match_plan
+  ok   full.match_plan[1]: summary er ikke-tom streng
+  ok   full.match_plan[1]: why er strengarray
+  ok   full.match_plan[1]: recommendedBecause er strengarray
+  ok   full.match_plan[1]: risks er strengarray
+  ok   full.match_plan[1]: suggestedAdjustments er strengarray
+  ok   full.match_plan[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.match_plan[1]: confidence i [0,1]
+  ok   full.match_plan[1]: sourceSignals er strengarray
+  ok   full.match_plan[2]: id er ikke-tom streng
+  ok   full.match_plan[2]: title er ikke-tom streng
+  ok   full.match_plan[2]: type === match_plan
+  ok   full.match_plan[2]: summary er ikke-tom streng
+  ok   full.match_plan[2]: why er strengarray
+  ok   full.match_plan[2]: recommendedBecause er strengarray
+  ok   full.match_plan[2]: risks er strengarray
+  ok   full.match_plan[2]: suggestedAdjustments er strengarray
+  ok   full.match_plan[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.match_plan[2]: confidence i [0,1]
+  ok   full.match_plan[2]: sourceSignals er strengarray
+  ok   full.match_plan[3]: id er ikke-tom streng
+  ok   full.match_plan[3]: title er ikke-tom streng
+  ok   full.match_plan[3]: type === match_plan
+  ok   full.match_plan[3]: summary er ikke-tom streng
+  ok   full.match_plan[3]: why er strengarray
+  ok   full.match_plan[3]: recommendedBecause er strengarray
+  ok   full.match_plan[3]: risks er strengarray
+  ok   full.match_plan[3]: suggestedAdjustments er strengarray
+  ok   full.match_plan[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.match_plan[3]: confidence i [0,1]
+  ok   full.match_plan[3]: sourceSignals er strengarray
+  ok   full.match_plan har unike id-er
+  ok   full.training_week er array
+  ok   full.training_week har 0–4 forslag
+  ok   full.training_week[0]: id er ikke-tom streng
+  ok   full.training_week[0]: title er ikke-tom streng
+  ok   full.training_week[0]: type === training_week
+  ok   full.training_week[0]: summary er ikke-tom streng
+  ok   full.training_week[0]: why er strengarray
+  ok   full.training_week[0]: recommendedBecause er strengarray
+  ok   full.training_week[0]: risks er strengarray
+  ok   full.training_week[0]: suggestedAdjustments er strengarray
+  ok   full.training_week[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.training_week[0]: confidence i [0,1]
+  ok   full.training_week[0]: sourceSignals er strengarray
+  ok   full.training_week[1]: id er ikke-tom streng
+  ok   full.training_week[1]: title er ikke-tom streng
+  ok   full.training_week[1]: type === training_week
+  ok   full.training_week[1]: summary er ikke-tom streng
+  ok   full.training_week[1]: why er strengarray
+  ok   full.training_week[1]: recommendedBecause er strengarray
+  ok   full.training_week[1]: risks er strengarray
+  ok   full.training_week[1]: suggestedAdjustments er strengarray
+  ok   full.training_week[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.training_week[1]: confidence i [0,1]
+  ok   full.training_week[1]: sourceSignals er strengarray
+  ok   full.training_week[2]: id er ikke-tom streng
+  ok   full.training_week[2]: title er ikke-tom streng
+  ok   full.training_week[2]: type === training_week
+  ok   full.training_week[2]: summary er ikke-tom streng
+  ok   full.training_week[2]: why er strengarray
+  ok   full.training_week[2]: recommendedBecause er strengarray
+  ok   full.training_week[2]: risks er strengarray
+  ok   full.training_week[2]: suggestedAdjustments er strengarray
+  ok   full.training_week[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.training_week[2]: confidence i [0,1]
+  ok   full.training_week[2]: sourceSignals er strengarray
+  ok   full.training_week[3]: id er ikke-tom streng
+  ok   full.training_week[3]: title er ikke-tom streng
+  ok   full.training_week[3]: type === training_week
+  ok   full.training_week[3]: summary er ikke-tom streng
+  ok   full.training_week[3]: why er strengarray
+  ok   full.training_week[3]: recommendedBecause er strengarray
+  ok   full.training_week[3]: risks er strengarray
+  ok   full.training_week[3]: suggestedAdjustments er strengarray
+  ok   full.training_week[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full.training_week[3]: confidence i [0,1]
+  ok   full.training_week[3]: sourceSignals er strengarray
+  ok   full.training_week har unike id-er
+  ok   full: minst 2 formasjonsforslag
+  ok   full: minst 2 kampplanforslag
+  ok   full: minst 2 treningsforslag
+  ok   full: build_up prioriteres som treningsfokus mot høyt press
+  ok   full: treningsforslag bærer matchup-signal
+  ok   full: kampplan inneholder matchup-basert plan
+  ok   full: possession_433-forslag har risiko mot høyt press
+
+Determinisme:
+  ok   to kall gir byte-identisk output
+
+Degradering — uten motstander:
+  ok   noOpponent.formation er array
+  ok   noOpponent.formation har 0–4 forslag
+  ok   noOpponent.formation[0]: id er ikke-tom streng
+  ok   noOpponent.formation[0]: title er ikke-tom streng
+  ok   noOpponent.formation[0]: type === formation
+  ok   noOpponent.formation[0]: summary er ikke-tom streng
+  ok   noOpponent.formation[0]: why er strengarray
+  ok   noOpponent.formation[0]: recommendedBecause er strengarray
+  ok   noOpponent.formation[0]: risks er strengarray
+  ok   noOpponent.formation[0]: suggestedAdjustments er strengarray
+  ok   noOpponent.formation[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.formation[0]: confidence i [0,1]
+  ok   noOpponent.formation[0]: sourceSignals er strengarray
+  ok   noOpponent.formation[1]: id er ikke-tom streng
+  ok   noOpponent.formation[1]: title er ikke-tom streng
+  ok   noOpponent.formation[1]: type === formation
+  ok   noOpponent.formation[1]: summary er ikke-tom streng
+  ok   noOpponent.formation[1]: why er strengarray
+  ok   noOpponent.formation[1]: recommendedBecause er strengarray
+  ok   noOpponent.formation[1]: risks er strengarray
+  ok   noOpponent.formation[1]: suggestedAdjustments er strengarray
+  ok   noOpponent.formation[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.formation[1]: confidence i [0,1]
+  ok   noOpponent.formation[1]: sourceSignals er strengarray
+  ok   noOpponent.formation[2]: id er ikke-tom streng
+  ok   noOpponent.formation[2]: title er ikke-tom streng
+  ok   noOpponent.formation[2]: type === formation
+  ok   noOpponent.formation[2]: summary er ikke-tom streng
+  ok   noOpponent.formation[2]: why er strengarray
+  ok   noOpponent.formation[2]: recommendedBecause er strengarray
+  ok   noOpponent.formation[2]: risks er strengarray
+  ok   noOpponent.formation[2]: suggestedAdjustments er strengarray
+  ok   noOpponent.formation[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.formation[2]: confidence i [0,1]
+  ok   noOpponent.formation[2]: sourceSignals er strengarray
+  ok   noOpponent.formation[3]: id er ikke-tom streng
+  ok   noOpponent.formation[3]: title er ikke-tom streng
+  ok   noOpponent.formation[3]: type === formation
+  ok   noOpponent.formation[3]: summary er ikke-tom streng
+  ok   noOpponent.formation[3]: why er strengarray
+  ok   noOpponent.formation[3]: recommendedBecause er strengarray
+  ok   noOpponent.formation[3]: risks er strengarray
+  ok   noOpponent.formation[3]: suggestedAdjustments er strengarray
+  ok   noOpponent.formation[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.formation[3]: confidence i [0,1]
+  ok   noOpponent.formation[3]: sourceSignals er strengarray
+  ok   noOpponent.formation har unike id-er
+  ok   noOpponent.match_plan er array
+  ok   noOpponent.match_plan har 0–4 forslag
+  ok   noOpponent.match_plan[0]: id er ikke-tom streng
+  ok   noOpponent.match_plan[0]: title er ikke-tom streng
+  ok   noOpponent.match_plan[0]: type === match_plan
+  ok   noOpponent.match_plan[0]: summary er ikke-tom streng
+  ok   noOpponent.match_plan[0]: why er strengarray
+  ok   noOpponent.match_plan[0]: recommendedBecause er strengarray
+  ok   noOpponent.match_plan[0]: risks er strengarray
+  ok   noOpponent.match_plan[0]: suggestedAdjustments er strengarray
+  ok   noOpponent.match_plan[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.match_plan[0]: confidence i [0,1]
+  ok   noOpponent.match_plan[0]: sourceSignals er strengarray
+  ok   noOpponent.match_plan[1]: id er ikke-tom streng
+  ok   noOpponent.match_plan[1]: title er ikke-tom streng
+  ok   noOpponent.match_plan[1]: type === match_plan
+  ok   noOpponent.match_plan[1]: summary er ikke-tom streng
+  ok   noOpponent.match_plan[1]: why er strengarray
+  ok   noOpponent.match_plan[1]: recommendedBecause er strengarray
+  ok   noOpponent.match_plan[1]: risks er strengarray
+  ok   noOpponent.match_plan[1]: suggestedAdjustments er strengarray
+  ok   noOpponent.match_plan[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.match_plan[1]: confidence i [0,1]
+  ok   noOpponent.match_plan[1]: sourceSignals er strengarray
+  ok   noOpponent.match_plan har unike id-er
+  ok   noOpponent.training_week er array
+  ok   noOpponent.training_week har 0–4 forslag
+  ok   noOpponent.training_week[0]: id er ikke-tom streng
+  ok   noOpponent.training_week[0]: title er ikke-tom streng
+  ok   noOpponent.training_week[0]: type === training_week
+  ok   noOpponent.training_week[0]: summary er ikke-tom streng
+  ok   noOpponent.training_week[0]: why er strengarray
+  ok   noOpponent.training_week[0]: recommendedBecause er strengarray
+  ok   noOpponent.training_week[0]: risks er strengarray
+  ok   noOpponent.training_week[0]: suggestedAdjustments er strengarray
+  ok   noOpponent.training_week[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.training_week[0]: confidence i [0,1]
+  ok   noOpponent.training_week[0]: sourceSignals er strengarray
+  ok   noOpponent.training_week[1]: id er ikke-tom streng
+  ok   noOpponent.training_week[1]: title er ikke-tom streng
+  ok   noOpponent.training_week[1]: type === training_week
+  ok   noOpponent.training_week[1]: summary er ikke-tom streng
+  ok   noOpponent.training_week[1]: why er strengarray
+  ok   noOpponent.training_week[1]: recommendedBecause er strengarray
+  ok   noOpponent.training_week[1]: risks er strengarray
+  ok   noOpponent.training_week[1]: suggestedAdjustments er strengarray
+  ok   noOpponent.training_week[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.training_week[1]: confidence i [0,1]
+  ok   noOpponent.training_week[1]: sourceSignals er strengarray
+  ok   noOpponent.training_week[2]: id er ikke-tom streng
+  ok   noOpponent.training_week[2]: title er ikke-tom streng
+  ok   noOpponent.training_week[2]: type === training_week
+  ok   noOpponent.training_week[2]: summary er ikke-tom streng
+  ok   noOpponent.training_week[2]: why er strengarray
+  ok   noOpponent.training_week[2]: recommendedBecause er strengarray
+  ok   noOpponent.training_week[2]: risks er strengarray
+  ok   noOpponent.training_week[2]: suggestedAdjustments er strengarray
+  ok   noOpponent.training_week[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.training_week[2]: confidence i [0,1]
+  ok   noOpponent.training_week[2]: sourceSignals er strengarray
+  ok   noOpponent.training_week[3]: id er ikke-tom streng
+  ok   noOpponent.training_week[3]: title er ikke-tom streng
+  ok   noOpponent.training_week[3]: type === training_week
+  ok   noOpponent.training_week[3]: summary er ikke-tom streng
+  ok   noOpponent.training_week[3]: why er strengarray
+  ok   noOpponent.training_week[3]: recommendedBecause er strengarray
+  ok   noOpponent.training_week[3]: risks er strengarray
+  ok   noOpponent.training_week[3]: suggestedAdjustments er strengarray
+  ok   noOpponent.training_week[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent.training_week[3]: confidence i [0,1]
+  ok   noOpponent.training_week[3]: sourceSignals er strengarray
+  ok   noOpponent.training_week har unike id-er
+  ok   uten motstander: fortsatt formasjonsforslag
+  ok   uten motstander: fortsatt kampplanforslag (fra teamFit)
+  ok   uten motstander: fortsatt treningsforslag (fra lagsvakhet)
+  ok   uten motstander: svakeste ledd (buildUp) gir build_up-trening
+
+Degradering — uten formasjonskunnskap:
+  ok   noKnowledge.formation er array
+  ok   noKnowledge.formation har 0–4 forslag
+  ok   noKnowledge.formation[0]: id er ikke-tom streng
+  ok   noKnowledge.formation[0]: title er ikke-tom streng
+  ok   noKnowledge.formation[0]: type === formation
+  ok   noKnowledge.formation[0]: summary er ikke-tom streng
+  ok   noKnowledge.formation[0]: why er strengarray
+  ok   noKnowledge.formation[0]: recommendedBecause er strengarray
+  ok   noKnowledge.formation[0]: risks er strengarray
+  ok   noKnowledge.formation[0]: suggestedAdjustments er strengarray
+  ok   noKnowledge.formation[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.formation[0]: confidence i [0,1]
+  ok   noKnowledge.formation[0]: sourceSignals er strengarray
+  ok   noKnowledge.formation[1]: id er ikke-tom streng
+  ok   noKnowledge.formation[1]: title er ikke-tom streng
+  ok   noKnowledge.formation[1]: type === formation
+  ok   noKnowledge.formation[1]: summary er ikke-tom streng
+  ok   noKnowledge.formation[1]: why er strengarray
+  ok   noKnowledge.formation[1]: recommendedBecause er strengarray
+  ok   noKnowledge.formation[1]: risks er strengarray
+  ok   noKnowledge.formation[1]: suggestedAdjustments er strengarray
+  ok   noKnowledge.formation[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.formation[1]: confidence i [0,1]
+  ok   noKnowledge.formation[1]: sourceSignals er strengarray
+  ok   noKnowledge.formation[2]: id er ikke-tom streng
+  ok   noKnowledge.formation[2]: title er ikke-tom streng
+  ok   noKnowledge.formation[2]: type === formation
+  ok   noKnowledge.formation[2]: summary er ikke-tom streng
+  ok   noKnowledge.formation[2]: why er strengarray
+  ok   noKnowledge.formation[2]: recommendedBecause er strengarray
+  ok   noKnowledge.formation[2]: risks er strengarray
+  ok   noKnowledge.formation[2]: suggestedAdjustments er strengarray
+  ok   noKnowledge.formation[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.formation[2]: confidence i [0,1]
+  ok   noKnowledge.formation[2]: sourceSignals er strengarray
+  ok   noKnowledge.formation[3]: id er ikke-tom streng
+  ok   noKnowledge.formation[3]: title er ikke-tom streng
+  ok   noKnowledge.formation[3]: type === formation
+  ok   noKnowledge.formation[3]: summary er ikke-tom streng
+  ok   noKnowledge.formation[3]: why er strengarray
+  ok   noKnowledge.formation[3]: recommendedBecause er strengarray
+  ok   noKnowledge.formation[3]: risks er strengarray
+  ok   noKnowledge.formation[3]: suggestedAdjustments er strengarray
+  ok   noKnowledge.formation[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.formation[3]: confidence i [0,1]
+  ok   noKnowledge.formation[3]: sourceSignals er strengarray
+  ok   noKnowledge.formation har unike id-er
+  ok   noKnowledge.match_plan er array
+  ok   noKnowledge.match_plan har 0–4 forslag
+  ok   noKnowledge.match_plan[0]: id er ikke-tom streng
+  ok   noKnowledge.match_plan[0]: title er ikke-tom streng
+  ok   noKnowledge.match_plan[0]: type === match_plan
+  ok   noKnowledge.match_plan[0]: summary er ikke-tom streng
+  ok   noKnowledge.match_plan[0]: why er strengarray
+  ok   noKnowledge.match_plan[0]: recommendedBecause er strengarray
+  ok   noKnowledge.match_plan[0]: risks er strengarray
+  ok   noKnowledge.match_plan[0]: suggestedAdjustments er strengarray
+  ok   noKnowledge.match_plan[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.match_plan[0]: confidence i [0,1]
+  ok   noKnowledge.match_plan[0]: sourceSignals er strengarray
+  ok   noKnowledge.match_plan[1]: id er ikke-tom streng
+  ok   noKnowledge.match_plan[1]: title er ikke-tom streng
+  ok   noKnowledge.match_plan[1]: type === match_plan
+  ok   noKnowledge.match_plan[1]: summary er ikke-tom streng
+  ok   noKnowledge.match_plan[1]: why er strengarray
+  ok   noKnowledge.match_plan[1]: recommendedBecause er strengarray
+  ok   noKnowledge.match_plan[1]: risks er strengarray
+  ok   noKnowledge.match_plan[1]: suggestedAdjustments er strengarray
+  ok   noKnowledge.match_plan[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.match_plan[1]: confidence i [0,1]
+  ok   noKnowledge.match_plan[1]: sourceSignals er strengarray
+  ok   noKnowledge.match_plan[2]: id er ikke-tom streng
+  ok   noKnowledge.match_plan[2]: title er ikke-tom streng
+  ok   noKnowledge.match_plan[2]: type === match_plan
+  ok   noKnowledge.match_plan[2]: summary er ikke-tom streng
+  ok   noKnowledge.match_plan[2]: why er strengarray
+  ok   noKnowledge.match_plan[2]: recommendedBecause er strengarray
+  ok   noKnowledge.match_plan[2]: risks er strengarray
+  ok   noKnowledge.match_plan[2]: suggestedAdjustments er strengarray
+  ok   noKnowledge.match_plan[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.match_plan[2]: confidence i [0,1]
+  ok   noKnowledge.match_plan[2]: sourceSignals er strengarray
+  ok   noKnowledge.match_plan[3]: id er ikke-tom streng
+  ok   noKnowledge.match_plan[3]: title er ikke-tom streng
+  ok   noKnowledge.match_plan[3]: type === match_plan
+  ok   noKnowledge.match_plan[3]: summary er ikke-tom streng
+  ok   noKnowledge.match_plan[3]: why er strengarray
+  ok   noKnowledge.match_plan[3]: recommendedBecause er strengarray
+  ok   noKnowledge.match_plan[3]: risks er strengarray
+  ok   noKnowledge.match_plan[3]: suggestedAdjustments er strengarray
+  ok   noKnowledge.match_plan[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.match_plan[3]: confidence i [0,1]
+  ok   noKnowledge.match_plan[3]: sourceSignals er strengarray
+  ok   noKnowledge.match_plan har unike id-er
+  ok   noKnowledge.training_week er array
+  ok   noKnowledge.training_week har 0–4 forslag
+  ok   noKnowledge.training_week[0]: id er ikke-tom streng
+  ok   noKnowledge.training_week[0]: title er ikke-tom streng
+  ok   noKnowledge.training_week[0]: type === training_week
+  ok   noKnowledge.training_week[0]: summary er ikke-tom streng
+  ok   noKnowledge.training_week[0]: why er strengarray
+  ok   noKnowledge.training_week[0]: recommendedBecause er strengarray
+  ok   noKnowledge.training_week[0]: risks er strengarray
+  ok   noKnowledge.training_week[0]: suggestedAdjustments er strengarray
+  ok   noKnowledge.training_week[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.training_week[0]: confidence i [0,1]
+  ok   noKnowledge.training_week[0]: sourceSignals er strengarray
+  ok   noKnowledge.training_week[1]: id er ikke-tom streng
+  ok   noKnowledge.training_week[1]: title er ikke-tom streng
+  ok   noKnowledge.training_week[1]: type === training_week
+  ok   noKnowledge.training_week[1]: summary er ikke-tom streng
+  ok   noKnowledge.training_week[1]: why er strengarray
+  ok   noKnowledge.training_week[1]: recommendedBecause er strengarray
+  ok   noKnowledge.training_week[1]: risks er strengarray
+  ok   noKnowledge.training_week[1]: suggestedAdjustments er strengarray
+  ok   noKnowledge.training_week[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.training_week[1]: confidence i [0,1]
+  ok   noKnowledge.training_week[1]: sourceSignals er strengarray
+  ok   noKnowledge.training_week[2]: id er ikke-tom streng
+  ok   noKnowledge.training_week[2]: title er ikke-tom streng
+  ok   noKnowledge.training_week[2]: type === training_week
+  ok   noKnowledge.training_week[2]: summary er ikke-tom streng
+  ok   noKnowledge.training_week[2]: why er strengarray
+  ok   noKnowledge.training_week[2]: recommendedBecause er strengarray
+  ok   noKnowledge.training_week[2]: risks er strengarray
+  ok   noKnowledge.training_week[2]: suggestedAdjustments er strengarray
+  ok   noKnowledge.training_week[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.training_week[2]: confidence i [0,1]
+  ok   noKnowledge.training_week[2]: sourceSignals er strengarray
+  ok   noKnowledge.training_week[3]: id er ikke-tom streng
+  ok   noKnowledge.training_week[3]: title er ikke-tom streng
+  ok   noKnowledge.training_week[3]: type === training_week
+  ok   noKnowledge.training_week[3]: summary er ikke-tom streng
+  ok   noKnowledge.training_week[3]: why er strengarray
+  ok   noKnowledge.training_week[3]: recommendedBecause er strengarray
+  ok   noKnowledge.training_week[3]: risks er strengarray
+  ok   noKnowledge.training_week[3]: suggestedAdjustments er strengarray
+  ok   noKnowledge.training_week[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noKnowledge.training_week[3]: confidence i [0,1]
+  ok   noKnowledge.training_week[3]: sourceSignals er strengarray
+  ok   noKnowledge.training_week har unike id-er
+  ok   uten kunnskap: formasjonsforslag finnes likevel
+  ok   uten kunnskap: formasjonsforslag bruker vanskelighetsgrad, ikke matchup
+
+Degradering — uten stab (coachContext = null):
+  ok   noStaff.formation er array
+  ok   noStaff.formation har 0–4 forslag
+  ok   noStaff.formation[0]: id er ikke-tom streng
+  ok   noStaff.formation[0]: title er ikke-tom streng
+  ok   noStaff.formation[0]: type === formation
+  ok   noStaff.formation[0]: summary er ikke-tom streng
+  ok   noStaff.formation[0]: why er strengarray
+  ok   noStaff.formation[0]: recommendedBecause er strengarray
+  ok   noStaff.formation[0]: risks er strengarray
+  ok   noStaff.formation[0]: suggestedAdjustments er strengarray
+  ok   noStaff.formation[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.formation[0]: confidence i [0,1]
+  ok   noStaff.formation[0]: sourceSignals er strengarray
+  ok   noStaff.formation[1]: id er ikke-tom streng
+  ok   noStaff.formation[1]: title er ikke-tom streng
+  ok   noStaff.formation[1]: type === formation
+  ok   noStaff.formation[1]: summary er ikke-tom streng
+  ok   noStaff.formation[1]: why er strengarray
+  ok   noStaff.formation[1]: recommendedBecause er strengarray
+  ok   noStaff.formation[1]: risks er strengarray
+  ok   noStaff.formation[1]: suggestedAdjustments er strengarray
+  ok   noStaff.formation[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.formation[1]: confidence i [0,1]
+  ok   noStaff.formation[1]: sourceSignals er strengarray
+  ok   noStaff.formation[2]: id er ikke-tom streng
+  ok   noStaff.formation[2]: title er ikke-tom streng
+  ok   noStaff.formation[2]: type === formation
+  ok   noStaff.formation[2]: summary er ikke-tom streng
+  ok   noStaff.formation[2]: why er strengarray
+  ok   noStaff.formation[2]: recommendedBecause er strengarray
+  ok   noStaff.formation[2]: risks er strengarray
+  ok   noStaff.formation[2]: suggestedAdjustments er strengarray
+  ok   noStaff.formation[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.formation[2]: confidence i [0,1]
+  ok   noStaff.formation[2]: sourceSignals er strengarray
+  ok   noStaff.formation[3]: id er ikke-tom streng
+  ok   noStaff.formation[3]: title er ikke-tom streng
+  ok   noStaff.formation[3]: type === formation
+  ok   noStaff.formation[3]: summary er ikke-tom streng
+  ok   noStaff.formation[3]: why er strengarray
+  ok   noStaff.formation[3]: recommendedBecause er strengarray
+  ok   noStaff.formation[3]: risks er strengarray
+  ok   noStaff.formation[3]: suggestedAdjustments er strengarray
+  ok   noStaff.formation[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.formation[3]: confidence i [0,1]
+  ok   noStaff.formation[3]: sourceSignals er strengarray
+  ok   noStaff.formation har unike id-er
+  ok   noStaff.match_plan er array
+  ok   noStaff.match_plan har 0–4 forslag
+  ok   noStaff.match_plan[0]: id er ikke-tom streng
+  ok   noStaff.match_plan[0]: title er ikke-tom streng
+  ok   noStaff.match_plan[0]: type === match_plan
+  ok   noStaff.match_plan[0]: summary er ikke-tom streng
+  ok   noStaff.match_plan[0]: why er strengarray
+  ok   noStaff.match_plan[0]: recommendedBecause er strengarray
+  ok   noStaff.match_plan[0]: risks er strengarray
+  ok   noStaff.match_plan[0]: suggestedAdjustments er strengarray
+  ok   noStaff.match_plan[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.match_plan[0]: confidence i [0,1]
+  ok   noStaff.match_plan[0]: sourceSignals er strengarray
+  ok   noStaff.match_plan[1]: id er ikke-tom streng
+  ok   noStaff.match_plan[1]: title er ikke-tom streng
+  ok   noStaff.match_plan[1]: type === match_plan
+  ok   noStaff.match_plan[1]: summary er ikke-tom streng
+  ok   noStaff.match_plan[1]: why er strengarray
+  ok   noStaff.match_plan[1]: recommendedBecause er strengarray
+  ok   noStaff.match_plan[1]: risks er strengarray
+  ok   noStaff.match_plan[1]: suggestedAdjustments er strengarray
+  ok   noStaff.match_plan[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.match_plan[1]: confidence i [0,1]
+  ok   noStaff.match_plan[1]: sourceSignals er strengarray
+  ok   noStaff.match_plan[2]: id er ikke-tom streng
+  ok   noStaff.match_plan[2]: title er ikke-tom streng
+  ok   noStaff.match_plan[2]: type === match_plan
+  ok   noStaff.match_plan[2]: summary er ikke-tom streng
+  ok   noStaff.match_plan[2]: why er strengarray
+  ok   noStaff.match_plan[2]: recommendedBecause er strengarray
+  ok   noStaff.match_plan[2]: risks er strengarray
+  ok   noStaff.match_plan[2]: suggestedAdjustments er strengarray
+  ok   noStaff.match_plan[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.match_plan[2]: confidence i [0,1]
+  ok   noStaff.match_plan[2]: sourceSignals er strengarray
+  ok   noStaff.match_plan[3]: id er ikke-tom streng
+  ok   noStaff.match_plan[3]: title er ikke-tom streng
+  ok   noStaff.match_plan[3]: type === match_plan
+  ok   noStaff.match_plan[3]: summary er ikke-tom streng
+  ok   noStaff.match_plan[3]: why er strengarray
+  ok   noStaff.match_plan[3]: recommendedBecause er strengarray
+  ok   noStaff.match_plan[3]: risks er strengarray
+  ok   noStaff.match_plan[3]: suggestedAdjustments er strengarray
+  ok   noStaff.match_plan[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.match_plan[3]: confidence i [0,1]
+  ok   noStaff.match_plan[3]: sourceSignals er strengarray
+  ok   noStaff.match_plan har unike id-er
+  ok   noStaff.training_week er array
+  ok   noStaff.training_week har 0–4 forslag
+  ok   noStaff.training_week[0]: id er ikke-tom streng
+  ok   noStaff.training_week[0]: title er ikke-tom streng
+  ok   noStaff.training_week[0]: type === training_week
+  ok   noStaff.training_week[0]: summary er ikke-tom streng
+  ok   noStaff.training_week[0]: why er strengarray
+  ok   noStaff.training_week[0]: recommendedBecause er strengarray
+  ok   noStaff.training_week[0]: risks er strengarray
+  ok   noStaff.training_week[0]: suggestedAdjustments er strengarray
+  ok   noStaff.training_week[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.training_week[0]: confidence i [0,1]
+  ok   noStaff.training_week[0]: sourceSignals er strengarray
+  ok   noStaff.training_week[1]: id er ikke-tom streng
+  ok   noStaff.training_week[1]: title er ikke-tom streng
+  ok   noStaff.training_week[1]: type === training_week
+  ok   noStaff.training_week[1]: summary er ikke-tom streng
+  ok   noStaff.training_week[1]: why er strengarray
+  ok   noStaff.training_week[1]: recommendedBecause er strengarray
+  ok   noStaff.training_week[1]: risks er strengarray
+  ok   noStaff.training_week[1]: suggestedAdjustments er strengarray
+  ok   noStaff.training_week[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.training_week[1]: confidence i [0,1]
+  ok   noStaff.training_week[1]: sourceSignals er strengarray
+  ok   noStaff.training_week[2]: id er ikke-tom streng
+  ok   noStaff.training_week[2]: title er ikke-tom streng
+  ok   noStaff.training_week[2]: type === training_week
+  ok   noStaff.training_week[2]: summary er ikke-tom streng
+  ok   noStaff.training_week[2]: why er strengarray
+  ok   noStaff.training_week[2]: recommendedBecause er strengarray
+  ok   noStaff.training_week[2]: risks er strengarray
+  ok   noStaff.training_week[2]: suggestedAdjustments er strengarray
+  ok   noStaff.training_week[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.training_week[2]: confidence i [0,1]
+  ok   noStaff.training_week[2]: sourceSignals er strengarray
+  ok   noStaff.training_week[3]: id er ikke-tom streng
+  ok   noStaff.training_week[3]: title er ikke-tom streng
+  ok   noStaff.training_week[3]: type === training_week
+  ok   noStaff.training_week[3]: summary er ikke-tom streng
+  ok   noStaff.training_week[3]: why er strengarray
+  ok   noStaff.training_week[3]: recommendedBecause er strengarray
+  ok   noStaff.training_week[3]: risks er strengarray
+  ok   noStaff.training_week[3]: suggestedAdjustments er strengarray
+  ok   noStaff.training_week[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noStaff.training_week[3]: confidence i [0,1]
+  ok   noStaff.training_week[3]: sourceSignals er strengarray
+  ok   noStaff.training_week har unike id-er
+  ok   uten stab: treningsforslag flagger manglende stab som risiko
+
+Degradering — tomt/manglende input:
+  ok   tomt input kaster ikke
+  ok   tomt input gir tre arrays
+  ok   tomt input gir et trygt standard treningsfokus
+  ok   suggestFormationSetups() uten args kaster ikke
+  ok   suggestMatchPlanSetups() uten args kaster ikke
+  ok   suggestTrainingWeekSetups() uten args kaster ikke
+
+Grenser (limit):
+  ok   limited.formation er array
+  ok   limited.formation har 0–2 forslag
+  ok   limited.formation[0]: id er ikke-tom streng
+  ok   limited.formation[0]: title er ikke-tom streng
+  ok   limited.formation[0]: type === formation
+  ok   limited.formation[0]: summary er ikke-tom streng
+  ok   limited.formation[0]: why er strengarray
+  ok   limited.formation[0]: recommendedBecause er strengarray
+  ok   limited.formation[0]: risks er strengarray
+  ok   limited.formation[0]: suggestedAdjustments er strengarray
+  ok   limited.formation[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   limited.formation[0]: confidence i [0,1]
+  ok   limited.formation[0]: sourceSignals er strengarray
+  ok   limited.formation[1]: id er ikke-tom streng
+  ok   limited.formation[1]: title er ikke-tom streng
+  ok   limited.formation[1]: type === formation
+  ok   limited.formation[1]: summary er ikke-tom streng
+  ok   limited.formation[1]: why er strengarray
+  ok   limited.formation[1]: recommendedBecause er strengarray
+  ok   limited.formation[1]: risks er strengarray
+  ok   limited.formation[1]: suggestedAdjustments er strengarray
+  ok   limited.formation[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   limited.formation[1]: confidence i [0,1]
+  ok   limited.formation[1]: sourceSignals er strengarray
+  ok   limited.formation har unike id-er
+  ok   limited.match_plan er array
+  ok   limited.match_plan har 0–2 forslag
+  ok   limited.match_plan[0]: id er ikke-tom streng
+  ok   limited.match_plan[0]: title er ikke-tom streng
+  ok   limited.match_plan[0]: type === match_plan
+  ok   limited.match_plan[0]: summary er ikke-tom streng
+  ok   limited.match_plan[0]: why er strengarray
+  ok   limited.match_plan[0]: recommendedBecause er strengarray
+  ok   limited.match_plan[0]: risks er strengarray
+  ok   limited.match_plan[0]: suggestedAdjustments er strengarray
+  ok   limited.match_plan[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   limited.match_plan[0]: confidence i [0,1]
+  ok   limited.match_plan[0]: sourceSignals er strengarray
+  ok   limited.match_plan[1]: id er ikke-tom streng
+  ok   limited.match_plan[1]: title er ikke-tom streng
+  ok   limited.match_plan[1]: type === match_plan
+  ok   limited.match_plan[1]: summary er ikke-tom streng
+  ok   limited.match_plan[1]: why er strengarray
+  ok   limited.match_plan[1]: recommendedBecause er strengarray
+  ok   limited.match_plan[1]: risks er strengarray
+  ok   limited.match_plan[1]: suggestedAdjustments er strengarray
+  ok   limited.match_plan[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   limited.match_plan[1]: confidence i [0,1]
+  ok   limited.match_plan[1]: sourceSignals er strengarray
+  ok   limited.match_plan har unike id-er
+  ok   limited.training_week er array
+  ok   limited.training_week har 0–2 forslag
+  ok   limited.training_week[0]: id er ikke-tom streng
+  ok   limited.training_week[0]: title er ikke-tom streng
+  ok   limited.training_week[0]: type === training_week
+  ok   limited.training_week[0]: summary er ikke-tom streng
+  ok   limited.training_week[0]: why er strengarray
+  ok   limited.training_week[0]: recommendedBecause er strengarray
+  ok   limited.training_week[0]: risks er strengarray
+  ok   limited.training_week[0]: suggestedAdjustments er strengarray
+  ok   limited.training_week[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   limited.training_week[0]: confidence i [0,1]
+  ok   limited.training_week[0]: sourceSignals er strengarray
+  ok   limited.training_week[1]: id er ikke-tom streng
+  ok   limited.training_week[1]: title er ikke-tom streng
+  ok   limited.training_week[1]: type === training_week
+  ok   limited.training_week[1]: summary er ikke-tom streng
+  ok   limited.training_week[1]: why er strengarray
+  ok   limited.training_week[1]: recommendedBecause er strengarray
+  ok   limited.training_week[1]: risks er strengarray
+  ok   limited.training_week[1]: suggestedAdjustments er strengarray
+  ok   limited.training_week[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   limited.training_week[1]: confidence i [0,1]
+  ok   limited.training_week[1]: sourceSignals er strengarray
+  ok   limited.training_week har unike id-er
+  ok   limit=2: høyst 2 formasjonsforslag
+  ok   limit=2: høyst 2 treningsforslag
+
+Alle motstanderprofiler:
+  ok   alle motstanderprofiler gir gyldige forslag
+
+Off-pitch context (med og uten):
+  ok   offPitchState som input kaster ikke
+  ok   withOff.formation er array
+  ok   withOff.formation har 0–4 forslag
+  ok   withOff.formation[0]: id er ikke-tom streng
+  ok   withOff.formation[0]: title er ikke-tom streng
+  ok   withOff.formation[0]: type === formation
+  ok   withOff.formation[0]: summary er ikke-tom streng
+  ok   withOff.formation[0]: why er strengarray
+  ok   withOff.formation[0]: recommendedBecause er strengarray
+  ok   withOff.formation[0]: risks er strengarray
+  ok   withOff.formation[0]: suggestedAdjustments er strengarray
+  ok   withOff.formation[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.formation[0]: confidence i [0,1]
+  ok   withOff.formation[0]: sourceSignals er strengarray
+  ok   withOff.formation[1]: id er ikke-tom streng
+  ok   withOff.formation[1]: title er ikke-tom streng
+  ok   withOff.formation[1]: type === formation
+  ok   withOff.formation[1]: summary er ikke-tom streng
+  ok   withOff.formation[1]: why er strengarray
+  ok   withOff.formation[1]: recommendedBecause er strengarray
+  ok   withOff.formation[1]: risks er strengarray
+  ok   withOff.formation[1]: suggestedAdjustments er strengarray
+  ok   withOff.formation[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.formation[1]: confidence i [0,1]
+  ok   withOff.formation[1]: sourceSignals er strengarray
+  ok   withOff.formation[2]: id er ikke-tom streng
+  ok   withOff.formation[2]: title er ikke-tom streng
+  ok   withOff.formation[2]: type === formation
+  ok   withOff.formation[2]: summary er ikke-tom streng
+  ok   withOff.formation[2]: why er strengarray
+  ok   withOff.formation[2]: recommendedBecause er strengarray
+  ok   withOff.formation[2]: risks er strengarray
+  ok   withOff.formation[2]: suggestedAdjustments er strengarray
+  ok   withOff.formation[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.formation[2]: confidence i [0,1]
+  ok   withOff.formation[2]: sourceSignals er strengarray
+  ok   withOff.formation[3]: id er ikke-tom streng
+  ok   withOff.formation[3]: title er ikke-tom streng
+  ok   withOff.formation[3]: type === formation
+  ok   withOff.formation[3]: summary er ikke-tom streng
+  ok   withOff.formation[3]: why er strengarray
+  ok   withOff.formation[3]: recommendedBecause er strengarray
+  ok   withOff.formation[3]: risks er strengarray
+  ok   withOff.formation[3]: suggestedAdjustments er strengarray
+  ok   withOff.formation[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.formation[3]: confidence i [0,1]
+  ok   withOff.formation[3]: sourceSignals er strengarray
+  ok   withOff.formation har unike id-er
+  ok   withOff.match_plan er array
+  ok   withOff.match_plan har 0–4 forslag
+  ok   withOff.match_plan[0]: id er ikke-tom streng
+  ok   withOff.match_plan[0]: title er ikke-tom streng
+  ok   withOff.match_plan[0]: type === match_plan
+  ok   withOff.match_plan[0]: summary er ikke-tom streng
+  ok   withOff.match_plan[0]: why er strengarray
+  ok   withOff.match_plan[0]: recommendedBecause er strengarray
+  ok   withOff.match_plan[0]: risks er strengarray
+  ok   withOff.match_plan[0]: suggestedAdjustments er strengarray
+  ok   withOff.match_plan[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.match_plan[0]: confidence i [0,1]
+  ok   withOff.match_plan[0]: sourceSignals er strengarray
+  ok   withOff.match_plan[1]: id er ikke-tom streng
+  ok   withOff.match_plan[1]: title er ikke-tom streng
+  ok   withOff.match_plan[1]: type === match_plan
+  ok   withOff.match_plan[1]: summary er ikke-tom streng
+  ok   withOff.match_plan[1]: why er strengarray
+  ok   withOff.match_plan[1]: recommendedBecause er strengarray
+  ok   withOff.match_plan[1]: risks er strengarray
+  ok   withOff.match_plan[1]: suggestedAdjustments er strengarray
+  ok   withOff.match_plan[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.match_plan[1]: confidence i [0,1]
+  ok   withOff.match_plan[1]: sourceSignals er strengarray
+  ok   withOff.match_plan[2]: id er ikke-tom streng
+  ok   withOff.match_plan[2]: title er ikke-tom streng
+  ok   withOff.match_plan[2]: type === match_plan
+  ok   withOff.match_plan[2]: summary er ikke-tom streng
+  ok   withOff.match_plan[2]: why er strengarray
+  ok   withOff.match_plan[2]: recommendedBecause er strengarray
+  ok   withOff.match_plan[2]: risks er strengarray
+  ok   withOff.match_plan[2]: suggestedAdjustments er strengarray
+  ok   withOff.match_plan[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.match_plan[2]: confidence i [0,1]
+  ok   withOff.match_plan[2]: sourceSignals er strengarray
+  ok   withOff.match_plan[3]: id er ikke-tom streng
+  ok   withOff.match_plan[3]: title er ikke-tom streng
+  ok   withOff.match_plan[3]: type === match_plan
+  ok   withOff.match_plan[3]: summary er ikke-tom streng
+  ok   withOff.match_plan[3]: why er strengarray
+  ok   withOff.match_plan[3]: recommendedBecause er strengarray
+  ok   withOff.match_plan[3]: risks er strengarray
+  ok   withOff.match_plan[3]: suggestedAdjustments er strengarray
+  ok   withOff.match_plan[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.match_plan[3]: confidence i [0,1]
+  ok   withOff.match_plan[3]: sourceSignals er strengarray
+  ok   withOff.match_plan har unike id-er
+  ok   withOff.training_week er array
+  ok   withOff.training_week har 0–4 forslag
+  ok   withOff.training_week[0]: id er ikke-tom streng
+  ok   withOff.training_week[0]: title er ikke-tom streng
+  ok   withOff.training_week[0]: type === training_week
+  ok   withOff.training_week[0]: summary er ikke-tom streng
+  ok   withOff.training_week[0]: why er strengarray
+  ok   withOff.training_week[0]: recommendedBecause er strengarray
+  ok   withOff.training_week[0]: risks er strengarray
+  ok   withOff.training_week[0]: suggestedAdjustments er strengarray
+  ok   withOff.training_week[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.training_week[0]: confidence i [0,1]
+  ok   withOff.training_week[0]: sourceSignals er strengarray
+  ok   withOff.training_week[1]: id er ikke-tom streng
+  ok   withOff.training_week[1]: title er ikke-tom streng
+  ok   withOff.training_week[1]: type === training_week
+  ok   withOff.training_week[1]: summary er ikke-tom streng
+  ok   withOff.training_week[1]: why er strengarray
+  ok   withOff.training_week[1]: recommendedBecause er strengarray
+  ok   withOff.training_week[1]: risks er strengarray
+  ok   withOff.training_week[1]: suggestedAdjustments er strengarray
+  ok   withOff.training_week[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.training_week[1]: confidence i [0,1]
+  ok   withOff.training_week[1]: sourceSignals er strengarray
+  ok   withOff.training_week[2]: id er ikke-tom streng
+  ok   withOff.training_week[2]: title er ikke-tom streng
+  ok   withOff.training_week[2]: type === training_week
+  ok   withOff.training_week[2]: summary er ikke-tom streng
+  ok   withOff.training_week[2]: why er strengarray
+  ok   withOff.training_week[2]: recommendedBecause er strengarray
+  ok   withOff.training_week[2]: risks er strengarray
+  ok   withOff.training_week[2]: suggestedAdjustments er strengarray
+  ok   withOff.training_week[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.training_week[2]: confidence i [0,1]
+  ok   withOff.training_week[2]: sourceSignals er strengarray
+  ok   withOff.training_week[3]: id er ikke-tom streng
+  ok   withOff.training_week[3]: title er ikke-tom streng
+  ok   withOff.training_week[3]: type === training_week
+  ok   withOff.training_week[3]: summary er ikke-tom streng
+  ok   withOff.training_week[3]: why er strengarray
+  ok   withOff.training_week[3]: recommendedBecause er strengarray
+  ok   withOff.training_week[3]: risks er strengarray
+  ok   withOff.training_week[3]: suggestedAdjustments er strengarray
+  ok   withOff.training_week[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   withOff.training_week[3]: confidence i [0,1]
+  ok   withOff.training_week[3]: sourceSignals er strengarray
+  ok   withOff.training_week har unike id-er
+  ok   off-pitch: treningsforslag kan bære offPitch-signal
+  ok   off-pitch: kampplan kan bære offPitch-signal ved høyt press
+  ok   off-pitch: rå hidden-tall lekker ikke inn i forslagstekst
+  ok   uten off-pitch: byte-identisk med fullt datagrunnlag
+  ok   uten off-pitch: ingen offPitch-signal i noe forslag
+
+Historisk stil-motstander (Inter 1960-tallet — Catenaccio):
+  ok   historisk.formation er array
+  ok   historisk.formation har 0–4 forslag
+  ok   historisk.formation[0]: id er ikke-tom streng
+  ok   historisk.formation[0]: title er ikke-tom streng
+  ok   historisk.formation[0]: type === formation
+  ok   historisk.formation[0]: summary er ikke-tom streng
+  ok   historisk.formation[0]: why er strengarray
+  ok   historisk.formation[0]: recommendedBecause er strengarray
+  ok   historisk.formation[0]: risks er strengarray
+  ok   historisk.formation[0]: suggestedAdjustments er strengarray
+  ok   historisk.formation[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.formation[0]: confidence i [0,1]
+  ok   historisk.formation[0]: sourceSignals er strengarray
+  ok   historisk.formation[1]: id er ikke-tom streng
+  ok   historisk.formation[1]: title er ikke-tom streng
+  ok   historisk.formation[1]: type === formation
+  ok   historisk.formation[1]: summary er ikke-tom streng
+  ok   historisk.formation[1]: why er strengarray
+  ok   historisk.formation[1]: recommendedBecause er strengarray
+  ok   historisk.formation[1]: risks er strengarray
+  ok   historisk.formation[1]: suggestedAdjustments er strengarray
+  ok   historisk.formation[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.formation[1]: confidence i [0,1]
+  ok   historisk.formation[1]: sourceSignals er strengarray
+  ok   historisk.formation[2]: id er ikke-tom streng
+  ok   historisk.formation[2]: title er ikke-tom streng
+  ok   historisk.formation[2]: type === formation
+  ok   historisk.formation[2]: summary er ikke-tom streng
+  ok   historisk.formation[2]: why er strengarray
+  ok   historisk.formation[2]: recommendedBecause er strengarray
+  ok   historisk.formation[2]: risks er strengarray
+  ok   historisk.formation[2]: suggestedAdjustments er strengarray
+  ok   historisk.formation[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.formation[2]: confidence i [0,1]
+  ok   historisk.formation[2]: sourceSignals er strengarray
+  ok   historisk.formation[3]: id er ikke-tom streng
+  ok   historisk.formation[3]: title er ikke-tom streng
+  ok   historisk.formation[3]: type === formation
+  ok   historisk.formation[3]: summary er ikke-tom streng
+  ok   historisk.formation[3]: why er strengarray
+  ok   historisk.formation[3]: recommendedBecause er strengarray
+  ok   historisk.formation[3]: risks er strengarray
+  ok   historisk.formation[3]: suggestedAdjustments er strengarray
+  ok   historisk.formation[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.formation[3]: confidence i [0,1]
+  ok   historisk.formation[3]: sourceSignals er strengarray
+  ok   historisk.formation har unike id-er
+  ok   historisk.match_plan er array
+  ok   historisk.match_plan har 0–4 forslag
+  ok   historisk.match_plan[0]: id er ikke-tom streng
+  ok   historisk.match_plan[0]: title er ikke-tom streng
+  ok   historisk.match_plan[0]: type === match_plan
+  ok   historisk.match_plan[0]: summary er ikke-tom streng
+  ok   historisk.match_plan[0]: why er strengarray
+  ok   historisk.match_plan[0]: recommendedBecause er strengarray
+  ok   historisk.match_plan[0]: risks er strengarray
+  ok   historisk.match_plan[0]: suggestedAdjustments er strengarray
+  ok   historisk.match_plan[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.match_plan[0]: confidence i [0,1]
+  ok   historisk.match_plan[0]: sourceSignals er strengarray
+  ok   historisk.match_plan[1]: id er ikke-tom streng
+  ok   historisk.match_plan[1]: title er ikke-tom streng
+  ok   historisk.match_plan[1]: type === match_plan
+  ok   historisk.match_plan[1]: summary er ikke-tom streng
+  ok   historisk.match_plan[1]: why er strengarray
+  ok   historisk.match_plan[1]: recommendedBecause er strengarray
+  ok   historisk.match_plan[1]: risks er strengarray
+  ok   historisk.match_plan[1]: suggestedAdjustments er strengarray
+  ok   historisk.match_plan[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.match_plan[1]: confidence i [0,1]
+  ok   historisk.match_plan[1]: sourceSignals er strengarray
+  ok   historisk.match_plan[2]: id er ikke-tom streng
+  ok   historisk.match_plan[2]: title er ikke-tom streng
+  ok   historisk.match_plan[2]: type === match_plan
+  ok   historisk.match_plan[2]: summary er ikke-tom streng
+  ok   historisk.match_plan[2]: why er strengarray
+  ok   historisk.match_plan[2]: recommendedBecause er strengarray
+  ok   historisk.match_plan[2]: risks er strengarray
+  ok   historisk.match_plan[2]: suggestedAdjustments er strengarray
+  ok   historisk.match_plan[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.match_plan[2]: confidence i [0,1]
+  ok   historisk.match_plan[2]: sourceSignals er strengarray
+  ok   historisk.match_plan[3]: id er ikke-tom streng
+  ok   historisk.match_plan[3]: title er ikke-tom streng
+  ok   historisk.match_plan[3]: type === match_plan
+  ok   historisk.match_plan[3]: summary er ikke-tom streng
+  ok   historisk.match_plan[3]: why er strengarray
+  ok   historisk.match_plan[3]: recommendedBecause er strengarray
+  ok   historisk.match_plan[3]: risks er strengarray
+  ok   historisk.match_plan[3]: suggestedAdjustments er strengarray
+  ok   historisk.match_plan[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.match_plan[3]: confidence i [0,1]
+  ok   historisk.match_plan[3]: sourceSignals er strengarray
+  ok   historisk.match_plan har unike id-er
+  ok   historisk.training_week er array
+  ok   historisk.training_week har 0–4 forslag
+  ok   historisk.training_week[0]: id er ikke-tom streng
+  ok   historisk.training_week[0]: title er ikke-tom streng
+  ok   historisk.training_week[0]: type === training_week
+  ok   historisk.training_week[0]: summary er ikke-tom streng
+  ok   historisk.training_week[0]: why er strengarray
+  ok   historisk.training_week[0]: recommendedBecause er strengarray
+  ok   historisk.training_week[0]: risks er strengarray
+  ok   historisk.training_week[0]: suggestedAdjustments er strengarray
+  ok   historisk.training_week[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.training_week[0]: confidence i [0,1]
+  ok   historisk.training_week[0]: sourceSignals er strengarray
+  ok   historisk.training_week[1]: id er ikke-tom streng
+  ok   historisk.training_week[1]: title er ikke-tom streng
+  ok   historisk.training_week[1]: type === training_week
+  ok   historisk.training_week[1]: summary er ikke-tom streng
+  ok   historisk.training_week[1]: why er strengarray
+  ok   historisk.training_week[1]: recommendedBecause er strengarray
+  ok   historisk.training_week[1]: risks er strengarray
+  ok   historisk.training_week[1]: suggestedAdjustments er strengarray
+  ok   historisk.training_week[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.training_week[1]: confidence i [0,1]
+  ok   historisk.training_week[1]: sourceSignals er strengarray
+  ok   historisk.training_week[2]: id er ikke-tom streng
+  ok   historisk.training_week[2]: title er ikke-tom streng
+  ok   historisk.training_week[2]: type === training_week
+  ok   historisk.training_week[2]: summary er ikke-tom streng
+  ok   historisk.training_week[2]: why er strengarray
+  ok   historisk.training_week[2]: recommendedBecause er strengarray
+  ok   historisk.training_week[2]: risks er strengarray
+  ok   historisk.training_week[2]: suggestedAdjustments er strengarray
+  ok   historisk.training_week[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.training_week[2]: confidence i [0,1]
+  ok   historisk.training_week[2]: sourceSignals er strengarray
+  ok   historisk.training_week[3]: id er ikke-tom streng
+  ok   historisk.training_week[3]: title er ikke-tom streng
+  ok   historisk.training_week[3]: type === training_week
+  ok   historisk.training_week[3]: summary er ikke-tom streng
+  ok   historisk.training_week[3]: why er strengarray
+  ok   historisk.training_week[3]: recommendedBecause er strengarray
+  ok   historisk.training_week[3]: risks er strengarray
+  ok   historisk.training_week[3]: suggestedAdjustments er strengarray
+  ok   historisk.training_week[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   historisk.training_week[3]: confidence i [0,1]
+  ok   historisk.training_week[3]: sourceSignals er strengarray
+  ok   historisk.training_week har unike id-er
+  ok   historisk: kampplanforslag genereres
+  ok   historisk: et forslag refererer den historiske motstanderens navn
+  ok   historisk: motstanderens svakhet (bredde/tålmodighet) brukes i en kampplan
+
+Eksempel — fullt datagrunnlag mot Pressmaskinen:
+  [formation]
+   • Spill Classic 4-4-2 (konfidens 0.6) — Balansert system mot Pressmaskinen.
+   • Spill Catenaccio 5-3-2 (konfidens 0.6) — Balansert system mot Pressmaskinen.
+   • Spill Metodo 2-3-2-3 (konfidens 0.6) — Balansert system mot Pressmaskinen.
+   • Spill Possession 4-3-3 (konfidens 0.45) — Mulig, men risikabelt mot Pressmaskinen.
+  [match_plan]
+   • Pragmatisk og kompakt (konfidens 0.7) — Demp Pressmaskinens styrker og spill kontrollert.
+   • Utnytt Pressmaskinens svakheter (konfidens 0.6) — Rett angrepet mot der Pressmaskinen er sårbar.
+   • Spill på lagets styrker (konfidens 0.52) — Sett presspillet i sentrum av kampplanen.
+   • Skjul lagets svakeste ledd (konfidens 0.5) — Reduser eksponeringen av oppbyggingsspillet.
+  [training_week]
+   • Oppbygging (konfidens 0.9) — Spill tryggere og raskere gjennom første pressledd.
+   • Restforsvar (konfidens 0.8) — Sikre laget ved balltap og dempe kontringer.
+   • Dybdeløp (konfidens 0.7) — Timing og bevegelser bak motstanderens ledd.
+   • Bredde (konfidens 0.65) — Skap og bruk rom utenfor en kompakt blokk.
+
+Alle Suggested Setups-sjekker besto.
+EXIT=0
+=== npm run sim:training-programs ===
+
+> historygo-football-manager@0.1.0 sim:training-programs
+> node scripts/simulate-training-program-compositions.mjs
+
+Training Program Composition v1 — simulering
+
+Fullt datagrunnlag:
+  ok   full: er array
+  ok   full: 2–4 programmer
+  ok   full: unike id-er
+  ok   full[0]: id ikke-tom streng
+  ok   full[0]: title ikke-tom streng
+  ok   full[0]: type === training_program
+  ok   full[0]: category ikke-tom streng
+  ok   full[0]: summary ikke-tom streng
+  ok   full[0]: weekGoal ikke-tom streng
+  ok   full[0]: recommendedBecause strengarray
+  ok   full[0]: conditions strengarray
+  ok   full[0]: sessions har 1+ økter
+  ok   full[0].sessions[0]: day er ikke-tom streng
+  ok   full[0].sessions[0]: title er ikke-tom streng
+  ok   full[0].sessions[0]: focusId er ikke-tom streng
+  ok   full[0].sessions[0]: intensity gyldig
+  ok   full[0].sessions[0]: duration gyldig
+  ok   full[0].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   full[0].sessions[0]: expectedEffect er strengarray
+  ok   full[0].sessions[0]: fatigueLoad er tall
+  ok   full[0].sessions[0]: injuryRiskModifier er tall
+  ok   full[0].sessions[1]: day er ikke-tom streng
+  ok   full[0].sessions[1]: title er ikke-tom streng
+  ok   full[0].sessions[1]: focusId er ikke-tom streng
+  ok   full[0].sessions[1]: intensity gyldig
+  ok   full[0].sessions[1]: duration gyldig
+  ok   full[0].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   full[0].sessions[1]: expectedEffect er strengarray
+  ok   full[0].sessions[1]: fatigueLoad er tall
+  ok   full[0].sessions[1]: injuryRiskModifier er tall
+  ok   full[0].sessions[2]: day er ikke-tom streng
+  ok   full[0].sessions[2]: title er ikke-tom streng
+  ok   full[0].sessions[2]: focusId er ikke-tom streng
+  ok   full[0].sessions[2]: intensity gyldig
+  ok   full[0].sessions[2]: duration gyldig
+  ok   full[0].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   full[0].sessions[2]: expectedEffect er strengarray
+  ok   full[0].sessions[2]: fatigueLoad er tall
+  ok   full[0].sessions[2]: injuryRiskModifier er tall
+  ok   full[0].sessions[3]: day er ikke-tom streng
+  ok   full[0].sessions[3]: title er ikke-tom streng
+  ok   full[0].sessions[3]: focusId er ikke-tom streng
+  ok   full[0].sessions[3]: intensity gyldig
+  ok   full[0].sessions[3]: duration gyldig
+  ok   full[0].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   full[0].sessions[3]: expectedEffect er strengarray
+  ok   full[0].sessions[3]: fatigueLoad er tall
+  ok   full[0].sessions[3]: injuryRiskModifier er tall
+  ok   full[0]: targetMetrics strengarray
+  ok   full[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full[0]: risks strengarray
+  ok   full[0]: suggestedAdjustments strengarray
+  ok   full[0]: scoring finnes
+  ok   full[0]: baseScore tall
+  ok   full[0]: contextBonus tall
+  ok   full[0]: overusePenalty tall <= 0
+  ok   full[0]: riskAdjustment tall
+  ok   full[0]: totalScore tall
+  ok   full[0]: totalScore = base+context+overuse+risk
+  ok   full[0]: explanation strengarray
+  ok   full[0]: confidence i [0,1]
+  ok   full[0]: sourceSignals strengarray
+  ok   full[1]: id ikke-tom streng
+  ok   full[1]: title ikke-tom streng
+  ok   full[1]: type === training_program
+  ok   full[1]: category ikke-tom streng
+  ok   full[1]: summary ikke-tom streng
+  ok   full[1]: weekGoal ikke-tom streng
+  ok   full[1]: recommendedBecause strengarray
+  ok   full[1]: conditions strengarray
+  ok   full[1]: sessions har 1+ økter
+  ok   full[1].sessions[0]: day er ikke-tom streng
+  ok   full[1].sessions[0]: title er ikke-tom streng
+  ok   full[1].sessions[0]: focusId er ikke-tom streng
+  ok   full[1].sessions[0]: intensity gyldig
+  ok   full[1].sessions[0]: duration gyldig
+  ok   full[1].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   full[1].sessions[0]: expectedEffect er strengarray
+  ok   full[1].sessions[0]: fatigueLoad er tall
+  ok   full[1].sessions[0]: injuryRiskModifier er tall
+  ok   full[1].sessions[1]: day er ikke-tom streng
+  ok   full[1].sessions[1]: title er ikke-tom streng
+  ok   full[1].sessions[1]: focusId er ikke-tom streng
+  ok   full[1].sessions[1]: intensity gyldig
+  ok   full[1].sessions[1]: duration gyldig
+  ok   full[1].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   full[1].sessions[1]: expectedEffect er strengarray
+  ok   full[1].sessions[1]: fatigueLoad er tall
+  ok   full[1].sessions[1]: injuryRiskModifier er tall
+  ok   full[1].sessions[2]: day er ikke-tom streng
+  ok   full[1].sessions[2]: title er ikke-tom streng
+  ok   full[1].sessions[2]: focusId er ikke-tom streng
+  ok   full[1].sessions[2]: intensity gyldig
+  ok   full[1].sessions[2]: duration gyldig
+  ok   full[1].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   full[1].sessions[2]: expectedEffect er strengarray
+  ok   full[1].sessions[2]: fatigueLoad er tall
+  ok   full[1].sessions[2]: injuryRiskModifier er tall
+  ok   full[1].sessions[3]: day er ikke-tom streng
+  ok   full[1].sessions[3]: title er ikke-tom streng
+  ok   full[1].sessions[3]: focusId er ikke-tom streng
+  ok   full[1].sessions[3]: intensity gyldig
+  ok   full[1].sessions[3]: duration gyldig
+  ok   full[1].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   full[1].sessions[3]: expectedEffect er strengarray
+  ok   full[1].sessions[3]: fatigueLoad er tall
+  ok   full[1].sessions[3]: injuryRiskModifier er tall
+  ok   full[1]: targetMetrics strengarray
+  ok   full[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full[1]: risks strengarray
+  ok   full[1]: suggestedAdjustments strengarray
+  ok   full[1]: scoring finnes
+  ok   full[1]: baseScore tall
+  ok   full[1]: contextBonus tall
+  ok   full[1]: overusePenalty tall <= 0
+  ok   full[1]: riskAdjustment tall
+  ok   full[1]: totalScore tall
+  ok   full[1]: totalScore = base+context+overuse+risk
+  ok   full[1]: explanation strengarray
+  ok   full[1]: confidence i [0,1]
+  ok   full[1]: sourceSignals strengarray
+  ok   full[2]: id ikke-tom streng
+  ok   full[2]: title ikke-tom streng
+  ok   full[2]: type === training_program
+  ok   full[2]: category ikke-tom streng
+  ok   full[2]: summary ikke-tom streng
+  ok   full[2]: weekGoal ikke-tom streng
+  ok   full[2]: recommendedBecause strengarray
+  ok   full[2]: conditions strengarray
+  ok   full[2]: sessions har 1+ økter
+  ok   full[2].sessions[0]: day er ikke-tom streng
+  ok   full[2].sessions[0]: title er ikke-tom streng
+  ok   full[2].sessions[0]: focusId er ikke-tom streng
+  ok   full[2].sessions[0]: intensity gyldig
+  ok   full[2].sessions[0]: duration gyldig
+  ok   full[2].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   full[2].sessions[0]: expectedEffect er strengarray
+  ok   full[2].sessions[0]: fatigueLoad er tall
+  ok   full[2].sessions[0]: injuryRiskModifier er tall
+  ok   full[2].sessions[1]: day er ikke-tom streng
+  ok   full[2].sessions[1]: title er ikke-tom streng
+  ok   full[2].sessions[1]: focusId er ikke-tom streng
+  ok   full[2].sessions[1]: intensity gyldig
+  ok   full[2].sessions[1]: duration gyldig
+  ok   full[2].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   full[2].sessions[1]: expectedEffect er strengarray
+  ok   full[2].sessions[1]: fatigueLoad er tall
+  ok   full[2].sessions[1]: injuryRiskModifier er tall
+  ok   full[2].sessions[2]: day er ikke-tom streng
+  ok   full[2].sessions[2]: title er ikke-tom streng
+  ok   full[2].sessions[2]: focusId er ikke-tom streng
+  ok   full[2].sessions[2]: intensity gyldig
+  ok   full[2].sessions[2]: duration gyldig
+  ok   full[2].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   full[2].sessions[2]: expectedEffect er strengarray
+  ok   full[2].sessions[2]: fatigueLoad er tall
+  ok   full[2].sessions[2]: injuryRiskModifier er tall
+  ok   full[2].sessions[3]: day er ikke-tom streng
+  ok   full[2].sessions[3]: title er ikke-tom streng
+  ok   full[2].sessions[3]: focusId er ikke-tom streng
+  ok   full[2].sessions[3]: intensity gyldig
+  ok   full[2].sessions[3]: duration gyldig
+  ok   full[2].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   full[2].sessions[3]: expectedEffect er strengarray
+  ok   full[2].sessions[3]: fatigueLoad er tall
+  ok   full[2].sessions[3]: injuryRiskModifier er tall
+  ok   full[2]: targetMetrics strengarray
+  ok   full[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full[2]: risks strengarray
+  ok   full[2]: suggestedAdjustments strengarray
+  ok   full[2]: scoring finnes
+  ok   full[2]: baseScore tall
+  ok   full[2]: contextBonus tall
+  ok   full[2]: overusePenalty tall <= 0
+  ok   full[2]: riskAdjustment tall
+  ok   full[2]: totalScore tall
+  ok   full[2]: totalScore = base+context+overuse+risk
+  ok   full[2]: explanation strengarray
+  ok   full[2]: confidence i [0,1]
+  ok   full[2]: sourceSignals strengarray
+  ok   full[3]: id ikke-tom streng
+  ok   full[3]: title ikke-tom streng
+  ok   full[3]: type === training_program
+  ok   full[3]: category ikke-tom streng
+  ok   full[3]: summary ikke-tom streng
+  ok   full[3]: weekGoal ikke-tom streng
+  ok   full[3]: recommendedBecause strengarray
+  ok   full[3]: conditions strengarray
+  ok   full[3]: sessions har 1+ økter
+  ok   full[3].sessions[0]: day er ikke-tom streng
+  ok   full[3].sessions[0]: title er ikke-tom streng
+  ok   full[3].sessions[0]: focusId er ikke-tom streng
+  ok   full[3].sessions[0]: intensity gyldig
+  ok   full[3].sessions[0]: duration gyldig
+  ok   full[3].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   full[3].sessions[0]: expectedEffect er strengarray
+  ok   full[3].sessions[0]: fatigueLoad er tall
+  ok   full[3].sessions[0]: injuryRiskModifier er tall
+  ok   full[3].sessions[1]: day er ikke-tom streng
+  ok   full[3].sessions[1]: title er ikke-tom streng
+  ok   full[3].sessions[1]: focusId er ikke-tom streng
+  ok   full[3].sessions[1]: intensity gyldig
+  ok   full[3].sessions[1]: duration gyldig
+  ok   full[3].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   full[3].sessions[1]: expectedEffect er strengarray
+  ok   full[3].sessions[1]: fatigueLoad er tall
+  ok   full[3].sessions[1]: injuryRiskModifier er tall
+  ok   full[3].sessions[2]: day er ikke-tom streng
+  ok   full[3].sessions[2]: title er ikke-tom streng
+  ok   full[3].sessions[2]: focusId er ikke-tom streng
+  ok   full[3].sessions[2]: intensity gyldig
+  ok   full[3].sessions[2]: duration gyldig
+  ok   full[3].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   full[3].sessions[2]: expectedEffect er strengarray
+  ok   full[3].sessions[2]: fatigueLoad er tall
+  ok   full[3].sessions[2]: injuryRiskModifier er tall
+  ok   full[3].sessions[3]: day er ikke-tom streng
+  ok   full[3].sessions[3]: title er ikke-tom streng
+  ok   full[3].sessions[3]: focusId er ikke-tom streng
+  ok   full[3].sessions[3]: intensity gyldig
+  ok   full[3].sessions[3]: duration gyldig
+  ok   full[3].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   full[3].sessions[3]: expectedEffect er strengarray
+  ok   full[3].sessions[3]: fatigueLoad er tall
+  ok   full[3].sessions[3]: injuryRiskModifier er tall
+  ok   full[3]: targetMetrics strengarray
+  ok   full[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   full[3]: risks strengarray
+  ok   full[3]: suggestedAdjustments strengarray
+  ok   full[3]: scoring finnes
+  ok   full[3]: baseScore tall
+  ok   full[3]: contextBonus tall
+  ok   full[3]: overusePenalty tall <= 0
+  ok   full[3]: riskAdjustment tall
+  ok   full[3]: totalScore tall
+  ok   full[3]: totalScore = base+context+overuse+risk
+  ok   full[3]: explanation strengarray
+  ok   full[3]: confidence i [0,1]
+  ok   full[3]: sourceSignals strengarray
+
+Degradering — uten opponent:
+  ok   noOpponent: er array
+  ok   noOpponent: 2–4 programmer
+  ok   noOpponent: unike id-er
+  ok   noOpponent[0]: id ikke-tom streng
+  ok   noOpponent[0]: title ikke-tom streng
+  ok   noOpponent[0]: type === training_program
+  ok   noOpponent[0]: category ikke-tom streng
+  ok   noOpponent[0]: summary ikke-tom streng
+  ok   noOpponent[0]: weekGoal ikke-tom streng
+  ok   noOpponent[0]: recommendedBecause strengarray
+  ok   noOpponent[0]: conditions strengarray
+  ok   noOpponent[0]: sessions har 1+ økter
+  ok   noOpponent[0].sessions[0]: day er ikke-tom streng
+  ok   noOpponent[0].sessions[0]: title er ikke-tom streng
+  ok   noOpponent[0].sessions[0]: focusId er ikke-tom streng
+  ok   noOpponent[0].sessions[0]: intensity gyldig
+  ok   noOpponent[0].sessions[0]: duration gyldig
+  ok   noOpponent[0].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[0].sessions[0]: expectedEffect er strengarray
+  ok   noOpponent[0].sessions[0]: fatigueLoad er tall
+  ok   noOpponent[0].sessions[0]: injuryRiskModifier er tall
+  ok   noOpponent[0].sessions[1]: day er ikke-tom streng
+  ok   noOpponent[0].sessions[1]: title er ikke-tom streng
+  ok   noOpponent[0].sessions[1]: focusId er ikke-tom streng
+  ok   noOpponent[0].sessions[1]: intensity gyldig
+  ok   noOpponent[0].sessions[1]: duration gyldig
+  ok   noOpponent[0].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[0].sessions[1]: expectedEffect er strengarray
+  ok   noOpponent[0].sessions[1]: fatigueLoad er tall
+  ok   noOpponent[0].sessions[1]: injuryRiskModifier er tall
+  ok   noOpponent[0].sessions[2]: day er ikke-tom streng
+  ok   noOpponent[0].sessions[2]: title er ikke-tom streng
+  ok   noOpponent[0].sessions[2]: focusId er ikke-tom streng
+  ok   noOpponent[0].sessions[2]: intensity gyldig
+  ok   noOpponent[0].sessions[2]: duration gyldig
+  ok   noOpponent[0].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[0].sessions[2]: expectedEffect er strengarray
+  ok   noOpponent[0].sessions[2]: fatigueLoad er tall
+  ok   noOpponent[0].sessions[2]: injuryRiskModifier er tall
+  ok   noOpponent[0].sessions[3]: day er ikke-tom streng
+  ok   noOpponent[0].sessions[3]: title er ikke-tom streng
+  ok   noOpponent[0].sessions[3]: focusId er ikke-tom streng
+  ok   noOpponent[0].sessions[3]: intensity gyldig
+  ok   noOpponent[0].sessions[3]: duration gyldig
+  ok   noOpponent[0].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[0].sessions[3]: expectedEffect er strengarray
+  ok   noOpponent[0].sessions[3]: fatigueLoad er tall
+  ok   noOpponent[0].sessions[3]: injuryRiskModifier er tall
+  ok   noOpponent[0]: targetMetrics strengarray
+  ok   noOpponent[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent[0]: risks strengarray
+  ok   noOpponent[0]: suggestedAdjustments strengarray
+  ok   noOpponent[0]: scoring finnes
+  ok   noOpponent[0]: baseScore tall
+  ok   noOpponent[0]: contextBonus tall
+  ok   noOpponent[0]: overusePenalty tall <= 0
+  ok   noOpponent[0]: riskAdjustment tall
+  ok   noOpponent[0]: totalScore tall
+  ok   noOpponent[0]: totalScore = base+context+overuse+risk
+  ok   noOpponent[0]: explanation strengarray
+  ok   noOpponent[0]: confidence i [0,1]
+  ok   noOpponent[0]: sourceSignals strengarray
+  ok   noOpponent[1]: id ikke-tom streng
+  ok   noOpponent[1]: title ikke-tom streng
+  ok   noOpponent[1]: type === training_program
+  ok   noOpponent[1]: category ikke-tom streng
+  ok   noOpponent[1]: summary ikke-tom streng
+  ok   noOpponent[1]: weekGoal ikke-tom streng
+  ok   noOpponent[1]: recommendedBecause strengarray
+  ok   noOpponent[1]: conditions strengarray
+  ok   noOpponent[1]: sessions har 1+ økter
+  ok   noOpponent[1].sessions[0]: day er ikke-tom streng
+  ok   noOpponent[1].sessions[0]: title er ikke-tom streng
+  ok   noOpponent[1].sessions[0]: focusId er ikke-tom streng
+  ok   noOpponent[1].sessions[0]: intensity gyldig
+  ok   noOpponent[1].sessions[0]: duration gyldig
+  ok   noOpponent[1].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[1].sessions[0]: expectedEffect er strengarray
+  ok   noOpponent[1].sessions[0]: fatigueLoad er tall
+  ok   noOpponent[1].sessions[0]: injuryRiskModifier er tall
+  ok   noOpponent[1].sessions[1]: day er ikke-tom streng
+  ok   noOpponent[1].sessions[1]: title er ikke-tom streng
+  ok   noOpponent[1].sessions[1]: focusId er ikke-tom streng
+  ok   noOpponent[1].sessions[1]: intensity gyldig
+  ok   noOpponent[1].sessions[1]: duration gyldig
+  ok   noOpponent[1].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[1].sessions[1]: expectedEffect er strengarray
+  ok   noOpponent[1].sessions[1]: fatigueLoad er tall
+  ok   noOpponent[1].sessions[1]: injuryRiskModifier er tall
+  ok   noOpponent[1].sessions[2]: day er ikke-tom streng
+  ok   noOpponent[1].sessions[2]: title er ikke-tom streng
+  ok   noOpponent[1].sessions[2]: focusId er ikke-tom streng
+  ok   noOpponent[1].sessions[2]: intensity gyldig
+  ok   noOpponent[1].sessions[2]: duration gyldig
+  ok   noOpponent[1].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[1].sessions[2]: expectedEffect er strengarray
+  ok   noOpponent[1].sessions[2]: fatigueLoad er tall
+  ok   noOpponent[1].sessions[2]: injuryRiskModifier er tall
+  ok   noOpponent[1].sessions[3]: day er ikke-tom streng
+  ok   noOpponent[1].sessions[3]: title er ikke-tom streng
+  ok   noOpponent[1].sessions[3]: focusId er ikke-tom streng
+  ok   noOpponent[1].sessions[3]: intensity gyldig
+  ok   noOpponent[1].sessions[3]: duration gyldig
+  ok   noOpponent[1].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[1].sessions[3]: expectedEffect er strengarray
+  ok   noOpponent[1].sessions[3]: fatigueLoad er tall
+  ok   noOpponent[1].sessions[3]: injuryRiskModifier er tall
+  ok   noOpponent[1]: targetMetrics strengarray
+  ok   noOpponent[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent[1]: risks strengarray
+  ok   noOpponent[1]: suggestedAdjustments strengarray
+  ok   noOpponent[1]: scoring finnes
+  ok   noOpponent[1]: baseScore tall
+  ok   noOpponent[1]: contextBonus tall
+  ok   noOpponent[1]: overusePenalty tall <= 0
+  ok   noOpponent[1]: riskAdjustment tall
+  ok   noOpponent[1]: totalScore tall
+  ok   noOpponent[1]: totalScore = base+context+overuse+risk
+  ok   noOpponent[1]: explanation strengarray
+  ok   noOpponent[1]: confidence i [0,1]
+  ok   noOpponent[1]: sourceSignals strengarray
+  ok   noOpponent[2]: id ikke-tom streng
+  ok   noOpponent[2]: title ikke-tom streng
+  ok   noOpponent[2]: type === training_program
+  ok   noOpponent[2]: category ikke-tom streng
+  ok   noOpponent[2]: summary ikke-tom streng
+  ok   noOpponent[2]: weekGoal ikke-tom streng
+  ok   noOpponent[2]: recommendedBecause strengarray
+  ok   noOpponent[2]: conditions strengarray
+  ok   noOpponent[2]: sessions har 1+ økter
+  ok   noOpponent[2].sessions[0]: day er ikke-tom streng
+  ok   noOpponent[2].sessions[0]: title er ikke-tom streng
+  ok   noOpponent[2].sessions[0]: focusId er ikke-tom streng
+  ok   noOpponent[2].sessions[0]: intensity gyldig
+  ok   noOpponent[2].sessions[0]: duration gyldig
+  ok   noOpponent[2].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[2].sessions[0]: expectedEffect er strengarray
+  ok   noOpponent[2].sessions[0]: fatigueLoad er tall
+  ok   noOpponent[2].sessions[0]: injuryRiskModifier er tall
+  ok   noOpponent[2].sessions[1]: day er ikke-tom streng
+  ok   noOpponent[2].sessions[1]: title er ikke-tom streng
+  ok   noOpponent[2].sessions[1]: focusId er ikke-tom streng
+  ok   noOpponent[2].sessions[1]: intensity gyldig
+  ok   noOpponent[2].sessions[1]: duration gyldig
+  ok   noOpponent[2].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[2].sessions[1]: expectedEffect er strengarray
+  ok   noOpponent[2].sessions[1]: fatigueLoad er tall
+  ok   noOpponent[2].sessions[1]: injuryRiskModifier er tall
+  ok   noOpponent[2].sessions[2]: day er ikke-tom streng
+  ok   noOpponent[2].sessions[2]: title er ikke-tom streng
+  ok   noOpponent[2].sessions[2]: focusId er ikke-tom streng
+  ok   noOpponent[2].sessions[2]: intensity gyldig
+  ok   noOpponent[2].sessions[2]: duration gyldig
+  ok   noOpponent[2].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[2].sessions[2]: expectedEffect er strengarray
+  ok   noOpponent[2].sessions[2]: fatigueLoad er tall
+  ok   noOpponent[2].sessions[2]: injuryRiskModifier er tall
+  ok   noOpponent[2].sessions[3]: day er ikke-tom streng
+  ok   noOpponent[2].sessions[3]: title er ikke-tom streng
+  ok   noOpponent[2].sessions[3]: focusId er ikke-tom streng
+  ok   noOpponent[2].sessions[3]: intensity gyldig
+  ok   noOpponent[2].sessions[3]: duration gyldig
+  ok   noOpponent[2].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[2].sessions[3]: expectedEffect er strengarray
+  ok   noOpponent[2].sessions[3]: fatigueLoad er tall
+  ok   noOpponent[2].sessions[3]: injuryRiskModifier er tall
+  ok   noOpponent[2]: targetMetrics strengarray
+  ok   noOpponent[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent[2]: risks strengarray
+  ok   noOpponent[2]: suggestedAdjustments strengarray
+  ok   noOpponent[2]: scoring finnes
+  ok   noOpponent[2]: baseScore tall
+  ok   noOpponent[2]: contextBonus tall
+  ok   noOpponent[2]: overusePenalty tall <= 0
+  ok   noOpponent[2]: riskAdjustment tall
+  ok   noOpponent[2]: totalScore tall
+  ok   noOpponent[2]: totalScore = base+context+overuse+risk
+  ok   noOpponent[2]: explanation strengarray
+  ok   noOpponent[2]: confidence i [0,1]
+  ok   noOpponent[2]: sourceSignals strengarray
+  ok   noOpponent[3]: id ikke-tom streng
+  ok   noOpponent[3]: title ikke-tom streng
+  ok   noOpponent[3]: type === training_program
+  ok   noOpponent[3]: category ikke-tom streng
+  ok   noOpponent[3]: summary ikke-tom streng
+  ok   noOpponent[3]: weekGoal ikke-tom streng
+  ok   noOpponent[3]: recommendedBecause strengarray
+  ok   noOpponent[3]: conditions strengarray
+  ok   noOpponent[3]: sessions har 1+ økter
+  ok   noOpponent[3].sessions[0]: day er ikke-tom streng
+  ok   noOpponent[3].sessions[0]: title er ikke-tom streng
+  ok   noOpponent[3].sessions[0]: focusId er ikke-tom streng
+  ok   noOpponent[3].sessions[0]: intensity gyldig
+  ok   noOpponent[3].sessions[0]: duration gyldig
+  ok   noOpponent[3].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[3].sessions[0]: expectedEffect er strengarray
+  ok   noOpponent[3].sessions[0]: fatigueLoad er tall
+  ok   noOpponent[3].sessions[0]: injuryRiskModifier er tall
+  ok   noOpponent[3].sessions[1]: day er ikke-tom streng
+  ok   noOpponent[3].sessions[1]: title er ikke-tom streng
+  ok   noOpponent[3].sessions[1]: focusId er ikke-tom streng
+  ok   noOpponent[3].sessions[1]: intensity gyldig
+  ok   noOpponent[3].sessions[1]: duration gyldig
+  ok   noOpponent[3].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[3].sessions[1]: expectedEffect er strengarray
+  ok   noOpponent[3].sessions[1]: fatigueLoad er tall
+  ok   noOpponent[3].sessions[1]: injuryRiskModifier er tall
+  ok   noOpponent[3].sessions[2]: day er ikke-tom streng
+  ok   noOpponent[3].sessions[2]: title er ikke-tom streng
+  ok   noOpponent[3].sessions[2]: focusId er ikke-tom streng
+  ok   noOpponent[3].sessions[2]: intensity gyldig
+  ok   noOpponent[3].sessions[2]: duration gyldig
+  ok   noOpponent[3].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[3].sessions[2]: expectedEffect er strengarray
+  ok   noOpponent[3].sessions[2]: fatigueLoad er tall
+  ok   noOpponent[3].sessions[2]: injuryRiskModifier er tall
+  ok   noOpponent[3].sessions[3]: day er ikke-tom streng
+  ok   noOpponent[3].sessions[3]: title er ikke-tom streng
+  ok   noOpponent[3].sessions[3]: focusId er ikke-tom streng
+  ok   noOpponent[3].sessions[3]: intensity gyldig
+  ok   noOpponent[3].sessions[3]: duration gyldig
+  ok   noOpponent[3].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noOpponent[3].sessions[3]: expectedEffect er strengarray
+  ok   noOpponent[3].sessions[3]: fatigueLoad er tall
+  ok   noOpponent[3].sessions[3]: injuryRiskModifier er tall
+  ok   noOpponent[3]: targetMetrics strengarray
+  ok   noOpponent[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noOpponent[3]: risks strengarray
+  ok   noOpponent[3]: suggestedAdjustments strengarray
+  ok   noOpponent[3]: scoring finnes
+  ok   noOpponent[3]: baseScore tall
+  ok   noOpponent[3]: contextBonus tall
+  ok   noOpponent[3]: overusePenalty tall <= 0
+  ok   noOpponent[3]: riskAdjustment tall
+  ok   noOpponent[3]: totalScore tall
+  ok   noOpponent[3]: totalScore = base+context+overuse+risk
+  ok   noOpponent[3]: explanation strengarray
+  ok   noOpponent[3]: confidence i [0,1]
+  ok   noOpponent[3]: sourceSignals strengarray
+
+Degradering — uten teamFit:
+  ok   noTeamFit: er array
+  ok   noTeamFit: 2–4 programmer
+  ok   noTeamFit: unike id-er
+  ok   noTeamFit[0]: id ikke-tom streng
+  ok   noTeamFit[0]: title ikke-tom streng
+  ok   noTeamFit[0]: type === training_program
+  ok   noTeamFit[0]: category ikke-tom streng
+  ok   noTeamFit[0]: summary ikke-tom streng
+  ok   noTeamFit[0]: weekGoal ikke-tom streng
+  ok   noTeamFit[0]: recommendedBecause strengarray
+  ok   noTeamFit[0]: conditions strengarray
+  ok   noTeamFit[0]: sessions har 1+ økter
+  ok   noTeamFit[0].sessions[0]: day er ikke-tom streng
+  ok   noTeamFit[0].sessions[0]: title er ikke-tom streng
+  ok   noTeamFit[0].sessions[0]: focusId er ikke-tom streng
+  ok   noTeamFit[0].sessions[0]: intensity gyldig
+  ok   noTeamFit[0].sessions[0]: duration gyldig
+  ok   noTeamFit[0].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[0].sessions[0]: expectedEffect er strengarray
+  ok   noTeamFit[0].sessions[0]: fatigueLoad er tall
+  ok   noTeamFit[0].sessions[0]: injuryRiskModifier er tall
+  ok   noTeamFit[0].sessions[1]: day er ikke-tom streng
+  ok   noTeamFit[0].sessions[1]: title er ikke-tom streng
+  ok   noTeamFit[0].sessions[1]: focusId er ikke-tom streng
+  ok   noTeamFit[0].sessions[1]: intensity gyldig
+  ok   noTeamFit[0].sessions[1]: duration gyldig
+  ok   noTeamFit[0].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[0].sessions[1]: expectedEffect er strengarray
+  ok   noTeamFit[0].sessions[1]: fatigueLoad er tall
+  ok   noTeamFit[0].sessions[1]: injuryRiskModifier er tall
+  ok   noTeamFit[0].sessions[2]: day er ikke-tom streng
+  ok   noTeamFit[0].sessions[2]: title er ikke-tom streng
+  ok   noTeamFit[0].sessions[2]: focusId er ikke-tom streng
+  ok   noTeamFit[0].sessions[2]: intensity gyldig
+  ok   noTeamFit[0].sessions[2]: duration gyldig
+  ok   noTeamFit[0].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[0].sessions[2]: expectedEffect er strengarray
+  ok   noTeamFit[0].sessions[2]: fatigueLoad er tall
+  ok   noTeamFit[0].sessions[2]: injuryRiskModifier er tall
+  ok   noTeamFit[0].sessions[3]: day er ikke-tom streng
+  ok   noTeamFit[0].sessions[3]: title er ikke-tom streng
+  ok   noTeamFit[0].sessions[3]: focusId er ikke-tom streng
+  ok   noTeamFit[0].sessions[3]: intensity gyldig
+  ok   noTeamFit[0].sessions[3]: duration gyldig
+  ok   noTeamFit[0].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[0].sessions[3]: expectedEffect er strengarray
+  ok   noTeamFit[0].sessions[3]: fatigueLoad er tall
+  ok   noTeamFit[0].sessions[3]: injuryRiskModifier er tall
+  ok   noTeamFit[0]: targetMetrics strengarray
+  ok   noTeamFit[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noTeamFit[0]: risks strengarray
+  ok   noTeamFit[0]: suggestedAdjustments strengarray
+  ok   noTeamFit[0]: scoring finnes
+  ok   noTeamFit[0]: baseScore tall
+  ok   noTeamFit[0]: contextBonus tall
+  ok   noTeamFit[0]: overusePenalty tall <= 0
+  ok   noTeamFit[0]: riskAdjustment tall
+  ok   noTeamFit[0]: totalScore tall
+  ok   noTeamFit[0]: totalScore = base+context+overuse+risk
+  ok   noTeamFit[0]: explanation strengarray
+  ok   noTeamFit[0]: confidence i [0,1]
+  ok   noTeamFit[0]: sourceSignals strengarray
+  ok   noTeamFit[1]: id ikke-tom streng
+  ok   noTeamFit[1]: title ikke-tom streng
+  ok   noTeamFit[1]: type === training_program
+  ok   noTeamFit[1]: category ikke-tom streng
+  ok   noTeamFit[1]: summary ikke-tom streng
+  ok   noTeamFit[1]: weekGoal ikke-tom streng
+  ok   noTeamFit[1]: recommendedBecause strengarray
+  ok   noTeamFit[1]: conditions strengarray
+  ok   noTeamFit[1]: sessions har 1+ økter
+  ok   noTeamFit[1].sessions[0]: day er ikke-tom streng
+  ok   noTeamFit[1].sessions[0]: title er ikke-tom streng
+  ok   noTeamFit[1].sessions[0]: focusId er ikke-tom streng
+  ok   noTeamFit[1].sessions[0]: intensity gyldig
+  ok   noTeamFit[1].sessions[0]: duration gyldig
+  ok   noTeamFit[1].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[1].sessions[0]: expectedEffect er strengarray
+  ok   noTeamFit[1].sessions[0]: fatigueLoad er tall
+  ok   noTeamFit[1].sessions[0]: injuryRiskModifier er tall
+  ok   noTeamFit[1].sessions[1]: day er ikke-tom streng
+  ok   noTeamFit[1].sessions[1]: title er ikke-tom streng
+  ok   noTeamFit[1].sessions[1]: focusId er ikke-tom streng
+  ok   noTeamFit[1].sessions[1]: intensity gyldig
+  ok   noTeamFit[1].sessions[1]: duration gyldig
+  ok   noTeamFit[1].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[1].sessions[1]: expectedEffect er strengarray
+  ok   noTeamFit[1].sessions[1]: fatigueLoad er tall
+  ok   noTeamFit[1].sessions[1]: injuryRiskModifier er tall
+  ok   noTeamFit[1].sessions[2]: day er ikke-tom streng
+  ok   noTeamFit[1].sessions[2]: title er ikke-tom streng
+  ok   noTeamFit[1].sessions[2]: focusId er ikke-tom streng
+  ok   noTeamFit[1].sessions[2]: intensity gyldig
+  ok   noTeamFit[1].sessions[2]: duration gyldig
+  ok   noTeamFit[1].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[1].sessions[2]: expectedEffect er strengarray
+  ok   noTeamFit[1].sessions[2]: fatigueLoad er tall
+  ok   noTeamFit[1].sessions[2]: injuryRiskModifier er tall
+  ok   noTeamFit[1].sessions[3]: day er ikke-tom streng
+  ok   noTeamFit[1].sessions[3]: title er ikke-tom streng
+  ok   noTeamFit[1].sessions[3]: focusId er ikke-tom streng
+  ok   noTeamFit[1].sessions[3]: intensity gyldig
+  ok   noTeamFit[1].sessions[3]: duration gyldig
+  ok   noTeamFit[1].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[1].sessions[3]: expectedEffect er strengarray
+  ok   noTeamFit[1].sessions[3]: fatigueLoad er tall
+  ok   noTeamFit[1].sessions[3]: injuryRiskModifier er tall
+  ok   noTeamFit[1]: targetMetrics strengarray
+  ok   noTeamFit[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noTeamFit[1]: risks strengarray
+  ok   noTeamFit[1]: suggestedAdjustments strengarray
+  ok   noTeamFit[1]: scoring finnes
+  ok   noTeamFit[1]: baseScore tall
+  ok   noTeamFit[1]: contextBonus tall
+  ok   noTeamFit[1]: overusePenalty tall <= 0
+  ok   noTeamFit[1]: riskAdjustment tall
+  ok   noTeamFit[1]: totalScore tall
+  ok   noTeamFit[1]: totalScore = base+context+overuse+risk
+  ok   noTeamFit[1]: explanation strengarray
+  ok   noTeamFit[1]: confidence i [0,1]
+  ok   noTeamFit[1]: sourceSignals strengarray
+  ok   noTeamFit[2]: id ikke-tom streng
+  ok   noTeamFit[2]: title ikke-tom streng
+  ok   noTeamFit[2]: type === training_program
+  ok   noTeamFit[2]: category ikke-tom streng
+  ok   noTeamFit[2]: summary ikke-tom streng
+  ok   noTeamFit[2]: weekGoal ikke-tom streng
+  ok   noTeamFit[2]: recommendedBecause strengarray
+  ok   noTeamFit[2]: conditions strengarray
+  ok   noTeamFit[2]: sessions har 1+ økter
+  ok   noTeamFit[2].sessions[0]: day er ikke-tom streng
+  ok   noTeamFit[2].sessions[0]: title er ikke-tom streng
+  ok   noTeamFit[2].sessions[0]: focusId er ikke-tom streng
+  ok   noTeamFit[2].sessions[0]: intensity gyldig
+  ok   noTeamFit[2].sessions[0]: duration gyldig
+  ok   noTeamFit[2].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[2].sessions[0]: expectedEffect er strengarray
+  ok   noTeamFit[2].sessions[0]: fatigueLoad er tall
+  ok   noTeamFit[2].sessions[0]: injuryRiskModifier er tall
+  ok   noTeamFit[2].sessions[1]: day er ikke-tom streng
+  ok   noTeamFit[2].sessions[1]: title er ikke-tom streng
+  ok   noTeamFit[2].sessions[1]: focusId er ikke-tom streng
+  ok   noTeamFit[2].sessions[1]: intensity gyldig
+  ok   noTeamFit[2].sessions[1]: duration gyldig
+  ok   noTeamFit[2].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[2].sessions[1]: expectedEffect er strengarray
+  ok   noTeamFit[2].sessions[1]: fatigueLoad er tall
+  ok   noTeamFit[2].sessions[1]: injuryRiskModifier er tall
+  ok   noTeamFit[2].sessions[2]: day er ikke-tom streng
+  ok   noTeamFit[2].sessions[2]: title er ikke-tom streng
+  ok   noTeamFit[2].sessions[2]: focusId er ikke-tom streng
+  ok   noTeamFit[2].sessions[2]: intensity gyldig
+  ok   noTeamFit[2].sessions[2]: duration gyldig
+  ok   noTeamFit[2].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[2].sessions[2]: expectedEffect er strengarray
+  ok   noTeamFit[2].sessions[2]: fatigueLoad er tall
+  ok   noTeamFit[2].sessions[2]: injuryRiskModifier er tall
+  ok   noTeamFit[2].sessions[3]: day er ikke-tom streng
+  ok   noTeamFit[2].sessions[3]: title er ikke-tom streng
+  ok   noTeamFit[2].sessions[3]: focusId er ikke-tom streng
+  ok   noTeamFit[2].sessions[3]: intensity gyldig
+  ok   noTeamFit[2].sessions[3]: duration gyldig
+  ok   noTeamFit[2].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[2].sessions[3]: expectedEffect er strengarray
+  ok   noTeamFit[2].sessions[3]: fatigueLoad er tall
+  ok   noTeamFit[2].sessions[3]: injuryRiskModifier er tall
+  ok   noTeamFit[2]: targetMetrics strengarray
+  ok   noTeamFit[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noTeamFit[2]: risks strengarray
+  ok   noTeamFit[2]: suggestedAdjustments strengarray
+  ok   noTeamFit[2]: scoring finnes
+  ok   noTeamFit[2]: baseScore tall
+  ok   noTeamFit[2]: contextBonus tall
+  ok   noTeamFit[2]: overusePenalty tall <= 0
+  ok   noTeamFit[2]: riskAdjustment tall
+  ok   noTeamFit[2]: totalScore tall
+  ok   noTeamFit[2]: totalScore = base+context+overuse+risk
+  ok   noTeamFit[2]: explanation strengarray
+  ok   noTeamFit[2]: confidence i [0,1]
+  ok   noTeamFit[2]: sourceSignals strengarray
+  ok   noTeamFit[3]: id ikke-tom streng
+  ok   noTeamFit[3]: title ikke-tom streng
+  ok   noTeamFit[3]: type === training_program
+  ok   noTeamFit[3]: category ikke-tom streng
+  ok   noTeamFit[3]: summary ikke-tom streng
+  ok   noTeamFit[3]: weekGoal ikke-tom streng
+  ok   noTeamFit[3]: recommendedBecause strengarray
+  ok   noTeamFit[3]: conditions strengarray
+  ok   noTeamFit[3]: sessions har 1+ økter
+  ok   noTeamFit[3].sessions[0]: day er ikke-tom streng
+  ok   noTeamFit[3].sessions[0]: title er ikke-tom streng
+  ok   noTeamFit[3].sessions[0]: focusId er ikke-tom streng
+  ok   noTeamFit[3].sessions[0]: intensity gyldig
+  ok   noTeamFit[3].sessions[0]: duration gyldig
+  ok   noTeamFit[3].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[3].sessions[0]: expectedEffect er strengarray
+  ok   noTeamFit[3].sessions[0]: fatigueLoad er tall
+  ok   noTeamFit[3].sessions[0]: injuryRiskModifier er tall
+  ok   noTeamFit[3].sessions[1]: day er ikke-tom streng
+  ok   noTeamFit[3].sessions[1]: title er ikke-tom streng
+  ok   noTeamFit[3].sessions[1]: focusId er ikke-tom streng
+  ok   noTeamFit[3].sessions[1]: intensity gyldig
+  ok   noTeamFit[3].sessions[1]: duration gyldig
+  ok   noTeamFit[3].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[3].sessions[1]: expectedEffect er strengarray
+  ok   noTeamFit[3].sessions[1]: fatigueLoad er tall
+  ok   noTeamFit[3].sessions[1]: injuryRiskModifier er tall
+  ok   noTeamFit[3].sessions[2]: day er ikke-tom streng
+  ok   noTeamFit[3].sessions[2]: title er ikke-tom streng
+  ok   noTeamFit[3].sessions[2]: focusId er ikke-tom streng
+  ok   noTeamFit[3].sessions[2]: intensity gyldig
+  ok   noTeamFit[3].sessions[2]: duration gyldig
+  ok   noTeamFit[3].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[3].sessions[2]: expectedEffect er strengarray
+  ok   noTeamFit[3].sessions[2]: fatigueLoad er tall
+  ok   noTeamFit[3].sessions[2]: injuryRiskModifier er tall
+  ok   noTeamFit[3].sessions[3]: day er ikke-tom streng
+  ok   noTeamFit[3].sessions[3]: title er ikke-tom streng
+  ok   noTeamFit[3].sessions[3]: focusId er ikke-tom streng
+  ok   noTeamFit[3].sessions[3]: intensity gyldig
+  ok   noTeamFit[3].sessions[3]: duration gyldig
+  ok   noTeamFit[3].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noTeamFit[3].sessions[3]: expectedEffect er strengarray
+  ok   noTeamFit[3].sessions[3]: fatigueLoad er tall
+  ok   noTeamFit[3].sessions[3]: injuryRiskModifier er tall
+  ok   noTeamFit[3]: targetMetrics strengarray
+  ok   noTeamFit[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noTeamFit[3]: risks strengarray
+  ok   noTeamFit[3]: suggestedAdjustments strengarray
+  ok   noTeamFit[3]: scoring finnes
+  ok   noTeamFit[3]: baseScore tall
+  ok   noTeamFit[3]: contextBonus tall
+  ok   noTeamFit[3]: overusePenalty tall <= 0
+  ok   noTeamFit[3]: riskAdjustment tall
+  ok   noTeamFit[3]: totalScore tall
+  ok   noTeamFit[3]: totalScore = base+context+overuse+risk
+  ok   noTeamFit[3]: explanation strengarray
+  ok   noTeamFit[3]: confidence i [0,1]
+  ok   noTeamFit[3]: sourceSignals strengarray
+
+Degradering — uten coachContext:
+  ok   noCoach: er array
+  ok   noCoach: 2–4 programmer
+  ok   noCoach: unike id-er
+  ok   noCoach[0]: id ikke-tom streng
+  ok   noCoach[0]: title ikke-tom streng
+  ok   noCoach[0]: type === training_program
+  ok   noCoach[0]: category ikke-tom streng
+  ok   noCoach[0]: summary ikke-tom streng
+  ok   noCoach[0]: weekGoal ikke-tom streng
+  ok   noCoach[0]: recommendedBecause strengarray
+  ok   noCoach[0]: conditions strengarray
+  ok   noCoach[0]: sessions har 1+ økter
+  ok   noCoach[0].sessions[0]: day er ikke-tom streng
+  ok   noCoach[0].sessions[0]: title er ikke-tom streng
+  ok   noCoach[0].sessions[0]: focusId er ikke-tom streng
+  ok   noCoach[0].sessions[0]: intensity gyldig
+  ok   noCoach[0].sessions[0]: duration gyldig
+  ok   noCoach[0].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noCoach[0].sessions[0]: expectedEffect er strengarray
+  ok   noCoach[0].sessions[0]: fatigueLoad er tall
+  ok   noCoach[0].sessions[0]: injuryRiskModifier er tall
+  ok   noCoach[0].sessions[1]: day er ikke-tom streng
+  ok   noCoach[0].sessions[1]: title er ikke-tom streng
+  ok   noCoach[0].sessions[1]: focusId er ikke-tom streng
+  ok   noCoach[0].sessions[1]: intensity gyldig
+  ok   noCoach[0].sessions[1]: duration gyldig
+  ok   noCoach[0].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noCoach[0].sessions[1]: expectedEffect er strengarray
+  ok   noCoach[0].sessions[1]: fatigueLoad er tall
+  ok   noCoach[0].sessions[1]: injuryRiskModifier er tall
+  ok   noCoach[0].sessions[2]: day er ikke-tom streng
+  ok   noCoach[0].sessions[2]: title er ikke-tom streng
+  ok   noCoach[0].sessions[2]: focusId er ikke-tom streng
+  ok   noCoach[0].sessions[2]: intensity gyldig
+  ok   noCoach[0].sessions[2]: duration gyldig
+  ok   noCoach[0].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noCoach[0].sessions[2]: expectedEffect er strengarray
+  ok   noCoach[0].sessions[2]: fatigueLoad er tall
+  ok   noCoach[0].sessions[2]: injuryRiskModifier er tall
+  ok   noCoach[0].sessions[3]: day er ikke-tom streng
+  ok   noCoach[0].sessions[3]: title er ikke-tom streng
+  ok   noCoach[0].sessions[3]: focusId er ikke-tom streng
+  ok   noCoach[0].sessions[3]: intensity gyldig
+  ok   noCoach[0].sessions[3]: duration gyldig
+  ok   noCoach[0].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noCoach[0].sessions[3]: expectedEffect er strengarray
+  ok   noCoach[0].sessions[3]: fatigueLoad er tall
+  ok   noCoach[0].sessions[3]: injuryRiskModifier er tall
+  ok   noCoach[0]: targetMetrics strengarray
+  ok   noCoach[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noCoach[0]: risks strengarray
+  ok   noCoach[0]: suggestedAdjustments strengarray
+  ok   noCoach[0]: scoring finnes
+  ok   noCoach[0]: baseScore tall
+  ok   noCoach[0]: contextBonus tall
+  ok   noCoach[0]: overusePenalty tall <= 0
+  ok   noCoach[0]: riskAdjustment tall
+  ok   noCoach[0]: totalScore tall
+  ok   noCoach[0]: totalScore = base+context+overuse+risk
+  ok   noCoach[0]: explanation strengarray
+  ok   noCoach[0]: confidence i [0,1]
+  ok   noCoach[0]: sourceSignals strengarray
+  ok   noCoach[1]: id ikke-tom streng
+  ok   noCoach[1]: title ikke-tom streng
+  ok   noCoach[1]: type === training_program
+  ok   noCoach[1]: category ikke-tom streng
+  ok   noCoach[1]: summary ikke-tom streng
+  ok   noCoach[1]: weekGoal ikke-tom streng
+  ok   noCoach[1]: recommendedBecause strengarray
+  ok   noCoach[1]: conditions strengarray
+  ok   noCoach[1]: sessions har 1+ økter
+  ok   noCoach[1].sessions[0]: day er ikke-tom streng
+  ok   noCoach[1].sessions[0]: title er ikke-tom streng
+  ok   noCoach[1].sessions[0]: focusId er ikke-tom streng
+  ok   noCoach[1].sessions[0]: intensity gyldig
+  ok   noCoach[1].sessions[0]: duration gyldig
+  ok   noCoach[1].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noCoach[1].sessions[0]: expectedEffect er strengarray
+  ok   noCoach[1].sessions[0]: fatigueLoad er tall
+  ok   noCoach[1].sessions[0]: injuryRiskModifier er tall
+  ok   noCoach[1].sessions[1]: day er ikke-tom streng
+  ok   noCoach[1].sessions[1]: title er ikke-tom streng
+  ok   noCoach[1].sessions[1]: focusId er ikke-tom streng
+  ok   noCoach[1].sessions[1]: intensity gyldig
+  ok   noCoach[1].sessions[1]: duration gyldig
+  ok   noCoach[1].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noCoach[1].sessions[1]: expectedEffect er strengarray
+  ok   noCoach[1].sessions[1]: fatigueLoad er tall
+  ok   noCoach[1].sessions[1]: injuryRiskModifier er tall
+  ok   noCoach[1].sessions[2]: day er ikke-tom streng
+  ok   noCoach[1].sessions[2]: title er ikke-tom streng
+  ok   noCoach[1].sessions[2]: focusId er ikke-tom streng
+  ok   noCoach[1].sessions[2]: intensity gyldig
+  ok   noCoach[1].sessions[2]: duration gyldig
+  ok   noCoach[1].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noCoach[1].sessions[2]: expectedEffect er strengarray
+  ok   noCoach[1].sessions[2]: fatigueLoad er tall
+  ok   noCoach[1].sessions[2]: injuryRiskModifier er tall
+  ok   noCoach[1].sessions[3]: day er ikke-tom streng
+  ok   noCoach[1].sessions[3]: title er ikke-tom streng
+  ok   noCoach[1].sessions[3]: focusId er ikke-tom streng
+  ok   noCoach[1].sessions[3]: intensity gyldig
+  ok   noCoach[1].sessions[3]: duration gyldig
+  ok   noCoach[1].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noCoach[1].sessions[3]: expectedEffect er strengarray
+  ok   noCoach[1].sessions[3]: fatigueLoad er tall
+  ok   noCoach[1].sessions[3]: injuryRiskModifier er tall
+  ok   noCoach[1]: targetMetrics strengarray
+  ok   noCoach[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noCoach[1]: risks strengarray
+  ok   noCoach[1]: suggestedAdjustments strengarray
+  ok   noCoach[1]: scoring finnes
+  ok   noCoach[1]: baseScore tall
+  ok   noCoach[1]: contextBonus tall
+  ok   noCoach[1]: overusePenalty tall <= 0
+  ok   noCoach[1]: riskAdjustment tall
+  ok   noCoach[1]: totalScore tall
+  ok   noCoach[1]: totalScore = base+context+overuse+risk
+  ok   noCoach[1]: explanation strengarray
+  ok   noCoach[1]: confidence i [0,1]
+  ok   noCoach[1]: sourceSignals strengarray
+  ok   noCoach[2]: id ikke-tom streng
+  ok   noCoach[2]: title ikke-tom streng
+  ok   noCoach[2]: type === training_program
+  ok   noCoach[2]: category ikke-tom streng
+  ok   noCoach[2]: summary ikke-tom streng
+  ok   noCoach[2]: weekGoal ikke-tom streng
+  ok   noCoach[2]: recommendedBecause strengarray
+  ok   noCoach[2]: conditions strengarray
+  ok   noCoach[2]: sessions har 1+ økter
+  ok   noCoach[2].sessions[0]: day er ikke-tom streng
+  ok   noCoach[2].sessions[0]: title er ikke-tom streng
+  ok   noCoach[2].sessions[0]: focusId er ikke-tom streng
+  ok   noCoach[2].sessions[0]: intensity gyldig
+  ok   noCoach[2].sessions[0]: duration gyldig
+  ok   noCoach[2].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noCoach[2].sessions[0]: expectedEffect er strengarray
+  ok   noCoach[2].sessions[0]: fatigueLoad er tall
+  ok   noCoach[2].sessions[0]: injuryRiskModifier er tall
+  ok   noCoach[2].sessions[1]: day er ikke-tom streng
+  ok   noCoach[2].sessions[1]: title er ikke-tom streng
+  ok   noCoach[2].sessions[1]: focusId er ikke-tom streng
+  ok   noCoach[2].sessions[1]: intensity gyldig
+  ok   noCoach[2].sessions[1]: duration gyldig
+  ok   noCoach[2].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noCoach[2].sessions[1]: expectedEffect er strengarray
+  ok   noCoach[2].sessions[1]: fatigueLoad er tall
+  ok   noCoach[2].sessions[1]: injuryRiskModifier er tall
+  ok   noCoach[2].sessions[2]: day er ikke-tom streng
+  ok   noCoach[2].sessions[2]: title er ikke-tom streng
+  ok   noCoach[2].sessions[2]: focusId er ikke-tom streng
+  ok   noCoach[2].sessions[2]: intensity gyldig
+  ok   noCoach[2].sessions[2]: duration gyldig
+  ok   noCoach[2].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noCoach[2].sessions[2]: expectedEffect er strengarray
+  ok   noCoach[2].sessions[2]: fatigueLoad er tall
+  ok   noCoach[2].sessions[2]: injuryRiskModifier er tall
+  ok   noCoach[2].sessions[3]: day er ikke-tom streng
+  ok   noCoach[2].sessions[3]: title er ikke-tom streng
+  ok   noCoach[2].sessions[3]: focusId er ikke-tom streng
+  ok   noCoach[2].sessions[3]: intensity gyldig
+  ok   noCoach[2].sessions[3]: duration gyldig
+  ok   noCoach[2].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noCoach[2].sessions[3]: expectedEffect er strengarray
+  ok   noCoach[2].sessions[3]: fatigueLoad er tall
+  ok   noCoach[2].sessions[3]: injuryRiskModifier er tall
+  ok   noCoach[2]: targetMetrics strengarray
+  ok   noCoach[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noCoach[2]: risks strengarray
+  ok   noCoach[2]: suggestedAdjustments strengarray
+  ok   noCoach[2]: scoring finnes
+  ok   noCoach[2]: baseScore tall
+  ok   noCoach[2]: contextBonus tall
+  ok   noCoach[2]: overusePenalty tall <= 0
+  ok   noCoach[2]: riskAdjustment tall
+  ok   noCoach[2]: totalScore tall
+  ok   noCoach[2]: totalScore = base+context+overuse+risk
+  ok   noCoach[2]: explanation strengarray
+  ok   noCoach[2]: confidence i [0,1]
+  ok   noCoach[2]: sourceSignals strengarray
+  ok   noCoach[3]: id ikke-tom streng
+  ok   noCoach[3]: title ikke-tom streng
+  ok   noCoach[3]: type === training_program
+  ok   noCoach[3]: category ikke-tom streng
+  ok   noCoach[3]: summary ikke-tom streng
+  ok   noCoach[3]: weekGoal ikke-tom streng
+  ok   noCoach[3]: recommendedBecause strengarray
+  ok   noCoach[3]: conditions strengarray
+  ok   noCoach[3]: sessions har 1+ økter
+  ok   noCoach[3].sessions[0]: day er ikke-tom streng
+  ok   noCoach[3].sessions[0]: title er ikke-tom streng
+  ok   noCoach[3].sessions[0]: focusId er ikke-tom streng
+  ok   noCoach[3].sessions[0]: intensity gyldig
+  ok   noCoach[3].sessions[0]: duration gyldig
+  ok   noCoach[3].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   noCoach[3].sessions[0]: expectedEffect er strengarray
+  ok   noCoach[3].sessions[0]: fatigueLoad er tall
+  ok   noCoach[3].sessions[0]: injuryRiskModifier er tall
+  ok   noCoach[3].sessions[1]: day er ikke-tom streng
+  ok   noCoach[3].sessions[1]: title er ikke-tom streng
+  ok   noCoach[3].sessions[1]: focusId er ikke-tom streng
+  ok   noCoach[3].sessions[1]: intensity gyldig
+  ok   noCoach[3].sessions[1]: duration gyldig
+  ok   noCoach[3].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   noCoach[3].sessions[1]: expectedEffect er strengarray
+  ok   noCoach[3].sessions[1]: fatigueLoad er tall
+  ok   noCoach[3].sessions[1]: injuryRiskModifier er tall
+  ok   noCoach[3].sessions[2]: day er ikke-tom streng
+  ok   noCoach[3].sessions[2]: title er ikke-tom streng
+  ok   noCoach[3].sessions[2]: focusId er ikke-tom streng
+  ok   noCoach[3].sessions[2]: intensity gyldig
+  ok   noCoach[3].sessions[2]: duration gyldig
+  ok   noCoach[3].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   noCoach[3].sessions[2]: expectedEffect er strengarray
+  ok   noCoach[3].sessions[2]: fatigueLoad er tall
+  ok   noCoach[3].sessions[2]: injuryRiskModifier er tall
+  ok   noCoach[3].sessions[3]: day er ikke-tom streng
+  ok   noCoach[3].sessions[3]: title er ikke-tom streng
+  ok   noCoach[3].sessions[3]: focusId er ikke-tom streng
+  ok   noCoach[3].sessions[3]: intensity gyldig
+  ok   noCoach[3].sessions[3]: duration gyldig
+  ok   noCoach[3].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   noCoach[3].sessions[3]: expectedEffect er strengarray
+  ok   noCoach[3].sessions[3]: fatigueLoad er tall
+  ok   noCoach[3].sessions[3]: injuryRiskModifier er tall
+  ok   noCoach[3]: targetMetrics strengarray
+  ok   noCoach[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   noCoach[3]: risks strengarray
+  ok   noCoach[3]: suggestedAdjustments strengarray
+  ok   noCoach[3]: scoring finnes
+  ok   noCoach[3]: baseScore tall
+  ok   noCoach[3]: contextBonus tall
+  ok   noCoach[3]: overusePenalty tall <= 0
+  ok   noCoach[3]: riskAdjustment tall
+  ok   noCoach[3]: totalScore tall
+  ok   noCoach[3]: totalScore = base+context+overuse+risk
+  ok   noCoach[3]: explanation strengarray
+  ok   noCoach[3]: confidence i [0,1]
+  ok   noCoach[3]: sourceSignals strengarray
+
+Degradering — tomt input:
+  ok   tomt input kaster ikke
+  ok   empty: er array
+  ok   empty: 2–4 programmer
+  ok   empty: unike id-er
+  ok   empty[0]: id ikke-tom streng
+  ok   empty[0]: title ikke-tom streng
+  ok   empty[0]: type === training_program
+  ok   empty[0]: category ikke-tom streng
+  ok   empty[0]: summary ikke-tom streng
+  ok   empty[0]: weekGoal ikke-tom streng
+  ok   empty[0]: recommendedBecause strengarray
+  ok   empty[0]: conditions strengarray
+  ok   empty[0]: sessions har 1+ økter
+  ok   empty[0].sessions[0]: day er ikke-tom streng
+  ok   empty[0].sessions[0]: title er ikke-tom streng
+  ok   empty[0].sessions[0]: focusId er ikke-tom streng
+  ok   empty[0].sessions[0]: intensity gyldig
+  ok   empty[0].sessions[0]: duration gyldig
+  ok   empty[0].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   empty[0].sessions[0]: expectedEffect er strengarray
+  ok   empty[0].sessions[0]: fatigueLoad er tall
+  ok   empty[0].sessions[0]: injuryRiskModifier er tall
+  ok   empty[0].sessions[1]: day er ikke-tom streng
+  ok   empty[0].sessions[1]: title er ikke-tom streng
+  ok   empty[0].sessions[1]: focusId er ikke-tom streng
+  ok   empty[0].sessions[1]: intensity gyldig
+  ok   empty[0].sessions[1]: duration gyldig
+  ok   empty[0].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   empty[0].sessions[1]: expectedEffect er strengarray
+  ok   empty[0].sessions[1]: fatigueLoad er tall
+  ok   empty[0].sessions[1]: injuryRiskModifier er tall
+  ok   empty[0].sessions[2]: day er ikke-tom streng
+  ok   empty[0].sessions[2]: title er ikke-tom streng
+  ok   empty[0].sessions[2]: focusId er ikke-tom streng
+  ok   empty[0].sessions[2]: intensity gyldig
+  ok   empty[0].sessions[2]: duration gyldig
+  ok   empty[0].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   empty[0].sessions[2]: expectedEffect er strengarray
+  ok   empty[0].sessions[2]: fatigueLoad er tall
+  ok   empty[0].sessions[2]: injuryRiskModifier er tall
+  ok   empty[0].sessions[3]: day er ikke-tom streng
+  ok   empty[0].sessions[3]: title er ikke-tom streng
+  ok   empty[0].sessions[3]: focusId er ikke-tom streng
+  ok   empty[0].sessions[3]: intensity gyldig
+  ok   empty[0].sessions[3]: duration gyldig
+  ok   empty[0].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   empty[0].sessions[3]: expectedEffect er strengarray
+  ok   empty[0].sessions[3]: fatigueLoad er tall
+  ok   empty[0].sessions[3]: injuryRiskModifier er tall
+  ok   empty[0]: targetMetrics strengarray
+  ok   empty[0]: relatedTrainingFocusIds peker på ekte fokus
+  ok   empty[0]: risks strengarray
+  ok   empty[0]: suggestedAdjustments strengarray
+  ok   empty[0]: scoring finnes
+  ok   empty[0]: baseScore tall
+  ok   empty[0]: contextBonus tall
+  ok   empty[0]: overusePenalty tall <= 0
+  ok   empty[0]: riskAdjustment tall
+  ok   empty[0]: totalScore tall
+  ok   empty[0]: totalScore = base+context+overuse+risk
+  ok   empty[0]: explanation strengarray
+  ok   empty[0]: confidence i [0,1]
+  ok   empty[0]: sourceSignals strengarray
+  ok   empty[1]: id ikke-tom streng
+  ok   empty[1]: title ikke-tom streng
+  ok   empty[1]: type === training_program
+  ok   empty[1]: category ikke-tom streng
+  ok   empty[1]: summary ikke-tom streng
+  ok   empty[1]: weekGoal ikke-tom streng
+  ok   empty[1]: recommendedBecause strengarray
+  ok   empty[1]: conditions strengarray
+  ok   empty[1]: sessions har 1+ økter
+  ok   empty[1].sessions[0]: day er ikke-tom streng
+  ok   empty[1].sessions[0]: title er ikke-tom streng
+  ok   empty[1].sessions[0]: focusId er ikke-tom streng
+  ok   empty[1].sessions[0]: intensity gyldig
+  ok   empty[1].sessions[0]: duration gyldig
+  ok   empty[1].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   empty[1].sessions[0]: expectedEffect er strengarray
+  ok   empty[1].sessions[0]: fatigueLoad er tall
+  ok   empty[1].sessions[0]: injuryRiskModifier er tall
+  ok   empty[1].sessions[1]: day er ikke-tom streng
+  ok   empty[1].sessions[1]: title er ikke-tom streng
+  ok   empty[1].sessions[1]: focusId er ikke-tom streng
+  ok   empty[1].sessions[1]: intensity gyldig
+  ok   empty[1].sessions[1]: duration gyldig
+  ok   empty[1].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   empty[1].sessions[1]: expectedEffect er strengarray
+  ok   empty[1].sessions[1]: fatigueLoad er tall
+  ok   empty[1].sessions[1]: injuryRiskModifier er tall
+  ok   empty[1].sessions[2]: day er ikke-tom streng
+  ok   empty[1].sessions[2]: title er ikke-tom streng
+  ok   empty[1].sessions[2]: focusId er ikke-tom streng
+  ok   empty[1].sessions[2]: intensity gyldig
+  ok   empty[1].sessions[2]: duration gyldig
+  ok   empty[1].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   empty[1].sessions[2]: expectedEffect er strengarray
+  ok   empty[1].sessions[2]: fatigueLoad er tall
+  ok   empty[1].sessions[2]: injuryRiskModifier er tall
+  ok   empty[1].sessions[3]: day er ikke-tom streng
+  ok   empty[1].sessions[3]: title er ikke-tom streng
+  ok   empty[1].sessions[3]: focusId er ikke-tom streng
+  ok   empty[1].sessions[3]: intensity gyldig
+  ok   empty[1].sessions[3]: duration gyldig
+  ok   empty[1].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   empty[1].sessions[3]: expectedEffect er strengarray
+  ok   empty[1].sessions[3]: fatigueLoad er tall
+  ok   empty[1].sessions[3]: injuryRiskModifier er tall
+  ok   empty[1]: targetMetrics strengarray
+  ok   empty[1]: relatedTrainingFocusIds peker på ekte fokus
+  ok   empty[1]: risks strengarray
+  ok   empty[1]: suggestedAdjustments strengarray
+  ok   empty[1]: scoring finnes
+  ok   empty[1]: baseScore tall
+  ok   empty[1]: contextBonus tall
+  ok   empty[1]: overusePenalty tall <= 0
+  ok   empty[1]: riskAdjustment tall
+  ok   empty[1]: totalScore tall
+  ok   empty[1]: totalScore = base+context+overuse+risk
+  ok   empty[1]: explanation strengarray
+  ok   empty[1]: confidence i [0,1]
+  ok   empty[1]: sourceSignals strengarray
+  ok   empty[2]: id ikke-tom streng
+  ok   empty[2]: title ikke-tom streng
+  ok   empty[2]: type === training_program
+  ok   empty[2]: category ikke-tom streng
+  ok   empty[2]: summary ikke-tom streng
+  ok   empty[2]: weekGoal ikke-tom streng
+  ok   empty[2]: recommendedBecause strengarray
+  ok   empty[2]: conditions strengarray
+  ok   empty[2]: sessions har 1+ økter
+  ok   empty[2].sessions[0]: day er ikke-tom streng
+  ok   empty[2].sessions[0]: title er ikke-tom streng
+  ok   empty[2].sessions[0]: focusId er ikke-tom streng
+  ok   empty[2].sessions[0]: intensity gyldig
+  ok   empty[2].sessions[0]: duration gyldig
+  ok   empty[2].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   empty[2].sessions[0]: expectedEffect er strengarray
+  ok   empty[2].sessions[0]: fatigueLoad er tall
+  ok   empty[2].sessions[0]: injuryRiskModifier er tall
+  ok   empty[2].sessions[1]: day er ikke-tom streng
+  ok   empty[2].sessions[1]: title er ikke-tom streng
+  ok   empty[2].sessions[1]: focusId er ikke-tom streng
+  ok   empty[2].sessions[1]: intensity gyldig
+  ok   empty[2].sessions[1]: duration gyldig
+  ok   empty[2].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   empty[2].sessions[1]: expectedEffect er strengarray
+  ok   empty[2].sessions[1]: fatigueLoad er tall
+  ok   empty[2].sessions[1]: injuryRiskModifier er tall
+  ok   empty[2].sessions[2]: day er ikke-tom streng
+  ok   empty[2].sessions[2]: title er ikke-tom streng
+  ok   empty[2].sessions[2]: focusId er ikke-tom streng
+  ok   empty[2].sessions[2]: intensity gyldig
+  ok   empty[2].sessions[2]: duration gyldig
+  ok   empty[2].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   empty[2].sessions[2]: expectedEffect er strengarray
+  ok   empty[2].sessions[2]: fatigueLoad er tall
+  ok   empty[2].sessions[2]: injuryRiskModifier er tall
+  ok   empty[2].sessions[3]: day er ikke-tom streng
+  ok   empty[2].sessions[3]: title er ikke-tom streng
+  ok   empty[2].sessions[3]: focusId er ikke-tom streng
+  ok   empty[2].sessions[3]: intensity gyldig
+  ok   empty[2].sessions[3]: duration gyldig
+  ok   empty[2].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   empty[2].sessions[3]: expectedEffect er strengarray
+  ok   empty[2].sessions[3]: fatigueLoad er tall
+  ok   empty[2].sessions[3]: injuryRiskModifier er tall
+  ok   empty[2]: targetMetrics strengarray
+  ok   empty[2]: relatedTrainingFocusIds peker på ekte fokus
+  ok   empty[2]: risks strengarray
+  ok   empty[2]: suggestedAdjustments strengarray
+  ok   empty[2]: scoring finnes
+  ok   empty[2]: baseScore tall
+  ok   empty[2]: contextBonus tall
+  ok   empty[2]: overusePenalty tall <= 0
+  ok   empty[2]: riskAdjustment tall
+  ok   empty[2]: totalScore tall
+  ok   empty[2]: totalScore = base+context+overuse+risk
+  ok   empty[2]: explanation strengarray
+  ok   empty[2]: confidence i [0,1]
+  ok   empty[2]: sourceSignals strengarray
+  ok   empty[3]: id ikke-tom streng
+  ok   empty[3]: title ikke-tom streng
+  ok   empty[3]: type === training_program
+  ok   empty[3]: category ikke-tom streng
+  ok   empty[3]: summary ikke-tom streng
+  ok   empty[3]: weekGoal ikke-tom streng
+  ok   empty[3]: recommendedBecause strengarray
+  ok   empty[3]: conditions strengarray
+  ok   empty[3]: sessions har 1+ økter
+  ok   empty[3].sessions[0]: day er ikke-tom streng
+  ok   empty[3].sessions[0]: title er ikke-tom streng
+  ok   empty[3].sessions[0]: focusId er ikke-tom streng
+  ok   empty[3].sessions[0]: intensity gyldig
+  ok   empty[3].sessions[0]: duration gyldig
+  ok   empty[3].sessions[0]: tacticalObjective er ikke-tom streng
+  ok   empty[3].sessions[0]: expectedEffect er strengarray
+  ok   empty[3].sessions[0]: fatigueLoad er tall
+  ok   empty[3].sessions[0]: injuryRiskModifier er tall
+  ok   empty[3].sessions[1]: day er ikke-tom streng
+  ok   empty[3].sessions[1]: title er ikke-tom streng
+  ok   empty[3].sessions[1]: focusId er ikke-tom streng
+  ok   empty[3].sessions[1]: intensity gyldig
+  ok   empty[3].sessions[1]: duration gyldig
+  ok   empty[3].sessions[1]: tacticalObjective er ikke-tom streng
+  ok   empty[3].sessions[1]: expectedEffect er strengarray
+  ok   empty[3].sessions[1]: fatigueLoad er tall
+  ok   empty[3].sessions[1]: injuryRiskModifier er tall
+  ok   empty[3].sessions[2]: day er ikke-tom streng
+  ok   empty[3].sessions[2]: title er ikke-tom streng
+  ok   empty[3].sessions[2]: focusId er ikke-tom streng
+  ok   empty[3].sessions[2]: intensity gyldig
+  ok   empty[3].sessions[2]: duration gyldig
+  ok   empty[3].sessions[2]: tacticalObjective er ikke-tom streng
+  ok   empty[3].sessions[2]: expectedEffect er strengarray
+  ok   empty[3].sessions[2]: fatigueLoad er tall
+  ok   empty[3].sessions[2]: injuryRiskModifier er tall
+  ok   empty[3].sessions[3]: day er ikke-tom streng
+  ok   empty[3].sessions[3]: title er ikke-tom streng
+  ok   empty[3].sessions[3]: focusId er ikke-tom streng
+  ok   empty[3].sessions[3]: intensity gyldig
+  ok   empty[3].sessions[3]: duration gyldig
+  ok   empty[3].sessions[3]: tacticalObjective er ikke-tom streng
+  ok   empty[3].sessions[3]: expectedEffect er strengarray
+  ok   empty[3].sessions[3]: fatigueLoad er tall
+  ok   empty[3].sessions[3]: injuryRiskModifier er tall
+  ok   empty[3]: targetMetrics strengarray
+  ok   empty[3]: relatedTrainingFocusIds peker på ekte fokus
+  ok   empty[3]: risks strengarray
+  ok   empty[3]: suggestedAdjustments strengarray
+  ok   empty[3]: scoring finnes
+  ok   empty[3]: baseScore tall
+  ok   empty[3]: contextBonus tall
+  ok   empty[3]: overusePenalty tall <= 0
+  ok   empty[3]: riskAdjustment tall
+  ok   empty[3]: totalScore tall
+  ok   empty[3]: totalScore = base+context+overuse+risk
+  ok   empty[3]: explanation strengarray
+  ok   empty[3]: confidence i [0,1]
+  ok   empty[3]: sourceSignals strengarray
+  ok   tomt input inkluderer balansert fallback
+
+Recovery — slitasjekontekst:
+  ok   recovery er med ved høy slitasje
+  ok   recovery får positiv contextBonus ved slitasje
+  ok   recovery får positiv riskAdjustment ved skaderisiko
+  ok   recovery uten slitasje gir ingen contextBonus
+  ok   recovery rangerer høyere når sliten enn når frisk
+
+Recovery — overforbruk:
+  ok   recovery får overusePenalty ved gjentatt bruk
+  ok   overforbruk senker totalScore vs. samme slitasje uten overforbruk
+
+Defensiv struktur — sterk motstander:
+  ok   defensiv struktur er med mot sterk/risky motstander
+  ok   defensiv struktur får contextBonus mot sterk/risky motstander
+  ok   defensiv struktur skårer høyere mot sterk motstander enn uten
+
+Oppbygging — mot høyt press:
+  ok   oppbygging er med mot høyt press
+  ok   oppbygging får contextBonus mot høyt press
+  ok   oppbygging skårer høyere mot høyt press enn nøytralt
+
+Pressuke — høy fatigue:
+  ok   pressuke får negativ riskAdjustment ved høy fatigue
+  ok   pressuke skårer lavere sliten enn frisk (samme motstander)
+
+Determinisme:
+  ok   to like kall gir byte-identisk JSON
+
+Relaterte fokus-id-er:
+  ok   alle programmer peker på ekte treningsfokus
+
+Hjelpe-API:
+  ok   flattenTrainingProgramSessions gir øktene
+  ok   flattenTrainingProgramSessions tåler liste
+  ok   scoreTrainingProgramComposition gir gyldig regnskap
+  ok   getTrainingProgramCompositionById(ukjent) gir null
+
+Grenser (limit):
+  ok   limit=2 gir nøyaktig 2 programmer
+  ok   limit kappes på 4
+
+Alle motstanderprofiler:
+  ok   alle motstanderprofiler gir gyldige programmer
+
+Off-pitch context:
+  ok   offPitchState som input kaster ikke
+  ok   recovery henter slitasje fra off-pitch-state
+  ok   recovery bærer offPitch som sourceSignal
+  ok   formasjonstilvenning får off-pitch-bonus ved lav taktisk klarhet
+  ok   pressuke straffes av off-pitch-slitasje
+  ok   offPitchSignals.state godtas som kilde
+  ok   eksplisitt fatigueRisk vinner over off-pitch-state
+
+Integrasjon — treningsprogram → inbox:
+  ok   off-pitch-relevant program gir en treningstråd
+  ok   treningstråd peker tilbake på programmet
+
+Historisk stil-motstander gir kontekst-bonus:
+  ok   kompleks historisk stil gir formasjonstilvenning en kontekstbonus
+  ok   bonusen er forklart (kompleksitet)
+  ok   historisk opponent-signal er registrert
+  ok   høyintensiv historisk stil løfter restitusjon når kroppene er tunge
+  ok   treningsprogram leser historisk opponent-kontekst uten crash for alle profiler
+
+Eksempel — fullt datagrunnlag (sortert etter uttelling):
+  • Defensiv struktur (total 79, konfidens 0.69) — Kompakt lag, restforsvar og kontrollerte overganger før en sterk motstander.
+  • Formasjonstilvenning (total 76, konfidens 0.69) — Gjennomgang av lagform, rollekjeder og faseoverganger i systemet.
+  • Oppbygging mot høyt press (total 62, konfidens 0.59) — Trygg oppbygging, pressmotstand og tredjemannsløp mot et høyt pressende lag.
+  • Pressuke (total 60, konfidens 0.57) — Pressutløsere, motpress og kompakthet for å vinne ballen høyt.
+
+Alle Training Program Composition-sjekker besto.
+EXIT=0
+=== npm run sim:off-pitch ===
+
+> historygo-football-manager@0.1.0 sim:off-pitch
+> node scripts/simulate-off-pitch-parameters.mjs
+
+Off-pitch Parameters v1 — simulering
+
+Default-state:
+  ok   version er off-pitch.v1
+  ok   team/squad/manager/hidden finnes
+  ok   recentSignals/recentEvents/recentTrainingProgramIds er arrays
+  ok   alle default-verdier i [0,100]
+  ok   default er deterministisk (byte-identisk)
+
+Normalisering:
+  ok   normalizeOffPitchState(undefined) kaster ikke
+  ok   tomt input gir samme som default
+  ok   for høy verdi clampes til 100
+  ok   negativ verdi clampes til 0
+  ok   desimal rundes
+  ok   ugyldig verdi faller til default
+  ok   manglende seksjon fylles med default
+  ok   hidden clampes også
+  ok   normalisert state har alle verdier i [0,100]
+
+Hendelser:
+  ok   event muterer ikke input
+  ok   mediaPressure øker riktig
+  ok   boardPressure øker riktig
+  ok   hiddenStress (squad) øker riktig
+  ok   morale synker riktig
+  ok   event legges i recentEvents
+  ok   event lager et recentSignal
+  ok   ukjent effekt-param ignoreres trygt
+  ok   to like event-kall gir byte-identisk JSON
+
+Synlige signaler:
+  ok   høy fatigue gir fysisk signal om tung belastning
+  ok   fysisk signal er flagget som alert
+  ok   getVisibleOffPitchSignals gir én per kjernekategori (7)
+  ok   høy hiddenStress gir et synlig signal
+  ok   hiddenStress-signal er vagt (avslører ikke tallet)
+  ok   hidden-tall lekker ikke ut i de synlige signalene
+
+Skjulte modifikatorer:
+  ok   getHiddenOffPitchModifiers gir performanceDrag
+  ok   høy skjult belastning gir positiv performanceDrag
+  ok   summarizeOffPitchContext eksponerer IKKE rå hidden-tall
+
+Treningsprogram-effekter:
+  ok   recovery senker fatigue
+  ok   recovery senker wear
+  ok   recovery senker injuryRisk
+  ok   recovery legger program-id i recentTrainingProgramIds
+  ok   pressuke øker fatigue
+  ok   pressuke øker wear
+  ok   formasjonstilvenning øker taktisk klarhet
+  ok   formasjonstilvenning gir 'stigende' taktisk klarhet-signal
+
+Kampdag-effekter:
+  ok   seier løfter moral
+  ok   seier letter styrepress
+  ok   kamp øker fatigue uansett
+  ok   tap senker moral
+  ok   tap øker styrepress
+  ok   kampdag-effekt er deterministisk
+
+Off-pitch-fit for treningsprogram:
+  ok   recovery favoriseres ved høy fatigue (score > 0)
+  ok   recovery skårer høyere sliten enn frisk
+  ok   pressuke straffes ved høy fatigue (score < 0)
+  ok   pressuke skårer lavere sliten enn frisk
+  ok   formasjonstilvenning favoriseres ved lav taktisk klarhet
+  ok   scoreOffPitchFitForTrainingProgram gir explanation
+
+Utledning + debug:
+  ok   deriveOffPitchSignals gir state/visible/hidden/summary
+  ok   rå fatigueRisk-hint overstyrer fatigue
+  ok   deriveOffPitchSignals tåler tomt input
+  ok   debug-snapshot inkluderer hidden-tall (kun for debug)
+
+Integrasjon — training program compositions:
+  ok   offPitchState som input kaster ikke
+  ok   gir gyldige programmer med offPitchState
+  ok   recovery får contextBonus av off-pitch-slitasje
+  ok   recovery skårer høyere med off-pitch-slitasje enn uten
+  ok   recovery bærer off-pitch som kilde
+  ok   formasjonstilvenning får off-pitch-bonus ved lav taktisk klarhet
+  ok   pressuke får negativ riskAdjustment av off-pitch-slitasje
+  ok   recovery uten off-pitch og uten slitasje gir 0 contextBonus
+
+Integrasjon — suggested setups:
+  ok   offPitchState som input kaster ikke
+  ok   treningsforslag kan bære off-pitch-signal
+  ok   treningsforslag nevner off-pitch i justeringer
+  ok   uten offPitch: ingen offPitch-signal lekker inn
+
+Integrasjon — inbox event → off-pitch:
+  ok   tung off-pitch-state gir medisinsk inbox-tråd
+  ok   inbox-valg gir offPitchEvent med effects
+  ok   offPitchEvent fra inbox kan anvendes på off-pitch-state
+
+Eksempel — synlige signaler ved tung uke og høyt press:
+  • [Fysisk] (alert) Laget virker tungt etter høy belastning.
+  • [Skadefare] (good) Skadebildet ser rolig ut.
+  • [Psykisk] (info) Det mentale virker stabilt.
+  • [Garderobe] (info) Garderoben virker rolig.
+  • [Press] (alert) Forventningspresset rundt laget er høyt.
+  • [Styre/media] (alert) Styret forventer synlig sportslig retning.
+  • [Taktisk klarhet] (info) Den taktiske forståelsen virker grei.
+
+Sammendrag: Laget virker tungt etter høy belastning.
+
+Alle Off-pitch Parameters-sjekker besto.
+EXIT=0
+=== npm run sim:inbox ===
+
+> historygo-football-manager@0.1.0 sim:inbox
+> node scripts/simulate-inbox-events.mjs
+
+Inbox Event Integration v1 — simulering
+
+Default-state:
+  ok   version er inbox.v1
+  ok   threads/archived/read/resolved/history er arrays
+  ok   lastGeneratedContextHash starter som null
+  ok   createInboxState er deterministisk
+
+Normalisering:
+  ok   normalizeInboxState(undefined) kaster ikke
+  ok   tomt input gir samme som default
+  ok   ukjent type faller til admin
+  ok   ugyldig priority faller til medium
+  ok   duplikat-id fjernes
+  ok   tråd uten id droppes
+  ok   ukjente effekt-nøkler strippes fra valg
+  ok   arkivert id setter status=archived
+  ok   history-feiltype gir tom array
+
+Trådgenerering fra kontekst:
+  ok   høy fatigue genererer medisinsk tråd
+  ok   medisinsk tråd peker mot recovery-program
+  ok   medisinsk tråd har valg med effekter
+  ok   høy boardPressure genererer styretråd
+  ok   høy mediaPressure genererer pressetråd
+  ok   lav morale/cohesion genererer garderobetråd
+  ok   garderobetråd gir halvskjult signal (ingen rå tall)
+  ok   lav tacticalClarity genererer assistent-/treningstråd
+  ok   manglende 15-spillerkrav genererer scouting/History Go-tråd
+  ok   scouting-tråd har ingen valg (muterer ikke History Go)
+  ok   rolig standardkontekst gir ingen bekymringstråder
+  ok   tap genererer kampdagstråd med valg
+  ok   seier utledes fra mål og gir kampdagstråd
+  ok   createInboxThreadFromOffPitchSignal gir medisinsk tråd fra physical-signal
+
+Determinisme:
+  ok   samme kontekst gir byte-identiske threads
+  ok   integrate legger til tråder
+  ok   samme context hash gir ingen nye tråder
+  ok   lastGeneratedContextHash settes
+  ok   ny kontekst (styrepress) gir en ny tråd
+
+Valg og status:
+  ok   applyInboxChoice gir offPitchEvent med effects
+  ok   offPitchEvent har gyldig type
+  ok   valgt tråd markeres resolved
+  ok   valgt tråd markeres read
+  ok   valg legges i history
+  ok   applyInboxChoice muterer ikke input
+  ok   ugyldig choiceId gir null offPitchEvent
+  ok   applyInboxChoice er deterministisk
+
+Off-pitch-integrasjon:
+  ok   offPitchEvent fra inbox kan sendes til applyOffPitchEvent
+  ok   ease_load senker fatigue i off-pitch-staten
+
+Arkiv og telling:
+  ok   archiveInboxThread flytter tråd til arkiv
+  ok   arkivert tråd er ikke lenger aktiv
+  ok   markInboxThreadRead reduserer ulest-telling
+  ok   getUnreadInboxCount teller bare uleste aktive
+  ok   summarizeInboxPulse gir unread/active/headline
+
+Integrasjon — training program compositions:
+  ok   training program compositions kobles uten runtime-feil
+  ok   off-pitch-relevant program gir treningstråd
+  ok   treningstråd peker på programmet via linkedAction
+  ok   irrelevant program gir ingen tråd
+
+Integrasjon — suggested setups:
+  ok   suggested setups kobles uten runtime-feil
+
+Synlige signaler → tråd:
+  ok   synlig physical-signal kan bli en medisinsk tråd
+
+Eksempel — aktive tråder ved tung uke + styrepress:
+  • [Medisinsk apparat] (urgent) Faresignal fra medisinsk — Skadefaren er forhøyet — en pressuke kan bli dyr.
+  • [Styret] (urgent) Styret vil ha en tydelig retning — Styret forventer synlig sportslig retning. Hva svarer du?
+  • [Assistenttrener] (high) Etter tapet mot Rival FK — Tapet sitter i gruppa. Hvordan svarer du?
+  • [Presseansvarlig] (high) Mediene følger laget tett — Medietrykket er høyt. Hvordan vil du håndtere det?
+  • [Assistenttrener] (high) Assistenttreneren har en observasjon — Vi kan spille oss fri i 4-3-3, men bare hvis vi trener oppbyggingen først.
+
+Puls: Skadefaren er forhøyet — en pressuke kan bli dyr.
+
+Alle Inbox Event Integration-sjekker besto.
+EXIT=0
+=== npm run sim:club-week ===
+
+> historygo-football-manager@0.1.0 sim:club-week
+> node scripts/simulate-club-week-v01.mjs
+
+Club Week Orchestrator v1 — fase-rytme:
+  ok   seks faser i forventet rekkefølge
+  ok   hver fase har en etikett
+  ok   hver fase har handlingsrettet veiledning
+  ok   etikett-oppslag matcher faselista
+  ok   veiledning-oppslag matcher faselista
+
+Uke-loop (fasen flytter spillet, uka ruller etter oppsummering):
+  ok   starter i uke 1 / analyse
+  ok   én runde besøker alle seks fasene i rekkefølge
+  ok   uka holder seg i uke 1 gjennom hele rytmen
+  ok   oppsummering → ny uke ruller til uke 2 / analyse
+
+Kampdag ↔ Club Week-porten (kampdagfasen krever spilt kamp):
+  ok   kampdag uten spilt kamp stenger porten
+  ok   kamp spilt denne uka åpner porten
+  ok   utenfor kampdagfasen er porten alltid åpen
+
+Trening → off-pitch (treningsvalget beveger konteksten utenfor banen):
+  ok   restforsvar-fokus gir en off-pitch-hendelse
+  ok   restforsvar letter slitasjen
+  ok   restforsvar løfter taktisk klarhet
+  ok   treningsvalget havner i off-pitch-historikken
+  ok   pressing koster fysisk (mer slitasje)
+  ok   ukjent fokus gir ingen hendelse
+
+Kampkonsekvenser → klubbverdier (kampen farger uka videre):
+  ok   en spilt kamp gir konsekvenser
+  ok   seier løfter minst én klubbverdi
+  ok   formasjonstilvenning øker (1-6)
+  ok   klubbverdier holder seg i 0-100 etter effekt
+
+Mini Season ↔ Club Week (to uker henger sammen):
+  ok   mini-sesong + Club Week starter begge i uke/runde 1
+  ok   uke 1: mini-sesongens runde er 1
+  ok   uke 1: kampen er registrert i mini-sesongen
+  ok   uke 1 → ny uke: begge ruller i takt
+  ok   uke 2: mini-sesongens runde er 2
+  ok   uke 2: kampen er registrert i mini-sesongen
+  ok   uke 2 → ny uke: begge ruller i takt
+  ok   etter to uker har mini-sesongen 2 kamper og poeng
+  ok   mini-sesongen er fortsatt aktiv (ikke fullført på 2/5)
+
+Alle Club Week-sjekker besto.
+EXIT=0
+=== npm run sim:role-learning ===
+
+> historygo-football-manager@0.1.0 sim:role-learning
+> node scripts/simulate-role-learning.mjs
+
+{
+  "ok": true,
+  "good": {
+    "fit": 100,
+    "hint": "Gi rollen det den trenger: trenger støtte/overlapp så han ikke blir isolert."
+  },
+  "misused": {
+    "fit": 43,
+    "hint": "Endre rolle/posisjon eller taktikk slik at spilleren får brukt styrkene sine — dette er managerens ansvar."
+  }
+}
+EXIT=0
+=== npm run sim:staff-identity ===
+
+> historygo-football-manager@0.1.0 sim:staff-identity
+> node scripts/simulate-staff-identity.mjs
+
+Staff identity sim OK
+EXIT=0
+=== npm run sim:manager-flow-ui ===
+
+> historygo-football-manager@0.1.0 sim:manager-flow-ui
+> node scripts/simulate-manager-flow-ui.mjs
+
+{
+  "ok": true,
+  "readyPrimary": "Spill kamp",
+  "readyFlow": [
+    "Les innboksen",
+    "Se kampanalyse",
+    "Gå til neste fase"
+  ]
+}
+EXIT=0
+=== npm run sim:manager-ground-flow-v1 ===
+
+> historygo-football-manager@0.1.0 sim:manager-ground-flow-v1
+> node scripts/simulate-manager-ground-flow-v1.mjs
+
+Manager grunnflyt v1: formation, readiness and next-action checks passed.
+EXIT=0
+=== npm run sim:manager-season-scene-v1 ===
+
+> historygo-football-manager@0.1.0 sim:manager-season-scene-v1
+> node scripts/simulate-manager-season-scene-v1.mjs
+
+Manager Season Scene v1: 18/18 sjekker bestått.
+EXIT=0
+=== npm run sim:manager-office-inbox-v1 ===
+
+> historygo-football-manager@0.1.0 sim:manager-office-inbox-v1
+> node scripts/simulate-manager-office-inbox-v1.mjs
+
+Manager Office & Inbox v1: 18/18 kontroller bestått.
+EXIT=0
+=== npm run sim:role-familiarity ===
+
+> historygo-football-manager@0.1.0 sim:role-familiarity
+> node scripts/simulate-role-familiarity.mjs
+
+{
+  "ok": true,
+  "sampleGrowth": 9,
+  "maxBonus": 5
+}
+EXIT=0
+=== npm run sim:league-season ===
+
+> historygo-football-manager@0.1.0 sim:league-season
+> node scripts/simulate-real-league-season.mjs
+
+{
+  "ok": true,
+  "pyramide": [
+    "Eliteserien: 16 klubber / 30 runder",
+    "OBOS-ligaen: 16 klubber / 30 runder",
+    "2. divisjon: 28 klubber / 26 runder"
+  ],
+  "klubberTotalt": 60,
+  "eliteserien": {
+    "klubber": 16,
+    "runder": 30,
+    "kamper": 240
+  },
+  "lengsteBanestrekk": 2,
+  "spillestilerPerSesong": 15,
+  "spillestilTokens": 16,
+  "perNivå": {
+    "Eliteserien": "15 stiler / 16 tokens",
+    "OBOS-ligaen": "15 stiler / 14 tokens",
+    "2. divisjon": "13 stiler / 14 tokens"
+  },
+  "stigenOpp": "andredivisjon → obosligaen → eliteserien",
+  "stigenNed": "eliteserien → obosligaen"
+}
+EXIT=0
+=== npm run sim:mode-isolation ===
+
+> historygo-football-manager@0.1.0 sim:mode-isolation
+> node scripts/simulate-mode-isolation.mjs
+
+Mode Isolation v1 — simulering
+
+  ok   ligasnapshot er byte-identisk etter inn/ut av treningsrom
+  ok   nullstill påvirker bare treningsrommet
+  ok   scenario har separat uke, kampplan og resultater
+  ok   ferdig scenariokamp endrer ikke ligaens tabell, terminliste eller spillerstatus
+  ok   refresh/resume beholder aktiv ligalagring
+  ok   refresh i scenario ødelegger ikke ligalagringen
+  ok   legacy-format migreres idempotent uten sletting eller datatap
+  ok   footer, status og panelguard følger den ene aktive modusen
+  ok   Set-felt overlever capture→apply-runden (ingen `.has is not a function`)
+  ok   landslagsmodus er en egen modus med egen nasjon og tropp
+  ok   landslagstroppen lekker ikke inn i klubblagringen
+  ok   valgt nasjon huskes ved retur og over refresh
+  ok   nullstilling av landslaget rører ikke klubblaget
+  ok   mesterskapet er landslagets, ikke klubbens
+  ok   et pågående mesterskap lekker ikke inn i klubblagringen
+  ok   landslagsspillere er kun tilgjengelige i landslagsmodus
+
+Alle 16 modusisolasjonssjekker besto.
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\.manager-portal, #offPitchSignalCard, \.decision-strip/. Input:
+
+'import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";\n' +
+  'import "./ui/manager-shell-elements.js";\n' +
+  'import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";\n' +
+  'import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";\n' +
+  'import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";\n' +
+  'import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-presentation.js";\n' +
+  'import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js";\n' +
+  'import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";\n' +
+  'import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";\n' +
+  'import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";\n' +
+  'import { calculateTeamFit } from "./football-team-fit-engine.js";\n' +
+  'import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";\n' +
+  'import {\n' +
+  '  createMatchReport,\n' +
+  '  createMatchdaySession,\n' +
+  '  resolveMatchdayDecision,\n' +
+  '  finalizeMatchdaySession,\n' +
+  '  getSessionEventIndex,\n' +
+  '  advanceMatchClock,\n' +
+  '  logMatchMoment,\n' +
+  '  applyMatchPlanChange,\n' +
+  '  applyMatchdaySubstitution,\n' +
+  '  applyOpponentAdaptation,\n' +
+  '  OPPONENT_PROFILES,\n' +
+  '  evaluateFormationMatchupVsOpponent\n' +
+  '} from "./football-matchday-engine.js";\n' +
+  'import {\n' +
+  '  HISTORICAL_OPPONENT_PROFILES,\n' +
+  '  getHistoricalOpponentProfile,\n' +
+  '  pickHistoricalOpponentProfile\n' +
+  '} from "./football-historical-opponent-profiles.js";\n' +
+  'import {\n' +
+  '  MINI_SEASON_VERSION,\n' +
+  '  MINI_SEASON_TOTAL_WEEKS,\n' +
+  '  MINI_SEASON_OUTCOME_LABELS,\n' +
+  '  startMiniSeason as createMiniSeasonStart,\n' +
+  '  normalizeMiniSeasonState,\n' +
+  '  getCurrentMiniSeasonMatch,\n' +
+  '  isCurrentMiniSeasonMatchPlayed,\n' +
+  '  applyMiniSeasonMatchResult,\n' +
+  '  advanceMiniSeasonWeek,\n' +
+  '  summarizeMiniSeason,\n' +
+  '  createMiniSeasonTable,\n' +
+  '  createMiniSeasonFormGuide,\n' +
+  '  createMiniSeasonOffPitchEvent\n' +
+  '} from "./football-mini-season.js";\n' +
+  'import {\n' +
+  '  createFederationArchiveEntry,\n' +
+  '  createFederationVerdict,\n' +
+  '  deriveFederationExpectation\n' +
+  '} from "./football-federation-verdict.js";\n' +
+  'import {\n' +
+  '  appendSeasonArchive,\n' +
+  '  createSeasonArchiveEntry,\n' +
+  '  createSeasonReview,\n' +
+  '  deriveSeasonTarget,\n' +
+  '  summarizeSeasonHistory\n' +
+  '} from "./football-season-review.js";\n' +
+  'import {\n' +
+  '  createScenarioMiniSeasonContext,\n' +
+  '  describeScenario,\n' +
+  '  getScenario,\n' +
+  '  normalizeScenarios\n' +
+  '} from "./football-scenarios.js";\n' +
+  'import {\n' +
+  '  applyMatchPlayerStats,\n' +
+  '  rankPlayerStats,\n' +
+  '  summarizePlayerStats\n' +
+  '} from "./football-player-stats.js";\n' +
+  'import {\n' +
+  '  applyMatchToConditions,\n' +
+  '  applyWeeklyRecovery,\n' +
+  '  conditionFor,\n' +
+  '  describeCondition,\n' +
+  '  fatigueFactorFor,\n' +
+  '  freshnessFor,\n' +
+  '  injuredPlayerIds,\n' +
+  '  isInjured,\n' +
+  '  playersNeedingRest,\n' +
+  '  applySummerBreak,\n' +
+  '  applyIndividualTrainingEffects,\n' +
+  '  summarizeSquadCondition\n' +
+  '} from "./football-player-condition.js";\n' +
+  'import {\n' +
+  '  MAX_SUBSTITUTIONS,\n' +
+  '  availableSubstitutions,\n' +
+  '  rankSubstitutionsForSlot,\n' +
+  '  substitutionsRemaining\n' +
+  '} from "./football-substitutions.js";\n' +
+  'import {\n' +
+  '  LEAGUE_SEASON_VERSION,\n' +
+  '  createLeagueSeason,\n' +
+  '  DEFAULT_LEAGUE_TIER,\n' +
+  '  isPlayoffPending,\n' +
+  '  resolveLeagueOutcome,\n' +
+  '  normalizeLeagueSeason,\n' +
+  '  getNextLeagueOpponent,\n' +
+  '  completeLeagueRound,\n' +
+  '  createLeagueTable,\n' +
+  '  startNextLeagueSeason\n' +
+  '} from "./football-league-season.js";\n' +
+  'import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";\n' +
+  'import { resolveClubSquadAccess, listClubHeritagePlayers } from "./football-club-squad.js";\n' +
+  'import {\n' +
+  '  normalizeAttributeCatalogue,\n' +
+  '  derivePlayerAttributeIndex,\n' +
+  '  describePositionDemands,\n' +
+  '  splitRoleRequirements,\n' +
+  '  resolveAttributeToken\n' +
+  '} from "./football-player-attributes.js";\n' +
+  'import {\n' +
+  '  listSelectableClubs,\n' +
+  '  resolveStartTier,\n' +
+  '  describeClubSelection,\n' +
+  '  deriveClubExpectation,\n' +
+  '  createManagerClubFromSelection,\n' +
+  '  createOwnManagerClub\n' +
+  '} from "./football-club-selection.js";\n' +
+  'import {\n' +
+  '  createLeaguePlayoff,\n' +
+  '  completePlayoffLeg,\n' +
+  '  resolveLeaguePlayoff,\n' +
+  '  describePlayoff,\n' +
+  '  getPlayoffMatchdayOpponent,\n' +
+  '  normalizeLeaguePlayoff,\n' +
+  '  LEAGUE_PLAYOFF_VERSION\n' +
+  '} from "./football-league-playoff.js";\n' +
+  'import {\n' +
+  '  TOURNAMENT_STAGE_LABELS,\n' +
+  '  createTournament,\n' +
+  '  normalizeTournamentState,\n' +
+  '  getEligibleTournaments,\n' +
+  '  getTournamentNextOpponent,\n' +
+  '  applyTournamentMatchResult,\n' +
+  '  createTournamentGroupTable,\n' +
+  '  createTournamentBracket,\n' +
+  '  getTournamentTeam,\n' +
+  '  summarizeTournament\n' +
+  '} from "./football-tournament.js";\n' +
+  'import {\n' +
+  '  computeMatchdayConsequences,\n' +
+  '  evaluateClubWeekMatchdayGate\n' +
+  '} from "./football-match-consequences.js";\n' +
+  'import {\n' +
+  '  TRAINING_FOCUSES,\n' +
+  '  getTrainingFocus,\n' +
+  '  sanitizeWeeklyTrainingFocus,\n' +
+  '  calculateTrainingStaffSupport,\n' +
+  '  recommendTrainingFocus,\n' +
+  '  createTrainingMatchdaySnapshot,\n' +
+  '  buildTrainingFocusOffPitchEvent\n' +
+  '} from "./football-training-week.js";\n' +
+  'import { createSuggestedSetups } from "./football-suggested-setups.js";\n' +
+  'import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";\n' +
+  'import { selectDefaultFormation, selectDefaultMatchPlan } from "./football-default-formation.js";\n' +
+  'import { evaluateMatchdayReadiness } from "./football-matchday-readiness.js";\n' +
+  'import {\n' +
+  '  GAME_STATE_LABELS,\n' +
+  '  rankPlansForSituation,\n' +
+  '  readGameState\n' +
+  '} from "./football-match-plan.js";\n' +
+  'import {\n' +
+  '  normalizeRoleFamiliarity,\n' +
+  '  recordMatchRoleUsage,\n' +
+  '  summarizeLineupFamiliarity,\n' +
+  '  describeRoleFamiliarity,\n' +
+  '  getRoleFamiliarity,\n' +
+  '  applyTrainingRoleGrowth\n' +
+  '} from "./football-role-familiarity-engine.js";\n' +
+  'import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";\n' +
+  'import {\n' +
+  '  createTrainingProgramCompositions,\n' +
+  '  getTrainingProgramCompositionById\n' +
+  '} from "./football-training-program-compositions.js";\n' +
+  '// Ukens plan: den ene modellen som binder ramme, tema og enkeltspiller sammen.\n' +
+  'import {\n' +
+  '  createWeeklyTrainingPlan,\n' +
+  '  calculateWeeklyTrainingIntensity,\n' +
+  '  evaluateProgramFocusCoherence,\n' +
+  '  describeWeeklyLoad\n' +
+  '} from "./football-training-plan.js";\n' +
+  'import {\n' +
+  '  PLAYER_WEAKNESS_VERSION,\n' +
+  '  normalizeWeaknessCatalogue,\n' +
+  '  normalizeWeaknessProgress,\n' +
+  '  identifyPlayerWeaknesses,\n' +
+  '  getWeaknessProgress,\n' +
+  '  describeWeaknessProgress,\n' +
+  '  applyWeaknessTraining,\n' +
+  '  weeklyWeaknessGrowth,\n' +
+  '  summarizeLineupWeaknessWork,\n' +
+  '  getWeaknessAttribute\n' +
+  '} from "./football-player-weaknesses.js";\n' +
+  'import {\n' +
+  '  normalizeIndividualTrainingCatalogue,\n' +
+  '  getIndividualTrack,\n' +
+  '  calculateIndividualCapacity,\n' +
+  '  sanitizeIndividualAssignments,\n' +
+  '  evaluateIndividualAssignment,\n' +
+  '  resolveIndividualTrainingWeek,\n' +
+  '  summarizeIndividualTraining\n' +
+  '} from "./football-individual-training.js";\n' +
+  'import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";\n' +
+  'import {\n' +
+  '  createDefaultOffPitchState,\n' +
+  '  normalizeOffPitchState,\n' +
+  '  summarizeOffPitchContext,\n' +
+  '  applyMatchdayOffPitchEffects,\n' +
+  '  applyOffPitchEvent,\n' +
+  '  applyTrainingProgramOffPitchEffects\n' +
+  '} from "./football-off-pitch-parameters.js";\n' +
+  'import {\n' +
+  '  createInboxState,\n' +
+  '  normalizeInboxState,\n' +
+  '  integrateInboxThreads,\n' +
+  '  applyInboxChoice,\n' +
+  '  archiveInboxThread,\n' +
+  '  markInboxThreadRead,\n' +
+  '  getActiveInboxThreads as getActiveInboxEventThreads,\n' +
+  '  getArchivedInboxThreads as getArchivedInboxEventThreads,\n' +
+  '  getUnreadInboxCount as getUnreadInboxEventCount\n' +
+  '} from "./football-inbox-events.js";\n' +
+  'import {\n' +
+  '  adaptHgFormations,\n' +
+  '  buildRoleTypeIndex,\n' +
+  '  getRoleDisplayNames,\n' +
+  '  getHistoricalFormationRoleHint,\n' +
+  '  lineXPositions\n' +
+  '} from "./hg-football-formation-adapter.js";\n' +
+  'import {\n' +
+  '  buildFormationKnowledgeIndex,\n' +
+  '  buildOpponentProfileIndex,\n' +
+  '  createFormationKnowledgeViewModel,\n' +
+  '  getFormationLearningHint\n' +
+  '} from "./football-formation-knowledge-view-model.js";\n' +
+  'import {\n' +
+  '  buildCoachContext,\n' +
+  '  buildCoachContextReport,\n' +
+  '  getStaffCategory\n' +
+  '} from "./hg-football-coach-context-engine.js";\n' +
+  'import {\n' +
+  '  preloadManagerEngine,\n' +
+  '  getLoadedManagerEngine,\n' +
+  '  createLegacyManagerAppStateFromBrowserState,\n' +
+  '  createLegacyManagerAppStateFromBrowserStateSync,\n' +
+  '  getDashboardViewModelFromLegacyManagerState,\n' +
+  '  createInitialClubWeekStateFromBrowser,\n' +
+  '  advanceClubWeekPhaseFromBrowser,\n' +
+  '  applyClubWeekEffectsFromBrowser,\n' +
+  '  createClubWeekSummaryFromBrowser,\n' +
+  '  getClubWeekPhaseLabelFromBrowser,\n' +
+  '  getClubWeekPhaseGuidanceFromBrowser,\n' +
+  '  listClubWeekPhasesFromBrowser,\n' +
+  '} from "./app-manager-engine-bridge.js";\n' +
+  'import {\n' +
+  '  migrateModeSessions,\n' +
+  '  persistModeEnvelope,\n' +
+  '  switchModeSession,\n' +
+  '  resetSecondarySession,\n' +
+  '  captureModeSession,\n' +
+  '  applyModeSession\n' +
+  '} from "./football-mode-sessions.js";\n' +
+  '\n' +
+  'const DATA_PATHS = {\n' +
+  '  players: "data/football_players.json",\n' +
+  '  // Spillerarketyper (rolleprofiler/underliggende logikk) som ekte spillere\n' +
+  '  // kobler seg til via archetypeIds. Brukes ikke til å fylle spillerselect.\n' +
+  '  playerArchetypes: "data/football_player_archetypes.json",\n' +
+  '  roles: "data/football_roles.json",\n' +
+  '  tactics: "data/football_tactics.json",\n' +
+  '  // Scenarioer: korte historiske utfordringer bygget på arketypene.\n' +
+  '  scenarios: "data/football_scenarios.json",\n' +
+  '  // Gammel formasjonskatalog beholdes som legacy/fallback. Taktikktavla på\n' +
+  '  // forsiden drives nå av de historiske hgFootball-formasjonene under, men\n' +
+  '  // filen slettes ikke: den er trygg fallback hvis hgFootball-data mangler.\n' +
+  '  legacyFormations: "data/football_formations.json",\n' +
+  '  // Historisk formasjonsgrunnlag (data/hgFootball/) som nå fyller formationSelect\n' +
+  '  // og tegnes på den eksisterende grønne banen via formasjonsadapteren.\n' +
+  '  hgFormations: "data/hgFootball/formations.json",\n' +
+  '  hgFormationEras: "data/hgFootball/formationEras.json",\n' +
+  '  hgRoleTypes: "data/hgFootball/roleTypes.json",\n' +
+  '  hgRoleFitRules: "data/hgFootball/playerRoleFitRules.json",\n' +
+  '  hgUnlockRules: "data/hgFootball/unlockRules.json",\n' +
+  '  // Stab-/trenerroller: hvilke lag-/utviklingsdimensjoner hver rolle påvirker.\n' +
+  '  // Driver coachContext-motoren (formationFamiliarity, coachUnderstanding m.m.).\n' +
+  '  hgStaffRoles: "data/hgFootball/staffRoles.json",\n' +
+  '  // Formation Knowledge Engine: kunnskapslag (matchups/parameterprofil) per\n' +
+  '  // formasjon. Driver formasjons-matchup mot motstanderprofiler på kampdag.\n' +
+  '  hgFormationKnowledge: "data/hgFootball/formationKnowledge.json",\n' +
+  '  knowledgePrinciples: "data/football_knowledge_principles.json",\n' +
+  '  footballBookKnowledgeIndex: "data/football_book_knowledge_principles.json",\n' +
+  '  clubInboxMessages: "data/club_inbox_messages'... 665539 more characters
+
+    at file:///home/runner/work/HistoryGo-FootballManager/HistoryGo-FootballManager/scripts/simulate-mode-isolation.mjs:136:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";\n' +
+    'import "./ui/manager-shell-elements.js";\n' +
+    'import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";\n' +
+    'import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";\n' +
+    'import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";\n' +
+    'import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-presentation.js";\n' +
+    'import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js";\n' +
+    'import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";\n' +
+    'import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";\n' +
+    'import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";\n' +
+    'import { calculateTeamFit } from "./football-team-fit-engine.js";\n' +
+    'import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";\n' +
+    'import {\n' +
+    '  createMatchReport,\n' +
+    '  createMatchdaySession,\n' +
+    '  resolveMatchdayDecision,\n' +
+    '  finalizeMatchdaySession,\n' +
+    '  getSessionEventIndex,\n' +
+    '  advanceMatchClock,\n' +
+    '  logMatchMoment,\n' +
+    '  applyMatchPlanChange,\n' +
+    '  applyMatchdaySubstitution,\n' +
+    '  applyOpponentAdaptation,\n' +
+    '  OPPONENT_PROFILES,\n' +
+    '  evaluateFormationMatchupVsOpponent\n' +
+    '} from "./football-matchday-engine.js";\n' +
+    'import {\n' +
+    '  HISTORICAL_OPPONENT_PROFILES,\n' +
+    '  getHistoricalOpponentProfile,\n' +
+    '  pickHistoricalOpponentProfile\n' +
+    '} from "./football-historical-opponent-profiles.js";\n' +
+    'import {\n' +
+    '  MINI_SEASON_VERSION,\n' +
+    '  MINI_SEASON_TOTAL_WEEKS,\n' +
+    '  MINI_SEASON_OUTCOME_LABELS,\n' +
+    '  startMiniSeason as createMiniSeasonStart,\n' +
+    '  normalizeMiniSeasonState,\n' +
+    '  getCurrentMiniSeasonMatch,\n' +
+    '  isCurrentMiniSeasonMatchPlayed,\n' +
+    '  applyMiniSeasonMatchResult,\n' +
+    '  advanceMiniSeasonWeek,\n' +
+    '  summarizeMiniSeason,\n' +
+    '  createMiniSeasonTable,\n' +
+    '  createMiniSeasonFormGuide,\n' +
+    '  createMiniSeasonOffPitchEvent\n' +
+    '} from "./football-mini-season.js";\n' +
+    'import {\n' +
+    '  createFederationArchiveEntry,\n' +
+    '  createFederationVerdict,\n' +
+    '  deriveFederationExpectation\n' +
+    '} from "./football-federation-verdict.js";\n' +
+    'import {\n' +
+    '  appendSeasonArchive,\n' +
+    '  createSeasonArchiveEntry,\n' +
+    '  createSeasonReview,\n' +
+    '  deriveSeasonTarget,\n' +
+    '  summarizeSeasonHistory\n' +
+    '} from "./football-season-review.js";\n' +
+    'import {\n' +
+    '  createScenarioMiniSeasonContext,\n' +
+    '  describeScenario,\n' +
+    '  getScenario,\n' +
+    '  normalizeScenarios\n' +
+    '} from "./football-scenarios.js";\n' +
+    'import {\n' +
+    '  applyMatchPlayerStats,\n' +
+    '  rankPlayerStats,\n' +
+    '  summarizePlayerStats\n' +
+    '} from "./football-player-stats.js";\n' +
+    'import {\n' +
+    '  applyMatchToConditions,\n' +
+    '  applyWeeklyRecovery,\n' +
+    '  conditionFor,\n' +
+    '  describeCondition,\n' +
+    '  fatigueFactorFor,\n' +
+    '  freshnessFor,\n' +
+    '  injuredPlayerIds,\n' +
+    '  isInjured,\n' +
+    '  playersNeedingRest,\n' +
+    '  applySummerBreak,\n' +
+    '  applyIndividualTrainingEffects,\n' +
+    '  summarizeSquadCondition\n' +
+    '} from "./football-player-condition.js";\n' +
+    'import {\n' +
+    '  MAX_SUBSTITUTIONS,\n' +
+    '  availableSubstitutions,\n' +
+    '  rankSubstitutionsForSlot,\n' +
+    '  substitutionsRemaining\n' +
+    '} from "./football-substitutions.js";\n' +
+    'import {\n' +
+    '  LEAGUE_SEASON_VERSION,\n' +
+    '  createLeagueSeason,\n' +
+    '  DEFAULT_LEAGUE_TIER,\n' +
+    '  isPlayoffPending,\n' +
+    '  resolveLeagueOutcome,\n' +
+    '  normalizeLeagueSeason,\n' +
+    '  getNextLeagueOpponent,\n' +
+    '  completeLeagueRound,\n' +
+    '  createLeagueTable,\n' +
+    '  startNextLeagueSeason\n' +
+    '} from "./football-league-season.js";\n' +
+    'import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";\n' +
+    'import { resolveClubSquadAccess, listClubHeritagePlayers } from "./football-club-squad.js";\n' +
+    'import {\n' +
+    '  normalizeAttributeCatalogue,\n' +
+    '  derivePlayerAttributeIndex,\n' +
+    '  describePositionDemands,\n' +
+    '  splitRoleRequirements,\n' +
+    '  resolveAttributeToken\n' +
+    '} from "./football-player-attributes.js";\n' +
+    'import {\n' +
+    '  listSelectableClubs,\n' +
+    '  resolveStartTier,\n' +
+    '  describeClubSelection,\n' +
+    '  deriveClubExpectation,\n' +
+    '  createManagerClubFromSelection,\n' +
+    '  createOwnManagerClub\n' +
+    '} from "./football-club-selection.js";\n' +
+    'import {\n' +
+    '  createLeaguePlayoff,\n' +
+    '  completePlayoffLeg,\n' +
+    '  resolveLeaguePlayoff,\n' +
+    '  describePlayoff,\n' +
+    '  getPlayoffMatchdayOpponent,\n' +
+    '  normalizeLeaguePlayoff,\n' +
+    '  LEAGUE_PLAYOFF_VERSION\n' +
+    '} from "./football-league-playoff.js";\n' +
+    'import {\n' +
+    '  TOURNAMENT_STAGE_LABELS,\n' +
+    '  createTournament,\n' +
+    '  normalizeTournamentState,\n' +
+    '  getEligibleTournaments,\n' +
+    '  getTournamentNextOpponent,\n' +
+    '  applyTournamentMatchResult,\n' +
+    '  createTournamentGroupTable,\n' +
+    '  createTournamentBracket,\n' +
+    '  getTournamentTeam,\n' +
+    '  summarizeTournament\n' +
+    '} from "./football-tournament.js";\n' +
+    'import {\n' +
+    '  computeMatchdayConsequences,\n' +
+    '  evaluateClubWeekMatchdayGate\n' +
+    '} from "./football-match-consequences.js";\n' +
+    'import {\n' +
+    '  TRAINING_FOCUSES,\n' +
+    '  getTrainingFocus,\n' +
+    '  sanitizeWeeklyTrainingFocus,\n' +
+    '  calculateTrainingStaffSupport,\n' +
+    '  recommendTrainingFocus,\n' +
+    '  createTrainingMatchdaySnapshot,\n' +
+    '  buildTrainingFocusOffPitchEvent\n' +
+    '} from "./football-training-week.js";\n' +
+    'import { createSuggestedSetups } from "./football-suggested-setups.js";\n' +
+    'import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";\n' +
+    'import { selectDefaultFormation, selectDefaultMatchPlan } from "./football-default-formation.js";\n' +
+    'import { evaluateMatchdayReadiness } from "./football-matchday-readiness.js";\n' +
+    'import {\n' +
+    '  GAME_STATE_LABELS,\n' +
+    '  rankPlansForSituation,\n' +
+    '  readGameState\n' +
+    '} from "./football-match-plan.js";\n' +
+    'import {\n' +
+    '  normalizeRoleFamiliarity,\n' +
+    '  recordMatchRoleUsage,\n' +
+    '  summarizeLineupFamiliarity,\n' +
+    '  describeRoleFamiliarity,\n' +
+    '  getRoleFamiliarity,\n' +
+    '  applyTrainingRoleGrowth\n' +
+    '} from "./football-role-familiarity-engine.js";\n' +
+    'import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";\n' +
+    'import {\n' +
+    '  createTrainingProgramCompositions,\n' +
+    '  getTrainingProgramCompositionById\n' +
+    '} from "./football-training-program-compositions.js";\n' +
+    '// Ukens plan: den ene modellen som binder ramme, tema og enkeltspiller sammen.\n' +
+    'import {\n' +
+    '  createWeeklyTrainingPlan,\n' +
+    '  calculateWeeklyTrainingIntensity,\n' +
+    '  evaluateProgramFocusCoherence,\n' +
+    '  describeWeeklyLoad\n' +
+    '} from "./football-training-plan.js";\n' +
+    'import {\n' +
+    '  PLAYER_WEAKNESS_VERSION,\n' +
+    '  normalizeWeaknessCatalogue,\n' +
+    '  normalizeWeaknessProgress,\n' +
+    '  identifyPlayerWeaknesses,\n' +
+    '  getWeaknessProgress,\n' +
+    '  describeWeaknessProgress,\n' +
+    '  applyWeaknessTraining,\n' +
+    '  weeklyWeaknessGrowth,\n' +
+    '  summarizeLineupWeaknessWork,\n' +
+    '  getWeaknessAttribute\n' +
+    '} from "./football-player-weaknesses.js";\n' +
+    'import {\n' +
+    '  normalizeIndividualTrainingCatalogue,\n' +
+    '  getIndividualTrack,\n' +
+    '  calculateIndividualCapacity,\n' +
+    '  sanitizeIndividualAssignments,\n' +
+    '  evaluateIndividualAssignment,\n' +
+    '  resolveIndividualTrainingWeek,\n' +
+    '  summarizeIndividualTraining\n' +
+    '} from "./football-individual-training.js";\n' +
+    'import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";\n' +
+    'import {\n' +
+    '  createDefaultOffPitchState,\n' +
+    '  normalizeOffPitchState,\n' +
+    '  summarizeOffPitchContext,\n' +
+    '  applyMatchdayOffPitchEffects,\n' +
+    '  applyOffPitchEvent,\n' +
+    '  applyTrainingProgramOffPitchEffects\n' +
+    '} from "./football-off-pitch-parameters.js";\n' +
+    'import {\n' +
+    '  createInboxState,\n' +
+    '  normalizeInboxState,\n' +
+    '  integrateInboxThreads,\n' +
+    '  applyInboxChoice,\n' +
+    '  archiveInboxThread,\n' +
+    '  markInboxThreadRead,\n' +
+    '  getActiveInboxThreads as getActiveInboxEventThreads,\n' +
+    '  getArchivedInboxThreads as getArchivedInboxEventThreads,\n' +
+    '  getUnreadInboxCount as getUnreadInboxEventCount\n' +
+    '} from "./football-inbox-events.js";\n' +
+    'import {\n' +
+    '  adaptHgFormations,\n' +
+    '  buildRoleTypeIndex,\n' +
+    '  getRoleDisplayNames,\n' +
+    '  getHistoricalFormationRoleHint,\n' +
+    '  lineXPositions\n' +
+    '} from "./hg-football-formation-adapter.js";\n' +
+    'import {\n' +
+    '  buildFormationKnowledgeIndex,\n' +
+    '  buildOpponentProfileIndex,\n' +
+    '  createFormationKnowledgeViewModel,\n' +
+    '  getFormationLearningHint\n' +
+    '} from "./football-formation-knowledge-view-model.js";\n' +
+    'import {\n' +
+    '  buildCoachContext,\n' +
+    '  buildCoachContextReport,\n' +
+    '  getStaffCategory\n' +
+    '} from "./hg-football-coach-context-engine.js";\n' +
+    'import {\n' +
+    '  preloadManagerEngine,\n' +
+    '  getLoadedManagerEngine,\n' +
+    '  createLegacyManagerAppStateFromBrowserState,\n' +
+    '  createLegacyManagerAppStateFromBrowserStateSync,\n' +
+    '  getDashboardViewModelFromLegacyManagerState,\n' +
+    '  createInitialClubWeekStateFromBrowser,\n' +
+    '  advanceClubWeekPhaseFromBrowser,\n' +
+    '  applyClubWeekEffectsFromBrowser,\n' +
+    '  createClubWeekSummaryFromBrowser,\n' +
+    '  getClubWeekPhaseLabelFromBrowser,\n' +
+    '  getClubWeekPhaseGuidanceFromBrowser,\n' +
+    '  listClubWeekPhasesFromBrowser,\n' +
+    '} from "./app-manager-engine-bridge.js";\n' +
+    'import {\n' +
+    '  migrateModeSessions,\n' +
+    '  persistModeEnvelope,\n' +
+    '  switchModeSession,\n' +
+    '  resetSecondarySession,\n' +
+    '  captureModeSession,\n' +
+    '  applyModeSession\n' +
+    '} from "./football-mode-sessions.js";\n' +
+    '\n' +
+    'const DATA_PATHS = {\n' +
+    '  players: "data/football_players.json",\n' +
+    '  // Spillerarketyper (rolleprofiler/underliggende logikk) som ekte spillere\n' +
+    '  // kobler seg til via archetypeIds. Brukes ikke til å fylle spillerselect.\n' +
+    '  playerArchetypes: "data/football_player_archetypes.json",\n' +
+    '  roles: "data/football_roles.json",\n' +
+    '  tactics: "data/football_tactics.json",\n' +
+    '  // Scenarioer: korte historiske utfordringer bygget på arketypene.\n' +
+    '  scenarios: "data/football_scenarios.json",\n' +
+    '  // Gammel formasjonskatalog beholdes som legacy/fallback. Taktikktavla på\n' +
+    '  // forsiden drives nå av de historiske hgFootball-formasjonene under, men\n' +
+    '  // filen slettes ikke: den er trygg fallback hvis hgFootball-data mangler.\n' +
+    '  legacyFormations: "data/football_formations.json",\n' +
+    '  // Historisk formasjonsgrunnlag (data/hgFootball/) som nå fyller formationSelect\n' +
+    '  // og tegnes på den eksisterende grønne banen via formasjonsadapteren.\n' +
+    '  hgFormations: "data/hgFootball/formations.json",\n' +
+    '  hgFormationEras: "data/hgFootball/formationEras.json",\n' +
+    '  hgRoleTypes: "data/hgFootball/roleTypes.json",\n' +
+    '  hgRoleFitRules: "data/hgFootball/playerRoleFitRules.json",\n' +
+    '  hgUnlockRules: "data/hgFootball/unlockRules.json",\n' +
+    '  // Stab-/trenerroller: hvilke lag-/utviklingsdimensjoner hver rolle påvirker.\n' +
+    '  // Driver coachContext-motoren (formationFamiliarity, coachUnderstanding m.m.).\n' +
+    '  hgStaffRoles: "data/hgFootball/staffRoles.json",\n' +
+    '  // Formation Knowledge Engine: kunnskapslag (matchups/parameterprofil) per\n' +
+    '  // formasjon. Driver formasjons-matchup mot motstanderprofiler på kampdag.\n' +
+    '  hgFormationKnowledge: "data/hgFootball/formationKnowledge.json",\n' +
+    '  knowledgePrinciples: "data/football_knowledge_principles.json",\n' +
+    '  footballBookKnowledgeIndex: "data/football_book_knowledge_principles.json",\n' +
+    '  clubInboxMessages: "data/club_inbox_messages'... 665539 more characters,
+  expected: /\.manager-portal, #offPitchSignalCard, \.decision-strip/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v22.23.1
 EXIT=1
