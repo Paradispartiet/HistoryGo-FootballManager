@@ -4165,10 +4165,10 @@
       "warningWhenMisused": "Setter du ham alene på topp uten kombinasjonsspill rundt, tar du fra ham både dribling og avslutning.",
       "classSource": "belagt",
       "clubStatus": {
-        "fredrikstad_stadion": "key_player"
+        "fredrikstad_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "fredrikstad_stadion": "utledet"
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -4235,10 +4235,10 @@
       "warningWhenMisused": "Uten tid på ballen blir en oppspiller til en tilskuer — han styrte tempoet, han jaget det ikke.",
       "classSource": "belagt",
       "clubStatus": {
-        "fredrikstad_stadion": "club_profile"
+        "fredrikstad_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "fredrikstad_stadion": "utledet"
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -4301,10 +4301,10 @@
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
       "classSource": "belagt",
       "clubStatus": {
-        "fredrikstad_stadion": "club_profile"
+        "fredrikstad_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "fredrikstad_stadion": "utledet"
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -4368,10 +4368,10 @@
       "warningWhenMisused": "Uten en tydelig forsvarslinje å lese blir styrken hans — plasseringen — verdiløs.",
       "classSource": "belagt",
       "clubStatus": {
-        "fredrikstad_stadion": "club_profile"
+        "fredrikstad_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "fredrikstad_stadion": "utledet"
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -5603,7 +5603,8 @@
       "era": "historical",
       "sourcePlaceIds": [
         "sarpsborg_stadion",
-        "brann_stadion"
+        "brann_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 83,
       "naturalPositions": [
@@ -5657,11 +5658,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "sarpsborg_stadion": "club_profile",
-        "brann_stadion": "club_profile"
+        "brann_stadion": "club_profile",
+        "fredrikstad_stadion": "club_icon"
       },
       "clubStatusSource": {
         "sarpsborg_stadion": "utledet",
-        "brann_stadion": "utledet"
+        "brann_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -6342,7 +6345,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "sarpsborg_stadion"
+        "sarpsborg_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -6397,10 +6401,12 @@
       "warningWhenMisused": "Han debuterte på landslaget som midtstopper. Bruker du ham offensivt, bruker du ham som noe han ikke var.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_profile",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -6470,7 +6476,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "sarpsborg_stadion"
+        "sarpsborg_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -6524,10 +6531,12 @@
       "warningWhenMisused": "Han eide venstresiden i hele sin lengde. Låser du ham lavt og smalt, tar du bort halve rollen.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_profile",
+        "fredrikstad_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -8623,7 +8632,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "fredrikstad_stadion"
       ],
       "classHeight": 88,
       "naturalPositions": [
@@ -8675,10 +8685,12 @@
       "warningWhenMisused": "En spiss måles på sjansene han får. Får han ingen, ser han ut som en spiller han ikke er.",
       "classSource": "belagt",
       "clubStatus": {
-        "intility_arena": "elite_career"
+        "intility_arena": "elite_career",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "intility_arena": "belagt"
+        "intility_arena": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -9422,7 +9434,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "intility_arena",
-        "brann_stadion"
+        "brann_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -9474,11 +9487,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "intility_arena": "club_profile",
-        "brann_stadion": "club_profile"
+        "brann_stadion": "club_profile",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
         "intility_arena": "belagt",
-        "brann_stadion": "utledet"
+        "brann_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -19008,7 +19023,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "lerkendal_stadion"
+        "lerkendal_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -19056,10 +19072,12 @@
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
       "classSource": "belagt",
       "clubStatus": {
-        "lerkendal_stadion": "golden_era_core"
+        "lerkendal_stadion": "golden_era_core",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "belagt"
+        "lerkendal_stadion": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -19556,67 +19574,6 @@
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "club_legend"
-      },
-      "clubStatusSource": {
-        "lerkendal_stadion": "belagt"
-      }
-    },
-    {
-      "id": "christian_gamboa",
-      "name": "Christian Gamboa",
-      "nationality": "Costa Rica",
-      "era": "modern",
-      "sourcePlaceIds": [
-        "lerkendal_stadion"
-      ],
-      "classHeight": 79,
-      "naturalPositions": [
-        "RB"
-      ],
-      "usablePositions": [],
-      "poorFits": [
-        "ST",
-        "GK",
-        "AM"
-      ],
-      "archetypeIds": [
-        "overlapping_fullback"
-      ],
-      "archetypes": [
-        "overlap",
-        "wide_support",
-        "stamina",
-        "crossing"
-      ],
-      "strengths": [
-        "stamina",
-        "wide_support",
-        "overlapping_runs"
-      ],
-      "needs": [
-        "wide_lane",
-        "cover_behind",
-        "runners_inside"
-      ],
-      "preferredRoles": [
-        "overlapping_fullback",
-        "support_fullback",
-        "wingback"
-      ],
-      "likesTactics": [
-        "wide_attacks",
-        "high_width",
-        "overloads"
-      ],
-      "dislikesTactics": [
-        "narrow_fullback",
-        "no_wide_support",
-        "isolated_wide_defending"
-      ],
-      "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
-      "classSource": "belagt",
-      "clubStatus": {
-        "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt"
@@ -20325,7 +20282,8 @@
       "nationality": "Sverige",
       "era": "modern",
       "sourcePlaceIds": [
-        "lerkendal_stadion"
+        "lerkendal_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -20372,10 +20330,12 @@
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
       "classSource": "belagt",
       "clubStatus": {
-        "lerkendal_stadion": "squad_profile"
+        "lerkendal_stadion": "squad_profile",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "belagt"
+        "lerkendal_stadion": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -21753,7 +21713,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "lerkendal_stadion"
+        "lerkendal_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 83,
       "naturalPositions": [
@@ -21805,10 +21766,12 @@
       "warningWhenMisused": "En kantspiller uten bredde å jobbe i er en kantspiller uten fotball.",
       "classSource": "belagt",
       "clubStatus": {
-        "lerkendal_stadion": "elite_career"
+        "lerkendal_stadion": "elite_career",
+        "fredrikstad_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "belagt"
+        "lerkendal_stadion": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -25885,7 +25848,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "araasen_stadion"
+        "araasen_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -25926,10 +25890,12 @@
       "warningWhenMisused": "Hansen blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "araasen_stadion": "club_profile"
+        "araasen_stadion": "club_profile",
+        "fredrikstad_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "araasen_stadion": "utledet"
+        "araasen_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -26000,7 +25966,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "lyse_arena"
+        "lyse_arena",
+        "fredrikstad_stadion"
       ],
       "classHeight": 87,
       "naturalPositions": [
@@ -26041,10 +26008,12 @@
       "warningWhenMisused": "Myhre trenger en tydelig forsvarslinje foran seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "lyse_arena": "key_player"
+        "lyse_arena": "key_player",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "lyse_arena": "belagt"
+        "lyse_arena": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -26449,7 +26418,8 @@
       "nationality": "Island",
       "era": "historical",
       "sourcePlaceIds": [
-        "lyse_arena"
+        "lyse_arena",
+        "fredrikstad_stadion"
       ],
       "classHeight": 85,
       "naturalPositions": [
@@ -26491,10 +26461,12 @@
       "warningWhenMisused": "Daðason blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "lyse_arena": "key_player"
+        "lyse_arena": "key_player",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "lyse_arena": "belagt"
+        "lyse_arena": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -29494,7 +29466,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "brann_stadion"
+        "brann_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -29536,10 +29509,12 @@
       "warningWhenMisused": "Ahlsen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "brann_stadion": "key_player"
+        "brann_stadion": "key_player",
+        "fredrikstad_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "brann_stadion": "utledet"
+        "brann_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -32731,7 +32706,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "romssa_arena"
+        "romssa_arena",
+        "fredrikstad_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -32775,10 +32751,12 @@
       "warningWhenMisused": "Nilsen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_icon"
+        "romssa_arena": "club_icon",
+        "fredrikstad_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "romssa_arena": "utledet"
+        "romssa_arena": "utledet",
+        "fredrikstad_stadion": "utledet"
       }
     },
     {
@@ -36718,7 +36696,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "aker_stadion"
+        "aker_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 85,
       "naturalPositions": [
@@ -36762,10 +36741,12 @@
       "warningWhenMisused": "Fuglset blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "aker_stadion": "key_player"
+        "aker_stadion": "key_player",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -37821,7 +37802,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "aker_stadion"
+        "aker_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 83,
       "naturalPositions": [
@@ -37864,10 +37846,12 @@
       "warningWhenMisused": "Hussain forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "aker_stadion": "club_profile"
+        "aker_stadion": "club_profile",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -39843,7 +39827,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "aker_stadion"
+        "aker_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -39883,10 +39868,12 @@
       "warningWhenMisused": "Fuglset blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "aker_stadion": "club_profile"
+        "aker_stadion": "club_profile",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -40951,7 +40938,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "aspmyra_stadion",
-        "kfum_arena"
+        "kfum_arena",
+        "fredrikstad_stadion"
       ],
       "classHeight": 84,
       "naturalPositions": [
@@ -40995,11 +40983,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "aspmyra_stadion": "club_profile",
-        "kfum_arena": "academy_export"
+        "kfum_arena": "academy_export",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
         "aspmyra_stadion": "utledet",
-        "kfum_arena": "belagt"
+        "kfum_arena": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -42292,7 +42282,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "aspmyra_stadion"
+        "aspmyra_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -42335,10 +42326,12 @@
       "warningWhenMisused": "Berg trenger en tydelig oppgave og en makker ved siden av seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "aspmyra_stadion": "club_profile"
+        "aspmyra_stadion": "club_profile",
+        "fredrikstad_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aspmyra_stadion": "utledet"
+        "aspmyra_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -44748,7 +44741,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "nordmore_stadion"
+        "nordmore_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -44791,10 +44785,12 @@
       "warningWhenMisused": "Askar mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "nordmore_stadion": "club_profile"
+        "nordmore_stadion": "club_profile",
+        "fredrikstad_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "nordmore_stadion": "utledet"
+        "nordmore_stadion": "utledet",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -62074,7 +62070,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "marienlyst_stadion"
+        "marienlyst_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 84,
       "naturalPositions": [
@@ -62117,10 +62114,12 @@
       "warningWhenMisused": "Brenne forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "marienlyst_stadion": "elite_career"
+        "marienlyst_stadion": "elite_career",
+        "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "belagt"
+        "marienlyst_stadion": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -63290,7 +63289,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "marienlyst_stadion"
+        "marienlyst_stadion",
+        "fredrikstad_stadion"
       ],
       "classHeight": 84,
       "naturalPositions": [
@@ -63331,10 +63331,12 @@
       "warningWhenMisused": "Jóhannsson blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "marienlyst_stadion": "elite_career"
+        "marienlyst_stadion": "elite_career",
+        "fredrikstad_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "belagt"
+        "marienlyst_stadion": "belagt",
+        "fredrikstad_stadion": "belagt"
       }
     },
     {
@@ -65020,6 +65022,4210 @@
       },
       "clubStatusSource": {
         "marienlyst_stadion": "belagt"
+      }
+    },
+    {
+      "id": "sten_moe",
+      "name": "Sten Moe",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "game_reading",
+        "passing_range",
+        "dribbling",
+        "leadership",
+        "tempo_control"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Moe forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "knut_bryna_brynildsen",
+      "name": "Knut «Bryna» Brynildsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines"
+      ],
+      "strengths": [
+        "box_finishing",
+        "combination_play",
+        "agility"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Brynildsen trenger frihet mellom ledd og folk som angriper rom foran ham.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "rolf_bayern_johannessen",
+      "name": "Rolf «Bayern» Johannessen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "duels",
+        "passing_range",
+        "bravery"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Johannessen mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "bjorn_spydevold",
+      "name": "Bjørn Spydevold",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "positioning",
+        "leadership",
+        "duels",
+        "composure",
+        "simple_passing"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Spydevold blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "erik_holmberg",
+      "name": "Erik Holmberg",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "heading",
+        "positioning",
+        "passing_range",
+        "duels",
+        "leadership"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Holmberg blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "henry_johannessen",
+      "name": "Henry Johannessen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "first_touch",
+        "finishing",
+        "combination_play",
+        "movement",
+        "final_pass"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Johannessen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "per_mosgaard",
+      "name": "Per Mosgaard",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "determination",
+        "positioning",
+        "reflexes",
+        "command_of_area"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Mosgaard trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "arne_borresen",
+      "name": "Arne Børresen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines"
+      ],
+      "strengths": [
+        "first_touch",
+        "passing_range",
+        "agility",
+        "vision",
+        "combination_play"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Børresen trenger frihet mellom ledd og folk som angriper rom foran ham.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "willy_vinga_olsen",
+      "name": "Willy «Vinga» Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "pace",
+        "crossing",
+        "wide_support",
+        "runs_behind",
+        "combination_play"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Olsen mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "reidar_kristiansen",
+      "name": "Reidar Kristiansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "work_rate",
+        "interceptions",
+        "simple_passing",
+        "positioning",
+        "teamwork"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Kristiansen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "reidar_lund",
+      "name": "Reidar Lund",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "acceleration",
+        "dribbling",
+        "long_shots",
+        "first_touch",
+        "late_runs"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Lund blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "atle_kristoffersen",
+      "name": "Atle Kristoffersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "stamina",
+        "simple_passing",
+        "determination",
+        "teamwork",
+        "work_rate"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Kristoffersen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "kai_erik_herlovsen",
+      "name": "Kai Erik Herlovsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "RB"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "pace",
+        "duels",
+        "composure",
+        "passing_range",
+        "teamwork"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Herlovsen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "pal_andre_czwartek",
+      "name": "Pål André Czwartek",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "determination",
+        "stamina",
+        "tackling",
+        "positioning",
+        "concentration"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Czwartek mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "markus_ringberg",
+      "name": "Markus Ringberg",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing",
+        "strength",
+        "heading",
+        "blocking",
+        "leadership"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Ringberg blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "raio_piiroja",
+      "name": "Raio Piiroja",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "heading",
+        "bravery",
+        "aggression",
+        "blocking",
+        "leadership"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Piiroja blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "hans_erik_ramberg",
+      "name": "Hans Erik Ramberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "work_rate",
+        "stamina",
+        "late_runs",
+        "determination",
+        "teamwork"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Ramberg forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "celso_borges",
+      "name": "Celso Borges",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "game_reading",
+        "passing_range",
+        "late_runs",
+        "heading",
+        "set_pieces"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Borges forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "rami_shaaban",
+      "name": "Rami Shaaban",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "reflexes",
+        "blocking",
+        "determination"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Shaaban trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "cristian_gamboa",
+      "name": "Cristian Gamboa",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion",
+        "lerkendal_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB",
+        "WB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "acceleration",
+        "stamina",
+        "overlapping_runs",
+        "aggression",
+        "ball_carrying"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Gamboa mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career",
+        "lerkendal_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt",
+        "lerkendal_stadion": "belagt"
+      }
+    },
+    {
+      "id": "brian_west",
+      "name": "Brian West",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "pace",
+        "runs_behind",
+        "pressing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "West blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "trond_erik_bertelsen",
+      "name": "Trond Erik Bertelsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "pace",
+        "stamina",
+        "aggression",
+        "one_vs_one",
+        "overlapping_runs"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Bertelsen mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "john_anders_bjorkoy",
+      "name": "John Anders Bjørkøy",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "RB"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "leadership",
+        "stamina",
+        "tackling",
+        "simple_passing",
+        "teamwork"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Bjørkøy forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "roger_risholt",
+      "name": "Roger Risholt",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "interceptions",
+        "stamina",
+        "aggression",
+        "passing_range",
+        "long_shots"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Risholt forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "joannes_bjartalid",
+      "name": "Jóannes Bjartalíð",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "first_touch",
+        "set_pieces",
+        "crossing",
+        "movement",
+        "final_pass"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Bjartalíð mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "patrick_metcalfe",
+      "name": "Patrick Metcalfe",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "WB"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "work_rate",
+        "aggression",
+        "teamwork",
+        "pressing",
+        "movement"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Metcalfe forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "dominic_adiyiah",
+      "name": "Dominic Adiyiah",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "pace",
+        "finishing",
+        "runs_behind",
+        "acceleration"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Adiyiah blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "gustav_adolf_gusten_eden",
+      "name": "Gustav Adolf «Gusten» Edén",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "determination",
+        "first_touch"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Edén blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "einar_wilhelms",
+      "name": "Einar Wilhelms",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "pace",
+        "first_touch",
+        "box_finishing",
+        "crossing",
+        "chance_creation"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Wilhelms blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "andreas_johansen",
+      "name": "Andreas Johansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "leadership",
+        "passing_range",
+        "game_reading",
+        "work_rate"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Johansen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "egil_brenna_lund",
+      "name": "Egil Brenna Lund",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "tackling",
+        "bravery",
+        "strength",
+        "duels",
+        "determination"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Lund mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "sverre_moe",
+      "name": "Sverre Moe",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "positioning",
+        "determination",
+        "box_presence",
+        "teamwork"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Moe blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "finn_jagge_johannessen",
+      "name": "Finn «Jagge» Johannessen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "pace",
+        "runs_behind",
+        "dribbling",
+        "crossing"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Johannessen mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "morten_pettersen",
+      "name": "Morten Pettersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing",
+        "pace",
+        "finishing",
+        "box_presence"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Pettersen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "haakon_johannessen",
+      "name": "Haakon Johannessen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "positioning",
+        "simple_passing",
+        "work_rate",
+        "teamwork"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Johannessen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "gunnar_pasan_andreassen",
+      "name": "Gunnar «Påsan» Andreassen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "duels",
+        "work_rate",
+        "teamwork"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Andreassen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "arne_ileby",
+      "name": "Arne Ileby",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "pace",
+        "box_finishing",
+        "crossing",
+        "wide_support"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Ileby mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "thorleif_larsen",
+      "name": "Thorleif Larsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "dribbling",
+        "crossing",
+        "pace",
+        "combination_play"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Larsen mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "reidar_brede_olsen",
+      "name": "Reidar Brede Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "interceptions",
+        "positioning",
+        "simple_passing",
+        "work_rate"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Olsen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "kjell_moe",
+      "name": "Kjell Moe",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "pace",
+        "first_touch",
+        "combination_play",
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Moe blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "leif_pedersen",
+      "name": "Leif Pedersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "first_touch",
+        "passing_range",
+        "crossing",
+        "agility"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Pedersen mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "age_spydevold",
+      "name": "Åge Spydevold",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "positioning",
+        "duels",
+        "teamwork",
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Spydevold blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "hans_jakob_jappen_mathisen",
+      "name": "Hans Jakob «Jappen» Mathisen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "teamwork",
+        "work_rate",
+        "duels",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Mathisen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "rolf_olsen",
+      "name": "Rolf Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_presence",
+        "combination_play",
+        "movement"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Olsen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "kjell_andreassen",
+      "name": "Kjell Andreassen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "duels",
+        "strength",
+        "positioning",
+        "simple_passing"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Andreassen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "jan_aas",
+      "name": "Jan Aas",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "pace",
+        "first_touch",
+        "crossing",
+        "movement"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Aas mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "sverre_pettersen",
+      "name": "Sverre Pettersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "duels",
+        "strength",
+        "heading",
+        "leadership"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Pettersen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "fridtjof_resberg",
+      "name": "Fridtjof Resberg",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing",
+        "runs_behind",
+        "determination"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Resberg blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "ivar_olsen",
+      "name": "Ivar Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "composure",
+        "positioning",
+        "reflexes",
+        "concentration"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Olsen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "georg_schuster",
+      "name": "Georg Schuster",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 83,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "reflexes",
+        "shot_stopping",
+        "bravery",
+        "determination"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Schuster trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "jan_erik_olsen",
+      "name": "Jan Erik Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "reflexes",
+        "bravery",
+        "command_of_area",
+        "concentration",
+        "determination"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Olsen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "lars_sorlie",
+      "name": "Lars Sørlie",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "RB"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "duels",
+        "determination",
+        "strength",
+        "blocking"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Sørlie blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "hans_jorgen_deunk",
+      "name": "Hans Jørgen Deunk",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "teamwork",
+        "work_rate",
+        "duels"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Deunk blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "espen_engebretsen",
+      "name": "Espen Engebretsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "work_rate",
+        "passing_range",
+        "movement",
+        "teamwork"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Engebretsen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "jan_erik_audsen",
+      "name": "Jan Erik Audsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "teamwork",
+        "determination",
+        "work_rate",
+        "positioning"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Audsen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "terje_jensen",
+      "name": "Terje Jensen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "RW"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "movement",
+        "first_touch",
+        "long_shots",
+        "determination"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Jensen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "vidar_kristoffersen",
+      "name": "Vidar Kristoffersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "movement",
+        "work_rate",
+        "late_runs"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Kristoffersen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "utledet"
+      }
+    },
+    {
+      "id": "patrik_gerrbrand",
+      "name": "Patrik Gerrbrand",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "positioning",
+        "passing_range",
+        "duels",
+        "teamwork"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Gerrbrand blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "mihaly_toth",
+      "name": "Mihály Tóth",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "strength",
+        "work_rate",
+        "box_presence",
+        "hold_up_play"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Tóth blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "oyvind_hoas",
+      "name": "Øyvind Hoås",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "heading",
+        "first_touch",
+        "combination_play"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Hoås blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "lasse_staw",
+      "name": "Lasse Staw",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "reflexes",
+        "determination",
+        "one_vs_one"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Staw trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "ludvig_begby",
+      "name": "Ludvig Begby",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB",
+        "WB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "determination",
+        "stamina",
+        "first_touch",
+        "crossing",
+        "set_pieces"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Begby mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "simen_rafn",
+      "name": "Simen Rafn",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "positioning",
+        "determination",
+        "duels",
+        "teamwork",
+        "leadership"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Rafn mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "jonathan_fischer",
+      "name": "Jonathan Fischer",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "reflexes",
+        "set_pieces",
+        "concentration",
+        "determination"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Fischer trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "julius_magnusson",
+      "name": "Julius Magnússon",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [
+        "CM",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "holding_midfielder"
+      ],
+      "archetypes": [
+        "ball_winner"
+      ],
+      "strengths": [
+        "interceptions",
+        "positioning",
+        "leadership",
+        "simple_passing",
+        "aggression"
+      ],
+      "needs": [
+        "clear_structure",
+        "midfield_partner"
+      ],
+      "preferredRoles": [
+        "holding_midfielder",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "chaotic_transitions"
+      ],
+      "warningWhenMisused": "Magnússon trenger en tydelig oppgave og en makker ved siden av seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "mads_nielsen",
+      "name": "Mads Nielsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "heading",
+        "leadership",
+        "duels",
+        "strength",
+        "set_pieces"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Nielsen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "maxwell_woledzi",
+      "name": "Maxwell Woledzi",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "pace",
+        "strength",
+        "ball_carrying",
+        "interceptions",
+        "passing_range"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Woledzi blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "stian_stray_molde",
+      "name": "Stian Stray Molde",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "aggression",
+        "positioning",
+        "first_touch",
+        "stamina",
+        "teamwork"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Molde mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "morten_bjorlo",
+      "name": "Morten Bjørlo",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "passing_range",
+        "set_pieces",
+        "long_shots",
+        "movement",
+        "late_runs"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Bjørlo forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "sondre_sorlokk",
+      "name": "Sondre Sørløkk",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM",
+        "WB"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "work_rate",
+        "pressing",
+        "movement",
+        "teamwork",
+        "runs_behind"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Sørløkk mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "brandur_hendriksson",
+      "name": "Brandur Hendriksson",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "first_touch",
+        "passing_range",
+        "set_pieces",
+        "long_shots",
+        "chance_creation"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Hendriksson forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "daniel_eid",
+      "name": "Daniel Eid",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB",
+        "WB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "stamina",
+        "overlapping_runs",
+        "pace",
+        "crossing",
+        "wide_support"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Eid mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "henrik_kjelsrud_johansen",
+      "name": "Henrik Kjelsrud Johansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "strength",
+        "heading",
+        "hold_up_play",
+        "pressing",
+        "game_reading"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Johansen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "havar_jenssen",
+      "name": "Håvar Jenssen",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "reflexes",
+        "determination",
+        "one_vs_one",
+        "leadership"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Jenssen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
+      }
+    },
+    {
+      "id": "henrik_skogvold",
+      "name": "Henrik Skogvold",
+      "nationality": "Norge",
+      "era": "modern",
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "pace",
+        "movement",
+        "pressing",
+        "teamwork"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Skogvold blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "fredrikstad_stadion": "academy_export"
+      },
+      "clubStatusSource": {
+        "fredrikstad_stadion": "belagt"
       }
     }
   ],

@@ -166,6 +166,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Rosenborg | Lerkendal | 156 |
 | Strømsgodset | Marienlyst stadion | 143 |
 | Vålerenga | Intility Arena | 127 |
+| Fredrikstad | Fredrikstad stadion | 100 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Lyn | Bislett Stadion | 82 |
@@ -179,12 +180,12 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Kristiansund | Nordmøre stadion | 49 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
-| Fredrikstad | Fredrikstad stadion | 4 |
+
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn og Strømsgodset —
-1291 arveplasser fordelt på alle 19. **Ingen klubb med bane står uten navn.** De 41 klubbene som
+1387 arveplasser fordelt på alle 19. **Ingen klubb med bane står uten navn.** De 41 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som.
 
 Arven er ikke lenger et eliteserieprivilegium: Strømsgodset og Lyn ligger begge
@@ -192,7 +193,7 @@ i OBOS-ligaen og har henholdsvis den nest største og den sjette største arven 
 katalogen. Det er riktig — arv er klubbens historie,
 ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 150 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 169 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -474,6 +475,24 @@ levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
 
+### Fredrikstad: fra 4 til 100 navn
+
+Fredrikstad hadde bane og **fire navn** — ni seriemesterskap og tolv
+cupmesterskap representert ved fire spillere. Det var det største avviket
+mellom hva en klubb er og hva katalogen visste om den.
+
+75 nye navn, 25 koblet på. Kilden er på høyde med Tromsø: **100 unike
+kvalitetssetninger for 100 spillere**, og 98 ulike ferdighetssett etter
+kartlegging.
+
+**Nær-duplikat-vakten fant enda en ekte duplikat.** Katalogen hadde «Christian
+Gamboa» på Lerkendal som `squad_profile` 79 — Rosenborg-importens stavemåte —
+og Fredrikstad-kilden har den riktige, «Cristian Gamboa», som `elite_career`
+85. Samme costaricanske høyreback, som spilte for FFK før Rosenborg, West
+Bromwich og Celtic. Oppføringene er slått sammen på den riktige stavemåten.
+Det er fjerde gang den vakten finner samme spiller lagt inn to ganger, og
+tredje gang det er en stavevariant.
+
 ### Tromsø: 81 profiler, to byttede posisjoner, og en måling som pyntet på seg selv
 
 Tromsø var den siste malgenererte arven — 38 av 81 på posisjonsmalen. Kilden
@@ -626,8 +645,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1319 statusoppføringer på 1117
-spillere, 718 belagte og 601 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1415 statusoppføringer på 1191
+spillere, 911 belagte og 504 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
@@ -640,11 +659,11 @@ Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 ```
 
 Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
-sto på én bane. Det er ikke lenger sant for 150 av dem, og KFUM gjorde det
+sto på én bane. Det er ikke lenger sant for 169 av dem, og KFUM gjorde det
 umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
 gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
 er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
-motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Sekstini
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Nittito
 spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
 det tallet er større enn null: faller det til null, er migreringen reversert.
 
