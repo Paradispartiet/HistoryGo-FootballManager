@@ -151,27 +151,27 @@
 
        Seksjonene på sin side bærer `data-tab-parent`, som er det som får
        hovedfanen til å lyse mens du er inne på en underflate. -->
-  <nav class="app-subnav" id="appSubnav" aria-label="Underfaner" hidden>
+  <nav class="app-subnav" id="appSubnav" role="tablist" aria-label="Underfaner" hidden>
     <!-- Kontor: det du må håndtere nå. -->
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="dashboard">Oversikt</button>
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="inbox">Assistentråd</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="dashboard" data-tab-target="dashboard">Oversikt</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="dashboard" data-tab-target="inbox">Assistentråd</button>
 
     <!-- Lag: uttak, benk, trening og systemkunnskap i samme arbeidsområde. -->
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="tactics">Oppstilling</button>
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="squad">Tropp &amp; benk</button>
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="trening">Trening</button>
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="system">Systemet</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="tactics">Oppstilling</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="squad">Tropp &amp; benk</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="trening">Trening</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="system">Systemet</button>
 
     <!-- Kamp: forberedelse, kamp og etterarbeid. -->
-    <button type="button" class="app-subtab" data-subnav-parent="kamp" data-tab-target="kamp">Kampdag</button>
-    <button type="button" class="app-subtab" data-subnav-parent="kamp" data-tab-target="analyse">Analyse</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="kamp" data-tab-target="kamp">Kampdag</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="kamp" data-tab-target="analyse">Analyse</button>
 
     <!-- Klubb/Mer: varige klubbfunksjoner. Uferdig økonomi, marked og
          fasiliteter er bevisst ikke navigerbare. -->
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="board">Styret</button>
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="admin">Stab &amp; drift</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="board">Styret</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="admin">Stab &amp; drift</button>
   </nav>
 
   <main class="app-shell" id="app">

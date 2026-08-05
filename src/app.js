@@ -1,13768 +1,1356 @@
-import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
-import "./ui/manager-shell-elements.js";
-import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
-import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
-import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";
-import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
-import { calculateTeamFit } from "./football-team-fit-engine.js";
-import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
-import {
-  createMatchReport,
-  createMatchdaySession,
-  resolveMatchdayDecision,
-  finalizeMatchdaySession,
-  getSessionEventIndex,
-  advanceMatchClock,
-  logMatchMoment,
-  applyMatchPlanChange,
-  applyMatchdaySubstitution,
-  applyOpponentAdaptation,
-  OPPONENT_PROFILES,
-  evaluateFormationMatchupVsOpponent
-} from "./football-matchday-engine.js";
-import {
-  HISTORICAL_OPPONENT_PROFILES,
-  getHistoricalOpponentProfile,
-  pickHistoricalOpponentProfile
-} from "./football-historical-opponent-profiles.js";
-import {
-  MINI_SEASON_VERSION,
-  MINI_SEASON_TOTAL_WEEKS,
-  MINI_SEASON_OUTCOME_LABELS,
-  startMiniSeason as createMiniSeasonStart,
-  normalizeMiniSeasonState,
-  getCurrentMiniSeasonMatch,
-  isCurrentMiniSeasonMatchPlayed,
-  applyMiniSeasonMatchResult,
-  advanceMiniSeasonWeek,
-  summarizeMiniSeason,
-  createMiniSeasonTable,
-  createMiniSeasonFormGuide,
-  createMiniSeasonOffPitchEvent
-} from "./football-mini-season.js";
-import {
-  createFederationArchiveEntry,
-  createFederationVerdict,
-  deriveFederationExpectation
-} from "./football-federation-verdict.js";
-import {
-  appendSeasonArchive,
-  createSeasonArchiveEntry,
-  createSeasonReview,
-  deriveSeasonTarget,
-  summarizeSeasonHistory
-} from "./football-season-review.js";
-import {
-  createScenarioMiniSeasonContext,
-  describeScenario,
-  getScenario,
-  normalizeScenarios
-} from "./football-scenarios.js";
-import {
-  applyMatchPlayerStats,
-  rankPlayerStats,
-  summarizePlayerStats
-} from "./football-player-stats.js";
-import {
-  applyMatchToConditions,
-  applyWeeklyRecovery,
-  conditionFor,
-  describeCondition,
-  fatigueFactorFor,
-  freshnessFor,
-  injuredPlayerIds,
-  isInjured,
-  playersNeedingRest,
-  applySummerBreak,
-  applyIndividualTrainingEffects,
-  summarizeSquadCondition
-} from "./football-player-condition.js";
-import {
-  MAX_SUBSTITUTIONS,
-  availableSubstitutions,
-  rankSubstitutionsForSlot,
-  substitutionsRemaining
-} from "./football-substitutions.js";
-import {
-  LEAGUE_SEASON_VERSION,
-  createLeagueSeason,
-  DEFAULT_LEAGUE_TIER,
-  isPlayoffPending,
-  resolveLeagueOutcome,
-  normalizeLeagueSeason,
-  getNextLeagueOpponent,
-  completeLeagueRound,
-  createLeagueTable,
-  startNextLeagueSeason
-} from "./football-league-season.js";
-import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";
-import { resolveClubSquadAccess, listClubHeritagePlayers } from "./football-club-squad.js";
-import {
-  normalizeAttributeCatalogue,
-  derivePlayerAttributeIndex,
-  describePositionDemands,
-  splitRoleRequirements,
-  resolveAttributeToken
-} from "./football-player-attributes.js";
-import {
-  listSelectableClubs,
-  resolveStartTier,
-  describeClubSelection,
-  deriveClubExpectation,
-  createManagerClubFromSelection,
-  createOwnManagerClub
-} from "./football-club-selection.js";
-import {
-  createLeaguePlayoff,
-  completePlayoffLeg,
-  resolveLeaguePlayoff,
-  describePlayoff,
-  getPlayoffMatchdayOpponent,
-  normalizeLeaguePlayoff,
-  LEAGUE_PLAYOFF_VERSION
-} from "./football-league-playoff.js";
-import {
-  TOURNAMENT_STAGE_LABELS,
-  createTournament,
-  normalizeTournamentState,
-  getEligibleTournaments,
-  getTournamentNextOpponent,
-  applyTournamentMatchResult,
-  createTournamentGroupTable,
-  createTournamentBracket,
-  getTournamentTeam,
-  summarizeTournament
-} from "./football-tournament.js";
-import {
-  computeMatchdayConsequences,
-  evaluateClubWeekMatchdayGate
-} from "./football-match-consequences.js";
-import {
-  TRAINING_FOCUSES,
-  getTrainingFocus,
-  sanitizeWeeklyTrainingFocus,
-  calculateTrainingStaffSupport,
-  recommendTrainingFocus,
-  createTrainingMatchdaySnapshot,
-  buildTrainingFocusOffPitchEvent
-} from "./football-training-week.js";
-import { createSuggestedSetups } from "./football-suggested-setups.js";
-import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
-import {
-  GAME_STATE_LABELS,
-  rankPlansForSituation,
-  readGameState
-} from "./football-match-plan.js";
-import {
-  normalizeRoleFamiliarity,
-  recordMatchRoleUsage,
-  summarizeLineupFamiliarity,
-  describeRoleFamiliarity,
-  getRoleFamiliarity,
-  applyTrainingRoleGrowth
-} from "./football-role-familiarity-engine.js";
-import { createRoleLearningViewModel } from "./football-role-learning-view-model.js";
-import {
-  createTrainingProgramCompositions,
-  getTrainingProgramCompositionById
-} from "./football-training-program-compositions.js";
-// Ukens plan: den ene modellen som binder ramme, tema og enkeltspiller sammen.
-import {
-  createWeeklyTrainingPlan,
-  calculateWeeklyTrainingIntensity,
-  evaluateProgramFocusCoherence,
-  describeWeeklyLoad
-} from "./football-training-plan.js";
-import {
-  PLAYER_WEAKNESS_VERSION,
-  normalizeWeaknessCatalogue,
-  normalizeWeaknessProgress,
-  identifyPlayerWeaknesses,
-  getWeaknessProgress,
-  describeWeaknessProgress,
-  applyWeaknessTraining,
-  weeklyWeaknessGrowth,
-  summarizeLineupWeaknessWork,
-  getWeaknessAttribute
-} from "./football-player-weaknesses.js";
-import {
-  normalizeIndividualTrainingCatalogue,
-  getIndividualTrack,
-  calculateIndividualCapacity,
-  sanitizeIndividualAssignments,
-  evaluateIndividualAssignment,
-  resolveIndividualTrainingWeek,
-  summarizeIndividualTraining
-} from "./football-individual-training.js";
-import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";
-import {
-  createDefaultOffPitchState,
-  normalizeOffPitchState,
-  summarizeOffPitchContext,
-  applyMatchdayOffPitchEffects,
-  applyOffPitchEvent,
-  applyTrainingProgramOffPitchEffects
-} from "./football-off-pitch-parameters.js";
-import {
-  createInboxState,
-  normalizeInboxState,
-  integrateInboxThreads,
-  applyInboxChoice,
-  archiveInboxThread,
-  markInboxThreadRead,
-  getActiveInboxThreads as getActiveInboxEventThreads,
-  getArchivedInboxThreads as getArchivedInboxEventThreads,
-  getUnreadInboxCount as getUnreadInboxEventCount
-} from "./football-inbox-events.js";
-import {
-  adaptHgFormations,
-  buildRoleTypeIndex,
-  getRoleDisplayNames,
-  getHistoricalFormationRoleHint,
-  lineXPositions
-} from "./hg-football-formation-adapter.js";
-import {
-  buildFormationKnowledgeIndex,
-  buildOpponentProfileIndex,
-  createFormationKnowledgeViewModel,
-  getFormationLearningHint
-} from "./football-formation-knowledge-view-model.js";
-import {
-  buildCoachContext,
-  buildCoachContextReport,
-  getStaffCategory
-} from "./hg-football-coach-context-engine.js";
-import {
-  preloadManagerEngine,
-  getLoadedManagerEngine,
-  createLegacyManagerAppStateFromBrowserState,
-  createLegacyManagerAppStateFromBrowserStateSync,
-  getDashboardViewModelFromLegacyManagerState,
-  createInitialClubWeekStateFromBrowser,
-  advanceClubWeekPhaseFromBrowser,
-  applyClubWeekEffectsFromBrowser,
-  createClubWeekSummaryFromBrowser,
-  getClubWeekPhaseLabelFromBrowser,
-  getClubWeekPhaseGuidanceFromBrowser,
-  listClubWeekPhasesFromBrowser,
-} from "./app-manager-engine-bridge.js";
-import {
-  migrateModeSessions,
-  persistModeEnvelope,
-  switchModeSession,
-  resetSecondarySession,
-  captureModeSession,
-  applyModeSession
-} from "./football-mode-sessions.js";
-
-const DATA_PATHS = {
-  players: "data/football_players.json",
-  // Spillerarketyper (rolleprofiler/underliggende logikk) som ekte spillere
-  // kobler seg til via archetypeIds. Brukes ikke til Ã¥ fylle spillerselect.
-  playerArchetypes: "data/football_player_archetypes.json",
-  roles: "data/football_roles.json",
-  tactics: "data/football_tactics.json",
-  // Scenarioer: korte historiske utfordringer bygget pÃ¥ arketypene.
-  scenarios: "data/football_scenarios.json",
-  // Gammel formasjonskatalog beholdes som legacy/fallback. Taktikktavla pÃ¥
-  // forsiden drives nÃ¥ av de historiske hgFootball-formasjonene under, men
-  // filen slettes ikke: den er trygg fallback hvis hgFootball-data mangler.
-  legacyFormations: "data/football_formations.json",
-  // Historisk formasjonsgrunnlag (data/hgFootball/) som nÃ¥ fyller formationSelect
-  // og tegnes pÃ¥ den eksisterende grÃ¸nne banen via formasjonsadapteren.
-  hgFormations: "data/hgFootball/formations.json",
-  hgFormationEras: "data/hgFootball/formationEras.json",
-  hgRoleTypes: "data/hgFootball/roleTypes.json",
-  hgRoleFitRules: "data/hgFootball/playerRoleFitRules.json",
-  hgUnlockRules: "data/hgFootball/unlockRules.json",
-  // Stab-/trenerroller: hvilke lag-/utviklingsdimensjoner hver rolle pÃ¥virker.
-  // Driver coachContext-motoren (formationFamiliarity, coachUnderstanding m.m.).
-  hgStaffRoles: "data/hgFootball/staffRoles.json",
-  // Formation Knowledge Engine: kunnskapslag (matchups/parameterprofil) per
-  // formasjon. Driver formasjons-matchup mot motstanderprofiler pÃ¥ kampdag.
-  hgFormationKnowledge: "data/hgFootball/formationKnowledge.json",
-  knowledgePrinciples: "data/football_knowledge_principles.json",
-  footballBookKnowledgeIndex: "data/football_book_knowledge_principles.json",
-  clubInboxMessages: "data/club_inbox_messages.json",
-  clubInboxMessageManifest: "data/club_inbox_messages/manifest.json",
-  clubInboxSenders: "data/club_inbox_senders.json",
-  clubInboxThreads: "data/club_inbox_threads.json",
-  clubInboxChoiceManifest: "data/club_inbox_choices/manifest.json",
-  clubInboxReplyManifest: "data/club_inbox_replies/manifest.json",
-  // History Go-unlocks: steder, stab, ekspertise, treningsprogrammer og badges.
-  unlocks: "data/football_unlocks.json",
-  // Mesterskap (EM/VM) for landslagsmodus: turneringsstruktur + nasjoner med
-  // historisk stil-arketype. Ingen nasjoner eller mesterskap hardkodes i JS.
-  tournaments: "data/football_tournaments.json",
-  placeLocations: "data/football_place_locations.json",
-  staff: "data/football_staff.json",
-  expertise: "data/football_expertise.json",
-  trainingPrograms: "data/football_training_programs.json",
-  // Individuell trening: sporene en enkeltspiller kan settes pÃ¥ ved siden av
-  // lagsÃ¸kta. Ingen av dem hever `overall` â€” se docs/trening.md.
-  individualTraining: "data/football_individual_training.json",
-  // Svake sider: attributtkatalog + posisjonskrav. Svakhetene identifiseres ut
-  // av spillerdataene som allerede finnes â€” se docs/svake-sider.md.
-  playerWeaknesses: "data/football_player_weaknesses.json",
-  // Ferdighetsvokabularet: de 42 ferdighetene spillere mÃ¥les pÃ¥, aliasene som
-  // binder eldre tokens til dem, og posisjonenes RANGERTE kravlister. LÃ¥
-  // tidligere inne i svakhetsfila, som da eide to ting samtidig.
-  attributes: "data/football_attributes.json",
-  // Ligaklubbenes spillestil, tegnet pÃ¥ klubbenes egen tradisjon. Klubben eier
-  // identitet og nivÃ¥ (football_clubs.json); dette eier fotballen.
-  leagueClubProfiles: "data/football_league_club_profiles.json",
-  // Seriepyramiden: Eliteserien / OBOS-ligaen / 2. divisjon med klubber, nivÃ¥er
-  // og opp-/nedrykksregler. Kilden for HVEM du mÃ¸ter og HVOR du stÃ¥r.
-  clubs: "data/football_clubs.json",
-  trainingBadges: "data/football_training_badges.json",
-  teamClassifications: "data/football_team_classifications.json",
-  // Stedsrapporter (v1): forklarer hva hvert sportsted gir manageren. Rent
-  // UI-/forklaringslag â€“ ingen unlock-, fit- eller badgeeffektmotor-effekt.
-  placeReports: "data/football_place_reports.json",
-  // V1 bruker example-filen som midlertidig lag-/demostate (unlockedPlaceIds,
-  // hiredStaffIds, earnedBadgeIds osv.). Flyttes til save-system senere.
-  teamMerits: "data/football_team_merits.example.json"
-};
-
-const EMPTY_VALUE = "__empty__";
-const POSITIONS_KEY = "hgfm.slotPositions.v1";
-
-// Brikkefordelingen pÃ¥ banen er versjonert i selve dataene, ikke i nÃ¸kkelen.
-// Layout 1 strakk HVER linje ut til sidelinja (spissparet i 4-4-2 havnet pÃ¥
-// 14 % og 86 %) og klemte tette formasjoner inn i det samme smale bÃ¥ndet.
-// Lagrede layout 1-koordinater ville overstyrt den rettede fordelingen for alle
-// som allerede har spilt â€” ogsÃ¥ via modus-konvoluttens sesjoner, som en ren
-// nÃ¸kkelbump ikke ville nÃ¥dd. Derfor stemples settet, og et umerket/utdatert
-// sett forkastes Ã©n gang. Manuelt flyttede brikker nullstilles da; alt annet i
-// lagringen er urÃ¸rt.
-const PITCH_LAYOUT_VERSION = 3;
-const PITCH_LAYOUT_FIELD = "__layout";
-const ACTIVE_KNOWLEDGE_FOCUS_KEY = "hgfm.activeKnowledgeFocus.v1";
-const COMPLETED_KNOWLEDGE_FOCUS_KEY = "hgfm.completedKnowledgeFocus.v1";
-const TRAINING_WEEK_KEY = "hgfm.trainingWeek.v1";
-const WEEKLY_TRAINING_FOCUS_KEY = "hgfm.weeklyTrainingFocus.v1";
-// Ukens valgte treningsprogram (komposisjon). Holdes adskilt fra treningsfokus
-// og HG-badge-programmer. Kun UI/progresjon + engangs off-pitch-effekt per uke.
-const WEEKLY_TRAINING_PROGRAM_KEY = "hgfm.weeklyTrainingProgram.v1";
-// Ukas individuelle oppfÃ¸lging: { week, assignments: [{playerId, trackId, roleId}] }.
-const INDIVIDUAL_TRAINING_KEY = "hgfm.individualTraining.v1";
-const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
-const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
-const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
-// History Go-lagprogresjon (team merits) i localStorage. Seedes fra example-filen
-// ved fÃ¸rste lasting, deretter persisteres brukerens egne endringer her.
-const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
-// Innboks-trÃ¥der: leste og leverte meldings-id-er (kun UI/progresjon).
-const READ_INBOX_MESSAGE_IDS_KEY = "hgfm.readInboxMessageIds.v1";
-const DELIVERED_INBOX_MESSAGE_IDS_KEY = "hgfm.deliveredInboxMessageIds.v1";
-// Innboks-svarvalg (v1): brukerens valgte svar per messageId. Kun UI/progresjon
-// pluss smÃ¥ engangs-effekter pÃ¥ Club Week-verdier.
-const SELECTED_INBOX_CHOICES_KEY = "hgfm.selectedInboxChoices.v1";
-// Innboks-kuratering v2: hvilken uke spilleren sist kvitterte ut ukas signal.
-// Ren UI-state â€” styrer bare hvor mange trÃ¥der som lÃ¸ftes til Â«Viktig nÃ¥Â» per
-// uke, aldri motoren.
-const INBOX_ACK_WEEK_KEY = "hgfm.inboxAcknowledgedWeek.v1";
-// Kampdag (v1): siste spilte kamp. Kun UI/progresjon i localStorage â€“ ingen serie,
-// tabell, sesong eller livekamp. Selve kampberegningen ligger i kampmotoren.
-const MATCHDAY_STATE_KEY = "hgfm.matchday.v1";
-// Mini Season v0.1: 5-kampers prÃ¸veperiode (motstanderplan, resultater, styremÃ¥l
-// og sluttvurdering). Kun UI/progresjon i localStorage â€“ ingen liga, tabell,
-// Ã¸konomi eller ny kampmotor. Selve logikken ligger i football-mini-season.js.
-const MINI_SEASON_KEY = MINI_SEASON_VERSION;
-const LEAGUE_SEASON_KEY = LEAGUE_SEASON_VERSION;
-const LEAGUE_PLAYOFF_KEY = LEAGUE_PLAYOFF_VERSION;
-const FIRST_TIME_PLAYTHROUGH_KEY = "hgfm.firstTimePlaythrough.v1";
-const GAME_START_STATE_KEY = "hgfm.gameStartState.v1";
-// Onboarding v2: egen startskjerm. `onboarded` = spilleren har valgt spillmodus
-// minst Ã©n gang, sÃ¥ startskjermen ikke legger seg over spillet ved hver last.
-const ONBOARDED_KEY = "hgfm.onboarded.v1";
-const AJAX_TOTAL_FOOTBALL_SCENARIO_ID = "ajax_1971_73_totalfootball";
-const FIRST_TIME_OPPONENT_ID = "ajax_1971_73_total_football";
-
-// Ekte History Go-progresjon i localStorage (skrives av History Go-appen, ikke
-// av Football Manager). Brukes som kilde til faktisk besÃ¸kte sportsteder.
-//   visited_places            â€“ objekt/map med besÃ¸kte placeId-er ({ id: true }).
-//   hg_groundhopper_stats_v1  â€“ Groundhopper-/sportstatistikk, der
-//                               visited_groundhopper_places er hovedlisten.
-const HISTORY_GO_VISITED_PLACES_KEY = "visited_places";
-const HISTORY_GO_GROUNDHOPPER_STATS_KEY = "hg_groundhopper_stats_v1";
-// Quiz-status fra History Go. Kilden er verifisert mot History Go-repoet
-// (Paradispartiet/History-Go):
-//   js/quizzes.js:     HG_LEARNING_LOG_KEY = "hg_learning_log_v1"
-//                      // Â«eneste sannhet: quiz + observasjonerÂ»
-//   js/learningLog.js: isQuizEvent() => type === "quiz_perfect"
-//                      || "quiz_set_complete" || "quiz_legacy"
-//   Radene bÃ¦rer `parentTargetId` = stedets id (jf. quizzes.js og
-//   tests/knowledge-v2-model.test.js: parentTargetId: "torggata").
-// Vi LESER kun denne nÃ¸kkelen â€“ Football Manager skriver aldri til den.
-const HISTORY_GO_LEARNING_LOG_KEY = "hg_learning_log_v1";
-const HISTORY_GO_QUIZ_EVENT_TYPES = new Set(["quiz_perfect", "quiz_set_complete", "quiz_legacy"]);
-
-// Maks antall klubbhendelser som beholdes i loggen (nyeste fÃ¸rst).
-const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
-
-// Troppskrav (roster readiness): minst 15 opplÃ¥ste spillere totalt, der 11 stÃ¥r
-// i startelleveren og minst 4 er benkespillere, fÃ¸r manager-/kampdelen regnes
-// som spillklar.
-const REQUIRED_SQUAD_SIZE = 15;
-const REQUIRED_STARTERS = 11;
-const REQUIRED_BENCH = 4;
-const REQUIRED_STAFF_SIZE = 3;
-
-// Standard y-bÃ¥nd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
-const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
-
-const state = {
-  players: [],
-  // Spillerarketyper fra football_player_archetypes.json. Underliggende
-  // rolleprofiler som ekte spillere kobler seg til via archetypeIds. Brukes
-  // ikke til Ã¥ fylle spillerselect og har ingen direkte fit-/kampmotor-effekt.
-  playerArchetypes: [],
-  roles: [],
-  tactics: [],
-  // Runtime-formasjoner som taktikktavla bruker. Fylles nÃ¥ fra de historiske
-  // hgFootball-formasjonene via adapteren (adaptHgFormations). Gamle
-  // football_formations.json beholdes i legacyFormations som fallback.
-  formations: [],
-  legacyFormations: [],
-  // Historisk hgFootball-grunnlag (data/hgFootball/). RÃ¥data pluss oppslag.
-  // Driver formationSelect, faseformasjons-/taktikkpanelet og rollefit-hint.
-  hgFormations: [],
-  hgFormationEras: [],
-  // Formation Knowledge Engine: oppslag formationId -> kunnskap (strongAgainst/
-  // weakAgainst m.m.). Driver formasjons-matchup mot motstanderprofiler.
-  formationKnowledgeById: {},
-  hgRoleTypes: [],
-  // Oppslag id -> roleType for visningsnavn pÃ¥ nÃ¸kkelroller (roleTypes.json).
-  hgRoleTypeIndex: new Map(),
-  hgRoleFitRules: null,
-  hgUnlockRules: null,
-  // Stab-/trenerroller (staffRoles) for coachContext-motoren. Normaliseres til
-  // staffRolesData.staffRoles || [] i init().
-  hgStaffRoles: [],
-  knowledgePrinciples: [],
-  // Peker pÃ¥ en hgFootball-formation.id (felles state, ingen parallell id).
-  selectedFormationId: null,
-  selectedTacticId: null,
-  selectedSlotId: null,
-  lineup: {},
-  // slotId -> { x, y } i prosent innenfor banen, for gjeldende formasjon.
-  slotPositions: {},
-  // Valgt kunnskapskort som ukens treningsfokus (kun UI/state, ingen kampmotor-effekt).
-  activeKnowledgeFocusId: null,
-  // Kunnskapsfokus som er markert fullfÃ¸rt denne uken (kun UI/progresjon, ingen score-effekt).
-  completedKnowledgeFocusIds: new Set(),
-  // Gjeldende treningsuke (kun UI/progresjon, ingen kampmotor- eller score-effekt).
-  trainingWeek: 1,
-  // Taktisk treningsfokus for gjeldende Club Week. Holdes bevisst adskilt fra
-  // kunnskapsfokus og History Go-programmer/badges.
-  weeklyTrainingFocus: null,
-  // Ukens valgte treningsprogram (komposisjon). { programId, week, applied }.
-  // Adskilt fra treningsfokus; brukes til valgt-tilstand og engangs off-pitch-effekt.
-  weeklyTrainingProgram: null,
-  // Katalogen over individuelle treningsspor (fra datafil, normalisert).
-  individualTrainingCatalogue: { capacity: { base: 1, perStaffMember: 1, max: 5 }, tracks: [] },
-  // Ukas individuelle oppfÃ¸lging: { week, assignments: [] }.
-  individualTraining: { week: null, assignments: [] },
-  // Katalogen over svake sider (fra datafil, normalisert).
-  weaknessCatalogue: { attributes: [], positionDemands: {}, difficulty: {}, biteReliefCap: 4 },
-  // Spillestilprofiler for ligaklubbene, keyet pÃ¥ klubb-id.
-  leagueClubProfiles: {},
-  // Seriepyramiden: { tiers, clubs }. Tom pyramide betyr at motoren faller
-  // tilbake pÃ¥ standardnivÃ¥et â€” spillet stÃ¥r ikke, men karrierestigen mangler.
-  leaguePyramid: { tiers: [], clubs: [] },
-  // Aktiv kvalifisering (opp-/nedrykkskamper). Null nÃ¥r sesongen ikke endte pÃ¥
-  // en kvalifiseringsplass.
-  leaguePlayoff: null,
-  // Club Week Engine-tilstand (uke, fase og klubbverdier). Normaliseres av engine/fallback.
-  clubWeekState: null,
-  // Kort tilbakemelding om siste fasebytte (kun UI/tekst, ingen score- eller engine-effekt).
-  clubWeekFeedback: "Klubbuken er klar.",
-  // Kort logg over fasebytter i Club Week (nyeste fÃ¸rst). Kun UI/state/localStorage.
-  clubWeekEventLog: [],
-  // Base-meldinger fra datafil. Svarvalg og replies ligger i egne kataloger og
-  // kobles inn i runtime (getAllRuntimeInboxMessages).
-  clubInboxMessages: [],
-  // Full avsenderkatalog for Innboks. Brukes til Ã¥ vise stabile klubbstemmer fra start.
-  clubInboxSenders: [],
-  // TrÃ¥dkatalog for Innboks. Grupperer meldinger i samtaletrÃ¥der per avsender/tema.
-  clubInboxThreads: [],
-  // Innboks-trÃ¥d-state (kun UI/progresjon i localStorage â€“ ingen kampmotor-,
-  // rollefit- eller matching-effekt):
-  // - delivered = meldinger som har blitt utlÃ¸st/vist minst Ã©n gang (matchet
-  //   fase/conditions). Huskes i historikken selv etter at conditions slutter Ã¥ matche.
-  // - read = meldinger brukeren har markert som lest via "Marker trÃ¥d som lest".
-  // - Innboks viser aktive trÃ¥der med uleste meldinger.
-  // - Arkiv viser trÃ¥der med levert/lest historikk.
-  readInboxMessageIds: new Set(),
-  deliveredInboxMessageIds: new Set(),
-  // Uken spilleren sist kvitterte ut ukas innbokssignal (0 = ingen ennÃ¥).
-  inboxAcknowledgedWeek: 0,
-  // Innboks-svarvalg (v1):
-  // - clubInboxChoices = valgkatalogen lastet fra manifest (Ã©n fil per avsender).
-  // - selectedInboxChoices = brukerens valg som map { [messageId]: choiceId }.
-  // Effekter pÃ¥ Club Week-verdier brukes kun fÃ¸rste gang et valg tas; reload
-  // bruker ikke effekter pÃ¥ nytt. Ingen kampmotor-, rollefit- eller matching-effekt.
-  clubInboxChoices: [],
-  selectedInboxChoices: {},
-  // Hvilken innbokstrÃ¥d som er Ã¥pnet/ekspandert i panelet (kun UI). TrÃ¥der vises
-  // kollapset som klikkbare rader; den Ã¥pne trÃ¥den viser innhold og svarvalg.
-  openInboxThreadId: null,
-  // Innboks-trÃ¥dsvar (v1):
-  // - clubInboxReplies = reply-katalogen lastet fra manifest (Ã©n fil per avsender).
-  // Et reply er en oppfÃ¸lgingsmelding som lÃ¥ses opp nÃ¥r et bestemt svarvalg er
-  // tatt. Replies er runtime-meldinger med egne id-er som gjenbruker eksisterende
-  // delivered/read-modell. De har ingen effekter eller egne svarvalg i v1.
-  clubInboxReplies: [],
-  // History Go-unlocks (v1). Kobler besÃ¸kte steder til Football Manager-ressurser.
-  // Filtreres gjennom availability-snapshotet (teamMerits + ekte History
-  // Go-progresjon). Ingen fit-/kampmotor-effekt.
-  unlocks: { placeUnlocks: [] },
-  // Koordinater for steder som kan levere lokal starttropp. Datafilen er eneste
-  // kilde til koordinater; app.js inneholder ingen stedsspesifikke posisjoner.
-  placeLocations: { places: [] },
-  staff: [],
-  expertise: [],
-  trainingPrograms: [],
-  trainingBadges: { badgeFamilies: [] },
-  teamClassifications: { classifications: [] },
-  // Stedsrapporter (v1): forklaringskort per sportsted. Kun visning â€“ ingen
-  // effekt pÃ¥ unlock-, fit- eller badgeeffektmotor.
-  placeReports: { placeReports: [] },
-  // Midlertidig lag-/demostate fra example-filen (unlockedPlaceIds, hiredStaffIds,
-  // unlockedExpertiseIds, earnedBadgeIds, badgeProgress, activeClassifications).
-  teamMerits: null,
-  // Midlertidig UI-melding for geolokasjon/aktivering. Selve valget persisteres
-  // under teamMerits.localStart; denne teksten er kun status i gjeldende Ã¸kt.
-  localStartMessage: "",
-  // Kampdag (v0.2): siste spilte kamp pluss eventuell pÃ¥gÃ¥ende kampsesjon
-  // (faser pre_match â†’ event_1..3 â†’ resolved med managerbeslutninger). Kun
-  // UI/progresjon i localStorage â€“ ingen serie, tabell, sesong eller livekamp.
-  matchday: { lastMatch: null, session: null },
-  // Mini Season v0.1: aktiv/fullfÃ¸rt 5-kampers prÃ¸veperiode, eller null nÃ¥r
-  // ingen prÃ¸veperiode er startet. Kun UI/progresjon i localStorage.
-  miniSeason: null,
-  // Egen 14-runders ligatilstand. Scenarioets miniSeason deles aldri med ligaen.
-  leagueSeason: null,
-  modeEnvelope: null,
-  modeChooserOpen: false,
-  // Landslagsmodus: valgt nasjon + uttatt landslagstropp (isolert per modus).
-  nationalTeam: { nationality: null, squadPlayerIds: [] },
-  // Aktivt mesterskap (EM/VM) i landslagsmodus, eller null fÃ¸r du melder pÃ¥.
-  tournament: null,
-  // Ferdigspilte mesterskap: nasjon, mesterskap og plassering. Landslagets
-  // merittliste, adskilt fra klubbens.
-  tournamentHistory: [],
-  // Onboarding v2: har spilleren valgt modus pÃ¥ egen startskjerm minst Ã©n gang?
-  onboarded: false,
-  firstTimePlaythrough: { started: false, completed: false, currentStep: "start" },
-  gameStartState: { selectedMode: null, activeLeagueSaveId: undefined, activeScenarioId: undefined },
-  openTrainingStepId: "trainingProgramStep"
-};
-
-const elements = {
-  formationSelect: document.querySelector("#formationSelect"),
-  tacticSelect: document.querySelector("#tacticSelect"),
-  teamStatus: document.querySelector("#teamStatus"),
-  roleFitAverage: document.querySelector("#roleFitAverage"),
-  tacticFitAverage: document.querySelector("#tacticFitAverage"),
-  balanceScore: document.querySelector("#balanceScore"),
-  restDefenseScore: document.querySelector("#restDefenseScore"),
-  formationTitle: document.querySelector("#formationTitle"),
-  completeCount: document.querySelector("#completeCount"),
-  lineupSlots: document.querySelector("#lineupSlots"),
-  lineupPlayerChoices: document.querySelector("#lineupPlayerChoices"),
-  lineupRoleChoices: document.querySelector("#lineupRoleChoices"),
-  // Kompakt taktisk systempanel for valgt historisk formasjon (nÃ¦r banen).
-  tacticalSystemPanel: document.querySelector("#tacticalSystemPanel"),
-  // Additivt historisk rollefit-hint i sidepanelet.
-  historicalRoleHint: document.querySelector("#historicalRoleHint"),
-  roleLearningCard: document.querySelector("#roleLearningCard"),
-  selectedSlotTitle: document.querySelector("#selectedSlotTitle"),
-  selectedMatchScore: document.querySelector("#selectedMatchScore"),
-  selectedFitStatus: document.querySelector("#selectedFitStatus"),
-  selectedFitExplanation: document.querySelector("#selectedFitExplanation"),
-  reportSummary: document.querySelector("#reportSummary"),
-  // TrenerstÃ¸tte (coachContext) i lagrapporten.
-  coachContextHeadline: document.querySelector("#coachContextHeadline"),
-  coachContextFamiliarity: document.querySelector("#coachContextFamiliarity"),
-  coachContextUnderstanding: document.querySelector("#coachContextUnderstanding"),
-  coachContextLearning: document.querySelector("#coachContextLearning"),
-  coachContextStaff: document.querySelector("#coachContextStaff"),
-  badgeEffectsSummary: document.querySelector("#badgeEffectsSummary"),
-  // Kampdag (v1): knapper og resultatomrÃ¥de i analysepanelet.
-  playMatchdayButton: document.querySelector("#playMatchdayButton"),
-  resetMatchdayButton: document.querySelector("#resetMatchdayButton"),
-  matchdayResult: document.querySelector("#matchdayResult"),
-  // Mini Season v0.1: prÃ¸veperiodepanelet nÃ¦r Club Week-topbaren.
-  miniSeasonStatus: document.querySelector("#miniSeasonStatus"),
-  startMiniSeasonButton: document.querySelector("#startMiniSeasonButton"),
-  resetMiniSeasonButton: document.querySelector("#resetMiniSeasonButton"),
-  miniSeasonOverview: document.querySelector("#miniSeasonOverview"),
-  // League Loop v0.2: ligasesong-panelet (samme motor, liga-presentasjon).
-  leagueSeasonPanel: document.querySelector("#leagueSeasonPanel"),
-  leagueSeasonStatus: document.querySelector("#leagueSeasonStatus"),
-  leagueSeasonOverview: document.querySelector("#leagueSeasonOverview"),
-  startNewLeagueSeasonButton: document.querySelector("#startNewLeagueSeasonButton"),
-  // Legacy id: firstTimePlaythroughCard is now used as the game mode card.
-  // Do not treat it as mandatory onboarding.
-  onboardingScreen: document.querySelector("#onboardingScreen"),
-  firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
-  portalNextMatch: document.querySelector("#portalNextMatch"),
-  portalMatchHint: document.querySelector("#portalMatchHint"),
-  portalInboxStatus: document.querySelector("#portalInboxStatus"),
-  firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
-  firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
-  firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
-  modeChoiceCards: Array.from(document.querySelectorAll("[data-start-mode]")),
-  scenarioList: document.querySelector("#scenarioList"),
-  trainingChoiceGate: document.querySelector("#trainingChoiceGate"),
-  trainingChoiceStatus: document.querySelector("#trainingChoiceStatus"),
-  trainingChoiceSignal: document.querySelector("#trainingChoiceSignal"),
-  trainingChoiceRecommended: document.querySelector("#trainingChoiceRecommended"),
-  trainingChoiceRisk: document.querySelector("#trainingChoiceRisk"),
-  trainingGoMatch: document.querySelector("#trainingGoMatch"),
-  // Ukens plan (football-training-plan.js): fire steg i fast rekkefÃ¸lge.
-  trainingPlanHeadline: document.querySelector("#trainingPlanHeadline"),
-  trainingPlanCoherence: document.querySelector("#trainingPlanCoherence"),
-  trainingPlanLoad: document.querySelector("#trainingPlanLoad"),
-  trainingPlanSteps: document.querySelector("#trainingPlanSteps"),
-  trainingPlanNext: document.querySelector("#trainingPlanNext"),
-  trainingProgramLoadValue: document.querySelector("#trainingProgramLoadValue"),
-  // Individuell trening (football-individual-training.js).
-  individualTrainingCapacity: document.querySelector("#individualTrainingCapacity"),
-  individualTrainingAssignments: document.querySelector("#individualTrainingAssignments"),
-  individualTrainingPicker: document.querySelector("#individualTrainingPicker"),
-  // Svake sider (football-player-weaknesses.js).
-  weaknessWorkSummary: document.querySelector("#weaknessWorkSummary"),
-  weaknessList: document.querySelector("#weaknessList"),
-  // Appens underfanestripe (Ã©n for alle hovedfaner som har underinndeling).
-  appSubnav: document.querySelector("#appSubnav"),
-  progressionBadgeCount: document.querySelector("#progressionBadgeCount"),
-  weeklyTrainingStatus: document.querySelector("#weeklyTrainingStatus"),
-  weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
-  weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
-  strengthsList: document.querySelector("#strengthsList"),
-  issuesList: document.querySelector("#issuesList"),
-  widthScore: document.querySelector("#widthScore"),
-  depthScore: document.querySelector("#depthScore"),
-  buildUpScore: document.querySelector("#buildUpScore"),
-  pressScore: document.querySelector("#pressScore"),
-  relationshipScore: document.querySelector("#relationshipScore"),
-  // Relasjoner (synlig metrikk + forklarende liste i lagrapporten).
-  relationshipHeadline: document.querySelector("#relationshipHeadline"),
-  relationshipList: document.querySelector("#relationshipList"),
-  // Neste handling-stripe (Playable Manager Flow Polish v1): prioritert
-  // primÃ¦rhandling + sekundÃ¦re steg utledet av eksisterende state.
-  nextActionStrip: document.querySelector("#nextActionStrip"),
-  nextActionPhase: document.querySelector("#nextActionPhase"),
-  nextActionPrimary: document.querySelector("#nextActionPrimary"),
-  nextActionPrimaryTag: document.querySelector("#nextActionPrimaryTag"),
-  nextActionPrimaryTitle: document.querySelector("#nextActionPrimaryTitle"),
-  nextActionPrimaryHint: document.querySelector("#nextActionPrimaryHint"),
-  nextActionSecondary: document.querySelector("#nextActionSecondary"),
-  suggestedSetupsTactics: document.querySelector("#suggestedSetupsTactics"),
-  contextSignals: document.querySelector("#contextSignals"),
-  contextHeadline: document.querySelector("#contextHeadline"),
-  trainingPrograms: document.querySelector("#trainingPrograms"),
-  weeklyTrainingProgramStatus: document.querySelector("#weeklyTrainingProgramStatus"),
-  managerTrainingPlan: document.querySelector("#managerTrainingPlan"),
-  managerRoleChanges: document.querySelector("#managerRoleChanges"),
-  managerWeakPoints: document.querySelector("#managerWeakPoints"),
-  // Analyse-fanen viser de samme to listene som den dype rapporten, fra samme
-  // motorkall â€” ikke en egen beregning som kunne begynt Ã¥ motsi den.
-  analyseMatchReport: document.querySelector("#analyseMatchReport"),
-  statsSummary: document.querySelector("#statsSummary"),
-  statsMatches: document.querySelector("#statsMatches"),
-  statsGoals: document.querySelector("#statsGoals"),
-  statsAssists: document.querySelector("#statsAssists"),
-  statsTopScorer: document.querySelector("#statsTopScorer"),
-  statsStanding: document.querySelector("#statsStanding"),
-  statsBoardGoal: document.querySelector("#statsBoardGoal"),
-  headerClubName: document.querySelector("#headerClubName"),
-  headerClubManager: document.querySelector("#headerClubManager"),
-  playerStatsTable: document.querySelector("#playerStatsTable"),
-  leagueOnboardingPanel: document.querySelector("#leagueOnboardingPanel"),
-  leagueOnboardingLead: document.querySelector("#leagueOnboardingLead"),
-  leagueOnboardingSteps: document.querySelector("#leagueOnboardingSteps"),
-  seasonReviewPanel: document.querySelector("#seasonReviewPanel"),
-  seasonReviewVerdict: document.querySelector("#seasonReviewVerdict"),
-  seasonReviewHeadline: document.querySelector("#seasonReviewHeadline"),
-  seasonReviewBoard: document.querySelector("#seasonReviewBoard"),
-  seasonReviewReasons: document.querySelector("#seasonReviewReasons"),
-  seasonReviewHighlights: document.querySelector("#seasonReviewHighlights"),
-  seasonArchiveSummary: document.querySelector("#seasonArchiveSummary"),
-  seasonArchiveTable: document.querySelector("#seasonArchiveTable"),
-  squadConditionSummary: document.querySelector("#squadConditionSummary"),
-  squadConditionList: document.querySelector("#squadConditionList"),
-  analyseRoleChanges: document.querySelector("#analyseRoleChanges"),
-  analyseWeakPoints: document.querySelector("#analyseWeakPoints"),
-  managerKnowledgeRecommendations: document.querySelector("#managerKnowledgeRecommendations"),
-  activeKnowledgeFocus: document.querySelector("#activeKnowledgeFocus"),
-  clearKnowledgeFocus: document.querySelector("#clearKnowledgeFocus"),
-  trainingWeekStatus: document.querySelector("#trainingWeekStatus"),
-  advanceTrainingWeek: document.querySelector("#advanceTrainingWeek"),
-  trainingHistoryList: document.querySelector("#trainingHistoryList"),
-  knowledgeCompletedThisWeek: document.querySelector("#knowledgeCompletedThisWeek"),
-  knowledgeCompletedTotal: document.querySelector("#knowledgeCompletedTotal"),
-  clubWeekSummary: document.querySelector("#clubWeekSummary"),
-  clubWeekPhase: document.querySelector("#clubWeekPhase"),
-  clubWeekPhaseSteps: document.querySelector("#clubWeekPhaseSteps"),
-  clubWeekPhaseGuidance: document.querySelector("#clubWeekPhaseGuidance"),
-  clubWeekFeedback: document.querySelector("#clubWeekFeedback"),
-  clubWeekGateHint: document.querySelector("#clubWeekGateHint"),
-  clubBoardTrust: document.querySelector("#clubBoardTrust"),
-  clubPlayerMorale: document.querySelector("#clubPlayerMorale"),
-  clubTacticalClarity: document.querySelector("#clubTacticalClarity"),
-  clubTrainingCulture: document.querySelector("#clubTrainingCulture"),
-  clubMediaPressure: document.querySelector("#clubMediaPressure"),
-  clubWeekEventLog: document.querySelector("#clubWeekEventLog"),
-  inboxThreadList: document.querySelector("#inboxThreadList"),
-  inboxThreadArchive: document.querySelector("#inboxThreadArchive"),
-  inboxSignalUnread: document.querySelector("#inboxSignalUnread"),
-  inboxSignalReplies: document.querySelector("#inboxSignalReplies"),
-  inboxSignalStatus: document.querySelector("#inboxSignalStatus"),
-  inboxGoTraining: document.querySelector("#inboxGoTraining"),
-  // History Go-unlocks (v1).
-  unlockPlacesList: document.querySelector("#unlockPlacesList"),
-  unlockedPlayersStatus: document.querySelector("#unlockedPlayersStatus"),
-  unlockedPlayersList: document.querySelector("#unlockedPlayersList"),
-  availableStaffList: document.querySelector("#availableStaffList"),
-  hiredStaffList: document.querySelector("#hiredStaffList"),
-  unlockedExpertiseList: document.querySelector("#unlockedExpertiseList"),
-  availableTrainingProgramsList: document.querySelector("#availableTrainingProgramsList"),
-  earnedBadgesList: document.querySelector("#earnedBadgesList"),
-  teamClassificationsList: document.querySelector("#teamClassificationsList"),
-  // Lagidentitet (v1): forklarings-/planleggingspanel.
-  teamIdentityPanel: document.querySelector("#teamIdentityPanel"),
-  // Stedsrapporter (v1).
-  placeReportsList: document.querySelector("#placeReportsList"),
-  // History Go-treningsuke og progresjon (v1, interaktivt).
-  hgTrainingWeekStatus: document.querySelector("#hgTrainingWeekStatus"),
-  advanceHgTrainingWeek: document.querySelector("#advanceHgTrainingWeek"),
-  resetHgTeamMerits: document.querySelector("#resetHgTeamMerits"),
-  badgeProgressList: document.querySelector("#badgeProgressList"),
-  // Ekte History Go-sync (v1): statusfelt og manuell synk-knapp.
-  historyGoSyncStatus: document.querySelector("#historyGoSyncStatus"),
-  syncHistoryGoPlaces: document.querySelector("#syncHistoryGoPlaces"),
-  // Din fotballsamling: oppsummering av availability-snapshotet i History Go-fanen.
-  collectionPlacesCount: document.querySelector("#collectionPlacesCount"),
-  collectionPlayersCount: document.querySelector("#collectionPlayersCount"),
-  collectionStaffCount: document.querySelector("#collectionStaffCount"),
-  collectionFormationsCount: document.querySelector("#collectionFormationsCount"),
-  collectionMatchdayBadge: document.querySelector("#collectionMatchdayBadge"),
-  collectionSourceNote: document.querySelector("#collectionSourceNote"),
-  collectionNextStep: document.querySelector("#collectionNextStep"),
-  startModePanel: document.querySelector("#startModePanel"),
-  startModeChoices: document.querySelector("#startModeChoices"),
-  startModeRosterNeed: document.querySelector("#startModeRosterNeed"),
-  playableSquadReady: document.querySelector("#playableSquadReady"),
-  activeLocalStart: document.querySelector("#activeLocalStart"),
-  localStartStatus: document.querySelector("#localStartStatus"),
-  useHistoryGoCollection: document.querySelector("#useHistoryGoCollection"),
-  clearLocalStart: document.querySelector("#clearLocalStart"),
-  // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
-  matchdayReadiness: document.querySelector("#matchdayReadiness"),
-  // Lag & taktikk-gate: kompakt 11 + 4-sjekkliste og neste manageroppgave.
-  squadSetupGate: document.querySelector("#squadSetupGate"),
-  squadSetupGateTitle: document.querySelector("#squadSetupGateTitle"),
-  squadSetupGateHint: document.querySelector("#squadSetupGateHint"),
-  squadSetupGateAction: document.querySelector("#squadSetupGateAction"),
-  squadGateStarters: document.querySelector("#squadGateStarters"),
-  squadGateBench: document.querySelector("#squadGateBench"),
-  squadGateRoles: document.querySelector("#squadGateRoles"),
-  squadGateMisuse: document.querySelector("#squadGateMisuse"),
-  squadGateDuplicates: document.querySelector("#squadGateDuplicates"),
-  // Tropp og benk (roster readiness): topbar-teller + statisk panel i Kontoret.
-  // Rendres av app.js fra availability-snapshotet â€“ ingen separat modul.
-  rosterReadyCount: document.querySelector("#rosterReadyCount"),
-  rosterReadinessBadge: document.querySelector("#rosterReadinessBadge"),
-  rosterUnlockedCount: document.querySelector("#rosterUnlockedCount"),
-  rosterReadyStatus: document.querySelector("#rosterReadyStatus"),
-  rosterReadinessNote: document.querySelector("#rosterReadinessNote"),
-  benchPlayersList: document.querySelector("#benchPlayersList"),
-  // Fase 2: dynamisk sidepanel (spillerprofil vs. neste beslutninger).
-  sidePanelKicker: document.querySelector("#sidePanelKicker"),
-  sideProfile: document.querySelector("#sideProfile"),
-  profileName: document.querySelector("#profileName"),
-  profilePositions: document.querySelector("#profilePositions"),
-  profileSource: document.querySelector("#profileSource"),
-  profileSignature: document.querySelector("#profileSignature"),
-  profileAttributes: document.querySelector("#profileAttributes"),
-  profileAttributeList: document.querySelector("#profileAttributeList"),
-  profileAttributeNote: document.querySelector("#profileAttributeNote"),
-  profileStrengths: document.querySelector("#profileStrengths"),
-  profileNeeds: document.querySelector("#profileNeeds"),
-  sideDecisions: document.querySelector("#sideDecisions"),
-  // Fase 2: statuskort med neste beslutninger pÃ¥ hovedskjermen.
-  decisionCards: document.querySelector("#decisionCards"),
-  // Fase 2: avdelinger med levende status.
-  inboxPulseCount: document.querySelector("#inboxPulseCount"),
-  adminSquadCount: document.querySelector("#adminSquadCount"),
-  adminStaffCount: document.querySelector("#adminStaffCount"),
-  facilityOverallValue: document.querySelector("#facilityOverallValue"),
-  facilityTrainingLevel: document.querySelector("#facilityTrainingLevel"),
-  facilityTrainingStatus: document.querySelector("#facilityTrainingStatus"),
-  facilityStadiumLevel: document.querySelector("#facilityStadiumLevel"),
-  facilityStadiumStatus: document.querySelector("#facilityStadiumStatus"),
-  facilityAcademyLevel: document.querySelector("#facilityAcademyLevel"),
-  facilityAcademyStatus: document.querySelector("#facilityAcademyStatus"),
-  facilityMedicalLevel: document.querySelector("#facilityMedicalLevel"),
-  facilityMedicalStatus: document.querySelector("#facilityMedicalStatus"),
-  marketMediaValue: document.querySelector("#marketMediaValue"),
-  marketReputationNote: document.querySelector("#marketReputationNote"),
-  boardTrustValue: document.querySelector("#boardTrustValue"),
-  boardTrustFill: document.querySelector("#boardTrustFill"),
-  boardTrustNote: document.querySelector("#boardTrustNote"),
-  boardExpectationNote: document.querySelector("#boardExpectationNote"),
-  boardClubMetrics: document.querySelector("#boardClubMetrics"),
-  boardWeekNote: document.querySelector("#boardWeekNote"),
-  marketSignals: document.querySelector("#marketSignals"),
-  marketFanMood: document.querySelector("#marketFanMood"),
-  marketSponsorNote: document.querySelector("#marketSponsorNote"),
-  adminDriftMetrics: document.querySelector("#adminDriftMetrics"),
-  adminStaffNote: document.querySelector("#adminStaffNote")
-};
-
-let managerEngineRenderId = 0;
-
-async function loadJson(path) {
-  const response = await fetch(path);
-
-  if (!response.ok) {
-    throw new Error(`Kunne ikke laste ${path}`);
-  }
-
-  return response.json();
-}
-
-// SlÃ¥r sammen innboks-meldinger fra Ã©n fil per avsender (manifest-basert) til
-// Ã©n samlet array. Faller tilbake til den gamle samlefilen og deretter til
-// hardkodede fallback-meldinger. Kaster aldri videre til init().
-async function loadClubInboxMessages() {
-  // 1) PrimÃ¦rkilde: manifest + Ã©n avsenderfil per avsender.
-  try {
-    const manifest = await loadJson(DATA_PATHS.clubInboxMessageManifest);
-
-    if (Array.isArray(manifest?.files)) {
-      const results = await Promise.allSettled(
-        manifest.files.map((filePath) => loadJson(filePath))
-      );
-
-      const merged = [];
-      results.forEach((result, index) => {
-        const filePath = manifest.files[index];
-
-        if (result.status !== "fulfilled") {
-          console.warn(`Innboks-avsenderfil kunne ikke lastes: ${filePath}`);
-          return;
-        }
-
-        const fileData = result.value;
-        if (!Array.isArray(fileData?.messages)) {
-          console.warn(`Innboks-avsenderfil mangler gyldig messages-array: ${filePath}`);
-          return;
-        }
-
-        fileData.messages.forEach((message) => {
-          if (
-            typeof fileData.senderId === "string" &&
-            message &&
-            typeof message.senderId === "string" &&
-            message.senderId !== fileData.senderId
-          ) {
-            console.warn(
-              `Innboks-melding ${message.id ?? "(ukjent id)"} har senderId "${message.senderId}" men ligger i ${filePath} (forventet "${fileData.senderId}").`
-            );
-          }
-          merged.push(message);
-        });
-      });
-
-      const validated = validateClubInboxMessages(merged);
-      if (validated.length > 0) {
-        return validated;
-      }
-    } else {
-      console.warn("Innboks-manifest mangler eller har feil format. PrÃ¸ver legacy samlefil.");
-    }
-  } catch (error) {
-    console.warn("Innboks-manifest mangler eller har feil format. PrÃ¸ver legacy samlefil.");
-  }
-
-  // 2) Legacy fallback: den gamle samlefilen.
-  try {
-    const legacyData = await loadJson(DATA_PATHS.clubInboxMessages);
-    if (Array.isArray(legacyData?.messages)) {
-      return validateClubInboxMessages(legacyData.messages);
-    }
-  } catch (error) {
-    // Faller gjennom til hardkodede fallback-meldinger nedenfor.
-  }
-
-  // 3) Siste fallback: hardkodede meldinger.
-  console.warn("Innboks-data mangler eller har feil format. Bruker fallback-meldinger.");
-  return getFallbackInboxMessages();
-}
-
-// Intern validering av en samlet messages-array. Filtrerer bort objekter uten
-// string-id og varsler om dubletter eller manglende felt, men stopper aldri appen.
-function validateClubInboxMessages(messages) {
-  const seenIds = new Set();
-  const valid = [];
-
-  messages.forEach((message) => {
-    if (!message || typeof message.id !== "string") {
-      console.warn("Innboks-melding uten gyldig string-id ble hoppet over.");
-      return;
-    }
-
-    if (seenIds.has(message.id)) {
-      console.warn(`Innboks-melding med duplikat id oppdaget: ${message.id}`);
-    }
-    seenIds.add(message.id);
-
-    if (typeof message.senderId !== "string") {
-      console.warn(`Innboks-melding ${message.id} mangler senderId.`);
-    }
-    if (typeof message.threadId !== "string") {
-      console.warn(`Innboks-melding ${message.id} mangler threadId.`);
-    }
-
-    valid.push(message);
-  });
-
-  return valid;
-}
-
-// Gyldige metric-nÃ¸kler for innboks-svarvalg. Holdes synk med Club Week-state.
-// Brukes til validering og effekt-applisering. Ingen andre nÃ¸kler pÃ¥virker noe.
-const INBOX_CHOICE_METRIC_KEYS = new Set([
-  "boardTrust",
-  "playerMorale",
-  "mediaPressure",
-  "trainingCulture",
-  "tacticalClarity"
-]);
-
-// Last innboks-svarvalg manifest-basert (Ã©n fil per avsender). SlÃ¥r sammen alle
-// vellykkede filers choices-array, validerer og returnerer samlet array. Kaster
-// aldri videre til init â€“ ved manglende/feilende manifest returneres tom array.
-async function loadClubInboxChoices() {
-  try {
-    const manifest = await loadJson(DATA_PATHS.clubInboxChoiceManifest);
-
-    if (!Array.isArray(manifest?.files)) {
-      console.warn("Innboks-valg-manifest mangler eller har feil format. Ingen svarvalg lastes.");
-      return [];
-    }
-
-    const results = await Promise.allSettled(
-      manifest.files.map((filePath) => loadJson(filePath))
-    );
-
-    const merged = [];
-    results.forEach((result, index) => {
-      const filePath = manifest.files[index];
-
-      if (result.status !== "fulfilled") {
-        console.warn(`Innboks-valgfil kunne ikke lastes: ${filePath}`);
-        return;
-      }
-
-      const fileData = result.value;
-      if (!Array.isArray(fileData?.choices)) {
-        console.warn(`Innboks-valgfil mangler gyldig choices-array: ${filePath}`);
-        return;
-      }
-
-      fileData.choices.forEach((choice) => merged.push(choice));
-    });
-
-    return validateClubInboxChoices(merged);
-  } catch (error) {
-    console.warn("Innboks-valg-manifest mangler eller har feil format. Ingen svarvalg lastes.");
-    return [];
-  }
-}
-
-// Intern validering av en samlet choices-array. Beholder kun objekter med
-// string-id og varsler om dubletter og manglende/ugyldige felt. Stopper aldri
-// appen â€“ ugyldige enkeltfelt logges, men valget beholdes med string-id.
-function validateClubInboxChoices(choices) {
-  const seenIds = new Set();
-  const valid = [];
-
-  choices.forEach((choice) => {
-    if (!choice || typeof choice.id !== "string") {
-      console.warn("Innboks-valg uten gyldig string-id ble hoppet over.");
-      return;
-    }
-
-    if (seenIds.has(choice.id)) {
-      console.warn(`Innboks-valg med duplikat id oppdaget: ${choice.id}`);
-    }
-    seenIds.add(choice.id);
-
-    if (typeof choice.messageId !== "string") {
-      console.warn(`Innboks-valg ${choice.id} mangler messageId.`);
-    }
-    if (typeof choice.threadId !== "string") {
-      console.warn(`Innboks-valg ${choice.id} mangler threadId.`);
-    }
-    if (typeof choice.senderId !== "string") {
-      console.warn(`Innboks-valg ${choice.id} mangler senderId.`);
-    }
-
-    if (choice.effects && typeof choice.effects === "object" && !Array.isArray(choice.effects)) {
-      for (const [metric, delta] of Object.entries(choice.effects)) {
-        if (!INBOX_CHOICE_METRIC_KEYS.has(metric)) {
-          console.warn(`Innboks-valg ${choice.id} har ukjent metric i effects: ${metric}`);
-        } else if (typeof delta !== "number") {
-          console.warn(`Innboks-valg ${choice.id} har ikke-numerisk effektverdi for ${metric}.`);
-        }
-      }
-    }
-
-    valid.push(choice);
-  });
-
-  return valid;
-}
-
-// Last innboks-trÃ¥dsvar manifest-basert (Ã©n fil per avsender). SlÃ¥r sammen alle
-// vellykkede filers replies-array, validerer og returnerer samlet array. Kaster
-// aldri videre til init â€“ ved manglende/feilende manifest returneres tom array,
-// og innboksen fungerer som fÃ¸r uten trÃ¥dsvar.
-async function loadClubInboxReplies() {
-  try {
-    const manifest = await loadJson(DATA_PATHS.clubInboxReplyManifest);
-
-    if (!Array.isArray(manifest?.files)) {
-      console.warn("Innboks-reply-manifest mangler eller har feil format. Ingen trÃ¥dsvar lastes.");
-      return [];
-    }
-
-    const results = await Promise.allSettled(
-      manifest.files.map((filePath) => loadJson(filePath))
-    );
-
-    const merged = [];
-    results.forEach((result, index) => {
-      const filePath = manifest.files[index];
-
-      if (result.status !== "fulfilled") {
-        console.warn(`Innboks-replyfil kunne ikke lastes: ${filePath}`);
-        return;
-      }
-
-      const fileData = result.value;
-      if (!Array.isArray(fileData?.replies)) {
-        console.warn(`Innboks-replyfil mangler gyldig replies-array: ${filePath}`);
-        return;
-      }
-
-      const fileSenderId = typeof fileData.senderId === "string" ? fileData.senderId : null;
-      fileData.replies.forEach((reply) => merged.push({ reply, fileSenderId }));
-    });
-
-    return validateClubInboxReplies(merged);
-  } catch (error) {
-    console.warn("Innboks-reply-manifest mangler eller har feil format. Ingen trÃ¥dsvar lastes.");
-    return [];
-  }
-}
-
-// Intern validering av en samlet replies-array. Hvert element er { reply,
-// fileSenderId } der fileSenderId er avsenderfilens senderId (eller null).
-// Beholder kun objekter med string-id og varsler om dubletter og manglende/
-// ugyldige felt. Stopper aldri appen â€“ returnerer rene reply-objekter.
-function validateClubInboxReplies(entries) {
-  const seenIds = new Set();
-  const valid = [];
-
-  entries.forEach(({ reply, fileSenderId }) => {
-    if (!reply || typeof reply.id !== "string") {
-      console.warn("Innboks-reply uten gyldig string-id ble hoppet over.");
-      return;
-    }
-
-    if (seenIds.has(reply.id)) {
-      console.warn(`Innboks-reply med duplikat id oppdaget: ${reply.id}`);
-    }
-    seenIds.add(reply.id);
-
-    if (typeof reply.triggerChoiceId !== "string") {
-      console.warn(`Innboks-reply ${reply.id} mangler triggerChoiceId.`);
-    }
-    if (typeof reply.responseToMessageId !== "string") {
-      console.warn(`Innboks-reply ${reply.id} mangler responseToMessageId.`);
-    }
-    if (typeof reply.threadId !== "string") {
-      console.warn(`Innboks-reply ${reply.id} mangler threadId.`);
-    }
-    if (typeof reply.senderId !== "string") {
-      console.warn(`Innboks-reply ${reply.id} mangler senderId.`);
-    } else if (fileSenderId && reply.senderId !== fileSenderId) {
-      console.warn(
-        `Innboks-reply ${reply.id} har senderId "${reply.senderId}" men ligger i fil for "${fileSenderId}".`
-      );
-    }
-    if (reply.phases !== undefined && !Array.isArray(reply.phases)) {
-      console.warn(`Innboks-reply ${reply.id} har phases som ikke er array.`);
-    }
-    if (
-      reply.conditions !== undefined &&
-      (typeof reply.conditions !== "object" || reply.conditions === null || Array.isArray(reply.conditions))
-    ) {
-      console.warn(`Innboks-reply ${reply.id} har conditions som ikke er objekt.`);
-    }
-
-    valid.push(reply);
-  });
-
-  return valid;
-}
-
-function setOptions(select, items, getValue, getLabel, emptyLabel = null, shouldDisable = null) {
-  select.innerHTML = "";
-
-  if (emptyLabel) {
-    const emptyOption = document.createElement("option");
-    emptyOption.value = EMPTY_VALUE;
-    emptyOption.textContent = emptyLabel;
-    select.append(emptyOption);
-  }
-
-  items.forEach((item) => {
-    const option = document.createElement("option");
-    option.value = getValue(item);
-    option.textContent = getLabel(item);
-    option.disabled = shouldDisable ? shouldDisable(item) : false;
-    select.append(option);
-  });
-}
-
-function validateFootballData({ players, playerArchetypes = [], roles, tactics, formations }) {
-  const warnings = [];
-  const roleIds = new Set(roles.map((role) => role.id));
-  const validPositions = new Set(FOOTBALL_POSITIONS);
-
-  // Arketypeobjekter mÃ¥ ha id; bygg samtidig oppslag for spillernes archetypeIds.
-  const archetypeIds = new Set();
-  playerArchetypes.forEach((archetype) => {
-    if (!archetype || !archetype.id) {
-      warnings.push("En spillerarketype mangler id.");
-      return;
-    }
-    archetypeIds.add(archetype.id);
-  });
-
-  players.forEach((player) => {
-    if (!player.id || !player.name) {
-      warnings.push("En spiller mangler id eller name.");
-    }
-
-    if (typeof player.classHeight !== "number" || player.classHeight < 85 || player.classHeight > 100) {
-      warnings.push(`${player.name || player.id} har overall utenfor 85â€“100.`);
-    }
-
-    if (!Array.isArray(player.naturalPositions) || player.naturalPositions.length === 0) {
-      warnings.push(`${player.name || player.id} mangler naturalPositions.`);
-    }
-
-    if (!Array.isArray(player.strengths) || player.strengths.length === 0) {
-      warnings.push(`${player.name || player.id} mangler strengths.`);
-    }
-
-    if (!Array.isArray(player.needs) || player.needs.length === 0) {
-      warnings.push(`${player.name || player.id} mangler needs.`);
-    }
-
-    if (!Array.isArray(player.likesTactics) || player.likesTactics.length === 0) {
-      warnings.push(`${player.name || player.id} mangler likesTactics.`);
-    }
-
-    // Hver archetypeId mÃ¥ peke pÃ¥ en arketype i football_player_archetypes.json.
-    player.archetypeIds?.forEach((archetypeId) => {
-      if (!archetypeIds.has(archetypeId)) {
-        const message = `${player.name || player.id} peker pÃ¥ ukjent arketype: ${archetypeId}.`;
-        warnings.push(message);
-        console.warn(`Spillerarketype-kobling mangler: ${message}`);
-      }
-    });
-
-    player.naturalPositions?.forEach((position) => {
-      if (!validPositions.has(position)) {
-        warnings.push(`${player.name || player.id} har ukjent naturalPosition: ${position}.`);
-      }
-    });
-
-    player.usablePositions?.forEach((position) => {
-      if (!validPositions.has(position)) {
-        warnings.push(`${player.name || player.id} har ukjent usablePosition: ${position}.`);
-      }
-    });
-
-    player.poorFits?.forEach((position) => {
-      if (!validPositions.has(position)) {
-        warnings.push(`${player.name || player.id} har ukjent poorFit: ${position}.`);
-      }
-    });
-
-    if (!Array.isArray(player.preferredRoles) || player.preferredRoles.length === 0) {
-      warnings.push(`${player.name || player.id} mangler preferredRoles.`);
-    }
-
-    player.preferredRoles?.forEach((roleId) => {
-      if (!roleIds.has(roleId)) {
-        warnings.push(`${player.name || player.id} peker pÃ¥ ukjent rolle: ${roleId}.`);
-      }
-    });
-  });
-
-  roles.forEach((role) => {
-    if (!role.id || !role.name) {
-      warnings.push("En rolle mangler id eller name.");
-    }
-
-    if (!Array.isArray(role.validPositions) || role.validPositions.length === 0) {
-      warnings.push(`${role.name || role.id} mangler validPositions.`);
-    }
-
-    role.validPositions?.forEach((position) => {
-      if (!validPositions.has(position)) {
-        warnings.push(`${role.name || role.id} har ukjent validPosition: ${position}.`);
-      }
-    });
-  });
-
-  tactics.forEach((tactic) => {
-    if (!tactic.id || !tactic.name) {
-      warnings.push("En taktikk mangler id eller name.");
-    }
-
-    if (!Array.isArray(tactic.tags) || tactic.tags.length === 0) {
-      warnings.push(`${tactic.name || tactic.id} mangler tags.`);
-    }
-  });
-
-  formations.forEach((formation) => {
-    if (!formation.id || !formation.name) {
-      warnings.push("En formasjon mangler id eller name.");
-    }
-
-    if (!Array.isArray(formation.slots) || formation.slots.length !== 11) {
-      warnings.push(`${formation.name || formation.id} mÃ¥ ha nÃ¸yaktig 11 slots.`);
-    }
-
-    formation.slots?.forEach((slot) => {
-      if (!slot.slotId || !slot.label || !slot.position) {
-        warnings.push(`${formation.name || formation.id} har en ufullstendig slot.`);
-      }
-
-      if (!validPositions.has(slot.position)) {
-        warnings.push(`${formation.name || formation.id} har ukjent slot-posisjon: ${slot.position}.`);
-      }
-    });
-  });
-
-  return warnings;
-}
-
-// ============================================================================
-// History Go unlock-motor (v1)
-// Kobler besÃ¸kte/samlede History Go-steder til Football Manager-ressurser.
-// KjernelÃ¸kke: Sted â†’ Person â†’ Ekspertise â†’ Treningsprogram â†’ Badge â†’ Lagklasse.
-// Alt filtreres gjennom unlockedPlaceIds (+ team merits). Rene hjelpefunksjoner,
-// robuste mot manglende prototypefelt. Ingen effekt pÃ¥ fit-/kamp-/scoremotoren.
-// ============================================================================
-
-// RekkefÃ¸lge pÃ¥ badge-nivÃ¥er, brukes til klassifiseringsberegning.
-const BADGE_LEVEL_ORDER = { bronze: 1, silver: 2, gold: 3 };
-
-// Lesbare etiketter for badge-nivÃ¥er i UI (lagidentitet). Fallback til id-en selv.
-const BADGE_LEVEL_LABELS = { none: "Ingen", bronze: "Bronse", silver: "SÃ¸lv", gold: "Gull" };
-
-// Tekst per programstatus, brukt i render.
-const TRAINING_STATUS_TEXT = {
-  available: "Tilgjengelig",
-  needs_staff: "Mangler riktig stab",
-  needs_expertise: "Mangler ekspertise"
-};
-
-// Seed fra football_team_merits.example.json. Brukes som utgangspunkt ved fÃ¸rste
-// lasting og nÃ¥r brukeren nullstiller progresjonen.
-let teamMeritsSeed = null;
-
-// Dyp klone uten Ã¥ dele referanser med seed eller localStorage-parsing.
-function cloneTeamMerits(merits) {
-  return JSON.parse(JSON.stringify(merits));
-}
-
-function isTeamMeritsObject(value) {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-// Normaliser formationFamiliarity-oppslaget { [formationId]: 0-100 }. TÃ¥ler
-// manglende/korrupt struktur og gamle localStorage-data: ikke-objekt blir {},
-// og bare gyldige tallverdier (clampet 0-100) beholdes.
-function normalizeFormationFamiliarity(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return {};
-  }
-  const result = {};
-  Object.entries(value).forEach(([formationId, raw]) => {
-    if (typeof formationId !== "string" || !formationId) {
-      return;
-    }
-    const numberValue = Number(raw);
-    if (Number.isFinite(numberValue)) {
-      result[formationId] = Math.max(0, Math.min(100, Math.round(numberValue)));
-    }
-  });
-  return result;
-}
-
-// Normaliser lokal starttropp separat slik at gamle/korrupt lagrede merits
-// aldri kan lekke ugyldige koordinater eller spiller-id-er inn i availability.
-function isValidLatitude(value) {
-  return Number.isFinite(value) && value >= -90 && value <= 90;
-}
-
-function isValidLongitude(value) {
-  return Number.isFinite(value) && value >= -180 && value <= 180;
-}
-
-function normalizePublicStartAnchor(value) {
-  const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-  const enabled = base.enabled === true;
-  const placeId = typeof base.placeId === "string" && base.placeId.trim() ? base.placeId.trim() : null;
-  const placeName = typeof base.placeName === "string" && base.placeName.trim() ? base.placeName.trim() : null;
-  const latitude = isValidLatitude(base.latitude) ? base.latitude : null;
-  const longitude = isValidLongitude(base.longitude) ? base.longitude : null;
-  const source = base.source === "public_history_go_place" ? base.source : "public_history_go_place";
-
-  if (!enabled || !placeId || !placeName || latitude === null || longitude === null) {
-    return {
-      enabled: false,
-      placeId: null,
-      placeName: null,
-      latitude: null,
-      longitude: null,
-      source: null,
-      createdAt: null
-    };
-  }
-
-  return {
-    enabled: true,
-    placeId,
-    placeName,
-    latitude,
-    longitude,
-    source,
-    createdAt: typeof base.createdAt === "string" && base.createdAt.trim() ? base.createdAt : null
-  };
-}
-
-function normalizeNearbyFavorites(value) {
-  const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-  const placeIds = Array.isArray(base.placeIds)
-    ? [...new Set(base.placeIds.filter((placeId) => typeof placeId === "string").map((placeId) => placeId.trim()))]
-        .filter(Boolean)
-    : [];
-
-  return {
-    placeIds,
-    updatedAt: typeof base.updatedAt === "string" ? base.updatedAt : null
-  };
-}
-
-function normalizeLocalStart(value) {
-  const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-  const playerIds = Array.isArray(base.playerIds)
-    ? [...new Set(base.playerIds.filter((playerId) => typeof playerId === "string").map((playerId) => playerId.trim()))]
-        .filter(Boolean)
-        .slice(0, REQUIRED_SQUAD_SIZE)
-    : [];
-
-  return {
-    enabled: base.enabled === true && playerIds.length > 0,
-    source: typeof base.source === "string" && base.source.trim() ? base.source : null,
-    latitude: isValidLatitude(base.latitude) ? base.latitude : null,
-    longitude: isValidLongitude(base.longitude) ? base.longitude : null,
-    chosenPlaceId: typeof base.chosenPlaceId === "string" && base.chosenPlaceId.trim() ? base.chosenPlaceId : null,
-    chosenPlaceName:
-      typeof base.chosenPlaceName === "string" && base.chosenPlaceName.trim() ? base.chosenPlaceName.trim() : null,
-    playerIds,
-    createdAt: typeof base.createdAt === "string" && base.createdAt.trim() ? base.createdAt : null
-  };
-}
-
-// Normaliser team merits til forventet form slik at render-/progresjonslaget
-// alltid har gyldige arrays/tall, uansett seed eller lagret tilstand.
-function normalizeTeamMerits(merits) {
-  const base = isTeamMeritsObject(merits) ? merits : {};
-  const localStart = normalizeLocalStart(base.localStart);
-  const publicStartAnchor = normalizePublicStartAnchor(base.publicStartAnchor);
-  const migratedPublicStartAnchor = publicStartAnchor.enabled
-    ? publicStartAnchor
-    : normalizePublicStartAnchor({
-        enabled: localStart.source === "chosen_place" && Boolean(localStart.chosenPlaceId),
-        placeId: localStart.chosenPlaceId,
-        placeName: localStart.chosenPlaceName,
-        latitude: localStart.latitude,
-        longitude: localStart.longitude,
-        source: "public_history_go_place",
-        createdAt: localStart.createdAt
-      });
-
-  return {
-    ...base,
-    activeTrainingWeek:
-      Number.isInteger(base.activeTrainingWeek) && base.activeTrainingWeek >= 1 ? base.activeTrainingWeek : 1,
-    publicStartAnchor: migratedPublicStartAnchor,
-    localStart,
-    nearbyFavorites: normalizeNearbyFavorites(base.nearbyFavorites),
-    hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
-    // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
-    // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
-    // verdier filtreres bort og manglende felt blir et tomt oppslag.
-    formationFamiliarity: normalizeFormationFamiliarity(base.formationFamiliarity),
-    // Role Familiarity Engine v1: fortrolighet per spillerÃ—rolle (0-100), bygget
-    // ved RIKTIG bruk over kamper. Bor i manager-staten (teamMerits), aldri i
-    // History Go-progresjonen. Robust mot gamle/korrupte data.
-    roleFamiliarity: normalizeRoleFamiliarity(base.roleFamiliarity),
-    // Framgang pÃ¥ svake sider, spillerÃ—attributt â†’ 0â€“100. Persisteres sammen med
-    // rollefortroligheten, aldri i History Go-progresjonen.
-    weaknessProgress: normalizeWeaknessProgress(base.weaknessProgress),
-    unlockedPlaceIds: Array.isArray(base.unlockedPlaceIds) ? base.unlockedPlaceIds : [],
-    unlockedExpertiseIds: Array.isArray(base.unlockedExpertiseIds) ? base.unlockedExpertiseIds : [],
-    earnedBadgeIds: Array.isArray(base.earnedBadgeIds) ? base.earnedBadgeIds : [],
-    badgeProgress: Array.isArray(base.badgeProgress) ? base.badgeProgress : [],
-    activeClassifications: Array.isArray(base.activeClassifications) ? base.activeClassifications : [],
-    // Off-pitch Parameters v1: managerens kontekstlag (slitasje, moral, press,
-    // garderobe, taktisk klarhet â€¦) ligger i manager-staten, ikke i History
-    // Go-progresjonen. Normaliseres alltid; ny tropp fÃ¥r default-konteksten.
-    offPitch: normalizeOffPitchState(base.offPitch),
-    // Inbox Event Integration v1: innboksens levende trÃ¥der (genererte fra
-    // off-pitch/trening/kampdag/kontekst, leste/lÃ¸ste/arkiverte). Ligger ogsÃ¥ i
-    // manager-staten, ikke i History Go-progresjonen. Aldri visited_places /
-    // hg_groundhopper_stats_v1.
-    inbox: normalizeInboxState(base.inbox),
-    // Club Week Orchestrator v1: uke/fase/klubbverdier bor nÃ¥ i merits, sammen
-    // med off-pitch og innboks, slik at hele manageruka er Ã©n sammenhengende
-    // state. null til den er migrert/initialisert (engine/fallback eier formen).
-    clubWeekState: sanitizeStoredClubWeekState(base.clubWeekState)
-  };
-}
-
-// Off-pitch-kontekst (Off-pitch Parameters v1) for manager-staten. Ligger i
-// teamMerits.offPitch; returnerer alltid en normalisert state (default nÃ¥r den
-// mangler). Leses av treningsprogram-, forslag- og kontekst-UI-et.
-function getOffPitchState() {
-  return state.teamMerits?.offPitch
-    ? normalizeOffPitchState(state.teamMerits.offPitch)
-    : createDefaultOffPitchState();
-}
-
-// Match Explanation v1.5: en lesbar off-pitch-snapshot SLIK KONTEKSTEN VAR FÃ˜R
-// kampen, til kampforklaringen. Eksponerer kun de lesbare team-/squad-verdiene
-// og et VAGT hint om skjult uro (summarizeOffPitchContext.hiddenHint) â€” aldri de
-// rÃ¥ hidden-tallene (off-pitch-modulens hidden-prinsipp). Kampmotoren leser den;
-// app.js eier all lasting/normalisering.
-function buildMatchdayOffPitchSnapshot() {
-  const offPitchState = getOffPitchState();
-  const summary = summarizeOffPitchContext(offPitchState);
-  const team = offPitchState.team || {};
-  const squad = offPitchState.squad || {};
-  return {
-    morale: team.morale,
-    confidence: team.confidence,
-    cohesion: team.cohesion,
-    fatigue: team.fatigue,
-    wear: team.wear,
-    injuryRisk: team.injuryRisk,
-    mediaPressure: team.mediaPressure,
-    boardPressure: team.boardPressure,
-    tacticalClarity: squad.tacticalClarity,
-    recentTrainingProgramIds: Array.isArray(offPitchState.recentTrainingProgramIds)
-      ? [...offPitchState.recentTrainingProgramIds]
-      : [],
-    hiddenHint: summary.hiddenHint || null,
-    topConcerns: Array.isArray(summary.topConcerns) ? summary.topConcerns.slice(0, 3) : [],
-    positives: Array.isArray(summary.positives) ? summary.positives.slice(0, 3) : []
-  };
-}
-
-// Inbox Event Integration v1: innboksens trÃ¥d-state (teamMerits.inbox).
-// Returnerer alltid en normalisert state (default nÃ¥r den mangler).
-function getInboxState() {
-  return state.teamMerits?.inbox
-    ? normalizeInboxState(state.teamMerits.inbox)
-    : createInboxState();
-}
-
-// Les team merits: prÃ¸v localStorage fÃ¸rst, fall ellers tilbake til seed-data.
-// MÃ¥ tÃ¥le manglende/korrupt localStorage uten Ã¥ krasje. Lagrer seed-en for
-// senere bruk (resetTeamMerits).
-function loadTeamMerits(seedMerits) {
-  teamMeritsSeed = isTeamMeritsObject(seedMerits) ? cloneTeamMerits(seedMerits) : null;
-
-  try {
-    const raw = localStorage.getItem(TEAM_MERITS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (isTeamMeritsObject(parsed)) {
-        return normalizeTeamMerits(parsed);
-      }
-    }
-  } catch (error) {
-    // Korrupt eller utilgjengelig localStorage: bruk seed i stedet for Ã¥ krasje.
-  }
-
-  return teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
-}
-
-// Lagre gjeldende team merits til localStorage. Stille no-op hvis lagring feiler.
-function saveTeamMerits() {
-  if (state.modeEnvelope && !isLeagueModeActive()) return;
-  if (!state.teamMerits) {
-    return;
-  }
-  try {
-    localStorage.setItem(TEAM_MERITS_KEY, JSON.stringify(state.teamMerits));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-// Nullstill progresjon: slett localStorage-key, gjenopprett seed og rerender.
-function resetTeamMerits() {
-  try {
-    localStorage.removeItem(TEAM_MERITS_KEY);
-  } catch (error) {
-    // Fjerning kan feile i privat modus e.l. Da fortsetter vi uansett.
-  }
-
-  state.teamMerits = teamMeritsSeed ? normalizeTeamMerits(cloneTeamMerits(teamMeritsSeed)) : null;
-  if (state.teamMerits) {
-    state.teamMerits.localStart = normalizeLocalStart(null);
-    state.teamMerits.publicStartAnchor = normalizePublicStartAnchor(null);
-    state.teamMerits.nearbyFavorites = normalizeNearbyFavorites(null);
-  }
-  state.localStartMessage = "";
-  recomputeActiveClassifications();
-  invalidateAvailability();
-  // Nullstilling kan lÃ¥se spillere/formasjoner igjen; fjern nÃ¥-lÃ¥ste spillere
-  // fra lineup og fall tilbake til fÃ¸rste tilgjengelige formasjon ved behov.
-  sanitizeLineupForUnlockedPlayers();
-  sanitizeSelectedFormation();
-  renderApp();
-}
-
-// Hold activeClassifications synk med opptjente badges. KjÃ¸res etter hver
-// badge-endring og ved lasting/nullstilling slik at lagrede/viste klasser
-// alltid speiler earnedBadgeIds.
-function recomputeActiveClassifications() {
-  if (state.teamMerits) {
-    state.teamMerits.activeClassifications = computeActiveClassificationIds();
-  }
-}
-
-// ----------------------------------------------------------------------------
-// Ekte History Go-sync (v1)
-// Football Manager leser History Go sin egen localStorage-progresjon og bruker
-// faktisk besÃ¸kte sportsteder som grunnlag for unlocks. Dette legges som et lag
-// oppÃ¥ demo-/lagstaten i hgfm.teamMerits.v1 â€“ det erstatter den ikke.
-// ----------------------------------------------------------------------------
-
-// Trygg JSON-lesing fra localStorage. Krasjer aldri: returnerer fallback ved
-// manglende nÃ¸kkel, ugyldig JSON eller utilgjengelig localStorage (privat modus).
-function readJsonLocalStorage(key, fallback) {
-  try {
-    return JSON.parse(localStorage.getItem(key) || "null") ?? fallback;
-  } catch (error) {
-    return fallback;
-  }
-}
-
-// BesÃ¸kte steder fra History Go (`visited_places`). Forventet form er et
-// objekt/map { placeId: truthy }. Returnerer Set med placeId-er der verdien er
-// truthy. Ugyldig format gir tom Set + console.warn.
-function getHistoryGoVisitedPlaceIds() {
-  const raw = readJsonLocalStorage(HISTORY_GO_VISITED_PLACES_KEY, null);
-  const ids = new Set();
-
-  if (raw === null || raw === undefined) {
-    return ids;
-  }
-
-  if (typeof raw !== "object" || Array.isArray(raw)) {
-    console.warn("History Go-sync: visited_places har ugyldig format (forventet objekt/map).");
-    return ids;
-  }
-
-  Object.entries(raw).forEach(([placeId, value]) => {
-    if (placeId && value) {
-      ids.add(placeId);
-    }
-  });
-
-  return ids;
-}
-
-// Groundhopper-/sportsteder fra History Go (`hg_groundhopper_stats_v1`). Bruker
-// `visited_groundhopper_places` (array) som hovedliste. Ugyldig format gir tom
-// Set + console.warn.
-function getHistoryGoGroundhopperPlaceIds() {
-  const raw = readJsonLocalStorage(HISTORY_GO_GROUNDHOPPER_STATS_KEY, null);
-  const ids = new Set();
-
-  if (raw === null || raw === undefined) {
-    return ids;
-  }
-
-  if (typeof raw !== "object" || Array.isArray(raw)) {
-    console.warn("History Go-sync: hg_groundhopper_stats_v1 har ugyldig format (forventet objekt).");
-    return ids;
-  }
-
-  const visited = raw.visited_groundhopper_places;
-
-  if (visited === undefined) {
-    return ids;
-  }
-
-  if (!Array.isArray(visited)) {
-    console.warn("History Go-sync: visited_groundhopper_places er ikke en array.");
-    return ids;
-  }
-
-  visited.forEach((placeId) => {
-    if (typeof placeId === "string" && placeId) {
-      ids.add(placeId);
-    }
-  });
-
-  return ids;
-}
-
-// Samlede sportsteder fra History Go som faktisk har unlock-data i Football
-// Manager. SlÃ¥r sammen Groundhopper-steder og generelt besÃ¸kte steder, og
-// filtrerer til placeId-er som finnes i state.unlocks.placeUnlocks. Dermed bryr
-// Football Manager seg bare om History Go-steder den selv har innhold for.
-// Steder der spilleren faktisk har tatt quizen i History Go.
-// Returnerer `null` nÃ¥r lÃ¦ringsloggen ikke finnes/ikke er lesbar â€“ da vet vi
-// ingenting om quiz, og quiz-porten skal IKKE hÃ¥ndheves (ellers ville spillere
-// blitt lÃ¥st ute av spillere de umulig kunne lÃ¥st opp).
-function getHistoryGoQuizCompletedPlaceIds() {
-  const raw = readJsonLocalStorage(HISTORY_GO_LEARNING_LOG_KEY, null);
-  if (raw === null || raw === undefined) {
-    return null;
-  }
-  if (!Array.isArray(raw)) {
-    console.warn("History Go-sync: hg_learning_log_v1 har ugyldig format (forventet array).");
-    return null;
-  }
-
-  const ids = new Set();
-  raw.forEach((event) => {
-    if (!event || typeof event !== "object") return;
-    if (!HISTORY_GO_QUIZ_EVENT_TYPES.has(event.type)) return;
-    // parentTargetId er stedets id; targetId er en sammensatt set-id som
-    // starter med stedet. Godta begge, slik at smÃ¥ formatvarianter tÃ¥les.
-    const parent = typeof event.parentTargetId === "string" ? event.parentTargetId.trim() : "";
-    if (parent) ids.add(parent);
-    const target = typeof event.targetId === "string" ? event.targetId.trim() : "";
-    if (target) ids.add(target.split("::")[0].split("__")[0]);
-  });
-  return ids;
-}
-
-function getHistoryGoCollectedSportPlaceIds() {
-  const collected = new Set();
-  getHistoryGoGroundhopperPlaceIds().forEach((id) => collected.add(id));
-  getHistoryGoVisitedPlaceIds().forEach((id) => collected.add(id));
-
-  const knownPlaceIds = new Set(
-    (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [])
-      .map((place) => place && place.placeId)
-      .filter(Boolean)
-  );
-
-  const result = new Set();
-  collected.forEach((id) => {
-    if (knownPlaceIds.has(id)) {
-      result.add(id);
-    }
-  });
-
-  return result;
-}
-
-// Synk ekte History Go-steder inn i team merits. Legger nye besÃ¸kte sportsteder
-// til state.teamMerits.unlockedPlaceIds uten Ã¥ overskrive eksisterende
-// progresjon. Finnes ingen ekte History Go-steder, beholdes demo-/lagstaten
-// urÃ¸rt. Normaliserer alltid unlockedPlaceIds til en duplikatfri array.
-function syncUnlockedPlacesFromHistoryGo() {
-  if (!state.teamMerits) {
-    return;
-  }
-
-  const collected = getHistoryGoCollectedSportPlaceIds();
-
-  const existing = Array.isArray(state.teamMerits.unlockedPlaceIds)
-    ? state.teamMerits.unlockedPlaceIds.filter((id) => typeof id === "string" && id)
-    : [];
-
-  // Ingen ekte History Go-steder: ikke rÃ¸r eksisterende demo-/lagstate.
-  if (collected.size === 0) {
-    state.teamMerits.unlockedPlaceIds = Array.from(new Set(existing));
-    return;
-  }
-
-  const merged = new Set(existing);
-  collected.forEach((id) => merged.add(id));
-
-  state.teamMerits.unlockedPlaceIds = Array.from(merged);
-  saveTeamMerits();
-}
-
-// Unlock-typer i football_unlocks.json som regnes som stab/trener/personkandidat.
-function isStaffUnlockType(type) {
-  return typeof type === "string" && /staff|coach|person|candidate/i.test(type);
-}
-
-// Unlock-typer i football_unlocks.json som regnes som spillerkandidat.
-function isPlayerUnlockType(type) {
-  return typeof type === "string" && (type === "player_candidate" || /player/i.test(type));
-}
-
-function getLocalStartPlayerIds() {
-  const localStart = normalizeLocalStart(state.teamMerits?.localStart);
-  return localStart.enabled ? localStart.playerIds : [];
-}
-
-
-
-
-// Haversine-avstand mellom to { latitude, longitude }-punkter, i kilometer.
-function calculateDistanceKm(a, b) {
-  if (
-    !isValidLatitude(a?.latitude) ||
-    !isValidLongitude(a?.longitude) ||
-    !isValidLatitude(b?.latitude) ||
-    !isValidLongitude(b?.longitude)
-  ) {
-    return Number.POSITIVE_INFINITY;
-  }
-
-  const toRadians = (degrees) => (degrees * Math.PI) / 180;
-  const earthRadiusKm = 6371;
-  const latitudeDelta = toRadians(b.latitude - a.latitude);
-  const longitudeDelta = toRadians(b.longitude - a.longitude);
-  const startLatitude = toRadians(a.latitude);
-  const endLatitude = toRadians(b.latitude);
-  const haversine =
-    Math.sin(latitudeDelta / 2) ** 2 +
-    Math.cos(startLatitude) * Math.cos(endLatitude) * Math.sin(longitudeDelta / 2) ** 2;
-
-  const clampedHaversine = Math.max(0, Math.min(1, haversine));
-  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(clampedHaversine), Math.sqrt(1 - clampedHaversine));
-}
-
-function getPlaceLocationIndex(placeLocations = state.placeLocations) {
-  const index = new Map();
-  (Array.isArray(placeLocations?.places) ? placeLocations.places : []).forEach((place) => {
-    if (
-      place &&
-      typeof place.placeId === "string" &&
-      place.placeId &&
-      isValidLatitude(place.latitude) &&
-      isValidLongitude(place.longitude)
-    ) {
-      index.set(place.placeId, place);
-    }
-  });
-  return index;
-}
-
-// Returnerer stabile spillerkandidater sortert etter nÃ¦rmeste kvalifiserte sted.
-// Samme spiller beholdes bare Ã©n gang, via stedet med kortest avstand.
-
-function getPersonNameById(collection, id) {
-  return (Array.isArray(collection) ? collection : []).find((item) => item?.id === id)?.name || null;
-}
-
-function normalizeRecommendationLimit(limit) {
-  return Number.isInteger(limit) && limit >= 0 ? limit : 6;
-}
-
-function describePlaceRecommendation(placeId) {
-  if (!placeId) {
-    return null;
-  }
-
-  const location = getPlaceLocationIndex().get(placeId);
-  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
-  const place = placeUnlocks.find((entry) => entry && entry.placeId === placeId) || null;
-  const report = getPlaceReport(placeId);
-  const unlockSummary = { players: 0, staff: 0, expertise: 0, training: 0 };
-  const playerNames = [];
-  const staffNames = [];
-
-  (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
-    if (!unlock || !unlock.type) {
-      return;
-    }
-    if (isPlayerUnlockType(unlock.type)) {
-      unlockSummary.players += 1;
-      const name = getPersonNameById(state.players, unlock.targetId);
-      if (name) {
-        playerNames.push(name);
-      }
-    } else if (isStaffUnlockType(unlock.type)) {
-      unlockSummary.staff += 1;
-      const name = getPersonNameById(state.staff, unlock.targetId);
-      if (name) {
-        staffNames.push(name);
-      }
-    } else if (unlock.type === "expertise") {
-      unlockSummary.expertise += 1;
-    } else if (unlock.type === "training_program" || unlock.type === "training_model") {
-      unlockSummary.training += 1;
-    }
-  });
-
-  const recommendedUse = Array.isArray(report?.recommendedUse) ? report.recommendedUse.filter(Boolean) : [];
-  return {
-    placeId,
-    placeName: place?.placeName || location?.placeName || report?.title || placeId,
-    isUnlocked: getUnlockedPlaceIds().has(placeId),
-    unlockSummary,
-    shortReason: report?.managerValue || report?.summary || "",
-    recommendedUse,
-    playerNames,
-    staffNames,
-    report
-  };
-}
-
-
-function getNearbyFavoritePlaceIds() {
-  return normalizeNearbyFavorites(state.teamMerits?.nearbyFavorites).placeIds;
-}
-
-function isNearbyFavorite(placeId) {
-  return typeof placeId === "string" && getNearbyFavoritePlaceIds().includes(placeId);
-}
-
-function setNearbyFavoritePlaceIds(placeIds) {
-  if (!state.teamMerits) {
-    return;
-  }
-  state.teamMerits.nearbyFavorites = normalizeNearbyFavorites({
-    placeIds,
-    updatedAt: new Date().toISOString()
-  });
-  saveTeamMerits();
-}
-
-function toggleNearbyFavorite(placeId) {
-  if (!state.teamMerits || typeof placeId !== "string" || !placeId.trim()) {
-    return;
-  }
-  const normalizedPlaceId = placeId.trim();
-  const current = getNearbyFavoritePlaceIds();
-  setNearbyFavoritePlaceIds(
-    current.includes(normalizedPlaceId)
-      ? current.filter((favoriteId) => favoriteId !== normalizedPlaceId)
-      : [...current, normalizedPlaceId]
-  );
-  renderApp();
-}
-
-function removeNearbyFavorite(placeId) {
-  if (!state.teamMerits || typeof placeId !== "string" || !placeId.trim()) {
-    return;
-  }
-  setNearbyFavoritePlaceIds(getNearbyFavoritePlaceIds().filter((favoriteId) => favoriteId !== placeId.trim()));
-  renderApp();
-}
-
-
-
-
-
-// Auto-tropp UTEN sted/koordinater. Erstatter den gamle geografiske Â«nÃ¦rmeste
-// spillereÂ»-modellen: stedsanker og geolokasjon er faset ut. Bygger en
-// balansert 15-spillertropp rett fra spillerkatalogen (data/football_players.json),
-// med spillere som faktisk kan lÃ¥ses opp via player_candidate-unlocks fÃ¸rst.
-// Ingen spillerdata hardkodes her, og ekte History Go-progresjon rÃ¸res aldri.
-const STARTER_SQUAD_GROUPS = [
-  { positions: ["GK"], count: 2 },
-  { positions: ["CB", "LB", "RB", "WB"], count: 5 },
-  { positions: ["DM", "CM", "AM"], count: 5 },
-  { positions: ["ST", "LW", "RW"], count: 3 }
-];
-
-function getStarterSquadPlayerIds(limit = REQUIRED_SQUAD_SIZE) {
-  const players = Array.isArray(state.players) ? state.players : [];
-  if (!players.length) return [];
-
-  // Kun KLUBBspillere: auto-troppen skal aldri dele ut landslagsstjernene
-  // (Ullevaal/MaracanÃ£). De er belÃ¸nningen for Ã¥ samle i History Go.
-  const candidateIds = new Set();
-  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
-    if (isNationalArenaPlace(place)) return;
-    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
-        candidateIds.add(unlock.targetId);
-      }
-    });
-  });
-
-  // Jevne klubbspillere fÃ¸rst (lavest overall), sÃ¥ toppsjiktet er noe du samler
-  // deg til â€“ ikke noe auto-fyll deler ut gratis. Alle er gode nok (85+).
-  const ordered = [...players].filter((player) => candidateIds.has(player.id)).sort((a, b) => {
-    const diff = (Number(a.classHeight) || 0) - (Number(b.classHeight) || 0);
-    if (diff !== 0) return diff;
-    return String(a.id).localeCompare(String(b.id));
-  });
-
-  const playsIn = (player, positions) => {
-    const natural = Array.isArray(player?.naturalPositions) ? player.naturalPositions : [];
-    const usable = Array.isArray(player?.usablePositions) ? player.usablePositions : [];
-    return [...natural, ...usable].some((position) => positions.includes(position));
-  };
-
-  const picked = [];
-  const takenIds = new Set();
-  // 1) Dekk posisjonsgruppene, slik at troppen faktisk kan settes opp pÃ¥ banen.
-  STARTER_SQUAD_GROUPS.forEach((group) => {
-    let need = group.count;
-    ordered.forEach((player) => {
-      if (need <= 0 || takenIds.has(player.id) || picked.length >= limit) return;
-      if (!playsIn(player, group.positions)) return;
-      picked.push(player.id);
-      takenIds.add(player.id);
-      need -= 1;
-    });
-  });
-  // 2) Fyll opp til 15 med de gjenvÃ¦rende beste kandidatene.
-  ordered.forEach((player) => {
-    if (picked.length >= limit || takenIds.has(player.id)) return;
-    picked.push(player.id);
-    takenIds.add(player.id);
-  });
-
-  return picked.slice(0, limit);
-}
-
-// Er auto-starttroppen aktiv (starttropp uten History Go)?
-function isStarterSquadActive() {
-  const localStart = normalizeLocalStart(state.teamMerits?.localStart);
-  return localStart.enabled && localStart.playerIds.length > 0;
-}
-
-// Stabskandidater som fÃ¸lger auto-troppen: deterministisk utvalg fra
-// stabskatalogen, slik at Â«Velg stabÂ» er mulig uten History Go-samling.
-// Manageren mÃ¥ fortsatt engasjere dem selv. Ingen stabsdata hardkodes her.
-function getStarterSquadStaffCandidates(staff, limit = REQUIRED_STAFF_SIZE) {
-  if (!isStarterSquadActive()) return [];
-  const list = Array.isArray(staff) ? staff.filter((member) => member && member.id) : [];
-  return [...list]
-    .sort((a, b) => String(a.id).localeCompare(String(b.id)))
-    .slice(0, Math.max(0, limit));
-}
-
-// Draft-pool: grunnsjiktet av klubbspillere (under NAME_TIER_MIN). De store
-// navnene og landslagsspillerne er bevisst utenfor â€“ de samles i History Go.
-const NAME_TIER_MIN = 90;
-
-function getDraftPoolPlayers() {
-  const players = Array.isArray(state.players) ? state.players : [];
-  const clubIds = new Set();
-  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
-    if (isNationalArenaPlace(place)) return;
-    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
-        clubIds.add(unlock.targetId);
-      }
-    });
-  });
-  return players
-    .filter((player) => clubIds.has(player.id) && Number(player.classHeight) < NAME_TIER_MIN)
-    .sort((a, b) => {
-      const order = { GK: 0, CB: 1, LB: 2, RB: 3, WB: 4, DM: 5, CM: 6, AM: 7, LW: 8, RW: 9, ST: 10 };
-      const ap = order[(a.naturalPositions || [])[0]] ?? 99;
-      const bp = order[(b.naturalPositions || [])[0]] ?? 99;
-      if (ap !== bp) return ap - bp;
-      return String(a.name).localeCompare(String(b.name), "no");
-    });
-}
-
-// Landslagsmodus skal kunne spilles uten History Go-progresjon, pÃ¥ samme mÃ¥te
-// som klubblaget har en spillbar starttropp. Grunnpoolen er nasjonens jevne
-// klubbspillere (under NAME_TIER_MIN) â€“ landslagsstjernene fra Ullevaal og
-// MaracanÃ£ er fortsatt noe du mÃ¥ samle. Uttaket blir dermed en reell jobb:
-// grunnstammen er der, forskjellen gjÃ¸r du ved Ã¥ samle.
-function getNationalBasePlayers() {
-  const players = Array.isArray(state.players) ? state.players : [];
-  const clubIds = new Set();
-  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
-    if (isNationalArenaPlace(place)) return;
-    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
-        clubIds.add(unlock.targetId);
-      }
-    });
-  });
-  return players.filter(
-    (player) => player && clubIds.has(player.id) && Number(player.classHeight) < NAME_TIER_MIN
-  );
-}
-
-function getNationalBasePlayerIds(nationality) {
-  const nation = typeof nationality === "string" ? nationality.trim() : "";
-  if (!nation) return [];
-  return getNationalBasePlayers()
-    .filter((player) => String(player.nationality || "").trim() === nation)
-    .map((player) => player.id);
-}
-
-// Aktiver auto-troppen. Samme lagringsmodell som fÃ¸r (teamMerits.localStart med
-// unlockSource local_start), men uten koordinater eller valgt sted.
-function activateStarterSquad(chosenPlayerIds = null) {
-  if (!state.teamMerits) {
-    state.localStartMessage = "Kunne ikke fylle troppen fordi lagprogresjonen ikke er tilgjengelig.";
-    renderApp();
-    return;
-  }
-
-  // Draften sender spillerens eget utvalg; ellers bygges en balansert tropp.
-  const playerIds = Array.isArray(chosenPlayerIds) && chosenPlayerIds.length
-    ? chosenPlayerIds.slice(0, REQUIRED_SQUAD_SIZE)
-    : getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE);
-  if (!playerIds.length) {
-    state.localStartMessage = "Fant ingen spillere Ã¥ fylle troppen med.";
-    renderApp();
-    return;
-  }
-
-  state.teamMerits.localStart = normalizeLocalStart({
-    enabled: true,
-    source: "auto_squad",
-    latitude: null,
-    longitude: null,
-    chosenPlaceId: null,
-    chosenPlaceName: null,
-    playerIds,
-    createdAt: new Date().toISOString()
-  });
-  state.localStartMessage = "";
-  saveTeamMerits();
-  invalidateAvailability();
-  sanitizeLineupForUnlockedPlayers();
-  fillEmptyLineupSlots(true);
-  renderApp();
-}
-
-function clearLocalStartSquad() {
-  if (!state.teamMerits) {
-    return;
-  }
-  state.teamMerits.localStart = normalizeLocalStart(null);
-  state.localStartMessage = "";
-  saveTeamMerits();
-  invalidateAvailability();
-  sanitizeLineupForUnlockedPlayers();
-  sanitizeSelectedFormation();
-  renderApp();
-}
-
-// ----------------------------------------------------------------------------
-// Availability-snapshot (runtime source of truth)
-// Ã‰n samlet beregning av hva manageren har tilgang til akkurat nÃ¥:
-//   - opplÃ¥ste place-id-er, med eksplisitt kilde (ekte History Go-progresjon
-//     vs. lokal manager-/demostate i hgfm.teamMerits.v1)
-//   - tilgjengelige spillere og stab (football_unlocks.json placeId -> targetId)
-//   - ulÃ¥ste/lÃ¥ste historiske formasjoner (unlockRules.json + unlockLinks)
-//   - roster readiness (15-spillerkravet)
-// Prinsipp: History Go er det brukeren samler; HG Football Manager er det
-// brukeren kan bruke basert pÃ¥ samlingen. All annen kode leser denne
-// beregningen via getAvailability()/de tynne getterne under â€“ ingen parallelle
-// unlocklesere.
-// ----------------------------------------------------------------------------
-
-// Formasjonstier som gir grunntilgang uten samlede kilder, slik at manageren
-// alltid har noen startsystemer Ã¥ bygge med (unlockRules.json: start/early).
-const FORMATION_BASELINE_TIERS = new Set(["start", "early"]);
-
-// Memoisert snapshot. Invalidieres ved hver renderApp og i mutasjoner som
-// trenger fersk beregning fÃ¸r neste render (reset/sync/formasjonssanering).
-let availabilityCache = null;
-
-function invalidateAvailability() {
-  availabilityCache = null;
-}
-
-function getAvailability() {
-  if (!availabilityCache) {
-    availabilityCache = computeAvailability();
-  }
-  return availabilityCache;
-}
-
-// Selve beregningen. Leser kun rÃ¥ kilder (state + History Go-localStorage) og
-// kaller aldri de tynne getterne under â€“ ingen rekursjon.
-function computeAvailability() {
-  // 1) Steder. Ekte History Go-progresjon leses live; manager-/demostate ligger
-  // i hgfm.teamMerits.v1 (seedet fra example-filen og tidligere merges).
-  const historyGoPlaceIds = getHistoryGoCollectedSportPlaceIds();
-  const meritPlaceIds = new Set(
-    (Array.isArray(state.teamMerits?.unlockedPlaceIds) ? state.teamMerits.unlockedPlaceIds : []).filter(
-      (placeId) => typeof placeId === "string" && placeId
-    )
-  );
-  const unlockedPlaceIds = new Set([...meritPlaceIds, ...historyGoPlaceIds]);
-
-  // Eksplisitt kildeskille: et sted regnes som "history-go" nÃ¥r det ligger i
-  // History Go-progresjonen akkurat nÃ¥, ellers "manager" (demo-/seed-/lagstate).
-  // Skillet gjÃ¸r det mulig Ã¥ hÃ¥ndheve produksjonsprinsippet (kun samlet History
-  // Go-innhold) senere, uten Ã¥ fjerne demo-stÃ¸tten nÃ¥.
-  const placeSourceById = new Map();
-  unlockedPlaceIds.forEach((placeId) => {
-    placeSourceById.set(placeId, historyGoPlaceIds.has(placeId) ? "history-go" : "manager");
-  });
-
-  // 2) placeUnlocks (football_unlocks.json) filtrert pÃ¥ opplÃ¥ste steder.
-  const allPlaceUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
-  const placeUnlocks = allPlaceUnlocks.filter((place) => place && unlockedPlaceIds.has(place.placeId));
-
-  // 3) Spillere og stab via konkrete placeId -> targetId-unlocks. Ukjente
-  // spiller-id-er ignoreres med console.warn. Finnes ingen player-unlocks,
-  // er listen tom â€“ det faller aldri tilbake til alle spillere.
-  const unlockedPlayerIds = new Set();
-  const playerSourceById = new Map();
-  const explicitStaffIds = new Set();
-  // Klubbspillere vs landslagsspillere: en landslagsarena (Ullevaal, MaracanÃ£)
-  // gir deg IKKE spillere til klubblaget â€“ ellers kunne ett besÃ¸k pÃ¥ Ullevaal
-  // sikre hele Norges beste. Spilleren blir speidet/synlig, men kan bare
-  // signeres hvis du ogsÃ¥ har besÃ¸kt et KLUBBanlegg som har ham/henne.
-  const nationalOnlyPlayerIds = new Set();
-  // Quiz-porten: for steder som kommer fra EKTE History Go-progresjon holder det
-  // ikke Ã¥ ha vÃ¦rt der â€“ du mÃ¥ ha tatt quizen for Ã¥ kunne signere spillerne.
-  // `null` = ingen lÃ¦ringslogg tilgjengelig => porten hÃ¥ndheves ikke.
-  const quizCompletedPlaceIds = getHistoryGoQuizCompletedPlaceIds();
-  const quizGateActive = quizCompletedPlaceIds !== null;
-  const quizPendingPlayerIds = new Set();
-  placeUnlocks.forEach((place) => {
-    const nationalArena = isNationalArenaPlace(place);
-    // Kun ekte History Go-steder kvalifiserer for quiz-porten. Manager-/demo-
-    // steder (og auto-troppen) er upÃ¥virket, sÃ¥ spillet stÃ¥r aldri fast.
-    const needsQuiz =
-      quizGateActive && historyGoPlaceIds.has(place.placeId) && !quizCompletedPlaceIds.has(place.placeId);
-    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (!unlock || !unlock.targetId) {
-        return;
-      }
-      if (isPlayerUnlockType(unlock.type)) {
-        if (nationalArena) {
-          nationalOnlyPlayerIds.add(unlock.targetId);
-          return;
-        }
-        if (needsQuiz) {
-          quizPendingPlayerIds.add(unlock.targetId);
-          return;
-        }
-        unlockedPlayerIds.add(unlock.targetId);
-        const sources = playerSourceById.get(unlock.targetId) || { placeIds: new Set(), localStart: false };
-        sources.placeIds.add(place.placeId);
-        playerSourceById.set(unlock.targetId, sources);
-      } else if (isStaffUnlockType(unlock.type)) {
-        explicitStaffIds.add(unlock.targetId);
-      }
-    });
-  });
-  // Speidet pÃ¥ landslagsarena, men signerbar via klubbanlegg: da er den
-  // allerede i unlockedPlayerIds og skal ikke telles som Â«kun landslagÂ».
-  // Samme for quiz: er spilleren signerbar fra et annet sted, er den ikke ventende.
-  unlockedPlayerIds.forEach((playerId) => {
-    nationalOnlyPlayerIds.delete(playerId);
-    quizPendingPlayerIds.delete(playerId);
-  });
-
-  // Lokal start utvider bare spillerpoolen. Den Ã¥pner ingen steder og skriver
-  // aldri til History Go-progresjonen (visited_places/groundhopper-state).
-  getLocalStartPlayerIds().forEach((playerId) => {
-    unlockedPlayerIds.add(playerId);
-    const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
-    sources.localStart = true;
-    playerSourceById.set(playerId, sources);
-  });
-
-  const players = Array.isArray(state.players) ? state.players : [];
-  const playersById = new Map(players.filter((player) => player && player.id).map((player) => [player.id, player]));
-
-  // Landslagsmodus: her ER landslagsspillerne poenget. De speidede spillerne
-  // fra landslagsarena blir tilgjengelige, men HELE troppen filtreres pÃ¥ den
-  // valgte nasjonen â€“ du kan ikke ta ut en brasilianer pÃ¥ Norges landslag.
-  // Klubblagets tropp rÃ¸res ikke; modusene har hver sin sesjon.
-  if (isNationalModeActive()) {
-    nationalOnlyPlayerIds.forEach((playerId) => unlockedPlayerIds.add(playerId));
-    nationalOnlyPlayerIds.clear();
-    const nationality = getNationalTeamNationality();
-    if (nationality) {
-      // Grunnstammen er alltid tilgjengelig, ellers ville en ny manager stÃ¥tt
-      // med et tomt landslag og ingen vei videre.
-      getNationalBasePlayerIds(nationality).forEach((playerId) => unlockedPlayerIds.add(playerId));
-      [...unlockedPlayerIds].forEach((playerId) => {
-        if (playersById.get(playerId)?.nationality !== nationality) unlockedPlayerIds.delete(playerId);
-      });
-    }
-  }
-
-  const unlockedPlayers = [];
-  unlockedPlayerIds.forEach((playerId) => {
-    const player = playersById.get(playerId);
-    if (player) {
-      unlockedPlayers.push(player);
-    } else {
-      console.warn(`Spiller-unlock peker pÃ¥ ukjent spiller-id: ${playerId} (ignoreres).`);
-      unlockedPlayerIds.delete(playerId);
-    }
-  });
-
-  const staff = Array.isArray(state.staff) ? state.staff : [];
-  const normallyUnlockedStaff = staff.filter((member) => {
-    if (!member || !member.id) {
-      return false;
-    }
-    const sources = Array.isArray(member.sourcePlaceIds) ? member.sourcePlaceIds : [];
-    return sources.some((placeId) => unlockedPlaceIds.has(placeId)) || explicitStaffIds.has(member.id);
-  });
-  // Auto-troppen (starttropp uten History Go) gir ogsÃ¥ et minimum av
-  // stabskandidater, slik at Â«Velg stabÂ» er mulig uten samling. Stedene legges
-  // aldri i unlockedPlaceIds eller History Go-lagring, og manageren mÃ¥ fortsatt
-  // engasjere personene selv. Erstatter den gamle stedsanker-baserte kilden.
-  const starterStaff = getStarterSquadStaffCandidates(staff, REQUIRED_STAFF_SIZE + 2);
-  const staffById = new Map([...normallyUnlockedStaff, ...starterStaff].map((member) => [member.id, member]));
-  const unlockedStaff = [...staffById.values()];
-
-  // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
-  // vurdert mot samlingen (steder, spillere, stab, badges).
-  const collectedPools = {
-    unlockedPlaceIds,
-    unlockedPlayerIds,
-    unlockedStaffIds: new Set(unlockedStaff.map((member) => member.id)),
-    earnedBadgeIds: new Set(Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [])
-  };
-
-  // Alle formasjoner er spillbare (unlockedFormations = alle). History Go styrer
-  // bare hva som er SAMLET/oppdaget (collectedFormations) â€” brukt til
-  // samlingstelleren og bibliotekets kunnskapslinje, ikke som spillÃ¥s.
-  const unlockedFormations = [];
-  const collectedFormations = [];
-  const lockedFormations = [];
-  const formationStatusById = new Map();
-  (Array.isArray(state.formations) ? state.formations : []).forEach((formation) => {
-    const status = evaluateFormationUnlock(formation, collectedPools);
-    formationStatusById.set(formation.id, status);
-    unlockedFormations.push(formation);
-    (status.collected ? collectedFormations : lockedFormations).push(formation);
-  });
-
-  // 5) Roster readiness (15-spillerkravet) fra opplÃ¥ste spillere + lineup.
-  const rosterReadiness = computeRosterReadiness(unlockedPlayers);
-
-  return {
-    historyGoPlaceIds,
-    managerPlaceIds: new Set([...unlockedPlaceIds].filter((placeId) => !historyGoPlaceIds.has(placeId))),
-    unlockedPlaceIds,
-    placeSourceById,
-    placeUnlocks,
-    unlockedPlayers,
-    unlockedPlayerIds,
-    nationalOnlyPlayerIds,
-    quizPendingPlayerIds,
-    playerSourceById,
-    unlockedStaff,
-    unlockedStaffIds: collectedPools.unlockedStaffIds,
-    unlockedFormations,
-    collectedFormations,
-    lockedFormations,
-    formationStatusById,
-    rosterReadiness
-  };
-}
-
-// Ett unlock-krav ({ sourceType, ref?, theme? }) mot samlede kilder. Krav uten
-// konkret ref (kun tema, slik reglene i unlockRules.json er skrevet i dag) kan
-// ikke verifiseres mot samlingen ennÃ¥ og regnes som ikke oppfylt â€“
-// grunntilgangstierne sÃ¸rger for at manageren likevel har systemer Ã¥ spille med.
-function isUnlockRequirementSatisfied(requirement, pools) {
-  if (!requirement || typeof requirement !== "object") {
-    return false;
-  }
-
-  const ref = typeof requirement.ref === "string" ? requirement.ref : "";
-
-  // Eksplisitt startmarkÃ¸r i formations.json (history_go_place/starting_unlock).
-  if (ref === "starting_unlock") {
-    return true;
-  }
-
-  if (!ref) {
-    return false;
-  }
-
-  switch (requirement.sourceType) {
-    case "history_go_place":
-    case "sport_place":
-    case "football_stadium":
-    case "football_club":
-    case "groundhopper_place":
-      return pools.unlockedPlaceIds.has(ref);
-    case "collected_player":
-      return pools.unlockedPlayerIds.has(ref);
-    case "collected_manager":
-    case "collected_staff":
-      return pools.unlockedStaffIds.has(ref);
-    case "football_badge":
-      return pools.earnedBadgeIds.has(ref);
-    default:
-      // football_story/football_lexicon_entry har ingen samle-/progresjonskilde
-      // i denne appen ennÃ¥.
-      return false;
-  }
-}
-
-// anyOf/allOf-klausuler fra unlockRules.json. allOf mÃ¥ vÃ¦re komplett oppfylt;
-// anyOf trenger minst ett treff. Tom/manglende requires gir ingen Ã¥pning her.
-function isUnlockRequiresSatisfied(requires, pools) {
-  if (!requires || typeof requires !== "object") {
-    return false;
-  }
-
-  const allOf = Array.isArray(requires.allOf) ? requires.allOf : [];
-  const anyOf = Array.isArray(requires.anyOf) ? requires.anyOf : [];
-
-  if (!allOf.length && !anyOf.length) {
-    return false;
-  }
-
-  const allSatisfied = allOf.every((requirement) => isUnlockRequirementSatisfied(requirement, pools));
-  const anySatisfied = !anyOf.length || anyOf.some((requirement) => isUnlockRequirementSatisfied(requirement, pools));
-
-  return allSatisfied && anySatisfied;
-}
-
-// FÃ¸rste konkrete krav (med ref) som er oppfylt i en requires-klausul. Brukes
-// kun til "UlÃ¥st via â€¦"-forklaring i UI â€“ selve unlock-avgjÃ¸relsen tas over.
-function findSatisfiedUnlockRequirement(requires, pools) {
-  const allOf = Array.isArray(requires?.allOf) ? requires.allOf : [];
-  const anyOf = Array.isArray(requires?.anyOf) ? requires.anyOf : [];
-  return (
-    [...allOf, ...anyOf].find(
-      (requirement) => requirement?.ref && isUnlockRequirementSatisfied(requirement, pools)
-    ) || null
-  );
-}
-
-// Formasjonsstatus: { unlocked, tier, reason, satisfiedBy }. Unlock handler om
-// tilgang/kunnskap/samlekilde â€“ aldri om kvalitet. Alle formasjoner blir stÃ¥ende
-// i det historiske formasjonsbiblioteket uansett status. satisfiedBy er det
-// konkrete kravet (sted/spiller/stab/badge) som Ã¥pnet systemet, til UI-visning.
-// Formasjoner er managerens taktiske verktÃ¸y, ikke samleobjekter: ALLE er
-// alltid spillbare (`unlocked: true`). Det History Go styrer er hva du har
-// SAMLET/oppdaget (`collected`) â€” den historiske opplÃ¥singslinjen vises i
-// formasjonsbiblioteket som kunnskap, ikke som en lÃ¥s. Spillere og
-// stÃ¸tteapparat samles fortsatt via History Go; formasjoner gjÃ¸r det ikke.
-function evaluateFormationUnlock(formation, pools) {
-  if (!formation || !formation.id) {
-    return { unlocked: true, collected: true, tier: null, reason: "Ã…pent system.", satisfiedBy: null };
-  }
-
-  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
-  const rule =
-    rules.find((item) => item && item.appliesTo === "formation" && item.formationId === formation.id) || null;
-  const tier = rule?.tier || null;
-  const links = Array.isArray(formation.unlockLinks) ? formation.unlockLinks : [];
-
-  // Grunntilgang: start-/early-tier er managerens basissystemer (alltid Â«samletÂ»).
-  if (tier && FORMATION_BASELINE_TIERS.has(tier)) {
-    return { unlocked: true, collected: true, tier, reason: "Grunnsystem (start-/tidligformasjon).", satisfiedBy: null };
-  }
-
-  // Ingen registrert regel og ingen unlockLinks: Ã¥pent system.
-  if (!rule && !links.length) {
-    return { unlocked: true, collected: true, tier, reason: "Ã…pent system uten egen historisk kilde.", satisfiedBy: null };
-  }
-
-  if (rule && isUnlockRequiresSatisfied(rule.requires, pools)) {
-    return {
-      unlocked: true,
-      collected: true,
-      tier,
-      reason: "Samlet via History Go.",
-      satisfiedBy: findSatisfiedUnlockRequirement(rule.requires, pools)
-    };
-  }
-
-  const satisfiedLink = links.find((link) => isUnlockRequirementSatisfied(link, pools));
-  if (satisfiedLink) {
-    return {
-      unlocked: true,
-      collected: true,
-      tier,
-      reason: "Samlet via History Go.",
-      satisfiedBy: satisfiedLink.ref ? satisfiedLink : null
-    };
-  }
-
-  // Ikke samlet i History Go ennÃ¥ â€” men fortsatt fritt spillbar som taktisk valg.
-  return { unlocked: true, collected: false, tier, reason: buildFormationUnlockNote(formation), satisfiedBy: null };
-}
-
-// Roster readiness (15-spillerkravet): 11 i startelleveren + minst 4 pÃ¥ benken.
-// Startere telles fra state.lineup (playerId); benk er Ã¸vrige opplÃ¥ste spillere.
-function computeRosterReadiness(unlockedPlayers) {
-  const lineupPlayerIds = new Set(
-    Object.values(state.lineup || {})
-      .map((slotState) => slotState && slotState.playerId)
-      .filter(Boolean)
-  );
-
-  const starters = unlockedPlayers.filter((player) => lineupPlayerIds.has(player.id));
-  const benchCandidates = unlockedPlayers.filter((player) => !lineupPlayerIds.has(player.id));
-
-  const unlockedCount = unlockedPlayers.length;
-  const starterCount = starters.length;
-  const benchCount = benchCandidates.length;
-  const hasEnoughUnlocked = unlockedCount >= REQUIRED_SQUAD_SIZE;
-  const hasCompleteXi = starterCount >= REQUIRED_STARTERS;
-  const hasEnoughBench = benchCount >= REQUIRED_BENCH;
-
-  return {
-    starters,
-    benchCandidates,
-    unlockedCount,
-    starterCount,
-    benchCount,
-    hasEnoughUnlocked,
-    hasCompleteXi,
-    hasEnoughBench,
-    isReady: hasEnoughUnlocked && hasCompleteXi && hasEnoughBench,
-    missingUnlocked: Math.max(0, REQUIRED_SQUAD_SIZE - unlockedCount),
-    missingStarters: Math.max(0, REQUIRED_STARTERS - starterCount),
-    missingBench: Math.max(0, REQUIRED_BENCH - benchCount)
-  };
-}
-
-// Felles refresh ved History Go-progresjon (manuell synk-knapp, updateProfile i
-// samme vindu, storage-event fra andre vinduer): merge nye steder inn i team
-// merits, recompute availability og saner lineup/valgt formasjon fÃ¸r rerender.
-function refreshAvailabilityFromHistoryGo() {
-  if (state.teamMerits) {
-    syncUnlockedPlacesFromHistoryGo();
-    recomputeActiveClassifications();
-    saveTeamMerits();
-  }
-
-  invalidateAvailability();
-  sanitizeLineupForUnlockedPlayers();
-  sanitizeSelectedFormation();
-  renderApp();
-}
-
-// ----------------------------------------------------------------------------
-// Tynne gettere over availability-snapshotet. Resten av appen bruker disse;
-// ingen andre steder skal beregne unlocks selv.
-// ----------------------------------------------------------------------------
-
-// OpplÃ¥ste steder som Set (teamMerits + ekte History Go-progresjon).
-function getUnlockedPlaceIds() {
-  return getAvailability().unlockedPlaceIds;
-}
-
-// placeUnlocks filtrert pÃ¥ opplÃ¥ste steder.
-function getPlaceUnlocks() {
-  return getAvailability().placeUnlocks;
-}
-
-// Stab som er tilgjengelig: kommer fra et opplÃ¥st sted (sourcePlaceIds) eller er
-// eksplisitt lÃ¥st opp gjennom football_unlocks.json.
-function getUnlockedStaff() {
-  return getAvailability().unlockedStaff;
-}
-
-// OpplÃ¥ste spillere: ekte spillere fra state.players som er pekt pÃ¥ av et
-// player_candidate-unlock pÃ¥ et opplÃ¥st sted.
-function getUnlockedPlayers() {
-  return getAvailability().unlockedPlayers;
-}
-
-// Landslagsarena? Stedsrollen i football_unlocks.json skiller allerede
-// landslagsarenaer (national_arena_/national_stadium_) fra klubbanlegg.
-// Spillere herfra er landslagsspillere: speidet, men ikke signerbare til
-// klubblaget. Ingen sted-id-er hardkodes her â€“ kun rollen leses.
-function isNationalArenaPlace(place) {
-  const role = typeof place?.placeRole === "string" ? place.placeRole : "";
-  return role.includes("national");
-}
-
-// Er en formasjon tilgjengelig som aktiv managerformasjon?
-function isFormationUnlocked(formationId) {
-  if (!formationId) {
-    return false;
-  }
-  const status = getAvailability().formationStatusById.get(formationId);
-  return status ? status.unlocked : true;
-}
-
-// SamlebelÃ¸nning for formasjoner: ALLE formasjoner er fritt spillbare, men et
-// system du har samlet/oppdaget via History Go setter seg raskere â€” laget og
-// trenerteamet kjenner allerede systemets historie og idÃ©. Dette er gulroten
-// for Ã¥ samle, i stedet for en lÃ¥s: et ikke-samlet system er like spillbart,
-// det tar bare litt lengre tid Ã¥ lÃ¦re inn.
-const COLLECTED_FORMATION_FAMILIARITY_BONUS = 1;
-
-function isFormationCollected(formationId) {
-  if (!formationId) {
-    return false;
-  }
-  return Boolean(getAvailability().formationStatusById.get(formationId)?.collected);
-}
-
-// Ekstra tilvenning per treningsuke/kamp for samlede formasjoner (0 ellers).
-function getCollectedFormationFamiliarityBonus(formationId) {
-  return isFormationCollected(formationId) ? COLLECTED_FORMATION_FAMILIARITY_BONUS : 0;
-}
-
-// Er en spiller lÃ¥st opp (kan velges)?
-function isPlayerUnlocked(playerId) {
-  if (!playerId) {
-    return false;
-  }
-  return getUnlockedPlayers().some((player) => player.id === playerId);
-}
-
-// Kilder for en opplÃ¥st spiller. Leser playerSourceById fra availability slik
-// at lokal start kan vises uten Ã¥ late som spillerens sted er samlet.
-function getPlayerSourcePlaces(playerId) {
-  if (!playerId) {
-    return [];
-  }
-
-  const snapshot = getAvailability();
-  const sources = snapshot.playerSourceById.get(playerId);
-  if (!sources) {
-    return [];
-  }
-
-  const placeById = new Map(snapshot.placeUnlocks.map((place) => [place.placeId, place]));
-  const result = [...sources.placeIds].map((placeId) => {
-    const place = placeById.get(placeId);
-    return { placeId, placeName: place?.placeName || placeId, source: snapshot.placeSourceById.get(placeId) };
-  });
-  if (sources.localStart) {
-    result.push({ placeId: null, placeName: "Lokal starttropp", source: "local_start" });
-  }
-  return result;
-}
-
-// ----------------------------------------------------------------------------
-// Lesbare unlock-forklaringer (kun visning)
-// Oversetter tekniske unlock-typer/-id-er til navn spilleren kjenner igjen.
-// Leser eksisterende kataloger (players/staff/expertise/programs) og availability-
-// snapshotet â€“ beregner aldri egne unlocks.
-// ----------------------------------------------------------------------------
-
-// Norske etiketter for unlock-typene i football_unlocks.json.
-const UNLOCK_TYPE_LABELS = {
-  player_candidate: "Spiller",
-  head_coach_candidate: "Trenerkandidat",
-  staff_candidate: "Stab",
-  expertise: "Ekspertise",
-  training_program: "Treningsprogram",
-  training_model: "Treningsmodell"
-};
-
-// Lesbar tekst for ett place-unlock: "Spiller: Martin Ã˜degaard" i stedet for
-// "player_candidate: martin_odegaard". Faller tilbake til formatert id.
-function describeUnlockTarget(unlock) {
-  const typeLabel = UNLOCK_TYPE_LABELS[unlock?.type] || formatTagText(unlock?.type || "ukjent");
-  const targetId = unlock?.targetId || "";
-
-  let name = null;
-  if (isPlayerUnlockType(unlock?.type)) {
-    name = (Array.isArray(state.players) ? state.players : []).find((player) => player?.id === targetId)?.name;
-  } else if (isStaffUnlockType(unlock?.type)) {
-    name = (Array.isArray(state.staff) ? state.staff : []).find((member) => member?.id === targetId)?.name;
-  } else if (unlock?.type === "expertise") {
-    name = (Array.isArray(state.expertise) ? state.expertise : []).find((item) => item?.id === targetId)?.name;
-  } else if (unlock?.type === "training_program") {
-    name = (Array.isArray(state.trainingPrograms) ? state.trainingPrograms : []).find(
-      (program) => program?.id === targetId
-    )?.name;
-  }
-
-  return `${typeLabel}: ${name || formatTagText(targetId)}`;
-}
-
-// Historiske formasjoner som peker pÃ¥ et sted i sine unlock-krav (unlockRules
-// eller unlockLinks med ref === placeId). Kun visning: forklarer "dette stedet
-// Ã¥pner system X" i stedskort og stedsrapporter.
-function getFormationsLinkedToPlace(placeId) {
-  if (!placeId) {
-    return [];
-  }
-
-  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
-  const refersToPlace = (requirement) => requirement?.ref === placeId;
-
-  return (Array.isArray(state.formations) ? state.formations : []).filter((formation) => {
-    const rule = rules.find((item) => item?.appliesTo === "formation" && item.formationId === formation.id);
-    const ruleRefs = [
-      ...(Array.isArray(rule?.requires?.anyOf) ? rule.requires.anyOf : []),
-      ...(Array.isArray(rule?.requires?.allOf) ? rule.requires.allOf : [])
-    ];
-    const links = Array.isArray(formation.unlockLinks) ? formation.unlockLinks : [];
-    return ruleRefs.some(refersToPlace) || links.some(refersToPlace);
-  });
-}
-
-// ----------------------------------------------------------------------------
-// Stedsrapporter (v1)
-// Rent forklarings-/UI-lag. Kobler hvert sportsted til en lesbar rapport om hva
-// stedet gir manageren (spillere, stab, ekspertise, trening, identitet).
-// Leser unlock-data, men endrer den ikke. Ingen fit-/badgeeffektmotor-effekt.
-// ----------------------------------------------------------------------------
-
-// Finn en stedsrapport pÃ¥ placeId.
-function getPlaceReport(placeId) {
-  if (!placeId) {
-    return null;
-  }
-  const reports = Array.isArray(state.placeReports?.placeReports)
-    ? state.placeReports.placeReports
-    : [];
-  return reports.find((report) => report && report.placeId === placeId) || null;
-}
-
-// Lite oppsummeringsobjekt med antall unlocks per kategori for ett sted. Leser
-// rÃ¥ placeUnlocks (ufiltrert) slik at telleverket gjelder selve stedet.
-function getPlaceReportUnlockSummary(placeId) {
-  const summary = { players: 0, staff: 0, expertise: 0, training: 0 };
-  if (!placeId) {
-    return summary;
-  }
-
-  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
-  const place = placeUnlocks.find((entry) => entry && entry.placeId === placeId);
-  if (!place) {
-    return summary;
-  }
-
-  (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
-    if (!unlock || !unlock.type) {
-      return;
-    }
-    if (isPlayerUnlockType(unlock.type)) {
-      summary.players += 1;
-    } else if (isStaffUnlockType(unlock.type)) {
-      summary.staff += 1;
-    } else if (unlock.type === "expertise") {
-      summary.expertise += 1;
-    } else if (unlock.type === "training_program" || unlock.type === "training_model") {
-      summary.training += 1;
-    }
-  });
-
-  return summary;
-}
-
-// Rapporter for aktive/samlede steder (via getPlaceUnlocks()). Mangler en rapport
-// for et opplÃ¥st sted, bygges en enkel fallback fra selve placeUnlock-objektet.
-function getUnlockedPlaceReports() {
-  return getPlaceUnlocks().map((place) => {
-    const report = getPlaceReport(place.placeId);
-    if (report) {
-      return report;
-    }
-    return {
-      placeId: place.placeId,
-      title: place.placeName || place.placeId,
-      summary: "Ingen detaljert stedsrapport tilgjengelig ennÃ¥ for dette stedet.",
-      managerValue: "",
-      unlocksExplanation: {},
-      recommendedUse: [],
-      helpsBuildClassifications: [],
-      warning: ""
-    };
-  });
-}
-
-// SlÃ¥ opp et lesbart navn for en lagklasse-id. Faller tilbake til id-en selv.
-function getClassificationName(classificationId) {
-  const classifications = Array.isArray(state.teamClassifications?.classifications)
-    ? state.teamClassifications.classifications
-    : [];
-  const match = classifications.find((entry) => entry && entry.id === classificationId);
-  return match?.name || classificationId;
-}
-
-// Engasjert stab: tilgjengelig stab som finnes i hiredStaffIds.
-function getHiredStaff() {
-  const hiredIds = new Set(
-    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : []
-  );
-  return getUnlockedStaff().filter((member) => hiredIds.has(member.id));
-}
-
-// Alle staff-typer en ansatt kan dekke (staffType + canBeHiredAs).
-function getStaffCoveredTypes(member) {
-  const types = new Set();
-  if (member?.staffType) {
-    types.add(member.staffType);
-  }
-  (Array.isArray(member?.canBeHiredAs) ? member.canBeHiredAs : []).forEach((type) => types.add(type));
-  return types;
-}
-
-// OpplÃ¥st ekspertise som Set av id-er: via opplÃ¥st sted, via teamMerits, eller
-// fordi en ansatt stab har ekspertisen i expertiseIds.
-function getUnlockedExpertiseIds() {
-  const unlockedPlaceIds = getUnlockedPlaceIds();
-  const fromMerits = new Set(
-    Array.isArray(state.teamMerits?.unlockedExpertiseIds) ? state.teamMerits.unlockedExpertiseIds : []
-  );
-
-  const hiredExpertise = new Set();
-  getHiredStaff().forEach((member) => {
-    (Array.isArray(member.expertiseIds) ? member.expertiseIds : []).forEach((id) => hiredExpertise.add(id));
-  });
-
-  const result = new Set();
-  const expertise = Array.isArray(state.expertise) ? state.expertise : [];
-  expertise.forEach((item) => {
-    if (!item || !item.id) {
-      return;
-    }
-    const places = Array.isArray(item.unlockedByPlaceIds) ? item.unlockedByPlaceIds : [];
-    const fromPlace = places.some((placeId) => unlockedPlaceIds.has(placeId));
-    if (fromPlace || fromMerits.has(item.id) || hiredExpertise.has(item.id)) {
-      result.add(item.id);
-    }
-  });
-  return result;
-}
-
-// OpplÃ¥st ekspertise som hele objekter.
-function getUnlockedExpertise() {
-  const ids = getUnlockedExpertiseIds();
-  const expertise = Array.isArray(state.expertise) ? state.expertise : [];
-  return expertise.filter((item) => item && ids.has(item.id));
-}
-
-// Badgefamilier som er Ã¥pnet av opplÃ¥st ekspertise (via opensBadgeFamilies).
-function getOpenedBadgeFamilyIds() {
-  const families = new Set();
-  getUnlockedExpertise().forEach((item) => {
-    (Array.isArray(item.opensBadgeFamilies) ? item.opensBadgeFamilies : []).forEach((id) => families.add(id));
-  });
-  return families;
-}
-
-// Treningsprogrammer innen rekkevidde, med status og begrunnelse.
-// Relevansport: programmet vises bare hvis minst ett krav-ekspertise er opplÃ¥st,
-// eller programmets badgefamilie er Ã¥pnet av opplÃ¥st ekspertise. Status:
-//   available       â€“ ekspertise pÃ¥ plass OG matchende ansatt stab
-//   needs_staff     â€“ ekspertise pÃ¥ plass, men ingen ansatt stab matcher
-//   needs_expertise â€“ nÃ¥dd via badgefamilie, men selve krav-ekspertisen mangler
-function getAvailableTrainingPrograms() {
-  const unlockedExpertise = getUnlockedExpertiseIds();
-  const openedFamilies = getOpenedBadgeFamilyIds();
-  const hiredStaff = getHiredStaff();
-  const programs = Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [];
-
-  const results = [];
-
-  programs.forEach((program) => {
-    if (!program || !program.id) {
-      return;
-    }
-
-    const required = Array.isArray(program.requiresExpertiseIds) ? program.requiresExpertiseIds : [];
-    const matchedExpertise = required.filter((id) => unlockedExpertise.has(id));
-    const hasExpertise = matchedExpertise.length > 0;
-    const familyOpened = openedFamilies.has(program.badgeFamilyId);
-
-    if (!hasExpertise && !familyOpened) {
-      return;
-    }
-
-    const requiredStaffTypes = Array.isArray(program.requiredStaffTypes) ? program.requiredStaffTypes : [];
-    const matchedStaff = hiredStaff.filter((member) => {
-      const covered = getStaffCoveredTypes(member);
-      return requiredStaffTypes.some((type) => covered.has(type));
-    });
-    const hasStaff = matchedStaff.length > 0;
-
-    let status;
-    const reasons = [];
-
-    if (!hasExpertise) {
-      status = "needs_expertise";
-      const missing = required.filter((id) => !unlockedExpertise.has(id));
-      reasons.push(`Mangler ekspertise: ${missing.join(", ") || "ukjent"}`);
-    } else if (!hasStaff) {
-      status = "needs_staff";
-      reasons.push(`Krever stab: ${requiredStaffTypes.join(", ") || "ukjent"}`);
-    } else {
-      status = "available";
-      reasons.push(`Ekspertise pÃ¥ plass: ${matchedExpertise.join(", ")}`);
-      reasons.push(`Stab: ${matchedStaff.map((member) => member.name || member.id).join(", ")}`);
-    }
-
-    results.push({ program, status, reasons });
-  });
-
-  const order = { available: 0, needs_staff: 1, needs_expertise: 2 };
-  results.sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
-  return results;
-}
-
-// Oppslag fra badge-id til badgeobjekt beriket med familieinfo.
-function getBadgeCatalog() {
-  const families = Array.isArray(state.trainingBadges?.badgeFamilies) ? state.trainingBadges.badgeFamilies : [];
-  const byBadgeId = new Map();
-
-  families.forEach((family) => {
-    (Array.isArray(family.levels) ? family.levels : []).forEach((level) => {
-      if (level && level.id) {
-        byBadgeId.set(level.id, {
-          ...level,
-          familyId: family.id,
-          familyName: family.name,
-          category: family.category
-        });
-      }
-    });
-  });
-
-  return byBadgeId;
-}
-
-// Opptjente badges (fra earnedBadgeIds) som berikede badgeobjekter.
-function getEarnedBadges() {
-  const earnedIds = Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [];
-  const catalog = getBadgeCatalog();
-  return earnedIds.map((id) => catalog.get(id)).filter(Boolean);
-}
-
-// HÃ¸yeste oppnÃ¥dde badge-nivÃ¥ (som tall) per badgefamilie ut fra earnedBadgeIds.
-function getEarnedBadgeLevelByFamily() {
-  const levels = new Map();
-  getEarnedBadges().forEach((badge) => {
-    const rank = BADGE_LEVEL_ORDER[badge.level] || 0;
-    const current = levels.get(badge.familyId) || 0;
-    if (rank > current) {
-      levels.set(badge.familyId, rank);
-    }
-  });
-  return levels;
-}
-
-// Beregn hvilke lagklasser som er oppnÃ¥dd ut fra earnedBadgeIds. Trygg helper
-// for senere bruk; v1-render viser eksplisitt lagrede activeClassifications.
-function computeActiveClassificationIds() {
-  const familyLevels = getEarnedBadgeLevelByFamily();
-  const classifications = Array.isArray(state.teamClassifications?.classifications)
-    ? state.teamClassifications.classifications
-    : [];
-
-  return classifications
-    .filter((classification) => {
-      const required = Array.isArray(classification.requiresBadges) ? classification.requiresBadges : [];
-      return required.length > 0 && required.every((req) => {
-        const have = familyLevels.get(req.familyId) || 0;
-        const need = BADGE_LEVEL_ORDER[req.minimumLevel] || 0;
-        return have >= need;
-      });
-    })
-    .map((classification) => classification.id);
-}
-
-// Aktive lagklasser beregnet direkte fra opptjente badges, slik at visningen
-// alltid speiler earnedBadgeIds. state.teamMerits.activeClassifications holdes
-// synk med samme beregning (recomputeActiveClassifications) for persistens.
-function getActiveTeamClassifications() {
-  const classifications = Array.isArray(state.teamClassifications?.classifications)
-    ? state.teamClassifications.classifications
-    : [];
-  const activeIds = new Set(computeActiveClassificationIds());
-  return classifications.filter((classification) => activeIds.has(classification.id));
-}
-
-// ----------------------------------------------------------------------------
-// Lagidentitet (v1)
-// Forklarings- og planleggingslag oppÃ¥ badges/lagklasser: hvilke identiteter
-// laget har, hvilke det nesten har, og hva som mangler (badges, treningsprogram,
-// steder, spillere og stab). Rene helpers â€“ ingen fit-/kampmotor-, badgeeffekt-
-// eller unlock-effekt.
-// ----------------------------------------------------------------------------
-
-// Lesbart navn for en badgefamilie ut fra trainingBadges. Fallback til id-en.
-function getBadgeFamilyName(familyId) {
-  const families = Array.isArray(state.trainingBadges?.badgeFamilies)
-    ? state.trainingBadges.badgeFamilies
-    : [];
-  const match = families.find((family) => family && family.id === familyId);
-  return match?.name || familyId;
-}
-
-// Lesbar etikett for et badge-nivÃ¥ (bronze/silver/gold/none). Fallback til verdien.
-function getBadgeLevelLabel(level) {
-  return BADGE_LEVEL_LABELS[level] || level;
-}
-
-// HÃ¸yeste opptjente nivÃ¥ i en badgefamilie ut fra earnedBadgeIds. Returnerer
-// { level: "none", rank: 0, badge: null } nÃ¥r ingenting er opptjent, ellers
-// bronze/silver/gold med rank 1/2/3 og selve badgeobjektet.
-function getBadgeFamilyCurrentLevel(familyId) {
-  let best = { level: "none", rank: 0, badge: null };
-  getEarnedBadges().forEach((badge) => {
-    if (badge.familyId !== familyId) {
-      return;
-    }
-    const rank = BADGE_LEVEL_ORDER[badge.level] || 0;
-    if (rank > best.rank) {
-      best = { level: badge.level, rank, badge };
-    }
-  });
-  return best;
-}
-
-// Progresjon mot Ã©n lagklasse: hvert badgekrav med nÃ¥vÃ¦rende/krevd nivÃ¥, hvor
-// mange krav som er mÃ¸tt, om identiteten er oppnÃ¥dd, og hvilke krav som mangler.
-function getClassificationProgress(classification) {
-  const required = Array.isArray(classification?.requiresBadges) ? classification.requiresBadges : [];
-
-  const requirements = required.map((req) => {
-    const familyId = req?.familyId;
-    const minimumLevel = req?.minimumLevel;
-    const requiredRank = BADGE_LEVEL_ORDER[minimumLevel] || 0;
-    const current = getBadgeFamilyCurrentLevel(familyId);
-    return {
-      familyId,
-      familyName: getBadgeFamilyName(familyId),
-      minimumLevel,
-      minimumLevelLabel: getBadgeLevelLabel(minimumLevel),
-      currentLevel: current.level,
-      currentLevelLabel: getBadgeLevelLabel(current.level),
-      currentRank: current.rank,
-      requiredRank,
-      completed: current.rank >= requiredRank
-    };
-  });
-
-  const totalRequirements = requirements.length;
-  const completedRequirements = requirements.filter((req) => req.completed).length;
-  const progressRatio = totalRequirements > 0 ? completedRequirements / totalRequirements : 0;
-  const isUnlocked = totalRequirements > 0 && completedRequirements === totalRequirements;
-  const missingRequirements = requirements.filter((req) => !req.completed);
-
-  return {
-    classification,
-    requirements,
-    completedRequirements,
-    totalRequirements,
-    progressRatio,
-    isUnlocked,
-    missingRequirements
-  };
-}
-
-// Alle lagklasser med progresjon, sortert: oppnÃ¥dde fÃ¸rst, deretter nesten
-// ferdige (hÃ¸yest andel oppfylte krav), deretter resten (stabilt pÃ¥ navn).
-function getTeamIdentityProgress() {
-  const classifications = Array.isArray(state.teamClassifications?.classifications)
-    ? state.teamClassifications.classifications
-    : [];
-
-  return classifications
-    .filter((classification) => classification && classification.id)
-    .map((classification) => getClassificationProgress(classification))
-    .sort((a, b) => {
-      if (a.isUnlocked !== b.isUnlocked) {
-        return a.isUnlocked ? -1 : 1;
-      }
-      if (b.progressRatio !== a.progressRatio) {
-        return b.progressRatio - a.progressRatio;
-      }
-      const aName = a.classification.name || a.classification.id || "";
-      const bName = b.classification.name || b.classification.id || "";
-      return aName.localeCompare(bName);
-    });
-}
-
-// Treningsprogrammer som bygger en gitt badgefamilie (program.badgeFamilyId).
-function getTrainingProgramsForBadgeFamily(familyId) {
-  if (!familyId) {
-    return [];
-  }
-  const programs = Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [];
-  return programs.filter((program) => program && program.badgeFamilyId === familyId);
-}
-
-// Steder som kan hjelpe en badgefamilie: finn programmene for familien, hvilke
-// ekspertise-id-er de krever, og hvilke steder i football_unlocks.json som lÃ¥ser
-// opp disse ekspertisene eller selve treningsprogrammene. Returnerer unike
-// { placeId, placeName }. Leser rÃ¥ placeUnlocks (alle steder), ikke bare opplÃ¥ste.
-function getPlacesForBadgeFamily(familyId) {
-  if (!familyId) {
-    return [];
-  }
-
-  const programs = getTrainingProgramsForBadgeFamily(familyId);
-  const expertiseIds = new Set();
-  const programIds = new Set();
-  programs.forEach((program) => {
-    if (program.id) {
-      programIds.add(program.id);
-    }
-    (Array.isArray(program.requiresExpertiseIds) ? program.requiresExpertiseIds : []).forEach((id) =>
-      expertiseIds.add(id)
-    );
-  });
-
-  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
-  const result = [];
-  const seen = new Set();
-
-  placeUnlocks.forEach((place) => {
-    if (!place || !place.placeId || seen.has(place.placeId)) {
-      return;
-    }
-    const helps = (Array.isArray(place.unlocks) ? place.unlocks : []).some((unlock) => {
-      if (!unlock || !unlock.targetId) {
-        return false;
-      }
-      if (unlock.type === "expertise" && expertiseIds.has(unlock.targetId)) {
-        return true;
-      }
-      return unlock.type === "training_program" && programIds.has(unlock.targetId);
-    });
-    if (helps) {
-      seen.add(place.placeId);
-      result.push({ placeId: place.placeId, placeName: place.placeName || place.placeId });
-    }
-  });
-
-  return result;
-}
-
-// Hjelper: har en spiller minst Ã©n av verdiene i et listefelt?
-function playerFieldIncludesAny(player, field, values) {
-  const list = Array.isArray(player?.[field]) ? player[field] : [];
-  return values.some((value) => list.includes(value));
-}
-
-// OpplÃ¥ste spillere som passer en lagidentitet. Enkel v1-mapping i kode:
-// matcher pÃ¥ likesTactics/strengths/archetypes/era/kilde. Filtrert til
-// getUnlockedPlayers() og begrenset til maks 5. Ren visning â€“ ingen kampeffekt.
-function getRelevantPlayersForClassification(classificationId) {
-  const matchers = {
-    transition_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["fast_transitions", "vertical_play", "direct_counter"]),
-    pressing_team: (p) =>
-      playerFieldIncludesAny(p, "likesTactics", ["high_press"]) ||
-      playerFieldIncludesAny(p, "strengths", ["pressing", "pressing_intelligence"]) ||
-      playerFieldIncludesAny(p, "archetypes", ["pressing_intelligence"]),
-    control_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["possession", "structured_build_up", "central_control"]),
-    wide_dominant_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["wide_attack", "isolate_wingers"]),
-    defensive_structure_team: (p) => playerFieldIncludesAny(p, "likesTactics", ["compact_shape", "low_block", "medium_press"]),
-    set_piece_team: (p) =>
-      playerFieldIncludesAny(p, "strengths", ["heading", "duels", "box_presence"]) ||
-      playerFieldIncludesAny(p, "archetypes", ["box_presence"]),
-    development_team: (p) =>
-      p?.era === "modern" || (Array.isArray(p?.sourcePlaceIds) && p.sourcePlaceIds.includes("ekebergsletta"))
-  };
-
-  const matcher = matchers[classificationId];
-  if (!matcher) {
-    return [];
-  }
-  return getUnlockedPlayers().filter(matcher).slice(0, 5);
-}
-
-// Tilgjengelig stab som passer en lagidentitet. Enkel v1-mapping pÃ¥ ekspertise.
-// Filtrert til getUnlockedStaff() (tilgjengelig/engasjert stab) og maks 5.
-function getRelevantStaffForClassification(classificationId) {
-  const expertiseByClassification = {
-    development_team: ["development_culture", "club_building"],
-    pressing_team: ["pressing_structure", "team_organisation"],
-    defensive_structure_team: ["defensive_structure", "rest_defense", "team_organisation"],
-    control_team: ["passing_training", "build_up_play", "team_organisation"],
-    transition_team: ["speed_training", "physical_preparation", "depth_runs"],
-    wide_dominant_team: ["wide_attack", "chance_creation"],
-    set_piece_team: ["set_piece_attack", "set_piece_defense", "duel_training"]
-  };
-
-  const wanted = expertiseByClassification[classificationId];
-  if (!Array.isArray(wanted)) {
-    return [];
-  }
-  const wantedSet = new Set(wanted);
-
-  return getUnlockedStaff()
-    .filter((member) => {
-      const expertiseIds = Array.isArray(member.expertiseIds) ? member.expertiseIds : [];
-      return expertiseIds.some((id) => wantedSet.has(id));
-    })
-    .slice(0, 5);
-}
-
-// Engasjer tilgjengelig stab: legg staff-id i hiredStaffIds, lagre og rerender.
-// Robust mot ukjent/utilgjengelig id og duplikater (console.warn, ingen krasj).
-function hireStaff(staffId) {
-  if (!state.teamMerits) {
-    console.warn("hireStaff: team merits mangler â€“ kan ikke engasjere stab.");
-    return;
-  }
-
-  const member = getUnlockedStaff().find((candidate) => candidate.id === staffId);
-
-  if (!member) {
-    console.warn(`hireStaff: ukjent eller utilgjengelig staff-id: ${staffId}`);
-    return;
-  }
-
-  if (!Array.isArray(state.teamMerits.hiredStaffIds)) {
-    state.teamMerits.hiredStaffIds = [];
-  }
-
-  if (state.teamMerits.hiredStaffIds.includes(staffId)) {
-    return;
-  }
-
-  // Respekter staffRoles.maxActive der mappingen er sikker. Usikker mapping
-  // (ukjent kategori eller manglende staffRole) blokkerer ikke â€“ da er det bedre
-  // Ã¥ advare enn Ã¥ hindre engasjement i prototypen.
-  if (!canHireWithinStaffLimits(member)) {
-    return;
-  }
-
-  state.teamMerits.hiredStaffIds.push(staffId);
-  saveTeamMerits();
-  renderApp();
-}
-
-// Sjekk om en ny ansatt holder seg innenfor staffRoles.maxActive for sin
-// kategori. Returnerer true (tillat) ved usikker mapping. Keepertrener og
-// "tidligere keeper"-keepertrener deler kategori, sÃ¥ grensen gjelder begge.
-function canHireWithinStaffLimits(member) {
-  const category = getStaffCategory(member);
-  if (!category) {
-    return true;
-  }
-
-  const staffRole = (Array.isArray(state.hgStaffRoles) ? state.hgStaffRoles : []).find(
-    (role) => role && role.id === category
-  );
-  const maxActive = staffRole && Number.isInteger(staffRole.maxActive) ? staffRole.maxActive : null;
-  if (!maxActive) {
-    return true;
-  }
-
-  const currentInCategory = getHiredStaff().filter((hired) => getStaffCategory(hired) === category).length;
-  if (currentInCategory >= maxActive) {
-    console.warn(
-      `hireStaff: ${staffRole.name || category} er allerede engasjert med maks ${maxActive}. Ny ansettelse blokkeres.`
-    );
-    return false;
-  }
-
-  return true;
-}
-
-// Finn neste badge-nivÃ¥ i et program som ennÃ¥ ikke er opptjent. Sjekker nivÃ¥er
-// i rekkefÃ¸lge bronse â†’ sÃ¸lv â†’ gull, og hopper over nivÃ¥er som krever et
-// foregÃ¥ende nivÃ¥ som ikke er opptjent ennÃ¥. Returnerer level-objektet eller null.
-function findNextBadgeTargetForProgram(program) {
-  const levels = Array.isArray(program?.levels) ? program.levels : [];
-  const earned = new Set(
-    Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : []
-  );
-
-  const ordered = [...levels].sort(
-    (a, b) => (BADGE_LEVEL_ORDER[a?.level] || 0) - (BADGE_LEVEL_ORDER[b?.level] || 0)
-  );
-
-  for (const level of ordered) {
-    if (!level || !level.targetBadgeId || earned.has(level.targetBadgeId)) {
-      continue;
-    }
-
-    if (level.requiresPreviousLevel) {
-      const rank = BADGE_LEVEL_ORDER[level.level] || 0;
-      const previous = ordered.find((candidate) => (BADGE_LEVEL_ORDER[candidate?.level] || 0) === rank - 1);
-      if (previous && previous.targetBadgeId && !earned.has(previous.targetBadgeId)) {
-        continue;
-      }
-    }
-
-    return level;
-  }
-
-  return null;
-}
-
-// Velg et tilgjengelig treningsprogram: sett (eller behold) en aktiv
-// badge-progresjon mot programmets neste badge-nivÃ¥. Krever at programmet finnes
-// i getAvailableTrainingPrograms() med status "available".
-function selectTrainingProgram(programId) {
-  if (!state.teamMerits) {
-    console.warn("selectTrainingProgram: team merits mangler â€“ kan ikke velge program.");
-    return;
-  }
-
-  const entry = getAvailableTrainingPrograms().find(
-    (item) => item.program?.id === programId && item.status === "available"
-  );
-
-  if (!entry) {
-    console.warn(`selectTrainingProgram: program er ikke tilgjengelig: ${programId}`);
-    return;
-  }
-
-  const program = entry.program;
-  const target = findNextBadgeTargetForProgram(program);
-
-  if (!target) {
-    console.warn(`selectTrainingProgram: ingen gjenstÃ¥ende badge-nivÃ¥ i program: ${programId}`);
-    return;
-  }
-
-  if (!Array.isArray(state.teamMerits.badgeProgress)) {
-    state.teamMerits.badgeProgress = [];
-  }
-
-  const requiredWeeks =
-    Number.isInteger(target.weeksRequired) && target.weeksRequired >= 1 ? target.weeksRequired : 1;
-  const existing = state.teamMerits.badgeProgress.find(
-    (item) => item && item.targetBadgeId === target.targetBadgeId
-  );
-
-  if (existing) {
-    // Samme target finnes allerede: behold opptjent progress, oppdater metadata.
-    existing.badgeFamilyId = program.badgeFamilyId;
-    existing.requiredWeeks = requiredWeeks;
-    existing.activeProgramId = program.id;
-  } else {
-    state.teamMerits.badgeProgress.push({
-      badgeFamilyId: program.badgeFamilyId,
-      targetBadgeId: target.targetBadgeId,
-      progressWeeks: 0,
-      requiredWeeks,
-      activeProgramId: program.id
-    });
-  }
-
-  saveTeamMerits();
-  renderApp();
-}
-
-// Avanser badge-uke: Ã¸k uketeller, gi hver aktiv progresjon +1 uke, tildel
-// badge nÃ¥r requiredWeeks er nÃ¥dd (uten duplikater), oppdater lagklasser fra
-// earned badges, lagre og rerender.
-function advanceHgTrainingWeek() {
-  if (!state.teamMerits) {
-    console.warn("advanceHgTrainingWeek: team merits mangler â€“ kan ikke avansere uke.");
-    return;
-  }
-
-  const merits = state.teamMerits;
-
-  merits.activeTrainingWeek = (Number.isInteger(merits.activeTrainingWeek) ? merits.activeTrainingWeek : 0) + 1;
-
-  if (!Array.isArray(merits.earnedBadgeIds)) {
-    merits.earnedBadgeIds = [];
-  }
-
-  const remaining = [];
-
-  (Array.isArray(merits.badgeProgress) ? merits.badgeProgress : []).forEach((progress) => {
-    if (!progress || typeof progress !== "object") {
-      return;
-    }
-
-    const required =
-      Number.isInteger(progress.requiredWeeks) && progress.requiredWeeks >= 1 ? progress.requiredWeeks : 1;
-    const nextWeeks = (Number.isInteger(progress.progressWeeks) ? progress.progressWeeks : 0) + 1;
-
-    if (nextWeeks >= required) {
-      // Badge oppnÃ¥dd: legg til (uten duplikat) og fjern progresjonen.
-      if (progress.targetBadgeId && !merits.earnedBadgeIds.includes(progress.targetBadgeId)) {
-        merits.earnedBadgeIds.push(progress.targetBadgeId);
-      }
-      return;
-    }
-
-    progress.progressWeeks = nextWeeks;
-    remaining.push(progress);
-  });
-
-  merits.badgeProgress = remaining;
-
-  // Formasjonstilvenning vokser sakte med treningsuker, raskere med god
-  // lÃ¦ringsfart/stab. Lagres per formationId og brukes som grunnlag av
-  // coachContext-motoren. Aldri en hard avhengighet: progresjonen skal aldri
-  // knekke uken om coachContext/formasjon mangler.
-  try {
-    const formation = getFormation();
-    if (formation && formation.id) {
-      if (!merits.formationFamiliarity || typeof merits.formationFamiliarity !== "object") {
-        merits.formationFamiliarity = {};
-      }
-      const coachContext = getCoachContext();
-      const stored = merits.formationFamiliarity[formation.id];
-      // Start fra dynamisk staff-verdi fÃ¸rste gang, deretter fra lagret verdi.
-      const current = Number.isFinite(stored) ? stored : Number(coachContext.formationFamiliarity) || 45;
-      const learn = Math.max(0, Math.min(100, Number(coachContext.tacticalLearningSpeed) || 0));
-      // +1 til +4 per uke basert pÃ¥ taktisk lÃ¦ringsfart, pluss samlebonus for
-      // formasjoner du har oppdaget via History Go (raskere tilvenning).
-      const gain = 1 + Math.round((learn / 100) * 3) + getCollectedFormationFamiliarityBonus(formation.id);
-      merits.formationFamiliarity[formation.id] = Math.max(0, Math.min(100, Math.round(current + gain)));
-    }
-  } catch (error) {
-    // Progresjon er valgfri tilleggsverdi; en feil her skal ikke stoppe uken.
-  }
-
-  // Lagklasser beregnes pÃ¥ nytt fra earned badges etter badge-endringene.
-  recomputeActiveClassifications();
-
-  saveTeamMerits();
-  renderApp();
-}
-
-// Enkel validering av unlock-/stab-/badge-data. Skriver advarsler med
-// console.warn, men krasjer ikke appen om prototypedata mangler felt.
-function validateUnlockData() {
-  const warnings = [];
-  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
-  const staff = Array.isArray(state.staff) ? state.staff : [];
-  const expertise = Array.isArray(state.expertise) ? state.expertise : [];
-  const programs = Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [];
-  const families = Array.isArray(state.trainingBadges?.badgeFamilies) ? state.trainingBadges.badgeFamilies : [];
-
-  const familyIds = new Set(families.map((family) => family && family.id).filter(Boolean));
-  const badgeIds = new Set();
-  families.forEach((family) => {
-    (Array.isArray(family.levels) ? family.levels : []).forEach((level) => {
-      if (level && level.id) {
-        badgeIds.add(level.id);
-      }
-    });
-  });
-  const staffIds = new Set(staff.map((member) => member && member.id).filter(Boolean));
-
-  // Ekte spiller-id-er og arketype-id-er for Ã¥ validere player_candidate-unlocks.
-  const playerIds = new Set(
-    (Array.isArray(state.players) ? state.players : []).map((player) => player && player.id).filter(Boolean)
-  );
-  const archetypeIds = new Set(
-    (Array.isArray(state.playerArchetypes) ? state.playerArchetypes : [])
-      .map((archetype) => archetype && archetype.id)
-      .filter(Boolean)
-  );
-
-  placeUnlocks.forEach((place) => {
-    if (typeof place?.placeId !== "string" || !place.placeId) {
-      warnings.push("Et placeUnlock mangler gyldig placeId (streng).");
-    }
-
-    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (!unlock || !isPlayerUnlockType(unlock.type)) {
-        return;
-      }
-
-      // KFUM Arena skal aldri gi spillere â€“ den er kun trener-/ekspertise-kilde.
-      if (place.placeId === "kfum_arena") {
-        const message = "KFUM Arena skal ikke gi spillere.";
-        warnings.push(message);
-        console.warn(message);
-      }
-
-      const targetId = unlock.targetId;
-
-      if (!targetId) {
-        warnings.push(`Et player_candidate pÃ¥ ${place.placeId || "ukjent sted"} mangler targetId.`);
-        return;
-      }
-
-      // En player_candidate skal peke pÃ¥ en ekte spiller-id, ikke en arketype-id.
-      if (!playerIds.has(targetId)) {
-        if (archetypeIds.has(targetId)) {
-          const message =
-            `player_candidate pÃ¥ ${place.placeId || "ukjent sted"} peker pÃ¥ arketype-id "${targetId}" ` +
-            "i stedet for en ekte spiller-id fra football_players.json.";
-          warnings.push(message);
-          console.warn(message);
-        } else {
-          warnings.push(
-            `player_candidate pÃ¥ ${place.placeId || "ukjent sted"} peker pÃ¥ ukjent spiller-id: ${targetId} (ignoreres).`
-          );
-        }
-      }
-    });
-  });
-
-  staff.forEach((member) => {
-    if (!member?.id || !member?.name || !member?.staffType) {
-      warnings.push(`Stab mangler id, name eller staffType: ${member?.id || member?.name || "ukjent"}.`);
-    }
-    if (member && member.sourcePlaceIds !== undefined && !Array.isArray(member.sourcePlaceIds)) {
-      warnings.push(`Stab ${member.id || member.name} har sourcePlaceIds som ikke er array.`);
-    }
-  });
-
-  expertise.forEach((item) => {
-    if (!item?.id || !item?.name || !item?.category) {
-      warnings.push(`Ekspertise mangler id, name eller category: ${item?.id || item?.name || "ukjent"}.`);
-    }
-  });
-
-  programs.forEach((program) => {
-    if (!program?.id || !program?.badgeFamilyId || !Array.isArray(program?.requiresExpertiseIds)) {
-      warnings.push(`Treningsprogram mangler id, badgeFamilyId eller requiresExpertiseIds: ${program?.id || "ukjent"}.`);
-    }
-    if (program?.badgeFamilyId && !familyIds.has(program.badgeFamilyId)) {
-      warnings.push(`Treningsprogram ${program.id} peker pÃ¥ ukjent badgeFamilyId: ${program.badgeFamilyId}.`);
-    }
-  });
-
-  const earnedBadgeIds = Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [];
-  earnedBadgeIds.forEach((id) => {
-    if (!badgeIds.has(id)) {
-      warnings.push(`earnedBadgeId finnes ikke i badge-katalogen: ${id}.`);
-    }
-  });
-
-  const hiredStaffIds = Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : [];
-  hiredStaffIds.forEach((id) => {
-    if (!staffIds.has(id)) {
-      warnings.push(`hiredStaffId finnes ikke i staff-filen: ${id}.`);
-    }
-  });
-
-  const programIds = new Set(programs.map((program) => program && program.id).filter(Boolean));
-  const classificationIds = new Set(
-    (Array.isArray(state.teamClassifications?.classifications) ? state.teamClassifications.classifications : [])
-      .map((classification) => classification && classification.id)
-      .filter(Boolean)
-  );
-
-  const badgeProgress = Array.isArray(state.teamMerits?.badgeProgress) ? state.teamMerits.badgeProgress : [];
-  badgeProgress.forEach((entry) => {
-    if (entry?.activeProgramId && !programIds.has(entry.activeProgramId)) {
-      warnings.push(`badgeProgress peker pÃ¥ ukjent treningsprogram: ${entry.activeProgramId}.`);
-    }
-    if (entry?.targetBadgeId && !badgeIds.has(entry.targetBadgeId)) {
-      warnings.push(`badgeProgress peker pÃ¥ ukjent badge: ${entry.targetBadgeId}.`);
-    }
-  });
-
-  const activeClassifications = Array.isArray(state.teamMerits?.activeClassifications)
-    ? state.teamMerits.activeClassifications
-    : [];
-  activeClassifications.forEach((id) => {
-    if (!classificationIds.has(id)) {
-      warnings.push(`activeClassification finnes ikke i klassifiseringsfilen: ${id}.`);
-    }
-  });
-
-  return warnings;
-}
-
-// Validerer stedsrapporter (football_place_reports.json). Rene UI-data, sÃ¥ feil
-// gir console.warn og advarsler â€“ aldri krasj. Sjekker at hver rapport har
-// placeId som finnes i placeUnlocks, at lagklasse-id-er finnes hvis mulig, og at
-// KFUM/Bislett ikke beskriver spillere som unlock (de er ikke spillerkilder).
-function validatePlaceReportsData() {
-  const warnings = [];
-  const reports = Array.isArray(state.placeReports?.placeReports)
-    ? state.placeReports.placeReports
-    : [];
-  const placeUnlocks = Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : [];
-  const placeIds = new Set(placeUnlocks.map((place) => place && place.placeId).filter(Boolean));
-  const classificationIds = new Set(
-    (Array.isArray(state.teamClassifications?.classifications) ? state.teamClassifications.classifications : [])
-      .map((classification) => classification && classification.id)
-      .filter(Boolean)
-  );
-
-  // Steder som ikke skal beskrive spillere som unlock i v1.
-  const noPlayerPlaceIds = new Set(["kfum_arena", "bislett_stadion"]);
-
-  reports.forEach((report) => {
-    if (typeof report?.placeId !== "string" || !report.placeId) {
-      const message = "En stedsrapport mangler gyldig placeId (streng).";
-      warnings.push(message);
-      console.warn(message);
-      return;
-    }
-
-    if (!placeIds.has(report.placeId)) {
-      const message =
-        `Stedsrapport peker pÃ¥ placeId som ikke finnes i football_unlocks.json: ${report.placeId}.`;
-      warnings.push(message);
-      console.warn(message);
-    }
-
-    (Array.isArray(report.helpsBuildClassifications) ? report.helpsBuildClassifications : []).forEach((id) => {
-      if (classificationIds.size > 0 && !classificationIds.has(id)) {
-        const message =
-          `Stedsrapport ${report.placeId} peker pÃ¥ ukjent lagklasse: ${id}.`;
-        warnings.push(message);
-        console.warn(message);
-      }
-    });
-
-    // KFUM og Bislett er ikke spillerkilder â€“ rapporten skal ikke beskrive
-    // spillere som faktisk opplÃ¥sing.
-    if (noPlayerPlaceIds.has(report.placeId)) {
-      const summary = getPlaceReportUnlockSummary(report.placeId);
-      if (summary.players > 0) {
-        const message =
-          `Stedsrapport ${report.placeId} skal ikke beskrive spillere som unlock, men stedet har player-unlocks.`;
-        warnings.push(message);
-        console.warn(message);
-      }
-    }
-  });
-
-  return warnings;
-}
-
-// Validerer lagklasser (football_team_classifications.json) for lagidentitet.
-// Rene UI-/planleggingsdata, sÃ¥ feil gir console.warn og advarsler â€“ aldri krasj.
-// Sjekker at hver klasse har en id, at hvert badgekrav peker pÃ¥ en kjent
-// badgefamilie, og at minimumLevel er bronze/silver/gold.
-function validateTeamClassificationsData() {
-  const warnings = [];
-  const classifications = Array.isArray(state.teamClassifications?.classifications)
-    ? state.teamClassifications.classifications
-    : [];
-  const families = Array.isArray(state.trainingBadges?.badgeFamilies) ? state.trainingBadges.badgeFamilies : [];
-  const familyIds = new Set(families.map((family) => family && family.id).filter(Boolean));
-  const validLevels = new Set(["bronze", "silver", "gold"]);
-
-  classifications.forEach((classification) => {
-    if (typeof classification?.id !== "string" || !classification.id) {
-      const message = "En lagklasse mangler gyldig id (streng).";
-      warnings.push(message);
-      console.warn(message);
-      return;
-    }
-
-    (Array.isArray(classification.requiresBadges) ? classification.requiresBadges : []).forEach((req) => {
-      if (typeof req?.familyId !== "string" || !familyIds.has(req.familyId)) {
-        const message = `Lagklasse ${classification.id} peker pÃ¥ ukjent badgefamilie: ${req?.familyId || "ukjent"}.`;
-        warnings.push(message);
-        console.warn(message);
-      }
-      if (!validLevels.has(req?.minimumLevel)) {
-        const message = `Lagklasse ${classification.id} har ugyldig minimumLevel: ${req?.minimumLevel || "ukjent"}.`;
-        warnings.push(message);
-        console.warn(message);
-      }
-    });
-  });
-
-  return warnings;
-}
-
-function getFormation() {
-  return (
-    state.formations.find((formation) => formation.id === state.selectedFormationId) ||
-    getAvailability().unlockedFormations[0] ||
-    state.formations[0]
-  );
-}
-
-function getTactic() {
-  return state.tactics.find((tactic) => tactic.id === state.selectedTacticId) || state.tactics[0];
-}
-
-function getSelectedSlot() {
-  const formation = getFormation();
-  return formation?.slots.find((slot) => slot.slotId === state.selectedSlotId) || formation?.slots[0] || null;
-}
-
-
-function getStaffIdentitySummary() {
-  return buildStaffIdentitySummary({
-    staff: state.staff,
-    expertise: state.expertise,
-    unlocks: state.unlocks,
-    teamMerits: state.teamMerits,
-    hiredStaff: getHiredStaff()
-  });
-}
-
-// Role Familiarity Engine v1: manager-statens fortrolighetsoppslag (spillerÃ—rolle).
-function getRoleFamiliarityStore() {
-  return state.teamMerits?.roleFamiliarity && typeof state.teamMerits.roleFamiliarity === "object"
-    ? state.teamMerits.roleFamiliarity
-    : {};
-}
-
-// Komplette spillerÃ—rolle-par i den valgte startelleveren, med fit-status.
-// Grunnlag for bÃ¥de fortrolighets-bonusen og registreringen etter kamp.
-function getLineupRoleUsageEntries(teamFit) {
-  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  return assignments
-    .filter((item) => item.player && item.role)
-    .map((item) => ({
-      playerId: item.player.id,
-      roleId: item.role.id,
-      status: item.fit?.status || "brukbar"
-    }));
-}
-
-// ---------------------------------------------------------------------------
-// Svake sider
-//
-// Identifiseres ut av spillerdataene (rollens `requires` + posisjonens krav,
-// minus spillerens `strengths`). Memoisert per spiller: listen er ren funksjon
-// av data som ikke endrer seg i en Ã¸kt, og den bygges i hver render.
-// ---------------------------------------------------------------------------
-const weaknessCache = new Map();
-
-function getPlayerWeaknesses(player) {
-  const id = player?.id;
-  if (!id) return [];
-  if (weaknessCache.has(id)) return weaknessCache.get(id);
-  const list = identifyPlayerWeaknesses(player, {
-    roles: state.roles,
-    catalogue: state.weaknessCatalogue
-  });
-  weaknessCache.set(id, list);
-  return list;
-}
-
-function getWeaknessProgressStore() {
-  return state.teamMerits?.weaknessProgress && typeof state.teamMerits.weaknessProgress === "object"
-    ? state.teamMerits.weaknessProgress
-    : {};
-}
-
-// Hva svakhetsarbeidet er verdt i denne elleveren: Ã©n liten bonus per spiller
-// som stÃ¥r i en rolle han har trent seg til. Trent, men ikke brukt, gir null â€”
-// og det sies rett ut i stedet for Ã¥ skjules.
-function getLineupWeaknessWork(teamFit) {
-  return summarizeLineupWeaknessWork(getWeaknessProgressStore(), teamFit?.assignments, {
-    roles: state.roles,
-    catalogue: state.weaknessCatalogue
-  });
-}
-
-// Oppsummert fortrolighet for den valgte startelleveren (snitt, etablerte/ferske
-// og en liten, klampet kampstyrke-bonus). Ren visning + bonus, ingen mutasjon.
-function getLineupFamiliaritySummary(teamFit) {
-  const pairs = getLineupRoleUsageEntries(teamFit).map(({ playerId, roleId }) => ({ playerId, roleId }));
-  return summarizeLineupFamiliarity(getRoleFamiliarityStore(), pairs);
-}
-
-// Registrer den spilte startelleverens rollebruk: bygg fortrolighet ved riktig
-// bruk, forvitre litt ved feilbruk. Persisteres i teamMerits (aldri i History
-// Go-progresjonen). Idempotent nok: kalles Ã©n gang per fullfÃ¸rt kamp.
-function recordRoleFamiliarityFromMatch(teamFit) {
-  if (!state.teamMerits) {
-    return;
-  }
-  const entries = getLineupRoleUsageEntries(teamFit);
-  if (!entries.length) {
-    return;
-  }
-  state.teamMerits.roleFamiliarity = recordMatchRoleUsage(getRoleFamiliarityStore(), entries);
-  saveTeamMerits();
-}
-
-// Bygg coachContext fra ansatt stab, staffRoles, valgt formasjon og team merits.
-// Alltid gyldig og nÃ¸ytral/lav selv uten ansatt stab (ingen null-krasj).
-function getCoachContext() {
-  return buildCoachContext({
-    hiredStaff: getHiredStaff(),
-    staffRoles: state.hgStaffRoles,
-    formation: getFormation(),
-    teamMerits: state.teamMerits
-  });
-}
-
-function getTeamFit() {
-  const formation = getFormation();
-  const tactic = getTactic();
-
-  if (!formation || !tactic) {
-    return null;
-  }
-
-  const args = {
-    lineup: state.lineup,
-    formation,
-    tactic,
-    players: state.players,
-    roles: state.roles,
-    earnedBadgeIds: state.teamMerits?.earnedBadgeIds || [],
-    trainingBadges: state.trainingBadges,
-    coachContext: getCoachContext()
-  };
-
-  // Steg 7b: TS-motoren eier teamFit-beregningen nÃ¥r den er lastet. Outputen er
-  // bevist byte-identisk med legacy (paritetstest over 255 caser), sÃ¥ alle
-  // konsumenter (renderLineup/renderSidePanel/buildNextDecisions/kampdag) fÃ¥r
-  // samme data. Uten bygget dist/ faller vi tilbake til legacy-motoren.
-  const engine = getLoadedManagerEngine();
-  if (engine?.calculateTeamFit) {
-    return engine.calculateTeamFit(args);
-  }
-
-  return calculateTeamFit(args);
-}
-
-// ----------------------------------------------------------------------------
-// Kampdag (v0.2)
-// Tester det valgte HISTORISKE systemet via kampmotoren, nÃ¥ som en spillbar
-// sekvens: laguttak â†’ kampplan (pre_match) â†’ 3 formasjons-/motstanderhendelser
-// â†’ managergrep med lesbar konsekvens â†’ summerte beslutningseffekter â†’
-// resultat â†’ forklarende sluttrapport. Ingen serie, tabell, sesong, livekamp,
-// skader, scouting, transfer eller reaksjoner. Endrer ikke unlocks,
-// spillerfilter, badgeeffektmotor, fitmotor eller KFUM/Bislett-regler.
-// ----------------------------------------------------------------------------
-
-// Gyldige sesjonsfaser. Brukes til Ã¥ forkaste korrupt/ukjent session-state fra
-// localStorage uten Ã¥ krasje.
-const MATCHDAY_SESSION_PHASES = ["pre_match", "event_1", "event_2", "event_3"];
-
-// Minimal strukturell validering av en lagret kampsesjon. Returnerer sesjonen
-// eller null â€” aldri en runtime-feil.
-function sanitizeStoredMatchdaySession(session) {
-  if (!session || typeof session !== "object" || Array.isArray(session)) {
-    return null;
-  }
-  if (!MATCHDAY_SESSION_PHASES.includes(session.phase)) {
-    return null;
-  }
-  if (!Array.isArray(session.events) || session.events.length === 0) {
-    return null;
-  }
-  if (!Array.isArray(session.decisions)) {
-    return null;
-  }
-  return session;
-}
-
-// Les kampdag-state fra localStorage. Krasjer aldri: faller tilbake til tom
-// state ved manglende nÃ¸kkel, ugyldig JSON eller utilgjengelig localStorage.
-// v1-lagrede kamper (kun lastMatch) leses fortsatt.
-function loadMatchdayState() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(MATCHDAY_STATE_KEY));
-
-    if (stored && typeof stored === "object" && !Array.isArray(stored)) {
-      return {
-        lastMatch: stored.lastMatch || null,
-        session: sanitizeStoredMatchdaySession(stored.session),
-        // Sett-flagg for kamprapporten (Playable Manager Flow Polish v1.1):
-        // hvilken kamp manageren sist har sett rapporten for.
-        lastSeenMatchId: stored.lastSeenMatchId || null
-      };
-    }
-
-    return { lastMatch: null, session: null, lastSeenMatchId: null };
-  } catch (error) {
-    return { lastMatch: null, session: null, lastSeenMatchId: null };
-  }
-}
-
-// Lagre gjeldende kampdag-state. Stille no-op hvis lagring feiler (privat modus).
-// ---------------------------------------------------------------------------
-// Spillerstatistikk: sesongens mÃ¥l, mÃ¥lgivende og kamper
-// Motoren (`football-player-stats.js`) er ren; her ligger bare akkumuleringen
-// og lagringen, per modus som alt annet.
-// ---------------------------------------------------------------------------
-
-const PLAYER_STATS_KEY = "hgfm.playerSeasonStats.v1";
-const PLAYER_CONDITION_KEY = "hgfm.playerCondition.v1";
-
-// ---------------------------------------------------------------------------
-// Spillerform og slitasje: troppen mellom kampene
-// Motoren (`football-player-condition.js`) er ren; her ligger akkumuleringen,
-// lagringen og hvile-steget nÃ¥r uka ruller.
-// ---------------------------------------------------------------------------
-
-function normalizePlayerCondition(value) {
-  return Array.isArray(value) ? value.filter((entry) => entry?.playerId) : [];
-}
-
-function loadPlayerCondition() {
-  try {
-    return normalizePlayerCondition(JSON.parse(localStorage.getItem(PLAYER_CONDITION_KEY) || "null"));
-  } catch (error) {
-    console.error("Kunne ikke lese spillerform", error);
-    return [];
-  }
-}
-
-function savePlayerCondition() {
-  try {
-    localStorage.setItem(PLAYER_CONDITION_KEY, JSON.stringify(normalizePlayerCondition(state.playerCondition)));
-  } catch (error) {
-    console.error("Kunne ikke lagre spillerform", error);
-  }
-}
-
-function getPlayerCondition() {
-  return normalizePlayerCondition(state.playerCondition);
-}
-
-// Hvor hardt kampplanen tok pÃ¥ beina. Kampplanene bÃ¦rer sin egen `intensity`;
-// uten en valgt plan er den nÃ¸ytral.
-// Kampplanenes `intensity` i data/football_tactics.json gÃ¥r fra 30 til 100 â€”
-// IKKE fra 0.6 til 1.6. Den gamle koden klampet tallet direkte inn i
-// [0.6, 1.6], sÃ¥ ENHVER kampplan ble maksimal intensitet: hver kamp la pÃ¥ 1.6
-// ganger normal belastning. Det er hele grunnen til at skadene eksploderte.
-//
-// 60 er nÃ¸ytralt. En lav blokk (30) koster ~0.82, alt frem (100) ~1.24.
-function getMatchIntensityFactor() {
-  const raw = getTactic()?.intensity;
-  const byLevel = { lav: 0.85, moderat: 1, hoy: 1.15, "hÃ¸y": 1.15, ekstrem: 1.25 };
-  if (typeof raw === "number" && Number.isFinite(raw)) {
-    return Math.max(0.8, Math.min(1.3, 1 + (raw - 60) / 100 * 0.6));
-  }
-  return byLevel[String(raw).toLowerCase()] || 1;
-}
-
-// Etter kampen: belastning fra minuttene, form fra det som skjedde, og
-// skaderisiko fra belastning som har fÃ¥tt stÃ¥. Idempotent pÃ¥ matchId.
-function registerMatchInPlayerCondition(lastMatch) {
-  const played = Array.isArray(lastMatch?.playerStats?.appearances) ? lastMatch.playerStats.appearances : [];
-  if (played.length === 0) return;
-  const matchId = String(lastMatch.id || "");
-  if (matchId && Array.isArray(state.playerConditionMatchIds) && state.playerConditionMatchIds.includes(matchId)) return;
-
-  state.playerCondition = applyMatchToConditions(getPlayerCondition(), {
-    played,
-    goals: lastMatch.playerStats?.goals || [],
-    outcome: lastMatch.outcome,
-    intensity: getMatchIntensityFactor()
-  });
-  state.playerConditionMatchIds = [...(state.playerConditionMatchIds || []), matchId].slice(-60);
-  savePlayerCondition();
-}
-
-// Uka ruller: laget hviler. Hvor mye avhenger av treningsuka du valgte â€”
-// restitusjon henter mer enn en pressuke.
-// Treningsuka avgjÃ¸r hvor mye laget henter inn igjen. Belastningen fra fokuset
-// er et tall mellom âˆ’4 (restitusjonspreget) og +6 (press) i treningsmotoren.
-//
-// Den gamle koden lette etter `fatigueLoad`/`intensity` pÃ¥ fokus-objektet â€”
-// felter som ikke finnes â€” og falt alltid tilbake til nÃ¸ytralt. Treningsvalget
-// gjorde altsÃ¥ ingenting for restitusjonen.
-// Uka gjÃ¸res opp i den rekkefÃ¸lgen den faktisk skjer:
-//
-//   1. LAGET hviler â€” hvor mye avgjÃ¸res av ukas RAMME (treningsprogrammet), med
-//      fokuset som modulering. Tidligere leste denne kun fokuset, mens
-//      programmets egne `fatigueLoad`-tall (6â€“19 for en hel uke) lÃ¥ ubrukt. Ukas
-//      faktiske arbeidsmengde var altsÃ¥ mekanisk uten virkning â€” samme klasse
-//      feil som resten av skalafeilene i CLAUDE.md.
-//   2. ENKELTSPILLERNE fÃ¸lges opp â€” egen restitusjon legger seg OPPÃ… lagets
-//      hvile, rolletrening bygger fortrolighet, opptrening korter ned skader.
-function applyWeeklyPlayerRecovery() {
-  const trainingIntensity = calculateWeeklyTrainingIntensity({
-    program: getSelectedTrainingProgramComposition(),
-    focusId: state.weeklyTrainingFocus?.focusId || null
-  });
-  state.playerCondition = applyWeeklyRecovery(getPlayerCondition(), { trainingIntensity });
-  savePlayerCondition();
-  applyIndividualTrainingWeek();
-}
-
-// Snittet av startelleverens slitasje, som en liten lagstyrke-penalty.
-// Klampet i motoren til maks âˆ’6: den avgjÃ¸r aldri en kamp alene.
-function getSquadFatiguePenalty(teamFit) {
-  const conditions = getPlayerCondition();
-  if (conditions.length === 0) return 0;
-  const starters = (Array.isArray(teamFit?.assignments) ? teamFit.assignments : [])
-    .map((assignment) => assignment?.player?.id)
-    .filter(Boolean);
-  if (starters.length === 0) return 0;
-  const average = starters.reduce((sum, id) => sum + fatigueFactorFor(conditionFor(conditions, id)), 0) / starters.length;
-  // `fatigueFactorFor` gÃ¥r fra 1.0 (uthvilt) til 0.78 (utkjÃ¸rt). Motoren klamper
-  // straffen til [0, 6], sÃ¥ mappingen mÃ¥ treffe NÃ˜YAKTIG det omrÃ¥det.
-  //
-  // FÃ¸rste forsÃ¸k regnet `(1 - snitt) * 90`, som gir 18 ved full utmattelse.
-  // Da lÃ¥ straffen fast pÃ¥ taket fra og med load 70: en sliten tropp og en
-  // utkjÃ¸rt tropp ble behandlet likt, og gradvisheten forsvant nettopp der den
-  // betyr mest. Samme feil som kampplanenes intensitet â€” klampen gjorde jobben
-  // som mappingen skulle gjort.
-  const spenn = 1 - 0.78;
-  return Math.round(Math.min(1, (1 - average) / spenn) * 6 * 10) / 10;
-}
-
-// Friskheten per spiller, slik kampmotoren og innbyttemotoren trenger den.
-function getFreshnessByPlayerId() {
-  const map = {};
-  getPlayerCondition().forEach((entry) => { map[entry.playerId] = freshnessFor(entry); });
-  return map;
-}
-
-
-function normalizePlayerSeasonStats(value) {
-  if (!value || typeof value !== "object") return { rows: [], matchIds: [] };
-  return {
-    rows: Array.isArray(value.rows) ? value.rows : [],
-    matchIds: Array.isArray(value.matchIds) ? value.matchIds : []
-  };
-}
-
-function loadPlayerSeasonStats() {
-  try {
-    return normalizePlayerSeasonStats(JSON.parse(localStorage.getItem(PLAYER_STATS_KEY) || "null"));
-  } catch (error) {
-    console.error("Kunne ikke lese spillerstatistikk", error);
-    return { rows: [], matchIds: [] };
-  }
-}
-
-function savePlayerSeasonStats() {
-  try {
-    localStorage.setItem(PLAYER_STATS_KEY, JSON.stringify(normalizePlayerSeasonStats(state.playerSeasonStats)));
-  } catch (error) {
-    console.error("Kunne ikke lagre spillerstatistikk", error);
-  }
-}
-
-function registerMatchInPlayerStats(lastMatch) {
-  const matchStats = lastMatch?.playerStats;
-  if (!matchStats) return;
-  const current = normalizePlayerSeasonStats(state.playerSeasonStats);
-  const matchId = String(lastMatch.id || "");
-  if (matchId && current.matchIds.includes(matchId)) return;
-
-  state.playerSeasonStats = {
-    rows: applyMatchPlayerStats(current.rows, matchStats),
-    matchIds: matchId ? [...current.matchIds, matchId] : current.matchIds
-  };
-  savePlayerSeasonStats();
-}
-
-function saveMatchdayState() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.setItem(MATCHDAY_STATE_KEY, JSON.stringify(state.matchday));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-// Kampklar-status: samler hvorfor laget eventuelt ikke kan spille kampdag.
-// Leser kun teamFit og availability-snapshotets roster readiness â€“ ingen ny
-// motor, ingen egne unlock-beregninger. Returnerer { isReady, reasons }.
-function getMatchdayReadiness(teamFit) {
-  const readiness = getAvailability().rosterReadiness;
-  const reasons = [];
-
-  if (!teamFit) {
-    reasons.push("Lagdata er ikke lastet ennÃ¥.");
-    return { isReady: false, reasons };
-  }
-
-  const missingStarters = teamFit.totalSlots - teamFit.completeCount;
-  if (missingStarters > 0) {
-    reasons.push(
-      `Fyll ${missingStarters} plass${missingStarters === 1 ? "" : "er"} i startelleveren (spiller og rolle).`
-    );
-  }
-
-  const duplicates = Array.isArray(teamFit.duplicatePlayers) ? teamFit.duplicatePlayers : [];
-  if (duplicates.length > 0) {
-    reasons.push(`Samme spiller stÃ¥r pÃ¥ flere plasser: ${duplicates.map((player) => player.name).join(", ")}.`);
-  }
-
-  if (!readiness.hasEnoughBench) {
-    reasons.push(`Mangler ${readiness.missingBench} benkespiller${readiness.missingBench === 1 ? "" : "e"} (krav: ${REQUIRED_BENCH}).`);
-  }
-
-  if (!readiness.hasEnoughUnlocked) {
-    reasons.push(
-      `Samle ${readiness.missingUnlocked} spiller${readiness.missingUnlocked === 1 ? "" : "e"} til via History Go-steder (krav: ${REQUIRED_SQUAD_SIZE} i troppen).`
-    );
-  }
-
-  return { isReady: reasons.length === 0, reasons };
-}
-
-// SÃ¸rg for at matchday-state alltid har riktig form fÃ¸r den brukes.
-function ensureMatchdayState() {
-  if (!state.matchday || typeof state.matchday !== "object") {
-    state.matchday = { lastMatch: null, session: null, lastSeenMatchId: null };
-  }
-  if (!("session" in state.matchday)) {
-    state.matchday.session = null;
-  }
-  if (!("lastSeenMatchId" in state.matchday)) {
-    state.matchday.lastSeenMatchId = null;
-  }
-}
-
-// Sett-flagg for kamprapporten: en fersk kamp regnes som "ulest" til manageren
-// faktisk har Ã¥pnet Kamp-flaten. Brukes av Neste handling-stripa slik at
-// Â«Se kampanalyseÂ» forsvinner nÃ¥r rapporten er sett.
-function hasUnseenMatchReport() {
-  const lastMatch = state.matchday?.lastMatch || null;
-  if (!lastMatch) {
-    return false;
-  }
-  return (lastMatch.id || null) !== (state.matchday?.lastSeenMatchId || null);
-}
-
-// Marker den siste kampens rapport som sett. Idempotent og persistert.
-// Returnerer true hvis noe faktisk endret seg (slik at kalleren kan rerendre).
-function markMatchReportSeen() {
-  if (!hasUnseenMatchReport()) {
-    return false;
-  }
-  ensureMatchdayState();
-  state.matchday.lastSeenMatchId = state.matchday.lastMatch?.id || null;
-  saveMatchdayState();
-  return true;
-}
-
-// Formasjons-matchup mot en gitt motstander, basert pÃ¥ valgt formasjons
-// kunnskapsoppslag (Formation Knowledge Engine). Returnerer null hvis motstander
-// eller kunnskap mangler. Brukes til matchup-bevisst treningsrÃ¥d og -bonus.
-function getFormationMatchupVsOpponent(opponent) {
-  const formation = getFormation();
-  const knowledge = formation ? state.formationKnowledgeById[formation.id] : null;
-  if (!opponent || !knowledge) {
-    return null;
-  }
-  return evaluateFormationMatchupVsOpponent(knowledge, opponent.matchupStyles, opponent.name);
-}
-
-// Start kampdag: oppretter en ny kampsesjon (pre_match) med motstanderprofil,
-// snapshots og 3 genererte hendelser. Selve resultatet beregnes fÃ¸rst nÃ¥r alle
-// managergrep er tatt (finalizeMatchdaySession).
-function playMatchday() {
-  const teamFit = getTeamFit();
-  const formation = getFormation();
-
-  if (!teamFit || !formation) {
-    return;
-  }
-
-  ensureMatchdayState();
-
-  // Allerede en kamp i gang: ikke start pÃ¥ nytt (Nullstill kamp rydder).
-  if (state.matchday.session) {
-    return;
-  }
-
-  // Kampdag-gating: ikke spill med ufullstendig eller ugyldig lag. Statusfeltet
-  // i kampdagpanelet (renderMatchdayReadiness) forklarer hva som mangler.
-  if (!getMatchdayReadiness(teamFit).isReady || (!state.weeklyTrainingProgram?.programId && !state.weeklyTrainingFocus?.focusId)) {
-    renderApp();
-    return;
-  }
-
-  // Aktive lagklasser hvis helperen finnes (ren liten identitetsbonus i motoren).
-  const activeClassifications =
-    typeof getActiveTeamClassifications === "function" ? getActiveTeamClassifications() : [];
-
-  // Mini Season v0.1 styrer motstanderen nÃ¥r en prÃ¸veperiode er aktiv. Uten aktiv
-  // periode er dette en testkamp: velg en historisk stil-motstander
-  // (lÃ¦ringsmotstander) i stedet for en generisk robot.
-  const opponent = getMiniSeasonNextOpponent() || pickHistoricalOpponentProfile();
-  const coachContext = getCoachContext();
-  const trainingFocus = createTrainingMatchdaySnapshot({
-    selection: state.weeklyTrainingFocus,
-    clubWeek: state.clubWeekState?.week,
-    coachContext,
-    opponent,
-    // Matchup mot denne motstanderen gjÃ¸r et relevant treningsfokus litt mer verdt
-    // (proaktiv kontekst). Null hvis motstander/kunnskap mangler.
-    formationMatchup: getFormationMatchupVsOpponent(opponent),
-    // Reaktiv kontekst: Ã¥ trene det forrige kamp avslÃ¸rte som svakest belÃ¸nnes Ã²g.
-    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-    // Samsvar mellom ukas ramme og ukas tema: lÃ¥ fokuset inne i treningsprogrammet
-    // (+1), eller trente laget Ã©n ting mens kampplanen krevde en annen (âˆ’1)?
-    coherenceBonus: evaluateProgramFocusCoherence(
-      getSelectedTrainingProgramComposition(),
-      state.weeklyTrainingFocus?.focusId || null
-    ).metricBonusDelta
-  });
-
-  state.matchday.session = createMatchdaySession({
-    teamFit,
-    formation,
-    tactic: getTactic(),
-    activeClassifications,
-    coachContext,
-    // Mini Season v0.1: aktiv prÃ¸veperiode styrer motstanderen etter den
-    // lagrede planen. Uten aktiv mini-sesong (null) velger kampmotoren
-    // tilfeldig motstander som fÃ¸r (testkamp).
-    opponent,
-    trainingFocus,
-    // Formation Knowledge Engine: valgt formasjons kunnskapsoppslag (hvis dekket)
-    // lar kampmotoren beregne formasjons-matchup mot motstanderens spillestil.
-    formationKnowledge: state.formationKnowledgeById[formation?.id] || null,
-    // Match Explanation v1.5: snapshot av relasjoner og off-pitch-kontekst fÃ¸r
-    // kampen, sÃ¥ sluttforklaringen kan binde sammen taktikk, relasjoner, trening
-    // og menneskene rundt laget.
-    relationships: teamFit?.relationships || null,
-    offPitchContext: buildMatchdayOffPitchSnapshot(),
-    staffIdentity: getStaffIdentitySummary(),
-    // Benken er ikke lenger pynt: de fire spillerne spillet krever av deg kan
-    // faktisk komme inn. Motoren regner passformen deres mot hver av de elleve
-    // plassene ved avspark.
-    benchPlayers: getAvailability().rosterReadiness?.benchCandidates || [],
-    roles: state.roles,
-    // Slitasje: en tropp som er kjÃ¸rt hardt leverer mindre, og en spiller som
-    // startet sliten er tom tidligere.
-    conditionPenalty: getSquadFatiguePenalty(teamFit),
-    conditionByPlayerId: getFreshnessByPlayerId(),
-    // Role Familiarity Engine v1: liten, klampet kampstyrke-bonus for kontinuitet
-    // i rollene. Beregnet utenfor fit-motoren og matet inn additivt.
-    roleFamiliarityBonus: getLineupFamiliaritySummary(teamFit).bonus,
-    // Svakhetstrening betaler kun nÃ¥r spilleren stÃ¥r i rollen han trente seg til.
-    weaknessWorkBonus: getLineupWeaknessWork(teamFit).bonus
-  });
-
-  // ReservÃ©r ukas fokus til denne sesjonen med Ã©n gang. Dermed kan reload eller
-  // Â«Nullstill kampÂ» aldri gi samme ukebonus til en ny kamp.
-  if (trainingFocus && state.matchday.session?.id) {
-    state.weeklyTrainingFocus = {
-      ...state.weeklyTrainingFocus,
-      appliedSessionId: state.matchday.session.id
-    };
-    saveWeeklyTrainingFocus();
-  }
-
-  saveMatchdayState();
-  renderApp();
-}
-
-// Avspark: kampplanen er sett, gÃ¥ fra pre_match til fÃ¸rste hendelse.
-function startMatchdayKickoff() {
-  ensureMatchdayState();
-  const session = state.matchday.session;
-
-  if (!session || session.phase !== "pre_match") {
-    return;
-  }
-
-  session.phase = "event_1";
-  // FÃ¸rste periode: fra avspark til fÃ¸rste hendelse. Kampen har en stilling
-  // allerede fÃ¸r du tar ditt fÃ¸rste grep â€” akkurat som en ekte kamp.
-  state.matchday.session = advanceMatchClock(session);
-  // Kampen starter fra 0 og spilles av minutt for minutt.
-  state.matchday.session.liveMinute = 0;
-  saveMatchdayState();
-  renderApp();
-  startMatchLive();
-}
-
-// Ta et managergrep for gjeldende hendelse: vurder valget mot sesjonens
-// snapshots, lagre beslutningen med konsekvens, og gÃ¥ videre til neste
-// hendelse â€” eller avslutt kampen og bygg sluttrapporten.
-function chooseMatchdayDecision(optionId) {
-  ensureMatchdayState();
-  // `let`: motstanderens tilpasning gir en NY sesjon (motorene muterer ikke),
-  // og resten av funksjonen mÃ¥ jobbe videre pÃ¥ den.
-  let session = state.matchday.session;
-  const eventIndex = getSessionEventIndex(session);
-
-  if (session === null || eventIndex === null) {
-    return;
-  }
-
-  const event = session.events[eventIndex];
-  const option = (event.options || []).find((candidate) => candidate.id === optionId);
-
-  if (!option) {
-    return;
-  }
-
-  let matchJustFinished = false;
-  let startNextPeriodPlayback = false;
-  const resolution = resolveMatchdayDecision({
-    event,
-    option,
-    tacticalProfile: session.teamFitSnapshot?.tacticalProfile,
-    matchEngineEffects: session.matchEngineEffects,
-    coachSnapshot: session.coachSnapshot,
-    trainingFocus: session.trainingFocus
-  });
-
-  if (!resolution) {
-    return;
-  }
-
-  // Grepet inn i minuttloggen, sÃ¥ kampen leses som Ã©n sammenhengende fortelling.
-  state.matchday.session = logMatchMoment(session, {
-    type: "decision",
-    side: "for",
-    detail: `Ditt grep: ${option.label}`
-  });
-  session = state.matchday.session;
-
-  session.decisions.push({
-    eventId: event.id,
-    eventTitle: event.title,
-    optionId: option.id,
-    optionLabel: option.label,
-    tone: resolution.tone,
-    effects: resolution.effects,
-    feedback: resolution.feedback,
-    trainingImpact: resolution.trainingImpact
-  });
-
-  if (eventIndex + 1 < session.events.length) {
-    session.phase = `event_${eventIndex + 2}`;
-    // Spill ferdig perioden fram til neste hendelse. Grepet du nettopp tok
-    // gjelder for den â€” derfor teller tidlige grep i flere perioder enn sene.
-    const periodStart = currentPeriodEndMinute(session);
-    session = advanceMatchClock(session);
-    // Neste periode spilles av fra der den forrige sluttet.
-    session.liveMinute = periodStart;
-    state.matchday.session = session;
-    // Motstanderen svarer pÃ¥ kampbildet â€” nÃ¥ den ekte stillingen. Skyver de
-    // laget opp eller trekker de seg ned, er ikke planen din like god lenger.
-    const adapted = applyOpponentAdaptation(session);
-    if (adapted !== session) {
-      state.matchday.session = adapted;
-      session = adapted;
-    }
-    startNextPeriodPlayback = true;
-  } else {
-    // Siste periode: fra siste hendelse til full tid.
-    session = advanceMatchClock(session);
-    session.liveMinute = 90;
-    state.matchday.session = session;
-    // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
-    state.matchday.lastMatch = finalizeMatchdaySession(session);
-    // Kampdag â†” Club Week: merk resultatet med uka det ble spilt i, slik at
-    // kampdagfasen kan kreve en faktisk spilt kamp fÃ¸r uka ruller videre.
-    state.matchday.lastMatch.playedInClubWeek = state.clubWeekState?.week ?? null;
-    // Club Week Consequence Loop v1: kampen gir smÃ¥ klubb-/tilvenningseffekter
-    // Ã©n gang. Markeringen (consequencesApplied) persisteres i saveMatchdayState.
-    applyMatchdayConsequences(state.matchday.lastMatch, session);
-    // Mini Season v0.1: registrer resultatet i en aktiv prÃ¸veperiode (matchId
-    // som idempotensnÃ¸kkel â€” reload/dobbeltkall gir aldri dobbel registrering).
-    registerMatchInMiniSeason(state.matchday.lastMatch);
-    // Spillerstatistikk: legg kampens kamper, mÃ¥l og mÃ¥lgivende til sesongen.
-    // Idempotent pÃ¥ matchId, sÃ¥ reload/dobbeltkall aldri teller dobbelt.
-    registerMatchInPlayerStats(state.matchday.lastMatch);
-    // Bruken fÃ¥r konsekvenser: belastning, form og skaderisiko bÃ¦res videre.
-    registerMatchInPlayerCondition(state.matchday.lastMatch);
-    // Role Familiarity Engine v1: bygg spillernes rolle-fortrolighet ved riktig
-    // bruk (forvitre litt ved feilbruk). Startelleveren er lÃ¥st gjennom sesjonen,
-    // sÃ¥ gjeldende teamFit speiler laget som spilte. KjÃ¸res Ã©n gang per kamp
-    // (denne grenen treffes bare nÃ¥r siste hendelse er besvart).
-    recordRoleFamiliarityFromMatch(getTeamFit());
-    state.matchday.session = null;
-    matchJustFinished = true;
-  }
-
-  saveMatchdayState();
-  renderApp();
-  // Neste periode spilles av med det samme, sÃ¥ kampen fÃ¸les sammenhengende.
-  if (startNextPeriodPlayback) startMatchLive();
-  // Club Week Orchestrator v1.1: spilt kamp nudger uka til Oppsummering-fasen
-  // (gate-sikkert â€” kampdagâ†’oppsummering krever nettopp en spilt kamp). Selve
-  // uke-rullen skjer fortsatt via Â«Til managerkontoretÂ».
-  if (matchJustFinished) {
-    syncClubWeekPhaseToProgress().catch(console.error);
-  }
-}
-
-// Norske etiketter og kort tekst for kampkonsekvenser, f.eks.
-// "Spillermoral +3, Taktisk klarhet +2, Medietrykk -1". Tom streng uten utslag.
-const MATCH_CONSEQUENCE_EFFECT_LABELS = {
-  boardTrust: "Styretillit",
-  playerMorale: "Spillermoral",
-  tacticalClarity: "Taktisk klarhet",
-  trainingCulture: "Treningskultur",
-  mediaPressure: "Medietrykk"
-};
-
-function formatMatchConsequenceEffects(effects) {
-  if (!effects || typeof effects !== "object" || Array.isArray(effects)) {
-    return "";
-  }
-
-  const parts = [];
-  for (const [metric, delta] of Object.entries(effects)) {
-    if (!MATCH_CONSEQUENCE_EFFECT_LABELS[metric] || typeof delta !== "number" || delta === 0) {
-      continue;
-    }
-    parts.push(`${MATCH_CONSEQUENCE_EFFECT_LABELS[metric]} ${delta > 0 ? "+" : ""}${delta}`);
-  }
-
-  return parts.join(", ");
-}
-
-// Club Week Consequence Loop v1: bruk et fullfÃ¸rt Kampdag v0.2-resultat til
-// smÃ¥, lesbare effekter pÃ¥ eksisterende Club Week-verdier og formasjons-
-// tilvenning i teamMerits. KjÃ¸res kun i det kampen avsluttes, og resultatet
-// merkes med consequencesApplied slik at reload/dobbeltkall aldri gir ny
-// effekt. Gamle v1-kamper (uten version 2) gir aldri konsekvens og krasjer
-// ikke. Ingen liga, tabell, sesong eller ny motor â€” bare smÃ¥ deltaer.
-function applyMatchdayConsequences(lastMatch, session) {
-  if (!lastMatch || typeof lastMatch !== "object" || lastMatch.consequencesApplied) {
-    return;
-  }
-
-  const consequences = computeMatchdayConsequences({
-    lastMatch,
-    coachSnapshot: session?.coachSnapshot || null,
-    historicalScore: Number(session?.teamFitSnapshot?.historicalScore) || 0
-  });
-
-  if (!consequences) {
-    return;
-  }
-
-  // Club Week-verdier: samme mÃ¸nster som innboksvalg â€” kun eksisterende
-  // numeriske verdier pÃ¥virkes, og resultatet clamps 0â€“100.
-  const appliedEffects = {};
-  if (state.clubWeekState && typeof state.clubWeekState === "object") {
-    for (const [metric, delta] of Object.entries(consequences.clubEffects)) {
-      if (typeof state.clubWeekState[metric] === "number" && typeof delta === "number" && delta !== 0) {
-        state.clubWeekState[metric] = clampMetric(state.clubWeekState[metric] + delta);
-        appliedEffects[metric] = delta;
-      }
-    }
-    if (Object.keys(appliedEffects).length > 0) {
-      saveClubWeekState(state.clubWeekState);
-    }
-  }
-
-  // Formasjonstilvenning for brukt formasjon: eksisterende struktur i
-  // teamMerits.formationFamiliarity[formationId], clampet 0â€“100. Startverdi
-  // ved fÃ¸rste kamp hentes fra stabens formationFamiliarity (som i trenings-
-  // uken), ellers fra lagret verdi.
-  let familiarityApplied = null;
-  if (state.teamMerits && consequences.formationId && consequences.familiarityGain > 0) {
-    const merits = state.teamMerits;
-    if (!merits.formationFamiliarity || typeof merits.formationFamiliarity !== "object") {
-      merits.formationFamiliarity = {};
-    }
-    const stored = merits.formationFamiliarity[consequences.formationId];
-    const current = Number.isFinite(stored)
-      ? stored
-      : Number(session?.coachSnapshot?.formationFamiliarity) || 45;
-    const startValue = Math.max(0, Math.min(100, Math.round(current)));
-    // Samlebonus: et system oppdaget via History Go setter seg raskere ogsÃ¥
-    // gjennom kamp.
-    const collectedBonus = getCollectedFormationFamiliarityBonus(consequences.formationId);
-    const nextValue = Math.max(0, Math.min(100, Math.round(startValue + consequences.familiarityGain + collectedBonus)));
-    merits.formationFamiliarity[consequences.formationId] = nextValue;
-    saveTeamMerits();
-    familiarityApplied = {
-      formationId: consequences.formationId,
-      formationName: lastMatch.formationSnapshot?.name || consequences.formationId,
-      gain: nextValue - startValue,
-      value: nextValue
-    };
-  }
-
-  // Off-pitch Parameters v1: kampen farger ogsÃ¥ konteksten utenfor banen
-  // (moral, selvtillit, slitasje, press). Manager-staten oppdateres Ã©n gang per
-  // kamp (samme consequencesApplied-vern). Ingen History Go-progresjon rÃ¸res.
-  if (state.teamMerits) {
-    state.teamMerits.offPitch = applyMatchdayOffPitchEffects(getOffPitchState(), {
-      outcome: lastMatch.outcome,
-      goalsFor: lastMatch.score?.for,
-      goalsAgainst: lastMatch.score?.against,
-      teamStrength: lastMatch.teamStrength,
-      opponentStrength: lastMatch.opponent?.strength,
-      exposedWeaknessMetric: lastMatch.exposedWeaknessMetric
-    });
-    saveTeamMerits();
-  }
-
-  // Engangsmarkering + lagret oppsummering for sluttrapporten. Persisteres
-  // sammen med lastMatch i matchday-state av kalleren (saveMatchdayState).
-  lastMatch.consequencesApplied = true;
-  lastMatch.clubConsequences = {
-    effects: appliedEffects,
-    familiarity: familiarityApplied
-  };
-
-  // Kort kampkonsekvens i Club Week-loggen og som feedback.
-  const outcomeLabel = { win: "Seier", draw: "Uavgjort", loss: "Tap" }[lastMatch.outcome] || "Kamp";
-  const effectsText = formatMatchConsequenceEffects(appliedEffects);
-  const summaryParts = [];
-  if (effectsText) {
-    summaryParts.push(`Kampkonsekvens: ${effectsText}.`);
-  }
-  if (familiarityApplied && familiarityApplied.gain > 0) {
-    summaryParts.push(`Formasjonstilvenning i ${familiarityApplied.formationName} +${familiarityApplied.gain}.`);
-  }
-
-  const message = [`${outcomeLabel} mot ${lastMatch.opponent?.name || "ukjent motstander"}.`, ...summaryParts].join(" ");
-
-  addClubWeekEvent({
-    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    week: state.clubWeekState?.week ?? "?",
-    phase: "matchday",
-    phaseLabel: "Kampdag",
-    message
-  });
-  // I kampdagfasen er det denne kampen som Ã¥pner porten for fasebyttet.
-  setClubWeekFeedback(
-    state.clubWeekState?.phase === "matchday" ? `${message} Uka kan nÃ¥ rulle videre.` : message
-  );
-
-  // Profilrelatert progresjon (Club Week-verdier/formationFamiliarity) er
-  // faktisk endret: varsle appskallet. Ren rendering skjer i kalleren.
-  if (Object.keys(appliedEffects).length > 0 || familiarityApplied) {
-    window.dispatchEvent(new Event("updateProfile"));
-  }
-}
-
-// Nullstill kampdag: fjern bÃ¥de siste kamp og eventuell pÃ¥gÃ¥ende sesjon.
-function resetMatchday() {
-  // Nullstilling stopper ogsÃ¥ klokka.
-  stopMatchLive();
-  ensureMatchdayState();
-  state.matchday.lastMatch = null;
-  state.matchday.session = null;
-  saveMatchdayState();
-  renderApp();
-}
-
-// ----------------------------------------------------------------------------
-// Mini Season v0.1 â€” 5-kampers prÃ¸veperiode
-// En lett spillramme oppÃ¥ eksisterende Club Week og Kampdag v0.2: motstander-
-// plan fra de eksisterende motstanderprofilene, resultathistorikk, smÃ¥
-// styremÃ¥l og en sluttvurdering etter 5 kamper. Ingen liga, tabell, Ã¸konomi,
-// overgangsmarked eller ny motor. Selve logikken ligger i
-// football-mini-season.js; app.js eier kun lagring (hgfm.miniSeason.v1) og UI.
-// ----------------------------------------------------------------------------
-
-// Les mini-sesong fra localStorage. Krasjer aldri: manglende nÃ¸kkel, ugyldig
-// JSON eller korrupt struktur gir null (= ingen prÃ¸veperiode startet).
-
-function normalizeFirstTimePlaythrough(value) {
-  const source = value && typeof value === "object" ? value : {};
-  return {
-    started: Boolean(source.started),
-    completed: Boolean(source.completed),
-    currentStep: typeof source.currentStep === "string" && source.currentStep ? source.currentStep : "start"
-  };
-}
-
-function normalizeGameStartState(value) {
-  const selectedMode = ["league", "national", "scenario", "training"].includes(value?.selectedMode) ? value.selectedMode : null;
-  return {
-    selectedMode,
-    activeLeagueSaveId: typeof value?.activeLeagueSaveId === "string" ? value.activeLeagueSaveId : undefined,
-    activeScenarioId: typeof value?.activeScenarioId === "string" ? value.activeScenarioId : undefined,
-    leagueSeasonStatus: typeof value?.leagueSeasonStatus === "string" ? value.leagueSeasonStatus : undefined,
-    clubName: typeof value?.clubName === "string" ? value.clubName : undefined,
-  // Tok manageren over en etablert klubb? Da eier klubben nivÃ¥et, tradisjonen
-  // og styrets forventning â€” men aldri troppen.
-  takeoverClubId: typeof value?.takeoverClubId === "string" ? value.takeoverClubId : undefined,
-    managerName: typeof value?.managerName === "string" ? value.managerName : undefined,
-    leagueName: typeof value?.leagueName === "string" ? value.leagueName : undefined,
-    seasonLabel: typeof value?.seasonLabel === "string" ? value.seasonLabel : undefined,
-    boardExpectation: typeof value?.boardExpectation === "string" ? value.boardExpectation : undefined,
-    seasonObjective: typeof value?.seasonObjective === "string" ? value.seasonObjective : undefined,
-    createdAt: typeof value?.createdAt === "string" ? value.createdAt : undefined
-  };
-}
-
-function loadGameStartState() {
-  try {
-    return normalizeGameStartState(JSON.parse(localStorage.getItem(GAME_START_STATE_KEY)));
-  } catch (error) {
-    return normalizeGameStartState(null);
-  }
-}
-
-function saveGameStartState() {
-  try {
-    localStorage.setItem(GAME_START_STATE_KEY, JSON.stringify(normalizeGameStartState(state.gameStartState)));
-  } catch (error) {
-    // Valg av spillmodus er UI-state og mÃ¥ ikke stoppe appen i privat modus.
-  }
-}
-
-function selectGameMode(mode, extras = {}) {
-  if (state.modeEnvelope) {
-    state.modeEnvelope = switchModeSession(state.modeEnvelope, state, mode);
-    persistModeEnvelope(localStorage, state.modeEnvelope);
-  }
-  // Mode is owned by modeEnvelope. gameStartState keeps league/scenario
-  // metadata for backward compatibility, without discarding the league save.
-  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, selectedMode: mode, ...extras });
-  saveGameStartState();
-}
-
-function isScenarioModeActive() {
-  return state.modeEnvelope?.activeMode === "scenario";
-}
-
-function isLeagueModeActive() {
-  return state.modeEnvelope?.activeMode === "league";
-}
-
-// ---------------------------------------------------------------------------
-// Landslagsmodus: du tar over et landslag i stedet for en klubb. Troppen er
-// spillerne du har SAMLET fra den nasjonen â€“ inkludert landslagsarena-spillerne
-// (Ullevaal/MaracanÃ£) som klubblaget aldri fÃ¥r signere. Egen modus-sesjon, sÃ¥
-// klubbsaven aldri pÃ¥virkes.
-// ---------------------------------------------------------------------------
-
-function getNationalTeamState() {
-  const raw = state.nationalTeam;
-  return {
-    nationality: typeof raw?.nationality === "string" && raw.nationality.trim() ? raw.nationality.trim() : null,
-    squadPlayerIds: Array.isArray(raw?.squadPlayerIds) ? raw.squadPlayerIds.filter((id) => typeof id === "string") : []
-  };
-}
-
-function getNationalTeamNationality() {
-  return getNationalTeamState().nationality;
-}
-
-// Hvilke spillere har du samlet, uavhengig av klubb/landslag-skillet OG av
-// hvilken nasjon som er valgt nÃ¥? Leses fra de opplÃ¥ste stedene direkte, ikke
-// fra den nasjonsfiltrerte spillerlista â€“ ellers ville nasjonsvelgeren bare
-// vist nasjonen du allerede har valgt.
-function getCollectedPlayersForNations() {
-  const unlockedPlaceIds = getAvailability().unlockedPlaceIds;
-  const byId = new Map((Array.isArray(state.players) ? state.players : []).map((p) => [p.id, p]));
-  const ids = new Set(getLocalStartPlayerIds());
-  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
-    if (!place || !unlockedPlaceIds.has(place.placeId)) return;
-    (Array.isArray(place.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (unlock && isPlayerUnlockType(unlock.type) && unlock.targetId) ids.add(unlock.targetId);
-    });
-  });
-  return [...ids].map((id) => byId.get(id)).filter(Boolean);
-}
-
-// Nasjoner du kan lede. Troppen er grunnstammen (nasjonens jevne klubbspillere,
-// alltid tilgjengelig) pluss spillerne du faktisk har samlet â€“ inkludert
-// landslagsstjernene som klubblaget ditt aldri fÃ¥r signere. `collected` telles
-// separat, sÃ¥ det synes hva samlingen din tilfÃ¸rer.
-function getAvailableNations() {
-  const nations = new Map();
-  const entry = (nation) => {
-    if (!nations.has(nation)) nations.set(nation, { ids: new Set(), collected: new Set() });
-    return nations.get(nation);
-  };
-  getNationalBasePlayers().forEach((player) => {
-    const nation = typeof player.nationality === "string" ? player.nationality.trim() : "";
-    if (!nation) return;
-    entry(nation).ids.add(player.id);
-  });
-  getCollectedPlayersForNations().forEach((player) => {
-    const nation = typeof player.nationality === "string" ? player.nationality.trim() : "";
-    if (!nation) return;
-    const record = entry(nation);
-    record.ids.add(player.id);
-    record.collected.add(player.id);
-  });
-  return [...nations.entries()]
-    .map(([nationality, record]) => ({
-      nationality,
-      count: record.ids.size,
-      collected: record.collected.size,
-      playable: record.ids.size >= REQUIRED_SQUAD_SIZE
-    }))
-    .sort((a, b) => b.count - a.count || a.nationality.localeCompare(b.nationality, "no"));
-}
-
-// Velg nasjon Ã¥ lede. Nullstiller troppen, siden spillerpoolen endres â€” og et
-// pÃ¥gÃ¥ende mesterskap, siden det tilhÃ¸rte den forrige nasjonen.
-function selectNationalTeamNation(nationality) {
-  const nation = typeof nationality === "string" ? nationality.trim() : "";
-  if (!nation) return;
-  const previous = getNationalTeamNationality();
-  state.nationalTeam = { nationality: nation, squadPlayerIds: [] };
-  if (previous !== nation) state.tournament = null;
-  invalidateAvailability();
-  sanitizeLineupForUnlockedPlayers();
-  fillEmptyLineupSlots(true);
-  renderApp();
-}
-
-// ---------------------------------------------------------------------------
-// Mesterskap (EM/VM). Motoren bor i football-tournament.js; her bor bare
-// koblingen til app-state, lagring og UI. Ingen nasjoner, mesterskap eller
-// motstandere hardkodes â€” alt leses fra data/football_tournaments.json.
-// ---------------------------------------------------------------------------
-function getActiveTournament() {
-  return normalizeTournamentState(state.tournament);
-}
-
-function isTournamentActive() {
-  const tournament = getActiveTournament();
-  return Boolean(tournament && tournament.status === "active");
-}
-
-// Hvilke mesterskap kan nasjonen din melde seg pÃ¥? Tom liste betyr at
-// mesterskapsdataen mangler â€” da spilles landslagsmodus som enkeltkamper.
-function getAvailableTournaments() {
-  const nationality = getNationalTeamNationality();
-  if (!nationality) return [];
-  return getEligibleTournaments(
-    state.tournamentDefinitions || [],
-    state.tournamentNations || [],
-    nationality
-  );
-}
-
-// Seed: nasjon + mesterskap + antall tidligere mesterskap. Deterministisk, men
-// et nytt mesterskap gir en ny trekning.
-function buildTournamentSeed(tournamentId, nationality) {
-  const previous = (state.tournamentHistory || []).length;
-  return `${tournamentId}-${slugifyNationSeed(nationality)}-${previous + 1}`;
-}
-
-function slugifyNationSeed(nationality) {
-  return String(nationality || "nasjon")
-    .toLowerCase()
-    .replace(/Ã¦/g, "ae").replace(/Ã¸/g, "o").replace(/Ã¥/g, "a")
-    .replace(/[^a-z0-9]+/g, "-");
-}
-
-function startTournament(tournamentId) {
-  const nationality = getNationalTeamNationality();
-  if (!nationality) return;
-  const definition = getAvailableTournaments().find((entry) => entry.id === tournamentId);
-  if (!definition) return;
-  const source = (state.tournamentDefinitions || []).find((entry) => entry.id === tournamentId) || definition;
-  try {
-    state.tournament = createTournament({
-      definition: source,
-      nations: state.tournamentNations || [],
-      managerNationality: nationality,
-      seed: buildTournamentSeed(tournamentId, nationality)
-    });
-  } catch (error) {
-    console.warn(`Kunne ikke starte mesterskap: ${error.message}`);
-    state.tournament = null;
-    return;
-  }
-  const opponent = getTournamentNextOpponent(state.tournament);
-  addClubWeekEvent({
-    id: `tournament-start-${state.tournament.seed}`,
-    week: state.clubWeekState?.week || 1,
-    phase: "matchday",
-    phaseLabel: state.tournament.name,
-    message: opponent
-      ? `${state.tournament.fullName} er i gang. FÃ¸rste kamp: ${opponent.nationality}.`
-      : `${state.tournament.fullName} er i gang.`
-  });
-  persistTournament();
-  renderApp();
-}
-
-function abandonTournament() {
-  state.tournament = null;
-  persistTournament();
-  renderApp();
-}
-
-function persistTournament() {
-  // Mesterskapet bor i modus-sesjonen (landslagsmodus), ikke i en egen
-  // legacy-nÃ¸kkel: det skal aldri kunne lekke inn i klubblagringen.
-  if (!state.modeEnvelope) return;
-  state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
-  try {
-    state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
-  } catch (_) { /* memory-only fallback */ }
-}
-
-// Neste motstander i mesterskapet som en full motstanderprofil kampdagen kan
-// bruke. Nasjonen er identiteten; stilen er den historiske arketypen den spiller
-// med â€” samme kontrakt som de Ã¸vrige motstanderne.
-function getTournamentMatchdayOpponent() {
-  const tournament = getActiveTournament();
-  if (!tournament) return null;
-  const next = getTournamentNextOpponent(tournament);
-  if (!next) return null;
-  const profile =
-    getHistoricalOpponentProfile(next.styleProfileId) ||
-    OPPONENT_PROFILES.find((candidate) => candidate.id === next.styleProfileId) ||
-    OPPONENT_PROFILES[0];
-  if (!profile) return null;
-  return {
-    ...profile,
-    id: `tournament-${next.id}`,
-    // Navnet er nasjonen, ikke Â«nasjon â€” stegÂ»: displayName brukes inne i
-    // kampbriefens setninger, og et steg midt i en setning ble uleselig
-    // (Â«Italia â€” Gruppespill Â· Gruppe A truet i overgangÂ»).
-    name: next.nationality,
-    displayName: next.nationality,
-    strength: next.strength,
-    homeAway: next.homeAway,
-    // Utslagskamp er alltid en Â«mÃ¥ vinneÂ»-ramme; gruppespill tÃ¥ler et poeng.
-    boardExpectation: next.knockout ? "win" : "avoid_loss",
-    narrativeHook: next.narrativeHook,
-    tournamentStage: next.stage,
-    tournamentStageLabel: next.stageLabel
-  };
-}
-
-// Registrer et fullfÃ¸rt kampresultat i mesterskapet. Idempotent via motoren:
-// er kampen allerede registrert, returnerer den samme state.
-function registerMatchInTournament(lastMatch) {
-  if (!isNationalModeActive() || !isTournamentActive() || !lastMatch) return;
-  const before = state.tournament;
-  const updated = applyTournamentMatchResult(before, lastMatch);
-  if (updated === before) return;
-  state.tournament = updated;
-
-  const summary = summarizeTournament(updated);
-  if (updated.status === "completed") {
-    // Forbundet gjÃ¸r opp. Merittlista fantes fra fÃ¸r, men ingen hadde en mening
-    // om den: Ã¥ ryke i gruppa med Brasil og Ã¥ nÃ¥ semifinalen med Norge sto som
-    // samme slags linje.
-    const nation = (Array.isArray(state.tournamentNations) ? state.tournamentNations : [])
-      .find((entry) => entry.nationality === updated.managerNationality) || null;
-    const verdict = createFederationVerdict({
-      tournament: updated,
-      summary,
-      expectation: deriveFederationExpectation({
-        strength: Number(nation?.strength) || 70,
-        knockoutStages: updated.knockoutStages
-      }),
-      previousVerdicts: (Array.isArray(state.tournamentHistory) ? state.tournamentHistory : [])
-        .map((entry) => entry.verdict ? entry : null)
-        .filter(Boolean),
-      federationTrust: Number(state.federationTrust) || 50
-    });
-    if (verdict) {
-      state.federationVerdict = verdict;
-      state.federationTrust = verdict.trustAfter;
-    }
-
-    state.tournamentHistory = [
-      ...(Array.isArray(state.tournamentHistory) ? state.tournamentHistory : []),
-      {
-        tournamentId: updated.tournamentId,
-        name: updated.name,
-        nationality: updated.managerNationality,
-        placement: updated.outcome?.placement || "Ferdig",
-        champion: updated.outcome?.champion || null,
-        played: summary.played,
-        won: summary.won,
-        drawn: summary.drawn,
-        lost: summary.lost,
-        ...(createFederationArchiveEntry(verdict) || {})
-      }
-    ];
-  }
-  (updated.log || []).slice(-1).forEach((message, index) => {
-    addClubWeekEvent({
-      id: `tournament-${updated.seed}-${updated.stage}-${index}`,
-      week: state.clubWeekState?.week || 1,
-      phase: "matchday",
-      phaseLabel: updated.name,
-      message
-    });
-  });
-  persistTournament();
-}
-
-function isNationalModeActive() {
-  return state.modeEnvelope?.activeMode === "national";
-}
-
-function isTrainingModeActive() {
-  return state.modeEnvelope?.activeMode === "training";
-}
-
-function shouldWriteLegacyLeagueStorage() {
-  return !state.modeEnvelope || isLeagueModeActive();
-}
-
-function isLeagueSeasonActive() {
-  return isLeagueModeActive() &&
-    Boolean(state.gameStartState?.activeLeagueSaveId) &&
-    state.gameStartState?.leagueSeasonStatus === "active" &&
-    state.leagueSeason?.status === "active";
-}
-
-function getLeagueStatusLabel(status = state.gameStartState?.leagueSeasonStatus, season = state.leagueSeason) {
-  if (status === "completed" || season?.status === "completed") return "FullfÃ¸rt sesong";
-  if (status === "active" && season?.status === "active") return "Aktiv sesong";
-  return "FÃ¸r sesong";
-}
-
-// Klubbnavnet er noe spilleren setter selv i onboardingen. Faller tilbake pÃ¥ et
-// nÃ¸ytralt midlertidig navn hvis klubben ikke er opprettet ennÃ¥ â€” aldri avledet
-// av et History Go-sted (stedsanker er faset ut som identitetskilde).
-function getTemporaryClubName() {
-  const raw = state.gameStartState?.clubName;
-  if (typeof raw === "string" && raw.trim()) return { name: raw.trim(), temporary: false };
-  return { name: "Ny klubb", temporary: true };
-}
-
-function getLeagueSaveModel() {
-  const season = state.leagueSeason;
-  // Klubbidentiteten kommer fra klubben spilleren opprettet (onboarding), ikke
-  // fra et History Go-sted. Stedsanker er faset ut som identitetskilde.
-  const club = getTemporaryClubName();
-  const status = getLeagueStatusLabel(state.gameStartState?.leagueSeasonStatus, season);
-  return {
-    activeLeagueSaveId: state.gameStartState?.activeLeagueSaveId || null,
-    leagueSeasonStatus: status,
-    clubName: club.name,
-    temporaryClubName: club.temporary,
-    managerName: state.gameStartState?.managerName || "",
-    leagueName: state.gameStartState?.leagueName || "HG Liga",
-    seasonLabel: state.gameStartState?.seasonLabel || "Sesong 1",
-    boardExpectation: state.gameStartState?.boardExpectation || season?.boardExpectation || "Styret vil se en tydelig klubbidentitet og et kampklart lag.",
-    seasonObjective: state.gameStartState?.seasonObjective || season?.seasonGoal || "FullfÃ¸r fÃ¸r-sesong og gjÃ¸r klubben klar for serieÃ¥pning.",
-    createdAt: state.gameStartState?.createdAt || null
-  };
-}
-
-function createLeagueSaveExtras() {
-  const model = getLeagueSaveModel();
-  return {
-    activeLeagueSaveId: model.activeLeagueSaveId || `league_save_${Date.now()}`,
-    leagueSeasonStatus: "active",
-    clubName: model.clubName,
-    leagueName: model.leagueName,
-    seasonLabel: model.seasonLabel,
-    boardExpectation: model.boardExpectation,
-    seasonObjective: model.seasonObjective,
-    createdAt: model.createdAt || new Date().toISOString()
-  };
-}
-
-function clearLeagueSaveState() {
-  state.gameStartState = normalizeGameStartState({ selectedMode: state.gameStartState?.selectedMode || null });
-}
-
-function activateLeagueOnboardingTarget(step) {
-  const targetByStep = {
-    klubb: { tab: "dashboard", selector: ".manager-portal", openClubStep: true },
-    spillere: { tab: "historygo", selector: "#unlockedPlayersList" },
-    // Staben flyttet fra en popup pÃ¥ Speiding til Stab & drift-flata. Ruta
-    // pekte pÃ¥ et element inne i en LUKKET modal, sÃ¥ Â«scroll hitÂ» gjorde
-    // ingenting â€” steget sÃ¥ ut som en blindvei.
-    stab: { tab: "admin", selector: "#availableStaffList" },
-    ellever: { tab: "tactics", selector: "#formationSelect" },
-    formasjon: { tab: "tactics", selector: "#formationSelect" },
-    trening: { tab: "trening", selector: "#weeklyTrainingOptions" },
-    sesong: { tab: "dashboard", selector: "#leagueSeasonPanel", startSeason: true }
-  };
-  const target = targetByStep[step?.id] || { tab: step?.tab || "dashboard" };
-  if (target.startSeason) startLeagueSeasonFromOnboarding();
-  // Mangler klubben navn, Ã¥pner vi klubb-opprettelsen i startskjermen.
-  if (target.openClubStep && !getSavedClubName()) {
-    state.modeChooserOpen = true;
-    renderApp();
-    showOnboardingClubStep();
-    return;
-  }
-  activateTab(target.tab);
-  if (target.selector) {
-    window.requestAnimationFrame(() => document.querySelector(target.selector)?.scrollIntoView({ behavior: "smooth", block: "center" }));
-  }
-}
-
-function activateRecommendedLeagueTab(teamFit = null) {
-  const rosterReadiness = getAvailability().rosterReadiness;
-  if (!rosterReadiness.hasEnoughUnlocked) {
-    activateTab("historygo");
-    return;
-  }
-  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  const filled = assignments.filter((item) => item.player).length;
-  if (!teamFit || filled < 11 || !rosterReadiness.hasEnoughBench) {
-    activateTab("tactics");
-    return;
-  }
-  if (!state.weeklyTrainingProgram?.programId && !state.weeklyTrainingFocus?.focusId) {
-    activateTab("trening");
-    return;
-  }
-  activateTab("kamp");
-}
-
-function loadFirstTimePlaythrough() {
-  try {
-    return normalizeFirstTimePlaythrough(JSON.parse(localStorage.getItem(FIRST_TIME_PLAYTHROUGH_KEY)));
-  } catch (error) {
-    return normalizeFirstTimePlaythrough(null);
-  }
-}
-
-function saveFirstTimePlaythrough() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.setItem(FIRST_TIME_PLAYTHROUGH_KEY, JSON.stringify(normalizeFirstTimePlaythrough(state.firstTimePlaythrough)));
-  } catch (error) {
-    // UI-progresjon kan feile i privat modus uten Ã¥ stoppe fÃ¸rsteuka.
-  }
-}
-
-function isFirstTimePlaythroughActive() {
-  return isScenarioModeActive() &&
-    state.gameStartState?.activeScenarioId === AJAX_TOTAL_FOOTBALL_SCENARIO_ID &&
-    !state.firstTimePlaythrough?.completed;
-}
-
-function getFirstTimeOpponentProfile() {
-  return getHistoricalOpponentProfile(FIRST_TIME_OPPONENT_ID) ||
-    HISTORICAL_OPPONENT_PROFILES.find((profile) => /ajax|total/i.test(`${profile.id} ${profile.displayName} ${profile.archetypeName}`)) ||
-    HISTORICAL_OPPONENT_PROFILES[0] ||
-    null;
-}
-
-function buildFirstTimeNextActionState(teamFit, readiness = null) {
-  const ft = normalizeFirstTimePlaythrough(state.firstTimePlaythrough);
-  if (!isFirstTimePlaythroughActive() || ft.completed) return { active: false, started: ft.started, completed: Boolean(ft.completed) };
-  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  const filled = assignments.filter((item) => item.player).length;
-  const misused = assignments.some((item) => item.player && item.fit?.status === "feilbrukt");
-  const opponent = getFirstTimeOpponentProfile();
-  const firstMatchPlayed = Boolean(state.miniSeason?.matchHistory?.length) || Boolean(state.matchday?.lastMatch);
-  const reportSeen = firstMatchPlayed && !hasUnseenMatchReport();
-  return {
-    active: true,
-    started: ft.started || state.miniSeason?.status === "active",
-    completed: ft.completed,
-    hasFormation: Boolean(state.selectedFormationId),
-    hasRoles: filled >= 11 && !misused,
-    hasReadInbox: getInboxAttentionCount() === 0,
-    hasPlayedFirstMatch: firstMatchPlayed,
-    hasSeenReport: reportSeen,
-    opponentName: opponent?.displayName || "Ajax 1971â€“73 â€” Totalfotball",
-    readiness: readiness || (teamFit ? getMatchdayReadiness(teamFit) : { isReady: false })
-  };
-}
-
-
-function getLeagueOnboardingSteps(teamFit) {
-  const availability = getAvailability();
-  const roster = availability.rosterReadiness || {};
-  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  const filled = assignments.filter((item) => item.player).length;
-  const bench = Math.max(0, Number(roster.unlockedCount || 0) - filled);
-  // Klubbidentitet = klubben du opprettet i onboardingen (navn), ikke et
-  // stedsanker. Stedsanker er faset ut som identitetskilde.
-  const hasClubIdentity = Boolean(getSavedClubName()) || (isLeagueSeasonActive() && Boolean(state.gameStartState?.activeLeagueSaveId));
-  const hiredStaff = getHiredStaff().length;
-  const hasFormation = Boolean(state.selectedFormationId);
-  const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
-  const leagueActive = isLeagueSeasonActive();
-  return [
-    { id: "klubb", title: "Opprett klubben", done: hasClubIdentity, detail: hasClubIdentity ? `Klubben er opprettet: ${getTemporaryClubName().name}.` : "Gi klubben et navn i startskjermen fÃ¸r laget behandles som en aktiv ligaklubb.", tab: "dashboard" },
-    { id: "spillere", title: "Hent spillere", done: Number(roster.unlockedCount || 0) >= REQUIRED_SQUAD_SIZE, detail: `${Number(roster.unlockedCount || 0)}/${REQUIRED_SQUAD_SIZE} spillere tilgjengelig. Bruk samling, nÃ¦romrÃ¥de, klubblink eller auto-fyll.`, tab: "historygo" },
-    { id: "stab", title: "Velg stab", done: hiredStaff >= REQUIRED_STAFF_SIZE, detail: `${hiredStaff}/${REQUIRED_STAFF_SIZE} stabsmedlemmer valgt. Tilgjengelig stab teller fÃ¸rst nÃ¥r du faktisk engasjerer dem.`, tab: "historygo" },
-    { id: "ellever", title: "Sett fÃ¸rsteellever og benk", done: filled >= REQUIRED_STARTERS && bench >= REQUIRED_BENCH, detail: `Startellever ${Math.min(filled, REQUIRED_STARTERS)}/${REQUIRED_STARTERS} Â· benk ${Math.min(bench, REQUIRED_BENCH)}/${REQUIRED_BENCH}.`, tab: "tactics" },
-    { id: "formasjon", title: "Velg formasjon", done: hasFormation, detail: hasFormation ? "Formasjonen er valgt og forklares pÃ¥ taktikkbrettet." : "Velg en spillbar formasjon fÃ¸r treningsuka lÃ¥ses inn.", tab: "tactics" },
-    { id: "trening", title: "Velg trening", done: hasTraining, detail: hasTraining ? "Ukas treningsprogram er valgt." : "Velg treningsfokus eller program slik at laget gÃ¥r inn i serieÃ¥pningen med en plan.", tab: "trening" },
-    { id: "sesong", title: "Start sesongen", done: leagueActive, detail: leagueActive ? "League-save, terminliste og tabell er aktive." : "Opprett league-save og terminliste nÃ¥r alle fÃ¸r-sesongsgrepene er klare.", tab: "dashboard" }
-  ];
-}
-
-function isLeaguePreseasonReady(teamFit) {
-  const steps = getLeagueOnboardingSteps(teamFit);
-  return steps.filter((step) => step.id !== "sesong").every((step) => step.done);
-}
-
-function renderLeagueOnboarding(teamFit) {
-  const panel = elements.leagueOnboardingPanel;
-  const list = elements.leagueOnboardingSteps;
-  if (!panel || !list) return;
-  const active = isLeagueModeActive();
-  const steps = getLeagueOnboardingSteps(teamFit);
-  const complete = steps.filter((step) => step.done).length;
-  const done = complete === steps.length;
-  panel.hidden = !active || done;
-  if (panel.hidden) return;
-  const next = steps.find((step) => !step.done) || steps[steps.length - 1];
-  if (elements.leagueOnboardingLead) {
-    elements.leagueOnboardingLead.textContent = `FÃ¸r seriestart: ${complete}/${steps.length} managergrep klare. Neste steg: ${next.title.toLowerCase()}.`;
-  }
-  list.replaceChildren();
-  steps.forEach((step, index) => {
-    const item = document.createElement("li");
-    item.className = step.done ? "is-done" : "";
-    // Hvert steg er en knapp til flata steget faktisk skjer pÃ¥. Et steg som
-    // bare beskriver seg selv er et skilt uten dÃ¸r â€” samme feil som klubbukas
-    // fasestripe hadde.
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "league-onboarding-step";
-    const number = document.createElement("span");
-    number.textContent = step.done ? "âœ“" : String(index + 1);
-    const body = document.createElement("div");
-    const title = document.createElement("strong");
-    title.textContent = step.title;
-    const detail = document.createElement("small");
-    detail.textContent = step.detail;
-    body.append(title, detail);
-    button.append(number, body);
-    button.addEventListener("click", () => activateLeagueOnboardingTarget(step));
-    item.append(button);
-    list.append(item);
-  });
-}
-
-// Klubbnavnet spilleren selv har satt (tom => klubb ikke opprettet ennÃ¥).
-function getSavedClubName() {
-  const raw = state.gameStartState?.clubName;
-  return typeof raw === "string" && raw.trim() ? raw.trim() : "";
-}
-
-// Onboarding steg 2: vis klubb-opprettelsen, skjul modusvalget.
-function showOnboardingClubStep() {
-  const chooser = elements.firstTimePlaythroughCard;
-  const clubStep = document.querySelector("#onboardingClubStep");
-  if (chooser) chooser.hidden = true;
-  if (clubStep) {
-    clubStep.hidden = false;
-    document.querySelector("#onboardingClubName")?.focus();
-  }
-}
-
-// Tilbake til modusvalget fra klubb-steget.
-function showOnboardingModeStep() {
-  const chooser = elements.firstTimePlaythroughCard;
-  const clubStep = document.querySelector("#onboardingClubStep");
-  if (clubStep) clubStep.hidden = true;
-  if (chooser) chooser.hidden = false;
-}
-
-function loadOnboarded() {
-  try { return localStorage.getItem(ONBOARDED_KEY) === "1"; } catch (_) { return false; }
-}
-
-function saveOnboarded() {
-  try { localStorage.setItem(ONBOARDED_KEY, state.onboarded ? "1" : "0"); } catch (_) { /* privat modus */ }
-}
-
-// Onboarding v2: egen startskjerm styres uavhengig av spillflaten. Den vises til
-// spilleren har valgt modus (`onboarded`), og igjen nÃ¥r Â«Bytt modusÂ» Ã¥pner den.
-function renderOnboardingScreen() {
-  const screen = elements.onboardingScreen;
-  if (!screen) return;
-  screen.hidden = state.onboarded && !state.modeChooserOpen;
-  document.body.classList.toggle("is-onboarding", !screen.hidden);
-  // Startskjermen Ã¥pner alltid pÃ¥ modusvalget; klubb-steget vises kun nÃ¥r
-  // ligaspill velges uten at en klubb er opprettet.
-  if (screen.hidden) showOnboardingModeStep();
-}
-
-// Landslagspanelet: nasjonsvalg + troppsoppsummering. Kun i landslagsmodus.
-function renderNationalTeamPanel() {
-  const panel = document.querySelector("#nationalTeamPanel");
-  if (!panel) return;
-  panel.hidden = !isNationalModeActive();
-  if (panel.hidden) return;
-
-  const nations = getAvailableNations();
-  const chosen = getNationalTeamNationality();
-  const listEl = document.querySelector("#nationalNationList");
-  const titleEl = document.querySelector("#nationalTeamTitle");
-  const leadEl = document.querySelector("#nationalTeamLead");
-  const statusEl = document.querySelector("#nationalTeamStatus");
-  const summaryEl = document.querySelector("#nationalSquadSummary");
-
-  if (titleEl) titleEl.textContent = chosen ? `${chosen}s landslag` : "Velg nasjon";
-  if (statusEl) statusEl.textContent = chosen ? "Nasjon valgt" : "Ingen nasjon valgt";
-
-  if (listEl) {
-    listEl.replaceChildren();
-    if (!nations.length) {
-      const empty = document.createElement("p");
-      empty.className = "muted-text";
-      empty.textContent = "Ingen nasjoner er tilgjengelige ennÃ¥. BesÃ¸k fotballsteder i History Go â€“ landslagsarenaer som Ullevaal gir landslagsspillerne.";
-      listEl.append(empty);
-    }
-    nations.forEach((nation) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = `nation-card${nation.nationality === chosen ? " is-selected" : ""}${nation.playable ? "" : " is-locked"}`;
-      button.disabled = !nation.playable;
-      const name = document.createElement("strong");
-      name.textContent = nation.nationality;
-      const meta = document.createElement("small");
-      meta.textContent = nation.playable
-        ? `${nation.count} spillere Ã¥ velge blant Â· ${nation.collected} samlet i History Go`
-        : `${nation.count}/${REQUIRED_SQUAD_SIZE} spillere â€“ samle flere fra ${nation.nationality}`;
-      button.append(name, meta);
-      button.addEventListener("click", () => selectNationalTeamNation(nation.nationality));
-      listEl.append(button);
-    });
-  }
-
-  if (leadEl) {
-    leadEl.textContent = chosen
-      ? "Troppen er nasjonens grunnstamme pluss spillerne du har samlet â€“ ogsÃ¥ landslagsstjernene du aldri fÃ¥r signere til klubblaget."
-      : "Grunnstammen fÃ¥r du gratis. Stjernene samler du i History Go.";
-  }
-
-  if (summaryEl) {
-    summaryEl.hidden = !chosen;
-    if (chosen) {
-      const squad = getUnlockedPlayers();
-      const best = [...squad].sort((a, b) => (Number(b.classHeight) || 0) - (Number(a.classHeight) || 0))[0];
-      const set = (id, text) => { const el = document.querySelector(id); if (el) el.textContent = text; };
-      set("#nationalSquadNation", chosen);
-      set("#nationalSquadCount", String(squad.length));
-      set("#nationalSquadBest", best ? `${best.name} (${best.classHeight})` : "â€“");
-      set("#nationalSquadNext", squad.length >= REQUIRED_STARTERS ? "Sett laget pÃ¥ Lag" : "Samle flere spillere");
-    }
-  }
-}
-
-// Mesterskapspanelet: enten pÃ¥melding (EM/VM), eller den aktive turneringen med
-// gruppetabell, bracket og neste motstander. Merittlista stÃ¥r under.
-function renderTournamentPanel() {
-  const panel = document.querySelector("#tournamentPanel");
-  if (!panel) return;
-  const nationality = getNationalTeamNationality();
-  panel.hidden = !isNationalModeActive() || !nationality;
-  if (panel.hidden) return;
-
-  const set = (id, text) => { const el = document.querySelector(id); if (el) el.textContent = text; };
-  const tournament = getActiveTournament();
-  const choicesEl = document.querySelector("#tournamentChoices");
-  const activeEl = document.querySelector("#tournamentActive");
-  const historyEl = document.querySelector("#tournamentHistory");
-
-  // Forbundets dom over det siste fullfÃ¸rte mesterskapet.
-  const verdictEl = document.querySelector("#federationVerdict");
-  if (verdictEl) {
-    const verdict = state.federationVerdict || null;
-    verdictEl.hidden = !verdict;
-    if (verdict) {
-      verdictEl.dataset.verdict = verdict.verdict;
-      set("#federationVerdictLabel", verdict.sacked
-        ? "Forbundets dom Â· avskjediget"
-        : verdict.warning
-          ? "Forbundets dom Â· advarsel"
-          : `Forbundets dom Â· ${verdict.verdictLabel}`);
-      set("#federationVerdictHeadline", verdict.headline);
-      const trend = verdict.trustDelta >= 0 ? `+${verdict.trustDelta}` : `${verdict.trustDelta}`;
-      set("#federationVerdictMessage", `${verdict.federationMessage} Forbundets tillit ${trend} (nÃ¥ ${verdict.trustAfter}).`);
-      renderTextList(document.querySelector("#federationVerdictReasons"), verdict.reasons, (line) => line, "");
-    }
-  }
-
-  const history = Array.isArray(state.tournamentHistory) ? state.tournamentHistory : [];
-  if (historyEl) {
-    historyEl.hidden = history.length === 0;
-    const list = document.querySelector("#tournamentHistoryList");
-    if (list) {
-      list.replaceChildren();
-      history.slice().reverse().forEach((entry) => {
-        const item = document.createElement("li");
-        const name = document.createElement("strong");
-        name.textContent = `${entry.name} Â· ${entry.nationality}`;
-        const placement = document.createElement("span");
-        placement.textContent = entry.verdictLabel
-          ? `${entry.placement} Â· ${entry.won}-${entry.drawn}-${entry.lost} Â· ${entry.verdictLabel}`
-          : `${entry.placement} Â· ${entry.won}-${entry.drawn}-${entry.lost}`;
-        item.append(name, placement);
-        list.append(item);
-      });
-    }
-  }
-
-  // Ingen aktiv turnering: vis pÃ¥melding.
-  if (!tournament || tournament.status !== "active") {
-    if (activeEl) activeEl.hidden = true;
-    set("#tournamentTitle", "Meld pÃ¥ til mesterskap");
-    set("#tournamentStatus", "Ikke pÃ¥meldt");
-    const available = getAvailableTournaments();
-    set("#tournamentLead", available.length
-      ? `${nationality} kan melde seg pÃ¥. Gruppespill fÃ¸rst, sÃ¥ utslagsrunder â€“ ett tap for mye og du er ute.`
-      : "Mesterskapsdata mangler. Landslagsmodus spilles som enkeltkamper inntil videre.");
-    if (choicesEl) {
-      choicesEl.hidden = false;
-      choicesEl.replaceChildren();
-      available.forEach((definition) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "tournament-choice";
-        const title = document.createElement("strong");
-        title.textContent = definition.fullName;
-        const meta = document.createElement("small");
-        meta.textContent = `${definition.teamCount} nasjoner Â· ${definition.groupCount} grupper Â· ${definition.managerMatches} kamper`;
-        const frame = document.createElement("span");
-        frame.className = "tournament-choice-frame";
-        frame.textContent = definition.learningFrame || definition.summary;
-        button.append(title, meta, frame);
-        button.addEventListener("click", () => startTournament(definition.id));
-        choicesEl.append(button);
-      });
-    }
-    return;
-  }
-
-  // Aktiv turnering.
-  if (choicesEl) choicesEl.hidden = true;
-  if (activeEl) activeEl.hidden = false;
-  const summary = summarizeTournament(tournament);
-  set("#tournamentTitle", `${tournament.fullName} Â· ${nationality}`);
-  set("#tournamentStatus", summary.stageLabel);
-  set("#tournamentLead", tournament.learningFrame || tournament.summary);
-  set("#tournamentStage", summary.groupName && tournament.stage === "group"
-    ? `${summary.stageLabel} Â· ${summary.groupName}`
-    : summary.stageLabel);
-  set("#tournamentNextOpponent", summary.nextOpponent
-    ? `${summary.nextOpponent.nationality} (${summary.nextOpponent.homeAway === "home" ? "hjemme" : "borte"})`
-    : "â€“");
-  set("#tournamentRecord", `${summary.played} kamper Â· ${summary.won}-${summary.drawn}-${summary.lost}`);
-  set("#tournamentGoals", `${summary.goalsFor}â€“${summary.goalsAgainst}`);
-  const hookEl = document.querySelector("#tournamentNextHook");
-  if (hookEl) {
-    const next = getTournamentNextOpponent(tournament);
-    hookEl.textContent = next ? next.narrativeHook : "";
-  }
-
-  const managerTeam = getTournamentTeam(tournament, tournament.managerTeamId);
-  set("#tournamentGroupTitle", summary.groupName || "Gruppe");
-  const tableBody = document.querySelector("#tournamentGroupTable");
-  if (tableBody) {
-    tableBody.replaceChildren();
-    createTournamentGroupTable(tournament, managerTeam?.groupId).forEach((row) => {
-      const tr = document.createElement("tr");
-      if (row.isManager) tr.className = "is-manager";
-      [
-        String(row.position),
-        row.nationality,
-        String(row.played),
-        row.goalDifference > 0 ? `+${row.goalDifference}` : String(row.goalDifference),
-        String(row.points)
-      ].forEach((value) => {
-        const td = document.createElement("td");
-        td.textContent = value;
-        tr.append(td);
-      });
-      tableBody.append(tr);
-    });
-  }
-
-  const bracketEl = document.querySelector("#tournamentBracket");
-  if (bracketEl) {
-    bracketEl.replaceChildren();
-    const bracket = createTournamentBracket(tournament).filter((stage) => stage.matches.length > 0);
-    bracket.forEach((stage) => {
-      const block = document.createElement("div");
-      block.className = "tournament-bracket-stage";
-      const heading = document.createElement("h4");
-      heading.textContent = stage.label;
-      block.append(heading);
-      stage.matches.forEach((match) => {
-        const line = document.createElement("p");
-        line.className = `tournament-bracket-match${match.involvesManager ? " is-manager" : ""}`;
-        const score = match.score
-          ? `${match.score}${match.penalties ? ` (str. ${match.penalties})` : ""}`
-          : "ikke spilt";
-        line.textContent = `${match.home} â€“ ${match.away} Â· ${score}`;
-        block.append(line);
-      });
-      bracketEl.append(block);
-    });
-  }
-}
-
-// Klubben du leder stÃ¥r i toppen, over alt du gjÃ¸r. Utenfor ligamodus stÃ¥r den
-// generiske tittelen, slik at landslag og Fotballvitenskap ikke later som de er
-// klubben din.
-function renderHeaderClubIdentity() {
-  const name = elements.headerClubName;
-  const manager = elements.headerClubManager;
-  if (!name || !manager) return;
-
-  const identityRoot = document.querySelector("#clubIdentityHeader");
-
-  if (!isLeagueModeActive() || !getSavedClubName()) {
-    name.textContent = "HG Football Manager";
-    manager.textContent = "Treneren avgjÃ¸r. Les klubbens puls, bygg laget pÃ¥ banen og ta de neste beslutningene.";
-    renderClubIdentity(identityRoot, createClubIdentityView({
-      clubName: "HG Football Manager",
-      clubId: "hgfm",
-      leagueName: "Managerkontoret"
-    }));
-    return;
-  }
-
-  const model = getLeagueSaveModel();
-  const takeover = getTakeoverClub();
-  renderClubIdentity(identityRoot, createClubIdentityView({
-    clubName: model.clubName,
-    clubId: takeover?.id || model.activeLeagueSaveId || model.clubName,
-    ground: takeover?.ground || `${model.clubName} stadion`,
-    city: takeover?.city || null,
-    leagueName: model.leagueName,
-    temporary: model.temporaryClubName
-  }));
-  manager.textContent = model.managerName
-    ? `${model.managerName} Â· ${model.leagueName} Â· ${model.leagueSeasonStatus}`
-    : `${model.leagueName} Â· ${model.leagueSeasonStatus}`;
-}
-
-// Â«Klubben dinÂ» og Â«SpillmodusÂ» er borte fra Kontor: to bokser som gjentok tall
-// managerportalen, klubbuka og footeren allerede viste, og som skjÃ¸v de faktiske
-// handlingene nedover. Modusbyttet ligger i Innstillinger, der det hÃ¸rer hjemme.
-// Det som var ekte her â€” portalens neste kamp og assistentrÃ¥dets status â€” lever
-// videre.
-function renderGameModeStatus(teamFit) {
-  renderOnboardingScreen();
-  renderHeaderClubIdentity();
-
-  const availability = getAvailability();
-  const roster = availability.rosterReadiness || {};
-  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  const filled = assignments.filter((item) => item.player).length;
-  const unread = getInboxAttentionCount();
-  // En kamp finnes for UI-et fÃ¸rst nÃ¥r league-save og terminliste er aktive.
-  // FÃ¸r det bruker portalen samme fÃ¸rste steg som onboarding/footeren.
-  const scheduledOpponent = getMiniSeasonNextOpponent();
-  const preseasonStep = isLeagueModeActive() && !isLeagueSeasonActive()
-    ? getLeagueOnboardingSteps(teamFit).find((step) => !step.done)
-    : null;
-  const nextMatch = isLeagueSeasonActive()
-    ? state.matchday?.session?.opponent?.name || scheduledOpponent?.name || "ikke terminfestet"
-    : preseasonStep?.title || "Sesongen er ikke startet";
-
-  if (elements.portalNextMatch) elements.portalNextMatch.textContent = `Neste kamp: ${nextMatch}`;
-  if (elements.portalMatchHint) {
-    elements.portalMatchHint.textContent = scheduledOpponent?.homeAway
-      ? `${scheduledOpponent.homeAway === "home" ? "Hjemme" : "Borte"} Â· klargjÃ¸r kampplan og kamptropp.`
-      : "Sett startellever, benk og kampplan fÃ¸r kampdag.";
-  }
-  if (elements.portalInboxStatus) {
-    elements.portalInboxStatus.textContent = `AssistentrÃ¥d: ${unread > 0 ? `${unread} ulest` : "rolig"}`;
-  }
-  // Troppstallene lever videre i klubbuka sine mÃ¥lere (completeCount/
-  // rosterReadyCount); her trengs bare at de er lest ut Ã©n gang.
-  void roster;
-  void filled;
-}
-
-function renderModeIsolation() {
-  const mode = state.modeEnvelope?.activeMode || "league";
-  document.documentElement.dataset.activeMode = mode;
-  const leagueMode = mode === "league";
-  // FÃ¸r-sesong-fokus: sÃ¥ lenge ligasesongen ikke er aktiv ennÃ¥ (fÃ¸r-sesong)
-  // skal Oversikt ha Ã‰N tydelig vei videre â€” fÃ¸r-sesong-sjekklista, klubbkortet
-  // og footerens Â«Neste handlingÂ». De rene in-season-/kampflatene lekker inn som
-  // en vegg av konkurrerende Â«nesteÂ»-kort fÃ¸r laget er bygd og terminlista
-  // finnes: managerportalen (Â«Neste kamp: lÃ¥stÂ», Â«Neste beslutningÂ»),
-  // off-pitch-signalene og Â«Flere Ã¥pne beslutningerÂ». De er premature nÃ¥ og
-  // kommer tilbake automatisk nÃ¥r sesongen er aktiv.
-  const leaguePreseason = leagueMode && !isLeagueSeasonActive();
-  document.querySelectorAll("[data-league-only]").forEach((node) => { node.hidden = !leagueMode; });
-  document.querySelectorAll(".club-topbar, #clubWeekFeedback, .club-week-event-log-panel")
-    .forEach((node) => { node.hidden = !leagueMode; });
-  document.querySelectorAll(".manager-portal, #offPitchSignalCard, .decision-strip")
-    .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
-  // Kontor: knapperaden med dype popup-er hÃ¸rer til ligamodus; Â«Flere
-  // beslutningerÂ» er fortsatt prematur i fÃ¸r-sesong.
-  document.querySelectorAll(".kontor-deep-actions")
-    .forEach((node) => { node.hidden = !leagueMode; });
-  document.querySelectorAll(".kontor-deep-decisions")
-    .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
-  if (mode !== "league") {
-    document.querySelectorAll(".league-season-panel, .league-onboarding-panel, .league-club-card")
-      .forEach((node) => { node.hidden = true; });
-  }
-  if (mode !== "national") {
-    document.querySelectorAll(".national-team-panel").forEach((node) => { node.hidden = true; });
-  }
-  // Menyen skal si sannheten om hvilken modus du er i. Hver nav-fane (og noen
-  // fÃ¥ flater) bÃ¦rer `data-nav-modes` med modiene den hÃ¸rer hjemme i:
-  // Scenario-fanen finnes bare i scenariomodus, Fotballvitenskap bare i sin
-  // egen modul. Ã… la alle fanene stÃ¥ framme i alle modi var halve grunnen til
-  // at navigasjonen fÃ¸ltes tilfeldig.
-  applyModeScopedNav(mode);
-
-  const bar = document.querySelector("#secondaryModeBar");
-  if (bar) {
-    bar.hidden = mode === "league";
-    const title = bar.querySelector("#secondaryModeTitle");
-    const hint = bar.querySelector("#secondaryModeHint");
-    const barTitle = { scenario: "Scenario", national: "Landslag", training: "Fotballvitenskap" };
-    if (title) title.textContent = barTitle[mode] || "Fotballvitenskap";
-    if (hint) {
-      if (mode === "scenario") {
-        const active = getScenario(state.scenarios, state.gameStartState?.activeScenarioId);
-        hint.textContent = active ? `${active.name} Â· spill neste scenariokamp` : "Velg scenario";
-      } else if (mode === "national") {
-        hint.textContent = getNationalTeamNationality()
-          ? `${getNationalTeamNationality()}s landslag Â· ta ut troppen`
-          : "Velg nasjon";
-      } else {
-        hint.textContent = "LÃ¦r fotball Â· formasjonsbiblioteket epoke for epoke Â· ingenting her rÃ¸rer klubben din";
-      }
-    }
-  }
-}
-
-// Vis bare de nav-fanene som hÃ¸rer til den aktive modusen, og sÃ¸rg for at den
-// aktive fanen faktisk er en av dem. Uten det siste kunne en modusbytte etterlate
-// deg stÃ¥ende pÃ¥ en flate hvis fane nettopp forsvant fra menyen â€” synlig innhold
-// uten en meny som forklarer hvor du er.
-function applyModeScopedNav(mode) {
-  const scoped = Array.from(document.querySelectorAll("[data-nav-modes]"));
-  scoped.forEach((node) => {
-    node.hidden = !String(node.dataset.navModes || "").split(/\s+/).includes(mode);
-  });
-
-  const allowedTabs = new Set(
-    scoped
-      .filter((node) => !node.hidden && node.dataset.tabTarget)
-      .map((node) => node.dataset.tabTarget)
-  );
-  if (allowedTabs.size === 0) return;
-
-  const activeSection = document.querySelector("[data-tab-section]:not([hidden])");
-  const activeTarget = activeSection?.dataset.tabSection;
-  if (!activeTarget) return;
-
-  // Kontorets avdelinger har ingen egen fane og skal aldri tvinges bort.
-  const activeTab = document.querySelector(`.nav-tab[data-tab-target="${activeTarget}"]`);
-  if (!activeTab) return;
-
-  // `data-nav-section-modes` skiller Â«hvor fanen visesÂ» fra Â«hvor flaten er
-  // lovligÂ». Formasjonsbiblioteket har bare fane i Fotballvitenskap, men Ã¥pnes
-  // som oppslagsverk fra Taktikk i spillet â€” da skal du fÃ¥ bli der.
-  const sectionModes = String(activeTab.dataset.navSectionModes || activeTab.dataset.navModes || "").split(/\s+/);
-  if (!sectionModes.includes(mode)) {
-    activateTab(allowedTabs.has("dashboard") ? "dashboard" : [...allowedTabs][0]);
-    return;
-  }
-
-  // Synligheten kan nettopp ha endret seg (biblioteket fÃ¥r egen fane i
-  // Fotballvitenskap), sÃ¥ markeringen mÃ¥ regnes om etterpÃ¥.
-  highlightActiveTab();
-}
-
-function renderFirstTimePlaythrough(teamFit) {
-  renderNationalTeamPanel();
-  renderTournamentPanel();
-  renderGameModeStatus(teamFit);
-  const card = elements.firstTimePlaythroughCard;
-  if (!card || card.hidden) return;
-  const ft = buildFirstTimeNextActionState(teamFit);
-  if (!ft.active) {
-    if (elements.firstTimeAssistant) {
-      elements.firstTimeAssistant.textContent = "Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.";
-    }
-    return;
-  }
-  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  const filled = assignments.filter((item) => item.player).length;
-  const opponent = getFirstTimeOpponentProfile();
-  if (elements.firstTimeReadiness) {
-    const training = state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "valgt" : "mangler";
-    elements.firstTimeReadiness.textContent = `Startellever ${Math.min(filled, 11)}/11 Â· trening ${training} Â· rapport ${ft.hasSeenReport ? "sett" : "venter"}`;
-  }
-  if (elements.firstTimeOpponent && opponent) {
-    elements.firstTimeOpponent.textContent = `${opponent.displayName}: Fare â€” hÃ¸yt press/hÃ¸y linje. Mulighet â€” rom bak presset hvis oppbyggingen holder.`;
-  }
-  if (elements.firstTimeAssistant) {
-    let advice = "Start med Ã¥ gjÃ¸re laget kampklart.";
-    if (filled < 11) advice = "Velg en formasjon laget forstÃ¥r og fyll startelleveren.";
-    else if (!state.weeklyTrainingProgram?.programId && !state.weeklyTrainingFocus?.focusId) advice = "Motstanderen presser hÃ¸yt. Tenk oppbygging under press eller en tryggere utvei.";
-    else if (!ft.hasReadInbox) advice = "Les innboksen fÃ¸r du spiller kamp.";
-    else if (!ft.hasPlayedFirstMatch) advice = "Spill kampen nÃ¥r readiness er grÃ¸nn nok.";
-    else if (!ft.hasSeenReport) advice = "Etter kampen bÃ¸r du lese rapporten fÃ¸r du gÃ¥r videre.";
-    elements.firstTimeAssistant.textContent = advice;
-  }
-}
-
-function loadMiniSeason() {
-  try {
-    return normalizeMiniSeasonState(JSON.parse(localStorage.getItem(MINI_SEASON_KEY)));
-  } catch (error) {
-    return null;
-  }
-}
-
-function loadLeagueSeason() {
-  try { return normalizeLeagueSeason(JSON.parse(localStorage.getItem(LEAGUE_SEASON_KEY))); }
-  catch (_) { return null; }
-}
-
-function saveLeagueSeason() {
-  try {
-    if (state.leagueSeason) localStorage.setItem(LEAGUE_SEASON_KEY, JSON.stringify(state.leagueSeason));
-    else localStorage.removeItem(LEAGUE_SEASON_KEY);
-  } catch (_) { /* memory-only fallback */ }
-}
-
-function loadLeaguePlayoff() {
-  try { return normalizeLeaguePlayoff(JSON.parse(localStorage.getItem(LEAGUE_PLAYOFF_KEY))); }
-  catch (_) { return null; }
-}
-
-function saveLeaguePlayoff() {
-  try {
-    if (state.leaguePlayoff) localStorage.setItem(LEAGUE_PLAYOFF_KEY, JSON.stringify(state.leaguePlayoff));
-    else localStorage.removeItem(LEAGUE_PLAYOFF_KEY);
-  } catch (_) { /* memory-only fallback */ }
-}
-
-// Sesongen endte pÃ¥ en kvalifiseringsplass: sett opp kampene. Idempotent pÃ¥
-// sesongnummer, sÃ¥ en omlasting aldri lager kvalifiseringen pÃ¥ nytt.
-function ensureLeaguePlayoff() {
-  const season = state.leagueSeason;
-  if (!season || season.status !== "completed") return;
-  if (state.leaguePlayoff) return;
-  if (!isPlayoffPending(season)) return;
-
-  const outcome = resolveLeagueOutcome(season);
-  const playoff = createLeaguePlayoff({
-    outcome: { ...outcome, seasonNumber: season.seasonNumber },
-    managerClub: season.clubs.find((club) => club.id === season.managerClubId),
-    allClubs: state.leaguePyramid?.clubs || [],
-    tiers: state.leaguePyramid?.tiers || [],
-    seed: `${season.seed}-kval-${season.seasonNumber}`
-  });
-  if (!playoff) return;
-
-  state.leaguePlayoff = playoff;
-  saveLeaguePlayoff();
-  const described = describePlayoff(playoff);
-  addClubWeekEvent({
-    id: `kval-${season.seasonNumber}`,
-    week: state.clubWeekState?.week ?? "?",
-    phase: "matchday",
-    phaseLabel: "Kvalifisering",
-    message: `${outcome.position}. plass ga kvalifisering. ${described.headline} mot ${described.opponentName}.`
-  });
-}
-
-// Kvalifiseringen er spilt ferdig: gi utfallet videre og rydd den bort.
-function consumeLeaguePlayoffResolution() {
-  const playoff = state.leaguePlayoff;
-  if (!playoff || playoff.status === "active") return null;
-  return resolveLeaguePlayoff(playoff);
-}
-
-// Manager-kontekst som mini-sesongen leser (off-pitch + Club Week-verdier). Den
-// brukes til Ã¥ avlede sesongmÃ¥l/styreforventning og til kontekstuell vurdering.
-// Leser kun manager-state â€” aldri History Go-progresjon.
-function getMiniSeasonContext() {
-  const base = {
-    seasonId: `mini-season-${Date.now()}`,
-    offPitch: getOffPitchState(),
-    clubWeekState: state.clubWeekState,
-    // Historical Opponent Archetypes v1: prÃ¸veperioden settes opp mot historiske
-    // stil-lag (lÃ¦ringsmotstandere), ikke generiske roboter. Profilene er
-    // runtime-kompatible med kampmotoren.
-    opponents: HISTORICAL_OPPONENT_PROFILES,
-    firstOpponentId: isFirstTimePlaythroughActive() ? FIRST_TIME_OPPONENT_ID : null,
-    teamName: "HG-laget"
-  };
-
-  // Et scenario er nettopp et UTVALG av disse motstanderne, med sin egen
-  // fortelling. Uten dette mÃ¸tte alle scenarioer det samme feltet, og
-  // Â«Kontringens kunstÂ» var ikke annerledes enn Â«Pressets tiÃ¥rÂ».
-  const scenario = getScenario(state.scenarios, state.gameStartState?.activeScenarioId);
-  if (isScenarioModeActive() && scenario) {
-    return createScenarioMiniSeasonContext(scenario, base) || base;
-  }
-  return base;
-}
-
-// Lagre gjeldende mini-sesong. Stille no-op hvis lagring feiler (privat modus).
-function saveMiniSeason() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    if (state.miniSeason) {
-      localStorage.setItem(MINI_SEASON_KEY, JSON.stringify(state.miniSeason));
-    } else {
-      localStorage.removeItem(MINI_SEASON_KEY);
-    }
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-// Start en ny prÃ¸veperiode (Mini Season v1 / League Loop v1): en deterministisk
-// 5-kampers kamprekke bygges fra de eksisterende motstanderprofilene, og
-// sesongmÃ¥l/styreforventning avledes av managerkonteksten. Erstatter en fullfÃ¸rt
-// periode; en aktiv periode rÃ¸res ikke.
-function startMiniSeason() {
-  if (state.miniSeason?.status === "active") {
-    return;
-  }
-
-  const rosterReadiness = getAvailability().rosterReadiness;
-  if (!rosterReadiness.hasEnoughUnlocked) {
-    activateTab("historygo");
-    return;
-  }
-  if (!rosterReadiness.isReady) {
-    activateTab("tactics");
-    return;
-  }
-
-  const miniSeason = createMiniSeasonStart(getMiniSeasonContext());
-  if (!miniSeason) {
-    return;
-  }
-
-  state.miniSeason = miniSeason;
-  if (!state.firstTimePlaythrough?.completed) {
-    state.firstTimePlaythrough = { ...normalizeFirstTimePlaythrough(state.firstTimePlaythrough), started: true, currentStep: "lineup" };
-    saveFirstTimePlaythrough();
-  }
-  saveMiniSeason();
-
-  addClubWeekEvent({
-    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    week: state.clubWeekState?.week ?? "?",
-    phase: state.clubWeekState?.phase || "analysis",
-    phaseLabel: "PrÃ¸veperiode",
-    message: `PrÃ¸veperioden er i gang: ${MINI_SEASON_TOTAL_WEEKS} kamper avgjÃ¸r styrets dom. SesongmÃ¥l: ${miniSeason.seasonGoal}.`
-  });
-
-  renderApp();
-}
-
-// Nullstill prÃ¸veperioden. Fjerner KUN mini-sesong-state â€” rÃ¸rer aldri
-// History Go-unlocks, team merits, Club Week-state eller kampdag-state.
-function resetMiniSeason() {
-  if (!state.miniSeason) {
-    return;
-  }
-  state.miniSeason = null;
-  saveMiniSeason();
-  renderApp();
-}
-
-// League Loop v0.2: i ligamodus ER sesongen terminlista. Den opprettes fÃ¸rst
-// nÃ¥r fÃ¸r-sesongsgaten har eksplisitt aktivert en league-save, med samme rene
-// motor som prÃ¸veperioden â€” men uten scenario-sideeffekter (rÃ¸rer aldri
-// firstTimePlaythrough). Aktiv/fullfÃ¸rt sesong rÃ¸res ikke.
-function ensureLeagueSeason() {
-  if (!isLeagueModeActive() || state.leagueSeason || !state.gameStartState?.activeLeagueSaveId) {
-    return;
-  }
-  if (state.gameStartState?.leagueSeasonStatus !== "active") {
-    return;
-  }
-  if (!isLeaguePreseasonReady(getTeamFit())) {
-    return;
-  }
-
-  const start = getLeagueStartTier();
-  const managerClub = buildManagerClubForSeason(start.tier);
-  if (!managerClub) return;
-  state.leagueSeason = createLeagueSeason({
-    managerClub,
-    opponents: start.opponents,
-    tier: start.tier,
-    seed: `${state.gameStartState.activeLeagueSaveId}-season-1`
-  });
-  saveLeagueSeason();
-
-  const rounds = state.leagueSeason.competition.rounds;
-  const matches = state.leagueSeason.fixtures.reduce((sum, entry) => sum + entry.matches.length, 0);
-  addClubWeekEvent({
-    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    week: state.clubWeekState?.week ?? "?",
-    phase: state.clubWeekState?.phase || "analysis",
-    phaseLabel: "Ligasesong",
-    message: `${start.tier.name} er i gang: ${rounds} serierunder og ${matches} kamper stÃ¥r pÃ¥ terminlista.`
-  });
-}
-
-// NivÃ¥et manageren starter pÃ¥, og motstanderne der. Uten pyramiden faller vi
-// tilbake pÃ¥ motorens standardnivÃ¥ â€” men da uten klubber, sÃ¥ sesongen kastes
-// heller enn Ã¥ bli spilt mot ingen. Derfor: pyramiden er kilden.
-//
-// Tok manageren over en etablert klubb, starter han der KLUBBEN stÃ¥r â€” tar du
-// over Skeid, begynner du i 2. divisjon. Det er ikke en straff, det er hvor
-// klubben er.
-function getLeagueStartTier() {
-  return resolveStartTier({
-    takeoverClub: getTakeoverClub(),
-    tiers: state.leaguePyramid?.tiers || [],
-    clubs: state.leaguePyramid?.clubs || []
-  }) || { tier: DEFAULT_LEAGUE_TIER, group: null, opponents: [] };
-}
-
-// Hva klubbvalget gir deg av spillere: klubbens historiske navn hvis du har vÃ¦rt
-// pÃ¥ banen, ellers en automatisk grunntropp og en oppfordring om Ã¥ samle.
-//
-// Motoren LESER History Go-progresjonen (besÃ¸kte steder) â€” den skriver aldri.
-function getClubSquadAccess(club) {
-  if (!club) return null;
-  // Kun klubbspillere er kandidater til grunntroppen: landslagsarenaene
-  // (Ullevaal, MaracanÃ£) er noe du samler, ikke noe du fÃ¥r utdelt.
-  const candidateIds = new Set();
-  (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).forEach((place) => {
-    if (isNationalArenaPlace(place)) return;
-    (Array.isArray(place?.unlocks) ? place.unlocks : []).forEach((unlock) => {
-      if (unlock && isPlayerUnlockType(unlock.type) && typeof unlock.targetId === "string") {
-        candidateIds.add(unlock.targetId);
-      }
-    });
-  });
-  return resolveClubSquadAccess({
-    club,
-    players: Array.isArray(state.players) ? state.players : [],
-    unlockedPlaceIds: getHistoryGoCollectedSportPlaceIds(),
-    candidateIds,
-    squadSize: REQUIRED_SQUAD_SIZE
-  });
-}
-
-// Den etablerte klubben manageren tok over, eller null nÃ¥r klubben er egenlaget.
-function getTakeoverClub() {
-  const id = state.gameStartState?.takeoverClubId;
-  if (!id) return null;
-  return (state.leaguePyramid?.clubs || []).find((club) => club.id === id) || null;
-}
-
-// Managerklubben slik ligamotoren vil ha den: enten den etablerte klubben, eller
-// den egenopprettede.
-function buildManagerClubForSeason(tier) {
-  const takeover = getTakeoverClub();
-  if (takeover) {
-    return createManagerClubFromSelection({
-      club: takeover,
-      profile: state.leagueClubProfiles[takeover.id] || null,
-      managerName: state.gameStartState?.managerName || ""
-    });
-  }
-  return createOwnManagerClub({
-    clubName: getTemporaryClubName().name,
-    saveId: state.gameStartState.activeLeagueSaveId,
-    tier,
-    managerName: state.gameStartState?.managerName || ""
-  });
-}
-
-// Styrets forventning fÃ¸rste sesong. En egenopprettet klubb har ingen historie
-// og fÃ¥r det tÃ¥lmodige mÃ¥let; tar du over en storklubb, arver du styret dens.
-function getClubExpectation() {
-  const takeover = getTakeoverClub();
-  if (!takeover) return null;
-  const tier = (state.leaguePyramid?.tiers || []).find((entry) => entry.id === takeover.tier);
-  return tier ? deriveClubExpectation(takeover, state.leaguePyramid?.clubs || [], tier) : null;
-}
-
-// Etter fullfÃ¸rt ligasesong: legg den bak deg og start neste. RÃ¸rer kun
-// mini-sesong-state â€” aldri History Go-unlocks, merits eller Club Week.
-function startLeagueSeasonFromOnboarding() {
-  if (!isLeagueModeActive() || state.leagueSeason?.status === "active") {
-    return;
-  }
-  if (!isLeaguePreseasonReady(getTeamFit())) {
-    return;
-  }
-  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, ...createLeagueSaveExtras() });
-  saveGameStartState();
-  ensureLeagueSeason();
-  renderApp();
-}
-
-const SEASON_ARCHIVE_KEY = "hgfm.seasonArchive.v1";
-
-// ---------------------------------------------------------------------------
-// Sesongdom og merittliste
-// Motoren (`football-season-review.js`) er ren; her ligger lagringen, koblingen
-// til styretilliten og sesongrullen.
-// ---------------------------------------------------------------------------
-
-function normalizeSeasonArchive(value) {
-  return Array.isArray(value) ? value.filter((entry) => Number.isFinite(Number(entry?.seasonNumber))) : [];
-}
-
-function loadSeasonArchive() {
-  try {
-    return normalizeSeasonArchive(JSON.parse(localStorage.getItem(SEASON_ARCHIVE_KEY) || "null"));
-  } catch (error) {
-    console.error("Kunne ikke lese merittlista", error);
-    return [];
-  }
-}
-
-function saveSeasonArchive() {
-  try {
-    localStorage.setItem(SEASON_ARCHIVE_KEY, JSON.stringify(normalizeSeasonArchive(state.seasonArchive)));
-  } catch (error) {
-    console.error("Kunne ikke lagre merittlista", error);
-  }
-}
-
-function getSeasonArchive() {
-  return normalizeSeasonArchive(state.seasonArchive);
-}
-
-// MÃ¥let styret setter for innevÃ¦rende sesong: en tabellplass, avledet av der du
-// endte sist. Brukes bÃ¥de til dommen og til Ã¥ vise forventningen underveis.
-function getSeasonTarget() {
-  const archive = getSeasonArchive();
-  const previous = archive[archive.length - 1] || null;
-  return deriveSeasonTarget({
-    clubCount: state.leagueSeason?.clubs?.length || 8,
-    seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
-    previousPosition: previous ? Number(previous.position) : null,
-    // Tok du over en etablert klubb, arver du styrets forventning fra dag Ã©n.
-    clubExpectation: getClubExpectation()
-  });
-}
-
-// Spilte manageren klubbens fotball? Bare aktuelt for en overtatt klubb â€” en
-// egenopprettet klubb har ingen tradisjon Ã¥ svikte.
-//
-// Dommen er en STYREDOM, ikke en motor: den rÃ¸rer aldri en kamp, en spiller
-// eller en score. Uten den var Â«Styret venter at du spiller klubbens fotballÂ»
-// i onboardingen et lÃ¸fte ingenting leste.
-function getClubTraditionVerdict() {
-  const takeover = getTakeoverClub();
-  if (!takeover) return null;
-  const clubProfile = state.leagueClubProfiles[takeover.id] || null;
-  const formation = state.formations?.find((entry) => entry.id === state.selectedFormationId) || null;
-  const knowledge = state.formationKnowledgeById[state.selectedFormationId] || null;
-  if (!clubProfile || !knowledge?.parameterProfile) return null;
-
-  const profiles = Object.values(state.leagueClubProfiles || {});
-  return judgeClubTradition({
-    clubProfile,
-    formationProfile: knowledge.parameterProfile,
-    formationName: formation?.name || knowledge.displayName || "systemet ditt",
-    thresholds: buildTraditionThresholds(profiles),
-    profiles,
-    // Dommen mÃ¥les mot det som er OPPNÃ…ELIG for klubben â€” ellers ville 44 av 60
-    // klubber aldri kunne nÃ¥ toppdommen uansett hva manageren valgte.
-    formationProfiles: Object.values(state.formationKnowledgeById || {})
-      .map((entry) => entry?.parameterProfile)
-      .filter(Boolean)
-  });
-}
-
-// Sesongen er ferdig: bygg dommen, flytt styretilliten og arkiver sesongen.
-// Idempotent pÃ¥ sesongnummer, sÃ¥ reload aldri dÃ¸mmer samme sesong to ganger.
-function registerSeasonReview(season) {
-  if (!season || season.status !== "completed") return;
-  const seasonNumber = Number(season.seasonNumber) || 1;
-  if (getSeasonArchive().some((entry) => Number(entry.seasonNumber) === seasonNumber)) return;
-
-  const review = createSeasonReview({
-    season,
-    table: createLeagueTable(season),
-    target: getSeasonTarget(),
-    playerStats: state.playerSeasonStats?.rows || [],
-    previousReviews: getSeasonArchive(),
-    boardTrust: Number(getOffPitchState()?.boardTrust) || 50,
-    // Overtok du en klubb, dÃ¸mmer styret ogsÃ¥ pÃ¥ om du spilte klubbens fotball.
-    tradition: getClubTraditionVerdict()
-  });
-  if (!review) return;
-
-  state.seasonReview = review;
-  state.seasonArchive = appendSeasonArchive(getSeasonArchive(), createSeasonArchiveEntry(review, {
-    playerStats: state.playerSeasonStats?.rows || []
-  }));
-  saveSeasonArchive();
-
-  addClubWeekEvent({
-    id: `season-review-${seasonNumber}`,
-    week: state.clubWeekState?.week ?? "?",
-    phase: "review",
-    phaseLabel: "Sesongslutt",
-    message: `${review.headline} ${review.boardMessage}`
-  });
-}
-
-function startNewLeagueSeason() {
-  if (!isLeagueModeActive() || state.leagueSeason?.status === "active") {
-    return;
-  }
-  // StÃ¥r kvalifiseringen uspilt, er sesongen ikke ferdig avgjort. Ã… rulle videre
-  // her ville sluppet manageren forbi kampene som avgjÃ¸r nivÃ¥et hans.
-  ensureLeaguePlayoff();
-  if (state.leaguePlayoff?.status === "active") {
-    return;
-  }
-  // SÃ¸rg for at sesongen som avsluttes faktisk er dÃ¸mt og arkivert fÃ¸r vi
-  // ruller videre â€” ellers ville en sesong kunne forsvinne uten spor.
-  registerSeasonReview(state.leagueSeason);
-
-  state.gameStartState = normalizeGameStartState({ ...state.gameStartState, ...createLeagueSaveExtras() });
-  saveGameStartState();
-
-  // Ny sesong = ny statistikk. Uten dette bar toppscorerlista pÃ¥ fjorÃ¥rets mÃ¥l
-  // i det uendelige, og Â«kamper spiltÂ» ble et karrieretall forkledd som en
-  // sesong.
-  state.playerSeasonStats = { rows: [], matchIds: [] };
-  savePlayerSeasonStats();
-
-  // Sommerferie: troppen hviler ut mellom sesongene.
-  state.playerCondition = applySummerBreak(getPlayerCondition());
-  state.playerConditionMatchIds = [];
-  savePlayerCondition();
-
-  // Dommen er lest; den nye sesongen starter uten den hengende over seg.
-  state.seasonReview = null;
-
-  // Pyramiden inn: uten den blir neste sesong samme nivÃ¥ med samme klubber,
-  // og opp-/nedrykket manageren nettopp spilte for skjer ikke.
-  const playoffResolution = consumeLeaguePlayoffResolution();
-  state.leagueSeason = state.leagueSeason
-    ? startNextLeagueSeason(state.leagueSeason, {
-      allClubs: state.leaguePyramid?.clubs || null,
-      tiers: state.leaguePyramid?.tiers || null,
-      playoffResolution
-    })
-    : null;
-  // Kvalifiseringen er brukt opp; den skal ikke henge igjen i neste sesong.
-  state.leaguePlayoff = null;
-  saveLeaguePlayoff();
-  saveLeagueSeason();
-  if (!state.leagueSeason) ensureLeagueSeason();
-  renderApp();
-}
-
-// Neste planlagte motstander som full motstanderprofil, eller null nÃ¥r ingen
-// mini-sesong er aktiv (da beholder kampdagen dagens tilfeldige motstander).
-function getMiniSeasonNextOpponent() {
-  // Landslagsmodus med aktivt mesterskap: terminlisten er turneringens.
-  if (isNationalModeActive()) {
-    return getTournamentMatchdayOpponent();
-  }
-  if (isLeagueModeActive()) {
-    // Kvalifiseringen gÃ¥r foran serien: er den aktiv, er DEN kampen som skal
-    // spilles. Uten dette ville kvalifiseringsplassen vÃ¦rt en plass uten kamper.
-    const playoffOpponent = getPlayoffMatchdayOpponent(state.leaguePlayoff);
-    if (playoffOpponent) {
-      const playoffProfile = state.leagueClubProfiles[playoffOpponent.id] || null;
-      const playoffBase = playoffProfile || OPPONENT_PROFILES[0];
-      return {
-        ...playoffBase,
-        id: playoffOpponent.id,
-        name: playoffOpponent.name,
-        displayName: playoffOpponent.name,
-        strength: playoffOpponent.strength,
-        homeAway: playoffOpponent.homeAway,
-        ground: playoffOpponent.ground,
-        archetypeName: playoffProfile?.styleName || playoffBase.archetypeName || null,
-        isClubProfile: Boolean(playoffProfile),
-        isPlayoff: true,
-        playoffRoundName: playoffOpponent.playoffRoundName
-      };
-    }
-    const opponent = getNextLeagueOpponent(state.leagueSeason);
-    if (!opponent) return null;
-    // Klubben eier identitet og nivÃ¥; profilen eier fotballen.
-    //
-    // Her lette koden fÃ¸r etter klubb-id-en (`molde`, `brann` â€¦) blant de fem
-    // GENERISKE profilene, som heter `high_press_opponent` og lignende. Den
-    // kunne aldri treffe, sÃ¥ `|| OPPONENT_PROFILES[0]` slo inn hver gang: alle
-    // fjorten serierunder ble spilt mot samme profil med byttet navnelapp.
-    //
-    // Profilene er tegnet pÃ¥ klubbenes EGEN spilletradisjon, ikke pÃ¥ historiske
-    // arketyper. Arketypene hÃ¸rer til scenarioer og mesterskap â€” mÃ¸ter du dem
-    // fjorten ganger i serien, slutter de Ã¥ vÃ¦re noe.
-    const clubProfile = state.leagueClubProfiles[opponent.id] || null;
-    const base = clubProfile || OPPONENT_PROFILES[0];
-    return {
-      ...base,
-      id: opponent.id,
-      name: opponent.name,
-      displayName: opponent.name,
-      // Klubbens egen styrke gjelder â€” profilen leverer stilen, ikke nivÃ¥et.
-      strength: opponent.strength,
-      homeAway: opponent.homeAway,
-      ground: opponent.ground,
-      tacticalIdentity: opponent.tacticalIdentity,
-      // Kampbriefen leser `archetypeName`; for en klubb er det spillestilen
-      // hennes, ikke en historisk arketyp.
-      archetypeName: clubProfile?.styleName || base.archetypeName || null,
-      isClubProfile: Boolean(clubProfile)
-    };
-  }
-  const match = getCurrentMiniSeasonMatch(state.miniSeason);
-  if (!match) {
-    return null;
-  }
-  // Historiske stil-profiler fÃ¸rst; fall tilbake til de generiske (for en
-  // mini-sesong som ble startet fÃ¸r Historical Opponent Archetypes v1).
-  const profile =
-    getHistoricalOpponentProfile(match.opponentId) ||
-    OPPONENT_PROFILES.find((candidate) => candidate.id === match.opponentId) ||
-    null;
-  // Behold kamprekkas hjemme/borte og forventning oppÃ¥ motstanderprofilen, slik
-  // at kampdag og UI kan vise rammen rundt kampen.
-  return profile
-    ? { ...profile, homeAway: match.homeAway, boardExpectation: match.boardExpectation, narrativeHook: match.narrativeHook }
-    : null;
-}
-
-// Registrer et fullfÃ¸rt Kampdag v0.2-resultat i den aktive mini-sesongen.
-// Mini-sesongen er en ren motor (football-mini-season.js): app.js mater inn
-// kampresultatet og managerkonteksten og lagrer den nye staten. matchId gjÃ¸r
-// registreringen idempotent (reload/dobbeltkall gir aldri dobbel registrering).
-// Selve uke-rullen skjer nÃ¥r Club Week gÃ¥r fra oppsummering til ny uke.
-function registerMatchInMiniSeason(lastMatch) {
-  if (isNationalModeActive()) {
-    registerMatchInTournament(lastMatch);
-    return;
-  }
-  // Kvalifiseringen fÃ¸rst: er den aktiv, er det den som skal ha resultatet.
-  if (isLeagueModeActive() && state.leaguePlayoff?.status === "active" && lastMatch) {
-    const updatedPlayoff = completePlayoffLeg(state.leaguePlayoff, lastMatch);
-    if (updatedPlayoff !== state.leaguePlayoff) {
-      state.leaguePlayoff = updatedPlayoff;
-      saveLeaguePlayoff();
-      const described = describePlayoff(updatedPlayoff);
-      addClubWeekEvent({
-        id: `kval-${state.leagueSeason?.seasonNumber ?? "x"}-${updatedPlayoff.currentRoundIndex}-${updatedPlayoff.rounds[updatedPlayoff.currentRoundIndex]?.legs.filter((leg) => leg.status === "completed").length ?? 0}`,
-        week: state.clubWeekState?.week ?? "?",
-        phase: "matchday",
-        phaseLabel: "Kvalifisering",
-        message: `${described.headline} ${described.detail}`
-      });
-      window.dispatchEvent(new Event("updateProfile"));
-    }
-    return;
-  }
-  if (isLeagueModeActive() && state.leagueSeason?.status === "active" && lastMatch) {
-    const previousRound = state.leagueSeason.currentRound;
-    const updated = completeLeagueRound(state.leagueSeason, lastMatch);
-    if (updated !== state.leagueSeason) {
-      state.leagueSeason = updated;
-      if (updated.status === "completed") {
-        state.gameStartState.leagueSeasonStatus = "completed";
-        // Styret gjÃ¸r opp regnskapet. FÃ¸r sa statuslinja bare hvem som ble
-        // seriemester â€” forventningen de satte da klubben ble opprettet ble
-        // aldri mÃ¥lt mot noe.
-        registerSeasonReview(updated);
-        // Endte sesongen pÃ¥ en kvalifiseringsplass, skal kampene spilles fÃ¸r
-        // noen ny sesong kan starte.
-        ensureLeaguePlayoff();
-      }
-      saveLeagueSeason(); saveGameStartState();
-      addClubWeekEvent({ id: `league-r${previousRound}`, week: previousRound, phase: "matchday", phaseLabel: "Ligaspill", message: `Serierunde ${previousRound} er ferdig. Alle fire resultater er registrert.` });
-      window.dispatchEvent(new Event("updateProfile"));
-    }
-    return;
-  }
-  const miniSeason = state.miniSeason;
-  if (!miniSeason || miniSeason.status !== "active" || !lastMatch || typeof lastMatch !== "object") {
-    return;
-  }
-
-  // Allerede registrert denne runden? Da er dette en reload/dobbeltkall.
-  const before = isCurrentMiniSeasonMatchPlayed(miniSeason);
-  const context = getMiniSeasonContext();
-
-  const matchdayResult = {
-    id: lastMatch.id || null,
-    matchId: lastMatch.id || null,
-    outcome: lastMatch.outcome || "draw",
-    score: { for: Number(lastMatch.score?.for) || 0, against: Number(lastMatch.score?.against) || 0 },
-    opponent: lastMatch.opponent || null,
-    teamStrength: Number(lastMatch.teamStrength) || 0,
-    decisionTotals: lastMatch.decisionTotals || {},
-    decisions: Array.isArray(lastMatch.decisions) ? lastMatch.decisions : [],
-    trainingFocus: lastMatch.trainingFocus || null
-  };
-
-  const updated = applyMiniSeasonMatchResult(miniSeason, matchdayResult, context);
-  if (isCurrentMiniSeasonMatchPlayed(updated) === before && JSON.stringify(updated) === JSON.stringify(miniSeason)) {
-    // Ingen endring (idempotens) â€” ikke logg eller varsle pÃ¥ nytt.
-    return;
-  }
-
-  state.miniSeason = updated;
-  saveMiniSeason();
-
-  // Off-pitch-kobling: mini-sesongens kontekst kan farge laget utenfor banen
-  // (selvtillit/press/uro/belastning) etter kampen. Komponerer MED den
-  // eksisterende applyMatchdayOffPitchEffects â€” dupliserer den ikke. Aldri
-  // History Go-progresjon (kun teamMerits.offPitch).
-  if (state.teamMerits) {
-    const offPitchEvent = createMiniSeasonOffPitchEvent(updated, context);
-    if (offPitchEvent) {
-      state.teamMerits.offPitch = applyOffPitchEvent(getOffPitchState(), offPitchEvent);
-      saveTeamMerits();
-    }
-  }
-
-  const summary = summarizeMiniSeason(updated);
-  const lastEntry = updated.matchHistory[updated.matchHistory.length - 1];
-  const outcomeLabel = MINI_SEASON_OUTCOME_LABELS[lastEntry?.outcome] || "Kamp";
-  const message = `PrÃ¸veperiode runde ${lastEntry?.round ?? "?"} av ${updated.totalWeeks}: ${outcomeLabel} ${lastEntry?.scoreLine || ""} mot ${lastEntry?.opponentName || "motstanderen"}. ${summary.points} poeng (form ${summary.formText || "â€”"}).`;
-
-  addClubWeekEvent({
-    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    week: state.clubWeekState?.week ?? "?",
-    phase: "matchday",
-    phaseLabel: "PrÃ¸veperiode",
-    message
-  });
-
-  // Mini-sesong-progresjon er faktisk endret: varsle appskallet (samme mÃ¸nster
-  // som kampkonsekvensene). Ren rendering skjer i kalleren.
-  window.dispatchEvent(new Event("updateProfile"));
-}
-
-// Rull mini-sesongen videre nÃ¥r Club Week gÃ¥r fra oppsummering til ny uke. Den
-// rene motoren krever at ukas kamp er spilt fÃ¸r den ruller (ellers no-op), og
-// fullfÃ¸rer sesongen med styrets sluttvurdering etter femte kamp.
-function advanceMiniSeasonForNewWeek() {
-  if (isLeagueModeActive()) return;
-  const miniSeason = state.miniSeason;
-  if (!miniSeason || miniSeason.status !== "active") {
-    return;
-  }
-  const updated = advanceMiniSeasonWeek(miniSeason, getMiniSeasonContext());
-  if (JSON.stringify(updated) === JSON.stringify(miniSeason)) {
-    return;
-  }
-  state.miniSeason = updated;
-  saveMiniSeason();
-
-  if (updated.status === "completed") {
-    addClubWeekEvent({
-      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      week: state.clubWeekState?.week ?? "?",
-      phase: "review",
-      phaseLabel: "PrÃ¸veperiode",
-      message: `PrÃ¸veperioden er fullfÃ¸rt med ${updated.points} poeng. ${updated.finalReview?.headline || ""}`.trim()
-    });
-  } else {
-    const nextMatch = getCurrentMiniSeasonMatch(updated);
-    if (nextMatch) {
-      const venue = nextMatch.homeAway === "home" ? "hjemme" : "borte";
-      addClubWeekEvent({
-        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-        week: state.clubWeekState?.week ?? "?",
-        phase: "analysis",
-        phaseLabel: "PrÃ¸veperiode",
-        message: `PrÃ¸veperiode runde ${nextMatch.round} av ${updated.totalWeeks}: ${nextMatch.opponentName} (${venue}). ${nextMatch.narrativeHook}`
-      });
-    }
-  }
-
-  window.dispatchEvent(new Event("updateProfile"));
-}
-
-function getUsedPlayerIds(exceptSlotId = null) {
-  return new Set(
-    Object.entries(state.lineup)
-      .filter(([slotId]) => slotId !== exceptSlotId)
-      .map(([, slotState]) => slotState.playerId)
-      .filter(Boolean)
-  );
-}
-
-function getDefaultRoleForPlayer(player, slot) {
-  if (!player || !slot) {
-    return null;
-  }
-
-  const preferredRole = player.preferredRoles
-    .map((roleId) => state.roles.find((role) => role.id === roleId))
-    .find((role) => role?.validPositions.includes(slot.position));
-
-  if (preferredRole) {
-    return preferredRole.id;
-  }
-
-  const validRole = state.roles.find((role) => role.validPositions.includes(slot.position));
-  return validRole?.id || state.roles[0]?.id || null;
-}
-
-function findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers) {
-  // Siste nivÃ¥ er bevisst Â«hvem som helst som er ledigÂ». Krever formasjonen
-  // flere av en posisjon enn troppen har (f.eks. 1-1-8), ville et hardt filter
-  // etterlate tomme plasser og en blindvei: manageren fikk beskjed om Ã¥ fylle
-  // dem, men ingen kunne fylles. Feilbruk er lov â€“ det er nettopp det spillet
-  // handler om: motoren merker plassen som feilbrukt og forklarer hvorfor,
-  // i stedet for Ã¥ blokkere. Manageren kan alltid bytte selv.
-  // Skadde spillere holdes utenfor de tre fÃ¸rste nivÃ¥ene, men IKKE det siste.
-  // Har skadene tÃ¸mt troppen, mÃ¥ elleveren fortsatt kunne fylles â€” ellers er en
-  // skade en blindvei i stedet for et problem Ã¥ lÃ¸se. Ã… spille en skadet mann
-  // er da managerens valg, og flaten sier det.
-  const injured = injuredPlayerIds(getPlayerCondition());
-  const fit = (candidate) => !injured.has(candidate.id);
-  const tiers = [
-    (candidate) => fit(candidate) && candidate.naturalPositions.includes(slot.position),
-    (candidate) => fit(candidate) && candidate.usablePositions.includes(slot.position),
-    (candidate) => fit(candidate) && !candidate.poorFits.includes(slot.position),
-    (candidate) => fit(candidate),
-    () => true
-  ];
-
-  for (const matches of tiers) {
-    const player = availablePlayers.find((candidate) => !usedPlayerIds.has(candidate.id) && matches(candidate));
-
-    if (player) {
-      return player;
-    }
-  }
-
-  return null;
-}
-
-function seedLineupForFormation() {
-  const formation = getFormation();
-
-  state.lineup = {};
-  state.selectedSlotId = formation?.slots[0]?.slotId || null;
-
-  if (!formation) {
-    return;
-  }
-
-  // Bare opplÃ¥ste spillere kan seedes inn i startoppstillingen. Er ingen
-  // spillere lÃ¥st opp, fylles ingen plasser automatisk.
-  const availablePlayers = getUnlockedPlayers();
-  const usedPlayerIds = new Set();
-
-  formation.slots.forEach((slot) => {
-    const player = findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers);
-
-    if (!player) {
-      state.lineup[slot.slotId] = {
-        playerId: null,
-        roleId: null
-      };
-      return;
-    }
-
-    usedPlayerIds.add(player.id);
-    state.lineup[slot.slotId] = {
-      playerId: player.id,
-      roleId: getDefaultRoleForPlayer(player, slot)
-    };
-  });
-}
-
-// Fyll tomme plasser i startelleveren automatisk fra opplÃ¥ste spillere. Dette
-// gjÃ¸r Â«Fyll neste ledige plassÂ»-knappen til en ekte handling i stedet for bare
-// Ã¥ velge plassen (den gamle oppfÃ¸rselen var et lÃ¸ftebrudd: knappen Â«fylteÂ»
-// ingenting). En plass uten spiller fÃ¥r beste ledige spiller + standardrolle; en
-// plass med spiller men uten rolle fÃ¥r standardrollen. Manageren kan alltid
-// endre valget etterpÃ¥ â€” dette er et startpunkt, ikke en fasit.
-//
-// `fillAll = false` fyller kun neste ledige plass (og velger den, sÃ¥ editoren
-// Ã¸verst peker pÃ¥ den). `fillAll = true` fyller alle ledige plasser i Ã©n omgang.
-// Returnerer antall plasser som ble fylt. Er ingen spillere ledige, gjÃ¸res
-// ingenting her â€” kalleren faller tilbake til Ã¥ bare velge plassen.
-function fillEmptyLineupSlots(fillAll = false) {
-  const formation = getFormation();
-  if (!formation) {
-    return 0;
-  }
-
-  const availablePlayers = getUnlockedPlayers();
-  let filled = 0;
-  let firstFilledSlotId = null;
-
-  for (const slot of formation.slots) {
-    const slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
-
-    // Har plassen allerede spiller, men mangler rolle: sett standardrollen.
-    if (slotState.playerId) {
-      if (!slotState.roleId) {
-        const player = availablePlayers.find((item) => item.id === slotState.playerId) || null;
-        state.lineup[slot.slotId] = { playerId: slotState.playerId, roleId: getDefaultRoleForPlayer(player, slot) };
-        filled += 1;
-        if (!firstFilledSlotId) firstFilledSlotId = slot.slotId;
-        if (!fillAll) break;
-      }
-      continue;
-    }
-
-    // Tom plass: finn beste ledige spiller (respekterer naturlig posisjon fÃ¸rst).
-    const usedPlayerIds = getUsedPlayerIds(slot.slotId);
-    const player = findBestAvailablePlayerForSlot(slot, usedPlayerIds, availablePlayers);
-    if (!player) {
-      continue;
-    }
-
-    state.lineup[slot.slotId] = { playerId: player.id, roleId: getDefaultRoleForPlayer(player, slot) };
-    filled += 1;
-    if (!firstFilledSlotId) firstFilledSlotId = slot.slotId;
-    if (!fillAll) break;
-  }
-
-  if (filled > 0) {
-    if (firstFilledSlotId) state.selectedSlotId = firstFilledSlotId;
-    invalidateAvailability();
-  }
-
-  return filled;
-}
-
-// Handling bak Â«Fyll neste ledige plassÂ»-knappen: fyll neste tomme plass hvis
-// mulig, ellers pek manageren pÃ¥ plassen (og troppen mangler da spillere â€”
-// Â«Neste beslutningerÂ» guider videre til History Go-samlingen).
-function fillNextEmptySlotAction(slotId) {
-  return () => {
-    const filled = fillEmptyLineupSlots(false);
-    if (filled === 0) {
-      // Ingen ledige spillere Ã¥ fylle med: velg plassen sÃ¥ editoren Ã¸verst vises.
-      state.selectedSlotId = slotId;
-    }
-    activateTab("tactics");
-    renderApp();
-  };
-}
-
-// Saner gjeldende lineup mot opplÃ¥ste spillere. Gamle valg i localStorage/state
-// skal ikke kunne omgÃ¥ unlock-regelen: en plass som peker pÃ¥ en spiller som ikke
-// lenger er opplÃ¥st, beholder rollen sin men mister playerId. Returnerer true
-// hvis noe ble endret.
-function sanitizeLineupForUnlockedPlayers() {
-  const unlockedIds = new Set(getUnlockedPlayers().map((player) => player.id));
-  let changed = false;
-
-  Object.entries(state.lineup).forEach(([slotId, slotState]) => {
-    if (slotState && slotState.playerId && !unlockedIds.has(slotState.playerId)) {
-      state.lineup[slotId] = { ...slotState, playerId: null };
-      changed = true;
-    }
-  });
-
-  return changed;
-}
-
-// Saner valgt formasjon mot formasjons-unlocks. Hvis valgt formasjon er lÃ¥st
-// (eller mangler) etter refresh/sanering, fall tilbake til fÃ¸rste tilgjengelige
-// formasjon og reseed lineup/posisjoner. Returnerer true hvis formasjonen ble
-// byttet.
-function sanitizeSelectedFormation() {
-  if (!state.formations.length) {
-    return false;
-  }
-
-  const snapshot = getAvailability();
-  const currentStatus = snapshot.formationStatusById.get(state.selectedFormationId);
-
-  if (currentStatus?.unlocked) {
-    return false;
-  }
-
-  const fallback = snapshot.unlockedFormations[0] || state.formations[0];
-
-  if (!fallback || fallback.id === state.selectedFormationId) {
-    return false;
-  }
-
-  state.selectedFormationId = fallback.id;
-  seedLineupForFormation();
-  ensurePositionsForFormation();
-  // Lineup er reseedet; snapshotets roster readiness mÃ¥ beregnes pÃ¥ nytt.
-  invalidateAvailability();
-  return true;
-}
-
-function loadStoredPositions() {
-  try {
-    return withCurrentPitchLayout(JSON.parse(localStorage.getItem(POSITIONS_KEY)));
-  } catch (error) {
-    return {};
-  }
-}
-
-// Forkast koordinatsett fra en eldre banelayout. Returnerer alltid et objekt
-// stemplet med gjeldende layoutversjon.
-function withCurrentPitchLayout(value) {
-  const isObject = Boolean(value) && typeof value === "object" && !Array.isArray(value);
-  if (!isObject || value[PITCH_LAYOUT_FIELD] !== PITCH_LAYOUT_VERSION) {
-    return { [PITCH_LAYOUT_FIELD]: PITCH_LAYOUT_VERSION };
-  }
-  return value;
-}
-
-function saveStoredPositions(all) {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.setItem(POSITIONS_KEY, JSON.stringify(all));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-// Aktivt treningsfokus: hvilket kunnskapskort brukeren har valgt for uken.
-// Kun lett persistens i localStorage, ingen effekt pÃ¥ score eller engine.
-function loadActiveKnowledgeFocus() {
-  try {
-    return localStorage.getItem(ACTIVE_KNOWLEDGE_FOCUS_KEY) || null;
-  } catch (error) {
-    return null;
-  }
-}
-
-function saveActiveKnowledgeFocus(principleId) {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.setItem(ACTIVE_KNOWLEDGE_FOCUS_KEY, principleId);
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-function clearActiveKnowledgeFocus() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.removeItem(ACTIVE_KNOWLEDGE_FOCUS_KEY);
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-// Treningsuke: enkel uke-state slik at "fullfÃ¸rt denne uken" knyttes til en uke.
-// Kun UI/progresjon i localStorage â€“ ingen effekt pÃ¥ score, engine eller matching.
-function loadTrainingWeek() {
-  try {
-    const stored = Number(JSON.parse(localStorage.getItem(TRAINING_WEEK_KEY)));
-    return Number.isInteger(stored) && stored >= 1 ? stored : 1;
-  } catch (error) {
-    return 1;
-  }
-}
-
-function saveTrainingWeek(week) {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.setItem(TRAINING_WEEK_KEY, JSON.stringify(week));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-function advanceTrainingWeek() {
-  state.trainingWeek += 1;
-  saveTrainingWeek(state.trainingWeek);
-  // Ny uke starter uten valgt fokus; aktivt fokus nullstilles.
-  state.activeKnowledgeFocusId = null;
-  clearActiveKnowledgeFocus();
-  // FullfÃ¸rt-status leses pÃ¥ nytt for gjeldende uke (tom for en helt ny uke).
-  state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
-}
-
-// Ukens taktiske treningsfokus. Uke-id og appliedSessionId gjÃ¸r lagringen
-// robust mot reload, feil uke og gjenbruk etter nullstilling av kamp.
-function loadWeeklyTrainingFocus() {
-  try {
-    return sanitizeWeeklyTrainingFocus(JSON.parse(localStorage.getItem(WEEKLY_TRAINING_FOCUS_KEY)));
-  } catch (error) {
-    return null;
-  }
-}
-
-function saveWeeklyTrainingFocus() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    if (state.weeklyTrainingFocus) {
-      localStorage.setItem(WEEKLY_TRAINING_FOCUS_KEY, JSON.stringify(state.weeklyTrainingFocus));
-    } else {
-      localStorage.removeItem(WEEKLY_TRAINING_FOCUS_KEY);
-    }
-  } catch (error) {
-    // Privat modus e.l.: appen fortsetter uten persistens.
-  }
-}
-
-function selectWeeklyTrainingFocus(focusId) {
-  const focus = getTrainingFocus(focusId);
-  const week = Number(state.clubWeekState?.week);
-  if (!focus || !Number.isInteger(week) || state.matchday?.session || state.weeklyTrainingFocus?.appliedSessionId) {
-    return;
-  }
-  const previousFocusId = state.weeklyTrainingFocus?.focusId || null;
-  state.weeklyTrainingFocus = { focusId: focus.id, week, appliedSessionId: null };
-  saveWeeklyTrainingFocus();
-
-  // Treningsvalget beveger konteksten utenfor banen. Vi anvender effekten kun
-  // nÃ¥r fokuset faktisk endres denne uka, slik at gjentatte klikk ikke stabler
-  // opp samme effekt. Off-pitch-historikken husker hva som ble trent, slik at
-  // kampdag og senere forklaringer kan vise hvorfor laget ble som det ble.
-  if (state.teamMerits && focus.id !== previousFocusId) {
-    const offPitchEvent = buildTrainingFocusOffPitchEvent(focus.id);
-    if (offPitchEvent) {
-      state.teamMerits.offPitch = applyOffPitchEvent(getOffPitchState(), offPitchEvent);
-      saveTeamMerits();
-    }
-  }
-
-  renderApp();
-  // Valgt trening nudger uka til Kampplan-fasen (gate-sikkert).
-  syncClubWeekPhaseToProgress().catch(console.error);
-}
-
-function syncWeeklyTrainingFocusToClubWeek() {
-  const week = Number(state.clubWeekState?.week);
-  if (state.weeklyTrainingFocus && state.weeklyTrainingFocus.week !== week) {
-    state.weeklyTrainingFocus = null;
-    saveWeeklyTrainingFocus();
-  }
-  if (state.weeklyTrainingProgram && state.weeklyTrainingProgram.week !== week) {
-    state.weeklyTrainingProgram = null;
-    saveWeeklyTrainingProgram();
-  }
-}
-
-// Ukens valgte treningsprogram (komposisjon). Lagring speiler treningsfokuset:
-// programId + uke + applied-flagg gjÃ¸r den robust mot reload og forhindrer at
-// off-pitch-effekten stables opp ved gjentatte klikk.
-function sanitizeWeeklyTrainingProgram(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return null;
-  }
-  const programId = typeof value.programId === "string" ? value.programId : null;
-  const week = Number(value.week);
-  if (!programId || !Number.isInteger(week) || week < 1) {
-    return null;
-  }
-  return { programId, week, applied: Boolean(value.applied) };
-}
-
-function loadWeeklyTrainingProgram() {
-  try {
-    return sanitizeWeeklyTrainingProgram(JSON.parse(localStorage.getItem(WEEKLY_TRAINING_PROGRAM_KEY)));
-  } catch (error) {
-    return null;
-  }
-}
-
-function saveWeeklyTrainingProgram() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    if (state.weeklyTrainingProgram) {
-      localStorage.setItem(WEEKLY_TRAINING_PROGRAM_KEY, JSON.stringify(state.weeklyTrainingProgram));
-    } else {
-      localStorage.removeItem(WEEKLY_TRAINING_PROGRAM_KEY);
-    }
-  } catch (error) {
-    // Privat modus e.l.: appen fortsetter uten persistens.
-  }
-}
-
-// Velg ukens treningsprogram. Idempotent per uke: programmet kan byttes sÃ¥ lenge
-// off-pitch-effekten ikke er brukt (applied), og effekten anvendes kun Ã©n gang.
-// Selve uttellingen/forklaringen kommer fra komposisjonsmotoren â€” UI velger bare.
-function selectWeeklyTrainingProgram(program) {
-  const week = Number(state.clubWeekState?.week);
-  if (!program || typeof program.id !== "string" || !Number.isInteger(week)) {
-    return;
-  }
-  if (state.matchday?.session || state.weeklyTrainingProgram?.applied) {
-    return;
-  }
-  if (state.weeklyTrainingProgram?.programId === program.id) {
-    return;
-  }
-
-  state.weeklyTrainingProgram = { programId: program.id, week, applied: false };
-
-  // Treningsprogrammet beveger konteksten utenfor banen (slitasje, klarhet,
-  // samhold). Effekten anvendes kun Ã©n gang per uke; senere bytter samme uke
-  // bare oppdaterer hvilket program som er valgt uten Ã¥ stable opp belastning.
-  if (state.teamMerits) {
-    state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
-    state.weeklyTrainingProgram.applied = true;
-    saveTeamMerits();
-  }
-  saveWeeklyTrainingProgram();
-
-  renderApp();
-  // Valgt treningsprogram nudger uka til Kampplan-fasen (gate-sikkert).
-  syncClubWeekPhaseToProgress().catch(console.error);
-}
-
-// Gyldige fase-ID-er i den nye 6-fase-rytmen. Brukes til sanering av lagret
-// clubWeekState (gamle fase-ID-er som match_day/club_work faller til analyse).
-const CLUB_WEEK_PHASE_IDS = ["analysis", "inbox", "training", "match_prep", "matchday", "review"];
-
-// Saner en lagret clubWeekState til forventet form. Tolerant mot null/feil
-// typer og gamle fase-ID-er. Speiler engine-normaliseringen, men er synkron
-// slik at merits-normalisereren kan bruke den ved oppstart (fÃ¸r engine er lastet).
-function sanitizeStoredClubWeekState(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return null;
-  }
-  const week = Number(value.week);
-  const clampM = (v) => {
-    const n = Number(v);
-    return Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : 50;
-  };
-  return {
-    week: Number.isInteger(week) && week >= 1 ? week : 1,
-    phase: CLUB_WEEK_PHASE_IDS.includes(value.phase) ? value.phase : "analysis",
-    boardTrust: clampM(value.boardTrust),
-    playerMorale: clampM(value.playerMorale),
-    tacticalClarity: clampM(value.tacticalClarity),
-    trainingCulture: clampM(value.trainingCulture),
-    mediaPressure: clampM(value.mediaPressure)
-  };
-}
-
-// Club Week-tilstand: uke, fase og klubbverdier fra Club Week Engine. Kanonisk
-// plassering er teamMerits.clubWeekState (Club Week Orchestrator v1). Migrerer
-// fra den gamle frittstÃ¥ende localStorage-nÃ¸kkelen nÃ¥r merits ennÃ¥ mangler en
-// verdi. Selve fase-/effektlogikken ligger i engine/fallback.
-function loadClubWeekState() {
-  const fromMerits = state.teamMerits?.clubWeekState;
-  if (fromMerits && typeof fromMerits === "object" && !Array.isArray(fromMerits)) {
-    return fromMerits;
-  }
-
-  // Migrering: les den gamle nÃ¸kkelen Ã©n gang slik at eksisterende spill ikke
-  // mister uke/fase/verdier nÃ¥r staten flyttes inn i merits.
-  try {
-    const stored = JSON.parse(localStorage.getItem(CLUB_WEEK_STATE_KEY));
-    if (stored && typeof stored === "object" && !Array.isArray(stored)) {
-      return stored;
-    }
-  } catch (error) {
-    // Ignorer korrupt/utilgjengelig lagring â€“ vi faller tilbake til ny uke 1.
-  }
-
-  return null;
-}
-
-function saveClubWeekState(clubWeekState) {
-  // Skriv til den kanoniske plasseringen i merits. Uten merits (skulle ikke
-  // skje etter init) faller vi stille tilbake uten persistens.
-  if (state.teamMerits && typeof state.teamMerits === "object") {
-    state.teamMerits.clubWeekState = clubWeekState;
-    saveTeamMerits();
-  }
-
-  // Rydd bort den gamle frittstÃ¥ende nÃ¸kkelen etter at staten er migrert inn.
-  try {
-    localStorage.removeItem(CLUB_WEEK_STATE_KEY);
-  } catch (error) {
-    // Privat modus e.l.: ufarlig, den gamle nÃ¸kkelen blir bare liggende.
-  }
-}
-
-function setClubWeekState(clubWeekState) {
-  state.clubWeekState = clubWeekState;
-  saveClubWeekState(clubWeekState);
-  renderApp();
-}
-
-// Club Week-feedback: kort tekst om siste fasebytte. Kun lett persistens i
-// localStorage â€“ ingen effekt pÃ¥ score, engine eller matching.
-function loadClubWeekFeedback() {
-  try {
-    return localStorage.getItem(CLUB_WEEK_FEEDBACK_KEY) || "Klubbuken er klar.";
-  } catch (error) {
-    return "Klubbuken er klar.";
-  }
-}
-
-function saveClubWeekFeedback(message) {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.setItem(CLUB_WEEK_FEEDBACK_KEY, message);
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-function setClubWeekFeedback(message) {
-  state.clubWeekFeedback = message;
-  saveClubWeekFeedback(message);
-}
-
-// Club Week-hendelseslogg: korte hendelser fra fasebytter. Nyeste fÃ¸rst, maks 12.
-// Kun lett persistens i localStorage â€“ ingen effekt pÃ¥ score, engine eller matching.
-function loadClubWeekEventLog() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(CLUB_WEEK_EVENT_LOG_KEY));
-    return Array.isArray(stored) ? stored.slice(0, CLUB_WEEK_EVENT_LOG_LIMIT) : [];
-  } catch (error) {
-    return [];
-  }
-}
-
-function saveClubWeekEventLog(events) {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    const list = Array.isArray(events) ? events.slice(0, CLUB_WEEK_EVENT_LOG_LIMIT) : [];
-    localStorage.setItem(CLUB_WEEK_EVENT_LOG_KEY, JSON.stringify(list));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-function addClubWeekEvent(event) {
-  // Nyeste hendelse fÃ¸rst, behold maks 12.
-  state.clubWeekEventLog = [event, ...state.clubWeekEventLog].slice(0, CLUB_WEEK_EVENT_LOG_LIMIT);
-  saveClubWeekEventLog(state.clubWeekEventLog);
-}
-
-// Lokal fase-etikettmap som fallback for konsekvenstekster. Holdes synk med
-// Club Week Engine-fasene; brukes kun til visningstekst.
-const CLUB_WEEK_PHASE_LABELS = {
-  analysis: "Analyse",
-  inbox: "Innboks",
-  training: "Trening",
-  match_prep: "Kampplan",
-  matchday: "Kampdag",
-  review: "Oppsummering"
-};
-
-// Kampdag â†” Club Week-kobling: les porten fra den rene modellen med gjeldende
-// state. Stengt port betyr at kampdagfasen venter pÃ¥ en faktisk spilt kamp
-// (eller at en pÃ¥gÃ¥ende kampsesjon fullfÃ¸res) fÃ¸r uka kan rulle videre.
-function getClubWeekMatchdayGate() {
-  return evaluateClubWeekMatchdayGate({
-    clubWeekState: state.clubWeekState,
-    lastMatch: state.matchday?.lastMatch || null,
-    hasActiveSession: Boolean(state.matchday?.session)
-  });
-}
-
-// Club Week Orchestrator v1.1: hvilken fase spillerens FAKTISKE fremdrift denne
-// uka tilsier. Ren avlesning av state (ingen ny motor): spilt kamp â†’ Oppsummering,
-// valgt trening â†’ Kampplan, hÃ¥ndtert innboks â†’ Trening. Null nÃ¥r ingen handling
-// ennÃ¥ tilsier en fremrykning (da styrer Â«Neste faseÂ»-knappen manuelt).
-function clubWeekPhaseTargetFromProgress() {
-  const week = Number(state.clubWeekState?.week) || 1;
-  if (state.matchday?.lastMatch?.playedInClubWeek === week) return "review";
-  if (state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId) return "match_prep";
-  if (hasAcknowledgedInboxThisWeek()) return "training";
-  return null;
-}
-
-// Rull klubbukens fase FRAMOVER til den fasen spillerens handlinger tilsier, via
-// den eksisterende fasemotoren (advanceClubWeekPhaseAction). Gate-sikker
-// (kampdagâ†’oppsummering krever spilt kamp, som nettopp er oppfylt nÃ¥r
-// target=review), gÃ¥r aldri bakover, ruller aldri over til ny uke (stopper pÃ¥
-// review), og er idempotent nÃ¥r fasen alt er pÃ¥/forbi mÃ¥let. Orkestrering, ikke
-// en ny motor â€” samme transitions/konsekvenser som Â«Neste faseÂ»-knappen.
-async function syncClubWeekPhaseToProgress() {
-  if (!state.clubWeekState) return;
-  const target = clubWeekPhaseTargetFromProgress();
-  if (!target) return;
-  const targetIdx = CLUB_WEEK_PHASE_IDS.indexOf(target);
-  if (targetIdx < 0) return;
-
-  for (let i = 0; i < CLUB_WEEK_PHASE_IDS.length; i++) {
-    const before = state.clubWeekState;
-    const currentIdx = CLUB_WEEK_PHASE_IDS.indexOf(before?.phase);
-    if (currentIdx < 0 || currentIdx >= targetIdx) break;
-    if (getClubWeekMatchdayGate().isBlocked) break;
-    await advanceClubWeekPhaseAction();
-    // Stopp hvis fasen ikke beveget seg eller uka rullet over (sikkerhetsnett).
-    if (state.clubWeekState === before || state.clubWeekState?.week !== before.week) break;
-  }
-}
-
-// Kort norsk effekt-fras per treningsfokus: hva treningen faktisk gjorde med
-// laget pÃ¥ kampdag. Brukes til den kausale "derfor"-forklaringen.
-const TRAINING_FOCUS_MATCH_EFFECT_PHRASE = {
-  rest_defence: "dempet laget kontringsrisikoen",
-  pressing: "presset laget mer samordnet",
-  build_up: "spilte laget tryggere ut bakfra",
-  width: "fant laget bedre rom i bredden",
-  depth_runs: "truet laget rommet bak forsvaret oftere",
-  role_understanding: "sto rollene tydeligere i pressede situasjoner",
-  set_pieces: "sto laget bedre rustet pÃ¥ dÃ¸dballer",
-  formation_familiarity: "satt systemet tryggere"
-};
-
-// Club Week Orchestrator v1: den kausale lenken trening â†’ kampdag. Leser ukas
-// treningssnapshot fra den spilte kampen og forklarer HVORFOR laget ble som det
-// ble. Dette speiler kampmotorens faktiske oppfÃ¸rsel: et kontekstuelt relevant
-// fokus demper de situasjonene det ble trent pÃ¥ (trainingDamping i
-// resolveMatchdayDecision). Tom streng nÃ¥r ingen trening er knyttet til kampen.
-function buildTrainingMatchCausalNote() {
-  const lastMatch = state.matchday?.lastMatch;
-  const trainingFocus = lastMatch?.trainingFocus;
-  if (!trainingFocus || !trainingFocus.focusId) {
-    return "";
-  }
-  const focusName = trainingFocus.name || getTrainingFocus(trainingFocus.focusId)?.name || "treningsfokuset";
-  const opponentName = lastMatch.opponent?.name || "motstanderen";
-  const phrase = TRAINING_FOCUS_MATCH_EFFECT_PHRASE[trainingFocus.focusId] || "ga laget noe Ã¥ stÃ¸tte seg pÃ¥";
-
-  if (trainingFocus.contextRelevant) {
-    return `Du trente ${focusName} fÃ¸r ${opponentName}, derfor ${phrase}.`;
-  }
-  return `Du trente ${focusName} fÃ¸r ${opponentName}. Det ga laget arbeid, men traff ikke kampbildet direkte denne gangen.`;
-}
-
-// SmÃ¥, synlige konsekvenser av et fasebytte i den nye 6-fase-rytmen
-// (analyse â†’ innboks â†’ trening â†’ kampplan â†’ kampdag â†’ oppsummering â†’ ny uke).
-// Returnerer effekter pÃ¥ klubbverdier og en kort norsk tilbakemelding som
-// forklarer hvorfor uka beveget seg som den gjorde. Kun UI/Club Week-state â€“
-// ingen lagscore, kampmotor, rollefit eller Football Knowledge-matching.
-function getClubWeekTransitionConsequences(previousState, nextState) {
-  switch (previousState.phase) {
-    case "analysis":
-      return {
-        effects: {},
-        message: "Analysen er gjennomgÃ¥tt. NÃ¥ rydder du innboksen fÃ¸r uka planlegges."
-      };
-
-    case "inbox":
-      return {
-        effects: {},
-        message: "Innboksen er hÃ¥ndtert, og svarene har satt seg i konteksten. Treningsuka kan planlegges."
-      };
-
-    case "training": {
-      const selectedFocus = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
-      const focusNote = selectedFocus
-        ? ` Valgt fokus: ${selectedFocus.name} â€” det fÃ¸lger med inn i kampplanen.`
-        : " Uten valgt treningsfokus gÃ¥r laget inn i kampuka uten en tydelig rÃ¸d trÃ¥d.";
-
-      if (state.activeKnowledgeFocusId && isKnowledgeFocusCompleted(state.activeKnowledgeFocusId)) {
-        return {
-          effects: { trainingCulture: 2, tacticalClarity: 1 },
-          message: `Treningsfasen er fullfÃ¸rt. KunnskapsÃ¸kten ga +2 treningskultur og +1 taktisk klarhet.${focusNote}`
-        };
-      }
-
-      if (state.activeKnowledgeFocusId) {
-        return {
-          effects: { trainingCulture: -1 },
-          message: `Treningsfasen er over. Valgt kunnskapsÃ¸kt ble ikke fullfÃ¸rt, og treningskulturen faller med 1.${focusNote}`
-        };
-      }
-
-      return {
-        effects: selectedFocus ? {} : { tacticalClarity: -1 },
-        message: selectedFocus
-          ? `Treningsfasen er over.${focusNote}`
-          : `Treningsfasen er over uten valgt kunnskapsfokus. Taktisk klarhet faller med 1.${focusNote}`
-      };
-    }
-
-    case "match_prep":
-      return {
-        effects: { mediaPressure: 1 },
-        message: "Kampplanen er lÃ¥st. Kampdag nÃ¦rmer seg, og medietrykket Ã¸ker med 1."
-      };
-
-    case "matchday": {
-      // Kampen er spilt (porten Ã¥pnet av applyMatchdayConsequences). Selve
-      // klubbeffektene ble brukt da kampen ble avsluttet; her forklarer vi
-      // hvorfor laget presterte som det gjorde, og leder over i oppsummeringen.
-      const causalNote = buildTrainingMatchCausalNote();
-      const base = "Kampen er spilt. NÃ¥ oppsummeres uka.";
-      return {
-        effects: {},
-        message: causalNote ? `${causalNote} ${base}` : base
-      };
-    }
-
-    case "review":
-      return {
-        effects: { mediaPressure: -1 },
-        message: `Uke ${previousState.week} er oppsummert. Klubben gÃ¥r inn i uke ${nextState.week} med ny analysefase.`
-      };
-
-    default: {
-      const label = CLUB_WEEK_PHASE_LABELS[nextState.phase] || "neste fase";
-      return {
-        effects: {},
-        message: `Klubben gÃ¥r videre til ${label}.`
-      };
-    }
-  }
-}
-
-// FullfÃ¸rt ukesÃ¸kt: hvilke kunnskapsfokus brukeren har markert som gjennomfÃ¸rt.
-// Rent UI/progresjonslag i localStorage â€“ ingen effekt pÃ¥ score, engine eller matching.
-// Lagres som objekt per uke ({ "1": [...], "2": [...] }), holdes i minnet som Set
-// for raske oppslag pÃ¥ gjeldende uke. Robust migrering: gammel flat array tolkes
-// som uke 1.
-function readCompletedKnowledgeFocusStore() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(COMPLETED_KNOWLEDGE_FOCUS_KEY));
-
-    if (Array.isArray(stored)) {
-      // Gammel lagringsmodell: flat array behandles som uke 1.
-      return { "1": stored };
-    }
-
-    if (stored && typeof stored === "object") {
-      return stored;
-    }
-
-    return {};
-  } catch (error) {
-    return {};
-  }
-}
-
-function loadCompletedKnowledgeFocusIds() {
-  const store = readCompletedKnowledgeFocusStore();
-  const weekIds = store[String(state.trainingWeek)];
-  return new Set(Array.isArray(weekIds) ? weekIds : []);
-}
-
-function saveCompletedKnowledgeFocusIds(ids) {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    const store = readCompletedKnowledgeFocusStore();
-    store[String(state.trainingWeek)] = Array.from(ids);
-    localStorage.setItem(COMPLETED_KNOWLEDGE_FOCUS_KEY, JSON.stringify(store));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-function markKnowledgeFocusCompleted(principleId) {
-  if (!principleId) {
-    return;
-  }
-
-  state.completedKnowledgeFocusIds.add(principleId);
-  saveCompletedKnowledgeFocusIds(state.completedKnowledgeFocusIds);
-}
-
-function isKnowledgeFocusCompleted(principleId) {
-  return Boolean(principleId) && state.completedKnowledgeFocusIds.has(principleId);
-}
-
-// Logiske standardposisjoner: grupper slots per lagdel og spre dem jevnt i bredden.
-function computeDefaultPositions(formation) {
-  const positions = {};
-
-  // hgFootball-formasjoner kommer fra adapteren med ferdige standardkoordinater
-  // (shape -> slot-koordinat). Bruk dem direkte nÃ¥r alle slots har x/y, ellers
-  // fall tilbake til den gamle linjebaserte fordelingen (legacy-formasjoner).
-  const hasExplicitCoordinates = formation.slots.every(
-    (slot) => Number.isFinite(slot.x) && Number.isFinite(slot.y)
-  );
-
-  if (hasExplicitCoordinates) {
-    formation.slots.forEach((slot) => {
-      positions[slot.slotId] = { x: slot.x, y: slot.y };
-    });
-    return positions;
-  }
-
-  const byLine = {};
-
-  formation.slots.forEach((slot) => {
-    (byLine[slot.line] ||= []).push(slot);
-  });
-
-  Object.entries(byLine).forEach(([line, slots]) => {
-    const y = LINE_Y[line] ?? 50;
-    // Samme regel som adapteren: bare linjer med ekte breddespillere strekkes
-    // ut til sidelinja. Ellers ville et sentralt par (to spisser, to stoppere)
-    // havnet pÃ¥ 14 % og 86 % â€“ ute pÃ¥ vingen.
-    const xs = lineXPositions(slots.map((slot) => slot.position));
-
-    slots.forEach((slot, index) => {
-      positions[slot.slotId] = { x: xs[index], y };
-    });
-  });
-
-  return positions;
-}
-
-// SÃ¸rg for at gjeldende formasjon har posisjoner (lagret eller standard) for alle slots.
-function ensurePositionsForFormation() {
-  const formation = getFormation();
-
-  if (!formation) {
-    state.slotPositions = {};
-    return;
-  }
-
-  // Sesjonen (modus-konvolutten) kan bÃ¦re et koordinatsett fra en eldre
-  // banelayout. Er stempelet borte eller utdatert, forkastes settet her â€“ ellers
-  // ville et lagret spill beholdt den gamle, feilaktige plasseringen.
-  if (state.slotPositions && state.slotPositions[PITCH_LAYOUT_FIELD] !== PITCH_LAYOUT_VERSION) {
-    state.slotPositions = {};
-  }
-
-  const all = loadStoredPositions();
-  const defaults = computeDefaultPositions(formation);
-  const stored = all[formation.id] || {};
-
-  const merged = {};
-
-  formation.slots.forEach((slot) => {
-    merged[slot.slotId] = stored[slot.slotId] || defaults[slot.slotId];
-  });
-
-  merged[PITCH_LAYOUT_FIELD] = PITCH_LAYOUT_VERSION;
-  all[formation.id] = merged;
-  all[PITCH_LAYOUT_FIELD] = PITCH_LAYOUT_VERSION;
-  saveStoredPositions(all);
-  state.slotPositions = merged;
-}
-
-function persistCurrentPositions() {
-  const formation = getFormation();
-
-  if (!formation) {
-    return;
-  }
-
-  const all = loadStoredPositions();
-  all[formation.id] = state.slotPositions;
-  saveStoredPositions(all);
-}
-
-function renderList(list, items) {
-  list.innerHTML = "";
-
-  if (items.length === 0) {
-    const item = document.createElement("li");
-    item.textContent = "Ingen tydelige punkter ennÃ¥.";
-    list.append(item);
-    return;
-  }
-
-  items.forEach((text) => {
-    const item = document.createElement("li");
-    item.textContent = text;
-    list.append(item);
-  });
-}
-
-// Trygg liste-render: hopper over hvis elementet mangler, og viser emptyText nÃ¥r listen er tom.
-function renderTextList(list, items, getText, emptyText) {
-  if (!list) {
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if (!Array.isArray(items) || items.length === 0) {
-    const item = document.createElement("li");
-    item.textContent = emptyText || "Ingen tydelige punkter ennÃ¥.";
-    list.append(item);
-    return;
-  }
-
-  items.forEach((entry) => {
-    const item = document.createElement("li");
-    item.textContent = getText(entry);
-    list.append(item);
-  });
-}
-
-// Trygg liste-render for managerTrainingPlan: ligner renderTextList, men gir
-// det aktivt valgte kunnskapsfokuset egen visuell markering via item.type.
-// Bruker kun textContent, ingen innerHTML.
-function renderTrainingFocusList(list, items, emptyText) {
-  if (!list) {
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if (!Array.isArray(items) || items.length === 0) {
-    const empty = document.createElement("li");
-    empty.textContent = emptyText || "Ingen tydelige punkter ennÃ¥.";
-    list.append(empty);
-    return;
-  }
-
-  items.forEach((item) => {
-    const li = document.createElement("li");
-
-    if (item.type === "knowledge_focus") {
-      const completed = isKnowledgeFocusCompleted(item.principleId);
-
-      li.className = "training-focus-item is-knowledge-focus";
-
-      if (completed) {
-        li.classList.add("is-completed");
-      }
-
-      // Tekst og knapp i egne noder, slik at vi kun bruker textContent.
-      const text = document.createElement("p");
-      text.className = "training-focus-text";
-      text.textContent = item.text;
-      li.append(text);
-
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "training-focus-complete-button";
-      button.textContent = completed ? "FullfÃ¸rt" : "FullfÃ¸r ukesÃ¸kt";
-      button.disabled = completed;
-      button.addEventListener("click", () => {
-        markKnowledgeFocusCompleted(item.principleId);
-        renderApp();
-      });
-      li.append(button);
-    } else {
-      li.className = "training-focus-item";
-      li.textContent = item.text;
-    }
-
-    list.append(li);
-  });
-}
-
-// Render kunnskapsanbefalinger som ryddige kort i stedet for Ã©n lang tekstlinje.
-// Bruker kun textContent, ingen innerHTML.
-function renderKnowledgeCards(list, items, emptyText) {
-  if (!list) {
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if (!Array.isArray(items) || items.length === 0) {
-    const empty = document.createElement("li");
-    empty.textContent = emptyText || "Ingen kunnskapsanbefalinger ennÃ¥.";
-    list.append(empty);
-    return;
-  }
-
-  items.forEach((item) => {
-    const isActiveFocus = item.principleId === state.activeKnowledgeFocusId;
-    const isCompletedFocus = isKnowledgeFocusCompleted(item.principleId);
-
-    const card = document.createElement("li");
-    card.className = "knowledge-card";
-
-    if (isActiveFocus) {
-      card.classList.add("is-active-focus");
-    }
-
-    if (isCompletedFocus) {
-      card.classList.add("is-completed-focus");
-    }
-
-    const header = document.createElement("div");
-    header.className = "knowledge-card-header";
-
-    const title = document.createElement("strong");
-    title.textContent = item.title;
-    if (item.tooltipText) {
-      title.title = item.tooltipText;
-    }
-
-    const meta = document.createElement("span");
-    meta.textContent = `${item.priorityText} Â· ${item.categoryText}`;
-
-    header.append(title, meta);
-
-    const reason = document.createElement("p");
-    reason.className = "knowledge-reason";
-    reason.textContent = `Hvorfor: ${item.reason}`;
-
-    const advice = document.createElement("p");
-    advice.className = "knowledge-advice";
-    advice.textContent = `Trenergrep: ${item.coachAdvice}`;
-
-    const session = document.createElement("p");
-    session.className = "knowledge-session";
-    session.textContent = `Ã˜kt: ${item.trainingSession}`;
-
-    card.append(header, reason, advice, session);
-
-    if (item.handbookText) {
-      const handbook = document.createElement("details");
-      handbook.className = "knowledge-handbook";
-      const handbookSummary = document.createElement("summary");
-      handbookSummary.textContent = "Mer forklaring";
-      const handbookText = document.createElement("p");
-      handbookText.textContent = item.handbookText;
-      handbook.append(handbookSummary, handbookText);
-      card.append(handbook);
-    }
-
-    if (isActiveFocus) {
-      const status = document.createElement("p");
-      status.className = "knowledge-focus-status";
-      status.textContent = "Aktivt treningsfokus";
-      card.append(status);
-    }
-
-    if (isCompletedFocus) {
-      const completedStatus = document.createElement("p");
-      completedStatus.className = "knowledge-completed-status";
-      completedStatus.textContent = "FullfÃ¸rt";
-      card.append(completedStatus);
-    }
-
-    const action = document.createElement("button");
-    action.type = "button";
-    action.className = "knowledge-card-action";
-    action.textContent = isActiveFocus ? "Aktivt fokus" : "Sett som ukens fokus";
-    action.addEventListener("click", () => {
-      state.activeKnowledgeFocusId = item.principleId;
-      saveActiveKnowledgeFocus(item.principleId);
-      renderApp();
-    });
-    card.append(action);
-
-    list.append(card);
-  });
-}
-
-// Leser hele fullfÃ¸rt-lageret (objekt per uke). Tynn wrapper rundt den
-// migrerende leseren, slik at historikk-renderen kan vise alle uker, ikke
-// bare gjeldende uke. Kun UI/progresjon, ingen engine- eller score-effekt.
-function getCompletedKnowledgeFocusStore() {
-  return readCompletedKnowledgeFocusStore();
-}
-
-// Progresjonstall: hvor mange Ã¸kter er fullfÃ¸rt denne uken. Leser fra Set-et
-// for gjeldende uke. Kun UI/progresjon, ingen engine- eller score-effekt.
-function countCompletedThisWeek() {
-  return state.completedKnowledgeFocusIds.size;
-}
-
-// Progresjonstall: hvor mange Ã¸kter er fullfÃ¸rt totalt pÃ¥ tvers av alle uker.
-// Robust mot ugyldige verdier: bare arrays teller, andre verdier ignoreres.
-// Kun UI/progresjon, ingen engine- eller score-effekt.
-function countCompletedTotal() {
-  const store = getCompletedKnowledgeFocusStore();
-  return Object.values(store).reduce((total, ids) => {
-    return total + (Array.isArray(ids) ? ids.length : 0);
-  }, 0);
-}
-
-// Finn lesbar tittel for en fullfÃ¸rt principleId i gjeldende viewModel.
-// Faller trygt tilbake til selve ID-en hvis prinsippet ikke finnes lenger.
-function findKnowledgePrincipleTitle(principleId, viewModel) {
-  const match = viewModel.knowledgeRecommendations.find((item) => item.principleId === principleId);
-  return match?.title || principleId;
-}
-
-// Enkel treningshistorikk: lister fullfÃ¸rte kunnskapsÃ¸kter gruppert per uke,
-// nyeste uke fÃ¸rst. Rent UI/progresjon fra localStorage â€“ ingen engine- eller
-// score-effekt. Bruker kun textContent, ingen innerHTML.
-function renderTrainingHistory(list, viewModel) {
-  if (!list) {
-    return;
-  }
-
-  const store = getCompletedKnowledgeFocusStore();
-  const weeks = Object.keys(store)
-    .map((week) => Number(week))
-    .filter((week) => Number.isInteger(week) && week >= 1)
-    .sort((a, b) => b - a);
-
-  list.innerHTML = "";
-
-  const hasHistory = weeks.some((week) => {
-    const ids = store[String(week)];
-    return Array.isArray(ids) && ids.length > 0;
-  });
-
-  if (!hasHistory) {
-    const empty = document.createElement("li");
-    empty.textContent = "Ingen fullfÃ¸rte kunnskapsÃ¸kter ennÃ¥.";
-    list.append(empty);
-    return;
-  }
-
-  weeks.forEach((week) => {
-    const ids = store[String(week)];
-
-    if (!Array.isArray(ids) || ids.length === 0) {
-      return;
-    }
-
-    const titles = ids.map((id) => findKnowledgePrincipleTitle(id, viewModel));
-
-    const item = document.createElement("li");
-    item.className = "training-history-week";
-    item.textContent = `Uke ${week}: ${titles.join(", ")}`;
-    list.append(item);
-  });
-}
-
-function getTeamStatus(teamFit) {
-  if (!teamFit || teamFit.completeCount < teamFit.totalSlots) {
-    return "Ufullstendig";
-  }
-
-  if (teamFit.duplicatePlayers?.length > 0) {
-    return "Ugyldig ellever";
-  }
-
-  if (teamFit.teamScore >= 84) {
-    return "Sterk helhet";
-  }
-
-  if (teamFit.teamScore >= 72) {
-    return "God helhet";
-  }
-
-  if (teamFit.teamScore >= 60) {
-    return "Ujevn helhet";
-  }
-
-  return "Taktisk krasj";
-}
-
-function renderControls() {
-  setOptions(
-    elements.formationSelect,
-    state.formations,
-    (formation) => formation.id,
-    // Vis navn + epoke + skole slik at f.eks. historisk "WM 3-2-2-3" og moderne
-    // "Box Midfield 3-2-2-3" ikke forveksles selv om tallene ligner. LÃ¥ste
-    // formasjoner merkes og kan ikke velges som aktiv managerformasjon â€“
-    // unlock handler om tilgang/samlekilde, ikke kvalitet.
-    (formation) =>
-      isFormationUnlocked(formation.id)
-        ? formation.selectLabel || formation.name
-        : `${formation.selectLabel || formation.name} Â· LÃ¥st`,
-    null,
-    (formation) => !isFormationUnlocked(formation.id)
-  );
-
-  setOptions(
-    elements.tacticSelect,
-    state.tactics,
-    (tactic) => tactic.id,
-    (tactic) => tactic.name
-  );
-
-  elements.formationSelect.value = state.selectedFormationId;
-  elements.tacticSelect.value = state.selectedTacticId;
-
-  // Kampplanens formasjonsarv sto tidligere i selve navnet (Â«Bredt og hurtig
-  // 4-3-3Â»), og fikk kampplanvelgeren til Ã¥ se ut som en formasjonsvelger nummer
-  // to â€” med et tall som motsa den valgte formasjonen. Arven hÃ¸rer hjemme som en
-  // opplysning under valget, ikke i navnet.
-  const originHint = document.querySelector("#tacticOriginHint");
-  if (originHint) {
-    const tactic = getTactic();
-    const origin = typeof tactic?.formation === "string" ? tactic.formation.trim() : "";
-    originHint.textContent = origin ? `Fra ${origin}-tradisjonen` : "";
-    originHint.hidden = !origin;
-  }
-}
-
-// Hvor stor plass har Ã©n brikke pÃ¥ banen? Det avhenger av formasjonen, ikke av
-// skjermen: en 4-4-2 har fire pÃ¥ bredeste rad og 24 % mellom radene, mens en
-// 1-1-8 har Ã¥tte pÃ¥ rad. Med Ã©n fast brikkestÃ¸rrelse la de tette formasjonene
-// brikkene oppÃ¥ hverandre.
-//
-// Bredden regnes ut eksakt (vi kjenner avstanden mellom naboene). HÃ¸yden kan vi
-// ikke regne oss fram til: brikkas innhold har minstestÃ¸rrelser i piksler, sÃ¥ pÃ¥
-// en liten bane blir den relativt hÃ¸yere enn matematikken tilsier. Derfor MÃ…LER
-// vi den etterpÃ¥ â€” se fitPitchDensity().
-const PITCH_DENSITY_STEPS = ["lav", "middels", "hoy"];
-const PITCH_ROW_CLEARANCE = 2;
-// Under denne bredden fÃ¥r ikke bunnraden plass i brikka.
-const PITCH_NARROW_CHIP_PX = 70;
-
-function getPitchRowGeometry(formation) {
-  const slots = Array.isArray(formation?.slots) ? formation.slots : [];
-  const rows = new Map();
-  slots.forEach((slot) => {
-    const point = state.slotPositions[slot.slotId] || { x: slot.x, y: slot.y };
-    const y = Math.round(Number(point?.y ?? 50));
-    if (!rows.has(y)) rows.set(y, []);
-    rows.get(y).push(Number(point?.x ?? 50));
-  });
-
-  let minGapX = 100;
-  rows.forEach((xs) => {
-    const sorted = [...xs].sort((a, b) => a - b);
-    for (let i = 1; i < sorted.length; i += 1) {
-      minGapX = Math.min(minGapX, sorted[i] - sorted[i - 1]);
-    }
-  });
-
-  const ys = [...rows.keys()].sort((a, b) => a - b);
-  let minGapY = 100;
-  for (let i = 1; i < ys.length; i += 1) {
-    minGapY = Math.min(minGapY, ys[i] - ys[i - 1]);
-  }
-
-  return { minGapX, minGapY };
-}
-
-function applyPitchDensity(formation) {
-  const pitch = elements.lineupSlots;
-  if (!pitch) return;
-  const { minGapX } = getPitchRowGeometry(formation);
-  // 92 % av avstanden gir litt luft mellom naboene; 21 cqw er taket.
-  pitch.style.setProperty("--chip-w", `${Math.min(21, minGapX * 0.92)}cqw`);
-  // Start Ã¥pent. fitPitchDensity() strammer inn hvis brikkene faktisk ikke fÃ¥r
-  // plass i hÃ¸yden.
-  pitch.dataset.density = PITCH_DENSITY_STEPS[0];
-}
-
-// Velg det mest informative tetthetsnivÃ¥et brikkene faktisk fÃ¥r plass til.
-// Â«lavÂ» viser navn og rolle, Â«middelsÂ» dropper rollen, Â«hoyÂ» viser bare token,
-// posisjon og matchScore. Fullt navn ligger uansett i aria-label og sidepanelet.
-function fitPitchDensity(formation) {
-  const pitch = elements.lineupSlots;
-  if (!pitch) return;
-  const chip = pitch.querySelector(".player-chip");
-  if (!chip) return;
-  const box = pitch.getBoundingClientRect();
-  if (!(box.height > 0)) return;
-
-  const { minGapX, minGapY } = getPitchRowGeometry(formation);
-  const gapPx = (minGapY / 100) * box.height;
-
-  // Smal brikke: bunnraden (posisjon + matchScore) har en minstebredde i
-  // piksler og RANT UT av brikka nÃ¥r den ble smal nok â€” brikkene sÃ¥ ut til Ã¥
-  // kollidere selv om boksene ikke gjorde det. Da faller posisjonsmerket bort;
-  // det stÃ¥r uansett i sidepanelet og er gitt av plassen pÃ¥ banen.
-  const chipWidthPx = (minGapX / 100) * box.width * 0.92;
-  pitch.dataset.narrow = chipWidthPx < PITCH_NARROW_CHIP_PX ? "true" : "false";
-
-  // Litt luft mellom radene: uten margin ble Â«akkurat like hÃ¸y som avstandenÂ»
-  // godtatt, og avrunding ga Ã©n piksel overlapp.
-  const budget = gapPx - PITCH_ROW_CLEARANCE;
-
-  for (const step of PITCH_DENSITY_STEPS) {
-    pitch.dataset.density = step;
-    // MÃ¥ler faktisk hÃ¸yde etter at nivÃ¥et er satt â€” minstestÃ¸rrelsene i piksler
-    // gjÃ¸r at den ikke kan regnes ut pÃ¥ forhÃ¥nd.
-    if (chip.getBoundingClientRect().height <= budget) return;
-  }
-  // Selv det tetteste nivÃ¥et kan vÃ¦re for hÃ¸yt pÃ¥ en veldig liten skjerm.
-  // Da stÃ¥r vi igjen med Â«hoyÂ» â€” bedre litt trangt enn uleselig.
-}
-
-function renderLineup(teamFit) {
-  const formation = getFormation();
-
-  elements.lineupSlots.innerHTML = "";
-  elements.formationTitle.textContent = formation?.name || "Formasjon";
-
-  if (!formation || !teamFit) {
-    return;
-  }
-
-  applyPitchDensity(formation);
-
-  formation.slots.forEach((slot) => {
-    const assignment = teamFit.assignments.find((item) => item.slot.slotId === slot.slotId);
-    const position = state.slotPositions[slot.slotId] || { x: 50, y: 50 };
-
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = "player-chip";
-    chip.dataset.slotId = slot.slotId;
-    chip.dataset.line = slot.line;
-    chip.style.left = `${position.x}%`;
-    chip.style.top = `${position.y}%`;
-
-    if (slot.slotId === state.selectedSlotId) {
-      chip.classList.add("is-selected");
-    }
-
-    if (assignment?.fit?.status === "feilbrukt") {
-      chip.classList.add("is-misused");
-    }
-
-    if (teamFit.duplicatePlayers.some((player) => player.id === assignment?.player?.id)) {
-      chip.classList.add("is-duplicate");
-    }
-
-    const player = assignment?.player || null;
-    const playerName = player?.name || "Tom plass";
-    // Brikka er smal (den skal fÃ¥ plass elleve ganger pÃ¥ banen), sÃ¥ fornavnet
-    // ble kuttet midt i: Â«Daniel Nâ€¦Â». Etternavnet identifiserer spilleren
-    // bedre pÃ¥ like liten plass. Fullt navn ligger fortsatt i aria-label og i
-    // sidepanelet.
-    const chipName = playerName.split(" ").filter(Boolean).pop() || playerName;
-    const roleName = assignment?.role?.name || "Ingen rolle";
-    const score = assignment?.fit?.matchScore ?? "â€“";
-    chip.innerHTML = `
-      <span class="chip-name">${chipName}</span>
-      <span class="chip-role">${roleName}</span>
-      <span class="chip-foot">
-        <span class="chip-pos">${slot.position}</span>
-        <span class="chip-score">${score}</span>
-      </span>
-    `;
-
-    chip.setAttribute("aria-label", `${slot.label}: ${playerName}. Dra for Ã¥ flytte, klikk for Ã¥ velge.`);
-
-    attachChipDrag(chip, slot.slotId);
-
-    elements.lineupSlots.append(chip);
-  });
-
-  // Brikkene er i DOM-en nÃ¥, sÃ¥ hÃ¸yden kan mÃ¥les og tetthetsnivÃ¥et strammes inn.
-  fitPitchDensity(formation);
-}
-
-// Drag-and-drop med pointer events: fungerer med mus og touch (ogsÃ¥ iPad).
-// Liten bevegelse tolkes som klikk (velg plass), stÃ¸rre bevegelse som flytting.
-function attachChipDrag(chip, slotId) {
-  const DRAG_THRESHOLD = 5;
-  let dragging = false;
-  let moved = false;
-  let startX = 0;
-  let startY = 0;
-  let pitchRect = null;
-  let pendingPosition = null;
-
-  function clamp(value) {
-    return Math.min(96, Math.max(4, value));
-  }
-
-  function onPointerDown(event) {
-    if (event.button !== undefined && event.button !== 0) {
-      return;
-    }
-
-    dragging = true;
-    moved = false;
-    startX = event.clientX;
-    startY = event.clientY;
-    pitchRect = elements.lineupSlots.getBoundingClientRect();
-    pendingPosition = null;
-
-    chip.classList.add("is-dragging");
-
-    try {
-      chip.setPointerCapture(event.pointerId);
-    } catch (error) {
-      // Ignorer hvis pointer capture ikke stÃ¸ttes.
-    }
-  }
-
-  function onPointerMove(event) {
-    if (!dragging || !pitchRect) {
-      return;
-    }
-
-    if (!moved && (Math.abs(event.clientX - startX) > DRAG_THRESHOLD || Math.abs(event.clientY - startY) > DRAG_THRESHOLD)) {
-      moved = true;
-    }
-
-    if (!moved) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const x = clamp(((event.clientX - pitchRect.left) / pitchRect.width) * 100);
-    const y = clamp(((event.clientY - pitchRect.top) / pitchRect.height) * 100);
-
-    pendingPosition = { x, y };
-    chip.style.left = `${x}%`;
-    chip.style.top = `${y}%`;
-  }
-
-  function onPointerUp(event) {
-    if (!dragging) {
-      return;
-    }
-
-    dragging = false;
-    chip.classList.remove("is-dragging");
-
-    try {
-      chip.releasePointerCapture(event.pointerId);
-    } catch (error) {
-      // Ignorer.
-    }
-
-    if (moved && pendingPosition) {
-      // Slipp over en annen brikke = bytt spiller/rolle mellom plassene. Dette
-      // er raskere og mer manageraktig enn Ã¥ Ã¥pne to nedtrekkslister.
-      const swapTarget = Array.from(elements.lineupSlots.querySelectorAll(".player-chip"))
-        .filter((candidate) => candidate !== chip)
-        .find((candidate) => {
-          const rect = candidate.getBoundingClientRect();
-          return event.clientX >= rect.left && event.clientX <= rect.right
-            && event.clientY >= rect.top && event.clientY <= rect.bottom;
-        });
-      const targetSlotId = swapTarget?.dataset.slotId || null;
-      if (targetSlotId && targetSlotId !== slotId) {
-        const sourceAssignment = state.lineup[slotId] || { playerId: null, roleId: null };
-        const targetAssignment = state.lineup[targetSlotId] || { playerId: null, roleId: null };
-        state.lineup[slotId] = targetAssignment;
-        state.lineup[targetSlotId] = sourceAssignment;
-        state.selectedSlotId = targetSlotId;
-        renderApp();
-        return;
-      }
-
-      state.slotPositions[slotId] = pendingPosition;
-      persistCurrentPositions();
-      // Behold valgt plass i sync slik at editoren peker pÃ¥ spilleren som ble flyttet.
-      state.selectedSlotId = slotId;
-      renderApp();
-      return;
-    }
-
-    // Ren klikk: velg plassen.
-    state.selectedSlotId = slotId;
-    renderApp();
-  }
-
-  chip.addEventListener("pointerdown", onPointerDown);
-  chip.addEventListener("pointermove", onPointerMove);
-  chip.addEventListener("pointerup", onPointerUp);
-  chip.addEventListener("pointercancel", onPointerUp);
-}
-
-function setSelectedSlotPlayer(nextPlayerId) {
-  const slot = getSelectedSlot();
-  if (!slot) return;
-
-  const player = state.players.find((item) => item.id === nextPlayerId) || null;
-  const currentRoleId = state.lineup[slot.slotId]?.roleId || null;
-  const currentRole = state.roles.find((role) => role.id === currentRoleId);
-  state.lineup[slot.slotId] = {
-    playerId: nextPlayerId || null,
-    roleId: currentRole?.validPositions.includes(slot.position)
-      ? currentRoleId
-      : getDefaultRoleForPlayer(player, slot)
-  };
-  renderApp();
-}
-
-function setSelectedSlotRole(nextRoleId) {
-  const slot = getSelectedSlot();
-  if (!slot) return;
-  state.lineup[slot.slotId] = {
-    playerId: state.lineup[slot.slotId]?.playerId || null,
-    roleId: nextRoleId || null
-  };
-  renderApp();
-}
-
-function renderDirectLineupEditor() {
-  const playerHost = elements.lineupPlayerChoices;
-  const roleHost = elements.lineupRoleChoices;
-  const slot = getSelectedSlot();
-  if (!playerHost || !roleHost || !slot) return;
-
-  const slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
-  const usedPlayerIds = getUsedPlayerIds(slot.slotId);
-  const available = getUnlockedPlayers();
-  const current = available.find((player) => player.id === slotState.playerId);
-  const choices = [current, ...available.filter((player) => player.id !== current?.id)]
-    .filter(Boolean)
-    .slice(0, 16);
-
-  playerHost.replaceChildren();
-  choices.forEach((player) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `lineup-player-card${player.id === slotState.playerId ? " is-selected" : ""}`;
-    button.disabled = usedPlayerIds.has(player.id);
-    const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions.join(" / ") : "â€“";
-    button.innerHTML = `<strong>${player.name || player.id}</strong><span>${positions}</span>`;
-    button.addEventListener("click", () => setSelectedSlotPlayer(player.id));
-    playerHost.append(button);
-  });
-
-  roleHost.replaceChildren();
-  state.roles.filter((role) => role.validPositions.includes(slot.position)).forEach((role) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `lineup-role-chip${role.id === slotState.roleId ? " is-selected" : ""}`;
-    button.textContent = role.name;
-    button.addEventListener("click", () => setSelectedSlotRole(role.id));
-    roleHost.append(button);
-  });
-}
-
-function renderSidePanel(teamFit) {
-  const slot = getSelectedSlot();
-
-  if (!slot) {
-    return;
-  }
-
-  let slotState = state.lineup[slot.slotId] || { playerId: null, roleId: null };
-
-  // Bare spillere som er tilgjengelige via History Go eller lokal starttropp kan velges.
-  const availablePlayers = getUnlockedPlayers();
-
-  // Hvis denne plassen har en spiller som ikke lenger er opplÃ¥st, fjern
-  // playerId men behold rollen, og rerender trygt.
-  if (slotState.playerId && !availablePlayers.some((player) => player.id === slotState.playerId)) {
-    slotState = { ...slotState, playerId: null };
-    state.lineup[slot.slotId] = slotState;
-  }
-
-  const assignment = teamFit?.assignments.find((item) => item.slot.slotId === slot.slotId);
-  elements.selectedSlotTitle.textContent = `${slot.label} Â· ${slot.position}`;
-  // Valget gjÃ¸res kun med spillerkort og rolleknapper ved banen.
-  // Sidepanelet forklarer den samme staten uten et parallelt skjema.
-
-  if (assignment?.fit) {
-    elements.selectedMatchScore.textContent = assignment.fit.matchScore;
-    elements.selectedFitStatus.textContent = assignment.fit.status;
-    elements.selectedFitExplanation.textContent = assignment.fit.explanation;
-  } else {
-    elements.selectedMatchScore.textContent = "â€“";
-    elements.selectedFitStatus.textContent = "Ufullstendig plass";
-    elements.selectedFitExplanation.textContent = "Velg bÃ¥de spiller og rolle for Ã¥ se om denne plassen fungerer.";
-  }
-
-  // Additivt historisk rollefit-hint: forklarer om valgt rolle passer det valgte
-  // historiske systemet. Erstatter ikke lagfit-motoren over.
-  renderHistoricalRoleHint(slot, slotState);
-  renderRoleLearningCard({ slot, slotState, assignment, teamFit });
-
-  // Dynamisk sidepanel: spillerprofil nÃ¥r plassen har en spiller, ellers en
-  // kort henvisning til Oversikt. Selve handlingene (spiller-/rollevalg) vises alltid.
-  const player =
-    assignment?.player || state.players.find((item) => item.id === slotState.playerId) || null;
-
-  if (player) {
-    if (elements.sidePanelKicker) {
-      elements.sidePanelKicker.textContent = `${slot.label} Â· ${slot.position}`;
-    }
-    if (elements.sideProfile) {
-      elements.sideProfile.hidden = false;
-    }
-    if (elements.sideDecisions) {
-      elements.sideDecisions.hidden = true;
-    }
-    renderPlayerProfile(player, slot);
-  } else {
-    if (elements.sidePanelKicker) {
-      elements.sidePanelKicker.textContent = "Velg en plass";
-    }
-    if (elements.sideProfile) {
-      elements.sideProfile.hidden = true;
-    }
-    if (elements.sideDecisions) {
-      elements.sideDecisions.hidden = false;
-    }
-  }
-}
-
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function renderRoleLearningCard({ slot, slotState, assignment, teamFit }) {
-  if (!elements.roleLearningCard) return;
-  const player = assignment?.player || state.players.find((item) => item.id === slotState?.playerId) || null;
-  const role = assignment?.role || state.roles.find((item) => item.id === slotState?.roleId) || null;
-  if (!player || !role) {
-    elements.roleLearningCard.hidden = true;
-    elements.roleLearningCard.innerHTML = "";
-    return;
-  }
-
-  const vm = createRoleLearningViewModel({
-    player,
-    role,
-    slot,
-    tactic: getTactic(),
-    roles: state.roles,
-    relationships: teamFit?.relationships || null,
-    formationKnowledge: state.formationKnowledgeById[getFormation()?.id] || null,
-    fit: assignment?.fit || null
-  });
-  if (!vm) {
-    elements.roleLearningCard.hidden = true;
-    return;
-  }
-
-  const row = (label, values, emptyText = "Ingen tydelig signal") => {
-    const items = Array.isArray(values) ? values.filter(Boolean) : [values].filter(Boolean);
-    return `
-      <div class="role-learning-row">
-        <dt>${label}</dt>
-        <dd>${escapeHtml(items.slice(0, 3).join(" Â· ") || emptyText)}</dd>
-      </div>`;
-  };
-
-  // Role Familiarity Engine v1: hvor godt denne spilleren kjenner denne rollen
-  // etter riktig bruk over kamper. Ren visning oppÃ¥ rolleforstÃ¥elseskortet.
-  const familiarity = describeRoleFamiliarity(getRoleFamiliarity(getRoleFamiliarityStore(), player.id, role.id));
-
-  elements.roleLearningCard.hidden = false;
-  elements.roleLearningCard.innerHTML = `
-    <div class="role-learning-head">
-      <div>
-        <p class="eyebrow">RolleforstÃ¥else</p>
-        <h4>${escapeHtml(vm.playerName)} som ${escapeHtml(vm.roleName)}</h4>
-      </div>
-      <span class="role-learning-badge" data-status="${escapeHtml(vm.fitLabel)}">${vm.fitScore ?? "â€“"} Â· ${escapeHtml(vm.fitLabel)}</span>
-    </div>
-    <p class="role-learning-type">${escapeHtml(vm.playerType)}</p>
-    <dl class="role-learning-list">
-      ${row("Rollen krever", vm.roleCore)}
-      ${row("Dette fÃ¥r spilleren brukt", vm.usesStrengths)}
-      ${row("Dette mister spilleren", vm.losesStrengths, vm.misuseExplanation)}
-      ${row("Relasjoner som hjelper", vm.relationNeeds)}
-      ${vm.relationWarnings.length ? row("Relasjonsvarsel", vm.relationWarnings) : ""}
-      ${vm.formationRoleHint ? row("Formasjon", [vm.formationRoleHint]) : ""}
-    </dl>
-    <div class="role-learning-familiarity" data-level="${familiarity.level}">
-      <div class="role-learning-familiarity-head">
-        <span>Rolleerfaring</span>
-        <strong>${familiarity.value} Â· ${escapeHtml(familiarity.label)}</strong>
-      </div>
-      <div class="role-learning-familiarity-meter" aria-hidden="true"><span style="width:${familiarity.value}%"></span></div>
-      <p class="role-learning-familiarity-hint">${escapeHtml(familiarity.hint)}</p>
-    </div>
-    <p class="role-learning-hint"><strong>Managerhint:</strong> ${escapeHtml(vm.managerHint)}</p>
-    ${vm.alternativeRoles.length ? `<p class="role-learning-alt">Alternativer: ${escapeHtml(vm.alternativeRoles.join(", "))}</p>` : ""}
-  `;
-}
-
-// Ferdighetsprofilen i sidepanelet.
-//
-// Den viser SPILLERENS egne sterkeste ferdigheter, sortert etter hva han faktisk
-// er god til â€” ikke etter hva plassen han tilfeldigvis stÃ¥r pÃ¥ krever. Ã˜degaard
-// har 20 i spilleforstÃ¥else enten han stÃ¥r som tier eller er feilplassert som
-// midtstopper, og profilen skal si det samme begge steder.
-//
-// Under den kommer det plassen krever OG han mangler, som konkrete ferdigheter
-// med tall. Det forklarer feilbruk uten Ã¥ felle en samlet dom: Â«CB krever
-// hodespill, han har 6Â» er et faktum om en ferdighet. Â«Ã˜degaard som CB = 46Â» er
-// en rating, og en fornÃ¦rmelse.
-//
-// Hver verdi viser dessuten HVOR den kom fra. `belagt` betyr at kilden faktisk
-// sa det om denne spilleren; `utledet` betyr at spillet har regnet seg fram.
-// Dette er 367 ekte, navngitte fotballspillere, og forskjellen mellom hva vi vet
-// og hva vi antar skal stÃ¥ i klartekst.
-const ATTRIBUTE_SOURCE_LABEL = {
-  belagt: "belagt i kilden",
-  posisjon: "fra posisjonen han spiller",
-  rolle: "fra rollene hans",
-  utledet: "utledet"
-};
-const PROFILE_TOP_SKILLS = 8;
-
-function appendAttributeRow(list, entry, { muted = false } = {}) {
-  const item = document.createElement("li");
-  item.className = "attribute-row";
-  item.dataset.source = entry.source || "utledet";
-  if (muted) item.dataset.demand = "mangler";
-  item.title = `${entry.name}: ${entry.value} av 20 â€” ${ATTRIBUTE_SOURCE_LABEL[entry.source] || entry.source || "utledet"}.`;
-
-  const name = document.createElement("span");
-  name.className = "attribute-name";
-  name.textContent = entry.name;
-
-  const bar = document.createElement("span");
-  bar.className = "attribute-bar";
-  const fill = document.createElement("span");
-  fill.className = "attribute-bar-fill";
-  fill.style.width = `${Math.round((entry.value / 20) * 100)}%`;
-  bar.appendChild(fill);
-
-  const number = document.createElement("strong");
-  number.className = "attribute-value";
-  number.textContent = entry.value;
-
-  item.append(name, bar, number);
-  list.appendChild(item);
-}
-
-function renderPlayerAttributes(player, position) {
-  const section = elements.profileAttributes;
-  const list = elements.profileAttributeList;
-  if (!section || !list) return;
-
-  const profile = player?.attributes;
-  if (!profile) {
-    section.hidden = true;
-    return;
-  }
-
-  list.innerHTML = "";
-  // Dette er han. Alltid det samme, uansett hvor han stÃ¥r.
-  for (const entry of profile.top.slice(0, PROFILE_TOP_SKILLS)) {
-    appendAttributeRow(list, entry);
-  }
-
-  // ... og det han er svakest pÃ¥. En FM-profil viser begge ender: uten den
-  // nedre er det ikke en profil, bare en liste over hÃ¸ydepunkter. At en tier
-  // takler lite er like mye informasjon som at han ser pasningen.
-  const weakest = profile.weak.slice(0, 4);
-  if (weakest.length) {
-    const heading = document.createElement("li");
-    heading.className = "attribute-subhead";
-    heading.textContent = "Svakest";
-    list.appendChild(heading);
-    for (const entry of weakest) appendAttributeRow(list, entry, { muted: true });
-  }
-
-  // Og hva plassen krever som han ikke har. Bare ferdigheter, bare tall.
-  const demands = position
-    ? describePositionDemands(profile, position, state.attributeCatalogue)
-    : null;
-  const shownIds = new Set([
-    ...profile.top.slice(0, PROFILE_TOP_SKILLS).map((entry) => entry.id),
-    ...weakest.map((entry) => entry.id)
-  ]);
-  const gaps = (demands?.missing || []).filter((entry) => !shownIds.has(entry.id)).slice(0, 4);
-  if (gaps.length) {
-    const heading = document.createElement("li");
-    heading.className = "attribute-subhead";
-    heading.textContent = `${position} krever ogsÃ¥`;
-    list.appendChild(heading);
-    for (const entry of gaps) {
-      appendAttributeRow(list, { ...entry, source: profile.provenance[entry.id] }, { muted: true });
-    }
-  }
-
-  if (elements.profileAttributeNote) {
-    const base = `${profile.sourcedCount} av ferdighetene er belagt i kilden, resten er utledet av posisjon, roller og arketype.`;
-    elements.profileAttributeNote.textContent = gaps.length
-      ? `Sterkeste ferdigheter fÃ¸rst. ${position} krever i tillegg ${gaps.map((entry) => entry.name.toLowerCase()).join(", ")} â€” se om systemet ditt dekker det. ${base}`
-      : `Sterkeste ferdigheter fÃ¸rst. ${base}`;
-  }
-  section.hidden = list.childElementCount === 0;
-}
-
-// Fyll spillerprofilen i sidepanelet: rating, navn, posisjoner, samlet History
-// Go-sted, styrker og behov. Taktisk samsvar settes allerede over (fit-boksen).
-function renderPlayerProfile(player, slot) {
-  // Sirkelen viser spillerens STERKESTE FERDIGHET, ikke en samlet score.
-  // Her sto det tidligere en posisjonsvektet klasse, og den var `overall` pÃ¥
-  // nytt: den ga Ã˜degaard 46 som midtstopper â€” en posisjon han aldri skal
-  // spille â€” og gjorde et tall om til en dom over spilleren. Ferdighetene ER
-  // scoren, sÃ¥ det er en av dem som stÃ¥r her.
-  const signature = player.attributes?.top?.[0] || null;
-  const ratingPosition = slot?.position || player.naturalPositions?.[0] || null;
-  if (elements.profileSignature) {
-    elements.profileSignature.textContent = signature ? signature.name : "";
-    elements.profileSignature.hidden = !signature;
-  }
-  renderPlayerAttributes(player, ratingPosition);
-  if (elements.profileName) {
-    elements.profileName.textContent = player.name || player.id;
-  }
-  if (elements.profilePositions) {
-    const natural = Array.isArray(player.naturalPositions) ? player.naturalPositions : [];
-    const usable = Array.isArray(player.usablePositions) ? player.usablePositions : [];
-    const parts = [];
-    if (natural.length) {
-      parts.push(natural.join(" / "));
-    }
-    if (usable.length) {
-      parts.push(`(ogsÃ¥ ${usable.join(", ")})`);
-    }
-    elements.profilePositions.textContent = parts.join(" ") || "Ingen posisjoner registrert";
-  }
-  if (elements.profileSource) {
-    const sources = getPlayerSourcePlaces(player.id);
-    elements.profileSource.textContent = sources.length
-      ? `History Go-sted: ${sources.map((place) => place.placeName).join(", ")}`
-      : "History Go-sted: ukjent kilde";
-  }
-  if (elements.profileStrengths) {
-    renderTextChips(elements.profileStrengths, player.strengths, "Ingen registrert");
-  }
-  if (elements.profileNeeds) {
-    renderTextChips(elements.profileNeeds, player.needs, "Ingen registrert");
-  }
-}
-
-// Liten hjelper: fyll en <ul> med korte tekstpunkter (eller tom-tekst).
-function renderTextChips(list, items, emptyText) {
-  list.innerHTML = "";
-  const values = Array.isArray(items) ? items.filter(Boolean) : [];
-  if (!values.length) {
-    const li = document.createElement("li");
-    li.textContent = emptyText;
-    list.append(li);
-    return;
-  }
-  values.slice(0, 5).forEach((value) => {
-    const li = document.createElement("li");
-    li.textContent = formatTagText(value);
-    list.append(li);
-  });
-}
-
-// GjÃ¸r tekniske tags lesbare: "final_pass" -> "Final pass".
-function formatTagText(value) {
-  const text = String(value).replace(/_/g, " ").trim();
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-// Additivt historisk rollefit-hint (historicalFormationRoleHint). Sammenligner
-// den valgte rollen mot valgt historisk formasjons roleRequirements/
-// preferredPlayerTypes/misusedPlayerTypes og viser en kort forklarende tekst.
-// PÃ¥virker ikke lagfit-scoren; faller tilbake til nÃ¸ytral tekst uten match.
-function renderHistoricalRoleHint(slot, slotState) {
-  if (!elements.historicalRoleHint) {
-    return;
-  }
-
-  const formation = getFormation();
-  const role = slotState?.roleId
-    ? state.roles.find((item) => item.id === slotState.roleId) || null
-    : null;
-
-  const hint = getHistoricalFormationRoleHint(formation, role, state.hgRoleTypeIndex);
-  elements.historicalRoleHint.textContent = hint.text;
-  elements.historicalRoleHint.dataset.tone = hint.tone;
-}
-
-// ----------------------------------------------------------------------------
-// Taktisk systempanel (Managerkontoret)
-// Kompakt info om den valgte historiske formasjonen rett ved banen: epoke,
-// taktisk skole, faseformasjoner, vanskelighetsgrad, nÃ¸kkelroller, de viktigste
-// prinsippene og en kort History Go-opplÃ¥singsnote. Dette er bevisst kort og
-// kamp-/taktikkrelevant â€“ det fullstendige biblioteket finnes i egen fane.
-// ----------------------------------------------------------------------------
-
-const TACTIC_DIFFICULTY_LABELS = {
-  low: "Lav",
-  medium: "Middels",
-  high: "HÃ¸y",
-  very_high: "SvÃ¦rt hÃ¸y"
-};
-
-const TACTIC_PHASE_FIELDS = [
-  { key: "baseShape", label: "Grunnform" },
-  { key: "inPossessionShape", label: "Med ball" },
-  { key: "outOfPossessionShape", label: "Uten ball" },
-  { key: "pressShape", label: "Press" },
-  { key: "lowBlockShape", label: "Lav blokk" },
-  { key: "restDefenceShape", label: "Restforsvar" }
-];
-
-// Liten chip-liste-bygger for systempanelet (kun textContent, ingen innerHTML).
-function appendTacticChips(container, items, variant) {
-  const list = document.createElement("ul");
-  list.className = `tactic-system-chips${variant ? ` tactic-system-chips-${variant}` : ""}`;
-  const values = (Array.isArray(items) ? items : []).filter(Boolean);
-
-  if (!values.length) {
-    const empty = document.createElement("li");
-    empty.className = "tactic-system-chip is-empty";
-    empty.textContent = "â€“";
-    list.append(empty);
-  } else {
-    values.forEach((value) => {
-      const chip = document.createElement("li");
-      chip.className = "tactic-system-chip";
-      chip.textContent = value;
-      list.append(chip);
-    });
-  }
-
-  container.append(list);
-}
-
-// Kort History Go-opplÃ¥singsnote for valgt formasjon. Leser trygt fra
-// unlockRules.json (tier + tema) med fallback til formation.unlockLinks. Blokker
-// ikke bruk; dette er ren visning.
-function buildFormationUnlockNote(formation) {
-  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
-  const sources = Array.isArray(state.hgUnlockRules?.unlockSources) ? state.hgUnlockRules.unlockSources : [];
-  const sourceNames = new Map(sources.map((source) => [source.id, source.name]));
-  const tierLabels = { start: "Startformasjon", early: "Tidlig", standard: "Standard", advanced: "Avansert" };
-
-  const describe = (clause) =>
-    (Array.isArray(clause) ? clause : [])
-      .map((req) => {
-        const name = sourceNames.get(req.sourceType) || req.sourceType;
-        return req.theme ? `${name}: ${req.theme}` : name;
-      })
-      .filter(Boolean);
-
-  const rule = rules.find((item) => item.appliesTo === "formation" && item.formationId === formation.id);
-
-  if (rule) {
-    const tierLabel = tierLabels[rule.tier] || rule.tier || "Standard";
-    const themes = [...describe(rule.requires?.anyOf), ...describe(rule.requires?.allOf)];
-    const themeText = themes.length ? ` Â· ${themes.slice(0, 3).join(" Â· ")}` : "";
-    return `Tilknyttet History Go (${tierLabel})${themeText}`;
-  }
-
-  const links = (Array.isArray(formation.unlockLinks) ? formation.unlockLinks : [])
-    .map((link) => {
-      const name = sourceNames.get(link.sourceType) || link.sourceType;
-      return link.theme ? `${name}: ${link.theme}` : name;
-    })
-    .filter(Boolean);
-
-  if (links.length) {
-    return `Tilknyttet History Go Â· ${links.slice(0, 3).join(" Â· ")}`;
-  }
-
-  return "Ingen spesifikk opplÃ¥singsregel registrert ennÃ¥.";
-}
-
-// Kort, lesbar beskrivelse av ett unlock-krav: "sted: Highbury (Arsenal
-// Stadium)", "spiller: PelÃ©", "trener/stab: Herbert Chapman", "badge: â€¦".
-// Krav uten konkret ref beskrives med tema. Kun visning.
-function describeUnlockRequirementShort(requirement) {
-  if (!requirement || typeof requirement !== "object") {
-    return "";
-  }
-
-  const ref = typeof requirement.ref === "string" ? requirement.ref : "";
-
-  if (!ref) {
-    return requirement.theme ? `tema: ${requirement.theme}` : "";
-  }
-
-  switch (requirement.sourceType) {
-    case "history_go_place":
-    case "sport_place":
-    case "football_stadium":
-    case "football_club":
-    case "groundhopper_place": {
-      const place = (Array.isArray(state.unlocks?.placeUnlocks) ? state.unlocks.placeUnlocks : []).find(
-        (entry) => entry?.placeId === ref
-      );
-      return `sted: ${place?.placeName || formatTagText(ref)}`;
-    }
-    case "collected_player": {
-      const player = (Array.isArray(state.players) ? state.players : []).find((entry) => entry?.id === ref);
-      return `spiller: ${player?.name || formatTagText(ref)}`;
-    }
-    case "collected_manager":
-    case "collected_staff": {
-      const member = (Array.isArray(state.staff) ? state.staff : []).find((entry) => entry?.id === ref);
-      return `trener/stab: ${member?.name || formatTagText(ref)}`;
-    }
-    case "football_badge": {
-      const badge = getBadgeCatalog().get(ref);
-      return `badge: ${badge?.name || formatTagText(ref)}`;
-    }
-    default:
-      return requirement.theme ? `tema: ${requirement.theme}` : formatTagText(ref);
-  }
-}
-
-// Unlock-kravene for Ã©n formasjon (regelens anyOf/allOf + unlockLinks).
-// Konkrete krav (med ref) prioriteres, siden de er handlingsbare for spilleren.
-function getFormationUnlockRequirements(formation) {
-  const rules = Array.isArray(state.hgUnlockRules?.rules) ? state.hgUnlockRules.rules : [];
-  const rule = rules.find((item) => item?.appliesTo === "formation" && item.formationId === formation?.id);
-  const all = [
-    ...(Array.isArray(rule?.requires?.allOf) ? rule.requires.allOf : []),
-    ...(Array.isArray(rule?.requires?.anyOf) ? rule.requires.anyOf : []),
-    ...(Array.isArray(formation?.unlockLinks) ? formation.unlockLinks : [])
-  ].filter((requirement) => requirement && typeof requirement === "object");
-
-  const concrete = all.filter((requirement) => typeof requirement.ref === "string" && requirement.ref);
-  return concrete.length ? concrete : all;
-}
-
-// Kort tilgangstekst for Ã©n formasjon. Alle formasjoner er spillbare; teksten
-// forklarer bare History Go-samlestatusen: "Samlet via sted: Highbury" for
-// oppdagede systemer, og "Fritt spillbart. Samles i History Go via â€¦" for de du
-// ennÃ¥ ikke har oppdaget. Kun visning â€“ ingen unlock-beregning.
-function buildFormationAccessText(formation) {
-  const status = formation ? getAvailability().formationStatusById.get(formation.id) : null;
-
-  if (!status) {
-    return "";
-  }
-
-  // Samlede systemer setter seg raskere â€“ si det, slik at samlebelÃ¸nningen er
-  // synlig og forklart i stedet for skjult i motoren.
-  const fasterNote = "Laget kjenner systemet â€“ raskere taktisk tilvenning.";
-
-  if (status.satisfiedBy) {
-    const source = describeUnlockRequirementShort(status.satisfiedBy);
-    return source ? `Samlet via ${source}. ${fasterNote}` : `${status.reason} ${fasterNote}`;
-  }
-  if (status.tier && FORMATION_BASELINE_TIERS.has(status.tier)) {
-    return `Grunnsystem (start-/tidligformasjon). ${fasterNote}`;
-  }
-  if (status.collected) {
-    return `${status.reason} ${fasterNote}`;
-  }
-
-  const requirements = getFormationUnlockRequirements(formation)
-    .map((requirement) => describeUnlockRequirementShort(requirement))
-    .filter(Boolean);
-
-  return requirements.length
-    ? `Fritt spillbart, men tar lengre tid Ã¥ lÃ¦re inn. Samle det i History Go via ${requirements.slice(0, 3).join(" eller ")} for raskere tilvenning.`
-    : "Fritt spillbart historisk system.";
-}
-
-function appendFormationKnowledgeList(root, label, items, className = "") {
-  const values = Array.isArray(items) ? items.filter(Boolean) : [];
-  if (!values.length) return;
-  const block = document.createElement("div");
-  block.className = `formation-knowledge-mini-block${className ? ` ${className}` : ""}`;
-  const title = document.createElement("p");
-  title.className = "formation-knowledge-mini-label";
-  title.textContent = label;
-  block.append(title);
-  const list = document.createElement("ul");
-  list.className = "formation-knowledge-mini-list";
-  values.forEach((item) => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    list.append(li);
-  });
-  block.append(list);
-  root.append(block);
-}
-
-function createFormationKnowledgeMiniCard(formation, { compact = false } = {}) {
-  const knowledge = formation ? state.formationKnowledgeById[formation.id] : null;
-  const vm = createFormationKnowledgeViewModel({
-    formation,
-    knowledge,
-    roleIndex: state.hgRoleTypeIndex,
-    opponentIndex: state.historicalOpponentIndex
-  });
-  if (!vm) return null;
-
-  const card = document.createElement("section");
-  card.className = `formation-knowledge-mini${compact ? " is-compact" : ""}`;
-  const eyebrow = document.createElement("p");
-  eyebrow.className = "formation-knowledge-mini-eyebrow";
-  eyebrow.textContent = "Formasjonskunnskap";
-  const title = document.createElement("h4");
-  title.textContent = vm.displayName;
-  const subtitle = document.createElement("p");
-  subtitle.className = "formation-knowledge-mini-subtitle";
-  subtitle.textContent = vm.subtitle;
-  const core = document.createElement("p");
-  core.className = "formation-knowledge-mini-core";
-  core.textContent = vm.corePrinciple;
-  card.append(eyebrow, title, subtitle, core);
-
-  appendFormationKnowledgeList(card, "Styrker", vm.quickStrengths, "is-strength");
-  appendFormationKnowledgeList(card, "Svakheter", vm.quickWeaknesses, "is-weakness");
-  appendFormationKnowledgeList(card, "Rollekrav", vm.roleRequirements, "is-role");
-
-  const hint = vm.managerHints[0] || vm.learningPoints[0];
-  if (hint) {
-    const managerHint = document.createElement("p");
-    managerHint.className = "formation-knowledge-mini-hint";
-    managerHint.textContent = `Managerhint: ${hint}`;
-    card.append(managerHint);
-  }
-
-  return card;
-}
-
-function renderTacticalSystemPanel() {
-  const panel = elements.tacticalSystemPanel;
-  if (!panel) {
-    return;
-  }
-
-  panel.innerHTML = "";
-  const formation = getFormation();
-
-  if (!formation) {
-    const empty = document.createElement("p");
-    empty.className = "tactic-system-empty";
-    empty.textContent = "Velg en formasjon for Ã¥ se det taktiske systemet.";
-    panel.append(empty);
-    return;
-  }
-
-  // Topplinje: epoke Â· periode Â· skole. Holder like tall (f.eks. to 3-2-2-3)
-  // tydelig adskilt fordi epoke og skole vises eksplisitt.
-  const head = document.createElement("div");
-  head.className = "tactic-system-head";
-
-  const eyebrow = document.createElement("p");
-  eyebrow.className = "tactic-system-eyebrow";
-  eyebrow.textContent = [formation.eraName, formation.eraPeriod, formation.tacticalSchool]
-    .filter(Boolean)
-    .join(" Â· ");
-  head.append(eyebrow);
-
-  const titleRow = document.createElement("div");
-  titleRow.className = "tactic-system-title";
-  const shapeBadge = document.createElement("span");
-  shapeBadge.className = "tactic-system-shape";
-  shapeBadge.textContent = formation.baseShape || "";
-  const titleText = document.createElement("h3");
-  titleText.textContent = formation.name;
-  titleRow.append(shapeBadge, titleText);
-  head.append(titleRow);
-
-  const difficulty = document.createElement("span");
-  difficulty.className = `tactic-system-diff tactic-system-diff-${formation.tacticalDifficulty || "medium"}`;
-  difficulty.textContent = `Taktisk vanskelighetsgrad: ${
-    TACTIC_DIFFICULTY_LABELS[formation.tacticalDifficulty] || formation.tacticalDifficulty || "â€“"
-  }`;
-  head.append(difficulty);
-
-  panel.append(head);
-
-  const knowledgeCard = createFormationKnowledgeMiniCard(formation);
-  if (knowledgeCard) {
-    panel.append(knowledgeCard);
-  }
-
-  const tacticKnowledge = getTacticalKnowledgeForTactic(getTactic()).slice(0, 3);
-  if (tacticKnowledge.length) {
-    const knowledgeBlock = document.createElement("div");
-    knowledgeBlock.className = "tactic-system-block";
-    const knowledgeLabel = document.createElement("p");
-    knowledgeLabel.className = "tactic-system-block-label";
-    knowledgeLabel.textContent = "Assistentens taktikkforklaring";
-    knowledgeBlock.append(knowledgeLabel);
-    tacticKnowledge.forEach((item) => {
-      const note = document.createElement("p");
-      note.className = "muted-text";
-      note.textContent = `${item.title}: ${item.explanation} Spillerkrav: ${item.requirements.join(", ")}.`;
-      knowledgeBlock.append(note);
-    });
-    panel.append(knowledgeBlock);
-  }
-
-  // Faseformasjoner: grunnform + de fem fasene i kompakte bokser.
-  const phaseGrid = document.createElement("div");
-  phaseGrid.className = "tactic-system-phases";
-  TACTIC_PHASE_FIELDS.forEach(({ key, label }) => {
-    const box = document.createElement("div");
-    box.className = "tactic-system-phase";
-    const phaseLabel = document.createElement("span");
-    phaseLabel.className = "tactic-system-phase-label";
-    phaseLabel.textContent = label;
-    const phaseValue = document.createElement("span");
-    phaseValue.className = "tactic-system-phase-value";
-    phaseValue.textContent = formation[key] || "â€“";
-    box.append(phaseLabel, phaseValue);
-    phaseGrid.append(box);
-  });
-  panel.append(phaseGrid);
-
-  // NÃ¸kkelroller (roleRequirements) med visningsnavn fra roleTypes.json.
-  const roleNames = getRoleDisplayNames(formation.roleRequirements, state.hgRoleTypeIndex);
-  const rolesBlock = document.createElement("div");
-  rolesBlock.className = "tactic-system-block";
-  const rolesLabel = document.createElement("p");
-  rolesLabel.className = "tactic-system-block-label";
-  rolesLabel.textContent = "NÃ¸kkelroller";
-  rolesBlock.append(rolesLabel);
-  appendTacticChips(rolesBlock, roleNames, "role");
-  panel.append(rolesBlock);
-
-  // 2â€“4 viktigste prinsipper.
-  const principlesBlock = document.createElement("div");
-  principlesBlock.className = "tactic-system-block";
-  const principlesLabel = document.createElement("p");
-  principlesLabel.className = "tactic-system-block-label";
-  principlesLabel.textContent = "Viktigste prinsipper";
-  principlesBlock.append(principlesLabel);
-  appendTacticChips(principlesBlock, (formation.principles || []).slice(0, 4), "principle");
-  panel.append(principlesBlock);
-
-  // Kort tilgangstekst for valgt system: hva samlingen faktisk Ã¥pnet det med
-  // ("UlÃ¥st via sted: â€¦"), eller grunntilgang. Blokkerer ikke bruk.
-  const unlockNote = document.createElement("p");
-  unlockNote.className = "tactic-system-unlock";
-  unlockNote.textContent = buildFormationAccessText(formation) || buildFormationUnlockNote(formation);
-  panel.append(unlockNote);
-
-  // Kort formasjonstilgjengelighet: hvor mange systemer er ulÃ¥st og hvordan
-  // lÃ¥ste systemer Ã¥pnes. Bevisst kort â€“ ingen ny stor visning.
-  const snapshot = getAvailability();
-  const availabilityNote = document.createElement("p");
-  availabilityNote.className = "tactic-system-availability";
-  availabilityNote.textContent =
-    `${snapshot.unlockedFormations.length} av ${state.formations.length} historiske systemer er ulÃ¥st. ` +
-    `LÃ¥ste systemer er merket "LÃ¥st" i formasjonsvalget og Ã¥pnes via History Go-samling (steder, spillere, stab) â€“ de er ikke dÃ¥rligere.`;
-  panel.append(availabilityNote);
-
-  // NÃ¦rmeste lÃ¥ste systemer med konkret opplÃ¥singskilde (sted/spiller/stab).
-  // Kort liste (maks 3) slik at spilleren ser hvorfor noe er lÃ¥st og hva som
-  // Ã¥pner det â€“ ingen ny formation picker, bare forklaring ved siden av.
-  const lockedWithSource = snapshot.lockedFormations
-    .map((locked) => ({
-      formation: locked,
-      sources: getFormationUnlockRequirements(locked)
-        .filter((requirement) => requirement.ref)
-        .map((requirement) => describeUnlockRequirementShort(requirement))
-        .filter(Boolean)
-    }))
-    .filter((entry) => entry.sources.length > 0)
-    .slice(0, 3);
-
-  if (lockedWithSource.length) {
-    const lockedBlock = document.createElement("div");
-    lockedBlock.className = "tactic-system-block";
-    const lockedLabel = document.createElement("p");
-    lockedLabel.className = "tactic-system-block-label";
-    lockedLabel.textContent = "NÃ¦rmeste lÃ¥ste systemer";
-    lockedBlock.append(lockedLabel);
-
-    const lockedList = document.createElement("ul");
-    lockedList.className = "tactic-system-locked-list";
-    lockedWithSource.forEach(({ formation: locked, sources }) => {
-      const item = document.createElement("li");
-      item.className = "tactic-system-locked-item";
-      item.textContent = `${locked.name}: Ã¥pnes via ${sources.slice(0, 2).join(" eller ")}.`;
-      lockedList.append(item);
-    });
-    lockedBlock.append(lockedList);
-    panel.append(lockedBlock);
-  }
-}
-
-// ----------------------------------------------------------------------------
-// Neste beslutninger (Fase 2)
-// Samler de viktigste Ã¥pne beslutningene pÃ¥ tvers av laget, klubbuken, innboksen
-// og History Go. Hver beslutning peker mot en konkret handling (velg plass,
-// avanser klubbuke, bytt fane). Ren UI/navigasjon â€“ ingen score- eller
-// kampmotor-effekt.
-// ----------------------------------------------------------------------------
-
-// Handling som velger en plass pÃ¥ banen og bytter til Kontoret-fanen.
-function selectSlotDecision(slotId) {
-  return () => {
-    state.selectedSlotId = slotId;
-    activateTab("tactics");
-    renderApp();
-  };
-}
-
-// Handling som aktiverer en ulÃ¥st historisk formasjon via den eksisterende
-// formasjonsflyten (samme steg som formationSelect-endring) og gÃ¥r til banen.
-function selectFormationDecision(formationId) {
-  return () => {
-    if (!isFormationUnlocked(formationId)) {
-      return;
-    }
-    state.selectedFormationId = formationId;
-    seedLineupForFormation();
-    ensurePositionsForFormation();
-    activateTab("tactics");
-    renderApp();
-  };
-}
-
-function buildNextDecisions(teamFit) {
-  const decisions = [];
-
-  if (!teamFit) {
-    return decisions;
-  }
-
-  const assignments = Array.isArray(teamFit.assignments) ? teamFit.assignments : [];
-
-  // 1) Tomme plasser i startelleveren. Fyller alle ledige plasser i ett klikk
-  //    nÃ¥r det finnes spillere; ellers velges plassen (troppen mangler spillere).
-  const emptySlots = assignments.filter((item) => !item.player);
-  if (emptySlots.length) {
-    const hasPlayersToPlace = getUnlockedPlayers().length > 0;
-    decisions.push({
-      tag: "Lag",
-      title: emptySlots.length === 1 ? "Fyll Ã©n tom plass" : `Fyll ${emptySlots.length} tomme plasser`,
-      detail: `Startelleveren mangler ${emptySlots.length} av ${teamFit.totalSlots} spillere.`,
-      action: hasPlayersToPlace
-        ? () => {
-            fillEmptyLineupSlots(true);
-            activateTab("tactics");
-            renderApp();
-          }
-        : selectSlotDecision(emptySlots[0].slot.slotId)
-    });
-  }
-
-  // 2) Feilbrukte spillere.
-  const misused = assignments.filter((item) => item.player && item.fit?.status === "feilbrukt");
-  if (misused.length) {
-    decisions.push({
-      tag: "Taktikk",
-      title: misused.length === 1 ? "Ã‰n spiller er feilbrukt" : `${misused.length} spillere er feilbrukt`,
-      detail: `${misused[0].player.name} passer dÃ¥rlig som ${misused[0].slot.position}. Bytt rolle eller posisjon.`,
-      action: selectSlotDecision(misused[0].slot.slotId)
-    });
-  }
-
-  // 3) Samme spiller brukt flere ganger.
-  const duplicateIds = new Set((teamFit.duplicatePlayers || []).map((player) => player.id));
-  if (duplicateIds.size) {
-    const duplicateAssignment = assignments.find((item) => item.player && duplicateIds.has(item.player.id));
-    if (duplicateAssignment) {
-      decisions.push({
-        tag: "Lag",
-        title: "Samme spiller stÃ¥r flere steder",
-        detail: `${duplicateAssignment.player.name} er satt opp pÃ¥ mer enn Ã©n plass. Velg en annen spiller.`,
-        action: selectSlotDecision(duplicateAssignment.slot.slotId)
-      });
-    }
-  }
-
-  // 4) Troppen mangler samlingsgrunnlag (15-spillerkravet): pek spilleren mot
-  // History Go-samlingen. Leser kun roster readiness fra availability-snapshotet.
-  const rosterReadiness = getAvailability().rosterReadiness;
-  if (!rosterReadiness.hasEnoughUnlocked || !rosterReadiness.hasEnoughBench) {
-    const gapParts = [];
-    if (rosterReadiness.missingUnlocked > 0) {
-      gapParts.push(`${rosterReadiness.missingUnlocked} spillere mangler i troppen (krav: ${REQUIRED_SQUAD_SIZE})`);
-    } else if (rosterReadiness.missingBench > 0) {
-      gapParts.push(`${rosterReadiness.missingBench} benkespillere mangler (krav: ${REQUIRED_BENCH})`);
-    }
-    decisions.push({
-      tag: "Samling",
-      title: "Samle flere spillere",
-      detail: `${gapParts.join(", ")}. BesÃ¸k/synk History Go-steder og bruk opplÃ¥ste spillere.`,
-      action: () => activateTab("historygo")
-    });
-  }
-
-  // 5) Kampdag nÃ¥r laget er kampklart (samme gating som kampdagpanelet:
-  // komplett ellever, ingen duplikater, full benk og 15-spillerkravet).
-  if (getMatchdayReadiness(teamFit).isReady && !state.matchday?.session) {
-    decisions.push({
-      tag: "Kampdag",
-      title: "Spill neste kamp",
-      detail: "Laget er kampklart. Test det historiske systemet i kamp.",
-      action: playMatchday
-    });
-  }
-
-  // 6) Historisk system ulÃ¥st via samlingen, men ikke i bruk: foreslÃ¥ Ã¥ teste
-  // det. Bruker formationStatusById (satisfiedBy) â€“ ingen egen unlock-lesing.
-  const collectedFormation = getAvailability().unlockedFormations.find((formation) => {
-    if (formation.id === state.selectedFormationId) {
-      return false;
-    }
-    const status = getAvailability().formationStatusById.get(formation.id);
-    return Boolean(status?.satisfiedBy);
-  });
-  if (collectedFormation) {
-    const source = describeUnlockRequirementShort(
-      getAvailability().formationStatusById.get(collectedFormation.id)?.satisfiedBy
-    );
-    decisions.push({
-      tag: "Taktikk",
-      title: "Test historisk system",
-      detail: `${collectedFormation.name} er ulÃ¥st${source ? ` via ${source}` : ""}. PrÃ¸v systemet pÃ¥ taktikktavla.`,
-      action: selectFormationDecision(collectedFormation.id)
-    });
-  }
-
-  // 7) Driv klubbuken videre â€” eller spill ukens kamp nÃ¥r kampdagfasen
-  // krever det (Kampdag â†” Club Week-porten).
-  if (state.clubWeekState) {
-    const phaseLabel = CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase;
-    const gate = getClubWeekMatchdayGate();
-    if (gate.isBlocked) {
-      decisions.push({
-        tag: "Klubbuke",
-        title: "Spill ukens kamp",
-        detail: `Uke ${state.clubWeekState.week} stÃ¥r i fasen Â«${phaseLabel}Â». ${gate.reason}`,
-        action: () => activateTab("kamp")
-      });
-    } else {
-      decisions.push({
-        tag: "Klubbuke",
-        title: "Driv klubbuken videre",
-        detail: `Du er i fasen Â«${phaseLabel}Â» i uke ${state.clubWeekState.week}.`,
-        action: () => {
-          advanceClubWeekPhaseAction().catch(console.error);
-        }
-      });
-    }
-  }
-
-  // 8) Uleste innbokstrÃ¥der (statiske JSON-trÃ¥der + levende kontekst-trÃ¥der).
-  const unreadThreads = getInboxAttentionCount();
-  if (unreadThreads > 0) {
-    decisions.push({
-      tag: "Innboks",
-      title: unreadThreads === 1 ? "1 ulest trÃ¥d venter" : `${unreadThreads} uleste trÃ¥der`,
-      detail: "Klubbens puls har meldinger som venter pÃ¥ et svar.",
-      action: () => activateTab("inbox")
-    });
-  }
-
-  // 9) Stab klar til Ã¥ engasjeres.
-  const hiredIds = new Set(state.teamMerits?.hiredStaffIds || []);
-  const availableToHire = getUnlockedStaff().filter((member) => !hiredIds.has(member.id));
-  if (availableToHire.length) {
-    decisions.push({
-      tag: "History Go",
-      title: availableToHire.length === 1 ? "Engasjer ny stab" : `${availableToHire.length} stab er klare`,
-      detail: `${availableToHire[0].name || availableToHire[0].id} er lÃ¥st opp og kan engasjeres.`,
-      action: () => activateTab("historygo")
-    });
-  }
-
-  // 10) Treningsprogram klart til Ã¥ startes.
-  const availablePrograms = getAvailableTrainingPrograms().filter((entry) => entry.status === "available");
-  if (availablePrograms.length) {
-    decisions.push({
-      tag: "Trening",
-      title: "Start et treningsprogram",
-      detail: `${availablePrograms.length} program kan starte badge-progresjon nÃ¥.`,
-      action: () => activateTab("historygo")
-    });
-  }
-
-  // 11) Lagets stÃ¸rste svakhet fra rapporten (informativ, ingen direkte handling).
-  const issues = teamFit.report?.issues;
-  if (Array.isArray(issues) && issues.length) {
-    decisions.push({
-      tag: "Analyse",
-      title: "FÃ¸lg opp lagets svakhet",
-      detail: issues[0],
-      action: null
-    });
-  }
-
-  if (!decisions.length) {
-    decisions.push({
-      tag: "Klart",
-      title: "Laget er klart",
-      detail: "Ingen Ã¥pne beslutninger akkurat nÃ¥. Driv klubbuken videre nÃ¥r du er klar.",
-      action: null
-    });
-  }
-
-  return decisions;
-}
-
-// Bygg ett beslutningselement. baseClass "decision-card" gir statuskort.
-// Beslutninger uten handling rendres som ikke-klikkbare kort.
-function createDecisionElement(decision, baseClass) {
-  const isCard = baseClass === "decision-card";
-  const isStatic = typeof decision.action !== "function";
-
-  const el = document.createElement(isStatic ? "div" : "button");
-  el.className = isStatic ? `${baseClass} is-static` : baseClass;
-
-  if (!isStatic) {
-    el.type = "button";
-    el.addEventListener("click", decision.action);
-  }
-
-  const tag = document.createElement("span");
-  tag.className = isCard ? "decision-card-tag" : "decision-tag";
-  tag.textContent = decision.tag;
-
-  const title = document.createElement(isCard ? "h3" : "span");
-  title.className = isCard ? "decision-card-title" : "decision-title";
-  title.textContent = decision.title;
-
-  const detail = document.createElement(isCard ? "p" : "span");
-  detail.className = isCard ? "decision-card-detail" : "decision-detail";
-  detail.textContent = decision.detail;
-
-  el.append(tag, title, detail);
-  return el;
-}
-
-// Bygg det rene kontekstobjektet som Next Action-motoren leser. Trekker kun ut
-// eksisterende state (teamFit, availability, Club Week-port, innboks, trening,
-// mini-sesong) â€” ingen ny beregning, ingen mutasjon.
-function buildNextActionContext(teamFit) {
-  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  const emptySlots = assignments.filter((item) => !item.player);
-  const misused = assignments.filter((item) => item.player && item.fit?.status === "feilbrukt");
-  const duplicateIds = new Set((teamFit?.duplicatePlayers || []).map((player) => player.id));
-  const duplicateAssignment =
-    assignments.find((item) => item.player && duplicateIds.has(item.player.id)) || null;
-
-  const rosterReadiness = getAvailability().rosterReadiness;
-  const readiness = teamFit ? getMatchdayReadiness(teamFit) : { isReady: false };
-  const gate = getClubWeekMatchdayGate();
-  const clubWeekState = state.clubWeekState || null;
-
-  const leaguePreseasonStep = isLeagueModeActive() && !isLeagueSeasonActive()
-    ? getLeagueOnboardingSteps(teamFit).find((step) => !step.done) || null
-    : null;
-  return {
-    selectedMode: state.gameStartState?.selectedMode || null,
-    hasSession: Boolean(state.matchday?.session),
-    opponentName: state.matchday?.session?.opponent?.name || null,
-    roster: {
-      enoughUnlocked: Boolean(rosterReadiness.hasEnoughUnlocked),
-      enoughBench: Boolean(rosterReadiness.hasEnoughBench),
-      unlockedCount: rosterReadiness.unlockedCount
-    },
-    lineup: {
-      totalSlots: teamFit?.totalSlots || 11,
-      emptyCount: emptySlots.length,
-      firstEmptySlotId: emptySlots[0]?.slot?.slotId || null,
-      misused: misused.length
-        ? {
-            name: misused[0].player.name,
-            position: misused[0].slot.position,
-            slotId: misused[0].slot.slotId
-          }
-        : null,
-      duplicate: duplicateAssignment
-        ? { name: duplicateAssignment.player.name, slotId: duplicateAssignment.slot.slotId }
-        : null
-    },
-    clubWeekGate: { isBlocked: Boolean(gate.isBlocked), reason: gate.reason || "" },
-    hasTrainingChoice:
-      Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId),
-    matchdayReady: Boolean(readiness.isReady),
-    unreadThreads: getInboxAttentionCount(),
-    hasUnseenReport: hasUnseenMatchReport(),
-    miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active" || isLeagueModeActive() && state.leagueSeason?.status === "active",
-    leagueModeActive: isLeagueModeActive(),
-    leagueSeasonActive: isLeagueSeasonActive(),
-    leaguePreseasonReady: isLeagueModeActive() ? isLeaguePreseasonReady(teamFit) : true,
-    leaguePreseasonStep,
-    scenarioModeActive: isScenarioModeActive(),
-    nationalModeActive: isNationalModeActive(),
-    nationalNationChosen: Boolean(getNationalTeamNationality()),
-    nationalTournamentActive: isNationalModeActive() && isTournamentActive(),
-    nationalTournamentAvailable: isNationalModeActive() && getAvailableTournaments().length > 0,
-    firstTime: isFirstTimePlaythroughActive() ? buildFirstTimeNextActionState(teamFit, readiness) : null,
-    clubWeek: clubWeekState
-      ? {
-          week: clubWeekState.week,
-          phase: clubWeekState.phase,
-          phaseLabel: CLUB_WEEK_PHASE_LABELS[clubWeekState.phase] || clubWeekState.phase
-        }
-      : null
-  };
-}
-
-// Oversett en handlingsbeskrivelse fra Next Action-motoren til en faktisk
-// klikk-handler. Selve prioriteringen bor i den rene motoren; her bor bare
-// koblingen til app-state-handlerne.
-function resolveNextActionRun(action) {
-  if (!action || typeof action !== "object") {
-    return null;
-  }
-  switch (action.type) {
-    case NEXT_ACTION_TYPES.TAB:
-      return () => activateTab(action.tab);
-    case NEXT_ACTION_TYPES.SLOT:
-      return action.slotId ? selectSlotDecision(action.slotId) : null;
-    case NEXT_ACTION_TYPES.MINI_SEASON:
-      return () => {
-        startMiniSeason();
-      };
-    case NEXT_ACTION_TYPES.LEAGUE_SEASON:
-      return () => startLeagueSeasonFromOnboarding();
-    case NEXT_ACTION_TYPES.CLUB_WEEK:
-      return () => {
-        advanceClubWeekPhaseAction().catch(console.error);
-      };
-    default:
-      return null;
-  }
-}
-
-// Playable Manager Flow Polish v1: Ã©n tydelig "neste handling" + sekundÃ¦re
-// steg, utledet av eksisterende state via den rene Next Action-motoren
-// (src/football-next-action.js). Returnerer { tag, title, hint, run }.
-function computeManagerNextActions(teamFit) {
-  const context = buildNextActionContext(teamFit);
-  return computeNextActions(context).map((descriptor) => ({
-    tag: descriptor.tag,
-    title: descriptor.title,
-    hint: descriptor.hint,
-    run: resolveNextActionRun(descriptor.action)
-  }));
-}
-
-// Render "Neste handling" i manager-footeren: Ã©n kompakt primÃ¦rhandling
-// + opptil to sekundÃ¦re steg. Faseteksten viser hvor i uka treneren er.
-// Alt er utledet av computeManagerNextActions.
-function renderNextActionStrip(teamFit) {
-  const primaryButton = elements.nextActionPrimary;
-  const secondaryContainer = elements.nextActionSecondary;
-  if (!primaryButton || !secondaryContainer) {
-    return;
-  }
-
-  // Fotballvitenskap er en lÃ¦remodul, ikke en manageruke. Â«Neste handling:
-  // skaff spillbar troppÂ» i bunnen motsa flatens eget lÃ¸fte om at ingenting her
-  // rÃ¸rer klubben din â€” og pekte pÃ¥ en flate modusen ikke engang har meny til.
-  // Vi skjuler bare stripa â€” resten av funksjonen kjÃ¸rer videre, siden den ogsÃ¥
-  // driver onboarding-skjermen og modusstatusen.
-  if (elements.nextActionStrip) {
-    elements.nextActionStrip.hidden = isTrainingModeActive();
-  }
-
-  if (elements.nextActionPhase) {
-    const week = Number(state.clubWeekState?.week) || 1;
-    const phaseLabel = state.clubWeekState
-      ? CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase
-      : "Oppsett";
-    elements.nextActionPhase.textContent = `Uke ${week} Â· ${phaseLabel}`;
-  }
-
-  renderFirstTimePlaythrough(teamFit);
-
-  const actions = computeManagerNextActions(teamFit);
-  const primary = actions[0] || {
-    tag: "Klart",
-    title: "Laget er klart",
-    hint: "Ingen Ã¥pne grep akkurat nÃ¥. Driv klubbuken videre nÃ¥r du er klar.",
-    run: null
-  };
-
-  if (elements.nextActionPrimaryTag) elements.nextActionPrimaryTag.textContent = primary.tag;
-  if (elements.nextActionPrimaryTitle) elements.nextActionPrimaryTitle.textContent = primary.title;
-  if (elements.nextActionPrimaryHint) elements.nextActionPrimaryHint.textContent = primary.hint;
-  primaryButton.disabled = typeof primary.run !== "function";
-  // Onclick-property (ikke addEventListener) hindrer at handlere hoper seg opp
-  // mellom renders.
-  primaryButton.onclick = typeof primary.run === "function" ? primary.run : null;
-
-  secondaryContainer.innerHTML = "";
-  actions.slice(1, 3).forEach((action) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "next-action-chip";
-    const tag = document.createElement("span");
-    tag.className = "next-action-chip-tag";
-    tag.textContent = action.tag;
-    const title = document.createElement("span");
-    title.className = "next-action-chip-title";
-    title.textContent = action.title;
-    button.append(tag, title);
-    if (typeof action.run === "function") {
-      button.addEventListener("click", action.run);
-    } else {
-      button.disabled = true;
-    }
-    secondaryContainer.append(button);
-  });
-}
-
-// Statuskort-strip pÃ¥ hovedskjermen. FÃ¸rste aktive beslutning fremheves.
-function renderDecisionCards(teamFit) {
-  const container = elements.decisionCards;
-  if (!container) {
-    return;
-  }
-
-  container.innerHTML = "";
-  buildNextDecisions(teamFit).slice(0, 4).forEach((decision, index) => {
-    const card = createDecisionElement(decision, "decision-card");
-    if (index === 0 && typeof decision.action === "function") {
-      card.classList.add("is-primary");
-    }
-    container.append(card);
-  });
-}
-
-// Levende status i avdelingene: innboks-puls, stallstÃ¸rrelse, medietrykk og
-// styretillit. Leser eksisterende state direkte. Trygg mot manglende elementer.
-function renderDepartments() {
-  if (elements.inboxPulseCount) {
-    // TrÃ¥der som krever oppmerksomhet nÃ¥ (i fÃ¸rste uke: ett tydelig signal).
-    elements.inboxPulseCount.textContent = String(getInboxAttentionCount());
-  }
-
-  if (elements.adminSquadCount) {
-    elements.adminSquadCount.textContent = String(getUnlockedPlayers().length);
-  }
-
-  if (elements.adminStaffCount) {
-    const count = getHiredStaff().length;
-    elements.adminStaffCount.textContent = `${count} ${count === 1 ? "ansatt" : "ansatte"}`;
-  }
-
-  renderAdminRoom();
-  renderFacilities();
-
-  const media = state.clubWeekState?.mediaPressure;
-  if (elements.marketMediaValue) {
-    elements.marketMediaValue.textContent = Number.isFinite(media) ? String(media) : "â€“";
-  }
-  if (elements.marketReputationNote && Number.isFinite(media)) {
-    elements.marketReputationNote.textContent =
-      media >= 65
-        ? "HÃ¸yt medietrykk. OmdÃ¸mmet er under press â€“ styr forventningene aktivt."
-        : media <= 40
-          ? "Lavt medietrykk. Det er rolig rundt klubben akkurat nÃ¥."
-          : "Medietrykket er normalt. OmdÃ¸mmet fÃ¸lger resultatene dine.";
-  }
-
-  renderMarketRoom();
-
-  const trust = state.clubWeekState?.boardTrust;
-  if (elements.boardTrustValue) {
-    elements.boardTrustValue.textContent = Number.isFinite(trust) ? String(trust) : "â€“";
-  }
-  if (elements.boardTrustFill && Number.isFinite(trust)) {
-    elements.boardTrustFill.style.width = `${Math.max(0, Math.min(100, trust))}%`;
-  }
-  if (elements.boardTrustNote && Number.isFinite(trust)) {
-    elements.boardTrustNote.textContent =
-      trust >= 65
-        ? "Styret har solid tillit til treneren."
-        : trust <= 35
-          ? "Styret er bekymret. Tilliten er lav â€“ det trengs resultater."
-          : "Styret fÃ¸lger utviklingen tett. Tilliten er moderat.";
-  }
-
-  renderBoardRoom();
-}
-
-// Styret v1: den fyldige styreflaten. Leser klubbstate direkte
-// (styretillit, klubbverdier, ukerytme) â€” ingen ny motor, ingen History
-// Go-progresjon. I scenario-modus vises ogsÃ¥ prÃ¸veperiodens styreforventning.
-// Fasiliteter v1: ekte, lesbar kontorflate â€” ingen ny motor. Anleggsstanden
-// avledes av verdier som allerede finnes (treningskultur, medietrykk, opplÃ¥ste
-// spillere, engasjert stab), pÃ¥ samme mÃ¥te som Styret og Klubbrom leser klubben.
-function renderFacilities() {
-  const club = state.clubWeekState || {};
-  const bandFromScore = (value, t2, t3) => {
-    const n = Number(value);
-    if (!Number.isFinite(n)) return { level: 0, label: "NivÃ¥ â€“", tone: "neutral" };
-    if (n >= t3) return { level: 3, label: "NivÃ¥ 3", tone: "good" };
-    if (n >= t2) return { level: 2, label: "NivÃ¥ 2", tone: "neutral" };
-    return { level: 1, label: "NivÃ¥ 1", tone: "warn" };
-  };
-  const bandFromCount = (count, t1, t2, t3) => {
-    if (count >= t3) return { level: 3, label: "NivÃ¥ 3", tone: "good" };
-    if (count >= t2) return { level: 2, label: "NivÃ¥ 2", tone: "neutral" };
-    if (count >= t1) return { level: 1, label: "NivÃ¥ 1", tone: "warn" };
-    return { level: 0, label: "NivÃ¥ â€“", tone: "neutral" };
-  };
-  const apply = (levelEl, statusEl, band, text) => {
-    if (levelEl) { levelEl.textContent = band.label; levelEl.dataset.tone = band.tone; }
-    if (statusEl) statusEl.textContent = text;
-  };
-
-  const culture = Number(club.trainingCulture);
-  const training = bandFromScore(culture, 45, 65);
-  apply(elements.facilityTrainingLevel, elements.facilityTrainingStatus, training,
-    !Number.isFinite(culture) ? "Treningskulturen er ikke lest ennÃ¥."
-      : culture >= 65 ? `Sterk treningskultur (${culture}) â€“ anlegget driver rask utvikling.`
-        : culture <= 40 ? `Svak treningskultur (${culture}) â€“ anlegget holder laget sÃ¥ vidt i gang.`
-          : `Treningskultur ${culture} â€“ solid grunnlag for utvikling.`);
-
-  const media = Number(club.mediaPressure);
-  const stadium = bandFromScore(media, 45, 65);
-  apply(elements.facilityStadiumLevel, elements.facilityStadiumStatus, stadium,
-    !Number.isFinite(media) ? "Medietrykket er ikke lest ennÃ¥."
-      : media >= 65 ? `Stor kampdagsramme â€“ medietrykket (${media}) fyller stadion.`
-        : media <= 40 ? `Rolig ramme â€“ lavt medietrykk (${media}).`
-          : `Medietrykk ${media} â€“ jevn kampdagsstemning.`);
-
-  const players = getUnlockedPlayers().length;
-  const academy = bandFromCount(players, 1, 8, 15);
-  apply(elements.facilityAcademyLevel, elements.facilityAcademyStatus, academy,
-    players === 0 ? "Ingen spillere hentet inn ennÃ¥ â€“ besÃ¸k steder i History Go."
-      : `${players} klassespillere i samlingen mater akademiet.`);
-
-  const staff = getHiredStaff().length;
-  const medical = bandFromCount(staff, 1, 1, 3);
-  apply(elements.facilityMedicalLevel, elements.facilityMedicalStatus, medical,
-    staff === 0 ? "Ingen stab engasjert â€“ begrenset skadeforebygging."
-      : `${staff} i staben stÃ¸tter restitusjon og skadeforebygging.`);
-
-  if (elements.facilityOverallValue) {
-    const levels = [training, stadium, academy, medical].map((b) => b.level);
-    const avg = levels.reduce((a, b) => a + b, 0) / levels.length;
-    elements.facilityOverallValue.textContent = avg >= 2.5 ? "Sterk" : avg >= 1.5 ? "Solid" : avg > 0 ? "Grunnleggende" : "â€“";
-  }
-}
-
-function renderBoardRoom() {
-  const club = state.clubWeekState;
-
-  // Styrets forventning: avledet av tilliten akkurat nÃ¥. Kort, kontekstuell
-  // retning â€” ikke en fasit, men det styret ser etter denne uka.
-  if (elements.boardExpectationNote) {
-    const miniExpectation = isScenarioModeActive() && state.miniSeason?.boardExpectation
-      ? state.miniSeason.boardExpectation
-      : null;
-    if (miniExpectation) {
-      elements.boardExpectationNote.textContent = `PrÃ¸veperioden: ${miniExpectation}`;
-    } else {
-      const trust = Number(club?.boardTrust);
-      elements.boardExpectationNote.textContent = !Number.isFinite(trust)
-        ? "Styret venter at du bygger laget og viser en tydelig retning."
-        : trust >= 65
-          ? "Styret forventer at du holder retningen og bygger videre pÃ¥ det som virker."
-          : trust <= 35
-            ? "Styret forventer tydelige grep og resultater som snur trenden."
-            : "Styret forventer jevn framgang: sett laget, tren mÃ¥lrettet og vinn kampene du bÃ¸r vinne.";
-    }
-  }
-
-  // Klubbens temperatur: styrets lesning av klubbverdiene, som lesbare signaler
-  // med retning (hÃ¸y/lav) i stedet for rÃ¥ tall alene.
-  if (elements.boardClubMetrics) {
-    elements.boardClubMetrics.innerHTML = "";
-    const metrics = [
-      { label: "Moral", value: club?.playerMorale, highGood: true },
-      { label: "Taktisk klarhet", value: club?.tacticalClarity, highGood: true },
-      { label: "Treningskultur", value: club?.trainingCulture, highGood: true },
-      { label: "Medietrykk", value: club?.mediaPressure, highGood: false }
-    ];
-    for (const metric of metrics) {
-      const value = Number(metric.value);
-      const li = document.createElement("li");
-      li.className = "board-metric";
-      const name = document.createElement("span");
-      name.className = "board-metric-label";
-      name.textContent = metric.label;
-      const num = document.createElement("strong");
-      num.className = "board-metric-value";
-      if (Number.isFinite(value)) {
-        num.textContent = String(value);
-        const strong = metric.highGood ? value >= 60 : value <= 40;
-        const weak = metric.highGood ? value <= 40 : value >= 60;
-        num.dataset.tone = strong ? "good" : weak ? "warn" : "neutral";
-      } else {
-        num.textContent = "â€“";
-        num.dataset.tone = "neutral";
-      }
-      li.append(name, num);
-      elements.boardClubMetrics.append(li);
-    }
-  }
-
-  // Ukerytme: hvor i klubbuka styret ser laget akkurat nÃ¥.
-  if (elements.boardWeekNote) {
-    const week = Number(club?.week) || 1;
-    const phaseLabel = club ? CLUB_WEEK_PHASE_LABELS[club.phase] || club.phase : "Oppsett";
-    elements.boardWeekNote.textContent = `Uke ${week} Â· ${phaseLabel} â€” styret fÃ¸lger utviklingen.`;
-  }
-}
-
-// Marked v1: markedsavdelingen. Leser klubbstate direkte (medietrykk, moral,
-// styretillit) og presenterer omdÃ¸mme, fanstemning og sponsorinteresse som
-// lesbare kvalitative signaler â€” ingen ny motor, ingen tall som ikke finnes.
-function renderMarketRoom() {
-  const club = state.clubWeekState;
-  const media = Number(club?.mediaPressure);
-  const morale = Number(club?.playerMorale);
-  const trust = Number(club?.boardTrust);
-
-  // Kommersielle signaler: de klubbverdiene som faktisk driver marked/omdÃ¸mme.
-  if (elements.marketSignals) {
-    elements.marketSignals.innerHTML = "";
-    const signals = [
-      { label: "Medietrykk", value: media, highGood: false },
-      { label: "Moral", value: morale, highGood: true },
-      { label: "Styretillit", value: trust, highGood: true }
-    ];
-    for (const signal of signals) {
-      const value = Number(signal.value);
-      const li = document.createElement("li");
-      li.className = "board-metric";
-      const name = document.createElement("span");
-      name.className = "board-metric-label";
-      name.textContent = signal.label;
-      const num = document.createElement("strong");
-      num.className = "board-metric-value";
-      if (Number.isFinite(value)) {
-        num.textContent = String(value);
-        const strong = signal.highGood ? value >= 60 : value <= 40;
-        const weak = signal.highGood ? value <= 40 : value >= 60;
-        num.dataset.tone = strong ? "good" : weak ? "warn" : "neutral";
-      } else {
-        num.textContent = "â€“";
-        num.dataset.tone = "neutral";
-      }
-      li.append(name, num);
-      elements.marketSignals.append(li);
-    }
-  }
-
-  // Fanstemning: avledet av moral og medietrykk. En lesbar temperatur, ikke et
-  // oppmÃ¸tetall â€” oppmÃ¸te-/lojalitetsmotor finnes ikke ennÃ¥.
-  if (elements.marketFanMood) {
-    if (!Number.isFinite(morale) && !Number.isFinite(media)) {
-      elements.marketFanMood.textContent = "Fanstemningen leses av moral og medietrykk.";
-    } else if (Number.isFinite(media) && media >= 65) {
-      elements.marketFanMood.textContent = "Medietrykket smitter over pÃ¥ tribunen. Fansen er utÃ¥lmodige.";
-    } else if (Number.isFinite(morale) && morale >= 60) {
-      elements.marketFanMood.textContent = "Fansen er med laget. Stemningen pÃ¥ tribunen er god.";
-    } else if (Number.isFinite(morale) && morale <= 40) {
-      elements.marketFanMood.textContent = "Lav moral demper stemningen. Fansen venter pÃ¥ et lÃ¸ft.";
-    } else {
-      elements.marketFanMood.textContent = "Fanstemningen er avventende â€” resultatene avgjÃ¸r temperaturen.";
-    }
-  }
-
-  // Sponsorinteresse: fÃ¸lger omdÃ¸mmet (styretillit + medietrykk). Kvalitativ,
-  // konkrete avtaler kobles pÃ¥ senere (Ã¦rlig merket i UI).
-  if (elements.marketSponsorNote) {
-    const calm = !Number.isFinite(media) || media < 65;
-    if (Number.isFinite(trust) && trust >= 65 && calm) {
-      elements.marketSponsorNote.textContent = "OmdÃ¸mmet er attraktivt. Sponsorinteressen er stigende.";
-    } else if ((Number.isFinite(trust) && trust <= 35) || (Number.isFinite(media) && media >= 65)) {
-      elements.marketSponsorNote.textContent = "Uro rundt klubben demper sponsorinteressen.";
-    } else {
-      elements.marketSponsorNote.textContent = "Sponsorinteressen er stabil og fÃ¸lger resultatene.";
-    }
-  }
-}
-
-// Admin v1: administrasjonen â€” den operative driften rundt laget. Leser
-// tropp-/stab-state direkte (rosterReadiness, hired staff). Ingen ny motor og
-// ingen Ã¸konomital som ikke finnes; budsjett/kontrakter er Ã¦rlig senere.
-function renderAdminRoom() {
-  const roster = getAvailability().rosterReadiness || {};
-  const staffCount = getHiredStaff().length;
-
-  if (elements.adminDriftMetrics) {
-    elements.adminDriftMetrics.innerHTML = "";
-    const metrics = [
-      { label: "Spillere i stall", value: roster.unlockedCount, threshold: REQUIRED_SQUAD_SIZE },
-      { label: "Startellever satt", value: roster.starterCount, threshold: REQUIRED_STARTERS },
-      { label: "Benk", value: roster.benchCount, threshold: REQUIRED_BENCH },
-      { label: "Stab engasjert", value: staffCount, threshold: 1 }
-    ];
-    for (const metric of metrics) {
-      const value = Number(metric.value);
-      const li = document.createElement("li");
-      li.className = "board-metric";
-      const name = document.createElement("span");
-      name.className = "board-metric-label";
-      name.textContent = metric.label;
-      const num = document.createElement("strong");
-      num.className = "board-metric-value";
-      if (Number.isFinite(value)) {
-        num.textContent = `${value}/${metric.threshold}`;
-        num.dataset.tone = value >= metric.threshold ? "good" : value <= 0 ? "warn" : "neutral";
-      } else {
-        num.textContent = `â€“/${metric.threshold}`;
-        num.dataset.tone = "warn";
-      }
-      li.append(name, num);
-      elements.adminDriftMetrics.append(li);
-    }
-  }
-
-  if (elements.adminStaffNote) {
-    elements.adminStaffNote.textContent = staffCount > 0
-      ? "Staben stÃ¸tter treningsuka og kampdagen."
-      : "Ingen stab engasjert ennÃ¥ â€” stab hentes inn via History Go-progresjon.";
-  }
-}
-
-function renderTeamSummary(teamFit) {
-  // Scorepanelet skrives fra teamFit (getTeamFit). Etter steg 7b er teamFit
-  // selv TS-beregnet nÃ¥r motoren er lastet, sÃ¥ hele Laganalyse-panelet (score,
-  // metrikker, rapport, ellever) kommer nÃ¥ fra Ã©n og samme motor â€“
-  // calculateTeamFit â€“ i stedet for Ã¥ blande inn dashboard-pipelinens setupScore.
-  if (!teamFit) {
-    return;
-  }
-
-  elements.teamStatus.textContent = getTeamStatus(teamFit);
-  elements.completeCount.textContent = `${teamFit.completeCount}/${teamFit.totalSlots}`;
-  elements.roleFitAverage.textContent = teamFit.metrics.roleFitAverage;
-  elements.tacticFitAverage.textContent = teamFit.metrics.tacticFitAverage;
-  elements.balanceScore.textContent = teamFit.metrics.balanceScore;
-  elements.restDefenseScore.textContent = teamFit.metrics.restDefenseScore;
-  elements.widthScore.textContent = teamFit.metrics.widthScore;
-  elements.depthScore.textContent = teamFit.metrics.depthScore;
-  elements.buildUpScore.textContent = teamFit.metrics.buildUpScore;
-  elements.pressScore.textContent = teamFit.metrics.pressScore;
-  elements.relationshipScore.textContent = teamFit.metrics.relationshipScore;
-}
-
-
-function getFootballBookSurfaceText(surface, { weakPoints = [], trainingAreas = [], relatedTags = [], phase = null } = {}) {
-  const engine = getLoadedManagerEngine();
-  if (!engine?.getFootballBookGameText || !Array.isArray(state.knowledgePrinciples)) {
-    return null;
-  }
-
-  const matches = engine.getFootballBookGameText({
-    principles: state.knowledgePrinciples,
-    weakPoints,
-    trainingAreas,
-    relatedTags,
-    phase,
-    surface,
-    maxResults: 1,
-  });
-
-  return matches[0]?.text || null;
-}
-
-function getTeamFitWeakPointsForBook(teamFit) {
-  const engine = getLoadedManagerEngine();
-  if (!engine?.analyzeWeakPointsFromTeamFit || !teamFit) {
-    return [];
-  }
-  return engine.analyzeWeakPointsFromTeamFit(teamFit);
-}
-
-function renderReport(teamFit) {
-  if (!teamFit) {
-    return;
-  }
-
-  const reportWeakPoints = getTeamFitWeakPointsForBook(teamFit);
-  const reportBookText = getFootballBookSurfaceText("matchReport", {
-    weakPoints: reportWeakPoints.map((weakPoint) => weakPoint.code),
-  });
-  elements.reportSummary.textContent = reportBookText
-    ? `${teamFit.report.summary} Fotballboka: ${reportBookText}`
-    : teamFit.report.summary;
-  renderList(elements.strengthsList, teamFit.report.strengths);
-  renderList(elements.issuesList, teamFit.report.issues);
-  renderCoachContextStatus(teamFit.coachContext);
-  renderRelationships(teamFit);
-}
-
-// Relasjoner mellom rollene (kun visning): gjÃ¸r relasjonsmotorens resultat
-// synlig i lagrapporten. Leser teamFit.relationships (samme kilde som
-// relationshipScore i metrikkpanelet) â€“ beregner ingenting selv. Forklarer
-// HVORFOR roller hjelper eller blokkerer hverandre, i trÃ¥d med prinsippet om
-// at relasjoner er en del av taktikken, ikke en spillerstyrke.
-function renderRelationships(teamFit) {
-  if (!elements.relationshipList || !elements.relationshipHeadline) {
-    return;
-  }
-
-  const relationships = teamFit?.relationships;
-  const positives = Array.isArray(relationships?.positiveRelations) ? relationships.positiveRelations : [];
-  const negatives = Array.isArray(relationships?.negativeRelations) ? relationships.negativeRelations : [];
-
-  elements.relationshipList.innerHTML = "";
-
-  // Ufullstendig ellever: relasjoner krever komplette rollepar for Ã¥ bety noe.
-  if (!relationships || teamFit.completeCount < teamFit.totalSlots) {
-    elements.relationshipHeadline.textContent =
-      "Fyll laget for Ã¥ se hvordan rollene stÃ¸tter hverandre.";
-    return;
-  }
-
-  const score = relationships.relationshipScore;
-  if (score >= 76) {
-    elements.relationshipHeadline.textContent =
-      `Relasjonsscore ${score}: rollene lÃ¸fter hverandre og havner oftere i riktige situasjoner.`;
-  } else if (score < 50) {
-    elements.relationshipHeadline.textContent =
-      `Relasjonsscore ${score}: flere roller mangler medspillerne de trenger for Ã¥ fungere.`;
-  } else {
-    elements.relationshipHeadline.textContent =
-      `Relasjonsscore ${score}: noen koblinger virker, andre roller stÃ¥r litt isolert.`;
-  }
-
-  const appendRelation = (relation, tone, sign) => {
-    const entry = document.createElement("article");
-    entry.className = `relationship-entry is-${tone}`;
-
-    const title = document.createElement("p");
-    title.className = "relationship-title";
-    const points = Number.isFinite(relation.points) ? ` (${sign}${relation.points})` : "";
-    title.textContent = `${relation.title}${points}`;
-    entry.append(title);
-
-    if (relation.explanation) {
-      const explanation = document.createElement("p");
-      explanation.className = "relationship-explanation";
-      explanation.textContent = relation.explanation;
-      entry.append(explanation);
-    }
-
-    elements.relationshipList.append(entry);
-  };
-
-  positives.forEach((relation) => appendRelation(relation, "positive", "+"));
-  negatives.forEach((relation) => appendRelation(relation, "negative", "âˆ’"));
-
-  if (positives.length === 0 && negatives.length === 0) {
-    const entry = document.createElement("p");
-    entry.className = "relationship-explanation muted-text";
-    entry.textContent = "Ingen tydelige relasjoner mellom rollene ennÃ¥.";
-    elements.relationshipList.append(entry);
-  }
-}
-
-// Liten coachContext-status i lagrapporten (kun visning): formasjonstilvenning,
-// trenerforstÃ¥else, taktisk lÃ¦ringsfart og stab. Ingen ny taktikktavle eller
-// stort panel â€“ bruker den eksisterende lagrapporten.
-function renderCoachContextStatus(coachContext) {
-  if (!elements.coachContextHeadline) {
-    return;
-  }
-
-  if (!coachContext) {
-    elements.coachContextHeadline.textContent =
-      "Engasjer stab for Ã¥ se hvordan trenerteamet stÃ¸tter formasjonen.";
-    [
-      elements.coachContextFamiliarity,
-      elements.coachContextUnderstanding,
-      elements.coachContextLearning,
-      elements.coachContextStaff
-    ].forEach((node) => {
-      if (node) {
-        node.textContent = "â€“";
-      }
-    });
-    return;
-  }
-
-  const report = buildCoachContextReport({ coachContext, formation: getFormation() });
-  elements.coachContextHeadline.textContent = report.headline;
-
-  if (elements.coachContextFamiliarity) {
-    elements.coachContextFamiliarity.textContent = String(coachContext.formationFamiliarity);
-  }
-  if (elements.coachContextUnderstanding) {
-    elements.coachContextUnderstanding.textContent = String(coachContext.coachUnderstanding);
-  }
-  if (elements.coachContextLearning) {
-    elements.coachContextLearning.textContent = String(coachContext.tacticalLearningSpeed);
-  }
-  if (elements.coachContextStaff) {
-    elements.coachContextStaff.textContent = String(coachContext.staffCount);
-  }
-}
-
-// ----------------------------------------------------------------------------
-// Badge-effekter i laganalysen (kun visning)
-// PR #30 koblet opptjente treningsbadges inn i lagfitmotoren, og
-// calculateTeamFit returnerer nÃ¥ badgeEffects ved siden av metrics/baseMetrics.
-// Her viser vi disse effektene i UI slik at brukeren ser hvilke badges som
-// nudger lagets metrics. Ren render â€“ ingen endring i badge-effektmotor,
-// lagfitmotor, unlock-system eller progresjon.
-// ----------------------------------------------------------------------------
-
-// Norske visningsnavn for lagmetrikkene som badge-effekter kan pÃ¥virke.
-const BADGE_EFFECT_METRIC_LABELS = {
-  individualFitAverage: "Individuell fit",
-  roleFitAverage: "Rollefit",
-  tacticFitAverage: "Taktisk fit",
-  balanceScore: "Balanse",
-  widthScore: "Bredde",
-  depthScore: "Dybde",
-  buildUpScore: "Oppbygging",
-  pressScore: "Press",
-  restDefenseScore: "Restforsvar"
-};
-
-// Norske nivÃ¥etiketter for badge-nivÃ¥ene.
-const BADGE_EFFECT_LEVEL_LABELS = { bronze: "Bronse", silver: "SÃ¸lv", gold: "Gull" };
-
-function formatBadgeEffectMetricLabel(metric) {
-  return BADGE_EFFECT_METRIC_LABELS[metric] || metric;
-}
-
-function formatBadgeEffectMetrics(metrics) {
-  return metrics
-    .map((entry) =>
-      Number.isFinite(entry.amount)
-        ? `${formatBadgeEffectMetricLabel(entry.metric)} (+${entry.amount})`
-        : formatBadgeEffectMetricLabel(entry.metric)
-    )
-    .join(", ");
-}
-
-// Bygg badge-sentrerte visningseffekter fra opptjente badges. Tar hÃ¸yeste
-// opptjente nivÃ¥ per familie (samme prioritering som lagfitmotoren bruker) og
-// regner ut familiens metrikkeffekter via den eksporterte motorfunksjonen, slik
-// at visningen alltid speiler det motoren faktisk legger oppÃ¥ metrikkene.
-function buildBadgeEffectDisplayItems() {
-  const highestByFamily = new Map();
-
-  getEarnedBadges().forEach((badge) => {
-    if (!badge || !badge.familyId) {
-      return;
-    }
-
-    const rank = BADGE_LEVEL_ORDER[badge.level] || 0;
-    const current = highestByFamily.get(badge.familyId);
-
-    if (!current || rank > (BADGE_LEVEL_ORDER[current.level] || 0)) {
-      highestByFamily.set(badge.familyId, badge);
-    }
-  });
-
-  const items = [];
-
-  highestByFamily.forEach((badge) => {
-    const familyEffects = calculateBadgeMetricEffects({
-      familyLevels: { [badge.familyId]: badge.level }
-    });
-
-    const metrics = Object.entries(familyEffects)
-      .filter(([, amount]) => Number(amount) > 0)
-      .map(([metric, amount]) => ({ metric, amount }));
-
-    if (metrics.length === 0) {
-      return;
-    }
-
-    items.push({
-      name: badge.familyName || badge.familyId,
-      level: BADGE_EFFECT_LEVEL_LABELS[badge.level] || badge.level || null,
-      summary: badge.description || null,
-      metrics
-    });
-  });
-
-  return items;
-}
-
-// Vis hvilke opptjente badges som pÃ¥virker laget, og hvilke metrics de nudger.
-// Uten aktive effekter vises en tydelig tom-tekst. Bruker textContent (ikke
-// innerHTML) for alt brukernÃ¦rt innhold.
-function renderBadgeEffects(teamFit) {
-  const panel = elements.badgeEffectsSummary;
-  if (!panel) {
-    return;
-  }
-
-  panel.innerHTML = "";
-
-  const badgeEffects = teamFit?.badgeEffects;
-  const hasActiveEffects =
-    badgeEffects &&
-    typeof badgeEffects === "object" &&
-    Object.values(badgeEffects).some((amount) => Number(amount) > 0);
-
-  if (!hasActiveEffects) {
-    // Panelet stod nesten tomt med bare Ã©n linje. Vis heller lagscoren uten
-    // badge-bonus (en konkret referanse) + hvordan badges tjenes opp, sÃ¥
-    // kolonnen er informativ i stedet for dÃ¸d plass.
-    if (Number.isFinite(teamFit?.baseTeamScore)) {
-      const base = document.createElement("p");
-      base.className = "badge-effect-meta";
-      base.textContent = `Lagscore uten badge-bonus: ${teamFit.baseTeamScore}`;
-      panel.append(base);
-    }
-    const empty = document.createElement("p");
-    empty.className = "badge-effect-empty";
-    empty.textContent =
-      "Ingen badge-effekter aktive ennÃ¥. Tren spillerne og fullfÃ¸r treningsbadges via History Go â€” opptjente badges gir smÃ¥, additive bonuser til lagets taktiske metrics her.";
-    panel.append(empty);
-    return;
-  }
-
-  // Eventuell grunnscore fÃ¸r badges og samlet bonus til lagscore vises bare hvis
-  // lagfitmotoren faktisk leverer feltene.
-  if (Number.isFinite(teamFit?.baseTeamScore)) {
-    const base = document.createElement("p");
-    base.className = "badge-effect-meta";
-    base.textContent = `Grunnscore fÃ¸r badges: ${teamFit.baseTeamScore}`;
-    panel.append(base);
-  }
-
-  if (Number.isFinite(teamFit?.teamScoreBonus) && teamFit.teamScoreBonus !== 0) {
-    const bonus = document.createElement("p");
-    bonus.className = "badge-effect-meta";
-    bonus.textContent = `Badge-bonus til lagscore: +${teamFit.teamScoreBonus}`;
-    panel.append(bonus);
-  }
-
-  // Foretrekk en badge-sentrert visning (navn + nivÃ¥). Faller tilbake til en
-  // metrikk-sentrert visning hvis vi ikke finner berikede badges, slik at
-  // panelet aldri stÃ¥r tomt nÃ¥r effekter er aktive.
-  let effects = buildBadgeEffectDisplayItems();
-
-  if (effects.length === 0) {
-    effects = Object.entries(badgeEffects)
-      .filter(([, amount]) => Number(amount) > 0)
-      .map(([metric, amount]) => ({
-        name: formatBadgeEffectMetricLabel(metric),
-        level: null,
-        summary: null,
-        metrics: [{ metric, amount: Number(amount) }]
-      }));
-  }
-
-  effects.slice(0, 6).forEach((effect) => {
-    const card = document.createElement("article");
-    card.className = "badge-effect-card";
-
-    const title = document.createElement("p");
-    title.className = "badge-effect-title";
-    title.textContent = effect.name;
-    card.append(title);
-
-    if (effect.level) {
-      const meta = document.createElement("p");
-      meta.className = "badge-effect-meta";
-      meta.textContent = `NivÃ¥: ${effect.level}`;
-      card.append(meta);
-    }
-
-    if (effect.metrics.length > 0) {
-      const metricsEl = document.createElement("p");
-      metricsEl.className = "badge-effect-metrics";
-      metricsEl.textContent = `PÃ¥virker: ${formatBadgeEffectMetrics(effect.metrics)}`;
-      card.append(metricsEl);
-    }
-
-    if (effect.summary) {
-      const summaryEl = document.createElement("p");
-      summaryEl.className = "badge-effect-meta";
-      summaryEl.textContent = effect.summary;
-      card.append(summaryEl);
-    }
-
-    panel.append(card);
-  });
-}
-
-// Kampklar-status i kampdagpanelet: grÃ¸nn "Klar for kampdag" nÃ¥r laget er
-// gyldig, ellers en tydelig forklaring pÃ¥ hva som mangler. Spill kamp-knappen
-// fÃ¸lger samme status, og deaktiveres ogsÃ¥ mens en kamp pÃ¥gÃ¥r.
-function renderMatchdayReadiness(teamFit) {
-  const el = elements.matchdayReadiness;
-  const { isReady, reasons } = getMatchdayReadiness(teamFit);
-  const session = state.matchday?.session || null;
-  const hasTrainingChoice = Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId);
-
-  if (el) {
-    if (session) {
-      el.dataset.ready = "true";
-      el.textContent = `Kamp pÃ¥gÃ¥r mot ${session.opponent?.name || "ukjent motstander"}. Ta managergrepene under.`;
-    } else {
-      el.dataset.ready = isReady ? "true" : "false";
-      el.textContent = isReady && hasTrainingChoice
-        ? "Klar for kampdag: 11 gyldige startere, minst 4 pÃ¥ benken og treningsuka er valgt."
-        : `Ikke kampklar ennÃ¥: ${[...reasons, ...(!hasTrainingChoice ? ["Velg treningsuke fÃ¸r kamp."] : [])].join(" ")}`;
-    }
-  }
-
-  if (elements.playMatchdayButton) {
-    elements.playMatchdayButton.disabled = !isReady || !hasTrainingChoice || Boolean(session);
-  }
-}
-
-// Liten hjelpemetode for meta-linjer i kampdagkortene.
-function appendMatchdayMeta(parent, text, className = "matchday-meta") {
-  const el = document.createElement("p");
-  el.className = className;
-  el.textContent = text;
-  parent.append(el);
-}
-
-function appendMatchdaySubheading(parent, text) {
-  const heading = document.createElement("h4");
-  heading.className = "matchday-subheading";
-  heading.textContent = text;
-  parent.append(heading);
-}
-
-function appendMatchdayList(parent, lines) {
-  const list = document.createElement("ul");
-  list.className = "matchday-list";
-  lines.forEach((line) => {
-    const item = document.createElement("li");
-    item.textContent = line;
-    list.append(item);
-  });
-  parent.append(list);
-}
-
-function getWeeklyTrainingChoiceLabel() {
-  if (state.weeklyTrainingProgram?.programId) {
-    const program = (Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [])
-      .find((item) => item?.id === state.weeklyTrainingProgram.programId);
-    return program?.name || state.weeklyTrainingProgram.programId;
-  }
-  const focus = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
-  return focus?.name || null;
-}
-
-function getMatchdayOpponentBrief(session) {
-  // Under en aktiv sesjon vises den faktiske motstanderen; ellers evt. neste
-  // mini-sesong-motstander. En vanlig ligakamp trekker en historisk stil-
-  // motstander ved avspark (pickHistoricalOpponentProfile), sÃ¥ vi kan ikke
-  // navngi den pÃ¥ forhÃ¥nd â€” vÃ¦r Ã¦rlig i stedet for Ã¥ love en generisk motstander
-  // spilleren aldri mÃ¸ter.
-  const opponent = session?.opponent || getMiniSeasonNextOpponent();
-  if (!opponent) {
-    return "Historisk stil-motstander Â· trekkes ved avspark";
-  }
-  const parts = [opponent.name || "Ikke valgt"];
-  if (opponent.style) parts.push(opponent.style);
-  if (opponent.archetypeName) parts.push(opponent.archetypeName);
-  return parts.join(" Â· ");
-}
-
-function getLastInboxSignalText() {
-  const thread = getActiveInboxThreads()[0];
-  if (thread?.thread?.subject) return thread.thread.subject;
-  if (thread?.thread?.title) return thread.thread.title;
-  if (thread?.latestMessage?.subject) return thread.latestMessage.subject;
-  if (thread?.latestMessage?.title) return thread.latestMessage.title;
-  return "Ingen uleste signaler â€” innboksen blokkerer ikke kampforberedelsen.";
-}
-
-function appendMatchdayNavButton(parent, label, tab) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "matchday-nav-button";
-  button.textContent = label;
-  button.addEventListener("click", () => {
-    activateTab(tab);
-    renderApp();
-  });
-  parent.append(button);
-}
-
-function renderMatchdayGate(container, teamFit) {
-  const { isReady, reasons } = getMatchdayReadiness(teamFit);
-  const session = state.matchday?.session || null;
-  const lastMatch = state.matchday?.lastMatch || null;
-  const hasTrainingChoice = Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId);
-  const formation = session?.formationSnapshot || getFormation() || {};
-  const tactic = session?.tacticSnapshot || getTactic() || {};
-  const primary = session
-    ? "Fortsett kampen"
-    : lastMatch
-      ? (hasUnseenMatchReport() ? "Se kampanalyse" : "Forbered neste kamp")
-      : isReady && hasTrainingChoice
-        ? "Spill kamp"
-        : "FullfÃ¸r forberedelser";
-
-  // NÃ¥r en ferdigspilt kamp vises som rapport (lastMatch uten aktiv sesjon), er
-  // rapporten selve innholdet. Da skal ikke pre-match-sjekklista gjentas over
-  // den â€” den viste en annen (neste/generisk) motstander enn den du nettopp
-  // spilte, og skapte forvirring. Er alt klart, hopper vi over hele gaten.
-  const showingFinishedReport = Boolean(lastMatch) && !session;
-  if (showingFinishedReport && isReady && hasTrainingChoice) {
-    return;
-  }
-
-  const gate = document.createElement("article");
-  gate.className = "matchday-gate";
-
-  const title = document.createElement("h3");
-  title.textContent = "Kampdag";
-  gate.append(title);
-
-  // Pre-match-brief vises kun nÃ¥r vi forbereder eller er midt i en kamp â€” ikke
-  // stablet over en ferdig rapport.
-  if (!showingFinishedReport) {
-    const lines = [
-      `Kampklar: ${isReady ? "ja" : "nei"}`,
-      `Motstander: ${getMatchdayOpponentBrief(session)}`,
-      `Formasjon / kampplan: ${formation.name || "Ikke valgt"}${tactic.name ? ` Â· ${tactic.name}` : ""}`,
-      `Treningsuke valgt: ${getWeeklyTrainingChoiceLabel() || "mangler"}`,
-      `Siste signal: ${getLastInboxSignalText()}`,
-      `PrimÃ¦rhandling: ${primary}`
-    ];
-    appendMatchdayList(gate, lines);
-  }
-
-  if (!isReady || !hasTrainingChoice) {
-    appendMatchdaySubheading(gate, "Dette mangler fÃ¸r kamp");
-    const missing = [...reasons];
-    if (!hasTrainingChoice) missing.push("Velg treningsprogram eller treningsfokus fÃ¸r Kamp blir primÃ¦rhandling.");
-    appendMatchdayList(gate, missing);
-    const actions = document.createElement("div");
-    actions.className = "matchday-gate-actions";
-    if (!getAvailability().rosterReadiness.hasEnoughUnlocked) appendMatchdayNavButton(actions, "GÃ¥ til History Go", "historygo");
-    if (!isReady) appendMatchdayNavButton(actions, "GÃ¥ til Lag & taktikk", "tactics");
-    if (getActiveInboxThreads().length > 0) appendMatchdayNavButton(actions, "GÃ¥ til Innboks", "inbox");
-    if (!hasTrainingChoice) appendMatchdayNavButton(actions, "GÃ¥ til Trening", "trening");
-    gate.append(actions);
-  }
-
-  container.append(gate);
-}
-
-// Norske trykk-etiketter for hendelser.
-const MATCHDAY_PRESSURE_LABELS = { low: "Lavt trykk", medium: "Middels trykk", high: "HÃ¸yt trykk" };
-
-// Tatt managergrep med tone-farget konsekvens, brukt bÃ¥de underveis og i
-// sluttrapporten.
-function appendMatchdayDecisionLog(parent, decisions, heading) {
-  if (!Array.isArray(decisions) || decisions.length === 0) {
-    return;
-  }
-
-  appendMatchdaySubheading(parent, heading);
-
-  decisions.forEach((decision) => {
-    const entry = document.createElement("div");
-    const tone = ["positive", "neutral", "negative"].includes(decision.tone) ? decision.tone : "neutral";
-    entry.className = `matchday-decision-entry is-${tone}`;
-
-    const title = document.createElement("p");
-    title.className = "matchday-decision-title";
-    title.textContent = `${decision.eventTitle}: ${decision.optionLabel}`;
-    entry.append(title);
-
-    if (decision.feedback) {
-      const feedback = document.createElement("p");
-      feedback.className = "matchday-decision-feedback";
-      feedback.textContent = decision.feedback;
-      entry.append(feedback);
-    }
-
-    parent.append(entry);
-  });
-}
-
-// Pre_match: motstanderprofil, valgt system/taktikk, kampplan og avspark.
-function renderMatchdaySessionPreMatch(container, session) {
-  const card = document.createElement("article");
-  card.className = "matchday-result-card";
-
-  appendMatchdayMeta(card, `Kampdag mot ${session.opponent?.name || "Ukjent motstander"}`);
-
-  const phase = document.createElement("p");
-  phase.className = "matchday-phase";
-  phase.textContent = "Kampplan fÃ¸r avspark";
-  card.append(phase);
-
-  const opponent = session.opponent || {};
-
-  // Playable Manager Flow Polish v1: kompakt kampbrief Ã¸verst â€” motstander, stil,
-  // nÃ¸kkelduell, Ã©n fare, Ã©n mulighet og anbefalt forberedelse + statuschip, slik
-  // at treneren intuitivt ser Â«dette er laget jeg mÃ¸ter, dette prÃ¸ver de pÃ¥, dette
-  // mÃ¥ jeg passe pÃ¥Â» fÃ¸r han graver i de fulle profilene under. Rene utdrag fra
-  // den eksisterende motstander-/matchup-dataen â€” ingen ny motor.
-  {
-    const histMatchup =
-      session.historicalMatchup && typeof session.historicalMatchup === "object" ? session.historicalMatchup : null;
-    const formationMatchup =
-      session.formationMatchup && typeof session.formationMatchup === "object" ? session.formationMatchup : null;
-    const firstText = (arr) => {
-      const item = (Array.isArray(arr) ? arr : [])[0];
-      if (!item) return null;
-      return typeof item === "string" ? item : item.text || null;
-    };
-
-    const styleParts = [];
-    if (opponent.style) styleParts.push(opponent.style);
-    if (opponent.archetypeName) styleParts.push(opponent.archetypeName);
-    if (opponent.tacticalSchool) styleParts.push(opponent.tacticalSchool);
-
-    const keyDuell = (Array.isArray(opponent.keyBattles) ? opponent.keyBattles : [])[0] || null;
-    const danger =
-      firstText(histMatchup?.vulnerabilities) ||
-      firstText(formationMatchup?.risks) ||
-      (Array.isArray(opponent.strengths) ? opponent.strengths : [])[0] ||
-      (Array.isArray(opponent.pressurePoints) ? opponent.pressurePoints : [])[0] ||
-      null;
-    const opportunity =
-      firstText(histMatchup?.advantages) ||
-      firstText(formationMatchup?.advantages) ||
-      (Array.isArray(opponent.weaknesses) ? opponent.weaknesses : [])[0] ||
-      null;
-    const prep =
-      firstText(histMatchup?.recommendedPreparation) ||
-      firstText(formationMatchup?.suggestions) ||
-      (Array.isArray(opponent.managerHints) ? opponent.managerHints : [])[0] ||
-      null;
-
-    const finalStrength = Number(session.strengthSnapshot?.finalStrength) || 0;
-    const status =
-      finalStrength < 50 ? { tone: "risk", text: "Risiko Â· lav lagstyrke" } : { tone: "ready", text: "Klar for kamp" };
-
-    const brief = document.createElement("div");
-    brief.className = "matchday-brief";
-
-    const statusChip = document.createElement("span");
-    statusChip.className = "matchday-brief-status";
-    statusChip.dataset.tone = status.tone;
-    statusChip.textContent = status.text;
-    brief.append(statusChip);
-
-    const dl = document.createElement("dl");
-    dl.className = "matchday-brief-list";
-    const row = (label, value) => {
-      if (!value) return;
-      const dt = document.createElement("dt");
-      dt.textContent = label;
-      const dd = document.createElement("dd");
-      dd.textContent = value;
-      dl.append(dt, dd);
-    };
-    row("Motstander", opponent.name || "Ukjent motstander");
-    row("Stil", styleParts.join(" Â· "));
-    row("NÃ¸kkelduell", keyDuell);
-    row("Ã‰n fare", danger);
-    row("Ã‰n mulighet", opportunity);
-    row("Anbefalt forberedelse", prep);
-    brief.append(dl);
-    card.append(brief);
-  }
-
-  // Historical Opponent Archetypes v1: nÃ¥r motstanderen er en historisk stil-
-  // profil, vis en kompakt kampforberedelses-boks (historisk stil, formasjon,
-  // taktisk skole, nÃ¸kkelduell, managerhint) FÃ˜R den ordinÃ¦re profilen. Rent
-  // tekstlig/faglig referanse â€” ingen logoer/drakter/emblemer.
-  if (opponent.archetypeName || opponent.tacticalSchool) {
-    // En ligaklubb spiller SIN EGEN stil; en scenario-/mesterskapsmotstander er
-    // en historisk arketyp. Overskriften mÃ¥ si hvilken av delene du mÃ¸ter â€”
-    // ellers ser det ut som Molde ER en historisk skole.
-    appendMatchdaySubheading(card, opponent.isClubProfile ? "Klubbens spillestil" : "Historisk stil-motstander");
-    const histLines = [];
-    if (opponent.archetypeName) histLines.push(`${opponent.isClubProfile ? "Spillestil" : "Arketyp"}: ${opponent.archetypeName}`);
-    if (opponent.era) histLines.push(`${opponent.isClubProfile ? "Tradisjon" : "Epoke"}: ${opponent.era}`);
-    if (opponent.tacticalSchool) histLines.push(`Taktisk skole: ${opponent.tacticalSchool}`);
-    if (opponent.inPossessionShape) histLines.push(`Med ball: ${opponent.inPossessionShape}`);
-    if (opponent.outOfPossessionShape) histLines.push(`Uten ball: ${opponent.outOfPossessionShape}`);
-    (Array.isArray(opponent.keyBattles) ? opponent.keyBattles : []).slice(0, 2).forEach((line) => {
-      histLines.push(`NÃ¸kkelduell: ${line}`);
-    });
-    (Array.isArray(opponent.managerHints) ? opponent.managerHints : []).slice(0, 2).forEach((line) => {
-      histLines.push(`Managerhint: ${line}`);
-    });
-    if (opponent.historicalNote) histLines.push(`${opponent.isClubProfile ? "Tradisjon" : "Historisk"}: ${opponent.historicalNote}`);
-    appendMatchdayList(card, histLines);
-
-    const opponentFormation = state.formations.find((candidate) => candidate.id === opponent.formationId) || null;
-    const opponentFormationKnowledge = opponent.formationId ? state.formationKnowledgeById[opponent.formationId] : null;
-    const opponentFormationVm = createFormationKnowledgeViewModel({
-      formation: opponentFormation,
-      knowledge: opponentFormationKnowledge,
-      roleIndex: state.hgRoleTypeIndex,
-      opponentIndex: state.historicalOpponentIndex
-    });
-    if (opponentFormationVm) {
-      appendMatchdaySubheading(card, "Formasjonen bak stilen");
-      const formationLines = [
-        `${opponentFormationVm.displayName}: ${opponentFormationVm.corePrinciple}`
-      ];
-      opponentFormationVm.matchupSignals.slice(0, 2).forEach((line) => {
-        formationLines.push(`Se etter: ${line}`);
-      });
-      if (opponentFormationVm.managerHints[0]) {
-        formationLines.push(`Managerhint: ${opponentFormationVm.managerHints[0]}`);
-      }
-      appendMatchdayList(card, formationLines);
-    }
-  }
-
-  // Stil-matchup (Historical Opponent Archetypes v1): hvordan den historiske
-  // stilen mÃ¸ter lagets ledd. Vises bare for historiske arketyper.
-  const histMatchup = session.historicalMatchup;
-  if (histMatchup && typeof histMatchup === "object") {
-    appendMatchdaySubheading(card, "Stil-matchup");
-    const hmLines = [histMatchup.summary];
-    (Array.isArray(histMatchup.advantages) ? histMatchup.advantages : []).slice(0, 2).forEach((a) => {
-      hmLines.push(`Fordel: ${a.text}`);
-    });
-    (Array.isArray(histMatchup.vulnerabilities) ? histMatchup.vulnerabilities : []).slice(0, 2).forEach((v) => {
-      hmLines.push(`SÃ¥rbarhet: ${v.text}`);
-    });
-    (Array.isArray(histMatchup.recommendedPreparation) ? histMatchup.recommendedPreparation : []).slice(0, 2).forEach((p) => {
-      hmLines.push(`Forberedelse: ${p}`);
-    });
-    appendMatchdayList(card, hmLines);
-  }
-
-  // Motstanderprofil.
-  appendMatchdaySubheading(card, "Motstanderprofil");
-  const opponentLines = [];
-  if (opponent.style) {
-    opponentLines.push(`Stil: ${opponent.style}`);
-  }
-  (Array.isArray(opponent.strengths) ? opponent.strengths : []).forEach((line) => {
-    opponentLines.push(`Styrke: ${line}`);
-  });
-  (Array.isArray(opponent.weaknesses) ? opponent.weaknesses : []).forEach((line) => {
-    opponentLines.push(`Svakhet: ${line}`);
-  });
-  (Array.isArray(opponent.pressurePoints) ? opponent.pressurePoints : []).forEach((line) => {
-    opponentLines.push(`Setter press pÃ¥: ${line}`);
-  });
-  appendMatchdayList(card, opponentLines);
-
-  // Formasjons-matchup (Formation Knowledge Engine): hvordan ditt system stÃ¥r mot
-  // motstanderens spillestil. Vises bare nÃ¥r valgt formasjon har kunnskapsoppslag.
-  const matchup = session.formationMatchup;
-  if (matchup) {
-    appendMatchdaySubheading(card, "Formasjons-matchup");
-    const leanText = matchup.lean === "favourable"
-      ? "Gunstig"
-      : matchup.lean === "risky"
-        ? "Risikabel"
-        : "Balansert";
-    const matchupLines = [`${leanText}: ${matchup.summary}`];
-    (Array.isArray(matchup.advantages) ? matchup.advantages : []).forEach((a) => {
-      matchupLines.push(`Fordel: ${a.text}`);
-    });
-    (Array.isArray(matchup.risks) ? matchup.risks : []).forEach((r) => {
-      matchupLines.push(`Risiko: ${r.text}`);
-    });
-    (Array.isArray(matchup.suggestions) ? matchup.suggestions : []).forEach((s) => {
-      matchupLines.push(`Vurder: ${s}`);
-    });
-    appendMatchdayList(card, matchupLines);
-  }
-
-  // Eget system og kampplan.
-  appendMatchdaySubheading(card, "Din kampplan");
-  const formation = session.formationSnapshot || {};
-  const formationParts = [formation.name || "Ukjent formasjon"];
-  if (formation.baseShape) formationParts.push(formation.baseShape);
-  if (formation.tacticalSchool) formationParts.push(formation.tacticalSchool);
-  const planLines = [`Formasjon: ${formationParts.join(" Â· ")}`];
-  if (session.tacticSnapshot?.name) {
-    planLines.push(`Taktikk: ${session.tacticSnapshot.name}`);
-  }
-  planLines.push(`Lagstyrke: ${Number(session.strengthSnapshot?.finalStrength) || 0}`);
-  // Role Familiarity Engine v1: gjÃ¸r den lille kontinuitetsbonusen synlig og
-  // forklart nÃ¥r den faktisk slÃ¥r ut.
-  const familiarityBonus = Number(session.strengthSnapshot?.modifiers?.roleFamiliarityBonus) || 0;
-  if (familiarityBonus > 0) {
-    planLines.push(`Rolleerfaring: +${familiarityBonus} lagstyrke fra kontinuitet i rollene`);
-  }
-  const coach = session.coachSnapshot;
-  if (coach) {
-    planLines.push(
-      `TrenerstÃ¸tte: systemforstÃ¥else ${coach.coachUnderstanding}, formasjonstilvenning ${coach.formationFamiliarity}`
-    );
-  }
-  if (session.trainingFocus) {
-    const contextNote = session.trainingFocus.contextRelevant
-      ? " Â· kontekstuelt relevant mot matchupen (ekstra uttelling)"
-      : "";
-    planLines.push(
-      `Ukens treningsfokus: ${session.trainingFocus.name} Â· staff-stÃ¸tte ${session.trainingFocus.staffSupport?.label?.toLowerCase() || "svak"} Â· ${session.trainingFocus.effectHint}${contextNote}`
-    );
-  }
-  appendMatchdayList(card, planLines);
-
-  // Svak forutsetning vises tydelig fÃ¸r avspark, uten Ã¥ blokkere.
-  const finalStrength = Number(session.strengthSnapshot?.finalStrength) || 0;
-  if (finalStrength < 50) {
-    const warning = document.createElement("p");
-    warning.className = "matchday-weak-warning";
-    warning.textContent = "Svak forutsetning: laget gÃ¥r inn i kampen med lav lagstyrke.";
-    card.append(warning);
-  }
-
-  const kickoff = document.createElement("button");
-  kickoff.type = "button";
-  kickoff.className = "matchday-kickoff-button";
-  kickoff.textContent = "Spill kamp";
-  kickoff.addEventListener("click", () => {
-    startMatchdayKickoff();
-  });
-  card.append(kickoff);
-
-  container.append(card);
-}
-
-// Event-fase: kampstatus, tidligere grep med konsekvens, aktuell hendelse og
-// managerens valgknapper.
-function renderMatchdaySessionEvent(container, session, eventIndex) {
-  const card = document.createElement("article");
-  card.className = "matchday-result-card";
-
-  appendMatchdayMeta(card, `Kamp mot ${session.opponent?.name || "Ukjent motstander"}`);
-
-  const phase = document.createElement("p");
-  phase.className = "matchday-phase";
-  phase.textContent = `Hendelse ${eventIndex + 1} av ${session.events.length}`;
-  card.append(phase);
-
-  // Stillingen. Kampen har en resultattavle nÃ¥, og den er det fÃ¸rste manageren
-  // skal se â€” alt annet (kampplan, motstanderens grep) leses i lys av den.
-  // Egen beholder, sÃ¥ live-avspillingen kan oppdatere bare denne per minutt.
-  const liveView = document.createElement("div");
-  liveView.className = "matchday-live-view";
-  appendMatchScoreboard(liveView, session);
-  card.append(liveView);
-
-  // Tidligere grep med kort konsekvens.
-  appendMatchdayDecisionLog(card, session.decisions, "Grep sÃ¥ langt");
-
-  const event = session.events[eventIndex];
-
-  // Har motstanderen justert seg, er det den viktigste nye opplysningen i
-  // kampen: planen din mÃ¥les nÃ¥ mot noe annet enn den gjorde ved avspark.
-  const adjustments = Array.isArray(session.opponentAdjustments) ? session.opponentAdjustments : [];
-  const lastAdjustment = adjustments[adjustments.length - 1] || null;
-  if (lastAdjustment) {
-    const alert = document.createElement("p");
-    alert.className = "matchday-opponent-shift";
-    alert.textContent = `${lastAdjustment.label}: ${lastAdjustment.note}`;
-    card.append(alert);
-  }
-
-  const eventCard = document.createElement("div");
-  eventCard.className = `matchday-event-card is-pressure-${event.pressure || "medium"}`;
-
-  const pressure = document.createElement("p");
-  pressure.className = "matchday-event-pressure";
-  pressure.textContent = MATCHDAY_PRESSURE_LABELS[event.pressure] || MATCHDAY_PRESSURE_LABELS.medium;
-  eventCard.append(pressure);
-
-  const title = document.createElement("h4");
-  title.className = "matchday-event-title";
-  title.textContent = event.title;
-  eventCard.append(title);
-
-  const text = document.createElement("p");
-  text.className = "matchday-event-text";
-  text.textContent = event.text;
-  eventCard.append(text);
-
-  // Beslutningen stÃ¥r for tur nÃ¥r perioden er spilt av. Ã… kunne gripe inn i et
-  // minutt du ennÃ¥ ikke har sett ville gjort avspillingen meningslÃ¸s.
-  const periodSeen = Number(session.liveMinute) >= currentPeriodEndMinute(session);
-
-  const options = document.createElement("div");
-  options.className = "matchday-decision-options";
-  (event.options || []).forEach((option) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "matchday-decision-button";
-    button.textContent = option.label;
-    button.disabled = !periodSeen;
-    button.addEventListener("click", () => {
-      chooseMatchdayDecision(option.id);
-    });
-    options.append(button);
-  });
-  eventCard.append(options);
-
-  card.append(eventCard);
-  const continueHint = document.createElement("p");
-  continueHint.className = "matchday-meta";
-  continueHint.textContent = periodSeen
-    ? "Fortsett kampen ved Ã¥ velge ett managergrep over."
-    : "Kampen pÃ¥gÃ¥r. Grepet Ã¥pner nÃ¥r perioden er spilt â€” eller hopp til pausen.";
-  card.append(continueHint);
-
-  // Kampplanen kan byttes midt i kampen. Den stÃ¥r under grepene fordi den er
-  // det stÃ¸rre taktiske valget, ikke et alternativ til hendelsen foran deg.
-  appendMatchPlanSwitcher(card, session);
-  appendMatchSubstitutions(card, session);
-  container.append(card);
-}
-
-// Hva motstanderen gjorde med kampen. Uten dette ser det ut som om planen din
-// Â«sluttet Ã¥ virkeÂ» av seg selv.
-// Byttene i sluttrapporten: hva omstillingen kostet og ga, som planbyttene.
-function appendSubstitutionLog(parent, lastMatch) {
-  const subs = Array.isArray(lastMatch?.substitutions) ? lastMatch.substitutions : [];
-  if (!subs.length) return;
-
-  appendMatchdaySubheading(parent, "Dine bytter");
-  subs.forEach((entry) => {
-    const item = document.createElement("div");
-    item.className = `matchday-decision-entry is-${entry.tone || "neutral"}`;
-    const title = document.createElement("p");
-    title.className = "matchday-decision-title";
-    title.textContent = `${entry.minute}' ${entry.outName} â†’ ${entry.inName} (${entry.roleName || entry.position})`;
-    const detail = document.createElement("p");
-    detail.className = "matchday-decision-detail";
-    detail.textContent = (entry.reasons || []).join(" ");
-    item.append(title, detail);
-    parent.append(item);
-  });
-}
-
-function appendOpponentAdjustmentLog(parent, lastMatch) {
-  const adjustments = Array.isArray(lastMatch?.opponentAdjustments) ? lastMatch.opponentAdjustments : [];
-  if (!adjustments.length) return;
-
-  appendMatchdaySubheading(parent, "Motstanderens grep");
-  adjustments.forEach((entry) => {
-    const item = document.createElement("div");
-    item.className = "matchday-decision-entry";
-    const title = document.createElement("p");
-    title.className = "matchday-decision-title";
-    title.textContent = entry.label || "Motstanderen justerte seg";
-    const detail = document.createElement("p");
-    detail.className = "matchday-decision-detail";
-    detail.textContent = entry.note || "";
-    item.append(title, detail);
-    parent.append(item);
-  });
-}
-
-// Planbyttene i sluttrapporten: hva omstillingen kostet, og hva den ga.
-// Byttet er en beslutning pÃ¥ linje med managergrepene, og skal leses som det.
-function appendMatchPlanChangeLog(parent, lastMatch) {
-  const changes = Array.isArray(lastMatch?.planChanges) ? lastMatch.planChanges : [];
-  if (!changes.length) return;
-
-  appendMatchdaySubheading(parent, "Kampplan underveis");
-
-  changes.forEach((change) => {
-    const entry = document.createElement("div");
-    entry.className = `matchday-decision-entry is-${change.tone || "neutral"}`;
-
-    const title = document.createElement("p");
-    title.className = "matchday-decision-title";
-    title.textContent = `${change.fromPlanName || "Start"} â†’ ${change.toPlanName}`;
-    entry.append(title);
-
-    const detail = document.createElement("p");
-    detail.className = "matchday-decision-detail";
-    const clarity = Number(change.effects?.tacticalClarityDelta) || 0;
-    const cost = clarity < 0 ? ` Omstillingen kostet ${Math.abs(clarity).toFixed(2)} taktisk klarhet.` : "";
-    detail.textContent = `${change.feedback || ""}${cost}`;
-    entry.append(detail);
-
-    parent.append(entry);
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Live-avspilling. Perioden er ferdig AVGJORT i motoren i det Ã¸yeblikket den
-// spilles â€” det mÃ¥ den vÃ¦re, for utfallet henger pÃ¥ grepet du nettopp tok.
-// Det som skjer her er at kampen AVDEKKES minutt for minutt, sÃ¥ manageren ser
-// den utspille seg i stedet for Ã¥ fÃ¥ fire tall servert.
-//
-// Klokka stopper nÃ¥r perioden er ferdig avdekket: da stÃ¥r beslutningen for tur.
-// ---------------------------------------------------------------------------
-const MATCH_LIVE_SPEEDS = [
-  { id: "rolig", label: "Rolig", msPerMinute: 260 },
-  { id: "normal", label: "Normal", msPerMinute: 130 },
-  { id: "rask", label: "Rask", msPerMinute: 45 }
-];
-
-let matchLiveTimer = null;
-
-function getMatchLiveSpeed() {
-  return MATCH_LIVE_SPEEDS.find((speed) => speed.id === state.matchLiveSpeedId) || MATCH_LIVE_SPEEDS[1];
-}
-
-// Hvor langt ut i kampen perioden som nettopp ble spilt rekker.
-function currentPeriodEndMinute(session) {
-  const timeline = Array.isArray(session?.timeline) ? session.timeline : [];
-  const last = timeline[timeline.length - 1];
-  return last?.range?.to ?? last?.minute ?? 0;
-}
-
-function isMatchLiveRunning() {
-  return matchLiveTimer !== null;
-}
-
-function stopMatchLive() {
-  if (matchLiveTimer !== null) {
-    clearInterval(matchLiveTimer);
-    matchLiveTimer = null;
-  }
-}
-
-// Start avdekkingen av perioden som nettopp ble spilt.
-function startMatchLive() {
-  stopMatchLive();
-  const session = state.matchday?.session;
-  if (!session || session.phase === "resolved") return;
-  const target = currentPeriodEndMinute(session);
-  if (Number(session.liveMinute) >= target) {
-    renderMatchLive();
-    return;
-  }
-  const { msPerMinute } = getMatchLiveSpeed();
-  matchLiveTimer = setInterval(() => {
-    const live = state.matchday?.session;
-    if (!live) { stopMatchLive(); return; }
-    const end = currentPeriodEndMinute(live);
-    live.liveMinute = Math.min(end, Number(live.liveMinute || 0) + 1);
-    if (live.liveMinute >= end) {
-      stopMatchLive();
-      saveMatchdayState();
-      // Perioden er sett: nÃ¥ skal beslutningen fram, sÃ¥ hele kortet tegnes pÃ¥ nytt.
-      renderApp();
-      return;
-    }
-    renderMatchLive();
-  }, msPerMinute);
-  renderMatchLive();
-}
-
-// Hopp til slutten av perioden. Manageren skal aldri mÃ¥tte vente pÃ¥ klokka.
-function skipMatchLive() {
-  stopMatchLive();
-  const session = state.matchday?.session;
-  if (!session) return;
-  session.liveMinute = currentPeriodEndMinute(session);
-  saveMatchdayState();
-  renderApp();
-}
-
-function toggleMatchLive() {
-  if (isMatchLiveRunning()) {
-    stopMatchLive();
-    renderApp();
-    return;
-  }
-  startMatchLive();
-}
-
-function setMatchLiveSpeed(speedId) {
-  state.matchLiveSpeedId = speedId;
-  if (isMatchLiveRunning()) startMatchLive();
-  else renderApp();
-}
-
-// Oppdater KUN kampbildet mellom minuttene. renderApp() pÃ¥ hvert minutt ville
-// bygget hele skjermen pÃ¥ nytt og gjort avspillingen hakkete.
-function renderMatchLive() {
-  const session = state.matchday?.session;
-  // Klasse, ikke id: beholderen lages av JS og finnes ikke i index.html.
-  const host = document.querySelector(".matchday-live-view");
-  if (!session || !host) return;
-  host.replaceChildren();
-  appendMatchScoreboard(host, session);
-}
-
-// Stillingen slik den stÃ¥r i det minuttet som er avdekket.
-function visibleScore(session) {
-  const visible = visibleMinuteLog(session);
-  const last = [...visible].reverse().find((entry) => entry.scoreAfter);
-  if (last) return { ...last.scoreAfter };
-  // Ingenting avdekket ennÃ¥: kampen stÃ¥r 0-0 til fÃ¸rste hendelse spilles av.
-  const live = Number(session?.liveMinute);
-  if (Number.isFinite(live) && live > 0) return { for: 0, against: 0 };
-  return session?.score || { for: 0, against: 0 };
-}
-
-// Hvilke minutter er avdekket? Er kampen ferdig, vises alt.
-function visibleMinuteLog(session) {
-  const log = Array.isArray(session?.minuteLog) ? session.minuteLog : [];
-  // En FERDIG kamp (`lastMatch`) har ikke klokke: den bÃ¦rer `outcome`, ikke
-  // `liveMinute`. Uten dette falt hele loggen bort i sluttrapporten, og
-  // overskriften Â«Kampen minutt for minuttÂ» sto igjen med ingenting under seg.
-  // Avdekkingsregelen gjelder bare mens kampen faktisk spilles av.
-  if (session?.outcome || session?.phase === "resolved") return log;
-  const live = Number(session?.liveMinute);
-  if (!Number.isFinite(live) || live <= 0) return [];
-  return log.filter((entry) => Number(entry.minute) <= live);
-}
-
-// Resultattavla med tidslinje: stillingen nÃ¥, og nÃ¥r mÃ¥lene falt.
-function appendMatchScoreboard(parent, session) {
-  const timeline = Array.isArray(session.timeline) ? session.timeline : [];
-  // Stillingen skal fÃ¸lge AVSPILLINGEN, ikke fasiten. Viste vi sluttstillingen
-  // fra fÃ¸rste minutt, avslÃ¸rte tavla mÃ¥let fÃ¸r du rakk Ã¥ se det falle.
-  const score = visibleScore(session);
-
-  const board = document.createElement("div");
-  board.className = "matchday-scoreboard";
-
-  const line = document.createElement("p");
-  line.className = "matchday-score";
-  const diff = Number(score.for) - Number(score.against);
-  line.dataset.state = diff > 0 ? "leading" : diff < 0 ? "behind" : "level";
-  line.textContent = `${session.teamName || "Ditt lag"} ${score.for} â€“ ${score.against} ${session.opponent?.name || "Motstander"}`;
-  board.append(line);
-
-  // Kampklokka. Under avspilling teller den, og stopper nÃ¥r perioden er sett.
-  const live = Number(session.liveMinute) || 0;
-  const periodEnd = currentPeriodEndMinute(session);
-  const played = timeline[timeline.length - 1];
-  if (played) {
-    const clock = document.createElement("p");
-    clock.className = "matchday-clock";
-    const running = isMatchLiveRunning();
-    clock.textContent = live > 0 && live < periodEnd
-      ? `${live}' â€” kampen pÃ¥gÃ¥r`
-      : `${live || played.minute}' Â· ${played.note}`;
-    // Notaten oppsummerer perioden, og skal bare stÃ¥ nÃ¥r perioden ER sett.
-    if (running) clock.dataset.running = "true";
-    board.append(clock);
-  }
-
-  parent.append(board);
-  appendMatchFlow(parent, session);
-  appendMatchLiveControls(parent, session);
-  appendMatchMinuteLog(parent, session);
-}
-
-function appendMatchFlow(parent, session) {
-  const snapshot = createMatchFlowSnapshot(session, visibleMinuteLog(session));
-  const panel = document.createElement("section");
-  panel.className = "match-flow";
-  panel.setAttribute("aria-label", "Kampbilde og momentum");
-
-  const head = document.createElement("div");
-  head.className = "match-flow-head";
-  const title = document.createElement("strong");
-  title.textContent = "Kampbildet";
-  const momentum = document.createElement("span");
-  momentum.className = "match-flow-momentum";
-  momentum.dataset.tone = snapshot.tone;
-  momentum.textContent = snapshot.momentum;
-  head.append(title, momentum);
-
-  const zones = document.createElement("div");
-  zones.className = "match-flow-zones";
-  zones.innerHTML = `
-    <span class="is-defensive" style="--zone-share:${snapshot.defensiveShare}%"><small>Egen tredel</small></span>
-    <span class="is-neutral" style="--zone-share:${snapshot.neutralShare}%"><small>Midtbane</small></span>
-    <span class="is-attacking" style="--zone-share:${snapshot.attackingShare}%"><small>Siste tredel</small></span>
-  `;
-
-  const hint = document.createElement("p");
-  hint.className = "match-flow-hint";
-  hint.textContent = snapshot.minute > 0
-    ? `Basert pÃ¥ sjanser og mÃ¥l som er avdekket til ${snapshot.minute}. minutt.`
-    : "Kampbildet formes nÃ¥r sjanser og mÃ¥l avdekkes.";
-  panel.append(head, zones, hint);
-  parent.append(panel);
-}
-
-// Kontrollene for avspillingen: pause, hastighet og Â«hopp til sluttenÂ».
-// Manageren skal aldri mÃ¥tte vente pÃ¥ klokka for Ã¥ ta et grep.
-function appendMatchLiveControls(parent, session) {
-  if (session.phase === "resolved") return;
-  const periodEnd = currentPeriodEndMinute(session);
-  const live = Number(session.liveMinute) || 0;
-  if (periodEnd <= 0) return;
-
-  const bar = document.createElement("div");
-  bar.className = "matchday-live-controls";
-
-  if (live < periodEnd) {
-    const toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "matchday-live-button";
-    toggle.textContent = isMatchLiveRunning() ? "Pause" : "Spill av";
-    toggle.addEventListener("click", toggleMatchLive);
-    bar.append(toggle);
-
-    const skip = document.createElement("button");
-    skip.type = "button";
-    skip.className = "matchday-live-button is-secondary";
-    skip.textContent = "Hopp til pausen";
-    skip.addEventListener("click", skipMatchLive);
-    bar.append(skip);
-  }
-
-  const speeds = document.createElement("div");
-  speeds.className = "matchday-live-speeds";
-  MATCH_LIVE_SPEEDS.forEach((speed) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `matchday-live-speed${getMatchLiveSpeed().id === speed.id ? " is-active" : ""}`;
-    button.textContent = speed.label;
-    button.addEventListener("click", () => setMatchLiveSpeed(speed.id));
-    speeds.append(button);
-  });
-  bar.append(speeds);
-
-  parent.append(bar);
-}
-
-// Kampen minutt for minutt: hver sjanse, hvert mÃ¥l, hvert grep â€” i ett spor.
-// Perioder ga fire tall; dette er kampen slik den faktisk ble spilt.
-const MINUTE_LOG_TYPE_LABELS = {
-  goal: "MÃ…L",
-  chance: "Sjanse",
-  decision: "Grep",
-  plan: "Kampplan",
-  opponent: "Motstander",
-  substitution: "Innbytte"
-};
-
-function appendMatchMinuteLog(parent, session) {
-  // Bare minuttene som faktisk er spilt av. Under avspilling vokser loggen
-  // mens du ser pÃ¥; er kampen ferdig, vises hele kampen.
-  const log = visibleMinuteLog(session);
-  if (!log.length) return;
-
-  const wrap = document.createElement("details");
-  wrap.className = "matchday-minutes";
-  // Ã…pen som standard: kampen er det manageren vil se.
-  wrap.open = state.matchMinuteLogOpen !== false;
-  wrap.addEventListener("toggle", () => { state.matchMinuteLogOpen = wrap.open; });
-
-  const summary = document.createElement("summary");
-  const goals = log.filter((entry) => entry.type === "goal").length;
-  const chances = log.filter((entry) => entry.type === "chance").length;
-  summary.textContent = `Kampen minutt for minutt Â· ${goals} mÃ¥l, ${chances} sjanser`;
-  wrap.append(summary);
-
-  const list = document.createElement("ol");
-  list.className = "matchday-minute-list";
-  // Nyeste nederst, som en ekte kamplogg.
-  [...log].sort((a, b) => a.minute - b.minute).forEach((entry) => {
-    const item = document.createElement("li");
-    item.className = `matchday-minute is-${entry.type} is-${entry.side}`;
-
-    const minute = document.createElement("span");
-    minute.className = "matchday-minute-clock";
-    minute.textContent = `${entry.minute}'`;
-
-    const body = document.createElement("span");
-    body.className = "matchday-minute-text";
-    if (entry.type === "goal") {
-      // MÃ¥lene tilhÃ¸rer noen nÃ¥. Egne mÃ¥l har en scorer og som regel en
-      // mÃ¥lgivende; motstanderens har det ikke â€” vi kjenner ikke troppen deres.
-      const who = entry.side === "for"
-        ? entry.scorer
-          ? entry.assist ? `MÃ¥l: ${entry.scorer} (${entry.assist})` : `MÃ¥l: ${entry.scorer}`
-          : "MÃ¥l for laget"
-        : "MÃ¥l imot";
-      body.textContent = `${who} â€” ${entry.scoreAfter.for}â€“${entry.scoreAfter.against}`;
-    } else if (entry.type === "substitution") {
-      body.textContent = `Innbytte: ${entry.detail || ""}`;
-    } else if (entry.type === "chance") {
-      const who = entry.side === "for" ? "Sjanse" : "Sjanse imot";
-      body.textContent = `${who}: ${entry.detail}`;
-    } else {
-      body.textContent = entry.detail || MINUTE_LOG_TYPE_LABELS[entry.type] || "";
-    }
-
-    item.append(minute, body);
-    list.append(item);
-  });
-  wrap.append(list);
-  parent.append(wrap);
-}
-
-// Bytt kampplan underveis. Viser kampbildet slik det leses nÃ¥, gjeldende plan,
-// og planene rangert etter hva som passer situasjonen â€” med prisen synlig.
-function appendMatchPlanSwitcher(card, session) {
-  const plans = Array.isArray(state.tactics) ? state.tactics : [];
-  if (!plans.length) return;
-
-  const currentId = session.activePlanSnapshot?.id || session.selectedTacticId || null;
-  const currentPlan = plans.find((plan) => plan.id === currentId) || null;
-  const gameState = readGameState(session);
-
-  const wrap = document.createElement("details");
-  wrap.className = "match-plan-switcher";
-  wrap.open = Boolean(state.matchPlanSwitcherOpen);
-  wrap.addEventListener("toggle", () => { state.matchPlanSwitcherOpen = wrap.open; });
-
-  const summary = document.createElement("summary");
-  const standing = gameState.scoreKnown
-    ? `${gameState.label} ${gameState.score.for}â€“${gameState.score.against}`
-    : gameState.label;
-  summary.textContent = `Kampplan: ${currentPlan?.name || "ikke valgt"} Â· ${standing}`;
-  wrap.append(summary);
-
-  const lead = document.createElement("p");
-  lead.className = "muted-text match-plan-lead";
-  const matchupNow = session.planMatchup?.verdict;
-  const matchupNote = matchupNow && matchupNow !== "nÃ¸ytral"
-    ? ` Slik de spiller nÃ¥, er planen din ${matchupNow} mot dem.`
-    : "";
-  lead.textContent = `${currentPlan?.intent ? currentPlan.intent + " " : ""}${matchupNote} Et bytte koster omstilling â€“ laget mÃ¥ finne formen pÃ¥ nytt.`.trim();
-  wrap.append(lead);
-
-  const changes = Array.isArray(session.planChanges) ? session.planChanges : [];
-  if (changes.length) {
-    const log = document.createElement("ul");
-    log.className = "match-plan-log";
-    changes.forEach((change) => {
-      const item = document.createElement("li");
-      item.className = `is-${change.tone || "neutral"}`;
-      const head = document.createElement("strong");
-      head.textContent = `${change.fromPlanName || "Start"} â†’ ${change.toPlanName}`;
-      const why = document.createElement("span");
-      why.textContent = change.feedback || "";
-      item.append(head, why);
-      log.append(item);
-    });
-    wrap.append(log);
-  }
-
-  const list = document.createElement("div");
-  list.className = "match-plan-options";
-  const ranked = rankPlansForSituation(plans, {
-    currentPlan,
-    gameState: gameState.state,
-    opponent: session.opponent
-  });
-
-  ranked.forEach((entry) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `match-plan-option${entry.isCurrent ? " is-current" : ""}${entry.fitsGameState ? " is-fitting" : ""}`;
-    button.disabled = entry.isCurrent;
-
-    const name = document.createElement("strong");
-    name.textContent = entry.plan.name;
-    const intent = document.createElement("small");
-    intent.textContent = entry.plan.intent;
-
-    const meta = document.createElement("span");
-    meta.className = "match-plan-meta";
-    const bits = [];
-    if (entry.isCurrent) bits.push("Aktiv nÃ¥");
-    else bits.push(entry.fitsGameState ? "Passer bildet" : "For et annet bilde");
-    if (!entry.isCurrent) {
-      bits.push(entry.distance >= 55 ? "stor omstilling" : entry.distance >= 25 ? "merkbar omstilling" : "liten omstilling");
-    }
-    if (entry.matchupVerdict !== "nÃ¸ytral") bits.push(`${entry.matchupVerdict} mot dem`);
-    meta.textContent = bits.join(" Â· ");
-
-    button.append(name, intent, meta);
-    if (!entry.isCurrent) {
-      button.addEventListener("click", () => switchMatchPlanDuringMatch(entry.plan.id));
-    }
-    list.append(button);
-  });
-  wrap.append(list);
-  card.append(wrap);
-}
-
-// Innbytte underveis. Benken har alltid vÃ¦rt et krav (fire spillere fÃ¸r du fÃ¥r
-// spille) uten Ã¥ vÃ¦re en mulighet â€” de kom aldri inn. Her er de.
-//
-// Flyten er to steg, som pÃ¥ ekte: velg hvem som skal AV, sÃ¥ ser du hvem pÃ¥
-// benken som passer den plassen best. Rangeringen er rÃ¥d, ikke automatikk.
-function appendMatchSubstitutions(card, session) {
-  const { bench, onPitch, remaining } = availableSubstitutions(session);
-  if (!Array.isArray(onPitch) || onPitch.length === 0) return;
-
-  const wrap = document.createElement("details");
-  wrap.className = "match-subs";
-  wrap.open = Boolean(state.matchSubsOpen);
-  wrap.addEventListener("toggle", () => { state.matchSubsOpen = wrap.open; });
-
-  const summary = document.createElement("summary");
-  summary.textContent = `Innbytte Â· ${remaining} av ${MAX_SUBSTITUTIONS} igjen`;
-  wrap.append(summary);
-
-  const done = Array.isArray(session.substitutions) ? session.substitutions : [];
-  if (done.length) {
-    const log = document.createElement("ul");
-    log.className = "match-subs-log";
-    done.forEach((entry) => {
-      const item = document.createElement("li");
-      item.className = `is-${entry.tone || "neutral"}`;
-      const head = document.createElement("strong");
-      head.textContent = `${entry.minute}' ${entry.outName} â†’ ${entry.inName}`;
-      const why = document.createElement("span");
-      why.textContent = entry.reasons?.[0] || "";
-      item.append(head, why);
-      log.append(item);
-    });
-    wrap.append(log);
-  }
-
-  if (remaining <= 0) {
-    const spent = document.createElement("p");
-    spent.className = "muted-text";
-    spent.textContent = "Byttekvoten er brukt opp. Laget du har pÃ¥ banen er laget du avslutter med.";
-    wrap.append(spent);
-    card.append(wrap);
-    return;
-  }
-  if (bench.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Ingen pÃ¥ benken som kan komme inn.";
-    wrap.append(empty);
-    card.append(wrap);
-    return;
-  }
-
-  // Steg 1: hvem gÃ¥r av?
-  const outRow = document.createElement("div");
-  outRow.className = "match-subs-out";
-  const outLabel = document.createElement("p");
-  outLabel.className = "muted-text";
-  outLabel.textContent = "Hvem gÃ¥r av?";
-  outRow.append(outLabel);
-
-  const outList = document.createElement("div");
-  outList.className = "match-subs-options";
-  onPitch.forEach((entry) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `match-subs-player${state.matchSubOutId === entry.playerId ? " is-current" : ""}`;
-    const name = document.createElement("strong");
-    name.textContent = entry.name;
-    const meta = document.createElement("small");
-    meta.textContent = `${entry.position} Â· ${entry.roleName || "rolle"} Â· passform ${entry.matchScore}`;
-    button.append(name, meta);
-    button.addEventListener("click", () => {
-      state.matchSubOutId = state.matchSubOutId === entry.playerId ? null : entry.playerId;
-      state.matchSubsOpen = true;
-      renderApp();
-    });
-    outList.append(button);
-  });
-  outRow.append(outList);
-  wrap.append(outRow);
-
-  // Steg 2: hvem kommer inn pÃ¥ nettopp den plassen?
-  if (state.matchSubOutId && onPitch.some((entry) => entry.playerId === state.matchSubOutId)) {
-    const gameState = readGameState(session);
-    const ranked = rankSubstitutionsForSlot({
-      session,
-      outPlayerId: state.matchSubOutId,
-      minute: currentPeriodEndMinute(session),
-      gameState: gameState.state
-    });
-
-    const inLabel = document.createElement("p");
-    inLabel.className = "muted-text";
-    const out = onPitch.find((entry) => entry.playerId === state.matchSubOutId);
-    inLabel.textContent = `Hvem inn som ${out?.roleName || out?.position}? Passformen gjelder PLASSEN â€“ ikke spillerens klasse.`;
-    wrap.append(inLabel);
-
-    const inList = document.createElement("div");
-    inList.className = "match-subs-options";
-    ranked.forEach((entry) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = `match-subs-player${entry.improvement > 0.05 ? " is-fitting" : ""}`;
-      const name = document.createElement("strong");
-      name.textContent = entry.inName;
-      const meta = document.createElement("small");
-      const arrow = entry.fitDelta > 0 ? `+${entry.fitDelta}` : `${entry.fitDelta}`;
-      meta.textContent = `passform ${entry.matchScoreAfter} (${arrow}) Â· ${entry.reasons[0] || ""}`;
-      button.append(name, meta);
-      button.addEventListener("click", () => makeSubstitution(state.matchSubOutId, entry.inPlayerId));
-      inList.append(button);
-    });
-    wrap.append(inList);
-  }
-
-  card.append(wrap);
-}
-
-// UtfÃ¸r byttet pÃ¥ den aktive kampsesjonen.
-function makeSubstitution(outPlayerId, inPlayerId) {
-  const session = state.matchday?.session;
-  if (!session || session.phase === "resolved") return;
-  const gameState = readGameState(session);
-  const next = applyMatchdaySubstitution(session, {
-    outPlayerId,
-    inPlayerId,
-    minute: currentPeriodEndMinute(session),
-    gameState: gameState.state
-  });
-  if (next === session) return;
-  state.matchday.session = next;
-  state.matchSubOutId = null;
-  saveMatchdayState();
-  renderApp();
-}
-
-// UtfÃ¸r planbyttet pÃ¥ den aktive kampsesjonen.
-function switchMatchPlanDuringMatch(planId) {
-  const session = state.matchday?.session;
-  if (!session || session.phase === "resolved") return;
-  const plan = (Array.isArray(state.tactics) ? state.tactics : []).find((item) => item.id === planId);
-  if (!plan) return;
-  const next = applyMatchPlanChange(session, plan, { opponent: session.opponent });
-  if (next === session) return;
-  state.matchday.session = next;
-  // Kampplanen utenfor kampen fÃ¸lger med, slik at neste kamp starter der du
-  // faktisk endte opp â€” ikke pÃ¥ planen du forlot. Valget lagres av
-  // modus-sesjonen i renderApp, som all annen oppsettstate.
-  state.selectedTacticId = planId;
-  saveMatchdayState();
-  renderApp();
-}
-
-// Sluttrapport: v1-kjernen (resultat, xG, nÃ¸kkelfaktorer, analyse) pluss
-// v0.2-feltene (managergrep, beste/svakeste grep, systemdom, avgjÃ¸rende
-// lagdel, rÃ¥d og History Go-hint) nÃ¥r de finnes.
-function renderMatchdayReport(container, lastMatch) {
-  const report = createMatchReport(lastMatch);
-  if (!report || typeof report !== "object") {
-    const empty = document.createElement("p");
-    empty.className = "matchday-empty muted-text";
-    empty.textContent = "Ingen kamp spilt ennÃ¥.";
-    container.append(empty);
-    return;
-  }
-
-  const card = document.createElement("article");
-  card.className = "matchday-result-card matchday-report-card";
-
-  const safeOutcome = ["win", "draw", "loss"].includes(report.outcome) ? report.outcome : "draw";
-  const safeOutcomeLabel = { win: "Seier", draw: "Uavgjort", loss: "Tap" }[safeOutcome];
-
-  // Playable Manager Flow Polish v1: rapporten leder med det dramatiske (resultat
-  // + hovedforklaring + de avgjÃ¸rende faktorene + det kampen lÃ¦rte deg), og
-  // folder den fulle datadumpen bak en details-skuff. Ingen informasjon fjernes â€”
-  // den prioriteres.
-
-  // 1) Resultat Ã¸verst: stor score + fargekodet utfall.
-  const score = document.createElement("p");
-  score.className = "matchday-score";
-  score.textContent = report.scoreLine || "0â€“0";
-  card.append(score);
-
-  const outcome = document.createElement("p");
-  outcome.className = `matchday-outcome is-${safeOutcome}`;
-  outcome.textContent = safeOutcomeLabel;
-  card.append(outcome);
-
-  // 2) Kompakt kontekst: motstander (+ stil/arketyp) og eget system pÃ¥ to linjer.
-  const opponentParts = [report.opponentName || "Ukjent motstander"];
-  if (report.opponentStyle) opponentParts.push(report.opponentStyle);
-  if (report.opponentArchetype) opponentParts.push(report.opponentArchetype);
-  if (report.opponentTacticalSchool) opponentParts.push(report.opponentTacticalSchool);
-  appendMatchdayMeta(card, `Motstander: ${opponentParts.join(" Â· ")}`);
-
-  const formationParts = [report.formationName || "Ukjent formasjon"];
-  if (report.baseShape) formationParts.push(report.baseShape);
-  if (report.tacticName) formationParts.push(report.tacticName);
-  appendMatchdayMeta(card, `Ditt system: ${formationParts.join(" Â· ")}`);
-
-  appendMatchdayMeta(
-    card,
-    `xG ${report.expectedGoalsLine || "0 â€“ 0"} Â· lagstyrke ${Number.isFinite(Number(report.teamStrength)) ? report.teamStrength : 0}`
-  );
-
-  // 3) Hovedforklaring (Match Explanation v1.5).
-  const explanation = report.explanation && typeof report.explanation === "object" ? report.explanation : null;
-  if (explanation?.headline) {
-    const headline = document.createElement("p");
-    headline.className = "matchday-explanation-headline";
-    headline.textContent = explanation.headline;
-    card.append(headline);
-  }
-  if (explanation?.resultSummary) {
-    appendMatchdayMeta(card, explanation.resultSummary);
-  }
-
-  // 4) Tre avgjÃ¸rende faktorer.
-  const decisiveFactors = Array.isArray(explanation?.decisiveFactors) ? explanation.decisiveFactors : [];
-  if (decisiveFactors.length > 0) {
-    appendMatchdaySubheading(card, "AvgjÃ¸rende faktorer");
-    appendMatchdayList(card, decisiveFactors.slice(0, 3));
-  }
-
-  // 5) Det kampen lÃ¦rte deg: Ã©n taktisk, Ã©n rolle-/relasjons- og Ã©n
-  // trenings-/off-pitch-lÃ¦ring, kuratert fra forklaringen.
-  if (explanation) {
-    const learnings = [];
-    const tacticLearn = (explanation.tacticalFactors || [])[0] || (explanation.historicalFactors || [])[0];
-    if (tacticLearn) learnings.push(`Taktisk: ${tacticLearn}`);
-    const relationLearn = (explanation.relationshipFactors || [])[0];
-    if (relationLearn) learnings.push(`Relasjoner: ${relationLearn}`);
-    const offPitchLearn = (explanation.trainingFactors || [])[0] || (explanation.offPitchFactors || [])[0];
-    if (offPitchLearn) learnings.push(`Trening/off-pitch: ${offPitchLearn}`);
-    if (!learnings.length && Array.isArray(explanation.learningPoints)) {
-      explanation.learningPoints.slice(0, 3).forEach((line) => learnings.push(line));
-    }
-    if (learnings.length > 0) {
-      appendMatchdaySubheading(card, "Det kampen lÃ¦rte deg");
-      appendMatchdayList(card, learnings);
-    }
-  }
-
-  // 6) Neste uke bÃ¸r du vurdere â€¦
-  const nextWeek = [];
-  (Array.isArray(explanation?.nextWeekSuggestions) ? explanation.nextWeekSuggestions : []).slice(0, 2).forEach((line) => nextWeek.push(line));
-  if (!nextWeek.length && report.nextWeekAdvice) nextWeek.push(report.nextWeekAdvice);
-  if (nextWeek.length > 0) {
-    appendMatchdaySubheading(card, "Neste uke bÃ¸r du vurdere");
-    appendMatchdayList(card, nextWeek);
-  }
-
-  const nextWeekButton = document.createElement("button");
-  nextWeekButton.type = "button";
-  nextWeekButton.className = "matchday-next-week-button";
-  nextWeekButton.textContent = "Til managerkontoret";
-  nextWeekButton.addEventListener("click", async () => {
-    markMatchReportSeen();
-    // Kampen er spilt og rapporten lest: rull ukas gjenvÃ¦rende faser helt til
-    // ny uke, uansett hvilken fase kampen ble spilt i. Kampdag-porten er Ã¥pen
-    // (kampen finnes), sÃ¥ lÃ¸kka terminerer alltid; grensen er et sikkerhetsnett.
-    const currentWeek = state.clubWeekState?.week;
-    for (let i = 0; i <= CLUB_WEEK_PHASE_IDS.length; i++) {
-      if (state.clubWeekState?.week !== currentWeek) break;
-      if (getClubWeekMatchdayGate().isBlocked) break;
-      await advanceClubWeekPhaseAction();
-    }
-    activateTab("dashboard");
-    renderApp();
-  });
-  card.append(nextWeekButton);
-
-  // 7) Full kampanalyse i en foldet skuff: detaljene er der, men dominerer ikke.
-  const drawer = document.createElement("details");
-  drawer.className = "matchday-detail-drawer";
-  const drawerSummary = document.createElement("summary");
-  drawerSummary.textContent = "Full kampanalyse";
-  drawer.append(drawerSummary);
-  const body = document.createElement("div");
-  drawer.append(body);
-
-  if (report.eraName) {
-    appendMatchdayMeta(body, `Epoke: ${report.eraName}`);
-  }
-
-  // Fulle forklaringslister (kuraterte hÃ¸ydepunkter ligger over).
-  const explanationSections = [
-    ["Taktisk bilde", explanation?.tacticalFactors],
-    ["Historisk stil-matchup", explanation?.historicalFactors],
-    ["Relasjoner", explanation?.relationshipFactors],
-    ["Trening", explanation?.trainingFactors],
-    ["Utenfor banen", explanation?.offPitchFactors],
-    ["LÃ¦ringspunkter", explanation?.learningPoints]
-  ];
-  explanationSections.forEach(([title, items]) => {
-    if (Array.isArray(items) && items.length > 0) {
-      appendMatchdaySubheading(body, title);
-      appendMatchdayList(body, items);
-    }
-  });
-
-  // Managergrep med konsekvens (v0.2).
-  appendMatchdayDecisionLog(body, report.decisions, "Managergrep i kampen");
-  appendMatchPlanChangeLog(body, lastMatch);
-  appendSubstitutionLog(body, lastMatch);
-  appendOpponentAdjustmentLog(body, lastMatch);
-  if (Array.isArray(lastMatch?.minuteLog) && lastMatch.minuteLog.length) {
-    appendMatchdaySubheading(body, "Kampen minutt for minutt");
-    appendMatchMinuteLog(body, lastMatch);
-  }
-
-  // Beste/svakeste grep (v0.2).
-  if (report.bestDecision || report.worstDecision) {
-    appendMatchdaySubheading(body, "Managerdommen");
-    const verdictLines = [];
-    if (report.bestDecision) {
-      verdictLines.push(`Beste grep: ${report.bestDecision.label} (${report.bestDecision.eventTitle}).`);
-    }
-    if (report.worstDecision) {
-      verdictLines.push(`Svakeste grep: ${report.worstDecision.label} (${report.worstDecision.eventTitle}).`);
-    }
-    appendMatchdayList(body, verdictLines);
-  }
-
-  // Hvorfor systemet fungerte eller ikke (v0.2).
-  if (report.formationVerdict) {
-    appendMatchdaySubheading(body, "Systemdommen");
-    const verdict = document.createElement("p");
-    verdict.className = "matchday-meta";
-    verdict.textContent = report.formationVerdict;
-    body.append(verdict);
-  }
-
-  // NÃ¸kkelfaktorer + kampanalyse.
-  const keyFactors = Array.isArray(report.keyFactors) ? report.keyFactors : [];
-  const analysis = Array.isArray(report.analysis) ? report.analysis : [];
-  if (keyFactors.length > 0) {
-    appendMatchdaySubheading(body, "NÃ¸kkelfaktorer");
-    appendMatchdayList(body, keyFactors);
-  }
-  if (analysis.length > 0) {
-    appendMatchdaySubheading(body, "Kampanalyse");
-    appendMatchdayList(body, analysis);
-  }
-
-  if (report.trainingFocus?.summary) {
-    appendMatchdaySubheading(body, "Ukens trening");
-    appendMatchdayList(body, [report.trainingFocus.summary]);
-  }
-
-  // Veien videre: avgjÃ¸rende lagdel, treningsrÃ¥d og History Go-hint (v0.2).
-  const nextLines = [];
-  if (report.decisiveUnit) nextLines.push(report.decisiveUnit);
-  if (report.nextWeekAdvice) nextLines.push(`Neste uke: ${report.nextWeekAdvice}`);
-  if (report.historyGoHint) nextLines.push(report.historyGoHint);
-  if (nextLines.length > 0) {
-    appendMatchdaySubheading(body, "Veien videre");
-    appendMatchdayList(body, nextLines);
-  }
-
-  // Kampkonsekvens (Club Week Consequence Loop v1).
-  const clubConsequences = lastMatch?.clubConsequences;
-  if (clubConsequences && typeof clubConsequences === "object") {
-    const consequenceLines = [];
-    const effectsText = formatMatchConsequenceEffects(clubConsequences.effects);
-    if (effectsText) {
-      consequenceLines.push(`Klubben: ${effectsText}.`);
-    }
-    const familiarity = clubConsequences.familiarity;
-    if (familiarity && typeof familiarity === "object" && Number(familiarity.gain) > 0) {
-      consequenceLines.push(
-        `Formasjonstilvenning i ${familiarity.formationName || familiarity.formationId} +${familiarity.gain}.`
-      );
-    }
-    if (consequenceLines.length > 0) {
-      appendMatchdaySubheading(body, "Kampkonsekvens");
-      appendMatchdayList(body, consequenceLines);
-    }
-  }
-
-  // Bare ta med skuffen hvis den faktisk fikk innhold.
-  if (body.childNodes.length > 0) {
-    card.append(drawer);
-  }
-
-  container.append(card);
-}
-
-// Kampdag (v0.2): viser pÃ¥gÃ¥ende kampsesjon (kampplan/hendelser) eller siste
-// spilte kamp. Bruker textContent (ingen innerHTML) og bygger alle elementer
-// programmatisk.
-function renderMatchday(teamFit) {
-  const container = elements.matchdayResult;
-
-  renderMatchdayReadiness(teamFit);
-
-  if (!container) {
-    return;
-  }
-
-  container.textContent = "";
-  renderMatchdayGate(container, teamFit);
-
-  const session = state.matchday?.session || null;
-
-  if (session) {
-    if (session.phase === "pre_match") {
-      renderMatchdaySessionPreMatch(container, session);
-      return;
-    }
-
-    const eventIndex = getSessionEventIndex(session);
-    if (eventIndex !== null) {
-      renderMatchdaySessionEvent(container, session, eventIndex);
-      return;
-    }
-
-    // Ukjent fase i lagret sesjon: rydd stille og fall tilbake til siste kamp.
-    state.matchday.session = null;
-  }
-
-  const lastMatch = state.matchday?.lastMatch || null;
-
-  if (!lastMatch) {
-    const empty = document.createElement("p");
-    empty.className = "matchday-empty muted-text";
-    empty.textContent = "Ingen kamp spilt ennÃ¥.";
-    container.append(empty);
-    return;
-  }
-
-  renderMatchdayReport(container, lastMatch);
-}
-
-// ----------------------------------------------------------------------------
-// Mini Season v0.1 â€” panelrendering
-// Lite panel nÃ¦r Club Week-topbaren: status, Kamp X av 5, neste motstander,
-// poeng, styremÃ¥l, siste resultater og sluttvurdering nÃ¥r perioden er
-// fullfÃ¸rt. Bygger alt programmatisk med textContent (ingen innerHTML).
-// ----------------------------------------------------------------------------
-
-function appendMiniSeasonMeta(parent, text, className = "mini-season-meta") {
-  const el = document.createElement("p");
-  el.className = className;
-  el.textContent = text;
-  parent.append(el);
-}
-
-// Sportslig status: poeng, rekord og formkurve som kompakte tall + W/D/L-pinner.
-function renderMiniSeasonStanding(parent, summary, formGuide) {
-  const standing = document.createElement("div");
-  standing.className = "mini-season-standing";
-
-  const stat = (label, value) => {
-    const box = document.createElement("div");
-    box.className = "mini-season-stat";
-    const v = document.createElement("span");
-    v.className = "mini-season-stat-value";
-    v.textContent = value;
-    const l = document.createElement("span");
-    l.className = "mini-season-stat-label";
-    l.textContent = label;
-    box.append(v, l);
-    standing.append(box);
-  };
-
-  stat("Poeng", String(summary.points));
-  stat("S-U-T", summary.record);
-  stat("MÃ¥l", `${summary.goalsFor}â€“${summary.goalsAgainst}`);
-  parent.append(standing);
-
-  // Formkurve som fargede pinner (W/D/L), eldste til nyeste.
-  const form = Array.isArray(formGuide?.form) ? formGuide.form : [];
-  if (form.length > 0) {
-    const formRow = document.createElement("div");
-    formRow.className = "mini-season-form";
-    form.forEach((letter) => {
-      const pin = document.createElement("span");
-      const outcome = letter === "W" ? "win" : letter === "L" ? "loss" : "draw";
-      pin.className = `mini-season-form-pin is-${outcome}`;
-      pin.textContent = letter;
-      formRow.append(pin);
-    });
-    parent.append(formRow);
-    if (formGuide?.note) {
-      appendMiniSeasonMeta(parent, formGuide.note);
-    }
-  }
-}
-
-// Tabell (light league): HG-laget mot rivaler. Deterministisk. Overskriften er
-// kontekstavhengig (prÃ¸veperiode vs ligasesong) siden samme motor og render
-// deles av begge modiene.
-function renderMiniSeasonTable(parent, table, caption = "PrÃ¸veperiode-tabell") {
-  if (!table || !Array.isArray(table.rows) || table.rows.length === 0) {
-    return;
-  }
-
-  appendMatchdaySubheading(parent, caption);
-  const wrap = document.createElement("div");
-  wrap.className = "mini-season-table-wrap";
-  const tableEl = document.createElement("table");
-  tableEl.className = "mini-season-table";
-
-  const head = document.createElement("tr");
-  ["#", "Lag", "K", "S", "U", "T", "MF", "MM", "MD", "P"].forEach((label) => {
-    const th = document.createElement("th");
-    th.textContent = label;
-    head.append(th);
-  });
-  tableEl.append(head);
-
-  table.rows.forEach((row) => {
-    const tr = document.createElement("tr");
-    if (row.isHg) {
-      tr.className = "is-hg";
-    }
-    const cells = [
-      String(row.position),
-      row.name,
-      String(row.played),
-      String(row.wins),
-      String(row.draws),
-      String(row.losses),
-      String(row.goalsFor),
-      String(row.goalsAgainst),
-      row.goalDifference > 0 ? `+${row.goalDifference}` : String(row.goalDifference),
-      String(row.points)
-    ];
-    cells.forEach((value, index) => {
-      const td = document.createElement("td");
-      if (index === 1) {
-        td.className = "mini-season-table-team";
-      }
-      td.textContent = value;
-      tr.append(td);
-    });
-    tableEl.append(tr);
-  });
-
-  wrap.append(tableEl);
-  parent.append(wrap);
-}
-
-function renderMiniSeasonResults(parent, miniSeason) {
-  const history = Array.isArray(miniSeason.matchHistory) ? miniSeason.matchHistory : [];
-  if (history.length === 0) {
-    return;
-  }
-
-  appendMatchdaySubheading(parent, "Resultater");
-  const list = document.createElement("ul");
-  list.className = "mini-season-results";
-  history.forEach((result) => {
-    const item = document.createElement("li");
-    const outcome = ["win", "draw", "loss"].includes(result.outcome) ? result.outcome : "draw";
-    item.className = `is-${outcome}`;
-    const outcomeLabel = MINI_SEASON_OUTCOME_LABELS[outcome] || "Uavgjort";
-    const venue = result.homeAway === "home" ? "hjemme" : "borte";
-    item.textContent = `Runde ${result.round}: ${outcomeLabel} ${result.scoreLine || "0â€“0"} mot ${result.opponentName || "ukjent motstander"} (${venue})`;
-    list.append(item);
-  });
-  parent.append(list);
-}
-
-function renderMiniSeasonVerdict(parent, finalVerdict) {
-  if (!finalVerdict || typeof finalVerdict !== "object") {
-    return;
-  }
-
-  const box = document.createElement("div");
-  const verdict = ["trusted", "pressure", "failed"].includes(finalVerdict.verdict)
-    ? finalVerdict.verdict
-    : "pressure";
-  box.className = `mini-season-verdict is-${verdict}`;
-
-  const label = document.createElement("p");
-  label.className = "mini-season-verdict-label";
-  label.textContent = finalVerdict.label || "Styrets dom";
-  box.append(label);
-
-  if (finalVerdict.headline) {
-    appendMiniSeasonMeta(box, finalVerdict.headline, "mini-season-verdict-headline");
-  }
-  if (finalVerdict.detail) {
-    appendMiniSeasonMeta(box, finalVerdict.detail);
-  }
-  if (finalVerdict.recommendation) {
-    appendMiniSeasonMeta(box, finalVerdict.recommendation);
-  }
-
-  parent.append(box);
-}
-
-
-function trainingChoiceRiskFromProgram(program) {
-  if (!program) return "Middels";
-  const sessions = Array.isArray(program.sessions) ? program.sessions : [];
-  const high = sessions.filter((session) => session.intensity === "high").length;
-  const risks = Array.isArray(program.risks) ? program.risks.length : 0;
-  if (high >= 2 || risks >= 3) return "HÃ¸y";
-  if (high === 0 && risks <= 1) return "Lav";
-  return "Middels";
-}
-
-function getRoleById(roleId) {
-  return (Array.isArray(state.roles) ? state.roles : []).find((role) => role?.id === roleId) || null;
-}
-
-// ---------------------------------------------------------------------------
-// Individuell trening: steg 4 i uka
-//
-// LagsÃ¸kta treffer alle elleve likt. Her gjÃ¸r manageren noe med Ã‰N spiller.
-// Ingen av sporene rÃ¸rer `overall` â€” de bygger rollefortrolighet, henter inn
-// belastning, skjerper form eller trener en skadet mann tilbake. Motoren ligger
-// i football-individual-training.js; app.js eier lagring og flate.
-// ---------------------------------------------------------------------------
-
-// Hvilke roller det gir mening Ã¥ trene for denne spilleren: den han skal spille
-// pÃ¥ lÃ¸rdag fÃ¸rst, sÃ¥ rollene han allerede foretrekker. Listen er aldri tom for
-// en spiller med data â€” Ã¥ tilby rolletrening uten en eneste rolle ville vÃ¦rt en
-// blindvei.
-function getIndividualRoleCandidates(player, plannedRoleId) {
-  const ids = [plannedRoleId, ...(Array.isArray(player?.preferredRoles) ? player.preferredRoles : [])].filter(Boolean);
-  const roles = [...new Set(ids)].map((id) => getRoleById(id)).filter(Boolean);
-  return roles.length > 0 ? roles : (Array.isArray(state.roles) ? state.roles.slice(0, 6) : []);
-}
-
-// Kapasiteten er 1 + relevant stab (maks 5). Alltid minst Ã©n plass, ellers
-// ville flata vÃ¦rt en blindvei for en manager uten stab.
-function getIndividualTrainingCapacity() {
-  const categories = (getCoachContext()?.activeStaff || [])
-    .map((member) => member?.category)
-    .filter(Boolean);
-  return calculateIndividualCapacity(state.individualTrainingCatalogue, { staffCategories: categories });
-}
-
-// Ukas tildelinger. Ruller automatisk nÃ¥r Club Week bytter uke â€” individuell
-// oppfÃ¸lging er en ukesbeslutning, ikke en permanent innstilling.
-function getIndividualAssignments() {
-  const week = Number(state.clubWeekState?.week) || 1;
-  if (Number(state.individualTraining?.week) !== week) return [];
-  return Array.isArray(state.individualTraining?.assignments) ? state.individualTraining.assignments : [];
-}
-
-function loadIndividualTraining() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(INDIVIDUAL_TRAINING_KEY) || "null");
-    if (!raw || typeof raw !== "object") return { week: null, assignments: [] };
-    const sanitized = sanitizeIndividualAssignments(raw.assignments, {
-      catalogue: state.individualTrainingCatalogue,
-      capacity: 11
-    });
-    const week = Number(raw.week);
-    return { week: Number.isInteger(week) ? week : null, assignments: sanitized.assignments };
-  } catch (error) {
-    return { week: null, assignments: [] };
-  }
-}
-
-function saveIndividualTraining() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    localStorage.setItem(
-      INDIVIDUAL_TRAINING_KEY,
-      JSON.stringify(state.individualTraining || { week: null, assignments: [] })
-    );
-  } catch (error) {
-    // Privat modus e.l.: appen fortsetter uten persistens.
-  }
-}
-
-function setIndividualAssignment(playerId, trackId, roleId = null, attributeId = null) {
-  const week = Number(state.clubWeekState?.week) || 1;
-  const current = getIndividualAssignments().filter((entry) => entry.playerId !== playerId);
-  const next = trackId ? [...current, { playerId, trackId, roleId, attributeId }] : current;
-  const sanitized = sanitizeIndividualAssignments(next, {
-    catalogue: state.individualTrainingCatalogue,
-    capacity: getIndividualTrainingCapacity(),
-    week
-  });
-  state.individualTraining = { week, assignments: sanitized.assignments };
-  saveIndividualTraining();
-  renderApp();
-}
-
-// Hvem spiller hvilken rolle pÃ¥ lÃ¸rdag? Ã… trene rollen han faktisk skal spille
-// gir full uttelling â€” lÃ¦ringen festes av repetisjonen i kamp.
-function getPlannedRoleByPlayerId() {
-  const map = {};
-  getLineupRoleUsageEntries(getTeamFit()).forEach((entry) => {
-    map[entry.playerId] = entry.roleId;
-  });
-  return map;
-}
-
-// Uka gjÃ¸res opp: belastning/form/skade til tilstandsmotoren, rollefortrolighet
-// til fortrolighetsmotoren. Kalles fra applyWeeklyPlayerRecovery, etter lagets
-// hvile â€” egen restitusjon skal legge seg OPPÃ… den, ikke bli spist av den.
-function applyIndividualTrainingWeek() {
-  const assignments = getIndividualAssignments();
-  if (assignments.length === 0) return [];
-
-  const conditions = getPlayerCondition();
-  const conditionsById = {};
-  conditions.forEach((entry) => { conditionsById[entry.playerId] = entry; });
-  const playersById = {};
-  getUnlockedPlayers().forEach((player) => { playersById[player.id] = player; });
-
-  const resolved = resolveIndividualTrainingWeek({
-    catalogue: state.individualTrainingCatalogue,
-    assignments,
-    playersById,
-    conditionsById,
-    staffCategories: (getCoachContext()?.activeStaff || []).map((member) => member?.category).filter(Boolean),
-    playsRoleThisWeek: getPlannedRoleByPlayerId(),
-    weaknessesByPlayerId: Object.fromEntries(
-      assignments.map((assignment) => [assignment.playerId, getPlayerWeaknesses(playersById[assignment.playerId])])
-    )
-  });
-
-  state.playerCondition = applyIndividualTrainingEffects(conditions, resolved);
-  savePlayerCondition();
-
-  if (state.teamMerits && resolved.familiarityGains.length > 0) {
-    state.teamMerits.roleFamiliarity = applyTrainingRoleGrowth(getRoleFamiliarityStore(), resolved.familiarityGains);
-    saveTeamMerits();
-  }
-
-  // Svakhetstrening: individuell-trening-motoren leverer MÃ…L, ikke tall. Hvor
-  // fort en svak side flytter seg eies av svakhetsmotoren â€” posisjonering gÃ¥r
-  // fort, akselerasjon nesten ikke.
-  if (state.teamMerits && resolved.weaknessTargets.length > 0) {
-    const gains = resolved.weaknessTargets.map((target) => ({
-      playerId: target.playerId,
-      attributeId: target.attributeId,
-      growth: weeklyWeaknessGrowth(state.weaknessCatalogue, target.attributeId, target.staffFactor)
-    }));
-    state.teamMerits.weaknessProgress = applyWeaknessTraining(getWeaknessProgressStore(), gains);
-    saveTeamMerits();
-  }
-
-  return resolved.reports;
-}
-
-// Troppens svake sider, med framgangen pÃ¥ hver. Flata sier eksplisitt nÃ¥r et
-// ferdig arbeid ligger ubrukt â€” Ã¥ trene noe du aldri tar i bruk er en av de fÃ¥
-// mÃ¥tene Ã¥ kaste bort en uke pÃ¥, og det skal ikke vÃ¦re skjult.
-function renderPlayerWeaknesses(teamFit) {
-  const list = elements.weaknessList;
-  if (!list) return;
-
-  const work = getLineupWeaknessWork(teamFit);
-  if (elements.weaknessWorkSummary) {
-    const idle = work.idleWork.length > 0
-      ? ` ${work.idleWork.length} ferdig arbeid ligger ubrukt â€” sett spilleren i en rolle som krever det.`
-      : "";
-    elements.weaknessWorkSummary.textContent = `${work.headline}${idle}`;
-    elements.weaknessWorkSummary.dataset.selected = work.bonus > 0 ? "true" : "false";
-  }
-
-  list.textContent = "";
-  const store = getWeaknessProgressStore();
-  const players = getUnlockedPlayers();
-
-  if (players.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Hent spillere fÃ¸rst, sÃ¥ tegner vi profilene deres.";
-    list.append(empty);
-    return;
-  }
-
-  players.forEach((player) => {
-    const weaknesses = getPlayerWeaknesses(player);
-    const card = document.createElement("article");
-    card.className = "weakness-card";
-
-    const title = document.createElement("h5");
-    title.textContent = player.name || player.id;
-    card.append(title);
-
-    if (weaknesses.length === 0) {
-      const none = document.createElement("p");
-      none.className = "muted-text";
-      none.textContent = "Ingen svake sider innenfor rekkevidde â€” styrkene hans dekker det posisjonene krever.";
-      card.append(none);
-      list.append(card);
-      return;
-    }
-
-    const rows = document.createElement("ul");
-    rows.className = "weakness-rows";
-    weaknesses.forEach((weakness) => {
-      const progress = describeWeaknessProgress(getWeaknessProgress(store, player.id, weakness.attributeId));
-      const row = document.createElement("li");
-      row.dataset.level = progress.level;
-
-      const label = document.createElement("strong");
-      label.textContent = weakness.label;
-      const meta = document.createElement("span");
-      meta.textContent = `${weakness.category} Â· ${weakness.difficulty} Ã¥ trene Â· ${progress.label}`;
-      const bar = document.createElement("div");
-      bar.className = "weakness-bar";
-      const fill = document.createElement("i");
-      fill.style.width = `${progress.value}%`;
-      bar.append(fill);
-
-      row.append(label, meta, bar);
-      // Hvilke dÃ¸rer den stenger. Er det ingen rolle i rekkevidde, kommer kravet
-      // fra selve posisjonen â€” da sier vi det i stedet for Ã¥ la linja stÃ¥ tom.
-      const bites = document.createElement("span");
-      bites.className = "weakness-bites";
-      bites.textContent = weakness.bitesInRoles.length > 0
-        ? `Stenger: ${weakness.bitesInRoles.slice(0, 3).map((role) => role.name).join(", ")}`
-        : weakness.note || "Kreves av posisjonen han spiller.";
-      row.append(bites);
-      rows.append(row);
-    });
-    card.append(rows);
-    list.append(card);
-  });
-}
-
-function renderIndividualTraining() {
-  const capacity = getIndividualTrainingCapacity();
-  const assignments = getIndividualAssignments();
-  const catalogue = state.individualTrainingCatalogue;
-  const summary = summarizeIndividualTraining({ catalogue, assignments, capacity });
-
-  if (elements.individualTrainingCapacity) {
-    elements.individualTrainingCapacity.textContent = `${summary.headline} ${catalogue?.capacity?.note || ""}`.trim();
-    elements.individualTrainingCapacity.dataset.selected = summary.used > 0 ? "true" : "false";
-  }
-
-  const conditions = getPlayerCondition();
-  const players = getUnlockedPlayers();
-  const plannedRoles = getPlannedRoleByPlayerId();
-
-  const chosen = elements.individualTrainingAssignments;
-  if (chosen) {
-    chosen.textContent = "";
-    if (assignments.length === 0) {
-      const empty = document.createElement("p");
-      empty.className = "muted-text";
-      empty.textContent = "Ingen spillere fÃ¸lges opp individuelt denne uka.";
-      chosen.append(empty);
-    }
-    assignments.forEach((assignment) => {
-      const track = getIndividualTrack(catalogue, assignment.trackId);
-      const player = players.find((item) => item.id === assignment.playerId) || null;
-      if (!track) return;
-      const card = document.createElement("article");
-      card.className = "individual-training-card is-selected";
-
-      const title = document.createElement("h5");
-      title.textContent = `${player?.name || assignment.playerId} Â· ${track.name}`;
-      const note = document.createElement("p");
-      note.className = "muted-text";
-      const role = assignment.roleId ? getRoleById(assignment.roleId) : null;
-      const attribute = assignment.attributeId ? getWeaknessAttribute(state.weaknessCatalogue, assignment.attributeId) : null;
-      if (attribute) {
-        const progress = describeWeaknessProgress(
-          getWeaknessProgress(getWeaknessProgressStore(), assignment.playerId, assignment.attributeId)
-        );
-        note.textContent = `${attribute.weaknessLabel} â†’ ${attribute.name}. ${progress.label} (${progress.value}/100). ${progress.hint}`;
-      } else if (role) {
-        note.textContent = `LÃ¦rer rollen ${role.name}. ${plannedRoles[assignment.playerId] === assignment.roleId ? "Han spiller den pÃ¥ lÃ¸rdag â€” lÃ¦ringen festes." : "Han spiller den ikke denne uka, sÃ¥ lÃ¦ringen fester seg saktere."}`;
-      } else {
-        note.textContent = track.effectText;
-      }
-      const risk = document.createElement("p");
-      risk.className = "individual-training-risk";
-      risk.textContent = track.riskText;
-
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.className = "individual-training-remove";
-      remove.textContent = "Avslutt oppfÃ¸lging";
-      remove.addEventListener("click", () => setIndividualAssignment(assignment.playerId, null));
-
-      card.append(title, note, risk, remove);
-      chosen.append(card);
-    });
-  }
-
-  const picker = elements.individualTrainingPicker;
-  if (!picker) return;
-  picker.textContent = "";
-
-  if (assignments.length >= capacity) {
-    const full = document.createElement("p");
-    full.className = "muted-text";
-    full.textContent = "Alle plassene er brukt. Avslutt en oppfÃ¸lging for Ã¥ flytte den til en annen spiller â€” eller hent inn mer stab for Ã¥ fÃ¥ flere plasser.";
-    picker.append(full);
-    return;
-  }
-
-  const assignedIds = new Set(assignments.map((entry) => entry.playerId));
-  // Sorter dem som trenger noe av deg fÃ¸rst: skadde, sÃ¥ slitne, sÃ¥ resten.
-  const ranked = players
-    .filter((player) => !assignedIds.has(player.id))
-    .map((player) => ({ player, condition: conditionFor(conditions, player.id) }))
-    .sort((a, b) => {
-      const score = (entry) => (isInjured(entry.condition) ? 0 : freshnessFor(entry.condition));
-      return score(a) - score(b);
-    })
-    .slice(0, 8);
-
-  if (ranked.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Ingen ledige spillere Ã¥ fÃ¸lge opp.";
-    picker.append(empty);
-    return;
-  }
-
-  ranked.forEach(({ player, condition }) => {
-    const card = document.createElement("article");
-    card.className = "individual-training-card";
-
-    const title = document.createElement("h5");
-    title.textContent = player.name || player.id;
-    const status = document.createElement("p");
-    status.className = "muted-text";
-    status.textContent = describeCondition(condition);
-    card.append(title, status);
-
-    // Svake sider er ikke en dom over spilleren â€” de er svaret pÃ¥ Â«hvor koster
-    // det noe Ã¥ bruke ham?Â». Derfor stÃ¥r de synlig pÃ¥ kortet der du velger hva
-    // han skal jobbe med, ikke gjemt bak en forklaring.
-    const weaknesses = getPlayerWeaknesses(player);
-    const weaknessLine = document.createElement("p");
-    weaknessLine.className = "individual-training-weaknesses";
-    weaknessLine.textContent = weaknesses.length > 0
-      ? `Svake sider: ${weaknesses.map((weakness) => weakness.label.toLowerCase()).join(" Â· ")}`
-      : "Ingen svake sider innenfor rekkevidde.";
-    card.append(weaknessLine);
-
-    const weaknessSelect = document.createElement("select");
-    weaknessSelect.className = "individual-training-role";
-    weaknessSelect.setAttribute("aria-label", `Svak side Ã¥ jobbe med for ${player.name || player.id}`);
-    weaknesses.forEach((weakness) => {
-      const progress = getWeaknessProgress(getWeaknessProgressStore(), player.id, weakness.attributeId);
-      const option = document.createElement("option");
-      option.value = weakness.attributeId;
-      option.textContent = `${weakness.label} â€” ${weakness.difficulty}${progress > 0 ? ` (${progress}/100)` : ""}`;
-      weaknessSelect.append(option);
-    });
-    if (weaknesses.length > 0) card.append(weaknessSelect);
-
-    // Rolletrening trenger et mÃ¥l. Valget er managerens: rollen han skal spille
-    // pÃ¥ lÃ¸rdag, eller en han skal lÃ¦re til senere.
-    const roleCandidates = getIndividualRoleCandidates(player, plannedRoles[player.id] || null);
-    const roleSelect = document.createElement("select");
-    roleSelect.className = "individual-training-role";
-    roleSelect.setAttribute("aria-label", `Rolle Ã¥ trene for ${player.name || player.id}`);
-    roleCandidates.forEach((role) => {
-      const option = document.createElement("option");
-      option.value = role.id;
-      option.textContent = role.id === plannedRoles[player.id] ? `${role.name} (spiller den pÃ¥ lÃ¸rdag)` : role.name;
-      roleSelect.append(option);
-    });
-    if (roleCandidates.length > 0) card.append(roleSelect);
-
-    const options = document.createElement("div");
-    options.className = "individual-training-tracks";
-    (catalogue?.tracks || []).forEach((track) => {
-      const roleId = track.requires === "role" ? (roleSelect.value || roleCandidates[0]?.id || null) : null;
-      const attributeId = track.requires === "weakness"
-        ? (weaknessSelect.value || weaknesses[0]?.attributeId || null)
-        : null;
-      const check = evaluateIndividualAssignment({ track, player, condition, roleId, attributeId, weaknesses });
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "individual-training-track";
-      button.textContent = track.name;
-      button.title = `${track.shortDescription} ${check.valid ? track.effectText : check.reason}`;
-      button.disabled = !check.valid;
-      if (check.valid) {
-        button.addEventListener("click", () => setIndividualAssignment(
-          player.id,
-          track.id,
-          track.requires === "role" ? (roleSelect.value || roleCandidates[0]?.id || null) : null,
-          track.requires === "weakness" ? (weaknessSelect.value || weaknesses[0]?.attributeId || null) : null
-        ));
-      }
-      options.append(button);
-    });
-    card.append(options);
-    picker.append(card);
-  });
-}
-
-// Signal/anbefaling/risiko hÃ¸rer hjemme der du velger RAMMEN â€” i
-// programpopupen. De sto tidligere pÃ¥ selve Trening-flata, som en fjerde boks
-// ved siden av tre andre; det var en del av grunnen til at flata leste som en
-// vegg uten rekkefÃ¸lge.
-function renderTrainingProgramContext({ recommendation, programs, selectedProgram }) {
-  const recommendedProgram = programs[0] || null;
-  const recommendedFocus = recommendation?.focusIds?.[0] ? getTrainingFocus(recommendation.focusIds[0]) : null;
-  const recommendedLabel = recommendedProgram?.title || recommendedFocus?.name || "Trygt basisfokus";
-  const signal = selectedProgram?.recommendedBecause?.[0]
-    || recommendedProgram?.recommendedBecause?.[0]
-    || recommendation?.reason
-    || summarizeOffPitchContext(getOffPitchState()).headline;
-  const risk = selectedProgram ? trainingChoiceRiskFromProgram(selectedProgram) : trainingChoiceRiskFromProgram(recommendedProgram);
-
-  if (elements.trainingChoiceSignal) elements.trainingChoiceSignal.textContent = signal;
-  if (elements.trainingChoiceRecommended) elements.trainingChoiceRecommended.textContent = recommendedLabel;
-  if (elements.trainingChoiceRisk) elements.trainingChoiceRisk.textContent = risk;
-  if (elements.trainingProgramLoadValue) {
-    const load = describeWeeklyLoad(
-      calculateWeeklyTrainingIntensity({
-        program: selectedProgram || recommendedProgram,
-        focusId: state.weeklyTrainingFocus?.focusId || null
-      })
-    );
-    elements.trainingProgramLoadValue.textContent = selectedProgram
-      ? load.label
-      : `${load.label} (hvis du velger anbefalt)`;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Ukens plan: den ene flata som gjÃ¸r rekkefÃ¸lgen tydelig
-// ---------------------------------------------------------------------------
-
-// Ukas valgte program som en full komposisjon. Rammen (Ã¸kter, belastning,
-// relaterte fokus) er kontekstuavhengig, sÃ¥ et tomt kontekstobjekt holder â€” vi
-// bruker den kun til belastning og samsvar, ikke til poeng.
-function getSelectedTrainingProgramComposition() {
-  const programId = state.weeklyTrainingProgram?.programId;
-  if (!programId) return null;
-  return getTrainingProgramCompositionById(programId, {});
-}
-
-function getWeeklyTrainingPlan() {
-  return createWeeklyTrainingPlan({
-    week: Number(state.clubWeekState?.week) || 1,
-    inboxRead: hasAcknowledgedInboxThisWeek(),
-    program: getSelectedTrainingProgramComposition(),
-    focusId: state.weeklyTrainingFocus?.focusId || null,
-    individualSummary: summarizeIndividualTraining({
-      catalogue: state.individualTrainingCatalogue,
-      assignments: getIndividualAssignments(),
-      capacity: getIndividualTrainingCapacity()
-    }),
-    conditionSummary: null
-  });
-}
-
-function focusTrainingWorkspace(legacyModalId) {
-  const targetId = getTrainingWorkspaceTarget(legacyModalId);
-  const target = targetId ? document.getElementById(targetId) : null;
-  if (!target) return;
-  state.openTrainingStepId = targetId;
-  activateTab("trening");
-  requestAnimationFrame(() => {
-    syncTrainingWorkspace(document.querySelector("#trainingWorkspace"), state.openTrainingStepId);
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-    target.focus({ preventScroll: true });
-  });
-}
-
-function renderWeeklyTrainingPlan() {
-  if (!elements.trainingChoiceGate) return;
-  const plan = getWeeklyTrainingPlan();
-
-  if (elements.trainingPlanHeadline) elements.trainingPlanHeadline.textContent = plan.headline;
-  if (elements.trainingPlanCoherence) {
-    elements.trainingPlanCoherence.textContent = plan.coherence.note;
-    elements.trainingPlanCoherence.dataset.level = plan.coherence.level;
-  }
-  if (elements.trainingPlanLoad) {
-    elements.trainingPlanLoad.textContent = `${plan.load.label} Â· intensitet ${plan.intensity}`;
-    elements.trainingPlanLoad.dataset.level = plan.load.level;
-  }
-  if (elements.trainingChoiceStatus) {
-    elements.trainingChoiceStatus.textContent = plan.ready ? "Treningsuke valgt" : "Ikke valgt";
-    elements.trainingChoiceStatus.dataset.selected = plan.ready ? "true" : "false";
-  }
-  if (elements.trainingGoMatch) elements.trainingGoMatch.hidden = !plan.ready;
-
-  const list = elements.trainingPlanSteps;
-  if (list) {
-    list.textContent = "";
-    plan.steps.forEach((step) => {
-      const item = document.createElement("li");
-      item.className = "training-plan-step";
-      item.dataset.done = step.done ? "true" : "false";
-      if (step.id === plan.nextStepId) item.classList.add("is-next");
-
-      const head = document.createElement("div");
-      head.className = "training-plan-step-head";
-      const title = document.createElement("h3");
-      title.textContent = `${step.order}. ${step.title}`;
-      const status = document.createElement("span");
-      status.className = "training-plan-step-status";
-      status.textContent = step.status;
-      head.append(title, status);
-
-      const role = document.createElement("p");
-      role.className = "training-plan-step-role";
-      role.textContent = step.role;
-
-      const detail = document.createElement("p");
-      detail.className = "training-plan-step-detail";
-      detail.textContent = step.detail;
-
-      const action = document.createElement("button");
-      action.type = "button";
-      action.className = "training-plan-step-action";
-      action.textContent = step.done ? "Endre" : "Velg";
-      if (step.modal) {
-        action.addEventListener("click", () => focusTrainingWorkspace(step.modal));
-      } else {
-        action.addEventListener("click", () => activateTab(step.target));
-      }
-
-      item.append(head, role, detail, action);
-      list.append(item);
-    });
-  }
-
-  if (elements.trainingPlanNext) {
-    const next = plan.steps.find((step) => step.id === plan.nextStepId) || null;
-    elements.trainingPlanNext.hidden = false;
-    if (next) {
-      elements.trainingPlanNext.textContent = `Neste: ${next.title.toLowerCase()}`;
-      elements.trainingPlanNext.onclick = () => {
-        if (next.modal) {
-          focusTrainingWorkspace(next.modal);
-        } else {
-          activateTab(next.target);
-        }
-      };
-    } else {
-      elements.trainingPlanNext.textContent = "Uka er planlagt â€” gÃ¥ til Kamp";
-      elements.trainingPlanNext.onclick = () => activateTab("kamp");
-    }
-  }
-
-  state.openTrainingStepId = syncTrainingWorkspace(
-    document.querySelector("#trainingWorkspace"),
-    state.openTrainingStepId
-  );
-}
-
-function renderWeeklyTrainingFocus(teamFit) {
-  const status = elements.weeklyTrainingStatus;
-  const recommendationEl = elements.weeklyTrainingRecommendation;
-  const options = elements.weeklyTrainingOptions;
-  if (!status || !recommendationEl || !options) return;
-
-  syncWeeklyTrainingFocusToClubWeek();
-  const week = Number(state.clubWeekState?.week) || 1;
-  const selected = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
-  const used = Boolean(state.weeklyTrainingFocus?.appliedSessionId);
-  status.textContent = selected
-    ? `Uke ${week}: ${selected.name}${used ? " Â· brukt i ukas kampplan" : " Â· valgt"}`
-    : `Uke ${week}: Velg ett fokus fÃ¸r kamp.`;
-  status.dataset.selected = selected ? "true" : "false";
-
-  // Matchup-bevisst treningsrÃ¥d: tren det matchupen mot neste motstander er
-  // risikabel pÃ¥. Faller tilbake til motstanderprofil-/svakhetsrÃ¥d uten matchup.
-  const nextOpponentForFocus = getMiniSeasonNextOpponent();
-  const recommendation = recommendTrainingFocus({
-    opponent: nextOpponentForFocus,
-    teamFit,
-    formationMatchup: getFormationMatchupVsOpponent(nextOpponentForFocus),
-    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null
-  });
-  recommendationEl.textContent = recommendation.reason;
-
-  options.textContent = "";
-  const orderedFocuses = [
-    ...TRAINING_FOCUSES.filter((focus) => recommendation.focusIds.includes(focus.id)),
-    ...TRAINING_FOCUSES.filter((focus) => !recommendation.focusIds.includes(focus.id))
-  ];
-  orderedFocuses.forEach((focus, index) => {
-    const support = calculateTrainingStaffSupport({ focusId: focus.id, coachContext: getCoachContext() });
-    const isSelected = selected?.id === focus.id;
-    const isRecommended = recommendation.focusIds.includes(focus.id);
-    const card = document.createElement("article");
-    card.className = "weekly-training-card";
-    card.dataset.support = support.level;
-    if (isSelected) card.classList.add("is-selected");
-    if (isRecommended) card.classList.add("is-recommended");
-
-    const groupLabel = document.createElement("p");
-    groupLabel.className = "training-choice-card-label";
-    groupLabel.textContent = isRecommended && index === 0 ? "Anbefalt nÃ¥" : "Andre trygge valg";
-    const heading = document.createElement("h3");
-    heading.textContent = focus.name;
-    const description = document.createElement("p");
-    description.textContent = focus.shortDescription;
-    const effect = document.createElement("p");
-    effect.className = "weekly-training-effect";
-    effect.textContent = focus.effectHint;
-    const meta = document.createElement("p");
-    meta.className = "weekly-training-support";
-    meta.textContent = `Staff-stÃ¸tte: ${support.label}${isRecommended ? " Â· anbefalt" : ""}`;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = isSelected ? "Valgt" : "Velg fokus";
-    button.disabled = used || Boolean(state.matchday?.session) || isSelected;
-    button.addEventListener("click", () => selectWeeklyTrainingFocus(focus.id));
-    card.append(groupLabel, heading, description, effect, meta, button);
-    options.append(card);
-  });
-  return recommendation;
-}
-
-// Suggested Setups v1: forklarende oppsettforslag (formasjon, kampplan) i
-// Taktikk-fanen. Bygger pÃ¥ samme motorer som resten av appen (teamFit,
-// formasjonskunnskap, motstander, coachContext) og degraderer trygt.
-// Forslagene er additive: de lÃ¥ser ikke spilleren, men forklarer
-// standardforstÃ¥elsen slik at egne kontekstuelle valg kan slÃ¥ dem.
-// Treningsuke-gruppen fra createSuggestedSetups() rendres bevisst ikke her â€”
-// Trening-fanens weekly-training-panel har allerede sin egen "Anbefalt nÃ¥"-
-// merking integrert i selve valget, og en egen liste ville duplisert den.
-const SUGGESTED_SETUP_GROUPS = [
-  { type: "formation", label: "Formasjon" },
-  { type: "match_plan", label: "Kampplan" }
-];
-
-function suggestedSetupConfidenceLabel(confidence) {
-  const value = Number(confidence) || 0;
-  if (value >= 0.7) return "HÃ¸y";
-  if (value >= 0.5) return "Middels";
-  return "Lav";
-}
-
-function appendSuggestedSetupList(card, className, label, items) {
-  const list = Array.isArray(items) ? items.filter(Boolean) : [];
-  if (list.length === 0) return;
-  const heading = document.createElement("p");
-  heading.className = "suggested-setup-list-label";
-  heading.textContent = label;
-  const ul = document.createElement("ul");
-  ul.className = className;
-  list.forEach((text) => {
-    const li = document.createElement("li");
-    li.textContent = text;
-    ul.append(li);
-  });
-  card.append(heading, ul);
-}
-
-// Hva et forslag faktisk kan Â«settesÂ» til i eksisterende state. Formasjons- og
-// treningsuke-forslag peker pÃ¥ et konkret valg (selectedFormationId / ukens
-// treningsfokus); kampplan-forslag er rene rÃ¥d uten egen state og fÃ¥r ikke knapp.
-function resolveSuggestedSetupAction(suggestion) {
-  if (suggestion.type === "formation") {
-    const formationId = suggestion.id.startsWith("formation:")
-      ? suggestion.id.slice("formation:".length)
-      : null;
-    if (!formationId) return null;
-    const isSelected = state.selectedFormationId === formationId;
-    const unlocked = isFormationUnlocked(formationId);
-    return {
-      isSelected,
-      disabled: !unlocked || isSelected,
-      label: isSelected ? "Aktivt system" : unlocked ? "Bruk dette systemet" : "LÃ¥st formasjon",
-      apply: () => {
-        if (!isFormationUnlocked(formationId)) return;
-        state.selectedFormationId = formationId;
-        seedLineupForFormation();
-        ensurePositionsForFormation();
-        renderApp();
-      }
-    };
-  }
-  if (suggestion.type === "training_week") {
-    const focusId = suggestion.relatedTrainingFocusIds[0]
-      || (suggestion.id.startsWith("training_week:") ? suggestion.id.slice("training_week:".length) : null);
-    if (!focusId) return null;
-    const isSelected = state.weeklyTrainingFocus?.focusId === focusId;
-    const locked = Boolean(state.matchday?.session || state.weeklyTrainingFocus?.appliedSessionId);
-    return {
-      isSelected,
-      disabled: isSelected || locked,
-      label: isSelected ? "Valgt fokus" : "Velg som treningsfokus",
-      apply: () => selectWeeklyTrainingFocus(focusId)
-    };
-  }
-  return null;
-}
-
-function buildSuggestedSetupCard(suggestion) {
-  const action = resolveSuggestedSetupAction(suggestion);
-  const card = document.createElement("article");
-  card.className = "suggested-setup-card";
-  if (action?.isSelected) card.classList.add("is-selected");
-
-  if (action?.isSelected) {
-    const chosen = document.createElement("span");
-    chosen.className = "card-selected-flag";
-    chosen.textContent = "âœ“ Valgt";
-    card.append(chosen);
-  }
-
-  const head = document.createElement("div");
-  head.className = "suggested-setup-head";
-  const title = document.createElement("h4");
-  title.textContent = suggestion.title;
-  const confidence = document.createElement("span");
-  confidence.className = "suggested-setup-confidence";
-  confidence.dataset.level = suggestedSetupConfidenceLabel(suggestion.confidence).toLowerCase();
-  confidence.textContent = `Konfidens: ${suggestedSetupConfidenceLabel(suggestion.confidence)}`;
-  head.append(title, confidence);
-  card.append(head);
-
-  const summary = document.createElement("p");
-  summary.className = "suggested-setup-summary";
-  summary.textContent = suggestion.summary;
-  card.append(summary);
-
-  if (suggestion.type === "formation") {
-    const formationId = suggestion.id.startsWith("formation:") ? suggestion.id.slice("formation:".length) : null;
-    const learningHint = getFormationLearningHint(state.formationKnowledgeById[formationId]);
-    if (learningHint) {
-      const hint = document.createElement("p");
-      hint.className = "suggested-setup-learning-hint";
-      hint.textContent = `LÃ¦ringshint: ${learningHint}`;
-      card.append(hint);
-    }
-  }
-
-  appendSuggestedSetupList(card, "suggested-setup-why", "Hvorfor nÃ¥", suggestion.why);
-  appendSuggestedSetupList(card, "suggested-setup-risks", "Risiko", suggestion.risks);
-  appendSuggestedSetupList(card, "suggested-setup-adjust", "Du kan justere", suggestion.suggestedAdjustments);
-
-  // Forslag som peker pÃ¥ et konkret valg fÃ¥r en knapp som setter det i state.
-  // Kampplan-forslag er rene rÃ¥d og forblir uten knapp.
-  if (action) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "suggested-setup-apply";
-    button.textContent = action.label;
-    button.disabled = action.disabled;
-    if (!action.disabled) {
-      button.addEventListener("click", action.apply);
-    }
-    card.append(button);
-  }
-
-  return card;
-}
-
-function renderSuggestedSetups(teamFit) {
-  const container = elements.suggestedSetupsTactics;
-  if (!container) return;
-
-  container.textContent = "";
-
-  const formation = getFormation();
-  if (!formation) {
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Velg et system for Ã¥ se foreslÃ¥tte oppsett.";
-    container.append(empty);
-    return;
-  }
-
-  const suggested = createSuggestedSetups({
-    teamFit,
-    formation,
-    tactic: getTactic(),
-    availableFormations: getAvailability().unlockedFormations,
-    formationKnowledgeById: state.formationKnowledgeById,
-    opponent: getMiniSeasonNextOpponent(),
-    coachContext: getCoachContext(),
-    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-    // Off-pitch: forslagene fÃ¥r bare det halvskjulte laget (synlige signaler),
-    // aldri hele hidden-blokken â€” en bevisst manager kan lese mer.
-    offPitchState: getOffPitchState(),
-    limit: 3
-  });
-
-  let total = 0;
-  SUGGESTED_SETUP_GROUPS.forEach(({ type, label }) => {
-    const items = Array.isArray(suggested[type]) ? suggested[type] : [];
-    if (items.length === 0) return;
-    total += items.length;
-
-    const group = document.createElement("div");
-    group.className = "suggested-setups-group";
-    group.dataset.type = type;
-
-    const heading = document.createElement("h3");
-    heading.className = "suggested-setups-group-label";
-    heading.textContent = label;
-    group.append(heading);
-
-    const cards = document.createElement("div");
-    cards.className = "suggested-setups-cards";
-    items.forEach((suggestion) => cards.append(buildSuggestedSetupCard(suggestion)));
-    group.append(cards);
-    container.append(group);
-  });
-
-  if (total === 0) {
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Ingen forslag akkurat nÃ¥ â€“ fyll laget for et bedre datagrunnlag.";
-    container.append(empty);
-  }
-}
-
-// Training Program Composition v1: ferdige ukeprogram (flere Ã¸kter) som
-// valgspill. Bygger pÃ¥ samme motorer som resten av appen og degraderer trygt.
-// Forslagene lÃ¥ser ikke spilleren â€” de viser faglige standardvalg som et bevisst
-// kontekstuelt valg kan slÃ¥.
-function trainingProgramConfidenceLabel(confidence) {
-  const value = Number(confidence) || 0;
-  if (value >= 0.6) return "HÃ¸y";
-  if (value >= 0.45) return "Middels";
-  return "Lav";
-}
-
-const PROGRAM_INTENSITY_LABEL = { low: "lav", medium: "moderat", high: "hÃ¸y" };
-
-function buildTrainingProgramCard(program, context = {}) {
-  const isSelected = Boolean(context.isSelected);
-  const locked = Boolean(context.locked);
-  const card = document.createElement("article");
-  card.className = "training-program-card";
-  if (isSelected) card.classList.add("is-selected");
-  const canSelect = !isSelected && !locked;
-  if (canSelect) {
-    card.tabIndex = 0;
-    card.setAttribute("role", "button");
-    card.setAttribute("aria-label", `Velg treningsprogram: ${program.title}`);
-    card.addEventListener("click", (event) => {
-      if (event.target instanceof HTMLButtonElement) return;
-      selectWeeklyTrainingProgram(program);
-    });
-    card.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      selectWeeklyTrainingProgram(program);
-    });
-  }
-
-  if (isSelected) {
-    const chosen = document.createElement("span");
-    chosen.className = "card-selected-flag";
-    chosen.textContent = "âœ“ Valgt";
-    card.append(chosen);
-  }
-
-  const head = document.createElement("div");
-  head.className = "training-program-head";
-  const title = document.createElement("h3");
-  title.textContent = program.title;
-  const confidence = document.createElement("span");
-  confidence.className = "training-program-confidence";
-  confidence.dataset.level = trainingProgramConfidenceLabel(program.confidence).toLowerCase();
-  // totalScore/konfidens som forklaring, ikke fasit.
-  confidence.textContent = `Uttelling ${program.scoring.totalScore} Â· konfidens ${trainingProgramConfidenceLabel(program.confidence)}`;
-  head.append(title, confidence);
-  card.append(head);
-
-  const summary = document.createElement("p");
-  summary.className = "training-program-summary";
-  summary.textContent = program.summary;
-  card.append(summary);
-
-  // Playable Manager Flow Polish v1: kort, lesbar "Passer nÃ¥ fordi"-etikett i
-  // stedet for et nÃ¸ytralt avsnitt.
-  if (program.recommendedBecause.length > 0) {
-    const why = document.createElement("p");
-    why.className = "training-program-why";
-    why.textContent = `Passer nÃ¥ fordi: ${program.recommendedBecause[0]}`;
-    card.append(why);
-  }
-
-  // Forbereder mot: matchup-relevansen mot neste motstander, vist nÃ¥r programmet
-  // er foreslÃ¥tt nettopp pga. motstanderen (sourceSignals inneholder "opponent").
-  const opponentName = context.opponentName;
-  if (opponentName && Array.isArray(program.sourceSignals) && program.sourceSignals.includes("opponent")) {
-    const prepares = document.createElement("p");
-    prepares.className = "training-program-prepares";
-    prepares.textContent = `Forbereder mot: ${opponentName}`;
-    card.append(prepares);
-  }
-
-  // Ã˜ktene i uka â€” kompakt, foldet liste sÃ¥ kortet ikke domineres av detaljene.
-  const sessionsDetails = document.createElement("details");
-  sessionsDetails.className = "training-program-sessions-details";
-  const sessionsSummary = document.createElement("summary");
-  sessionsSummary.textContent = `Ã˜kter denne uka (${program.sessions.length})`;
-  sessionsDetails.append(sessionsSummary);
-  const sessions = document.createElement("ul");
-  sessions.className = "training-program-sessions";
-  program.sessions.forEach((session) => {
-    const li = document.createElement("li");
-    li.textContent = `${session.day}: ${session.title} (${PROGRAM_INTENSITY_LABEL[session.intensity] || session.intensity})`;
-    sessions.append(li);
-  });
-  sessionsDetails.append(sessions);
-  card.append(sessionsDetails);
-
-  if (program.risks.length > 0) {
-    const riskLabel = document.createElement("p");
-    riskLabel.className = "training-program-list-label";
-    riskLabel.textContent = "Risiko";
-    const risks = document.createElement("ul");
-    risks.className = "training-program-risks";
-    program.risks.forEach((text) => {
-      const li = document.createElement("li");
-      li.textContent = text;
-      risks.append(li);
-    });
-    card.append(riskLabel, risks);
-  }
-
-  if (program.staffSupport) {
-    const support = document.createElement("div");
-    support.className = "training-program-staff-support";
-    const label = document.createElement("p");
-    label.className = "training-program-list-label";
-    label.textContent = `StÃ¸tte fra stab: ${program.staffSupport.label}`;
-    support.append(label);
-    const details = document.createElement("ul");
-    [...(program.staffSupport.notes || [])].slice(0, 3).forEach((text) => {
-      const li = document.createElement("li");
-      li.textContent = text;
-      details.append(li);
-    });
-    if (!details.childNodes.length) {
-      const li = document.createElement("li");
-      li.textContent = "Ingen tydelig spesialiststÃ¸tte â€” managerens tolkning blir viktigere.";
-      details.append(li);
-    }
-    support.append(details);
-    card.append(support);
-  }
-
-  // Valgknapp: gjÃ¸r kortet til et faktisk valg koblet til ukens treningsstate.
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "training-program-select";
-  button.textContent = isSelected ? "âœ“ Valgt" : "Velg dette programmet";
-  button.disabled = isSelected || locked;
-  if (canSelect) {
-    button.addEventListener("click", () => selectWeeklyTrainingProgram(program));
-  }
-  card.append(button);
-
-  return card;
-}
-
-function renderTrainingProgramCompositions(teamFit) {
-  const container = elements.trainingPrograms;
-  if (!container) return;
-
-  container.textContent = "";
-
-  const selectedProgramId = state.weeklyTrainingProgram?.programId || null;
-  const locked = Boolean(state.matchday?.session || state.weeklyTrainingProgram?.applied);
-
-  const opponent = getMiniSeasonNextOpponent();
-  const offPitchState = getOffPitchState();
-  const programs = createTrainingProgramCompositions({
-    teamFit,
-    opponent,
-    formation: getFormation(),
-    tactic: getTactic(),
-    formationMatchup: getFormationMatchupVsOpponent(opponent),
-    coachContext: getCoachContext(),
-    lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-    // Off-pitch Parameters v1: slitasje/skadefare/press kommer nÃ¥ fra manager-
-    // statens kontekstlag. Restitusjon/skadeforebygging blir dermed situasjons-
-    // bestemt â€” den mÃ¥ fortjenes av faktisk slitasje, ikke velges som vane.
-    offPitchState,
-    recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
-    staffIdentity: getStaffIdentitySummary(),
-    limit: 3
-  });
-
-  if (!Array.isArray(programs) || programs.length === 0) {
-    updateWeeklyTrainingProgramStatus(null);
-    renderTrainingProgramContext({ recommendation: null, programs: [], selectedProgram: null });
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Ingen treningsprogram akkurat nÃ¥ â€“ fyll laget for et bedre datagrunnlag.";
-    container.append(empty);
-    return;
-  }
-
-  // Valgt program kan ligge utenfor de 3 anbefalte denne renderen; pass pÃ¥ at
-  // det fortsatt vises som et kort sÃ¥ valget alltid er synlig.
-  let visiblePrograms = programs;
-  let selectedProgram = programs.find((program) => program.id === selectedProgramId) || null;
-  if (selectedProgramId && !selectedProgram) {
-    const extra = createTrainingProgramCompositions({
-      teamFit,
-      opponent,
-      formation: getFormation(),
-      tactic: getTactic(),
-      formationMatchup: getFormationMatchupVsOpponent(opponent),
-      coachContext: getCoachContext(),
-      lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-      offPitchState,
-      recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
-      staffIdentity: getStaffIdentitySummary(),
-      limit: 8
-    });
-    selectedProgram = (Array.isArray(extra) ? extra : []).find((program) => program.id === selectedProgramId) || null;
-    if (selectedProgram) {
-      visiblePrograms = [selectedProgram, ...programs.filter((program) => program.id !== selectedProgramId)];
-    }
-  }
-
-  updateWeeklyTrainingProgramStatus(selectedProgram);
-  renderTrainingProgramContext({ recommendation: null, programs: visiblePrograms, selectedProgram });
-
-  visiblePrograms.forEach((program, index) => {
-    const sectionLabel = document.createElement("p");
-    sectionLabel.className = "training-program-section-label";
-    sectionLabel.textContent = index === 0 ? "Anbefalt nÃ¥" : index === 1 ? "Andre trygge valg" : "Dypere treningsprogram / historikk";
-    container.append(sectionLabel);
-    container.append(
-      buildTrainingProgramCard(program, {
-        isSelected: program.id === selectedProgramId,
-        locked,
-        opponentName: opponent?.name || null
-      })
-    );
-  });
-}
-
-// Kort oppsummering av ukens valgte treningsprogram pÃ¥ hovedflaten/treningsfanen.
-function updateWeeklyTrainingProgramStatus(selectedProgram) {
-  const status = elements.weeklyTrainingProgramStatus;
-  if (!status) return;
-  const week = Number(state.clubWeekState?.week) || 1;
-  if (selectedProgram) {
-    const applied = state.weeklyTrainingProgram?.applied;
-    status.textContent = `Uke ${week}: ${selectedProgram.title}${applied ? " Â· brukt denne uka" : " Â· valgt"}`;
-    status.dataset.selected = "true";
-  } else {
-    status.textContent = `Uke ${week}: Velg ett treningsprogram for uka.`;
-    status.dataset.selected = "false";
-  }
-}
-
-// Off-pitch Parameters v1: kompakt Â«KontekstÂ»-seksjon i managerkontor-stil.
-// Viser lesbare manager-signaler (fysisk, psykisk, garderobe, press, styre/
-// media, taktisk klarhet, skadefare) â€” ikke rÃ¥ tall, og aldri hele hidden-laget.
-// Poenget er at manageren skal LESE konteksten, ikke avlese et regneark.
-function renderContextPanel() {
-  const container = elements.contextSignals;
-  if (!container) return;
-
-  const summary = summarizeOffPitchContext(getOffPitchState());
-
-  if (elements.contextHeadline) {
-    elements.contextHeadline.textContent = summary.headline;
-    elements.contextHeadline.dataset.tone = summary.tone;
-  }
-
-  container.textContent = "";
-  summary.visible.forEach((signal) => {
-    const row = document.createElement("article");
-    row.className = "context-signal";
-    row.dataset.severity = signal.severity;
-
-    const label = document.createElement("span");
-    label.className = "context-signal-label";
-    label.textContent = signal.label;
-
-    const text = document.createElement("span");
-    text.className = "context-signal-text";
-    text.textContent = signal.text;
-
-    row.append(label, text);
-    container.append(row);
-  });
-
-  // Vag hint om skjult uro â€” synlig at noe er der, ikke hva. Forsterker
-  // lÃ¦ringsspill-poenget: forslagene ser ikke alt.
-  if (summary.hiddenHint) {
-    const hint = document.createElement("p");
-    hint.className = "context-hidden-hint";
-    hint.textContent = summary.hiddenHint;
-    container.append(hint);
-  }
-}
-
-function renderMiniSeason() {
-  const statusEl = elements.miniSeasonStatus;
-  const overview = elements.miniSeasonOverview;
-  const startButton = elements.startMiniSeasonButton;
-  const resetButton = elements.resetMiniSeasonButton;
-  const miniSeason = state.miniSeason;
-  const panel = statusEl?.closest(".mini-season-panel") || overview?.closest(".mini-season-panel") || null;
-  if (panel) panel.hidden = !isScenarioModeActive();
-  if (!isScenarioModeActive()) {
-    if (overview) overview.textContent = "";
-    return;
-  }
-
-  if (startButton) {
-    startButton.hidden = miniSeason?.status === "active";
-    startButton.textContent = miniSeason?.status === "completed" ? "Start ny prÃ¸veperiode" : "Start prÃ¸veperiode";
-  }
-  if (resetButton) {
-    resetButton.hidden = !miniSeason;
-  }
-
-  const summary = miniSeason ? summarizeMiniSeason(miniSeason) : null;
-
-  if (statusEl) {
-    if (!miniSeason || !summary) {
-      statusEl.textContent =
-        "Ingen aktiv prÃ¸veperiode. Start en 5-kampers prÃ¸veperiode og bli vurdert av styret â€” anbefalt ramme for kampdag-loopen.";
-    } else if (miniSeason.status === "completed") {
-      statusEl.textContent = `PrÃ¸veperioden er fullfÃ¸rt: ${summary.points} poeng pÃ¥ ${miniSeason.totalWeeks} kamper.`;
-    } else {
-      statusEl.textContent = `Runde ${Math.min(miniSeason.weekIndex + 1, miniSeason.totalWeeks)} av ${miniSeason.totalWeeks} Â· ${summary.points} poeng sÃ¥ langt.`;
-    }
-  }
-
-  if (!overview) {
-    return;
-  }
-
-  overview.textContent = "";
-
-  if (!miniSeason || !summary) {
-    return;
-  }
-
-  // SesongmÃ¥l + samlet styreforventning: den sportslige retningen for perioden.
-  appendMiniSeasonMeta(overview, `SesongmÃ¥l: ${miniSeason.seasonGoal}`, "mini-season-goal");
-  if (miniSeason.boardExpectation) {
-    appendMiniSeasonMeta(overview, miniSeason.boardExpectation);
-  }
-
-  // Neste motstander med hjemme/borte, forventning og Â«hva betyr dette nÃ¥?Â».
-  if (miniSeason.status === "active") {
-    const nextMatch = getCurrentMiniSeasonMatch(miniSeason);
-    if (nextMatch) {
-      const venue = nextMatch.homeAway === "home" ? "Hjemme" : "Borte";
-      appendMiniSeasonMeta(
-        overview,
-        `Runde ${nextMatch.round}/${miniSeason.totalWeeks} Â· ${nextMatch.opponentName} Â· ${venue}`,
-        "mini-season-next-opponent"
-      );
-      appendMiniSeasonMeta(overview, nextMatch.narrativeHook);
-    }
-  }
-
-  renderMiniSeasonStanding(overview, summary, createMiniSeasonFormGuide(miniSeason));
-  renderMiniSeasonTable(overview, createMiniSeasonTable(miniSeason, getMiniSeasonContext()));
-  renderMiniSeasonResults(overview, miniSeason);
-
-  if (miniSeason.status === "completed") {
-    renderMiniSeasonVerdict(overview, miniSeason.finalReview);
-  }
-}
-
-// League Loop v0.2: ligasesong-panelet pÃ¥ Oversikt. Samme motor og
-// visningshjelpere som prÃ¸veperioden, men liga-presentasjon: auto-startet
-// sesong, terminliste (neste kamp), tabell, form, resultater og styredom ved
-// sesongslutt. Vises KUN i ligamodus; prÃ¸veperiodepanelet er fortsatt
-// scenario-isolert i renderMiniSeason.
-function renderLeagueSeason() {
-  const panel = elements.leagueSeasonPanel;
-  if (!panel) return;
-
-  panel.hidden = !isLeagueModeActive();
-  if (!isLeagueModeActive()) {
-    if (elements.leagueSeasonOverview) elements.leagueSeasonOverview.textContent = "";
-    return;
-  }
-
-  ensureLeagueSeason();
-
-  const season = state.leagueSeason;
-  const statusEl = elements.leagueSeasonStatus;
-  const overview = elements.leagueSeasonOverview;
-  const newSeasonButton = elements.startNewLeagueSeasonButton;
-  const table = season ? createLeagueTable(season) : [];
-  const managerRow = table.find((row) => row.isManager);
-
-  if (newSeasonButton) {
-    newSeasonButton.hidden = season?.status !== "completed";
-  }
-
-  if (statusEl) {
-    if (!season) {
-      statusEl.textContent = "Ligasesongen starter nÃ¥r fÃ¸r-sesongen er bekreftet: klubbanker, tropp, stab, ellever, formasjon og trening.";
-    } else if (season.status === "completed") {
-      statusEl.textContent = `Sesongen er fullfÃ¸rt. ${table[0]?.club || "Ligamesteren"} er seriemester; ${managerRow?.club} endte pÃ¥ ${managerRow?.position}. plass med ${managerRow?.points} poeng.`;
-    } else {
-      statusEl.textContent = `Serierunde ${season.currentRound} av 14 Â· ${managerRow?.position}. plass Â· ${managerRow?.points} poeng.`;
-    }
-  }
-
-  if (!overview) return;
-  overview.textContent = "";
-  if (!season) return;
-
-  if (season.status === "active") {
-    const nextMatch = getNextLeagueOpponent(season);
-    if (nextMatch) {
-      const venue = nextMatch.homeAway === "home" ? "Hjemme" : "Borte";
-      appendMiniSeasonMeta(
-        overview,
-        `Neste kamp â€” serierunde ${nextMatch.round}/14: ${nextMatch.name} Â· ${venue}${nextMatch.ground ? ` Â· ${nextMatch.ground}` : ""}`,
-        "mini-season-next-opponent"
-      );
-    }
-  }
-  const wrap = document.createElement("div"); wrap.className = "mini-season-table-wrap";
-  const tableEl = document.createElement("table"); tableEl.className = "mini-season-table";
-  tableEl.innerHTML = "<caption>Ligatabell</caption><thead><tr><th>#</th><th>Klubb</th><th>S</th><th>V</th><th>U</th><th>T</th><th>MF</th><th>MM</th><th>Â±</th><th>P</th></tr></thead>";
-  const body = document.createElement("tbody");
-  table.forEach((row) => { const tr = document.createElement("tr"); if (row.isManager) tr.className = "is-manager-club"; [row.position, row.club, row.played, row.won, row.drawn, row.lost, row.goalsFor, row.goalsAgainst, row.goalDifference, row.points].forEach((value) => { const cell = document.createElement("td"); cell.textContent = String(value); tr.append(cell); }); body.append(tr); });
-  tableEl.append(body); wrap.append(tableEl); overview.append(wrap);
-  const details = document.createElement("details"); details.className = "league-fixtures-details";
-  const detailsSummary = document.createElement("summary"); detailsSummary.textContent = "Se full terminliste og alle resultater"; details.append(detailsSummary);
-  season.fixtures.forEach((round) => { const section = document.createElement("section"); const heading = document.createElement("h4"); heading.textContent = `Serierunde ${round.round}`; section.append(heading); round.matches.forEach((match) => { const home = season.clubs.find((club) => club.id === match.homeClubId)?.name; const away = season.clubs.find((club) => club.id === match.awayClubId)?.name; const p = document.createElement("p"); p.textContent = `${home} â€“ ${away}${match.result ? `  ${match.result.homeGoals}â€“${match.result.awayGoals}` : ""}`; section.append(p); }); details.append(section); });
-  overview.append(details);
-}
-
-// Finn aktiv kunnskapsanbefaling i gjeldende viewModel, eller null hvis ingen er valgt
-// eller det valgte kortet ikke finnes lenger. Kun UI/state, ingen engine-effekt.
-function getActiveKnowledgeRecommendation(viewModel) {
-  if (!viewModel || !state.activeKnowledgeFocusId) return null;
-  return viewModel.knowledgeRecommendations.find(
-    (item) => item.principleId === state.activeKnowledgeFocusId
-  ) || null;
-}
-
-// Kunnskapsuke-tellere leses fra state (ikke fra viewModel) og hÃ¸rer derfor
-// hjemme i den synkrone render-stien, ikke bak den async TS-broen. Ellers
-// sluttet de Ã¥ oppdatere seg nÃ¥r dist/ ikke var bygget.
-function renderTrainingWeekCounters() {
-  if (elements.trainingWeekStatus) {
-    elements.trainingWeekStatus.textContent = `Kunnskapsuke ${state.trainingWeek}`;
-  }
-
-  if (elements.knowledgeCompletedThisWeek) {
-    elements.knowledgeCompletedThisWeek.textContent = String(countCompletedThisWeek());
-  }
-
-  if (elements.knowledgeCompletedTotal) {
-    elements.knowledgeCompletedTotal.textContent = String(countCompletedTotal());
-  }
-}
-
-function renderManagerDashboardViewModel(viewModel, teamFit = null) {
-  if (!viewModel) {
-    return;
-  }
-
-  // Scorepanelet (score/metrikker/rapport) eies av teamFit via renderTeamSummary/
-  // renderReport. Sammendrag, topp-grep, rollebytter og svakheter eies av teamFit
-  // via renderManagerDetailFromTeamFit. Denne funksjonen skriver derfor kun de
-  // gjenstÃ¥ende dashboard-seksjonene: treningsplan (med kunnskapsfokus) og
-  // kunnskapsanbefalinger â€“ innhold som er koblet til kunnskaps-funksjonen.
-
-  const activeKnowledge = getActiveKnowledgeRecommendation(viewModel);
-
-  // TreningsÃ¸ktene avledes fra teamFit-svakhetene nÃ¥r motoren er lastet, slik at
-  // de matcher svakhetene panelet viser. Faller tilbake til den strukturerte
-  // treningsplanen uten bygget dist/. Kunnskapsfokus-elementet (valgt ukesÃ¸kt)
-  // beholdes uansett, siden det tilhÃ¸rer kunnskaps-funksjonen.
-  const trainingEngine = getLoadedManagerEngine();
-  const teamFitFocus = (trainingEngine?.createTrainingFocusFromTeamFit && teamFit)
-    ? trainingEngine.createTrainingFocusFromTeamFit(teamFit)
-    : viewModel.trainingPlan.map((item) => ({
-        areaText: item.areaText,
-        suggestedSession: item.suggestedSession,
-        weakPointCode: item.area
-      }));
-
-  const trainingItems = [
-    ...(activeKnowledge ? [{
-      type: "knowledge_focus",
-      principleId: activeKnowledge.principleId,
-      text: `Valgt ukesÃ¸kt: ${activeKnowledge.title} â€” ${activeKnowledge.trainingSession}`
-    }] : []),
-    ...teamFitFocus.map((item) => {
-      const trainingText = getFootballBookSurfaceText("training", {
-        weakPoints: item.weakPointCode ? [item.weakPointCode] : [],
-        trainingAreas: [item.areaText],
-      });
-      return {
-        type: "engine_training",
-        text: `${item.areaText}: ${trainingText || item.suggestedSession}`
-      };
-    })
-  ];
-
-  renderTrainingFocusList(
-    elements.managerTrainingPlan,
-    trainingItems,
-    viewModel.emptyStates.trainingPlan,
-  );
-
-  // Rollebytter og svakheter rendres separat fra teamFit
-  // (renderManagerDetailFromTeamFit), slik at de bruker samme motor/metrikker
-  // som elleveren og headline. Denne funksjonen rÃ¸rer dem derfor ikke lenger.
-
-  renderKnowledgeCards(
-    elements.managerKnowledgeRecommendations,
-    viewModel.knowledgeRecommendations,
-    viewModel.emptyStates.knowledgeRecommendations,
-  );
-
-  renderTrainingHistory(elements.trainingHistoryList, viewModel);
-
-  if (elements.activeKnowledgeFocus) {
-    const active = activeKnowledge;
-
-    if (active) {
-      if (isKnowledgeFocusCompleted(active.principleId)) {
-        elements.activeKnowledgeFocus.textContent =
-          `Aktivt fokus: ${active.title} â€” fullfÃ¸rt denne uken`;
-      } else {
-        elements.activeKnowledgeFocus.textContent =
-          `Aktivt fokus: ${active.title} â€” ${active.trainingSession}`;
-      }
-    } else {
-      elements.activeKnowledgeFocus.textContent = "Ingen aktiv kunnskapsÃ¸kt valgt.";
-    }
-
-    if (elements.clearKnowledgeFocus) {
-      elements.clearKnowledgeFocus.hidden = !active;
-    }
-  }
-}
-
-function getBrowserManagerStateArgs() {
-  return {
-    teamId: "browser_legacy_team",
-    teamName: "Browser Legacy Team",
-    players: state.players,
-    roles: state.roles,
-    tactics: state.tactics,
-    formations: state.formations,
-    selectedTacticId: state.selectedTacticId,
-    selectedFormationId: state.selectedFormationId,
-    lineup: state.lineup,
-    knowledgePrinciples: state.knowledgePrinciples,
-  };
-}
-
-// Render manager-detalj-panelet fra TS-motoren. Etter preloadManagerEngine() i
-// init() er motoren tilgjengelig synkront, sÃ¥ vi bygger og rendrer i samme
-// tikk som resten av renderApp (ingen async-blink). FÃ¸r motoren er ferdig
-// lastet â€“ eller hvis dist/ ikke er bygget â€“ faller vi tilbake til den async
-// lastestien, som er null-trygg og lar legacy-demoen kjÃ¸re uendret.
-// Manager-detalj-panelets teamFit-avledede seksjoner (rollebytter + svakheter).
-// De bruker samme motor/metrikker (calculateTeamFit) som headline og elleveren,
-// og erstatter den strukturerte pipelinens versjoner som kunne motsi headline.
-// Uten bygget dist/ (motor ikke lastet) lar vi panelet stÃ¥ som det er.
-function renderManagerDetailFromTeamFit(teamFit) {
-  const engine = getLoadedManagerEngine();
-
-  // Samme motorkall, to visninger: den dype rapporten (modal) og Analyse-fanen.
-  const roleChangeTargets = [elements.managerRoleChanges, elements.analyseRoleChanges].filter(Boolean);
-  const weakPointTargets = [elements.managerWeakPoints, elements.analyseWeakPoints].filter(Boolean);
-
-  if (roleChangeTargets.length > 0 && engine?.recommendRoleChangesFromTeamFit && teamFit) {
-    const recommendations = engine
-      .recommendRoleChangesFromTeamFit(teamFit, { tactic: getTactic(), roles: state.roles })
-      .filter((recommendation) => recommendation.status !== "keep_role")
-      .sort((a, b) => (b.candidates[0]?.improvement ?? 0) - (a.candidates[0]?.improvement ?? 0));
-
-    roleChangeTargets.forEach((target) => renderTextList(
-      target,
-      recommendations,
-      (recommendation) => recommendation.label,
-      "Ingen tydelige rollebytter akkurat nÃ¥. Rollebruken bÃ¸r i hovedsak beholdes.",
-    ));
-  }
-
-  if (weakPointTargets.length > 0 && engine?.analyzeWeakPointsFromTeamFit && teamFit) {
-    const weakPoints = engine.analyzeWeakPointsFromTeamFit(teamFit);
-
-    weakPointTargets.forEach((target) => renderTextList(
-      target,
-      weakPoints,
-      (weakPoint) => {
-        const assistantText = getFootballBookSurfaceText("assistant", {
-          weakPoints: [weakPoint.code],
-          relatedTags: [weakPoint.categoryText],
-        });
-        return assistantText
-          ? `${weakPoint.categoryText}: ${weakPoint.label} â€” ${assistantText}`
-          : `${weakPoint.categoryText}: ${weakPoint.label} â€” ${weakPoint.suggestedAction}`;
-      },
-      "Ingen tydelige svakheter i denne vurderingen.",
-    ));
-  }
-}
-
-// Sesongdommen og merittlista pÃ¥ Statistikk. Dommen vises bare nÃ¥r sesongen
-// faktisk er ferdig; merittlista stÃ¥r alltid, som karrieren din.
-function renderSeasonReview() {
-  const panel = elements.seasonReviewPanel;
-  const review = state.seasonReview || null;
-
-  if (panel) {
-    panel.hidden = !isLeagueModeActive() || !review;
-    if (review && !panel.hidden) {
-      panel.dataset.verdict = review.verdict;
-      if (elements.seasonReviewVerdict) {
-        elements.seasonReviewVerdict.textContent = review.sacked
-          ? "Sesongdom Â· sparket"
-          : review.warning
-            ? "Sesongdom Â· advarsel"
-            : `Sesongdom Â· ${review.verdictLabel}`;
-      }
-      if (elements.seasonReviewHeadline) elements.seasonReviewHeadline.textContent = review.headline;
-      if (elements.seasonReviewBoard) {
-        const trend = review.boardTrustDelta >= 0 ? `+${review.boardTrustDelta}` : `${review.boardTrustDelta}`;
-        elements.seasonReviewBoard.textContent = `${review.boardMessage} Styretillit ${trend} (nÃ¥ ${review.boardTrustAfter}).`;
-      }
-      renderTextList(elements.seasonReviewReasons, review.reasons, (line) => line, "");
-      renderTextList(elements.seasonReviewHighlights, review.highlights, (line) => line, "");
-    }
-  }
-
-  const archive = getSeasonArchive();
-  const summary = summarizeSeasonHistory(archive);
-  if (elements.seasonArchiveSummary) {
-    const target = isLeagueModeActive() && state.leagueSeason?.status === "active" ? getSeasonTarget() : null;
-    elements.seasonArchiveSummary.textContent = target
-      ? `${summary.headline} Denne sesongen: ${target.description}`
-      : summary.headline;
-  }
-
-  const container = elements.seasonArchiveTable;
-  if (!container) return;
-  container.textContent = "";
-  if (archive.length === 0) return;
-
-  const table = document.createElement("table");
-  table.className = "stats-table";
-  const head = document.createElement("thead");
-  const headRow = document.createElement("tr");
-  ["Sesong", "Plass", "P", "MÃ¥l", "Dom", "Toppscorer"].forEach((label) => {
-    const th = document.createElement("th");
-    th.scope = "col";
-    th.textContent = label;
-    headRow.append(th);
-  });
-  head.append(headRow);
-
-  const body = document.createElement("tbody");
-  [...archive].reverse().forEach((entry) => {
-    const row = document.createElement("tr");
-    if (entry.sacked) row.className = "is-sacked";
-    else if (entry.warning) row.className = "is-warning";
-    const cells = [
-      String(entry.seasonNumber),
-      `${entry.position}.`,
-      String(entry.points),
-      `${entry.goalsFor}â€“${entry.goalsAgainst}`,
-      entry.verdictLabel || "",
-      entry.topScorer ? `${entry.topScorer.name} (${entry.topScorer.goals})` : "â€“"
-    ];
-    cells.forEach((value, index) => {
-      const cell = document.createElement(index === 0 ? "th" : "td");
-      if (index === 0) cell.scope = "row";
-      cell.textContent = value;
-      row.append(cell);
-    });
-    body.append(row);
-  });
-
-  table.append(head, body);
-  container.append(table);
-}
-
-// Scenariolista, bygget fra data. Hvert kort forklarer seg selv: hva epoken er,
-// hva utfordringen bestÃ¥r i, og hva du skal lÃ¦re av den â€” ikke bare et navn og
-// en Â«StartÂ»-knapp.
-function renderScenarioList() {
-  const list = elements.scenarioList;
-  if (!list) return;
-
-  const scenarios = Array.isArray(state.scenarios) ? state.scenarios : [];
-  list.textContent = "";
-
-  if (scenarios.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Scenariokatalogen kunne ikke lastes. Ligaspill og landslag virker som normalt.";
-    list.append(empty);
-    return;
-  }
-
-  const activeId = state.gameStartState?.activeScenarioId || null;
-
-  scenarios.forEach((scenario) => {
-    const info = describeScenario(scenario);
-    const card = document.createElement("article");
-    card.className = `scenario-card${info.id === activeId ? " is-active" : ""}`;
-
-    const era = document.createElement("span");
-    era.textContent = `${info.era} Â· ${info.matchCount} kamper`;
-
-    const name = document.createElement("strong");
-    name.textContent = info.name;
-
-    const subtitle = document.createElement("small");
-    subtitle.textContent = info.subtitle;
-
-    const lede = document.createElement("p");
-    lede.className = "muted-text";
-    lede.textContent = info.lede;
-
-    const challenge = document.createElement("p");
-    challenge.className = "scenario-challenge";
-    challenge.textContent = info.challenge;
-
-    const learn = document.createElement("p");
-    learn.className = "scenario-learning muted-text";
-    learn.textContent = `Du lÃ¦rer: ${info.learningFocus}`;
-
-    const opponents = document.createElement("p");
-    opponents.className = "scenario-opponents muted-text";
-    opponents.textContent = `${info.isOrdered ? "I rekkefÃ¸lge" : "Motstandere"}: ${info.opponentNames.join(" Â· ")}`;
-
-    const action = document.createElement("button");
-    action.type = "button";
-    action.className = "primary-action-button";
-    action.textContent = info.id === activeId ? "Aktivt scenario" : "Start scenario";
-    action.disabled = info.id === activeId;
-    if (info.id !== activeId) {
-      action.addEventListener("click", () => startScenario(info.id));
-    }
-
-    card.append(era, name, subtitle, lede, challenge, learn, opponents, action);
-    list.append(card);
-  });
-}
-
-// Start et scenario: lÃ¥ser motstanderne til scenarioets utvalg og setter i gang
-// den separate femkampersÃ¸kta. Ligaspillet rÃ¸res ikke.
-function startScenario(scenarioId) {
-  const scenario = getScenario(state.scenarios, scenarioId);
-  if (!scenario) return;
-  selectGameMode("scenario", { activeScenarioId: scenario.id });
-  startMiniSeason();
-  activateTab("dashboard");
-}
-
-// Troppens tilstand pÃ¥ Trening-flata: hvem er sliten, hvem er skadet, og hvem
-// bÃ¸r hviles. Formuleringene peker alltid pÃ¥ BRUKEN â€” en sliten spiller er ikke
-// en dÃ¥rlig spiller, han er en spiller manageren har brukt hardt.
-function renderSquadCondition() {
-  const conditions = getPlayerCondition();
-  const summary = summarizeSquadCondition(conditions);
-
-  if (elements.squadConditionSummary) {
-    // Etter sommerferien er alle uthvilte fordi kalenderen sa det â€” ikke fordi
-    // manageren roterte. Ã… rose ham for det ville vÃ¦rt en liten lÃ¸gn.
-    const playedThisSeason = conditions.some((entry) => Number(entry.matchesPlayed) > 0);
-    elements.squadConditionSummary.textContent = summary.tracked === 0
-      ? "Ingen kamper spilt ennÃ¥ â€” troppen er uthvilt."
-      : !playedThisSeason
-        ? `Troppen er uthvilt etter oppholdet. Belastningen bygger seg opp igjen fra fÃ¸rste kamp.`
-        : summary.injuredCount === 0 && summary.tiredCount === 0
-          ? `${summary.tracked} spillere fulgt. Ingen slitne, ingen skadde â€” du har rotert godt.`
-          : `${summary.tiredCount} sliten${summary.tiredCount === 1 ? "" : "e"}, ${summary.injuredCount} skadd${summary.injuredCount === 1 ? "" : "e"}. Treningsuka du velger avgjÃ¸r hvor mye laget henter inn igjen.`;
-  }
-
-  const list = elements.squadConditionList;
-  if (!list) return;
-  list.textContent = "";
-
-  const injured = conditions.filter((entry) => isInjured(entry));
-  const rest = playersNeedingRest(conditions);
-
-  if (injured.length === 0 && rest.length === 0) {
-    const empty = document.createElement("li");
-    empty.className = "muted-text";
-    empty.textContent = summary.tracked === 0
-      ? "Spill en kamp, sÃ¥ fÃ¸lger belastning, form og skaderisiko troppen videre."
-      : "Ingen som trenger avlastning akkurat nÃ¥.";
-    list.append(empty);
-    return;
-  }
-
-  injured.forEach((entry) => {
-    const item = document.createElement("li");
-    item.className = "is-injured";
-    const who = document.createElement("strong");
-    who.textContent = entry.name || entry.playerId;
-    const why = document.createElement("span");
-    why.textContent = describeCondition(entry);
-    item.append(who, why);
-    list.append(item);
-  });
-
-  rest.forEach((entry) => {
-    const item = document.createElement("li");
-    item.className = "is-tired";
-    const who = document.createElement("strong");
-    who.textContent = entry.name || entry.playerId;
-    const why = document.createElement("span");
-    why.textContent = entry.advice;
-    item.append(who, why);
-    list.append(item);
-  });
-}
-
-// Statistikk-fanen: sesongens tall. Tabellen og terminlista rendres av sine
-// egne funksjoner (renderLeagueSeasonPanel / renderMiniSeason) â€” de flyttet bare
-// hit fra en popup pÃ¥ Kontor. Dette er spillerdelen.
-let playerStatsSort = "goals";
-
-function renderPlayerStats() {
-  const rows = Array.isArray(state.playerSeasonStats?.rows) ? state.playerSeasonStats.rows : [];
-  const summary = summarizePlayerStats(rows);
-
-  // Plassering og styremÃ¥l lÃ¥ i Â«Klubben dinÂ»-boksen pÃ¥ Kontor. De hÃ¸rer her,
-  // ved siden av tabellen de leses av.
-  if (elements.statsStanding) {
-    let standing = "Ikke startet";
-    if (isLeagueSeasonActive() && state.leagueSeason) {
-      const table = createLeagueTable(state.leagueSeason);
-      const managerRow = Array.isArray(table) ? table.find((row) => row.isManager) : null;
-      if (managerRow) standing = `${managerRow.position}. plass Â· ${managerRow.points} poeng`;
-    }
-    elements.statsStanding.textContent = standing;
-  }
-  if (elements.statsBoardGoal) elements.statsBoardGoal.textContent = getLeagueSaveModel().boardExpectation;
-
-  if (elements.statsMatches) elements.statsMatches.textContent = String(summary.matches);
-  if (elements.statsGoals) elements.statsGoals.textContent = String(summary.totalGoals);
-  if (elements.statsAssists) elements.statsAssists.textContent = String(summary.totalAssists);
-  if (elements.statsTopScorer) {
-    elements.statsTopScorer.textContent = summary.topScorer
-      ? `${summary.topScorer.name} (${summary.topScorer.goals})`
-      : "â€“";
-  }
-  if (elements.statsSummary) {
-    elements.statsSummary.textContent = summary.matches === 0
-      ? "Ingen kamper spilt ennÃ¥. Statistikken fylles etter hvert som du spiller."
-      : summary.topAssist
-        ? `${summary.matches} kamper spilt. ${summary.topScorer?.name || "Ingen"} leder scoringslista, ${summary.topAssist.name} leder pÃ¥ mÃ¥lgivende.`
-        : `${summary.matches} kamper spilt.`;
-  }
-
-  const container = elements.playerStatsTable;
-  if (!container) return;
-  container.textContent = "";
-
-  if (rows.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "muted-text";
-    empty.textContent = "Ingen spillerstatistikk ennÃ¥. Spill en kamp, sÃ¥ fÃ¸res kamper, mÃ¥l og mÃ¥lgivende her.";
-    container.append(empty);
-    return;
-  }
-
-  const table = document.createElement("table");
-  table.className = "stats-table";
-  const head = document.createElement("thead");
-  const headRow = document.createElement("tr");
-  ["#", "Spiller", "Pos", "K", "Min", "M", "A", "M+A"].forEach((label) => {
-    const th = document.createElement("th");
-    th.scope = "col";
-    th.textContent = label;
-    headRow.append(th);
-  });
-  head.append(headRow);
-
-  const body = document.createElement("tbody");
-  rankPlayerStats(rows, { sortBy: playerStatsSort }).forEach((row, index) => {
-    const tr = document.createElement("tr");
-    const cells = [
-      String(index + 1),
-      row.name,
-      row.position || "â€“",
-      String(row.appearances),
-      String(row.minutes ?? row.appearances * 90),
-      String(row.goals),
-      String(row.assists),
-      String(row.points)
-    ];
-    cells.forEach((value, cellIndex) => {
-      const cell = document.createElement(cellIndex === 1 ? "th" : "td");
-      if (cellIndex === 1) cell.scope = "row";
-      cell.textContent = value;
-      tr.append(cell);
-    });
-    body.append(tr);
-  });
-
-  table.append(head, body);
-  container.append(table);
-}
-
-function initPlayerStatsSort() {
-  document.querySelectorAll("[data-stats-sort]").forEach((button) => {
-    button.addEventListener("click", () => {
-      playerStatsSort = button.dataset.statsSort || "goals";
-      document.querySelectorAll("[data-stats-sort]").forEach((other) => {
-        other.classList.toggle("is-active", other === button);
-      });
-      renderPlayerStats();
-    });
-  });
-}
-
-// Analyse-fanen: ettertanken etter kampen. Kamprapporten er den samme som pÃ¥
-// Kamp-flaten â€” Analyse er stedet du gÃ¥r tilbake til den, ikke en ny beregning.
-function renderAnalyse() {
-  const container = elements.analyseMatchReport;
-  if (!container) return;
-
-  container.textContent = "";
-
-  const lastMatch = state.matchday?.lastMatch || null;
-  if (!lastMatch) {
-    const empty = document.createElement("p");
-    empty.className = "matchday-empty muted-text";
-    empty.textContent = "Ingen kamp spilt ennÃ¥. Spill en kamp under Kamp, sÃ¥ ligger hele forklaringen her etterpÃ¥.";
-    container.append(empty);
-    return;
-  }
-
-  renderMatchdayReport(container, lastMatch);
-}
-
-function renderManagerEngineBridge(teamFit) {
-  if (getLoadedManagerEngine()) {
-    // Invalider evt. in-flight async-render slik at den ikke overskriver dette.
-    managerEngineRenderId += 1;
-
-    const legacyManagerState = createLegacyManagerAppStateFromBrowserStateSync(
-      getBrowserManagerStateArgs(),
-    );
-
-    renderManagerDashboardViewModel(
-      getDashboardViewModelFromLegacyManagerState(legacyManagerState),
-      teamFit,
-    );
-
-    return;
-  }
-
-  renderManagerEngineBridgeAsync(teamFit);
-}
-
-async function renderManagerEngineBridgeAsync(teamFit) {
-  const renderId = ++managerEngineRenderId;
-
-  const legacyManagerState = await createLegacyManagerAppStateFromBrowserState(
-    getBrowserManagerStateArgs(),
-  );
-
-  if (renderId !== managerEngineRenderId) {
-    return;
-  }
-
-  const viewModel = getDashboardViewModelFromLegacyManagerState(legacyManagerState);
-
-  renderManagerDashboardViewModel(viewModel, teamFit);
-}
-
-// Render Club Week-hendelseslogg: korte hendelser fra fasebytter, nyeste fÃ¸rst.
-// Bruker kun textContent, ingen innerHTML. Trygg fallback hvis felt mangler.
-function renderClubWeekEventLog(list) {
-  if (!list) return;
-
-  list.innerHTML = "";
-
-  if (!state.clubWeekEventLog.length) {
-    const empty = document.createElement("li");
-    empty.className = "club-week-event-log-empty";
-    empty.textContent = "Ingen klubbhendelser ennÃ¥.";
-    list.append(empty);
-    return;
-  }
-
-  for (const event of state.clubWeekEventLog) {
-    const week = (event && (typeof event.week === "number" || typeof event.week === "string"))
-      ? event.week
-      : "?";
-    const phaseLabel = (event && event.phaseLabel) || (event && event.phase) || "Fase";
-    const message = (event && event.message) || "Hendelse registrert.";
-
-    const item = document.createElement("li");
-    item.className = "club-week-event-log-item";
-    item.textContent = `Uke ${week} Â· ${phaseLabel}: ${message}`;
-    list.append(item);
-  }
-}
-
-// Render Club Week-panelet: uke, fase og klubbverdier. Async fordi summary/label
-// hentes via bridge (engine eller fallback). PÃ¥virker ikke resten av renderApp.
-// Tegn fase-stripa: Ã©n bolk per fase i rekkefÃ¸lge, gjeldende fase markert og
-// allerede passerte faser dempet. Rent visningslag â€” ingen state-endring.
-// Hver klubbukefase hÃ¸rer til en flate i menyen. Uten denne koblingen var
-// ukerytmen i Kontor bare en stripe med ord.
-const CLUB_WEEK_PHASE_TABS = Object.freeze({
-  analysis: "analyse",
-  inbox: "inbox",
-  training: "trening",
-  match_prep: "tactics",
-  matchday: "kamp",
-  review: "statistikk"
-});
-
-const CLUB_WEEK_PHASE_TAB_LABELS = Object.freeze({
-  analyse: "Analyse",
-  inbox: "AssistentrÃ¥d",
-  trening: "Trening",
-  tactics: "Taktikk",
-  kamp: "Kamp",
-  statistikk: "Statistikk"
-});
-
-function renderClubWeekPhaseSteps(container, phaseList, currentPhase) {
-  if (!container) {
-    return;
-  }
-  container.replaceChildren();
-  const phases = Array.isArray(phaseList) ? phaseList : [];
-  const currentIndex = phases.findIndex((entry) => entry.phase === currentPhase);
-
-  phases.forEach((entry, index) => {
-    const item = document.createElement("li");
-    item.className = "club-week-step";
-    if (index === currentIndex) {
-      item.classList.add("is-active");
-      item.setAttribute("aria-current", "step");
-    } else if (currentIndex >= 0 && index < currentIndex) {
-      item.classList.add("is-done");
-    }
-    // Fasene skal SENDE deg et sted. Ukerytmen sto som ren pynt i Kontor: den
-    // fortalte hvor du var i uka, men Ã¥ trykke pÃ¥ den gjorde ingenting â€” og da
-    // er den bare et skilt uten dÃ¸r. Hver fase har en flate der arbeidet
-    // faktisk gjÃ¸res; nÃ¥ er steget knappen dit.
-    const target = CLUB_WEEK_PHASE_TABS[entry.phase];
-    const label = document.createElement(target ? "button" : "span");
-    label.className = "club-week-step-label";
-    label.textContent = entry.label;
-    if (target) {
-      label.type = "button";
-      label.dataset.tabTarget = target;
-      label.title = entry.guidance
-        ? `${entry.guidance} â€” Ã¥pne ${CLUB_WEEK_PHASE_TAB_LABELS[target] || target}`
-        : `Ã…pne ${CLUB_WEEK_PHASE_TAB_LABELS[target] || target}`;
-      label.addEventListener("click", () => activateTab(target));
-    } else if (entry.guidance) {
-      label.title = entry.guidance;
-    }
-    item.append(label);
-    container.append(item);
-  });
-}
-
-async function renderClubWeek() {
-  if (!state.clubWeekState) {
-    return;
-  }
-
-  const clubWeekState = state.clubWeekState;
-
-  const [summary, phaseLabel, guidance, phaseList] = await Promise.all([
-    createClubWeekSummaryFromBrowser(clubWeekState),
-    getClubWeekPhaseLabelFromBrowser(clubWeekState.phase),
-    getClubWeekPhaseGuidanceFromBrowser(clubWeekState.phase),
-    listClubWeekPhasesFromBrowser(),
-  ]);
-
-  if (elements.clubWeekSummary) {
-    elements.clubWeekSummary.textContent = summary;
-  }
-
-  if (elements.clubWeekPhase) {
-    elements.clubWeekPhase.textContent = phaseLabel;
-  }
-
-  // Club Week Orchestrator v1: fase-stripa gjÃ¸r ukerytmen synlig og markerer
-  // hvor manageren er nÃ¥. Veiledningen forteller hva som skal gjÃ¸res i fasen.
-  if (elements.clubWeekPhaseSteps) {
-    renderClubWeekPhaseSteps(elements.clubWeekPhaseSteps, phaseList, clubWeekState.phase);
-  }
-
-  if (elements.clubWeekPhaseGuidance) {
-    elements.clubWeekPhaseGuidance.textContent = guidance;
-  }
-
-  if (elements.clubWeekFeedback) {
-    elements.clubWeekFeedback.textContent = state.clubWeekFeedback || "Klubbuken er klar.";
-  }
-
-  // Faseporten forklares her, men kan bare utfÃ¸res via Â«Neste handlingÂ».
-  if (elements.clubWeekGateHint) {
-    const gate = getClubWeekMatchdayGate();
-    elements.clubWeekGateHint.textContent = gate.isBlocked
-      ? gate.reason
-      : "Neste grep styres av Â«Neste handlingÂ».";
-  }
-
-  if (elements.clubBoardTrust) {
-    elements.clubBoardTrust.textContent = String(clubWeekState.boardTrust);
-  }
-
-  if (elements.clubPlayerMorale) {
-    elements.clubPlayerMorale.textContent = String(clubWeekState.playerMorale);
-  }
-
-  if (elements.clubTacticalClarity) {
-    elements.clubTacticalClarity.textContent = String(clubWeekState.tacticalClarity);
-  }
-
-  if (elements.clubTrainingCulture) {
-    elements.clubTrainingCulture.textContent = String(clubWeekState.trainingCulture);
-  }
-
-  if (elements.clubMediaPressure) {
-    elements.clubMediaPressure.textContent = String(clubWeekState.mediaPressure);
-  }
-
-  renderClubWeekEventLog(elements.clubWeekEventLog);
-}
-
-// Fallback-innboksmeldinger brukes hvis datafilen ikke laster. Holder
-// Innboksen levende selv uten data/club_inbox_messages.json.
-function getFallbackInboxMessages() {
-  return [
-    {
-      id: "welcome_from_board",
-      from: "Styret",
-      tag: "SesongmÃ¥l",
-      title: "Velkommen til klubben",
-      body: "Styret forventer en stabil sesong. Bygg en ellever som henger sammen taktisk, og vis at klassespillere kan brukes riktig.",
-      phases: ["analysis", "inbox", "training", "match_prep", "matchday", "review"],
-      conditions: {}
-    },
-    {
-      id: "assistant_training_focus",
-      from: "Trenerteam",
-      tag: "Trening",
-      title: "Ukens treningsvalg",
-      body: "NÃ¥r laget har en tydelig svakhet, bÃ¸r treningsuka brukes til ett konkret prinsipp. Velg en kunnskapsÃ¸kt og fullfÃ¸r den fÃ¸r klubben gÃ¥r videre.",
-      phases: ["training"],
-      conditions: {}
-    }
-  ];
-}
-
-// Fallback-avsendere brukes hvis avsenderfilen ikke laster. Holder et minimum
-// av stabile klubbstemmer tilgjengelig selv uten data/club_inbox_senders.json.
-function getFallbackInboxSenders() {
-  return [
-    {
-      id: "board",
-      name: "Styret",
-      group: "club_leadership",
-      description: "Klubbens Ã¸verste ledelse.",
-      defaultTag: "Styret"
-    },
-    {
-      id: "coaching_team",
-      name: "Trenerteam",
-      group: "sporting_staff",
-      description: "Gir sportslige vurderinger.",
-      defaultTag: "Trening"
-    },
-    {
-      id: "press_officer",
-      name: "Presseansvarlig",
-      group: "media",
-      description: "HÃ¥ndterer kommunikasjon og medietrykk.",
-      defaultTag: "Presse"
-    },
-    {
-      id: "administration",
-      name: "Administrasjonen",
-      group: "club_operations",
-      description: "Holder klubben i gang.",
-      defaultTag: "Administrasjon"
-    },
-    {
-      id: "groundhopper",
-      name: "Groundhopper",
-      group: "history_go",
-      description: "Kobler managerdelen til History Go.",
-      defaultTag: "Groundhopper"
-    }
-  ];
-}
-
-// Les et sett med meldings-id-er fra localStorage. Robust mot manglende eller
-// korrupt storage: ugyldig innhold gir et tomt Set. Filtrerer bort tomme/ikke-
-// string-verdier. Kun UI/progresjon â€“ ingen effekt pÃ¥ score, engine eller matching.
-function loadInboxMessageIdSet(key) {
-  try {
-    const stored = JSON.parse(localStorage.getItem(key));
-
-    if (!Array.isArray(stored)) {
-      return new Set();
-    }
-
-    return new Set(stored.filter((id) => typeof id === "string" && id.length > 0));
-  } catch (error) {
-    return new Set();
-  }
-}
-
-// Lagre et sett med meldings-id-er til localStorage som JSON-array. Stille no-op
-// hvis lagring feiler (privat modus e.l.) â€“ Innboks fungerer da videre i minnet.
-function saveInboxMessageIdSet(key, ids) {
-  try {
-    localStorage.setItem(key, JSON.stringify(Array.from(ids)));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-function loadReadInboxMessageIds() {
-  return loadInboxMessageIdSet(READ_INBOX_MESSAGE_IDS_KEY);
-}
-
-function saveReadInboxMessageIds() {
-  saveInboxMessageIdSet(READ_INBOX_MESSAGE_IDS_KEY, state.readInboxMessageIds);
-}
-
-function loadDeliveredInboxMessageIds() {
-  return loadInboxMessageIdSet(DELIVERED_INBOX_MESSAGE_IDS_KEY);
-}
-
-function saveDeliveredInboxMessageIds() {
-  saveInboxMessageIdSet(DELIVERED_INBOX_MESSAGE_IDS_KEY, state.deliveredInboxMessageIds);
-}
-
-// Les brukerens valgte innboks-svar fra localStorage som map { messageId: choiceId }.
-// Robust: returnerer {} ved parsefeil eller hvis lagret verdi ikke er et objekt.
-function loadSelectedInboxChoices() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(SELECTED_INBOX_CHOICES_KEY));
-
-    if (!stored || typeof stored !== "object" || Array.isArray(stored)) {
-      return {};
-    }
-
-    const result = {};
-    for (const [messageId, choiceId] of Object.entries(stored)) {
-      if (typeof messageId === "string" && typeof choiceId === "string") {
-        result[messageId] = choiceId;
-      }
-    }
-    return result;
-  } catch (error) {
-    return {};
-  }
-}
-
-// Lagre valgte innboks-svar. Stille no-op hvis lagring feiler (privat modus e.l.).
-function saveSelectedInboxChoices(selectedChoices) {
-  try {
-    const map = selectedChoices && typeof selectedChoices === "object" && !Array.isArray(selectedChoices)
-      ? selectedChoices
-      : {};
-    localStorage.setItem(SELECTED_INBOX_CHOICES_KEY, JSON.stringify(map));
-  } catch (error) {
-    // Lagring kan feile i privat modus e.l. Da kjÃ¸rer vi bare uten persistens.
-  }
-}
-
-// Alle svarvalg som hÃ¸rer til en gitt melding (kan vÃ¦re 0â€“2 i v1).
-function getChoicesForMessage(messageId) {
-  return state.clubInboxChoices.filter((choice) => choice.messageId === messageId);
-}
-
-// Det allerede valgte svaret for en melding, eller null hvis intet er valgt.
-function getSelectedChoiceForMessage(messageId) {
-  const choiceId = state.selectedInboxChoices?.[messageId];
-  if (!choiceId) {
-    return null;
-  }
-  return state.clubInboxChoices.find((choice) => choice.id === choiceId) || null;
-}
-
-// Klem en klubbverdi inn i gyldig 0â€“100-bÃ¥nd.
-function clampMetric(value) {
-  return Math.max(0, Math.min(100, value));
-}
-
-// Bruk et valgs effekter pÃ¥ Club Week-verdiene. Kun gyldige metric-nÃ¸kler med
-// numerisk delta og eksisterende numerisk verdi i clubWeekState pÃ¥virkes, og
-// resultatet clamps 0â€“100. Skriver tilbake til localStorage via saveClubWeekState.
-// Ingen kampmotor-, rollefit-, matching- eller Club Week Engine-endring.
-function applyInboxChoiceEffects(choice) {
-  const effects = choice?.effects;
-  if (!effects || typeof effects !== "object" || Array.isArray(effects)) {
-    return;
-  }
-  if (!state.clubWeekState || typeof state.clubWeekState !== "object") {
-    return;
-  }
-
-  for (const [metric, delta] of Object.entries(effects)) {
-    if (!INBOX_CHOICE_METRIC_KEYS.has(metric) || typeof delta !== "number") {
-      continue;
-    }
-    if (typeof state.clubWeekState[metric] === "number") {
-      state.clubWeekState[metric] = clampMetric(state.clubWeekState[metric] + delta);
-    }
-  }
-
-  saveClubWeekState(state.clubWeekState);
-}
-
-// Velg ett svar for en melding. Idempotent per messageId: hvis et valg allerede
-// finnes for meldingen, gjÃ¸res ingenting (effekter brukes kun fÃ¸rste gang).
-function chooseInboxChoice(choiceId) {
-  const choice = state.clubInboxChoices.find((item) => item.id === choiceId);
-  if (!choice) {
-    console.warn(`Innboks-valg ikke funnet: ${choiceId}`);
-    return;
-  }
-
-  if (state.selectedInboxChoices[choice.messageId]) {
-    return;
-  }
-
-  state.selectedInboxChoices[choice.messageId] = choice.id;
-  saveSelectedInboxChoices(state.selectedInboxChoices);
-  acknowledgeInboxThisWeek();
-
-  applyInboxChoiceEffects(choice);
-
-  const phaseLabel = (state.clubWeekState && CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase])
-    || state.clubWeekState?.phase
-    || "Innboks";
-
-  addClubWeekEvent({
-    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    week: state.clubWeekState?.week ?? "?",
-    phase: state.clubWeekState?.phase || "inbox",
-    phaseLabel,
-    title: "Innboksvalg",
-    detail: choice.responseTitle || "Valg registrert",
-    message: `Innboksvalg: ${choice.responseTitle || "Valg registrert"}`
-  });
-
-  renderApp();
-}
-
-// Norske etiketter for klubbverdier i effekttekst.
-const INBOX_CHOICE_EFFECT_LABELS = {
-  boardTrust: "Styretillit",
-  playerMorale: "Spillermoral",
-  mediaPressure: "Medietrykk",
-  trainingCulture: "Treningskultur",
-  tacticalClarity: "Taktisk klarhet"
-};
-
-// Bygg en lesbar effekttekst, f.eks. "Effekt: Styretillit +2, Taktisk klarhet +1".
-// Returnerer tom streng hvis ingen gyldige effekter finnes.
-function formatInboxChoiceEffects(effects) {
-  if (!effects || typeof effects !== "object" || Array.isArray(effects)) {
-    return "";
-  }
-
-  const parts = [];
-  for (const [metric, delta] of Object.entries(effects)) {
-    if (!INBOX_CHOICE_METRIC_KEYS.has(metric) || typeof delta !== "number" || delta === 0) {
-      continue;
-    }
-    const label = INBOX_CHOICE_EFFECT_LABELS[metric] || metric;
-    const sign = delta > 0 ? "+" : "";
-    parts.push(`${label} ${sign}${delta}`);
-  }
-
-  if (parts.length === 0) {
-    return "";
-  }
-
-  return `Effekt: ${parts.join(", ")}`;
-}
-
-// Fallback-trÃ¥der brukes hvis trÃ¥ddatafilen ikke laster. Holder et minimum av
-// trÃ¥dstruktur tilgjengelig selv uten data/club_inbox_threads.json.
-function getFallbackInboxThreads() {
-  return [
-    {
-      id: "board_direction_and_trust",
-      senderId: "board",
-      subject: "Retning og styretillit",
-      category: "club_leadership",
-      description: "Styrets vurdering av klubbens retning og tillit."
-    },
-    {
-      id: "coaching_training_focus",
-      senderId: "coaching_team",
-      subject: "Treningsfokus",
-      category: "sporting_staff",
-      description: "Trenerteamets meldinger om trening og taktisk klarhet."
-    }
-  ];
-}
-
-// SlÃ¥ opp en trÃ¥d i trÃ¥dkatalogen via threadId. Returnerer null hvis threadId
-// mangler eller ikke finnes â€“ da bygges trÃ¥den ad hoc fra meldingens egne felt.
-function getInboxThread(threadId) {
-  if (!threadId) {
-    return null;
-  }
-  return state.clubInboxThreads.find((thread) => thread.id === threadId) || null;
-}
-
-// Finn threadId for en melding. Bruker message.threadId hvis det finnes, ellers
-// faller vi tilbake til message.id slik at meldingen blir sin egen trÃ¥d.
-function getMessageThreadId(message) {
-  if (message && typeof message.threadId === "string" && message.threadId.length > 0) {
-    return message.threadId;
-  }
-  return message?.id || null;
-}
-
-// Finn avsenderen for en trÃ¥d: fÃ¸rst trÃ¥dens egen senderId, sÃ¥ meldingens
-// senderId. Returnerer avsenderobjektet (eller null) via getInboxSender.
-function getThreadSender(thread, message) {
-  const senderId = thread?.senderId || message?.senderId || null;
-  return getInboxSender(senderId);
-}
-
-// SlÃ¥ opp en avsender i avsenderkatalogen via senderId. Returnerer null hvis
-// senderId mangler eller ikke finnes â€“ da brukes meldingens egen from/tag.
-function getInboxSender(senderId) {
-  if (!senderId) {
-    return null;
-  }
-  return state.clubInboxSenders.find((sender) => sender.id === senderId) || null;
-}
-
-// Gyldige klubbverdi-nÃ¸kler for betinget innboksfiltrering. Holdes synk med
-// Club Week-state. Brukes kun til lesefiltrering â€“ ingen state-effekt.
-const CLUB_WEEK_METRIC_KEYS = new Set([
-  "boardTrust",
-  "playerMorale",
-  "tacticalClarity",
-  "trainingCulture",
-  "mediaPressure"
-]);
-
-// AvgjÃ¸r om en innboksmelding skal vises i gjeldende Club Week-fase og
-// med gjeldende klubbverdier. Rent lesefilter â€“ endrer ikke state.
-function messageMatchesClubWeek(message) {
-  if (!message || typeof message !== "object") {
-    return false;
-  }
-
-  const phase = state.clubWeekState?.phase || "analysis";
-
-  if (Array.isArray(message.phases) && message.phases.length > 0 && !message.phases.includes(phase)) {
-    return false;
-  }
-
-  // Valgfri uke-vindusgating (Innboks-datavask v2): en melding kan bindes til et
-  // ukevindu med minWeek/maxWeek. Onboarding-meldinger pinnes f.eks. til uke 1
-  // (maxWeek: 1) sÃ¥ de ikke dukker opp igjen senere. Uten feltene er meldingen
-  // ukenÃ¸ytral, som fÃ¸r.
-  const week = Number(state.clubWeekState?.week) || 1;
-  if (Number.isFinite(message.minWeek) && week < message.minWeek) {
-    return false;
-  }
-  if (Number.isFinite(message.maxWeek) && week > message.maxWeek) {
-    return false;
-  }
-
-  const conditions = message.conditions;
-
-  if (!conditions || Object.keys(conditions).length === 0) {
-    return true;
-  }
-
-  const { metric, operator, value } = conditions;
-
-  if (!CLUB_WEEK_METRIC_KEYS.has(metric)) {
-    return false;
-  }
-
-  if (operator !== "lte" && operator !== "gte") {
-    return false;
-  }
-
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    return false;
-  }
-
-  const currentValue = state.clubWeekState?.[metric];
-
-  if (typeof currentValue !== "number" || !Number.isFinite(currentValue)) {
-    return false;
-  }
-
-  if (operator === "lte") {
-    return currentValue <= value;
-  }
-
-  return currentValue >= value;
-}
-
-// Alle valgte svarvalg-id-er som et Set (brukerens valg fra selectedInboxChoices).
-function getSelectedInboxChoiceIds() {
-  return new Set(Object.values(state.selectedInboxChoices || {}).filter((id) => typeof id === "string"));
-}
-
-// TrÃ¥dsvar som er lÃ¥st opp fordi det utlÃ¸sende svarvalget er tatt. Returnerer
-// runtime-meldinger (kopier) merket med isReply, slik at de kan behandles som
-// vanlige innboksmeldinger uten Ã¥ mutere state.clubInboxReplies eller
-// state.clubInboxMessages. Egne id-er gjÃ¸r at delivered/read-modellen fungerer.
-function getUnlockedInboxReplies() {
-  const selectedChoiceIds = getSelectedInboxChoiceIds();
-
-  return state.clubInboxReplies
-    .filter((reply) => selectedChoiceIds.has(reply.triggerChoiceId))
-    .map((reply) => ({
-      ...reply,
-      isReply: true,
-      replyToMessageId: reply.responseToMessageId
-    }));
-}
-
-// Samlet runtime-meldingssett: base-meldinger pluss opplÃ¥ste trÃ¥dsvar. Replies
-// kommer etter base-meldingene, slik at et svar blir siste melding i trÃ¥den.
-function getAllRuntimeInboxMessages() {
-  return [
-    ...state.clubInboxMessages,
-    ...getUnlockedInboxReplies()
-  ];
-}
-
-// Meldinger som matcher gjeldende Club Week-fase/conditions akkurat nÃ¥.
-function getActiveInboxMessages() {
-  return getAllRuntimeInboxMessages().filter(messageMatchesClubWeek);
-}
-
-// Marker alle aktive meldinger som levert. En melding som har matchet fase/
-// conditions huskes da i historikken selv etter at conditions slutter Ã¥ matche.
-function syncDeliveredInboxMessages(activeMessages) {
-  let changed = false;
-
-  for (const message of activeMessages) {
-    if (message?.id && !state.deliveredInboxMessageIds.has(message.id)) {
-      state.deliveredInboxMessageIds.add(message.id);
-      changed = true;
-    }
-  }
-
-  if (changed) {
-    saveDeliveredInboxMessageIds();
-  }
-}
-
-// Grupper meldinger i trÃ¥der. Returnerer en array av trÃ¥dgrupper med thread,
-// sender, meldinger, uleste meldinger og siste melding. Bevarer datarekkefÃ¸lge
-// (nyeste/sist aktive trÃ¥d vises i den rekkefÃ¸lgen meldingene kommer i v1).
-function groupInboxMessagesByThread(messages) {
-  const groups = new Map();
-
-  for (const message of messages) {
-    const threadId = getMessageThreadId(message);
-
-    if (!threadId) {
-      continue;
-    }
-
-    if (!groups.has(threadId)) {
-      groups.set(threadId, {
-        threadId,
-        thread: getInboxThread(threadId),
-        messages: []
-      });
-    }
-
-    groups.get(threadId).messages.push(message);
-  }
-
-  return Array.from(groups.values()).map((group) => {
-    const latestMessage = group.messages[group.messages.length - 1] || null;
-    const unreadMessages = group.messages.filter((message) => {
-      return message?.id && !state.readInboxMessageIds.has(message.id);
-    });
-
-    return {
-      threadId: group.threadId,
-      thread: group.thread,
-      sender: getThreadSender(group.thread, latestMessage),
-      messages: group.messages,
-      unreadMessages,
-      latestMessage
-    };
-  });
-}
-
-// Aktiv Innboks: trÃ¥der med minst Ã©n ulest, aktiv melding. Synker samtidig
-// levert-historikken slik at arkivet husker meldinger som er vist minst Ã©n gang.
-function getActiveInboxThreads() {
-  const activeMessages = getActiveInboxMessages();
-  syncDeliveredInboxMessages(activeMessages);
-
-  const unreadActiveMessages = activeMessages.filter((message) => {
-    return message?.id && !state.readInboxMessageIds.has(message.id);
-  });
-
-  return groupInboxMessagesByThread(unreadActiveMessages);
-}
-
-// Innboks-kuratering v2: hver uke skal Â«Viktig nÃ¥Â» vÃ¦re FÃ…, relevante signaler
-// â€” ikke hele katalogen pÃ¥ Ã©n gang. De statiske trÃ¥dene er kun fase-gatet, sÃ¥
-// uten kuratering ville alle fase-trÃ¥der dukket opp hver uke. FÃ¸rste uke er ett
-// tydelig onboarding-signal; senere uker lÃ¸ftes et lite prioritert utvalg. Delt
-// regel for visning (renderInboxThreads) og telleverk (puls, Â«Neste handlingÂ»),
-// slik at flaten aldri krever mer lesing enn den viser.
-function getInboxWeeklyCap() {
-  return (Number(state.clubWeekState?.week) || 1) === 1 ? 1 : 3;
-}
-
-// Har spilleren kvittert ut ukas innbokssignal? Settes eksplisitt per uke nÃ¥r en
-// trÃ¥d leses/besvares (acknowledgeInboxThisWeek). Rulles automatisk ut nÃ¥r uka
-// bytter, slik at ferske signaler lÃ¸ftes hver ny uke â€” i motsetning til den
-// globale lest-historikken, som ellers ville Â«kvittert utÂ» alle senere uker.
-function hasAcknowledgedInboxThisWeek() {
-  return Number(state.inboxAcknowledgedWeek) === (Number(state.clubWeekState?.week) || 1);
-}
-
-function loadInboxAcknowledgedWeek() {
-  try {
-    const raw = Number(localStorage.getItem(INBOX_ACK_WEEK_KEY));
-    return Number.isFinite(raw) && raw > 0 ? Math.trunc(raw) : 0;
-  } catch (error) {
-    return 0;
-  }
-}
-
-function acknowledgeInboxThisWeek() {
-  const week = Number(state.clubWeekState?.week) || 1;
-  state.inboxAcknowledgedWeek = week;
-  try {
-    localStorage.setItem(INBOX_ACK_WEEK_KEY, String(week));
-  } catch (error) {
-    // Privat modus e.l.: kuratering fungerer fortsatt innen Ã¸kta.
-  }
-  // Club Week Orchestrator v1.1: hÃ¥ndtert innboks nudger uka til Trening-fasen,
-  // sÃ¥ toppstripa speiler det spilleren nettopp gjorde. Gate-sikkert; fire-and-
-  // forget siden kalleren allerede rendrer.
-  syncClubWeekPhaseToProgress().catch(console.error);
-}
-
-// Uleste trÃ¥der som faktisk KREVER oppmerksomhet nÃ¥: opptil ukas kvote, og null
-// sÃ¥ snart spilleren har kvittert ut uka. Resten ligger som Â«kan leses senereÂ»
-// og sperrer aldri veien til trening eller kamp.
-function getInboxAttentionCount() {
-  if (hasAcknowledgedInboxThisWeek()) return 0;
-  const total = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
-  return Math.min(getInboxWeeklyCap(), total);
-}
-
-// TrÃ¥darkiv: levert historikk som ikke er ulest-aktiv. En melding som fortsatt
-// er aktiv og ulest hÃ¸rer hjemme i Innboks, ikke i arkivet.
-function getArchivedInboxThreads() {
-  const deliveredMessages = getAllRuntimeInboxMessages().filter((message) => {
-    return message?.id && state.deliveredInboxMessageIds.has(message.id);
-  });
-
-  const readOrInactiveMessages = deliveredMessages.filter((message) => {
-    const isRead = state.readInboxMessageIds.has(message.id);
-    const isActive = messageMatchesClubWeek(message);
-    const isUnreadActive = isActive && !isRead;
-    return !isUnreadActive;
-  });
-
-  return groupInboxMessagesByThread(readOrInactiveMessages);
-}
-
-// Inbox UI v2: trÃ¥der vises kollapset som klikkbare rader. Den Ã¥pne trÃ¥den
-// (openInboxThreadId) viser innhold og svarvalg i samme panel. Toggler Ã¥pen/lukket
-// uten Ã¥ rÃ¸re lest/levert-modellen eller kontekstmotoren â€” kun visningsstate.
-function toggleInboxThread(threadId) {
-  if (!threadId) return;
-  state.openInboxThreadId = state.openInboxThreadId === threadId ? null : threadId;
-  renderApp();
-}
-
-// GjÃ¸r et trÃ¥dkort til en klikkbar, kollapserbar rad: header-knappen toggler
-// Ã¥pen/lukket, og det ekspanderbare innholdet legges i en body-container som kun
-// vises nÃ¥r trÃ¥den er Ã¥pen. open=true viser innholdet (f.eks. for arkiv-hÃ¥ndtering).
-function makeThreadCollapsible(article, headerNodes, bodyNodes, { threadId, open }) {
-  const header = document.createElement("button");
-  header.type = "button";
-  header.className = "inbox-thread-toggle";
-  header.setAttribute("aria-expanded", open ? "true" : "false");
-  headerNodes.forEach((node) => header.append(node));
-  if (threadId) {
-    header.addEventListener("click", () => toggleInboxThread(threadId));
-  }
-
-  const body = document.createElement("div");
-  body.className = "inbox-thread-body";
-  bodyNodes.forEach((node) => node && body.append(node));
-
-  article.classList.add("is-collapsible");
-  if (open) article.classList.add("is-open");
-  article.append(header, body);
-}
-
-// Bygg ett message-card-element fra en melding. Bruker kun textContent,
-// gjenbruker eksisterende message-card-CSS. isEmpty gir empty-state-stil.
-function createMessageCard(message, isEmpty = false) {
-  const article = document.createElement("article");
-  article.className = isEmpty ? "message-card is-empty" : "message-card";
-
-  // Avsenderkatalogen brukes nÃ¥r senderId finnes; ellers faller vi tilbake til
-  // meldingens egen from/tag. Beskrivelse vises ikke i UI ennÃ¥.
-  const sender = getInboxSender(message.senderId);
-
-  if (sender?.group) {
-    article.dataset.senderGroup = sender.group;
-  }
-
-  const meta = document.createElement("div");
-  meta.className = "message-meta";
-
-  const from = document.createElement("span");
-  from.className = "message-from";
-  from.textContent = sender?.name || message.from || "Klubbkontoret";
-
-  const tag = document.createElement("span");
-  tag.className = "message-tag";
-  tag.textContent = message.tag || sender?.defaultTag || "Melding";
-
-  const title = document.createElement("h3");
-  title.textContent = message.title || "Ny melding";
-
-  const body = document.createElement("p");
-  body.textContent = message.body || "Ingen meldingstekst.";
-
-  meta.append(from, tag);
-  article.append(meta, title, body);
-
-  return article;
-}
-
-// Bygg svarvalg-blokk for Ã©n melding. Returnerer null hvis meldingen ikke har
-// valg. Hvis et svar allerede er valgt, vises en responsblokk; ellers vises
-// knapper. Bruker kun createElement/textContent â€“ aldri innerHTML.
-function createInboxChoiceBlock(message) {
-  const messageId = message?.id;
-  if (typeof messageId !== "string") {
-    return null;
-  }
-
-  const choices = getChoicesForMessage(messageId);
-  if (!choices.length) {
-    return null;
-  }
-
-  const container = document.createElement("div");
-  container.className = "inbox-choice-list";
-
-  const selected = getSelectedChoiceForMessage(messageId);
-
-  if (selected) {
-    const response = document.createElement("div");
-    response.className = "inbox-choice-response";
-
-    const chosen = document.createElement("p");
-    chosen.className = "inbox-choice-response-title";
-    chosen.textContent = `Valgt svar: ${selected.label || ""}`;
-
-    const title = document.createElement("p");
-    title.className = "inbox-choice-response-title";
-    title.textContent = selected.responseTitle || "";
-
-    const body = document.createElement("p");
-    body.className = "inbox-choice-response-body";
-    body.textContent = selected.responseBody || "";
-
-    response.append(chosen, title, body);
-
-    const effectsText = formatInboxChoiceEffects(selected.effects);
-    if (effectsText) {
-      const effects = document.createElement("p");
-      effects.className = "inbox-choice-effects";
-      effects.textContent = effectsText;
-      response.append(effects);
-    }
-
-    container.append(response);
-  } else {
-    choices.forEach((choice) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "inbox-choice-button";
-      button.textContent = choice.label || "Svar";
-      button.addEventListener("click", () => chooseInboxChoice(choice.id));
-      container.append(button);
-    });
-  }
-
-  return container;
-}
-
-function inboxThreadRequiresReply(threadGroup) {
-  return Boolean(threadGroup?.messages?.some((message) => {
-    const messageId = message?.id;
-    return typeof messageId === "string"
-      && getChoicesForMessage(messageId).length > 0
-      && !getSelectedChoiceForMessage(messageId);
-  }));
-}
-
-function getInboxThreadPriorityScore(threadGroup) {
-  const subject = `${threadGroup?.thread?.subject || ""} ${threadGroup?.latestMessage?.title || ""}`.toLowerCase();
-  let score = 0;
-  if (inboxThreadRequiresReply(threadGroup)) score += 30;
-  if (/assistent|kampnotat|trening|taktisk|fysio|belast|slitasje|garderobe|moral|styre/.test(subject)) score += 20;
-  score += Math.min(10, threadGroup?.unreadMessages?.length || 0);
-  return score;
-}
-
-function updateInboxSignalGate({ visibleEventActive, visibleActiveThreads }) {
-  // Teller TRÃ…DER (ikke enkeltmeldinger), i trÃ¥d med etiketten Â«Uleste trÃ¥derÂ»,
-  // og fÃ¸lger samme ukekvote som pulsen og Â«Neste handlingÂ». Â«Krever svarÂ»
-  // teller kun trÃ¥der som faktisk vises nÃ¥, sÃ¥ tallet aldri peker pÃ¥ trÃ¥der
-  // spilleren ikke ser.
-  const unreadCount = getInboxAttentionCount();
-  // Avsendere som venter pÃ¥ et svar akkurat nÃ¥ â€” brukt bÃ¥de til Â«Krever svarÂ»-
-  // tallet og til Ã¥ navngi hvem som venter i statuslinjen.
-  const replySenders = [
-    ...visibleEventActive
-      .filter((thread) => thread.status !== "resolved" && thread.choices?.length)
-      .map((thread) => thread.sender || INBOX_EVENT_SENDER_ROLES[thread.type] || "Klubben"),
-    ...visibleActiveThreads
-      .filter(inboxThreadRequiresReply)
-      .map((threadGroup) => threadGroup.sender?.name || threadGroup.latestMessage?.from || "Klubbkontoret")
-  ];
-  const requiresReplyCount = replySenders.length;
+YªçŠx-®éÜj×¢ëiºÚ+Š§j[h‘éÜ¢éíÛn;ë¤èµ©hºÚn¶X§zÍZ[\ÜÈ“ÓÕSÔÔÒUSÓ”ÈHœ›ÛH‹‹Ù›ÛÝ˜[Yš]Y[™Ú[™KšœÈŽÂš[\Ü‹‹ÝZKÛX[˜YÙ\‹\Ú[Y[[Y[ËšœÈŽÂš[\ÜÈÜ™X]SX]Ú›ÝÔÛ˜\ÚÝHœ›ÛH‹‹ÝZKÛX[˜YÙ\‹\Ú[]šY]ËšœÈŽÂš[\ÜÈÜ™X]PÛX’Y[]UšY]Ë™[™\ÛX’Y[]HHœ›ÛH‹‹ÝZKÛX[˜YÙ\‹XÛX‹ZY[]KšœÈŽÂš[\ÜÈÙ]˜Z[š[™ÕÛÜšÜÜXÙU\™Ù]Þ[˜Õ˜Z[š[™ÕÛÜšÜÜXÙHHœ›ÛH‹‹ÝZKÝ˜Z[š[™Ë]ÛÜšÜÜXÙK]šY]ËšœÈŽÂš[\ÜÈÙ]XÝXØ[Û›ÝÛYÙQ›Ü•XÝXÈHœ›ÛH‹‹Ù›ÛÝ˜[]XÝXØ[ZÛ›ÝÛYÙKšœÈŽÂš[\ÜÈØ[Ý[]UX[Qš]Hœ›ÛH‹‹Ù›ÛÝ˜[]X[KYš]Y[™Ú[™KšœÈŽÂš[\ÜÈØ[Ý[]P˜YÙSY]šXÑY™™XÝÈHœ›ÛH‹‹Ù›ÛÝ˜[X˜YÙKYY™™XÝY[™Ú[™KšœÈŽÂš[\ÜÂˆÜ™X]SX]Ú™\ÜˆÜ™X]SX]Ú^TÙ\ÜÚ[Û‹ˆ™\ÛÛ™SX]Ú^QXÚ\Ú[Û‹ˆš[˜[^™SX]Ú^TÙ\ÜÚ[Û‹ˆÙ]Ù\ÜÚ[Û‘]™[[™^ˆY˜[˜ÙSX]ÚÛØÚËˆÙÓX]Ú[ÛY[ˆ\SX]Ú[Ú[™ÙKˆ\SX]Ú^TÝXœÝ]][Û‹ˆ\SÜÛ™[Y\][Û‹ˆÔÓ‘S•Ô“Ñ’STËˆ]˜[X]Q›Ü›X][Û“X]Ú\œÓÜÛ™[ŸHœ›ÛH‹‹Ù›ÛÝ˜[[X]Ú^KY[™Ú[™KšœÈŽÂš[\ÜÂˆTÕÔ’PÐSÓÔÓ‘S•Ô“Ñ’STËˆÙ]\ÝÜšXØ[ÜÛ™[›Ùš[KˆXÚÒ\ÝÜšXØ[ÜÛ™[›Ùš[BŸHœ›ÛH‹‹Ù›ÛÝ˜[Z\ÝÜšXØ[[ÜÛ™[\›Ùš[\ËšœÈŽÂš[\ÜÂˆRS’WÔÑPTÓÓ—Õ‘T”ÒSÓ‹ˆRS’WÔÑPTÓÓ—ÕÕSÕÑQRÔËˆRS’WÔÑPTÓÓ—ÓÕUÓÓQWÓP‘SËˆÝ\Z[šTÙX\ÛÛˆ\ÈÜ™X]SZ[šTÙX\ÛÛ”Ý\ˆ›Ü›X[^™SZ[šTÙX\ÛÛ”Ý]KˆÙ]Ý\œ™[Z[šTÙX\ÛÛ“X]Úˆ\ÐÝ\œ™[Z[šTÙX\ÛÛ“X]Ú^YYˆ\SZ[šTÙX\ÛÛ“X]Ú™\Ý[ˆY˜[˜ÙSZ[šTÙX\ÛÛ•ÙYZËˆÝ[[X\š^™SZ[šTÙX\ÛÛ‹ˆÜ™X]SZ[šTÙX\ÛÛ•X›KˆÜ™X]SZ[šTÙX\ÛÛ‘›Ü›QÝZYKˆÜ™X]SZ[šTÙX\ÛÛ“Ù™”]Ú]™[ŸHœ›ÛH‹‹Ù›ÛÝ˜[[Z[šK\ÙX\ÛÛ‹šœÈŽÂš[\ÜÂˆÜ™X]Q™Y\˜][Û\˜Ú]™Q[žKˆÜ™X]Q™Y\˜][Û•™\™XÝˆ\š]™Q™Y\˜][Û‘^XÝ][Û‚ŸHœ›ÛH‹‹Ù›ÛÝ˜[Y™Y\˜][Û‹]™\™XÝšœÈŽÂš[\ÜÂˆ\[™ÙX\ÛÛ\˜Ú]™KˆÜ™X]TÙX\ÛÛ\˜Ú]™Q[žKˆÜ™X]TÙX\ÛÛ”™]šY]Ëˆ\š]™TÙX\ÛÛ•\™Ù]ˆÝ[[X\š^™TÙX\ÛÛ’\ÝÜžBŸHœ›ÛH‹‹Ù›ÛÝ˜[\ÙX\ÛÛ‹\™]šY]ËšœÈŽÂš[\ÜÂˆÜ™X]TØÙ[˜\š[ÓZ[šTÙX\ÛÛÛÛ^ˆ\ØÜšX™TØÙ[˜\š[ËˆÙ]ØÙ[˜\š[Ëˆ›Ü›X[^™TØÙ[˜\š[ÜÂŸHœ›ÛH‹‹Ù›ÛÝ˜[\ØÙ[˜\š[ÜËšœÈŽÂš[\ÜÂˆ\SX]Ú^Y\”Ý]Ëˆ˜[šÔ^Y\”Ý]ËˆÝ[[X\š^™T^Y\”Ý]ÂŸHœ›ÛH‹‹Ù›ÛÝ˜[\^Y\‹\Ý]ËšœÈŽÂš[\ÜÂˆ\SX]ÚÐÛÛ™][ÛœËˆ\UÙYZÛT™XÛÝ™\žKˆÛÛ™][Û‘›Ü‹ˆ\ØÜšX™PÛÛ™][Û‹ˆ˜]YÝYQ˜XÝÜ‘›Ü‹ˆœ™\Ú™\ÜÑ›Ü‹ˆ[š\™Y^Y\’YËˆ\Ò[š\™Yˆ^Y\œÓ™YY[™Ô™\Ýˆ\TÝ[[Y\œ™XZËˆ\R[™]šYX[˜Z[š[™ÑY™™XÝËˆÝ[[X\š^™TÜ]XYÛÛ™][Û‚ŸHœ›ÛH‹‹Ù›ÛÝ˜[\^Y\‹XÛÛ™][Û‹šœÈŽÂš[\ÜÂˆPVÔÕP”ÕUUSÓ”Ëˆ]˜Z[X›TÝXœÝ]][ÛœËˆ˜[šÔÝXœÝ]][ÛœÑ›Ü”ÛÝˆÝXœÝ]][ÛœÔ™[XZ[š[™ÂŸHœ›ÛH‹‹Ù›ÛÝ˜[\ÝXœÝ]][ÛœËšœÈŽÂš[\ÜÂˆPQÕQWÔÑPTÓÓ—Õ‘T”ÒSÓ‹ˆÜ™X]SXYÝYTÙX\ÛÛ‹ˆQUSÓPQÕQWÕQT‹ˆ\Ô^[Ù™”[™[™Ëˆ™\ÛÛ™SXYÝYSÝ]ÛÛYKˆ›Ü›X[^™SXYÝYTÙX\ÛÛ‹ˆÙ]™^XYÝYSÜÛ™[ˆÛÛ\]SXYÝYT›Ý[™ˆÜ™X]SXYÝYUX›KˆÝ\™^XYÝYTÙX\ÛÛ‚ŸHœ›ÛH‹‹Ù›ÛÝ˜[[XYÝYK\ÙX\ÛÛ‹šœÈŽÂš[\ÜÈYÙPÛX•˜Y][Û‹Z[˜Y][Û•™\ÚÛÈHœ›ÛH‹‹Ù›ÛÝ˜[XÛX‹]˜Y][Û‹šœÈŽÂš[\ÜÈ™\ÛÛ™PÛX”Ü]XYXØÙ\ÜË\ÝÛX’\š]YÙT^Y\œÈHœ›ÛH‹‹Ù›ÛÝ˜[XÛX‹\Ü]XYšœÈŽÂš[\ÜÂˆ›Ü›X[^™P]šX]PØ][ÙÝYKˆ\š]™T^Y\]šX]R[™^ˆ\ØÜšX™TÜÚ][Û‘[X[™ËˆÜ]›ÛT™\]Z\™[Y[Ëˆ™\ÛÛ™P]šX]UÚÙ[‚ŸHœ›ÛH‹‹Ù›ÛÝ˜[\^Y\‹X]šX]\ËšœÈŽÂš[\ÜÂˆ\ÝÙ[XÝX›PÛXœËˆ™\ÛÛ™TÝ\Y\‹ˆ\ØÜšX™PÛX”Ù[XÝ[Û‹ˆ\š]™PÛX‘^XÝ][Û‹ˆÜ™X]SX[˜YÙ\ÛX‘œ›ÛTÙ[XÝ[Û‹ˆÜ™X]SÝÛ“X[˜YÙ\ÛX‚ŸHœ›ÛH‹‹Ù›ÛÝ˜[XÛX‹\Ù[XÝ[Û‹šœÈŽÂš[\ÜÂˆÜ™X]SXYÝYT^[Ù™‹ˆÛÛ\]T^[Ù™“YËˆ™\ÛÛ™SXYÝYT^[Ù™‹ˆ\ØÜšX™T^[Ù™‹ˆÙ]^[Ù™“X]Ú^SÜÛ™[ˆ›Ü›X[^™SXYÝYT^[Ù™‹ˆPQÕQWÔVSÑ‘—Õ‘T”ÒSÓ‚ŸHœ›ÛH‹‹Ù›ÛÝ˜[[XYÝYK\^[Ù™‹šœÈŽÂš[\ÜÂˆÕT“SQS•ÔÕQÑWÓP‘SËˆÜ™X]UÝ\›˜[Y[ˆ›Ü›X[^™UÝ\›˜[Y[Ý]KˆÙ][YÚX›UÝ\›˜[Y[ËˆÙ]Ý\›˜[Y[™^ÜÛ™[ˆ\UÝ\›˜[Y[X]Ú™\Ý[ˆÜ™X]UÝ\›˜[Y[Ü›Ý\X›KˆÜ™X]UÝ\›˜[Y[œ˜XÚÙ]ˆÙ]Ý\›˜[Y[X[KˆÝ[[X\š^™UÝ\›˜[Y[ŸHœ›ÛH‹‹Ù›ÛÝ˜[]Ý\›˜[Y[šœÈŽÂš[\ÜÂˆÛÛ\]SX]Ú^PÛÛœÙ\]Y[˜Ù\Ëˆ]˜[X]PÛX•ÙYZÓX]Ú^QØ]BŸHœ›ÛH‹‹Ù›ÛÝ˜[[X]ÚXÛÛœÙ\]Y[˜Ù\ËšœÈŽÂš[\ÜÂˆRS’S‘×Ñ“ÐÕTÑTËˆÙ]˜Z[š[™Ñ›ØÝ\ËˆØ[š]^™UÙYZÛU˜Z[š[™Ñ›ØÝ\ËˆØ[Ý[]U˜Z[š[™ÔÝY™”Ý\Üˆ™XÛÛ[Y[™˜Z[š[™Ñ›ØÝ\ËˆÜ™X]U˜Z[š[™ÓX]Ú^TÛ˜\ÚÝˆZ[˜Z[š[™Ñ›ØÝ\ÓÙ™”]Ú]™[ŸHœ›ÛH‹‹Ù›ÛÝ˜[]˜Z[š[™Ë]ÙYZËšœÈŽÂš[\ÜÈÜ™X]TÝYÙÙ\ÝYÙ]\ÈHœ›ÛH‹‹Ù›ÛÝ˜[\ÝYÙÙ\ÝY\Ù]\ËšœÈŽÂš[\ÜÈÛÛ\]S™^XÝ[ÛœË‘VÐPÕSÓ—ÕTTÈHœ›ÛH‹‹Ù›ÛÝ˜[[™^XXÝ[Û‹šœÈŽÂš[\ÜÂˆÐSQWÔÕUWÓP‘SËˆ˜[šÔ[œÑ›Ü”Ú]X][Û‹ˆ™XYØ[YTÝ]BŸHœ›ÛH‹‹Ù›ÛÝ˜[[X]Ú\[‹šœÈŽÂš[\ÜÂˆ›Ü›X[^™T›ÛQ˜[Z[X\š]Kˆ™XÛÜ™X]Ú›ÛU\ØYÙKˆÝ[[X\š^™S[™]\˜[Z[X\š]Kˆ\ØÜšX™T›ÛQ˜[Z[X\š]KˆÙ]›ÛQ˜[Z[X\š]Kˆ\U˜Z[š[™Ô›ÛQÜ›ÝÝŸHœ›ÛH‹‹Ù›ÛÝ˜[\›ÛKY˜[Z[X\š]KY[™Ú[™KšœÈŽÂš[\ÜÈÜ™X]T›ÛSX\›š[™ÕšY]Ó[Ù[Hœ›ÛH‹‹Ù›ÛÝ˜[\›ÛK[X\›š[™Ë]šY]Ë[[Ù[šœÈŽÂš[\ÜÂˆÜ™X]U˜Z[š[™Ô›ÙÜ˜[PÛÛ\ÜÚ][ÛœËˆÙ]˜Z[š[™Ô›ÙÜ˜[PÛÛ\ÜÚ][ÛžRYŸHœ›ÛH‹‹Ù›ÛÝ˜[]˜Z[š[™Ë\›ÙÜ˜[KXÛÛ\ÜÚ][ÛœËšœÈŽÂ‹ËÈZÙ[œÈ[Žˆ[ˆ[™H[Ù[[ˆÛÛHš[™\ˆ˜[[YK[XHÙÈ[šÙ[Ü[\ˆØ[[Y[‹‚š[\ÜÂˆÜ™X]UÙYZÛU˜Z[š[™Ô[‹ˆØ[Ý[]UÙYZÛU˜Z[š[™Ò[[œÚ]Kˆ]˜[X]T›ÙÜ˜[Q›ØÝ\ÐÛÚ\™[˜ÙKˆ\ØÜšX™UÙYZÛSØYŸHœ›ÛH‹‹Ù›ÛÝ˜[]˜Z[š[™Ë\[‹šœÈŽÂš[\ÜÂˆVQT—ÕÑPRÓ‘TÔ×Õ‘T”ÒSÓ‹ˆ›Ü›X[^™UÙXZÛ™\ÜÐØ][ÙÝYKˆ›Ü›X[^™UÙXZÛ™\ÜÔ›ÙÜ™\ÜËˆY[YžT^Y\•ÙXZÛ™\ÜÙ\ËˆÙ]ÙXZÛ™\ÜÔ›ÙÜ™\ÜËˆ\ØÜšX™UÙXZÛ™\ÜÔ›ÙÜ™\ÜËˆ\UÙXZÛ™\ÜÕ˜Z[š[™ËˆÙYZÛUÙXZÛ™\ÜÑÜ›ÝÝˆÝ[[X\š^™S[™]\ÙXZÛ™\ÜÕÛÜšËˆÙ]ÙXZÛ™\ÜÐ]šX]BŸHœ›ÛH‹‹Ù›ÛÝ˜[\^Y\‹]ÙXZÛ™\ÜÙ\ËšœÈŽÂš[\ÜÂˆ›Ü›X[^™R[™]šYX[˜Z[š[™ÐØ][ÙÝYKˆÙ][™]šYX[˜XÚËˆØ[Ý[]R[™]šYX[Ø\XÚ]KˆØ[š]^™R[™]šYX[\ÜÚYÛ›Y[Ëˆ]˜[X]R[™]šYX[\ÜÚYÛ›Y[ˆ™\ÛÛ™R[™]šYX[˜Z[š[™ÕÙYZËˆÝ[[X\š^™R[™]šYX[˜Z[š[™ÂŸHœ›ÛH‹‹Ù›ÛÝ˜[Z[™]šYX[]˜Z[š[™ËšœÈŽÂš[\ÜÈZ[ÝY™’Y[]TÝ[[X\žHHœ›ÛH‹‹Ù›ÛÝ˜[\ÝY™‹ZY[]KY[™Ú[™KšœÈŽÂš[\ÜÂˆÜ™X]QY˜][Ù™”]ÚÝ]Kˆ›Ü›X[^™SÙ™”]ÚÝ]KˆÝ[[X\š^™SÙ™”]ÚÛÛ^ˆ\SX]Ú^SÙ™”]ÚY™™XÝËˆ\SÙ™”]Ú]™[ˆ\U˜Z[š[™Ô›ÙÜ˜[SÙ™”]ÚY™™XÝÂŸHœ›ÛH‹‹Ù›ÛÝ˜[[Ù™‹\]Ú\\˜[Y]\œËšœÈŽÂš[\ÜÂˆÜ™X]R[˜›ÞÝ]Kˆ›Ü›X[^™R[˜›ÞÝ]Kˆ[YÜ˜]R[˜›Þ™XYËˆ\R[˜›ÞÚÚXÙKˆ\˜Ú]™R[˜›Þ™XYˆX\šÒ[˜›Þ™XY™XYˆÙ]XÝ]™R[˜›Þ™XYÈ\ÈÙ]XÝ]™R[˜›Þ]™[™XYËˆÙ]\˜Ú]™Y[˜›Þ™XYÈ\ÈÙ]\˜Ú]™Y[˜›Þ]™[™XYËˆÙ][œ™XY[˜›ÞÛÝ[\ÈÙ][œ™XY[˜›Þ]™[ÛÝ[ŸHœ›ÛH‹‹Ù›ÛÝ˜[Z[˜›ÞY]™[ËšœÈŽÂš[\ÜÂˆY\Ñ›Ü›X][ÛœËˆZ[›ÛU\R[™^ˆÙ]›ÛQ\Ü^S˜[Y\ËˆÙ]\ÝÜšXØ[›Ü›X][Û”›ÛR[ˆ[™VÜÚ][ÛœÂŸHœ›ÛH‹‹ÚËY›ÛÝ˜[Y›Ü›X][Û‹XY\\‹šœÈŽÂš[\ÜÂˆZ[›Ü›X][Û’Û›ÝÛYÙR[™^ˆZ[ÜÛ™[›Ùš[R[™^ˆÜ™X]Q›Ü›X][Û’Û›ÝÛYÙUšY]Ó[Ù[ˆÙ]›Ü›X][Û“X\›š[™Ò[ŸHœ›ÛH‹‹Ù›ÛÝ˜[Y›Ü›X][Û‹ZÛ›ÝÛYÙK]šY]Ë[[Ù[šœÈŽÂš[\ÜÂˆZ[ÛØXÚÛÛ^ˆZ[ÛØXÚÛÛ^™\ÜˆÙ]ÝY™Ø]YÛÜžBŸHœ›ÛH‹‹ÚËY›ÛÝ˜[XÛØXÚXÛÛ^Y[™Ú[™KšœÈŽÂš[\ÜÂˆ™[ØYX[˜YÙ\‘[™Ú[™KˆÙ]ØYYX[˜YÙ\‘[™Ú[™KˆÜ™X]SYØXÞSX[˜YÙ\\Ý]Qœ›ÛPœ›ÝÜÙ\”Ý]KˆÜ™X]SYØXÞSX[˜YÙ\\Ý]Qœ›ÛPœ›ÝÜÙ\”Ý]TÞ[˜ËˆÙ]\Ú›Ø\™šY]Ó[Ù[œ›ÛSYØXÞSX[˜YÙ\”Ý]KˆÜ™X]R[š]X[ÛX•ÙYZÔÝ]Qœ›ÛPœ›ÝÜÙ\‹ˆY˜[˜ÙPÛX•ÙYZÔ\ÙQœ›ÛPœ›ÝÜÙ\‹ˆ\PÛX•ÙYZÑY™™XÝÑœ›ÛPœ›ÝÜÙ\‹ˆÜ™X]PÛX•ÙYZÔÝ[[X\žQœ›ÛPœ›ÝÜÙ\‹ˆÙ]ÛX•ÙYZÔ\ÙSX™[œ›ÛPœ›ÝÜÙ\‹ˆÙ]ÛX•ÙYZÔ\ÙQÝZY[˜ÙQœ›ÛPœ›ÝÜÙ\‹ˆ\ÝÛX•ÙYZÔ\Ù\Ñœ›ÛPœ›ÝÜÙ\‹ŸHœ›ÛH‹‹Ø\[X[˜YÙ\‹Y[™Ú[™KXœšYÙKšœÈŽÂš[\ÜÂˆZYÜ˜]S[ÙTÙ\ÜÚ[ÛœËˆ\œÚ\Ý[ÙQ[™[ÜKˆÝÚ]Ú[ÙTÙ\ÜÚ[Û‹ˆ™\Ù]ÙXÛÛ™\žTÙ\ÜÚ[Û‹ˆØ\\™S[ÙTÙ\ÜÚ[Û‹ˆ\S[ÙTÙ\ÜÚ[Û‚ŸHœ›ÛH‹‹Ù›ÛÝ˜[[[ÙK\Ù\ÜÚ[ÛœËšœÈŽÂ‚˜ÛÛœÝUWÔUÈHÂˆ^Y\œÎˆ™]KÙ›ÛÝ˜[Ü^Y\œËšœÛÛˆ‹ˆËÈÜ[\˜\šÙ]\\ˆ
+›Û\›Ùš[\‹Ý[™\›YÙÙ[™HÙÚZÚÊHÛÛHZÝHÜ[\™BˆËÈÛØ›\ˆÙYÈ[šXH\˜Ú]\RYËˆœZÙ\ÈZÚÙH[0éHž[HÜ[\œÙ[XÝ‚ˆ^Y\\˜Ú]\\Îˆ™]KÙ›ÛÝ˜[Ü^Y\—Ø\˜Ú]\\ËšœÛÛˆ‹ˆ›Û\Îˆ™]KÙ›ÛÝ˜[Ü›Û\ËšœÛÛˆ‹ˆXÝXÜÎˆ™]KÙ›ÛÝ˜[ÝXÝXÜËšœÛÛˆ‹ˆËÈØÙ[˜\š[Ù\ŽˆÛÜH\ÝÜš\ÚÙH]›Ü™š[™Ù\ˆžYÙÙ]0éH\šÙ]\[™K‚ˆØÙ[˜\š[ÜÎˆ™]KÙ›ÛÝ˜[ÜØÙ[˜\š[ÜËšœÛÛˆ‹ˆËÈØ[[Y[›Ü›X\Ú›ÛœÚØ][ÙÈ™ZÛ\ÈÛÛHYØXÞKÙ˜[˜XÚËˆZÝZÚÝ]›H0éBˆËÈ›ÜœÚY[ˆš]™\È°éH]ˆH\ÝÜš\ÚÙHÑ›ÛÝ˜[Y›Ü›X\Ú›Û™[™H[™\‹Y[‚ˆËÈš[[ˆÛ]\ÈZÚÙNˆ[ˆ\ˆžYÙÈ˜[˜XÚÈš\ÈÑ›ÛÝ˜[Y]HX[™Û\‹‚ˆYØXÞQ›Ü›X][ÛœÎˆ™]KÙ›ÛÝ˜[Ù›Ü›X][ÛœËšœÛÛˆ‹ˆËÈ\ÝÜš\ÚÈ›Ü›X\Ú›ÛœÙÜ[››YÈ
+]KÚÑ›ÛÝ˜[ÊHÛÛH°éHž[\ˆ›Ü›X][Û”Ù[XÝˆËÈÙÈYÛ™\È0éH[ˆZÜÚ\Ý\™[™HÜ°î›™H˜[™[ˆšXH›Ü›X\Ú›ÛœØY\\™[‹‚ˆÑ›Ü›X][ÛœÎˆ™]KÚÑ›ÛÝ˜[Ù›Ü›X][ÛœËšœÛÛˆ‹ˆÑ›Ü›X][Û‘\˜\Îˆ™]KÚÑ›ÛÝ˜[Ù›Ü›X][Û‘\˜\ËšœÛÛˆ‹ˆÔ›ÛU\\Îˆ™]KÚÑ›ÛÝ˜[Ü›ÛU\\ËšœÛÛˆ‹ˆÔ›ÛQš][\Îˆ™]KÚÑ›ÛÝ˜[Ü^Y\”›ÛQš][\ËšœÛÛˆ‹ˆÕ[›ØÚÔ[\Îˆ™]KÚÑ›ÛÝ˜[Ý[›ØÚÔ[\ËšœÛÛˆ‹ˆËÈÝX‹KÝ™[™\œ›Û\Žˆš[ÙHYËKÝ]šZÛ[™ÜÙ[Y[œÚ›Û™\ˆ™\ˆ›ÛH0é]š\šÙ\‹‚ˆËÈš]™\ˆÛØXÚÛÛ^[[ÝÜ™[ˆ
+›Ü›X][Û‘˜[Z[X\š]KÛØXÚ[™\œÝ[™[™ÈK›KŠK‚ˆÔÝY™”›Û\Îˆ™]KÚÑ›ÛÝ˜[ÜÝY™”›Û\ËšœÛÛˆ‹ˆËÈ›Ü›X][ÛˆÛ›ÝÛYÙH[™Ú[™NˆÝ[›œÚØ\ÛYÈ
+X]Ú\ËÜ\˜[Y]\œ›Ùš[
+H\‚ˆËÈ›Ü›X\Ú›Û‹ˆš]™\ˆ›Ü›X\Ú›ÛœË[X]Ú\[Ý[ÝÝ[™\œ›Ùš[\ˆ0éHØ[\YË‚ˆÑ›Ü›X][Û’Û›ÝÛYÙNˆ™]KÚÑ›ÛÝ˜[Ù›Ü›X][Û’Û›ÝÛYÙKšœÛÛˆ‹ˆÛ›ÝÛYÙTš[˜Ú\\Îˆ™]KÙ›ÛÝ˜[ÚÛ›ÝÛYÙWÜš[˜Ú\\ËšœÛÛˆ‹ˆ›ÛÝ˜[›ÛÚÒÛ›ÝÛYÙR[™^ˆ™]KÙ›ÛÝ˜[Ø›ÛÚ×ÚÛ›ÝÛYÙWÜš[˜Ú\\ËšœÛÛˆ‹ˆÛX’[˜›ÞY\ÜØYÙ\Îˆ™]KØÛX—Ú[˜›ÞÛY\ÜØYÙ\ËšœÛÛˆ‹ˆÛX’[˜›ÞY\ÜØYÙSX[šY™\Ýˆ™]KØÛX—Ú[˜›ÞÛY\ÜØYÙ\ËÛX[šY™\ÝšœÛÛˆ‹ˆÛX’[˜›ÞÙ[™\œÎˆ™]KØÛX—Ú[˜›ÞÜÙ[™\œËšœÛÛˆ‹ˆÛX’[˜›Þ™XYÎˆ™]KØÛX—Ú[˜›ÞÝ™XYËšœÛÛˆ‹ˆÛX’[˜›ÞÚÚXÙSX[šY™\Ýˆ™]KØÛX—Ú[˜›ÞØÚÚXÙ\ËÛX[šY™\ÝšœÛÛˆ‹ˆÛX’[˜›Þ™\SX[šY™\Ýˆ™]KØÛX—Ú[˜›ÞÜ™\Y\ËÛX[šY™\ÝšœÛÛˆ‹ˆËÈ\ÝÜžHÛË][›ØÚÜÎˆÝY\‹ÝX‹ZÜÜ\\ÙK™[š[™ÜÜ›ÙÜ˜[[Y\ˆÙÈ˜YÙ\Ë‚ˆ[›ØÚÜÎˆ™]KÙ›ÛÝ˜[Ý[›ØÚÜËšœÛÛˆ‹ˆËÈY\Ý\œÚØ\
+SKÕ“JH›Üˆ[™ÛYÜÛ[Ù\Îˆ\›™\š[™ÜÜÝZÝ\ˆ
+È˜\Ú›Û™\ˆYYˆËÈ\ÝÜš\ÚÈÝ[X\šÙ]\Kˆ[™Ù[ˆ˜\Ú›Û™\ˆ[\ˆY\Ý\œÚØ\\™ÛÙ\ÈH”Ë‚ˆÝ\›˜[Y[Îˆ™]KÙ›ÛÝ˜[ÝÝ\›˜[Y[ËšœÛÛˆ‹ˆXÙSØØ][ÛœÎˆ™]KÙ›ÛÝ˜[ÜXÙWÛØØ][ÛœËšœÛÛˆ‹ˆÝY™Žˆ™]KÙ›ÛÝ˜[ÜÝY™‹šœÛÛˆ‹ˆ^\\ÙNˆ™]KÙ›ÛÝ˜[Ù^\\ÙKšœÛÛˆ‹ˆ˜Z[š[™Ô›ÙÜ˜[\Îˆ™]KÙ›ÛÝ˜[Ý˜Z[š[™×Ü›ÙÜ˜[\ËšœÛÛˆ‹ˆËÈ[™]šYY[™[š[™ÎˆÜÜ™[™H[ˆ[šÙ[Ü[\ˆØ[ˆÙ]\È0éH™YÚY[ˆ]‚ˆËÈYÜðîÝKˆ[™Ù[ˆ]ˆ[H]™\ˆÝ™\˜[8 %ÙHØÜËÝ™[š[™Ë›Y‚ˆ[™]šYX[˜Z[š[™Îˆ™]KÙ›ÛÝ˜[Ú[™]šYX[Ý˜Z[š[™ËšœÛÛˆ‹ˆËÈÝ˜ZÙHÚY\Žˆ]šX]Ø][ÙÈ
+ÈÜÚ\Ú›ÛœÚÜ˜]‹ˆÝ˜ZÚ][™HY[Yš\Ù\™\È]ˆËÈ]ˆÜ[\™]Y[™HÛÛH[\™YHš[›™\È8 %ÙHØÜËÜÝ˜ZÙK\ÚY\‹›Y‚ˆ^Y\•ÙXZÛ™\ÜÙ\Îˆ™]KÙ›ÛÝ˜[Ü^Y\—ÝÙXZÛ™\ÜÙ\ËšœÛÛˆ‹ˆËÈ™\™YÚ]Ý›ÚØX[\™]ˆHˆ™\™YÚ][™HÜ[\™Hpé[\È0éK[X\Ù[™HÛÛBˆËÈš[™\ˆ[™HÚÙ[œÈ[[KÙÈÜÚ\Ú›Û™[™\ÈS‘ÑT•HÜ˜]›\Ý\‹ˆ0éBˆËÈYYÙ\™H[›™HHÝ˜ZÚ]Ùš[KÛÛHHZYHÈ[™ÈØ[]YYË‚ˆ]šX]\Îˆ™]KÙ›ÛÝ˜[Ø]šX]\ËšœÛÛˆ‹ˆËÈYØZÛX˜™[™\ÈÜ[\Ý[YÛ™]0éHÛX˜™[™\ÈYÙ[ˆ˜Y\Ú›Û‹ˆÛX˜™[ˆZY\‚ˆËÈY[]]ÙÈš]°éH
+›ÛÝ˜[ØÛXœËšœÛÛŠNÈ]HZY\ˆ›Ý˜[[‹‚ˆXYÝYPÛX”›Ùš[\Îˆ™]KÙ›ÛÝ˜[ÛXYÝYWØÛX—Ü›Ùš[\ËšœÛÛˆ‹ˆËÈÙ\šY\\˜[ZY[Žˆ[]\Ù\šY[ˆÈÐ“ÔË[YØY[ˆÈ‹ˆ]š\Ú›ÛˆYYÛX˜™\‹š]°éY\‚ˆËÈÙÈÜKÛ™YžZÚÜÜ™YÛ\‹ˆÚ[[ˆ›Üˆ‘SHHpî\ˆÙÈ“ÔˆHÝ0é\‹‚ˆÛXœÎˆ™]KÙ›ÛÝ˜[ØÛXœËšœÛÛˆ‹ˆ˜Z[š[™Ð˜YÙ\Îˆ™]KÙ›ÛÝ˜[Ý˜Z[š[™×Ø˜YÙ\ËšœÛÛˆ‹ˆX[PÛ\ÜÚYšXØ][ÛœÎˆ™]KÙ›ÛÝ˜[ÝX[WØÛ\ÜÚYšXØ][ÛœËšœÛÛˆ‹ˆËÈÝYÜ˜\Ü\ˆ
+ŒJNˆ›ÜšÛ\™\ˆ˜H™\ÜÜÝYÚ\ˆX[˜YÙ\™[‹ˆ™[ˆËÈRKKÙ›ÜšÛ\š[™ÜÛYÈ8 $È[™Ù[ˆ[›ØÚËKš]H[\ˆ˜YÙYY™™ZÝ[ÝÜ‹YY™™ZÝ‚ˆXÙT™\ÜÎˆ™]KÙ›ÛÝ˜[ÜXÙWÜ™\ÜËšœÛÛˆ‹ˆËÈŒHœZÙ\ˆ^[\KYš[[ˆÛÛHZY\YYÈYËKÙ[[ÜÝ]H
+[›ØÚÙYXÙRYËˆËÈ\™YÝY™’YËX\›™Y˜YÙRYÈÜÝ‹ŠKˆ›]\È[Ø]™K\Þ\Ý[HÙ[™\™K‚ˆX[SY\š]Îˆ™]KÙ›ÛÝ˜[ÝX[WÛY\š]Ë™^[\KšœÛÛˆ‚ŸNÂ‚˜ÛÛœÝSTWÕSQHH—×Ù[\W×ÈŽÂ˜ÛÛœÝÔÒUSÓ”×ÒÑVHHšÙ›KœÛÝÜÚ][ÛœËŒHŽÂ‚‹ËÈœšZÚÙY›Ü™[[™Ù[ˆ0éH˜[™[ˆ\ˆ™\œÚ›Û™\HÙ[™H]Y[™KZÚÙHH°îÚÙ[[‹‚‹ËÈ^[Ý]HÝ˜ZÚÈ‘Tˆ[š™H][ÚY[[š˜H
+Ü\ÜÜ\™]HMLˆ]›™]0éB‹ËÈM	HÙÈˆ	JHÙÈÛ[]H]H›Ü›X\Ú›Û™\ˆ[›ˆH]Ø[[YHÛX[H°é[™]‚‹ËÈYÜ™YH^[Ý]KZÛÛÜ™[˜]\ˆš[HÝ™\œÝ\[ˆ™]YH›Ü™[[™Ù[ˆ›Üˆ[B‹ËÈÛÛH[\™YH\ˆÜ[8 %ÙÜðéHšXH[Ù\ËZÛÛ›Û][œÈÙ\Ú›Û™\‹ÛÛH[ˆ™[‚‹ËÈ°îÚÙ[[\ZÚÙHš[H°éYˆ\™›ÜˆÝ[\\ÈÙ]]ÙÈ][Y\šÙ]Ý]]\‹ËÈÙ]›ÜšØ\Ý\È0ê[ˆØ[™ËˆX[Y[›]YHœšZÚÙ\ˆ[Ý[\ÈNÈ[[›™]B‹ËÈYÜš[™Ù[ˆ\ˆ\°î‚˜ÛÛœÝUÒÓVSÕUÕ‘T”ÒSÓˆHÎÂ˜ÛÛœÝUÒÓVSÕUÑ’QSH—×Û^[Ý]ŽÂ˜ÛÛœÝPÕU‘WÒÓ“ÕÓQÑWÑ“ÐÕT×ÒÑVHHšÙ›K˜XÝ]™RÛ›ÝÛYÙQ›ØÝ\ËŒHŽÂ˜ÛÛœÝÓÓTUQÒÓ“ÕÓQÑWÑ“ÐÕT×ÒÑVHHšÙ›K˜ÛÛ\]YÛ›ÝÛYÙQ›ØÝ\ËŒHŽÂ˜ÛÛœÝRS’S‘×ÕÑQR×ÒÑVHHšÙ›K˜Z[š[™ÕÙYZËŒHŽÂ˜ÛÛœÝÑQRÓWÕRS’S‘×Ñ“ÐÕT×ÒÑVHHšÙ›KÙYZÛU˜Z[š[™Ñ›ØÝ\ËŒHŽÂ‹ËÈZÙ[œÈ˜[ÝH™[š[™ÜÜ›ÙÜ˜[H
+ÛÛ\ÜÚ\Ú›ÛŠKˆÛ\ÈYÚÚ[œ˜H™[š[™ÜÙ›ÚÝ\Â‹ËÈÙÈËX˜YÙK\›ÙÜ˜[[Y\‹ˆÝ[ˆRKÜ›ÙÜ™\Ú›Ûˆ
+È[™Ø[™ÜÈÙ™‹\]ÚYY™™ZÝ\ˆZÙK‚˜ÛÛœÝÑQRÓWÕRS’S‘×Ô“ÑÔSWÒÑVHHšÙ›KÙYZÛU˜Z[š[™Ô›ÙÜ˜[KŒHŽÂ‹ËÈZØ\È[™]šYY[HÜ°îÚ[™ÎˆÈÙYZË\ÜÚYÛ›Y[ÎˆÞÜ^Y\’Y˜XÚÒY›ÛRYWHK‚˜ÛÛœÝS‘U’QPSÕRS’S‘×ÒÑVHHšÙ›Kš[™]šYX[˜Z[š[™ËŒHŽÂ˜ÛÛœÝÓP—ÕÑQR×ÔÕUWÒÑVHHšÙ›K˜ÛX•ÙYZÔÝ]KŒHŽÂ˜ÛÛœÝÓP—ÕÑQR×Ñ‘QQPÒ×ÒÑVHHšÙ›K˜ÛX•ÙYZÑ™YY˜XÚËŒHŽÂ˜ÛÛœÝÓP—ÕÑQR×ÑU‘S•ÓÑ×ÒÑVHHšÙ›K˜ÛX•ÙYZÑ]™[ÙËŒHŽÂ‹ËÈ\ÝÜžHÛË[YÜ›ÙÜ™\Ú›Ûˆ
+X[HY\š]ÊHHØØ[ÝÜ˜YÙKˆÙYY\Èœ˜H^[\KYš[[‚‹ËÈ™Y°îœÝH\Ý[™Ë\™]\ˆ\œÚ\Ý\™\ÈœZÙ\™[œÈYÛ™H[™š[™Ù\ˆ\‹‚˜ÛÛœÝPSWÓQT’U×ÒÑVHHšÙ›KX[SY\š]ËŒHŽÂ‹ËÈ[›˜›ÚÜË]°éY\Žˆ\ÝHÙÈ]™\HY[[™ÜËZYY\ˆ
+Ý[ˆRKÜ›ÙÜ™\Ú›ÛŠK‚˜ÛÛœÝ‘PQÒS“ÖÓQTÔÐQÑWÒQ×ÒÑVHHšÙ›Kœ™XY[˜›ÞY\ÜØYÙRYËŒHŽÂ˜ÛÛœÝSU‘T‘QÒS“ÖÓQTÔÐQÑWÒQ×ÒÑVHHšÙ›K™[]™\™Y[˜›ÞY\ÜØYÙRYËŒHŽÂ‹ËÈ[›˜›ÚÜË\Ý˜\˜[È
+ŒJNˆœZÙ\™[œÈ˜[ÝHÝ˜\ˆ\ˆY\ÜØYÙRYˆÝ[ˆRKÜ›ÙÜ™\Ú›Û‚‹ËÈ\ÜÈÛpéH[™Ø[™ÜËYY™™ZÝ\ˆ0éHÛXˆÙYZË]™\™Y\‹‚˜ÛÛœÝÑSPÕQÒS“ÖÐÒÒPÑT×ÒÑVHHšÙ›KœÙ[XÝY[˜›ÞÚÚXÙ\ËŒHŽÂ‹ËÈ[›˜›ÚÜËZÝ\˜]\š[™ÈŒŽˆš[Ù[ˆZÙHÜ[\™[ˆÚ\ÝÝš]\H]ZØ\ÈÚYÛ˜[‚‹ËÈ™[ˆRK\Ý]H8 %Ý\™\ˆ˜\™H›ÜˆX[™ÙH°éY\ˆÛÛH0î\È[0ªÕšZÝYÈ°ép®È\‚‹ËÈZÙK[šH[ÝÜ™[‹‚˜ÛÛœÝS“ÖÐPÒ×ÕÑQR×ÒÑVHHšÙ›Kš[˜›ÞXÚÛ›ÝÛYÙYÙYZËŒHŽÂ‹ËÈØ[\YÈ
+ŒJNˆÚ\ÝHÜ[HØ[\ˆÝ[ˆRKÜ›ÙÜ™\Ú›ÛˆHØØ[ÝÜ˜YÙH8 $È[™Ù[ˆÙ\šYK‹ËÈX™[Ù\ÛÛ™È[\ˆ]™ZØ[\ˆÙ[™HØ[\™\™YÛš[™Ù[ˆYÙÙ\ˆHØ[\[ÝÜ™[‹‚˜ÛÛœÝPUÒVWÔÕUWÒÑVHHšÙ›K›X]Ú^KŒHŽÂ‹ËÈZ[šHÙX\ÛÛˆŒŒNˆKZØ[\\œÈ°î™\\š[ÙH
+[ÝÝ[™\œ[‹™\Ý[]\‹Ý\™[pé[‹ËÈÙÈÛ]\™\š[™ÊKˆÝ[ˆRKÜ›ÙÜ™\Ú›ÛˆHØØ[ÝÜ˜YÙH8 $È[™Ù[ˆYØKX™[‹ËÈ0îÛÛ›ÛZH[\ˆžHØ[\[ÝÜ‹ˆÙ[™HÙÚZÚÙ[ˆYÙÙ\ˆH›ÛÝ˜[[Z[šK\ÙX\ÛÛ‹šœË‚˜ÛÛœÝRS’WÔÑPTÓÓ—ÒÑVHHRS’WÔÑPTÓÓ—Õ‘T”ÒSÓŽÂ˜ÛÛœÝPQÕQWÔÑPTÓÓ—ÒÑVHHPQÕQWÔÑPTÓÓ—Õ‘T”ÒSÓŽÂ˜ÛÛœÝPQÕQWÔVSÑ‘—ÒÑVHHPQÕQWÔVSÑ‘—Õ‘T”ÒSÓŽÂ˜ÛÛœÝ’T”ÕÕSQWÔVU“ÕQÒÒÑVHHšÙ›K™š\œÝ[YT^]›ÝYÚŒHŽÂ˜ÛÛœÝÐSQWÔÕT•ÔÕUWÒÑVHHšÙ›K™Ø[YTÝ\Ý]KŒHŽÂ‹ËÈÛ˜›Ø\™[™ÈŒŽˆYÙ[ˆÝ\ÚÚ™\›KˆÛ˜›Ø\™YHÜ[\™[ˆ\ˆ˜[ÝÜ[[Ù\Â‹ËÈZ[œÝ0ê[ˆØ[™ËðéHÝ\ÚÚ™\›Y[ˆZÚÙHYÙÙ\ˆÙYÈÝ™\ˆÜ[]™Y™\ˆ\Ý‚˜ÛÛœÝÓ“ÐT‘QÒÑVHHšÙ›K›Û˜›Ø\™YŒHŽÂ˜ÛÛœÝRVÕÕSÑ“ÓÕSÔÐÑST’S×ÒQH˜Z˜^ÌNMÌWÍÌ×ÝÝ[›ÛÝ˜[ŽÂ˜ÛÛœÝ’T”ÕÕSQWÓÔÓ‘S•ÒQH˜Z˜^ÌNMÌWÍÌ×ÝÝ[Ù›ÛÝ˜[ŽÂ‚‹ËÈZÝH\ÝÜžHÛË\›ÙÜ™\Ú›ÛˆHØØ[ÝÜ˜YÙH
+ÚÜš]™\È]ˆ\ÝÜžHÛËX\[‹ZÚÙB‹ËÈ]ˆ›ÛÝ˜[X[˜YÙ\ŠKˆœZÙ\ÈÛÛHÚ[H[˜ZÝ\ÚÈ™\ðîÝHÜÜÝY\‹‚‹ËÈš\Ú]YÜXÙ\È8 $ÈØš™ZÝÛX\YY™\ðîÝHXÙRYY\ˆ
+ÈYˆYHJK‚‹ËÈ×ÙÜ›Ý[™Ü\—ÜÝ]×ÝŒH8 $ÈÜ›Ý[™Ü\‹KÜÜÜÝ]\ÝZÚË\‚‹ËÈš\Ú]YÙÜ›Ý[™Ü\—ÜXÙ\È\ˆÝ™Y\Ý[‹‚˜ÛÛœÝTÕÔ–WÑÓ×Õ’TÒUQÔPÑT×ÒÑVHHš\Ú]YÜXÙ\ÈŽÂ˜ÛÛœÝTÕÔ–WÑÓ×ÑÔ“ÕS‘ÔT—ÔÕU×ÒÑVHHš×ÙÜ›Ý[™Ü\—ÜÝ]×ÝŒHŽÂ‹ËÈ]Z^‹\Ý]\Èœ˜H\ÝÜžHÛËˆÚ[[ˆ\ˆ™\šYš\Ù\[Ý\ÝÜžHÛË\™\Ù]‹ËÈ
+\˜Y\Ü\Y]Ò\ÝÜžKQÛÊN‚‹ËÈœËÜ]Z^ž™\ËšœÎˆ×ÓPT“’S‘×ÓÑ×ÒÑVHHš×ÛX\›š[™×ÛÙ×ÝŒH‚‹ËÈËÈ0ªÙ[™\ÝHØ[›š]ˆ]Z^ˆ
+ÈØœÙ\˜\Ú›Û™\°®Â‹ËÈœËÛX\›š[™ÓÙËšœÎˆ\Ô]Z^‘]™[
+
+HOˆ\HOOHœ]Z^—Ü\™™XÝ‚‹ËÈœ]Z^—ÜÙ]ØÛÛ\]Hˆœ]Z^—ÛYØXÞH‚‹ËÈ˜Y[™H°éœ™\ˆ\™[\™Ù]YHÝY]ÈY
+™‹ˆ]Z^ž™\ËšœÈÙÂ‹ËÈ\ÝËÚÛ›ÝÛYÙK]Œ‹[[Ù[\ÝšœÎˆ\™[\™Ù]YˆÜ™ÙØ]HŠK‚‹ËÈšHTÑTˆÝ[ˆ[›™H°îÚÙ[[ˆ8 $È›ÛÝ˜[X[˜YÙ\ˆÚÜš]™\ˆ[šH[[‹‚˜ÛÛœÝTÕÔ–WÑÓ×ÓPT“’S‘×ÓÑ×ÒÑVHHš×ÛX\›š[™×ÛÙ×ÝŒHŽÂ˜ÛÛœÝTÕÔ–WÑÓ×ÔURV—ÑU‘S•ÕTTÈH™]ÈÙ]
+Èœ]Z^—Ü\™™XÝ‹œ]Z^—ÜÙ]ØÛÛ\]H‹œ]Z^—ÛYØXÞH—JNÂ‚‹ËÈXZÜÈ[[ÛX˜š[™[Ù\ˆÛÛH™ZÛ\ÈHÙÙÙ[ˆ
+žY\ÝH°îœÝ
+K‚˜ÛÛœÝÓP—ÕÑQR×ÑU‘S•ÓÑ×ÓSRUHLŽÂ‚‹ËÈ›ÜÚÜ˜]ˆ
+›ÜÝ\ˆ™XY[™\ÜÊNˆZ[œÝMHÜ0é\ÝHÜ[\™HÝ[\ˆLHÝ0é\‚‹ËÈHÝ\[]™\™[ˆÙÈZ[œÝ\ˆ™[šÙ\Ü[\™K°îˆX[˜YÙ\‹KÚØ[\[[ˆ™YÛ™\Â‹ËÈÛÛHÜ[Û\‹‚˜ÛÛœÝ‘TURT‘QÔÔUPQÔÒV‘HHMNÂ˜ÛÛœÝ‘TURT‘QÔÕT•T”ÈHLNÂ˜ÛÛœÝ‘TURT‘QÐ‘SÒHÂ˜ÛÛœÝ‘TURT‘QÔÕQ‘—ÔÒV‘HHÎÂ‚‹ËÈÝ[™\™KX°é[™\ˆYÙ[
+	HHÜØ[™Ü™\L	HH[›‹ÚÙY\\ŠK‚˜ÛÛœÝS‘WÖHHÈÙY\\ŽˆLY™[œÙNˆÌ‹ZYšY[ˆL]XÚÎˆNÂ‚˜ÛÛœÝÝ]HHÂˆ^Y\œÎˆ×KˆËÈÜ[\˜\šÙ]\\ˆœ˜H›ÛÝ˜[Ü^Y\—Ø\˜Ú]\\ËšœÛÛ‹ˆ[™\›YÙÙ[™BˆËÈ›Û\›Ùš[\ˆÛÛHZÝHÜ[\™HÛØ›\ˆÙYÈ[šXH\˜Ú]\RYËˆœZÙ\ÂˆËÈZÚÙH[0éHž[HÜ[\œÙ[XÝÙÈ\ˆ[™Ù[ˆ\™ZÝHš]KÚØ[\[ÝÜ‹YY™™ZÝ‚ˆ^Y\\˜Ú]\\Îˆ×Kˆ›Û\Îˆ×KˆXÝXÜÎˆ×KˆËÈ[[YKY›Ü›X\Ú›Û™\ˆÛÛHZÝZÚÝ]›HœZÙ\‹ˆž[\È°éHœ˜HH\ÝÜš\ÚÙBˆËÈÑ›ÛÝ˜[Y›Ü›X\Ú›Û™[™HšXHY\\™[ˆ
+Y\Ñ›Ü›X][ÛœÊKˆØ[[BˆËÈ›ÛÝ˜[Ù›Ü›X][ÛœËšœÛÛˆ™ZÛ\ÈHYØXÞQ›Ü›X][ÛœÈÛÛH˜[˜XÚË‚ˆ›Ü›X][ÛœÎˆ×KˆYØXÞQ›Ü›X][ÛœÎˆ×KˆËÈ\ÝÜš\ÚÈÑ›ÛÝ˜[YÜ[››YÈ
+]KÚÑ›ÛÝ˜[ÊKˆ°éY]H\ÜÈÜÛYË‚ˆËÈš]™\ˆ›Ü›X][Û”Ù[XÝ˜\ÙY›Ü›X\Ú›ÛœËKÝZÝZÚÜ[™[]ÙÈ›ÛYš]Z[‚ˆÑ›Ü›X][ÛœÎˆ×KˆÑ›Ü›X][Û‘\˜\Îˆ×KˆËÈ›Ü›X][ÛˆÛ›ÝÛYÙH[™Ú[™NˆÜÛYÈ›Ü›X][Û’YOˆÝ[›œÚØ\
+Ý›Û™ÐYØZ[œÝÂˆËÈÙXZÐYØZ[œÝK›KŠKˆš]™\ˆ›Ü›X\Ú›ÛœË[X]Ú\[Ý[ÝÝ[™\œ›Ùš[\‹‚ˆ›Ü›X][Û’Û›ÝÛYÙPžRYˆßKˆÔ›ÛU\\Îˆ×KˆËÈÜÛYÈYOˆ›ÛU\H›Üˆš\Ûš[™ÜÛ˜]›ˆ0éH°îÚÙ[›Û\ˆ
+›ÛU\\ËšœÛÛŠK‚ˆÔ›ÛU\R[™^ˆ™]ÈX\
+
+KˆÔ›ÛQš][\Îˆ[ˆÕ[›ØÚÔ[\Îˆ[ˆËÈÝX‹KÝ™[™\œ›Û\ˆ
+ÝY™”›Û\ÊH›ÜˆÛØXÚÛÛ^[[ÝÜ™[‹ˆ›Ü›X[\Ù\™\È[ˆËÈÝY™”›Û\Ñ]KœÝY™”›Û\È×HH[š]
+
+K‚ˆÔÝY™”›Û\Îˆ×KˆÛ›ÝÛYÙTš[˜Ú\\Îˆ×KˆËÈZÙ\ˆ0éH[ˆÑ›ÛÝ˜[Y›Ü›X][Û‹šY
+™[\ÈÝ]K[™Ù[ˆ\˜[[Y
+K‚ˆÙ[XÝY›Ü›X][Û’Yˆ[ˆÙ[XÝYXÝXÒYˆ[ˆÙ[XÝYÛÝYˆ[ˆ[™]\ˆßKˆËÈÛÝYOˆÈHHH›ÜÙ[[›™[™›Üˆ˜[™[‹›ÜˆÚ™[[™H›Ü›X\Ú›Û‹‚ˆÛÝÜÚ][ÛœÎˆßKˆËÈ˜[ÝÝ[›œÚØ\ÚÛÜÛÛHZÙ[œÈ™[š[™ÜÙ›ÚÝ\È
+Ý[ˆRKÜÝ]K[™Ù[ˆØ[\[ÝÜ‹YY™™ZÝ
+K‚ˆXÝ]™RÛ›ÝÛYÙQ›ØÝ\ÒYˆ[ˆËÈÝ[›œÚØ\Ù›ÚÝ\ÈÛÛH\ˆX\šÙ\[°î[›™HZÙ[ˆ
+Ý[ˆRKÜ›ÙÜ™\Ú›Û‹[™Ù[ˆØÛÜ™KYY™™ZÝ
+K‚ˆÛÛ\]YÛ›ÝÛYÙQ›ØÝ\ÒYÎˆ™]ÈÙ]
+
+KˆËÈÚ™[[™H™[š[™ÜÝZÙH
+Ý[ˆRKÜ›ÙÜ™\Ú›Û‹[™Ù[ˆØ[\[ÝÜ‹H[\ˆØÛÜ™KYY™™ZÝ
+K‚ˆ˜Z[š[™ÕÙYZÎˆKˆËÈZÝ\ÚÈ™[š[™ÜÙ›ÚÝ\È›ÜˆÚ™[[™HÛXˆÙYZËˆÛ\È™]š\ÜÝYÚÚ[œ˜BˆËÈÝ[›œÚØ\Ù›ÚÝ\ÈÙÈ\ÝÜžHÛË\›ÙÜ˜[[Y\‹Ø˜YÙ\Ë‚ˆÙYZÛU˜Z[š[™Ñ›ØÝ\Îˆ[ˆËÈZÙ[œÈ˜[ÝH™[š[™ÜÜ›ÙÜ˜[H
+ÛÛ\ÜÚ\Ú›ÛŠKˆÈ›ÙÜ˜[RYÙYZË\YYK‚ˆËÈYÚÚ[œ˜H™[š[™ÜÙ›ÚÝ\ÎÈœZÙ\È[˜[Ý][Ý[™ÙÈ[™Ø[™ÜÈÙ™‹\]ÚYY™™ZÝ‚ˆÙYZÛU˜Z[š[™Ô›ÙÜ˜[Nˆ[ˆËÈØ][ÙÙ[ˆÝ™\ˆ[™]šYY[H™[š[™ÜÜÜÜˆ
+œ˜H]Yš[›Ü›X[\Ù\
+K‚ˆ[™]šYX[˜Z[š[™ÐØ][ÙÝYNˆÈØ\XÚ]NˆÈ˜\ÙNˆK\”ÝY™“Y[X™\ŽˆKX^ˆHK˜XÚÜÎˆ×HKˆËÈZØ\È[™]šYY[HÜ°îÚ[™ÎˆÈÙYZË\ÜÚYÛ›Y[Îˆ×HK‚ˆ[™]šYX[˜Z[š[™ÎˆÈÙYZÎˆ[\ÜÚYÛ›Y[Îˆ×HKˆËÈØ][ÙÙ[ˆÝ™\ˆÝ˜ZÙHÚY\ˆ
+œ˜H]Yš[›Ü›X[\Ù\
+K‚ˆÙXZÛ™\ÜÐØ][ÙÝYNˆÈ]šX]\Îˆ×KÜÚ][Û‘[X[™ÎˆßKY™šXÝ[NˆßKš]T™[YYØ\ˆKˆËÈÜ[\Ý[›Ùš[\ˆ›ÜˆYØZÛX˜™[™KÙ^Y]0éHÛX˜‹ZY‚ˆXYÝYPÛX”›Ùš[\ÎˆßKˆËÈÙ\šY\\˜[ZY[ŽˆÈY\œËÛXœÈKˆÛH\˜[ZYH™]\ˆ][ÝÜ™[ˆ˜[\‚ˆËÈ[˜ZÙH0éHÝ[™\™š]°éY]8 %Ü[]Ý0é\ˆZÚÙKY[ˆØ\œšY\™\ÝYÙ[ˆX[™Û\‹‚ˆXYÝYT\˜[ZYˆÈY\œÎˆ×KÛXœÎˆ×HKˆËÈZÝ]ˆÝ˜[Yš\Ù\š[™È
+ÜKÛ™YžZÚÜÚØ[\\ŠKˆ[°é\ˆÙ\ÛÛ™Ù[ˆZÚÙH[™H0éBˆËÈ[ˆÝ˜[Yš\Ù\š[™ÜÜ\ÜË‚ˆXYÝYT^[Ù™Žˆ[ˆËÈÛXˆÙYZÈ[™Ú[™K][Ý[™
+ZÙK˜\ÙHÙÈÛX˜™\™Y\ŠKˆ›Ü›X[\Ù\™\È]ˆ[™Ú[™KÙ˜[˜XÚË‚ˆÛX•ÙYZÔÝ]Nˆ[ˆËÈÛÜ[˜ZÙ[Y[[™ÈÛHÚ\ÝH˜\ÙXž]H
+Ý[ˆRKÝZÜÝ[™Ù[ˆØÛÜ™KH[\ˆ[™Ú[™KYY™™ZÝ
+K‚ˆÛX•ÙYZÑ™YY˜XÚÎˆ’ÛX˜ZÙ[ˆ\ˆÛ\‹ˆ‹ˆËÈÛÜÙÙÈÝ™\ˆ˜\ÙXž]\ˆHÛXˆÙYZÈ
+žY\ÝH°îœÝ
+KˆÝ[ˆRKÜÝ]KÛØØ[ÝÜ˜YÙK‚ˆÛX•ÙYZÑ]™[ÙÎˆ×KˆËÈ˜\ÙK[Y[[™Ù\ˆœ˜H]Yš[ˆÝ˜\˜[ÈÙÈ™\Y\ÈYÙÙ\ˆHYÛ™HØ][ÙÙ\ˆÙÂˆËÈÛØ›\È[›ˆH[[YH
+Ù][[[YR[˜›ÞY\ÜØYÙ\ÊK‚ˆÛX’[˜›ÞY\ÜØYÙ\Îˆ×KˆËÈ[]œÙ[™\šØ][ÙÈ›Üˆ[›˜›ÚÜËˆœZÙ\È[0éHš\ÙHÝXš[HÛX˜œÝ[[Y\ˆœ˜HÝ\‚ˆÛX’[˜›ÞÙ[™\œÎˆ×KˆËÈ°éYØ][ÙÈ›Üˆ[›˜›ÚÜËˆÜ\\™\ˆY[[™Ù\ˆHØ[][]°éY\ˆ\ˆ]œÙ[™\‹Ý[XK‚ˆÛX’[˜›Þ™XYÎˆ×KˆËÈ[›˜›ÚÜË]°éY\Ý]H
+Ý[ˆRKÜ›ÙÜ™\Ú›ÛˆHØØ[ÝÜ˜YÙH8 $È[™Ù[ˆØ[\[ÝÜ‹KˆËÈ›ÛYš]H[\ˆX]Ú[™ËYY™™ZÝ
+N‚ˆËÈH[]™\™YHY[[™Ù\ˆÛÛH\ˆ›]]0îÝÝš\ÝZ[œÝ0ê[ˆØ[™È
+X]Ú]ˆËÈ˜\ÙKØÛÛ™][ÛœÊKˆ\ÚÙ\ÈH\ÝÜšZÚÙ[ˆÙ[ˆ]\ˆ]ÛÛ™][ÛœÈÛ]\ˆ0éHX]ÚK‚ˆËÈH™XYHY[[™Ù\ˆœZÙ\™[ˆ\ˆX\šÙ\ÛÛH\ÝšXH“X\šÙ\ˆ°éYÛÛH\Ý‹‚ˆËÈH[›˜›ÚÜÈš\Ù\ˆZÝ]™H°éY\ˆYY[\ÝHY[[™Ù\‹‚ˆËÈH\šÚ]ˆš\Ù\ˆ°éY\ˆYY]™\Û\Ý\ÝÜšZÚË‚ˆ™XY[˜›ÞY\ÜØYÙRYÎˆ™]ÈÙ]
+
+Kˆ[]™\™Y[˜›ÞY\ÜØYÙRYÎˆ™]ÈÙ]
+
+KˆËÈZÙ[ˆÜ[\™[ˆÚ\ÝÝš]\H]ZØ\È[›˜›ÚÜÜÚYÛ˜[
+H[™Ù[ˆ[›°éJK‚ˆ[˜›ÞXÚÛ›ÝÛYÙYÙYZÎˆˆËÈ[›˜›ÚÜË\Ý˜\˜[È
+ŒJN‚ˆËÈHÛX’[˜›ÞÚÚXÙ\ÈH˜[ÚØ][ÙÙ[ˆ\Ý]œ˜HX[šY™\Ý
+0ê[ˆš[\ˆ]œÙ[™\ŠK‚ˆËÈHÙ[XÝY[˜›ÞÚÚXÙ\ÈHœZÙ\™[œÈ˜[ÈÛÛHX\ÈÛY\ÜØYÙRYNˆÚÚXÙRYK‚ˆËÈY™™ZÝ\ˆ0éHÛXˆÙYZË]™\™Y\ˆœZÙ\ÈÝ[ˆ°îœÝHØ[™È]˜[È\ÎÈ™[ØYˆËÈœZÙ\ˆZÚÙHY™™ZÝ\ˆ0éHž]ˆ[™Ù[ˆØ[\[ÝÜ‹K›ÛYš]H[\ˆX]Ú[™ËYY™™ZÝ‚ˆÛX’[˜›ÞÚÚXÙ\Îˆ×KˆÙ[XÝY[˜›ÞÚÚXÙ\ÎˆßKˆËÈš[Ù[ˆ[›˜›ÚÜÝ°éYÛÛH\ˆ0é\™]ÙZÜÜ[™\H[™[]
+Ý[ˆRJKˆ°éY\ˆš\Ù\ÂˆËÈÛÛ\Ù]ÛÛHÛZÚØ˜\™H˜Y\ŽÈ[ˆ0é\™H°éY[ˆš\Ù\ˆ[›šÛÙÈÝ˜\˜[Ë‚ˆÜ[’[˜›Þ™XYYˆ[ˆËÈ[›˜›ÚÜË]°éYÝ˜\ˆ
+ŒJN‚ˆËÈHÛX’[˜›Þ™\Y\ÈH™\KZØ][ÙÙ[ˆ\Ý]œ˜HX[šY™\Ý
+0ê[ˆš[\ˆ]œÙ[™\ŠK‚ˆËÈ]™\H\ˆ[ˆÜ°îÚ[™ÜÛY[[™ÈÛÛH0é\Ù\ÈÜ°é\ˆ]™\Ý[]Ý˜\˜[È\‚ˆËÈ]ˆ™\Y\È\ˆ[[YK[Y[[™Ù\ˆYYYÛ™HYY\ˆÛÛHÚ™[˜œZÙ\ˆZÜÚ\Ý\™[™BˆËÈ[]™\™YÜ™XY[[Ù[ˆH\ˆ[™Ù[ˆY™™ZÝ\ˆ[\ˆYÛ™HÝ˜\˜[ÈHŒK‚ˆÛX’[˜›Þ™\Y\Îˆ×KˆËÈ\ÝÜžHÛË][›ØÚÜÈ
+ŒJKˆÛØ›\ˆ™\ðîÝHÝY\ˆ[›ÛÝ˜[X[˜YÙ\‹\™\ÜÝ\œÙ\‹‚ˆËÈš[™\™\ÈÚ™[››ÛH]˜Z[Xš[]K\Û˜\ÚÝ]
+X[SY\š]È
+ÈZÝH\ÝÜžBˆËÈÛË\›ÙÜ™\Ú›ÛŠKˆ[™Ù[ˆš]KÚØ[\[ÝÜ‹YY™™ZÝ‚ˆ[›ØÚÜÎˆÈXÙU[›ØÚÜÎˆ×HKˆËÈÛÛÜ™[˜]\ˆ›ÜˆÝY\ˆÛÛHØ[ˆ]™\™HÚØ[Ý\›Üˆ]Yš[[ˆ\ˆ[™\ÝBˆËÈÚ[H[ÛÛÜ™[˜]\ŽÈ\šœÈ[›™ZÛ\ˆ[™Ù[ˆÝYÜÜ\ÚYšZÚÙHÜÚ\Ú›Û™\‹‚ˆXÙSØØ][ÛœÎˆÈXÙ\Îˆ×HKˆÝY™Žˆ×Kˆ^\\ÙNˆ×Kˆ˜Z[š[™Ô›ÙÜ˜[\Îˆ×Kˆ˜Z[š[™Ð˜YÙ\ÎˆÈ˜YÙQ˜[Z[Y\Îˆ×HKˆX[PÛ\ÜÚYšXØ][ÛœÎˆÈÛ\ÜÚYšXØ][ÛœÎˆ×HKˆËÈÝYÜ˜\Ü\ˆ
+ŒJNˆ›ÜšÛ\š[™ÜÚÛÜ\ˆÜÜÝYˆÝ[ˆš\Ûš[™È8 $È[™Ù[‚ˆËÈY™™ZÝ0éH[›ØÚËKš]H[\ˆ˜YÙYY™™ZÝ[ÝÜ‹‚ˆXÙT™\ÜÎˆÈXÙT™\ÜÎˆ×HKˆËÈZY\YYÈYËKÙ[[ÜÝ]Hœ˜H^[\KYš[[ˆ
+[›ØÚÙYXÙRYË\™YÝY™’YËˆËÈ[›ØÚÙY^\\ÙRYËX\›™Y˜YÙRYË˜YÙT›ÙÜ™\ÜËXÝ]™PÛ\ÜÚYšXØ][ÛœÊK‚ˆX[SY\š]Îˆ[ˆËÈZY\YYÈRK[Y[[™È›ÜˆÙ[ÛÚØ\Ú›Û‹ØZÝ]™\š[™ËˆÙ[™H˜[Ù]\œÚ\Ý\™\ÂˆËÈ[™\ˆX[SY\š]Ë›ØØ[Ý\È[›™HZÜÝ[ˆ\ˆÝ[ˆÝ]\ÈHÚ™[[™H0îÝ‚ˆØØ[Ý\Y\ÜØYÙNˆˆ‹ˆËÈØ[\YÈ
+ŒŒŠNˆÚ\ÝHÜ[HØ[\\ÜÈ]™[Y[0éYðéY[™HØ[\Ù\Ú›Û‚ˆËÈ
+˜\Ù\ˆ™WÛX]Ú8¡¤ˆ]™[ÌK‹ŒÈ8¡¤ˆ™\ÛÛ™YYYX[˜YÙ\˜™\Û]š[™Ù\ŠKˆÝ[‚ˆËÈRKÜ›ÙÜ™\Ú›ÛˆHØØ[ÝÜ˜YÙH8 $È[™Ù[ˆÙ\šYKX™[Ù\ÛÛ™È[\ˆ]™ZØ[\‚ˆX]Ú^NˆÈ\ÝX]Úˆ[Ù\ÜÚ[ÛŽˆ[KˆËÈZ[šHÙX\ÛÛˆŒŒNˆZÝ]‹Ù[°îKZØ[\\œÈ°î™\\š[ÙK[\ˆ[°é\‚ˆËÈ[™Ù[ˆ°î™\\š[ÙH\ˆÝ\]ˆÝ[ˆRKÜ›ÙÜ™\Ú›ÛˆHØØ[ÝÜ˜YÙK‚ˆZ[šTÙX\ÛÛŽˆ[ˆËÈYÙ[ˆM\[™\œÈYØ][Ý[™ˆØÙ[˜\š[Ù]ÈZ[šTÙX\ÛÛˆ[\È[šHYYYØY[‹‚ˆXYÝYTÙX\ÛÛŽˆ[ˆ[ÙQ[™[ÜNˆ[ˆ[ÙPÚÛÜÙ\“Ü[Žˆ˜[ÙKˆËÈ[™ÛYÜÛ[Ù\Îˆ˜[Ý˜\Ú›Ûˆ
+È]][™ÛYÜÝ›Ü
+\ÛÛ\\ˆ[Ù\ÊK‚ˆ˜][Û˜[X[NˆÈ˜][Û˜[]Nˆ[Ü]XY^Y\’YÎˆ×HKˆËÈZÝ]Y\Ý\œÚØ\
+SKÕ“JHH[™ÛYÜÛ[Ù\Ë[\ˆ[°îˆHY[\ˆ0éK‚ˆÝ\›˜[Y[ˆ[ˆËÈ™\™YÜÜ[HY\Ý\œÚØ\ˆ˜\Ú›Û‹Y\Ý\œÚØ\ÙÈ\ÜÙ\š[™Ëˆ[™ÛYÙ]ÂˆËÈY\š]\ÝKYÚÚ[œ˜HÛX˜™[œË‚ˆÝ\›˜[Y[\ÝÜžNˆ×KˆËÈÛ˜›Ø\™[™ÈŒŽˆ\ˆÜ[\™[ˆ˜[Ý[Ù\È0éHYÙ[ˆÝ\ÚÚ™\›HZ[œÝ0ê[ˆØ[™ÏÂˆÛ˜›Ø\™Yˆ˜[ÙKˆš\œÝ[YT^]›ÝYÚˆÈÝ\Yˆ˜[ÙKÛÛ\]Yˆ˜[ÙKÝ\œ™[Ý\ˆœÝ\ˆKˆØ[YTÝ\Ý]NˆÈÙ[XÝY[ÙNˆ[XÝ]™SXYÝYTØ]™RYˆ[™Yš[™YXÝ]™TØÙ[˜\š[ÒYˆ[™Yš[™YKˆÜ[•˜Z[š[™ÔÝ\Yˆ˜Z[š[™Ô›ÙÜ˜[TÝ\‚ŸNÂ‚˜ÛÛœÝ[[Y[ÈHÂˆ›Ü›X][Û”Ù[XÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ›Ü›X][Û”Ù[XÝŠKˆXÝXÔÙ[XÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝXÝXÔÙ[XÝŠKˆX[TÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝX[TÝ]\ÈŠKˆ›ÛQš]]™\˜YÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÛQš]]™\˜YÙHŠKˆXÝXÑš]]™\˜YÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝXÝXÑš]]™\˜YÙHŠKˆ˜[[˜ÙTØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ˜[[˜ÙTØÛÜ™HŠKˆ™\ÝY™[œÙTØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™\ÝY™[œÙTØÛÜ™HŠKˆ›Ü›X][Û•]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ›Ü›X][Û•]HŠKˆÛÛ\]PÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛ\]PÛÝ[ŠKˆ[™]\ÛÝÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ[™]\ÛÝÈŠKˆ[™]\^Y\ÚÚXÙ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ[™]\^Y\ÚÚXÙ\ÈŠKˆ[™]\›ÛPÚÚXÙ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ[™]\›ÛPÚÚXÙ\ÈŠKˆËÈÛÛ\ZÝZÝ\ÚÈÞ\Ý[\[™[›Üˆ˜[Ý\ÝÜš\ÚÈ›Ü›X\Ú›Ûˆ
+°éœˆ˜[™[ŠK‚ˆXÝXØ[Þ\Ý[T[™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝXÝXØ[Þ\Ý[T[™[ŠKˆËÈY]]\ÝÜš\ÚÈ›ÛYš]Z[HÚY\[™[]‚ˆ\ÝÜšXØ[›ÛR[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ\ÝÜšXØ[›ÛR[ŠKˆ›ÛSX\›š[™ÐØ\™ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÛSX\›š[™ÐØ\™ŠKˆÙ[XÝYÛÝ]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙ[XÝYÛÝ]HŠKˆÙ[XÝYX]ÚØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙ[XÝYX]ÚØÛÜ™HŠKˆÙ[XÝYš]Ý]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙ[XÝYš]Ý]\ÈŠKˆÙ[XÝYš]^[˜][ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙ[XÝYš]^[˜][ÛˆŠKˆ™\ÜÝ[[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™\ÜÝ[[X\žHŠKˆËÈ™[™\œÝ0îH
+ÛØXÚÛÛ^
+HHYÜ˜\Ü[‹‚ˆÛØXÚÛÛ^XY[™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛØXÚÛÛ^XY[™HŠKˆÛØXÚÛÛ^˜[Z[X\š]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛØXÚÛÛ^˜[Z[X\š]HŠKˆÛØXÚÛÛ^[™\œÝ[™[™ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛØXÚÛÛ^[™\œÝ[™[™ÈŠKˆÛØXÚÛÛ^X\›š[™ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛØXÚÛÛ^X\›š[™ÈŠKˆÛØXÚÛÛ^ÝY™ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛØXÚÛÛ^ÝY™ˆŠKˆ˜YÙQY™™XÝÔÝ[[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ˜YÙQY™™XÝÔÝ[[X\žHŠKˆËÈØ[\YÈ
+ŒJNˆÛ˜\\ˆÙÈ™\Ý[]Û\°éYHH[˜[\Ù\[™[]‚ˆ^SX]Ú^P]ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ^SX]Ú^P]ÛˆŠKˆ™\Ù]X]Ú^P]ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™\Ù]X]Ú^P]ÛˆŠKˆX]Ú^T™\Ý[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX]Ú^T™\Ý[ŠKˆËÈZ[šHÙX\ÛÛˆŒŒNˆ°î™\\š[Ù\[™[]°éœˆÛXˆÙYZË]Ü˜\™[‹‚ˆZ[šTÙX\ÛÛ”Ý]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛZ[šTÙX\ÛÛ”Ý]\ÈŠKˆÝ\Z[šTÙX\ÛÛ]ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ\Z[šTÙX\ÛÛ]ÛˆŠKˆ™\Ù]Z[šTÙX\ÛÛ]ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™\Ù]Z[šTÙX\ÛÛ]ÛˆŠKˆZ[šTÙX\ÛÛ“Ý™\šY]ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛZ[šTÙX\ÛÛ“Ý™\šY]ÈŠKˆËÈXYÝYHÛÜŒŒŽˆYØ\Ù\ÛÛ™Ë\[™[]
+Ø[[YH[ÝÜ‹YØK\™\Ù[\Ú›ÛŠK‚ˆXYÝYTÙX\ÛÛ”[™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛXYÝYTÙX\ÛÛ”[™[ŠKˆXYÝYTÙX\ÛÛ”Ý]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛXYÝYTÙX\ÛÛ”Ý]\ÈŠKˆXYÝYTÙX\ÛÛ“Ý™\šY]ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛXYÝYTÙX\ÛÛ“Ý™\šY]ÈŠKˆÝ\™]ÓXYÝYTÙX\ÛÛ]ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ\™]ÓXYÝYTÙX\ÛÛ]ÛˆŠKˆËÈYØXÞHYˆš\œÝ[YT^]›ÝYÚØ\™\È›ÝÈ\ÙY\ÈHØ[YH[ÙHØ\™‚ˆËÈÈ›Ý™X]]\ÈX[™]ÜžHÛ˜›Ø\™[™Ë‚ˆÛ˜›Ø\™[™ÔØÜ™Y[ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛÛ˜›Ø\™[™ÔØÜ™Y[ˆŠKˆš\œÝ[YT^]›ÝYÚØ\™ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙš\œÝ[YT^]›ÝYÚØ\™ŠKˆÜ[™^X]ÚˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ[™^X]ÚŠKˆÜ[X]Ú[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ[X]Ú[ŠKˆÜ[[˜›ÞÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ[[˜›ÞÝ]\ÈŠKˆš\œÝ[YT™XY[™\ÜÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙš\œÝ[YT™XY[™\ÜÈŠKˆš\œÝ[YSÜÛ™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙš\œÝ[YSÜÛ™[ŠKˆš\œÝ[YP\ÜÚ\Ý[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙš\œÝ[YP\ÜÚ\Ý[ŠKˆ[ÙPÚÚXÙPØ\™Îˆ\œ˜^K™œ›ÛJØÝ[Y[œ]Y\žTÙ[XÝÜ[
+–Ù]K\Ý\[[ÙWHŠJKˆØÙ[˜\š[Ó\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜØÙ[˜\š[Ó\ÝŠKˆ˜Z[š[™ÐÚÚXÙQØ]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™ÐÚÚXÙQØ]HŠKˆ˜Z[š[™ÐÚÚXÙTÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™ÐÚÚXÙTÝ]\ÈŠKˆ˜Z[š[™ÐÚÚXÙTÚYÛ˜[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™ÐÚÚXÙTÚYÛ˜[ŠKˆ˜Z[š[™ÐÚÚXÙT™XÛÛ[Y[™YˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™ÐÚÚXÙT™XÛÛ[Y[™YŠKˆ˜Z[š[™ÐÚÚXÙTš\ÚÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™ÐÚÚXÙTš\ÚÈŠKˆ˜Z[š[™ÑÛÓX]ÚˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™ÑÛÓX]ÚŠKˆËÈZÙ[œÈ[ˆ
+›ÛÝ˜[]˜Z[š[™Ë\[‹šœÊNˆš\™HÝYÈH˜\Ý™ZÚÙY°îÙK‚ˆ˜Z[š[™Ô[’XY[™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ô[’XY[™HŠKˆ˜Z[š[™Ô[ÛÚ\™[˜ÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ô[ÛÚ\™[˜ÙHŠKˆ˜Z[š[™Ô[“ØYˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ô[“ØYŠKˆ˜Z[š[™Ô[”Ý\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ô[”Ý\ÈŠKˆ˜Z[š[™Ô[“™^ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ô[“™^ŠKˆ˜Z[š[™Ô›ÙÜ˜[SØY˜[YNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ô›ÙÜ˜[SØY˜[YHŠKˆËÈ[™]šYY[™[š[™È
+›ÛÝ˜[Z[™]šYX[]˜Z[š[™ËšœÊK‚ˆ[™]šYX[˜Z[š[™ÐØ\XÚ]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[™]šYX[˜Z[š[™ÐØ\XÚ]HŠKˆ[™]šYX[˜Z[š[™Ð\ÜÚYÛ›Y[ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[™]šYX[˜Z[š[™Ð\ÜÚYÛ›Y[ÈŠKˆ[™]šYX[˜Z[š[™ÔXÚÙ\ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[™]šYX[˜Z[š[™ÔXÚÙ\ˆŠKˆËÈÝ˜ZÙHÚY\ˆ
+›ÛÝ˜[\^Y\‹]ÙXZÛ™\ÜÙ\ËšœÊK‚ˆÙXZÛ™\ÜÕÛÜšÔÝ[[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝÙXZÛ™\ÜÕÛÜšÔÝ[[X\žHŠKˆÙXZÛ™\ÜÓ\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝÙXZÛ™\ÜÓ\ÝŠKˆËÈ\[œÈ[™\™˜[™\Ýš\H
+0ê[ˆ›Üˆ[HÝ™Y˜[™\ˆÛÛH\ˆ[™\š[›™[[™ÊK‚ˆ\ÝX›˜]ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ\ÝX›˜]ˆŠKˆ›ÙÜ™\ÜÚ[Û˜YÙPÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÙÜ™\ÜÚ[Û˜YÙPÛÝ[ŠKˆÙYZÛU˜Z[š[™ÔÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝÙYZÛU˜Z[š[™ÔÝ]\ÈŠKˆÙYZÛU˜Z[š[™Ô™XÛÛ[Y[™][ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝÙYZÛU˜Z[š[™Ô™XÛÛ[Y[™][ÛˆŠKˆÙYZÛU˜Z[š[™ÓÜ[ÛœÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝÙYZÛU˜Z[š[™ÓÜ[ÛœÈŠKˆÝ™[™ÝÓ\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ™[™ÝÓ\ÝŠKˆ\ÜÝY\Ó\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ\ÜÝY\Ó\ÝŠKˆÚYØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝÚYØÛÜ™HŠKˆ\ØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ\ØÛÜ™HŠKˆZ[\ØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØZ[\ØÛÜ™HŠKˆ™\ÜÔØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™\ÜÔØÛÜ™HŠKˆ™[][ÛœÚ\ØÛÜ™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™[][ÛœÚ\ØÛÜ™HŠKˆËÈ™[\Ú›Û™\ˆ
+Þ[›YÈY]šZÚÈ
+È›ÜšÛ\™[™H\ÝHHYÜ˜\Ü[ŠK‚ˆ™[][ÛœÚ\XY[™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™[][ÛœÚ\XY[™HŠKˆ™[][ÛœÚ\\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™[][ÛœÚ\\ÝŠKˆËÈ™\ÝH[™[™Ë\Ýš\H
+^XX›HX[˜YÙ\ˆ›ÝÈÛ\ÚŒJNˆš[Üš]\ˆËÈš[péœš[™[™È
+ÈÙZÝ[™0éœ™HÝYÈ]Y]]ˆZÜÚ\Ý\™[™HÝ]K‚ˆ™^XÝ[Û”Ýš\ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ™^XÝ[Û”Ýš\ŠKˆ™^XÝ[Û”\ÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ™^XÝ[Û”\ÙHŠKˆ™^XÝ[Û”š[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ™^XÝ[Û”š[X\žHŠKˆ™^XÝ[Û”š[X\žUYÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ™^XÝ[Û”š[X\žUYÈŠKˆ™^XÝ[Û”š[X\žU]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ™^XÝ[Û”š[X\žU]HŠKˆ™^XÝ[Û”š[X\žR[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ™^XÝ[Û”š[X\žR[ŠKˆ™^XÝ[Û”ÙXÛÛ™\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛ™^XÝ[Û”ÙXÛÛ™\žHŠKˆÝYÙÙ\ÝYÙ]\ÕXÝXÜÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝYÙÙ\ÝYÙ]\ÕXÝXÜÈŠKˆÛÛ^ÚYÛ˜[ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛ^ÚYÛ˜[ÈŠKˆÛÛ^XY[™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛ^XY[™HŠKˆ˜Z[š[™Ô›ÙÜ˜[\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ô›ÙÜ˜[\ÈŠKˆÙYZÛU˜Z[š[™Ô›ÙÜ˜[TÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝÙYZÛU˜Z[š[™Ô›ÙÜ˜[TÝ]\ÈŠKˆX[˜YÙ\•˜Z[š[™Ô[ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX[˜YÙ\•˜Z[š[™Ô[ˆŠKˆX[˜YÙ\”›ÛPÚ[™Ù\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX[˜YÙ\”›ÛPÚ[™Ù\ÈŠKˆX[˜YÙ\•ÙXZÔÚ[ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX[˜YÙ\•ÙXZÔÚ[ÈŠKˆËÈ[˜[\ÙKY˜[™[ˆš\Ù\ˆHØ[[YHÈ\Ý[™HÛÛH[ˆ\H˜\Ü[‹œ˜HØ[[YBˆËÈ[ÝÜšØ[8 %ZÚÙH[ˆYÙ[ˆ™\™YÛš[™ÈÛÛHÝ[›™H™YÞ[0éH[ÝÚH[‹‚ˆ[˜[\ÙSX]Ú™\ÜˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ[˜[\ÙSX]Ú™\ÜŠKˆÝ]ÔÝ[[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ]ÔÝ[[X\žHŠKˆÝ]ÓX]Ú\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ]ÓX]Ú\ÈŠKˆÝ]ÑÛØ[ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ]ÑÛØ[ÈŠKˆÝ]Ð\ÜÚ\ÝÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ]Ð\ÜÚ\ÝÈŠKˆÝ]ÕÜØÛÜ™\ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ]ÕÜØÛÜ™\ˆŠKˆÝ]ÔÝ[™[™ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ]ÔÝ[™[™ÈŠKˆÝ]Ð›Ø\™ÛØ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ]Ð›Ø\™ÛØ[ŠKˆXY\ÛX“˜[YNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚXY\ÛX“˜[YHŠKˆXY\ÛX“X[˜YÙ\ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚXY\ÛX“X[˜YÙ\ˆŠKˆ^Y\”Ý]ÕX›NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ^Y\”Ý]ÕX›HŠKˆXYÝYSÛ˜›Ø\™[™Ô[™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛXYÝYSÛ˜›Ø\™[™Ô[™[ŠKˆXYÝYSÛ˜›Ø\™[™ÓXYˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛXYÝYSÛ˜›Ø\™[™ÓXYŠKˆXYÝYSÛ˜›Ø\™[™ÔÝ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛXYÝYSÛ˜›Ø\™[™ÔÝ\ÈŠKˆÙX\ÛÛ”™]šY]Ô[™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ”™]šY]Ô[™[ŠKˆÙX\ÛÛ”™]šY]Õ™\™XÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ”™]šY]Õ™\™XÝŠKˆÙX\ÛÛ”™]šY]ÒXY[™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ”™]šY]ÒXY[™HŠKˆÙX\ÛÛ”™]šY]Ð›Ø\™ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ”™]šY]Ð›Ø\™ŠKˆÙX\ÛÛ”™]šY]Ô™X\ÛÛœÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ”™]šY]Ô™X\ÛÛœÈŠKˆÙX\ÛÛ”™]šY]ÒYÚYÚÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ”™]šY]ÒYÚYÚÈŠKˆÙX\ÛÛ\˜Ú]™TÝ[[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ\˜Ú]™TÝ[[X\žHŠKˆÙX\ÛÛ\˜Ú]™UX›NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÙX\ÛÛ\˜Ú]™UX›HŠKˆÜ]XYÛÛ™][Û”Ý[[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYÛÛ™][Û”Ý[[X\žHŠKˆÜ]XYÛÛ™][Û“\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYÛÛ™][Û“\ÝŠKˆ[˜[\ÙT›ÛPÚ[™Ù\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ[˜[\ÙT›ÛPÚ[™Ù\ÈŠKˆ[˜[\ÙUÙXZÔÚ[ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ[˜[\ÙUÙXZÔÚ[ÈŠKˆX[˜YÙ\’Û›ÝÛYÙT™XÛÛ[Y[™][ÛœÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX[˜YÙ\’Û›ÝÛYÙT™XÛÛ[Y[™][ÛœÈŠKˆXÝ]™RÛ›ÝÛYÙQ›ØÝ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØXÝ]™RÛ›ÝÛYÙQ›ØÝ\ÈŠKˆÛX\’Û›ÝÛYÙQ›ØÝ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX\’Û›ÝÛYÙQ›ØÝ\ÈŠKˆ˜Z[š[™ÕÙYZÔÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™ÕÙYZÔÝ]\ÈŠKˆY˜[˜ÙU˜Z[š[™ÕÙYZÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØY˜[˜ÙU˜Z[š[™ÕÙYZÈŠKˆ˜Z[š[™Ò\ÝÜžS\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ˜Z[š[™Ò\ÝÜžS\ÝŠKˆÛ›ÝÛYÙPÛÛ\]Y\ÕÙYZÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚÛ›ÝÛYÙPÛÛ\]Y\ÕÙYZÈŠKˆÛ›ÝÛYÙPÛÛ\]YÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚÛ›ÝÛYÙPÛÛ\]YÝ[ŠKˆÛX•ÙYZÔÝ[[X\žNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•ÙYZÔÝ[[X\žHŠKˆÛX•ÙYZÔ\ÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•ÙYZÔ\ÙHŠKˆÛX•ÙYZÔ\ÙTÝ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•ÙYZÔ\ÙTÝ\ÈŠKˆÛX•ÙYZÔ\ÙQÝZY[˜ÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•ÙYZÔ\ÙQÝZY[˜ÙHŠKˆÛX•ÙYZÑ™YY˜XÚÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•ÙYZÑ™YY˜XÚÈŠKˆÛX•ÙYZÑØ]R[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•ÙYZÑØ]R[ŠKˆÛX›Ø\™\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX›Ø\™\ÝŠKˆÛX”^Y\“[Ü˜[NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX”^Y\“[Ü˜[HŠKˆÛX•XÝXØ[Û\š]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•XÝXØ[Û\š]HŠKˆÛX•˜Z[š[™ÐÝ[\™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•˜Z[š[™ÐÝ[\™HŠKˆÛX“YYXT™\ÜÝ\™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX“YYXT™\ÜÝ\™HŠKˆÛX•ÙYZÑ]™[ÙÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX•ÙYZÑ]™[ÙÈŠKˆ[˜›Þ™XY\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[˜›Þ™XY\ÝŠKˆ[˜›Þ™XY\˜Ú]™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[˜›Þ™XY\˜Ú]™HŠKˆ[˜›ÞÚYÛ˜[[œ™XYˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[˜›ÞÚYÛ˜[[œ™XYŠKˆ[˜›ÞÚYÛ˜[™\Y\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[˜›ÞÚYÛ˜[™\Y\ÈŠKˆ[˜›ÞÚYÛ˜[Ý]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[˜›ÞÚYÛ˜[Ý]\ÈŠKˆ[˜›ÞÛÕ˜Z[š[™ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[˜›ÞÛÕ˜Z[š[™ÈŠKˆËÈ\ÝÜžHÛË][›ØÚÜÈ
+ŒJK‚ˆ[›ØÚÔXÙ\Ó\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ[›ØÚÔXÙ\Ó\ÝŠKˆ[›ØÚÙY^Y\œÔÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ[›ØÚÙY^Y\œÔÝ]\ÈŠKˆ[›ØÚÙY^Y\œÓ\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ[›ØÚÙY^Y\œÓ\ÝŠKˆ]˜Z[X›TÝY™“\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ]˜Z[X›TÝY™“\ÝŠKˆ\™YÝY™“\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ\™YÝY™“\ÝŠKˆ[›ØÚÙY^\\ÙS\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ[›ØÚÙY^\\ÙS\ÝŠKˆ]˜Z[X›U˜Z[š[™Ô›ÙÜ˜[\Ó\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ]˜Z[X›U˜Z[š[™Ô›ÙÜ˜[\Ó\ÝŠKˆX\›™Y˜YÙ\Ó\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙX\›™Y˜YÙ\Ó\ÝŠKˆX[PÛ\ÜÚYšXØ][ÛœÓ\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝX[PÛ\ÜÚYšXØ][ÛœÓ\ÝŠKˆËÈYÚY[]]
+ŒJNˆ›ÜšÛ\š[™ÜËKÜ[›YÙÚ[™ÜÜ[™[‚ˆX[RY[]T[™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝX[RY[]T[™[ŠKˆËÈÝYÜ˜\Ü\ˆ
+ŒJK‚ˆXÙT™\ÜÓ\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜXÙT™\ÜÓ\ÝŠKˆËÈ\ÝÜžHÛË]™[š[™ÜÝZÙHÙÈ›ÙÜ™\Ú›Ûˆ
+ŒK[\˜ZÝ]
+K‚ˆÕ˜Z[š[™ÕÙYZÔÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚÕ˜Z[š[™ÕÙYZÔÝ]\ÈŠKˆY˜[˜ÙRÕ˜Z[š[™ÕÙYZÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØY˜[˜ÙRÕ˜Z[š[™ÕÙYZÈŠKˆ™\Ù]ÕX[SY\š]ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ™\Ù]ÕX[SY\š]ÈŠKˆ˜YÙT›ÙÜ™\ÜÓ\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ˜YÙT›ÙÜ™\ÜÓ\ÝŠKˆËÈZÝH\ÝÜžHÛË\Þ[˜È
+ŒJNˆÝ]\Ù™[ÙÈX[Y[Þ[šËZÛ˜\‚ˆ\ÝÜžQÛÔÞ[˜ÔÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ\ÝÜžQÛÔÞ[˜ÔÝ]\ÈŠKˆÞ[˜Ò\ÝÜžQÛÔXÙ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÞ[˜Ò\ÝÜžQÛÔXÙ\ÈŠKˆËÈ[ˆ›Ý˜[Ø[[[™ÎˆÜÝ[[Y\š[™È]ˆ]˜Z[Xš[]K\Û˜\ÚÝ]H\ÝÜžHÛËY˜[™[‹‚ˆÛÛXÝ[Û”XÙ\ÐÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛXÝ[Û”XÙ\ÐÛÝ[ŠKˆÛÛXÝ[Û”^Y\œÐÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛXÝ[Û”^Y\œÐÛÝ[ŠKˆÛÛXÝ[Û”ÝY™ÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛXÝ[Û”ÝY™ÛÝ[ŠKˆÛÛXÝ[Û‘›Ü›X][ÛœÐÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛXÝ[Û‘›Ü›X][ÛœÐÛÝ[ŠKˆÛÛXÝ[Û“X]Ú^P˜YÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛXÝ[Û“X]Ú^P˜YÙHŠKˆÛÛXÝ[Û”ÛÝ\˜ÙS›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛXÝ[Û”ÛÝ\˜ÙS›ÝHŠKˆÛÛXÝ[Û“™^Ý\ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛÛXÝ[Û“™^Ý\ŠKˆÝ\[ÙT[™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ\[ÙT[™[ŠKˆÝ\[ÙPÚÚXÙ\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ\[ÙPÚÚXÙ\ÈŠKˆÝ\[ÙT›ÜÝ\“™YYˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÝ\[ÙT›ÜÝ\“™YYŠKˆ^XX›TÜ]XY™XYNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ^XX›TÜ]XY™XYHŠKˆXÝ]™SØØ[Ý\ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØXÝ]™SØØ[Ý\ŠKˆØØ[Ý\Ý]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛØØ[Ý\Ý]\ÈŠKˆ\ÙR\ÝÜžQÛÐÛÛXÝ[ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÝ\ÙR\ÝÜžQÛÐÛÛXÝ[ÛˆŠKˆÛX\“ØØ[Ý\ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØÛX\“ØØ[Ý\ŠKˆËÈØ[\Û\‹\Ý]\ÈHØ[\YÜ[™[]
+Ø][™ËY›ÜšÛ\š[™Ë[™Ù[ˆžHØ[\[ÝÜŠK‚ˆX]Ú^T™XY[™\ÜÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX]Ú^T™XY[™\ÜÈŠKˆËÈYÈ	ˆZÝZÚËYØ]NˆÛÛ\ZÝLH
+È\Ú™ZÚÛ\ÝHÙÈ™\ÝHX[˜YÙ\›ÜØ]™K‚ˆÜ]XYÙ]\Ø]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYÙ]\Ø]HŠKˆÜ]XYÙ]\Ø]U]NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYÙ]\Ø]U]HŠKˆÜ]XYÙ]\Ø]R[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYÙ]\Ø]R[ŠKˆÜ]XYÙ]\Ø]PXÝ[ÛŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYÙ]\Ø]PXÝ[ÛˆŠKˆÜ]XYØ]TÝ\\œÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYØ]TÝ\\œÈŠKˆÜ]XYØ]P™[˜ÚˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYØ]P™[˜ÚŠKˆÜ]XYØ]T›Û\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYØ]T›Û\ÈŠKˆÜ]XYØ]SZ\Ý\ÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYØ]SZ\Ý\ÙHŠKˆÜ]XYØ]Q\XØ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÜ]XYØ]Q\XØ]\ÈŠKˆËÈ›ÜÙÈ™[šÈ
+›ÜÝ\ˆ™XY[™\ÜÊNˆÜ˜\‹][\ˆ
+ÈÝ]\ÚÈ[™[HÛÛÜ™]‚ˆËÈ™[™™\È]ˆ\šœÈœ˜H]˜Z[Xš[]K\Û˜\ÚÝ]8 $È[™Ù[ˆÙ\\˜][Ù[‚ˆ›ÜÝ\”™XYPÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÜÝ\”™XYPÛÝ[ŠKˆ›ÜÝ\”™XY[™\ÜÐ˜YÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÜÝ\”™XY[™\ÜÐ˜YÙHŠKˆ›ÜÝ\•[›ØÚÙYÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÜÝ\•[›ØÚÙYÛÝ[ŠKˆ›ÜÝ\”™XYTÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÜÝ\”™XYTÝ]\ÈŠKˆ›ÜÝ\”™XY[™\ÜÓ›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›ÜÝ\”™XY[™\ÜÓ›ÝHŠKˆ™[˜Ú^Y\œÓ\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ™[˜Ú^Y\œÓ\ÝŠKˆËÈ˜\ÙHŽˆ[˜[Z\ÚÈÚY\[™[
+Ü[\œ›Ùš[œËˆ™\ÝH™\Û]š[™Ù\ŠK‚ˆÚYT[™[ÚXÚÙ\ŽˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÚYT[™[ÚXÚÙ\ˆŠKˆÚYT›Ùš[NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÚYT›Ùš[HŠKˆ›Ùš[S˜[YNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[S˜[YHŠKˆ›Ùš[TÜÚ][ÛœÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[TÜÚ][ÛœÈŠKˆ›Ùš[TÛÝ\˜ÙNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[TÛÝ\˜ÙHŠKˆ›Ùš[TÚYÛ˜]\™NˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[TÚYÛ˜]\™HŠKˆ›Ùš[P]šX]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[P]šX]\ÈŠKˆ›Ùš[P]šX]S\ÝˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[P]šX]S\ÝŠKˆ›Ùš[P]šX]S›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[P]šX]S›ÝHŠKˆ›Ùš[TÝ™[™ÝÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[TÝ™[™ÝÈŠKˆ›Ùš[S™YYÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜ›Ùš[S™YYÈŠKˆÚYQXÚ\Ú[ÛœÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÜÚYQXÚ\Ú[ÛœÈŠKˆËÈ˜\ÙHŽˆÝ]\ÚÛÜYY™\ÝH™\Û]š[™Ù\ˆ0éHÝ™YÚÚ™\›Y[‹‚ˆXÚ\Ú[ÛØ\™ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙXÚ\Ú[ÛØ\™ÈŠKˆËÈ˜\ÙHŽˆ]™[[™Ù\ˆYY]™[™HÝ]\Ë‚ˆ[˜›Þ[ÙPÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÚ[˜›Þ[ÙPÛÝ[ŠKˆYZ[”Ü]XYÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØYZ[”Ü]XYÛÝ[ŠKˆYZ[”ÝY™ÛÝ[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØYZ[”ÝY™ÛÝ[ŠKˆ˜XÚ[]SÝ™\˜[˜[YNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]SÝ™\˜[˜[YHŠKˆ˜XÚ[]U˜Z[š[™Ó]™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]U˜Z[š[™Ó]™[ŠKˆ˜XÚ[]U˜Z[š[™ÔÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]U˜Z[š[™ÔÝ]\ÈŠKˆ˜XÚ[]TÝY][S]™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]TÝY][S]™[ŠKˆ˜XÚ[]TÝY][TÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]TÝY][TÝ]\ÈŠKˆ˜XÚ[]PXØY[^S]™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]PXØY[^S]™[ŠKˆ˜XÚ[]PXØY[^TÝ]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]PXØY[^TÝ]\ÈŠKˆ˜XÚ[]SYYXØ[]™[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]SYYXØ[]™[ŠKˆ˜XÚ[]SYYXØ[Ý]\ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÙ˜XÚ[]SYYXØ[Ý]\ÈŠKˆX\šÙ]YYXU˜[YNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX\šÙ]YYXU˜[YHŠKˆX\šÙ]™\]][Û“›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX\šÙ]™\]][Û“›ÝHŠKˆ›Ø\™\Ý˜[YNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ›Ø\™\Ý˜[YHŠKˆ›Ø\™\Ýš[ˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ›Ø\™\Ýš[ŠKˆ›Ø\™\Ý›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ›Ø\™\Ý›ÝHŠKˆ›Ø\™^XÝ][Û“›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ›Ø\™^XÝ][Û“›ÝHŠKˆ›Ø\™ÛX“Y]šXÜÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ›Ø\™ÛX“Y]šXÜÈŠKˆ›Ø\™ÙYZÓ›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØ›Ø\™ÙYZÓ›ÝHŠKˆX\šÙ]ÚYÛ˜[ÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX\šÙ]ÚYÛ˜[ÈŠKˆX\šÙ]˜[“[ÛÙˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX\šÙ]˜[“[ÛÙŠKˆX\šÙ]ÜÛœÛÜ“›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆÛX\šÙ]ÜÛœÛÜ“›ÝHŠKˆYZ[‘šYY]šXÜÎˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØYZ[‘šYY]šXÜÈŠKˆYZ[”ÝY™“›ÝNˆØÝ[Y[œ]Y\žTÙ[XÝÜŠˆØYZ[”ÝY™“›ÝHŠBŸNÂ‚›]X[˜YÙ\‘[™Ú[™T™[™\’YHÂ‚˜\Þ[˜È[˜Ý[ÛˆØYœÛÛŠ]
+HÂˆÛÛœÝ™\ÜÛœÙHH]ØZ]™]Ú
+]
+NÂ‚ˆYˆ
+\™\ÜÛœÙK›ÚÊHÂˆ›ÝÈ™]È\œ›ÜŠÝ[›™HZÚÙH\ÝH	Ü]X
+NÂˆB‚ˆ™]\›ˆ™\ÜÛœÙKšœÛÛŠ
+NÂŸB‚‹ËÈÛ0é\ˆØ[[Y[ˆ[›˜›ÚÜË[Y[[™Ù\ˆœ˜H0ê[ˆš[\ˆ]œÙ[™\ˆ
+X[šY™\ÝX˜\Ù\
+H[‹ËÈ0ê[ˆØ[[]\œ˜^Kˆ˜[\ˆ[˜ZÙH[[ˆØ[[HØ[[Yš[[ˆÙÈ\™]\ˆ[‹ËÈ\™ÛÙYH˜[˜XÚË[Y[[™Ù\‹ˆØ\Ý\ˆ[šHšY\™H[[š]
+
+K‚˜\Þ[˜È[˜Ý[ÛˆØYÛX’[˜›ÞY\ÜØYÙ\Ê
+HÂˆËÈJHš[péœšÚ[NˆX[šY™\Ý
+È0ê[ˆ]œÙ[™\™š[\ˆ]œÙ[™\‹‚ˆžHÂˆÛÛœÝX[šY™\ÝH]ØZ]ØYœÛÛŠUWÔUË˜ÛX’[˜›ÞY\ÜØYÙSX[šY™\Ý
+NÂ‚ˆYˆ
+\œ˜^Kš\Ð\œ˜^JX[šY™\ÝË™š[\ÊJHÂˆÛÛœÝ™\Ý[ÈH]ØZ]›ÛZ\ÙK˜[Ù]Y
+ˆX[šY™\Ý™š[\Ë›X\
+
+š[T]
+HOˆØYœÛÛŠš[T]
+JBˆ
+NÂ‚ˆÛÛœÝY\™ÙYH×NÂˆ™\Ý[Ë™›Ü‘XXÚ
+
+™\Ý[[™^
+HOˆÂˆÛÛœÝš[T]HX[šY™\Ý™š[\ÖÚ[™^NÂ‚ˆYˆ
+™\Ý[œÝ]\ÈOOH™[š[YŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜËX]œÙ[™\™š[Ý[›™HZÚÙH\Ý\Îˆ	Ùš[T]X
+NÂˆ™]\›ŽÂˆB‚ˆÛÛœÝš[Q]HH™\Ý[˜[YNÂˆYˆ
+P\œ˜^Kš\Ð\œ˜^Jš[Q]OË›Y\ÜØYÙ\ÊJHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜËX]œÙ[™\™š[X[™Û\ˆÞ[YÈY\ÜØYÙ\ËX\œ˜^Nˆ	Ùš[T]X
+NÂˆ™]\›ŽÂˆB‚ˆš[Q]K›Y\ÜØYÙ\Ë™›Ü‘XXÚ
+
+Y\ÜØYÙJHOˆÂˆYˆ
+ˆ\[Ùˆš[Q]KœÙ[™\’YOOHœÝš[™Èˆ	‰‚ˆY\ÜØYÙH	‰‚ˆ\[ÙˆY\ÜØYÙKœÙ[™\’YOOHœÝš[™Èˆ	‰‚ˆY\ÜØYÙKœÙ[™\’YOOHš[Q]KœÙ[™\’Yˆ
+HÂˆÛÛœÛÛKØ\›Šˆ[›˜›ÚÜË[Y[[™È	ÛY\ÜØYÙKšYÏÈŠZÚ™[Y
+HŸH\ˆÙ[™\’Y‰ÛY\ÜØYÙKœÙ[™\’YHˆY[ˆYÙÙ\ˆH	Ùš[T]H
+›Ü™[]‰Ùš[Q]KœÙ[™\’YHŠK˜ˆ
+NÂˆBˆY\™ÙYœ\Ú
+Y\ÜØYÙJNÂˆJNÂˆJNÂ‚ˆÛÛœÝ˜[Y]YH˜[Y]PÛX’[˜›ÞY\ÜØYÙ\ÊY\™ÙY
+NÂˆYˆ
+˜[Y]Y›[™Ýˆ
+HÂˆ™]\›ˆ˜[Y]YÂˆBˆH[ÙHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË[X[šY™\ÝX[™Û\ˆ[\ˆ\ˆ™Z[›Ü›X]ˆ°î™\ˆYØXÞHØ[[Yš[ˆŠNÂˆBˆHØ]Ú
+\œ›ÜŠHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË[X[šY™\ÝX[™Û\ˆ[\ˆ\ˆ™Z[›Ü›X]ˆ°î™\ˆYØXÞHØ[[Yš[ˆŠNÂˆB‚ˆËÈŠHYØXÞH˜[˜XÚÎˆ[ˆØ[[HØ[[Yš[[‹‚ˆžHÂˆÛÛœÝYØXÞQ]HH]ØZ]ØYœÛÛŠUWÔUË˜ÛX’[˜›ÞY\ÜØYÙ\ÊNÂˆYˆ
+\œ˜^Kš\Ð\œ˜^JYØXÞQ]OË›Y\ÜØYÙ\ÊJHÂˆ™]\›ˆ˜[Y]PÛX’[˜›ÞY\ÜØYÙ\ÊYØXÞQ]K›Y\ÜØYÙ\ÊNÂˆBˆHØ]Ú
+\œ›ÜŠHÂˆËÈ˜[\ˆÚ™[››ÛH[\™ÛÙYH˜[˜XÚË[Y[[™Ù\ˆ™Y[™›Ü‹‚ˆB‚ˆËÈÊHÚ\ÝH˜[˜XÚÎˆ\™ÛÙYHY[[™Ù\‹‚ˆÛÛœÛÛKØ\›Š’[›˜›ÚÜËY]HX[™Û\ˆ[\ˆ\ˆ™Z[›Ü›X]ˆœZÙ\ˆ˜[˜XÚË[Y[[™Ù\‹ˆŠNÂˆ™]\›ˆÙ]˜[˜XÚÒ[˜›ÞY\ÜØYÙ\Ê
+NÂŸB‚‹ËÈ[\›ˆ˜[Y\š[™È]ˆ[ˆØ[[]Y\ÜØYÙ\ËX\œ˜^Kˆš[™\™\ˆ›ÜØš™ZÝ\ˆ][‚‹ËÈÝš[™ËZYÙÈ˜\œÛ\ˆÛHX›]\ˆ[\ˆX[™Û[™H™[Y[ˆÝÜ\ˆ[šH\[‹‚™[˜Ý[Ûˆ˜[Y]PÛX’[˜›ÞY\ÜØYÙ\ÊY\ÜØYÙ\ÊHÂˆÛÛœÝÙY[’YÈH™]ÈÙ]
+
+NÂˆÛÛœÝ˜[YH×NÂ‚ˆY\ÜØYÙ\Ë™›Ü‘XXÚ
+
+Y\ÜØYÙJHOˆÂˆYˆ
+[Y\ÜØYÙH\[ÙˆY\ÜØYÙKšYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË[Y[[™È][ˆÞ[YÈÝš[™ËZY›HÜ]Ý™\‹ˆŠNÂˆ™]\›ŽÂˆB‚ˆYˆ
+ÙY[’YËš\ÊY\ÜØYÙKšY
+JHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË[Y[[™ÈYY\ZØ]YÜYÙ]ˆ	ÛY\ÜØYÙKšYX
+NÂˆBˆÙY[’YË˜Y
+Y\ÜØYÙKšY
+NÂ‚ˆYˆ
+\[ÙˆY\ÜØYÙKœÙ[™\’YOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË[Y[[™È	ÛY\ÜØYÙKšYHX[™Û\ˆÙ[™\’Y˜
+NÂˆBˆYˆ
+\[ÙˆY\ÜØYÙK™XYYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË[Y[[™È	ÛY\ÜØYÙKšYHX[™Û\ˆ™XYY˜
+NÂˆB‚ˆ˜[Yœ\Ú
+Y\ÜØYÙJNÂˆJNÂ‚ˆ™]\›ˆ˜[YÂŸB‚‹ËÈÞ[YÙHY]šXË[°îÛ\ˆ›Üˆ[›˜›ÚÜË\Ý˜\˜[ËˆÛ\ÈÞ[šÈYYÛXˆÙYZË\Ý]K‚‹ËÈœZÙ\È[˜[Y\š[™ÈÙÈY™™ZÝX\\Ù\š[™Ëˆ[™Ù[ˆ[™™H°îÛ\ˆ0é]š\šÙ\ˆ›ÙK‚˜ÛÛœÝS“ÖÐÒÒPÑWÓQU’P×ÒÑVTÈH™]ÈÙ]
+Âˆ˜›Ø\™\Ý‹ˆœ^Y\“[Ü˜[H‹ˆ›YYXT™\ÜÝ\™H‹ˆ˜Z[š[™ÐÝ[\™H‹ˆXÝXØ[Û\š]H‚—JNÂ‚‹ËÈ\Ý[›˜›ÚÜË\Ý˜\˜[ÈX[šY™\ÝX˜\Ù\
+0ê[ˆš[\ˆ]œÙ[™\ŠKˆÛ0é\ˆØ[[Y[ˆ[B‹ËÈ™[ZÚÙYHš[\œÈÚÚXÙ\ËX\œ˜^K˜[Y\™\ˆÙÈ™]\›™\™\ˆØ[[]\œ˜^KˆØ\Ý\‚‹ËÈ[šHšY\™H[[š]8 $È™YX[™Û[™KÙ™Z[[™HX[šY™\Ý™]\›™\™\ÈÛH\œ˜^K‚˜\Þ[˜È[˜Ý[ÛˆØYÛX’[˜›ÞÚÚXÙ\Ê
+HÂˆžHÂˆÛÛœÝX[šY™\ÝH]ØZ]ØYœÛÛŠUWÔUË˜ÛX’[˜›ÞÚÚXÙSX[šY™\Ý
+NÂ‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^JX[šY™\ÝË™š[\ÊJHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË]˜[Ë[X[šY™\ÝX[™Û\ˆ[\ˆ\ˆ™Z[›Ü›X]ˆ[™Ù[ˆÝ˜\˜[È\Ý\ËˆŠNÂˆ™]\›ˆ×NÂˆB‚ˆÛÛœÝ™\Ý[ÈH]ØZ]›ÛZ\ÙK˜[Ù]Y
+ˆX[šY™\Ý™š[\Ë›X\
+
+š[T]
+HOˆØYœÛÛŠš[T]
+JBˆ
+NÂ‚ˆÛÛœÝY\™ÙYH×NÂˆ™\Ý[Ë™›Ü‘XXÚ
+
+™\Ý[[™^
+HOˆÂˆÛÛœÝš[T]HX[šY™\Ý™š[\ÖÚ[™^NÂ‚ˆYˆ
+™\Ý[œÝ]\ÈOOH™[š[YŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[Ùš[Ý[›™HZÚÙH\Ý\Îˆ	Ùš[T]X
+NÂˆ™]\›ŽÂˆB‚ˆÛÛœÝš[Q]HH™\Ý[˜[YNÂˆYˆ
+P\œ˜^Kš\Ð\œ˜^Jš[Q]OË˜ÚÚXÙ\ÊJHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[Ùš[X[™Û\ˆÞ[YÈÚÚXÙ\ËX\œ˜^Nˆ	Ùš[T]X
+NÂˆ™]\›ŽÂˆB‚ˆš[Q]K˜ÚÚXÙ\Ë™›Ü‘XXÚ
+
+ÚÚXÙJHOˆY\™ÙYœ\Ú
+ÚÚXÙJJNÂˆJNÂ‚ˆ™]\›ˆ˜[Y]PÛX’[˜›ÞÚÚXÙ\ÊY\™ÙY
+NÂˆHØ]Ú
+\œ›ÜŠHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË]˜[Ë[X[šY™\ÝX[™Û\ˆ[\ˆ\ˆ™Z[›Ü›X]ˆ[™Ù[ˆÝ˜\˜[È\Ý\ËˆŠNÂˆ™]\›ˆ×NÂˆBŸB‚‹ËÈ[\›ˆ˜[Y\š[™È]ˆ[ˆØ[[]ÚÚXÙ\ËX\œ˜^Kˆ™ZÛ\ˆÝ[ˆØš™ZÝ\ˆYY‹ËÈÝš[™ËZYÙÈ˜\œÛ\ˆÛHX›]\ˆÙÈX[™Û[™KÝYÞ[YÙH™[ˆÝÜ\ˆ[šB‹ËÈ\[ˆ8 $ÈYÞ[YÙH[šÙ[™[ÙÙÙ\ËY[ˆ˜[Ù]™ZÛ\ÈYYÝš[™ËZY‚™[˜Ý[Ûˆ˜[Y]PÛX’[˜›ÞÚÚXÙ\ÊÚÚXÙ\ÊHÂˆÛÛœÝÙY[’YÈH™]ÈÙ]
+
+NÂˆÛÛœÝ˜[YH×NÂ‚ˆÚÚXÙ\Ë™›Ü‘XXÚ
+
+ÚÚXÙJHOˆÂˆYˆ
+XÚÚXÙH\[ÙˆÚÚXÙKšYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË]˜[È][ˆÞ[YÈÝš[™ËZY›HÜ]Ý™\‹ˆŠNÂˆ™]\›ŽÂˆB‚ˆYˆ
+ÙY[’YËš\ÊÚÚXÙKšY
+JHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[ÈYY\ZØ]YÜYÙ]ˆ	ØÚÚXÙKšYX
+NÂˆBˆÙY[’YË˜Y
+ÚÚXÙKšY
+NÂ‚ˆYˆ
+\[ÙˆÚÚXÙK›Y\ÜØYÙRYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[È	ØÚÚXÙKšYHX[™Û\ˆY\ÜØYÙRY˜
+NÂˆBˆYˆ
+\[ÙˆÚÚXÙK™XYYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[È	ØÚÚXÙKšYHX[™Û\ˆ™XYY˜
+NÂˆBˆYˆ
+\[ÙˆÚÚXÙKœÙ[™\’YOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[È	ØÚÚXÙKšYHX[™Û\ˆÙ[™\’Y˜
+NÂˆB‚ˆYˆ
+ÚÚXÙK™Y™™XÝÈ	‰ˆ\[ÙˆÚÚXÙK™Y™™XÝÈOOH›Øš™XÝˆ	‰ˆP\œ˜^Kš\Ð\œ˜^JÚÚXÙK™Y™™XÝÊJHÂˆ›Üˆ
+ÛÛœÝÛY]šXË[WHÙˆØš™XÝ™[šY\ÊÚÚXÙK™Y™™XÝÊJHÂˆYˆ
+RS“ÖÐÒÒPÑWÓQU’P×ÒÑVTËš\ÊY]šXÊJHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[È	ØÚÚXÙKšYH\ˆZÚ™[Y]šXÈHY™™XÝÎˆ	ÛY]šXßX
+NÂˆH[ÙHYˆ
+\[Ùˆ[HOOH›[X™\ˆŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË]˜[È	ØÚÚXÙKšYH\ˆZÚÙK[[Y\š\ÚÈY™™ZÝ™\™H›Üˆ	ÛY]šXßK˜
+NÂˆBˆBˆB‚ˆ˜[Yœ\Ú
+ÚÚXÙJNÂˆJNÂ‚ˆ™]\›ˆ˜[YÂŸB‚‹ËÈ\Ý[›˜›ÚÜË]°éYÝ˜\ˆX[šY™\ÝX˜\Ù\
+0ê[ˆš[\ˆ]œÙ[™\ŠKˆÛ0é\ˆØ[[Y[ˆ[B‹ËÈ™[ZÚÙYHš[\œÈ™\Y\ËX\œ˜^K˜[Y\™\ˆÙÈ™]\›™\™\ˆØ[[]\œ˜^KˆØ\Ý\‚‹ËÈ[šHšY\™H[[š]8 $È™YX[™Û[™KÙ™Z[[™HX[šY™\Ý™]\›™\™\ÈÛH\œ˜^K‹ËÈÙÈ[›˜›ÚÜÙ[ˆ[™Ù\™\ˆÛÛH°îˆ][ˆ°éYÝ˜\‹‚˜\Þ[˜È[˜Ý[ÛˆØYÛX’[˜›Þ™\Y\Ê
+HÂˆžHÂˆÛÛœÝX[šY™\ÝH]ØZ]ØYœÛÛŠUWÔUË˜ÛX’[˜›Þ™\SX[šY™\Ý
+NÂ‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^JX[šY™\ÝË™š[\ÊJHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË\™\K[X[šY™\ÝX[™Û\ˆ[\ˆ\ˆ™Z[›Ü›X]ˆ[™Ù[ˆ°éYÝ˜\ˆ\Ý\ËˆŠNÂˆ™]\›ˆ×NÂˆB‚ˆÛÛœÝ™\Ý[ÈH]ØZ]›ÛZ\ÙK˜[Ù]Y
+ˆX[šY™\Ý™š[\Ë›X\
+
+š[T]
+HOˆØYœÛÛŠš[T]
+JBˆ
+NÂ‚ˆÛÛœÝY\™ÙYH×NÂˆ™\Ý[Ë™›Ü‘XXÚ
+
+™\Ý[[™^
+HOˆÂˆÛÛœÝš[T]HX[šY™\Ý™š[\ÖÚ[™^NÂ‚ˆYˆ
+™\Ý[œÝ]\ÈOOH™[š[YŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\Yš[Ý[›™HZÚÙH\Ý\Îˆ	Ùš[T]X
+NÂˆ™]\›ŽÂˆB‚ˆÛÛœÝš[Q]HH™\Ý[˜[YNÂˆYˆ
+P\œ˜^Kš\Ð\œ˜^Jš[Q]OËœ™\Y\ÊJHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\Yš[X[™Û\ˆÞ[YÈ™\Y\ËX\œ˜^Nˆ	Ùš[T]X
+NÂˆ™]\›ŽÂˆB‚ˆÛÛœÝš[TÙ[™\’YH\[Ùˆš[Q]KœÙ[™\’YOOHœÝš[™ÈˆÈš[Q]KœÙ[™\’Yˆ[Âˆš[Q]Kœ™\Y\Ë™›Ü‘XXÚ
+
+™\JHOˆY\™ÙYœ\Ú
+È™\Kš[TÙ[™\’YJJNÂˆJNÂ‚ˆ™]\›ˆ˜[Y]PÛX’[˜›Þ™\Y\ÊY\™ÙY
+NÂˆHØ]Ú
+\œ›ÜŠHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË\™\K[X[šY™\ÝX[™Û\ˆ[\ˆ\ˆ™Z[›Ü›X]ˆ[™Ù[ˆ°éYÝ˜\ˆ\Ý\ËˆŠNÂˆ™]\›ˆ×NÂˆBŸB‚‹ËÈ[\›ˆ˜[Y\š[™È]ˆ[ˆØ[[]™\Y\ËX\œ˜^Kˆ™\[[Y[\ˆÈ™\K‹ËÈš[TÙ[™\’YH\ˆš[TÙ[™\’Y\ˆ]œÙ[™\™š[[œÈÙ[™\’Y
+[\ˆ[
+K‚‹ËÈ™ZÛ\ˆÝ[ˆØš™ZÝ\ˆYYÝš[™ËZYÙÈ˜\œÛ\ˆÛHX›]\ˆÙÈX[™Û[™KÂ‹ËÈYÞ[YÙH™[ˆÝÜ\ˆ[šH\[ˆ8 $È™]\›™\™\ˆ™[™H™\K[Øš™ZÝ\‹‚™[˜Ý[Ûˆ˜[Y]PÛX’[˜›Þ™\Y\Ê[šY\ÊHÂˆÛÛœÝÙY[’YÈH™]ÈÙ]
+
+NÂˆÛÛœÝ˜[YH×NÂ‚ˆ[šY\Ë™›Ü‘XXÚ
+
+È™\Kš[TÙ[™\’YJHOˆÂˆYˆ
+\™\H\[Ùˆ™\KšYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š’[›˜›ÚÜË\™\H][ˆÞ[YÈÝš[™ËZY›HÜ]Ý™\‹ˆŠNÂˆ™]\›ŽÂˆB‚ˆYˆ
+ÙY[’YËš\Ê™\KšY
+JHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\HYY\ZØ]YÜYÙ]ˆ	Ü™\KšYX
+NÂˆBˆÙY[’YË˜Y
+™\KšY
+NÂ‚ˆYˆ
+\[Ùˆ™\KšYÙÙ\ÚÚXÙRYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\H	Ü™\KšYHX[™Û\ˆšYÙÙ\ÚÚXÙRY˜
+NÂˆBˆYˆ
+\[Ùˆ™\Kœ™\ÜÛœÙUÓY\ÜØYÙRYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\H	Ü™\KšYHX[™Û\ˆ™\ÜÛœÙUÓY\ÜØYÙRY˜
+NÂˆBˆYˆ
+\[Ùˆ™\K™XYYOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\H	Ü™\KšYHX[™Û\ˆ™XYY˜
+NÂˆBˆYˆ
+\[Ùˆ™\KœÙ[™\’YOOHœÝš[™ÈŠHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\H	Ü™\KšYHX[™Û\ˆÙ[™\’Y˜
+NÂˆH[ÙHYˆ
+š[TÙ[™\’Y	‰ˆ™\KœÙ[™\’YOOHš[TÙ[™\’Y
+HÂˆÛÛœÛÛKØ\›Šˆ[›˜›ÚÜË\™\H	Ü™\KšYH\ˆÙ[™\’Y‰Ü™\KœÙ[™\’YHˆY[ˆYÙÙ\ˆHš[›Üˆ‰Ùš[TÙ[™\’YH‹˜ˆ
+NÂˆBˆYˆ
+™\Kœ\Ù\ÈOOH[™Yš[™Y	‰ˆP\œ˜^Kš\Ð\œ˜^J™\Kœ\Ù\ÊJHÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\H	Ü™\KšYH\ˆ\Ù\ÈÛÛHZÚÙH\ˆ\œ˜^K˜
+NÂˆBˆYˆ
+ˆ™\K˜ÛÛ™][ÛœÈOOH[™Yš[™Y	‰‚ˆ
+\[Ùˆ™\K˜ÛÛ™][ÛœÈOOH›Øš™XÝˆ™\K˜ÛÛ™][ÛœÈOOH[\œ˜^Kš\Ð\œ˜^J™\K˜ÛÛ™][ÛœÊJBˆ
+HÂˆÛÛœÛÛKØ\›Š[›˜›ÚÜË\™\H	Ü™\KšYH\ˆÛÛ™][ÛœÈÛÛHZÚÙH\ˆØš™ZÝ˜
+NÂˆB‚ˆ˜[Yœ\Ú
+™\JNÂˆJNÂ‚ˆ™]\›ˆ˜[YÂŸB‚™[˜Ý[ÛˆÙ]Ü[ÛœÊÙ[XÝ][\ËÙ]˜[YKÙ]X™[[\SX™[H[ÚÝ[\ØX›HH[
+HÂˆÙ[XÝš[›™\’SHˆŽÂ‚ˆYˆ
+[\SX™[
+HÂˆÛÛœÝ[\SÜ[ÛˆHØÝ[Y[˜Ü™X]Q[[Y[
+›Ü[ÛˆŠNÂˆ[\SÜ[Û‹˜[YHHSTWÕSQNÂˆ[\SÜ[Û‹^ÛÛ[H[\SX™[ÂˆÙ[XÝ˜\[™
+[\SÜ[ÛŠNÂˆB‚ˆ][\Ë™›Ü‘XXÚ
+
+][JHOˆÂˆÛÛœÝÜ[ÛˆHØÝ[Y[˜Ü™X]Q[[Y[
+›Ü[ÛˆŠNÂˆÜ[Û‹˜[YHHÙ]˜[YJ][JNÂˆÜ[Û‹^ÛÛ[HÙ]X™[
+][JNÂˆÜ[Û‹™\ØX›YHÚÝ[\ØX›HÈÚÝ[\ØX›J][JHˆ˜[ÙNÂˆÙ[XÝ˜\[™
+Ü[ÛŠNÂˆJNÂŸB‚™[˜Ý[Ûˆ˜[Y]Q›ÛÝ˜[]JÈ^Y\œË^Y\\˜Ú]\\ÈH×K›Û\ËXÝXÜË›Ü›X][ÛœÈJHÂˆÛÛœÝØ\›š[™ÜÈH×NÂˆÛÛœÝ›ÛRYÈH™]ÈÙ]
+›Û\Ë›X\
+
+›ÛJHOˆ›ÛKšY
+JNÂˆÛÛœÝ˜[YÜÚ][ÛœÈH™]ÈÙ]
+“ÓÕSÔÔÒUSÓ”ÊNÂ‚ˆËÈ\šÙ]\[Øš™ZÝ\ˆpéHHYÈžYÙÈØ[]YYÈÜÛYÈ›ÜˆÜ[\›™\È\˜Ú]\RYË‚ˆÛÛœÝ\˜Ú]\RYÈH™]ÈÙ]
+
+NÂˆ^Y\\˜Ú]\\Ë™›Ü‘XXÚ
+
+\˜Ú]\JHOˆÂˆYˆ
+X\˜Ú]\HX\˜Ú]\KšY
+HÂˆØ\›š[™ÜËœ\Ú
+‘[ˆÜ[\˜\šÙ]\HX[™Û\ˆYˆŠNÂˆ™]\›ŽÂˆBˆ\˜Ú]\RYË˜Y
+\˜Ú]\KšY
+NÂˆJNÂ‚ˆ^Y\œË™›Ü‘XXÚ
+
+^Y\ŠHOˆÂˆYˆ
+\^Y\‹šY\^Y\‹›˜[YJHÂˆØ\›š[™ÜËœ\Ú
+‘[ˆÜ[\ˆX[™Û\ˆY[\ˆ˜[YKˆŠNÂˆB‚ˆYˆ
+\[Ùˆ^Y\‹˜Û\ÜÒZYÚOOH›[X™\ˆˆ^Y\‹˜Û\ÜÒZYÚH^Y\‹˜Û\ÜÒZYÚˆL
+HÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYH\ˆÝ™\˜[][™›Üˆx $ÌL˜
+NÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^J^Y\‹›˜]\˜[ÜÚ][ÛœÊH^Y\‹›˜]\˜[ÜÚ][ÛœË›[™ÝOOH
+HÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYHX[™Û\ˆ˜]\˜[ÜÚ][ÛœË˜
+NÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^J^Y\‹œÝ™[™ÝÊH^Y\‹œÝ™[™ÝË›[™ÝOOH
+HÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYHX[™Û\ˆÝ™[™ÝË˜
+NÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^J^Y\‹›™YYÊH^Y\‹›™YYË›[™ÝOOH
+HÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYHX[™Û\ˆ™YYË˜
+NÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^J^Y\‹›ZÙ\ÕXÝXÜÊH^Y\‹›ZÙ\ÕXÝXÜË›[™ÝOOH
+HÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYHX[™Û\ˆZÙ\ÕXÝXÜË˜
+NÂˆB‚ˆËÈ™\ˆ\˜Ú]\RYpéHZÙH0éH[ˆ\šÙ]\HH›ÛÝ˜[Ü^Y\—Ø\˜Ú]\\ËšœÛÛ‹‚ˆ^Y\‹˜\˜Ú]\RYÏË™›Ü‘XXÚ
+
+\˜Ú]\RY
+HOˆÂˆYˆ
+X\˜Ú]\RYËš\Ê\˜Ú]\RY
+JHÂˆÛÛœÝY\ÜØYÙHH	Ü^Y\‹›˜[YH^Y\‹šYHZÙ\ˆ0éHZÚ™[\šÙ]\Nˆ	Ø\˜Ú]\RYK˜ÂˆØ\›š[™ÜËœ\Ú
+Y\ÜØYÙJNÂˆÛÛœÛÛKØ\›ŠÜ[\˜\šÙ]\KZÛØ›[™ÈX[™Û\Žˆ	ÛY\ÜØYÙ_X
+NÂˆBˆJNÂ‚ˆ^Y\‹›˜]\˜[ÜÚ][ÛœÏË™›Ü‘XXÚ
+
+ÜÚ][ÛŠHOˆÂˆYˆ
+]˜[YÜÚ][ÛœËš\ÊÜÚ][ÛŠJHÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYH\ˆZÚ™[˜]\˜[ÜÚ][ÛŽˆ	ÜÜÚ][ÛŸK˜
+NÂˆBˆJNÂ‚ˆ^Y\‹\ØX›TÜÚ][ÛœÏË™›Ü‘XXÚ
+
+ÜÚ][ÛŠHOˆÂˆYˆ
+]˜[YÜÚ][ÛœËš\ÊÜÚ][ÛŠJHÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYH\ˆZÚ™[\ØX›TÜÚ][ÛŽˆ	ÜÜÚ][ÛŸK˜
+NÂˆBˆJNÂ‚ˆ^Y\‹œÛÜ‘š]ÏË™›Ü‘XXÚ
+
+ÜÚ][ÛŠHOˆÂˆYˆ
+]˜[YÜÚ][ÛœËš\ÊÜÚ][ÛŠJHÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYH\ˆZÚ™[ÛÜ‘š]ˆ	ÜÜÚ][ÛŸK˜
+NÂˆBˆJNÂ‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^J^Y\‹œ™Y™\œ™Y›Û\ÊH^Y\‹œ™Y™\œ™Y›Û\Ë›[™ÝOOH
+HÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYHX[™Û\ˆ™Y™\œ™Y›Û\Ë˜
+NÂˆB‚ˆ^Y\‹œ™Y™\œ™Y›Û\ÏË™›Ü‘XXÚ
+
+›ÛRY
+HOˆÂˆYˆ
+\›ÛRYËš\Ê›ÛRY
+JHÂˆØ\›š[™ÜËœ\Ú
+	Ü^Y\‹›˜[YH^Y\‹šYHZÙ\ˆ0éHZÚ™[›ÛNˆ	Ü›ÛRYK˜
+NÂˆBˆJNÂˆJNÂ‚ˆ›Û\Ë™›Ü‘XXÚ
+
+›ÛJHOˆÂˆYˆ
+\›ÛKšY\›ÛK›˜[YJHÂˆØ\›š[™ÜËœ\Ú
+‘[ˆ›ÛHX[™Û\ˆY[\ˆ˜[YKˆŠNÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^J›ÛK˜[YÜÚ][ÛœÊH›ÛK˜[YÜÚ][ÛœË›[™ÝOOH
+HÂˆØ\›š[™ÜËœ\Ú
+	Ü›ÛK›˜[YH›ÛKšYHX[™Û\ˆ˜[YÜÚ][ÛœË˜
+NÂˆB‚ˆ›ÛK˜[YÜÚ][ÛœÏË™›Ü‘XXÚ
+
+ÜÚ][ÛŠHOˆÂˆYˆ
+]˜[YÜÚ][ÛœËš\ÊÜÚ][ÛŠJHÂˆØ\›š[™ÜËœ\Ú
+	Ü›ÛK›˜[YH›ÛKšYH\ˆZÚ™[˜[YÜÚ][ÛŽˆ	ÜÜÚ][ÛŸK˜
+NÂˆBˆJNÂˆJNÂ‚ˆXÝXÜË™›Ü‘XXÚ
+
+XÝXÊHOˆÂˆYˆ
+]XÝXËšY]XÝXË›˜[YJHÂˆØ\›š[™ÜËœ\Ú
+‘[ˆZÝZÚÈX[™Û\ˆY[\ˆ˜[YKˆŠNÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^JXÝXËYÜÊHXÝXËYÜË›[™ÝOOH
+HÂˆØ\›š[™ÜËœ\Ú
+	ÝXÝXË›˜[YHXÝXËšYHX[™Û\ˆYÜË˜
+NÂˆBˆJNÂ‚ˆ›Ü›X][ÛœË™›Ü‘XXÚ
+
+›Ü›X][ÛŠHOˆÂˆYˆ
+Y›Ü›X][Û‹šYY›Ü›X][Û‹›˜[YJHÂˆØ\›š[™ÜËœ\Ú
+‘[ˆ›Ü›X\Ú›ÛˆX[™Û\ˆY[\ˆ˜[YKˆŠNÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^J›Ü›X][Û‹œÛÝÊH›Ü›X][Û‹œÛÝË›[™ÝOOHLJHÂˆØ\›š[™ÜËœ\Ú
+	Ù›Ü›X][Û‹›˜[YH›Ü›X][Û‹šYHpéHH°îXZÝYÈLHÛÝË˜
+NÂˆB‚ˆ›Ü›X][Û‹œÛÝÏË™›Ü‘XXÚ
+
+ÛÝ
+HOˆÂˆYˆ
+\ÛÝœÛÝY\ÛÝ›X™[\ÛÝœÜÚ][ÛŠHÂˆØ\›š[™ÜËœ\Ú
+	Ù›Ü›X][Û‹›˜[YH›Ü›X][Û‹šYH\ˆ[ˆY[Ý[™YÈÛÝ˜
+NÂˆB‚ˆYˆ
+]˜[YÜÚ][ÛœËš\ÊÛÝœÜÚ][ÛŠJHÂˆØ\›š[™ÜËœ\Ú
+	Ù›Ü›X][Û‹›˜[YH›Ü›X][Û‹šYH\ˆZÚ™[ÛÝ\ÜÚ\Ú›ÛŽˆ	ÜÛÝœÜÚ][ÛŸK˜
+NÂˆBˆJNÂˆJNÂ‚ˆ™]\›ˆØ\›š[™ÜÎÂŸB‚‹ËÈOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOB‹ËÈ\ÝÜžHÛÈ[›ØÚË[[ÝÜˆ
+ŒJB‹ËÈÛØ›\ˆ™\ðîÝKÜØ[[YH\ÝÜžHÛË\ÝY\ˆ[›ÛÝ˜[X[˜YÙ\‹\™\ÜÝ\œÙ\‹‚‹ËÈÚ™\›™[0îÚÙNˆÝY8¡¤ˆ\œÛÛˆ8¡¤ˆZÜÜ\\ÙH8¡¤ˆ™[š[™ÜÜ›ÙÜ˜[H8¡¤ˆ˜YÙH8¡¤ˆYÚÛ\ÜÙK‚‹ËÈ[š[™\™\ÈÚ™[››ÛH[›ØÚÙYXÙRYÈ
+
+ÈX[HY\š]ÊKˆ™[™H™[Y[šÜÚ›Û™\‹‹ËÈ›Ø\ÝH[ÝX[™Û[™H›ÝÝ\Y™[ˆ[™Ù[ˆY™™ZÝ0éHš]KÚØ[\KÜØÛÜ™[[ÝÜ™[‹‚‹ËÈOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOB‚‹ËÈ™ZÚÙY°îÙH0éH˜YÙK[š]°éY\‹œZÙ\È[Û\ÜÚYš\Ù\š[™ÜØ™\™YÛš[™Ë‚˜ÛÛœÝQÑWÓU‘SÓÔ‘TˆHÈœ›Ûž™NˆKÚ[™\Žˆ‹ÛÛˆÈNÂ‚‹ËÈ\Ø˜\™H]ZÙ]\ˆ›Üˆ˜YÙK[š]°éY\ˆHRH
+YÚY[]]
+Kˆ˜[˜XÚÈ[YY[ˆÙ[‹‚˜ÛÛœÝQÑWÓU‘SÓP‘SÈHÈ›Û™Nˆ’[™Ù[ˆ‹œ›Ûž™Nˆœ›ÛœÙH‹Ú[™\Žˆ”ðîˆ‹ÛÛˆ‘Ý[ˆNÂ‚‹ËÈZÜÝ\ˆ›ÙÜ˜[\Ý]\ËœZÝH™[™\‹‚˜ÛÛœÝRS’S‘×ÔÕUT×ÕVHÂˆ]˜Z[X›Nˆ•[Ú™[™Ù[YÈ‹ˆ™YY×ÜÝY™Žˆ“X[™Û\ˆšZÝYÈÝXˆ‹ˆ™YY×Ù^\\ÙNˆ“X[™Û\ˆZÜÜ\\ÙH‚ŸNÂ‚‹ËÈÙYYœ˜H›ÛÝ˜[ÝX[WÛY\š]Ë™^[\KšœÛÛ‹ˆœZÙ\ÈÛÛH]Ø[™ÜÜ[šÝ™Y°îœÝB‹ËÈ\Ý[™ÈÙÈ°é\ˆœZÙ\™[ˆ[Ý[\ˆ›ÙÜ™\Ú›Û™[‹‚›]X[SY\š]ÔÙYYH[Â‚‹ËÈ\ÛÛ™H][ˆ0éH[H™Y™\˜[œÙ\ˆYYÙYY[\ˆØØ[ÝÜ˜YÙK\\œÚ[™Ë‚™[˜Ý[ÛˆÛÛ™UX[SY\š]ÊY\š]ÊHÂˆ™]\›ˆ”ÓÓ‹œ\œÙJ”ÓÓ‹œÝš[™ÚYžJY\š]ÊJNÂŸB‚™[˜Ý[Ûˆ\ÕX[SY\š]ÓØš™XÝ
+˜[YJHÂˆ™]\›ˆ›ÛÛX[Š˜[YJH	‰ˆ\[Ùˆ˜[YHOOH›Øš™XÝˆ	‰ˆP\œ˜^Kš\Ð\œ˜^J˜[YJNÂŸB‚‹ËÈ›Ü›X[\Ù\ˆ›Ü›X][Û‘˜[Z[X\š]K[ÜÛYÙ]ÈÙ›Ü›X][Û’YNˆLLKˆ0é[\‚‹ËÈX[™Û[™KÚÛÜœ\ÝZÝ\ˆÙÈØ[[HØØ[ÝÜ˜YÙKY]NˆZÚÙK[Øš™ZÝ›\ˆßK‹ËÈÙÈ˜\™HÞ[YÙH[™\™Y\ˆ
+Û[\]LL
+H™ZÛ\Ë‚™[˜Ý[Ûˆ›Ü›X[^™Q›Ü›X][Û‘˜[Z[X\š]J˜[YJHÂˆYˆ
+]˜[YH\[Ùˆ˜[YHOOH›Øš™XÝˆ\œ˜^Kš\Ð\œ˜^J˜[YJJHÂˆ™]\›ˆßNÂˆBˆÛÛœÝ™\Ý[HßNÂˆØš™XÝ™[šY\Ê˜[YJK™›Ü‘XXÚ
+
+Ù›Ü›X][Û’Y˜]×JHOˆÂˆYˆ
+\[Ùˆ›Ü›X][Û’YOOHœÝš[™ÈˆY›Ü›X][Û’Y
+HÂˆ™]\›ŽÂˆBˆÛÛœÝ[X™\•˜[YHH[X™\Š˜]ÊNÂˆYˆ
+[X™\‹š\Ñš[š]J[X™\•˜[YJJHÂˆ™\Ý[Ù›Ü›X][Û’YHHX]›X^
+X]›Z[ŠLX]œ›Ý[™
+[X™\•˜[YJJJNÂˆBˆJNÂˆ™]\›ˆ™\Ý[ÂŸB‚‹ËÈ›Ü›X[\Ù\ˆÚØ[Ý\›ÜÙ\\˜]ÛZÈ]Ø[[KÚÛÜœ\YÜ™YHY\š]Â‹ËÈ[šHØ[ˆZÚÙHYÞ[YÙHÛÛÜ™[˜]\ˆ[\ˆÜ[\‹ZYY\ˆ[›ˆH]˜Z[Xš[]K‚™[˜Ý[Ûˆ\Õ˜[Y]]YJ˜[YJHÂˆ™]\›ˆ[X™\‹š\Ñš[š]J˜[YJH	‰ˆ˜[YHHNL	‰ˆ˜[YHHLÂŸB‚™[˜Ý[Ûˆ\Õ˜[YÛ™Ú]YJ˜[YJHÂˆ™]\›ˆ[X™\‹š\Ñš[š]J˜[YJH	‰ˆ˜[YHHLN	‰ˆ˜[YHHNÂŸB‚™[˜Ý[Ûˆ›Ü›X[^™TX›XÔÝ\[˜ÚÜŠ˜[YJHÂˆÛÛœÝ˜\ÙHH˜[YH	‰ˆ\[Ùˆ˜[YHOOH›Øš™XÝˆ	‰ˆP\œ˜^Kš\Ð\œ˜^J˜[YJHÈ˜[YHˆßNÂˆÛÛœÝ[˜X›YH˜\ÙK™[˜X›YOOHYNÂˆÛÛœÝXÙRYH\[Ùˆ˜\ÙKœXÙRYOOHœÝš[™Èˆ	‰ˆ˜\ÙKœXÙRYš[J
+HÈ˜\ÙKœXÙRYš[J
+Hˆ[ÂˆÛÛœÝXÙS˜[YHH\[Ùˆ˜\ÙKœXÙS˜[YHOOHœÝš[™Èˆ	‰ˆ˜\ÙKœXÙS˜[YKš[J
+HÈ˜\ÙKœXÙS˜[YKš[J
+Hˆ[ÂˆÛÛœÝ]]YHH\Õ˜[Y]]YJ˜\ÙK›]]YJHÈ˜\ÙK›]]YHˆ[ÂˆÛÛœÝÛ™Ú]YHH\Õ˜[YÛ™Ú]YJ˜\ÙK›Û™Ú]YJHÈ˜\ÙK›Û™Ú]YHˆ[ÂˆÛÛœÝÛÝ\˜ÙHH˜\ÙKœÛÝ\˜ÙHOOHœX›X×Ú\ÝÜžWÙÛ×ÜXÙHˆÈ˜\ÙKœÛÝ\˜ÙHˆœX›X×Ú\ÝÜžWÙÛ×ÜXÙHŽÂ‚ˆYˆ
+Y[˜X›Y\XÙRY\XÙS˜[YH]]YHOOH[Û™Ú]YHOOH[
+HÂˆ™]\›ˆÂˆ[˜X›Yˆ˜[ÙKˆXÙRYˆ[ˆXÙS˜[YNˆ[ˆ]]YNˆ[ˆÛ™Ú]YNˆ[ˆÛÝ\˜ÙNˆ[ˆÜ™X]Y]ˆ[ˆNÂˆB‚ˆ™]\›ˆÂˆ[˜X›YˆYKˆXÙRYˆXÙS˜[YKˆ]]YKˆÛ™Ú]YKˆÛÝ\˜ÙKˆÜ™X]Y]ˆ\[Ùˆ˜\ÙK˜Ü™X]Y]OOHœÝš[™Èˆ	‰ˆ˜\ÙK˜Ü™X]Y]š[J
+HÈ˜\ÙK˜Ü™X]Y]ˆ[ˆNÂŸB‚™[˜Ý[Ûˆ›Ü›X[^™S™X\˜žQ˜]›Üš]\Ê˜[YJHÂˆÛÛœÝ˜\ÙHH˜[YH	‰ˆ\[Ùˆ˜[YHOOH›Øš™XÝˆ	‰ˆP\œ˜^Kš\Ð\œ˜^J˜[YJHÈ˜[YHˆßNÂˆÛÛœÝXÙRYÈH\œ˜^Kš\Ð\œ˜^J˜\ÙKœXÙRYÊBˆÈË‹‹›™]ÈÙ]
+˜\ÙKœXÙRYË™š[\Š
+XÙRY
+HOˆ\[ÙˆXÙRYOOHœÝš[™ÈŠK›X\
+
+XÙRY
+HOˆXÙRYš[J
+JJWBˆ™š[\Š›ÛÛX[ŠBˆˆ×NÂ‚ˆ™]\›ˆÂˆXÙRYËˆ\]Y]ˆ\[Ùˆ˜\ÙK\]Y]OOHœÝš[™ÈˆÈ˜\ÙK\]Y]ˆ[ˆNÂŸB‚™[˜Ý[Ûˆ›Ü›X[^™SØØ[Ý\
+˜[YJHÂˆÛÛœÝ˜\ÙHH˜[YH	‰ˆ\[Ùˆ˜[YHOOH›Øš™XÝˆ	‰ˆP\œ˜^Kš\Ð\œ˜^J˜[YJHÈ˜[YHˆßNÂˆÛÛœÝ^Y\’YÈH\œ˜^Kš\Ð\œ˜^J˜\ÙKœ^Y\’YÊBˆÈË‹‹›™]ÈÙ]
+˜\ÙKœ^Y\’YË™š[\Š
+^Y\’Y
+HOˆ\[Ùˆ^Y\’YOOHœÝš[™ÈŠK›X\
+
+^Y\’Y
+HOˆ^Y\’Yš[J
+JJWBˆ™š[\Š›ÛÛX[ŠBˆœÛXÙJ‘TURT‘QÔÔUPQÔÒV‘JBˆˆ×NÂ‚ˆ™]\›ˆÂˆ[˜X›Yˆ˜\ÙK™[˜X›YOOHYH	‰ˆ^Y\’YË›[™ÝˆˆÛÝ\˜ÙNˆ\[Ùˆ˜\ÙKœÛÝ\˜ÙHOOHœÝš[™Èˆ	‰ˆ˜\ÙKœÛÝ\˜ÙKš[J
+HÈ˜\ÙKœÛÝ\˜ÙHˆ[ˆ]]YNˆ\Õ˜[Y]]YJ˜\ÙK›]]YJHÈ˜\ÙK›]]YHˆ[ˆÛ™Ú]YNˆ\Õ˜[YÛ™Ú]YJ˜\ÙK›Û™Ú]YJHÈ˜\ÙK›Û™Ú]YHˆ[ˆÚÜÙ[”XÙRYˆ\[Ùˆ˜\ÙK˜ÚÜÙ[”XÙRYOOHœÝš[™Èˆ	‰ˆ˜\ÙK˜ÚÜÙ[”XÙRYš[J
+HÈ˜\ÙK˜ÚÜÙ[”XÙRYˆ[ˆÚÜÙ[”XÙS˜[YN‚ˆ\[Ùˆ˜\ÙK˜ÚÜÙ[”XÙS˜[YHOOHœÝš[™Èˆ	‰ˆ˜\ÙK˜ÚÜÙ[”XÙS˜[YKš[J
+HÈ˜\ÙK˜ÚÜÙ[”XÙS˜[YKš[J
+Hˆ[ˆ^Y\’YËˆÜ™X]Y]ˆ\[Ùˆ˜\ÙK˜Ü™X]Y]OOHœÝš[™Èˆ	‰ˆ˜\ÙK˜Ü™X]Y]š[J
+HÈ˜\ÙK˜Ü™X]Y]ˆ[ˆNÂŸB‚‹ËÈ›Ü›X[\Ù\ˆX[HY\š]È[›Ü™[]›Ü›HÛZÈ]™[™\‹KÜ›ÙÜ™\Ú›ÛœÛYÙ]‹ËÈ[Y\ˆÞ[YÙH\œ˜^\ËÝ[X[œÙ]ÙYY[\ˆYÜ™][Ý[™‚™[˜Ý[Ûˆ›Ü›X[^™UX[SY\š]ÊY\š]ÊHÂˆÛÛœÝ˜\ÙHH\ÕX[SY\š]ÓØš™XÝ
+Y\š]ÊHÈY\š]ÈˆßNÂˆÛÛœÝØØ[Ý\H›Ü›X[^™SØØ[Ý\
+˜\ÙK›ØØ[Ý\
+NÂˆÛÛœÝX›XÔÝ\[˜ÚÜˆH›Ü›X[^™TX›XÔÝ\[˜ÚÜŠ˜\ÙKœX›XÔÝ\[˜ÚÜŠNÂˆÛÛœÝZYÜ˜]YX›XÔÝ\[˜ÚÜˆHX›XÔÝ\[˜ÚÜ‹™[˜X›YˆÈX›XÔÝ\[˜ÚÜ‚ˆˆ›Ü›X[^™TX›XÔÝ\[˜ÚÜŠÂˆ[˜X›YˆØØ[Ý\œÛÝ\˜ÙHOOH˜ÚÜÙ[—ÜXÙHˆ	‰ˆ›ÛÛX[ŠØØ[Ý\˜ÚÜÙ[”XÙRY
+KˆXÙRYˆØØ[Ý\˜ÚÜÙ[”XÙRYˆXÙS˜[YNˆØØ[Ý\˜ÚÜÙ[”XÙS˜[YKˆ]]YNˆØØ[Ý\›]]YKˆÛ™Ú]YNˆØØ[Ý\›Û™Ú]YKˆÛÝ\˜ÙNˆœX›X×Ú\ÝÜžWÙÛ×ÜXÙH‹ˆÜ™X]Y]ˆØØ[Ý\˜Ü™X]Y]ˆJNÂ‚ˆ™]\›ˆÂˆ‹‹˜˜\ÙKˆXÝ]™U˜Z[š[™ÕÙYZÎ‚ˆ[X™\‹š\Ò[YÙ\Š˜\ÙK˜XÝ]™U˜Z[š[™ÕÙYZÊH	‰ˆ˜\ÙK˜XÝ]™U˜Z[š[™ÕÙYZÈHHÈ˜\ÙK˜XÝ]™U˜Z[š[™ÕÙYZÈˆKˆX›XÔÝ\[˜ÚÜŽˆZYÜ˜]YX›XÔÝ\[˜ÚÜ‹ˆØØ[Ý\ˆ™X\˜žQ˜]›Üš]\Îˆ›Ü›X[^™S™X\˜žQ˜]›Üš]\Ê˜\ÙK›™X\˜žQ˜]›Üš]\ÊKˆ\™YÝY™’YÎˆ\œ˜^Kš\Ð\œ˜^J˜\ÙKš\™YÝY™’YÊHÈ˜\ÙKš\™YÝY™’YÈˆ×KˆËÈ›Ü›X\Ú›ÛœÝ[™[›š[™È\ˆ›Ü›X][Û’Y
+LL
+Kˆ›ÚÜÙ\ˆØZÝHYY™[š[™ÜÝZÙ\‚ˆËÈšXHY˜[˜ÙRÕ˜Z[š[™ÕÙYZËˆ›Ø\Ý[ÝØ[[HØØ[ÝÜ˜YÙKY]NˆYÞ[YÙBˆËÈ™\™Y\ˆš[™\™\È›ÜÙÈX[™Û[™H™[›\ˆ]Û]ÜÛYË‚ˆ›Ü›X][Û‘˜[Z[X\š]Nˆ›Ü›X[^™Q›Ü›X][Û‘˜[Z[X\š]J˜\ÙK™›Ü›X][Û‘˜[Z[X\š]JKˆËÈ›ÛH˜[Z[X\š]H[™Ú[™HŒNˆ›Ü›ÛYÚ]\ˆÜ[\°åÜ›ÛH
+LL
+KžYÙÙ]ˆËÈ™Y’RÕQÈœZÈÝ™\ˆØ[\\‹ˆ›ÜˆHX[˜YÙ\‹\Ý][ˆ
+X[SY\š]ÊK[šHBˆËÈ\ÝÜžHÛË\›ÙÜ™\Ú›Û™[‹ˆ›Ø\Ý[ÝØ[[KÚÛÜœ\H]K‚ˆ›ÛQ˜[Z[X\š]Nˆ›Ü›X[^™T›ÛQ˜[Z[X\š]J˜\ÙKœ›ÛQ˜[Z[X\š]JKˆËÈœ˜[YØ[™È0éHÝ˜ZÙHÚY\‹Ü[\°åØ]šX]8¡¤ˆ8 $ÌLˆ\œÚ\Ý\™\ÈØ[[Y[ˆYYˆËÈ›ÛY›Ü›ÛYÚ][‹[šHH\ÝÜžHÛË\›ÙÜ™\Ú›Û™[‹‚ˆÙXZÛ™\ÜÔ›ÙÜ™\ÜÎˆ›Ü›X[^™UÙXZÛ™\ÜÔ›ÙÜ™\ÜÊ˜\ÙKÙXZÛ™\ÜÔ›ÙÜ™\ÜÊKˆ[›ØÚÙYXÙRYÎˆ\œ˜^Kš\Ð\œ˜^J˜\ÙK[›ØÚÙYXÙRYÊHÈ˜\ÙK[›ØÚÙYXÙRYÈˆ×Kˆ[›ØÚÙY^\\ÙRYÎˆ\œ˜^Kš\Ð\œ˜^J˜\ÙK[›ØÚÙY^\\ÙRYÊHÈ˜\ÙK[›ØÚÙY^\\ÙRYÈˆ×KˆX\›™Y˜YÙRYÎˆ\œ˜^Kš\Ð\œ˜^J˜\ÙK™X\›™Y˜YÙRYÊHÈ˜\ÙK™X\›™Y˜YÙRYÈˆ×Kˆ˜YÙT›ÙÜ™\ÜÎˆ\œ˜^Kš\Ð\œ˜^J˜\ÙK˜˜YÙT›ÙÜ™\ÜÊHÈ˜\ÙK˜˜YÙT›ÙÜ™\ÜÈˆ×KˆXÝ]™PÛ\ÜÚYšXØ][ÛœÎˆ\œ˜^Kš\Ð\œ˜^J˜\ÙK˜XÝ]™PÛ\ÜÚYšXØ][ÛœÊHÈ˜\ÙK˜XÝ]™PÛ\ÜÚYšXØ][ÛœÈˆ×KˆËÈÙ™‹\]Ú\˜[Y]\œÈŒNˆX[˜YÙ\™[œÈÛÛZÜÝYÈ
+Û]\Ú™K[Ü˜[™\ÜËˆËÈØ\™\›Ø™KZÝ\ÚÈÛ\š]8 )ŠHYÙÙ\ˆHX[˜YÙ\‹\Ý][‹ZÚÙHH\ÝÜžBˆËÈÛË\›ÙÜ™\Ú›Û™[‹ˆ›Ü›X[\Ù\™\È[YÈžH›Ü°é\ˆY˜][ZÛÛZÜÝ[‹‚ˆÙ™”]Úˆ›Ü›X[^™SÙ™”]ÚÝ]J˜\ÙK›Ù™”]Ú
+KˆËÈ[˜›Þ]™[[YÜ˜][ÛˆŒNˆ[›˜›ÚÜÙ[œÈ]™[™H°éY\ˆ
+Ù[™\™\Hœ˜BˆËÈÙ™‹\]ÚÝ™[š[™ËÚØ[\YËÚÛÛZÜÝ\ÝKÛ0îÝKØ\šÚ]™\JKˆYÙÙ\ˆÙÜðéHBˆËÈX[˜YÙ\‹\Ý][‹ZÚÙHH\ÝÜžHÛË\›ÙÜ™\Ú›Û™[‹ˆ[šHš\Ú]YÜXÙ\ÈÂˆËÈ×ÙÜ›Ý[™Ü\—ÜÝ]×ÝŒK‚ˆ[˜›Þˆ›Ü›X[^™R[˜›ÞÝ]J˜\ÙKš[˜›Þ
+KˆËÈÛXˆÙYZÈÜ˜Ú\Ý˜]ÜˆŒNˆZÙKÙ˜\ÙKÚÛX˜™\™Y\ˆ›Üˆ°éHHY\š]ËØ[[Y[‚ˆËÈYYÙ™‹\]ÚÙÈ[›˜›ÚÜËÛZÈ][HX[˜YÙ\ZØH\ˆ0ê[ˆØ[[Y[š[™Ù[™BˆËÈÝ]Kˆ[[[ˆ\ˆZYÜ™\Ú[š]X[\Ù\
+[™Ú[™KÙ˜[˜XÚÈZY\ˆ›Ü›Y[ŠK‚ˆÛX•ÙYZÔÝ]NˆØ[š]^™TÝÜ™YÛX•ÙYZÔÝ]J˜\ÙK˜ÛX•ÙYZÔÝ]JBˆNÂŸB‚‹ËÈÙ™‹\]ÚZÛÛZÜÝ
+Ù™‹\]Ú\˜[Y]\œÈŒJH›ÜˆX[˜YÙ\‹\Ý][‹ˆYÙÙ\ˆB‹ËÈX[SY\š]Ë›Ù™”]ÚÈ™]\›™\™\ˆ[Y[ˆ›Ü›X[\Ù\Ý]H
+Y˜][°é\ˆ[‚‹ËÈX[™Û\ŠKˆ\Ù\È]ˆ™[š[™ÜÜ›ÙÜ˜[KK›ÜœÛYËHÙÈÛÛZÜÝURKY]‚™[˜Ý[ÛˆÙ]Ù™”]ÚÝ]J
+HÂˆ™]\›ˆÝ]KX[SY\š]ÏË›Ù™”]ÚˆÈ›Ü›X[^™SÙ™”]ÚÝ]JÝ]KX[SY\š]Ë›Ù™”]Ú
+BˆˆÜ™X]QY˜][Ù™”]ÚÝ]J
+NÂŸB‚‹ËÈX]Ú^[˜][ÛˆŒKNˆ[ˆ\Ø˜\ˆÙ™‹\]Ú\Û˜\ÚÝÓRÈÓÓ•RÔÕSˆTˆ°æ‚‹ËÈØ[\[‹[Ø[\›ÜšÛ\š[™Ù[‹ˆZÜÜÛ™\™\ˆÝ[ˆH\Ø˜\™HX[KKÜÜ]XY]™\™Y[™B‹ËÈÙÈ]QÕ[ÛHÚÚ[\›È
+Ý[[X\š^™SÙ™”]ÚÛÛ^šY[’[
+H8 %[šHB‹ËÈ°éHY[‹][[™H
+Ù™‹\]Ú[[Ù[[œÈY[‹\š[œÚ\
+KˆØ[\[ÝÜ™[ˆ\Ù\ˆ[ŽÂ‹ËÈ\šœÈZY\ˆ[\Ý[™ËÛ›Ü›X[\Ù\š[™Ë‚™[˜Ý[ÛˆZ[X]Ú^SÙ™”]ÚÛ˜\ÚÝ
+
+HÂˆÛÛœÝÙ™”]ÚÝ]HHÙ]Ù™”]ÚÝ]J
+NÂˆÛÛœÝÝ[[X\žHHÝ[[X\š^™SÙ™”]ÚÛÛ^
+Ù™”]ÚÝ]JNÂˆÛÛœÝX[HHÙ™”]ÚÝ]KX[HßNÂˆÛÛœÝÜ]XYHÙ™”]ÚÝ]KœÜ]XYßNÂˆ™]\›ˆÂˆ[Ü˜[NˆX[K›[Ü˜[KˆÛÛ™šY[˜ÙNˆX[K˜ÛÛ™šY[˜ÙKˆÛÚ\Ú[ÛŽˆX[K˜ÛÚ\Ú[Û‹ˆ˜]YÝYNˆX[K™˜]YÝYKˆÙX\ŽˆX[KÙX\‹ˆ[š\žTš\ÚÎˆX[Kš[š\žTš\ÚËˆYYXT™\ÜÝ\™NˆX[K›YYXT™\ÜÝ\™Kˆ›Ø\™™\ÜÝ\™NˆX[K˜›Ø\™™\ÜÝ\™KˆXÝXØ[Û\š]NˆÜ]XYXÝXØ[Û\š]Kˆ™XÙ[˜Z[š[™Ô›ÙÜ˜[RYÎˆ\œ˜^Kš\Ð\œ˜^JÙ™”]ÚÝ]Kœ™XÙ[˜Z[š[™Ô›ÙÜ˜[RYÊBˆÈË‹‹›Ù™”]ÚÝ]Kœ™XÙ[˜Z[š[™Ô›ÙÜ˜[RY×Bˆˆ×KˆY[’[ˆÝ[[X\žKšY[’[[ˆÜÛÛ˜Ù\›œÎˆ\œ˜^Kš\Ð\œ˜^JÝ[[X\žKÜÛÛ˜Ù\›œÊHÈÝ[[X\žKÜÛÛ˜Ù\›œËœÛXÙJÊHˆ×KˆÜÚ]]™\Îˆ\œ˜^Kš\Ð\œ˜^JÝ[[X\žKœÜÚ]]™\ÊHÈÝ[[X\žKœÜÚ]]™\ËœÛXÙJÊHˆ×BˆNÂŸB‚‹ËÈ[˜›Þ]™[[YÜ˜][ÛˆŒNˆ[›˜›ÚÜÙ[œÈ°éY\Ý]H
+X[SY\š]Ëš[˜›Þ
+K‚‹ËÈ™]\›™\™\ˆ[Y[ˆ›Ü›X[\Ù\Ý]H
+Y˜][°é\ˆ[ˆX[™Û\ŠK‚™[˜Ý[ÛˆÙ][˜›ÞÝ]J
+HÂˆ™]\›ˆÝ]KX[SY\š]ÏËš[˜›ÞˆÈ›Ü›X[^™R[˜›ÞÝ]JÝ]KX[SY\š]Ëš[˜›Þ
+BˆˆÜ™X]R[˜›ÞÝ]J
+NÂŸB‚‹ËÈ\ÈX[HY\š]Îˆ°îˆØØ[ÝÜ˜YÙH°îœÝ˜[[\œÈ[˜ZÙH[ÙYYY]K‚‹ËÈpéH0é[HX[™Û[™KÚÛÜœ\ØØ[ÝÜ˜YÙH][ˆ0éHÜ˜\Ú™KˆYÜ™\ˆÙYYY[ˆ›Ü‚‹ËÈÙ[™\™HœZÈ
+™\Ù]X[SY\š]ÊK‚™[˜Ý[ÛˆØYX[SY\š]ÊÙYYY\š]ÊHÂˆX[SY\š]ÔÙYYH\ÕX[SY\š]ÓØš™XÝ
+ÙYYY\š]ÊHÈÛÛ™UX[SY\š]ÊÙYYY\š]ÊHˆ[Â‚ˆžHÂˆÛÛœÝ˜]ÈHØØ[ÝÜ˜YÙK™Ù]][JPSWÓQT’U×ÒÑVJNÂˆYˆ
+˜]ÊHÂˆÛÛœÝ\œÙYH”ÓÓ‹œ\œÙJ˜]ÊNÂˆYˆ
+\ÕX[SY\š]ÓØš™XÝ
+\œÙY
+JHÂˆ™]\›ˆ›Ü›X[^™UX[SY\š]Ê\œÙY
+NÂˆBˆBˆHØ]Ú
+\œ›ÜŠHÂˆËÈÛÜœ\[\ˆ][Ú™[™Ù[YÈØØ[ÝÜ˜YÙNˆœZÈÙYYHÝY]›Üˆ0éHÜ˜\Ú™K‚ˆB‚ˆ™]\›ˆX[SY\š]ÔÙYYÈ›Ü›X[^™UX[SY\š]ÊÛÛ™UX[SY\š]ÊX[SY\š]ÔÙYY
+JHˆ[ÂŸB‚‹ËÈYÜ™HÚ™[[™HX[HY\š]È[ØØ[ÝÜ˜YÙKˆÝ[H›Ë[Üš\ÈYÜš[™È™Z[\‹‚™[˜Ý[ÛˆØ]™UX[SY\š]Ê
+HÂˆYˆ
+Ý]K›[ÙQ[™[ÜH	‰ˆZ\ÓXYÝYS[ÙPXÝ]™J
+JH™]\›ŽÂˆYˆ
+\Ý]KX[SY\š]ÊHÂˆ™]\›ŽÂˆBˆžHÂˆØØ[ÝÜ˜YÙKœÙ]][JPSWÓQT’U×ÒÑVK”ÓÓ‹œÝš[™ÚYžJÝ]KX[SY\š]ÊJNÂˆHØ]Ú
+\œ›ÜŠHÂˆËÈYÜš[™ÈØ[ˆ™Z[HHš]˜][Ù\ÈK›ˆHÚ°î™\ˆšH˜\™H][ˆ\œÚ\Ý[œË‚ˆBŸB‚‹ËÈ[Ý[›ÙÜ™\Ú›ÛŽˆÛ]ØØ[ÝÜ˜YÙKZÙ^KÚ™[›Ü™]ÙYYÙÈ™\™[™\‹‚™[˜Ý[Ûˆ™\Ù]X[SY\š]Ê
+HÂˆžHÂˆØØ[ÝÜ˜YÙKœ™[[Ý™R][JPSWÓQT’U×ÒÑVJNÂˆHØ]Ú
+\œ›ÜŠHÂˆËÈš™\›š[™ÈØ[ˆ™Z[HHš]˜][Ù\ÈK›ˆH›ÜÙ]\ˆšHX[œÙ]‚ˆB‚ˆÝ]KX[SY\š]ÈHX[SY\š]ÔÙYYÈ›Ü›X[^™UX[SY\š]ÊÛÛ™UX[SY\š]ÊX[SY\š]ÔÙYY
+JHˆ[ÂˆYˆ
+Ý]KX[SY\š]ÊHÂˆÝ]KX[SY\š]Ë›ØØ[Ý\H›Ü›X[^™SØØ[Ý\
+[
+NÂˆÝ]KX[SY\š]ËœX›XÔÝ\[˜ÚÜˆH›Ü›X[^™TX›XÔÝ\[˜ÚÜŠ[
+NÂˆÝ]KX[SY\š]Ë›™X\˜žQ˜]›Üš]\ÈH›Ü›X[^™S™X\˜žQ˜]›Üš]\Ê[
+NÂˆBˆÝ]K›ØØ[Ý\Y\ÜØYÙHHˆŽÂˆ™XÛÛ\]PXÝ]™PÛ\ÜÚYšXØ][ÛœÊ
+NÂˆ[˜[Y]P]˜Z[Xš[]J
+NÂˆËÈ[Ý[[™ÈØ[ˆ0é\ÙHÜ[\™KÙ›Ü›X\Ú›Û™\ˆYÚ™[ŽÈš™\›ˆ°éK[0é\ÝHÜ[\™BˆËÈœ˜H[™]\ÙÈ˜[[˜ZÙH[°îœÝH[Ú™[™Ù[YÙH›Ü›X\Ú›Ûˆ™Y™ZÝ‹‚ˆØ[š]^™S[™]\›Ü•[›ØÚÙY^Y\œÊ
+NÂˆØ[š]^™TÙ[XÝY›Ü›X][ÛŠ
+NÂˆ™[™\\
+
+NÂŸB‚‹ËÈÛXÝ]™PÛ\ÜÚYšXØ][ÛœÈÞ[šÈYYÜ™[H˜YÙ\ËˆÚ°î™\È]\ˆ™\‚‹ËÈ˜YÙKY[™š[™ÈÙÈ™Y\Ý[™ËÛ[Ý[[™ÈÛZÈ]YÜ™YKÝš\ÝHÛ\ÜÙ\‚‹ËÈ[YÜZ[\ˆX\›™Y˜YÙRYË‚™[˜Ý[Ûˆ™XÛÛ\]PXÝ]™PÛ\ÜÚYšXØ][ÛœÊ
+HÂˆYˆ
+Ý]KX[SY\š]ÊHÂˆÝ]KX[SY\š]Ë˜XÝ]™PÛ\ÜÚYšXØ][ÛœÈHÛÛ\]PXÝ]™PÛ\ÜÚYšXØ][Û’YÊ
+NÂˆBŸB‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‹ËÈZÝH\ÝÜžHÛË\Þ[˜È
+ŒJB‹ËÈ›ÛÝ˜[X[˜YÙ\ˆ\Ù\ˆ\ÝÜžHÛÈÚ[ˆYÙ[ˆØØ[ÝÜ˜YÙK\›ÙÜ™\Ú›ÛˆÙÈœZÙ\‚‹ËÈ˜ZÝ\ÚÈ™\ðîÝHÜÜÝY\ˆÛÛHÜ[››YÈ›Üˆ[›ØÚÜËˆ]HYÙÙ\ÈÛÛH]YÂ‹ËÈÜ0éH[[ËKÛYÜÝ][ˆHÙ›KX[SY\š]ËŒH8 $È]\œÝ]\ˆ[ˆZÚÙK‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‚‹ËÈžYÙÈ”ÓÓ‹[\Ú[™Èœ˜HØØ[ÝÜ˜YÙKˆÜ˜\Ú™\ˆ[šNˆ™]\›™\™\ˆ˜[˜XÚÈ™Y‹ËÈX[™Û[™H°îÚÙ[YÞ[YÈ”ÓÓˆ[\ˆ][Ú™[™Ù[YÈØØ[ÝÜ˜YÙH
+š]˜][Ù\ÊK‚™[˜Ý[Ûˆ™XYœÛÛ“ØØ[ÝÜ˜YÙJÙ^K˜[˜XÚÊHÂˆžHÂˆ™]\›ˆ”ÓÓ‹œ\œÙJØØ[ÝÜ˜YÙK™Ù]][JÙ^JH›[ŠHÏÈ˜[˜XÚÎÂˆHØ]Ú
+\œ›ÜŠHÂˆ™]\›ˆ˜[˜XÚÎÂˆBŸB‚‹ËÈ™\ðîÝHÝY\ˆœ˜H\ÝÜžHÛÈ
+š\Ú]YÜXÙ\Ø
+Kˆ›Ü™[]›Ü›H\ˆ]‹ËÈØš™ZÝÛX\ÈXÙRYˆ]HKˆ™]\›™\™\ˆÙ]YYXÙRYY\ˆ\ˆ™\™Y[ˆ\‚‹ËÈ]KˆYÞ[YÈ›Ü›X]Ú\ˆÛHÙ]
+ÈÛÛœÛÛKØ\›‹‚™[˜Ý[ÛˆÙ]\ÝÜžQÛÕš\Ú]YXÙRYÊ
+HÂˆÛÛœÝ˜]ÈH™XYœÛÛ“ØØ[ÝÜ˜YÙJTÕÔ–WÑÓ×Õ’TÒUQÔPÑT×ÒÑVK[
+NÂˆÛÛœÝYÈH™]ÈÙ]
+
+NÂ‚ˆYˆ
+˜]ÈOOH[˜]ÈOOH[™Yš[™Y
+HÂˆ™]\›ˆYÎÂˆB‚ˆYˆ
+\[Ùˆ˜]ÈOOH›Øš™XÝˆ\œ˜^Kš\Ð\œ˜^J˜]ÊJHÂˆÛÛœÛÛKØ\›Š’\ÝÜžHÛË\Þ[˜Îˆš\Ú]YÜXÙ\È\ˆYÞ[YÈ›Ü›X]
+›Ü™[]Øš™ZÝÛX\
+KˆŠNÂˆ™]\›ˆYÎÂˆB‚ˆØš™XÝ™[šY\Ê˜]ÊK™›Ü‘XXÚ
+
+ÜXÙRY˜[YWJHOˆÂˆYˆ
+XÙRY	‰ˆ˜[YJHÂˆYË˜Y
+XÙRY
+NÂˆBˆJNÂ‚ˆ™]\›ˆYÎÂŸB‚‹ËÈÜ›Ý[™Ü\‹KÜÜÜÝY\ˆœ˜H\ÝÜžHÛÈ
+×ÙÜ›Ý[™Ü\—ÜÝ]×ÝŒX
+KˆœZÙ\‚‹ËÈš\Ú]YÙÜ›Ý[™Ü\—ÜXÙ\Ø
+\œ˜^JHÛÛHÝ™Y\ÝKˆYÞ[YÈ›Ü›X]Ú\ˆÛB‹ËÈÙ]
+ÈÛÛœÛÛKØ\›‹‚™[˜Ý[ÛˆÙ]\ÝÜžQÛÑÜ›Ý[™Ü\”XÙRYÊ
+HÂˆÛÛœÝ˜]ÈH™XYœÛÛ“ØØ[ÝÜ˜YÙJTÕÔ–WÑÓ×ÑÔ“ÕS‘ÔT—ÔÕU×ÒÑVK[
+NÂˆÛÛœÝYÈH™]ÈÙ]
+
+NÂ‚ˆYˆ
+˜]ÈOOH[˜]ÈOOH[™Yš[™Y
+HÂˆ™]\›ˆYÎÂˆB‚ˆYˆ
+\[Ùˆ˜]ÈOOH›Øš™XÝˆ\œ˜^Kš\Ð\œ˜^J˜]ÊJHÂˆÛÛœÛÛKØ\›Š’\ÝÜžHÛË\Þ[˜Îˆ×ÙÜ›Ý[™Ü\—ÜÝ]×ÝŒH\ˆYÞ[YÈ›Ü›X]
+›Ü™[]Øš™ZÝ
+KˆŠNÂˆ™]\›ˆYÎÂˆB‚ˆÛÛœÝš\Ú]YH˜]Ëš\Ú]YÙÜ›Ý[™Ü\—ÜXÙ\ÎÂ‚ˆYˆ
+š\Ú]YOOH[™Yš[™Y
+HÂˆ™]\›ˆYÎÂˆB‚ˆYˆ
+P\œ˜^Kš\Ð\œ˜^Jš\Ú]Y
+JHÂˆÛÛœÛÛKØ\›Š’\ÝÜžHÛË\Þ[˜Îˆš\Ú]YÙÜ›Ý[™Ü\—ÜXÙ\È\ˆZÚÙH[ˆ\œ˜^KˆŠNÂˆ™]\›ˆYÎÂˆB‚ˆš\Ú]Y™›Ü‘XXÚ
+
+XÙRY
+HOˆÂˆYˆ
+\[ÙˆXÙRYOOHœÝš[™Èˆ	‰ˆXÙRY
+HÂˆYË˜Y
+XÙRY
+NÂˆBˆJNÂ‚ˆ™]\›ˆYÎÂŸB‚‹ËÈØ[[YHÜÜÝY\ˆœ˜H\ÝÜžHÛÈÛÛH˜ZÝ\ÚÈ\ˆ[›ØÚËY]HH›ÛÝ˜[‹ËÈX[˜YÙ\‹ˆÛ0é\ˆØ[[Y[ˆÜ›Ý[™Ü\‹\ÝY\ˆÙÈÙ[™\™[™\ðîÝHÝY\‹ÙÂ‹ËÈš[™\™\ˆ[XÙRYY\ˆÛÛHš[›™\ÈHÝ]K[›ØÚÜËœXÙU[›ØÚÜËˆ\›YYœž\‚‹ËÈ›ÛÝ˜[X[˜YÙ\ˆÙYÈ˜\™HÛH\ÝÜžHÛË\ÝY\ˆ[ˆÙ[ˆ\ˆ[›šÛ›Ü‹‚‹ËÈÝY\ˆ\ˆÜ[\™[ˆ˜ZÝ\ÚÈ\ˆ]]Z^™[ˆH\ÝÜžHÛË‚‹ËÈ™]\›™\™\ˆ[°é\ˆ0éœš[™ÜÛÙÙÙ[ˆZÚÙHš[›™\ËÚZÚÙH\ˆ\Ø˜\ˆ8 $ÈH™]šB‹ËÈ[™Ù[[™ÈÛH]Z^‹ÙÈ]Z^‹\Ü[ˆÚØ[RÒÑH0é[™]™\È
+[\œÈš[HÜ[\™B‹ËÈ›]0é\Ý]H]ˆÜ[\™HH[][YÈÝ[›™H0é\ÝÜ
+K‚™[˜Ý[ÛˆÙ]\ÝÜžQÛÔ]Z^ÛÛ\]YXÙRYÊ
+HÂˆÛÛœÝ˜]ÈH™XYœÛÛ“ØØ[ÝÜ˜YÙJTÕÔ–WÑÓ×ÓPT“’S‘×ÓÑ×ÒÑVK[
+NÂˆYˆ
+˜]ÈOOH[˜]ÈOOH[™Yš[™Y
+HÂˆ™]\›ˆ[ÂˆBˆYˆ
+P\œ˜^Kš\Ð\œ˜^J˜]ÊJHÂˆÛÛœÛÛKØ\›Š’\ÝÜžHÛË\Þ[˜Îˆ×ÛX\›š[™×ÛÙ×ÝŒH\ˆYÞ[YÈ›Ü›X]
+›Ü™[]\œ˜^JKˆŠNÂˆ™]\›ˆ[ÂˆB‚ˆÛÛœÝYÈH™]ÈÙ]
+
+NÂˆ˜]Ë™›Ü‘XXÚ
+
+]™[
+HOˆÂˆYˆ
+Y]™[\[Ùˆ]™[OOH›Øš™XÝŠH™]\›ŽÂˆYˆ
+RTÕÔ–WÑÓ×ÔURV—ÑU‘S•ÕTTËš\Ê]™[\JJH™]\›ŽÂˆËÈ\™[\™Ù]Y\ˆÝY]ÈYÈ\™Ù]Y\ˆ[ˆØ[[Y[œØ]Ù]ZYÛÛBˆËÈÝ\\ˆYYÝY]ˆÛÙH™YÙÙKÛZÈ]ÛpéH›Ü›X]˜\šX[\ˆ0é[\Ë‚ˆÛÛœÝ\™[H\[Ùˆ]™[œ\™[\™Ù]YOOHœÝš[™ÈˆÈ]™[œ\™[\™Ù]Yš[J
+HˆˆŽÂˆYˆ
+\™[
+HYË˜Y
+\™[
+NÂˆÛÛœÝ\™Ù]H\[Ùˆ]™[\™Ù]YOOHœÝš[™ÈˆÈ]™[\™Ù]Yš[J
+HˆˆŽÂˆYˆ
+\™Ù]
+HYË˜Y
+\™Ù]œÜ]
+ŽŽˆŠVÌKœÜ]
+—×ÈŠVÌJNÂˆJNÂˆ™]\›ˆYÎÂŸB‚™[˜Ý[ÛˆÙ]\ÝÜžQÛÐÛÛXÝYÜÜXÙRYÊ
+HÂˆÛÛœÝÛÛXÝYH™]ÈÙ]
+
+NÂˆÙ]\ÝÜžQÛÑÜ›Ý[™Ü\”XÙRYÊ
+K™›Ü‘XXÚ
+
+Y
+HOˆÛÛXÝY˜Y
+Y
+JNÂˆÙ]\ÝÜžQÛÕš\Ú]YXÙRYÊ
+K™›Ü‘XXÚ
+
+Y
+HOˆÛÛXÝY˜Y
+Y
+JNÂ‚ˆÛÛœÝÛ›ÝÛ”XÙRYÈH™]ÈÙ]
+ˆ
+\œ˜^Kš\Ð\œ˜^JÝ]K[›ØÚÜÏËœXÙU[›ØÚÜÊHÈÝ]K[›ØÚÜËœXÙU[›ØÚÜÈˆ×JBˆ›X\
+
+XÙJHOˆXÙH	‰ˆXÙKœXÙRY
+Bˆ™š[\Š›ÛÛX[ŠBˆ
+NÂ‚ˆÛÛœÝ™\Ý[H™]ÈÙ]
+
+NÂˆÛÛXÝY™›Ü‘XXÚ
+
+Y
+HOˆÂˆYˆ
+Û›ÝÛ”XÙRYËš\ÊY
+JHÂˆ™\Ý[˜Y
+Y
+NÂˆBˆJNÂ‚ˆ™]\›ˆ™\Ý[ÂŸB‚‹ËÈÞ[šÈZÝH\ÝÜžHÛË\ÝY\ˆ[›ˆHX[HY\š]ËˆYÙÙ\ˆžYH™\ðîÝHÜÜÝY\‚‹ËÈ[Ý]KX[SY\š]Ë[›ØÚÙYXÙRYÈ][ˆ0éHÝ™\œÚÜš]™HZÜÚ\Ý\™[™B‹ËÈ›ÙÜ™\Ú›Û‹ˆš[›™\È[™Ù[ˆZÝH\ÝÜžHÛË\ÝY\‹™ZÛ\È[[ËKÛYÜÝ][‚‹ËÈ\°îˆ›Ü›X[\Ù\™\ˆ[Y[›ØÚÙYXÙRYÈ[[ˆ\ZØ]œšH\œ˜^K‚™[˜Ý[ÛˆÞ[˜Õ[›ØÚÙYXÙ\Ñœ›ÛR\ÝÜžQÛÊ
+HÂˆYˆ
+\Ý]KX[SY\š]ÊHÂˆ™]\›ŽÂˆB‚ˆÛÛœÝÛÛXÝYHÙ]\ÝÜžQÛÐÛÛXÝYÜÜXÙRYÊ
+NÂ‚ˆÛÛœÝ^\Ý[™ÈH\œ˜^Kš\Ð\œ˜^JÝ]KX[SY\š]Ë[›ØÚÙYXÙRYÊBˆÈÝ]KX[SY\š]Ë[›ØÚÙYXÙRYË™š[\Š
+Y
+HOˆ\[ÙˆYOOHœÝš[™Èˆ	‰ˆY
+Bˆˆ×NÂ‚ˆËÈ[™Ù[ˆZÝH\ÝÜžHÛË\ÝY\ŽˆZÚÙH°îˆZÜÚ\Ý\™[™H[[ËKÛYÜÝ]K‚ˆYˆ
+ÛÛXÝYœÚ^™HOOH
+HÂˆÝ]KX[SY\š]Ë[›ØÚÙYXÙRYÈH\œ˜^K™œ›ÛJ™]ÈÙ]
+^\Ý[™ÊJNÂˆ™]\›ŽÂˆB‚ˆÛÛœÝY\™ÙYH™]ÈÙ]
+^\Ý[™ÊNÂˆÛÛXÝY™›Ü‘XXÚ
+
+Y
+HOˆY\™ÙY˜Y
+Y
+JNÂ‚ˆÝ]KX[SY\š]Ë[›ØÚÙYXÙRYÈH\œ˜^K™œ›ÛJY\™ÙY
+NÂˆØ]™UX[SY\š]Ê
+NÂŸB‚‹ËÈ[›ØÚË]\\ˆH›ÛÝ˜[Ý[›ØÚÜËšœÛÛˆÛÛH™YÛ™\ÈÛÛHÝX‹Ý™[™\‹Ü\œÛÛšØ[™Y]‚™[˜Ý[Ûˆ\ÔÝY™•[›ØÚÕ\J\JHÂˆ™]\›ˆ\[Ùˆ\HOOHœÝš[™Èˆ	‰ˆÜÝY™ŸÛØXÚ\œÛÛŸØ[™Y]KÚK\Ý
+\JNÂŸB‚‹ËÈ[›ØÚË]\\ˆH›ÛÝ˜[Ý[›ØÚÜËšœÛÛˆÛÛH™YÛ™\ÈÛÛHÜ[\šØ[™Y]‚™[˜Ý[Ûˆ\Ô^Y\•[›ØÚÕ\J\JHÂˆ™]\›ˆ\[Ùˆ\HOOHœÝš[™Èˆ	‰ˆ
+\HOOHœ^Y\—ØØ[™Y]HˆÜ^Y\‹ÚK\Ý
+\JJNÂŸB‚™[˜Ý[ÛˆÙ]ØØ[Ý\^Y\’YÊ
+HÂˆÛÛœÝØØ[Ý\H›Ü›X[^™SØØ[Ý\
+Ý]KX[SY\š]ÏË›ØØ[Ý\
+NÂˆ™]\›ˆØØ[Ý\™[˜X›YÈØØ[Ý\œ^Y\’YÈˆ×NÂŸB‚‚‚‚‹ËÈ]™\œÚ[™KX]œÝ[™Y[ÛHÈÈ]]YKÛ™Ú]YHK\[šÝ\‹HÚ[ÛY]\‹‚™[˜Ý[ÛˆØ[Ý[]Q\Ý[˜ÙRÛJKŠHÂˆYˆ
+ˆZ\Õ˜[Y]]YJOË›]]YJHˆZ\Õ˜[YÛ™Ú]YJOË›Û™Ú]YJHˆZ\Õ˜[Y]]YJË›]]YJHˆZ\Õ˜[YÛ™Ú]YJË›Û™Ú]YJBˆ
+HÂˆ™]\›ˆ[X™\‹”ÔÒUU‘WÒS‘’S’UNÂˆB‚ˆÛÛœÝÔ˜YX[œÈH
+YÜ™Y\ÊHOˆ
+YÜ™Y\È
+ˆX]”JHÈNÂˆÛÛœÝX\˜Y]\ÒÛHHŒÍÌNÂˆÛÛœÝ]]YQ[HHÔ˜YX[œÊ‹›]]YHHK›]]YJNÂˆÛÛœÝÛ™Ú]YQ[HHÔ˜YX[œÊ‹›Û™Ú]YHHK›Û™Ú]YJNÂˆÛÛœÝÝ\]]YHHÔ˜YX[œÊK›]]YJNÂˆÛÛœÝ[™]]YHHÔ˜YX[œÊ‹›]]YJNÂˆÛÛœÝ]™\œÚ[™HBˆX]œÚ[Š]]YQ[HÈŠH
+Šˆˆ
+ÂˆX]˜ÛÜÊÝ\]]YJH
+ˆX]˜ÛÜÊ[™]]YJH
+ˆX]œÚ[ŠÛ™Ú]YQ[HÈŠH
+ŠˆŽÂ‚ˆÛÛœÝÛ[\Y]™\œÚ[™HHX]›X^
+X]›Z[ŠK]™\œÚ[™JJNÂˆ™]\›ˆX\˜Y]\ÒÛH
+ˆˆ
+ˆX]˜][ŒŠX]œÜ\
+Û[\Y]™\œÚ[™JKX]œÜ\
+HHÛ[\Y]™\œÚ[™JJNÂŸB‚™[˜Ý[ÛˆÙ]XÙSØØ][Û’[™^
+XÙSØØ][ÛœÈHÝ]KœXÙSØØ][ÛœÊHÂˆÛÛœÝ[™^H™]ÈX\
+
+NÂˆ
+\œ˜^Kš\Ð\œ˜^JXÙSØØ][ÛœÏËœXÙ\ÊHÈXÙSØØ][ÛœËœXÙ\Èˆ×JK™›Ü‘XXÚ
+
+XÙJHOˆÂˆYˆ
+ˆXÙH	‰‚ˆ\[ÙˆXÙKœXÙRYOOHœÝš[™Èˆ	‰‚ˆXÙKœXÙRY	‰‚ˆ\Õ˜[Y]]YJXÙK›]]YJH	‰‚ˆ\Õ˜[YÛ™Ú]YJXÙK›Û™Ú]YJBˆ
+HÂˆ[™^œÙ]
+XÙKœXÙRYXÙJNÂˆBˆJNÂˆ™]\›ˆ[™^ÂŸB‚‹ËÈ™]\›™\™\ˆÝXš[HÜ[\šØ[™Y]\ˆÛÜ\]\ˆ°éœ›Y\ÝHÝ˜[Yš\Ù\HÝY‚‹ËÈØ[[YHÜ[\ˆ™ZÛ\È˜\™H0ê[ˆØ[™ËšXHÝY]YYÛÜ\Ý]œÝ[™‚‚™[˜Ý[ÛˆÙ]\œÛÛ“˜[YPžRY
+ÛÛXÝ[Û‹Y
+HÂˆ™]\›ˆ
+\œ˜^Kš\Ð\œ˜^JÛÛXÝ[ÛŠHÈÛÛXÝ[Ûˆˆ×JK™š[™
+
+][JHOˆ][OËšYOOHY
+OË›˜[YH[ÂŸB‚™[˜Ý[Ûˆ›Ü›X[^™T™XÛÛ[Y[™][Û“[Z]
+[Z]
+HÂˆ™]\›ˆ[X™\‹š\Ò[YÙ\Š[Z]
+H	‰ˆ[Z]HÈ[Z]ˆŽÂŸB‚™[˜Ý[Ûˆ\ØÜšX™TXÙT™XÛÛ[Y[™][ÛŠXÙRY
+HÂˆYˆ
+\XÙRY
+HÂˆ™]\›ˆ[ÂˆB‚ˆÛÛœÝØØ][ÛˆHÙ]XÙSØØ][Û’[™^
+
+K™Ù]
+XÙRY
+NÂˆÛÛœÝXÙU[›ØÚÜÈH\œ˜^Kš\Ð\œ˜^JÝ]K[›ØÚÜÏËœXÙU[›ØÚÜÊHÈÝ]K[›ØÚÜËœXÙU[›ØÚÜÈˆ×NÂˆÛÛœÝXÙHHXÙU[›ØÚÜË™š[™
+
+[žJHOˆ[žH	‰ˆ[žKœXÙRYOOHXÙRY
+H[ÂˆÛÛœÝ™\ÜHÙ]XÙT™\Ü
+XÙRY
+NÂˆÛÛœÝ[›ØÚÔÝ[[X\žHHÈ^Y\œÎˆÝY™Žˆ^\\ÙNˆ˜Z[š[™ÎˆNÂˆÛÛœÝ^Y\“˜[Y\ÈH×NÂˆÛÛœÝÝY™“˜[Y\ÈH×NÂ‚ˆ
+\œ˜^Kš\Ð\œ˜^JXÙOË[›ØÚÜÊHÈXÙK[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+[›ØÚÊHOˆÂˆYˆ
+][›ØÚÈ][›ØÚË\JHÂˆ™]\›ŽÂˆBˆYˆ
+\Ô^Y\•[›ØÚÕ\J[›ØÚË\JJHÂˆ[›ØÚÔÝ[[X\žKœ^Y\œÈ
+ÏHNÂˆÛÛœÝ˜[YHHÙ]\œÛÛ“˜[YPžRY
+Ý]Kœ^Y\œË[›ØÚË\™Ù]Y
+NÂˆYˆ
+˜[YJHÂˆ^Y\“˜[Y\Ëœ\Ú
+˜[YJNÂˆBˆH[ÙHYˆ
+\ÔÝY™•[›ØÚÕ\J[›ØÚË\JJHÂˆ[›ØÚÔÝ[[X\žKœÝY™ˆ
+ÏHNÂˆÛÛœÝ˜[YHHÙ]\œÛÛ“˜[YPžRY
+Ý]KœÝY™‹[›ØÚË\™Ù]Y
+NÂˆYˆ
+˜[YJHÂˆÝY™“˜[Y\Ëœ\Ú
+˜[YJNÂˆBˆH[ÙHYˆ
+[›ØÚË\HOOH™^\\ÙHŠHÂˆ[›ØÚÔÝ[[X\žK™^\\ÙH
+ÏHNÂˆH[ÙHYˆ
+[›ØÚË\HOOH˜Z[š[™×Ü›ÙÜ˜[Hˆ[›ØÚË\HOOH˜Z[š[™×Û[Ù[ŠHÂˆ[›ØÚÔÝ[[X\žK˜Z[š[™È
+ÏHNÂˆBˆJNÂ‚ˆÛÛœÝ™XÛÛ[Y[™Y\ÙHH\œ˜^Kš\Ð\œ˜^J™\ÜËœ™XÛÛ[Y[™Y\ÙJHÈ™\Üœ™XÛÛ[Y[™Y\ÙK™š[\Š›ÛÛX[ŠHˆ×NÂˆ™]\›ˆÂˆXÙRYˆXÙS˜[YNˆXÙOËœXÙS˜[YHØØ][ÛËœXÙS˜[YH™\ÜË]HXÙRYˆ\Õ[›ØÚÙYˆÙ][›ØÚÙYXÙRYÊ
+Kš\ÊXÙRY
+Kˆ[›ØÚÔÝ[[X\žKˆÚÜ™X\ÛÛŽˆ™\ÜË›X[˜YÙ\•˜[YH™\ÜËœÝ[[X\žHˆ‹ˆ™XÛÛ[Y[™Y\ÙKˆ^Y\“˜[Y\ËˆÝY™“˜[Y\Ëˆ™\ÜˆNÂŸB‚‚™[˜Ý[ÛˆÙ]™X\˜žQ˜]›Üš]TXÙRYÊ
+HÂˆ™]\›ˆ›Ü›X[^™S™X\˜žQ˜]›Üš]\ÊÝ]KX[SY\š]ÏË›™X\˜žQ˜]›Üš]\ÊKœXÙRYÎÂŸB‚™[˜Ý[Ûˆ\Ó™X\˜žQ˜]›Üš]JXÙRY
+HÂˆ™]\›ˆ\[ÙˆXÙRYOOHœÝš[™Èˆ	‰ˆÙ]™X\˜žQ˜]›Üš]TXÙRYÊ
+Kš[˜ÛY\ÊXÙRY
+NÂŸB‚™[˜Ý[ÛˆÙ]™X\˜žQ˜]›Üš]TXÙRYÊXÙRYÊHÂˆYˆ
+\Ý]KX[SY\š]ÊHÂˆ™]\›ŽÂˆBˆÝ]KX[SY\š]Ë›™X\˜žQ˜]›Üš]\ÈH›Ü›X[^™S™X\˜žQ˜]›Üš]\ÊÂˆXÙRYËˆ\]Y]ˆ™]È]J
+KÒTÓÔÝš[™Ê
+BˆJNÂˆØ]™UX[SY\š]Ê
+NÂŸB‚™[˜Ý[ÛˆÙÙÛS™X\˜žQ˜]›Üš]JXÙRY
+HÂˆYˆ
+\Ý]KX[SY\š]È\[ÙˆXÙRYOOHœÝš[™Èˆ\XÙRYš[J
+JHÂˆ™]\›ŽÂˆBˆÛÛœÝ›Ü›X[^™YXÙRYHXÙRYš[J
+NÂˆÛÛœÝÝ\œ™[HÙ]™X\˜žQ˜]›Üš]TXÙRYÊ
+NÂˆÙ]™X\˜žQ˜]›Üš]TXÙRYÊˆÝ\œ™[š[˜ÛY\Ê›Ü›X[^™YXÙRY
+BˆÈÝ\œ™[™š[\Š
+˜]›Üš]RY
+HOˆ˜]›Üš]RYOOH›Ü›X[^™YXÙRY
+BˆˆË‹‹˜Ý\œ™[›Ü›X[^™YXÙRYBˆ
+NÂˆ™[™\\
+
+NÂŸB‚™[˜Ý[Ûˆ™[[Ý™S™X\˜žQ˜]›Üš]JXÙRY
+HÂˆYˆ
+\Ý]KX[SY\š]È\[ÙˆXÙRYOOHœÝš[™Èˆ\XÙRYš[J
+JHÂˆ™]\›ŽÂˆBˆÙ]™X\˜žQ˜]›Üš]TXÙRYÊÙ]™X\˜žQ˜]›Üš]TXÙRYÊ
+K™š[\Š
+˜]›Üš]RY
+HOˆ˜]›Üš]RYOOHXÙRYš[J
+JJNÂˆ™[™\\
+
+NÂŸB‚‚‚‚‚‹ËÈ]]Ë]›ÜUSˆÝYÚÛÛÜ™[˜]\‹ˆ\œÝ]\ˆ[ˆØ[[HÙ[ÙÜ˜Yš\ÚÙH0ªÛ°éœ›Y\ÝB‹ËÈÜ[\™p®Ë[[Ù[[ŽˆÝYØ[šÙ\ˆÙÈÙ[ÛÚØ\Ú›Ûˆ\ˆ˜\Ù]]ˆžYÙÙ\ˆ[‚‹ËÈ˜[[œÙ\MK\Ü[\›Ü™]œ˜HÜ[\šØ][ÙÙ[ˆ
+]KÙ›ÛÝ˜[Ü^Y\œËšœÛÛŠK‹ËÈYYÜ[\™HÛÛH˜ZÝ\ÚÈØ[ˆ0é\Ù\ÈÜšXH^Y\—ØØ[™Y]K][›ØÚÜÈ°îœÝ‚‹ËÈ[™Ù[ˆÜ[\™]H\™ÛÙ\È\‹ÙÈZÝH\ÝÜžHÛË\›ÙÜ™\Ú›Ûˆ°î™\È[šK‚˜ÛÛœÝÕT•T—ÔÔUPQÑÔ“ÕTÈHÂˆÈÜÚ][ÛœÎˆÈ‘ÒÈ—KÛÝ[ˆˆKˆÈÜÚ][ÛœÎˆÈÐˆ‹“ˆ‹”ˆ‹•Ðˆ—KÛÝ[ˆHKˆÈÜÚ][ÛœÎˆÈ‘H‹ÓH‹SH—KÛÝ[ˆHKˆÈÜÚ][ÛœÎˆÈ”Õ‹“È‹”•È—KÛÝ[ˆÈB—NÂ‚™[˜Ý[ÛˆÙ]Ý\\”Ü]XY^Y\’YÊ[Z]H‘TURT‘QÔÔUPQÔÒV‘JHÂˆÛÛœÝ^Y\œÈH\œ˜^Kš\Ð\œ˜^JÝ]Kœ^Y\œÊHÈÝ]Kœ^Y\œÈˆ×NÂˆYˆ
+\^Y\œË›[™Ý
+H™]\›ˆ×NÂ‚ˆËÈÝ[ˆÓPœÜ[\™Nˆ]]Ë]›Ü[ˆÚØ[[šH[H][™ÛYÜÜÝ™\›™[™BˆËÈ
+[]˜X[ÓX\˜XØ[°èÊKˆH\ˆ™[0î›š[™Ù[ˆ›Üˆ0éHØ[[HH\ÝÜžHÛË‚ˆÛÛœÝØ[™Y]RYÈH™]ÈÙ]
+
+NÂˆ
+\œ˜^Kš\Ð\œ˜^JÝ]K[›ØÚÜÏËœXÙU[›ØÚÜÊHÈÝ]K[›ØÚÜËœXÙU[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+XÙJHOˆÂˆYˆ
+\Ó˜][Û˜[\™[˜TXÙJXÙJJH™]\›ŽÂˆ
+\œ˜^Kš\Ð\œ˜^JXÙOË[›ØÚÜÊHÈXÙK[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+[›ØÚÊHOˆÂˆYˆ
+[›ØÚÈ	‰ˆ\Ô^Y\•[›ØÚÕ\J[›ØÚË\JH	‰ˆ\[Ùˆ[›ØÚË\™Ù]YOOHœÝš[™ÈŠHÂˆØ[™Y]RYË˜Y
+[›ØÚË\™Ù]Y
+NÂˆBˆJNÂˆJNÂ‚ˆËÈ™]›™HÛX˜œÜ[\™H°îœÝ
+]™\ÝÝ™\˜[
+KðéHÜÚšZÝ]\ˆ›ÙHHØ[[\‚ˆËÈYÈ[8 $ÈZÚÙH›ÙH]]ËYž[[\ˆ]Ü˜]\Ëˆ[H\ˆÛÙH›ÚÈ
+JÊK‚ˆÛÛœÝÜ™\™YHË‹‹œ^Y\œ×K™š[\Š
+^Y\ŠHOˆØ[™Y]RYËš\Ê^Y\‹šY
+JKœÛÜ
+
+KŠHOˆÂˆÛÛœÝY™ˆH
+[X™\ŠK˜Û\ÜÒZYÚ
+H
+HH
+[X™\Š‹˜Û\ÜÒZYÚ
+H
+NÂˆYˆ
+Y™ˆOOH
+H™]\›ˆY™ŽÂˆ™]\›ˆÝš[™ÊKšY
+K›ØØ[PÛÛ\\™JÝš[™Ê‹šY
+JNÂˆJNÂ‚ˆÛÛœÝ^\Ò[ˆH
+^Y\‹ÜÚ][ÛœÊHOˆÂˆÛÛœÝ˜]\˜[H\œ˜^Kš\Ð\œ˜^J^Y\Ë›˜]\˜[ÜÚ][ÛœÊHÈ^Y\‹›˜]\˜[ÜÚ][ÛœÈˆ×NÂˆÛÛœÝ\ØX›HH\œ˜^Kš\Ð\œ˜^J^Y\Ë\ØX›TÜÚ][ÛœÊHÈ^Y\‹\ØX›TÜÚ][ÛœÈˆ×NÂˆ™]\›ˆË‹‹›˜]\˜[‹‹\ØX›WKœÛÛYJ
+ÜÚ][ÛŠHOˆÜÚ][ÛœËš[˜ÛY\ÊÜÚ][ÛŠJNÂˆNÂ‚ˆÛÛœÝXÚÙYH×NÂˆÛÛœÝZÙ[’YÈH™]ÈÙ]
+
+NÂˆËÈJHZÚÈÜÚ\Ú›ÛœÙÜ\[™KÛZÈ]›Ü[ˆ˜ZÝ\ÚÈØ[ˆÙ]\ÈÜ0éH˜[™[‹‚ˆÕT•T—ÔÔUPQÑÔ“ÕTË™›Ü‘XXÚ
+
+Ü›Ý\
+HOˆÂˆ]™YYHÜ›Ý\˜ÛÝ[ÂˆÜ™\™Y™›Ü‘XXÚ
+
+^Y\ŠHOˆÂˆYˆ
+™YYHZÙ[’YËš\Ê^Y\‹šY
+HXÚÙY›[™ÝH[Z]
+H™]\›ŽÂˆYˆ
+\^\Ò[Š^Y\‹Ü›Ý\œÜÚ][ÛœÊJH™]\›ŽÂˆXÚÙYœ\Ú
+^Y\‹šY
+NÂˆZÙ[’YË˜Y
+^Y\‹šY
+NÂˆ™YYOHNÂˆJNÂˆJNÂˆËÈŠHž[Ü[MHYYHÚ™[°éœ™[™H™\ÝHØ[™Y][™K‚ˆÜ™\™Y™›Ü‘XXÚ
+
+^Y\ŠHOˆÂˆYˆ
+XÚÙY›[™ÝH[Z]ZÙ[’YËš\Ê^Y\‹šY
+JH™]\›ŽÂˆXÚÙYœ\Ú
+^Y\‹šY
+NÂˆZÙ[’YË˜Y
+^Y\‹šY
+NÂˆJNÂ‚ˆ™]\›ˆXÚÙYœÛXÙJ[Z]
+NÂŸB‚‹ËÈ\ˆ]]Ë\Ý\›Ü[ˆZÝ]ˆ
+Ý\›Ü][ˆ\ÝÜžHÛÊOÂ™[˜Ý[Ûˆ\ÔÝ\\”Ü]XYXÝ]™J
+HÂˆÛÛœÝØØ[Ý\H›Ü›X[^™SØØ[Ý\
+Ý]KX[SY\š]ÏË›ØØ[Ý\
+NÂˆ™]\›ˆØØ[Ý\™[˜X›Y	‰ˆØØ[Ý\œ^Y\’YË›[™ÝˆÂŸB‚‹ËÈÝXœÚØ[™Y]\ˆÛÛH°îÙ\ˆ]]Ë]›Ü[Žˆ]\›Z[š\Ý\ÚÈ]˜[Èœ˜B‹ËÈÝXœÚØ][ÙÙ[‹ÛZÈ]0ªÕ™[ÈÝX°®È\ˆ][YÈ][ˆ\ÝÜžHÛË\Ø[[[™Ë‚‹ËÈX[˜YÙ\™[ˆpéH›ÜØ][™Ø\Ú™\™H[HÙ[‹ˆ[™Ù[ˆÝXœÙ]H\™ÛÙ\È\‹‚™[˜Ý[ÛˆÙ]Ý\\”Ü]XYÝY™Ø[™Y]\ÊÝY™‹[Z]H‘TURT‘QÔÕQ‘—ÔÒV‘JHÂˆYˆ
+Z\ÔÝ\\”Ü]XYXÝ]™J
+JH™]\›ˆ×NÂˆÛÛœÝ\ÝH\œ˜^Kš\Ð\œ˜^JÝY™ŠHÈÝY™‹™š[\Š
+Y[X™\ŠHOˆY[X™\ˆ	‰ˆY[X™\‹šY
+Hˆ×NÂˆ™]\›ˆË‹‹›\ÝBˆœÛÜ
+
+KŠHOˆÝš[™ÊKšY
+K›ØØ[PÛÛ\\™JÝš[™Ê‹šY
+JJBˆœÛXÙJX]›X^
+[Z]
+JNÂŸB‚‹ËÈ˜Y\ÛÛˆÜ[›œÚšZÝ]]ˆÛX˜œÜ[\™H
+[™\ˆSQWÕQT—ÓRSŠKˆHÝÜ™B‹ËÈ˜]›™[™HÙÈ[™ÛYÜÜÜ[\›™H\ˆ™]š\ÜÝ][™›Üˆ8 $ÈHØ[[\ÈH\ÝÜžHÛË‚˜ÛÛœÝSQWÕQT—ÓRSˆHLÂ‚™[˜Ý[ÛˆÙ]˜YÛÛ^Y\œÊ
+HÂˆÛÛœÝ^Y\œÈH\œ˜^Kš\Ð\œ˜^JÝ]Kœ^Y\œÊHÈÝ]Kœ^Y\œÈˆ×NÂˆÛÛœÝÛX’YÈH™]ÈÙ]
+
+NÂˆ
+\œ˜^Kš\Ð\œ˜^JÝ]K[›ØÚÜÏËœXÙU[›ØÚÜÊHÈÝ]K[›ØÚÜËœXÙU[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+XÙJHOˆÂˆYˆ
+\Ó˜][Û˜[\™[˜TXÙJXÙJJH™]\›ŽÂˆ
+\œ˜^Kš\Ð\œ˜^JXÙOË[›ØÚÜÊHÈXÙK[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+[›ØÚÊHOˆÂˆYˆ
+[›ØÚÈ	‰ˆ\Ô^Y\•[›ØÚÕ\J[›ØÚË\JH	‰ˆ\[Ùˆ[›ØÚË\™Ù]YOOHœÝš[™ÈŠHÂˆÛX’YË˜Y
+[›ØÚË\™Ù]Y
+NÂˆBˆJNÂˆJNÂˆ™]\›ˆ^Y\œÂˆ™š[\Š
+^Y\ŠHOˆÛX’YËš\Ê^Y\‹šY
+H	‰ˆ[X™\Š^Y\‹˜Û\ÜÒZYÚ
+HSQWÕQT—ÓRSŠBˆœÛÜ
+
+KŠHOˆÂˆÛÛœÝÜ™\ˆHÈÒÎˆÐŽˆKŽˆ‹ŽˆËÐŽˆNˆKÓNˆ‹SNˆËÎˆ•ÎˆKÕˆLNÂˆÛÛœÝ\HÜ™\–ÊK›˜]\˜[ÜÚ][ÛœÈ×JVÌWHÏÈNNÂˆÛÛœÝœHÜ™\–Ê‹›˜]\˜[ÜÚ][ÛœÈ×JVÌWHÏÈNNÂˆYˆ
+\OOHœ
+H™]\›ˆ\HœÂˆ™]\›ˆÝš[™ÊK›˜[YJK›ØØ[PÛÛ\\™JÝš[™Ê‹›˜[YJK››ÈŠNÂˆJNÂŸB‚‹ËÈ[™ÛYÜÛ[Ù\ÈÚØ[Ý[›™HÜ[\È][ˆ\ÝÜžHÛË\›ÙÜ™\Ú›Û‹0éHØ[[YHpé]B‹ËÈÛÛHÛX˜›YÙ]\ˆ[ˆÜ[˜\ˆÝ\›ÜˆÜ[›œÛÛ[ˆ\ˆ˜\Ú›Û™[œÈ™]›™B‹ËÈÛX˜œÜ[\™H
+[™\ˆSQWÕQT—ÓRSŠH8 $È[™ÛYÜÜÝ™\›™[™Hœ˜H[]˜X[ÙÂ‹ËÈX\˜XØ[°èÈ\ˆ›ÜØ]›ÙHHpéHØ[[Kˆ]ZÙ]›\ˆ\›YY[ˆ™Y[›Ø˜Ž‚‹ËÈÜ[›œÝ[[Y[ˆ\ˆ\‹›ÜœÚÚ™[[ˆÚ°îˆH™Y0éHØ[[K‚™[˜Ý[ÛˆÙ]˜][Û˜[˜\ÙT^Y\œÊ
+HÂˆÛÛœÝ^Y\œÈH\œ˜^Kš\Ð\œ˜^JÝ]Kœ^Y\œÊHÈÝ]Kœ^Y\œÈˆ×NÂˆÛÛœÝÛX’YÈH™]ÈÙ]
+
+NÂˆ
+\œ˜^Kš\Ð\œ˜^JÝ]K[›ØÚÜÏËœXÙU[›ØÚÜÊHÈÝ]K[›ØÚÜËœXÙU[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+XÙJHOˆÂˆYˆ
+\Ó˜][Û˜[\™[˜TXÙJXÙJJH™]\›ŽÂˆ
+\œ˜^Kš\Ð\œ˜^JXÙOË[›ØÚÜÊHÈXÙK[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+[›ØÚÊHOˆÂˆYˆ
+[›ØÚÈ	‰ˆ\Ô^Y\•[›ØÚÕ\J[›ØÚË\JH	‰ˆ\[Ùˆ[›ØÚË\™Ù]YOOHœÝš[™ÈŠHÂˆÛX’YË˜Y
+[›ØÚË\™Ù]Y
+NÂˆBˆJNÂˆJNÂˆ™]\›ˆ^Y\œË™š[\Šˆ
+^Y\ŠHOˆ^Y\ˆ	‰ˆÛX’YËš\Ê^Y\‹šY
+H	‰ˆ[X™\Š^Y\‹˜Û\ÜÒZYÚ
+HSQWÕQT—ÓRS‚ˆ
+NÂŸB‚™[˜Ý[ÛˆÙ]˜][Û˜[˜\ÙT^Y\’YÊ˜][Û˜[]JHÂˆÛÛœÝ˜][ÛˆH\[Ùˆ˜][Û˜[]HOOHœÝš[™ÈˆÈ˜][Û˜[]Kš[J
+HˆˆŽÂˆYˆ
+[˜][ÛŠH™]\›ˆ×NÂˆ™]\›ˆÙ]˜][Û˜[˜\ÙT^Y\œÊ
+Bˆ™š[\Š
+^Y\ŠHOˆÝš[™Ê^Y\‹›˜][Û˜[]HˆŠKš[J
+HOOH˜][ÛŠBˆ›X\
+
+^Y\ŠHOˆ^Y\‹šY
+NÂŸB‚‹ËÈZÝ]™\ˆ]]Ë]›Ü[‹ˆØ[[YHYÜš[™ÜÛ[Ù[ÛÛH°îˆ
+X[SY\š]Ë›ØØ[Ý\YY‹ËÈ[›ØÚÔÛÝ\˜ÙHØØ[ÜÝ\
+KY[ˆ][ˆÛÛÜ™[˜]\ˆ[\ˆ˜[ÝÝY‚™[˜Ý[ÛˆXÝ]˜]TÝ\\”Ü]XY
+ÚÜÙ[”^Y\’YÈH[
+HÂˆYˆ
+\Ý]KX[SY\š]ÊHÂˆÝ]K›ØØ[Ý\Y\ÜØYÙHH’Ý[›™HZÚÙHž[H›Ü[ˆ›Ü™HYÜ›ÙÜ™\Ú›Û™[ˆZÚÙH\ˆ[Ú™[™Ù[YËˆŽÂˆ™[™\\
+
+NÂˆ™]\›ŽÂˆB‚ˆËÈ˜Y[ˆÙ[™\ˆÜ[\™[œÈYÙ]]˜[ÎÈ[\œÈžYÙÙ\È[ˆ˜[[œÙ\›Ü‚ˆÛÛœÝ^Y\’YÈH\œ˜^Kš\Ð\œ˜^JÚÜÙ[”^Y\’YÊH	‰ˆÚÜÙ[”^Y\’YË›[™ÝˆÈÚÜÙ[”^Y\’YËœÛXÙJ‘TURT‘QÔÔUPQÔÒV‘JBˆˆÙ]Ý\\”Ü]XY^Y\’YÊ‘TURT‘QÔÔUPQÔÒV‘JNÂˆYˆ
+\^Y\’YË›[™Ý
+HÂˆÝ]K›ØØ[Ý\Y\ÜØYÙHH‘˜[[™Ù[ˆÜ[\™H0éHž[H›Ü[ˆYYˆŽÂˆ™[™\\
+
+NÂˆ™]\›ŽÂˆB‚ˆÝ]KX[SY\š]Ë›ØØ[Ý\H›Ü›X[^™SØØ[Ý\
+Âˆ[˜X›YˆYKˆÛÝ\˜ÙNˆ˜]]×ÜÜ]XY‹ˆ]]YNˆ[ˆÛ™Ú]YNˆ[ˆÚÜÙ[”XÙRYˆ[ˆÚÜÙ[”XÙS˜[YNˆ[ˆ^Y\’YËˆÜ™X]Y]ˆ™]È]J
+KÒTÓÔÝš[™Ê
+BˆJNÂˆÝ]K›ØØ[Ý\Y\ÜØYÙHHˆŽÂˆØ]™UX[SY\š]Ê
+NÂˆ[˜[Y]P]˜Z[Xš[]J
+NÂˆØ[š]^™S[™]\›Ü•[›ØÚÙY^Y\œÊ
+NÂˆš[[\S[™]\ÛÝÊYJNÂˆ™[™\\
+
+NÂŸB‚™[˜Ý[ÛˆÛX\“ØØ[Ý\Ü]XY
+
+HÂˆYˆ
+\Ý]KX[SY\š]ÊHÂˆ™]\›ŽÂˆBˆÝ]KX[SY\š]Ë›ØØ[Ý\H›Ü›X[^™SØØ[Ý\
+[
+NÂˆÝ]K›ØØ[Ý\Y\ÜØYÙHHˆŽÂˆØ]™UX[SY\š]Ê
+NÂˆ[˜[Y]P]˜Z[Xš[]J
+NÂˆØ[š]^™S[™]\›Ü•[›ØÚÙY^Y\œÊ
+NÂˆØ[š]^™TÙ[XÝY›Ü›X][ÛŠ
+NÂˆ™[™\\
+
+NÂŸB‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‹ËÈ]˜Z[Xš[]K\Û˜\ÚÝ
+[[YHÛÝ\˜ÙHÙˆ]
+B‹ËÈ0â[ˆØ[[]™\™YÛš[™È]ˆ˜HX[˜YÙ\™[ˆ\ˆ[Ø[™È[ZÚÝ\˜]°éN‚‹ËÈHÜ0é\ÝHXÙKZYY\‹YYZÜÜ\Ú]Ú[H
+ZÝH\ÝÜžHÛË\›ÙÜ™\Ú›Û‚‹ËÈœËˆÚØ[X[˜YÙ\‹KÙ[[ÜÝ]HHÙ›KX[SY\š]ËŒJB‹ËÈH[Ú™[™Ù[YÙHÜ[\™HÙÈÝXˆ
+›ÛÝ˜[Ý[›ØÚÜËšœÛÛˆXÙRYOˆ\™Ù]Y
+B‹ËÈH[0é\ÝKÛ0é\ÝH\ÝÜš\ÚÙH›Ü›X\Ú›Û™\ˆ
+[›ØÚÔ[\ËšœÛÛˆ
+È[›ØÚÓ[šÜÊB‹ËÈH›ÜÝ\ˆ™XY[™\ÜÈ
+MK\Ü[\šÜ˜]™]
+B‹ËÈš[œÚ\ˆ\ÝÜžHÛÈ\ˆ]œZÙ\™[ˆØ[[\ŽÈÈ›ÛÝ˜[X[˜YÙ\ˆ\ˆ]‹ËÈœZÙ\™[ˆØ[ˆœZÙH˜\Ù\0éHØ[[[™Ù[‹ˆ[[›™[ˆÛÙH\Ù\ˆ[›™B‹ËÈ™\™YÛš[™Ù[ˆšXHÙ]]˜Z[Xš[]J
+KÙH[›™HÙ]\›™H[™\ˆ8 $È[™Ù[ˆ\˜[[B‹ËÈ[›ØÚÛ\Ù\™K‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‚‹ËÈ›Ü›X\Ú›ÛœÝY\ˆÛÛHÚ\ˆÜ[›[Ø[™È][ˆØ[[YHÚ[\‹ÛZÈ]X[˜YÙ\™[‚‹ËÈ[Y\ˆ›Ù[ˆÝ\Þ\Ý[Y\ˆ0éHžYÙÙHYY
+[›ØÚÔ[\ËšœÛÛŽˆÝ\ÙX\›JK‚˜ÛÛœÝ“Ô“PUSÓ—ÐTÑSS‘WÕQT”ÈH™]ÈÙ]
+ÈœÝ\‹™X\›H—JNÂ‚‹ËÈY[[Ú\Ù\Û˜\ÚÝˆ[˜[YY\™\È™Y™\ˆ™[™\\ÙÈH]]\Ú›Û™\ˆÛÛB‹ËÈ™[™Ù\ˆ™\œÚÈ™\™YÛš[™È°îˆ™\ÝH™[™\ˆ
+™\Ù]ÜÞ[˜ËÙ›Ü›X\Ú›ÛœÜØ[™\š[™ÊK‚›]]˜Z[Xš[]PØXÚHH[Â‚™[˜Ý[Ûˆ[˜[Y]P]˜Z[Xš[]J
+HÂˆ]˜Z[Xš[]PØXÚHH[ÂŸB‚™[˜Ý[ÛˆÙ]]˜Z[Xš[]J
+HÂˆYˆ
+X]˜Z[Xš[]PØXÚJHÂˆ]˜Z[Xš[]PØXÚHHÛÛ\]P]˜Z[Xš[]J
+NÂˆBˆ™]\›ˆ]˜Z[Xš[]PØXÚNÂŸB‚‹ËÈÙ[™H™\™YÛš[™Ù[‹ˆ\Ù\ˆÝ[ˆ°éHÚ[\ˆ
+Ý]H
+È\ÝÜžHÛË[ØØ[ÝÜ˜YÙJHÙÂ‹ËÈØ[\ˆ[šHH[›™HÙ]\›™H[™\ˆ8 $È[™Ù[ˆ™ZÝ\œÚ›Û‹‚™[˜Ý[ÛˆÛÛ\]P]˜Z[Xš[]J
+HÂˆËÈJHÝY\‹ˆZÝH\ÝÜžHÛË\›ÙÜ™\Ú›Ûˆ\Ù\È]™NÈX[˜YÙ\‹KÙ[[ÜÝ]HYÙÙ\‚ˆËÈHÙ›KX[SY\š]ËŒH
+ÙYY]œ˜H^[\KYš[[ˆÙÈYYÙ\™HY\™Ù\ÊK‚ˆÛÛœÝ\ÝÜžQÛÔXÙRYÈHÙ]\ÝÜžQÛÐÛÛXÝYÜÜXÙRYÊ
+NÂˆÛÛœÝY\š]XÙRYÈH™]ÈÙ]
+ˆ
+\œ˜^Kš\Ð\œ˜^JÝ]KX[SY\š]ÏË[›ØÚÙYXÙRYÊHÈÝ]KX[SY\š]Ë[›ØÚÙYXÙRYÈˆ×JK™š[\Šˆ
+XÙRY
+HOˆ\[ÙˆXÙRYOOHœÝš[™Èˆ	‰ˆXÙRYˆ
+Bˆ
+NÂˆÛÛœÝ[›ØÚÙYXÙRYÈH™]ÈÙ]
+Ë‹‹›Y\š]XÙRYË‹‹š\ÝÜžQÛÔXÙRY×JNÂ‚ˆËÈZÜÜ\Ú]Ú[\ÚÚ[Nˆ]ÝY™YÛ™\ÈÛÛHš\ÝÜžKYÛÈˆ°é\ˆ]YÙÙ\ˆBˆËÈ\ÝÜžHÛË\›ÙÜ™\Ú›Û™[ˆZÚÝ\˜]°éK[\œÈ›X[˜YÙ\ˆˆ
+[[ËKÜÙYYKÛYÜÝ]JK‚ˆËÈÚÚ[]Ú°îˆ]][YÈ0éH0é[™]™H›ÙZÜÚ›ÛœÜš[œÚ\]
+Ý[ˆØ[[]\ÝÜžBˆËÈÛËZ[›šÛ
+HÙ[™\™K][ˆ0éHš™\›™H[[Ë\Ý0î[ˆ°éK‚ˆÛÛœÝXÙTÛÝ\˜ÙPžRYH™]ÈX\
+
+NÂˆ[›ØÚÙYXÙRYË™›Ü‘XXÚ
+
+XÙRY
+HOˆÂˆXÙTÛÝ\˜ÙPžRYœÙ]
+XÙRY\ÝÜžQÛÔXÙRYËš\ÊXÙRY
+HÈš\ÝÜžKYÛÈˆˆ›X[˜YÙ\ˆŠNÂˆJNÂ‚ˆËÈŠHXÙU[›ØÚÜÈ
+›ÛÝ˜[Ý[›ØÚÜËšœÛÛŠHš[™\0éHÜ0é\ÝHÝY\‹‚ˆÛÛœÝ[XÙU[›ØÚÜÈH\œ˜^Kš\Ð\œ˜^JÝ]K[›ØÚÜÏËœXÙU[›ØÚÜÊHÈÝ]K[›ØÚÜËœXÙU[›ØÚÜÈˆ×NÂˆÛÛœÝXÙU[›ØÚÜÈH[XÙU[›ØÚÜË™š[\Š
+XÙJHOˆXÙH	‰ˆ[›ØÚÙYXÙRYËš\ÊXÙKœXÙRY
+JNÂ‚ˆËÈÊHÜ[\™HÙÈÝXˆšXHÛÛšÜ™]HXÙRYOˆ\™Ù]Y][›ØÚÜËˆZÚ™[BˆËÈÜ[\‹ZYY\ˆYÛ›Ü™\™\ÈYYÛÛœÛÛKØ\›‹ˆš[›™\È[™Ù[ˆ^Y\‹][›ØÚÜËˆËÈ\ˆ\Ý[ˆÛH8 $È]˜[\ˆ[šH[˜ZÙH[[HÜ[\™K‚ˆÛÛœÝ[›ØÚÙY^Y\’YÈH™]ÈÙ]
+
+NÂˆÛÛœÝ^Y\”ÛÝ\˜ÙPžRYH™]ÈX\
+
+NÂˆÛÛœÝ^XÚ]ÝY™’YÈH™]ÈÙ]
+
+NÂˆËÈÛX˜œÜ[\™HœÈ[™ÛYÜÜÜ[\™Nˆ[ˆ[™ÛYÜØ\™[˜H
+[]˜X[X\˜XØ[°èÊBˆËÈÚ\ˆYÈRÒÑHÜ[\™H[ÛX˜›YÙ]8 $È[\œÈÝ[›™H]™\ðîÈ0éH[]˜X[ˆËÈÚZÜ™H[H›Ü™Ù\È™\ÝKˆÜ[\™[ˆ›\ˆÜZY]ÜÞ[›YËY[ˆØ[ˆ˜\™BˆËÈÚYÛ™\™\Èš\ÈHÙÜðéH\ˆ™\ðîÝ]ÓP˜[›YÙÈÛÛH\ˆ[KÚ[›™K‚ˆÛÛœÝ˜][Û˜[Û›T^Y\’YÈH™]ÈÙ]
+
+NÂˆËÈ]Z^‹\Ü[Žˆ›ÜˆÝY\ˆÛÛHÛÛ[Y\ˆœ˜HRÕH\ÝÜžHÛË\›ÙÜ™\Ú›ÛˆÛ\ˆ]ˆËÈZÚÙH0éHH°éœ\ˆ8 $ÈHpéHH]]Z^™[ˆ›Üˆ0éHÝ[›™HÚYÛ™\™HÜ[\›™K‚ˆËÈ[H[™Ù[ˆ0éœš[™ÜÛÙÙÈ[Ú™[™Ù[YÈOˆÜ[ˆ0é[™]™\ÈZÚÙK‚ˆÛÛœÝ]Z^ÛÛ\]YXÙRYÈHÙ]\ÝÜžQÛÔ]Z^ÛÛ\]YXÙRYÊ
+NÂˆÛÛœÝ]Z^‘Ø]PXÝ]™HH]Z^ÛÛ\]YXÙRYÈOOH[ÂˆÛÛœÝ]Z^”[™[™Ô^Y\’YÈH™]ÈÙ]
+
+NÂˆXÙU[›ØÚÜË™›Ü‘XXÚ
+
+XÙJHOˆÂˆÛÛœÝ˜][Û˜[\™[˜HH\Ó˜][Û˜[\™[˜TXÙJXÙJNÂˆËÈÝ[ˆZÝH\ÝÜžHÛË\ÝY\ˆÝ˜[Yš\Ù\™\ˆ›Üˆ]Z^‹\Ü[‹ˆX[˜YÙ\‹KÙ[[ËBˆËÈÝY\ˆ
+ÙÈ]]Ë]›Ü[ŠH\ˆ\0é]š\šÙ]ðéHÜ[]Ý0é\ˆ[šH˜\Ý‚ˆÛÛœÝ™YYÔ]Z^ˆBˆ]Z^‘Ø]PXÝ]™H	‰ˆ\ÝÜžQÛÔXÙRYËš\ÊXÙKœXÙRY
+H	‰ˆ\]Z^ÛÛ\]YXÙRYËš\ÊXÙKœXÙRY
+NÂˆ
+\œ˜^Kš\Ð\œ˜^JXÙK[›ØÚÜÊHÈXÙK[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+[›ØÚÊHOˆÂˆYˆ
+][›ØÚÈ][›ØÚË\™Ù]Y
+HÂˆ™]\›ŽÂˆBˆYˆ
+\Ô^Y\•[›ØÚÕ\J[›ØÚË\JJHÂˆYˆ
+˜][Û˜[\™[˜JHÂˆ˜][Û˜[Û›T^Y\’YË˜Y
+[›ØÚË\™Ù]Y
+NÂˆ™]\›ŽÂˆBˆYˆ
+™YYÔ]Z^ŠHÂˆ]Z^”[™[™Ô^Y\’YË˜Y
+[›ØÚË\™Ù]Y
+NÂˆ™]\›ŽÂˆBˆ[›ØÚÙY^Y\’YË˜Y
+[›ØÚË\™Ù]Y
+NÂˆÛÛœÝÛÝ\˜Ù\ÈH^Y\”ÛÝ\˜ÙPžRY™Ù]
+[›ØÚË\™Ù]Y
+HÈXÙRYÎˆ™]ÈÙ]
+
+KØØ[Ý\ˆ˜[ÙHNÂˆÛÝ\˜Ù\ËœXÙRYË˜Y
+XÙKœXÙRY
+NÂˆ^Y\”ÛÝ\˜ÙPžRYœÙ]
+[›ØÚË\™Ù]YÛÝ\˜Ù\ÊNÂˆH[ÙHYˆ
+\ÔÝY™•[›ØÚÕ\J[›ØÚË\JJHÂˆ^XÚ]ÝY™’YË˜Y
+[›ØÚË\™Ù]Y
+NÂˆBˆJNÂˆJNÂˆËÈÜZY]0éH[™ÛYÜØ\™[˜KY[ˆÚYÛ™\˜˜\ˆšXHÛX˜˜[›YÙÎˆH\ˆ[‚ˆËÈ[\™YHH[›ØÚÙY^Y\’YÈÙÈÚØ[ZÚÙH[\ÈÛÛH0ªÚÝ[ˆ[™ÛYð®Ë‚ˆËÈØ[[YH›Üˆ]Z^Žˆ\ˆÜ[\™[ˆÚYÛ™\˜˜\ˆœ˜H][›™]ÝY\ˆ[ˆZÚÙH™[[™K‚ˆ[›ØÚÙY^Y\’YË™›Ü‘XXÚ
+
+^Y\’Y
+HOˆÂˆ˜][Û˜[Û›T^Y\’YË™[]J^Y\’Y
+NÂˆ]Z^”[™[™Ô^Y\’YË™[]J^Y\’Y
+NÂˆJNÂ‚ˆËÈÚØ[Ý\]šY\ˆ˜\™HÜ[\œÛÛ[‹ˆ[ˆ0é\™\ˆ[™Ù[ˆÝY\ˆÙÈÚÜš]™\‚ˆËÈ[šH[\ÝÜžHÛË\›ÙÜ™\Ú›Û™[ˆ
+š\Ú]YÜXÙ\ËÙÜ›Ý[™Ü\‹\Ý]JK‚ˆÙ]ØØ[Ý\^Y\’YÊ
+K™›Ü‘XXÚ
+
+^Y\’Y
+HOˆÂˆ[›ØÚÙY^Y\’YË˜Y
+^Y\’Y
+NÂˆÛÛœÝÛÝ\˜Ù\ÈH^Y\”ÛÝ\˜ÙPžRY™Ù]
+^Y\’Y
+HÈXÙRYÎˆ™]ÈÙ]
+
+KØØ[Ý\ˆ˜[ÙHNÂˆÛÝ\˜Ù\Ë›ØØ[Ý\HYNÂˆ^Y\”ÛÝ\˜ÙPžRYœÙ]
+^Y\’YÛÝ\˜Ù\ÊNÂˆJNÂ‚ˆÛÛœÝ^Y\œÈH\œ˜^Kš\Ð\œ˜^JÝ]Kœ^Y\œÊHÈÝ]Kœ^Y\œÈˆ×NÂˆÛÛœÝ^Y\œÐžRYH™]ÈX\
+^Y\œË™š[\Š
+^Y\ŠHOˆ^Y\ˆ	‰ˆ^Y\‹šY
+K›X\
+
+^Y\ŠHOˆÜ^Y\‹šY^Y\—JJNÂ‚ˆËÈ[™ÛYÜÛ[Ù\Îˆ\ˆTˆ[™ÛYÜÜÜ[\›™HÙ[™Ù]ˆHÜZYYHÜ[\›™BˆËÈœ˜H[™ÛYÜØ\™[˜H›\ˆ[Ú™[™Ù[YÙKY[ˆSH›Ü[ˆš[™\™\È0éH[‚ˆËÈ˜[ÝH˜\Ú›Û™[ˆ8 $ÈHØ[ˆZÚÙHH][ˆœ˜\Ú[X[™\ˆ0éH›Ü™Ù\È[™ÛYË‚ˆËÈÛX˜›YÙ]È›Ü°î™\ÈZÚÙNÈ[Ù\Ù[™H\ˆ™\ˆÚ[ˆÙ\Ú›Û‹‚ˆYˆ
+\Ó˜][Û˜[[ÙPXÝ]™J
+JHÂˆ˜][Û˜[Û›T^Y\’YË™›Ü‘XXÚ
+
+^Y\’Y
+HOˆ[›ØÚÙY^Y\’YË˜Y
+^Y\’Y
+JNÂˆ˜][Û˜[Û›T^Y\’YË˜ÛX\Š
+NÂˆÛÛœÝ˜][Û˜[]HHÙ]˜][Û˜[X[S˜][Û˜[]J
+NÂˆYˆ
+˜][Û˜[]JHÂˆËÈÜ[›œÝ[[Y[ˆ\ˆ[Y[Ú™[™Ù[YË[\œÈš[H[ˆžHX[˜YÙ\ˆÝ0é]ˆËÈYY]Û][™ÛYÈÙÈ[™Ù[ˆ™ZHšY\™K‚ˆÙ]˜][Û˜[˜\ÙT^Y\’YÊ˜][Û˜[]JK™›Ü‘XXÚ
+
+^Y\’Y
+HOˆ[›ØÚÙY^Y\’YË˜Y
+^Y\’Y
+JNÂˆË‹‹[›ØÚÙY^Y\’Y×K™›Ü‘XXÚ
+
+^Y\’Y
+HOˆÂˆYˆ
+^Y\œÐžRY™Ù]
+^Y\’Y
+OË›˜][Û˜[]HOOH˜][Û˜[]JH[›ØÚÙY^Y\’YË™[]J^Y\’Y
+NÂˆJNÂˆBˆB‚ˆÛÛœÝ[›ØÚÙY^Y\œÈH×NÂˆ[›ØÚÙY^Y\’YË™›Ü‘XXÚ
+
+^Y\’Y
+HOˆÂˆÛÛœÝ^Y\ˆH^Y\œÐžRY™Ù]
+^Y\’Y
+NÂˆYˆ
+^Y\ŠHÂˆ[›ØÚÙY^Y\œËœ\Ú
+^Y\ŠNÂˆH[ÙHÂˆÛÛœÛÛKØ\›ŠÜ[\‹][›ØÚÈZÙ\ˆ0éHZÚ™[Ü[\‹ZYˆ	Ü^Y\’YH
+YÛ›Ü™\™\ÊK˜
+NÂˆ[›ØÚÙY^Y\’YË™[]J^Y\’Y
+NÂˆBˆJNÂ‚ˆÛÛœÝÝY™ˆH\œ˜^Kš\Ð\œ˜^JÝ]KœÝY™ŠHÈÝ]KœÝY™ˆˆ×NÂˆÛÛœÝ›Ü›X[U[›ØÚÙYÝY™ˆHÝY™‹™š[\Š
+Y[X™\ŠHOˆÂˆYˆ
+[Y[X™\ˆ[Y[X™\‹šY
+HÂˆ™]\›ˆ˜[ÙNÂˆBˆÛÛœÝÛÝ\˜Ù\ÈH\œ˜^Kš\Ð\œ˜^JY[X™\‹œÛÝ\˜ÙTXÙRYÊHÈY[X™\‹œÛÝ\˜ÙTXÙRYÈˆ×NÂˆ™]\›ˆÛÝ\˜Ù\ËœÛÛYJ
+XÙRY
+HOˆ[›ØÚÙYXÙRYËš\ÊXÙRY
+JH^XÚ]ÝY™’YËš\ÊY[X™\‹šY
+NÂˆJNÂˆËÈ]]Ë]›Ü[ˆ
+Ý\›Ü][ˆ\ÝÜžHÛÊHÚ\ˆÙÜðéH]Z[š[][H]‚ˆËÈÝXœÚØ[™Y]\‹ÛZÈ]0ªÕ™[ÈÝX°®È\ˆ][YÈ][ˆØ[[[™ËˆÝY[™HYÙÙ\ÂˆËÈ[šHH[›ØÚÙYXÙRYÈ[\ˆ\ÝÜžHÛË[YÜš[™ËÙÈX[˜YÙ\™[ˆpéH›ÜØ]ˆËÈ[™Ø\Ú™\™H\œÛÛ™[™HÙ[‹ˆ\œÝ]\ˆ[ˆØ[[HÝYØ[šÙ\‹X˜\Ù\HÚ[[‹‚ˆÛÛœÝÝ\\”ÝY™ˆHÙ]Ý\\”Ü]XYÝY™Ø[™Y]\ÊÝY™‹‘TURT‘QÔÕQ‘—ÔÒV‘H
+ÈŠNÂˆÛÛœÝÝY™žRYH™]ÈX\
+Ë‹‹››Ü›X[U[›ØÚÙYÝY™‹‹‹œÝ\\”ÝY™—K›X\
+
+Y[X™\ŠHOˆÛY[X™\‹šYY[X™\—JJNÂˆÛÛœÝ[›ØÚÙYÝY™ˆHË‹‹œÝY™žRY˜[Y\Ê
+WNÂ‚ˆËÈ
+H›Ü›X\Ú›ÛœÝ[Ú™[™Ù[YÚ]ˆ[›ØÚÔ[\ËšœÛÛˆ
+È›Ü›X][Û‹[›ØÚÓ[šÜÂˆËÈ\™\[ÝØ[[[™Ù[ˆ
+ÝY\‹Ü[\™KÝX‹˜YÙ\ÊK‚ˆÛÛœÝÛÛXÝYÛÛÈHÂˆ[›ØÚÙYXÙRYËˆ[›ØÚÙY^Y\’YËˆ[›ØÚÙYÝY™’YÎˆ™]ÈÙ]
+[›ØÚÙYÝY™‹›X\
+
+Y[X™\ŠHOˆY[X™\‹šY
+JKˆX\›™Y˜YÙRYÎˆ™]ÈÙ]
+\œ˜^Kš\Ð\œ˜^JÝ]KX[SY\š]ÏË™X\›™Y˜YÙRYÊHÈÝ]KX[SY\š]Ë™X\›™Y˜YÙRYÈˆ×JBˆNÂ‚ˆËÈ[H›Ü›X\Ú›Û™\ˆ\ˆÜ[˜\™H
+[›ØÚÙY›Ü›X][ÛœÈH[JKˆ\ÝÜžHÛÈÝ\™\‚ˆËÈ˜\™H˜HÛÛH\ˆÐSSUÛÜYÙ]
+ÛÛXÝY›Ü›X][ÛœÊH8 %œZÝ[ˆËÈØ[[[™ÜÝ[\™[ˆÙÈšX›[ÝZÙ]ÈÝ[›œÚØ\Û[š™KZÚÙHÛÛHÜ[0é\Ë‚ˆÛÛœÝ[›ØÚÙY›Ü›X][ÛœÈH×NÂˆÛÛœÝÛÛXÝY›Ü›X][ÛœÈH×NÂˆÛÛœÝØÚÙY›Ü›X][ÛœÈH×NÂˆÛÛœÝ›Ü›X][Û”Ý]\ÐžRYH™]ÈX\
+
+NÂˆ
+\œ˜^Kš\Ð\œ˜^JÝ]K™›Ü›X][ÛœÊHÈÝ]K™›Ü›X][ÛœÈˆ×JK™›Ü‘XXÚ
+
+›Ü›X][ÛŠHOˆÂˆÛÛœÝÝ]\ÈH]˜[X]Q›Ü›X][Û•[›ØÚÊ›Ü›X][Û‹ÛÛXÝYÛÛÊNÂˆ›Ü›X][Û”Ý]\ÐžRYœÙ]
+›Ü›X][Û‹šYÝ]\ÊNÂˆ[›ØÚÙY›Ü›X][ÛœËœ\Ú
+›Ü›X][ÛŠNÂˆ
+Ý]\Ë˜ÛÛXÝYÈÛÛXÝY›Ü›X][ÛœÈˆØÚÙY›Ü›X][ÛœÊKœ\Ú
+›Ü›X][ÛŠNÂˆJNÂ‚ˆËÈJH›ÜÝ\ˆ™XY[™\ÜÈ
+MK\Ü[\šÜ˜]™]
+Hœ˜HÜ0é\ÝHÜ[\™H
+È[™]\‚ˆÛÛœÝ›ÜÝ\”™XY[™\ÜÈHÛÛ\]T›ÜÝ\”™XY[™\ÜÊ[›ØÚÙY^Y\œÊNÂ‚ˆ™]\›ˆÂˆ\ÝÜžQÛÔXÙRYËˆX[˜YÙ\”XÙRYÎˆ™]ÈÙ]
+Ë‹‹[›ØÚÙYXÙRY×K™š[\Š
+XÙRY
+HOˆZ\ÝÜžQÛÔXÙRYËš\ÊXÙRY
+JJKˆ[›ØÚÙYXÙRYËˆXÙTÛÝ\˜ÙPžRYˆXÙU[›ØÚÜËˆ[›ØÚÙY^Y\œËˆ[›ØÚÙY^Y\’YËˆ˜][Û˜[Û›T^Y\’YËˆ]Z^”[™[™Ô^Y\’YËˆ^Y\”ÛÝ\˜ÙPžRYˆ[›ØÚÙYÝY™‹ˆ[›ØÚÙYÝY™’YÎˆÛÛXÝYÛÛË[›ØÚÙYÝY™’YËˆ[›ØÚÙY›Ü›X][ÛœËˆÛÛXÝY›Ü›X][ÛœËˆØÚÙY›Ü›X][ÛœËˆ›Ü›X][Û”Ý]\ÐžRYˆ›ÜÝ\”™XY[™\ÜÂˆNÂŸB‚‹ËÈ][›ØÚËZÜ˜]ˆ
+ÈÛÝ\˜ÙU\K™YË[YOÈJH[ÝØ[[YHÚ[\‹ˆÜ˜]ˆ][‚‹ËÈÛÛšÜ™]™Yˆ
+Ý[ˆ[XKÛZÈ™YÛ[™HH[›ØÚÔ[\ËšœÛÛˆ\ˆÚÜ™]™]HYÊHØ[‚‹ËÈZÚÙH™\šYš\Ù\™\È[ÝØ[[[™Ù[ˆ[›°éHÙÈ™YÛ™\ÈÛÛHZÚÙHÜž[8 $Â‹ËÈÜ[›[Ø[™ÜÝY\›™Hðî™Ù\ˆ›Üˆ]X[˜YÙ\™[ˆZÙ]™[\ˆÞ\Ý[Y\ˆ0éHÜ[HYY‚™[˜Ý[Ûˆ\Õ[›ØÚÔ™\]Z\™[Y[Ø]\ÙšYY
+™\]Z\™[Y[ÛÛÊHÂˆYˆ
+\™\]Z\™[Y[\[Ùˆ™\]Z\™[Y[OOH›Øš™XÝŠHÂˆ™]\›ˆ˜[ÙNÂˆB‚ˆÛÛœÝ™YˆH\[Ùˆ™\]Z\™[Y[œ™YˆOOHœÝš[™ÈˆÈ™\]Z\™[Y[œ™YˆˆˆŽÂ‚ˆËÈZÜÜ\Ú]Ý\X\šðîˆH›Ü›X][ÛœËšœÛÛˆ
+\ÝÜžWÙÛ×ÜXÙKÜÝ\[™×Ý[›ØÚÊK‚ˆYˆ
+™YˆOOHœÝ\[™×Ý[›ØÚÈŠHÂˆ™]\›ˆYNÂˆB‚ˆYˆ
+\™YŠHÂˆ™]\›ˆ˜[ÙNÂˆB‚ˆÝÚ]Ú
+™\]Z\™[Y[œÛÝ\˜ÙU\JHÂˆØ\ÙHš\ÝÜžWÙÛ×ÜXÙHŽ‚ˆØ\ÙHœÜÜÜXÙHŽ‚ˆØ\ÙH™›ÛÝ˜[ÜÝY][HŽ‚ˆØ\ÙH™›ÛÝ˜[ØÛXˆŽ‚ˆØ\ÙH™Ü›Ý[™Ü\—ÜXÙHŽ‚ˆ™]\›ˆÛÛË[›ØÚÙYXÙRYËš\Ê™YŠNÂˆØ\ÙH˜ÛÛXÝYÜ^Y\ˆŽ‚ˆ™]\›ˆÛÛË[›ØÚÙY^Y\’YËš\Ê™YŠNÂˆØ\ÙH˜ÛÛXÝYÛX[˜YÙ\ˆŽ‚ˆØ\ÙH˜ÛÛXÝYÜÝY™ˆŽ‚ˆ™]\›ˆÛÛË[›ØÚÙYÝY™’YËš\Ê™YŠNÂˆØ\ÙH™›ÛÝ˜[Ø˜YÙHŽ‚ˆ™]\›ˆÛÛË™X\›™Y˜YÙRYËš\Ê™YŠNÂˆY˜][‚ˆËÈ›ÛÝ˜[ÜÝÜžKÙ›ÛÝ˜[Û^XÛÛ—Ù[žH\ˆ[™Ù[ˆØ[[KKÜ›ÙÜ™\Ú›ÛœÚÚ[BˆËÈH[›™H\[ˆ[›°éK‚ˆ™]\›ˆ˜[ÙNÂˆBŸB‚‹ËÈ[žSÙ‹Ø[Ù‹ZÛ]\Ý[\ˆœ˜H[›ØÚÔ[\ËšœÛÛ‹ˆ[ÙˆpéH°éœ™HÛÛ\]Üž[Â‹ËÈ[žSÙˆ™[™Ù\ˆZ[œÝ]™Y™‹ˆÛKÛX[™Û[™H™\]Z\™\ÈÚ\ˆ[™Ù[ˆ0é\š[™È\‹‚™[˜Ý[Ûˆ\Õ[›ØÚÔ™\]Z\™\ÔØ]\ÙšYY
+™\]Z\™\ËÛÛÊHÂˆYˆ
+\™\]Z\™\È\[Ùˆ™\]Z\™\ÈOOH›Øš™XÝŠHÂˆ™]\›ˆ˜[ÙNÂˆB‚ˆÛÛœÝ[ÙˆH\œ˜^Kš\Ð\œ˜^J™\]Z\™\Ë˜[ÙŠHÈ™\]Z\™\Ë˜[Ùˆˆ×NÂˆÛÛœÝ[žSÙˆH\œ˜^Kš\Ð\œ˜^J™\]Z\™\Ë˜[žSÙŠHÈ™\]Z\™\Ë˜[žSÙˆˆ×NÂ‚ˆYˆ
+X[Ù‹›[™Ý	‰ˆX[žSÙ‹›[™Ý
+HÂˆ™]\›ˆ˜[ÙNÂˆB‚ˆÛÛœÝ[Ø]\ÙšYYH[Ù‹™]™\žJ
+™\]Z\™[Y[
+HOˆ\Õ[›ØÚÔ™\]Z\™[Y[Ø]\ÙšYY
+™\]Z\™[Y[ÛÛÊJNÂˆÛÛœÝ[žTØ]\ÙšYYHX[žSÙ‹›[™Ý[žSÙ‹œÛÛYJ
+™\]Z\™[Y[
+HOˆ\Õ[›ØÚÔ™\]Z\™[Y[Ø]\ÙšYY
+™\]Z\™[Y[ÛÛÊJNÂ‚ˆ™]\›ˆ[Ø]\ÙšYY	‰ˆ[žTØ]\ÙšYYÂŸB‚‹ËÈ°îœÝHÛÛšÜ™]HÜ˜]ˆ
+YY™YŠHÛÛH\ˆÜž[H[ˆ™\]Z\™\ËZÛ]\Ý[ˆœZÙ\Â‹ËÈÝ[ˆ[•[0é\ÝšXH8 )ˆ‹Y›ÜšÛ\š[™ÈHRH8 $ÈÙ[™H[›ØÚËX]™Ú°î™[Ù[ˆ\ÈÝ™\‹‚™[˜Ý[Ûˆš[™Ø]\ÙšYY[›ØÚÔ™\]Z\™[Y[
+™\]Z\™\ËÛÛÊHÂˆÛÛœÝ[ÙˆH\œ˜^Kš\Ð\œ˜^J™\]Z\™\ÏË˜[ÙŠHÈ™\]Z\™\Ë˜[Ùˆˆ×NÂˆÛÛœÝ[žSÙˆH\œ˜^Kš\Ð\œ˜^J™\]Z\™\ÏË˜[žSÙŠHÈ™\]Z\™\Ë˜[žSÙˆˆ×NÂˆ™]\›ˆ
+ˆË‹‹˜[Ù‹‹‹˜[žSÙ—K™š[™
+ˆ
+™\]Z\™[Y[
+HOˆ™\]Z\™[Y[Ëœ™Yˆ	‰ˆ\Õ[›ØÚÔ™\]Z\™[Y[Ø]\ÙšYY
+™\]Z\™[Y[ÛÛÊBˆ
+H[ˆ
+NÂŸB‚‹ËÈ›Ü›X\Ú›ÛœÜÝ]\ÎˆÈ[›ØÚÙYY\‹™X\ÛÛ‹Ø]\ÙšYYžHKˆ[›ØÚÈ[™\ˆÛB‹ËÈ[Ø[™ËÚÝ[›œÚØ\ÜØ[[ZÚ[H8 $È[šHÛHÝ˜[]]ˆ[H›Ü›X\Ú›Û™\ˆ›\ˆÝ0éY[™B‹ËÈH]\ÝÜš\ÚÙH›Ü›X\Ú›ÛœØšX›[ÝZÙ]X[œÙ]Ý]\ËˆØ]\ÙšYYžH\ˆ]‹ËÈÛÛšÜ™]HÜ˜]™]
+ÝYÜÜ[\‹ÜÝX‹Ø˜YÙJHÛÛH0é\™]Þ\Ý[Y][RK]š\Ûš[™Ë‚‹ËÈ›Ü›X\Ú›Û™\ˆ\ˆX[˜YÙ\™[œÈZÝ\ÚÙH™\šÝ0îKZÚÙHØ[[[Øš™ZÝ\ŽˆSH\‚‹ËÈ[YÜ[˜\™H
+[›ØÚÙYˆYX
+Kˆ]\ÝÜžHÛÈÝ\™\ˆ\ˆ˜HH\‚‹ËÈÐSSUÛÜYÙ]
+ÛÛXÝY
+H8 %[ˆ\ÝÜš\ÚÙHÜ0é\Ú[™ÜÛ[š™[ˆš\Ù\ÈB‹ËÈ›Ü›X\Ú›ÛœØšX›[ÝZÙ]ÛÛHÝ[›œÚØ\ZÚÙHÛÛH[ˆ0é\ËˆÜ[\™HÙÂ‹ËÈÝ0îX\\˜]Ø[[\È›ÜØ]šXH\ÝÜžHÛÎÈ›Ü›X\Ú›Û™\ˆÚ°îˆ]ZÚÙK‚™[˜Ý[Ûˆ]˜[X]Q›Ü›X][Û•[›ØÚÊ›Ü›X][Û‹ÛÛÊHÂˆYˆ
+Y›Ü›X][ÛˆY›Ü›X][Û‹šY
+HÂˆ™]\›ˆÈ[›ØÚÙYˆYKÛÛXÝYˆYKY\Žˆ[™X\ÛÛŽˆ°á\[Þ\Ý[Kˆ‹Ø]\ÙšYYžNˆ[NÂˆB‚ˆÛÛœÝ[\ÈH\œ˜^Kš\Ð\œ˜^JÝ]KšÕ[›ØÚÔ[\ÏËœ[\ÊHÈÝ]KšÕ[›ØÚÔ[\Ëœ[\Èˆ×NÂˆÛÛœÝ[HBˆ[\Ë™š[™
+
+][JHOˆ][H	‰ˆ][K˜\Y\ÕÈOOH™›Ü›X][Ûˆˆ	‰ˆ][K™›Ü›X][Û’YOOH›Ü›X][Û‹šY
+H[ÂˆÛÛœÝY\ˆH[OËY\ˆ[ÂˆÛÛœÝ[šÜÈH\œ˜^Kš\Ð\œ˜^J›Ü›X][Û‹[›ØÚÓ[šÜÊHÈ›Ü›X][Û‹[›ØÚÓ[šÜÈˆ×NÂ‚ˆËÈÜ[›[Ø[™ÎˆÝ\KÙX\›K]Y\ˆ\ˆX[˜YÙ\™[œÈ˜\Ú\ÜÞ\Ý[Y\ˆ
+[Y0ªÜØ[[]0®ÊK‚ˆYˆ
+Y\ˆ	‰ˆ“Ô“PUSÓ—ÐTÑSS‘WÕQT”Ëš\ÊY\ŠJHÂˆ™]\›ˆÈ[›ØÚÙYˆYKÛÛXÝYˆYKY\‹™X\ÛÛŽˆ‘Ü[›œÞ\Ý[H
+Ý\KÝYYÙ›Ü›X\Ú›ÛŠKˆ‹Ø]\ÙšYYžNˆ[NÂˆB‚ˆËÈ[™Ù[ˆ™YÚ\Ý™\™YÙ[ÙÈ[™Ù[ˆ[›ØÚÓ[šÜÎˆ0é\[Þ\Ý[K‚ˆYˆ
+\[H	‰ˆ[[šÜË›[™Ý
+HÂˆ™]\›ˆÈ[›ØÚÙYˆYKÛÛXÝYˆYKY\‹™X\ÛÛŽˆ°á\[Þ\Ý[H][ˆYÙ[ˆ\ÝÜš\ÚÈÚ[Kˆ‹Ø]\ÙšYYžNˆ[NÂˆB‚ˆYˆ
+[H	‰ˆ\Õ[›ØÚÔ™\]Z\™\ÔØ]\ÙšYY
+[Kœ™\]Z\™\ËÛÛÊJHÂˆ™]\›ˆÂˆ[›ØÚÙYˆYKˆÛÛXÝYˆYKˆY\‹ˆ™X\ÛÛŽˆ”Ø[[]šXH\ÝÜžHÛËˆ‹ˆØ]\ÙšYYžNˆš[™Ø]\ÙšYY[›ØÚÔ™\]Z\™[Y[
+[Kœ™\]Z\™\ËÛÛÊBˆNÂˆB‚ˆÛÛœÝØ]\ÙšYY[šÈH[šÜË™š[™
+
+[šÊHOˆ\Õ[›ØÚÔ™\]Z\™[Y[Ø]\ÙšYY
+[šËÛÛÊJNÂˆYˆ
+Ø]\ÙšYY[šÊHÂˆ™]\›ˆÂˆ[›ØÚÙYˆYKˆÛÛXÝYˆYKˆY\‹ˆ™X\ÛÛŽˆ”Ø[[]šXH\ÝÜžHÛËˆ‹ˆØ]\ÙšYYžNˆØ]\ÙšYY[šËœ™YˆÈØ]\ÙšYY[šÈˆ[ˆNÂˆB‚ˆËÈZÚÙHØ[[]H\ÝÜžHÛÈ[›°éH8 %Y[ˆ›ÜØ]œš]Ü[˜\ˆÛÛHZÝ\ÚÈ˜[Ë‚ˆ™]\›ˆÈ[›ØÚÙYˆYKÛÛXÝYˆ˜[ÙKY\‹™X\ÛÛŽˆZ[›Ü›X][Û•[›ØÚÓ›ÝJ›Ü›X][ÛŠKØ]\ÙšYYžNˆ[NÂŸB‚‹ËÈ›ÜÝ\ˆ™XY[™\ÜÈ
+MK\Ü[\šÜ˜]™]
+NˆLHHÝ\[]™\™[ˆ
+ÈZ[œÝ0éH™[šÙ[‹‚‹ËÈÝ\\™H[\Èœ˜HÝ]K›[™]\
+^Y\’Y
+NÈ™[šÈ\ˆ0îœšYÙHÜ0é\ÝHÜ[\™K‚™[˜Ý[ÛˆÛÛ\]T›ÜÝ\”™XY[™\ÜÊ[›ØÚÙY^Y\œÊHÂˆÛÛœÝ[™]\^Y\’YÈH™]ÈÙ]
+ˆØš™XÝ˜[Y\ÊÝ]K›[™]\ßJBˆ›X\
+
+ÛÝÝ]JHOˆÛÝÝ]H	‰ˆÛÝÝ]Kœ^Y\’Y
+Bˆ™š[\Š›ÛÛX[ŠBˆ
+NÂ‚ˆÛÛœÝÝ\\œÈH[›ØÚÙY^Y\œË™š[\Š
+^Y\ŠHOˆ[™]\^Y\’YËš\Ê^Y\‹šY
+JNÂˆÛÛœÝ™[˜ÚØ[™Y]\ÈH[›ØÚÙY^Y\œË™š[\Š
+^Y\ŠHOˆ[[™]\^Y\’YËš\Ê^Y\‹šY
+JNÂ‚ˆÛÛœÝ[›ØÚÙYÛÝ[H[›ØÚÙY^Y\œË›[™ÝÂˆÛÛœÝÝ\\ÛÝ[HÝ\\œË›[™ÝÂˆÛÛœÝ™[˜ÚÛÝ[H™[˜ÚØ[™Y]\Ë›[™ÝÂˆÛÛœÝ\Ñ[›ÝYÚ[›ØÚÙYH[›ØÚÙYÛÝ[H‘TURT‘QÔÔUPQÔÒV‘NÂˆÛÛœÝ\ÐÛÛ\]VHHÝ\\ÛÝ[H‘TURT‘QÔÕT•T”ÎÂˆÛÛœÝ\Ñ[›ÝYÚ™[˜ÚH™[˜ÚÛÝ[H‘TURT‘QÐ‘SÒÂ‚ˆ™]\›ˆÂˆÝ\\œËˆ™[˜ÚØ[™Y]\Ëˆ[›ØÚÙYÛÝ[ˆÝ\\ÛÝ[ˆ™[˜ÚÛÝ[ˆ\Ñ[›ÝYÚ[›ØÚÙYˆ\ÐÛÛ\]VKˆ\Ñ[›ÝYÚ™[˜Úˆ\Ô™XYNˆ\Ñ[›ÝYÚ[›ØÚÙY	‰ˆ\ÐÛÛ\]VH	‰ˆ\Ñ[›ÝYÚ™[˜ÚˆZ\ÜÚ[™Õ[›ØÚÙYˆX]›X^
+‘TURT‘QÔÔUPQÔÒV‘HH[›ØÚÙYÛÝ[
+KˆZ\ÜÚ[™ÔÝ\\œÎˆX]›X^
+‘TURT‘QÔÕT•T”ÈHÝ\\ÛÝ[
+KˆZ\ÜÚ[™Ð™[˜ÚˆX]›X^
+‘TURT‘QÐ‘SÒH™[˜ÚÛÝ[
+BˆNÂŸB‚‹ËÈ™[\È™Yœ™\Ú™Y\ÝÜžHÛË\›ÙÜ™\Ú›Ûˆ
+X[Y[Þ[šËZÛ˜\\]T›Ùš[HB‹ËÈØ[[YHš[™KÝÜ˜YÙKY]™[œ˜H[™™Hš[™Y\ŠNˆY\™ÙHžYHÝY\ˆ[›ˆHX[B‹ËÈY\š]Ë™XÛÛ\]H]˜Z[Xš[]HÙÈØ[™\ˆ[™]\Ý˜[Ý›Ü›X\Ú›Ûˆ°îˆ™\™[™\‹‚™[˜Ý[Ûˆ™Yœ™\Ú]˜Z[Xš[]Qœ›ÛR\ÝÜžQÛÊ
+HÂˆYˆ
+Ý]KX[SY\š]ÊHÂˆÞ[˜Õ[›ØÚÙYXÙ\Ñœ›ÛR\ÝÜžQÛÊ
+NÂˆ™XÛÛ\]PXÝ]™PÛ\ÜÚYšXØ][ÛœÊ
+NÂˆØ]™UX[SY\š]Ê
+NÂˆB‚ˆ[˜[Y]P]˜Z[Xš[]J
+NÂˆØ[š]^™S[™]\›Ü•[›ØÚÙY^Y\œÊ
+NÂˆØ[š]^™TÙ[XÝY›Ü›X][ÛŠ
+NÂˆ™[™\\
+
+NÂŸB‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‹ËÈ[›™HÙ]\™HÝ™\ˆ]˜Z[Xš[]K\Û˜\ÚÝ]ˆ™\Ý[ˆ]ˆ\[ˆœZÙ\ˆ\ÜÙNÂ‹ËÈ[™Ù[ˆ[™™HÝY\ˆÚØ[™\™YÛ™H[›ØÚÜÈÙ[‹‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‚‹ËÈÜ0é\ÝHÝY\ˆÛÛHÙ]
+X[SY\š]È
+ÈZÝH\ÝÜžHÛË\›ÙÜ™\Ú›ÛŠK‚™[˜Ý[ÛˆÙ][›ØÚÙYXÙRYÊ
+HÂˆ™]\›ˆÙ]]˜Z[Xš[]J
+K[›ØÚÙYXÙRYÎÂŸB‚‹ËÈXÙU[›ØÚÜÈš[™\0éHÜ0é\ÝHÝY\‹‚™[˜Ý[ÛˆÙ]XÙU[›ØÚÜÊ
+HÂˆ™]\›ˆÙ]]˜Z[Xš[]J
+KœXÙU[›ØÚÜÎÂŸB‚‹ËÈÝXˆÛÛH\ˆ[Ú™[™Ù[YÎˆÛÛ[Y\ˆœ˜H]Ü0é\ÝÝY
+ÛÝ\˜ÙTXÙRYÊH[\ˆ\‚‹ËÈZÜÜ\Ú]0é\ÝÜÚ™[››ÛH›ÛÝ˜[Ý[›ØÚÜËšœÛÛ‹‚™[˜Ý[ÛˆÙ][›ØÚÙYÝY™Š
+HÂˆ™]\›ˆÙ]]˜Z[Xš[]J
+K[›ØÚÙYÝY™ŽÂŸB‚‹ËÈÜ0é\ÝHÜ[\™NˆZÝHÜ[\™Hœ˜HÝ]Kœ^Y\œÈÛÛH\ˆZÝ0éH]ˆ]‹ËÈ^Y\—ØØ[™Y]K][›ØÚÈ0éH]Ü0é\ÝÝY‚™[˜Ý[ÛˆÙ][›ØÚÙY^Y\œÊ
+HÂˆ™]\›ˆÙ]]˜Z[Xš[]J
+K[›ØÚÙY^Y\œÎÂŸB‚‹ËÈ[™ÛYÜØ\™[˜OÈÝYÜ›Û[ˆH›ÛÝ˜[Ý[›ØÚÜËšœÛÛˆÚÚ[\ˆ[\™YB‹ËÈ[™ÛYÜØ\™[˜Y\ˆ
+˜][Û˜[Ø\™[˜WËÛ˜][Û˜[ÜÝY][WÊHœ˜HÛX˜˜[›YÙË‚‹ËÈÜ[\™H\™œ˜H\ˆ[™ÛYÜÜÜ[\™NˆÜZY]Y[ˆZÚÙHÚYÛ™\˜˜\™H[‹ËÈÛX˜›YÙ]ˆ[™Ù[ˆÝYZYY\ˆ\™ÛÙ\È\ˆ8 $ÈÝ[ˆ›Û[ˆ\Ù\Ë‚™[˜Ý[Ûˆ\Ó˜][Û˜[\™[˜TXÙJXÙJHÂˆÛÛœÝ›ÛHH\[ÙˆXÙOËœXÙT›ÛHOOHœÝš[™ÈˆÈXÙKœXÙT›ÛHˆˆŽÂˆ™]\›ˆ›ÛKš[˜ÛY\Ê›˜][Û˜[ŠNÂŸB‚‹ËÈ\ˆ[ˆ›Ü›X\Ú›Ûˆ[Ú™[™Ù[YÈÛÛHZÝ]ˆX[˜YÙ\™›Ü›X\Ú›ÛÂ™[˜Ý[Ûˆ\Ñ›Ü›X][Û•[›ØÚÙY
+›Ü›X][Û’Y
+HÂˆYˆ
+Y›Ü›X][Û’Y
+HÂˆ™]\›ˆ˜[ÙNÂˆBˆÛÛœÝÝ]\ÈHÙ]]˜Z[Xš[]J
+K™›Ü›X][Û”Ý]\ÐžRY™Ù]
+›Ü›X][Û’Y
+NÂˆ™]\›ˆÝ]\ÈÈÝ]\Ë[›ØÚÙYˆYNÂŸB‚‹ËÈØ[[X™[0î›š[™È›Üˆ›Ü›X\Ú›Û™\ŽˆSH›Ü›X\Ú›Û™\ˆ\ˆœš]Ü[˜\™KY[ˆ]‹ËÈÞ\Ý[HH\ˆØ[[]ÛÜYÙ]šXH\ÝÜžHÛÈÙ]\ˆÙYÈ˜\ÚÙ\™H8 %YÙ]ÙÂ‹ËÈ™[™\X[Y]Ú™[›™\ˆ[\™YHÞ\Ý[Y]È\ÝÜšYHÙÈY0êKˆ]H\ˆÝ[›Ý[‚‹ËÈ›Üˆ0éHØ[[KHÝY]›Üˆ[ˆ0é\Îˆ]ZÚÙK\Ø[[]Þ\Ý[H\ˆZÙHÜ[˜\‹ËÈ]\ˆ˜\™H][™Ü™HY0éH0éœ™H[›‹‚˜ÛÛœÝÓÓPÕQÑ“Ô“PUSÓ—ÑSRSPT’UWÐ“Ó•TÈHNÂ‚™[˜Ý[Ûˆ\Ñ›Ü›X][ÛÛÛXÝY
+›Ü›X][Û’Y
+HÂˆYˆ
+Y›Ü›X][Û’Y
+HÂˆ™]\›ˆ˜[ÙNÂˆBˆ™]\›ˆ›ÛÛX[ŠÙ]]˜Z[Xš[]J
+K™›Ü›X][Û”Ý]\ÐžRY™Ù]
+›Ü›X][Û’Y
+OË˜ÛÛXÝY
+NÂŸB‚‹ËÈZÜÝ˜H[™[›š[™È\ˆ™[š[™ÜÝZÙKÚØ[\›ÜˆØ[[YH›Ü›X\Ú›Û™\ˆ
+[\œÊK‚™[˜Ý[ÛˆÙ]ÛÛXÝY›Ü›X][Û‘˜[Z[X\š]P›Û\Ê›Ü›X][Û’Y
+HÂˆ™]\›ˆ\Ñ›Ü›X][ÛÛÛXÝY
+›Ü›X][Û’Y
+HÈÓÓPÕQÑ“Ô“PUSÓ—ÑSRSPT’UWÐ“Ó•TÈˆÂŸB‚‹ËÈ\ˆ[ˆÜ[\ˆ0é\ÝÜ
+Ø[ˆ™[Ù\ÊOÂ™[˜Ý[Ûˆ\Ô^Y\•[›ØÚÙY
+^Y\’Y
+HÂˆYˆ
+\^Y\’Y
+HÂˆ™]\›ˆ˜[ÙNÂˆBˆ™]\›ˆÙ][›ØÚÙY^Y\œÊ
+KœÛÛYJ
+^Y\ŠHOˆ^Y\‹šYOOH^Y\’Y
+NÂŸB‚‹ËÈÚ[\ˆ›Üˆ[ˆÜ0é\ÝÜ[\‹ˆ\Ù\ˆ^Y\”ÛÝ\˜ÙPžRYœ˜H]˜Z[Xš[]HÛZÂ‹ËÈ]ÚØ[Ý\Ø[ˆš\Ù\È][ˆ0éH]HÛÛHÜ[\™[œÈÝY\ˆØ[[]‚™[˜Ý[ÛˆÙ]^Y\”ÛÝ\˜ÙTXÙ\Ê^Y\’Y
+HÂˆYˆ
+\^Y\’Y
+HÂˆ™]\›ˆ×NÂˆB‚ˆÛÛœÝÛ˜\ÚÝHÙ]]˜Z[Xš[]J
+NÂˆÛÛœÝÛÝ\˜Ù\ÈHÛ˜\ÚÝœ^Y\”ÛÝ\˜ÙPžRY™Ù]
+^Y\’Y
+NÂˆYˆ
+\ÛÝ\˜Ù\ÊHÂˆ™]\›ˆ×NÂˆB‚ˆÛÛœÝXÙPžRYH™]ÈX\
+Û˜\ÚÝœXÙU[›ØÚÜË›X\
+
+XÙJHOˆÜXÙKœXÙRYXÙWJJNÂˆÛÛœÝ™\Ý[HË‹‹œÛÝ\˜Ù\ËœXÙRY×K›X\
+
+XÙRY
+HOˆÂˆÛÛœÝXÙHHXÙPžRY™Ù]
+XÙRY
+NÂˆ™]\›ˆÈXÙRYXÙS˜[YNˆXÙOËœXÙS˜[YHXÙRYÛÝ\˜ÙNˆÛ˜\ÚÝœXÙTÛÝ\˜ÙPžRY™Ù]
+XÙRY
+HNÂˆJNÂˆYˆ
+ÛÝ\˜Ù\Ë›ØØ[Ý\
+HÂˆ™\Ý[œ\Ú
+ÈXÙRYˆ[XÙS˜[YNˆ“ÚØ[Ý\›Ü‹ÛÝ\˜ÙNˆ›ØØ[ÜÝ\ˆJNÂˆBˆ™]\›ˆ™\Ý[ÂŸB‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‹ËÈ\Ø˜\™H[›ØÚËY›ÜšÛ\š[™Ù\ˆ
+Ý[ˆš\Ûš[™ÊB‹ËÈÝ™\œÙ]\ˆZÛš\ÚÙH[›ØÚË]\\‹ËZYY\ˆ[˜]›ˆÜ[\™[ˆÚ™[›™\ˆYÚ™[‹‚‹ËÈ\Ù\ˆZÜÚ\Ý\™[™HØ][ÙÙ\ˆ
+^Y\œËÜÝY™‹Ù^\\ÙKÜ›ÙÜ˜[\ÊHÙÈ]˜Z[Xš[]KB‹ËÈÛ˜\ÚÝ]8 $È™\™YÛ™\ˆ[šHYÛ™H[›ØÚÜË‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‚‹ËÈ›ÜœÚÙH]ZÙ]\ˆ›Üˆ[›ØÚË]\[™HH›ÛÝ˜[Ý[›ØÚÜËšœÛÛ‹‚˜ÛÛœÝS“ÐÒ×ÕTWÓP‘SÈHÂˆ^Y\—ØØ[™Y]Nˆ”Ü[\ˆ‹ˆXYØÛØXÚØØ[™Y]Nˆ•™[™\šØ[™Y]‹ˆÝY™—ØØ[™Y]Nˆ”ÝXˆ‹ˆ^\\ÙNˆ‘ZÜÜ\\ÙH‹ˆ˜Z[š[™×Ü›ÙÜ˜[Nˆ•™[š[™ÜÜ›ÙÜ˜[H‹ˆ˜Z[š[™×Û[Ù[ˆ•™[š[™ÜÛ[Ù[‚ŸNÂ‚‹ËÈ\Ø˜\ˆZÜÝ›Üˆ]XÙK][›ØÚÎˆ”Ü[\ŽˆX\[ˆ0æYØX\™ˆHÝY]›Ü‚‹ËÈœ^Y\—ØØ[™Y]NˆX\[—ÛÙYØX\™‹ˆ˜[\ˆ[˜ZÙH[›Ü›X]\Y‚™[˜Ý[Ûˆ\ØÜšX™U[›ØÚÕ\™Ù]
+[›ØÚÊHÂˆÛÛœÝ\SX™[HS“ÐÒ×ÕTWÓP‘SÖÝ[›ØÚÏË\WH›Ü›X]YÕ^
+[›ØÚÏË\HZÚ™[ŠNÂˆÛÛœÝ\™Ù]YH[›ØÚÏË\™Ù]YˆŽÂ‚ˆ]˜[YHH[ÂˆYˆ
+\Ô^Y\•[›ØÚÕ\J[›ØÚÏË\JJHÂˆ˜[YHH
+\œ˜^Kš\Ð\œ˜^JÝ]Kœ^Y\œÊHÈÝ]Kœ^Y\œÈˆ×JK™š[™
+
+^Y\ŠHOˆ^Y\ËšYOOH\™Ù]Y
+OË›˜[YNÂˆH[ÙHYˆ
+\ÔÝY™•[›ØÚÕ\J[›ØÚÏË\JJHÂˆ˜[YHH
+\œ˜^Kš\Ð\œ˜^JÝ]KœÝY™ŠHÈÝ]KœÝY™ˆˆ×JK™š[™
+
+Y[X™\ŠHOˆY[X™\ËšYOOH\™Ù]Y
+OË›˜[YNÂˆH[ÙHYˆ
+[›ØÚÏË\HOOH™^\\ÙHŠHÂˆ˜[YHH
+\œ˜^Kš\Ð\œ˜^JÝ]K™^\\ÙJHÈÝ]K™^\\ÙHˆ×JK™š[™
+
+][JHOˆ][OËšYOOH\™Ù]Y
+OË›˜[YNÂˆH[ÙHYˆ
+[›ØÚÏË\HOOH˜Z[š[™×Ü›ÙÜ˜[HŠHÂˆ˜[YHH
+\œ˜^Kš\Ð\œ˜^JÝ]K˜Z[š[™Ô›ÙÜ˜[\ÊHÈÝ]K˜Z[š[™Ô›ÙÜ˜[\Èˆ×JK™š[™
+ˆ
+›ÙÜ˜[JHOˆ›ÙÜ˜[OËšYOOH\™Ù]Yˆ
+OË›˜[YNÂˆB‚ˆ™]\›ˆ	Ý\SX™[Nˆ	Û˜[YH›Ü›X]YÕ^
+\™Ù]Y
+_XÂŸB‚‹ËÈ\ÝÜš\ÚÙH›Ü›X\Ú›Û™\ˆÛÛHZÙ\ˆ0éH]ÝYHÚ[™H[›ØÚËZÜ˜]ˆ
+[›ØÚÔ[\Â‹ËÈ[\ˆ[›ØÚÓ[šÜÈYY™YˆOOHXÙRY
+KˆÝ[ˆš\Ûš[™Îˆ›ÜšÛ\™\ˆ™]HÝY]‹ËÈ0é\™\ˆÞ\Ý[HˆHÝYÚÛÜÙÈÝYÜ˜\Ü\‹‚™[˜Ý[ÛˆÙ]›Ü›X][ÛœÓ[šÙYÔXÙJXÙRY
+HÂˆYˆ
+\XÙRY
+HÂˆ™]\›ˆ×NÂˆB‚ˆÛÛœÝ[\ÈH\œ˜^Kš\Ð\œ˜^JÝ]KšÕ[›ØÚÔ[\ÏËœ[\ÊHÈÝ]KšÕ[›ØÚÔ[\Ëœ[\Èˆ×NÂˆÛÛœÝ™Y™\œÕÔXÙHH
+™\]Z\™[Y[
+HOˆ™\]Z\™[Y[Ëœ™YˆOOHXÙRYÂ‚ˆ™]\›ˆ
+\œ˜^Kš\Ð\œ˜^JÝ]K™›Ü›X][ÛœÊHÈÝ]K™›Ü›X][ÛœÈˆ×JK™š[\Š
+›Ü›X][ÛŠHOˆÂˆÛÛœÝ[HH[\Ë™š[™
+
+][JHOˆ][OË˜\Y\ÕÈOOH™›Ü›X][Ûˆˆ	‰ˆ][K™›Ü›X][Û’YOOH›Ü›X][Û‹šY
+NÂˆÛÛœÝ[T™YœÈHÂˆ‹‹Š\œ˜^Kš\Ð\œ˜^J[OËœ™\]Z\™\ÏË˜[žSÙŠHÈ[Kœ™\]Z\™\Ë˜[žSÙˆˆ×JKˆ‹‹Š\œ˜^Kš\Ð\œ˜^J[OËœ™\]Z\™\ÏË˜[ÙŠHÈ[Kœ™\]Z\™\Ë˜[Ùˆˆ×JBˆNÂˆÛÛœÝ[šÜÈH\œ˜^Kš\Ð\œ˜^J›Ü›X][Û‹[›ØÚÓ[šÜÊHÈ›Ü›X][Û‹[›ØÚÓ[šÜÈˆ×NÂˆ™]\›ˆ[T™YœËœÛÛYJ™Y™\œÕÔXÙJH[šÜËœÛÛYJ™Y™\œÕÔXÙJNÂˆJNÂŸB‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‹ËÈÝYÜ˜\Ü\ˆ
+ŒJB‹ËÈ™[›ÜšÛ\š[™ÜËKÕRK[YËˆÛØ›\ˆ™\ÜÜÝY[[ˆ\Ø˜\ˆ˜\ÜÛH˜B‹ËÈÝY]Ú\ˆX[˜YÙ\™[ˆ
+Ü[\™KÝX‹ZÜÜ\\ÙK™[š[™ËY[]]
+K‚‹ËÈ\Ù\ˆ[›ØÚËY]KY[ˆ[™™\ˆ[ˆZÚÙKˆ[™Ù[ˆš]KØ˜YÙYY™™ZÝ[ÝÜ‹YY™™ZÝ‚‹ËÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‚‹ËÈš[›ˆ[ˆÝYÜ˜\Ü0éHXÙRY‚™[˜Ý[ÛˆÙ]XÙT™\Ü
+XÙRY
+HÂˆYˆ
+\XÙRY
+HÂˆ™]\›ˆ[ÂˆBˆÛÛœÝ™\ÜÈH\œ˜^Kš\Ð\œ˜^JÝ]KœXÙT™\ÜÏËœXÙT™\ÜÊBˆÈÝ]KœXÙT™\ÜËœXÙT™\ÜÂˆˆ×NÂˆ™]\›ˆ™\ÜË™š[™
+
+™\Ü
+HOˆ™\Ü	‰ˆ™\ÜœXÙRYOOHXÙRY
+H[ÂŸB‚‹ËÈ]HÜÝ[[Y\š[™ÜÛØš™ZÝYY[[[›ØÚÜÈ\ˆØ]YÛÜšH›Üˆ]ÝYˆ\Ù\‚‹ËÈ°éHXÙU[›ØÚÜÈ
+Yš[™\
+HÛZÈ][]™\šÙ]Ú™[\ˆÙ[™HÝY]‚™[˜Ý[ÛˆÙ]XÙT™\Ü[›ØÚÔÝ[[X\žJXÙRY
+HÂˆÛÛœÝÝ[[X\žHHÈ^Y\œÎˆÝY™Žˆ^\\ÙNˆ˜Z[š[™ÎˆNÂˆYˆ
+\XÙRY
+HÂˆ™]\›ˆÝ[[X\žNÂˆB‚ˆÛÛœÝXÙU[›ØÚÜÈH\œ˜^Kš\Ð\œ˜^JÝ]K[›ØÚÜÏËœXÙU[›ØÚÜÊHÈÝ]K[›ØÚÜËœXÙU[›ØÚÜÈˆ×NÂˆÛÛœÝXÙHHXÙU[›ØÚÜË™š[™
+
+[žJHOˆ[žH	‰ˆ[žKœXÙRYOOHXÙRY
+NÂˆYˆ
+\XÙJHÂˆ™]\›ˆÝ[[X\žNÂˆB‚ˆ
+\œ˜^Kš\Ð\œ˜^JXÙK[›ØÚÜÊHÈXÙK[›ØÚÜÈˆ×JK™›Ü‘XXÚ
+
+[›ØÚÊHOˆÂˆYˆ
+][›ØÚÈ][›ØÚË\JHÂˆ™]\›ŽÂˆBˆYˆ
+\Ô^Y\•[›ØÚÕ\J[›ØÚË\JJHÂˆÝ[[X\žKœ^Y\œÈ
+ÏHNÂˆH[ÙHYˆ
+\ÔÝY™•[›ØÚÕ\J[›ØÚË\JJHÂˆÝ[[X\žKœÝY™ˆ
+ÏHNÂˆH[ÙHYˆ
+[›ØÚË\HOOH™^\\ÙHŠHÂˆÝ[[X\žK™^\\ÙH
+ÏHNÂˆH[ÙHYˆ
+[›ØÚË\HOOH˜Z[š[™×Ü›ÙÜ˜[Hˆ[›ØÚË\HOOH˜Z[š[™×Û[Ù[ŠHÂˆÝ[[X\žK˜Z[š[™È
+ÏHNÂˆBˆJNÂ‚ˆ™]\›ˆÝ[[X\žNÂŸB‚‹ËÈ˜\Ü\ˆ›ÜˆZÝ]™KÜØ[[YHÝY\ˆ
+šXHÙ]XÙU[›ØÚÜÊ
+JKˆX[™Û\ˆ[ˆ˜\Ü‹ËÈ›Üˆ]Ü0é\ÝÝYžYÙÙ\È[ˆ[šÙ[˜[˜XÚÈœ˜HÙ[™HXÙU[›ØÚË[Øš™ZÝ]‚™[˜Ý[ÛˆÙ][›ØÚÙYXÙT™\ÜÊ
+HÂˆ™]\›ˆÙ]XÙU[›ØÚÜÊ
+K›X\
+
+XÙJHOˆÂˆÛÛœÝ™\ÜHÙ]XÙT™\Ü
+XÙKœXÙRY
+NÂˆYˆ
+™\Ü
+HÂˆ™]\›ˆ™\ÜÂˆBˆ™]\›ˆÂˆXÙRYˆXÙKœXÙRYˆ]NˆXÙKœXÙS˜[YHXÙKœXÙRYˆÝ[[X\žNˆ’[™Ù[ˆ][™\ÝYÜ˜\Ü[Ú™[™Ù[YÈ[›°éH›Üˆ]HÝY]ˆ‹ˆX[˜YÙ\•˜[YNˆˆ‹ˆ[›ØÚÜÑ^[˜][ÛŽˆßKˆ™XÛÛ[Y[™Y\ÙNˆ×Kˆ[ÐZ[Û\ÜÚYšXØ][ÛœÎˆ×KˆØ\›š[™Îˆˆ‚ˆNÂˆJNÂŸB‚‹ËÈÛ0éHÜ]\Ø˜\˜]›ˆ›Üˆ[ˆYÚÛ\ÜÙKZYˆ˜[\ˆ[˜ZÙH[YY[ˆÙ[‹‚™[˜Ý[ÛˆÙ]Û\ÜÚYšXØ][Û“˜[YJÛ\ÜÚYšXØ][Û’Y
+HÂˆÛÛœÝÛ\ÜÚYšXØ][ÛœÈH\œ˜^Kš\Ð\œ˜^JÝ]KX[PÛ\ÜÚYšXØ][ÛœÏË˜Û\ÜÚYšXØ][ÛœÊBˆÈÝ]KX[PÛ\ÜÚYšXØ][ÛœË˜Û\ÜÚYšXØ][ÛœÂˆˆ×NÂˆÛÛœÝX]ÚHÛ\ÜÚYšXØ][ÛœË™š[™
+
+[žJHOˆ[žH	‰ˆ[žKšYOOHÛ\ÜÚYšXØ][Û’Y
+NÂˆ™]\›ˆX]ÚË›˜[YHÛ\ÜÚYšXØ][Û’YÂŸB‚‹ËÈ[™Ø\Ú™\ÝXŽˆ[Ú™[™Ù[YÈÝXˆÛÛHš[›™\ÈH\™YÝY™’YË‚™[˜Ý[ÛˆÙ]\™YÝY™Š
+HÂˆÛÛœÝ\™YYÈH™]ÈÙ]
+ˆ\œ˜^Kš\Ð\œ˜^JÝ]KX[SY\š]ÏËš\™YÝY™’YÊHÈÝ]KX[SY\š]Ëš\™YÝY™’YÈˆ×Bˆ
+NÂˆ™]\›ˆÙ][›ØÚÙYÝY™Š
+K™š[\Š
+Y[X™\ŠHOˆ\™YYËš\ÊY[X™\‹šY
+JNÂŸB‚‹ËÈ[HÝY™‹]\\ˆ[ˆ[œØ]Ø[ˆZÚÙH
+ÝY™•\H
+ÈØ[™R\™Y\ÊK‚™[˜Ý[ÛˆÙ]ÝY™ÛÝ™\™Y\\ÊY[X™\ŠHÂˆÛÛœÝ\\ÈH™]ÈÙ]
+
+NÂˆYˆ
+Y[X™\ËœÝY™•\JHÂˆ\\Ë˜Y
+Y[X™\‹œÝY™•\JNÂˆBˆ
+\œ˜^Kš\Ð\œ˜^JY[X™\Ë˜Ø[™R\™Y\ÊHÈY[X™\‹˜Ø[™R\™Y\Èˆ×JK™›Ü‘XXÚ
+
+\JHOˆ\\Ë˜Y
+\JJNÂˆ™]\›ˆ\\ÎÂŸB‚‹ËÈÜ0é\ÝZÜÜ\\ÙHÛÛHÙ]]ˆYY\ŽˆšXHÜ0é\ÝÝYšXHX[SY\š]Ë[\‚‹ËÈ›Ü™H[ˆ[œØ]ÝXˆ\ˆZÜÜ\\Ù[ˆH^\\ÙRYË‚™[˜Ý[ÛˆÙ][›ØÚÙY^\\ÙRYÊ
+HÂˆÛÛœÝ[›ØÚÙYXÙRYÈHÙ][›ØÚÙYXÙRYÊ
+NÂˆÛÛœÝœ›ÛSY\š]ÈH™]ÈÙ]
+ˆ\œ˜^Kš\Ð\œ˜^JÝ]KX[SY\š]ÏË[›ØÚÙY^\\ÙRYÊHÈÝ]KX[SY\š]Ë[›ØÚÙY^\\ÙRYÈˆ×Bˆ
+NÂ‚ˆÛÛœÝ\™Y^\\ÙHH™]ÈÙ]
+
+NÂˆÙ]\™YÝY™Š
+K™›Ü‘XXÚ
+
+Y[X™\ŠHOˆÂˆ
+\œ˜^Kš\Ð\œ˜^JY[X™\‹™^\\ÙRYÊHÈY[X™\‹™^\\ÙRYÈˆ×JK™›Ü‘XXÚ
+
+Y
+HOˆ\™Y^\\ÙK˜Y
+Y
+JNÂˆJNÂ‚ˆÛÛœÝ™\Ý[H™]ÈÙ]
+
+NÂˆÛÛœÝ^\\ÙHH\œ˜^Kš\Ð\œ˜^JÝ]K™^\\ÙJHÈÝ]K™^\\ÙHˆ×NÂˆ^\\ÙK™›Ü‘XXÚ
+
+][JHOˆÂˆYˆ
+Z][HZ][KšY
+HÂˆ™]\›ŽÂˆBˆÛÛœÝXÙ\ÈH\œ˜^Kš\Ð\œ˜^J][K[›ØÚÙYžTXÙRYÊHÈ][K[›ØÚÙYžTXÙRYÈˆ×NÂˆÛÛœÝœ›ÛTXÙHHXÙ\ËœÛÛYJ
+XÙRY
+HOˆ[›ØÚÙYXÙRYËš\ÊXÙRY
+JNÂˆYˆ
+œ›ÛTXÙHœ›ÛSY\š]Ëš\Ê][KšY
+H\™Y^\\ÙKš\Ê][KšY
+JHÂˆ™\Ý[˜Y
+][KšY
+NÂˆBˆJNÂˆ™]\›ˆ™\Ý[ÂŸB‚‹ËÈÜ0é\ÝZÜÜ\\ÙHÛÛH[HØš™ZÝ\‹‚™[˜Ý[ÛˆÙ][›ØÚÙY^\\ÙJ
+HÂˆÛÛœÝYÈHÙ][›ØÚÙY^\\ÙRYÊ
+NÂˆÛÛœÝ^\\ÙHH\œ˜^Kš\Ð\œ˜^JÝ]K™^\\ÙJHÈÝ]K™^\\ÙHˆ×NÂˆ™]\›ˆ^\\ÙK™š[\Š
+][JHOˆ][H	‰ˆYËš\Ê][KšY
+JNÂŸB‚‹ËÈ˜YÙY˜[Z[Y\ˆÛÛH\ˆ0é\™]]ˆÜ0é\ÝZÜÜ\\ÙH
+šXHÜ[œÐ˜YÙQ˜[Z[Y\ÊK‚™[˜Ý[ÛˆÙ]Ü[™Y˜YÙQ˜[Z[RYÊ
+HÂˆÛÛœÝ˜[Z[Y\ÈH™]ÈÙ]
+
+NÂˆÙ][›ØÚÙY^\\ÙJ
+K™›Ü‘XXÚ
+
+][JHOˆÂˆ
+\œ˜^Kš\Ð\œ˜^J][K›Ü[œÐ˜YÙQ˜[Z[Y\ÊHÈ][K›Ü[œÐ˜YÙQ˜[Z[Y\Èˆ×JK™›Ü‘XXÚ
+
+Y
+HOˆ˜[Z[Y\Ë˜Y
+Y
+JNÂˆJNÂˆ™]\›ˆ˜[Z[Y\ÎÂŸB‚‹ËÈ™[š[™ÜÜ›ÙÜ˜[[Y\ˆ[›™[ˆ™ZÚÙ]šYKYYÝ]\ÈÙÈ™YÜ[›™[ÙK‚‹ËÈ™[]˜[œÜÜˆ›ÙÜ˜[[Y]š\Ù\È˜\™Hš\ÈZ[œÝ]Ü˜]‹YZÜÜ\\ÙH\ˆÜ0é\Ý‹ËÈ[\ˆ›ÙÜ˜[[Y]È˜YÙY˜[Z[YH\ˆ0é\™]]ˆÜ0é\ÝZÜÜ\\ÙKˆÝ]\Î‚‹ËÈ]˜Z[X›H8 $ÈZÜÜ\\ÙH0éH\ÜÈÑÈX]Ú[™H[œØ]ÝX‚‹ËÈ™YY×ÜÝY™ˆ8 $ÈZÜÜ\\ÙH0éH\ÜËY[ˆ[™Ù[ˆ[œØ]ÝXˆX]Ú\‚‹ËÈ™YY×Ù^\\ÙH8 $È°éYšXH˜YÙY˜[Z[YKY[ˆÙ[™HÜ˜]‹YZÜÜ\\Ù[ˆX[™Û\‚™[˜Ý[ÛˆÙ]]˜Z[X›U˜Z[š[™Ô›ÙÜ˜[\Ê
+HÂˆÛÛœÝ[›ØÚÙY^\\ÙHHÙ][›ØÚÙY^\\ÙRYÊ
+NÂˆÛÛœÝÜ[™Y˜[Z[Y\ÈHÙ]Ü[™Y˜YÙQ˜[Z[RYÊ
+NÂˆÛÛœÝ\™YÝY™ˆHÙ]\™YÝY™Š
+NÂˆÛÛœÝ›ÙÜ˜[\ÈH\œ˜^Kš\Ð\œ˜^JÝ]K˜Z[š[™Ô›ÙÜ˜[\ÊHÈÝ]K˜Z[š[™Ô›ÙÜ˜[\Èˆ×NÂ‚ˆÛÛœÝ™\Ý[ÈH×NÂ‚ˆ›ÙÜ˜[\Ë™›Ü‘XXÚ
+
+›ÙÜ˜[JHOˆÂˆYˆ
+\›ÙÜ˜[H\›ÙÜ˜[KšY
+HÂˆ™]\›ŽÂˆB‚ˆÛÛœÝ™\]Z\™YH\œ˜^Kš\Ð\œ˜^J›ÙÜ˜[Kœ™\]Z\™\Ñ^\\ÙRYÊHÈ›ÙÜ˜[Kœ™\]Z\™\Ñ^\\ÙRYÈˆ×NÂˆÛÛœÝX]ÚY^\\ÙHH™\]Z\™Y™š[\Š
+Y
+HOˆ[›ØÚÙY^\\ÙKš\ÊY
+JNÂˆÛÛœÝ\Ñ^\\ÙHHX]ÚY^\\ÙK›[™ÝˆÂˆÛÛœÝ˜[Z[SÜ[™YHÜ[™Y˜[Z[Y\Ëš\Ê›ÙÜ˜[K˜˜YÙQ˜[Z[RY
+NÂ‚ˆYˆ
+Z\Ñ^\\ÙH	‰ˆY˜[Z[SÜ[™Y
+HÂˆ™]\›ŽÂˆB‚ˆÛÛœÝ™\]Z\™YÝY™•\\ÈH\œ˜^Kš\Ð\œ˜^J›ÙÜ˜[Kœ™\]Z\™YÝY™•\\ÊHÈ›ÙÜ˜[Kœ™\]Z\™YÝY™•\\Èˆ×NÂˆÛÛœÝX]ÚYÝY™ˆH\™YÝY™‹™š[\Š
+Y[X™\ŠHOˆÂˆÛÛœÝÛÝ™\™YHÙ]ÝY™ÛÝ™\™Y\\ÊY[X™\ŠNÂˆ™]\›ˆ™\]Z\™YÝY™•\\ËœÛÛYJ
+\JHOˆÛÝ™\™Yš\Ê\JJNÂˆJNÂˆÛÛœÝ\ÔÝY™ˆHX]ÚYÝY™‹›[™ÝˆÂ‚ˆ]Ý]\ÎÂˆÛÛœÝ™X\ÛÛœÈH×NÂ‚ˆYˆ
+Z\Ñ^\\ÙJHÂˆÝ]\ÈH›™YY×Ù^\\ÙHŽÂˆÛÛœÝZ\ÜÚ[™ÈH™\]Z\™Y™š[\Š
+Y
+HOˆ][›ØÚÙY^\\ÙKš\ÊY
+JNÂˆ™X\ÛÛœËœ\Ú
+X[™Û\ˆZÜÜ\\ÙNˆ	ÛZ\ÜÚ[™Ëš›Ú[Š‹ŠHZÚ™[ŸX
+NÂˆH[ÙHYˆ
+Z\ÔÝY™ŠHÂˆÝ]\ÈH›™YY×ÜÝY™ˆŽÂˆ™X\ÛÛœËœ\Ú
+Ü™]™\ˆÝXŽˆ	Ü™\]Z\™YÝY™•\\Ëš›Ú[Š‹ŠHZÚ™[ŸX
+NÂˆH[ÙHÂˆÝ]\ÈH˜]˜Z[X›HŽÂˆ™X\ÛÛœËœ\Ú
+ZÜÜ\\ÙH0éH\ÜÎˆ	ÛX]ÚY^\\ÙKš›Ú[Š‹Š_X
+NÂˆ™X\ÛÛœËœ\Ú
+ÝXŽˆ	ÛX]ÚYÝY™‹›X\
+
+Y[X™\ŠHOˆY[X™\‹›˜[YHY[X™\‹šY
+Kš›Ú[Š‹Š_X
+uãŽúêÚ$z{-®éÜj×Count = replySenders.length;
 
   if (elements.inboxSignalUnread) elements.inboxSignalUnread.textContent = String(unreadCount);
   // Â«Krever svarÂ» peker pÃ¥ avsenderen som venter, ikke bare et tall.
@@ -16320,7 +3908,7 @@ function highlightActiveTab() {
   const target = activeSection?.dataset.tabSection;
   if (!target) return;
 
-  const buttons = Array.from(document.querySelectorAll("[data-tab-target]"));
+  const buttons = Array.from(document.querySelectorAll(".nav-tab[data-tab-target], .app-subtab[data-tab-target]"));
   const ownTab = buttons.find(
     (button) => button.dataset.tabTarget === target && button.classList.contains("nav-tab") && !button.hidden
   );

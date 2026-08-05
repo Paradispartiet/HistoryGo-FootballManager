@@ -22,6 +22,25 @@ body > manager-next-action > .site-footer { grid-row: 6; }
   display: none !important;
 }
 
+/* Explicit canvases keep text contrast deterministic. Transparent native
+   buttons may otherwise be evaluated against the browser's white button
+   canvas even though the surrounding manager shell is dark. */
+.main-nav .nav-tab {
+  background-color: #070a10;
+}
+
+.main-nav .nav-tab.is-active {
+  background-color: #111823;
+}
+
+.app-subnav .app-subtab {
+  background-color: #070a10;
+}
+
+.app-subnav .app-subtab.is-active {
+  background-color: #151c27;
+}
+
 .club-identity-mark {
   display: grid;
   place-items: center;
