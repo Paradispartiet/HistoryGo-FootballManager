@@ -265,7 +265,12 @@ const REVIEWED_NAME_PAIRS = new Map([
   ["jan knudsen|jon knudsen", "to ulike keepere, Brann (historisk) og Stabæk (moderne)"],
   // Molde-kilden og Lyn-kilden beskriver hver sin indreløper. Kallenavnet er
   // det eneste som skiller dem, og det er derfor Lyns står med det.
-  ["jan berg|jan berg", "Molde-spilleren og Lyns «Julle» Berg, to ulike menn"]
+  ["jan berg|jan berg", "Molde-spilleren og Lyns «Julle» Berg, to ulike menn"],
+  // Klubbsuffiks-regelen fant denne med én gang. Rosenborgs Tore Pedersen er
+  // offensiv midtbane (79), Branns er midtstopper med landskamper (86) — to
+  // menn, og RBK-importen disambiguerte seg ut av navnekollisjonen. Suffikset
+  // står derfor med vilje; det er ikke en duplikat som Tom Jacobsen var.
+  ["tore pedersen|tore pedersen rbk", "RBKs offensive midtbane mot Branns midtstopper"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()
@@ -286,11 +291,23 @@ function editDistanceAtMostOne(a, b) {
   return diff + (long.length - j) + (short.length - i) <= 1;
 }
 
-const keyed = players.map((player) => ({ name: player.name, key: nameKey(player.name) }));
+// Ett tegns avstand var ikke nok. Katalogen bar «Tom Jacobsen (VIF)» ved siden
+// av «Tom Jacobsen» — samme mann, halve karrieren på Briskeby og halve på
+// Intility, og Vålerenga-kilden sa det rett ut («HamKam-profil hentet til
+// VIF»). Klubbsuffikset gjør navnene fire tegn fra hverandre, så vakten så dem
+// ikke. Et navn som er et annet navn pluss en parentes er ikke en navnelikhet
+// — det er noen som har lagt inn samme spiller to ganger og disambiguert seg
+// ut av kollisjonen.
+const bareName = (name) => nameKey(String(name).replace(/\([^)]*\)/g, " "));
+
+const keyed = players.map((player) => ({
+  name: player.name, key: nameKey(player.name), bare: bareName(player.name)
+}));
 const nearPairs = [];
 for (let i = 0; i < keyed.length; i += 1) {
   for (let j = i + 1; j < keyed.length; j += 1) {
-    if (!editDistanceAtMostOne(keyed[i].key, keyed[j].key)) continue;
+    const suffixDupe = keyed[i].key !== keyed[j].key && keyed[i].bare === keyed[j].bare;
+    if (!suffixDupe && !editDistanceAtMostOne(keyed[i].key, keyed[j].key)) continue;
     const pair = [keyed[i].key, keyed[j].key].sort().join("|");
     if (REVIEWED_NAME_PAIRS.has(pair)) continue;
     nearPairs.push(`${keyed[i].name} / ${keyed[j].name}`);

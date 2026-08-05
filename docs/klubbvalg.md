@@ -164,7 +164,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
-| Vålerenga | Intility Arena | 126 |
+| Vålerenga | Intility Arena | 127 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Lyn | Bislett Stadion | 82 |
@@ -182,7 +182,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk og Lyn — 1147 arveplasser
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk og Lyn — 1148 arveplasser
 fordelt på alle 18. **Ingen klubb med bane står uten navn.** De 42 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som.
 
@@ -190,7 +190,7 @@ Arven er ikke lenger et eliteserieprivilegium: Lyn ligger i OBOS-ligaen og har
 den femte største arven i katalogen. Det er riktig — arv er klubbens historie,
 ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 130 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 131 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -200,23 +200,76 @@ ganger — et redigeringsskript som avbrøt midtveis, en delvis redigering som g
 Rosenborg to rader, og HamKam som sto både med 26 spillere og som tom. Ingenting
 feilet, for dokumentasjon leses ikke av noen vakt. Nå gjør den det.
 
-### Vålerenga: 126 navn, og en mal i stedet for 126 håndskrevne varianter
+### Vålerenga: 127 navn, lest fra kilde etter å ha vært malgenerert
 
-Vålerenga-arven er den desidert største: 126 navn fra Henry «Tippen» Johansen og
+Vålerenga-arven er den nest største: 127 navn fra Henry «Tippen» Johansen og
 Einar «Bruno» Larsens klubbrekord på 99 mål, gjennom gullalderen 1980–1984, til
 akademiet som har solgt Sahraoui, Odin Thiago Holm og Jones El-Abdellaoui.
 
-Profilene er **generert fra posisjon**, ikke skrevet én og én. Kilden oppgir
-primærposisjon for hver eneste spiller, og det er den som styrer arketyper,
-styrker, behov, roller og taktikkpreferanser. 126 håndskrevne varianter ville
-vært falsk presisjon — og verre: de ville drevet fra posisjonen de skulle
-beskrive. Det unike per spiller er posisjon, epoke, nasjon og nivå, som er
-nøyaktig det kilden faktisk oppgir.
+**Den var malgenerert, og det var den største gjenstående gjelden i katalogen.**
+Da lista kom hadde jeg bare primærposisjon per navn, så styrkene ble generert
+fra posisjonen. Begrunnelsen som sto her — at 126 håndskrevne varianter ville
+vært falsk presisjon — var riktig så langt den rakk, men den beskrev et valg
+mellom mal og oppfinnelse. Det var aldri de eneste to mulighetene: den tredje
+var **en kilde som faktisk beskriver spillerne**, og den fantes ikke ennå.
 
-**Joshua King er bevisst utelatt.** Kilden sier at han spilte i ungdomsavdelingen
-og aldri på A-laget. Å legge ham inn som arvespiller ville vært å påstå noe
-kilden uttrykkelig avviser. Han hører hjemme i en egen akademikategori, og den
-finnes ikke i datamodellen ennå.
+Nå gjør den det. Kilden gir *Styrker*, *Begrensninger* og en eksplisitt
+**Kildegrad** per spiller (A: 55, B: 62, C: 10), og styrkene er lest inn ord for
+ord: 201 ulike fraser kartlagt til ferdighetsvokabularet i
+`data/football_attributes.json`, hver spiller med tokens fra **sin egen
+setning**. 126 av 127 fikk nye styrker, og de 127 fordeler seg på 125 ulike
+styrke-sett.
+
+Kilden setter selv grensene, og de er fulgt:
+
+> «Listen lager ikke målte attributter og bør ikke brukes som belegg for
+> eksakte 1–20-verdier uten en egen individuell kildeaudit.»
+
+Derfor går frasene inn i `strengths` — tokens motoren *utleder* fra — aldri som
+håndskrevne tall. Og:
+
+> «For C-profiler bør spillet bruke brede rolleprofiler og lav
+> evidenssikkerhet, ikke detaljerte påstander om fart, teknikk eller
+> mentalitet.»
+
+Derfor får C-profilene maks tre tokens mot fems for A og B, og beholder
+`classSource: utledet` mens A og B settes til `belagt`.
+
+Målt effekt på hele katalogen: profiluniktheten gikk **73,7 % → 78,6 %** og
+styrke-settene **46,9 % → 56,4 %**. De to største kollisjonsgruppene i
+katalogen, på 34 og 27 spillere, er borte. Begge vaktene er ratchetet opp
+(0,70 → 0,76 og 0,46 → 0,52), og bitetesten er å reversere VIF til mal: da
+faller de til 74,4 % og 44,4 %, og begge feller.
+
+**Aliaser er kanonisert, med vilje.** `power` og `physical_presence` peker
+begge på `strength`. Lagres aliasene rått, ser styrke-settene mer ulike ut enn
+de er — og da måler uniktheten synonymer i stedet for spillere. Det ville vært
+å pynte på nøyaktig det tallet som skulle vise om jobben var gjort.
+
+**Joshua King er nå inne — som akademitilknytning.** Han sto utenfor fordi
+«akademikategorien ikke finnes i datamodellen». Det stemte ikke: `academy_export`
+påstår ingen A-kamper, den sier at klubben utviklet ham og at han gikk videre.
+Kilden ber uttrykkelig om at han registreres slik, og advarselen hans sier det
+rett ut.
+
+**«Tom Jacobsen (VIF)» og «Tom Jacobsen» var samme mann.** Kilden sier det selv
+— «HamKam-profil hentet til VIF; kaptein og midtbanebærer i cup- og
+seriemesterlagene» — og katalogen bar ham to ganger, med halve karrieren på
+Briskeby og halve på Intility. Nær-duplikat-vakten så det ikke, fordi
+klubbsuffikset gjør navnene fire tegn fra hverandre. Den er utvidet: et navn som
+er et annet navn pluss en parentes er ikke en navnelikhet, det er noen som har
+disambiguert seg ut av en kollisjon. Den nye regelen fant «Tore Pedersen (RBK)»
+med én gang — der er suffikset riktig, for RBKs Tore Pedersen er offensiv
+midtbane (79) og Branns er midtstopper med landskamper (86).
+
+Fire posisjoner er rettet mot kilden, som oppgir primærposisjonen først:
+Jarl-André Storbæk sto som venstreback der kilden sier **høyreback**, og Dag
+Riisnæs, Daniel Fredheim Holm og Kristofer Hæstad sto med sekundærposisjonen
+først.
+
+Kilden rydder også opp i noe katalogen hadde riktig: **Tom R. Jacobsen var
+keeper, Tom Jacobsen var sentral midtbanespiller og bror av Pål Jacobsen.**
+De er og blir to spillere.
 
 Elleve spillere som allerede lå på andre baner ble **koblet på** i stedet for
 kopiert: Ronny Johnsen, John Carew, Tore André Flo og Sander Berge fra Ullevaal,
@@ -519,8 +572,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1175 statusoppføringer på 1008
-spillere, 520 belagte og 655 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1176 statusoppføringer på 1008
+spillere, 553 belagte og 623 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
@@ -533,11 +586,11 @@ Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 ```
 
 Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
-sto på én bane. Det er ikke lenger sant for 130 av dem, og KFUM gjorde det
+sto på én bane. Det er ikke lenger sant for 131 av dem, og KFUM gjorde det
 umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
 gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
 er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
-motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Førtifem
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Førtiseks
 spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
 det tallet er større enn null: faller det til null, er migreringen reversert.
 

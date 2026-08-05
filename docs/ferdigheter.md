@@ -315,8 +315,29 @@ som blir stående lavt beskytter ikke det som er oppnådd.
 Men bitetesten avslørte at den fortsatt var for treg: å reversere **én** klubb
 til malstyrker koster bare 2 poeng (75 % → 73 %), fordi epoke og nivå fortsatt
 skiller spillerne. Den følsomme målingen ligger **oppstrøms**, i styrke-settene
-selv — det er nettopp dem en malimport gjør like. Med en egen grense der (48 %
-målt, 46 % satt) faller en enkelt malgenerert klubb umiddelbart.
+selv — det er nettopp dem en malimport gjør like. Med en egen grense der faller
+en enkelt malgenerert klubb umiddelbart.
+
+Begge er ratchetet igjen etter at **Vålerenga-kilden** kom. VIF-arven var den
+siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
+katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
+spiller:
+
+| | Før | Etter | Grense |
+|---|---:|---:|---:|
+| Unike profiler | 73,7 % | **78,6 %** | 0,76 |
+| Unike styrke-sett | 46,9 % | **56,4 %** | 0,52 |
+| Største klon | 12 | **10** | ≤ 14 |
+
+Bitetesten er å reversere VIF til mal: da faller de til 74,4 % og 44,4 %, og
+begge vaktene feller det. Sto grensene der de sto, ville nøyaktig den
+reverteringen passert i stillhet.
+
+En ting måtte holdes ren for at tallene skal bety noe. Vokabularet har aliaser —
+`power` og `physical_presence` peker begge på `strength` — og lagres aliasene
+rått, ser styrke-settene mer ulike ut enn de er. Da måler uniktheten **synonymer
+i stedet for spillere**. Frasene kanoniseres derfor før de lagres. Det er den
+ene måten dette tallet kunne vært pyntet på uten at noe feilet.
 
 ## Påstander om ekte spillere
 
