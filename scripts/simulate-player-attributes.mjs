@@ -296,13 +296,13 @@ const largestClone = Math.max(...signatures.values());
 // uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
 // importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
 // er oppnådd — neste malgenererte import ville dratt den ned igjen uten at noe
-// feilet. Målt: 989 unike av 1191 (83 %), største klon 12.
+// feilet. Målt: 1053 unike av 1260 (84 %), største klon 12.
 //
 // Grensa er flyttet fra 0,70 til 0,76 fordi Vålerenga-arven nå er lest fra
 // kilde i stedet for malgenerert. Det ER en ratchet: reverteres VIF til mal,
 // faller andelen til 74,4 %, og vakten feller det. Sto grensa på 0,70 ville
 // nøyaktig den reverteringen passert i stillhet.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.82,
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.83,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -326,7 +326,7 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // Grensa er derfor satt på nytt fra bitetester på den ærlige målingen:
 // reverteres Tromsø til mal faller den til 44,6 %, Vålerenga til 41,5 %
 // og Rosenborg til 48,0 %. Etter Fredrikstad-kilden står den på 54,2 %,
-// og grensa er flyttet fra 0,49 til 0,52.
+// og grensa er flyttet fra 0,49 til 0,54, etter Start-kilden (55,6 %).
 //
 // Rosenborg-kilden ga en mindre gevinst enn Vålerenga-kilden, og det er en
 // egenskap ved kilden, ikke ved importen: RBK-dokumentet har 42 unike
@@ -351,7 +351,7 @@ for (const player of players) {
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.52,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.54,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // ---------------------------------------------------------------------------

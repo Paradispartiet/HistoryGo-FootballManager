@@ -310,7 +310,11 @@ const REVIEWED_NAME_PAIRS = new Map([
   // stor. Men begge er navngitt av sin egen klubbkilde med hver sin posisjon —
   // Branns høyreving mot Strømsgodsets midtbanespiller — og å smelte to
   // dokumenterte klubbkarrierer sammen er den ene feilen som ikke kan angres.
-  ["bjørn oddmar andersen|bjørn odmar andersen", "Branns ving mot Strømsgodsets midtbanespiller"]
+  ["bjørn oddmar andersen|bjørn odmar andersen", "Branns ving mot Strømsgodsets midtbanespiller"],
+  // Knutsen og Knudsen er to ulike etternavn, ikke en stavevariant: Vikings
+  // hurtige ving fra gullperioden mot Starts midtbanespiller med over 200
+  // kamper fram til 1974.
+  ["arvid knudsen|arvid knutsen", "Vikings ving mot Starts sentrale midtbanespiller"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

@@ -167,6 +167,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Strømsgodset | Marienlyst stadion | 143 |
 | Vålerenga | Intility Arena | 127 |
 | Fredrikstad | Fredrikstad stadion | 100 |
+| Start | Sparebanken Sør Arena | 85 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Lyn | Bislett Stadion | 82 |
@@ -181,11 +182,10 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 
-| Start | Sparebanken Sør Arena | 2 |
 | Aalesund | Color Line Stadion | 1 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn og Strømsgodset —
-1387 arveplasser fordelt på alle 19. **Ingen klubb med bane står uten navn.** De 41 klubbene som
+1470 arveplasser fordelt på alle 19. **Ingen klubb med bane står uten navn.** De 41 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som.
 
 Arven er ikke lenger et eliteserieprivilegium: Strømsgodset og Lyn ligger begge
@@ -193,7 +193,7 @@ i OBOS-ligaen og har henholdsvis den nest største og den sjette største arven 
 katalogen. Det er riktig — arv er klubbens historie,
 ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 169 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 180 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -475,6 +475,23 @@ levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
 
+### Start: fra 2 til 85 navn
+
+Start hadde bane og **to navn** — to seriemesterskap representert ved Erik
+«Myggen» Mykland og Svein «Matta» Mathisen. 69 nye navn, 16 koblet på.
+
+Kilden holder samme standard som Tromsø og Fredrikstad: **85 unike
+kvalitetssetninger for 85 spillere**, 81 ulike ferdighetssett etter
+kartlegging. Og ordbøkene begynner å konvergere — **71 % av frasene var
+allerede dekket** av de fem tidligere kildene, mot 0 % da Vålerenga-ordboka
+ble skrevet. Det er et fotballvokabular som har satt seg, ikke seks separate.
+
+Nær-duplikat-vakten fanget **Arvid Knutsen / Arvid Knudsen**. Denne gangen er
+det to menn: Vikings hurtige ving fra gullperioden og Starts midtbanespiller
+med over 200 kamper fram til 1974. Knutsen og Knudsen er to ulike etternavn,
+ikke en stavevariant — men vakten kan ikke vite det, og det er nettopp derfor
+hvert par må gjennomgås for hånd.
+
 ### Fredrikstad: fra 4 til 100 navn
 
 Fredrikstad hadde bane og **fire navn** — ni seriemesterskap og tolv
@@ -645,8 +662,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1415 statusoppføringer på 1191
-spillere, 911 belagte og 504 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1498 statusoppføringer på 1260
+spillere, 989 belagte og 509 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
@@ -659,11 +676,11 @@ Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 ```
 
 Feltet var opprinnelig én verdi per spiller, og det holdt så lenge hver spiller
-sto på én bane. Det er ikke lenger sant for 169 av dem, og KFUM gjorde det
+sto på én bane. Det er ikke lenger sant for 180 av dem, og KFUM gjorde det
 umulig å late som: en spiller kan ikke være både klubblegende og kortvarig
 gjest når statusen bare finnes i ett eksemplar. Alle 774 eksisterende spillere
 er migrert, og `clubStatusFor(player, homePlaceId)` er den eneste veien inn —
-motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Nittito
+motoren slår aldri opp en status uten å si *hvilken klubb som spør*. Hundreogto
 spillere har i dag ulik status i ulike klubber, og `audit:attributes` krever at
 det tallet er større enn null: faller det til null, er migreringen reversert.
 
