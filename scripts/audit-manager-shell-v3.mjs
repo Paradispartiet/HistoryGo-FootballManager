@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,6 +10,9 @@ const app = read("src/app.js");
 const css = `${read("style.css")}\n${read("src/ui/manager-shell-v3.css")}\n${read("src/ui/manager-shell-foundation.css")}`;
 const browser = read("tests/browser/manager-shell-v3.spec.js");
 const shellElements = read("src/ui/manager-shell-elements.js");
+const workflow = read(".github/workflows/ci.yml");
+const snapshotDir = join(root, "tests/browser/manager-shell-v3.spec.js-snapshots");
+const snapshots = existsSync(snapshotDir) ? readdirSync(snapshotDir).filter((name) => name.endsWith("-chromium-linux.png")) : [];
 
 const checks = [];
 const check = (label, ok, detail = "") => checks.push({ label, ok: Boolean(ok), detail });
@@ -28,7 +31,8 @@ check("klubbidentiteten bruker egen presentasjonsmodul", /manager-club-identity\
 check("HTML-skallet er modulert i egne custom elements", /<manager-club-header>/.test(html) && /<manager-next-action>/.test(html) && existsSync(join(root, "src/ui/manager-shell-elements.js")));
 check("CSS-skallet har egen foundation", /manager-shell-foundation\.css/.test(read("src/ui/manager-shell-v3.css")) && existsSync(join(root, "src/ui/manager-shell-foundation.css")));
 check("responsive nettleservakter dekker 390/768/1280", [390, 768, 1280].every((width) => browser.includes(`width: ${width}`)));
-check("fem visuelle differansetester er låst", (browser.match(/toHaveScreenshot\(/g) || []).length === 5);
+check("fem visuelle differansetester er låst", (browser.match(/toHaveScreenshot\(/g) || []).length === 5 && snapshots.length === 5);
+check("CI sammenligner mot baseliner uten å omskrive dem", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
 check("tilgjengelighet testes med axe", /AxeBuilder/.test(browser) && /wcag2aa/.test(browser));
 check("tastatur og fokusfelle testes", /Shift\+Tab/.test(browser) && /toBeFocused/.test(browser));
 check("horisontal overflow testes", /scrollWidth - document\.documentElement\.clientWidth/.test(browser));

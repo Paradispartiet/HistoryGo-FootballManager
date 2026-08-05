@@ -90,7 +90,8 @@ De eksisterende auditene og simuleringene dekker motor- og flytkontraktene.
 
 Testpakken kjører ved 390, 768 og 1280 piksler, kontrollerer horisontal overflow,
 at primærhandlingen er synlig uten scrolling, WCAG 2 A/AA med axe, modalens
-tastatur-/fokusfelle og fem screenshot-baserte differansetester.
+tastatur-/fokusfelle og fem screenshot-baserte differansetester. De fem
+Linux/Chromium-bildene er versjonerte baseliner; CI får ikke oppdatere dem.
 
 CI installerer Chromium og kjører `npm run test:browser` etter hele den
 eksisterende verifikasjonssuiten.
