@@ -319,23 +319,16 @@
         </div>
       </section>
 
-      <section class="manager-portal" aria-label="Managerkontor">
-        <article class="portal-card portal-club-card">
-          <p class="eyebrow">Klubbkontor</p>
-          <h2>Managerkontoret</h2>
-          <p class="muted-text">Du leder klubben herfra: neste kamp, ukas viktigste beslutning og rådene fra apparatet.</p>
-        </article>
-        <button type="button" class="portal-card portal-match-card" data-tab-target="kamp">
-          <span class="eyebrow">Neste kamp</span>
-          <strong id="portalNextMatch">Neste kamp: låst</strong>
-          <small id="portalMatchHint">Sett startellever, benk og kampplan før kampdag.</small>
-        </button>
-        <button type="button" class="portal-card portal-inbox-card" data-tab-target="inbox">
-          <span class="eyebrow">Assistentråd</span>
-          <strong id="portalInboxStatus">Ingen nye assistentråd</strong>
-          <small>Stab, styre, speiding og garderobe samles som meldingskort.</small>
-        </button>
+      <section class="manager-surface office-command-panel" id="officeCommandPanel" aria-label="Managerkontoret" aria-live="polite">
+        <div id="officeCommand" class="office-command"></div>
       </section>
+
+      <!-- Ukas detaljer ligger ett nivå ned. Managerkontoret over viser hva som
+           betyr noe nå; denne delen beholder hele Club Week- og kontekstlaget
+           uten at alle signalene konkurrerer på første skjerm. -->
+      <details class="office-depth" id="officeDepth">
+        <summary>Vis klubbukas detaljer og signaler</summary>
+        <div class="office-depth-content">
 
       <!-- Kontorets avdelinger: kontorfunksjonene er nå tilbake på selve Kontor
            i stedet for gjemt i «senere»-menyen. Hver åpner sin flate. -->
@@ -397,6 +390,9 @@
         <button type="button" class="kontor-deep-decisions" data-modal-open="modalDecisions">Flere beslutninger</button>
         <button type="button" data-modal-open="modalClubEvents">Klubbhendelser</button>
       </div>
+
+        </div>
+      </details>
 
       <!-- ===== POPUP: FLERE ÅPNE BESLUTNINGER ===== -->
 
@@ -858,27 +854,44 @@
 
     <!-- ============================ INNBOKS ============================ -->
     <div class="tab-section dept dept-inbox" data-tab-section="inbox" data-tab-parent="dashboard" hidden>
-      <section class="dept-hero dept-hero-inbox">
+      <section class="dept-hero dept-hero-inbox inbox-command-hero">
         <div>
-          <p class="eyebrow">Klubbens signaler før trening</p>
+          <p class="eyebrow">Klubbens viktigste signal</p>
           <h2>Assistentråd</h2>
-          <p class="dept-hero-lede">Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
+          <p class="dept-hero-lede">Én sak i fokus. Les hva apparatet ser, forstå konsekvensen og ta beslutningen før du går videre i manageruka.</p>
         </div>
         <div class="dept-hero-stat">
           <strong id="inboxPulseCount">0</strong>
-          <span>uleste tråder</span>
+          <span>krever oppmerksomhet</span>
         </div>
       </section>
 
-      <div class="popup-actions" aria-label="Innboks">
-        <button type="button" class="inbox-training-cta" data-tab-target="trening" id="inboxGoTraining">Gå til Trening</button>
-        <button type="button" data-modal-open="modalInboxWhy">Hvorfor nå?</button>
-        <button type="button" data-modal-open="modalInboxArchive">Hele innboksen</button>
+      <div class="inbox-command-layout">
+        <section class="manager-surface inbox-focus-panel" aria-label="Aktiv sak">
+          <div class="inbox-focus-heading">
+            <div><p class="eyebrow">Aktiv sak</p><h3 id="inboxFocusTitle">Innboksen er rolig</h3></div>
+            <span id="inboxFocusStatus" class="inbox-focus-status">Ingen beslutning venter</span>
+          </div>
+          <div id="inboxThreadList" class="message-list inbox-focus-list"></div>
+        </section>
+
+        <aside class="manager-surface inbox-briefing-panel" aria-label="Beslutningsstøtte">
+          <div><p class="eyebrow">Beslutningsstøtte</p><h3>Hva betyr saken nå?</h3></div>
+          <dl class="inbox-inline-stats">
+            <div><dt>Uleste tråder</dt><dd id="inboxSignalUnread">0</dd></div>
+            <div><dt>Krever svar</dt><dd id="inboxSignalReplies">0</dd></div>
+          </dl>
+          <p id="inboxSignalStatus" class="inbox-signal-status">Ingen kritiske signaler nå</p>
+          <div class="inbox-briefing-actions">
+            <button type="button" class="inbox-training-cta" data-tab-target="trening" id="inboxGoTraining">Gå til Trening</button>
+            <button type="button" data-modal-open="modalInboxArchive">Åpne historikken</button>
+          </div>
+        </aside>
       </div>
 
-      <section class="manager-surface inbox-thread-panel" aria-label="Viktig nå">
-        <h3>Viktig nå</h3>
-        <div id="inboxThreadList" class="message-list"></div>
+      <section class="manager-surface inbox-queue-panel" id="inboxQueuePanel" aria-label="Neste saker" hidden>
+        <div class="inbox-queue-heading"><div><p class="eyebrow">Etter hovedsaken</p><h3>Neste saker</h3></div><span id="inboxQueueCount">0</span></div>
+        <div id="inboxQueueList" class="message-list inbox-queue-list"></div>
       </section>
 
     </div>
@@ -1414,22 +1427,6 @@
               <summary>Treningshistorikk</summary>
               <ul id="trainingHistoryList" class="training-history-list"></ul>
             </details>
-          </div>
-        </div>
-  <div class="modal-overlay" id="modalInboxWhy" role="dialog" aria-modal="true" aria-label="Hvorfor nå?" hidden>
-          <div class="modal">
-            <div class="modal-head">
-              <div><p class="eyebrow">Hvorfor nå?</p><h3>Klubbens signaler før trening</h3></div>
-              <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
-            </div>
-            <p class="muted-text">Assistent, fysio, garderobe, styre og presse gir signalene du bruker før du velger treningsuke.</p>
-            <dl class="inbox-signal-stats">
-              <div><dt>Uleste tråder</dt><dd id="inboxSignalUnread">0</dd></div>
-              <div><dt>Krever svar</dt><dd id="inboxSignalReplies">0</dd></div>
-              <div><dt>Påvirker</dt><dd>trening / slitasje / moral / taktisk klarhet / styrepress</dd></div>
-              <div><dt>Neste steg etter innboks</dt><dd>Trening</dd></div>
-            </dl>
-            <p id="inboxSignalStatus" class="inbox-signal-status">Ingen kritiske signaler nå</p>
           </div>
         </div>
   <div class="modal-overlay" id="modalInboxArchive" role="dialog" aria-modal="true" aria-label="Hele innboksen" hidden>
