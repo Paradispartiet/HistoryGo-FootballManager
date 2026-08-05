@@ -149,6 +149,7 @@ export function computeNextActions(context = {}) {
 
   const { lineup, roster, clubWeekGate, clubWeek } = ctx;
   const firstTime = ctx.firstTime;
+  const leagueSeasonGateOpen = (!ctx.leagueModeActive || ctx.leagueSeasonActive);
 
   if (!ctx.leagueModeActive && !ctx.scenarioModeActive && !ctx.nationalModeActive && context.selectedMode === null) {
     return [{ id: "choose-game-mode", tag: "Kom i gang", title: "Velg spillmodus", hint: "Velg Ligaspill, Landslag, Scenario eller Fotballvitenskap.", action: { type: NEXT_ACTION_TYPES.TAB, tab: "dashboard" } }];
@@ -382,7 +383,7 @@ export function computeNextActions(context = {}) {
 
   // 6) Club Week-porten kan vente på at kampen spilles. Readiness avgjør om
   // avspark faktisk er lov; gate-signalet bidrar bare med kontekst i teksten.
-  if (!ctx.hasSession && ctx.matchdayReadiness.canStartMatch && clubWeekGate.isBlocked) {
+  if (!ctx.hasSession && leagueSeasonGateOpen && ctx.matchdayReadiness.canStartMatch && clubWeekGate.isBlocked) {
     push({
       id: "play-week-match",
       tag: "Kampdag",
@@ -456,7 +457,7 @@ export function computeNextActions(context = {}) {
   }
 
   // 12) Laget er kampklart og treningsuka er valgt — sett kampplan og spill.
-  if (!ctx.hasSession && ctx.matchdayReadiness.canStartMatch && !clubWeekGate.isBlocked && !ctx.hasUnseenReport && clubWeek?.phase !== "review") {
+  if (!ctx.hasSession && leagueSeasonGateOpen && ctx.matchdayReadiness.canStartMatch && !clubWeekGate.isBlocked && !ctx.hasUnseenReport && clubWeek?.phase !== "review") {
     push({
       id: "play-match",
       tag: "Kampdag",
