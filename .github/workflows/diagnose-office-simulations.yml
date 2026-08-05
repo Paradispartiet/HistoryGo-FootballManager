@@ -34,12 +34,12 @@ jobs:
           python3 <<'PY'
           from pathlib import Path
           path = Path("scripts/simulate-mode-isolation.mjs")
-          text = path.read_text()
-          old = '  assert.match(app, /\\.manager-portal, #offPitchSignalCard, \\.decision-strip/);'
-          new = '  assert.match(app, /\\.office-command-panel, \\.office-depth, #offPitchSignalCard, \\.decision-strip/);'
-          if old not in text:
+          lines = path.read_text().splitlines()
+          index = next((i for i, line in enumerate(lines) if "assert.match(app" in line and "manager-portal" in line and "offPitchSignalCard" in line), None)
+          if index is None:
               raise SystemExit("obsolete manager portal assertion not found")
-          path.write_text(text.replace(old, new, 1))
+          lines[index] = '  assert.match(app, /\\.office-command-panel, \\.office-depth, #offPitchSignalCard, \\.decision-strip/);'
+          path.write_text("\n".join(lines) + "\n")
           PY
 
       - name: Build TypeScript engine
