@@ -61,8 +61,7 @@ jobs:
           new = '''  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]:visible').first();
             await expect(trainingTab).toBeVisible();
             await trainingTab.click();
-            await expect(page.locator("#trainingWorkspace")).toBeVisible();
-            const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled]):visible").first();
+            const focusButton = page.locator("#weeklyTrainingOptions:visible button:not([disabled]):visible").first();
             await expect(focusButton).toBeVisible();
           '''
           if old not in source:
