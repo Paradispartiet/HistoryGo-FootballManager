@@ -53,40 +53,82 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run full validation
+        shell: bash
         run: |
-          npm run validate:script-syntax
+          set -euo pipefail
+          npm run typecheck
           npm run build
-          npm run verify:pages-artifact
-          npm run test:data
-          npm run audit:club-data
-          npm run sim:promoted-clubs
-          npm run audit:unlock-data
-          npm run audit:club-selection
-          npm run audit:data-sources
-          npm run verify:historygo-flow
+          npm run stage:pages
+          npm run audit:pages-artifact
+
+          npm run audit:knowledge
+          npm run audit:ci-coverage
+          npm run audit:clubs
+          npm run audit:football-book-knowledge
+          npm run audit:football-book-ux
+          npm run audit:scenarios
+          npm run audit:hg-football
+          npm run audit:hg-historical-fit
+          npm run audit:hg-coach-context
+          npm run audit:hg-formation-knowledge
+          npm run audit:historical-opponents
+          npm run audit:tournaments
+          npm run audit:tactics
+          npm run audit:attributes
+
+          npm run check:syntax
+          npm run check:dom-ids
+          npm run audit:flow
           npm run audit:dead-ends
-          npm run audit:ui-flow
-          npm run audit:manager-ground-flow
-          npm run audit:manager-scenes
-          npm run sim:historygo-flow
-          npm run sim:manager-ground-flow
-          npm run sim:manager-scenes
-          npm run sim:first-season
-          npm run sim:match-flow
-          npm run sim:club-mode
-          npm run sim:league-mode
-          npm run sim:training-room
-          npm run sim:match-tactics
-          npm run sim:academic-4-2-4
+          npm run audit:manager-shell-v3
+
+          npm run sim:matchday
+          npm run sim:mini-season
+          npm run sim:tournament
+          npm run sim:match-plan
+          npm run sim:pitch-layout
+          npm run sim:training-week
+          npm run sim:training-plan
+          npm run sim:individual-training
+          npm run sim:player-weaknesses
+          npm run sim:player-attributes
+          npm run sim:formation-matchup
+          npm run sim:suggested-setups
+          npm run sim:training-programs
+          npm run sim:off-pitch
+          npm run sim:inbox
+          npm run sim:club-week
+          npm run sim:role-learning
+          npm run sim:staff-identity
+          npm run sim:manager-flow-ui
+          npm run sim:manager-ground-flow-v1
+          node scripts/simulate-manager-scenes-v1.mjs
+          npm run sim:role-familiarity
+          npm run sim:league-season
+          npm run sim:mode-isolation
+          npm run sim:first-time
+          npm run sim:first-run-real-seed
+          npm run sim:first-run-football-book-qa
+          npm run sim:player-stats
+          npm run sim:substitutions
+          npm run sim:player-condition
+          npm run sim:scenarios
+          npm run sim:season-review
+          npm run sim:federation-verdict
+          npm run sim:league-playoff
+          npm run sim:club-selection
+          npm run sim:club-tradition
+          npm run sim:club-squad
+
           npx playwright install --with-deps chromium
-          npm run test:responsive
+          npm run test:browser
 
       - name: Commit and push permanent changes
         shell: bash
