@@ -1,5 +1,8 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
-import { createMatchFlowSnapshot, getTrainingWorkspaceTarget } from "./ui/manager-shell-view.js";
+import "./ui/manager-shell-elements.js";
+import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
+import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
+import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -553,14 +556,14 @@ const state = {
   // Onboarding v2: har spilleren valgt modus på egen startskjerm minst én gang?
   onboarded: false,
   firstTimePlaythrough: { started: false, completed: false, currentStep: "start" },
-  gameStartState: { selectedMode: null, activeLeagueSaveId: undefined, activeScenarioId: undefined }
+  gameStartState: { selectedMode: null, activeLeagueSaveId: undefined, activeScenarioId: undefined },
+  openTrainingStepId: "trainingProgramStep"
 };
 
 const elements = {
   formationSelect: document.querySelector("#formationSelect"),
   tacticSelect: document.querySelector("#tacticSelect"),
   teamStatus: document.querySelector("#teamStatus"),
-  teamScore: document.querySelector("#teamScore"),
   roleFitAverage: document.querySelector("#roleFitAverage"),
   tacticFitAverage: document.querySelector("#tacticFitAverage"),
   balanceScore: document.querySelector("#balanceScore"),
@@ -576,8 +579,6 @@ const elements = {
   historicalRoleHint: document.querySelector("#historicalRoleHint"),
   roleLearningCard: document.querySelector("#roleLearningCard"),
   selectedSlotTitle: document.querySelector("#selectedSlotTitle"),
-  slotPlayerSelect: document.querySelector("#slotPlayerSelect"),
-  slotRoleSelect: document.querySelector("#slotRoleSelect"),
   selectedMatchScore: document.querySelector("#selectedMatchScore"),
   selectedFitStatus: document.querySelector("#selectedFitStatus"),
   selectedFitExplanation: document.querySelector("#selectedFitExplanation"),
@@ -609,10 +610,6 @@ const elements = {
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
   portalNextMatch: document.querySelector("#portalNextMatch"),
   portalMatchHint: document.querySelector("#portalMatchHint"),
-  portalPriorityAction: document.querySelector("#portalPriorityAction"),
-  portalPriorityTag: document.querySelector("#portalPriorityTag"),
-  portalPriorityTitle: document.querySelector("#portalPriorityTitle"),
-  portalPriorityHint: document.querySelector("#portalPriorityHint"),
   portalInboxStatus: document.querySelector("#portalInboxStatus"),
   firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
@@ -687,7 +684,6 @@ const elements = {
   playerStatsTable: document.querySelector("#playerStatsTable"),
   leagueOnboardingPanel: document.querySelector("#leagueOnboardingPanel"),
   leagueOnboardingLead: document.querySelector("#leagueOnboardingLead"),
-  leagueOnboardingPrimary: document.querySelector("#leagueOnboardingPrimary"),
   leagueOnboardingSteps: document.querySelector("#leagueOnboardingSteps"),
   seasonReviewPanel: document.querySelector("#seasonReviewPanel"),
   seasonReviewVerdict: document.querySelector("#seasonReviewVerdict"),
@@ -714,7 +710,7 @@ const elements = {
   clubWeekPhaseSteps: document.querySelector("#clubWeekPhaseSteps"),
   clubWeekPhaseGuidance: document.querySelector("#clubWeekPhaseGuidance"),
   clubWeekFeedback: document.querySelector("#clubWeekFeedback"),
-  advanceClubWeekPhase: document.querySelector("#advanceClubWeekPhase"),
+  clubWeekGateHint: document.querySelector("#clubWeekGateHint"),
   clubBoardTrust: document.querySelector("#clubBoardTrust"),
   clubPlayerMorale: document.querySelector("#clubPlayerMorale"),
   clubTacticalClarity: document.querySelector("#clubTacticalClarity"),
@@ -5007,10 +5003,6 @@ function renderLeagueOnboarding(teamFit) {
   if (elements.leagueOnboardingLead) {
     elements.leagueOnboardingLead.textContent = `Før seriestart: ${complete}/${steps.length} managergrep klare. Neste steg: ${next.title.toLowerCase()}.`;
   }
-  if (elements.leagueOnboardingPrimary) {
-    elements.leagueOnboardingPrimary.textContent = next.title;
-    elements.leagueOnboardingPrimary.onclick = () => activateLeagueOnboardingTarget(next);
-  }
   list.replaceChildren();
   steps.forEach((step, index) => {
     const item = document.createElement("li");
@@ -5305,14 +5297,29 @@ function renderHeaderClubIdentity() {
   const manager = elements.headerClubManager;
   if (!name || !manager) return;
 
+  const identityRoot = document.querySelector("#clubIdentityHeader");
+
   if (!isLeagueModeActive() || !getSavedClubName()) {
     name.textContent = "HG Football Manager";
     manager.textContent = "Treneren avgjør. Les klubbens puls, bygg laget på banen og ta de neste beslutningene.";
+    renderClubIdentity(identityRoot, createClubIdentityView({
+      clubName: "HG Football Manager",
+      clubId: "hgfm",
+      leagueName: "Managerkontoret"
+    }));
     return;
   }
 
   const model = getLeagueSaveModel();
-  name.textContent = model.temporaryClubName ? `${model.clubName} (midlertidig navn)` : model.clubName;
+  const takeover = getTakeoverClub();
+  renderClubIdentity(identityRoot, createClubIdentityView({
+    clubName: model.clubName,
+    clubId: takeover?.id || model.activeLeagueSaveId || model.clubName,
+    ground: takeover?.ground || `${model.clubName} stadion`,
+    city: takeover?.city || null,
+    leagueName: model.leagueName,
+    temporary: model.temporaryClubName
+  }));
   manager.textContent = model.managerName
     ? `${model.managerName} · ${model.leagueName} · ${model.leagueSeasonStatus}`
     : `${model.leagueName} · ${model.leagueSeasonStatus}`;
@@ -7703,41 +7710,9 @@ function renderSidePanel(teamFit) {
   }
 
   const assignment = teamFit?.assignments.find((item) => item.slot.slotId === slot.slotId);
-  const usedPlayerIds = getUsedPlayerIds(slot.slotId);
-
   elements.selectedSlotTitle.textContent = `${slot.label} · ${slot.position}`;
-
-  if (availablePlayers.length === 0) {
-    // Ingen spillere låst opp: vis én disabled placeholder-option uten å krasje.
-    elements.slotPlayerSelect.innerHTML = "";
-    const option = document.createElement("option");
-    option.value = EMPTY_VALUE;
-    option.textContent = "Ingen spillere låst opp ennå";
-    option.disabled = true;
-    elements.slotPlayerSelect.append(option);
-  } else {
-    setOptions(
-      elements.slotPlayerSelect,
-      availablePlayers,
-      (player) => player.id,
-      (player) => `${player.name} · ${player.classHeight}`,
-      "Tom plass",
-      (player) => usedPlayerIds.has(player.id)
-    );
-  }
-
-  const roleOptions = state.roles.filter((role) => role.validPositions.includes(slot.position));
-
-  setOptions(
-    elements.slotRoleSelect,
-    roleOptions,
-    (role) => role.id,
-    (role) => role.name,
-    "Ingen rolle"
-  );
-
-  elements.slotPlayerSelect.value = slotState.playerId || EMPTY_VALUE;
-  elements.slotRoleSelect.value = slotState.roleId || EMPTY_VALUE;
+  // Valget gjøres kun med spillerkort og rolleknapper ved banen.
+  // Sidepanelet forklarer den samme staten uten et parallelt skjema.
 
   if (assignment?.fit) {
     elements.selectedMatchScore.textContent = assignment.fit.matchScore;
@@ -8850,13 +8825,6 @@ function renderNextActionStrip(teamFit) {
   if (elements.nextActionPrimaryTag) elements.nextActionPrimaryTag.textContent = primary.tag;
   if (elements.nextActionPrimaryTitle) elements.nextActionPrimaryTitle.textContent = primary.title;
   if (elements.nextActionPrimaryHint) elements.nextActionPrimaryHint.textContent = primary.hint;
-  if (elements.portalPriorityTag) elements.portalPriorityTag.textContent = primary.tag || "Prioritet";
-  if (elements.portalPriorityTitle) elements.portalPriorityTitle.textContent = primary.title;
-  if (elements.portalPriorityHint) elements.portalPriorityHint.textContent = primary.hint;
-  if (elements.portalPriorityAction) {
-    elements.portalPriorityAction.disabled = typeof primary.run !== "function";
-    elements.portalPriorityAction.onclick = typeof primary.run === "function" ? primary.run : null;
-  }
   primaryButton.disabled = typeof primary.run !== "function";
   // Onclick-property (ikke addEventListener) hindrer at handlere hoper seg opp
   // mellom renders.
@@ -9202,7 +9170,6 @@ function renderTeamSummary(teamFit) {
   }
 
   elements.teamStatus.textContent = getTeamStatus(teamFit);
-  elements.teamScore.textContent = teamFit.teamScore;
   elements.completeCount.textContent = `${teamFit.completeCount}/${teamFit.totalSlots}`;
   elements.roleFitAverage.textContent = teamFit.metrics.roleFitAverage;
   elements.tacticFitAverage.textContent = teamFit.metrics.tacticFitAverage;
@@ -11602,8 +11569,10 @@ function focusTrainingWorkspace(legacyModalId) {
   const targetId = getTrainingWorkspaceTarget(legacyModalId);
   const target = targetId ? document.getElementById(targetId) : null;
   if (!target) return;
+  state.openTrainingStepId = targetId;
   activateTab("trening");
   requestAnimationFrame(() => {
+    syncTrainingWorkspace(document.querySelector("#trainingWorkspace"), state.openTrainingStepId);
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     target.focus({ preventScroll: true });
   });
@@ -11686,6 +11655,11 @@ function renderWeeklyTrainingPlan() {
       elements.trainingPlanNext.onclick = () => activateTab("kamp");
     }
   }
+
+  state.openTrainingStepId = syncTrainingWorkspace(
+    document.querySelector("#trainingWorkspace"),
+    state.openTrainingStepId
+  );
 }
 
 function renderWeeklyTrainingFocus(teamFit) {
@@ -13042,13 +13016,12 @@ async function renderClubWeek() {
     elements.clubWeekFeedback.textContent = state.clubWeekFeedback || "Klubbuken er klar.";
   }
 
-  // Kampdag ↔ Club Week: stengt port gjør "Neste fase" utilgjengelig og
-  // forklarer hvorfor, slik at kampdag og klubbuke er én sammenhengende rytme.
-  if (elements.advanceClubWeekPhase) {
+  // Faseporten forklares her, men kan bare utføres via «Neste handling».
+  if (elements.clubWeekGateHint) {
     const gate = getClubWeekMatchdayGate();
-    elements.advanceClubWeekPhase.disabled = gate.isBlocked;
-    elements.advanceClubWeekPhase.textContent = gate.isBlocked ? "Spill kampen først" : "Neste fase →";
-    elements.advanceClubWeekPhase.title = gate.isBlocked ? gate.reason : "";
+    elements.clubWeekGateHint.textContent = gate.isBlocked
+      ? gate.reason
+      : "Neste grep styres av «Neste handling».";
   }
 
   if (elements.clubBoardTrust) {
@@ -15598,12 +15571,11 @@ function renderApp() {
 
 function bindEvents() {
   bindFormationAndTacticControls();
-  bindLineupSlotControls();
+  bindTrainingWorkspaceControls();
   bindTrainingAndKnowledgeControls();
   bindTeamMeritsControls();
   bindLocalStartControls();
   bindHistoryGoSyncControls();
-  bindClubWeekControls();
   bindMatchdayControls();
   bindGameModeControls();
   bindModals();
@@ -16006,16 +15978,20 @@ function bindSettings() {
 // backdrop-klikk eller Esc. Bindes én gang på document, så renderApp aldri
 // dobbeltbinder.
 function bindModals() {
-  const closeAll = () => {
+  let lastModalOpener = null;
+  const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  const closeAll = ({ restoreFocus = true } = {}) => {
     document.querySelectorAll(".modal-overlay:not([hidden])").forEach((m) => { m.hidden = true; });
     document.body.classList.remove("has-modal-open");
+    if (restoreFocus && lastModalOpener?.isConnected) lastModalOpener.focus();
   };
   document.addEventListener("click", (event) => {
     const opener = event.target.closest("[data-modal-open]");
     if (opener) {
       const modal = document.getElementById(opener.getAttribute("data-modal-open"));
       if (modal) {
-        closeAll();
+        closeAll({ restoreFocus: false });
+        lastModalOpener = opener;
         modal.hidden = false;
         document.body.classList.add("has-modal-open");
         modal.querySelector(".modal-close, [data-modal-close]")?.focus();
@@ -16028,6 +16004,24 @@ function bindModals() {
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeAll();
+    if (event.key !== "Tab") return;
+    const modal = document.querySelector(".modal-overlay:not([hidden])");
+    if (!modal) return;
+    const focusable = [...modal.querySelectorAll(focusableSelector)].filter((node) => node.getClientRects().length > 0);
+    if (focusable.length === 0) {
+      event.preventDefault();
+      modal.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
 }
 
@@ -16054,14 +16048,14 @@ function bindFormationAndTacticControls() {
   });
 }
 
-function bindLineupSlotControls() {
-  elements.slotPlayerSelect.addEventListener("change", (event) => {
-    const nextPlayerId = event.target.value === EMPTY_VALUE ? null : event.target.value;
-    setSelectedSlotPlayer(nextPlayerId);
-  });
-
-  elements.slotRoleSelect.addEventListener("change", (event) => {
-    setSelectedSlotRole(event.target.value === EMPTY_VALUE ? null : event.target.value);
+function bindTrainingWorkspaceControls() {
+  const workspace = document.querySelector("#trainingWorkspace");
+  workspace?.addEventListener("click", (event) => {
+    const toggle = event.target.closest("[data-training-step-toggle]");
+    const step = toggle?.closest(".training-workspace-step");
+    if (!step?.id) return;
+    state.openTrainingStepId = step.id;
+    syncTrainingWorkspace(workspace, state.openTrainingStepId);
   });
 }
 
@@ -16147,14 +16141,6 @@ function bindHistoryGoSyncControls() {
       refreshAvailabilityFromHistoryGo();
     }
   });
-}
-
-function bindClubWeekControls() {
-  if (elements.advanceClubWeekPhase) {
-    elements.advanceClubWeekPhase.addEventListener("click", () => {
-      advanceClubWeekPhaseAction().catch(console.error);
-    });
-  }
 }
 
 function bindMatchdayControls() {
@@ -16334,7 +16320,7 @@ function highlightActiveTab() {
   const target = activeSection?.dataset.tabSection;
   if (!target) return;
 
-  const buttons = Array.from(document.querySelectorAll("[data-tab-target]"));
+  const buttons = Array.from(document.querySelectorAll(".nav-tab[data-tab-target], .app-subtab[data-tab-target]"));
   const ownTab = buttons.find(
     (button) => button.dataset.tabTarget === target && button.classList.contains("nav-tab") && !button.hidden
   );

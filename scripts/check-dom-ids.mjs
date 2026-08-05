@@ -13,10 +13,12 @@ import { dirname, join } from "node:path";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(root, "index.html"), "utf8");
 const app = readFileSync(join(root, "src/app.js"), "utf8");
+const shellElements = readFileSync(join(root, "src/ui/manager-shell-elements.js"), "utf8");
+const domSource = `${html}\n${shellElements}`;
 
 // Alle id-attributter i index.html.
 const htmlIds = new Set();
-for (const match of html.matchAll(/\sid="([^"]+)"/g)) {
+for (const match of domSource.matchAll(/\sid="([^"]+)"/g)) {
   htmlIds.add(match[1]);
 }
 
@@ -46,6 +48,6 @@ if (missing.length > 0) {
 
 console.log(
   `✓ DOM-id-sjekk OK: ${queried.size} unike id-oppslag i app.js finnes alle i index.html ` +
-    `(${htmlIds.size} id-er totalt i index.html).`
+    `(${htmlIds.size} id-er totalt i statisk og modulær shell-markup).`
 );
 process.exit(0);

@@ -2500,29 +2500,6 @@ ul {
   padding: 12px 16px;
 }
 
-#advanceClubWeekPhase {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--hg-surface-deep);
-  color: var(--text);
-  font-size: 0.92rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-}
-
-#advanceClubWeekPhase:hover {
-  background: var(--text);
-  color: #000000;
-}
-
-#advanceClubWeekPhase:focus-visible {
-  outline: 3px solid var(--text);
-  outline-offset: 2px;
-}
-
 .club-week-metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -3193,29 +3170,6 @@ ul {
   text-transform: uppercase;
   font-size: 0.82rem;
   padding: 7px 14px;
-}
-
-#advanceClubWeekPhase {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--text);
-  color: #000000;
-  font-size: 0.86rem;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: filter 0.12s ease, transform 0.08s ease;
-}
-
-#advanceClubWeekPhase:hover {
-  filter: invert(1);
-  border-color: var(--text);
-}
-
-#advanceClubWeekPhase:focus-visible {
-  outline: 3px solid var(--text);
-  outline-offset: 2px;
 }
 
 /* Club Week Orchestrator v1: fase-stripa gjør ukerytmen synlig. */
@@ -7174,7 +7128,7 @@ ul {
 /* Manager Game Feel Pass v1 — portal, squad wall og avdelingsfølelse uten ny motor. */
 .manager-portal {
   display: grid;
-  grid-template-columns: minmax(240px, 1.25fr) repeat(3, minmax(180px, 1fr));
+  grid-template-columns: minmax(240px, 1.25fr) repeat(2, minmax(180px, 1fr));
   gap: var(--gap);
   margin: 0 0 var(--gap);
 }
@@ -7215,7 +7169,6 @@ button.portal-card:hover {
 
 .portal-club-card { --portal-accent: var(--hg-accent-tactics); }
 .portal-match-card { --portal-accent: var(--hg-accent-kamp); }
-.portal-priority-card { --portal-accent: var(--hg-accent-inbox); }
 .portal-inbox-card { --portal-accent: var(--hg-accent-board); }
 
 .portal-card h2,
@@ -7234,15 +7187,6 @@ button.portal-card:hover {
   color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.45;
-}
-
-.portal-priority-card {
-  border-color: rgba(77, 163, 255, 0.45);
-}
-
-.portal-priority-card:disabled {
-  cursor: default;
-  opacity: 0.82;
 }
 
 .pitch-stage {
@@ -7323,7 +7267,7 @@ button.portal-card:hover {
 
 /* Manager Feel QA Pass v1: gjør første skjerm mer managerkontor enn dashboard. */
 .manager-portal {
-  grid-template-columns: minmax(280px, 1.55fr) repeat(3, minmax(190px, 1fr));
+  grid-template-columns: minmax(280px, 1.55fr) repeat(2, minmax(190px, 1fr));
   align-items: stretch;
 }
 
@@ -7339,13 +7283,11 @@ button.portal-card:hover {
   padding: 22px;
 }
 
-.portal-match-card,
-.portal-priority-card {
+.portal-match-card {
   border-color: rgba(255, 255, 255, 0.42);
 }
 
-.portal-match-card strong,
-.portal-priority-card strong {
+.portal-match-card strong {
   font-size: clamp(1.45rem, 3vw, 2.15rem);
 }
 

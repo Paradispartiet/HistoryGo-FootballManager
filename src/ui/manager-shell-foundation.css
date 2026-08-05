@@ -1,0 +1,178 @@
+/* Manager Shell primitives live outside the legacy stylesheet. These are
+   semantic scenes and dividers, not a new card around every block. */
+manager-club-header,
+manager-next-action {
+  display: block;
+  min-width: 0;
+}
+
+body > manager-club-header { grid-row: 1; }
+body > manager-next-action { grid-row: 6; }
+
+.manager-surface {
+  min-width: 0;
+  padding: clamp(14px, 2vw, 22px) 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.manager-surface[hidden] {
+  display: none !important;
+}
+
+/* Explicit canvases keep text contrast deterministic. Transparent native
+   buttons may otherwise be evaluated against the browser's white button
+   canvas even though the surrounding manager shell is dark. */
+.main-nav .nav-tab {
+  background-color: #070a10;
+}
+
+.main-nav .nav-tab.is-active {
+  background-color: #111823;
+}
+
+.app-subnav .app-subtab {
+  background-color: #070a10;
+}
+
+.app-subnav .app-subtab.is-active {
+  background-color: #151c27;
+}
+
+.club-identity-mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  aspect-ratio: 0.82;
+  border: 2px solid var(--club-accent, #fff);
+  border-radius: 45% 45% 52% 52% / 30% 30% 68% 68%;
+  background: var(--club-accent, #fff);
+  color: var(--club-ink, #050706);
+  font-size: 0.92rem;
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 28px color-mix(in srgb, var(--club-accent, #fff) 24%, transparent);
+}
+
+#clubIdentityHeader {
+  position: relative;
+  overflow: hidden;
+  border-bottom-color: color-mix(in srgb, var(--club-accent, #fff) 58%, transparent);
+}
+
+#clubIdentityHeader::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--club-accent, #fff), transparent 72%);
+}
+
+#clubIdentityHeader .header-inner {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.club-ground-line {
+  margin: 0.25rem 0 0;
+  color: var(--club-accent, #fff);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.authoritative-action-note {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+/* The legacy onboarding buttons relied on transparent user-agent button
+   backgrounds. Give the route an explicit dark canvas so text contrast is
+   stable in every browser and completed rows do not become faded controls. */
+#leagueOnboardingPanel {
+  background: #080c13;
+  color: var(--text);
+}
+
+#leagueOnboardingPanel .league-onboarding-step {
+  background: #080c13;
+  color: var(--text);
+}
+
+#leagueOnboardingPanel .league-onboarding-steps .is-done .league-onboarding-step {
+  background: #0b1714;
+  opacity: 1;
+}
+
+#leagueOnboardingPanel .league-onboarding-step small,
+#leagueOnboardingPanel .muted-text,
+#leagueOnboardingPanel .authoritative-action-note,
+#leagueOnboardingPanel .eyebrow {
+  color: #bac3ce;
+}
+
+#leagueOnboardingPanel .league-onboarding-steps {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#leagueOnboardingPanel .league-onboarding-steps > li,
+#leagueOnboardingPanel .league-onboarding-step {
+  min-width: 0;
+}
+
+#leagueOnboardingPanel .league-onboarding-step strong,
+#leagueOnboardingPanel .league-onboarding-step small {
+  overflow-wrap: anywhere;
+}
+
+#autoFillSquad {
+  border: 1px solid var(--club-accent, var(--hg-accent-tactics));
+  border-radius: 10px;
+  background: #111823;
+  color: var(--text);
+  padding: 0.72rem 1rem;
+  font-weight: 900;
+}
+
+.topbar-team-reading {
+  align-content: center;
+  min-width: 150px;
+}
+
+.topbar-team-reading .topbar-status {
+  max-width: 22ch;
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.slot-editor-direct-note {
+  border: 0;
+  background: transparent;
+}
+
+@media (max-width: 620px) {
+  .club-identity-mark {
+    width: 42px;
+  }
+
+  #clubIdentityHeader .header-inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  #leagueOnboardingPanel .league-onboarding-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 621px) and (max-width: 980px) {
+  #leagueOnboardingPanel .league-onboarding-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

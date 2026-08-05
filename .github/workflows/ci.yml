@@ -68,6 +68,7 @@ jobs:
           npm run check:dom-ids
           npm run audit:flow
           npm run audit:dead-ends
+          npm run audit:manager-shell-v3
 
       - name: Simuleringer (motorer ende-til-ende)
         run: |
@@ -110,5 +111,5 @@ jobs:
       - name: Installer Chromium for nettleservakter
         run: npx playwright install --with-deps chromium
 
-      - name: Responsive nettleservakter
+      - name: Responsive nettleservakter og visuelle differanser
         run: npm run test:browser

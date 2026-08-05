@@ -22,6 +22,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(root, "index.html"), "utf8");
 const app = readFileSync(join(root, "src/app.js"), "utf8");
 const css = readFileSync(join(root, "style.css"), "utf8");
+const shellElements = readFileSync(join(root, "src/ui/manager-shell-elements.js"), "utf8");
+const shellCss = readFileSync(join(root, "src/ui/manager-shell-foundation.css"), "utf8");
+const domSource = `${html}\n${shellElements}`;
 const engine = readFileSync(join(root, "src/football-matchday-engine.js"), "utf8");
 const modeSessions = readFileSync(join(root, "src/football-mode-sessions.js"), "utf8");
 const subsEngine = readFileSync(join(root, "src/football-substitutions.js"), "utf8");
@@ -29,7 +32,7 @@ const subsEngine = readFileSync(join(root, "src/football-substitutions.js"), "ut
 // ---- HTML-hjelpere ----------------------------------------------------------
 
 const htmlIds = new Set();
-for (const match of html.matchAll(/\sid="([^"]+)"/g)) htmlIds.add(match[1]);
+for (const match of domSource.matchAll(/\sid="([^"]+)"/g)) htmlIds.add(match[1]);
 
 const tabTargets = new Set();
 for (const match of html.matchAll(/data-tab-target="([^"]+)"/g)) tabTargets.add(match[1]);
@@ -265,10 +268,7 @@ stage("7. Kamp-gating");
 // ---- 8) «Neste fase» kan ikke hoppe forbi kampen ---------------------------
 stage("8. Fase-gating");
 {
-  check(
-    "«Neste fase»-knappen deaktiveres av kampdag-porten",
-    /advanceClubWeekPhase\.disabled\s*=\s*gate\.isBlocked/.test(app)
-  );
+  check("ingen konkurrerende «Neste fase»-knapp finnes", !html.includes('id="advanceClubWeekPhase"'));
   check(
     "fase-handleren stopper på stengt port",
     /const gate = getClubWeekMatchdayGate\(\);[\s\S]{0,200}if\s*\(gate\.isBlocked\)/.test(app)
@@ -278,7 +278,7 @@ stage("8. Fase-gating");
 // ---- 9) Rapport → ny uke har en vei videre ---------------------------------
 stage("9. Rapport → ny uke");
 {
-  check("«Neste fase»-handlingen finnes (#advanceClubWeekPhase)", htmlIds.has("advanceClubWeekPhase"));
+  check("fasehandlingen er tilgjengelig i next-action-koblingen", /NEXT_ACTION_TYPES\.CLUB_WEEK[\s\S]{0,180}advanceClubWeekPhaseAction/.test(app));
   check("ny uke nullstiller ukens trening", /weeklyTrainingFocus\s*=\s*null/.test(app) && /weeklyTrainingProgram\s*=\s*null/.test(app));
   check("ny uke ruller mini-sesongen", /advanceMiniSeasonForNewWeek\(\)/.test(app));
 }
@@ -290,14 +290,14 @@ stage("9. Rapport → ny uke");
 // konkurrere — de foldes bak en <details>, ikke stå åpne som en andre primær.
 stage("10. Én primær vei videre");
 {
-  const primaryCount = (html.match(/class="next-action-primary"/g) || []).length;
+  const primaryCount = (shellElements.match(/class="next-action-primary"/g) || []).length;
   check("nøyaktig én primær «Neste handling»-knapp i managerkontoret", primaryCount === 1, `antall=${primaryCount}`);
 
-  const footer = html.match(/<footer\b[^>]*class="site-footer"[\s\S]*?<\/footer>/);
+  const footer = shellElements.match(/<footer\b[^>]*class="site-footer"[\s\S]*?<\/footer>/);
   check("«Neste handling» ligger i manager-footeren", Boolean(footer) && /next-action-strip/.test(footer[0]));
 
   // «Neste handling»-stripa skal være alltid synlig — ikke gjemt bak <details>.
-  const strip = html.match(/<section\b[^>]*\bnext-action-strip\b[\s\S]*?<\/section>/);
+  const strip = shellElements.match(/<section\b[^>]*\bnext-action-strip\b[\s\S]*?<\/section>/);
   check("«Neste handling»-stripa finnes", Boolean(strip));
   check(
     "«Neste handling»-stripa er ikke foldet bak <details>",
@@ -553,16 +553,17 @@ stage("16. App-rammen kan ikke kollapse");
   );
   // Hver ramme-del må ha sin egen rad, uansett hva som er skjult.
   const explicitRows = [
-    ["body > .site-header", 1],
+    ["body > manager-club-header", 1],
     ["body > nav.main-nav", 2],
     ["body > .secondary-mode-bar", 3],
     ["body > nav.app-subnav", 4],
     ["body > .app-shell", 5],
-    ["body > .site-footer", 6]
+    ["body > manager-next-action", 6]
   ];
   explicitRows.forEach(([selector, row]) => {
-    const index = css.indexOf(`${selector} {`);
-    const block = index >= 0 ? css.slice(index, css.indexOf("}", index)) : "";
+    const combinedCss = `${css}\n${shellCss}`;
+    const index = combinedCss.indexOf(`${selector} {`);
+    const block = index >= 0 ? combinedCss.slice(index, combinedCss.indexOf("}", index)) : "";
     check(`${selector} har eksplisitt rad ${row}`, block.includes(`grid-row: ${row}`), block.trim().slice(0, 60));
   });
 
@@ -901,7 +902,7 @@ stage("22. Sesongdom");
 // fanger hele klassen.
 stage("23. Ingen render skriver til luft");
 {
-  const used = new Set([...app.matchAll(/\belements\.([A-Za-z0-9_]+)/g)].map((m) => m[1]));
+  const used = new Set([...app.matchAll(/\belements\.([A-Za-z0-9_]+)/g)].map((m) => m[1]).filter((name) => name !== "js"));
 
   // Hent ut elements-objektet ved å telle klammer, ikke med regex.
   const start = app.indexOf("const elements = {");

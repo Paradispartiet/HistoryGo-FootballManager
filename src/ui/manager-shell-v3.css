@@ -1,3 +1,5 @@
+@import url("./manager-shell-foundation.css");
+
 /* Manager Shell v3: presentation-only layer. Engines and persisted state stay
    in their existing modules; this file owns the five-area shell and its direct
    work surfaces. */
@@ -42,7 +44,7 @@
 
 .lineup-direct-head h3,
 .pitch-bench-head h3,
-.training-workspace-step-head h3 {
+.training-workspace-step-head strong {
   margin: 0;
 }
 
@@ -164,12 +166,51 @@
   outline: none;
 }
 
+.training-workspace-step-head {
+  appearance: none;
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.training-workspace-step-head > span:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.training-workspace-step-head > span:first-child > strong {
+  font-size: 1.05rem;
+}
+
+.training-workspace-step-head::after {
+  content: "+";
+  align-self: center;
+  font-size: 1.25rem;
+}
+
+.training-workspace-step-head[aria-expanded="true"]::after {
+  content: "–";
+}
+
+.training-workspace-step-body {
+  padding-top: 12px;
+}
+
+.training-workspace-step-body[hidden] {
+  display: none !important;
+}
+
 .training-workspace-step:focus {
   border-color: #fff;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
 }
 
-.training-workspace-step-head > span {
+.training-workspace-step-head > span:last-of-type {
   padding: 5px 8px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 999px;
@@ -246,19 +287,21 @@
 }
 
 @media (max-width: 760px) {
-  .nav-tab-club .nav-label { font-size: 0 !important; }
-  .nav-tab-club .nav-label::after { content: "Mer"; font-size: 0.58rem; }
+  .main-nav .nav-tab-club .nav-label { font-size: 0 !important; }
+  .main-nav .nav-tab-club .nav-label::after {
+    content: "Mer";
+    display: block;
+    color: var(--hg-text-muted);
+    font-size: 0.58rem;
+  }
 
   .main-nav {
-    position: fixed !important;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: auto !important;
-    z-index: 80;
-    padding-bottom: env(safe-area-inset-bottom) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.26);
-    background: rgba(5, 7, 6, 0.97);
+    position: static !important;
+    inset: auto !important;
+    z-index: 30;
+    padding-bottom: 4px !important;
+    border-top: 0;
+    background: #070a10;
   }
 
   .main-nav-inner {
@@ -275,11 +318,11 @@
   }
 
   .site-footer {
-    bottom: calc(58px + env(safe-area-inset-bottom));
+    bottom: auto;
   }
 
   .app-shell {
-    padding-bottom: calc(128px + env(safe-area-inset-bottom));
+    padding-bottom: 0;
   }
 
   .office-main {
@@ -314,6 +357,37 @@
 
   .matchday-panel {
     padding: 14px;
+  }
+}
+
+/* The plan is a compact progress rail; the actual program, focus and player
+   work lives in the one-open-at-a-time workspace directly below it. */
+.training-plan-steps {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.training-plan-step {
+  min-width: 0;
+  border: 0;
+  border-top: 2px solid var(--line-soft, rgba(255, 255, 255, 0.24));
+  border-radius: 0;
+  background: transparent;
+  padding: 0.65rem 0.15rem 0;
+}
+
+.training-plan-step-role,
+.training-plan-step-detail {
+  display: none;
+}
+
+.training-plan-step-action {
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 760px) {
+  .training-plan-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

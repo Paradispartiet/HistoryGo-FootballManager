@@ -16,6 +16,7 @@ import { computeNextActions, NEXT_ACTION_TYPES } from "../src/football-next-acti
 const root = join(fileURLToPath(new URL("..", import.meta.url)));
 const appSource = readFileSync(join(root, "src/app.js"), "utf8");
 const htmlSource = readFileSync(join(root, "index.html"), "utf8");
+const shellSource = readFileSync(join(root, "src/ui/manager-shell-elements.js"), "utf8");
 
 const failures = [];
 const check = (label, ok) => {
@@ -155,8 +156,8 @@ check("league save får id når sesong starter", appSource.includes("activeLeagu
 // Klubbidentitet er klubben spilleren opprettet (navn + manager), ikke et
 // History Go-stedsanker. Den står nå i toppen i stedet for i en egen boks på
 // Kontor, som gjentok tall managerportalen og klubbuka allerede viste.
-check("klubbidentiteten står i toppen", htmlSource.includes('id="headerClubName"') && appSource.includes("function renderHeaderClubIdentity"));
-check("klubbidentiteten viser navn og manager", htmlSource.includes('id="headerClubManager"') && appSource.includes("model.managerName"));
+check("klubbidentiteten står i toppen", shellSource.includes('id="headerClubName"') && appSource.includes("function renderHeaderClubIdentity"));
+check("klubbidentiteten viser navn og manager", shellSource.includes('id="headerClubManager"') && appSource.includes("model.managerName"));
 check("klubbkortet på Kontor er borte", !htmlSource.includes('id="leagueClubCard"'));
 check("klubbkort bruker ikke stedsanker", !htmlSource.includes('id="leagueClubAnchor"') && !appSource.includes("Klubbanker / hjemsted"));
 check("leagueSeasonStatus vises som norsk managerstatus", appSource.includes("Før sesong") && appSource.includes("Aktiv sesong") && appSource.includes("Fullført sesong"));

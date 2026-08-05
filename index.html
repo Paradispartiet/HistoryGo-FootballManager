@@ -68,23 +68,9 @@
     </section>
   </div>
 
-  <header class="site-header">
-    <div class="header-inner">
-      <!-- Klubbidentiteten hører hjemme i toppen, over alt du gjør — ikke i en
-           egen boks på Kontor som gjentok den hver gang du kom innom. -->
-      <div class="header-title">
-        <p class="eyebrow" id="headerClubName">HG Football Manager</p>
-        <h1>Managerkontoret</h1>
-        <p class="lede" id="headerClubManager">Treneren avgjør. Les klubbens puls, bygg laget på banen og ta de neste beslutningene.</p>
-      </div>
-      <button type="button" class="settings-button" id="settingsButton" data-modal-open="modalSettings" aria-label="Innstillinger" title="Innstillinger">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="3.2"/>
-          <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
-        </svg>
-      </button>
-    </div>
-  </header>
+  <!-- Eget UI-element holder klubbidentiteten adskilt fra den store statiske
+       skjermmarkuppen. Det rendrer lys DOM før app.js binder elementene. -->
+  <manager-club-header></manager-club-header>
 
   <!-- HOVEDMENY · MANAGER SHELL V3
        Fem stabile arbeidsområder: Kontor → Lag → Kamp → Sesong → Klubb.
@@ -165,27 +151,27 @@
 
        Seksjonene på sin side bærer `data-tab-parent`, som er det som får
        hovedfanen til å lyse mens du er inne på en underflate. -->
-  <nav class="app-subnav" id="appSubnav" aria-label="Underfaner" hidden>
+  <nav class="app-subnav" id="appSubnav" role="tablist" aria-label="Underfaner" hidden>
     <!-- Kontor: det du må håndtere nå. -->
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="dashboard">Oversikt</button>
-    <button type="button" class="app-subtab" data-subnav-parent="dashboard" data-tab-target="inbox">Assistentråd</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="dashboard" data-tab-target="dashboard">Oversikt</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="dashboard" data-tab-target="inbox">Assistentråd</button>
 
     <!-- Lag: uttak, benk, trening og systemkunnskap i samme arbeidsområde. -->
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="tactics">Oppstilling</button>
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="squad">Tropp &amp; benk</button>
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="trening">Trening</button>
-    <button type="button" class="app-subtab" data-subnav-parent="tactics" data-tab-target="system">Systemet</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="tactics">Oppstilling</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="squad">Tropp &amp; benk</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="trening">Trening</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="tactics" data-tab-target="system">Systemet</button>
 
     <!-- Kamp: forberedelse, kamp og etterarbeid. -->
-    <button type="button" class="app-subtab" data-subnav-parent="kamp" data-tab-target="kamp">Kampdag</button>
-    <button type="button" class="app-subtab" data-subnav-parent="kamp" data-tab-target="analyse">Analyse</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="kamp" data-tab-target="kamp">Kampdag</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="kamp" data-tab-target="analyse">Analyse</button>
 
     <!-- Klubb/Mer: varige klubbfunksjoner. Uferdig økonomi, marked og
          fasiliteter er bevisst ikke navigerbare. -->
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="board">Styret</button>
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
-    <button type="button" class="app-subtab" data-subnav-parent="board" data-tab-target="admin">Stab &amp; drift</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="board">Styret</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="admin">Stab &amp; drift</button>
   </nav>
 
   <main class="app-shell" id="app">
@@ -194,7 +180,7 @@
     <div class="tab-section dashboard-view" data-tab-section="dashboard">
 
       <!-- Landslagsmodus: velg nasjon og se troppen. Vises kun i landslagsmodus. -->
-      <section id="nationalTeamPanel" class="panel national-team-panel" aria-label="Landslag" aria-live="polite" hidden>
+      <section id="nationalTeamPanel" class="manager-surface national-team-panel" aria-label="Landslag" aria-live="polite" hidden>
         <div class="league-club-card-head">
           <div>
             <p class="eyebrow">Landslagssjef</p>
@@ -212,7 +198,7 @@
         </div>
       </section>
 
-      <section id="tournamentPanel" class="panel tournament-panel" aria-label="Mesterskap" aria-live="polite" hidden>
+      <section id="tournamentPanel" class="manager-surface tournament-panel" aria-label="Mesterskap" aria-live="polite" hidden>
         <div class="league-club-card-head">
           <div>
             <p class="eyebrow">Mesterskap</p>
@@ -266,11 +252,11 @@
            Markupen manglet helt: renderLeagueOnboarding() skrev til fire
            elementer som ikke fantes, returnerte stille, og eneste vei til
            seriestart var «Neste handling» i footeren. -->
-      <section id="leagueOnboardingPanel" class="panel league-onboarding-panel" aria-label="Før sesongstart" aria-live="polite" hidden>
+      <section id="leagueOnboardingPanel" class="manager-surface league-onboarding-panel" aria-label="Før sesongstart" aria-live="polite" hidden>
         <p class="eyebrow">Før sesongstart</p>
         <h2>Gjør klubben klar for serien</h2>
         <p id="leagueOnboardingLead" class="muted-text">Før seriestart: 0/7 managergrep klare.</p>
-        <button type="button" id="leagueOnboardingPrimary" class="primary-action-button">Neste steg</button>
+        <p class="authoritative-action-note">Bruk «Neste handling» nederst for å åpne det første uferdige steget.</p>
         <ol id="leagueOnboardingSteps" class="league-onboarding-steps"></ol>
 
         <!-- STARTVALG. Lå som en popup-snarvei nede på Speiding — langt fra der
@@ -344,11 +330,6 @@
           <strong id="portalNextMatch">Neste kamp: låst</strong>
           <small id="portalMatchHint">Sett startellever, benk og kampplan før kampdag.</small>
         </button>
-        <button type="button" class="portal-card portal-priority-card" id="portalPriorityAction">
-          <span class="eyebrow" id="portalPriorityTag">Prioritet</span>
-          <strong id="portalPriorityTitle">Neste beslutning</strong>
-          <small id="portalPriorityHint">Følg assistentrådet og velg neste grep for kampplanen.</small>
-        </button>
         <button type="button" class="portal-card portal-inbox-card" data-tab-target="inbox">
           <span class="eyebrow">Assistentråd</span>
           <strong id="portalInboxStatus">Ingen nye assistentråd</strong>
@@ -365,15 +346,14 @@
           <h2 id="clubWeekSummary">Uke 1 · Analyse</h2>
           <div class="topbar-phase-row">
             <span class="topbar-phase" id="clubWeekPhase">Analyse</span>
-            <button type="button" id="advanceClubWeekPhase">Neste fase →</button>
+            <span class="authoritative-action-note" id="clubWeekGateHint">Neste grep styres av «Neste handling».</span>
           </div>
           <ol class="club-week-steps" id="clubWeekPhaseSteps" aria-label="Ukerytme"></ol>
           <p class="club-week-guidance" id="clubWeekPhaseGuidance">Les laget og motstanderen før uka settes i gang.</p>
         </div>
 
-        <div class="topbar-score">
-          <div class="score-ring" id="teamScore">–</div>
-          <p class="score-ring-label">Lagfit</p>
+        <div class="topbar-score topbar-team-reading">
+          <p class="eyebrow">Assistentens lagbilde</p>
           <p class="topbar-status" id="teamStatus">Laster…</p>
         </div>
 
@@ -396,7 +376,7 @@
              (fysisk, psykisk, garderobe, press, styre/media, taktisk klarhet,
              skadefare) — ikke rå tall. Forslagene ser ikke alt; manageren må
              lese konteksten selv. -->
-        <section id="offPitchSignalCard" class="panel context-panel off-pitch-signal-card dashboard-support-panel" aria-label="Off-pitch-signaler" aria-live="polite">
+        <section id="offPitchSignalCard" class="manager-surface context-panel off-pitch-signal-card dashboard-support-panel" aria-label="Off-pitch-signaler" aria-live="polite">
           <div class="panel-heading-row">
             <div>
               <p class="eyebrow">Klubbapparatet</p>
@@ -428,7 +408,7 @@
 
     <!-- ============================ SCENARIOER ============================ -->
     <div class="tab-section scenarios-view" data-tab-section="scenarios" hidden>
-      <section class="panel scenario-list-panel" aria-label="Scenarioer">
+      <section class="manager-surface scenario-list-panel" aria-label="Scenarioer">
         <p class="eyebrow">Scenarioer</p>
         <h2>Valgfrie historiske og taktiske utfordringer</h2>
         <p class="muted-text">Scenarioer er bonusmodus. De er korte tester inspirert av kjente lag, epoker og spillestiler — ikke obligatorisk start for ligaspillet.</p>
@@ -445,7 +425,7 @@
     <div class="tab-section office" data-tab-section="tactics" hidden>
 
       <!-- Kampklar-gate: kompakt 11 + 4-sjekkliste før dybdepanelene. -->
-      <section id="squadSetupGate" class="panel squad-setup-gate" aria-live="polite">
+      <section id="squadSetupGate" class="manager-surface squad-setup-gate" aria-live="polite">
         <div class="squad-setup-gate-head">
           <div>
             <p class="eyebrow">Kampklar tropp</p>
@@ -465,7 +445,7 @@
 
       <!-- Hovedflate: bane + dynamisk sidepanel -->
       <div class="office-main">
-        <section class="panel pitch-stage" aria-label="Taktisk bane">
+        <section class="manager-surface pitch-stage" aria-label="Taktisk bane">
           <div class="pitch-stage-head">
             <div>
               <p class="eyebrow">Startellever</p>
@@ -516,7 +496,7 @@
 
         </section>
 
-        <aside class="panel side-panel" id="sidePanel" aria-live="polite">
+        <aside class="manager-surface side-panel" id="sidePanel" aria-live="polite">
           <div class="side-panel-head">
             <p class="eyebrow" id="sidePanelKicker">Valgt plass</p>
             <h2 id="selectedSlotTitle">Velg en plass</h2>
@@ -525,14 +505,10 @@
           <!-- Handlinger: velg spiller og rolle for den valgte plassen. Ligger
                øverst så det alltid er tydelig HVORDAN man setter laget — selve
                grepet, ikke gjemt under profilinfo. -->
-          <form id="slotEditor" class="slot-editor">
+          <div id="slotEditor" class="slot-editor slot-editor-direct-note">
             <p class="side-actions-label">Sett spiller på denne plassen</p>
-            <label for="slotPlayerSelect">Spiller</label>
-            <select id="slotPlayerSelect" name="slotPlayer"></select>
-            <label for="slotRoleSelect">Rolle</label>
-            <select id="slotRoleSelect" name="slotRole"></select>
-            <p class="slot-editor-hint muted-text">Velg en spiller fra troppen, så en rolle. Tomme plasser fylles automatisk med «Fyll neste ledige plass» øverst.</p>
-          </form>
+            <p class="slot-editor-hint muted-text">Bruk spillerkortene og rolleknappene ved banen. Sidepanelet forklarer valget ditt.</p>
+          </div>
 
           <!-- Spillerprofil: vises når plassen har en spiller -->
           <div class="side-profile" id="sideProfile" hidden>
@@ -599,7 +575,7 @@
     <!-- Lå nederst på taktikkflata og gjorde tavla til en scrollside. Troppen er
          et oppslag du går til, ikke noe som skal forlenge banen. -->
     <div class="tab-section office" data-tab-section="squad" data-tab-parent="tactics" hidden>
-      <section id="rosterReadinessPanel" class="panel roster-readiness-panel" aria-live="polite">
+      <section id="rosterReadinessPanel" class="manager-surface roster-readiness-panel" aria-live="polite">
         <div class="roster-readiness-head">
           <div>
             <p class="eyebrow">Tropp og benk</p>
@@ -647,7 +623,7 @@
     <!-- ============================ KAMP ============================ -->
     <div class="tab-section kamp-view" data-tab-section="kamp" hidden>
       <div class="insight-grid">
-        <section class="panel matchday-panel" aria-live="polite">
+        <section class="manager-surface matchday-panel" aria-live="polite">
           <p class="eyebrow">Kampdag</p>
           <h2>Spill kamp</h2>
           <details class="panel-details">
@@ -749,7 +725,7 @@
 
       <!-- Sesongdommen: styrets regnskap etter fjorten runder. Vises bare når
            sesongen faktisk er ferdig. -->
-      <section class="panel season-review-panel" id="seasonReviewPanel" aria-label="Sesongdom" aria-live="polite" hidden>
+      <section class="manager-surface season-review-panel" id="seasonReviewPanel" aria-label="Sesongdom" aria-live="polite" hidden>
         <p class="eyebrow" id="seasonReviewVerdict">Sesongdom</p>
         <h2 id="seasonReviewHeadline">Sesongen er fullført</h2>
         <p id="seasonReviewBoard" class="season-review-board"></p>
@@ -758,14 +734,14 @@
       </section>
 
       <!-- Merittlista: sesongene huskes. -->
-      <section class="panel season-archive-panel" aria-label="Merittliste" aria-live="polite">
+      <section class="manager-surface season-archive-panel" aria-label="Merittliste" aria-live="polite">
         <p class="eyebrow">Karrieren</p>
         <h3>Merittliste</h3>
         <p id="seasonArchiveSummary" class="muted-text">Ingen fullførte sesonger ennå.</p>
         <div id="seasonArchiveTable" class="season-archive-table"></div>
       </section>
 
-      <section class="panel league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
+      <section class="manager-surface league-season-panel" id="leagueSeasonPanel" aria-label="Ligasesong" aria-live="polite" hidden>
         <div class="mini-season-head">
           <div>
             <p class="eyebrow">Ligasesong</p>
@@ -779,7 +755,7 @@
         <div id="leagueSeasonOverview" class="mini-season-overview"></div>
       </section>
 
-      <section class="panel mini-season-panel" aria-label="Prøveperiode" aria-live="polite" hidden>
+      <section class="manager-surface mini-season-panel" aria-label="Prøveperiode" aria-live="polite" hidden>
         <div class="mini-season-head">
           <div>
             <p class="eyebrow">Prøveperiode</p>
@@ -804,7 +780,7 @@
            ENKELTSPILLEREN. Selve valgene ligger i popup-er, slik at flata er en
            plan du leser på ett skjermbilde — ikke en scrollevegg.
            Motor: src/football-training-plan.js. -->
-      <section class="panel training-plan-panel" id="trainingChoiceGate" aria-label="Ukens treningsplan" aria-live="polite">
+      <section class="manager-surface training-plan-panel" id="trainingChoiceGate" aria-label="Ukens treningsplan" aria-live="polite">
         <div class="training-plan-head">
           <div>
             <p class="eyebrow">Ukens plan</p>
@@ -829,7 +805,7 @@
       <!-- Troppens tilstand: slitasje og skader er en følge av HVORDAN du har
            brukt spillerne, ikke av hvor gode de er. Lista er kort med vilje —
            bare de som trenger noe av deg. -->
-      <section class="panel squad-condition-panel" aria-label="Troppens tilstand" aria-live="polite">
+      <section class="manager-surface squad-condition-panel" aria-label="Troppens tilstand" aria-live="polite">
         <p class="eyebrow">Troppen</p>
         <h2>Form og slitasje</h2>
         <p id="squadConditionSummary" class="muted-text">Ingen kamper spilt ennå — troppen er uthvilt.</p>
@@ -839,8 +815,9 @@
       <!-- Kjernevalgene ligger i én sammenhengende arbeidsflate. Det gjør
            treningsuka lesbar og redigerbar uten en kjede av modaler. -->
       <div class="training-workspace" id="trainingWorkspace" aria-label="Treningsarbeidsflate">
-        <section class="panel training-workspace-step" id="trainingProgramStep" tabindex="-1">
-          <div class="training-workspace-step-head"><div><p class="eyebrow">Steg 2 · ukas ramme</p><h3>Treningsprogram</h3></div><span>Lagbelastning</span></div>
+        <section class="manager-surface training-workspace-step" id="trainingProgramStep" tabindex="-1">
+          <button type="button" class="training-workspace-step-head" data-training-step-toggle aria-expanded="true" aria-controls="trainingProgramStepBody"><span><span class="eyebrow">Steg 2 · ukas ramme</span><strong>Treningsprogram</strong></span><span>Lagbelastning</span></button>
+          <div class="training-workspace-step-body" id="trainingProgramStepBody">
           <p class="muted-text">Fire økter som henger sammen. Rammen setter ukas arbeidsmengde: en restitusjonsuke henter inn mer enn kampen kostet, en pressuke mindre.</p>
           <div class="training-choice-grid">
             <article><span>Viktigste signal</span><strong id="trainingChoiceSignal">Laster kontekst…</strong></article>
@@ -850,23 +827,28 @@
           </div>
           <p id="weeklyTrainingProgramStatus" class="weekly-training-status" data-selected="false">Velg ett treningsprogram for uka.</p>
           <div id="trainingPrograms" class="training-programs-list"></div>
+          </div>
         </section>
 
-        <section class="panel training-workspace-step" id="trainingFocusStep" tabindex="-1">
-          <div class="training-workspace-step-head"><div><p class="eyebrow">Steg 3 · kampens tema</p><h3>Ukens treningsfokus</h3></div><span>Kampbonus</span></div>
+        <section class="manager-surface training-workspace-step" id="trainingFocusStep" tabindex="-1">
+          <button type="button" class="training-workspace-step-head" data-training-step-toggle aria-expanded="false" aria-controls="trainingFocusStepBody"><span><span class="eyebrow">Steg 3 · kampens tema</span><strong>Ukens treningsfokus</strong></span><span>Kampbonus</span></button>
+          <div class="training-workspace-step-body" id="trainingFocusStepBody" hidden>
           <p class="muted-text">Velg ett taktisk tema. Når temaet finnes i programmet, får laget mer ut av begge valgene.</p>
           <p id="weeklyTrainingStatus" class="weekly-training-status">Velg ett fokus før kamp.</p>
           <p id="weeklyTrainingRecommendation" class="weekly-training-recommendation">Laster anbefaling…</p>
           <div id="weeklyTrainingOptions" class="weekly-training-options"></div>
+          </div>
         </section>
 
-        <section class="panel training-workspace-step" id="individualTrainingStep" tabindex="-1">
-          <div class="training-workspace-step-head"><div><p class="eyebrow">Steg 4 · enkeltspilleren</p><h3>Individuell trening</h3></div><span>Oppfølging</span></div>
+        <section class="manager-surface training-workspace-step" id="individualTrainingStep" tabindex="-1">
+          <button type="button" class="training-workspace-step-head" data-training-step-toggle aria-expanded="false" aria-controls="individualTrainingStepBody"><span><span class="eyebrow">Steg 4 · enkeltspilleren</span><strong>Individuell trening</strong></span><span>Oppfølging</span></button>
+          <div class="training-workspace-step-body" id="individualTrainingStepBody" hidden>
           <p class="muted-text">Lær en rolle, hent inn belastning, skjerp formen eller tren en spiller tilbake fra skade. Treningen endrer bruk og beredskap, ikke en kunstig samlet rating.</p>
           <p id="individualTrainingCapacity" class="weekly-training-status" data-selected="false">Laster kapasitet…</p>
           <div id="individualTrainingAssignments" class="individual-training-assignments"></div>
           <h4>Legg til oppfølging</h4>
           <div id="individualTrainingPicker" class="individual-training-picker"></div>
+          </div>
         </section>
       </div>
 
@@ -898,7 +880,7 @@
         <button type="button" data-modal-open="modalInboxArchive">Hele innboksen</button>
       </div>
 
-      <section class="panel inbox-thread-panel" aria-label="Viktig nå">
+      <section class="manager-surface inbox-thread-panel" aria-label="Viktig nå">
         <h3>Viktig nå</h3>
         <div id="inboxThreadList" class="message-list"></div>
       </section>
@@ -1268,7 +1250,7 @@
               <div><p class="eyebrow">Beslutninger</p><h3>Flere åpne beslutninger</h3></div>
               <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
             </div>
-            <section class="panel decision-strip" aria-label="Flere åpne beslutninger">
+            <section class="manager-surface decision-strip" aria-label="Flere åpne beslutninger">
               <p class="muted-text decision-strip-intro">«Neste handling» i footeren er alltid det viktigste grepet. Her ligger de øvrige åpne beslutningene på tvers av klubben.</p>
               <div id="decisionCards" class="decision-cards"></div>
             </section>
@@ -1280,7 +1262,7 @@
               <div><p class="eyebrow">Logg</p><h3>Klubbhendelser</h3></div>
               <button type="button" class="modal-close" data-modal-close aria-label="Lukk">×</button>
             </div>
-            <section class="panel club-week-event-log-panel" aria-label="Klubbhendelser">
+            <section class="manager-surface club-week-event-log-panel" aria-label="Klubbhendelser">
               <ul id="clubWeekEventLog" class="club-week-event-log"></ul>
             </section>
           </div>
@@ -1524,25 +1506,7 @@
     </div>
 
 
-  <footer class="site-footer">
-    <p>HG Football Manager — managerkontor, startellever og samlet lagfit. Fortsatt ikke full kampmotor.</p>
-
-    <!-- Neste handling v1: kompakt handlingspåminnelse i manager-footeren.
-         Bruker samme id-er og rendering som tidligere hero-plassering, slik at
-         state, handlere og aria-live fortsatt drives av eksisterende logikk. -->
-    <section class="next-action-strip" id="nextActionStrip" aria-label="Neste handling" aria-live="polite">
-      <div class="next-action-head">
-        <p class="eyebrow">Neste handling</p>
-        <span class="next-action-phase" id="nextActionPhase">Uke 1 · Analyse</span>
-      </div>
-      <button type="button" class="next-action-primary" id="nextActionPrimary">
-        <span class="next-action-tag" id="nextActionPrimaryTag">Lag</span>
-        <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
-        <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
-      </button>
-      <div class="next-action-secondary" id="nextActionSecondary" aria-label="Andre naturlige steg"></div>
-    </section>
-  </footer>
+  <manager-next-action></manager-next-action>
 
   <!-- ============================ INNSTILLINGER (POPUP) ============================
        Egen innstillingsknapp (tannhjul i headeren) → endre spillmodus, gå til
