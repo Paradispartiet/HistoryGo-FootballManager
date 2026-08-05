@@ -1,0 +1,43 @@
+name: Repair Office Audit Boundary
+
+on:
+  push:
+    branches:
+      - agent/manager-office-inbox-v1
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update audit boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("scripts/audit-dead-ends.mjs")
+          text = path.read_text()
+          old = "    const panel = html.slice(html.indexOf('id=\"leagueOnboardingPanel\"'), html.indexOf('class=\"manager-portal\"'));\n"
+          lines = [
+              "    const panelStart = html.indexOf('id=\"leagueOnboardingPanel\"');",
+              "    const panelEnd = html.indexOf('id=\"officeCommandPanel\"', panelStart);",
+              "    const panel = panelStart >= 0 && panelEnd > panelStart ? html.slice(panelStart, panelEnd) : \"\";",
+              "",
+          ]
+          if old not in text:
+              raise SystemExit("expected boundary not found")
+          path.write_text(text.replace(old, "\n".join(lines), 1))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/audit-dead-ends.mjs
+          git commit -m "Fix before-season audit boundary"
+          git push origin HEAD:${GITHUB_REF_NAME}
