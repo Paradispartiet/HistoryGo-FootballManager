@@ -144,6 +144,12 @@ jobs:
               raise SystemExit("Expected matchday enabled assertion was not found")
           source = source.replace(old, new, 1)
 
+          old = '    const pause = page.locator(".matchday-live-button").filter({ hasText: "Pause" });'
+          new = '    const pause = page.getByRole("button", { name: "Pause", exact: true });'
+          if old not in source:
+              raise SystemExit("Expected live pause locator was not found")
+          source = source.replace(old, new, 1)
+
           path.write_text(source, encoding="utf-8")
           PY
 
