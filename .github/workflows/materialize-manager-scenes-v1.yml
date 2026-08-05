@@ -67,7 +67,7 @@ jobs:
           goto_new = '''  });
             if (testInfo.title === "Kamp i gang · 1280") {
               await page.addInitScript(() => {
-                localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify({
+                const clubWeekState = {
                   week: 1,
                   phase: "matchday",
                   boardTrust: 50,
@@ -75,7 +75,32 @@ jobs:
                   tacticalClarity: 50,
                   trainingCulture: 50,
                   mediaPressure: 50
+                };
+                localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
+                  schema: "historygo-football-manager.team_merits.v1",
+                  version: 1,
+                  teamId: "browser_legacy_team",
+                  teamName: "Browser Legacy Team",
+                  activeTrainingWeek: 1,
+                  hiredStaffIds: [
+                    "bislett_speed_specialist",
+                    "ekeberg_recruitment_coach",
+                    "helenio_herrera"
+                  ],
+                  unlockedPlaceIds: ["kfum_arena"],
+                  unlockedExpertiseIds: [
+                    "team_organisation",
+                    "club_building",
+                    "development_culture",
+                    "pressing_structure",
+                    "rest_defense"
+                  ],
+                  earnedBadgeIds: ["training_culture_bronze"],
+                  badgeProgress: [],
+                  activeClassifications: ["development_team"],
+                  clubWeekState
                 }));
+                localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(clubWeekState));
               });
             }
             await page.goto("/");
