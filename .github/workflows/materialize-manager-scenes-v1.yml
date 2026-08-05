@@ -110,6 +110,16 @@ jobs:
               raise SystemExit("Expected training helper block was not found")
           source = source.replace(training_old, training_new, 1)
 
+          readiness_old = '  await expect(page.locator("#playMatchdayButton")).toBeEnabled();'
+          readiness_new = '''  const readinessNode = page.locator("#matchdayReadiness");
+            const readinessText = (await readinessNode.textContent() || "").trim();
+            const readinessData = await readinessNode.evaluate((node) => ({ ...node.dataset }));
+            console.log("MATCHDAY_READINESS", JSON.stringify({ readinessText, readinessData }));
+            await expect(page.locator("#playMatchdayButton"), `${readinessText} | ${JSON.stringify(readinessData)}`).toBeEnabled();'''
+          if readiness_old not in source:
+              raise SystemExit("Expected matchday enabled assertion was not found")
+          source = source.replace(readiness_old, readiness_new, 1)
+
           path.write_text(source, encoding="utf-8")
           PY
 
