@@ -133,7 +133,7 @@ check("footer, status og panelguard følger den ene aktive modusen", async () =>
   // Panelguarden er nå delt: alltid-league-flater vs. flater som også gates bort
   // i før-sesong (managerportal, off-pitch, «flere åpne beslutninger»).
   assert.match(app, /\.club-topbar, #clubWeekFeedback/);
-  assert.match(app, /\.manager-portal, #offPitchSignalCard, \.decision-strip/);
+  assert.match(app, /\.office-command-panel, \.office-depth, #offPitchSignalCard, \.decision-strip/);
   assert.match(app, /const leaguePreseason = leagueMode && !isLeagueSeasonActive\(\)/);
   assert.match(html, /id="secondaryModeBar"/);
   assert.match(html, /Tilbake til ligaspill/);
