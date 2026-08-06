@@ -90,7 +90,12 @@ check("kampplan peker til Lag", ready.statusCards.find((card) => card.id === "pl
 check("trening peker til treningsflaten", ready.statusCards.find((card) => card.id === "training")?.target === "trening");
 check("motstanderstatus peker til kampdetaljer før kamp", ready.statusCards.find((card) => card.id === "opponent")?.target === "details");
 check("motstanderstatus peker til analyse etter kamp", report.statusCards.find((card) => card.id === "opponent")?.target === "analyse");
-check("motstander og kontekst er bevart", ready.opponentName === "Viking" && ready.opponentContext.includes("Runde 4"));
+const expectedContextTokens = ["Eliteserien", "Runde 4", "Borte"];
+check(
+  "motstander og kontekst er bevart",
+  ready.opponentName === "Viking" && expectedContextTokens.every((token) => ready.opponentContext.includes(token)),
+  `${ready.opponentName} · ${ready.opponentContext}`
+);
 check("formasjon og kampplan er samlet", ready.planLabel.includes("Modern 4-2-3-1") && ready.planLabel.includes("Balansert"));
 check("treningsuka er synlig", ready.trainingLabel.includes("Pressmotstand"));
 check("assistentens signal er synlig", ready.signalLabel.includes("første fase"));
