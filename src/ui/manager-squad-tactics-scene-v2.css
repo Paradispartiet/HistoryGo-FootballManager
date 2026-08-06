@@ -1,0 +1,160 @@
+.manager-squad-tactics-command-panel {
+  margin: 0 0 1rem;
+  padding: clamp(0.9rem, 2vw, 1.25rem);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: linear-gradient(135deg, rgba(14, 43, 30, 0.97), rgba(4, 8, 7, 0.99) 68%);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28);
+}
+
+#squadTacticsCommand {
+  display: grid;
+  gap: 1rem;
+}
+
+.squad-tactics-command-head,
+.squad-tactics-reading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(15rem, 0.75fr);
+  gap: 0.9rem;
+  align-items: stretch;
+}
+
+.squad-tactics-command-head h2 {
+  margin: 0.12rem 0 0.3rem;
+  font-size: clamp(1.45rem, 3vw, 2.2rem);
+}
+
+.squad-tactics-command-headline {
+  max-width: 65ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.squad-tactics-identity,
+.squad-tactics-status,
+.squad-tactics-reading-card,
+.squad-tactics-next {
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: rgba(0, 0, 0, 0.32);
+  color: inherit;
+}
+
+.squad-tactics-identity {
+  display: grid;
+  gap: 0.22rem;
+  width: 100%;
+  padding: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.squad-tactics-identity span,
+.squad-tactics-status-label,
+.squad-tactics-reading-card > span,
+.squad-tactics-next span {
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.squad-tactics-identity strong,
+.squad-tactics-status-value,
+.squad-tactics-reading-card strong,
+.squad-tactics-next strong {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.squad-tactics-identity small,
+.squad-tactics-status-detail,
+.squad-tactics-next small {
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.35;
+}
+
+.squad-tactics-status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.squad-tactics-status {
+  display: grid;
+  align-content: start;
+  gap: 0.28rem;
+  min-height: 8rem;
+  padding: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.squad-tactics-status[data-tone="positive"] { border-color: rgba(128, 235, 163, 0.72); }
+.squad-tactics-status[data-tone="attention"] { border-color: rgba(247, 208, 103, 0.78); }
+.squad-tactics-status[data-tone="negative"] { border-color: rgba(255, 132, 132, 0.78); }
+
+.squad-tactics-status:hover,
+.squad-tactics-status:focus-visible,
+.squad-tactics-identity:hover,
+.squad-tactics-identity:focus-visible {
+  background: rgba(255, 255, 255, 0.09);
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.squad-tactics-reading-card,
+.squad-tactics-next {
+  display: grid;
+  gap: 0.38rem;
+  min-width: 0;
+  padding: 0.95rem;
+}
+
+.squad-tactics-reading-card[data-tone="attention"] { border-left: 4px solid #f4c95d; }
+.squad-tactics-reading-card[data-tone="positive"] { border-left: 4px solid #79d897; }
+
+.squad-tactics-reading-card p {
+  margin: 0.15rem 0 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.squad-tactics-next {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.squad-tactics-command-action {
+  min-height: 2.9rem;
+  padding: 0.72rem 1rem;
+  border: 1px solid #fff;
+  background: #fff;
+  color: #050807;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.squad-tactics-command-action:hover,
+.squad-tactics-command-action:focus-visible {
+  background: #dff6e7;
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+#squadTacticsCommand[data-ready="true"] .squad-tactics-command-action {
+  background: #a8edba;
+}
+
+@media (max-width: 900px) {
+  .squad-tactics-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .squad-tactics-command-head,
+  .squad-tactics-reading { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .manager-squad-tactics-command-panel { padding: 0.78rem; }
+  .squad-tactics-status-grid { grid-template-columns: 1fr; }
+  .squad-tactics-status { min-height: 0; }
+  .squad-tactics-next { grid-template-columns: 1fr; }
+  .squad-tactics-command-action { width: 100%; }
+}
