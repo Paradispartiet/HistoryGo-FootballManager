@@ -1,0 +1,48 @@
+name: Temporary materialize manager club scene v1
+
+on:
+  push:
+    branches:
+      - agent/manager-club-scene-v1
+    paths:
+      - .github/workflows/temp-materialize-manager-club-scene-v1.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/manager-club-scene-v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Materialize club scene integration
+        run: python scripts/temp-materialize-manager-club-scene-v1.py
+      - name: Install dependencies
+        run: npm ci
+      - name: Verify static integration
+        run: |
+          npm run check:syntax
+          npm run check:dom-ids
+          npm run audit:ci-coverage
+          npm run audit:manager-club-scene-v1
+          npm run sim:manager-club-scene-v1
+          npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Generate intentional club baseline
+        run: npx playwright test tests/browser/manager-club-scene-v1.spec.js --project=chromium --update-snapshots
+      - name: Verify club browser contract
+        run: npx playwright test tests/browser/manager-club-scene-v1.spec.js --project=chromium
+      - name: Commit permanent integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html src/app.js package.json .github/workflows/ci.yml tests/browser/manager-club-scene-v1.spec.js-snapshots/club-768-chromium-linux.png
+          git commit -m "Koble inn klubbscene v1"
+          git push origin HEAD:agent/manager-club-scene-v1
