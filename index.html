@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="src/ui/manager-shell-v3.css">
   <link rel="stylesheet" href="src/ui/manager-training-scene-v2.css">
+  <link rel="stylesheet" href="src/ui/manager-club-scene-v1.css">
 </head>
 <body>
   <!-- ============================ ONBOARDING (EGEN SKJERM) ============================
@@ -169,7 +170,7 @@
 
     <!-- Klubb/Mer: varige klubbfunksjoner. Uferdig økonomi, marked og
          fasiliteter er bevisst ikke navigerbare. -->
-    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="board">Styret</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="board">Oversikt</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="admin">Stab &amp; drift</button>
@@ -1109,6 +1110,13 @@
          her er live via renderBoardRoom(). Budsjett/kontrakter er ærlig merket
          som senere, som en liten sekundær note, ikke som hovedinnhold. -->
     <div class="tab-section dept dept-board" data-tab-section="board" hidden>
+      <section class="manager-surface club-command-panel" id="clubCommandPanel" aria-label="Klubbkontoret" aria-live="polite">
+        <div id="clubCommand" class="club-command"></div>
+      </section>
+
+      <details class="club-depth" id="clubDepth">
+        <summary>Styrets vurdering og klubbverdier</summary>
+        <div class="club-depth-content">
       <section class="dept-hero dept-hero-board">
         <div>
           <p class="eyebrow">Boardroom</p>
@@ -1142,6 +1150,8 @@
           <p class="facility-empty board-future-note">Budsjett og kontrakter kobles på i full managerutgave.</p>
         </article>
       </div>
+        </div>
+      </details>
     </div>
 
     <!-- ============================ HISTORY GO ============================ -->
