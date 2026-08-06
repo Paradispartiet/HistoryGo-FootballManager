@@ -34,7 +34,7 @@ text = path.read_text()
 
 prepare_start = text.index("async function prepareAndOpenPreMatch(page) {")
 prepare_end = text.index("test.beforeEach", prepare_start)
-prepare = '''async function prepareAndOpenPreMatch(page) {\n  await openMatchday(page);\n  const play = page.locator("#playMatchdayButton");\n  await expect(play).toBeEnabled();\n  await play.click();\n  await expect(page.locator(".matchday-kickoff-button")).toBeVisible();\n}\n\n'''
+prepare = '''async function prepareAndOpenPreMatch(page) {\n  await openMatchday(page);\n  const play = page.locator("#playMatchdayButton");\n  await expect(play).toBeEnabled();\n  const scene = page.locator("#matchdayCommand .matchday-scene");\n  await expect(scene).toHaveAttribute("data-phase", "ready");\n  const sceneAction = page.locator("#matchdayCommand .matchday-scene-action");\n  await expect(sceneAction).toBeVisible();\n  await sceneAction.click();\n  await expect(page.locator(".matchday-kickoff-button")).toBeVisible();\n}\n\n'''
 text = text[:prepare_start] + prepare + text[prepare_end:]
 
 before_start = text.index("test.beforeEach(async ({ page }) => {")
