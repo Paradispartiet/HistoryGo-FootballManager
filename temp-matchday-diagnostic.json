@@ -1,5 +1,14 @@
 {
   "diagnostic": {
+    "renderDebug": {
+      "renderMatchdayCalled": true,
+      "resultReferenceFound": true,
+      "commandReferenceFound": true,
+      "readinessReferenceFound": true,
+      "stage": "entered-gate",
+      "gateCalled": true,
+      "gateContainerId": "matchdayCommand"
+    },
     "panel": {
       "tag": "SECTION",
       "id": "matchdayCommandPanel",
@@ -36,6 +45,33 @@
       "height": 0,
       "childCount": 0
     },
+    "readiness": {
+      "tag": "P",
+      "id": "matchdayReadiness",
+      "className": "matchday-readiness",
+      "hidden": false,
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "width": 1022,
+      "height": 36.390625,
+      "childCount": 0
+    },
+    "playButton": {
+      "tag": "BUTTON",
+      "id": "playMatchdayButton",
+      "className": "is-primary",
+      "hidden": false,
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "0.52",
+      "width": 240,
+      "height": 52,
+      "childCount": 0
+    },
+    "readinessHTML": "Ikke kampklar: Velg treningsprogram før kamp.",
+    "readinessText": "Ikke kampklar: Velg treningsprogram før kamp.",
+    "playDisabled": true,
     "commandHTML": "",
     "resultHTML": "",
     "commandHasScene": false,
