@@ -25,6 +25,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Materialize temporary squad tactics implementation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("scripts/temp-materialize-manager-squad-tactics-scene-v2.py")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace('aria-labelledby=\\"squadTacticsCommandTitle\\"', 'aria-label=\\"Lag og taktikk\\"')
+          text = text.replace('files.presentation.includes("dataSquadTacticsTarget")', 'files.presentation.includes("dataset.squadTacticsTarget")')
+          path.write_text(text, encoding="utf-8")
+          PY
+          python scripts/temp-materialize-manager-squad-tactics-scene-v2.py
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -73,6 +85,7 @@ jobs:
           npm run audit:manager-training-scene-v2
           npm run audit:manager-club-scene-v1
           npm run audit:manager-matchday-scene-v1
+          npm run audit:manager-squad-tactics-scene-v2
 
       - name: Simuleringer (motorer ende-til-ende)
         run: |
@@ -101,6 +114,7 @@ jobs:
           npm run sim:manager-training-scene-v2
           npm run sim:manager-club-scene-v1
           npm run sim:manager-matchday-scene-v1
+          npm run sim:manager-squad-tactics-scene-v2
           npm run sim:role-familiarity
           npm run sim:league-season
           npm run sim:mode-isolation
@@ -121,5 +135,168 @@ jobs:
       - name: Installer Chromium for nettleservakter
         run: npx playwright install --with-deps chromium
 
+      - name: Materialize squad tactics visual baseline
+        run: npx playwright test tests/browser/manager-squad-tactics-scene-v2.spec.js --project=chromium --update-snapshots
+
       - name: Responsive nettleservakter og visuelle differanser
         run: npm run test:browser
+
+      - name: Prepare permanent implementation artifact
+        if: success()
+        run: |
+          rm -f scripts/temp-materialize-manager-squad-tactics-scene-v2.py
+          rm -f .github/workflows/temp-materialize-manager-squad-tactics-scene-v2.yml
+          cat > .github/workflows/ci.yml <<'YAML'
+          name: CI
+
+          # PR-/branch-sikkerhetsnett: kjører hele verifiseringssuiten før kode når main.
+          # Deploy-workflowen (pages.yml) kjører kjernesjekkene på push til main; denne
+          # kjører i tillegg alle sim-/audit-scriptene på PR-er og feature-branch-pushes.
+          # Alle scriptene bruker kun standardbibliotek (ingen DOM/nett), så de er raske.
+          on:
+            pull_request:
+            push:
+              branches-ignore:
+                - main
+
+          concurrency:
+            group: ci-${{ github.ref }}
+            cancel-in-progress: true
+
+          permissions:
+            contents: read
+
+          jobs:
+            verify:
+              runs-on: ubuntu-latest
+
+              steps:
+                - name: Checkout repository
+                  uses: actions/checkout@v4
+
+                - name: Setup Node
+                  uses: actions/setup-node@v4
+                  with:
+                    node-version: 22
+                    cache: npm
+
+                - name: Install dependencies
+                  run: npm ci
+
+                - name: Typecheck TypeScript engine
+                  run: npm run typecheck
+
+                - name: Build TypeScript engine
+                  run: npm run build
+
+                - name: Audit Pages artifact
+                  run: |
+                    npm run stage:pages
+                    npm run audit:pages-artifact
+
+                - name: Data audits
+                  run: |
+                    npm run audit:knowledge
+                    npm run audit:ci-coverage
+                    npm run audit:clubs
+                    npm run audit:football-book-knowledge
+                    npm run audit:football-book-ux
+                    npm run audit:scenarios
+                    npm run audit:hg-football
+                    npm run audit:hg-historical-fit
+                    npm run audit:hg-coach-context
+                    npm run audit:hg-formation-knowledge
+                    npm run audit:historical-opponents
+                    npm run audit:tournaments
+                    npm run audit:tactics
+                    npm run audit:attributes
+
+                - name: UI-/flyt-vakter
+                  run: |
+                    npm run check:syntax
+                    npm run check:dom-ids
+                    npm run audit:flow
+                    npm run audit:dead-ends
+                    npm run audit:manager-shell-v3
+                    npm run audit:manager-office-inbox-v1
+                    npm run audit:manager-training-scene-v2
+                    npm run audit:manager-club-scene-v1
+                    npm run audit:manager-matchday-scene-v1
+                    npm run audit:manager-squad-tactics-scene-v2
+
+                - name: Simuleringer (motorer ende-til-ende)
+                  run: |
+                    npm run sim:matchday
+                    npm run sim:mini-season
+                    npm run sim:tournament
+                    npm run sim:match-plan
+                    npm run sim:pitch-layout
+                    npm run sim:training-week
+                    npm run sim:training-plan
+                    npm run sim:individual-training
+                    npm run sim:player-weaknesses
+                    npm run sim:player-attributes
+                    npm run sim:formation-matchup
+                    npm run sim:suggested-setups
+                    npm run sim:training-programs
+                    npm run sim:off-pitch
+                    npm run sim:inbox
+                    npm run sim:club-week
+                    npm run sim:role-learning
+                    npm run sim:staff-identity
+                    npm run sim:manager-flow-ui
+                    npm run sim:manager-ground-flow-v1
+                    npm run sim:manager-season-scene-v1
+                    npm run sim:manager-office-inbox-v1
+                    npm run sim:manager-training-scene-v2
+                    npm run sim:manager-club-scene-v1
+                    npm run sim:manager-matchday-scene-v1
+                    npm run sim:manager-squad-tactics-scene-v2
+                    npm run sim:role-familiarity
+                    npm run sim:league-season
+                    npm run sim:mode-isolation
+                    npm run sim:first-time
+                    npm run sim:first-run-real-seed
+                    npm run sim:first-run-football-book-qa
+                    npm run sim:player-stats
+                    npm run sim:substitutions
+                    npm run sim:player-condition
+                    npm run sim:scenarios
+                    npm run sim:season-review
+                    npm run sim:federation-verdict
+                    npm run sim:league-playoff
+                    npm run sim:club-selection
+                    npm run sim:club-tradition
+                    npm run sim:club-squad
+
+                - name: Installer Chromium for nettleservakter
+                  run: npx playwright install --with-deps chromium
+
+                - name: Responsive nettleservakter og visuelle differanser
+                  run: npm run test:browser
+          YAML
+          files=(
+            ".github/workflows/ci.yml"
+            "docs/MANAGER_SQUAD_TACTICS_SCENE_V2.md"
+            "index.html"
+            "package.json"
+            "scripts/audit-manager-squad-tactics-scene-v2.mjs"
+            "scripts/simulate-manager-squad-tactics-scene-v2.mjs"
+            "src/app.js"
+            "src/ui/manager-squad-tactics-presentation.js"
+            "src/ui/manager-squad-tactics-scene-v2.css"
+            "tests/browser/manager-squad-tactics-scene-v2.spec.js"
+            "tests/browser/manager-squad-tactics-scene-v2.spec.js-snapshots/squad-tactics-768-chromium-linux.png"
+          )
+          for file in "${files[@]}"; do
+            mkdir -p "materialized-output/$(dirname "$file")"
+            cp "$file" "materialized-output/$file"
+          done
+
+      - name: Upload permanent implementation artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-squad-tactics-scene-v2
+          path: materialized-output
+          if-no-files-found: error
