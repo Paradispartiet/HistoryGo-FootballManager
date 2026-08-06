@@ -38,7 +38,7 @@ check("appen importerer renderfunksjonen", files.app.includes("renderManagerMatc
 check("appen bruker autoritativ readiness", files.app.includes("getMatchdayReadiness(teamFit)"));
 check("appen bruker eksisterende rapporttransformasjon", files.app.includes("createMatchReport(lastMatch)"));
 check("appen bruker eksisterende avspark", files.app.includes("startMatchdayKickoff"));
-check("appen bruker eksisterende faner", files.app.includes('activateTab("analyse")') && files.app.includes('activateTab("tactics")'));
+check("appen bruker bare validerte eksisterende fanemål", files.app.includes('["dashboard", "tactics", "trening", "analyse"]') && files.app.includes("activateTab(target)"));
 check("mobilregler finnes", files.style.includes("Manager Matchday Scene v1") && files.style.includes("@media (max-width: 640px)"));
 check("nettleservakten kontrollerer mobil overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
 check("nettleservakten kontrollerer WCAG", files.browser.includes("AxeBuilder") && files.browser.includes("wcag2aa"));
