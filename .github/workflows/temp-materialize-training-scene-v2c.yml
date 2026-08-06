@@ -1,0 +1,39 @@
+name: Temporary materialize training scene v2c
+
+on:
+  push:
+    branches:
+      - agent/manager-training-scene-v2
+    paths:
+      - .github/workflows/temp-materialize-training-scene-v2c.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/manager-training-scene-v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Materialize training scene
+        run: python scripts/temp-materialize-training-scene-v2.py
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate source changes
+        run: |
+          npm run check:syntax
+          npm run check:dom-ids
+          npm run sim:manager-training-scene-v2
+      - name: Commit source changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html src/app.js package.json
+          git commit -m "Bygg treningsscene v2"
+          git push origin HEAD:agent/manager-training-scene-v2
