@@ -1,0 +1,319 @@
+/* Manager Training Scene v2: situasjon først, valg nummer to, dybde foldet. */
+.manager-surface.training-command-panel {
+  padding: 0;
+  overflow: hidden;
+  border-bottom: 0;
+  border-radius: 18px;
+  background: #070b12;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+}
+
+.training-command {
+  display: grid;
+  gap: 16px;
+  padding: clamp(18px, 3vw, 30px);
+}
+
+.training-command-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.training-command-head h2 {
+  margin: 2px 0 7px;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.training-command-headline {
+  max-width: 720px;
+  margin: 0;
+  color: #bac3ce;
+  line-height: 1.5;
+}
+
+.training-opponent-brief {
+  display: grid;
+  gap: 5px;
+  min-width: min(300px, 38vw);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 14px;
+  background: #111823;
+  color: #f2f4f7;
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.training-opponent-brief:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.training-opponent-brief span,
+.training-assistant-signal > span,
+.training-load-brief > span,
+.training-command-next span,
+.training-command-status-label {
+  color: #bac3ce;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.training-opponent-brief strong {
+  font-size: 1.22rem;
+}
+
+.training-opponent-brief small {
+  color: #bac3ce;
+  line-height: 1.4;
+}
+
+.training-command-reading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.75fr);
+  gap: 12px;
+}
+
+.training-assistant-signal,
+.training-load-brief {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  background: #0f131b;
+  padding: 18px;
+}
+
+.training-assistant-signal {
+  border-color: rgba(77, 163, 255, 0.5);
+}
+
+.training-assistant-signal strong,
+.training-load-brief strong {
+  font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+  line-height: 1.2;
+}
+
+.training-assistant-signal p,
+.training-load-brief p {
+  margin: 0;
+  color: #d2d8e0;
+  line-height: 1.5;
+}
+
+.training-load-brief small {
+  color: #bac3ce;
+  line-height: 1.45;
+}
+
+.training-load-brief[data-tone="negative"] {
+  border-color: rgba(255, 107, 94, 0.58);
+}
+
+.training-load-brief[data-tone="attention"] {
+  border-color: rgba(255, 180, 84, 0.58);
+}
+
+.training-command-status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.training-command-status {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+  min-height: 118px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  background: #0c1119;
+  color: #f2f4f7;
+  padding: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.training-command-status::before {
+  content: "";
+  width: 34px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.training-command-status[data-tone="positive"]::before {
+  background: #46d68c;
+}
+
+.training-command-status[data-tone="attention"]::before {
+  background: #ffb454;
+}
+
+.training-command-status[data-tone="negative"]::before {
+  background: #ff6b5e;
+}
+
+.training-command-status:hover {
+  border-color: rgba(255, 255, 255, 0.66);
+  background: #151c27;
+}
+
+.training-command-status-value {
+  font-size: 1.1rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.training-command-status-detail {
+  color: #bac3ce;
+  line-height: 1.4;
+}
+
+.training-command-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid rgba(70, 214, 140, 0.48);
+  border-radius: 16px;
+  background: #0b1714;
+  padding: 16px 18px;
+}
+
+.training-command-next > div {
+  display: grid;
+  gap: 5px;
+}
+
+.training-command-next strong {
+  font-size: 1.12rem;
+}
+
+.training-command-next small {
+  color: #bac3ce;
+}
+
+.training-command-action {
+  min-height: 46px;
+  border: 1px solid #f2f4f7;
+  border-radius: 10px;
+  background: #f2f4f7;
+  color: #070b12;
+  padding: 10px 16px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.training-command-action:hover {
+  background: #ffffff;
+}
+
+.training-depth {
+  margin-top: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  background: #080c13;
+}
+
+.training-depth > summary {
+  cursor: pointer;
+  list-style: none;
+  color: #bac3ce;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  padding: 14px 16px;
+  text-transform: uppercase;
+}
+
+.training-depth > summary::-webkit-details-marker {
+  display: none;
+}
+
+.training-depth > summary::after {
+  content: " +";
+  color: #f2f4f7;
+}
+
+.training-depth[open] > summary::after {
+  content: " −";
+}
+
+.training-depth-content {
+  display: grid;
+  gap: 10px;
+  padding: 0 16px 16px;
+}
+
+.training-depth-content > .manager-surface {
+  background: transparent;
+}
+
+.training-workspace {
+  margin-top: 14px;
+}
+
+.training-workspace-step.is-open {
+  border-bottom-color: rgba(255, 255, 255, 0.42);
+}
+
+@media (max-width: 900px) {
+  .training-command-head,
+  .training-command-next {
+    align-items: stretch;
+  }
+
+  .training-command-reading {
+    grid-template-columns: 1fr;
+  }
+
+  .training-command-status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .training-command {
+    gap: 13px;
+    padding: 16px;
+  }
+
+  .training-command-head,
+  .training-command-next {
+    display: grid;
+  }
+
+  .training-opponent-brief {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .training-command-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .training-command-status {
+    min-height: 96px;
+  }
+
+  .training-command-action {
+    width: 100%;
+  }
+
+  .training-depth-content {
+    padding-inline: 12px;
+  }
+}
