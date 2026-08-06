@@ -18,6 +18,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/manager-matchday-scene-v1
+      - name: Extract original matchday region
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('src/app.js').read_text()
+          start = text.index('function renderMatchdayGate(container, teamFit) {')
+          end = text.index('// Pre_match:', start)
+          Path('temp-original-matchday-region.txt').write_text(text[start:end])
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -45,6 +55,6 @@ jobs:
           set -euxo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add temp-matchday-diagnostic.json
-          git commit -m "Oppdater instrumentert kampdagdiagnostikk"
+          git add temp-matchday-diagnostic.json temp-original-matchday-region.txt
+          git commit -m "Publiser original kampdagregion"
           git push origin HEAD:agent/manager-matchday-scene-v1
