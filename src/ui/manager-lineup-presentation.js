@@ -1,3 +1,5 @@
+import "./manager-squad-tactics-scene-v2.js";
+
 // ============================================================================
 // Lineup presentation helpers — qualitative manager language, no hidden overall.
 // Pure functions: no DOM, state or engine ownership.
