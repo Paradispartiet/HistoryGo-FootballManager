@@ -17,6 +17,7 @@ const root = join(fileURLToPath(new URL("..", import.meta.url)));
 const appSource = readFileSync(join(root, "src/app.js"), "utf8");
 const htmlSource = readFileSync(join(root, "index.html"), "utf8");
 const shellSource = readFileSync(join(root, "src/ui/manager-shell-elements.js"), "utf8");
+const matchdaySource = readFileSync(join(root, "src/ui/manager-matchday-presentation.js"), "utf8");
 
 const failures = [];
 const check = (label, ok) => {
@@ -227,8 +228,21 @@ check("tom kontekst gir minst én handling eller tom liste uten feil", Array.isA
       && app.includes("elements.trainingPlanHeadline")
       && app.includes("elements.trainingPlanLoad")
   );
-  check("Kampfanen har tydelig kampdag-gate", app.includes("renderMatchdayGate") && app.includes("createMatchdaySceneModel") && app.includes("scene.primaryAction") && app.includes("scene.statusLabel"));
-  check("Kampfanen viser CTA-er for states", app.includes("Spill kamp") && app.includes("Fortsett kampen") && app.includes("Forbered neste kamp"));
+  check(
+  "Kampfanen har tydelig kampdag-gate",
+  app.includes("renderManagerMatchdayCommand")
+    && app.includes("createMatchdaySceneModel")
+    && matchdaySource.includes("resolvePhase")
+    && matchdaySource.includes("statusLabel")
+    && matchdaySource.includes("primaryAction")
+);
+  check(
+  "Kampfanen viser CTA-er for states",
+  matchdaySource.includes('action: "Fullfør forberedelsene"')
+    && matchdaySource.includes('action: "Start kampen"')
+    && matchdaySource.includes('action: "Gå til kampbildet"')
+    && matchdaySource.includes('action: "Åpne kampanalysen"')
+);
   check("Kamprapporten folder dybde i details", app.includes("matchday-detail-drawer") && app.includes("Full kampanalyse"));
 }
 
