@@ -71,6 +71,7 @@ jobs:
           npm run audit:manager-shell-v3
           npm run audit:manager-office-inbox-v1
           npm run audit:manager-training-scene-v2
+          npm run audit:manager-club-scene-v1
 
       - name: Simuleringer (motorer ende-til-ende)
         run: |
@@ -97,6 +98,7 @@ jobs:
           npm run sim:manager-season-scene-v1
           npm run sim:manager-office-inbox-v1
           npm run sim:manager-training-scene-v2
+          npm run sim:manager-club-scene-v1
           npm run sim:role-familiarity
           npm run sim:league-season
           npm run sim:mode-isolation

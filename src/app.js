@@ -8,6 +8,7 @@ import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js"
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
+import { createManagerClubSceneModel, renderManagerClubCommand } from "./ui/manager-club-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -825,6 +826,8 @@ const elements = {
   facilityMedicalStatus: document.querySelector("#facilityMedicalStatus"),
   marketMediaValue: document.querySelector("#marketMediaValue"),
   marketReputationNote: document.querySelector("#marketReputationNote"),
+  clubCommand: document.querySelector("#clubCommand"),
+  clubDepth: document.querySelector("#clubDepth"),
   boardTrustValue: document.querySelector("#boardTrustValue"),
   boardTrustFill: document.querySelector("#boardTrustFill"),
   boardTrustNote: document.querySelector("#boardTrustNote"),
@@ -9049,8 +9052,61 @@ function renderFacilities() {
   }
 }
 
+
+function openManagerClubTarget(target) {
+  if (target === "details") {
+    if (!elements.clubDepth) return;
+    elements.clubDepth.open = true;
+    requestAnimationFrame(() => {
+      elements.clubDepth.scrollIntoView({ behavior: "smooth", block: "start" });
+      elements.clubDepth.querySelector("summary")?.focus({ preventScroll: true });
+    });
+    return;
+  }
+  activateTab(target);
+}
+
+function renderManagerClubScene() {
+  if (!elements.clubCommand) return;
+  if (elements.clubDepth && elements.clubDepth.dataset.initialized !== "true") {
+    elements.clubDepth.open = false;
+    elements.clubDepth.dataset.initialized = "true";
+  }
+
+  const availability = getAvailability();
+  const staffIdentity = getStaffIdentitySummary();
+  const leagueSave = getLeagueSaveModel();
+  const model = createManagerClubSceneModel({
+    clubName: getSavedClubName() || "Managerklubben",
+    week: Number(state.clubWeekState?.week) || 1,
+    phaseLabel: state.clubWeekState
+      ? CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase
+      : "Klubbdrift",
+    boardExpectation: leagueSave?.boardExpectation || "Styret venter at du bygger laget og viser en tydelig retning.",
+    clubState: state.clubWeekState,
+    roster: {
+      ...(availability.rosterReadiness || {}),
+      requiredCount: REQUIRED_SQUAD_SIZE
+    },
+    staffIdentity,
+    hiredStaffCount: getHiredStaff().length,
+    unlockedStaffCount: getUnlockedStaff().length,
+    unlockedPlayersCount: getUnlockedPlayers().length,
+    unlockedPlacesCount: getUnlockedPlaceIds().size,
+    unlockedExpertiseCount: getUnlockedExpertise().length,
+    activeProgramCount: Array.isArray(state.teamMerits?.badgeProgress) ? state.teamMerits.badgeProgress.length : 0,
+    earnedBadgeCount: getEarnedBadges().length,
+    activeClassificationCount: Array.isArray(state.teamMerits?.activeClassifications)
+      ? state.teamMerits.activeClassifications.length
+      : 0
+  });
+
+  renderManagerClubCommand(elements.clubCommand, model, { onOpenTarget: openManagerClubTarget });
+}
+
 function renderBoardRoom() {
   const club = state.clubWeekState;
+  renderManagerClubScene();
 
   // Styrets forventning: avledet av tilliten akkurat nå. Kort, kontekstuell
   // retning — ikke en fasit, men det styret ser etter denne uka.
