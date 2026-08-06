@@ -73,6 +73,8 @@
     "sim:manager-club-scene-v1": "node scripts/simulate-manager-club-scene-v1.mjs",
     "audit:manager-matchday-scene-v1": "node scripts/audit-manager-matchday-scene-v1.mjs",
     "sim:manager-matchday-scene-v1": "node scripts/simulate-manager-matchday-scene-v1.mjs",
+    "audit:manager-post-match-analysis-v1": "node scripts/audit-manager-post-match-analysis-v1.mjs",
+    "sim:manager-post-match-analysis-v1": "node scripts/simulate-manager-post-match-analysis-v1.mjs",
     "audit:manager-squad-tactics-scene-v2": "node scripts/audit-manager-squad-tactics-scene-v2.mjs",
     "sim:manager-squad-tactics-scene-v2": "node scripts/simulate-manager-squad-tactics-scene-v2.mjs"
   },
