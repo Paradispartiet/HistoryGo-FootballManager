@@ -1,6 +1,6 @@
 name: Temporary materialize manager matchday scene v1
 
-# Rerun after the matchday scene binding fix.
+# Rerun with focused browser diagnostics before final materialization.
 on:
   push:
     branches:
@@ -37,6 +37,8 @@ jobs:
           npm run build
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      - name: Diagnose rendered matchday scene
+        run: npx playwright test tests/browser/temp-diagnose-manager-matchday-scene-v1.spec.js --project=chromium
       - name: Generate intentional matchday baseline
         run: npx playwright test tests/browser/manager-matchday-scene-v1.spec.js --project=chromium --update-snapshots
       - name: Verify matchday browser contract
@@ -48,7 +50,7 @@ jobs:
           git status --short
           find tests/browser -maxdepth 4 -type f -name 'matchday-768*.png' -print
           git add -A
-          git reset -- .github/workflows/ci.yml .github/workflows/temp-materialize-manager-matchday-scene-v1.yml scripts/temp-materialize-manager-matchday-scene-v1.py test-results || true
+          git reset -- .github/workflows/ci.yml .github/workflows/temp-materialize-manager-matchday-scene-v1.yml scripts/temp-materialize-manager-matchday-scene-v1.py tests/browser/temp-diagnose-manager-matchday-scene-v1.spec.js test-results || true
           git diff --cached --name-status
           test -n "$(git diff --cached --name-only)"
       - name: Commit permanent integration
