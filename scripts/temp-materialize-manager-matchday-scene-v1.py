@@ -102,7 +102,7 @@ function renderMatchdayGate(container, teamFit) {
     elements.matchdayDepth.dataset.initialized = "true";
   }
 
-  const scene = createMatchdaySceneModel({
+  const matchdayScene = createMatchdaySceneModel({
     teamName: session?.teamName || getTemporaryClubName().name,
     opponentBrief: getMatchdayOpponentBrief(session),
     opponent,
@@ -120,7 +120,7 @@ function renderMatchdayGate(container, teamFit) {
     report
   });
 
-  renderManagerMatchdayCommand(elements.matchdayCommand || container, scene, {
+  renderManagerMatchdayCommand(elements.matchdayCommand || container, matchdayScene, {
     onPrimaryAction: handleManagerMatchdayPrimaryAction,
     onOpenTarget: openManagerMatchdayTarget
   });
