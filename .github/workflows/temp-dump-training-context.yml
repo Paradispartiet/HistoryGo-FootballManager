@@ -1,0 +1,63 @@
+name: Temporary training context dump
+
+on:
+  push:
+    branches:
+      - agent/manager-training-scene-v2
+    paths:
+      - .github/workflows/temp-dump-training-context.yml
+
+permissions:
+  contents: write
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/manager-training-scene-v2
+      - name: Extract training context
+        shell: bash
+        run: |
+          mkdir -p tmp
+          python - <<'PY'
+          from pathlib import Path
+
+          def excerpts(path, needles, radius=70):
+              lines = Path(path).read_text().splitlines()
+              out = [f"===== {path} ({len(lines)} lines) ====="]
+              ranges = []
+              for needle in needles:
+                  hits = [i for i, line in enumerate(lines) if needle in line]
+                  out.append(f"NEEDLE {needle!r}: {[i + 1 for i in hits]}")
+                  for i in hits:
+                      ranges.append((max(0, i-radius), min(len(lines), i+radius+1)))
+              merged = []
+              for start, end in sorted(ranges):
+                  if merged and start <= merged[-1][1]:
+                      merged[-1] = (merged[-1][0], max(merged[-1][1], end))
+                  else:
+                      merged.append((start, end))
+              for start, end in merged:
+                  out.append(f"--- lines {start+1}-{end} ---")
+                  out.extend(f"{i+1:05d}: {lines[i]}" for i in range(start, end))
+              return "\n".join(out)
+
+          sections = [
+              excerpts("index.html", ["trainingWorkspace", "trainingPlanHeadline", "data-tab-section=\"trening\"", "weeklyTrainingProgramStatus", "trainingPlanNext"], 90),
+              excerpts("src/app.js", ["function getWeeklyTrainingPlan", "function renderWeeklyTraining", "function renderTrainingProgramCompositions", "function renderTrainingProgramContext", "function focusTrainingWorkspace", "function bindTrainingWorkspaceControls", "trainingPlanNext", "renderWeeklyTrainingFocus("], 110),
+              excerpts("package.json", ["audit:manager-office", "sim:manager-office", "playwright"], 30),
+              excerpts(".github/workflows/ci.yml", ["audit:manager-office", "sim:manager-office", "Responsive nettleservakter"], 35),
+              excerpts("tests/browser/manager-office-inbox-v1.spec.js", ["seed", "accessibility", "AxeBuilder", "test("], 45),
+          ]
+          Path("tmp/training-context.txt").write_text("\n\n".join(sections) + "\n")
+          PY
+      - name: Commit context dump
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tmp/training-context.txt
+          git commit -m "Dump training context"
+          git push origin HEAD:agent/manager-training-scene-v2
