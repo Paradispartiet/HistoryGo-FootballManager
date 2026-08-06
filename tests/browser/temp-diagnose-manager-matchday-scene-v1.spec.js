@@ -32,6 +32,8 @@ test("diagnostiserer kampdagscenen etter ordinær bootstrap", async ({ page }) =
     const panel = document.querySelector("#matchdayCommandPanel");
     const command = document.querySelector("#matchdayCommand");
     const result = document.querySelector("#matchdayResult");
+    const readiness = document.querySelector("#matchdayReadiness");
+    const playButton = document.querySelector("#playMatchdayButton");
     const describe = (node) => {
       if (!node) return null;
       const style = getComputedStyle(node);
@@ -56,9 +58,15 @@ test("diagnostiserer kampdagscenen etter ordinær bootstrap", async ({ page }) =
       current = current.parentElement;
     }
     return {
+      renderDebug: window.__matchdayDebug || null,
       panel: describe(panel),
       command: describe(command),
       result: describe(result),
+      readiness: describe(readiness),
+      playButton: describe(playButton),
+      readinessHTML: readiness?.innerHTML || "",
+      readinessText: readiness?.textContent?.replace(/\s+/g, " ").trim() || "",
+      playDisabled: Boolean(playButton?.disabled),
       commandHTML: command?.innerHTML || "",
       resultHTML: result?.innerHTML || "",
       commandHasScene: Boolean(command?.querySelector(".matchday-scene")),
