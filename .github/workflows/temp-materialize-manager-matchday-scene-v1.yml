@@ -1,6 +1,6 @@
 name: Temporary materialize manager matchday scene v1
 
-# Rerun after deterministic preseason and contrast fixes.
+# Rerun with browser runtime diagnostics.
 on:
   push:
     branches:
