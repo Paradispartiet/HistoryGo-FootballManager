@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="src/ui/manager-shell-v3.css">
   <link rel="stylesheet" href="src/ui/manager-training-scene-v2.css">
   <link rel="stylesheet" href="src/ui/manager-club-scene-v1.css">
+  <link rel="stylesheet" href="src/ui/manager-matchday-scene-v1.css">
 </head>
 <body>
   <!-- ============================ ONBOARDING (EGEN SKJERM) ============================
@@ -622,6 +623,13 @@
     <div class="tab-section kamp-view" data-tab-section="kamp" hidden>
       <div class="insight-grid">
         <section class="manager-surface matchday-panel" aria-live="polite">
+          <section class="matchday-command-panel" id="matchdayCommandPanel" aria-label="Kampkommando">
+            <div id="matchdayCommand"></div>
+          </section>
+
+          <details class="matchday-depth" id="matchdayDepth">
+            <summary>Kampdetaljer og tekniske kontroller</summary>
+            <div class="matchday-depth-content">
           <p class="eyebrow">Kampdag</p>
           <h2>Spill kamp</h2>
           <details class="panel-details">
@@ -639,6 +647,8 @@
             <button id="playMatchdayButton" type="button" class="is-primary">Spill kamp</button>
             <button id="resetMatchdayButton" type="button" class="is-reset">Nullstill kamp</button>
           </div>
+            </div>
+          </details>
           <div id="matchdayResult"></div>
         </section>
       </div>

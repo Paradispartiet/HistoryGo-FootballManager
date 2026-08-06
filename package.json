@@ -70,7 +70,9 @@
     "audit:manager-training-scene-v2": "node scripts/audit-manager-training-scene-v2.mjs",
     "sim:manager-training-scene-v2": "node scripts/simulate-manager-training-scene-v2.mjs",
     "audit:manager-club-scene-v1": "node scripts/audit-manager-club-scene-v1.mjs",
-    "sim:manager-club-scene-v1": "node scripts/simulate-manager-club-scene-v1.mjs"
+    "sim:manager-club-scene-v1": "node scripts/simulate-manager-club-scene-v1.mjs",
+    "audit:manager-matchday-scene-v1": "node scripts/audit-manager-matchday-scene-v1.mjs",
+    "sim:manager-matchday-scene-v1": "node scripts/simulate-manager-matchday-scene-v1.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
