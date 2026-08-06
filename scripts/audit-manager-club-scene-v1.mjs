@@ -20,7 +20,7 @@ function check(label, condition) {
 }
 
 console.log("\nManager Club Scene v1 audit");
-check("Klubb/Mer åpner på Oversikt", files.html.includes('data-subnav-parent="board" data-tab-target="board">Oversikt</button>'));
+check("Klubb/Mer åpner på Klubboversikt", files.html.includes('data-subnav-parent="board" data-tab-target="board">Klubboversikt</button>'));
 check("egen klubbkommandoflate finnes", files.html.includes('id="clubCommandPanel"') && files.html.includes('id="clubCommand"'));
 check("styrets dybde er foldet", files.html.includes('id="clubDepth"') && files.html.includes("Styrets vurdering og klubbverdier"));
 check("fire eksisterende klubbflater er bevart", ["board", "historygo", "progression", "admin"].every((id) => files.html.includes(`data-tab-section="${id}"`)));

@@ -40,7 +40,7 @@ test("klubbkontoret samler forventning, prioritet og fire operative funksjoner",
   await expect(page.locator(".club-command-action")).toBeVisible();
   await expect(page.locator(".club-command-status")).toHaveCount(4);
   await expect(page.locator(".club-command-metrics article")).toHaveCount(5);
-  await expect(page.locator('.app-subtab[data-subnav-parent="board"][data-tab-target="board"]')).toHaveText("Oversikt");
+  await expect(page.locator('.app-subtab[data-subnav-parent="board"][data-tab-target="board"]')).toHaveText("Klubboversikt");
   expect(await page.locator("#clubDepth").getAttribute("open")).toBeNull();
   await expect(page.locator('.app-subtab[data-tab-target="facilities"]')).toHaveCount(0);
   await expect(page.locator('.app-subtab[data-tab-target="market"]')).toHaveCount(0);

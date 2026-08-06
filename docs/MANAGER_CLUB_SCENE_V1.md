@@ -4,7 +4,7 @@ Denne leveransen gjør Klubb/Mer til ett samlet klubbkontor. Den bygger ingen ny
 
 ## Scenens hierarki
 
-Klubb/Mer åpner på **Oversikt**, ikke på en isolert styreside. Første skjerm viser:
+Klubb/Mer åpner på **Klubboversikt**, ikke på en isolert styreside. Første skjerm viser:
 
 1. klubbnavn, uke og aktiv klubbukefase;
 2. styrets forventning;
@@ -19,11 +19,11 @@ Styrets fulle vurdering og klubbverdier ligger i ett foldet dybdenivå. Speiding
 ## Arbeidsflyt
 
 ```text
-Klubb/Mer → Oversikt
+Klubb/Mer → Klubboversikt
 → forstå styrets forventning og klubbens viktigste oppgave
 → åpne riktig funksjon
 → Speiding / Stab & drift / Klubbutvikling
-→ tilbake til Oversikt
+→ tilbake til Klubboversikt
 ```
 
 Den lokale klubboppgaven erstatter ikke den globale `Neste handling`. Den hjelper manageren å drive klubbens varige funksjoner uten å skape en parallell ukeprogresjon.
