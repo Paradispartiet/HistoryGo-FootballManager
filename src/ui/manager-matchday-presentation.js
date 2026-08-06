@@ -1,7 +1,14 @@
 // ============================================================================
-// Manager Matchday Scene v1 — visual hierarchy on top of existing state.
-// The match engine, readiness, league and persistence remain authoritative.
+// Manager Matchday Scene v1 + Post-match analysis v1
+// Visual hierarchy on top of existing state. The match engine, readiness,
+// explanation, league and persistence remain authoritative.
 // ============================================================================
+
+import {
+  createPostMatchAnalysisModel,
+  ensurePostMatchStylesheet,
+  renderPostMatchAnalysis
+} from "./manager-post-match-analysis-v1.js";
 
 function text(value, fallback) {
   const normalized = String(value || "").trim();
@@ -179,6 +186,7 @@ export function createMatchdaySceneModel({
       turningPoint,
       learningPoint
     },
+    postMatch: phase === "report" ? createPostMatchAnalysisModel({ lastMatch, report }) : null,
     statusCards: [
       {
         id: "readiness",
@@ -236,6 +244,7 @@ export function renderManagerMatchdayCommand(container, model, {
   onOpenTarget
 } = {}) {
   if (!container || !model) return;
+  if (model.phase === "report") ensurePostMatchStylesheet();
   container.replaceChildren();
 
   const scene = node("section", "matchday-scene");
@@ -306,6 +315,7 @@ export function renderManagerMatchdayCommand(container, model, {
       node("small", "", model.result.learningPoint)
     );
     scene.append(report);
+    if (model.postMatch) scene.append(renderPostMatchAnalysis(model.postMatch, onOpenTarget));
   }
 
   container.append(scene);
