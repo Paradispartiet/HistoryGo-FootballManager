@@ -10243,3 +10243,121 @@ button:disabled {
     display: none;
   }
 }
+
+/* ============================================================================
+   Managerkontor og Assistentråd v1
+   Ett informasjonsnivå for ukas hovedsak, ett for beslutningsstøtte og ett
+   eksplisitt dybdenivå. Ingen ny motor; kun presentasjon og navigasjon.
+   ============================================================================ */
+.office-command-panel {
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.34);
+  background:
+    radial-gradient(100% 120% at 0% 0%, rgba(117, 214, 156, 0.11), transparent 56%),
+    linear-gradient(180deg, rgba(12, 16, 23, 0.99), rgba(3, 5, 9, 0.98));
+}
+.office-command { display: grid; gap: 18px; padding: clamp(18px, 3vw, 30px); }
+.office-command-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+.office-command-head h2 { margin: 2px 0 6px; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 0.95; letter-spacing: -0.055em; }
+.office-command-phase { margin: 0; color: var(--hg-accent-tactics); font-size: 0.84rem; font-weight: 950; letter-spacing: 0.12em; text-transform: uppercase; }
+.office-command-pulse { display: grid; gap: 5px; max-width: 390px; text-align: right; }
+.office-command-pulse span,
+.office-priority-card > span,
+.office-next-match-card > span,
+.office-status-card > span,
+.office-assistant-brief > span,
+.office-season-brief > span { color: var(--muted); font-size: 0.72rem; font-weight: 950; letter-spacing: 0.11em; text-transform: uppercase; }
+.office-command-pulse strong { font-size: 0.95rem; line-height: 1.35; }
+.office-command-main { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, 0.75fr); gap: 14px; }
+.office-priority-card,
+.office-next-match-card,
+.office-assistant-brief,
+.office-season-brief { position: relative; display: grid; align-content: start; gap: 9px; min-width: 0; border: 1px solid var(--line-soft); border-radius: 16px; background: rgba(0, 0, 0, 0.34); color: var(--text); padding: 18px; text-align: left; }
+.office-priority-card { border-color: rgba(117, 214, 156, 0.48); background: linear-gradient(135deg, rgba(117, 214, 156, 0.12), transparent 62%), rgba(0, 0, 0, 0.38); }
+.office-priority-card strong,
+.office-next-match-card strong { font-size: clamp(1.35rem, 2.8vw, 2rem); line-height: 1.08; letter-spacing: -0.025em; }
+.office-priority-card p { margin: 0; color: var(--text); font-size: 1rem; line-height: 1.5; }
+.office-priority-card small,
+.office-next-match-card small,
+.office-season-brief small { color: var(--muted); line-height: 1.45; }
+.office-next-match-card,
+.office-season-brief,
+.office-status-card { cursor: pointer; }
+.office-next-match-card:hover:not(:disabled),
+.office-season-brief:hover,
+.office-status-card:hover { border-color: rgba(255, 255, 255, 0.68); background: rgba(255, 255, 255, 0.07); }
+.office-next-match-card:disabled { cursor: default; opacity: 0.68; }
+.office-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.office-status-card { display: grid; align-content: start; gap: 6px; min-width: 0; min-height: 112px; border: 1px solid var(--line-soft); border-radius: 14px; background: rgba(255, 255, 255, 0.025); color: var(--text); padding: 14px; text-align: left; }
+.office-status-card::before { content: ""; width: 34px; height: 3px; border-radius: 999px; background: var(--line-soft); }
+.office-status-card[data-tone="positive"]::before { background: var(--hg-accent-tactics); }
+.office-status-card[data-tone="attention"]::before { background: var(--hg-accent-inbox); }
+.office-status-card[data-tone="negative"]::before { background: var(--hg-accent-kamp); }
+.office-status-card strong { font-size: 1.15rem; line-height: 1.15; }
+.office-status-card small { color: var(--muted); line-height: 1.35; }
+.office-briefing-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.75fr); gap: 12px; }
+.office-assistant-brief strong,
+.office-season-brief strong { font-size: 1.12rem; line-height: 1.3; }
+.office-assistant-brief p { margin: 0; color: var(--muted); line-height: 1.5; }
+.office-depth { margin-top: 12px; border-top: 1px solid var(--line-soft); }
+.office-depth > summary { cursor: pointer; list-style: none; color: var(--muted); font-size: 0.84rem; font-weight: 900; letter-spacing: 0.05em; padding: 14px 4px; text-transform: uppercase; }
+.office-depth > summary::-webkit-details-marker { display: none; }
+.office-depth > summary::after { content: " +"; color: var(--text); }
+.office-depth[open] > summary::after { content: " −"; }
+.office-depth-content { display: grid; gap: var(--gap); padding-top: 4px; }
+.inbox-command-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.65fr); gap: var(--gap); align-items: start; }
+.manager-surface.inbox-focus-panel,
+.manager-surface.inbox-briefing-panel,
+.manager-surface.inbox-queue-panel {
+  display: grid;
+  gap: 16px;
+  border-color: var(--hg-border-soft);
+  background: #0f131b;
+}
+.inbox-focus-panel { border-color: rgba(77, 163, 255, 0.48); }
+.inbox-focus-heading,
+.inbox-queue-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+.inbox-focus-heading h3,
+.inbox-queue-heading h3,
+.inbox-briefing-panel h3 { margin: 2px 0 0; }
+.inbox-focus-status,
+.inbox-queue-heading > span { border: 1px solid var(--line-soft); border-radius: 999px; color: var(--muted); font-size: 0.76rem; font-weight: 900; padding: 7px 11px; text-align: center; }
+.inbox-focus-status[data-tone="attention"] { border-color: rgba(255, 180, 84, 0.55); color: #ffd09a; }
+.inbox-focus-status[data-tone="positive"] { border-color: rgba(117, 214, 156, 0.45); color: var(--hg-accent-tactics); }
+.inbox-focus-list .inbox-thread-card,
+.inbox-focus-list .message-card { border-color: rgba(255, 255, 255, 0.24); background: rgba(0, 0, 0, 0.34); }
+.inbox-focus-list .inbox-thread-toggle::after { display: none; }
+.inbox-focus-list .inbox-thread-body { padding-bottom: 22px; }
+.inbox-inline-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.inbox-inline-stats div { border: 1px solid var(--line-soft); border-radius: 12px; background: rgba(255, 255, 255, 0.035); padding: 12px; }
+.inbox-inline-stats dt { color: var(--muted); font-size: 0.68rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+.inbox-inline-stats dd { margin: 5px 0 0; font-size: 1rem; font-weight: 950; }
+.inbox-briefing-panel .inbox-signal-status { margin: 0; border-left: 3px solid var(--hg-accent-inbox); color: var(--text); line-height: 1.5; padding-left: 12px; }
+.inbox-briefing-actions { display: grid; gap: 9px; }
+.inbox-briefing-actions button { width: 100%; min-height: 44px; }
+.inbox-queue-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.inbox-queue-list .inbox-thread-card,
+.inbox-queue-list .message-card { min-width: 0; }
+.inbox-queue-list .inbox-thread-toggle { min-height: 150px; }
+@media (max-width: 980px) {
+  .office-command-main,
+  .office-briefing-grid,
+  .inbox-command-layout { grid-template-columns: 1fr; }
+  .office-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .office-command-pulse { max-width: 300px; }
+}
+@media (max-width: 640px) {
+  .office-command { gap: 14px; padding: 16px; }
+  .office-command-head { display: grid; align-items: start; }
+  .office-command-pulse { max-width: none; text-align: left; }
+  .office-command-main,
+  .office-status-grid,
+  .office-briefing-grid,
+  .inbox-command-layout,
+  .inbox-queue-list { grid-template-columns: 1fr; }
+  .office-status-card { min-height: 94px; }
+  .inbox-focus-heading,
+  .inbox-queue-heading { display: grid; }
+  .inbox-focus-status { justify-self: start; }
+}

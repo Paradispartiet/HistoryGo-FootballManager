@@ -6,6 +6,7 @@ import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training
 import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-presentation.js";
 import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js";
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
+import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -614,9 +615,8 @@ const elements = {
   // Do not treat it as mandatory onboarding.
   onboardingScreen: document.querySelector("#onboardingScreen"),
   firstTimePlaythroughCard: document.querySelector("#firstTimePlaythroughCard"),
-  portalNextMatch: document.querySelector("#portalNextMatch"),
-  portalMatchHint: document.querySelector("#portalMatchHint"),
-  portalInboxStatus: document.querySelector("#portalInboxStatus"),
+  officeCommand: document.querySelector("#officeCommand"),
+  officeCommandPanel: document.querySelector("#officeCommandPanel"),
   firstTimeReadiness: document.querySelector("#firstTimeReadiness"),
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
@@ -725,6 +725,11 @@ const elements = {
   clubWeekEventLog: document.querySelector("#clubWeekEventLog"),
   inboxThreadList: document.querySelector("#inboxThreadList"),
   inboxThreadArchive: document.querySelector("#inboxThreadArchive"),
+  inboxFocusTitle: document.querySelector("#inboxFocusTitle"),
+  inboxFocusStatus: document.querySelector("#inboxFocusStatus"),
+  inboxQueuePanel: document.querySelector("#inboxQueuePanel"),
+  inboxQueueCount: document.querySelector("#inboxQueueCount"),
+  inboxQueueList: document.querySelector("#inboxQueueList"),
   inboxSignalUnread: document.querySelector("#inboxSignalUnread"),
   inboxSignalReplies: document.querySelector("#inboxSignalReplies"),
   inboxSignalStatus: document.querySelector("#inboxSignalStatus"),
@@ -5365,35 +5370,53 @@ function renderHeaderClubIdentity() {
 function renderGameModeStatus(teamFit) {
   renderOnboardingScreen();
   renderHeaderClubIdentity();
+  // Managerkontoret rendres av renderOfficeScene() etter at innboksen og
+  // kontekstsignalene er oppdatert. Denne funksjonen eier nå bare modus- og
+  // headerstatus, slik at samme informasjon ikke skrives i to presentasjoner.
+  void teamFit;
+}
 
-  const availability = getAvailability();
-  const roster = availability.rosterReadiness || {};
+function renderOfficeScene(teamFit) {
+  const container = elements.officeCommand;
+  if (!container) return;
+  if (!isLeagueModeActive() || !isLeagueSeasonActive()) {
+    container.textContent = "";
+    return;
+  }
+
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
-  const filled = assignments.filter((item) => item.player).length;
-  const unread = getInboxAttentionCount();
-  // En kamp finnes for UI-et først når league-save og terminliste er aktive.
-  // Før det bruker portalen samme første steg som onboarding/footeren.
-  const scheduledOpponent = getMiniSeasonNextOpponent();
-  const preseasonStep = isLeagueModeActive() && !isLeagueSeasonActive()
-    ? getLeagueOnboardingSteps(teamFit).find((step) => !step.done)
-    : null;
-  const nextMatch = isLeagueSeasonActive()
-    ? state.matchday?.session?.opponent?.name || scheduledOpponent?.name || "ikke terminfestet"
-    : preseasonStep?.title || "Sesongen er ikke startet";
+  const lineupCount = assignments.filter((entry) => entry.player).length;
+  const rosterReadiness = getAvailability().rosterReadiness || {};
+  const nextActions = computeManagerNextActions(teamFit);
+  const readiness = getMatchdayReadiness(teamFit);
+  const season = state.leagueSeason;
+  const table = season ? createLeagueTable(season) : [];
+  const standing = table.find((row) => row.isManager) || null;
+  const nextOpponent = season?.status === "active" ? getNextLeagueOpponent(season) : null;
+  const seasonScene = createSeasonSceneModel({ season, table, nextMatch: nextOpponent, boardExpectation: getLeagueSaveModel().boardExpectation });
 
-  if (elements.portalNextMatch) elements.portalNextMatch.textContent = `Neste kamp: ${nextMatch}`;
-  if (elements.portalMatchHint) {
-    elements.portalMatchHint.textContent = scheduledOpponent?.homeAway
-      ? `${scheduledOpponent.homeAway === "home" ? "Hjemme" : "Borte"} · klargjør kampplan og kamptropp.`
-      : "Sett startellever, benk og kampplan før kampdag.";
-  }
-  if (elements.portalInboxStatus) {
-    elements.portalInboxStatus.textContent = `Assistentråd: ${unread > 0 ? `${unread} ulest` : "rolig"}`;
-  }
-  // Troppstallene lever videre i klubbuka sine målere (completeCount/
-  // rosterReadyCount); her trengs bare at de er lest ut én gang.
-  void roster;
-  void filled;
+  const model = createOfficeSceneModel({
+    clubName: getSavedClubName() || "Managerklubben",
+    clubWeekState: state.clubWeekState,
+    phaseLabel: state.clubWeekState ? CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase : "Oppsett",
+    nextActions,
+    nextMatch: seasonScene.nextMatch,
+    lineupCount,
+    rosterCount: Number(rosterReadiness.unlockedCount) || 0,
+    trainingSelected: Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId),
+    inboxAttentionCount: getInboxAttentionCount(),
+    inboxFocusTitle: elements.inboxFocusTitle?.textContent || "Innboksen er rolig",
+    readiness,
+    teamStatus: elements.teamStatus?.textContent || "Laget er ikke vurdert ennå.",
+    assistantSignal: elements.contextHeadline?.textContent || nextActions[0]?.hint || "Les klubbens signaler før neste grep.",
+    standing,
+    lastMatch: state.matchday?.lastMatch || null,
+    boardTrust: state.clubWeekState?.boardTrust,
+    playerMorale: state.clubWeekState?.playerMorale,
+    mediaPressure: state.clubWeekState?.mediaPressure
+  });
+
+  renderOfficeCommand(container, model, { onOpenArea: (target) => activateTab(target) });
 }
 
 function renderModeIsolation() {
@@ -5411,7 +5434,7 @@ function renderModeIsolation() {
   document.querySelectorAll("[data-league-only]").forEach((node) => { node.hidden = !leagueMode; });
   document.querySelectorAll(".club-topbar, #clubWeekFeedback, .club-week-event-log-panel")
     .forEach((node) => { node.hidden = !leagueMode; });
-  document.querySelectorAll(".manager-portal, #offPitchSignalCard, .decision-strip")
+  document.querySelectorAll(".office-command-panel, .office-depth, #offPitchSignalCard, .decision-strip")
     .forEach((node) => { node.hidden = !leagueMode || leaguePreseason; });
   // Kontor: knapperaden med dype popup-er hører til ligamodus; «Flere
   // beslutninger» er fortsatt prematur i før-sesong.
@@ -14297,127 +14320,113 @@ function createInboxEventThreadCard(thread, options = {}) {
   return article;
 }
 
-// Render Innboks som trådsystem: levende kontekst-tråder (Inbox Event v1) først,
-// deretter de statiske JSON-trådene. Aktive tråder i inboxThreadList, arkiv i
-// inboxThreadArchive. Tømmer containerne (eneste innerHTML-bruk) og bygger
-// trådkort med createElement/textContent.
+// Render Innboks som en beslutningsflate: én aktiv sak i fokus, resten i en
+// kort kø og levert/løst innhold i historikken. Samme tråd- og valgmodeller som
+// før; dette endrer bare prioritering og presentasjon.
+function createInboxCandidate(kind, payload) {
+  if (kind === "event") {
+    return {
+      kind,
+      payload,
+      id: payload.id,
+      title: payload.title || "Ny sak",
+      sender: payload.sender || INBOX_EVENT_SENDER_ROLES[payload.type] || "Klubbkontoret",
+      requiresReply: payload.status !== "resolved" && Array.isArray(payload.choices) && payload.choices.length > 0
+    };
+  }
+  return {
+    kind,
+    payload,
+    id: getThreadGroupId(payload),
+    title: payload.latestMessage?.title || payload.thread?.subject || "Ny tråd",
+    sender: payload.sender?.name || payload.latestMessage?.from || "Klubbkontoret",
+    requiresReply: inboxThreadRequiresReply(payload)
+  };
+}
+
+function appendInboxCandidate(container, candidate, { open = false, showReadButton = false, archived = false } = {}) {
+  if (!container || !candidate) return;
+  if (candidate.kind === "event") {
+    container.append(createInboxEventThreadCard(candidate.payload, { open, archived }));
+    return;
+  }
+  container.append(createInboxThreadCard(candidate.payload, { open, showReadButton }));
+}
+
 function renderInboxThreads() {
-  const activeContainer = elements.inboxThreadList;
+  const focusContainer = elements.inboxThreadList;
+  const queueContainer = elements.inboxQueueList;
   const archiveContainer = elements.inboxThreadArchive;
   const inboxState = getInboxState();
   const eventActive = getActiveInboxEventThreads(inboxState);
   const eventArchived = getArchivedInboxEventThreads(inboxState);
   const activeThreads = getActiveInboxThreads();
 
-  const sortedEventActive = [...eventActive].sort((a, b) => {
-    const pa = a.priority === "critical" ? 3 : a.priority === "high" ? 2 : 1;
-    const pb = b.priority === "critical" ? 3 : b.priority === "high" ? 2 : 1;
-    return pb - pa;
-  });
+  const priorityWeight = { urgent: 4, critical: 4, high: 3, medium: 2, low: 1 };
+  const sortedEventActive = [...eventActive].sort((a, b) => ((priorityWeight[b.priority] || 1) - (priorityWeight[a.priority] || 1)));
   const sortedActiveThreads = [...activeThreads].sort((a, b) => getInboxThreadPriorityScore(b) - getInboxThreadPriorityScore(a));
+  const allCandidates = [
+    ...sortedEventActive.map((thread) => createInboxCandidate("event", thread)),
+    ...sortedActiveThreads.map((threadGroup) => createInboxCandidate("static", threadGroup))
+  ].filter((candidate) => candidate.id);
 
-  // «Viktig nå» kurateres HVER uke til ukas kvote (getInboxWeeklyCap): ett
-  // onboarding-signal i uke 1, et lite prioritert utvalg senere. Er ukas signal
-  // kvittert ut, er lista tom (med vei videre) — resten av de uleste trådene
-  // ligger lesbart som «kan leses senere», aldri usynlige og aldri hele
-  // katalogen på én gang. Levende kontekst-tråder (event) prioriteres foran de
-  // statiske innen samme kvote.
   const cap = getInboxWeeklyCap();
   const signalHandled = hasAcknowledgedInboxThisWeek();
-  const visibleEventActive = signalHandled ? [] : sortedEventActive.slice(0, cap);
-  const visibleActiveThreads = signalHandled
-    ? []
-    : sortedActiveThreads.slice(0, Math.max(0, cap - visibleEventActive.length));
+  const attentionCandidates = signalHandled ? [] : allCandidates.slice(0, cap);
+  const selectedCandidate = allCandidates.find((candidate) => candidate.id === state.openInboxThreadId) || null;
+  const focusCandidate = selectedCandidate || attentionCandidates[0] || null;
+  const queueCandidates = allCandidates.filter((candidate) => candidate.id !== focusCandidate?.id).slice(0, 6);
 
-  const visibleThreadIds = [
-    ...visibleEventActive.map((thread) => thread.id),
-    ...visibleActiveThreads.map((threadGroup) => getThreadGroupId(threadGroup))
-  ].filter(Boolean);
-  const visibleIdSet = new Set(visibleThreadIds);
+  const visibleEventActive = attentionCandidates.filter((candidate) => candidate.kind === "event").map((candidate) => candidate.payload);
+  const visibleActiveThreads = attentionCandidates.filter((candidate) => candidate.kind === "static").map((candidate) => candidate.payload);
+  updateInboxSignalGate({ eventActive, activeThreads, visibleEventActive, visibleActiveThreads });
 
-  // Uleste aktive tråder som kurateringen holder utenfor «Viktig nå» denne uka.
-  const laterEventThreads = sortedEventActive.filter((thread) => !visibleIdSet.has(thread.id));
-  const laterThreads = sortedActiveThreads.filter((threadGroup) => !visibleIdSet.has(getThreadGroupId(threadGroup)));
-
-  if (activeContainer) {
-    activeContainer.innerHTML = "";
-
-    // Hvilken tråd er åpen? Brukerens valg vinner; ellers åpnes den første
-    // synlige tråden som standard slik at det alltid er én lesbar tråd uten
-    // ekstra klikk.
-    const effectiveOpenId = visibleIdSet.has(state.openInboxThreadId)
-      ? state.openInboxThreadId
-      : visibleThreadIds[0] || null;
-
-    updateInboxSignalGate({ eventActive, activeThreads, visibleEventActive, visibleActiveThreads });
-
-    visibleEventActive.forEach((thread) => {
-      activeContainer.append(createInboxEventThreadCard(thread, { open: thread.id === effectiveOpenId }));
-    });
-
-    visibleActiveThreads.forEach((threadGroup) => {
-      activeContainer.append(
-        createInboxThreadCard(threadGroup, {
-          showReadButton: true,
-          open: getThreadGroupId(threadGroup) === effectiveOpenId
-        })
-      );
-    });
-
-    if (!visibleEventActive.length && !visibleActiveThreads.length) {
-      activeContainer.append(createMessageCard({
+  if (focusContainer) {
+    focusContainer.textContent = "";
+    if (focusCandidate) {
+      appendInboxCandidate(focusContainer, focusCandidate, { open: true, showReadButton: true });
+      if (elements.inboxFocusTitle) elements.inboxFocusTitle.textContent = focusCandidate.title;
+      if (elements.inboxFocusStatus) {
+        elements.inboxFocusStatus.textContent = focusCandidate.requiresReply ? `${focusCandidate.sender} venter på svar` : `${focusCandidate.sender} ber om oppmerksomhet`;
+        elements.inboxFocusStatus.dataset.tone = focusCandidate.requiresReply ? "attention" : "neutral";
+      }
+    } else {
+      const title = signalHandled ? "Ukas signal er håndtert" : "Innboksen er rolig";
+      focusContainer.append(createMessageCard({
         from: "Klubbkontoret",
-        tag: "Ingen uleste tråder",
-        title: signalHandled ? "Ukas signal er håndtert" : "Innboksen er rolig",
+        tag: "Ingen aktiv sak",
+        title,
         body: signalHandled
-          ? `Du har lest ukas viktigste signal. Resten ligger under «kan leses senere» — neste steg er ${state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "kampdagen" : "å velge treningsuke"}.`
+          ? `Du har håndtert ukas viktigste signal. Neste steg er ${state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "kampdagen" : "å velge treningsuke"}.`
           : "Det er ingen aktive uleste tråder akkurat nå."
       }, true));
+      if (elements.inboxFocusTitle) elements.inboxFocusTitle.textContent = title;
+      if (elements.inboxFocusStatus) {
+        elements.inboxFocusStatus.textContent = "Ingen beslutning venter";
+        elements.inboxFocusStatus.dataset.tone = "positive";
+      }
     }
   }
 
+  if (queueContainer) {
+    queueContainer.textContent = "";
+    queueCandidates.forEach((candidate) => appendInboxCandidate(queueContainer, candidate, { open: false, showReadButton: false }));
+  }
+  if (elements.inboxQueuePanel) elements.inboxQueuePanel.hidden = queueCandidates.length === 0;
+  if (elements.inboxQueueCount) elements.inboxQueueCount.textContent = String(queueCandidates.length);
+
   if (archiveContainer) {
-    archiveContainer.innerHTML = "";
-
-    // Første uke: uleste tråder utenfor «Viktig nå» er lesbare her — de er
-    // nedprioritert, ikke borte.
-    laterEventThreads.slice(0, 12).forEach((thread) => {
-      archiveContainer.append(
-        createInboxEventThreadCard(thread, { archived: true, open: thread.id === state.openInboxThreadId })
-      );
-    });
-    laterThreads.slice(0, 12).forEach((threadGroup) => {
-      archiveContainer.append(
-        createInboxThreadCard(threadGroup, {
-          showReadButton: false,
-          open: getThreadGroupId(threadGroup) === state.openInboxThreadId
-        })
-      );
-    });
-
-    eventArchived.slice(-12).forEach((thread) => {
-      archiveContainer.append(
-        createInboxEventThreadCard(thread, { archived: true, open: thread.id === state.openInboxThreadId })
-      );
-    });
-
+    archiveContainer.textContent = "";
+    queueCandidates.forEach((candidate) => appendInboxCandidate(archiveContainer, candidate, {
+      open: candidate.id === state.openInboxThreadId,
+      showReadButton: false,
+      archived: candidate.kind === "event"
+    }));
+    eventArchived.slice(-12).forEach((thread) => archiveContainer.append(createInboxEventThreadCard(thread, { archived: true, open: thread.id === state.openInboxThreadId })));
     const archivedThreads = getArchivedInboxThreads();
-    archivedThreads.slice(0, 12).forEach((threadGroup) => {
-      archiveContainer.append(
-        createInboxThreadCard(threadGroup, {
-          showReadButton: false,
-          open: getThreadGroupId(threadGroup) === state.openInboxThreadId
-        })
-      );
-    });
-
-    if (!eventArchived.length && !archivedThreads.length && !laterEventThreads.length && !laterThreads.length) {
-      archiveContainer.append(createMessageCard({
-        from: "Klubbkontoret",
-        tag: "Arkiv",
-        title: "Ingen trådhistorikk ennå",
-        body: "Tråder dukker opp her etter at meldinger er levert eller lest."
-      }, true));
+    archivedThreads.slice(0, 12).forEach((threadGroup) => archiveContainer.append(createInboxThreadCard(threadGroup, { showReadButton: false, open: getThreadGroupId(threadGroup) === state.openInboxThreadId })));
+    if (!queueCandidates.length && !eventArchived.length && !archivedThreads.length) {
+      archiveContainer.append(createMessageCard({ from: "Klubbkontoret", tag: "Historikk", title: "Ingen trådhistorikk ennå", body: "Leste, besvarte og arkiverte saker dukker opp her." }, true));
     }
   }
 }
@@ -15618,6 +15627,7 @@ function renderApp() {
   refreshInboxEvents(teamFit);
   renderInboxThreads();
   renderDepartments();
+  renderOfficeScene(teamFit);
 
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
