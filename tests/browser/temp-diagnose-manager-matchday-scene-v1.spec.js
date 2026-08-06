@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { expect, test } from "@playwright/test";
 
 test("diagnostiserer kampdagscenen etter ordinær bootstrap", async ({ page }) => {
@@ -53,5 +54,7 @@ test("diagnostiserer kampdagscenen etter ordinær bootstrap", async ({ page }) =
     };
   });
 
-  console.log("MATCHDAY_DIAGNOSTIC=" + JSON.stringify({ diagnostic, pageErrors, consoleErrors }, null, 2));
+  const payload = { diagnostic, pageErrors, consoleErrors };
+  fs.writeFileSync("temp-matchday-diagnostic.json", JSON.stringify(payload, null, 2));
+  console.log("MATCHDAY_DIAGNOSTIC=" + JSON.stringify(payload, null, 2));
 });
