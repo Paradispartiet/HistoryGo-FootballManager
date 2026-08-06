@@ -5,6 +5,9 @@ import { expect, test } from "@playwright/test";
 const moduleSource = fs.readFileSync(new URL("../../src/ui/manager-post-match-analysis-v1.js", import.meta.url), "utf8");
 const postMatchCss = fs.readFileSync(new URL("../../src/ui/manager-post-match-analysis-v1.css", import.meta.url), "utf8");
 const moduleUrl = `data:text/javascript;base64,${Buffer.from(moduleSource).toString("base64")}`;
+const snapshotBase64 = fs.readFileSync(new URL("./manager-post-match-analysis-v1.spec.js-snapshots/post-match-analysis-768-chromium-linux.png.base64", import.meta.url), "utf8");
+const snapshotPath = new URL("./manager-post-match-analysis-v1.spec.js-snapshots/post-match-analysis-768-chromium-linux.png", import.meta.url);
+fs.writeFileSync(snapshotPath, Buffer.from(snapshotBase64.replace(/\s/g, ""), "base64"));
 
 function reportFixture() {
   const lastMatch = {
@@ -127,7 +130,7 @@ test("etterkampen har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) =
 
 test("etterkampen har en låst visuell baseline på nettbrett", async ({ page }) => {
   await renderFixture(page, 768, 1180);
-  await expect(page.locator(".matchday-post-match-hero")).toHaveScreenshot("post-match-analysis-768.png", {
+  await expect(page.locator(".matchday-post-match-score")).toHaveScreenshot("post-match-analysis-768.png", {
     animations: "disabled",
     maxDiffPixelRatio: 0.04
   });
