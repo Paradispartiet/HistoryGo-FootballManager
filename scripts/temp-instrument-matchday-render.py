@@ -34,6 +34,7 @@ new = '''function renderMatchdayGate(container, teamFit) {
     window.__matchdayDebug.gateContainerId = container?.id || "";
     window.__matchdayDebug.stage = "entered-gate";
   }
+  try {
   const readiness = getMatchdayReadiness(teamFit);
 '''
 if text.count(old) != 1:
@@ -53,6 +54,15 @@ new = '''  renderManagerMatchdayCommand(container, matchdayScene, {
   if (window.__matchdayDebug) {
     window.__matchdayDebug.stage = "after-command-render";
     window.__matchdayDebug.renderedChildCount = container?.children?.length || 0;
+  }
+  } catch (error) {
+    if (window.__matchdayDebug) {
+      window.__matchdayDebug.stage = "gate-error";
+      window.__matchdayDebug.errorName = error?.name || "Error";
+      window.__matchdayDebug.errorMessage = error?.message || String(error);
+      window.__matchdayDebug.errorStack = error?.stack || "";
+    }
+    throw error;
   }
 }
 '''
