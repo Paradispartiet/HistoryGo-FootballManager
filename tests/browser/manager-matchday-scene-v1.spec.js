@@ -73,6 +73,10 @@ async function prepareAndOpenPreMatch(page) {
 }
 
 test.beforeEach(async ({ page }) => {
+  page.on("pageerror", (error) => console.error(`[pageerror] ${error.stack || error.message}`));
+  page.on("console", (message) => {
+    if (message.type() === "error") console.error(`[browser-console] ${message.text()}`);
+  });
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript((season) => {
