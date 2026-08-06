@@ -1,6 +1,6 @@
 name: Temporary materialize manager matchday scene v1
 
-# Final focused materialization before the permanent PR.
+# Final focused materialization with deterministic browser fixtures.
 on:
   push:
     branches:
