@@ -1,6 +1,6 @@
 name: Temporary materialize manager matchday scene v1
 
-# Final materialization after the render-target correction.
+# Focused diagnostic of the materialized browser render path.
 on:
   push:
     branches:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  materialize:
+  diagnose:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,36 +30,19 @@ jobs:
         run: |
           npm run check:syntax
           npm run check:dom-ids
-          npm run audit:ci-coverage
-          npm run audit:dead-ends
           npm run audit:manager-matchday-scene-v1
           npm run sim:manager-matchday-scene-v1
           npm run build
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
-      - name: Generate intentional matchday baseline
-        run: npx playwright test tests/browser/manager-matchday-scene-v1.spec.js --project=chromium --update-snapshots
-      - name: Verify matchday browser contract
-        run: npx playwright test tests/browser/manager-matchday-scene-v1.spec.js --project=chromium
-      - name: Stage permanent integration
-        shell: bash
-        run: |
-          set -euxo pipefail
-          git status --short
-          find tests/browser -maxdepth 4 -type f -name 'matchday-768*.png' -print
-          git add -A
-          git reset -- .github/workflows/ci.yml .github/workflows/temp-materialize-manager-matchday-scene-v1.yml scripts/temp-materialize-manager-matchday-scene-v1.py tests/browser/temp-diagnose-manager-matchday-scene-v1.spec.js temp-matchday-diagnostic.json test-results || true
-          git diff --cached --name-status
-          test -n "$(git diff --cached --name-only)"
-      - name: Commit permanent integration
+      - name: Diagnose rendered matchday scene
+        run: npx playwright test tests/browser/temp-diagnose-manager-matchday-scene-v1.spec.js --project=chromium
+      - name: Publish focused diagnostic
         shell: bash
         run: |
           set -euxo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Koble inn kampdagscene v1"
-      - name: Push permanent integration
-        shell: bash
-        run: |
-          set -euxo pipefail
+          git add temp-matchday-diagnostic.json
+          git commit -m "Oppdater midlertidig kampdagdiagnostikk"
           git push origin HEAD:agent/manager-matchday-scene-v1
