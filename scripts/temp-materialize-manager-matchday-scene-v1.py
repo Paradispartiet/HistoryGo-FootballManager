@@ -159,3 +159,42 @@ text = replace_once(
     "matchday simulation ci",
 )
 path.write_text(text)
+
+
+# Strengthen contrast only inside the folded technical depth.
+path = Path("src/ui/manager-matchday-scene-v1.css")
+text = path.read_text()
+contrast_marker = "/* Matchday technical-depth contrast */"
+if contrast_marker not in text:
+    text += '''\n\n/* Matchday technical-depth contrast */\n.matchday-depth .matchday-readiness-summary,\n.matchday-depth .data-inline-list-item {\n  color: #f3f6fb;\n}\n'''
+path.write_text(text)
+
+
+# Browser setup follows the already-green Manager Shell preseason path.
+path = Path("tests/browser/manager-matchday-scene-v1.spec.js")
+text = path.read_text()
+text = replace_once(
+    text,
+    '      leagueSeasonStatus: "active",',
+    '      leagueSeasonStatus: "preseason",',
+    "browser preseason status",
+)
+text = replace_once(
+    text,
+    '    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));\n',
+    '',
+    "remove preseeded season",
+)
+text = replace_once(
+    text,
+    '  }, seededSeason());',
+    '  });',
+    "browser init arguments",
+)
+text = replace_once(
+    text,
+    '  const startSeasonAction = page.locator("#leagueOnboardingSteps button", { hasText: "Start sesongen" });\n  if (await startSeasonAction.isVisible()) await startSeasonAction.click();\n',
+    '  const preseasonSteps = await page.locator("#leagueOnboardingSteps li").evaluateAll((items) => items.map((item) => ({\n    text: item.textContent?.replace(/\\s+/g, " ").trim() || "",\n    done: item.classList.contains("is-done")\n  })));\n  const incomplete = preseasonSteps.filter((step) => !step.done && !step.text.includes("Start sesongen"));\n  expect(incomplete, JSON.stringify(preseasonSteps)).toEqual([]);\n  const startSeasonAction = page.locator("#leagueOnboardingSteps button", { hasText: "Start sesongen" });\n  await expect(startSeasonAction).toBeVisible();\n  await startSeasonAction.click();\n',
+    "deterministic season start",
+)
+path.write_text(text)
