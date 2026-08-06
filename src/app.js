@@ -12104,20 +12104,7 @@ function buildTrainingProgramCard(program, context = {}) {
   card.className = "training-program-card";
   if (isSelected) card.classList.add("is-selected");
   const canSelect = !isSelected && !locked;
-  if (canSelect) {
-    card.tabIndex = 0;
-    card.setAttribute("role", "button");
-    card.setAttribute("aria-label", `Velg treningsprogram: ${program.title}`);
-    card.addEventListener("click", (event) => {
-      if (event.target instanceof HTMLButtonElement) return;
-      selectWeeklyTrainingProgram(program);
-    });
-    card.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      selectWeeklyTrainingProgram(program);
-    });
-  }
+  if (canSelect) card.classList.add("is-selectable");
 
   if (isSelected) {
     const chosen = document.createElement("span");
