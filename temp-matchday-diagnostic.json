@@ -5,9 +5,12 @@
       "resultReferenceFound": true,
       "commandReferenceFound": true,
       "readinessReferenceFound": true,
-      "stage": "entered-gate",
+      "stage": "gate-error",
       "gateCalled": true,
-      "gateContainerId": "matchdayCommand"
+      "gateContainerId": "matchdayCommand",
+      "errorName": "ReferenceError",
+      "errorMessage": "getLeagueSeason is not defined",
+      "errorStack": "ReferenceError: getLeagueSeason is not defined\n    at renderMatchdayGate (http://127.0.0.1:4173/src/app.js:9803:24)\n    at renderMatchday (http://127.0.0.1:4173/src/app.js:11057:3)\n    at renderApp (http://127.0.0.1:4173/src/app.js:15691:3)\n    at init (http://127.0.0.1:4173/src/app.js:17006:5)"
     },
     "panel": {
       "tag": "SECTION",
