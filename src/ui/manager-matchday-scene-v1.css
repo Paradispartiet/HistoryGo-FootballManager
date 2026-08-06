@@ -1,0 +1,435 @@
+/* ========================================================================== */
+/* Manager Matchday Scene v1                                                  */
+/* ========================================================================== */
+
+.matchday-command-panel {
+  margin: 0 0 1rem;
+}
+
+.matchday-scene {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  background:
+    linear-gradient(145deg, rgba(28, 84, 49, 0.2), transparent 42%),
+    #0d1118;
+  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.28);
+}
+
+.matchday-scene-head,
+.matchday-scene-priority,
+.matchday-scene-versus,
+.matchday-scene-context,
+.matchday-scene-status-grid {
+  min-width: 0;
+}
+
+.matchday-scene-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.matchday-scene-head h2 {
+  margin: 0.15rem 0 0;
+  font-size: clamp(1.7rem, 4vw, 2.8rem);
+  line-height: 1;
+}
+
+.matchday-scene-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.matchday-scene-status[data-tone="blocked"] {
+  border-color: rgba(255, 183, 77, 0.62);
+  background: rgba(125, 73, 17, 0.32);
+}
+
+.matchday-scene-status[data-tone="ready"] {
+  border-color: rgba(112, 225, 153, 0.58);
+  background: rgba(24, 95, 52, 0.36);
+}
+
+.matchday-scene-status[data-tone="live"] {
+  border-color: rgba(255, 102, 102, 0.72);
+  background: rgba(121, 30, 30, 0.4);
+}
+
+.matchday-scene-status[data-tone="report"] {
+  border-color: rgba(151, 192, 255, 0.65);
+  background: rgba(37, 70, 119, 0.38);
+}
+
+.matchday-stage-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.matchday-stage {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.7rem;
+  color: rgba(255, 255, 255, 0.62);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.matchday-stage[data-state="active"] {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.matchday-stage[data-state="complete"] {
+  color: rgba(211, 255, 225, 0.86);
+  background: rgba(40, 113, 66, 0.18);
+}
+
+.matchday-stage-index {
+  display: grid;
+  flex: 0 0 1.65rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.matchday-stage strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.86rem;
+}
+
+.matchday-scene-versus {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.matchday-scene-team,
+.matchday-scene-marker {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  min-height: 7.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.9rem;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.matchday-scene-team.is-away {
+  text-align: right;
+}
+
+.matchday-scene-team span,
+.matchday-scene-context-card span,
+.matchday-scene-priority-copy > span,
+.matchday-scene-status-card > span,
+.matchday-scene-report > span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.matchday-scene-team strong {
+  margin-top: 0.3rem;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.15rem, 3vw, 1.8rem);
+  line-height: 1.05;
+}
+
+.matchday-scene-team small {
+  margin-top: 0.45rem;
+  color: rgba(255, 255, 255, 0.68);
+  overflow-wrap: anywhere;
+}
+
+.matchday-scene-marker {
+  justify-items: center;
+  min-width: 4.5rem;
+  padding-inline: 0.8rem;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(25, 83, 47, 0.32);
+}
+
+.matchday-scene-marker strong {
+  font-size: 1.4rem;
+}
+
+.matchday-scene-marker small {
+  margin-top: 0.25rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.matchday-scene-priority {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.065);
+}
+
+.matchday-scene-priority-copy {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.matchday-scene-priority-copy strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+}
+
+.matchday-scene-priority-copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  overflow-wrap: anywhere;
+}
+
+.matchday-scene-action {
+  min-width: 12rem;
+  min-height: 3.25rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #fff;
+  border-radius: 0.7rem;
+  color: #fff;
+  background: #111820;
+  font-weight: 900;
+}
+
+.matchday-scene-action:hover,
+.matchday-scene-action:focus-visible {
+  background: #1d653b;
+}
+
+.matchday-scene-context {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.matchday-scene-context-card {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.85rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.matchday-scene-context-card strong {
+  overflow-wrap: anywhere;
+  font-size: 0.94rem;
+}
+
+.matchday-scene-status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.matchday-scene-status-card {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  min-width: 0;
+  min-height: 8.5rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.035);
+  text-align: left;
+}
+
+.matchday-scene-status-card:hover,
+.matchday-scene-status-card:focus-visible {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.matchday-scene-status-card[data-tone="blocked"] {
+  border-color: rgba(255, 183, 77, 0.48);
+}
+
+.matchday-scene-status-card[data-tone="live"] {
+  border-color: rgba(255, 102, 102, 0.55);
+}
+
+.matchday-scene-status-card strong,
+.matchday-scene-status-card small {
+  overflow-wrap: anywhere;
+}
+
+.matchday-scene-status-card strong {
+  font-size: 0.95rem;
+}
+
+.matchday-scene-status-card small {
+  color: rgba(255, 255, 255, 0.66);
+  line-height: 1.35;
+}
+
+.matchday-scene-report {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.35rem 1rem;
+  align-items: baseline;
+  padding: 1rem;
+  border: 1px solid rgba(151, 192, 255, 0.5);
+  border-radius: 0.8rem;
+  background: rgba(37, 70, 119, 0.25);
+}
+
+.matchday-scene-report strong {
+  font-size: 1.35rem;
+}
+
+.matchday-scene-report p,
+.matchday-scene-report small {
+  grid-column: 1 / -1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.matchday-scene-report small {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.matchday-depth {
+  margin: 0.75rem 0 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.matchday-depth > summary {
+  min-height: 3rem;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.matchday-depth-content {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0 1rem 1rem;
+}
+
+@media (max-width: 900px) {
+  .matchday-scene-status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .matchday-scene-context {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .matchday-scene {
+    gap: 0.8rem;
+    padding: 0.9rem;
+    border-radius: 0.8rem;
+  }
+
+  .matchday-scene-head {
+    display: grid;
+  }
+
+  .matchday-scene-status {
+    justify-self: start;
+  }
+
+  .matchday-stage-rail {
+    gap: 0.3rem;
+  }
+
+  .matchday-stage {
+    display: grid;
+    justify-items: center;
+    padding: 0.5rem 0.3rem;
+    text-align: center;
+  }
+
+  .matchday-stage strong {
+    font-size: 0.7rem;
+  }
+
+  .matchday-scene-versus {
+    grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .matchday-scene-team,
+  .matchday-scene-marker {
+    min-height: 6.5rem;
+    padding: 0.65rem;
+  }
+
+  .matchday-scene-marker {
+    min-width: 0;
+    padding-inline: 0.35rem;
+  }
+
+  .matchday-scene-marker strong {
+    font-size: 1rem;
+  }
+
+  .matchday-scene-team strong {
+    font-size: 1rem;
+  }
+
+  .matchday-scene-team small {
+    font-size: 0.7rem;
+  }
+
+  .matchday-scene-priority {
+    grid-template-columns: 1fr;
+  }
+
+  .matchday-scene-action {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .matchday-scene-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .matchday-scene-status-card {
+    min-height: 0;
+  }
+}
