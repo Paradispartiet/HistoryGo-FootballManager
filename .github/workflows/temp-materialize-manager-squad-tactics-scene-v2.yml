@@ -1,0 +1,68 @@
+name: Temporary materialize Manager Squad Tactics Scene v2
+
+on:
+  push:
+    branches:
+      - agent/manager-squad-tactics-scene-v2
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: temp-materialize-manager-squad-tactics-scene-v2
+  cancel-in-progress: false
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/manager-squad-tactics-scene-v2
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Materialize permanent files
+        run: python scripts/temp-materialize-manager-squad-tactics-scene-v2.py
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run focused static verification
+        run: |
+          npm run typecheck
+          npm run build
+          npm run audit:manager-squad-tactics-scene-v2
+          npm run sim:manager-squad-tactics-scene-v2
+          npm run check:syntax
+          npm run check:dom-ids
+          npm run audit:flow
+          npm run audit:dead-ends
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate and verify visual baseline
+        run: |
+          npx playwright test tests/browser/manager-squad-tactics-scene-v2.spec.js --project=chromium --update-snapshots
+          npx playwright test tests/browser/manager-squad-tactics-scene-v2.spec.js --project=chromium
+
+      - name: Remove temporary materialization files
+        run: |
+          rm scripts/temp-materialize-manager-squad-tactics-scene-v2.py
+          rm .github/workflows/temp-materialize-manager-squad-tactics-scene-v2.yml
+
+      - name: Commit permanent implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Implement Manager Squad & Tactics Scene v2"
+          git push origin HEAD:agent/manager-squad-tactics-scene-v2
