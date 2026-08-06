@@ -1,0 +1,128 @@
+function renderMatchdayGate(container, teamFit) {
+  const readiness = getMatchdayReadiness(teamFit);
+  const session = state.matchday?.session || null;
+  const lastMatch = state.matchday?.lastMatch || null;
+  const formation = session?.formationSnapshot || getFormation() || {};
+  const tactic = session?.tacticSnapshot || getTactic() || {};
+  const primary = session
+    ? "Fortsett kampen"
+    : lastMatch
+      ? (hasUnseenMatchReport() ? "Se kampanalyse" : "Forbered neste kamp")
+      : readiness.canStartMatch
+        ? "Spill kamp"
+        : "Fullfør forberedelser";
+
+  const showingFinishedReport = Boolean(lastMatch) && !session;
+  if (showingFinishedReport && readiness.canStartMatch) return;
+
+  const scene = createMatchdaySceneModel({
+    teamName: session?.teamName || getTemporaryClubName().name,
+    opponentBrief: getMatchdayOpponentBrief(session),
+    formationName: formation.name,
+    tacticName: tactic.name,
+    trainingLabel: getWeeklyTrainingChoiceLabel(),
+    lastSignal: getLastInboxSignalText(),
+    primaryAction: primary,
+    readiness
+  });
+
+  const gate = document.createElement("article");
+  gate.className = "matchday-command";
+  gate.dataset.status = scene.statusTone;
+  gate.innerHTML = `
+    <header class="matchday-command-head">
+      <div>
+        <p class="eyebrow">Kampkommando</p>
+        <h3>${escapeHtml(scene.primaryAction)}</h3>
+      </div>
+      <span class="matchday-command-status" data-tone="${escapeHtml(scene.statusTone)}">${escapeHtml(scene.statusLabel)}</span>
+    </header>
+    <div class="matchday-versus" aria-label="Neste kamp">
+      <section class="matchday-team is-home">
+        <span class="matchday-team-side">Hjemme</span>
+        <strong>${escapeHtml(scene.teamName)}</strong>
+        <small>Managerens lag</small>
+      </section>
+      <div class="matchday-kickoff" data-tone="${escapeHtml(scene.statusTone)}">
+        <span>${escapeHtml(scene.kickoffLabel)}</span>
+        <strong>VS</strong>
+        <small>Kampdag</small>
+      </div>
+      <section class="matchday-team is-away">
+        <span class="matchday-team-side">Motstander</span>
+        <strong>${escapeHtml(scene.opponentName)}</strong>
+        <small>${escapeHtml(scene.opponentContext)}</small>
+      </section>
+    </div>
+    <div class="matchday-command-plan">
+      <article><span>Formasjon og kampplan</span><strong>${escapeHtml(scene.planLabel)}</strong></article>
+      <article><span>Treningsuke</span><strong>${escapeHtml(scene.trainingLabel)}</strong></article>
+      <article><span>Siste signal</span><strong>${escapeHtml(scene.signalLabel)}</strong></article>
+    </div>
+    <p class="matchday-command-summary">${escapeHtml(scene.summary)}</p>
+  `;
+
+  if (!scene.canStart && readiness.status !== "in_progress") {
+    const blockerSection = document.createElement("section");
+    blockerSection.className = "matchday-command-blockers";
+    const heading = document.createElement("div");
+    heading.className = "matchday-command-blockers-head";
+    heading.innerHTML = `<span>Neste krav</span><strong>${scene.blockers.length}</strong>`;
+    blockerSection.append(heading);
+
+    const list = document.createElement("ol");
+    scene.blockers.forEach((blocker, index) => {
+      const item = document.createElement("li");
+      item.innerHTML = `<span>${index + 1}</span><p>${escapeHtml(blocker.message)}</p>`;
+      list.append(item);
+    });
+    blockerSection.append(list);
+
+    const actions = document.createElement("div");
+    actions.className = "matchday-gate-actions";
+    const targets = new Set(scene.blockers.map((item) => item.target));
+    if (targets.has("historygo")) appendMatchdayNavButton(actions, "Åpne samlingen", "historygo");
+    if (targets.has("tactics")) appendMatchdayNavButton(actions, "Gå til laguttak", "tactics");
+    if (targets.has("trening")) appendMatchdayNavButton(actions, "Planlegg trening", "trening");
+    if (targets.has("statistikk")) appendMatchdayNavButton(actions, "Åpne sesongen", "statistikk");
+    if (targets.has("dashboard")) appendMatchdayNavButton(actions, "Gå til kontoret", "dashboard");
+    if (actions.childElementCount) blockerSection.append(actions);
+    gate.append(blockerSection);
+  }
+
+  container.append(gate);
+}
+
+// Norske trykk-etiketter for hendelser.
+const MATCHDAY_PRESSURE_LABELS = { low: "Lavt trykk", medium: "Middels trykk", high: "Høyt trykk" };
+
+// Tatt managergrep med tone-farget konsekvens, brukt både underveis og i
+// sluttrapporten.
+function appendMatchdayDecisionLog(parent, decisions, heading) {
+  if (!Array.isArray(decisions) || decisions.length === 0) {
+    return;
+  }
+
+  appendMatchdaySubheading(parent, heading);
+
+  decisions.forEach((decision) => {
+    const entry = document.createElement("div");
+    const tone = ["positive", "neutral", "negative"].includes(decision.tone) ? decision.tone : "neutral";
+    entry.className = `matchday-decision-entry is-${tone}`;
+
+    const title = document.createElement("p");
+    title.className = "matchday-decision-title";
+    title.textContent = `${decision.eventTitle}: ${decision.optionLabel}`;
+    entry.append(title);
+
+    if (decision.feedback) {
+      const feedback = document.createElement("p");
+      feedback.className = "matchday-decision-feedback";
+      feedback.textContent = decision.feedback;
+      entry.append(feedback);
+    }
+
+    parent.append(entry);
+  });
+}
+
