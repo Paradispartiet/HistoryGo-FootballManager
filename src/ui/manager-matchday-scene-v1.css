@@ -433,3 +433,10 @@
     min-height: 0;
   }
 }
+
+
+/* Matchday technical-depth contrast */
+.matchday-depth .matchday-readiness-summary,
+.matchday-depth .data-inline-list-item {
+  color: #f3f6fb;
+}

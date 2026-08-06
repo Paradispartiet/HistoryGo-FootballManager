@@ -55,20 +55,14 @@ async function expectNoHorizontalOverflow(page) {
 }
 
 async function prepareAndOpenPreMatch(page) {
-  await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
-  await page.locator('.app-subtab[data-tab-target="trening"]').click();
-  const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
-  await expect(focusButton).toBeAttached();
-  await focusButton.evaluate((node) => node.click());
-
-  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
-  const startSeasonAction = page.locator("#leagueOnboardingSteps button", { hasText: "Start sesongen" });
-  if (await startSeasonAction.isVisible()) await startSeasonAction.click();
-
   await openMatchday(page);
   const play = page.locator("#playMatchdayButton");
   await expect(play).toBeEnabled();
-  await play.click();
+  const scene = page.locator("#matchdayCommand .matchday-scene");
+  await expect(scene).toHaveAttribute("data-phase", "ready");
+  const sceneAction = page.locator("#matchdayCommand .matchday-scene-action");
+  await expect(sceneAction).toBeVisible();
+  await sceneAction.click();
   await expect(page.locator(".matchday-kickoff-button")).toBeVisible();
 }
 
@@ -80,6 +74,15 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript((season) => {
+    const clubWeekState = {
+      week: 1,
+      phase: "matchday",
+      boardTrust: 50,
+      playerMorale: 50,
+      tacticalClarity: 50,
+      trainingCulture: 50,
+      mediaPressure: 50
+    };
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
@@ -92,6 +95,12 @@ test.beforeEach(async ({ page }) => {
       boardExpectation: "Øvre halvdel"
     }));
     localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
+    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(clubWeekState));
+    localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
+      focusId: "formation_familiarity",
+      week: 1,
+      appliedSessionId: null
+    }));
   }, seededSeason());
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
@@ -119,7 +128,7 @@ test("statuskort åpner eksisterende kampdetaljer og arbeidsflater", async ({ pa
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 
   await openMatchday(page);
-  await page.locator('.matchday-scene-status-card[data-matchday-target="trening"]').click();
+  await page.getByRole("button", { name: /^Treningsuka:/ }).click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
 });
 

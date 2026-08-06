@@ -4,7 +4,7 @@ import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
 import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";
 import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-presentation.js";
-import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js";
+import { createMatchdaySceneModel, renderManagerMatchdayCommand } from "./ui/manager-matchday-presentation.js";
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
@@ -776,6 +776,9 @@ const elements = {
   localStartStatus: document.querySelector("#localStartStatus"),
   useHistoryGoCollection: document.querySelector("#useHistoryGoCollection"),
   clearLocalStart: document.querySelector("#clearLocalStart"),
+  // Kampdagscene og foldet teknisk dybde.
+  matchdayCommand: document.querySelector("#matchdayCommand"),
+  matchdayDepth: document.querySelector("#matchdayDepth"),
   // Kampklar-status i kampdagpanelet (gating-forklaring, ingen ny kampmotor).
   matchdayReadiness: document.querySelector("#matchdayReadiness"),
   // Lag & taktikk-gate: kompakt 11 + 4-sjekkliste og neste manageroppgave.
@@ -9746,99 +9749,81 @@ function appendMatchdayNavButton(parent, label, tab) {
   parent.append(button);
 }
 
+function openManagerMatchdayTarget(target) {
+  if (target === "details") {
+    if (!elements.matchdayDepth) return;
+    elements.matchdayDepth.open = true;
+    requestAnimationFrame(() => {
+      elements.matchdayDepth.scrollIntoView({ behavior: "smooth", block: "start" });
+      elements.matchdayDepth.querySelector("summary")?.focus({ preventScroll: true });
+    });
+    return;
+  }
+  if (["dashboard", "tactics", "trening", "analyse"].includes(target)) {
+    activateTab(target);
+  }
+}
+
+function handleManagerMatchdayPrimaryAction(target) {
+  if (target === "create_session") {
+    const button = document.querySelector("#playMatchdayButton");
+    if (button && !button.disabled) button.click();
+    return;
+  }
+  if (target === "kickoff") {
+    const button = document.querySelector(".matchday-kickoff-button");
+    if (button) button.click();
+    else startMatchdayKickoff();
+    return;
+  }
+  if (target === "live") {
+    const liveCard = elements.matchdayResult?.querySelector(".matchday-result-card:last-of-type");
+    if (!liveCard) return;
+    liveCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    requestAnimationFrame(() => liveCard.querySelector("button:not([disabled])")?.focus({ preventScroll: true }));
+    return;
+  }
+  openManagerMatchdayTarget(target);
+}
+
 function renderMatchdayGate(container, teamFit) {
   const readiness = getMatchdayReadiness(teamFit);
   const session = state.matchday?.session || null;
   const lastMatch = state.matchday?.lastMatch || null;
   const formation = session?.formationSnapshot || getFormation() || {};
   const tactic = session?.tacticSnapshot || getTactic() || {};
-  const primary = session
-    ? "Fortsett kampen"
-    : lastMatch
-      ? (hasUnseenMatchReport() ? "Se kampanalyse" : "Forbered neste kamp")
-      : readiness.canStartMatch
-        ? "Spill kamp"
-        : "Fullfør forberedelser";
+  const report = lastMatch ? createMatchReport(lastMatch) : null;
+  const opponent = session?.opponent || lastMatch?.opponent || null;
+  const leagueSeason = state.leagueSeason || null;
+  const nextOpponent = leagueSeason ? getNextLeagueOpponent(leagueSeason) : null;
 
-  const showingFinishedReport = Boolean(lastMatch) && !session;
-  if (showingFinishedReport && readiness.canStartMatch) return;
+  if (elements.matchdayDepth && elements.matchdayDepth.dataset.initialized !== "true") {
+    elements.matchdayDepth.open = false;
+    elements.matchdayDepth.dataset.initialized = "true";
+  }
 
-  const scene = createMatchdaySceneModel({
+  const matchdayScene = createMatchdaySceneModel({
     teamName: session?.teamName || getTemporaryClubName().name,
     opponentBrief: getMatchdayOpponentBrief(session),
+    opponent,
+    competitionLabel: leagueSeason?.competition?.tierName || leagueSeason?.tier?.name || "",
+    roundLabel: nextOpponent?.round ? `Runde ${nextOpponent.round}` : "",
+    venueLabel: nextOpponent?.homeAway === "home" ? "Hjemme" : nextOpponent?.homeAway === "away" ? "Borte" : "",
     formationName: formation.name,
     tacticName: tactic.name,
     trainingLabel: getWeeklyTrainingChoiceLabel(),
     lastSignal: getLastInboxSignalText(),
-    primaryAction: primary,
-    readiness
+    opponentThreat: opponent?.style || opponent?.archetypeName || "",
+    readiness,
+    session,
+    lastMatch,
+    report
   });
 
-  const gate = document.createElement("article");
-  gate.className = "matchday-command";
-  gate.dataset.status = scene.statusTone;
-  gate.innerHTML = `
-    <header class="matchday-command-head">
-      <div>
-        <p class="eyebrow">Kampkommando</p>
-        <h3>${escapeHtml(scene.primaryAction)}</h3>
-      </div>
-      <span class="matchday-command-status" data-tone="${escapeHtml(scene.statusTone)}">${escapeHtml(scene.statusLabel)}</span>
-    </header>
-    <div class="matchday-versus" aria-label="Neste kamp">
-      <section class="matchday-team is-home">
-        <span class="matchday-team-side">Hjemme</span>
-        <strong>${escapeHtml(scene.teamName)}</strong>
-        <small>Managerens lag</small>
-      </section>
-      <div class="matchday-kickoff" data-tone="${escapeHtml(scene.statusTone)}">
-        <span>${escapeHtml(scene.kickoffLabel)}</span>
-        <strong>VS</strong>
-        <small>Kampdag</small>
-      </div>
-      <section class="matchday-team is-away">
-        <span class="matchday-team-side">Motstander</span>
-        <strong>${escapeHtml(scene.opponentName)}</strong>
-        <small>${escapeHtml(scene.opponentContext)}</small>
-      </section>
-    </div>
-    <div class="matchday-command-plan">
-      <article><span>Formasjon og kampplan</span><strong>${escapeHtml(scene.planLabel)}</strong></article>
-      <article><span>Treningsuke</span><strong>${escapeHtml(scene.trainingLabel)}</strong></article>
-      <article><span>Siste signal</span><strong>${escapeHtml(scene.signalLabel)}</strong></article>
-    </div>
-    <p class="matchday-command-summary">${escapeHtml(scene.summary)}</p>
-  `;
-
-  if (!scene.canStart && readiness.status !== "in_progress") {
-    const blockerSection = document.createElement("section");
-    blockerSection.className = "matchday-command-blockers";
-    const heading = document.createElement("div");
-    heading.className = "matchday-command-blockers-head";
-    heading.innerHTML = `<span>Neste krav</span><strong>${scene.blockers.length}</strong>`;
-    blockerSection.append(heading);
-
-    const list = document.createElement("ol");
-    scene.blockers.forEach((blocker, index) => {
-      const item = document.createElement("li");
-      item.innerHTML = `<span>${index + 1}</span><p>${escapeHtml(blocker.message)}</p>`;
-      list.append(item);
-    });
-    blockerSection.append(list);
-
-    const actions = document.createElement("div");
-    actions.className = "matchday-gate-actions";
-    const targets = new Set(scene.blockers.map((item) => item.target));
-    if (targets.has("historygo")) appendMatchdayNavButton(actions, "Åpne samlingen", "historygo");
-    if (targets.has("tactics")) appendMatchdayNavButton(actions, "Gå til laguttak", "tactics");
-    if (targets.has("trening")) appendMatchdayNavButton(actions, "Planlegg trening", "trening");
-    if (targets.has("statistikk")) appendMatchdayNavButton(actions, "Åpne sesongen", "statistikk");
-    if (targets.has("dashboard")) appendMatchdayNavButton(actions, "Gå til kontoret", "dashboard");
-    if (actions.childElementCount) blockerSection.append(actions);
-    gate.append(blockerSection);
-  }
-
-  container.append(gate);
+  renderManagerMatchdayCommand(container, matchdayScene, {
+    onPrimaryAction: handleManagerMatchdayPrimaryAction,
+    onOpenTarget: openManagerMatchdayTarget
+  });
 }
 
 // Norske trykk-etiketter for hendelser.
@@ -11073,7 +11058,9 @@ function renderMatchday(teamFit) {
   }
 
   container.textContent = "";
-  renderMatchdayGate(container, teamFit);
+  const commandContainer = elements.matchdayCommand || container;
+  if (commandContainer !== container) commandContainer.textContent = "";
+  renderMatchdayGate(commandContainer, teamFit);
 
   const session = state.matchday?.session || null;
 
