@@ -24,6 +24,8 @@ jobs:
           cache: npm
       - name: Materialize matchday scene integration
         run: python scripts/temp-materialize-manager-matchday-scene-v1.py
+      - name: Instrument matchday render path
+        run: python scripts/temp-instrument-matchday-render.py
       - name: Install dependencies
         run: npm ci
       - name: Verify static integration
@@ -44,5 +46,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add temp-matchday-diagnostic.json
-          git commit -m "Oppdater midlertidig kampdagdiagnostikk"
+          git commit -m "Oppdater instrumentert kampdagdiagnostikk"
           git push origin HEAD:agent/manager-matchday-scene-v1
