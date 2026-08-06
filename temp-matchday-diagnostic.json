@@ -1,0 +1,87 @@
+{
+  "diagnostic": {
+    "outerHTML": "<section class=\"matchday-command-panel\" id=\"matchdayCommandPanel\" aria-label=\"Kampkommando\">\n            <div id=\"matchdayCommand\"></div>\n          </section>",
+    "commandHTML": "",
+    "ancestry": [
+      {
+        "tag": "SECTION",
+        "id": "matchdayCommandPanel",
+        "className": "matchday-command-panel",
+        "hidden": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "width": 1058,
+        "height": 0
+      },
+      {
+        "tag": "SECTION",
+        "id": "",
+        "className": "manager-surface matchday-panel",
+        "hidden": false,
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "width": 1058,
+        "height": 480
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "insight-grid",
+        "hidden": false,
+        "display": "grid",
+        "visibility": "visible",
+        "opacity": "1",
+        "width": 1058,
+        "height": 506
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "tab-section kamp-view",
+        "hidden": false,
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "width": 1078,
+        "height": 403.15625
+      },
+      {
+        "tag": "MAIN",
+        "id": "app",
+        "className": "app-shell",
+        "hidden": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "width": 1078,
+        "height": 403.15625
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "className": "",
+        "hidden": false,
+        "display": "grid",
+        "visibility": "visible",
+        "opacity": "1",
+        "width": 1080,
+        "height": 720
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "className": "",
+        "hidden": false,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  "pageErrors": [],
+  "consoleErrors": []
+}
