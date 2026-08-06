@@ -40,11 +40,16 @@ jobs:
       - name: Verify club browser contract
         run: npx playwright test tests/browser/manager-club-scene-v1.spec.js --project=chromium
       - name: Commit permanent integration
+        shell: bash
         run: |
+          set -euxo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git status --short
-          git add index.html src/app.js package.json .github/workflows/ci.yml
-          git add tests/browser/manager-club-scene-v1.spec.js-snapshots/
+          find tests/browser -maxdepth 4 -type f -name 'club-768*.png' -print
+          git add -A
+          git reset -- .github/workflows/temp-materialize-manager-club-scene-v1.yml scripts/temp-materialize-manager-club-scene-v1.py
+          git diff --cached --name-status
+          test -n "$(git diff --cached --name-only)"
           git commit -m "Koble inn klubbscene v1"
           git push origin HEAD:agent/manager-club-scene-v1
