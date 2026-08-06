@@ -4,7 +4,7 @@ const files = {
   html: fs.readFileSync(new URL("../index.html", import.meta.url), "utf8"),
   app: fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8"),
   presentation: fs.readFileSync(new URL("../src/ui/manager-training-presentation.js", import.meta.url), "utf8"),
-  style: fs.readFileSync(new URL("../style.css", import.meta.url), "utf8"),
+  trainingStyle: fs.readFileSync(new URL("../src/ui/manager-training-scene-v2.css", import.meta.url), "utf8"),
   package: fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"),
   ci: fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8"),
   docs: fs.readFileSync(new URL("../docs/MANAGER_TRAINING_SCENE_V2.md", import.meta.url), "utf8"),
@@ -32,7 +32,7 @@ check("neste motstander leses fra eksisterende kampflyt", files.app.includes("ge
 check("første uferdige steg kan åpnes direkte", files.presentation.includes("trainingProgramStep") && files.presentation.includes("trainingFocusStep") && files.presentation.includes("individualTrainingStep"));
 check("Kamp er slutten på den lokale flyten", files.presentation.includes('target: "kamp"'));
 check("det finnes fire operative statuskort", files.presentation.includes('id: "squad"') && files.presentation.includes('id: "program"') && files.presentation.includes('id: "focus"') && files.presentation.includes('id: "individual"'));
-check("mobilregler finnes", files.style.includes("Manager Training Scene v2") && files.style.includes("@media (max-width: 640px)"));
+check("mobilregler finnes", files.trainingStyle.includes("Manager Training Scene v2") && files.trainingStyle.includes("@media (max-width: 640px)"));
 check("nettleservakten kontrollerer overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
 check("nettleservakten kontrollerer WCAG", files.browser.includes("AxeBuilder") && files.browser.includes("wcag2aa"));
 check("simuleringen er registrert", files.package.includes('"sim:manager-training-scene-v2"'));

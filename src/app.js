@@ -7,6 +7,7 @@ import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-pres
 import { createMatchdaySceneModel } from "./ui/manager-matchday-presentation.js";
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
+import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -629,6 +630,8 @@ const elements = {
   trainingChoiceRisk: document.querySelector("#trainingChoiceRisk"),
   trainingGoMatch: document.querySelector("#trainingGoMatch"),
   // Ukens plan (football-training-plan.js): fire steg i fast rekkefølge.
+  trainingCommand: document.querySelector("#trainingCommand"),
+  trainingDepth: document.querySelector("#trainingDepth"),
   trainingPlanHeadline: document.querySelector("#trainingPlanHeadline"),
   trainingPlanCoherence: document.querySelector("#trainingPlanCoherence"),
   trainingPlanLoad: document.querySelector("#trainingPlanLoad"),
@@ -11678,6 +11681,55 @@ function focusTrainingWorkspace(legacyModalId) {
   });
 }
 
+function openManagerTrainingTarget(target) {
+  if (target === "inbox" || target === "kamp") {
+    activateTab(target);
+    return;
+  }
+  if (target === "details") {
+    if (elements.trainingDepth) {
+      elements.trainingDepth.open = true;
+      elements.trainingDepth.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    return;
+  }
+  const step = typeof target === "string" ? document.getElementById(target) : null;
+  if (!step) return;
+  state.openTrainingStepId = step.id;
+  activateTab("trening");
+  requestAnimationFrame(() => {
+    syncTrainingWorkspace(document.querySelector("#trainingWorkspace"), state.openTrainingStepId);
+    step.scrollIntoView({ behavior: "smooth", block: "start" });
+    step.focus({ preventScroll: true });
+  });
+}
+
+function renderManagerTrainingScene(plan) {
+  if (!elements.trainingCommand) return;
+  const conditionSummary = summarizeSquadCondition(getPlayerCondition());
+  const individualSummary = summarizeIndividualTraining({
+    catalogue: state.individualTrainingCatalogue,
+    assignments: getIndividualAssignments(),
+    capacity: getIndividualTrainingCapacity()
+  });
+  const offPitchSummary = summarizeOffPitchContext(getOffPitchState());
+  const selectedProgram = getSelectedTrainingProgramComposition();
+  const selectedFocus = getTrainingFocus(state.weeklyTrainingFocus?.focusId || null);
+  const model = createManagerTrainingSceneModel({
+    week: Number(state.clubWeekState?.week) || 1,
+    phase: state.clubWeekState?.phase || "training",
+    opponent: getMiniSeasonNextOpponent(),
+    plan,
+    assistantSignal: elements.trainingChoiceSignal?.textContent || offPitchSummary.headline,
+    assistantDetail: plan?.coherence?.note || offPitchSummary.headline,
+    conditionSummary,
+    selectedProgram,
+    selectedFocus,
+    individualSummary
+  });
+  renderManagerTrainingCommand(elements.trainingCommand, model, { onOpenTarget: openManagerTrainingTarget });
+}
+
 function renderWeeklyTrainingPlan() {
   if (!elements.trainingChoiceGate) return;
   const plan = getWeeklyTrainingPlan();
@@ -11755,6 +11807,8 @@ function renderWeeklyTrainingPlan() {
       elements.trainingPlanNext.onclick = () => activateTab("kamp");
     }
   }
+
+  renderManagerTrainingScene(plan);
 
   state.openTrainingStepId = syncTrainingWorkspace(
     document.querySelector("#trainingWorkspace"),

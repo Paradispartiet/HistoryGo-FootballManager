@@ -62,7 +62,14 @@ export function createManagerTrainingSceneModel({
   individualSummary = null
 } = {}) {
   const steps = asArray(plan?.steps);
-  const nextStep = steps.find((step) => step.id === plan?.nextStepId) || steps.find((step) => !step.done) || null;
+  const plannedNextStep = steps.find((step) => step.id === plan?.nextStepId)
+    || steps.find((step) => !step.done)
+    || null;
+  // Individuell trening er oppfølging, ikke en kampport. Når ukeplanen allerede
+  // er spillbar, skal manageren kunne gå videre uten å fylle en kunstig kvote.
+  const nextStep = plannedNextStep?.id === "individual" && plan?.ready
+    ? null
+    : plannedNextStep;
   const completedSteps = steps.filter((step) => step.done).length;
   const squad = squadStatus(conditionSummary || {});
   const individualUsed = Math.max(0, number(individualSummary?.used));
