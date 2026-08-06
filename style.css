@@ -10307,9 +10307,9 @@ button:disabled {
 .office-depth[open] > summary::after { content: " −"; }
 .office-depth-content { display: grid; gap: var(--gap); padding-top: 4px; }
 .inbox-command-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.65fr); gap: var(--gap); align-items: start; }
-.inbox-focus-panel,
-.inbox-briefing-panel,
-.inbox-queue-panel {
+.manager-surface.inbox-focus-panel,
+.manager-surface.inbox-briefing-panel,
+.manager-surface.inbox-queue-panel {
   display: grid;
   gap: 16px;
   border-color: var(--hg-border-soft);
