@@ -1,23 +1,69 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+function seededSeason() {
+  const clubs = [
+    { id: "rosenborg", name: "Rosenborg", isManager: true, ground: "Lerkendal", strength: 82 },
+    { id: "brann", name: "Brann", isManager: false, ground: "Brann stadion", strength: 80 },
+    { id: "viking", name: "Viking", isManager: false, ground: "Lyse Arena", strength: 79 },
+    { id: "molde", name: "Molde", isManager: false, ground: "Aker stadion", strength: 78 }
+  ];
+  const round = (number, matches, completed = false) => ({
+    round: number,
+    status: completed ? "completed" : "scheduled",
+    matches: matches.map((match, index) => ({
+      id: `office-r${number}-${index}`,
+      round: number,
+      status: completed ? "completed" : "scheduled",
+      result: completed ? match.result : null,
+      homeClubId: match.home,
+      awayClubId: match.away
+    }))
+  });
+
+  return {
+    version: "historygo-football-manager.league-season.v3",
+    competition: {
+      id: "hg-eliteserien",
+      mode: "league",
+      tierId: "eliteserien",
+      tierName: "Eliteserien",
+      tierLevel: 1,
+      clubCount: 4,
+      rounds: 6,
+      homeAndAway: true,
+      points: { win: 3, draw: 1, loss: 0 },
+      version: 3
+    },
+    tier: { id: "eliteserien", name: "Eliteserien", level: 1, clubCount: 4, groupSize: 4, rounds: 6 },
+    seed: "manager-office-inbox-scene",
+    seasonNumber: 1,
+    managerClubId: "rosenborg",
+    clubs,
+    currentRound: 2,
+    status: "active",
+    fixtures: [
+      round(1, [
+        { home: "rosenborg", away: "brann", result: { homeGoals: 2, awayGoals: 0 } },
+        { home: "viking", away: "molde", result: { homeGoals: 1, awayGoals: 1 } }
+      ], true),
+      round(2, [{ home: "viking", away: "rosenborg" }, { home: "brann", away: "molde" }]),
+      round(3, [{ home: "rosenborg", away: "molde" }, { home: "brann", away: "viking" }]),
+      round(4, [{ home: "brann", away: "rosenborg" }, { home: "molde", away: "viking" }]),
+      round(5, [{ home: "rosenborg", away: "viking" }, { home: "molde", away: "brann" }]),
+      round(6, [{ home: "molde", away: "rosenborg" }, { home: "viking", away: "brann" }])
+    ],
+    completedMatchIds: ["office-r1-0", "office-r1-1"],
+    createdFrom: "browser office and inbox scene"
+  };
+}
+
 async function openArea(page, target) {
   await page.locator(`.main-nav [role="tab"][data-tab-target="${target}"]`).click();
 }
 
 async function prepareActiveSeason(page) {
-  await openArea(page, "tactics");
-  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]').first();
-  await expect(trainingTab).toBeAttached();
-  await trainingTab.evaluate((node) => node.click());
-  const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
-  await expect(focusButton).toBeAttached();
-  await focusButton.evaluate((node) => node.click());
-
   await openArea(page, "dashboard");
-  const startSeason = page.locator("#leagueOnboardingSteps button", { hasText: "Start sesongen" });
-  await expect(startSeason).toBeVisible();
-  await startSeason.click();
   await expect(page.locator("#officeCommandPanel")).toBeVisible();
   await expect(page.locator("#officeCommand h2")).toHaveText("Managerkontoret");
 }
@@ -30,7 +76,7 @@ async function expectNoHorizontalOverflow(page) {
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.addInitScript(() => {
+  await page.addInitScript((season) => {
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
@@ -38,10 +84,12 @@ test.beforeEach(async ({ page }) => {
       clubName: "Rosenborg",
       takeoverClubId: "rosenborg",
       managerName: "Manager",
-      leagueName: "HG Liga",
-      leagueSeasonStatus: "preseason"
+      leagueName: "Eliteserien",
+      leagueSeasonStatus: "active",
+      boardExpectation: "Øvre halvdel"
     }));
-  });
+    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
+  }, seededSeason());
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
