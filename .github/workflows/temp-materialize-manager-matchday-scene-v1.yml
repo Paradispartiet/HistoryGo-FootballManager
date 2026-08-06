@@ -1,6 +1,6 @@
 name: Temporary materialize manager matchday scene v1
 
-# Final focused materialization with active matchday browser state.
+# Final focused materialization through the visible matchday command action.
 on:
   push:
     branches:
