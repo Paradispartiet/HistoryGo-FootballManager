@@ -46,7 +46,7 @@ jobs:
           git status --short
           find tests/browser -maxdepth 4 -type f -name 'club-768*.png' -print
           git add -A
-          git reset -- .github/workflows/temp-materialize-manager-club-scene-v1.yml scripts/temp-materialize-manager-club-scene-v1.py
+          git reset -- .github/workflows/ci.yml .github/workflows/temp-materialize-manager-club-scene-v1.yml scripts/temp-materialize-manager-club-scene-v1.py
           git diff --cached --name-status
           test -n "$(git diff --cached --name-only)"
       - name: Commit permanent integration
