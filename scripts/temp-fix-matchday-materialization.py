@@ -43,4 +43,16 @@ text = replace_once(
     '  await page.locator(\'#trainingFocusStep [data-training-step-toggle]\').click();\n',
     "stable focus step",
 )
+text = replace_once(
+    text,
+    '  await page.locator(\'.matchday-scene-status-card[data-matchday-target="trening"]\').click();\n',
+    '  await page.getByRole("button", { name: /^Treningsuka:/ }).click();\n',
+    "deterministic training status card",
+)
+text = replace_once(
+    text,
+    '''      boardExpectation: "Øvre halvdel"\n    }));\n  });\n''',
+    '''      boardExpectation: "Øvre halvdel"\n    }));\n    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({\n      schema: "historygo-football-manager.team_merits.v1",\n      version: 1,\n      teamId: "matchday_browser_team",\n      teamName: "Rosenborg",\n      activeTrainingWeek: 1,\n      hiredStaffIds: [\n        "jorgen_isnes",\n        "johannes_moesgaard",\n        "bislett_speed_specialist"\n      ],\n      unlockedPlaceIds: ["kfum_arena", "bislett_stadion"],\n      unlockedExpertiseIds: [\n        "team_organisation",\n        "club_building",\n        "development_culture",\n        "pressing_structure",\n        "rest_defense"\n      ],\n      earnedBadgeIds: ["training_culture_bronze"],\n      badgeProgress: [],\n      activeClassifications: ["development_team"]\n    }));\n  });\n''',
+    "green staff fixture",
+)
 path.write_text(text)
