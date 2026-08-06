@@ -31,28 +31,21 @@ path.write_text(text)
 
 path = Path("tests/browser/manager-matchday-scene-v1.spec.js")
 text = path.read_text()
-text = replace_once(
-    text,
-    '  await page.locator(\'.training-command-status[data-training-target="trainingProgramStep"]\').click();\n  const programButton = page.locator(".training-program-select:not([disabled])").first();\n',
-    '  await expect(page.locator("#trainingProgramStepBody")).toBeVisible();\n  const programButton = page.locator(".training-program-select:not([disabled])").first();\n',
-    "stable program step",
-)
-text = replace_once(
-    text,
-    '  await page.locator(\'.training-command-status[data-training-target="trainingFocusStep"]\').click();\n',
-    '  await page.locator(\'#trainingFocusStep [data-training-step-toggle]\').click();\n',
-    "stable focus step",
-)
+
+prepare_start = text.index("async function prepareAndOpenPreMatch(page) {")
+prepare_end = text.index("test.beforeEach", prepare_start)
+prepare = '''async function prepareAndOpenPreMatch(page) {\n  await openMatchday(page);\n  const play = page.locator("#playMatchdayButton");\n  await expect(play).toBeEnabled();\n  await play.click();\n  await expect(page.locator(".matchday-kickoff-button")).toBeVisible();\n}\n\n'''
+text = text[:prepare_start] + prepare + text[prepare_end:]
+
+before_start = text.index("test.beforeEach(async ({ page }) => {")
+before_end = text.index('test("kampdagen viser én scene', before_start)
+before_each = '''test.beforeEach(async ({ page }) => {\n  page.on("pageerror", (error) => console.error(`[pageerror] ${error.stack || error.message}`));\n  page.on("console", (message) => {\n    if (message.type() === "error") console.error(`[browser-console] ${message.text()}`);\n  });\n  await page.setViewportSize({ width: 1280, height: 900 });\n  await page.emulateMedia({ reducedMotion: "reduce" });\n  await page.addInitScript((season) => {\n    const clubWeekState = {\n      week: 1,\n      phase: "matchday",\n      boardTrust: 50,\n      playerMorale: 50,\n      tacticalClarity: 50,\n      trainingCulture: 50,\n      mediaPressure: 50\n    };\n    localStorage.setItem("hgfm.onboarded.v1", "1");\n    localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({\n      selectedMode: "league",\n      activeLeagueSaveId: "matchday_scene_v1",\n      clubName: "Rosenborg",\n      takeoverClubId: "rosenborg",\n      managerName: "Manager",\n      leagueName: "Eliteserien",\n      leagueSeasonStatus: "active",\n      boardExpectation: "Øvre halvdel"\n    }));\n    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));\n    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(clubWeekState));\n    localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({\n      focusId: "formation_familiarity",\n      week: 1,\n      appliedSessionId: null\n    }));\n  }, seededSeason());\n  await page.goto("/");\n  await expect(page.locator("#formationSelect option").first()).toBeAttached();\n  await expect(page.locator("#onboardingScreen")).toBeHidden();\n});\n\n'''
+text = text[:before_start] + before_each + text[before_end:]
+
 text = replace_once(
     text,
     '  await page.locator(\'.matchday-scene-status-card[data-matchday-target="trening"]\').click();\n',
     '  await page.getByRole("button", { name: /^Treningsuka:/ }).click();\n',
     "deterministic training status card",
-)
-text = replace_once(
-    text,
-    '''      boardExpectation: "Øvre halvdel"\n    }));\n  });\n''',
-    '''      boardExpectation: "Øvre halvdel"\n    }));\n    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({\n      schema: "historygo-football-manager.team_merits.v1",\n      version: 1,\n      teamId: "matchday_browser_team",\n      teamName: "Rosenborg",\n      activeTrainingWeek: 1,\n      hiredStaffIds: [\n        "jorgen_isnes",\n        "johannes_moesgaard",\n        "bislett_speed_specialist"\n      ],\n      unlockedPlaceIds: ["kfum_arena", "bislett_stadion"],\n      unlockedExpertiseIds: [\n        "team_organisation",\n        "club_building",\n        "development_culture",\n        "pressing_structure",\n        "rest_defense"\n      ],\n      earnedBadgeIds: ["training_culture_bronze"],\n      badgeProgress: [],\n      activeClassifications: ["development_team"]\n    }));\n  });\n''',
-    "green staff fixture",
 )
 path.write_text(text)
