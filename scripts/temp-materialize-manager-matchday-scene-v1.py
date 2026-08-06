@@ -120,7 +120,7 @@ function renderMatchdayGate(container, teamFit) {
     report
   });
 
-  renderManagerMatchdayCommand(elements.matchdayCommand || container, matchdayScene, {
+  renderManagerMatchdayCommand(container, matchdayScene, {
     onPrimaryAction: handleManagerMatchdayPrimaryAction,
     onOpenTarget: openManagerMatchdayTarget
   });
@@ -128,6 +128,12 @@ function renderMatchdayGate(container, teamFit) {
 
 '''
 text = text[:start] + replacement + text[end:]
+text = replace_once(
+    text,
+    '  container.textContent = "";\n  renderMatchdayGate(container, teamFit);\n',
+    '  container.textContent = "";\n  const commandContainer = elements.matchdayCommand || container;\n  if (commandContainer !== container) commandContainer.textContent = "";\n  renderMatchdayGate(commandContainer, teamFit);\n',
+    "matchday command render target",
+)
 path.write_text(text)
 
 
@@ -173,6 +179,12 @@ path.write_text(text)
 # Browser setup follows the already-green Manager Shell preseason path.
 path = Path("tests/browser/manager-matchday-scene-v1.spec.js")
 text = path.read_text()
+text = replace_once(
+    text,
+    '  await page.locator(\'.app-subtab[data-tab-target="trening"]\').click();\n  const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();\n  await expect(focusButton).toBeAttached();\n  await focusButton.evaluate((node) => node.click());\n',
+    '  await page.locator(\'.app-subtab[data-tab-target="trening"]\').click();\n  await page.locator(\'.training-command-status[data-training-target="trainingProgramStep"]\').click();\n  const programButton = page.locator(".training-program-select:not([disabled])").first();\n  await expect(programButton).toBeAttached();\n  await programButton.evaluate((node) => node.click());\n  await page.locator(\'.training-command-status[data-training-target="trainingFocusStep"]\').click();\n  const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();\n  await expect(focusButton).toBeAttached();\n  await focusButton.evaluate((node) => node.click());\n',
+    "browser training preparation",
+)
 text = replace_once(
     text,
     '      leagueSeasonStatus: "active",',
