@@ -66,7 +66,9 @@
     "sim:club-selection": "node scripts/simulate-club-selection.mjs",
     "sim:club-tradition": "node scripts/simulate-club-tradition.mjs",
     "sim:club-squad": "node scripts/simulate-club-squad.mjs",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "audit:manager-training-scene-v2": "node scripts/audit-manager-training-scene-v2.mjs",
+    "sim:manager-training-scene-v2": "node scripts/simulate-manager-training-scene-v2.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",

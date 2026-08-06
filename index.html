@@ -6,6 +6,7 @@
   <title>HG Football Manager</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="src/ui/manager-shell-v3.css">
+  <link rel="stylesheet" href="src/ui/manager-training-scene-v2.css">
 </head>
 <body>
   <!-- ============================ ONBOARDING (EGEN SKJERM) ============================
@@ -766,6 +767,14 @@
     <!-- ============================ TRENING & KUNNSKAP ============================ -->
     <div class="tab-section trening-view" data-tab-section="trening" data-tab-parent="tactics" hidden>
 
+      <section class="manager-surface training-command-panel" id="trainingCommandPanel" aria-label="Treningskommando" aria-live="polite">
+        <div id="trainingCommand" class="training-command"></div>
+      </section>
+
+      <details class="training-depth" id="trainingDepth">
+        <summary>Planstatus og troppsdetaljer</summary>
+        <div class="training-depth-content">
+
       <!-- UKENS PLAN: fire steg i fast rekkefølge, ikke tre parallelle lister.
            Innboks leverer signalene, programmet er ukas RAMME (belastning),
            fokuset er KAMPENS TEMA (metrikkbonus), individuell trening er
@@ -803,6 +812,8 @@
         <p id="squadConditionSummary" class="muted-text">Ingen kamper spilt ennå — troppen er uthvilt.</p>
         <ul id="squadConditionList" class="squad-condition-list"></ul>
       </section>
+        </div>
+      </details>
 
       <!-- Kjernevalgene ligger i én sammenhengende arbeidsflate. Det gjør
            treningsuka lesbar og redigerbar uten en kjede av modaler. -->
