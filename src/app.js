@@ -11706,6 +11706,12 @@ function openManagerTrainingTarget(target) {
 
 function renderManagerTrainingScene(plan) {
   if (!elements.trainingCommand) return;
+  // Dybdepanelet skal være foldet første gang scenen materialiseres. Senere
+  // renderer må ikke overstyre managerens eget valg om å åpne eller lukke det.
+  if (elements.trainingDepth && elements.trainingDepth.dataset.initialized !== "true") {
+    elements.trainingDepth.open = false;
+    elements.trainingDepth.dataset.initialized = "true";
+  }
   const conditionSummary = summarizeSquadCondition(getPlayerCondition());
   const individualSummary = summarizeIndividualTraining({
     catalogue: state.individualTrainingCatalogue,
