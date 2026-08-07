@@ -187,21 +187,6 @@ function createCrest(view) {
   });
   monogram.textContent = view.monogram;
   svg.append(monogram);
-
-  const signature = svgNode("text", {
-    x: "32",
-    y: "59",
-    "text-anchor": "middle",
-    fill: "#fff",
-    stroke: "rgba(0,0,0,.55)",
-    "stroke-width": "2",
-    "paint-order": "stroke",
-    "font-size": "5.5",
-    "font-weight": "900",
-    "letter-spacing": "1.4"
-  });
-  signature.textContent = "HGFM";
-  svg.append(signature);
   return svg;
 }
 
