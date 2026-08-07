@@ -1,8 +1,11 @@
-import "./manager-squad-tactics-scene-v2.js";
-
 // ============================================================================
 // Lineup presentation helpers — qualitative manager language, no hidden overall.
 // Pure functions: no DOM, state or engine ownership.
+//
+// Spillerliste og spillerprofil v1 eier nå Lag-presentasjonen gjennom
+// manager-shell-view.js. Den gamle manager-squad-tactics-scene-v2-importen er
+// bevisst fjernet: Lag skal ikke ha en egen «neste handling»-motor ved siden av
+// den globale Forslag til neste steg-veiviseren.
 // ============================================================================
 
 const FIT_BANDS = Object.freeze([
