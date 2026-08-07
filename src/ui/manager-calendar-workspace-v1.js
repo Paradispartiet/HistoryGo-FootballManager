@@ -99,6 +99,13 @@ function ensureStyles() {
   document.head.append(link);
 }
 
+function syncCalendarLocation() {
+  const section = document.querySelector('[data-tab-section="calendar"]');
+  if (!section || section.hidden) return;
+  const location = document.getElementById("managerLocationText");
+  if (location && location.textContent !== "Kontor · Kalender") location.textContent = "Kontor · Kalender";
+}
+
 function activateCalendar() {
   const section = document.querySelector('[data-tab-section="calendar"]');
   if (!section) return;
@@ -117,8 +124,7 @@ function activateCalendar() {
   });
   const subnav = document.getElementById("appSubnav");
   if (subnav) subnav.hidden = false;
-  const location = document.getElementById("managerLocationText");
-  if (location) location.textContent = "Kontor · Kalender";
+  syncCalendarLocation();
   scheduleRender();
   window.scrollTo({ top: 0, behavior: "auto" });
 }
@@ -201,6 +207,7 @@ function scheduleRender() {
   renderFrame = requestAnimationFrame(() => {
     renderFrame = 0;
     renderCalendar();
+    syncCalendarLocation();
   });
 }
 
@@ -211,6 +218,11 @@ function installObservers() {
   if (weekNodes.length) {
     const observer = new MutationObserver(scheduleRender);
     weekNodes.forEach((element) => observer.observe(element, { subtree: true, childList: true, characterData: true }));
+  }
+  const calendarSection = document.querySelector('[data-tab-section="calendar"]');
+  if (calendarSection) {
+    new MutationObserver(() => queueMicrotask(syncCalendarLocation))
+      .observe(calendarSection, { attributes: true, attributeFilter: ["hidden"] });
   }
   window.addEventListener("storage", scheduleRender);
   window.addEventListener("updateProfile", scheduleRender);
