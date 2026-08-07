@@ -6,19 +6,37 @@ Manager Shell v3 gjør HG Football Manager til et tydelig managerspill uten å e
 
 Ligaspillet har fem stabile hovedområder:
 
-1. **Kontor** – innboks, klubbdrift og oppstartshjelp.
+1. **Kontor** – innboks, kalender, klubbdrift og oppstartshjelp.
 2. **Lag** – oppstilling, tropp, trening og systemkunnskap.
 3. **Speiding** – rekrutterbare spillere og andre klubbers HG-koblede spillerpool.
 4. **Kamp** – kampdag og kampanalyse.
 5. **Stats** – tabell, terminliste, spillerstatistikk og sesongdom.
 
-`Klubb` er ikke et eget hovedområde. Styret, utvikling, stab/drift, fasiliteter og marked eies av **Kontor → Klubbdrift**. Speiding er løftet ut fordi spillerjakt er en egen, gjentakende manageroppgave og trenger listetetthet og drill-down som ikke hører hjemme i Kontorets sakskø.
+`Klubb` er ikke et eget hovedområde. Styret, utvikling, stab/drift, fasiliteter og marked eies av **Kontor → Klubbdrift**. Speiding er eget hovedområde fordi spillerjakt er en egen, gjentakende manageroppgave.
+
+## Kontor og manageruka
+
+Kontor åpner på Innboks og har fire synlige underflater:
+
+**Innboks · Kalender · Klubbdrift · Oppstartshjelp**
+
+Kalenderen er et tidslag over eksisterende Club Week-state, ikke en ny progresjonsmotor. Den viser den eksisterende seksfaserytmen som en vanlig uke:
+
+- mandag: analyse og restitusjon;
+- tirsdag: innboks og klubbdrift;
+- onsdag: trening;
+- torsdag: videre trening og individuell oppfølging;
+- fredag: kampforberedelse;
+- lørdag: kampdag;
+- søndag: etterkamp og oppsummering.
+
+Torsdag deler den eksisterende `training`-fasen. Kalenderen lager derfor ikke en kunstig syvende fase bare for å fylle syv ukedager.
 
 ## Autoritativ handling
 
 `football-next-action.js` er fortsatt kilden til neste handling. Skallet viser én primær handling i den faste footeren: `Forslag til neste steg`.
 
-Ingen hovedflate – heller ikke Speiding – bygger en parallell Neste-knapp eller automatisk arbeidsflyt. Statusflater forklarer tilstanden; de konkurrerer ikke om progresjonsansvaret.
+Ingen hovedflate eller underflate – heller ikke Kalender eller Speiding – bygger en parallell Neste-knapp, «fortsett dag»-kontroll eller automatisk arbeidsflyt. Kalenderen viser tid; `Forslag til neste steg` leder progresjonen.
 
 ## Lag og spillerpresentasjon
 
@@ -56,14 +74,16 @@ Kampdag bruker hele arbeidsbredden. Den eksisterende kampmotoren beholder kampkl
 ## Kodegrenser
 
 - `src/ui/manager-shell-elements.js` eier header, footer og grunnleggende Kontor-IA.
+- `src/football-manager-calendar.js` projiserer eksisterende Club Week til mandag–søndag uten egen state.
+- `src/ui/manager-calendar-workspace-v1.js` eier Kalender-presentasjonen under Kontor.
 - `src/ui/manager-player-workspace-v1.js` eier troppslisten og spillerprofilen.
-- `src/ui/manager-scouting-workspace-v1.js` eier Speiding-presentasjonen og løfter Speiding til hovednavigasjonen.
+- `src/ui/manager-scouting-workspace-v1.js` eier Speiding-presentasjonen.
 - `src/ui/manager-club-identity.js` eier klubbens visuelle identitet.
 - `src/ui/training-workspace-view.js` eier accordion-presentasjonen i trening.
 - `src/ui/manager-shell-view.js` laster de permanente manager-workspacene.
 - `src/app.js` binder eksisterende state og motorresultater til DOM-en.
 
-Speiding v1 introduserer ingen overgangs-, kontrakts-, lønns- eller rekrutteringsmotor og ingen nye localStorage-nøkler.
+Kalender v1 introduserer ingen ny uke-/fase-engine, ingen ny kalenderlagring og ingen ny progresjonshandling. Speiding v1 introduserer ingen overgangs-, kontrakts-, lønns- eller rekrutteringsmotor.
 
 ## Regresjonsvern
 
@@ -71,13 +91,14 @@ Speiding v1 introduserer ingen overgangs-, kontrakts-, lønns- eller rekrutterin
 
 **Kontor · Lag · Speiding · Kamp · Stats**
 
-I tillegg tester `tests/browser/manager-scouting-workspace-v1.spec.js`:
+`tests/browser/manager-calendar-v1.spec.js` låser:
 
-- Rekrutterbare som tett spillerliste;
-- felles spillerprofil;
-- Andre klubber og klubb → spiller-drill-down;
-- at egen klubb ikke ligger i «Andre klubber»;
+- Kalender som Kontor-underfane;
+- syv dager fra mandag til søndag;
+- riktig aktuell dag fra Club Week-fasen;
+- ingen egen progresjonsknapp;
+- uendret femområdes hovedmeny;
 - mobil uten horisontal lekkasje;
-- WCAG 2 A/AA med axe.
+- WCAG 2 A/AA.
 
-Permanente audit- og simuleringsporter kontrollerer samtidig at Speiding gjenbruker eksisterende unlock- og klubbdata og ikke introduserer en ny spillsannhet.
+Permanente audit- og simuleringsporter kontrollerer samtidig at Kalender bare projiserer eksisterende Club Week-/liga-/kampdata og ikke introduserer en ny spillsannhet.
