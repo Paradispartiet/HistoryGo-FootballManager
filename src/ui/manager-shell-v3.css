@@ -1,15 +1,42 @@
 @import url("./manager-shell-foundation.css");
 
-/* Manager Shell v3: presentation-only layer. Engines and persisted state stay
-   in their existing modules; this file owns the five-area shell and its direct
-   work surfaces. */
+/* Manager Shell v4 IA: presentation-only layer. Engines and persisted state stay
+   in their existing modules; this file owns the four-area shell and direct work
+   surfaces: Kontor · Lag · Kamp · Stats. */
 
 .main-nav-inner {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .main-nav .nav-tab {
   min-width: 0;
+}
+
+/* Klubb er en del av Kontor, aldri en femte hovedfane. Denne regelen er
+   permanent og tåler at eldre mode-rendering forsøker å vise knappen igjen. */
+.main-nav .nav-tab[data-tab-target="board"] {
+  display: none !important;
+}
+
+/* Forslag til neste steg skal kunne forklare seg uten å renne ut av kortet. */
+.next-action-primary {
+  min-width: 0;
+}
+
+.next-action-primary > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.next-action-hint {
+  white-space: normal !important;
+}
+
+/* Stats skal være et stabilt hovedområde også før første seriekamp. Panelet kan
+   da vise før-sesong-status, mens tabell/terminliste fylles når sesongen finnes. */
+.statistikk-view #leagueSeasonPanel[hidden] {
+  display: block !important;
 }
 
 .office-main,
@@ -280,21 +307,10 @@
 .match-flow-zones small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .match-flow-hint { margin: 0; color: var(--hg-text-muted, #aeb6b0); font-size: 0.72rem; }
 
-/* Halvferdige produktløfter skal ikke være dører i spillet. */
-.dept-facilities,
-.dept-market {
-  display: none !important;
-}
+/* Fasiliteter og Marked er eksisterende, levende Kontor-flater. De skal ikke
+   skjules av shell-CSS; data-shell-hidden styres nå av IA-laget. */
 
 @media (max-width: 760px) {
-  .main-nav .nav-tab-club .nav-label { font-size: 0 !important; }
-  .main-nav .nav-tab-club .nav-label::after {
-    content: "Mer";
-    display: block;
-    color: var(--hg-text-muted);
-    font-size: 0.58rem;
-  }
-
   .main-nav {
     position: static !important;
     inset: auto !important;
@@ -306,7 +322,7 @@
 
   .main-nav-inner {
     display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
   }
 
@@ -315,6 +331,10 @@
     place-items: center;
     gap: 2px;
     padding: 7px 2px !important;
+  }
+
+  .main-nav .nav-tab[data-tab-target="board"] {
+    display: none !important;
   }
 
   .site-footer {

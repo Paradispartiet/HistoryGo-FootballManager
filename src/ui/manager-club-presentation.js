@@ -27,6 +27,69 @@ function status(id, label, value, detail, tone, target) {
   return { id, label, value, detail, tone, target };
 }
 
+function scoreBand(value, medium = 45, strong = 65) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 0;
+  if (parsed >= strong) return 3;
+  if (parsed >= medium) return 2;
+  return 1;
+}
+
+function countBand(value, basic = 1, solid = 8, strong = 15) {
+  const parsed = Math.max(0, number(value));
+  if (parsed >= strong) return 3;
+  if (parsed >= solid) return 2;
+  if (parsed >= basic) return 1;
+  return 0;
+}
+
+function deriveFacilityReading({ clubState, players, hiredStaff }) {
+  const levels = [
+    scoreBand(clubState?.trainingCulture),
+    scoreBand(clubState?.mediaPressure),
+    countBand(players, 1, 8, 15),
+    countBand(hiredStaff, 1, 1, 3)
+  ];
+  const average = levels.reduce((sum, value) => sum + value, 0) / levels.length;
+  const label = average >= 2.5 ? "Sterk" : average >= 1.5 ? "Solid" : average > 0 ? "Grunnleggende" : "Ikke lest";
+  const tone = average >= 2.5 ? "positive" : average >= 1.5 ? "neutral" : average > 0 ? "attention" : "neutral";
+  return {
+    label,
+    tone,
+    detail: `${players} spillere · ${hiredStaff} i stab · treningskultur ${number(clubState?.trainingCulture)}.`
+  };
+}
+
+function deriveMarketReading({ trust, morale, media }) {
+  if (media.score >= 65) {
+    return {
+      label: "Under press",
+      tone: "negative",
+      detail: `Medietrykk ${media.score}. Fans og sponsorer leses mot moral ${morale.score} og styretillit ${trust.score}.`
+    };
+  }
+  if (media.score <= 35 && morale.score >= 50 && trust.score >= 50) {
+    return {
+      label: "God temperatur",
+      tone: "positive",
+      detail: `Lavt medietrykk · moral ${morale.score} · styretillit ${trust.score}.`
+    };
+  }
+  return {
+    label: "Stabilt",
+    tone: "neutral",
+    detail: `Medietrykk ${media.score} · moral ${morale.score} · styretillit ${trust.score}.`
+  };
+}
+
+function ensureClubSectionsKeyboardAccessible() {
+  if (typeof document === "undefined") return;
+  ["board", "historygo", "progression", "admin", "facilities", "market"].forEach((target) => {
+    const section = document.querySelector(`[data-tab-section="${target}"]`);
+    if (section && !section.hasAttribute("tabindex")) section.tabIndex = 0;
+  });
+}
+
 function derivePriority({ trust, rosterCount, rosterRequired, hiredStaff, staffGaps, unlockedExpertise, activePrograms }) {
   if (trust.score <= 35) {
     return {
@@ -125,6 +188,8 @@ export function createManagerClubSceneModel({
   const expertise = Math.max(0, number(unlockedExpertiseCount));
   const players = Math.max(0, number(unlockedPlayersCount));
   const places = Math.max(0, number(unlockedPlacesCount));
+  const facilities = deriveFacilityReading({ clubState, players, hiredStaff });
+  const market = deriveMarketReading({ trust, morale, media: { ...media, score: clamp(clubState?.mediaPressure, 0, 100) } });
 
   const priority = derivePriority({
     trust,
@@ -156,6 +221,22 @@ export function createManagerClubSceneModel({
       "historygo"
     ),
     status(
+      "development",
+      "Klubbutvikling",
+      activePrograms > 0 ? `${activePrograms} aktiv${activePrograms === 1 ? "" : "e"}` : badges > 0 ? `${badges} badge${badges === 1 ? "" : "s"}` : "Ikke startet",
+      `${expertise} ekspertise · ${badges} badges · ${classifications} lagklasse${classifications === 1 ? "" : "r"}.`,
+      activePrograms > 0 || badges > 0 ? "positive" : expertise > 0 ? "attention" : "neutral",
+      "progression"
+    ),
+    status(
+      "facilities",
+      "Fasiliteter",
+      facilities.label,
+      facilities.detail,
+      facilities.tone,
+      "facilities"
+    ),
+    status(
       "staff",
       "Stab & drift",
       staffIdentity?.identityLabel || `${hiredStaff} ansatt${hiredStaff === 1 ? "" : "e"}`,
@@ -164,12 +245,12 @@ export function createManagerClubSceneModel({
       "admin"
     ),
     status(
-      "development",
-      "Klubbutvikling",
-      activePrograms > 0 ? `${activePrograms} aktiv${activePrograms === 1 ? "" : "e"}` : badges > 0 ? `${badges} badge${badges === 1 ? "" : "s"}` : "Ikke startet",
-      `${expertise} ekspertise · ${badges} badges · ${classifications} lagklasse${classifications === 1 ? "" : "r"}.`,
-      activePrograms > 0 || badges > 0 ? "positive" : expertise > 0 ? "attention" : "neutral",
-      "progression"
+      "market",
+      "Marked",
+      market.label,
+      market.detail,
+      market.tone,
+      "market"
     )
   ];
 
@@ -180,6 +261,8 @@ export function createManagerClubSceneModel({
     expectation: boardExpectation || "Styret venter at du bygger laget og viser en tydelig retning.",
     priority,
     statuses,
+    facilities,
+    market,
     staff: {
       score: staffScore,
       label: staffIdentity?.identityLabel || (hiredStaff > 0 ? "Støtteapparat under bygging" : "Uetablert stab"),
@@ -233,6 +316,7 @@ function statusButton(item, onOpenTarget) {
 
 export function renderManagerClubCommand(container, model, { onOpenTarget } = {}) {
   if (!container) return;
+  ensureClubSectionsKeyboardAccessible();
   container.textContent = "";
   container.dataset.complete = model.complete ? "true" : "false";
 
@@ -282,7 +366,7 @@ export function renderManagerClubCommand(container, model, { onOpenTarget } = {}
   main.append(expectation, priority);
 
   const statusGrid = document.createElement("div");
-  statusGrid.className = "club-command-status-grid";
+  statusGrid.className = "club-command-status-grid club-command-status-grid-operations";
   model.statuses.forEach((item) => statusGrid.append(statusButton(item, onOpenTarget)));
 
   const reading = document.createElement("div");
@@ -314,7 +398,6 @@ export function renderManagerClubCommand(container, model, { onOpenTarget } = {}
       textElement("strong", "", String(item.score)),
       textElement("small", "", item.label)
     );
-    card.lastElementChild.textContent = item.label === "Medietrykk" ? `${item.label}: ${item.label === "Medietrykk" ? item.label && item.tone === "negative" ? "høyt" : item.tone === "positive" ? "lavt" : "normalt" : item.label}` : item.label;
     card.lastElementChild.textContent = item.label === "Medietrykk"
       ? (item.tone === "negative" ? "Høyt press" : item.tone === "positive" ? "Lavt press" : "Normalt press")
       : item.tone === "positive" ? "Sterkt" : item.tone === "negative" ? "Krever arbeid" : "Stabilt";

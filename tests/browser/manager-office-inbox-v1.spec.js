@@ -58,14 +58,17 @@ function seededSeason() {
   };
 }
 
-async function openArea(page, target) {
-  await page.locator(`.main-nav [role="tab"][data-tab-target="${target}"]`).click();
+async function openOffice(page) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Innboks");
 }
 
-async function prepareActiveSeason(page) {
-  await openArea(page, "dashboard");
+async function openHelp(page) {
+  await openOffice(page);
+  await page.locator('.app-subtab[data-tab-target="officeHelp"]').click();
+  await expect(page.locator('[data-tab-section="officeHelp"]')).toBeVisible();
   await expect(page.locator("#officeCommandPanel")).toBeVisible();
-  await expect(page.locator("#officeCommand h2")).toHaveText("Managerkontoret");
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -95,25 +98,21 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("managerkontoret prioriterer én hovedsak og fire operative statuser", async ({ page }) => {
-  await prepareActiveSeason(page);
+test("Kontor åpner på Innboks; gammel oversikt ligger i Oppstartshjelp", async ({ page }) => {
+  await openOffice(page);
+  await expect(page.locator("#inboxThreadList")).toBeVisible();
+  await expect(page.locator("#officeCommandPanel")).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="dashboard"]')).toBeHidden();
 
+  await openHelp(page);
+  await expect(page.locator("#officeCommand h2")).toHaveText("Managerkontoret");
   await expect(page.locator(".office-priority-card")).toBeVisible();
-  await expect(page.locator(".office-priority-card strong")).not.toBeEmpty();
-  await expect(page.locator(".office-next-match-card")).toBeVisible();
   await expect(page.locator(".office-status-card")).toHaveCount(4);
-  await expect(page.locator("#officeCommand .next-action-primary")).toHaveCount(0);
-  await expect(page.locator("#nextActionPrimary")).toHaveCount(1);
-  expect(await page.locator("#officeDepth").getAttribute("open")).toBeNull();
-
-  await page.locator('.office-status-card[data-office-target="inbox"]').click();
-  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Oppstartshjelp");
 });
 
-test("assistentråden viser én fokussak og resten som kø", async ({ page }) => {
-  await prepareActiveSeason(page);
-  await page.locator('.app-subtab[data-tab-target="inbox"]').click();
-
+test("Innboks viser én fokussak og resten som kø", async ({ page }) => {
+  await openOffice(page);
   await expect(page.locator("#inboxFocusTitle")).not.toBeEmpty();
   await expect(page.locator("#inboxThreadList .inbox-thread-card.is-open, #inboxThreadList .message-card.is-empty")).toHaveCount(1);
   await expect(page.locator(".inbox-inline-stats")).toBeVisible();
@@ -131,24 +130,22 @@ test("assistentråden viser én fokussak og resten som kø", async ({ page }) =>
   }
 });
 
-test("assistentråd går direkte videre til trening", async ({ page }) => {
-  await prepareActiveSeason(page);
-  await page.locator('.app-subtab[data-tab-target="inbox"]').click();
+test("Innboks går direkte videre til trening", async ({ page }) => {
+  await openOffice(page);
   await page.locator("#inboxGoTraining").click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
 });
 
-test("kontor og assistentråd har ingen mobil overflow", async ({ page }) => {
+test("Kontor, Innboks og Oppstartshjelp har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await prepareActiveSeason(page);
+  await openOffice(page);
   await expectNoHorizontalOverflow(page);
-  await page.locator('.app-subtab[data-tab-target="inbox"]').click();
+  await openHelp(page);
   await expectNoHorizontalOverflow(page);
 });
 
-test("assistentråden har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  await prepareActiveSeason(page);
-  await page.locator('.app-subtab[data-tab-target="inbox"]').click();
+test("Innboks har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
+  await openOffice(page);
   const results = await new AxeBuilder({ page })
     .include('[data-tab-section="inbox"]')
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])

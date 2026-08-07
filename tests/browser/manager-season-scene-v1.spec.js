@@ -80,9 +80,9 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#leagueSeasonPanel")).toBeVisible();
 });
 
-test("sesongflaten åpner med managerens situasjon og neste kamp", async ({ page }) => {
+test("Stats åpner med managerens situasjon og neste kamp", async ({ page }) => {
   const command = page.locator("#seasonCommand");
-  await expect(command).toContainText("Sesongkontroll");
+  await expect(command.locator("h2")).toHaveText("Stats");
   await expect(command).toContainText("Serierunde 2 av 6");
   await expect(command.locator(".season-next-match")).toContainText("Viking");
   await expect(command.locator(".season-command-metrics article")).toHaveCount(4);
@@ -91,26 +91,30 @@ test("sesongflaten åpner med managerens situasjon og neste kamp", async ({ page
   await expect(command.locator(".season-command-metrics")).toContainText("V");
 });
 
-test("kompakt tabell og kamprytme kommer før full dybde", async ({ page }) => {
+test("tabell, kamprytme og full terminliste er samlet i Stats", async ({ page }) => {
   await expect(page.locator(".season-workspace-grid")).toBeVisible();
   const rows = page.locator(".season-compact-table tbody tr:not(.season-table-gap)");
   await expect(rows).toHaveCount(4);
   await expect(page.locator(".season-compact-table tr.is-manager-club")).toContainText("Rosenborg");
   await expect(page.locator(".season-fixture.is-recent")).toContainText("Brann");
   await expect(page.locator(".season-fixture.is-upcoming").first()).toContainText("Viking");
-  await expect(page.locator(".season-depth")).not.toHaveAttribute("open", "");
+  await expect(page.locator(".season-depth")).toHaveAttribute("open", "");
+  await expect(page.locator(".season-full-table")).toBeVisible();
+  await expect(page.locator(".season-all-fixtures")).toBeVisible();
+  await expect(page.locator("#playerStatsTable")).toBeVisible();
 });
 
-test("sesongkontrollen gir direkte vei til kamp", async ({ page }) => {
+test("Stats gir direkte vei til kamp", async ({ page }) => {
   await page.getByRole("button", { name: "Gå til kamp" }).click();
   await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
   await expect(page.locator('.main-nav [role="tab"][data-tab-target="kamp"]')).toHaveAttribute("aria-selected", "true");
 });
 
-test("sesongflaten har ingen horisontal overflow på mobil", async ({ page }) => {
+test("Stats har ingen horisontal overflow på mobil", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   await expect(page.locator(".season-command-metrics article")).toHaveCount(4);
   await expect(page.locator(".season-fixture-columns")).toBeVisible();
+  await expect(page.locator(".season-full-table")).toBeVisible();
 });

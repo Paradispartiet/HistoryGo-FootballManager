@@ -1,4 +1,4 @@
-/* Manager Club Scene v1: ett klubbkontor, fire operative funksjoner, dybde foldet. */
+/* Manager Club Scene v1: ett klubbkontor, seks operative funksjoner, dybde foldet. */
 .manager-surface.club-command-panel {
   padding: 0;
   overflow: hidden;
@@ -283,6 +283,20 @@
 
 .club-depth-content > .dept-hero {
   margin-top: 0;
+}
+
+/* Fasiliteter og Marked er nå reelle Kontor-flater. Legacy-muted var for svak
+   mot kortbakgrunnene; all støttetekst må bestå WCAG AA. */
+.dept-facilities .facility-card .muted-text,
+.dept-facilities .facility-card .facility-status,
+.dept-market .eyebrow,
+.dept-market .muted-text,
+.dept-market .market-feature p,
+.dept-market .market-feature small,
+.dept-market .market-feature summary,
+.dept-market .market-side p,
+.dept-market .market-side small {
+  color: #d2d8e0;
 }
 
 @media (max-width: 900px) {
