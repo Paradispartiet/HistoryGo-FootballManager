@@ -1,8 +1,14 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+async function openOffice(page) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+}
+
 async function openClub(page) {
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
+  await openOffice(page);
+  await page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]').click();
   await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
   await expect(page.locator("#clubCommandPanel")).toBeVisible();
 }
@@ -32,7 +38,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("klubbkontoret samler forventning, prioritet og seks operative funksjoner", async ({ page }) => {
+test("Klubbdrift ligger under Kontor og samler seks operative funksjoner", async ({ page }) => {
   await openClub(page);
   await expect(page.locator("#clubCommand h2")).toHaveText("Klubbkontoret");
   await expect(page.locator(".club-expectation-card strong")).not.toBeEmpty();
@@ -40,56 +46,46 @@ test("klubbkontoret samler forventning, prioritet og seks operative funksjoner",
   await expect(page.locator(".club-command-action")).toBeVisible();
   await expect(page.locator(".club-command-status")).toHaveCount(6);
   await expect(page.locator(".club-command-metrics article")).toHaveCount(5);
-  await expect(page.locator('.app-subtab[data-subnav-parent="board"][data-tab-target="board"]')).toHaveText("Klubboversikt");
-  await expect(page.locator('.app-subtab[data-subnav-parent="board"][data-tab-target="facilities"]')).toHaveText("Fasiliteter");
-  await expect(page.locator('.app-subtab[data-subnav-parent="board"][data-tab-target="market"]')).toHaveText("Marked");
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubbdrift");
+  await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(4);
   expect(await page.locator("#clubDepth").getAttribute("open")).toBeNull();
 });
 
-test("statuskort åpner alle eksisterende klubbflater og styredybde", async ({ page }) => {
+test("statuskort åpner klubbfunksjonene uten ny hovedfane", async ({ page }) => {
   await openClub(page);
   await page.locator('.club-command-status[data-club-target="admin"]').click();
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
   await expect(page.locator("#availableStaffList")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubbdrift · Stab & drift");
 
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
+  await openClub(page);
   await page.locator('.club-command-status[data-club-target="historygo"]').click();
   await expect(page.locator('[data-tab-section="historygo"]')).toBeVisible();
   await expect(page.locator("#unlockedPlayersList")).toBeVisible();
 
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
+  await openClub(page);
   await page.locator('.club-command-status[data-club-target="progression"]').click();
   await expect(page.locator('[data-tab-section="progression"]')).toBeVisible();
   await expect(page.locator("#unlockedExpertiseList")).toBeVisible();
 
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
+  await openClub(page);
   await page.locator('.club-command-status[data-club-target="facilities"]').click();
   await expect(page.locator('[data-tab-section="facilities"]')).toBeVisible();
   await expect(page.locator("#facilityOverallValue")).toBeVisible();
 
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
+  await openClub(page);
   await page.locator('.club-command-status[data-club-target="market"]').click();
   await expect(page.locator('[data-tab-section="market"]')).toBeVisible();
   await expect(page.locator("#marketMediaValue")).toBeVisible();
 
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
+  await openClub(page);
   await page.locator('.club-command-status[data-club-target="details"]').click();
   await expect(page.locator("#clubDepth")).toHaveAttribute("open", "");
 });
 
-test("klubbundernavigasjonen åpner Fasiliteter og Marked", async ({ page }) => {
-  await openClub(page);
-  await page.locator('.app-subtab[data-subnav-parent="board"][data-tab-target="facilities"]').click();
-  await expect(page.locator('[data-tab-section="facilities"]')).toBeVisible();
-  await expect(page.locator("#facilityTrainingLevel")).not.toHaveText("Nivå –");
-
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
-  await page.locator('.app-subtab[data-subnav-parent="board"][data-tab-target="market"]').click();
-  await expect(page.locator('[data-tab-section="market"]')).toBeVisible();
-  await expect(page.locator("#marketReputationNote")).not.toBeEmpty();
-});
-
-test("klubbkontoret og de nye klubbflatene har ingen mobil overflow", async ({ page }) => {
+test("klubbkontoret og klubbfunksjonene har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openClub(page);
   await expectNoHorizontalOverflow(page);
@@ -97,26 +93,20 @@ test("klubbkontoret og de nye klubbflatene har ingen mobil overflow", async ({ p
   await page.locator('.club-command-status[data-club-target="facilities"]').click();
   await expectNoHorizontalOverflow(page);
 
-  await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
+  await openClub(page);
   await page.locator('.club-command-status[data-club-target="market"]').click();
   await expectNoHorizontalOverflow(page);
 });
 
-test("klubbkontoret og de nye klubbflatene har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  await openClub(page);
+test("klubbkontoret og klubbfunksjonene har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
   for (const target of ["board", "facilities", "market"]) {
-    if (target !== "board") {
-      await page.locator(`.club-command-status[data-club-target="${target}"]`).click();
-    }
+    await openClub(page);
+    if (target !== "board") await page.locator(`.club-command-status[data-club-target="${target}"]`).click();
     const results = await new AxeBuilder({ page })
       .include(`[data-tab-section="${target}"]`)
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       .analyze();
     const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
     expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
-    if (target !== "market") {
-      await page.locator('.main-nav [role="tab"][data-tab-target="board"]').click();
-      await expect(page.locator("#clubCommandPanel")).toBeVisible();
-    }
   }
 });
