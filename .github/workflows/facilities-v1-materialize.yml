@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   materialize:
-    if: github.event.head_commit.message == 'Add temporary facilities v1 materializer workflow'
+    if: github.event.head_commit.message == 'Rerun facilities v1 materializer'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout feature branch
@@ -26,7 +26,9 @@ jobs:
           cache: npm
 
       - name: Materialize permanent feature files
-        run: python3 scripts/_materialize_facilities_v1.py
+        run: |
+          python3 scripts/_materialize_facilities_v1.py
+          python3 scripts/_fix_facilities_stale_ids.py
 
       - name: Install dependencies
         run: npm ci
