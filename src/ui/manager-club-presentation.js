@@ -82,6 +82,14 @@ function deriveMarketReading({ trust, morale, media }) {
   };
 }
 
+function ensureClubSectionsKeyboardAccessible() {
+  if (typeof document === "undefined") return;
+  ["board", "historygo", "progression", "admin", "facilities", "market"].forEach((target) => {
+    const section = document.querySelector(`[data-tab-section="${target}"]`);
+    if (section && !section.hasAttribute("tabindex")) section.tabIndex = 0;
+  });
+}
+
 function derivePriority({ trust, rosterCount, rosterRequired, hiredStaff, staffGaps, unlockedExpertise, activePrograms }) {
   if (trust.score <= 35) {
     return {
@@ -308,6 +316,7 @@ function statusButton(item, onOpenTarget) {
 
 export function renderManagerClubCommand(container, model, { onOpenTarget } = {}) {
   if (!container) return;
+  ensureClubSectionsKeyboardAccessible();
   container.textContent = "";
   container.dataset.complete = model.complete ? "true" : "false";
 
