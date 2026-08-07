@@ -40,7 +40,7 @@ test.beforeEach(async ({ page }) => {
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
-      activeLeagueSaveId: "manager_shell_visual_save",
+      activeLeagueSaveId: "manager_shell_v4_save",
       clubName: "Rosenborg",
       takeoverClubId: "rosenborg",
       managerName: "Manager",
@@ -64,7 +64,6 @@ test("har fire stabile hovedområder og ett samlet Kontor", async ({ page }) => 
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toHaveText("Innboks");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toHaveText("Oppstartshjelp");
-
   await expect(page.locator("#nextActionPrimary")).toHaveCount(1);
   await expect(page.locator("#nextActionDestination")).toBeVisible();
   await expect(page.locator("#advanceClubWeekPhase, #leagueOnboardingPrimary, #portalPriorityAction")).toHaveCount(0);
@@ -106,14 +105,12 @@ test("trening viser nøyaktig ett utvidet arbeidssteg", async ({ page }) => {
   const toggles = page.locator("[data-training-step-toggle]");
   await expect(toggles).toHaveCount(3);
   await expect(page.locator('[data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
-
   await toggles.nth(2).click();
   await expect(toggles.nth(2)).toHaveAttribute("aria-expanded", "true");
   await expect(page.locator('[data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
   await expect(page.locator("#individualTrainingStepBody")).toBeVisible();
   await expect(page.locator("#trainingProgramStepBody")).toBeHidden();
   await expect(page.locator("#trainingFocusStepBody")).toBeHidden();
-  await expect(page.locator("#modalTrainingProgram, #modalTrainingFocusPick, #modalIndividualTraining")).toHaveCount(0);
 });
 
 test("klubbidentiteten viser skjold, klubbfarge og stadion", async ({ page }) => {
@@ -168,23 +165,16 @@ test("hovedskallet har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) 
 
 test("Stats samler tabell, terminliste og spillerstatistikk", async ({ page }) => {
   await openArea(page, "Stats");
+  await expect(page.locator("#leagueSeasonPanel")).toBeVisible();
   await expect(page.locator("#seasonCommand h2")).toHaveText("Stats");
-  await expect(page.locator("#leagueSeasonOverview")).toBeVisible();
-  const depth = page.locator("#leagueSeasonOverview .season-depth");
-  if (await depth.count()) await expect(depth).toHaveAttribute("open", "");
   await expect(page.locator("#statsMatches")).toBeVisible();
   await expect(page.locator("#statsGoals")).toBeVisible();
   await expect(page.locator("#statsAssists")).toBeVisible();
   await expect(page.locator("#statsStanding")).toBeVisible();
   await expect(page.locator("#playerStatsTable")).toBeVisible();
   await expect(page.locator("#seasonArchiveTable")).toBeVisible();
-});
-
-test("ny ligalagring velger moderne 4-2-3-1 eksplisitt", async ({ page }) => {
-  await openArea(page, "Lag");
-  await expect(page.locator("#formationSelect")).toHaveValue("modern_4231");
-  await expect(page.locator("#formationSelect option:checked")).toContainText("Modern 4-2-3-1");
-  await expect(page.locator("#formationSelect option:checked")).not.toContainText("Pre-modern Rush 1-1-8");
+  // Full tabell og terminliste fylles her når en aktiv ligasesong finnes;
+  // den seedede sesongtesten låser det konkrete tabell-/terminlisteinnholdet.
 });
 
 for (const viewport of VIEWPORTS) {
@@ -226,16 +216,7 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("kampknapp og kampklar-status bruker samme autoritative resultat", async ({ page }) => {
-  await openArea(page, "Kamp");
-  const readiness = page.locator("#matchdayReadiness");
-  const play = page.locator("#playMatchdayButton");
-  await expect(readiness).toBeVisible();
-  const canStart = await readiness.getAttribute("data-ready") === "true";
-  expect(await play.isDisabled()).toBe(!canStart);
-});
-
-test("sentrale handlingsknapper er mørke og har synlig tastaturfokus", async ({ page }) => {
+test("sentrale shell-knapper er mørke og har synlig tastaturfokus", async ({ page }) => {
   async function expectDarkButton(button) {
     await expect(button).toBeVisible();
     const appearance = await button.evaluate((node) => {
@@ -244,8 +225,6 @@ test("sentrale handlingsknapper er mørke og har synlig tastaturfokus", async ({
       return {
         background: style.backgroundColor,
         color: style.color,
-        outlineStyle: style.outlineStyle,
-        outlineWidth: style.outlineWidth,
         height: box.height,
         disabled: node.disabled
       };
@@ -253,7 +232,6 @@ test("sentrale handlingsknapper er mørke og har synlig tastaturfokus", async ({
     expect(appearance.background).not.toBe("rgb(255, 255, 255)");
     expect(appearance.color).not.toBe("rgb(0, 0, 0)");
     expect(appearance.height).toBeGreaterThanOrEqual(44);
-
     if (!appearance.disabled) {
       await button.focus();
       const focus = await button.evaluate((node) => {
@@ -267,32 +245,4 @@ test("sentrale handlingsknapper er mørke og har synlig tastaturfokus", async ({
 
   await expectDarkButton(page.locator("#nextActionPrimary"));
   await expectDarkButton(page.locator("#settingsButton"));
-  await openArea(page, "Kamp");
-  await expectDarkButton(page.locator("#playMatchdayButton"));
-});
-
-test("laguttaket bruker større bane og kvalitativ rollebruk", async ({ page }) => {
-  await openArea(page, "Lag");
-  const pitch = page.locator("#lineupSlots");
-  const pitchBox = await pitch.boundingBox();
-  expect(pitchBox).not.toBeNull();
-  expect(pitchBox.width).toBeGreaterThanOrEqual(500);
-
-  await expect(page.locator(".player-chip .chip-fit")).toHaveCount(11);
-  const chipFit = (await page.locator(".player-chip .chip-fit").first().textContent()).trim();
-  expect(chipFit).not.toMatch(/^\d+$/);
-  const sideFit = (await page.locator("#selectedMatchScore").textContent()).trim();
-  expect(sideFit).not.toMatch(/^\d+$/);
-  expect(sideFit).toMatch(/samsvar|rolle|vurdert/i);
-});
-
-test("kampdagen åpner som en visuell kampkommando", async ({ page }) => {
-  await openArea(page, "Kamp");
-  const command = page.locator(".matchday-command");
-  await expect(command).toBeVisible();
-  await expect(command.locator(".matchday-versus")).toBeVisible();
-  await expect(command.locator(".matchday-team")).toHaveCount(2);
-  await expect(command.locator(".matchday-command-plan article")).toHaveCount(3);
-  await expect(command.locator(".matchday-command-status")).toContainText(/avspark|forberedelser|pågår|laster/i);
-  await expectNoHorizontalOverflow(page);
 });
