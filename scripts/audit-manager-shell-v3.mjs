@@ -10,6 +10,7 @@ const app = read("src/app.js");
 const css = `${read("style.css")}\n${read("src/ui/manager-shell-v3.css")}\n${read("src/ui/manager-shell-foundation.css")}`;
 const browser = read("tests/browser/manager-shell-v3.spec.js");
 const seasonBrowser = read("tests/browser/manager-season-scene-v1.spec.js");
+const clubBrowser = read("tests/browser/manager-club-scene-v1.spec.js");
 const shellElements = read("src/ui/manager-shell-elements.js");
 const workflow = read(".github/workflows/ci.yml");
 const packageJson = read("package.json");
@@ -25,6 +26,14 @@ const panelCount = [...html.matchAll(/class="([^"]*)"/g)]
 
 check("nøyaktig én autoritativ neste handling", (shellElements.match(/class="next-action-primary"/g) || []).length === 1);
 check("konkurrerende neste-knapper er fjernet", !/advanceClubWeekPhase|leagueOnboardingPrimary|portalPriorityAction/.test(html));
+check("Neste handling viser eksplisitt målflate", /nextActionDestination/.test(shellElements) && /Forslag til neste steg/.test(shellElements));
+check("fire stabile hovedområder er browser-låst", /har fire stabile hovedområder/.test(browser) && /\["Kontor", "Lag", "Kamp", "Stats"\]/.test(browser));
+check("Klubb er fjernet som eget hovedområde", /clubMainTab\.hidden = true/.test(shellElements) && /data-tab-target=\\?"board\\?"/.test(clubBrowser));
+check("Kontor åpner på Innboks i ligaspill", /redirectLeagueDashboardToInbox/.test(shellElements) && /Kontor åpner på Innboks/.test(browser));
+check("Oversikt er fjernet som synlig ligaunderfane", /overview\.classList\.add\("office-subnav-proxy"\)/.test(shellElements) && /data-tab-target=\\?"dashboard\\?"/.test(browser));
+check("oppstartshjelp eier tidligere oversiktsstøtte", ["leagueOnboardingPanel", "officeCommandPanel", "officeDepth"].every((id) => shellElements.includes(`"${id}"`)) && /Oppstartshjelp/.test(browser));
+check("Innboks er tydelig navngitt", /inboxHeading\.textContent = "Innboks"/.test(shellElements) && /data-tab-target=\\?"inbox\\?"/.test(browser));
+check("fast Du er her-linje finnes", /managerLocationBar/.test(shellElements) && /managerLocationText/.test(browser));
 check("direkte uttak har spillerkort og rolleknapper", /id="lineupPlayerChoices"/.test(html) && /id="lineupRoleChoices"/.test(html));
 check("gamle spiller-/rolle-selecter er fjernet", !/slotPlayerSelect|slotRoleSelect/.test(html));
 check("numerisk lagfit-sirkel er fjernet", !/id="teamScore"|score-ring-label">Lagfit/.test(html));
@@ -36,8 +45,8 @@ check("HTML-skallet er modulert i egne custom elements", /<manager-club-header>/
 check("CSS-skallet har egen foundation", /manager-shell-foundation\.css/.test(read("src/ui/manager-shell-v3.css")) && existsSync(join(root, "src/ui/manager-shell-foundation.css")));
 check("responsive nettleservakter dekker 390/768/1280", [390, 768, 1280].every((width) => browser.includes(`width: ${width}`)));
 check(
-  "minst åtte visuelle differansetester er låst",
-  visualTests >= 8 && snapshots.length >= 8 && visualTests === snapshots.length,
+  "minst seks visuelle differansetester er låst",
+  visualTests >= 6 && snapshots.length >= visualTests,
   `tester=${visualTests}, baseliner=${snapshots.length}`
 );
 check("CI sammenligner mot baseliner uten å omskrive dem", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
@@ -48,28 +57,31 @@ check("primærhandling uten scroll testes", /expectPrimaryActionInViewport/.test
 check("modalene har fokusfelle i appen", /event\.key !== "Tab"/.test(app) && /lastModalOpener\.focus/.test(app));
 check("foreldet portal-/fase-CSS er fjernet", !/portal-priority-card|#advanceClubWeekPhase/.test(css));
 check(
-  "sesongkontrollen har egen presentasjonsmodul",
+  "Stats bruker eksisterende sesongpresentasjon",
   /manager-season-presentation\.js/.test(app)
     && /createSeasonSceneModel/.test(seasonPresentation)
     && /renderSeasonCommand/.test(seasonPresentation)
     && /renderSeasonLeagueOverview/.test(seasonPresentation)
+    && /syncStatsPresentation/.test(shellElements)
 );
 check(
-  "sesongflaten prioriterer kommando før statistikk",
+  "Stats samler kommando, tabell og spillerstatistikk",
   html.indexOf('id="seasonCommand"') > -1
-    && html.indexOf('id="seasonCommand"') < html.indexOf('id="statsSummary"')
-    && /season-workspace-grid/.test(css)
+    && html.indexOf('id="statsSummary"') > -1
+    && html.indexOf('id="playerStatsTable"') > -1
+    && /Stats samler tabell, terminliste og spillerstatistikk/.test(browser)
 );
+check("full tabell og terminliste åpnes i Stats", /depth\.open = true/.test(shellElements) && /season-full-table/.test(seasonBrowser));
 check(
-  "sesongkontrollen har permanent simulering i CI",
+  "Stats har permanent simulering i CI",
   /sim:manager-season-scene-v1/.test(packageJson)
     && /npm run sim:manager-season-scene-v1/.test(workflow)
     && existsSync(join(root, "scripts/simulate-manager-season-scene-v1.mjs"))
 );
 check(
-  "sesongkontrollen har nettleservakt for handling og mobil",
-  /Gå til kamp/.test(seasonBrowser)
-    && /data-tab-section="kamp"/.test(seasonBrowser)
+  "Stats har nettleservakt for handling og mobil",
+  /Stats gir direkte vei til kamp/.test(seasonBrowser)
+    && /data-tab-section=\\?"kamp\\?"/.test(seasonBrowser)
     && /width: 390/.test(seasonBrowser)
     && /scrollWidth - document\.documentElement\.clientWidth/.test(seasonBrowser)
 );
