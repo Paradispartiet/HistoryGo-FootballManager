@@ -39,7 +39,7 @@ function text(value, fallback = "") { const normalized = String(value ?? "").tri
 function node(tag, className = "", value) { const element = document.createElement(tag); if (className) element.className = className; if (value !== undefined) element.textContent = String(value); return element; }
 function readStorage(key, fallback) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } }
 function writeStorage(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } }
-function formatToken(value) { return text(value, "–").replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase(); }
+function formatToken(value) { return text(value, "–").replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase()); }
 async function loadJson(url) { const response = await fetch(url); if (!response.ok) throw new Error(`Kunne ikke laste ${url.pathname}: ${response.status}`); return response.json(); }
 
 function currentHistoryGoPlaceIds() {
