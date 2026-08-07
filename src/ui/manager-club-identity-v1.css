@@ -1,0 +1,91 @@
+/* ========================================================================== */
+/* Autentisk klubbidentitet v1                                                */
+/*                                                                            */
+/* Fargene og skjoldformen er HGFM-presentasjon. Ingen offisielle logoer      */
+/* eller klubbemblemer brukes. De funksjonelle fargene for Kontor/Lag/Kamp    */
+/* beholdes; klubbidentiteten fungerer som et gjennomgående lag over dem.      */
+/* ========================================================================== */
+
+:root {
+  --club-accent: #f5f7f6;
+  --club-secondary: #171b19;
+}
+
+.club-identity-mark {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  aspect-ratio: 64 / 76;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+
+.hgfm-club-crest {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 8px 14px color-mix(in srgb, var(--club-accent) 24%, transparent));
+}
+
+#clubIdentityHeader .header-inner {
+  border-color: color-mix(in srgb, var(--club-accent) 38%, var(--hg-border-soft));
+  background:
+    linear-gradient(110deg, color-mix(in srgb, var(--club-accent) 10%, transparent), transparent 34%),
+    var(--hg-panel-bg);
+}
+
+#clubIdentityHeader::after {
+  background: linear-gradient(90deg, var(--club-accent), var(--club-secondary) 42%, transparent 78%);
+}
+
+.club-ground-line {
+  color: color-mix(in srgb, var(--club-accent) 82%, #fff);
+}
+
+/* Det etablerte klubbpreget følger manageren inn i de eksisterende flatene,
+   uten å overstyre de funksjonelle områdeaksentene i navigasjon eller motor. */
+body[data-club-identity="established"] .office-main,
+body[data-club-identity="established"] .pitch-stage {
+  outline: 1px solid color-mix(in srgb, var(--club-accent) 20%, transparent);
+  outline-offset: -1px;
+}
+
+body[data-club-identity="established"] .matchday-scene {
+  border-color: color-mix(in srgb, var(--club-accent) 34%, rgba(255, 255, 255, 0.2));
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--club-accent) 12%, transparent), transparent 42%),
+    #0d1118;
+}
+
+body[data-club-identity="established"] .matchday-scene-team.is-home {
+  border-color: color-mix(in srgb, var(--club-accent) 62%, rgba(255, 255, 255, 0.16));
+  box-shadow: inset 3px 0 0 var(--club-accent);
+}
+
+body[data-club-identity="established"] .season-compact-table tr.is-manager-club th,
+body[data-club-identity="established"] .season-compact-table tr.is-manager-club td,
+body[data-club-identity="established"] .season-full-table .mini-season-table tr.is-manager-club th,
+body[data-club-identity="established"] .season-full-table .mini-season-table tr.is-manager-club td {
+  border-bottom-color: color-mix(in srgb, var(--club-accent) 58%, var(--line));
+}
+
+body[data-club-identity="established"] .season-compact-table tr.is-manager-club th {
+  border-left-color: var(--club-accent);
+}
+
+body[data-club-identity="established"] .is-manager-fixture {
+  border-left: 3px solid var(--club-accent);
+  padding-left: 0.55rem;
+}
+
+@media (max-width: 620px) {
+  .club-identity-mark {
+    width: 46px;
+  }
+}
