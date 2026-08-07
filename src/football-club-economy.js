@@ -17,7 +17,7 @@ export const RECRUIT_CONTRACT = Object.freeze({
 export const CLUB_ECONOMY_PRESETS = Object.freeze({
   eliteserien: Object.freeze({ openingBalance: 100, wageBudget: 60, seasonGrant: 40 }),
   obosligaen: Object.freeze({ openingBalance: 80, wageBudget: 54, seasonGrant: 30 }),
-  andre_divisjon: Object.freeze({ openingBalance: 60, wageBudget: 48, seasonGrant: 24 }),
+  andredivisjon: Object.freeze({ openingBalance: 60, wageBudget: 48, seasonGrant: 24 }),
   default: Object.freeze({ openingBalance: 80, wageBudget: 54, seasonGrant: 30 })
 });
 
