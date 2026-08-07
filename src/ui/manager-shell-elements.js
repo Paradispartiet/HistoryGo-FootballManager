@@ -4,6 +4,219 @@ const SETTINGS_ICON = `
     <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
   </svg>`;
 
+const OFFICE_DEEP_TARGETS = new Set(["progression", "admin", "facilities", "market"]);
+const LOCATION_LABELS = Object.freeze({
+  dashboard: "Kontor · Oversikt",
+  inbox: "Kontor · Innboks",
+  board: "Kontor · Klubbdrift",
+  historygo: "Kontor · Speiding",
+  progression: "Kontor · Klubbdrift · Utvikling",
+  admin: "Kontor · Klubbdrift · Stab & drift",
+  facilities: "Kontor · Klubbdrift · Fasiliteter",
+  market: "Kontor · Klubbdrift · Marked",
+  officeHelp: "Kontor · Oppstartshjelp",
+  tactics: "Lag · Oppstilling",
+  squad: "Lag · Tropp & benk",
+  trening: "Lag · Trening",
+  system: "Lag · Systemet",
+  kamp: "Kamp · Kampdag",
+  analyse: "Kamp · Analyse",
+  statistikk: "Stats",
+  scenarios: "Scenario",
+  hgfmLibrary: "Fotballvitenskap"
+});
+
+function ensureShellStyle() {
+  if (document.getElementById("manager-information-architecture-v4-style")) return;
+  const style = document.createElement("style");
+  style.id = "manager-information-architecture-v4-style";
+  style.textContent = `
+    .office-subnav-proxy { display: none !important; }
+    .manager-location-bar {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      min-width: 0;
+      padding: .45rem clamp(.75rem, 2vw, 1.1rem);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: #070a0f;
+      color: rgba(255,255,255,.72);
+      font-size: .78rem;
+    }
+    .manager-location-bar span {
+      font-size: .66rem;
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.48);
+    }
+    .manager-location-bar strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #fff;
+    }
+    .app-subtab.is-office-group-active {
+      border-color: rgba(255,255,255,.82);
+      color: #fff;
+      background: rgba(255,255,255,.10);
+    }
+    .office-help-shell {
+      display: grid;
+      gap: 1rem;
+    }
+    .office-help-intro {
+      padding: clamp(1rem, 2vw, 1.4rem);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 14px;
+      background: #0b1018;
+    }
+    .office-help-intro h2,
+    .office-help-intro p { margin-top: .35rem; margin-bottom: 0; }
+    .next-action-secondary { display: none !important; }
+    .next-action-destination {
+      display: block;
+      margin-top: .2rem;
+      color: rgba(255,255,255,.62);
+      font-size: .72rem;
+    }
+    @media (max-width: 640px) {
+      .manager-location-bar { padding-inline: .7rem; }
+    }
+  `;
+  document.head.append(style);
+}
+
+function createSubtab(subnav, target, label, { visible = true } = {}) {
+  let button = subnav.querySelector(`.app-subtab[data-subnav-parent="dashboard"][data-tab-target="${target}"]`);
+  if (!button) {
+    button = document.createElement("button");
+    button.type = "button";
+    button.className = "app-subtab";
+    button.setAttribute("role", "tab");
+    button.dataset.subnavParent = "dashboard";
+    button.dataset.tabTarget = target;
+    subnav.append(button);
+  }
+  button.textContent = label;
+  button.classList.toggle("office-subnav-proxy", !visible);
+  return button;
+}
+
+function ensureOfficeHelpSection() {
+  let section = document.querySelector('[data-tab-section="officeHelp"]');
+  if (!section) {
+    section = document.createElement("div");
+    section.className = "tab-section dept office-help-shell";
+    section.dataset.tabSection = "officeHelp";
+    section.dataset.tabParent = "dashboard";
+    section.hidden = true;
+    section.innerHTML = `
+      <section class="office-help-intro" aria-label="Oppstartshjelp">
+        <p class="eyebrow">Hjelp</p>
+        <h2>Gjør klubben klar når du trenger det</h2>
+        <p class="muted-text">Dette er en veiviser, ikke managerkontorets førsteside. Bruk den hvis du står fast i oppstarten.</p>
+      </section>`;
+    document.querySelector("#app")?.append(section);
+  }
+
+  const onboarding = document.querySelector("#leagueOnboardingPanel");
+  if (onboarding && onboarding.parentElement !== section) section.append(onboarding);
+  return section;
+}
+
+function installLocationBar() {
+  let bar = document.querySelector("#managerLocationBar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "managerLocationBar";
+    bar.className = "manager-location-bar";
+    bar.setAttribute("aria-live", "polite");
+    bar.innerHTML = '<span>Du er her</span><strong id="managerLocationText">Kontor · Oversikt</strong>';
+    document.querySelector("#appSubnav")?.before(bar);
+  }
+  return bar;
+}
+
+function syncOrientation() {
+  const active = document.querySelector('[data-tab-section]:not([hidden])');
+  const target = active?.dataset.tabSection || "dashboard";
+  const location = document.querySelector("#managerLocationText");
+  if (location) location.textContent = LOCATION_LABELS[target] || target;
+
+  const clubTab = document.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]');
+  if (clubTab) {
+    const grouped = OFFICE_DEEP_TARGETS.has(target);
+    clubTab.classList.toggle("is-office-group-active", grouped);
+    if (grouped) clubTab.setAttribute("aria-selected", "true");
+  }
+
+  const destination = document.querySelector("#nextActionDestination");
+  const tag = document.querySelector("#nextActionPrimaryTag")?.textContent?.trim();
+  if (destination) destination.textContent = tag || "neste arbeidsflate";
+}
+
+function applyManagerInformationArchitectureV4() {
+  if (document.documentElement.dataset.managerIaV4 === "true") return;
+  document.documentElement.dataset.managerIaV4 = "true";
+  ensureShellStyle();
+
+  const clubMainTab = document.querySelector('.nav-tab[data-tab-target="board"]');
+  if (clubMainTab) clubMainTab.hidden = true;
+
+  const statsTab = document.querySelector('.nav-tab[data-tab-target="statistikk"] .nav-label');
+  if (statsTab) statsTab.textContent = "Stats";
+
+  const inboxHeading = document.querySelector('.dept-inbox h2');
+  if (inboxHeading) inboxHeading.textContent = "Innboks";
+
+  ["board", "historygo", "progression", "admin", "facilities", "market"].forEach((target) => {
+    const section = document.querySelector(`[data-tab-section="${target}"]`);
+    if (!section) return;
+    section.dataset.tabParent = "dashboard";
+    section.removeAttribute("data-shell-hidden");
+  });
+
+  ensureOfficeHelpSection();
+
+  const subnav = document.querySelector("#appSubnav");
+  if (subnav) {
+    subnav.querySelectorAll('.app-subtab[data-subnav-parent="board"]').forEach((button) => button.remove());
+
+    const overview = subnav.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="dashboard"]');
+    if (overview) overview.textContent = "Oversikt";
+    const inbox = subnav.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]');
+    if (inbox) inbox.textContent = "Innboks";
+
+    createSubtab(subnav, "board", "Klubbdrift");
+    createSubtab(subnav, "historygo", "Speiding");
+    createSubtab(subnav, "officeHelp", "Oppstartshjelp");
+    createSubtab(subnav, "progression", "Utvikling", { visible: false });
+    createSubtab(subnav, "admin", "Stab & drift", { visible: false });
+    createSubtab(subnav, "facilities", "Fasiliteter", { visible: false });
+    createSubtab(subnav, "market", "Marked", { visible: false });
+  }
+
+  installLocationBar();
+
+  const observer = new MutationObserver(() => queueMicrotask(syncOrientation));
+  document.querySelectorAll("[data-tab-section]").forEach((section) => {
+    observer.observe(section, { attributes: true, attributeFilter: ["hidden"] });
+  });
+  const tag = document.querySelector("#nextActionPrimaryTag");
+  if (tag) observer.observe(tag, { childList: true, characterData: true, subtree: true });
+  syncOrientation();
+}
+
+function scheduleInformationArchitecture() {
+  if (typeof document === "undefined") return;
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyManagerInformationArchitectureV4, { once: true });
+  } else {
+    applyManagerInformationArchitectureV4();
+  }
+}
+
 class ManagerClubHeader extends HTMLElement {
   connectedCallback() {
     if (this.firstElementChild) return;
@@ -29,15 +242,16 @@ class ManagerNextAction extends HTMLElement {
     if (this.firstElementChild) return;
     this.innerHTML = `
       <footer class="site-footer">
-        <section class="next-action-strip" id="nextActionStrip" aria-label="Neste handling" aria-live="polite">
+        <section class="next-action-strip" id="nextActionStrip" aria-label="Forslag til neste steg" aria-live="polite">
           <div class="next-action-head">
-            <p class="eyebrow">Neste handling</p>
+            <p class="eyebrow">Forslag til neste steg</p>
             <span class="next-action-phase" id="nextActionPhase">Uke 1 · Analyse</span>
           </div>
           <button type="button" class="next-action-primary" id="nextActionPrimary">
             <span class="next-action-tag" id="nextActionPrimaryTag">Lag</span>
             <span class="next-action-title" id="nextActionPrimaryTitle">Gjør laget klart</span>
             <span class="next-action-hint" id="nextActionPrimaryHint">Fyll laget for å komme i gang.</span>
+            <span class="next-action-destination">Åpner: <strong id="nextActionDestination">Lag</strong></span>
           </button>
           <div class="next-action-secondary" id="nextActionSecondary" role="group" aria-label="Andre naturlige steg"></div>
         </section>
@@ -49,3 +263,5 @@ if (typeof customElements !== "undefined") {
   if (!customElements.get("manager-club-header")) customElements.define("manager-club-header", ManagerClubHeader);
   if (!customElements.get("manager-next-action")) customElements.define("manager-next-action", ManagerNextAction);
 }
+
+scheduleInformationArchitecture();
