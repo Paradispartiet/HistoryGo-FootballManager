@@ -10,24 +10,27 @@ const app = read("src/app.js");
 const css = `${read("style.css")}\n${read("src/ui/manager-shell-v3.css")}\n${read("src/ui/manager-shell-foundation.css")}`;
 const browser = read("tests/browser/manager-shell-v3.spec.js");
 const seasonBrowser = read("tests/browser/manager-season-scene-v1.spec.js");
-const clubBrowser = read("tests/browser/manager-club-scene-v1.spec.js");
 const matchdayBrowser = read("tests/browser/manager-matchday-scene-v1.spec.js");
 const postMatchBrowser = read("tests/browser/manager-post-match-analysis-v1.spec.js");
 const shellElements = read("src/ui/manager-shell-elements.js");
+const shellView = read("src/ui/manager-shell-view.js");
+const scouting = read("src/ui/manager-scouting-workspace-v1.js");
 const workflow = read(".github/workflows/ci.yml");
 const packageJson = read("package.json");
 const seasonPresentation = read("src/ui/manager-season-presentation.js");
 
 const checks = [];
 const check = (label, ok, detail = "") => checks.push({ label, ok: Boolean(ok), detail });
-const panelCount = [...html.matchAll(/class="([^"]*)"/g)]
-  .filter((match) => match[1].split(/\s+/).includes("panel")).length;
+const panelCount = [...html.matchAll(/class="([^"]*)"/g)].filter((match) => match[1].split(/\s+/).includes("panel")).length;
 
 check("nøyaktig én autoritativ neste handling", (shellElements.match(/class="next-action-primary"/g) || []).length === 1);
 check("konkurrerende neste-knapper er fjernet", !/advanceClubWeekPhase|leagueOnboardingPrimary|portalPriorityAction/.test(html));
 check("Neste handling viser eksplisitt målflate", /nextActionDestination/.test(shellElements) && /Forslag til neste steg/.test(shellElements));
-check("fire stabile hovedområder er browser-låst", /har fire stabile hovedområder/.test(browser) && /\["Kontor", "Lag", "Kamp", "Stats"\]/.test(browser));
-check("Klubb er fjernet som eget hovedområde", /clubMainTab\.hidden = true/.test(shellElements) && /data-tab-target=\\?"board\\?"/.test(clubBrowser));
+check("fem stabile hovedområder er browser-låst", /har fem stabile hovedområder/.test(browser) && /\["Kontor", "Lag", "Speiding", "Kamp", "Stats"\]/.test(browser));
+check("Speiding repurposer tidligere Klubb-hovedfane", /scoutingTab\.dataset\.tabTarget = "historygo"/.test(scouting) && /lagTab\.after\(scoutingTab\)/.test(scouting));
+check("Klubbdrift forblir under Kontor", /clubMainTab\.hidden = true/.test(shellElements) && /data-tab-target=\\?"board\\?"/.test(browser));
+check("Speiding har egne underflater", /Rekrutterbare/.test(scouting) && /Andre klubber/.test(scouting) && /scoutingClubs/.test(scouting));
+check("Speiding lastes fra managerskallet", /manager-scouting-workspace-v1\.js/.test(shellView));
 check("Kontor åpner på Innboks i ligaspill", /redirectLeagueDashboardToInbox/.test(shellElements) && /Kontor åpner på Innboks/.test(browser));
 check("Oversikt er fjernet som synlig ligaunderfane", /overview\.classList\.add\("office-subnav-proxy"\)/.test(shellElements) && /data-tab-target=\\?"dashboard\\?"/.test(browser));
 check("oppstartshjelp eier tidligere oversiktsstøtte", ["leagueOnboardingPanel", "officeCommandPanel", "officeDepth"].every((id) => shellElements.includes(`"${id}"`)) && /Oppstartshjelp/.test(browser));
@@ -52,35 +55,11 @@ check("horisontal overflow testes", /scrollWidth - document\.documentElement\.cl
 check("primærhandling uten scroll testes", /expectPrimaryActionInViewport/.test(browser));
 check("modalene har fokusfelle i appen", /event\.key !== "Tab"/.test(app) && /lastModalOpener\.focus/.test(app));
 check("foreldet portal-/fase-CSS er fjernet", !/portal-priority-card|#advanceClubWeekPhase/.test(css));
-check(
-  "Stats bruker eksisterende sesongpresentasjon",
-  /manager-season-presentation\.js/.test(app)
-    && /createSeasonSceneModel/.test(seasonPresentation)
-    && /renderSeasonCommand/.test(seasonPresentation)
-    && /renderSeasonLeagueOverview/.test(seasonPresentation)
-    && /syncStatsPresentation/.test(shellElements)
-);
-check(
-  "Stats samler kommando, tabell og spillerstatistikk",
-  html.indexOf('id="seasonCommand"') > -1
-    && html.indexOf('id="statsSummary"') > -1
-    && html.indexOf('id="playerStatsTable"') > -1
-    && /Stats samler tabell, terminliste og spillerstatistikk/.test(browser)
-);
+check("Stats bruker eksisterende sesongpresentasjon", /manager-season-presentation\.js/.test(app) && /createSeasonSceneModel/.test(seasonPresentation) && /renderSeasonCommand/.test(seasonPresentation) && /renderSeasonLeagueOverview/.test(seasonPresentation) && /syncStatsPresentation/.test(shellElements));
+check("Stats samler kommando, tabell og spillerstatistikk", html.includes('id="seasonCommand"') && html.includes('id="statsSummary"') && html.includes('id="playerStatsTable"') && /Stats samler tabell, terminliste og spillerstatistikk/.test(browser));
 check("full tabell og terminliste åpnes i Stats", /depth\.open = true/.test(shellElements) && /season-full-table/.test(seasonBrowser));
-check(
-  "Stats har permanent simulering i CI",
-  /sim:manager-season-scene-v1/.test(packageJson)
-    && /npm run sim:manager-season-scene-v1/.test(workflow)
-    && existsSync(join(root, "scripts/simulate-manager-season-scene-v1.mjs"))
-);
-check(
-  "Stats har nettleservakt for handling og mobil",
-  /Stats gir direkte vei til kamp/.test(seasonBrowser)
-    && /data-tab-section=\\?"kamp\\?"/.test(seasonBrowser)
-    && /width: 390/.test(seasonBrowser)
-    && /scrollWidth - document\.documentElement\.clientWidth/.test(seasonBrowser)
-);
+check("Stats har permanent simulering i CI", /sim:manager-season-scene-v1/.test(packageJson) && /npm run sim:manager-season-scene-v1/.test(workflow) && existsSync(join(root, "scripts/simulate-manager-season-scene-v1.mjs")));
+check("Stats har nettleservakt for handling og mobil", /Stats gir direkte vei til kamp/.test(seasonBrowser) && /data-tab-section=\\?"kamp\\?"/.test(seasonBrowser) && /width: 390/.test(seasonBrowser) && /scrollWidth - document\.documentElement\.clientWidth/.test(seasonBrowser));
 
 const failed = checks.filter((entry) => !entry.ok);
 console.log("Manager Shell v3 completion-audit\n");
