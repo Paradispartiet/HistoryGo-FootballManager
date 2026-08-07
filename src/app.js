@@ -1554,6 +1554,21 @@ function saveTeamMerits() {
   } catch (error) {
     // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
   }
+
+  // Mode Isolation eier også et snapshot av league-staten. Hold samme
+  // canonical teamMerits synkronisert der med én gang; ellers kan et
+  // eldre snapshot vinne over hgfm.teamMerits.v1 ved neste reload.
+  if (state.modeEnvelope && isLeagueModeActive()) {
+    state.modeEnvelope.sessions.league = {
+      ...state.modeEnvelope.sessions.league,
+      teamMerits: cloneTeamMerits(state.teamMerits)
+    };
+    try {
+      state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+    } catch (_) {
+      // Privat modus: legacy teamMerits-lagringen over er fortsatt best effort.
+    }
+  }
 }
 
 // Nullstill progresjon: slett localStorage-key, gjenopprett seed og rerender.
