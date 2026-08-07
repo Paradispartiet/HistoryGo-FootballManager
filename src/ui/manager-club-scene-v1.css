@@ -1,4 +1,4 @@
-/* Manager Club Scene v1: ett klubbkontor, fire operative funksjoner, dybde foldet. */
+/* Manager Club Scene v1: ett klubbkontor, seks operative funksjoner, dybde foldet. */
 .manager-surface.club-command-panel {
   padding: 0;
   overflow: hidden;
@@ -283,6 +283,13 @@
 
 .club-depth-content > .dept-hero {
   margin-top: 0;
+}
+
+/* Fasiliteter er nå en reell Kontor-flate. Legacy-muted var for svak mot
+   facility-kortenes bakgrunn; disse tekstene må bestå WCAG AA. */
+.dept-facilities .facility-card .muted-text,
+.dept-facilities .facility-card .facility-status {
+  color: #d2d8e0;
 }
 
 @media (max-width: 900px) {
