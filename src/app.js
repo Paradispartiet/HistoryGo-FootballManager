@@ -2295,9 +2295,10 @@ function computeAvailability() {
 
   // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
   // vurdert mot samlingen (steder, spillere, stab, badges).
+  const collectedPlayerIds = new Set([...candidatePlayerIds, ...getLocalStartPlayerIds()]);
   const collectedPools = {
     unlockedPlaceIds,
-    unlockedPlayerIds,
+    unlockedPlayerIds: collectedPlayerIds,
     unlockedStaffIds: new Set(unlockedStaff.map((member) => member.id)),
     earnedBadgeIds: new Set(Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [])
   };
@@ -16344,7 +16345,8 @@ function bindHistoryGoSyncControls() {
     if (
       !event.key ||
       event.key === HISTORY_GO_VISITED_PLACES_KEY ||
-      event.key === HISTORY_GO_GROUNDHOPPER_STATS_KEY
+      event.key === HISTORY_GO_GROUNDHOPPER_STATS_KEY ||
+      event.key === TEAM_MERITS_KEY
     ) {
       refreshAvailabilityFromHistoryGo();
     }
