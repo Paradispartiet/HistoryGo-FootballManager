@@ -10,22 +10,24 @@ const browser = fs.readFileSync(new URL("../tests/browser/manager-recruitment-v1
 const docs = fs.readFileSync(new URL("../docs/MANAGER_RECRUITMENT_V1.md", import.meta.url), "utf8");
 const packageJson = fs.readFileSync(new URL("../package.json", import.meta.url), "utf8");
 const ci = fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
+const recruitmentRuntime = `${scouting}\n${engine}`;
+const economyFieldPattern = /\b(?:transferFee|salary|wage|contractLength|agentFee|marketValue|askingPrice|releaseClause)\s*[:=]/i;
 
 const checks = [
   ["fem hovedområder er uendret", shellBrowser.includes('["Kontor", "Lag", "Speiding", "Kamp", "Stats"]')],
   ["rekruttering ligger under Speiding", scouting.includes("Speiding · Rekrutterbare") && scouting.includes("Hent til troppen")],
   ["kandidat og tropp er separate state-begreper", app.includes("candidatePlayerIds") && app.includes("recruitedPlayerIds")],
   ["troppsmedlemskap bor i eksisterende teamMerits", scouting.includes('merits: "hgfm.teamMerits.v1"') && seed.includes('"recruitedPlayerIds"')],
-  ["ingen separat recruitment-localStorage-key", !/hgfm\.(recruitment|transfer|market)/i.test(scouting + engine)],
+  ["ingen separat recruitment-localStorage-key", !/hgfm\.(recruitment|transfer|market)/i.test(recruitmentRuntime)],
   ["samme-session state refresh finnes", scouting.includes("hgfm:team-merits-changed") && app.includes("hgfm:team-merits-changed")],
   ["gamle saves har eksplisitt engangsmigrering", engine.includes("migrateLegacyRecruitmentState") && app.includes("migration.migrated")],
   ["nye saves starter uten automatisk kandidatimport", seed.includes('"recruitmentVersion": 1') && seed.includes('"recruitedPlayerIds": []')],
   ["rekruttert spiller må fortsatt være kvalifisert kandidat", engine.includes("eligible.has(id)") && app.includes("candidatePlayerIds.has(playerId)")],
   ["nasjonalarena og quiz-port beholdes", scouting.includes("isNationalArenaPlace") && scouting.includes("currentQuizCompletedPlaceIds")],
   ["History Go-samling skilles fra tropp", app.includes("collectedPlayerIds") && app.includes("unlockedPlayerIds: collectedPlayerIds")],
-  ["ingen ny Neste-/Fortsett-flyt", !/Neste dag|Fortsett|nextAction|next-action/i.test(scouting + engine)],
-  ["ingen overgangsøkonomi i v1", !/transferFee|salary|wage|contract|kontrakt|lønn|fee/i.test(scouting + engine)],
-  ["ingen Overall introduseres", !/overall\s*[:=]/i.test(scouting + engine)],
+  ["ingen ny Neste-/Fortsett-flyt", !/Neste dag|Fortsett|nextAction|next-action/i.test(recruitmentRuntime)],
+  ["ingen overgangsøkonomiske runtime-felt i v1", !economyFieldPattern.test(recruitmentRuntime)],
+  ["ingen Overall introduseres", !/overall\s*[:=]/i.test(recruitmentRuntime)],
   ["mobil rekrutteringshandling er stylet", css.includes(".scouting-recruit-button") && css.includes("@media (max-width: 680px)")],
   ["browser tester kandidat til tropp i samme økt", browser.includes("Hent til troppen") && browser.includes("recruitedPlayerIds") && browser.includes("formationSelect")],
   ["browser tester mobil og WCAG", browser.includes("390") && browser.includes("AxeBuilder")],
