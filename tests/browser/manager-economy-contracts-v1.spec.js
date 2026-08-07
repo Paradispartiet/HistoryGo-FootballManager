@@ -151,14 +151,15 @@ test("Stab & drift viser klubbmidler, lønnsramme og kontraktsflate", async ({ p
 
 test("Hent til troppen lager avtale, trekker midler og synker league-snapshotet", async ({ page }) => {
   await openScouting(page);
-  const row = page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').first();
-  const playerId = await row.getAttribute("data-player-id");
-  const playerName = await row.locator(".scouting-player-link strong").innerText();
+  const candidateRow = page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').first();
+  const playerId = await candidateRow.getAttribute("data-player-id");
+  const playerName = await candidateRow.locator(".scouting-player-link strong").innerText();
   expect(playerId).toBeTruthy();
+  const playerRow = page.locator(`#scoutingRecruitableBody tr[data-player-id="${playerId}"]`);
 
-  await row.getByRole("button", { name: `Hent ${playerName} til troppen` }).click();
+  await candidateRow.getByRole("button", { name: `Hent ${playerName} til troppen` }).click();
   await expect(page.locator("#scoutingRecruitmentFeedback")).toContainText(`${playerName} er hentet til troppen`);
-  await expect(row).toHaveAttribute("data-squad-status", "squad");
+  await expect(playerRow).toHaveAttribute("data-squad-status", "squad");
 
   const saved = await page.evaluate((id) => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
