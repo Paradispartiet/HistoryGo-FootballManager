@@ -33,6 +33,12 @@
   white-space: normal !important;
 }
 
+/* Stats skal være et stabilt hovedområde også før første seriekamp. Panelet kan
+   da vise før-sesong-status, mens tabell/terminliste fylles når sesongen finnes. */
+.statistikk-view #leagueSeasonPanel[hidden] {
+  display: block !important;
+}
+
 .office-main,
 .pitch-stage,
 .lineup-direct-editor,
