@@ -8,7 +8,8 @@ const files = {
   package: fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"),
   ci: fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8"),
   docs: fs.readFileSync(new URL("../docs/MANAGER_MATCHDAY_SCENE_V1.md", import.meta.url), "utf8"),
-  browser: fs.readFileSync(new URL("../tests/browser/manager-matchday-scene-v1.spec.js", import.meta.url), "utf8")
+  browser: fs.readFileSync(new URL("../tests/browser/manager-matchday-scene-v1.spec.js", import.meta.url), "utf8"),
+  postMatchBrowser: fs.readFileSync(new URL("../tests/browser/manager-post-match-analysis-v1.spec.js", import.meta.url), "utf8")
 };
 
 let failures = 0;
@@ -42,7 +43,8 @@ check("appen bruker bare validerte eksisterende fanemål", files.app.includes('[
 check("mobilregler finnes", files.style.includes("Manager Matchday Scene v1") && files.style.includes("@media (max-width: 640px)"));
 check("nettleservakten kontrollerer mobil overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
 check("nettleservakten kontrollerer WCAG", files.browser.includes("AxeBuilder") && files.browser.includes("wcag2aa"));
-check("visuell baseline er påkrevd", files.browser.includes('toHaveScreenshot("matchday-768.png"'));
+check("Kampdag låser ikke hovednavigasjonen med helsides baseline", !files.browser.includes("toHaveScreenshot("));
+check("visuell baseline finnes på isolert etterkampkomponent", files.postMatchBrowser.includes('toHaveScreenshot("post-match-analysis-768.png"') && files.postMatchBrowser.includes(".matchday-post-match-score"));
 check("simuleringen er registrert", files.package.includes('"sim:manager-matchday-scene-v1"'));
 check("auditen er registrert", files.package.includes('"audit:manager-matchday-scene-v1"'));
 check("CI kjører begge permanente porter", files.ci.includes("audit:manager-matchday-scene-v1") && files.ci.includes("sim:manager-matchday-scene-v1"));
