@@ -1,12 +1,12 @@
 const SETTINGS_ICON = `
   <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="3.2"/>
-    <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
+    <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 1 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
   </svg>`;
 
 const OFFICE_DEEP_TARGETS = new Set(["progression", "admin", "facilities", "market"]);
 const LOCATION_LABELS = Object.freeze({
-  dashboard: "Kontor · Oversikt",
+  dashboard: "Kontor · Oppstartshjelp",
   inbox: "Kontor · Innboks",
   board: "Kontor · Klubbdrift",
   historygo: "Kontor · Speiding",
@@ -25,6 +25,14 @@ const LOCATION_LABELS = Object.freeze({
   scenarios: "Scenario",
   hgfmLibrary: "Fotballvitenskap"
 });
+
+function currentMode() {
+  try {
+    return JSON.parse(localStorage.getItem("hgfm.gameStartState.v1"))?.selectedMode || "league";
+  } catch {
+    return "league";
+  }
+}
 
 function ensureShellStyle() {
   if (document.getElementById("manager-information-architecture-v4-style")) return;
@@ -80,6 +88,8 @@ function ensureShellStyle() {
       color: rgba(255,255,255,.62);
       font-size: .72rem;
     }
+    .statistikk-view .season-depth { border-color: rgba(255,255,255,.26); }
+    .statistikk-view .season-depth > summary { font-weight: 900; }
     @media (max-width: 640px) {
       .manager-location-bar { padding-inline: .7rem; }
     }
@@ -114,14 +124,16 @@ function ensureOfficeHelpSection() {
     section.innerHTML = `
       <section class="office-help-intro" aria-label="Oppstartshjelp">
         <p class="eyebrow">Hjelp</p>
-        <h2>Gjør klubben klar når du trenger det</h2>
-        <p class="muted-text">Dette er en veiviser, ikke managerkontorets førsteside. Bruk den hvis du står fast i oppstarten.</p>
+        <h2>Oppstartshjelp og klubbuke</h2>
+        <p class="muted-text">Dette er støtteinformasjon, ikke managerkontorets førsteside. Bruk den hvis du står fast eller vil se hele klubbukens detaljer.</p>
       </section>`;
     document.querySelector("#app")?.append(section);
   }
 
-  const onboarding = document.querySelector("#leagueOnboardingPanel");
-  if (onboarding && onboarding.parentElement !== section) section.append(onboarding);
+  ["leagueOnboardingPanel", "officeCommandPanel", "officeDepth"].forEach((id) => {
+    const node = document.querySelector(`#${id}`);
+    if (node && node.parentElement !== section) section.append(node);
+  });
   return section;
 }
 
@@ -132,15 +144,39 @@ function installLocationBar() {
     bar.id = "managerLocationBar";
     bar.className = "manager-location-bar";
     bar.setAttribute("aria-live", "polite");
-    bar.innerHTML = '<span>Du er her</span><strong id="managerLocationText">Kontor · Oversikt</strong>';
+    bar.innerHTML = '<span>Du er her</span><strong id="managerLocationText">Kontor · Innboks</strong>';
     document.querySelector("#appSubnav")?.before(bar);
   }
   return bar;
 }
 
+function syncStatsPresentation() {
+  const statsLabel = document.querySelector('.nav-tab[data-tab-target="statistikk"] .nav-label');
+  if (statsLabel) statsLabel.textContent = "Stats";
+  const statsTitle = document.querySelector("#seasonCommand h2");
+  if (statsTitle) statsTitle.textContent = "Stats";
+  const depth = document.querySelector("#leagueSeasonOverview .season-depth");
+  if (depth) {
+    depth.open = true;
+    const summary = depth.querySelector(":scope > summary");
+    if (summary) summary.textContent = "Full tabell og terminliste";
+  }
+}
+
+function redirectLeagueDashboardToInbox() {
+  if (currentMode() !== "league") return;
+  const active = document.querySelector('[data-tab-section="dashboard"]:not([hidden])');
+  if (!active) return;
+  const inbox = document.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]');
+  if (inbox && !inbox.hidden) queueMicrotask(() => inbox.click());
+}
+
 function syncOrientation() {
+  syncStatsPresentation();
+  redirectLeagueDashboardToInbox();
+
   const active = document.querySelector('[data-tab-section]:not([hidden])');
-  const target = active?.dataset.tabSection || "dashboard";
+  const target = active?.dataset.tabSection || "inbox";
   const location = document.querySelector("#managerLocationText");
   if (location) location.textContent = LOCATION_LABELS[target] || target;
 
@@ -164,9 +200,6 @@ function applyManagerInformationArchitectureV4() {
   const clubMainTab = document.querySelector('.nav-tab[data-tab-target="board"]');
   if (clubMainTab) clubMainTab.hidden = true;
 
-  const statsTab = document.querySelector('.nav-tab[data-tab-target="statistikk"] .nav-label');
-  if (statsTab) statsTab.textContent = "Stats";
-
   const inboxHeading = document.querySelector('.dept-inbox h2');
   if (inboxHeading) inboxHeading.textContent = "Innboks";
 
@@ -184,7 +217,7 @@ function applyManagerInformationArchitectureV4() {
     subnav.querySelectorAll('.app-subtab[data-subnav-parent="board"]').forEach((button) => button.remove());
 
     const overview = subnav.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="dashboard"]');
-    if (overview) overview.textContent = "Oversikt";
+    if (overview) overview.classList.add("office-subnav-proxy");
     const inbox = subnav.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]');
     if (inbox) inbox.textContent = "Innboks";
 
@@ -205,6 +238,8 @@ function applyManagerInformationArchitectureV4() {
   });
   const tag = document.querySelector("#nextActionPrimaryTag");
   if (tag) observer.observe(tag, { childList: true, characterData: true, subtree: true });
+  const seasonOverview = document.querySelector("#leagueSeasonOverview");
+  if (seasonOverview) observer.observe(seasonOverview, { childList: true, subtree: true });
   syncOrientation();
 }
 
