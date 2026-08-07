@@ -1,100 +1,96 @@
-import { createManagerSquadTacticsSceneModel } from "../src/ui/manager-squad-tactics-scene-v2.js";
+import {
+  createRosterViewModel,
+  filterRosterRows
+} from "../src/ui/manager-player-workspace-v1.js";
 
 const checks = [];
 function check(label, condition, detail = "") {
   checks.push({ label, ok: Boolean(condition), detail });
 }
 
-const incomplete = createManagerSquadTacticsSceneModel({
-  gateReady: false,
-  gateTitle: "Fyll neste ledige plass",
-  gateHint: "Startelleveren mangler 3 plasser.",
-  gateActionText: "Fyll neste ledige plass",
-  starterText: "8/11",
-  benchText: "4/4",
-  rolesText: "OK",
-  formationName: "4-2-3-1",
-  tacticName: "Høyt press"
-});
-check("ufullstendig scene er blokkert", incomplete.state === "blocked", incomplete.state);
-check("ufullstendig scene viser 8/11", incomplete.statuses[0].value === "8/11 klare", incomplete.statuses[0].value);
-check("ufullstendig scene bruker eksisterende gatehandling", incomplete.action.target === "gate-action", incomplete.action.target);
-check("ufullstendig scene bevarer gatehint", incomplete.reading.issue.includes("3 plasser"), incomplete.reading.issue);
+const players = [
+  {
+    id: "maker",
+    name: "Midtbane Maker",
+    nationality: "Norge",
+    naturalPositions: ["AM", "CM"],
+    usablePositions: ["RW"],
+    preferredRoles: ["classic_ten"],
+    likesTactics: ["possession"],
+    dislikesTactics: ["long_ball_only"]
+  },
+  {
+    id: "stopper",
+    name: "Forsvars Stopper",
+    nationality: "Norge",
+    naturalPositions: ["CB"],
+    usablePositions: [],
+    preferredRoles: ["stopper"],
+    likesTactics: ["compact_shape"],
+    dislikesTactics: []
+  },
+  {
+    id: "locked",
+    name: "Låst Spiller",
+    naturalPositions: ["ST"],
+    preferredRoles: ["advanced_forward"]
+  }
+];
 
-const bench = createManagerSquadTacticsSceneModel({
-  gateReady: false,
-  gateTitle: "Legg minst 4 spillere på benken",
-  gateHint: "Benk 2/4.",
-  starterText: "11/11",
-  benchText: "2/4",
-  rolesText: "OK",
-  formationName: "4-3-3",
-  tacticName: "Balansert"
-});
-check("benkestatus viser 2/4", bench.statuses[3].value === "2/4 kampklare", bench.statuses[3].value);
-check("benkestatus er negativ", bench.statuses[3].tone === "negative", bench.statuses[3].tone);
+const roles = [
+  { id: "classic_ten", name: "Klassisk tier" },
+  { id: "stopper", name: "Stopper" },
+  { id: "advanced_forward", name: "Avansert spiss" }
+];
 
-const roles = createManagerSquadTacticsSceneModel({
-  gateReady: true,
-  starterText: "11/11",
-  benchText: "4/4",
-  rolesText: "Trenger valg",
-  misuseText: "2 feilbruk",
-  formationName: "3-4-3",
-  tacticName: "Direkte kontring",
-  availabilityText: "Ingen akutte varsler."
+const rows = createRosterViewModel({
+  players,
+  unlockedPlayerIds: new Set(["maker", "stopper"]),
+  statsRows: [
+    { playerId: "maker", appearances: 8, goals: 3, assists: 6, minutes: 690 },
+    { playerId: "stopper", appearances: 9, goals: 1, assists: 0, minutes: 810 }
+  ],
+  conditions: [
+    { playerId: "maker", load: 18, form: 1.4, injury: null },
+    { playerId: "stopper", load: 76, form: -1.2, injury: null }
+  ],
+  roleFamiliarity: {
+    "maker::classic_ten": 64,
+    "stopper::stopper": 31
+  },
+  individualTraining: [
+    { playerId: "maker", trackId: "role_learning", roleId: "classic_ten" }
+  ],
+  roles,
+  tacticId: "possession"
 });
-check("rolleproblem får oppmerksomhetstone", roles.statuses[1].tone === "attention", roles.statuses[1].tone);
-check("rolleproblem vises i lesningen", roles.reading.issue.includes("oppfølging"), roles.reading.issue);
 
-const training = createManagerSquadTacticsSceneModel({
-  gateReady: true,
-  starterText: "11/11",
-  benchText: "4/4",
-  rolesText: "OK",
-  formationName: "4-2-3-1",
-  tacticName: "Høyt press",
-  matchdayTarget: "trening",
-  matchdayActionText: "Velg treningsprogram"
-});
-check("manglende trening peker til Trening", training.action.target === "trening", training.action.target);
-check("manglende trening bruker tydelig CTA", training.action.label === "Gå til Trening", training.action.label);
+check("kun opplåste spillere vises", rows.length === 2, String(rows.length));
+check("sesongtall følger spilleren", rows[0].appearances === 8 && rows[0].goals === 3 && rows[0].assists === 6);
+check("rollefortrolighet vises", rows[0].role.familiarity === 64, String(rows[0].role.familiarity));
+check("taktikk-fit er kvalitativ", rows[0].fit.label === "God" && !Object.hasOwn(rows[0].fit, "score"), rows[0].fit.label);
+check("klar spiller er klar", rows[0].status.id === "ready", rows[0].status.id);
+check("belastet spiller får belastningsstatus", ["loaded", "tired"].includes(rows[1].status.id), rows[1].status.id);
+check("form vises som retning", rows[0].form.label === "↑" && rows[1].form.label === "↓");
+check("individuell trening følger spilleren", rows[0].training?.roleId === "classic_ten");
+check("ingen overall-felt i troppsraden", rows.every((row) => !Object.hasOwn(row, "overall")));
 
-const ready = createManagerSquadTacticsSceneModel({
-  gateReady: true,
-  starterText: "11/11",
-  benchText: "4/4",
-  rolesText: "OK",
-  formationName: "4-2-3-1",
-  tacticName: "Høyt press",
-  availabilityText: "Ingen akutte tilgjengelighetsvarsler.",
-  matchdayReady: true,
-  matchdayTarget: "kickoff",
-  matchdayActionText: "Start kamp"
-});
-check("klar scene er ready", ready.state === "ready", ready.state);
-check("klar scene peker til Kamp", ready.action.target === "kamp", ready.action.target);
-check("klar scene har fire statuskort", ready.statuses.length === 4, String(ready.statuses.length));
-check("klar ellever er positiv", ready.statuses[0].tone === "positive", ready.statuses[0].tone);
-check("klar benk er positiv", ready.statuses[3].tone === "positive", ready.statuses[3].tone);
-check("formasjon bevares", ready.formation.name === "4-2-3-1", ready.formation.name);
-check("kampplan bevares", ready.formation.plan === "Høyt press", ready.formation.plan);
-check("ingen hidden overall introduseres", !Object.hasOwn(ready, "teamScore"));
+const byName = filterRosterRows(rows, { query: "maker", sort: "name" });
+check("søk finner riktig spiller", byName.length === 1 && byName[0].id === "maker");
 
-const unavailable = createManagerSquadTacticsSceneModel({
-  gateReady: true,
-  starterText: "11/11",
-  benchText: "4/4",
-  rolesText: "OK",
-  availabilityText: "1 skadet og 2 slitne spillere."
-});
-check("skade gir negativ tilgjengelighet", unavailable.statuses[2].tone === "negative", unavailable.statuses[2].tone);
-check("skadeforklaring bevares", unavailable.statuses[2].detail.includes("1 skadet"), unavailable.statuses[2].detail);
+const defenders = filterRosterRows(rows, { position: "CB" });
+check("posisjonsfilter finner stopper", defenders.length === 1 && defenders[0].id === "stopper");
+
+const ready = filterRosterRows(rows, { availability: "ready" });
+check("tilgjengelighetsfilter virker", ready.length === 1 && ready[0].id === "maker");
+
+const byGoals = filterRosterRows(rows, { sort: "goals" });
+check("mål-sortering virker", byGoals[0].id === "maker");
 
 const failed = checks.filter((item) => !item.ok);
 checks.forEach((item) => console.log(`${item.ok ? "✓" : "✗"} ${item.label}${item.detail ? ` — ${item.detail}` : ""}`));
 if (failed.length) {
-  console.error(`\n✗ Manager Squad & Tactics Scene v2 feilet: ${failed.length}/${checks.length}`);
+  console.error(`\n✗ Spillerliste og spillerprofil v1 feilet: ${failed.length}/${checks.length}`);
   process.exit(1);
 }
-console.log(`\n✓ Manager Squad & Tactics Scene v2: ${checks.length}/${checks.length}`);
+console.log(`\n✓ Spillerliste og spillerprofil v1: ${checks.length}/${checks.length}`);
