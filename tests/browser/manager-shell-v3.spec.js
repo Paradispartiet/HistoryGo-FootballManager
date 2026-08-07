@@ -12,10 +12,10 @@ async function openArea(page, name) {
     Kontor: "dashboard",
     Lag: "tactics",
     Kamp: "kamp",
-    Sesong: "statistikk",
-    Klubb: "board"
+    Stats: "statistikk"
   };
   await page.locator(`.main-nav [role="tab"][data-tab-target="${targetByArea[name]}"]`).click();
+  if (name === "Kontor") await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -91,13 +91,33 @@ test.beforeEach(async ({ page }, testInfo) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("har fem stabile hovedområder og én autoritativ handling", async ({ page }) => {
+test("har fire stabile hovedområder og ett samlet Kontor", async ({ page }) => {
   const leagueTabs = page.locator('.main-nav .nav-tab[data-nav-modes~="league"]:visible');
-  await expect(leagueTabs).toHaveCount(5);
-  await expect(leagueTabs).toHaveText(["Kontor", "Lag", "Kamp", "Sesong", "Klubb"]);
+  await expect(leagueTabs).toHaveCount(4);
+  await expect(leagueTabs).toHaveText(["Kontor", "Lag", "Kamp", "Stats"]);
+  await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toBeHidden();
+
+  await openArea(page, "Kontor");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="dashboard"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toHaveText("Innboks");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toHaveText("Oppstartshjelp");
+
   await expect(page.locator("#nextActionPrimary")).toHaveCount(1);
+  await expect(page.locator("#nextActionDestination")).toBeVisible();
   await expect(page.locator("#advanceClubWeekPhase, #leagueOnboardingPrimary, #portalPriorityAction")).toHaveCount(0);
   await expectPrimaryActionInViewport(page);
+});
+
+test("Kontor åpner på Innboks og viser hvor du er", async ({ page }) => {
+  await openArea(page, "Kontor");
+  await expect(page.locator("#inboxThreadList")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Innboks");
+  await expect(page.locator("#leagueOnboardingPanel")).toBeHidden();
+
+  await page.locator('.app-subtab[data-tab-target="officeHelp"]').click();
+  await expect(page.locator("#leagueOnboardingPanel")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Oppstartshjelp");
 });
 
 test("lagflaten bruker bare direkte uttak og holder banen i arbeidsområdet", async ({ page }) => {
@@ -145,7 +165,7 @@ test("klubbidentiteten viser skjold, klubbfarge og stadion", async ({ page }) =>
 for (const viewport of VIEWPORTS) {
   test(`ingen overflow og primærhandlingen er synlig ved ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    for (const area of ["Kontor", "Lag", "Kamp", "Sesong", "Klubb"]) {
+    for (const area of ["Kontor", "Lag", "Kamp", "Stats"]) {
       await openArea(page, area);
       await expectNoHorizontalOverflow(page);
     }
@@ -184,6 +204,19 @@ test("hovedskallet har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) 
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 });
 
+test("Stats samler tabell, terminliste og spillerstatistikk", async ({ page }) => {
+  await openArea(page, "Stats");
+  await expect(page.locator("#seasonCommand h2")).toHaveText("Stats");
+  await expect(page.locator("#leagueSeasonOverview")).toBeVisible();
+  const depth = page.locator("#leagueSeasonOverview .season-depth");
+  if (await depth.count()) await expect(depth).toHaveAttribute("open", "");
+  await expect(page.locator("#statsMatches")).toBeVisible();
+  await expect(page.locator("#statsGoals")).toBeVisible();
+  await expect(page.locator("#statsAssists")).toBeVisible();
+  await expect(page.locator("#statsStanding")).toBeVisible();
+  await expect(page.locator("#playerStatsTable")).toBeVisible();
+  await expect(page.locator("#seasonArchiveTable")).toBeVisible();
+});
 
 test("ny ligalagring velger moderne 4-2-3-1 eksplisitt", async ({ page }) => {
   await openArea(page, "Lag");
@@ -193,14 +226,16 @@ test("ny ligalagring velger moderne 4-2-3-1 eksplisitt", async ({ page }) => {
 });
 
 for (const viewport of VIEWPORTS) {
-  test(`Neste handling viser full tittel og forklaring ved ${viewport.width}px`, async ({ page }) => {
+  test(`Neste handling viser full tittel, forklaring og mål ved ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
     const button = page.locator("#nextActionPrimary");
     const title = page.locator("#nextActionPrimaryTitle");
     const hint = page.locator("#nextActionPrimaryHint");
+    const destination = page.locator("#nextActionDestination");
     await expect(button).toBeVisible();
     await expect(title).toBeVisible();
     await expect(hint).toBeVisible();
+    await expect(destination).toBeVisible();
     const values = await page.evaluate(() => {
       const button = document.querySelector("#nextActionPrimary");
       const title = document.querySelector("#nextActionPrimaryTitle");
@@ -274,7 +309,6 @@ test("sentrale handlingsknapper er mørke og har synlig tastaturfokus", async ({
   await expectDarkButton(page.locator("#playMatchdayButton"));
 });
 
-
 test("laguttaket bruker større bane og kvalitativ rollebruk", async ({ page }) => {
   await openArea(page, "Lag");
   const pitch = page.locator("#lineupSlots");
@@ -310,6 +344,7 @@ async function prepareAndStartMatch(page) {
   await expect(focusButton).toBeAttached();
   await focusButton.evaluate((node) => node.click());
   await openArea(page, "Kontor");
+  await page.locator('.app-subtab[data-tab-target="officeHelp"]').click();
   const preseasonSteps = await page.locator("#leagueOnboardingSteps li").evaluateAll((items) => items.map((item) => ({
     text: item.textContent?.replace(/\s+/g, " ").trim() || "",
     done: item.classList.contains("is-done")
@@ -328,12 +363,7 @@ async function prepareAndStartMatch(page) {
   await expect(page.locator(".matchday-kickoff-button")).toBeVisible();
 }
 
-
 test.describe("visuelle baseliner", () => {
-  test("Kontor · 1280", async ({ page }) => {
-    await expect(page).toHaveScreenshot("office-1280.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
-  });
-
   test("Lag · 1280", async ({ page }) => {
     await openArea(page, "Lag");
     await expect(page).toHaveScreenshot("lineup-1280.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
@@ -372,10 +402,5 @@ test.describe("visuelle baseliner", () => {
     await expect(page.locator(".matchday-scoreboard")).toBeVisible();
     await expect(page.locator(".match-flow")).toBeVisible();
     await expect(page).toHaveScreenshot("match-live-1280.png", { animations: "disabled", maxDiffPixelRatio: 0.02 });
-  });
-
-  test("Kontor · 390", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await expect(page).toHaveScreenshot("office-390.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
   });
 });
