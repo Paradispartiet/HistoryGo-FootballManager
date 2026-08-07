@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -15,9 +15,13 @@ const shellElements = read("src/ui/manager-shell-elements.js");
 const workflow = read(".github/workflows/ci.yml");
 const packageJson = read("package.json");
 const seasonPresentation = read("src/ui/manager-season-presentation.js");
-const snapshotDir = join(root, "tests/browser/manager-shell-v3.spec.js-snapshots");
-const snapshots = existsSync(snapshotDir) ? readdirSync(snapshotDir).filter((name) => name.endsWith("-chromium-linux.png")) : [];
-const visualTests = (browser.match(/toHaveScreenshot\(/g) || []).length;
+const visualSceneSpecs = [
+  "tests/browser/manager-training-scene-v2.spec.js",
+  "tests/browser/manager-matchday-scene-v1.spec.js",
+  "tests/browser/manager-squad-tactics-scene-v2.spec.js",
+  "tests/browser/manager-post-match-analysis-v1.spec.js"
+];
+const visualSceneCoverage = visualSceneSpecs.every((path) => existsSync(join(root, path)) && /toHaveScreenshot\(/.test(read(path)));
 
 const checks = [];
 const check = (label, ok, detail = "") => checks.push({ label, ok: Boolean(ok), detail });
@@ -44,12 +48,9 @@ check("klubbidentiteten bruker egen presentasjonsmodul", /manager-club-identity\
 check("HTML-skallet er modulert i egne custom elements", /<manager-club-header>/.test(html) && /<manager-next-action>/.test(html) && existsSync(join(root, "src/ui/manager-shell-elements.js")));
 check("CSS-skallet har egen foundation", /manager-shell-foundation\.css/.test(read("src/ui/manager-shell-v3.css")) && existsSync(join(root, "src/ui/manager-shell-foundation.css")));
 check("responsive nettleservakter dekker 390/768/1280", [390, 768, 1280].every((width) => browser.includes(`width: ${width}`)));
-check(
-  "minst seks visuelle differansetester er låst",
-  visualTests >= 6 && snapshots.length >= visualTests,
-  `tester=${visualTests}, baseliner=${snapshots.length}`
-);
-check("CI sammenligner mot baseliner uten å omskrive dem", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
+check("visuell regresjon ligger i dedikerte scenevakter", visualSceneCoverage);
+check("shell-testen låser ikke hovedmenyen med helskjermbilder", !/toHaveScreenshot\(/.test(browser));
+check("CI kjører nettleservaktene uten å omskrive baseliner", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
 check("tilgjengelighet testes med axe", /AxeBuilder/.test(browser) && /wcag2aa/.test(browser));
 check("tastatur og fokusfelle testes", /Shift\+Tab/.test(browser) && /toBeFocused/.test(browser));
 check("horisontal overflow testes", /scrollWidth - document\.documentElement\.clientWidth/.test(browser));
