@@ -44,9 +44,10 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout HEAD -- .github/workflows/ci.yml
           git rm .github/materialize-role-staff-v1.py
           git rm .github/workflows/materialize-role-staff-v1-clean.yml
-          git add src data scripts tests docs package.json .github/workflows/ci.yml
+          git add src data scripts tests docs package.json
           git diff --cached --check
           git commit -m "Build role-based first-team staff roster v1"
           git push origin HEAD:agent/staff-roster-v1-clean
