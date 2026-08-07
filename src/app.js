@@ -2236,9 +2236,23 @@ function computeAvailability() {
     }
   });
 
+  // Starttroppen er det eksisterende spillbarhetsgulvet og er ikke en History Go-
+  // signering. Når ingen eksplisitt lokal/starttropp er lagret, brukes den samme
+  // deterministiske 15-spillerstroppen som før Rekruttering v1. Kandidater utover
+  // dette gulvet må fortsatt hentes eksplisitt.
+  const localStartPlayerIds = getLocalStartPlayerIds();
+  if (!localStartPlayerIds.length && !isNationalModeActive()) {
+    getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE).forEach((playerId) => {
+      unlockedPlayerIds.add(playerId);
+      const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
+      sources.localStart = true;
+      playerSourceById.set(playerId, sources);
+    });
+  }
+
   // Lokal start utvider bare spillerpoolen. Den åpner ingen steder og skriver
   // aldri til History Go-progresjonen (visited_places/groundhopper-state).
-  getLocalStartPlayerIds().forEach((playerId) => {
+  localStartPlayerIds.forEach((playerId) => {
     unlockedPlayerIds.add(playerId);
     const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
     sources.localStart = true;

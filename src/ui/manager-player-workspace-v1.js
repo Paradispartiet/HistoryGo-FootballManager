@@ -1,7 +1,7 @@
 import { derivePlayerAttributeIndex, normalizeAttributeCatalogue } from "../football-player-attributes.js";
 import { describeCondition, freshnessFor, isInjured } from "../football-player-condition.js";
 import { describeRoleFamiliarity, getRoleFamiliarity } from "../football-role-familiarity-engine.js";
-import { normalizeRecruitmentState } from "../football-recruitment.js";
+import { buildStarterSquadPlayerIds, normalizeRecruitmentState } from "../football-recruitment.js";
 
 const STYLE_ID = "managerPlayerWorkspaceV1Style";
 const WORKSPACE_ID = "managerPlayerWorkspace";
@@ -89,20 +89,23 @@ function resolveUnlockedPlayerIds(players, unlockData) {
   const recruitment = normalizeRecruitmentState(merits);
   const placeIds = historyGoPlaceIds();
   asArray(merits?.unlockedPlaceIds).forEach((id) => placeIds.add(String(id)));
-  const candidateIds = new Set();
+  const starterCandidateIds = new Set();
+  const eligibleCandidateIds = new Set();
   asArray(unlockData?.placeUnlocks).forEach((place) => {
-    if (!placeIds.has(String(place?.placeId))) return;
+    const nationalArena = text(place?.placeRole).includes("national");
     asArray(place?.unlocks).forEach((unlock) => {
-      if (unlock?.type === "player_candidate" && unlock?.targetId) candidateIds.add(String(unlock.targetId));
+      if (unlock?.type !== "player_candidate" || !unlock?.targetId || nationalArena) return;
+      const id = String(unlock.targetId);
+      starterCandidateIds.add(id);
+      if (placeIds.has(String(place?.placeId))) eligibleCandidateIds.add(id);
     });
   });
-  const current = new Set(asArray(merits?.localStart?.playerIds).map(String));
-  recruitment.recruitedPlayerIds.forEach((id) => { if (candidateIds.has(String(id))) current.add(String(id)); });
-  // Bare gamle, ikke-migrerte states får den tidligere fallbacken. I v1 betyr
-  // kandidattilgang ikke lenger automatisk troppsmedlemskap.
-  if (recruitment.recruitmentVersion !== 1 && !current.size && !sessionPlayerPool.size) {
-    buildStarterSquad(players, candidateIds).forEach((id) => current.add(id));
-  }
+  const localIds = asArray(merits?.localStart?.playerIds).map(String);
+  const starterIds = localIds.length ? [] : buildStarterSquadPlayerIds(players, [...starterCandidateIds], 15);
+  const current = new Set([...starterIds, ...localIds]);
+  recruitment.recruitedPlayerIds.forEach((id) => {
+    if (eligibleCandidateIds.has(String(id))) current.add(String(id));
+  });
   current.forEach((id) => sessionPlayerPool.add(id));
   return new Set(sessionPlayerPool);
 }

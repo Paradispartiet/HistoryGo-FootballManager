@@ -3,7 +3,7 @@ import {
   clubStatusFor,
   listClubHeritagePlayers
 } from "../football-club-squad.js";
-import { recruitPlayerToMerits, normalizeRecruitmentState } from "../football-recruitment.js";
+import { buildStarterSquadPlayerIds, recruitPlayerToMerits, normalizeRecruitmentState } from "../football-recruitment.js";
 
 const STYLE_ID = "managerScoutingWorkspaceV1Style";
 const RECRUITABLE_ID = "managerScoutingRecruitable";
@@ -80,29 +80,34 @@ export function buildRecruitablePlayers({ players = [], unlockData = {}, merits 
   asArray(merits?.unlockedPlaceIds).forEach((id) => unlockedPlaces.add(String(id)));
   const localIds = new Set(asArray(merits?.localStart?.playerIds).map(String));
   const recruitment = normalizeRecruitmentState(merits);
-  const squadIds = new Set([...localIds, ...recruitment.recruitedPlayerIds]);
   const quizCompleted = quizCompletedPlaceIds instanceof Set
     ? quizCompletedPlaceIds
     : quizCompletedPlaceIds === null
       ? null
       : new Set(asArray(quizCompletedPlaceIds).map(String));
   const sources = new Map();
+  const starterCandidateIds = new Set();
 
   asArray(unlockData?.placeUnlocks).forEach((place) => {
     const placeId = String(place?.placeId || "");
-    if (!placeId || !unlockedPlaces.has(placeId) || isNationalArenaPlace(place)) return;
+    if (!placeId || isNationalArenaPlace(place)) return;
+    const playerUnlocks = asArray(place?.unlocks).filter((unlock) => unlock?.type === "player_candidate" && unlock?.targetId);
+    playerUnlocks.forEach((unlock) => starterCandidateIds.add(String(unlock.targetId)));
+    if (!unlockedPlaces.has(placeId)) return;
     const needsQuiz = quizCompleted !== null && historyPlaces.has(placeId) && !quizCompleted.has(placeId);
     if (needsQuiz) return;
-    asArray(place?.unlocks).forEach((unlock) => {
-      if (unlock?.type !== "player_candidate" || !unlock?.targetId) return;
+    playerUnlocks.forEach((unlock) => {
       const id = String(unlock.targetId);
       if (!sources.has(id)) sources.set(id, []);
       sources.get(id).push({ placeId, placeName: text(place.placeName, formatToken(placeId)) });
     });
   });
 
+  const starterIds = new Set(localIds.size ? [] : buildStarterSquadPlayerIds(players, [...starterCandidateIds], 15));
+  const squadIds = new Set([...starterIds, ...localIds, ...recruitment.recruitedPlayerIds]);
+
   return asArray(players)
-    .filter((player) => localIds.has(String(player.id)) || sources.has(String(player.id)))
+    .filter((player) => starterIds.has(String(player.id)) || localIds.has(String(player.id)) || sources.has(String(player.id)))
     .map((player) => ({
       id: String(player.id),
       name: text(player.name, player.id),
@@ -115,6 +120,7 @@ export function buildRecruitablePlayers({ players = [], unlockData = {}, merits 
         ? [...new Set(sources.get(String(player.id)).map((source) => source.placeName))].join(" · ")
         : "Starttropp",
       positionRank: POSITION_ORDER[asArray(player.naturalPositions)[0]] ?? 99,
+      isStarter: starterIds.has(String(player.id)),
       isLocalStart: localIds.has(String(player.id)),
       isInSquad: squadIds.has(String(player.id)),
       player
