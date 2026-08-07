@@ -1,4 +1,5 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
+import { migrateLegacyRecruitmentState, normalizeRecruitmentState } from "./football-recruitment.js";
 import "./ui/manager-shell-elements.js";
 import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
@@ -1445,6 +1446,7 @@ function normalizeTeamMerits(merits) {
     publicStartAnchor: migratedPublicStartAnchor,
     localStart,
     nearbyFavorites: normalizeNearbyFavorites(base.nearbyFavorites),
+    ...normalizeRecruitmentState(base),
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
     // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
@@ -2165,6 +2167,7 @@ function computeAvailability() {
   // 3) Spillere og stab via konkrete placeId -> targetId-unlocks. Ukjente
   // spiller-id-er ignoreres med console.warn. Finnes ingen player-unlocks,
   // er listen tom – det faller aldri tilbake til alle spillere.
+  const candidatePlayerIds = new Set();
   const unlockedPlayerIds = new Set();
   const playerSourceById = new Map();
   const explicitStaffIds = new Set();
@@ -2198,7 +2201,7 @@ function computeAvailability() {
           quizPendingPlayerIds.add(unlock.targetId);
           return;
         }
-        unlockedPlayerIds.add(unlock.targetId);
+        candidatePlayerIds.add(unlock.targetId);
         const sources = playerSourceById.get(unlock.targetId) || { placeIds: new Set(), localStart: false };
         sources.placeIds.add(place.placeId);
         playerSourceById.set(unlock.targetId, sources);
@@ -2210,14 +2213,46 @@ function computeAvailability() {
   // Speidet på landslagsarena, men signerbar via klubbanlegg: da er den
   // allerede i unlockedPlayerIds og skal ikke telles som «kun landslag».
   // Samme for quiz: er spilleren signerbar fra et annet sted, er den ikke ventende.
-  unlockedPlayerIds.forEach((playerId) => {
+  candidatePlayerIds.forEach((playerId) => {
     nationalOnlyPlayerIds.delete(playerId);
     quizPendingPlayerIds.delete(playerId);
   });
 
+  // Recruitment v1: History Go gir kandidattilgang; troppen består av
+  // starttroppen + eksplisitt rekrutterte kandidater. Gamle saves migreres én
+  // gang ved å bevare kandidatene som tidligere automatisk var spillbare.
+  if (state.teamMerits) {
+    const migration = migrateLegacyRecruitmentState(state.teamMerits, [...candidatePlayerIds]);
+    if (migration.migrated) {
+      state.teamMerits.recruitmentVersion = migration.merits.recruitmentVersion;
+      state.teamMerits.recruitedPlayerIds = migration.merits.recruitedPlayerIds;
+      saveTeamMerits();
+    }
+  }
+  const recruitmentState = normalizeRecruitmentState(state.teamMerits);
+  recruitmentState.recruitedPlayerIds.forEach((playerId) => {
+    if (candidatePlayerIds.has(playerId)) {
+      unlockedPlayerIds.add(playerId);
+    }
+  });
+
+  // Starttroppen er det eksisterende spillbarhetsgulvet og er ikke en History Go-
+  // signering. Når ingen eksplisitt lokal/starttropp er lagret, brukes den samme
+  // deterministiske 15-spillerstroppen som før Rekruttering v1. Kandidater utover
+  // dette gulvet må fortsatt hentes eksplisitt.
+  const localStartPlayerIds = getLocalStartPlayerIds();
+  if (!localStartPlayerIds.length && !isNationalModeActive()) {
+    getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE).forEach((playerId) => {
+      unlockedPlayerIds.add(playerId);
+      const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
+      sources.localStart = true;
+      playerSourceById.set(playerId, sources);
+    });
+  }
+
   // Lokal start utvider bare spillerpoolen. Den åpner ingen steder og skriver
   // aldri til History Go-progresjonen (visited_places/groundhopper-state).
-  getLocalStartPlayerIds().forEach((playerId) => {
+  localStartPlayerIds.forEach((playerId) => {
     unlockedPlayerIds.add(playerId);
     const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
     sources.localStart = true;
@@ -2274,9 +2309,10 @@ function computeAvailability() {
 
   // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
   // vurdert mot samlingen (steder, spillere, stab, badges).
+  const collectedPlayerIds = new Set([...candidatePlayerIds, ...getLocalStartPlayerIds()]);
   const collectedPools = {
     unlockedPlaceIds,
-    unlockedPlayerIds,
+    unlockedPlayerIds: collectedPlayerIds,
     unlockedStaffIds: new Set(unlockedStaff.map((member) => member.id)),
     earnedBadgeIds: new Set(Array.isArray(state.teamMerits?.earnedBadgeIds) ? state.teamMerits.earnedBadgeIds : [])
   };
@@ -2304,6 +2340,7 @@ function computeAvailability() {
     unlockedPlaceIds,
     placeSourceById,
     placeUnlocks,
+    candidatePlayerIds,
     unlockedPlayers,
     unlockedPlayerIds,
     nationalOnlyPlayerIds,
@@ -2519,8 +2556,8 @@ function getUnlockedStaff() {
   return getAvailability().unlockedStaff;
 }
 
-// Opplåste spillere: ekte spillere fra state.players som er pekt på av et
-// player_candidate-unlock på et opplåst sted.
+// Troppsspillere: starttroppen + eksplisitt rekrutterte kandidater som fortsatt
+// har en gyldig klubb-/quiz-kilde. Kandidattilgang alene gjør ikke spilleren spillbar.
 function getUnlockedPlayers() {
   return getAvailability().unlockedPlayers;
 }
@@ -16306,13 +16343,24 @@ function bindHistoryGoSyncControls() {
     refreshAvailabilityFromHistoryGo();
   });
 
+  // Same-window recruitment: Speiding skriver den samme teamMerits-nøkkelen og
+  // ber kjernen lese den på nytt. Ingen parallell troppsstate eller sidecache.
+  window.addEventListener("hgfm:team-merits-changed", () => {
+    state.teamMerits = loadTeamMerits(teamMeritsSeed);
+    invalidateAvailability();
+    sanitizeLineupForUnlockedPlayers();
+    sanitizeSelectedFormation();
+    renderApp();
+  });
+
   // Cross-tab/vindu: History Go skriver progresjon i localStorage; storage-
   // eventet dekker endringer fra andre vinduer/faner. key === null betyr clear().
   window.addEventListener("storage", (event) => {
     if (
       !event.key ||
       event.key === HISTORY_GO_VISITED_PLACES_KEY ||
-      event.key === HISTORY_GO_GROUNDHOPPER_STATS_KEY
+      event.key === HISTORY_GO_GROUNDHOPPER_STATS_KEY ||
+      event.key === TEAM_MERITS_KEY
     ) {
       refreshAvailabilityFromHistoryGo();
     }

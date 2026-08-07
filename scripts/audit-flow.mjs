@@ -216,8 +216,8 @@ check(
 }
 check(
   "computeAvailability() trekker inn lokal tropp",
-  /getLocalStartPlayerIds\(\)\.forEach/.test(app) ||
-    /computeAvailability[\s\S]{0,4000}getLocalStartPlayerIds\(\)/.test(app)
+  app.includes("const localStartPlayerIds = getLocalStartPlayerIds();")
+    && app.includes("localStartPlayerIds.forEach((playerId) =>")
 );
 // Kjerneprinsipp: lokal start skriver ALDRI til ekte History Go-progresjon.
 check(

@@ -3,6 +3,7 @@ import {
   clubStatusFor,
   listClubHeritagePlayers
 } from "../football-club-squad.js";
+import { buildStarterSquadPlayerIds, recruitPlayerToMerits, normalizeRecruitmentState } from "../football-recruitment.js";
 
 const STYLE_ID = "managerScoutingWorkspaceV1Style";
 const RECRUITABLE_ID = "managerScoutingRecruitable";
@@ -18,8 +19,11 @@ const STORAGE = Object.freeze({
   merits: "hgfm.teamMerits.v1",
   start: "hgfm.gameStartState.v1",
   visitedPlaces: "visited_places",
-  groundhopper: "hg_groundhopper_stats_v1"
+  groundhopper: "hg_groundhopper_stats_v1",
+  learningLog: "hg_learning_log_v1"
 });
+
+const QUIZ_EVENT_TYPES = new Set(["quiz_perfect", "quiz_set_complete", "quiz_legacy"]);
 
 const POSITION_ORDER = Object.freeze({
   GK: 0, CB: 10, LB: 11, RB: 12, WB: 13,
@@ -34,6 +38,7 @@ const asArray = (value) => (Array.isArray(value) ? value : []);
 function text(value, fallback = "") { const normalized = String(value ?? "").trim(); return normalized || fallback; }
 function node(tag, className = "", value) { const element = document.createElement(tag); if (className) element.className = className; if (value !== undefined) element.textContent = String(value); return element; }
 function readStorage(key, fallback) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } }
+function writeStorage(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } }
 function formatToken(value) { return text(value, "–").replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase()); }
 async function loadJson(url) { const response = await fetch(url); if (!response.ok) throw new Error(`Kunne ikke laste ${url.pathname}: ${response.status}`); return response.json(); }
 
@@ -51,24 +56,58 @@ function currentHistoryGoPlaceIds() {
   return ids;
 }
 
-export function buildRecruitablePlayers({ players = [], unlockData = {}, merits = {}, visitedPlaceIds = [] } = {}) {
-  const unlockedPlaces = visitedPlaceIds instanceof Set ? new Set(visitedPlaceIds) : new Set(asArray(visitedPlaceIds).map(String));
+function currentQuizCompletedPlaceIds() {
+  const log = readStorage(STORAGE.learningLog, null);
+  if (log === null || log === undefined || !Array.isArray(log)) return null;
+  const ids = new Set();
+  log.forEach((event) => {
+    if (!event || typeof event !== "object" || !QUIZ_EVENT_TYPES.has(event.type)) return;
+    const parent = text(event.parentTargetId);
+    if (parent) ids.add(parent);
+    const target = text(event.targetId);
+    if (target) ids.add(target.split("::")[0].split("__")[0]);
+  });
+  return ids;
+}
+
+function isNationalArenaPlace(place) {
+  return text(place?.placeRole).includes("national");
+}
+
+export function buildRecruitablePlayers({ players = [], unlockData = {}, merits = {}, visitedPlaceIds = [], quizCompletedPlaceIds = null } = {}) {
+  const historyPlaces = visitedPlaceIds instanceof Set ? new Set(visitedPlaceIds) : new Set(asArray(visitedPlaceIds).map(String));
+  const unlockedPlaces = new Set(historyPlaces);
   asArray(merits?.unlockedPlaceIds).forEach((id) => unlockedPlaces.add(String(id)));
   const localIds = new Set(asArray(merits?.localStart?.playerIds).map(String));
+  const recruitment = normalizeRecruitmentState(merits);
+  const quizCompleted = quizCompletedPlaceIds instanceof Set
+    ? quizCompletedPlaceIds
+    : quizCompletedPlaceIds === null
+      ? null
+      : new Set(asArray(quizCompletedPlaceIds).map(String));
   const sources = new Map();
+  const starterCandidateIds = new Set();
 
   asArray(unlockData?.placeUnlocks).forEach((place) => {
-    if (!unlockedPlaces.has(String(place?.placeId))) return;
-    asArray(place?.unlocks).forEach((unlock) => {
-      if (unlock?.type !== "player_candidate" || !unlock?.targetId) return;
+    const placeId = String(place?.placeId || "");
+    if (!placeId || isNationalArenaPlace(place)) return;
+    const playerUnlocks = asArray(place?.unlocks).filter((unlock) => unlock?.type === "player_candidate" && unlock?.targetId);
+    playerUnlocks.forEach((unlock) => starterCandidateIds.add(String(unlock.targetId)));
+    if (!unlockedPlaces.has(placeId)) return;
+    const needsQuiz = quizCompleted !== null && historyPlaces.has(placeId) && !quizCompleted.has(placeId);
+    if (needsQuiz) return;
+    playerUnlocks.forEach((unlock) => {
       const id = String(unlock.targetId);
       if (!sources.has(id)) sources.set(id, []);
-      sources.get(id).push({ placeId: String(place.placeId), placeName: text(place.placeName, formatToken(place.placeId)) });
+      sources.get(id).push({ placeId, placeName: text(place.placeName, formatToken(placeId)) });
     });
   });
 
+  const starterIds = new Set(localIds.size ? [] : buildStarterSquadPlayerIds(players, [...starterCandidateIds], 15));
+  const squadIds = new Set([...starterIds, ...localIds, ...recruitment.recruitedPlayerIds]);
+
   return asArray(players)
-    .filter((player) => localIds.has(String(player.id)) || sources.has(String(player.id)))
+    .filter((player) => starterIds.has(String(player.id)) || localIds.has(String(player.id)) || sources.has(String(player.id)))
     .map((player) => ({
       id: String(player.id),
       name: text(player.name, player.id),
@@ -81,6 +120,9 @@ export function buildRecruitablePlayers({ players = [], unlockData = {}, merits 
         ? [...new Set(sources.get(String(player.id)).map((source) => source.placeName))].join(" · ")
         : "Starttropp",
       positionRank: POSITION_ORDER[asArray(player.naturalPositions)[0]] ?? 99,
+      isStarter: starterIds.has(String(player.id)),
+      isLocalStart: localIds.has(String(player.id)),
+      isInSquad: squadIds.has(String(player.id)),
       player
     }))
     .sort((a, b) => a.positionRank - b.positionRank || a.name.localeCompare(b.name, "nb"));
@@ -221,9 +263,10 @@ function createRecruitableWorkspace() {
   workspace = node("section", "manager-scouting-surface scouting-recruitable");
   workspace.id = RECRUITABLE_ID;
   workspace.innerHTML = `
-    <header class="scouting-head"><div><p class="eyebrow">Speiding · Rekrutterbare</p><h2>Tilgjengelige spillere</h2><p class="muted-text">Spillere du allerede har tilgang til gjennom History Go eller starttroppen. Sammenlign mange her; åpne profilen for å forstå én.</p></div><strong id="scoutingRecruitableCount">0 spillere</strong></header>
+    <header class="scouting-head"><div><p class="eyebrow">Speiding · Rekrutterbare</p><h2>Rekrutterbare spillere</h2><p class="muted-text">History Go gir tilgang til kandidater. Hent en kandidat til troppen når du vil bruke spilleren i oppstilling, trening og kamp.</p></div><strong id="scoutingRecruitableCount">0 spillere</strong></header>
     <form id="scoutingRecruitableTools" class="scouting-tools" role="search"><label><span>Søk spiller</span><input id="scoutingRecruitableSearch" type="search" autocomplete="off" placeholder="Navn, rolle eller sted"></label><label><span>Posisjon</span><select id="scoutingRecruitablePosition"><option value="all">Alle posisjoner</option></select></label></form>
-    <div class="scouting-table-wrap"><table class="scouting-player-table"><thead><tr><th>Spiller</th><th>Posisjon</th><th>Roller</th><th>Tilgang fra</th><th>Status</th></tr></thead><tbody id="scoutingRecruitableBody"></tbody></table><p id="scoutingRecruitableEmpty" class="scouting-empty" hidden>Ingen tilgjengelige spillere matcher filtrene.</p></div>`;
+    <p id="scoutingRecruitmentFeedback" class="scouting-recruitment-feedback" aria-live="polite"></p>
+    <div class="scouting-table-wrap"><table class="scouting-player-table"><thead><tr><th>Spiller</th><th>Posisjon</th><th>Roller</th><th>Tilgang fra</th><th>Status</th><th>Handling</th></tr></thead><tbody id="scoutingRecruitableBody"></tbody></table><p id="scoutingRecruitableEmpty" class="scouting-empty" hidden>Ingen rekrutterbare spillere matcher filtrene.</p></div>`;
   section.prepend(workspace);
   const position = workspace.querySelector("#scoutingRecruitablePosition");
   Object.keys(POSITION_ORDER).sort((a, b) => POSITION_ORDER[a] - POSITION_ORDER[b]).forEach((id) => { const option = node("option", "", id); option.value = id; position?.append(option); });
@@ -255,7 +298,8 @@ function currentRecruitableRows() {
     players: runtime.players,
     unlockData: runtime.unlocks,
     merits: readStorage(STORAGE.merits, {}),
-    visitedPlaceIds: currentHistoryGoPlaceIds()
+    visitedPlaceIds: currentHistoryGoPlaceIds(),
+    quizCompletedPlaceIds: currentQuizCompletedPlaceIds()
   });
 }
 
@@ -279,6 +323,39 @@ function playerProfileButton(player, secondary = "") {
   return button;
 }
 
+function recruitPlayer(playerId) {
+  const row = currentRecruitableRows().find((candidate) => candidate.id === playerId);
+  if (!row || row.isInSquad || row.isLocalStart || !row.sources.length) return;
+  const current = readStorage(STORAGE.merits, {});
+  const result = recruitPlayerToMerits(current, playerId);
+  if (!result.changed) return;
+  const feedback = document.getElementById("scoutingRecruitmentFeedback");
+  if (!writeStorage(STORAGE.merits, result.merits)) {
+    if (feedback) feedback.textContent = "Kunne ikke lagre rekrutteringen.";
+    return;
+  }
+  if (feedback) feedback.textContent = `${row.name} er hentet til troppen.`;
+  window.dispatchEvent(new CustomEvent("hgfm:team-merits-changed", {
+    detail: { action: "recruit", playerId }
+  }));
+  scheduleRender();
+}
+
+function recruitmentAction(row) {
+  const host = node("div", "scouting-recruit-action");
+  if (row.isInSquad) {
+    host.append(node("span", "scouting-in-squad", "I troppen"));
+    return host;
+  }
+  const button = node("button", "scouting-recruit-button", "Hent til troppen");
+  button.type = "button";
+  button.dataset.recruitPlayer = row.id;
+  button.setAttribute("aria-label", `Hent ${row.name} til troppen`);
+  button.addEventListener("click", () => recruitPlayer(row.id));
+  host.append(button);
+  return host;
+}
+
 function renderRecruitable() {
   const workspace = createRecruitableWorkspace();
   if (!workspace) return;
@@ -296,13 +373,17 @@ function renderRecruitable() {
   const fragment = document.createDocumentFragment();
   rows.forEach((row) => {
     const tr = document.createElement("tr");
+    tr.dataset.playerId = row.id;
+    tr.dataset.squadStatus = row.isInSquad ? "squad" : "candidate";
     const playerCell = document.createElement("td"); playerCell.append(playerProfileButton(row, row.nationality));
+    const actionCell = document.createElement("td"); actionCell.className = "scouting-action-cell"; actionCell.append(recruitmentAction(row));
     tr.append(
       playerCell,
       node("td", "scouting-positions", row.naturalPositions.join("/") || "–"),
       node("td", "", row.preferredRoles.length ? row.preferredRoles.map(formatToken).join(" · ") : "–"),
       node("td", "scouting-source", row.sourceLabel),
-      node("td", "scouting-status", "Tilgjengelig nå")
+      node("td", "scouting-status", row.isInSquad ? "Tropp" : "Kandidat"),
+      actionCell
     );
     fragment.append(tr);
   });
@@ -396,6 +477,7 @@ async function boot() {
     renderOtherClubs();
     installLocationGuard();
     window.addEventListener("updateProfile", scheduleRender);
+    window.addEventListener("hgfm:team-merits-changed", scheduleRender);
     window.addEventListener("storage", scheduleRender);
     syncScoutingLocation();
   } catch (error) {

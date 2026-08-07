@@ -10,7 +10,16 @@ Dette følger samme informasjonsprinsipp som spillerlisten: oversikten brukes ti
 
 ### Rekrutterbare
 
-Viser spillere manageren allerede har tilgang til gjennom eksisterende History Go-opplåsinger eller en eksplisitt starttropp.
+Viser spillere manageren har kandidattilgang til gjennom eksisterende History Go-opplåsinger, samt spillere som allerede ligger i en eksplisitt starttropp.
+
+Fra Rekruttering v1 er skillet eksplisitt:
+
+```text
+History Go-tilgang = kandidat
+Hent til troppen = troppsmedlem
+```
+
+En kvalifisert kandidat kan derfor sammenlignes og åpnes i spillerprofilen uten å være spillbar. `Hent til troppen` skriver spiller-ID-en til den eksisterende `hgfm.teamMerits.v1`-staten. Lag og kjernens availability leser samme medlemskap og oppdateres i samme økt.
 
 Listen viser bare data spillet faktisk har:
 
@@ -18,9 +27,12 @@ Listen viser bare data spillet faktisk har:
 - naturlige og brukbare posisjoner
 - foretrukne roller
 - hvilket History Go-sted som ga tilgang
-- tilgjengelig status
+- status `Kandidat` eller `Tropp`
+- eksplisitt rekrutteringshandling når kandidaten ikke er i troppen
 
-Det finnes ingen Overall-kolonne, lønn, alder eller kontraktsinformasjon som datasettet ikke eier.
+Det finnes ingen Overall-kolonne, lønn, alder, overgangssum eller kontraktsinformasjon som datasettet ikke eier.
+
+History Go-portene gjelder fortsatt: landslagsarena alene gir ikke en klubb-signering, og quiz-porten respekteres når læringsloggen finnes.
 
 ### Andre klubber
 
@@ -29,6 +41,8 @@ Viser alle andre klubber i den eksisterende ligapyramiden. Egen klubb filtreres 
 For hver klubb bruker visningen den eksisterende `listClubHeritagePlayers()`-motoren. Den kobler klubbens `homePlaceId` mot spillernes `sourcePlaceIds` og leser eventuell `clubStatus`.
 
 Derfor er dette **HGs dokumenterte klubbtilknytninger / mulige historiske spillerpool – ikke en live stall og ikke en påstand om hvilke spillere klubben har under kontrakt i virkeligheten akkurat nå**.
+
+`Andre klubber` er fortsatt en speider-/kunnskapsflate. Rekruttering skjer bare når spilleren faktisk finnes som kvalifisert kandidat under `Rekrutterbare`; klubbtilknytningen alene gir ingen spiller til troppen.
 
 ## Spillerprofil
 
@@ -44,22 +58,24 @@ Det betyr at samme spiller alltid har samme:
 - History Go-opprinnelse
 - misbruksvarsel
 
-Speiding lager ingen parallell spillerprofil.
+Speiding lager ingen parallell spillerprofil. Profilklikk rekrutterer heller aldri spilleren.
 
 ## Motorgrenser
 
-Speiding v1 er et presentasjons- og informasjonsarkitekturpass:
+Speiding v1 + Rekruttering v1 bruker eksisterende data og managerstate:
 
-- ingen overgangsmotor
+- kandidattilgang fra `player_candidate`-opplåsinger
+- troppsmedlemskap i eksisterende `teamMerits`
+- ingen separat transfer-/recruitment-localStorage
+- ingen overgangssum
 - ingen lønns- eller kontraktsmotor
-- ingen transfer fee
+- ingen bud-/forhandlingsmotor
 - ingen ny fitmotor
 - ingen ny spillerverdi
-- ingen nye localStorage-nøkler
 - ingen skriving til History Go-progresjonen
 
-Rekrutterbare leses av de eksisterende `player_candidate`-opplåsingene. Andre klubber leses av `football_clubs.json`, `football_players.json` og `football-club-squad.js`.
+Andre klubber leses av `football_clubs.json`, `football_players.json` og `football-club-squad.js`.
 
 ## Responsive prinsipper
 
-Desktop viser tette tabeller og klubb → spiller-drill-down. På mobil brytes tabellene til kompakte rader i stedet for en bred horisontal monster-tabell. Browser-vakten dekker 390 px, overflow, spillerprofil og WCAG 2 A/AA.
+Desktop viser tette tabeller og klubb → spiller-drill-down. På mobil brytes tabellene til kompakte rader i stedet for en bred horisontal monster-tabell. Rekrutteringshandlingen forblir eksplisitt og trykkbar på 390 px. Browser-vaktene dekker overflow, spillerprofil, kandidat → tropp i samme økt og WCAG 2 A/AA.
