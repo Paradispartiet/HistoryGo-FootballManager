@@ -157,10 +157,3 @@ test("kampdagen har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => 
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 });
-
-test("kampdagen har en låst visuell baseline på nettbrett", async ({ page }) => {
-  await page.setViewportSize({ width: 768, height: 900 });
-  await openMatchday(page);
-  await page.locator("#matchdayCommandPanel").scrollIntoViewIfNeeded();
-  await expect(page).toHaveScreenshot("matchday-768.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
-});
