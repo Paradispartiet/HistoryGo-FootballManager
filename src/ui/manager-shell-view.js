@@ -1,5 +1,6 @@
 import "./manager-player-workspace-v1.js";
 import "./manager-scouting-workspace-v1.js";
+import "./manager-calendar-workspace-v1.js";
 
 export function createMatchFlowSnapshot(session, visibleLog = []) {
   const log = Array.isArray(visibleLog) ? visibleLog : [];
