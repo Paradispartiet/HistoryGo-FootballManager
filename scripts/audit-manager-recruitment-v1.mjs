@@ -20,6 +20,7 @@ const checks = [
   ["kandidat og tropp er separate state-begreper", app.includes("candidatePlayerIds") && app.includes("recruitedPlayerIds")],
   ["troppsmedlemskap bor i eksisterende teamMerits", scouting.includes('merits: "hgfm.teamMerits.v1"') && seed.includes('"recruitedPlayerIds"')],
   ["eksisterende 15-spillers startgulv er bevart", engine.includes("buildStarterSquadPlayerIds") && app.includes("getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE)") && playerWorkspace.includes("buildStarterSquadPlayerIds(players") && scouting.includes("buildStarterSquadPlayerIds(players")],
+  ["Lag har ingen lokal kopi av startergeneratoren", !playerWorkspace.includes("function buildStarterSquad(") && !playerWorkspace.includes("STARTER_SQUAD_GROUPS")],
   ["startgulvet er ikke recruitment-state", engine.includes("starterPlayerIds") && engine.includes("recruitedPlayerIds") && docs.includes("Starttroppen er ikke en History Go-signering")],
   ["ingen separat recruitment-localStorage-key", !/hgfm\.(recruitment|transfer|market)/i.test(recruitmentRuntime)],
   ["samme-session state refresh finnes", scouting.includes("hgfm:team-merits-changed") && app.includes("hgfm:team-merits-changed")],
