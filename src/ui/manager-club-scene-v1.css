@@ -285,10 +285,16 @@
   margin-top: 0;
 }
 
-/* Fasiliteter er nå en reell Kontor-flate. Legacy-muted var for svak mot
-   facility-kortenes bakgrunn; disse tekstene må bestå WCAG AA. */
+/* Fasiliteter og Marked er nå reelle Kontor-flater. Legacy-muted var for svak
+   mot kortbakgrunnene; all støttetekst må bestå WCAG AA. */
 .dept-facilities .facility-card .muted-text,
-.dept-facilities .facility-card .facility-status {
+.dept-facilities .facility-card .facility-status,
+.dept-market .eyebrow,
+.dept-market .muted-text,
+.dept-market .market-feature p,
+.dept-market .market-feature small,
+.dept-market .market-side p,
+.dept-market .market-side small {
   color: #d2d8e0;
 }
 
