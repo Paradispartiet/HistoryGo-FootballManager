@@ -1,0 +1,52 @@
+name: Recruitment v1 player-list alignment
+
+on:
+  push:
+    branches:
+      - agent/recruitment-v1
+    paths:
+      - .github/workflows/recruitment-v1-player-list.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/recruitment-v1
+      - name: Align Lag roster with recruitment membership
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('src/ui/manager-player-workspace-v1.js')
+          text = p.read_text()
+          old = 'import { describeRoleFamiliarity, getRoleFamiliarity } from "../football-role-familiarity-engine.js";\n'
+          new = old + 'import { normalizeRecruitmentState } from "../football-recruitment.js";\n'
+          if text.count(old) != 1:
+              raise SystemExit('import anchor mismatch')
+          text = text.replace(old, new, 1)
+
+          old = '''function resolveUnlockedPlayerIds(players, unlockData) {\n  const merits = readStorage(STORAGE.merits, {});\n  const placeIds = historyGoPlaceIds();\n  asArray(merits?.unlockedPlaceIds).forEach((id) => placeIds.add(String(id)));\n  const candidateIds = new Set();\n  const current = new Set(asArray(merits?.localStart?.playerIds).map(String));\n  asArray(unlockData?.placeUnlocks).forEach((place) => asArray(place?.unlocks).forEach((unlock) => {\n    if (unlock?.type !== "player_candidate" || !unlock?.targetId) return;\n    const id = String(unlock.targetId); candidateIds.add(id); if (placeIds.has(String(place.placeId))) current.add(id);\n  }));\n  if (!current.size && !sessionPlayerPool.size) buildStarterSquad(players, candidateIds).forEach((id) => current.add(id));\n  current.forEach((id) => sessionPlayerPool.add(id));\n  return new Set(sessionPlayerPool);\n}'''
+          new = '''function resolveUnlockedPlayerIds(players, unlockData) {\n  const merits = readStorage(STORAGE.merits, {});\n  const recruitment = normalizeRecruitmentState(merits);\n  const placeIds = historyGoPlaceIds();\n  asArray(merits?.unlockedPlaceIds).forEach((id) => placeIds.add(String(id)));\n  const candidateIds = new Set();\n  asArray(unlockData?.placeUnlocks).forEach((place) => {\n    if (!placeIds.has(String(place?.placeId))) return;\n    asArray(place?.unlocks).forEach((unlock) => {\n      if (unlock?.type === "player_candidate" && unlock?.targetId) candidateIds.add(String(unlock.targetId));\n    });\n  });\n  const current = new Set(asArray(merits?.localStart?.playerIds).map(String));\n  recruitment.recruitedPlayerIds.forEach((id) => { if (candidateIds.has(String(id))) current.add(String(id)); });\n  // Bare gamle, ikke-migrerte states får den tidligere fallbacken. I v1 betyr\n  // kandidattilgang ikke lenger automatisk troppsmedlemskap.\n  if (recruitment.recruitmentVersion !== 1 && !current.size && !sessionPlayerPool.size) {\n    buildStarterSquad(players, candidateIds).forEach((id) => current.add(id));\n  }\n  current.forEach((id) => sessionPlayerPool.add(id));\n  return new Set(sessionPlayerPool);\n}'''
+          if text.count(old) != 1:
+              raise SystemExit('roster resolver anchor mismatch')
+          text = text.replace(old, new, 1)
+
+          old = 'window.addEventListener("updateProfile", scheduleRosterRender); window.addEventListener("storage", scheduleRosterRender); window.addEventListener("hgfm:open-player-profile",'
+          new = 'window.addEventListener("updateProfile", scheduleRosterRender); window.addEventListener("storage", scheduleRosterRender); window.addEventListener("hgfm:team-merits-changed", scheduleRosterRender); window.addEventListener("hgfm:open-player-profile",'
+          if text.count(old) != 1:
+              raise SystemExit('observer anchor mismatch')
+          text = text.replace(old, new, 1)
+          p.write_text(text)
+          PY
+      - name: Commit alignment
+        run: |
+          rm .github/workflows/recruitment-v1-player-list.yml
+          git config user.name "Paradispartiet"
+          git config user.email "paradispartiet@gmail.com"
+          git add src/ui/manager-player-workspace-v1.js .github/workflows/recruitment-v1-player-list.yml
+          git commit -m "Align Lag roster with recruitment membership"
+          git push origin HEAD:agent/recruitment-v1
