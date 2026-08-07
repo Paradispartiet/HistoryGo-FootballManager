@@ -9,6 +9,7 @@ const seed = fs.readFileSync(new URL("../data/football_team_merits.example.json"
 const shellBrowser = fs.readFileSync(new URL("../tests/browser/manager-shell-v3.spec.js", import.meta.url), "utf8");
 const browser = fs.readFileSync(new URL("../tests/browser/manager-recruitment-v1.spec.js", import.meta.url), "utf8");
 const docs = fs.readFileSync(new URL("../docs/MANAGER_RECRUITMENT_V1.md", import.meta.url), "utf8");
+const economyDocs = fs.readFileSync(new URL("../docs/MANAGER_ECONOMY_CONTRACTS_V1.md", import.meta.url), "utf8");
 const packageJson = fs.readFileSync(new URL("../package.json", import.meta.url), "utf8");
 const ci = fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
 const recruitmentRuntime = `${scouting}\n${engine}`;
@@ -30,12 +31,19 @@ const checks = [
   ["nasjonalarena og quiz-port beholdes", scouting.includes("isNationalArenaPlace") && scouting.includes("currentQuizCompletedPlaceIds")],
   ["History Go-samling skilles fra tropp", app.includes("collectedPlayerIds") && app.includes("unlockedPlayerIds: collectedPlayerIds")],
   ["ingen ny Neste-/Fortsett-flyt", !/Neste dag|Fortsett|nextAction|next-action/i.test(recruitmentRuntime)],
-  ["ingen overgangsøkonomiske runtime-felt i v1", !economyFieldPattern.test(recruitmentRuntime)],
+  ["rekrutteringsmotoren eier ingen overgangsøkonomiske runtime-felt", !economyFieldPattern.test(recruitmentRuntime)],
   ["ingen Overall introduseres", !/overall\s*[:=]/i.test(recruitmentRuntime)],
   ["mobil rekrutteringshandling er stylet", css.includes(".scouting-recruit-button") && css.includes("@media (max-width: 680px)")],
   ["browser tester kandidat til tropp i samme økt", browser.includes("Hent til troppen") && browser.includes("recruitedPlayerIds") && browser.includes("formationSelect")],
   ["browser tester mobil og WCAG", browser.includes("390") && browser.includes("AxeBuilder")],
-  ["dokumentasjonen avgrenser v1", docs.includes("ingen overgangssum") && docs.includes("Forslag til neste steg")],
+  [
+    "dokumentasjonen låser recruitment-/økonomigrensen",
+    docs.includes("økonomi-/kontraktsmodulen eier kostnad, lønnsramme og avtale")
+      && docs.includes("ingen historiske/virkelige overgangssummer")
+      && docs.includes("Forslag til neste steg")
+      && economyDocs.includes("ikke virkelige klubbbudsjetter")
+      && economyDocs.includes("Økonomi skaper aldri kandidattilgang")
+  ],
   ["simulering og audit er registrert", packageJson.includes('"sim:manager-recruitment-v1"') && packageJson.includes('"audit:manager-recruitment-v1"')],
   ["CI kjører begge permanente porter", ci.includes("audit:manager-recruitment-v1") && ci.includes("sim:manager-recruitment-v1")]
 ];

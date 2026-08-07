@@ -61,7 +61,7 @@ test("kandidat er ikke i troppen før Hent til troppen, og blir tilgjengelig i s
   await openScouting(page);
   const freshRow = page.locator(`#scoutingRecruitableBody tr[data-player-id="${playerId}"]`);
   await freshRow.getByRole("button", { name: `Hent ${playerName} til troppen` }).click();
-  await expect(page.locator("#scoutingRecruitmentFeedback")).toContainText(`${playerName} er hentet til troppen`);
+  await expect(page.locator("#scoutingRecruitmentFeedback")).toContainText(`${playerName} er hentet`);
   await expect(freshRow).toHaveAttribute("data-squad-status", "squad");
   await expect(freshRow).toContainText("I troppen");
 

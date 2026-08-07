@@ -71,5 +71,13 @@
     },
     "lastUpgradeWeek": null,
     "lastUpgradeFacilityId": null
+  },
+  "clubEconomy": {
+    "version": 1,
+    "balance": 80,
+    "wageBudget": 54,
+    "lastSettledSeason": 1,
+    "contracts": {},
+    "ledger": []
   }
 }
