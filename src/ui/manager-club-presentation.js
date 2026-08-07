@@ -1,8 +1,3 @@
-const CLUB_OPERATIONS_NAV = Object.freeze([
-  { target: "facilities", label: "Fasiliteter", after: "progression" },
-  { target: "market", label: "Marked", after: "admin" }
-]);
-
 function asArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -85,38 +80,6 @@ function deriveMarketReading({ trust, morale, media }) {
     tone: "neutral",
     detail: `Medietrykk ${media.score} · moral ${morale.score} · styretillit ${trust.score}.`
   };
-}
-
-function ensureClubOperationsNavigation(onOpenTarget) {
-  if (typeof document === "undefined") return;
-
-  CLUB_OPERATIONS_NAV.forEach(({ target }) => {
-    document.querySelector(`[data-tab-section="${target}"]`)?.removeAttribute("data-shell-hidden");
-  });
-
-  const subnav = document.querySelector("#appSubnav");
-  if (!subnav) return;
-
-  CLUB_OPERATIONS_NAV.forEach(({ target, label, after }) => {
-    let button = subnav.querySelector(`[data-subnav-parent="board"][data-tab-target="${target}"]`);
-    if (!button) {
-      button = document.createElement("button");
-      button.type = "button";
-      button.className = "app-subtab";
-      button.setAttribute("role", "tab");
-      button.dataset.subnavParent = "board";
-      button.dataset.tabTarget = target;
-      button.dataset.clubOperationsV1 = "true";
-      button.textContent = label;
-
-      const anchor = subnav.querySelector(`[data-subnav-parent="board"][data-tab-target="${after}"]`);
-      if (anchor?.nextSibling) anchor.parentNode.insertBefore(button, anchor.nextSibling);
-      else if (anchor) anchor.parentNode.append(button);
-      else subnav.append(button);
-    }
-
-    button.onclick = () => onOpenTarget?.(target);
-  });
 }
 
 function derivePriority({ trust, rosterCount, rosterRequired, hiredStaff, staffGaps, unlockedExpertise, activePrograms }) {
@@ -345,7 +308,6 @@ function statusButton(item, onOpenTarget) {
 
 export function renderManagerClubCommand(container, model, { onOpenTarget } = {}) {
   if (!container) return;
-  ensureClubOperationsNavigation(onOpenTarget);
   container.textContent = "";
   container.dataset.complete = model.complete ? "true" : "false";
 
@@ -427,7 +389,6 @@ export function renderManagerClubCommand(container, model, { onOpenTarget } = {}
       textElement("strong", "", String(item.score)),
       textElement("small", "", item.label)
     );
-    card.lastElementChild.textContent = item.label === "Medietrykk" ? `${item.label}: ${item.label === "Medietrykk" ? item.label && item.tone === "negative" ? "høyt" : item.tone === "positive" ? "lavt" : "normalt" : item.label}` : item.label;
     card.lastElementChild.textContent = item.label === "Medietrykk"
       ? (item.tone === "negative" ? "Høyt press" : item.tone === "positive" ? "Lavt press" : "Normalt press")
       : item.tone === "positive" ? "Sterkt" : item.tone === "negative" ? "Krever arbeid" : "Stabilt";
