@@ -78,7 +78,9 @@
     "audit:manager-post-match-analysis-v1": "node scripts/audit-manager-post-match-analysis-v1.mjs",
     "sim:manager-post-match-analysis-v1": "node scripts/simulate-manager-post-match-analysis-v1.mjs",
     "audit:manager-squad-tactics-scene-v2": "node scripts/audit-manager-squad-tactics-scene-v2.mjs",
-    "sim:manager-squad-tactics-scene-v2": "node scripts/simulate-manager-squad-tactics-scene-v2.mjs"
+    "sim:manager-squad-tactics-scene-v2": "node scripts/simulate-manager-squad-tactics-scene-v2.mjs",
+    "audit:manager-scouting-workspace-v1": "node scripts/audit-manager-scouting-workspace-v1.mjs",
+    "sim:manager-scouting-workspace-v1": "node scripts/simulate-manager-scouting-workspace-v1.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
