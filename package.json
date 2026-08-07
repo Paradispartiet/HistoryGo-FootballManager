@@ -81,6 +81,8 @@
     "sim:manager-squad-tactics-scene-v2": "node scripts/simulate-manager-squad-tactics-scene-v2.mjs",
     "audit:manager-scouting-workspace-v1": "node scripts/audit-manager-scouting-workspace-v1.mjs",
     "sim:manager-scouting-workspace-v1": "node scripts/simulate-manager-scouting-workspace-v1.mjs",
+    "audit:manager-recruitment-v1": "node scripts/audit-manager-recruitment-v1.mjs",
+    "sim:manager-recruitment-v1": "node scripts/simulate-football-recruitment-v1.mjs",
     "audit:manager-calendar-v1": "node scripts/audit-manager-calendar-v1.mjs",
     "sim:manager-calendar-v1": "node scripts/simulate-manager-calendar-v1.mjs"
   },
