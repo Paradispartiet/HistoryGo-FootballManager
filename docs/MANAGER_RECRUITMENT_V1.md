@@ -23,7 +23,7 @@ Dermed er troppsmodellen:
 starttropp + eksplisitt hentede kvalifiserte kandidater = klubbens tropp
 ```
 
-Starttroppen er ikke en History Go-signering og skal ikke måtte hentes på nytt i Speiding.
+Starttroppen er ikke en History Go-signering og skal ikke måtte hentes på nytt i Speiding. En starttroppsspiller kan derfor aldri kreve `Hent til troppen` bare fordi Rekruttering v1 er aktivert.
 
 ## State
 
