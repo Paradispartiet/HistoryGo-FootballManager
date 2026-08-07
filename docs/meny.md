@@ -14,7 +14,7 @@ Kontor · Lag · Speiding · Kamp · Stats
 
 Dette er navigasjonskontrakten. Nye funksjoner skal plasseres under disse områdene før det vurderes en ny hovedfane.
 
-- **Kontor** – innboks, klubbdrift og oppstartshjelp.
+- **Kontor** – innboks, kalender, klubbdrift og oppstartshjelp.
 - **Lag** – oppstilling, tropp, trening og systemkunnskap.
 - **Speiding** – rekrutterbare spillere og andre klubbers mulige/HG-koblede spillerpool.
 - **Kamp** – kampdag og etterkampanalyse.
@@ -27,12 +27,28 @@ Dette er navigasjonskontrakten. Nye funksjoner skal plasseres under disse områd
 Kontor åpner på **Innboks** i ligaspill. Synlige underflater er:
 
 ```
-Innboks · Klubbdrift · Oppstartshjelp
+Innboks · Kalender · Klubbdrift · Oppstartshjelp
 ```
+
+### Kalender
+
+Kalender er tidslinjen for den eksisterende manageruka. Den viser Club Week-fasene som mandag–søndag:
+
+```
+Mandag analyse
+Tirsdag innboks
+Onsdag trening
+Torsdag trening / individuell oppfølging
+Fredag kampforberedelse
+Lørdag kamp
+Søndag etterkamp
+```
+
+Kalenderen har ingen «Neste dag» eller «Fortsett»-knapp. Den sier hva som er ferdig, hva som skjer nå og hva som kommer senere; `Forslag til neste steg` er fortsatt eneste veiviser. Torsdag er samme eksisterende `training`-fase som onsdag, ikke en ny progresjonsstate.
 
 Klubbdrift eier de varige klubbfunksjonene: styre, utvikling, stab/drift, fasiliteter og marked. Disse er ikke egne hovedområder.
 
-**Speiding ligger ikke lenger under Kontor.** Spillerjakt er en gjentakende manageroppgave med egne sammenligningslister og er derfor løftet til hovednivå.
+**Speiding ligger ikke under Kontor.** Spillerjakt er en gjentakende manageroppgave med egne sammenligningslister og er derfor på hovednivå.
 
 ## Lag
 
@@ -87,7 +103,7 @@ Stats samler tabell, terminliste, sesongstatus og spillerstatistikk på ett sted
 
 Appen har én `nav.app-subnav`. Knappene bærer `data-subnav-parent`, og bare gruppen som hører til aktivt hovedområde vises.
 
-Det gjelder nå Kontor, Lag, Speiding og Kamp. Én stripe er viktig fordi body-gridet har eksplisitte rader; flere parallelle undernav ville igjen kunne overlappe hovedmeny eller spillflate.
+Det gjelder Kontor, Lag, Speiding og Kamp. Kalender er en Kontor-underfane i den samme stripen, ikke et nytt navigasjonslag.
 
 ## Ingen funksjon to steder
 
@@ -97,8 +113,9 @@ Husregelen er:
 - eventuelle snarveier må ha en tydelig lokal grunn og må ikke kopiere hovedmenyen;
 - samme label skal ikke sende til forskjellige flater;
 - ingen popup skal være en skjult kopi av hovednavigasjonen;
-- dyp informasjon skal ligge bak drill-down, ikke som en ny vegg av kort.
+- dyp informasjon skal ligge bak drill-down, ikke som en ny vegg av kort;
+- en tidsvisning skal ikke bli en parallell progresjonsmotor.
 
 ## Moduser
 
-Hver hovedfane bærer `data-nav-modes` for modiene den faktisk gjelder. **Speiding v1 er ligaspill-funksjon**. Scenarioer og Fotballvitenskap beholder sine egne modusgrenser og skal ikke gjøre ligamenyen større.
+Hver hovedfane bærer `data-nav-modes` for modiene den faktisk gjelder. Speiding og Kalender v1 er ligaspill-funksjoner. Scenarioer og Fotballvitenskap beholder sine egne modusgrenser og skal ikke gjøre ligamenyen større.

@@ -8,6 +8,7 @@ const OFFICE_DEEP_TARGETS = new Set(["progression", "admin", "facilities", "mark
 const LOCATION_LABELS = Object.freeze({
   dashboard: "Kontor · Oppstartshjelp",
   inbox: "Kontor · Innboks",
+  calendar: "Kontor · Kalender",
   board: "Kontor · Klubbdrift",
   historygo: "Kontor · Speiding",
   progression: "Kontor · Klubbdrift · Utvikling",
