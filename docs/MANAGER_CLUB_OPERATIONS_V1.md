@@ -2,9 +2,67 @@
 
 ## Formål
 
-Klubb/Mer skal være et faktisk arbeidsområde for hele klubbapparatet, ikke bare en styreoversikt med skjulte avdelinger.
+Klubb skal ikke være et eget hovedområde ved siden av Kontor. For manageren er styret, innboksen, stab, fasiliteter, marked, speiding og klubbutvikling deler av det samme managerkontoret.
 
-Denne versjonen gjør de eksisterende flatene **Fasiliteter** og **Marked** navigerbare sammen med Klubboversikt, Speiding, Klubbutvikling og Stab & drift.
+Denne versjonen rydder derfor informasjonsarkitekturen til fire hovedområder:
+
+**Kontor · Lag · Kamp · Stats**
+
+`Klubb` fjernes som egen hovedfane. Klubbdriften ligger under Kontor.
+
+## Kontor
+
+Kontor er stedet for alt managerarbeid som ikke skjer direkte på banen eller i kamp:
+
+- **Innboks** — standardinngangen i ligaspill og stedet for ukas viktigste beskjed/sak.
+- **Klubbdrift** — styret og seks operative klubbområder.
+- **Speiding** — spillere, stab og ressurser fra History Go.
+- **Oppstartshjelp** — før-sesong-sjekklista og den gamle oversikts-/klubbukeinformasjonen. Dette er hjelp, ikke førstesiden.
+
+Den tidligere synlige **Oversikt**-underfanen fjernes i ligaspill. Når manageren trykker Kontor, åpnes Innboks.
+
+### Klubbdrift
+
+Klubbdrift samler seks eksisterende funksjoner uten å introdusere nye motorer:
+
+1. **Styret** — forventning og styretillit.
+2. **Speiding** — spillere, stab og ressurser fra History Go.
+3. **Klubbutvikling** — ekspertise, utviklingsprogrammer, badges og lagklasse.
+4. **Fasiliteter** — treningsanlegg, stadion, akademi og medisinsk avdeling.
+5. **Stab & drift** — stall, tilgjengelig stab og engasjert stab.
+6. **Marked** — omdømme, fans og sponsorinteresse som kvalitative signaler.
+
+Utvikling, Fasiliteter, Stab & drift og Marked er dypflater. De trenger ikke konkurrere som likeverdige hovedfaner; de åpnes fra Klubbdrift og beholder Kontor som tydelig hovedområde.
+
+## Stats
+
+Den tidligere hovedfanen **Sesong** heter **Stats**.
+
+Stats samler:
+
+- ligatabell
+- full terminliste og resultater
+- plassering og poeng
+- målforskjell og form
+- kamper, mål og målgivende
+- toppscorer
+- spillerstatistikk
+- sesongdom
+- merittliste
+
+Full tabell og terminliste skal være åpne på Stats-flaten, ikke gjemt som en egen navigasjonsdestinasjon.
+
+## Orientering
+
+Et fast `Du er her`-signal viser den aktive arbeidsflaten, for eksempel:
+
+- `Kontor · Innboks`
+- `Kontor · Klubbdrift · Fasiliteter`
+- `Lag · Trening`
+- `Kamp · Analyse`
+- `Stats`
+
+«Neste handling» omtales som **Forslag til neste steg** og viser hvilken arbeidsflate handlingen åpner. Sekundære konkurrerende snarveier skjules, slik at footeren ikke blir en teleportmeny.
 
 ## Autoritative kilder
 
@@ -18,34 +76,24 @@ Ingen ny klubbmotor introduseres. Presentasjonen leser bare eksisterende tilstan
 - eksisterende roster-readiness og tilgjengelige spillere
 - eksisterende engasjert/tilgjengelig stab
 - eksisterende History Go-steder, ekspertise, utviklingsprogrammer, badges og lagklasse
+- eksisterende ligasesong, tabell, terminliste og spillerstatistikk
 
-De eksisterende rendererne i `app.js` fortsetter å eie innholdet i Fasiliteter, Stab & drift og Marked. `manager-club-presentation.js` eier bare klubboversikt, navigasjonsinnganger og kvalitative statussignaler.
-
-## Seks klubbområder
-
-1. **Styret** — forventning og styretillit.
-2. **Speiding** — spillere, stab og ressurser fra History Go.
-3. **Klubbutvikling** — ekspertise, utviklingsprogrammer, badges og lagklasse.
-4. **Stab & drift** — stall, tilgjengelig stab og engasjert stab.
-5. **Fasiliteter** — eksisterende kvalitativ stand på treningsanlegg, stadion, akademi og medisinsk avdeling.
-6. **Marked** — eksisterende kvalitative signaler for omdømme, fans og sponsorinteresse.
+De eksisterende rendererne og motorene fortsetter å eie data og konsekvenser. UI-lagene eier bare hierarki, tekst, orientering og navigasjon.
 
 ## Viktige grenser
 
-- Fasilitetsnivåene er fortsatt avledede lesesignaler. Det finnes ingen kjøp-/oppgraderingsmotor i denne versjonen.
+- Fasilitetsnivåene er avledede lesesignaler. Det finnes ingen kjøp-/oppgraderingsmotor i denne versjonen.
 - Marked viser temperatur og interesse, men oppretter ingen sponsoravtaler.
 - Stab & drift viser eksisterende stab og stall, men oppretter ingen økonomi-, lønns- eller kontraktsmotor.
 - Ingen nye localStorage-nøkler, save-felt eller History Go-unlocks.
 - Ingen endringer i kamp-, trening-, liga-, availability- eller konsekvensmotorer.
 
-## Navigasjon
-
-Når Klubbkontoret rendres, sikrer presentasjonslaget at Fasiliteter og Marked finnes i den eksisterende Klubb-undernavigasjonen. De to legacy-markørene `data-shell-hidden` fjernes bare fra disse allerede eksisterende seksjonene. Navigasjonen bruker den samme `onOpenTarget`-callbacken som de øvrige klubbstatusene.
-
-Dermed finnes det ingen blindvei fra de nye statuskortene: begge åpner en eksisterende, live-renderet flate og hovedfanen Klubb forblir aktiv via `data-tab-parent="board"`.
-
 ## Permanente porter
 
+- `audit:manager-shell-v3`
+- `audit:manager-club-scene-v1`
 - `audit:manager-club-operations-v1`
+- `sim:manager-club-scene-v1`
 - `sim:manager-club-operations-v1`
-- nettleservakt for seks statuser, undernavigasjon, klikkflyt, mobil overflow og WCAG A/AA
+- Manager Shell browser-vakt for fire hovedområder, Kontor → Innboks, Oppstartshjelp, Stats, orientering, mobil overflow og WCAG
+- Klubbdrift browser-vakt for seks operative funksjoner og dypflater
