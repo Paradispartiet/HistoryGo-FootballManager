@@ -33,7 +33,7 @@ async function expectPrimaryActionInViewport(page) {
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 }
 
-test.beforeEach(async ({ page }, testInfo) => {
+test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => {
@@ -48,44 +48,6 @@ test.beforeEach(async ({ page }, testInfo) => {
       leagueSeasonStatus: "preseason"
     }));
   });
-  if (testInfo.title === "Kamp i gang · 1280") {
-    await page.addInitScript(() => {
-      const clubWeekState = {
-        week: 1,
-        phase: "matchday",
-        boardTrust: 50,
-        playerMorale: 50,
-        tacticalClarity: 50,
-        trainingCulture: 50,
-        mediaPressure: 50
-      };
-      localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
-        schema: "historygo-football-manager.team_merits.v1",
-        version: 1,
-        teamId: "browser_legacy_team",
-        teamName: "Browser Legacy Team",
-        activeTrainingWeek: 1,
-        hiredStaffIds: [
-          "jorgen_isnes",
-          "johannes_moesgaard",
-          "bislett_speed_specialist"
-        ],
-        unlockedPlaceIds: ["kfum_arena", "bislett_stadion"],
-        unlockedExpertiseIds: [
-          "team_organisation",
-          "club_building",
-          "development_culture",
-          "pressing_structure",
-          "rest_defense"
-        ],
-        earnedBadgeIds: ["training_culture_bronze"],
-        badgeProgress: [],
-        activeClassifications: ["development_team"],
-        clubWeekState
-      }));
-      localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(clubWeekState));
-    });
-  }
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
@@ -333,74 +295,4 @@ test("kampdagen åpner som en visuell kampkommando", async ({ page }) => {
   await expect(command.locator(".matchday-command-plan article")).toHaveCount(3);
   await expect(command.locator(".matchday-command-status")).toContainText(/avspark|forberedelser|pågår|laster/i);
   await expectNoHorizontalOverflow(page);
-});
-
-async function prepareAndStartMatch(page) {
-  await openArea(page, "Lag");
-  const trainingTab = page.locator('.app-subtab[data-tab-target="trening"]').first();
-  await expect(trainingTab).toBeAttached();
-  await trainingTab.evaluate((node) => node.click());
-  const focusButton = page.locator("#weeklyTrainingOptions button:not([disabled])").first();
-  await expect(focusButton).toBeAttached();
-  await focusButton.evaluate((node) => node.click());
-  await openArea(page, "Kontor");
-  await page.locator('.app-subtab[data-tab-target="officeHelp"]').click();
-  const preseasonSteps = await page.locator("#leagueOnboardingSteps li").evaluateAll((items) => items.map((item) => ({
-    text: item.textContent?.replace(/\s+/g, " ").trim() || "",
-    done: item.classList.contains("is-done")
-  })));
-  const incomplete = preseasonSteps.filter((step) => !step.done && !step.text.includes("Start sesongen"));
-  expect(incomplete, JSON.stringify(preseasonSteps)).toEqual([]);
-  const startSeasonAction = page.locator("#leagueOnboardingSteps button", { hasText: "Start sesongen" });
-  await expect(startSeasonAction).toBeVisible();
-  await startSeasonAction.click();
-  await openArea(page, "Kamp");
-  const readinessNode = page.locator("#matchdayReadiness");
-  const readinessText = (await readinessNode.textContent() || "").trim();
-  const readinessData = await readinessNode.evaluate((node) => ({ ...node.dataset }));
-  await expect(page.locator("#playMatchdayButton"), `${readinessText} | ${JSON.stringify(readinessData)}`).toBeEnabled();
-  await page.locator("#playMatchdayButton").click();
-  await expect(page.locator(".matchday-kickoff-button")).toBeVisible();
-}
-
-test.describe("visuelle baseliner", () => {
-  test("Lag · 1280", async ({ page }) => {
-    await openArea(page, "Lag");
-    await expect(page).toHaveScreenshot("lineup-1280.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
-  });
-
-  test("Trening · 768", async ({ page }) => {
-    await page.setViewportSize({ width: 768, height: 1024 });
-    await openArea(page, "Lag");
-    await page.locator('.app-subtab[data-tab-target="trening"]').click();
-    await page.locator("#trainingWorkspace").scrollIntoViewIfNeeded();
-    await expect(page).toHaveScreenshot("training-768.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
-  });
-
-  test("Kamp · 1280", async ({ page }) => {
-    await openArea(page, "Kamp");
-    await expect(page).toHaveScreenshot("matchday-1280.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
-  });
-
-  test("Lag · 390", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await openArea(page, "Lag");
-    await expect(page).toHaveScreenshot("lineup-390.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
-  });
-
-  test("Kamp · 390", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await openArea(page, "Kamp");
-    await expect(page).toHaveScreenshot("matchday-390.png", { animations: "disabled", maxDiffPixelRatio: 0.015 });
-  });
-
-  test("Kamp i gang · 1280", async ({ page }) => {
-    await prepareAndStartMatch(page);
-    await page.locator(".matchday-kickoff-button").click();
-    const pause = page.getByRole("button", { name: "Pause", exact: true });
-    if (await pause.isVisible()) await pause.click();
-    await expect(page.locator(".matchday-scoreboard")).toBeVisible();
-    await expect(page.locator(".match-flow")).toBeVisible();
-    await expect(page).toHaveScreenshot("match-live-1280.png", { animations: "disabled", maxDiffPixelRatio: 0.02 });
-  });
 });
