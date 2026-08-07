@@ -1,6 +1,7 @@
 import { derivePlayerAttributeIndex, normalizeAttributeCatalogue } from "../football-player-attributes.js";
 import { describeCondition, freshnessFor, isInjured } from "../football-player-condition.js";
 import { describeRoleFamiliarity, getRoleFamiliarity } from "../football-role-familiarity-engine.js";
+import { normalizeRecruitmentState } from "../football-recruitment.js";
 
 const STYLE_ID = "managerPlayerWorkspaceV1Style";
 const WORKSPACE_ID = "managerPlayerWorkspace";
@@ -85,15 +86,23 @@ function buildStarterSquad(players, candidateIds, limit = 15) {
 
 function resolveUnlockedPlayerIds(players, unlockData) {
   const merits = readStorage(STORAGE.merits, {});
+  const recruitment = normalizeRecruitmentState(merits);
   const placeIds = historyGoPlaceIds();
   asArray(merits?.unlockedPlaceIds).forEach((id) => placeIds.add(String(id)));
   const candidateIds = new Set();
+  asArray(unlockData?.placeUnlocks).forEach((place) => {
+    if (!placeIds.has(String(place?.placeId))) return;
+    asArray(place?.unlocks).forEach((unlock) => {
+      if (unlock?.type === "player_candidate" && unlock?.targetId) candidateIds.add(String(unlock.targetId));
+    });
+  });
   const current = new Set(asArray(merits?.localStart?.playerIds).map(String));
-  asArray(unlockData?.placeUnlocks).forEach((place) => asArray(place?.unlocks).forEach((unlock) => {
-    if (unlock?.type !== "player_candidate" || !unlock?.targetId) return;
-    const id = String(unlock.targetId); candidateIds.add(id); if (placeIds.has(String(place.placeId))) current.add(id);
-  }));
-  if (!current.size && !sessionPlayerPool.size) buildStarterSquad(players, candidateIds).forEach((id) => current.add(id));
+  recruitment.recruitedPlayerIds.forEach((id) => { if (candidateIds.has(String(id))) current.add(String(id)); });
+  // Bare gamle, ikke-migrerte states får den tidligere fallbacken. I v1 betyr
+  // kandidattilgang ikke lenger automatisk troppsmedlemskap.
+  if (recruitment.recruitmentVersion !== 1 && !current.size && !sessionPlayerPool.size) {
+    buildStarterSquad(players, candidateIds).forEach((id) => current.add(id));
+  }
   current.forEach((id) => sessionPlayerPool.add(id));
   return new Set(sessionPlayerPool);
 }
@@ -227,6 +236,6 @@ export function openManagerPlayerProfile(playerId, { allowLocked = false } = {})
 function enhanceLineupChoices() {
   if (!runtime) return; document.querySelectorAll("#lineupPlayerChoices > .lineup-player-card:not([data-player-workspace-enhanced])").forEach((selectButton) => { const name = text(selectButton.querySelector("strong")?.textContent); if (!name) return; const positions = text(selectButton.querySelector("span")?.textContent, "–"); const player = runtime.players.find((entry) => entry.name === name); const wrapper = node("div", "lineup-player-choice-row"); const profileButton = node("button", "lineup-player-profile-link"); profileButton.type = "button"; profileButton.append(node("strong", "", name), node("span", "", positions)); profileButton.addEventListener("click", () => { if (player) openManagerPlayerProfile(player.id); }); selectButton.dataset.playerWorkspaceEnhanced = "true"; selectButton.classList.add("lineup-player-select-action"); const selected = selectButton.classList.contains("is-selected"); selectButton.replaceChildren(node("strong", "", selected ? "Valgt" : "Velg"), node("span", "", "Sett inn")); selectButton.setAttribute("aria-label", `${selected ? "Valgt" : "Sett inn"} ${name} på valgt plass`); selectButton.replaceWith(wrapper); wrapper.append(profileButton, selectButton); });
 }
-function installObservers() { const choices = document.getElementById("lineupPlayerChoices"); if (choices) new MutationObserver(() => requestAnimationFrame(enhanceLineupChoices)).observe(choices, { childList: true }); const gate = document.getElementById("squadSetupGate"); if (gate) new MutationObserver(() => requestAnimationFrame(() => renderCompactStatus(liveRows()))).observe(gate, { subtree: true, childList: true, characterData: true, attributes: true }); document.addEventListener("change", (event) => { if (event.target?.matches?.("#formationSelect, #tacticSelect")) scheduleRosterRender(); }); window.addEventListener("updateProfile", scheduleRosterRender); window.addEventListener("storage", scheduleRosterRender); window.addEventListener("hgfm:open-player-profile", (event) => { const playerId = event.detail?.playerId; if (playerId) openManagerPlayerProfile(playerId, { allowLocked: event.detail?.allowLocked !== false }); }); }
+function installObservers() { const choices = document.getElementById("lineupPlayerChoices"); if (choices) new MutationObserver(() => requestAnimationFrame(enhanceLineupChoices)).observe(choices, { childList: true }); const gate = document.getElementById("squadSetupGate"); if (gate) new MutationObserver(() => requestAnimationFrame(() => renderCompactStatus(liveRows()))).observe(gate, { subtree: true, childList: true, characterData: true, attributes: true }); document.addEventListener("change", (event) => { if (event.target?.matches?.("#formationSelect, #tacticSelect")) scheduleRosterRender(); }); window.addEventListener("updateProfile", scheduleRosterRender); window.addEventListener("storage", scheduleRosterRender); window.addEventListener("hgfm:team-merits-changed", scheduleRosterRender); window.addEventListener("hgfm:open-player-profile", (event) => { const playerId = event.detail?.playerId; if (playerId) openManagerPlayerProfile(playerId, { allowLocked: event.detail?.allowLocked !== false }); }); }
 async function boot() { ensureStyles(); ensureWorkspace(); ensureCompactStatus(); try { await loadRuntime(); const rows = liveRows(); renderCompactStatus(rows); renderRoster(rows, { force: true }); enhanceLineupChoices(); installObservers(); } catch (error) { console.error("Kunne ikke bygge spillerliste og spillerprofil", error); const empty = document.getElementById("managerRosterEmpty"); if (empty) { empty.hidden = false; empty.textContent = "Spillerlisten kunne ikke lastes. De eksisterende lagfunksjonene er fortsatt tilgjengelige."; } } }
 if (typeof document !== "undefined") { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true }); else boot(); }
