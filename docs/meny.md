@@ -59,7 +59,7 @@ Oppstilling · Tropp & benk · Trening · Systemet
 ```
 
 - **Oppstilling** – bane, formasjon, kampplan, eksplisitt spiller-/rollevalg og benk.
-- **Tropp & benk** – tett spillerliste for å sammenligne mange.
+- **Tropp & benk** – tett spillerliste over klubbens faktiske troppsmedlemmer.
 - **Trening** – ukas treningsarbeid.
 - **Systemet** – formasjonskunnskap og taktisk fordypning.
 
@@ -75,13 +75,24 @@ Rekrutterbare · Andre klubber
 
 ### Rekrutterbare
 
-En tett spillerliste over kandidater manageren allerede har tilgang til gjennom eksisterende History Go-opplåsinger eller starttropp. Listen brukes til sammenligning; spillerprofilen brukes til dybde.
+En tett spillerliste over kandidater manageren har tilgang til gjennom eksisterende History Go-opplåsinger, pluss spillere som allerede er i starttroppen.
+
+Fra Rekruttering v1 gjelder et eksplisitt skille:
+
+```
+History Go-tilgang = kandidat
+Hent til troppen = troppsmedlem
+```
+
+En kandidat kan derfor sammenlignes og åpnes i spillerprofilen uten å være tilgjengelig i Lag. `Hent til troppen` legger kandidaten inn i eksisterende `teamMerits`-state; da dukker spilleren opp i Lag og kjernens spillerpool i samme økt.
+
+Det finnes ingen egen overgangsøkonomi i denne flaten. Ingen lønn, kontrakt eller overgangssum diktes når datasettet ikke eier informasjonen.
 
 ### Andre klubber
 
 En tett klubbliste over de øvrige klubbene i ligapyramiden. Når en klubb åpnes, vises spillerne HG-dataene knytter til klubbens `homePlaceId` gjennom spillerens `sourcePlaceIds` og eventuell `clubStatus`.
 
-Dette er **mulige/historiske klubbtilknytninger i HG-dataene, ikke en påstått live stall**. Ingen lønn, kontrakt eller overgangssum diktes når datasettet ikke eier informasjonen.
+Dette er **mulige/historiske klubbtilknytninger i HG-dataene, ikke en påstått live stall**. Klubbtilknytning alene gjør heller ikke spilleren rekrutterbar; den faktiske kandidatporten ligger under `Rekrutterbare`.
 
 Begge listene åpner den samme spillerprofilen som Lag bruker.
 
@@ -114,8 +125,9 @@ Husregelen er:
 - samme label skal ikke sende til forskjellige flater;
 - ingen popup skal være en skjult kopi av hovednavigasjonen;
 - dyp informasjon skal ligge bak drill-down, ikke som en ny vegg av kort;
-- en tidsvisning skal ikke bli en parallell progresjonsmotor.
+- en tidsvisning skal ikke bli en parallell progresjonsmotor;
+- kandidattilgang skal ikke være en skjult synonym for troppsmedlemskap.
 
 ## Moduser
 
-Hver hovedfane bærer `data-nav-modes` for modiene den faktisk gjelder. Speiding og Kalender v1 er ligaspill-funksjoner. Scenarioer og Fotballvitenskap beholder sine egne modusgrenser og skal ikke gjøre ligamenyen større.
+Hver hovedfane bærer `data-nav-modes` for modiene den faktisk gjelder. Speiding, Rekruttering v1 og Kalender v1 er ligaspill-funksjoner. Scenarioer og Fotballvitenskap beholder sine egne modusgrenser og skal ikke gjøre ligamenyen større.
