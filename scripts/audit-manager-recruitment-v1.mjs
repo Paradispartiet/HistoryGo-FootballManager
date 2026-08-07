@@ -3,6 +3,7 @@ import fs from "node:fs";
 const engine = fs.readFileSync(new URL("../src/football-recruitment.js", import.meta.url), "utf8");
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 const scouting = fs.readFileSync(new URL("../src/ui/manager-scouting-workspace-v1.js", import.meta.url), "utf8");
+const playerWorkspace = fs.readFileSync(new URL("../src/ui/manager-player-workspace-v1.js", import.meta.url), "utf8");
 const css = fs.readFileSync(new URL("../src/ui/manager-scouting-workspace-v1.css", import.meta.url), "utf8");
 const seed = fs.readFileSync(new URL("../data/football_team_merits.example.json", import.meta.url), "utf8");
 const shellBrowser = fs.readFileSync(new URL("../tests/browser/manager-shell-v3.spec.js", import.meta.url), "utf8");
@@ -18,6 +19,8 @@ const checks = [
   ["rekruttering ligger under Speiding", scouting.includes("Speiding · Rekrutterbare") && scouting.includes("Hent til troppen")],
   ["kandidat og tropp er separate state-begreper", app.includes("candidatePlayerIds") && app.includes("recruitedPlayerIds")],
   ["troppsmedlemskap bor i eksisterende teamMerits", scouting.includes('merits: "hgfm.teamMerits.v1"') && seed.includes('"recruitedPlayerIds"')],
+  ["eksisterende 15-spillers startgulv er bevart", engine.includes("buildStarterSquadPlayerIds") && app.includes("getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE)") && playerWorkspace.includes("buildStarterSquadPlayerIds(players") && scouting.includes("buildStarterSquadPlayerIds(players")],
+  ["startgulvet er ikke recruitment-state", engine.includes("starterPlayerIds") && engine.includes("recruitedPlayerIds") && docs.includes("Starttroppen er ikke en History Go-signering")],
   ["ingen separat recruitment-localStorage-key", !/hgfm\.(recruitment|transfer|market)/i.test(recruitmentRuntime)],
   ["samme-session state refresh finnes", scouting.includes("hgfm:team-merits-changed") && app.includes("hgfm:team-merits-changed")],
   ["gamle saves har eksplisitt engangsmigrering", engine.includes("migrateLegacyRecruitmentState") && app.includes("migration.migrated")],
