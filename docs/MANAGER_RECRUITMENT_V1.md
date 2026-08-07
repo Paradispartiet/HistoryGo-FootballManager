@@ -13,9 +13,21 @@ Hent til troppen = troppsmedlem
 
 Et besøk/opplåsing gir dermed ikke lenger automatisk en spiller plass i klubbtroppen. Kandidaten må hentes eksplisitt fra Speiding før spilleren kan brukes i oppstilling, trening og kamp.
 
+## Starttroppen er fortsatt gulvet
+
+Rekruttering v1 fjerner ikke den eksisterende spillbare starttroppen. Når ingen eksplisitt `localStart.playerIds` er lagret, bruker spillet den eksisterende deterministiske, balanserte 15-spillers auto-troppen fra grunnsjiktet av klubbspillere. Landslagsstjerner og toppsjiktet holdes fortsatt utenfor dette gulvet.
+
+Dermed er troppsmodellen:
+
+```text
+starttropp + eksplisitt hentede kvalifiserte kandidater = klubbens tropp
+```
+
+Starttroppen er ikke en History Go-signering og skal ikke måtte hentes på nytt i Speiding.
+
 ## State
 
-Troppsmedlemskapet bor i den eksisterende managerstaten:
+Rekrutterte spilleres troppsmedlemskap bor i den eksisterende managerstaten:
 
 ```text
 hgfm.teamMerits.v1
@@ -34,7 +46,7 @@ Det finnes ingen egen recruitment-/transfer-localStorage og ingen parallell spil
 
 Troppen består av:
 
-1. eksisterende `localStart.playerIds` / starttropp;
+1. eksisterende starttropp / `localStart.playerIds`;
 2. eksplisitt rekrutterte spiller-ID-er som fortsatt har en gyldig kandidattilgang.
 
 ## History Go-porten gjelder fortsatt
@@ -44,6 +56,7 @@ Troppen består av:
 - En ren landslagsarena gir ikke en klubbspiller.
 - Når læringsloggen finnes, må quiz-porten være oppfylt på ekte History Go-steder.
 - En rekruttert ID uten gyldig kandidattilgang blir ikke gjort spillbar av recruitment-state alene.
+- Starttroppen er et separat spillbarhetsgulv og åpner ingen History Go-steder.
 
 ## Eksisterende saves
 
@@ -53,7 +66,7 @@ Før v1 ble alle kvalifiserte `player_candidate`-spillere automatisk tilgjengeli
 - `recruitmentVersion` settes til `1`;
 - senere kandidater må hentes eksplisitt.
 
-Nye saves seedes med `recruitmentVersion: 1` og tom `recruitedPlayerIds`, og får derfor ikke automatisk alle kandidater i troppen.
+Nye saves seedes med `recruitmentVersion: 1` og tom `recruitedPlayerIds`. De beholder starttroppen, men får ikke automatisk alle History Go-kandidater i troppen.
 
 ## UI
 
@@ -65,6 +78,8 @@ Nye saves seedes med `recruitmentVersion: 1` og tom `recruitedPlayerIds`, og få
 - tilgangskilde;
 - status `Kandidat` eller `Tropp`;
 - handlingen `Hent til troppen` når spilleren ikke allerede er i troppen.
+
+Starttroppsspillere markeres som allerede i troppen og får ikke en falsk rekrutteringshandling.
 
 Etter rekruttering oppdateres både Speiding, Lag-spillerlisten og kjernens availability i samme nettleserøkt.
 
@@ -99,7 +114,7 @@ Rekrutteringen får ingen `Neste`, `Fortsett` eller egen arbeidsflyt. **`Forslag
 
 CI låser v1 med:
 
-- ren recruitment-state-simulering;
+- ren recruitment-state-simulering, inkludert 15-spillers startgulv;
 - statisk arkitektur-/produkt-audit;
 - Chromium-test av kandidat → hent → tropp i samme økt;
 - 390 px mobiltest;
