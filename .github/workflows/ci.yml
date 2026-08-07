@@ -51,7 +51,6 @@ jobs:
           npm run audit:ci-coverage
           npm run audit:clubs
           npm run audit:football-book-knowledge
-          npm run audit:football-book-knowledge
           npm run audit:football-book-ux
           npm run audit:scenarios
           npm run audit:hg-football
