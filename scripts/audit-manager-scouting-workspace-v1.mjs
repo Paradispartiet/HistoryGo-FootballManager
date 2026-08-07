@@ -15,7 +15,7 @@ const checks = [
   ["fem hovedområder er låst", shellBrowser.includes('["Kontor", "Lag", "Speiding", "Kamp", "Stats"]')],
   ["Rekrutterbare er første speiderflate", scouting.includes("Speiding · Rekrutterbare") && scouting.includes("scoutingRecruitableBody")],
   ["Andre klubber er egen speiderflate", scouting.includes("Speiding · Andre klubber") && scouting.includes('const CLUBS_SECTION = "scoutingClubs"')],
-  ["rekrutterbare kommer fra eksisterende unlock-data", scouting.includes('unlock?.type !== "player_candidate"') && scouting.includes("unlockedPlaceIds")],
+  ["rekrutterbare kommer fra eksisterende unlock-data", scouting.includes('"player_candidate"') && scouting.includes("placeUnlocks") && scouting.includes("unlockedPlaceIds")],
   ["andre klubber bruker eksisterende klubbmotor", scouting.includes("listClubHeritagePlayers") && scouting.includes("clubStatusFor")],
   ["egen klubb filtreres bort", scouting.includes("currentClubId") && scouting.includes("takeoverClubId")],
   ["spillerprofil gjenbrukes", scouting.includes("hgfm:open-player-profile")],
