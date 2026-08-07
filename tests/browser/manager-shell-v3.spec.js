@@ -172,9 +172,8 @@ test("Stats samler tabell, terminliste og spillerstatistikk", async ({ page }) =
   await expect(page.locator("#statsAssists")).toBeVisible();
   await expect(page.locator("#statsStanding")).toBeVisible();
   await expect(page.locator("#playerStatsTable")).toBeVisible();
-  await expect(page.locator("#seasonArchiveTable")).toBeVisible();
-  // Full tabell og terminliste fylles her når en aktiv ligasesong finnes;
-  // den seedede sesongtesten låser det konkrete tabell-/terminlisteinnholdet.
+  // Full tabell, terminliste og sesongarkiv fylles når en aktiv ligasesong
+  // finnes; den seedede sesongtesten låser de konkrete sesongdataene.
 });
 
 for (const viewport of VIEWPORTS) {
