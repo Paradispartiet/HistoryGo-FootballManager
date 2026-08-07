@@ -1,5 +1,6 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import { migrateLegacyRecruitmentState, normalizeRecruitmentState } from "./football-recruitment.js";
+import { decorateHiredStaffWithAssignments, selectStarterStaffCandidates, summarizeStaffRoster } from "./football-staff-roster.js";
 import "./ui/manager-shell-elements.js";
 import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
@@ -416,7 +417,7 @@ const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
 const REQUIRED_SQUAD_SIZE = 15;
 const REQUIRED_STARTERS = 11;
 const REQUIRED_BENCH = 4;
-const REQUIRED_STAFF_SIZE = 3;
+const REQUIRED_STAFF_SIZE = 6;
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -1992,12 +1993,9 @@ function isStarterSquadActive() {
 // Stabskandidater som følger auto-troppen: deterministisk utvalg fra
 // stabskatalogen, slik at «Velg stab» er mulig uten History Go-samling.
 // Manageren må fortsatt engasjere dem selv. Ingen stabsdata hardkodes her.
-function getStarterSquadStaffCandidates(staff, limit = REQUIRED_STAFF_SIZE) {
+function getStarterSquadStaffCandidates(staff) {
   if (!isStarterSquadActive()) return [];
-  const list = Array.isArray(staff) ? staff.filter((member) => member && member.id) : [];
-  return [...list]
-    .sort((a, b) => String(a.id).localeCompare(String(b.id)))
-    .slice(0, Math.max(0, limit));
+  return selectStarterStaffCandidates(staff);
 }
 
 // Draft-pool: grunnsjiktet av klubbspillere (under NAME_TIER_MIN). De store
@@ -2303,7 +2301,7 @@ function computeAvailability() {
   // stabskandidater, slik at «Velg stab» er mulig uten samling. Stedene legges
   // aldri i unlockedPlaceIds eller History Go-lagring, og manageren må fortsatt
   // engasjere personene selv. Erstatter den gamle stedsanker-baserte kilden.
-  const starterStaff = getStarterSquadStaffCandidates(staff, REQUIRED_STAFF_SIZE + 2);
+  const starterStaff = getStarterSquadStaffCandidates(staff);
   const staffById = new Map([...normallyUnlockedStaff, ...starterStaff].map((member) => [member.id, member]));
   const unlockedStaff = [...staffById.values()];
 
@@ -2777,7 +2775,8 @@ function getHiredStaff() {
   const hiredIds = new Set(
     Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : []
   );
-  return getUnlockedStaff().filter((member) => hiredIds.has(member.id));
+  const hired = getUnlockedStaff().filter((member) => hiredIds.has(member.id));
+  return decorateHiredStaffWithAssignments(hired);
 }
 
 // Alle staff-typer en ansatt kan dekke (staffType + canBeHiredAs).
@@ -5052,14 +5051,15 @@ function getLeagueOnboardingSteps(teamFit) {
   // Klubbidentitet = klubben du opprettet i onboardingen (navn), ikke et
   // stedsanker. Stedsanker er faset ut som identitetskilde.
   const hasClubIdentity = Boolean(getSavedClubName()) || (isLeagueSeasonActive() && Boolean(state.gameStartState?.activeLeagueSaveId));
-  const hiredStaff = getHiredStaff().length;
+  const staffRoster = summarizeStaffRoster(getHiredStaff());
+  const hiredStaff = staffRoster.filledCount;
   const hasFormation = Boolean(state.selectedFormationId);
   const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
   const leagueActive = isLeagueSeasonActive();
   return [
     { id: "klubb", title: "Opprett klubben", done: hasClubIdentity, detail: hasClubIdentity ? `Klubben er opprettet: ${getTemporaryClubName().name}.` : "Gi klubben et navn i startskjermen før laget behandles som en aktiv ligaklubb.", tab: "dashboard" },
     { id: "spillere", title: "Hent spillere", done: Number(roster.unlockedCount || 0) >= REQUIRED_SQUAD_SIZE, detail: `${Number(roster.unlockedCount || 0)}/${REQUIRED_SQUAD_SIZE} spillere tilgjengelig. Bruk samling, nærområde, klubblink eller auto-fyll.`, tab: "historygo" },
-    { id: "stab", title: "Velg stab", done: hiredStaff >= REQUIRED_STAFF_SIZE, detail: `${hiredStaff}/${REQUIRED_STAFF_SIZE} stabsmedlemmer valgt. Tilgjengelig stab teller først når du faktisk engasjerer dem.`, tab: "historygo" },
+    { id: "stab", title: "Velg stab", done: staffRoster.complete, detail: staffRoster.complete ? "Førstelagsstaben er komplett: assistenttrener, tre trenere, fysio og keepertrener." : `${hiredStaff}/${REQUIRED_STAFF_SIZE} roller dekket. Mangler: ${staffRoster.missingLabel || "rolledekning"}.`, tab: "admin" },
     { id: "ellever", title: "Sett førsteellever og benk", done: filled >= REQUIRED_STARTERS && bench >= REQUIRED_BENCH, detail: `Startellever ${Math.min(filled, REQUIRED_STARTERS)}/${REQUIRED_STARTERS} · benk ${Math.min(bench, REQUIRED_BENCH)}/${REQUIRED_BENCH}.`, tab: "tactics" },
     { id: "formasjon", title: "Velg formasjon", done: hasFormation, detail: hasFormation ? "Formasjonen er valgt og forklares på taktikkbrettet." : "Velg en spillbar formasjon før treningsuka låses inn.", tab: "tactics" },
     { id: "trening", title: "Velg trening", done: hasTraining, detail: hasTraining ? "Ukas treningsprogram er valgt." : "Velg treningsfokus eller program slik at laget går inn i serieåpningen med en plan.", tab: "trening" },
