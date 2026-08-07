@@ -11,11 +11,13 @@ async function openArea(page, name) {
   const targetByArea = {
     Kontor: "dashboard",
     Lag: "tactics",
+    Speiding: "historygo",
     Kamp: "kamp",
     Stats: "statistikk"
   };
   await page.locator(`.main-nav [role="tab"][data-tab-target="${targetByArea[name]}"]`).click();
   if (name === "Kontor") await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  if (name === "Speiding") await expect(page.locator('[data-tab-section="historygo"]')).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -40,7 +42,7 @@ test.beforeEach(async ({ page }) => {
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
-      activeLeagueSaveId: "manager_shell_v4_save",
+      activeLeagueSaveId: "manager_shell_v5_save",
       clubName: "Rosenborg",
       takeoverClubId: "rosenborg",
       managerName: "Manager",
@@ -53,17 +55,18 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("har fire stabile hovedområder og ett samlet Kontor", async ({ page }) => {
+test("har fem stabile hovedområder med Speiding mellom Lag og Kamp", async ({ page }) => {
   const leagueTabs = page.locator('.main-nav .nav-tab[data-nav-modes~="league"]:visible');
-  await expect(leagueTabs).toHaveCount(4);
-  await expect(leagueTabs).toHaveText(["Kontor", "Lag", "Kamp", "Stats"]);
-  await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toBeHidden();
+  await expect(leagueTabs).toHaveCount(5);
+  await expect(leagueTabs).toHaveText(["Kontor", "Lag", "Speiding", "Kamp", "Stats"]);
+  await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toHaveCount(0);
 
   await openArea(page, "Kontor");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="dashboard"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toHaveText("Innboks");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toHaveText("Oppstartshjelp");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="historygo"]')).toHaveCount(0);
   await expect(page.locator("#nextActionPrimary")).toHaveCount(1);
   await expect(page.locator("#nextActionDestination")).toBeVisible();
   await expect(page.locator("#advanceClubWeekPhase, #leagueOnboardingPrimary, #portalPriorityAction")).toHaveCount(0);
@@ -75,10 +78,19 @@ test("Kontor åpner på Innboks og viser hvor du er", async ({ page }) => {
   await expect(page.locator("#inboxThreadList")).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Innboks");
   await expect(page.locator("#leagueOnboardingPanel")).toBeHidden();
-
   await page.locator('.app-subtab[data-tab-target="officeHelp"]').click();
   await expect(page.locator("#leagueOnboardingPanel")).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Oppstartshjelp");
+});
+
+test("Speiding er eget hovedområde med to listeflater", async ({ page }) => {
+  await openArea(page, "Speiding");
+  await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Rekrutterbare");
+  await expect(page.locator('.app-subtab[data-subnav-parent="historygo"]:visible')).toHaveText(["Rekrutterbare", "Andre klubber"]);
+  await page.locator('.app-subtab[data-tab-target="scoutingClubs"]').click();
+  await expect(page.locator('[data-tab-section="scoutingClubs"]')).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Andre klubber");
 });
 
 test("lagflaten bruker bare direkte uttak og holder banen i arbeidsområdet", async ({ page }) => {
@@ -88,11 +100,7 @@ test("lagflaten bruker bare direkte uttak og holder banen i arbeidsområdet", as
   await expect(page.locator("#lineupRoleChoices")).toBeVisible();
   await expect(page.locator("#benchPlayersList")).toBeVisible();
   await expect(page.locator("#slotPlayerSelect, #slotRoleSelect, #teamScore")).toHaveCount(0);
-
-  const [app, pitch] = await Promise.all([
-    page.locator("#app").boundingBox(),
-    page.locator("#lineupSlots").boundingBox()
-  ]);
+  const [app, pitch] = await Promise.all([page.locator("#app").boundingBox(), page.locator("#lineupSlots").boundingBox()]);
   expect(app).not.toBeNull();
   expect(pitch).not.toBeNull();
   expect(pitch.x).toBeGreaterThanOrEqual(app.x - 1);
@@ -117,14 +125,14 @@ test("klubbidentiteten viser skjold, klubbfarge og stadion", async ({ page }) =>
   await expect(page.locator("#headerClubMark")).toHaveText("RO");
   await expect(page.locator("#headerClubName")).toContainText("Rosenborg");
   await expect(page.locator("#headerClubGround")).toContainText("Lerkendal");
-  const accent = await page.locator("#clubIdentityHeader").evaluate((node) => getComputedStyle(node).getPropertyValue("--club-accent").trim());
+  const accent = await page.locator("#clubIdentityHeader").evaluate((el) => getComputedStyle(el).getPropertyValue("--club-accent").trim());
   expect(accent).toMatch(/^#[0-9a-f]{6}$/i);
 });
 
 for (const viewport of VIEWPORTS) {
   test(`ingen overflow og primærhandlingen er synlig ved ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    for (const area of ["Kontor", "Lag", "Kamp", "Stats"]) {
+    for (const area of ["Kontor", "Lag", "Speiding", "Kamp", "Stats"]) {
       await openArea(page, area);
       await expectNoHorizontalOverflow(page);
     }
@@ -140,7 +148,6 @@ test("modaler har tastaturfokus, fokusfelle og fokusretur", async ({ page }) => 
   await expect(modal).toBeVisible();
   await expect(modal).toHaveAttribute("aria-modal", "true");
   await expect(page.locator("#modalSettings :focus")).toHaveCount(1);
-
   const focusable = modal.locator('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])').filter({ visible: true });
   const first = focusable.first();
   const last = focusable.last();
@@ -155,10 +162,7 @@ test("modaler har tastaturfokus, fokusfelle og fokusretur", async ({ page }) => 
 });
 
 test("hovedskallet har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  const results = await new AxeBuilder({ page })
-    .include("body")
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-    .analyze();
+  const results = await new AxeBuilder({ page }).include("body").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 });
@@ -172,8 +176,6 @@ test("Stats samler tabell, terminliste og spillerstatistikk", async ({ page }) =
   await expect(page.locator("#statsAssists")).toBeVisible();
   await expect(page.locator("#statsStanding")).toBeVisible();
   await expect(page.locator("#playerStatsTable")).toBeVisible();
-  // Full tabell, terminliste og sesongarkiv fylles når en aktiv ligasesong
-  // finnes; den seedede sesongtesten låser de konkrete sesongdataene.
 });
 
 for (const viewport of VIEWPORTS) {
@@ -218,30 +220,21 @@ for (const viewport of VIEWPORTS) {
 test("sentrale shell-knapper er mørke og har synlig tastaturfokus", async ({ page }) => {
   async function expectDarkButton(button) {
     await expect(button).toBeVisible();
-    const appearance = await button.evaluate((node) => {
-      const style = getComputedStyle(node);
-      const box = node.getBoundingClientRect();
-      return {
-        background: style.backgroundColor,
-        color: style.color,
-        height: box.height,
-        disabled: node.disabled
-      };
+    const appearance = await button.evaluate((el) => {
+      const style = getComputedStyle(el);
+      const box = el.getBoundingClientRect();
+      return { background: style.backgroundColor, color: style.color, height: box.height, disabled: el.disabled };
     });
     expect(appearance.background).not.toBe("rgb(255, 255, 255)");
     expect(appearance.color).not.toBe("rgb(0, 0, 0)");
     expect(appearance.height).toBeGreaterThanOrEqual(44);
     if (!appearance.disabled) {
       await button.focus();
-      const focus = await button.evaluate((node) => {
-        const style = getComputedStyle(node);
-        return { width: style.outlineWidth, style: style.outlineStyle };
-      });
+      const focus = await button.evaluate((el) => { const style = getComputedStyle(el); return { width: style.outlineWidth, style: style.outlineStyle }; });
       expect(focus.style).not.toBe("none");
       expect(parseFloat(focus.width)).toBeGreaterThan(0);
     }
   }
-
   await expectDarkButton(page.locator("#nextActionPrimary"));
   await expectDarkButton(page.locator("#settingsButton"));
 });
