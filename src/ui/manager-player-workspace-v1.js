@@ -34,13 +34,6 @@ const POSITION_POINTS = Object.freeze({
   DM: [50, 57], CM: [50, 43], AM: [50, 29], LW: [20, 25], RW: [80, 25], ST: [50, 12]
 });
 const CATEGORY_LABELS = Object.freeze({ teknisk: "Teknisk", mental: "Mental", taktisk: "Taktisk", fysisk: "Fysisk" });
-const STARTER_SQUAD_GROUPS = Object.freeze([
-  { positions: ["GK"], count: 2 },
-  { positions: ["CB", "LB", "RB", "WB"], count: 5 },
-  { positions: ["DM", "CM", "AM"], count: 5 },
-  { positions: ["ST", "LW", "RW"], count: 3 }
-]);
-
 let runtimePromise = null;
 let runtime = null;
 let currentProfileTab = "season";
@@ -64,24 +57,6 @@ function historyGoPlaceIds() {
   const places = groundhopper?.visited_groundhopper_places || groundhopper?.visitedGroundhopperPlaces || groundhopper?.visitedPlaces;
   asArray(places).forEach((entry) => { const id = typeof entry === "string" ? entry : entry?.placeId || entry?.id; if (id) ids.add(String(id)); });
   return ids;
-}
-
-function buildStarterSquad(players, candidateIds, limit = 15) {
-  const candidates = asArray(players).filter((player) => candidateIds.has(String(player.id))).sort((a, b) =>
-    (Number(a.classHeight) || 0) - (Number(b.classHeight) || 0) || String(a.id).localeCompare(String(b.id))
-  );
-  const chosen = [];
-  const used = new Set();
-  const playsIn = (player, positions) => [...asArray(player.naturalPositions), ...asArray(player.usablePositions)].some((position) => positions.includes(position));
-  STARTER_SQUAD_GROUPS.forEach((group) => {
-    let need = group.count;
-    candidates.forEach((player) => {
-      if (need <= 0 || chosen.length >= limit || used.has(player.id) || !playsIn(player, group.positions)) return;
-      chosen.push(String(player.id)); used.add(player.id); need -= 1;
-    });
-  });
-  candidates.forEach((player) => { if (chosen.length < limit && !used.has(player.id)) { chosen.push(String(player.id)); used.add(player.id); } });
-  return chosen;
 }
 
 function resolveUnlockedPlayerIds(players, unlockData) {
