@@ -11,17 +11,12 @@ const css = `${read("style.css")}\n${read("src/ui/manager-shell-v3.css")}\n${rea
 const browser = read("tests/browser/manager-shell-v3.spec.js");
 const seasonBrowser = read("tests/browser/manager-season-scene-v1.spec.js");
 const clubBrowser = read("tests/browser/manager-club-scene-v1.spec.js");
+const matchdayBrowser = read("tests/browser/manager-matchday-scene-v1.spec.js");
+const postMatchBrowser = read("tests/browser/manager-post-match-analysis-v1.spec.js");
 const shellElements = read("src/ui/manager-shell-elements.js");
 const workflow = read(".github/workflows/ci.yml");
 const packageJson = read("package.json");
 const seasonPresentation = read("src/ui/manager-season-presentation.js");
-const visualSceneSpecs = [
-  "tests/browser/manager-training-scene-v2.spec.js",
-  "tests/browser/manager-matchday-scene-v1.spec.js",
-  "tests/browser/manager-squad-tactics-scene-v2.spec.js",
-  "tests/browser/manager-post-match-analysis-v1.spec.js"
-];
-const visualSceneCoverage = visualSceneSpecs.every((path) => existsSync(join(root, path)) && /toHaveScreenshot\(/.test(read(path)));
 
 const checks = [];
 const check = (label, ok, detail = "") => checks.push({ label, ok: Boolean(ok), detail });
@@ -48,8 +43,8 @@ check("klubbidentiteten bruker egen presentasjonsmodul", /manager-club-identity\
 check("HTML-skallet er modulert i egne custom elements", /<manager-club-header>/.test(html) && /<manager-next-action>/.test(html) && existsSync(join(root, "src/ui/manager-shell-elements.js")));
 check("CSS-skallet har egen foundation", /manager-shell-foundation\.css/.test(read("src/ui/manager-shell-v3.css")) && existsSync(join(root, "src/ui/manager-shell-foundation.css")));
 check("responsive nettleservakter dekker 390/768/1280", [390, 768, 1280].every((width) => browser.includes(`width: ${width}`)));
-check("visuell regresjon ligger i dedikerte scenevakter", visualSceneCoverage);
-check("shell-testen låser ikke hovedmenyen med helskjermbilder", !/toHaveScreenshot\(/.test(browser));
+check("visuell regresjon finnes på en isolert kampkomponent", /toHaveScreenshot\(/.test(postMatchBrowser) && /matchday-post-match-score/.test(postMatchBrowser));
+check("shell og kampdag låser ikke IA med helskjermbilder", !/toHaveScreenshot\(/.test(browser) && !/toHaveScreenshot\(/.test(matchdayBrowser));
 check("CI kjører nettleservaktene uten å omskrive baseliner", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
 check("tilgjengelighet testes med axe", /AxeBuilder/.test(browser) && /wcag2aa/.test(browser));
 check("tastatur og fokusfelle testes", /Shift\+Tab/.test(browser) && /toBeFocused/.test(browser));
