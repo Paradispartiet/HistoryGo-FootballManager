@@ -1,0 +1,52 @@
+name: Recruitment v1 diagnose
+
+on:
+  push:
+    branches:
+      - agent/recruitment-v1
+    paths:
+      - .github/workflows/recruitment-v1-diagnose.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Identify failing UI audit
+        run: |
+          set +e
+          failed=0
+          for cmd in \
+            "npm run check:syntax" \
+            "npm run check:dom-ids" \
+            "npm run audit:flow" \
+            "npm run audit:dead-ends" \
+            "npm run audit:manager-shell-v3" \
+            "npm run audit:manager-office-inbox-v1" \
+            "npm run audit:manager-training-scene-v2" \
+            "npm run audit:manager-club-scene-v1" \
+            "npm run audit:manager-club-operations-v1" \
+            "npm run audit:manager-matchday-scene-v1" \
+            "npm run audit:manager-post-match-analysis-v1" \
+            "npm run audit:manager-squad-tactics-scene-v2" \
+            "npm run audit:manager-scouting-workspace-v1" \
+            "npm run audit:manager-recruitment-v1" \
+            "npm run audit:manager-calendar-v1"
+          do
+            echo "--- $cmd"
+            eval "$cmd"
+            code=$?
+            if [ $code -ne 0 ]; then
+              echo "::error::$cmd failed with exit code $code"
+              failed=1
+            fi
+          done
+          exit $failed
