@@ -9051,7 +9051,9 @@ function renderFacilities() {
         renderFacilities();
         return;
       }
-      state.teamMerits = result.merits;
+      // teamMerits er et langlivet canonical-objekt som også eies av modus-/
+      // availability-laget. Bevar objektidentiteten og oppdater kun fasilitetsfeltet.
+      state.teamMerits.facilities = normalizeFacilityState(result.facilities);
       saveTeamMerits();
       renderFacilities();
       renderManagerClubScene();

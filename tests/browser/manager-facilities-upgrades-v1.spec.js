@@ -56,6 +56,8 @@ test("fasiliteter har tre reelle nivåer og ett managerstyrt valg per uke", asyn
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await openFacilities(page);
   await expect(page.locator('.manager-facility-card[data-facility-id="training"] .manager-facility-level')).toHaveText("Nivå 2 av 3");
+  await expect(page.locator(".facility-upgrade-action:enabled")).toHaveCount(0);
+  await expect(page.locator(".facility-week-choice")).toContainText("Treningsanlegg");
 });
 
 test("fasilitetsflaten fungerer på 390 px uten overflow", async ({ page }) => {

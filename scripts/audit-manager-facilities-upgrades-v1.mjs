@@ -30,7 +30,7 @@ check("tre reelle fasiliteter brukes", ["training", "medical", "analysis"].every
 check("stadion og akademi er ikke falske oppgraderingskort", !files.html.includes('id="facilityStadiumLevel"') && !files.html.includes('id="facilityAcademyLevel"'));
 check("nivåene er 1–3", files.engine.includes("FACILITY_MAX_LEVEL = 3") && files.engine.includes("Math.max(1"));
 check("ett anleggsvalg per klubbuke", files.engine.includes("lastUpgradeWeek === normalizedWeek") && files.engine.includes("Ukens anleggsvalg er allerede brukt"));
-check("state lagres i teamMerits", files.app.includes("facilities: normalizeFacilityState(base.facilities)") && files.app.includes("state.teamMerits = result.merits"));
+check("state lagres i teamMerits uten å erstatte canonical-objektet", files.app.includes("facilities: normalizeFacilityState(base.facilities)") && files.app.includes("state.teamMerits.facilities = normalizeFacilityState(result.facilities)"));
 check("ingen ny localStorage-nøkkel", !files.app.includes("FACILITIES_KEY") && files.docs.includes("ingen ny localStorage-nøkkel"));
 check("treningseffekt bruker eksisterende off-pitch-motor", files.app.includes("facilityEffects: calculateFacilityEffects") && files.offPitch.includes("trainingLoadReduction") && files.offPitch.includes("analysisClarityBonus"));
 check("medisinsk effekt bruker eksisterende recovery", files.app.includes("weeklyRecoveryBonus") && files.condition.includes("recoveryBonus"));
