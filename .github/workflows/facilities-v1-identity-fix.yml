@@ -1,0 +1,48 @@
+name: Facilities merits identity fix
+
+on:
+  push:
+    branches:
+      - agent/facilities-upgrades-v1
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.head_commit.message == 'Run facilities merits identity fix'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/facilities-upgrades-v1
+          fetch-depth: 0
+
+      - name: Apply identity fix
+        run: python3 scripts/_fix_facilities_merits_identity.py
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Targeted facility gates
+        run: |
+          npm run check:syntax
+          npm run audit:manager-facilities-upgrades-v1
+          npm run sim:manager-facilities-upgrades-v1
+          npm run audit:flow
+          npm run audit:dead-ends
+
+      - name: Commit permanent fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app.js scripts/audit-manager-facilities-upgrades-v1.mjs tests/browser/manager-facilities-upgrades-v1.spec.js
+          git commit -m "Preserve team merits identity for facility upgrades"
+          git push origin HEAD:agent/facilities-upgrades-v1
