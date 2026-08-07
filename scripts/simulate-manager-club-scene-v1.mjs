@@ -30,9 +30,11 @@ const newClub = createManagerClubSceneModel({
   unlockedPlacesCount: 2
 });
 check("klubb og uke er lesbare", newClub.clubName === "Bislett FK" && newClub.week === 1);
-check("fire varige funksjoner bygges", newClub.statuses.length === 4);
+check("seks varige klubbfunksjoner bygges", newClub.statuses.length === 6);
 check("ufullstendig stall peker til Speiding", newClub.priority.target === "historygo" && /spillergrunnlaget/i.test(newClub.priority.title));
 check("speiderstatus viser manglende stall", newClub.statuses.find((item) => item.id === "scouting")?.tone === "attention");
+check("fasiliteter er en egen status", newClub.statuses.find((item) => item.id === "facilities")?.target === "facilities");
+check("marked er en egen status", newClub.statuses.find((item) => item.id === "market")?.target === "market");
 check("ny klubb er ikke operativt komplett", newClub.complete === false);
 
 console.log("\n2. Kampklar stall med smalt støtteapparat");
@@ -58,6 +60,7 @@ check("smal stab blir lokal hovedoppgave", staffGap.priority.target === "admin")
 check("første stabs-gap forklares", /fysio/i.test(staffGap.priority.detail));
 check("stabstatus bruker eksisterende identitet", staffGap.statuses.find((item) => item.id === "staff")?.value === "Smalt støtteapparat");
 check("speiding blir positiv når stallen er komplett", staffGap.statuses.find((item) => item.id === "scouting")?.tone === "positive");
+check("fasilitetslesningen bruker eksisterende stab og treningskultur", staffGap.facilities.detail.includes("2 i stab") && staffGap.facilities.detail.includes("treningskultur 54"));
 
 console.log("\n3. Stab og ekspertise klare, ingen aktiv progresjon");
 const development = createManagerClubSceneModel({
@@ -117,7 +120,9 @@ check("etablert klubb stemples komplett", mature.complete === true);
 check("fem klubbpulsverdier bygges", mature.pulse.length === 5);
 check("medietrykk leses omvendt", mature.pulse.find((item) => item.id === "media")?.tone === "positive");
 check("utviklingsstatus viser aktive program", mature.statuses.find((item) => item.id === "development")?.value === "2 aktive");
-check("alle statusmål peker til eksisterende flater", mature.statuses.every((item) => ["details", "historygo", "admin", "progression"].includes(item.target)));
+check("sterk klubb gir sterk fasilitetslesning", mature.facilities.label === "Sterk");
+check("lavt press og sterke klubbverdier gir god markedstemperatur", mature.market.label === "God temperatur" && mature.market.tone === "positive");
+check("alle statusmål peker til eksisterende flater", mature.statuses.every((item) => ["details", "historygo", "admin", "progression", "facilities", "market"].includes(item.target)));
 
 console.log(`\nManager Club Scene v1: ${checks - failures}/${checks} bestått.`);
 if (failures > 0) process.exitCode = 1;
