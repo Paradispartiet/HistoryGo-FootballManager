@@ -21,10 +21,18 @@ const unlockData = {
   ]
 };
 
+// Denne simuleringen tester stedskilden isolert. En eksplisitt lokal startmarkør
+// slår av auto-starttroppen her; selve 15-spillers startgulvet testes i
+// simulate-football-recruitment-v1.mjs.
 const recruitable = buildRecruitablePlayers({
   players,
   unlockData,
-  merits: { unlockedPlaceIds: ["ground_a"], localStart: { playerIds: [] } },
+  merits: {
+    recruitmentVersion: 1,
+    recruitedPlayerIds: [],
+    unlockedPlaceIds: ["ground_a"],
+    localStart: { playerIds: ["fixture_local_start"] }
+  },
   visitedPlaceIds: []
 });
 check("kun spillere fra åpnet sted er rekrutterbare", recruitable.length === 2, String(recruitable.length));
