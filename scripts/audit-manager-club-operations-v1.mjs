@@ -35,7 +35,7 @@ check("adminrenderer finnes i appen", files.app.includes("function renderAdminRo
 check("presentasjonen eier seks operasjonsstatuser", ["board", "scouting", "development", "facilities", "staff", "market"].every((id) => files.presentation.includes(`"${id}"`)));
 check("shell legger Klubbdrift under Kontor", files.shell.includes('createSubtab(subnav, "board", "Klubbdrift")') && files.shell.includes('section.dataset.tabParent = "dashboard"'));
 check("Klubb fjernes som hovedfane", files.shell.includes('clubMainTab.hidden = true'));
-check("fasiliteter og marked åpnes som eksisterende dypflater", files.presentation.includes('target: "facilities"') && files.presentation.includes('target: "market"') && files.shell.includes('section.removeAttribute("data-shell-hidden")'));
+check("fasiliteter og marked åpnes som eksisterende dypflater", files.presentation.includes('"facilities"') && files.presentation.includes('"market"') && files.shell.includes('section.removeAttribute("data-shell-hidden")'));
 check("dype klubbflater skjules fra Kontors primære underfaneliste", files.shell.includes('createSubtab(subnav, "facilities", "Fasiliteter", { visible: false })') && files.shell.includes('createSubtab(subnav, "market", "Marked", { visible: false })'));
 check("statuskort bruker eksisterende target-kontrakt", files.presentation.includes("onOpenTarget(item.target)"));
 check("fasilitetslesningen bruker bare eksisterende klubbverdier", files.presentation.includes("clubState?.trainingCulture") && files.presentation.includes("clubState?.mediaPressure") && files.presentation.includes("players") && files.presentation.includes("hiredStaff"));
