@@ -92,7 +92,8 @@
         "transition_team",
         "pressing_team"
       ],
-      "warningWhenMisused": "Denne spesialisten gir mest verdi hvis laget faktisk trener hurtighet, intensitet og restitusjon over flere uker."
+      "warningWhenMisused": "Denne spesialisten gir mest verdi hvis laget faktisk trener hurtighet, intensitet og restitusjon over flere uker.",
+      "starterStaff": true
     },
     {
       "id": "ullevaal_final_pressure_mentor",
@@ -122,7 +123,8 @@
         "big_match_team",
         "defensive_structure_project"
       ],
-      "warningWhenMisused": "Denne profilen bør brukes til kampforberedelse, pressmestring og struktur, ikke som ren teknikktrener."
+      "warningWhenMisused": "Denne profilen bør brukes til kampforberedelse, pressmestring og struktur, ikke som ren teknikktrener.",
+      "starterStaff": true
     },
     {
       "id": "ekeberg_recruitment_coach",
@@ -154,7 +156,8 @@
         "youth_focused_club",
         "broad_recruitment_club"
       ],
-      "warningWhenMisused": "Denne profilen passer best når klubben bruker trening og rekruttering som langsiktig utviklingsvei."
+      "warningWhenMisused": "Denne profilen passer best når klubben bruker trening og rekruttering som langsiktig utviklingsvei.",
+      "starterStaff": true
     },
     {
       "id": "herbert_chapman",
@@ -237,6 +240,88 @@
         "identity_club"
       ],
       "warningWhenMisused": "Michels krever tekniske, intelligente spillere som tåler posisjonsbytter og kollektivt press. Totalfotball kollapser i et lag uten teknisk og taktisk grunnlag."
+    },
+    {
+      "id": "kfum_training_coach",
+      "name": "KFUM treningscoach",
+      "staffType": "coach",
+      "isPlaceholder": true,
+      "needsResearch": true,
+      "starterStaff": true,
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "sourcePlaceIds": [
+        "kfum_arena"
+      ],
+      "expertiseIds": [
+        "development_culture",
+        "passing_training",
+        "team_organisation"
+      ],
+      "roles": [
+        "field_coach",
+        "player_development_coach"
+      ],
+      "fitsClubs": [
+        "development_project",
+        "modern_training_environment"
+      ],
+      "warningWhenMisused": "Denne plassholderprofilen representerer en ordinær treningscoach og skal erstattes når en dokumentert klubbperson er kuratert."
+    },
+    {
+      "id": "bislett_first_team_physio",
+      "name": "Bislett førstelagsfysio",
+      "staffType": "physio",
+      "isPlaceholder": true,
+      "needsResearch": true,
+      "starterStaff": true,
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "sourcePlaceIds": [
+        "bislett_stadion"
+      ],
+      "expertiseIds": [
+        "load_management",
+        "physical_preparation"
+      ],
+      "roles": [
+        "first_team_physio",
+        "load_management"
+      ],
+      "fitsClubs": [
+        "high_intensity_team",
+        "development_project"
+      ],
+      "warningWhenMisused": "Denne plassholderprofilen representerer fysiorollen, ikke en identifisert virkelig person."
+    },
+    {
+      "id": "ullevaal_goalkeeper_coach",
+      "name": "Ullevaal keepertrener",
+      "staffType": "goalkeeper_coach",
+      "isPlaceholder": true,
+      "needsResearch": true,
+      "starterStaff": true,
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "sourcePlaceIds": [
+        "ullevaal_stadion"
+      ],
+      "expertiseIds": [
+        "team_organisation",
+        "match_discipline"
+      ],
+      "roles": [
+        "goalkeeper_development",
+        "match_preparation_coach"
+      ],
+      "fitsClubs": [
+        "development_project",
+        "big_match_team"
+      ],
+      "warningWhenMisused": "Denne plassholderprofilen representerer keepertrenerrollen, ikke en identifisert virkelig person."
     }
   ]
 }

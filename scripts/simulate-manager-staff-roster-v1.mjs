@@ -1,0 +1,15 @@
+import fs from "node:fs";
+import assert from "node:assert/strict";
+import { REQUIRED_FIRST_TEAM_STAFF, STAFF_ROLE_REQUIREMENTS, assignFirstTeamStaff, decorateHiredStaffWithAssignments, selectStarterStaffCandidates, summarizeStaffRoster } from "../src/football-staff-roster.js";
+const staff = JSON.parse(fs.readFileSync(new URL("../data/football_staff.json", import.meta.url), "utf8")).staff || [];
+let checks=0; const check=(condition,message)=>{assert.ok(condition,message);checks+=1;console.log(`✓ ${checks}. ${message}`)};
+check(REQUIRED_FIRST_TEAM_STAFF===6,"førstelagsstaben krever seks personer");
+check(STAFF_ROLE_REQUIREMENTS.find(r=>r.id==="assistant_coach")?.required===1,"én assistenttrener kreves");
+check(STAFF_ROLE_REQUIREMENTS.find(r=>r.id==="training_coach")?.required===3,"tre trenere kreves");
+check(STAFF_ROLE_REQUIREMENTS.find(r=>r.id==="physio")?.required===1,"én fysio kreves");
+check(STAFF_ROLE_REQUIREMENTS.find(r=>r.id==="goalkeeper_coach")?.required===1,"én keepertrener kreves");
+const starters=selectStarterStaffCandidates(staff); const starterSummary=summarizeStaffRoster(starters);
+check(starters.length===6,"startgulvet velger seks rollekompatible stabsprofiler"); check(starterSummary.complete,"startgulvet dekker alle roller"); check(starters.every(m=>m.isPlaceholder===true),"starterstaben bruker bare plassholderprofiler");
+const three=[{id:"a",staffType:"coach",canBeHiredAs:["coach"]},{id:"b",staffType:"coach",canBeHiredAs:["coach"]},{id:"c",staffType:"coach",canBeHiredAs:["coach"]}]; const incomplete=summarizeStaffRoster(three);
+check(!incomplete.complete,"tre vilkårlige trenere er ikke komplett stab"); check(incomplete.byRole.find(r=>r.id==="training_coach")?.filled===3,"tre trenere fyller bare trenerplassene"); check(incomplete.missing.some(r=>r.id==="assistant_coach"),"manglende assistent oppdages"); check(incomplete.missing.some(r=>r.id==="physio"),"manglende fysio oppdages"); check(incomplete.missing.some(r=>r.id==="goalkeeper_coach"),"manglende keepertrener oppdages");
+const assignments=assignFirstTeamStaff(starters); check(assignments.filter(e=>e.staffId).length===6,"seks rolleplasser tildeles"); check(new Set(assignments.filter(e=>e.staffId).map(e=>e.staffId)).size===6,"samme person fyller ikke to plasser"); const decorated=decorateHiredStaffWithAssignments(starters); check(decorated.filter(m=>m.assignedStaffRole).length===6,"coach-context får tildelte roller"); check(decorated.some(m=>m.staffType==="physio"),"fysiorollen mates videre"); check(decorated.some(m=>m.staffType==="goalkeeper_coach"),"keepertrenerrollen mates videre"); console.log(`\n${checks}/${checks} staff-roster-sjekker bestått.`);

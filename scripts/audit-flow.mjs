@@ -126,8 +126,9 @@ requireHandler("clearLocalStartSquad");
 requireHandler("getStarterSquadPlayerIds");
 requireHandler("activateStarterSquad");
 check(
-  "auto-troppen gir også stabskandidater (så «Velg stab» er mulig uten samling)",
-  app.includes("getStarterSquadStaffCandidates(staff, REQUIRED_STAFF_SIZE")
+  "auto-troppen gir rollekomplette stabskandidater (så «Velg stab» er mulig uten samling)",
+  app.includes("getStarterSquadStaffCandidates(staff)")
+    && app.includes("selectStarterStaffCandidates(staff)")
 );
 check(
   "ingen geolokasjon eller stedsanker i starttroppen",
@@ -312,7 +313,12 @@ requireHandler("resetMiniSeason");
 
 // ---- 12) Ligaspill før-sesong gate -----------------------------------------
 stage("12. Ligaspill før-sesong gate");
-check("onboarding bruker valgt stab, ikke bare tilgjengelig stab", app.includes("hiredStaff >= REQUIRED_STAFF_SIZE") && app.includes("Tilgjengelig stab teller først når du faktisk engasjerer dem"));
+check(
+  "onboarding bruker rolledekning i valgt stab, ikke bare antall tilgjengelige",
+  app.includes("const staffRoster = summarizeStaffRoster(getHiredStaff())")
+    && app.includes("done: staffRoster.complete")
+    && app.includes("roller dekket. Mangler:")
+);
 // Klubbidentitet kommer nå fra klubben spilleren OPPRETTER i onboardingen
 // (navn), ikke fra et History Go-stedsanker. Stedsanker er faset ut som
 // identitetskilde.
