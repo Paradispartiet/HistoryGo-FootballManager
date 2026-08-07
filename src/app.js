@@ -1,6 +1,8 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import { migrateLegacyRecruitmentState, normalizeRecruitmentState } from "./football-recruitment.js";
 import { decorateHiredStaffWithAssignments, selectStarterStaffCandidates, summarizeStaffRoster } from "./football-staff-roster.js";
+import { calculateFacilityEffects, normalizeFacilityState, upgradeFacilityInMerits } from "./football-facilities.js";
+import { createManagerFacilitiesModel, renderManagerFacilitiesWorkspace } from "./ui/manager-facilities-workspace-v1.js";
 import "./ui/manager-shell-elements.js";
 import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
@@ -820,15 +822,6 @@ const elements = {
   inboxPulseCount: document.querySelector("#inboxPulseCount"),
   adminSquadCount: document.querySelector("#adminSquadCount"),
   adminStaffCount: document.querySelector("#adminStaffCount"),
-  facilityOverallValue: document.querySelector("#facilityOverallValue"),
-  facilityTrainingLevel: document.querySelector("#facilityTrainingLevel"),
-  facilityTrainingStatus: document.querySelector("#facilityTrainingStatus"),
-  facilityStadiumLevel: document.querySelector("#facilityStadiumLevel"),
-  facilityStadiumStatus: document.querySelector("#facilityStadiumStatus"),
-  facilityAcademyLevel: document.querySelector("#facilityAcademyLevel"),
-  facilityAcademyStatus: document.querySelector("#facilityAcademyStatus"),
-  facilityMedicalLevel: document.querySelector("#facilityMedicalLevel"),
-  facilityMedicalStatus: document.querySelector("#facilityMedicalStatus"),
   marketMediaValue: document.querySelector("#marketMediaValue"),
   marketReputationNote: document.querySelector("#marketReputationNote"),
   clubCommand: document.querySelector("#clubCommand"),
@@ -1449,6 +1442,8 @@ function normalizeTeamMerits(merits) {
     nearbyFavorites: normalizeNearbyFavorites(base.nearbyFavorites),
     ...normalizeRecruitmentState(base),
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
+    // Reelle fasilitetsoppgraderinger v1: varig klubbstate i eksisterende teamMerits.
+    facilities: normalizeFacilityState(base.facilities),
     // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
     // verdier filtreres bort og manglende felt blir et tomt oppslag.
@@ -1558,6 +1553,21 @@ function saveTeamMerits() {
     localStorage.setItem(TEAM_MERITS_KEY, JSON.stringify(state.teamMerits));
   } catch (error) {
     // Lagring kan feile i privat modus e.l. Da kjører vi bare uten persistens.
+  }
+
+  // Mode Isolation eier også et snapshot av league-staten. Hold samme
+  // canonical teamMerits synkronisert der med én gang; ellers kan et
+  // eldre snapshot vinne over hgfm.teamMerits.v1 ved neste reload.
+  if (state.modeEnvelope && isLeagueModeActive()) {
+    state.modeEnvelope.sessions.league = {
+      ...state.modeEnvelope.sessions.league,
+      teamMerits: cloneTeamMerits(state.teamMerits)
+    };
+    try {
+      state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+    } catch (_) {
+      // Privat modus: legacy teamMerits-lagringen over er fortsatt best effort.
+    }
   }
 }
 
@@ -3944,7 +3954,10 @@ function applyWeeklyPlayerRecovery() {
     program: getSelectedTrainingProgramComposition(),
     focusId: state.weeklyTrainingFocus?.focusId || null
   });
-  state.playerCondition = applyWeeklyRecovery(getPlayerCondition(), { trainingIntensity });
+  state.playerCondition = applyWeeklyRecovery(getPlayerCondition(), {
+    trainingIntensity,
+    recoveryBonus: calculateFacilityEffects(state.teamMerits?.facilities).weeklyRecoveryBonus
+  });
   savePlayerCondition();
   applyIndividualTrainingWeek();
 }
@@ -6687,7 +6700,11 @@ function selectWeeklyTrainingProgram(program) {
   // samhold). Effekten anvendes kun én gang per uke; senere bytter samme uke
   // bare oppdaterer hvilket program som er valgt uten å stable opp belastning.
   if (state.teamMerits) {
-    state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
+    state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(
+      getOffPitchState(),
+      program,
+      { facilityEffects: calculateFacilityEffects(state.teamMerits?.facilities) }
+    );
     state.weeklyTrainingProgram.applied = true;
     saveTeamMerits();
   }
@@ -9038,58 +9055,25 @@ function renderDepartments() {
 // avledes av verdier som allerede finnes (treningskultur, medietrykk, opplåste
 // spillere, engasjert stab), på samme måte som Styret og Klubbrom leser klubben.
 function renderFacilities() {
-  const club = state.clubWeekState || {};
-  const bandFromScore = (value, t2, t3) => {
-    const n = Number(value);
-    if (!Number.isFinite(n)) return { level: 0, label: "Nivå –", tone: "neutral" };
-    if (n >= t3) return { level: 3, label: "Nivå 3", tone: "good" };
-    if (n >= t2) return { level: 2, label: "Nivå 2", tone: "neutral" };
-    return { level: 1, label: "Nivå 1", tone: "warn" };
-  };
-  const bandFromCount = (count, t1, t2, t3) => {
-    if (count >= t3) return { level: 3, label: "Nivå 3", tone: "good" };
-    if (count >= t2) return { level: 2, label: "Nivå 2", tone: "neutral" };
-    if (count >= t1) return { level: 1, label: "Nivå 1", tone: "warn" };
-    return { level: 0, label: "Nivå –", tone: "neutral" };
-  };
-  const apply = (levelEl, statusEl, band, text) => {
-    if (levelEl) { levelEl.textContent = band.label; levelEl.dataset.tone = band.tone; }
-    if (statusEl) statusEl.textContent = text;
-  };
-
-  const culture = Number(club.trainingCulture);
-  const training = bandFromScore(culture, 45, 65);
-  apply(elements.facilityTrainingLevel, elements.facilityTrainingStatus, training,
-    !Number.isFinite(culture) ? "Treningskulturen er ikke lest ennå."
-      : culture >= 65 ? `Sterk treningskultur (${culture}) – anlegget driver rask utvikling.`
-        : culture <= 40 ? `Svak treningskultur (${culture}) – anlegget holder laget så vidt i gang.`
-          : `Treningskultur ${culture} – solid grunnlag for utvikling.`);
-
-  const media = Number(club.mediaPressure);
-  const stadium = bandFromScore(media, 45, 65);
-  apply(elements.facilityStadiumLevel, elements.facilityStadiumStatus, stadium,
-    !Number.isFinite(media) ? "Medietrykket er ikke lest ennå."
-      : media >= 65 ? `Stor kampdagsramme – medietrykket (${media}) fyller stadion.`
-        : media <= 40 ? `Rolig ramme – lavt medietrykk (${media}).`
-          : `Medietrykk ${media} – jevn kampdagsstemning.`);
-
-  const players = getUnlockedPlayers().length;
-  const academy = bandFromCount(players, 1, 8, 15);
-  apply(elements.facilityAcademyLevel, elements.facilityAcademyStatus, academy,
-    players === 0 ? "Ingen spillere hentet inn ennå – besøk steder i History Go."
-      : `${players} klassespillere i samlingen mater akademiet.`);
-
-  const staff = getHiredStaff().length;
-  const medical = bandFromCount(staff, 1, 1, 3);
-  apply(elements.facilityMedicalLevel, elements.facilityMedicalStatus, medical,
-    staff === 0 ? "Ingen stab engasjert – begrenset skadeforebygging."
-      : `${staff} i staben støtter restitusjon og skadeforebygging.`);
-
-  if (elements.facilityOverallValue) {
-    const levels = [training, stadium, academy, medical].map((b) => b.level);
-    const avg = levels.reduce((a, b) => a + b, 0) / levels.length;
-    elements.facilityOverallValue.textContent = avg >= 2.5 ? "Sterk" : avg >= 1.5 ? "Solid" : avg > 0 ? "Grunnleggende" : "–";
-  }
+  const facilityState = normalizeFacilityState(state.teamMerits?.facilities);
+  const week = Math.max(1, Number(state.clubWeekState?.week) || 1);
+  const model = createManagerFacilitiesModel({ facilityState, week });
+  renderManagerFacilitiesWorkspace(document.querySelector("#managerFacilitiesWorkspace"), model, {
+    onUpgrade: (facilityId) => {
+      if (!state.teamMerits) return;
+      const result = upgradeFacilityInMerits(state.teamMerits, facilityId, { week });
+      if (!result.changed) {
+        renderFacilities();
+        return;
+      }
+      // teamMerits er et langlivet canonical-objekt som også eies av modus-/
+      // availability-laget. Bevar objektidentiteten og oppdater kun fasilitetsfeltet.
+      state.teamMerits.facilities = normalizeFacilityState(result.facilities);
+      saveTeamMerits();
+      renderFacilities();
+      renderManagerClubScene();
+    }
+  });
 }
 
 
@@ -9134,6 +9118,7 @@ function renderManagerClubScene() {
     unlockedPlayersCount: getUnlockedPlayers().length,
     unlockedPlacesCount: getUnlockedPlaceIds().size,
     unlockedExpertiseCount: getUnlockedExpertise().length,
+    facilitiesState: state.teamMerits?.facilities,
     activeProgramCount: Array.isArray(state.teamMerits?.badgeProgress) ? state.teamMerits.badgeProgress.length : 0,
     earnedBadgeCount: getEarnedBadges().length,
     activeClassificationCount: Array.isArray(state.teamMerits?.activeClassifications)

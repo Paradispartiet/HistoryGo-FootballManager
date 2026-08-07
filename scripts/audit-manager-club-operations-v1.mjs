@@ -40,10 +40,10 @@ check("Speiding løftes ut av Kontor uten å flytte klubbdriften", files.scoutin
 check("fasiliteter og marked åpnes som eksisterende dypflater", files.presentation.includes('"facilities"') && files.presentation.includes('"market"') && files.shell.includes('section.removeAttribute("data-shell-hidden")'));
 check("dype klubbflater skjules fra Kontors primære underfaneliste", files.shell.includes('createSubtab(subnav, "facilities", "Fasiliteter", { visible: false })') && files.shell.includes('createSubtab(subnav, "market", "Marked", { visible: false })'));
 check("statuskort bruker eksisterende target-kontrakt", files.presentation.includes("onOpenTarget(item.target)"));
-check("fasilitetslesningen bruker bare eksisterende klubbverdier", files.presentation.includes("clubState?.trainingCulture") && files.presentation.includes("clubState?.mediaPressure") && files.presentation.includes("players") && files.presentation.includes("hiredStaff"));
+check("fasiliteter bruker eksplisitt save-state", files.presentation.includes("summarizeFacilityState") && files.app.includes("facilities: normalizeFacilityState(base.facilities)"));
 check("markedslesningen bruker bare eksisterende klubbverdier", files.presentation.includes("trust.score") && files.presentation.includes("morale.score") && files.presentation.includes("media.score"));
 check("ingen ny lagring eller nettverksmotor i presentasjonen", !files.presentation.includes("localStorage") && !files.presentation.includes("sessionStorage") && !files.presentation.includes("fetch(") && !files.presentation.includes("Math.random"));
-check("ingen ny økonomi- eller sponsormotor dokumenteres", files.docs.includes("ingen kjøp-/oppgraderingsmotor") && files.docs.includes("ingen sponsoravtaler") && files.docs.includes("Ingen nye localStorage-nøkler"));
+check("ingen økonomi- eller sponsormotor introduseres", files.docs.includes("ingen sponsoravtaler") && files.docs.includes("Ingen nye localStorage-nøkler"));
 check("legacy-simuleringen forventer seks områder", files.legacySim.includes("seks varige klubbfunksjoner") && files.legacySim.includes('"facilities", "market"'));
 check("legacy-auditen beskytter nytt Kontor-hierarki", files.legacyAudit.includes("Klubb er ikke eget hovedområde") && files.legacyAudit.includes("Klubbdrift ligger under Kontor") && files.legacyAudit.includes("Speiding er løftet ut av Klubbdrift"));
 check("browsertesten åpner fasiliteter fra Klubbdrift", files.browser.includes('data-club-target="facilities"') && files.browser.includes("#facilityOverallValue"));

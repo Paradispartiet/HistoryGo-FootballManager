@@ -47,7 +47,7 @@ check("simuleringen er registrert", files.package.includes('"sim:manager-club-sc
 check("auditen er registrert", files.package.includes('"audit:manager-club-scene-v1"'));
 check("CI kjører begge permanente porter", files.ci.includes("audit:manager-club-scene-v1") && files.ci.includes("sim:manager-club-scene-v1"));
 check("opprinnelig dokumentasjon låser motorgrensene", /ingen ny styre-, speider-, stabs-/i.test(files.docs) && files.docs.includes("football-staff-identity-engine.js"));
-check("operasjonsdokumentasjonen avviser nye økonomi- og sponsormotorer", files.operationsDocs.includes("ingen kjøp-/oppgraderingsmotor") && files.operationsDocs.includes("ingen sponsoravtaler") && files.operationsDocs.includes("Ingen nye localStorage-nøkler"));
+check("operasjonsdokumentasjonen avviser nye økonomi- og sponsormotorer", files.operationsDocs.includes("ingen sponsoravtaler") && files.operationsDocs.includes("Ingen nye localStorage-nøkler"));
 
 console.log(`\nManager Club Scene v1 audit: ${checks - failures}/${checks} bestått.`);
 if (failures > 0) process.exitCode = 1;

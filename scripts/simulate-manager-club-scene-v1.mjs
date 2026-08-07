@@ -60,7 +60,7 @@ check("smal stab blir lokal hovedoppgave", staffGap.priority.target === "admin")
 check("første stabs-gap forklares", /fysio/i.test(staffGap.priority.detail));
 check("stabstatus bruker eksisterende identitet", staffGap.statuses.find((item) => item.id === "staff")?.value === "Smalt støtteapparat");
 check("speiding blir positiv når stallen er komplett", staffGap.statuses.find((item) => item.id === "scouting")?.tone === "positive");
-check("fasilitetslesningen bruker eksisterende stab og treningskultur", staffGap.facilities.detail.includes("2 i stab") && staffGap.facilities.detail.includes("treningskultur 54"));
+check("fasiliteter starter på eksplisitt grunnnivå", staffGap.facilities.label === "Grunnleggende" && staffGap.facilities.detail.includes("Trening 1/3"));
 
 console.log("\n3. Stab og ekspertise klare, ingen aktiv progresjon");
 const development = createManagerClubSceneModel({
@@ -113,7 +113,8 @@ const mature = createManagerClubSceneModel({
   unlockedExpertiseCount: 8,
   activeProgramCount: 2,
   earnedBadgeCount: 4,
-  activeClassificationCount: 1
+  activeClassificationCount: 1,
+  facilitiesState: { levels: { training: 3, medical: 3, analysis: 3 } }
 });
 check("etablert klubb følger retningen", mature.priority.target === "details" && mature.priority.tone === "positive");
 check("etablert klubb stemples komplett", mature.complete === true);
