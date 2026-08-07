@@ -9,7 +9,7 @@ import {
   signRecruitmentContractInMerits,
   summarizeClubEconomy
 } from "../football-club-economy.js";
-import { LEAGUE_SEASON_VERSION } from "../football-league-season.js";
+import { DEFAULT_LEAGUE_TIER, LEAGUE_SEASON_VERSION } from "../football-league-season.js";
 import { migrateModeSessions, persistModeEnvelope } from "../football-mode-sessions.js";
 
 const STYLE_ID = "managerEconomyContractsV1Style";
@@ -47,7 +47,7 @@ function currentContext() {
   const league = readJson(STORAGE.leagueSeason, null);
   const takeoverClub = runtime?.clubsById?.get(String(start?.takeoverClubId || "")) || null;
   return {
-    tierId: text(league?.tier?.id || league?.competition?.tierId || takeoverClub?.tier, "obosligaen"),
+    tierId: text(league?.tier?.id || league?.competition?.tierId || takeoverClub?.tier, DEFAULT_LEAGUE_TIER.id),
     seasonNumber: Math.max(1, Math.trunc(Number(league?.seasonNumber)) || 1)
   };
 }
@@ -176,7 +176,7 @@ function renderWorkspace() {
   const tierName = runtime?.tierNames?.get(context.tierId) || context.tierId;
 
   workspace.replaceChildren();
-  const disclaimer = node("p", "economy-disclaimer", "Spilløkonomi: ingen av beløpene nedenfor er påstander om virkelige spillerlønninger, overgangssummer eller kontrakter.");
+  const disclaimer = node("p", "economy-disclaimer", "Spilløkonomi – ikke historiske tall: beløpene er HGFM-spillverdier, ikke påstander om virkelige spillerlønninger, overgangssummer eller kontrakter.");
   const metrics = node("div", "economy-metrics");
   metrics.append(
     metric("Klubbmidler", String(summary.balance), `Sesongramme · ${tierName}`),
