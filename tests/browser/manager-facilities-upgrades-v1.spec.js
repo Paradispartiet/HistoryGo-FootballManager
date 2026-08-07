@@ -3,7 +3,9 @@ import { expect, test } from "@playwright/test";
 
 async function openFacilities(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
   await page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]').click();
+  await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
   await expect(page.locator("#clubCommandPanel")).toBeVisible();
   await page.locator('.club-command-status[data-club-target="facilities"]').click();
   await expect(page.locator('[data-tab-section="facilities"]')).toBeVisible();
