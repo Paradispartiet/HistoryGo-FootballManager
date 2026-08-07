@@ -38,7 +38,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("Klubbdrift ligger under Kontor og samler seks operative funksjoner", async ({ page }) => {
+test("Klubbdrift ligger under Kontor mens Speiding er eget hovedområde", async ({ page }) => {
   await openClub(page);
   await expect(page.locator("#clubCommand h2")).toHaveText("Klubbkontoret");
   await expect(page.locator(".club-expectation-card strong")).not.toBeEmpty();
@@ -47,13 +47,14 @@ test("Klubbdrift ligger under Kontor og samler seks operative funksjoner", async
   await expect(page.locator(".club-command-status")).toHaveCount(6);
   await expect(page.locator(".club-command-metrics article")).toHaveCount(5);
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubbdrift");
-  await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toBeHidden();
+  await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toHaveCount(0);
+  await expect(page.locator('.main-nav .nav-tab[data-tab-target="historygo"]')).toHaveText("Speiding");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(4);
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(3);
   expect(await page.locator("#clubDepth").getAttribute("open")).toBeNull();
 });
 
-test("statuskort åpner klubbfunksjonene uten ny hovedfane", async ({ page }) => {
+test("klubbstatus åpner Speiding som hovedområde og øvrige klubbfunksjoner under Kontor", async ({ page }) => {
   await openClub(page);
   await page.locator('.club-command-status[data-club-target="admin"]').click();
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
@@ -63,7 +64,8 @@ test("statuskort åpner klubbfunksjonene uten ny hovedfane", async ({ page }) =>
   await openClub(page);
   await page.locator('.club-command-status[data-club-target="historygo"]').click();
   await expect(page.locator('[data-tab-section="historygo"]')).toBeVisible();
-  await expect(page.locator("#unlockedPlayersList")).toBeVisible();
+  await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Rekrutterbare");
 
   await openClub(page);
   await page.locator('.club-command-status[data-club-target="progression"]').click();
@@ -89,10 +91,8 @@ test("klubbkontoret og klubbfunksjonene har ingen mobil overflow", async ({ page
   await page.setViewportSize({ width: 390, height: 844 });
   await openClub(page);
   await expectNoHorizontalOverflow(page);
-
   await page.locator('.club-command-status[data-club-target="facilities"]').click();
   await expectNoHorizontalOverflow(page);
-
   await openClub(page);
   await page.locator('.club-command-status[data-club-target="market"]').click();
   await expectNoHorizontalOverflow(page);
