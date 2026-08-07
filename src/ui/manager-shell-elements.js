@@ -178,14 +178,16 @@ function installLocationBar() {
 
 function syncStatsPresentation() {
   const statsLabel = document.querySelector('.nav-tab[data-tab-target="statistikk"] .nav-label');
-  if (statsLabel) statsLabel.textContent = "Stats";
+  if (statsLabel && statsLabel.textContent !== "Stats") statsLabel.textContent = "Stats";
   const statsTitle = document.querySelector("#seasonCommand h2");
-  if (statsTitle) statsTitle.textContent = "Stats";
+  if (statsTitle && statsTitle.textContent !== "Stats") statsTitle.textContent = "Stats";
   const depth = document.querySelector("#leagueSeasonOverview .season-depth");
   if (depth) {
-    depth.open = true;
+    if (!depth.open) depth.open = true;
     const summary = depth.querySelector(":scope > summary");
-    if (summary) summary.textContent = "Full tabell og terminliste";
+    if (summary && summary.textContent !== "Full tabell og terminliste") {
+      summary.textContent = "Full tabell og terminliste";
+    }
   }
 }
 
@@ -281,8 +283,6 @@ function applyManagerInformationArchitectureV4() {
   });
   const tag = document.querySelector("#nextActionPrimaryTag");
   if (tag) observer.observe(tag, { childList: true, characterData: true, subtree: true });
-  const seasonOverview = document.querySelector("#leagueSeasonOverview");
-  if (seasonOverview) observer.observe(seasonOverview, { childList: true, subtree: true });
   syncOrientation();
 }
 
