@@ -4,6 +4,7 @@ const files = {
   html: fs.readFileSync(new URL("../index.html", import.meta.url), "utf8"),
   app: fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8"),
   presentation: fs.readFileSync(new URL("../src/ui/manager-club-presentation.js", import.meta.url), "utf8"),
+  shell: fs.readFileSync(new URL("../src/ui/manager-shell-elements.js", import.meta.url), "utf8"),
   style: fs.readFileSync(new URL("../src/ui/manager-club-scene-v1.css", import.meta.url), "utf8"),
   package: fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"),
   ci: fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8"),
@@ -21,12 +22,12 @@ function check(label, condition) {
 }
 
 console.log("\nManager Club Scene v1 audit");
-check("Klubb/Mer åpner på Klubboversikt", files.html.includes('data-subnav-parent="board" data-tab-target="board">Klubboversikt</button>'));
+check("Klubb er ikke lenger eget hovedområde", files.shell.includes('clubMainTab.hidden = true') && files.browser.includes("Klubbdrift ligger under Kontor"));
+check("Klubbdrift ligger under Kontor", files.shell.includes('createSubtab(subnav, "board", "Klubbdrift")') && files.browser.includes('data-subnav-parent="dashboard"'));
 check("egen klubbkommandoflate finnes", files.html.includes('id="clubCommandPanel"') && files.html.includes('id="clubCommand"'));
 check("styrets dybde er foldet", files.html.includes('id="clubDepth"') && files.html.includes("Styrets vurdering og klubbverdier"));
 check("seks eksisterende klubbflater er bevart", ["board", "historygo", "progression", "admin", "facilities", "market"].every((id) => files.html.includes(`data-tab-section="${id}"`)));
-check("legacy-markører finnes fortsatt bare i statisk markup", files.html.includes('data-tab-section="facilities" data-tab-parent="board" data-shell-hidden') && files.html.includes('data-tab-section="market" data-tab-parent="board" data-shell-hidden'));
-check("presentasjonslaget åpner bare de eksisterende legacy-flatene", files.presentation.includes('removeAttribute("data-shell-hidden")') && files.presentation.includes('target: "facilities"') && files.presentation.includes('target: "market"'));
+check("shell reparenterer klubbflatene til Kontor", files.shell.includes('section.dataset.tabParent = "dashboard"') && files.shell.includes('section.removeAttribute("data-shell-hidden")'));
 check("egen presentasjonsmodul importeres", files.app.includes('from "./ui/manager-club-presentation.js"'));
 check("klubbscenen rendres fra eksisterende state", files.app.includes("createManagerClubSceneModel") && files.app.includes("renderManagerClubCommand") && files.app.includes("renderManagerClubScene()"));
 check("Club Week er sannhetskilde", files.app.includes("clubState: state.clubWeekState"));
@@ -37,7 +38,7 @@ check("ingen ny klubbmotor eller lagring er innført", !files.presentation.inclu
 check("seks operative statuskort finnes", ["board", "scouting", "development", "facilities", "staff", "market"].every((id) => files.presentation.includes(`"${id}"`)));
 check("lokal prioritet og status peker bare til eksisterende flater", ["details", "historygo", "admin", "progression", "facilities", "market"].every((target) => files.presentation.includes(`"${target}"`)));
 check("mobilregler finnes", files.style.includes("Manager Club Scene v1") && files.style.includes("@media (max-width: 640px)"));
-check("nettleservakten kontrollerer nye klubbflater", files.browser.includes('data-club-target="facilities"') && files.browser.includes('data-club-target="market"'));
+check("nettleservakten kontrollerer klubbfunksjoner uten ny hovedfane", files.browser.includes('data-club-target="facilities"') && files.browser.includes('data-club-target="market"') && files.browser.includes('.main-nav .nav-tab[data-tab-target="board"]'));
 check("nettleservakten kontrollerer overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
 check("nettleservakten kontrollerer WCAG", files.browser.includes("AxeBuilder") && files.browser.includes("wcag2aa"));
 check("simuleringen er registrert", files.package.includes('"sim:manager-club-scene-v1"'));
