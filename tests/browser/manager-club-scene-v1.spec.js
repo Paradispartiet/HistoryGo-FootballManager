@@ -50,7 +50,8 @@ test("Klubbdrift ligger under Kontor mens Speiding er eget hovedområde", async 
   await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toHaveCount(0);
   await expect(page.locator('.main-nav .nav-tab[data-tab-target="historygo"]')).toHaveText("Speiding");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(3);
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toHaveText("Kalender");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(4);
   expect(await page.locator("#clubDepth").getAttribute("open")).toBeNull();
 });
 
