@@ -32,6 +32,7 @@
   display: grid;
   place-content: center;
   gap: 0.2rem;
+  min-height: 135px;
   padding: 1rem;
   text-align: center;
 }
@@ -311,6 +312,7 @@
 
   .matchday-post-match-score {
     grid-template-columns: auto auto auto;
+    min-height: 0;
     align-items: baseline;
     justify-content: start;
     text-align: left;
