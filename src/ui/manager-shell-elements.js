@@ -1,7 +1,7 @@
 const SETTINGS_ICON = `
   <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="3.2"/>
-    <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 1 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
+    <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
   </svg>`;
 
 const OFFICE_DEEP_TARGETS = new Set(["progression", "admin", "facilities", "market"]);
@@ -97,17 +97,43 @@ function ensureShellStyle() {
   document.head.append(style);
 }
 
+function activateShellTarget(target) {
+  const section = document.querySelector(`[data-tab-section="${target}"]`);
+  if (!section) return;
+  document.querySelectorAll("[data-tab-section]").forEach((candidate) => {
+    candidate.hidden = candidate !== section;
+  });
+
+  const parent = section.dataset.tabParent || target;
+  document.querySelectorAll(".nav-tab[data-tab-target]").forEach((button) => {
+    const selected = button.dataset.tabTarget === parent;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-selected", selected ? "true" : "false");
+  });
+  document.querySelectorAll(".app-subtab[data-tab-target]").forEach((button) => {
+    const selected = button.dataset.tabTarget === target;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-selected", selected ? "true" : "false");
+  });
+
+  const subnav = document.querySelector("#appSubnav");
+  if (subnav && parent === "dashboard") subnav.hidden = false;
+  window.scrollTo({ top: 0, behavior: "auto" });
+  syncOrientation();
+}
+
 function createSubtab(subnav, target, label, { visible = true } = {}) {
-  let button = subnav.querySelector(`.app-subtab[data-subnav-parent="dashboard"][data-tab-target="${target}"]`);
+  let button = subnav.querySelector(`.app-subtab[data-tab-target="${target}"]`);
   if (!button) {
     button = document.createElement("button");
     button.type = "button";
     button.className = "app-subtab";
     button.setAttribute("role", "tab");
-    button.dataset.subnavParent = "dashboard";
     button.dataset.tabTarget = target;
+    button.addEventListener("click", () => activateShellTarget(target));
     subnav.append(button);
   }
+  button.dataset.subnavParent = "dashboard";
   button.textContent = label;
   button.classList.toggle("office-subnav-proxy", !visible);
   return button;
@@ -214,12 +240,29 @@ function applyManagerInformationArchitectureV4() {
 
   const subnav = document.querySelector("#appSubnav");
   if (subnav) {
-    subnav.querySelectorAll('.app-subtab[data-subnav-parent="board"]').forEach((button) => button.remove());
-
-    const overview = subnav.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="dashboard"]');
+    const overview = subnav.querySelector('.app-subtab[data-tab-target="dashboard"]');
     if (overview) overview.classList.add("office-subnav-proxy");
-    const inbox = subnav.querySelector('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]');
-    if (inbox) inbox.textContent = "Innboks";
+    const inbox = subnav.querySelector('.app-subtab[data-tab-target="inbox"]');
+    if (inbox) {
+      inbox.dataset.subnavParent = "dashboard";
+      inbox.textContent = "Innboks";
+    }
+
+    const legacyLabels = {
+      board: "Klubbdrift",
+      historygo: "Speiding",
+      progression: "Utvikling",
+      admin: "Stab & drift",
+      facilities: "Fasiliteter",
+      market: "Marked"
+    };
+    Object.entries(legacyLabels).forEach(([target, label]) => {
+      const existing = subnav.querySelector(`.app-subtab[data-tab-target="${target}"]`);
+      if (!existing) return;
+      existing.dataset.subnavParent = "dashboard";
+      existing.textContent = label;
+      existing.classList.toggle("office-subnav-proxy", OFFICE_DEEP_TARGETS.has(target));
+    });
 
     createSubtab(subnav, "board", "Klubbdrift");
     createSubtab(subnav, "historygo", "Speiding");
@@ -272,6 +315,7 @@ class ManagerClubHeader extends HTMLElement {
       </header>`;
   }
 }
+
 class ManagerNextAction extends HTMLElement {
   connectedCallback() {
     if (this.firstElementChild) return;
