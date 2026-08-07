@@ -1,3 +1,5 @@
+import { summarizeFacilityState } from "../football-facilities.js";
+
 function asArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -43,22 +45,10 @@ function countBand(value, basic = 1, solid = 8, strong = 15) {
   return 0;
 }
 
-function deriveFacilityReading({ clubState, players, hiredStaff }) {
-  const levels = [
-    scoreBand(clubState?.trainingCulture),
-    scoreBand(clubState?.mediaPressure),
-    countBand(players, 1, 8, 15),
-    countBand(hiredStaff, 1, 1, 3)
-  ];
-  const average = levels.reduce((sum, value) => sum + value, 0) / levels.length;
-  const label = average >= 2.5 ? "Sterk" : average >= 1.5 ? "Solid" : average > 0 ? "Grunnleggende" : "Ikke lest";
-  const tone = average >= 2.5 ? "positive" : average >= 1.5 ? "neutral" : average > 0 ? "attention" : "neutral";
-  return {
-    label,
-    tone,
-    detail: `${players} spillere · ${hiredStaff} i stab · treningskultur ${number(clubState?.trainingCulture)}.`
-  };
+function deriveFacilityReading(facilitiesState) {
+  return summarizeFacilityState(facilitiesState);
 }
+
 
 function deriveMarketReading({ trust, morale, media }) {
   if (media.score >= 65) {
@@ -161,6 +151,7 @@ export function createManagerClubSceneModel({
   roster = null,
   staffIdentity = null,
   hiredStaffCount = 0,
+  facilitiesState = null,
   unlockedStaffCount = 0,
   unlockedPlayersCount = 0,
   unlockedPlacesCount = 0,
@@ -188,7 +179,7 @@ export function createManagerClubSceneModel({
   const expertise = Math.max(0, number(unlockedExpertiseCount));
   const players = Math.max(0, number(unlockedPlayersCount));
   const places = Math.max(0, number(unlockedPlacesCount));
-  const facilities = deriveFacilityReading({ clubState, players, hiredStaff });
+  const facilities = deriveFacilityReading(facilitiesState);
   const market = deriveMarketReading({ trust, morale, media: { ...media, score: clamp(clubState?.mediaPressure, 0, 100) } });
 
   const priority = derivePriority({

@@ -35,6 +35,7 @@ function model(overrides = {}) {
     unlockedPlayersCount: 20,
     unlockedPlacesCount: 9,
     unlockedExpertiseCount: 5,
+    facilitiesState: { levels: { training: 3, medical: 3, analysis: 3 } },
     activeProgramCount: 1,
     earnedBadgeCount: 2,
     activeClassificationCount: 1,
@@ -58,16 +59,14 @@ check("fasiliteter peker til eksisterende flate", healthy.statuses.find((item) =
 check("marked peker til eksisterende flate", healthy.statuses.find((item) => item.id === "market")?.target === "market");
 check("sterkt anleggsgrunnlag leses som sterkt", healthy.facilities.label === "Sterk", healthy.facilities.label);
 check("god klubbtemperatur leses positivt", healthy.market.tone === "positive", healthy.market.label);
-check("fasilitetslesningen bruker antall spillere", healthy.facilities.detail.includes("20 spillere"));
-check("fasilitetslesningen bruker engasjert stab", healthy.facilities.detail.includes("5 i stab"));
-check("fasilitetslesningen bruker treningskultur", healthy.facilities.detail.includes("treningskultur 70"));
+check("fasilitetslesningen bruker eksplisitte nivåer", healthy.facilities.detail.includes("Trening 3/3") && healthy.facilities.detail.includes("Medisinsk 3/3") && healthy.facilities.detail.includes("Analyse 3/3"));
 check("marked leser faktisk medietrykk", healthy.market.detail.includes("Medietrykk") || healthy.market.detail.includes("medietrykk"));
 check("ingen ekstra klubbpuls oppfinnes", healthy.pulse.length === 5);
 
 const pressured = model({ clubState: { mediaPressure: 81, playerMorale: 39, boardTrust: 44, trainingCulture: 52 } });
 check("høyt medietrykk gir negativ markedslesning", pressured.market.tone === "negative", pressured.market.label);
 check("markedslesningen beholder rå medieverdi", pressured.market.detail.includes("81"));
-check("fasiliteter forblir lesesignal også under press", ["Sterk", "Solid", "Grunnleggende", "Ikke lest"].includes(pressured.facilities.label));
+check("fasiliteter påvirkes ikke kunstig av medietrykk", pressured.facilities.label === "Sterk");
 
 const bare = model({
   clubState: { boardTrust: 50, playerMorale: 50, tacticalClarity: 50, trainingCulture: 0, mediaPressure: 0 },
@@ -80,11 +79,12 @@ const bare = model({
   unlockedExpertiseCount: 0,
   activeProgramCount: 0,
   earnedBadgeCount: 0,
-  activeClassificationCount: 0
+  activeClassificationCount: 0,
+  facilitiesState: { levels: { training: 1, medical: 1, analysis: 1 } }
 });
 check("tom klubb har fortsatt fasilitetsinngang", bare.statuses.some((item) => item.target === "facilities"));
 check("tom klubb har fortsatt markedsinngang", bare.statuses.some((item) => item.target === "market"));
-check("manglende stall prioriteres fortsatt foran read-only klubbflater", bare.priority.target === "historygo");
+check("manglende stall prioriteres fortsatt foran dype klubbflater", bare.priority.target === "historygo");
 
 console.log(`\nManager Club Operations v1: ${checks - failures}/${checks} bestått.`);
 if (failures > 0) process.exitCode = 1;

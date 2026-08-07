@@ -66,7 +66,7 @@ Et fast `Du er her`-signal viser den aktive arbeidsflaten, for eksempel:
 
 ## Autoritative kilder
 
-Ingen ny klubbmotor introduseres. Presentasjonen leser bare eksisterende tilstand:
+Klubbdriftens øvrige områder leser fortsatt eksisterende tilstand. Fasiliteter har fra Facilities Upgrades v1 en liten, eksplisitt save-modell i eksisterende `teamMerits`:
 
 - `clubWeekState.boardTrust`
 - `clubWeekState.playerMorale`
@@ -82,10 +82,10 @@ De eksisterende rendererne og motorene fortsetter å eie data og konsekvenser. U
 
 ## Viktige grenser
 
-- Fasilitetsnivåene er avledede lesesignaler. Det finnes ingen kjøp-/oppgraderingsmotor i denne versjonen.
+- Fasilitetsnivåene er ikke lenger avledet fra medietrykk/spillerantall. Facilities Upgrades v1 lagrer nivå 1–3 for trening, medisinsk og analyse i eksisterende `teamMerits`, med ett managerstyrt valg per klubbuke.
 - Marked viser temperatur og interesse, men oppretter ingen sponsoravtaler.
 - Stab & drift viser eksisterende stab og stall, men oppretter ingen økonomi-, lønns- eller kontraktsmotor.
-- Ingen nye localStorage-nøkler, save-felt eller History Go-unlocks.
+- Ingen nye localStorage-nøkler eller History Go-unlocks. Fasilitetsstate er et nytt felt i eksisterende `hgfm.teamMerits.v1`.
 - Ingen endringer i kamp-, trening-, liga-, availability- eller konsekvensmotorer.
 
 ## Permanente porter
