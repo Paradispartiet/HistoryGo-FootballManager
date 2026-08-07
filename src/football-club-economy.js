@@ -315,6 +315,7 @@ export function settleClubEconomySeasonInMerits(merits, targetSeasonNumber, {
   economy = {
     ...economy,
     balance,
+    wageBudget: preset.wageBudget,
     lastSettledSeason: targetSeason,
     contracts,
     ledger: ledger.slice(-40)
