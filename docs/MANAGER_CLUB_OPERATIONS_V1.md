@@ -23,13 +23,13 @@ Den tidligere synlige **Oversikt**-underfanen fjernes i ligaspill. Når managere
 
 ### Klubbdrift
 
-Klubbdrift samler seks eksisterende funksjoner uten å introdusere nye motorer:
+Klubbdrift samler seks eksisterende funksjoner:
 
 1. **Styret** — forventning og styretillit.
 2. **Speiding** — spillere, stab og ressurser fra History Go.
 3. **Klubbutvikling** — ekspertise, utviklingsprogrammer, badges og lagklasse.
-4. **Fasiliteter** — treningsanlegg, stadion, akademi og medisinsk avdeling.
-5. **Stab & drift** — stall, tilgjengelig stab og engasjert stab.
+4. **Fasiliteter** — treningsanlegg, medisinsk avdeling og analyseavdeling.
+5. **Stab & drift** — stall, tilgjengelig/engasjert stab samt klubbøkonomi og spilleravtaler.
 6. **Marked** — omdømme, fans og sponsorinteresse som kvalitative signaler.
 
 Utvikling, Fasiliteter, Stab & drift og Marked er dypflater. De trenger ikke konkurrere som likeverdige hovedfaner; de åpnes fra Klubbdrift og beholder Kontor som tydelig hovedområde.
@@ -38,19 +38,7 @@ Utvikling, Fasiliteter, Stab & drift og Marked er dypflater. De trenger ikke kon
 
 Den tidligere hovedfanen **Sesong** heter **Stats**.
 
-Stats samler:
-
-- ligatabell
-- full terminliste og resultater
-- plassering og poeng
-- målforskjell og form
-- kamper, mål og målgivende
-- toppscorer
-- spillerstatistikk
-- sesongdom
-- merittliste
-
-Full tabell og terminliste skal være åpne på Stats-flaten, ikke gjemt som en egen navigasjonsdestinasjon.
+Stats samler ligatabell, full terminliste/resultater, plassering/poeng, målforskjell/form, spillerstatistikk, sesongdom og merittliste. Full tabell og terminliste skal være åpne på Stats-flaten, ikke gjemt som en egen navigasjonsdestinasjon.
 
 ## Orientering
 
@@ -66,7 +54,7 @@ Et fast `Du er her`-signal viser den aktive arbeidsflaten, for eksempel:
 
 ## Autoritative kilder
 
-Klubbdriftens øvrige områder leser fortsatt eksisterende tilstand. Fasiliteter har fra Facilities Upgrades v1 en liten, eksplisitt save-modell i eksisterende `teamMerits`:
+Klubbdriften leser eksisterende managerstate og to små, eksplisitte save-lag i samme canonical `hgfm.teamMerits.v1`:
 
 - `clubWeekState.boardTrust`
 - `clubWeekState.playerMorale`
@@ -77,16 +65,37 @@ Klubbdriftens øvrige områder leser fortsatt eksisterende tilstand. Fasiliteter
 - eksisterende engasjert/tilgjengelig stab
 - eksisterende History Go-steder, ekspertise, utviklingsprogrammer, badges og lagklasse
 - eksisterende ligasesong, tabell, terminliste og spillerstatistikk
+- `facilities` for varige anleggsnivåer
+- `clubEconomy` for HGFM-klubbmidler, lønnsramme og rekrutteringsavtaler
 
-De eksisterende rendererne og motorene fortsetter å eie data og konsekvenser. UI-lagene eier bare hierarki, tekst, orientering og navigasjon.
+Mode Isolation-snapshotet speiler samme `teamMerits`; det opprettes ingen parallell økonomisave.
+
+## Kontrakter og klubbøkonomi
+
+`Stab & drift → Økonomi & kontrakter` er fra Kontrakter og klubbøkonomi v1 en live managerflate.
+
+Den viser:
+
+- klubbmidler;
+- brukt og tilgjengelig lønnsramme;
+- fast kostnad for grunntroppen;
+- aktive rekrutteringsavtaler;
+- kontraktslengde og standardisert lønnsbelastning;
+- eksplisitt `Forny` når én sesong gjenstår;
+- eksplisitt `Frigi` for hentede spillere.
+
+En ny rekruttering må ha både signeringsmidler og ledig lønnsramme. Avtaler teller ned ved faktisk sesongskifte; en utløpt rekrutteringsavtale fjerner spilleren fra `recruitedPlayerIds`. Ny sesong tilfører en nivåbasert HGFM-sesongramme.
+
+Alle økonomitall er **spill-/balansetall**, ikke påstander om ekte klubbøkonomi, overgangssummer, lønninger eller kontrakter. Prisene bruker ikke skjult Overall eller oppdiktet markedsverdi.
 
 ## Viktige grenser
 
-- Fasilitetsnivåene er ikke lenger avledet fra medietrykk/spillerantall. Facilities Upgrades v1 lagrer nivå 1–3 for trening, medisinsk og analyse i eksisterende `teamMerits`, med ett managerstyrt valg per klubbuke.
+- Facilities Upgrades v1 lagrer nivå 1–3 for trening, medisinsk og analyse, med ett managerstyrt valg per klubbuke.
+- Kontrakter og klubbøkonomi v1 lagrer klubbmidler, lønnsramme og rekrutteringsavtaler i samme `teamMerits`; starttroppen ligger innenfor en fast grunnramme og får ikke individuelle utløpsavtaler i v1.
 - Marked viser temperatur og interesse, men oppretter ingen sponsoravtaler.
-- Stab & drift viser eksisterende stab og stall, men oppretter ingen økonomi-, lønns- eller kontraktsmotor.
-- Ingen nye localStorage-nøkler eller History Go-unlocks. Fasilitetsstate er et nytt felt i eksisterende `hgfm.teamMerits.v1`.
-- Ingen endringer i kamp-, trening-, liga-, availability- eller konsekvensmotorer.
+- Ingen nye localStorage-nøkler eller History Go-unlocks for fasiliteter eller økonomi.
+- Ingen agent, budrunde, individuell lønnsforhandling eller historiske økonomipåstander.
+- Ingen endringer i kamp-, trening- eller konsekvensmotorene. Recruitment-state forblir eier av kandidat/troppsmedlemskap; økonomien porter handlingen og eier avtalen.
 
 ## Permanente porter
 
@@ -95,5 +104,6 @@ De eksisterende rendererne og motorene fortsetter å eie data og konsekvenser. U
 - `audit:manager-club-operations-v1`
 - `sim:manager-club-scene-v1`
 - `sim:manager-club-operations-v1`
-- Manager Shell browser-vakt for fire hovedområder, Kontor → Innboks, Oppstartshjelp, Stats, orientering, mobil overflow og WCAG
-- Klubbdrift browser-vakt for seks operative funksjoner og dypflater
+- Manager Shell browser-vakt for hovedområder, Kontor → Innboks, Oppstartshjelp, Stats, orientering, mobil overflow og WCAG
+- Klubbdrift browser-vakt for operative funksjoner og dypflater
+- økonomi-/kontraktsregresjon for signering, lønnsramme, fornyelse, utløp og release
