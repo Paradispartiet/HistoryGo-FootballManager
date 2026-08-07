@@ -30,6 +30,7 @@ const STORAGE = Object.freeze({
 let runtime = null;
 let renderFrame = 0;
 let internalWrite = false;
+let lastFeedback = { message: "", tone: "neutral" };
 
 const asArray = (value) => (Array.isArray(value) ? value : []);
 function text(value, fallback = "") { const normalized = String(value ?? "").trim(); return normalized || fallback; }
@@ -124,6 +125,14 @@ function contractStatus(contract) {
   return `${contract.remainingSeasons} sesonger igjen`;
 }
 
+function setFeedback(message, tone = "neutral") {
+  lastFeedback = { message: message || "", tone };
+  const feedback = document.getElementById("managerEconomyFeedback");
+  if (!feedback) return;
+  feedback.textContent = lastFeedback.message;
+  feedback.dataset.tone = lastFeedback.tone;
+}
+
 function contractActions(playerId, contract, context, baseSquadCount) {
   const host = node("div", "economy-contract-actions");
   const renew = node("button", "economy-action economy-action-primary", "Forny");
@@ -153,13 +162,6 @@ function contractActions(playerId, contract, context, baseSquadCount) {
   return host;
 }
 
-function setFeedback(message, tone = "neutral") {
-  const feedback = document.getElementById("managerEconomyFeedback");
-  if (!feedback) return;
-  feedback.textContent = message || "";
-  feedback.dataset.tone = tone;
-}
-
 function renderWorkspace() {
   if (!runtime || !isLeagueMode()) return;
   const workspace = ensureWorkspace();
@@ -171,12 +173,13 @@ function renderWorkspace() {
   const summary = summarizeClubEconomy(initialized.economy, { ...context, baseSquadCount: baseIds.length });
   const contracts = Object.values(summary.economy.contracts)
     .sort((a, b) => a.remainingSeasons - b.remainingSeasons || playerName(a.playerId).localeCompare(playerName(b.playerId), "nb"));
+  const tierName = runtime?.tierNames?.get(context.tierId) || context.tierId;
 
   workspace.replaceChildren();
   const disclaimer = node("p", "economy-disclaimer", "Spilløkonomi: ingen av beløpene nedenfor er påstander om virkelige spillerlønninger, overgangssummer eller kontrakter.");
   const metrics = node("div", "economy-metrics");
   metrics.append(
-    metric("Klubbmidler", String(summary.balance), `+ sesongramme på nivå ${context.tierId}`),
+    metric("Klubbmidler", String(summary.balance), `Sesongramme · ${tierName}`),
     metric("Lønnsramme", `${summary.wageUsed}/${summary.wageBudget}`, `${summary.wageAvailable} ledig`),
     metric("Grunntropp", `${baseIds.length} spillere`, `${summary.baseWages} lønnsenheter`),
     metric("Rekrutteringsavtaler", String(summary.activeContractCount), `${summary.contractWages} lønnsenheter`)
@@ -187,8 +190,9 @@ function renderWorkspace() {
     node("strong", "", "Standardavtale for ny rekruttering"),
     node("span", "", `${RECRUIT_CONTRACT.signingCost} klubbmidler · ${RECRUIT_CONTRACT.wageUnits} lønnsenheter · ${RECRUIT_CONTRACT.seasons} sesonger`)
   );
-  const feedback = node("p", "economy-feedback", "");
+  const feedback = node("p", "economy-feedback", lastFeedback.message);
   feedback.id = "managerEconomyFeedback";
+  feedback.dataset.tone = lastFeedback.tone;
   feedback.setAttribute("role", "status");
 
   const section = node("section", "economy-contracts");
@@ -228,8 +232,7 @@ function reconcileEconomy() {
   const context = currentContext();
   const initialized = initializeClubEconomyInMerits(merits, { ...context, recruitedPlayerIds: merits?.recruitedPlayerIds });
   const settled = settleClubEconomySeasonInMerits(initialized.merits, context.seasonNumber, { tierId: context.tierId });
-  const changed = initialized.changed || settled.changed;
-  if (changed) {
+  if (initialized.changed || settled.changed) {
     writeMerits(settled.merits, {
       action: "economy-reconcile",
       expiredPlayerIds: settled.expiredPlayerIds || []
@@ -268,7 +271,7 @@ function onTeamMeritsChanged(event) {
     });
     if (result.changed && writeMerits(result.merits, { action: "economy-contract", playerId })) {
       const scoutingFeedback = document.getElementById("scoutingRecruitmentFeedback");
-      if (scoutingFeedback) scoutingFeedback.textContent = `${playerName(playerId)} er hentet på en ${RECRUIT_CONTRACT.seasons}-sesongers HGFM-avtale.`;
+      if (scoutingFeedback) scoutingFeedback.textContent = `${playerName(playerId)} er hentet til troppen på en ${RECRUIT_CONTRACT.seasons}-sesongers HGFM-avtale.`;
     }
   }
   scheduleRender();
@@ -280,6 +283,18 @@ function scheduleRender() {
     renderFrame = 0;
     renderWorkspace();
   });
+}
+
+function installSeasonGuard() {
+  const target = document.getElementById("seasonCommand") || document.getElementById("leagueSeasonPanel");
+  if (!target) return;
+  const observer = new MutationObserver(() => {
+    queueMicrotask(() => {
+      reconcileEconomy();
+      scheduleRender();
+    });
+  });
+  observer.observe(target, { childList: true, subtree: true, characterData: true });
 }
 
 async function boot() {
@@ -302,11 +317,14 @@ async function boot() {
       players,
       playersById: new Map(players.map((player) => [String(player.id), player])),
       clubsById: new Map(asArray(clubsData?.clubs).map((club) => [String(club.id), club])),
+      tierNames: new Map(asArray(clubsData?.tiers).map((tier) => [String(tier.id), tier.name || tier.shortName || tier.id])),
       starterCandidateIds: [...starterCandidateIds]
     };
     document.addEventListener("click", recruitmentGate, true);
     window.addEventListener("hgfm:team-merits-changed", onTeamMeritsChanged);
-    window.addEventListener("storage", scheduleRender);
+    window.addEventListener("updateProfile", () => { reconcileEconomy(); scheduleRender(); });
+    window.addEventListener("storage", () => { reconcileEconomy(); scheduleRender(); });
+    installSeasonGuard();
     reconcileEconomy();
     renderWorkspace();
   } catch (error) {
