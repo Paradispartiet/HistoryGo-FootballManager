@@ -1,0 +1,35 @@
+/* Manager Visual Identity v1 · shell-layout
+   Ligaspillets fem områder er selve navigasjonen. Den gamle vertikale
+   «Manageruka»-etiketten var nyttig under shell-migreringen, men er nå bare
+   støy og et sjette grid-element. */
+
+body[data-manager-area] .main-nav .nav-group-label-primary {
+  display: none !important;
+}
+
+body[data-manager-area] .main-nav-inner {
+  display: grid;
+  grid-template-columns: repeat(var(--manager-nav-count, 5), minmax(0, 1fr));
+  align-items: stretch;
+  gap: 0;
+  overflow-x: visible;
+  padding: 0;
+}
+
+body[data-manager-area] .main-nav .nav-tab {
+  width: auto;
+  min-width: 0;
+  max-width: none;
+}
+
+@media (max-width: 760px) {
+  body[data-manager-area] .main-nav-inner {
+    display: grid !important;
+    grid-template-columns: repeat(var(--manager-nav-count, 5), minmax(0, 1fr)) !important;
+    overflow-x: visible !important;
+  }
+
+  body[data-manager-area] .main-nav .nav-tab {
+    min-width: 0 !important;
+  }
+}
