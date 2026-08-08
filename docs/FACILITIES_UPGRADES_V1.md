@@ -1,5 +1,7 @@
 # Reelle fasilitetsoppgraderinger v1
 
+> **Produktstatus 08.08.2026:** Denne filen dokumenterer en eksisterende teknisk v1-implementasjon, men nivåbaserte fasilitetsoppgraderinger er **ikke lenger ønsket produktretning**. Canonical retning er `PRODUCT_PRINCIPLES_CLUB_SIMULATION.md`: treningsanlegg og medisinsk apparat skal være lærings- og simuleringsmiljøer som viser faktisk klubbdrift, fasiliteter, utstyr, arbeidsmåter, trening, skadebehandling og forebygging — ikke primært nivåstiger eller prosentbonuser. Runtime-koden er ikke fjernet av denne dokumentasjonsendringen.
+
 ## Kontrakt
 
 Fasiliteter ligger under **Kontor → Klubbdrift → Fasiliteter**. De er ikke en ny hovedfane og de lager ingen konkurrerende «neste»-motor.
