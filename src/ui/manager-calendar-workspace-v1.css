@@ -103,6 +103,13 @@ html[data-manager-office-calendar-v1="active"] manager-next-action {
   color: #fff;
 }
 
+.manager-calendar-day-button:focus-visible,
+.manager-calendar-event-button:focus-visible,
+.manager-calendar-drawer-close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
 .manager-calendar-day-button[aria-selected="true"] {
   border-top-color: #fff;
   background: #10161b;
