@@ -252,6 +252,10 @@ function toggleRoleLearning() {
 }
 
 function handlePitchClick(event) {
+  // app.js bruker også programmatisk `.click()` når uttaket synkroniseres.
+  // Bare et faktisk brukerklikk skal åpne inspektøren; ellers kan oppstarten
+  // ufrivillig legge en modal over Lag-flaten.
+  if (!event.isTrusted) return;
   const section = document.querySelector('[data-tab-section="tactics"]');
   if (!section || section.hidden) return;
   const card = event.target?.closest?.("#lineupSlots .lineup-player-card");
@@ -263,8 +267,6 @@ function install() {
   ensureStyles();
   ensureInspector();
   document.addEventListener("click", handlePitchClick);
-  const observer = new MutationObserver(() => syncInspector());
-  observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["class", "aria-pressed", "aria-selected"] });
   window.addEventListener("hgfm:team-merits-changed", syncInspector);
   window.addEventListener("storage", syncInspector);
 }
