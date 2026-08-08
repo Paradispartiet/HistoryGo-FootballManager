@@ -5,6 +5,7 @@
 // Den eier ingen motor, progresjon, nettverk eller lagring.
 
 const STYLE_ID = "managerVisualIdentityV1Style";
+const LAYOUT_STYLE_ID = "managerVisualIdentityLayoutV1Style";
 const CORE_MANAGER_AREAS = new Set(["office", "team", "scouting", "match", "stats"]);
 
 const AREA_BY_TARGET = Object.freeze({
@@ -46,13 +47,19 @@ const KIND_BY_TARGET = Object.freeze({
   hgfmLibrary: "science"
 });
 
-function ensureStyles() {
-  if (typeof document === "undefined" || document.getElementById(STYLE_ID)) return;
+function appendStylesheet(id, filename) {
+  if (document.getElementById(id)) return;
   const link = document.createElement("link");
-  link.id = STYLE_ID;
+  link.id = id;
   link.rel = "stylesheet";
-  link.href = new URL("./manager-visual-identity-v1.css", import.meta.url).href;
+  link.href = new URL(filename, import.meta.url).href;
   document.head.append(link);
+}
+
+function ensureStyles() {
+  if (typeof document === "undefined") return;
+  appendStylesheet(STYLE_ID, "./manager-visual-identity-v1.css");
+  appendStylesheet(LAYOUT_STYLE_ID, "./manager-visual-identity-layout-v1.css");
 }
 
 export function resolveManagerVisualContext(target, parent = "") {
