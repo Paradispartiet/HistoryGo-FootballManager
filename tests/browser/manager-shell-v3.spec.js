@@ -82,13 +82,24 @@ test("Speiding er eget hovedområde med to listeflater", async ({ page }) => {
   await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Andre klubber");
 });
 
-test("lagflaten bruker bare direkte uttak og holder banen i arbeidsområdet", async ({ page }) => {
+test("lagflaten viser banen og valgt tilstand mens alternativer åpnes i drawer", async ({ page }) => {
   await openArea(page, "Lag");
   await expect(page.locator("#lineupSlots")).toBeVisible();
-  await expect(page.locator("#lineupPlayerChoices")).toBeVisible();
-  await expect(page.locator("#lineupRoleChoices")).toBeVisible();
+  await expect(page.locator("#teamTacticsSelectedState")).toBeVisible();
+  await expect(page.locator("#teamLineupSelectedState")).toBeVisible();
+  await expect(page.locator("#lineupPlayerChoices")).toBeHidden();
+  await expect(page.locator("#lineupRoleChoices")).toBeHidden();
+  await expect(page.locator("#formationSelect")).toBeHidden();
   await expect(page.locator("#benchPlayersList")).toBeVisible();
   await expect(page.locator("#slotPlayerSelect, #slotRoleSelect, #teamScore")).toHaveCount(0);
+
+  await page.locator("#teamChangePlayerRole").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  await expect(page.locator("#lineupPlayerChoices")).toBeVisible();
+  await expect(page.locator("#lineupRoleChoices")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
+
   const [app, pitch] = await Promise.all([page.locator("#app").boundingBox(), page.locator("#lineupSlots").boundingBox()]);
   expect(app).not.toBeNull();
   expect(pitch).not.toBeNull();
@@ -108,6 +119,8 @@ test("trening viser nøyaktig ett utvidet arbeidssteg", async ({ page }) => {
   await expect(page.locator("#individualTrainingStepBody")).toBeVisible();
   await expect(page.locator("#trainingProgramStepBody")).toBeHidden();
   await expect(page.locator("#trainingFocusStepBody")).toBeHidden();
+  await expect(page.locator("#individualTrainingPicker")).toBeHidden();
+  await expect(page.locator("#teamChangeIndividualTraining")).toBeVisible();
 });
 
 test("klubbidentiteten viser skjold, klubbfarge og stadion", async ({ page }) => {
