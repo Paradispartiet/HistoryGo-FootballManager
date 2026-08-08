@@ -172,6 +172,7 @@ test("Next-footeren er skjult i den normale managerloopen", async ({ page }) => 
   await openArea(page, "Kontor");
   await expect(page.locator("manager-next-action")).toBeHidden();
   await expect(page.locator("#nextActionPrimary")).toBeHidden();
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="3"]').click();
   await expect(page.locator('#managerCalendarTimeline [data-event-id="team-training"]')).toBeVisible();
 });
 
