@@ -8,6 +8,7 @@ import "./manager-staff-workspace-v1.js";
 import "./manager-economy-contracts-v1.js";
 import "./manager-transfer-market-v2.js";
 import "./manager-club-organization-v1.js";
+import "./manager-club-organization-location-v1.js";
 
 export function createMatchFlowSnapshot(session, visibleLog = []) {
   const log = Array.isArray(visibleLog) ? visibleLog : [];
