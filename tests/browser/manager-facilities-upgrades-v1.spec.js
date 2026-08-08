@@ -1,15 +1,14 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-async function openFacilities(page) {
+async function openTrainingGround(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]').click();
-  await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
-  await expect(page.locator("#clubCommandPanel")).toBeVisible();
-  await page.locator('.club-command-status[data-club-target="facilities"]').click();
-  await expect(page.locator('[data-tab-section="facilities"]')).toBeVisible();
-  await expect(page.locator("#managerFacilitiesWorkspace")).toBeVisible();
+  await expect(page.locator("#managerClubOrganization")).toBeVisible();
+  await page.locator('[data-club-room="training-ground"]').click();
+  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
+  await expect(page.locator("#managerClubRoomTitle")).toHaveText("Treningsanlegg");
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -35,43 +34,53 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
-  await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
+  await expect(page.locator("#managerFacilitiesWorkspace")).toBeAttached();
 });
 
-test("fasiliteter har tre reelle nivåer og ett managerstyrt valg per uke", async ({ page }) => {
-  await openFacilities(page);
-  await expect(page.locator(".manager-facility-card")).toHaveCount(3);
-  await expect(page.locator('.manager-facility-card[data-facility-id="training"] .manager-facility-level')).toHaveText("Nivå 1 av 3");
-  await expect(page.locator(".facility-upgrade-action:enabled")).toHaveCount(3);
+test("legacy fasilitetsnivåer beholdes i runtime men er ute av live IA", async ({ page }) => {
+  await openTrainingGround(page);
+  await expect(page.locator('[data-tab-section="facilities"]')).toBeHidden();
+  await expect(page.locator("#managerFacilitiesWorkspace")).toBeHidden();
+  const body = page.locator("#managerClubRoomBody");
+  await expect(body).toContainText("Fysisk anleggsdata er ikke dokumentert ennå");
+  await expect(body).toContainText("ikke oppdiktede nivå 1–3");
+  await expect(body).not.toContainText(/Nivå 1 av 3|Oppgrader til|\+\d+%/i);
+});
 
-  await page.locator('.facility-upgrade-action[data-facility-id="training"]').click();
-  await expect(page.locator('.manager-facility-card[data-facility-id="training"] .manager-facility-level')).toHaveText("Nivå 2 av 3");
-  await expect(page.locator(".facility-upgrade-action:enabled")).toHaveCount(0);
-  await expect(page.locator(".facility-week-choice")).toContainText("Treningsanlegg");
-
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}"));
-  expect(saved.facilities.levels.training).toBe(2);
-  expect(saved.facilities.lastUpgradeWeek).toBeGreaterThanOrEqual(1);
-
+test("eksisterende fasilitetsstate overlever refresh fram til trygg Pass 7-migrering", async ({ page }) => {
+  await page.evaluate(() => {
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.facilities = {
+      version: 1,
+      levels: { training: 2, medical: 3, analysis: 1 },
+      lastUpgradeWeek: 4,
+      lastUpgradeFacilityId: "medical"
+    };
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+  });
   await page.reload();
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
-  await openFacilities(page);
-  await expect(page.locator('.manager-facility-card[data-facility-id="training"] .manager-facility-level')).toHaveText("Nivå 2 av 3");
-  await expect(page.locator(".facility-upgrade-action:enabled")).toHaveCount(0);
-  await expect(page.locator(".facility-week-choice")).toContainText("Treningsanlegg");
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}").facilities);
+  expect(saved).toEqual(expect.objectContaining({
+    levels: { training: 2, medical: 3, analysis: 1 },
+    lastUpgradeWeek: 4,
+    lastUpgradeFacilityId: "medical"
+  }));
+  await openTrainingGround(page);
+  await expect(page.locator("#managerFacilitiesWorkspace")).toBeHidden();
+  await expect(page.locator("#managerClubRoomBody")).not.toContainText(/Nivå 2 av 3|Nivå 3 av 3/i);
 });
 
-test("fasilitetsflaten fungerer på 390 px uten overflow", async ({ page }) => {
+test("Treningsanlegg-rommet fungerer på 390 px uten overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openFacilities(page);
-  await expect(page.locator(".manager-facility-grid")).toBeVisible();
+  await openTrainingGround(page);
   await expectNoHorizontalOverflow(page);
 });
 
-test("fasilitetsflaten har ingen alvorlige WCAG-brudd", async ({ page }) => {
-  await openFacilities(page);
+test("Treningsanlegg-rommet har ingen alvorlige WCAG-brudd", async ({ page }) => {
+  await openTrainingGround(page);
   const results = await new AxeBuilder({ page })
-    .include('[data-tab-section="facilities"]')
+    .include("#managerClubRoomDrawer")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
