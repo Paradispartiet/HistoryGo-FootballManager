@@ -246,7 +246,9 @@ function renderSystem() {
 
   workspace.append(header, main, knowledge);
   const legacySelected = document.getElementById("teamSystemSelectedState");
-  if (legacySelected) legacySelected.dataset.replacedBySystemV2 = "true";
+  if (legacySelected && legacySelected.dataset.replacedBySystemV2 !== "true") {
+    legacySelected.dataset.replacedBySystemV2 = "true";
+  }
 }
 
 function buildChoiceSource(parameter) {
@@ -310,10 +312,8 @@ function installObservers() {
   document.addEventListener("click", (event) => {
     if (event.target?.closest?.('.app-subtab[data-tab-target="system"]')) requestAnimationFrame(renderSystem);
   });
-  const observer = new MutationObserver((mutations) => {
-    if (mutations.some((mutation) => mutation.target?.id === "teamSystemFormation" || mutation.target?.id === "teamSystemTactic")) scheduleRender();
-  });
-  observer.observe(document.body, { subtree: true, childList: true, characterData: true });
+  window.addEventListener("hgfm:team-merits-changed", scheduleRender);
+  window.addEventListener("storage", scheduleRender);
 }
 
 async function boot() {
