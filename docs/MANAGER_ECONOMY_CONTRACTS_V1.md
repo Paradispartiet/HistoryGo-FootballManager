@@ -1,5 +1,7 @@
 # Kontrakter og klubbøkonomi v1
 
+> **Produktstatus 08.08.2026:** Denne filen dokumenterer en eksisterende teknisk v1-implementasjon, men fiktive spillerkontrakter, lønnsenheter og kontraktsutløp er **ikke lenger canonical produktretning**. Spillermaterialet består blant annet av historiske spillere uten nødvendigvis definert alder eller én felles tidskontekst. `PRODUCT_PRINCIPLES_CLUB_SIMULATION.md` er overordnet: økonomi skal bare brukes når den lærer brukeren hvordan faktisk klubbdrift fungerer, og History Go skal ikke underordnes et kunstig kjøp/salg-/kontraktssystem. Runtime-koden er ikke fjernet av denne dokumentasjonsendringen.
+
 ## Formål
 
 HG Football Manager trenger økonomiske konsekvenser for at rekruttering og troppsbygging skal være managerbeslutninger, men spillet skal ikke dikte virkelige lønninger, overgangssummer eller kontrakter om ekte personer og klubber.
