@@ -540,7 +540,8 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 57,
-      "form": 52
+      "form": 52,
+      "homePlaceId": "nordre_asen"
     },
     {
       "id": "honefoss",

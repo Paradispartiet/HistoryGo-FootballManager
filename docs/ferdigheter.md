@@ -323,10 +323,10 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter alle tolv kildene | Grense |
+| | Før VIF | Etter alle tretten kildene | Grense |
 |---|---:|---:|---:|
-| Unike profiler | 73,7 % | **85,8 %** | 0,855 |
-| Unike styrke-sett | 46,9 %* | **60,4 %** | 0,59 |
+| Unike profiler | 73,7 % | **85,7 %** | 0,855 |
+| Unike styrke-sett | 46,9 %* | **60,0 %** | 0,59 |
 | Største klon | 12 | 12 | ≤ 14 |
 
 \* Tallene for styrke-sett er ikke sammenlignbare på tvers av kolonnene.
@@ -356,6 +356,12 @@ uskarpere av at katalogen vokser.
 Tromsø, Fredrikstad, Start, Odd, Aalesund og Haugesund er de seks ordrikeste
 kildene — alle med like mange unike kvalitetssetninger som profiler — og de dro
 begge andelene opp til 85,8 % og 60,4 % på 1505 spillere.
+
+Skeid tok dem **ned** igjen, til 85,7 % og 60,0 % på 1583. Grensene blir stående:
+en ratchet går ikke ned. Kilden har 100 unike kvalitetssetninger, men bare 81 %
+unike styrkesett internt, fordi den moderne troppen beskrives med korte stikkord
+der de eldre profilene får hele setninger. Det er kildens egenskap, ikke en
+feil — og det er derfor per-klubb-målingen finnes ved siden av korpusandelen.
 
 Bitetesten er å reversere klubben til mal: VIF falt til 74,4 % og 44,4 %, RBK
 til 77,2 % og 51,7 %, og vaktene feller begge. Sto grensene der de sto, ville
@@ -406,9 +412,14 @@ bet: epokespennet mellom klubbene står stille (Sandefjord og Viking eier
 ytterpunktene), og korpusandelen flytter seg tre prosentpoeng. 59 % er dessuten
 riktig for Fredrikstad, så det finnes ingen fordeling å måle mot.
 
-Spillerne har derfor `eraSource`, samme mønster som `classSource`: 468 `belagt`
-mot 1037 `utledet`. Grensa er en ratchet på 30 % — lav med vilje, siden 608
+Spillerne har derfor `eraSource`, samme mønster som `classSource`: 520 `belagt`
+mot 1063 `utledet`. Grensa er en ratchet på 32 % — lav med vilje, siden 608
 spillere står utenfor klubbkildene og aldri har hatt en registrert datering.
+
+Skeid-kilden løftet den ved å datere med **ord** der den mangler tall («en
+tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode»), og ved at de
+daterte profilene i hver kategori daterer de udaterte i samme kategori — en
+måling i kilden, ikke en antakelse om den.
 Den fanger ikke en import som lyver om provenansen, like lite som `classSource`
 gjør; den flytter kostnaden dit den hører hjemme.
 
@@ -432,7 +443,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1505 navngitte fotballspillere**. 58 tall hver er ~87 000
+Dette er **1583 navngitte fotballspillere**. 58 tall hver er ~92 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 

@@ -364,6 +364,13 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // Haugesund tok den til 60,4 %, og grensa til 0,59. Den kilden ga
 // `natural_fitness` sine første spillere — men den var ikke spist av en
 // ordbok, den hadde bare aldri møtt en kilde som sa «tilgjengelighet».
+//
+// Skeid tok den NED igjen til 60,0 %, og grensa blir stående på 0,59. En
+// ratchet går ikke ned. Fallet er kildens egenskap og ikke en feil: Skeid
+// beskriver den moderne troppen med korte stikkord («Allsidighet, disiplin,
+// arbeidskapasitet») der de eldre profilene får hele setninger, og 81 % unike
+// styrkesett internt er det laveste av de seks siste kildene. Det er ærlig
+// beskrevet av en klubb hvis dokumenterte storhet ligger i 1947–1974.
 const strengthSets = new Map();
 for (const player of players) {
   const key = JSON.stringify([...player.strengths].sort());
@@ -469,11 +476,15 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
     kilder.every((value) => value === "belagt" || value === "utledet"),
     [...new Set(kilder)].join(", "));
   const belagt = kilder.filter((value) => value === "belagt").length / players.length;
-  // RATCHET. Målt 31,1 % etter Haugesund (var 29,3 %), og det er lavt med vilje:
-  // 608 spillere står utenfor klubbkildene og har ingen registrert datering i
-  // det hele tatt. Tallet skal opp for hver kilde som daterer det den navngir,
-  // og aldri ned.
-  check("epoken er belagt for en reell andel", belagt > 0.30, `${(belagt * 100).toFixed(1)} %`);
+  // RATCHET. Målt 32,8 % etter Skeid (29,3 % ved innføringen), og det er lavt
+  // med vilje: 608 spillere står utenfor klubbkildene og har ingen registrert
+  // datering i det hele tatt. Tallet skal opp for hver kilde som daterer det
+  // den navngir, og aldri ned.
+  //
+  // Skeid løftet det fordi kilden daterer med ORD der den mangler tall — «en
+  // tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode». Det er
+  // like mye kildens egen datering som et årstall, og teller derfor `belagt`.
+  check("epoken er belagt for en reell andel", belagt > 0.32, `${(belagt * 100).toFixed(1)} %`);
   check("begge kildegradene er i bruk", new Set(kilder).size === 2);
 }
 const eraPairs = [];

@@ -155,10 +155,29 @@ for (const club of clubs) {
   check(`${club.name}: forklarer hva du får`, Boolean(cold.headline && cold.detail && cold.todo.length));
 }
 // Også for en klubb uten bane i History Go — den skal si det rett ut.
-const skeid = byId.get("skeid");
-const noGround = resolveClubSquadAccess({ club: skeid, players, unlockedPlaceIds: [], candidateIds: clubCandidateIds, squadSize: REQUIRED });
-check("klubb uten bane sier det rett ut", /ingen bane i History Go/.test(noGround.headline), noGround.headline);
-check("klubb uten bane får likevel en tropp", noGround.baseSquad.length === REQUIRED);
+//
+// Denne sto med Skeid navngitt som eksempelet, og så fikk Skeid bane. Da feilet
+// vakten fordi ARBEIDET LYKTES, ikke fordi noe var galt — samme utløpte premiss
+// som klubbstatus-andelen hadde. En vakt skal lese dataene, ikke bære en klubb
+// som antakelse.
+//
+// Kravet går nå begge veier, og den andre halvdelen er den som består når
+// pyramiden en dag er komplett: en klubb MED bane skal aldri si at den mangler
+// en.
+const uten = clubs.filter((club) => !club.homePlaceId);
+const med = clubs.filter((club) => club.homePlaceId);
+check("det finnes fortsatt klubber uten bane å måle på", uten.length > 0, String(uten.length));
+for (const club of uten) {
+  const access = resolveClubSquadAccess({ club, players, unlockedPlaceIds: [], candidateIds: clubCandidateIds, squadSize: REQUIRED });
+  check(`${club.name} uten bane sier det rett ut`, /ingen bane i History Go/.test(access.headline), access.headline);
+  check(`${club.name} uten bane får likevel en tropp`, access.baseSquad.length === REQUIRED,
+    String(access.baseSquad.length));
+}
+for (const club of med) {
+  const access = resolveClubSquadAccess({ club, players, unlockedPlaceIds: [], candidateIds: clubCandidateIds, squadSize: REQUIRED });
+  check(`${club.name} med bane påstår ikke at den mangler en`,
+    !/ingen bane i History Go/.test(access.headline), access.headline);
+}
 
 // ---------------------------------------------------------------------------
 // 5b. Dokumentasjonen må stemme med dataene

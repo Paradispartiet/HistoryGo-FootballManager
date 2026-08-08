@@ -346,7 +346,11 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Og et fjerde par fra samme kilde, denne gangen INNAD i den: Haugars
   // landslagskeeper (130 kamper 1967–1978, ti A-landskamper) mot FKHs
   // forsvarsspiller fra klubbens første tiår. Kilden fører dem hver for seg.
-  ["per andreas haftorsen|per haftorsen", "Haugars keeper mot FKHs forsvarsspiller"]
+  ["per andreas haftorsen|per haftorsen", "Haugars keeper mot FKHs forsvarsspiller"],
+  // Johnsen og Johansen er to ulike etternavn, ikke en stavevariant — samme sak
+  // som Knudsen/Knutsen. KFUMs keeper mot Skeids angrepsspiller med 39
+  // landskamper fra gullalderen.
+  ["erik johansen|erik johnsen", "KFUMs keeper mot Skeids landslagsspiss"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()
