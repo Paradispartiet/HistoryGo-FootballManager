@@ -61,31 +61,5 @@
   "nearbyFavorites": {
     "placeIds": [],
     "updatedAt": null
-  },
-  "facilities": {
-    "version": 1,
-    "levels": {
-      "training": 1,
-      "medical": 1,
-      "analysis": 1
-    },
-    "lastUpgradeWeek": null,
-    "lastUpgradeFacilityId": null
-  },
-  "clubEconomy": {
-    "version": 1,
-    "balance": 80,
-    "wageBudget": 54,
-    "lastSettledSeason": 1,
-    "contracts": {},
-    "ledger": []
-  },
-  "transferMarket": {
-    "version": 2,
-    "listedPlayerIds": [],
-    "offers": {},
-    "closedOfferKeys": [],
-    "history": [],
-    "lastSeenWindowKey": "s1:opening"
   }
 }
