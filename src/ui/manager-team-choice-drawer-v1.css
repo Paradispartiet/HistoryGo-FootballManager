@@ -1,0 +1,286 @@
+/* Lag · valgt tilstand først v1
+   Alternativer er ikke fjernet. De åpnes i én felles drawer/bottom sheet. */
+
+html.has-manager-team-choice-drawer,
+html.has-manager-team-choice-drawer body {
+  overflow: hidden;
+}
+
+.manager-team-alternative-source {
+  display: none !important;
+}
+
+.manager-team-choice-body .manager-team-alternative-source.is-in-team-choice-drawer {
+  display: block !important;
+}
+
+.manager-team-selected-state {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0;
+  min-width: 0;
+  margin: .45rem 0 1rem;
+  border-top: 1px solid rgba(255,255,255,.14);
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.018);
+}
+
+.manager-team-selected-field {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: .25rem;
+  min-width: 0;
+  padding: .75rem .85rem;
+  border-right: 1px solid rgba(255,255,255,.1);
+}
+
+.manager-team-selected-field:last-child { border-right: 0; }
+
+.manager-team-selected-label {
+  color: rgba(255,255,255,.52);
+  font-size: .61rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.manager-team-selected-value {
+  overflow: hidden;
+  color: #fff;
+  font-size: .93rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+}
+
+.manager-team-selected-detail {
+  color: rgba(255,255,255,.62);
+  font-size: .68rem;
+  line-height: 1.4;
+}
+
+.manager-team-selected-action {
+  justify-self: start;
+  min-height: 2.35rem;
+  margin-top: .28rem;
+  padding: .35rem .62rem;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 7px;
+  background: rgba(255,255,255,.045);
+  color: #fff;
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.manager-team-selected-action:hover,
+.manager-team-selected-action:focus-visible {
+  border-color: rgba(255,255,255,.78);
+  background: rgba(255,255,255,.1);
+}
+
+.manager-team-selected-action:focus-visible,
+.manager-team-choice-close:focus-visible,
+.manager-team-choice-done:focus-visible,
+.manager-team-choice-body button:focus-visible,
+.manager-team-choice-body select:focus-visible,
+.manager-team-choice-body input:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.manager-lineup-selected-state {
+  grid-template-columns: 1fr;
+  margin-bottom: .2rem;
+}
+
+.manager-lineup-selected-state .manager-team-selected-field {
+  border-right: 0;
+}
+
+.manager-roster-selected-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .7rem;
+  align-items: baseline;
+  margin: 0 0 .75rem;
+  padding: .55rem .1rem .7rem;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.62);
+  font-size: .7rem;
+}
+
+.manager-roster-selected-note strong { color: #fff; }
+
+.manager-team-choice-drawer[hidden] { display: none !important; }
+
+.manager-team-choice-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(24rem, 42rem);
+}
+
+.manager-team-choice-backdrop {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(0,0,0,.72);
+  cursor: default;
+}
+
+.manager-team-choice-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-width: 0;
+  height: 100dvh;
+  border-left: 1px solid rgba(255,255,255,.25);
+  background: #090d11;
+  color: #fff;
+  box-shadow: -24px 0 55px rgba(0,0,0,.4);
+}
+
+.manager-team-choice-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem 1.05rem .9rem;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+
+.manager-team-choice-head h2 {
+  margin: .12rem 0 .25rem;
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+}
+
+.manager-team-choice-head .muted-text {
+  max-width: 64ch;
+  margin: 0;
+  font-size: .72rem;
+  line-height: 1.45;
+}
+
+.manager-team-choice-close {
+  flex: 0 0 auto;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 7px;
+  background: transparent;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.manager-team-choice-body {
+  min-width: 0;
+  overflow: auto;
+  padding: 1rem 1.05rem 1.2rem;
+}
+
+.manager-team-choice-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .8rem;
+  padding: .72rem 1rem;
+  border-top: 1px solid rgba(255,255,255,.15);
+  background: #070a0d;
+}
+
+.manager-team-choice-footer span {
+  color: rgba(255,255,255,.55);
+  font-size: .65rem;
+}
+
+.manager-team-choice-done {
+  min-height: 2.5rem;
+  padding: .4rem .8rem;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 7px;
+  background: #fff;
+  color: #070a0d;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* Eksisterende valgsystemer beholder sitt eget innhold, men får plass til å
+   fungere som en egen meny i stedet for å stå permanent under hovedscenen. */
+.manager-team-choice-body #teamForm {
+  display: grid !important;
+  gap: .75rem;
+  margin: 0;
+}
+
+.manager-team-choice-body #teamForm .pitch-control-field {
+  display: grid;
+  gap: .3rem;
+  margin: 0;
+}
+
+.manager-team-choice-body #teamForm select {
+  width: 100%;
+  min-height: 2.75rem;
+}
+
+.manager-team-lineup-choice-source.is-in-team-choice-drawer {
+  display: grid !important;
+  gap: 1rem;
+}
+
+.manager-team-choice-body #lineupPlayerChoices,
+.manager-team-choice-body #lineupRoleChoices,
+.manager-team-choice-body #trainingPrograms,
+.manager-team-choice-body #weeklyTrainingOptions,
+.manager-team-choice-body #individualTrainingPicker {
+  display: grid;
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .manager-team-selected-state {
+    grid-template-columns: 1fr;
+  }
+
+  .manager-team-selected-field {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+
+  .manager-team-selected-field:last-child { border-bottom: 0; }
+
+  .manager-team-choice-drawer {
+    grid-template-columns: 1fr;
+  }
+
+  .manager-team-choice-backdrop {
+    position: absolute;
+    inset: 0;
+  }
+
+  .manager-team-choice-panel {
+    position: relative;
+    z-index: 1;
+    align-self: end;
+    width: 100%;
+    height: min(82dvh, 48rem);
+    border-top: 1px solid rgba(255,255,255,.25);
+    border-left: 0;
+    box-shadow: 0 -24px 55px rgba(0,0,0,.4);
+  }
+
+  .manager-team-choice-head,
+  .manager-team-choice-body {
+    padding-inline: .8rem;
+  }
+
+  .manager-team-choice-footer {
+    align-items: stretch;
+  }
+
+  .manager-team-choice-footer span { display: none; }
+  .manager-team-choice-done { width: 100%; }
+}
