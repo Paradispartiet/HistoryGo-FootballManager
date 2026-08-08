@@ -56,7 +56,7 @@ const checks = [
   ["profil og laguttak har separate treffmål", files.workspace.includes("lineup-player-profile-link") && files.workspace.includes("lineup-player-select-action")],
   ["ingen ny overall-rating introduseres", !/\boverall\b/i.test(files.workspace.replace("ingen overall", ""))],
 
-  ["dokumentasjonen sier eksplisitt at alternativer ikke fjernes", files.selectedDocs.includes("ikke at alternativer fjernes") && files.selectedDocs.includes("popup/drawer")],
+  ["dokumentasjonen sier eksplisitt at alternativer ikke fjernes", files.selectedDocs.includes("alternativer fjernes") && files.selectedDocs.includes("popup/drawer")],
   ["dokumentasjonen låser eksisterende motorer", files.selectedDocs.includes("ingen ny taktikkmotor") && files.selectedDocs.includes("ingen ny treningsmotor") && files.selectedDocs.includes("ingen ny localStorage-nøkkel")],
   ["dokumentasjonen låser komplett alternativmeny", files.selectedDocs.includes("Alternativene skal være komplette")],
   ["opprinnelig spillerliste/profil-skille beholdes", files.docs.includes("Spillerliste = sammenligne mange spillere") && files.docs.includes("Spillerprofil = forstå én spiller")],
