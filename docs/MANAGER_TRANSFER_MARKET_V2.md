@@ -1,5 +1,7 @@
 # Overgangsmarked v2
 
+> **Produktstatus 08.08.2026:** Denne filen dokumenterer en eksisterende teknisk v2-implementasjon, men et klassisk kjøp/salg-marked er **ikke lenger canonical produktretning**. History Go skal være den autoritative inngangen til historiske spillere, og managerdelen skal lære brukeren å forstå og bruke dem — ikke gjøre dem til tilfeldige markedsobjekter. Se `PRODUCT_PRINCIPLES_CLUB_SIMULATION.md`. Runtime-koden er ikke fjernet av denne dokumentasjonsendringen.
+
 ## Formål
 
 Overgangsmarked v2 bygger videre på Rekruttering v1 og Kontrakter og klubbøkonomi v1. Målet er at troppsbygging skal ha en reell utgående side: manageren kan gjøre egne rekrutterte spillere tilgjengelige, motta bud fra andre ligaklubber og velge om klubben skal selge.
