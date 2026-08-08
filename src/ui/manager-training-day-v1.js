@@ -30,11 +30,9 @@ function clubWeekState() {
 }
 
 function currentContext() {
+  if (calendarContext?.target === "trening") return calendarContext;
   const clubWeek = clubWeekState();
   const week = Math.max(1, Number(clubWeek.week) || 1);
-  if (calendarContext?.week === week && calendarContext?.target === "trening") {
-    return calendarContext;
-  }
   const dayIndex = currentManagerDayIndex(clubWeek);
   return {
     week,
@@ -267,12 +265,13 @@ function captureCalendarContext(event) {
     week: Math.max(1, Number(clubWeek.week) || 1),
     dayIndex,
     day: DAYS[dayIndex - 1] || "Onsdag",
-    time: compactText("#managerCalendarTimeline .manager-calendar-event-button[data-target=\"trening\"] .manager-calendar-event-time", ""),
+    time: String(button.querySelector(".manager-calendar-event-time")?.textContent || "").trim(),
     eventId: button.dataset.eventId || "training-calendar",
     eventTitle: String(button.querySelector(".manager-calendar-event-copy strong")?.textContent || "Treningsarbeid").trim(),
     target: "trening",
     source: "calendar"
   };
+  scheduleRender();
 }
 
 function installObservers() {
