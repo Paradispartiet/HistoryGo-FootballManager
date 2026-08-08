@@ -57,6 +57,17 @@ function ensureStyles() {
   document.head.append(link);
 }
 
+function returnToCalendarDay() {
+  const context = currentContext();
+  const office = document.querySelector('.main-nav [role="tab"][data-tab-target="dashboard"]');
+  if (!(office instanceof HTMLElement)) return;
+  office.click();
+  requestAnimationFrame(() => {
+    const day = document.querySelector(`#managerCalendarDays .manager-calendar-day-button[data-day="${context.dayIndex}"]`);
+    if (day instanceof HTMLElement) day.click();
+  });
+}
+
 function ensureSurface() {
   const section = document.querySelector('[data-tab-section="trening"]');
   if (!section) return null;
@@ -127,14 +138,8 @@ function ensureSurface() {
   surface.querySelector("#trainingDayChangeProgram")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingProgram"));
   surface.querySelector("#trainingDayChangeFocus")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingFocus"));
   surface.querySelector("#trainingDayChangeIndividual")?.addEventListener("click", () => openExistingChoice("teamChangeIndividualTraining"));
-  const returnToCalendar = () => {
-    const context = currentContext();
-    window.dispatchEvent(new CustomEvent("hgfm:calendar-return", {
-      detail: { week: context.week, dayIndex: context.dayIndex, source: "training" }
-    }));
-  };
-  surface.querySelector("#trainingDayBackCalendar")?.addEventListener("click", returnToCalendar);
-  surface.querySelector("#trainingDayReturnCalendar")?.addEventListener("click", returnToCalendar);
+  surface.querySelector("#trainingDayBackCalendar")?.addEventListener("click", returnToCalendarDay);
+  surface.querySelector("#trainingDayReturnCalendar")?.addEventListener("click", returnToCalendarDay);
   return surface;
 }
 
@@ -216,7 +221,7 @@ function renderTrainingDay() {
   if (eyebrow) eyebrow.textContent = `Lag · Trening · Uke ${context.week} · ${context.day}`;
   if (lede) lede.textContent = context.source === "calendar"
     ? `Åpnet fra kalenderen. Fullfør arbeidet for ${context.day.toLocaleLowerCase("nb-NO")} uten å opprette en ny tidsflyt.`
-    : `Dette er treningsarbeidet som ligger i kalenderuka. Kalenderen er fortsatt fasit for når arbeidet skjer.`;
+    : "Dette treningsarbeidet ligger i kalenderuka. Kalenderen er fortsatt fasit for når arbeidet skjer.";
   if (time) time.textContent = context.time || "Trening";
   if (event) event.textContent = context.eventTitle || "Treningsarbeid";
 
@@ -252,16 +257,29 @@ function scheduleRender() {
   });
 }
 
+function captureCalendarContext(event) {
+  const button = event.target?.closest?.('#managerCalendarTimeline .manager-calendar-event-button[data-target="trening"]');
+  if (!button) return;
+  const selectedDay = document.querySelector('#managerCalendarDays .manager-calendar-day-button[aria-selected="true"]');
+  const dayIndex = Number(selectedDay?.dataset.day) || 3;
+  const clubWeek = clubWeekState();
+  calendarContext = {
+    week: Math.max(1, Number(clubWeek.week) || 1),
+    dayIndex,
+    day: DAYS[dayIndex - 1] || "Onsdag",
+    time: compactText("#managerCalendarTimeline .manager-calendar-event-button[data-target=\"trening\"] .manager-calendar-event-time", ""),
+    eventId: button.dataset.eventId || "training-calendar",
+    eventTitle: String(button.querySelector(".manager-calendar-event-copy strong")?.textContent || "Treningsarbeid").trim(),
+    target: "trening",
+    source: "calendar"
+  };
+}
+
 function installObservers() {
-  window.addEventListener("hgfm:calendar-open-work", (event) => {
-    const detail = event.detail || {};
-    if (detail.target !== "trening") return;
-    calendarContext = { ...detail, source: "calendar" };
-    scheduleRender();
-  });
   window.addEventListener("updateProfile", scheduleRender);
   window.addEventListener("storage", scheduleRender);
 
+  document.addEventListener("click", captureCalendarContext, true);
   document.addEventListener("click", (event) => {
     if (event.target?.closest?.("#trainingPrograms, #weeklyTrainingOptions, #individualTrainingPicker, #individualTrainingAssignments")) {
       queueMicrotask(scheduleRender);
