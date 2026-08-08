@@ -65,7 +65,7 @@ check("avviste motor-/UI-/testfiler er fysisk slettet", permanentlyRemoved.every
 
 check("browser verifiserer save-migrering", files.browser.includes("clubEconomy") && files.browser.includes("transferMarket") && files.browser.includes("recruitedPlayerIds"));
 check("browser verifiserer at legacy DOM er borte", files.browser.includes("managerEconomyWorkspace") && files.browser.includes("managerTransferMarketWorkspace") && files.browser.includes('data-tab-section="facilities"'));
-check("browser verifiserer at rekrutteringsklikk ikke blokkeres", files.browser.includes("defaultPrevented") && files.browser.includes("data-recruit-player"));
+check("browser verifiserer at rekrutteringsklikk ikke blokkeres", files.browser.includes("defaultPrevented") && files.browser.includes("dataset.recruitPlayer"));
 check("dokumentasjonen låser History Go som spillerkilde", files.docs.includes("History Go eier fortsatt spilleroppdagelsen"));
 check("dokumentasjonen låser ingen ny lagringsnøkkel", files.docs.includes("ingen ny lagringsnøkkel"));
 check("Pass 7 audit er registrert", files.package.includes('"audit:manager-legacy-cleanup-v1"'));
