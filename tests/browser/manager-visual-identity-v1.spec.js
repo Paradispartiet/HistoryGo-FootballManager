@@ -8,9 +8,25 @@ const AREAS = [
   ["Kamp", "kamp", "match", "kamp", '[data-tab-section="kamp"]'],
   ["Stats", "statistikk", "stats", "statistikk", '[data-tab-section="statistikk"]']
 ];
+const CONTEXT_BY_TARGET = Object.fromEntries(AREAS.map(([, target, area, surface]) => [target, { area, surface }]));
 
 async function openArea(page, target) {
   await page.locator(`.main-nav [role="tab"][data-tab-target="${target}"]`).click();
+  const expected = CONTEXT_BY_TARGET[target];
+  if (expected) {
+    await expect(page.locator("body")).toHaveAttribute("data-manager-area", expected.area);
+    await expect(page.locator("body")).toHaveAttribute("data-manager-surface", expected.surface);
+  }
+}
+
+async function expectFiveColumnNav(page) {
+  await expect.poll(async () => page.locator(".main-nav-inner").evaluate((el) => {
+    const style = getComputedStyle(el);
+    return {
+      display: style.display,
+      columns: style.gridTemplateColumns.split(/\s+/).filter(Boolean).length
+    };
+  })).toEqual({ display: "grid", columns: 5 });
 }
 
 async function noOverflow(page) {
@@ -37,6 +53,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
   await expect(page.locator("#managerVisualIdentityV1Style")).toBeAttached();
+  await expect(page.locator("#managerVisualIdentityLayoutV1Style")).toBeAttached();
   await expect(page.locator("body")).toHaveAttribute("data-manager-area", "office");
 });
 
@@ -44,15 +61,10 @@ test("fem hovedområder får riktig visuell scene og lesbar femkolonne-nav", asy
   const visibleTabs = page.locator('.main-nav .nav-tab[data-nav-modes~="league"]:visible');
   await expect(visibleTabs).toHaveCount(5);
   await expect(visibleTabs).toHaveText(["Kontor", "Lag", "Speiding", "Kamp", "Stats"]);
+  await expect(page.locator(".main-nav .nav-group-label-primary")).toBeHidden();
+  await expectFiveColumnNav(page);
 
-  const columns = await page.locator(".main-nav-inner").evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
-  expect(columns).toBe(5);
-
-  for (const [, target, area, surface] of AREAS) {
-    await openArea(page, target);
-    await expect(page.locator("body")).toHaveAttribute("data-manager-area", area);
-    await expect(page.locator("body")).toHaveAttribute("data-manager-surface", surface);
-  }
+  for (const [, target] of AREAS) await openArea(page, target);
 });
 
 test("hovedscenene har ulike visuelle karakterer uten ny kortvegg", async ({ page }) => {
@@ -112,8 +124,7 @@ for (const viewport of [
       await openArea(page, target);
       await noOverflow(page);
     }
-    const columns = await page.locator(".main-nav-inner").evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
-    expect(columns).toBe(5);
+    await expectFiveColumnNav(page);
   });
 }
 
