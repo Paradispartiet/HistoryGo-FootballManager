@@ -7,6 +7,7 @@ const files = {
   css: fs.readFileSync("src/ui/manager-player-workspace-v1.css", "utf8"),
   drawer: fs.readFileSync("src/ui/manager-team-choice-drawer-v1.js", "utf8"),
   drawerCss: fs.readFileSync("src/ui/manager-team-choice-drawer-v1.css", "utf8"),
+  systemV2: fs.readFileSync("src/ui/manager-system-workspace-v2.js", "utf8"),
   docs: fs.readFileSync("docs/PLAYER_LIST_PROFILE_V1.md", "utf8"),
   selectedDocs: fs.readFileSync("docs/MANAGER_TEAM_SELECTED_STATE_V1.md", "utf8"),
   package: fs.readFileSync("package.json", "utf8"),
@@ -40,7 +41,8 @@ const checks = [
   ["treningsfokusalternativer flyttes til drawer", files.drawer.includes('trainingSource("weeklyTrainingOptions")') && files.drawer.includes("teamChangeTrainingFocus")],
   ["individuell picker flyttes til drawer", files.drawer.includes('trainingSource("individualTrainingPicker")') && files.drawer.includes("teamChangeIndividualTraining")],
   ["Systemet viser aktiv formasjon og kampplan", files.drawer.includes("teamSystemSelectedState") && files.drawer.includes("teamSystemFormation") && files.drawer.includes("teamSystemTactic")],
-  ["Systemet gjenbruker samme formasjon/kampplan-drawer", files.drawer.includes("teamChangeSystem") && files.drawer.includes('source: form')],
+  ["Systemet v2 delegerer formasjon og kampplan til eksisterende valg", files.systemV2.includes('document.getElementById("teamChangeFormation")?.click()') && files.systemV2.includes('document.getElementById("teamChangeTactic")?.click()')],
+  ["Systemet beholder samme autoritative formasjon/kampplan-drawer", files.drawer.includes("teamChangeSystem") && files.drawer.includes('source: form')],
 
   ["alternativkilder skjules bare på hovedflaten", files.drawerCss.includes(".manager-team-alternative-source") && files.drawerCss.includes(".is-in-team-choice-drawer")],
   ["desktop bruker sidedrawer", files.drawerCss.includes("grid-template-columns: minmax(0, 1fr) minmax(24rem, 42rem)")],
@@ -66,7 +68,7 @@ const checks = [
   ["browser tester formasjon i drawer", files.browser.includes("formasjon og kampplan åpnes i drawer") && files.browser.includes("#teamChangeFormation")],
   ["browser tester spiller og rolle i drawer", files.browser.includes("spiller- og rollealternativer") && files.browser.includes("#teamChangePlayerRole")],
   ["browser tester trening i drawer", files.browser.includes("program fokus og individuell picker") && files.browser.includes("#teamChangeTrainingProgram")],
-  ["browser tester Systemet i drawer", files.browser.includes("Systemet viser aktivt system") && files.browser.includes("#teamChangeSystem")],
+  ["browser tester Systemet v2 til eksisterende drawer", files.browser.includes("Systemet viser aktivt system") && files.browser.includes("#managerSystemWorkspaceV2") && files.browser.includes('name: "Endre formasjon"')],
   ["browser tester mobil overflow", files.browser.includes("valgdrawer har ingen mobil overflow")],
   ["browser tester tilgjengelighet og fokusretur", files.browser.includes("returnerer fokus") && files.browser.includes("AxeBuilder")]
 ];
