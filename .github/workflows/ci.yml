@@ -82,9 +82,8 @@ jobs:
           npm run audit:manager-recruitment-v1
           npm run audit:manager-calendar-v1
           npm run audit:manager-staff-roster-v1
-          npm run audit:manager-facilities-upgrades-v1
-          npm run audit:manager-transfer-market-v2
           npm run audit:manager-visual-identity-v1
+          npm run audit:manager-legacy-cleanup-v1
 
       - name: Simuleringer (motorer ende-til-ende)
         run: |
@@ -122,9 +121,8 @@ jobs:
           npm run sim:manager-recruitment-v1
           npm run sim:manager-calendar-v1
           npm run sim:manager-staff-roster-v1
-          npm run sim:manager-facilities-upgrades-v1
-          npm run sim:manager-transfer-market-v2
           npm run sim:manager-visual-identity-v1
+          npm run sim:manager-legacy-cleanup-v1
           npm run sim:role-familiarity
           npm run sim:league-season
           npm run sim:mode-isolation
