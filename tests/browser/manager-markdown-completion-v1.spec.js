@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 async function openTeam(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
-  await expect(page.locator("#lineupSlots .lineup-player-card").first()).toBeVisible();
+  await expect(page.locator("#lineupSlots .player-chip").first()).toBeVisible();
 }
 
 async function openSystem(page) {
@@ -76,7 +76,7 @@ test.beforeEach(async ({ page }) => {
 
 test("trykk på spillerplass åpner inspektør før spiller- og rollealternativer", async ({ page }) => {
   await openTeam(page);
-  const slot = page.locator("#lineupSlots .lineup-player-card").first();
+  const slot = page.locator("#lineupSlots .player-chip").first();
   await slot.click();
   const inspector = page.locator("#managerLineupSlotInspector");
   await expect(inspector).toBeVisible();
@@ -141,7 +141,7 @@ test("Treningsanlegg og medisinsk apparat lærer fagarbeidet uten oppdiktede niv
 test("completion-flatene fungerer på 390px uten sideoverflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openTeam(page);
-  await page.locator("#lineupSlots .lineup-player-card").first().click();
+  await page.locator("#lineupSlots .player-chip").first().click();
   await expect(page.locator("#managerLineupSlotInspector")).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await page.locator("#managerLineupSlotInspector .lineup-slot-inspector-close").click();
@@ -155,7 +155,7 @@ test("completion-flatene fungerer på 390px uten sideoverflow", async ({ page })
 
 test("nye inspector- og systemflater har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
   await openTeam(page);
-  await page.locator("#lineupSlots .lineup-player-card").first().click();
+  await page.locator("#lineupSlots .player-chip").first().click();
   let results = await new AxeBuilder({ page })
     .include("#managerLineupSlotInspector")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
