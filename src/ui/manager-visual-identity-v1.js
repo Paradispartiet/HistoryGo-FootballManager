@@ -5,7 +5,7 @@
 // Den eier ingen motor, progresjon, nettverk eller lagring.
 
 const STYLE_ID = "managerVisualIdentityV1Style";
-const LAYOUT_STYLE_ID = "managerVisualIdentityLayoutV1Style";
+const CORE_MANAGER_AREAS = new Set(["office", "team", "scouting", "match", "stats"]);
 
 const AREA_BY_TARGET = Object.freeze({
   dashboard: "office",
@@ -46,19 +46,13 @@ const KIND_BY_TARGET = Object.freeze({
   hgfmLibrary: "science"
 });
 
-function appendStylesheet(id, href) {
-  if (document.getElementById(id)) return;
-  const link = document.createElement("link");
-  link.id = id;
-  link.rel = "stylesheet";
-  link.href = href;
-  document.head.append(link);
-}
-
 function ensureStyles() {
-  if (typeof document === "undefined") return;
-  appendStylesheet(STYLE_ID, new URL("./manager-visual-identity-v1.css", import.meta.url).href);
-  appendStylesheet(LAYOUT_STYLE_ID, new URL("./manager-visual-identity-layout-v1.css", import.meta.url).href);
+  if (typeof document === "undefined" || document.getElementById(STYLE_ID)) return;
+  const link = document.createElement("link");
+  link.id = STYLE_ID;
+  link.rel = "stylesheet";
+  link.href = new URL("./manager-visual-identity-v1.css", import.meta.url).href;
+  document.head.append(link);
 }
 
 export function resolveManagerVisualContext(target, parent = "") {
@@ -107,7 +101,13 @@ export function syncManagerVisualContext() {
   if (typeof document === "undefined") return null;
   const target = activeShellTarget();
   const context = resolveManagerVisualContext(target, targetParent(target));
-  const count = Math.max(1, visibleMainTabCount());
+  // Ligaspillets canonical shell har fem stabile hovedområder. Å lese computed
+  // visibility mens Speiding repurposes gammel Klubb-fane skapte et kort
+  // oppstartsøyeblikk med 3 kolonner. For de fem managerområdene er derfor
+  // femkolonne-layouten selve kontrakten; andre modi bruker faktisk fanetall.
+  const count = CORE_MANAGER_AREAS.has(context.area)
+    ? 5
+    : Math.max(1, visibleMainTabCount());
   const targets = [document.documentElement, document.body].filter(Boolean);
   targets.forEach((node) => {
     node.dataset.managerArea = context.area;
