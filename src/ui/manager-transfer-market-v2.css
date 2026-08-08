@@ -1,0 +1,109 @@
+.manager-transfer-market-v2 {
+  display: grid;
+  gap: .75rem;
+  margin-top: .8rem;
+  padding-top: .8rem;
+  border-top: 1px solid rgba(255,255,255,.16);
+}
+
+.transfer-market-head,
+.transfer-player-head,
+.transfer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+}
+
+.transfer-market-head h4,
+.transfer-window-text,
+.transfer-disclaimer,
+.transfer-feedback,
+.transfer-empty,
+.transfer-player-note { margin: 0; }
+
+.transfer-market-head h4 { color: #fff; font-size: .95rem; }
+.transfer-eyebrow { display: block; color: rgba(255,255,255,.55); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; }
+
+.transfer-window-badge,
+.transfer-status {
+  flex: 0 0 auto;
+  padding: .28rem .48rem;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  color: rgba(255,255,255,.75);
+  font-size: .64rem;
+  font-weight: 800;
+}
+
+.transfer-window-badge.is-open,
+.transfer-status.is-listed { border-color: rgba(191,232,199,.55); color: #bfe8c7; }
+.transfer-window-badge.is-closed { color: rgba(255,255,255,.48); }
+
+.transfer-window-text,
+.transfer-disclaimer,
+.transfer-feedback,
+.transfer-empty,
+.transfer-player-note {
+  color: rgba(255,255,255,.67);
+  font-size: .73rem;
+  line-height: 1.45;
+}
+
+.transfer-disclaimer {
+  padding: .65rem .75rem;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+}
+
+.transfer-feedback { min-height: 1.05rem; }
+.transfer-feedback[data-tone="positive"] { color: #bfe8c7; }
+.transfer-feedback[data-tone="attention"] { color: #f4d8a0; }
+
+.transfer-player-list { display: grid; gap: .55rem; }
+.transfer-player-card {
+  display: grid;
+  gap: .55rem;
+  padding: .7rem;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 10px;
+  background: rgba(0,0,0,.18);
+}
+
+.transfer-player-head > div { min-width: 0; display: grid; gap: .1rem; }
+.transfer-player-head strong { color: #fff; font-size: .8rem; }
+.transfer-player-head small { color: rgba(255,255,255,.55); font-size: .66rem; }
+
+.transfer-offer {
+  display: grid;
+  gap: .12rem;
+  padding: .6rem .65rem;
+  border-left: 3px solid var(--club-accent, #fff);
+  background: rgba(255,255,255,.05);
+}
+.transfer-offer span,
+.transfer-offer small { color: rgba(255,255,255,.58); font-size: .65rem; }
+.transfer-offer strong { color: #fff; font-size: .78rem; }
+
+.transfer-actions { justify-content: flex-start; flex-wrap: wrap; }
+.transfer-action {
+  min-height: 34px;
+  padding: .38rem .58rem;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.transfer-action-primary { border-color: var(--club-accent, rgba(255,255,255,.72)); background: rgba(255,255,255,.08); }
+.transfer-action:disabled { opacity: .38; cursor: default; }
+
+@media (max-width: 640px) {
+  .transfer-market-head,
+  .transfer-player-head { align-items: flex-start; }
+  .transfer-player-head { flex-direction: column; }
+}
