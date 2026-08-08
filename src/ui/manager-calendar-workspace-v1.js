@@ -285,11 +285,15 @@ function applyOfficeNavigationContract() {
   }
   if (officeHelp) officeHelp.classList.toggle("office-subnav-proxy", normalSave);
 
-  // Dersom Speiding allerede finnes som egen hovedinngang, skal den ikke også
-  // ligge som parallell Kontor-fane. Hvis ikke, beholdes den eksisterende
-  // inngangen inntil hovednavigasjonen eksplisitt flyttes i en senere pass.
+  // Speiding flyttes av sin egen workspace fra Kontor til hovedområdet Speiding.
+  // Kalenderen skal bare skjule den gamle Kontor-proxyen; når fanen er
+  // reparentet til `historygo`, eies synligheten av Speiding selv.
   const scoutingMain = document.querySelector('.main-nav .nav-tab[data-tab-target="historygo"]');
-  if (historygo && scoutingMain && !scoutingMain.hidden) historygo.classList.add("office-subnav-proxy");
+  if (historygo?.dataset.subnavParent === "dashboard" && scoutingMain && !scoutingMain.hidden) {
+    historygo.classList.add("office-subnav-proxy");
+  } else if (historygo?.dataset.subnavParent === "historygo") {
+    historygo.classList.remove("office-subnav-proxy");
+  }
 
   if (calendar && board && calendar.parentElement === board.parentElement) subnav.insertBefore(calendar, board);
   else if (calendar) subnav.prepend(calendar);
