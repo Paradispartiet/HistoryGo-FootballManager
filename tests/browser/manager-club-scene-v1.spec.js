@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 async function openOffice(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
-  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 }
 
 async function openClub(page) {
@@ -36,9 +36,10 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
-test("Klubbdrift ligger under Kontor mens Speiding er eget hovedområde", async ({ page }) => {
+test("Klubben ligger under Kontor mens Speiding er eget hovedområde", async ({ page }) => {
   await openClub(page);
   await expect(page.locator("#clubCommand h2")).toHaveText("Klubbkontoret");
   await expect(page.locator(".club-expectation-card strong")).not.toBeEmpty();
@@ -46,21 +47,20 @@ test("Klubbdrift ligger under Kontor mens Speiding er eget hovedområde", async 
   await expect(page.locator(".club-command-action")).toBeVisible();
   await expect(page.locator(".club-command-status")).toHaveCount(6);
   await expect(page.locator(".club-command-metrics article")).toHaveCount(5);
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubbdrift");
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubben");
   await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toHaveCount(0);
   await expect(page.locator('.main-nav .nav-tab[data-tab-target="historygo"]')).toHaveText("Speiding");
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubben");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toHaveText("Kalender");
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(4);
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(2);
   expect(await page.locator("#clubDepth").getAttribute("open")).toBeNull();
 });
 
-test("klubbstatus åpner Speiding som hovedområde og øvrige klubbfunksjoner under Kontor", async ({ page }) => {
+test("klubbstatus åpner Speiding som hovedområde og øvrige klubbfunksjoner fra Klubben", async ({ page }) => {
   await openClub(page);
   await page.locator('.club-command-status[data-club-target="admin"]').click();
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
   await expect(page.locator("#availableStaffList")).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubbdrift · Stab & drift");
 
   await openClub(page);
   await page.locator('.club-command-status[data-club-target="historygo"]').click();
