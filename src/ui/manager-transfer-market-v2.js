@@ -36,7 +36,7 @@ function leagueSeason() {
   return readJson(STORAGE.leagueSeason, null) || {
     seasonNumber: 1,
     currentRound: 1,
-    status: "active",
+    status: "unavailable",
     competition: { rounds: 30 },
     clubs: [],
     managerClubId: null
