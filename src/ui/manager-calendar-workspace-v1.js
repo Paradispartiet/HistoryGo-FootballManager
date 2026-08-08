@@ -342,6 +342,23 @@ function renderDayRail(section, model) {
   days.replaceChildren(fragment);
 }
 
+function emitCalendarWorkContext(day, entry) {
+  if (!entry?.target) return;
+  const fallbackWeek = Math.max(1, Number(clubWeekState()?.week) || 1);
+  window.dispatchEvent(new CustomEvent("hgfm:calendar-open-work", {
+    detail: {
+      week: selectedWeek || fallbackWeek,
+      dayIndex: day.dayIndex,
+      day: day.day,
+      time: entry.time,
+      eventId: entry.id,
+      eventTitle: entry.title,
+      target: entry.target,
+      source: "calendar"
+    }
+  }));
+}
+
 function renderTimeline(section, day) {
   const title = section.querySelector("#managerCalendarSelectedDay");
   const status = section.querySelector("#managerCalendarSelectedStatus");
@@ -370,8 +387,12 @@ function renderTimeline(section, day) {
     meta.append(node("span", "manager-calendar-event-action", entry.actionLabel));
     button.append(time, copy, meta);
     button.addEventListener("click", () => {
-      if (entry.kind === "message") openInboxDrawer(entry, button);
-      else activateTarget(entry.target);
+      if (entry.kind === "message") {
+        openInboxDrawer(entry, button);
+        return;
+      }
+      emitCalendarWorkContext(day, entry);
+      activateTarget(entry.target);
     });
     item.append(button);
     fragment.append(item);

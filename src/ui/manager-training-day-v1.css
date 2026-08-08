@@ -1,0 +1,241 @@
+/* Manager Training Day v1 — én treningsdag i kalenderuka, ikke en parallell progresjonsflate. */
+
+.trening-view.has-manager-training-day-v1 #trainingCommandPanel,
+.trening-view.has-manager-training-day-v1 #teamTrainingSelectedState,
+.trening-view.has-manager-training-day-v1 #trainingDepth {
+  display: none !important;
+}
+
+.manager-training-day {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.16);
+  background: #070b10;
+  color: #f7f8fa;
+}
+
+.training-day-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(.9rem, 2.4vw, 1.35rem);
+  border-bottom: 1px solid rgba(255,255,255,.16);
+  background: #0a0f15;
+}
+
+.training-day-calendar-link {
+  min-height: 2rem;
+  margin: 0 0 .45rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,.72);
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+  cursor: pointer;
+}
+
+.training-day-head h2 {
+  margin: .1rem 0 .35rem;
+  font-size: clamp(1.7rem, 4vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+
+.training-day-lede {
+  max-width: 68ch;
+  margin: 0;
+  color: rgba(255,255,255,.68);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+
+.training-day-clock {
+  display: grid;
+  justify-items: end;
+  gap: .15rem;
+  flex: 0 0 auto;
+  min-width: 8rem;
+  padding-left: 1rem;
+  border-left: 2px solid rgba(255,255,255,.72);
+}
+
+.training-day-clock span {
+  color: rgba(255,255,255,.58);
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.training-day-clock strong { font-size: 1rem; }
+
+.training-day-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(17rem, .8fr);
+  min-width: 0;
+}
+
+.training-day-main {
+  min-width: 0;
+  padding: clamp(.9rem, 2.3vw, 1.3rem);
+  border-right: 1px solid rgba(255,255,255,.14);
+}
+
+.training-day-section-head,
+.training-day-card header,
+.training-day-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+}
+
+.training-day-section-head {
+  padding-bottom: .75rem;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+.training-day-section-head span,
+.training-day-card > span,
+.training-day-card header span,
+.training-day-footer span {
+  color: rgba(255,255,255,.56);
+  font-size: .63rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.training-day-section-head h3 {
+  margin: .18rem 0 0;
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+}
+
+.training-day-action,
+.training-day-card button,
+.training-day-calendar-return {
+  min-height: 2.65rem;
+  border: 1px solid rgba(255,255,255,.34);
+  background: #0f151c;
+  color: #fff;
+  padding: .55rem .75rem;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.training-day-action:hover,
+.training-day-card button:hover,
+.training-day-calendar-return:hover {
+  border-color: rgba(255,255,255,.8);
+  background: #151e27;
+}
+
+.training-day-calendar-link:focus-visible,
+.training-day-action:focus-visible,
+.training-day-card button:focus-visible,
+.training-day-calendar-return:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.training-day-sessions {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.training-day-session {
+  display: grid;
+  grid-template-columns: 2.2rem 5.5rem minmax(0, 1fr) auto;
+  gap: .65rem;
+  align-items: center;
+  min-width: 0;
+  padding: .8rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.training-day-session:last-child { border-bottom: 0; }
+
+.training-day-session[data-current-calendar-day="true"] {
+  box-shadow: inset 3px 0 0 #fff;
+  padding-left: .65rem;
+}
+
+.training-day-session-index,
+.training-day-session-day,
+.training-day-session-intensity {
+  color: rgba(255,255,255,.58);
+  font-size: .68rem;
+  font-weight: 850;
+}
+
+.training-day-session-index { font-variant-numeric: tabular-nums; }
+.training-day-session-title { min-width: 0; font-size: .86rem; line-height: 1.35; }
+.training-day-session-intensity { text-align: right; }
+
+.training-day-side {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+  background: #090e14;
+}
+
+.training-day-card {
+  display: grid;
+  gap: .45rem;
+  min-width: 0;
+  padding: .9rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.training-day-card:last-child { border-bottom: 0; }
+.training-day-card strong { font-size: .9rem; line-height: 1.35; overflow-wrap: anywhere; }
+.training-day-card p { margin: 0; color: rgba(255,255,255,.62); font-size: .7rem; line-height: 1.45; }
+.training-day-assistant { box-shadow: inset 3px 0 0 rgba(255,255,255,.54); }
+.training-day-condition { background: rgba(255,255,255,.025); }
+
+.training-day-footer {
+  padding: .7rem clamp(.9rem, 2.3vw, 1.3rem);
+  border-top: 1px solid rgba(255,255,255,.14);
+  background: #080c11;
+}
+
+.training-day-footer > div { display: grid; gap: .16rem; }
+.training-day-footer strong { font-size: .82rem; }
+
+@media (max-width: 820px) {
+  .training-day-grid { grid-template-columns: 1fr; }
+  .training-day-main { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.14); }
+  .training-day-side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .training-day-card:nth-child(odd) { border-right: 1px solid rgba(255,255,255,.12); }
+}
+
+@media (max-width: 560px) {
+  .training-day-head,
+  .training-day-footer { display: grid; align-items: start; }
+  .training-day-clock { justify-items: start; padding-left: .55rem; }
+  .training-day-section-head { align-items: end; }
+  .training-day-action { min-width: 7rem; }
+  .training-day-session {
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    grid-template-areas:
+      "index title intensity"
+      ". day intensity";
+    gap: .18rem .5rem;
+  }
+  .training-day-session-index { grid-area: index; }
+  .training-day-session-title { grid-area: title; }
+  .training-day-session-day { grid-area: day; }
+  .training-day-session-intensity { grid-area: intensity; }
+  .training-day-side { grid-template-columns: 1fr; }
+  .training-day-card:nth-child(odd) { border-right: 0; }
+  .training-day-calendar-return { width: 100%; }
+}

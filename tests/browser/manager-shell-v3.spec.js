@@ -107,20 +107,21 @@ test("lagflaten viser banen og valgt tilstand mens alternativer åpnes i drawer"
   expect(pitch.x + pitch.width).toBeLessThanOrEqual(app.x + app.width + 1);
 });
 
-test("trening viser nøyaktig ett utvidet arbeidssteg", async ({ page }) => {
+test("trening er en kalenderkoblet treningsdag med valg i drawer", async ({ page }) => {
   await openArea(page, "Lag");
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
-  const toggles = page.locator("[data-training-step-toggle]");
-  await expect(toggles).toHaveCount(3);
-  await expect(page.locator('[data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
-  await toggles.nth(2).click();
-  await expect(toggles.nth(2)).toHaveAttribute("aria-expanded", "true");
-  await expect(page.locator('[data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
-  await expect(page.locator("#individualTrainingStepBody")).toBeVisible();
-  await expect(page.locator("#trainingProgramStepBody")).toBeHidden();
-  await expect(page.locator("#trainingFocusStepBody")).toBeHidden();
-  await expect(page.locator("#individualTrainingPicker")).toBeHidden();
-  await expect(page.locator("#teamChangeIndividualTraining")).toBeVisible();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+  await expect(page.locator("#trainingDaySessions .training-day-session")).toHaveCount(4);
+  await expect(page.locator("#trainingCommandPanel")).toBeHidden();
+  await expect(page.locator("#trainingDepth")).toBeHidden();
+  await expect(page.locator("#trainingDayBackCalendar")).toContainText("Kalender · Uke");
+  await expect(page.locator("#teamChangeIndividualTraining")).toBeAttached();
+
+  await page.locator("#trainingDayChangeIndividual").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  await expect(page.locator("#individualTrainingPicker")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
 });
 
 test("klubbidentiteten viser skjold, klubbfarge og stadion", async ({ page }) => {
