@@ -50,7 +50,7 @@ Dype arbeidsflater får eksplisitt retur til Klubben. De blir ikke nye permanent
 
 ## Rejected live IA
 
-Pass 5 fjerner følgende fra normal klubbnavigasjon og hovedflate:
+Pass 5 fjernet følgende fra normal klubbnavigasjon og hovedflate:
 
 - fasilitetsnivå 1–3 og oppgraderingsknapper;
 - fiktiv spillerøkonomi og lønnsenheter;
@@ -59,7 +59,7 @@ Pass 5 fjerner følgende fra normal klubbnavigasjon og hovedflate:
 - kommersielt `Marked` som egen managerflate;
 - permanent klubbpuls med rå 0–100-målere.
 
-Underliggende runtime-moduler og gammel save-state slettes **ikke** i dette passet. Permanent kode- og save-opprydding kommer først i Pass 7, når migreringen kan gjøres trygt.
+**Pass 7 er nå gjennomført:** økonomi-/kontrakt- og overgangsmotorene er permanent fjernet fra runtime, gamle `facilities`, `clubEconomy` og `transferMarket`-felter migreres ut av eksisterende saves, og fasilitetskompatibiliteten har null effekt og ingen UI. Se `MANAGER_LEGACY_CLEANUP_V1.md`.
 
 ## Datagrenser
 
