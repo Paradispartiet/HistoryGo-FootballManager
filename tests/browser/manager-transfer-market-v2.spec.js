@@ -51,32 +51,34 @@ test.beforeEach(async ({ page }) => {
       leagueName: "Eliteserien",
       leagueSeasonStatus: "active"
     }));
-    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
-      recruitmentVersion: 1,
-      recruitedPlayerIds: ["erik_johnsen"],
-      unlockedPlaceIds: ["kfum_arena"],
-      hiredStaffIds: [],
-      roleFamiliarity: {},
-      localStart: { enabled: false, playerIds: [] },
-      clubEconomy: {
-        version: 1,
-        balance: 100,
-        wageBudget: 60,
-        lastSettledSeason: 1,
-        contracts: {
-          erik_johnsen: { playerId: "erik_johnsen", remainingSeasons: 2, wageUnits: 3, signedSeason: 1, source: "recruited" }
+    if (!localStorage.getItem("hgfm.teamMerits.v1")) {
+      localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
+        recruitmentVersion: 1,
+        recruitedPlayerIds: ["erik_johnsen"],
+        unlockedPlaceIds: ["kfum_arena"],
+        hiredStaffIds: [],
+        roleFamiliarity: {},
+        localStart: { enabled: false, playerIds: [] },
+        clubEconomy: {
+          version: 1,
+          balance: 100,
+          wageBudget: 60,
+          lastSettledSeason: 1,
+          contracts: {
+            erik_johnsen: { playerId: "erik_johnsen", remainingSeasons: 2, wageUnits: 3, signedSeason: 1, source: "recruited" }
+          },
+          ledger: []
         },
-        ledger: []
-      },
-      transferMarket: {
-        version: 2,
-        listedPlayerIds: [],
-        offers: {},
-        closedOfferKeys: [],
-        history: [],
-        lastSeenWindowKey: "s1:opening"
-      }
-    }));
+        transferMarket: {
+          version: 2,
+          listedPlayerIds: [],
+          offers: {},
+          closedOfferKeys: [],
+          history: [],
+          lastSeenWindowKey: "s1:opening"
+        }
+      }));
+    }
   });
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
@@ -126,9 +128,6 @@ test("eksisterende transfer-state overlever refresh uten å bli eksponert", asyn
     merits.transferMarket.listedPlayerIds = ["erik_johnsen"];
     merits.transferMarket.history = [{ type: "listed", playerId: "erik_johnsen" }];
 
-    // Mode Isolation eier den autoritative league-snapshoten. Testen må derfor
-    // skrive samme state dit før reload, i stedet for å omgå save-kontrakten
-    // med bare en direkte teamMerits-skriving.
     const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
     if (!envelope.sessions?.league) throw new Error("Mangler autoritativ league-snapshot");
     envelope.sessions.league = { ...envelope.sessions.league, teamMerits: merits };
