@@ -1,4 +1,8 @@
-/* Kalender og ekte manageruke v1. Kalenderen leser tid; den styrer ikke flyt. */
+/* Kalender + Kontor redesign v1. Tiden vises som dagstripe + kronologisk arbeidsdag. */
+
+html[data-manager-office-calendar-v1="active"] manager-next-action {
+  display: none !important;
+}
 
 .manager-calendar-view {
   min-width: 0;
@@ -6,7 +10,6 @@
 
 .manager-calendar-surface {
   min-width: 0;
-  border: 1px solid rgba(255,255,255,.42);
   background: #070a0d;
   color: #fff;
   overflow: hidden;
@@ -18,13 +21,13 @@
   align-items: end;
   gap: 1rem;
   padding: 1rem 1.05rem .9rem;
-  border-bottom: 1px solid rgba(255,255,255,.2);
-  background: #0a0e12;
+  border-bottom: 1px solid rgba(255,255,255,.18);
+  background: #090d11;
 }
 
 .manager-calendar-head h2 {
   margin: .08rem 0 .2rem;
-  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
 }
 
 .manager-calendar-head p { margin-bottom: 0; }
@@ -33,29 +36,28 @@
   display: grid;
   gap: .12rem;
   flex: 0 0 auto;
-  padding: .45rem .62rem;
-  border: 1px solid rgba(255,255,255,.34);
-  background: #050709;
+  padding-left: .8rem;
+  border-left: 2px solid rgba(255,255,255,.72);
 }
 
 .manager-calendar-now span,
 .manager-calendar-context span {
-  color: rgba(255,255,255,.68);
+  color: rgba(255,255,255,.62);
   font-size: .62rem;
   font-weight: 900;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
 
-.manager-calendar-now strong { font-size: .83rem; }
+.manager-calendar-now strong { font-size: .86rem; }
 
 .manager-calendar-context {
   display: flex;
   align-items: baseline;
-  gap: .6rem;
-  padding: .58rem 1rem;
-  border-bottom: 1px solid rgba(255,255,255,.14);
-  background: #080b0e;
+  gap: .65rem;
+  padding: .6rem 1.05rem;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  background: #070a0d;
 }
 
 .manager-calendar-context strong { font-size: .82rem; }
@@ -66,153 +68,370 @@
   margin: 0;
   padding: 0;
   list-style: none;
+  border-bottom: 1px solid rgba(255,255,255,.18);
+  background: #05080b;
 }
 
 .manager-calendar-day {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
   min-width: 0;
-  min-height: 15.5rem;
-  padding: .72rem;
-  border-right: 1px solid rgba(255,255,255,.12);
-  background: #070a0d;
+  border-right: 1px solid rgba(255,255,255,.10);
 }
 
 .manager-calendar-day:last-child { border-right: 0; }
-.manager-calendar-day.is-completed { background: #06080a; color: rgba(255,255,255,.72); }
-.manager-calendar-day.is-current { background: #10171b; box-shadow: inset 0 3px 0 #fff; }
-.manager-calendar-day.is-upcoming { color: rgba(255,255,255,.82); }
 
-.manager-calendar-day-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: .4rem;
-  padding-bottom: .7rem;
-  border-bottom: 1px solid rgba(255,255,255,.12);
+.manager-calendar-day-button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "name marker"
+    "title title";
+  gap: .18rem .3rem;
+  width: 100%;
+  min-height: 5.3rem;
+  padding: .65rem .62rem .58rem;
+  border: 0;
+  border-top: 3px solid transparent;
+  background: transparent;
+  color: rgba(255,255,255,.76);
+  text-align: left;
+  cursor: pointer;
 }
 
-.manager-calendar-day-label span {
-  font-size: .66rem;
+.manager-calendar-day-button:hover,
+.manager-calendar-day-button:focus-visible {
+  background: rgba(255,255,255,.06);
+  color: #fff;
+}
+
+.manager-calendar-day-button[aria-selected="true"] {
+  border-top-color: #fff;
+  background: #10161b;
+  color: #fff;
+}
+
+.manager-calendar-day-button.is-completed:not([aria-selected="true"]) {
+  color: rgba(255,255,255,.55);
+}
+
+.manager-calendar-day-name {
+  grid-area: name;
+  font-size: .68rem;
+  font-weight: 950;
+  letter-spacing: .075em;
+}
+
+.manager-calendar-day-marker {
+  grid-area: marker;
+  justify-self: end;
+  min-height: 1em;
+  font-size: .72rem;
+  font-weight: 950;
+}
+
+.manager-calendar-day-title {
+  grid-area: title;
+  overflow: hidden;
+  color: rgba(255,255,255,.58);
+  font-size: .61rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+}
+
+.manager-calendar-day-button[aria-selected="true"] .manager-calendar-day-title {
+  color: rgba(255,255,255,.78);
+}
+
+.manager-calendar-workday {
+  min-width: 0;
+  padding: clamp(.85rem, 2vw, 1.2rem) clamp(.8rem, 2.5vw, 1.35rem) 1.15rem;
+  background: #090d11;
+}
+
+.manager-calendar-workday-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: .65rem;
+  border-bottom: 1px solid rgba(255,255,255,.16);
+}
+
+.manager-calendar-workday-head h3 {
+  margin: .12rem 0 0;
+  font-size: clamp(1.15rem, 2.3vw, 1.65rem);
+}
+
+.manager-calendar-selected-status {
+  flex: 0 0 auto;
+  color: rgba(255,255,255,.68);
+  font-size: .62rem;
   font-weight: 900;
   letter-spacing: .07em;
   text-transform: uppercase;
 }
 
-.manager-calendar-day-label strong {
-  color: rgba(255,255,255,.62);
-  font-size: 1rem;
+.manager-calendar-selected-status[data-status="current"] { color: #fff; }
+
+.manager-calendar-timeline {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.manager-calendar-event {
+  min-width: 0;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+
+.manager-calendar-event:last-child { border-bottom: 0; }
+
+.manager-calendar-event-button {
+  display: grid;
+  grid-template-columns: 4.2rem minmax(0, 1fr) minmax(7rem, auto);
+  gap: .75rem;
+  align-items: start;
+  width: 100%;
+  padding: .88rem 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.manager-calendar-event-button:hover,
+.manager-calendar-event-button:focus-visible {
+  background: rgba(255,255,255,.035);
+  outline-offset: 3px;
+}
+
+.manager-calendar-event.has-attention .manager-calendar-event-button {
+  box-shadow: inset 3px 0 0 rgba(255,255,255,.9);
+  padding-left: .7rem;
+}
+
+.manager-calendar-event-time {
+  color: rgba(255,255,255,.56);
+  font-size: .72rem;
+  font-weight: 900;
   font-variant-numeric: tabular-nums;
 }
 
-.manager-calendar-day-content {
+.manager-calendar-event-copy {
   display: grid;
-  align-content: start;
-  gap: .45rem;
-  padding-top: .72rem;
+  gap: .28rem;
+  min-width: 0;
 }
 
-.manager-calendar-day-content > strong {
-  font-size: .86rem;
-  line-height: 1.25;
+.manager-calendar-event-copy > strong {
+  font-size: .88rem;
+  line-height: 1.3;
 }
 
-.manager-calendar-day-content p {
-  margin: 0;
-  color: rgba(255,255,255,.68);
-  font-size: .69rem;
-  line-height: 1.45;
+.manager-calendar-event-detail {
+  max-width: 70ch;
+  color: rgba(255,255,255,.65);
+  font-size: .7rem;
+  line-height: 1.48;
 }
 
-.manager-calendar-day-content small {
-  color: rgba(255,255,255,.68);
-  font-size: .62rem;
-  font-weight: 800;
+.manager-calendar-event-meta {
+  display: grid;
+  justify-items: end;
+  gap: .28rem;
+  color: rgba(255,255,255,.56);
+  text-align: right;
 }
 
-.manager-calendar-day-status {
-  justify-self: start;
-  margin-top: .65rem;
-  padding: .22rem .34rem;
-  border: 1px solid rgba(255,255,255,.3);
-  color: rgba(255,255,255,.72);
-  font-size: .58rem;
+.manager-calendar-event-meta small {
+  font-size: .61rem;
+  font-weight: 750;
+}
+
+.manager-calendar-event-action,
+.manager-calendar-event-warning {
+  font-size: .61rem;
   font-weight: 900;
-  letter-spacing: .06em;
-  text-transform: uppercase;
 }
 
-.manager-calendar-day.is-current .manager-calendar-day-status {
-  border-color: #fff;
-  background: #fff;
-  color: #050709;
+.manager-calendar-event-action { color: #fff; }
+.manager-calendar-event-warning {
+  padding: .13rem .3rem;
+  border: 1px solid rgba(255,255,255,.55);
+  color: #fff;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
 .manager-calendar-rule {
   display: flex;
   gap: .6rem;
   align-items: baseline;
-  padding: .7rem 1rem;
+  padding: .7rem 1.05rem;
   border-top: 1px solid rgba(255,255,255,.16);
-  background: #080b0e;
+  background: #070a0d;
   font-size: .7rem;
 }
 
-.manager-calendar-rule span { color: rgba(255,255,255,.68); }
+.manager-calendar-rule span { color: rgba(255,255,255,.62); }
 
-@media (max-width: 1050px) {
-  .manager-calendar-days {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  .manager-calendar-day {
-    min-height: 12rem;
-    border-bottom: 1px solid rgba(255,255,255,.12);
-  }
-  .manager-calendar-day:nth-child(4n) { border-right: 0; }
+.manager-calendar-drawer[hidden] { display: none !important; }
+
+.manager-calendar-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 36rem);
 }
 
-@media (max-width: 680px) {
+.manager-calendar-drawer-backdrop {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(0,0,0,.7);
+  cursor: default;
+}
+
+.manager-calendar-drawer-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  height: 100dvh;
+  border-left: 1px solid rgba(255,255,255,.24);
+  background: #090d11;
+  box-shadow: -18px 0 40px rgba(0,0,0,.36);
+}
+
+.manager-calendar-drawer-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,.16);
+}
+
+.manager-calendar-drawer-head h3 { margin: .15rem 0 0; }
+
+.manager-calendar-drawer-close {
+  min-width: 2.45rem;
+  min-height: 2.45rem;
+  border: 1px solid rgba(255,255,255,.28);
+  background: transparent;
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.manager-calendar-drawer-body {
+  min-width: 0;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.manager-calendar-drawer-body .inbox-thread-card {
+  margin: 0;
+}
+
+.manager-calendar-message-fallback {
+  display: grid;
+  gap: .5rem;
+  padding-top: .4rem;
+}
+
+.manager-calendar-message-fallback p {
+  margin: 0;
+  color: rgba(255,255,255,.68);
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
   .manager-calendar-head {
     display: grid;
     align-items: start;
     padding: .8rem;
   }
+
   .manager-calendar-head .muted-text {
-    max-width: 38ch;
+    max-width: 42ch;
     font-size: .72rem;
   }
-  .manager-calendar-now { justify-self: start; }
+
+  .manager-calendar-now {
+    justify-self: start;
+    padding-left: .55rem;
+  }
+
   .manager-calendar-context {
     display: grid;
-    gap: .18rem;
-    padding: .58rem .8rem;
+    gap: .16rem;
+    padding: .55rem .8rem;
   }
-  .manager-calendar-days {
-    grid-template-columns: 1fr;
+
+  .manager-calendar-day-button {
+    min-height: 3.6rem;
+    padding: .48rem .18rem .42rem;
+    text-align: center;
   }
-  .manager-calendar-day,
-  .manager-calendar-day:nth-child(4n) {
-    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
-    grid-template-rows: auto;
-    gap: .65rem;
-    align-items: start;
-    min-height: 0;
-    padding: .68rem .75rem;
-    border-right: 0;
+
+  .manager-calendar-day-name {
+    justify-self: center;
+    font-size: .6rem;
   }
-  .manager-calendar-day-label {
-    display: grid;
-    gap: .1rem;
-    justify-content: start;
-    padding: 0;
-    border: 0;
+
+  .manager-calendar-day-marker {
+    justify-self: center;
+    font-size: .62rem;
   }
-  .manager-calendar-day-content { padding: 0; }
-  .manager-calendar-day-status { margin-top: 0; white-space: nowrap; }
+
+  .manager-calendar-day-title { display: none; }
+
+  .manager-calendar-workday {
+    padding: .78rem .75rem 1rem;
+  }
+
+  .manager-calendar-event-button {
+    grid-template-columns: 3.4rem minmax(0, 1fr);
+    gap: .55rem;
+    padding: .76rem 0;
+  }
+
+  .manager-calendar-event-meta {
+    grid-column: 2;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .manager-calendar-event.has-attention .manager-calendar-event-button {
+    padding-left: .5rem;
+  }
+
   .manager-calendar-rule {
     display: grid;
     gap: .2rem;
     padding: .65rem .8rem;
+  }
+
+  .manager-calendar-drawer {
+    grid-template-columns: 1fr;
+  }
+
+  .manager-calendar-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+  }
+
+  .manager-calendar-drawer-panel {
+    position: relative;
+    align-self: end;
+    z-index: 1;
+    width: 100%;
+    height: min(78dvh, 46rem);
+    border-top: 1px solid rgba(255,255,255,.24);
+    border-left: 0;
+    box-shadow: 0 -18px 40px rgba(0,0,0,.36);
   }
 }
