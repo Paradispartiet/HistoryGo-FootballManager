@@ -60,7 +60,10 @@ check("smal stab blir lokal hovedoppgave", staffGap.priority.target === "admin")
 check("første stabs-gap forklares", /fysio/i.test(staffGap.priority.detail));
 check("stabstatus bruker eksisterende identitet", staffGap.statuses.find((item) => item.id === "staff")?.value === "Smalt støtteapparat");
 check("speiding blir positiv når stallen er komplett", staffGap.statuses.find((item) => item.id === "scouting")?.tone === "positive");
-check("fasiliteter starter på eksplisitt grunnnivå", staffGap.facilities.label === "Grunnleggende" && staffGap.facilities.detail.includes("Trening 1/3"));
+check(
+  "fasilitetskompatibilitet viser arbeidsrom uten nivåsystem",
+  staffGap.facilities.label === "Arbeidsrom" && /ikke nivå 1–3/i.test(staffGap.facilities.detail)
+);
 
 console.log("\n3. Stab og ekspertise klare, ingen aktiv progresjon");
 const development = createManagerClubSceneModel({
@@ -121,7 +124,10 @@ check("etablert klubb stemples komplett", mature.complete === true);
 check("fem klubbpulsverdier bygges", mature.pulse.length === 5);
 check("medietrykk leses omvendt", mature.pulse.find((item) => item.id === "media")?.tone === "positive");
 check("utviklingsstatus viser aktive program", mature.statuses.find((item) => item.id === "development")?.value === "2 aktive");
-check("sterk klubb gir sterk fasilitetslesning", mature.facilities.label === "Sterk");
+check(
+  "gammel facilitiesState kan ikke gjeninnføre nivålesning",
+  mature.facilities.label === "Arbeidsrom" && mature.facilities.total === 0 && mature.facilities.maxTotal === 0
+);
 check("lavt press og sterke klubbverdier gir god markedstemperatur", mature.market.label === "God temperatur" && mature.market.tone === "positive");
 check("alle statusmål peker til eksisterende flater", mature.statuses.every((item) => ["details", "historygo", "admin", "progression", "facilities", "market"].includes(item.target)));
 
