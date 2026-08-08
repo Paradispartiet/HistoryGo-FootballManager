@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 async function openFacilities(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
-  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]').click();
   await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
   await expect(page.locator("#clubCommandPanel")).toBeVisible();
@@ -35,6 +35,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
 test("fasiliteter har tre reelle nivåer og ett managerstyrt valg per uke", async ({ page }) => {

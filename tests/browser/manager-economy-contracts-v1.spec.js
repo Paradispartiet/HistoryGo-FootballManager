@@ -8,7 +8,7 @@ async function openScouting(page) {
 
 async function openEconomy(page) {
   await page.getByRole("tab", { name: "Kontor", exact: true }).click();
-  await page.getByRole("tab", { name: "Klubbdrift", exact: true }).click();
+  await page.getByRole("tab", { name: "Klubben", exact: true }).click();
   await expect(page.locator("#clubCommand")).toBeVisible();
   await page.locator('[data-club-target="admin"]').first().click();
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
@@ -69,6 +69,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
   await seedOpenLeagueSeason(page);
   await expect(page.locator("#managerEconomyWorkspace")).toBeAttached();
 });

@@ -1,9 +1,9 @@
-// Manager Calendar v1 — ren tidsprojeksjon av eksisterende Club Week.
+// Manager Calendar v1 — presentasjonslag over eksisterende Club Week.
 //
 // Kalenderen eier IKKE progresjon, fasebytter eller lagring. Den leser
-// ClubWeekState og legger de eksisterende arbeidsflatene på mandag–søndag.
-// `Forslag til neste steg` forblir eneste veiviser; denne modulen svarer bare på
-// «hvilken dag er vi på, hva har skjedd og hva kommer senere i uka?».
+// ClubWeekState og organiserer eksisterende managerarbeid som dager og
+// kronologiske hendelser. Handlinger i hendelsene åpner bare eksisterende
+// arbeidsflater; de flytter aldri uka på egen hånd.
 
 export const MANAGER_WEEK_VERSION = "historygo-football-manager.manager-week.v1";
 
@@ -27,12 +27,12 @@ export const MANAGER_WEEK_DAY_BY_PHASE = Object.freeze({
 
 const WEEK_TEMPLATE = Object.freeze([
   Object.freeze({ dayIndex: 1, day: "Mandag", phase: "analysis", title: "Analyse og restitusjon", owner: "Kontor · Stats" }),
-  Object.freeze({ dayIndex: 2, day: "Tirsdag", phase: "inbox", title: "Innboks og klubbdrift", owner: "Kontor" }),
+  Object.freeze({ dayIndex: 2, day: "Tirsdag", phase: "inbox", title: "Møter og meldinger", owner: "Kontor" }),
   Object.freeze({ dayIndex: 3, day: "Onsdag", phase: "training", title: "Treningsarbeid", owner: "Lag · Trening" }),
-  Object.freeze({ dayIndex: 4, day: "Torsdag", phase: "training", title: "Trening og individuell oppfølging", owner: "Lag · Trening" }),
+  Object.freeze({ dayIndex: 4, day: "Torsdag", phase: "training", title: "Oppfølging", owner: "Lag · Trening" }),
   Object.freeze({ dayIndex: 5, day: "Fredag", phase: "match_prep", title: "Kampforberedelse", owner: "Lag · Oppstilling" }),
   Object.freeze({ dayIndex: 6, day: "Lørdag", phase: "matchday", title: "Kampdag", owner: "Kamp" }),
-  Object.freeze({ dayIndex: 7, day: "Søndag", phase: "review", title: "Etterkamp og oppsummering", owner: "Kamp · Analyse" })
+  Object.freeze({ dayIndex: 7, day: "Søndag", phase: "review", title: "Etterkamp", owner: "Kamp · Analyse" })
 ]);
 
 function text(value, fallback = "") {
@@ -43,6 +43,10 @@ function text(value, fallback = "") {
 function normalizeWeek(value) {
   const week = Number(value);
   return Number.isInteger(week) && week >= 1 ? week : 1;
+}
+
+function event(id, time, title, detail, { owner = "", target = "", kind = "work", attention = false, actionLabel = "Åpne" } = {}) {
+  return { id, time, title, detail, owner, target, kind, attention: Boolean(attention), actionLabel };
 }
 
 export function normalizeManagerWeekPhase(value) {
@@ -67,11 +71,102 @@ function resultText(lastMatch) {
   return `${Math.max(0, Math.round(own))}–${Math.max(0, Math.round(against))}`;
 }
 
+function eventsForDay(dayIndex, {
+  week,
+  opponent,
+  opponentName,
+  trainingSelected,
+  inboxHandled,
+  inboxTitle,
+  inboxAttentionCount,
+  lineupReady,
+  lastMatch
+}) {
+  const result = resultText(lastMatch);
+
+  if (dayIndex === 1) {
+    return [
+      event("analysis-brief", "08:30", week === 1 ? "Ukeanalyse" : "Analyse etter forrige kamp", week === 1
+        ? "Les laget, sesongen og neste motstander før arbeidsuka tar form."
+        : "Se resultat, mønstre og belastning før den nye uka settes.", { owner: "Stats", target: "statistikk" }),
+      event("recovery-check", "10:00", "Restitusjon og belastning", "Følg opp hvilke spillere som trenger restitusjon eller særskilt belastningsstyring.", { owner: "Lag · Trening", target: "trening" })
+    ];
+  }
+
+  if (dayIndex === 2) {
+    const hasAttention = Number(inboxAttentionCount) > 0 && !inboxHandled;
+    return [
+      event("club-message", "08:30", text(inboxTitle, "Melding fra klubben"), inboxHandled
+        ? "Ukas viktigste melding er håndtert. Den ligger fortsatt i arbeidsdagen som historikk."
+        : "En melding fra klubben eller støtteapparatet venter i dagens arbeidsdag.", {
+          owner: "Kontor",
+          kind: "message",
+          attention: hasAttention,
+          actionLabel: "Åpne melding"
+        }),
+      event("staff-meeting", "10:00", "Trener- og klubbmøte", "Samle signalene fra støtteapparatet før treningsarbeidet og kampforberedelsene.", { owner: "Klubben", target: "board" })
+    ];
+  }
+
+  if (dayIndex === 3) {
+    return [
+      event("training-meeting", "09:30", "Trenermøte", "Avklar dagens hensikt, belastning og coachingpunkter før laget går ut på feltet.", { owner: "Lag · Trening", target: "trening" }),
+      event("team-training", "11:00", "Trening", trainingSelected
+        ? "Ukas treningsramme er valgt. Åpne treningen for å se program, fokus og belastning."
+        : "Treningsprogram mangler. Velg program og fokus før økta gjennomføres.", {
+          owner: "Lag · Trening",
+          target: "trening",
+          attention: !trainingSelected,
+          actionLabel: trainingSelected ? "Åpne trening" : "Velg program"
+        }),
+      event("training-feedback", "14:30", "Oppfølging etter økta", "Se belastning, individuelle signaler og hva trenerteamet tar med seg videre.", { owner: "Lag · Trening", target: "trening" })
+    ];
+  }
+
+  if (dayIndex === 4) {
+    return [
+      event("individual-follow-up", "11:00", "Individuell oppfølging", "Arbeid med roller, individuelle behov, skader og belastning innen den eksisterende treningsfasen.", { owner: "Lag · Trening", target: "trening" }),
+      event("analysis-follow-up", "14:00", "Analyse og justering", "Juster det som skal tas med inn i kampforberedelsen uten å opprette en ny fase.", { owner: "Lag · Systemet", target: "system" })
+    ];
+  }
+
+  if (dayIndex === 5) {
+    return [
+      event("match-prep", "10:00", "Kampforberedelse", lineupReady
+        ? "Startellever og benk er satt. Bekreft roller, system og siste kampplan."
+        : "Laguttaket er ikke kampklart. Få ellever, benk og roller på plass.", {
+          owner: "Lag · Oppstilling",
+          target: "tactics",
+          attention: !lineupReady,
+          actionLabel: lineupReady ? "Åpne kampforberedelse" : "Gjør laget klart"
+        })
+    ];
+  }
+
+  if (dayIndex === 6) {
+    const title = opponentName ? `Kamp mot ${opponentName}` : "Kampdag";
+    const venue = opponent?.homeAway === "away" ? "Bortekamp" : opponent?.homeAway === "home" ? "Hjemmekamp" : "Ligakamp";
+    return [
+      event("matchday", "15:00", title, opponentName
+        ? `${venue}${opponent?.round ? ` · runde ${opponent.round}` : ""}. Kampmotoren og kampvalgene er uendret.`
+        : "Spill ukas kamp og ta managergrep underveis.", { owner: "Kamp", target: "kamp", actionLabel: "Åpne kampdag" })
+    ];
+  }
+
+  return [
+    event("post-match", "10:30", "Etterkamp og kampanalyse", result
+      ? `Siste kamp endte ${result}. Les konsekvensene, forklaringen og hva laget tar med seg inn i neste uke.`
+      : "Les kampanalysen, konsekvensene og hva laget tar med seg videre.", { owner: "Kamp · Analyse", target: "analyse", actionLabel: "Åpne kampanalyse" })
+  ];
+}
+
 export function createManagerWeekCalendar({
   clubWeekState = {},
   opponent = null,
   trainingSelected = false,
   inboxHandled = false,
+  inboxTitle = "Melding fra klubben",
+  inboxAttentionCount = 0,
   lineupReady = false,
   lastMatch = null
 } = {}) {
@@ -79,55 +174,25 @@ export function createManagerWeekCalendar({
   const phase = normalizeManagerWeekPhase(clubWeekState?.phase);
   const currentDayIndex = currentManagerDayIndex({ phase });
   const opponentName = text(opponent?.name);
-  const result = resultText(lastMatch);
 
-  const days = WEEK_TEMPLATE.map((template) => {
-    let title = template.title;
-    let detail = "";
+  const context = {
+    week,
+    opponent,
+    opponentName,
+    trainingSelected,
+    inboxHandled,
+    inboxTitle,
+    inboxAttentionCount,
+    lineupReady,
+    lastMatch
+  };
 
-    if (template.dayIndex === 1) {
-      detail = week === 1
-        ? "Les laget, sesongen og neste motstander før arbeidsuka tar form."
-        : "Les forrige kamp, belastning og neste motstander før den nye uka settes.";
-    }
-    if (template.dayIndex === 2) {
-      detail = inboxHandled
-        ? "Ukas viktigste klubb- og stabsignaler er håndtert."
-        : "Les ukas viktigste klubb-, stabs- og garderobesignaler.";
-    }
-    if (template.dayIndex === 3) {
-      detail = trainingSelected
-        ? "Ukas treningsramme eller fokus er valgt."
-        : "Sett ukas treningsramme og taktiske fokus.";
-    }
-    if (template.dayIndex === 4) {
-      detail = "Følg opp belastning, roller, skader og individuell trening innen samme treningsfase.";
-    }
-    if (template.dayIndex === 5) {
-      detail = lineupReady
-        ? "Bekreft kampplan, roller og siste justeringer før kamp."
-        : "Få ellever, benk, roller og kampplan kampklare.";
-    }
-    if (template.dayIndex === 6) {
-      title = opponentName ? `Kamp mot ${opponentName}` : "Kampdag";
-      detail = opponentName
-        ? `${opponent?.homeAway === "away" ? "Bortekamp" : opponent?.homeAway === "home" ? "Hjemmekamp" : "Ligakamp"}${opponent?.round ? ` · runde ${opponent.round}` : ""}.`
-        : "Spill ukas kamp og ta managergrep underveis.";
-    }
-    if (template.dayIndex === 7) {
-      detail = result
-        ? `Siste kamp: ${result}. Les konsekvensene og ta lærdommen inn i neste uke.`
-        : "Les kampanalysen, konsekvensene og hva laget tar med seg videre.";
-    }
-
-    return {
-      ...template,
-      title,
-      detail,
-      status: statusForDay(template.dayIndex, currentDayIndex),
-      isCurrent: template.dayIndex === currentDayIndex
-    };
-  });
+  const days = WEEK_TEMPLATE.map((template) => ({
+    ...template,
+    status: statusForDay(template.dayIndex, currentDayIndex),
+    isCurrent: template.dayIndex === currentDayIndex,
+    events: eventsForDay(template.dayIndex, context)
+  }));
 
   const currentDay = days.find((day) => day.isCurrent) || days[0];
   return {
