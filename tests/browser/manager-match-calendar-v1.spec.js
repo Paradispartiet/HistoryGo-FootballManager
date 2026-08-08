@@ -58,6 +58,10 @@ async function setPhase(page, phase) {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 }
 
+async function storedClubWeekPhase(page) {
+  return page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}").clubWeekState?.phase);
+}
+
 async function expectNoHorizontalOverflow(page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
@@ -138,8 +142,7 @@ test("fredag returnerer til samme kalenderdag uten å flytte Club Week", async (
   await page.locator("#matchPrepReturnCalendar").click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="5"]')).toHaveAttribute("aria-selected", "true");
-  const phase = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.clubWeekState.v1") || "{}").phase);
-  expect(phase).toBe("match_prep");
+  expect(await storedClubWeekPhase(page)).toBe("match_prep");
 });
 
 test("lørdagens kalenderhendelse eier Kamp og beholder eksisterende kampdag", async ({ page }) => {
@@ -165,8 +168,7 @@ test("lørdag returnerer til samme kalenderdag uten å starte kamp", async ({ pa
   await page.locator("#matchdayBackCalendar").click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="6"]')).toHaveAttribute("aria-selected", "true");
-  const phase = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.clubWeekState.v1") || "{}").phase);
-  expect(phase).toBe("matchday");
+  expect(await storedClubWeekPhase(page)).toBe("matchday");
 });
 
 test("fredag og lørdag har ingen mobil overflow", async ({ page }) => {
