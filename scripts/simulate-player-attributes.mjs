@@ -304,8 +304,9 @@ const largestClone = Math.max(...signatures.values());
 // nøyaktig den reverteringen passert i stillhet.
 //
 // Odd-importen (100 profiler, 100 % unike kvalitetssetninger i kilden) tok den
-// til 1126 av 1336 = 84,3 %, og grensa følger etter til 0,84.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.84,
+// til 84,3 %. Aalesund la 90 til, og målt er den nå 85,2 % av 1413. Grensa
+// følger etter til 0,85.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.85,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -349,18 +350,24 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // Rekkefølgen betyr ingenting for utledningen, så den skal ikke bety noe for
 // målingen heller — ellers pynter tallet på seg selv.
 //
-// Odd tok den fra 55,6 % til 57,0 %, og grensa til 0,56. Kilden er den mest
-// ordrike hittil (95 av 100 styrkesett unike for seg selv). Samtidig ble 69
-// lagrede styrker kanonisert: de sto som ALIAS (`one_v_one` ved siden av
-// `one_vs_one`), og da teller denne målingen én ferdighet som to. Det trakk
-// tallet ned 0,2 poeng, og det er riktig — det var pynt.
+// Odd tok den fra 55,6 % til 57,0 %. Kilden er den mest ordrike hittil (95 av
+// 100 styrkesett unike for seg selv). Samtidig ble 69 lagrede styrker
+// kanonisert: de sto som ALIAS (`one_v_one` ved siden av `one_vs_one`), og da
+// teller denne målingen én ferdighet som to. Det trakk tallet ned 0,2 poeng, og
+// det er riktig — det var pynt.
+//
+// Aalesund tok den videre til 59,3 %, og grensa til 0,58. Kilden har 100 %
+// unike styrkesett for seg selv, og samtidig fikk `marking` og `flair` sine
+// første 85 spillere: to ferdigheter katalogen hadde, men som én
+// ordbokoppføring hadde spist («markering» pekte på `duels`). Et smalere
+// vokabular gir likere sett.
 const strengthSets = new Map();
 for (const player of players) {
   const key = JSON.stringify([...player.strengths].sort());
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.56,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.58,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // ---------------------------------------------------------------------------
@@ -427,6 +434,44 @@ for (const [placeId, andel, antall, total] of malandeler) {
 // epoke, skal ikke være like.
 check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length >= 2,
   Object.keys(catalogue.eraProfiles).join(", "));
+
+// ---------------------------------------------------------------------------
+// Epoken må komme fra kilden, ikke fra en fallback
+// ---------------------------------------------------------------------------
+// Importene utledet `era` av årstall i kilden, med «historical» som fallback
+// når kilden ikke oppga noe. Det er husets tilbakevendende feil i ny form: en
+// fallback som ALLTID biter. 46 av 90 Aalesund-profiler har ikke ett eneste
+// årstall, så arven havnet på 59 % `historical` — for en klubb som kom til
+// øverste nivå første gang i 2002.
+//
+// TO VAKTER BLE SKREVET FØRST, OG INGEN AV DEM BET.
+//
+// Den ene målte epokespennet mellom klubbene, den andre korpusandelen.
+// Bitetesten — datér alle udaterte Aalesund-profiler til `historical` igjen —
+// gikk rett gjennom begge: spennet står stille fordi Sandefjord (1 %) og
+// Viking (67 %) eier ytterpunktene uansett hva Aalesund gjør, og korpusandelen
+// flyttet seg fra 42,7 % til 45,7 %, godt innenfor enhver rimelig grense.
+//
+// Én klubbs epokemiks er rett og slett ikke synlig i utdataene, og 59 % er
+// dessuten helt riktig for Fredrikstad (ni seriegull 1938–1961). Det finnes
+// ingen fordeling å måle mot.
+//
+// Det som KAN måles, er om påstanden er belagt. `eraSource` er samme mønster
+// som `classSource` og `clubStatusSource`: `belagt` betyr at kilden daterte
+// ham. En fallback som daterer det udaterte produserer `utledet`, og da
+// beveger dette tallet seg — det er hele poenget med å skrive det ned.
+{
+  const kilder = players.map((player) => player.eraSource);
+  check("hver spiller sier hvor epoken kom fra",
+    kilder.every((value) => value === "belagt" || value === "utledet"),
+    [...new Set(kilder)].join(", "));
+  const belagt = kilder.filter((value) => value === "belagt").length / players.length;
+  // RATCHET. Målt 29,3 %, og det er lavt med vilje: 608 spillere står utenfor
+  // klubbkildene og har ingen registrert datering i det hele tatt. Tallet skal
+  // opp for hver kilde som daterer det den navngir, og aldri ned.
+  check("epoken er belagt for en reell andel", belagt > 0.28, `${(belagt * 100).toFixed(1)} %`);
+  check("begge kildegradene er i bruk", new Set(kilder).size === 2);
+}
 const eraPairs = [];
 for (const player of players) {
   const twin = players.find((other) =>

@@ -168,6 +168,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Vålerenga | Intility Arena | 127 |
 | Fredrikstad | Fredrikstad stadion | 100 |
 | Odd | Skagerak Arena | 100 |
+| Aalesund | Color Line Stadion | 90 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Start | Sparebanken Sør Arena | 85 |
@@ -183,18 +184,16 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 
-| Aalesund | Color Line Stadion | 1 |
-
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset og Odd
-— 1570 arveplasser fordelt på alle 20. **Ingen klubb med bane står uten navn.** De 40 klubbene som
-mangler bane sier det rett ut i profilen i stedet for å late som.
+— 1659 arveplasser fordelt på alle 20, og **ingen klubb med bane har under 26 navn**.
+De 40 klubbene som mangler bane sier det rett ut i profilen i stedet for å late som.
 
 Arven er ikke lenger et eliteserieprivilegium: Strømsgodset, Odd og Lyn ligger
 alle tre i OBOS-ligaen og har henholdsvis den nest største, den delt fjerde
 største og den niende største arven i katalogen. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 193 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 201 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -476,6 +475,97 @@ levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
 
+### Aalesund: fra 1 til 90 navn, og en fallback som alltid bet
+
+AaFK hadde bane og **ett navn** — Tor Hogne Aarøy, ført som
+`club_profile`/`utledet` enda han er klubbens cupfinalescorer fra 2009. 79 nye
+navn, 11 koblet på.
+
+Kilden holder standarden fra Tromsø, Fredrikstad, Start og Odd: **90 unike
+kvalitetssetninger for 90 profiler**, og **100 % unike ferdighetssett** etter
+kartlegging — det høyeste noen kilde har gitt. **94 % av frasene var allerede
+dekket** av de sju tidligere ordbøkene, også det en rekord; bare 19 fraser var
+nye. Til gjengjeld skriver den kortere enn Odd — stikkord i stedet for
+setninger — og sju profiler ender på to ferdigheter fordi kilden gjentar samme
+sak med to ord («Reflekser, reaksjoner», «Markering, duellstyrke»). Å telle dem
+som to ferdigheter ville vært den samme pyntingen som usorterte styrkesett.
+
+Nær-duplikat-vakten fant to par, begge samme mann: **Mustafa / Mostafa «Mos»
+Abdellaoue** (feilstavet — slått sammen til den riktige stavemåten, slik
+Cristian Gamboa ble) og **Sondre Fet / Sondre Brunstad Fet** (begge former
+riktige — den som allerede sto i katalogen beholdes, som for Jarstein).
+
+#### Epoken var utledet uten at noe sa det
+
+`era` er en akse i ferdighetsprofilen (`eraProfiles`), altså en påstand om
+hvilken fotball spilleren spilte. Importene utledet den av årstall i kilden,
+med **`historical` som fallback** når kilden ikke oppga noe.
+
+**46 av 90 AaFK-profiler har ikke ett eneste årstall.** Arven havnet derfor på
+**59 % `historical` — for en klubb som kom til øverste nivå første gang i
+2002.** Til sammenligning: Sandefjord 1 %, Stabæk 8 %, Fredrikstad 65 % (som er
+riktig — ni seriegull mellom 1938 og 1961).
+
+Epoken utledes nå av kildens egne to signaler: årstall i profilen, og
+kategorien — «Historisk pioner» og «Historisk overgangsprofil» er de eneste to
+kilden selv merker som historiske. Dokumentet sier dessuten rett ut at klubben
+rykket opp i 2002 og at spillere fra før 2002 er inkludert *som unntak*.
+Resultat: **18 %**, altså de tolv kilden merker pluss fire daterte før 2000.
+
+#### To vakter ble skrevet først, og ingen av dem bet
+
+Den ene målte epokespennet mellom klubbene, den andre korpusandelen. Bitetesten
+— datér alle udaterte AaFK-profiler til `historical` igjen — gikk rett gjennom
+begge:
+
+| Vakt | Uten fallback | Med fallback gjeninnført | Bet? |
+|---|---:|---:|---|
+| Spenn mellom arvene | 66 pp | 66 pp | nei |
+| Korpusandel `historical` | 42,7 % | 45,7 % | nei |
+
+Spennet står stille fordi Sandefjord og Viking eier ytterpunktene uansett hva
+Aalesund gjør, og tre prosentpoeng av korpuset er usynlig. **Én klubbs
+epokemiks er ikke synlig i utdataene**, og det finnes ingen riktig fordeling å
+måle mot — 59 % er tross alt korrekt for Fredrikstad.
+
+Det som kan måles, er om påstanden er **belagt**. Spillerne har nå `eraSource`,
+samme mønster som `classSource` og `clubStatusSource`: 414 `belagt` (kilden
+daterte ham) mot 999 `utledet`. Grensa er en ratchet på 28 %, og den er lav med
+vilje — 608 spillere står utenfor klubbkildene og har ingen registrert datering
+i det hele tatt. Bitetest: 30 belagte satt til utledet feller den på 27,2 %.
+
+Grensen er ærlig: en import som *lyver* om provenansen fanges ikke, like lite
+som for `classSource`. Vakten flytter kostnaden dit den hører hjemme — den som
+importerer må si hva kilden faktisk sa.
+
+#### Tre ord katalogen ikke fikk bruke
+
+Fire ferdigheter hadde **null** spillere: `marking`, `flair`, `decisions`,
+`natural_fitness`. For to av dem var det ikke kildene som manglet, men
+ordboka — én oppføring hadde spist ordet:
+
+| Frase | Pekte på | Skal peke på |
+|---|---|---|
+| «markering» | `duels` | `marking` |
+| «improvisasjon» | `chance_creation` | `flair` |
+| «uforutsigbarhet» | `chance_creation` | `flair` |
+
+**51 kildeprofiler sier «markering» rett ut**, og ferdigheten sto likevel på
+null. Rettelsen ga `marking` 78 spillere og `flair` 7. Der kilden sier begge
+deler («Markering, duellstyrke») legges den nye til; der ordet var eneste
+grunnlag, erstatter den. `kreativitet` → `chance_creation` blir stående:
+katalogens egen aliasliste sier `creativity` → `chance_creation`.
+
+`decisions` (0 kildetreff) og `natural_fitness` (2) står igjen som ekte
+kildehull, ikke ordbokfeil.
+
+Første forsøk på reparasjonen tokeniserte hele kilden på nytt og sammenlignet.
+Den rekonstruksjonen er ikke tro mot de eldre importene — de brukte andre
+ordbokprioriteringer, andre tak og RBKs egen 3-token-regel — så 326 av 384 rader
+avvek av grunner som ikke hadde med rettelsen å gjøre. Vakten avviste dem, som
+den skulle, men den lot også ekte treff ligge. Andre forsøk bytter bare
+ferdigheten som spiste ordet, der kilden sier ordet.
+
 ### Odd: fra 0 til 100 navn, og 47 fraser som aldri kom fram
 
 Odd er **Norges eldste fotballklubb** (1894) med tolv cupgull, og hadde verken
@@ -731,8 +821,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1598 statusoppføringer på 1336
-spillere, 1084 belagte og 514 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1687 statusoppføringer på 1413
+spillere, 1165 belagte og 522 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
