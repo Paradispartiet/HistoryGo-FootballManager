@@ -250,7 +250,8 @@
       "city": "Skien",
       "tier": "obosligaen",
       "strength": 68,
-      "form": 52
+      "form": 52,
+      "homePlaceId": "skagerak_arena"
     },
     {
       "id": "stromsgodset",

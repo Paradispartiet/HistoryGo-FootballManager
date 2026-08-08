@@ -137,6 +137,23 @@ for (const player of players) {
 }
 check("alle styrke-tokens løser til en ferdighet", unresolved.size === 0, [...unresolved].join(", "));
 
+// Og de må stå som FERDIGHETEN, ikke som aliaset. Vakten over godtar begge,
+// fordi motoren gjør det — så alt fungerte, og ingenting feilet. Men 69 lagrede
+// styrker sto som alias, og da teller målingen av unike styrkesett `one_v_one`
+// og `one_vs_one` som to forskjellige ferdigheter. Tallet pynter på seg selv:
+// samme feil som usorterte sett, ett ledd lenger inn.
+//
+// Aliasene finnes for det de ble laget for — å lese kilder og rolledata som
+// bruker et annet ord. Dataene selv skal være kanoniske.
+const lagredeAliaser = new Set();
+for (const player of players) {
+  for (const token of player.strengths || []) {
+    if (!ids.has(token)) lagredeAliaser.add(token);
+  }
+}
+check("ingen spiller har et alias lagret i stedet for ferdigheten",
+  lagredeAliaser.size === 0, [...lagredeAliaser].join(", "));
+
 // Hver rolle må ha minst ett ferdighetskrav, ellers kan rollens klassebonus
 // ikke regnes ut og faller stilltiende tilbake til klassehøyden.
 for (const role of roles) {
@@ -314,7 +331,12 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Knutsen og Knudsen er to ulike etternavn, ikke en stavevariant: Vikings
   // hurtige ving fra gullperioden mot Starts midtbanespiller med over 200
   // kamper fram til 1974.
-  ["arvid knudsen|arvid knutsen", "Vikings ving mot Starts sentrale midtbanespiller"]
+  ["arvid knudsen|arvid knutsen", "Vikings ving mot Starts sentrale midtbanespiller"],
+  // Odd-kilden ga det reneste tilfellet av samme navn, to menn: Vikings Sverre
+  // Andersen er keeper med 482 kamper og 41 landskamper, Odds er spiss med 61
+  // mål på 80 kamper mellom 1911 og 1920. Posisjonen alene avgjør det. Han er
+  // ført med klubbsuffiks, slik Tore Pedersen (RBK) allerede var.
+  ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

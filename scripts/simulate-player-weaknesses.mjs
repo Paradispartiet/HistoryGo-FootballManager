@@ -70,19 +70,24 @@ check(
   "alle posisjonskrav peker på kjente attributter",
   Object.values(catalogue.positionDemands).every((tokens) => tokens.every((t) => Boolean(getWeaknessAttribute(catalogue, t))))
 );
-// Dekningen må være nåbar fra ekte spillerdata, ellers er den pynt. Etter at
-// ferdighetskatalogen fikk kanoniske ider, går veien ofte gjennom aliaslista:
-// spillerne har `reading_game`, ferdigheten heter `game_reading`. Vakten må
-// løse akkurat som motoren gjør — ellers måler den noe produksjonen ikke ser.
+// Dekningen må være nåbar fra ekte spillerdata, ellers er den pynt. Veien går
+// gjennom aliaslista, og den må gås BEGGE veier — det var den ikke før.
+//
+// Første utgave slo bare opp bakover: hvilke aliaser peker på dette tokenet, og
+// har noen spiller ett av dem? Det holdt så lenge spillerdataene selv bar
+// aliaser (`reading_game` sto lagret hos ni spillere). Da styrkene ble
+// kanonisert, forsvant hele den veien, og `coveredBy: ["box_movement"]` ble
+// «unåbar» — enda hver eneste spiller med `box_presence` dekker den.
+//
+// Et `coveredBy`-token kan altså selv VÆRE et alias. Vakten må derfor først
+// kanonisere tokenet, akkurat som motoren gjør, og deretter spørre om noen
+// spiller har den ferdigheten.
 check(
   "alle coveredBy er nåbare fra ekte spillerstyrker",
   (() => {
-    const strengths = new Set(players.flatMap((p) => p.strengths));
-    const aliasesTo = {};
-    for (const [token, target] of Object.entries(rawAttributes.strengthAliases || {})) {
-      (aliasesTo[target] = aliasesTo[target] || []).push(token);
-    }
-    const reachable = (token) => strengths.has(token) || (aliasesTo[token] || []).some((t) => strengths.has(t));
+    const aliases = rawAttributes.strengthAliases || {};
+    const strengths = new Set(players.flatMap((p) => p.strengths).map((t) => aliases[t] || t));
+    const reachable = (token) => strengths.has(aliases[token] || token);
     return catalogue.attributes.every((a) => a.coveredBy.every(reachable));
   })()
 );

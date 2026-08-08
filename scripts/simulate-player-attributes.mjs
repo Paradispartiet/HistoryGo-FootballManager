@@ -302,7 +302,10 @@ const largestClone = Math.max(...signatures.values());
 // kilde i stedet for malgenerert. Det ER en ratchet: reverteres VIF til mal,
 // faller andelen til 74,4 %, og vakten feller det. Sto grensa på 0,70 ville
 // nøyaktig den reverteringen passert i stillhet.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.83,
+//
+// Odd-importen (100 profiler, 100 % unike kvalitetssetninger i kilden) tok den
+// til 1126 av 1336 = 84,3 %, og grensa følger etter til 0,84.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.84,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -345,13 +348,19 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // ulik rekkefølge fra hver sin klubbkilde, og de er bit-identiske profiler.
 // Rekkefølgen betyr ingenting for utledningen, så den skal ikke bety noe for
 // målingen heller — ellers pynter tallet på seg selv.
+//
+// Odd tok den fra 55,6 % til 57,0 %, og grensa til 0,56. Kilden er den mest
+// ordrike hittil (95 av 100 styrkesett unike for seg selv). Samtidig ble 69
+// lagrede styrker kanonisert: de sto som ALIAS (`one_v_one` ved siden av
+// `one_vs_one`), og da teller denne målingen én ferdighet som to. Det trakk
+// tallet ned 0,2 poeng, og det er riktig — det var pynt.
 const strengthSets = new Map();
 for (const player of players) {
   const key = JSON.stringify([...player.strengths].sort());
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.54,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.56,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // ---------------------------------------------------------------------------

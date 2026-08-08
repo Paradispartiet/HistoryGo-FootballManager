@@ -323,10 +323,10 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter alle sju kildene | Grense |
+| | Før VIF | Etter alle ti kildene | Grense |
 |---|---:|---:|---:|
-| Unike profiler | 73,7 % | **81,8 %** | 0,81 |
-| Unike styrke-sett | 46,9 %* | **51,6 %** | 0,49 |
+| Unike profiler | 73,7 % | **84,3 %** | 0,84 |
+| Unike styrke-sett | 46,9 %* | **57,0 %** | 0,56 |
 | Største klon | 12 | 12 | ≤ 14 |
 
 \* Tallene for styrke-sett er ikke sammenlignbare på tvers av kolonnene.
@@ -348,10 +348,14 @@ hva kildene sier, ikke en malimport, og et tak på 12 ville felt neste ekte
 import av en midtstopper.
 
 Strømsgodset senket begge andelene (kilden har 48 unike styrkesetninger for 144
-spillere), Viking løftet dem igjen. Netto står de på stedet hvil mens katalogen
-har vokst fra 1007 til 1117 spillere — og det er nettopp derfor den
+spillere), Viking løftet dem igjen. Netto sto de på stedet hvil mens katalogen
+vokste fra 1007 til 1117 spillere — og det er nettopp derfor den
 korpusbrede målingen ble supplert med en **per klubb**-måling: den blir ikke
 uskarpere av at katalogen vokser.
+
+Tromsø, Fredrikstad, Start og Odd er de fire ordrikeste kildene (81/81, 100/100,
+85/85 og 100/100 unike kvalitetssetninger), og de dro begge andelene opp igjen
+til 84,3 % og 57,0 % på 1336 spillere.
 
 Bitetesten er å reversere klubben til mal: VIF falt til 74,4 % og 44,4 %, RBK
 til 77,2 % og 51,7 %, og vaktene feller begge. Sto grensene der de sto, ville
@@ -362,7 +366,7 @@ VIF-dokumentet har 127 unike styrkesetninger for 127 spillere; RBK-dokumentet
 har 42 for 156. Det grupperer etter rolle — tolv offensive backer deler én
 setning. En delt setning gir derfor tre tokens og ikke fem: med fem dekket én
 delt keeperbeskrivelse hele GK-kravlista, og ni spillere endte med under tre
-svake sider.  felte det, og det var en ekte
+svake sider. `sim:player-weaknesses` felte det, og det var en ekte
 modelleringsfeil, ikke en for streng terskel.
 
 En ting måtte holdes ren for at tallene skal bety noe. Vokabularet har aliaser —
@@ -371,9 +375,27 @@ rått, ser styrke-settene mer ulike ut enn de er. Da måler uniktheten **synonym
 i stedet for spillere**. Frasene kanoniseres derfor før de lagres. Det er den
 ene måten dette tallet kunne vært pyntet på uten at noe feilet.
 
+Kanoniseringen sto i docs og var ikke gjort. Odd-importen fant to hull:
+
+**47 ordbokfraser pekte på et alias**, og importene ender med
+`.filter((t) => ids.has(t))` — et alias er ikke en id, så treffet ble filtrert
+bort til slutt. Kilden sa noe om spilleren, og spillet lagret det ikke. Ingen
+vakt så det, fordi resultatet ser ut som en kilde som ikke nevnte ferdigheten.
+Målt skade: 12 profiler. Nå null.
+
+**69 lagrede styrker sto som alias** der importen ikke filtrerte. Det virker —
+motoren slår opp aliaset — men målingen teller strenger, så `one_v_one` og
+`one_vs_one` telte som to ferdigheter. Nøyaktig den pyntingen dette avsnittet
+advarer mot, i produksjonsdataene. De er kanonisert; 11 kollapset mot en form
+som allerede sto der, og andelen unike styrkesett falt fra 57,2 % til 57,0 %.
+
+`audit:attributes` feller nå et lagret alias direkte. Vakten som fantes fra før —
+«alle styrke-tokens løser til en ferdighet» — godtok begge former, fordi motoren
+gjør det. En vakt som speiler motoren finner ikke en feil motoren tåler.
+
 ## Påstander om ekte spillere
 
-Dette er **367 navngitte fotballspillere**. 42 tall hver er ~15 000
+Dette er **1336 navngitte fotballspillere**. 58 tall hver er ~77 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 

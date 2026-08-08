@@ -6413,6 +6413,414 @@
         }
       ],
       "notes": "Klubbanlegg: Strømsgodsets hjemmebane i Drammen."
+    },
+    {
+      "placeId": "skagerak_arena",
+      "placeName": "Skagerak Arena",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "andre_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "geir_karlsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ardian_gashi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_gunnar_solli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bengt_saeternes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arni_gautur_arason"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frode_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mushaga_bakenga"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "olivier_occean"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mikael_noro_ingebrigtsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "etzaz_hussain"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "odin_bjortuft"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_storbaek"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "peter_kovacs"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_skou"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_hoff"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_svindal_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "somen_tchoyi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_aas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_brenne"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_grogaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bard_borgersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "einar_jeja_gundersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thaulow_goberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ingolf_skruen_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bertel_ulriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_jacobsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steffen_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_fevang"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_ruud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_holtan"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ronny_deila"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torjus_ekeli_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_rambekk"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jone_samuelsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ewald_normann_kihle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ragnar_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_reinholt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_magne_holte"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thor_sem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "olav_gundersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "reidar_skjonstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "william_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "chukwuma_bentley_akabueze"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "guttorm_hol"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_gasmann"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "berthold_pettersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "peder_henriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjarne_gulbrandsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henry_reinholt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sverre_andersen_odd"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "haakon_haakonsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nils_torstensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ragnar_pedersen_brane"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "didrik_christensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sigurd_johannessen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nils_pasan_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_arhus"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henry_thorsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tiedemann_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martinius_kristoffersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erling_lunde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_bonna_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "odd_johannessen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_erhard_johannessen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dagfinn_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ove_odegard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_tollefsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_jarstein"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nat_borchers"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_nilsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tuomo_kononen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elbasan_rashani"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "herolind_shala"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "birk_risa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joshua_kitolano"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_lauritsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rafik_zekhnini"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leopold_wahlstedt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dennis_gjengaar"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sami_mahlio"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_lovseth_rossbach"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_frode_nornes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_flindt_bjerg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kim_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_roed"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_nordkvelle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_semb_berge"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_oldrup_jensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_lekven"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torgeir_borven"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vebjorn_hoff"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_andre_kaasa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oliver_berg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "conrad_wallem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "filip_ronningen_jorgensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "syver_aas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "faniel_tewelde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "solomon_owusu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "josef_brian_baccay"
+        }
+      ],
+      "notes": "Klubbanlegg: Odds hjemmebane i Skien. Norges eldste fotballklubb, tolv cupgull."
     }
   ]
 }

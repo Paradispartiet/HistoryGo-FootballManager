@@ -167,9 +167,10 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Strømsgodset | Marienlyst stadion | 143 |
 | Vålerenga | Intility Arena | 127 |
 | Fredrikstad | Fredrikstad stadion | 100 |
-| Start | Sparebanken Sør Arena | 85 |
+| Odd | Skagerak Arena | 100 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
+| Start | Sparebanken Sør Arena | 85 |
 | Lyn | Bislett Stadion | 82 |
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
@@ -184,16 +185,16 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 
 | Aalesund | Color Line Stadion | 1 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn og Strømsgodset —
-1470 arveplasser fordelt på alle 19. **Ingen klubb med bane står uten navn.** De 41 klubbene som
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset og Odd
+— 1570 arveplasser fordelt på alle 20. **Ingen klubb med bane står uten navn.** De 40 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som.
 
-Arven er ikke lenger et eliteserieprivilegium: Strømsgodset og Lyn ligger begge
-i OBOS-ligaen og har henholdsvis den nest største og den sjette største arven i
-katalogen. Det er riktig — arv er klubbens historie,
-ikke dens tabellplass i dag.
+Arven er ikke lenger et eliteserieprivilegium: Strømsgodset, Odd og Lyn ligger
+alle tre i OBOS-ligaen og har henholdsvis den nest største, den delt fjerde
+største og den niende største arven i katalogen. Det er riktig — arv er klubbens
+historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 180 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 193 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -475,6 +476,74 @@ levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
 
+### Odd: fra 0 til 100 navn, og 47 fraser som aldri kom fram
+
+Odd er **Norges eldste fotballklubb** (1894) med tolv cupgull, og hadde verken
+bane eller ett eneste arvenavn. Skagerak Arena er lagt inn som sted etter samme
+mønster som Marienlyst — id-en følger konvensjonen og **må verifiseres mot
+History Gos egen id**; treffer den ikke, er klubben fortsatt spillbar på
+grunntroppen, så det blir ingen blindvei.
+
+78 nye navn, 22 koblet på. Kilden er den beste hittil målt på sine egne tall:
+**100 unike kvalitetssetninger for 100 profiler**, og **95 av 100 ferdighetssett
+unike** etter kartlegging. Den dekker 1894–2025, det lengste tidsspennet noen
+kilde har levert, og det ga en frasetype ingen av de andre hadde: setninger om
+*datidens* fotball («tidlig kombinasjonsspill», «sterk forståelse for datidens
+direkte forsvarsspill»). De beskriver en ferdighet i sin epoke, ikke en annen
+ferdighet, så de kartlegges som ferdigheten — epokejusteringen gjør
+`eraProfiles` allerede.
+
+**89 % av frasene var dekket** av de seks tidligere ordbøkene.
+
+#### 47 ordbokfraser lagret et alias i stedet for ferdigheten
+
+Katalogen har en `strengthAliases`-liste: tokens som *betyr* det samme som en
+ferdighet. `one_v_one` betyr `one_vs_one`, `box_movement` betyr `box_presence`.
+Motoren slår dem opp, så en spiller som bærer aliaset får ferdigheten lest.
+Ingenting var ødelagt i spillet.
+
+To ting var likevel galt, og begge var usynlige.
+
+**Importene kaster aliaset.** De ender med `.filter((t) => ids.has(t))`, og et
+alias er ikke en id. Ordbøkene hadde 47 fraser som pekte på et alias, og
+treffet ble derfor filtrert bort til slutt — kilden sa noe om spilleren, og
+spillet lagret det ikke. Målt: **12 profiler** hadde mistet en styrke
+(Tromsø 8, Start 3, Fredrikstad 1). Nå er ordbøkene kanonisert mot aliaslista,
+og tallet er null.
+
+**69 lagrede styrker sto som alias.** Der importen ikke filtrerte, havnet
+aliaset i dataene. Det virker — men målingen av unike styrkesett teller
+strengene, ikke ferdighetene, så `one_v_one` og `one_vs_one` telte som to
+forskjellige ferdigheter. Tallet pyntet på seg selv, nøyaktig som usorterte
+sett gjorde det. De 69 er kanonisert, og 11 kollapset mot en form som allerede
+sto der.
+
+Kanoniseringen følger **aliaslista**, ikke min egen lesning, med tolv navngitte
+unntak der frasen sier noe aliaset ikke sier: «én-mot-én-forsvar» blir `duels`,
+ikke `one_vs_one`, som ligger i teknikk-gruppa og handler om å komme forbi
+mannen. Å følge aliaset der ville gjort en stopper til en dribler.
+
+`audit:attributes` feller nå et lagret alias direkte. Vakten over den — «alle
+styrke-tokens løser til en ferdighet» — godtok begge former, fordi motoren gjør
+det, og derfor feilet ingenting på ti importer.
+
+Netto: andelen unike styrkesett gikk fra 55,6 % til 57,0 %. Den ordrike kilden
+løftet den, kanoniseringen tok tilbake det som var pynt.
+
+Nær-duplikat-vakten fant tre par, og alle tre var noe:
+
+| Par | Dom |
+|---|---|
+| Rune Jarstein / Rune Almenning Jarstein | samme mann — slått sammen |
+| Fredrik Nordkvelle / Fredrik Lund Nordkvelle | samme mann — slått sammen |
+| Sverre Andersen / Sverre Andersen (Odd) | to menn — ført med klubbsuffiks |
+
+De to første er mellomnavn-regelen som Rosenborg-kilden tvang fram, og den
+betalte seg her: landslagskeeperen sto ført både med og uten «Almenning».
+Den tredje er det reneste tilfellet av samme navn, to menn, hittil — Vikings
+Sverre Andersen er keeper med 482 kamper og 41 landskamper, Odds er spiss med
+61 mål på 80 kamper mellom 1911 og 1920. **Posisjonen alene avgjør det.**
+
 ### Start: fra 2 til 85 navn
 
 Start hadde bane og **to navn** — to seriemesterskap representert ved Erik
@@ -662,8 +731,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1498 statusoppføringer på 1260
-spillere, 989 belagte og 509 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1598 statusoppføringer på 1336
+spillere, 1084 belagte og 514 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 
