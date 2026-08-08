@@ -1,4 +1,4 @@
-import { completeRecruitmentSaleInMerits, normalizeClubEconomy } from "./football-club-economy.js";
+import { normalizeClubEconomy } from "./football-club-economy.js";
 
 // Overgangsmarked v2.
 //
@@ -63,13 +63,41 @@ function normalizeHistory(value) {
   }));
 }
 
+function completeRecruitmentSaleInMerits(merits, playerId, amount, { tierId = null, seasonNumber = 1 } = {}) {
+  const base = isObject(merits) ? merits : {};
+  const id = String(playerId || "").trim();
+  const saleAmount = Math.max(0, integer(amount, 0));
+  const economy = normalizeClubEconomy(base.clubEconomy, { tierId, seasonNumber });
+  if (!ids(base.recruitedPlayerIds).includes(id) || !economy.contracts[id]) {
+    return { changed: false, reason: "Spilleren er ikke en salgbar rekruttering med aktiv avtale.", merits: base };
+  }
+  const contracts = { ...economy.contracts };
+  delete contracts[id];
+  const ledger = [...economy.ledger, {
+    id: `transfer_sale-${Math.max(1, integer(seasonNumber, 1))}-${id}-${saleAmount}`,
+    type: "transfer_sale",
+    season: Math.max(1, integer(seasonNumber, 1)),
+    playerId: id,
+    amount: saleAmount,
+    label: "HGFM-spillersalg"
+  }].slice(-40);
+  return {
+    changed: true,
+    merits: {
+      ...base,
+      recruitedPlayerIds: ids(base.recruitedPlayerIds).filter((entry) => entry !== id),
+      clubEconomy: { ...economy, balance: economy.balance + saleAmount, contracts, ledger }
+    }
+  };
+}
+
 export function transferWindowForSeason(season) {
   const seasonNumber = Math.max(1, integer(season?.seasonNumber, 1));
   const currentRound = Math.max(1, integer(season?.currentRound, 1));
   const totalRounds = Math.max(2, integer(season?.competition?.rounds, season?.tier?.rounds || 30));
   const midStart = Math.floor(totalRounds / 2) + 1;
   if (season?.status && season.status !== "active") {
-    return { open: false, key: `s${seasonNumber}:closed`, label: "Vindu stengt", phase: "closed", seasonNumber, currentRound, totalRounds };
+    return { open: false, key: `s${seasonNumber}:closed`, label: "Vindu stengt", phase: "closed", seasonNumber, currentRound, totalRounds, nextLabel: "Neste HGFM-vindu åpner ved starten av neste sesong." };
   }
   if (currentRound <= OPENING_WINDOW_ROUNDS) {
     return {
@@ -185,7 +213,6 @@ export function reconcileTransferMarketInMerits(merits, season) {
   let market = normalizeTransferMarket(nextMerits.transferMarket, season);
   let changed = !isObject(nextMerits.transferMarket) || Number(nextMerits.transferMarket?.version) !== TRANSFER_MARKET_VERSION;
 
-  // Åpne bud er bare gyldige i vinduet de ble laget i.
   const offers = Object.fromEntries(Object.entries(market.offers).filter(([, offer]) => offer.windowKey === window.key && window.open));
   if (Object.keys(offers).length !== Object.keys(market.offers).length) changed = true;
   market = { ...market, offers, lastSeenWindowKey: window.key };
