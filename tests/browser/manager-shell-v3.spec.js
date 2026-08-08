@@ -16,23 +16,13 @@ async function openArea(page, name) {
     Stats: "statistikk"
   };
   await page.locator(`.main-nav [role="tab"][data-tab-target="${targetByArea[name]}"]`).click();
-  if (name === "Kontor") await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  if (name === "Kontor") await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   if (name === "Speiding") await expect(page.locator('[data-tab-section="historygo"]')).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
-}
-
-async function expectPrimaryActionInViewport(page) {
-  const action = page.locator("#nextActionPrimary");
-  await expect(action).toBeVisible();
-  const box = await action.boundingBox();
-  const viewport = page.viewportSize();
-  expect(box).not.toBeNull();
-  expect(box.y).toBeGreaterThanOrEqual(0);
-  expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -47,12 +37,13 @@ test.beforeEach(async ({ page }) => {
       takeoverClubId: "rosenborg",
       managerName: "Manager",
       leagueName: "HG Liga",
-      leagueSeasonStatus: "preseason"
+      leagueSeasonStatus: "active"
     }));
   });
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
 test("har fem stabile hovedområder med Speiding mellom Lag og Kamp", async ({ page }) => {
@@ -63,24 +54,22 @@ test("har fem stabile hovedområder med Speiding mellom Lag og Kamp", async ({ p
 
   await openArea(page, "Kontor");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="dashboard"]')).toBeHidden();
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toHaveText("Innboks");
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubbdrift");
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toHaveText("Oppstartshjelp");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toHaveText("Kalender");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubben");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="historygo"]')).toHaveCount(0);
-  await expect(page.locator("#nextActionPrimary")).toHaveCount(1);
-  await expect(page.locator("#nextActionDestination")).toBeVisible();
+  await expect(page.locator("manager-next-action")).toBeHidden();
   await expect(page.locator("#advanceClubWeekPhase, #leagueOnboardingPrimary, #portalPriorityAction")).toHaveCount(0);
-  await expectPrimaryActionInViewport(page);
 });
 
-test("Kontor åpner på Innboks og viser hvor du er", async ({ page }) => {
+test("Kontor åpner på Kalender og viser hvor du er", async ({ page }) => {
   await openArea(page, "Kontor");
-  await expect(page.locator("#inboxThreadList")).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Innboks");
+  await expect(page.locator("#managerCalendarDays")).toBeVisible();
+  await expect(page.locator("#managerCalendarTimeline")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeHidden();
   await expect(page.locator("#leagueOnboardingPanel")).toBeHidden();
-  await page.locator('.app-subtab[data-tab-target="officeHelp"]').click();
-  await expect(page.locator("#leagueOnboardingPanel")).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Oppstartshjelp");
 });
 
 test("Speiding er eget hovedområde med to listeflater", async ({ page }) => {
@@ -130,13 +119,14 @@ test("klubbidentiteten viser skjold, klubbfarge og stadion", async ({ page }) =>
 });
 
 for (const viewport of VIEWPORTS) {
-  test(`ingen overflow og primærhandlingen er synlig ved ${viewport.width}px`, async ({ page }) => {
+  test(`ingen overflow ved ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
     for (const area of ["Kontor", "Lag", "Speiding", "Kamp", "Stats"]) {
       await openArea(page, area);
       await expectNoHorizontalOverflow(page);
     }
-    await expectPrimaryActionInViewport(page);
+    await openArea(page, "Kontor");
+    await expect(page.locator("manager-next-action")).toBeHidden();
   });
 }
 
@@ -178,44 +168,12 @@ test("Stats samler tabell, terminliste og spillerstatistikk", async ({ page }) =
   await expect(page.locator("#playerStatsTable")).toBeVisible();
 });
 
-for (const viewport of VIEWPORTS) {
-  test(`Neste handling viser full tittel, forklaring og mål ved ${viewport.width}px`, async ({ page }) => {
-    await page.setViewportSize(viewport);
-    const button = page.locator("#nextActionPrimary");
-    const title = page.locator("#nextActionPrimaryTitle");
-    const hint = page.locator("#nextActionPrimaryHint");
-    const destination = page.locator("#nextActionDestination");
-    await expect(button).toBeVisible();
-    await expect(title).toBeVisible();
-    await expect(hint).toBeVisible();
-    await expect(destination).toBeVisible();
-    const values = await page.evaluate(() => {
-      const button = document.querySelector("#nextActionPrimary");
-      const title = document.querySelector("#nextActionPrimaryTitle");
-      const hint = document.querySelector("#nextActionPrimaryHint");
-      const titleStyle = getComputedStyle(title);
-      const hintStyle = getComputedStyle(hint);
-      return {
-        titleOverflow: titleStyle.textOverflow,
-        titleWhiteSpace: titleStyle.whiteSpace,
-        hintOverflow: hintStyle.textOverflow,
-        hintWhiteSpace: hintStyle.whiteSpace,
-        titleInside: title.getBoundingClientRect().right <= button.getBoundingClientRect().right + 1,
-        hintInside: hint.getBoundingClientRect().right <= button.getBoundingClientRect().right + 1,
-        aria: button.getAttribute("aria-label") || ""
-      };
-    });
-    expect(values.titleOverflow).not.toBe("ellipsis");
-    expect(values.hintOverflow).not.toBe("ellipsis");
-    expect(values.titleWhiteSpace).not.toBe("nowrap");
-    expect(values.hintWhiteSpace).not.toBe("nowrap");
-    expect(values.titleInside).toBe(true);
-    expect(values.hintInside).toBe(true);
-    expect(values.aria).toContain((await title.textContent()).trim());
-    expect(values.aria).toContain((await hint.textContent()).trim());
-    await expectNoHorizontalOverflow(page);
-  });
-}
+test("Next-footeren er skjult i den normale managerloopen", async ({ page }) => {
+  await openArea(page, "Kontor");
+  await expect(page.locator("manager-next-action")).toBeHidden();
+  await expect(page.locator("#nextActionPrimary")).toBeHidden();
+  await expect(page.locator('#managerCalendarTimeline [data-event-id="team-training"]')).toBeVisible();
+});
 
 test("sentrale shell-knapper er mørke og har synlig tastaturfokus", async ({ page }) => {
   async function expectDarkButton(button) {
@@ -230,11 +188,15 @@ test("sentrale shell-knapper er mørke og har synlig tastaturfokus", async ({ pa
     expect(appearance.height).toBeGreaterThanOrEqual(44);
     if (!appearance.disabled) {
       await button.focus();
-      const focus = await button.evaluate((el) => { const style = getComputedStyle(el); return { width: style.outlineWidth, style: style.outlineStyle }; });
+      const focus = await button.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return { width: style.outlineWidth, style: style.outlineStyle };
+      });
       expect(focus.style).not.toBe("none");
       expect(parseFloat(focus.width)).toBeGreaterThan(0);
     }
   }
-  await expectDarkButton(page.locator("#nextActionPrimary"));
   await expectDarkButton(page.locator("#settingsButton"));
+  await openArea(page, "Kontor");
+  await expectDarkButton(page.locator('#managerCalendarDays .manager-calendar-day-button[aria-current="date"]'));
 });
