@@ -6,13 +6,19 @@ async function openScouting(page) {
   await expect.poll(async () => page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').count()).toBeGreaterThan(0);
 }
 
-async function openEconomy(page) {
+async function openClub(page) {
   await page.getByRole("tab", { name: "Kontor", exact: true }).click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.getByRole("tab", { name: "Klubben", exact: true }).click();
-  await expect(page.locator("#clubCommand")).toBeVisible();
-  await page.locator('[data-club-target="admin"]').first().click();
+  await expect(page.locator("#managerClubOrganization")).toBeVisible();
+}
+
+async function openAdministration(page) {
+  await openClub(page);
+  await page.locator('[data-club-room="administration"]').click();
+  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
+  await page.locator('[data-club-room-action="admin"]').click();
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
-  await expect(page.locator("#managerEconomyWorkspace")).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -111,21 +117,9 @@ test("økonomimotoren håndterer signering, fornyelse, utløp, release og legacy
     }, { tierId: "eliteserien", seasonNumber: 1, baseSquadCount: 15 });
 
     return {
-      signed: {
-        changed: signed.changed,
-        balance: signed.economy.balance,
-        remaining: signed.contract.remainingSeasons,
-        wage: signed.contract.wageUnits
-      },
-      seasonTwo: {
-        balance: seasonTwo.economy.balance,
-        remaining: seasonTwo.economy.contracts["new-player"]?.remainingSeasons
-      },
-      renewed: {
-        changed: renewed.changed,
-        balance: renewed.economy.balance,
-        remaining: renewed.contract?.remainingSeasons
-      },
+      signed: { changed: signed.changed, balance: signed.economy.balance, remaining: signed.contract.remainingSeasons, wage: signed.contract.wageUnits },
+      seasonTwo: { balance: seasonTwo.economy.balance, remaining: seasonTwo.economy.contracts["new-player"]?.remainingSeasons },
+      renewed: { changed: renewed.changed, balance: renewed.economy.balance, remaining: renewed.contract?.remainingSeasons },
       expired: {
         playerStillRecruited: seasonFour.merits.recruitedPlayerIds.includes("new-player"),
         contractExists: Boolean(seasonFour.economy.contracts["new-player"]),
@@ -155,18 +149,16 @@ test("økonomimotoren håndterer signering, fornyelse, utløp, release og legacy
   expect(result.thirdTier).toEqual({ openingBalance: 60, wageBudget: 48, seasonGrant: 24 });
 });
 
-test("Stab & drift viser klubbmidler, lønnsramme og kontraktsflate", async ({ page }) => {
-  await openEconomy(page);
-  const workspace = page.locator("#managerEconomyWorkspace");
-  await expect(workspace).toContainText("Spilløkonomi");
-  await expect(workspace).toContainText("Klubbmidler");
-  await expect(workspace).toContainText("100");
-  await expect(workspace).toContainText("30/60");
-  await expect(workspace).toContainText("Standardavtale for ny rekruttering");
-  await expect(workspace).toContainText("ikke historiske");
+test("legacy økonomi og kontraktsflate beholdes for migrering men er ute av live IA", async ({ page }) => {
+  await openAdministration(page);
+  await expect(page.locator("#managerEconomyWorkspace")).toBeAttached();
+  await expect(page.locator("#managerEconomyWorkspace")).toBeHidden();
+  const economyArticle = page.locator("#adminEconomyNote").locator("xpath=ancestor::article[1]");
+  await expect(economyArticle).toBeHidden();
+  await expect(page.locator("#managerClubOrganization")).toBeHidden();
 });
 
-test("Hent til troppen lager avtale, trekker midler og synker league-snapshotet", async ({ page }) => {
+test("Hent til troppen lager fortsatt legacy-avtale fram til Pass 7 og synker league-snapshotet", async ({ page }) => {
   await openScouting(page);
   const candidateRow = page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').first();
   const playerId = await candidateRow.getAttribute("data-player-id");
@@ -192,7 +184,7 @@ test("Hent til troppen lager avtale, trekker midler og synker league-snapshotet"
   expect(saved.snapshotContract).toEqual(expect.objectContaining({ remainingSeasons: 2, wageUnits: 3 }));
 });
 
-test("rekruttering blokkeres før troppsstate endres når klubbkassen er tom", async ({ page }) => {
+test("legacy økonomigrenser bevares fram til migrering når klubbkassen er tom", async ({ page }) => {
   await page.evaluate(() => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
     merits.clubEconomy.balance = 0;
@@ -210,9 +202,9 @@ test("rekruttering blokkeres før troppsstate endres når klubbkassen er tom", a
   expect(recruited).not.toContain(playerId);
 });
 
-test("økonomiflaten fungerer på 390px uten sideoverflow", async ({ page }) => {
+test("skjult legacy økonomiflate skaper ikke mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openEconomy(page);
-  await expect(page.locator("#managerEconomyWorkspace")).toBeVisible();
+  await openAdministration(page);
+  await expect(page.locator("#managerEconomyWorkspace")).toBeHidden();
   await expectNoHorizontalOverflow(page);
 });
