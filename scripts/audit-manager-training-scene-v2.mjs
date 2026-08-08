@@ -7,6 +7,7 @@ const files = {
   trainingStyle: fs.readFileSync(new URL("../src/ui/manager-training-scene-v2.css", import.meta.url), "utf8"),
   day: fs.readFileSync(new URL("../src/ui/manager-training-day-v1.js", import.meta.url), "utf8"),
   dayStyle: fs.readFileSync(new URL("../src/ui/manager-training-day-v1.css", import.meta.url), "utf8"),
+  calendar: fs.readFileSync(new URL("../src/ui/manager-calendar-workspace-v1.js", import.meta.url), "utf8"),
   shell: fs.readFileSync(new URL("../src/ui/manager-shell-view.js", import.meta.url), "utf8"),
   teamDrawer: fs.readFileSync(new URL("../src/ui/manager-team-choice-drawer-v1.js", import.meta.url), "utf8"),
   package: fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"),
@@ -31,7 +32,8 @@ check("kalenderkoblet treningsdag lastes fra managerskallet", files.shell.includ
 check("treningsdagen har egen samlet hovedflate", files.day.includes('const SURFACE_ID = "managerTrainingDay"') && files.day.includes("Treningsdag"));
 check("gammel kommandovegg og stegflate demoteres kun visuelt", files.dayStyle.includes("#trainingCommandPanel") && files.dayStyle.includes("#trainingDepth") && files.dayStyle.includes("display: none !important"));
 
-check("Kalender er eksplisitt inngang til Trening", files.day.includes('#managerCalendarTimeline .manager-calendar-event-button[data-target="trening"]') && files.day.includes("captureCalendarContext"));
+check("Kalender sender arbeidskontekst før navigasjon", files.calendar.includes("emitCalendarWorkContext(day, entry)") && files.calendar.includes('new CustomEvent("hgfm:calendar-open-work"') && files.calendar.includes("activateTarget(entry.target)"));
+check("Treningsdagen mottar kalenderkonteksten eksplisitt", files.day.includes('window.addEventListener("hgfm:calendar-open-work", acceptCalendarContext)') && files.day.includes("detail.target !== \"trening\""));
 check("kalenderkontekst lagres bare i runtime-minne", files.day.includes("let calendarContext = null") && !files.day.includes("localStorage.setItem"));
 check("retur åpner Kontor og samme kalenderdag", files.day.includes('data-tab-target="dashboard"') && files.day.includes("manager-calendar-day-button") && files.day.includes("context.dayIndex"));
 check("direkte Lag-åpning bruker eksisterende Club Week som fallback", files.day.includes("clubWeekState()") && files.day.includes("currentManagerDayIndex"));
