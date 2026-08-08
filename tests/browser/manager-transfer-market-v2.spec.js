@@ -22,6 +22,28 @@ async function expectNoHorizontalOverflow(page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
+async function seedCanonicalLeagueSeason(page) {
+  await page.evaluate(async () => {
+    const { LEAGUE_SEASON_VERSION, createLeagueSeason } = await import("/src/football-league-season.js");
+    const clubsData = await fetch("/data/football_clubs.json").then((response) => response.json());
+    const managerClub = clubsData.clubs.find((club) => club.id === "rosenborg");
+    if (!managerClub) throw new Error("Mangler Rosenborg i canonical klubbdata");
+    const tier = clubsData.tiers.find((entry) => entry.id === managerClub.tier);
+    if (!tier) throw new Error(`Mangler tier ${managerClub.tier}`);
+    const opponents = clubsData.clubs.filter((club) => club.tier === tier.id && club.id !== managerClub.id);
+    const season = createLeagueSeason({
+      managerClub,
+      opponents,
+      tier,
+      seed: "transfer-market-v2-browser",
+      seasonNumber: 1
+    });
+    localStorage.setItem(LEAGUE_SEASON_VERSION, JSON.stringify(season));
+    window.dispatchEvent(new Event("updateProfile"));
+  });
+  await expect.poll(async () => page.evaluate((key) => Boolean(localStorage.getItem(key)), LEAGUE_KEY)).toBe(true);
+}
+
 async function setLeagueRound(page, round) {
   await page.evaluate(({ key, roundNumber }) => {
     const season = JSON.parse(localStorage.getItem(key) || "null");
@@ -83,6 +105,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await seedCanonicalLeagueSeason(page);
   await expect(page.locator("#managerTransferMarketWorkspace")).toBeAttached();
 });
 
