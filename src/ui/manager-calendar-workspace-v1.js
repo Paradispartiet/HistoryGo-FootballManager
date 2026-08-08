@@ -61,6 +61,7 @@ function isNormalLeagueSave() {
   const start = gameStartState();
   if ((start.selectedMode || "league") !== "league") return false;
   if (!start.activeLeagueSaveId && start.leagueSeasonStatus !== "active") return false;
+  if (localStorage.getItem("hgfm.onboarded.v1") === "1") return true;
   const onboarding = document.getElementById("onboardingScreen");
   return !onboarding || onboarding.hidden;
 }
@@ -215,7 +216,7 @@ function ensureSection() {
       <div class="manager-calendar-context" aria-label="Ukas kamp">
         <span>Neste kamp</span><strong id="managerCalendarMatch">Ingen terminfestet kamp</strong>
       </div>
-      <ol id="managerCalendarDays" class="manager-calendar-days" aria-label="Mandag til søndag"></ol>
+      <ol id="managerCalendarDays" class="manager-calendar-days" role="tablist" aria-label="Mandag til søndag"></ol>
       <section class="manager-calendar-workday" aria-labelledby="managerCalendarSelectedDay">
         <header class="manager-calendar-workday-head">
           <div><p class="eyebrow">Arbeidsdagen</p><h3 id="managerCalendarSelectedDay">Mandag</h3></div>
@@ -313,8 +314,11 @@ function renderDayRail(section, model) {
   const fragment = document.createDocumentFragment();
   model.days.forEach((day, index) => {
     const item = node("li", "manager-calendar-day");
+    item.setAttribute("role", "presentation");
     const button = node("button", `manager-calendar-day-button is-${day.status}`);
     button.type = "button";
+    button.setAttribute("role", "tab");
+    button.setAttribute("aria-controls", "managerCalendarTimeline");
     button.dataset.day = String(day.dayIndex);
     button.dataset.status = day.status;
     button.setAttribute("aria-selected", selectedDayIndex === day.dayIndex ? "true" : "false");
