@@ -1,7 +1,7 @@
 // Manager Visual Identity v1
 //
 // Presentasjonskontekst for Pass 6. Modulen leser bare hvilken eksisterende
-// managerflate som er synlig og eksponerer dette som data-attributter/CSS-token.
+// managerflate som er valgt og eksponerer dette som data-attributter/CSS-token.
 // Den eier ingen motor, progresjon, nettverk eller lagring.
 
 const STYLE_ID = "managerVisualIdentityV1Style";
@@ -69,27 +69,40 @@ export function resolveManagerVisualContext(target, parent = "") {
   };
 }
 
-function visibleSection() {
-  return [...document.querySelectorAll("[data-tab-section]")]
-    .find((section) => !section.hidden && getComputedStyle(section).display !== "none") || null;
+function activeShellTarget() {
+  const activeSubtab = [...document.querySelectorAll('.app-subnav .app-subtab[data-tab-target][aria-selected="true"]')]
+    .find((button) => !button.hidden);
+  if (activeSubtab?.dataset.tabTarget) return activeSubtab.dataset.tabTarget;
+
+  const activeMain = [...document.querySelectorAll('.main-nav .nav-tab[data-tab-target][aria-selected="true"]')]
+    .find((button) => !button.hidden);
+  if (activeMain?.dataset.tabTarget) return activeMain.dataset.tabTarget;
+
+  const section = [...document.querySelectorAll("[data-tab-section]")]
+    .find((candidate) => !candidate.hidden);
+  return section?.dataset.tabSection || "dashboard";
+}
+
+function targetParent(target) {
+  return document.querySelector(`[data-tab-section="${CSS.escape(String(target || ""))}"]`)?.dataset.tabParent || "";
 }
 
 function visibleMainTabCount() {
   return [...document.querySelectorAll('.main-nav .nav-tab[data-tab-target]')]
-    .filter((button) => !button.hidden && getComputedStyle(button).display !== "none").length;
+    .filter((button) => !button.hidden).length;
 }
 
 export function syncManagerVisualContext() {
   if (typeof document === "undefined") return null;
-  const section = visibleSection();
-  const context = resolveManagerVisualContext(section?.dataset.tabSection, section?.dataset.tabParent);
+  const target = activeShellTarget();
+  const context = resolveManagerVisualContext(target, targetParent(target));
   const count = Math.max(1, visibleMainTabCount());
   const targets = [document.documentElement, document.body].filter(Boolean);
-  targets.forEach((target) => {
-    target.dataset.managerArea = context.area;
-    target.dataset.managerSurface = context.surface;
-    target.dataset.managerSceneKind = context.kind;
-    target.style.setProperty("--manager-nav-count", String(count));
+  targets.forEach((node) => {
+    node.dataset.managerArea = context.area;
+    node.dataset.managerSurface = context.surface;
+    node.dataset.managerSceneKind = context.kind;
+    node.style.setProperty("--manager-nav-count", String(count));
   });
   return { ...context, navCount: count };
 }
@@ -116,7 +129,7 @@ function boot() {
       subtree: true,
       childList: true,
       attributes: true,
-      attributeFilter: ["hidden", "aria-selected", "data-tab-target", "data-tab-parent"]
+      attributeFilter: ["hidden", "aria-selected", "class", "style", "data-tab-target", "data-tab-parent"]
     });
   });
   window.addEventListener("hgfm:team-merits-changed", scheduleSync);
