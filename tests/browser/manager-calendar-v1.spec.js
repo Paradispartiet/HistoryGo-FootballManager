@@ -88,7 +88,7 @@ test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) 
   await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Tirsdag");
   const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]');
   await expect(message).toHaveCount(1);
-  await expect(message).toContainText("Melding");
+  await expect(message).toContainText("Åpne melding");
   await message.click();
   await expect(page.locator("#managerCalendarMessageDrawer")).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender · Melding");
