@@ -1,5 +1,7 @@
 # Football Knowledge Integration
 
+> **Overordnet produktkontrakt:** Les `PRODUCT_PRINCIPLES_CLUB_SIMULATION.md` sammen med denne filen. Fotballkunnskap skal ikke bare forklares ved siden av spillet; der det er naturlig skal den brukes til å bygge **utforskbare og handlingsbaserte simuleringer av faktisk klubbdrift**. Treningsanlegg, medisinsk apparat, analyse, stab og andre klubbfunksjoner skal derfor modelleres etter hva mennesker, rom, utstyr og arbeidsprosesser faktisk gjør — ikke som abstrakte nivåer eller prosentbonuser.
+
 HG Football Manager skal kunne ta inn ny fotballkunnskap uten å lage nye parallelle systemer. Denne standarden gjelder for Fotballboka-importen og for senere notater, bilder, bokstoff og taktisk teori.
 
 ## Fast regel
@@ -13,6 +15,8 @@ Ny kunnskap skal ikke automatisk bli:
 - nytt formasjonsbibliotek som dupliserer eksisterende data
 - nye hovedmenyer uten spillkobling
 - en ren tekstbank som ikke brukes av spillet
+
+Når kunnskapen beskriver en faktisk arbeidsprosess i klubben, kan den derimot bli en **simulert handling i eksisterende klubbflate**. Eksempel: kunnskap om treningsdesign kan brukes når brukeren setter opp areal, spillertall, regler og coachingpunkter i en øvelse; kunnskap om skadehåndtering kan brukes når det medisinske apparatet vurderer symptomer, belastning, rehabilitering og retur til spill.
 
 ## Kanonisk kilde for denne importen
 
@@ -29,9 +33,10 @@ All ny fotballkunnskap skal gå gjennom samme løype:
 1. **Source** — registrer hvilken kilde stoffet kommer fra.
 2. **Extract** — del stoffet opp i konkrete prinsipper, ikke én lang tekstblob.
 3. **Normalize** — skriv hvert prinsipp i samme dataform.
-4. **Map** — koble prinsippet til eksisterende weak points, training areas, tags, roller, taktikkvalg eller kampanalyse.
-5. **Surface** — bruk det i managerhåndbok, assistentfeedback, kampanalyse, trening, tooltips eller docs.
-6. **Validate** — kjør audit og sjekk at ingen ny motor eller døde menyer er laget.
+4. **Map** — koble prinsippet til eksisterende weak points, training areas, tags, roller, taktikkvalg, kampanalyse eller en dokumentert klubbprosess.
+5. **Surface** — bruk det i managerhåndbok, assistentfeedback, kampanalyse, trening, tooltips, klubbrom eller docs.
+6. **Simulate when appropriate** — dersom kunnskapen beskriver noe brukeren faktisk kan gjøre eller observere i en klubb, vurder en handlingsbasert simulering fremfor ren tekst.
+7. **Validate** — kjør audit og sjekk at ingen unødvendig parallellmotor eller døde menyer er laget.
 
 ## Dataform
 
@@ -58,7 +63,8 @@ Et prinsipp er ikke ferdig importert før det kan svare på minst ett av disse s
 - Hvilket eksisterende treningsområde peker det mot?
 - Hvilken eksisterende taktisk situasjon gjør det mer forståelig?
 - Hvilken assistentfeedback kan det skape?
-- Hvilken del av Botballboka eller managerhåndboka kan bruke teksten?
+- Hvilken konkret arbeidsprosess i klubben kan det forklare eller simulere?
+- Hvilken del av Fotballboka eller managerhåndboka kan bruke teksten?
 
 Hvis svaret er uklart, skal stoffet ligge i docs/manus, ikke i gameplay-data.
 
@@ -80,14 +86,18 @@ Denne importen legger til prinsipper fra `Fotballboka.pages` innen:
 - psykologi
 - fotballkultur og spillestil
 
-Disse prinsippene utvider forklaringslaget. De endrer ikke taktikkmotoren.
+Disse prinsippene utvider forklaringslaget. De endrer ikke taktikkmotoren uten at eksisterende motor faktisk mangler en nødvendig mekanikk.
 
 ## Guardrail for fremtidige imports
 
 Når ny teori skal inn, gjør dette først:
 
 ```txt
-Finn eksisterende mekanikk → map teorien dit → skriv forklaring → valider audit → først deretter vurder om spillet faktisk mangler mekanikk.
+Finn eksisterende mekanikk eller klubbprosess
+→ map teorien dit
+→ gjør kunnskapen forståelig gjennom forklaring eller handling
+→ valider audit
+→ først deretter vurder om spillet faktisk mangler mekanikk
 ```
 
-Ny mekanikk skal bare lages hvis eksisterende motor ikke kan uttrykke prinsippet i det hele tatt. Standardvalget er alltid kunnskapslag, ikke systembygging.
+Ny mekanikk skal bare lages hvis eksisterende motor eller klubbflate ikke kan uttrykke prinsippet i det hele tatt. Standardvalget er kunnskapslag og læringssimulering, ikke systembygging for systembyggingens skyld.
