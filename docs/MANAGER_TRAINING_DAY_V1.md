@@ -39,13 +39,13 @@ Alternativer skal ikke fjernes.
 
 ## Kalenderkobling
 
-Når en kalenderhendelse åpner en arbeidsflate, sender Kalender et transient `hgfm:calendar-open-work`-event med uke, dag, tidspunkt, hendelse og target. Dette lagres ikke.
+Treningspresentasjonen fanger hvilken eksisterende kalenderhendelse manageren faktisk trykket på: valgt uke/dag leses fra Kalender/Club Week, mens tidspunkt og hendelsestittel leses fra den klikkede kalenderhendelsen. Denne konteksten holdes bare i runtime-minne og lagres ikke.
 
-Treningsdagen bruker denne konteksten for å vise for eksempel:
+Treningsdagen kan derfor vise for eksempel:
 
 `Kalender · Uke 3 · Onsdag → Lag · Trening`
 
-`Tilbake til kalenderdagen` sender `hgfm:calendar-return`. Kalenderen åpner samme uke/dag igjen uten å flytte Club Week-fasen.
+`Tilbake til kalenderdagen` åpner Kontor → Kalender og velger den samme dagen igjen. Det endrer ikke Club Week-fasen og avanserer ikke tiden.
 
 Hvis Trening åpnes direkte fra Lag, bruker presentasjonen eksisterende Club Week som fallback og tilbyr fortsatt en vei tilbake til den relevante kalenderdagen.
 
