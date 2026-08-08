@@ -5,6 +5,7 @@
 // Den eier ingen motor, progresjon, nettverk eller lagring.
 
 const STYLE_ID = "managerVisualIdentityV1Style";
+const LAYOUT_STYLE_ID = "managerVisualIdentityLayoutV1Style";
 
 const AREA_BY_TARGET = Object.freeze({
   dashboard: "office",
@@ -45,13 +46,19 @@ const KIND_BY_TARGET = Object.freeze({
   hgfmLibrary: "science"
 });
 
-function ensureStyles() {
-  if (typeof document === "undefined" || document.getElementById(STYLE_ID)) return;
+function appendStylesheet(id, href) {
+  if (document.getElementById(id)) return;
   const link = document.createElement("link");
-  link.id = STYLE_ID;
+  link.id = id;
   link.rel = "stylesheet";
-  link.href = new URL("./manager-visual-identity-v1.css", import.meta.url).href;
+  link.href = href;
   document.head.append(link);
+}
+
+function ensureStyles() {
+  if (typeof document === "undefined") return;
+  appendStylesheet(STYLE_ID, new URL("./manager-visual-identity-v1.css", import.meta.url).href);
+  appendStylesheet(LAYOUT_STYLE_ID, new URL("./manager-visual-identity-layout-v1.css", import.meta.url).href);
 }
 
 export function resolveManagerVisualContext(target, parent = "") {
@@ -69,17 +76,21 @@ export function resolveManagerVisualContext(target, parent = "") {
   };
 }
 
+function isActuallyVisible(element) {
+  return Boolean(element) && !element.hidden && getComputedStyle(element).display !== "none";
+}
+
 function activeShellTarget() {
   const activeSubtab = [...document.querySelectorAll('.app-subnav .app-subtab[data-tab-target][aria-selected="true"]')]
-    .find((button) => !button.hidden);
+    .find(isActuallyVisible);
   if (activeSubtab?.dataset.tabTarget) return activeSubtab.dataset.tabTarget;
 
   const activeMain = [...document.querySelectorAll('.main-nav .nav-tab[data-tab-target][aria-selected="true"]')]
-    .find((button) => !button.hidden);
+    .find(isActuallyVisible);
   if (activeMain?.dataset.tabTarget) return activeMain.dataset.tabTarget;
 
   const section = [...document.querySelectorAll("[data-tab-section]")]
-    .find((candidate) => !candidate.hidden);
+    .find(isActuallyVisible);
   return section?.dataset.tabSection || "dashboard";
 }
 
@@ -132,8 +143,12 @@ function boot() {
       attributeFilter: ["hidden", "aria-selected", "class", "style", "data-tab-target", "data-tab-parent"]
     });
   });
+  document.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest(".main-nav, .app-subnav")) scheduleSync();
+  });
   window.addEventListener("hgfm:team-merits-changed", scheduleSync);
   window.addEventListener("updateProfile", scheduleSync);
+  window.addEventListener("pageshow", scheduleSync);
 }
 
 if (typeof document !== "undefined") {
