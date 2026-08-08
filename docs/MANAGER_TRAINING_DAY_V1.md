@@ -11,7 +11,8 @@ Kalenderen eier fortsatt tiden. Når manageren åpner en treningshendelse fra on
 - Kalenderen er fasit for uke og dag.
 - Trening oppretter ingen ny dag, fase eller `Neste`-funksjon.
 - `football-manager-calendar.js` organiserer eksisterende Club Week i dager og hendelser.
-- `manager-training-day-v1.js` er bare et presentasjonslag over eksisterende trening.
+- `manager-calendar-workspace-v1.js` sender den valgte arbeidskonteksten før navigasjon.
+- `manager-training-day-v1.js` mottar konteksten og er bare et presentasjonslag over eksisterende trening.
 - Ingen ny localStorage-nøkkel.
 - Ingen ny treningsmotor.
 - Ingen ny progresjonsmotor.
@@ -39,7 +40,9 @@ Alternativer skal ikke fjernes.
 
 ## Kalenderkobling
 
-Treningspresentasjonen fanger hvilken eksisterende kalenderhendelse manageren faktisk trykket på: valgt uke/dag leses fra Kalender/Club Week, mens tidspunkt og hendelsestittel leses fra den klikkede kalenderhendelsen. Denne konteksten holdes bare i runtime-minne og lagres ikke.
+Kalenderen kjenner allerede den valgte uka, dagen og hendelsen. Før den åpner en vanlig arbeidsflate sender den derfor et transient `hgfm:calendar-open-work`-event med uke, dag, tidspunkt, hendelses-ID, hendelsestittel og target.
+
+Treningsdagen lytter bare på denne hendelsen når target er `trening`. Kalenderkonteksten holdes i runtime-minne og lagres ikke. Trening rekonstruerer dermed ikke eller gjetter hvilken dag manageren kom fra.
 
 Treningsdagen kan derfor vise for eksempel:
 
