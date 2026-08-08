@@ -60,15 +60,18 @@ function seededSeason() {
 
 async function openOffice(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
-  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Innboks");
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
 }
 
-async function openHelp(page) {
+async function openTuesdayMessage(page) {
   await openOffice(page);
-  await page.locator('.app-subtab[data-tab-target="officeHelp"]').click();
-  await expect(page.locator('[data-tab-section="officeHelp"]')).toBeVisible();
-  await expect(page.locator("#officeCommandPanel")).toBeVisible();
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="2"]').click();
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Tirsdag");
+  const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]');
+  await expect(message).toBeVisible();
+  await message.click();
+  await expect(page.locator("#managerCalendarMessageDrawer")).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -96,58 +99,64 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
-test("Kontor åpner på Innboks; gammel oversikt ligger i Oppstartshjelp", async ({ page }) => {
+test("Kontor åpner Kalender; Innboks og Oppstartshjelp er ikke parallelle normalfaner", async ({ page }) => {
   await openOffice(page);
-  await expect(page.locator("#inboxThreadList")).toBeVisible();
-  await expect(page.locator("#officeCommandPanel")).toBeHidden();
   await expect(page.locator('.app-subtab[data-tab-target="dashboard"]')).toBeHidden();
-
-  await openHelp(page);
-  await expect(page.locator("#officeCommand h2")).toHaveText("Managerkontoret");
-  await expect(page.locator(".office-priority-card")).toBeVisible();
-  await expect(page.locator(".office-status-card")).toHaveCount(4);
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Oppstartshjelp");
+  await expect(page.locator('.app-subtab[data-tab-target="inbox"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="officeHelp"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="board"]')).toHaveText("Klubben");
+  await expect(page.locator("#officeCommandPanel")).toBeHidden();
 });
 
-test("Innboks viser én fokussak og resten som kø", async ({ page }) => {
+test("innboksmotoren beholder fokus og kø som intern meldingskilde", async ({ page }) => {
   await openOffice(page);
   await expect(page.locator("#inboxFocusTitle")).not.toBeEmpty();
-  await expect(page.locator("#inboxThreadList .inbox-thread-card.is-open, #inboxThreadList .message-card.is-empty")).toHaveCount(1);
-  await expect(page.locator(".inbox-inline-stats")).toBeVisible();
-  await expect(page.locator("#inboxSignalUnread")).toBeVisible();
-  await expect(page.locator("#inboxSignalReplies")).toBeVisible();
-  await expect(page.locator("#inboxThreadList .inbox-thread-toggle[aria-expanded=\"true\"]")).toHaveCount(1);
-  await expect(page.locator("#inboxQueueList .inbox-thread-toggle[aria-expanded=\"true\"]")).toHaveCount(0);
-
-  const queue = page.locator("#inboxQueueList .inbox-thread-toggle");
-  if (await queue.count()) {
-    const before = await page.locator("#inboxFocusTitle").textContent();
-    await queue.first().click();
-    await expect(page.locator("#inboxFocusTitle")).not.toHaveText(before || "");
-    await expect(page.locator("#inboxThreadList .inbox-thread-card.is-open")).toHaveCount(1);
-  }
+  await expect(page.locator("#inboxThreadList")).toBeAttached();
+  await expect(page.locator("#inboxQueueList")).toBeAttached();
+  await expect(page.locator("#inboxSignalUnread")).toBeAttached();
+  await expect(page.locator("#inboxSignalReplies")).toBeAttached();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeHidden();
 });
 
-test("Innboks går direkte videre til trening", async ({ page }) => {
+test("melding åpnes fra tirsdag i drawer med eksisterende innbokstråd", async ({ page }) => {
+  await expect(page.locator("#inboxThreadList .inbox-thread-card, #inboxQueueList .inbox-thread-card").first()).toBeAttached();
+  await openTuesdayMessage(page);
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender · Melding");
+  await expect(page.locator("#managerCalendarDrawerBody .inbox-thread-card")).toHaveCount(1);
+  await expect(page.locator("#managerCalendarDrawerTitle")).not.toBeEmpty();
+});
+
+test("lukking av melding returnerer til samme kalenderdag", async ({ page }) => {
+  await openTuesdayMessage(page);
+  await page.locator("#managerCalendarMessageDrawer .manager-calendar-drawer-close").click();
+  await expect(page.locator("#managerCalendarMessageDrawer")).toBeHidden();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Tirsdag");
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
+});
+
+test("kalenderens treningshendelse går direkte til trening", async ({ page }) => {
   await openOffice(page);
-  await page.locator("#inboxGoTraining").click();
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="3"]').click();
+  await page.locator('#managerCalendarTimeline [data-event-id="team-training"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
 });
 
-test("Kontor, Innboks og Oppstartshjelp har ingen mobil overflow", async ({ page }) => {
+test("Kontor, Kalender og meldingsdrawer har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openOffice(page);
   await expectNoHorizontalOverflow(page);
-  await openHelp(page);
+  await openTuesdayMessage(page);
   await expectNoHorizontalOverflow(page);
 });
 
-test("Innboks har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  await openOffice(page);
+test("Kalender og meldingsdrawer har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
+  await openTuesdayMessage(page);
   const results = await new AxeBuilder({ page })
-    .include('[data-tab-section="inbox"]')
+    .include('[data-tab-section="calendar"]')
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
