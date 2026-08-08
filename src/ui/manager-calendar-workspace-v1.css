@@ -103,6 +103,9 @@ html[data-manager-office-calendar-v1="active"] manager-next-action {
   color: #fff;
 }
 
+.manager-calendar-day-button:focus,
+.manager-calendar-event-button:focus,
+.manager-calendar-drawer-close:focus,
 .manager-calendar-day-button:focus-visible,
 .manager-calendar-event-button:focus-visible,
 .manager-calendar-drawer-close:focus-visible {
