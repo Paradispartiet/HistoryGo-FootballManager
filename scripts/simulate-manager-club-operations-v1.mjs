@@ -57,16 +57,22 @@ const healthy = model();
 check("seks klubbområder finnes", healthy.statuses.length === 6, String(healthy.statuses.length));
 check("fasiliteter peker til eksisterende flate", healthy.statuses.find((item) => item.id === "facilities")?.target === "facilities");
 check("marked peker til eksisterende flate", healthy.statuses.find((item) => item.id === "market")?.target === "market");
-check("sterkt anleggsgrunnlag leses som sterkt", healthy.facilities.label === "Sterk", healthy.facilities.label);
+check("legacy nivåinput degraderes til arbeidsrom", healthy.facilities.label === "Arbeidsrom", healthy.facilities.label);
 check("god klubbtemperatur leses positivt", healthy.market.tone === "positive", healthy.market.label);
-check("fasilitetslesningen bruker eksplisitte nivåer", healthy.facilities.detail.includes("Trening 3/3") && healthy.facilities.detail.includes("Medisinsk 3/3") && healthy.facilities.detail.includes("Analyse 3/3"));
+check(
+  "fasilitetslesningen eksponerer ikke nivåsystemet",
+  healthy.facilities.detail.includes("ikke nivå 1–3")
+    && !healthy.facilities.detail.includes("Trening 3/3")
+    && !healthy.facilities.detail.includes("Medisinsk 3/3")
+    && !healthy.facilities.detail.includes("Analyse 3/3")
+);
 check("marked leser faktisk medietrykk", healthy.market.detail.includes("Medietrykk") || healthy.market.detail.includes("medietrykk"));
 check("ingen ekstra klubbpuls oppfinnes", healthy.pulse.length === 5);
 
 const pressured = model({ clubState: { mediaPressure: 81, playerMorale: 39, boardTrust: 44, trainingCulture: 52 } });
 check("høyt medietrykk gir negativ markedslesning", pressured.market.tone === "negative", pressured.market.label);
 check("markedslesningen beholder rå medieverdi", pressured.market.detail.includes("81"));
-check("fasiliteter påvirkes ikke kunstig av medietrykk", pressured.facilities.label === "Sterk");
+check("fasilitetskompatibiliteten påvirkes ikke kunstig av medietrykk", pressured.facilities.label === "Arbeidsrom");
 
 const bare = model({
   clubState: { boardTrust: 50, playerMorale: 50, tacticalClarity: 50, trainingCulture: 0, mediaPressure: 0 },
