@@ -1,13 +1,10 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-async function openCalendar(page) {
+async function openOfficeCalendar(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
-  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
-  const calendar = page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]');
-  await expect(calendar).toHaveText("Kalender");
-  await calendar.click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -52,52 +49,77 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
-test("Kalender ligger under Kontor og viser en syvdagers manageruke", async ({ page }) => {
-  await openCalendar(page);
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
+test("Kontor åpner Kalender direkte og skjuler separat Innboks", async ({ page }) => {
+  await openOfficeCalendar(page);
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toBeVisible();
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubben");
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toBeHidden();
+});
+
+test("Kalender viser syv valgbare dager og den faktiske arbeidsdagen", async ({ page }) => {
+  await openOfficeCalendar(page);
   await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Onsdag");
-  await expect(page.locator("#managerCalendarDays > li")).toHaveCount(7);
-  await expect(page.locator("#managerCalendarDays > li").nth(0)).toContainText("Mandag");
-  await expect(page.locator("#managerCalendarDays > li").nth(6)).toContainText("Søndag");
-  await expect(page.locator('#managerCalendarDays > li[aria-current="date"]')).toHaveCount(1);
-  await expect(page.locator('#managerCalendarDays > li[aria-current="date"]')).toContainText("Onsdag");
+  const days = page.locator("#managerCalendarDays .manager-calendar-day-button");
+  await expect(days).toHaveCount(7);
+  await expect(days.nth(0)).toContainText("MAN");
+  await expect(days.nth(6)).toContainText("SØN");
+  await expect(page.locator('#managerCalendarDays [aria-current="date"]')).toHaveCount(1);
+  await expect(page.locator('#managerCalendarDays [aria-current="date"]')).toHaveAttribute("data-day", "3");
+  await expect(page.locator('#managerCalendarDays [aria-selected="true"]')).toHaveAttribute("data-day", "3");
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
 });
 
-test("manageruka plasserer eksisterende funksjoner på riktige dager", async ({ page }) => {
-  await openCalendar(page);
-  const days = page.locator("#managerCalendarDays > li");
-  await expect(days.nth(1)).toContainText("Innboks og klubbdrift");
-  await expect(days.nth(2)).toContainText("Treningsarbeid");
-  await expect(days.nth(3)).toContainText("individuell oppfølging");
-  await expect(days.nth(4)).toContainText("Kampforberedelse");
-  await expect(days.nth(5)).toContainText(/Kampdag|Kamp mot/);
-  await expect(days.nth(6)).toContainText("Etterkamp og oppsummering");
+test("onsdag viser kronologisk trening og manglende program der arbeidet skjer", async ({ page }) => {
+  await openOfficeCalendar(page);
+  const events = page.locator("#managerCalendarTimeline .manager-calendar-event-button");
+  await expect(events).toHaveCount(3);
+  await expect(events.nth(0)).toContainText("09:30");
+  await expect(events.nth(0)).toContainText("Trenermøte");
+  await expect(events.nth(1)).toContainText("11:00");
+  await expect(events.nth(1)).toContainText("Trening");
+  await expect(events.nth(1)).toContainText("Treningsprogram mangler");
+  await expect(events.nth(1)).toContainText("Velg program");
 });
 
-test("Kalender har ingen egen progresjonsknapp", async ({ page }) => {
-  await openCalendar(page);
-  await expect(page.locator('[data-tab-section="calendar"] button')).toHaveCount(0);
-  await expect(page.locator("#nextActionPrimary")).toHaveCount(1);
-  await expect(page.locator(".manager-calendar-rule")).toContainText("Tidslinje, ikke veiviser");
+test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) => {
+  await openOfficeCalendar(page);
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="2"]').click();
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Tirsdag");
+  const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]');
+  await expect(message).toHaveCount(1);
+  await expect(message).toContainText("Melding");
+  await message.click();
+  await expect(page.locator("#managerCalendarMessageDrawer")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender · Melding");
+  await page.locator("#managerCalendarMessageDrawer .manager-calendar-drawer-close").click();
+  await expect(page.locator("#managerCalendarMessageDrawer")).toBeHidden();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Tirsdag");
 });
 
-test("Kalender endrer ikke de fem hovedområdene", async ({ page }) => {
-  const leagueTabs = page.locator('.main-nav .nav-tab[data-nav-modes~="league"]:visible');
-  await expect(leagueTabs).toHaveCount(5);
-  await expect(leagueTabs).toHaveText(["Kontor", "Lag", "Speiding", "Kamp", "Stats"]);
-  await openCalendar(page);
+test("Next-footeren er skjult i normal ligasave", async ({ page }) => {
+  await openOfficeCalendar(page);
+  await expect(page.locator("manager-next-action")).toBeHidden();
+  await expect(page.locator("#nextActionPrimary")).toBeHidden();
+});
+
+test("Kalender beholder Kontor som hovedområde", async ({ page }) => {
+  await openOfficeCalendar(page);
   await expect(page.locator('.main-nav .nav-tab[data-tab-target="dashboard"]')).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator('.main-nav .nav-tab[data-tab-target="dashboard"]')).toHaveClass(/is-active/);
 });
 
 test("Kalender har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openCalendar(page);
+  await openOfficeCalendar(page);
   await expectNoHorizontalOverflow(page);
-  await expect(page.locator("#managerCalendarDays > li")).toHaveCount(7);
+  await expect(page.locator("#managerCalendarDays .manager-calendar-day-button")).toHaveCount(7);
+  await expect(page.locator("#managerCalendarTimeline .manager-calendar-event-button").first()).toBeVisible();
 });
 
 test("Kalender har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  await openCalendar(page);
+  await openOfficeCalendar(page);
   const results = await new AxeBuilder({ page })
     .include('[data-tab-section="calendar"]')
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
