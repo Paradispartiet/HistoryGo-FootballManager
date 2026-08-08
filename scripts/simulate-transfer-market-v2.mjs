@@ -56,13 +56,11 @@ assert.equal(transferOfferUnits({ remainingSeasons: 1, wageUnits: 3 }), 13);
 const listed = listRecruitedPlayerForTransfer(merits(), "player_one", season(1));
 assert.equal(listed.changed, true);
 assert.deepEqual(listed.merits.transferMarket.listedPlayerIds, ["player_one"]);
+assert.equal(listed.offer.amount, 15);
+assert.notEqual(listed.offer.bidderClubId, "manager");
 
-const generated = generateTransferOfferForListedPlayer(listed.merits, "player_one", season(1));
-assert.equal(generated.changed, true);
-assert.equal(generated.offer.amount, 15);
-assert.notEqual(generated.offer.bidderClubId, "manager");
-
-const accepted = acceptTransferOfferInMerits(generated.merits, "player_one", season(1));
+// Listing og bud er én managerhandling: tilbudet kan godtas umiddelbart.
+const accepted = acceptTransferOfferInMerits(listed.merits, "player_one", season(1));
 assert.equal(accepted.changed, true);
 assert.equal(accepted.merits.recruitedPlayerIds.includes("player_one"), false);
 assert.equal(Boolean(accepted.merits.clubEconomy.contracts.player_one), false);
@@ -70,10 +68,8 @@ assert.equal(accepted.merits.clubEconomy.balance, 115);
 assert.equal(accepted.merits.transferMarket.history.at(-1)?.type, "sold");
 assert.equal(accepted.merits.clubEconomy.ledger.at(-1)?.type, "transfer_sale");
 
-const second = merits("player_two");
-const secondListed = listRecruitedPlayerForTransfer(second, "player_two", season(1));
-const secondOffer = generateTransferOfferForListedPlayer(secondListed.merits, "player_two", season(1));
-const rejected = rejectTransferOfferInMerits(secondOffer.merits, "player_two", season(1));
+const secondListed = listRecruitedPlayerForTransfer(merits("player_two"), "player_two", season(1));
+const rejected = rejectTransferOfferInMerits(secondListed.merits, "player_two", season(1));
 assert.equal(rejected.changed, true);
 assert.equal(Boolean(rejected.merits.transferMarket.offers.player_two), false);
 assert.equal(rejected.merits.recruitedPlayerIds.includes("player_two"), true);
@@ -85,7 +81,7 @@ const closedListing = listRecruitedPlayerForTransfer(merits("player_three"), "pl
 assert.equal(closedListing.changed, false);
 assert.match(closedListing.reason, /Neste HGFM-vindu/);
 
-const reconciled = reconcileTransferMarketInMerits(generated.merits, season(5));
+const reconciled = reconcileTransferMarketInMerits(listed.merits, season(5));
 assert.equal(Object.keys(reconciled.market.offers).length, 0);
 assert.equal(reconciled.window.open, false);
 
