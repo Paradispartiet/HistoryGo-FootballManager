@@ -3,6 +3,7 @@ import "./manager-team-choice-drawer-v1.js";
 import "./manager-scouting-workspace-v1.js";
 import "./manager-calendar-workspace-v1.js";
 import "./manager-training-day-v1.js";
+import "./manager-match-calendar-v1.js";
 import "./manager-staff-workspace-v1.js";
 import "./manager-economy-contracts-v1.js";
 import "./manager-transfer-market-v2.js";
