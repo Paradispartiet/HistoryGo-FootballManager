@@ -2,19 +2,18 @@ import { expect, test } from "@playwright/test";
 
 const LEAGUE_KEY = "historygo-football-manager.league-season.v3";
 
-async function openEconomy(page) {
+async function openClub(page) {
   await page.getByRole("tab", { name: "Kontor", exact: true }).click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.getByRole("tab", { name: "Klubben", exact: true }).click();
-  await expect(page.locator("#clubCommand")).toBeVisible();
-  await page.locator('[data-club-target="admin"]').first().click();
-  await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
-  await expect(page.locator("#managerTransferMarketWorkspace")).toBeVisible();
+  await expect(page.locator("#managerClubOrganization")).toBeVisible();
 }
 
-async function openScouting(page) {
-  await page.locator('.main-nav [role="tab"][data-tab-target="historygo"]').click();
-  await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
-  await expect.poll(async () => page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').count()).toBeGreaterThan(0);
+async function openAdministration(page) {
+  await openClub(page);
+  await page.locator('[data-club-room="administration"]').click();
+  await page.locator('[data-club-room-action="admin"]').click();
+  await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -31,28 +30,11 @@ async function seedCanonicalLeagueSeason(page) {
     const tier = clubsData.tiers.find((entry) => entry.id === managerClub.tier);
     if (!tier) throw new Error(`Mangler tier ${managerClub.tier}`);
     const opponents = clubsData.clubs.filter((club) => club.tier === tier.id && club.id !== managerClub.id);
-    const season = createLeagueSeason({
-      managerClub,
-      opponents,
-      tier,
-      seed: "transfer-market-v2-browser",
-      seasonNumber: 1
-    });
+    const season = createLeagueSeason({ managerClub, opponents, tier, seed: "transfer-market-v2-browser", seasonNumber: 1 });
     localStorage.setItem(LEAGUE_SEASON_VERSION, JSON.stringify(season));
     window.dispatchEvent(new Event("updateProfile"));
   });
   await expect.poll(async () => page.evaluate((key) => Boolean(localStorage.getItem(key)), LEAGUE_KEY)).toBe(true);
-}
-
-async function setLeagueRound(page, round) {
-  await page.evaluate(({ key, roundNumber }) => {
-    const season = JSON.parse(localStorage.getItem(key) || "null");
-    if (!season) throw new Error("Mangler ligasesong i browser-test");
-    season.currentRound = roundNumber;
-    season.status = "active";
-    localStorage.setItem(key, JSON.stringify(season));
-    window.dispatchEvent(new Event("updateProfile"));
-  }, { key: LEAGUE_KEY, roundNumber: round });
 }
 
 test.beforeEach(async ({ page }) => {
@@ -82,13 +64,7 @@ test.beforeEach(async ({ page }) => {
         wageBudget: 60,
         lastSettledSeason: 1,
         contracts: {
-          erik_johnsen: {
-            playerId: "erik_johnsen",
-            remainingSeasons: 2,
-            wageUnits: 3,
-            signedSeason: 1,
-            source: "recruited"
-          }
+          erik_johnsen: { playerId: "erik_johnsen", remainingSeasons: 2, wageUnits: 3, signedSeason: 1, source: "recruited" }
         },
         ledger: []
       },
@@ -105,85 +81,64 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
-  await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
   await seedCanonicalLeagueSeason(page);
   await expect(page.locator("#managerTransferMarketWorkspace")).toBeAttached();
 });
 
-test("listing gir bud i samme økt og Godta bud gjør salget atomisk", async ({ page }) => {
-  await openEconomy(page);
+test("legacy overgangsmarked initialiseres men er ute av live IA", async ({ page }) => {
+  await openAdministration(page);
   const workspace = page.locator("#managerTransferMarketWorkspace");
-  await expect(workspace).toContainText("Vindu åpent");
-  const card = workspace.locator('[data-transfer-player="erik_johnsen"]');
-  await expect(card).toContainText("Erik Johnsen");
+  await expect(workspace).toBeAttached();
+  await expect(workspace).toBeHidden();
+  await expect(page.locator('[data-tab-section="market"]')).toBeHidden();
+  await expect(page.locator("#managerClubOrganization")).not.toContainText(/overgangsvindu|overgangsbud|Gjør tilgjengelig for bud/i);
+});
 
-  await card.getByRole("button", { name: "Gjør Erik Johnsen tilgjengelig for bud" }).click();
-  await expect(card).toContainText("Bud mottatt");
-  await expect(card.getByRole("button", { name: "Godta bud på Erik Johnsen" })).toBeVisible();
-  const offerText = await card.locator(".transfer-offer strong").innerText();
-  expect(offerText).toMatch(/15 klubbmidler/);
-
-  await card.getByRole("button", { name: "Godta bud på Erik Johnsen" }).click();
-  await expect(workspace).toContainText("kjøper spilleren for 15 HGFM-klubbmidler");
-  await expect(workspace.locator('[data-transfer-player="erik_johnsen"]')).toHaveCount(0);
-
-  const saved = await page.evaluate(() => {
+test("legacy overgangsmotoren er fortsatt tilgjengelig for trygg Pass 7-migrering", async ({ page }) => {
+  const result = await page.evaluate(async () => {
+    const transfer = await import("/src/football-transfer-market.js");
+    const season = {
+      seasonNumber: 1,
+      currentRound: 1,
+      status: "active",
+      managerClubId: "rosenborg",
+      tier: { id: "eliteserien", rounds: 30 },
+      competition: { tierId: "eliteserien", rounds: 30 },
+      clubs: [{ id: "rosenborg" }, { id: "brann" }, { id: "viking" }]
+    };
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
-    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
-    const snapshot = envelope.sessions?.league?.teamMerits || {};
+    const listed = transfer.listRecruitedPlayerForTransfer(merits, "erik_johnsen", season);
+    const accepted = transfer.acceptTransferOfferInMerits(listed.merits, "erik_johnsen", season);
     return {
-      recruited: merits.recruitedPlayerIds || [],
-      contract: merits.clubEconomy?.contracts?.erik_johnsen,
-      balance: merits.clubEconomy?.balance,
-      ledgerType: merits.clubEconomy?.ledger?.at(-1)?.type,
-      historyType: merits.transferMarket?.history?.at(-1)?.type,
-      snapshotRecruited: snapshot.recruitedPlayerIds || [],
-      snapshotBalance: snapshot.clubEconomy?.balance
+      listed: listed.changed,
+      offer: listed.offer?.amount,
+      sold: accepted.changed,
+      recruited: accepted.merits.recruitedPlayerIds.includes("erik_johnsen"),
+      balance: accepted.merits.clubEconomy.balance
     };
   });
-  expect(saved.recruited).not.toContain("erik_johnsen");
-  expect(saved.contract).toBeUndefined();
-  expect(saved.balance).toBe(115);
-  expect(saved.ledgerType).toBe("transfer_sale");
-  expect(saved.historyType).toBe("sold");
-  expect(saved.snapshotRecruited).not.toContain("erik_johnsen");
-  expect(saved.snapshotBalance).toBe(115);
+  expect(result).toEqual({ listed: true, offer: 15, sold: true, recruited: false, balance: 115 });
 });
 
-test("stengt vindu vises i klubbdrift og blokkerer ny rekruttering", async ({ page }) => {
-  await setLeagueRound(page, 5);
-  await openEconomy(page);
-  const workspace = page.locator("#managerTransferMarketWorkspace");
-  await expect(workspace).toContainText("Vindu stengt");
-  await expect(workspace).toContainText("Neste HGFM-vindu åpner i runde 16");
-  await expect(workspace.getByRole("button", { name: "Gjør Erik Johnsen tilgjengelig for bud" })).toBeDisabled();
-
-  await openScouting(page);
-  const row = page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').first();
-  const playerId = await row.getAttribute("data-player-id");
-  const playerName = await row.locator(".scouting-player-link strong").innerText();
-  await row.getByRole("button", { name: `Hent ${playerName} til troppen` }).click();
-  await expect(page.locator("#scoutingRecruitmentFeedback")).toContainText("overgangsvinduet er stengt");
-  const recruited = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}").recruitedPlayerIds || []);
-  expect(recruited).not.toContain(playerId);
+test("eksisterende transfer-state overlever refresh uten å bli eksponert", async ({ page }) => {
+  await page.evaluate(() => {
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.transferMarket.listedPlayerIds = ["erik_johnsen"];
+    merits.transferMarket.history = [{ type: "listed", playerId: "erik_johnsen" }];
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+  });
+  await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}").transferMarket || {});
+  expect(saved.listedPlayerIds).toContain("erik_johnsen");
+  expect(saved.history.at(-1)?.type).toBe("listed");
+  await openAdministration(page);
+  await expect(page.locator("#managerTransferMarketWorkspace")).toBeHidden();
 });
 
-test("avslått bud blir ikke erstattet av nytt bud i samme vindu", async ({ page }) => {
-  await openEconomy(page);
-  const card = page.locator('[data-transfer-player="erik_johnsen"]');
-  await card.getByRole("button", { name: "Gjør Erik Johnsen tilgjengelig for bud" }).click();
-  await expect(card).toContainText("Bud mottatt");
-  await card.getByRole("button", { name: "Avslå bud på Erik Johnsen" }).click();
-  await expect(card).toContainText("Budet i dette vinduet er avslått");
-  await expect(card).not.toContainText("Bud mottatt");
-  const state = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}").transferMarket || {});
-  expect(state.history.at(-1)?.type).toBe("rejected");
-  expect(state.offers?.erik_johnsen).toBeUndefined();
-});
-
-test("overgangsmarkedet fungerer på 390px uten global sideoverflow", async ({ page }) => {
+test("skjult legacy overgangsmarked skaper ikke mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openEconomy(page);
-  await expect(page.locator("#managerTransferMarketWorkspace")).toBeVisible();
+  await openAdministration(page);
+  await expect(page.locator("#managerTransferMarketWorkspace")).toBeHidden();
   await expectNoHorizontalOverflow(page);
 });
