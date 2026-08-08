@@ -4,6 +4,7 @@ const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
 const files = {
   runtime: read("../src/ui/manager-visual-identity-v1.js"),
   css: read("../src/ui/manager-visual-identity-v1.css"),
+  layout: read("../src/ui/manager-visual-identity-layout-v1.css"),
   shell: read("../src/ui/manager-shell-view.js"),
   identity: read("../src/ui/manager-club-identity.js"),
   docs: read("../docs/MANAGER_VISUAL_IDENTITY_V1.md"),
@@ -38,7 +39,10 @@ check("ingen ny nettverks- eller tilfeldighetslogikk", !/fetch\(|Math\.random/.t
 check("klubbidentiteten forblir separat presentasjonskilde", files.identity.includes("CLUB_VISUAL_IDENTITIES") && files.css.includes("--club-accent"));
 check("områdeaksent blandes med klubbidentitet", files.css.includes("--area-accent") && files.css.includes("color-mix"));
 check("klubbfarge brukes som markør, ikke heldekkende lerret", files.docs.includes("ikke") && files.docs.includes("heldekkende bakgrunn") && files.css.includes("var(--club-accent"));
-check("navigasjonen bruker faktisk synlig fanetall", files.runtime.includes("--manager-nav-count") && files.css.includes("repeat(var(--manager-nav-count, 5)"));
+check("ligaspillet låser fem hovedområder", files.runtime.includes("CORE_MANAGER_AREAS") && files.runtime.includes("? 5"));
+check("shell-layouten er faktisk grid", files.layout.includes("display: grid") && files.layout.includes("repeat(var(--manager-nav-count, 5)"));
+check("gammel Manageruka-etikett er visuelt demotert", files.layout.includes(".nav-group-label-primary") && files.layout.includes("display: none !important"));
+check("mobilfanene kan krympe uten menyoverflow", files.layout.includes("min-width: 0 !important") && files.layout.includes("overflow-x: visible !important"));
 check("mobilnavn beholdes lesbare", files.css.includes('font-size: .63rem') && !files.css.includes("text-overflow: ellipsis"));
 check("underfaner presenteres som underline-kontroll", files.css.includes(".app-subnav .app-subtab.is-active") && files.css.includes("border-bottom-color: var(--area-accent)"));
 check("typografisk displayhierarki finnes", files.css.includes("--manager-display-font") && files.css.includes("letter-spacing: -.035em"));
@@ -50,6 +54,7 @@ check("Kamp har egen kampdagsscene", files.css.includes(".matchday-scene") && fi
 check("Stats bruker tabulære tall", files.css.includes("font-variant-numeric: tabular-nums"));
 check("Pass 6 har 390/768/1280 browservakter", ["390", "768", "1280"].every((width) => files.browser.includes(width)));
 check("browser tester fem hovedområder", files.browser.includes("Kontor") && files.browser.includes("Speiding") && files.browser.includes("Stats"));
+check("browser krever ekte femkolonne-grid", files.browser.includes('display: "grid"') && files.browser.includes("columns: 5"));
 check("browser tester scenevariasjon", files.browser.includes("new Set(backgrounds).size"));
 check("browser tester typografisk hierarki", files.browser.includes("headingSize") && files.browser.includes("detailSize"));
 check("browser tester global overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
