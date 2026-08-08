@@ -82,6 +82,19 @@ test("onsdag viser kronologisk trening og manglende program der arbeidet skjer",
   await expect(events.nth(1)).toContainText("Velg program");
 });
 
+test("fredag inneholder både kampforberedelse og pressearbeid", async ({ page }) => {
+  await openOfficeCalendar(page);
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="5"]').click();
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Fredag");
+  const events = page.locator("#managerCalendarTimeline .manager-calendar-event-button");
+  await expect(events).toHaveCount(2);
+  await expect(events.nth(0)).toContainText("10:00");
+  await expect(events.nth(0)).toContainText("Kampforberedelse");
+  await expect(events.nth(1)).toContainText("13:00");
+  await expect(events.nth(1)).toContainText("Pressebrief før kamp");
+  await expect(page.locator('#managerCalendarTimeline [data-event-id="press-brief"]')).toContainText("Presseansvarlig");
+});
+
 test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) => {
   await openOfficeCalendar(page);
   await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="2"]').click();
