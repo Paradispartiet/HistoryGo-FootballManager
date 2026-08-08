@@ -144,7 +144,12 @@ function boot() {
     });
   });
   document.addEventListener("click", (event) => {
-    if (event.target instanceof Element && event.target.closest(".main-nav, .app-subnav")) scheduleSync();
+    if (!(event.target instanceof Element) || !event.target.closest(".main-nav, .app-subnav")) return;
+    // Enkelte eksisterende nav-handlere (bl.a. Speiding) gjør selve målbyttet i
+    // queueMicrotask. Legg vår synk bak den køen og behold RAF som sikkerhetsnett
+    // for eventuelle etterfølgende DOM-mutasjoner.
+    queueMicrotask(syncManagerVisualContext);
+    scheduleSync();
   });
   window.addEventListener("hgfm:team-merits-changed", scheduleSync);
   window.addEventListener("updateProfile", scheduleSync);
