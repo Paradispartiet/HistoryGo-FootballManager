@@ -105,17 +105,17 @@ test("treningsanlegget dikter ikke nivå eller oppgraderingsbonus", async ({ pag
   await expect(body).toContainText("ikke dokumentert");
   await expect(body).toContainText("ikke oppdiktede nivå 1–3");
   await expect(body).not.toContainText(/oppgrader til|\+\d+%/i);
-  await expect(page.locator('[data-tab-section="facilities"]')).toBeHidden();
-  await expect(page.locator("#managerFacilitiesWorkspace")).toBeHidden();
+  await expect(page.locator('[data-tab-section="facilities"]')).toHaveCount(0);
+  await expect(page.locator("#managerFacilitiesWorkspace")).toHaveCount(0);
 });
 
-test("fiktiv økonomi kontrakter og overgangsmarked er ute av live IA", async ({ page }) => {
+test("fiktiv økonomi kontrakter overgangsmarked og fasilitetsnivå finnes ikke lenger som skjulte parallelle flater", async ({ page }) => {
   await openClub(page);
-  await expect(page.locator('[data-tab-section="market"]')).toBeHidden();
-  const economyArticle = page.locator("#adminEconomyNote").locator("xpath=ancestor::article[1]");
-  await expect(economyArticle).toBeHidden();
-  await expect(page.locator("#managerEconomyWorkspace")).toBeHidden();
-  await expect(page.locator("#managerTransferMarketWorkspace")).toBeHidden();
+  await expect(page.locator('[data-tab-section="market"], [data-tab-section="facilities"]')).toHaveCount(0);
+  await expect(page.locator("#adminEconomyNote")).toHaveCount(0);
+  await expect(page.locator("#managerEconomyWorkspace")).toHaveCount(0);
+  await expect(page.locator("#managerTransferMarketWorkspace")).toHaveCount(0);
+  await expect(page.locator("#managerFacilitiesWorkspace")).toHaveCount(0);
   await expect(page.locator("#managerClubOrganization")).not.toContainText(/lønnstak|overgangsbud|overgangsvindu|kontraktlengde/i);
 });
 
@@ -127,7 +127,7 @@ test("Trenerteam viser faktisk engasjert stab og åpner eksisterende stabsarbeid
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
   await expect(page.locator('[data-tab-section="admin"] > .club-organization-back')).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubben · Administrasjon");
-  await expect(page.locator("#adminEconomyNote").locator("xpath=ancestor::article[1]")).toBeHidden();
+  await expect(page.locator("#adminEconomyNote")).toHaveCount(0);
   await page.locator('[data-tab-section="admin"] > .club-organization-back').click();
   await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
   await expect(page.locator("#managerClubOrganization")).toBeVisible();
