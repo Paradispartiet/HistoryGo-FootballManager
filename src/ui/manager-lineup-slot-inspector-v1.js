@@ -258,7 +258,7 @@ function handlePitchClick(event) {
   if (!event.isTrusted) return;
   const section = document.querySelector('[data-tab-section="tactics"]');
   if (!section || section.hidden) return;
-  const card = event.target?.closest?.("#lineupSlots .lineup-player-card");
+  const card = event.target?.closest?.("#lineupSlots .player-chip");
   if (!(card instanceof HTMLElement)) return;
   queueMicrotask(() => openInspector(card));
 }
