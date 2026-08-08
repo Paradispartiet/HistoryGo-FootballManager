@@ -1,0 +1,386 @@
+/* Manager Club Organization v1 — organisasjon og rom, ikke dashboard av ratings. */
+
+.club-organization-deep-proxy {
+  display: none !important;
+}
+
+.dept-board.has-manager-club-organization-v1 > #clubCommandPanel,
+.dept-board.has-manager-club-organization-v1 > #clubDepth,
+[data-rejected-live-ia="true"] {
+  display: none !important;
+}
+
+.manager-club-organization {
+  min-width: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--club-accent, #fff) 9%, transparent), transparent 34%),
+    #070b10;
+  color: #f6f7f9;
+}
+
+.club-organization-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, .42fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: end;
+  padding: clamp(1.1rem, 3vw, 2rem);
+  border-bottom: 1px solid rgba(255,255,255,.16);
+}
+
+.club-organization-head h2 {
+  margin: .1rem 0 .45rem;
+  font-size: clamp(2.15rem, 6vw, 4.3rem);
+  line-height: .92;
+  letter-spacing: -.055em;
+}
+
+.club-organization-lede {
+  max-width: 66ch;
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  line-height: 1.5;
+}
+
+.club-organization-rule {
+  display: grid;
+  gap: .35rem;
+  align-self: stretch;
+  align-content: end;
+  padding: 0 0 .15rem 1rem;
+  border-left: 3px solid var(--club-accent, rgba(255,255,255,.7));
+}
+
+.club-organization-rule span,
+.club-organization-room-group,
+.club-organization-footer strong,
+.club-room-fact dt {
+  color: rgba(255,255,255,.55);
+  font-size: .65rem;
+  font-weight: 900;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.club-organization-rule strong {
+  font-size: 1rem;
+}
+
+.club-organization-rule small {
+  color: rgba(255,255,255,.64);
+  line-height: 1.45;
+}
+
+.club-organization-directory {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.club-organization-group {
+  min-width: 0;
+  padding: clamp(.95rem, 2.4vw, 1.45rem) clamp(1rem, 2.8vw, 1.7rem) 1.3rem;
+}
+
+.club-organization-group + .club-organization-group {
+  border-left: 1px solid rgba(255,255,255,.13);
+}
+
+.club-organization-group h3 {
+  margin: 0 0 .35rem;
+  color: rgba(255,255,255,.74);
+  font-size: .7rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.club-organization-room-list {
+  display: grid;
+}
+
+.club-organization-room {
+  display: grid;
+  grid-template-columns: 7.3rem minmax(0, 1fr) auto;
+  gap: .8rem;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 5.25rem;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  background: transparent;
+  color: inherit;
+  padding: .75rem 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.club-organization-room:first-child {
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+
+.club-organization-room:hover,
+.club-organization-room:focus-visible {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--club-accent, #fff) 11%, transparent), transparent 78%);
+  outline: 0;
+}
+
+.club-organization-room:focus-visible {
+  box-shadow: inset 3px 0 0 var(--club-accent, #fff);
+}
+
+.club-organization-room-copy {
+  display: grid;
+  gap: .18rem;
+  min-width: 0;
+}
+
+.club-organization-room-copy strong {
+  font-size: clamp(.95rem, 2vw, 1.12rem);
+  line-height: 1.2;
+}
+
+.club-organization-room-copy small {
+  min-width: 0;
+  color: rgba(255,255,255,.62);
+  line-height: 1.38;
+  overflow-wrap: anywhere;
+}
+
+.club-organization-room-arrow {
+  color: var(--club-accent, #fff);
+  font-size: 1.2rem;
+  font-weight: 1000;
+}
+
+.club-organization-footer {
+  display: flex;
+  gap: .7rem 1rem;
+  align-items: baseline;
+  padding: .8rem clamp(1rem, 2.8vw, 1.7rem);
+  border-top: 1px solid rgba(255,255,255,.13);
+  background: rgba(255,255,255,.025);
+}
+
+.club-organization-footer span {
+  color: rgba(255,255,255,.62);
+  font-size: .72rem;
+  line-height: 1.4;
+}
+
+.manager-club-room-drawer[hidden] {
+  display: none !important;
+}
+
+.manager-club-room-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1800;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(22rem, 34rem);
+}
+
+.club-room-backdrop {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  border: 0;
+  background: rgba(0,0,0,.68);
+  cursor: default;
+}
+
+.club-room-panel {
+  position: relative;
+  z-index: 1;
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  max-height: 100dvh;
+  background:
+    linear-gradient(155deg, color-mix(in srgb, var(--club-accent, #fff) 10%, transparent), transparent 34%),
+    #090e14;
+  border-left: 1px solid rgba(255,255,255,.2);
+  box-shadow: -24px 0 55px rgba(0,0,0,.45);
+}
+
+.club-room-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+
+.club-room-head h2 {
+  margin: .1rem 0 0;
+  font-size: clamp(1.45rem, 4vw, 2.2rem);
+}
+
+.club-room-close {
+  flex: 0 0 auto;
+  width: 2.55rem;
+  height: 2.55rem;
+  border: 1px solid rgba(255,255,255,.3);
+  background: transparent;
+  color: #fff;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.club-room-body {
+  min-width: 0;
+  overflow: auto;
+  padding: clamp(1rem, 3vw, 1.45rem);
+}
+
+.club-room-summary {
+  margin: 0 0 .6rem;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.club-room-detail {
+  margin: 0 0 1.1rem;
+  color: rgba(255,255,255,.68);
+  line-height: 1.55;
+}
+
+.club-room-facts {
+  margin: 0;
+  border-top: 1px solid rgba(255,255,255,.14);
+}
+
+.club-room-fact {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: .75rem;
+  padding: .75rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.11);
+}
+
+.club-room-fact dd {
+  margin: 0;
+  color: #f1f3f5;
+  font-size: .82rem;
+  font-weight: 750;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.club-room-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: 1.15rem;
+}
+
+.club-room-action,
+.club-organization-back {
+  min-height: 2.75rem;
+  border: 1px solid rgba(255,255,255,.34);
+  background: #101820;
+  color: #fff;
+  padding: .6rem .85rem;
+  font: inherit;
+  font-size: .75rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.club-room-action:hover,
+.club-room-action:focus-visible,
+.club-organization-back:hover,
+.club-organization-back:focus-visible,
+.club-room-close:hover,
+.club-room-close:focus-visible {
+  border-color: var(--club-accent, #fff);
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--club-accent, #fff) 35%, transparent);
+}
+
+.club-organization-back {
+  margin: 0 0 .75rem;
+}
+
+/* Administrasjon beholdes som reell arbeidsflate, men den feilrettede
+   spilløkonomien og overgangsmarkedet er ute av live IA i Pass 5. */
+.dept-admin [data-rejected-live-ia="true"],
+.dept-admin #managerEconomyWorkspace,
+.dept-admin #managerTransferMarketWorkspace {
+  display: none !important;
+}
+
+@media (max-width: 820px) {
+  .club-organization-head,
+  .club-organization-directory {
+    grid-template-columns: 1fr;
+  }
+
+  .club-organization-rule {
+    padding: .8rem 0 0;
+    border-left: 0;
+    border-top: 2px solid var(--club-accent, rgba(255,255,255,.7));
+  }
+
+  .club-organization-group + .club-organization-group {
+    border-left: 0;
+    border-top: 1px solid rgba(255,255,255,.13);
+  }
+}
+
+@media (max-width: 560px) {
+  .club-organization-head,
+  .club-organization-group {
+    padding-left: .9rem;
+    padding-right: .9rem;
+  }
+
+  .club-organization-room {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .5rem;
+  }
+
+  .club-organization-room-group {
+    grid-column: 1 / -1;
+  }
+
+  .club-organization-room-arrow {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .club-organization-footer {
+    display: grid;
+    padding-left: .9rem;
+    padding-right: .9rem;
+  }
+
+  .manager-club-room-drawer {
+    align-items: end;
+    grid-template-columns: 1fr;
+  }
+
+  .club-room-panel {
+    grid-column: 1;
+    align-self: end;
+    max-height: min(86dvh, 48rem);
+    border-left: 0;
+    border-top: 1px solid rgba(255,255,255,.2);
+    border-radius: 18px 18px 0 0;
+  }
+
+  .club-room-fact {
+    grid-template-columns: 1fr;
+    gap: .3rem;
+  }
+
+  .club-room-action {
+    width: 100%;
+  }
+}

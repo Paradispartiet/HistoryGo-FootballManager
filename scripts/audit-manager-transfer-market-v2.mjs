@@ -18,9 +18,9 @@ const checks = [
   ["bud opprettes uten classHeight/Overall", !/classHeight\s*[.:=]|overall\s*[.:=]/i.test(engine) && docs.includes("ingen skjult Overall")],
   ["bud kan godtas eller avslås", engine.includes("acceptTransferOfferInMerits") && engine.includes("rejectTransferOfferInMerits")],
   ["salg oppdaterer tropp, kontrakt og klubbkasse", engine.includes("transfer_sale") && engine.includes("balance: economy.balance + saleAmount") && engine.includes("delete contracts[id]")],
-  ["samme managerflate brukes", shell.includes('manager-transfer-market-v2.js') && ui.includes("managerEconomyWorkspace")],
+  ["samme legacy managerflate beholdes fram til Pass 7", shell.includes('manager-transfer-market-v2.js') && ui.includes("managerEconomyWorkspace")],
   ["ingen ny Neste-flyt", !/Neste dag|nextAction|next-action/i.test(`${engine}\n${ui}`)],
-  ["browser-regresjon dekker markedet", browser.includes("Godta bud") && browser.includes("Vindu stengt") && browser.includes("390")],
+  ["browser-regresjon dekker skjult legacy-marked og migrerbar motor", browser.includes("legacy overgangsmarked initialiseres men er ute av live IA") && browser.includes("legacy overgangsmotoren er fortsatt tilgjengelig for trygg Pass 7-migrering") && browser.includes("#managerTransferMarketWorkspace") && browser.includes("toBeHidden") && browser.includes("390")],
   ["dokumentasjonen låser spillverdigrensen", docs.includes("ikke historiske overgangssummer") && docs.includes("HGFM-spillverdier")]
 ];
 

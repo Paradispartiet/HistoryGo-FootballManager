@@ -10,7 +10,7 @@ async function openClub(page) {
   await openOffice(page);
   await page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]').click();
   await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
-  await expect(page.locator("#clubCommandPanel")).toBeVisible();
+  await expect(page.locator("#managerClubOrganization")).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -41,73 +41,68 @@ test.beforeEach(async ({ page }) => {
 
 test("Klubben ligger under Kontor mens Speiding er eget hovedområde", async ({ page }) => {
   await openClub(page);
-  await expect(page.locator("#clubCommand h2")).toHaveText("Klubbkontoret");
-  await expect(page.locator(".club-expectation-card strong")).not.toBeEmpty();
-  await expect(page.locator(".club-priority-card strong")).not.toBeEmpty();
-  await expect(page.locator(".club-command-action")).toBeVisible();
-  await expect(page.locator(".club-command-status")).toHaveCount(6);
-  await expect(page.locator(".club-command-metrics article")).toHaveCount(5);
+  await expect(page.locator("#managerClubOrganization h2")).toHaveText("Bislett FK");
+  await expect(page.locator(".club-organization-room")).toHaveCount(8);
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubben");
   await expect(page.locator('.main-nav .nav-tab[data-tab-target="board"]')).toHaveCount(0);
   await expect(page.locator('.main-nav .nav-tab[data-tab-target="historygo"]')).toHaveText("Speiding");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubben");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toHaveText("Kalender");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"]:visible')).toHaveCount(2);
-  expect(await page.locator("#clubDepth").getAttribute("open")).toBeNull();
+
+  // Legacy-scenen beholdes i DOM for trygg migrering, men er ikke lenger live IA.
+  await expect(page.locator("#clubCommandPanel")).toBeAttached();
+  await expect(page.locator("#clubCommandPanel")).toBeHidden();
+  await expect(page.locator("#clubDepth")).toBeHidden();
 });
 
-test("klubbstatus åpner Speiding som hovedområde og øvrige klubbfunksjoner fra Klubben", async ({ page }) => {
+test("Klubben åpner faktiske rom mens Speiding forblir separat", async ({ page }) => {
   await openClub(page);
-  await page.locator('.club-command-status[data-club-target="admin"]').click();
-  await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
-  await expect(page.locator("#availableStaffList")).toBeVisible();
+  await page.locator('[data-club-room="coaches"]').click();
+  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
+  await expect(page.locator("#managerClubRoomTitle")).toHaveText("Trenerteam");
+  await page.locator("#managerClubRoomDrawer .club-room-close").click();
 
-  await openClub(page);
-  await page.locator('.club-command-status[data-club-target="historygo"]').click();
+  await page.locator('[data-club-room="development"]').click();
+  await page.locator('[data-club-room-action="progression"]').click();
+  await expect(page.locator('[data-tab-section="progression"]')).toBeVisible();
+  await expect(page.locator('[data-tab-section="progression"] > .club-organization-back')).toBeVisible();
+  await page.locator('[data-tab-section="progression"] > .club-organization-back').click();
+  await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
+
+  await page.locator('.main-nav .nav-tab[data-tab-target="historygo"]').click();
   await expect(page.locator('[data-tab-section="historygo"]')).toBeVisible();
   await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Rekrutterbare");
 
   await openClub(page);
-  await page.locator('.club-command-status[data-club-target="progression"]').click();
-  await expect(page.locator('[data-tab-section="progression"]')).toBeVisible();
-  await expect(page.locator("#unlockedExpertiseList")).toBeVisible();
-
-  await openClub(page);
-  await page.locator('.club-command-status[data-club-target="facilities"]').click();
-  await expect(page.locator('[data-tab-section="facilities"]')).toBeVisible();
-  await expect(page.locator("#facilityOverallValue")).toBeVisible();
-
-  await openClub(page);
-  await page.locator('.club-command-status[data-club-target="market"]').click();
-  await expect(page.locator('[data-tab-section="market"]')).toBeVisible();
-  await expect(page.locator("#marketMediaValue")).toBeVisible();
-
-  await openClub(page);
-  await page.locator('.club-command-status[data-club-target="details"]').click();
-  await expect(page.locator("#clubDepth")).toHaveAttribute("open", "");
+  await expect(page.locator('[data-tab-section="facilities"]')).toBeHidden();
+  await expect(page.locator('[data-tab-section="market"]')).toBeHidden();
 });
 
-test("klubbkontoret og klubbfunksjonene har ingen mobil overflow", async ({ page }) => {
+test("klubborganisasjonen og rommene har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openClub(page);
   await expectNoHorizontalOverflow(page);
-  await page.locator('.club-command-status[data-club-target="facilities"]').click();
-  await expectNoHorizontalOverflow(page);
-  await openClub(page);
-  await page.locator('.club-command-status[data-club-target="market"]').click();
+  await page.locator('[data-club-room="stadium"]').click();
+  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
-test("klubbkontoret og klubbfunksjonene har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  for (const target of ["board", "facilities", "market"]) {
-    await openClub(page);
-    if (target !== "board") await page.locator(`.club-command-status[data-club-target="${target}"]`).click();
-    const results = await new AxeBuilder({ page })
-      .include(`[data-tab-section="${target}"]`)
-      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-      .analyze();
-    const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
-    expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
-  }
+test("klubborganisasjonen og rommene har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
+  await openClub(page);
+  let results = await new AxeBuilder({ page })
+    .include("#managerClubOrganization")
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  let serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
+
+  await page.locator('[data-club-room="board"]').click();
+  results = await new AxeBuilder({ page })
+    .include("#managerClubRoomDrawer")
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 });

@@ -12,6 +12,7 @@ const files = {
   package: read("../package.json"),
   ci: read("../.github/workflows/ci.yml"),
   browser: read("../tests/browser/manager-club-scene-v1.spec.js"),
+  organizationBrowser: read("../tests/browser/manager-club-organization-v1.spec.js"),
   legacyAudit: read("./audit-manager-club-scene-v1.mjs"),
   legacySim: read("./simulate-manager-club-scene-v1.mjs")
 };
@@ -38,7 +39,7 @@ check("presentasjonen eier seks operasjonsstatuser foreløpig", ["board", "scout
 check("Klubben ligger under Kontor", files.shell.includes('createSubtab(subnav, "board", "Klubbdrift")') && files.calendar.includes('board.textContent = "Klubben"') && files.shell.includes('section.dataset.tabParent = "dashboard"'));
 check("Klubb fjernes som eget hovedområde", files.shell.includes('clubMainTab.hidden = true') && files.scouting.includes('scoutingTab.dataset.tabTarget = "historygo"'));
 check("Speiding løftes ut av Kontor uten å flytte klubbflatene", files.scouting.includes('historySection.dataset.tabParent = "historygo"') && files.calendar.includes('board.textContent = "Klubben"'));
-check("fasiliteter og marked åpnes som eksisterende dypflater", files.presentation.includes('"facilities"') && files.presentation.includes('"market"') && files.shell.includes('section.removeAttribute("data-shell-hidden")'));
+check("legacy fasiliteter og marked beholder eksisterende dypflater fram til Pass 7", files.presentation.includes('"facilities"') && files.presentation.includes('"market"') && files.shell.includes('section.removeAttribute("data-shell-hidden")'));
 check("dype klubbflater skjules fra Kontors primære underfaneliste", files.shell.includes('createSubtab(subnav, "facilities", "Fasiliteter", { visible: false })') && files.shell.includes('createSubtab(subnav, "market", "Marked", { visible: false })'));
 check("statuskort bruker eksisterende target-kontrakt", files.presentation.includes("onOpenTarget(item.target)"));
 check("fasiliteter bruker eksplisitt save-state", files.presentation.includes("summarizeFacilityState") && files.app.includes("facilities: normalizeFacilityState(base.facilities)"));
@@ -47,8 +48,8 @@ check("ingen ny lagring eller nettverksmotor i presentasjonen", !files.presentat
 check("ingen økonomi- eller sponsormotor introduseres av denne presentasjonen", files.docs.includes("ingen sponsoravtaler") && files.docs.includes("Ingen nye localStorage-nøkler"));
 check("legacy-simuleringen forventer seks områder", files.legacySim.includes("seks varige klubbfunksjoner") && files.legacySim.includes('"facilities", "market"'));
 check("legacy-auditen beskytter nytt Kontor-hierarki", files.legacyAudit.includes("Klubben er ikke eget hovedområde") && files.legacyAudit.includes("Klubben ligger under Kontor ved siden av Kalender") && files.legacyAudit.includes("Speiding er løftet ut av Klubben"));
-check("browsertesten åpner fasiliteter fra Klubben", files.browser.includes('data-club-target="facilities"') && files.browser.includes("#facilityOverallValue"));
-check("browsertesten åpner marked fra Klubben", files.browser.includes('data-club-target="market"') && files.browser.includes("#marketMediaValue"));
+check("browsertesten krever Treningsanlegg-rom i stedet for live fasilitetsnivåer", files.organizationBrowser.includes("treningsanlegget dikter ikke nivå eller oppgraderingsbonus") && files.organizationBrowser.includes("#managerFacilitiesWorkspace") && files.organizationBrowser.includes("toBeHidden"));
+check("browsertesten krever marked økonomi og kontrakter ut av live IA", files.organizationBrowser.includes("fiktiv økonomi kontrakter og overgangsmarked er ute av live IA") && files.organizationBrowser.includes("#managerTransferMarketWorkspace") && files.organizationBrowser.includes("toBeHidden"));
 check("browsertesten bekrefter at board ikke finnes som hovedmål", files.browser.includes('.main-nav .nav-tab[data-tab-target="board"]') && files.browser.includes("toHaveCount(0)"));
 check("browsertesten bekrefter separat Speiding-hovedfane", files.browser.includes('.main-nav .nav-tab[data-tab-target="historygo"]') && files.browser.includes('toHaveText("Speiding")'));
 check("browsertesten dekker mobil overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));

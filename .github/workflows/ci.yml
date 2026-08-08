@@ -73,6 +73,7 @@ jobs:
           npm run audit:manager-training-scene-v2
           npm run audit:manager-club-scene-v1
           npm run audit:manager-club-operations-v1
+          npm run audit:manager-club-organization-v1
           npm run audit:manager-matchday-scene-v1
           npm run audit:manager-match-calendar-v1
           npm run audit:manager-post-match-analysis-v1
@@ -111,6 +112,7 @@ jobs:
           npm run sim:manager-training-scene-v2
           npm run sim:manager-club-scene-v1
           npm run sim:manager-club-operations-v1
+          npm run sim:manager-club-organization-v1
           npm run sim:manager-matchday-scene-v1
           npm run sim:manager-match-calendar-v1
           npm run sim:manager-post-match-analysis-v1
