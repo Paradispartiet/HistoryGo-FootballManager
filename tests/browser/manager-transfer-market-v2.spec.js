@@ -125,6 +125,14 @@ test("eksisterende transfer-state overlever refresh uten å bli eksponert", asyn
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
     merits.transferMarket.listedPlayerIds = ["erik_johnsen"];
     merits.transferMarket.history = [{ type: "listed", playerId: "erik_johnsen" }];
+
+    // Mode Isolation eier den autoritative league-snapshoten. Testen må derfor
+    // skrive samme state dit før reload, i stedet for å omgå save-kontrakten
+    // med bare en direkte teamMerits-skriving.
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    if (!envelope.sessions?.league) throw new Error("Mangler autoritativ league-snapshot");
+    envelope.sessions.league = { ...envelope.sessions.league, teamMerits: merits };
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
     localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
   });
   await page.reload();
