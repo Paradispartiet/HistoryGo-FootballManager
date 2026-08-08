@@ -79,5 +79,13 @@
     "lastSettledSeason": 1,
     "contracts": {},
     "ledger": []
+  },
+  "transferMarket": {
+    "version": 2,
+    "listedPlayerIds": [],
+    "offers": {},
+    "closedOfferKeys": [],
+    "history": [],
+    "lastSeenWindowKey": "s1:opening"
   }
 }

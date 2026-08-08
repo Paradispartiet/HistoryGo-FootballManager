@@ -88,7 +88,9 @@
     "audit:manager-staff-roster-v1": "node scripts/audit-manager-staff-roster-v1.mjs",
     "sim:manager-staff-roster-v1": "node scripts/simulate-manager-staff-roster-v1.mjs",
     "audit:manager-facilities-upgrades-v1": "node scripts/audit-manager-facilities-upgrades-v1.mjs",
-    "sim:manager-facilities-upgrades-v1": "node scripts/simulate-manager-facilities-upgrades-v1.mjs"
+    "sim:manager-facilities-upgrades-v1": "node scripts/simulate-manager-facilities-upgrades-v1.mjs",
+    "audit:manager-transfer-market-v2": "node scripts/audit-manager-transfer-market-v2.mjs",
+    "sim:manager-transfer-market-v2": "node scripts/simulate-transfer-market-v2.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
