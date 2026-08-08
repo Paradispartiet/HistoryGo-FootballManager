@@ -1,0 +1,212 @@
+/* Pass 4 — fredag/lørdag presenteres som kalenderarbeid over eksisterende Lag- og Kamp-systemer. */
+
+.manager-match-prep-day,
+.manager-match-calendar-context {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.16);
+  background: #070b10;
+  color: #f7f8fa;
+}
+
+.manager-match-prep-day { margin-bottom: .9rem; }
+
+.match-prep-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(.9rem, 2.4vw, 1.35rem);
+  border-bottom: 1px solid rgba(255,255,255,.16);
+  background: #0a0f15;
+}
+
+.match-calendar-link {
+  min-height: 2rem;
+  margin: 0 0 .45rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,.72);
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+  cursor: pointer;
+}
+
+.match-prep-head h2 {
+  margin: .1rem 0 .35rem;
+  font-size: clamp(1.7rem, 4vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+
+.match-prep-lede {
+  max-width: 68ch;
+  margin: 0;
+  color: rgba(255,255,255,.68);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+
+.match-calendar-clock {
+  display: grid;
+  justify-items: end;
+  gap: .15rem;
+  flex: 0 0 auto;
+  min-width: 8rem;
+  padding-left: 1rem;
+  border-left: 2px solid rgba(255,255,255,.72);
+}
+
+.match-calendar-clock span,
+.match-prep-opponent span,
+.match-prep-card > span,
+.match-prep-brief > span,
+.match-calendar-footer span {
+  color: rgba(255,255,255,.56);
+  font-size: .63rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.match-calendar-clock strong { font-size: 1rem; text-align: right; }
+
+.match-prep-opponent {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, .75fr);
+  gap: 1rem;
+  align-items: center;
+  padding: .85rem clamp(.9rem, 2.4vw, 1.35rem);
+  border-bottom: 1px solid rgba(255,255,255,.13);
+  background: rgba(255,255,255,.025);
+}
+
+.match-prep-opponent > div { display: grid; gap: .2rem; }
+.match-prep-opponent strong { font-size: clamp(1.05rem, 2.4vw, 1.35rem); }
+.match-prep-opponent p { margin: 0; color: rgba(255,255,255,.68); font-size: .72rem; line-height: 1.45; text-align: right; }
+
+.match-prep-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-width: 0;
+  border-bottom: 1px solid rgba(255,255,255,.13);
+}
+
+.match-prep-card {
+  display: grid;
+  align-content: start;
+  gap: .4rem;
+  min-width: 0;
+  padding: .9rem 1rem;
+  border-right: 1px solid rgba(255,255,255,.12);
+}
+
+.match-prep-card:last-child { border-right: 0; }
+.match-prep-card strong { font-size: .92rem; line-height: 1.35; overflow-wrap: anywhere; }
+.match-prep-card p { min-height: 2.1rem; margin: 0; color: rgba(255,255,255,.62); font-size: .7rem; line-height: 1.45; overflow-wrap: anywhere; }
+
+.match-prep-card button,
+.match-calendar-return {
+  min-height: 2.6rem;
+  margin-top: .25rem;
+  border: 1px solid rgba(255,255,255,.34);
+  background: #0f151c;
+  color: #fff;
+  padding: .55rem .75rem;
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.match-prep-card button:hover,
+.match-calendar-return:hover {
+  border-color: rgba(255,255,255,.8);
+  background: #151e27;
+}
+
+.match-calendar-link:focus-visible,
+.match-prep-card button:focus-visible,
+.match-calendar-return:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.match-prep-brief {
+  display: grid;
+  gap: .35rem;
+  padding: .9rem clamp(.9rem, 2.4vw, 1.35rem);
+  box-shadow: inset 3px 0 0 rgba(255,255,255,.62);
+  background: #090e14;
+}
+
+.match-prep-brief strong { font-size: .9rem; line-height: 1.4; }
+.match-prep-brief p { margin: 0; color: rgba(255,255,255,.6); font-size: .69rem; line-height: 1.45; }
+
+.match-calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  padding: .7rem clamp(.9rem, 2.4vw, 1.35rem);
+  border-top: 1px solid rgba(255,255,255,.14);
+  background: #080c11;
+}
+
+.match-calendar-footer > div { display: grid; gap: .16rem; }
+.match-calendar-footer strong { font-size: .78rem; }
+
+.manager-match-calendar-context {
+  display: grid;
+  gap: .35rem;
+  padding: .75rem clamp(.85rem, 2vw, 1.1rem);
+  border-bottom: 0;
+  background: #090e14;
+}
+
+.manager-match-calendar-context[hidden] { display: none !important; }
+.manager-match-prep-day[hidden] { display: none !important; }
+
+.manager-match-calendar-context .match-calendar-link { justify-self: start; margin-bottom: 0; }
+.match-calendar-context-copy {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.match-calendar-context-copy > div:first-child { display: grid; gap: .14rem; }
+.match-calendar-context-copy p { margin: 0; }
+.match-calendar-context-copy > div:first-child > strong { font-size: clamp(1rem, 2.2vw, 1.25rem); }
+
+/* Fredagens nye arbeidsflate erstatter bare den gamle kommandopresentasjonen.
+   Selve oppstillingen, banen, valgene og drawer-kildene beholdes. */
+[data-tab-section="tactics"].has-manager-match-prep-day-v1 #squadTacticsCommandPanel {
+  display: none !important;
+}
+
+@media (max-width: 920px) {
+  .match-prep-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .match-prep-card:nth-child(2) { border-right: 0; }
+  .match-prep-card:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,.12); }
+}
+
+@media (max-width: 560px) {
+  .match-prep-head,
+  .match-calendar-context-copy,
+  .match-calendar-footer { align-items: stretch; flex-direction: column; }
+  .match-prep-head { display: grid; }
+  .match-calendar-clock { justify-items: start; min-width: 0; padding: .55rem 0 0; border-left: 0; border-top: 1px solid rgba(255,255,255,.2); }
+  .match-calendar-clock strong { text-align: left; }
+  .match-prep-opponent { grid-template-columns: 1fr; }
+  .match-prep-opponent p { text-align: left; }
+  .match-prep-grid { grid-template-columns: 1fr; }
+  .match-prep-card { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .match-prep-card:last-child { border-bottom: 0; }
+  .match-calendar-footer { display: grid; }
+  .match-calendar-return { width: 100%; }
+}
