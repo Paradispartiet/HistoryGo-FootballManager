@@ -47,7 +47,16 @@ async function openTraining(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
-  await expect(page.locator("#trainingCommandPanel")).toBeVisible();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+}
+
+async function openCalendarTraining(page, day = 3, eventId = "team-training") {
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await page.locator(`#managerCalendarDays .manager-calendar-day-button[data-day="${day}"]`).click();
+  await page.locator(`#managerCalendarTimeline [data-event-id="${eventId}"]`).click();
+  await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -75,42 +84,64 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator("#managerTrainingDay")).toBeAttached();
 });
 
-test("treningsscenen viser situasjon, motstander og fire operative statuser", async ({ page }) => {
+test("Trening er én faktisk treningsdag med fire økter og uten gammel kommandovegg", async ({ page }) => {
   await openTraining(page);
-  await expect(page.locator("#trainingCommand h2")).toHaveText("Treningsuka");
-  await expect(page.locator(".training-assistant-signal strong")).not.toBeEmpty();
-  await expect(page.locator(".training-opponent-brief strong")).not.toBeEmpty();
-  await expect(page.locator(".training-command-status")).toHaveCount(4);
-  await expect(page.locator(".training-command-action")).toBeVisible();
-  expect(await page.locator("#trainingDepth").getAttribute("open")).toBeNull();
-  await expect(page.locator('#trainingWorkspace [data-training-step-toggle][aria-expanded="true"]')).toHaveCount(1);
+  await expect(page.locator("#managerTrainingDay h2")).toHaveText("Treningsdag");
+  await expect(page.locator("#trainingDayBackCalendar")).toContainText("Kalender · Uke");
+  await expect(page.locator("#trainingDaySessions .training-day-session")).toHaveCount(4);
+  await expect(page.locator("#trainingDayAssistant")).not.toBeEmpty();
+  await expect(page.locator("#trainingDayCondition")).not.toBeEmpty();
+  await expect(page.locator("#trainingDayOpponent")).not.toBeEmpty();
+  await expect(page.locator("#trainingCommandPanel")).toBeHidden();
+  await expect(page.locator("#trainingDepth")).toBeHidden();
+  await expect(page.locator("#teamTrainingSelectedState")).toBeHidden();
 });
 
-test("statuskort åpner riktig eksisterende arbeidssteg", async ({ page }) => {
+test("program fokus og individuell oppfølging åpner komplette eksisterende valg i felles drawer", async ({ page }) => {
   await openTraining(page);
-  await page.locator('.training-command-status[data-training-target="trainingFocusStep"]').click();
-  await expect(page.locator('#trainingFocusStep [data-training-step-toggle]')).toHaveAttribute("aria-expanded", "true");
-  await expect(page.locator("#trainingFocusStepBody")).toBeVisible();
-  await expect(page.locator("#trainingProgramStepBody")).toBeHidden();
+  await expect(page.locator("#teamChangeTrainingProgram")).toBeAttached();
 
-  await page.locator('.training-command-status[data-training-target="details"]').click();
-  await expect(page.locator("#trainingDepth")).toHaveAttribute("open", "");
+  await page.locator("#trainingDayChangeProgram").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  await expect(page.locator("#managerTeamChoiceDrawerBody #trainingPrograms")).toBeVisible();
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+
+  await page.locator("#trainingDayChangeFocus").click();
+  await expect(page.locator("#managerTeamChoiceDrawerBody #weeklyTrainingOptions")).toBeVisible();
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+
+  await page.locator("#trainingDayChangeIndividual").click();
+  await expect(page.locator("#managerTeamChoiceDrawerBody #individualTrainingPicker")).toBeVisible();
 });
 
-test("treningsscenen har ingen mobil overflow", async ({ page }) => {
+test("kalenderhendelsen eier dagkonteksten og retur går tilbake til samme dag", async ({ page }) => {
+  await openCalendarTraining(page, 4, "individual-follow-up");
+  await expect(page.locator("#trainingDayBackCalendar")).toContainText("Torsdag");
+  await expect(page.locator("#trainingDayEvent")).toHaveText("Individuell oppfølging");
+  await expect(page.locator("#managerLocationText")).toHaveText("Lag · Trening · Torsdag");
+
+  await page.locator("#trainingDayReturnCalendar").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator('#managerCalendarDays .manager-calendar-day-button[aria-selected="true"]')).toHaveAttribute("data-day", "4");
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Torsdag");
+});
+
+test("treningsdagen og valgdraweren har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openTraining(page);
+  await openCalendarTraining(page, 3, "team-training");
   await expectNoHorizontalOverflow(page);
-  await page.locator('.training-command-status[data-training-target="trainingProgramStep"]').click();
+  await page.locator("#trainingDayChangeProgram").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
-test("treningsscenen har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  await openTraining(page);
+test("treningsdagen har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
+  await openCalendarTraining(page, 3, "team-training");
   const results = await new AxeBuilder({ page })
-    .include('[data-tab-section="trening"]')
+    .include("#managerTrainingDay")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
