@@ -9,6 +9,7 @@ import "./manager-staff-workspace-v1.js";
 import "./manager-club-organization-v1.js";
 import "./manager-club-organization-location-v1.js";
 import "./manager-visual-identity-v1.js";
+import "./manager-league-next-suppression-v1.js";
 
 export function createMatchFlowSnapshot(session, visibleLog = []) {
   const log = Array.isArray(visibleLog) ? visibleLog : [];
