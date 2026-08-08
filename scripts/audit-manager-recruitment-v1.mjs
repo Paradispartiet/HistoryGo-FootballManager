@@ -4,12 +4,15 @@ const engine = fs.readFileSync(new URL("../src/football-recruitment.js", import.
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 const scouting = fs.readFileSync(new URL("../src/ui/manager-scouting-workspace-v1.js", import.meta.url), "utf8");
 const playerWorkspace = fs.readFileSync(new URL("../src/ui/manager-player-workspace-v1.js", import.meta.url), "utf8");
+const shell = fs.readFileSync(new URL("../src/ui/manager-shell-view.js", import.meta.url), "utf8");
+const cleanup = fs.readFileSync(new URL("../src/ui/manager-legacy-cleanup-v1.js", import.meta.url), "utf8");
 const css = fs.readFileSync(new URL("../src/ui/manager-scouting-workspace-v1.css", import.meta.url), "utf8");
 const seed = fs.readFileSync(new URL("../data/football_team_merits.example.json", import.meta.url), "utf8");
 const shellBrowser = fs.readFileSync(new URL("../tests/browser/manager-shell-v3.spec.js", import.meta.url), "utf8");
 const browser = fs.readFileSync(new URL("../tests/browser/manager-recruitment-v1.spec.js", import.meta.url), "utf8");
+const cleanupBrowser = fs.readFileSync(new URL("../tests/browser/manager-legacy-cleanup-v1.spec.js", import.meta.url), "utf8");
 const docs = fs.readFileSync(new URL("../docs/MANAGER_RECRUITMENT_V1.md", import.meta.url), "utf8");
-const economyDocs = fs.readFileSync(new URL("../docs/MANAGER_ECONOMY_CONTRACTS_V1.md", import.meta.url), "utf8");
+const cleanupDocs = fs.readFileSync(new URL("../docs/MANAGER_LEGACY_CLEANUP_V1.md", import.meta.url), "utf8");
 const packageJson = fs.readFileSync(new URL("../package.json", import.meta.url), "utf8");
 const ci = fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
 const recruitmentRuntime = `${scouting}\n${engine}`;
@@ -25,7 +28,7 @@ const checks = [
   ["startgulvet er ikke recruitment-state", engine.includes("starterPlayerIds") && engine.includes("recruitedPlayerIds") && docs.includes("Starttroppen er ikke en History Go-signering")],
   ["ingen separat recruitment-localStorage-key", !/hgfm\.(recruitment|transfer|market)/i.test(recruitmentRuntime)],
   ["samme-session state refresh finnes", scouting.includes("hgfm:team-merits-changed") && app.includes("hgfm:team-merits-changed")],
-  ["gamle saves har eksplisitt engangsmigrering", engine.includes("migrateLegacyRecruitmentState") && app.includes("migration.migrated")],
+  ["gamle recruitment-saves har eksplisitt engangsmigrering", engine.includes("migrateLegacyRecruitmentState") && app.includes("migration.migrated")],
   ["nye saves starter uten automatisk kandidatimport", seed.includes('"recruitmentVersion": 1') && seed.includes('"recruitedPlayerIds": []')],
   ["rekruttert spiller må fortsatt være kvalifisert kandidat", engine.includes("eligible.has(id)") && app.includes("candidatePlayerIds.has(playerId)")],
   ["nasjonalarena og quiz-port beholdes", scouting.includes("isNationalArenaPlace") && scouting.includes("currentQuizCompletedPlaceIds")],
@@ -36,13 +39,15 @@ const checks = [
   ["mobil rekrutteringshandling er stylet", css.includes(".scouting-recruit-button") && css.includes("@media (max-width: 680px)")],
   ["browser tester kandidat til tropp i samme økt", browser.includes("Hent til troppen") && browser.includes("recruitedPlayerIds") && browser.includes("formationSelect")],
   ["browser tester mobil og WCAG", browser.includes("390") && browser.includes("AxeBuilder")],
+  ["økonomi- og overgangs-UI lastes ikke av managerskallet", !shell.includes("manager-economy-contracts-v1") && !shell.includes("manager-transfer-market-v2")],
+  ["Pass 7 cleanup fjerner gamle økonomi- og markedsfelter", cleanup.includes("migrateLegacyManagerStorage") && cleanupDocs.includes("clubEconomy") && cleanupDocs.includes("transferMarket")],
+  ["browser beviser at skjulte økonomi-/vindusgater ikke blokkerer rekruttering", cleanupBrowser.includes("defaultPrevented") && cleanupBrowser.includes("dataset.recruitPlayer")],
   [
-    "dokumentasjonen låser recruitment-/økonomigrensen",
-    docs.includes("økonomi-/kontraktsmodulen eier kostnad, lønnsramme og avtale")
-      && docs.includes("ingen historiske/virkelige overgangssummer")
-      && docs.includes("Forslag til neste steg")
-      && economyDocs.includes("ikke virkelige klubbbudsjetter")
-      && economyDocs.includes("Økonomi skaper aldri kandidattilgang")
+    "dokumentasjonen låser History Go-/rekrutteringsgrensen",
+    docs.includes("History Go-tilgang = kandidat")
+      && docs.includes("skal ikke kunne blokkeres av oppdiktet klubbkasse")
+      && docs.includes("ingen skjult lønns-, kontrakt- eller overgangsvindusgate")
+      && docs.includes("Kalenderen")
   ],
   ["simulering og audit er registrert", packageJson.includes('"sim:manager-recruitment-v1"') && packageJson.includes('"audit:manager-recruitment-v1"')],
   ["CI kjører begge permanente porter", ci.includes("audit:manager-recruitment-v1") && ci.includes("sim:manager-recruitment-v1")]

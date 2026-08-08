@@ -2,9 +2,9 @@
 
 ## Formål
 
-Rekruttering v1 gjør `Speiding → Rekrutterbare` operativ uten å eie en parallell overgangsmodell.
+Rekruttering v1 gjør `Speiding → Rekrutterbare` operativ uten en parallell overgangsmodell.
 
-Den viktige forskjellen er:
+Den canonical forskjellen er:
 
 ```text
 History Go-tilgang = kandidat
@@ -13,21 +13,19 @@ Hent til troppen = troppsmedlem
 
 Et besøk/opplåsing gir dermed ikke automatisk en spiller plass i klubbtroppen. Kandidaten må hentes eksplisitt fra Speiding før spilleren kan brukes i oppstilling, trening og kamp.
 
-Fra **Kontrakter og klubbøkonomi v1** er selve rekrutteringshandlingen i tillegg portet av klubbens HGFM-spilløkonomi. Recruitment-modulen eier fortsatt bare kandidat → troppsmedlem; økonomi-/kontraktsmodulen eier kostnad, lønnsramme og avtale.
-
-Fra **Overgangsmarked v2** kreves også et åpent HGFM-overgangsvindu. Markedsmodulen eier tidsporten, mens Recruitment fortsatt eier kandidat → tropp og History Go fortsatt eier hvem som i det hele tatt er kvalifisert kandidat.
+**Pass 7 har fjernet den tidligere økonomi-/kontrakt- og overgangsvinduporten.** En kvalifisert History Go-kandidat skal ikke kunne blokkeres av oppdiktet klubbkasse, lønnsramme, kontrakt eller overgangsvindu.
 
 ## Starttroppen er fortsatt gulvet
 
 Rekruttering v1 fjerner ikke den eksisterende spillbare starttroppen. Når ingen eksplisitt `localStart.playerIds` er lagret, bruker spillet den eksisterende deterministiske, balanserte 15-spillers auto-troppen fra grunnsjiktet av klubbspillere. Landslagsstjerner og toppsjiktet holdes fortsatt utenfor dette gulvet.
 
-Dermed er troppsmodellen:
+Troppsmodellen er dermed:
 
 ```text
-starttropp + eksplisitt hentede kvalifiserte kandidater med aktiv avtale = klubbens tropp
+starttropp + eksplisitt hentede kvalifiserte History Go-kandidater = klubbens tropp
 ```
 
-Starttroppen er ikke en History Go-signering og skal ikke måtte hentes på nytt i Speiding. Den ligger innenfor klubbens faste grunnramme i økonomi v1 og får ikke individuelle utløpskontrakter i denne versjonen.
+Starttroppen er ikke en History Go-signering og skal ikke måtte hentes på nytt i Speiding.
 
 ## State
 
@@ -46,12 +44,12 @@ Rekrutteringsfeltene er:
 }
 ```
 
-Kontrakter, klubbøkonomi og overgangsmarked bor i samme canonical objekt under henholdsvis `clubEconomy` og `transferMarket`. Det finnes ingen egen recruitment-/transfer-/economy-localStorage og ingen parallell spillerpool.
+Det finnes ingen egen recruitment-, transfer- eller economy-localStorage og ingen parallell spillerpool. Pass 7 migrerer dessuten gamle `clubEconomy`- og `transferMarket`-felter ut av `teamMerits`.
 
 Troppen består av:
 
 1. eksisterende starttropp / `localStart.playerIds`;
-2. eksplisitt rekrutterte spiller-ID-er som fortsatt har en gyldig kandidattilgang og aktiv HGFM-avtale.
+2. eksplisitt rekrutterte spiller-ID-er som fortsatt har gyldig kandidattilgang.
 
 ## History Go-porten gjelder fortsatt
 
@@ -61,14 +59,7 @@ Troppen består av:
 - Når læringsloggen finnes, må quiz-porten være oppfylt på ekte History Go-steder.
 - En rekruttert ID uten gyldig kandidattilgang blir ikke gjort spillbar av recruitment-state alene.
 - Starttroppen er et separat spillbarhetsgulv og åpner ingen History Go-steder.
-- Økonomisk handlingsrom skaper aldri kandidattilgang; det kan bare godkjenne eller blokkere en allerede kvalifisert kandidat.
-- Et åpent overgangsvindu skaper heller aldri kandidattilgang; det bestemmer bare når en kvalifisert og økonomisk mulig signering kan gjennomføres.
-
-## Overgangsvindu
-
-Overgangsmarked v2 bruker to spillmekaniske HGFM-vinduer per ligasesong. Utenfor disse stoppes `Hent til troppen` **før** recruitment-state endres. Speiding forklarer når neste vindu åpner.
-
-Vinduene er save-/spillstruktur og skal ikke presenteres som historiske eller virkelige norske overgangsdatoer.
+- Penger, kontrakter eller overgangsvinduer skaper eller blokkerer ikke kandidattilgang.
 
 ## Eksisterende saves
 
@@ -78,9 +69,7 @@ Før Rekruttering v1 ble alle kvalifiserte `player_candidate`-spillere automatis
 - `recruitmentVersion` settes til `1`;
 - senere kandidater må hentes eksplisitt.
 
-Når Kontrakter og klubbøkonomi v1 møter en allerede rekruttert spiller uten avtale, opprettes en overgangsavtale for eldre save uten retrospektiv signeringskostnad eller lønnsbelastning. Ved senere fornyelse går spilleren over på den ordinære HGFM-standardavtalen.
-
-Overgangsmarked v2 krever ingen retroaktiv transaksjon. Eldre rekrutterte spillere kan legges ut først når markedet initialiseres og et nytt HGFM-vindu er åpent.
+Pass 7 gjør en separat, idempotent opprydding av saves som fortsatt har de senere avviste feltene `facilities`, `clubEconomy` og `transferMarket`. `recruitedPlayerIds` og øvrige canonical meritter beholdes. Se `MANAGER_LEGACY_CLEANUP_V1.md`.
 
 ## UI
 
@@ -95,25 +84,23 @@ Overgangsmarked v2 krever ingen retroaktiv transaksjon. Eldre rekrutterte spille
 
 Starttroppsspillere markeres som allerede i troppen og får ikke en falsk rekrutteringshandling.
 
-Når overgangsvinduet er stengt, eller klubbkasse/lønnsramme ikke tillater standardavtalen, blokkeres `Hent til troppen` før recruitment-state endres og Speiding forklarer hvorfor. Ved godkjent rekruttering opprettes avtalen i samme handling og Speiding, Lag og kjernens availability oppdateres i samme nettleserøkt.
+Når en kvalifisert kandidat hentes, oppdateres Speiding, Lag og kjernens availability i samme nettleserøkt. Det finnes ingen skjult lønns-, kontrakt- eller overgangsvindusgate foran handlingen.
 
 Spillerprofilen er fortsatt den delte profilen fra Lag. Profilklikk rekrutterer aldri spilleren.
 
-## Avgrensning etter økonomi v1 og overgangsmarked v2
+## Avgrensning
 
-Rekruttering har nå standardiserte HGFM-spillkostnader, kontrakter og tidsvinduer, men fortsatt:
+Rekruttering har fortsatt:
 
 - ingen historiske/virkelige overgangssummer;
 - ingen historiske/virkelige spillerlønninger;
 - ingen oppdiktet markedsverdi;
 - ingen agent;
-- ingen budrunde for kjøp av kandidater;
+- ingen budrunde;
 - ingen individuell lønnsforhandling;
 - ingen skjult Overall-verdi som prisdriver.
 
-Overgangsmarked v2 har standardiserte **utgående** bud på rekrutterte spillere; det er en separat managerfunksjon og endrer ikke kandidatkravet for innkommende rekruttering.
-
-De økonomiske tallene er save-/balansetall for HGFM og må aldri presenteres som fakta om ekte personer eller klubber.
+History Go avgjør hvem brukeren har oppdaget. HG Football Manager lærer brukeren hvordan spilleren kan brukes i tropp, rolle, taktikk, trening og kamp.
 
 ## Navigasjon og progresjon
 
@@ -123,7 +110,7 @@ Rekruttering er en funksjon under **Speiding**. Hovedmenyen forblir:
 Kontor · Lag · Speiding · Kamp · Stats
 ```
 
-Rekrutteringen får ingen `Neste`, `Fortsett` eller egen arbeidsflyt. **`Forslag til neste steg` forblir den ene autoritative progresjonsveiviseren.**
+Rekrutteringen får ingen `Neste`, `Fortsett` eller egen progresjonsflyt. Kalenderen og de relevante arbeidsflatene viser hva som må gjøres i den aktuelle manageruka.
 
 ## Permanente porter
 
@@ -132,7 +119,6 @@ CI låser rekrutteringsgrunnlaget med:
 - ren recruitment-state-simulering, inkludert 15-spillers startgulv;
 - statisk arkitektur-/produkt-audit;
 - Chromium-test av kandidat → hent → tropp i samme økt;
-- økonomi-/kontraktsregresjon som låser kostnadsporten uten å endre History Go-tilgangen;
-- overgangsmarkedsregresjon som låser vindusporten;
+- Pass 7-regresjon som beviser at økonomi-/kontrakt-/overgangsgater ikke kan blokkere `data-recruit-player`;
 - 390 px mobiltest;
 - WCAG 2 A/AA-test.
