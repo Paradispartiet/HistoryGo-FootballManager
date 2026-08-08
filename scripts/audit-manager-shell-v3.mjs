@@ -7,7 +7,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(root, path), "utf8");
 const html = read("index.html");
 const app = read("src/app.js");
-const css = `${read("style.css")}\n${read("src/ui/manager-shell-v3.css")}\n${read("src/ui/manager-shell-foundation.css")}`;
+const css = `${read("style.css")}\n${read("src/ui/manager-shell-v3.css")}\n${read("src/ui/manager-shell-foundation.css")}\n${read("src/ui/manager-calendar-workspace-v1.css")}`;
 const browser = read("tests/browser/manager-shell-v3.spec.js");
 const calendarBrowser = read("tests/browser/manager-calendar-v1.spec.js");
 const seasonBrowser = read("tests/browser/manager-season-scene-v1.spec.js");
@@ -25,39 +25,50 @@ const checks = [];
 const check = (label, ok, detail = "") => checks.push({ label, ok: Boolean(ok), detail });
 const panelCount = [...html.matchAll(/class="([^"]*)"/g)].filter((match) => match[1].split(/\s+/).includes("panel")).length;
 
-check("nøyaktig én autoritativ neste handling", (shellElements.match(/class="next-action-primary"/g) || []).length === 1);
-check("konkurrerende neste-knapper er fjernet", !/advanceClubWeekPhase|leagueOnboardingPrimary|portalPriorityAction/.test(html));
-check("Neste handling viser eksplisitt målflate", /nextActionDestination/.test(shellElements) && /Forslag til neste steg/.test(shellElements));
+// Shellens stabile hovedstruktur.
 check("fem stabile hovedområder er browser-låst", /har fem stabile hovedområder/.test(browser) && /\["Kontor", "Lag", "Speiding", "Kamp", "Stats"\]/.test(browser));
-check("Kalender er Kontor-underfane, ikke hovedområde", /data-tab-target=\\?"calendar\\?"/.test(calendarBrowser) && /data-subnav-parent=\\?"dashboard\\?"/.test(calendarBrowser) && /toHaveCount\(5\)/.test(calendarBrowser));
+check("konkurrerende gamle progresjonsknapper er fjernet", !/advanceClubWeekPhase|leagueOnboardingPrimary|portalPriorityAction/.test(html));
+check("legacy Next-kontrollen finnes bare én gang i skallet", (shellElements.match(/class="next-action-primary"/g) || []).length === 1);
+check("Next-footeren skjules i normal ligasave", /manager-office-calendar-v1="active"/.test(css) && /manager-next-action/.test(css) && /Next-footeren er skjult/.test(calendarBrowser));
+
+// Kontor + Kalender er den nye autoritative IA-en for tid.
 check("Kalender lastes fra managerskallet", /manager-calendar-workspace-v1\.js/.test(shellView) && /Kontor · Kalender/.test(calendar));
-check("Kalender lager ingen konkurrerende progresjonsknapp", /ingen egen progresjonsknapp/.test(calendarBrowser) && !/advanceClubWeekPhase|Fortsett uka|Neste fase/.test(calendar));
+check("Kalender ligger under Kontor", /section\.dataset\.tabParent = "dashboard"/.test(calendar) && /button\.dataset\.subnavParent = "dashboard"/.test(calendar));
+check("Kontor åpner Kalender direkte i vanlig ligasave", /redirectOfficeToCalendar/.test(calendar) && /Kontor åpner Kalender direkte/.test(calendarBrowser));
+check("Innboks er skjult som parallell Kontor-fane", /inbox\.classList\.add\("office-subnav-proxy"\)/.test(calendar) && /separat Innboks/.test(calendarBrowser));
+check("Klubbdrift presenteres som Klubben", /board\.textContent = "Klubben"/.test(calendar) && /Klubben/.test(calendarBrowser));
+check("Oppstartshjelp skjules etter oppstart", /officeHelp\.classList\.toggle\("office-subnav-proxy", normalSave\)/.test(calendar) && /officeHelp/.test(calendarBrowser));
+check("Kalenderen lager ingen egen progresjonsmotor", !/advanceClubWeekPhase|advanceWeek|nextPhase|Fortsett uka|Neste fase/.test(calendar));
+check("manglende arbeid vises lokalt i kalenderen", /Treningsprogram mangler/.test(calendarBrowser) && /Velg program/.test(calendarBrowser));
+check("meldinger åpnes som kalenderdrawer", /openInboxDrawer/.test(calendar) && /managerCalendarMessageDrawer/.test(calendar) && /melding åpnes i drawer/.test(calendarBrowser));
+check("fast Du er her-linje finnes", /managerLocationBar/.test(shellElements) && /managerLocationText/.test(calendarBrowser));
+
+// Speiding og resten av femområdeskallet skal fortsatt bestå.
 check("Speiding repurposer tidligere Klubb-hovedfane", /scoutingTab\.dataset\.tabTarget = "historygo"/.test(scouting) && /lagTab\.after\(scoutingTab\)/.test(scouting));
-check("Klubbdrift forblir under Kontor", /clubMainTab\.hidden = true/.test(shellElements) && /data-tab-target=\\?"board\\?"/.test(browser));
 check("Speiding har egne underflater", /Rekrutterbare/.test(scouting) && /Andre klubber/.test(scouting) && /scoutingClubs/.test(scouting));
 check("Speiding lastes fra managerskallet", /manager-scouting-workspace-v1\.js/.test(shellView));
-check("Kontor åpner på Innboks i ligaspill", /redirectLeagueDashboardToInbox/.test(shellElements) && /Kontor åpner på Innboks/.test(browser));
-check("Oversikt er fjernet som synlig ligaunderfane", /overview\.classList\.add\("office-subnav-proxy"\)/.test(shellElements) && /data-tab-target=\\?"dashboard\\?"/.test(browser));
-check("oppstartshjelp eier tidligere oversiktsstøtte", ["leagueOnboardingPanel", "officeCommandPanel", "officeDepth"].every((id) => shellElements.includes(`"${id}"`)) && /Oppstartshjelp/.test(browser));
-check("Innboks er tydelig navngitt", /inboxHeading\.textContent = "Innboks"/.test(shellElements) && /data-tab-target=\\?"inbox\\?"/.test(browser));
-check("fast Du er her-linje finnes", /managerLocationBar/.test(shellElements) && /managerLocationText/.test(browser));
+check("gammel Klubb-hovedfane skjules", /clubMainTab\.hidden = true/.test(shellElements));
+check("Oversikt er ikke synlig ligaunderfane", /overview\.classList\.add\("office-subnav-proxy"\)/.test(shellElements));
+
+// Lag, klubbidentitet og modaladferd skal ikke regresere i Pass 1.
 check("direkte uttak har spillerkort og rolleknapper", /id="lineupPlayerChoices"/.test(html) && /id="lineupRoleChoices"/.test(html));
 check("gamle spiller-/rolle-selecter er fjernet", !/slotPlayerSelect|slotRoleSelect/.test(html));
 check("numerisk lagfit-sirkel er fjernet", !/id="teamScore"|score-ring-label">Lagfit/.test(html));
-check("panelrammene er kraftig redusert", panelCount <= 30, `panel tokens=${panelCount}`);
+check("panelrammene er fortsatt kraftig redusert", panelCount <= 30, `panel tokens=${panelCount}`);
 check("treningen er et accordion med tre steg", (html.match(/data-training-step-toggle/g) || []).length === 3 && /syncTrainingWorkspace/.test(app));
 check("klubbidentiteten har skjold og stadionlinje", /id="headerClubMark"/.test(shellElements) && /id="headerClubGround"/.test(shellElements));
 check("klubbidentiteten bruker egen presentasjonsmodul", /manager-club-identity\.js/.test(app) && existsSync(join(root, "src/ui/manager-club-identity.js")));
-check("HTML-skallet er modulert i egne custom elements", /<manager-club-header>/.test(html) && /<manager-next-action>/.test(html) && existsSync(join(root, "src/ui/manager-shell-elements.js")));
+check("HTML-skallet er modulert i custom elements", /<manager-club-header>/.test(html) && /<manager-next-action>/.test(html) && existsSync(join(root, "src/ui/manager-shell-elements.js")));
 check("CSS-skallet har egen foundation", /manager-shell-foundation\.css/.test(read("src/ui/manager-shell-v3.css")) && existsSync(join(root, "src/ui/manager-shell-foundation.css")));
+
+// Responsive, tilgjengelighet og sesongflater.
 check("responsive nettleservakter dekker 390/768/1280", [390, 768, 1280].every((width) => browser.includes(`width: ${width}`)));
-check("visuell regresjon finnes på en isolert kampkomponent", /toHaveScreenshot\(/.test(postMatchBrowser) && /matchday-post-match-score/.test(postMatchBrowser));
+check("visuell regresjon finnes på isolert kampkomponent", /toHaveScreenshot\(/.test(postMatchBrowser) && /matchday-post-match-score/.test(postMatchBrowser));
 check("shell og kampdag låser ikke IA med helskjermbilder", !/toHaveScreenshot\(/.test(browser) && !/toHaveScreenshot\(/.test(matchdayBrowser));
 check("CI kjører nettleservaktene uten å omskrive baseliner", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
 check("tilgjengelighet testes med axe", /AxeBuilder/.test(browser) && /wcag2aa/.test(browser));
 check("tastatur og fokusfelle testes", /Shift\+Tab/.test(browser) && /toBeFocused/.test(browser));
 check("horisontal overflow testes", /scrollWidth - document\.documentElement\.clientWidth/.test(browser));
-check("primærhandling uten scroll testes", /expectPrimaryActionInViewport/.test(browser));
 check("modalene har fokusfelle i appen", /event\.key !== "Tab"/.test(app) && /lastModalOpener\.focus/.test(app));
 check("foreldet portal-/fase-CSS er fjernet", !/portal-priority-card|#advanceClubWeekPhase/.test(css));
 check("Stats bruker eksisterende sesongpresentasjon", /manager-season-presentation\.js/.test(app) && /createSeasonSceneModel/.test(seasonPresentation) && /renderSeasonCommand/.test(seasonPresentation) && /renderSeasonLeagueOverview/.test(seasonPresentation) && /syncStatsPresentation/.test(shellElements));
