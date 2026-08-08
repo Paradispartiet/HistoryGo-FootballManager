@@ -270,6 +270,10 @@ function acceptCalendarContext(event) {
     source: "calendar"
   };
   renderTrainingDay();
+  requestAnimationFrame(() => {
+    renderTrainingDay();
+    syncLocation(calendarContext);
+  });
 }
 
 function installObservers() {
