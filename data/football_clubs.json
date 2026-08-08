@@ -270,7 +270,8 @@
       "city": "Haugesund",
       "tier": "obosligaen",
       "strength": 67,
-      "form": 51
+      "form": 51,
+      "homePlaceId": "haugesund_stadion"
     },
     {
       "id": "stabak",

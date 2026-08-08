@@ -168,6 +168,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Vålerenga | Intility Arena | 127 |
 | Fredrikstad | Fredrikstad stadion | 100 |
 | Odd | Skagerak Arena | 100 |
+| Haugesund | Haugesund stadion | 100 |
 | Aalesund | Color Line Stadion | 90 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
@@ -184,16 +185,17 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset og Odd
-— 1659 arveplasser fordelt på alle 20, og **ingen klubb med bane har under 26 navn**.
-De 40 klubbene som mangler bane sier det rett ut i profilen i stedet for å late som.
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd og
+Haugesund — 1759 arveplasser fordelt på alle 21, og **ingen klubb med bane har
+under 26 navn**. De 39 klubbene som mangler bane sier det rett ut i profilen i
+stedet for å late som.
 
-Arven er ikke lenger et eliteserieprivilegium: Strømsgodset, Odd og Lyn ligger
-alle tre i OBOS-ligaen og har henholdsvis den nest største, den delt fjerde
-største og den niende største arven i katalogen. Det er riktig — arv er klubbens
+Arven er ikke lenger et eliteserieprivilegium: Strømsgodset, Odd, Haugesund og
+Lyn ligger alle fire i OBOS-ligaen og har henholdsvis den nest største, to delt
+fjerde største og den ellevte største arven i katalogen. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 201 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 209 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -474,6 +476,68 @@ er også to menn, og er holdt fra hverandre.
 levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
+
+### Haugesund: fra 0 til 100 navn, og tre klubber på én bane
+
+Haugesund hadde **verken bane eller ett eneste navn** — den siste store norske
+klubbhistorien uten noen av delene. Haugesund stadion er lagt inn som sted;
+id-en følger konvensjonen og **må verifiseres mot History Gos egen id**.
+
+94 nye navn, 6 koblet på. Kilden setter to rekorder til: **96 % av frasene var
+allerede dekket** av de åtte tidligere ordbøkene — bare 15 var nye — og den har
+**100 unike kvalitetssetninger for 100 profiler**, med 96 av 100 ferdighetssett
+unike etter kartlegging.
+
+To av de nye frasene lukker et ekte hull: `natural_fitness` var én av de fire
+ferdighetene ingen spiller bar. «Tilgjengelighet» og «kampberedskap» er nettopp
+den ferdigheten, og kilden sier ordet selv. Den ble altså ikke *spist* av en
+ordbokoppføring, slik `marking` og `flair` var — den hadde bare aldri møtt en
+kilde som sa det. Nå står `decisions` igjen som den eneste med null.
+
+#### Tre klubber, én bane
+
+Kilden behandler **FK Haugesund, SK Haugar og SK Djerv 1919 som én
+Haugesund-pool uten å blande dem**: FKH ble stiftet i 1993 av de to
+moderklubbene, Haugar nådde cupfinalen i 1961 og 1979, Djerv semifinalen i 1986
+og øverste nivå i 1988. Hver profil bærer et eget `Klubb/arv`-felt.
+
+Katalogen kan ikke holde den tredelingen. `clubStatus` er et kart fra *placeId*
+til status, og alle tre spilte på samme bane — Haugesund stadion har vært byens
+hovedarena siden 1920. Haugar og Djerv finnes heller ikke i seriepyramiden, så
+egne steder for dem ville vært å finne opp klubber spillet ikke har.
+
+Ett sted er derfor riktig, men **klubbskillet er ekte informasjon skjemaet ikke
+bærer**, og det står her i stedet for å forsvinne stille. Kategorien bærer
+mesteparten av det uansett: «Haugar-legende», «Djerv-legende», «Djerv–FKH-bro».
+
+`Klubb/arv` gjør likevel én ting i importen — den daterer. 46 av 100 profiler
+har ikke ett årstall, og der sier kilden tilhørigheten i stedet: FKH er etter
+1993, Haugar og Djerv før 2000. Det er kildens eget ord, ikke en fallback, og
+`eraSource` skiller dem: datert av kilden er `belagt`, utledet av klubben er
+`utledet`. Resultat: 63 % moderne, 37 % historisk — som er en klubb med et
+moderne toppfotballkapittel og to eldre moderklubber.
+
+#### Fem par på én gang, og to av dem var samme mann
+
+| Par | Dom |
+|---|---|
+| Morten Konradsen / Morten Ågnes Konradsen | samme mann — slått sammen |
+| Bala Garba / Bala Ahmed Garba | samme mann — slått sammen |
+| Tor Andreassen / Tor Arne Andreassen | to menn |
+| Thore Pedersen / Tore Pedersen | to menn |
+| Tor Nilsen / Tore Nilsen | to menn |
+| Per Andreas Haftorsen / Per Haftorsen | to menn — **begge fra denne kilden** |
+
+Konradsen er Bodø/Glimt-midtbanespilleren som kom til FKH i senere
+eliteserieår, Garba den nigerianske spissen som gikk fra Start til Haugesund og
+står med 62 mål på 152 kamper. Begge navneformene er riktige i begge tilfeller,
+så den som allerede sto i katalogen beholdes.
+
+Det siste paret er nytt av slaget: **to menn fra samme kilde**, ført hver for
+seg av den. Haugars landslagskeeper Per Haftorsen (130 kamper 1967–1978, ti
+A-landskamper) mot FKHs forsvarsspiller Per Andreas Haftorsen fra klubbens
+første tiår. Vakten kan ikke vite det — posisjon og epoke avgjør, og det er
+nettopp derfor hvert par gjennomgås for hånd.
 
 ### Aalesund: fra 1 til 90 navn, og en fallback som alltid bet
 
@@ -821,8 +885,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1687 statusoppføringer på 1413
-spillere, 1165 belagte og 522 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1787 statusoppføringer på 1505
+spillere, 1252 belagte og 535 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 

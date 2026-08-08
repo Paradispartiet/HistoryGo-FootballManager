@@ -336,7 +336,17 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Andersen er keeper med 482 kamper og 41 landskamper, Odds er spiss med 61
   // mål på 80 kamper mellom 1911 og 1920. Posisjonen alene avgjør det. Han er
   // ført med klubbsuffiks, slik Tore Pedersen (RBK) allerede var.
-  ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"]
+  ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"],
+  // Haugesund-kilden utløste fem par på én gang — det er vakten som virker, og
+  // to av dem VAR samme mann (Konradsen og Garba, begge slått sammen). De tre
+  // her er forskjellige menn, og alle tre skilles av posisjon eller epoke.
+  ["tor andreassen|tor arne andreassen", "VIFs historiske stopper mot FKHs kamprekordholder"],
+  ["thore pedersen|tore pedersen", "FKHs moderne høyreback mot Branns historiske midtstopper"],
+  ["tor nilsen|tore nilsen", "Haugars cupfinalespiller fra 1979 mot Tromsø/Fredrikstads stopper"],
+  // Og et fjerde par fra samme kilde, denne gangen INNAD i den: Haugars
+  // landslagskeeper (130 kamper 1967–1978, ti A-landskamper) mot FKHs
+  // forsvarsspiller fra klubbens første tiår. Kilden fører dem hver for seg.
+  ["per andreas haftorsen|per haftorsen", "Haugars keeper mot FKHs forsvarsspiller"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()
