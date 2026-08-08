@@ -41,7 +41,7 @@ const checks = [
   ["browser tester mobil og WCAG", browser.includes("390") && browser.includes("AxeBuilder")],
   ["økonomi- og overgangs-UI lastes ikke av managerskallet", !shell.includes("manager-economy-contracts-v1") && !shell.includes("manager-transfer-market-v2")],
   ["Pass 7 cleanup fjerner gamle økonomi- og markedsfelter", cleanup.includes("migrateLegacyManagerStorage") && cleanupDocs.includes("clubEconomy") && cleanupDocs.includes("transferMarket")],
-  ["browser beviser at skjulte økonomi-/vindusgater ikke blokkerer rekruttering", cleanupBrowser.includes("defaultPrevented") && cleanupBrowser.includes("data-recruit-player")],
+  ["browser beviser at skjulte økonomi-/vindusgater ikke blokkerer rekruttering", cleanupBrowser.includes("defaultPrevented") && cleanupBrowser.includes("dataset.recruitPlayer")],
   [
     "dokumentasjonen låser History Go-/rekrutteringsgrensen",
     docs.includes("History Go-tilgang = kandidat")
