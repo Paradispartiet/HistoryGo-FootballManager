@@ -20,7 +20,8 @@ async function openTraining(page) {
   await openTeam(page);
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
-  await expect(page.locator("#teamTrainingSelectedState")).toBeVisible();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+  await expect(page.locator("#teamTrainingSelectedState")).toBeHidden();
 }
 
 async function openSystem(page) {
@@ -115,24 +116,26 @@ test("Tropp er en tett spillerliste med søk, filter og sesongkolonner", async (
 
 test("Trening beholder valgene, men program fokus og individuell picker åpnes først ved Endre", async ({ page }) => {
   await openTraining(page);
-  await expect(page.locator("#teamSelectedTrainingProgram")).not.toBeEmpty();
-  await expect(page.locator("#teamSelectedTrainingFocus")).not.toBeEmpty();
-  await expect(page.locator("#teamSelectedIndividualTraining")).not.toBeEmpty();
+  await expect(page.locator("#trainingDayProgramTitle")).not.toBeEmpty();
+  await expect(page.locator("#trainingDayFocus")).not.toBeEmpty();
+  await expect(page.locator("#trainingDayIndividual")).not.toBeEmpty();
+  await expect(page.locator("#trainingDaySessions .training-day-session")).toHaveCount(4);
   await expect(page.locator("#trainingPrograms")).toBeHidden();
   await expect(page.locator("#weeklyTrainingOptions")).toBeHidden();
   await expect(page.locator("#individualTrainingPicker")).toBeHidden();
+  await expect(page.locator("#teamChangeTrainingProgram")).toBeAttached();
 
-  await page.locator("#teamChangeTrainingProgram").click();
+  await page.locator("#trainingDayChangeProgram").click();
   await expect(page.locator("#managerTeamChoiceDrawerTitle")).toHaveText("Velg treningsprogram");
   await expect(page.locator("#trainingPrograms")).toBeVisible();
   await closeChoiceDrawer(page);
 
-  await page.locator("#teamChangeTrainingFocus").click();
+  await page.locator("#trainingDayChangeFocus").click();
   await expect(page.locator("#managerTeamChoiceDrawerTitle")).toHaveText("Velg treningsfokus");
   await expect(page.locator("#weeklyTrainingOptions")).toBeVisible();
   await closeChoiceDrawer(page);
 
-  await page.locator("#teamChangeIndividualTraining").click();
+  await page.locator("#trainingDayChangeIndividual").click();
   await expect(page.locator("#managerTeamChoiceDrawerTitle")).toHaveText("Individuell oppfølging");
   await expect(page.locator("#individualTrainingPicker")).toBeVisible();
   await closeChoiceDrawer(page);
@@ -216,7 +219,7 @@ test("Lag, Tropp, Trening, Systemet og valgdrawer har ingen mobil overflow", asy
 
   await openTraining(page);
   await expectNoHorizontalOverflow(page);
-  await page.locator("#teamChangeTrainingProgram").click();
+  await page.locator("#trainingDayChangeProgram").click();
   await expectNoHorizontalOverflow(page);
   await closeChoiceDrawer(page);
 
