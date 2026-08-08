@@ -1,0 +1,484 @@
+/* ========================================================================== */
+/* Manager Visual Identity v1 · Pass 6                                        */
+/*                                                                            */
+/* Ett visuelt system over eksisterende managerflater. Klubbfargen er         */
+/* identitet; områdepreget skiller arbeidstypene. Ingen spillmotor eller state.*/
+/* ========================================================================== */
+
+:root {
+  --manager-display-font: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+  --manager-body-font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --manager-rule: rgba(255, 255, 255, .13);
+  --manager-rule-strong: rgba(255, 255, 255, .22);
+  --manager-canvas: #070a0f;
+  --manager-canvas-raised: #0a0f16;
+  --area-accent: var(--club-accent, #f4f4f1);
+}
+
+body[data-manager-area="office"] {
+  --area-accent: color-mix(in srgb, var(--club-accent, #f4f4f1) 68%, #d4a85d);
+  --area-wash: color-mix(in srgb, var(--area-accent) 8%, transparent);
+}
+body[data-manager-area="team"] {
+  --area-accent: color-mix(in srgb, var(--club-accent, #f4f4f1) 58%, #55bf78);
+  --area-wash: color-mix(in srgb, var(--area-accent) 8%, transparent);
+}
+body[data-manager-area="scouting"] {
+  --area-accent: color-mix(in srgb, var(--club-accent, #f4f4f1) 58%, #78a9d0);
+  --area-wash: color-mix(in srgb, var(--area-accent) 8%, transparent);
+}
+body[data-manager-area="match"] {
+  --area-accent: color-mix(in srgb, var(--club-accent, #f4f4f1) 60%, #dd6d70);
+  --area-wash: color-mix(in srgb, var(--area-accent) 9%, transparent);
+}
+body[data-manager-area="stats"] {
+  --area-accent: color-mix(in srgb, var(--club-accent, #f4f4f1) 62%, #a8b4c2);
+  --area-wash: color-mix(in srgb, var(--area-accent) 7%, transparent);
+}
+body[data-manager-area="scenario"],
+body[data-manager-area="science"] {
+  --area-accent: var(--club-accent, #f4f4f1);
+  --area-wash: color-mix(in srgb, var(--area-accent) 7%, transparent);
+}
+
+body[data-manager-area] {
+  font-family: var(--manager-body-font);
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--club-accent, #fff) 8%, transparent), transparent 24rem),
+    #05070b;
+}
+
+/* Fem hovedområder skal få plass som fem områder, ikke som fire kolonner med
+   en femte knapp som må bryte eller krympe teksten. Andre modi får automatisk
+   riktig antall via --manager-nav-count fra presentasjonsmodulen. */
+body[data-manager-area] .main-nav-inner {
+  grid-template-columns: repeat(var(--manager-nav-count, 5), minmax(0, 1fr));
+}
+
+body[data-manager-area] .main-nav {
+  border-bottom: 1px solid var(--manager-rule);
+  background: #05080d;
+}
+
+body[data-manager-area] .main-nav .nav-tab {
+  position: relative;
+  min-height: 54px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(255,255,255,.66);
+  transition: color 140ms ease, background-color 140ms ease;
+}
+
+body[data-manager-area] .main-nav .nav-tab:hover,
+body[data-manager-area] .main-nav .nav-tab:focus-visible {
+  color: #fff;
+  background: rgba(255,255,255,.035);
+}
+
+body[data-manager-area] .main-nav .nav-tab.is-active {
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--area-accent) 8%, transparent));
+  color: #fff;
+  box-shadow: inset 0 -3px 0 var(--area-accent);
+}
+
+body[data-manager-area] .main-nav .nav-label {
+  min-width: 0;
+  overflow: visible;
+  text-overflow: clip;
+  font-size: clamp(.66rem, 1.2vw, .78rem);
+  font-weight: 850;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+
+body[data-manager-area] .main-nav .nav-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Underfaner er en lokal innholdsfortegnelse, ikke en ny rad av kort. */
+body[data-manager-area] .app-subnav {
+  gap: 0;
+  padding: 0 clamp(.65rem, 2vw, 1.1rem);
+  border: 0;
+  border-bottom: 1px solid var(--manager-rule);
+  background: #080b10;
+}
+
+body[data-manager-area] .app-subnav .app-subtab {
+  min-height: 42px;
+  padding: .7rem .8rem .58rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(255,255,255,.58);
+  font-size: .72rem;
+  font-weight: 820;
+}
+
+body[data-manager-area] .app-subnav .app-subtab:hover,
+body[data-manager-area] .app-subnav .app-subtab:focus-visible {
+  color: #fff;
+  background: transparent;
+}
+
+body[data-manager-area] .app-subnav .app-subtab.is-active {
+  border-bottom-color: var(--area-accent);
+  background: transparent;
+  color: #fff;
+}
+
+/* Typografisk hierarki: scene > inspektør > sekundær informasjon. */
+body[data-manager-area] [data-tab-section]:not([hidden]) h1,
+body[data-manager-area] [data-tab-section]:not([hidden]) h2 {
+  font-family: var(--manager-display-font);
+  font-weight: 900;
+  letter-spacing: -.035em;
+}
+
+body[data-manager-area] [data-tab-section]:not([hidden]) h2 {
+  font-size: clamp(1.65rem, 3.5vw, 2.8rem);
+  line-height: .98;
+}
+
+body[data-manager-area] [data-tab-section]:not([hidden]) h3 {
+  font-family: var(--manager-display-font);
+  font-weight: 850;
+  letter-spacing: -.018em;
+}
+
+body[data-manager-area] [data-tab-section]:not([hidden]) .eyebrow {
+  color: color-mix(in srgb, var(--area-accent) 78%, #fff);
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .11em;
+}
+
+body[data-manager-area] [data-tab-section]:not([hidden]) .muted-text {
+  color: rgba(231,235,240,.64);
+  line-height: 1.48;
+}
+
+/* Hovedscenen får rom; generiske managerflater trenger ikke se ut som kort. */
+body[data-manager-area] #app {
+  background:
+    linear-gradient(180deg, var(--area-wash), transparent 12rem),
+    var(--manager-canvas);
+}
+
+body[data-manager-area] [data-tab-section]:not([hidden]) {
+  background-color: var(--manager-canvas);
+}
+
+body[data-manager-area] [data-tab-section]:not([hidden]) > .manager-surface:first-child,
+body[data-manager-area] [data-tab-section]:not([hidden]) > .manager-calendar-surface,
+body[data-manager-area] [data-tab-section]:not([hidden]) > .manager-scouting-surface,
+body[data-manager-area] [data-tab-section]:not([hidden]) .manager-club-organization {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* KONTOR · tidslinje / arbeidsdag */
+body[data-manager-area="office"] .manager-calendar-surface {
+  background:
+    linear-gradient(90deg, transparent 0 4.15rem, color-mix(in srgb, var(--area-accent) 15%, transparent) 4.15rem 4.2rem, transparent 4.2rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--club-accent) 6%, transparent), transparent 16rem),
+    #080c11;
+}
+
+body[data-manager-area="office"] .manager-calendar-head,
+body[data-manager-area="office"] .manager-calendar-context,
+body[data-manager-area="office"] .manager-calendar-workday,
+body[data-manager-area="office"] .manager-calendar-rule {
+  background: transparent;
+}
+
+body[data-manager-area="office"] .manager-calendar-head {
+  padding-top: clamp(1.1rem, 3vw, 1.8rem);
+  border-bottom-color: var(--manager-rule-strong);
+}
+
+body[data-manager-area="office"] .manager-calendar-day-button[aria-selected="true"] {
+  border-top-color: var(--area-accent);
+  background: color-mix(in srgb, var(--area-accent) 8%, #0a0f15);
+}
+
+body[data-manager-area="office"] .manager-calendar-now {
+  border-left-color: var(--area-accent);
+}
+
+body[data-manager-area="office"] .manager-calendar-event {
+  border-bottom-color: rgba(255,255,255,.085);
+}
+
+body[data-manager-area="office"] .manager-calendar-event.has-attention .manager-calendar-event-button {
+  box-shadow: inset 3px 0 0 var(--area-accent);
+}
+
+body[data-manager-area="office"] .manager-calendar-event-time {
+  color: color-mix(in srgb, var(--area-accent) 68%, #adb6c0);
+}
+
+/* KLUBBEN · organisasjon / rom */
+body[data-manager-surface="board"] .manager-club-organization {
+  background:
+    radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--club-accent) 15%, transparent), transparent 28rem),
+    #070b10;
+}
+
+body[data-manager-surface="board"] .club-organization-head {
+  border-bottom-color: var(--manager-rule-strong);
+}
+
+body[data-manager-surface="board"] .club-organization-room {
+  min-height: 5.6rem;
+  border-bottom-color: rgba(255,255,255,.09);
+}
+
+body[data-manager-surface="board"] .club-organization-room:hover,
+body[data-manager-surface="board"] .club-organization-room:focus-visible {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--area-accent) 10%, transparent), transparent 80%);
+}
+
+body[data-manager-surface="board"] .club-organization-room-arrow,
+body[data-manager-surface="board"] .club-organization-rule {
+  color: var(--area-accent);
+  border-color: var(--area-accent);
+}
+
+/* LAG · banen er hovedobjektet, resten er inspektør og arbeidslister. */
+body[data-manager-area="team"] [data-tab-section]:not([hidden]) {
+  background:
+    radial-gradient(circle at 50% -8rem, color-mix(in srgb, var(--area-accent) 9%, transparent), transparent 34rem),
+    #060a0c;
+}
+
+body[data-manager-area="team"] .pitch-stage {
+  border: 0;
+  border-top: 3px solid var(--area-accent);
+  background: #07110b;
+  box-shadow: none;
+}
+
+body[data-manager-area="team"] .pitch-stage-head,
+body[data-manager-area="team"] .lineup-direct-editor,
+body[data-manager-area="team"] .pitch-bench {
+  border-color: rgba(255,255,255,.13);
+}
+
+body[data-manager-area="team"] .side-panel {
+  border: 0;
+  border-left: 1px solid var(--manager-rule-strong);
+  background: #090e12;
+  box-shadow: none;
+}
+
+body[data-manager-area="team"] .lineup-player-card,
+body[data-manager-area="team"] .bench-player-card {
+  border-color: rgba(255,255,255,.15);
+  border-radius: 2px;
+  background: rgba(255,255,255,.018);
+}
+
+body[data-manager-area="team"] .lineup-player-card.is-selected,
+body[data-manager-area="team"] .lineup-role-chip.is-selected {
+  border-color: var(--area-accent);
+  box-shadow: inset 3px 0 0 var(--area-accent);
+}
+
+body[data-manager-area="team"] .training-workspace-step-head {
+  border-bottom-color: rgba(255,255,255,.12);
+}
+
+/* SPEIDING · lesbar arbeidsliste, ikke kortgalleri. */
+body[data-manager-area="scouting"] [data-tab-section]:not([hidden]) {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--area-accent) 5%, transparent), transparent 28rem),
+    #070b10;
+}
+
+body[data-manager-area="scouting"] .manager-scouting-surface {
+  border: 0;
+  border-top: 3px solid var(--area-accent);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body[data-manager-area="scouting"] .scouting-head {
+  border-bottom-color: var(--manager-rule-strong);
+}
+
+body[data-manager-area="scouting"] .scouting-player-table,
+body[data-manager-area="scouting"] .scouting-club-table {
+  font-variant-numeric: tabular-nums;
+}
+
+body[data-manager-area="scouting"] .scouting-player-table tbody tr,
+body[data-manager-area="scouting"] .scouting-club-table tbody tr {
+  background: transparent;
+}
+
+body[data-manager-area="scouting"] .scouting-player-table tbody tr:hover,
+body[data-manager-area="scouting"] .scouting-club-table tbody tr:hover,
+body[data-manager-area="scouting"] .scouting-club-table tbody tr.is-active {
+  background: color-mix(in srgb, var(--area-accent) 7%, transparent);
+}
+
+body[data-manager-area="scouting"] .scouting-recruit-button,
+body[data-manager-area="scouting"] .scouting-club-button {
+  border-radius: 2px;
+}
+
+/* KAMP · egen scene med mer kontrast og stadionfølelse. */
+body[data-manager-area="match"] [data-tab-section]:not([hidden]) {
+  background:
+    radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--area-accent) 12%, transparent), transparent 32rem),
+    #05080c;
+}
+
+body[data-manager-area="match"] .matchday-scene,
+body[data-manager-area="match"] .matchday-panel {
+  border-radius: 0;
+  border-color: rgba(255,255,255,.16);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--area-accent) 8%, transparent), transparent 45%),
+    #080d13;
+  box-shadow: none;
+}
+
+body[data-manager-area="match"] .matchday-scene {
+  border-top: 3px solid var(--area-accent);
+}
+
+body[data-manager-area="match"] .matchday-scene-team.is-home {
+  border-left-color: var(--club-accent);
+  box-shadow: inset 3px 0 0 var(--club-accent);
+}
+
+body[data-manager-area="match"] .match-flow {
+  border: 0;
+  border-top: 1px solid var(--manager-rule-strong);
+  border-bottom: 1px solid var(--manager-rule-strong);
+  border-radius: 0;
+  background: rgba(8,22,13,.52);
+}
+
+/* STATS · dokument-/tabellkarakter med tabulære tall. */
+body[data-manager-area="stats"] [data-tab-section]:not([hidden]) {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--area-accent) 6%, transparent), transparent 18rem),
+    #080b10;
+}
+
+body[data-manager-area="stats"] #seasonCommand,
+body[data-manager-area="stats"] .season-standings-card,
+body[data-manager-area="stats"] .season-form-card,
+body[data-manager-area="stats"] .season-fixtures-card {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body[data-manager-area="stats"] #seasonCommand {
+  border-top: 3px solid var(--area-accent);
+}
+
+body[data-manager-area="stats"] .season-command-metrics article {
+  border: 0;
+  border-left: 1px solid var(--manager-rule);
+  border-radius: 0;
+  background: transparent;
+}
+
+body[data-manager-area="stats"] .season-command-metrics article:first-child {
+  border-left: 0;
+}
+
+body[data-manager-area="stats"] .season-command-metrics strong,
+body[data-manager-area="stats"] .season-compact-table,
+body[data-manager-area="stats"] .mini-season-table,
+body[data-manager-area="stats"] #playerStatsTable {
+  font-variant-numeric: tabular-nums;
+}
+
+body[data-manager-area="stats"] .season-compact-table tr.is-manager-club th,
+body[data-manager-area="stats"] .season-compact-table tr.is-manager-club td {
+  background: color-mix(in srgb, var(--club-accent) 7%, transparent);
+}
+
+/* Interaktive elementer beholder mørkt lerret; klubbfarge brukes som fokusmarkør. */
+body[data-manager-area] button:focus-visible,
+body[data-manager-area] [role="button"]:focus-visible,
+body[data-manager-area] a:focus-visible,
+body[data-manager-area] input:focus-visible,
+body[data-manager-area] select:focus-visible {
+  outline-color: var(--area-accent);
+}
+
+@media (max-width: 760px) {
+  body[data-manager-area] .main-nav-inner {
+    grid-template-columns: repeat(var(--manager-nav-count, 5), minmax(0, 1fr)) !important;
+  }
+
+  body[data-manager-area] .main-nav .nav-tab {
+    min-height: 50px;
+    padding: 6px 2px !important;
+  }
+
+  body[data-manager-area] .main-nav .nav-label {
+    font-size: .65rem;
+    letter-spacing: 0;
+  }
+
+  body[data-manager-area] .main-nav .nav-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  body[data-manager-area] .app-subnav {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  body[data-manager-area] .app-subnav .app-subtab {
+    flex: 0 0 auto;
+    min-width: max-content;
+  }
+
+  body[data-manager-area="team"] .side-panel {
+    border-left: 0;
+    border-top: 1px solid var(--manager-rule-strong);
+  }
+
+  body[data-manager-area="stats"] .season-command-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body[data-manager-area="stats"] .season-command-metrics article:nth-child(odd) {
+    border-left: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  body[data-manager-area] .main-nav .nav-label {
+    font-size: .63rem;
+  }
+
+  body[data-manager-area] [data-tab-section]:not([hidden]) h2 {
+    font-size: clamp(1.5rem, 8vw, 2.1rem);
+  }
+
+  body[data-manager-area="office"] .manager-calendar-surface {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--club-accent) 5%, transparent), transparent 13rem),
+      #080c11;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-manager-area] .main-nav .nav-tab {
+    transition: none;
+  }
+}
