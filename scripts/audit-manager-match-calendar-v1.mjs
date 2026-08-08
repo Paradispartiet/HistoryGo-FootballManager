@@ -37,7 +37,7 @@ check("ingen ny kampmotor", !files.matchCalendar.includes("football-matchday-eng
 check("oppstillingsvalg gjenbruker eksisterende drawer-knapper", files.matchCalendar.includes("teamChangePlayerRole") && files.matchCalendar.includes("teamChangeFormation") && files.drawer.includes("openManagerTeamChoiceDrawer"));
 check("fredag leser eksisterende kampklarhet", files.matchCalendar.includes("#matchdayReadiness") && files.matchCalendar.includes("#squadGateStarters") && files.matchCalendar.includes("#squadGateBench"));
 check("fredag leser eksisterende trening", files.matchCalendar.includes("teamSelectedTrainingProgram") && files.matchCalendar.includes("teamSelectedTrainingFocus"));
-check("fredag leser eksisterende motstanderbrief", files.matchCalendar.includes("Motstanderens trussel") && files.matchCalendar.includes("matchday-scene-status-card"));
+check("fredag leser eksisterende motstanderbrief", files.matchCalendar.includes("Motstanderens viktigste trussel") && files.matchCalendar.includes("matchday-scene-status-card"));
 check("fredag skjuler bare gammel kommandopresentasjon", files.style.includes("#squadTacticsCommandPanel") && !files.style.includes("#lineupSlots") && !files.style.includes("#teamTacticsSelectedState"));
 check("mobilregler finnes", files.style.includes("@media (max-width: 560px)") && files.style.includes("grid-template-columns: 1fr"));
 check("browser tester fredag fra Kalender", files.browser.includes("fredagens kalenderhendelse eier kampforberedelsen") && files.browser.includes('data-event-id="match-prep"'));
