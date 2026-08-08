@@ -108,6 +108,8 @@ Dette beskriver **implementert v1**, ikke målet for videre produktutvikling. Fi
 - Facilities Upgrades v1 og Economy/Contracts v1 skal ikke brukes som presedens for nye systemer.
 - History Go forblir autoritativ kilde til spilleroppdagelse/unlocks.
 - Virkelige klubbpåstander om fasiliteter, utstyr, medisinsk praksis eller treningsarbeid skal kildebelegges.
+- Marked viser temperatur og interesse, men oppretter **ingen sponsoravtaler**.
+- **Ingen nye localStorage-nøkler** eller nye History Go-unlocks skal introduseres av den dokumenterte v1-klubbdriften.
 - Ingen ny `Neste`-/`Fortsett`-motor skal konkurrere med `Forslag til neste steg`.
 
 ## Permanente porter fra v1
