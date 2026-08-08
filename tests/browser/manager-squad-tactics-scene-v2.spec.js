@@ -28,7 +28,8 @@ async function openSystem(page) {
   await openTeam(page);
   await page.locator('.app-subtab[data-tab-target="system"]').click();
   await expect(page.locator('[data-tab-section="system"]')).toBeVisible();
-  await expect(page.locator("#teamSystemSelectedState")).toBeVisible();
+  await expect(page.locator("#managerSystemWorkspaceV2")).toBeVisible();
+  await expect(page.locator("#teamSystemSelectedState")).toBeHidden();
 }
 
 async function closeChoiceDrawer(page) {
@@ -143,12 +144,14 @@ test("Trening beholder valgene, men program fokus og individuell picker åpnes f
 
 test("Systemet viser aktivt system og åpner de samme eksisterende alternativene i drawer", async ({ page }) => {
   await openSystem(page);
-  await expect(page.locator("#teamSystemFormation")).not.toBeEmpty();
-  await expect(page.locator("#teamSystemTactic")).not.toBeEmpty();
+  await expect(page.locator("#managerSystemWorkspaceV2 .manager-system-head-copy-v2 h2")).not.toBeEmpty();
+  await expect(page.locator("#managerSystemWorkspaceV2 .manager-system-plan-name")).not.toBeEmpty();
+  await expect(page.locator("#managerSystemWorkspaceV2 .manager-system-pitch-v2")).toBeVisible();
   await expect(page.locator("#tacticalSystemPanel")).toBeVisible();
 
-  await page.locator("#teamChangeSystem").click();
-  await expect(page.locator("#managerTeamChoiceDrawerTitle")).toHaveText("Endre system");
+  await page.locator("#managerSystemWorkspaceV2").getByRole("button", { name: "Endre formasjon" }).click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  await expect(page.locator("#managerTeamChoiceDrawerTitle")).toHaveText("Formasjon og kampplan");
   await expect(page.locator("#formationSelect")).toBeVisible();
   await expect(page.locator("#tacticSelect")).toBeVisible();
   await closeChoiceDrawer(page);
