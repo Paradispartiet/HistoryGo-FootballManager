@@ -43,18 +43,6 @@ function seededSeason() {
   };
 }
 
-function clubWeek(phase) {
-  return {
-    week: 4,
-    phase,
-    boardTrust: 50,
-    playerMorale: 50,
-    tacticalClarity: 50,
-    trainingCulture: 50,
-    mediaPressure: 50
-  };
-}
-
 async function openCalendarDay(page, day) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
@@ -64,14 +52,7 @@ async function openCalendarDay(page, day) {
 }
 
 async function setPhase(page, phase) {
-  await page.evaluate(({ next }) => {
-    const direct = JSON.parse(localStorage.getItem("hgfm.clubWeekState.v1") || "{}");
-    direct.phase = next;
-    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(direct));
-    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
-    merits.clubWeekState = { ...(merits.clubWeekState || {}), phase: next };
-    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
-  }, { next: phase });
+  await page.evaluate((next) => sessionStorage.setItem("hgfm.test.matchCalendarPhase", next), phase);
   await page.reload();
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
@@ -86,9 +67,10 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript((season) => {
+    const phase = sessionStorage.getItem("hgfm.test.matchCalendarPhase") || "match_prep";
     const week = {
       week: 4,
-      phase: "match_prep",
+      phase,
       boardTrust: 50,
       playerMorale: 50,
       tacticalClarity: 50,
