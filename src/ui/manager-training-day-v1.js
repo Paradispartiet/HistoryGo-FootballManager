@@ -29,7 +29,34 @@ function clubWeekState() {
   return merits.clubWeekState || { week: 1, phase: "analysis" };
 }
 
+function calendarSelectionContext() {
+  const selectedDay = document.querySelector('#managerCalendarDays .manager-calendar-day-button[aria-selected="true"]');
+  const dayIndex = Number(selectedDay?.dataset.day);
+  if (!Number.isInteger(dayIndex) || dayIndex < 1 || dayIndex > 7) return null;
+
+  const focused = document.activeElement?.closest?.('#managerCalendarTimeline .manager-calendar-event-button[data-target="trening"]');
+  const eventButton = focused || document.querySelector('#managerCalendarTimeline .manager-calendar-event-button[data-target="trening"]');
+  if (!eventButton) return null;
+
+  const clubWeek = clubWeekState();
+  return {
+    week: Math.max(1, Number(clubWeek.week) || 1),
+    dayIndex,
+    day: DAYS[dayIndex - 1] || "Onsdag",
+    time: String(eventButton.querySelector(".manager-calendar-event-time")?.textContent || "").trim(),
+    eventId: eventButton.dataset.eventId || "training-calendar",
+    eventTitle: String(eventButton.querySelector(".manager-calendar-event-copy strong")?.textContent || "Treningsarbeid").trim(),
+    target: "trening",
+    source: "calendar"
+  };
+}
+
 function currentContext() {
+  const selected = calendarSelectionContext();
+  if (selected && document.querySelector('[data-tab-section="trening"]:not([hidden])')) {
+    calendarContext = selected;
+    return selected;
+  }
   if (calendarContext?.target === "trening") return calendarContext;
   const clubWeek = clubWeekState();
   const week = Math.max(1, Number(clubWeek.week) || 1);
@@ -278,6 +305,7 @@ function installObservers() {
   window.addEventListener("updateProfile", scheduleRender);
   window.addEventListener("storage", scheduleRender);
 
+  document.addEventListener("pointerdown", captureCalendarContext, true);
   document.addEventListener("click", captureCalendarContext, true);
   document.addEventListener("click", (event) => {
     if (event.target?.closest?.("#trainingPrograms, #weeklyTrainingOptions, #individualTrainingPicker, #individualTrainingAssignments")) {
