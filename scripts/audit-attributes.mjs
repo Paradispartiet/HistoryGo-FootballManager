@@ -366,7 +366,9 @@ const REVIEWED_NAME_PAIRS = new Map([
   ["nils eriksen moss|nils espen eriksen", "Moss' stopper fra 1930-tallet mot Moss' keeper fra 1983"],
   // Aalesunds keeperkjempe fra 1951–1962 mot Moss-stopperen som spilte for
   // Bayern München og Nottingham Forest.
-  ["einar aas|einar jan aas", "AaFKs keeper mot Moss' internasjonale midtstopper"]
+  ["einar aas|einar jan aas", "AaFKs keeper mot Moss' internasjonale midtstopper"],
+  // Tromsøs historiske spiss «Kykkeliky» mot Mjøndalens moderne forsvarsspiller.
+  ["petter eichler jensen|petter jensen", "Tromsøs historiske spiss mot Mjøndalens moderne forsvarsspiller"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

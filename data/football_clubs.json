@@ -433,7 +433,8 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 56,
-      "form": 51
+      "form": 51,
+      "homePlaceId": "consto_arena"
     },
     {
       "id": "pors",

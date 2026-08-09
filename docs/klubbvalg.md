@@ -174,6 +174,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Start | Sparebanken Sør Arena | 85 |
+| Mjøndalen | Consto Arena | 83 |
 | Lyn | Bislett Stadion | 82 |
 | Moss | Melløs | 82 |
 | Tromsø | Romssa Arena | 81 |
@@ -190,10 +191,11 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | HamKam | Briskeby | 26 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne og Hødd — 2078 arveplasser fordelt på alle 25, og
-**ingen klubb med bane har under 26 navn**. De 35 klubbene som mangler bane sier
-det rett ut i profilen i stedet for å late som. **Alle klubber med en nasjonal
-tittel har nå arv.**
+Haugesund, Skeid, Moss, Bryne, Hødd og Mjøndalen — 2161 arveplasser fordelt på
+alle 26, og **ingen klubb med bane har under 26 navn**. De 34 klubbene som
+mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
+med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
+2. divisjon.
 
 Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund,
 Lyn, Moss, Bryne og Hødd ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
@@ -201,7 +203,7 @@ fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvi
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 259 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 273 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -482,6 +484,55 @@ er også to menn, og er holdt fra hverandre.
 levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
+
+### Mjøndalen: fra 0 til 83 navn, og vakten som byttet form igjen
+
+Cupmester i **1933, 1934 og 1937**, seriesølv i 1976 — og klubben lå i
+2. divisjon uten bane og uten ett eneste navn. Consto Arena er lagt inn som
+sted. 83 av 85 inn, bare to utelatt på posisjon.
+
+Samme v2-form som Hødd, men en klart bedre kilde: **85 unike
+kvalitetssetninger OG 85 unike historikkfelt**. Den sier likevel fra om sine
+egne hull, og det gjelder **31 av 85** — de fleste fra cupmesterlagene, der
+kilden bare har «fast på cupmesterlaget 1937». Ni til er moderne spillere hvis
+eneste påstand er *overgangsverdi*, som ikke er en ferdighet.
+
+Epoken gikk nesten av seg selv: tre av fire kategorier daterte seg selv, og
+90 %-terskelen avviste den fjerde — «Øverste Mjøndalen-legende» står 21
+historiske mot 3 moderne, altså 87,5 %. Terskelen hadde rett for tredje gang:
+den ene udaterte i kategorien er klubbens moderne kaptein gjennom opprykkene,
+ikke en cupvinner fra 1930-tallet.
+
+#### Andre gang huset lærer at en korpusbred andel er feil form
+
+Vakten fra Hødd-runden — «andelen uten dokumenterte styrker vokser ikke» — sto
+på 1,2 % av hele korpuset. Mjøndalen tok den til 2,4 %, og det er nettopp den
+formfeilen per-klubb-målingen ble innført for å rette da styrke-settene led av
+den samme: **en andel av 1800 spillere blir uskarpere for hver import.**
+
+Målingen er nå per arv, og de to arvene med et ekte hull står navngitt med sin
+målte verdi:
+
+| Arv | Uten dokumenterte styrker | Tak |
+|---|---:|---:|
+| Høddvoll | 13 av 69 (19 %) | 21 % |
+| Consto Arena | 32 av 83 (39 %) | 41 % |
+| *alle andre* | 0 | 5 % |
+
+Da kan de to ikke vokse, og en ny kildeløs klubb kan ikke gjemme seg i
+gjennomsnittet. Bittestet begge veier: åtte tomme lister på Nordre Åsen feller
+femprosentstaket, og tre flere på Høddvoll feller Høddvolls eget.
+
+Profilunikheten måtte deles på samme måte og av samme grunn. En spiller uten
+dokumenterte styrker har ingen individuell påstand å skille seg på — profilen
+hans er posisjon pluss epoke pluss klassetak, og han *skal* ligne andre med
+samme posisjon og epoke. Målt: **86,2 % blant de dokumenterte**, 56,8 % blant de
+44 uten (største klon 5 — posisjon og epoke skiller dem fortsatt). Blandet blir
+tallet 85,5 %, og da måler ratcheten hvor mange udokumenterte spillere som
+nettopp ble importert, ikke hvor godt profilene skiller folk fra hverandre.
+
+Nær-duplikat-vakten fant ett par, to menn: Tromsøs historiske spiss Petter
+«Kykkeliky» Jensen mot Mjøndalens moderne forsvarsspiller Petter Eichler Jensen.
 
 ### Hødd: fra 0 til 69 navn, og kilden som sa fra om sine egne hull
 
@@ -1161,8 +1212,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 2106 statusoppføringer på 1755
-spillere, 1441 belagte og 665 utledede.
+**kuratert klubbhistorie** fra **utledet**. 2189 statusoppføringer på 1822
+spillere, 1486 belagte og 703 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 

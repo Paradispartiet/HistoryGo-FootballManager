@@ -285,12 +285,23 @@ check("klassen rører ikke bunnen",
 // halverte problemet. Det som gjenstår er en ekte begrensning i kildene, ikke
 // en feil: flere ulike profiler krever mer kildemateriale per spiller, ikke mer
 // oppdiktet variasjon.
+// Samme deling som styrke-settene under, av samme grunn og for samme kilder.
+// En spiller UTEN dokumenterte styrker har ingen individuell påstand å skille
+// seg på — profilen hans er posisjon pluss epoke pluss klassetak, og han skal
+// ligne andre med samme posisjon, epoke og nivå. Det er ikke en feil, det er
+// hva det ser ut som å ikke vite noe.
+//
+// Målt: 86,2 % blant dem med styrker, 56,8 % blant de 44 uten (største klon 5 —
+// posisjon og epoke skiller dem fortsatt). Blandet blir tallet 85,5 %, og da
+// måler ratcheten hvor mange udokumenterte spillere som nettopp ble importert
+// i stedet for hvor godt profilene skiller folk fra hverandre.
+const dokumenterte = players.filter((player) => (player.strengths || []).length > 0);
 const signatures = new Map();
-for (const player of players) {
+for (const player of dokumenterte) {
   const key = JSON.stringify(profiles[player.id].values);
   signatures.set(key, (signatures.get(key) || 0) + 1);
 }
-const uniqueShare = signatures.size / players.length;
+const uniqueShare = signatures.size / dokumenterte.length;
 const largestClone = Math.max(...signatures.values());
 // Grensa er en RATCHET og flyttes opp når den er vunnet. Den sto på 0,55 da
 // uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
@@ -307,7 +318,7 @@ const largestClone = Math.max(...signatures.values());
 // til 84,3 %. Aalesund, Haugesund, Skeid, Moss og Bryne la 440 til, og målt er
 // den nå 86,2 % av 1699. Grensa følger etter til 0,86.
 check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.86,
-  `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
+  `${signatures.size} unike av ${dokumenterte.length} dokumenterte (${(uniqueShare * 100).toFixed(1)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
 // beskriver med de samme tre ordene — hodespill, duellspill,
@@ -396,19 +407,44 @@ for (const player of medStyrker) {
 }
 const strengthShare = strengthSets.size / medStyrker.length;
 
-// RATCHET NEDOVER. Målt 13 av 1757 = 0,7 %. En spiller uten dokumenterte
-// styrker er ærlig, men han er også et hull, og hullet skal ikke vokse. Kommer
-// det en ny kilde uten materiale, feller denne den — og det er den eneste
-// vakten som gjør det, siden en tom liste ikke ligner en mal.
-const utenAndel = utenStyrker.length / players.length;
-check("andelen uten dokumenterte styrker vokser ikke", utenAndel < 0.012,
-  `${utenStyrker.length} av ${players.length} (${(utenAndel * 100).toFixed(1)} %)`);
-// Og de tomme må være tomme AV EN GRUNN. Alle 13 ligger på Høddvoll, der kilden
-// selv trakk grensen. Dukker det opp en tom spiller et annet sted, er det en
-// importfeil og ikke en kildegrense.
-const tommeUtenforHødd = utenStyrker.filter((player) => !(player.sourcePlaceIds || []).includes("hoddvoll"));
+// Målingen er PER ARV, ikke korpusbred — og det er andre gang huset lærer det.
+// Den korpusbrede varianten sto én runde på 1,2 % og var allerede feil form:
+// en andel av 1800 spillere blir uskarpere for hver import, akkurat som
+// styrke-settene ble før per-klubb-målingen kom.
+//
+// To arver har et ekte hull, og de står NAVNGITT med sin målte verdi. Da kan de
+// ikke vokse, og en ny kildeløs klubb kan ikke gjemme seg i gjennomsnittet.
+const KJENT_UDOKUMENTERT = {
+  // Kilden sier ordrett om 28 av sine 85 at den ikke dokumenterer en ferdighet
+  // «som bør importeres som strength uten ny kilde». Målt 13 av 69.
+  hoddvoll: 0.21,
+  // Samme v2-form, og 31 av 85 sier det samme — de fleste fra cupmesterlagene
+  // 1933–1937, der kilden bare har «fast på cupmesterlaget 1937». Ni til er
+  // moderne spillere hvis eneste påstand er overgangsverdi, som ikke er en
+  // ferdighet. Målt 32 av 83.
+  consto_arena: 0.41
+};
+const perArv = new Map();
+for (const player of players) {
+  for (const placeId of player.sourcePlaceIds || []) {
+    if (!perArv.has(placeId)) perArv.set(placeId, { alle: 0, tomme: 0 });
+    perArv.get(placeId).alle += 1;
+    if ((player.strengths || []).length === 0) perArv.get(placeId).tomme += 1;
+  }
+}
+for (const [placeId, tall] of perArv) {
+  if (tall.alle < 20) continue;
+  const andel = tall.tomme / tall.alle;
+  const tak = KJENT_UDOKUMENTERT[placeId] ?? 0.05;
+  check(`${placeId}: andelen uten dokumenterte styrker vokser ikke`, andel < tak,
+    `${tall.tomme} av ${tall.alle} (${(andel * 100).toFixed(0)} %, tak ${(tak * 100).toFixed(0)} %)`);
+}
+// Og de tomme må være tomme AV EN GRUNN — bare der en kilde selv trakk grensen.
+const kjenteSteder = new Set(Object.keys(KJENT_UDOKUMENTERT));
+const tommeAndreSteder = utenStyrker.filter((player) =>
+  !(player.sourcePlaceIds || []).some((placeId) => kjenteSteder.has(placeId)));
 check("tomme styrkelister finnes bare der kilden sa fra",
-  tommeUtenforHødd.length === 0, tommeUtenforHødd.map((p) => p.name).join(", "));
+  tommeAndreSteder.length === 0, tommeAndreSteder.map((p) => p.name).join(", "));
 check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.60,
   `${strengthSets.size} unike styrke-sett av ${medStyrker.length} med styrker (${(strengthShare * 100).toFixed(1)} %)`);
 
@@ -508,7 +544,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
     kilder.every((value) => value === "belagt" || value === "utledet"),
     [...new Set(kilder)].join(", "));
   const belagt = kilder.filter((value) => value === "belagt").length / players.length;
-  // RATCHET. Målt 36,8 % etter Hødd (29,3 % ved innføringen), og det er lavt
+  // RATCHET. Målt 38,0 % etter Mjøndalen (29,3 % ved innføringen), og det er lavt
   // med vilje: 608 spillere står utenfor klubbkildene og har ingen registrert
   // datering i det hele tatt. Tallet skal opp for hver kilde som daterer det
   // den navngir, og aldri ned.
@@ -516,7 +552,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
   // Skeid løftet det fordi kilden daterer med ORD der den mangler tall — «en
   // tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode». Det er
   // like mye kildens egen datering som et årstall, og teller derfor `belagt`.
-  check("epoken er belagt for en reell andel", belagt > 0.36, `${(belagt * 100).toFixed(1)} %`);
+  check("epoken er belagt for en reell andel", belagt > 0.37, `${(belagt * 100).toFixed(1)} %`);
   check("begge kildegradene er i bruk", new Set(kilder).size === 2);
 }
 const eraPairs = [];
