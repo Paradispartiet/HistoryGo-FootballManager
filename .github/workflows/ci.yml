@@ -84,6 +84,7 @@ jobs:
           npm run audit:manager-staff-roster-v1
           npm run audit:manager-visual-identity-v1
           npm run audit:manager-legacy-cleanup-v1
+          node scripts/audit-manager-football-learning-loop-v1.mjs
 
       - name: Simuleringer (motorer ende-til-ende)
         run: |
@@ -123,6 +124,7 @@ jobs:
           npm run sim:manager-staff-roster-v1
           npm run sim:manager-visual-identity-v1
           npm run sim:manager-legacy-cleanup-v1
+          node scripts/simulate-manager-football-learning-loop-v1.mjs
           npm run sim:role-familiarity
           npm run sim:league-season
           npm run sim:mode-isolation
