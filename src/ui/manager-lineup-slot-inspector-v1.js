@@ -262,6 +262,14 @@ function tacticsIsVisible() {
   return Boolean(section && !section.hidden);
 }
 
+function openFromUserActivation(card) {
+  openInspector(card);
+  // Legacy Oppstilling kan rerendre spillerbrikken i samme input-sekvens.
+  // Dialogen er allerede synlig; etter rerender leser vi den oppdaterte
+  // valgte spilleren og rollen fra eksisterende stateflate.
+  setTimeout(syncInspector, 0);
+}
+
 function handlePitchPointerUp(event) {
   // app.js bruker programmatisk `.click()` når uttaket synkroniseres. Pointerup
   // oppstår bare ved faktisk peker-/touch-aktivering og kan derfor ikke åpne
@@ -269,21 +277,16 @@ function handlePitchPointerUp(event) {
   if (!(event instanceof PointerEvent) || event.button !== 0 || !event.isPrimary || !tacticsIsVisible()) return;
   const card = pitchCardFromTarget(event.target);
   if (!card) return;
-  // Legacy click-håndtering får synkronisere valgt spiller/rolle først.
-  setTimeout(() => {
-    if (card.isConnected && tacticsIsVisible()) openInspector(card);
-  }, 0);
+  // Capture på selve banen kjører før spillerbrikkens legacy pointerup, som kan
+  // kalle renderApp() og erstatte brikken. Åpne derfor dialogen mens kortet lever.
+  openFromUserActivation(card);
 }
 
 function handlePitchKeydown(event) {
   if ((event.key !== "Enter" && event.key !== " ") || !tacticsIsVisible()) return;
   const card = pitchCardFromTarget(event.target);
   if (!card) return;
-  // La den eksisterende tastaturaktiverte click-håndteringen synkronisere uttaket
-  // før inspektøren leser valgt spiller og rolle.
-  setTimeout(() => {
-    if (card.isConnected && tacticsIsVisible()) openInspector(card);
-  }, 0);
+  openFromUserActivation(card);
 }
 
 function install() {
