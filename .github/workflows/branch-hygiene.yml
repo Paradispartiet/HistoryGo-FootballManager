@@ -1,0 +1,35 @@
+name: Branch hygiene
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Vis hva som ville blitt slettet uten å endre refs
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: branch-hygiene
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Slett mergede og kjente midlertidige agent-brancher
+        run: node scripts/cleanup-merged-branches.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}

@@ -34,10 +34,25 @@ Denne regelen finnes fordi `gh` allerede er installert og har blitt verifisert f
 Når brukeren ber om implementering i repoet, er arbeidet normalt ikke ferdig ved lokal endring. Standardmålet er:
 
 ```text
-implementer → commit → push → PR → full CI → squash merge til main → verifiser main/deploy
+implementer → commit → push → PR → full CI → squash merge til main → verifiser main/deploy → rydd feature-branch og midlertidige artefakter
 ```
 
 Ikke la en midlertidig shell-begrensning stoppe dette dersom GitHub-connectoren kan fullføre arbeidsflyten.
+
+## Repository-hygiene
+
+Feature-brancher under `agent/` er **midlertidige arbeidsrefs**, ikke prosjektarkiv. Når en PR er squash-merget, skal head-branchen slettes. `.github/workflows/branch-hygiene.yml` er sikkerhetsnettet som rydder mergede head-brancher etter push til `main`; det erstatter ikke agentens ansvar for å avslutte arbeidet ryddig.
+
+Ikke la tekniske mellombrancher som `-clean`, `-anchor`, `-2`, `-3` eller tilsvarende bli stående etter at den endelige leveransen er merget. Hvis en slik branch faktisk inneholder unikt, umerget arbeid, må det avklares og flyttes inn i en eksplisitt PR før opprydding.
+
+Repoet skal heller ikke brukes som lager for engangsnotater fra implementeringen. Før merge skal agenten skille mellom:
+
+- **permanente kontrakter, tester, audits og dokumentasjon** som beskytter produktet videre; og
+- **midlertidige QA-rapporter, CI-markører, debugging-filer, engangssimuleringer og implementation notes** som bare beskriver arbeidet som nettopp ble gjort.
+
+Den første gruppen beholdes. Den andre gruppen skal inn i PR-beskrivelsen eller fjernes før oppgaven regnes som ferdig. Ikke opprett en ny permanent audit eller dokumentfil for hver liten feature dersom eksisterende kontrakter kan utvides.
+
+Opprydding skal være konservativ på runtime-kode: navn som `legacy`, `compat` eller `migration` er ikke i seg selv grunn til sletting. Før kode fjernes må aktive imports, save-migrering, DOM-referanser, eventlisteners og tester være kartlagt slik at kompatibilitet ikke brytes.
 
 ## Produktretning
 
