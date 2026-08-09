@@ -318,7 +318,8 @@
       "city": "Bryne",
       "tier": "obosligaen",
       "strength": 62,
-      "form": 57
+      "form": 57,
+      "homePlaceId": "bryne_stadion"
     },
     {
       "id": "egersund",

@@ -181,6 +181,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Stabæk | Nadderud | 75 |
 | Viking | Lyse Arena | 70 |
 | Sandefjord | Jotun Arena | 68 |
+| Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
 | Kristiansund | Nordmøre stadion | 49 |
@@ -188,17 +189,17 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | HamKam | Briskeby | 26 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid og Moss — 1941 arveplasser fordelt på alle 23, og **ingen klubb
-med bane har under 26 navn**. De 37 klubbene som mangler bane sier det rett ut i
-profilen i stedet for å late som.
+Haugesund, Skeid, Moss og Bryne — 2009 arveplasser fordelt på alle 24, og **ingen
+klubb med bane har under 26 navn**. De 36 klubbene som mangler bane sier det rett
+ut i profilen i stedet for å late som.
 
 Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund,
-Lyn og Moss ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
+Lyn, Moss og Bryne ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
 fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvinner
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 236 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 248 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -479,6 +480,59 @@ er også to menn, og er holdt fra hverandre.
 levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
+
+### Bryne: fra 0 til 68 navn, og en terskel som slapp gjennom én feil
+
+Cupgull i 1987, seriesølv på 80-tallet og europacup i 1981, 1983 og 1988 — et
+lag fra Jæren som slo seg opp på arbeid. Bryne stadion er lagt inn som sted.
+
+53 nye navn, 15 koblet på. **17 av kildens 85 står utenfor**, den største
+utelatelsen så langt, og den er kildens egen ærlighet: de er navn fra klubbens
+eldste bevarte lagbilde fra 1928 og fra opprykkstroppen i 1975, ført med
+posisjonen «Historisk utespiller». Kilden vet at de spilte ute, ikke hvor.
+Posisjon styrer arketyper, roller, styrker og svake sider, så en gjettet
+posisjon er en påstand om en ekte mann.
+
+Det henger sammen med et annet tall: **66 unike kvalitetssetninger for 85
+profiler**, den første kilden siden Rosenborg som gjenbruker. Én eneste setning
+— «Klubblojalitet, pionerånd, arbeidsvilje og historisk lagverdi» — dekker alle
+20 i pionerkategorien. Den beskriver kategorien, ikke spillerne. 17 av de 20
+faller ut på posisjon uansett, så gjenbruket rammer tre navn.
+
+#### Terskelen ble hevet fra 80 % til 90 %, og Bryne er grunnen
+
+Regelen fra Skeid lar de daterte profilene i en kategori datere de udaterte, når
+kilden har vist nok til det. Terskelen sto på 80 %.
+
+«Øverste Bryne-legende» har **11 daterte før 2000 og 2 etter — 84,6 %**, altså
+innenfor. Men blant de 12 udaterte i samme kategori ligger **Tommy Høiland**, en
+Bryne-utviklet angrepsspiller fra 2010-tallet. En kategoridom på «historical»
+ville datert ham feil, og ingenting ville sagt fra.
+
+80 % var altså løst nok til å slippe gjennom én feil. De tidligere kildene taper
+ingenting på 90 %: hver eneste kategori som fikk en dom hos Skeid og Moss var
+100 % entydig (20/20, 25/25, 8/8, 16/16, 18/18).
+
+Prisen er at Bryne får **null kategoridommer** for sine to store kategorier, og
+at 17 profiler må dateres for hånd. Hver av dem står navngitt i importen med
+kildens egen setning som begrunnelse, og alle er `utledet`:
+
+| Grunnlag | Navn |
+|---|---|
+| Klubbrekorder (596/504/371/274 kamper eller mål) bygget i toppserie- og europaperioden | Høyland, Eskeland, Reime, Vold |
+| Kilden bruker selv ordet «historisk» om dem | Sigbjørnsen, Andersen, Rangnes, Braut |
+| «Toppserieperioden … den brede lokale stammen» = 1975–1993 | Mellemstrand |
+| Den ene moderne blant legendene | Høiland |
+| «Stor total karriere», hver beskrevet med klubben de gikk til | Håland, Grødem, Braut Brunes, Gauseth, Baldvinsson, Herrem, Hansen |
+
+«Stor total karriere» kunne ikke få en kategoridom heller: 4 av de daterte er
+moderne og 2 historiske, så **selvkontrollen forbød den** — den samme kontrollen
+som tillot dommen hos Moss.
+
+Nær-duplikat-vakten fant ett par, og det er samme mann: **Erling Braut Haaland /
+Erling Haaland**, 16 A-lagskamper i OBOS-ligaen for Bryne i 2016 før Molde,
+Salzburg, Dortmund og Manchester City. Bryne-importens kategoriregel ga ham 86;
+katalogen har 97, og sammenslåingen tar det høyeste.
 
 ### Moss: fra 0 til 82 navn, og en sammenslåing vakten ikke kunne se
 
@@ -1033,8 +1087,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1969 statusoppføringer på 1647
-spillere, 1336 belagte og 633 utledede.
+**kuratert klubbhistorie** fra **utledet**. 2037 statusoppføringer på 1699
+spillere, 1401 belagte og 636 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 

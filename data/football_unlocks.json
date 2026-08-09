@@ -8329,6 +8329,286 @@
         }
       ],
       "notes": "Klubbanlegg: Moss FKs hjemmebane. Seriegull 1987, cupgull 1983 og europacup mot Bayern München og Real Madrid."
+    },
+    {
+      "placeId": "bryne_stadion",
+      "placeName": "Melløs stadion",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "stefan_strandberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_mykland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ragnvald_soma"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mons_ivar_mjelde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "roger_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_guddal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dadi_dodou_gaye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "remi_andre_svindland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_knarvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jon_inge_hoiland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marek_lemsalu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jesper_mathisen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bard_borgersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_dybevik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_egil_nygard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gabriel_hoyland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_vold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "birk_engstrom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "trond_sirevag"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arne_larsen_okland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "paal_fjeldstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "roger_eskeland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torbjorn_reime"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_iversen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "olav_sigbjornsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kare_kabben_thu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_ottesen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "einar_braut"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "geir_atle_undheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_hoiland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "asle_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bent_apneseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_rangnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oddgeir_mellemstrand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjarne_undheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "asgeir_kleppa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gaute_engstrom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kolbjorn_ekker"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_gulden"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erling_haaland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alfie_haland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_retsius_grodem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonatan_braut_brunes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_gauseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rogvi_baldvinsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "paul_oyuga"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "geir_andre_herrem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "cato_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oddvar_kristensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arild_aadnesen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_tjaland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "duarte_moreira"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "luis_maximilian_gorlich"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sanel_bojadzic"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_erik_sodal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lasse_qvigstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "patrick_wik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jacob_haahr_steffensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_de_boer"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nicklas_strunck"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sjur_jonassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "paya_pichkah"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "asle_sirevag"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_skurve_haland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mats_thornes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alfred_scriven"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_hay"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_amot_lye"
+        }
+      ],
+      "notes": "Klubbanlegg: Moss FKs hjemmebane. Seriegull 1987, cupgull 1983 og europacup mot Bayern München og Real Madrid."
     }
   ]
 }

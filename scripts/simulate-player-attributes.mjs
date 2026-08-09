@@ -304,9 +304,9 @@ const largestClone = Math.max(...signatures.values());
 // nøyaktig den reverteringen passert i stillhet.
 //
 // Odd-importen (100 profiler, 100 % unike kvalitetssetninger i kilden) tok den
-// til 84,3 %. Aalesund og Haugesund la 190 til, og målt er den nå 85,8 % av
-// 1505. Grensa følger etter til 0,85.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.855,
+// til 84,3 %. Aalesund, Haugesund, Skeid, Moss og Bryne la 440 til, og målt er
+// den nå 86,2 % av 1699. Grensa følger etter til 0,86.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.86,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -365,8 +365,8 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // `natural_fitness` sine første spillere — men den var ikke spist av en
 // ordbok, den hadde bare aldri møtt en kilde som sa «tilgjengelighet».
 //
-// Skeid tok den NED igjen til 60,0 %, og grensa blir stående på 0,59. En
-// ratchet går ikke ned. Fallet er kildens egenskap og ikke en feil: Skeid
+// Skeid tok den NED igjen til 60,0 %, og Bryne opp til 61,0 %. Grensa står på
+// 0,59. En ratchet går ikke ned. Fallet er kildens egenskap og ikke en feil: Skeid
 // beskriver den moderne troppen med korte stikkord («Allsidighet, disiplin,
 // arbeidskapasitet») der de eldre profilene får hele setninger, og 81 % unike
 // styrkesett internt er det laveste av de seks siste kildene. Det er ærlig
@@ -476,7 +476,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
     kilder.every((value) => value === "belagt" || value === "utledet"),
     [...new Set(kilder)].join(", "));
   const belagt = kilder.filter((value) => value === "belagt").length / players.length;
-  // RATCHET. Målt 34,5 % etter Moss (29,3 % ved innføringen), og det er lavt
+  // RATCHET. Målt 35,4 % etter Bryne (29,3 % ved innføringen), og det er lavt
   // med vilje: 608 spillere står utenfor klubbkildene og har ingen registrert
   // datering i det hele tatt. Tallet skal opp for hver kilde som daterer det
   // den navngir, og aldri ned.
@@ -484,7 +484,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
   // Skeid løftet det fordi kilden daterer med ORD der den mangler tall — «en
   // tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode». Det er
   // like mye kildens egen datering som et årstall, og teller derfor `belagt`.
-  check("epoken er belagt for en reell andel", belagt > 0.34, `${(belagt * 100).toFixed(1)} %`);
+  check("epoken er belagt for en reell andel", belagt > 0.35, `${(belagt * 100).toFixed(1)} %`);
   check("begge kildegradene er i bruk", new Set(kilder).size === 2);
 }
 const eraPairs = [];
