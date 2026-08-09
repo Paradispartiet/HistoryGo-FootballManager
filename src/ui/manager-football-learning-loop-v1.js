@@ -346,7 +346,9 @@ function renderLearningLayer() {
 }
 
 function scheduleRender() {
-  cancelAnimationFrame(renderFrame);
+  // Coalesce, ikke debounce: kontinuerlige DOM-oppdateringer i managerflaten
+  // skal aldri kunne skyve læringsrenderen foran seg for alltid.
+  if (renderFrame) return;
   renderFrame = requestAnimationFrame(() => {
     renderFrame = 0;
     renderLearningLayer();
@@ -357,10 +359,10 @@ function installObservers() {
   window.addEventListener("hgfm:team-merits-changed", scheduleRender);
   window.addEventListener("updateProfile", scheduleRender);
   window.addEventListener("storage", scheduleRender);
-  document.addEventListener("click", () => queueMicrotask(scheduleRender));
-  document.addEventListener("change", scheduleRender);
+  document.addEventListener("click", () => queueMicrotask(scheduleRender), true);
+  document.addEventListener("change", scheduleRender, true);
   const observer = new MutationObserver(() => scheduleRender());
-  observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected"] });
+  observer.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected"] });
 }
 
 async function boot() {
