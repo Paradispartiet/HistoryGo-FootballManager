@@ -476,7 +476,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
     kilder.every((value) => value === "belagt" || value === "utledet"),
     [...new Set(kilder)].join(", "));
   const belagt = kilder.filter((value) => value === "belagt").length / players.length;
-  // RATCHET. Målt 32,8 % etter Skeid (29,3 % ved innføringen), og det er lavt
+  // RATCHET. Målt 34,5 % etter Moss (29,3 % ved innføringen), og det er lavt
   // med vilje: 608 spillere står utenfor klubbkildene og har ingen registrert
   // datering i det hele tatt. Tallet skal opp for hver kilde som daterer det
   // den navngir, og aldri ned.
@@ -484,7 +484,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
   // Skeid løftet det fordi kilden daterer med ORD der den mangler tall — «en
   // tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode». Det er
   // like mye kildens egen datering som et årstall, og teller derfor `belagt`.
-  check("epoken er belagt for en reell andel", belagt > 0.32, `${(belagt * 100).toFixed(1)} %`);
+  check("epoken er belagt for en reell andel", belagt > 0.34, `${(belagt * 100).toFixed(1)} %`);
   check("begge kildegradene er i bruk", new Set(kilder).size === 2);
 }
 const eraPairs = [];

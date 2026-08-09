@@ -175,6 +175,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Molde | Aker stadion | 89 |
 | Start | Sparebanken Sør Arena | 85 |
 | Lyn | Bislett Stadion | 82 |
+| Moss | Melløs | 82 |
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Stabæk | Nadderud | 75 |
@@ -187,17 +188,17 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | HamKam | Briskeby | 26 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund og Skeid — 1859 arveplasser fordelt på alle 22, og **ingen klubb med
-bane har under 26 navn**. De 38 klubbene som mangler bane sier det rett ut i
+Haugesund, Skeid og Moss — 1941 arveplasser fordelt på alle 23, og **ingen klubb
+med bane har under 26 navn**. De 37 klubbene som mangler bane sier det rett ut i
 profilen i stedet for å late som.
 
-Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund og
-Lyn ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt fjerde
-største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvinner ikke
-fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
+Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund,
+Lyn og Moss ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
+fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvinner
+ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 225 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 236 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -478,6 +479,69 @@ er også to menn, og er holdt fra hverandre.
 levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
+
+### Moss: fra 0 til 82 navn, og en sammenslåing vakten ikke kunne se
+
+Seriegullet i 1987 kom under Nils Arne Eggen, cupgullet i 1983, seriesølvet i
+1979 — og europacup mot Bayern München og Real Madrid. Klubben lå i OBOS-ligaen
+uten bane og uten ett eneste navn. Melløs er lagt inn som sted.
+
+64 nye navn, 18 koblet på. **Tre står utenfor**: kilden oppgir «Historisk
+utespiller» som posisjon for Trygve Løken, Håkon Askerød og John Olsen. Det er
+ærlig av kilden — den vet at han spilte ute, ikke hvor — men posisjon styrer
+arketyper, roller, styrker og svake sider, så en gjettet posisjon er en påstand
+om en ekte mann. De står utenfor til en kilde sier hva de spilte, samme
+avgjørelse som for Lyns to navn uten posisjon.
+
+95 % av frasene var dekket av de ti tidligere ordbøkene, og 98 % av
+ferdighetssettene er unike internt.
+
+#### Kategorien som ikke kunne datere seg selv — igjen
+
+«Stor total karriere» har 20 profiler og **bare én datert**, altså under
+terskelen på tre. Terskelen gjorde jobben sin ved Skeid, der nøyaktig den
+kategorien blandet Braaten med Arne Natland fra «en tidlig
+landslagsgenerasjon», og en majoritet ville datert tre menn feil.
+
+Her er den ikke blandet, og det er **lest, ikke antatt**: alle 19 udaterte
+beskrives med klubben de gikk til — Wimbledon, Austria Wien, Aberdeen, Dundee
+United, Örebro, Viborg, Odense, Crystal Palace, Sundsvall — og hver eneste er en
+1990-/2000-tallsspiller. Kilden har dessuten en egen kategori for de gamle
+(«Historisk pioner / epokeprofil», 16 av 16 datert før 2000).
+
+Avgjørelsen er derfor tatt på **kategori** og ikke på ni enkeltnavn, den står
+synlig i importen, og den **kontrolleres mot kilden**: sier én eneste datert
+profil i kategorien noe annet, kaster importen.
+
+#### Feilen vakten ikke kunne se
+
+Navnenøkkelen fjerner kallenavn i «...», så kildens «Nils Eriksen» traff
+katalogens **«Nils «Påsan» Eriksen» fra Odd** — og importen slo dem sammen.
+
+Odds Påsan spilte 208 obligatoriske kamper for Odd mellom 1929 og 1939.
+Moss-kilden beskriver sin Nils Eriksen som klubbens store førkrigslandslagsprofil
+med 47 landskamper *mens han spilte i Moss*. Begge deler kan ikke stemme om
+samme mann i samme tiår.
+
+**Dette er en feil nær-duplikat-vakten ikke KAN fange.** Resultatet er ikke to
+like navn — det er én spiller på to baner, som er nøyaktig det dataene skal se
+ut som når en mann faktisk spilte begge steder. Den ble funnet ved å lese hva
+kildene sier om hverandres menn, ikke av en måling.
+
+Å smelte to dokumenterte klubbkarrierer sammen er den ene feilen som ikke kan
+angres, så tvilen faller ut til splitting. Moss-mannen bærer klubbsuffikset
+katalogen allerede bruker for Tore Pedersen (RBK) og Sverre Andersen (Odd).
+
+Motsatt vei: **Hans Deunk og Hans Jørgen Deunk er samme mann** — cupmester med
+Moss i 1983, «langvarig forsvarsspiller rundt 1984-laget» hos Fredrikstad. Samme
+posisjon, samme periode, og et etternavn som knapt finnes i norsk fotball
+ellers. Slått sammen.
+
+Tre menn heter nå Nils Eriksen i katalogen, og alle tre står gjennomgått: Odds
+back fra 1930-tallet, Moss' førkrigsstopper, og Moss' keeper fra cup- og
+seriemesterlaget i 1983 og 1987. I tillegg **Einar Aas / Einar Jan Aas** —
+Aalesunds keeperkjempe fra 1951–1962 mot Moss-stopperen som spilte for Bayern
+München og Nottingham Forest.
 
 ### Skeid: fra 0 til 100 navn, og en vakt som navnga en klubb
 
@@ -969,8 +1033,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1887 statusoppføringer på 1583
-spillere, 1292 belagte og 595 utledede.
+**kuratert klubbhistorie** fra **utledet**. 1969 statusoppføringer på 1647
+spillere, 1336 belagte og 633 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 

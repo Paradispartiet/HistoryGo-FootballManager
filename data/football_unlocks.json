@@ -7993,6 +7993,342 @@
         }
       ],
       "notes": "Klubbanlegg: Skeids hjemmebane på Torshov i Oslo. Åtte cupgull 1947–1974 og seriegull i 1966."
+    },
+    {
+      "placeId": "mellos_stadion",
+      "placeName": "Melløs stadion",
+      "placeRole": "historical_club_ground_source",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "raymond_kvisvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_pereira"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_kristian_fjaerestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_andresen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "svein_grondalen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dagfinn_enerly"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oyvind_storflor"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kasey_wehrman"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_myhre"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jarkko_wiss"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rob_friend"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_solli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "amin_askar"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erland_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steffen_nystrom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jarle_odegard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nils_eriksen_moss"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_vinje"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "geir_henaes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "einar_jan_aas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_johnny_henriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_tangen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "carsten_bachke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nils_espen_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stein_kollshaugen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_morten_haugen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gunnar_gislason"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johnny_melbye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_gjestrumsbakken"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_heliasz"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_rafn"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hans_jorgen_deunk"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brede_halvorsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tore_gregersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "pal_gronstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_buer_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leif_erik_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tom_reidar_haraldsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_tore_ophaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_solberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oyvind_svenning"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_olofsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kevin_nicol"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_giaever"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arvid_lindberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "trygve_aasen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "walter_wallenborg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torkild_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kurt_thunheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "glenn_holm"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "odd_brynte_skauen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "svein_traedal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tore_lovland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_tore_karlsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "age_gjermund_haugeneset"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "odd_arild_osterud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bo_hegland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_strande"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tim_bjorkstrom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_lassen_harrison"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jo_o_barros"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_andresen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_enger_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_cassidy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "william_strand_kvale"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_klemetsen_jakobsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "noah_alexandersson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "altin_lajqi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "saadiq_elmi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "niklas_fuglestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "michee_mayonga"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_welinder"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sigurd_prestmo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "robert_marcus"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oscar_aga"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "robin_hermanstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jamiu_musbaudeen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "julian_laegreid"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "niclas_schjoth_semmen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "felix_lovtangen"
+        }
+      ],
+      "notes": "Klubbanlegg: Moss FKs hjemmebane. Seriegull 1987, cupgull 1983 og europacup mot Bayern München og Real Madrid."
     }
   ]
 }

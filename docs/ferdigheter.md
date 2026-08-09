@@ -323,10 +323,10 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter alle tretten kildene | Grense |
+| | Før VIF | Etter alle fjorten kildene | Grense |
 |---|---:|---:|---:|
-| Unike profiler | 73,7 % | **85,7 %** | 0,855 |
-| Unike styrke-sett | 46,9 %* | **60,0 %** | 0,59 |
+| Unike profiler | 73,7 % | **85,8 %** | 0,855 |
+| Unike styrke-sett | 46,9 %* | **60,4 %** | 0,59 |
 | Største klon | 12 | 12 | ≤ 14 |
 
 \* Tallene for styrke-sett er ikke sammenlignbare på tvers av kolonnene.
@@ -412,8 +412,8 @@ bet: epokespennet mellom klubbene står stille (Sandefjord og Viking eier
 ytterpunktene), og korpusandelen flytter seg tre prosentpoeng. 59 % er dessuten
 riktig for Fredrikstad, så det finnes ingen fordeling å måle mot.
 
-Spillerne har derfor `eraSource`, samme mønster som `classSource`: 520 `belagt`
-mot 1063 `utledet`. Grensa er en ratchet på 32 % — lav med vilje, siden 608
+Spillerne har derfor `eraSource`, samme mønster som `classSource`: 568 `belagt`
+mot 1079 `utledet`. Grensa er en ratchet på 34 % — lav med vilje, siden 608
 spillere står utenfor klubbkildene og aldri har hatt en registrert datering.
 
 Skeid-kilden løftet den ved å datere med **ord** der den mangler tall («en
@@ -443,7 +443,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1583 navngitte fotballspillere**. 58 tall hver er ~92 000
+Dette er **1647 navngitte fotballspillere**. 58 tall hver er ~96 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 

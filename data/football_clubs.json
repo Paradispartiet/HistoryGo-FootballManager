@@ -372,7 +372,8 @@
       "city": "Moss",
       "tier": "obosligaen",
       "strength": 60,
-      "form": 55
+      "form": 55,
+      "homePlaceId": "mellos_stadion"
     },
     {
       "id": "sandnes_ulf",

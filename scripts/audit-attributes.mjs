@@ -350,7 +350,23 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Johnsen og Johansen er to ulike etternavn, ikke en stavevariant — samme sak
   // som Knudsen/Knutsen. KFUMs keeper mot Skeids angrepsspiller med 39
   // landskamper fra gullalderen.
-  ["erik johansen|erik johnsen", "KFUMs keeper mot Skeids landslagsspiss"]
+  ["erik johansen|erik johnsen", "KFUMs keeper mot Skeids landslagsspiss"],
+  // Moss-kilden ga TRE menn som heter Nils Eriksen, og de er tre. Odds
+  // «Påsan» spilte 208 kamper for Odd 1929–1939; Moss-kildens Nils Eriksen var
+  // klubbens store førkrigslandslagsprofil med 47 landskamper MENS han spilte i
+  // Moss — begge deler kan ikke stemme om samme mann i samme tiår. Nils Espen
+  // Eriksen er keeperen på cup- og seriemesterlaget i 1983 og 1987.
+  //
+  // Importen slo faktisk sammen de to første, fordi navnenøkkelen fjerner
+  // kallenavn i «...». Det er en feil vakten ikke KAN se — resultatet er ikke to
+  // like navn, men én spiller på to baner. Den er splittet igjen, og Moss-mannen
+  // bærer klubbsuffikset katalogen allerede bruker.
+  ["nils eriksen|nils espen eriksen", "Odds back fra 1930-tallet mot Moss' keeper fra 1983"],
+  ["nils eriksen|nils eriksen moss", "Odds back mot Moss' førkrigslandslagsprofil"],
+  ["nils eriksen moss|nils espen eriksen", "Moss' stopper fra 1930-tallet mot Moss' keeper fra 1983"],
+  // Aalesunds keeperkjempe fra 1951–1962 mot Moss-stopperen som spilte for
+  // Bayern München og Nottingham Forest.
+  ["einar aas|einar jan aas", "AaFKs keeper mot Moss' internasjonale midtstopper"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()
