@@ -25,17 +25,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Materialiser klubbtilknytninger
-        run: node scripts/sync-club-affiliations.mjs --write
-
-      - name: Patch app og dokumentasjon
-        run: node scripts/apply-club-pool-save-integrity-v1.mjs
+      - name: Koble besøkt stadion til hele klubbpoolen
+        run: node scripts/apply-club-pool-followup-v1.mjs
 
       - name: Commit generated changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/football_players.json data/football_clubs.json src/app.js docs/klubbvalg.md
+          git add src/app.js
           git diff --cached --quiet && exit 0
-          git commit -m "Materialiser klubbpool og save-integritet"
+          git commit -m "Åpne hele klubbpoolen ved stadionbesøk"
           git push origin HEAD:agent/club-pool-save-integrity-v1
