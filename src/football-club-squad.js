@@ -1,40 +1,31 @@
 // ============================================================================
-// Klubbtropp v4 — klubbvalget bestemmer poolen, banen bestemmer dybden
+// Klubbtropp v5 — klubbmedlemskap er data, stadion er tilgang
 //
-// Tar du over Rosenborg, får du ikke hele Eggens lag utdelt. Du starter med en
-// automatisk, spillbar grunntropp fra ROSENBORGS egen registrerte spillerpool.
-// Har du vært på Lerkendal, åpnes hele klubbens historiske spillerpool og du
-// velger selv hvem du bygger laget rundt.
+// Canonical modell:
 //
-// Canonical regel:
+//   player.clubAffiliations  → hvilke klubbpooler spilleren tilhører
+//   player.sourcePlaceIds    → hvor spilleren kan oppdages i History Go
+//   club.homePlaceId         → hvilket stadion som åpner hele klubbpoolen
 //
-//   Klubbvalg           → bestemmer hvilken spillerpool troppen kan hentes fra
-//   Har vært på banen   → hele klubbpoolen er tilgjengelig
-//   Har ikke vært der   → lavere/grunnleggende klubbprofiler fyller starttroppen
+// Disse tre relasjonene skal ikke blandes. En spiller kan være dokumentert
+// Viking-spiller uten at klubbidentiteten må utledes av Lyse Arena, og et fysisk
+// sted kan være relevant for flere historiske sammenhenger uten å bli en
+// klubb-ID forkledd som stadion-ID.
 //
-// En Viking-manager skal derfor aldri få en tilfeldig Rosenborg-, Brann- eller
-// utenlandsk spiller i automatisk Viking-tropp bare fordi motoren trenger en
-// keeper, stopper eller ving.
-//
-// `sourcePlaceIds` er sannhetskilden for klubbtilknytningen. Grunntroppen er et
-// GULV, ikke en stjernepakke: den plukker de jevneste spillerne (lavest
-// `classHeight`) fra klubbens egen pool. For klubber som ennå ikke har bane /
-// spillerpool i History Go beholdes den generiske fallbacken så klubbvalget ikke
-// blir en blindvei.
-//
-// v3 flyttet spillerens KLUBBSTATUS (`clubStatus`) fra hardkodede navnelister i
-// motoren til spillerdataene. Statusen er fortsatt per klubb, og rangeringen
-// leses av `CLUB_STATUS_RANK`.
+// Uten stadionbesøk får manageren et spillbart gulv fra klubbens EGEN pool.
+// Grunntroppen prioriterer ordinære tropps-/klubbprofiler før ikoner og
+// legender, og deretter lavere classHeight. Med stadionbesøk åpnes hele poolen.
+// En klubb med færre enn 15 dokumenterte tilknytninger er `unavailable` for
+// overtakelse; motoren fyller aldri hull med tilfeldige spillere fra andre
+// klubber.
 //
 // Ren ESM: ingen DOM, fetch, localStorage, Date.now eller Math.random. Motoren
-// LESER History Go-progresjon som en liste inn; den skriver aldri til den.
+// LESER History Go-progresjon som input og skriver aldri til den.
 // ============================================================================
 
-export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v4";
+export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v5";
+export const CLUB_PLAYER_POOL_VERSION = "historygo-football-manager.club-player-pool.v1";
 
-// Hvor tungt en klubbstatus veier når arven sorteres. Vokabularet er det samme
-// som `clubStatus` i spillerdataene; rekkefølgen er den eneste tolkningen
-// motoren gjør av det.
 export const CLUB_STATUS_RANK = Object.freeze({
   club_icon: 7,
   club_legend: 6,
@@ -59,8 +50,6 @@ export const CLUB_STATUS_LABEL = Object.freeze({
   squad_profile: "Troppsprofil"
 });
 
-// Samme posisjonsfordeling som autofyll-troppen ellers i spillet: en tropp som
-// faktisk kan settes opp på banen.
 const SQUAD_GROUPS = Object.freeze([
   { positions: ["GK"], count: 2 },
   { positions: ["CB", "LB", "RB", "WB"], count: 5 },
@@ -76,9 +65,28 @@ function playsIn(player, positions) {
     .some((position) => positions.includes(position));
 }
 
-// Statusen er PER KLUBB, ikke per spiller. Den sto først som ett felt, og det
-// var feil modellering: Henning Berg er elitekarriere for Vålerenga og en
-// kortvarig gjest i KFUM. Ett felt kan ikke bære begge, og kilden krevde begge.
+export function clubAffiliationsFor(player) {
+  return asArray(player?.clubAffiliations)
+    .filter((entry) => entry && typeof entry.clubId === "string" && entry.clubId.trim())
+    .map((entry) => ({
+      clubId: entry.clubId.trim(),
+      relation: typeof entry.relation === "string" && entry.relation ? entry.relation : "played_for",
+      status: typeof entry.status === "string" && entry.status ? entry.status : null,
+      source: entry.source === "belagt" ? "belagt" : "utledet"
+    }));
+}
+
+export function clubAffiliationFor(player, clubId) {
+  if (!clubId) return null;
+  return clubAffiliationsFor(player).find((entry) => entry.clubId === clubId) || null;
+}
+
+export function playerAffiliatedWithClub(player, clubId) {
+  return Boolean(clubAffiliationFor(player, clubId));
+}
+
+// Legacy-hjelpere beholdes fordi klubbstatus historisk var nøkkelt på placeId.
+// De brukes ikke til å avgjøre hvem som er i klubbpoolen.
 export function clubStatusFor(player, homePlaceId) {
   const status = player?.clubStatus;
   if (!status || typeof status !== "object") return null;
@@ -91,37 +99,56 @@ export function clubStatusSourceFor(player, homePlaceId) {
   return source[homePlaceId] || "utledet";
 }
 
-export function clubStatusRank(player, homePlaceId) {
-  return CLUB_STATUS_RANK[clubStatusFor(player, homePlaceId)] ?? 0;
+export function clubStatusRank(player, clubRef) {
+  const affiliation = clubAffiliationFor(player, clubRef);
+  const status = affiliation?.status || clubStatusFor(player, clubRef);
+  return CLUB_STATUS_RANK[status] ?? 0;
 }
 
-// Klubbens historiske spillere: de som er knyttet til klubbens egen bane.
-// `sourcePlaceIds` er sannhetskilden. Sorteringen beholder classHeight som
-// første nøkkel — klubbstatus skiller bare mellom like klassehøyder.
-export function listClubHeritagePlayers({ homePlaceId = null, players = [] } = {}) {
-  if (!homePlaceId) return [];
+function affiliationStatusRank(player, clubId) {
+  return CLUB_STATUS_RANK[clubAffiliationFor(player, clubId)?.status] ?? 0;
+}
+
+export function listClubPoolPlayers({ clubId = null, players = [] } = {}) {
+  if (!clubId) return [];
   return asArray(players)
-    .filter((player) => asArray(player.sourcePlaceIds).includes(homePlaceId))
+    .filter((player) => playerAffiliatedWithClub(player, clubId))
     .slice()
     .sort((a, b) =>
       num(b.classHeight) - num(a.classHeight)
-      || clubStatusRank(b, homePlaceId) - clubStatusRank(a, homePlaceId)
+      || affiliationStatusRank(b, clubId) - affiliationStatusRank(a, clubId)
       || String(a.id).localeCompare(String(b.id))
     );
 }
 
-// Har manageren vært på klubbens bane? Leser en liste — skriver aldri.
+// Kompatibilitetsnavn for eksisterende UI/tester. Når clubId finnes er den
+// eksplisitte klubbtilknytningen canonical. Bare eldre kall uten clubId kan lese
+// legacy clubStatus på placeId; sourcePlaceIds brukes aldri som klubbbevis.
+export function listClubHeritagePlayers({ clubId = null, homePlaceId = null, players = [] } = {}) {
+  if (clubId) return listClubPoolPlayers({ clubId, players });
+  if (!homePlaceId) return [];
+  return asArray(players)
+    .filter((player) => Boolean(clubStatusFor(player, homePlaceId)))
+    .slice()
+    .sort((a, b) =>
+      num(b.classHeight) - num(a.classHeight)
+      || (CLUB_STATUS_RANK[clubStatusFor(b, homePlaceId)] ?? 0) - (CLUB_STATUS_RANK[clubStatusFor(a, homePlaceId)] ?? 0)
+      || String(a.id).localeCompare(String(b.id))
+    );
+}
+
 export function hasVisitedClubGround({ homePlaceId = null, unlockedPlaceIds = [] } = {}) {
   if (!homePlaceId) return false;
   const set = unlockedPlaceIds instanceof Set ? unlockedPlaceIds : new Set(asArray(unlockedPlaceIds));
   return set.has(homePlaceId);
 }
 
-// Den automatiske grunntroppen. Et gulv som holder klubben spillbar. Hvilken
-// pool den får velge fra avgjøres av kalleren; for en klubb med bane er dette
-// alltid klubbens egen registrerte spillerpool.
+// Et spillbarhetsgulv, ikke en stjernepakke. Hvis clubId sendes inn, sorteres
+// ordinære troppsprofiler foran ikoner/legender før classHeight avgjør innenfor
+// samme statusnivå. Dermed er stadionbesøket fortsatt en meningsfull åpning av
+// klubbhistorien uten at vi later som de 15 svakeste tallene er en historisk XI.
 export function buildClubBaseSquad({
-  players = [], candidateIds = null, excludePlayerIds = [], size = 15
+  players = [], candidateIds = null, excludePlayerIds = [], size = 15, clubId = null
 } = {}) {
   const excluded = excludePlayerIds instanceof Set ? excludePlayerIds : new Set(asArray(excludePlayerIds));
   const allowed = candidateIds instanceof Set ? candidateIds : (candidateIds ? new Set(candidateIds) : null);
@@ -129,7 +156,13 @@ export function buildClubBaseSquad({
   const ordered = asArray(players)
     .filter((player) => player && !excluded.has(player.id) && (!allowed || allowed.has(player.id)))
     .slice()
-    .sort((a, b) => num(a.classHeight) - num(b.classHeight) || String(a.id).localeCompare(String(b.id)));
+    .sort((a, b) => {
+      if (clubId) {
+        const statusDelta = affiliationStatusRank(a, clubId) - affiliationStatusRank(b, clubId);
+        if (statusDelta) return statusDelta;
+      }
+      return num(a.classHeight) - num(b.classHeight) || String(a.id).localeCompare(String(b.id));
+    });
 
   const picked = [];
   const taken = new Set();
@@ -152,8 +185,9 @@ export function buildClubBaseSquad({
   return picked;
 }
 
-function heritageSummary(player, homePlaceId) {
-  const status = clubStatusFor(player, homePlaceId);
+function poolSummary(player, clubId) {
+  const affiliation = clubAffiliationFor(player, clubId);
+  const status = affiliation?.status || null;
   return {
     id: player.id,
     name: player.name,
@@ -165,9 +199,10 @@ function heritageSummary(player, homePlaceId) {
     poorFits: asArray(player.poorFits),
     tacticalDislikes: asArray(player.dislikesTactics),
     usageWarning: player.warningWhenMisused || "",
+    clubRelation: affiliation?.relation || "played_for",
     clubStatus: status,
     clubStatusLabel: CLUB_STATUS_LABEL[status] || "",
-    clubStatusSource: clubStatusSourceFor(player, homePlaceId)
+    clubStatusSource: affiliation?.source || "utledet"
   };
 }
 
@@ -176,85 +211,155 @@ function asIdSet(value) {
   return value ? new Set(asArray(value)) : null;
 }
 
-// Hva klubbvalget faktisk gir deg, og hva du må gjøre for å få resten.
 export function resolveClubSquadAccess({
   club = null, players = [], unlockedPlaceIds = [], candidateIds = null, squadSize = 15
 } = {}) {
-  if (!club) return null;
+  if (!club?.id) return null;
+  const clubId = club.id;
   const homePlaceId = club.homePlaceId || null;
-  const heritage = listClubHeritagePlayers({ homePlaceId, players });
+  const pool = listClubPoolPlayers({ clubId, players });
+  const poolIds = new Set(pool.map((player) => player.id));
+  const poolReady = pool.length >= squadSize;
   const visited = hasVisitedClubGround({ homePlaceId, unlockedPlaceIds });
   const groundName = club.ground || "klubbens bane";
 
-  // Klubber uten History Go-bane har ennå ingen autoritativ klubbpool å avgrense
-  // mot. De beholder den generiske fallbacken til datajobben finnes.
-  if (!homePlaceId) {
+  if (!poolReady) {
     return {
       version: CLUB_SQUAD_VERSION,
-      clubId: club.id, homePlaceId: null, groundName, visited: false,
-      mode: "base",
-      heritage: [], heritageCount: 0,
-      baseSquad: buildClubBaseSquad({ players, candidateIds, size: squadSize }),
-      headline: `${club.name} har ingen bane i History Go ennå.`,
-      detail: "Du starter med en automatisk grunntropp, og bygger laget videre ved å samle spillere.",
-      todo: ["Samle spillere gjennom stedene du besøker i History Go."]
+      poolVersion: CLUB_PLAYER_POOL_VERSION,
+      clubId, homePlaceId, groundName, visited,
+      mode: "unavailable",
+      poolReady: false,
+      poolSize: pool.length,
+      clubPoolIds: [...poolIds],
+      heritage: [], heritageCount: pool.length,
+      lockedCount: pool.length,
+      baseSquad: [],
+      headline: `${club.name} har ikke en ferdig spillerpool ennå.`,
+      detail: `Klubben har ${pool.length} dokumenterte spillerprofiler. Det trengs minst ${squadSize} før klubben kan overtas uten å fylle laget med spillere fra andre klubber.`,
+      todo: ["Bygg ut klubbens dokumenterte spillerpool før klubben gjøres spillbar."]
     };
   }
 
   if (visited) {
     return {
       version: CLUB_SQUAD_VERSION,
-      clubId: club.id, homePlaceId, groundName, visited: true,
+      poolVersion: CLUB_PLAYER_POOL_VERSION,
+      clubId, homePlaceId, groundName, visited: true,
       mode: "heritage",
-      heritage: heritage.map((player) => heritageSummary(player, homePlaceId)),
-      heritageCount: heritage.length,
+      poolReady: true,
+      poolSize: pool.length,
+      clubPoolIds: [...poolIds],
+      heritage: pool.map((player) => poolSummary(player, clubId)),
+      heritageCount: pool.length,
+      lockedCount: 0,
       baseSquad: [],
-      headline: heritage.length
-        ? `Du har vært på ${groundName}. ${heritage.length} historiske ${club.name}-spillere er dine å velge blant.`
-        : `Du har vært på ${groundName}, men klubben har ingen historiske spillere i katalogen ennå.`,
-      detail: heritage.length
-        ? "Du plukker selv hvem av dem du vil bygge laget rundt — hver spiller har posisjon, styrker, brukskostnader og klubbstatus."
-        : "Klubbens spillerpool må bygges ut før en full historisk tropp kan velges.",
-      todo: heritage.length
-        ? ["Velg blant klubbens historiske spillere når du setter troppen."]
-        : ["Samle flere spillere gjennom stedene du besøker."]
+      headline: `Du har vært på ${groundName}. Hele ${club.name}-poolen på ${pool.length} spillere er tilgjengelig.`,
+      detail: "Du plukker selv hvem du vil bygge laget rundt — klubbtilknytningen kommer fra spillerdataene, mens stadionbesøket åpner tilgangen.",
+      todo: ["Velg blant klubbens historiske spillere når du setter troppen."]
     };
   }
 
-  // Ubesøkt bane: grunntroppen skal fortsatt være KLUBBENS tropp. Først
-  // avgrenser vi til spillerne som faktisk peker på klubbens bane. `candidateIds`
-  // kan snevre inn ytterligere (for eksempel fjerne landslagsarena-kandidater),
-  // men får aldri utvide poolen med spillere fra andre klubber.
-  const heritageIds = new Set(heritage.map((player) => player.id));
   const allowed = asIdSet(candidateIds);
   const eligibleClubIds = allowed
-    ? new Set([...heritageIds].filter((id) => allowed.has(id)))
-    : heritageIds;
-
-  // Dersom et eksternt kandidatfilter gjør klubbpoolen for liten, faller vi
-  // tilbake til HELE klubbpoolen — aldri til den globale spillerkatalogen.
-  const basePoolIds = eligibleClubIds.size >= squadSize ? eligibleClubIds : heritageIds;
-  const baseSquad = buildClubBaseSquad({ players, candidateIds: basePoolIds, size: squadSize });
+    ? new Set([...poolIds].filter((id) => allowed.has(id)))
+    : poolIds;
+  const basePoolIds = eligibleClubIds.size >= squadSize ? eligibleClubIds : poolIds;
+  const baseSquad = buildClubBaseSquad({
+    players,
+    candidateIds: basePoolIds,
+    size: squadSize,
+    clubId
+  });
   const baseIds = new Set(baseSquad);
-  const lockedCount = heritage.filter((player) => !baseIds.has(player.id)).length;
+  const lockedCount = pool.filter((player) => !baseIds.has(player.id)).length;
 
+  const noGround = !homePlaceId;
   return {
     version: CLUB_SQUAD_VERSION,
-    clubId: club.id, homePlaceId, groundName, visited: false,
+    poolVersion: CLUB_PLAYER_POOL_VERSION,
+    clubId, homePlaceId, groundName, visited: false,
     mode: "base",
+    poolReady: true,
+    poolSize: pool.length,
+    clubPoolIds: [...poolIds],
     heritage: [],
-    heritageCount: heritage.length,
+    heritageCount: pool.length,
     lockedCount,
     baseSquad,
-    headline: `Du har ikke vært på ${groundName}.`,
-    detail: heritage.length
-      ? `Du får en automatisk ${club.name}-grunntropp med ${baseSquad.length} spillere fra klubbens egen spillerpool. De resterende ${lockedCount} historiske spillerne åpner seg når du besøker ${groundName} i History Go.`
-      : `${club.name} har foreløpig ingen registrert spillerpool på ${groundName}.`,
-    todo: heritage.length
-      ? [
+    headline: noGround
+      ? `${club.name} har en spillerpool, men ingen History Go-bane koblet til ennå.`
+      : `Du har ikke vært på ${groundName}.`,
+    detail: noGround
+      ? `Du får en ${club.name}-grunntropp med ${baseSquad.length} spillere fra klubbens egen pool. Resten åpnes når klubben får en History Go-bane og den besøkes.`
+      : `Du får en automatisk ${club.name}-grunntropp med ${baseSquad.length} spillere fra klubbens egen pool. De resterende ${lockedCount} historiske spillerne åpnes når du besøker ${groundName} i History Go.`,
+    todo: noGround
+      ? ["Koble klubben til riktig History Go-bane for å gjøre resten av klubbpoolen samlebar."]
+      : [
           `Besøk ${groundName} i History Go for å åpne resten av klubbens historiske spillerpool.`,
-          "Grunntroppen består bare av spillere som er registrert på denne klubben."
+          "Grunntroppen består bare av spillere med eksplisitt klubbtilknytning."
         ]
-      : ["Klubbens spillerpool må bygges ut i dataene før klubben kan få en full grunntropp."]
+  };
+}
+
+// Ren og idempotent save-reparasjon. Den tar bare data inn/ut; app-laget eier
+// persistens. Dermed kan gamle `auto_squad`-saves fra før klubbpool v1 repareres
+// før availability gjør fremmede spillere tilgjengelige.
+export function reconcileClubBaseSquadSave({ localStart = null, access = null } = {}) {
+  if (!localStart || typeof localStart !== "object" || localStart.source !== "auto_squad" || !access?.clubId) {
+    return { changed: false, localStart, reason: null, message: "" };
+  }
+
+  const currentIds = asArray(localStart.playerIds).filter((id) => typeof id === "string");
+  const clear = (reason, message) => ({
+    changed: Boolean(localStart.enabled || currentIds.length),
+    reason,
+    message,
+    localStart: {
+      ...localStart,
+      enabled: false,
+      clubId: access.clubId,
+      poolVersion: access.version,
+      generatedFrom: "club_pool",
+      playerIds: []
+    }
+  });
+
+  if (access.mode === "unavailable") {
+    return clear("pool_unavailable", `${access.clubId}: gammel automatisk tropp ble fjernet fordi klubbpoolen ikke er ferdig.`);
+  }
+  if (access.mode === "heritage") {
+    return clear("full_pool_unlocked", `${access.clubId}: automatisk grunntropp ble fjernet fordi hele klubbpoolen nå er åpnet.`);
+  }
+  if (access.mode !== "base") {
+    return { changed: false, localStart, reason: null, message: "" };
+  }
+
+  const expected = asArray(access.baseSquad);
+  const expectedSet = new Set(expected);
+  const foreignIds = currentIds.filter((id) => !expectedSet.has(id));
+  const stale =
+    localStart.clubId !== access.clubId
+    || localStart.poolVersion !== access.version
+    || localStart.generatedFrom !== "club_pool"
+    || currentIds.length !== expected.length
+    || currentIds.some((id, index) => id !== expected[index]);
+
+  if (!stale) return { changed: false, localStart, reason: null, message: "" };
+
+  return {
+    changed: true,
+    reason: foreignIds.length ? "foreign_players" : "pool_version",
+    message: foreignIds.length
+      ? `${access.clubId}: gammel grunntropp inneholdt spillere utenfor klubbpoolen og er reparert.`
+      : `${access.clubId}: grunntroppen er oppdatert til gjeldende klubbpool.`,
+    localStart: {
+      ...localStart,
+      enabled: true,
+      clubId: access.clubId,
+      poolVersion: access.version,
+      generatedFrom: "club_pool",
+      playerIds: expected
+    }
   };
 }
