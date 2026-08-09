@@ -8332,7 +8332,7 @@
     },
     {
       "placeId": "bryne_stadion",
-      "placeName": "Melløs stadion",
+      "placeName": "Bryne stadion",
       "placeRole": "historical_club_ground_source",
       "unlocks": [
         {
@@ -8608,7 +8608,7 @@
           "targetId": "martin_amot_lye"
         }
       ],
-      "notes": "Klubbanlegg: Moss FKs hjemmebane. Seriegull 1987, cupgull 1983 og europacup mot Bayern München og Real Madrid."
+      "notes": "Klubbanlegg: Brynes hjemmebane på Jæren. Cupgull 1987, seriesølv på 80-tallet og europacup i 1981, 1983 og 1988."
     }
   ]
 }

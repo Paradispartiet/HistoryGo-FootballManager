@@ -42,6 +42,39 @@ for (const club of withGround) {
 }
 check("ingen to klubber deler bane", new Set(withGround.map((club) => club.homePlaceId)).size === withGround.length);
 
+// Og stedet må hete det klubben sier at banen heter.
+//
+// `bryne_stadion` ble opprettet med navnet «Melløs stadion» og Moss' notat,
+// fordi importskriptet var kopiert fra Moss-importen og bare id-en ble byttet.
+// Id-en var riktig, klubbkoblingen var riktig, alle 68 spillerne var riktige —
+// og spilleren som besøkte Bryne stadion fikk se «Melløs stadion». Det gikk
+// gjennom hele suiten og ut på main, fordi ingen vakt sammenlignet NAVNET på
+// stedet med noe som helst.
+//
+// To krav, og det andre er det som fanger nettopp denne feilen: to steder kan
+// ikke hete det samme.
+{
+  const forenkle = (value) => String(value).toLowerCase()
+    .replace(/stadion|arena|park|idrettsanlegg|kunstgress|campus/g, " ")
+    .replace(/[^a-zà-ÿ]/g, "").trim();
+  for (const club of withGround) {
+    const place = placeUnlocks.find((entry) => entry.placeId === club.homePlaceId);
+    if (!place) continue;
+    check(`${club.name}: stedet heter det banen heter`,
+      forenkle(place.placeName) === forenkle(club.ground)
+      || forenkle(club.homePlaceId).includes(forenkle(club.ground))
+      || forenkle(club.ground).includes(forenkle(place.placeName)),
+      `${club.ground} mot «${place.placeName}»`);
+  }
+  const navn = new Map();
+  const delte = [];
+  for (const place of placeUnlocks) {
+    if (navn.has(place.placeName)) delte.push(`${navn.get(place.placeName)} / ${place.placeId} = ${place.placeName}`);
+    navn.set(place.placeName, place.placeId);
+  }
+  check("ingen to steder deler navn", delte.length === 0, delte.join(" · "));
+}
+
 // Et sted som låser opp en spiller må stå i spillerens EGNE sourcePlaceIds.
 // Ellers lyver stedet: unlocken lover en spiller som aldri dukker opp som
 // klubbarv, fordi arven leses fra spilleren. Gikk rett på den da Brede
