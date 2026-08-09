@@ -91,7 +91,9 @@
       "tier": "eliteserien",
       "strength": 84,
       "form": 57,
-      "homePlaceId": "aspmyra_stadion"
+      "homePlaceId": "aspmyra_stadion",
+      "playerPoolSize": 89,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "viking",
@@ -101,7 +103,9 @@
       "tier": "eliteserien",
       "strength": 82,
       "form": 55,
-      "homePlaceId": "lyse_arena"
+      "homePlaceId": "lyse_arena",
+      "playerPoolSize": 70,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "brann",
@@ -111,7 +115,9 @@
       "tier": "eliteserien",
       "strength": 79,
       "form": 52,
-      "homePlaceId": "brann_stadion"
+      "homePlaceId": "brann_stadion",
+      "playerPoolSize": 75,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "molde",
@@ -121,7 +127,9 @@
       "tier": "eliteserien",
       "strength": 78,
       "form": 51,
-      "homePlaceId": "aker_stadion"
+      "homePlaceId": "aker_stadion",
+      "playerPoolSize": 89,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "rosenborg",
@@ -131,7 +139,9 @@
       "tier": "eliteserien",
       "strength": 76,
       "form": 60,
-      "homePlaceId": "lerkendal_stadion"
+      "homePlaceId": "lerkendal_stadion",
+      "playerPoolSize": 156,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "tromso",
@@ -141,7 +151,9 @@
       "tier": "eliteserien",
       "strength": 76,
       "form": 60,
-      "homePlaceId": "romssa_arena"
+      "homePlaceId": "romssa_arena",
+      "playerPoolSize": 81,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "fredrikstad",
@@ -151,7 +163,9 @@
       "tier": "eliteserien",
       "strength": 74,
       "form": 58,
-      "homePlaceId": "fredrikstad_stadion"
+      "homePlaceId": "fredrikstad_stadion",
+      "playerPoolSize": 100,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "valerenga",
@@ -161,7 +175,9 @@
       "tier": "eliteserien",
       "strength": 73,
       "form": 57,
-      "homePlaceId": "intility_arena"
+      "homePlaceId": "intility_arena",
+      "playerPoolSize": 127,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "lillestrom",
@@ -171,7 +187,9 @@
       "tier": "eliteserien",
       "strength": 73,
       "form": 57,
-      "homePlaceId": "araasen_stadion"
+      "homePlaceId": "araasen_stadion",
+      "playerPoolSize": 56,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "sarpsborg08",
@@ -181,7 +199,9 @@
       "tier": "eliteserien",
       "strength": 72,
       "form": 56,
-      "homePlaceId": "sarpsborg_stadion"
+      "homePlaceId": "sarpsborg_stadion",
+      "playerPoolSize": 32,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "kristiansund",
@@ -191,7 +211,9 @@
       "tier": "eliteserien",
       "strength": 71,
       "form": 55,
-      "homePlaceId": "nordmore_stadion"
+      "homePlaceId": "nordmore_stadion",
+      "playerPoolSize": 49,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "start",
@@ -201,7 +223,9 @@
       "tier": "eliteserien",
       "strength": 71,
       "form": 55,
-      "homePlaceId": "sor_arena"
+      "homePlaceId": "sor_arena",
+      "playerPoolSize": 85,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "aalesund",
@@ -211,7 +235,9 @@
       "tier": "eliteserien",
       "strength": 71,
       "form": 55,
-      "homePlaceId": "color_line_stadion"
+      "homePlaceId": "color_line_stadion",
+      "playerPoolSize": 90,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "hamkam",
@@ -221,7 +247,9 @@
       "tier": "eliteserien",
       "strength": 70,
       "form": 54,
-      "homePlaceId": "briskeby_stadion"
+      "homePlaceId": "briskeby_stadion",
+      "playerPoolSize": 81,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "sandefjord",
@@ -231,7 +259,9 @@
       "tier": "eliteserien",
       "strength": 70,
       "form": 54,
-      "homePlaceId": "jotun_arena"
+      "homePlaceId": "jotun_arena",
+      "playerPoolSize": 68,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "kfum",
@@ -241,7 +271,9 @@
       "tier": "eliteserien",
       "strength": 70,
       "form": 54,
-      "homePlaceId": "kfum_arena"
+      "homePlaceId": "kfum_arena",
+      "playerPoolSize": 66,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "odd",
@@ -251,7 +283,9 @@
       "tier": "obosligaen",
       "strength": 68,
       "form": 52,
-      "homePlaceId": "skagerak_arena"
+      "homePlaceId": "skagerak_arena",
+      "playerPoolSize": 100,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "stromsgodset",
@@ -261,7 +295,9 @@
       "tier": "obosligaen",
       "strength": 68,
       "form": 52,
-      "homePlaceId": "marienlyst_stadion"
+      "homePlaceId": "marienlyst_stadion",
+      "playerPoolSize": 143,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "haugesund",
@@ -271,7 +307,9 @@
       "tier": "obosligaen",
       "strength": 67,
       "form": 51,
-      "homePlaceId": "haugesund_stadion"
+      "homePlaceId": "haugesund_stadion",
+      "playerPoolSize": 100,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "stabak",
@@ -281,7 +319,9 @@
       "tier": "obosligaen",
       "strength": 65,
       "form": 60,
-      "homePlaceId": "nadderud_stadion"
+      "homePlaceId": "nadderud_stadion",
+      "playerPoolSize": 75,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "lyn",
@@ -291,7 +331,9 @@
       "tier": "obosligaen",
       "strength": 64,
       "form": 59,
-      "homePlaceId": "bislett_stadion"
+      "homePlaceId": "bislett_stadion",
+      "playerPoolSize": 82,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "sogndal",
@@ -300,7 +342,9 @@
       "city": "Sogndal",
       "tier": "obosligaen",
       "strength": 63,
-      "form": 58
+      "form": 58,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "ranheim",
@@ -309,7 +353,9 @@
       "city": "Trondheim",
       "tier": "obosligaen",
       "strength": 62,
-      "form": 57
+      "form": 57,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "bryne",
@@ -319,7 +365,9 @@
       "tier": "obosligaen",
       "strength": 62,
       "form": 57,
-      "homePlaceId": "bryne_stadion"
+      "homePlaceId": "bryne_stadion",
+      "playerPoolSize": 68,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "egersund",
@@ -328,7 +376,9 @@
       "city": "Egersund",
       "tier": "obosligaen",
       "strength": 62,
-      "form": 57
+      "form": 57,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "asane",
@@ -337,7 +387,9 @@
       "city": "Bergen",
       "tier": "obosligaen",
       "strength": 61,
-      "form": 56
+      "form": 56,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "raufoss",
@@ -346,7 +398,9 @@
       "city": "Raufoss",
       "tier": "obosligaen",
       "strength": 61,
-      "form": 56
+      "form": 56,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "kongsvinger",
@@ -355,7 +409,9 @@
       "city": "Kongsvinger",
       "tier": "obosligaen",
       "strength": 60,
-      "form": 55
+      "form": 55,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "hodd",
@@ -365,7 +421,9 @@
       "tier": "obosligaen",
       "strength": 60,
       "form": 55,
-      "homePlaceId": "hoddvoll"
+      "homePlaceId": "hoddvoll",
+      "playerPoolSize": 69,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "moss",
@@ -375,7 +433,9 @@
       "tier": "obosligaen",
       "strength": 60,
       "form": 55,
-      "homePlaceId": "mellos_stadion"
+      "homePlaceId": "mellos_stadion",
+      "playerPoolSize": 82,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "sandnes_ulf",
@@ -384,7 +444,9 @@
       "city": "Sandnes",
       "tier": "obosligaen",
       "strength": 60,
-      "form": 55
+      "form": 55,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "strommen",
@@ -393,7 +455,9 @@
       "city": "Strømmen",
       "tier": "obosligaen",
       "strength": 58,
-      "form": 53
+      "form": 53,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "arendal",
@@ -403,7 +467,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 57,
-      "form": 52
+      "form": 52,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "jerv",
@@ -413,7 +479,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 57,
-      "form": 52
+      "form": 52,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "notodden",
@@ -423,7 +491,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 56,
-      "form": 51
+      "form": 51,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "mjondalen",
@@ -434,7 +504,9 @@
       "group": "avdeling1",
       "strength": 56,
       "form": 51,
-      "homePlaceId": "consto_arena"
+      "homePlaceId": "consto_arena",
+      "playerPoolSize": 83,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "pors",
@@ -444,7 +516,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 54,
-      "form": 60
+      "form": 60,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "brattvag",
@@ -454,7 +528,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 53,
-      "form": 59
+      "form": 59,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "eik_tonsberg",
@@ -464,7 +540,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 53,
-      "form": 59
+      "form": 59,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "vidar",
@@ -474,7 +552,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 52,
-      "form": 58
+      "form": 58,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "kvik_halden",
@@ -484,7 +564,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 51,
-      "form": 57
+      "form": 57,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "sandviken",
@@ -494,7 +576,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 51,
-      "form": 57
+      "form": 57,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "lysekloster",
@@ -504,7 +588,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 50,
-      "form": 56
+      "form": 56,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "sotra",
@@ -514,7 +600,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 49,
-      "form": 55
+      "form": 55,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "traff",
@@ -524,7 +612,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 48,
-      "form": 54
+      "form": 54,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "bjarg",
@@ -534,7 +624,9 @@
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 47,
-      "form": 53
+      "form": 53,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "skeid",
@@ -545,7 +637,9 @@
       "group": "avdeling2",
       "strength": 57,
       "form": 52,
-      "homePlaceId": "nordre_asen"
+      "homePlaceId": "nordre_asen",
+      "playerPoolSize": 100,
+      "playerPoolStatus": "ready"
     },
     {
       "id": "honefoss",
@@ -555,7 +649,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 56,
-      "form": 51
+      "form": 51,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "ull_kisa",
@@ -565,7 +661,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 56,
-      "form": 51
+      "form": 51,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "levanger",
@@ -575,7 +673,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 55,
-      "form": 50
+      "form": 50,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "kjelsas",
@@ -585,7 +685,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 54,
-      "form": 60
+      "form": 60,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "grorud",
@@ -595,7 +697,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 53,
-      "form": 59
+      "form": 59,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "tromsdalen",
@@ -605,7 +709,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 52,
-      "form": 58
+      "form": 58,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "stjordals_blink",
@@ -615,7 +721,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 52,
-      "form": 58
+      "form": 58,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "rana",
@@ -625,7 +733,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 51,
-      "form": 57
+      "form": 57,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "junkeren",
@@ -635,7 +745,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 50,
-      "form": 56
+      "form": 56,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "lorenskog",
@@ -645,7 +757,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 50,
-      "form": 56
+      "form": 56,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "eidsvold_turn",
@@ -655,7 +769,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 49,
-      "form": 55
+      "form": 55,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "follo",
@@ -665,7 +781,9 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 48,
-      "form": 54
+      "form": 54,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     },
     {
       "id": "trygg_lade",
@@ -675,7 +793,11 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 47,
-      "form": 53
+      "form": 53,
+      "playerPoolSize": 0,
+      "playerPoolStatus": "pending"
     }
-  ]
+  ],
+  "playerPoolSchema": "historygo-football-manager.club-player-pool.v1",
+  "playerPoolVersion": 1
 }

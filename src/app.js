@@ -106,7 +106,7 @@ import {
   startNextLeagueSeason
 } from "./football-league-season.js";
 import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";
-import { resolveClubSquadAccess, listClubHeritagePlayers } from "./football-club-squad.js";
+import { resolveClubSquadAccess, reconcileClubBaseSquadSave, listClubHeritagePlayers } from "./football-club-squad.js";
 import {
   normalizeAttributeCatalogue,
   derivePlayerAttributeIndex,
@@ -1410,6 +1410,10 @@ function normalizeLocalStart(value) {
     chosenPlaceId: typeof base.chosenPlaceId === "string" && base.chosenPlaceId.trim() ? base.chosenPlaceId : null,
     chosenPlaceName:
       typeof base.chosenPlaceName === "string" && base.chosenPlaceName.trim() ? base.chosenPlaceName.trim() : null,
+    clubId: typeof base.clubId === "string" && base.clubId.trim() ? base.clubId.trim() : null,
+    poolVersion: typeof base.poolVersion === "string" && base.poolVersion.trim() ? base.poolVersion.trim() : null,
+    generatedFrom: base.generatedFrom === "club_pool" ? "club_pool" : null,
+    repairedAt: typeof base.repairedAt === "string" && base.repairedAt.trim() ? base.repairedAt : null,
     playerIds,
     createdAt: typeof base.createdAt === "string" && base.createdAt.trim() ? base.createdAt : null
   };
@@ -1775,7 +1779,24 @@ function isPlayerUnlockType(type) {
 
 function getLocalStartPlayerIds() {
   const localStart = normalizeLocalStart(state.teamMerits?.localStart);
-  return localStart.enabled ? localStart.playerIds : [];
+  if (!localStart.enabled) return [];
+
+  // Eldre saves kan ha en global auto-tropp lagret før klubbpoolen ble canonical.
+  // Reparer den idempotent mot den valgte klubbens faktiske pool før
+  // availability får lov til å gjøre spillerne tilgjengelige.
+  const takeoverClub = getTakeoverClub();
+  if (takeoverClub && localStart.source === "auto_squad") {
+    const access = getClubSquadAccess(takeoverClub);
+    const repair = reconcileClubBaseSquadSave({ localStart, access });
+    if (repair.changed) {
+      state.teamMerits.localStart = normalizeLocalStart(repair.localStart);
+      state.localStartMessage = repair.message || "";
+      saveTeamMerits();
+      return state.teamMerits.localStart.enabled ? state.teamMerits.localStart.playerIds : [];
+    }
+  }
+
+  return localStart.playerIds;
 }
 
 
@@ -2065,7 +2086,7 @@ function getNationalBasePlayerIds(nationality) {
 
 // Aktiver auto-troppen. Samme lagringsmodell som før (teamMerits.localStart med
 // unlockSource local_start), men uten koordinater eller valgt sted.
-function activateStarterSquad(chosenPlayerIds = null) {
+function activateStarterSquad(chosenPlayerIds = null, metadata = null) {
   if (!state.teamMerits) {
     state.localStartMessage = "Kunne ikke fylle troppen fordi lagprogresjonen ikke er tilgjengelig.";
     renderApp();
@@ -2089,6 +2110,10 @@ function activateStarterSquad(chosenPlayerIds = null) {
     longitude: null,
     chosenPlaceId: null,
     chosenPlaceName: null,
+    clubId: typeof metadata?.clubId === "string" ? metadata.clubId : null,
+    poolVersion: typeof metadata?.poolVersion === "string" ? metadata.poolVersion : null,
+    generatedFrom: metadata?.generatedFrom === "club_pool" ? "club_pool" : null,
+    repairedAt: null,
     playerIds,
     createdAt: new Date().toISOString()
   });
@@ -2244,13 +2269,17 @@ function computeAvailability() {
     }
   });
 
-  // Starttroppen er det eksisterende spillbarhetsgulvet og er ikke en History Go-
-  // signering. Når ingen eksplisitt lokal/starttropp er lagret, brukes den samme
-  // deterministiske 15-spillerstroppen som før Rekruttering v1. Kandidater utover
-  // dette gulvet må fortsatt hentes eksplisitt.
+  // Starttroppen er et spillbarhetsgulv. For en overtatt klubb kommer gulvet
+  // ALLTID fra klubbens egen pool; den globale startertroppen er bare fallback
+  // for egenopprettet klubb. Dermed kan en tom/eldre klubb-save aldri snike inn
+  // tilfeldige spillere fra andre klubber.
   const localStartPlayerIds = getLocalStartPlayerIds();
   if (!localStartPlayerIds.length && !isNationalModeActive()) {
-    getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE).forEach((playerId) => {
+    const takeoverClub = getTakeoverClub();
+    const fallbackPlayerIds = takeoverClub
+      ? (getClubSquadAccess(takeoverClub)?.baseSquad || [])
+      : getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE);
+    fallbackPlayerIds.forEach((playerId) => {
       unlockedPlayerIds.add(playerId);
       const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
       sources.localStart = true;
@@ -2634,7 +2663,15 @@ function getPlayerSourcePlaces(playerId) {
     return { placeId, placeName: place?.placeName || placeId, source: snapshot.placeSourceById.get(placeId) };
   });
   if (sources.localStart) {
-    result.push({ placeId: null, placeName: "Lokal starttropp", source: "local_start" });
+    const localStart = normalizeLocalStart(state.teamMerits?.localStart);
+    const poolClub = localStart.clubId
+      ? (state.leaguePyramid?.clubs || []).find((club) => club.id === localStart.clubId)
+      : null;
+    result.push({
+      placeId: null,
+      placeName: poolClub ? poolClub.name + " · grunntropp" : "Lokal starttropp",
+      source: localStart.generatedFrom === "club_pool" ? "club_pool" : "local_start"
+    });
   }
   return result;
 }
@@ -16029,7 +16066,11 @@ function bindOnboardingClub() {
       const access = getClubSquadAccess(club);
       const alreadyHasSquad = (state.teamMerits?.localStart?.playerIds || []).length > 0;
       if (access?.mode === "base" && access.baseSquad.length && !alreadyHasSquad) {
-        activateStarterSquad(access.baseSquad);
+        activateStarterSquad(access.baseSquad, {
+          clubId: club.id,
+          poolVersion: access.version,
+          generatedFrom: "club_pool"
+        });
       }
       showOnboardingModeStep();
       activateRecommendedLeagueTab(getTeamFit());
