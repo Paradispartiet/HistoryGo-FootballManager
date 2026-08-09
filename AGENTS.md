@@ -41,7 +41,7 @@ Ikke la en midlertidig shell-begrensning stoppe dette dersom GitHub-connectoren 
 
 ## Repository-hygiene
 
-Feature-brancher under `agent/` er **midlertidige arbeidsrefs**, ikke prosjektarkiv. Når en PR er squash-merget, skal head-branchen slettes. `.github/workflows/branch-hygiene.yml` er sikkerhetsnettet som rydder mergede head-brancher etter push til `main`; det erstatter ikke agentens ansvar for å avslutte arbeidet ryddig.
+Feature-brancher under `agent/` og `claude/` er **midlertidige arbeidsrefs**, ikke prosjektarkiv. Når en PR er squash-merget, skal head-branchen slettes. `.github/workflows/branch-hygiene.yml` er sikkerhetsnettet som rydder mergede head-brancher etter push til `main`; det erstatter ikke agentens ansvar for å avslutte arbeidet ryddig.
 
 Ikke la tekniske mellombrancher som `-clean`, `-anchor`, `-2`, `-3` eller tilsvarende bli stående etter at den endelige leveransen er merget. Hvis en slik branch faktisk inneholder unikt, umerget arbeid, må det avklares og flyttes inn i en eksplisitt PR før opprydding.
 

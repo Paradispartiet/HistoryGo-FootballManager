@@ -7,6 +7,7 @@ if (!repository || !repository.includes("/")) throw new Error("GITHUB_REPOSITORY
 
 const [owner, repo] = repository.split("/");
 const apiBase = `https://api.github.com/repos/${owner}/${repo}`;
+const TEMPORARY_BRANCH_PREFIXES = ["agent/", "claude/"];
 
 const HISTORICAL_STALE_BRANCHES = new Set([
   "agent/economy-contracts-v1-ci-anchor",
@@ -50,8 +51,8 @@ function sameRepository(pr) {
   return pr?.head?.repo?.full_name === repository;
 }
 
-function temporaryAgentBranch(name) {
-  return typeof name === "string" && name.startsWith("agent/");
+function temporaryWorkBranch(name) {
+  return typeof name === "string" && TEMPORARY_BRANCH_PREFIXES.some((prefix) => name.startsWith(prefix));
 }
 
 async function main() {
@@ -84,14 +85,14 @@ async function main() {
   }
 
   const deletions = [...candidates.entries()]
-    .filter(([name]) => temporaryAgentBranch(name))
+    .filter(([name]) => temporaryWorkBranch(name))
     .filter(([name]) => name !== defaultBranch)
     .filter(([name]) => !openHeads.has(name))
     .sort(([a], [b]) => a.localeCompare(b));
 
   console.log(`Branch hygiene: ${branches.length} branches, ${openPulls.length} åpne PR-er, ${mergedHeads.size} mergede head-referanser.`);
   if (!deletions.length) {
-    console.log("Ingen midlertidige agent-brancher å slette.");
+    console.log("Ingen mergede eller eksplisitt verifiserte midlertidige arbeidsbrancher å slette.");
     return;
   }
 
