@@ -1,13 +1,16 @@
 import "./manager-legacy-cleanup-v1.js";
 import "./manager-player-workspace-v1.js";
 import "./manager-team-choice-drawer-v1.js";
+import "./manager-lineup-slot-inspector-v1.js";
 import "./manager-scouting-workspace-v1.js";
 import "./manager-calendar-workspace-v1.js";
 import "./manager-training-day-v1.js";
 import "./manager-match-calendar-v1.js";
 import "./manager-staff-workspace-v1.js";
 import "./manager-club-organization-v1.js";
+import "./manager-club-learning-v1.js";
 import "./manager-club-organization-location-v1.js";
+import "./manager-system-workspace-v2.js";
 import "./manager-visual-identity-v1.js";
 import "./manager-league-next-suppression-v1.js";
 

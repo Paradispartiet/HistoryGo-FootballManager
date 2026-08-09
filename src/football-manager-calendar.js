@@ -71,6 +71,32 @@ function resultText(lastMatch) {
   return `${Math.max(0, Math.round(own))}–${Math.max(0, Math.round(against))}`;
 }
 
+function pressSignal(value) {
+  const pressure = Number(value);
+  if (!Number.isFinite(pressure)) {
+    return {
+      attention: false,
+      detail: "Presseansvarlig samler spørsmål og mediebilde før kamp. Medietrykket er ikke vurdert ennå."
+    };
+  }
+  if (pressure >= 65) {
+    return {
+      attention: true,
+      detail: "Presseansvarlig varsler om et krevende mediebilde. Avklar budskap og hva klubben skal svare på før kamp."
+    };
+  }
+  if (pressure <= 35) {
+    return {
+      attention: false,
+      detail: "Pressebildet er rolig. Bruk briefen til å holde budskapet samlet før kamp."
+    };
+  }
+  return {
+    attention: false,
+    detail: "Presseansvarlig samler ukas mediebilde og spørsmål før kamp. Avklar klubbens budskap."
+  };
+}
+
 function eventsForDay(dayIndex, {
   week,
   opponent,
@@ -80,6 +106,7 @@ function eventsForDay(dayIndex, {
   inboxTitle,
   inboxAttentionCount,
   lineupReady,
+  mediaPressure,
   lastMatch
 }) {
   const result = resultText(lastMatch);
@@ -131,6 +158,7 @@ function eventsForDay(dayIndex, {
   }
 
   if (dayIndex === 5) {
+    const press = pressSignal(mediaPressure);
     return [
       event("match-prep", "10:00", "Kampforberedelse", lineupReady
         ? "Startellever og benk er satt. Bekreft roller, system og siste kampplan."
@@ -139,7 +167,13 @@ function eventsForDay(dayIndex, {
           target: "tactics",
           attention: !lineupReady,
           actionLabel: lineupReady ? "Åpne kampforberedelse" : "Gjør laget klart"
-        })
+        }),
+      event("press-brief", "13:00", "Pressebrief før kamp", press.detail, {
+        owner: "Kontor · Klubben",
+        target: "board",
+        attention: press.attention,
+        actionLabel: "Åpne Klubben"
+      })
     ];
   }
 
@@ -184,6 +218,7 @@ export function createManagerWeekCalendar({
     inboxTitle,
     inboxAttentionCount,
     lineupReady,
+    mediaPressure: clubWeekState?.mediaPressure,
     lastMatch
   };
 

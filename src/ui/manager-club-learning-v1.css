@@ -1,0 +1,58 @@
+.club-room-learning-v1 {
+  display: grid;
+  gap: .8rem;
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,.16);
+}
+
+.club-room-learning-v1 h3,
+.club-room-learning-v1 p { margin: 0; }
+
+.club-room-learning-intro,
+.club-room-learning-note {
+  max-width: 68ch;
+  color: rgba(255,255,255,.72);
+  line-height: 1.55;
+}
+
+.club-room-learning-v1 h3 {
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.club-room-learning-list {
+  display: grid;
+  border-top: 1px solid rgba(255,255,255,.11);
+}
+
+.club-room-learning-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, .8fr) minmax(0, 1.7fr);
+  gap: .9rem;
+  padding: .72rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.club-room-learning-row strong {
+  font-size: .76rem;
+  line-height: 1.4;
+}
+
+.club-room-learning-row p {
+  color: rgba(255,255,255,.66);
+  font-size: .72rem;
+  line-height: 1.5;
+}
+
+.club-room-learning-note {
+  font-size: .68rem;
+}
+
+@media (max-width: 640px) {
+  .club-room-learning-row {
+    grid-template-columns: 1fr;
+    gap: .25rem;
+  }
+}
