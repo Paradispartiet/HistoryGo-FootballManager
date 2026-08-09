@@ -368,7 +368,10 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Bayern München og Nottingham Forest.
   ["einar aas|einar jan aas", "AaFKs keeper mot Moss' internasjonale midtstopper"],
   // Tromsøs historiske spiss «Kykkeliky» mot Mjøndalens moderne forsvarsspiller.
-  ["petter eichler jensen|petter jensen", "Tromsøs historiske spiss mot Mjøndalens moderne forsvarsspiller"]
+  ["petter eichler jensen|petter jensen", "Tromsøs historiske spiss mot Mjøndalens moderne forsvarsspiller"],
+  // Rosenborgs midtstopper mot HamKams keeper, «en av klubbens beste» gjennom
+  // åtte sesonger.
+  ["svein haagenrud|svein inge haagenrud", "RBKs midtstopper mot HamKams keeper"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

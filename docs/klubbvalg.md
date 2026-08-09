@@ -178,6 +178,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Lyn | Bislett Stadion | 82 |
 | Moss | Melløs | 82 |
 | Tromsø | Romssa Arena | 81 |
+| HamKam | Briskeby | 81 |
 | Brann | Brann Stadion | 75 |
 | Stabæk | Nadderud | 75 |
 | Viking | Lyse Arena | 70 |
@@ -188,11 +189,10 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Lillestrøm | Åråsen | 56 |
 | Kristiansund | Nordmøre stadion | 49 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
-| HamKam | Briskeby | 26 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd og Mjøndalen — 2161 arveplasser fordelt på
-alle 26, og **ingen klubb med bane har under 26 navn**. De 34 klubbene som
+Haugesund, Skeid, Moss, Bryne, Hødd og Mjøndalen — 2216 arveplasser fordelt på
+alle 26, og **ingen klubb med bane har under 32 navn**. De 34 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -203,7 +203,7 @@ fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvi
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 273 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 280 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -484,6 +484,60 @@ er også to menn, og er holdt fra hverandre.
 levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
+
+### HamKam: fra 26 til 81 navn, og en tredje vakt som byttet form
+
+Briskeby hadde 26 navn fra før — den siste av de fire klubbene som lenge sto
+med bane og ingen navn. 55 nye på, og HamKam er nå på nivå med Tromsø.
+
+Best formede v2-kilde så langt: **85 unike kvalitetssetninger OG 85 unike
+historikkfelt**. Men også den som avstår oftest — **41 av 85** sier at ingen
+ferdighet bør fylles uten ny individuell kilde, i sin egen ordlyd. Markøren har
+nå tre varianter på tvers av kildene, og tokeniseringen kjenner igjen formen i
+stedet for ordlyden.
+
+Epoken: to kategorier daterte seg selv, og «Stor total karriere» landet på 89 %
+— akkurat under terskelen. Denne gangen var den *konservativ og ikke feil*:
+begge de udaterte er åpenbart moderne, og kilden sier det med klubbene den
+navngir (Sparta Praha, dansk klubbfotball, Thailands landslag).
+
+#### Tredje gang: også styrke-spredningen måtte per klubb
+
+Jeg skrev sist at «neste gang bør den starte per klubb». Den gjorde ikke det, og
+HamKam viste hvorfor.
+
+Den korpusbrede andelen unike styrkesett falt fra 60,4 % til 59,6 % og brøt
+ratcheten. Men målt **per arv** ligger Briskeby på **82 %** — over medianen.
+Forskjellen er *kryss-klubb-kollisjoner*: to midtstoppere fra hver sin klubb med
+«duels, heading, positioning» kolliderer, og det sier ingenting om kildene
+deres. Antallet kombinasjoner kildene faktisk produserer er begrenset, så det
+korpusbrede tallet synker for hver import uansett kvalitet — nøyaktig det en
+ratchet ikke skal gjøre.
+
+Per arv diskriminerer det derimot skarpt, og rangeringen stemmer med det vi
+visste om kildene fra før:
+
+| Arv | Unike styrkesett | |
+|---|---:|---|
+| Lerkendal | 43 % | de to tynneste kildene |
+| Marienlyst | 45 % | |
+| Høddvoll | 52 % | v2-kildene som avstår ofte |
+| Consto Arena | 63 % | |
+| **Briskeby** | **82 %** | over medianen |
+| Fredrikstad, Romssa, Color Line | 100 % | |
+
+Median 82 %, gulv satt på 40 % rett under Lerkendal. Bittestet ved å male hele
+Start-arven på posisjonsmal: Sør Arena faller til 9 %.
+
+Det korpusbrede tallet blir stående som en løs bunnlinje på 50 %, ikke som
+ratchet — det fanger et kollaps, ikke en fortynning.
+
+Briskeby er lagt til i den navngitte lista over arver med et ekte hull: 26 av 81
+uten dokumenterte styrker, tak 34 %.
+
+Nær-duplikat-vakten fant ett par, to menn: Rosenborgs midtstopper Svein
+Haagenrud mot HamKams keeper Svein Inge Haagenrud, «en av klubbens beste»
+gjennom åtte sesonger.
 
 ### Mjøndalen: fra 0 til 83 navn, og vakten som byttet form igjen
 
@@ -1212,8 +1266,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 2189 statusoppføringer på 1822
-spillere, 1486 belagte og 703 utledede.
+**kuratert klubbhistorie** fra **utledet**. 2244 statusoppføringer på 1869
+spillere, 1526 belagte og 718 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 

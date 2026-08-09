@@ -407,6 +407,48 @@ for (const player of medStyrker) {
 }
 const strengthShare = strengthSets.size / medStyrker.length;
 
+// ---------------------------------------------------------------------------
+// Og den samme målingen PER ARV — som er der den faktisk diskriminerer
+// ---------------------------------------------------------------------------
+// Tredje gang huset lærer det samme: en korpusbred andel er feil form.
+//
+// Det korpusbrede tallet teller unike KOMBINASJONER over hele katalogen, og
+// antallet kombinasjoner kildene faktisk produserer er begrenset. To
+// midtstoppere fra hver sin klubb med «duels, heading, positioning» kolliderer,
+// og det sier ingenting om kildene deres. Tallet synker derfor for hver import
+// uansett kvalitet — nøyaktig det en vakt ikke skal gjøre.
+//
+// Per arv skiller det skarpt, og målt stemmer det med det vi vet om kildene:
+//
+//   Lerkendal 43 %, Marienlyst 45 %   <- de to tynneste kildene, kjent fra før
+//   Høddvoll 52 %, Consto 63 %        <- v2-kildene som avstår ofte
+//   Briskeby 82 %                     <- HamKam, over medianen
+//   Fredrikstad/Romssa/Color Line 100 %
+//
+// Median 82 %. Gulvet står på 0,40, rett under Lerkendal, og det er dette
+// tallet som skal opp — ikke det korpusbrede, som bare kan synke.
+{
+  const perArvStyrker = new Map();
+  for (const player of medStyrker) {
+    for (const placeId of player.sourcePlaceIds || []) {
+      if (!perArvStyrker.has(placeId)) perArvStyrker.set(placeId, []);
+      perArvStyrker.get(placeId).push(player);
+    }
+  }
+  const andeler = [];
+  for (const [placeId, liste] of perArvStyrker) {
+    if (liste.length < 20) continue;
+    const sett = new Set(liste.map((player) => JSON.stringify([...player.strengths].sort())));
+    const andel = sett.size / liste.length;
+    andeler.push(andel);
+    check(`${placeId}: styrkene skiller spillere fra hverandre`, andel > 0.4,
+      `${sett.size} unike sett av ${liste.length} (${(andel * 100).toFixed(0)} %)`);
+  }
+  check("nok arver til å måle styrkespredningen per klubb", andeler.length >= 20, String(andeler.length));
+  const median = [...andeler].sort((a, b) => a - b)[Math.floor(andeler.length / 2)];
+  check("median arv skiller klart", median > 0.75, `${(median * 100).toFixed(0)} %`);
+}
+
 // Målingen er PER ARV, ikke korpusbred — og det er andre gang huset lærer det.
 // Den korpusbrede varianten sto én runde på 1,2 % og var allerede feil form:
 // en andel av 1800 spillere blir uskarpere for hver import, akkurat som
@@ -422,7 +464,10 @@ const KJENT_UDOKUMENTERT = {
   // 1933–1937, der kilden bare har «fast på cupmesterlaget 1937». Ni til er
   // moderne spillere hvis eneste påstand er overgangsverdi, som ikke er en
   // ferdighet. Målt 32 av 83.
-  consto_arena: 0.41
+  consto_arena: 0.41,
+  // HamKam: 41 av 85 med samme markør, i egen ordlyd — «ingen teknisk/fysisk
+  // strength skal derfor fylles uten ny individuell kilde». Målt 26 av 81.
+  briskeby_stadion: 0.34
 };
 const perArv = new Map();
 for (const player of players) {
@@ -445,7 +490,10 @@ const tommeAndreSteder = utenStyrker.filter((player) =>
   !(player.sourcePlaceIds || []).some((placeId) => kjenteSteder.has(placeId)));
 check("tomme styrkelister finnes bare der kilden sa fra",
   tommeAndreSteder.length === 0, tommeAndreSteder.map((p) => p.name).join(", "));
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.60,
+// Det korpusbrede tallet blir stående som en LØS bunnlinje, ikke som ratchet.
+// Det kan bare synke etter hvert som katalogen vokser (se forklaringen over),
+// så grensa er satt der den fanger et kollaps og ikke en fortynning.
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.50,
   `${strengthSets.size} unike styrke-sett av ${medStyrker.length} med styrker (${(strengthShare * 100).toFixed(1)} %)`);
 
 // ---------------------------------------------------------------------------
@@ -544,7 +592,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
     kilder.every((value) => value === "belagt" || value === "utledet"),
     [...new Set(kilder)].join(", "));
   const belagt = kilder.filter((value) => value === "belagt").length / players.length;
-  // RATCHET. Målt 38,0 % etter Mjøndalen (29,3 % ved innføringen), og det er lavt
+  // RATCHET. Målt 38,7 % etter HamKam (29,3 % ved innføringen), og det er lavt
   // med vilje: 608 spillere står utenfor klubbkildene og har ingen registrert
   // datering i det hele tatt. Tallet skal opp for hver kilde som daterer det
   // den navngir, og aldri ned.
@@ -552,7 +600,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
   // Skeid løftet det fordi kilden daterer med ORD der den mangler tall — «en
   // tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode». Det er
   // like mye kildens egen datering som et årstall, og teller derfor `belagt`.
-  check("epoken er belagt for en reell andel", belagt > 0.37, `${(belagt * 100).toFixed(1)} %`);
+  check("epoken er belagt for en reell andel", belagt > 0.38, `${(belagt * 100).toFixed(1)} %`);
   check("begge kildegradene er i bruk", new Set(kilder).size === 2);
 }
 const eraPairs = [];

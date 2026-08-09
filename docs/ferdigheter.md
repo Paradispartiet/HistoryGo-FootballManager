@@ -323,11 +323,12 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter alle sytten kildene | Grense |
+| | Før VIF | Etter alle atten kildene | Grense |
 |---|---:|---:|---:|
-| Unike profiler** | 73,7 % | **86,2 %** | 0,86 |
-| Unike styrke-sett** | 46,9 %* | **60,4 %** | 0,60 |
-| Uten dokumenterte styrker | 0 | **per arv** | Høddvoll 21 %, Consto 41 %, ellers 5 % |
+| Unike profiler** | 73,7 % | **86,3 %** | 0,86 |
+| Unike styrke-sett **per arv** | — | **median 82 %** | gulv 40 % |
+| Unike styrke-sett, korpus** | 46,9 %* | 59,6 % | løs bunnlinje 50 % |
+| Uten dokumenterte styrker | 0 | **per arv** | Høddvoll 21 %, Consto 41 %, Briskeby 34 %, ellers 5 % |
 
 \*\* Begge måles nå blant dem som HAR styrker. Hødd-kilden sier ordrett om 28 av sine
 85 profiler at den ikke dokumenterer en ferdighet «som bør importeres som
@@ -336,7 +337,16 @@ derfor tomme. En tom liste er verken lest per spiller eller malt per posisjon,
 så å telle den som en kollisjon måler feil ting. Den nye raden under fanger dem
 i stedet, og den kan bare gå ned.
 
-Mjøndalen tvang den siste omskrivingen: som korpusbred andel var den feil form —
+HamKam tvang den tredje omskrivingen, og denne gangen gjaldt den styrke-settene
+selv. Korpusbredt teller de unike KOMBINASJONER over hele katalogen, og
+antallet kombinasjoner kildene faktisk produserer er begrenset — to
+midtstoppere fra hver sin klubb med «duels, heading, positioning» kolliderer, og
+det sier ingenting om kildene deres. Tallet synker derfor for hver import
+uansett kvalitet. Per arv diskriminerer det skarpt: Lerkendal 43 % og Marienlyst
+45 % (de to tynneste kildene, kjent fra før), Høddvoll 52 %, Consto 63 %,
+Briskeby 82 %, Fredrikstad og Romssa 100 %. Median 82 %, gulv 40 %.
+
+Mjøndalen tvang omskrivingen før den: som korpusbred andel var den feil form —
 en andel av 1800 spillere blir uskarpere for hver import, akkurat som
 styrke-settene var før per-klubb-målingen kom. Den måles nå **per arv**, med de
 to arvene som har et ekte hull navngitt med sin målte verdi.
@@ -425,8 +435,8 @@ bet: epokespennet mellom klubbene står stille (Sandefjord og Viking eier
 ytterpunktene), og korpusandelen flytter seg tre prosentpoeng. 59 % er dessuten
 riktig for Fredrikstad, så det finnes ingen fordeling å måle mot.
 
-Spillerne har derfor `eraSource`, samme mønster som `classSource`: 692 `belagt`
-mot 1130 `utledet`. Grensa er en ratchet på 37 % — lav med vilje, siden 608
+Spillerne har derfor `eraSource`, samme mønster som `classSource`: 724 `belagt`
+mot 1145 `utledet`. Grensa er en ratchet på 38 % — lav med vilje, siden 608
 spillere står utenfor klubbkildene og aldri har hatt en registrert datering.
 
 Skeid-kilden løftet den ved å datere med **ord** der den mangler tall («en
@@ -456,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1822 navngitte fotballspillere**. 58 tall hver er ~106 000
+Dette er **1869 navngitte fotballspillere**. 58 tall hver er ~108 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
