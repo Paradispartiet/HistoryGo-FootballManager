@@ -262,14 +262,17 @@ function tacticsIsVisible() {
   return Boolean(section && !section.hidden);
 }
 
-function handlePitchClick(event) {
-  // app.js bruker også programmatisk `.click()` når uttaket synkroniseres.
-  // HTMLElement.click() gir click-detail 0. Pekermus/touch gir detail > 0,
-  // så vi kan skille reell pekeraktivering uten å stole på isTrusted.
-  if (!(event instanceof MouseEvent) || event.detail <= 0 || !tacticsIsVisible()) return;
+function handlePitchPointerUp(event) {
+  // app.js bruker programmatisk `.click()` når uttaket synkroniseres. Pointerup
+  // oppstår bare ved faktisk peker-/touch-aktivering og kan derfor ikke åpne
+  // inspektøren under intern state-synk.
+  if (!(event instanceof PointerEvent) || event.button !== 0 || !event.isPrimary || !tacticsIsVisible()) return;
   const card = pitchCardFromTarget(event.target);
   if (!card) return;
-  queueMicrotask(() => openInspector(card));
+  // Legacy click-håndtering får synkronisere valgt spiller/rolle først.
+  setTimeout(() => {
+    if (card.isConnected && tacticsIsVisible()) openInspector(card);
+  }, 0);
 }
 
 function handlePitchKeydown(event) {
@@ -278,16 +281,19 @@ function handlePitchKeydown(event) {
   if (!card) return;
   // La den eksisterende tastaturaktiverte click-håndteringen synkronisere uttaket
   // før inspektøren leser valgt spiller og rolle.
-  setTimeout(() => openInspector(card), 0);
+  setTimeout(() => {
+    if (card.isConnected && tacticsIsVisible()) openInspector(card);
+  }, 0);
 }
 
 function install() {
   ensureStyles();
   ensureInspector();
-  // Fang spillertrykket før legacy-oppstillingshåndteringen eventuelt avslutter boblingen.
-  // Microtasken i handlePitchClick lar likevel den eksisterende state-synken fullføre først.
-  document.addEventListener("click", handlePitchClick, true);
-  document.addEventListener("keydown", handlePitchKeydown, true);
+  const lineup = document.getElementById("lineupSlots");
+  // Lytt direkte på oppstillingsbrettet. Da er aktiveringen uavhengig av eldre
+  // dokument-delegering, samtidig som programmatisk `.click()` ikke kan trigge modal.
+  lineup?.addEventListener("pointerup", handlePitchPointerUp, true);
+  lineup?.addEventListener("keydown", handlePitchKeydown, true);
   window.addEventListener("hgfm:team-merits-changed", syncInspector);
   window.addEventListener("storage", syncInspector);
 }
