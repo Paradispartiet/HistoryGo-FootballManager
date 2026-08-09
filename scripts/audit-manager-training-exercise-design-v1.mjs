@@ -39,7 +39,7 @@ check("økter kan åpnes med tastatur", day.includes('event.key !== "Enter"') &&
 check("plassholderøkter kan ikke åpnes", day.includes("isExerciseSession") && day.includes('aria-disabled'));
 check("shell laster øvelsesflaten", shell.includes('import "./manager-training-exercise-design-v1.js"'));
 check("mobilregel finnes", css.includes("@media (max-width: 560px)"));
-check("produktgrensen er dokumentert", /ingen ny treningsmotor/i.test(doc) && /endrer ikke/i.test(doc));
+check("produktgrensen er dokumentert", /ingen ny treningsmotor/i.test(doc) && /endrer\s+(?:\*\*)?ikke(?:\*\*)?/i.test(doc));
 check("læringslaget forklarer ingen lagret effekt", model.includes("endrer ikke lagret treningsbelastning"));
 
 const failed = checks.filter((entry) => !entry.ok);
