@@ -14,7 +14,10 @@ const HISTORICAL_STALE_BRANCHES = new Set([
   "agent/economy-contracts-v1-ci-anchor-2",
   "agent/economy-contracts-v1-ci-anchor-3",
   "agent/matchday-lineup-scenes-v1",
-  "agent/staff-roster-v1"
+  "agent/staff-roster-v1",
+  // Prototype 10.06.2026. Samme Kampdag v1-API og firefilers leveranse ble
+  // erstattet dagen etter av den større, mergede PR #43.
+  "claude/kampdag-v1-match-engine-lqm39g"
 ]);
 
 async function github(path, { method = "GET" } = {}) {
