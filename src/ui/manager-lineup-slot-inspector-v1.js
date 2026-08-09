@@ -189,7 +189,6 @@ function syncInspector() {
 async function openInspector(card) {
   if (!(card instanceof HTMLElement)) return;
   activePitchCard = card;
-  await loadRoles();
   const inspector = ensureInspector();
   document.documentElement.classList.add("has-manager-lineup-slot-inspector");
   const legacyState = document.getElementById("teamLineupSelectedState");
@@ -197,6 +196,8 @@ async function openInspector(card) {
   inspector.hidden = false;
   syncInspector();
   queueMicrotask(() => inspector.querySelector(".lineup-slot-inspector-close")?.focus());
+  await loadRoles();
+  syncInspector();
 }
 
 function closeInspector({ restoreFocus = true } = {}) {
