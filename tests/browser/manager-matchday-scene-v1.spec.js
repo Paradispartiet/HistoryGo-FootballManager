@@ -63,7 +63,8 @@ async function prepareAndOpenPreMatch(page) {
   const sceneAction = page.locator("#matchdayCommand .matchday-scene-action");
   await expect(sceneAction).toBeVisible();
   await sceneAction.click();
-  await expect(page.locator(".matchday-kickoff-button")).toBeVisible();
+  await expect(scene).toHaveAttribute("data-phase", "pre_match");
+  await expect(sceneAction).toHaveText("Start kampen");
 }
 
 test.beforeEach(async ({ page }) => {
