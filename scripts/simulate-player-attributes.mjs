@@ -365,20 +365,52 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // `natural_fitness` sine første spillere — men den var ikke spist av en
 // ordbok, den hadde bare aldri møtt en kilde som sa «tilgjengelighet».
 //
-// Skeid tok den NED igjen til 60,0 %, og Bryne opp til 61,0 %. Grensa står på
-// 0,59. En ratchet går ikke ned. Fallet er kildens egenskap og ikke en feil: Skeid
+// Skeid tok den NED igjen til 60,0 %, og Bryne opp til 61,0 %. Hødd delte
+// målingen i to (se over) og lander på 60,5 % blant dem som har styrker.
+// Grensa er 0,60. En ratchet går ikke ned. Fallet er kildens egenskap og ikke en feil: Skeid
 // beskriver den moderne troppen med korte stikkord («Allsidighet, disiplin,
 // arbeidskapasitet») der de eldre profilene får hele setninger, og 81 % unike
 // styrkesett internt er det laveste av de seks siste kildene. Det er ærlig
 // beskrevet av en klubb hvis dokumenterte storhet ligger i 1947–1974.
+// MÅLINGEN ER DELT I TO, og Hødd er grunnen.
+//
+// Hødd-kilden sier ordrett om 28 av sine 85 profiler at den ikke dokumenterer
+// en individuell ferdighet «som bør importeres som strength uten ny kilde». De
+// spillerne står derfor UTEN dokumenterte styrker: profilen deres kommer fra
+// posisjons- og epokegrunnlinja, og ingen av de 58 verdiene er merket `belagt`.
+//
+// Å telle dem her ville sagt at de er like. Det er sant om strengene og usant
+// om saken: spørsmålet metrikken stiller er «er styrkene lest per spiller eller
+// MALT per posisjon», og en tom liste er ingen av delene. En malt spiller har
+// fått en påstand han ikke har dekning for; en tom har ikke fått noen.
+//
+// Så: unikheten måles blant dem som HAR styrker, og de tomme får sin egen vakt
+// rett under. Til sammen er de strengere enn den ene var — den nye kan bare gå
+// NED, så neste kildeløse klubb feller den.
+const medStyrker = players.filter((player) => (player.strengths || []).length > 0);
+const utenStyrker = players.filter((player) => (player.strengths || []).length === 0);
 const strengthSets = new Map();
-for (const player of players) {
+for (const player of medStyrker) {
   const key = JSON.stringify([...player.strengths].sort());
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
-const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.59,
-  `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
+const strengthShare = strengthSets.size / medStyrker.length;
+
+// RATCHET NEDOVER. Målt 13 av 1757 = 0,7 %. En spiller uten dokumenterte
+// styrker er ærlig, men han er også et hull, og hullet skal ikke vokse. Kommer
+// det en ny kilde uten materiale, feller denne den — og det er den eneste
+// vakten som gjør det, siden en tom liste ikke ligner en mal.
+const utenAndel = utenStyrker.length / players.length;
+check("andelen uten dokumenterte styrker vokser ikke", utenAndel < 0.012,
+  `${utenStyrker.length} av ${players.length} (${(utenAndel * 100).toFixed(1)} %)`);
+// Og de tomme må være tomme AV EN GRUNN. Alle 13 ligger på Høddvoll, der kilden
+// selv trakk grensen. Dukker det opp en tom spiller et annet sted, er det en
+// importfeil og ikke en kildegrense.
+const tommeUtenforHødd = utenStyrker.filter((player) => !(player.sourcePlaceIds || []).includes("hoddvoll"));
+check("tomme styrkelister finnes bare der kilden sa fra",
+  tommeUtenforHødd.length === 0, tommeUtenforHødd.map((p) => p.name).join(", "));
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.60,
+  `${strengthSets.size} unike styrke-sett av ${medStyrker.length} med styrker (${(strengthShare * 100).toFixed(1)} %)`);
 
 // ---------------------------------------------------------------------------
 // Og den samme målingen PER KLUBB — som er der feilen faktisk bor
@@ -476,7 +508,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
     kilder.every((value) => value === "belagt" || value === "utledet"),
     [...new Set(kilder)].join(", "));
   const belagt = kilder.filter((value) => value === "belagt").length / players.length;
-  // RATCHET. Målt 35,4 % etter Bryne (29,3 % ved innføringen), og det er lavt
+  // RATCHET. Målt 36,8 % etter Hødd (29,3 % ved innføringen), og det er lavt
   // med vilje: 608 spillere står utenfor klubbkildene og har ingen registrert
   // datering i det hele tatt. Tallet skal opp for hver kilde som daterer det
   // den navngir, og aldri ned.
@@ -484,7 +516,7 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
   // Skeid løftet det fordi kilden daterer med ORD der den mangler tall — «en
   // tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode». Det er
   // like mye kildens egen datering som et årstall, og teller derfor `belagt`.
-  check("epoken er belagt for en reell andel", belagt > 0.35, `${(belagt * 100).toFixed(1)} %`);
+  check("epoken er belagt for en reell andel", belagt > 0.36, `${(belagt * 100).toFixed(1)} %`);
   check("begge kildegradene er i bruk", new Set(kilder).size === 2);
 }
 const eraPairs = [];

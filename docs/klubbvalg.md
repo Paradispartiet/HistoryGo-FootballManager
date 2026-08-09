@@ -180,6 +180,7 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Brann | Brann Stadion | 75 |
 | Stabæk | Nadderud | 75 |
 | Viking | Lyse Arena | 70 |
+| Hødd | Høddvoll | 69 |
 | Sandefjord | Jotun Arena | 68 |
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
@@ -189,17 +190,18 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | HamKam | Briskeby | 26 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss og Bryne — 2009 arveplasser fordelt på alle 24, og **ingen
-klubb med bane har under 26 navn**. De 36 klubbene som mangler bane sier det rett
-ut i profilen i stedet for å late som.
+Haugesund, Skeid, Moss, Bryne og Hødd — 2078 arveplasser fordelt på alle 25, og
+**ingen klubb med bane har under 26 navn**. De 35 klubbene som mangler bane sier
+det rett ut i profilen i stedet for å late som. **Alle klubber med en nasjonal
+tittel har nå arv.**
 
 Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund,
-Lyn, Moss og Bryne ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
+Lyn, Moss, Bryne og Hødd ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
 fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvinner
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 248 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 259 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -480,6 +482,78 @@ er også to menn, og er holdt fra hverandre.
 levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
+
+### Hødd: fra 0 til 69 navn, og kilden som sa fra om sine egne hull
+
+Cupgullet i 2012 (1–1 mot Tromsø, 4–2 på straffer), og en gullalder klubben
+selv daterer til 1963–1972. Høddvoll er lagt inn som sted. 58 nye navn, 11
+koblet på, **16 utelatt** på «Historisk utespiller».
+
+Dette er den vanskeligste kilden i hele rekka, og den eneste som **sier fra**.
+
+#### Førsteutgaven var en posisjonsmal
+
+Den hadde **fem kvalitetssetninger for 85 profiler**, og de fem var én per
+posisjonsgruppe — midtbane, forsvar, spiss, ving, keeper. 85 ekte, navngitte
+menn ville blitt fem profiler. Til sammenligning hadde de seks kildene før
+Bryne 100 % unike setninger.
+
+Andreutgaven erstattet dem, men ikke ved å finne nytt materiale. For **28 av 85**
+er svaret ordrett:
+
+> «Den dokumenterer ikke en individuell teknisk eller fysisk ferdighet **som bør
+> importeres som strength uten ny kilde**.»
+
+Det er kilden som selv trekker grensen, og den grensen er respektert. Tre til
+har en påstand som ikke er en ferdighet («dokumentert høy historisk intern
+vurdering», «langvarig fotballfaglig klubbrolle etter spillerkarrieren») — en
+klubbrangering er nettopp det ene tallet dette prosjektet nekter å ha.
+
+Etter posisjonsfilteret og to sammenslåinger står **13 spillere uten
+dokumenterte styrker**. Verifisert i motoren: de får 58 verdier fra posisjons-
+og epokegrunnlinja, og **null av dem er merket `belagt`**. Spillet innrømmer at
+det ikke vet, i stedet for å finne på.
+
+#### Metrikken måtte deles i to
+
+`strengthShare` spør: er styrkene lest per spiller, eller **malt** per posisjon?
+En tom liste er ingen av delene. Å telle de 13 som én kollisjon er sant om
+strengene og usant om saken — en malt spiller har fått en påstand uten dekning,
+en tom har ikke fått noen.
+
+Målingen er derfor delt:
+
+| Vakt | Måler | Grense | Målt |
+|---|---|---|---|
+| Unike styrke-sett | blant dem som **har** styrker | > 0,60 | 60,5 % |
+| Uten dokumenterte styrker | andel av hele korpuset | **< 1,2 %** | 0,7 % |
+| Tomme lister utenfor Høddvoll | skal være null | 0 | 0 |
+
+Den andre er en **ratchet nedover** — den kan bare krympe. Til sammen er de tre
+strengere enn den ene var: en tom liste ligner ikke en mal, så den gamle
+metrikken ville aldri fanget en kildeløs klubb. Nå gjør den nye det. Alle tre er
+bittestet; 12 flere tomme lister feller den på 1,4 %, og én tom liste utenfor
+Høddvoll feller den tredje ved navn.
+
+#### Epoken: to kategorier nektet igjen, og slekt avgjorde fire
+
+«Øverste Hødd-legende» (13 moderne mot 7 historiske) og «Stor total karriere»
+(6 mot 3) er ekte blandede, og 90 %-terskelen fra Bryne avviste begge. Ti navn
+måtte dateres for hånd.
+
+Seks knytter kilden til klubbyggingen — «laget som etablerte Hødd i 1. divisjon»,
+«generasjonen som bygget Hødd opp til nasjonalt toppnivå», «en av de historiske
+Hødd-profilene». Karsten Ulstein daterer seg selv indirekte: han «la **senere**
+ned 38 år som frivillig rundt A-laget».
+
+De fire andre daterer kilden ved **slekt**, og det er uvanlig presist: Geir
+Hasund er «sønn av Kjetil Hasund» (gullalderen 1963–1972) og Egil Ulfstein er
+«andre generasjon Ulfstein», sønn av Jan Ulfstein (302 kamper 1962–1972). Ett
+slektsledd etter gullalderen er moderne.
+
+Nær-duplikat-vakten fant to par, begge samme mann og begge fra finalelaget 2012:
+**Ørjan Nyland** (banens beste i finalen, senere Molde og landslaget) og
+**Fredrik Klock** (kaptein og forsvarsleder, senere Aalesund).
 
 ### Bryne: fra 0 til 68 navn, og en terskel som slapp gjennom én feil
 
@@ -1087,8 +1161,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 2037 statusoppføringer på 1699
-spillere, 1401 belagte og 636 utledede.
+**kuratert klubbhistorie** fra **utledet**. 2106 statusoppføringer på 1755
+spillere, 1441 belagte og 665 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 

@@ -323,10 +323,18 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter alle femten kildene | Grense |
+| | Før VIF | Etter alle seksten kildene | Grense |
 |---|---:|---:|---:|
-| Unike profiler | 73,7 % | **86,2 %** | 0,86 |
-| Unike styrke-sett | 46,9 %* | **61,0 %** | 0,59 |
+| Unike profiler | 73,7 % | **86,3 %** | 0,86 |
+| Unike styrke-sett** | 46,9 %* | **60,5 %** | 0,60 |
+| Uten dokumenterte styrker | 0 | **0,7 %** | < 1,2 % |
+
+\*\* Måles nå blant dem som HAR styrker. Hødd-kilden sier ordrett om 28 av sine
+85 profiler at den ikke dokumenterer en ferdighet «som bør importeres som
+strength uten ny kilde», og de 13 som ble igjen etter posisjonsfilteret står
+derfor tomme. En tom liste er verken lest per spiller eller malt per posisjon,
+så å telle den som en kollisjon måler feil ting. Den nye raden under fanger dem
+i stedet, og den kan bare gå ned.
 | Største klon | 12 | 12 | ≤ 14 |
 
 \* Tallene for styrke-sett er ikke sammenlignbare på tvers av kolonnene.
@@ -412,8 +420,8 @@ bet: epokespennet mellom klubbene står stille (Sandefjord og Viking eier
 ytterpunktene), og korpusandelen flytter seg tre prosentpoeng. 59 % er dessuten
 riktig for Fredrikstad, så det finnes ingen fordeling å måle mot.
 
-Spillerne har derfor `eraSource`, samme mønster som `classSource`: 602 `belagt`
-mot 1097 `utledet`. Grensa er en ratchet på 35 % — lav med vilje, siden 608
+Spillerne har derfor `eraSource`, samme mønster som `classSource`: 645 `belagt`
+mot 1110 `utledet`. Grensa er en ratchet på 36 % — lav med vilje, siden 608
 spillere står utenfor klubbkildene og aldri har hatt en registrert datering.
 
 Skeid-kilden løftet den ved å datere med **ord** der den mangler tall («en
@@ -443,7 +451,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1699 navngitte fotballspillere**. 58 tall hver er ~99 000
+Dette er **1755 navngitte fotballspillere**. 58 tall hver er ~102 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 

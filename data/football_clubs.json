@@ -364,7 +364,8 @@
       "city": "Ulsteinvik",
       "tier": "obosligaen",
       "strength": 60,
-      "form": 55
+      "form": 55,
+      "homePlaceId": "hoddvoll"
     },
     {
       "id": "moss",
