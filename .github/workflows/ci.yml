@@ -65,6 +65,7 @@ jobs:
 
       - name: UI-/flyt-vakter
         run: |
+          node --check scripts/cleanup-merged-branches.mjs
           npm run check:syntax
           npm run check:dom-ids
           npm run audit:flow
