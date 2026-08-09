@@ -266,7 +266,9 @@ function handlePitchClick(event) {
 function install() {
   ensureStyles();
   ensureInspector();
-  document.addEventListener("click", handlePitchClick);
+  // Fang spillertrykket før legacy-oppstillingshåndteringen eventuelt avslutter boblingen.
+  // Microtasken i handlePitchClick lar likevel den eksisterende state-synken fullføre først.
+  document.addEventListener("click", handlePitchClick, true);
   window.addEventListener("hgfm:team-merits-changed", syncInspector);
   window.addEventListener("storage", syncInspector);
 }
