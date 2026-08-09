@@ -61,7 +61,7 @@ app = app.slice(0, fallbackStart) + fallbackReplacement + app.slice(fallbackEnd)
 app = replaceOnce(
   app,
   `  if (sources.localStart) {\n    result.push({ placeId: null, placeName: "Lokal starttropp", source: "local_start" });\n  }`,
-  `  if (sources.localStart) {\n    const localStart = normalizeLocalStart(state.teamMerits?.localStart);\n    const poolClub = localStart.clubId\n      ? (state.leaguePyramid?.clubs || []).find((club) => club.id === localStart.clubId)\n      : null;\n    result.push({\n      placeId: null,\n      placeName: poolClub ? \\`${poolClub.name} · grunntropp\\` : "Lokal starttropp",\n      source: localStart.generatedFrom === "club_pool" ? "club_pool" : "local_start"\n    });\n  }`,
+  `  if (sources.localStart) {\n    const localStart = normalizeLocalStart(state.teamMerits?.localStart);\n    const poolClub = localStart.clubId\n      ? (state.leaguePyramid?.clubs || []).find((club) => club.id === localStart.clubId)\n      : null;\n    result.push({\n      placeId: null,\n      placeName: poolClub ? poolClub.name + " · grunntropp" : "Lokal starttropp",\n      source: localStart.generatedFrom === "club_pool" ? "club_pool" : "local_start"\n    });\n  }`,
   "vis klubbpool som spillerkilde"
 );
 
