@@ -27,7 +27,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Slett mergede og kjente midlertidige agent-brancher
+      - name: Slett mergede og verifiserte midlertidige arbeidsbrancher
         run: node scripts/cleanup-merged-branches.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
