@@ -7,7 +7,6 @@ if (!repository || !repository.includes("/")) throw new Error("GITHUB_REPOSITORY
 
 const [owner, repo] = repository.split("/");
 const apiBase = `https://api.github.com/repos/${owner}/${repo}`;
-const TEMPORARY_BRANCH_PREFIXES = ["agent/", "claude/"];
 
 const HISTORICAL_STALE_BRANCHES = new Set([
   "agent/economy-contracts-v1-ci-anchor",
@@ -54,10 +53,6 @@ function sameRepository(pr) {
   return pr?.head?.repo?.full_name === repository;
 }
 
-function temporaryWorkBranch(name) {
-  return typeof name === "string" && TEMPORARY_BRANCH_PREFIXES.some((prefix) => name.startsWith(prefix));
-}
-
 async function main() {
   const repoInfo = await github("");
   const defaultBranch = repoInfo.default_branch || "main";
@@ -77,20 +72,26 @@ async function main() {
       .filter(Boolean)
   );
 
-  const existing = new Set(branches.map((branch) => branch.name));
+  const branchByName = new Map(branches.map((branch) => [branch.name, branch]));
+  const existing = new Set(branchByName.keys());
   const candidates = new Map();
 
+  // Branchnavnet er ikke et sikkerhetskriterium. En same-repo PR-head som er
+  // dokumentert merget er ferdig arbeid og kan ryddes uansett om den heter
+  // agent/, claude/, codex/, feat/, fix/, docs/ eller noe annet.
   for (const name of mergedHeads) {
     if (existing.has(name)) candidates.set(name, "merged PR head");
   }
+  // Unntakslisten brukes kun for historiske arbeidsrefs der merge-sporet er
+  // borte, men erstatningen er eksplisitt verifisert.
   for (const name of HISTORICAL_STALE_BRANCHES) {
     if (existing.has(name)) candidates.set(name, "historisk midlertidig branch");
   }
 
   const deletions = [...candidates.entries()]
-    .filter(([name]) => temporaryWorkBranch(name))
     .filter(([name]) => name !== defaultBranch)
     .filter(([name]) => !openHeads.has(name))
+    .filter(([name]) => !branchByName.get(name)?.protected)
     .sort(([a], [b]) => a.localeCompare(b));
 
   console.log(`Branch hygiene: ${branches.length} branches, ${openPulls.length} åpne PR-er, ${mergedHeads.size} mergede head-referanser.`);
