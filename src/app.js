@@ -2269,6 +2269,24 @@ function computeAvailability() {
     }
   });
 
+  // Et stadionbesøk åpner HELE den eksplisitte klubbpoolen. Dette kan ikke
+  // overlates til place-unlocks alene: clubAffiliations og sourcePlaceIds er
+  // bevisst to forskjellige relasjoner, og framtidige klubbspillere kan derfor
+  // tilhøre poolen uten å ha stadionet som eget oppdagelsessted.
+  const takeoverClubForPool = getTakeoverClub();
+  if (takeoverClubForPool && !isNationalModeActive()) {
+    const clubAccess = getClubSquadAccess(takeoverClubForPool);
+    if (clubAccess?.mode === "heritage") {
+      const groundPlaceId = takeoverClubForPool.homePlaceId || null;
+      (clubAccess.clubPoolIds || []).forEach((playerId) => {
+        unlockedPlayerIds.add(playerId);
+        const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
+        if (groundPlaceId) sources.placeIds.add(groundPlaceId);
+        playerSourceById.set(playerId, sources);
+      });
+    }
+  }
+
   // Starttroppen er et spillbarhetsgulv. For en overtatt klubb kommer gulvet
   // ALLTID fra klubbens egen pool; den globale startertroppen er bare fallback
   // for egenopprettet klubb. Dermed kan en tom/eldre klubb-save aldri snike inn
