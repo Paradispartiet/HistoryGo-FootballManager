@@ -94,7 +94,11 @@ function ensureSurface() {
     <div class="training-day-grid">
       <section class="training-day-main" aria-labelledby="trainingDayProgramTitle">
         <header class="training-day-section-head">
-          <div><span>Valgt program</span><h3 id="trainingDayProgramTitle">Ikke valgt</h3></div>
+          <div>
+            <span>Valgt program</span>
+            <h3 id="trainingDayProgramTitle">Ikke valgt</h3>
+            <small class="training-day-exercise-hint" id="trainingDayExerciseHint">Klikk en økt for å åpne øvelsesdesign.</small>
+          </div>
           <button type="button" class="training-day-action" id="trainingDayChangeProgram">Endre program</button>
         </header>
         <ol class="training-day-sessions" id="trainingDaySessions" aria-label="Fire treningsøkter"></ol>
@@ -165,6 +169,24 @@ function selectedSessions() {
   return rows;
 }
 
+function isExerciseSession(session) {
+  return Boolean(session?.title) && !/^velg treningsprogram/i.test(String(session.title));
+}
+
+function openExerciseDesign(session, index, context) {
+  if (!isExerciseSession(session)) return;
+  window.dispatchEvent(new CustomEvent("hgfm:training-exercise-open", {
+    detail: {
+      session: {
+        ...session,
+        index,
+        programTitle: selectedProgramTitle(),
+        calendarDay: context.day
+      }
+    }
+  }));
+}
+
 function compactText(selector, fallback = "") {
   return String(document.querySelector(selector)?.textContent || fallback).trim().replace(/\s+/g, " ");
 }
@@ -186,13 +208,31 @@ function renderSessions(surface, context) {
   selectedSessions().forEach((session, index) => {
     const item = node("li", "training-day-session");
     const sameDay = session.day.toLocaleLowerCase("nb-NO").startsWith(context.day.toLocaleLowerCase("nb-NO"));
+    const openable = isExerciseSession(session);
     item.dataset.currentCalendarDay = sameDay ? "true" : "false";
+    item.dataset.exerciseOpenable = openable ? "true" : "false";
     item.append(
       node("span", "training-day-session-index", String(index + 1).padStart(2, "0")),
       node("span", "training-day-session-day", session.day),
       node("strong", "training-day-session-title", session.title),
       node("small", "training-day-session-intensity", session.intensity)
     );
+
+    if (openable) {
+      item.tabIndex = 0;
+      item.setAttribute("role", "button");
+      item.setAttribute("aria-haspopup", "dialog");
+      item.setAttribute("aria-label", `Åpne øvelsesdesign for ${session.title}`);
+      item.title = "Åpne øvelsesdesign";
+      item.addEventListener("click", () => openExerciseDesign(session, index, context));
+      item.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openExerciseDesign(session, index, context);
+      });
+    } else {
+      item.setAttribute("aria-disabled", "true");
+    }
     fragment.append(item);
   });
   list.replaceChildren(fragment);
