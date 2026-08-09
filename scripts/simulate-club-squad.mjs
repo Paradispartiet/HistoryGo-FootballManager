@@ -1,12 +1,9 @@
-// Klubbens historiske spillere ligger på banen, ikke i klubbvalget.
+// Klubbvalget bestemmer spillerpoolen; banen bestemmer hvor mye av den som åpnes.
 //
-// Å ta over Rosenborg skal ikke dele ut Eggens lag. Det skal gi tilgang til
-// klubbens historiske spillere — men bare hvis du faktisk har vært på Lerkendal.
-// Har du ikke det, får du en automatisk tropp og samler resten selv.
-//
-// Det er kjernesløyfen brukt PÅ klubbovertakelsen i stedet for å omgå den. Uten
-// gaten ville klubbvalget vært den snarveien rundt History Go som hele
-// designet er bygget for å unngå.
+// Å ta over Rosenborg skal ikke dele ut hele Eggens lag, men en automatisk
+// grunntropp skal heller aldri fylles med tilfeldige spillere fra andre klubber.
+// Uten Lerkendal får du et spillbart gulv fra Rosenborg-poolen. Med Lerkendal
+// åpnes hele den historiske klubbpoolen og manageren velger selv.
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
@@ -111,43 +108,42 @@ for (const club of clubs.filter((entry) => entry.homePlaceId)) {
 // ---------------------------------------------------------------------------
 const rosenborg = byId.get("rosenborg");
 const heritage = listClubHeritagePlayers({ homePlaceId: rosenborg.homePlaceId, players });
-check("Rosenborg har historiske spillere på Lerkendal", heritage.length >= 5, String(heritage.length));
+check("Rosenborg har historiske spillere på Lerkendal", heritage.length >= REQUIRED, String(heritage.length));
 check("alle er faktisk knyttet til Lerkendal", heritage.every((player) => player.sourcePlaceIds.includes("lerkendal_stadion")));
 check("lista er sortert sterkest først", heritage.every((player, i) => i === 0 || player.classHeight <= heritage[i - 1].classHeight));
 check("uten bane finnes ingen arv", listClubHeritagePlayers({ homePlaceId: null, players }).length === 0);
 
 // ---------------------------------------------------------------------------
-// 3. Gaten: banen avgjør, ikke klubbvalget
+// 3. Gaten: klubbvalget bestemmer poolen, banen bestemmer dybden
 // ---------------------------------------------------------------------------
 check("besøkt bane gir tilgang", hasVisitedClubGround({ homePlaceId: "lerkendal_stadion", unlockedPlaceIds: ["lerkendal_stadion"] }) === true);
-check("ubesøkt bane gir ikke tilgang", hasVisitedClubGround({ homePlaceId: "lerkendal_stadion", unlockedPlaceIds: ["brann_stadion"] }) === false);
+check("ubesøkt bane gir ikke full tilgang", hasVisitedClubGround({ homePlaceId: "lerkendal_stadion", unlockedPlaceIds: ["brann_stadion"] }) === false);
 check("et annet stadion åpner ikke Lerkendal", hasVisitedClubGround({ homePlaceId: "lerkendal_stadion", unlockedPlaceIds: ["aspmyra_stadion", "aker_stadion"] }) === false);
-check("tom progresjon gir ikke tilgang", hasVisitedClubGround({ homePlaceId: "lerkendal_stadion", unlockedPlaceIds: [] }) === false);
+check("tom progresjon gir ikke full tilgang", hasVisitedClubGround({ homePlaceId: "lerkendal_stadion", unlockedPlaceIds: [] }) === false);
 
 const visited = resolveClubSquadAccess({ club: rosenborg, players, unlockedPlaceIds: ["lerkendal_stadion"], candidateIds: clubCandidateIds, squadSize: REQUIRED });
 const notVisited = resolveClubSquadAccess({ club: rosenborg, players, unlockedPlaceIds: [], candidateIds: clubCandidateIds, squadSize: REQUIRED });
 
 check("besøkt bane gir arvemodus", visited.mode === "heritage");
-check("besøkt bane lister klubbens spillere", visited.heritage.length === heritage.length, String(visited.heritage.length));
+check("besøkt bane lister hele klubbpoolen", visited.heritage.length === heritage.length, String(visited.heritage.length));
 check("besøkt bane deler ikke ut en ferdig tropp", visited.baseSquad.length === 0);
 check("besøkt bane sier at DU velger", /velge blant|plukker selv/.test(`${visited.headline} ${visited.detail}`));
 
 check("ubesøkt bane gir grunntropp", notVisited.mode === "base");
 check("grunntroppen er full", notVisited.baseSquad.length === REQUIRED, String(notVisited.baseSquad.length));
-check("ubesøkt bane lister ingen arvespillere", notVisited.heritage.length === 0);
-check("men den sier hvor mange som er låst", notVisited.lockedCount === heritage.length, String(notVisited.lockedCount));
-check("og den sier hva du må gjøre", notVisited.todo.some((line) => line.includes(rosenborg.ground)), notVisited.todo.join(" | "));
-
-// Den viktigste: grunntroppen gir ALDRI bort klubbens historiske navn. Gjorde
-// den det, ville gaten vært pynt — du fikk Eggens spillere uten å gå til
-// Lerkendal.
+check("ubesøkt bane lister ikke hele arven som valgfri", notVisited.heritage.length === 0);
 const heritageIds = new Set(heritage.map((player) => player.id));
-check("grunntroppen inneholder ingen av klubbens historiske spillere",
-  !notVisited.baseSquad.some((id) => heritageIds.has(id)),
-  notVisited.baseSquad.filter((id) => heritageIds.has(id)).join(", "));
+check("grunntroppen består BARE av klubbens egne spillere",
+  notVisited.baseSquad.every((id) => heritageIds.has(id)),
+  notVisited.baseSquad.filter((id) => !heritageIds.has(id)).join(", "));
+check("låst-tallet er resten av klubbpoolen",
+  notVisited.lockedCount === heritage.length - notVisited.baseSquad.length,
+  `${notVisited.lockedCount} mot ${heritage.length - notVisited.baseSquad.length}`);
+check("og den sier hva du må gjøre", notVisited.todo.some((line) => line.includes(rosenborg.ground)), notVisited.todo.join(" | "));
+check("teksten sier at grunntroppen kommer fra klubbens pool", /egen spillerpool|registrert på denne klubben/.test(`${notVisited.detail} ${notVisited.todo.join(" ")}`));
 
 // ---------------------------------------------------------------------------
-// 4. Grunntroppen er et GULV, ikke en snarvei
+// 4. Grunntroppen er et GULV i klubbpoolen, ikke en global snarvei
 // ---------------------------------------------------------------------------
 const squadPlayers = notVisited.baseSquad.map((id) => players.find((player) => player.id === id));
 check("grunntroppen er spillbar: minst én keeper", squadPlayers.some((player) => [...player.naturalPositions, ...(player.usablePositions || [])].includes("GK")));
@@ -155,30 +151,28 @@ for (const [label, positions] of [["forsvar", ["CB", "LB", "RB", "WB"]], ["midtb
   const count = squadPlayers.filter((player) => [...player.naturalPositions, ...(player.usablePositions || [])].some((pos) => positions.includes(pos))).length;
   check(`grunntroppen dekker ${label}`, count >= 3, String(count));
 }
-// Ingen landslagsarena-spillere: én visit skal ikke sikre en nasjons beste.
-check("grunntroppen deler ikke ut landslagsarena-spillere",
-  !squadPlayers.some((player) => (player.sourcePlaceIds || []).some((id) => nationalPlaceIds.has(id))));
-// Og den skal favorisere de JEVNESTE, ikke toppsjiktet: toppen er noe du samler
-// deg til. Målt på ekte data ligger grunntroppen på 86,8 mot et poolsnitt på
-// 88,5 — snur man sorteringen havner den på 90,0. Terskelen må ligge MELLOM de
-// to, ellers skiller vakten dem ikke (den gjorde ikke det: en bitetest som snur
-// sorteringen gikk rett gjennom en «<= snitt + 1»-grense).
-const pool = players.filter((player) => clubCandidateIds.has(player.id));
+const eligibleHeritage = heritage.filter((player) => clubCandidateIds.has(player.id));
+const pool = eligibleHeritage.length >= REQUIRED ? eligibleHeritage : heritage;
+const poolIds = new Set(pool.map((player) => player.id));
+check("kandidatfilter kan bare snevre inn klubbpoolen",
+  squadPlayers.every((player) => poolIds.has(player.id)),
+  squadPlayers.filter((player) => !poolIds.has(player.id)).map((player) => player.name).join(", "));
+if (eligibleHeritage.length >= REQUIRED) {
+  check("grunntroppen deler ikke ut landslagsarena-spillere når klubbpoolen er stor nok",
+    !squadPlayers.some((player) => (player.sourcePlaceIds || []).some((id) => nationalPlaceIds.has(id))));
+}
+// Og den skal favorisere de jevneste i KLUBBPOOLEN, ikke toppsjiktet.
 const mean = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
 const squadAvg = mean(squadPlayers.map((player) => player.classHeight));
 const poolAvg = mean(pool.map((player) => player.classHeight));
-check("grunntroppen ligger UNDER snittet i katalogen", squadAvg < poolAvg, `${squadAvg.toFixed(2)} mot ${poolAvg.toFixed(2)}`);
-// Og nær gulvet, ikke midt i mellom: den skal ikke være et kompromiss.
+check("grunntroppen ligger UNDER snittet i klubbpoolen", squadAvg < poolAvg, `${squadAvg.toFixed(2)} mot ${poolAvg.toFixed(2)}`);
 const floor = Math.min(...pool.map((player) => player.classHeight));
-check("grunntroppen ligger nærmere gulvet enn snittet",
+check("grunntroppen ligger nærmere klubbpoolens gulv enn snittet",
   squadAvg - floor < poolAvg - squadAvg,
   `snitt ${squadAvg.toFixed(2)}, gulv ${floor}, pool ${poolAvg.toFixed(2)}`);
 
 // ---------------------------------------------------------------------------
-// 5. Ingen klubb blir en blindvei
-//
-// Uansett klubb og uansett progresjon må manageren ende opp med spillere. En
-// klubb du kan velge, men ikke spille, ville vært den verste blindveien av alle.
+// 5. Ingen klubb blir en blindvei — og ingen klubb med pool får fremmede navn
 // ---------------------------------------------------------------------------
 for (const club of clubs) {
   const cold = resolveClubSquadAccess({ club, players, unlockedPlaceIds: [], candidateIds: clubCandidateIds, squadSize: REQUIRED });
@@ -186,6 +180,14 @@ for (const club of clubs) {
     cold.mode === "heritage" ? cold.heritage.length > 0 : cold.baseSquad.length === REQUIRED,
     `${cold.mode} / ${cold.baseSquad.length}`);
   check(`${club.name}: forklarer hva du får`, Boolean(cold.headline && cold.detail && cold.todo.length));
+
+  if (club.homePlaceId) {
+    const clubPool = new Set(listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players }).map((player) => player.id));
+    check(`${club.name}: klubbpoolen er stor nok til grunntropp`, clubPool.size >= REQUIRED, String(clubPool.size));
+    check(`${club.name}: automatisk tropp inneholder bare dokumenterte klubbspillere`,
+      cold.baseSquad.every((id) => clubPool.has(id)),
+      cold.baseSquad.filter((id) => !clubPool.has(id)).map((id) => playerById.get(id)?.name || id).join(", "));
+  }
 }
 // Også for en klubb uten bane i History Go — den skal si det rett ut.
 //
@@ -266,7 +268,7 @@ for (const club of med) {
 }
 
 // ---------------------------------------------------------------------------
-// 5b. Klubbstatus følger med arven — fra dataene, ikke fra en egen motor
+// 5c. Klubbstatus følger med arven — fra dataene, ikke fra en egen motor
 // ---------------------------------------------------------------------------
 const num = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
 // Statusen lå en periode i to parallelle profilmotorer med hardkodede
@@ -323,7 +325,7 @@ console.log(JSON.stringify({
   klubberMedBane: withGround.length,
   arvePerKlubb: Object.fromEntries(withGround.map((club) => [club.name, listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players }).length])),
   rosenborg: {
-    utenLerkendal: `${notVisited.baseSquad.length} i grunntropp, ${notVisited.lockedCount} låst`,
+    utenLerkendal: `${notVisited.baseSquad.length} i klubbens grunntropp, ${notVisited.lockedCount} gjenstår`,
     medLerkendal: `${visited.heritage.length} historiske spillere å velge blant`
   }
 }, null, 2));

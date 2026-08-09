@@ -1,39 +1,36 @@
 // ============================================================================
-// Klubbtropp v2 — arven ligger på banen, ikke i klubbvalget
+// Klubbtropp v4 — klubbvalget bestemmer poolen, banen bestemmer dybden
 //
-// Tar du over Rosenborg, får du IKKE Eggens lag utdelt. Du får tilgang til
-// klubbens historiske spillere — men bare hvis du faktisk har vært på Lerkendal.
-// Har du ikke det, får du en automatisk tropp som holder klubben spillbar, og
-// resten må du samle selv.
+// Tar du over Rosenborg, får du ikke hele Eggens lag utdelt. Du starter med en
+// automatisk, spillbar grunntropp fra ROSENBORGS egen registrerte spillerpool.
+// Har du vært på Lerkendal, åpnes hele klubbens historiske spillerpool og du
+// velger selv hvem du bygger laget rundt.
 //
-// Det er hele kjernesløyfen brukt på klubbovertakelsen i stedet for å omgå den:
+// Canonical regel:
 //
-//   Har vært på banen   → klubbens historiske spillere er dine å velge blant
-//   Har ikke vært der   → automatisk grunntropp + «gå og samle»
+//   Klubbvalg           → bestemmer hvilken spillerpool troppen kan hentes fra
+//   Har vært på banen   → hele klubbpoolen er tilgjengelig
+//   Har ikke vært der   → lavere/grunnleggende klubbprofiler fyller starttroppen
 //
-// Samme form som landslagsmodus, der nasjonens grunntropp er bunnen og
-// samlingen er oppsiden. Ingen ny gate er funnet opp: spillerne er allerede
-// knyttet til steder gjennom `sourcePlaceIds`, og `computeAvailability()` gater
-// dem allerede på besøkte steder. Det som manglet var koblingen KLUBB → BANE,
-// og en grunntropp så et klubbvalg aldri blir en blindvei.
+// En Viking-manager skal derfor aldri få en tilfeldig Rosenborg-, Brann- eller
+// utenlandsk spiller i automatisk Viking-tropp bare fordi motoren trenger en
+// keeper, stopper eller ving.
 //
-// Grunntroppen er et GULV, ikke en snarvei: den plukker de jevneste spillerne
-// (lavest `classHeight`) og aldri klubbens egne historiske navn — de er nettopp
-// det du går til Lerkendal for. Den deler heller aldri ut landslagsarena-spillere.
+// `sourcePlaceIds` er sannhetskilden for klubbtilknytningen. Grunntroppen er et
+// GULV, ikke en stjernepakke: den plukker de jevneste spillerne (lavest
+// `classHeight`) fra klubbens egen pool. For klubber som ennå ikke har bane /
+// spillerpool i History Go beholdes den generiske fallbacken så klubbvalget ikke
+// blir en blindvei.
 //
-// v3 leser spillerens KLUBBSTATUS (`clubStatus`) fra spillerdataene. Den lå en
-// periode som navnelister i to egne motorfiler — én for Rosenborg og én for
-// Vålerenga — med normalisert navnematching og aliaser som «Karl-Petter Løken»
-// ved siden av «Karl-Petter «Kalle» Løken». Det er husregelen snudd på hodet:
-// `data/*.json` er fasit, og en motor som inneholder 900 linjer spillernavn er
-// en katalog forkledd som kode. Statusen bor nå på spilleren, og rangeringen
+// v3 flyttet spillerens KLUBBSTATUS (`clubStatus`) fra hardkodede navnelister i
+// motoren til spillerdataene. Statusen er fortsatt per klubb, og rangeringen
 // leses av `CLUB_STATUS_RANK`.
 //
 // Ren ESM: ingen DOM, fetch, localStorage, Date.now eller Math.random. Motoren
 // LESER History Go-progresjon som en liste inn; den skriver aldri til den.
 // ============================================================================
 
-export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v3";
+export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v4";
 
 // Hvor tungt en klubbstatus veier når arven sorteres. Vokabularet er det samme
 // som `clubStatus` i spillerdataene; rekkefølgen er den eneste tolkningen
@@ -120,8 +117,9 @@ export function hasVisitedClubGround({ homePlaceId = null, unlockedPlaceIds = []
   return set.has(homePlaceId);
 }
 
-// Den automatiske grunntroppen. Et gulv som holder klubben spillbar uten at den
-// gir bort det du skal samle deg til.
+// Den automatiske grunntroppen. Et gulv som holder klubben spillbar. Hvilken
+// pool den får velge fra avgjøres av kalleren; for en klubb med bane er dette
+// alltid klubbens egen registrerte spillerpool.
 export function buildClubBaseSquad({
   players = [], candidateIds = null, excludePlayerIds = [], size = 15
 } = {}) {
@@ -173,6 +171,11 @@ function heritageSummary(player, homePlaceId) {
   };
 }
 
+function asIdSet(value) {
+  if (value instanceof Set) return value;
+  return value ? new Set(asArray(value)) : null;
+}
+
 // Hva klubbvalget faktisk gir deg, og hva du må gjøre for å få resten.
 export function resolveClubSquadAccess({
   club = null, players = [], unlockedPlaceIds = [], candidateIds = null, squadSize = 15
@@ -183,6 +186,8 @@ export function resolveClubSquadAccess({
   const visited = hasVisitedClubGround({ homePlaceId, unlockedPlaceIds });
   const groundName = club.ground || "klubbens bane";
 
+  // Klubber uten History Go-bane har ennå ingen autoritativ klubbpool å avgrense
+  // mot. De beholder den generiske fallbacken til datajobben finnes.
   if (!homePlaceId) {
     return {
       version: CLUB_SQUAD_VERSION,
@@ -209,29 +214,47 @@ export function resolveClubSquadAccess({
         : `Du har vært på ${groundName}, men klubben har ingen historiske spillere i katalogen ennå.`,
       detail: heritage.length
         ? "Du plukker selv hvem av dem du vil bygge laget rundt — hver spiller har posisjon, styrker, brukskostnader og klubbstatus."
-        : "Grunntroppen holder klubben spillbar til flere spillere kommer til.",
+        : "Klubbens spillerpool må bygges ut før en full historisk tropp kan velges.",
       todo: heritage.length
         ? ["Velg blant klubbens historiske spillere når du setter troppen."]
         : ["Samle flere spillere gjennom stedene du besøker."]
     };
   }
 
+  // Ubesøkt bane: grunntroppen skal fortsatt være KLUBBENS tropp. Først
+  // avgrenser vi til spillerne som faktisk peker på klubbens bane. `candidateIds`
+  // kan snevre inn ytterligere (for eksempel fjerne landslagsarena-kandidater),
+  // men får aldri utvide poolen med spillere fra andre klubber.
   const heritageIds = new Set(heritage.map((player) => player.id));
+  const allowed = asIdSet(candidateIds);
+  const eligibleClubIds = allowed
+    ? new Set([...heritageIds].filter((id) => allowed.has(id)))
+    : heritageIds;
+
+  // Dersom et eksternt kandidatfilter gjør klubbpoolen for liten, faller vi
+  // tilbake til HELE klubbpoolen — aldri til den globale spillerkatalogen.
+  const basePoolIds = eligibleClubIds.size >= squadSize ? eligibleClubIds : heritageIds;
+  const baseSquad = buildClubBaseSquad({ players, candidateIds: basePoolIds, size: squadSize });
+  const baseIds = new Set(baseSquad);
+  const lockedCount = heritage.filter((player) => !baseIds.has(player.id)).length;
+
   return {
     version: CLUB_SQUAD_VERSION,
     clubId: club.id, homePlaceId, groundName, visited: false,
     mode: "base",
     heritage: [],
     heritageCount: heritage.length,
-    lockedCount: heritage.length,
-    baseSquad: buildClubBaseSquad({ players, candidateIds, excludePlayerIds: heritageIds, size: squadSize }),
+    lockedCount,
+    baseSquad,
     headline: `Du har ikke vært på ${groundName}.`,
     detail: heritage.length
-      ? `Du får en automatisk ${club.name}-tropp å starte med. Klubbens ${heritage.length} historiske spillere åpner seg når du besøker ${groundName} i History Go.`
-      : `Du får en automatisk ${club.name}-tropp å starte med, og bygger laget videre ved å samle spillere.`,
-    todo: [
-      `Besøk ${groundName} i History Go for å låse opp klubbens historiske spillere.`,
-      "Fram til da bygger du troppen ved å samle spillere andre steder."
-    ]
+      ? `Du får en automatisk ${club.name}-grunntropp med ${baseSquad.length} spillere fra klubbens egen spillerpool. De resterende ${lockedCount} historiske spillerne åpner seg når du besøker ${groundName} i History Go.`
+      : `${club.name} har foreløpig ingen registrert spillerpool på ${groundName}.`,
+    todo: heritage.length
+      ? [
+          `Besøk ${groundName} i History Go for å åpne resten av klubbens historiske spillerpool.`,
+          "Grunntroppen består bare av spillere som er registrert på denne klubben."
+        ]
+      : ["Klubbens spillerpool må bygges ut i dataene før klubben kan få en full grunntropp."]
   };
 }
