@@ -54,23 +54,6 @@ async function expectNoHorizontalOverflow(page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
-async function readDiagnosticState(page) {
-  return page.evaluate(() => {
-    const read = (key) => {
-      try { return JSON.parse(localStorage.getItem(key) || "null"); } catch (_) { return null; }
-    };
-    const merits = read("hgfm.teamMerits.v1");
-    const modes = read("hgfm.modeSessions.v1");
-    return {
-      localStart: merits?.localStart || null,
-      recruitedPlayerIds: merits?.recruitedPlayerIds || [],
-      legacyLineup: read("hgfm.lineup.v1"),
-      modeLineup: modes?.sessions?.league?.lineup || null,
-      modeLocalStart: modes?.sessions?.league?.teamMerits?.localStart || null
-    };
-  });
-}
-
 async function prepareAndOpenPreMatch(page) {
   await openMatchday(page);
   const play = page.locator("#playMatchdayButton");
@@ -79,16 +62,8 @@ async function prepareAndOpenPreMatch(page) {
   await expect(scene).toHaveAttribute("data-phase", "ready");
   const sceneAction = page.locator("#matchdayCommand .matchday-scene-action");
   await expect(sceneAction).toBeVisible();
-  const before = await readDiagnosticState(page);
   await sceneAction.click();
-  const phase = await scene.getAttribute("data-phase");
-  if (phase !== "pre_match") {
-    const readiness = await page.locator("#matchdayReadiness").textContent();
-    const action = await sceneAction.textContent();
-    const after = await readDiagnosticState(page);
-    throw new Error(`Kampforberedelsen ble ${phase || "ukjent"}; readiness=${readiness || "ukjent"}; action=${action || "ukjent"}; before=${JSON.stringify(before)}; after=${JSON.stringify(after)}`);
-  }
-  await expect(sceneAction).toHaveText("Start kampen");
+  await expect(page.locator(".matchday-kickoff-button")).toBeVisible();
 }
 
 test.beforeEach(async ({ page }) => {

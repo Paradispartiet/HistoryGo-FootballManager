@@ -17000,6 +17000,10 @@ function hydrateModeSessions() {
     applyModeSession(state, state.modeEnvelope.sessions[mode]);
   }
   state.gameStartState = normalizeGameStartState({ ...state.gameStartState, selectedMode: mode });
+  // Availability er klubb- og modusavhengig. hydratePersistedUiState() kan ha
+  // fylt cachen før gameStartState og aktiv modussnapshot var ferdig hydrert;
+  // nullstill den her før startelleveren seedes mot feil spillerpool.
+  invalidateAvailability();
   persistModeEnvelope(localStorage, state.modeEnvelope);
   saveGameStartState();
 }
