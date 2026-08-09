@@ -315,9 +315,18 @@ const largestClone = Math.max(...signatures.values());
 // nøyaktig den reverteringen passert i stillhet.
 //
 // Odd-importen (100 profiler, 100 % unike kvalitetssetninger i kilden) tok den
-// til 84,3 %. Aalesund, Haugesund, Skeid, Moss og Bryne la 440 til, og målt er
-// den nå 86,2 % av 1699. Grensa følger etter til 0,86.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.86,
+// til 84,3 %. Aalesund, Haugesund, Skeid, Moss og Bryne la 440 til, og målt var
+// den 86,2 % av 1699. Grensa fulgte etter til 0,86.
+//
+// Sarpsborg tok den FØRST feil vei — 85,1 % — og det var vakten som virket:
+// merittfrasene ga tretten menn fra 1917-laget identisk profil. Da titlene ble
+// tatt ut av ferdighetene, og den samme rettingen ble gjort bakover i Mjøndalen
+// og HamKam, endte den på 86,4 % av 1810. Grensa følger etter til 0,863.
+//
+// Det er en ekte ratchet: settes merittene tilbake til `determination`, faller
+// den til 85,1 %, og vakten feller det. Sto grensa på 0,86 ville en ny
+// merittbasert kilde tatt korpuset nedover uten at noe sa fra.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.863,
   `${signatures.size} unike av ${dokumenterte.length} dokumenterte (${(uniqueShare * 100).toFixed(1)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -463,11 +472,33 @@ const KJENT_UDOKUMENTERT = {
   // Samme v2-form, og 31 av 85 sier det samme — de fleste fra cupmesterlagene
   // 1933–1937, der kilden bare har «fast på cupmesterlaget 1937». Ni til er
   // moderne spillere hvis eneste påstand er overgangsverdi, som ikke er en
-  // ferdighet. Målt 32 av 83.
-  consto_arena: 0.41,
+  // ferdighet. Målt 41 av 83.
+  //
+  // Taket er HEVET fra 0,41, og grunnen er en RETTING, ikke et frafall: tolv av
+  // disse bar `determination` utledet av «dokumentert cup-/finaleerfaring».
+  // Sarpsborg-kilden viste hva den kartleggingen gjør i stor skala, og regelen
+  // den avdekket gjelder hele katalogen — en tittel er lagets. Beviset på at
+  // hevingen kjøpte noe står i profil-unikheten: den gikk OPP, fra 86,2 % til
+  // 86,4 %, samtidig som disse listene ble tomme.
+  consto_arena: 0.50,
   // HamKam: 41 av 85 med samme markør, i egen ordlyd — «ingen teknisk/fysisk
-  // strength skal derfor fylles uten ny individuell kilde». Målt 26 av 81.
-  briskeby_stadion: 0.34
+  // strength skal derfor fylles uten ny individuell kilde». Målt 33 av 81.
+  // Hevet fra 0,34 av samme retting: åtte bar `determination` fra «dokumentert
+  // opprykksverdi», og et opprykk er lagets.
+  briskeby_stadion: 0.42,
+  // Sarpsborg er det fjerde hullet, og det eneste med en annen årsak: kilden
+  // avstår bare 14 ganger av 100 — den SIER noe om nesten alle. Men hele
+  // ordforrådet er fjorten fraser, og de er merittfraser. «Del av det første
+  // cupmesterlaget i 1917» er en påstand om laget, ikke om mannen, og av 35
+  // SFK-profiler er det alt kilden har om 33 av dem.
+  //
+  // Første import kartla merittene til `determination` likevel. Da fikk tretten
+  // menn fra 1917-laget identisk profil, og korpusets profil-unikhet falt til
+  // 85,1 %. Å la meritten være tom løftet den til 86,1 % og Sarpsborg selv fra
+  // 66 % til 84 %. En tom liste er derfor ikke det dårligere alternativet her —
+  // det er det som ga den mest presise katalogen.
+  // Målt 39 av 107.
+  sarpsborg_stadion: 0.37
 };
 const perArv = new Map();
 for (const player of players) {
