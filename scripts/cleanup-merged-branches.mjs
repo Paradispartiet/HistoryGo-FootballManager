@@ -14,6 +14,10 @@ const HISTORICAL_STALE_BRANCHES = new Set([
   "agent/economy-contracts-v1-ci-anchor-3",
   "agent/matchday-lineup-scenes-v1",
   "agent/staff-roster-v1",
+  // Lukket uten merge under cleanup fordi senere canonical arbeid allerede
+  // erstatter innholdet: PR #65 (README-status) og PR #105 (ligastart/scenario).
+  "readme-status-cleanup",
+  "codex/endre-startflyt-til-ligaspill",
   // Prototype 10.06.2026. Samme Kampdag v1-API og firefilers leveranse ble
   // erstattet dagen etter av den større, mergede PR #43.
   "claude/kampdag-v1-match-engine-lqm39g"
@@ -83,7 +87,8 @@ async function main() {
     if (existing.has(name)) candidates.set(name, "merged PR head");
   }
   // Unntakslisten brukes kun for historiske arbeidsrefs der merge-sporet er
-  // borte, men erstatningen er eksplisitt verifisert.
+  // borte eller PR-en bevisst ble lukket som erstattet, og erstatningen er
+  // eksplisitt verifisert.
   for (const name of HISTORICAL_STALE_BRANCHES) {
     if (existing.has(name)) candidates.set(name, "historisk midlertidig branch");
   }
