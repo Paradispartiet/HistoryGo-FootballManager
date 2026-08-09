@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1869 navngitte fotballspillere**. 58 tall hver er ~108 000
+Dette er **1935 navngitte fotballspillere**. 58 tall hver er ~112 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -503,6 +503,55 @@ på — den ene datafeltet vekter det andre.
 `sim:player-attributes` sjekker hver eneste `belagt`-verdi mot spillerens egne
 `strengths`. Finner motoren på en påstand om en ekte fotballspiller, faller
 vakten. Bittestet: legger man inn `finishing` som belagt for alle, faller den.
+
+### En tittel er lagets, ikke mannens
+
+Sarpsborg-kilden er velformet — 100 unike kvalitetssetninger, 98 unike
+historikkfelt, og den avstår bare 14 ganger. Men hele ordforrådet er **fjorten
+fraser**, og de er merittfraser: «dokumentert vinner-/cuperfaring» står 30
+ganger, «finaleerfaring» 16, «medaljelagsverdi» 6.
+
+Første import kartla dem ærlig og smalt — storkampverdi ble `determination`. Det
+ga **tretten menn fra 1917-laget bokstavelig talt identisk profil** («CB
+historical 82 | determination»), og korpusets profil-unikhet falt fra 86,2 % til
+85,1 %. Vakten fyrte, og den hadde rett: å velge mellom de tretten var
+meningsløst, altså nøyaktig feilen `era`-aksen ble innført for å rette.
+
+Fristelsen var å kalle det en kildebegrensning og heve unntaket. Men det er en
+ekte feil, og spørsmålet som løser den er ikke et tall:
+
+> Sier frasen noe om **mannen** eller om **laget**?
+
+Nivå og kampmengde er individuelt — han spilte de kampene, han fikk de
+landskampene, han holdt i tjue år. Titler er lagets. «Del av det første
+cupmesterlaget i 1917» sier at elleve menn vant en cup; det sier ingenting om
+hva denne ene gjorde med ballen. Å utlede `determination` av det er å påstå en
+**mental egenskap om en navngitt person** på det grunnlaget at laget hans vant
+for 109 år siden — samme slags påstand som dette dokumentet ellers nekter å
+gjøre.
+
+Merittene er derfor `null`. Da står de merittbaserte profilene uten dokumenterte
+styrker, og det er det ærlige: kilden dokumenterte ingen ferdighet. Vakten
+skiller allerede dokumenterte fra udokumenterte fordi «en spiller uten
+dokumenterte styrker har ingen individuell påstand å skille seg på».
+
+**Målingen bekreftet regelen i stedet for å bli reddet av den.** Profil-unikheten
+gikk fra 85,1 % til 86,1 %, Sarpsborg selv fra 66 % til 84 %, og klonegruppa på
+tretten forsvant. En tom liste var ikke det dårligere alternativet — den ga den
+mest presise katalogen.
+
+Regelen gjelder katalogen, ikke bare denne klubben, så den er **rettet bakover**:
+tolv Mjøndalen-profiler bar `determination` fra «dokumentert
+cup-/finaleerfaring» og åtte HamKam-profiler fra «dokumentert opprykksverdi». Et
+opprykk er lagets. Med den rettingen endte korpuset på **86,4 %**, over der det
+lå før importen, og ratcheten fulgte etter til 0,863. Bittestet: settes
+merittene tilbake, faller den til 85,1 % og vakten feller det.
+
+Prisen står navngitt. `KJENT_UDOKUMENTERT` måtte **heves** for Consto Arena
+(0,41 → 0,50) og Briskeby (0,34 → 0,42), og det er en ratchet som går feil vei.
+Den står med begrunnelsen i koden: hevingen kommer av en *retting*, ikke et
+frafall, og beviset på at den kjøpte noe er at profil-unikheten gikk opp
+samtidig.
 
 ### Realisme er sprik, ikke senking
 
