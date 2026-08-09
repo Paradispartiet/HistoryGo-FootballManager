@@ -41,6 +41,9 @@ jobs:
       - name: Audit seriepyramiden (nivåer, klubber, opp-/nedrykk)
         run: npm run audit:clubs
 
+      - name: Audit klubbpool og spillerklubbtilknytning
+        run: node scripts/sync-club-affiliations.mjs
+
       - name: Audit CI-dekning (kjører suiten faktisk alt?)
         run: npm run audit:ci-coverage
 
