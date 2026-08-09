@@ -150,16 +150,18 @@ vært på Lerkendal?**
 | | Du får |
 |---|---|
 | **Har vært på banen** | Klubbens historiske spillere er dine å velge blant. Du plukker selv hvem du bygger laget rundt. |
-| **Har ikke vært der** | En automatisk grunntropp, og klubbens spillere åpner seg når du besøker banen. |
+| **Har ikke vært der** | En automatisk grunntropp fra klubbens egen spillerpool. Resten av klubbpoolen åpnes når du besøker banen. |
 
 Det er kjernesløyfen brukt **på** klubbovertakelsen i stedet for å omgå den —
 samme form som landslagsmodus, der nasjonens grunntropp er bunnen og samlingen
 er oppsiden.
 
-Ingen ny gate er funnet opp: spillerne var allerede knyttet til steder gjennom
-`sourcePlaceIds`, og `computeAvailability()` gatet dem allerede på besøkte
-steder. Det som manglet var koblingen **klubb → bane** (`homePlaceId`) og en
-grunntropp så et klubbvalg aldri blir en blindvei.
+Klubbmedlemskap og oppdagelsessted er nå to forskjellige fakta. `clubAffiliations`
+på spilleren bestemmer hvilken klubbpool spilleren tilhører. `sourcePlaceIds`
+bestemmer bare hvilke History Go-steder som kan oppdage/låse opp spilleren.
+`homePlaceId` kobler separat klubben til banen som åpner resten av poolen. En
+spiller kan dermed være dokumentert klubbspiller uten at klubbidentiteten
+avhenger av hvor History Go-kortet hans ligger.
 
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
@@ -205,6 +207,8 @@ historie, ikke dens tabellplass i dag.
 
 Summen er *plasser*, ikke personer: 280 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
+
+**Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 dokumenterte klubbtilknytninger finnes. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
 stemmer, en klubb som står to ganger, eller en klubb med spillere plassert i
@@ -1615,3 +1619,16 @@ navnene ikke engang forekommer i kilden.
 begge tilstander — der oppdaget jeg at `visited_places` er et **objekt**, ikke en
 array, så den første testen min leste ingenting og ga samme svar i begge
 tilfeller.
+
+## Klubbpool v1: medlemskap og tilgang
+
+Klubbmedlemskap, History Go-oppdagelse og stadiontilgang er tre forskjellige fakta.
+`player.clubAffiliations` bestemmer hvilken klubbpool spilleren tilhører.
+`player.sourcePlaceIds` bestemmer bare hvor spilleren kan oppdages i History Go.
+`club.homePlaceId` bestemmer hvilket stadionbesøk som åpner hele klubbpoolen.
+
+En klubb kan bare overtas når den har minst 15 dokumenterte spillere i sin egen
+pool. Uferdige pooler står som `pending` og fylles aldri med tilfeldige spillere
+fra andre klubber. Gamle automatiske grunntropper repareres mot den valgte
+klubbens canonical pool ved lasting, slik at eldre saves ikke beholder fremmede
+spillere etter migreringen.

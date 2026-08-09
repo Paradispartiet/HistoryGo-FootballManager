@@ -1,6 +1,6 @@
 import {
   CLUB_STATUS_LABEL,
-  clubStatusFor,
+  clubAffiliationFor,
   listClubHeritagePlayers
 } from "../football-club-squad.js";
 import { buildStarterSquadPlayerIds, recruitPlayerToMerits, normalizeRecruitmentState } from "../football-recruitment.js";
@@ -141,7 +141,7 @@ export function buildClubScoutingRows({ clubs = [], players = [], currentClubId 
   return asArray(clubs)
     .filter((club) => club?.id && String(club.id) !== String(currentClubId || ""))
     .map((club) => {
-      const candidates = listClubHeritagePlayers({ homePlaceId: club.homePlaceId || null, players });
+      const candidates = listClubHeritagePlayers({ clubId: club.id, homePlaceId: club.homePlaceId || null, players });
       return {
         id: String(club.id),
         name: text(club.name, club.id),
@@ -283,7 +283,7 @@ function createOtherClubsSection() {
   section.dataset.tabParent = "historygo";
   section.hidden = true;
   section.innerHTML = `
-    <section class="manager-scouting-surface"><header class="scouting-head"><div><p class="eyebrow">Speiding · Andre klubber</p><h2>Klubbtilknyttede spillere</h2><p class="muted-text">Alle andre klubber i ligapyramiden og spillerne HG-dataene knytter til klubbens stadion. Dette er mulige/historiske kandidater – ikke en påstand om klubbens live 2026-stall.</p></div><strong id="scoutingClubCount">0 klubber</strong></header>
+    <section class="manager-scouting-surface"><header class="scouting-head"><div><p class="eyebrow">Speiding · Andre klubber</p><h2>Klubbtilknyttede spillere</h2><p class="muted-text">Alle andre klubber i ligapyramiden og spillerne HG-dataene knytter eksplisitt til klubben. Dette er mulige/historiske kandidater – ikke en påstand om klubbens live 2026-stall.</p></div><strong id="scoutingClubCount">0 klubber</strong></header>
     <form id="scoutingClubTools" class="scouting-tools" role="search"><label><span>Søk klubb</span><input id="scoutingClubSearch" type="search" autocomplete="off" placeholder="Klubb, by eller stadion"></label><label><span>Nivå</span><select id="scoutingClubTier"><option value="all">Alle nivåer</option></select></label></form>
     <div class="scouting-club-layout"><div class="scouting-club-list-wrap"><table class="scouting-club-table"><thead><tr><th>Klubb</th><th>Nivå</th><th>Mulige spillere</th></tr></thead><tbody id="scoutingClubBody"></tbody></table></div><aside id="scoutingClubDetail" class="scouting-club-detail" aria-live="polite"><p class="scouting-empty">Velg en klubb for å se spillerne.</p></aside></div></section>`;
   document.getElementById("app")?.append(section);
@@ -398,13 +398,13 @@ function renderClubDetail(club) {
   head.append(node("p", "eyebrow", club.tierName), node("h3", "", club.name), node("p", "muted-text", [club.city, club.ground].filter(Boolean).join(" · ")));
   host.append(head);
   if (!club.candidates.length) {
-    host.append(node("p", "scouting-empty", "Ingen klubbtilknyttede spillere er registrert for denne banen i HG-dataene ennå."));
+    host.append(node("p", "scouting-empty", "Ingen klubbtilknyttede spillere er registrert for denne klubben i HG-dataene ennå."));
     return;
   }
   const list = node("div", "scouting-club-player-list");
   club.candidates.forEach((player) => {
     const article = node("article", "scouting-club-player-row");
-    const status = clubStatusFor(player, club.homePlaceId);
+    const status = clubAffiliationFor(player, club.id)?.status || null;
     article.append(
       playerProfileButton(player, [player.nationality, asArray(player.naturalPositions).join("/")].filter(Boolean).join(" · ")),
       node("span", "scouting-club-status", CLUB_STATUS_LABEL[status] || "Klubbtilknytning")

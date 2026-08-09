@@ -9,9 +9,10 @@ const checks = [];
 const check = (label, ok, detail = "") => checks.push({ label, ok: Boolean(ok), detail });
 
 const players = [
-  { id: "maker", name: "Maker", nationality: "Norge", naturalPositions: ["AM"], usablePositions: ["CM"], preferredRoles: ["classic_ten"], sourcePlaceIds: ["ground_a"] },
-  { id: "stopper", name: "Stopper", nationality: "Norge", naturalPositions: ["CB"], usablePositions: [], preferredRoles: ["stopper"], sourcePlaceIds: ["ground_b"] },
-  { id: "runner", name: "Runner", nationality: "Norge", naturalPositions: ["ST"], usablePositions: [], preferredRoles: ["advanced_forward"], sourcePlaceIds: ["ground_a"] }
+  { id: "maker", name: "Maker", nationality: "Norge", naturalPositions: ["AM"], usablePositions: ["CM"], preferredRoles: ["classic_ten"], sourcePlaceIds: ["ground_a"], clubAffiliations: [{ clubId: "ours", relation: "played_for", status: "club_profile", source: "belagt" }] },
+  { id: "stopper", name: "Stopper", nationality: "Norge", naturalPositions: ["CB"], usablePositions: [], preferredRoles: ["stopper"], sourcePlaceIds: ["ground_b"], clubAffiliations: [{ clubId: "other", relation: "played_for", status: "club_profile", source: "belagt" }] },
+  { id: "runner", name: "Runner", nationality: "Norge", naturalPositions: ["ST"], usablePositions: [], preferredRoles: ["advanced_forward"], sourcePlaceIds: ["ground_a"], clubAffiliations: [{ clubId: "ours", relation: "played_for", status: "squad_profile", source: "utledet" }] },
+  { id: "tourist", name: "Tourist", nationality: "Norge", naturalPositions: ["CM"], usablePositions: [], preferredRoles: [], sourcePlaceIds: ["ground_b"] }
 ];
 
 const unlockData = {
@@ -48,6 +49,7 @@ const clubs = [
 const clubRows = buildClubScoutingRows({ clubs, players, currentClubId: "ours", tierNames: { top: "Toppdivisjon" } });
 check("egen klubb filtreres bort", clubRows.length === 1 && clubRows[0].id === "other", clubRows.map((row) => row.id).join(","));
 check("andre klubb får dokumentert spillerpool", clubRows[0].candidates.length === 1 && clubRows[0].candidates[0].id === "stopper");
+check("sourcePlaceIds alene gir ikke klubbmedlemskap", !clubRows[0].candidates.some((player) => player.id === "tourist"));
 check("klubbsøk virker", filterClubScoutingRows(clubRows, { query: "bergen" }).length === 1);
 check("nivåfilter virker", filterClubScoutingRows(clubRows, { tier: "top" }).length === 1);
 

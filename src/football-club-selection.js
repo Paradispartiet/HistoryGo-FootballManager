@@ -1,40 +1,30 @@
 // ============================================================================
-// Klubbvalg v1
+// Klubbvalg v2
 //
-// Du kan lage din egen klubb, eller ta over en som finnes. Begge deler er
-// ligaspill — forskjellen er hva du arver.
+// Du kan lage din egen klubb, eller ta over en etablert klubb med en spillbar,
+// dokumentert spillerpool. Klubbvalg og spilleroppdagelse er separate ting:
+// klubben bestemmer poolen, mens History Go bestemmer hvor mye av poolen som er
+// åpnet gjennom banebesøk.
 //
-// Tar du over en klubb, arver du TRE ting, og ingen av dem er spillere:
+// Tar du over en klubb, arver du:
+//   1. IDENTITET — navn, bane, by og nivå.
+//   2. TRADISJON — klubbens spillestil blir styrets referanse.
+//   3. FORVENTNING — styrets første sesongmål ut fra klubbens standing.
+//   4. ET SPILLBARHETSGULV — 15 spillere fra klubbens egen dokumenterte pool
+//      dersom hele poolen ikke allerede er åpnet i History Go.
 //
-//   1. IDENTITET — navn, bane, by, og hvilket nivå klubben faktisk står på.
-//      Tar du over Skeid, begynner du i 2. divisjon. Det er ikke en straff,
-//      det er hvor klubben er.
-//   2. TRADISJON — klubbens egen spillestil blir DIN. Rosenborg-styret vil se
-//      godfoten, ikke langball. Det gir sesongdommen noe å måle utover tabellen.
-//   3. FORVENTNING — og det er her det koster. Styret i en storklubb godtar
-//      ikke midt på tabellen første sesong slik en nyopprettet klubbs styre
-//      gjør. Forventningen kommer fra klubbens STANDING i sin egen divisjon,
-//      ikke fra spillerne dine.
-//
-// Troppen arver du IKKE. Spillerne kommer fortsatt fra samlingen din — det er
-// hele kjernesløyfen (Sted → Person → Ekspertise → Trening → Badge → Lagklasse),
-// og en ferdig tropp ville omgått den. Å arve klubbens alltid-tropp er en egen,
-// mye større datajobb.
-//
-// Merk hva forventningen IKKE er: den avgjør ingen kamp. Den setter bare hva
-// styret måler deg mot. Klubbens klasse endrer aldri hvordan en spiller gjør
-// det på banen — det er fortsatt rollen, posisjonen, taktikken og relasjonene.
+// Du arver IKKE en historisk all-star-tropp. De øvrige spillerne i klubbpoolen
+// åpnes gjennom History Go. En klubb uten minst 15 dokumenterte tilknytninger
+// blir ikke tilbudt som overtakelsesvalg; alternativet ville vært å fylle den
+// med spillere som aldri representerte klubben.
 //
 // Ren ESM: ingen DOM, fetch, localStorage, Date.now eller Math.random.
 // ============================================================================
 
-export const CLUB_SELECTION_VERSION = "historygo-football-manager.club-selection.v1";
+export const CLUB_SELECTION_VERSION = "historygo-football-manager.club-selection.v2";
 
 const num = (value, fallback = 0) => (Number.isFinite(Number(value)) ? Number(value) : fallback);
 
-// Klubbens plass i sitt eget selskap. Rangeringen er innenfor divisjonen (og
-// avdelingen), ikke på tvers av pyramiden — Skeid måles mot 2. divisjon, ikke
-// mot Bodø/Glimt.
 export function rankClubInTier(club, allClubs) {
   if (!club) return null;
   const peers = allClubs.filter((entry) =>
@@ -44,9 +34,6 @@ export function rankClubInTier(club, allClubs) {
   return position > 0 ? { position, of: sorted.length } : null;
 }
 
-// Styrets forventning FØRSTE sesong, avledet av hvor klubben står. En
-// nyopprettet klubb har ingen historie og får det tålmodige målet (midt på
-// tabellen); en klubb du tar over har det ikke like lett.
 export function deriveClubExpectation(club, allClubs, tier) {
   const rank = rankClubInTier(club, allClubs);
   if (!rank) return null;
@@ -54,7 +41,6 @@ export function deriveClubExpectation(club, allClubs, tier) {
   const canPromote = Boolean(tier?.promotion);
   const promotionPlaces = num(tier?.promotion?.direct, 0) + num(tier?.promotion?.playoff, 0);
 
-  // Toppklubbene i en divisjon som IKKE kan rykke opp, måles mot gullet.
   if (!canPromote) {
     if (position <= 2) return { targetPosition: 1, label: "Seriegull", pressure: "høy", description: `${club.name} er en av klubbene i divisjonen som måles mot gullet. Styret godtar ikke en mellomsesong.` };
     if (position <= 5) return { targetPosition: 3, label: "Topp 3", pressure: "høy", description: `${club.name} skal være med i medaljekampen. Styret venter topp 3.` };
@@ -63,7 +49,6 @@ export function deriveClubExpectation(club, allClubs, tier) {
     return { targetPosition: safe, label: "Sikker plass", pressure: "lav", description: `${club.name} har ingen tradisjon for topplasseringer. Styret vil først og fremst se klubben trygt over nedrykksstreken.` };
   }
 
-  // I divisjonene under er opprykk det klubbene måles mot.
   if (position <= 3 && promotionPlaces > 0) {
     return { targetPosition: Math.max(1, promotionPlaces), label: "Opprykk", pressure: "høy", description: `${club.name} er blant favorittene i divisjonen. Styret venter opprykk, ikke en grei sesong.` };
   }
@@ -74,9 +59,15 @@ export function deriveClubExpectation(club, allClubs, tier) {
   return { targetPosition: safe, label: "Sikker plass", pressure: "lav", description: `${club.name} er en av de mindre klubbene på nivået. Styret vil se en trygg sesong før de ber om mer.` };
 }
 
-// Klubblista til onboardingen, gruppert etter nivå. Stilen kommer fra profilen,
-// nivået fra klubben — samme skille som ellers.
-export function listSelectableClubs({ clubs = [], tiers = [], profiles = {} } = {}) {
+export function isClubTakeoverReady(club, minimumPoolSize = 15) {
+  if (!club?.id) return false;
+  if (club.playerPoolStatus === "pending") return false;
+  if (Number.isFinite(Number(club.playerPoolSize))) return Number(club.playerPoolSize) >= minimumPoolSize;
+  // Bakoverkompatibilitet for eldre data/test-fixtures uten poolmetadata.
+  return true;
+}
+
+export function listSelectableClubs({ clubs = [], tiers = [], profiles = {}, minimumPoolSize = 15 } = {}) {
   return tiers
     .slice()
     .sort((a, b) => num(a.level) - num(b.level))
@@ -85,13 +76,16 @@ export function listSelectableClubs({ clubs = [], tiers = [], profiles = {} } = 
       tierName: tier.name,
       level: num(tier.level),
       clubs: clubs
-        .filter((club) => club.tier === tier.id)
+        .filter((club) => club.tier === tier.id && isClubTakeoverReady(club, minimumPoolSize))
         .map((club) => {
           const profile = profiles[club.id] || null;
           const expectation = deriveClubExpectation(club, clubs, tier);
           return {
             id: club.id, name: club.name, ground: club.ground, city: club.city,
             tier: club.tier, group: club.group || null, strength: num(club.strength),
+            homePlaceId: club.homePlaceId || null,
+            playerPoolSize: num(club.playerPoolSize),
+            playerPoolStatus: club.playerPoolStatus || null,
             styleName: profile?.styleName || null,
             shortLabel: profile?.shortLabel || null,
             styleBasis: profile?.styleBasis || null,
@@ -105,10 +99,8 @@ export function listSelectableClubs({ clubs = [], tiers = [], profiles = {} } = 
     .filter((group) => group.clubs.length > 0);
 }
 
-// Klubben du faktisk spiller som. `saveId` holdes utenfor: lagringen er
-// managerens, ikke klubbens, så to karrierer i samme klubb ikke kolliderer.
 export function createManagerClubFromSelection({ club, profile = null, managerName = "" } = {}) {
-  if (!club?.id) return null;
+  if (!club?.id || !isClubTakeoverReady(club)) return null;
   return {
     id: club.id,
     name: club.name,
@@ -118,17 +110,16 @@ export function createManagerClubFromSelection({ club, profile = null, managerNa
     ...(club.group ? { group: club.group } : {}),
     strength: num(club.strength, 70),
     form: num(club.form, 55),
+    homePlaceId: club.homePlaceId || null,
+    playerPoolSize: num(club.playerPoolSize),
+    playerPoolStatus: club.playerPoolStatus || null,
     isTakenOver: true,
     managerName: managerName || "",
-    // Klubbens egen tradisjon blir managerens utgangspunkt — ikke et kostyme,
-    // men det styret forventer at du spiller.
     inheritedStyleName: profile?.styleName || null,
     inheritedStyleLabel: profile?.shortLabel || null
   };
 }
 
-// En egenopprettet klubb: ingen historie, ingen arvet stil, tålmodig styre.
-// Nivået er toppen av det du kan velge selv — du starter der spillet starter.
 export function createOwnManagerClub({ clubName, saveId, tier, managerName = "" } = {}) {
   const name = String(clubName || "").trim();
   if (!name || !saveId) return null;
@@ -147,12 +138,6 @@ export function createOwnManagerClub({ clubName, saveId, tier, managerName = "" 
   };
 }
 
-// Nivået sesongen skal starte på, og motstanderne der.
-//
-// Dette lå i app.js, der det bare kunne sjekkes ved å lete etter et funksjonsnavn
-// i kildekoden — og en slik vakt består selv om nivået ignoreres. Her kan den
-// faktiske oppførselen måles: tar du over Skeid, SKAL du havne i 2. divisjon
-// avdeling 2, ikke i Eliteserien.
 export function resolveStartTier({ takeoverClub = null, tiers = [], clubs = [] } = {}) {
   const tier = (takeoverClub ? tiers.find((entry) => entry.id === takeoverClub.tier) : null)
     || tiers.find((entry) => num(entry.level) === 1)
@@ -169,12 +154,11 @@ export function resolveStartTier({ takeoverClub = null, tiers = [], clubs = [] }
   };
 }
 
-// Lesbar oppsummering av hva et klubbvalg innebærer — brukt i onboardingen, så
-// spilleren vet hva han får FØR han velger. Særlig: han arver ikke troppen.
 export function describeClubSelection({ club, tier, allClubs = [], profile = null } = {}) {
   if (!club || !tier) return null;
   const expectation = deriveClubExpectation(club, allClubs, tier);
   const rank = rankClubInTier(club, allClubs);
+  const poolSize = num(club.playerPoolSize);
   return {
     clubName: club.name,
     tierName: tier.name,
@@ -185,18 +169,22 @@ export function describeClubSelection({ club, tier, allClubs = [], profile = nul
     styleBasis: profile?.styleBasis || null,
     standing: rank ? `${rank.position}. sterkeste klubb av ${rank.of} på nivået` : null,
     expectation,
+    playerPoolSize: poolSize,
+    playerPoolReady: isClubTakeoverReady(club),
     inherits: [
       `Identitet: ${club.name}, ${club.ground}${club.city ? `, ${club.city}` : ""}.`,
       `Nivå: ${tier.name} — der klubben faktisk står.`,
       profile?.styleName
         ? `Tradisjon: ${profile.styleName}. Styret venter at du spiller klubbens fotball.`
         : "Tradisjon: klubben har ingen nedskrevet spillestil ennå.",
-      expectation ? `Styrets krav første sesong: ${expectation.label}.` : null
+      expectation ? `Styrets krav første sesong: ${expectation.label}.` : null,
+      poolSize > 0 ? `Spillerpool: ${poolSize} dokumenterte klubbspillere.` : null
     ].filter(Boolean),
-    // Det viktigste å si tydelig: troppen følger ikke med.
     doesNotInherit: [
-      "Troppen — spillerne kommer fortsatt fra samlingen din. Klubbvalget gir deg en klubb, ikke et lag.",
-      "Klubbens historiske spillere. Det er en egen sak."
+      "En ferdig historisk all-star-tropp — uten banebesøk får du bare en balansert grunntropp fra klubbens egen spillerpool.",
+      club.homePlaceId
+        ? `Resten av klubbpoolen åpnes når du besøker ${club.ground} i History Go.`
+        : "Resten av klubbpoolen åpnes når klubben får en History Go-bane og den besøkes."
     ]
   };
 }

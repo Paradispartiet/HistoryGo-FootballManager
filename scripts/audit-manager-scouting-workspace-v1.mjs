@@ -16,7 +16,7 @@ const checks = [
   ["Rekrutterbare er første speiderflate", scouting.includes("Speiding · Rekrutterbare") && scouting.includes("scoutingRecruitableBody")],
   ["Andre klubber er egen speiderflate", scouting.includes("Speiding · Andre klubber") && scouting.includes('const CLUBS_SECTION = "scoutingClubs"')],
   ["rekrutterbare kommer fra eksisterende unlock-data", scouting.includes('"player_candidate"') && scouting.includes("placeUnlocks") && scouting.includes("unlockedPlaceIds")],
-  ["andre klubber bruker eksisterende klubbmotor", scouting.includes("listClubHeritagePlayers") && scouting.includes("clubStatusFor")],
+  ["andre klubber bruker canonical klubbmotor", scouting.includes("listClubHeritagePlayers") && scouting.includes("clubAffiliationFor") && scouting.includes("clubId: club.id")],
   ["egen klubb filtreres bort", scouting.includes("currentClubId") && scouting.includes("takeoverClubId")],
   ["spillerprofil gjenbrukes", scouting.includes("hgfm:open-player-profile")],
   ["ingen samlet overall introduseres", !/overall\s*[:=]/i.test(scouting)],
