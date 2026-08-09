@@ -11,6 +11,7 @@ import "./manager-club-organization-v1.js";
 import "./manager-club-learning-v1.js";
 import "./manager-club-organization-location-v1.js";
 import "./manager-system-workspace-v2.js";
+import "./manager-football-learning-loop-v1.js";
 import "./manager-visual-identity-v1.js";
 import "./manager-league-next-suppression-v1.js";
 
