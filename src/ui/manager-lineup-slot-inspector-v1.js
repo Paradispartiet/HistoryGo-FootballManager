@@ -252,16 +252,33 @@ function toggleRoleLearning() {
   if (!region.hidden) renderRoleLearning();
 }
 
+function pitchCardFromTarget(target) {
+  const card = target?.closest?.("#lineupSlots .player-chip");
+  return card instanceof HTMLElement ? card : null;
+}
+
+function tacticsIsVisible() {
+  const section = document.querySelector('[data-tab-section="tactics"]');
+  return Boolean(section && !section.hidden);
+}
+
 function handlePitchClick(event) {
   // app.js bruker også programmatisk `.click()` når uttaket synkroniseres.
-  // Bare et faktisk brukerklikk skal åpne inspektøren; ellers kan oppstarten
-  // ufrivillig legge en modal over Lag-flaten.
-  if (!event.isTrusted) return;
-  const section = document.querySelector('[data-tab-section="tactics"]');
-  if (!section || section.hidden) return;
-  const card = event.target?.closest?.("#lineupSlots .player-chip");
-  if (!(card instanceof HTMLElement)) return;
+  // HTMLElement.click() gir click-detail 0. Pekermus/touch gir detail > 0,
+  // så vi kan skille reell pekeraktivering uten å stole på isTrusted.
+  if (!(event instanceof MouseEvent) || event.detail <= 0 || !tacticsIsVisible()) return;
+  const card = pitchCardFromTarget(event.target);
+  if (!card) return;
   queueMicrotask(() => openInspector(card));
+}
+
+function handlePitchKeydown(event) {
+  if ((event.key !== "Enter" && event.key !== " ") || !tacticsIsVisible()) return;
+  const card = pitchCardFromTarget(event.target);
+  if (!card) return;
+  // La den eksisterende tastaturaktiverte click-håndteringen synkronisere uttaket
+  // før inspektøren leser valgt spiller og rolle.
+  setTimeout(() => openInspector(card), 0);
 }
 
 function install() {
@@ -270,6 +287,7 @@ function install() {
   // Fang spillertrykket før legacy-oppstillingshåndteringen eventuelt avslutter boblingen.
   // Microtasken i handlePitchClick lar likevel den eksisterende state-synken fullføre først.
   document.addEventListener("click", handlePitchClick, true);
+  document.addEventListener("keydown", handlePitchKeydown, true);
   window.addEventListener("hgfm:team-merits-changed", syncInspector);
   window.addEventListener("storage", syncInspector);
 }
