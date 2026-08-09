@@ -353,10 +353,7 @@ function scheduleRender() {
   });
 }
 
-async function boot() {
-  ensureStyles();
-  await loadRoles();
-  renderLearningLayer();
+function installObservers() {
   window.addEventListener("hgfm:team-merits-changed", scheduleRender);
   window.addEventListener("updateProfile", scheduleRender);
   window.addEventListener("storage", scheduleRender);
@@ -364,6 +361,17 @@ async function boot() {
   document.addEventListener("change", scheduleRender);
   const observer = new MutationObserver(() => scheduleRender());
   observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected"] });
+}
+
+async function boot() {
+  ensureStyles();
+  // System, trening og etterkamp er uavhengige av rollekatalogen. Lytt derfor
+  // på managerflatene før rolledata lastes, så raske tab-/rapport-rerenders
+  // aldri kan passere læringslaget mens fetch fortsatt pågår.
+  installObservers();
+  renderLearningLayer();
+  await loadRoles();
+  renderLearningLayer();
 }
 
 if (typeof document !== "undefined") {
