@@ -63,7 +63,12 @@ async function prepareAndOpenPreMatch(page) {
   const sceneAction = page.locator("#matchdayCommand .matchday-scene-action");
   await expect(sceneAction).toBeVisible();
   await sceneAction.click();
-  await expect(scene).toHaveAttribute("data-phase", "pre_match");
+  const phase = await scene.getAttribute("data-phase");
+  if (phase !== "pre_match") {
+    const readiness = await page.locator("#matchdayReadiness").textContent();
+    const action = await sceneAction.textContent();
+    throw new Error(`Kampforberedelsen ble ${phase || "ukjent"}; readiness=${readiness || "ukjent"}; action=${action || "ukjent"}`);
+  }
   await expect(sceneAction).toHaveText("Start kampen");
 }
 
