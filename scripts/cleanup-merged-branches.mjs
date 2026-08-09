@@ -20,7 +20,12 @@ const HISTORICAL_STALE_BRANCHES = new Set([
   "codex/endre-startflyt-til-ligaspill",
   // Prototype 10.06.2026. Samme Kampdag v1-API og firefilers leveranse ble
   // erstattet dagen etter av den større, mergede PR #43.
-  "claude/kampdag-v1-match-engine-lqm39g"
+  "claude/kampdag-v1-match-engine-lqm39g",
+  // To foreldreløse refs uten PR-head-spor. Begge tip-commitene er direkte
+  // forfedre av main (behind_by 0); de har derfor ingen unik kode å bevare.
+  // fix/playable-first-run-gate peker på merge-committen til PR #95.
+  "fix/playable-first-run-gate",
+  "ui/navigation-cleanup-v1"
 ]);
 
 async function github(path, { method = "GET" } = {}) {
