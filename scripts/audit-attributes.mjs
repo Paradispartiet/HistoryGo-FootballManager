@@ -336,7 +336,37 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Andersen er keeper med 482 kamper og 41 landskamper, Odds er spiss med 61
   // mål på 80 kamper mellom 1911 og 1920. Posisjonen alene avgjør det. Han er
   // ført med klubbsuffiks, slik Tore Pedersen (RBK) allerede var.
-  ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"]
+  ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"],
+  // Haugesund-kilden utløste fem par på én gang — det er vakten som virker, og
+  // to av dem VAR samme mann (Konradsen og Garba, begge slått sammen). De tre
+  // her er forskjellige menn, og alle tre skilles av posisjon eller epoke.
+  ["tor andreassen|tor arne andreassen", "VIFs historiske stopper mot FKHs kamprekordholder"],
+  ["thore pedersen|tore pedersen", "FKHs moderne høyreback mot Branns historiske midtstopper"],
+  ["tor nilsen|tore nilsen", "Haugars cupfinalespiller fra 1979 mot Tromsø/Fredrikstads stopper"],
+  // Og et fjerde par fra samme kilde, denne gangen INNAD i den: Haugars
+  // landslagskeeper (130 kamper 1967–1978, ti A-landskamper) mot FKHs
+  // forsvarsspiller fra klubbens første tiår. Kilden fører dem hver for seg.
+  ["per andreas haftorsen|per haftorsen", "Haugars keeper mot FKHs forsvarsspiller"],
+  // Johnsen og Johansen er to ulike etternavn, ikke en stavevariant — samme sak
+  // som Knudsen/Knutsen. KFUMs keeper mot Skeids angrepsspiller med 39
+  // landskamper fra gullalderen.
+  ["erik johansen|erik johnsen", "KFUMs keeper mot Skeids landslagsspiss"],
+  // Moss-kilden ga TRE menn som heter Nils Eriksen, og de er tre. Odds
+  // «Påsan» spilte 208 kamper for Odd 1929–1939; Moss-kildens Nils Eriksen var
+  // klubbens store førkrigslandslagsprofil med 47 landskamper MENS han spilte i
+  // Moss — begge deler kan ikke stemme om samme mann i samme tiår. Nils Espen
+  // Eriksen er keeperen på cup- og seriemesterlaget i 1983 og 1987.
+  //
+  // Importen slo faktisk sammen de to første, fordi navnenøkkelen fjerner
+  // kallenavn i «...». Det er en feil vakten ikke KAN se — resultatet er ikke to
+  // like navn, men én spiller på to baner. Den er splittet igjen, og Moss-mannen
+  // bærer klubbsuffikset katalogen allerede bruker.
+  ["nils eriksen|nils espen eriksen", "Odds back fra 1930-tallet mot Moss' keeper fra 1983"],
+  ["nils eriksen|nils eriksen moss", "Odds back mot Moss' førkrigslandslagsprofil"],
+  ["nils eriksen moss|nils espen eriksen", "Moss' stopper fra 1930-tallet mot Moss' keeper fra 1983"],
+  // Aalesunds keeperkjempe fra 1951–1962 mot Moss-stopperen som spilte for
+  // Bayern München og Nottingham Forest.
+  ["einar aas|einar jan aas", "AaFKs keeper mot Moss' internasjonale midtstopper"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

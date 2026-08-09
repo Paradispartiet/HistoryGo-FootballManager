@@ -304,9 +304,9 @@ const largestClone = Math.max(...signatures.values());
 // nøyaktig den reverteringen passert i stillhet.
 //
 // Odd-importen (100 profiler, 100 % unike kvalitetssetninger i kilden) tok den
-// til 84,3 %. Aalesund la 90 til, og målt er den nå 85,2 % av 1413. Grensa
-// følger etter til 0,85.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.85,
+// til 84,3 %. Aalesund, Haugesund, Skeid, Moss og Bryne la 440 til, og målt er
+// den nå 86,2 % av 1699. Grensa følger etter til 0,86.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.86,
   `${signatures.size} unike av ${players.length} (${(uniqueShare * 100).toFixed(0)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -356,18 +356,28 @@ check("ingen stor gruppe spillere er bytte-identiske", largestClone <= 14, Strin
 // teller denne målingen én ferdighet som to. Det trakk tallet ned 0,2 poeng, og
 // det er riktig — det var pynt.
 //
-// Aalesund tok den videre til 59,3 %, og grensa til 0,58. Kilden har 100 %
-// unike styrkesett for seg selv, og samtidig fikk `marking` og `flair` sine
-// første 85 spillere: to ferdigheter katalogen hadde, men som én
+// Aalesund tok den videre til 59,3 %, og samtidig fikk `marking` og `flair`
+// sine første 85 spillere: to ferdigheter katalogen hadde, men som én
 // ordbokoppføring hadde spist («markering» pekte på `duels`). Et smalere
 // vokabular gir likere sett.
+//
+// Haugesund tok den til 60,4 %, og grensa til 0,59. Den kilden ga
+// `natural_fitness` sine første spillere — men den var ikke spist av en
+// ordbok, den hadde bare aldri møtt en kilde som sa «tilgjengelighet».
+//
+// Skeid tok den NED igjen til 60,0 %, og Bryne opp til 61,0 %. Grensa står på
+// 0,59. En ratchet går ikke ned. Fallet er kildens egenskap og ikke en feil: Skeid
+// beskriver den moderne troppen med korte stikkord («Allsidighet, disiplin,
+// arbeidskapasitet») der de eldre profilene får hele setninger, og 81 % unike
+// styrkesett internt er det laveste av de seks siste kildene. Det er ærlig
+// beskrevet av en klubb hvis dokumenterte storhet ligger i 1947–1974.
 const strengthSets = new Map();
 for (const player of players) {
   const key = JSON.stringify([...player.strengths].sort());
   strengthSets.set(key, (strengthSets.get(key) || 0) + 1);
 }
 const strengthShare = strengthSets.size / players.length;
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.58,
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.59,
   `${strengthSets.size} unike styrke-sett av ${players.length} (${(strengthShare * 100).toFixed(0)} %)`);
 
 // ---------------------------------------------------------------------------
@@ -466,10 +476,15 @@ check("epoken er en akse i katalogen", Object.keys(catalogue.eraProfiles).length
     kilder.every((value) => value === "belagt" || value === "utledet"),
     [...new Set(kilder)].join(", "));
   const belagt = kilder.filter((value) => value === "belagt").length / players.length;
-  // RATCHET. Målt 29,3 %, og det er lavt med vilje: 608 spillere står utenfor
-  // klubbkildene og har ingen registrert datering i det hele tatt. Tallet skal
-  // opp for hver kilde som daterer det den navngir, og aldri ned.
-  check("epoken er belagt for en reell andel", belagt > 0.28, `${(belagt * 100).toFixed(1)} %`);
+  // RATCHET. Målt 35,4 % etter Bryne (29,3 % ved innføringen), og det er lavt
+  // med vilje: 608 spillere står utenfor klubbkildene og har ingen registrert
+  // datering i det hele tatt. Tallet skal opp for hver kilde som daterer det
+  // den navngir, og aldri ned.
+  //
+  // Skeid løftet det fordi kilden daterer med ORD der den mangler tall — «en
+  // tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode». Det er
+  // like mye kildens egen datering som et årstall, og teller derfor `belagt`.
+  check("epoken er belagt for en reell andel", belagt > 0.35, `${(belagt * 100).toFixed(1)} %`);
   check("begge kildegradene er i bruk", new Set(kilder).size === 2);
 }
 const eraPairs = [];

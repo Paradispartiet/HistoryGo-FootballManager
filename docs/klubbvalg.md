@@ -168,32 +168,38 @@ grunntropp så et klubbvalg aldri blir en blindvei.
 | Vålerenga | Intility Arena | 127 |
 | Fredrikstad | Fredrikstad stadion | 100 |
 | Odd | Skagerak Arena | 100 |
+| Haugesund | Haugesund stadion | 100 |
+| Skeid | Nordre Åsen | 100 |
 | Aalesund | Color Line Stadion | 90 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Start | Sparebanken Sør Arena | 85 |
 | Lyn | Bislett Stadion | 82 |
+| Moss | Melløs | 82 |
 | Tromsø | Romssa Arena | 81 |
 | Brann | Brann Stadion | 75 |
 | Stabæk | Nadderud | 75 |
 | Viking | Lyse Arena | 70 |
 | Sandefjord | Jotun Arena | 68 |
+| Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
 | Kristiansund | Nordmøre stadion | 49 |
 | Sarpsborg 08 | Sarpsborg stadion | 32 |
 | HamKam | Briskeby | 26 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset og Odd
-— 1659 arveplasser fordelt på alle 20, og **ingen klubb med bane har under 26 navn**.
-De 40 klubbene som mangler bane sier det rett ut i profilen i stedet for å late som.
+**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
+Haugesund, Skeid, Moss og Bryne — 2009 arveplasser fordelt på alle 24, og **ingen
+klubb med bane har under 26 navn**. De 36 klubbene som mangler bane sier det rett
+ut i profilen i stedet for å late som.
 
-Arven er ikke lenger et eliteserieprivilegium: Strømsgodset, Odd og Lyn ligger
-alle tre i OBOS-ligaen og har henholdsvis den nest største, den delt fjerde
-største og den niende største arven i katalogen. Det er riktig — arv er klubbens
+Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund,
+Lyn, Moss og Bryne ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
+fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvinner
+ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 201 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 248 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
@@ -474,6 +480,266 @@ er også to menn, og er holdt fra hverandre.
 levert til nesten hele katalogen, og Antonio Nusa, Hugo Vetlesen, Emil Bohinen,
 Ola Brynhildsen, Birger Meling og Andreas Hanche-Olsen står nå som
 `academy_export` på Nadderud og som noe annet der de fikk karrieren sin.
+
+### Bryne: fra 0 til 68 navn, og en terskel som slapp gjennom én feil
+
+Cupgull i 1987, seriesølv på 80-tallet og europacup i 1981, 1983 og 1988 — et
+lag fra Jæren som slo seg opp på arbeid. Bryne stadion er lagt inn som sted.
+
+53 nye navn, 15 koblet på. **17 av kildens 85 står utenfor**, den største
+utelatelsen så langt, og den er kildens egen ærlighet: de er navn fra klubbens
+eldste bevarte lagbilde fra 1928 og fra opprykkstroppen i 1975, ført med
+posisjonen «Historisk utespiller». Kilden vet at de spilte ute, ikke hvor.
+Posisjon styrer arketyper, roller, styrker og svake sider, så en gjettet
+posisjon er en påstand om en ekte mann.
+
+Det henger sammen med et annet tall: **66 unike kvalitetssetninger for 85
+profiler**, den første kilden siden Rosenborg som gjenbruker. Én eneste setning
+— «Klubblojalitet, pionerånd, arbeidsvilje og historisk lagverdi» — dekker alle
+20 i pionerkategorien. Den beskriver kategorien, ikke spillerne. 17 av de 20
+faller ut på posisjon uansett, så gjenbruket rammer tre navn.
+
+#### Terskelen ble hevet fra 80 % til 90 %, og Bryne er grunnen
+
+Regelen fra Skeid lar de daterte profilene i en kategori datere de udaterte, når
+kilden har vist nok til det. Terskelen sto på 80 %.
+
+«Øverste Bryne-legende» har **11 daterte før 2000 og 2 etter — 84,6 %**, altså
+innenfor. Men blant de 12 udaterte i samme kategori ligger **Tommy Høiland**, en
+Bryne-utviklet angrepsspiller fra 2010-tallet. En kategoridom på «historical»
+ville datert ham feil, og ingenting ville sagt fra.
+
+80 % var altså løst nok til å slippe gjennom én feil. De tidligere kildene taper
+ingenting på 90 %: hver eneste kategori som fikk en dom hos Skeid og Moss var
+100 % entydig (20/20, 25/25, 8/8, 16/16, 18/18).
+
+Prisen er at Bryne får **null kategoridommer** for sine to store kategorier, og
+at 17 profiler må dateres for hånd. Hver av dem står navngitt i importen med
+kildens egen setning som begrunnelse, og alle er `utledet`:
+
+| Grunnlag | Navn |
+|---|---|
+| Klubbrekorder (596/504/371/274 kamper eller mål) bygget i toppserie- og europaperioden | Høyland, Eskeland, Reime, Vold |
+| Kilden bruker selv ordet «historisk» om dem | Sigbjørnsen, Andersen, Rangnes, Braut |
+| «Toppserieperioden … den brede lokale stammen» = 1975–1993 | Mellemstrand |
+| Den ene moderne blant legendene | Høiland |
+| «Stor total karriere», hver beskrevet med klubben de gikk til | Håland, Grødem, Braut Brunes, Gauseth, Baldvinsson, Herrem, Hansen |
+
+«Stor total karriere» kunne ikke få en kategoridom heller: 4 av de daterte er
+moderne og 2 historiske, så **selvkontrollen forbød den** — den samme kontrollen
+som tillot dommen hos Moss.
+
+Nær-duplikat-vakten fant ett par, og det er samme mann: **Erling Braut Haaland /
+Erling Haaland**, 16 A-lagskamper i OBOS-ligaen for Bryne i 2016 før Molde,
+Salzburg, Dortmund og Manchester City. Bryne-importens kategoriregel ga ham 86;
+katalogen har 97, og sammenslåingen tar det høyeste.
+
+### Moss: fra 0 til 82 navn, og en sammenslåing vakten ikke kunne se
+
+Seriegullet i 1987 kom under Nils Arne Eggen, cupgullet i 1983, seriesølvet i
+1979 — og europacup mot Bayern München og Real Madrid. Klubben lå i OBOS-ligaen
+uten bane og uten ett eneste navn. Melløs er lagt inn som sted.
+
+64 nye navn, 18 koblet på. **Tre står utenfor**: kilden oppgir «Historisk
+utespiller» som posisjon for Trygve Løken, Håkon Askerød og John Olsen. Det er
+ærlig av kilden — den vet at han spilte ute, ikke hvor — men posisjon styrer
+arketyper, roller, styrker og svake sider, så en gjettet posisjon er en påstand
+om en ekte mann. De står utenfor til en kilde sier hva de spilte, samme
+avgjørelse som for Lyns to navn uten posisjon.
+
+95 % av frasene var dekket av de ti tidligere ordbøkene, og 98 % av
+ferdighetssettene er unike internt.
+
+#### Kategorien som ikke kunne datere seg selv — igjen
+
+«Stor total karriere» har 20 profiler og **bare én datert**, altså under
+terskelen på tre. Terskelen gjorde jobben sin ved Skeid, der nøyaktig den
+kategorien blandet Braaten med Arne Natland fra «en tidlig
+landslagsgenerasjon», og en majoritet ville datert tre menn feil.
+
+Her er den ikke blandet, og det er **lest, ikke antatt**: alle 19 udaterte
+beskrives med klubben de gikk til — Wimbledon, Austria Wien, Aberdeen, Dundee
+United, Örebro, Viborg, Odense, Crystal Palace, Sundsvall — og hver eneste er en
+1990-/2000-tallsspiller. Kilden har dessuten en egen kategori for de gamle
+(«Historisk pioner / epokeprofil», 16 av 16 datert før 2000).
+
+Avgjørelsen er derfor tatt på **kategori** og ikke på ni enkeltnavn, den står
+synlig i importen, og den **kontrolleres mot kilden**: sier én eneste datert
+profil i kategorien noe annet, kaster importen.
+
+#### Feilen vakten ikke kunne se
+
+Navnenøkkelen fjerner kallenavn i «...», så kildens «Nils Eriksen» traff
+katalogens **«Nils «Påsan» Eriksen» fra Odd** — og importen slo dem sammen.
+
+Odds Påsan spilte 208 obligatoriske kamper for Odd mellom 1929 og 1939.
+Moss-kilden beskriver sin Nils Eriksen som klubbens store førkrigslandslagsprofil
+med 47 landskamper *mens han spilte i Moss*. Begge deler kan ikke stemme om
+samme mann i samme tiår.
+
+**Dette er en feil nær-duplikat-vakten ikke KAN fange.** Resultatet er ikke to
+like navn — det er én spiller på to baner, som er nøyaktig det dataene skal se
+ut som når en mann faktisk spilte begge steder. Den ble funnet ved å lese hva
+kildene sier om hverandres menn, ikke av en måling.
+
+Å smelte to dokumenterte klubbkarrierer sammen er den ene feilen som ikke kan
+angres, så tvilen faller ut til splitting. Moss-mannen bærer klubbsuffikset
+katalogen allerede bruker for Tore Pedersen (RBK) og Sverre Andersen (Odd).
+
+Motsatt vei: **Hans Deunk og Hans Jørgen Deunk er samme mann** — cupmester med
+Moss i 1983, «langvarig forsvarsspiller rundt 1984-laget» hos Fredrikstad. Samme
+posisjon, samme periode, og et etternavn som knapt finnes i norsk fotball
+ellers. Slått sammen.
+
+Tre menn heter nå Nils Eriksen i katalogen, og alle tre står gjennomgått: Odds
+back fra 1930-tallet, Moss' førkrigsstopper, og Moss' keeper fra cup- og
+seriemesterlaget i 1983 og 1987. I tillegg **Einar Aas / Einar Jan Aas** —
+Aalesunds keeperkjempe fra 1951–1962 mot Moss-stopperen som spilte for Bayern
+München og Nottingham Forest.
+
+### Skeid: fra 0 til 100 navn, og en vakt som navnga en klubb
+
+**Åtte cupgull mellom 1947 og 1974 og seriegullet i 1966** gjør Skeid til en av
+Norges mest titteltunge klubber — og den lå i **2. divisjon** uten bane og uten
+ett eneste navn. Nordre Åsen er lagt inn som sted; id-en følger konvensjonen og
+må verifiseres mot History Go.
+
+78 nye navn, 22 koblet på. Kilden er tydelig **mer forsiktig** enn de siste:
+bare 40 av 100 profiler har «Høy» kildesikkerhet, 35 «Middels–høy» og 25
+«Middels». Det er ærlig for en klubb hvis dokumenterte storhet ligger et halvt
+århundre tilbake, og forsiktigheten leses som den er — «Middels–høy» blir M.
+Provenansen rundes aldri opp.
+
+Det viser seg også i tallene: **81 % unike styrkesett internt**, det laveste av
+de seks siste kildene, fordi den moderne troppen beskrives med korte stikkord
+(«Allsidighet, disiplin, arbeidskapasitet») der de eldre profilene får hele
+setninger. Korpusandelen falt fra 60,4 % til 60,0 %, og grensa blir stående på
+0,59 — **en ratchet går ikke ned.** Fallet er kildens egenskap, ikke en feil.
+
+#### La de daterte profilene datere de udaterte
+
+43 av 100 profiler er udaterte, og Skeid har verken Aalesunds moderne fasit
+eller Haugesunds klubbtilhørighet å falle tilbake på: klubben har både et
+dynasti på 50- og 60-tallet og en moderne tropp.
+
+Men kilden svarer selv, og svaret er målbart i den. Innenfor hver kategori er
+de **daterte** profilene entydige:
+
+| Kategori | Daterte | Dom |
+|---|---|---|
+| Øverste Skeid-legende | 20 av 20 før 2000 | historical |
+| Historisk cup-/gullalderprofil | 25 av 25 før 2000 | historical |
+| Sterk samlingsspiller / moderne profil | 8 av 8 etter 2000 | modern |
+| **Stor total karriere** | **2 daterte** | **ingen dom** |
+
+Kategorien er altså et datosignal — men bare der kilden har vist det. Regelen
+krever minst tre daterte og minst 80 % enighet, og **«Stor total karriere»
+klarte ikke det.** Vakten kastet, og den hadde rett: kategorien inneholder både
+Braaten, Elabdellaoui og Aleesami *og* Arne Natland fra «en tidlig
+landslagsgenerasjon». En majoritet ville datert tre menn feil.
+
+For dem svarer kilden med **ord i stedet for tall** — «en tidlig
+landslagsgenerasjon», «en sterk norsk etterkrigsperiode», «historisk
+landslagsprofil». Det er like mye kildens egen datering som et årstall, og
+teller derfor `belagt`. Andelen belagte epoker gikk fra 31,1 % til **32,8 %**.
+
+Nøyaktig **én** spiller ble stående uten noe signal: Morten Vinje, «15
+landskamper og Skeid-spiller». Han står i en **navngitt** unntaksliste i
+importen med begrunnelsen i klartekst (den personlige konteksten sier «uten
+samme ettertidssynlighet som de største legendene»), merket `utledet`. Blir
+siste utvei en stille gren, daterer den hele arver uten at noe sier fra — det
+var Aalesund-feilen. Står en ny udatert spiller ikke i lista, kastes det.
+
+#### Navnenøkkelen slettet bindestreken
+
+Importen fant ikke «Pa-Modou Kah», som allerede sto i katalogen, fordi
+nøkkelen fjernet bindestreken i stedet for å gjøre den til mellomrom:
+`pamodou kah` mot kildens `pa modou kah`. Resultatet ville vært en **duplikat
+person** — den dyreste feilen i denne katalogen. 29 navn har bindestrek.
+
+Nær-duplikat-vakten ville tatt den i etterkant (ett tegns avstand), men det er
+bedre å ikke lage den. Samtidig translittereres de slaviske tegnene katalogen
+faktisk inneholder: uten det ble «Dočkal» til `dokal`, altså en bokstav som
+forsvant sporløst. Målt: ingen nye kollisjoner utover de tre kjente parene med
+klubbsuffiks.
+
+Nær-duplikat-vakten fant ett par til, og det er to menn: **Erik Johnsen /
+Erik Johansen** — KFUMs keeper mot Skeids landslagsspiss med 39 landskamper fra
+gullalderen. Johnsen og Johansen er to ulike etternavn, ikke en stavevariant.
+
+#### Vakten som navnga en klubb
+
+`sim:club-squad` sjekket at en klubb uten bane sier det rett ut — med **Skeid
+hardkodet som eksempelet**. Så fikk Skeid bane, og vakten feilet fordi arbeidet
+lyktes, ikke fordi noe var galt. Samme utløpte premiss som klubbstatus-andelen
+hadde.
+
+Den leser nå dataene: alle 38 klubber uten bane må si det, og alle 22 med bane
+må la være. Den andre halvdelen er den som fortsatt består den dagen pyramiden
+er komplett — en vakt som bare teller det som mangler, slutter å beskytte når
+ingenting mangler.
+
+### Haugesund: fra 0 til 100 navn, og tre klubber på én bane
+
+Haugesund hadde **verken bane eller ett eneste navn** — den siste store norske
+klubbhistorien uten noen av delene. Haugesund stadion er lagt inn som sted;
+id-en følger konvensjonen og **må verifiseres mot History Gos egen id**.
+
+94 nye navn, 6 koblet på. Kilden setter to rekorder til: **96 % av frasene var
+allerede dekket** av de åtte tidligere ordbøkene — bare 15 var nye — og den har
+**100 unike kvalitetssetninger for 100 profiler**, med 96 av 100 ferdighetssett
+unike etter kartlegging.
+
+To av de nye frasene lukker et ekte hull: `natural_fitness` var én av de fire
+ferdighetene ingen spiller bar. «Tilgjengelighet» og «kampberedskap» er nettopp
+den ferdigheten, og kilden sier ordet selv. Den ble altså ikke *spist* av en
+ordbokoppføring, slik `marking` og `flair` var — den hadde bare aldri møtt en
+kilde som sa det. Nå står `decisions` igjen som den eneste med null.
+
+#### Tre klubber, én bane
+
+Kilden behandler **FK Haugesund, SK Haugar og SK Djerv 1919 som én
+Haugesund-pool uten å blande dem**: FKH ble stiftet i 1993 av de to
+moderklubbene, Haugar nådde cupfinalen i 1961 og 1979, Djerv semifinalen i 1986
+og øverste nivå i 1988. Hver profil bærer et eget `Klubb/arv`-felt.
+
+Katalogen kan ikke holde den tredelingen. `clubStatus` er et kart fra *placeId*
+til status, og alle tre spilte på samme bane — Haugesund stadion har vært byens
+hovedarena siden 1920. Haugar og Djerv finnes heller ikke i seriepyramiden, så
+egne steder for dem ville vært å finne opp klubber spillet ikke har.
+
+Ett sted er derfor riktig, men **klubbskillet er ekte informasjon skjemaet ikke
+bærer**, og det står her i stedet for å forsvinne stille. Kategorien bærer
+mesteparten av det uansett: «Haugar-legende», «Djerv-legende», «Djerv–FKH-bro».
+
+`Klubb/arv` gjør likevel én ting i importen — den daterer. 46 av 100 profiler
+har ikke ett årstall, og der sier kilden tilhørigheten i stedet: FKH er etter
+1993, Haugar og Djerv før 2000. Det er kildens eget ord, ikke en fallback, og
+`eraSource` skiller dem: datert av kilden er `belagt`, utledet av klubben er
+`utledet`. Resultat: 63 % moderne, 37 % historisk — som er en klubb med et
+moderne toppfotballkapittel og to eldre moderklubber.
+
+#### Fem par på én gang, og to av dem var samme mann
+
+| Par | Dom |
+|---|---|
+| Morten Konradsen / Morten Ågnes Konradsen | samme mann — slått sammen |
+| Bala Garba / Bala Ahmed Garba | samme mann — slått sammen |
+| Tor Andreassen / Tor Arne Andreassen | to menn |
+| Thore Pedersen / Tore Pedersen | to menn |
+| Tor Nilsen / Tore Nilsen | to menn |
+| Per Andreas Haftorsen / Per Haftorsen | to menn — **begge fra denne kilden** |
+
+Konradsen er Bodø/Glimt-midtbanespilleren som kom til FKH i senere
+eliteserieår, Garba den nigerianske spissen som gikk fra Start til Haugesund og
+står med 62 mål på 152 kamper. Begge navneformene er riktige i begge tilfeller,
+så den som allerede sto i katalogen beholdes.
+
+Det siste paret er nytt av slaget: **to menn fra samme kilde**, ført hver for
+seg av den. Haugars landslagskeeper Per Haftorsen (130 kamper 1967–1978, ti
+A-landskamper) mot FKHs forsvarsspiller Per Andreas Haftorsen fra klubbens
+første tiår. Vakten kan ikke vite det — posisjon og epoke avgjør, og det er
+nettopp derfor hvert par gjennomgås for hånd.
 
 ### Aalesund: fra 1 til 90 navn, og en fallback som alltid bet
 
@@ -821,8 +1087,8 @@ tabellen nevnte den. Den gamle null-raden ville ikke sagt et ord.
 Hver arveplass har en `clubStatus` — klubbikon, klubblegende, elitekarriere,
 gullalderens kjerne, nøkkelspiller, klubbprofil, akademi/eksport, stjerne med
 kortere opphold eller troppsprofil — og et `clubStatusSource` som skiller
-**kuratert klubbhistorie** fra **utledet**. 1687 statusoppføringer på 1413
-spillere, 1165 belagte og 522 utledede.
+**kuratert klubbhistorie** fra **utledet**. 2037 statusoppføringer på 1699
+spillere, 1401 belagte og 636 utledede.
 
 Begge er **kart fra `placeId` til verdi**, ikke enkeltverdier:
 

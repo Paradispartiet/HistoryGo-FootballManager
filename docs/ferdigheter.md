@@ -323,10 +323,10 @@ siste store malimporten utenom Rosenborg, og de to største kollisjonsgruppene i
 katalogen — på 34 og 27 spillere — kom begge derfra. Med styrkene lest per
 spiller:
 
-| | Før VIF | Etter alle elleve kildene | Grense |
+| | Før VIF | Etter alle femten kildene | Grense |
 |---|---:|---:|---:|
-| Unike profiler | 73,7 % | **85,2 %** | 0,85 |
-| Unike styrke-sett | 46,9 %* | **59,3 %** | 0,58 |
+| Unike profiler | 73,7 % | **86,2 %** | 0,86 |
+| Unike styrke-sett | 46,9 %* | **61,0 %** | 0,59 |
 | Største klon | 12 | 12 | ≤ 14 |
 
 \* Tallene for styrke-sett er ikke sammenlignbare på tvers av kolonnene.
@@ -353,9 +353,15 @@ vokste fra 1007 til 1117 spillere — og det er nettopp derfor den
 korpusbrede målingen ble supplert med en **per klubb**-måling: den blir ikke
 uskarpere av at katalogen vokser.
 
-Tromsø, Fredrikstad, Start, Odd og Aalesund er de fem ordrikeste kildene
-(81/81, 100/100, 85/85, 100/100 og 90/90 unike kvalitetssetninger), og de dro
-begge andelene opp til 85,2 % og 59,3 % på 1413 spillere.
+Tromsø, Fredrikstad, Start, Odd, Aalesund og Haugesund er de seks ordrikeste
+kildene — alle med like mange unike kvalitetssetninger som profiler — og de dro
+begge andelene opp til 85,8 % og 60,4 % på 1505 spillere.
+
+Skeid tok dem **ned** igjen, til 85,7 % og 60,0 % på 1583. Grensene blir stående:
+en ratchet går ikke ned. Kilden har 100 unike kvalitetssetninger, men bare 81 %
+unike styrkesett internt, fordi den moderne troppen beskrives med korte stikkord
+der de eldre profilene får hele setninger. Det er kildens egenskap, ikke en
+feil — og det er derfor per-klubb-målingen finnes ved siden av korpusandelen.
 
 Bitetesten er å reversere klubben til mal: VIF falt til 74,4 % og 44,4 %, RBK
 til 77,2 % og 51,7 %, og vaktene feller begge. Sto grensene der de sto, ville
@@ -406,9 +412,14 @@ bet: epokespennet mellom klubbene står stille (Sandefjord og Viking eier
 ytterpunktene), og korpusandelen flytter seg tre prosentpoeng. 59 % er dessuten
 riktig for Fredrikstad, så det finnes ingen fordeling å måle mot.
 
-Spillerne har derfor `eraSource`, samme mønster som `classSource`: 414 `belagt`
-mot 999 `utledet`. Grensa er en ratchet på 28 % — lav med vilje, siden 608
+Spillerne har derfor `eraSource`, samme mønster som `classSource`: 602 `belagt`
+mot 1097 `utledet`. Grensa er en ratchet på 35 % — lav med vilje, siden 608
 spillere står utenfor klubbkildene og aldri har hatt en registrert datering.
+
+Skeid-kilden løftet den ved å datere med **ord** der den mangler tall («en
+tidlig landslagsgenerasjon», «en sterk norsk etterkrigsperiode»), og ved at de
+daterte profilene i hver kategori daterer de udaterte i samme kategori — en
+måling i kilden, ikke en antakelse om den.
 Den fanger ikke en import som lyver om provenansen, like lite som `classSource`
 gjør; den flytter kostnaden dit den hører hjemme.
 
@@ -420,8 +431,11 @@ For to av dem var ikke kildene tause — én ordbokoppføring hadde spist ordet.
 «markering» pekte på `duels`, «improvisasjon» og «uforutsigbarhet» på
 `chance_creation`. **51 kildeprofiler sier «markering» rett ut.**
 
-Rettet gir det `marking` 78 spillere og `flair` 7. `decisions` (0 kildetreff) og
-`natural_fitness` (2) står igjen som ekte kildehull.
+Rettet gir det `marking` 86 spillere og `flair` 10. Haugesund-kilden lukket den
+tredje: «tilgjengelighet» og «kampberedskap» ER `natural_fitness`, og den
+ferdigheten var ikke spist av en ordbok — den hadde bare aldri møtt en kilde som
+sa ordet. `decisions` står igjen som den eneste med null, og det er et ekte
+kildehull: ingen av de tolv kildene sier «beslutninger» eller «spillvalg».
 
 Lærdommen er at et alias kan gjøre vokabularet **smalere enn kildene**, og at
 det ser ut som en kildebegrensning. Målingen som avslører det er triviell:
@@ -429,7 +443,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1413 navngitte fotballspillere**. 58 tall hver er ~82 000
+Dette er **1699 navngitte fotballspillere**. 58 tall hver er ~99 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 

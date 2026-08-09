@@ -270,7 +270,8 @@
       "city": "Haugesund",
       "tier": "obosligaen",
       "strength": 67,
-      "form": 51
+      "form": 51,
+      "homePlaceId": "haugesund_stadion"
     },
     {
       "id": "stabak",
@@ -317,7 +318,8 @@
       "city": "Bryne",
       "tier": "obosligaen",
       "strength": 62,
-      "form": 57
+      "form": 57,
+      "homePlaceId": "bryne_stadion"
     },
     {
       "id": "egersund",
@@ -371,7 +373,8 @@
       "city": "Moss",
       "tier": "obosligaen",
       "strength": 60,
-      "form": 55
+      "form": 55,
+      "homePlaceId": "mellos_stadion"
     },
     {
       "id": "sandnes_ulf",
@@ -539,7 +542,8 @@
       "tier": "andredivisjon",
       "group": "avdeling2",
       "strength": 57,
-      "form": 52
+      "form": 52,
+      "homePlaceId": "nordre_asen"
     },
     {
       "id": "honefoss",
