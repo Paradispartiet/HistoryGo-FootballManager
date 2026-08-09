@@ -73,6 +73,7 @@ jobs:
           npm run audit:manager-shell-v3
           npm run audit:manager-office-inbox-v1
           npm run audit:manager-training-scene-v2
+          npm run audit:manager-training-exercise-design-v1
           npm run audit:manager-club-scene-v1
           npm run audit:manager-club-operations-v1
           npm run audit:manager-club-organization-v1
@@ -113,6 +114,7 @@ jobs:
           npm run sim:manager-season-scene-v1
           npm run sim:manager-office-inbox-v1
           npm run sim:manager-training-scene-v2
+          npm run sim:manager-training-exercise-design-v1
           npm run sim:manager-club-scene-v1
           npm run sim:manager-club-operations-v1
           npm run sim:manager-club-organization-v1
