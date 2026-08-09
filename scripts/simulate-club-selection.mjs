@@ -133,8 +133,13 @@ for (const club of ready.slice(0, 10)) {
   check(`${club.name}: standing er lesbar`, /\d+\. sterkeste klubb av \d+/.test(summary.standing), summary.standing);
 }
 
-const rank = rankClubInTier(allClubs.find((club) => club.id === "bodo_glimt"), allClubs);
-check("sterkeste klubb rangeres først", rank.position === 1 && rank.of === 16, JSON.stringify(rank));
+const bodoGlimt = allClubs.find((club) => club.id === "bodo_glimt");
+const rank = rankClubInTier(bodoGlimt, allClubs);
+const glimtPeers = allClubs.filter((club) =>
+  club.tier === bodoGlimt.tier && (!bodoGlimt.group || club.group === bodoGlimt.group));
+check("sterkeste klubb rangeres først mot dagens faktiske divisjonsstørrelse",
+  rank.position === 1 && rank.of === glimtPeers.length,
+  `${JSON.stringify(rank)} / faktiske peers ${glimtPeers.length}`);
 
 // ---------------------------------------------------------------------------
 // 5. App/markup bruker datadrevet liste
