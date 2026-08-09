@@ -46,7 +46,7 @@ const ARCHETYPES = Object.freeze([
   }),
   Object.freeze({
     id: "pressing",
-    match: /press|gjenvinn|defensiv struktur|kompakt|høyt press/i,
+    match: /høyt press|pressing|pressøkt|pressøvelse|gjenvinn|defensiv struktur|kompakt/i,
     title: "Press og kollektiv avstand",
     objective: "Trene at første pressledd og støtten bak går samtidig, slik at motstanderen ikke bare spiller gjennom presset.",
     baseSetup: "Et mulig utgangspunkt er retningsbestemt spill der laget uten ball får tydelige pressutløsere og må flytte samlet når første spiller går.",
