@@ -5258,18 +5258,18 @@
       "warningWhenMisused": "Centerhalfen var lagets midtpunkt. Skyver du ham ut av sentrum, mister laget den som holdt det sammen.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "elite_career"
+        "sarpsborg_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "elite_career",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         }
       ]
     },
@@ -5342,7 +5342,7 @@
         "marienlyst_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "aspmyra_stadion": "utledet",
         "marienlyst_stadion": "belagt"
       },
@@ -5358,7 +5358,7 @@
           "clubId": "sarpsborg08",
           "relation": "played_for",
           "status": "elite_career",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "stromsgodset",
@@ -5433,11 +5433,11 @@
       "warningWhenMisused": "Klemt inn i en smal form mister han både dribleduellen og siste pasning.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "key_player",
+        "sarpsborg_stadion": "elite_career",
         "aker_stadion": "key_player"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "aker_stadion": "utledet"
       },
       "eraSource": "utledet",
@@ -5451,8 +5451,8 @@
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "key_player",
-          "source": "utledet"
+          "status": "elite_career",
+          "source": "belagt"
         }
       ]
     },
@@ -5517,18 +5517,18 @@
       "warningWhenMisused": "En stor spiss uten støtte i nærheten blir en vegg uten noen å spille veggen med.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "key_player"
+        "sarpsborg_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "key_player",
-          "source": "utledet"
+          "status": "elite_career",
+          "source": "belagt"
         }
       ]
     },
@@ -5594,18 +5594,18 @@
       "warningWhenMisused": "Setter du en løper uten rom å løpe i, har du tatt fra ham alt.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "key_player"
+        "sarpsborg_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "key_player",
-          "source": "utledet"
+          "status": "elite_career",
+          "source": "belagt"
         }
       ]
     },
@@ -5665,18 +5665,18 @@
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         }
       ]
     },
@@ -5738,18 +5738,18 @@
       "warningWhenMisused": "Sytten mål på tjuefem landskamper kom fra service inn i boksen, ikke fra å hente ballen selv.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         }
       ]
     },
@@ -6084,11 +6084,11 @@
       "warningWhenMisused": "Vingen trenger en duell å vinne. Tar du bort en-mot-en-situasjonen, tar du bort ham.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile",
+        "sarpsborg_stadion": "club_legend",
         "marienlyst_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "marienlyst_stadion": "utledet"
       },
       "eraSource": "belagt",
@@ -6096,8 +6096,8 @@
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         },
         {
           "clubId": "stromsgodset",
@@ -6166,18 +6166,18 @@
       "warningWhenMisused": "En kantspiller berømt for å score direkte fra corner trenger bredden — og dødballene.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         }
       ]
     },
@@ -6241,18 +6241,18 @@
       "warningWhenMisused": "En stopper som leser spillet trenger en linje å lese. Uten struktur blir han bare en som løper etter.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -6317,18 +6317,18 @@
       "warningWhenMisused": "Låser du en boks-til-boks-spiller foran forsvaret, forsvinner løpene som var poenget hans.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -6390,18 +6390,18 @@
       "warningWhenMisused": "En balanserende midtbanespiller uten makker må gjøre to jobber og gjør ingen av dem godt.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "squad_profile"
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "squad_profile",
-          "source": "utledet"
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -6463,18 +6463,18 @@
       "warningWhenMisused": "En targetspiss uten innlegg er en spiss uten fotball.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "squad_profile"
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "squad_profile",
-          "source": "utledet"
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -6537,11 +6537,11 @@
       "warningWhenMisused": "En seksser alene foran en høy linje får et rom han ikke kan dekke.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile",
+        "sarpsborg_stadion": "elite_career",
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "aker_stadion": "utledet"
       },
       "eraSource": "utledet",
@@ -6555,8 +6555,8 @@
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "elite_career",
+          "source": "belagt"
         }
       ]
     },
@@ -6880,18 +6880,18 @@
       "warningWhenMisused": "En dyp oppspiller uten tid på ballen blir tvunget til å slå langt — og da er han ikke seg selv.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "squad_profile"
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "squad_profile",
-          "source": "utledet"
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -6955,18 +6955,18 @@
       "warningWhenMisused": "Fart uten rom er ingen fart. Mot en lav blokk må laget skape rommet han skal inn i.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "squad_profile"
+        "sarpsborg_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "squad_profile",
-          "source": "utledet"
+          "status": "elite_career",
+          "source": "belagt"
         }
       ]
     },
@@ -7278,11 +7278,11 @@
       "warningWhenMisused": "En løpende midtbanespiller i et stillestående lag ser ut som han løper i feil retning.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "squad_profile",
+        "sarpsborg_stadion": "club_icon",
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -7296,8 +7296,8 @@
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "squad_profile",
-          "source": "utledet"
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -7364,11 +7364,11 @@
       "warningWhenMisused": "«Half»-rollen hans lå mellom stopper og sentral midtbane. Skyver du ham ut på kanten, står han i en rolle systemet hans aldri hadde.",
       "classSource": "belagt",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile",
+        "sarpsborg_stadion": "club_legend",
         "bislett_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "bislett_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -7382,8 +7382,8 @@
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         }
       ]
     },
@@ -7449,11 +7449,11 @@
       "warningWhenMisused": "Han debuterte på landslaget som midtstopper. Bruker du ham offensivt, bruker du ham som noe han ikke var.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile",
+        "sarpsborg_stadion": "club_legend",
         "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "fredrikstad_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -7467,8 +7467,8 @@
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         }
       ]
     },
@@ -7527,18 +7527,18 @@
       "warningWhenMisused": "Kildene sier «angrepsspiller» og ikke mer. Han står bredt som spiss — spillet dikter ikke opp en rolle han kanskje aldri hadde.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile"
+        "sarpsborg_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet"
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_legend",
+          "source": "belagt"
         }
       ]
     },
@@ -7603,11 +7603,11 @@
       "warningWhenMisused": "Han eide venstresiden i hele sin lengde. Låser du ham lavt og smalt, tar du bort halve rollen.",
       "classSource": "utledet",
       "clubStatus": {
-        "sarpsborg_stadion": "club_profile",
+        "sarpsborg_stadion": "club_icon",
         "fredrikstad_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "sarpsborg_stadion": "utledet",
+        "sarpsborg_stadion": "belagt",
         "fredrikstad_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -7621,8 +7621,8 @@
         {
           "clubId": "sarpsborg08",
           "relation": "played_for",
-          "status": "club_profile",
-          "source": "utledet"
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -51983,7 +51983,8 @@
       "nationality": "Kosovo",
       "era": "modern",
       "sourcePlaceIds": [
-        "nordmore_stadion"
+        "nordmore_stadion",
+        "sarpsborg_stadion"
       ],
       "classHeight": 84,
       "naturalPositions": [
@@ -52031,10 +52032,12 @@
       "warningWhenMisused": "Kalludra trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
-        "nordmore_stadion": "club_profile"
+        "nordmore_stadion": "club_profile",
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "nordmore_stadion": "utledet"
+        "nordmore_stadion": "utledet",
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -52043,6 +52046,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
+        },
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -53202,7 +53211,8 @@
       "sourcePlaceIds": [
         "nordmore_stadion",
         "fredrikstad_stadion",
-        "mellos_stadion"
+        "mellos_stadion",
+        "sarpsborg_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -53247,12 +53257,14 @@
       "clubStatus": {
         "nordmore_stadion": "club_profile",
         "fredrikstad_stadion": "club_profile",
-        "mellos_stadion": "elite_career"
+        "mellos_stadion": "elite_career",
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
         "nordmore_stadion": "utledet",
         "fredrikstad_stadion": "belagt",
-        "mellos_stadion": "belagt"
+        "mellos_stadion": "belagt",
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -53272,6 +53284,12 @@
           "clubId": "moss",
           "relation": "played_for",
           "status": "elite_career",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
           "source": "belagt"
         }
       ]
@@ -55647,7 +55665,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "kfum_arena"
+        "kfum_arena",
+        "sarpsborg_stadion"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -55690,10 +55709,12 @@
       "warningWhenMisused": "Jonvik trenger en tydelig oppgave og en makker ved siden av seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "kfum_arena": "club_legend"
+        "kfum_arena": "club_legend",
+        "sarpsborg_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "kfum_arena": "belagt"
+        "kfum_arena": "belagt",
+        "sarpsborg_stadion": "utledet"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -55702,6 +55723,12 @@
           "relation": "played_for",
           "status": "club_legend",
           "source": "belagt"
+        },
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
         }
       ]
     },
@@ -67164,7 +67191,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "nadderud_stadion"
+        "nadderud_stadion",
+        "sarpsborg_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -67206,13 +67234,21 @@
       "warningWhenMisused": "Næss blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "nadderud_stadion": "club_legend"
+        "nadderud_stadion": "club_legend",
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "nadderud_stadion": "belagt"
+        "nadderud_stadion": "belagt",
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "stabak",
           "relation": "played_for",
@@ -73283,7 +73319,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "marienlyst_stadion"
+        "marienlyst_stadion",
+        "sarpsborg_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -73325,13 +73362,21 @@
       "warningWhenMisused": "Wiig blir usynlig uten tilførsel inn i boksen.",
       "classSource": "utledet",
       "clubStatus": {
-        "marienlyst_stadion": "club_profile"
+        "marienlyst_stadion": "club_profile",
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "utledet",
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "stromsgodset",
           "relation": "played_for",
@@ -75730,7 +75775,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "marienlyst_stadion"
+        "marienlyst_stadion",
+        "sarpsborg_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -75775,13 +75821,21 @@
       "warningWhenMisused": "Tokstad mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "marienlyst_stadion": "club_profile"
+        "marienlyst_stadion": "club_profile",
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "belagt"
+        "marienlyst_stadion": "belagt",
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "stromsgodset",
           "relation": "played_for",
@@ -81193,7 +81247,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "fredrikstad_stadion"
+        "fredrikstad_stadion",
+        "sarpsborg_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -81236,10 +81291,12 @@
       "warningWhenMisused": "Hoås blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "fredrikstad_stadion": "club_profile"
+        "fredrikstad_stadion": "club_profile",
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "fredrikstad_stadion": "belagt"
+        "fredrikstad_stadion": "belagt",
+        "sarpsborg_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -81247,6 +81304,12 @@
           "clubId": "fredrikstad",
           "relation": "played_for",
           "status": "club_profile",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
           "source": "belagt"
         }
       ]
@@ -95500,7 +95563,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "color_line_stadion"
+        "color_line_stadion",
+        "sarpsborg_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -95544,10 +95608,12 @@
       "warningWhenMisused": "Roberts mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "color_line_stadion": "club_profile"
+        "color_line_stadion": "club_profile",
+        "sarpsborg_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "color_line_stadion": "belagt"
+        "color_line_stadion": "belagt",
+        "sarpsborg_stadion": "utledet"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -95556,6 +95622,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"
+        },
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
         }
       ]
     },
@@ -107591,7 +107663,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "nordre_asen"
+        "nordre_asen",
+        "sarpsborg_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -107635,12 +107708,20 @@
       "warningWhenMisused": "Breive forsvinner hvis midtbanen blir isolert.",
       "classSource": "utledet",
       "clubStatus": {
-        "nordre_asen": "club_profile"
+        "nordre_asen": "club_profile",
+        "sarpsborg_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "nordre_asen": "utledet"
+        "nordre_asen": "utledet",
+        "sarpsborg_stadion": "belagt"
       },
       "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "skeid",
           "relation": "played_for",
@@ -117286,7 +117367,6 @@
         "wide_support"
       ],
       "strengths": [
-        "determination",
         "teamwork"
       ],
       "needs": [
@@ -119156,7 +119236,6 @@
         "dribbler"
       ],
       "strengths": [
-        "determination",
         "game_reading"
       ],
       "needs": [
@@ -119219,9 +119298,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -119283,7 +119360,6 @@
         "duel_winner"
       ],
       "strengths": [
-        "determination",
         "game_reading"
       ],
       "needs": [
@@ -119345,9 +119421,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -119406,9 +119480,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -119467,9 +119539,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -121071,9 +121141,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -121132,9 +121200,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -121545,9 +121611,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -121605,9 +121669,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -121667,9 +121729,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -123792,9 +123852,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -123854,9 +123912,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -123918,8 +123974,7 @@
         "duel_winner"
       ],
       "strengths": [
-        "leadership",
-        "determination"
+        "leadership"
       ],
       "needs": [
         "covering_partner",
@@ -123979,9 +124034,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -124595,9 +124648,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -124778,9 +124829,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -125322,9 +125371,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -125385,9 +125432,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -125893,6 +125938,3990 @@
       "clubAffiliations": [
         {
           "clubId": "hamkam",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ole_heieren_hansen",
+      "name": "Ole Heieren Hansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Hansen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjetil_berge",
+      "name": "Kjetil Berge",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Berge blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "magnar_odegaard",
+      "name": "Magnar Ødegaard",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Ødegaard blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "joackim_jorgensen",
+      "name": "Joackim Jørgensen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Jørgensen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bjorn_inge_utvik",
+      "name": "Bjørn Inge Utvik",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Utvik blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "claes_kronberg",
+      "name": "Claes Kronberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Kronberg mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "matti_lund_nielsen",
+      "name": "Matti Lund Nielsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Nielsen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "anders_kristiansen",
+      "name": "Anders Kristiansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Kristiansen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "tobias_heintz",
+      "name": "Tobias Heintz",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Heintz mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "berat_jusufi",
+      "name": "Berat Jusufi",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB",
+        "CM"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Jusufi mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "steffen_ernemann",
+      "name": "Steffen Ernemann",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Ernemann forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jonathan_lindseth",
+      "name": "Jonathan Lindseth",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Lindseth trenger frihet mellom ledd og folk som angriper rom foran ham.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "michael_ron",
+      "name": "Michael Røn",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Røn forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jon_helge_tveita",
+      "name": "Jon-Helge Tveita",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Tveita mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "joachim_soltvedt",
+      "name": "Joachim Soltvedt",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB",
+        "RW"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Soltvedt mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "mikkel_maigaard",
+      "name": "Mikkel Maigaard",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [
+        "CM",
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "classic_ten"
+      ],
+      "archetypes": [
+        "creator",
+        "between_lines"
+      ],
+      "strengths": [],
+      "needs": [
+        "central_space",
+        "passing_options",
+        "creative_freedom"
+      ],
+      "preferredRoles": [
+        "classic_ten",
+        "free_creator"
+      ],
+      "likesTactics": [
+        "possession",
+        "central_combinations"
+      ],
+      "dislikesTactics": [
+        "long_ball_only",
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Maigaard trenger frihet mellom ledd og folk som angriper rom foran ham.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ibrahima_kone",
+      "name": "Ibrahima Koné",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Koné blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ismaila_coulibaly",
+      "name": "Ismaila Coulibaly",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Coulibaly forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "serge_junior_martinsson_ngouali",
+      "name": "Serge-Junior Martinsson Ngouali",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Ngouali forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "einar_nordlie",
+      "name": "Einar Nordlie",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Nordlie blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "alf_simensen",
+      "name": "Alf Simensen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Simensen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ingvald_martinsen",
+      "name": "Ingvald Martinsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Martinsen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bruun_hansen",
+      "name": "Bruun Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Hansen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "henry_hansen",
+      "name": "Henry Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Hansen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "petter_pedersen",
+      "name": "Petter Pedersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Pedersen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "peder_jensen",
+      "name": "Peder Jensen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Jensen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "einar_andersen_sfk",
+      "name": "Einar Andersen (Sarpsborg FK)",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Andersen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "erling_gustavsen",
+      "name": "Erling Gustavsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Gustavsen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arne_yven",
+      "name": "Arne Yven",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Yven blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "harald_gundersen",
+      "name": "Harald Gundersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Gundersen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "olav_navestad",
+      "name": "Olav Navestad",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Navestad blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "rolf_bakke_olsen",
+      "name": "Rolf Bakke Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Olsen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "finn_moen",
+      "name": "Finn Moen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Moen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "olaf_johansen",
+      "name": "Olaf Johansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Johansen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "gunnar_hansen",
+      "name": "Gunnar Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Hansen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "gunnar_eide",
+      "name": "Gunnar Eide",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "CB"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Eide forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "einar_fredriksen",
+      "name": "Einar Fredriksen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Fredriksen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jacob_johansen",
+      "name": "Jacob Johansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Johansen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "knut_andersen_sfk",
+      "name": "Knut Andersen (Sarpsborg FK)",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Andersen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ottar_nilsen",
+      "name": "Ottar Nilsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Nilsen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "john_mathiesen",
+      "name": "John Mathiesen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Mathiesen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "villy_andresen",
+      "name": "Villy Andresen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Andresen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "thor_lunde",
+      "name": "Thor Lunde",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Lunde blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "odd_pettersen",
+      "name": "Odd Pettersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "CB"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Pettersen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "guttorm_nicolaysen",
+      "name": "Guttorm Nicolaysen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Nicolaysen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "brede_svendsen",
+      "name": "Brede Svendsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Svendsen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "karsten_hansen",
+      "name": "Karsten Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Hansen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "einar_brathe",
+      "name": "Einar Bråthe",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Bråthe forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "roger_pedersen",
+      "name": "Roger Pedersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Pedersen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arne_olsen",
+      "name": "Arne Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Olsen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "knut_sorensen",
+      "name": "Knut Sørensen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Sørensen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "evald_nilsen",
+      "name": "Evald Nilsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Nilsen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "egil_johansen_sparta",
+      "name": "Egil Johansen (Sparta)",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Johansen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "joacim_heier",
+      "name": "Joacim Heier",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Heier trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ladislav_smatana",
+      "name": "Ladislav Smatana",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Smatana blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "are_tronseth",
+      "name": "Are Tronseth",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Tronseth blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "pal_rustadstuen",
+      "name": "Pål Rustadstuen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Rustadstuen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "mounir_el_masrouri",
+      "name": "Mounir El-Masrouri",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "RW"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "El-Masrouri forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "mathias_engebretsen",
+      "name": "Mathias Engebretsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Engebretsen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "nicolay_solberg",
+      "name": "Nicolay Solberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Solberg mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "mehmed_divanovic",
+      "name": "Mehmed Divanovic",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Divanovic forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "stanley_ihugba",
+      "name": "Stanley Ihugba",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Ihugba blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "haraldur_bjornsson",
+      "name": "Haraldur Björnsson",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Björnsson trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "alvaro_baigorri",
+      "name": "Alvaro Baigorri",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Baigorri blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "claes_jorgensen",
+      "name": "Claes Jørgensen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Jørgensen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "frode_larsen_sarpsborg",
+      "name": "Frode Larsen (Sarpsborg 08)",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Larsen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "sarpsborg_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "sarpsborg_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sarpsborg08",
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"

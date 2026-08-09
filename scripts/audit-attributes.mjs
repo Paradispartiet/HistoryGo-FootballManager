@@ -371,7 +371,20 @@ const REVIEWED_NAME_PAIRS = new Map([
   ["petter eichler jensen|petter jensen", "Tromsøs historiske spiss mot Mjøndalens moderne forsvarsspiller"],
   // Rosenborgs midtstopper mot HamKams keeper, «en av klubbens beste» gjennom
   // åtte sesonger.
-  ["svein haagenrud|svein inge haagenrud", "RBKs midtstopper mot HamKams keeper"]
+  ["svein haagenrud|svein inge haagenrud", "RBKs midtstopper mot HamKams keeper"],
+  // Sarpsborg-kilden utløste fem par, og FIRE av dem er navnesammenfall
+  // importen ville koblet feil i stillhet — samme feil som Nils Eriksen, funnet
+  // på samme måte: ved å lese de to kildene mot hverandre. Alle fire motsies av
+  // posisjon, klubb eller årstall, og de bærer klubbsuffiks slik katalogen
+  // allerede gjør.
+  ["knut andersen|knut andersen sarpsborg fk", "Skeids forsvarer (cupgull 1947/1958) mot SFKs spiss (1949/1951)"],
+  ["einar andersen|einar andersen sarpsborg fk", "Mjøndalens «Gubbe» mot SFKs cupmester fra 1917"],
+  ["egil johansen|egil johansen sparta", "VIFs «Snapper'n» på midtbanen mot Spartas angrepsspiller fra 1952"],
+  ["frode larsen|frode larsen sarpsborg", "Branns historiske høyreving mot Sarpsborg 08s keeper i 2012"],
+  // Det femte paret er to menn kilden selv fører hver for seg: Fredrikstads
+  // spiss fra den siste gullalderen mot Sarpsborgs cupmesterkeeper i 1939 og
+  // 1951. Mellomnavnet er ikke en stavevariant her — posisjonen avgjør det.
+  ["rolf bakke olsen|rolf olsen", "FFKs spiss mot SFKs cupmesterkeeper"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

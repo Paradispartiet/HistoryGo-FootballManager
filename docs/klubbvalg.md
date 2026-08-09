@@ -168,6 +168,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | Rosenborg | Lerkendal | 156 |
 | Strømsgodset | Marienlyst stadion | 143 |
 | Vålerenga | Intility Arena | 127 |
+| Sarpsborg 08 | Sarpsborg stadion | 107 |
 | Fredrikstad | Fredrikstad stadion | 100 |
 | Odd | Skagerak Arena | 100 |
 | Haugesund | Haugesund stadion | 100 |
@@ -190,11 +191,10 @@ avhenger av hvor History Go-kortet hans ligger.
 | KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
 | Kristiansund | Nordmøre stadion | 49 |
-| Sarpsborg 08 | Sarpsborg stadion | 32 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd og Mjøndalen — 2216 arveplasser fordelt på
-alle 26, og **ingen klubb med bane har under 32 navn**. De 34 klubbene som
+Haugesund, Skeid, Moss, Bryne, Hødd og Mjøndalen — 2291 arveplasser fordelt på
+alle 26, og **ingen klubb med bane har under 49 navn**. De 34 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1323,6 +1323,42 @@ HamKam viste seg like sterk: 26 navn fra Pål Jacobsen og Terje Kojedal via Finn
 Thorsen og Jan Åge Fjørtoft til Cato Erstads klubbrekord på 506 kamper.
 Kriteriet er at spilleren har **representert klubben** — det holder.
 
+#### Tre klubber på én bane
+
+Sarpsborg-kilden fylte de 32 navnene opp til **107**, og den holder tre klubber
+fra hverandre: Sarpsborg 08 (49), Sarpsborg FK (33) og IL Sparta (10), pluss
+kombinasjoner. `clubStatus` er nøklet på **placeId**, og alle tre spilte på
+Sarpsborg stadion, så skillet kan ikke ligge i skjemaet. Det er nøyaktig samme
+situasjon som Haugesund stadion (FK Haugesund, SK Haugar og SK Djerv 1919), og
+det håndteres på samme måte: klubbene står her i dokumentet, statusen står på
+banen. Forgjengerklubbenes profiler er `club_legend` — de er legender på
+**banen**, som er det statusen faktisk måler.
+
+#### Fire navnesammenfall importen ville koblet feil
+
+Navnenøkkelen stryker kallenavn, og det er riktig for én mann stavet på to
+måter. Kilden ga fire tilfeller der det er galt, og hver av dem ville blitt en
+**stille feilkobling** — én spiller på to baner, med to menns karrierer:
+
+| Navn | Den ene | Den andre |
+|---|---|---|
+| Knut Andersen | Skeids forsvarer, cupgull 1947 og 1958 | SFKs spiss, cupgull 1949 og 1951 |
+| Einar Andersen | Mjøndalens «Gubbe», spiss og klubbikon | SFKs midtbane på cupmesterlaget 1917 |
+| Egil Johansen | Vålerengas «Snapper'n», midtbane | Spartas angrepsspiller, NM-laget 1952 |
+| Frode Larsen | Branns historiske høyreving | Sarpsborg 08s keeper i 2012-stallen |
+
+Alle fire står nå med klubbsuffiks, slik katalogen allerede gjorde for Tore
+Pedersen (RBK) og Nils Eriksen (Moss). To andre sammenfall — Glenn Roberts og
+Erik Jonvik — er **samme mann i to klubber**, og er koblet med vilje; det er den
+koblingen katalogen finnes for.
+
+Feilen er bare delvis synlig for vaktene, og det er verdt å være presis om
+hvor grensa går. Slettes den ene av to splittede spillere i ettertid, står
+låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
+(bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
+låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
+de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
 ### Strømsgodset: 143 navn, en helt ny bane, og en vakt som byttet form
 
 Strømsgodset er den første klubben som får arv uten å ha en bane i katalogen fra
@@ -1583,3 +1619,16 @@ navnene ikke engang forekommer i kilden.
 begge tilstander — der oppdaget jeg at `visited_places` er et **objekt**, ikke en
 array, så den første testen min leste ingenting og ga samme svar i begge
 tilfeller.
+
+## Klubbpool v1: medlemskap og tilgang
+
+Klubbmedlemskap, History Go-oppdagelse og stadiontilgang er tre forskjellige fakta.
+`player.clubAffiliations` bestemmer hvilken klubbpool spilleren tilhører.
+`player.sourcePlaceIds` bestemmer bare hvor spilleren kan oppdages i History Go.
+`club.homePlaceId` bestemmer hvilket stadionbesøk som åpner hele klubbpoolen.
+
+En klubb kan bare overtas når den har minst 15 dokumenterte spillere i sin egen
+pool. Uferdige pooler står som `pending` og fylles aldri med tilfeldige spillere
+fra andre klubber. Gamle automatiske grunntropper repareres mot den valgte
+klubbens canonical pool ved lasting, slik at eldre saves ikke beholder fremmede
+spillere etter migreringen.
