@@ -607,7 +607,13 @@ const KJENT_UDOKUMENTERT = {
   // fraseform. Taket står likevel her, fordi 10 % er over standardtaket på 5 %
   // og en navngitt verdi er den eneste måten hullet ikke kan vokse i stillhet.
   // Målt 6 av 60.
-  oster_hus_arena: 0.12
+  oster_hus_arena: 0.12,
+  // Egersund er den best DATERTE kilden i katalogen — bare 7 av 85 uten årstall,
+  // de fleste med hele karrierespennet («441 kamper og klubbens målrekord med
+  // 241 mål, 1975–1992»). Til gjengjeld avstår den 73 ganger av 85, så bare tolv
+  // profiler bærer en påstand i det hele tatt. Godt datert og tynt beskrevet er
+  // to uavhengige egenskaper ved en kilde. Målt 36 av 56.
+  egersund_arena: 0.66
 };
 const perArv = new Map();
 for (const player of players) {
