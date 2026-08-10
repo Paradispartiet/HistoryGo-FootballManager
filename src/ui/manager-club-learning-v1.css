@@ -154,6 +154,174 @@
   border-left: 3px solid rgba(255,255,255,.4);
 }
 
+.opponent-analysis-workshop-v1 {
+  display: grid;
+  gap: .85rem;
+  margin-top: 1.15rem;
+  padding: 1rem;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 14px;
+  background: rgba(255,255,255,.035);
+}
+
+.opponent-analysis-workshop-v1 h3,
+.opponent-analysis-workshop-v1 h4,
+.opponent-analysis-workshop-v1 p,
+.opponent-analysis-workshop-v1 dl,
+.opponent-analysis-workshop-v1 ul { margin: 0; }
+
+.opponent-analysis-kicker,
+.opponent-analysis-status {
+  color: rgba(255,255,255,.62);
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.opponent-analysis-workshop-v1 > h3 { font-size: 1rem; }
+
+.opponent-analysis-fixture-picker,
+.opponent-analysis-dynamic,
+.opponent-analysis-brief,
+.opponent-analysis-reasoning,
+.opponent-analysis-actions {
+  display: grid;
+  gap: .65rem;
+  min-width: 0;
+}
+
+.opponent-analysis-fixture-picker label,
+.opponent-analysis-question { font-size: .72rem; font-weight: 850; }
+
+.opponent-analysis-fixture-picker select {
+  width: 100%;
+  min-width: 0;
+  padding: .7rem;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 9px;
+  background: #0c1118;
+  color: inherit;
+  font: inherit;
+  font-size: .72rem;
+}
+
+.opponent-analysis-fixture-picker small,
+.opponent-analysis-empty,
+.opponent-analysis-prompt,
+.opponent-analysis-reasoning p,
+.opponent-analysis-signals,
+.opponent-analysis-feedback,
+.opponent-analysis-guardrail {
+  color: rgba(255,255,255,.68);
+  font-size: .68rem;
+  line-height: 1.5;
+}
+
+.opponent-analysis-brief,
+.opponent-analysis-reasoning {
+  padding: .85rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  background: rgba(0,0,0,.16);
+}
+
+.opponent-analysis-brief h4 { font-size: 1rem; }
+
+.opponent-analysis-profile {
+  display: grid;
+  grid-template-columns: minmax(6rem, .58fr) minmax(0, 1.42fr);
+  gap: .35rem .7rem;
+}
+
+.opponent-analysis-profile dt {
+  color: rgba(255,255,255,.54);
+  font-size: .62rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.opponent-analysis-profile dd {
+  min-width: 0;
+  color: rgba(255,255,255,.82);
+  font-size: .7rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.opponent-analysis-focuses,
+.opponent-analysis-countermeasures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem;
+}
+
+.opponent-analysis-focus,
+.opponent-analysis-countermeasure,
+.opponent-analysis-save,
+.opponent-analysis-open-target {
+  min-width: 0;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 10px;
+  background: rgba(0,0,0,.2);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.opponent-analysis-focus {
+  padding: .7rem;
+  font-size: .68rem;
+  font-weight: 850;
+}
+
+.opponent-analysis-focus[aria-pressed="true"],
+.opponent-analysis-countermeasure[aria-pressed="true"] {
+  border-color: rgba(255,255,255,.78);
+  background: rgba(255,255,255,.12);
+}
+
+.opponent-analysis-countermeasure {
+  display: grid;
+  gap: .32rem;
+  padding: .75rem;
+}
+
+.opponent-analysis-countermeasure span {
+  color: rgba(255,255,255,.54);
+  font-size: .58rem;
+  font-weight: 850;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.opponent-analysis-countermeasure strong { font-size: .72rem; }
+.opponent-analysis-countermeasure small { color: rgba(255,255,255,.65); font-size: .63rem; line-height: 1.42; }
+
+.opponent-analysis-reasoning h4 { font-size: .7rem; }
+.opponent-analysis-signals { display: grid; gap: .3rem; padding-left: 1rem; }
+
+.opponent-analysis-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+}
+
+.opponent-analysis-save,
+.opponent-analysis-open-target {
+  padding: .72rem .8rem;
+  font-size: .68rem;
+  font-weight: 850;
+  text-align: center;
+}
+
+.opponent-analysis-save:disabled { opacity: .45; cursor: not-allowed; }
+.opponent-analysis-feedback { grid-column: 1 / -1; }
+.opponent-analysis-feedback:empty { display: none; }
+.opponent-analysis-feedback[data-status="saved"] { color: #8bd7a7; }
+.opponent-analysis-feedback[data-status="error"] { color: #ef9a9a; }
+.opponent-analysis-guardrail { padding-top: .65rem; border-top: 1px solid rgba(255,255,255,.11); }
+
 @media (max-width: 640px) {
   .club-room-learning-row {
     grid-template-columns: 1fr;
@@ -161,5 +329,10 @@
   }
 
   .medical-decision-evidence,
-  .medical-decision-choices { grid-template-columns: 1fr; }
+  .medical-decision-choices,
+  .opponent-analysis-focuses,
+  .opponent-analysis-countermeasures,
+  .opponent-analysis-actions { grid-template-columns: 1fr; }
+
+  .opponent-analysis-profile { grid-template-columns: 1fr; }
 }

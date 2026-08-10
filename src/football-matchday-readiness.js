@@ -17,6 +17,7 @@ export const MATCHDAY_BLOCKER_ORDER = Object.freeze([
   "bench_incomplete",
   "squad_too_small",
   "training_missing",
+  "opponent_analysis_missing",
   "season_inactive",
   "fixture_missing",
   "club_week_blocked"
@@ -125,6 +126,15 @@ export function evaluateMatchdayReadiness(input = {}) {
       "Velg treningsprogram før kamp.",
       "trening",
       "Treningsuka må fullføres før laget er kampklart."
+    ));
+  }
+
+  if (input.requiresOpponentAnalysis && !input.hasOpponentAnalysisPlan) {
+    blockers.push(blocker(
+      "opponent_analysis_missing",
+      `Analyser ${input.opponentName || "neste motstander"} og lagre ett observasjonspunkt før kamp.`,
+      "board",
+      "Motstanderforberedelsen må være registrert før laget er kampklart."
     ));
   }
 

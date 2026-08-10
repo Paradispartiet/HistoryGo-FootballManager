@@ -25,7 +25,7 @@ Hovedflaten er en katalog over mennesker og rom, ikke en samling statuskort.
 - **Trenerteam** – viser de stabsprofilene som faktisk er engasjert i klubbens save.
 - **Treningsanlegg** – stedet for dokumenterte fysiske anleggsdata. Klubbdataene har foreløpig ikke treningsfelt, styrkerom, behandlingsrom eller utstyr; derfor vises ingen oppdiktede nivåer eller bonuser.
 - **Medisinsk apparat** – bruker eksisterende spillercondition, belastning, skade og individuell oppfølging. Når save-staten har et reelt signal, åpner rommet et beslutningsverksted for kriteriebasert opptrening og retur til spill. Ingen separat medisinsk rating.
-- **Analyse** – peker til det aktive systemet og eksisterende kampanalyse.
+- **Analyse** – åpner et spillbart motstanderforberedelsesverksted for den faktiske terminlisten og peker videre til aktivt system og kampanalyse. Motstanderprofilen, taktikkmotoren og kampanalysen er fortsatt sannhetskildene.
 
 ### Klubben
 
@@ -106,3 +106,25 @@ Kildene brukes til generelle læringsprinsipper. Verkstedet gir ikke medisinske 
 Klubborganisasjonen følger den permanente redesignregelen:
 
 > Vis den faktiske organisasjonen først. Åpne et rom når manageren vil fordype seg. Ikke lag et dashboard når vi kan simulere en klubb.
+
+## Analyseavdelingen og motstanderforberedelse v1
+
+`Kontor → Klubben → Analyse` gjør analyse til et arbeidssteg før kamp:
+
+```text
+terminfestet motstander
+→ registrerte profil- og matchup-signaler
+→ velg ett analysespørsmål
+→ formuler en arbeidshypotese
+→ velg et motgrep i eksisterende trening, oppstilling eller system
+→ bestem hva som skal observeres i kampen
+→ les samme plan i kampbrief og etterkamp
+```
+
+Manageren kan undersøke gjenværende kamper i den faktiske ligaterminlisten. Bare planen som matcher nærmeste `fixtureId` teller som gjennomført motstanderforberedelse i den eksisterende autoritative kampklarheten. En plan for en senere kamp kan lagres, men åpner ikke den nærmeste kampen.
+
+Profilen kommer fra `football_league_club_profiles.json` sammen med klubbidentiteten og styrken fra ligasesongen. Formasjons-matchupen kommer fra den eksisterende Formation Knowledge Engine. Verkstedet finner ikke på videoer, enkeltkamphendelser eller nåtidsform som datagrunnlaget ikke inneholder.
+
+Planen lagres som `opponentAnalysisPlan` i den aktive `hgfm.modeSessions.v1`-sesjonen. Det opprettes ingen ny localStorage-nøkkel. Planen inneholder fixture, motstander, fokus, hypotese, registrerte bevis, valgt motgrep, risiko og observasjonspunkt. Den er et lesbart arbeids- og readiness-steg; den gir ingen kampstyrke, xG, spillerverdi, analysekvalitetsscore eller skjult bonus.
+
+Rådene er faglige standardvalg, aldri fasit. Manageren kan velge et annet motgrep dersom konteksten tilsier det, og etterkampen skal brukes til å vurdere hypotesen mot registrerte kampsignaler — ikke til å hevde at analysen «var riktig» bare fordi resultatet ble godt.

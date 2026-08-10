@@ -13,6 +13,7 @@ export const MODES = Object.freeze(["league", "scenario", "training", "national"
 export const SESSION_STATE_FIELDS = Object.freeze([
   "selectedFormationId", "selectedTacticId", "lineup", "slotPositions",
   "weeklyTrainingFocus", "weeklyTrainingProgram", "individualTraining", "trainingWeek",
+  "opponentAnalysisPlan",
   "activeKnowledgeFocusId", "completedKnowledgeFocusIds", "clubWeekState",
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",

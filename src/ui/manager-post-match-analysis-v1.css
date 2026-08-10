@@ -109,6 +109,23 @@
   padding: 0.9rem;
 }
 
+.matchday-post-match-analysis-plan {
+  display: grid;
+  gap: .55rem;
+  padding: .9rem;
+  border-left: 3px solid rgba(255,255,255,.62);
+  background: rgba(255,255,255,.035);
+}
+
+.matchday-post-match-analysis-plan > p,
+.matchday-post-match-analysis-plan > small {
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  line-height: 1.45;
+}
+
+.matchday-post-match-analysis-plan > small { font-size: .7rem; }
+
 .matchday-post-match-card.is-primary {
   border-color: rgba(255, 255, 255, 0.42);
   background: rgba(255, 255, 255, 0.055);

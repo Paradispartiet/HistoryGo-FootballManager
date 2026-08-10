@@ -3,6 +3,16 @@ import {
   evaluateMedicalDecision
 } from "../football-medical-decision-learning.js";
 import { MODE_SESSION_KEY, normalizeMode } from "../football-mode-sessions.js";
+import {
+  createOpponentAnalysisPlan,
+  createOpponentAnalysisWorkspace,
+  getOpponentAnalysisFocus
+} from "../football-opponent-analysis.js";
+import {
+  getOpponentAnalysisContext,
+  openOpponentAnalysisTarget,
+  saveOpponentAnalysisPlan
+} from "../football-opponent-analysis-bridge.js";
 
 const STYLE_ID = "managerClubLearningV1Style";
 const PLAYER_CONDITION_KEY = "hgfm.playerCondition.v1";
@@ -32,6 +42,18 @@ const ROOM_LEARNING = Object.freeze({
       ["7 · Returnere", "Spilleren går tilbake til trening og kamp når den eksisterende condition- og tilgjengelighetslogikken faktisk tillater det." ]
     ]),
     note: "HGFM oppretter ingen egen medisinsk overall eller recovery-rating for å representere dette arbeidet."
+  }),
+  "Analyse": Object.freeze({
+    intro: "Analyseavdelingen arbeider med den terminfestede motstanderen, lagets faktiske system og registrerte matchup-signaler. Profilen er et faglig utgangspunkt, ikke en fasit på hvordan kampen vil bli.",
+    heading: "Arbeidskjeden",
+    items: Object.freeze([
+      ["1 · Observere", "Skill det profilen faktisk viser fra antakelser om hva motstanderen kommer til å gjøre."],
+      ["2 · Avgrense", "Velg ett spørsmål. En analyse som prøver å dekke alt gir sjelden et tydelig kampforberedende grep."],
+      ["3 · Formulere hypotese", "Beskriv hva du tror kan skje, og hvilken sammenheng mellom rom, spillere og handlinger som må undersøkes."],
+      ["4 · Velge motgrep", "Knytt hypotesen til eksisterende trening, oppstilling eller kampplan uten å gjøre rådet til automatisk fasit."],
+      ["5 · Observere i kamp", "Bestem på forhånd hvilken konkret atferd som kan støtte eller svekke hypotesen." ]
+    ]),
+    note: "Den lagrede planen påvirker kampklarheten som et gjennomført arbeidssteg, men gir ingen skjult styrke-, xG- eller kampbonus."
   })
 });
 
@@ -138,6 +160,194 @@ function appendMedicalDecisionWorkshop(body) {
   body.append(workshop);
 }
 
+function appendList(parent, items, className = "") {
+  const list = node("ul", className);
+  items.forEach((item) => list.append(node("li", "", item)));
+  parent.append(list);
+  return list;
+}
+
+function appendOpponentAnalysisWorkshop(body) {
+  const context = getOpponentAnalysisContext();
+  const workshop = node("section", "opponent-analysis-workshop-v1");
+  workshop.setAttribute("aria-labelledby", "opponentAnalysisWorkshopTitle");
+  workshop.append(
+    node("span", "opponent-analysis-kicker", "Observasjon → hypotese → motgrep → kamp"),
+    node("h3", "", "Motstanderforberedelse")
+  );
+  workshop.querySelector("h3").id = "opponentAnalysisWorkshopTitle";
+
+  const fixtures = Array.isArray(context?.fixtures) ? context.fixtures : [];
+  if (!context || fixtures.length === 0) {
+    const empty = createOpponentAnalysisWorkspace();
+    workshop.dataset.caseKind = empty.kind;
+    workshop.append(node("strong", "opponent-analysis-headline", empty.headline), node("p", "opponent-analysis-empty", empty.explanation));
+    body.append(workshop);
+    return;
+  }
+
+  workshop.dataset.caseKind = "fixture";
+  const picker = node("div", "opponent-analysis-fixture-picker");
+  const label = node("label", "", "Velg terminfestet kamp");
+  label.htmlFor = "opponentAnalysisFixture";
+  const select = node("select", "");
+  select.id = "opponentAnalysisFixture";
+  fixtures.forEach((fixture) => {
+    const option = node("option", "", `Runde ${fixture.round} · ${fixture.opponent?.name || "Ukjent"} · ${fixture.homeAway === "home" ? "hjemme" : "borte"}`);
+    option.value = fixture.fixtureId;
+    select.append(option);
+  });
+  const initialFixtureId = fixtures.some((fixture) => fixture.fixtureId === context.savedPlan?.fixtureId)
+    ? context.savedPlan.fixtureId
+    : context.currentFixtureId || fixtures[0].fixtureId;
+  select.value = initialFixtureId;
+  picker.append(label, select, node("small", "", "Bare planen for nærmeste kamp teller i kampklarheten. Du kan likevel undersøke senere kamper."));
+  workshop.append(picker);
+
+  const dynamic = node("div", "opponent-analysis-dynamic");
+  dynamic.setAttribute("aria-live", "polite");
+  workshop.append(dynamic);
+  let selectedFocusId = context.savedPlan?.fixtureId === initialFixtureId ? context.savedPlan.focusId : null;
+  let selectedCountermeasureId = context.savedPlan?.fixtureId === initialFixtureId ? context.savedPlan.countermeasureId : null;
+
+  function render() {
+    dynamic.replaceChildren();
+    const fixture = fixtures.find((entry) => entry.fixtureId === select.value) || fixtures[0];
+    const workspace = createOpponentAnalysisWorkspace({
+      fixture,
+      formation: context.formation,
+      tactic: context.tactic,
+      trainingLabel: context.trainingLabel
+    });
+    const saved = context.savedPlan?.fixtureId === fixture.fixtureId ? context.savedPlan : null;
+
+    const brief = node("section", "opponent-analysis-brief");
+    brief.append(
+      node("span", "opponent-analysis-status", fixture.fixtureId === context.currentFixtureId
+        ? (context.currentPlanReady ? "Nærmeste kamp · analyse registrert" : "Nærmeste kamp · analyse mangler")
+        : "Senere terminfestet kamp"),
+      node("h4", "", `${workspace.opponent.name}${workspace.homeAway ? ` · ${workspace.homeAway}` : ""}`)
+    );
+    const profile = node("dl", "opponent-analysis-profile");
+    [
+      ["Stil", workspace.opponent.styleName || workspace.opponent.style || "Ikke dokumentert"],
+      ["Med ball", workspace.opponent.inPossessionShape || "Ikke dokumentert"],
+      ["Uten ball", workspace.opponent.outOfPossessionShape || "Ikke dokumentert"],
+      ["Vårt utgangspunkt", `${workspace.ownPlan.formation} · ${workspace.ownPlan.tactic}`],
+      ["Trening", workspace.ownPlan.training]
+    ].forEach(([term, value]) => {
+      profile.append(node("dt", "", term), node("dd", "", value));
+    });
+    brief.append(profile);
+    dynamic.append(brief);
+
+    const focusQuestion = node("p", "opponent-analysis-question", "Hva skal analysen undersøke?");
+    focusQuestion.id = "opponentAnalysisQuestion";
+    const focusChoices = node("div", "opponent-analysis-focuses");
+    focusChoices.setAttribute("role", "group");
+    focusChoices.setAttribute("aria-labelledby", focusQuestion.id);
+    workspace.focuses.forEach((focus) => {
+      const button = node("button", "opponent-analysis-focus", focus.label);
+      button.type = "button";
+      button.dataset.opponentAnalysisFocus = focus.id;
+      button.setAttribute("aria-pressed", focus.id === selectedFocusId ? "true" : "false");
+      button.addEventListener("click", () => {
+        selectedFocusId = focus.id;
+        selectedCountermeasureId = null;
+        render();
+      });
+      focusChoices.append(button);
+    });
+    dynamic.append(focusQuestion, focusChoices);
+
+    const focus = getOpponentAnalysisFocus(workspace, selectedFocusId);
+    if (!focus) {
+      dynamic.append(node("p", "opponent-analysis-prompt", "Velg ett analysefokus for å skille registrerte observasjoner fra hypotesen du vil teste."));
+      return;
+    }
+
+    const reasoning = node("section", "opponent-analysis-reasoning");
+    reasoning.append(node("strong", "", focus.question), node("h4", "", "Registrerte signaler"));
+    appendList(reasoning, focus.signals.length ? focus.signals : ["Motstanderprofilen har ikke et konkret signal på dette området."], "opponent-analysis-signals");
+    reasoning.append(node("h4", "", "Arbeidshypotese"), node("p", "", focus.hypothesis));
+    dynamic.append(reasoning);
+
+    const counterHeading = node("p", "opponent-analysis-question", "Hvilket motgrep vil du ta med videre?");
+    counterHeading.id = "opponentAnalysisCounterQuestion";
+    const countermeasures = node("div", "opponent-analysis-countermeasures");
+    countermeasures.setAttribute("role", "group");
+    countermeasures.setAttribute("aria-labelledby", counterHeading.id);
+    focus.countermeasures.forEach((measure) => {
+      const button = node("button", "opponent-analysis-countermeasure");
+      button.type = "button";
+      button.dataset.opponentAnalysisCountermeasure = measure.id;
+      button.setAttribute("aria-pressed", measure.id === selectedCountermeasureId ? "true" : "false");
+      button.append(
+        node("span", "", measure.targetLabel),
+        node("strong", "", measure.label),
+        node("small", "", measure.why),
+        node("small", "", `Risiko: ${measure.risk}`),
+        node("small", "", `Se etter: ${measure.watch}`)
+      );
+      button.addEventListener("click", () => {
+        selectedCountermeasureId = measure.id;
+        render();
+      });
+      countermeasures.append(button);
+    });
+    dynamic.append(counterHeading, countermeasures);
+
+    const actions = node("div", "opponent-analysis-actions");
+    const save = node("button", "opponent-analysis-save", saved && saved.focusId === selectedFocusId && saved.countermeasureId === selectedCountermeasureId ? "Plan lagret" : "Lagre analyseplan");
+    save.type = "button";
+    save.disabled = !selectedCountermeasureId;
+    const feedback = node("p", "opponent-analysis-feedback");
+    feedback.setAttribute("aria-live", "polite");
+    save.addEventListener("click", () => {
+      const plan = createOpponentAnalysisPlan({
+        workspace,
+        focusId: selectedFocusId,
+        countermeasureId: selectedCountermeasureId,
+        week: context.week
+      });
+      const result = saveOpponentAnalysisPlan(plan);
+      if (!result?.saved) {
+        feedback.dataset.status = "error";
+        feedback.textContent = result?.reason || "Planen kunne ikke lagres.";
+        return;
+      }
+      context.savedPlan = result.plan;
+      context.currentPlanReady = result.currentPlanReady;
+      feedback.dataset.status = "saved";
+      feedback.textContent = result.currentPlanReady
+        ? "Planen er registrert for nærmeste kamp og kampklarheten er oppdatert."
+        : "Planen er lagret for en senere kamp. Nærmeste kamp trenger fortsatt sin egen analyse.";
+      save.textContent = "Plan lagret";
+      const target = node("button", "opponent-analysis-open-target", `Arbeid videre i ${result.plan.targetLabel}`);
+      target.type = "button";
+      target.addEventListener("click", () => openOpponentAnalysisTarget(result.plan.target));
+      actions.querySelector(".opponent-analysis-open-target")?.remove();
+      actions.append(target);
+    });
+    actions.append(save, feedback);
+    if (saved?.target) {
+      const target = node("button", "opponent-analysis-open-target", `Arbeid videre i ${saved.targetLabel}`);
+      target.type = "button";
+      target.addEventListener("click", () => openOpponentAnalysisTarget(saved.target));
+      actions.append(target);
+    }
+    dynamic.append(actions, node("p", "opponent-analysis-guardrail", "Planen lagrer observasjon, hypotese og valgt arbeidsretning. Den endrer ingen spillerverdier, kampstyrke, xG eller skjulte bonuser."));
+  }
+
+  select.addEventListener("change", () => {
+    selectedFocusId = context.savedPlan?.fixtureId === select.value ? context.savedPlan.focusId : null;
+    selectedCountermeasureId = context.savedPlan?.fixtureId === select.value ? context.savedPlan.countermeasureId : null;
+    render();
+  });
+  render();
+  body.append(workshop);
+}
+
 function renderRoomLearning() {
   const drawer = document.getElementById("managerClubRoomDrawer");
   if (!drawer || drawer.hidden) return;
@@ -164,6 +374,7 @@ function renderRoomLearning() {
   section.append(list, node("p", "club-room-learning-note", config.note));
   body.append(section);
   if (title === "Medisinsk apparat") appendMedicalDecisionWorkshop(body);
+  if (title === "Analyse") appendOpponentAnalysisWorkshop(body);
 }
 
 function install() {
