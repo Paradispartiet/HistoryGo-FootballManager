@@ -9287,7 +9287,8 @@
       "era": "historical",
       "sourcePlaceIds": [
         "briskeby_stadion",
-        "araasen_stadion"
+        "araasen_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -9340,11 +9341,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "briskeby_stadion": "elite_career",
-        "araasen_stadion": "club_profile"
+        "araasen_stadion": "club_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
         "briskeby_stadion": "belagt",
-        "araasen_stadion": "utledet"
+        "araasen_stadion": "utledet",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -9352,6 +9355,12 @@
           "clubId": "hamkam",
           "relation": "played_for",
           "status": "elite_career",
+          "source": "belagt"
+        },
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
           "source": "belagt"
         },
         {
@@ -14058,7 +14067,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "gjemselund_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -14101,13 +14111,21 @@
       "warningWhenMisused": "Riisnæs forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "intility_arena": "club_legend"
+        "intility_arena": "club_legend",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "intility_arena": "belagt"
+        "intility_arena": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "valerenga",
           "relation": "played_for",
@@ -14123,7 +14141,8 @@
       "era": "historical",
       "sourcePlaceIds": [
         "intility_arena",
-        "nadderud_stadion"
+        "nadderud_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -14175,14 +14194,22 @@
       "classSource": "belagt",
       "clubStatus": {
         "intility_arena": "club_legend",
-        "nadderud_stadion": "club_profile"
+        "nadderud_stadion": "club_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
         "intility_arena": "belagt",
-        "nadderud_stadion": "belagt"
+        "nadderud_stadion": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "stabak",
           "relation": "played_for",
@@ -14349,7 +14376,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "gjemselund_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -14396,13 +14424,21 @@
       "warningWhenMisused": "En keeper uten forsvar foran seg blir målt på andres feil.",
       "classSource": "belagt",
       "clubStatus": {
-        "intility_arena": "squad_profile"
+        "intility_arena": "squad_profile",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "intility_arena": "belagt"
+        "intility_arena": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "valerenga",
           "relation": "played_for",
@@ -14562,7 +14598,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "gjemselund_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -14612,13 +14649,21 @@
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "intility_arena": "squad_profile"
+        "intility_arena": "squad_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "intility_arena": "belagt"
+        "intility_arena": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "valerenga",
           "relation": "played_for",
@@ -18461,7 +18506,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "lerkendal_stadion"
+        "lerkendal_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 89,
       "naturalPositions": [
@@ -18512,13 +18558,21 @@
       "warningWhenMisused": "En back som lever på bredden må ha en kant å samhandle med — og dekning bak seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "lerkendal_stadion": "elite_career"
+        "lerkendal_stadion": "elite_career",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "belagt"
+        "lerkendal_stadion": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "rosenborg",
           "relation": "played_for",
@@ -19054,7 +19108,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "lerkendal_stadion"
+        "lerkendal_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 84,
       "naturalPositions": [
@@ -19107,13 +19162,21 @@
       "warningWhenMisused": "En stopper trenger en linje å lese. Uten struktur foran seg blir han bare en som rydder opp.",
       "classSource": "belagt",
       "clubStatus": {
-        "lerkendal_stadion": "elite_career"
+        "lerkendal_stadion": "elite_career",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "belagt"
+        "lerkendal_stadion": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "rosenborg",
           "relation": "played_for",
@@ -28776,7 +28839,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "araasen_stadion"
+        "araasen_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 84,
       "naturalPositions": [
@@ -28818,13 +28882,21 @@
       "warningWhenMisused": "Kordahl blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "araasen_stadion": "club_profile"
+        "araasen_stadion": "club_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "araasen_stadion": "utledet"
+        "araasen_stadion": "utledet",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "lillestrom",
           "relation": "played_for",
@@ -30544,7 +30616,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "araasen_stadion"
+        "araasen_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -30591,13 +30664,21 @@
       "warningWhenMisused": "Tomteberget trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
-        "araasen_stadion": "club_profile"
+        "araasen_stadion": "club_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "araasen_stadion": "utledet"
+        "araasen_stadion": "utledet",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "lillestrom",
           "relation": "played_for",
@@ -50943,7 +51024,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "aspmyra_stadion"
+        "aspmyra_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -50985,10 +51067,12 @@
       "warningWhenMisused": "Berstad blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "aspmyra_stadion": "club_profile"
+        "aspmyra_stadion": "club_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "aspmyra_stadion": "utledet"
+        "aspmyra_stadion": "utledet",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -50997,6 +51081,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
+        },
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
         }
       ]
     },
@@ -61377,7 +61467,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "jotun_arena"
+        "jotun_arena",
+        "gjemselund_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -61419,13 +61510,21 @@
       "warningWhenMisused": "Nystuen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "jotun_arena": "club_profile"
+        "jotun_arena": "club_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "jotun_arena": "belagt"
+        "jotun_arena": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "sandefjord",
           "relation": "played_for",
@@ -62613,7 +62712,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "jotun_arena"
+        "jotun_arena",
+        "gjemselund_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -62656,13 +62756,21 @@
       "warningWhenMisused": "Bergman mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "jotun_arena": "squad_profile"
+        "jotun_arena": "squad_profile",
+        "gjemselund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "jotun_arena": "belagt"
+        "jotun_arena": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
         {
           "clubId": "sandefjord",
           "relation": "played_for",
@@ -68566,7 +68674,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "nadderud_stadion",
-        "bryne_stadion"
+        "bryne_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -68610,16 +68719,24 @@
       "classSource": "belagt",
       "clubStatus": {
         "nadderud_stadion": "club_profile",
-        "bryne_stadion": "elite_career"
+        "bryne_stadion": "elite_career",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
         "nadderud_stadion": "belagt",
-        "bryne_stadion": "belagt"
+        "bryne_stadion": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "bryne",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
+        {
+          "clubId": "kongsvinger",
           "relation": "played_for",
           "status": "elite_career",
           "source": "belagt"
@@ -87524,7 +87641,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "skagerak_arena"
+        "skagerak_arena",
+        "gjemselund_stadion"
       ],
       "classHeight": 85,
       "naturalPositions": [
@@ -87565,13 +87683,21 @@
       "warningWhenMisused": "Holtan trenger en tydelig forsvarslinje foran seg.",
       "classSource": "belagt",
       "clubStatus": {
-        "skagerak_arena": "club_icon"
+        "skagerak_arena": "club_icon",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "skagerak_arena": "belagt"
+        "skagerak_arena": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "odd",
           "relation": "played_for",
@@ -94072,7 +94198,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "color_line_stadion"
+        "color_line_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -94117,15 +94244,23 @@
       "warningWhenMisused": "Castro mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "color_line_stadion": "elite_career"
+        "color_line_stadion": "elite_career",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "color_line_stadion": "belagt"
+        "color_line_stadion": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
         {
           "clubId": "aalesund",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
+        {
+          "clubId": "kongsvinger",
           "relation": "played_for",
           "status": "elite_career",
           "source": "belagt"
@@ -106584,7 +106719,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "nordre_asen"
+        "nordre_asen",
+        "gjemselund_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -106628,12 +106764,20 @@
       "warningWhenMisused": "Noppi blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "nordre_asen": "elite_career"
+        "nordre_asen": "elite_career",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "nordre_asen": "belagt"
+        "nordre_asen": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "skeid",
           "relation": "played_for",
@@ -120899,7 +121043,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "consto_arena"
+        "consto_arena",
+        "gjemselund_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -120938,12 +121083,20 @@
       "warningWhenMisused": "Moberg forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "consto_arena": "elite_career"
+        "consto_arena": "elite_career",
+        "gjemselund_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "consto_arena": "belagt"
+        "consto_arena": "belagt",
+        "gjemselund_stadion": "utledet"
       },
       "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
         {
           "clubId": "mjondalen",
           "relation": "played_for",
@@ -123438,7 +123591,8 @@
       "era": "historical",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "briskeby_stadion"
+        "briskeby_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 85,
       "naturalPositions": [
@@ -123481,16 +123635,24 @@
       "warningWhenMisused": "Ingelstad blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "briskeby_stadion": "club_icon"
+        "briskeby_stadion": "club_icon",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "briskeby_stadion": "belagt"
+        "briskeby_stadion": "belagt",
+        "gjemselund_stadion": "belagt"
       },
       "clubAffiliations": [
         {
           "clubId": "hamkam",
           "relation": "played_for",
           "status": "club_icon",
+          "source": "belagt"
+        },
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
           "source": "belagt"
         }
       ]
@@ -125323,7 +125485,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "briskeby_stadion"
+        "briskeby_stadion",
+        "gjemselund_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -125361,10 +125524,12 @@
       "warningWhenMisused": "Sjølstad blir utsatt i høy linje med mye rom bak.",
       "classSource": "utledet",
       "clubStatus": {
-        "briskeby_stadion": "club_profile"
+        "briskeby_stadion": "club_profile",
+        "gjemselund_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "briskeby_stadion": "utledet"
+        "briskeby_stadion": "utledet",
+        "gjemselund_stadion": "belagt"
       },
       "clubAffiliations": [
         {
@@ -125372,6 +125537,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
+        },
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
         }
       ]
     },
@@ -133556,6 +133727,3623 @@
       "clubAffiliations": [
         {
           "clubId": "sogndal",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "adem_guven",
+      "name": "Adem Güven",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "natural_fitness",
+        "leadership"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Güven blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kai_olav_ryen",
+      "name": "Kai Olav Ryen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Ryen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "vidar_sanderud",
+      "name": "Vidar Sanderud",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Sanderud blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_einar_martinsen",
+      "name": "Ole Einar Martinsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Martinsen mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arnfinn_engerbakk",
+      "name": "Arnfinn Engerbakk",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "teamwork",
+        "natural_fitness"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Engerbakk forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jorn_karlsrud",
+      "name": "Jørn Karlsrud",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Karlsrud forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "per_gunnar_dallokken",
+      "name": "Per Gunnar Dalløkken",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Dalløkken forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "harald_holter",
+      "name": "Harald Holter",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "leadership"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Holter forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "olav_nysaeter",
+      "name": "Olav Nysæter",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Nysæter blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "cato_holtet",
+      "name": "Cato Holtet",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Holtet blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "even_pellerud",
+      "name": "Even Pellerud",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "CB"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Pellerud forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "erik_nystuen",
+      "name": "Erik Nystuen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "finishing"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Nystuen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjetil_rydje",
+      "name": "Kjetil Rydje",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Rydje blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "roy_holth",
+      "name": "Roy Holth",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Holth blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "geir_jom",
+      "name": "Geir Jom",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Jom trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "knut_nordnes",
+      "name": "Knut Nordnes",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Nordnes forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "club_icon"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "lars_christian_krogh_gerson",
+      "name": "Lars Christian Krogh Gerson",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Gerson blir utsatt i høy linje med mye rom bak.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "otto_fredrikson",
+      "name": "Otto Fredrikson",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Fredrikson trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ali_ahamada",
+      "name": "Ali Ahamada",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Ahamada trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "mats_cato_moldskred",
+      "name": "Mats Cato Moldskred",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Moldskred blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "par_ericsson",
+      "name": "Pär Ericsson",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Ericsson blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "mame_niang",
+      "name": "Mame Niang",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Niang blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ludwig_ernstsson",
+      "name": "Ludwig Ernstsson",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Ernstsson blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "caleb_francis",
+      "name": "Caleb Francis",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "finishing",
+        "game_reading"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Francis mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_arvid_langnes",
+      "name": "Ole Arvid Langnes",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Langnes trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jorgen_kolstad",
+      "name": "Jørgen Kolstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Kolstad forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sven_erik_saetre",
+      "name": "Sven Erik Sætre",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "finishing"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Sætre mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "gjemselund_stadion": "elite_career"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "age_steen",
+      "name": "Åge Steen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Steen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "geir_hagalokken",
+      "name": "Geir Hagaløkken",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Hagaløkken blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "matz_ivan_faldmo",
+      "name": "Matz Ivan Faldmo",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Faldmo blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "tor_arne_sannerholt",
+      "name": "Tor Arne Sannerholt",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Sannerholt forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "rolf_furuly",
+      "name": "Rolf Furuly",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Furuly forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kai_erik_moen",
+      "name": "Kai Erik Moen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Moen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "rune_sunde",
+      "name": "Rune Sunde",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Sunde forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "tor_gunnar_johnsen",
+      "name": "Tor Gunnar Johnsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Johnsen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ove_jorstad",
+      "name": "Ove Jørstad",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Jørstad forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "vidar_evensen",
+      "name": "Vidar Evensen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Evensen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "pal_hapnes",
+      "name": "Pål Håpnes",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM",
+        "ST"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Håpnes forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "eirik_dybendal",
+      "name": "Eirik Dybendal",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Dybendal forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "bjorn_berg",
+      "name": "Bjørn Berg",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Berg forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "karl_erik_rimfeldt",
+      "name": "Karl Erik Rimfeldt",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Rimfeldt blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "fredrik_palerud",
+      "name": "Fredrik Pålerud",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Pålerud mister verdien sin uten bredde å angripe.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "adrian_ovlien",
+      "name": "Adrian Ovlien",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Ovlien blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jorgen_richardsen",
+      "name": "Jørgen Richardsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Richardsen blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "markus_skjellum",
+      "name": "Markus Skjellum",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Skjellum blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "martin_ellingsen",
+      "name": "Martin Ellingsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Ellingsen forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "johan_wennberg",
+      "name": "Johan Wennberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Wennberg forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "maikel_nieves",
+      "name": "Maikel Nieves",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Nieves blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "aleksey_gorodovoy",
+      "name": "Aleksey Gorodovoy",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Gorodovoy trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "joacim_holtan",
+      "name": "Joacim Holtan",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Holtan blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "martin_tangen_vinjor",
+      "name": "Martin Tangen Vinjor",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Vinjor forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jesper_grundt",
+      "name": "Jesper Grundt",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Grundt forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "august_stromberg",
+      "name": "August Strömberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Strömberg trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "lucas_ravn_haren",
+      "name": "Lucas Ravn-Haren",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Ravn-Haren mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ludvig_langrekken",
+      "name": "Ludvig Langrekken",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "WB"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Langrekken blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "eric_taylor",
+      "name": "Eric Taylor",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Taylor forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "fredrik_holme",
+      "name": "Fredrik Holmé",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Holmé blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "daniel_lysgard",
+      "name": "Daniel Lysgård",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Lysgård blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kristian_jahr",
+      "name": "Kristian Jahr",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Jahr blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "martin_hoel_andersen",
+      "name": "Martin Hoel Andersen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "gjemselund_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Andersen mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "gjemselund_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "gjemselund_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kongsvinger",
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"

@@ -182,7 +182,9 @@ avhenger av hvor History Go-kortet hans ligger.
 | Moss | Melløs | 82 |
 | Tromsø | Romssa Arena | 81 |
 | HamKam | Briskeby | 81 |
+| Kongsvinger | Gjemselund | 79 |
 | Brann | Brann Stadion | 75 |
+| Sogndal | Fosshaugane Campus | 75 |
 | Stabæk | Nadderud | 75 |
 | Viking | Lyse Arena | 70 |
 | Hødd | Høddvoll | 69 |
@@ -190,12 +192,12 @@ avhenger av hvor History Go-kortet hans ligger.
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
-| Sogndal | Fosshaugane Campus | 75 |
 | Kristiansund | Nordmøre stadion | 49 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen og Sogndal — 2366 arveplasser
-fordelt på alle 27, og **ingen klubb med bane har under 49 navn**. De 33 klubbene som
+Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal og Kongsvinger —
+2445 arveplasser fordelt på alle 28, og **ingen klubb med bane har under 49
+navn**. De 32 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1359,6 +1361,56 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Kongsvinger: samme kildeform, og et årstall som ikke var et årstall
+
+KIL delte utgangspunkt med Sogndal — `ground: "Gjemselund"` uten `placeId` — og
+deler v2-formen, men ikke tettheten:
+
+| | Sogndal | Kongsvinger |
+|---|---:|---:|
+| Profiler i kilden | 85 | 85 |
+| Kilden avstår uttrykkelig fra en ferdighet | 52 | 16 |
+| Med dokumenterte styrker etter import | 25 | 39 |
+| Uten posisjon i kilden | 10 | 6 |
+| Udatert i historikk og kvaliteter | 49 | 19 |
+| Håndsatte epoker | 18 | 1 |
+
+Kongsvinger er altså langt bedre belagt. Det som likevel tømmer 40 av 79
+styrkelister er **merittregelen**: «dokumentert cupsemifinaleerfaring» står 25
+ganger, og KILs fire cupsemifinaler er lagets merittliste sett fra spilleren,
+ikke en ferdighet hos mannen. Taket i `KJENT_UDOKUMENTERT` er 0,52.
+
+#### Et årstall er ikke nødvendigvis et karriereårstall
+
+KIL oppgir kampantall fra **«KILs publiserte adelskalender i 2023»**. Årstallet
+er når *lista* ble publisert, ikke når mannen spilte — og epoke-utledningen, som
+tar høyeste årstall i kildeteksten, gjorde derfor Charles Berstad til `modern`.
+Han var nøkkelspiller i sølvlaget **1992**. Espen Nystuen fikk 2023 som sitt
+eneste årstall.
+
+Regelen som luker det bort er smal med vilje: bare årstallet som henger på selve
+adelskalenderen strykes. Harald Holter «passerte 214 KIL-kamper i 2023 etter å
+ha vært i klubben siden 2015», og *det* er en ekte datering som må overleve.
+
+Rettelsen betalte seg to ganger: da publiseringsåret var borte, klarte «Øverste
+KIL-legende» 90 %-terskelen på egen hånd, og håndlista for epoke falt fra tre
+navn til ett.
+
+#### «Allrounder» er en posisjon, ikke fravær av en
+
+Arnfinn Engerbakk (266 kamper, sentral mot Juventus) falt først ut fordi
+posisjonsfeltet sa «Allrounder». Men kilden sier `Spilte alle posisjoner for
+KIL, inkludert keeper mot slutten av karrieren` — det er en påstand *om*
+posisjon, ikke en manglende. Han står nå med midtbanemalen og **ingen utvidet
+slot-liste**: å gi ham ti brukbare posisjoner ville gjort ham til
+universalplasteret for ethvert hull i oppstillingen, og det er en spillmekanisk
+påstand kilden ikke gjør. Allsidigheten ligger i `teamwork`, der den hører
+hjemme.
+
+De seks som er utelatt er det med rette: to æresmedlemmer, en trener, en
+«sr.-generasjon» som ikke er én person, og to historiske utespillere kilden ikke
+plasserer.
 
 ### Sogndal: den tynneste arven, og hvorfor den likevel står
 

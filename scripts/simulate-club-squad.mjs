@@ -222,6 +222,52 @@ check("spillerkilde kan vises som club_pool", /source: localStart\.generatedFrom
 
 const docs = fs.readFileSync(new URL("../docs/klubbvalg.md", import.meta.url), "utf8");
 check("docs skiller klubbtilknytning fra oppdagelsessted", docs.includes("`clubAffiliations`") && docs.includes("`sourcePlaceIds`"));
+
+// ---------------------------------------------------------------------------
+// Arvetabellen i docs/klubbvalg.md må stemme med dataene
+//
+// Tabellen har drevet fra dataene fire ganger nå: et redigeringsskript som
+// avbrøt midtveis, en delvis redigering som ga Rosenborg to rader, HamKam som
+// sto både med 26 spillere og som tom — og sist en Sogndal-rad som havnet
+// utenfor sorteringen. Dokumentet påstår selv at tabellen er «vaktet mot
+// dataene», og den påstanden var en periode usann: vakten forsvant i en
+// omskriving av denne fila mens teksten ble stående.
+//
+// Utsnittet stopper ved TABELLENS slutt, ikke dokumentets. Leser man til slutten
+// av fila, blir enhver senere tabell med tre kolonner lest som klubbrader — en
+// sammenligningstabell for to kildeimporter felte den med «Profiler i kilden er
+// en klubb med bane».
+{
+  const start = docs.indexOf("| Klubb | Bane | Historiske spillere |");
+  check("arvetabellen finnes i docs", start >= 0);
+  const linjer = docs.slice(start).split("\n");
+  const slutt = linjer.findIndex((line, i) => i > 0 && !line.startsWith("|"));
+  const rader = [...linjer.slice(0, slutt === -1 ? linjer.length : slutt).join("\n")
+    .matchAll(/^\| ([^|]+?) \| ([^|]+?) \| (\d+) \|$/gm)]
+    .map((m) => ({ clubs: m[1].split(",").map((x) => x.trim()), count: Number(m[3]) }));
+  check("arvetabellen har rader", rader.length >= 10, String(rader.length));
+
+  const navngitte = rader.filter((row) => row.count > 0);
+  const toGanger = navngitte.flatMap((row) => row.clubs).filter((n, i, all) => all.indexOf(n) !== i);
+  check("ingen klubb står to ganger i arvetabellen", toGanger.length === 0, toGanger.join(", "));
+
+  const arvPerNavn = new Map(clubs.filter((club) => club.homePlaceId).map((club) =>
+    [club.name, listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players }).length]));
+  for (const row of navngitte) {
+    for (const navn of row.clubs) {
+      check(`docs: «${navn}» er en klubb med bane`, arvPerNavn.has(navn), navn);
+      if (!arvPerNavn.has(navn)) continue;
+      check(`docs: ${navn} står med ${row.count} arvespillere`, arvPerNavn.get(navn) === row.count,
+        `dataene sier ${arvPerNavn.get(navn)}`);
+    }
+  }
+  // Og tabellen skal være sortert. En rad som havner utenfor sorteringen er
+  // nettopp slik Sogndal-raden ble stående feil uten at noe sa fra.
+  const tall = navngitte.map((row) => row.count);
+  const usortert = tall.findIndex((n, i) => i > 0 && n > tall[i - 1]);
+  check("arvetabellen er sortert fallende", usortert === -1,
+    usortert === -1 ? "" : `${navngitte[usortert].clubs.join("/")} (${tall[usortert]}) står under ${tall[usortert - 1]}`);
+}
 check("docs sier at pending-klubber ikke får tilfeldige spillere", /uten ferdig spillerpool.*ikke lenger fylt med tilfeldige ekte spillere/s.test(docs));
 
 console.log(JSON.stringify({
