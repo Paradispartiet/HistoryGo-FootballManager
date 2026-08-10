@@ -382,14 +382,42 @@ const largestClone = størst([...signatures.values()]);
 // en malimport og samtidig tåler noen ærlige tynne arver. Den skal fortsatt opp
 // hvis avstanden vokser — men den flyttes aldri under den målte bitteverdien.
 //
-// Begge endepunktene har flyttet seg NED siden forrige måling (86,24/85,17), og
-// det er verdt å lese riktig: AVSTANDEN mellom dem vokste, fra 1,07 til 1,44
-// poeng. Vakten skiller altså bedre enn før, ikke dårligere — det er nivået som
-// har flyttet seg, fordi hver ærlig tynn arv legger til spillere med smalere
-// kildespråk. Hadde avstanden krympet, ville vakten vært i ferd med å miste
-// evnen til å se forskjellen, og DA er det den som må skrives om igjen.
+// Forrige runde sto det her at AVSTANDEN mellom endepunktene vokste — 1,07 til
+// 1,44 poeng — og at en krympende avstand ville bety at vakten måtte skrives om
+// igjen. Notodden og Hønefoss målte 85,46 mot 84,35, altså 1,11, og da er den
+// spådommen prøvd. Serien er nå 1,07 · 1,44 · 1,39 · 1,11.
+//
+// Den svinger, den vokser ikke. Og det er nettopp derfor avstanden IKKE kan bli
+// selve grensa: en vakt med krav om minst 1,20 poeng ville felt to av fire
+// ærlige målinger. Å bytte en dilutert absoluttandel mot et svingende
+// differansetall er ikke å måle mot feilen, det er å bytte støykilde.
+//
+// Grensa på 0,848 gjør fortsatt jobben sin: den ligger 1,11 poeng OVER
+// flat-bittet, som altså fortsatt felles. Tallet å følge med på er ikke
+// avstanden, men KLARINGEN — 0,66 poeng opp fra grensa til dagens katalog. Den
+// krymper med hver tynn arv, og når den er brukt opp, er svaret å måle begge
+// endepunktene på nytt og flytte grensa dit den fortsatt ligger mellom dem —
+// aldri under bittet.
+//
+// Og for at det ikke skal måtte gjøres for hånd igjen: bittet MÅLES her, hver
+// kjøring, og skrives ut sammen med den ærlige andelen. Kommentaren over kan
+// bli foreldet; de to tallene i utskriften kan det ikke.
+const flatRå = read("data/football_attributes.json");
+for (const vekter of Object.values(flatRå.positionProfiles || {})) {
+  for (const gruppe of Object.keys(vekter)) vekter[gruppe] = 50;
+}
+const flatProfiles = derivePlayerAttributeIndex(read("data/football_players.json").players,
+  { catalogue: normalizeAttributeCatalogue(flatRå), roles }).profiles;
+const flatSignaturer = new Set(dokumenterte.map((player) =>
+  JSON.stringify(flatProfiles[player.id].values)));
+const flatShare = flatSignaturer.size / dokumenterte.length;
 check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.848,
   `${signatures.size} unike av ${dokumenterte.length} dokumenterte (${(uniqueShare * 100).toFixed(1)} %)`);
+// Selve bittet: uten posisjonsvektingen er profilen posisjonsblind, og det er
+// den malimporten vakten finnes for. Ligger den ærlige katalogen under grensa
+// mens bittet ligger over, har grensa mistet meningen og må måles på nytt.
+check("flat grunnlinje faller på den samme grensa", flatShare <= 0.848,
+  `flat ${(flatShare * 100).toFixed(2)} % mot ærlig ${(uniqueShare * 100).toFixed(2)} %`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
 // beskriver med de samme tre ordene — hodespill, duellspill,
@@ -623,7 +651,33 @@ const KJENT_UDOKUMENTERT = {
   // konkrete HANDLINGER — stupheadingen mot Brann, fire strafferedninger i
   // samme kvalifiseringsfinale, opprykksmålet mot Rolvsøy i 1982 — så det som
   // finnes er godt, det er bare lite av det. Målt 53 av 72.
-  levermyr_stadion: 0.75
+  levermyr_stadion: 0.75,
+  // Notodden er det største hullet i katalogen, og årsaken er ny: kilden
+  // beskriver DOKUMENTASJON i stedet for fotball. 77 av 85 kvalitetslinjer har
+  // formen «N kamper dokumenterer kontinuitet», og kilden slår selv fast i
+  // toppen at kampmengde, mål, landslag og opprykk «ikke automatisk oversettes
+  // til skjulte tekniske/fysiske attributter». 39 av linjene sier i tillegg
+  // ordrett at ferdighetsprofilen «holdes thin-source».
+  //
+  // Regelen det ga står i importen: EN KAMP ER INDIVIDUELL, MEN DEN ER IKKE EN
+  // FERDIGHET. Åtte profiler sier noe om hvordan mannen spilte — Eric Kitolano
+  // «rask, driblesterk og villig til å utfordre én mot én», Magne Hoseths
+  // «silkemyke venstrefot» — og de åtte er de eneste som bærer styrker herfra.
+  // Målt 61 av 80.
+  //
+  // Taket er satt tett på det målte med vilje. Et tak på 76 % vokter lite i seg
+  // selv, men gulvet på baksiden gjør det: faller to av de nitten med styrker
+  // ut, slår vakten inn.
+  notodden_stadion: 0.78,
+  // Hønefoss har samme form og samme forbud, men er dobbelt så godt dekket —
+  // fordi klubbens adelskalender fører MÅL per mann fra 1987. 24 av 85 har
+  // dermed en individuell påstand mot Notoddens åtte, og etter at de 27 uten
+  // oppgitt posisjon er utelatt, står bare 23 av 58 tomme.
+  //
+  // To kilder med identisk struktur, identisk forbud og dobbelt så stor
+  // forskjell i dekning: det er skillet mellom godt datert og godt beskrevet
+  // igjen, i en tredje form. Målt 23 av 58.
+  aka_arena: 0.42
 };
 const perArv = new Map();
 for (const player of players) {
@@ -893,6 +947,14 @@ console.log(JSON.stringify({
   ferdigheter: catalogue.attributes.length,
   skalering: scaling,
   sprikMedian: medianRange,
+  // De to endepunktene grensa på 0,848 skal ligge mellom. Skrives ut hver
+  // kjøring nettopp fordi de før måtte måles for hånd og ble stående feil.
+  profilUnikhet: {
+    ærlig: `${(uniqueShare * 100).toFixed(2)} %`,
+    flatGrunnlinje: `${(flatShare * 100).toFixed(2)} %`,
+    grense: "84,80 %",
+    klaring: `${((uniqueShare - 0.848) * 100).toFixed(2)} poeng`
+  },
   påTaket: `${(atCeiling * 100).toFixed(1)} %`,
   rollerVunnetAvLavereKlasse: `${rolesWonByLowerClass} av ${roles.length}`,
   kampRollerVunnetAvLavereKlasse: `${beatenByLower} av ${roles.length}`,

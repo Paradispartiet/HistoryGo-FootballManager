@@ -399,7 +399,18 @@ const REVIEWED_NAME_PAIRS = new Map([
   ["arne olsen|arne nana olsen jerv", "Spartas angrepsspiller mot Jervs kamprekordholder"],
   // Egersunds klubblegende (321 kamper 2004–2018) mot Jerv-spilleren som kom
   // fra Fløy. Ingen kilde nevner den andre klubben.
-  ["espen rasmussen jerv|espen stene rasmussen", "Jervs Fløy-signering mot Egersunds klubblegende"]
+  ["espen rasmussen jerv|espen stene rasmussen", "Jervs Fløy-signering mot Egersunds klubblegende"],
+  // Hønefoss-kilden ga to par, og begge er splitter importen gjorde med vilje.
+  //
+  // Katalogens David Hanssen er `modern` sentral midtbanespiller med
+  // squad_profile på Intility; Hønefoss' David A. Hanssen er «Forsvar» med 110
+  // kamper i 2000-tallsgenerasjonen. Initialen er kildens egen — den skriver
+  // man når man vet at navnet deles — og mellomnavn-heuristikken stryker den.
+  ["david a hanssen|david hanssen", "Vålerengas midtbanespiller mot Hønefoss' forsvarsspiller"],
+  // Og Helge Haugen er det klareste av alle: katalogens er `historical` sentral
+  // midtbane i Kristiansand og Bergen, Hønefoss' spilte 91 kamper i klubbens
+  // 2000-tallsperiode. Epoken alene avgjør det.
+  ["helge haugen|helge haugen hønefoss", "Start/Åsanes historiske midtbanespiller mot Hønefoss' 2000-tallsprofil"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

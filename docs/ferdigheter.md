@@ -553,6 +553,49 @@ Den står med begrunnelsen i koden: hevingen kommer av en *retting*, ikke et
 frafall, og beviset på at den kjøpte noe er at profil-unikheten gikk opp
 samtidig.
 
+
+### En kamp er individuell, men den er ikke en ferdighet
+
+Notodden og Hønefoss er de første kildene som ikke beskriver fotball. Nesten
+hver kvalitetslinje har formen «*N* kamper dokumenterer kontinuitet», og begge
+kildene slår fast i toppen at kampmengde, mål, landslag og opprykk «brukes som
+dokumentert spillerverdi, men **oversettes ikke automatisk** til skjulte
+tekniske/fysiske attributter».
+
+Det stiller regelen over på hodet. Sarpsborg-spørsmålet var *mannen eller
+laget?*, og en kamp består den prøven glatt: han spilte de kampene, ingen andre.
+Likevel er den ikke en ferdighet:
+
+> 524 kamper sier at mannen var **tilgjengelig**, ikke hva han kunne.
+
+Mål er det motsatte. De er handlinger kilden teller per mann, og begge kildene
+graderer dem med sine egne ord — «ekstrem målrate», «svært høy målproduksjon»,
+«betydelig». «77 mål på 235 kamper» er derfor lest som `finishing`; «59 kamper
+dokumenterer stabil A-lagstilknytning» er ikke lest som noe.
+
+De to unntakene kommer fra kilden selv, ikke fra kampantallet: Frode Laftons
+**184 sammenhengende hele kamper** og Thomas Solvolls «samtlige minutter i 2004»
+kaller kilden *tilgjengelighetsverdi*, og det er `natural_fitness`.
+
+To prøvene av regelen som er verdt å ha med:
+
+- Kenneth Dokken scoret 50 mål fra **sentral midtbane**. Mål gjør ingen til
+  spiss, og det er grunnen til at 27 Hønefoss-profiler med «Historisk
+  utespiller» i posisjonsfeltet utelates i stedet for å gjettes inn i angrepet —
+  også Jan-Tore Øverby med 301 kamper og 46 mål.
+- To påstander kildene faktisk gjør, lot seg ikke importere i det hele tatt:
+  Erik Midtgarden er «allsidig indreløper», Alexander Groven har «reell
+  rolleallsidighet». Ordforrådet har ingen allsidighets-ferdighet, og et
+  nabotoken (`teamwork`, `wide_support`) er en annen påstand enn den kilden
+  gjorde. De står tomme.
+
+Resultatet er katalogens største hull — Notodden 61 av 80 uten dokumenterte
+styrker — og det er kildens, ikke importens: 39 av linjene sier ordrett at
+ferdighetsprofilen «holdes thin-source». Hønefoss har samme form og samme
+forbud, men bare 23 av 58 tomme, fordi klubbens **adelskalender fører mål per
+mann fra 1987**. Godt datert og godt beskrevet er to uavhengige egenskaper ved
+en kilde; her er *hva kilden teller* den tredje.
+
 ### Vakten som målte sin egen avrunding
 
 Sogndal-importen felte vakten «ingen enkeltverdi tar mer enn en femtedel» —
@@ -705,6 +748,47 @@ Og her er testen som gjør regelen etterprøvbar: **hadde avstanden krympet**,
 ville det betydd at vakten er i ferd med å miste evnen til å se forskjellen på
 en ærlig tynn import og en malimport — og da er det vakten som må skrives om, ikke
 grensa som skal flyttes.
+
+### Avstanden krympet — og prøven ga et annet svar enn den lovet
+
+Notodden og Hønefoss målte **85,46 %** ærlig mot **84,35 %** flat. Avstanden er
+1,11, og serien er nå:
+
+| | Sandnes Ulf → | Åsane/Jerv → | Notodden/Hønefoss |
+|---|---:|---:|---:|
+| Ærlig katalog | 85,66 % | 85,52 % | **85,46 %** |
+| Flat grunnlinje | 84,22 % | 84,13 % | **84,35 %** |
+| **Avstand** | 1,44 | 1,39 | **1,11** |
+
+Løftet over var at en krympende avstand betyr at vakten må skrives om. Prøven
+ble gjort, og svaret er nei — men ikke fordi løftet var uvesentlig, og ikke ved
+å slakke noe:
+
+Fire målinger av avstanden gir **1,07 · 1,44 · 1,39 · 1,11**. Den *svinger* med
+hva slags arv som nettopp kom inn; den følger ingen retning. En vakt som krevde
+minst 1,20 poeng ville felt to av fire ærlige målinger. Å bytte en dilutert
+absoluttandel mot et svingende differansetall er ikke å måle mot feilen — det er
+å bytte støykilde.
+
+Og grensa gjør fortsatt jobben: 0,848 ligger **1,11 poeng over** flat-bittet,
+som altså felles hver gang det prøves. Det som har endret seg er ikke evnen til
+å skille, men **klaringen** — 0,66 poeng opp fra grensa til dagens katalog. Den
+krymper med hver tynn arv, og det er det tallet som avgjør om neste import går
+gjennom.
+
+Det som *ble* skrevet om, er hvordan tallene holdes sanne. Påstanden om at
+avstanden vokste sto i en kommentar og i denne fila, og den var utdatert lenge
+før noen målte på nytt. Nå måler `sim:player-attributes` **flat-bittet selv,
+hver kjøring**, og skriver ut begge endepunktene:
+
+```json
+"profilUnikhet": { "ærlig": "85.46 %", "flatGrunnlinje": "84.35 %",
+                   "grense": "84,80 %", "klaring": "0.66 poeng" }
+```
+
+Det ligger dessuten en egen vakt på bittet: felles ikke den flate grunnlinja av
+grensa, har grensa mistet meningen og begge endepunktene må måles på nytt.
+Kommentarer kan bli foreldet. Et tall som regnes ut hver kjøring kan det ikke.
 
 ### Realisme er sprik, ikke senking
 

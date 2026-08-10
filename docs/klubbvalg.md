@@ -178,11 +178,12 @@ avhenger av hvor History Go-kortet hans ligger.
 | Molde | Aker stadion | 89 |
 | Start | Sparebanken Sør Arena | 85 |
 | Mjøndalen | Consto Arena | 83 |
-| Lyn | Bislett Stadion | 82 |
+| Lyn | Bislett | 82 |
 | Moss | Melløs | 82 |
 | Tromsø | Romssa Arena | 81 |
 | HamKam | Briskeby | 81 |
 | Ranheim | Extra Arena | 81 |
+| Notodden | Notodden stadion | 80 |
 | Kongsvinger | Gjemselund | 79 |
 | Åsane | Myrdal | 76 |
 | Brann | Brann Stadion | 75 |
@@ -196,6 +197,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | KFUM Oslo | KFUM Arena | 66 |
 | Sandnes Ulf | Øster Hus Arena | 60 |
 | Raufoss | Raufoss Arena | 58 |
+| Hønefoss | AKA Arena | 58 |
 | Lillestrøm | Åråsen | 56 |
 | Egersund | Egersund Arena | 56 |
 | Strømmen | Strømmen stadion | 54 |
@@ -203,9 +205,9 @@ avhenger av hvor History Go-kortet hans ligger.
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane og Jerv — 2902 arveplasser
-fordelt på alle 35, og **ingen klubb med bane har under 49 navn**. De 25
-klubbene som
+Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Notodden og Hønefoss —
+3040 arveplasser fordelt på alle 37, og **ingen klubb med bane har under 49
+navn**. De 23 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -216,7 +218,7 @@ fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvi
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 280 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 414 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 **Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 dokumenterte klubbtilknytninger finnes. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.
@@ -1413,6 +1415,109 @@ Den siste er den lærerike: Egersund har ham gjennom 2025, Jerv i «2026-forsvar
 Der **kjeder tidslinjen seg sammen**, og det er positivt belegg — ikke bare et
 navn som ligner. De tre andre har ingenting utenom navnet, og
 mellomnavn-heuristikken har nå tatt feil fire ganger totalt.
+
+### Notodden og Hønefoss: to kilder som beskriver dokumentasjon i stedet for fotball
+
+Begge klubbene manglet bane — `ground: "Notodden stadion"` og `ground: "AKA
+Arena"` uten `placeId`. **80 navn** (61 nye, 19 koblet) og **58 navn** (40 nye,
+18 koblet). Første gang to kilder kom samtidig, og de er strukturelt identiske:
+fire kategorier, samme felt, samme standardavsnitt.
+
+De er også de første kildene som ikke beskriver fotball. Nesten hver eneste
+kvalitetslinje har formen «*N* kamper dokumenterer kontinuitet», og begge
+kildene slår fast i toppen at kampmengde, mål, landslag og opprykk «brukes som
+dokumentert spillerverdi, men **oversettes ikke automatisk** til skjulte
+tekniske/fysiske attributter».
+
+#### En kamp er individuell, men den er ikke en ferdighet
+
+Sarpsborg ga regelen om at **en tittel tilhører laget, ikke mannen**. Disse to
+gir dens motstykke, og det trengs, for en kamp er ikke lagets — den er hans:
+
+> 524 kamper sier at mannen var **tilgjengelig**, ikke hva han kunne.
+
+Mål er det motsatte. De er handlinger kilden teller per mann, og begge kildene
+graderer dem med sine egne ord. «77 mål på 235 kamper» er derfor lest; «59
+kamper dokumenterer stabil A-lagstilknytning» er det ikke.
+
+To unntak, og begge er kildens egne: Frode Laftons **184 sammenhengende hele
+kamper** og Thomas Solvolls «samtlige minutter i 2004» kaller kilden selv
+*tilgjengelighetsverdi*. Det er `natural_fitness` — hentet fra kilden, ikke fra
+kampantallet.
+
+#### Samme form, dobbelt så god dekning
+
+| | Notodden | Hønefoss |
+|---|---:|---:|
+| Profiler med en individuell påstand | 8 av 85 | 24 av 85 |
+| Uten dokumenterte styrker (på banen) | 61 av 80 | 23 av 58 |
+
+Forskjellen har én årsak: HBKs offisielle **adelskalender fører mål per mann fra
+1987**. Notodden har ingen tilsvarende liste, og de åtte som står igjen er de
+som beskriver *spillemåte* — Eric Kitolano «rask, driblesterk og villig til å
+utfordre én mot én», Magne Hoseths «silkemyke venstrefot» og «gode skuddfot».
+
+Notodden er dermed det største hullet i katalogen (76 %), og det er kildens,
+ikke importens: 39 av linjene sier ordrett at ferdighetsprofilen «holdes
+thin-source».
+
+To påstander kildene faktisk gjør, lot seg **ikke** importere: Erik Midtgarden
+er «allsidig indreløper» og Alexander Groven har «reell rolleallsidighet».
+`data/football_attributes.json` har ingen allsidighets-ferdighet, og å låne et
+nabotoken ville importert en annen påstand enn den kilden gjorde. De står tomme.
+
+#### En klubb kan mangle en historisk epoke
+
+Notodden FK ble **stiftet 3. november 1999**, og kildens A-lagshistorikk løper
+2006–2026. «Historisk pioner» betyr her 2007-laget. Ni profiler sto uten epoke,
+og alternativet var å datere Piotr Stokowiec og Símun Samuelsen på hukommelse.
+
+Erklæringen er derfor en påstand om **klubben**, ikke om ni enkeltmenn — men
+den er også nøyaktig den stille grenen som daterte hele Aalesund-arven på
+gjetning. Så den måles mot kilden før den får virke: finnes det én eneste
+spiller kilden selv daterer før 2000, stopper importen. Notodden måler **54
+daterte moderne mot 0 historiske**. Bittestet med Hønefoss, som daterer 7 før
+2000 og felles.
+
+Hønefoss kan ingen slik erklæring hjelpe — klubblinja går tilbake til Liv og
+Fossekallen — så der står 16 navn i håndlista. Sju av dem daterer kilden med
+**periodenavn** i stedet for årstall, og et periodenavn er like presist når
+serien har skiftet navn: Tippeligaen 1990–2016, OBOS-ligaen fra 2017.
+
+#### Posisjonsfeltet skjulte en posisjon for fjerde gang
+
+«Midtspiss» traff verken `^spiss` eller `^midtbane`. Elleve spisser falt ut av
+importen. «Høyre midtbane» falt mellom `^høyreving` og `^midtbane` og tok
+Notoddens kaptein Pål Christian Alsaker med seg.
+
+Alle fire funnene — «Allrounder», 1950-tallets «indre venstre», «Historisk
+angrepsprofil» og nå disse — kom samme vei: ved å **lese utelatelseslista** i
+stedet for å stole på den. Derfor stopper importen nå når posisjonsfeltet sier
+noe kartet ikke leser.
+
+Vaktens første utkast bommet, og det er verdt å ha med: den stoppet på «utelatt
+med ferdighetspåstand», og felte Jan-Tore Øverby (301 kamper, 46 mål) og to til
+— ekte «Historisk utespiller» som skal utelates. At kilden teller mål på en mann
+den ikke vil plassere, er kildens sprik, ikke importens feil. Vakten skiller nå
+mellom kildens egen markør for «vi vet ikke» og et hull i kartet.
+
+#### To splitter og en tredje som kunne gått motsatt vei
+
+| Kilden | Katalogen | Avgjørelse |
+|---|---|---|
+| Helge Haugen — 91 kamper i 2000-tallsperioden | Helge Haugen — `historical` midtbane, Start og Åsane | To menn |
+| David A. Hanssen — «Forsvar», 110 kamper | David Hanssen — `modern` midtbane, Vålerenga | To menn |
+| Lennart Steffensen (Hønefoss) — 172 kamper, 24 mål | Lennart Steffensen (Notodden) — forsvar i 2007-laget | To menn |
+
+Den siste er den lærerike denne gangen. En HBK-veteran som følger et
+nyopprykket nabolag opp på nivå to i 2007 ville kjedet seg pent sammen — men
+det er **jeg** som konstruerer den kjeden. Hønefoss-kilden oppgir ikke ett
+eneste årstall for ham, så det finnes ingen tidslinje å prøve koblingen mot. Jo
+Stålesen ble beholdt fordi *begge* kildene sa når; her sier ingen av dem det.
+
+> En ubekreftet kobling er en påstand — og en **sannsynlig** kobling er det også.
+
+Mellomnavn-heuristikken har nå tatt feil fem ganger.
 
 ### Åsane: en kategoridom som avgjorde femten ukjente på ti kjente
 
