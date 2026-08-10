@@ -63,6 +63,7 @@
     "audit:clubs": "node scripts/audit-clubs.mjs",
     "sim:league-playoff": "node scripts/simulate-league-playoff.mjs",
     "audit:ci-coverage": "node scripts/audit-ci-coverage.mjs",
+    "audit:product-status": "node scripts/audit-product-status.mjs",
     "sim:club-selection": "node scripts/simulate-club-selection.mjs",
     "sim:club-tradition": "node scripts/simulate-club-tradition.mjs",
     "sim:club-squad": "node scripts/simulate-club-squad.mjs",
