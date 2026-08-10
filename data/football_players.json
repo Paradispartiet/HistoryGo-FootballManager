@@ -16624,7 +16624,8 @@
       "nationality": "Serbia",
       "era": "modern",
       "sourcePlaceIds": [
-        "intility_arena"
+        "intility_arena",
+        "oster_hus_arena"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -16674,13 +16675,21 @@
       "warningWhenMisused": "En skapende spiller uten tid og frihet blir en som bare flytter ballen videre.",
       "classSource": "belagt",
       "clubStatus": {
-        "intility_arena": "squad_profile"
+        "intility_arena": "squad_profile",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "intility_arena": "belagt"
+        "intility_arena": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "valerenga",
           "relation": "played_for",
@@ -26093,7 +26102,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "lerkendal_stadion",
-        "haugesund_stadion"
+        "haugesund_stadion",
+        "oster_hus_arena"
       ],
       "classHeight": 83,
       "naturalPositions": [
@@ -26118,7 +26128,9 @@
       "strengths": [
         "finishing",
         "movement",
-        "combination_play"
+        "combination_play",
+        "box_finishing",
+        "game_reading"
       ],
       "needs": [
         "box_service",
@@ -26144,11 +26156,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "elite_career",
-        "haugesund_stadion": "elite_career"
+        "haugesund_stadion": "elite_career",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt",
-        "haugesund_stadion": "belagt"
+        "haugesund_stadion": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -26160,6 +26174,12 @@
         },
         {
           "clubId": "rosenborg",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sandnes_ulf",
           "relation": "played_for",
           "status": "elite_career",
           "source": "belagt"
@@ -26863,7 +26883,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "lerkendal_stadion",
-        "extra_arena"
+        "extra_arena",
+        "oster_hus_arena"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -26890,7 +26911,10 @@
       "strengths": [
         "teamwork",
         "positioning",
-        "duels"
+        "duels",
+        "natural_fitness",
+        "determination",
+        "game_reading"
       ],
       "needs": [
         "clear_defensive_line",
@@ -26916,11 +26940,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "lerkendal_stadion": "academy_export",
-        "extra_arena": "elite_career"
+        "extra_arena": "elite_career",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
         "lerkendal_stadion": "belagt",
-        "extra_arena": "utledet"
+        "extra_arena": "utledet",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -26934,6 +26960,12 @@
           "clubId": "rosenborg",
           "relation": "academy",
           "status": "academy_export",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
           "source": "belagt"
         }
       ]
@@ -33654,7 +33686,8 @@
       "nationality": "Kosovo",
       "era": "modern",
       "sourcePlaceIds": [
-        "lyse_arena"
+        "lyse_arena",
+        "oster_hus_arena"
       ],
       "classHeight": 83,
       "naturalPositions": [
@@ -33678,7 +33711,8 @@
       "strengths": [
         "first_touch",
         "dribbling",
-        "one_vs_one"
+        "one_vs_one",
+        "game_reading"
       ],
       "needs": [
         "wide_space",
@@ -33698,13 +33732,21 @@
       "warningWhenMisused": "Bytyqi mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "lyse_arena": "club_profile"
+        "lyse_arena": "club_profile",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "lyse_arena": "belagt"
+        "lyse_arena": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "viking",
           "relation": "played_for",
@@ -42161,7 +42203,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "romssa_arena"
+        "romssa_arena",
+        "oster_hus_arena"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -42187,7 +42230,8 @@
         "teamwork",
         "late_runs",
         "long_shots",
-        "work_rate"
+        "work_rate",
+        "game_reading"
       ],
       "needs": [
         "midfield_partner",
@@ -42206,13 +42250,21 @@
       "warningWhenMisused": "Johansen forsvinner hvis midtbanen blir isolert.",
       "classSource": "belagt",
       "clubStatus": {
-        "romssa_arena": "club_profile"
+        "romssa_arena": "club_profile",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "romssa_arena": "belagt"
+        "romssa_arena": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "tromso",
           "relation": "played_for",
@@ -60165,7 +60217,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "jotun_arena",
-        "hoddvoll"
+        "hoddvoll",
+        "oster_hus_arena"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -60207,11 +60260,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "jotun_arena": "club_legend",
-        "hoddvoll": "elite_career"
+        "hoddvoll": "elite_career",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
         "jotun_arena": "belagt",
-        "hoddvoll": "belagt"
+        "hoddvoll": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -60225,6 +60280,12 @@
           "clubId": "sandefjord",
           "relation": "played_for",
           "status": "club_legend",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
           "source": "belagt"
         }
       ]
@@ -68129,7 +68190,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "nadderud_stadion"
+        "nadderud_stadion",
+        "oster_hus_arena"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -68172,13 +68234,21 @@
       "warningWhenMisused": "Holmvik mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "nadderud_stadion": "club_legend"
+        "nadderud_stadion": "club_legend",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "nadderud_stadion": "belagt"
+        "nadderud_stadion": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        },
         {
           "clubId": "stabak",
           "relation": "played_for",
@@ -82303,7 +82373,8 @@
       "nationality": "Norge",
       "era": "historical",
       "sourcePlaceIds": [
-        "fredrikstad_stadion"
+        "fredrikstad_stadion",
+        "oster_hus_arena"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -82347,10 +82418,12 @@
       "warningWhenMisused": "Nielsen blir utsatt i høy linje med mye rom bak.",
       "classSource": "belagt",
       "clubStatus": {
-        "fredrikstad_stadion": "club_profile"
+        "fredrikstad_stadion": "club_profile",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "fredrikstad_stadion": "belagt"
+        "fredrikstad_stadion": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -82358,6 +82431,12 @@
           "clubId": "fredrikstad",
           "relation": "played_for",
           "status": "club_profile",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
           "source": "belagt"
         }
       ]
@@ -97890,7 +97969,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "haugesund_stadion"
+        "haugesund_stadion",
+        "oster_hus_arena"
       ],
       "classHeight": 85,
       "naturalPositions": [
@@ -97936,16 +98016,24 @@
       "warningWhenMisused": "Nilsen mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "haugesund_stadion": "club_icon"
+        "haugesund_stadion": "club_icon",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "haugesund_stadion": "belagt"
+        "haugesund_stadion": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "clubAffiliations": [
         {
           "clubId": "haugesund",
           "relation": "played_for",
           "status": "club_icon",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
           "source": "belagt"
         }
       ]
@@ -97957,7 +98045,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "haugesund_stadion"
+        "haugesund_stadion",
+        "oster_hus_arena"
       ],
       "classHeight": 85,
       "naturalPositions": [
@@ -97984,7 +98073,8 @@
         "set_pieces",
         "long_shots",
         "crossing",
-        "late_runs"
+        "late_runs",
+        "game_reading"
       ],
       "needs": [
         "wide_lane",
@@ -98003,16 +98093,24 @@
       "warningWhenMisused": "Stølås mister verdien sin uten bredde å angripe.",
       "classSource": "belagt",
       "clubStatus": {
-        "haugesund_stadion": "club_icon"
+        "haugesund_stadion": "club_icon",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "haugesund_stadion": "belagt"
+        "haugesund_stadion": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "clubAffiliations": [
         {
           "clubId": "haugesund",
           "relation": "played_for",
           "status": "club_icon",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
           "source": "belagt"
         }
       ]
@@ -113842,7 +113940,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "bryne_stadion"
+        "bryne_stadion",
+        "oster_hus_arena"
       ],
       "classHeight": 85,
       "naturalPositions": [
@@ -113865,7 +113964,8 @@
         "finishing",
         "pressing",
         "strength",
-        "box_finishing"
+        "box_finishing",
+        "game_reading"
       ],
       "needs": [
         "box_service",
@@ -113885,14 +113985,22 @@
       "warningWhenMisused": "Høiland blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "bryne_stadion": "club_icon"
+        "bryne_stadion": "club_icon",
+        "oster_hus_arena": "club_icon"
       },
       "clubStatusSource": {
-        "bryne_stadion": "belagt"
+        "bryne_stadion": "belagt",
+        "oster_hus_arena": "belagt"
       },
       "clubAffiliations": [
         {
           "clubId": "bryne",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        },
+        {
+          "clubId": "sandnes_ulf",
           "relation": "played_for",
           "status": "club_icon",
           "source": "belagt"
@@ -122963,7 +123071,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "consto_arena"
+        "consto_arena",
+        "oster_hus_arena"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -122985,7 +123094,9 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [],
+      "strengths": [
+        "game_reading"
+      ],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -123003,10 +123114,12 @@
       "warningWhenMisused": "Torsteinbø forsvinner hvis midtbanen blir isolert.",
       "classSource": "utledet",
       "clubStatus": {
-        "consto_arena": "club_profile"
+        "consto_arena": "club_profile",
+        "oster_hus_arena": "elite_career"
       },
       "clubStatusSource": {
-        "consto_arena": "utledet"
+        "consto_arena": "utledet",
+        "oster_hus_arena": "belagt"
       },
       "clubAffiliations": [
         {
@@ -123014,6 +123127,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
+        },
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
         }
       ]
     },
@@ -123024,7 +123143,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "consto_arena"
+        "consto_arena",
+        "oster_hus_arena"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -123045,7 +123165,10 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -123064,14 +123187,22 @@
       "warningWhenMisused": "Ekeland mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "utledet",
       "clubStatus": {
-        "consto_arena": "club_profile"
+        "consto_arena": "club_profile",
+        "oster_hus_arena": "club_profile"
       },
       "clubStatusSource": {
-        "consto_arena": "utledet"
+        "consto_arena": "utledet",
+        "oster_hus_arena": "utledet"
       },
       "clubAffiliations": [
         {
           "clubId": "mjondalen",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
+        {
+          "clubId": "sandnes_ulf",
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
@@ -133810,7 +133941,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "fosshaugane_campus"
+        "fosshaugane_campus",
+        "oster_hus_arena"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -133828,7 +133960,11 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
       "needs": [
         "box_service",
         "runners_inside"
@@ -133847,12 +133983,20 @@
       "warningWhenMisused": "Ramsland blir usynlig uten tilførsel inn i boksen.",
       "classSource": "utledet",
       "clubStatus": {
-        "fosshaugane_campus": "club_profile"
+        "fosshaugane_campus": "club_profile",
+        "oster_hus_arena": "club_profile"
       },
       "clubStatusSource": {
-        "fosshaugane_campus": "utledet"
+        "fosshaugane_campus": "utledet",
+        "oster_hus_arena": "utledet"
       },
       "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
         {
           "clubId": "sogndal",
           "relation": "played_for",
@@ -145976,6 +146120,2853 @@
       "clubAffiliations": [
         {
           "clubId": "raufoss",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kare_nygaard",
+      "name": "Kåre Nygaard",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Nygaard blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "paul_olav_hoivik",
+      "name": "Paul Olav Høivik",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing",
+        "natural_fitness"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Høivik blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "torgil_gunneng",
+      "name": "Torgil Gunneng",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Gunneng blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_magnus_sirevaag",
+      "name": "Ole Magnus Sirevaag",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Sirevaag blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "reidar_berger",
+      "name": "Reidar Berger",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Berger blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "gunnar_vigesdal",
+      "name": "Gunnar Vigesdal",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing",
+        "natural_fitness"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Vigesdal blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "rolf_stangeland",
+      "name": "Rolf Stangeland",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Stangeland blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stig_klungtveit",
+      "name": "Stig Klungtveit",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Klungtveit blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjell_mathisen",
+      "name": "Kjell Mathisen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Mathisen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "tor_jan_skretting",
+      "name": "Tor Jan Skretting",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Skretting blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "aksel_berget_skjolsvik",
+      "name": "Aksel Berget Skjølsvik",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing",
+        "leadership",
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Skjølsvik forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kent_havard_eriksen",
+      "name": "Kent Håvard Eriksen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing",
+        "natural_fitness"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Eriksen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "vegard_aanestad",
+      "name": "Vegard Aanestad",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading",
+        "box_finishing"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Aanestad mister verdien sin uten bredde å angripe.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "anel_raskaj",
+      "name": "Anel Raskaj",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 85,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Raskaj forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "club_icon"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_icon",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "egil_selvik",
+      "name": "Egil Selvik",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Selvik trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "steinthor_freyr_thorsteinsson",
+      "name": "Steinthór Freyr Thorsteinsson",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing",
+        "game_reading"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Thorsteinsson mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "pontus_engblom",
+      "name": "Pontus Engblom",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Engblom blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "christian_landu_landu",
+      "name": "Christian Landu-Landu",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Landu-Landu forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "aslak_falch",
+      "name": "Aslak Falch",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Falch trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kamal_saaliti",
+      "name": "Kamal Saaliti",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing",
+        "game_reading"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Saaliti blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bo_andersen",
+      "name": "Bo Andersen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "ST",
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "archetypeIds": [
+        "classic_keeper"
+      ],
+      "archetypes": [
+        "shot_stopper"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "clear_defensive_line",
+        "protected_box"
+      ],
+      "preferredRoles": [
+        "classic_keeper"
+      ],
+      "likesTactics": [
+        "structured_build_up"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Andersen trenger en tydelig forsvarslinje foran seg.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "vidar_nisja",
+      "name": "Vidar Nisja",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Nisja forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "vajebah_sakor",
+      "name": "Vajebah Sakor",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 86,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Sakor forsvinner hvis midtbanen blir isolert.",
+      "classSource": "belagt",
+      "clubStatus": {
+        "oster_hus_arena": "elite_career"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "elite_career",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "johny_gilje",
+      "name": "Johny Gilje",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Gilje blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_legend"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "morten_eriksen",
+      "name": "Morten Eriksen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Eriksen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_legend"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "livar_eide",
+      "name": "Livar Eide",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Eide blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_legend"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "morten_hermansen",
+      "name": "Morten Hermansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Hermansen blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_legend"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "michael_andre_bekke",
+      "name": "Michael Andre Bekke",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Bekke mister verdien sin uten bredde å angripe.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_legend"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ronny_espedal",
+      "name": "Ronny Espedal",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Espedal blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "edier_frejd",
+      "name": "Edier Frejd",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Frejd blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "harald_vindenes",
+      "name": "Harald Vindenes",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Vindenes blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "andreas_ulland_andersen",
+      "name": "Andreas Ulland Andersen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [
+        "ST",
+        "AM"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "wide_dribbler"
+      ],
+      "archetypes": [
+        "dribbler"
+      ],
+      "strengths": [
+        "game_reading"
+      ],
+      "needs": [
+        "wide_space",
+        "isolation_duels"
+      ],
+      "preferredRoles": [
+        "wide_dribbler",
+        "inverted_winger"
+      ],
+      "likesTactics": [
+        "wide_attack",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Andersen mister 1v1-situasjonene sine i et trangt system.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "gilles_ondo",
+      "name": "Gilles Ondo",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Ondo blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "marius_helle",
+      "name": "Marius Helle",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing",
+        "box_finishing",
+        "natural_fitness"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Helle blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kenneth_sola",
+      "name": "Kenneth Sola",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing",
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Sola blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "steffen_haugland",
+      "name": "Steffen Haugland",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Haugland blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "axel_kryger",
+      "name": "Axel Kryger",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "game_reading"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Kryger mister verdien sin uten bredde å angripe.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ingvald_sandvik_halgunset",
+      "name": "Ingvald Sandvik Halgunset",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination",
+        "finishing"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Halgunset forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "espen_hammer_berger",
+      "name": "Espen Hammer Berger",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Berger blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "anders_hiim",
+      "name": "Anders Hiim",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [
+        "LW",
+        "CB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "natural_fitness",
+        "determination"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Hiim mister verdien sin uten bredde å angripe.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "herman_kleppa",
+      "name": "Herman Kleppa",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [
+        "RW",
+        "CB",
+        "WB"
+      ],
+      "poorFits": [
+        "ST",
+        "GK",
+        "AM"
+      ],
+      "archetypeIds": [
+        "overlapping_fullback"
+      ],
+      "archetypes": [
+        "wide_support"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "wide_lane",
+        "cover_behind"
+      ],
+      "preferredRoles": [
+        "overlapping_fullback",
+        "defensive_fullback"
+      ],
+      "likesTactics": [
+        "wide_attack"
+      ],
+      "dislikesTactics": [
+        "narrow_low_tempo"
+      ],
+      "warningWhenMisused": "Kleppa mister verdien sin uten bredde å angripe.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "alwande_roaldsoy",
+      "name": "Alwande Roaldsøy",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [
+        "box_finishing"
+      ],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Roaldsøy forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "gullbrandur_oregaard",
+      "name": "Gullbrandur Øregaard",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [
+        "DM",
+        "CM"
+      ],
+      "poorFits": [
+        "LW",
+        "RW",
+        "ST"
+      ],
+      "archetypeIds": [
+        "duel_stopper"
+      ],
+      "archetypes": [
+        "duel_winner"
+      ],
+      "strengths": [
+        "leadership"
+      ],
+      "needs": [
+        "covering_partner",
+        "clear_defensive_line"
+      ],
+      "preferredRoles": [
+        "duel_stopper",
+        "ball_playing_defender"
+      ],
+      "likesTactics": [
+        "compact_defense"
+      ],
+      "dislikesTactics": [
+        "high_line"
+      ],
+      "warningWhenMisused": "Øregaard blir utsatt i høy linje med mye rom bak.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "endre_osenbroch",
+      "name": "Endre Osenbroch",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [
+        "DM",
+        "AM"
+      ],
+      "poorFits": [
+        "GK",
+        "CB",
+        "LW"
+      ],
+      "archetypeIds": [
+        "box_to_box"
+      ],
+      "archetypes": [
+        "tempo_setter"
+      ],
+      "strengths": [],
+      "needs": [
+        "midfield_partner",
+        "passing_options"
+      ],
+      "preferredRoles": [
+        "box_to_box",
+        "deep_playmaker"
+      ],
+      "likesTactics": [
+        "possession"
+      ],
+      "dislikesTactics": [
+        "long_ball_only"
+      ],
+      "warningWhenMisused": "Osenbroch forsvinner hvis midtbanen blir isolert.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ole_sebastian_sundgot",
+      "name": "Ole Sebastian Sundgot",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [
+        "finishing"
+      ],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Sundgot blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jonas_brune_aune",
+      "name": "Jonas Brune Aune",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "oster_hus_arena"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [
+        "RW"
+      ],
+      "poorFits": [
+        "CB",
+        "GK",
+        "DM"
+      ],
+      "archetypeIds": [
+        "poacher"
+      ],
+      "archetypes": [
+        "box_presence"
+      ],
+      "strengths": [],
+      "needs": [
+        "box_service",
+        "runners_inside"
+      ],
+      "preferredRoles": [
+        "poacher",
+        "complete_forward"
+      ],
+      "likesTactics": [
+        "crossing",
+        "fast_transitions"
+      ],
+      "dislikesTactics": [
+        "isolated_midfield"
+      ],
+      "warningWhenMisused": "Aune blir usynlig uten tilførsel inn i boksen.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "oster_hus_arena": "club_profile"
+      },
+      "clubStatusSource": {
+        "oster_hus_arena": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sandnes_ulf",
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"

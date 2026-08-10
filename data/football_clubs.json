@@ -449,8 +449,9 @@
       "tier": "obosligaen",
       "strength": 60,
       "form": 55,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 60,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "oster_hus_arena"
     },
     {
       "id": "strommen",

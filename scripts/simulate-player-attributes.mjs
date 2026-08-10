@@ -375,13 +375,20 @@ const largestClone = størst([...signatures.values()]);
 // Omskrivingen er å slutte å måle mot GÅRSDAGENS tall og begynne å måle mot
 // FEILEN vakten finnes for. Begge endepunktene er målt:
 //
-//     ærlig katalog i dag        86,24 %
-//     samme katalog, flat grunnlinje (malimport)   85,17 %
+//     ærlig katalog                                85,66 %
+//     samme katalog, flat grunnlinje (malimport)   84,22 %
 //
 // Grensa settes mellom dem, nærmere bittet enn dagens tall, slik at den fanger
 // en malimport og samtidig tåler noen ærlige tynne arver. Den skal fortsatt opp
 // hvis avstanden vokser — men den flyttes aldri under den målte bitteverdien.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.858,
+//
+// Begge endepunktene har flyttet seg NED siden forrige måling (86,24/85,17), og
+// det er verdt å lese riktig: AVSTANDEN mellom dem vokste, fra 1,07 til 1,44
+// poeng. Vakten skiller altså bedre enn før, ikke dårligere — det er nivået som
+// har flyttet seg, fordi hver ærlig tynn arv legger til spillere med smalere
+// kildespråk. Hadde avstanden krympet, ville vakten vært i ferd med å miste
+// evnen til å se forskjellen, og DA er det den som må skrives om igjen.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.848,
   `${signatures.size} unike av ${dokumenterte.length} dokumenterte (${(uniqueShare * 100).toFixed(1)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -594,7 +601,13 @@ const KJENT_UDOKUMENTERT = {
   // Målt 18 av 58. Tallet ble bedre ETTER at flettingen av koblede spillere kom
   // på plass — tre Raufoss-profiler som sto tomme, hadde påstander i en annen
   // klubbs kilde. Taket er satt på det målte, ikke på det opprinnelige 21 av 58.
-  raufoss_arena: 0.33
+  raufoss_arena: 0.33,
+  // Sandnes Ulf er den BEST dekkede arven i katalogen: bare 6 av 60 uten
+  // dokumenterte styrker. Kilden avstår åtte ganger av 85 og er nesten ren
+  // fraseform. Taket står likevel her, fordi 10 % er over standardtaket på 5 %
+  // og en navngitt verdi er den eneste måten hullet ikke kan vokse i stillhet.
+  // Målt 6 av 60.
+  oster_hus_arena: 0.12
 };
 const perArv = new Map();
 for (const player of players) {

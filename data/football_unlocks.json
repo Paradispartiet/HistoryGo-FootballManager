@@ -11181,6 +11181,254 @@
           "targetId": "matias_moldskred_belli"
         }
       ]
+    },
+    {
+      "placeId": "oster_hus_arena",
+      "placeName": "Øster Hus Arena",
+      "placeRole": "modern_club_ground_source",
+      "notes": "Klubbanlegg: Sandnes Ulfs hjemmebane i Sandnes.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "bojan_zajic"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_gytkjaer"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torbjorn_lysaker_heggem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "zymer_bytyqi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "remi_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_rune_sellin"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjornar_holmvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mads_nielsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joakim_vage_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_stolas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_hoiland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_torsteinbo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jostein_ekeland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_ramsland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kare_nygaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "paul_olav_hoivik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torgil_gunneng"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_magnus_sirevaag"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "reidar_berger"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gunnar_vigesdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rolf_stangeland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stig_klungtveit"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_mathisen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tor_jan_skretting"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aksel_berget_skjolsvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kent_havard_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_aanestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anel_raskaj"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "egil_selvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steinthor_freyr_thorsteinsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "pontus_engblom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_landu_landu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aslak_falch"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kamal_saaliti"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bo_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vidar_nisja"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vajebah_sakor"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johny_gilje"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_eriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "livar_eide"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_hermansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "michael_andre_bekke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ronny_espedal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "edier_frejd"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_vindenes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_ulland_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gilles_ondo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_helle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kenneth_sola"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steffen_haugland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "axel_kryger"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ingvald_sandvik_halgunset"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_hammer_berger"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_hiim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "herman_kleppa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alwande_roaldsoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gullbrandur_oregaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "endre_osenbroch"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_sebastian_sundgot"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_brune_aune"
+        }
+      ]
     }
   ]
 }
