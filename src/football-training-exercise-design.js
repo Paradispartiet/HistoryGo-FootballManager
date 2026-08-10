@@ -59,7 +59,7 @@ const ARCHETYPES = Object.freeze([
   }),
   Object.freeze({
     id: "build_up",
-    match: /oppbygg|build|pasning|possession|førstetouch|første touch|rondo/i,
+    match: /oppbygg|build|pasning|possession|førstetouch|første touch|rondo|tredjemann|pressmotstand|keeper|distribusjon/i,
     title: "Oppbygging og pasningslinjer",
     objective: "Gi ballfører flere løsninger og trene mottakere til å orientere seg før de får ballen.",
     baseSetup: "Et mulig utgangspunkt er spill fra keeper eller bakre sone mot en målsone, med støtte foran, ved siden av og bak ballen.",
@@ -162,12 +162,28 @@ function optionLabel(key, id) {
   return (EXERCISE_DESIGN_CONTROLS[key] || []).find((option) => option.id === id)?.label || id;
 }
 
-export function resolveTrainingExerciseArchetype(session = {}) {
-  const source = [session.title, session.objective, session.focus, session.programTitle]
+function findArchetypeMatch(values) {
+  const source = values
     .map(clean)
     .filter(Boolean)
     .join(" · ");
-  return ARCHETYPES.find((entry) => entry.match.test(source)) || ARCHETYPES.at(-1);
+  let best = null;
+  let bestIndex = Number.POSITIVE_INFINITY;
+  for (const entry of ARCHETYPES.slice(0, -1)) {
+    const match = source.match(entry.match);
+    if (match && match.index < bestIndex) {
+      best = entry;
+      bestIndex = match.index;
+    }
+  }
+  return best;
+}
+
+export function resolveTrainingExerciseArchetype(session = {}) {
+  const sessionMatch = findArchetypeMatch([session.title, session.objective, session.focus]);
+  if (sessionMatch) return sessionMatch;
+
+  return findArchetypeMatch([session.programTitle]) || ARCHETYPES.at(-1);
 }
 
 export function normalizeExerciseDesignConfig(value, archetype = ARCHETYPES.at(-1)) {

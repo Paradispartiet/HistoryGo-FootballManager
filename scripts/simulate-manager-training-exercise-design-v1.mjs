@@ -45,6 +45,17 @@ ok("ukjent økt får trygg fallback", () => {
   assert.equal(resolveTrainingExerciseArchetype({ title: "Ny spesialøkt" }).id, "generic");
 });
 
+ok("konkret økttittel vinner over programtittel", () => {
+  const programTitle = "Oppbygging mot høyt press";
+  for (const title of ["Oppbygging under press", "Tredjemannsløp", "Pressmotstand", "Keeper og distribusjon"]) {
+    assert.equal(resolveTrainingExerciseArchetype({ title, programTitle }).id, "build_up", title);
+  }
+});
+
+ok("programtittel brukes bare som fallback", () => {
+  assert.equal(resolveTrainingExerciseArchetype({ title: "Ny spesialøkt", programTitle: "Oppbygging mot høyt press" }).id, "build_up");
+});
+
 ok("defaultoppsett er gyldig", () => {
   const design = createDefaultExerciseDesign({ title: "Restforsvar" });
   assert.equal(design.archetypeId, "rest_defence");
