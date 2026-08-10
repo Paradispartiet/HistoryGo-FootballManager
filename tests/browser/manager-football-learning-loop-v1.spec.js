@@ -58,6 +58,7 @@ test.beforeEach(async ({ page }) => {
       clubWeekState
     }));
     if (matchPrepLearning) {
+      localStorage.removeItem("hgfm.modeSessions.v1");
       localStorage.setItem("hgfm.weeklyTrainingProgram.v1", JSON.stringify({
         programId: "defensive_structure",
         week: 3,
