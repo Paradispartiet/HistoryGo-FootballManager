@@ -14,7 +14,9 @@ Denne versjonen gjør den eksisterende managerløkken pedagogisk sammenhengende:
 
 ## 1. Rolleforståelse og relasjoner
 
-`Lær om rollen` beholder kravene fra den eksisterende rollekatalogen, men viser i tillegg **hvorfor to roller kan fungere sammen**, hvilken rom-/balanserisiko relasjonen har, og hva manageren konkret bør se etter.
+`Lær om rollen` beholder kravene fra den eksisterende rollekatalogen, men leser nå også den **faktiske valgte elleveren**. Når et dokumentert rollepar finnes blant de ti medspillerne, navngis begge spillerne, plassene og rollene, og begge spillerplassene markeres på banen. Manageren får dermed se **hvem** relasjonen gjelder, ikke bare hvilke abstrakte rolletagger som kan passe sammen.
+
+Hvis den kuraterte komplementærrollen ikke finnes i dagens ellever, sier flaten dette eksplisitt. Det er ikke en dom om at oppstillingen er feil; det betyr bare at rollekatalogen ikke har et dokumentert rollepar å forklare i akkurat denne elleveren. Systemet finner ikke på en relasjon mellom to virkelige spillere.
 
 Eksempel: `Bred dribler + Overlappende back` kan skape to-mot-en, men hvis begge fyller samme brede kanal samtidig kan de blokkere hverandres rom og svekke restforsvaret. Timing og sikring er derfor en del av forklaringen.
 

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import {
+  createActualLineupRoleLesson,
   createMatchSignalLearningLesson,
   createRoleRelationshipLesson,
   createSystemLearningLesson,
@@ -16,6 +17,31 @@ assert.equal(relation.isInLineup, true);
 assert.equal(relation.partnerName, "Overlappende back");
 assert.match(relation.risk, /samme brede kanal/i);
 assert.match(relation.watch, /timing/i);
+
+const actualLineup = createActualLineupRoleLesson({
+  selectedSlotId: "lw",
+  roleList: roles,
+  lineup: [
+    { slotId: "lw", slotLabel: "Venstrekant", playerName: "Vingen", roleId: "wide_dribbler", roleName: "Bred dribler", x: 15, y: 25 },
+    { slotId: "lb", slotLabel: "Venstreback", playerName: "Backen", roleId: "overlapping_fullback", roleName: "Overlappende back", x: 16, y: 66 }
+  ]
+});
+assert.equal(actualLineup.status, "actual_pair");
+assert.equal(actualLineup.selected.playerName, "Vingen");
+assert.equal(actualLineup.partner.playerName, "Backen");
+assert.equal(actualLineup.partner.slotLabel, "Venstreback");
+assert.match(actualLineup.benefit, /to-mot-en/i);
+
+const missingActualPartner = createActualLineupRoleLesson({
+  selectedSlotId: "lw",
+  roleList: roles,
+  lineup: [
+    { slotId: "lw", slotLabel: "Venstrekant", playerName: "Vingen", roleId: "wide_dribbler", roleName: "Bred dribler", x: 15, y: 25 }
+  ]
+});
+assert.equal(missingActualPartner.status, "missing_curated_partner");
+assert.equal(missingActualPartner.partner, null);
+assert.equal(missingActualPartner.suggestedPartnerName, "Overlappende back");
 
 const pressTraining = createTrainingLearningLesson("Høyt press treningsprogram");
 assert.match(pressTraining.title, /Press/);
@@ -43,4 +69,4 @@ const generic = createMatchSignalLearningLesson("Et uklart, men registrert takti
 assert.equal(generic.principle, "Kampatferd");
 assert.match(generic.watch, /ett eller to trekk tilbake/i);
 
-console.log("Manager football learning loop v1: 18/18");
+console.log("Manager football learning loop v1: 24/24");

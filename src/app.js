@@ -7714,6 +7714,13 @@ function renderLineup(teamFit) {
     const playerName = player?.name || "Tom plass";
     const chipName = compactPlayerName(playerName);
     const roleName = assignment?.role?.name || "Ingen rolle";
+    chip.dataset.playerName = playerName;
+    chip.dataset.roleId = assignment?.role?.id || "";
+    chip.dataset.roleName = roleName;
+    chip.dataset.slotLabel = slot.label;
+    chip.dataset.position = slot.position;
+    chip.dataset.x = String(position.x);
+    chip.dataset.y = String(position.y);
     const fitView = describeTacticalFit(assignment?.fit);
     chip.dataset.fitTone = fitView.tone;
     chip.innerHTML = `
