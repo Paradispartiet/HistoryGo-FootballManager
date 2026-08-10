@@ -135,6 +135,40 @@ test("areal retning og touch endrer forklaringen uten å endre save-state", asyn
   expect(after.keys.some((key) => /exercise.?design/i.test(key))).toBe(false);
 });
 
+test("manageren lagrer og gjenåpner øvelsen som hypotese i eksisterende modussesjon", async ({ page }) => {
+  await openTraining(page);
+  const first = page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first();
+  await first.click();
+  const dialog = page.locator("#managerTrainingExerciseDesignV1");
+  await dialog.locator('label:has(input[name="area"][value="large"])').click();
+  await dialog.locator('label:has(input[name="direction"][value="transition"])').click();
+  await dialog.locator('label:has(input[name="touches"][value="three"])').click();
+  await dialog.locator("#trainingExerciseSave").click();
+  await expect(dialog.locator("#trainingExerciseSaveStatus")).toContainText("Lagret:");
+
+  const persisted = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    return {
+      keys: Object.keys(localStorage).filter((key) => /exercise.?design|hypothesis/i.test(key)),
+      hypothesis: envelope?.sessions?.[envelope.activeMode]?.trainingExerciseHypothesis
+    };
+  });
+  expect(persisted.keys).toEqual([]);
+  expect(persisted.hypothesis.setup).toContain("Stort område");
+  expect(persisted.hypothesis.config.direction).toBe("transition");
+  expect(persisted.hypothesis).not.toHaveProperty("score");
+  expect(persisted.hypothesis).not.toHaveProperty("bonus");
+
+  await dialog.locator("[data-exercise-close]").click();
+  await first.click();
+  await expect(dialog.locator('input[name="area"][value="large"]')).toBeChecked();
+  await expect(dialog.locator('input[name="direction"][value="transition"]')).toBeChecked();
+  await expect(dialog.locator("#trainingExerciseSaveStatus")).toContainText("Lagret hypotese:");
+  await dialog.locator("[data-exercise-close]").click();
+  await expect(page.locator("#trainingDaySavedHypothesis")).toBeVisible();
+  await expect(page.locator("#trainingDaySavedHypothesis")).toContainText("Stort område");
+});
+
 test("øvelsesdesign kan åpnes med tastatur og lukkes uten å flytte manageren", async ({ page }) => {
   await openTraining(page);
   const first = page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first();

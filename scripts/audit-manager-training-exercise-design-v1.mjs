@@ -33,7 +33,8 @@ check("modellen har ingen lagring", !/localStorage|sessionStorage|indexedDB/.tes
 check("modellen har ingen skjult totalscore", !/overall|matchScore|exerciseScore|scoreDelta/i.test(model));
 check("UI bruker den rene modellen", ui.includes('from "../football-training-exercise-design.js"'));
 check("UI bruker native dialog", ui.includes('document.createElement("dialog")'));
-check("UI har ingen ny lagring", !/localStorage|sessionStorage|indexedDB/.test(ui));
+check("UI leser bare eksisterende modussesjon", ui.includes("MODE_SESSION_KEY") && ui.includes("localStorage.getItem") && !ui.includes("localStorage.setItem"));
+check("hypotesen lagres via appens state-eier", ui.includes('new CustomEvent("hgfm:training-exercise-save"'));
 check("treningsdagen sender økthendelse", day.includes('new CustomEvent("hgfm:training-exercise-open"'));
 check("økter kan åpnes med tastatur", day.includes('event.key !== "Enter"') && day.includes('event.key !== " "'));
 check("plassholderøkter kan ikke åpnes", day.includes("isExerciseSession") && day.includes('aria-disabled'));

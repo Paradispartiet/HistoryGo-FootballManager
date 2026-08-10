@@ -42,7 +42,7 @@ check("rapporten bruker faktiske spillerstatistikker", files.postMatch.includes(
 check("rapporten bruker faktiske klubbkonsekvenser", files.postMatch.includes("lastMatch?.clubConsequences?.effects"));
 check("beste og svakeste managergrep vises", files.postMatch.includes("report?.bestDecision") && files.postMatch.includes("report?.worstDecision"));
 check("seier, uavgjort og tap har egne toner", ["positive", "neutral", "negative"].every((tone) => files.postMatch.includes(`"${tone}"`)));
-check("neste handling går til eksisterende Trening", files.postMatch.includes('primaryTarget: "trening"'));
+check("neste handling går til Trening eller eksplisitt problemforslag", files.postMatch.includes('"carry_training_problem"') && files.postMatch.includes(': "trening"'));
 check("full rapport går til eksisterende Analyse", files.postMatch.includes('secondaryTarget: "analyse"'));
 check("etterkampen har semantisk overskrift", files.postMatch.includes('aria-labelledby", "postMatchAnalysisTitle"'));
 check("etterkampen viser konkrete spillerbidrag uten overall", files.postMatch.includes("buildContributors") && !files.postMatch.includes("overall"));
@@ -58,7 +58,7 @@ check("egen etterkamp-CSS finnes", files.style.includes("Manager Post-match Anal
 check("CSS dekker mobil", files.style.includes("@media (max-width: 640px)"));
 check("CSS lastes som separat presentasjonsressurs", files.postMatch.includes("manager-post-match-analysis-v1.css"));
 check("browsertest dekker struktur", files.browser.includes("managergrep, spillerbidrag og konsekvenser"));
-check("browsertest dekker navigasjon", files.browser.includes('[data-matchday-target="trening"]') && files.browser.includes('[data-matchday-target="analyse"]'));
+check("browsertest dekker eksplisitt videreføring og analyse", files.browser.includes('[data-matchday-target="carry_training_problem"]') && files.browser.includes('[data-matchday-target="analyse"]'));
 check("browsertest dekker mobil overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
 check("browsertest dekker WCAG", files.browser.includes("AxeBuilder") && files.browser.includes("wcag2aa"));
 check("browsertest har visuell baseline", files.browser.includes('toHaveScreenshot("post-match-analysis-768.png"'));

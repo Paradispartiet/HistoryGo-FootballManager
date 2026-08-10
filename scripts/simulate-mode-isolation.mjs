@@ -44,6 +44,8 @@ const league = {
   lineup: { GK: { playerId: "keeper", roleId: "sweeper_keeper" } },
   weeklyTrainingFocus: { focusId: "pressing", week: 3 },
   weeklyTrainingProgram: { programId: "control", week: 3 },
+  trainingExerciseHypothesis: { week: 3, archetypeId: "pressing", setup: "Stort område · Likhet", hypothesis: "Flytt samlet.", watch: "Følger laget presset?" },
+  trainingProblemSuggestion: { sourceWeek: 2, targetWeek: 3, archetypeId: "pressing", title: "Pressproblemet", question: "Følger laget presset?" },
   clubWeekState: { week: 3, phase: "training", metrics: { morale: 64, fatigue: 28 } },
   matchday: { lastMatch: { id: "league-match-2" }, session: null },
   miniSeason: leagueSeason,
@@ -58,9 +60,19 @@ check("ligasnapshot er byte-identisk etter inn/ut av treningsrom", () => {
   state.selectedFormationId = "classic_442";
   state.lineup.GK.roleId = "goalkeeper";
   state.weeklyTrainingFocus = { focusId: "set_pieces", week: 1 };
+  state.trainingExerciseHypothesis = { week: 1, archetypeId: "set_pieces", setup: "Lite område" };
   envelope = switchModeSession(envelope, state, "league");
   assert.equal(JSON.stringify(envelope.sessions.league), leagueBefore);
   assert.equal(JSON.stringify(captureModeSession(state)), leagueBefore);
+});
+
+check("treningshypotese og problemforslag er isolert i modussesjonen", () => {
+  assert.ok(SESSION_STATE_FIELDS.includes("trainingExerciseHypothesis"));
+  assert.ok(SESSION_STATE_FIELDS.includes("trainingProblemSuggestion"));
+  const secondary = createSecondarySession(envelope.sessions.league, "training");
+  assert.equal(secondary.trainingExerciseHypothesis, null);
+  assert.equal(secondary.trainingProblemSuggestion, null);
+  assert.equal(envelope.sessions.league.trainingExerciseHypothesis.archetypeId, "pressing");
 });
 
 check("nullstill påvirker bare treningsrommet", () => {

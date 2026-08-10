@@ -204,6 +204,16 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
       }
     : null;
   const analysisSource = report.opponentAnalysisPlan || lastMatch.opponentAnalysisPlan || null;
+  const trainingHypothesisSource = report.trainingExerciseHypothesis || lastMatch.trainingExerciseHypothesis || null;
+  const trainingHypothesis = trainingHypothesisSource && typeof trainingHypothesisSource === "object"
+    ? {
+        archetypeId: text(trainingHypothesisSource.archetypeId, "generic"),
+        title: text(trainingHypothesisSource.title, "Treningsøvelse"),
+        setup: text(trainingHypothesisSource.setup, "Oppsett ikke registrert"),
+        hypothesis: text(trainingHypothesisSource.hypothesis, "Ingen konkret intensjon ble lagret."),
+        watch: text(trainingHypothesisSource.watch, "Ingen observasjon ble lagret.")
+      }
+    : null;
   const analysisPlan = analysisSource && typeof analysisSource === "object"
     ? {
         focus: text(analysisSource.focusLabel, "Valgt analysefokus"),
@@ -244,6 +254,7 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     })),
     consequences,
     trainingEvidence,
+    trainingHypothesis,
     analysisPlan,
     exposedWeakness: text(
       report.exposedWeaknessMetric || lastMatch.exposedWeaknessMetric,
@@ -253,8 +264,10 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     next: {
       title: "Gjør kampens læring til neste uke",
       detail: nextDetail,
-      primaryLabel: "Planlegg neste treningsuke",
-      primaryTarget: "trening",
+      primaryLabel: trainingHypothesis?.archetypeId === "rest_defence"
+        ? "Ta med overgangsproblemet til neste treningsuke"
+        : trainingHypothesis ? "Ta med problemet til neste treningsuke" : "Planlegg neste treningsuke",
+      primaryTarget: trainingHypothesis ? "carry_training_problem" : "trening",
       secondaryLabel: "Åpne full kampanalyse",
       secondaryTarget: "analyse"
     }
@@ -282,6 +295,13 @@ export function renderPostMatchAnalysis(model, onOpenTarget) {
     if (typeof model.trainingEvidence.helped === "boolean") {
       section.dataset.trainingHelped = String(model.trainingEvidence.helped);
     }
+  }
+  if (model.trainingHypothesis) {
+    section.dataset.trainingHypothesisArchetype = model.trainingHypothesis.archetypeId;
+    section.dataset.trainingHypothesisTitle = model.trainingHypothesis.title;
+    section.dataset.trainingHypothesisSetup = model.trainingHypothesis.setup;
+    section.dataset.trainingHypothesisIntent = model.trainingHypothesis.hypothesis;
+    section.dataset.trainingHypothesisWatch = model.trainingHypothesis.watch;
   }
   section.setAttribute("aria-labelledby", "postMatchAnalysisTitle");
 

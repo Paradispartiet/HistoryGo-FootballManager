@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   EXERCISE_DESIGN_CONTROLS,
   TRAINING_EXERCISE_DESIGN_VERSION,
+  createTrainingExerciseHypothesis,
   createDefaultExerciseDesign,
   evaluateTrainingExerciseDesign,
   normalizeExerciseDesignConfig,
@@ -110,6 +111,22 @@ ok("coachingpunkter og manager-spørsmål følger økta", () => {
   assert.equal(result.coachingPoints.length, 3);
   assert.ok(result.coachingPoints.every(Boolean));
   assert.match(result.managerQuestion, /første spiller|pasning/i);
+});
+
+ok("konkret oppsett blir en lesbar hypotese uten score", () => {
+  const hypothesis = createTrainingExerciseHypothesis({
+    week: 4,
+    index: 2,
+    day: "Torsdag",
+    title: "Restforsvar",
+    programTitle: "Kampforberedende uke"
+  }, { area: "large", numbers: "attack_overload", direction: "transition", touches: "three" });
+  assert.equal(hypothesis.week, 4);
+  assert.equal(hypothesis.archetypeId, "rest_defence");
+  assert.equal(hypothesis.setup, "Stort område · Overtall med ball · Omstilling ved balltap · Maks 3 touch");
+  assert.match(hypothesis.hypothesis, /avstander|balltap/i);
+  assert.match(hypothesis.watch, /før balltapet/i);
+  assert.doesNotMatch(JSON.stringify(hypothesis), /bonus|score|effect/i);
 });
 
 ok("ingen skjult spillscore i output", () => {

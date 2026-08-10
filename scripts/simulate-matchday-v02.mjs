@@ -218,6 +218,14 @@ while (getSessionEventIndex(session) !== null) {
 
 check("alle 3 beslutninger registrert", session.decisions.length === 3);
 
+session.trainingExerciseHypothesis = {
+  archetypeId: "rest_defence",
+  title: "Restforsvar",
+  setup: "Stort område · Overtall med ball · Omstilling ved balltap · Maks 3 touch",
+  hypothesis: "Kontroller større kontringsrom.",
+  watch: "Er sikringen organisert før balltapet?"
+};
+
 const result = finalizeMatchdaySession(session);
 check("sluttresultat har score og utfall", result && Number.isInteger(result.score.for) && ["win", "draw", "loss"].includes(result.outcome));
 check(
@@ -236,6 +244,7 @@ check("History Go-hint finnes", typeof result.historyGoHint === "string" && resu
 
 const report = createMatchReport(result);
 check("createMatchReport tar med v0.2-feltene", report.decisions.length === 3 && Boolean(report.formationVerdict) && Boolean(report.opponentStyle));
+check("treningshypotesen følger urørt til resultat og rapport", result.trainingExerciseHypothesis?.setup === session.trainingExerciseHypothesis.setup && report.trainingExerciseHypothesis === result.trainingExerciseHypothesis);
 
 // --- 3b) Match Explanation v1.5 ---------------------------------------------
 console.log("\nKampforklaring (Match Explanation v1.5):");

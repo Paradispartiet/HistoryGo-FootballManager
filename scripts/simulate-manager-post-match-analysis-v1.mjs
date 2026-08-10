@@ -110,6 +110,22 @@ check("treningsrapportens ordlyd bevares", winModel.trainingEvidence?.summary.in
 check("neste handling peker til Trening", winModel.next.primaryTarget === "trening");
 check("full analyse er sekundær handling", winModel.next.secondaryTarget === "analyse");
 
+const hypothesisModel = createPostMatchAnalysisModel({
+  ...win,
+  lastMatch: {
+    ...win.lastMatch,
+    trainingExerciseHypothesis: {
+      archetypeId: "rest_defence",
+      title: "Restforsvar",
+      setup: "Stort område · Overtall med ball · Omstilling ved balltap · Maks 3 touch",
+      hypothesis: "Kontroller større kontringsrom.",
+      watch: "Er sikringen organisert før balltapet?"
+    }
+  }
+});
+check("konkret hypotese eksponeres uten ny beregning", hypothesisModel.trainingHypothesis?.setup.includes("Stort område"));
+check("restforsvarsproblem må bæres videre eksplisitt", hypothesisModel.next.primaryTarget === "carry_training_problem" && hypothesisModel.next.primaryLabel.includes("overgangsproblemet"));
+
 const drawModel = createPostMatchAnalysisModel(resultFixture("draw"));
 check("uavgjort gir nøytral tone", drawModel.outcomeTone === "neutral", drawModel.outcomeTone);
 check("uavgjort viser korrekt resultat", drawModel.scoreLine === "1–1", drawModel.scoreLine);

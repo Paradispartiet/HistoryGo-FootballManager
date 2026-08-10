@@ -46,7 +46,8 @@
 }
 
 .training-exercise-close,
-.training-exercise-reset {
+.training-exercise-reset,
+.training-exercise-save {
   min-height: 2.65rem;
   border: 1px solid rgba(255,255,255,.34);
   background: #101820;
@@ -59,13 +60,15 @@
 }
 
 .training-exercise-close:hover,
-.training-exercise-reset:hover {
+.training-exercise-reset:hover,
+.training-exercise-save:hover {
   border-color: rgba(255,255,255,.82);
   background: #17222d;
 }
 
 .training-exercise-close:focus-visible,
 .training-exercise-reset:focus-visible,
+.training-exercise-save:focus-visible,
 .training-exercise-choice input:focus-visible + span {
   outline: 2px solid currentColor;
   outline-offset: 2px;
@@ -112,6 +115,19 @@
   font-size: .75rem;
   line-height: 1.55;
 }
+
+.training-exercise-save-row {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items: center;
+  gap: .75rem;
+  margin-top: .85rem;
+  padding-top: .85rem;
+  border-top: 1px solid rgba(255,255,255,.16);
+}
+
+.training-exercise-save-row p { margin: 0; }
+.training-exercise-save { background: #f5d142; color: #090b0d; }
 
 .training-exercise-setup p {
   margin: 0;
@@ -258,6 +274,8 @@
   .training-exercise-close {
     width: 100%;
   }
+  .training-exercise-save-row { grid-template-columns: 1fr; }
+  .training-exercise-save { width: 100%; }
   .training-exercise-choices,
   .training-exercise-effects {
     grid-template-columns: 1fr;

@@ -508,6 +508,7 @@ export function createMatchReport(matchResult) {
     worstDecision: matchResult.worstDecision || null,
     formationVerdict: matchResult.formationVerdict || "",
     trainingFocus: matchResult.trainingFocus || null,
+    trainingExerciseHypothesis: matchResult.trainingExerciseHypothesis || null,
     opponentAnalysisPlan: matchResult.opponentAnalysisPlan || null,
     decisiveUnit: matchResult.decisiveUnit || "",
     nextWeekAdvice: matchResult.nextWeekAdvice || "",
@@ -2201,6 +2202,9 @@ export function finalizeMatchdaySession(session) {
     // Managerens valgte analysehypotese er bare et lesbart snapshot. Den har
     // ingen vei inn i styrke-, xG- eller beslutningseffektberegningene.
     opponentAnalysisPlan: session.opponentAnalysisPlan || null,
+    // Øvelsesdesignet er kun et forklarende snapshot. Det leses aldri av
+    // styrke-, xG-, hendelses- eller beslutningsberegningene over.
+    trainingExerciseHypothesis: session.trainingExerciseHypothesis || null,
     teamStrength,
     score: { for: goalsFor, against: goalsAgainst },
     expectedGoals: { for: expectedGoalsFor, against: expectedGoalsAgainst },

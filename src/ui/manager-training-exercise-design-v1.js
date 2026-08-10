@@ -1,8 +1,10 @@
 import {
   EXERCISE_DESIGN_CONTROLS,
+  createTrainingExerciseHypothesis,
   createDefaultExerciseDesign,
   evaluateTrainingExerciseDesign
 } from "../football-training-exercise-design.js";
+import { MODE_SESSION_KEY } from "../football-mode-sessions.js";
 
 const STYLE_ID = "managerTrainingExerciseDesignV1Style";
 const DIALOG_ID = "managerTrainingExerciseDesignV1";
@@ -35,6 +37,18 @@ function showDialog(dialog) {
   if (dialog.open) return;
   if (typeof dialog.showModal === "function") dialog.showModal();
   else dialog.setAttribute("open", "");
+}
+
+function savedHypothesisFor(session) {
+  try {
+    const envelope = JSON.parse(localStorage.getItem(MODE_SESSION_KEY) || "null");
+    const saved = envelope?.sessions?.[envelope?.activeMode]?.trainingExerciseHypothesis;
+    if (!saved || Number(saved.week) !== Number(session.week)) return null;
+    if (Number(saved.sessionIndex) !== Number(session.index)) return null;
+    return String(saved.title || "") === String(session.title || "") ? saved : null;
+  } catch {
+    return null;
+  }
 }
 
 function ensureDialog() {
@@ -92,6 +106,10 @@ function ensureDialog() {
           </header>
           <ul id="trainingExerciseCoachingPoints"></ul>
           <blockquote id="trainingExerciseQuestion"></blockquote>
+          <div class="training-exercise-save-row">
+            <p id="trainingExerciseSaveStatus" role="status">Lagre oppsettet når det uttrykker det du vil se igjen i kamp.</p>
+            <button type="button" class="training-exercise-save" id="trainingExerciseSave">Lagre som treningshypotese</button>
+          </div>
         </section>
       </div>
     </article>`;
@@ -111,6 +129,14 @@ function ensureDialog() {
     if (!activeSession) return;
     activeConfig = createDefaultExerciseDesign(activeSession).config;
     renderDialog(dialog);
+  });
+
+  dialog.querySelector("#trainingExerciseSave")?.addEventListener("click", () => {
+    if (!activeSession) return;
+    const hypothesis = createTrainingExerciseHypothesis(activeSession, activeConfig);
+    window.dispatchEvent(new CustomEvent("hgfm:training-exercise-save", { detail: { hypothesis } }));
+    const status = dialog.querySelector("#trainingExerciseSaveStatus");
+    if (status) status.textContent = `Lagret: ${hypothesis.setup}`;
   });
 
   document.body.append(dialog);
@@ -212,15 +238,22 @@ function openExercise(event) {
   const session = event?.detail?.session;
   if (!session || !String(session.title || "").trim()) return;
   activeSession = {
+    week: Math.max(1, Number(session.week) || 1),
+    index: Math.max(0, Number(session.index) || 0),
     day: String(session.day || ""),
     title: String(session.title || ""),
     intensity: String(session.intensity || ""),
     programTitle: String(session.programTitle || ""),
     calendarDay: String(session.calendarDay || "")
   };
-  activeConfig = createDefaultExerciseDesign(activeSession).config;
+  const saved = savedHypothesisFor(activeSession);
+  activeConfig = saved?.config || createDefaultExerciseDesign(activeSession).config;
   const dialog = ensureDialog();
   renderDialog(dialog);
+  const status = dialog.querySelector("#trainingExerciseSaveStatus");
+  if (status) status.textContent = saved
+    ? `Lagret hypotese: ${saved.setup}`
+    : "Lagre oppsettet når det uttrykker det du vil se igjen i kamp.";
   showDialog(dialog);
   requestAnimationFrame(() => dialog.querySelector("input:checked")?.focus());
 }
