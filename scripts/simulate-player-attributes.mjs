@@ -578,7 +578,13 @@ const KJENT_UDOKUMENTERT = {
   // fraseliste i det hele tatt: de 30 andre er skrevet ut i klartekst og lest
   // for hånd. Fem av dem er salg, utlån og «rask integrasjon» — marked, ikke
   // ferdighet. Målt 44 av 81.
-  extra_arena: 0.55
+  extra_arena: 0.55,
+  // Strømmen har den rikeste prosaen av alle v2-kildene — VG- og klubbomtaler av
+  // 2025-/2026-troppen med faktiske ferdighetsbeskrivelser, som gir 100 % unike
+  // styrkesett blant de 16 som har noen. Men den gjelder en liten del av arven:
+  // 69 av 85 profiler er tynn-markert, og 30 mangler posisjon helt.
+  // Målt 24 av 54.
+  strommen_stadion: 0.45
 };
 const perArv = new Map();
 for (const player of players) {

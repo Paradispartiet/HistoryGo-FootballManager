@@ -193,12 +193,13 @@ avhenger av hvor History Go-kortet hans ligger.
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
+| Strømmen | Strømmen stadion | 54 |
 | Kristiansund | Nordmøre stadion | 49 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger og
-Ranheim — 2526 arveplasser fordelt på alle 29, og **ingen klubb med bane har
-under 49 navn**. De 31 klubbene som
+Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim
+og Strømmen — 2580 arveplasser fordelt på alle 30, og **ingen klubb med bane
+har under 49 navn**. De 30 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1362,6 +1363,41 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Strømmen: den rikeste prosaen, og den største utelatelsen
+
+Strømmen manglet bane — `ground: "Strømmen stadion"` uten `placeId`. **54 navn**
+av kildens 85, og differansen er hele historien om denne importen.
+
+Kilden har den **rikeste prosaen** av alle v2-kildene: den siterer VG- og
+klubbomtaler av 2025- og 2026-troppen, og de omtalene er faktiske
+ferdighetsbeskrivelser, ikke merittlister — «god med beina», «elegante
+dribleferdigheter og et kraftig tilslag», «nesten komplett på nivået, leder,
+duellspiller og god med ballen». Resultatet er **100 % unike styrkesett** blant
+de 16 som har noen; ingen annen kilde har levert det.
+
+Men den rikdommen gjelder en liten del av arven:
+
+| | |
+|---|---:|
+| Profiler i kilden | 85 |
+| Tynn-markert av kilden selv | 69 |
+| Uten posisjon («Historisk utespiller») | 30 |
+| Havnet i katalogen | 54 |
+| Av dem med dokumenterte styrker | 30 |
+
+**De 30 utelatte er den største utelatelsen så langt, og de tre øverste er
+klubbens kamprekordholdere**: Tor Hansen (301 kamper 1945–1965), Rune
+Kristiansen (288) og Nils Tømte (279). Kilden oppgir kampantall og årstall for
+dem, men aldri hva de spilte. Å gjette en posisjon for klubbens rekordholder er
+nøyaktig posisjonsmalen kilden uttrykkelig sier den ikke bruker, så de står
+utenfor til en kilde sier hvor de spilte.
+
+Én kobling ble avvist av samme grunn som Finn-Magnus Johannessen: Strømsgodsets
+**Robert Pedersen** er en historisk spiss på Marienlyst, Strømmens **Robert Aas
+Pedersen** er junior-norgesmester fra 1971 uten oppgitt posisjon. Ingenting
+utenom navnet knytter dem sammen, og koblingen ville påstått en karriere kilden
+ikke nevner. En ubekreftet kobling er en påstand; utelatelse er det ikke.
 
 ### Ranheim: 1950-tallets posisjoner, og en feilkobling importen selv laget
 
