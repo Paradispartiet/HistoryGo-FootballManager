@@ -24,8 +24,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: Correct verified full name
-        run: sed -i 's/"Thomas Lillo"/"Thomas Rømo Lillo"/' scripts/import-notodden-player-pool.mjs
+      - name: Correct verified source details
+        run: |
+          sed -i 's/"Thomas Lillo"/"Thomas Rømo Lillo"/' scripts/import-notodden-player-pool.mjs
+          # Kilden skiller ikke de tynne troppsprofilene på karrierenivå. Ikke
+          # dikt 76/77-presisjon som samtidig flytter katalogens klassegulv.
+          sed -i 's/,76]/,78]/g; s/,77]/,78]/g' scripts/import-notodden-player-pool.mjs
 
       - name: Import Notodden
         run: |
