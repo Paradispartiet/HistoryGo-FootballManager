@@ -410,7 +410,24 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Og Helge Haugen er det klareste av alle: katalogens er `historical` sentral
   // midtbane i Kristiansand og Bergen, Hønefoss' spilte 91 kamper i klubbens
   // 2000-tallsperiode. Epoken alene avgjør det.
-  ["helge haugen|helge haugen hønefoss", "Start/Åsanes historiske midtbanespiller mot Hønefoss' 2000-tallsprofil"]
+  ["helge haugen|helge haugen hønefoss", "Start/Åsanes historiske midtbanespiller mot Hønefoss' 2000-tallsprofil"],
+  // Fem samtidige kilder ga 80 eksakte navnetreff mot katalogen. Tre av dem
+  // hadde en HARD motsigelse — keeper mot utespiller, eller to klubber i samme
+  // sesong — og bare de tre ble splittet.
+  //
+  // Katalogens Martin Hansen er moderne keeper på Marienlyst; Kjelsås' er
+  // «Historisk angrepsprofil» med 71 mål og nummer tre på klubbens måltopp.
+  ["martin hansen|martin hansen kjelsås", "Strømsgodsets keeper mot Kjelsås' historiske målscorer"],
+  // Levangers Christian Aas er offensiv midtbane «fast i 2017-laget»;
+  // Ull/Kisas er defensiv midtbane «dokumentert i 2017 og 2019». Samme sesong,
+  // to klubber. Hvem som er katalogens (Hønefoss) er ikke avgjørbart; at det er
+  // minst to menn er det.
+  ["christian aas|christian aas ullkisa", "Levangers offensive midtbane mot Ull/Kisas defensive, begge i 2017"],
+  // Ett tegn skiller dem, som Gjestrumbakken/Gjestrumsbakken — men der ble de
+  // slått sammen, og her ikke: Aalesunds Oddbjørn Lie er moderne midtstopper,
+  // Ull/Kisas Oddbjørn Lien er historisk angrepsprofil som scoret i 2–0 over
+  // HamKam i cupen 1979. Epoke og posisjon skiller dem.
+  ["oddbjørn lie|oddbjørn lien", "Aalesunds moderne stopper mot Ull/Kisas cupmålscorer fra 1979"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

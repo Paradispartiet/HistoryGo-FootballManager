@@ -790,6 +790,55 @@ Det ligger dessuten en egen vakt på bittet: felles ikke den flate grunnlinja av
 grensa, har grensa mistet meningen og begge endepunktene må måles på nytt.
 Kommentarer kan bli foreldet. Et tall som regnes ut hver kjøring kan det ikke.
 
+### Klaringen gikk tom for den andre vakten — og svaret var det samme
+
+Fem samtidige klubbarver la til 254 spillere, 65 % av dem uten dokumenterte
+styrker. Da fyrte **toppbøtte-vakten** — «verdiene klumper seg ikke på to tall» —
+på 38,00 % mot en grense på 0,38. Ikke på en malimport, men på ærlig vekst.
+
+Det er nøyaktig samme situasjon som felte profil-ratcheten, og den fikk samme
+behandling: **mål begge endepunktene på nytt.**
+
+| | forrige måling | nå |
+|---|---:|---:|
+| Ærlig katalog | 36,4 % | **38,00 %** |
+| Flat grunnlinje (malimport) | 40,2 % | **46,93 %** |
+| **Avstand** | 3,8 | **8,9** |
+
+Bittet flyttet seg mer enn tallet det vokter, og grunnen er verdt å forstå: jo
+flere spillere som bare bærer grunnlinja, jo hardere kollapser de når
+grunnlinja flates ut. En vakt mot posisjonsblinde profiler blir altså *skarpere*
+av tynne arver, ikke sløvere.
+
+Grensa flyttes derfor fra 0,38 til **0,40** — 2,0 poeng over målt, 6,9 under
+bittet — og aldri under bitteverdien.
+
+Og som for profil-unikheten: bittet **måles nå hver kjøring**. Den flate
+grunnlinja regnes ut én gang og brukes av begge vaktene, hver med sin egen
+kontroll av at bittet fortsatt biter:
+
+```json
+"toppbøtter":    { "ærlig": "38.00 %", "flatGrunnlinje": "46.93 %", "grense": "40,00 %" },
+"profilUnikhet": { "ærlig": "85.11 %", "flatGrunnlinje": "84.15 %",
+                   "grense": "84,80 %", "klaring": "0.31 poeng" }
+```
+
+#### Profil-unikheten: klaringen er nesten oppbrukt
+
+85,11 % mot grensa på 84,80 er **0,31 poeng** — ned fra 0,66 forrige runde. Den
+foreskrevne kontrollen ble gjort, og fallet er ærlig: de største klonegruppene
+er gamle mønstre fra andre arver (elleve historiske spisser med
+`finishing`+`box_finishing`, sju moderne kanter med
+`dribbling`+`crossing`+`acceleration`), ikke noe disse fem importene laget.
+
+Det som *derimot* trekker ned er en ekte kildebegrensning: åtte Levanger-navn
+bærer nøyaktig `["finishing"]`, fordi det er alt kilden sier — «scoret fem mål i
+2015». Å legge til et token nummer to for å spre dem ville vært oppdiktet
+variasjon, som er det denne fila forbyr.
+
+Neste import av denne størrelsen vil sannsynligvis felle grensa. Da er svaret å
+måle begge endepunktene på nytt og flytte grensa mellom dem — ikke å senke den.
+
 ### Realisme er sprik, ikke senking
 
 Vi senket ikke spillerne. Å gi Harry Yven — der kilden bare rekker til

@@ -127,6 +127,21 @@ check("båndets topp gir full faktor",
 // Dette er husets tilbakevendende bug: en verdi som klemmes mot et tak i
 // stedet for å normaliseres. Første utgave la 5 % av alle verdier på nøyaktig
 // 20 og produserte toere om ekte spillere.
+// Den FLATE grunnlinja — alle posisjonsgrupper like — er malimporten begge
+// klumpevaktene under finnes for. Den regnes ut én gang her og måles av begge,
+// slik at ingen av grensene igjen kan stå og vise til et tall noen målte for
+// hånd for tre importer siden.
+const flatRå = read("data/football_attributes.json");
+for (const vekter of Object.values(flatRå.positionProfiles || {})) {
+  for (const gruppe of Object.keys(vekter)) vekter[gruppe] = 50;
+}
+const flatProfiles = derivePlayerAttributeIndex(read("data/football_players.json").players,
+  { catalogue: normalizeAttributeCatalogue(flatRå), roles }).profiles;
+const toStørsteAv = (verdier) => {
+  const b = [...new Set(verdier)].map((v) => verdier.filter((o) => o === v).length).sort((a, c) => c - a);
+  return (b[0] + (b[1] || 0)) / verdier.length;
+};
+
 const allValues = players.flatMap((player) => Object.values(profiles[player.id].values));
 const atCeiling = allValues.filter((value) => value === ATTRIBUTE_SCALE.max).length / allValues.length;
 const distinct = new Set(allValues).size;
@@ -259,9 +274,19 @@ check("gulvet er ikke lenger en haug", floorShare < 0.10, `${(floorShare * 100).
 // spillere, ny skalering), 36,4 % (etter importen). Moden svingte 3,4 poeng;
 // dette tallet flyttet seg 0,4.
 //
-// Bittestet mot feilen vakten ble skrevet for — flat grunnlinje, alle
-// posisjonsgrupper like — som gir 40,2 %. Grensa står på 0,38: 1,6 poeng over
-// målt, 2,2 under bittet.
+// Så gikk klaringen tom. Fem samtidige klubbarver med 65 % tomme styrkelister
+// tok tallet til 38,00 % mot en grense på 0,38 — vakten fyrte på ærlig vekst,
+// nøyaktig slik profil-ratcheten gjorde før den ble skrevet om.
+//
+// Svaret er det samme: mål BEGGE endepunktene på nytt. Bittet — flat
+// grunnlinje, alle posisjonsgrupper like — har flyttet seg fra 40,2 % til
+// 46,93 %, fordi jo flere spillere som bare bærer grunnlinja, jo hardere
+// kollapser de når grunnlinja flates ut. Avstanden VOKSTE altså fra 3,8 til
+// 8,9 poeng: vakten skiller bedre enn før, det er nivået som har flyttet seg.
+//
+// Grensa flyttes derfor fra 0,38 til 0,40 — 2,0 poeng over målt, 6,9 under
+// bittet — og bittet MÅLES nå hver kjøring i stedet for å stå som et tall i
+// en kommentar. Grensa skal aldri under den målte bitteverdien.
 //
 // Vær ærlig om hva denne er verdt: den er en BAKSTOPPER, ikke førstelinja.
 // Fire bitt ble prøvd — flat grunnlinje, ett klassenivå for alle, klem i stedet
@@ -275,7 +300,10 @@ const bøtter = [...new Set(allValues)]
   .map((value) => allValues.filter((other) => other === value).length)
   .sort((a, b) => b - a);
 const toStørste = (bøtter[0] + (bøtter[1] || 0)) / allValues.length;
-check("verdiene klumper seg ikke på to tall", toStørste < 0.38,
+const toStørsteFlat = toStørsteAv(players.flatMap((p) => Object.values(flatProfiles[p.id].values)));
+check("flat grunnlinje klumper seg MER enn katalogen", toStørsteFlat > 0.40,
+  `flat ${(toStørsteFlat * 100).toFixed(2)} % mot ærlig ${(toStørste * 100).toFixed(2)} %`);
+check("verdiene klumper seg ikke på to tall", toStørste < 0.40,
   `${(toStørste * 100).toFixed(1)} %`);
 
 // Svake sider måles bare der de betyr noe. En utespiller som ikke redder skudd
@@ -402,12 +430,6 @@ const largestClone = størst([...signatures.values()]);
 // Og for at det ikke skal måtte gjøres for hånd igjen: bittet MÅLES her, hver
 // kjøring, og skrives ut sammen med den ærlige andelen. Kommentaren over kan
 // bli foreldet; de to tallene i utskriften kan det ikke.
-const flatRå = read("data/football_attributes.json");
-for (const vekter of Object.values(flatRå.positionProfiles || {})) {
-  for (const gruppe of Object.keys(vekter)) vekter[gruppe] = 50;
-}
-const flatProfiles = derivePlayerAttributeIndex(read("data/football_players.json").players,
-  { catalogue: normalizeAttributeCatalogue(flatRå), roles }).profiles;
 const flatSignaturer = new Set(dokumenterte.map((player) =>
   JSON.stringify(flatProfiles[player.id].values)));
 const flatShare = flatSignaturer.size / dokumenterte.length;
@@ -677,7 +699,28 @@ const KJENT_UDOKUMENTERT = {
   // To kilder med identisk struktur, identisk forbud og dobbelt så stor
   // forskjell i dekning: det er skillet mellom godt datert og godt beskrevet
   // igjen, i en tredje form. Målt 23 av 58.
-  aka_arena: 0.42
+  aka_arena: 0.42,
+  // Fem klubber kom samtidig, og de er de fem best BESKREVNE tynne kildene så
+  // langt — fordi de siterer noen. Kjelsås siterer Eivind Kampen, Arendal
+  // skriver kampomtaler, Grorud lager spillerportretter. Hullet er derfor
+  // markant mindre enn hos Notodden (76 %), og de skiller seg innbyrdes på
+  // nøyaktig samme akse: jo mer kilden siterer, jo færre tomme.
+  //
+  // Kjelsås er den laveste av alle klubbheritagene med prosakilde — men 42 av
+  // 85 profiler har ingen posisjon i kilden og utelates, så de 46 som står
+  // igjen er de kilden faktisk sier noe om. Målt 16 av 46.
+  grefsen_stadion: 0.38,
+  // Arendal: klubbens egne kampomtaler gir 30 av 85 en påstand. Målt 43 av 77.
+  norac_stadion: 0.58,
+  // Levanger: best DATERT av de fem (5 av 85 uten årstall) og teller mål per
+  // mann gjennom hele nivå-2-perioden. Målt 42 av 76.
+  levanger_stadion: 0.58,
+  // Ull/Kisa er den tynneste: elleve påstander av 85, resten troppslister.
+  // Målt 54 av 81.
+  jessheim_stadion: 0.69,
+  // Grorud: nitten påstander, alle fra klubbens egne spillerportretter. De tre
+  // som bare har HØYDE står tomme med vilje — se ordboka. Målt 47 av 71.
+  grorud_idrettspark: 0.69
 };
 const perArv = new Map();
 for (const player of players) {
@@ -949,6 +992,11 @@ console.log(JSON.stringify({
   sprikMedian: medianRange,
   // De to endepunktene grensa på 0,848 skal ligge mellom. Skrives ut hver
   // kjøring nettopp fordi de før måtte måles for hånd og ble stående feil.
+  toppbøtter: {
+    ærlig: `${(toStørste * 100).toFixed(2)} %`,
+    flatGrunnlinje: `${(toStørsteFlat * 100).toFixed(2)} %`,
+    grense: "40,00 %"
+  },
   profilUnikhet: {
     ærlig: `${(uniqueShare * 100).toFixed(2)} %`,
     flatGrunnlinje: `${(flatShare * 100).toFixed(2)} %`,

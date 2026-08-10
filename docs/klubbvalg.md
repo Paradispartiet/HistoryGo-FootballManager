@@ -183,13 +183,17 @@ avhenger av hvor History Go-kortet hans ligger.
 | Tromsø | Romssa Arena | 81 |
 | HamKam | Briskeby | 81 |
 | Ranheim | Extra Arena | 81 |
+| Ullensaker/Kisa | Jessheim stadion | 81 |
 | Notodden | Notodden stadion | 80 |
 | Kongsvinger | Gjemselund | 79 |
+| Arendal Fotball | Norac stadion | 77 |
 | Åsane | Myrdal | 76 |
+| Levanger | Levanger stadion | 76 |
 | Brann | Brann Stadion | 75 |
 | Sogndal | Fosshaugane Campus | 75 |
 | Stabæk | Nadderud | 75 |
 | Jerv | Levermyr | 72 |
+| Grorud | Grorud idrettspark | 71 |
 | Viking | Lyse Arena | 70 |
 | Hødd | Høddvoll | 69 |
 | Sandefjord | Jotun Arena | 68 |
@@ -202,12 +206,13 @@ avhenger av hvor History Go-kortet hans ligger.
 | Egersund | Egersund Arena | 56 |
 | Strømmen | Strømmen stadion | 54 |
 | Kristiansund | Nordmøre stadion | 49 |
+| Kjelsås | Grefsen stadion | 46 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Notodden og Hønefoss —
-3040 arveplasser fordelt på alle 37, og **ingen klubb med bane har under 49
-navn**. De 23 klubbene som
+Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Notodden, Hønefoss,
+Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3391 arveplasser fordelt på
+alle 42, og **ingen klubb med bane har under 46 navn**. De 18 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -218,7 +223,7 @@ fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvi
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 414 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 494 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 **Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 dokumenterte klubbtilknytninger finnes. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.
@@ -1415,6 +1420,91 @@ Den siste er den lærerike: Egersund har ham gjennom 2025, Jerv i «2026-forsvar
 Der **kjeder tidslinjen seg sammen**, og det er positivt belegg — ikke bare et
 navn som ligner. De tre andre har ingenting utenom navnet, og
 mellomnavn-heuristikken har nå tatt feil fire ganger totalt.
+
+### Fem klubber på én gang: hvor mye en kilde SITERER avgjør alt
+
+Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud manglet alle bane. **46, 77, 76,
+81 og 71 navn.** Fem kilder samtidig, alle med samme struktur som Notodden og
+Hønefoss — fire kategorier, samme felt, samme forbud mot å oversette kampmengde
+til attributter.
+
+Og likevel er de langt bedre dekket. Årsaken er én ting, og den lar seg måle:
+
+| | påstand i kilden | tomme av importerte | hva kilden er |
+|---|---:|---:|---|
+| Kjelsås | 27 av 85 | 16 av 46 (35 %) | siterer trener Eivind Kampen |
+| Arendal | 30 av 85 | 43 av 77 (56 %) | skriver kampomtaler |
+| Levanger | 24 av 85 | 42 av 76 (55 %) | teller mål per mann |
+| Grorud | 19 av 85 | 47 av 71 (66 %) | klubbportretter |
+| Ull/Kisa | 11 av 85 | 54 av 81 (67 %) | troppslister |
+| *Notodden* | *8 av 85* | *61 av 80 (76 %)* | *dokumentasjon* |
+
+Rekkefølgen er ikke tilfeldig. **Jo mer kilden siterer noen, jo færre tomme.**
+Eivind Kampen om Håvard Meinseth — «Mr. Reliable: alltid treningsklar,
+tilgjengelig for 90 minutter, anvendelig på begge backsider» — er fire
+ferdigheter i én setning. Ull/Kisas «dokumentert i 2017-stallen» er null.
+
+Det er den tredje aksen. Godt datert og godt beskrevet var allerede uavhengige
+(Egersund mot Sandnes Ulf). Den tredje er **hvem kilden lar snakke**.
+
+#### Kjelsås deler seg rent på år 2000
+
+Klubbens seks sesonger på nivå to er **1949–51 og 1998–2001**, og det gjør
+epokeaksen skarp: «Historisk pioner»-kategorien er 11 daterte historiske mot 0
+moderne, fordi den *er* 1997–99-troppen. Den daterer seg selv.
+
+Kilden har også en ny tynn-markør, ordrett lik i tjue linjer: «posisjon eller
+teknisk spillestil fylles ikke uten separat individuell kilde». Hele
+pionerbolken er den setningen med et kampantall foran. **42 av 85 Kjelsås-navn
+har ingen posisjon i kilden** og utelates — den høyeste andelen i katalogen — så
+de 46 som står igjen er de kilden faktisk sier noe om.
+
+#### Åtti navnetreff, tre harde motsigelser
+
+De fem kildene ga **80 eksakte navnetreff** mot katalogen. Å lese dem alle mot
+hverandre ga tre motsigelser, og bare de tre ble splittet:
+
+| Kilden | Katalogen | Motsigelsen |
+|---|---|---|
+| Martin Hansen — «Historisk angrepsprofil», 71 mål | Martin Hansen — moderne keeper, Marienlyst | keeper mot målscorer |
+| Christian Aas — Ull/Kisa, defensiv midtbane 2017 **og** 2019 | Christian Aas — Levanger, offensiv midtbane 2017 | to klubber, samme sesong |
+| Emil Gundelach Ødegaard — Grorud, «Historisk utespiller» | Emil Ødegaard — keeper, KFUM og Levanger | «utespiller» *er* «ikke keeper» |
+
+Den siste er den lærerike. «Historisk utespiller» har til nå vært lest som
+fravær av informasjon — grunnen til at profilen utelates. Men ordet sier faktisk
+noe: **utespiller betyr ikke keeper**, og det er nok til å felle en kobling
+mellomnavn-regelen ellers ville gjort i stillhet.
+
+Og en fjerde motsigelse lå inne i én og samme kilde: Arendal fører både «Péter
+Kovács» (ungarsk landslagsspiss, ti A-landskamper) og «Péter Wiik-Kovács»
+(OBOS-troppen 2017, posisjon uavklart) som separate profiler. At en kilde lister
+dem hver for seg *er* kildens påstand om at det er to menn.
+
+#### Når to menn skiller seg med ett tegn
+
+Ull/Kisa ga begge utfallene av samme situasjon på én gang:
+
+- **Kristian** Flittie Onstad (Ull/Kisa) og **Kristjan** Flittie Onstad (Brann)
+  ble slått sammen. «Flittie Onstad» er et unikt dobbelt etternavn, begge er
+  moderne midtstoppere, og en Ull/Kisa-stopper som går til Brann er nøyaktig den
+  karrieren begge kildene beskriver.
+- Oddbjørn **Lie** (Aalesund) og Oddbjørn **Lien** (Ull/Kisa) står som to menn.
+  Aalesunds er moderne midtstopper; Ull/Kisas er historisk angrepsprofil som
+  scoret i 2–0 over HamKam i cupen 1979.
+
+Ett tegn er altså ikke et kriterium i noen retning. Det som avgjør er om epoke
+og posisjon lar dem være samme mann.
+
+#### Det som fortsatt ikke lar seg avgjøre
+
+Sytti av de åtti navnetreffene hadde ingen motsigelse og ble koblet. Noen av dem
+er trygge (kilden navngir den andre klubben), men flere hviler bare på at navnet
+er likt — «Trond Johansen», «Kristian Eriksen», «Peter Sørensen». De er koblet
+fordi standarden er å koble når ingenting motsier, og fordi en sammenslåing som
+er feil i det minste er synlig i profilen etterpå.
+
+Det er katalogens største uverifiserbare klasse, og den vokser med hver
+klubbarv. Den står her fordi den ikke bør oppdages på nytt som en overraskelse.
 
 ### Notodden og Hønefoss: to kilder som beskriver dokumentasjon i stedet for fotball
 

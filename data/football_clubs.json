@@ -476,8 +476,9 @@
       "group": "avdeling1",
       "strength": 57,
       "form": 52,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 77,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "norac_stadion"
     },
     {
       "id": "jerv",
@@ -673,8 +674,9 @@
       "group": "avdeling2",
       "strength": 56,
       "form": 51,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 81,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "jessheim_stadion"
     },
     {
       "id": "levanger",
@@ -685,8 +687,9 @@
       "group": "avdeling2",
       "strength": 55,
       "form": 50,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 76,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "levanger_stadion"
     },
     {
       "id": "kjelsas",
@@ -697,8 +700,9 @@
       "group": "avdeling2",
       "strength": 54,
       "form": 60,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 46,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "grefsen_stadion"
     },
     {
       "id": "grorud",
@@ -709,8 +713,9 @@
       "group": "avdeling2",
       "strength": 53,
       "form": 59,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 71,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "grorud_idrettspark"
     },
     {
       "id": "tromsdalen",
