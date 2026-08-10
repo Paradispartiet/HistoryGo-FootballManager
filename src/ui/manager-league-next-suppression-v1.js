@@ -27,6 +27,8 @@ function syncLeagueFooterOwnership() {
   if (strip && calendarOwnsFooter) strip.hidden = false;
   if (strip && !calendarOwnsFooter) {
     delete strip.dataset.surface;
+    delete strip.dataset.calendarInteractive;
+    strip.onclick = null;
     strip.setAttribute("aria-label", "Forslag til neste steg");
     const label = strip.querySelector(".next-action-head .eyebrow");
     if (label) label.textContent = "Forslag til neste steg";
