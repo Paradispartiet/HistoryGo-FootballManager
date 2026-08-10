@@ -623,7 +623,12 @@ const KJENT_UDOKUMENTERT = {
   // konkrete HANDLINGER — stupheadingen mot Brann, fire strafferedninger i
   // samme kvalifiseringsfinale, opprykksmålet mot Rolvsøy i 1982 — så det som
   // finnes er godt, det er bare lite av det. Målt 53 av 72.
-  levermyr_stadion: 0.75
+  levermyr_stadion: 0.75,
+  // Notodden-kilden er bevisst tynn på individuelle ferdigheter: 85 profiler er
+  // kontrollert mot tropps-/kamp-/karrieredata. Kildene dokumenterer først og
+  // fremst posisjon og klubbtilknytning, så tom styrkeliste er korrekt avståelse
+  // og ikke en invitasjon til posisjonsmal.
+  notodden_stadion: 0.99
 };
 const perArv = new Map();
 for (const player of players) {

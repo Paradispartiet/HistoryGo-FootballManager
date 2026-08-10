@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **2403 navngitte fotballspillere**. 58 tall hver er ~139 000
+Dette er **2475 navngitte fotballspillere**. 58 tall hver er ~139 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 

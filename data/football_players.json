@@ -3429,7 +3429,8 @@
       "sourcePlaceIds": [
         "aker_stadion",
         "intility_arena",
-        "nordmore_stadion"
+        "nordmore_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 84,
       "naturalPositions": [
@@ -3479,12 +3480,14 @@
       "clubStatus": {
         "aker_stadion": "elite_career",
         "intility_arena": "elite_career",
-        "nordmore_stadion": "elite_career"
+        "nordmore_stadion": "elite_career",
+        "notodden_stadion": "short_stay_star"
       },
       "clubStatusSource": {
         "aker_stadion": "belagt",
         "intility_arena": "belagt",
-        "nordmore_stadion": "belagt"
+        "nordmore_stadion": "belagt",
+        "notodden_stadion": "utledet"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -3499,6 +3502,12 @@
           "relation": "played_for",
           "status": "elite_career",
           "source": "belagt"
+        },
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "short_stay_star",
+          "source": "utledet"
         },
         {
           "clubId": "valerenga",
@@ -42868,7 +42877,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "romssa_arena",
-        "bryne_stadion"
+        "bryne_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -42912,11 +42922,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "romssa_arena": "club_profile",
-        "bryne_stadion": "elite_career"
+        "bryne_stadion": "elite_career",
+        "notodden_stadion": "short_stay_star"
       },
       "clubStatusSource": {
         "romssa_arena": "belagt",
-        "bryne_stadion": "belagt"
+        "bryne_stadion": "belagt",
+        "notodden_stadion": "utledet"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42925,6 +42937,12 @@
           "relation": "played_for",
           "status": "elite_career",
           "source": "belagt"
+        },
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "short_stay_star",
+          "source": "utledet"
         },
         {
           "clubId": "tromso",
@@ -66744,7 +66762,8 @@
       "era": "modern",
       "sourcePlaceIds": [
         "bislett_stadion",
-        "strommen_stadion"
+        "strommen_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 79,
       "naturalPositions": [
@@ -66786,11 +66805,13 @@
       "classSource": "belagt",
       "clubStatus": {
         "bislett_stadion": "club_profile",
-        "strommen_stadion": "elite_career"
+        "strommen_stadion": "elite_career",
+        "notodden_stadion": "short_stay_star"
       },
       "clubStatusSource": {
         "bislett_stadion": "belagt",
-        "strommen_stadion": "utledet"
+        "strommen_stadion": "utledet",
+        "notodden_stadion": "utledet"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -66799,6 +66820,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"
+        },
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "short_stay_star",
+          "source": "utledet"
         },
         {
           "clubId": "strommen",
@@ -76074,7 +76101,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "marienlyst_stadion"
+        "marienlyst_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 82,
       "naturalPositions": [
@@ -76118,13 +76146,21 @@
       "warningWhenMisused": "Johansen mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "belagt",
       "clubStatus": {
-        "marienlyst_stadion": "golden_era_core"
+        "marienlyst_stadion": "golden_era_core",
+        "notodden_stadion": "golden_era_core"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "belagt"
+        "marienlyst_stadion": "belagt",
+        "notodden_stadion": "utledet"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        },
         {
           "clubId": "stromsgodset",
           "relation": "played_for",
@@ -91049,7 +91085,8 @@
       "nationality": "Norge",
       "era": "modern",
       "sourcePlaceIds": [
-        "skagerak_arena"
+        "skagerak_arena",
+        "notodden_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -91097,13 +91134,21 @@
       "warningWhenMisused": "Shala trenger frihet mellom ledd og folk som angriper rom foran ham.",
       "classSource": "belagt",
       "clubStatus": {
-        "skagerak_arena": "elite_career"
+        "skagerak_arena": "elite_career",
+        "notodden_stadion": "short_stay_star"
       },
       "clubStatusSource": {
-        "skagerak_arena": "belagt"
+        "skagerak_arena": "belagt",
+        "notodden_stadion": "utledet"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "short_stay_star",
+          "source": "utledet"
+        },
         {
           "clubId": "odd",
           "relation": "played_for",
@@ -122079,7 +122124,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "consto_arena"
+        "consto_arena",
+        "notodden_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -122118,10 +122164,12 @@
       "warningWhenMisused": "Midtgarden blir usynlig uten tilførsel inn i boksen.",
       "classSource": "belagt",
       "clubStatus": {
-        "consto_arena": "elite_career"
+        "consto_arena": "elite_career",
+        "notodden_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "consto_arena": "belagt"
+        "consto_arena": "belagt",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
         {
@@ -122129,6 +122177,12 @@
           "relation": "played_for",
           "status": "elite_career",
           "source": "belagt"
+        },
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
         }
       ]
     },
@@ -133518,7 +133572,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "fosshaugane_campus"
+        "fosshaugane_campus",
+        "notodden_stadion"
       ],
       "classHeight": 81,
       "naturalPositions": [
@@ -133555,12 +133610,20 @@
       "warningWhenMisused": "Dale blir usynlig uten tilførsel inn i boksen.",
       "classSource": "utledet",
       "clubStatus": {
-        "fosshaugane_campus": "club_legend"
+        "fosshaugane_campus": "club_legend",
+        "notodden_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "fosshaugane_campus": "utledet"
+        "fosshaugane_campus": "utledet",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
         {
           "clubId": "sogndal",
           "relation": "played_for",
@@ -138234,7 +138297,8 @@
       "era": "modern",
       "eraSource": "utledet",
       "sourcePlaceIds": [
-        "gjemselund_stadion"
+        "gjemselund_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -138274,14 +138338,22 @@
       "warningWhenMisused": "Jahr blir utsatt i høy linje med mye rom bak.",
       "classSource": "utledet",
       "clubStatus": {
-        "gjemselund_stadion": "club_profile"
+        "gjemselund_stadion": "club_profile",
+        "notodden_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "gjemselund_stadion": "utledet"
+        "gjemselund_stadion": "utledet",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
         {
           "clubId": "kongsvinger",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
+        {
+          "clubId": "notodden",
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
@@ -144294,7 +144366,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "strommen_stadion"
+        "strommen_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -144332,12 +144405,20 @@
       "warningWhenMisused": "Lillo blir utsatt i høy linje med mye rom bak.",
       "classSource": "utledet",
       "clubStatus": {
-        "strommen_stadion": "club_profile"
+        "strommen_stadion": "club_profile",
+        "notodden_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "strommen_stadion": "utledet"
+        "strommen_stadion": "utledet",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
         {
           "clubId": "strommen",
           "relation": "played_for",
@@ -145646,7 +145727,8 @@
       "eraSource": "belagt",
       "sourcePlaceIds": [
         "raufoss_arena",
-        "levermyr_stadion"
+        "levermyr_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -145691,15 +145773,23 @@
       "classSource": "utledet",
       "clubStatus": {
         "raufoss_arena": "club_profile",
-        "levermyr_stadion": "club_profile"
+        "levermyr_stadion": "club_profile",
+        "notodden_stadion": "club_profile"
       },
       "clubStatusSource": {
         "raufoss_arena": "utledet",
-        "levermyr_stadion": "utledet"
+        "levermyr_stadion": "utledet",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
         {
           "clubId": "jerv",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
+        {
+          "clubId": "notodden",
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
@@ -151120,7 +151210,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "egersund_arena"
+        "egersund_arena",
+        "notodden_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -151160,14 +151251,22 @@
       "warningWhenMisused": "Voilås mister 1v1-situasjonene sine i et trangt system.",
       "classSource": "utledet",
       "clubStatus": {
-        "egersund_arena": "club_profile"
+        "egersund_arena": "club_profile",
+        "notodden_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "egersund_arena": "utledet"
+        "egersund_arena": "utledet",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
         {
           "clubId": "egersund",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        },
+        {
+          "clubId": "notodden",
           "relation": "played_for",
           "status": "club_profile",
           "source": "utledet"
@@ -151181,7 +151280,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "egersund_arena"
+        "egersund_arena",
+        "notodden_stadion"
       ],
       "classHeight": 80,
       "naturalPositions": [
@@ -151220,16 +151320,24 @@
       "warningWhenMisused": "Eggen blir utsatt i høy linje med mye rom bak.",
       "classSource": "utledet",
       "clubStatus": {
-        "egersund_arena": "club_profile"
+        "egersund_arena": "club_profile",
+        "notodden_stadion": "key_player"
       },
       "clubStatusSource": {
-        "egersund_arena": "utledet"
+        "egersund_arena": "utledet",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
         {
           "clubId": "egersund",
           "relation": "played_for",
           "status": "club_profile",
+          "source": "utledet"
+        },
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
           "source": "utledet"
         }
       ]
@@ -157863,7 +157971,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "levermyr_stadion"
+        "levermyr_stadion",
+        "notodden_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -157900,16 +158009,24 @@
       "warningWhenMisused": "Hustad blir usynlig uten tilførsel inn i boksen.",
       "classSource": "utledet",
       "clubStatus": {
-        "levermyr_stadion": "elite_career"
+        "levermyr_stadion": "elite_career",
+        "notodden_stadion": "key_player"
       },
       "clubStatusSource": {
-        "levermyr_stadion": "utledet"
+        "levermyr_stadion": "utledet",
+        "notodden_stadion": "utledet"
       },
       "clubAffiliations": [
         {
           "clubId": "jerv",
           "relation": "played_for",
           "status": "elite_career",
+          "source": "utledet"
+        },
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
           "source": "utledet"
         }
       ]
@@ -159580,6 +159697,2814 @@
           "clubId": "jerv",
           "relation": "played_for",
           "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "havard_kleven",
+      "name": "Håvard Kleven",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kjetil_holand_t_sse",
+      "name": "Kjetil Holand Tøsse",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "key_player"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "adrian_berntsen",
+      "name": "Adrian Berntsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "key_player"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "even_parkstad_johansen",
+      "name": "Even Parkstad Johansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "key_player"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "melvin_frithzell",
+      "name": "Melvin Frithzell",
+      "nationality": "Sverige",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "key_player"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jonatan_johansson",
+      "name": "Jonatan Johansson",
+      "nationality": "Sverige",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "key_player"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "abel_tjomsland",
+      "name": "Abel Tjomsland",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "key_player"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "key_player",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "william_schj_lberg_huseb",
+      "name": "William Schjølberg Husebø",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jonatan_ulsnes",
+      "name": "Jonatan Ulsnes",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "paul_endre_ullenes",
+      "name": "Paul Endre Ullenes",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "leo_kyvik",
+      "name": "Leo Kyvik",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jonas_holthe",
+      "name": "Jonas Holthe",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "michael_ledger",
+      "name": "Michael Ledger",
+      "nationality": "England",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jens_jonassen",
+      "name": "Jens Jonassen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "david_sissoko",
+      "name": "David Sissoko",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "josh_robson",
+      "name": "Josh Robson",
+      "nationality": "England",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "tobias_midtlyng",
+      "name": "Tobias Midtlyng",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "espen_vasby",
+      "name": "Espen Vasby",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kim_bj_rkesett",
+      "name": "Kim Bjørkesett",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "konrad_kapusta",
+      "name": "Konrad Kapusta",
+      "nationality": "Polen",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "steffen_jenssen",
+      "name": "Steffen Jenssen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "borgar_velta",
+      "name": "Borgar Velta",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_legend"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jeffrey_perez",
+      "name": "Jeffrey Pérez",
+      "nationality": "Spania",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "henrik_gustavsen",
+      "name": "Henrik Gustavsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "martin_strange",
+      "name": "Martin Strange",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "filip_almstrom_tahti",
+      "name": "Filip Almström Tähti",
+      "nationality": "Sverige",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "martin_holmen",
+      "name": "Martin Holmen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "DM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "eric_kitolano",
+      "name": "Eric Kitolano",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 84,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "short_stay_star"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "short_stay_star",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "amani_dickson_mbedule",
+      "name": "Amani Dickson Mbedule",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "andre_bakke",
+      "name": "André Bakke",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ole_marius_aasen",
+      "name": "Ole Marius Aasen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "ardian_rexhepi",
+      "name": "Ardian Rexhepi",
+      "nationality": "Sverige",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "martin_brekke",
+      "name": "Martin Brekke",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "havard_straumsnes",
+      "name": "Håvard Straumsnes",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "nuno_marques",
+      "name": "Nuno Marques",
+      "nationality": "Portugal",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kim_lie",
+      "name": "Kim Lie",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "terje_reinertsen",
+      "name": "Terje Reinertsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "marius_boldt",
+      "name": "Marius Boldt",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "lars_lien",
+      "name": "Lars Lien",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jan_tore_amundsen",
+      "name": "Jan Tore Amundsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "trond_viggo_toresen",
+      "name": "Trond Viggo Toresen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kjetil_lundebakken",
+      "name": "Kjetil Lundebakken",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kavin_bryan",
+      "name": "Kavin Bryan",
+      "nationality": "Jamaica",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 79,
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "erik_sergio_skogen",
+      "name": "Erik Sergio Skogen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "alexander_larsen",
+      "name": "Alexander Larsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "fabian_taylor",
+      "name": "Fabian Taylor",
+      "nationality": "Jamaica",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kristian_ystaas",
+      "name": "Kristian Ystaas",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 81,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "marius_lundeberg_enger",
+      "name": "Marius Lundeberg Enger",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jon_masalin",
+      "name": "Jon Masalin",
+      "nationality": "Finland",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 82,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "golden_era_core"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "golden_era_core",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "kenneth_bardseng",
+      "name": "Kenneth Bardseng",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "beau_molenaar",
+      "name": "Beau Molenaar",
+      "nationality": "Nederland",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "short_stay_star"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "short_stay_star",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "bror_ness_gr_tterud",
+      "name": "Bror Ness Grøtterud",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "sjur_lothe",
+      "name": "Sjur Lothe",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "anton_snibb",
+      "name": "Anton Snibb",
+      "nationality": "Sverige",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "alexander_r_nning_olsen",
+      "name": "Alexander Rønning-Olsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "LB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "fredrik_carson_pedersen",
+      "name": "Fredrik Carson Pedersen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "emmanuel_kisaruko",
+      "name": "Emmanuel Kisaruko",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "shahram_jabari",
+      "name": "Shahram Jabari",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "sebastian_temte_hansen",
+      "name": "Sebastian Temte Hansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "willian_pozo",
+      "name": "Willian Pozo",
+      "nationality": "Cuba",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 80,
+      "naturalPositions": [
+        "LW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "short_stay_star"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "short_stay_star",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "torben_dvergsdal",
+      "name": "Torben Dvergsdal",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "sondre_solas",
+      "name": "Sondre Solås",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "noah_jacobsen",
+      "name": "Noah Jacobsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "henrik_hatlen_osen",
+      "name": "Henrik Hatlen Osen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "jone_bjerkan_hammerli",
+      "name": "Jone Bjerkan Hammerli",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "sondre_svarstad",
+      "name": "Sondre Svarstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "andreas_kalstad",
+      "name": "Andreas Kalstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "sebastian_r_nningen_j_rgensen",
+      "name": "Sebastian Rønningen Jørgensen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "tor_andre_nordb",
+      "name": "Tor André Nordbø",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "anders_ryste",
+      "name": "Anders Ryste",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "andreas_sersland",
+      "name": "Andreas Sersland",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
+          "source": "utledet"
+        }
+      ]
+    },
+    {
+      "id": "erik_leandersson",
+      "name": "Erik Leandersson",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "notodden_stadion"
+      ],
+      "classHeight": 78,
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden dokumenterer klubbtilknytning og posisjon, men ikke nok individuell rolle-/ferdighetsprosa til flere påstander.",
+      "classSource": "utledet",
+      "clubStatus": {
+        "notodden_stadion": "squad_profile"
+      },
+      "clubStatusSource": {
+        "notodden_stadion": "utledet"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "notodden",
+          "relation": "played_for",
+          "status": "squad_profile",
           "source": "utledet"
         }
       ]

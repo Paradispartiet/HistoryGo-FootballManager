@@ -501,8 +501,9 @@
       "group": "avdeling1",
       "strength": 56,
       "form": 51,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 85,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "notodden_stadion"
     },
     {
       "id": "mjondalen",

@@ -177,6 +177,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
 | Start | Sparebanken Sør Arena | 85 |
+| Notodden | Notodden stadion | 85 |
 | Mjøndalen | Consto Arena | 83 |
 | Lyn | Bislett Stadion | 82 |
 | Moss | Melløs | 82 |
@@ -203,8 +204,8 @@ avhenger av hvor History Go-kortet hans ligger.
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane og Jerv — 2902 arveplasser
-fordelt på alle 35, og **ingen klubb med bane har under 49 navn**. De 25
+Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv og Notodden — 2987 arveplasser
+fordelt på alle 36, og **ingen klubb med bane har under 49 navn**. De 24
 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
