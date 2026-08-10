@@ -1,542 +1,155 @@
 # HistoryGo Football Manager
 
-HistoryGo Football Manager er en selvstendig managerprototype koblet til History Go / Civication.
-
-Det nåværende managerskallet og den responsive flytkontrakten er dokumentert i
-[`docs/MANAGER_SHELL_V3.md`](docs/MANAGER_SHELL_V3.md).
+HistoryGo Football Manager er et selvstendig, mobiltilpasset managerspill koblet til History Go / Civication.
 
 > Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
 
-Dette er ikke et vanlig ratingspill. `overall` beskriver klasse, ikke automatisk kampverdi. En spiller med lavere `overall` kan prestere bedre enn en høyere rated spiller dersom han brukes i riktigere posisjon, rolle, taktikk og relasjonelt mønster.
+Spillet er ikke bygget rundt en skjult samlet spillerverdi. `classHeight` beskriver dokumentert karrierenivå og setter et tak for ferdighetsprofilen; kampbidraget avgjøres av hvordan spilleren brukes i posisjon, rolle, taktikk, relasjoner, form og belastning.
 
+## Canonical produktstatus
 
-## Taktisk kunnskapslag
+Den oppdaterte oversikten over hva som faktisk er implementert, hva som er en bevisst produktgrense og hva som fortsatt er åpent, ligger i [`docs/PRODUCT_STATUS.md`](docs/PRODUCT_STATUS.md).
 
-Taktikkmotoren finnes allerede og er fortsatt sannheten for kamp, lagfit og resultater. Det nye taktiske kunnskapslaget er kun pedagogisk: det leser eksisterende taktikkdata og forklarer hva valg som lav blokk, høyt press, høy linje, 4-3-3, sonepress, mann-mot-mann-press, inverterte backer og korte cornere betyr for manageren.
+README skal beskrive dagens produkt. Historiske audits og gamle veikart skal ikke brukes som nåstatus. Før en ny hovedfunksjon startes, kontroller:
 
-Laget skal brukes til UI-tekster, tooltips, assistentfeedback, kampanalyse og dokumentasjon — ikke til å bygge en ny motor eller parallelle taktikkvalg. Se [`docs/TACTICAL_KNOWLEDGE_LAYER.md`](docs/TACTICAL_KNOWLEDGE_LAYER.md).
+1. `docs/PRODUCT_STATUS.md`;
+2. relevant kode og permanent audit/simulering;
+3. nyere commits og merged PR-er.
 
-## Dashboard-regel
+Det verner mot å bygge en ny versjon av noe som allerede finnes.
 
-Når aktiv modus er `league`, skal dashboardet bare vise ligaspill-relevante handlinger. Scenario, Ajax, femkamper og mini-season skal ikke vises som hovedflyt. Scenarioer er valgfrie og skal startes fra `Scenarioer`-fanen.
+## Managerstrukturen
 
-Første skjerm skal ha én primær handling. Forklaring og dybde skal foldes eller vises sekundært.
+Ligaspillet har fem hovedområder:
 
-## Status 30.06.2026
+```text
+Kontor · Lag · Speiding · Kamp · Stats
+```
 
-Prosjektet har mange virkende motorer, men README og UI har blitt for mye feature-logg og for lite spillkart. Denne README-en er derfor gjort om til en **spillbar flow-kontrakt**: hva spilleren skal gjøre, hvilke systemer som eier hvilke deler av flyten, og hvor dead ends oppstår.
+- **Kontor** – innboks, kalender, klubborganisasjon og oppstartshjelp.
+- **Lag** – oppstilling, valgt tropp, trening og systemkunnskap.
+- **Speiding** – Min spillerpool og andre klubbers dokumenterte HG-tilknytninger.
+- **Kamp** – kampforberedelse, kampdag og etterkampanalyse.
+- **Stats** – tabell, terminliste, sesongstatus og spillerstatistikk.
 
-Det som finnes nå:
+Detaljene og navigasjonsgrensene er låst i [`docs/meny.md`](docs/meny.md) og [`docs/MANAGER_SHELL_V3.md`](docs/MANAGER_SHELL_V3.md).
 
-1. **Managerkontor / startellever** – formasjon, taktikk, spillere, roller og grønn taktikkbane.
-2. **Individuell fitmotor** – vurderer posisjon, rolle, taktikk og feilbruk.
-3. **Lagfitmotor** – vurderer balanse, bredde, dybde, oppbygging, press, restforsvar, relasjoner, badges og duplikater.
-4. **Relasjonsmotor** – forklarer hvilke roller som hjelper eller blokkerer hverandre.
-5. **History Go-unlocks** – steder gir spillere, stab, ekspertise, treningsprogrammer, badges og formasjoner.
-6. **Lokal/offentlig start** – kan gi en spillbar starttropp uten å skrive til ekte History Go-progresjon.
+## Den spillbare læringsløkken
 
-### First-run Truth Pass v1
+```text
+kamp-/klubbsignal
+→ analyse av problemet
+→ oppstilling, rolle, system eller trening
+→ konkret managerhandling
+→ kamp
+→ forklaring og etterkamp
+→ nytt observasjonspunkt
+```
 
-En tom nettleser har nå én eksplisitt ligakontrakt: velg **Ligaspill**, velg et
-offentlig klubbanker, bekreft den save-lokale starttroppen (15 spillere, 11+4),
-engasjer tre tilgjengelige steds-/klubblinkede stabsprofiler, bekreft ellever,
-benk og formasjon, velg trening og start sesongen. Først da opprettes
-`activeLeagueSaveId`, en aktiv terminliste og en navngitt første ligakamp.
+Læringen følger **situasjon → handling → konsekvens → forklaring**. Pedagogiske lag kan lese og forklare de eksisterende motorene, men de skal ikke lage parallelle fit-, kamp-, trenings- eller progresjonsscorer.
 
-Offentlig starttilgang er ikke en History Go-opplåsing. Den avleder midlertidig
-tilgang i den aktuelle manager-saven fra eksisterende `sourcePlaceIds` ved
-ankeret og de nærmeste koordinatfestede fotballstedene. Kandidatene er ekte
-profiler fra staff-katalogen, må engasjeres manuelt og deres steder blir aldri
-skrevet til `visited_places`, `hg_groundhopper_stats_v1` eller samlet-status.
-Ekte History Go-besøk eier fortsatt permanente unlocks.
+### Spillerpool og tropp
 
-Før aktiv sesong bruker onboarding, ligastatus, Managerportalen og **Neste
-handling** det samme første uferdige før-sesongsteget. Innboks, Club Week og
-kamp kan derfor ikke overstyre porten, og «Neste kamp» vises bare for en aktiv
-sesong med en faktisk terminfestet motstander.
-7. **Stab, ekspertise og trening** – staff og ekspertise påvirker treningsprogrammer og læringsstøtte.
-8. **Off-pitch Parameters** – slitasje, moral, garderobe, press, styre/media og taktisk klarhet.
-9. **Innboks / klubbuke** – levende tråder, svarvalg, kontekstsignaler og klubbverdier.
-10. **Kampdag** – historiske motstanderarketyper, managergrep og forklarende kamprapport.
-11. **Scenarioer / prøveperiode** – fem kamper oppå Club Week når spilleren aktivt velger en scenario-utfordring, ikke som standard ligastart.
-12. **Role Familiarity** – spillere bygger rollefortrolighet ved riktig bruk over kamper.
-13. **Historisk formasjonsbibliotek** – `data/hgFootball/` med epoker, systemer, rolletyper og kunnskapslag.
+```text
+History Go-samling → Min spillerpool → valgt klubbtropp → oppstilling / rolle / trening / kamp
+```
 
-Dette er fortsatt ikke et ferdig Football Manager-spill. Full ligadybde, overgangsmarked, økonomi, kontrakter, kalender, fasilitetsutbygging og lang sesong gjenstår. V0.1 må først bli lett å spille gjennom, men produktregelen er allerede fast: HG Football Manager skal starte som Football Manager, ikke som en taktisk historieleksjon.
+History Go- og klubbtilgang avgjør hvem som finnes i spillerpoolen. `squadPlayerIds` i eksisterende `hgfm.teamMerits.v1` avgjør hvem klubben bruker. Profilklikk velger aldri en spiller; inn- og uttak krever eksplisitte handlinger. Se [`docs/MANAGER_RECRUITMENT_V1.md`](docs/MANAGER_RECRUITMENT_V1.md).
+
+### Oppstilling, roller og system
+
+Oppstilling viser valgt ellever først. Spiller- og rollealternativer åpnes i drawer. Rolleinspektøren leser den faktiske elleveren, navngir relevante spillerplasser og forklarer kuraterte relasjoner uten å endre rollefit. Se [`docs/MANAGER_FOOTBALL_LEARNING_LOOP_V1.md`](docs/MANAGER_FOOTBALL_LEARNING_LOOP_V1.md).
+
+### Trening
+
+Ukeplanen består av program, konkrete økter, fokus og individuell oppfølging. Hver økt kan åpnes som et øvelsesverksted der areal, spillerbalanse, retning og touchregel endrer den fotballfaglige forklaringen. Den eksisterende treningsmotoren eier fortsatt belastning og forventet effekt. Se [`docs/MANAGER_TRAINING_EXERCISE_DESIGN_V1.md`](docs/MANAGER_TRAINING_EXERCISE_DESIGN_V1.md).
+
+### Analyse og kampforberedelse
+
+Analyseavdelingen bruker faktisk terminliste, motstanderprofil, formasjonsmatchup, eget system og trening. Manageren lagrer én fixturebundet hypotese, ett motgrep, en risiko og et observasjonspunkt. Planen inngår i kampklarheten og følger lesbart til kampbrief og etterkamp, men gir ingen kampbonus. Se [`docs/MANAGER_CLUB_ORGANIZATION_V1.md`](docs/MANAGER_CLUB_ORGANIZATION_V1.md).
+
+### Medisinsk apparat
+
+Det medisinske beslutningsverkstedet leser eksisterende skade- og belastningsstate og lærer forskjellen mellom ukeestimat og kriteriebasert retur til fotball. Det diagnostiserer ingen skade og endrer ingen save-state. Se [`docs/MANAGER_CLUB_ORGANIZATION_V1.md`](docs/MANAGER_CLUB_ORGANIZATION_V1.md).
+
+### Kamp og etterkamp
+
+Kampmotoren eier resultat, xG, managergrep, spillerbidrag og konsekvenser. Etterkampen samler faktiske taktiske, relasjonelle, treningsmessige og menneskelige signaler og peker dem tilbake mot neste arbeidsuke. Se [`docs/MANAGER_POST_MATCH_ANALYSIS_V1.md`](docs/MANAGER_POST_MATCH_ANALYSIS_V1.md).
 
 ## Spillmoduser
 
-### Mode Isolation v1 – tilstand og lagring
+`hgfm.modeSessions.v1` isolerer fire aktive snapshots:
 
-Aktiv modus har én sannhetskilde: `hgfm.modeSessions.v1`. Lagringen er en
-versjonert envelope med `activeMode` (`league`, `scenario` eller `training`) og
-tre adskilte snapshots under `sessions`. Ligaspillet er den varige sesjonen;
-scenarioet har sin egen femkampers mini-season, og Fotballvitenskap er en
-midlertidig kopi som kan nullstilles uten å berøre ligaen. Alle tre bruker de
-eksisterende formasjons-, taktikk-, trenings-, kamp- og mini-season-motorene.
+- `league` – klubbsesong med divisjoner, terminliste, tabell, kvalifisering og sesongdom;
+- `scenario` – kuraterte femkampersutfordringer;
+- `national` – landslag og EM/VM;
+- `training` – **Fotballvitenskap**, det historiske formasjonsbiblioteket utenfor klubbsaven.
 
-Ved første lasting migreres eksisterende league-nøkler kopierende inn i
-`sessions.league`. Migreringen er idempotent, og gamle nøkler slettes ikke før
-en gyldig envelope er skrevet. Scenario- og treningsdata kan derfor aldri
-erstatte en gyldig ligasnapshot. `hgfm.gameStartState.v1` beholdes som
-bakoverkompatibel metadata for klubb/save og scenario-id, men eier ikke lenger
-aktiv modus.
+Alle modusene bruker de samme stateless motorene. En sekundær modus kan aldri overskrive ligasaven.
 
-### Ligaspill
+## Bevisste produktgrenser
 
-Hovedmodusen i HG Football Manager. Spilleren tar over en klubb og spiller en tradisjonell sesong med tropp, trening, terminliste, tabell, innboks og kampdag. Ligaspill er primærvalget fra start, og første handling skal alltid peke mot spillbar tropp, startellever, trening eller neste ligakamp.
+Følgende er ikke skjulte restoppgaver og skal ikke implementeres uten en egen, vedtatt regel:
 
-**Real League Season v1** består av åtte klubber, 14 serierunder og fire
-kamper per runde. En deterministisk circle-method lager først sju runder før
-returoppgjørene speiler hjemme/borte; den lagrede seed-en gir identisk
-terminliste etter refresh. Når managerkampen er ferdig, registreres den én
-gang og de tre andre kampene i runden simuleres deterministisk med klubbenes
-lette styrkeprofiler. Tabellen beregnes fra de 56 registrerte kampene etter
-3–1–0-regelen.
+- overgangsmarked, overgangssummer, agenter, lønn og kontrakter;
+- maksimumsstørrelse, registreringsfrist eller cooldown for klubbtroppen;
+- oppdiktede fasilitetsnivåer når klubbdataene ikke beskriver anleggene;
+- `overall`-kolonner, nye samleverdier eller pedagogiske bonusmotorer;
+- tilfeldige ekte spillere for klubber uten dokumentert spillerpool;
+- parallelle «Neste»-systemer ved siden av den autoritative managerflyten.
 
-Managerklubben kommer fra brukerens eksisterende league-save. De sju
-motstanderprofilene i `football-league-season.js` er FM-eide
-konkurranseprofiler med stabile klubb-ID-er, presentasjonsnavn, hjemmebane,
-styrke/form og taktisk identitet. De er ikke nye canonical History Go-data og
-påstår ingen historiske spillerrelasjoner eller tropper. Ligaflyten skriver
-aldri `visited_places`, `hg_groundhopper_stats_v1` eller andre History Go-
-unlocks.
+Manglende regler skal avklares før kode. Manglende kildedata skal vises ærlig, ikke fylles med plausible påstander.
 
-Ligaen lagres som `historygo-football-manager.league-season.v2` og snapshots
-som `leagueSeason` i den eksisterende mode-envelope. Scenario beholder sin
-separate `miniSeason` på fem kamper; Fotballvitenskap får ingen ligatilstand.
-En eldre femukers league-mini-season beholdes urørt som legacy-historikk og
-tolkes aldri som en ny liga. Ny v2-liga opprettes separat når league-save-en
-er klar. Dermed er migreringen kopierende, idempotent og uten tap av manager,
-klubb, tropp, stab, laguttak eller taktikk.
+## Arkitektur
 
-V1 har ikke opprykk/nedrykk, cuper, overganger, kontrakter, økonomi,
-stadionøkonomi eller komplette AI-spillertropper. Kampdag og taktikk bruker
-fortsatt de eksisterende motorene; ligaen eier bare konkurransestrukturen.
+Appen er statisk HTML/CSS/ESM uten frontend-rammeverk.
 
-### Scenarioer
+- `src/app.js` binder save-state, legacy-UI og motorresultater.
+- `src/football-*.js` inneholder rene eller avgrensede domenemoduler.
+- `src/ui/` inneholder managerflatene og pedagogiske presentasjonslag.
+- `src/domain/` og `src/engine/` er den TypeScript-baserte managerkjernen.
+- `data/` er canonical fotball- og History Go-data.
+- `scripts/` inneholder permanente audits og deterministiske simuleringer.
+- `tests/browser/` låser spillflyt, mobilvisning og WCAG A/AA.
 
-Valgfrie korte utfordringer basert på historiske lag, taktiske ideer eller bestemte læringsmål. Eksempel: Ajax 1971–73 / totalfotball. Scenarioer kan bruke eksisterende femkampers prøveperiode, styreoppdrag og læringslogikk, men de skal startes aktivt fra Scenarioer-valget.
+Den kompilerte TypeScript-motoren ligger i `dist/`. Den ubygde browserdemoen har byte-kompatible ESM-fallbacks. Se [`docs/ENGINE_ARCHITECTURE.md`](docs/ENGINE_ARCHITECTURE.md) og `CLAUDE.md` for motorgrensene.
 
-### Fotballvitenskap
+## Lokal kjøring
 
-Egen læremodul, ikke en spillmodus: formasjonsbiblioteket epoke for epoke, der
-du kan lære om fotball uavhengig av spillet. Den het tidligere «Treningsrom» og
-sendte deg rett inn i lagets treningsuke — altså inn i spillet den påsto å stå
-utenfor. Nå åpner den formasjonsbiblioteket, har sin egen ene fane, og skriver
-ingenting til klubben din.
-
-Standard start skal alltid være ligaspill eller valg av spillmodus. Et scenario skal aldri være hardkodet som første obligatoriske handling.
-
-## Spillbar hovedvei
-
-Spilleren skal ikke måtte forstå hele arkitekturen for å komme til første kamp. Den første spillbare løkken skal være:
-
-```txt
-Oversikt
-  ↓
-Skaff spillbar tropp
-  ↓
-Lag & taktikk
-  ↓
-Innboks
-  ↓
-Trening
-  ↓
-Kampplan / kampforberedelse
-  ↓
-Kamp
-  ↓
-Kamprapport
-  ↓
-Neste uke
-```
-
-### 1. Oversikt eier starten
-
-Spilleren skal starte i **Oversikt**. Øverst skal **Neste handling** fortelle nøyaktig hva som må gjøres nå. De andre kortene i Oversikt kan forklare hvorfor, men de skal ikke konkurrere med Neste handling.
-
-Regel:
-
-```txt
-Neste handling eier veien videre.
-Club Week eier fase/status.
-Innboks eier kontekst og historikk.
-History Go eier tilgang.
-Kamp eier kamp og rapport.
-```
-
-### 2. Første krav er spillbar tropp
-
-Før spilleren sendes inn i prøveperiode, kamp eller avanserte valg, må spillet sikre at manageren faktisk har en spillbar tropp.
-
-Kravet i v0.1 er:
-
-```txt
-15 opplåste spillere totalt
-= 11 startere + minst 4 benkespillere
-```
-
-Hvis spilleren ikke har nok spillere, skal primærhandlingen være én av disse:
-
-- **Bruk History Go-samlingen min**
-- **Velg offentlig startsted**
-- **Finn nærmeste spillere**
-- **Samle flere spillere**
-
-Spilleren skal ikke få beskjed om å starte prøveperiode før spillerpoolen er reell.
-
-### 3. Lag & taktikk fyller laget
-
-Når 15-spillerkravet er mulig å oppfylle, skal spilleren gå til **Lag & taktikk**:
-
-1. Velg eller behold formasjon.
-2. Fyll 11 plasser.
-3. Velg roller.
-4. Rett feilbruk og duplikater.
-5. Sjekk at benken har minst 4 spillere.
-
-Dette er kjernen i spillet: treneren forstår spilleren gjennom posisjon, rolle, taktikk og relasjon.
-
-### 4. Innboks gir signaler før trening
-
-Når laget er kampklart, skal spilleren lese de relevante signalene fra klubben før treningen låses inn. Innboksen er ikke “mail som bare ligger der”; den er klubbens signalapparat.
-
-Innboksen skal forklare:
-
-- hva assistenttreneren ser taktisk
-- hva fysio/medisinsk apparat ser av slitasje og risiko
-- hva garderoben signaliserer
-- hva styret og presse presser på med
-- hva scouting/History Go peker mot
-
-I første uke bør innboksen gi ett tydelig signal før kamp, ikke mange likeverdige tråder.
-
-### 5. Trening velges etter signalene
-
-Når spilleren har sett klubbens signaler, skal han velge:
-
-- ett ukentlig treningsfokus
-- ett treningsprogram / ukeprogram
-
-Forslagene skal være trygge standardvalg, men ikke fasit. Et bevisst kontekstuelt valg kan være bedre enn standardforslaget.
-
-### 6. Kamp og rapport avslutter uka
-
-Kampfanen skal:
-
-1. forklare om laget er kampklart
-2. vise motstander og kampbrief
-3. la spilleren ta managergrep
-4. vise resultat
-5. forklare hvorfor resultatet skjedde
-6. gi ett tydelig råd for neste uke
-
-Etter rapporten skal Neste handling peke til neste fase eller neste uke.
-
-## Hvorfor spillet oppleves rotete
-
-Rotet skyldes ikke én enkelt motorfeil. Det skyldes at flere riktige systemer er synlige samtidig uten en hard spillbar rekkefølge.
-
-### Dead end 1: default-state gir ikke spillere
-
-`football_team_merits.example.json` starter med `kfum_arena` som opplåst sted. I `football_unlocks.json` er KFUM Arena bevisst definert som trener-/kompetansekilde, ikke spillerkilde. Stedet låser opp trenere, ekspertise og treningsmodell, men ingen `player_candidate`.
-
-Samtidig sier availability-logikken at spillerlisten bare kommer fra konkrete `player_candidate`-unlocks på opplåste steder eller lokal start. Den faller aldri tilbake til alle spillere.
-
-Konsekvens:
-
-```txt
-Ny spiller → KFUM Arena → 0 spillere → 15-spillerkravet feiler → kamp låses
-```
-
-Dette er riktig datalogikk, men feil førsteopplevelse. Førsteopplevelsen må sende spilleren til lokal/offentlig start eller et sted som faktisk gir nok spillere.
-
-### Dead end 2: First-Time Playthrough antar for mye
-
-`sim:first-time` tester Next Action-stigen med en idealisert mock der `roster.enoughUnlocked` og `roster.enoughBench` allerede er `true`. Den tester derfor ikke den virkelige første lasten fra seed-data.
-
-Konsekvens:
-
-```txt
-Test grønn → faktisk ny spiller kan likevel stå uten spillere
-```
-
-Det trengs en egen real-seed-sim som laster seed/unlocks og forventer at første primærhandling er startmodus/spillerpool før prøveperiode.
-
-### Dead end 3: Neste handling kan starte prøveperiode før spillerpool
-
-First-Time-prioriteringen i `football-next-action.js` kan gi **Start femkampers prøveperiode** før den generelle roster-gatingen får stoppe flyten. Etterpå kan spilleren bli sendt til **Fullfør startellever**, men da finnes det kanskje ingen spillere å velge.
-
-Riktig regel:
-
-```txt
-Ikke mini-season før availability.rosterReadiness.hasEnoughUnlocked === true.
-```
-
-Hvis `unlockedPlayers < 15`, skal Neste handling alltid peke til History Go/startmodus.
-
-### Dead end 4: uferdige avdelinger ligger i hovednavigasjonen
-
-Fasiliteter, Administrasjon, Marked og Styret ligger som primære faner, men flere kort sier i praksis «kommer senere», «ikke koblet på ennå», «ingen data ennå» eller «ikke bygget ennå».
-
-Disse fanene gir riktig managerkontor-følelse, men i v0.1 fungerer de som dead ends hvis de ser like viktige ut som Lag, Trening, Innboks og Kamp.
-
-Regel for v0.1:
-
-```txt
-Primærnav = bare spillbar løkke.
-Uferdige avdelinger = sekundært, låst, foldet eller tydelig merket «kommer senere».
-```
-
-### Dead end 5: for mange «hva nå?»-flater
-
-Oversikt har Neste handling, Managerinnsikt, Foreslåtte oppsett, Kontekst, Neste beslutninger, Mini Season og snarveier. Hver av dem kan være nyttig, men samlet lager de støy.
-
-Regel:
-
-```txt
-Én primærhandling.
-Maks to sekundære handlinger.
-Alt annet er forklaring eller status.
-```
-
-## Navigasjonskontrakt for v0.1
-
-### Primærflyt
-
-Disse flatene er del av spillbar hovedvei:
-
-1. **Oversikt** – start, status, Neste handling.
-2. **History Go** – tilgang, samling, startmodus, lokal/offentlig start.
-3. **Lag & taktikk** – formasjon, startellever, roller, benk.
-4. **Innboks** – relevante signaler og valg.
-5. **Trening** – treningsfokus og treningsprogram.
-6. **Kamp** – kampbrief, kamp, rapport.
-
-### Sekundær/fremtidig flyt
-
-Disse skal ikke være blokkere i v0.1:
-
-- Fasiliteter
-- Administrasjon
-- Marked
-- Styret
-- Full sesong/liga
-- Økonomi
-- Kontrakter
-- Overgangsmarked
-- Kalender
-
-De kan være synlige som miljø/managerkontor, men de må merkes som **ikke del av første spillbare løkke** til de faktisk har interaksjon.
-
-## First-run-audit (historikk)
-
-### 1. Fiks første handling
-
-Når spillet starter, bygg Next Action-konteksten fra faktisk availability:
-
-```txt
-if unlockedPlayers < 15:
-  primary = "Skaff spillbar tropp"
-  action = History Go / startmodus
-else if leagueSeason not active:
-  primary = firstIncompletePreseasonStep
-```
-
-### 2. Fiks First-Time-testen
-
-Legg til en test/sim som bruker ekte seed-data:
-
-```txt
-npm run sim:first-run-real-seed
-```
-
-Den feiler hvis før-sesongen kan forbigås eller real-seed ikke gir en komplett,
-save-lokal vei til aktiv ligasesong.
-
-Minimumssjekker:
-
-- seed med bare KFUM Arena gir ikke kampklar tropp
-- primærhandling peker til startmodus / History Go
-- alle offentlige starter gir 15 spillere og minst tre valgbare,
-  stedstilknyttede stabsprofiler
-- tre profiler må engasjeres eksplisitt før sesongen kan startes
-- aktiv league-save har en navngitt, terminfestet første motstander
-- etter 15 spillere kan flyten gå videre til Lag & taktikk
-- etter 11 + 4 kan flyten gå til Innboks / Trening / Kamp
-
-### 3. Rydd primærnavigasjonen
-
-For v0.1 bør synlig hovedløype være:
-
-```txt
-Oversikt · Lag & taktikk · Innboks · Trening · Kamp · History Go
-```
-
-Fasiliteter, Admin, Marked, Styret og Formasjoner bør enten:
-
-- ligge i en sekundær «Kontor»-skuff
-- være låst/merket «kommer senere»
-- eller foldes inn som forklaringskort til de faktisk påvirker spillet
-
-### 4. Rydd dashboardet
-
-Oversikt bør prioriteres slik:
-
-1. Neste handling
-2. Hvorfor denne handlingen?
-3. Status for tropp/uke/kamp
-4. Sekundære detaljer foldet under
-
-Ikke vis flere likeverdige «neste»-systemer samtidig.
-
-### 5. Skjul teknisk dybde til spilleren ber om den
-
-Kampforklaring, formation knowledge, staff identity, role familiarity og off-pitch er verdifulle. Men førsteuka skal bare vise det som hjelper spilleren til neste beslutning. Resten må ligge i `<details>` eller «Vis mer».
-
-
-## First Playthrough QA status (v1)
-
-QA-gjennomgangen av første spilløkt er verifisert gjennom seed- og sim-testene. Hovedveien er nå:
-
-```txt
-Oversikt
-  ↓
-Skaff spillbar tropp
-  ↓
-History Go / startmodus
-  ↓
-Lag & taktikk
-  ↓
-Innboks
-  ↓
-Trening
-  ↓
-Kamp
-  ↓
-Kamprapport
-  ↓
-Neste uke
-```
-
-Verifisert status:
-
-- Ny spiller med repository-seed havner ikke i prøveperiode før 15 spillere.
-- Repository-seeden (`kfum_arena`) gir 0 spillere og peker primærhandlingen til History Go/startmodus.
-- Når 15 spillere er tilgjengelige, peker flyten til Lag & taktikk.
-- Når 11 startere + 4 benk er klart, peker førsteuka til Innboks før Trening.
-- Etter innboks og treningsvalg peker flyten til Kamp.
-- Etter kamp peker flyten til Kamprapport.
-- Etter lest rapport peker flyten til neste uke.
-- Primærnavigasjonen holder spillbar løkke adskilt fra kontor-/senere-flater, og primærhandlingene peker ikke til future-flater.
-
-Kjørte QA-kommandoer:
-
-```txt
-npm run check:dom-ids
-npm run audit:flow
-npm run sim:first-run-real-seed
-npm run sim:first-time
-npm run sim:manager-flow-ui
-npm run sim:mini-season
-npm run sim:matchday
-```
-
-## Viktige filer
-
-```txt
-index.html
-style.css
-README.md
-
-src/
-  app.js
-  football-next-action.js
-  football-fit-engine.js
-  football-team-fit-engine.js
-  football-relationship-engine.js
-  football-off-pitch-parameters.js
-  football-inbox-events.js
-  football-matchday-engine.js
-  football-match-explanation-engine.js
-  football-mini-season.js
-  football-role-familiarity-engine.js
-  football-training-program-compositions.js
-  hg-formation-library.js
-
-data/
-  football_players.json
-  football_unlocks.json
-  football_place_locations.json
-  football_staff.json
-  football_expertise.json
-  football_training_programs.json
-  football_training_badges.json
-  football_team_merits.example.json
-  club_inbox_threads.json
-  club_inbox_senders.json
-  club_inbox_messages/
-  club_inbox_choices/
-  club_inbox_replies/
-  hgFootball/
-
-scripts/
-  audit-flow.mjs
-  simulate-first-time-playthrough.mjs
-  simulate-manager-flow-ui.mjs
-  simulate-mini-season.mjs
-  simulate-matchday-v02.mjs
-```
-
-## Kjøring
-
-Prosjektet er foreløpig en statisk HTML/CSS/JS-app uten framework.
-
-Direkte åpning av `index.html` kan feile fordi JSON-data lastes med `fetch`. Bruk GitHub Pages eller en enkel lokal server:
+Installer avhengigheter og start en statisk server:
 
 ```bash
+npm ci
 python3 -m http.server 8000
 ```
 
-Åpne deretter:
+Åpne `http://localhost:8000`. Direkte åpning av `index.html` kan feile fordi data lastes med `fetch`.
 
-```txt
-http://localhost:8000
-```
+## Verifikasjon
 
-## Kvalitetssjekk
-
-Kjør relevante kontroller før nye endringer:
+Grunnportene er:
 
 ```bash
 npm run typecheck
 npm run build
+npm run stage:pages
+npm run audit:pages-artifact
+npm run audit:product-status
+npm run check:syntax
 npm run check:dom-ids
 npm run audit:flow
-npm run sim:first-time
-npm run sim:manager-flow-ui
-npm run sim:mini-season
-npm run sim:matchday
+npm run audit:dead-ends
+npm run test:browser
 ```
 
-Viktig: `audit:flow` er en strukturell wiring-audit. Den beviser at id-er, handlere og motorimporter finnes, men den beviser ikke at en ny spiller faktisk finner veien fra første skjerm til første kamp. Det må dekkes av en real-seed first-run-sim og manuell spilltest.
+GitHub Actions kjører i tillegg alle registrerte dataaudits, manageraudits og motor-/flytsimuleringer før merge. Push til `main` bygger og deployer `_site` til GitHub Pages.
 
-## Fast regel for videre arbeid
+## Arbeidsregel
 
-Ikke bygg flere likeverdige paneler før hovedveien er spillbar.
+Nye funksjoner skal:
 
-Alt videre arbeid skal bevare denne setningen:
-
-> Alle spillere er gode nok. Spørsmålet er om treneren forstår dem.
-
-## Informasjonsnivåer i manager-UI
-
-HG Football Manager bruker progressiv visning for å holde toppflatene korte:
-
-1. **Beslutningslag** – hovedskjermene viser først hva som skjer nå, hva det betyr og én tydelig neste handling.
-2. **Romoversikt** – hvert rom grupperer innhold i få kort: lag, taktikk, kampdag, stab og klubb.
-3. **Detaljer** – rapporter, spillerprofiler, stabstekst og kampbrief åpnes med «Se detaljer», «Åpne rapport» eller tilsvarende utvidelser.
-4. **Analyse/rådata** – lange lister, tabeller og motorverdier ligger sekundært bak «Analyse», «Full rapport» eller «Se hele …».
-
-Målet er at ingen toppnivåflate skal være en database som default. Informasjon beholdes, men flyttes ned i nivåer slik at manageren først ser beslutningen og deretter kan åpne detaljer ved behov.
+1. gjenbruke eksisterende state og motorer;
+2. ha én tydelig produktinngang;
+3. få permanent audit/simulering og relevant browservern;
+4. være bakoverkompatible med eksisterende saves;
+5. fullføres gjennom grønn CI, squash-merge, Pages-verifikasjon og branch-opprydding.
