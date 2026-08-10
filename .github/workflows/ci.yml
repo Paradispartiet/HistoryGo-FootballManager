@@ -49,6 +49,7 @@ jobs:
         run: |
           npm run audit:knowledge
           npm run audit:ci-coverage
+          npm run audit:product-status
           npm run audit:clubs
           node scripts/sync-club-affiliations.mjs
           npm run audit:football-book-knowledge
