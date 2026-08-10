@@ -339,11 +339,179 @@ html[data-manager-office-calendar-v1="active"] manager-next-action {
 .manager-calendar-drawer-body {
   min-width: 0;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 0 1.25rem 2rem;
 }
 
-.manager-calendar-drawer-body .inbox-thread-card {
+.manager-club-mail {
+  display: grid;
+  gap: 1.2rem;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding-top: 1.25rem;
+}
+
+.manager-club-mail-sender {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+  gap: .7rem;
+  align-items: center;
+  padding-bottom: .9rem;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+.manager-club-mail-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid rgba(255,255,255,.44);
+  border-radius: 50%;
+  color: #fff;
+  font-size: .74rem;
+  font-weight: 950;
+  letter-spacing: .04em;
+}
+
+.manager-club-mail-identity {
+  display: grid;
+  gap: .12rem;
+  min-width: 0;
+}
+
+.manager-club-mail-identity strong { font-size: .83rem; }
+.manager-club-mail-identity small,
+.manager-club-mail-time {
+  color: rgba(255,255,255,.62);
+  font-size: .66rem;
+}
+
+.manager-club-mail-time { font-variant-numeric: tabular-nums; }
+
+.manager-club-mail-heading {
+  display: grid;
+  gap: .45rem;
+}
+
+.manager-club-mail-heading h4 {
   margin: 0;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.15;
+}
+
+.manager-club-mail-heading p {
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  font-size: .85rem;
+  line-height: 1.55;
+}
+
+.manager-club-mail-copy {
+  display: grid;
+  gap: .85rem;
+}
+
+.manager-club-mail-copy p {
+  margin: 0;
+  color: rgba(255,255,255,.88);
+  font-size: .88rem;
+  line-height: 1.65;
+}
+
+.manager-club-mail-facts {
+  display: grid;
+  margin: 0;
+  border-top: 1px solid rgba(255,255,255,.18);
+}
+
+.manager-club-mail-fact {
+  display: grid;
+  grid-template-columns: minmax(7rem, .7fr) minmax(0, 1.3fr);
+  gap: 1rem;
+  padding: .72rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.manager-club-mail-fact dt {
+  color: rgba(255,255,255,.58);
+  font-size: .64rem;
+  font-weight: 900;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.manager-club-mail-fact dd {
+  margin: 0;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.manager-club-mail-reply,
+.manager-club-mail-choices {
+  display: grid;
+  gap: .55rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255,255,255,.22);
+  border-bottom: 1px solid rgba(255,255,255,.22);
+}
+
+.manager-club-mail-reply small {
+  color: rgba(255,255,255,.62);
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.manager-club-mail-reply p {
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  font-size: .78rem;
+  line-height: 1.55;
+}
+
+.manager-club-mail-choices h5 {
+  margin: 0 0 .2rem;
+  font-size: .8rem;
+}
+
+.manager-club-mail-choice {
+  display: grid;
+  gap: .18rem;
+  width: 100%;
+  padding: .8rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.manager-club-mail-choice:last-child { border-bottom: 0; }
+.manager-club-mail-choice:hover { padding-left: .4rem; }
+.manager-club-mail-choice span {
+  color: rgba(255,255,255,.64);
+  font-size: .7rem;
+  line-height: 1.45;
+}
+
+.manager-club-mail-action {
+  justify-self: start;
+  min-height: 2.65rem;
+  padding: .65rem 1rem;
+  border: 1px solid #fff;
+  background: #fff;
+  color: #070a0d;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.manager-club-mail-choice:focus-visible,
+.manager-club-mail-action:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
 }
 
 .manager-calendar-message-fallback {
@@ -443,5 +611,12 @@ html[data-manager-office-calendar-v1="active"] manager-next-action {
     border-top: 1px solid rgba(255,255,255,.24);
     border-left: 0;
     box-shadow: 0 -18px 40px rgba(0,0,0,.36);
+  }
+
+  .manager-calendar-drawer-body { padding: 0 1rem 1.5rem; }
+
+  .manager-club-mail-fact {
+    grid-template-columns: 1fr;
+    gap: .24rem;
   }
 }

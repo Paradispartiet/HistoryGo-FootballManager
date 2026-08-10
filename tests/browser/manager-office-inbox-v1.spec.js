@@ -121,11 +121,13 @@ test("innboksmotoren beholder fokus og kø som intern meldingskilde", async ({ p
   await expect(page.locator('[data-tab-section="inbox"]')).toBeHidden();
 });
 
-test("melding åpnes fra tirsdag i drawer med eksisterende innbokstråd", async ({ page }) => {
+test("melding åpnes fra tirsdag i drawer med eksakt klubbmail", async ({ page }) => {
   await expect(page.locator("#inboxThreadList .inbox-thread-card, #inboxQueueList .inbox-thread-card").first()).toBeAttached();
   await openTuesdayMessage(page);
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender · Melding");
-  await expect(page.locator("#managerCalendarDrawerBody .inbox-thread-card")).toHaveCount(1);
+  await expect(page.locator("#managerCalendarDrawerBody .manager-club-mail")).toHaveCount(1);
+  const eventId = await page.locator('#managerCalendarTimeline [data-event-kind="message"]').first().getAttribute("data-event-id");
+  await expect(page.locator("#managerCalendarDrawerBody .manager-club-mail")).toHaveAttribute("data-message-id", eventId || "");
   await expect(page.locator("#managerCalendarDrawerTitle")).not.toBeEmpty();
 });
 

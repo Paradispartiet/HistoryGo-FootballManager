@@ -6,7 +6,7 @@ Manager Shell v3 gjør HG Football Manager til et tydelig managerspill uten å e
 
 Ligaspillet har fem stabile hovedområder:
 
-1. **Kontor** – innboks, kalender, klubbdrift og oppstartshjelp.
+1. **Kontor** – kalender med klubbkommunikasjon og klubbens arbeidsrom.
 2. **Lag** – oppstilling, tropp, trening og systemkunnskap.
 3. **Speiding** – rekrutterbare spillere og andre klubbers HG-koblede spillerpool.
 4. **Kamp** – kampdag og kampanalyse.
@@ -16,9 +16,9 @@ Ligaspillet har fem stabile hovedområder:
 
 ## Kontor og manageruka
 
-Kontor åpner på Innboks og har fire synlige underflater:
+Kontor åpner på Kalender og har to synlige underflater i normal ligasave:
 
-**Innboks · Kalender · Klubbdrift · Oppstartshjelp**
+**Kalender · Klubben**
 
 Kalenderen er et tidslag over eksisterende Club Week-state, ikke en ny progresjonsmotor. Den viser den eksisterende seksfaserytmen som en vanlig uke:
 
@@ -34,7 +34,7 @@ Torsdag deler den eksisterende `training`-fasen. Kalenderen lager derfor ikke en
 
 ## Autoritativ handling
 
-`football-next-action.js` er fortsatt kilden til neste handling. Skallet viser én primær handling i den faste footeren: `Forslag til neste steg`.
+`football-next-action.js` kan fortsatt brukes som intern kompatibilitetslogikk. Skallet skjuler den faste `Forslag til neste steg`-footeren i normal ligasave.
 
 Ingen hovedflate eller underflate – heller ikke Kalender eller Speiding – bygger en parallell Neste-knapp, «fortsett dag»-kontroll eller automatisk arbeidsflyt. Kalenderen viser tid; `Forslag til neste steg` leder progresjonen.
 

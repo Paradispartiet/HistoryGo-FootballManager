@@ -26,7 +26,7 @@ Ligaspillet har fem hovedområder:
 Kontor · Lag · Speiding · Kamp · Stats
 ```
 
-- **Kontor** – innboks, kalender, klubborganisasjon og oppstartshjelp.
+- **Kontor** – kalender med konkrete klubbmailer og klubborganisasjon.
 - **Lag** – oppstilling, valgt tropp, trening og systemkunnskap.
 - **Speiding** – Min spillerpool og andre klubbers dokumenterte HG-tilknytninger.
 - **Kamp** – kampforberedelse, kampdag og etterkampanalyse.
@@ -47,6 +47,10 @@ kamp-/klubbsignal
 ```
 
 Læringen følger **situasjon → handling → konsekvens → forklaring**. Pedagogiske lag kan lese og forklare de eksisterende motorene, men de skal ikke lage parallelle fit-, kamp-, trenings- eller progresjonsscorer.
+
+### Kalender og klubbkommunikasjon
+
+Kontor åpner på managerkalenderen. Mailer fra trenerteam, medisinsk apparat, analyse, styre, garderobe og presse ligger på den faktiske arbeidsdagen og bruker faktisk motstander, kampresultat, treningsvalg, spillerbelastning og lagret kampplan når dette finnes. Å lese en mail flytter aldri Club Week-fasen eller kvitterer ut resten av uka. Se [`docs/MANAGER_CLUB_COMMUNICATION_V2.md`](docs/MANAGER_CLUB_COMMUNICATION_V2.md).
 
 ### Spillerpool og tropp
 

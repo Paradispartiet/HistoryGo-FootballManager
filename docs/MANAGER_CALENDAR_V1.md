@@ -28,7 +28,7 @@ Innboks er ikke lenger en parallell Kontor-fane. En melding er en hendelse i man
 14:30 · Oppfølging etter økta
 ```
 
-Trykk på en melding åpner den eksisterende innbokstråden i et drawer over kalenderen. Når meldingen lukkes, står brukeren fortsatt på samme kalenderdag.
+Trykk på en melding åpner den eksakte mailen som tilhører hendelsen i et drawer over kalenderen. Når meldingen lukkes, står brukeren fortsatt på samme kalenderdag. Den videre kontrakten for konkrete, state-drevne mailer ligger i `MANAGER_CLUB_COMMUNICATION_V2.md`.
 
 Den eksisterende klubbflaten presenteres som **Klubben**. Dype legacy-flater beholdes teknisk der de fortsatt trengs, men de skal ikke konkurrere som likeverdige Kontor-faner.
 
@@ -96,7 +96,7 @@ Kalenderen gjenbruker eksisterende data og UI-signaler:
 - eksisterende treningsvalg for om ukas treningsarbeid er satt;
 - eksisterende kampstate for siste resultat;
 - eksisterende kampklar-status for ellever og benk;
-- eksisterende innbokstråder for meldingshendelsen.
+- eksisterende innbokstråder og konkrete klubbmailer for meldingshendelsene.
 
 Ingen av disse dataene skrives av kalenderen.
 

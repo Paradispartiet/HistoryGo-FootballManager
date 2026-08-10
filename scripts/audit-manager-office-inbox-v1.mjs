@@ -35,8 +35,8 @@ check("Kontor åpner Kalender i aktiv ligasave", /redirectOfficeToCalendar/.test
 check("separat Innboks-fane skjules", /inbox\.classList\.add\("office-subnav-proxy"\)/.test(calendar) && /Innboks og Oppstartshjelp/.test(browser));
 check("Oppstartshjelp skjules etter oppstart", /officeHelp\.classList\.toggle\("office-subnav-proxy", normalSave\)/.test(calendar));
 check("Klubben er synlig Kontor-motpart", /board\.textContent = "Klubben"/.test(calendar));
-check("melding er kalenderhendelse", /kind: "message"/.test(calendarModel) && /Åpne melding/.test(calendarModel));
-check("drawer bruker eksisterende innbokskort", /findInboxCard/.test(calendar) && /body\.append\(card\)/.test(calendar) && /managerCalendarDrawerBody \.inbox-thread-card/.test(browser));
+check("melding er kalenderhendelse", /kind: "message"/.test(calendarModel) && /Les mail/.test(calendarModel));
+check("drawer bruker eksakt klubbmail", /getClubCommunicationMessage/.test(calendar) && /article\.dataset\.messageId = message\.id/.test(calendar) && /managerCalendarDrawerBody \.manager-club-mail/.test(browser));
 check("drawer lukkes tilbake til samme dag", /closeInboxDrawer/.test(calendar) && /samme kalenderdag/.test(browser));
 check("trening nås fra kalenderhendelsen", /data-event-id=\\?"team-training\\?"/.test(browser) && /data-tab-section=\\?"trening\\?"/.test(browser));
 check("global Next-footer skjules i normal save", /manager-next-action/.test(css) && /data-manager-office-calendar-v1="active"/.test(css));

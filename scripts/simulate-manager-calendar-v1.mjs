@@ -27,6 +27,16 @@ const week = createManagerWeekCalendar({
   inboxHandled: true,
   inboxTitle: "Melding fra fysioterapeut",
   inboxAttentionCount: 1,
+  communications: [{
+    id: "physio-week-4",
+    dayIndex: 2,
+    time: "08:30",
+    sender: { name: "Fysioterapeut", role: "Medisinsk" },
+    subject: "Melding fra fysioterapeut",
+    preview: "Belastningen må vurderes før trening.",
+    priority: "high",
+    isRead: false
+  }],
   lineupReady: true
 });
 
@@ -38,7 +48,7 @@ check("onsdag er nåværende treningsdag", week.days[2].status === "current" && 
 check("torsdag er fortsatt del av eksisterende treningsfase", week.days[3].phase === "training");
 check("fredag, lørdag og søndag kommer senere", week.days.slice(4).every((day) => day.status === "upcoming"));
 check("hver dag har kronologiske hendelser", week.days.every((day) => Array.isArray(day.events) && day.events.length > 0));
-check("tirsdag inneholder melding som hendelse", week.days[1].events[0].kind === "message" && week.days[1].events[0].title === "Melding fra fysioterapeut", week.days[1].events[0].title);
+check("tirsdag inneholder eksakt melding som hendelse", week.days[1].events[0].kind === "message" && week.days[1].events[0].id === "physio-week-4" && week.days[1].events[0].message.subject === "Melding fra fysioterapeut", week.days[1].events[0].title);
 check("onsdag viser trenermøte før trening", week.days[2].events[0].time === "09:30" && week.days[2].events[1].time === "11:00");
 check("manglende treningsvalg markeres lokalt", week.days[2].events.some((entry) => entry.id === "team-training" && entry.attention && entry.actionLabel === "Velg program"));
 check("arbeidshendelser peker til eksisterende flater", week.days[2].events.some((entry) => entry.target === "trening") && week.days[4].events[0].target === "tactics");

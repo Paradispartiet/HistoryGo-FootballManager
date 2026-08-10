@@ -14,20 +14,20 @@ Kontor · Lag · Speiding · Kamp · Stats
 
 Dette er navigasjonskontrakten. Nye funksjoner skal plasseres under disse områdene før det vurderes en ny hovedfane.
 
-- **Kontor** – innboks, kalender, klubbdrift og oppstartshjelp.
+- **Kontor** – kalender med klubbkommunikasjon og klubbens arbeidsrom.
 - **Lag** – oppstilling, tropp, trening og systemkunnskap.
 - **Speiding** – rekrutterbare spillere og andre klubbers mulige/HG-koblede spillerpool.
 - **Kamp** – kampdag og etterkampanalyse.
 - **Stats** – tabell, terminliste og spillerstatistikk.
 
-`Forslag til neste steg` i footeren er fortsatt den **ene autoritative progresjonsveiviseren**. Hovedområder og underfaner organiserer innhold; de bygger ikke egne Neste-systemer.
+Eksisterende motorer eier progresjonen. Normal ligasave har ingen permanent global «Neste»-footer; mangler og handlinger vises der arbeidet faktisk skjer.
 
 ## Kontor
 
-Kontor åpner på **Innboks** i ligaspill. Synlige underflater er:
+Kontor åpner på **Kalender** i ligaspill. Synlige underflater er:
 
 ```
-Innboks · Kalender · Klubbdrift · Oppstartshjelp
+Kalender · Klubben
 ```
 
 ### Kalender
@@ -44,7 +44,7 @@ Lørdag kamp
 Søndag etterkamp
 ```
 
-Kalenderen har ingen «Neste dag» eller «Fortsett»-knapp. Den sier hva som er ferdig, hva som skjer nå og hva som kommer senere; `Forslag til neste steg` er fortsatt eneste veiviser. Torsdag er samme eksisterende `training`-fase som onsdag, ikke en ny progresjonsstate.
+Kalenderen har ingen «Neste dag» eller «Fortsett»-knapp. Den sier hva som er ferdig, hva som skjer nå og hva som kommer senere. Klubbmailer ligger på den faktiske arbeidsdagen. Torsdag er samme eksisterende `training`-fase som onsdag, ikke en ny progresjonsstate.
 
 Klubbdrift eier de varige klubbfunksjonene: styre, utvikling, stab/drift, fasiliteter og marked. Disse er ikke egne hovedområder.
 

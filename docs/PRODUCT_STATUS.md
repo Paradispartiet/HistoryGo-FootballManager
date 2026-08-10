@@ -28,7 +28,8 @@ Underflatene er beskrevet i [`meny.md`](meny.md) og [`MANAGER_SHELL_V3.md`](MANA
 
 | Område | Implementert kontrakt | Permanente bevis |
 | --- | --- | --- |
-| Manageruke | Innboks, kalender, trening, kampforberedelse, kamp og etterkamp bruker eksisterende Club Week-state | `manager-calendar-v1`, `manager-match-calendar-v1`, `manager-office-inbox-v1` |
+| Manageruke | Kalender, trening, kampforberedelse, kamp og etterkamp bruker eksisterende Club Week-state | `manager-calendar-v1`, `manager-match-calendar-v1` |
+| Klubbkommunikasjon | Konkrete mailer bruker faktisk motstander, kamp, trening, condition, analyse og stab på riktig arbeidsdag | `MANAGER_CLUB_COMMUNICATION_V2.md`, `audit:manager-club-communication-v2`, `sim:manager-club-communication-v2` |
 | Spillerpool og tropp | History Go-samling og klubbtilgang utleder poolen; `squadPlayerIds` eier valgt klubbtropp | `MANAGER_RECRUITMENT_V1.md`, `audit:manager-recruitment-v1`, `sim:manager-recruitment-v1` |
 | Spillerliste og profil | Tett sammenligningsliste, delt spillerprofil og eksplisitt Velg/Sett inn uten Overall | `PLAYER_LIST_PROFILE_V1.md`, `manager-player-workspace-v1` |
 | Faktisk ellever og roller | Rolleinspektøren leser dagens ellever og forklarer navngitte relasjoner og rom | `MANAGER_FOOTBALL_LEARNING_LOOP_V1.md`, `audit-manager-football-learning-loop-v1` |

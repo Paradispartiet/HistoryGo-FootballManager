@@ -45,8 +45,8 @@ function normalizeWeek(value) {
   return Number.isInteger(week) && week >= 1 ? week : 1;
 }
 
-function event(id, time, title, detail, { owner = "", target = "", kind = "work", attention = false, actionLabel = "Åpne" } = {}) {
-  return { id, time, title, detail, owner, target, kind, attention: Boolean(attention), actionLabel };
+function event(id, time, title, detail, { owner = "", target = "", kind = "work", attention = false, actionLabel = "Åpne", message = null } = {}) {
+  return { id, time, title, detail, owner, target, kind, attention: Boolean(attention), actionLabel, message };
 }
 
 export function normalizeManagerWeekPhase(value) {
@@ -97,14 +97,29 @@ function pressSignal(value) {
   };
 }
 
+function communicationEventsForDay(dayIndex, communications) {
+  return (Array.isArray(communications) ? communications : [])
+    .filter((message) => message?.dayIndex === dayIndex && message?.id)
+    .map((message) => event(
+      message.id,
+      message.time,
+      message.subject,
+      message.preview,
+      {
+        owner: [message.sender?.name, message.sender?.role].filter(Boolean).join(" · "),
+        kind: "message",
+        attention: !message.isRead && ["urgent", "high"].includes(message.priority),
+        actionLabel: message.isRead ? "Les igjen" : "Les mail",
+        message
+      }
+    ));
+}
+
 function eventsForDay(dayIndex, {
   week,
   opponent,
   opponentName,
   trainingSelected,
-  inboxHandled,
-  inboxTitle,
-  inboxAttentionCount,
   lineupReady,
   mediaPressure,
   lastMatch
@@ -121,16 +136,7 @@ function eventsForDay(dayIndex, {
   }
 
   if (dayIndex === 2) {
-    const hasAttention = Number(inboxAttentionCount) > 0 && !inboxHandled;
     return [
-      event("club-message", "08:30", text(inboxTitle, "Melding fra klubben"), inboxHandled
-        ? "Ukas viktigste melding er håndtert. Den ligger fortsatt i arbeidsdagen som historikk."
-        : "En melding fra klubben eller støtteapparatet venter i dagens arbeidsdag.", {
-          owner: "Kontor",
-          kind: "message",
-          attention: hasAttention,
-          actionLabel: "Åpne melding"
-        }),
       event("staff-meeting", "10:00", "Trener- og klubbmøte", "Samle signalene fra støtteapparatet før treningsarbeidet og kampforberedelsene.", { owner: "Klubben", target: "board" })
     ];
   }
@@ -198,11 +204,9 @@ export function createManagerWeekCalendar({
   clubWeekState = {},
   opponent = null,
   trainingSelected = false,
-  inboxHandled = false,
-  inboxTitle = "Melding fra klubben",
-  inboxAttentionCount = 0,
   lineupReady = false,
-  lastMatch = null
+  lastMatch = null,
+  communications = []
 } = {}) {
   const week = normalizeWeek(clubWeekState?.week);
   const phase = normalizeManagerWeekPhase(clubWeekState?.phase);
@@ -214,9 +218,6 @@ export function createManagerWeekCalendar({
     opponent,
     opponentName,
     trainingSelected,
-    inboxHandled,
-    inboxTitle,
-    inboxAttentionCount,
     lineupReady,
     mediaPressure: clubWeekState?.mediaPressure,
     lastMatch
@@ -226,7 +227,10 @@ export function createManagerWeekCalendar({
     ...template,
     status: statusForDay(template.dayIndex, currentDayIndex),
     isCurrent: template.dayIndex === currentDayIndex,
-    events: eventsForDay(template.dayIndex, context)
+    events: [
+      ...communicationEventsForDay(template.dayIndex, communications),
+      ...eventsForDay(template.dayIndex, context)
+    ].sort((a, b) => a.time.localeCompare(b.time) || a.id.localeCompare(b.id))
   }));
 
   const currentDay = days.find((day) => day.isCurrent) || days[0];
