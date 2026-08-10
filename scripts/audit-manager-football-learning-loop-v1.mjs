@@ -7,6 +7,7 @@ const shell = read("src/ui/manager-shell-view.js");
 const css = read("src/ui/manager-football-learning-loop-v1.css");
 const browser = read("tests/browser/manager-football-learning-loop-v1.spec.js");
 const app = read("src/app.js");
+const postMatch = read("src/ui/manager-post-match-analysis-v1.js");
 
 const checks = [
   ["shell importerer læringslaget", shell.includes('import "./manager-football-learning-loop-v1.js";')],
@@ -21,15 +22,23 @@ const checks = [
   ["bred dribler + overlapp har eksplisitt romrisiko", ui.includes("samme brede kanal")],
   ["trening forklarer hvorfor", ui.includes("Hvorfor denne økta") && ui.includes("createTrainingLearningLesson")],
   ["trening peker fram mot kampobservasjon", ui.includes("Se etter i kamp")],
+  ["kampforberedelsen gjentar valgt trening som observasjon", ui.includes("enhanceMatchPreparation") && ui.includes("Observer i kampen")],
+  ["kampforberedelsen beholder hvert reelle treningsvalg", ui.includes(".filter((selection)") && ui.includes("ikke valgt|mangler")],
+  ["etterkampmodellen eksponerer motorens lagrede treningsrapport", postMatch.includes("trainingEvidence") && postMatch.includes("dataset.trainingSummary")],
+  ["trening kobles til kampens registrerte signaler", ui.includes("createTrainingMatchLearningThread") && ui.includes("TRAINING_SIGNAL_PATTERNS")],
+  ["treningsdommen sammenlignes med hele faktorlisten", ui.includes("signals.slice(0, 2).forEach") && browser.includes("alle viste taktiske faktorer")],
+  ["treningssløyfen bruker motorens fasit uten å overtolke", ui.includes("Etter kamp · motorens fasit") && ui.includes("ikke bevis på at én øvelse alene feilet")],
   ["systemet viser kompromiss", ui.includes("Kompromiss:") && ui.includes("createSystemLearningLesson")],
   ["etterkamp bruker faktiske taktiske li-signaler", ui.includes("tacticalSignals") && ui.includes("querySelectorAll(\"li\")")],
   ["etterkamp har eksplisitt ikke-dikt-regel", ui.includes("ikke på en oppdiktet teoriforklaring")],
   ["ingen ny localStorage-state", !ui.includes("localStorage.setItem")],
   ["ingen tilfeldig logikk", !ui.includes("Math.random") && !ui.includes("Date.now")],
   ["ingen ny motorclaim", /presentasjon og forklaring, ikke motor/.test(ui)],
-  ["CSS har mobiltilpasning", css.includes("@media(max-width:700px)")],
+  ["CSS har mobiltilpasning", /@media\s*\(max-width:700px\)/.test(css)],
   ["browser dekker systemlæring", browser.includes("footballLearningSystemBridge")],
   ["browser dekker treningslæring", browser.includes("footballLearningTrainingRationale")],
+  ["browser dekker trening i kampforberedelsen", browser.includes("footballLearningMatchPrepBridge")],
+  ["browser dekker hele trening-kamp-etterkamp-tråden", browser.includes("football-learning-training-thread") && browser.includes("motorens fasit")],
   ["browser dekker rolle-relasjon", browser.includes("football-learning-role-relationship")],
   ["browser dekker faktisk ellever og navngitt rollepar", browser.includes("Relasjonen i din faktiske ellever") && browser.includes("actualFocusName") && browser.includes("actualPartnerName")],
   ["browser dekker no-fiction når kuratert partner mangler", browser.includes("Det betyr ikke at oppstillingen er feil")],

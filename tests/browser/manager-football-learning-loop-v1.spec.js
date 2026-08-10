@@ -27,6 +27,15 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => {
+    const clubWeekState = {
+      week: 3,
+      phase: "training",
+      boardTrust: 58,
+      playerMorale: 55,
+      tacticalClarity: 54,
+      trainingCulture: 56,
+      mediaPressure: 43
+    };
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
@@ -45,15 +54,7 @@ test.beforeEach(async ({ page }) => {
       activeClassifications: [],
       roleFamiliarity: {},
       localStart: { enabled: false, playerIds: [] },
-      clubWeekState: {
-        week: 3,
-        phase: "training",
-        boardTrust: 58,
-        playerMorale: 55,
-        tacticalClarity: 54,
-        trainingCulture: 56,
-        mediaPressure: 43
-      }
+      clubWeekState
     }));
   });
   await page.goto("/");
@@ -78,6 +79,37 @@ test("Treningsdagen forklarer hvorfor økta finnes og hva manageren skal se ette
   await expect(learning).toContainText("Fotballprinsipp");
   await expect(learning).toContainText("Hvorfor denne økta:");
   await expect(learning).toContainText("Se etter i kamp:");
+});
+
+test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål", async ({ page }) => {
+  await openTraining(page);
+  await page.locator("#trainingDayChangeFocus").click();
+  const restDefence = page.locator("#managerTeamChoiceDrawerBody .weekly-training-card").filter({ hasText: "Restforsvar" });
+  await restDefence.getByRole("button", { name: "Velg fokus" }).click();
+  await expect(page.locator("#weeklyTrainingStatus")).toContainText("Restforsvar");
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="5"]').click();
+  await page.locator('#managerCalendarTimeline [data-event-id="match-prep"]').click();
+  await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+  await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
+  await expect(page.locator("#matchPrepFocus")).toContainText("Restforsvar");
+  const bridge = page.locator("#footballLearningMatchPrepBridge");
+  await expect(bridge).toBeVisible();
+  await expect(bridge).toContainText("Fra treningsfeltet til kampen");
+  await expect(bridge).toContainText("Restforsvar");
+  await expect(bridge).toContainText("Hypotese:");
+  await expect(bridge).toContainText("Observer i kampen:");
+  await expect(bridge).toContainText("Når laget mister ballen");
+  await expectNoHorizontalOverflow(page);
+  const results = await new AxeBuilder({ page })
+    .include("#footballLearningMatchPrepBridge")
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 });
 
 test("rolleinspektøren går fra tagger til forklaring av rollerelasjon og rom", async ({ page }) => {
@@ -135,6 +167,10 @@ test("etterkamp lærer bare av faktorer kampforklaringen faktisk registrerte", a
   await page.evaluate(() => {
     const report = document.createElement("section");
     report.className = "matchday-post-match";
+    report.dataset.trainingFocusId = "pressing";
+    report.dataset.trainingFocusName = "Pressing";
+    report.dataset.trainingHelped = "true";
+    report.dataset.trainingSummary = "Ukens pressing støttet et relevant managergrep.";
     report.innerHTML = `
       <div class="matchday-post-match-overview">
         <article class="matchday-post-match-card">
@@ -150,7 +186,65 @@ test("etterkamp lærer bare av faktorer kampforklaringen faktisk registrerte", a
   await expect(learning).toContainText("Valg → kampsignal → læring");
   await expect(learning).toContainText("Det høye presset sprakk");
   await expect(learning).toContainText("Prinsipp · Press");
+  const trainingThread = learning.locator(".football-learning-training-thread");
+  await expect(trainingThread).toContainText("Trening → kamp → etterkamp");
+  await expect(trainingThread).toContainText("Dette skulle du observere");
+  await expect(trainingThread).toContainText("Etter kamp · motorens fasit");
+  await expect(trainingThread).toContainText("Ukens pressing støttet et relevant managergrep");
+  await expect(trainingThread).toContainText("samme problemområde");
+  await expect(trainingThread).toContainText("Neste treningsuke:");
   await expect(learning).toContainText("Bare registrerte taktiske faktorer");
+});
+
+test("treningsdom uten tilsvarende kampsignal dikter ikke en hendelse", async ({ page }) => {
+  await page.evaluate(() => {
+    const report = document.createElement("section");
+    report.className = "matchday-post-match";
+    report.dataset.trainingFocusId = "build_up";
+    report.dataset.trainingFocusName = "Oppbygging";
+    report.dataset.trainingHelped = "true";
+    report.dataset.trainingSummary = "Ukens oppbygging dempet risikoen i en relevant hendelse.";
+    report.innerHTML = `
+      <div class="matchday-post-match-overview">
+        <article class="matchday-post-match-card">
+          <span>Taktisk evaluering</span>
+          <strong>Systemdom</strong>
+          <ul><li>Avslutningene kom fra gode rom.</li></ul>
+        </article>
+      </div>`;
+    document.body.append(report);
+  });
+  const thread = page.locator(".football-learning-training-thread");
+  await expect(thread).toContainText("oppdiktet kamphendelse");
+  await expect(thread).not.toContainText("Det høye presset sprakk");
+});
+
+test("treningsdommen sammenlignes med alle viste taktiske faktorer", async ({ page }) => {
+  await page.evaluate(() => {
+    const report = document.createElement("section");
+    report.className = "matchday-post-match";
+    report.dataset.trainingFocusId = "pressing";
+    report.dataset.trainingFocusName = "Pressing";
+    report.dataset.trainingHelped = "false";
+    report.dataset.trainingSummary = "Ukens pressing ga liten effekt i denne kampen.";
+    report.innerHTML = `
+      <div class="matchday-post-match-overview">
+        <article class="matchday-post-match-card">
+          <span>Taktisk evaluering</span>
+          <strong>Systemdom</strong>
+          <ul>
+            <li>Avslutningene kom fra gode rom.</li>
+            <li>Bredden skapte flere innlegg.</li>
+            <li>Det høye presset sprakk etter første pasning.</li>
+          </ul>
+        </article>
+      </div>`;
+    document.body.append(report);
+  });
+  const thread = page.locator(".football-learning-training-thread");
+  await expect(thread).toContainText("Det høye presset sprakk");
+  await expect(thread).toContainText("samme problemområde");
+  await expect(page.locator(".football-learning-signal-grid article")).toHaveCount(2);
 });
 
 test("etterkamp dikter ikke teorikobling når kampforklaringen mangler taktisk signal", async ({ page }) => {

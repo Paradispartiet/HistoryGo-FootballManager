@@ -192,6 +192,17 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     nextWeekSuggestions[0],
     "Bruk kampens læringspunkt når neste treningsuke planlegges."
   );
+  const trainingSource = lastMatch.trainingFocus && typeof lastMatch.trainingFocus === "object"
+    ? lastMatch.trainingFocus
+    : null;
+  const trainingEvidence = trainingSource && (trainingSource.focusId || trainingSource.name)
+    ? {
+        focusId: text(trainingSource.focusId, ""),
+        name: text(trainingSource.name, "Treningsfokus"),
+        helped: typeof trainingSource.helped === "boolean" ? trainingSource.helped : null,
+        summary: text(trainingSource.summary, "Kampen registrerte ingen egen treningsdom.")
+      }
+    : null;
 
   return {
     outcome,
@@ -221,6 +232,7 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
       detail: number(entry?.minute) > 0 ? `${number(entry.minute)}. minutt` : text(entry?.reason, "Bytte")
     })),
     consequences,
+    trainingEvidence,
     exposedWeakness: text(
       report.exposedWeaknessMetric || lastMatch.exposedWeaknessMetric,
       "Ingen maskinlesbar svakhet ble registrert."
@@ -251,6 +263,14 @@ function appendList(container, items, emptyText) {
 export function renderPostMatchAnalysis(model, onOpenTarget) {
   const section = node("section", "matchday-post-match");
   section.dataset.outcome = model.outcome;
+  if (model.trainingEvidence) {
+    section.dataset.trainingFocusId = model.trainingEvidence.focusId;
+    section.dataset.trainingFocusName = model.trainingEvidence.name;
+    section.dataset.trainingSummary = model.trainingEvidence.summary;
+    if (typeof model.trainingEvidence.helped === "boolean") {
+      section.dataset.trainingHelped = String(model.trainingEvidence.helped);
+    }
+  }
   section.setAttribute("aria-labelledby", "postMatchAnalysisTitle");
 
   const hero = node("header", "matchday-post-match-hero");

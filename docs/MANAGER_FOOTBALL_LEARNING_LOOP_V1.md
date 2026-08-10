@@ -44,6 +44,18 @@ Etterkampen kobler bare teori til taktiske faktorer som den eksisterende kampfor
 
 Hvis kampforklaringen ikke har et tydelig taktisk signal, sier flaten eksplisitt dette og **dikter ikke et læringspoeng**.
 
+## 5. Trening → kamp → etterkamp
+
+Det valgte treningsarbeidet følger nå samme observasjonsspørsmål gjennom tre eksisterende managerflater:
+
+1. **Trening** forklarer hvilket fotballproblem programmet og fokuset arbeider med.
+2. **Kampforberedelse** gjentar dette som en hypotese og ett konkret spørsmål manageren skal observere i kampen.
+3. **Etterkamp** viser kampmotorens lagrede treningsdom (`lastMatch.trainingFocus.summary` og `helped`) ved siden av taktiske signaler som kampforklaringen faktisk registrerte.
+
+Læringslaget sier ikke at en øvelse «virket» bare fordi et beslektet ord finnes i rapporten. Kampmotorens treningsrapport er fasit for registrert effekt. Den taktiske evalueringen brukes som konkret bevismateriale når samme problemområde finnes, og fravær av et slikt signal forklares eksplisitt i stedet for å fylles med en oppdiktet kamphendelse.
+
+Øvelsesverkstedets areal-, spillerbalanse-, retnings- og touchvalg er fortsatt utforskende og uten save-state. Derfor hevder etterkampen heller ikke at ett av disse designvalgene, som ikke lagres, forårsaket kampresultatet.
+
 ## Permanente grenser
 
 - ingen Overall eller ny totalscore;
