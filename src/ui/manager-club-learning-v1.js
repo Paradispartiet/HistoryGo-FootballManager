@@ -1,4 +1,11 @@
+import {
+  createMedicalDecisionCase,
+  evaluateMedicalDecision
+} from "../football-medical-decision-learning.js";
+import { MODE_SESSION_KEY, normalizeMode } from "../football-mode-sessions.js";
+
 const STYLE_ID = "managerClubLearningV1Style";
+const PLAYER_CONDITION_KEY = "hgfm.playerCondition.v1";
 
 const ROOM_LEARNING = Object.freeze({
   "Treningsanlegg": Object.freeze({
@@ -44,6 +51,93 @@ function ensureStyles() {
   document.head.append(link);
 }
 
+function readConditions() {
+  try {
+    const envelope = JSON.parse(localStorage.getItem(MODE_SESSION_KEY) || "null");
+    const activeMode = normalizeMode(envelope?.activeMode);
+    const activeSession = envelope?.sessions?.[activeMode];
+    if (activeSession && Array.isArray(activeSession.playerCondition)) {
+      return activeSession.playerCondition;
+    }
+  } catch {
+    // En korrupt konvolutt skal ikke gjøre den migrerte league-conditionen
+    // uleselig. Legacy-nøkkelen under er bare fallback, aldri førstevalg.
+  }
+  try {
+    const value = JSON.parse(localStorage.getItem(PLAYER_CONDITION_KEY) || "null");
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+}
+
+function renderMedicalOutcome(container, outcome) {
+  container.hidden = false;
+  container.dataset.status = outcome.status;
+  container.replaceChildren(
+    node("strong", "", outcome.label),
+    node("p", "", outcome.explanation),
+    node("p", "medical-decision-consequence", outcome.consequence),
+    node("small", "", outcome.guardrail)
+  );
+}
+
+function appendMedicalDecisionWorkshop(body) {
+  const decisionCase = createMedicalDecisionCase(readConditions());
+  const workshop = node("section", "medical-decision-workshop-v1");
+  workshop.dataset.caseKind = decisionCase.kind;
+  workshop.setAttribute("aria-labelledby", "medicalDecisionWorkshopTitle");
+  const kicker = node("span", "medical-decision-kicker", "Situasjon → valg → faglig konsekvens");
+  const title = node("h3", "", "Medisinsk beslutningsverksted");
+  title.id = "medicalDecisionWorkshopTitle";
+  workshop.append(kicker, title, node("strong", "medical-decision-headline", decisionCase.headline), node("p", "", decisionCase.situation));
+
+  if (decisionCase.kind === "no_case") {
+    workshop.append(node("p", "medical-decision-empty", decisionCase.question));
+    body.append(workshop);
+    return;
+  }
+
+  const evidence = node("div", "medical-decision-evidence");
+  const known = node("section", "");
+  known.append(node("strong", "", "Dette vet vi"));
+  const knownList = node("ul", "");
+  decisionCase.known.forEach((item) => knownList.append(node("li", "", item)));
+  known.append(knownList);
+  const missing = node("section", "");
+  missing.append(node("strong", "", "Dette mangler før en sikker konklusjon"));
+  const missingList = node("ul", "");
+  decisionCase.missing.forEach((item) => missingList.append(node("li", "", item)));
+  missing.append(missingList);
+  evidence.append(known, missing);
+
+  const question = node("p", "medical-decision-question", decisionCase.question);
+  question.id = "medicalDecisionQuestion";
+  const choices = node("div", "medical-decision-choices");
+  choices.setAttribute("role", "group");
+  choices.setAttribute("aria-labelledby", question.id);
+  const outcome = node("div", "medical-decision-outcome");
+  outcome.hidden = true;
+  outcome.setAttribute("aria-live", "polite");
+
+  decisionCase.choices.forEach((choice) => {
+    const button = node("button", "medical-decision-choice", choice.label);
+    button.type = "button";
+    button.dataset.medicalDecision = choice.id;
+    button.addEventListener("click", () => {
+      choices.querySelectorAll("button").forEach((candidate) => candidate.setAttribute("aria-pressed", candidate === button ? "true" : "false"));
+      const result = evaluateMedicalDecision(decisionCase, choice.id);
+      if (result) renderMedicalOutcome(outcome, result);
+    });
+    button.setAttribute("aria-pressed", "false");
+    choices.append(button);
+  });
+
+  const source = node("p", "medical-decision-source", "Faggrunnlag: kriteriebasert og individuelt tilpasset rehabilitering; retur vurderes mot symptomer, funksjon, fotballkrav og en delt beslutning i støtteapparatet.");
+  workshop.append(evidence, question, choices, outcome, source);
+  body.append(workshop);
+}
+
 function renderRoomLearning() {
   const drawer = document.getElementById("managerClubRoomDrawer");
   if (!drawer || drawer.hidden) return;
@@ -69,6 +163,7 @@ function renderRoomLearning() {
   });
   section.append(list, node("p", "club-room-learning-note", config.note));
   body.append(section);
+  if (title === "Medisinsk apparat") appendMedicalDecisionWorkshop(body);
 }
 
 function install() {
