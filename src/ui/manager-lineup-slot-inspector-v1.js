@@ -176,6 +176,7 @@ function renderRoleLearning() {
 function syncInspector() {
   const inspector = document.getElementById(INSPECTOR_ID);
   if (!inspector || inspector.hidden || !activePitchCard) return;
+  inspector.dataset.slotId = text(activePitchCard.dataset.slotId);
   inspector.querySelector("#managerLineupSlotTitle").textContent = slotTitle(activePitchCard);
   inspector.querySelector("#managerLineupSlotPlayer").textContent = selectedPlayer();
   inspector.querySelector("#managerLineupSlotRole").textContent = selectedRole();
@@ -204,6 +205,7 @@ function closeInspector({ restoreFocus = true } = {}) {
   const inspector = document.getElementById(INSPECTOR_ID);
   if (!inspector || inspector.hidden) return;
   inspector.hidden = true;
+  delete inspector.dataset.slotId;
   document.documentElement.classList.remove("has-manager-lineup-slot-inspector");
   const card = activePitchCard;
   activePitchCard = null;

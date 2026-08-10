@@ -85,20 +85,50 @@ test("rolleinspektøren går fra tagger til forklaring av rollerelasjon og rom",
   await page.locator("#lineupSlots .player-chip").first().click();
   await expect(page.locator("#managerLineupSlotInspector")).toBeVisible();
 
-  await page.evaluate(() => {
-    const role = document.getElementById("teamSelectedRole");
-    if (role) role.textContent = "Bred dribler";
-    window.dispatchEvent(new Event("storage"));
-  });
   const learn = page.locator('#managerLineupSlotInspector [data-slot-action="learn-role"]');
   await expect(learn).toBeEnabled();
   await learn.click();
   const relation = page.locator(".football-learning-role-relationship");
   await expect(relation).toBeVisible();
-  await expect(relation).toContainText("Relasjon til andre roller");
-  await expect(relation).toContainText("Overlappende back");
-  await expect(relation).toContainText("samme brede kanal");
+  await expect(relation).toContainText("Relasjonen i din faktiske ellever");
+  const focusChip = page.locator("#lineupSlots .player-chip.is-role-learning-focus");
+  const partnerChip = page.locator("#lineupSlots .player-chip.is-role-learning-partner");
+  await expect(focusChip).toHaveCount(1);
+  await expect(partnerChip).toHaveCount(1);
+  const [actualFocusName, actualPartnerName, actualFocusSlot, actualPartnerSlot, actualFocusRole, actualPartnerRole] = await Promise.all([
+    focusChip.getAttribute("data-player-name"),
+    partnerChip.getAttribute("data-player-name"),
+    focusChip.getAttribute("data-slot-label"),
+    partnerChip.getAttribute("data-slot-label"),
+    focusChip.getAttribute("data-role-name"),
+    partnerChip.getAttribute("data-role-name")
+  ]);
+  expect(actualFocusName).toBeTruthy();
+  expect(actualPartnerName).toBeTruthy();
+  await expect(relation).toContainText(actualFocusName);
+  await expect(relation).toContainText(actualPartnerName);
+  await expect(relation).toContainText(`${actualFocusSlot} ↔ ${actualPartnerSlot}`);
+  await expect(relation).toContainText(`${actualFocusRole} ↔ ${actualPartnerRole}`);
+  await expect(relation).toContainText("Hva de prøver å skape:");
+  await expect(relation).toContainText("Risiko:");
   await expect(relation).toContainText("Se etter:");
+
+  await page.evaluate(() => {
+    const selectedSlotId = document.getElementById("managerLineupSlotInspector")?.dataset.slotId;
+    [...document.querySelectorAll("#lineupSlots .player-chip")]
+      .filter((chip) => chip.dataset.slotId !== selectedSlotId)
+      .forEach((chip) => {
+        chip.dataset.roleId = "wide_dribbler";
+        chip.dataset.roleName = "Bred dribler";
+      });
+  });
+  await learn.click();
+  await learn.click();
+  await expect(relation).toContainText("Ikke representert i elleveren");
+  await expect(relation).toContainText("Det betyr ikke at oppstillingen er feil");
+  await expect(page.locator("#lineupSlots .player-chip.is-role-learning-partner")).toHaveCount(0);
+  await page.locator("#managerLineupSlotInspector .lineup-slot-inspector-close").click();
+  await expect(page.locator("#lineupSlots .player-chip.is-role-learning-focus")).toHaveCount(0);
 });
 
 test("etterkamp lærer bare av faktorer kampforklaringen faktisk registrerte", async ({ page }) => {
@@ -136,15 +166,31 @@ test("etterkamp dikter ikke teorikobling når kampforklaringen mangler taktisk s
 
 test("fotballæringen fungerer på mobil uten sideoverflow og alvorlige WCAG-brudd", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await openTeam(page);
+  await page.locator("#lineupSlots .player-chip").first().click();
+  const roleLearning = page.locator('#managerLineupSlotInspector [data-slot-action="learn-role"]');
+  await expect(roleLearning).toBeEnabled();
+  await roleLearning.click();
+  await expect(page.locator(".football-learning-role-relationship")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+
+  let results = await new AxeBuilder({ page })
+    .include("#managerLineupSlotInspector")
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  let serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
+  await page.locator("#managerLineupSlotInspector .lineup-slot-inspector-close").click();
+
   await openSystem(page);
   await expect(page.locator("#footballLearningSystemBridge")).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
-  let results = await new AxeBuilder({ page })
+  results = await new AxeBuilder({ page })
     .include("#footballLearningSystemBridge")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
-  let serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 
   await openTraining(page);

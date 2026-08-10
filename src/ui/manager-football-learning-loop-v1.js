@@ -89,6 +89,15 @@ function tokenLabel(value) {
   return clean(value).replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toLocaleUpperCase("nb-NO"));
 }
 
+function escapeHtml(value) {
+  return clean(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 function relationKey(a, b) {
   return [clean(a), clean(b)].sort().join("|");
 }
@@ -96,6 +105,37 @@ function relationKey(a, b) {
 function roleByLabel(roleList, value) {
   const wanted = normalized(value).replace(/^rolle\s*:\s*/i, "").replace(/^valgt\s*:\s*/i, "");
   return roleList.find((role) => normalized(role?.id) === wanted || normalized(role?.name) === wanted) || null;
+}
+
+function roleById(roleList, value) {
+  const wanted = clean(value);
+  return roleList.find((role) => clean(role?.id) === wanted) || null;
+}
+
+function roleTokens(role, field) {
+  return Array.isArray(role?.[field]) ? role[field].map(clean).filter(Boolean) : [];
+}
+
+function relationRank(selectedRole, partnerRole) {
+  if (!selectedRole || !partnerRole) return null;
+  if (ROLE_RELATION_LESSONS[relationKey(selectedRole.id, partnerRole.id)]) return 0;
+  if (roleTokens(selectedRole, "goodWith").includes(partnerRole.id)) return 1;
+  if (roleTokens(partnerRole, "goodWith").includes(selectedRole.id)) return 2;
+  return null;
+}
+
+function lineupDistance(a, b) {
+  const ax = Number(a?.x);
+  const ay = Number(a?.y);
+  const bx = Number(b?.x);
+  const by = Number(b?.y);
+  if (![ax, ay, bx, by].every(Number.isFinite)) return Number.POSITIVE_INFINITY;
+  return Math.hypot(ax - bx, ay - by);
+}
+
+function coordinate(value) {
+  const source = clean(value);
+  return source ? Number(source) : Number.NaN;
 }
 
 export function createRoleRelationshipLesson(role, roleList = [], visibleRoleLabels = []) {
@@ -115,6 +155,80 @@ export function createRoleRelationshipLesson(role, roleList = [], visibleRoleLab
     benefit: note?.benefit || `${role.name} fungerer best når en medspiller gir ${goodConcept ? tokenLabel(goodConcept).toLocaleLowerCase("nb-NO") : "en annen bevegelse eller støtte"} i samme angrep.`,
     risk: note?.risk || `Pass på ${badConcept ? tokenLabel(badConcept).toLocaleLowerCase("nb-NO") : "at flere roller ikke søker det samme rommet uten sikring"}.`,
     watch: note?.watch || "Se etter om rollene fyller ulike rom, gir hverandre pasningslinjer og om én spiller sikrer når en annen forlater posisjonen."
+  };
+}
+
+// Konkretiserer den kuraterte rolleforklaringen mot de elleve spillerne som
+// faktisk står på banen. Dette er fortsatt bare presentasjon: inputen kommer
+// fra eksisterende lineup/rollekatalog, og resultatet endrer ingen fit-score.
+export function createActualLineupRoleLesson({ selectedSlotId = "", lineup = [], roleList = [] } = {}) {
+  const assignments = (Array.isArray(lineup) ? lineup : [])
+    .map((entry) => ({
+      slotId: clean(entry?.slotId),
+      slotLabel: clean(entry?.slotLabel) || "Ukjent plass",
+      position: clean(entry?.position),
+      line: clean(entry?.line),
+      playerId: clean(entry?.playerId),
+      playerName: clean(entry?.playerName) || "Ukjent spiller",
+      roleId: clean(entry?.roleId),
+      roleName: clean(entry?.roleName),
+      x: coordinate(entry?.x),
+      y: coordinate(entry?.y)
+    }))
+    .filter((entry) => entry.slotId && entry.playerId && entry.playerName && entry.roleId);
+  const selected = assignments.find((entry) => entry.slotId === clean(selectedSlotId)) || null;
+  const selectedRole = roleById(roleList, selected?.roleId);
+  if (!selected || !selectedRole) return null;
+
+  const partners = assignments
+    .filter((entry) => entry.slotId !== selected.slotId)
+    .map((entry) => ({ entry, role: roleById(roleList, entry.roleId) }))
+    .filter((candidate) => candidate.role)
+    .map((candidate) => ({
+      ...candidate,
+      rank: relationRank(selectedRole, candidate.role),
+      distance: lineupDistance(selected, candidate.entry)
+    }))
+    .filter((candidate) => candidate.rank !== null)
+    .sort((a, b) => a.rank - b.rank || a.distance - b.distance || a.entry.slotId.localeCompare(b.entry.slotId));
+
+  const actual = partners[0] || null;
+  const fallback = createRoleRelationshipLesson(
+    selectedRole,
+    roleList,
+    actual ? [actual.role.name] : []
+  );
+  if (!fallback) return null;
+
+  if (!actual) {
+    return {
+      status: "missing_curated_partner",
+      selected,
+      selectedRole,
+      partner: null,
+      partnerRole: null,
+      suggestedPartnerName: fallback.partnerName,
+      benefit: fallback.benefit,
+      risk: fallback.risk,
+      watch: fallback.watch
+    };
+  }
+
+  const note = ROLE_RELATION_LESSONS[relationKey(selectedRole.id, actual.role.id)] || null;
+  const benefit = note?.benefit || (actual.rank === 2
+    ? `${actual.role.name} er dokumentert som en rolle som fungerer godt med ${selectedRole.name}.`
+    : `${selectedRole.name} er dokumentert som en rolle som fungerer godt med ${actual.role.name}.`);
+  const badConcept = roleTokens(selectedRole, "badFor")[0];
+  return {
+    status: "actual_pair",
+    selected,
+    selectedRole,
+    partner: actual.entry,
+    partnerRole: actual.role,
+    suggestedPartnerName: actual.role.name,
+    benefit,
+    risk: note?.risk || `Følg med på ${badConcept ? tokenLabel(badConcept).toLocaleLowerCase("nb-NO") : "om rolleparet fyller samme rom uten sikring"}.`,
+    watch: note?.watch || `Se etter om ${selected.playerName} og ${actual.entry.playerName} gir hverandre ulike bevegelser, pasningslinjer og sikring.`
   };
 }
 
@@ -184,21 +298,54 @@ function ensureStyles() {
   document.head.append(link);
 }
 
-function visibleLineupRoleLabels() {
-  const chips = Array.from(document.querySelectorAll("#lineupSlots .player-chip"));
-  return roles
-    .filter((role) => chips.some((chip) => normalized(chip.textContent).includes(normalized(role.name))))
-    .map((role) => role.name);
+function lineupAssignmentsFromPitch() {
+  return Array.from(document.querySelectorAll("#lineupSlots .player-chip")).map((chip) => ({
+    slotId: chip.dataset.slotId,
+    slotLabel: chip.dataset.slotLabel,
+    position: chip.dataset.position,
+    line: chip.dataset.line,
+    playerId: chip.dataset.playerId,
+    playerName: chip.dataset.playerName,
+    roleId: chip.dataset.roleId,
+    roleName: chip.dataset.roleName,
+    x: chip.dataset.x,
+    y: chip.dataset.y
+  }));
+}
+
+function markActualRolePair(selectedSlotId = "", partnerSlotId = "") {
+  document.querySelectorAll("#lineupSlots .player-chip").forEach((chip) => {
+    chip.classList.toggle("is-role-learning-focus", chip.dataset.slotId === selectedSlotId);
+    chip.classList.toggle("is-role-learning-partner", Boolean(partnerSlotId) && chip.dataset.slotId === partnerSlotId);
+  });
 }
 
 function enhanceRoleLearning() {
   const region = document.getElementById("managerLineupRoleLearning");
-  if (!region || region.hidden || !roles.length) return;
+  if (!region || region.hidden || !roles.length) {
+    markActualRolePair();
+    return;
+  }
   const selected = roleByLabel(roles, document.getElementById("managerLineupSlotRole")?.textContent);
-  if (!selected) return;
-  const lesson = createRoleRelationshipLesson(selected, roles, visibleLineupRoleLabels());
-  if (!lesson) return;
-  const signature = `${selected.id}|${lesson.partnerName}|${lesson.isInLineup}`;
+  if (!selected) {
+    markActualRolePair();
+    return;
+  }
+  const selectedSlotId = clean(document.getElementById("managerLineupSlotInspector")?.dataset.slotId);
+  const actual = createActualLineupRoleLesson({
+    selectedSlotId,
+    lineup: lineupAssignmentsFromPitch(),
+    roleList: roles
+  });
+  const generic = actual ? null : createRoleRelationshipLesson(selected, roles, []);
+  if (!actual && !generic) {
+    markActualRolePair();
+    return;
+  }
+  markActualRolePair(selectedSlotId, actual?.partner?.slotId || "");
+  const signature = actual
+    ? `${actual.status}|${actual.selected.slotId}|${actual.selectedRole.id}|${actual.partner?.slotId || actual.suggestedPartnerName}`
+    : `${selected.id}|${generic.partnerName}|generic`;
   let block = region.querySelector(".football-learning-role-relationship");
   if (block?.dataset.learningSignature === signature) return;
   if (!block) {
@@ -207,12 +354,36 @@ function enhanceRoleLearning() {
     region.append(block);
   }
   block.dataset.learningSignature = signature;
+  if (actual?.status === "actual_pair") {
+    block.innerHTML = `
+      <h4>Relasjonen i din faktiske ellever</h4>
+      <p class="football-learning-kicker"><strong>${escapeHtml(actual.selected.playerName)}</strong> + <strong>${escapeHtml(actual.partner.playerName)}</strong></p>
+      <dl class="football-learning-actual-pair">
+        <div><dt>Plasser</dt><dd>${escapeHtml(actual.selected.slotLabel)} ↔ ${escapeHtml(actual.partner.slotLabel)}</dd></div>
+        <div><dt>Roller</dt><dd>${escapeHtml(actual.selectedRole.name)} ↔ ${escapeHtml(actual.partnerRole.name)}</dd></div>
+      </dl>
+      <p><strong>Hva de prøver å skape:</strong> ${escapeHtml(actual.benefit)}</p>
+      <p><strong>Risiko:</strong> ${escapeHtml(actual.risk)}</p>
+      <p><strong>Se etter:</strong> ${escapeHtml(actual.watch)}</p>
+      <small>De to spillerplassene er markert på banen. Forklaringen leser dagens ellever og den eksisterende rollekatalogen; den endrer ingen rollefit.</small>`;
+    return;
+  }
+  if (actual) {
+    block.innerHTML = `
+      <h4>Rollen i din faktiske ellever</h4>
+      <p class="football-learning-kicker"><strong>${escapeHtml(actual.selected.playerName)}</strong> · ${escapeHtml(actual.selected.slotLabel)} · ${escapeHtml(actual.selectedRole.name)}</p>
+      <p><strong>Ikke representert i elleveren:</strong> Ingen annen valgt spiller har den kuraterte komplementærrollen ${escapeHtml(actual.suggestedPartnerName)}.</p>
+      <p>Det betyr ikke at oppstillingen er feil. Det betyr at rollekatalogen ikke har et dokumentert rollepar å forklare i akkurat denne elleveren.</p>
+      <p><strong>Mulig hensikt:</strong> ${escapeHtml(actual.benefit)}</p>
+      <p><strong>Se etter:</strong> ${escapeHtml(actual.watch)}</p>`;
+    return;
+  }
   block.innerHTML = `
     <h4>Relasjon til andre roller</h4>
-    <p class="football-learning-kicker">${lesson.isInLineup ? "I oppstillingen" : "Komplementær rolle"}: <strong>${lesson.partnerName}</strong></p>
-    <p><strong>Hvorfor:</strong> ${lesson.benefit}</p>
-    <p><strong>Risiko:</strong> ${lesson.risk}</p>
-    <p><strong>Se etter:</strong> ${lesson.watch}</p>`;
+    <p class="football-learning-kicker">Komplementær rolle: <strong>${escapeHtml(generic.partnerName)}</strong></p>
+    <p><strong>Hvorfor:</strong> ${escapeHtml(generic.benefit)}</p>
+    <p><strong>Risiko:</strong> ${escapeHtml(generic.risk)}</p>
+    <p><strong>Se etter:</strong> ${escapeHtml(generic.watch)}</p>`;
 }
 
 function trainingSourceText() {
