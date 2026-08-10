@@ -27,6 +27,14 @@ function reportFixture() {
       effects: { playerMorale: 3, boardTrust: 2, mediaPressure: -1 },
       familiarity: 3
     },
+    trainingFocus: { focusId: "rest_defence", name: "Restforsvar", helped: false, summary: "Ukens restforsvar ga liten effekt i denne kampen." },
+    trainingExerciseHypothesis: {
+      archetypeId: "rest_defence",
+      title: "Restforsvar",
+      setup: "Stort område · Overtall med ball · Omstilling ved balltap · Maks 3 touch",
+      hypothesis: "Laget må kontrollere større kontringsrom og organisere sikringen før balltapet.",
+      watch: "Har laget nok spillere bak ballen før balltapet?"
+    },
     exposedWeaknessMetric: "restDefenseScore"
   };
   const report = {
@@ -105,11 +113,13 @@ test("etterkampen viser resultat, forklaring, managergrep, spillerbidrag og kons
   await expect(page.locator(".matchday-post-match-effect")).toHaveCount(3);
 });
 
-test("etterkampen leder videre til eksisterende Trening og Analyse", async ({ page }) => {
+test("etterkampen kan ta problemet videre uten å velge trening automatisk", async ({ page }) => {
   await renderFixture(page);
-  await page.locator('.matchday-post-match-primary[data-matchday-target="trening"]').click();
+  const carry = page.locator('.matchday-post-match-primary[data-matchday-target="carry_training_problem"]');
+  await expect(carry).toContainText("Ta med overgangsproblemet");
+  await carry.click();
   await page.locator('.matchday-post-match-secondary[data-matchday-target="analyse"]').click();
-  await expect.poll(() => page.evaluate(() => window.__postMatchTargets)).toEqual(["trening", "analyse"]);
+  await expect.poll(() => page.evaluate(() => window.__postMatchTargets)).toEqual(["carry_training_problem", "analyse"]);
 });
 
 test("etterkampen har ingen mobil overflow", async ({ page }) => {

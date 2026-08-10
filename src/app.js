@@ -482,6 +482,11 @@ const state = {
   // aktive modussnapshoten, gir ingen kampbonus og teller bare når fixtureId
   // matcher kampen som faktisk skal spilles.
   opponentAnalysisPlan: null,
+  // Øvelsesdesignet som en lesbar treningshypotese og et eventuelt problem
+  // manageren selv valgte å ta med videre. Begge bor i modeSessions og har
+  // ingen vei inn i treningsscore, kampbonus eller motorberegning.
+  trainingExerciseHypothesis: null,
+  trainingProblemSuggestion: null,
   // Katalogen over individuelle treningsspor (fra datafil, normalisert).
   individualTrainingCatalogue: { capacity: { base: 1, perStaffMember: 1, max: 5 }, tracks: [] },
   // Ukas individuelle oppfølging: { week, assignments: [] }.
@@ -4356,6 +4361,17 @@ function playMatchday() {
     state.matchday.session.opponentAnalysisPlan = analysisPlan;
   }
 
+  const exerciseHypothesis = state.trainingExerciseHypothesis;
+  if (
+    state.matchday.session &&
+    exerciseHypothesis &&
+    Number(exerciseHypothesis.week) === Number(state.clubWeekState?.week)
+  ) {
+    // Lesbart snapshot, satt etter at motoren har opprettet sesjonen. Det kan
+    // derfor ikke påvirke styrke, hendelser eller andre kampberegninger.
+    state.matchday.session.trainingExerciseHypothesis = JSON.parse(JSON.stringify(exerciseHypothesis));
+  }
+
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
   // «Nullstill kamp» aldri gi samme ukebonus til en ny kamp.
   if (trainingFocus && state.matchday.session?.id) {
@@ -4442,7 +4458,20 @@ function chooseMatchdayDecision(optionId) {
     tone: resolution.tone,
     effects: resolution.effects,
     feedback: resolution.feedback,
-    trainingImpact: resolution.trainingImpact
+    trainingImpact: resolution.trainingImpact,
+    trainingObservation: resolution.trainingImpact &&
+      session.trainingExerciseHypothesis &&
+      resolution.trainingImpact.focusId === session.trainingExerciseHypothesis.archetypeId
+      ? {
+          situation: `${event.title}: ${event.text}`,
+          question: session.trainingExerciseHypothesis.watch,
+          action: option.label,
+          consequence: resolution.feedback,
+          // Forklaringen finnes bare når kampmotoren selv registrerte et
+          // relevant treningssignal på dette grepet.
+          explanation: `Kampmotoren registrerte hendelsen som relevant for ${resolution.trainingImpact.focusName.toLowerCase()}.`
+        }
+      : null
   });
 
   if (eventIndex + 1 < session.events.length) {
@@ -6892,6 +6921,12 @@ function syncWeeklyTrainingFocusToClubWeek() {
   if (state.weeklyTrainingProgram && state.weeklyTrainingProgram.week !== week) {
     state.weeklyTrainingProgram = null;
     saveWeeklyTrainingProgram();
+  }
+  if (state.trainingExerciseHypothesis && Number(state.trainingExerciseHypothesis.week) !== week) {
+    // Den spilte ukas hypotese følger kampen/resultatet som snapshot. Aktiv
+    // treningsflate starter tom, mens et problem manageren eksplisitt valgte
+    // å ta med videre forblir et synlig forslag.
+    state.trainingExerciseHypothesis = null;
   }
 }
 
@@ -9794,6 +9829,30 @@ function appendMatchdayNavButton(parent, label, tab) {
 }
 
 function openManagerMatchdayTarget(target) {
+  if (target === "carry_training_problem") {
+    const lastMatch = state.matchday?.lastMatch;
+    const hypothesis = lastMatch?.trainingExerciseHypothesis;
+    if (!hypothesis) return;
+    const transitionProblem = hypothesis.archetypeId === "rest_defence";
+    state.trainingProblemSuggestion = {
+      version: "historygo-football-manager.training-problem-suggestion.v1",
+      sourceMatchId: lastMatch.id || null,
+      sourceWeek: Number(lastMatch.playedInClubWeek) || Number(hypothesis.week) || null,
+      targetWeek: (Number(lastMatch.playedInClubWeek) || Number(hypothesis.week) || 0) + 1,
+      archetypeId: hypothesis.archetypeId,
+      title: transitionProblem ? "Overgangsproblemet fra forrige kamp" : `${hypothesis.title || "Treningsproblemet"} fra forrige kamp`,
+      problem: lastMatch.trainingFocus?.summary || hypothesis.hypothesis,
+      question: hypothesis.watch
+    };
+    if (state.modeEnvelope) {
+      state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+      try { state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope); } catch (_) { /* memory-only */ }
+    }
+    activateTab("trening");
+    renderApp();
+    window.dispatchEvent(new CustomEvent("hgfm:training-problem-suggested"));
+    return;
+  }
   if (target === "details") {
     if (!elements.matchdayDepth) return;
     elements.matchdayDepth.open = true;
@@ -9873,6 +9932,34 @@ function renderMatchdayGate(container, teamFit) {
 // Norske trykk-etiketter for hendelser.
 const MATCHDAY_PRESSURE_LABELS = { low: "Lavt trykk", medium: "Middels trykk", high: "Høyt trykk" };
 
+const TRAINING_OBSERVATION_EVENT_PATTERNS = Object.freeze({
+  rest_defence: /balltap|kontring|restforsvar|andreball|bakrom/i,
+  pressing: /press|ballen i ro|oppbygging/i,
+  build_up: /oppspill|oppbygg|presses høyt|keeper/i,
+  width: /bred|kant|lav blokk|innlegg/i,
+  finishing: /avslut|sjanse|mål/i,
+  team_shape: /rom|kompakt|mellomrom|balanse/i,
+  physical: /duell|tempo|løp/i
+});
+
+function isRelevantTrainingObservation(hypothesis, event) {
+  const pattern = TRAINING_OBSERVATION_EVENT_PATTERNS[hypothesis?.archetypeId];
+  return Boolean(pattern?.test(`${event?.title || ""} ${event?.text || ""}`));
+}
+
+function appendTrainingObservationPrompt(parent, hypothesis, event) {
+  if (!isRelevantTrainingObservation(hypothesis, event)) return;
+  const block = document.createElement("section");
+  block.className = "matchday-training-observation";
+  block.innerHTML = `
+    <span>Observasjonsøyeblikk fra treningsuka</span>
+    <strong>Situasjon · ${escapeHtml(event.title)}</strong>
+    <p><b>Managerspørsmål:</b> ${escapeHtml(hypothesis.watch)}</p>
+    <p><b>Handling:</b> Bruk ett av de eksisterende kampgrepene under.</p>
+    <small>Konsekvensen kommer fra kampmotoren. En fotballfaglig kobling vises først hvis motoren registrerer et relevant treningssignal.</small>`;
+  parent.append(block);
+}
+
 // Tatt managergrep med tone-farget konsekvens, brukt både underveis og i
 // sluttrapporten.
 function appendMatchdayDecisionLog(parent, decisions, heading) {
@@ -9897,6 +9984,18 @@ function appendMatchdayDecisionLog(parent, decisions, heading) {
       feedback.className = "matchday-decision-feedback";
       feedback.textContent = decision.feedback;
       entry.append(feedback);
+    }
+
+    if (decision.trainingObservation) {
+      const observation = document.createElement("div");
+      observation.className = "matchday-training-observation-result";
+      observation.innerHTML = `
+        <p><b>Situasjon:</b> ${escapeHtml(decision.trainingObservation.situation)}</p>
+        <p><b>Managerspørsmål:</b> ${escapeHtml(decision.trainingObservation.question)}</p>
+        <p><b>Handling:</b> ${escapeHtml(decision.trainingObservation.action)}</p>
+        <p><b>Konsekvens:</b> ${escapeHtml(decision.trainingObservation.consequence)}</p>
+        <p><b>Forklaring:</b> ${escapeHtml(decision.trainingObservation.explanation)}</p>`;
+      entry.append(observation);
     }
 
     parent.append(entry);
@@ -10214,6 +10313,7 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   text.className = "matchday-event-text";
   text.textContent = event.text;
   eventCard.append(text);
+  appendTrainingObservationPrompt(eventCard, session.trainingExerciseHypothesis, event);
 
   // Beslutningen står for tur når perioden er spilt av. Å kunne gripe inn i et
   // minutt du ennå ikke har sett ville gjort avspillingen meningsløs.
@@ -16389,6 +16489,23 @@ function bindTrainingWorkspaceControls() {
 }
 
 function bindTrainingAndKnowledgeControls() {
+  window.addEventListener("hgfm:training-exercise-save", (event) => {
+    const hypothesis = event.detail?.hypothesis;
+    const currentWeek = Number(state.clubWeekState?.week) || 1;
+    if (!hypothesis || typeof hypothesis !== "object" || Number(hypothesis.week) !== currentWeek) return;
+    if (!hypothesis.title || !hypothesis.archetypeId || !hypothesis.hypothesis || !hypothesis.watch) return;
+    state.trainingExerciseHypothesis = JSON.parse(JSON.stringify(hypothesis));
+    // Manageren har nå gjort et eksplisitt øvelsesvalg for problemet. Et
+    // tidligere forslag er dermed håndtert, ikke automatisk anvendt.
+    state.trainingProblemSuggestion = null;
+    if (state.modeEnvelope) {
+      state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+      try { state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope); } catch (_) { /* memory-only */ }
+    }
+    window.dispatchEvent(new CustomEvent("hgfm:training-hypothesis-changed"));
+    renderApp();
+  });
+
   if (elements.clearKnowledgeFocus) {
     elements.clearKnowledgeFocus.addEventListener("click", () => {
       state.activeKnowledgeFocusId = null;

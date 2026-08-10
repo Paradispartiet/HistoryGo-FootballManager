@@ -8,6 +8,8 @@ const css = read("src/ui/manager-football-learning-loop-v1.css");
 const browser = read("tests/browser/manager-football-learning-loop-v1.spec.js");
 const app = read("src/app.js");
 const postMatch = read("src/ui/manager-post-match-analysis-v1.js");
+const modeSessions = read("src/football-mode-sessions.js");
+const exercise = read("src/football-training-exercise-design.js");
 
 const checks = [
   ["shell importerer læringslaget", shell.includes('import "./manager-football-learning-loop-v1.js";')],
@@ -23,11 +25,16 @@ const checks = [
   ["trening forklarer hvorfor", ui.includes("Hvorfor denne økta") && ui.includes("createTrainingLearningLesson")],
   ["trening peker fram mot kampobservasjon", ui.includes("Se etter i kamp")],
   ["kampforberedelsen gjentar valgt trening som observasjon", ui.includes("enhanceMatchPreparation") && ui.includes("Observer i kampen")],
+  ["konkret øvelsesdesign blir treningshypotese", exercise.includes("createTrainingExerciseHypothesis") && exercise.includes("setup") && exercise.includes("watch")],
+  ["hypotese og forslag bor i eksisterende modussesjon", modeSessions.includes('"trainingExerciseHypothesis"') && modeSessions.includes('"trainingProblemSuggestion"')],
   ["kampforberedelsen beholder hvert reelle treningsvalg", ui.includes(".filter((selection)") && ui.includes("ikke valgt|mangler")],
   ["etterkampmodellen eksponerer motorens lagrede treningsrapport", postMatch.includes("trainingEvidence") && postMatch.includes("dataset.trainingSummary")],
   ["trening kobles til kampens registrerte signaler", ui.includes("createTrainingMatchLearningThread") && ui.includes("TRAINING_SIGNAL_PATTERNS")],
   ["treningsdommen sammenlignes med hele faktorlisten", ui.includes("signals.slice(0, 2).forEach") && browser.includes("alle viste taktiske faktorer")],
   ["treningssløyfen bruker motorens fasit uten å overtolke", ui.includes("Etter kamp · motorens fasit") && ui.includes("ikke bevis på at én øvelse alene feilet")],
+  ["etterkamp skiller intensjon bevis dom og usikkerhet", ["Intensjonen", "Kampens bevis", "Kampmotorens treningsdom", "Det som fortsatt er usikkert"].every((text) => ui.includes(text))],
+  ["problem sendes videre eksplisitt uten autovalg", app.includes('target === "carry_training_problem"') && app.includes("trainingProblemSuggestion") && browser.includes("uten automatisk valg")],
+  ["observasjonsøyeblikk bruker faktisk grep og motorens signal", app.includes("matchday-training-observation") && app.includes("resolution.trainingImpact") && app.includes("resolution.feedback")],
   ["systemet viser kompromiss", ui.includes("Kompromiss:") && ui.includes("createSystemLearningLesson")],
   ["etterkamp bruker faktiske taktiske li-signaler", ui.includes("tacticalSignals") && ui.includes("querySelectorAll(\"li\")")],
   ["etterkamp har eksplisitt ikke-dikt-regel", ui.includes("ikke på en oppdiktet teoriforklaring")],

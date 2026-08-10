@@ -90,6 +90,22 @@ const limitedTrainingThread = createTrainingMatchLearningThread({
 assert.equal(limitedTrainingThread.status, "limited");
 assert.match(limitedTrainingThread.evidence, /ikke bevis/i);
 
+const concreteHypothesisThread = createTrainingMatchLearningThread({
+  trainingFocus: { focusId: "rest_defence", name: "Restforsvar", helped: false, summary: "Restforsvaret ga liten effekt." },
+  hypothesis: {
+    archetypeId: "rest_defence",
+    title: "Restforsvar",
+    setup: "Stort område · Overtall med ball · Omstilling ved balltap · Maks 3 touch",
+    hypothesis: "Laget må kontrollere større kontringsrom.",
+    watch: "Har laget nok spillere bak ballen før balltapet?"
+  },
+  tacticalSignals: ["Laget ble tatt i kontring etter eget balltap."]
+});
+assert.match(concreteHypothesisThread.setup, /Stort område/);
+assert.match(concreteHypothesisThread.intent, /større kontringsrom/i);
+assert.match(concreteHypothesisThread.matchQuestion, /før balltapet/i);
+assert.match(concreteHypothesisThread.uncertainty, /beviser ikke/i);
+
 const noInventedTrainingSignal = createTrainingMatchLearningThread({
   trainingFocus: {
     focusId: "build_up",

@@ -1,5 +1,13 @@
 /* Manager Training Day v1 — én treningsdag i kalenderuka, ikke en parallell progresjonsflate. */
 
+.training-day-problem-suggestion {
+  border-color: color-mix(in srgb, #f5d142 55%, transparent) !important;
+  background: color-mix(in srgb, #f5d142 8%, transparent) !important;
+}
+
+.training-day-problem-suggestion small { opacity: .72; line-height: 1.4; }
+.training-day-saved-hypothesis { border-style: dashed !important; }
+
 .trening-view.has-manager-training-day-v1 #trainingCommandPanel,
 .trening-view.has-manager-training-day-v1 #teamTrainingSelectedState,
 .trening-view.has-manager-training-day-v1 #trainingDepth {

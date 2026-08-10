@@ -6,6 +6,8 @@
 // kamp-/taktikk-/treningsberegning opprettes her.
 // ============================================================================
 
+import { MODE_SESSION_KEY } from "../football-mode-sessions.js";
+
 const STYLE_ID = "managerFootballLearningLoopV1Style";
 const ROLE_DATA_URL = new URL("../../data/football_roles.json", import.meta.url);
 
@@ -267,9 +269,9 @@ export function createMatchSignalLearningLesson(value) {
 // Leser den eksisterende kampmotorens treningsrapport og setter den opp mot
 // de taktiske signalene etterkampen faktisk viser. Funksjonen vurderer ikke
 // kampen på nytt og trekker ingen konklusjon utover disse kildene.
-export function createTrainingMatchLearningThread({ trainingFocus = null, tacticalSignals: signals = [] } = {}) {
-  const focusId = clean(trainingFocus?.focusId);
-  const focusName = clean(trainingFocus?.name);
+export function createTrainingMatchLearningThread({ trainingFocus = null, hypothesis = null, tacticalSignals: signals = [] } = {}) {
+  const focusId = clean(hypothesis?.archetypeId) || clean(trainingFocus?.focusId);
+  const focusName = clean(hypothesis?.title) || clean(trainingFocus?.name);
   if (!focusId && !focusName) return null;
   const lesson = createTrainingLearningLesson(`${focusId} ${focusName}`);
   const tacticalSignals = (Array.isArray(signals) ? signals : []).map(clean).filter(Boolean);
@@ -298,13 +300,27 @@ export function createTrainingMatchLearningThread({ trainingFocus = null, tactic
     focusId,
     focusName: focusName || "Treningsfokus",
     status,
+    setup: clean(hypothesis?.setup),
+    intent: clean(hypothesis?.hypothesis) || lesson.principle,
     trainingPrinciple: lesson.principle,
-    matchQuestion: lesson.watch,
+    matchQuestion: clean(hypothesis?.watch) || lesson.watch,
     reportSummary,
     relatedSignals,
     evidence,
-    nextQuestion: `Før du beholder eller endrer neste ukes øvelse: ${lesson.watch}`
+    uncertainty: relatedSignals.length
+      ? "Signalet viser samme problemområde, men beviser ikke at øvelsesoppsettet alene skapte utfallet."
+      : "Kampforklaringen registrerte ikke et signal i samme problemområde. Derfor kan vi ikke avgjøre om den konkrete hypotesen holdt.",
+    nextQuestion: `Før du beholder eller endrer neste ukes øvelse: ${clean(hypothesis?.watch) || lesson.watch}`
   };
+}
+
+function activeTrainingHypothesis() {
+  try {
+    const envelope = JSON.parse(localStorage.getItem(MODE_SESSION_KEY) || "null");
+    return envelope?.sessions?.[envelope?.activeMode]?.trainingExerciseHypothesis || null;
+  } catch {
+    return null;
+  }
 }
 
 export function createSystemLearningLesson({ intent = "", risk = "", parameters = [] } = {}) {
@@ -487,8 +503,15 @@ function enhanceMatchPreparation() {
     existing?.remove();
     return;
   }
+  const hypothesis = activeTrainingHypothesis();
   const lesson = createTrainingLearningLesson(source);
-  const signature = `${source}|${lesson.watch}`;
+  const intent = clean(hypothesis?.hypothesis) || lesson.principle;
+  const hypothesisWatch = clean(hypothesis?.watch);
+  const watch = hypothesisWatch && hypothesis?.archetypeId === "rest_defence"
+    ? `Når laget mister ballen: ${hypothesisWatch}`
+    : hypothesisWatch || lesson.watch;
+  const setup = clean(hypothesis?.setup);
+  const signature = `${source}|${setup}|${intent}|${watch}`;
   let bridge = existing;
   if (bridge?.dataset.learningSignature === signature) return;
   if (!bridge) {
@@ -503,8 +526,9 @@ function enhanceMatchPreparation() {
     <span>Fra treningsfeltet til kampen</span>
     <h3>${escapeHtml(lesson.title)}</h3>
     <p><b>Ukas valgte arbeid:</b> ${escapeHtml(source)}</p>
-    <p><b>Hypotese:</b> ${escapeHtml(lesson.principle)}</p>
-    <p><b>Observer i kampen:</b> ${escapeHtml(lesson.watch)}</p>
+    ${setup ? `<p><b>Øvelsen dere valgte:</b> ${escapeHtml(setup)}</p>` : ""}
+    <p><b>Hypotese:</b> ${escapeHtml(intent)}</p>
+    <p><b>Observer i kampen:</b> ${escapeHtml(watch)}</p>
     <small>Dette følger det eksisterende treningsvalget inn i kampforberedelsen. Det oppretter ingen ny kampeffekt.</small>`;
 }
 
@@ -568,14 +592,27 @@ function postMatchTrainingEvidence(postMatch) {
   };
 }
 
+function postMatchTrainingHypothesis(postMatch) {
+  const title = clean(postMatch?.dataset.trainingHypothesisTitle);
+  if (!title) return null;
+  return {
+    archetypeId: clean(postMatch.dataset.trainingHypothesisArchetype),
+    title,
+    setup: clean(postMatch.dataset.trainingHypothesisSetup),
+    hypothesis: clean(postMatch.dataset.trainingHypothesisIntent),
+    watch: clean(postMatch.dataset.trainingHypothesisWatch)
+  };
+}
+
 function enhancePostMatch() {
   const postMatch = document.querySelector(".matchday-post-match");
   if (!postMatch) return;
   const signals = tacticalSignals(postMatch);
   const trainingEvidence = postMatchTrainingEvidence(postMatch);
-  const trainingThread = createTrainingMatchLearningThread({ trainingFocus: trainingEvidence, tacticalSignals: signals });
+  const hypothesis = postMatchTrainingHypothesis(postMatch);
+  const trainingThread = createTrainingMatchLearningThread({ trainingFocus: trainingEvidence, hypothesis, tacticalSignals: signals });
   const intent = clean(document.querySelector("#managerSystemWorkspaceV2 .manager-system-intent")?.textContent);
-  const signature = `${intent}|${trainingThread?.focusId || ""}|${trainingThread?.reportSummary || ""}|${signals.join("|")}`;
+  const signature = `${intent}|${trainingThread?.focusId || ""}|${trainingThread?.setup || ""}|${trainingThread?.reportSummary || ""}|${signals.join("|")}`;
   let block = postMatch.querySelector(".football-learning-post-match");
   if (block?.dataset.learningSignature === signature) return;
   if (!block) {
@@ -598,9 +635,10 @@ function enhancePostMatch() {
       <span>Hele observasjonstråden</span>
       <h5>Trening → kamp → etterkamp</h5>
       <div class="football-learning-training-thread-grid">
-        <article><span>Trening</span><strong>${escapeHtml(trainingThread.focusName)}</strong><p>${escapeHtml(trainingThread.trainingPrinciple)}</p></article>
-        <article><span>Før kamp</span><strong>Dette skulle du observere</strong><p>${escapeHtml(trainingThread.matchQuestion)}</p></article>
-        <article><span>Etter kamp · motorens fasit</span><strong>${escapeHtml(trainingThread.reportSummary)}</strong><p>${escapeHtml(trainingThread.evidence)}</p></article>
+        <article><span>Intensjonen</span><strong>${escapeHtml(trainingThread.focusName)}</strong>${trainingThread.setup ? `<p>${escapeHtml(trainingThread.setup)}</p>` : ""}<p>${escapeHtml(trainingThread.intent)}</p><p><b>Dette skulle du observere:</b> ${escapeHtml(trainingThread.matchQuestion)}</p></article>
+        <article><span>Kampens bevis</span><strong>${trainingThread.relatedSignals.length ? "Registrert signal" : "Ikke registrert"}</strong><p>${escapeHtml(trainingThread.relatedSignals[0] || "Ingen taktisk faktor i samme problemområde.")}</p></article>
+        <article><span>Kampmotorens treningsdom · Etter kamp · motorens fasit</span><strong>${escapeHtml(trainingThread.reportSummary)}</strong><p>${escapeHtml(trainingThread.evidence)}</p></article>
+        <article><span>Det som fortsatt er usikkert</span><strong>Ikke overtolket</strong><p>${escapeHtml(trainingThread.uncertainty)}</p></article>
       </div>
       <p class="football-learning-next-question"><b>Neste treningsuke:</b> ${escapeHtml(trainingThread.nextQuestion)}</p>
       <small>Treningsdommen kommer fra kampmotorens lagrede rapport. Taktiske bevis hentes bare fra den eksisterende kampforklaringen.</small>`;
@@ -652,6 +690,7 @@ function scheduleRender() {
 
 function installObservers() {
   window.addEventListener("hgfm:team-merits-changed", scheduleRender);
+  window.addEventListener("hgfm:training-hypothesis-changed", scheduleRender);
   window.addEventListener("updateProfile", scheduleRender);
   window.addEventListener("storage", scheduleRender);
   document.addEventListener("click", () => queueMicrotask(scheduleRender), true);

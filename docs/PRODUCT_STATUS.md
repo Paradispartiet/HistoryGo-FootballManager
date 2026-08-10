@@ -36,7 +36,7 @@ Underflatene er beskrevet i [`meny.md`](meny.md) og [`MANAGER_SHELL_V3.md`](MANA
 | Systemkunnskap | Formasjon, kampplan, historisk fit og formasjonsmatchup forklares over eksisterende motor | `MANAGER_SQUAD_TACTICS_SCENE_V2.md`, `TACTICAL_KNOWLEDGE_LAYER.md`, `audit:hg-formation-knowledge` |
 | Treningsuke | Program, fire økter, fokus og individuell oppfølging samles i eksisterende plan | `MANAGER_TRAINING_SCENE_V2.md`, `sim:training-plan` |
 | Øvelsesdesign | Konkrete økter lar manageren endre areal, spillerbalanse, retning og touchregel | `MANAGER_TRAINING_EXERCISE_DESIGN_V1.md`, `audit:manager-training-exercise-design-v1` |
-| Trening til kamp | Treningshypotesen følger til kampforberedelse, motorens dom og etterkampens neste spørsmål | `MANAGER_FOOTBALL_LEARNING_LOOP_V1.md`, `manager-football-learning-loop-v1.spec.js` |
+| Trening til kamp | Konkret øvelsesdesign lagres i modussesjonen og følger gjennom kampforberedelse, observasjonsøyeblikk, motorens dom, usikkerhet og eksplisitt forslag til neste uke | `MANAGER_FOOTBALL_LEARNING_LOOP_V1.md`, `manager-football-learning-loop-v1.spec.js` |
 | Motstanderforberedelse | Faktisk fixture og motstanderprofil blir hypotese, motgrep, risiko og observasjonspunkt | `football-opponent-analysis.js`, `manager-opponent-analysis-preparation-v1.spec.js` |
 | Medisinsk arbeid | Faktisk skade/belastning blir et kriteriebasert beslutningsverksted uten medisinsk motor | `football-medical-decision-learning.js`, `manager-medical-decision-learning-v1.spec.js` |
 | Kampdag | Eksisterende kampmotor driver forberedelse, live kamp, managergrep og rapport | `MANAGER_MATCHDAY_SCENE_V1.md`, `sim:matchday` |

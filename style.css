@@ -10221,3 +10221,44 @@ button:disabled {
   .inbox-queue-heading { display: grid; }
   .inbox-focus-status { justify-self: start; }
 }
+
+.matchday-training-observation {
+  display: grid;
+  gap: 7px;
+  margin: 14px 0 4px;
+  padding: 13px;
+  border: 1px dashed color-mix(in srgb, currentColor 35%, transparent);
+  background: color-mix(in srgb, #f5d142 7%, transparent);
+}
+
+.matchday-training-observation > span {
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .72;
+}
+
+.matchday-training-observation strong,
+.matchday-training-observation p,
+.matchday-training-observation small { margin: 0; }
+
+.matchday-training-observation-result {
+  display: grid;
+  gap: 5px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.matchday-training-observation-result p { margin: 0; line-height: 1.4; }
+
+.football-learning-post-match .football-learning-training-thread-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 700px) {
+  .football-learning-post-match .football-learning-training-thread-grid {
+    grid-template-columns: 1fr;
+  }
+}

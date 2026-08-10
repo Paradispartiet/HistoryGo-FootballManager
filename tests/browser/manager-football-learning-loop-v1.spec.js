@@ -88,6 +88,22 @@ test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmå
   await restDefence.getByRole("button", { name: "Velg fokus" }).click();
   await expect(page.locator("#weeklyTrainingStatus")).toContainText("Restforsvar");
   await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent("hgfm:training-exercise-save", { detail: { hypothesis: {
+    version: "historygo-football-manager.training-exercise-hypothesis.v1",
+    week: 3,
+    sessionIndex: 2,
+    day: "Torsdag",
+    title: "Restforsvar",
+    programTitle: "Kampforberedende uke",
+    archetypeId: "rest_defence",
+    objective: "Kontrollere kontringsrom.",
+    config: { area: "large", numbers: "attack_overload", direction: "transition", touches: "three" },
+    selections: { area: "Stort område", numbers: "Overtall med ball", direction: "Omstilling ved balltap", touches: "Maks 3 touch" },
+    setup: "Stort område · Overtall med ball · Omstilling ved balltap · Maks 3 touch",
+    hypothesis: "Laget må kontrollere større kontringsrom og organisere sikringen før balltapet.",
+    watch: "Har laget nok spillere bak ballen før balltapet?",
+    coachingPoints: ["Avstand", "Sikring", "Posisjon før balltap"]
+  } } })));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
@@ -101,6 +117,8 @@ test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmå
   await expect(bridge).toContainText("Fra treningsfeltet til kampen");
   await expect(bridge).toContainText("Restforsvar");
   await expect(bridge).toContainText("Hypotese:");
+  await expect(bridge).toContainText("Stort område");
+  await expect(bridge).toContainText("større kontringsrom");
   await expect(bridge).toContainText("Observer i kampen:");
   await expect(bridge).toContainText("Når laget mister ballen");
   await expectNoHorizontalOverflow(page);
@@ -171,6 +189,11 @@ test("etterkamp lærer bare av faktorer kampforklaringen faktisk registrerte", a
     report.dataset.trainingFocusName = "Pressing";
     report.dataset.trainingHelped = "true";
     report.dataset.trainingSummary = "Ukens pressing støttet et relevant managergrep.";
+    report.dataset.trainingHypothesisArchetype = "pressing";
+    report.dataset.trainingHypothesisTitle = "Høyt press";
+    report.dataset.trainingHypothesisSetup = "Stort område · Likhet · Mot mål · Maks 3 touch";
+    report.dataset.trainingHypothesisIntent = "Andre og tredje pressledd må dekke større avstander.";
+    report.dataset.trainingHypothesisWatch = "Følger laget etter når første spiller går?";
     report.innerHTML = `
       <div class="matchday-post-match-overview">
         <article class="matchday-post-match-card">
@@ -193,6 +216,9 @@ test("etterkamp lærer bare av faktorer kampforklaringen faktisk registrerte", a
   await expect(trainingThread).toContainText("Ukens pressing støttet et relevant managergrep");
   await expect(trainingThread).toContainText("samme problemområde");
   await expect(trainingThread).toContainText("Neste treningsuke:");
+  await expect(trainingThread).toContainText("Intensjonen");
+  await expect(trainingThread).toContainText("Kampens bevis");
+  await expect(trainingThread).toContainText("Det som fortsatt er usikkert");
   await expect(learning).toContainText("Bare registrerte taktiske faktorer");
 });
 
@@ -256,6 +282,63 @@ test("etterkamp dikter ikke teorikobling når kampforklaringen mangler taktisk s
   });
   await expect(page.locator(".football-learning-post-match")).toContainText("Ingen tydelig taktisk faktor er registrert");
   await expect(page.locator(".football-learning-post-match")).toContainText("ikke på en oppdiktet teoriforklaring");
+});
+
+test("etterkampens problemhandling åpner Trening som forslag uten automatisk valg", async ({ page }) => {
+  await page.evaluate(() => {
+    const lastMatch = {
+      id: "learning-loop-v2-match",
+      playedInClubWeek: 3,
+      outcome: "loss",
+      score: { for: 0, against: 1 },
+      expectedGoals: { for: 0.8, against: 1.4 },
+      opponent: { name: "Kontringslaget" },
+      formationSnapshot: { name: "4-3-3" },
+      trainingFocus: { focusId: "rest_defence", name: "Restforsvar", helped: false, summary: "Ukens restforsvar ga liten effekt i denne kampen." },
+      trainingExerciseHypothesis: {
+        archetypeId: "rest_defence",
+        title: "Restforsvar",
+        setup: "Stort område · Overtall med ball · Omstilling ved balltap · Maks 3 touch",
+        hypothesis: "Laget må kontrollere større kontringsrom.",
+        watch: "Har laget nok spillere bak ballen før balltapet?"
+      },
+      explanation: {
+        headline: "Tap 0–1: laget ble straffet i overgang.",
+        tacticalFactors: ["Laget ble tatt i kontring etter eget balltap."],
+        learningPoints: ["Sikringen må organiseres før balltapet."],
+        nextWeekSuggestions: ["Vurder restforsvaret på nytt."]
+      },
+      decisions: [], playerStats: { goals: [] }, clubConsequences: { effects: {} }
+    };
+    const matchday = { lastMatch, session: null, lastSeenMatchId: null };
+    localStorage.setItem("hgfm.matchday.v1", JSON.stringify(matchday));
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
+    envelope.sessions[envelope.activeMode].matchday = matchday;
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+  });
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [data-tab-target="kamp"]').click();
+  const carry = page.locator('[data-matchday-target="carry_training_problem"]');
+  await expect(carry).toBeVisible();
+  const before = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
+    const session = envelope.sessions[envelope.activeMode];
+    return { program: session.weeklyTrainingProgram || null, focus: session.weeklyTrainingFocus || null };
+  });
+  await carry.click();
+  await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
+  await expect(page.locator("#trainingDayProblemSuggestion")).toBeVisible();
+  await expect(page.locator("#trainingDayProblemSuggestion")).toContainText("Overgangsproblemet");
+  await expect(page.locator("#trainingDayProblemSuggestion")).toContainText("ikke program eller fokus automatisk");
+  const after = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
+    const session = envelope.sessions[envelope.activeMode];
+    return { program: session.weeklyTrainingProgram || null, focus: session.weeklyTrainingFocus || null, suggestion: session.trainingProblemSuggestion };
+  });
+  expect(after.program).toEqual(before.program);
+  expect(after.focus).toEqual(before.focus);
+  expect(after.suggestion.archetypeId).toBe("rest_defence");
 });
 
 test("fotballæringen fungerer på mobil uten sideoverflow og alvorlige WCAG-brudd", async ({ page }) => {

@@ -1,4 +1,4 @@
-# Fotballæring i managerløkken v1
+# Fotballæring i managerløkken v2
 
 ## Produktmål
 
@@ -8,9 +8,9 @@ Denne versjonen gjør den eksisterende managerløkken pedagogisk sammenhengende:
 
 **Oppstilling → rolle → system → trening → kamp → etterkamp → ny forståelse.**
 
-## Ingen ny motor
+## Ingen ny motor eller lagringsnøkkel
 
-`manager-football-learning-loop-v1.js` er et presentasjons- og forklaringslag. Det oppretter ingen ny taktikkmotor, treningsmotor, kampmotor, progresjon, scoring eller lagring. Det leser de eksisterende flatene og `football_roles.json`.
+`manager-football-learning-loop-v1.js` er fortsatt et presentasjons- og forklaringslag. Det oppretter ingen ny taktikkmotor, treningsmotor, kampmotor, progresjon, scoring eller lagringsnøkkel. Den konkrete treningshypotesen lagres i den eksisterende aktive `hgfm.modeSessions.v1`-sesjonen.
 
 ## 1. Rolleforståelse og relasjoner
 
@@ -46,15 +46,17 @@ Hvis kampforklaringen ikke har et tydelig taktisk signal, sier flaten eksplisitt
 
 ## 5. Trening → kamp → etterkamp
 
-Det valgte treningsarbeidet følger nå samme observasjonsspørsmål gjennom tre eksisterende managerflater:
+Det valgte treningsarbeidet følger nå samme observasjonsspørsmål gjennom hele managerløkken:
 
-1. **Trening** forklarer hvilket fotballproblem programmet og fokuset arbeider med.
-2. **Kampforberedelse** gjentar dette som en hypotese og ett konkret spørsmål manageren skal observere i kampen.
-3. **Etterkamp** viser kampmotorens lagrede treningsdom (`lastMatch.trainingFocus.summary` og `helped`) ved siden av taktiske signaler som kampforklaringen faktisk registrerte.
+1. **Trening** lagrer managerens valgte areal, spillerbalanse, retning og touchregel som en konkret hypotese.
+2. **Kampforberedelse** viser det samme oppsettet, intensjonen og ett konkret observasjonsspørsmål.
+3. **Kampen** viser et observasjonsøyeblikk når en faktisk motorhendelse berører samme problem. Manageren bruker fortsatt et eksisterende kampgrep, og konsekvensen kommer fra kampmotoren. En forklaring legges bare til når motorens `trainingImpact` registrerer koblingen.
+4. **Etterkamp** skiller mellom managerens intensjon, registrerte taktiske bevis, kampmotorens treningsdom og det som fortsatt er usikkert.
+5. **Neste uke** kan manageren eksplisitt ta problemet med videre. Trening åpnes da med et forslag, men program og fokus velges aldri automatisk.
 
 Læringslaget sier ikke at en øvelse «virket» bare fordi et beslektet ord finnes i rapporten. Kampmotorens treningsrapport er fasit for registrert effekt. Den taktiske evalueringen brukes som konkret bevismateriale når samme problemområde finnes, og fravær av et slikt signal forklares eksplisitt i stedet for å fylles med en oppdiktet kamphendelse.
 
-Øvelsesverkstedets areal-, spillerbalanse-, retnings- og touchvalg er fortsatt utforskende og uten save-state. Derfor hevder etterkampen heller ikke at ett av disse designvalgene, som ikke lagres, forårsaket kampresultatet.
+Øvelsesverkstedets valg lagres nå som en lesbar hypotese, ikke som en effekt. Etterkampen hevder derfor aldri at areal, overtall, retning eller touchregel forårsaket resultatet. Den sammenligner intensjonen med signalene som faktisk finnes og markerer eksplisitt usikkerhet.
 
 ## Permanente grenser
 

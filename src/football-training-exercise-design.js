@@ -325,6 +325,35 @@ export function evaluateTrainingExerciseDesign(session = {}, value = null) {
     topicEffect: topicEffect(archetype, config),
     coachingPoints: [...archetype.coachingPoints],
     managerQuestion: managerQuestion(archetype, config),
-    guardrail: "Dette er et læringslag over den valgte økta. Oppsettet endrer ikke lagret treningsbelastning, kampbonus, spillerverdier eller progresjon i v1."
+    guardrail: "Dette er et læringslag over den valgte økta. Oppsettet lagres som en hypotese, men endrer ikke lagret treningsbelastning, kampbonus, spillerverdier eller progresjon."
+  };
+}
+
+// Et lesbart snapshot av managerens intensjon. Snapshotet kan følge den
+// eksisterende modussesjonen gjennom kampforberedelse og etterkamp, men er
+// uttrykkelig ikke input til trenings- eller kampmotoren.
+export function createTrainingExerciseHypothesis(session = {}, value = null) {
+  const model = evaluateTrainingExerciseDesign(session, value);
+  const setup = [
+    model.selections.area,
+    model.selections.numbers,
+    model.selections.direction,
+    model.selections.touches
+  ].join(" · ");
+  return {
+    version: "historygo-football-manager.training-exercise-hypothesis.v1",
+    week: Math.max(1, Number(session.week) || 1),
+    sessionIndex: Math.max(0, Number(session.index) || 0),
+    day: clean(session.day),
+    title: clean(session.title) || model.archetype.title,
+    programTitle: clean(session.programTitle),
+    archetypeId: model.archetype.id,
+    objective: model.archetype.objective,
+    config: { ...model.config },
+    selections: { ...model.selections },
+    setup,
+    hypothesis: model.topicEffect,
+    watch: model.managerQuestion,
+    coachingPoints: [...model.coachingPoints]
   };
 }

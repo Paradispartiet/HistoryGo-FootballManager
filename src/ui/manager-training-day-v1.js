@@ -1,5 +1,6 @@
 import { currentManagerDayIndex } from "../football-manager-calendar.js";
 import { getTrainingProgramCompositionById } from "../football-training-program-compositions.js";
+import { MODE_SESSION_KEY } from "../football-mode-sessions.js";
 
 const STYLE_ID = "managerTrainingDayV1Style";
 const SURFACE_ID = "managerTrainingDay";
@@ -29,6 +30,11 @@ function readJson(key, fallback = null) {
 function clubWeekState() {
   const merits = readJson(TEAM_MERITS_KEY, {}) || {};
   return merits.clubWeekState || { week: 1, phase: "analysis" };
+}
+
+function activeModeLearningState() {
+  const envelope = readJson(MODE_SESSION_KEY, null);
+  return envelope?.sessions?.[envelope?.activeMode] || {};
 }
 
 function currentContext() {
@@ -107,6 +113,17 @@ function ensureSurface() {
       </section>
 
       <aside class="training-day-side">
+        <section class="training-day-card training-day-problem-suggestion" id="trainingDayProblemSuggestion" hidden>
+          <header><span>Forslag fra etterkampen</span><button type="button" id="trainingDayChooseSuggestedFocus">Velg fokus</button></header>
+          <strong id="trainingDayProblemTitle">Problem å følge opp</strong>
+          <p id="trainingDayProblemDetail"></p>
+          <small>Forslaget endrer ikke program eller fokus automatisk. Du tar fortsatt valget.</small>
+        </section>
+        <section class="training-day-card training-day-saved-hypothesis" id="trainingDaySavedHypothesis" hidden>
+          <span>Lagret treningshypotese</span>
+          <strong id="trainingDayHypothesisTitle"></strong>
+          <p id="trainingDayHypothesisDetail"></p>
+        </section>
         <section class="training-day-card">
           <header><span>Ukens fokus</span><button type="button" id="trainingDayChangeFocus">Endre</button></header>
           <strong id="trainingDayFocus">Ikke valgt</strong>
@@ -142,6 +159,7 @@ function ensureSurface() {
   surface.querySelector("#trainingDayChangeProgram")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingProgram"));
   surface.querySelector("#trainingDayChangeFocus")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingFocus"));
   surface.querySelector("#trainingDayChangeIndividual")?.addEventListener("click", () => openExistingChoice("teamChangeIndividualTraining"));
+  surface.querySelector("#trainingDayChooseSuggestedFocus")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingFocus"));
   surface.querySelector("#trainingDayBackCalendar")?.addEventListener("click", returnToCalendarDay);
   surface.querySelector("#trainingDayReturnCalendar")?.addEventListener("click", returnToCalendarDay);
   return surface;
@@ -199,6 +217,7 @@ function openExerciseDesign(session, index, context) {
       session: {
         ...session,
         index,
+        week: context.week,
         programTitle: selectedProgramTitle(),
         calendarDay: context.day
       }
@@ -291,6 +310,9 @@ function renderTrainingDay() {
   const condition = surface.querySelector("#trainingDayCondition");
   const load = surface.querySelector("#trainingDayLoad");
   const opponent = surface.querySelector("#trainingDayOpponent");
+  const learningState = activeModeLearningState();
+  const suggestion = learningState.trainingProblemSuggestion;
+  const hypothesis = learningState.trainingExerciseHypothesis;
 
   if (program) program.textContent = selectedProgramTitle();
   if (focus) focus.textContent = selectedFocus();
@@ -301,6 +323,26 @@ function renderTrainingDay() {
   if (condition) condition.textContent = compactText('.training-command-status[data-training-target="details"] .training-command-status-value', "Ingen akutte varsler");
   if (load) load.textContent = compactText(".training-load-brief", "Belastning beregnes fra valgt program.");
   if (opponent) opponent.textContent = compactText(".training-opponent-brief strong", "Motstander ikke klar");
+
+  const suggestionCard = surface.querySelector("#trainingDayProblemSuggestion");
+  if (suggestionCard) {
+    suggestionCard.hidden = !suggestion;
+    const title = suggestionCard.querySelector("#trainingDayProblemTitle");
+    const detail = suggestionCard.querySelector("#trainingDayProblemDetail");
+    if (title) title.textContent = suggestion?.title || "Problem å følge opp";
+    if (detail) detail.textContent = suggestion?.question || suggestion?.problem || "Vurder problemet før du velger ukas arbeid.";
+  }
+  const hypothesisCard = surface.querySelector("#trainingDaySavedHypothesis");
+  if (hypothesisCard) {
+    // Appstaten rydder bort hypotesen når klubbuka skifter. En ekstra
+    // sammenligning mot kalender-UI-et kan skjule en gyldig hypotese i framen
+    // der modussesjonen allerede er lagret, men kalenderflaten ikke er ferdig.
+    hypothesisCard.hidden = !hypothesis;
+    const title = hypothesisCard.querySelector("#trainingDayHypothesisTitle");
+    const detail = hypothesisCard.querySelector("#trainingDayHypothesisDetail");
+    if (title) title.textContent = hypothesis ? `${hypothesis.day || "Økt"} · ${hypothesis.title || "Treningsøvelse"}` : "";
+    if (detail) detail.textContent = hypothesis ? `${hypothesis.setup}. ${hypothesis.hypothesis}` : "";
+  }
 
   renderSessions(surface, context);
   syncLocation(context);
@@ -337,6 +379,15 @@ function acceptCalendarContext(event) {
 
 function installObservers() {
   window.addEventListener("hgfm:calendar-open-work", acceptCalendarContext);
+  const renderLearningChange = () => {
+    // Hendelsene sendes etter at den aktive modussesjonen er skrevet. Vis
+    // resultatet i samme brukerhandling; den planlagte runden synkroniserer
+    // fortsatt øvrige DOM-endringer fra app-renderingen.
+    renderTrainingDay();
+    scheduleRender();
+  };
+  window.addEventListener("hgfm:training-hypothesis-changed", renderLearningChange);
+  window.addEventListener("hgfm:training-problem-suggested", renderLearningChange);
   window.addEventListener("updateProfile", scheduleRender);
   window.addEventListener("storage", scheduleRender);
 
