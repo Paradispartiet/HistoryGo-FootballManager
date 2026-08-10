@@ -12451,11 +12451,6 @@ function renderTrainingProgramCompositions(teamFit) {
       limit: 8
     });
     selectedProgram = (Array.isArray(extra) ? extra : []).find((program) => program.id === selectedProgramId) || null;
-    // Et allerede valgt program er fortsatt fasit selv om konteksten har endret
-    // seg og programmet faller utenfor dagens åtte høyest rangerte forslag.
-    // Hent det direkte fra den eksisterende komposisjonskatalogen, slik at UI
-    // aldri fremstiller en gyldig lagret treningsuke som «ikke valgt».
-    selectedProgram ||= getTrainingProgramCompositionById(selectedProgramId, {});
     if (selectedProgram) {
       visiblePrograms = [selectedProgram, ...programs.filter((program) => program.id !== selectedProgramId)];
     }
