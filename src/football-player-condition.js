@@ -260,13 +260,12 @@ export function applyMatchToConditions(conditions, { played, goals, outcome, int
 // En uke uten kamp tar belastning bort — hvor mye avhenger av treningsuka du
 // valgte. Restitusjon henter mer, en pressuke mindre. Skader teller ned her, og
 // bare her: tid går i uker, ikke i kamper.
-export function applyWeeklyRecovery(conditions, { trainingIntensity = 1, recoveryBonus = 0 } = {}) {
+export function applyWeeklyRecovery(conditions, { trainingIntensity = 1 } = {}) {
   const map = toMap(conditions);
   const factor = clamp(2 - clamp(num(trainingIntensity, 1), 0.5, 1.6), 0.4, 1.5);
-  const facilityRecovery = clamp(num(recoveryBonus), 0, 8);
 
   map.forEach((condition) => {
-    condition.load = round1(clamp(condition.load - (BASE_WEEKLY_RECOVERY * factor + facilityRecovery), 0, 100));
+    condition.load = round1(clamp(condition.load - BASE_WEEKLY_RECOVERY * factor, 0, 100));
     if (isInjured(condition)) {
       const weeksOut = num(condition.injury.weeksOut) - 1;
       condition.injury = weeksOut > 0 ? { ...condition.injury, weeksOut } : null;

@@ -6,8 +6,6 @@ import {
   normalizeRecruitmentState
 } from "./football-recruitment.js";
 import { decorateHiredStaffWithAssignments, selectStarterStaffCandidates, summarizeStaffRoster } from "./football-staff-roster.js";
-import { calculateFacilityEffects, normalizeFacilityState, upgradeFacilityInMerits } from "./football-facilities.js";
-import { createManagerFacilitiesModel, renderManagerFacilitiesWorkspace } from "./ui/manager-facilities-workspace-v1.js";
 import "./ui/manager-shell-elements.js";
 import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
@@ -17,7 +15,6 @@ import { createMatchdaySceneModel, renderManagerMatchdayCommand } from "./ui/man
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
-import { createManagerClubSceneModel, renderManagerClubCommand } from "./ui/manager-club-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
@@ -833,19 +830,6 @@ const elements = {
   inboxPulseCount: document.querySelector("#inboxPulseCount"),
   adminSquadCount: document.querySelector("#adminSquadCount"),
   adminStaffCount: document.querySelector("#adminStaffCount"),
-  marketMediaValue: document.querySelector("#marketMediaValue"),
-  marketReputationNote: document.querySelector("#marketReputationNote"),
-  clubCommand: document.querySelector("#clubCommand"),
-  clubDepth: document.querySelector("#clubDepth"),
-  boardTrustValue: document.querySelector("#boardTrustValue"),
-  boardTrustFill: document.querySelector("#boardTrustFill"),
-  boardTrustNote: document.querySelector("#boardTrustNote"),
-  boardExpectationNote: document.querySelector("#boardExpectationNote"),
-  boardClubMetrics: document.querySelector("#boardClubMetrics"),
-  boardWeekNote: document.querySelector("#boardWeekNote"),
-  marketSignals: document.querySelector("#marketSignals"),
-  marketFanMood: document.querySelector("#marketFanMood"),
-  marketSponsorNote: document.querySelector("#marketSponsorNote"),
   adminDriftMetrics: document.querySelector("#adminDriftMetrics"),
   adminStaffNote: document.querySelector("#adminStaffNote")
 };
@@ -1433,7 +1417,13 @@ function normalizeLocalStart(value) {
 // Normaliser team merits til forventet form slik at render-/progresjonslaget
 // alltid har gyldige arrays/tall, uansett seed eller lagret tilstand.
 function normalizeTeamMerits(merits) {
-  const base = isTeamMeritsObject(merits) ? merits : {};
+  const base = isTeamMeritsObject(merits) ? { ...merits } : {};
+  // Pass 7 migrerer disse feltene i lagringen før appen hydreres. Slett dem
+  // også fra vilkårlig in-memory-input, slik at monolitten aldri kan føre et
+  // gammelt nivå-, økonomi- eller overgangsfelt tilbake til canonical state.
+  delete base.facilities;
+  delete base.clubEconomy;
+  delete base.transferMarket;
   const localStart = normalizeLocalStart(base.localStart);
   const publicStartAnchor = normalizePublicStartAnchor(base.publicStartAnchor);
   const migratedPublicStartAnchor = publicStartAnchor.enabled
@@ -1458,8 +1448,6 @@ function normalizeTeamMerits(merits) {
     ...normalizeRecruitmentState(base),
     ...normalizePlayerPoolSquadState(base),
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
-    // Reelle fasilitetsoppgraderinger v1: varig klubbstate i eksisterende teamMerits.
-    facilities: normalizeFacilityState(base.facilities),
     // Formasjonstilvenning per formationId (0-100). Vokser sakte med treningsuker
     // via advanceHgTrainingWeek. Robust mot gamle localStorage-data: ugyldige
     // verdier filtreres bort og manglende felt blir et tomt oppslag.
@@ -4067,8 +4055,7 @@ function applyWeeklyPlayerRecovery() {
     focusId: state.weeklyTrainingFocus?.focusId || null
   });
   state.playerCondition = applyWeeklyRecovery(getPlayerCondition(), {
-    trainingIntensity,
-    recoveryBonus: calculateFacilityEffects(state.teamMerits?.facilities).weeklyRecoveryBonus
+    trainingIntensity
   });
   savePlayerCondition();
   applyIndividualTrainingWeek();
@@ -6965,11 +6952,7 @@ function selectWeeklyTrainingProgram(program) {
   // samhold). Effekten anvendes kun én gang per uke; senere bytter samme uke
   // bare oppdaterer hvilket program som er valgt uten å stable opp belastning.
   if (state.teamMerits) {
-    state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(
-      getOffPitchState(),
-      program,
-      { facilityEffects: calculateFacilityEffects(state.teamMerits?.facilities) }
-    );
+    state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
     state.weeklyTrainingProgram.applied = true;
     saveTeamMerits();
   }
@@ -9283,8 +9266,8 @@ function renderDecisionCards(teamFit) {
   });
 }
 
-// Levende status i avdelingene: innboks-puls, stallstørrelse, medietrykk og
-// styretillit. Leser eksisterende state direkte. Trygg mot manglende elementer.
+// Levende status i avdelingene. Leser eksisterende state direkte og er trygg
+// mot manglende elementer.
 function renderDepartments() {
   if (elements.inboxPulseCount) {
     // Tråder som krever oppmerksomhet nå (i første uke: ett tydelig signal).
@@ -9301,261 +9284,11 @@ function renderDepartments() {
   }
 
   renderAdminRoom();
-  renderFacilities();
 
-  const media = state.clubWeekState?.mediaPressure;
-  if (elements.marketMediaValue) {
-    elements.marketMediaValue.textContent = Number.isFinite(media) ? String(media) : "–";
-  }
-  if (elements.marketReputationNote && Number.isFinite(media)) {
-    elements.marketReputationNote.textContent =
-      media >= 65
-        ? "Høyt medietrykk. Omdømmet er under press – styr forventningene aktivt."
-        : media <= 40
-          ? "Lavt medietrykk. Det er rolig rundt klubben akkurat nå."
-          : "Medietrykket er normalt. Omdømmet følger resultatene dine.";
-  }
-
-  renderMarketRoom();
-
-  const trust = state.clubWeekState?.boardTrust;
-  if (elements.boardTrustValue) {
-    elements.boardTrustValue.textContent = Number.isFinite(trust) ? String(trust) : "–";
-  }
-  if (elements.boardTrustFill && Number.isFinite(trust)) {
-    elements.boardTrustFill.style.width = `${Math.max(0, Math.min(100, trust))}%`;
-  }
-  if (elements.boardTrustNote && Number.isFinite(trust)) {
-    elements.boardTrustNote.textContent =
-      trust >= 65
-        ? "Styret har solid tillit til treneren."
-        : trust <= 35
-          ? "Styret er bekymret. Tilliten er lav – det trengs resultater."
-          : "Styret følger utviklingen tett. Tilliten er moderat.";
-  }
-
-  renderBoardRoom();
 }
 
-// Styret v1: den fyldige styreflaten. Leser klubbstate direkte
-// (styretillit, klubbverdier, ukerytme) — ingen ny motor, ingen History
-// Go-progresjon. I scenario-modus vises også prøveperiodens styreforventning.
-// Fasiliteter v1: ekte, lesbar kontorflate — ingen ny motor. Anleggsstanden
-// avledes av verdier som allerede finnes (treningskultur, medietrykk, opplåste
-// spillere, engasjert stab), på samme måte som Styret og Klubbrom leser klubben.
-function renderFacilities() {
-  const facilityState = normalizeFacilityState(state.teamMerits?.facilities);
-  const week = Math.max(1, Number(state.clubWeekState?.week) || 1);
-  const model = createManagerFacilitiesModel({ facilityState, week });
-  renderManagerFacilitiesWorkspace(document.querySelector("#managerFacilitiesWorkspace"), model, {
-    onUpgrade: (facilityId) => {
-      if (!state.teamMerits) return;
-      const result = upgradeFacilityInMerits(state.teamMerits, facilityId, { week });
-      if (!result.changed) {
-        renderFacilities();
-        return;
-      }
-      // teamMerits er et langlivet canonical-objekt som også eies av modus-/
-      // availability-laget. Bevar objektidentiteten og oppdater kun fasilitetsfeltet.
-      state.teamMerits.facilities = normalizeFacilityState(result.facilities);
-      saveTeamMerits();
-      renderFacilities();
-      renderManagerClubScene();
-    }
-  });
-}
-
-
-function openManagerClubTarget(target) {
-  if (target === "details") {
-    if (!elements.clubDepth) return;
-    elements.clubDepth.open = true;
-    requestAnimationFrame(() => {
-      elements.clubDepth.scrollIntoView({ behavior: "smooth", block: "start" });
-      elements.clubDepth.querySelector("summary")?.focus({ preventScroll: true });
-    });
-    return;
-  }
-  activateTab(target);
-}
-
-function renderManagerClubScene() {
-  if (!elements.clubCommand) return;
-  if (elements.clubDepth && elements.clubDepth.dataset.initialized !== "true") {
-    elements.clubDepth.open = false;
-    elements.clubDepth.dataset.initialized = "true";
-  }
-
-  const availability = getAvailability();
-  const staffIdentity = getStaffIdentitySummary();
-  const leagueSave = getLeagueSaveModel();
-  const model = createManagerClubSceneModel({
-    clubName: getSavedClubName() || "Managerklubben",
-    week: Number(state.clubWeekState?.week) || 1,
-    phaseLabel: state.clubWeekState
-      ? CLUB_WEEK_PHASE_LABELS[state.clubWeekState.phase] || state.clubWeekState.phase
-      : "Klubbdrift",
-    boardExpectation: leagueSave?.boardExpectation || "Styret venter at du bygger laget og viser en tydelig retning.",
-    clubState: state.clubWeekState,
-    roster: {
-      ...(availability.rosterReadiness || {}),
-      requiredCount: REQUIRED_SQUAD_SIZE
-    },
-    staffIdentity,
-    hiredStaffCount: getHiredStaff().length,
-    unlockedStaffCount: getUnlockedStaff().length,
-    unlockedPlayersCount: getUnlockedPlayers().length,
-    unlockedPlacesCount: getUnlockedPlaceIds().size,
-    unlockedExpertiseCount: getUnlockedExpertise().length,
-    facilitiesState: state.teamMerits?.facilities,
-    activeProgramCount: Array.isArray(state.teamMerits?.badgeProgress) ? state.teamMerits.badgeProgress.length : 0,
-    earnedBadgeCount: getEarnedBadges().length,
-    activeClassificationCount: Array.isArray(state.teamMerits?.activeClassifications)
-      ? state.teamMerits.activeClassifications.length
-      : 0
-  });
-
-  renderManagerClubCommand(elements.clubCommand, model, { onOpenTarget: openManagerClubTarget });
-}
-
-function renderBoardRoom() {
-  const club = state.clubWeekState;
-  renderManagerClubScene();
-
-  // Styrets forventning: avledet av tilliten akkurat nå. Kort, kontekstuell
-  // retning — ikke en fasit, men det styret ser etter denne uka.
-  if (elements.boardExpectationNote) {
-    const miniExpectation = isScenarioModeActive() && state.miniSeason?.boardExpectation
-      ? state.miniSeason.boardExpectation
-      : null;
-    if (miniExpectation) {
-      elements.boardExpectationNote.textContent = `Prøveperioden: ${miniExpectation}`;
-    } else {
-      const trust = Number(club?.boardTrust);
-      elements.boardExpectationNote.textContent = !Number.isFinite(trust)
-        ? "Styret venter at du bygger laget og viser en tydelig retning."
-        : trust >= 65
-          ? "Styret forventer at du holder retningen og bygger videre på det som virker."
-          : trust <= 35
-            ? "Styret forventer tydelige grep og resultater som snur trenden."
-            : "Styret forventer jevn framgang: sett laget, tren målrettet og vinn kampene du bør vinne.";
-    }
-  }
-
-  // Klubbens temperatur: styrets lesning av klubbverdiene, som lesbare signaler
-  // med retning (høy/lav) i stedet for rå tall alene.
-  if (elements.boardClubMetrics) {
-    elements.boardClubMetrics.innerHTML = "";
-    const metrics = [
-      { label: "Moral", value: club?.playerMorale, highGood: true },
-      { label: "Taktisk klarhet", value: club?.tacticalClarity, highGood: true },
-      { label: "Treningskultur", value: club?.trainingCulture, highGood: true },
-      { label: "Medietrykk", value: club?.mediaPressure, highGood: false }
-    ];
-    for (const metric of metrics) {
-      const value = Number(metric.value);
-      const li = document.createElement("li");
-      li.className = "board-metric";
-      const name = document.createElement("span");
-      name.className = "board-metric-label";
-      name.textContent = metric.label;
-      const num = document.createElement("strong");
-      num.className = "board-metric-value";
-      if (Number.isFinite(value)) {
-        num.textContent = String(value);
-        const strong = metric.highGood ? value >= 60 : value <= 40;
-        const weak = metric.highGood ? value <= 40 : value >= 60;
-        num.dataset.tone = strong ? "good" : weak ? "warn" : "neutral";
-      } else {
-        num.textContent = "–";
-        num.dataset.tone = "neutral";
-      }
-      li.append(name, num);
-      elements.boardClubMetrics.append(li);
-    }
-  }
-
-  // Ukerytme: hvor i klubbuka styret ser laget akkurat nå.
-  if (elements.boardWeekNote) {
-    const week = Number(club?.week) || 1;
-    const phaseLabel = club ? CLUB_WEEK_PHASE_LABELS[club.phase] || club.phase : "Oppsett";
-    elements.boardWeekNote.textContent = `Uke ${week} · ${phaseLabel} — styret følger utviklingen.`;
-  }
-}
-
-// Marked v1: markedsavdelingen. Leser klubbstate direkte (medietrykk, moral,
-// styretillit) og presenterer omdømme, fanstemning og sponsorinteresse som
-// lesbare kvalitative signaler — ingen ny motor, ingen tall som ikke finnes.
-function renderMarketRoom() {
-  const club = state.clubWeekState;
-  const media = Number(club?.mediaPressure);
-  const morale = Number(club?.playerMorale);
-  const trust = Number(club?.boardTrust);
-
-  // Kommersielle signaler: de klubbverdiene som faktisk driver marked/omdømme.
-  if (elements.marketSignals) {
-    elements.marketSignals.innerHTML = "";
-    const signals = [
-      { label: "Medietrykk", value: media, highGood: false },
-      { label: "Moral", value: morale, highGood: true },
-      { label: "Styretillit", value: trust, highGood: true }
-    ];
-    for (const signal of signals) {
-      const value = Number(signal.value);
-      const li = document.createElement("li");
-      li.className = "board-metric";
-      const name = document.createElement("span");
-      name.className = "board-metric-label";
-      name.textContent = signal.label;
-      const num = document.createElement("strong");
-      num.className = "board-metric-value";
-      if (Number.isFinite(value)) {
-        num.textContent = String(value);
-        const strong = signal.highGood ? value >= 60 : value <= 40;
-        const weak = signal.highGood ? value <= 40 : value >= 60;
-        num.dataset.tone = strong ? "good" : weak ? "warn" : "neutral";
-      } else {
-        num.textContent = "–";
-        num.dataset.tone = "neutral";
-      }
-      li.append(name, num);
-      elements.marketSignals.append(li);
-    }
-  }
-
-  // Fanstemning: avledet av moral og medietrykk. En lesbar temperatur, ikke et
-  // oppmøtetall — oppmøte-/lojalitetsmotor finnes ikke ennå.
-  if (elements.marketFanMood) {
-    if (!Number.isFinite(morale) && !Number.isFinite(media)) {
-      elements.marketFanMood.textContent = "Fanstemningen leses av moral og medietrykk.";
-    } else if (Number.isFinite(media) && media >= 65) {
-      elements.marketFanMood.textContent = "Medietrykket smitter over på tribunen. Fansen er utålmodige.";
-    } else if (Number.isFinite(morale) && morale >= 60) {
-      elements.marketFanMood.textContent = "Fansen er med laget. Stemningen på tribunen er god.";
-    } else if (Number.isFinite(morale) && morale <= 40) {
-      elements.marketFanMood.textContent = "Lav moral demper stemningen. Fansen venter på et løft.";
-    } else {
-      elements.marketFanMood.textContent = "Fanstemningen er avventende — resultatene avgjør temperaturen.";
-    }
-  }
-
-  // Sponsorinteresse: følger omdømmet (styretillit + medietrykk). Kvalitativ,
-  // konkrete avtaler kobles på senere (ærlig merket i UI).
-  if (elements.marketSponsorNote) {
-    const calm = !Number.isFinite(media) || media < 65;
-    if (Number.isFinite(trust) && trust >= 65 && calm) {
-      elements.marketSponsorNote.textContent = "Omdømmet er attraktivt. Sponsorinteressen er stigende.";
-    } else if ((Number.isFinite(trust) && trust <= 35) || (Number.isFinite(media) && media >= 65)) {
-      elements.marketSponsorNote.textContent = "Uro rundt klubben demper sponsorinteressen.";
-    } else {
-      elements.marketSponsorNote.textContent = "Sponsorinteressen er stabil og følger resultatene.";
-    }
-  }
-}
-
-// Admin v1: administrasjonen — den operative driften rundt laget. Leser
-// tropp-/stab-state direkte (rosterReadiness, hired staff). Ingen ny motor og
-// ingen økonomital som ikke finnes; budsjett/kontrakter er ærlig senere.
+// Administrasjonen viser den operative driften rundt laget fra eksisterende
+// tropp- og stabsstate. Den oppretter ingen økonomi- eller kontraktstall.
 function renderAdminRoom() {
   const roster = getAvailability().rosterReadiness || {};
   const staffCount = getHiredStaff().length;
@@ -9571,12 +9304,12 @@ function renderAdminRoom() {
     for (const metric of metrics) {
       const value = Number(metric.value);
       const li = document.createElement("li");
-      li.className = "board-metric";
+      li.className = "admin-metric";
       const name = document.createElement("span");
-      name.className = "board-metric-label";
+      name.className = "admin-metric-label";
       name.textContent = metric.label;
       const num = document.createElement("strong");
-      num.className = "board-metric-value";
+      num.className = "admin-metric-value";
       if (Number.isFinite(value)) {
         num.textContent = `${value}/${metric.threshold}`;
         num.dataset.tone = value >= metric.threshold ? "good" : value <= 0 ? "warn" : "neutral";

@@ -20,9 +20,9 @@
   /* Fargeaksenter: små, klare og funksjonelle signaler per managerområde. */
   --hg-accent-tactics: #46d68c;
   --hg-accent-inbox: #4da3ff;
-  --hg-accent-facilities: #5ecbc4;
+  --hg-accent-training: #5ecbc4;
   --hg-accent-admin: #e3c75e;
-  --hg-accent-market: #ff9d4d;
+  --hg-accent-warning: #ff9d4d;
   --hg-accent-board: #b48cff;
   --hg-accent-history: #4dd8e6;
   --hg-accent-library: #f2f4f7;
@@ -422,9 +422,7 @@ h3 {
 .nav-tab[data-tab-target="team"],
 .nav-tab[data-tab-target="tactics"] { --tab-accent: var(--hg-accent-tactics); }
 .nav-tab[data-tab-target="inbox"] { --tab-accent: var(--hg-accent-inbox); }
-.nav-tab[data-tab-target="facilities"] { --tab-accent: var(--hg-accent-facilities); }
 .nav-tab[data-tab-target="admin"] { --tab-accent: var(--hg-accent-admin); }
-.nav-tab[data-tab-target="market"] { --tab-accent: var(--hg-accent-market); }
 .nav-tab[data-tab-target="board"] { --tab-accent: var(--hg-accent-board); }
 .nav-tab[data-tab-target="historygo"] { --tab-accent: var(--hg-accent-history); }
 .nav-tab[data-tab-target="hgfmLibrary"] { --tab-accent: var(--hg-accent-library); }
@@ -2110,33 +2108,7 @@ ul {
   background: transparent;
 }
 
-/* ---------- Facility / generic card grids ---------- */
-.facility-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 14px;
-}
-
-.facility-card {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel);
-  padding: 22px;
-  display: grid;
-  gap: 8px;
-  align-content: start;
-}
-
-.facility-card h3 {
-  margin: 0;
-  font-size: 1.25rem;
-}
-
-.facility-card .muted-text {
-  margin: 0;
-}
-
-.facility-level {
+.admin-staff-count {
   margin: 0;
   font-size: 1.9rem;
   font-weight: 900;
@@ -3293,8 +3265,8 @@ ul {
 .topbar-metrics article:has(#clubBoardTrust) { --tile-accent: var(--hg-accent-board); }
 .topbar-metrics article:has(#clubPlayerMorale) { --tile-accent: var(--good); }
 .topbar-metrics article:has(#clubTacticalClarity) { --tile-accent: var(--hg-accent-tactics); }
-.topbar-metrics article:has(#clubTrainingCulture) { --tile-accent: var(--hg-accent-facilities); }
-.topbar-metrics article:has(#clubMediaPressure) { --tile-accent: var(--hg-accent-market); }
+.topbar-metrics article:has(#clubTrainingCulture) { --tile-accent: var(--hg-accent-training); }
+.topbar-metrics article:has(#clubMediaPressure) { --tile-accent: var(--hg-accent-warning); }
 
 .topbar-metrics span {
   display: block;
@@ -4355,7 +4327,7 @@ ul {
 .dashboard-grid .decision-strip { --card-accent: var(--hg-accent-board); }
 .dashboard-grid .mini-season-panel,
 .dashboard-grid .league-season-panel { --card-accent: var(--hg-accent-tactics); }
-.dashboard-grid .dashboard-shortcuts { --card-accent: var(--hg-accent-facilities); }
+.dashboard-grid .dashboard-shortcuts { --card-accent: var(--hg-accent-training); }
 .dashboard-grid .club-week-event-log-panel { --card-accent: var(--hg-accent-history); }
 
 .dashboard-view .dashboard-grid .manager-actions-panel {
@@ -4458,10 +4430,7 @@ ul {
 }
 
 .dept-hero-inbox { --dept-accent: var(--hg-accent-inbox); }
-.dept-hero-facilities { --dept-accent: var(--hg-accent-facilities); }
 .dept-hero-admin { --dept-accent: var(--hg-accent-admin); }
-.dept-hero-market { --dept-accent: var(--hg-accent-market); }
-.dept-hero-board { --dept-accent: var(--hg-accent-board); }
 .dept-hero-historygo { --dept-accent: var(--hg-accent-history); }
 .dept-hero-hgfm { --dept-accent: var(--hg-accent-library); }
 
@@ -4529,42 +4498,8 @@ ul {
   opacity: 0.35;
 }
 
-.dept-hero-facilities::after { border-radius: 50%; }
 .dept-hero-admin::after { transform: rotate(45deg); }
-.dept-hero-market::after { width: 280px; transform: rotate(12deg); }
-.dept-hero-board::after { border-style: dashed; }
 .dept-hero-inbox::after { border-radius: 50% 50% 50% 0; }
-
-.facility-empty {
-  margin: 0;
-  border: 1px dashed var(--line-soft);
-  border-radius: 10px;
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-style: italic;
-  line-height: 1.45;
-  padding: 10px 12px;
-}
-
-/* ---------- Fasiliteter: blueprint-aktig tavle med ulik størrelse ---------- */
-.facility-board {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.facility-feature {
-  grid-column: span 2;
-  grid-row: span 2;
-  border-width: 2px;
-  background:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0 12px, transparent 12px 24px),
-    var(--panel);
-}
-
-.facility-feature .facility-level {
-  font-size: 2.6rem;
-}
 
 /* ---------- Innboks: pulslayout ---------- */
 .dept-hero-stat-live#inboxPulseCount,
@@ -4586,75 +4521,30 @@ ul {
 }
 
 /* ---------- Administrasjon: ledger-tavle ---------- */
-.admin-board,
-.market-board,
-.board-board {
+.admin-board {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
-.admin-feature,
-.market-feature,
-.board-feature {
+.admin-feature {
   grid-column: span 2;
   display: grid;
   gap: 12px;
   align-content: start;
 }
 
-.admin-feature h3,
-.market-feature h3,
-.board-feature h3 {
+.admin-feature h3 {
   font-size: 1.5rem;
 }
 
-.admin-side,
-.market-side,
-.board-side {
+.admin-side {
   display: grid;
   gap: 10px;
   align-content: start;
 }
 
-.board-board {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.board-feature {
-  grid-column: span 4;
-}
-
-/* Styretillit-måler */
-.board-trust-meter {
-  height: 18px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--hg-surface-deep);
-  overflow: hidden;
-}
-
-.board-trust-fill {
-  height: 100%;
-  width: 50%;
-  background: var(--text);
-  transition: width 0.3s ease;
-}
-
-/* Styret v1: to sidekort under tillitskortet deler raden likt. */
-.board-board .board-side {
-  grid-column: span 2;
-}
-
-.board-expectation {
-  margin: 4px 0 0;
-  color: var(--text);
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-
-/* Klubbens temperatur: styrets lesning av klubbverdiene. */
-.board-metrics {
+.admin-metrics {
   list-style: none;
   margin: 4px 0 0;
   padding: 0;
@@ -4662,7 +4552,7 @@ ul {
   gap: 6px;
 }
 
-.board-metric {
+.admin-metric {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -4673,29 +4563,19 @@ ul {
   background: rgba(0, 0, 0, 0.14);
 }
 
-.board-metric-label {
+.admin-metric-label {
   color: var(--muted);
   font-size: 0.82rem;
 }
 
-.board-metric-value {
+.admin-metric-value {
   font-variant-numeric: tabular-nums;
   font-size: 0.95rem;
 }
 
-.board-metric-value[data-tone="good"] { color: var(--hg-accent-board, #6ee7b7); }
-.board-metric-value[data-tone="warn"] { color: #f6a96b; }
-.board-metric-value[data-tone="neutral"] { color: var(--text); }
-
-.board-future-note {
-  margin-top: 2px;
-}
-
-@media (max-width: 720px) {
-  .board-board .board-side {
-    grid-column: span 4;
-  }
-}
+.admin-metric-value[data-tone="good"] { color: var(--hg-accent-admin, #6ee7b7); }
+.admin-metric-value[data-tone="warn"] { color: #f6a96b; }
+.admin-metric-value[data-tone="neutral"] { color: var(--text); }
 
 /* ---------- Footer ---------- */
 .site-footer {
@@ -4761,17 +4641,11 @@ ul {
     grid-template-columns: 1fr;
   }
 
-  .facility-board,
-  .admin-board,
-  .market-board,
-  .board-board {
+  .admin-board {
     grid-template-columns: 1fr 1fr;
   }
 
-  .facility-feature,
-  .admin-feature,
-  .market-feature,
-  .board-feature {
+  .admin-feature {
     grid-column: 1 / -1;
   }
 
@@ -4884,10 +4758,7 @@ ul {
     width: clamp(30px, var(--chip-w, 21cqw), 96px);
   }
 
-  .facility-board,
-  .admin-board,
-  .market-board,
-  .board-board {
+  .admin-board {
     grid-template-columns: 1fr;
   }
 
@@ -5789,7 +5660,7 @@ ul {
   position: absolute;
   inset: 0 auto 0 0;
   width: 3px;
-  background: var(--hg-accent-facilities);
+  background: var(--hg-accent-training);
   opacity: 0.7;
 }
 
@@ -7330,9 +7201,6 @@ button.portal-card:hover {
 .panel > p.muted-text,
 .portal-card small,
 .dept-hero-lede,
-.facility-card .muted-text,
-.market-side .muted-text,
-.board-side .muted-text,
 .admin-side .muted-text,
 .inbox-signal-gate p,
 .pitch-hint {
@@ -7363,10 +7231,7 @@ button.portal-card:hover {
 .manager-portal,
 .squad-setup-checklist,
 .training-choice-grid,
-.facility-board,
-.admin-board,
-.market-board,
-.board-board {
+  .admin-board {
   align-items: stretch;
 }
 
@@ -7799,14 +7664,9 @@ body { grid-template-columns: minmax(0, 1fr); }
 .dept-link-card strong { font-size: 1.05rem; }
 .dept-link-card small { color: var(--hg-text-muted); }
 
-/* Fasiliteter: live status-linje + nivå-tone. */
-.facility-status { margin: 6px 0 0; font-size: 0.85rem; color: var(--hg-text-muted); }
-.facility-level[data-tone="good"] { color: var(--hg-accent-tactics); }
-.facility-level[data-tone="warn"] { color: var(--hg-accent-market, #ff9d4d); }
-
 /* «Bruk formasjon»-status (låst-tilbakemelding). */
 .hgfm-apply-status { margin: 4px 0 0; font-size: 0.85rem; color: var(--hg-text-muted); min-height: 1em; }
-.hgfm-apply-status[data-tone="warn"] { color: var(--hg-accent-market, #ff9d4d); }
+.hgfm-apply-status[data-tone="warn"] { color: var(--hg-accent-warning, #ff9d4d); }
 
 /* Auto-fyll tropp (never-stuck-uten-History-Go). */
 .autofill-squad { width: 100%; margin: 4px 0 4px; }

@@ -7,8 +7,6 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="src/ui/manager-shell-v3.css">
   <link rel="stylesheet" href="src/ui/manager-training-scene-v2.css">
-  <link rel="stylesheet" href="src/ui/manager-club-scene-v1.css">
-  <link rel="stylesheet" href="src/ui/manager-facilities-workspace-v1.css">
   <link rel="stylesheet" href="src/ui/manager-matchday-scene-v1.css">
 </head>
 <body>
@@ -170,8 +168,7 @@
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="kamp" data-tab-target="kamp">Kampdag</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="kamp" data-tab-target="analyse">Analyse</button>
 
-    <!-- Klubb/Mer: varige klubbfunksjoner. Uferdig økonomi, marked og
-         fasiliteter er bevisst ikke navigerbare. -->
+    <!-- Klubben: levende, varige klubbfunksjoner. -->
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="board">Klubboversikt</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
@@ -987,32 +984,15 @@
       </section>
     </div>
 
-    <!-- ============================ FASILITETER ============================ -->
-    <div class="tab-section dept dept-facilities" data-tab-section="facilities" data-tab-parent="board" data-shell-hidden hidden>
-      <section class="dept-hero dept-hero-facilities">
-        <div>
-          <p class="eyebrow">Klubbanlegg</p>
-          <h2>Fasiliteter</h2>
-          <p class="dept-hero-lede">Velg én reell anleggsoppgradering per manageruke. Oppgraderingene lagres i klubbens eksisterende save og virker direkte på trening, restitusjon og taktisk klarhet.</p>
-        </div>
-        <div class="dept-hero-stat dept-hero-stat-live">
-          <strong id="facilityOverallValue">Grunnleggende</strong>
-          <span>anleggsstatus</span>
-        </div>
-      </section>
-      <div id="managerFacilitiesWorkspace" class="manager-facilities-workspace-v1" aria-live="polite"></div>
-    </div>
-
     <!-- ============================ ADMINISTRASJON ============================ -->
-    <!-- Admin v1: ekte kontorflate — den operative driften rundt laget. Leser
-         tropp-/stab-state direkte (rosterReadiness, hired staff) via
-         renderAdminRoom(). Økonomi/kontrakter er ærlig merket som senere. -->
+    <!-- Admin v1: den operative driften rundt laget. Leser tropp-/stab-state
+         direkte (rosterReadiness, hired staff) via renderAdminRoom(). -->
     <div class="tab-section dept dept-admin" data-tab-section="admin" data-tab-parent="board" hidden>
       <section class="dept-hero dept-hero-admin">
         <div>
-          <p class="eyebrow">Drift og økonomi</p>
+          <p class="eyebrow">Klubbdrift</p>
           <h2>Stabskontor</h2>
-          <p class="dept-hero-lede">Stab, kampklar tropp og drift rundt laget. Full økonomimotor kommer senere.</p>
+          <p class="dept-hero-lede">Stab, kampklar tropp og den operative driften rundt laget.</p>
         </div>
         <div class="dept-hero-stat dept-hero-stat-live">
           <strong id="adminSquadCount">0</strong>
@@ -1025,11 +1005,11 @@
           <p class="eyebrow">Kamptropp</p>
           <h3>Stall og kampklar tropp</h3>
           <p class="muted-text">Slik ser kamptroppen ut før neste kamp.</p>
-          <ul id="adminDriftMetrics" class="board-metrics" aria-label="Driftsstatus"></ul>
+          <ul id="adminDriftMetrics" class="admin-metrics" aria-label="Driftsstatus"></ul>
         </article>
         <article class="panel admin-side admin-staff">
           <h3>Stab</h3>
-          <p id="adminStaffCount" class="facility-level">0 ansatte</p>
+          <p id="adminStaffCount" class="admin-staff-count">0 ansatte</p>
           <p id="adminStaffNote" class="muted-text">Stab hentes inn via History Go-progresjon.</p>
         <div class="unlock-block">
           <h4>Tilgjengelig stab</h4>
@@ -1041,102 +1021,11 @@
         </div>
       
         </article>
-        <article class="panel admin-side">
-          <h3>Økonomi &amp; kontrakter</h3>
-          <p id="adminEconomyNote" class="muted-text">Budsjett, lønnstak og kontrakter kobles på i full managerutgave.</p>
-          <p class="facility-empty board-future-note">Økonomimotoren er ikke koblet på ennå.</p>
-        </article>
       </div>
     </div>
 
-    <!-- ============================ MARKED ============================ -->
-    <!-- Marked v1: ekte kontorflate som leser klubbstate direkte (medietrykk,
-         moral, styretillit). Omdømme, fanstemning og sponsorinteresse er
-         lesbare kvalitative signaler avledet av eksisterende verdier — ingen ny
-         motor. Konkrete avtaler er ærlig merket som senere. -->
-    <div class="tab-section dept dept-market" data-tab-section="market" data-tab-parent="board" data-shell-hidden hidden>
-      <section class="dept-hero dept-hero-market">
-        <div>
-          <p class="eyebrow">Kommersiell utvikling</p>
-          <h2>Klubbrom</h2>
-          <p class="dept-hero-lede">Fans, sponsorer og omdømme. Medietrykket fra klubbuken styrer temperaturen.</p>
-        </div>
-        <div class="dept-hero-stat dept-hero-stat-live">
-          <strong id="marketMediaValue">–</strong>
-          <span>medietrykk</span>
-        </div>
-      </section>
-
-      <div class="market-board">
-        <article class="panel market-feature">
-          <p class="eyebrow">Omdømme</p>
-          <h3>Klubbens temperatur</h3>
-          <p id="marketReputationNote" class="muted-text">Omdømmet følger medietrykket.</p>
-          <button type="button" class="shortcut-button" data-tab-target="board">Se styremål</button>
-          <details class="panel-details is-flush"><summary>Se detaljer</summary>
-          <ul id="marketSignals" class="board-metrics" aria-label="Kommersielle signaler"></ul></details>
-        </article>
-        <article class="panel market-side">
-          <h3>Fans</h3>
-          <p id="marketFanMood" class="muted-text">Fanstemningen leses av moral og medietrykk.</p>
-        </article>
-        <article class="panel market-side">
-          <h3>Sponsorer</h3>
-          <p id="marketSponsorNote" class="muted-text">Sponsorinteressen følger omdømmet.</p>
-          <p class="facility-empty board-future-note">Konkrete avtaler kobles på i full managerutgave.</p>
-        </article>
-      </div>
-    </div>
-
-    <!-- ============================ STYRET ============================ -->
-    <!-- Styret v1: en ekte kontorflate som leser klubbstate (styretillit,
-         klubbverdier, ukerytme) direkte. Ikke lenger en «Senere»-flate — alt
-         her er live via renderBoardRoom(). Budsjett/kontrakter er ærlig merket
-         som senere, som en liten sekundær note, ikke som hovedinnhold. -->
-    <div class="tab-section dept dept-board" data-tab-section="board" hidden>
-      <section class="manager-surface club-command-panel" id="clubCommandPanel" aria-label="Klubbkontoret" aria-live="polite">
-        <div id="clubCommand" class="club-command"></div>
-      </section>
-
-      <details class="club-depth" id="clubDepth">
-        <summary>Styrets vurdering og klubbverdier</summary>
-        <div class="club-depth-content">
-      <section class="dept-hero dept-hero-board">
-        <div>
-          <p class="eyebrow">Boardroom</p>
-          <h2>Styret</h2>
-          <p class="dept-hero-lede">Tillit, forventninger og klubbens temperatur. Styret følger klubbukene dine — tilliten beveger seg med hvordan du driver laget.</p>
-        </div>
-        <div class="dept-hero-stat dept-hero-stat-live">
-          <strong id="boardTrustValue">–</strong>
-          <span>styretillit</span>
-        </div>
-      </section>
-
-      <div class="board-board">
-        <article class="panel board-feature">
-          <p class="eyebrow">Tillit</p>
-          <h3>Styrets tillit til treneren</h3>
-          <div class="board-trust-meter" aria-hidden="true">
-            <div class="board-trust-fill" id="boardTrustFill"></div>
-          </div>
-          <p id="boardTrustNote" class="muted-text">Tilliten oppdateres når du driver klubben gjennom ukene.</p>
-          <p id="boardExpectationNote" class="board-expectation">Styret venter at du bygger laget og viser en tydelig retning.</p>
-        </article>
-        <article class="panel board-side">
-          <h3>Klubbens temperatur</h3>
-          <p class="muted-text">Styrets lesning av klubben akkurat nå.</p>
-          <ul id="boardClubMetrics" class="board-metrics" aria-label="Klubbverdier styret følger"></ul>
-        </article>
-        <article class="panel board-side">
-          <h3>Denne uka</h3>
-          <p id="boardWeekNote" class="muted-text">Uke 1 · styret følger utviklingen.</p>
-          <p class="facility-empty board-future-note">Budsjett og kontrakter kobles på i full managerutgave.</p>
-        </article>
-      </div>
-        </div>
-      </details>
-    </div>
+    <!-- Klubborganisasjonen rendres inn her av manager-club-organization-v1. -->
+    <div class="tab-section dept dept-board" data-tab-section="board" hidden></div>
 
     <!-- ============================ HISTORY GO ============================ -->
     <div class="tab-section dept dept-historygo" data-tab-section="historygo" data-tab-parent="board" hidden>

@@ -325,20 +325,6 @@ function ensureNavigation() {
     if (section) section.dataset.tabParent = "dashboard";
   });
 
-  ["facilities", "market"].forEach((target) => {
-    const section = document.querySelector(`[data-tab-section="${target}"]`);
-    if (section) {
-      section.hidden = true;
-      section.dataset.shellHidden = "true";
-      section.dataset.rejectedLiveIa = "true";
-    }
-  });
-
-  const economyArticle = document.getElementById("adminEconomyNote")?.closest("article");
-  if (economyArticle) {
-    economyArticle.hidden = true;
-    economyArticle.dataset.rejectedLiveIa = "true";
-  }
 }
 
 function activateClub() {

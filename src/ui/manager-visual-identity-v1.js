@@ -15,8 +15,6 @@ const AREA_BY_TARGET = Object.freeze({
   board: "office",
   officeHelp: "office",
   admin: "office",
-  facilities: "office",
-  market: "office",
   progression: "office",
   tactics: "team",
   squad: "team",

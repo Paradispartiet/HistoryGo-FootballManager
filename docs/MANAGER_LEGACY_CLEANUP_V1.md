@@ -37,23 +37,15 @@ Mode-envelope migreres på samme måte for hver sesjon som har `teamMerits`. Å 
 
 De gamle økonomi-, kontrakt- og overgangsmotorene og deres UI/CSS er slettet permanent.
 
-### Fasilitetskompatibilitet
+### Endelig fasilitetsopprydding
 
-`src/app.js` er fortsatt en stor legacy-monolitt som importerer fasilitetsnavn direkte. For å unngå en risikofylt omskriving av hele appfilen i samme migrasjonspass ligger `src/football-facilities.js` og `src/ui/manager-facilities-workspace-v1.js` midlertidig igjen som import-kompatible fasader.
+De midlertidige kompatibilitetsfasadene for fasiliteter er nå fysisk slettet. `src/app.js`, trening og spillercondition har ingen fasilitetsimport, nivåstate, oppgraderingskall eller skjulte bonuser. `Kontor → Klubben → Treningsanlegg / Medisinsk apparat` og den eksisterende treningsmodellen er de eneste produktretningene for disse områdene.
 
-De er ikke et system:
-
-- ingen nivådefinisjoner;
-- ingen oppgraderinger;
-- ingen save-state;
-- alle fasilitetseffekter er `0`;
-- workspacen rendrer ingen UI.
-
-Dermed kan gamle kall ikke påvirke trening, restitusjon, skadefare, taktisk klarhet eller trivsel. `Kontor → Klubben → Treningsanlegg / Medisinsk apparat` er den eneste produktretningen for disse områdene.
+Save-migreringen beholdes med vilje. Den er nødvendig for å åpne eldre lagringer trygt, men oppretter ingen runtime-funksjon og ingen ny lagringsnøkkel.
 
 ## DOM og navigasjon
 
-Pass 7 fjerner eventuelle gjenværende legacy-noder for fasiliteter, marked og økonomi ved oppstart. De finnes ikke som skjulte alternative managerflater etter migreringen.
+Legacy-noder for fasiliteter, marked og økonomi er fysisk slettet fra HTML. Oppstartskoden migrerer bare gamle lagringer og manipulerer ikke lenger DOM for å skjule eller fjerne gamle flater.
 
 Dette endrer ikke den canonical strukturen:
 
@@ -82,7 +74,7 @@ Pass 7 har egne porter som krever at:
 1. migreringen fjerner nøyaktig de tre legacy-feltene og er idempotent;
 2. canonical meritter overlever migreringen;
 3. alle mode-session snapshots migreres;
-4. fasilitetsfasaden alltid har nøytrale effekter;
+4. fasilitetsfasader, statisk markup og motorintegrasjoner er fysisk slettet;
 5. managerskallet ikke importerer økonomi-/overgangsmodulene;
 6. canonical merits-seed ikke inneholder legacy-feltene;
 7. browseren ikke får economy/market/facilities-workspaces eller navigasjonsflater;

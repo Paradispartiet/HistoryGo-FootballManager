@@ -4,11 +4,6 @@ import {
   migrateLegacyModeEnvelope,
   migrateLegacyTeamMerits
 } from "../src/football-legacy-save-migration.js";
-import {
-  calculateFacilityEffects,
-  normalizeFacilityState,
-  upgradeFacilityInMerits
-} from "../src/football-facilities.js";
 
 const canonical = {
   schema: "historygo-football-manager.team_merits.v1",
@@ -68,19 +63,6 @@ for (const mode of ["league", "scenario"]) {
   }
 }
 
-assert.equal(normalizeFacilityState(oldMerits.facilities), undefined);
-assert.deepEqual(calculateFacilityEffects(oldMerits.facilities), {
-  trainingLoadReduction: 0,
-  trainingHappinessBonus: 0,
-  weeklyRecoveryBonus: 0,
-  medicalTrainingProtection: 0,
-  analysisClarityBonus: 0
-});
-const strippedByCompat = upgradeFacilityInMerits(oldMerits, "training", { week: 9 });
-assert.equal(strippedByCompat.changed, true);
-assert.equal("facilities" in strippedByCompat.merits, false);
-assert.deepEqual(strippedByCompat.merits.recruitedPlayerIds, oldMerits.recruitedPlayerIds);
-
 console.log("✓ Pass 7 migrerer gamle merits uten å miste tropp, unlocks eller stab");
 console.log("✓ Pass 7 migrerer teamMerits i mode-envelope idempotent");
-console.log("✓ Legacy fasiliteter kan ikke lenger gi skjulte motorbonuser");
+console.log("✓ Legacy runtime er fysisk slettet; bare save-migreringen består");

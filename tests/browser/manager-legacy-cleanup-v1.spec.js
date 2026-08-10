@@ -92,18 +92,11 @@ test("History Go-rekrutteringsklikk blokkeres ikke av skjult økonomi eller over
     return { dispatchResult, defaultPrevented };
   });
   expect(result).toEqual({ dispatchResult: true, defaultPrevented: false });
+});
 
-  const effects = await page.evaluate(async () => {
-    const facilities = await import("/src/football-facilities.js");
-    return facilities.calculateFacilityEffects({ levels: { training: 3, medical: 3, analysis: 3 } });
-  });
-  expect(effects).toEqual({
-    trainingLoadReduction: 0,
-    trainingHappinessBonus: 0,
-    weeklyRecoveryBonus: 0,
-    medicalTrainingProtection: 0,
-    analysisClarityBonus: 0
-  });
+test("legacy fasilitetsfasader lastes ikke lenger i runtime", async ({ page }) => {
+  const loadedScripts = await page.evaluate(() => performance.getEntriesByType("resource").map((entry) => entry.name));
+  expect(loadedScripts.some((url) => /football-facilities|manager-facilities-workspace/.test(url))).toBe(false);
 });
 
 test("Pass 7 beholder mobilflyt og WCAG A/AA", async ({ page }) => {

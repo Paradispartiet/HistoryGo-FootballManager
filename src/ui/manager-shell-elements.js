@@ -4,7 +4,7 @@ const SETTINGS_ICON = `
     <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
   </svg>`;
 
-const OFFICE_DEEP_TARGETS = new Set(["progression", "admin", "facilities", "market"]);
+const OFFICE_DEEP_TARGETS = new Set(["progression", "admin"]);
 const LOCATION_LABELS = Object.freeze({
   dashboard: "Kontor · Oppstartshjelp",
   inbox: "Kontor · Innboks",
@@ -13,8 +13,6 @@ const LOCATION_LABELS = Object.freeze({
   historygo: "Kontor · Speiding",
   progression: "Kontor · Klubbdrift · Utvikling",
   admin: "Kontor · Klubbdrift · Stab & drift",
-  facilities: "Kontor · Klubbdrift · Fasiliteter",
-  market: "Kontor · Klubbdrift · Marked",
   officeHelp: "Kontor · Oppstartshjelp",
   tactics: "Lag · Oppstilling",
   squad: "Lag · Tropp",
@@ -232,7 +230,7 @@ function applyManagerInformationArchitectureV4() {
   const inboxHeading = document.querySelector('.dept-inbox h2');
   if (inboxHeading) inboxHeading.textContent = "Innboks";
 
-  ["board", "historygo", "progression", "admin", "facilities", "market"].forEach((target) => {
+  ["board", "historygo", "progression", "admin"].forEach((target) => {
     const section = document.querySelector(`[data-tab-section="${target}"]`);
     if (!section) return;
     section.dataset.tabParent = "dashboard";
@@ -255,9 +253,7 @@ function applyManagerInformationArchitectureV4() {
       board: "Klubbdrift",
       historygo: "Speiding",
       progression: "Utvikling",
-      admin: "Stab & drift",
-      facilities: "Fasiliteter",
-      market: "Marked"
+      admin: "Stab & drift"
     };
     Object.entries(legacyLabels).forEach(([target, label]) => {
       const existing = subnav.querySelector(`.app-subtab[data-tab-target="${target}"]`);
@@ -272,8 +268,6 @@ function applyManagerInformationArchitectureV4() {
     createSubtab(subnav, "officeHelp", "Oppstartshjelp");
     createSubtab(subnav, "progression", "Utvikling", { visible: false });
     createSubtab(subnav, "admin", "Stab & drift", { visible: false });
-    createSubtab(subnav, "facilities", "Fasiliteter", { visible: false });
-    createSubtab(subnav, "market", "Marked", { visible: false });
   }
 
   installLocationBar();

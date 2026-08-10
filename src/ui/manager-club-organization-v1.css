@@ -4,12 +4,6 @@
   display: none !important;
 }
 
-.dept-board.has-manager-club-organization-v1 > #clubCommandPanel,
-.dept-board.has-manager-club-organization-v1 > #clubDepth,
-[data-rejected-live-ia="true"] {
-  display: none !important;
-}
-
 .manager-club-organization {
   min-width: 0;
   overflow: hidden;
@@ -306,14 +300,6 @@
 
 .club-organization-back {
   margin: 0 0 .75rem;
-}
-
-/* Administrasjon beholdes som reell arbeidsflate, men den feilrettede
-   spilløkonomien og overgangsmarkedet er ute av live IA i Pass 5. */
-.dept-admin [data-rejected-live-ia="true"],
-.dept-admin #managerEconomyWorkspace,
-.dept-admin #managerTransferMarketWorkspace {
-  display: none !important;
 }
 
 @media (max-width: 820px) {

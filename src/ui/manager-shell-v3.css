@@ -307,9 +307,6 @@
 .match-flow-zones small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .match-flow-hint { margin: 0; color: var(--hg-text-muted, #aeb6b0); font-size: 0.72rem; }
 
-/* Fasiliteter og Marked er eksisterende, levende Kontor-flater. De skal ikke
-   skjules av shell-CSS; data-shell-hidden styres nå av IA-laget. */
-
 @media (max-width: 760px) {
   .main-nav {
     position: static !important;
