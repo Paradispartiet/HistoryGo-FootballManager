@@ -112,9 +112,15 @@ test("areal retning og touch endrer forklaringen uten å endre save-state", asyn
   const dialog = page.locator("#managerTrainingExerciseDesignV1");
   const originalArea = await dialog.locator('[data-effect="area"] p').textContent();
 
-  await dialog.locator('input[name="area"][value="large"]').check();
-  await dialog.locator('input[name="direction"][value="transition"]').check();
-  await dialog.locator('input[name="touches"][value="two"]').check();
+  const largeArea = dialog.locator('label:has(input[name="area"][value="large"])');
+  const transitionDirection = dialog.locator('label:has(input[name="direction"][value="transition"])');
+  const twoTouches = dialog.locator('label:has(input[name="touches"][value="two"])');
+  await largeArea.click();
+  await transitionDirection.click();
+  await twoTouches.click();
+  await expect(largeArea.locator("input")).toBeChecked();
+  await expect(transitionDirection.locator("input")).toBeChecked();
+  await expect(twoTouches.locator("input")).toBeChecked();
 
   await expect(dialog.locator('[data-effect="area"] p')).not.toHaveText(originalArea || "");
   await expect(dialog.locator('[data-effect="direction"] p')).toContainText("balltap");
