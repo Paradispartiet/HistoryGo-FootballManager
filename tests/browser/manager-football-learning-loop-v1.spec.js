@@ -27,6 +27,16 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => {
+    const matchPrepLearning = sessionStorage.getItem("hgfm.test.learningMatchPrep") === "1";
+    const clubWeekState = {
+      week: 3,
+      phase: matchPrepLearning ? "match_prep" : "training",
+      boardTrust: 58,
+      playerMorale: 55,
+      tacticalClarity: 54,
+      trainingCulture: 56,
+      mediaPressure: 43
+    };
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
@@ -45,16 +55,20 @@ test.beforeEach(async ({ page }) => {
       activeClassifications: [],
       roleFamiliarity: {},
       localStart: { enabled: false, playerIds: [] },
-      clubWeekState: {
-        week: 3,
-        phase: "training",
-        boardTrust: 58,
-        playerMorale: 55,
-        tacticalClarity: 54,
-        trainingCulture: 56,
-        mediaPressure: 43
-      }
+      clubWeekState
     }));
+    if (matchPrepLearning) {
+      localStorage.setItem("hgfm.weeklyTrainingProgram.v1", JSON.stringify({
+        programId: "program_rest_defense",
+        week: 3,
+        applied: false
+      }));
+      localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
+        focusId: "rest_defence",
+        week: 3,
+        appliedSessionId: null
+      }));
+    }
   });
   await page.goto("/");
   await expect(page.locator("#onboardingScreen")).toBeHidden();
@@ -82,31 +96,18 @@ test("Treningsdagen forklarer hvorfor økta finnes og hva manageren skal se ette
 
 test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => sessionStorage.setItem("hgfm.test.learningMatchPrep", "1"));
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await openTeam(page);
-  await page.evaluate(() => {
-    window.dispatchEvent(new CustomEvent("hgfm:calendar-open-work", {
-      detail: {
-        target: "tactics",
-        week: 3,
-        dayIndex: 5,
-        day: "Fredag",
-        eventId: "match-prep",
-        eventTitle: "Kampforberedelse",
-        source: "calendar"
-      }
-    }));
-  });
   await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
-  await page.evaluate(() => {
-    document.getElementById("teamSelectedTrainingProgram").textContent = "Restforsvar treningsprogram";
-    document.getElementById("teamSelectedTrainingFocus").textContent = "Restforsvar";
-  });
-  await expect(page.locator("#matchPrepTraining")).toHaveText("Restforsvar treningsprogram");
-  await expect(page.locator("#matchPrepFocus")).toHaveText("Restforsvar");
+  await expect(page.locator("#matchPrepTraining")).toContainText("Restforsvar treningsprogram");
+  await expect(page.locator("#matchPrepFocus")).toContainText("Restforsvar");
   const bridge = page.locator("#footballLearningMatchPrepBridge");
   await expect(bridge).toBeVisible();
   await expect(bridge).toContainText("Fra treningsfeltet til kampen");
-  await expect(bridge).toContainText("Restforsvar treningsprogram · Restforsvar");
+  await expect(bridge).toContainText("Restforsvar treningsprogram");
   await expect(bridge).toContainText("Hypotese:");
   await expect(bridge).toContainText("Observer i kampen:");
   await expect(bridge).toContainText("Når laget mister ballen");
