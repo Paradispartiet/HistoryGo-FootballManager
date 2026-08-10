@@ -23,6 +23,7 @@ const checks = [
   ["trening forklarer hvorfor", ui.includes("Hvorfor denne økta") && ui.includes("createTrainingLearningLesson")],
   ["trening peker fram mot kampobservasjon", ui.includes("Se etter i kamp")],
   ["kampforberedelsen gjentar valgt trening som observasjon", ui.includes("enhanceMatchPreparation") && ui.includes("Observer i kampen")],
+  ["lagret treningsprogram beholdes selv utenfor dagens anbefalinger", app.includes("selectedProgram ||= getTrainingProgramCompositionById(selectedProgramId, {})")],
   ["etterkampmodellen eksponerer motorens lagrede treningsrapport", postMatch.includes("trainingEvidence") && postMatch.includes("dataset.trainingSummary")],
   ["trening kobles til kampens registrerte signaler", ui.includes("createTrainingMatchLearningThread") && ui.includes("TRAINING_SIGNAL_PATTERNS")],
   ["treningssløyfen bruker motorens fasit uten å overtolke", ui.includes("Etter kamp · motorens fasit") && ui.includes("ikke bevis på at én øvelse alene feilet")],
