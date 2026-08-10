@@ -379,8 +379,9 @@
       "tier": "obosligaen",
       "strength": 62,
       "form": 57,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 56,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "egersund_arena"
     },
     {
       "id": "asane",

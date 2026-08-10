@@ -195,13 +195,14 @@ avhenger av hvor History Go-kortet hans ligger.
 | Sandnes Ulf | Øster Hus Arena | 60 |
 | Raufoss | Raufoss Arena | 58 |
 | Lillestrøm | Åråsen | 56 |
+| Egersund | Egersund Arena | 56 |
 | Strømmen | Strømmen stadion | 54 |
 | Kristiansund | Nordmøre stadion | 49 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss og Sandnes Ulf — 2698 arveplasser fordelt på alle 32, og
-**ingen klubb med bane har under 49 navn**. De 28 klubbene som
+Strømmen, Raufoss, Sandnes Ulf og Egersund — 2754 arveplasser fordelt på alle
+33, og **ingen klubb med bane har under 49 navn**. De 27 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1365,6 +1366,30 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Egersund: godt datert og tynt beskrevet er to ulike ting
+
+Egersund manglet bane — `ground: "Egersund Arena"` uten `placeId`. **56 navn**
+(43 nye, 13 koblet).
+
+Kilden er den **best daterte i katalogen**: bare 7 av 85 profiler mangler
+årstall, og de fleste oppgir hele karrierespennet — «441 kamper og klubbens
+målrekord med 241 mål, 1975–1992». Epoken trengte derfor ingen håndliste i det
+hele tatt; tre av fire kategorier daterte seg selv over terskelen, og de to
+udaterte nye profilene falt riktig ut av den fjerde.
+
+Til gjengjeld **avstår den 73 ganger av 85**. Bare tolv profiler bærer en
+påstand, og taket måtte settes til 0,66.
+
+Det er verdt å skille de to: **hvor godt en kilde daterer, og hvor mye den
+beskriver, er uavhengige egenskaper.** Sandnes Ulf var motsatt — 53 udaterte,
+men bare 6 av 60 uten styrker. Egersund er den beste kilden på epoke og en av de
+tynneste på ferdigheter, og begge deler er ekte informasjon om kilden.
+
+To av de tolv med en reell påstand går likevel tapt: **Stian Stapnes Hunnestad**
+(454 kamper, klubbens kamprekord) og **Rune Eik** (429 kamper, Golden Goal mot
+Viking i 2002) står som «Historisk utespiller». Kilden gir dem år, men aldri
+posisjon — samme tap som Strømmens rekordholdere.
 
 ### Sandnes Ulf: den best dekkede arven, og en posisjon skjult i et epokeord
 

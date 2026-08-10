@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **2231 navngitte fotballspillere**. 58 tall hver er ~129 000
+Dette er **2274 navngitte fotballspillere**. 58 tall hver er ~132 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -590,7 +590,12 @@ normalisering, og 300 identiske malimporterte spillere — og hver gang fyrte en
 mer presis vakt først. Den står fordi den er billig og fordi den nå måler det
 den påstår. Den forrige utgaven gjorde ikke det.
 
-#### Vaktskriptet var 1,05x fra å kræsje
+#### Vaktskriptet var 1,05x fra å kræsje — og grensa er nå passert
+
+**Oppdatering:** med Egersund står katalogen på 2274 × 58 = **131 892 verdier**,
+altså over argumentgrensa på ~125 000. Uten `reduce`-rettingen ville denne
+importen tatt hele vaktskriptet ned. Fiksen er ikke lenger forebyggende; den
+bærer.
 
 Bittesten med 300 ekstra spillere avdekket noe annet på veien: `sim:player-attributes`
 døde med `Maximum call stack size exceeded` i stedet for å kjøre. `Math.min(...allValues)`
