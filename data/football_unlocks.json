@@ -12198,10 +12198,6 @@
         },
         {
           "type": "player_candidate",
-          "targetId": "noah_beisland_chalchoul"
-        },
-        {
-          "type": "player_candidate",
           "targetId": "mikael_almen"
         },
         {
@@ -12267,6 +12263,10 @@
         {
           "type": "player_candidate",
           "targetId": "phillip_syvertsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ikhsan_fandi"
         }
       ]
     },

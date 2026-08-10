@@ -146055,7 +146055,8 @@
       "era": "modern",
       "eraSource": "belagt",
       "sourcePlaceIds": [
-        "raufoss_arena"
+        "raufoss_arena",
+        "levermyr_stadion"
       ],
       "classHeight": 86,
       "naturalPositions": [
@@ -146094,12 +146095,20 @@
       "warningWhenMisused": "Fandi blir usynlig uten tilførsel inn i boksen.",
       "classSource": "utledet",
       "clubStatus": {
-        "raufoss_arena": "elite_career"
+        "raufoss_arena": "elite_career",
+        "levermyr_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "raufoss_arena": "utledet"
+        "raufoss_arena": "utledet",
+        "levermyr_stadion": "belagt"
       },
       "clubAffiliations": [
+        {
+          "clubId": "jerv",
+          "relation": "played_for",
+          "status": "club_legend",
+          "source": "belagt"
+        },
         {
           "clubId": "raufoss",
           "relation": "played_for",
@@ -159576,65 +159585,6 @@
       ]
     },
     {
-      "id": "noah_beisland_chalchoul",
-      "name": "Noah Beisland Chalchoul",
-      "nationality": "Norge",
-      "era": "modern",
-      "eraSource": "belagt",
-      "sourcePlaceIds": [
-        "levermyr_stadion"
-      ],
-      "classHeight": 81,
-      "naturalPositions": [
-        "CB"
-      ],
-      "usablePositions": [
-        "DM"
-      ],
-      "poorFits": [
-        "LW",
-        "RW",
-        "ST"
-      ],
-      "archetypeIds": [
-        "duel_stopper"
-      ],
-      "archetypes": [
-        "duel_winner"
-      ],
-      "strengths": [],
-      "needs": [
-        "covering_partner",
-        "clear_defensive_line"
-      ],
-      "preferredRoles": [
-        "duel_stopper",
-        "ball_playing_defender"
-      ],
-      "likesTactics": [
-        "compact_defense"
-      ],
-      "dislikesTactics": [
-        "high_line"
-      ],
-      "warningWhenMisused": "Chalchoul blir utsatt i høy linje med mye rom bak.",
-      "classSource": "utledet",
-      "clubStatus": {
-        "levermyr_stadion": "club_legend"
-      },
-      "clubStatusSource": {
-        "levermyr_stadion": "utledet"
-      },
-      "clubAffiliations": [
-        {
-          "clubId": "jerv",
-          "relation": "played_for",
-          "status": "club_legend",
-          "source": "utledet"
-        }
-      ]
-    },
-    {
       "id": "mikael_almen",
       "name": "Mikael Almén",
       "nationality": "Norge",
@@ -162837,7 +162787,9 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [],
+      "strengths": [
+        "leadership"
+      ],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -162881,15 +162833,17 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CB"
+        "RB"
       ],
       "usablePositions": [
-        "DM"
+        "CB",
+        "WB",
+        "CM"
       ],
       "poorFits": [
+        "ST",
         "LW",
-        "RW",
-        "ST"
+        "GK"
       ],
       "archetypeIds": [
         "duel_stopper"

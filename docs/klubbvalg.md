@@ -223,7 +223,7 @@ fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvi
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 494 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 495 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 **Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 dokumenterte klubbtilknytninger finnes. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.
@@ -1420,6 +1420,82 @@ Den siste er den lærerike: Egersund har ham gjennom 2025, Jerv i «2026-forsvar
 Der **kjeder tidslinjen seg sammen**, og det er positivt belegg — ikke bare et
 navn som ligner. De tre andre har ingenting utenom navnet, og
 mellomnavn-heuristikken har nå tatt feil fire ganger totalt.
+
+### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
+
+En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,
+Jerv, Notodden, Hønefoss, Kjelsås, Ull/Kisa, Levanger, Grorud og Arendal — og
+fant fire obligatoriske rettelser og fire verifikasjonspunkter.
+
+Det interessante er hvor lite av det nådde katalogen.
+
+#### Kildebruddet som aldri fikk et tall å feste seg i
+
+Auditens tyngste funn er Notodden: fire profiler bruker Aftenbladets
+**«sannsynlig Notodden-lag»** før kampen mot Start 25.05.2011 som om det var en
+dokumentert startellever. NFFs kampkort har ikke registrert oppstillingen. Så
+går teksten videre til «2011-startrolle dokumenterer …», «Dokumentert
+kamprolle …», «Dokumentert startplass …».
+
+Det er et ekte logisk kildebrudd — og alle fire står med **tom styrkeliste** i
+katalogen.
+
+Grunnen er regelen fra samme import: *en kamp er individuell, men den er ikke en
+ferdighet.* En startplass er kampmengde, og kampmengde ble ikke oversatt til
+attributter. Bruddet hadde ingenting å feste seg i.
+
+Det er ikke flaks. Det er nettopp forskjellen mellom å lese en kilde for hva den
+**dokumenterer** og å lese den for hva den **påstår om spilleren**: en feil i
+det første laget stopper ved grensa så lenge bare det andre importeres.
+
+#### De fire som faktisk endret data
+
+| Auditpunkt | Hva som skjedde i katalogen |
+|---|---|
+| **Jerv: Noah Beisland Chalchoul** mangler dokumentert A-kamp | Fjernet fra poolen. Han hadde bare Levermyr som bane, så profilen og låsen er borte. |
+| **Jerv: Ikhsan Fandi** som erstatter | Fantes alt fra Raufoss-arven. Det manglet en **bane**, ikke en spiller: Jerv–Raufoss 10.10.2020 og Jerv–Ull/Kisa 12.07.2021. |
+| **Notodden: Lars Lien** | Auditen dokumenterer kapteinsbindet mot Hødd og Ull/Kisa i 2012 (NFF). Det er en individuell påstand → `leadership`. |
+| **Notodden: Jan Tore Amundsen** | Kilden sa «Forsvar», og POSMAP leste det som midtstopper. Auditen og Ull/Kisa-kilden sier begge **høyreback**. Rettet til RB. |
+
+Erstatningen er verdt å merke seg: auditen foreslo å skrive en ny profil for
+Ikhsan Fandi, men han sto der alt. Det er den samme mekanismen som gjør at 495
+spillere står på to eller flere baner — en spiller er én person med flere
+klubber, ikke én oppføring per klubb.
+
+#### De fire som ikke rørte dataene, og hvorfor
+
+- **Levanger: Vegard Alstad Sunde** var beskrevet som toppscorer i
+  opprykkssesongen 2014. Det er feil; hans målperiode er 2004–05. Men epokeaksen
+  skiller ved år 2000, så *verdien* `modern` er riktig uansett — det var
+  begrunnelsen som var gal, ikke tallet. `finishing` står, fordi gjentatt
+  toppscorerstatus i 2004–05 er den samme påstanden.
+- **Kjelsås: Bjarne Rønning** står med 311 A-kamper i den nye klubbdatabasen og
+  211 i den gamle. Han er «Historisk utespiller» uten posisjon og ble utelatt av
+  importen, så kildespriket nådde aldri katalogen.
+- **Arendal: Péter Wiik-Kovács** skulle ikke posisjonsimporteres før posisjonen
+  er kontrollert. Han ble utelatt på posisjon *og* splittet fra Péter Kovács.
+- **Notodden: Martin Strange og Erik Midtgarden** skal beholdes som uløste
+  posisjonskonflikter. Auditen sier selv «ingen rettelse nå», og de står urørt.
+
+#### Duplikatfila kan ikke doble en arv
+
+Auditen fant to bit-identiske Hønefoss-filer (`Honefoss…` og `Hønefoss…`) og
+advarte mot dobbel innlesing. Det ble målt i stedet for antatt: å kjøre
+Hønefoss-importen to ganger gir **samme antall spillere og samme antall
+låser** — spillere kobles på navn og låser filtreres mot en `finnes`-mengde.
+Risikoen er reell i arbeidsflyten, men den stopper ved importen.
+
+#### Regelen som nå er valgt, ikke bare antatt
+
+Auditen ber prosjektet låse hva «representert A-laget» betyr. Valget er den
+**inkluderende** definisjonen — dokumentert A-lagstropp holder, slik kildene
+selv har brukt den — med én grense som Chalchoul-saken viser hvorfor trengs:
+
+> Rekruttlag, juniorlag, «klubb 2» og ren registrering i klubben er **ikke**
+> A-lagsrepresentasjon.
+
+Det er den grensa han falt på, og den er den eneste av auditens punkter som
+faktisk fjernet en spiller fra en klubbpool.
 
 ### Fem klubber på én gang: hvor mye en kilde SITERER avgjør alt
 
