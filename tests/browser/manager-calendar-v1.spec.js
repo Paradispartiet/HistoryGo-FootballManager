@@ -49,6 +49,12 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
+test("aktiv ligasave starter direkte i managerkalenderen", async ({ page }) => {
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
+  await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Onsdag");
+});
+
 test("Kontor åpner Kalender direkte og skjuler separat Innboks", async ({ page }) => {
   await openOfficeCalendar(page);
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toBeVisible();
@@ -110,10 +116,19 @@ test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) 
   await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
 });
 
-test("Next-footeren er skjult i normal ligasave", async ({ page }) => {
+test("kalenderfooteren viser dagens neste hendelse og åpner aktuell dag", async ({ page }) => {
   await openOfficeCalendar(page);
-  await expect(page.locator("manager-next-action")).toBeHidden();
-  await expect(page.locator("#nextActionPrimary")).toBeHidden();
+  await expect(page.locator("manager-next-action")).toBeVisible();
+  await expect(page.locator("#nextActionStrip")).toHaveAttribute("data-surface", "manager-calendar");
+  await expect(page.locator("#nextActionPrimaryTag")).toHaveText("Kalender");
+  await expect(page.locator("#nextActionPhase")).toHaveText("Uke 3 · Onsdag");
+  await expect(page.locator("#nextActionPrimaryTitle")).toContainText("Onsdag");
+
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="5"]').click();
+  await expect(page.locator('#managerCalendarDays [aria-selected="true"]')).toHaveAttribute("data-day", "5");
+  await page.locator("#nextActionPrimary").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator('#managerCalendarDays [aria-selected="true"]')).toHaveAttribute("data-day", "3");
 });
 
 test("Kalender beholder Kontor som hovedområde", async ({ page }) => {

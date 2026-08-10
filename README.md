@@ -50,7 +50,7 @@ Læringen følger **situasjon → handling → konsekvens → forklaring**. Peda
 
 ### Kalender og klubbkommunikasjon
 
-Kontor åpner på managerkalenderen. Mailer fra trenerteam, medisinsk apparat, analyse, styre, garderobe og presse ligger på den faktiske arbeidsdagen og bruker faktisk motstander, kampresultat, treningsvalg, spillerbelastning og lagret kampplan når dette finnes. Å lese en mail flytter aldri Club Week-fasen eller kvitterer ut resten av uka. Se [`docs/MANAGER_CLUB_COMMUNICATION_V2.md`](docs/MANAGER_CLUB_COMMUNICATION_V2.md).
+En aktiv ligasave starter på managerkalenderen. Den vedvarende footeren viser aktuell dag og neste kalenderhendelse fra alle hovedområder. Mailer fra trenerteam, medisinsk apparat, analyse, styre, garderobe og presse ligger på den faktiske arbeidsdagen, forklarer situasjon og managerproblem, og har presise lenker til relevant arbeid. Å lese en mail eller bruke footeren flytter aldri Club Week-fasen. Se [`docs/MANAGER_CALENDAR_V1.md`](docs/MANAGER_CALENDAR_V1.md) og [`docs/MANAGER_CLUB_COMMUNICATION_V3.md`](docs/MANAGER_CLUB_COMMUNICATION_V3.md).
 
 ### Spillerpool og tropp
 

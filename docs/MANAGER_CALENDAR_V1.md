@@ -6,7 +6,7 @@ Kalender v1 er nå Kontorets tids- og orkestreringsflate. Den gjør manageruka s
 
 **Club Week er fortsatt sannhetskilden for uke og fase.** Kalenderen leser denne staten og projiserer den på mandag til søndag.
 
-Kalenderen er Kontorets standardflate i en aktiv ligasave. Den viser hva som faktisk skjer i arbeidsdagen, og åpner de eksisterende arbeidsflatene der oppgaven hører hjemme.
+Kalenderen er startflaten i en aktiv ligasave og Kontorets standardflate. Den viser hva som faktisk skjer i arbeidsdagen, og åpner de eksisterende arbeidsflatene der oppgaven hører hjemme.
 
 Det betyr:
 
@@ -28,17 +28,26 @@ Innboks er ikke lenger en parallell Kontor-fane. En melding er en hendelse i man
 14:30 · Oppfølging etter økta
 ```
 
-Trykk på en melding åpner den eksakte mailen som tilhører hendelsen i et drawer over kalenderen. Når meldingen lukkes, står brukeren fortsatt på samme kalenderdag. Den videre kontrakten for konkrete, state-drevne mailer ligger i `MANAGER_CLUB_COMMUNICATION_V2.md`.
+Trykk på en melding åpner den eksakte mailen som tilhører hendelsen i et drawer over kalenderen. Når meldingen lukkes, står brukeren fortsatt på samme kalenderdag. Den videre kontrakten for konkrete, state-drevne mailer ligger i `MANAGER_CLUB_COMMUNICATION_V3.md`.
 
 Den eksisterende klubbflaten presenteres som **Klubben**. Dype legacy-flater beholdes teknisk der de fortsatt trengs, men de skal ikke konkurrere som likeverdige Kontor-faner.
 
 Oppstartshjelp skjules fra Kontor når en vanlig ligasave er i gang. Den kan fortsatt brukes under faktisk oppstart, slik at gamle og nye saves ikke får dead ends.
 
-## Next-funksjonen
+## Kalenderfooter
 
-Den interne `next-action`-logikken kan fortsatt brukes av eksisterende systemer til å forstå hva som mangler. Men den store globale **Forslag til neste steg / Next**-footeren er ikke lenger en del av den normale ligasave-opplevelsen.
+Den eksisterende `manager-next-action`-hosten er den vedvarende kalenderfooteren i en aktiv ligasave. Den viser:
 
-I stedet vises mangelen der arbeidet skjer:
+- aktuell uke og ukedag;
+- neste relevante hendelse på den faktiske arbeidsdagen;
+- tidspunkt og kort forklaring;
+- én lenke tilbake til dagens kalender.
+
+Footeren er synlig også når manageren arbeider i Lag, Speiding, Kamp eller Stats. Et klikk åpner aktuell kalenderdag. Det flytter aldri tid og gjennomfører aldri hendelsen.
+
+Den interne `next-action`-logikken kan fortsatt brukes av eksisterende systemer under oppstart og i andre modi. I ligasaven eier kalenderen den synlige footeren; den generiske Next-modellen er ikke en parallell veiviser.
+
+Detaljert manglende arbeid vises fortsatt der arbeidet skjer:
 
 ```text
 11:00 · Trening
@@ -122,7 +131,7 @@ Kalender v1 introduserer:
 - ingen ny fase-engine;
 - ingen ny kalenderlagring;
 - ingen automatisk dagprogresjon;
-- ingen ny «Neste»-funksjon;
+- ingen ny «Neste»-motor; kalenderen gjenbruker den eksisterende footer-hosten;
 - ingen endring i kamp-, trenings-, inbox-, liga- eller konsekvensmotorene.
 
 `src/football-manager-calendar.js` er en ren view-model. `src/ui/manager-calendar-workspace-v1.js` eier presentasjon, Kontor-ruting og meldingsdrawer.
@@ -143,14 +152,14 @@ Permanent simulering låser:
 
 Browser-vakten låser:
 
-- Kontor åpner Kalender direkte i aktiv ligasave;
+- aktiv ligasave starter direkte i Kalender;
 - separat Innboks-fane er skjult;
 - Klubbdrift presenteres som Klubben;
 - Oppstartshjelp er skjult etter oppstart;
 - syv valgbare dager;
 - kronologisk arbeidsdag;
 - meldingsdrawer uten å forlate kalenderdagen;
-- Next-footeren skjult i normal ligasave;
+- kalenderfooteren er synlig i hele ligasaven og returnerer til aktuell dag;
 - Kontor forblir valgt hovedområde;
 - mobil uten horisontal overflow;
 - WCAG 2 A/AA med axe.

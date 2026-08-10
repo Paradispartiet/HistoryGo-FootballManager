@@ -86,6 +86,7 @@ jobs:
           npm run audit:manager-recruitment-v1
           npm run audit:manager-calendar-v1
           npm run audit:manager-club-communication-v2
+          npm run audit:manager-club-communication-v3
           npm run audit:manager-staff-roster-v1
           npm run audit:manager-visual-identity-v1
           npm run audit:manager-legacy-cleanup-v1
@@ -128,6 +129,7 @@ jobs:
           npm run sim:manager-recruitment-v1
           npm run sim:manager-calendar-v1
           npm run sim:manager-club-communication-v2
+          npm run sim:manager-club-communication-v3
           npm run sim:manager-staff-roster-v1
           npm run sim:manager-visual-identity-v1
           npm run sim:manager-legacy-cleanup-v1

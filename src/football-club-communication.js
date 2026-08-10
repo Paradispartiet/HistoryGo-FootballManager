@@ -1,11 +1,11 @@
-// HG Football Manager — klubbkommunikasjon v2
+// HG Football Manager — klubbkommunikasjon v3
 //
 // Dette er et rent presentasjonslag over eksisterende managerstate. Det lager
 // konkrete mailer fra kamp, terminliste, trening, analyse, spiller-condition,
 // stab og eksisterende innbokssignaler. Modulen skriver ingen state, flytter
 // ingen Club Week-fase og beregner ingen ny effekt eller score.
 
-export const CLUB_COMMUNICATION_VERSION = "historygo-football-manager.club-communication.v2";
+export const CLUB_COMMUNICATION_VERSION = "historygo-football-manager.club-communication.v3";
 
 const PHASE_DAY = Object.freeze({
   analysis: 1,
@@ -53,13 +53,34 @@ function stableMessage({
   preview,
   body = [],
   facts = [],
+  guidance = null,
   action = null,
+  links = [],
   choices = [],
   reply = null,
   priority = "normal",
   source = null,
   readIds = new Set()
 }) {
+  const normalizedAction = action?.label
+    ? {
+        label: text(action.label),
+        target: text(action.target),
+        focusId: text(action.focusId),
+        kind: text(action.kind, "navigate")
+      }
+    : null;
+  const normalizedLinks = [...asArray(links), ...(normalizedAction ? [normalizedAction] : [])]
+    .map((link) => ({
+      label: text(link?.label, "Åpne arbeidsflaten"),
+      target: text(link?.target),
+      focusId: text(link?.focusId),
+      kind: text(link?.kind, "navigate")
+    }))
+    .filter((link, index, all) => link.target && all.findIndex((candidate) => (
+      candidate.target === link.target && candidate.focusId === link.focusId
+    )) === index);
+
   return {
     id: text(id),
     threadId: text(threadId, text(id)),
@@ -75,9 +96,16 @@ function stableMessage({
     facts: asArray(facts)
       .map((fact) => ({ label: text(fact?.label), value: text(fact?.value) }))
       .filter((fact) => fact.label && fact.value),
-    action: action?.label
-      ? { label: text(action.label), target: text(action.target), kind: text(action.kind, "navigate") }
+    guidance: guidance && typeof guidance === "object"
+      ? {
+          situation: text(guidance.situation),
+          meaning: text(guidance.meaning),
+          question: text(guidance.question),
+          watch: text(guidance.watch)
+        }
       : null,
+    action: normalizedAction,
+    links: normalizedLinks,
     choices: asArray(choices).map((choice) => ({
       id: text(choice?.id),
       label: text(choice?.label, "Svar"),
@@ -127,13 +155,23 @@ function matchReviewMessage(context, readIds) {
       preview: `${resultWord(lastMatch)} er registrert. Nå må hendelsene bli til ett konkret arbeidsproblem.`,
       body: [
         `${result ? `Resultatet ble ${result}` : "Kampen er ferdig"}${opponentName ? ` mot ${opponentName}` : ""}. Rapporten skiller mellom det som faktisk skjedde og det vi bare antar.`,
-        `Les kampforklaringen før vi bestemmer hva som skal følge laget inn i møtet med ${nextOpponent}.`
+        `Før vi velger nytt arbeid må vi finne situasjonen som gjentok seg, managergrepet som påvirket den og konsekvensen som faktisk ble registrert.`,
+        `Det funnet skal enten bli et treningsspørsmål eller legges bort. Det skal ikke bli en vag forklaring vi tar med oss fordi resultatet føltes godt eller dårlig.`
       ],
       facts: [
         { label: "Resultat", value: result || "Registrert" },
         { label: "Neste motstander", value: nextOpponent }
       ],
-      action: { label: "Åpne etterkampanalysen", target: "analyse" },
+      guidance: {
+        situation: `${result ? `${result} mot ${opponentName || "forrige motstander"}` : "Forrige kamp"} er det registrerte utgangspunktet.`,
+        meaning: `Resultatet alene sier ikke hva laget bør endre før ${nextOpponent}. Kampforklaringen må vise en faktisk årsakskjede.`,
+        question: "Hvilken gjentatt situasjon kunne vi påvirket med et annet valg eller bedre forberedelse?",
+        watch: `Finn én atferd som kan trenes og senere observeres mot ${nextOpponent}.`
+      },
+      links: [
+        { label: "Les kampanalysen", target: "analyse", focusId: "analyseMatchReport" },
+        { label: "Ta funnet inn i trening", target: "trening", focusId: "trainingDayAssistant" }
+      ],
       priority: "high",
       readIds
     });
@@ -148,10 +186,20 @@ function matchReviewMessage(context, readIds) {
     preview: "Vi trenger ett dokumentert problem før treningsuka får retning.",
     body: [
       `Start med laget vi faktisk har valgt og motstanderen vi faktisk skal møte: ${nextOpponent}.`,
-      "Skill mellom et mønster vi kan arbeide med og en løs bekymring. Resten av uka bør kunne spores tilbake til dette valget."
+      "Se deretter på oppstillingen og den terminfestede kampen. Et arbeidsproblem må beskrive en fotballsituasjon, ikke bare at laget bør bli bedre.",
+      "Resten av uka skal kunne spores tilbake til dette problemet: trening, kampplan og det vi ser etter under kampen."
     ],
     facts: [{ label: "Neste motstander", value: nextOpponent }],
-    action: { label: "Åpne analysearbeidet", target: "board" },
+    guidance: {
+      situation: `Uka starter før kampen mot ${nextOpponent}, uten en registrert etterkamp som kan gi retning.`,
+      meaning: "Manageren må derfor formulere problemet fra faktisk lag og terminliste, ikke fra en generell fotballtekst.",
+      question: `Hvilken situasjon i vårt eget lag er viktigst å undersøke før ${nextOpponent}?`,
+      watch: "Velg noe som senere kan gjenkjennes i en konkret kampsekvens."
+    },
+    links: [
+      { label: "Se sesong og neste kamp", target: "statistikk", focusId: "statsSummary" },
+      { label: "Vurder oppstillingen", target: "tactics", focusId: "teamTacticsSelectedState" }
+    ],
     priority: "high",
     readIds
   });
@@ -178,14 +226,24 @@ function conditionMessage(context, readIds) {
       preview: `Skaden krever kriterier for retur, ikke bare en dato i kalenderen.`,
       body: [
         `${text(player.name, "Spilleren")} er registrert ute i ${weeks} ${weeks === 1 ? "uke" : "uker"}.`,
-        `Dagens plan er ${training}. Før vi øker belastningen må bevegelse, smerterespons og fotballspesifikke handlinger vurderes i riktig rekkefølge.`
+        `Dagens plan er ${training}. Før vi øker belastningen må bevegelse, smerterespons og fotballspesifikke handlinger vurderes i riktig rekkefølge.`,
+        "En returavgjørelse skal knyttes til hva spilleren må kunne gjøre i rollen, ikke bare til at fraværsperioden nærmer seg slutten."
       ],
       facts: [
         { label: "Spiller", value: text(player.name, player.playerId) },
         { label: "Registrert fravær", value: `${weeks} ${weeks === 1 ? "uke" : "uker"}` },
         { label: "Dagens plan", value: training }
       ],
-      action: { label: "Åpne individuell oppfølging", target: "trening" },
+      guidance: {
+        situation: `${text(player.name, "Spilleren")} har et registrert skadefravær på ${weeks} ${weeks === 1 ? "uke" : "uker"}.`,
+        meaning: `${training} kan ikke brukes som en vanlig full økt før returkriteriene er oppfylt.`,
+        question: "Hvilke fotballhandlinger må spilleren tåle før full trening er forsvarlig?",
+        watch: "Se etter reaksjon under belastning og etter økta, ikke bare om spilleren fullfører."
+      },
+      links: [
+        { label: "Åpne individuell oppfølging", target: "trening", focusId: "trainingDayChangeIndividual" },
+        { label: "Se hele belastningsbildet", target: "trening", focusId: "trainingDayCondition" }
+      ],
       priority: "urgent",
       readIds
     });
@@ -202,14 +260,24 @@ function conditionMessage(context, readIds) {
       preview: "Belastningen kommer fra bruken i kamp og må sees opp mot dagens treningskrav.",
       body: [
         `${text(player.name, "Spilleren")} har den tydeligste belastningen i gruppa${streak ? ` etter ${streak} fulle kamper på rad` : " etter de siste kampene"}.`,
-        `Det betyr ikke automatisk hvile. Det betyr at ${training.toLowerCase()} må vurderes opp mot rollen og minuttene vi planlegger på lørdag.`
+        `Det betyr ikke automatisk hvile. Det betyr at ${training.toLowerCase()} må vurderes opp mot rollen og minuttene vi planlegger på lørdag.`,
+        "Velger du full belastning, må du samtidig vite hvilken kampkapasitet du risikerer å svekke. Velger du avlastning, må du vite hvilket treningsmål spilleren mister."
       ],
       facts: [
         { label: "Spiller", value: text(player.name, player.playerId) },
         { label: "Belastningsgrunnlag", value: streak ? `${streak} fulle kamper på rad` : "Registrert kampbelastning" },
         { label: "Dagens plan", value: training }
       ],
-      action: { label: "Åpne individuell oppfølging", target: "trening" },
+      guidance: {
+        situation: `${text(player.name, "Spilleren")} har lagets tydeligste registrerte belastningssignal${streak ? ` etter ${streak} fulle kamper` : ""}.`,
+        meaning: "Valget står mellom treningsutbytte nå og beredskap til neste kamp; signalet avgjør ikke valget alene.",
+        question: "Er dagens økt viktigere for denne spillerens rolle enn kapasiteten vi trenger på kampdag?",
+        watch: "Følg intensitet, gjentatte aksjoner og om kvaliteten faller sent i økta."
+      },
+      links: [
+        { label: "Vurder individuell belastning", target: "trening", focusId: "trainingDayChangeIndividual" },
+        { label: "Se troppens tilstand", target: "trening", focusId: "trainingDayCondition" }
+      ],
       priority: "high",
       readIds
     });
@@ -224,10 +292,20 @@ function conditionMessage(context, readIds) {
     preview: "Ingen enkeltspiller skiller seg alvorlig ut, men øktkrav og kampminutter må fortsatt sees sammen.",
     body: [
       `Dagens plan er ${training}. Vi har ingen registrert spiller med et akutt belastningssignal akkurat nå.`,
-      "Følg likevel med på spillere med mange minutter når øvelsene krever gjentatte sprinter, raske vendinger eller stor bane."
+      "Det er ikke det samme som at belastningen er irrelevant. Øvelsesareal, sprintmengde og gjentatte vendinger kan flytte belastningen i løpet av økta.",
+      "Bruk den individuelle oppfølgingen hvis en spiller reagerer annerledes enn resten av gruppa."
     ],
     facts: [{ label: "Dagens plan", value: training }],
-    action: { label: "Se belastning og oppfølging", target: "trening" },
+    guidance: {
+      situation: "Ingen akutt skade eller tydeligste belastningsspiller er registrert før økta.",
+      meaning: "Gruppa kan følge planen, men manageren må fortsatt reagere på det øvelsen faktisk krever.",
+      question: "Hvem får en annen belastning enn planlagt på grunn av rolle, minutter eller øvelsesdesign?",
+      watch: "Se etter fall i aksjonskvalitet, sprint og retningsforandringer gjennom økta."
+    },
+    links: [
+        { label: "Se treningsøkta", target: "trening", focusId: "trainingDaySessions" },
+        { label: "Åpne individuell oppfølging", target: "trening", focusId: "trainingDayChangeIndividual" }
+    ],
     priority: "normal",
     readIds
   });
@@ -251,13 +329,23 @@ function trainingMessage(context, readIds) {
       preview: `Det er fortsatt ikke valgt program eller fokus før kampen mot ${opponent}.`,
       body: [
         "Vi kan ikke evaluere en økt som ikke har en tydelig hensikt.",
-        `Velg ett program og ett observasjonspunkt som spillerne skal kjenne igjen mot ${opponent}.`
+        `Velg ett program som setter belastningsrammen og ett fokus som beskriver fotballproblemet mot ${opponent}.`,
+        "Først når de to valgene henger sammen, kan trenerteamet forklare hva øvelsene skal endre og hva vi skal se etter i kamp."
       ],
       facts: [
         { label: "Motstander", value: opponent },
         { label: "Treningsvalg", value: "Mangler" }
       ],
-      action: { label: "Velg treningsuke", target: "trening" },
+      guidance: {
+        situation: `Program og fokus mangler før kampen mot ${opponent}.`,
+        meaning: "Uten en belastningsramme og et fotballproblem kan økta gjennomføres, men ikke vurderes faglig.",
+        question: `Hvilken situasjon må laget håndtere annerledes mot ${opponent}?`,
+        watch: "Formuler én observerbar handling før du velger øvelser."
+      },
+      links: [
+        { label: "Velg treningsprogram", target: "trening", focusId: "trainingDayChangeProgram" },
+        { label: "Velg ukas fokus", target: "trening", focusId: "trainingDayChangeFocus" }
+      ],
       priority: "urgent",
       readIds
     });
@@ -275,14 +363,24 @@ function trainingMessage(context, readIds) {
       `Ukas valgte arbeid er ${label}. Det er først nyttig når spillerne kjenner igjen situasjonen uten at vi stopper spillet.`,
       watch
         ? `I kampforberedelsen skal vi derfor holde fast ved dette observasjonspunktet: ${watch}`
-        : `I kampforberedelsen må vi formulere én konkret atferd vi skal se etter mot ${opponent}.`
+        : `I kampforberedelsen må vi formulere én konkret atferd vi skal se etter mot ${opponent}.`,
+      "Ikke vurder økta etter energi eller innsats alene. Vurder om spillerne fant løsningen oftere, tidligere og med bedre avstander."
     ],
     facts: [
       { label: "Program", value: program || "Ikke valgt" },
       { label: "Fokus", value: focus || "Ikke valgt" },
       { label: "Se etter", value: watch || "Må avklares i kampforberedelsen" }
     ],
-    action: { label: "Åpne treningsøkta", target: "trening" },
+    guidance: {
+      situation: `${label} er gjennomført som ukas valgte arbeid.`,
+      meaning: `Treningsvalget har verdi først når atferden kan gjenkjennes mot ${opponent}.`,
+      question: "Hvilken konkret handling ble lettere for spillerne etter økta?",
+      watch: watch || `Se om laget gjenkjenner den trente situasjonen uten instruksjon mot ${opponent}.`
+    },
+    links: [
+      { label: "Åpne treningsøkta", target: "trening", focusId: "trainingDaySessions" },
+      { label: "Se ukas fokus", target: "trening", focusId: "trainingDayFocus" }
+    ],
     priority: "high",
     readIds
   });
@@ -305,14 +403,24 @@ function opponentMessage(context, readIds) {
       body: [
         `Hypotesen vår er: ${text(plan.hypothesis)}`,
         `Valgt motgrep er ${text(plan.countermeasureLabel)}. Risikoen vi aksepterer er ${text(plan.risk, "ikke tydelig formulert")}.`,
-        `Under kampen skal vi se etter: ${text(plan.watch, "om motgrepet faktisk endrer kampbildet")}`
+        `Under kampen skal vi se etter: ${text(plan.watch, "om motgrepet faktisk endrer kampbildet")}`,
+        "Hvis observasjonen uteblir, vet vi ikke om hypotesen var feil, om motgrepet ikke ble utført, eller om motstanderen svarte på en ny måte. Det skillet skal kampanalysen gjøre etterpå."
       ],
       facts: [
         { label: "Motstander", value: opponent },
         { label: "Motgrep", value: text(plan.countermeasureLabel) },
         { label: "Risiko", value: text(plan.risk, "Ikke formulert") }
       ],
-      action: { label: "Åpne kampforberedelsen", target: "tactics" },
+      guidance: {
+        situation: `Vi møter ${opponent} med hypotesen «${text(plan.hypothesis)}».`,
+        meaning: `${text(plan.countermeasureLabel)} skal påvirke dette problemet, men kan samtidig utløse risikoen: ${text(plan.risk, "ikke formulert")}.`,
+        question: "Hvilke spillere og avstander må være riktige for at motgrepet skal fungere?",
+        watch: text(plan.watch, "Se om motgrepet faktisk endrer den forventede situasjonen.")
+      },
+      links: [
+        { label: "Åpne kampforberedelsen", target: "tactics", focusId: "teamTacticsSelectedState" },
+        { label: "Se lagets system", target: "system", focusId: "managerSystemWorkspaceV2" }
+      ],
       priority: "high",
       readIds
     });
@@ -327,13 +435,23 @@ function opponentMessage(context, readIds) {
     preview: "Vi har en terminfestet kamp, men mangler en lagret hypotese og et motgrep.",
     body: [
       `Vi vet hvem vi møter: ${opponent}. Det vi fortsatt mangler er én presis hypotese om problemet de skaper.`,
-      "Velg deretter ett motgrep, én risiko og én atferd vi skal følge under kampen."
+      "Beskriv først situasjonen: hvor ballen er, hvem som har fordelen og hvilket rom som er truet.",
+      "Velg deretter ett motgrep, én risiko og én atferd vi skal følge under kampen. Uten dette blir kampplanen bare en oppstilling."
     ],
     facts: [
       { label: "Motstander", value: opponent },
       { label: "Analyseplan", value: "Mangler" }
     ],
-    action: { label: "Åpne Analyse", target: "board" },
+    guidance: {
+      situation: `${opponent} er terminfestet, men det finnes ingen lagret hypotese eller mottiltak.`,
+      meaning: "Oppstillingen kan settes, men vi kan ikke forklare hvilket kampbilde den er ment å påvirke.",
+      question: `Hvilken gjentakende situasjon forventer vi at ${opponent} forsøker å skape?`,
+      watch: "Formuler én synlig atferd som kan bekrefte eller avkrefte hypotesen."
+    },
+    links: [
+      { label: "Bygg kampforberedelsen", target: "tactics", focusId: "teamTacticsSelectedState" },
+      { label: "Les lagets system", target: "system", focusId: "managerSystemWorkspaceV2" }
+    ],
     priority: "urgent",
     readIds
   });
@@ -361,11 +479,22 @@ function pressMessage(context, readIds) {
       `Hovedspørsmålet blir hvordan vi skal møte ${opponent} og hva treningsuka faktisk har forsøkt å endre.`,
       pressure >= 65
         ? "Ikke lov et resultat. Forklar problemet, arbeidet og hva publikum skal kunne kjenne igjen i laget."
-        : "Vi trenger ikke skape en sak. Hold deg til planen, arbeidet og den observerbare atferden."
+        : "Vi trenger ikke skape en sak. Hold deg til planen, arbeidet og den observerbare atferden.",
+      "Et godt svar binder sammen kampplanen og det laget faktisk har øvd på. Det skal være mulig å kontrollere svaret mot kampen etterpå."
     ],
     facts: [
       { label: "Kamp", value: opponent },
       { label: "Kommunikasjonsbehov", value: pressure >= 65 ? "Krevende mediebilde" : "Samlet budskap" }
+    ],
+    guidance: {
+      situation: `${pressure >= 65 ? "Mediebildet er krevende" : "Pressebildet er håndterbart"} før ${opponent}.`,
+      meaning: "Klubbens budskap bør forklare arbeidet uten å love et resultat eller røpe mer enn kampplanen tåler.",
+      question: "Hva skal publikum kunne kjenne igjen i laget, uavhengig av resultatet?",
+      watch: "Bruk samme observerbare atferd i pressebrief, kampforberedelse og etterkamp."
+    },
+    links: [
+      { label: "Se kampforberedelsen", target: "tactics", focusId: "teamTacticsSelectedState" },
+      { label: "Åpne Klubben", target: "board", focusId: "managerClubOrganization" }
     ],
     priority: pressure >= 65 ? "high" : "normal",
     readIds
@@ -388,13 +517,23 @@ function postMatchMessage(context, readIds) {
     preview: `${result ? `${result} er resultatet.` : "Kampen er ferdig."} Nå må vi skille mellom intensjonen og det laget faktisk gjorde.`,
     body: [
       `${result ? `Kampen endte ${result}` : "Kampen er registrert"} mot ${opponent}.`,
-      "Se etter om ukas treningsspørsmål og motstanderhypotese faktisk dukket opp i kampforklaringen. Bare det systemet registrerte skal tas videre som læring."
+      "Se etter om ukas treningsspørsmål og motstanderhypotese faktisk dukket opp i kampforklaringen.",
+      "Skill mellom intensjonen vår, handlingen spillerne utførte og konsekvensen kampen registrerte. Bare det systemet faktisk viser skal tas videre som læring."
     ],
     facts: [
       { label: "Motstander", value: opponent },
       { label: "Resultat", value: result || "Registrert" }
     ],
-    action: { label: "Åpne etterkampanalysen", target: "analyse" },
+    guidance: {
+      situation: `${result ? `${result} mot ${opponent}` : `Kampen mot ${opponent}`} avslutter den registrerte manageruka.`,
+      meaning: "Resultatet må kobles tilbake til treningsspørsmålet og kampplanen før vi bestemmer neste ukes arbeid.",
+      question: "Oppstod situasjonen vi forberedte oss på, og endret motgrepet konsekvensen?",
+      watch: "Ta med én dokumentert atferd videre; ikke bygg neste uke på resultatfølelsen alene."
+    },
+    links: [
+      { label: "Åpne etterkampanalysen", target: "analyse", focusId: "analyseMatchReport" },
+      { label: "Forbered neste treningsuke", target: "trening", focusId: "trainingDayAssistant" }
+    ],
     priority: "high",
     readIds
   });
@@ -418,7 +557,16 @@ function existingSignalMessage(signal, context, readIds, index) {
     preview: text(signal?.preview),
     body,
     facts: signal?.facts,
+    guidance: signal?.guidance || {
+      situation: text(signal?.preview, "Klubben har sendt et nytt signal i den aktive manageruka."),
+      meaning: text(body[0], "Signalet må vurderes opp mot det eksisterende klubb- og lagarbeidet."),
+      question: asArray(signal?.choices).length
+        ? "Hvilket svar støtter best det du faktisk vil gjøre videre?"
+        : "Krever dette en beslutning nå, eller skal det bare tas med som kontekst?",
+      watch: "Følg bare konsekvensene som den eksisterende innboksmotoren registrerer."
+    },
     action: signal?.action,
+    links: signal?.links,
     choices: signal?.choices,
     reply: selectedChoice?.reply || signal?.reply,
     priority: signal?.priority,

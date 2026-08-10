@@ -28,8 +28,8 @@ Underflatene er beskrevet i [`meny.md`](meny.md) og [`MANAGER_SHELL_V3.md`](MANA
 
 | Område | Implementert kontrakt | Permanente bevis |
 | --- | --- | --- |
-| Manageruke | Kalender, trening, kampforberedelse, kamp og etterkamp bruker eksisterende Club Week-state | `manager-calendar-v1`, `manager-match-calendar-v1` |
-| Klubbkommunikasjon | Konkrete mailer bruker faktisk motstander, kamp, trening, condition, analyse og stab på riktig arbeidsdag | `MANAGER_CLUB_COMMUNICATION_V2.md`, `audit:manager-club-communication-v2`, `sim:manager-club-communication-v2` |
+| Manageruke | Aktiv ligasave starter i Kalender; vedvarende footer viser aktuell dag og neste hendelse over eksisterende Club Week-state | `MANAGER_CALENDAR_V1.md`, `manager-calendar-v1`, `manager-match-calendar-v1` |
+| Klubbkommunikasjon | Konkrete mailer bruker faktisk state, managerspørsmål, observasjonspunkt og presise arbeidslenker | `MANAGER_CLUB_COMMUNICATION_V3.md`, `audit:manager-club-communication-v3`, `sim:manager-club-communication-v3` |
 | Spillerpool og tropp | History Go-samling og klubbtilgang utleder poolen; `squadPlayerIds` eier valgt klubbtropp | `MANAGER_RECRUITMENT_V1.md`, `audit:manager-recruitment-v1`, `sim:manager-recruitment-v1` |
 | Spillerliste og profil | Tett sammenligningsliste, delt spillerprofil og eksplisitt Velg/Sett inn uten Overall | `PLAYER_LIST_PROFILE_V1.md`, `manager-player-workspace-v1` |
 | Faktisk ellever og roller | Rolleinspektøren leser dagens ellever og forklarer navngitte relasjoner og rom | `MANAGER_FOOTBALL_LEARNING_LOOP_V1.md`, `audit-manager-football-learning-loop-v1` |
@@ -55,7 +55,7 @@ Disse skal ikke gjeninnføres som «neste naturlige steg» uten at produktregele
 - fasilitetsnivå 1–3 uten dokumenterte anleggsdata;
 - ny kamp-, trening-, rekrutterings-, medisinsk- eller analysescore;
 - skjulte pedagogiske bonuser;
-- parallelle manageruker eller «Neste»-veivisere.
+- parallelle manageruker eller generiske «Neste»-veivisere ved siden av kalenderfooteren.
 
 Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør ikke det gamle systemet til en live produktretning.
 

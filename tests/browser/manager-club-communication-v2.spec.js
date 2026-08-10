@@ -122,6 +122,37 @@ test("motstanderbriefen bruker lagret plan mot faktisk motstander", async ({ pag
   await expect(mail).toContainText("For mange bak ballen");
 });
 
+test("mailen gjør situasjon til managerspørsmål og presise arbeidslenker", async ({ page }) => {
+  await openCalendar(page);
+  await selectDay(page, 3);
+  await page.locator('[data-event-id="club-mail:w8:medical"]').click();
+
+  const mail = page.locator(".manager-club-mail");
+  await expect(mail.locator(".manager-club-mail-guidance")).toContainText("Situasjonen");
+  await expect(mail.locator(".manager-club-mail-guidance")).toContainText("Hva det betyr");
+  await expect(mail.locator(".manager-club-mail-guidance")).toContainText("Managerspørsmålet");
+  await expect(mail.locator(".manager-club-mail-guidance")).toContainText("Se etter");
+  const links = mail.locator(".manager-club-mail-links .manager-club-mail-action");
+  await expect(links).toHaveCount(2);
+  await expect(links.nth(0)).toHaveAttribute("href", "#trening/trainingDayChangeIndividual");
+  await expect(links.nth(1)).toHaveAttribute("href", "#trening/trainingDayCondition");
+
+  await links.nth(0).click();
+  await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
+  await expect(page.locator("#trainingDayChangeIndividual")).toBeFocused();
+});
+
+test("motstanderbriefens lenke åpner riktig kampforberedelse", async ({ page }) => {
+  await openCalendar(page);
+  await selectDay(page, 5);
+  await page.locator('[data-event-id="club-mail:w8:opponent-plan"]').click();
+  const link = page.locator('.manager-club-mail-links a[href="#tactics/teamTacticsSelectedState"]');
+  await expect(link).toBeVisible();
+  await link.click();
+  await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+  await expect(page.locator("#teamTacticsSelectedState")).toBeFocused();
+});
+
 test("å lese én mail flytter ikke fasen eller skjuler andre mailer", async ({ page }) => {
   await openCalendar(page);
   await selectDay(page, 3);

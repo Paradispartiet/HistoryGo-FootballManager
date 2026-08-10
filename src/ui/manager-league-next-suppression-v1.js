@@ -1,8 +1,9 @@
-// League Next suppression v1
+// League footer ownership v2
 //
-// Kalenderen eier tid og progresjon i vanlig ligaspill. Den gamle globale
-// «Forslag til neste steg»-footeren beholdes kun som kompatibilitet for andre
-// modi, men skal aldri konkurrere med Kalender/Lag/Kamp i en aktiv ligasave.
+// Kalenderen eier den synlige manageruka i vanlig ligaspill. Den eksisterende
+// footer-hosten beholdes, men kalender-workspacen fyller den med aktuell dag og
+// neste kalenderhendelse. Den gamle generiske Next-modellen kan fortsatt brukes
+// under oppstart og i andre modi.
 
 function currentMode() {
   try {
@@ -12,40 +13,44 @@ function currentMode() {
   }
 }
 
-function suppressLeagueNextSurface() {
+function syncLeagueFooterOwnership() {
   const host = document.querySelector("manager-next-action");
   if (!host) return;
 
-  const leagueMode = currentMode() === "league";
-  host.hidden = leagueMode;
-  host.dataset.leagueSuppressed = leagueMode ? "true" : "false";
+  const calendarOwnsFooter = currentMode() === "league"
+    && document.documentElement.dataset.managerOfficeCalendarV1 === "active";
+  host.hidden = false;
+  host.dataset.leagueSuppressed = "false";
+  host.dataset.calendarOwned = calendarOwnsFooter ? "true" : "false";
 
-  // app.js kan fortsatt rendre den interne Next-modellen for onboarding og
-  // kompatibilitet. I ligaspill holdes også selve stripen eksplisitt skjult,
-  // slik at senere renders ikke kan få den fram på Lag/Trening/Kamp.
-  if (leagueMode) {
-    const strip = host.querySelector("#nextActionStrip");
-    if (strip) strip.hidden = true;
+  const strip = host.querySelector("#nextActionStrip");
+  if (strip && calendarOwnsFooter) strip.hidden = false;
+  if (strip && !calendarOwnsFooter) {
+    delete strip.dataset.surface;
+    strip.setAttribute("aria-label", "Forslag til neste steg");
+    const label = strip.querySelector(".next-action-head .eyebrow");
+    if (label) label.textContent = "Forslag til neste steg";
   }
 }
 
-function installLeagueNextSuppression() {
-  suppressLeagueNextSurface();
+function installLeagueFooterOwnership() {
+  syncLeagueFooterOwnership();
 
   // Hoved- og undernavigasjon endrer `hidden` på arbeidsflatene. Det gir en
   // liten, avgrenset synkroniseringskrok som også dekker modusskifter uten å
   // observere hele DOM-en eller innføre ny state.
-  const observer = new MutationObserver(() => queueMicrotask(suppressLeagueNextSurface));
+  const observer = new MutationObserver(() => queueMicrotask(syncLeagueFooterOwnership));
   document.querySelectorAll("[data-tab-section]").forEach((section) => {
     observer.observe(section, { attributes: true, attributeFilter: ["hidden"] });
   });
-  window.addEventListener("storage", suppressLeagueNextSurface);
+  window.addEventListener("storage", syncLeagueFooterOwnership);
+  window.addEventListener("hgfm:manager-calendar-footer-ready", syncLeagueFooterOwnership);
 }
 
 if (typeof document !== "undefined") {
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", installLeagueNextSuppression, { once: true });
+    document.addEventListener("DOMContentLoaded", installLeagueFooterOwnership, { once: true });
   } else {
-    installLeagueNextSuppression();
+    installLeagueFooterOwnership();
   }
 }
