@@ -24,6 +24,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Correct verified full name
+        run: sed -i 's/"Thomas Lillo"/"Thomas Rømo Lillo"/' scripts/import-notodden-player-pool.mjs
+
       - name: Import Notodden
         run: |
           node scripts/import-notodden-player-pool.mjs
