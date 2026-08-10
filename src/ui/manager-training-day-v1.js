@@ -1,8 +1,10 @@
 import { currentManagerDayIndex } from "../football-manager-calendar.js";
+import { getTrainingProgramCompositionById } from "../football-training-program-compositions.js";
 
 const STYLE_ID = "managerTrainingDayV1Style";
 const SURFACE_ID = "managerTrainingDay";
 const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
+const WEEKLY_TRAINING_PROGRAM_KEY = "hgfm.weeklyTrainingProgram.v1";
 const DAYS = Object.freeze(["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]);
 
 let calendarContext = null;
@@ -94,7 +96,11 @@ function ensureSurface() {
     <div class="training-day-grid">
       <section class="training-day-main" aria-labelledby="trainingDayProgramTitle">
         <header class="training-day-section-head">
-          <div><span>Valgt program</span><h3 id="trainingDayProgramTitle">Ikke valgt</h3></div>
+          <div>
+            <span>Valgt program</span>
+            <h3 id="trainingDayProgramTitle">Ikke valgt</h3>
+            <small class="training-day-exercise-hint" id="trainingDayExerciseHint">Klikk en økt for å åpne øvelsesdesign.</small>
+          </div>
           <button type="button" class="training-day-action" id="trainingDayChangeProgram">Endre program</button>
         </header>
         <ol class="training-day-sessions" id="trainingDaySessions" aria-label="Fire treningsøkter"></ol>
@@ -141,10 +147,17 @@ function ensureSurface() {
   return surface;
 }
 
+function selectedProgramModel() {
+  const stored = readJson(WEEKLY_TRAINING_PROGRAM_KEY, null);
+  const programId = typeof stored?.programId === "string" ? stored.programId : "";
+  return programId ? getTrainingProgramCompositionById(programId) : null;
+}
+
 function selectedProgramTitle() {
   const card = document.querySelector("#trainingPrograms .training-program-card.is-selected");
   return String(card?.querySelector(".training-program-head h3")?.textContent || "").trim()
     || String(document.getElementById("teamSelectedTrainingProgram")?.textContent || "").trim()
+    || String(selectedProgramModel()?.title || "").trim()
     || "Treningsprogram ikke valgt";
 }
 
@@ -159,10 +172,38 @@ function selectedSessions() {
   const rows = Array.from(document.querySelectorAll("#trainingPrograms .training-program-card.is-selected .training-program-sessions li"))
     .slice(0, 4)
     .map((item, index) => parseSession(item.textContent, index));
+
+  if (!rows.length) {
+    const program = selectedProgramModel();
+    rows.push(...(Array.isArray(program?.sessions) ? program.sessions : []).slice(0, 4).map((session, index) => ({
+      day: String(session?.day || `Økt ${index + 1}`),
+      title: String(session?.title || "Velg treningsprogram"),
+      intensity: String(session?.intensity || "")
+    })));
+  }
+
   while (rows.length < 4) {
     rows.push({ day: `Økt ${rows.length + 1}`, title: "Velg treningsprogram for å fylle økta", intensity: "Ikke satt" });
   }
   return rows;
+}
+
+function isExerciseSession(session) {
+  return Boolean(session?.title) && !/^velg treningsprogram/i.test(String(session.title));
+}
+
+function openExerciseDesign(session, index, context) {
+  if (!isExerciseSession(session)) return;
+  window.dispatchEvent(new CustomEvent("hgfm:training-exercise-open", {
+    detail: {
+      session: {
+        ...session,
+        index,
+        programTitle: selectedProgramTitle(),
+        calendarDay: context.day
+      }
+    }
+  }));
 }
 
 function compactText(selector, fallback = "") {
@@ -186,13 +227,31 @@ function renderSessions(surface, context) {
   selectedSessions().forEach((session, index) => {
     const item = node("li", "training-day-session");
     const sameDay = session.day.toLocaleLowerCase("nb-NO").startsWith(context.day.toLocaleLowerCase("nb-NO"));
+    const openable = isExerciseSession(session);
     item.dataset.currentCalendarDay = sameDay ? "true" : "false";
+    item.dataset.exerciseOpenable = openable ? "true" : "false";
     item.append(
       node("span", "training-day-session-index", String(index + 1).padStart(2, "0")),
       node("span", "training-day-session-day", session.day),
       node("strong", "training-day-session-title", session.title),
       node("small", "training-day-session-intensity", session.intensity)
     );
+
+    if (openable) {
+      item.tabIndex = 0;
+      item.setAttribute("role", "button");
+      item.setAttribute("aria-haspopup", "dialog");
+      item.setAttribute("aria-label", `Åpne øvelsesdesign for ${session.title}`);
+      item.title = "Åpne øvelsesdesign";
+      item.addEventListener("click", () => openExerciseDesign(session, index, context));
+      item.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openExerciseDesign(session, index, context);
+      });
+    } else {
+      item.setAttribute("aria-disabled", "true");
+    }
     fragment.append(item);
   });
   list.replaceChildren(fragment);

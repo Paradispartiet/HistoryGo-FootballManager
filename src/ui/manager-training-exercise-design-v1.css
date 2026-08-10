@@ -1,0 +1,265 @@
+/* Treningsøvelser og øvelsesdesign v1 — læringsverksted, ikke ny treningsmotor. */
+
+.training-exercise-dialog {
+  width: min(72rem, calc(100vw - 2rem));
+  max-height: min(90vh, 58rem);
+  margin: auto;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.22);
+  background: #070b10;
+  color: #f7f8fa;
+  box-shadow: 0 1.5rem 4rem rgba(0,0,0,.55);
+}
+
+.training-exercise-dialog::backdrop {
+  background: rgba(0,0,0,.78);
+}
+
+.training-exercise-shell {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.training-exercise-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 2.4vw, 1.45rem);
+  border-bottom: 1px solid rgba(255,255,255,.16);
+  background: #0a1017;
+}
+
+.training-exercise-head h2 {
+  margin: .15rem 0 .4rem;
+  font-size: clamp(1.55rem, 4vw, 2.45rem);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+
+.training-exercise-objective {
+  max-width: 72ch;
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  font-size: .8rem;
+  line-height: 1.55;
+}
+
+.training-exercise-close,
+.training-exercise-reset {
+  min-height: 2.65rem;
+  border: 1px solid rgba(255,255,255,.34);
+  background: #101820;
+  color: #fff;
+  padding: .55rem .8rem;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.training-exercise-close:hover,
+.training-exercise-reset:hover {
+  border-color: rgba(255,255,255,.82);
+  background: #17222d;
+}
+
+.training-exercise-close:focus-visible,
+.training-exercise-reset:focus-visible,
+.training-exercise-choice input:focus-visible + span {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.training-exercise-body {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  min-width: 0;
+}
+
+.training-exercise-body > section {
+  min-width: 0;
+  padding: clamp(.95rem, 2.4vw, 1.35rem);
+  border-bottom: 1px solid rgba(255,255,255,.13);
+}
+
+.training-exercise-body > section:nth-child(odd) {
+  border-right: 1px solid rgba(255,255,255,.13);
+}
+
+.training-exercise-body section > span,
+.training-exercise-body section > header > span,
+.training-exercise-topic > span {
+  color: rgba(255,255,255,.54);
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.training-exercise-body h3 {
+  margin: .18rem 0 .65rem;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.training-exercise-setup p,
+.training-exercise-topic p,
+.training-exercise-effect p,
+.training-exercise-coaching li,
+.training-exercise-coaching blockquote {
+  color: rgba(255,255,255,.7);
+  font-size: .75rem;
+  line-height: 1.55;
+}
+
+.training-exercise-setup p {
+  margin: 0;
+}
+
+.training-exercise-guardrail {
+  margin-top: .85rem !important;
+  padding: .7rem .8rem;
+  border-left: 3px solid rgba(255,255,255,.72);
+  background: rgba(255,255,255,.035);
+  color: rgba(255,255,255,.82) !important;
+}
+
+.training-exercise-control-groups {
+  display: grid;
+  gap: .8rem;
+}
+
+.training-exercise-control {
+  min-width: 0;
+  margin: 0;
+  padding: .7rem;
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+.training-exercise-control legend {
+  padding: 0 .3rem;
+  color: rgba(255,255,255,.7);
+  font-size: .67rem;
+  font-weight: 900;
+}
+
+.training-exercise-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+}
+
+.training-exercise-choice {
+  position: relative;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.training-exercise-choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.training-exercise-choice span {
+  display: grid;
+  place-items: center;
+  min-height: 2.55rem;
+  min-width: 0;
+  padding: .45rem .55rem;
+  border: 1px solid rgba(255,255,255,.18);
+  background: #0b1219;
+  color: rgba(255,255,255,.72);
+  font-size: .68rem;
+  font-weight: 850;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.training-exercise-choice input:checked + span {
+  border-color: rgba(255,255,255,.85);
+  background: #17212b;
+  color: #fff;
+  box-shadow: inset 0 -2px 0 #fff;
+}
+
+.training-exercise-reset {
+  width: 100%;
+  margin-top: .8rem;
+}
+
+.training-exercise-effects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+}
+
+.training-exercise-effect {
+  min-width: 0;
+  padding: .7rem .75rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.025);
+}
+
+.training-exercise-effect strong {
+  font-size: .75rem;
+}
+
+.training-exercise-effect p {
+  margin: .3rem 0 0;
+}
+
+.training-exercise-topic {
+  margin-top: .65rem;
+  padding: .75rem;
+  border-left: 3px solid rgba(255,255,255,.62);
+  background: #0b1118;
+}
+
+.training-exercise-topic p {
+  margin: .28rem 0 0;
+}
+
+.training-exercise-coaching ul {
+  display: grid;
+  gap: .45rem;
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.training-exercise-coaching blockquote {
+  margin: .85rem 0 0;
+  padding: .7rem .8rem;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.025);
+  color: #fff;
+  font-weight: 800;
+}
+
+@media (max-width: 820px) {
+  .training-exercise-body {
+    grid-template-columns: 1fr;
+  }
+  .training-exercise-body > section:nth-child(odd) {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .training-exercise-dialog {
+    width: calc(100vw - .75rem);
+    max-height: calc(100vh - .75rem);
+  }
+  .training-exercise-head {
+    display: grid;
+  }
+  .training-exercise-close {
+    width: 100%;
+  }
+  .training-exercise-choices,
+  .training-exercise-effects {
+    grid-template-columns: 1fr;
+  }
+}

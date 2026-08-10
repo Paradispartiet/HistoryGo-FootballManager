@@ -116,6 +116,14 @@
   font-size: clamp(1.1rem, 2.5vw, 1.45rem);
 }
 
+.training-day-exercise-hint {
+  display: block;
+  margin-top: .28rem;
+  color: rgba(255,255,255,.52);
+  font-size: .67rem;
+  line-height: 1.35;
+}
+
 .training-day-action,
 .training-day-card button,
 .training-day-calendar-return {
@@ -140,7 +148,8 @@
 .training-day-calendar-link:focus-visible,
 .training-day-action:focus-visible,
 .training-day-card button:focus-visible,
-.training-day-calendar-return:focus-visible {
+.training-day-calendar-return:focus-visible,
+.training-day-session[role="button"]:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
@@ -163,6 +172,27 @@
 }
 
 .training-day-session:last-child { border-bottom: 0; }
+
+.training-day-session[data-exercise-openable="true"] {
+  cursor: pointer;
+  transition: background-color .16s ease, padding-left .16s ease, border-color .16s ease;
+}
+
+.training-day-session[data-exercise-openable="true"]:hover,
+.training-day-session[data-exercise-openable="true"]:focus-visible {
+  padding-left: .65rem;
+  padding-right: .45rem;
+  border-color: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.045);
+}
+
+.training-day-session[data-exercise-openable="true"] .training-day-session-title::after {
+  content: "  ·  åpne øvelse";
+  color: rgba(255,255,255,.42);
+  font-size: .62rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
 
 .training-day-session[data-current-calendar-day="true"] {
   box-shadow: inset 3px 0 0 #fff;
@@ -235,6 +265,11 @@
   .training-day-session-title { grid-area: title; }
   .training-day-session-day { grid-area: day; }
   .training-day-session-intensity { grid-area: intensity; }
+  .training-day-session[data-exercise-openable="true"] .training-day-session-title::after {
+    display: block;
+    margin-top: .15rem;
+    white-space: normal;
+  }
   .training-day-side { grid-template-columns: 1fr; }
   .training-day-card:nth-child(odd) { border-right: 0; }
   .training-day-calendar-return { width: 100%; }

@@ -5,6 +5,7 @@ import "./manager-lineup-slot-inspector-v1.js";
 import "./manager-scouting-workspace-v1.js";
 import "./manager-calendar-workspace-v1.js";
 import "./manager-training-day-v1.js";
+import "./manager-training-exercise-design-v1.js";
 import "./manager-match-calendar-v1.js";
 import "./manager-staff-workspace-v1.js";
 import "./manager-club-organization-v1.js";
