@@ -168,13 +168,14 @@ export function createActualLineupRoleLesson({ selectedSlotId = "", lineup = [],
       slotLabel: clean(entry?.slotLabel) || "Ukjent plass",
       position: clean(entry?.position),
       line: clean(entry?.line),
+      playerId: clean(entry?.playerId),
       playerName: clean(entry?.playerName) || "Ukjent spiller",
       roleId: clean(entry?.roleId),
       roleName: clean(entry?.roleName),
       x: coordinate(entry?.x),
       y: coordinate(entry?.y)
     }))
-    .filter((entry) => entry.slotId && entry.playerName && entry.roleId);
+    .filter((entry) => entry.slotId && entry.playerId && entry.playerName && entry.roleId);
   const selected = assignments.find((entry) => entry.slotId === clean(selectedSlotId)) || null;
   const selectedRole = roleById(roleList, selected?.roleId);
   if (!selected || !selectedRole) return null;
@@ -303,6 +304,7 @@ function lineupAssignmentsFromPitch() {
     slotLabel: chip.dataset.slotLabel,
     position: chip.dataset.position,
     line: chip.dataset.line,
+    playerId: chip.dataset.playerId,
     playerName: chip.dataset.playerName,
     roleId: chip.dataset.roleId,
     roleName: chip.dataset.roleName,

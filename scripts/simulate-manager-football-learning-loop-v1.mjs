@@ -22,8 +22,8 @@ const actualLineup = createActualLineupRoleLesson({
   selectedSlotId: "lw",
   roleList: roles,
   lineup: [
-    { slotId: "lw", slotLabel: "Venstrekant", playerName: "Vingen", roleId: "wide_dribbler", roleName: "Bred dribler", x: 15, y: 25 },
-    { slotId: "lb", slotLabel: "Venstreback", playerName: "Backen", roleId: "overlapping_fullback", roleName: "Overlappende back", x: 16, y: 66 }
+    { slotId: "lw", slotLabel: "Venstrekant", playerId: "winger", playerName: "Vingen", roleId: "wide_dribbler", roleName: "Bred dribler", x: 15, y: 25 },
+    { slotId: "lb", slotLabel: "Venstreback", playerId: "fullback", playerName: "Backen", roleId: "overlapping_fullback", roleName: "Overlappende back", x: 16, y: 66 }
   ]
 });
 assert.equal(actualLineup.status, "actual_pair");
@@ -36,12 +36,23 @@ const missingActualPartner = createActualLineupRoleLesson({
   selectedSlotId: "lw",
   roleList: roles,
   lineup: [
-    { slotId: "lw", slotLabel: "Venstrekant", playerName: "Vingen", roleId: "wide_dribbler", roleName: "Bred dribler", x: 15, y: 25 }
+    { slotId: "lw", slotLabel: "Venstrekant", playerId: "winger", playerName: "Vingen", roleId: "wide_dribbler", roleName: "Bred dribler", x: 15, y: 25 }
   ]
 });
 assert.equal(missingActualPartner.status, "missing_curated_partner");
 assert.equal(missingActualPartner.partner, null);
 assert.equal(missingActualPartner.suggestedPartnerName, "Overlappende back");
+
+const emptySlotIsNotAPartner = createActualLineupRoleLesson({
+  selectedSlotId: "lw",
+  roleList: roles,
+  lineup: [
+    { slotId: "lw", slotLabel: "Venstrekant", playerId: "winger", playerName: "Vingen", roleId: "wide_dribbler", roleName: "Bred dribler", x: 15, y: 25 },
+    { slotId: "lb", slotLabel: "Venstreback", playerId: "", playerName: "Tom plass", roleId: "overlapping_fullback", roleName: "Overlappende back", x: 16, y: 66 }
+  ]
+});
+assert.equal(emptySlotIsNotAPartner.status, "missing_curated_partner");
+assert.equal(emptySlotIsNotAPartner.partner, null);
 
 const pressTraining = createTrainingLearningLesson("Høyt press treningsprogram");
 assert.match(pressTraining.title, /Press/);
@@ -69,4 +80,4 @@ const generic = createMatchSignalLearningLesson("Et uklart, men registrert takti
 assert.equal(generic.principle, "Kampatferd");
 assert.match(generic.watch, /ett eller to trekk tilbake/i);
 
-console.log("Manager football learning loop v1: 24/24");
+console.log("Manager football learning loop v1: 26/26");
