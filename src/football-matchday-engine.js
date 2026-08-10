@@ -508,6 +508,7 @@ export function createMatchReport(matchResult) {
     worstDecision: matchResult.worstDecision || null,
     formationVerdict: matchResult.formationVerdict || "",
     trainingFocus: matchResult.trainingFocus || null,
+    opponentAnalysisPlan: matchResult.opponentAnalysisPlan || null,
     decisiveUnit: matchResult.decisiveUnit || "",
     nextWeekAdvice: matchResult.nextWeekAdvice || "",
     historyGoHint: matchResult.historyGoHint || "",
@@ -2085,6 +2086,11 @@ export function finalizeMatchdaySession(session) {
 
   // Kampanalyse: kort beslutningsoppsummering pluss systembildet.
   const analysis = [];
+  if (session.opponentAnalysisPlan?.focusLabel) {
+    analysis.push(
+      `Analyseplanen prioriterte ${String(session.opponentAnalysisPlan.focusLabel).toLowerCase()}. Vurder kampsignalene mot observasjonspunktet: ${session.opponentAnalysisPlan.watch || "se om hypotesen stemte."}`
+    );
+  }
   if (positiveCount > 0) {
     analysis.push(`${positiveCount} av ${decisions.length} managergrep traff og løftet laget.`);
   }
@@ -2192,6 +2198,9 @@ export function finalizeMatchdaySession(session) {
     tacticSnapshot: session.tacticSnapshot || null,
     formationMatchup: session.formationMatchup || null,
     historicalMatchup: session.historicalMatchup || null,
+    // Managerens valgte analysehypotese er bare et lesbart snapshot. Den har
+    // ingen vei inn i styrke-, xG- eller beslutningseffektberegningene.
+    opponentAnalysisPlan: session.opponentAnalysisPlan || null,
     teamStrength,
     score: { for: goalsFor, against: goalsAgainst },
     expectedGoals: { for: expectedGoalsFor, against: expectedGoalsAgainst },

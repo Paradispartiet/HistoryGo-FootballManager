@@ -101,6 +101,37 @@ test.beforeEach(async ({ page }) => {
       week: 1,
       appliedSessionId: null
     }));
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify({
+      version: "mode-sessions.v1",
+      activeMode: "league",
+      sessions: {
+        league: {
+          opponentAnalysisPlan: {
+            version: "opponent-analysis.v1",
+            fixtureId: "matchday-r2-0",
+            opponentId: "viking",
+            opponentName: "Viking",
+            round: 2,
+            week: 1,
+            focusId: "press",
+            focusLabel: "Presset deres",
+            question: "Hvor starter presset, og hvilken pasning forsøker de å tvinge fram?",
+            hypothesis: "Behold en fri spiller bak første pressledd.",
+            evidence: ["Viking presser høyt"],
+            countermeasureId: "free_player",
+            countermeasureLabel: "Skap en fri spiller",
+            target: "system",
+            targetLabel: "Systemet",
+            why: "Happy-path-fixturen har registrert forberedelsen.",
+            risk: "Å lokke presset inn krever presisjon nær eget mål.",
+            watch: "Se hvem som blir fri når første pressledd går mot ballfører."
+          }
+        },
+        scenario: null,
+        training: null,
+        national: null
+      }
+    }));
   }, seededSeason());
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();

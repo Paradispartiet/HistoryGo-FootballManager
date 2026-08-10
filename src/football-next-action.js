@@ -22,7 +22,8 @@ export const NEXT_ACTION_TYPES = Object.freeze({
   SLOT: "slot",
   MINI_SEASON: "miniSeason",
   LEAGUE_SEASON: "leagueSeason",
-  CLUB_WEEK: "clubWeek"
+  CLUB_WEEK: "clubWeek",
+  CLUB_ROOM: "clubRoom"
 });
 
 function asString(value, fallback = "") {
@@ -216,6 +217,12 @@ export function computeNextActions(context = {}) {
         tag: "Trening",
         title: "Velg treningsprogram",
         action: { type: NEXT_ACTION_TYPES.TAB, tab: "trening" }
+      },
+      opponent_analysis_missing: {
+        id: "readiness-opponent-analysis",
+        tag: "Analyse",
+        title: "Forbered neste motstander",
+        action: { type: NEXT_ACTION_TYPES.CLUB_ROOM, room: "analysis" }
       }
     };
     const descriptor = byCode[readinessBlocker.code];

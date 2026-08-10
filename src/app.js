@@ -105,11 +105,19 @@ import {
   isPlayoffPending,
   resolveLeagueOutcome,
   normalizeLeagueSeason,
+  getManagerFixture,
   getNextLeagueOpponent,
   completeLeagueRound,
   createLeagueTable,
   startNextLeagueSeason
 } from "./football-league-season.js";
+import {
+  createOpponentAnalysisPlan,
+  createOpponentAnalysisWorkspace,
+  isOpponentAnalysisPlanForFixture,
+  normalizeOpponentAnalysisPlan
+} from "./football-opponent-analysis.js";
+import { registerOpponentAnalysisBridge } from "./football-opponent-analysis-bridge.js";
 import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";
 import { resolveClubSquadAccess, reconcileClubBaseSquadSave, listClubHeritagePlayers } from "./football-club-squad.js";
 import {
@@ -477,6 +485,10 @@ const state = {
   // Ukens valgte treningsprogram (komposisjon). { programId, week, applied }.
   // Adskilt fra treningsfokus; brukes til valgt-tilstand og engangs off-pitch-effekt.
   weeklyTrainingProgram: null,
+  // Managerens eksplisitte analyseplan for én terminfestet kamp. Ligger i den
+  // aktive modussnapshoten, gir ingen kampbonus og teller bare når fixtureId
+  // matcher kampen som faktisk skal spilles.
+  opponentAnalysisPlan: null,
   // Katalogen over individuelle treningsspor (fra datafil, normalisert).
   individualTrainingCatalogue: { capacity: { base: 1, perStaffMember: 1, max: 5 }, tracks: [] },
   // Ukas individuelle oppfølging: { week, assignments: [] }.
@@ -4168,6 +4180,7 @@ function getMatchdayReadiness(teamFit) {
   const clubWeekBlocked = Boolean(
     selectedMode === "league" && clubWeekPhase && clubWeekPhase !== "matchday"
   );
+  const analysisFixture = selectedMode === "league" ? getOpponentAnalysisFixtures()[0] || null : null;
 
   return evaluateMatchdayReadiness({
     dataLoaded: Boolean(teamFit),
@@ -4185,6 +4198,11 @@ function getMatchdayReadiness(teamFit) {
     minimumSquadSize: REQUIRED_SQUAD_SIZE,
     hasTrainingChoice:
       Boolean(state.weeklyTrainingProgram?.programId) || Boolean(state.weeklyTrainingFocus?.focusId),
+    requiresOpponentAnalysis: Boolean(selectedMode === "league" && analysisFixture),
+    hasOpponentAnalysisPlan: Boolean(
+      analysisFixture && isOpponentAnalysisPlanForFixture(state.opponentAnalysisPlan, analysisFixture.fixtureId)
+    ),
+    opponentName: analysisFixture?.opponent?.name || "neste motstander",
     selectedMode,
     hasPlayableMatch,
     leagueSeasonActive: !isLeagueModeActive() || isLeagueSeasonActive(),
@@ -4344,6 +4362,18 @@ function playMatchday() {
     // Svakhetstrening betaler kun når spilleren står i rollen han trente seg til.
     weaknessWorkBonus: getLineupWeaknessWork(teamFit).bonus
   });
+
+  const analysisFixture = isLeagueModeActive() ? getOpponentAnalysisFixtures()[0] || null : null;
+  const analysisPlan = normalizeOpponentAnalysisPlan(state.opponentAnalysisPlan);
+  if (
+    state.matchday.session &&
+    analysisFixture &&
+    isOpponentAnalysisPlanForFixture(analysisPlan, analysisFixture.fixtureId)
+  ) {
+    // Snapshotet følger kampbriefen og sluttrapporten, men endrer ingen tall i
+    // kampmotoren. Det er managerens hypotese og observasjonspunkt, ikke bonus.
+    state.matchday.session.opponentAnalysisPlan = analysisPlan;
+  }
 
   // Reservér ukas fokus til denne sesjonen med én gang. Dermed kan reload eller
   // «Nullstill kamp» aldri gi samme ukebonus til en ny kamp.
@@ -6164,6 +6194,141 @@ function startNewLeagueSeason() {
   if (!state.leagueSeason) ensureLeagueSeason();
   renderApp();
 }
+
+function leagueOpponentProfile(opponent) {
+  if (!opponent?.id) return null;
+  const clubProfile = state.leagueClubProfiles[opponent.id] || null;
+  const base = clubProfile || OPPONENT_PROFILES[0];
+  return {
+    ...base,
+    id: opponent.id,
+    name: opponent.name,
+    displayName: opponent.name,
+    strength: opponent.strength,
+    homeAway: opponent.homeAway,
+    ground: opponent.ground,
+    tacticalIdentity: opponent.tacticalIdentity,
+    archetypeName: clubProfile?.styleName || base.archetypeName || null,
+    isClubProfile: Boolean(clubProfile)
+  };
+}
+
+// Gjenværende terminfestede ligakamper som analyseavdelingen kan arbeide med.
+// Terminlisten eier hvem og når; profilkatalogen eier fotballstilen. En plan
+// for en senere kamp kan utforskes og lagres, men bare planen som matcher
+// nærmeste fixture teller i den autoritative kampklarheten.
+function getOpponentAnalysisFixtures() {
+  if (!isLeagueModeActive()) return [];
+
+  const playoffOpponent = getPlayoffMatchdayOpponent(state.leaguePlayoff);
+  if (playoffOpponent) {
+    const opponent = leagueOpponentProfile(playoffOpponent);
+    return opponent ? [{
+      fixtureId: playoffOpponent.matchId,
+      round: playoffOpponent.round,
+      homeAway: playoffOpponent.homeAway,
+      opponent,
+      formationMatchup: getFormationMatchupVsOpponent(opponent),
+      isCurrent: true,
+      competitionLabel: playoffOpponent.playoffRoundName || "Kvalifisering"
+    }] : [];
+  }
+
+  const season = state.leagueSeason;
+  if (!season || season.status !== "active") return [];
+  const fixtures = [];
+  for (let round = Number(season.currentRound) || 1; round <= Number(season.competition?.rounds || 0); round += 1) {
+    const fixture = getManagerFixture(season, round);
+    if (!fixture || fixture.status === "completed") continue;
+    const opponentId = fixture.homeClubId === season.managerClubId ? fixture.awayClubId : fixture.homeClubId;
+    const club = season.clubs.find((entry) => entry.id === opponentId);
+    if (!club) continue;
+    const opponent = leagueOpponentProfile({
+      ...club,
+      homeAway: fixture.homeClubId === season.managerClubId ? "home" : "away"
+    });
+    if (!opponent) continue;
+    fixtures.push({
+      fixtureId: fixture.id,
+      round: fixture.round,
+      homeAway: opponent.homeAway,
+      opponent,
+      formationMatchup: getFormationMatchupVsOpponent(opponent),
+      isCurrent: fixture.round === season.currentRound,
+      competitionLabel: season.competition?.tierName || season.tier?.name || "Liga"
+    });
+  }
+  return fixtures;
+}
+
+function getOpponentAnalysisContext() {
+  const fixtures = getOpponentAnalysisFixtures();
+  const savedPlan = normalizeOpponentAnalysisPlan(state.opponentAnalysisPlan);
+  const currentFixture = fixtures[0] || null;
+  return {
+    mode: state.gameStartState?.selectedMode || state.modeEnvelope?.activeMode || null,
+    week: Number(state.clubWeekState?.week) || 1,
+    fixtures,
+    currentFixtureId: currentFixture?.fixtureId || null,
+    savedPlan,
+    currentPlanReady: Boolean(currentFixture && isOpponentAnalysisPlanForFixture(savedPlan, currentFixture.fixtureId)),
+    formation: getFormation(),
+    tactic: getTactic(),
+    trainingLabel: getWeeklyTrainingChoiceLabel()
+  };
+}
+
+function saveOpponentAnalysisPlanFromClubRoom(plan) {
+  const context = getOpponentAnalysisContext();
+  const requested = normalizeOpponentAnalysisPlan(plan);
+  const fixture = context.fixtures.find((entry) => entry.fixtureId === requested?.fixtureId) || null;
+  if (!requested || !fixture || requested.opponentId !== fixture.opponent?.id) {
+    return { saved: false, reason: "Planen matcher ikke en gjenværende terminfestet kamp." };
+  }
+  const workspace = createOpponentAnalysisWorkspace({
+    fixture,
+    formation: context.formation,
+    tactic: context.tactic,
+    trainingLabel: context.trainingLabel
+  });
+  const canonical = createOpponentAnalysisPlan({
+    workspace,
+    focusId: requested.focusId,
+    countermeasureId: requested.countermeasureId,
+    week: context.week
+  });
+  if (!canonical) return { saved: false, reason: "Velg både analysefokus og motgrep." };
+
+  state.opponentAnalysisPlan = canonical;
+  try {
+    if (state.modeEnvelope) {
+      state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+      state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+    }
+  } catch (_) { /* privat modus: planen lever videre i minnet */ }
+  renderApp();
+  return {
+    saved: true,
+    plan: canonical,
+    currentPlanReady: canonical.fixtureId === context.currentFixtureId
+  };
+}
+
+function openOpponentAnalysisTargetFromClubRoom(target) {
+  document.querySelector("#managerClubRoomDrawer .club-room-close")?.click();
+  queueMicrotask(() => {
+    if (target === "training") activateTab("trening");
+    else if (target === "system") activateTab("system");
+    else activateTab("tactics");
+  });
+  return true;
+}
+
+registerOpponentAnalysisBridge({
+  getContext: getOpponentAnalysisContext,
+  savePlan: saveOpponentAnalysisPlanFromClubRoom,
+  openTarget: openOpponentAnalysisTargetFromClubRoom
+});
 
 // Neste planlagte motstander som full motstanderprofil, eller null når ingen
 // mini-sesong er aktiv (da beholder kampdagen dagens tilfeldige motstander).
@@ -9006,6 +9171,14 @@ function resolveNextActionRun(action) {
       return () => {
         advanceClubWeekPhaseAction().catch(console.error);
       };
+    case NEXT_ACTION_TYPES.CLUB_ROOM:
+      return () => {
+        activateTab("dashboard");
+        queueMicrotask(() => {
+          document.querySelector('.app-subtab[data-tab-target="board"]')?.click();
+          queueMicrotask(() => document.querySelector(`[data-club-room="${action.room || "analysis"}"]`)?.click());
+        });
+      };
     default:
       return null;
   }
@@ -10079,6 +10252,18 @@ function renderMatchdaySessionPreMatch(container, session) {
     row("Anbefalt forberedelse", prep);
     brief.append(dl);
     card.append(brief);
+  }
+
+  const analysisPlan = normalizeOpponentAnalysisPlan(session.opponentAnalysisPlan);
+  if (analysisPlan) {
+    appendMatchdaySubheading(card, "Analyseavdelingens plan");
+    appendMatchdayList(card, [
+      `Fokus: ${analysisPlan.focusLabel}`,
+      `Hypotese: ${analysisPlan.hypothesis}`,
+      `Valgt motgrep: ${analysisPlan.countermeasureLabel}`,
+      `Risiko: ${analysisPlan.risk}`,
+      `Se etter: ${analysisPlan.watch}`
+    ]);
   }
 
   // Historical Opponent Archetypes v1: når motstanderen er en historisk stil-

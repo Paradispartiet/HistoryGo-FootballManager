@@ -108,6 +108,21 @@ const primary = (context) => actions(context)[0] || null;
 // 5. Når forberedelsene er komplette, finnes ingen ekstra Facilities-gate.
 // Neste interne kampstatus peker direkte på eksisterende Kamp-flate.
 {
+  const analysis = primary(ctx({
+    matchdayReady: false,
+    matchdayReadiness: {
+      status: "blocked",
+      canStartMatch: false,
+      isReady: false,
+      primaryBlocker: {
+        code: "opponent_analysis_missing",
+        message: "Analyser Brann før avspark."
+      }
+    }
+  }));
+  check("manglende motstanderplan prioriterer Analyse", analysis?.title === "Forbered neste motstander");
+  check("analysehandlingen åpner klubbens Analyse-rom", analysis?.action?.type === NEXT_ACTION_TYPES.CLUB_ROOM && analysis.action.room === "analysis");
+
   const ready = primary(READY);
   check("klart lag har ingen ekstra managergate før Kamp", ready?.title === "Spill kamp");
   check("kampstatus peker til eksisterende Kamp-flate", ready?.action?.type === NEXT_ACTION_TYPES.TAB && ready.action.tab === "kamp");

@@ -203,6 +203,17 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
         summary: text(trainingSource.summary, "Kampen registrerte ingen egen treningsdom.")
       }
     : null;
+  const analysisSource = report.opponentAnalysisPlan || lastMatch.opponentAnalysisPlan || null;
+  const analysisPlan = analysisSource && typeof analysisSource === "object"
+    ? {
+        focus: text(analysisSource.focusLabel, "Valgt analysefokus"),
+        hypothesis: text(analysisSource.hypothesis, "Ingen arbeidshypotese ble lagret."),
+        countermeasure: text(analysisSource.countermeasureLabel, "Ingen motgrep ble lagret."),
+        risk: text(analysisSource.risk, "Ingen egen risiko ble registrert."),
+        watch: text(analysisSource.watch, "Sammenlign hypotesen med de registrerte kampsignalene."),
+        evidence: list(analysisSource.evidence).slice(0, 3)
+      }
+    : null;
 
   return {
     outcome,
@@ -233,6 +244,7 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     })),
     consequences,
     trainingEvidence,
+    analysisPlan,
     exposedWeakness: text(
       report.exposedWeaknessMetric || lastMatch.exposedWeaknessMetric,
       "Ingen maskinlesbar svakhet ble registrert."
@@ -302,6 +314,23 @@ export function renderPostMatchAnalysis(model, onOpenTarget) {
   appendList(human, model.humanFactors, "Kampen ga ingen ekstra registrerte belastnings- eller relasjonssignaler.");
   overview.append(why, tactical, human);
   section.append(overview);
+
+  if (model.analysisPlan) {
+    const analysisPlan = node("section", "matchday-post-match-analysis-plan");
+    analysisPlan.append(
+      node("span", "matchday-post-match-section-head", "Analysehypotesen før kamp"),
+      node("strong", "", model.analysisPlan.focus),
+      node("p", "", model.analysisPlan.hypothesis)
+    );
+    appendList(analysisPlan, [
+      `Valgt motgrep: ${model.analysisPlan.countermeasure}`,
+      `Risikoen du aksepterte: ${model.analysisPlan.risk}`,
+      `Observasjonspunkt: ${model.analysisPlan.watch}`,
+      ...model.analysisPlan.evidence.map((item) => `Grunnlag før kamp: ${item}`)
+    ], "Ingen analyseplan ble registrert før kampen.");
+    analysisPlan.append(node("small", "", "Resultatet avgjør ikke om hypotesen var god. Vurder den mot hendelsene og de taktiske signalene kampen faktisk registrerte."));
+    section.append(analysisPlan);
+  }
 
   const decisions = node("section", "matchday-post-match-decisions");
   decisions.append(node("div", "matchday-post-match-section-head", "Managerens grep"));

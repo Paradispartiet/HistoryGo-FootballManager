@@ -7,6 +7,13 @@ const files = {
   learning: fs.readFileSync(new URL("../src/ui/manager-club-learning-v1.js", import.meta.url), "utf8"),
   learningStyle: fs.readFileSync(new URL("../src/ui/manager-club-learning-v1.css", import.meta.url), "utf8"),
   medicalModel: fs.readFileSync(new URL("../src/football-medical-decision-learning.js", import.meta.url), "utf8"),
+  opponentAnalysis: fs.readFileSync(new URL("../src/football-opponent-analysis.js", import.meta.url), "utf8"),
+  opponentBridge: fs.readFileSync(new URL("../src/football-opponent-analysis-bridge.js", import.meta.url), "utf8"),
+  readiness: fs.readFileSync(new URL("../src/football-matchday-readiness.js", import.meta.url), "utf8"),
+  nextAction: fs.readFileSync(new URL("../src/football-next-action.js", import.meta.url), "utf8"),
+  matchday: fs.readFileSync(new URL("../src/football-matchday-engine.js", import.meta.url), "utf8"),
+  postMatch: fs.readFileSync(new URL("../src/ui/manager-post-match-analysis-v1.js", import.meta.url), "utf8"),
+  app: fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8"),
   modeSessions: fs.readFileSync(new URL("../src/football-mode-sessions.js", import.meta.url), "utf8"),
   oldClub: fs.readFileSync(new URL("../src/ui/manager-club-presentation.js", import.meta.url), "utf8"),
   facilities: fs.readFileSync(new URL("../src/ui/manager-facilities-workspace-v1.js", import.meta.url), "utf8"),
@@ -16,6 +23,7 @@ const files = {
   docs: fs.readFileSync(new URL("../docs/MANAGER_CLUB_ORGANIZATION_V1.md", import.meta.url), "utf8"),
   browser: fs.readFileSync(new URL("../tests/browser/manager-club-organization-v1.spec.js", import.meta.url), "utf8"),
   medicalBrowser: fs.readFileSync(new URL("../tests/browser/manager-medical-decision-learning-v1.spec.js", import.meta.url), "utf8"),
+  analysisBrowser: fs.readFileSync(new URL("../tests/browser/manager-opponent-analysis-preparation-v1.spec.js", import.meta.url), "utf8"),
   package: fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"),
   ci: fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8")
 };
@@ -46,6 +54,15 @@ check("legacy condition er bare fallback og UI skriver ingen state", files.learn
 check("medisinsk valg har ingen ny score eller skjult motor", !/medicalScore|recoveryScore|returnScore|medicalOverall/i.test(files.medicalModel));
 check("åpent klubbrom erstattes ikke under interaksjon", !files.organization.includes("openRoom(drawerState.roomId, drawerState.trigger)"));
 check("organisasjonen har Analyse", files.organization.includes('"analysis"') && files.organization.includes('"Analyse"'));
+check("analyse er et spillbart situasjon hypotese motgrep-verksted", files.learning.includes("appendOpponentAnalysisWorkshop") && files.learning.includes("createOpponentAnalysisPlan") && files.learning.includes("openOpponentAnalysisTarget"));
+check("motstanderanalysen er ren og deterministisk", !/\bdocument\b|\bwindow\b|localStorage|sessionStorage|Math\.random|Date\.now/.test(files.opponentAnalysis));
+check("analysen bruker terminfestet motstander profil og matchup", files.app.includes("getOpponentAnalysisFixtures") && files.app.includes("leagueOpponentProfile") && files.opponentAnalysis.includes("fixture.formationMatchup"));
+check("analyseplanen persisteres bare i aktiv modussnapshot", files.modeSessions.includes('"opponentAnalysisPlan"') && files.app.includes("state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state)") && !files.opponentBridge.includes("localStorage"));
+check("bare analyseplan for samme fixture teller", files.opponentAnalysis.includes("isOpponentAnalysisPlanForFixture") && files.app.includes("analysisFixture.fixtureId"));
+check("readiness bruker eksisterende autoritative port", files.readiness.includes('"opponent_analysis_missing"') && files.app.includes("requiresOpponentAnalysis") && files.app.includes("hasOpponentAnalysisPlan"));
+check("readiness sender manageren til Analyse-rommet", files.nextAction.includes("opponent_analysis_missing") && files.nextAction.includes('room: "analysis"'));
+check("analyseplan gir ingen styrke xG eller skjult bonus", !/analysisBonus|analysisScore|scoutingScore|opponentBonus/i.test(files.opponentAnalysis + files.app) && files.learning.includes("endrer ingen spillerverdier, kampstyrke, xG eller skjulte bonuser"));
+check("analyseplanen følger lesbart inn i kampbrief og etterkamp", files.app.includes('"Analyseavdelingens plan"') && files.matchday.includes("opponentAnalysisPlan: session.opponentAnalysisPlan") && files.matchday.includes("Analyseplanen prioriterte") && files.postMatch.includes("Analysehypotesen før kamp"));
 check("organisasjonen har Styret", files.organization.includes('"board"') && files.organization.includes('"Styret"'));
 check("organisasjonen har Administrasjon", files.organization.includes('"administration"') && files.organization.includes('"Administrasjon"'));
 check("organisasjonen har Stadion og hjemmebane", files.organization.includes('"stadium"') && files.organization.includes('"Stadion og hjemmebane"'));
@@ -70,6 +87,9 @@ check("browser tester WCAG", files.browser.includes("AxeBuilder") && files.brows
 check("browser tester medisinsk valg uten save-mutasjon", files.medicalBrowser.includes("conditionBefore") && files.medicalBrowser.includes("conditionAfter") && files.medicalBrowser.includes('data-medical-decision="rehab_and_assess"'));
 check("browser tester aktiv modus uten condition-lekkasje", files.medicalBrowser.includes("aktiv modussnapshot") && files.medicalBrowser.includes('playerCondition: []'));
 check("browser tester medisinsk navigasjon mobil og WCAG", files.medicalBrowser.includes('[data-tab-section="trening"]') && files.medicalBrowser.includes("expectNoHorizontalOverflow") && files.medicalBrowser.includes("AxeBuilder"));
+check("browser tester analysevalg lagring og aktiv modussnapshot", files.analysisBrowser.includes("choosePressPlan") && files.analysisBrowser.includes("hgfm.modeSessions.v1") && files.analysisBrowser.includes("opponentAnalysisPlan"));
+check("browser tester at senere kamp ikke åpner nærmeste kamp", files.analysisBrowser.includes("senere terminlistekamp") && files.analysisBrowser.includes("Nærmeste kamp trenger fortsatt"));
+check("browser tester analyseverksted mobil og WCAG", files.analysisBrowser.includes("expectNoHorizontalOverflow") && files.analysisBrowser.includes("AxeBuilder"));
 check("dokumentasjonen låser rejected live IA", files.docs.includes("Rejected live IA") && files.docs.includes("overgangsvinduer") && files.docs.includes("fasilitetsnivå 1–3"));
 check("dokumentasjonen peker cleanup til Pass 7", files.docs.includes("Pass 7"));
 check("dokumentasjonen låser medisinsk faggrunnlag og state-grense", files.docs.includes("London International Consensus") && files.docs.includes("aktive `hgfm.modeSessions.v1`-sesjonen") && files.docs.includes("gir ikke medisinske råd"));

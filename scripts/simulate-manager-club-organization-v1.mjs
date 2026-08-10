@@ -3,6 +3,13 @@ import {
   createMedicalDecisionCase,
   evaluateMedicalDecision
 } from "../src/football-medical-decision-learning.js";
+import {
+  createOpponentAnalysisPlan,
+  createOpponentAnalysisWorkspace,
+  isOpponentAnalysisPlanForFixture,
+  normalizeOpponentAnalysisPlan
+} from "../src/football-opponent-analysis.js";
+import { evaluateMatchdayReadiness } from "../src/football-matchday-readiness.js";
 
 let failures = 0;
 let checks = 0;
@@ -81,6 +88,72 @@ check("justering og ny vurdering støttes", evaluateMedicalDecision(loadCase, "a
 const quiet = createMedicalDecisionCase([{ playerId: "fresh", name: "Frisk", load: 22 }]);
 check("rolig condition oppretter ingen pasient", quiet.kind === "no_case" && quiet.playerId === null && quiet.choices.length === 0);
 check("ukjent medisinsk valg gir ingen oppdiktet konsekvens", evaluateMedicalDecision(injured, "unknown") === null);
+
+const analysisWorkspace = createOpponentAnalysisWorkspace({
+  fixture: {
+    fixtureId: "season-1-r4-rosenborg-brann",
+    round: 4,
+    homeAway: "home",
+    opponent: {
+      id: "brann",
+      name: "Brann",
+      style: "Intenst 4-3-3 som presser høyt",
+      archetypeName: "Fotballrepublikken",
+      buildUpStyle: "Kort bakfra og fort vertikalt",
+      inPossessionShape: "4-3-3 med høye backer",
+      outOfPossessionShape: "4-3-3 som presser høyt",
+      defensiveBlock: "Høy blokk",
+      attackingStyle: "Vertikalt etter gjenvinning",
+      strengths: ["hele laget deltar i presset", "gjenvinner høyt"],
+      weaknesses: ["rom bak den høye linja"],
+      vulnerableZones: ["bakrommet bak backene"],
+      dangerZones: ["egen sekstenmeter i oppbyggingen"],
+      keyBattles: ["keeper og stoppere mot første pressledd"],
+      pressurePoints: ["finn fri spiller bak første pressledd"]
+    },
+    formationMatchup: {
+      risks: [{ text: "Første oppspill kan låses av presset." }],
+      advantages: [{ text: "Rommet bak første pressledd kan angripes." }],
+      suggestions: ["Behold en fri spiller sentralt."]
+    }
+  },
+  formation: { name: "4-3-3" },
+  tactic: { name: "Kontrollert oppbygging" },
+  trainingLabel: "Spille av høyt press"
+});
+check("terminfestet motstander gir spillbart analyseverksted", analysisWorkspace.kind === "fixture" && analysisWorkspace.opponent.name === "Brann");
+check("analyseverkstedet tilbyr fire avgrensede spørsmål", analysisWorkspace.focuses.length === 4);
+check("registrerte signaler kommer fra profil og matchup", analysisWorkspace.focuses.every((focus) => focus.signals.length > 0));
+check("hvert fokus gir tre faglige motgrep med risiko og observasjon", analysisWorkspace.focuses.every((focus) => focus.countermeasures.length === 3 && focus.countermeasures.every((measure) => measure.risk && measure.watch)));
+
+const analysisPlan = createOpponentAnalysisPlan({
+  workspace: analysisWorkspace,
+  focusId: "press",
+  countermeasureId: "train_escape",
+  week: 3
+});
+check("managerens valg blir en plan for nøyaktig fixture", analysisPlan?.fixtureId === "season-1-r4-rosenborg-brann" && analysisPlan?.focusId === "press");
+check("planen lagrer hypotese motgrep risiko og observasjonspunkt", Boolean(analysisPlan?.hypothesis && analysisPlan?.countermeasureLabel && analysisPlan?.risk && analysisPlan?.watch));
+check("normalisering beholder gyldig plan og avviser ukjent versjon", normalizeOpponentAnalysisPlan(analysisPlan)?.fixtureId === analysisPlan.fixtureId && normalizeOpponentAnalysisPlan({ ...analysisPlan, version: "unknown" }) === null);
+check("bare planen for samme terminfestede kamp teller", isOpponentAnalysisPlanForFixture(analysisPlan, analysisPlan.fixtureId) && !isOpponentAnalysisPlanForFixture(analysisPlan, "next-fixture"));
+check("manglende terminliste lager ikke oppdiktet motstander", createOpponentAnalysisWorkspace().kind === "no_fixture");
+
+const readyAssignments = Array.from({ length: 11 }, (_, index) => ({ playerId: `p${index}`, roleId: `r${index}` }));
+const readinessBase = {
+  starterAssignments: readyAssignments,
+  duplicatePlayerIds: [],
+  unlockedPlayerCount: 15,
+  benchCount: 4,
+  hasTrainingChoice: true,
+  selectedMode: "league",
+  hasPlayableMatch: true,
+  leagueSeasonActive: true,
+  clubWeekBlocked: false,
+  requiresOpponentAnalysis: true,
+  opponentName: "Brann"
+};
+check("manglende analyseplan blokkerer samme autoritative readiness", evaluateMatchdayReadiness(readinessBase).primaryBlocker?.code === "opponent_analysis_missing");
+check("registrert analyseplan åpner kampklarheten uten bonus", evaluateMatchdayReadiness({ ...readinessBase, hasOpponentAnalysisPlan: true }).canStartMatch === true);
 
 console.log(`\nManager Club Organization v1: ${checks - failures}/${checks} bestått.`);
 if (failures > 0) process.exitCode = 1;
