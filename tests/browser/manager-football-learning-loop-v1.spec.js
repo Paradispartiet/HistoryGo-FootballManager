@@ -59,7 +59,7 @@ test.beforeEach(async ({ page }) => {
     }));
     if (matchPrepLearning) {
       localStorage.setItem("hgfm.weeklyTrainingProgram.v1", JSON.stringify({
-        programId: "program_rest_defense",
+        programId: "defensive_structure",
         week: 3,
         applied: false
       }));
@@ -102,12 +102,12 @@ test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmå
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await openTeam(page);
   await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
-  await expect(page.locator("#matchPrepTraining")).toContainText("Restforsvar treningsprogram");
+  await expect(page.locator("#matchPrepTraining")).toContainText("Defensiv struktur");
   await expect(page.locator("#matchPrepFocus")).toContainText("Restforsvar");
   const bridge = page.locator("#footballLearningMatchPrepBridge");
   await expect(bridge).toBeVisible();
   await expect(bridge).toContainText("Fra treningsfeltet til kampen");
-  await expect(bridge).toContainText("Restforsvar treningsprogram");
+  await expect(bridge).toContainText("Defensiv struktur");
   await expect(bridge).toContainText("Hypotese:");
   await expect(bridge).toContainText("Observer i kampen:");
   await expect(bridge).toContainText("Når laget mister ballen");
