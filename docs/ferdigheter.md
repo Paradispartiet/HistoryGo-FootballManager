@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **2115 navngitte fotballspillere**. 58 tall hver er ~123 000
+Dette er **2153 navngitte fotballspillere**. 58 tall hver er ~125 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -643,6 +643,18 @@ korpusbred. Den fanger ikke feilen — flat grunnlinje flytter laveste arv fra
 80 % til 80 % og medianen fra 97 % til 96 %. Per-arv-formen er riktig for
 *styrkesettene* og for tomme styrkelister, men profil-unikheten må være
 korpusbred for å bite.
+
+### Den omskrevne grensa besto sin første prøve
+
+Strømmen-importen er den første etter omskrivingen, og den er nettopp den typen
+som felte forgjengeren: 69 av 85 profiler tynn-markert, 44 % av arven uten
+dokumenterte styrker. Korpuset gikk fra 86,24 % til **86,19 %** — en ærlig,
+liten nedgang som den gamle ratcheten på 0,863 ville felt, og som den nye grensa
+på 0,858 slipper gjennom uten å miste evnen til å fange en malimport (bittet
+ligger fortsatt på 85,17 %).
+
+Det er slik grensa var ment å virke: den måler avstanden til feilen, ikke
+avstanden til gårsdagen.
 
 ### Realisme er sprik, ikke senking
 

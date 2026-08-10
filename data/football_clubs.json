@@ -459,8 +459,9 @@
       "tier": "obosligaen",
       "strength": 58,
       "form": 53,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 54,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "strommen_stadion"
     },
     {
       "id": "arendal",
