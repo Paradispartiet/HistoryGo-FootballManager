@@ -390,7 +390,16 @@ const REVIEWED_NAME_PAIRS = new Map([
   // familie. Åsanes er en historisk angrepsprofil med 44 mål i Bergen. Ingen av
   // kildene nevner den andre klubben, og et familienavn er nettopp det som gjør
   // at to menn kan dele det.
-  ["trond heggestad|trond heggestad åsane", "Sogndals 1990-tallsspiss mot Åsanes historiske målscorer"]
+  ["trond heggestad|trond heggestad åsane", "Sogndals 1990-tallsspiss mot Åsanes historiske målscorer"],
+  // Begge er spisser i Jerv-kilden, og kilden fører dem hver for seg: Arne
+  // «Nana» Olsen er kamprekordholderen med 514 kamper, Arve Olsen scoret
+  // opprykksmålet mot Rolvsøy i 1982. Ett tegns forskjell, to menn.
+  ["arne olsen|arve olsen", "Spartas angrepsspiller mot Jervs opprykkshelt fra 1982"],
+  ["arne nana olsen jerv|arve olsen", "Jervs kamprekordholder mot Jervs opprykkshelt"],
+  ["arne olsen|arne nana olsen jerv", "Spartas angrepsspiller mot Jervs kamprekordholder"],
+  // Egersunds klubblegende (321 kamper 2004–2018) mot Jerv-spilleren som kom
+  // fra Fløy. Ingen kilde nevner den andre klubben.
+  ["espen rasmussen jerv|espen stene rasmussen", "Jervs Fløy-signering mot Egersunds klubblegende"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

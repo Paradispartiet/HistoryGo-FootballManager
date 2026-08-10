@@ -488,8 +488,9 @@
       "group": "avdeling1",
       "strength": 57,
       "form": 52,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 72,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "levermyr_stadion"
     },
     {
       "id": "notodden",
