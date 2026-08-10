@@ -190,11 +190,12 @@ avhenger av hvor History Go-kortet hans ligger.
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
 | Lillestrøm | Åråsen | 56 |
+| Sogndal | Fosshaugane Campus | 75 |
 | Kristiansund | Nordmøre stadion | 49 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd og Mjøndalen — 2291 arveplasser fordelt på
-alle 26, og **ingen klubb med bane har under 49 navn**. De 34 klubbene som
+Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen og Sogndal — 2366 arveplasser
+fordelt på alle 27, og **ingen klubb med bane har under 49 navn**. De 33 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1358,6 +1359,53 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Sogndal: den tynneste arven, og hvorfor den likevel står
+
+Sogndal hadde ingen bane i katalogen — `ground: "Fosshaugane Campus"` sto der,
+uten `placeId`, akkurat som Strømsgodset før Marienlyst. Stedet er lagt til, og
+75 av kildens 85 profiler ligger på det.
+
+Kilden er velformet på formen — 85 unike kvalitetslinjer, 85 unike
+svakhetslinjer, null posisjonsmaler — men den er den **tynneste i katalogen**,
+og den sier det selv:
+
+| | |
+|---|---:|
+| Profiler i kilden | 85 |
+| Kilden avstår uttrykkelig fra en ferdighet | 52 |
+| Bare lagmeritt eller eksportverdi | 9 |
+| Med dokumenterte styrker | 25 |
+| Uten posisjon i kilden («Historisk utespiller») | 10 |
+
+De ti uten posisjon er **utelatt**. Det er 1964-guttelaget, og kilden vet ikke
+hva de spilte; å gjette ville vært posisjonsmalen kilden uttrykkelig sier den
+ikke bruker. De ni som bare bærer meritt fikk tom styrkeliste etter regelen
+Sarpsborg tvang fram — **åtte av dem har samme evidens, «Startet cupfinalen
+1976»**, altså cupfinalelaget ramset opp.
+
+`KJENT_UDOKUMENTERT` måtte derfor settes til **0,68 for Fosshaugane**, langt
+over alle andre. Det er høyt fordi hullet er ekte, ikke fordi importen var
+slurvete: alternativet var å la Sogndal stå helt uten arv, og 75 navngitte
+spillere med riktig posisjon, epoke og nivå er mer enn ingenting. Det som
+**ikke** er gjort, er å dikte opp ferdigheter for å pynte på tallet.
+
+Kilden påstår «Ratchet-unntak: nei» i sin egen kvalitetsaudit. Den påstanden
+holdt ikke — se `docs/ferdigheter.md`.
+
+Importen er nå **to steg**. Den kanoniske klubbpoolen kom inn mens denne
+importen pågikk, og med den er klubbmedlemskap eksplisitt i
+`player.clubAffiliations` — det holder ikke lenger å sette `clubStatus` på
+banen. Etter importen kjøres `node scripts/sync-club-affiliations.mjs --write`,
+som materialiserer tilknytningene og flytter klubben fra `pending` til `ready`
+når poolen passerer 15. Sogndal gikk dermed fra `playerPoolSize: 0` til 75.
+
+Tre navn ble nesten til **duplikate personer**: kilden skriver «Mathias
+Dyngeland», «Kristian Opseth» og «Kristoffer Haukås Steinset» der katalogen har
+«Mathias Lønne Dyngeland», «Kristian Fardal Opseth» og «Kristoffer Steinset».
+Navnenøkkelen stryker kallenavn, men ikke mellomnavn. `audit:attributes` fanget
+dem etterpå — samme regel som fant Rune Almenning Jarstein — men importen kobler
+dem nå selv, så de aldri oppstår.
 
 ### Strømsgodset: 143 navn, en helt ny bane, og en vakt som byttet form
 

@@ -29,6 +29,17 @@ import {
 } from "../src/football-player-attributes.js";
 import { calculatePlayerMatchFit, calculateClassBonus, CLASS_BONUS_MAX } from "../src/football-fit-engine.js";
 
+// `Math.min(...liste)` sprer hele lista som ARGUMENTER, og argumentlista har en
+// grense — målt ~125 000 i denne noden. Katalogen har 1993 spillere × 58
+// ferdigheter = 115 594 verdier, altså 1,08x margin: neste klubbimport på ~160
+// navn ville tatt dette skriptet ned med «Maximum call stack size exceeded» i
+// stedet for å kjøre vaktene. Funnet under en bittest som la til 300 spillere.
+//
+// Feilen er lumsk fordi den ikke ser ut som en datafeil: hele vaktskriptet dør,
+// og da er det ingen vakt igjen som kan si fra om noe annet.
+const minst = (liste) => liste.reduce((a, b) => (b < a ? b : a), Infinity);
+const størst = (liste) => liste.reduce((a, b) => (b > a ? b : a), -Infinity);
+
 const read = (path) => JSON.parse(fs.readFileSync(new URL(`../${path}`, import.meta.url), "utf8"));
 let checks = 0;
 const check = (label, ok, detail = "") => {
@@ -91,8 +102,8 @@ check("ingen spiller bruker under en tredel", usage[0] > 0.33, `${(usage[0] * 10
 // Klassebåndet leses av korpuset, ikke hardkodet. Sto det fast på 85–99 ville
 // hele bunnsjiktet blitt klemt til null da spillerne ble tiered til 78–99.
 check("klassebåndet er målt av korpuset",
-  scaling.classBand.low === Math.min(...players.map((p) => p.classHeight))
-  && scaling.classBand.high === Math.max(...players.map((p) => p.classHeight)),
+  scaling.classBand.low === minst(players.map((p) => p.classHeight))
+  && scaling.classBand.high === størst(players.map((p) => p.classHeight)),
   JSON.stringify(scaling.classBand));
 // Denne vakten måtte skrives om. Første utgave sjekket bare at faktoren var
 // > 0 — og et hardkodet bånd på 85–99 består den, fordi alt under 85 klemmes
@@ -125,8 +136,8 @@ const distinct = new Set(allValues).size;
 // Faktisk verdi nå er 2,8 %.
 check("under 4 % av verdiene ligger på taket", atCeiling < 0.04, `${(atCeiling * 100).toFixed(1)} %`);
 check("skalaen brukes bredt", distinct >= 12, `${distinct} ulike verdier`);
-check("ingen verdi under proffgulvet", Math.min(...allValues) >= ATTRIBUTE_SCALE.floor, String(Math.min(...allValues)));
-check("ingen verdi over taket", Math.max(...allValues) <= ATTRIBUTE_SCALE.max);
+check("ingen verdi under proffgulvet", minst(allValues) >= ATTRIBUTE_SCALE.floor, String(minst(allValues)));
+check("ingen verdi over taket", størst(allValues) <= ATTRIBUTE_SCALE.max);
 check("skaleringen ble målt av korpuset", scaling.sampled === players.length * catalogue.attributes.length);
 
 // ---------------------------------------------------------------------------
@@ -227,9 +238,45 @@ if (odegaard) {
 // verdier på ett og samme tall.
 const floorShare = allValues.filter((value) => value === ATTRIBUTE_SCALE.floor).length / allValues.length;
 check("gulvet er ikke lenger en haug", floorShare < 0.10, `${(floorShare * 100).toFixed(1)} %`);
-const topBucket = Math.max(...[...new Set(allValues)].map((value) =>
-  allValues.filter((other) => other === value).length)) / allValues.length;
-check("ingen enkeltverdi tar mer enn en femtedel", topBucket < 0.20, `${(topBucket * 100).toFixed(1)} %`);
+// Vakten under målte FØRST bare den største bøtta, og den målingen var selv en
+// SKALA-FEIL — husets tilbakevendende bug, denne gangen i vakten i stedet for i
+// motoren.
+//
+// `buildAttributeScaling()` utleder `high` av HELE spillerlista, så en import
+// flytter normaliseringen for alle. Sogndal flyttet den fra 20,069 til 19,897,
+// og det er nok til at 1403 av 1935 eksisterende spillere endret én verdi med
+// ett poeng. Målt direkte: de SAMME spillerne, uendret, går fra 19,4 % til
+// 22,8 % bare ved å bytte skalering. De 58 nye Sogndal-spillerne bidro med
+// 0,2 av de 3,6 poengene.
+//
+// Tallet målte altså hvor avrundingsgrensa tilfeldigvis falt mellom 9 og 10 —
+// ikke om fordelingen hadde klumpet seg. Løsningen er å måle noe som ikke er
+// avhengig av grensa: de TO største bøttene til sammen. Flytter grensa seg,
+// bytter massen plass mellom to nabotall og summen står stille; klumper
+// fordelingen seg på ekte, stiger summen.
+//
+// Målt over de tre tilstandene: 36,0 % (før, før-skalering), 36,3 % (samme
+// spillere, ny skalering), 36,4 % (etter importen). Moden svingte 3,4 poeng;
+// dette tallet flyttet seg 0,4.
+//
+// Bittestet mot feilen vakten ble skrevet for — flat grunnlinje, alle
+// posisjonsgrupper like — som gir 40,2 %. Grensa står på 0,38: 1,6 poeng over
+// målt, 2,2 under bittet.
+//
+// Vær ærlig om hva denne er verdt: den er en BAKSTOPPER, ikke førstelinja.
+// Fire bitt ble prøvd — flat grunnlinje, ett klassenivå for alle, klem i stedet
+// for normalisering, og 300 identiske malimporterte spillere — og hver eneste
+// gang fyrte en mer presis vakt først (sprikvakten, kohortvakten,
+// klassefaktorvakten, profil-ratcheten). Den fyrer altså aldri alene i praksis.
+// Den står fordi den er billig og fordi den nå MÅLER det den påstår; den forrige
+// utgaven gjorde ikke det, og den falske alarmen den ga på Sogndal-importen er
+// grunnen til at dette avsnittet finnes.
+const bøtter = [...new Set(allValues)]
+  .map((value) => allValues.filter((other) => other === value).length)
+  .sort((a, b) => b - a);
+const toStørste = (bøtter[0] + (bøtter[1] || 0)) / allValues.length;
+check("verdiene klumper seg ikke på to tall", toStørste < 0.38,
+  `${(toStørste * 100).toFixed(1)} %`);
 
 // Svake sider måles bare der de betyr noe. En utespiller som ikke redder skudd
 // er ikke svak, han er utespiller — og en «svakest»-liste full av
@@ -302,7 +349,7 @@ for (const player of dokumenterte) {
   signatures.set(key, (signatures.get(key) || 0) + 1);
 }
 const uniqueShare = signatures.size / dokumenterte.length;
-const largestClone = Math.max(...signatures.values());
+const largestClone = størst([...signatures.values()]);
 // Grensa er en RATCHET og flyttes opp når den er vunnet. Den sto på 0,55 da
 // uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
 // importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
@@ -498,7 +545,19 @@ const KJENT_UDOKUMENTERT = {
   // 66 % til 84 %. En tom liste er derfor ikke det dårligere alternativet her —
   // det er det som ga den mest presise katalogen.
   // Målt 39 av 107.
-  sarpsborg_stadion: 0.37
+  sarpsborg_stadion: 0.37,
+  // Sogndal er den TYNNESTE arven i katalogen, og kilden sier det selv: 52 av
+  // 85 profiler erklærer ordrett at «ingen teknisk eller fysisk strength skal
+  // fylles uten en ny individuell kilde». Ni til bærer bare finaleerfaring
+  // (cupfinalelaget 1976 ramset opp) eller eksportverdi, som ikke er
+  // ferdigheter. Målt 50 av 75.
+  //
+  // Taket er høyt fordi hullet er ekte, ikke fordi importen var slurvete.
+  // Alternativet var å la Sogndal stå uten arv i det hele tatt — klubben hadde
+  // ingen bane i katalogen før denne importen — og 75 navngitte spillere med
+  // riktig posisjon, epoke og nivå er mer enn ingenting. Det som IKKE er gjort,
+  // er å dikte opp ferdigheter for å pynte på tallet.
+  fosshaugane_campus: 0.68
 };
 const perArv = new Map();
 for (const player of players) {
@@ -684,11 +743,11 @@ check("matchScore lar lavere klassehøyde vinne roller", beatenByLower > roles.l
 // 6. Klassebonusen er rollavhengig, og holder seg i sitt spenn
 // ---------------------------------------------------------------------------
 const bonuses = players.flatMap((player) => roles.map((role) => calculateClassBonus(player, role)));
-check("klassebonusen holder seg under taket", Math.max(...bonuses) <= CLASS_BONUS_MAX + 0.001,
-  String(Math.max(...bonuses)));
-check("klassebonusen er aldri negativ", Math.min(...bonuses) >= 0);
+check("klassebonusen holder seg under taket", størst(bonuses) <= CLASS_BONUS_MAX + 0.001,
+  String(størst(bonuses)));
+check("klassebonusen er aldri negativ", minst(bonuses) >= 0);
 // Den skal SPRE seg. En bonus som ligger i samme punkt er ingen bonus.
-const bonusSpread = Math.max(...bonuses) - Math.min(...bonuses);
+const bonusSpread = størst(bonuses) - minst(bonuses);
 check("klassebonusen sprer seg over spennet", bonusSpread > CLASS_BONUS_MAX * 0.5, String(bonusSpread.toFixed(2)));
 
 // Samme spiller må få ULIK bonus i ulike roller — det er hele endringen fra
