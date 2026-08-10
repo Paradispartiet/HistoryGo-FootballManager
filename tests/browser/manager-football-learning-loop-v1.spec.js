@@ -23,14 +23,13 @@ async function expectNoHorizontalOverflow(page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
-test.beforeEach(async ({ page }, testInfo) => {
+test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  const matchPrepLearning = testInfo.title === "kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål";
-  await page.addInitScript(({ matchPrepLearning }) => {
+  await page.addInitScript(() => {
     const clubWeekState = {
       week: 3,
-      phase: matchPrepLearning ? "match_prep" : "training",
+      phase: "training",
       boardTrust: 58,
       playerMorale: 55,
       tacticalClarity: 54,
@@ -57,14 +56,7 @@ test.beforeEach(async ({ page }, testInfo) => {
       localStart: { enabled: false, playerIds: [] },
       clubWeekState
     }));
-    if (matchPrepLearning) {
-      localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
-        focusId: "rest_defence",
-        week: 3,
-        appliedSessionId: null
-      }));
-    }
-  }, { matchPrepLearning });
+  });
   await page.goto("/");
   await expect(page.locator("#onboardingScreen")).toBeHidden();
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
@@ -90,6 +82,12 @@ test("Treningsdagen forklarer hvorfor økta finnes og hva manageren skal se ette
 });
 
 test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål", async ({ page }) => {
+  await openTraining(page);
+  await page.locator("#trainingDayChangeFocus").click();
+  const restDefence = page.locator("#managerTeamChoiceDrawerBody .weekly-training-card").filter({ hasText: "Restforsvar" });
+  await restDefence.getByRole("button", { name: "Velg fokus" }).click();
+  await expect(page.locator("#weeklyTrainingStatus")).toContainText("Restforsvar");
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
   await page.setViewportSize({ width: 390, height: 844 });
   await openTeam(page);
   await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
