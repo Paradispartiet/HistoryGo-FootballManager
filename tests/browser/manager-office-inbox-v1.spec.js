@@ -66,8 +66,8 @@ async function openOffice(page) {
 
 async function openCalendarMessage(page) {
   await openOffice(page);
-  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="3"]').click();
-  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="1"]').click();
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Mandag");
   const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]');
   await expect(message).toBeVisible();
   await message.click();
@@ -136,7 +136,7 @@ test("lukking av melding returnerer til samme kalenderdag", async ({ page }) => 
   await page.locator("#managerCalendarMessageDrawer .manager-calendar-drawer-close").click();
   await expect(page.locator("#managerCalendarMessageDrawer")).toBeHidden();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
-  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Mandag");
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
 });
 
