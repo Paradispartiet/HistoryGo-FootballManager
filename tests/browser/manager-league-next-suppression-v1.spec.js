@@ -63,3 +63,31 @@ test("kalenderfooteren virker også på smal mobilbredde", async ({ page }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 });
+
+test("kalenderfooteren blir mer kompakt når vinduet snevres inn og hele stripen åpner kalenderen", async ({ page }) => {
+  await page.locator('.main-nav [data-tab-target="tactics"]').click();
+  await page.locator('.app-subtab[data-tab-target="trening"]').click();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+
+  async function footerHeightAt(width) {
+    await page.setViewportSize({ width, height: 900 });
+    await expectCalendarFooter(page);
+    return page.locator("manager-next-action .site-footer").evaluate((footer) => footer.getBoundingClientRect().height);
+  }
+
+  const wideHeight = await footerHeightAt(1180);
+  const compactHeight = await footerHeightAt(820);
+  const mobileHeight = await footerHeightAt(390);
+  expect(compactHeight).toBeLessThanOrEqual(wideHeight + 1);
+  expect(mobileHeight).toBeLessThanOrEqual(compactHeight + 1);
+
+  await page.setViewportSize({ width: 1180, height: 900 });
+  const destinationBox = await page.locator("#nextActionStrip .next-action-destination").boundingBox();
+  expect(destinationBox?.width || 0).toBeGreaterThan(70);
+  expect(destinationBox?.height || 100).toBeLessThan(30);
+
+  // Klikk på footerhodet, ikke bare den indre knappen.
+  await page.locator("#nextActionPhase").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator('#managerCalendarDays [aria-current="date"]')).toHaveAttribute("aria-selected", "true");
+});

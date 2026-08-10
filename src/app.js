@@ -9200,6 +9200,15 @@ function renderNextActionStrip(teamFit) {
     return;
   }
 
+  // I en aktiv ligasave eier Managerkalenderen den synlige footeren. Appens
+  // generiske Next-render kjører fortsatt for onboarding og andre modi, men må
+  // ikke overskrive kalendertekst eller klikkhandler når øvrig state rendres.
+  // Kalender-workspacen setter disse markørene på den eksisterende hosten; vi
+  // gjenbruker altså samme footer uten å innføre en ny navigasjonsmotor.
+  const calendarOwnsFooter = elements.nextActionStrip?.dataset.surface === "manager-calendar"
+    || elements.nextActionStrip?.closest("manager-next-action")?.dataset.calendarOwned === "true";
+  if (calendarOwnsFooter) return;
+
   // Fotballvitenskap er en læremodul, ikke en manageruke. «Neste handling:
   // skaff spillbar tropp» i bunnen motsa flatens eget løfte om at ingenting her
   // rører klubben din — og pekte på en flate modusen ikke engang har meny til.
