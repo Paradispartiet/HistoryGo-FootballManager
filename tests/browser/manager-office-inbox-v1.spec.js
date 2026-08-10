@@ -68,7 +68,7 @@ async function openCalendarMessage(page) {
   await openOffice(page);
   await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="1"]').click();
   await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Mandag");
-  const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]');
+  const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]').first();
   await expect(message).toBeVisible();
   await message.click();
   await expect(page.locator("#managerCalendarMessageDrawer")).toBeVisible();
