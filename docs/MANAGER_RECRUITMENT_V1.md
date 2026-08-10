@@ -1,124 +1,93 @@
-# Rekruttering v1
+# Min spillerpool → Tropp v1
 
-## Formål
+## Produktkontrakt
 
-Rekruttering v1 gjør `Speiding → Rekrutterbare` operativ uten en parallell overgangsmodell.
-
-Den canonical forskjellen er:
+Spillermodellen er nå:
 
 ```text
-History Go-tilgang = kandidat
-Hent til troppen = troppsmedlem
+History Go-samling → Min spillerpool → valgt klubbtropp → oppstilling / rolle / taktikk / trening / kamp
 ```
 
-Et besøk/opplåsing gir dermed ikke automatisk en spiller plass i klubbtroppen. Kandidaten må hentes eksplisitt fra Speiding før spilleren kan brukes i oppstilling, trening og kamp.
+History Go avgjør hvem manageren har samlet. Klubben bruker bare spillerne manageren eksplisitt har valgt til troppen. Tropp-flaten viser derfor valgt tilstand først; alternativene åpnes med **Endre tropp**.
 
-**Pass 7 har fjernet den tidligere økonomi-/kontrakt- og overgangsvinduporten.** En kvalifisert History Go-kandidat skal ikke kunne blokkeres av oppdiktet klubbkasse, lønnsramme, kontrakt eller overgangsvindu.
+Dette er et utvalg fra en samling, ikke et overgangsmarked. V1 innfører ingen troppsgrense, byttefrist, overgangssum, lønn, kontrakt, agent eller skjult bonus.
+Det finnes heller ingen ny progresjonsscore eller egen trenings-/kampeffekt.
 
-## Starttroppen er fortsatt gulvet
+## Canonical state
 
-Rekruttering v1 fjerner ikke den eksisterende spillbare starttroppen. Når ingen eksplisitt `localStart.playerIds` er lagret, bruker spillet den eksisterende deterministiske, balanserte 15-spillers auto-troppen fra grunnsjiktet av klubbspillere. Landslagsstjerner og toppsjiktet holdes fortsatt utenfor dette gulvet.
-
-Troppsmodellen er dermed:
-
-```text
-starttropp + eksplisitt hentede kvalifiserte History Go-kandidater = klubbens tropp
-```
-
-Starttroppen er ikke en History Go-signering og skal ikke måtte hentes på nytt i Speiding.
-
-## State
-
-Rekrutterte spilleres troppsmedlemskap bor i den eksisterende managerstaten:
-
-```text
-hgfm.teamMerits.v1
-```
-
-Rekrutteringsfeltene er:
+Valget bor i eksisterende `hgfm.teamMerits.v1`:
 
 ```json
 {
-  "recruitmentVersion": 1,
-  "recruitedPlayerIds": []
+  "playerPoolSquadVersion": 1,
+  "squadPlayerIds": ["player_a", "player_b"]
 }
 ```
 
-Det finnes ingen egen recruitment-, transfer- eller economy-localStorage og ingen parallell spillerpool. Pass 7 migrerer dessuten gamle `clubEconomy`- og `transferMarket`-felter ut av `teamMerits`.
+`squadPlayerIds` er den eneste canonical listen over klubbens valgte tropp. Spillerpoolen lagres ikke som en parallell kopi; den utledes hver gang fra History Go-steder, quiz-porten, klubbtilgang og eventuell lokal starttropp.
 
-Troppen består av:
+Kjernen eksponerer to forskjellige mengder:
 
-1. eksisterende starttropp / `localStart.playerIds`;
-2. eksplisitt rekrutterte spiller-ID-er som fortsatt har gyldig kandidattilgang.
+- `playerPoolIds` / `playerPoolPlayers`: alle spillere som kan velges;
+- `unlockedPlayerIds` / `unlockedPlayers`: kompatibilitetsnavnet som oppstilling, trening og kamp allerede bruker, nå avgrenset til valgt tropp.
 
-## History Go-porten gjelder fortsatt
+Dermed fortsetter eksisterende motorer å være fasit uten nye trenings-, kamp- eller condition-regler.
 
-`Hent til troppen` kan ikke brukes til å omgå eksisterende availability-regler.
+## Kontrollert save-migrering
 
-- En ren landslagsarena gir ikke en klubbspiller.
-- Når læringsloggen finnes, må quiz-porten være oppfylt på ekte History Go-steder.
-- En rekruttert ID uten gyldig kandidattilgang blir ikke gjort spillbar av recruitment-state alene.
-- Starttroppen er et separat spillbarhetsgulv og åpner ingen History Go-steder.
-- Penger, kontrakter eller overgangsvinduer skaper eller blokkerer ikke kandidattilgang.
+`recruitedPlayerIds` beholdes som legacy-data, men eier ikke lenger troppsmedlemskap.
 
-## Eksisterende saves
+Når `playerPoolSquadVersion` mangler eller er `0`, kopierer migreringen nøyaktig spillerne den gamle runtime-modellen gjorde spillbare til `squadPlayerIds`. Deretter settes versjonen til `1`. Nye spillere som senere kommer inn i poolen blir ikke automatisk lagt i troppen.
 
-Før Rekruttering v1 ble alle kvalifiserte `player_candidate`-spillere automatisk tilgjengelige i troppen. Gamle saves migreres derfor én gang:
+Migreringen:
 
-- kvalifiserte kandidater som allerede var spillbare kopieres til `recruitedPlayerIds`;
-- `recruitmentVersion` settes til `1`;
-- senere kandidater må hentes eksplisitt.
-
-Pass 7 gjør en separat, idempotent opprydding av saves som fortsatt har de senere avviste feltene `facilities`, `clubEconomy` og `transferMarket`. `recruitedPlayerIds` og øvrige canonical meritter beholdes. Se `MANAGER_LEGACY_CLEANUP_V1.md`.
+- mister ingen eksisterende troppsmedlemmer;
+- kjører bare én gang;
+- endrer ikke History Go-progresjon;
+- oppretter ingen ny localStorage-nøkkel;
+- lar øvrig save-state være urørt.
 
 ## UI
 
-`Speiding → Rekrutterbare` viser:
+### Lag → Tropp
 
-- spiller;
-- posisjon;
-- roller;
-- tilgangskilde;
-- status `Kandidat` eller `Tropp`;
-- handlingen `Hent til troppen` når spilleren ikke allerede er i troppen.
+Hovedflaten viser bare den valgte troppen og den eksisterende spillerinformasjonen. **Endre tropp** åpner en side-drawer med hele Min spillerpool. Valgte spillere står først.
 
-Starttroppsspillere markeres som allerede i troppen og får ikke en falsk rekrutteringshandling.
+Manageren kan:
 
-Når en kvalifisert kandidat hentes, oppdateres Speiding, Lag og kjernens availability i samme nettleserøkt. Det finnes ingen skjult lønns-, kontrakt- eller overgangsvindusgate foran handlingen.
+- søke på navn, posisjon eller kilde;
+- vise hele poolen, bare troppen eller bare alternativer;
+- velge en spiller inn;
+- ta en spiller ut.
 
-Spillerprofilen er fortsatt den delte profilen fra Lag. Profilklikk rekrutterer aldri spilleren.
+En spiller som står i startelleveren må først byttes ut på **Oppstilling**. Dette er en dataintegritetsregel, ikke en troppsgrense. Spilleren forsvinner aldri fra Min spillerpool når vedkommende tas ut.
+
+### Speiding → Min spillerpool
+
+Speiderflaten bruker samme språk og samme `squadPlayerIds`. Profilklikk endrer aldri troppen. Andre klubber er fortsatt kun en kunnskapsflate og påstår ikke å vise en live 2026-stall.
 
 ## Avgrensning
 
-Rekruttering har fortsatt:
+V1 har bevisst ingen:
 
-- ingen historiske/virkelige overgangssummer;
-- ingen historiske/virkelige spillerlønninger;
-- ingen oppdiktet markedsverdi;
-- ingen agent;
-- ingen budrunde;
-- ingen individuell lønnsforhandling;
-- ingen skjult Overall-verdi som prisdriver.
+- maksimums- eller minimumsstørrelse på den valgte troppen;
+- karantene eller cooldown for troppsbytte;
+- overgangsvindu;
+- økonomi-, kontrakt- eller forhandlingsmodell;
+- tilfeldig markedspool;
+- ny progresjonsscore eller skjult kampeffekt.
 
-History Go avgjør hvem brukeren har oppdaget. HG Football Manager lærer brukeren hvordan spilleren kan brukes i tropp, rolle, taktikk, trening og kamp.
-
-## Navigasjon og progresjon
-
-Rekruttering er en funksjon under **Speiding**. Hovedmenyen forblir:
-
-```text
-Kontor · Lag · Speiding · Kamp · Stats
-```
-
-Rekrutteringen får ingen `Neste`, `Fortsett` eller egen progresjonsflyt. Kalenderen og de relevante arbeidsflatene viser hva som må gjøres i den aktuelle manageruka.
+Kampklarhetens eksisterende 11 + 4-krav består. Det er en forklaring på hva som trengs for kamp, ikke en regel som hindrer manageren i å redigere troppen.
 
 ## Permanente porter
 
-CI låser rekrutteringsgrunnlaget med:
+CI verifiserer:
 
-- ren recruitment-state-simulering, inkludert 15-spillers startgulv;
-- statisk arkitektur-/produkt-audit;
-- Chromium-test av kandidat → hent → tropp i samme økt;
-- Pass 7-regresjon som beviser at økonomi-/kontrakt-/overgangsgater ikke kan blokkere `data-recruit-player`;
-- 390 px mobiltest;
-- WCAG 2 A/AA-test.
+- ren state-normalisering, inn/ut-valg og pool-filtrering;
+- engangsmigrering fra `recruitedPlayerIds` og gammel spillbar tropp;
+- at nye poolfunn ikke automatisk blir troppsmedlemmer;
+- samme-session oppdatering av Tropp, Oppstilling og Speiding;
+- Endre tropp på desktop og 390 px;
+- blokkering av uttak fra aktiv startellever;
+- WCAG 2 A/AA uten alvorlige brudd;
+- fravær av overgangsøkonomi og nye skjulte bonuser.

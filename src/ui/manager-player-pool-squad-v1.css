@@ -1,0 +1,46 @@
+.manager-player-workspace-head-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .55rem; }
+.player-pool-squad-open,
+.player-pool-squad-action,
+.player-pool-squad-close { border: 1px solid rgba(255,255,255,.45); background: #f4f0e7; color: #111; font: inherit; font-weight: 900; cursor: pointer; }
+.player-pool-squad-open { min-height: 2.35rem; padding: .45rem .72rem; }
+.player-pool-squad-drawer { width: min(46rem, 100%); max-width: none; height: 100dvh; max-height: none; margin: 0 0 0 auto; padding: 0; border: 0; background: #070a0d; color: #fff; }
+.player-pool-squad-drawer::backdrop { background: rgba(0,0,0,.72); }
+.player-pool-squad-shell { display: grid; grid-template-rows: auto auto auto minmax(0,1fr) auto; height: 100%; }
+.player-pool-squad-shell > header { display: flex; justify-content: space-between; gap: 1rem; padding: 1.15rem; border-bottom: 1px solid rgba(255,255,255,.2); }
+.player-pool-squad-shell h2 { margin: .1rem 0 .3rem; font-size: clamp(1.55rem,4vw,2.3rem); }
+.player-pool-squad-shell header p { margin-bottom: 0; max-width: 42rem; color: rgba(255,255,255,.67); }
+.player-pool-squad-close { flex: 0 0 auto; width: 2.5rem; height: 2.5rem; padding: 0; font-size: 1.6rem; }
+.player-pool-squad-tools { display: grid; grid-template-columns: minmax(0,1fr) minmax(10rem,.45fr); gap: .6rem; padding: .8rem 1rem; border-bottom: 1px solid rgba(255,255,255,.14); }
+.player-pool-squad-tools label { display: grid; gap: .25rem; }
+.player-pool-squad-tools label span { color: rgba(255,255,255,.58); font-size: .67rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.player-pool-squad-tools input,
+.player-pool-squad-tools select { width: 100%; min-height: 2.45rem; padding: .45rem .55rem; border: 1px solid rgba(255,255,255,.32); border-radius: 0; background: #050709; color: #fff; font: inherit; }
+.player-pool-squad-summary,
+.player-pool-squad-feedback { margin: 0; padding: .62rem 1rem; color: rgba(255,255,255,.72); font-weight: 800; }
+.player-pool-squad-feedback { min-height: 2.7rem; border-top: 1px solid rgba(255,255,255,.14); color: #d9edc5; }
+.player-pool-squad-list { overflow-y: auto; }
+.player-pool-squad-row { display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: .7rem; min-height: 4.2rem; padding: .55rem 1rem; border-top: 1px solid rgba(255,255,255,.1); }
+.player-pool-squad-row[data-in-squad="true"] { background: rgba(151,194,113,.08); }
+.player-pool-squad-player { display: grid; min-width: 0; padding: .2rem 0; border: 0; background: transparent; color: #fff; text-align: left; cursor: pointer; }
+.player-pool-squad-player strong,
+.player-pool-squad-player small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-pool-squad-player strong { text-decoration: underline; text-decoration-color: rgba(255,255,255,.3); text-underline-offset: .18rem; }
+.player-pool-squad-player small { margin-top: .2rem; color: rgba(255,255,255,.54); }
+.player-pool-squad-state { color: rgba(255,255,255,.62); font-size: .75rem; font-weight: 800; white-space: nowrap; }
+.player-pool-squad-action { min-width: 5rem; min-height: 2.35rem; padding: .4rem .58rem; }
+.player-pool-squad-row[data-in-squad="true"] .player-pool-squad-action { background: transparent; color: #fff; }
+.player-pool-squad-empty { padding: 2rem 1rem; color: rgba(255,255,255,.62); text-align: center; }
+.player-pool-squad-open:focus-visible,
+.player-pool-squad-action:focus-visible,
+.player-pool-squad-close:focus-visible,
+.player-pool-squad-player:focus-visible,
+.player-pool-squad-tools input:focus,
+.player-pool-squad-tools select:focus { outline: 2px solid #fff; outline-offset: 2px; }
+@media (max-width: 680px) {
+  .manager-player-workspace-head { align-items: stretch; flex-direction: column; }
+  .manager-player-workspace-head-actions { justify-content: space-between; }
+  .player-pool-squad-tools { grid-template-columns: 1fr; }
+  .player-pool-squad-row { grid-template-columns: minmax(0,1fr) auto; }
+  .player-pool-squad-state { grid-column: 1; grid-row: 2; }
+  .player-pool-squad-action { grid-column: 2; grid-row: 1 / span 2; }
+}

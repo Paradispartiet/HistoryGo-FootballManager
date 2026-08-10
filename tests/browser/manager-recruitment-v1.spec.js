@@ -1,37 +1,23 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-async function openScouting(page) {
-  await page.locator('.main-nav [role="tab"][data-tab-target="historygo"]').click();
-  await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
-  await expect.poll(async () => page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').count()).toBeGreaterThan(0);
+async function openSquad(page) {
+  await page.getByRole("tab", { name: "Lag", exact: true }).click();
+  await page.getByRole("tab", { name: "Tropp", exact: true }).click();
+  await expect(page.locator("#managerPlayerWorkspace")).toBeVisible();
+  await expect(page.locator("#openPlayerPoolSquadDrawer")).toBeVisible();
 }
 
-async function openRoster(page) {
-  await page.getByRole("tab", { name: "Lag", exact: true }).click();
-  const rosterTab = page.getByRole("tab", { name: "Tropp & benk", exact: true });
-  if (await rosterTab.count()) await rosterTab.click();
-  await expect(page.locator("#managerPlayerWorkspace")).toBeVisible();
+async function openDrawer(page) {
+  await openSquad(page);
+  await page.locator("#openPlayerPoolSquadDrawer").click();
+  await expect(page.locator("#playerPoolSquadDrawer")).toBeVisible();
+  await expect.poll(async () => page.locator('.player-pool-squad-row[data-in-squad="false"]').count()).toBeGreaterThan(0);
 }
 
 async function expectNoHorizontalOverflow(page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
-}
-
-async function seedOpenLeagueSeason(page) {
-  await page.evaluate(async () => {
-    const { LEAGUE_SEASON_VERSION, createLeagueSeason } = await import("/src/football-league-season.js");
-    const clubsData = await fetch("/data/football_clubs.json").then((response) => response.json());
-    const managerClub = clubsData.clubs.find((club) => club.id === "rosenborg");
-    if (!managerClub) throw new Error("Mangler Rosenborg i canonical klubbdata");
-    const tier = clubsData.tiers.find((entry) => entry.id === managerClub.tier);
-    if (!tier) throw new Error(`Mangler tier ${managerClub.tier}`);
-    const opponents = clubsData.clubs.filter((club) => club.tier === tier.id && club.id !== managerClub.id);
-    const season = createLeagueSeason({ managerClub, opponents, tier, seed: "recruitment-v1-browser", seasonNumber: 1 });
-    localStorage.setItem(LEAGUE_SEASON_VERSION, JSON.stringify(season));
-    window.dispatchEvent(new Event("updateProfile"));
-  });
 }
 
 test.beforeEach(async ({ page }) => {
@@ -41,7 +27,7 @@ test.beforeEach(async ({ page }) => {
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
-      activeLeagueSaveId: "recruitment_v1",
+      activeLeagueSaveId: "player_pool_squad_v1",
       clubName: "Rosenborg",
       takeoverClubId: "rosenborg",
       managerName: "Manager",
@@ -51,6 +37,8 @@ test.beforeEach(async ({ page }) => {
     localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
       recruitmentVersion: 1,
       recruitedPlayerIds: [],
+      playerPoolSquadVersion: 0,
+      squadPlayerIds: [],
       unlockedPlaceIds: ["kfum_arena"],
       hiredStaffIds: [],
       roleFamiliarity: {},
@@ -60,50 +48,61 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
-  await seedOpenLeagueSeason(page);
 });
 
-test("kandidat er ikke i troppen før Hent til troppen, og blir tilgjengelig i samme økt", async ({ page }) => {
-  await openScouting(page);
-  const candidateRow = page.locator('#scoutingRecruitableBody tr[data-squad-status="candidate"]').first();
-  const playerId = await candidateRow.getAttribute("data-player-id");
+test("gammel save migreres og Min spillerpool kan velge inn og ta ut uten ny motor", async ({ page }) => {
+  await openDrawer(page);
+  const alternative = page.locator('.player-pool-squad-row[data-in-squad="false"]').first();
+  const playerId = await alternative.getAttribute("data-player-id");
+  const playerName = await alternative.locator(".player-pool-squad-player strong").innerText();
   expect(playerId).toBeTruthy();
-  const playerName = await candidateRow.locator(".scouting-player-link strong").innerText();
-  await expect(candidateRow.getByRole("button", { name: `Hent ${playerName} til troppen` })).toBeVisible();
 
-  await openRoster(page);
   await expect(page.locator(`#managerRosterBody tr[data-player-id="${playerId}"]`)).toHaveCount(0);
+  await alternative.getByRole("button", { name: `Velg ${playerName} inn i troppen` }).click();
+  await expect(page.locator("#playerPoolSquadFeedback")).toContainText(`${playerName} er valgt inn`);
+  await expect(page.locator(`.player-pool-squad-row[data-player-id="${playerId}"]`)).toHaveAttribute("data-in-squad", "true");
 
-  await openScouting(page);
-  const freshRow = page.locator(`#scoutingRecruitableBody tr[data-player-id="${playerId}"]`);
-  await freshRow.getByRole("button", { name: `Hent ${playerName} til troppen` }).click();
-  await expect(page.locator("#scoutingRecruitmentFeedback")).toContainText(`${playerName} er hentet`);
-  await expect(freshRow).toHaveAttribute("data-squad-status", "squad");
-  await expect(freshRow).toContainText("I troppen");
+  let merits = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}"));
+  expect(merits.playerPoolSquadVersion).toBe(1);
+  expect(merits.squadPlayerIds).toContain(playerId);
+  expect(merits.recruitedPlayerIds).toEqual([]);
 
-  const merits = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}"));
-  expect(merits.recruitmentVersion).toBe(1);
-  expect(merits.recruitedPlayerIds).toContain(playerId);
-
-  await openRoster(page);
+  await page.locator(".player-pool-squad-close").click();
   await expect(page.locator(`#managerRosterBody tr[data-player-id="${playerId}"]`)).toBeVisible();
+  await page.locator("#openPlayerPoolSquadDrawer").click();
+  await page.locator(`.player-pool-squad-row[data-player-id="${playerId}"]`).getByRole("button", { name: `Ta ${playerName} ut av troppen` }).click();
+  await expect(page.locator("#playerPoolSquadFeedback")).toContainText("ligger fortsatt i Min spillerpool");
+  merits = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}"));
+  expect(merits.squadPlayerIds).not.toContain(playerId);
 });
 
-test("rekrutteringshandlingen fungerer på 390px uten horisontal overflow", async ({ page }) => {
+test("en spiller i startelleveren må byttes ut før uttak", async ({ page }) => {
+  await openSquad(page);
+  const lineupPlayerId = await page.locator('#lineupSlots .player-chip[data-player-id]:not([data-player-id=""])').first().getAttribute("data-player-id");
+  expect(lineupPlayerId).toBeTruthy();
+  await page.locator("#openPlayerPoolSquadDrawer").click();
+  const row = page.locator(`.player-pool-squad-row[data-player-id="${lineupPlayerId}"]`);
+  await row.locator(".player-pool-squad-action").click();
+  await expect(page.locator("#playerPoolSquadFeedback")).toContainText("Bytt spilleren på Oppstilling");
+  await expect(row).toHaveAttribute("data-in-squad", "true");
+});
+
+test("Endre tropp fungerer på 390 px uten dokument-overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await openScouting(page);
+  await openDrawer(page);
   await expectNoHorizontalOverflow(page);
-  const button = page.locator(".scouting-recruit-button").first();
-  await expect(button).toBeVisible();
-  await button.click();
-  await expect(page.locator(".scouting-in-squad").first()).toBeVisible();
+  const alternative = page.locator('.player-pool-squad-row[data-in-squad="false"]').first();
+  const playerId = await alternative.getAttribute("data-player-id");
+  expect(playerId).toBeTruthy();
+  await alternative.locator(".player-pool-squad-action").click();
+  await expect(page.locator(`.player-pool-squad-row[data-player-id="${playerId}"]`)).toHaveAttribute("data-in-squad", "true");
   await expectNoHorizontalOverflow(page);
 });
 
-test("rekrutteringsflaten har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
-  await openScouting(page);
+test("Tropp og Endre tropp har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {
+  await openDrawer(page);
   const results = await new AxeBuilder({ page })
-    .include('[data-tab-section="historygo"]')
+    .include("#playerPoolSquadDrawer")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));

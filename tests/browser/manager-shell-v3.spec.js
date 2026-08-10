@@ -75,8 +75,8 @@ test("Kontor åpner på Kalender og viser hvor du er", async ({ page }) => {
 test("Speiding er eget hovedområde med to listeflater", async ({ page }) => {
   await openArea(page, "Speiding");
   await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Rekrutterbare");
-  await expect(page.locator('.app-subtab[data-subnav-parent="historygo"]:visible')).toHaveText(["Rekrutterbare", "Andre klubber"]);
+  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Min spillerpool");
+  await expect(page.locator('.app-subtab[data-subnav-parent="historygo"]:visible')).toHaveText(["Min spillerpool", "Andre klubber"]);
   await page.locator('.app-subtab[data-tab-target="scoutingClubs"]').click();
   await expect(page.locator('[data-tab-section="scoutingClubs"]')).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Andre klubber");

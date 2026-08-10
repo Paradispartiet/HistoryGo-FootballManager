@@ -1,5 +1,10 @@
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
-import { migrateLegacyRecruitmentState, normalizeRecruitmentState } from "./football-recruitment.js";
+import {
+  buildSelectedSquadPlayerIds,
+  migrateLegacyPlayerPoolSquadState,
+  normalizePlayerPoolSquadState,
+  normalizeRecruitmentState
+} from "./football-recruitment.js";
 import { decorateHiredStaffWithAssignments, selectStarterStaffCandidates, summarizeStaffRoster } from "./football-staff-roster.js";
 import { calculateFacilityEffects, normalizeFacilityState, upgradeFacilityInMerits } from "./football-facilities.js";
 import { createManagerFacilitiesModel, renderManagerFacilitiesWorkspace } from "./ui/manager-facilities-workspace-v1.js";
@@ -1445,6 +1450,7 @@ function normalizeTeamMerits(merits) {
     localStart,
     nearbyFavorites: normalizeNearbyFavorites(base.nearbyFavorites),
     ...normalizeRecruitmentState(base),
+    ...normalizePlayerPoolSquadState(base),
     hiredStaffIds: Array.isArray(base.hiredStaffIds) ? base.hiredStaffIds : [],
     // Reelle fasilitetsoppgraderinger v1: varig klubbstate i eksisterende teamMerits.
     facilities: normalizeFacilityState(base.facilities),
@@ -2117,6 +2123,8 @@ function activateStarterSquad(chosenPlayerIds = null, metadata = null) {
     playerIds,
     createdAt: new Date().toISOString()
   });
+  state.teamMerits.playerPoolSquadVersion = 1;
+  state.teamMerits.squadPlayerIds = [...playerIds];
   state.localStartMessage = "";
   saveTeamMerits();
   invalidateAvailability();
@@ -2130,6 +2138,8 @@ function clearLocalStartSquad() {
     return;
   }
   state.teamMerits.localStart = normalizeLocalStart(null);
+  state.teamMerits.playerPoolSquadVersion = 0;
+  state.teamMerits.squadPlayerIds = [];
   state.localStartMessage = "";
   saveTeamMerits();
   invalidateAvailability();
@@ -2202,6 +2212,8 @@ function computeAvailability() {
   // er listen tom – det faller aldri tilbake til alle spillere.
   const candidatePlayerIds = new Set();
   const unlockedPlayerIds = new Set();
+  const playerPoolIds = new Set();
+  const legacyPlayablePlayerIds = new Set();
   const playerSourceById = new Map();
   const explicitStaffIds = new Set();
   // Klubbspillere vs landslagsspillere: en landslagsarena (Ullevaal, Maracanã)
@@ -2249,23 +2261,15 @@ function computeAvailability() {
   candidatePlayerIds.forEach((playerId) => {
     nationalOnlyPlayerIds.delete(playerId);
     quizPendingPlayerIds.delete(playerId);
+    playerPoolIds.add(playerId);
   });
 
-  // Recruitment v1: History Go gir kandidattilgang; troppen består av
-  // starttroppen + eksplisitt rekrutterte kandidater. Gamle saves migreres én
-  // gang ved å bevare kandidatene som tidligere automatisk var spillbare.
-  if (state.teamMerits) {
-    const migration = migrateLegacyRecruitmentState(state.teamMerits, [...candidatePlayerIds]);
-    if (migration.migrated) {
-      state.teamMerits.recruitmentVersion = migration.merits.recruitmentVersion;
-      state.teamMerits.recruitedPlayerIds = migration.merits.recruitedPlayerIds;
-      saveTeamMerits();
-    }
-  }
+  // Legacy recruitment-state is read only to reproduce the previously
+  // playable squad during the one-time player-pool migration below.
   const recruitmentState = normalizeRecruitmentState(state.teamMerits);
   recruitmentState.recruitedPlayerIds.forEach((playerId) => {
     if (candidatePlayerIds.has(playerId)) {
-      unlockedPlayerIds.add(playerId);
+      legacyPlayablePlayerIds.add(playerId);
     }
   });
 
@@ -2279,7 +2283,8 @@ function computeAvailability() {
     if (clubAccess?.mode === "heritage") {
       const groundPlaceId = takeoverClubForPool.homePlaceId || null;
       (clubAccess.clubPoolIds || []).forEach((playerId) => {
-        unlockedPlayerIds.add(playerId);
+        playerPoolIds.add(playerId);
+        legacyPlayablePlayerIds.add(playerId);
         const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
         if (groundPlaceId) sources.placeIds.add(groundPlaceId);
         playerSourceById.set(playerId, sources);
@@ -2298,7 +2303,8 @@ function computeAvailability() {
       ? (getClubSquadAccess(takeoverClub)?.baseSquad || [])
       : getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE);
     fallbackPlayerIds.forEach((playerId) => {
-      unlockedPlayerIds.add(playerId);
+      playerPoolIds.add(playerId);
+      legacyPlayablePlayerIds.add(playerId);
       const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
       sources.localStart = true;
       playerSourceById.set(playerId, sources);
@@ -2308,7 +2314,8 @@ function computeAvailability() {
   // Lokal start utvider bare spillerpoolen. Den åpner ingen steder og skriver
   // aldri til History Go-progresjonen (visited_places/groundhopper-state).
   localStartPlayerIds.forEach((playerId) => {
-    unlockedPlayerIds.add(playerId);
+    playerPoolIds.add(playerId);
+    legacyPlayablePlayerIds.add(playerId);
     const sources = playerSourceById.get(playerId) || { placeIds: new Set(), localStart: false };
     sources.localStart = true;
     playerSourceById.set(playerId, sources);
@@ -2322,18 +2329,53 @@ function computeAvailability() {
   // valgte nasjonen – du kan ikke ta ut en brasilianer på Norges landslag.
   // Klubblagets tropp røres ikke; modusene har hver sin sesjon.
   if (isNationalModeActive()) {
-    nationalOnlyPlayerIds.forEach((playerId) => unlockedPlayerIds.add(playerId));
+    nationalOnlyPlayerIds.forEach((playerId) => playerPoolIds.add(playerId));
     nationalOnlyPlayerIds.clear();
     const nationality = getNationalTeamNationality();
     if (nationality) {
       // Grunnstammen er alltid tilgjengelig, ellers ville en ny manager stått
       // med et tomt landslag og ingen vei videre.
-      getNationalBasePlayerIds(nationality).forEach((playerId) => unlockedPlayerIds.add(playerId));
-      [...unlockedPlayerIds].forEach((playerId) => {
-        if (playersById.get(playerId)?.nationality !== nationality) unlockedPlayerIds.delete(playerId);
+      getNationalBasePlayerIds(nationality).forEach((playerId) => playerPoolIds.add(playerId));
+      [...playerPoolIds].forEach((playerId) => {
+        if (playersById.get(playerId)?.nationality !== nationality) playerPoolIds.delete(playerId);
       });
     }
+    playerPoolIds.forEach((playerId) => unlockedPlayerIds.add(playerId));
+  } else {
+    // Player pool -> squad v1: old saves keep exactly the players the previous
+    // runtime exposed. New pool discoveries remain alternatives until the
+    // manager explicitly selects them for the squad. Startup asks for an
+    // availability snapshot before gameStartState/mode sessions are hydrated;
+    // never persist a one-time migration against that context-free snapshot.
+    const hasHydratedGameContext = Boolean(state.gameStartState?.selectedMode);
+    if (state.teamMerits && hasHydratedGameContext) {
+      const migration = migrateLegacyPlayerPoolSquadState(state.teamMerits, [...legacyPlayablePlayerIds]);
+      if (migration.migrated) {
+        state.teamMerits.playerPoolSquadVersion = migration.merits.playerPoolSquadVersion;
+        state.teamMerits.squadPlayerIds = migration.merits.squadPlayerIds;
+        saveTeamMerits();
+      }
+    }
+    const squadState = normalizePlayerPoolSquadState(state.teamMerits);
+    buildSelectedSquadPlayerIds({
+      squadPlayerIds: squadState.playerPoolSquadVersion === 1
+        ? squadState.squadPlayerIds
+        : [...legacyPlayablePlayerIds],
+      eligiblePoolPlayerIds: [...playerPoolIds]
+    }).forEach((playerId) => unlockedPlayerIds.add(playerId));
   }
+
+  const playerPoolPlayers = [];
+  playerPoolIds.forEach((playerId) => {
+    const player = playersById.get(playerId);
+    if (player) {
+      playerPoolPlayers.push(player);
+    } else {
+      console.warn(`Spillerpool peker på ukjent spiller-id: ${playerId} (ignoreres).`);
+      playerPoolIds.delete(playerId);
+      unlockedPlayerIds.delete(playerId);
+    }
+  });
 
   const unlockedPlayers = [];
   unlockedPlayerIds.forEach((playerId) => {
@@ -2396,6 +2438,8 @@ function computeAvailability() {
     placeSourceById,
     placeUnlocks,
     candidatePlayerIds,
+    playerPoolPlayers,
+    playerPoolIds,
     unlockedPlayers,
     unlockedPlayerIds,
     nationalOnlyPlayerIds,
@@ -2615,6 +2659,13 @@ function getUnlockedStaff() {
 // har en gyldig klubb-/quiz-kilde. Kandidattilgang alene gjør ikke spilleren spillbar.
 function getUnlockedPlayers() {
   return getAvailability().unlockedPlayers;
+}
+
+// Min spillerpool: alle spillerne samlingen og klubbtilgangen gjør valgbare.
+// Kamp, trening og oppstilling leser fortsatt bare getUnlockedPlayers(), altså
+// den eksplisitt valgte troppen.
+function getPlayerPoolPlayers() {
+  return getAvailability().playerPoolPlayers;
 }
 
 // Landslagsarena? Stedsrollen i football_unlocks.json skiller allerede
@@ -7659,6 +7710,7 @@ function renderLineup(teamFit) {
     }
 
     const player = assignment?.player || null;
+    chip.dataset.playerId = player?.id || "";
     const playerName = player?.name || "Tom plass";
     const chipName = compactPlayerName(playerName);
     const roleName = assignment?.role?.name || "Ingen rolle";
@@ -14693,7 +14745,7 @@ function renderUnlockPlaces() {
 // Opplåste spillere: statuslinje + kort med navn, posisjoner, overall og
 // kildeplass(er). Bruker bare textContent. Ren visning – ingen fit-/kampeffekt.
 function renderUnlockedPlayers() {
-  const players = getUnlockedPlayers();
+  const players = getPlayerPoolPlayers();
 
   if (elements.unlockedPlayersStatus) {
     // Landslagsspillere speidet på en landslagsarena (Ullevaal/Maracanã) kan
@@ -14710,7 +14762,7 @@ function renderUnlockedPlayers() {
       ? ` ${pending} spiller${pending === 1 ? "" : "e"} venter på at du tar quizen på stedet i History Go.`
       : "";
     if (players.length > 0) {
-      elements.unlockedPlayersStatus.textContent = `Klubbspillere du kan bruke: ${players.length}.${pendingNote}${scoutedNote}`;
+      elements.unlockedPlayersStatus.textContent = `Min spillerpool: ${players.length} spillere du kan velge til troppen.${pendingNote}${scoutedNote}`;
     } else {
       elements.unlockedPlayersStatus.textContent =
         `Ingen klubbspillere ennå. Besøk/synk et klubbanlegg (Intility, Lerkendal, Brann, Aspmyra, Åråsen, Aker eller Nadderud).${pendingNote}${scoutedNote}`;
@@ -15441,7 +15493,7 @@ function renderCollectionSummary(teamFit) {
 
   elements.collectionPlacesCount.textContent = String(snapshot.unlockedPlaceIds.size);
   if (elements.collectionPlayersCount) {
-    elements.collectionPlayersCount.textContent = String(snapshot.unlockedPlayers.length);
+    elements.collectionPlayersCount.textContent = String(snapshot.playerPoolPlayers.length);
   }
   if (elements.collectionStaffCount) {
     elements.collectionStaffCount.textContent = String(snapshot.unlockedStaff.length);
@@ -16391,6 +16443,7 @@ function bindHistoryGoSyncControls() {
   // ber kjernen lese den på nytt. Ingen parallell troppsstate eller sidecache.
   window.addEventListener("hgfm:team-merits-changed", () => {
     state.teamMerits = loadTeamMerits(teamMeritsSeed);
+    saveTeamMerits();
     invalidateAvailability();
     sanitizeLineupForUnlockedPlayers();
     sanitizeSelectedFormation();

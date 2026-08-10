@@ -55,11 +55,11 @@ Klubbdrift eier de varige klubbfunksjonene: styre, utvikling, stab/drift, fasili
 Lag har:
 
 ```
-Oppstilling · Tropp & benk · Trening · Systemet
+Oppstilling · Tropp · Trening · Systemet
 ```
 
 - **Oppstilling** – bane, formasjon, kampplan, eksplisitt spiller-/rollevalg og benk.
-- **Tropp & benk** – tett spillerliste over klubbens faktiske troppsmedlemmer.
+- **Tropp** – valgt klubbtropp først; hele spillerpoolen ligger bak `Endre tropp`.
 - **Trening** – ukas treningsarbeid.
 - **Systemet** – formasjonskunnskap og taktisk fordypning.
 
@@ -70,21 +70,18 @@ Spillernavnet åpner spillerprofil. Profilklikk endrer aldri laguttaket; det kre
 Speiding har to underflater:
 
 ```
-Rekrutterbare · Andre klubber
+Min spillerpool · Andre klubber
 ```
 
-### Rekrutterbare
+### Min spillerpool
 
-En tett spillerliste over kandidater manageren har tilgang til gjennom eksisterende History Go-opplåsinger, pluss spillere som allerede er i starttroppen.
-
-Fra Rekruttering v1 gjelder et eksplisitt skille:
+En tett spillerliste over spillere manageren har samlet gjennom History Go- og klubbtilgang, pluss starttroppen. Modellen er:
 
 ```
-History Go-tilgang = kandidat
-Hent til troppen = troppsmedlem
+History Go-samling → Min spillerpool → valgt tropp
 ```
 
-En kandidat kan derfor sammenlignes og åpnes i spillerprofilen uten å være tilgjengelig i Lag. `Hent til troppen` legger kandidaten inn i eksisterende `teamMerits`-state; da dukker spilleren opp i Lag og kjernens spillerpool i samme økt.
+En spiller kan sammenlignes og åpnes i profilen uten å være valgt til troppen. `Velg inn` og `Ta ut` oppdaterer eksisterende `teamMerits`-state; spilleren blir liggende i Min spillerpool selv når vedkommende tas ut.
 
 Det finnes ingen egen overgangsøkonomi i denne flaten. Ingen lønn, kontrakt eller overgangssum diktes når datasettet ikke eier informasjonen.
 
@@ -92,7 +89,7 @@ Det finnes ingen egen overgangsøkonomi i denne flaten. Ingen lønn, kontrakt el
 
 En tett klubbliste over de øvrige klubbene i ligapyramiden. Når en klubb åpnes, vises spillerne HG-dataene knytter til klubbens `homePlaceId` gjennom spillerens `sourcePlaceIds` og eventuell `clubStatus`.
 
-Dette er **mulige/historiske klubbtilknytninger i HG-dataene, ikke en påstått live stall**. Klubbtilknytning alene gjør heller ikke spilleren rekrutterbar; den faktiske kandidatporten ligger under `Rekrutterbare`.
+Dette er **mulige/historiske klubbtilknytninger i HG-dataene, ikke en påstått live stall**. Klubbtilknytning alene gir ikke tilgang; History Go- og klubbtilgangen avgjør Min spillerpool.
 
 Begge listene åpner den samme spillerprofilen som Lag bruker.
 

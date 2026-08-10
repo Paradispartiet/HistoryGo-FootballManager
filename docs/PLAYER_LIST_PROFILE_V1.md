@@ -37,7 +37,7 @@ Den er **informasjon**, ikke navigasjon. Kampklar-gaten brukes fortsatt av eksis
 
 ## Lag → Tropp
 
-`Tropp & benk` erstattes visuelt av en faktisk spillerliste. Desktop viser en tett tabell med:
+`Tropp` viser den faktisk valgte klubbtroppen først. Hele spillerpoolen åpnes eksplisitt med `Endre tropp`. Desktop viser en tett tabell med:
 
 - spiller
 - naturlige posisjoner

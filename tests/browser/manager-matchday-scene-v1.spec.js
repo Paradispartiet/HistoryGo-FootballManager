@@ -124,7 +124,7 @@ test("statuskort åpner eksisterende kampdetaljer og arbeidsflater", async ({ pa
   await page.locator('.matchday-scene-status-card[data-matchday-target="details"]').first().click();
   await expect(page.locator("#matchdayDepth")).toHaveAttribute("open", "");
 
-  await page.locator('.matchday-scene-status-card[data-matchday-target="tactics"]').click();
+  await page.getByRole("button", { name: /^Formasjon og kampplan/ }).click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 
   await openMatchday(page);

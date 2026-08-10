@@ -6,6 +6,8 @@
   "activeTrainingWeek": 1,
   "recruitmentVersion": 1,
   "recruitedPlayerIds": [],
+  "playerPoolSquadVersion": 0,
+  "squadPlayerIds": [],
   "hiredStaffIds": [],
   "unlockedPlaceIds": [
     "kfum_arena"

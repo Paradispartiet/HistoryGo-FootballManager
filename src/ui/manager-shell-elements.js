@@ -17,7 +17,7 @@ const LOCATION_LABELS = Object.freeze({
   market: "Kontor · Klubbdrift · Marked",
   officeHelp: "Kontor · Oppstartshjelp",
   tactics: "Lag · Oppstilling",
-  squad: "Lag · Tropp & benk",
+  squad: "Lag · Tropp",
   trening: "Lag · Trening",
   system: "Lag · Systemet",
   kamp: "Kamp · Kampdag",
