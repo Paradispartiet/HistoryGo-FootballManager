@@ -411,8 +411,9 @@
       "tier": "obosligaen",
       "strength": 60,
       "form": 55,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 79,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "gjemselund_stadion"
     },
     {
       "id": "hodd",

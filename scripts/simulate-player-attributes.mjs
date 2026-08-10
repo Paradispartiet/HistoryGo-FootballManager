@@ -30,8 +30,8 @@ import {
 import { calculatePlayerMatchFit, calculateClassBonus, CLASS_BONUS_MAX } from "../src/football-fit-engine.js";
 
 // `Math.min(...liste)` sprer hele lista som ARGUMENTER, og argumentlista har en
-// grense — målt ~125 000 i denne noden. Katalogen har 1993 spillere × 58
-// ferdigheter = 115 594 verdier, altså 1,08x margin: neste klubbimport på ~160
+// grense — målt ~125 000 i denne noden. Katalogen har 2053 spillere × 58
+// ferdigheter = 119 074 verdier, altså 1,05x margin: neste klubbimport på ~120
 // navn ville tatt dette skriptet ned med «Maximum call stack size exceeded» i
 // stedet for å kjøre vaktene. Funnet under en bittest som la til 300 spillere.
 //
@@ -557,7 +557,13 @@ const KJENT_UDOKUMENTERT = {
   // ingen bane i katalogen før denne importen — og 75 navngitte spillere med
   // riktig posisjon, epoke og nivå er mer enn ingenting. Det som IKKE er gjort,
   // er å dikte opp ferdigheter for å pynte på tallet.
-  fosshaugane_campus: 0.68
+  fosshaugane_campus: 0.68,
+  // Kongsvinger er samme kildeform som Sogndal, men vesentlig bedre belagt:
+  // bare 16 av 85 avstår, mot Sogndals 52. Det som tømmer resten er
+  // merittregelen — «dokumentert cupsemifinaleerfaring» står 25 ganger, og KILs
+  // fire cupsemifinaler er lagets merittliste sett fra spilleren, ikke en
+  // ferdighet hos mannen. Målt 40 av 79.
+  gjemselund_stadion: 0.52
 };
 const perArv = new Map();
 for (const player of players) {

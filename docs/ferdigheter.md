@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1993 navngitte fotballspillere**. 58 tall hver er ~116 000
+Dette er **2053 navngitte fotballspillere**. 58 tall hver er ~119 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -590,12 +590,12 @@ normalisering, og 300 identiske malimporterte spillere — og hver gang fyrte en
 mer presis vakt først. Den står fordi den er billig og fordi den nå måler det
 den påstår. Den forrige utgaven gjorde ikke det.
 
-#### Vaktskriptet var 1,08x fra å kræsje
+#### Vaktskriptet var 1,05x fra å kræsje
 
 Bittesten med 300 ekstra spillere avdekket noe annet på veien: `sim:player-attributes`
 døde med `Maximum call stack size exceeded` i stedet for å kjøre. `Math.min(...allValues)`
 sprer hele lista som argumenter, og argumentlista tåler ~125 000 i denne noden.
-Katalogen står på 1993 × 58 = **115 594** — altså 1,08x margin, og **neste
+Katalogen står på 2053 × 58 = **119 074** — altså 1,05x margin, og **neste
 klubbimport på ~160 navn ville tatt hele vaktskriptet ned**.
 
 Det er den verste formen for feil: ikke en vakt som sier feil, men en vakt som
