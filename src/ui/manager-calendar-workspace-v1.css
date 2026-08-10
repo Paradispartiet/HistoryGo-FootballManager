@@ -2,22 +2,82 @@
 
 html[data-manager-office-calendar-v1="active"] manager-next-action {
   display: block !important;
+  container-type: inline-size;
 }
 
 html[data-manager-office-calendar-v1="active"] #nextActionStrip[data-surface="manager-calendar"] {
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center;
   border-top-color: rgba(255,255,255,.34);
   background: #080d12;
 }
 
+#nextActionStrip[data-surface="manager-calendar"][data-calendar-interactive="true"] {
+  cursor: pointer;
+}
+
 #nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
+  grid-template-columns: auto minmax(0, .8fr) minmax(0, 1.4fr) auto;
   border-color: rgba(255,255,255,.34);
   background: #101820;
+}
+
+#nextActionStrip[data-surface="manager-calendar"] .next-action-primary > * {
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: normal;
+}
+
+#nextActionStrip[data-surface="manager-calendar"] .next-action-destination {
+  justify-self: end;
+  color: var(--hg-text-muted, #aeb6b0);
+  font-size: .72rem;
+}
+
+#nextActionStrip[data-surface="manager-calendar"] .next-action-secondary {
+  display: none;
 }
 
 #nextActionStrip[data-surface="manager-calendar"] .next-action-primary:hover,
 #nextActionStrip[data-surface="manager-calendar"] .next-action-primary:focus-visible {
   border-color: #fff;
   background: #17222c;
+}
+
+/* Footeren skal bli mer kompakt, ikke høyere, når selve appvinduet snevres
+   inn. Container-queryen følger komponentens faktiske bredde og virker derfor
+   også på iPad når nettleseren viser en desktop-viewport i et mindre vindu. */
+@container (max-width: 900px) {
+  html[data-manager-office-calendar-v1="active"] #nextActionStrip[data-surface="manager-calendar"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0;
+  }
+
+  #nextActionStrip[data-surface="manager-calendar"] .next-action-head,
+  #nextActionStrip[data-surface="manager-calendar"] .next-action-tag,
+  #nextActionStrip[data-surface="manager-calendar"] .next-action-destination {
+    display: none;
+  }
+
+  #nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    min-height: 52px;
+    padding: 7px 11px;
+  }
+}
+
+@container (max-width: 480px) {
+  #nextActionStrip[data-surface="manager-calendar"] .next-action-hint {
+    display: none;
+  }
+
+  #nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
+    min-height: 46px;
+  }
 }
 
 .manager-calendar-view {
