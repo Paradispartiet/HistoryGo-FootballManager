@@ -618,7 +618,12 @@ const KJENT_UDOKUMENTERT = {
   // på banen. Den avstår 69 ganger av 85, men de seksten som står igjen rommer
   // den mest DETALJERTE enkeltbeskrivelsen i katalogen: Martin Uelands
   // tidligere lagkamerater gir fem ferdigheter i én setning. Målt 56 av 76.
-  myrdal_idrettspark: 0.75
+  myrdal_idrettspark: 0.75,
+  // Jerv avstår 67 ganger av 85. De atten som står igjen er nesten alle
+  // konkrete HANDLINGER — stupheadingen mot Brann, fire strafferedninger i
+  // samme kvalifiseringsfinale, opprykksmålet mot Rolvsøy i 1982 — så det som
+  // finnes er godt, det er bare lite av det. Målt 53 av 72.
+  levermyr_stadion: 0.75
 };
 const perArv = new Map();
 for (const player of players) {

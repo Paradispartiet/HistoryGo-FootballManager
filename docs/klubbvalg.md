@@ -188,6 +188,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | Brann | Brann Stadion | 75 |
 | Sogndal | Fosshaugane Campus | 75 |
 | Stabæk | Nadderud | 75 |
+| Jerv | Levermyr | 72 |
 | Viking | Lyse Arena | 70 |
 | Hødd | Høddvoll | 69 |
 | Sandefjord | Jotun Arena | 68 |
@@ -202,8 +203,9 @@ avhenger av hvor History Go-kortet hans ligger.
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf, Egersund og Åsane — 2830 arveplasser fordelt
-på alle 34, og **ingen klubb med bane har under 49 navn**. De 26 klubbene som
+Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane og Jerv — 2902 arveplasser
+fordelt på alle 35, og **ingen klubb med bane har under 49 navn**. De 25
+klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1367,6 +1369,50 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Jerv: en kildeintern markør som kunne måles, og fire feilkoblinger
+
+Jerv manglet bane — `ground: "Levermyr"` uten `placeId`. **72 navn** (62 nye, 10
+koblet). Første **2. divisjons**-klubb med arv siden Skeid og Mjøndalen.
+
+Kilden avstår 67 ganger av 85, men de atten som står igjen er nesten alle
+konkrete **handlinger**: stupheadingen til 1–0 mot Brann i opprykksfinalen, fire
+strafferedninger i samme kamp, opprykksmålet borte mot Rolvsøy i 1982. Det er en
+kilde som husker kamper, ikke merittlister.
+
+#### «Registrerte kamper» er en datering — og det lot seg måle
+
+Med den nye representativitetsregelen nektet **tre av fire** kategorier, og 19
+profiler sto uten epoke. Men kilden bruker en formulering systematisk: «180
+**registrerte** Jerv-kamper».
+
+Hypotesen lot seg teste mot de daterte profilene:
+
+| | moderne | historiske |
+|---|---:|---:|
+| Med «registrerte» | **9** | **0** |
+| Uten «registrerte» | 37 | 15 |
+
+Ni av ni. Ordet markerer den registrerte statistikkens epoke, ikke bare et
+kampantall — klubbens historiske rekordholder står til sammenligning med «514
+kamper», uten. Det tok håndlista fra 19 navn til 7.
+
+**En kildeintern markør som kan måles er alltid bedre enn en liste med skjønn**,
+og forskjellen er at markøren kan vises å være feil.
+
+#### Fire feilkoblinger
+
+| Kilden | Katalogen | Avgjørelse |
+|---|---|---|
+| Arne «Nana» Olsen — Jervs kamprekordholder, 514 kamper | Arne Olsen — IL Sparta-angrepsspiller | To menn |
+| Espen Rasmussen — kom fra Fløy til Jerv | Espen Stene Rasmussen — Egersund-legende, 321 kamper | To menn |
+| Arne Olsen / Arve Olsen | begge i Jerv-kilden | To menn |
+| Jo Stålesen | Jo Stornes Stålesen — Egersund «gjennom 2025» | **Samme mann** |
+
+Den siste er den lærerike: Egersund har ham gjennom 2025, Jerv i «2026-forsvaret».
+Der **kjeder tidslinjen seg sammen**, og det er positivt belegg — ikke bare et
+navn som ligner. De tre andre har ingenting utenom navnet, og
+mellomnavn-heuristikken har nå tatt feil fire ganger totalt.
 
 ### Åsane: en kategoridom som avgjorde femten ukjente på ti kjente
 
