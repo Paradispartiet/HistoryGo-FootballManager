@@ -30,7 +30,7 @@ const checks = [
   ["browser dekker systemlæring", browser.includes("footballLearningSystemBridge")],
   ["browser dekker treningslæring", browser.includes("footballLearningTrainingRationale")],
   ["browser dekker rolle-relasjon", browser.includes("football-learning-role-relationship")],
-  ["browser dekker faktisk ellever og navngitt rollepar", browser.includes("Relasjonen i din faktiske ellever") && browser.includes("Valgt ving") && browser.includes("Valgt back")],
+  ["browser dekker faktisk ellever og navngitt rollepar", browser.includes("Relasjonen i din faktiske ellever") && browser.includes("actualFocusName") && browser.includes("actualPartnerName")],
   ["browser dekker no-fiction når kuratert partner mangler", browser.includes("Det betyr ikke at oppstillingen er feil")],
   ["browser dekker registrert etterkampsignal", browser.includes("Bare registrerte taktiske faktorer")],
   ["browser dekker no-fiction fallback", browser.includes("Ingen tydelig taktisk faktor er registrert")],

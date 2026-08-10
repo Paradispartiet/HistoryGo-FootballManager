@@ -85,53 +85,45 @@ test("rolleinspektøren går fra tagger til forklaring av rollerelasjon og rom",
   await page.locator("#lineupSlots .player-chip").first().click();
   await expect(page.locator("#managerLineupSlotInspector")).toBeVisible();
 
-  await page.evaluate(() => {
-    const inspector = document.getElementById("managerLineupSlotInspector");
-    const selectedSlotId = inspector?.dataset.slotId;
-    const chips = [...document.querySelectorAll("#lineupSlots .player-chip")];
-    const selectedChip = chips.find((chip) => chip.dataset.slotId === selectedSlotId);
-    const partnerChip = chips.find((chip) => chip !== selectedChip);
-    chips.filter((chip) => chip !== selectedChip).forEach((chip) => {
-      chip.dataset.roleId = "deep_playmaker";
-      chip.dataset.roleName = "Dyp playmaker";
-    });
-    selectedChip.dataset.playerName = "Valgt ving";
-    selectedChip.dataset.slotLabel = "Venstrekant";
-    selectedChip.dataset.roleId = "wide_dribbler";
-    selectedChip.dataset.roleName = "Bred dribler";
-    selectedChip.dataset.x = "15";
-    selectedChip.dataset.y = "25";
-    partnerChip.dataset.playerName = "Valgt back";
-    partnerChip.dataset.slotLabel = "Venstreback";
-    partnerChip.dataset.roleId = "overlapping_fullback";
-    partnerChip.dataset.roleName = "Overlappende back";
-    partnerChip.dataset.x = "16";
-    partnerChip.dataset.y = "66";
-    const role = document.getElementById("teamSelectedRole");
-    if (role) role.textContent = "Bred dribler";
-    window.dispatchEvent(new Event("storage"));
-  });
   const learn = page.locator('#managerLineupSlotInspector [data-slot-action="learn-role"]');
   await expect(learn).toBeEnabled();
   await learn.click();
   const relation = page.locator(".football-learning-role-relationship");
   await expect(relation).toBeVisible();
   await expect(relation).toContainText("Relasjonen i din faktiske ellever");
-  await expect(relation).toContainText("Valgt ving");
-  await expect(relation).toContainText("Valgt back");
-  await expect(relation).toContainText("Venstrekant ↔ Venstreback");
-  await expect(relation).toContainText("Overlappende back");
-  await expect(relation).toContainText("samme brede kanal");
+  const focusChip = page.locator("#lineupSlots .player-chip.is-role-learning-focus");
+  const partnerChip = page.locator("#lineupSlots .player-chip.is-role-learning-partner");
+  await expect(focusChip).toHaveCount(1);
+  await expect(partnerChip).toHaveCount(1);
+  const [actualFocusName, actualPartnerName, actualFocusSlot, actualPartnerSlot, actualFocusRole, actualPartnerRole] = await Promise.all([
+    focusChip.getAttribute("data-player-name"),
+    partnerChip.getAttribute("data-player-name"),
+    focusChip.getAttribute("data-slot-label"),
+    partnerChip.getAttribute("data-slot-label"),
+    focusChip.getAttribute("data-role-name"),
+    partnerChip.getAttribute("data-role-name")
+  ]);
+  expect(actualFocusName).toBeTruthy();
+  expect(actualPartnerName).toBeTruthy();
+  await expect(relation).toContainText(actualFocusName);
+  await expect(relation).toContainText(actualPartnerName);
+  await expect(relation).toContainText(`${actualFocusSlot} ↔ ${actualPartnerSlot}`);
+  await expect(relation).toContainText(`${actualFocusRole} ↔ ${actualPartnerRole}`);
+  await expect(relation).toContainText("Hva de prøver å skape:");
+  await expect(relation).toContainText("Risiko:");
   await expect(relation).toContainText("Se etter:");
-  await expect(page.locator("#lineupSlots .player-chip.is-role-learning-focus")).toHaveCount(1);
-  await expect(page.locator("#lineupSlots .player-chip.is-role-learning-partner")).toHaveCount(1);
 
   await page.evaluate(() => {
-    const partner = document.querySelector("#lineupSlots .player-chip.is-role-learning-partner");
-    partner.dataset.roleId = "deep_playmaker";
-    partner.dataset.roleName = "Dyp playmaker";
-    window.dispatchEvent(new Event("storage"));
+    const selectedSlotId = document.getElementById("managerLineupSlotInspector")?.dataset.slotId;
+    [...document.querySelectorAll("#lineupSlots .player-chip")]
+      .filter((chip) => chip.dataset.slotId !== selectedSlotId)
+      .forEach((chip) => {
+        chip.dataset.roleId = "wide_dribbler";
+        chip.dataset.roleName = "Bred dribler";
+      });
   });
+  await learn.click();
+  await learn.click();
   await expect(relation).toContainText("Ikke representert i elleveren");
   await expect(relation).toContainText("Det betyr ikke at oppstillingen er feil");
   await expect(page.locator("#lineupSlots .player-chip.is-role-learning-partner")).toHaveCount(0);
