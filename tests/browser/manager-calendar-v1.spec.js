@@ -96,18 +96,18 @@ test("fredag inneholder både kampforberedelse og pressearbeid", async ({ page }
 
 test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) => {
   await openOfficeCalendar(page);
-  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="2"]').click();
-  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Tirsdag");
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="3"]').click();
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
   const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]').first();
   await expect(message).toBeVisible();
   await expect(message).toContainText("Les mail");
   await message.click();
   await expect(page.locator("#managerCalendarMessageDrawer")).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender · Melding");
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
   await page.locator("#managerCalendarMessageDrawer .manager-calendar-drawer-close").click();
   await expect(page.locator("#managerCalendarMessageDrawer")).toBeHidden();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
-  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Tirsdag");
+  await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
 });
 
 test("Next-footeren er skjult i normal ligasave", async ({ page }) => {

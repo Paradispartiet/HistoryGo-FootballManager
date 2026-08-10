@@ -162,9 +162,8 @@ function syncCalendarLocation() {
   if (!location) return;
   const calendar = document.querySelector('[data-tab-section="calendar"]');
   const board = document.querySelector('[data-tab-section="board"]');
-  const drawer = document.getElementById("managerCalendarMessageDrawer");
   if (calendar && !calendar.hidden) {
-    location.textContent = drawer && !drawer.hidden ? "Kontor · Kalender · Melding" : "Kontor · Kalender";
+    location.textContent = "Kontor · Kalender";
   } else if (board && !board.hidden) {
     location.textContent = "Kontor · Klubben";
   }
