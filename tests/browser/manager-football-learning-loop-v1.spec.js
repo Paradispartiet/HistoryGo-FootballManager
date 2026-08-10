@@ -82,11 +82,20 @@ test("Treningsdagen forklarer hvorfor økta finnes og hva manageren skal se ette
 
 test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.evaluate(() => {
-    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify({ week: 3, phase: "match_prep" }));
-    window.dispatchEvent(new Event("storage"));
-  });
   await openTeam(page);
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent("hgfm:calendar-open-work", {
+      detail: {
+        target: "tactics",
+        week: 3,
+        dayIndex: 5,
+        day: "Fredag",
+        eventId: "match-prep",
+        eventTitle: "Kampforberedelse",
+        source: "calendar"
+      }
+    }));
+  });
   await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
   await page.evaluate(() => {
     document.getElementById("matchPrepTraining").textContent = "Defensiv kontroll";
