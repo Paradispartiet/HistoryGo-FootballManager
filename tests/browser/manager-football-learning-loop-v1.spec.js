@@ -98,13 +98,15 @@ test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmå
   });
   await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
   await page.evaluate(() => {
-    document.getElementById("matchPrepTraining").textContent = "Defensiv kontroll";
-    document.getElementById("matchPrepFocus").textContent = "Restforsvar";
+    document.getElementById("teamSelectedTrainingProgram").textContent = "Restforsvar treningsprogram";
+    document.getElementById("teamSelectedTrainingFocus").textContent = "Restforsvar";
   });
+  await expect(page.locator("#matchPrepTraining")).toHaveText("Restforsvar treningsprogram");
+  await expect(page.locator("#matchPrepFocus")).toHaveText("Restforsvar");
   const bridge = page.locator("#footballLearningMatchPrepBridge");
   await expect(bridge).toBeVisible();
   await expect(bridge).toContainText("Fra treningsfeltet til kampen");
-  await expect(bridge).toContainText("Defensiv kontroll · Restforsvar");
+  await expect(bridge).toContainText("Restforsvar treningsprogram · Restforsvar");
   await expect(bridge).toContainText("Hypotese:");
   await expect(bridge).toContainText("Observer i kampen:");
   await expect(bridge).toContainText("Når laget mister ballen");
