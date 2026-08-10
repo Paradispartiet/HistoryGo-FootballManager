@@ -192,14 +192,15 @@ avhenger av hvor History Go-kortet hans ligger.
 | Sandefjord | Jotun Arena | 68 |
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
+| Raufoss | Raufoss Arena | 58 |
 | Lillestrøm | Åråsen | 56 |
 | Strømmen | Strømmen stadion | 54 |
 | Kristiansund | Nordmøre stadion | 49 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim
-og Strømmen — 2580 arveplasser fordelt på alle 30, og **ingen klubb med bane
-har under 49 navn**. De 30 klubbene som
+Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
+Strømmen og Raufoss — 2638 arveplasser fordelt på alle 31, og **ingen klubb
+med bane har under 49 navn**. De 29 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1363,6 +1364,52 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Raufoss: alle tre kildeformene, og en påstand importene hadde kastet
+
+Raufoss manglet bane — `ground: "Raufoss Arena"` uten `placeId`. **58 navn** (32
+nye, 26 koblet), og den best dekkede v2-arven så langt: bare 36 % uten
+dokumenterte styrker.
+
+Kilden blander **alle tre formene i én fil** — 49 tynne, 18 fraselister og 18
+prosapåstander. Prosaen er klubbens egne spillervurderinger og jubileumstekst,
+og den beskriver faktisk spill: «silkefot av et pasningsbein», «fosset fram og
+slo innlegg med svært høy presisjon», «god fysikk, ro, teknikk og overblikk».
+
+To ting er verdt å merke seg om hvordan kilden ble lest:
+
+**En kategori kan være entydig og likevel gjelde feil mann.** «Stor total
+karriere» er 100 % moderne blant de daterte, men Dag-Eilev Fagermo «spilte for
+Raufoss som senior før en lang og markant trenerkarriere» — det er
+*trenerkarrieren* som er moderne. Håndlista går derfor foran kategoridommen.
+
+**En dokumentert svakhet trenger ingen oppføring.** Kilden sier om Sander Nordbø
+at klubben «nevnte tempoutfordringer i innkjøringen». Han får simpelthen ikke
+`pace`. En svakhet *er* fravær av en styrke; å registrere den som egne data ville
+vært en dom kilden allerede har uttrykt ved å la den stå ubesvart.
+
+#### Importene hadde kastet det den andre kilden sa
+
+Raufoss avdekket en feil som gjelder alle fem v2-importene. Møtte importen et
+navn katalogen kjente fra før, la den bare til stedet og klubbstatusen — og
+**kastet det den nye kilden sa om ferdighetene hans**. Det så uskyldig ut fordi
+spilleren «allerede hadde styrker», men klubbkildene beskriver ulike deler av
+samme karriere: Sogndal vet hva Frode Grodås gjorde i Sogndal, Kongsvinger hva
+Øivind Tomteberget gjorde på Gjemselund.
+
+Målt: **36 av 119** koblede spillere hadde tapte påstander, 63 tokens i alt.
+
+Frykten var at å ta dem inn ville gjøre profilene *likere* — de fleste
+tilleggene er kampmengde- og nivåfraser. Målingen sa det motsatte:
+profil-unikheten gikk fra **86,00 % til 86,34 %**. En ny akse på en spiller som
+allerede har tre skiller ham fra dem som bare har de tre. Rettingen er kjørt
+bakover over alle fem, og importen legger nå sammen påstandene selv.
+
+En stavevariant måtte også håndteres: Raufoss skriver «Rune Gjestrumbakken»,
+Moss «Rune Gjestrumsbakken». Ett tegn inne i etternavnet, som verken
+navnenøkkelen eller mellomnavn-regelen ser — og kilden sier selv at det er samme
+mann: han slo den avgjørende pasningen i 1977-kvartfinalen *mot* Moss og «ble
+senere hentet til Moss», der Moss-kilden har ham i cupfinalen 1983.
 
 ### Strømmen: den rikeste prosaen, og den største utelatelsen
 

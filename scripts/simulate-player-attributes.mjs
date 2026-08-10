@@ -584,7 +584,17 @@ const KJENT_UDOKUMENTERT = {
   // styrkesett blant de 16 som har noen. Men den gjelder en liten del av arven:
   // 69 av 85 profiler er tynn-markert, og 30 mangler posisjon helt.
   // Målt 24 av 54.
-  strommen_stadion: 0.45
+  strommen_stadion: 0.45,
+  // Raufoss blander alle TRE kildeformene i én fil — 49 tynne, 18 fraselister og
+  // 18 prosapåstander — og er den best dekkede av v2-kildene: bare 36 % uten
+  // styrker. Prosaen er klubbens egne spillervurderinger, med faktiske
+  // ferdighetsbeskrivelser («silkefot av et pasningsbein», «god fysikk, ro,
+  // teknikk og overblikk»).
+  //
+  // Målt 18 av 58. Tallet ble bedre ETTER at flettingen av koblede spillere kom
+  // på plass — tre Raufoss-profiler som sto tomme, hadde påstander i en annen
+  // klubbs kilde. Taket er satt på det målte, ikke på det opprinnelige 21 av 58.
+  raufoss_arena: 0.33
 };
 const perArv = new Map();
 for (const player of players) {
