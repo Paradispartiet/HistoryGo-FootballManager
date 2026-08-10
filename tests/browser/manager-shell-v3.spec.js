@@ -59,7 +59,8 @@ test("har fem stabile hovedområder med Speiding mellom Lag og Kamp", async ({ p
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubben");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="historygo"]')).toHaveCount(0);
-  await expect(page.locator("manager-next-action")).toBeHidden();
+  await expect(page.locator("manager-next-action")).toBeVisible();
+  await expect(page.locator("#nextActionPrimaryTag")).toHaveText("Kalender");
   await expect(page.locator("#advanceClubWeekPhase, #leagueOnboardingPrimary, #portalPriorityAction")).toHaveCount(0);
 });
 
@@ -140,7 +141,7 @@ for (const viewport of VIEWPORTS) {
       await expectNoHorizontalOverflow(page);
     }
     await openArea(page, "Kontor");
-    await expect(page.locator("manager-next-action")).toBeHidden();
+    await expect(page.locator("manager-next-action")).toBeVisible();
   });
 }
 
@@ -182,12 +183,14 @@ test("Stats samler tabell, terminliste og spillerstatistikk", async ({ page }) =
   await expect(page.locator("#playerStatsTable")).toBeVisible();
 });
 
-test("Next-footeren er skjult i den normale managerloopen", async ({ page }) => {
+test("kalenderfooteren er synlig og returnerer til aktuell kalenderdag", async ({ page }) => {
   await openArea(page, "Kontor");
-  await expect(page.locator("manager-next-action")).toBeHidden();
-  await expect(page.locator("#nextActionPrimary")).toBeHidden();
-  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="3"]').click();
-  await expect(page.locator('#managerCalendarTimeline [data-event-id="team-training"]')).toBeVisible();
+  await expect(page.locator("manager-next-action")).toBeVisible();
+  await expect(page.locator("#nextActionStrip")).toHaveAttribute("data-surface", "manager-calendar");
+  await openArea(page, "Lag");
+  await page.locator("#nextActionPrimary").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator('#managerCalendarDays [aria-current="date"]')).toHaveAttribute("aria-selected", "true");
 });
 
 test("sentrale shell-knapper er mørke og har synlig tastaturfokus", async ({ page }) => {

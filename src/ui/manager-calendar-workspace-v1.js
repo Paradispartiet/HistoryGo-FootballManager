@@ -36,8 +36,10 @@ let renderFrame = 0;
 let selectedDayIndex = null;
 let selectedWeek = null;
 let redirectQueued = false;
+let startupRouteApplied = false;
 let drawerState = null;
 let communicationTimeline = { messages: [] };
+let lastCalendarModel = null;
 
 function node(tag, className = "", value) {
   const element = document.createElement(tag);
@@ -191,16 +193,35 @@ function activateCalendar() {
   window.scrollTo({ top: 0, behavior: "auto" });
 }
 
-function activateTarget(target) {
+function revealDeepTarget(focusId) {
+  if (!focusId) return;
+  requestAnimationFrame(() => {
+    const destination = document.getElementById(focusId);
+    if (!destination) return;
+
+    destination.closest("details")?.setAttribute("open", "");
+    if (destination.classList.contains("training-workspace-step")) {
+      const toggle = destination.querySelector("[data-training-step-toggle]");
+      if (toggle?.getAttribute("aria-expanded") === "false") toggle.click();
+    }
+    if (!destination.hasAttribute("tabindex")) destination.setAttribute("tabindex", "-1");
+    destination.focus({ preventScroll: true });
+    destination.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
+function activateTarget(target, focusId = "") {
   if (!target) return;
   const subtab = document.querySelector(`.app-subtab[data-tab-target="${target}"]:not(.office-subnav-proxy)`);
   if (subtab) {
     subtab.click();
+    revealDeepTarget(focusId);
     return;
   }
   const main = document.querySelector(`.main-nav .nav-tab[data-tab-target="${target}"]`);
   if (main) {
     main.click();
+    revealDeepTarget(focusId);
     return;
   }
   const section = document.querySelector(`[data-tab-section="${target}"]`);
@@ -221,6 +242,7 @@ function activateTarget(target) {
   });
   syncCalendarLocation();
   window.scrollTo({ top: 0, behavior: "auto" });
+  revealDeepTarget(focusId);
 }
 
 function ensureSection() {
@@ -496,6 +518,22 @@ function renderMailMessage(body, message) {
     article.append(facts);
   }
 
+  if (message.guidance && Object.values(message.guidance).some(Boolean)) {
+    const guidance = node("section", "manager-club-mail-guidance");
+    guidance.append(node("h5", "", "Fra informasjon til managerarbeid"));
+    [
+      ["Situasjonen", message.guidance.situation],
+      ["Hva det betyr", message.guidance.meaning],
+      ["Managerspørsmålet", message.guidance.question],
+      ["Se etter", message.guidance.watch]
+    ].filter(([, value]) => value).forEach(([label, value]) => {
+      const row = node("div", "manager-club-mail-guidance-row");
+      row.append(node("strong", "", label), node("p", "", value));
+      guidance.append(row);
+    });
+    article.append(guidance);
+  }
+
   if (message.reply) {
     const reply = node("section", "manager-club-mail-reply");
     reply.append(node("small", "", "Ditt svar"), node("strong", "", message.reply.title), node("p", "", message.reply.body));
@@ -515,15 +553,26 @@ function renderMailMessage(body, message) {
     article.append(choices);
   }
 
-  if (message.action?.target) {
-    const action = node("button", "manager-club-mail-action", message.action.label || "Åpne arbeidsflaten");
-    action.type = "button";
-    action.dataset.target = message.action.target;
-    action.addEventListener("click", () => {
-      closeInboxDrawer();
-      activateTarget(message.action.target);
+  const mailLinks = Array.isArray(message.links) && message.links.length
+    ? message.links
+    : message.action?.target ? [message.action] : [];
+  if (mailLinks.length) {
+    const links = node("nav", "manager-club-mail-links");
+    links.setAttribute("aria-label", "Arbeidslenker fra mailen");
+    links.append(node("h5", "", "Gå til arbeidet"));
+    mailLinks.forEach((route) => {
+      const link = node("a", "manager-club-mail-action", route.label || "Åpne arbeidsflaten");
+      link.href = `#${route.target}${route.focusId ? `/${route.focusId}` : ""}`;
+      link.dataset.target = route.target;
+      if (route.focusId) link.dataset.focusId = route.focusId;
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        closeInboxDrawer();
+        activateTarget(route.target, route.focusId);
+      });
+      links.append(link);
     });
-    article.append(action);
+    article.append(links);
   }
 
   body.append(article);
@@ -567,9 +616,53 @@ function closeInboxDrawer() {
   if (state?.returnFocus?.isConnected) state.returnFocus.focus();
 }
 
+function syncText(element, value) {
+  if (element && element.textContent !== value) element.textContent = value;
+}
+
+function syncAttribute(element, name, value) {
+  if (element && element.getAttribute(name) !== value) element.setAttribute(name, value);
+}
+
+function renderCalendarFooter(model) {
+  if (!model || !isNormalLeagueSave()) return;
+  const host = document.querySelector("manager-next-action");
+  const strip = host?.querySelector("#nextActionStrip");
+  const primary = host?.querySelector("#nextActionPrimary");
+  if (!host || !strip || !primary) return;
+
+  const day = model.currentDay;
+  const nextEvent = day?.events?.find((entry) => entry.attention) || day?.events?.[0] || null;
+  const title = nextEvent ? `${day.day} · ${nextEvent.title}` : `${day.day} · ${day.title}`;
+  const hint = nextEvent?.detail || "Åpne managerkalenderen og se arbeidsdagen i riktig rekkefølge.";
+  const destination = nextEvent?.time ? `${day.day} kl. ${nextEvent.time}` : day.day;
+
+  if (host.hidden) host.hidden = false;
+  if (strip.hidden) strip.hidden = false;
+  if (host.dataset.calendarOwned !== "true") host.dataset.calendarOwned = "true";
+  if (strip.dataset.surface !== "manager-calendar") strip.dataset.surface = "manager-calendar";
+  syncText(host.querySelector(".next-action-head .eyebrow"), "Managerkalender");
+  syncAttribute(strip, "aria-label", "Managerkalender · neste hendelse");
+  syncText(host.querySelector("#nextActionPhase"), model.summary);
+  syncText(host.querySelector("#nextActionPrimaryTag"), "Kalender");
+  syncText(host.querySelector("#nextActionPrimaryTitle"), title);
+  syncText(host.querySelector("#nextActionPrimaryHint"), hint);
+  syncText(host.querySelector("#nextActionDestination"), destination);
+  syncAttribute(primary, "aria-label", `Åpne managerkalenderen. ${model.summary}. ${title}. ${hint}`);
+  if (primary.disabled) primary.disabled = false;
+  primary.onclick = () => {
+    selectedDayIndex = model.currentDayIndex;
+    activateCalendar();
+  };
+  const secondary = host.querySelector("#nextActionSecondary");
+  if (secondary?.childElementCount) secondary.replaceChildren();
+  window.dispatchEvent(new CustomEvent("hgfm:manager-calendar-footer-ready"));
+}
+
 function renderCalendar() {
   const section = ensureSection();
   const model = buildCalendar();
+  lastCalendarModel = model;
   if (selectedWeek !== model.week) {
     selectedWeek = model.week;
     selectedDayIndex = model.currentDayIndex;
@@ -583,6 +676,7 @@ function renderCalendar() {
   renderDayRail(section, model);
   renderTimeline(section, model.days.find((day) => day.dayIndex === selectedDayIndex) || model.currentDay);
   refreshOpenMail(section);
+  renderCalendarFooter(model);
 }
 
 function scheduleRender() {
@@ -605,6 +699,13 @@ function redirectOfficeToCalendar() {
     redirectQueued = false;
     activateCalendar();
   });
+}
+
+function openLeagueCalendarAtStartup() {
+  if (startupRouteApplied || !isNormalLeagueSave()) return;
+  startupRouteApplied = true;
+  selectedDayIndex = lastCalendarModel?.currentDayIndex || 1;
+  activateCalendar();
 }
 
 function installObservers() {
@@ -635,6 +736,12 @@ function installObservers() {
     dashboardTab.addEventListener("click", () => queueMicrotask(redirectOfficeToCalendar));
   }
 
+  const footerStrip = document.getElementById("nextActionStrip");
+  if (footerStrip) {
+    const observer = new MutationObserver(() => queueMicrotask(() => renderCalendarFooter(lastCalendarModel)));
+    observer.observe(footerStrip, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "disabled"] });
+  }
+
   window.addEventListener("storage", scheduleRender);
   window.addEventListener("updateProfile", scheduleRender);
   document.addEventListener("keydown", (event) => {
@@ -649,7 +756,7 @@ function boot() {
   applyOfficeNavigationContract();
   renderCalendar();
   installObservers();
-  redirectOfficeToCalendar();
+  openLeagueCalendarAtStartup();
   syncCalendarLocation();
 }
 

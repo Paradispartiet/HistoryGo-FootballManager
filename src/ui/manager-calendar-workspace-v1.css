@@ -1,7 +1,23 @@
 /* Kalender + Kontor redesign v1. Tiden vises som dagstripe + kronologisk arbeidsdag. */
 
 html[data-manager-office-calendar-v1="active"] manager-next-action {
-  display: none !important;
+  display: block !important;
+}
+
+html[data-manager-office-calendar-v1="active"] #nextActionStrip[data-surface="manager-calendar"] {
+  border-top-color: rgba(255,255,255,.34);
+  background: #080d12;
+}
+
+#nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
+  border-color: rgba(255,255,255,.34);
+  background: #101820;
+}
+
+#nextActionStrip[data-surface="manager-calendar"] .next-action-primary:hover,
+#nextActionStrip[data-surface="manager-calendar"] .next-action-primary:focus-visible {
+  border-color: #fff;
+  background: #17222c;
 }
 
 .manager-calendar-view {
@@ -497,15 +513,69 @@ html[data-manager-office-calendar-v1="active"] manager-next-action {
   line-height: 1.45;
 }
 
+.manager-club-mail-guidance {
+  display: grid;
+  border-top: 1px solid rgba(255,255,255,.18);
+  border-bottom: 1px solid rgba(255,255,255,.18);
+}
+
+.manager-club-mail-guidance h5,
+.manager-club-mail-links h5 {
+  margin: 0;
+  padding: .72rem 0;
+  color: rgba(255,255,255,.62);
+  font-size: .66rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.manager-club-mail-guidance-row {
+  display: grid;
+  grid-template-columns: minmax(7.2rem, .36fr) minmax(0, 1fr);
+  gap: .8rem;
+  padding: .7rem 0;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+.manager-club-mail-guidance-row strong {
+  font-size: .72rem;
+}
+
+.manager-club-mail-guidance-row p {
+  margin: 0;
+  color: rgba(255,255,255,.78);
+  font-size: .76rem;
+  line-height: 1.5;
+}
+
+.manager-club-mail-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: center;
+}
+
+.manager-club-mail-links h5 {
+  flex: 0 0 100%;
+  padding-bottom: 0;
+}
+
 .manager-club-mail-action {
-  justify-self: start;
+  display: inline-flex;
+  align-items: center;
   min-height: 2.65rem;
   padding: .65rem 1rem;
   border: 1px solid #fff;
   background: #fff;
   color: #070a0d;
   font-weight: 900;
+  text-decoration: none;
   cursor: pointer;
+}
+
+.manager-club-mail-action + .manager-club-mail-action {
+  background: transparent;
+  color: #fff;
 }
 
 .manager-club-mail-choice:focus-visible,
@@ -618,5 +688,19 @@ html[data-manager-office-calendar-v1="active"] manager-next-action {
   .manager-club-mail-fact {
     grid-template-columns: 1fr;
     gap: .24rem;
+  }
+
+  .manager-club-mail-guidance-row {
+    grid-template-columns: 1fr;
+    gap: .22rem;
+  }
+
+  .manager-club-mail-links {
+    display: grid;
+  }
+
+  .manager-club-mail-action {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -1,5 +1,7 @@
 # Klubbkommunikasjon v2
 
+> **Videreført 10.08.2026:** `MANAGER_CLUB_COMMUNICATION_V3.md` er canonical for dagens mailkvalitet og presise arbeidslenker. Dette dokumentet bevarer v2-overgangen fra parallell innboks til konkrete kalenderhendelser.
+
 Klubbkommunikasjon v2 gjør mail til en del av managerens faktiske arbeidsuke. Kalenderen viser ikke lenger én generisk «melding fra klubben» og åpner ikke et tilfeldig skjult innbokskort. Hver mail er en bestemt hendelse med stabil ID, avsender, tidspunkt, emne og innhold.
 
 ## Produktkontrakt

@@ -164,9 +164,9 @@ check("Next-motoren inneholder ingen facilities-logikk", !/facilit/i.test(nextSo
 check("Next-motoren inneholder ingen økonomi-/kontraktgate", !/clubEconomy|wageBudget|contract/i.test(nextSource));
 check("Next-motoren inneholder ingen overgangsmarkeds-gate", !/transferMarket|transferWindow|overgangsvindu/i.test(nextSource));
 
-// 9. Kalenderen er den synlige eieren av manageruka, og global Next er skjult.
+// 9. Kalenderen er den synlige eieren av manageruka og den eksisterende footeren.
 check("Kalender-workspacen er aktiv managerflate", calendarSource.includes("manager-calendar-surface") && calendarSource.includes("managerCalendarTimeline"));
-check("global Next er skjult i normal kalenderloop", readFileSync(join(root, "src/ui/manager-calendar-workspace-v1.css"), "utf8").includes("manager-next-action") && readFileSync(join(root, "src/ui/manager-calendar-workspace-v1.css"), "utf8").includes("display: none !important"));
+check("footer viser neste kalenderhendelse i normal kalenderloop", calendarSource.includes("renderCalendarFooter") && calendarSource.includes('strip.dataset.surface = "manager-calendar"') && !/manager-next-action\s*\{[^}]*display:\s*none\s*!important/s.test(readFileSync(join(root, "src/ui/manager-calendar-workspace-v1.css"), "utf8")));
 
 // 10. Ligaspill og kampdag bruker fortsatt de eksisterende autoritative flatene.
 check("league save får id når sesong starter", appSource.includes("activeLeagueSaveId: model.activeLeagueSaveId || `league_save_${Date.now()}`"));

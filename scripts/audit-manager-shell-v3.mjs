@@ -29,12 +29,12 @@ const panelCount = [...html.matchAll(/class="([^"]*)"/g)].filter((match) => matc
 check("fem stabile hovedområder er browser-låst", /har fem stabile hovedområder/.test(browser) && /\["Kontor", "Lag", "Speiding", "Kamp", "Stats"\]/.test(browser));
 check("konkurrerende gamle progresjonsknapper er fjernet", !/advanceClubWeekPhase|leagueOnboardingPrimary|portalPriorityAction/.test(html));
 check("legacy Next-kontrollen finnes bare én gang i skallet", (shellElements.match(/class="next-action-primary"/g) || []).length === 1);
-check("Next-footeren skjules i normal ligasave", /manager-office-calendar-v1="active"/.test(css) && /manager-next-action/.test(css) && /Next-footeren er skjult/.test(calendarBrowser));
+check("footeren viser neste kalenderhendelse i normal ligasave", /manager-office-calendar-v1="active"/.test(css) && /renderCalendarFooter/.test(calendar) && /kalenderfooteren viser dagens neste hendelse/.test(calendarBrowser));
 
 // Kontor + Kalender er den nye autoritative IA-en for tid.
 check("Kalender lastes fra managerskallet", /manager-calendar-workspace-v1\.js/.test(shellView) && /Kontor · Kalender/.test(calendar));
 check("Kalender ligger under Kontor", /section\.dataset\.tabParent = "dashboard"/.test(calendar) && /button\.dataset\.subnavParent = "dashboard"/.test(calendar));
-check("Kontor åpner Kalender direkte i vanlig ligasave", /redirectOfficeToCalendar/.test(calendar) && /Kontor åpner Kalender direkte/.test(calendarBrowser));
+check("ligasaven starter direkte i Kalender", /openLeagueCalendarAtStartup/.test(calendar) && /starter direkte i managerkalenderen/.test(calendarBrowser));
 check("Innboks er skjult som parallell Kontor-fane", /inbox\.classList\.add\("office-subnav-proxy"\)/.test(calendar) && /separat Innboks/.test(calendarBrowser));
 check("Klubbdrift presenteres som Klubben", /board\.textContent = "Klubben"/.test(calendar) && /Klubben/.test(calendarBrowser));
 check("Oppstartshjelp skjules etter oppstart", /officeHelp\.classList\.toggle\("office-subnav-proxy", normalSave\)/.test(calendar) && /officeHelp/.test(calendarBrowser));

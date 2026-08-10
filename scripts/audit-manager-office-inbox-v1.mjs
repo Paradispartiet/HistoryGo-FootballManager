@@ -39,7 +39,7 @@ check("melding er kalenderhendelse", /kind: "message"/.test(calendarModel) && /L
 check("drawer bruker eksakt klubbmail", /getClubCommunicationMessage/.test(calendar) && /article\.dataset\.messageId = message\.id/.test(calendar) && /managerCalendarDrawerBody \.manager-club-mail/.test(browser));
 check("drawer lukkes tilbake til samme dag", /closeInboxDrawer/.test(calendar) && /samme kalenderdag/.test(browser));
 check("trening nås fra kalenderhendelsen", /data-event-id=\\?"team-training\\?"/.test(browser) && /data-tab-section=\\?"trening\\?"/.test(browser));
-check("global Next-footer skjules i normal save", /manager-next-action/.test(css) && /data-manager-office-calendar-v1="active"/.test(css));
+check("eksisterende footer eies av kalenderen i normal save", /manager-next-action/.test(css) && /strip\.dataset\.surface = "manager-calendar"/.test(calendar));
 check("legacy hjelpeflaten lager ingen ekstra primærhandling", !/next-action-primary/.test(office));
 
 // Ingen ny motor eller lagring.

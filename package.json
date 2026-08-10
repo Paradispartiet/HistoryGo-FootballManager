@@ -94,6 +94,8 @@
     "sim:manager-calendar-v1": "node scripts/simulate-manager-calendar-v1.mjs",
     "audit:manager-club-communication-v2": "node scripts/audit-manager-club-communication-v2.mjs",
     "sim:manager-club-communication-v2": "node scripts/simulate-manager-club-communication-v2.mjs",
+    "audit:manager-club-communication-v3": "node scripts/audit-manager-club-communication-v3.mjs",
+    "sim:manager-club-communication-v3": "node scripts/simulate-manager-club-communication-v3.mjs",
     "audit:manager-staff-roster-v1": "node scripts/audit-manager-staff-roster-v1.mjs",
     "sim:manager-staff-roster-v1": "node scripts/simulate-manager-staff-roster-v1.mjs",
     "audit:manager-visual-identity-v1": "node scripts/audit-manager-visual-identity-v1.mjs",

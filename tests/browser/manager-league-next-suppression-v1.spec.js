@@ -1,9 +1,16 @@
 import { expect, test } from "@playwright/test";
 
-async function expectLeagueNextHidden(page) {
-  await expect(page.locator("manager-next-action")).toBeHidden();
-  await expect(page.locator("#nextActionStrip")).toBeHidden();
-  await expect(page.locator("#nextActionPrimary")).toBeHidden();
+async function expectCalendarFooter(page) {
+  const host = page.locator("manager-next-action");
+  await expect(host).toBeVisible();
+  await expect(host).toHaveAttribute("data-calendar-owned", "true");
+  await expect(page.locator("#nextActionStrip")).toHaveAttribute("data-surface", "manager-calendar");
+  await expect(page.locator("#nextActionStrip")).toHaveAttribute("aria-label", "Managerkalender · neste hendelse");
+  await expect(page.locator("#nextActionStrip .next-action-head .eyebrow")).toHaveText("Managerkalender");
+  await expect(page.locator("#nextActionPrimaryTag")).toHaveText("Kalender");
+  await expect(page.locator("#nextActionPrimaryTitle")).not.toBeEmpty();
+  await expect(page.locator("#nextActionPrimaryHint")).not.toBeEmpty();
+  await expect(page.locator("#nextActionPrimary")).toBeEnabled();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -25,29 +32,33 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("global Forslag til neste steg er skjult gjennom hele ligaspillet", async ({ page }) => {
-  await expectLeagueNextHidden(page);
+test("kalenderfooteren er synlig gjennom hele ligaspillet", async ({ page }) => {
+  await expectCalendarFooter(page);
 
   const areas = ["tactics", "historygo", "kamp", "statistikk", "dashboard"];
   for (const target of areas) {
     await page.locator(`.main-nav [data-tab-target="${target}"]`).click();
-    await expectLeagueNextHidden(page);
+    await expectCalendarFooter(page);
   }
 });
 
-test("Neste-flaten kommer ikke tilbake på Lag · Trening", async ({ page }) => {
+test("kalenderfooteren blir stående på Lag · Trening", async ({ page }) => {
   await page.locator('.main-nav [data-tab-target="tactics"]').click();
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
-  await expectLeagueNextHidden(page);
+  await expectCalendarFooter(page);
 });
 
-test("Neste-flaten er også borte på smal iPad/mobilbredde", async ({ page }) => {
+test("kalenderfooteren virker også på smal mobilbredde", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.locator('.main-nav [data-tab-target="tactics"]').click();
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
-  await expectLeagueNextHidden(page);
+  await expectCalendarFooter(page);
+
+  await page.locator("#nextActionPrimary").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator('#managerCalendarDays [aria-current="date"]')).toHaveAttribute("aria-selected", "true");
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);

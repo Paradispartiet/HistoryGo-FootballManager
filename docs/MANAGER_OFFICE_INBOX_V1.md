@@ -1,6 +1,6 @@
 # Managerkontor og Assistentråd v1
 
-> **Videreført 10.08.2026:** `MANAGER_CLUB_COMMUNICATION_V2.md` er canonical for den synlige mailopplevelsen. V1-modellene består som kilder til tråder, valg og konsekvenser, men drawer-et flytter ikke lenger legacy-kort mellom DOM-flater.
+> **Videreført 10.08.2026:** `MANAGER_CLUB_COMMUNICATION_V3.md` er canonical for den synlige mailopplevelsen. V1-modellene består som kilder til tråder, valg og konsekvenser, men drawer-et flytter ikke lenger legacy-kort mellom DOM-flater.
 
 Denne leveransen etablerte Kontor- og innboksfunksjonene som egne managerflater. **Presentasjonsdelen er nå videreført av `MANAGER_CALENDAR_V1.md`: i en aktiv ligasave ligger Innboks inne i Kalender i stedet for å være en parallell Kontor-fane.**
 
@@ -42,7 +42,7 @@ Disse strukturene kan fortsatt rendres internt og brukes av meldingsdrawer, arki
 
 Oppstartshjelp kan bruke dette laget mens en save faktisk settes opp. Etter oppstart skjules Oppstartshjelp fra normal Kontor-navigasjon.
 
-Det betyr også at den globale Next-footeren ikke lenger skal være den synlige autoritative navigasjonen i en vanlig ligasave. `football-next-action.js` kan fortsatt eksistere internt for å beregne mangler og kompatibilitet, men brukergrensesnittet viser mangelen der arbeidet faktisk skjer, for eksempel på kalenderens treningshendelse.
+Det betyr også at den generiske Next-modellen ikke lenger skal være den synlige autoritative navigasjonen i en vanlig ligasave. Den eksisterende footer-hosten er i stedet eid av Kalender og viser aktuell dag og neste kalenderhendelse. `football-next-action.js` kan fortsatt eksistere internt for oppstart, andre modi og kompatibilitet, mens detaljert manglende arbeid vises der det faktisk skjer.
 
 ## Motorgrenser
 
@@ -53,7 +53,7 @@ Følgende eksisterende systemer er fortsatt sannhetskilder:
 - kampklarhetsmodulen eier om kamp kan startes;
 - off-pitch-parametrene eier moral, styre, medier og taktisk klarhet;
 - ligamotoren eier terminliste, resultater og tabell;
-- `football-next-action.js` kan fortsatt beregne intern neste-handling-status, men eier ikke lenger en permanent synlig footer i normal managerloop.
+- `football-next-action.js` kan fortsatt beregne intern neste-handling-status, men eier ikke den synlige kalenderfooteren i normal managerloop.
 
 Kalenderintegrasjonen bygger **ingen ny motor**. Den skriver ingen ny innboks- eller kalenderstate og endrer ikke eksisterende svar- eller konsekvenslogikk.
 
@@ -67,7 +67,7 @@ Permanent verifikasjon skal nå låse at:
 - en eksisterende innbokstråd kan åpnes fra en kalenderhendelse i drawer;
 - lukking av drawer returnerer til samme kalenderdag;
 - trening og andre handlinger åpnes fra den relevante hendelsen;
-- den globale Next-footeren er skjult i normal managerloop;
+- den synlige footeren eies av Kalender og returnerer til aktuell arbeidsdag;
 - mobil ikke får horisontal overflow;
 - Kalender og meldingsdrawer består WCAG 2 A/AA-vaktene.
 
