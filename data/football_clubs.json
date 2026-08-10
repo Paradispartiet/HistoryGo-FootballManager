@@ -343,8 +343,9 @@
       "tier": "obosligaen",
       "strength": 63,
       "form": 58,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 75,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "fosshaugane_campus"
     },
     {
       "id": "ranheim",

@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **1935 navngitte fotballspillere**. 58 tall hver er ~112 000
+Dette er **1993 navngitte fotballspillere**. 58 tall hver er ~116 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -552,6 +552,56 @@ Prisen står navngitt. `KJENT_UDOKUMENTERT` måtte **heves** for Consto Arena
 Den står med begrunnelsen i koden: hevingen kommer av en *retting*, ikke et
 frafall, og beviset på at den kjøpte noe er at profil-unikheten gikk opp
 samtidig.
+
+### Vakten som målte sin egen avrunding
+
+Sogndal-importen felte vakten «ingen enkeltverdi tar mer enn en femtedel» —
+23,0 % mot et tak på 20 %. Den så ut som et ekte kvalitetsfall: 50 av 75
+Sogndal-profiler er uten dokumenterte styrker, så de faller tilbake på posisjon
+pluss epoke pluss klassetak, og da klumper verdiene seg.
+
+Det var feil diagnose, og målingen viste det:
+
+| | toppbøtte |
+|---|---:|
+| Spillerne før importen, med skaleringen før | 19,4 % |
+| **De samme spillerne, med skaleringen etter** | **22,8 %** |
+| Spillerne etter importen | 23,0 % |
+
+`buildAttributeScaling()` utleder `high` av **hele** spillerlista. Sogndal
+flyttet den fra 20,069 til 19,897 — nok til at **1403 av 1935 eksisterende
+spillere endret én verdi med ett poeng**. Av de 3,6 poengene vakten reagerte på,
+kom 3,4 fra at avrundingsgrensa mellom 9 og 10 flyttet seg, og 0,2 fra de nye
+spillerne.
+
+Vakten målte altså hvor avrundingsgrensa tilfeldigvis falt. Det er husets
+navngitte bugklasse — **skala-mismatch** — denne gangen i vakten i stedet for i
+motoren, og den er verdt å kjenne igjen: *et tall som svinger når normaliseringen
+flytter seg litt, måler normaliseringen.*
+
+Rettelsen er å måle noe avrundingen ikke rører: **de to største bøttene til
+sammen**. Flytter grensa seg, bytter massen plass mellom to nabotall og summen
+står stille. Målt 36,0 → 36,3 → 36,4 % gjennom de samme tre tilstandene — 0,4
+poeng der moden svingte 3,4.
+
+Og så det ubehagelige: **denne vakten er en bakstopper, ikke førstelinja.** Fire
+bitt ble prøvd — flat grunnlinje, ett klassenivå for alle, klem i stedet for
+normalisering, og 300 identiske malimporterte spillere — og hver gang fyrte en
+mer presis vakt først. Den står fordi den er billig og fordi den nå måler det
+den påstår. Den forrige utgaven gjorde ikke det.
+
+#### Vaktskriptet var 1,08x fra å kræsje
+
+Bittesten med 300 ekstra spillere avdekket noe annet på veien: `sim:player-attributes`
+døde med `Maximum call stack size exceeded` i stedet for å kjøre. `Math.min(...allValues)`
+sprer hele lista som argumenter, og argumentlista tåler ~125 000 i denne noden.
+Katalogen står på 1993 × 58 = **115 594** — altså 1,08x margin, og **neste
+klubbimport på ~160 navn ville tatt hele vaktskriptet ned**.
+
+Det er den verste formen for feil: ikke en vakt som sier feil, men en vakt som
+ikke finnes lenger, og som tar med seg alle de andre i samme fil. Spredningene
+over store lister er byttet med `reduce`, og bittesten kjører nå gjennom med 2293
+spillere og gir en ordentlig assertion.
 
 ### Realisme er sprik, ikke senking
 

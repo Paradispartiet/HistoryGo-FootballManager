@@ -9753,6 +9753,314 @@
         }
       ],
       "notes": "Klubbanlegg: Mjøndalen IFs hjemmebane i Nedre Eiker. Cupmester 1933, 1934 og 1937, seriesølv 1976."
+    },
+    {
+      "placeId": "fosshaugane_campus",
+      "placeName": "Fosshaugane Campus",
+      "placeRole": "modern_club_ground_source",
+      "notes": "Klubbanlegg: Sogndals hjemmebane i Sogndal.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "tore_andre_flo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "azar_karadas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "even_hovland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frode_grodas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "akor_adams"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_odegaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_bakke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_lonne_dyngeland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ruben_yttergard_jenssen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jostein_flo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_egil_flo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_fardal_opseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_naess_lund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_grorud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johan_hove"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arild_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_steinset"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "svein_bakke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "asle_hillestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_flo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_bolli_bolseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "terje_skjeldestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_oren"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ingvar_stadheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "knut_christiansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leon_hovland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rolf_navarsete"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jon_navarsete"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magdalon_saethre"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torodd_helle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gunnar_sigmar_haare"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "willy_ljosne"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johan_johannesen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jarle_skartun"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "terje_nysaether"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mats_solheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ulrik_flo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lasse_opseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_vatlestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_stadheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jukka_raitala"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sivert_mannsverk"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "igoh_ogbu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "edmund_baidoo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_orjasaeter"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gilbert_koomson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stephane_badji"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "constant_djakpa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "barry_kader"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kurt_morkore"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "julian_johnsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hannu_patronen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mahatma_otoo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_aabrekk"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "svein_andreassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tarjei_dale"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_medalen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjetil_holvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oddbjorn_skartun"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "trond_heggestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kurt_heggestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_hjelmhaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_furebotn"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegar_gjermundstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ruben_holsaeter"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "orjan_hopen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_ramsland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_lereng"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_hoven"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_hoven"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_martin_rindaroy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ulrik_fredriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_ove_roseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_hovden_flataker"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "borre_steenslid"
+        }
+      ]
     }
   ]
 }
