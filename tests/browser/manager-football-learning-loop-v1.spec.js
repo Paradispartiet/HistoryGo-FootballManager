@@ -89,7 +89,11 @@ test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmå
   await expect(page.locator("#weeklyTrainingStatus")).toContainText("Restforsvar");
   await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
   await page.setViewportSize({ width: 390, height: 844 });
-  await openTeam(page);
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="5"]').click();
+  await page.locator('#managerCalendarTimeline [data-event-id="match-prep"]').click();
+  await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
   await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
   await expect(page.locator("#matchPrepFocus")).toContainText("Restforsvar");
   const bridge = page.locator("#footballLearningMatchPrepBridge");
