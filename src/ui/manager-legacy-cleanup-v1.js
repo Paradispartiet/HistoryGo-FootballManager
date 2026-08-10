@@ -48,37 +48,14 @@ export function migrateLegacyManagerStorage(storage) {
   };
 }
 
-function removeLegacyManagerDom() {
-  // Pass 5 skjulte disse flatene. Pass 7 fjerner dem fra DOM slik at de ikke
-  // lenger er en latent navigasjons- eller tilgjengelighetsflate.
-  document.querySelectorAll(
-    '[data-tab-section="facilities"], [data-tab-section="market"], ' +
-    '.app-subtab[data-tab-target="facilities"], .app-subtab[data-tab-target="market"]'
-  ).forEach((node) => node.remove());
-
-  document.getElementById("managerFacilitiesWorkspace")?.remove();
-  document.getElementById("managerEconomyWorkspace")?.remove();
-  document.getElementById("managerTransferMarketWorkspace")?.remove();
-
-  // Administrasjon er fortsatt et ekte klubbrom. Bare artikkelen som var laget
-  // for den fiktive økonomien fjernes; resten av administrasjonsflaten består.
-  document.getElementById("adminEconomyNote")?.closest("article")?.remove();
-}
-
 function boot() {
-  migrateLegacyManagerStorage(globalThis.localStorage);
-  removeLegacyManagerDom();
+  return migrateLegacyManagerStorage(globalThis.localStorage);
 }
 
-if (typeof window !== "undefined" && typeof document !== "undefined") {
+if (typeof window !== "undefined") {
   // Kjør migreringen straks modulen evalueres. manager-shell-view importeres av
   // app.js før app-state hydreres, så gamle felt kan ikke vinne tilbake senere.
   migrateLegacyManagerStorage(globalThis.localStorage);
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", removeLegacyManagerDom, { once: true });
-  } else {
-    removeLegacyManagerDom();
-  }
 }
 
 export { boot as runLegacyManagerCleanup };

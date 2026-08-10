@@ -122,9 +122,9 @@ stage("2. «Senere»-faner deaktivert");
   const buttons = navTabButtons();
   const futureButtons = buttons.filter((b) => b.isFuture);
   check(
-    "uferdige økonomi-, marked- og fasilitetsflater er skjult fra skallet",
-    /data-tab-section="facilities"[^>]*data-shell-hidden/.test(html)
-      && /data-tab-section="market"[^>]*data-shell-hidden/.test(html)
+    "avviste økonomi-, marked- og fasilitetsflater er fysisk ute av skallet",
+    !/data-tab-section="facilities"/.test(html)
+      && !/data-tab-section="market"/.test(html)
       && !buttons.some((b) => ["facilities", "market"].includes(b.target)),
     `synlige senere-knapper=${futureButtons.length}`
   );
@@ -1078,7 +1078,7 @@ stage("27. Ingen funksjon to steder");
   // e) De tre snarveiene som lå på Speiding skal være borte for godt: staben
   //    hører til Stab & drift, stedene til Speiding selv, startvalget til
   //    Oversikt, og Klubbutvikling hadde alt sin egen underfane.
-  check("stabslistene ligger på Stab & drift", /data-tab-section="admin"[\s\S]*?id="availableStaffList"[\s\S]*?id="hiredStaffList"[\s\S]*?<!-- =+ MARKED/.test(html));
+  check("stabslistene ligger på Stab & drift", /data-tab-section="admin"[\s\S]*?id="availableStaffList"[\s\S]*?id="hiredStaffList"[\s\S]*?data-tab-section="board"/.test(html));
   check("stedene ligger på Speiding", /data-tab-section="historygo"[\s\S]*?id="unlockPlacesList"[\s\S]*?id="placeReportsList"/.test(html));
   // Startvalget skal ligge SYNLIG i før-sesong-panelet. Første forsøk la det
   // riktig sted, men bak en sammenslått <details> — altså fortsatt ett trykk

@@ -266,7 +266,7 @@ function programLoadFactor(program) {
   return Math.max(0.5, Math.min(1.6, round1(avg / 3)));
 }
 
-export function applyTrainingProgramOffPitchEffects(state, trainingProgram, { facilityEffects = {} } = {}) {
+export function applyTrainingProgramOffPitchEffects(state, trainingProgram) {
   const program = isObject(trainingProgram) ? trainingProgram : {};
   const category = isNonEmptyString(program.category) ? program.category : "balanced";
   const base = PROGRAM_CATEGORY_EFFECTS[category] || PROGRAM_CATEGORY_EFFECTS.balanced;
@@ -278,18 +278,6 @@ export function applyTrainingProgramOffPitchEffects(state, trainingProgram, { fa
     const isPhysical = param === "fatigue" || param === "wear" || param === "injuryRisk";
     scaled[param] = Math.round(isPhysical ? delta * factor : delta);
   }
-
-  // Fasiliteter modifiserer den eksisterende treningseffekten; de oppretter
-  // ingen parallelle fatigue-, skade- eller taktikkverdier.
-  const trainingRelief = Math.max(0, Math.min(2, Number(facilityEffects?.trainingLoadReduction) || 0));
-  const medicalProtection = Math.max(0, Math.min(2, Number(facilityEffects?.medicalTrainingProtection) || 0));
-  const clarityBonus = Math.max(0, Math.min(2, Number(facilityEffects?.analysisClarityBonus) || 0));
-  const happinessBonus = Math.max(0, Math.min(2, Number(facilityEffects?.trainingHappinessBonus) || 0));
-  if ((scaled.fatigue || 0) > 0) scaled.fatigue = Math.max(0, scaled.fatigue - trainingRelief);
-  if ((scaled.wear || 0) > 0) scaled.wear = Math.max(0, scaled.wear - trainingRelief - medicalProtection);
-  if ((scaled.injuryRisk || 0) > 0) scaled.injuryRisk = Math.max(0, scaled.injuryRisk - medicalProtection);
-  scaled.tacticalClarity = Math.round((scaled.tacticalClarity || 0) + clarityBonus);
-  scaled.trainingHappiness = Math.round((scaled.trainingHappiness || 0) + happinessBonus);
 
   const next = applyDeltas(state, scaled);
   pushProgramId(next, program.id);

@@ -84,8 +84,7 @@ test("Klubben er en romkatalog og den gamle dashboardveggen er demotert", async 
   await expect(page.locator('[data-club-room="coaches"]')).toContainText("Trenerteam");
   await expect(page.locator('[data-club-room="medical"]')).toContainText("Medisinsk apparat");
   await expect(page.locator('[data-club-room="stadium"]')).toContainText("Lerkendal");
-  await expect(page.locator("#clubCommandPanel")).toBeHidden();
-  await expect(page.locator("#clubDepth")).toBeHidden();
+  await expect(page.locator("#clubCommandPanel, #clubDepth")).toHaveCount(0);
 });
 
 test("stadionrommet bruker canonical klubbdata", async ({ page }) => {

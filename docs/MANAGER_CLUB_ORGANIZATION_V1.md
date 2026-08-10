@@ -60,7 +60,7 @@ Pass 5 fjernet følgende fra normal klubbnavigasjon og hovedflate:
 - kommersielt `Marked` som egen managerflate;
 - permanent klubbpuls med rå 0–100-målere.
 
-**Pass 7 er nå gjennomført:** økonomi-/kontrakt- og overgangsmotorene er permanent fjernet fra runtime, gamle `facilities`, `clubEconomy` og `transferMarket`-felter migreres ut av eksisterende saves, og fasilitetskompatibiliteten har null effekt og ingen UI. Se `MANAGER_LEGACY_CLEANUP_V1.md`.
+**Pass 7 og den endelige runtime-oppryddingen er gjennomført:** økonomi-/kontrakt-, overgangs- og fasilitetsmotorene er permanent fjernet fra runtime. Gamle `facilities`, `clubEconomy` og `transferMarket`-felter migreres fortsatt trygt ut av eksisterende saves. Statiske flater, kompatibilitetsfasader og skjulte bonuser er fysisk slettet. Se `MANAGER_LEGACY_CLEANUP_V1.md`.
 
 ## Datagrenser
 

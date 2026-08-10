@@ -15,8 +15,6 @@ const files = {
   postMatch: fs.readFileSync(new URL("../src/ui/manager-post-match-analysis-v1.js", import.meta.url), "utf8"),
   app: fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8"),
   modeSessions: fs.readFileSync(new URL("../src/football-mode-sessions.js", import.meta.url), "utf8"),
-  oldClub: fs.readFileSync(new URL("../src/ui/manager-club-presentation.js", import.meta.url), "utf8"),
-  facilities: fs.readFileSync(new URL("../src/ui/manager-facilities-workspace-v1.js", import.meta.url), "utf8"),
   cleanup: fs.readFileSync(new URL("../src/ui/manager-legacy-cleanup-v1.js", import.meta.url), "utf8"),
   clubs: fs.readFileSync(new URL("../data/football_clubs.json", import.meta.url), "utf8"),
   staff: fs.readFileSync(new URL("../data/football_staff.json", import.meta.url), "utf8"),
@@ -72,10 +70,10 @@ check("canonical klubbdata lastes", files.organization.includes("football_clubs.
 check("canonical stab lastes", files.organization.includes("football_staff.json") && files.staff.includes('"staffType"'));
 check("ingen ny localStorage-skriving", !files.organization.includes("localStorage.setItem") && !files.organization.includes("writeStorage"));
 check("ingen ny klubb- eller progresjonsmotor", !files.organization.includes("Math.random") && !files.organization.includes("advanceClubWeek") && !files.organization.includes("createMatchdaySession"));
-check("fasilitetskompatibilitet rendrer ingen nivå-UI", files.facilities.includes("renderManagerFacilitiesWorkspace") && files.facilities.includes('dataset.legacyRemoved = "true"'));
-check("Pass 7 cleanup fjerner økonomi marked og fasilitets-DOM", files.cleanup.includes("managerEconomyWorkspace") && files.cleanup.includes("managerTransferMarketWorkspace") && files.cleanup.includes("managerFacilitiesWorkspace"));
+check("legacy fasilitetsfasader er fysisk slettet", !fs.existsSync(new URL("../src/football-facilities.js", import.meta.url)) && !fs.existsSync(new URL("../src/ui/manager-facilities-workspace-v1.js", import.meta.url)));
+check("Pass 7 cleanup er redusert til save-migrering", files.cleanup.includes("migrateLegacyManagerStorage") && !files.cleanup.includes("document.querySelector"));
 check("økonomi- og overgangs-UI lastes ikke av managerskallet", !files.shell.includes("manager-economy-contracts-v1") && !files.shell.includes("manager-transfer-market-v2"));
-check("gammel klubbdashboard-presentasjon er fortsatt tilgjengelig mens monolitten fases ned", files.oldClub.includes("createManagerClubSceneModel") && files.style.includes("#clubCommandPanel"));
+check("gammelt klubbdashboard er fysisk slettet", !files.app.includes("manager-club-presentation") && !files.app.includes("renderManagerClubScene") && !files.style.includes("#clubCommandPanel"));
 check("rom åpnes i drawer", files.organization.includes('const DRAWER_ID = "managerClubRoomDrawer"') && files.style.includes(".manager-club-room-drawer"));
 check("mobil drawer blir bottom sheet", files.style.includes("@media (max-width: 560px)") && files.style.includes("border-radius: 18px 18px 0 0"));
 check("browser tester Kontor Kalender Klubben", files.browser.includes("ved siden av Kalender") && files.browser.includes('data-subnav-parent", "dashboard"'));
