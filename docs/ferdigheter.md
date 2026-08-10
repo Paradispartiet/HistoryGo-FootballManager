@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **2185 navngitte fotballspillere**. 58 tall hver er ~127 000
+Dette er **2231 navngitte fotballspillere**. 58 tall hver er ~129 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -674,6 +674,32 @@ kombinasjonen som er unik, ikke den enkelte ferdigheten.
 Regelen som følger: **en kilde som allerede har levert en spiller er ikke ferdig
 med ham.** Klubbkildene beskriver ulike deler av samme karriere, og påstandene
 skal legges sammen, ikke overskrives eller forkastes.
+
+### Grensa følger paret, ikke tallet
+
+Sandnes Ulf tok korpuset til 85,66 %, under grensa på 0,858. Kontrollen ble gjort
+som foreskrevet, og denne gangen fant den ingen kartleggingsfeil: seks av
+klubbens historiske spisser deler styrkesett fordi kilden sier det samme om dem
+— «kampmengde/kontinuitet» og «målproduksjon» — og målraten som faktisk skiller
+dem (0,32 mot 0,96 mål per kamp) finnes det ingen ferdighet for.
+
+Det avgjørende var å måle **begge** endepunktene på nytt:
+
+| | forrige måling | nå |
+|---|---:|---:|
+| Ærlig katalog | 86,24 % | 85,66 % |
+| Flat grunnlinje (malimport) | 85,17 % | 84,22 % |
+| **Avstand** | **1,07** | **1,44** |
+
+Nivået falt, men **avstanden vokste**. Vakten skiller altså bedre enn før, ikke
+dårligere — det er bare nullpunktet som har flyttet seg, fordi hver ærlig tynn
+arv legger til spillere med smalere kildespråk. Grensa følger paret ned til
+0,848 og blir liggende mellom dem.
+
+Og her er testen som gjør regelen etterprøvbar: **hadde avstanden krympet**,
+ville det betydd at vakten er i ferd med å miste evnen til å se forskjellen på
+en ærlig tynn import og en malimport — og da er det vakten som må skrives om, ikke
+grensa som skal flyttes.
 
 ### Realisme er sprik, ikke senking
 

@@ -192,6 +192,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | Sandefjord | Jotun Arena | 68 |
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
+| Sandnes Ulf | Øster Hus Arena | 60 |
 | Raufoss | Raufoss Arena | 58 |
 | Lillestrøm | Åråsen | 56 |
 | Strømmen | Strømmen stadion | 54 |
@@ -199,8 +200,8 @@ avhenger av hvor History Go-kortet hans ligger.
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen og Raufoss — 2638 arveplasser fordelt på alle 31, og **ingen klubb
-med bane har under 49 navn**. De 29 klubbene som
+Strømmen, Raufoss og Sandnes Ulf — 2698 arveplasser fordelt på alle 32, og
+**ingen klubb med bane har under 49 navn**. De 28 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1364,6 +1365,47 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Sandnes Ulf: den best dekkede arven, og en posisjon skjult i et epokeord
+
+Sandnes Ulf manglet bane — `ground: "Øster Hus Arena"` uten `placeId`. **60
+navn** (46 nye, 14 koblet), og **den best dekkede arven i katalogen**: bare 6 av
+60 uten dokumenterte styrker. Kilden avstår åtte ganger av 85.
+
+Som Sarpsborg og Haugesund samler banen flere klubber — kategorien heter
+`Historisk Ulf/Ulf-Sandnes/Sandnes FK-arv`, og forgjengerne er `club_legend` på
+**banen**, som er det `clubStatus` faktisk er nøklet på.
+
+#### «Historisk angrepsprofil» er en posisjon
+
+Kilden skriver «Historisk angrepsprofil» om **tretten** av sine største
+målscorere — Kjell Mathisen (212 mål på 221 kamper), Tor Jan Skretting (182 på
+202), Paul Olav Høivik (217 på 449). Ordet *angrepsprofil* er posisjonen;
+*historisk* foran er en datering.
+
+Uten den linja falt tretten av klubbens fremste spisser ut. «Historisk
+utespiller» — det samme uttrykket **uten** en posisjon i seg — utelates fortsatt
+med rette, og det er 25 av dem.
+
+Det er tredje gang på rad et posisjonsfelt har skjult en posisjon: «Allrounder»
+hos Kongsvinger, 1950-tallets «indre venstre» hos Ranheim, og nå dette. Regelen
+som faller ut: **les posisjonsfeltet som en påstand, ikke som en oppslagsnøkkel.**
+
+#### Kilden daterer med ord, ikke årstall
+
+53 av 85 profiler har ikke ett årstall. Maratontabellen gir bare kamper og mål —
+«360 kamper og 157 mål.» — men kilden daterer dem med sine egne ord i posisjons-
+og kontekstfeltet: «gamle Ulf», «eldre Ulf-perioder», «historiske målprofiler».
+De sytten står navngitt i epokelista i stedet for at et regex på ordet
+«historisk» skal datere en hel kategori.
+
+#### Hva vokabularet ikke kan bære
+
+Seks av klubbens historiske spisser ender med samme styrkesett
+(`natural_fitness, determination, finishing`). De skiller seg voldsomt i
+målrate — fra 0,32 til 0,55 mål per kamp, og Kjell Mathisen på 0,96 — men
+ferdighetsvokabularet har ingen «målrate», og å finne på en ville vært å dikte.
+At de ligner hverandre er en ekte begrensning, ikke en kartleggingsfeil.
 
 ### Raufoss: alle tre kildeformene, og en påstand importene hadde kastet
 
