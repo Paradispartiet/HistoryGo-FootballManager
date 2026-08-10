@@ -22,7 +22,6 @@ Codex-/agent-runtimer bruker ikke alltid repoets devcontainer. Før GitHub-arbei
 
 ```bash
 export PATH="/workspace/bin:$PATH"
-export GH_CONFIG_DIR="/workspace/gh-config"
 if ! command -v gh >/dev/null 2>&1; then
   bash scripts/ensure-gh.sh
 fi
@@ -30,7 +29,7 @@ gh --version
 gh auth status
 ```
 
-`scripts/ensure-gh.sh` laster bare ned når binæren faktisk mangler, verifiserer den offisielle GitHub CLI-arkivets SHA-256-checksum og installerer den i `/workspace/bin`. Binærtilgjengelighet og autentisering skal alltid kontrolleres separat.
+`scripts/ensure-gh.sh` laster bare ned når binæren faktisk mangler, verifiserer den offisielle GitHub CLI-arkivets SHA-256-checksum og installerer den i `/workspace/bin`. Bootstrapen skal ikke sette eller overskrive `GH_CONFIG_DIR`, fordi en tvungen konfigurasjonsmappe kan skjule en gyldig innlogging fra runtime-ens standardplassering. Binærtilgjengelighet og autentisering skal alltid kontrolleres separat.
 
 Hvis en tilfeldig assistent-runtime, verktøysandbox eller annen midlertidig prosess svarer `gh: command not found`, betyr det bare at den aktuelle runtime-en ikke er prosjektets devcontainer. Agenten skal da kjøre bootstrapen over. Det skal **aldri** omskrives til «repoet/prosjektet har ikke gh», og brukeren skal ikke bes om å installere `gh` på nytt.
 

@@ -5,7 +5,6 @@ set -euo pipefail
 GH_VERSION="${GH_VERSION:-2.97.0}"
 GH_INSTALL_ROOT="${GH_INSTALL_ROOT:-/workspace}"
 GH_BIN_DIR="${GH_BIN_DIR:-${GH_INSTALL_ROOT}/bin}"
-GH_CONFIG_DIR="${GH_CONFIG_DIR:-${GH_INSTALL_ROOT}/gh-config}"
 
 if command -v gh >/dev/null 2>&1; then
   gh --version | sed -n '1p'
@@ -59,7 +58,7 @@ fi
 printf '%s  %s\n' "${expected_checksum}" "${temporary_dir}/${archive}" | sha256sum --check --status
 tar --no-same-owner --extract --gzip --file "${temporary_dir}/${archive}" --directory "${temporary_dir}"
 
-install -d "${GH_BIN_DIR}" "${GH_CONFIG_DIR}"
+install -d "${GH_BIN_DIR}"
 install -m 0755 \
   "${temporary_dir}/gh_${GH_VERSION}_${platform}_${architecture}/bin/gh" \
   "${GH_BIN_DIR}/gh"
