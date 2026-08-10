@@ -42,7 +42,7 @@ test("Min spillerpool er en tett liste og bruker den delte spillerprofilen", asy
   await openScouting(page);
   await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Min spillerpool");
   await expect.poll(async () => page.locator("#scoutingRecruitableBody tr").count()).toBeGreaterThan(3);
-  await expect(page.locator(".scouting-player-table thead")).toContainText("Tilgang fra");
+  await expect(page.locator(".scouting-player-table thead")).toContainText("Samlet fra");
   await expect(page.locator(".scouting-player-table thead")).not.toContainText("Overall");
 
   const firstName = await page.locator("#scoutingRecruitableBody .scouting-player-link strong").first().innerText();

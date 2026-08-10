@@ -92,8 +92,10 @@ test("Endre tropp fungerer på 390 px uten dokument-overflow", async ({ page }) 
   await openDrawer(page);
   await expectNoHorizontalOverflow(page);
   const alternative = page.locator('.player-pool-squad-row[data-in-squad="false"]').first();
+  const playerId = await alternative.getAttribute("data-player-id");
+  expect(playerId).toBeTruthy();
   await alternative.locator(".player-pool-squad-action").click();
-  await expect(alternative).toHaveAttribute("data-in-squad", "true");
+  await expect(page.locator(`.player-pool-squad-row[data-player-id="${playerId}"]`)).toHaveAttribute("data-in-squad", "true");
   await expectNoHorizontalOverflow(page);
 });
 

@@ -2344,8 +2344,11 @@ function computeAvailability() {
   } else {
     // Player pool -> squad v1: old saves keep exactly the players the previous
     // runtime exposed. New pool discoveries remain alternatives until the
-    // manager explicitly selects them for the squad.
-    if (state.teamMerits) {
+    // manager explicitly selects them for the squad. Startup asks for an
+    // availability snapshot before gameStartState/mode sessions are hydrated;
+    // never persist a one-time migration against that context-free snapshot.
+    const hasHydratedGameContext = Boolean(state.gameStartState?.selectedMode);
+    if (state.teamMerits && hasHydratedGameContext) {
       const migration = migrateLegacyPlayerPoolSquadState(state.teamMerits, [...legacyPlayablePlayerIds]);
       if (migration.migrated) {
         state.teamMerits.playerPoolSquadVersion = migration.merits.playerPoolSquadVersion;
@@ -2355,7 +2358,9 @@ function computeAvailability() {
     }
     const squadState = normalizePlayerPoolSquadState(state.teamMerits);
     buildSelectedSquadPlayerIds({
-      squadPlayerIds: squadState.squadPlayerIds,
+      squadPlayerIds: squadState.playerPoolSquadVersion === 1
+        ? squadState.squadPlayerIds
+        : [...legacyPlayablePlayerIds],
       eligiblePoolPlayerIds: [...playerPoolIds]
     }).forEach((playerId) => unlockedPlayerIds.add(playerId));
   }
