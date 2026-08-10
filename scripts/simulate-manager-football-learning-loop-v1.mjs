@@ -102,6 +102,17 @@ const noInventedTrainingSignal = createTrainingMatchLearningThread({
 assert.equal(noInventedTrainingSignal.relatedSignals.length, 0);
 assert.match(noInventedTrainingSignal.evidence, /ikke til en oppdiktet kamphendelse/i);
 
+const laterTrainingSignal = createTrainingMatchLearningThread({
+  trainingFocus: { focusId: "pressing", name: "Pressing", helped: false },
+  tacticalSignals: [
+    "Avslutningene kom fra gode rom.",
+    "Bredden skapte flere innlegg.",
+    "Det høye presset sprakk etter første pasning."
+  ]
+});
+assert.equal(laterTrainingSignal.relatedSignals.length, 1);
+assert.match(laterTrainingSignal.evidence, /Det høye presset sprakk/);
+
 const system = createSystemLearningLesson({
   intent: "Vinn ballen høyt og angrip raskt.",
   risk: "Rom bak presset.",
@@ -119,4 +130,4 @@ const generic = createMatchSignalLearningLesson("Et uklart, men registrert takti
 assert.equal(generic.principle, "Kampatferd");
 assert.match(generic.watch, /ett eller to trekk tilbake/i);
 
-console.log("Manager football learning loop v1: 34/34");
+console.log("Manager football learning loop v1: 36/36");

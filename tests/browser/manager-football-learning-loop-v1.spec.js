@@ -219,6 +219,34 @@ test("treningsdom uten tilsvarende kampsignal dikter ikke en hendelse", async ({
   await expect(thread).not.toContainText("Det høye presset sprakk");
 });
 
+test("treningsdommen sammenlignes med alle viste taktiske faktorer", async ({ page }) => {
+  await page.evaluate(() => {
+    const report = document.createElement("section");
+    report.className = "matchday-post-match";
+    report.dataset.trainingFocusId = "pressing";
+    report.dataset.trainingFocusName = "Pressing";
+    report.dataset.trainingHelped = "false";
+    report.dataset.trainingSummary = "Ukens pressing ga liten effekt i denne kampen.";
+    report.innerHTML = `
+      <div class="matchday-post-match-overview">
+        <article class="matchday-post-match-card">
+          <span>Taktisk evaluering</span>
+          <strong>Systemdom</strong>
+          <ul>
+            <li>Avslutningene kom fra gode rom.</li>
+            <li>Bredden skapte flere innlegg.</li>
+            <li>Det høye presset sprakk etter første pasning.</li>
+          </ul>
+        </article>
+      </div>`;
+    document.body.append(report);
+  });
+  const thread = page.locator(".football-learning-training-thread");
+  await expect(thread).toContainText("Det høye presset sprakk");
+  await expect(thread).toContainText("samme problemområde");
+  await expect(page.locator(".football-learning-signal-grid article")).toHaveCount(2);
+});
+
 test("etterkamp dikter ikke teorikobling når kampforklaringen mangler taktisk signal", async ({ page }) => {
   await page.evaluate(() => {
     const report = document.createElement("section");

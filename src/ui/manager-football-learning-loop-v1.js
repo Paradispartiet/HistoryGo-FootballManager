@@ -480,8 +480,10 @@ function enhanceMatchPreparation() {
   }
   const program = clean(prep.querySelector("#matchPrepTraining")?.textContent);
   const focus = clean(prep.querySelector("#matchPrepFocus")?.textContent);
-  const source = [program, focus].filter(Boolean).join(" · ");
-  if (!source || /ikke valgt|mangler/i.test(source)) {
+  const source = [program, focus]
+    .filter((selection) => selection && !/ikke valgt|mangler|velg (?:ett )?(?:program|fokus)/i.test(selection))
+    .join(" · ");
+  if (!source) {
     existing?.remove();
     return;
   }
@@ -549,7 +551,7 @@ function tacticalSignals(postMatch) {
   const tacticalCard = Array.from(postMatch.querySelectorAll(".matchday-post-match-card"))
     .find((card) => /taktisk evaluering/i.test(card.querySelector("span")?.textContent || ""));
   return tacticalCard
-    ? Array.from(tacticalCard.querySelectorAll("li")).map((item) => clean(item.textContent)).filter(Boolean).slice(0, 2)
+    ? Array.from(tacticalCard.querySelectorAll("li")).map((item) => clean(item.textContent)).filter(Boolean)
     : [];
 }
 
@@ -613,7 +615,7 @@ function enhancePostMatch() {
   } else {
     const grid = document.createElement("div");
     grid.className = "football-learning-signal-grid";
-    signals.forEach((signal) => {
+    signals.slice(0, 2).forEach((signal) => {
       const lesson = createMatchSignalLearningLesson(signal);
       const card = document.createElement("article");
       card.innerHTML = `
