@@ -641,6 +641,7 @@ function renderCalendarFooter(model) {
   if (strip.hidden) strip.hidden = false;
   if (host.dataset.calendarOwned !== "true") host.dataset.calendarOwned = "true";
   if (strip.dataset.surface !== "manager-calendar") strip.dataset.surface = "manager-calendar";
+  strip.dataset.calendarInteractive = "true";
   syncText(host.querySelector(".next-action-head .eyebrow"), "Managerkalender");
   syncAttribute(strip, "aria-label", "Managerkalender · neste hendelse");
   syncText(host.querySelector("#nextActionPhase"), model.summary);
@@ -653,6 +654,13 @@ function renderCalendarFooter(model) {
   primary.onclick = () => {
     selectedDayIndex = model.currentDayIndex;
     activateCalendar();
+  };
+  // Footeren oppfattes visuelt som én samlet kontroll. La derfor også klikk på
+  // overskriften og den øvrige stripen åpne kalenderen, mens den egentlige
+  // knappen fortsatt er den fokuserbare og semantiske tastaturkontrollen.
+  strip.onclick = (event) => {
+    if (event.target?.closest?.("button, a, input, select, textarea")) return;
+    primary.click();
   };
   const secondary = host.querySelector("#nextActionSecondary");
   if (secondary?.childElementCount) secondary.replaceChildren();
