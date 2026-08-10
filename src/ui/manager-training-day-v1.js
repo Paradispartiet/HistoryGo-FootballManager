@@ -1,8 +1,10 @@
 import { currentManagerDayIndex } from "../football-manager-calendar.js";
+import { getTrainingProgramCompositionById } from "../football-training-program-compositions.js";
 
 const STYLE_ID = "managerTrainingDayV1Style";
 const SURFACE_ID = "managerTrainingDay";
 const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
+const WEEKLY_TRAINING_PROGRAM_KEY = "hgfm.weeklyTrainingProgram.v1";
 const DAYS = Object.freeze(["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]);
 
 let calendarContext = null;
@@ -145,10 +147,17 @@ function ensureSurface() {
   return surface;
 }
 
+function selectedProgramModel() {
+  const stored = readJson(WEEKLY_TRAINING_PROGRAM_KEY, null);
+  const programId = typeof stored?.programId === "string" ? stored.programId : "";
+  return programId ? getTrainingProgramCompositionById(programId) : null;
+}
+
 function selectedProgramTitle() {
   const card = document.querySelector("#trainingPrograms .training-program-card.is-selected");
   return String(card?.querySelector(".training-program-head h3")?.textContent || "").trim()
     || String(document.getElementById("teamSelectedTrainingProgram")?.textContent || "").trim()
+    || String(selectedProgramModel()?.title || "").trim()
     || "Treningsprogram ikke valgt";
 }
 
@@ -163,6 +172,16 @@ function selectedSessions() {
   const rows = Array.from(document.querySelectorAll("#trainingPrograms .training-program-card.is-selected .training-program-sessions li"))
     .slice(0, 4)
     .map((item, index) => parseSession(item.textContent, index));
+
+  if (!rows.length) {
+    const program = selectedProgramModel();
+    rows.push(...(Array.isArray(program?.sessions) ? program.sessions : []).slice(0, 4).map((session, index) => ({
+      day: String(session?.day || `Økt ${index + 1}`),
+      title: String(session?.title || "Velg treningsprogram"),
+      intensity: String(session?.intensity || "")
+    })));
+  }
+
   while (rows.length < 4) {
     rows.push({ day: `Økt ${rows.length + 1}`, title: "Velg treningsprogram for å fylle økta", intensity: "Ikke satt" });
   }
