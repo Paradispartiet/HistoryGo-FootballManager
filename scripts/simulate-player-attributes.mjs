@@ -350,30 +350,38 @@ for (const player of dokumenterte) {
 }
 const uniqueShare = signatures.size / dokumenterte.length;
 const largestClone = størst([...signatures.values()]);
-// Grensa er en RATCHET og flyttes opp når den er vunnet. Den sto på 0,55 da
-// uniktheten var 58 %; etter at styrkene ble lest fra kildene for fem tidligere
-// importer er den 75 %. En grense som blir stående lavt beskytter ikke det som
-// er oppnådd — neste malgenererte import ville dratt den ned igjen uten at noe
-// feilet. Målt: 1053 unike av 1260 (84 %), største klon 12.
+// Grensa var en RATCHET, og den er nå skrevet om. Historikken står fordi den
+// forklarer hvorfor: den sto på 0,55 da uniktheten var 58 %, ble flyttet til
+// 0,70 og 0,76 da Vålerenga-arven ble lest fra kilde i stedet for malgenerert,
+// til 0,86 etter Odd/Aalesund/Haugesund/Skeid/Moss/Bryne, og til 0,863 da
+// Sarpsborg-rettingen tok korpuset til 86,4 %.
 //
-// Grensa er flyttet fra 0,70 til 0,76 fordi Vålerenga-arven nå er lest fra
-// kilde i stedet for malgenerert. Det ER en ratchet: reverteres VIF til mal,
-// faller andelen til 74,4 %, og vakten feller det. Sto grensa på 0,70 ville
-// nøyaktig den reverteringen passert i stillhet.
+// Så FALT den, tre importer på rad: 86,31 % (Sogndal + Kongsvinger) og 86,24 %
+// (Ranheim). Hver gang ble den foreskrevne kontrollen gjort — er dette en
+// kartleggingsfeil forkledd som kildebegrensning? — og hos Ranheim VAR det
+// delvis det: «scoringer i Eliteserien» og «64 mål» sto i kilden og var ikke
+// lest, og å lese dem ga 0,10 poeng tilbake. De fire som ble igjen er ekte
+// kildebegrensning, lest mot både `Kvaliteter` og `Historikk`: to menn hvis
+// eneste påstand er «mange kamper», og to spisser hvis eneste påstand er
+// «scoret avgjørende mål».
 //
-// Odd-importen (100 profiler, 100 % unike kvalitetssetninger i kilden) tok den
-// til 84,3 %. Aalesund, Haugesund, Skeid, Moss og Bryne la 440 til, og målt var
-// den 86,2 % av 1699. Grensa fulgte etter til 0,86.
+// Da er premisset for en ratchet oppbrukt, og en vakt hvis premiss er oppbrukt
+// skal skrives om, ikke slakkes. Årsaken er ARITMETISK, ikke kvalitativ: en
+// import med lavere egen unikhet enn korpuset trekker snittet ned, og en tynn
+// kilde ER alltid under snittet. En absolutt korpusandel kan derfor ikke
+// overleve ærlig vekst — fjerde gang huset lærer at en korpusbred andel er feil
+// form.
 //
-// Sarpsborg tok den FØRST feil vei — 85,1 % — og det var vakten som virket:
-// merittfrasene ga tretten menn fra 1917-laget identisk profil. Da titlene ble
-// tatt ut av ferdighetene, og den samme rettingen ble gjort bakover i Mjøndalen
-// og HamKam, endte den på 86,4 % av 1810. Grensa følger etter til 0,863.
+// Omskrivingen er å slutte å måle mot GÅRSDAGENS tall og begynne å måle mot
+// FEILEN vakten finnes for. Begge endepunktene er målt:
 //
-// Det er en ekte ratchet: settes merittene tilbake til `determination`, faller
-// den til 85,1 %, og vakten feller det. Sto grensa på 0,86 ville en ny
-// merittbasert kilde tatt korpuset nedover uten at noe sa fra.
-check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.863,
+//     ærlig katalog i dag        86,24 %
+//     samme katalog, flat grunnlinje (malimport)   85,17 %
+//
+// Grensa settes mellom dem, nærmere bittet enn dagens tall, slik at den fanger
+// en malimport og samtidig tåler noen ærlige tynne arver. Den skal fortsatt opp
+// hvis avstanden vokser — men den flyttes aldri under den målte bitteverdien.
+check("profilene skiller stort sett spillere fra hverandre", uniqueShare > 0.858,
   `${signatures.size} unike av ${dokumenterte.length} dokumenterte (${(uniqueShare * 100).toFixed(1)} %)`);
 // Taket står på 14, og det er hevet fra 12 med åpne øyne. Den største
 // klonen er nå 12 moderne midtstoppere som TOLV FORSKJELLIGE klubbkilder
@@ -563,7 +571,14 @@ const KJENT_UDOKUMENTERT = {
   // merittregelen — «dokumentert cupsemifinaleerfaring» står 25 ganger, og KILs
   // fire cupsemifinaler er lagets merittliste sett fra spilleren, ikke en
   // ferdighet hos mannen. Målt 40 av 79.
-  gjemselund_stadion: 0.52
+  gjemselund_stadion: 0.52,
+  // Ranheim er den tredje v2-kilden, og markøren skiftet ordlyd igjen — «ingen
+  // teknisk eller fysisk STYRKE fylles utover dette uten ny individuell kilde»,
+  // norsk ord og uten «skal». 55 av 85 profiler bruker den. Kilden har ingen
+  // fraseliste i det hele tatt: de 30 andre er skrevet ut i klartekst og lest
+  // for hånd. Fem av dem er salg, utlån og «rask integrasjon» — marked, ikke
+  // ferdighet. Målt 44 av 81.
+  extra_arena: 0.55
 };
 const perArv = new Map();
 for (const player of players) {

@@ -355,8 +355,9 @@
       "tier": "obosligaen",
       "strength": 62,
       "form": 57,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 81,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "extra_arena"
     },
     {
       "id": "bryne",

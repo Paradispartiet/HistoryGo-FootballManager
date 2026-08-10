@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **2053 navngitte fotballspillere**. 58 tall hver er ~119 000
+Dette er **2115 navngitte fotballspillere**. 58 tall hver er ~123 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -602,6 +602,47 @@ Det er den verste formen for feil: ikke en vakt som sier feil, men en vakt som
 ikke finnes lenger, og som tar med seg alle de andre i samme fil. Spredningene
 over store lister er byttet med `reduce`, og bittesten kjører nå gjennom med 2293
 spillere og gir en ordentlig assertion.
+
+### Ratcheten som ikke tålte ærlig vekst
+
+Profil-unikheten var en ratchet: 0,55 → 0,70 → 0,76 → 0,86 → 0,863, hver gang
+flyttet opp etter at en arv ble lest fra kilde i stedet for malgenerert.
+
+Så falt den tre importer på rad — 86,31 % (Sogndal + Kongsvinger), 86,24 %
+(Ranheim) — og hver gang ble den foreskrevne kontrollen gjort: *er dette en
+kartleggingsfeil forkledd som kildebegrensning?*
+
+Hos Ranheim **var** det delvis det. «Scoringer i Eliteserien» sto i Mads
+Reginiussens profil og «64 mål» i Michael Karlsens, og ingen av delene var lest.
+Fire menn hadde dermed fått samme rendering av «mange kamper over lang tid». Å
+lese målene ga 0,10 poeng tilbake. De fire som ble igjen er ekte
+kildebegrensning, kontrollert mot både `Kvaliteter` og `Historikk`: to menn hvis
+eneste påstand er «mange kamper», og to spisser hvis eneste påstand er «scoret
+avgjørende mål».
+
+Da er premisset for en ratchet oppbrukt, og årsaken er **aritmetisk, ikke
+kvalitativ**: en import med lavere egen unikhet enn korpuset trekker snittet ned,
+og en tynn kilde er alltid under snittet. En absolutt korpusandel kan ikke
+overleve ærlig vekst. Det er fjerde gang huset lærer at **en korpusbred andel er
+feil form**.
+
+Omskrivingen er å slutte å måle mot gårsdagens tall og begynne å måle mot
+**feilen vakten finnes for**. Begge endepunktene er målt:
+
+| | profil-unikhet |
+|---|---:|
+| Ærlig katalog i dag | 86,24 % |
+| Samme katalog, flat grunnlinje (malimport) | 85,17 % |
+
+Grensa står på 0,858 — mellom dem, nærmere bittet enn dagens tall. Da fanger den
+en malimport og tåler samtidig noen ærlige tynne arver. Den skal fortsatt opp
+hvis avstanden vokser, men den flyttes aldri under den målte bitteverdien.
+
+Ett alternativ ble prøvd og forkastet: å gjøre målingen per arv i stedet for
+korpusbred. Den fanger ikke feilen — flat grunnlinje flytter laveste arv fra
+80 % til 80 % og medianen fra 97 % til 96 %. Per-arv-formen er riktig for
+*styrkesettene* og for tomme styrkelister, men profil-unikheten må være
+korpusbred for å bite.
 
 ### Realisme er sprik, ikke senking
 
