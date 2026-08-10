@@ -2,6 +2,7 @@
 // Pure helpers only. No fees, contracts, wages, negotiations or transfer market simulation.
 
 export const RECRUITMENT_STATE_VERSION = 1;
+export const PLAYER_POOL_SQUAD_STATE_VERSION = 1;
 
 const STARTER_SQUAD_GROUPS = Object.freeze([
   { positions: ["GK"], count: 2 },
@@ -24,6 +25,66 @@ export function normalizeRecruitmentState(merits = {}) {
       : 0,
     recruitedPlayerIds: normalizePlayerIdList(base.recruitedPlayerIds)
   };
+}
+
+// Player pool -> squad v1. The pool itself is derived from History Go and the
+// active club. Only the manager's current squad selection is persisted.
+export function normalizePlayerPoolSquadState(merits = {}) {
+  const base = merits && typeof merits === "object" && !Array.isArray(merits) ? merits : {};
+  return {
+    playerPoolSquadVersion: Number(base.playerPoolSquadVersion) === PLAYER_POOL_SQUAD_STATE_VERSION
+      ? PLAYER_POOL_SQUAD_STATE_VERSION
+      : 0,
+    squadPlayerIds: normalizePlayerIdList(base.squadPlayerIds)
+  };
+}
+
+export function migrateLegacyPlayerPoolSquadState(merits, legacyPlayablePlayerIds = []) {
+  const base = merits && typeof merits === "object" && !Array.isArray(merits) ? merits : {};
+  const current = normalizePlayerPoolSquadState(base);
+  if (current.playerPoolSquadVersion === PLAYER_POOL_SQUAD_STATE_VERSION) {
+    return { merits: { ...base, ...current }, migrated: false };
+  }
+
+  // Preserve exactly what the old runtime considered playable. recruitedPlayerIds
+  // remains readable as a legacy source, but squadPlayerIds is canonical from now on.
+  const squadPlayerIds = normalizePlayerIdList([
+    ...legacyPlayablePlayerIds,
+    ...normalizeRecruitmentState(base).recruitedPlayerIds
+  ]);
+  return {
+    merits: {
+      ...base,
+      playerPoolSquadVersion: PLAYER_POOL_SQUAD_STATE_VERSION,
+      squadPlayerIds
+    },
+    migrated: true
+  };
+}
+
+export function setPlayerSquadMembership(merits, playerId, included) {
+  const base = merits && typeof merits === "object" && !Array.isArray(merits) ? merits : {};
+  const id = typeof playerId === "string" ? playerId.trim() : "";
+  const current = normalizePlayerPoolSquadState(base);
+  if (!id) return { merits: { ...base, ...current }, changed: false };
+
+  const hasPlayer = current.squadPlayerIds.includes(id);
+  const nextIds = included
+    ? normalizePlayerIdList([...current.squadPlayerIds, id])
+    : current.squadPlayerIds.filter((candidateId) => candidateId !== id);
+  return {
+    merits: {
+      ...base,
+      playerPoolSquadVersion: PLAYER_POOL_SQUAD_STATE_VERSION,
+      squadPlayerIds: nextIds
+    },
+    changed: included ? !hasPlayer : hasPlayer
+  };
+}
+
+export function buildSelectedSquadPlayerIds({ squadPlayerIds = [], eligiblePoolPlayerIds = [] } = {}) {
+  const eligible = new Set(normalizePlayerIdList(eligiblePoolPlayerIds));
+  return normalizePlayerIdList(squadPlayerIds).filter((id) => eligible.has(id));
 }
 
 export function buildStarterSquadPlayerIds(players = [], candidatePlayerIds = [], limit = 15) {

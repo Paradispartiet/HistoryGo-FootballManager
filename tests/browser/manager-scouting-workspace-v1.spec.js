@@ -38,9 +38,9 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("Rekrutterbare er en tett liste og bruker den delte spillerprofilen", async ({ page }) => {
+test("Min spillerpool er en tett liste og bruker den delte spillerprofilen", async ({ page }) => {
   await openScouting(page);
-  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Rekrutterbare");
+  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Min spillerpool");
   await expect.poll(async () => page.locator("#scoutingRecruitableBody tr").count()).toBeGreaterThan(3);
   await expect(page.locator(".scouting-player-table thead")).toContainText("Tilgang fra");
   await expect(page.locator(".scouting-player-table thead")).not.toContainText("Overall");

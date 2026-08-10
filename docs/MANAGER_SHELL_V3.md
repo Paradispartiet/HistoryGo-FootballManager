@@ -54,7 +54,7 @@ Spillerprofilen gjenbruker eksisterende posisjoner, 1–20-ferdigheter, styrker,
 
 Speiding har to underflater:
 
-- **Rekrutterbare** – spillere manageren allerede har tilgang til gjennom eksisterende `player_candidate`-opplåsinger eller starttropp.
+- **Min spillerpool** – spillere manageren har samlet gjennom eksisterende `player_candidate`-opplåsinger, klubbtilgang eller starttropp.
 - **Andre klubber** – alle øvrige klubber i ligapyramiden med spillere HG-dataene knytter til klubbens `homePlaceId` via `sourcePlaceIds`.
 
 Andre klubbers spillerlister er klubbtilknyttede/historiske HG-kandidater. De presenteres aldri som en påstått live stall. Begge underflater bruker den samme spillerprofilen som Lag.

@@ -73,7 +73,7 @@ test("Klubben åpner faktiske rom mens Speiding forblir separat", async ({ page 
   await page.locator('.main-nav .nav-tab[data-tab-target="historygo"]').click();
   await expect(page.locator('[data-tab-section="historygo"]')).toBeVisible();
   await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Rekrutterbare");
+  await expect(page.locator("#managerLocationText")).toHaveText("Speiding · Min spillerpool");
 
   await openClub(page);
   await expect(page.locator('[data-tab-section="facilities"]')).toBeHidden();

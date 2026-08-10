@@ -3,7 +3,13 @@ import {
   clubAffiliationFor,
   listClubHeritagePlayers
 } from "../football-club-squad.js";
-import { buildStarterSquadPlayerIds, recruitPlayerToMerits, normalizeRecruitmentState } from "../football-recruitment.js";
+import {
+  buildStarterSquadPlayerIds,
+  normalizePlayerPoolSquadState,
+  normalizeRecruitmentState,
+  setPlayerSquadMembership
+} from "../football-recruitment.js";
+import { buildPlayerPoolSquadRows } from "./manager-player-pool-squad-v1.js";
 
 const STYLE_ID = "managerScoutingWorkspaceV1Style";
 const RECRUITABLE_ID = "managerScoutingRecruitable";
@@ -80,6 +86,7 @@ export function buildRecruitablePlayers({ players = [], unlockData = {}, merits 
   asArray(merits?.unlockedPlaceIds).forEach((id) => unlockedPlaces.add(String(id)));
   const localIds = new Set(asArray(merits?.localStart?.playerIds).map(String));
   const recruitment = normalizeRecruitmentState(merits);
+  const squadState = normalizePlayerPoolSquadState(merits);
   const quizCompleted = quizCompletedPlaceIds instanceof Set
     ? quizCompletedPlaceIds
     : quizCompletedPlaceIds === null
@@ -104,7 +111,8 @@ export function buildRecruitablePlayers({ players = [], unlockData = {}, merits 
   });
 
   const starterIds = new Set(localIds.size ? [] : buildStarterSquadPlayerIds(players, [...starterCandidateIds], 15));
-  const squadIds = new Set([...starterIds, ...localIds, ...recruitment.recruitedPlayerIds]);
+  const legacySquadIds = [...starterIds, ...localIds, ...recruitment.recruitedPlayerIds];
+  const squadIds = new Set(squadState.playerPoolSquadVersion === 1 ? squadState.squadPlayerIds : legacySquadIds);
 
   return asArray(players)
     .filter((player) => starterIds.has(String(player.id)) || localIds.has(String(player.id)) || sources.has(String(player.id)))
@@ -230,7 +238,7 @@ function installNavigation() {
   const recruitable = subnav.querySelector('.app-subtab[data-tab-target="historygo"]');
   if (recruitable) {
     recruitable.dataset.subnavParent = "historygo";
-    recruitable.textContent = "Rekrutterbare";
+    recruitable.textContent = "Min spillerpool";
     recruitable.classList.remove("office-subnav-proxy");
     recruitable.addEventListener("click", () => queueMicrotask(() => showScoutingTarget("historygo")));
   }
@@ -251,7 +259,7 @@ function syncScoutingLocation() {
   const active = document.querySelector('[data-tab-section]:not([hidden])')?.dataset.tabSection;
   if (active !== "historygo" && active !== CLUBS_SECTION) return;
   const location = document.getElementById("managerLocationText");
-  if (location) location.textContent = active === "historygo" ? "Speiding · Rekrutterbare" : "Speiding · Andre klubber";
+  if (location) location.textContent = active === "historygo" ? "Speiding · Min spillerpool" : "Speiding · Andre klubber";
 }
 
 function createRecruitableWorkspace() {
@@ -263,10 +271,10 @@ function createRecruitableWorkspace() {
   workspace = node("section", "manager-scouting-surface scouting-recruitable");
   workspace.id = RECRUITABLE_ID;
   workspace.innerHTML = `
-    <header class="scouting-head"><div><p class="eyebrow">Speiding · Rekrutterbare</p><h2>Rekrutterbare spillere</h2><p class="muted-text">History Go gir tilgang til kandidater. Hent en kandidat til troppen når du vil bruke spilleren i oppstilling, trening og kamp.</p></div><strong id="scoutingRecruitableCount">0 spillere</strong></header>
+    <header class="scouting-head"><div><p class="eyebrow">Speiding · Min spillerpool</p><h2>Min spillerpool</h2><p class="muted-text">History Go-samlingen avgjør hvem som finnes her. Velg hvilke spillere klubben bruker i troppen; alternativer blir liggende i spillerpoolen.</p></div><strong id="scoutingRecruitableCount">0 spillere</strong></header>
     <form id="scoutingRecruitableTools" class="scouting-tools" role="search"><label><span>Søk spiller</span><input id="scoutingRecruitableSearch" type="search" autocomplete="off" placeholder="Navn, rolle eller sted"></label><label><span>Posisjon</span><select id="scoutingRecruitablePosition"><option value="all">Alle posisjoner</option></select></label></form>
     <p id="scoutingRecruitmentFeedback" class="scouting-recruitment-feedback" aria-live="polite"></p>
-    <div class="scouting-table-wrap"><table class="scouting-player-table"><thead><tr><th>Spiller</th><th>Posisjon</th><th>Roller</th><th>Tilgang fra</th><th>Status</th><th>Handling</th></tr></thead><tbody id="scoutingRecruitableBody"></tbody></table><p id="scoutingRecruitableEmpty" class="scouting-empty" hidden>Ingen rekrutterbare spillere matcher filtrene.</p></div>`;
+    <div class="scouting-table-wrap"><table class="scouting-player-table"><thead><tr><th>Spiller</th><th>Posisjon</th><th>Roller</th><th>Samlet fra</th><th>Status</th><th>Handling</th></tr></thead><tbody id="scoutingRecruitableBody"></tbody></table><p id="scoutingRecruitableEmpty" class="scouting-empty" hidden>Ingen spillere i poolen matcher filtrene.</p></div>`;
   section.prepend(workspace);
   const position = workspace.querySelector("#scoutingRecruitablePosition");
   Object.keys(POSITION_ORDER).sort((a, b) => POSITION_ORDER[a] - POSITION_ORDER[b]).forEach((id) => { const option = node("option", "", id); option.value = id; position?.append(option); });
@@ -294,12 +302,28 @@ function createOtherClubsSection() {
 
 function currentRecruitableRows() {
   if (!runtime) return [];
-  return buildRecruitablePlayers({
+  const merits = readStorage(STORAGE.merits, {});
+  const start = readStorage(STORAGE.start, {});
+  const playerById = new Map(runtime.players.map((player) => [String(player.id), player]));
+  return buildPlayerPoolSquadRows({
     players: runtime.players,
     unlockData: runtime.unlocks,
-    merits: readStorage(STORAGE.merits, {}),
+    clubs: runtime.clubs,
+    merits,
+    start,
     visitedPlaceIds: currentHistoryGoPlaceIds(),
     quizCompletedPlaceIds: currentQuizCompletedPlaceIds()
+  }).map((row) => {
+    const player = playerById.get(row.id) || {};
+    return {
+      ...row,
+      naturalPositions: asArray(player.naturalPositions),
+      usablePositions: asArray(player.usablePositions),
+      preferredRoles: asArray(player.preferredRoles),
+      sourceLabel: row.source,
+      isInSquad: row.inSquad,
+      player
+    };
   });
 }
 
@@ -323,20 +347,27 @@ function playerProfileButton(player, secondary = "") {
   return button;
 }
 
-function recruitPlayer(playerId) {
+function setSquadMembership(playerId, included) {
   const row = currentRecruitableRows().find((candidate) => candidate.id === playerId);
-  if (!row || row.isInSquad || row.isLocalStart || !row.sources.length) return;
+  if (!row || row.isInSquad === included) return;
+  if (!included && [...document.querySelectorAll("#lineupSlots .player-chip[data-player-id]")].some((chip) => chip.dataset.playerId === playerId)) {
+    const feedback = document.getElementById("scoutingRecruitmentFeedback");
+    if (feedback) feedback.textContent = `${row.name} står i startelleveren. Bytt spilleren på Oppstilling først.`;
+    return;
+  }
   const current = readStorage(STORAGE.merits, {});
-  const result = recruitPlayerToMerits(current, playerId);
+  const result = setPlayerSquadMembership(current, playerId, included);
   if (!result.changed) return;
   const feedback = document.getElementById("scoutingRecruitmentFeedback");
   if (!writeStorage(STORAGE.merits, result.merits)) {
-    if (feedback) feedback.textContent = "Kunne ikke lagre rekrutteringen.";
+    if (feedback) feedback.textContent = "Kunne ikke lagre troppsvalget.";
     return;
   }
-  if (feedback) feedback.textContent = `${row.name} er hentet til troppen.`;
+  if (feedback) feedback.textContent = included
+    ? `${row.name} er valgt inn i troppen.`
+    : `${row.name} er tatt ut av troppen og ligger fortsatt i Min spillerpool.`;
   window.dispatchEvent(new CustomEvent("hgfm:team-merits-changed", {
-    detail: { action: "recruit", playerId }
+    detail: { action: included ? "squad-add" : "squad-remove", playerId }
   }));
   scheduleRender();
 }
@@ -344,14 +375,19 @@ function recruitPlayer(playerId) {
 function recruitmentAction(row) {
   const host = node("div", "scouting-recruit-action");
   if (row.isInSquad) {
-    host.append(node("span", "scouting-in-squad", "I troppen"));
+    const button = node("button", "scouting-recruit-button", "Ta ut");
+    button.type = "button";
+    button.dataset.squadPlayer = row.id;
+    button.setAttribute("aria-label", `Ta ${row.name} ut av troppen`);
+    button.addEventListener("click", () => setSquadMembership(row.id, false));
+    host.append(button);
     return host;
   }
-  const button = node("button", "scouting-recruit-button", "Hent til troppen");
+  const button = node("button", "scouting-recruit-button", "Velg inn");
   button.type = "button";
-  button.dataset.recruitPlayer = row.id;
-  button.setAttribute("aria-label", `Hent ${row.name} til troppen`);
-  button.addEventListener("click", () => recruitPlayer(row.id));
+  button.dataset.squadPlayer = row.id;
+  button.setAttribute("aria-label", `Velg ${row.name} inn i troppen`);
+  button.addEventListener("click", () => setSquadMembership(row.id, true));
   host.append(button);
   return host;
 }
@@ -374,7 +410,7 @@ function renderRecruitable() {
   rows.forEach((row) => {
     const tr = document.createElement("tr");
     tr.dataset.playerId = row.id;
-    tr.dataset.squadStatus = row.isInSquad ? "squad" : "candidate";
+    tr.dataset.squadStatus = row.isInSquad ? "squad" : "pool";
     const playerCell = document.createElement("td"); playerCell.append(playerProfileButton(row, row.nationality));
     const actionCell = document.createElement("td"); actionCell.className = "scouting-action-cell"; actionCell.append(recruitmentAction(row));
     tr.append(
@@ -382,7 +418,7 @@ function renderRecruitable() {
       node("td", "scouting-positions", row.naturalPositions.join("/") || "–"),
       node("td", "", row.preferredRoles.length ? row.preferredRoles.map(formatToken).join(" · ") : "–"),
       node("td", "scouting-source", row.sourceLabel),
-      node("td", "scouting-status", row.isInSquad ? "Tropp" : "Kandidat"),
+      node("td", "scouting-status", row.isInSquad ? "I troppen" : "I spillerpoolen"),
       actionCell
     );
     fragment.append(tr);

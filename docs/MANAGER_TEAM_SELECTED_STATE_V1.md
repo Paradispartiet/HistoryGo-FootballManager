@@ -1,6 +1,6 @@
 # Lag – valgt tilstand og valgdrawer v1
 
-Pass 2 i Kontor + Lag-redesignet etablerer én permanent UI-regel for **Oppstilling, Tropp & benk, Trening og Systemet**:
+Pass 2 i Kontor + Lag-redesignet etablerer én permanent UI-regel for **Oppstilling, Tropp, Trening og Systemet**:
 
 > Hovedflaten viser den faktiske valgte tilstanden. Alternativene skal fortsatt være fullt tilgjengelige, men de åpnes først når manageren ber om å endre noe.
 
@@ -41,7 +41,7 @@ Følgende alternativer ligger i valgdrawer:
 
 `Endre formasjon`, `Endre kampplan` og `Endre spiller eller rolle` åpner disse kontrollene. De eksisterende `formationSelect`, `tacticSelect`, `lineupPlayerChoices` og `lineupRoleChoices` brukes fortsatt som sannhetskilder og handlingsflater.
 
-## Tropp & benk
+## Tropp
 
 Troppsflaten viser den faktiske troppen. Søk, filter og sortering er visningsverktøy, ikke alternative spillvalg, og beholdes derfor på hovedflaten.
 

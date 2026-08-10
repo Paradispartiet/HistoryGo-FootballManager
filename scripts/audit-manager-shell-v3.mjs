@@ -45,7 +45,7 @@ check("fast Du er her-linje finnes", /managerLocationBar/.test(shellElements) &&
 
 // Speiding og resten av femområdeskallet skal fortsatt bestå.
 check("Speiding repurposer tidligere Klubb-hovedfane", /scoutingTab\.dataset\.tabTarget = "historygo"/.test(scouting) && /lagTab\.after\(scoutingTab\)/.test(scouting));
-check("Speiding har egne underflater", /Rekrutterbare/.test(scouting) && /Andre klubber/.test(scouting) && /scoutingClubs/.test(scouting));
+check("Speiding har egne underflater", /Min spillerpool/.test(scouting) && /Andre klubber/.test(scouting) && /scoutingClubs/.test(scouting));
 check("Speiding lastes fra managerskallet", /manager-scouting-workspace-v1\.js/.test(shellView));
 check("gammel Klubb-hovedfane skjules", /clubMainTab\.hidden = true/.test(shellElements));
 check("Oversikt er ikke synlig ligaunderfane", /overview\.classList\.add\("office-subnav-proxy"\)/.test(shellElements));

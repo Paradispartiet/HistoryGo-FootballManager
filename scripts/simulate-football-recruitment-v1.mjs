@@ -1,109 +1,94 @@
 import assert from "node:assert/strict";
 import {
-  RECRUITMENT_STATE_VERSION,
-  buildSquadPlayerIds,
-  buildStarterSquadPlayerIds,
-  migrateLegacyRecruitmentState,
-  normalizeRecruitmentState,
-  recruitPlayerToMerits
+  PLAYER_POOL_SQUAD_STATE_VERSION,
+  buildSelectedSquadPlayerIds,
+  migrateLegacyPlayerPoolSquadState,
+  normalizePlayerPoolSquadState,
+  setPlayerSquadMembership
 } from "../src/football-recruitment.js";
+import { buildPlayerPoolSquadRows } from "../src/ui/manager-player-pool-squad-v1.js";
 
 let checks = 0;
-function check(label, fn) {
-  fn();
-  checks += 1;
-  console.log(`✓ ${label}`);
-}
+function check(label, fn) { fn(); checks += 1; console.log(`✓ ${label}`); }
 
-check("ny state starter uten automatisk rekruttering", () => {
-  const state = normalizeRecruitmentState({ recruitmentVersion: 1, recruitedPlayerIds: [] });
-  assert.equal(state.recruitmentVersion, RECRUITMENT_STATE_VERSION);
-  assert.deepEqual(state.recruitedPlayerIds, []);
+check("canonical state normaliserer og dedupliserer troppen", () => {
+  const state = normalizePlayerPoolSquadState({ playerPoolSquadVersion: 1, squadPlayerIds: ["a", "a", " b ", null] });
+  assert.equal(state.playerPoolSquadVersion, PLAYER_POOL_SQUAD_STATE_VERSION);
+  assert.deepEqual(state.squadPlayerIds, ["a", "b"]);
 });
 
-check("eksisterende startgulv bygger en balansert 15-spillerstropp", () => {
-  const positions = [
-    "GK", "GK",
-    "CB", "CB", "LB", "RB", "WB",
-    "DM", "CM", "CM", "AM", "DM",
-    "ST", "LW", "RW"
-  ];
-  const players = positions.map((position, index) => ({
-    id: `starter_${index + 1}`,
-    classHeight: 20 + index,
-    naturalPositions: [position],
-    usablePositions: []
-  }));
-  const ids = buildStarterSquadPlayerIds(players, players.map((player) => player.id), 15);
-  assert.equal(ids.length, 15);
-  assert.equal(new Set(ids).size, 15);
-  assert.equal(ids.filter((id) => players.find((player) => player.id === id)?.naturalPositions.includes("GK")).length, 2);
+check("spiller kan velges inn uten troppsgrense", () => {
+  const initial = { playerPoolSquadVersion: 1, squadPlayerIds: Array.from({ length: 30 }, (_, index) => `p${index}`) };
+  const result = setPlayerSquadMembership(initial, "p30", true);
+  assert.equal(result.changed, true);
+  assert.equal(result.merits.squadPlayerIds.length, 31);
 });
 
-check("kandidattilgang alene gjør ikke spilleren til troppsmedlem utover startgulvet", () => {
-  const squad = buildSquadPlayerIds({
-    starterPlayerIds: ["starter_1"],
-    recruitedPlayerIds: [],
-    eligibleCandidatePlayerIds: ["candidate_1"]
-  });
-  assert.deepEqual(squad, ["starter_1"]);
-});
-
-check("rekruttering legger kandidaten i teamMerits én gang", () => {
-  const first = recruitPlayerToMerits({ recruitmentVersion: 1, recruitedPlayerIds: [] }, "candidate_1");
-  const second = recruitPlayerToMerits(first.merits, "candidate_1");
-  assert.equal(first.changed, true);
+check("samme spiller legges ikke inn to ganger", () => {
+  const first = setPlayerSquadMembership({ playerPoolSquadVersion: 1, squadPlayerIds: [] }, "a", true);
+  const second = setPlayerSquadMembership(first.merits, "a", true);
   assert.equal(second.changed, false);
-  assert.deepEqual(second.merits.recruitedPlayerIds, ["candidate_1"]);
+  assert.deepEqual(second.merits.squadPlayerIds, ["a"]);
 });
 
-check("rekruttert og fortsatt kvalifisert kandidat legges oppå starttroppen", () => {
-  const squad = buildSquadPlayerIds({
-    starterPlayerIds: ["starter_1"],
-    recruitedPlayerIds: ["candidate_1"],
-    eligibleCandidatePlayerIds: ["candidate_1", "candidate_2"]
-  });
-  assert.deepEqual(squad, ["starter_1", "candidate_1"]);
+check("spiller kan tas ut uten å fjernes fra andre merits", () => {
+  const result = setPlayerSquadMembership({ playerPoolSquadVersion: 1, squadPlayerIds: ["a", "b"], earnedBadgeIds: ["badge"] }, "a", false);
+  assert.deepEqual(result.merits.squadPlayerIds, ["b"]);
+  assert.deepEqual(result.merits.earnedBadgeIds, ["badge"]);
 });
 
-check("rekruttert id uten gyldig kandidattilgang slipper ikke gjennom", () => {
-  const squad = buildSquadPlayerIds({
-    starterPlayerIds: ["starter_1"],
-    recruitedPlayerIds: ["candidate_without_source"],
-    eligibleCandidatePlayerIds: ["candidate_1"]
-  });
-  assert.deepEqual(squad, ["starter_1"]);
+check("bare spillere som fortsatt finnes i poolen blir spillbare", () => {
+  const selected = buildSelectedSquadPlayerIds({ squadPlayerIds: ["a", "gone", "b"], eligiblePoolPlayerIds: ["a", "b", "c"] });
+  assert.deepEqual(selected, ["a", "b"]);
 });
 
-check("eksplisitt lokal starttropp beholdes uavhengig av kandidatlisten", () => {
-  const squad = buildSquadPlayerIds({
-    localStartPlayerIds: ["local_1", "local_2"],
-    recruitedPlayerIds: [],
-    eligibleCandidatePlayerIds: []
-  });
-  assert.deepEqual(squad, ["local_1", "local_2"]);
+check("et nytt poolfunn blir ikke automatisk troppsmedlem", () => {
+  const selected = buildSelectedSquadPlayerIds({ squadPlayerIds: ["a"], eligiblePoolPlayerIds: ["a", "new"] });
+  assert.deepEqual(selected, ["a"]);
 });
 
-check("gamle saves migreres én gang og beholder tidligere spillbare kandidater", () => {
-  const migration = migrateLegacyRecruitmentState(
-    { unlockedPlaceIds: ["ground_1"] },
-    ["candidate_1", "candidate_2"]
+check("legacy save migrerer nøyaktig tidligere spillbar tropp", () => {
+  const migration = migrateLegacyPlayerPoolSquadState(
+    { recruitmentVersion: 1, recruitedPlayerIds: ["recruited"], unlockedPlaceIds: ["ground"] },
+    ["starter", "heritage", "recruited"]
   );
   assert.equal(migration.migrated, true);
-  assert.equal(migration.merits.recruitmentVersion, 1);
-  assert.deepEqual(migration.merits.recruitedPlayerIds, ["candidate_1", "candidate_2"]);
-  const again = migrateLegacyRecruitmentState(migration.merits, ["candidate_3"]);
-  assert.equal(again.migrated, false);
-  assert.deepEqual(again.merits.recruitedPlayerIds, ["candidate_1", "candidate_2"]);
+  assert.equal(migration.merits.playerPoolSquadVersion, 1);
+  assert.deepEqual(migration.merits.squadPlayerIds, ["starter", "heritage", "recruited"]);
+  assert.deepEqual(migration.merits.recruitedPlayerIds, ["recruited"]);
 });
 
-check("nye saves med v1 migrerer ikke kandidater automatisk", () => {
-  const migration = migrateLegacyRecruitmentState(
-    { recruitmentVersion: 1, recruitedPlayerIds: [] },
-    ["candidate_1"]
-  );
-  assert.equal(migration.migrated, false);
-  assert.deepEqual(migration.merits.recruitedPlayerIds, []);
+check("canonical save migreres ikke på nytt når poolen vokser", () => {
+  const first = migrateLegacyPlayerPoolSquadState({}, ["starter"]);
+  const second = migrateLegacyPlayerPoolSquadState(first.merits, ["starter", "new"]);
+  assert.equal(second.migrated, false);
+  assert.deepEqual(second.merits.squadPlayerIds, ["starter"]);
 });
 
-console.log(`\n✓ Rekruttering v1 simulering: ${checks}/${checks}`);
+check("UI-modellen viser valgt tropp først og beholder poolalternativer", () => {
+  const players = [
+    { id: "selected", name: "Valgt", naturalPositions: ["CB"] },
+    { id: "alternative", name: "Alternativ", naturalPositions: ["ST"] }
+  ];
+  const rows = buildPlayerPoolSquadRows({
+    players,
+    unlockData: { placeUnlocks: [{ placeId: "ground", placeName: "Banen", unlocks: [{ type: "player_candidate", targetId: "alternative" }] }] },
+    merits: { playerPoolSquadVersion: 1, squadPlayerIds: ["selected"], unlockedPlaceIds: ["ground"], localStart: { playerIds: ["selected"] } }
+  });
+  assert.deepEqual(rows.map((row) => [row.id, row.inSquad]), [["selected", true], ["alternative", false]]);
+});
+
+check("quiz-porten holder et nytt History Go-funn utenfor poolen", () => {
+  const rows = buildPlayerPoolSquadRows({
+    players: [{ id: "locked", name: "Låst", naturalPositions: ["CM"] }],
+    unlockData: { placeUnlocks: [{ placeId: "ground", unlocks: [{ type: "player_candidate", targetId: "locked" }] }] },
+    clubs: [{ id: "ours", name: "Vår klubb", homePlaceId: "club_ground" }],
+    start: { takeoverClubId: "ours" },
+    merits: { playerPoolSquadVersion: 1, squadPlayerIds: [] },
+    visitedPlaceIds: new Set(["ground"]),
+    quizCompletedPlaceIds: new Set()
+  });
+  assert.deepEqual(rows, []);
+});
+
+console.log(`\n✓ Min spillerpool → Tropp v1 simulering: ${checks}/${checks}`);
