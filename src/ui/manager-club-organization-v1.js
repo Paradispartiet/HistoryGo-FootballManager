@@ -142,7 +142,7 @@ export function createClubOrganizationModel({
         { label: "Troppstilstand", value: text(conditionSignal, "Ingen akutte signaler") },
         { label: "Belastning", value: text(loadSignal, "Belastning leses fra treningssystemet") }
       ],
-      [{ id: "training", label: "Åpne individuell oppfølging" }]
+      [{ id: "individual-training", label: "Åpne individuell oppfølging" }]
     ),
     room(
       "analysis",
@@ -570,7 +570,10 @@ function handleRoomAction(action) {
     return;
   }
   closeRoom();
-  if (action === "training") activateExistingTarget("trening");
+  if (action === "individual-training") {
+    activateExistingTarget("trening");
+    queueMicrotask(() => document.getElementById("trainingDayChangeIndividual")?.click());
+  } else if (action === "training") activateExistingTarget("trening");
   else if (action === "system") activateExistingTarget("system");
   else if (action === "analysis") activateExistingTarget("analyse");
 }
@@ -581,7 +584,10 @@ function scheduleRender() {
     renderFrame = 0;
     ensureNavigation();
     renderOrganization();
-    if (!document.getElementById(DRAWER_ID)?.hidden && drawerState.roomId) openRoom(drawerState.roomId, drawerState.trigger);
+    // Et åpent dialogrom er et interaksjonsøyeblikksbilde. Bakgrunnsrendering
+    // kan oppdatere romkatalogen, men må ikke erstatte knappene mens manageren
+    // peker, bruker tastatur eller leser en faglig konsekvens. Rommet bygger
+    // fersk state neste gang det åpnes.
     const board = document.querySelector('[data-tab-section="board"]');
     if (board && !board.hidden) syncLocation(document.getElementById(DRAWER_ID)?.hidden === false ? document.getElementById("managerLocationText")?.textContent : "Kontor · Klubben");
   });

@@ -50,9 +50,116 @@
   font-size: .68rem;
 }
 
+.medical-decision-workshop-v1 {
+  display: grid;
+  gap: .8rem;
+  margin-top: 1.15rem;
+  padding: 1rem;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 14px;
+  background: rgba(255,255,255,.035);
+}
+
+.medical-decision-workshop-v1 h3,
+.medical-decision-workshop-v1 p,
+.medical-decision-workshop-v1 ul { margin: 0; }
+
+.medical-decision-kicker {
+  color: rgba(255,255,255,.62);
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.medical-decision-workshop-v1 > h3 { font-size: 1rem; }
+
+.medical-decision-headline { font-size: .86rem; }
+
+.medical-decision-workshop-v1 > p,
+.medical-decision-evidence li,
+.medical-decision-outcome p,
+.medical-decision-source {
+  color: rgba(255,255,255,.72);
+  font-size: .72rem;
+  line-height: 1.5;
+}
+
+.medical-decision-evidence {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+}
+
+.medical-decision-evidence section {
+  min-width: 0;
+  padding: .8rem;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+}
+
+.medical-decision-evidence section > strong { font-size: .7rem; }
+
+.medical-decision-evidence ul {
+  display: grid;
+  gap: .35rem;
+  margin-top: .5rem;
+  padding-left: 1rem;
+}
+
+.medical-decision-question { font-weight: 800; }
+
+.medical-decision-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .5rem;
+}
+
+.medical-decision-choice {
+  min-width: 0;
+  padding: .7rem;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 10px;
+  background: rgba(0,0,0,.2);
+  color: inherit;
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.medical-decision-choice[aria-pressed="true"] {
+  border-color: rgba(255,255,255,.72);
+  background: rgba(255,255,255,.12);
+}
+
+.medical-decision-outcome {
+  display: grid;
+  gap: .35rem;
+  padding: .85rem;
+  border-left: 3px solid rgba(255,255,255,.55);
+  background: rgba(0,0,0,.18);
+}
+
+.medical-decision-outcome[hidden] { display: none; }
+.medical-decision-outcome[data-status="supported"] { border-left-color: #75d39b; }
+.medical-decision-outcome[data-status="incomplete"] { border-left-color: #f0c75e; }
+.medical-decision-outcome[data-status="premature"] { border-left-color: #ef8d8d; }
+.medical-decision-outcome small,
+.medical-decision-source { color: rgba(255,255,255,.58); font-size: .64rem; line-height: 1.45; }
+
+.medical-decision-empty {
+  padding: .8rem;
+  border-left: 3px solid rgba(255,255,255,.4);
+}
+
 @media (max-width: 640px) {
   .club-room-learning-row {
     grid-template-columns: 1fr;
     gap: .25rem;
   }
+
+  .medical-decision-evidence,
+  .medical-decision-choices { grid-template-columns: 1fr; }
 }
