@@ -182,6 +182,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | Moss | Melløs | 82 |
 | Tromsø | Romssa Arena | 81 |
 | HamKam | Briskeby | 81 |
+| Ranheim | Extra Arena | 81 |
 | Kongsvinger | Gjemselund | 79 |
 | Brann | Brann Stadion | 75 |
 | Sogndal | Fosshaugane Campus | 75 |
@@ -195,9 +196,9 @@ avhenger av hvor History Go-kortet hans ligger.
 | Kristiansund | Nordmøre stadion | 49 |
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal og Kongsvinger —
-2445 arveplasser fordelt på alle 28, og **ingen klubb med bane har under 49
-navn**. De 32 klubbene som
+Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger og
+Ranheim — 2526 arveplasser fordelt på alle 29, og **ingen klubb med bane har
+under 49 navn**. De 31 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1361,6 +1362,42 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Ranheim: 1950-tallets posisjoner, og en feilkobling importen selv laget
+
+Ranheim er den tredje v2-kilden, og den tredje med sin egen ordlyd på
+tynn-markøren: «Ingen teknisk eller fysisk **styrke** fylles utover dette uten
+ny individuell kilde» — norsk ord, og uten «skal». 55 av 85 profiler bruker den.
+Regexen er derfor generalisert til *formen* i stedet for ordlyden; den var én
+ordendring fra å gjøre 55 tynne profiler til udekkede fraser.
+
+Kilden har **ingen fraseliste i det hele tatt**. De 30 som ikke er tynne er
+skrevet ut i klartekst og lest én for én. Fem av dem er salg, utlån og «rask
+integrasjon» — marked og karriereløp, ikke ferdigheter.
+
+#### 1950-tallets posisjonsnavn er posisjoner
+
+Ranheims storhetstid var Hovedserien 1949–50 og NM-semifinalen i 1953, og kilden
+beskriver spillerne slik samtida gjorde: **senterforward**, **høyre half**,
+**indre venstre**, **ytre høyre**. Posisjonskartet kjente ingen av dem, og seks
+profiler falt ut med nøyaktig samme feil som «Allrounder» ga hos Kongsvinger.
+
+Dette er presise posisjoner i 2-3-5, ikke manglende posisjoner. Med dem på plass
+gikk utelatelsene fra ti til fire — og de fire som står igjen er ekte:
+«Historisk utespiller» er kildens egen måte å si at den ikke vet.
+
+#### Mellomnavn-heuristikken koblet feil mann
+
+Regelen som fanger «Mathias Dyngeland = Mathias Lønne Dyngeland» koblet også
+Ranheims **Finn-Magnus Johannessen** til Fredrikstads **Finn «Jagge»
+Johannessen**. Kildene sier rett ut at det er to menn på hver sin side av samme
+kamp: FFKs Jagge var angrepsspiller i klubbens første gullalder, mens Ranheims
+Finn-Magnus **scoret mot Fredrikstad** i et cupoppgjør.
+
+En slik sammenslåing er den dyreste feilen i katalogen, og ingen vakt ser den i
+etterkant. Den ble funnet fordi importen nå **skriver ut hver kobling den
+gjør** — heuristikken beholdes, men unntakene står navngitt. Torbjørn Heggem =
+Torbjørn Lysaker Heggem er derimot samme mann, og den koblingen er hele poenget.
 
 ### Kongsvinger: samme kildeform, og et årstall som ikke var et årstall
 
