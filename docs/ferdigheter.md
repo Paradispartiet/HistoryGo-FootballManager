@@ -466,7 +466,7 @@ tell hvor mange spillere som bærer hver ferdighet, og se etter nullene.
 
 ## Påstander om ekte spillere
 
-Dette er **2153 navngitte fotballspillere**. 58 tall hver er ~125 000
+Dette er **2185 navngitte fotballspillere**. 58 tall hver er ~127 000
 tallpåstander, og median spiller har bare **5 ferdigheter faktisk belagt** i
 kilden.
 
@@ -655,6 +655,25 @@ ligger fortsatt på 85,17 %).
 
 Det er slik grensa var ment å virke: den måler avstanden til feilen, ikke
 avstanden til gårsdagen.
+
+### Det andre kildene sa, og importen kastet
+
+Raufoss-importen avdekket en systematisk under-lesning i alle fem v2-importer.
+Når importen møtte et navn katalogen kjente fra før, la den til stedet og
+klubbstatusen — og **kastet det den nye kilden sa om ferdighetene**.
+
+Målt: **36 av 119** koblede spillere hadde tapte påstander, 63 tokens i alt.
+
+Det interessante er at intuisjonen var feil. Frykten var at å ta dem inn ville
+gjøre profilene likere, siden de fleste tilleggene er de generiske
+`natural_fitness`/`determination`/`game_reading` fra kampmengde- og nivåfraser.
+Målingen viste motsatt: **86,00 % → 86,34 %**. En fjerde akse på en spiller som
+allerede har tre skiller ham fra alle dem som bare har de tre — det er
+kombinasjonen som er unik, ikke den enkelte ferdigheten.
+
+Regelen som følger: **en kilde som allerede har levert en spiller er ikke ferdig
+med ham.** Klubbkildene beskriver ulike deler av samme karriere, og påstandene
+skal legges sammen, ikke overskrives eller forkastes.
 
 ### Realisme er sprik, ikke senking
 

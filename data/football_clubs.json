@@ -401,8 +401,9 @@
       "tier": "obosligaen",
       "strength": 61,
       "form": 56,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 58,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "raufoss_arena"
     },
     {
       "id": "kongsvinger",
