@@ -17,7 +17,7 @@ export const SESSION_STATE_FIELDS = Object.freeze([
   "activeKnowledgeFocusId", "completedKnowledgeFocusIds", "clubWeekState",
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
-  "inboxAcknowledgedWeek", "firstTimePlaythrough", "teamMerits", "leagueSeason",
+  "firstTimePlaythrough", "teamMerits", "leagueSeason",
   "nationalTeam", "tournament", "tournamentHistory", "playerSeasonStats",
   "playerCondition", "playerConditionMatchIds", "seasonArchive", "seasonReview", "federationVerdict", "federationTrust"
 ]);

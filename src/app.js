@@ -383,10 +383,6 @@ const DELIVERED_INBOX_MESSAGE_IDS_KEY = "hgfm.deliveredInboxMessageIds.v1";
 // Innboks-svarvalg (v1): brukerens valgte svar per messageId. Kun UI/progresjon
 // pluss små engangs-effekter på Club Week-verdier.
 const SELECTED_INBOX_CHOICES_KEY = "hgfm.selectedInboxChoices.v1";
-// Innboks-kuratering v2: hvilken uke spilleren sist kvitterte ut ukas signal.
-// Ren UI-state — styrer bare hvor mange tråder som løftes til «Viktig nå» per
-// uke, aldri motoren.
-const INBOX_ACK_WEEK_KEY = "hgfm.inboxAcknowledgedWeek.v1";
 // Kampdag (v1): siste spilte kamp. Kun UI/progresjon i localStorage – ingen serie,
 // tabell, sesong eller livekamp. Selve kampberegningen ligger i kampmotoren.
 const MATCHDAY_STATE_KEY = "hgfm.matchday.v1";
@@ -525,8 +521,6 @@ const state = {
   // - Arkiv viser tråder med levert/lest historikk.
   readInboxMessageIds: new Set(),
   deliveredInboxMessageIds: new Set(),
-  // Uken spilleren sist kvitterte ut ukas innbokssignal (0 = ingen ennå).
-  inboxAcknowledgedWeek: 0,
   // Innboks-svarvalg (v1):
   // - clubInboxChoices = valgkatalogen lastet fra manifest (én fil per avsender).
   // - selectedInboxChoices = brukerens valg som map { [messageId]: choiceId }.
@@ -7134,13 +7128,12 @@ function getClubWeekMatchdayGate() {
 
 // Club Week Orchestrator v1.1: hvilken fase spillerens FAKTISKE fremdrift denne
 // uka tilsier. Ren avlesning av state (ingen ny motor): spilt kamp → Oppsummering,
-// valgt trening → Kampplan, håndtert innboks → Trening. Null når ingen handling
+// valgt trening → Kampplan. Å lese klubbmail flytter aldri fasen. Null når ingen handling
 // ennå tilsier en fremrykning (da styrer «Neste fase»-knappen manuelt).
 function clubWeekPhaseTargetFromProgress() {
   const week = Number(state.clubWeekState?.week) || 1;
   if (state.matchday?.lastMatch?.playedInClubWeek === week) return "review";
   if (state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId) return "match_prep";
-  if (hasAcknowledgedInboxThisWeek()) return "training";
   return null;
 }
 
@@ -12020,7 +12013,7 @@ function getSelectedTrainingProgramComposition() {
 function getWeeklyTrainingPlan() {
   return createWeeklyTrainingPlan({
     week: Number(state.clubWeekState?.week) || 1,
-    inboxRead: hasAcknowledgedInboxThisWeek(),
+    inboxRead: getInboxAttentionCount() === 0,
     program: getSelectedTrainingProgramComposition(),
     focusId: state.weeklyTrainingFocus?.focusId || null,
     individualSummary: summarizeIndividualTraining({
@@ -13752,8 +13745,9 @@ function chooseInboxChoice(choiceId) {
   }
 
   state.selectedInboxChoices[choice.messageId] = choice.id;
+  state.readInboxMessageIds.add(choice.messageId);
   saveSelectedInboxChoices(state.selectedInboxChoices);
-  acknowledgeInboxThisWeek();
+  saveReadInboxMessageIds();
 
   applyInboxChoiceEffects(choice);
 
@@ -14046,44 +14040,142 @@ function getInboxWeeklyCap() {
   return (Number(state.clubWeekState?.week) || 1) === 1 ? 1 : 3;
 }
 
-// Har spilleren kvittert ut ukas innbokssignal? Settes eksplisitt per uke når en
-// tråd leses/besvares (acknowledgeInboxThisWeek). Rulles automatisk ut når uka
-// bytter, slik at ferske signaler løftes hver ny uke — i motsetning til den
-// globale lest-historikken, som ellers ville «kvittert ut» alle senere uker.
-function hasAcknowledgedInboxThisWeek() {
-  return Number(state.inboxAcknowledgedWeek) === (Number(state.clubWeekState?.week) || 1);
-}
-
-function loadInboxAcknowledgedWeek() {
-  try {
-    const raw = Number(localStorage.getItem(INBOX_ACK_WEEK_KEY));
-    return Number.isFinite(raw) && raw > 0 ? Math.trunc(raw) : 0;
-  } catch (error) {
-    return 0;
-  }
-}
-
-function acknowledgeInboxThisWeek() {
-  const week = Number(state.clubWeekState?.week) || 1;
-  state.inboxAcknowledgedWeek = week;
-  try {
-    localStorage.setItem(INBOX_ACK_WEEK_KEY, String(week));
-  } catch (error) {
-    // Privat modus e.l.: kuratering fungerer fortsatt innen økta.
-  }
-  // Club Week Orchestrator v1.1: håndtert innboks nudger uka til Trening-fasen,
-  // så toppstripa speiler det spilleren nettopp gjorde. Gate-sikkert; fire-and-
-  // forget siden kalleren allerede rendrer.
-  syncClubWeekPhaseToProgress().catch(console.error);
-}
-
-// Uleste tråder som faktisk KREVER oppmerksomhet nå: opptil ukas kvote, og null
-// så snart spilleren har kvittert ut uka. Resten ligger som «kan leses senere»
-// og sperrer aldri veien til trening eller kamp.
+// Uleste tråder som faktisk krever oppmerksomhet nå, begrenset av ukas kvote.
+// Å lese én mail skjuler aldri de andre og flytter aldri Club Week-fasen.
 function getInboxAttentionCount() {
-  if (hasAcknowledgedInboxThisWeek()) return 0;
   const total = getActiveInboxThreads().length + getUnreadInboxEventCount(getInboxState());
   return Math.min(getInboxWeeklyCap(), total);
+}
+
+function clubCommunicationAction(kind) {
+  if (["training_program", "training_focus", "rest"].includes(kind)) {
+    return { label: "Åpne trening", target: "trening" };
+  }
+  if (["match_plan", "formation"].includes(kind)) {
+    return { label: "Åpne kampforberedelsen", target: "tactics" };
+  }
+  if (kind === "board") return { label: "Åpne Klubben", target: "board" };
+  return null;
+}
+
+function mapInboxEventToCommunication(thread) {
+  const selected = thread?.choices?.find((choice) => choice.id === thread.resolvedChoiceId) || null;
+  const source = { kind: "event", threadId: thread.id };
+  return {
+    id: thread.id,
+    threadId: thread.id,
+    dayIndex: 2,
+    senderName: thread.sender || INBOX_EVENT_SENDER_ROLES[thread.type] || "Klubbkontoret",
+    senderRole: INBOX_EVENT_TYPE_LABELS[thread.type] || "Klubbsignal",
+    subject: thread.title,
+    preview: thread.summary,
+    body: thread.body,
+    priority: thread.priority === "medium" ? "normal" : thread.priority,
+    action: clubCommunicationAction(thread.linkedAction?.kind),
+    choices: (thread.choices || []).map((choice) => ({
+      id: choice.id,
+      label: choice.label,
+      description: choice.description,
+      selected: choice.id === thread.resolvedChoiceId,
+      reply: choice.id === thread.resolvedChoiceId
+        ? { title: `Valgt: ${choice.label}`, body: (choice.resultText || []).join(" ") }
+        : null,
+      source
+    })),
+    reply: selected
+      ? { title: `Valgt: ${selected.label}`, body: (selected.resultText || []).join(" ") }
+      : null,
+    source
+  };
+}
+
+function mapStaticInboxToCommunication(threadGroup) {
+  const message = [...(threadGroup?.messages || [])]
+    .reverse()
+    .find((candidate) => getChoicesForMessage(candidate?.id).length > 0) || threadGroup?.latestMessage;
+  if (!message?.id) return null;
+  const sender = threadGroup.sender || getThreadSender(threadGroup.thread, message);
+  const selected = getSelectedChoiceForMessage(message.id);
+  const source = { kind: "static", messageId: message.id, threadId: threadGroup.threadId };
+  return {
+    id: message.id,
+    threadId: threadGroup.threadId,
+    dayIndex: 2,
+    senderName: sender?.name || message.from || "Klubbkontoret",
+    senderRole: message.tag || sender?.defaultTag || threadGroup.thread?.category || "Klubbmail",
+    subject: message.title || threadGroup.thread?.subject || "Melding fra klubben",
+    preview: message.body,
+    body: [message.body],
+    priority: inboxThreadRequiresReply(threadGroup) ? "high" : "normal",
+    choices: getChoicesForMessage(message.id).map((choice) => ({
+      id: choice.id,
+      label: choice.label,
+      description: choice.responseTitle || "",
+      selected: choice.id === selected?.id,
+      reply: choice.id === selected?.id
+        ? { title: choice.responseTitle, body: choice.responseBody }
+        : null,
+      source
+    })),
+    reply: selected ? { title: selected.responseTitle, body: selected.responseBody } : null,
+    source
+  };
+}
+
+function getClubCommunicationInboxSignals() {
+  const priorityWeight = { urgent: 4, high: 3, medium: 2, low: 1 };
+  const eventSignals = getActiveInboxEventThreads(getInboxState())
+    .sort((a, b) => (priorityWeight[b.priority] || 1) - (priorityWeight[a.priority] || 1))
+    .map(mapInboxEventToCommunication);
+  const staticSignals = groupInboxMessagesByThread(getActiveInboxMessages())
+    .sort((a, b) => getInboxThreadPriorityScore(b) - getInboxThreadPriorityScore(a))
+    .map(mapStaticInboxToCommunication)
+    .filter(Boolean);
+  return [...eventSignals, ...staticSignals].slice(0, getInboxWeeklyCap());
+}
+
+function getClubCommunicationContext() {
+  const analysis = getOpponentAnalysisContext();
+  const currentFixture = analysis.fixtures.find((fixture) => fixture.fixtureId === analysis.currentFixtureId) || analysis.fixtures[0] || null;
+  const program = state.weeklyTrainingProgram?.programId
+    ? (Array.isArray(state.trainingPrograms) ? state.trainingPrograms : []).find((item) => item?.id === state.weeklyTrainingProgram.programId)
+    : null;
+  const focus = getTrainingFocus(state.weeklyTrainingFocus?.focusId);
+  return {
+    week: Number(state.clubWeekState?.week) || 1,
+    clubWeekState: state.clubWeekState,
+    opponent: currentFixture?.opponent || null,
+    lastMatch: state.matchday?.lastMatch || null,
+    training: {
+      label: [program?.name, focus?.name].filter(Boolean).join(" · ") || "dagens treningsøkt",
+      programLabel: program?.name || "",
+      focusLabel: focus?.name || ""
+    },
+    analysisPlan: analysis.currentPlanReady ? analysis.savedPlan : null,
+    playerConditions: getPlayerCondition(),
+    staff: getStaffIdentitySummary().activeStaff || [],
+    inboxSignals: getClubCommunicationInboxSignals(),
+    readMessageIds: [...state.readInboxMessageIds]
+  };
+}
+
+function markClubCommunicationRead(detail = {}) {
+  const messageId = typeof detail.messageId === "string" ? detail.messageId : "";
+  if (messageId) state.readInboxMessageIds.add(messageId);
+  if (detail.source?.kind === "static" && detail.source.messageId) {
+    state.readInboxMessageIds.add(detail.source.messageId);
+  }
+  saveReadInboxMessageIds();
+  if (detail.source?.kind === "event" && detail.source.threadId && state.teamMerits) {
+    state.teamMerits.inbox = markInboxThreadRead(getInboxState(), detail.source.threadId);
+    saveTeamMerits();
+  }
+  renderApp();
+}
+
+function chooseClubCommunication(detail = {}) {
+  if (detail.source?.kind === "event") chooseInboxEventChoice(detail.source.threadId, detail.choiceId);
+  else chooseInboxChoice(detail.choiceId);
 }
 
 // Trådarkiv: levert historikk som ikke er ulest-aktiv. En melding som fortsatt
@@ -14383,7 +14475,6 @@ function createInboxThreadCard(threadGroup, options = {}) {
         }
       }
       saveReadInboxMessageIds();
-      acknowledgeInboxThisWeek();
       renderApp();
     });
   }
@@ -14549,7 +14640,6 @@ function chooseInboxEventChoice(threadId, choiceId) {
     state.teamMerits.offPitch = applyOffPitchEvent(getOffPitchState(), result.offPitchEvent);
   }
   saveTeamMerits();
-  acknowledgeInboxThisWeek();
   renderApp();
 }
 
@@ -14568,7 +14658,6 @@ function markInboxEventThreadRead(threadId) {
   }
   state.teamMerits.inbox = markInboxThreadRead(getInboxState(), threadId);
   saveTeamMerits();
-  acknowledgeInboxThisWeek();
   renderApp();
 }
 
@@ -14782,8 +14871,7 @@ function renderInboxThreads() {
   ].filter((candidate) => candidate.id);
 
   const cap = getInboxWeeklyCap();
-  const signalHandled = hasAcknowledgedInboxThisWeek();
-  const attentionCandidates = signalHandled ? [] : allCandidates.slice(0, cap);
+  const attentionCandidates = allCandidates.slice(0, cap);
   const selectedCandidate = allCandidates.find((candidate) => candidate.id === state.openInboxThreadId) || null;
   const focusCandidate = selectedCandidate || attentionCandidates[0] || null;
   const queueCandidates = allCandidates.filter((candidate) => candidate.id !== focusCandidate?.id).slice(0, 6);
@@ -14802,14 +14890,12 @@ function renderInboxThreads() {
         elements.inboxFocusStatus.dataset.tone = focusCandidate.requiresReply ? "attention" : "neutral";
       }
     } else {
-      const title = signalHandled ? "Ukas signal er håndtert" : "Innboksen er rolig";
+      const title = "Innboksen er rolig";
       focusContainer.append(createMessageCard({
         from: "Klubbkontoret",
         tag: "Ingen aktiv sak",
         title,
-        body: signalHandled
-          ? `Du har håndtert ukas viktigste signal. Neste steg er ${state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId ? "kampdagen" : "å velge treningsuke"}.`
-          : "Det er ingen aktive uleste tråder akkurat nå."
+        body: "Det er ingen aktive uleste tråder akkurat nå."
       }, true));
       if (elements.inboxFocusTitle) elements.inboxFocusTitle.textContent = title;
       if (elements.inboxFocusStatus) {
@@ -16617,6 +16703,18 @@ function bindLocalStartControls() {
 }
 
 function bindHistoryGoSyncControls() {
+  window.addEventListener("hgfm:request-club-communication-context", (event) => {
+    if (event.detail && typeof event.detail === "object") {
+      event.detail.context = getClubCommunicationContext();
+    }
+  });
+  window.addEventListener("hgfm:club-communication-read", (event) => {
+    markClubCommunicationRead(event.detail);
+  });
+  window.addEventListener("hgfm:club-communication-choice", (event) => {
+    chooseClubCommunication(event.detail);
+  });
+
   // Manuell synk av ekte History Go-steder. Gjør testing enkel på iPad/GitHub Pages.
   if (elements.syncHistoryGoPlaces) {
     elements.syncHistoryGoPlaces.addEventListener("click", () => {
@@ -17202,7 +17300,6 @@ async function hydratePersistedUiState() {
   state.completedKnowledgeFocusIds = loadCompletedKnowledgeFocusIds();
   state.readInboxMessageIds = loadReadInboxMessageIds();
   state.deliveredInboxMessageIds = loadDeliveredInboxMessageIds();
-  state.inboxAcknowledgedWeek = loadInboxAcknowledgedWeek();
   // Innboks-svarvalg (v1): valgkatalog fra manifest + brukerens lagrede valg.
   // loadClubInboxChoices kaster aldri – appen fungerer uten valg-manifest.
   state.clubInboxChoices = await loadClubInboxChoices();

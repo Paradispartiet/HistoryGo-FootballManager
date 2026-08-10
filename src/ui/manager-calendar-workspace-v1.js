@@ -3,6 +3,10 @@ import {
   MANAGER_WEEK_PHASE_ORDER
 } from "../football-manager-calendar.js";
 import {
+  createClubCommunicationTimeline,
+  getClubCommunicationMessage
+} from "../football-club-communication.js";
+import {
   LEAGUE_SEASON_VERSION,
   getNextLeagueOpponent,
   normalizeLeagueSeason
@@ -15,6 +19,7 @@ const GAME_START_KEY = "hgfm.gameStartState.v1";
 const MATCHDAY_KEY = "hgfm.matchday.v1";
 const TRAINING_PROGRAM_KEY = "hgfm.weeklyTrainingProgram.v1";
 const TRAINING_FOCUS_KEY = "hgfm.weeklyTrainingFocus.v1";
+const MODE_SESSION_KEY = "hgfm.modeSessions.v1";
 
 const PHASE_BY_LABEL = Object.freeze({
   analyse: "analysis",
@@ -32,6 +37,7 @@ let selectedDayIndex = null;
 let selectedWeek = null;
 let redirectQueued = false;
 let drawerState = null;
+let communicationTimeline = { messages: [] };
 
 function node(tag, className = "", value) {
   const element = document.createElement(tag);
@@ -98,24 +104,47 @@ function lineupReady() {
   return /^\s*11\s*\/\s*11\s*$/.test(starters) && /^\s*[4-9]\d*\s*\/\s*4\s*$/.test(bench);
 }
 
-function inboxSnapshot() {
-  const title = (document.getElementById("inboxFocusTitle")?.textContent || "").trim() || "Melding fra klubben";
-  const cards = document.querySelectorAll("#inboxThreadList .inbox-thread-card, #inboxQueueList .inbox-thread-card");
-  return { title, attentionCount: cards.length };
+function requestCommunicationContext() {
+  const detail = { context: null };
+  window.dispatchEvent(new CustomEvent("hgfm:request-club-communication-context", { detail }));
+  if (detail.context && typeof detail.context === "object") return detail.context;
+
+  const envelope = readJson(MODE_SESSION_KEY, {});
+  const league = envelope?.sessions?.league || {};
+  return {
+    week: Number(clubWeekState()?.week) || 1,
+    clubWeekState: clubWeekState(),
+    opponent: leagueOpponent(),
+    lastMatch: lastMatch(),
+    training: {
+      programLabel: readJson(TRAINING_PROGRAM_KEY, null)?.programId || "",
+      focusLabel: readJson(TRAINING_FOCUS_KEY, null)?.focusId || ""
+    },
+    analysisPlan: league.opponentAnalysisPlan || null,
+    playerConditions: Array.isArray(league.playerCondition) ? league.playerCondition : [],
+    staff: [],
+    inboxSignals: [],
+    readMessageIds: Array.isArray(league.readInboxMessageIds) ? league.readInboxMessageIds : []
+  };
 }
 
 function buildCalendar() {
   const clubWeek = clubWeekState();
-  const inbox = inboxSnapshot();
+  const communicationContext = requestCommunicationContext();
+  communicationTimeline = createClubCommunicationTimeline({
+    ...communicationContext,
+    week: Number(clubWeek?.week) || communicationContext.week || 1,
+    clubWeekState: clubWeek,
+    opponent: communicationContext.opponent || leagueOpponent(),
+    lastMatch: communicationContext.lastMatch || lastMatch()
+  });
   return createManagerWeekCalendar({
     clubWeekState: clubWeek,
     opponent: leagueOpponent(),
-    inboxHandled: phaseIndex(clubWeek.phase) > phaseIndex("inbox"),
-    inboxTitle: inbox.title,
-    inboxAttentionCount: inbox.attentionCount,
     trainingSelected: trainingSelected() || phaseIndex(clubWeek.phase) > phaseIndex("training"),
     lineupReady: lineupReady(),
-    lastMatch: lastMatch()
+    lastMatch: lastMatch(),
+    communications: communicationTimeline.messages
   });
 }
 
@@ -133,9 +162,8 @@ function syncCalendarLocation() {
   if (!location) return;
   const calendar = document.querySelector('[data-tab-section="calendar"]');
   const board = document.querySelector('[data-tab-section="board"]');
-  const drawer = document.getElementById("managerCalendarMessageDrawer");
   if (calendar && !calendar.hidden) {
-    location.textContent = drawer && !drawer.hidden ? "Kontor · Kalender · Melding" : "Kontor · Kalender";
+    location.textContent = "Kontor · Kalender";
   } else if (board && !board.hidden) {
     location.textContent = "Kontor · Klubben";
   }
@@ -224,13 +252,13 @@ function ensureSection() {
         </header>
         <ol id="managerCalendarTimeline" class="manager-calendar-timeline" aria-label="Dagens hendelser"></ol>
       </section>
-      <footer class="manager-calendar-rule"><strong>Kalenderen eier presentasjonen av tiden.</strong><span>Club Week, kamp, trening, innboks og konsekvensmotorene er fortsatt sannhetskildene.</span></footer>
+      <footer class="manager-calendar-rule"><strong>Klubben snakker gjennom arbeidsdagen.</strong><span>Mailene forklarer eksisterende kamp-, trenings- og klubbstate. De gir ingen ny score eller skjult bonus.</span></footer>
     </section>
     <div id="managerCalendarMessageDrawer" class="manager-calendar-drawer" role="dialog" aria-modal="true" aria-labelledby="managerCalendarDrawerTitle" hidden>
       <button type="button" class="manager-calendar-drawer-backdrop" data-calendar-drawer-close aria-label="Lukk melding"></button>
       <aside class="manager-calendar-drawer-panel">
         <header class="manager-calendar-drawer-head">
-          <div><p class="eyebrow">Kalender · Melding</p><h3 id="managerCalendarDrawerTitle">Melding</h3></div>
+          <div><p class="eyebrow">Klubbmail</p><h3 id="managerCalendarDrawerTitle">Melding</h3></div>
           <button type="button" class="manager-calendar-drawer-close" data-calendar-drawer-close aria-label="Lukk melding">×</button>
         </header>
         <div id="managerCalendarDrawerBody" class="manager-calendar-drawer-body"></div>
@@ -383,7 +411,7 @@ function renderTimeline(section, day) {
     copy.append(node("strong", "", entry.title), node("span", "manager-calendar-event-detail", entry.detail));
     const meta = node("span", "manager-calendar-event-meta");
     meta.append(node("small", "", entry.owner));
-    if (entry.attention) meta.append(node("span", "manager-calendar-event-warning", "Mangler"));
+    if (entry.attention) meta.append(node("span", "manager-calendar-event-warning", entry.kind === "message" ? "Ny" : "Mangler"));
     meta.append(node("span", "manager-calendar-event-action", entry.actionLabel));
     button.append(time, copy, meta);
     button.addEventListener("click", () => {
@@ -400,8 +428,105 @@ function renderTimeline(section, day) {
   timeline.replaceChildren(fragment);
 }
 
-function findInboxCard() {
-  return document.querySelector("#inboxThreadList .inbox-thread-card, #inboxQueueList .inbox-thread-card");
+function initials(value) {
+  return String(value || "K")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toLocaleUpperCase("nb-NO"))
+    .join("") || "K";
+}
+
+function dispatchCommunicationRead(message) {
+  if (!message || message.isRead) return;
+  message.isRead = true;
+  window.dispatchEvent(new CustomEvent("hgfm:club-communication-read", {
+    detail: { messageId: message.id, threadId: message.threadId, source: message.source || null }
+  }));
+}
+
+function dispatchCommunicationChoice(message, choice) {
+  if (!message || !choice) return;
+  window.dispatchEvent(new CustomEvent("hgfm:club-communication-choice", {
+    detail: {
+      messageId: message.id,
+      threadId: message.threadId,
+      choiceId: choice.id,
+      source: choice.source || message.source || null
+    }
+  }));
+  setTimeout(renderCalendar, 0);
+}
+
+function renderMailMessage(body, message) {
+  body.textContent = "";
+  if (!message) {
+    const fallback = node("article", "manager-calendar-message-fallback");
+    fallback.append(node("strong", "", "Meldingen finnes ikke lenger"), node("p", "", "Kalenderen er oppdatert fra den aktive manageruka."));
+    body.append(fallback);
+    return;
+  }
+
+  const article = node("article", "manager-club-mail");
+  article.dataset.messageId = message.id;
+  article.dataset.priority = message.priority || "normal";
+
+  const sender = node("header", "manager-club-mail-sender");
+  sender.append(node("span", "manager-club-mail-avatar", initials(message.sender?.name)));
+  const identity = node("span", "manager-club-mail-identity");
+  identity.append(node("strong", "", message.sender?.name || "Klubbkontoret"), node("small", "", message.sender?.role || "Klubbkommunikasjon"));
+  const time = node("time", "manager-club-mail-time", message.time || "");
+  sender.append(identity, time);
+
+  const heading = node("div", "manager-club-mail-heading");
+  heading.append(node("h4", "", message.subject), node("p", "", message.preview));
+  article.append(sender, heading);
+
+  const copy = node("div", "manager-club-mail-copy");
+  (message.body || []).forEach((paragraph) => copy.append(node("p", "", paragraph)));
+  article.append(copy);
+
+  if (message.facts?.length) {
+    const facts = node("dl", "manager-club-mail-facts");
+    message.facts.forEach((fact) => {
+      const row = node("div", "manager-club-mail-fact");
+      row.append(node("dt", "", fact.label), node("dd", "", fact.value));
+      facts.append(row);
+    });
+    article.append(facts);
+  }
+
+  if (message.reply) {
+    const reply = node("section", "manager-club-mail-reply");
+    reply.append(node("small", "", "Ditt svar"), node("strong", "", message.reply.title), node("p", "", message.reply.body));
+    article.append(reply);
+  } else if (message.choices?.length) {
+    const choices = node("section", "manager-club-mail-choices");
+    choices.append(node("h5", "", "Hva svarer du?"));
+    message.choices.forEach((choice) => {
+      const button = node("button", "manager-club-mail-choice");
+      button.type = "button";
+      button.dataset.choiceId = choice.id;
+      button.append(node("strong", "", choice.label));
+      if (choice.description) button.append(node("span", "", choice.description));
+      button.addEventListener("click", () => dispatchCommunicationChoice(message, choice));
+      choices.append(button);
+    });
+    article.append(choices);
+  }
+
+  if (message.action?.target) {
+    const action = node("button", "manager-club-mail-action", message.action.label || "Åpne arbeidsflaten");
+    action.type = "button";
+    action.dataset.target = message.action.target;
+    action.addEventListener("click", () => {
+      closeInboxDrawer();
+      activateTarget(message.action.target);
+    });
+    article.append(action);
+  }
+
+  body.append(article);
 }
 
 function openInboxDrawer(entry, trigger) {
@@ -411,46 +536,35 @@ function openInboxDrawer(entry, trigger) {
   const title = section.querySelector("#managerCalendarDrawerTitle");
   if (!drawer || !body || !title) return;
 
-  closeInboxDrawer();
-  body.textContent = "";
-  title.textContent = entry?.title || "Melding";
-  const card = findInboxCard();
-  drawerState = { card: null, parent: null, nextSibling: null, returnFocus: trigger || null };
-
-  if (card && card.parentElement) {
-    drawerState.card = card;
-    drawerState.parent = card.parentElement;
-    drawerState.nextSibling = card.nextSibling;
-    body.append(card);
-  } else {
-    const fallback = node("article", "manager-calendar-message-fallback");
-    fallback.append(node("strong", "", entry?.title || "Melding fra klubben"), node("p", "", entry?.detail || "Meldingen er registrert i manageruka."));
-    body.append(fallback);
-  }
-
+  const message = entry?.message || getClubCommunicationMessage(communicationTimeline, entry?.id);
+  title.textContent = message?.subject || entry?.title || "Melding";
+  drawerState = { messageId: message?.id || entry?.id || "", returnFocus: trigger || null };
+  renderMailMessage(body, message);
   drawer.hidden = false;
+  dispatchCommunicationRead(message);
   syncCalendarLocation();
   drawer.querySelector(".manager-calendar-drawer-close")?.focus();
+}
+
+function refreshOpenMail(section) {
+  const drawer = section.querySelector("#managerCalendarMessageDrawer");
+  if (!drawer || drawer.hidden || !drawerState?.messageId) return;
+  const message = getClubCommunicationMessage(communicationTimeline, drawerState.messageId);
+  const body = section.querySelector("#managerCalendarDrawerBody");
+  const title = section.querySelector("#managerCalendarDrawerTitle");
+  if (title && message) title.textContent = message.subject;
+  if (body) renderMailMessage(body, message);
 }
 
 function closeInboxDrawer() {
   const drawer = document.getElementById("managerCalendarMessageDrawer");
   if (!drawer || drawer.hidden) return;
   const state = drawerState;
-  if (state?.card) {
-    const replacementExists = state.parent?.querySelector?.(".inbox-thread-card");
-    if (state.parent?.isConnected && !replacementExists) {
-      const sibling = state.nextSibling?.parentElement === state.parent ? state.nextSibling : null;
-      state.parent.insertBefore(state.card, sibling);
-    } else {
-      state.card.remove();
-    }
-  }
   drawer.hidden = true;
   drawerState = null;
+  drawer.querySelector("#managerCalendarDrawerBody")?.replaceChildren();
   syncCalendarLocation();
   if (state?.returnFocus?.isConnected) state.returnFocus.focus();
-  scheduleRender();
 }
 
 function renderCalendar() {
@@ -468,6 +582,7 @@ function renderCalendar() {
   if (match) match.textContent = model.nextMatchLabel;
   renderDayRail(section, model);
   renderTimeline(section, model.days.find((day) => day.dayIndex === selectedDayIndex) || model.currentDay);
+  refreshOpenMail(section);
 }
 
 function scheduleRender() {

@@ -1,5 +1,7 @@
 # Managerkontor og Assistentråd v1
 
+> **Videreført 10.08.2026:** `MANAGER_CLUB_COMMUNICATION_V2.md` er canonical for den synlige mailopplevelsen. V1-modellene består som kilder til tråder, valg og konsekvenser, men drawer-et flytter ikke lenger legacy-kort mellom DOM-flater.
+
 Denne leveransen etablerte Kontor- og innboksfunksjonene som egne managerflater. **Presentasjonsdelen er nå videreført av `MANAGER_CALENDAR_V1.md`: i en aktiv ligasave ligger Innboks inne i Kalender i stedet for å være en parallell Kontor-fane.**
 
 Motorene og dataene fra denne leveransen består. Det er bare informasjonsarkitekturen som er endret.
@@ -17,7 +19,7 @@ Eksempel:
 14:30 · Oppfølging etter økta
 ```
 
-Når brukeren åpner meldingshendelsen, flyttes den eksisterende innbokstråden midlertidig inn i et drawer over kalenderen. Dermed beholdes eksisterende avsender, tråd, svarvalg og konsekvenslogikk uten å kopiere eller erstatte `football-inbox-events.js`.
+Når brukeren åpner meldingshendelsen, rendres den eksakte meldings-ID-en som et maildokument i drawer-et. Eksisterende avsender, svarvalg og konsekvenslogikk beholdes uten å flytte et tilfeldig legacy-kort eller erstatte `football-inbox-events.js`.
 
 Når draweret lukkes, er brukeren fortsatt på samme kalenderdag.
 

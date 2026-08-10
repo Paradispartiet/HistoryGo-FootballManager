@@ -8,6 +8,7 @@ const files = {
   menu: read("docs/meny.md"),
   recruitment: read("src/football-recruitment.js"),
   exercise: read("src/football-training-exercise-design.js"),
+  communication: read("src/football-club-communication.js"),
   learning: read("src/ui/manager-football-learning-loop-v1.js"),
   medical: read("src/football-medical-decision-learning.js"),
   opponent: read("src/football-opponent-analysis.js"),
@@ -52,6 +53,7 @@ check("statusen beskriver reelt dataarbeid", files.status.includes("spillerpoole
 
 check("spillerpool/tropp er faktisk implementert", files.recruitment.includes("PLAYER_POOL_SQUAD_STATE_VERSION") && files.recruitment.includes("squadPlayerIds"));
 check("øvelsesdesign er faktisk implementert", files.exercise.includes("evaluateTrainingExerciseDesign") && files.exercise.includes("EXERCISE_DESIGN_CONTROLS"));
+check("klubbkommunikasjon er faktisk implementert", files.communication.includes("createClubCommunicationTimeline") && files.status.includes("Klubbkommunikasjon"));
 check("faktisk ellever leses av læringslaget", files.learning.includes("createActualLineupRoleLesson") && files.learning.includes("Relasjonen i din faktiske ellever"));
 check("medisinsk beslutningsverksted er faktisk implementert", files.medical.includes("createMedicalDecisionCase") && files.medical.includes("evaluateMedicalDecision"));
 check("motstanderforberedelse er faktisk implementert", files.opponent.includes("createOpponentAnalysisWorkspace") && files.opponent.includes("createOpponentAnalysisPlan"));

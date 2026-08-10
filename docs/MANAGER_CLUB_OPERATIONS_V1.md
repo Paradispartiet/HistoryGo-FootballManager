@@ -2,6 +2,8 @@
 
 > **Produktstatus 08.08.2026:** Informasjonsarkitekturen i denne filen kan fortsatt være relevant, men den tidligere antakelsen om at klubbdrift først og fremst skal bestå av fasilitetsnivåer, fiktiv økonomi og spilleravtaler er ikke lenger canonical. Se `PRODUCT_PRINCIPLES_CLUB_SIMULATION.md`. Klubbdrift skal først og fremst la brukeren gå inn i klubbens faktiske arbeidsmiljøer og forstå hva trenerteam, medisinsk apparat, analyse, materialforvaltning og andre funksjoner gjør. Eksisterende runtime er ikke fjernet av denne dokumentasjonsendringen.
 
+> **Navigasjonsstatus 10.08.2026:** Påstanden nedenfor om Kontor → Innboks er historisk v1. Canonical normalflyt er Kontor → Kalender, der konkrete klubbmailer er hendelser i arbeidsdagen. Se `MANAGER_CALENDAR_V1.md` og `MANAGER_CLUB_COMMUNICATION_V2.md`.
+
 ## Ny overordnet retning for Klubbdrift
 
 `Klubbdrift` skal være inngangen til en **utforskbar klubb**, ikke en samling abstrakte oppgraderingssystemer.
