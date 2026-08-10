@@ -384,7 +384,13 @@ const REVIEWED_NAME_PAIRS = new Map([
   // Det femte paret er to menn kilden selv fører hver for seg: Fredrikstads
   // spiss fra den siste gullalderen mot Sarpsborgs cupmesterkeeper i 1939 og
   // 1951. Mellomnavnet er ikke en stavevariant her — posisjonen avgjør det.
-  ["rolf bakke olsen|rolf olsen", "FFKs spiss mot SFKs cupmesterkeeper"]
+  ["rolf bakke olsen|rolf olsen", "FFKs spiss mot SFKs cupmesterkeeper"],
+  // Sogndals Trond Heggestad er «Sogndal-profil i 1990-tallets A-lag», og
+  // kilden legger til at Heggestad er et navn i KLUBBMILJØET — altså en lokal
+  // familie. Åsanes er en historisk angrepsprofil med 44 mål i Bergen. Ingen av
+  // kildene nevner den andre klubben, og et familienavn er nettopp det som gjør
+  // at to menn kan dele det.
+  ["trond heggestad|trond heggestad åsane", "Sogndals 1990-tallsspiss mot Åsanes historiske målscorer"]
 ]);
 
 const nameKey = (name) => String(name).toLowerCase()

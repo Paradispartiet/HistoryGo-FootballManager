@@ -184,6 +184,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | HamKam | Briskeby | 81 |
 | Ranheim | Extra Arena | 81 |
 | Kongsvinger | Gjemselund | 79 |
+| Åsane | Myrdal | 76 |
 | Brann | Brann Stadion | 75 |
 | Sogndal | Fosshaugane Campus | 75 |
 | Stabæk | Nadderud | 75 |
@@ -201,8 +202,8 @@ avhenger av hvor History Go-kortet hans ligger.
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf og Egersund — 2754 arveplasser fordelt på alle
-33, og **ingen klubb med bane har under 49 navn**. De 27 klubbene som
+Strømmen, Raufoss, Sandnes Ulf, Egersund og Åsane — 2830 arveplasser fordelt
+på alle 34, og **ingen klubb med bane har under 49 navn**. De 26 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -1366,6 +1367,46 @@ låsen igjen og peker i tomme luften, og `sim:club-squad` feller det
 (bittestet). Men **oppstår sammenslåingen i importen**, blir det aldri noen
 låst id som mangler, og ingenting feiler. Den varianten finnes bare ved å lese
 de to kildene mot hverandre, slik Nils Eriksen ble funnet.
+
+### Åsane: en kategoridom som avgjorde femten ukjente på ti kjente
+
+Åsane manglet bane — `ground: "Myrdal"` uten `placeId`. **76 navn** (67 nye, 9
+koblet). Klubben ble stiftet i 1971, så arven er nesten helt moderne: 61 av 76.
+
+Kilden rommer den **mest detaljerte enkeltbeskrivelsen i katalogen**. Martin
+Uelands tidligere lagkamerater gir fem ferdigheter i én setning — «svært sterk
+til å skjerme ball, rolig under press, med presis venstrefot, god touch og gode
+offensive ferdigheter» — og for pionerene fra 1973 siterer klubben spillernes
+egne minner om målene de scoret.
+
+#### Terskelen målte feil gruppe
+
+«Øverste Åsane-legende» er **90 % moderne blant de daterte** og ville bestått
+90 %-terskelen. Men de ti daterte er 2019–21-troppen, mens de **femten udaterte
+er klubbens historiske målscorerliste** — Thomas Lund (147 mål), Ørjan Låstad
+(99), Paul Tengs (63) — hver med «Historisk angrepsprofil» i posisjonsfeltet.
+
+Terskelen måler bare de daterte og sier ingenting om hvorvidt de udaterte er
+trukket fra samme befolkning. Å avgjøre femten ukjente på ti kjente fra en annen
+gruppe er den samme stille dommen som Aalesund-feilen var.
+
+Kategoridommen krever derfor nå også at **de daterte er minst like mange som de
+udaterte den skal avgjøre**. Med den regelen nekter legendekategorien, og de
+femten står navngitt i epokelista.
+
+#### To feilkoblinger til
+
+Heuristikken tok to nye navn, og begge er lest mot kilden:
+
+| Kilden | Katalogen | Avgjørelse |
+|---|---|---|
+| Bjørn Riise — 219 kamper på Åsanes *historiske* liste | Bjørn Helge Riise — Lillestrøm, Aalesund, Fulham | To menn |
+| Trond Heggestad — 44 mål for Åsane | Trond Heggestad — «Sogndal-profil i 1990-tallets A-lag» | To menn |
+
+Riise-koblingen ga en Bergens-klubb en spiller som aldri spilte der.
+Heggestad-koblingen er finere: Sogndal-kilden sier at Heggestad er **et navn i
+klubbmiljøet**, altså en lokal familie — og et familienavn er nettopp det som
+gjør at to menn kan dele det. Åsanes står nå med klubbsuffiks.
 
 ### Egersund: godt datert og tynt beskrevet er to ulike ting
 

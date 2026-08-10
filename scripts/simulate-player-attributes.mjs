@@ -613,7 +613,12 @@ const KJENT_UDOKUMENTERT = {
   // 241 mål, 1975–1992»). Til gjengjeld avstår den 73 ganger av 85, så bare tolv
   // profiler bærer en påstand i det hele tatt. Godt datert og tynt beskrevet er
   // to uavhengige egenskaper ved en kilde. Målt 36 av 56.
-  egersund_arena: 0.66
+  egersund_arena: 0.66,
+  // Åsane er stiftet i 1971, og kilden er derfor nesten helt moderne — 61 av 76
+  // på banen. Den avstår 69 ganger av 85, men de seksten som står igjen rommer
+  // den mest DETALJERTE enkeltbeskrivelsen i katalogen: Martin Uelands
+  // tidligere lagkamerater gir fem ferdigheter i én setning. Målt 56 av 76.
+  myrdal_idrettspark: 0.75
 };
 const perArv = new Map();
 for (const player of players) {
