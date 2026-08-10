@@ -198,7 +198,7 @@ function matchReviewMessage(context, readIds) {
     },
     links: [
       { label: "Se sesong og neste kamp", target: "statistikk", focusId: "statsSummary" },
-      { label: "Vurder oppstillingen", target: "tactics", focusId: "squadTacticsCommandPanel" }
+      { label: "Vurder oppstillingen", target: "tactics", focusId: "teamTacticsSelectedState" }
     ],
     priority: "high",
     readIds
@@ -418,7 +418,7 @@ function opponentMessage(context, readIds) {
         watch: text(plan.watch, "Se om motgrepet faktisk endrer den forventede situasjonen.")
       },
       links: [
-        { label: "Åpne kampforberedelsen", target: "tactics", focusId: "squadTacticsCommandPanel" },
+        { label: "Åpne kampforberedelsen", target: "tactics", focusId: "teamTacticsSelectedState" },
         { label: "Se lagets system", target: "system", focusId: "managerSystemWorkspaceV2" }
       ],
       priority: "high",
@@ -449,7 +449,7 @@ function opponentMessage(context, readIds) {
       watch: "Formuler én synlig atferd som kan bekrefte eller avkrefte hypotesen."
     },
     links: [
-      { label: "Bygg kampforberedelsen", target: "tactics", focusId: "squadTacticsCommandPanel" },
+      { label: "Bygg kampforberedelsen", target: "tactics", focusId: "teamTacticsSelectedState" },
       { label: "Les lagets system", target: "system", focusId: "managerSystemWorkspaceV2" }
     ],
     priority: "urgent",
@@ -493,7 +493,7 @@ function pressMessage(context, readIds) {
       watch: "Bruk samme observerbare atferd i pressebrief, kampforberedelse og etterkamp."
     },
     links: [
-      { label: "Se kampforberedelsen", target: "tactics", focusId: "squadTacticsCommandPanel" },
+      { label: "Se kampforberedelsen", target: "tactics", focusId: "teamTacticsSelectedState" },
       { label: "Åpne Klubben", target: "board", focusId: "managerClubOrganization" }
     ],
     priority: pressure >= 65 ? "high" : "normal",

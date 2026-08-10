@@ -146,11 +146,11 @@ test("motstanderbriefens lenke åpner riktig kampforberedelse", async ({ page })
   await openCalendar(page);
   await selectDay(page, 5);
   await page.locator('[data-event-id="club-mail:w8:opponent-plan"]').click();
-  const link = page.locator('.manager-club-mail-links a[href="#tactics/squadTacticsCommandPanel"]');
+  const link = page.locator('.manager-club-mail-links a[href="#tactics/teamTacticsSelectedState"]');
   await expect(link).toBeVisible();
   await link.click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
-  await expect(page.locator("#squadTacticsCommandPanel")).toBeFocused();
+  await expect(page.locator("#teamTacticsSelectedState")).toBeFocused();
 });
 
 test("å lese én mail flytter ikke fasen eller skjuler andre mailer", async ({ page }) => {

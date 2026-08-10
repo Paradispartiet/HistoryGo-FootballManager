@@ -49,7 +49,7 @@ check("kuraterte mailer har minst to arbeidslenker", curated.every((message) => 
 check("arbeidslenkene har faktiske mål", curated.every((message) => message.links.every((link) => link.target && link.label)));
 check("arbeidslenkene er deduplisert", curated.every((message) => new Set(message.links.map((link) => `${link.target}:${link.focusId}`)).size === message.links.length));
 check("medisinsk mail peker presist til synlig individuell oppfølging", medical.links.some((link) => link.focusId === "trainingDayChangeIndividual"));
-check("motstanderbrief peker presist til kampforberedelse", opponent.links.some((link) => link.focusId === "squadTacticsCommandPanel"));
+check("motstanderbrief peker presist til synlig kampforberedelse", opponent.links.some((link) => link.focusId === "teamTacticsSelectedState"));
 check("eldre signal får samme veiledningsstruktur", Object.values(legacy.guidance).every(Boolean));
 check("veiledning eller lenker flytter ingen fase", context.clubWeekState.phase === "review");
 

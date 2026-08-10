@@ -9,7 +9,7 @@ const files = {
   css: read("src/ui/manager-calendar-workspace-v1.css"),
   html: read("index.html"),
   trainingDay: read("src/ui/manager-training-day-v1.js"),
-  squad: read("src/ui/manager-squad-tactics-scene-v2.js"),
+  squad: read("src/ui/manager-team-choice-drawer-v1.js"),
   system: read("src/ui/manager-system-workspace-v2.js"),
   organization: read("src/ui/manager-club-organization-v1.js"),
   docs: read("docs/MANAGER_CLUB_COMMUNICATION_V3.md"),
