@@ -23,11 +23,11 @@ async function expectNoHorizontalOverflow(page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.addInitScript(() => {
-    const matchPrepLearning = sessionStorage.getItem("hgfm.test.learningMatchPrep") === "1";
+  const matchPrepLearning = testInfo.title === "kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål";
+  await page.addInitScript(({ matchPrepLearning }) => {
     const clubWeekState = {
       week: 3,
       phase: matchPrepLearning ? "match_prep" : "training",
@@ -58,7 +58,6 @@ test.beforeEach(async ({ page }) => {
       clubWeekState
     }));
     if (matchPrepLearning) {
-      localStorage.removeItem("hgfm.modeSessions.v1");
       localStorage.setItem("hgfm.weeklyTrainingProgram.v1", JSON.stringify({
         programId: "defensive_structure",
         week: 3,
@@ -70,7 +69,7 @@ test.beforeEach(async ({ page }) => {
         appliedSessionId: null
       }));
     }
-  });
+  }, { matchPrepLearning });
   await page.goto("/");
   await expect(page.locator("#onboardingScreen")).toBeHidden();
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
@@ -97,10 +96,6 @@ test("Treningsdagen forklarer hvorfor økta finnes og hva manageren skal se ette
 
 test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.evaluate(() => sessionStorage.setItem("hgfm.test.learningMatchPrep", "1"));
-  await page.reload();
-  await expect(page.locator("#onboardingScreen")).toBeHidden();
-  await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await openTeam(page);
   await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
   await expect(page.locator("#matchPrepTraining")).toContainText("Defensiv struktur");
