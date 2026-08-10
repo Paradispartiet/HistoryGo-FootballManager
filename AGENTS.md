@@ -2,7 +2,7 @@
 
 Denne filen er bindende arbeidsinstruks for kodeagenter og assistenter som arbeider i `Paradispartiet/HistoryGo-FootballManager`.
 
-## Prosjektmiljø: GitHub CLI er installert
+## Prosjektmiljø: GitHub CLI skal alltid være tilgjengelig
 
 **Ikke konkluder med at prosjektet mangler `gh`.**
 
@@ -18,14 +18,28 @@ Repoets `.devcontainer/devcontainer.json` installerer den offisielle Dev Contain
 
 Det betyr at **GitHub CLI er en del av prosjektets deklarerte Codespace/devcontainer-miljø**.
 
-Hvis en tilfeldig assistent-runtime, verktøysandbox eller annen midlertidig prosess svarer `gh: command not found`, betyr det bare at den aktuelle runtime-en ikke er prosjektets devcontainer. Det skal **aldri** omskrives til «repoet/prosjektet har ikke gh», og brukeren skal ikke bes om å installere `gh` på nytt.
+Codex-/agent-runtimer bruker ikke alltid repoets devcontainer. Før GitHub-arbeid skal agenten derfor kjøre denne idempotente oppstarten fra repo-roten:
+
+```bash
+export PATH="/workspace/bin:$PATH"
+if ! command -v gh >/dev/null 2>&1; then
+  bash scripts/ensure-gh.sh
+fi
+gh --version
+gh auth status
+```
+
+`scripts/ensure-gh.sh` laster bare ned når binæren faktisk mangler, verifiserer den offisielle GitHub CLI-arkivets SHA-256-checksum og installerer den i `/workspace/bin`. Bootstrapen skal ikke sette eller overskrive `GH_CONFIG_DIR`, fordi en tvungen konfigurasjonsmappe kan skjule en gyldig innlogging fra runtime-ens standardplassering. Binærtilgjengelighet og autentisering skal alltid kontrolleres separat.
+
+Hvis en tilfeldig assistent-runtime, verktøysandbox eller annen midlertidig prosess svarer `gh: command not found`, betyr det bare at den aktuelle runtime-en ikke er prosjektets devcontainer. Agenten skal da kjøre bootstrapen over. Det skal **aldri** omskrives til «repoet/prosjektet har ikke gh», og brukeren skal ikke bes om å installere `gh` på nytt.
 
 Ved en slik runtime-begrensning skal agenten:
 
 1. kontrollere `.devcontainer/devcontainer.json`;
-2. behandle repoets deklarerte devcontainer som fasit for prosjektets verktøy;
-3. bruke tilgjengelig GitHub-connector/API som fallback i den aktuelle økten dersom shell-runtime-en ikke er prosjektmiljøet;
-4. aldri foreslå ny `gh`-installasjon med mindre devcontainer-konfigurasjonen faktisk er fjernet eller ødelagt.
+2. kjøre `scripts/ensure-gh.sh` dersom `gh` mangler;
+3. verifisere `gh --version` og `gh auth status` separat;
+4. bruke tilgjengelig GitHub-connector/API som fallback dersom binæren finnes, men runtime-en mangler lokal autentisering;
+5. aldri be brukeren installere `gh` på nytt med mindre både devcontainer-konfigurasjonen og bootstrapen faktisk er fjernet eller ødelagt.
 
 Denne regelen finnes fordi `gh` allerede er installert og har blitt verifisert flere ganger. Gjentatte installasjonsforslag skaper unødvendig dobbeltarbeid.
 
