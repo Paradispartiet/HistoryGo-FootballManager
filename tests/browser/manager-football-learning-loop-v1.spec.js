@@ -80,6 +80,34 @@ test("Treningsdagen forklarer hvorfor økta finnes og hva manageren skal se ette
   await expect(learning).toContainText("Se etter i kamp:");
 });
 
+test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmål", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => {
+    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify({ week: 3, phase: "match_prep" }));
+    window.dispatchEvent(new Event("storage"));
+  });
+  await openTeam(page);
+  await expect(page.locator("#managerMatchPrepDay")).toBeVisible();
+  await page.evaluate(() => {
+    document.getElementById("matchPrepTraining").textContent = "Defensiv kontroll";
+    document.getElementById("matchPrepFocus").textContent = "Restforsvar";
+  });
+  const bridge = page.locator("#footballLearningMatchPrepBridge");
+  await expect(bridge).toBeVisible();
+  await expect(bridge).toContainText("Fra treningsfeltet til kampen");
+  await expect(bridge).toContainText("Defensiv kontroll · Restforsvar");
+  await expect(bridge).toContainText("Hypotese:");
+  await expect(bridge).toContainText("Observer i kampen:");
+  await expect(bridge).toContainText("Når laget mister ballen");
+  await expectNoHorizontalOverflow(page);
+  const results = await new AxeBuilder({ page })
+    .include("#footballLearningMatchPrepBridge")
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
+});
+
 test("rolleinspektøren går fra tagger til forklaring av rollerelasjon og rom", async ({ page }) => {
   await openTeam(page);
   await page.locator("#lineupSlots .player-chip").first().click();
@@ -135,6 +163,10 @@ test("etterkamp lærer bare av faktorer kampforklaringen faktisk registrerte", a
   await page.evaluate(() => {
     const report = document.createElement("section");
     report.className = "matchday-post-match";
+    report.dataset.trainingFocusId = "pressing";
+    report.dataset.trainingFocusName = "Pressing";
+    report.dataset.trainingHelped = "true";
+    report.dataset.trainingSummary = "Ukens pressing støttet et relevant managergrep.";
     report.innerHTML = `
       <div class="matchday-post-match-overview">
         <article class="matchday-post-match-card">
@@ -150,7 +182,37 @@ test("etterkamp lærer bare av faktorer kampforklaringen faktisk registrerte", a
   await expect(learning).toContainText("Valg → kampsignal → læring");
   await expect(learning).toContainText("Det høye presset sprakk");
   await expect(learning).toContainText("Prinsipp · Press");
+  const trainingThread = learning.locator(".football-learning-training-thread");
+  await expect(trainingThread).toContainText("Trening → kamp → etterkamp");
+  await expect(trainingThread).toContainText("Dette skulle du observere");
+  await expect(trainingThread).toContainText("Etter kamp · motorens fasit");
+  await expect(trainingThread).toContainText("Ukens pressing støttet et relevant managergrep");
+  await expect(trainingThread).toContainText("samme problemområde");
+  await expect(trainingThread).toContainText("Neste treningsuke:");
   await expect(learning).toContainText("Bare registrerte taktiske faktorer");
+});
+
+test("treningsdom uten tilsvarende kampsignal dikter ikke en hendelse", async ({ page }) => {
+  await page.evaluate(() => {
+    const report = document.createElement("section");
+    report.className = "matchday-post-match";
+    report.dataset.trainingFocusId = "build_up";
+    report.dataset.trainingFocusName = "Oppbygging";
+    report.dataset.trainingHelped = "true";
+    report.dataset.trainingSummary = "Ukens oppbygging dempet risikoen i en relevant hendelse.";
+    report.innerHTML = `
+      <div class="matchday-post-match-overview">
+        <article class="matchday-post-match-card">
+          <span>Taktisk evaluering</span>
+          <strong>Systemdom</strong>
+          <ul><li>Avslutningene kom fra gode rom.</li></ul>
+        </article>
+      </div>`;
+    document.body.append(report);
+  });
+  const thread = page.locator(".football-learning-training-thread");
+  await expect(thread).toContainText("oppdiktet kamphendelse");
+  await expect(thread).not.toContainText("Det høye presset sprakk");
 });
 
 test("etterkamp dikter ikke teorikobling når kampforklaringen mangler taktisk signal", async ({ page }) => {

@@ -48,6 +48,12 @@ function resultFixture(outcome = "win", { injury = false } = {}) {
           : { playerMorale: 1 },
       familiarity: 3
     },
+    trainingFocus: {
+      focusId: "pressing",
+      name: "Pressing",
+      helped: true,
+      summary: "Ukens pressing støttet et relevant managergrep."
+    },
     exposedWeaknessMetric: "restDefenseScore"
   };
   const report = {
@@ -98,6 +104,9 @@ check("målgivende vises", winModel.goals[0]?.detail.includes("Mina Midtbane"));
 check("spillerbidrag aggregeres uten overall", winModel.contributors[0]?.detail === "2 mål");
 check("klubbkonsekvenser vises", winModel.consequences.effects.length === 3);
 check("formasjonstilvenning vises", winModel.consequences.familiarityLabel.includes("+3"));
+check("lagret treningsrapport føres til presentasjonsmodellen", winModel.trainingEvidence?.focusId === "pressing");
+check("treningsdommens faktiske hjalp-status bevares", winModel.trainingEvidence?.helped === true);
+check("treningsrapportens ordlyd bevares", winModel.trainingEvidence?.summary.includes("relevant managergrep"));
 check("neste handling peker til Trening", winModel.next.primaryTarget === "trening");
 check("full analyse er sekundær handling", winModel.next.secondaryTarget === "analyse");
 

@@ -77,6 +77,17 @@ const SIGNAL_LESSONS = Object.freeze([
   Object.freeze({ match: /avslut|xg|sjanse|mål/, principle: "Sjansekvalitet", explanation: "Resultatet av et skudd er ikke hele læringen. Rommet, sistepasningen og avslutterens balanse sier mer om hvor gjentakbar sjansen er.", watch: "Se på hvordan sjansen ble skapt før du vurderer selve avslutningen." })
 ]);
 
+const TRAINING_SIGNAL_PATTERNS = Object.freeze({
+  rest_defence: /omstilling|kontring|restforsvar|andreball|rom bak|bakrom/,
+  pressing: /press|gjenvinn/,
+  build_up: /oppbygg|pasning|spille seg|balltap|førstetouch/,
+  width: /bredde|kant|side|overlapp|innlegg/,
+  depth_runs: /bakrom|dybde|høy linje|forsvarslinje/,
+  role_understanding: /relasjon|rolle|avstand|støtte|kombinasjon|mellomrom/,
+  set_pieces: /dødball|corner|hjørnespark|frispark|duell/,
+  formation_familiarity: /formasjon|system|struktur|kompakt|avstand/
+});
+
 function clean(value) {
   return String(value ?? "").trim().replace(/\s+/g, " ");
 }
@@ -253,6 +264,49 @@ export function createMatchSignalLearningLesson(value) {
   };
 }
 
+// Leser den eksisterende kampmotorens treningsrapport og setter den opp mot
+// de taktiske signalene etterkampen faktisk viser. Funksjonen vurderer ikke
+// kampen på nytt og trekker ingen konklusjon utover disse kildene.
+export function createTrainingMatchLearningThread({ trainingFocus = null, tacticalSignals: signals = [] } = {}) {
+  const focusId = clean(trainingFocus?.focusId);
+  const focusName = clean(trainingFocus?.name);
+  if (!focusId && !focusName) return null;
+  const lesson = createTrainingLearningLesson(`${focusId} ${focusName}`);
+  const tacticalSignals = (Array.isArray(signals) ? signals : []).map(clean).filter(Boolean);
+  const pattern = TRAINING_SIGNAL_PATTERNS[focusId] || null;
+  const relatedSignals = pattern
+    ? tacticalSignals.filter((signal) => pattern.test(normalized(signal)))
+    : [];
+  const helped = typeof trainingFocus?.helped === "boolean" ? trainingFocus.helped : null;
+  const reportSummary = clean(trainingFocus?.summary) || "Kampmotoren registrerte ingen egen treningsdom.";
+  let status = "unverified";
+  let evidence = "Kampen er ikke ferdig vurdert ennå. Bruk observasjonsspørsmålet når kampen spilles.";
+
+  if (helped === true) {
+    status = "helped";
+    evidence = relatedSignals.length
+      ? `Treningsrapporten sier at fokuset hjalp, og den taktiske evalueringen registrerte samme problemområde: «${relatedSignals[0]}»`
+      : "Treningsrapporten sier at fokuset hjalp, men den taktiske evalueringen registrerte ikke et eget signal i samme problemområde. Derfor legges det ikke til en oppdiktet kamphendelse.";
+  } else if (helped === false) {
+    status = "limited";
+    evidence = relatedSignals.length
+      ? `Treningsrapporten sier at fokuset ga liten effekt, samtidig som den taktiske evalueringen registrerte samme problemområde: «${relatedSignals[0]}» Det er et spørsmål til neste analyse, ikke bevis på at én øvelse alene feilet.`
+      : "Treningsrapporten sier at fokuset ga liten effekt, og kampforklaringen registrerte ikke et taktisk signal i samme problemområde. Det er ikke nok grunnlag til å si hvilken konkret atferd som manglet.";
+  }
+
+  return {
+    focusId,
+    focusName: focusName || "Treningsfokus",
+    status,
+    trainingPrinciple: lesson.principle,
+    matchQuestion: lesson.watch,
+    reportSummary,
+    relatedSignals,
+    evidence,
+    nextQuestion: `Før du beholder eller endrer neste ukes øvelse: ${lesson.watch}`
+  };
+}
+
 export function createSystemLearningLesson({ intent = "", risk = "", parameters = [] } = {}) {
   const values = parameters.map((entry) => `${normalized(entry.label)} ${normalized(entry.value)} ${normalized(entry.explanation)}`).join(" ");
   let watch = "Se om kampbildet faktisk viser den atferden kampplanen ber om, og om risikoen blir håndtert av rollene rundt ballen.";
@@ -417,6 +471,41 @@ function enhanceTraining() {
     <p><b>Se etter i kamp:</b> ${lesson.watch}</p>`;
 }
 
+function enhanceMatchPreparation() {
+  const prep = document.getElementById("managerMatchPrepDay");
+  const existing = document.getElementById("footballLearningMatchPrepBridge");
+  if (!prep || prep.hidden) {
+    existing?.remove();
+    return;
+  }
+  const program = clean(prep.querySelector("#matchPrepTraining")?.textContent);
+  const focus = clean(prep.querySelector("#matchPrepFocus")?.textContent);
+  const source = [program, focus].filter(Boolean).join(" · ");
+  if (!source || /ikke valgt|mangler/i.test(source)) {
+    existing?.remove();
+    return;
+  }
+  const lesson = createTrainingLearningLesson(source);
+  const signature = `${source}|${lesson.watch}`;
+  let bridge = existing;
+  if (bridge?.dataset.learningSignature === signature) return;
+  if (!bridge) {
+    bridge = document.createElement("section");
+    bridge.id = "footballLearningMatchPrepBridge";
+    bridge.className = "football-learning-match-prep";
+    const brief = prep.querySelector(".match-prep-brief");
+    prep.insertBefore(bridge, brief || prep.querySelector(".match-calendar-footer"));
+  }
+  bridge.dataset.learningSignature = signature;
+  bridge.innerHTML = `
+    <span>Fra treningsfeltet til kampen</span>
+    <h3>${escapeHtml(lesson.title)}</h3>
+    <p><b>Ukas valgte arbeid:</b> ${escapeHtml(source)}</p>
+    <p><b>Hypotese:</b> ${escapeHtml(lesson.principle)}</p>
+    <p><b>Observer i kampen:</b> ${escapeHtml(lesson.watch)}</p>
+    <small>Dette følger det eksisterende treningsvalget inn i kampforberedelsen. Det oppretter ingen ny kampeffekt.</small>`;
+}
+
 function systemParameters(workspace) {
   return Array.from(workspace.querySelectorAll("[data-system-parameter]")).map((row) => ({
     label: clean(row.querySelector(".manager-system-principle-label")?.textContent),
@@ -464,12 +553,27 @@ function tacticalSignals(postMatch) {
     : [];
 }
 
+function postMatchTrainingEvidence(postMatch) {
+  const name = clean(postMatch?.dataset.trainingFocusName);
+  const focusId = clean(postMatch?.dataset.trainingFocusId);
+  if (!name && !focusId) return null;
+  const helpedValue = clean(postMatch?.dataset.trainingHelped);
+  return {
+    focusId,
+    name,
+    summary: clean(postMatch?.dataset.trainingSummary),
+    helped: helpedValue === "true" ? true : helpedValue === "false" ? false : null
+  };
+}
+
 function enhancePostMatch() {
   const postMatch = document.querySelector(".matchday-post-match");
   if (!postMatch) return;
   const signals = tacticalSignals(postMatch);
+  const trainingEvidence = postMatchTrainingEvidence(postMatch);
+  const trainingThread = createTrainingMatchLearningThread({ trainingFocus: trainingEvidence, tacticalSignals: signals });
   const intent = clean(document.querySelector("#managerSystemWorkspaceV2 .manager-system-intent")?.textContent);
-  const signature = `${intent}|${signals.join("|")}`;
+  const signature = `${intent}|${trainingThread?.focusId || ""}|${trainingThread?.reportSummary || ""}|${signals.join("|")}`;
   let block = postMatch.querySelector(".football-learning-post-match");
   if (block?.dataset.learningSignature === signature) return;
   if (!block) {
@@ -483,6 +587,23 @@ function enhancePostMatch() {
   const header = document.createElement("header");
   header.innerHTML = `<span>Fotballæring</span><h4>Valg → kampsignal → læring</h4>${intent ? `<p><b>Kampplanens utgangspunkt:</b> ${intent}</p>` : ""}`;
   block.append(header);
+
+  if (trainingThread) {
+    const loop = document.createElement("section");
+    loop.className = "football-learning-training-thread";
+    loop.dataset.status = trainingThread.status;
+    loop.innerHTML = `
+      <span>Hele observasjonstråden</span>
+      <h5>Trening → kamp → etterkamp</h5>
+      <div class="football-learning-training-thread-grid">
+        <article><span>Trening</span><strong>${escapeHtml(trainingThread.focusName)}</strong><p>${escapeHtml(trainingThread.trainingPrinciple)}</p></article>
+        <article><span>Før kamp</span><strong>Dette skulle du observere</strong><p>${escapeHtml(trainingThread.matchQuestion)}</p></article>
+        <article><span>Etter kamp · motorens fasit</span><strong>${escapeHtml(trainingThread.reportSummary)}</strong><p>${escapeHtml(trainingThread.evidence)}</p></article>
+      </div>
+      <p class="football-learning-next-question"><b>Neste treningsuke:</b> ${escapeHtml(trainingThread.nextQuestion)}</p>
+      <small>Treningsdommen kommer fra kampmotorens lagrede rapport. Taktiske bevis hentes bare fra den eksisterende kampforklaringen.</small>`;
+    block.append(loop);
+  }
 
   if (!signals.length) {
     const empty = document.createElement("p");
@@ -512,6 +633,7 @@ function enhancePostMatch() {
 function renderLearningLayer() {
   enhanceRoleLearning();
   enhanceTraining();
+  enhanceMatchPreparation();
   enhanceSystem();
   enhancePostMatch();
 }

@@ -36,6 +36,8 @@ check("eksisterende renderManagerMatchdayCommand beholdes", files.presentation.i
 check("rapporten bruker forklaringsmotorens avgjørende faktorer", files.postMatch.includes("explanation.decisiveFactors"));
 check("rapporten bruker taktiske faktorer", files.postMatch.includes("explanation.tacticalFactors"));
 check("rapporten bruker trening og off-pitch-signaler", files.postMatch.includes("explanation.trainingFactors") && files.postMatch.includes("explanation.offPitchFactors"));
+check("lagret treningsrapport føres videre uten ny beregning", files.postMatch.includes("lastMatch.trainingFocus") && files.postMatch.includes("trainingEvidence"));
+check("treningsrapporten eksponeres til læringslaget", files.postMatch.includes("dataset.trainingFocusId") && files.postMatch.includes("dataset.trainingSummary"));
 check("rapporten bruker faktiske spillerstatistikker", files.postMatch.includes("lastMatch?.playerStats?.goals"));
 check("rapporten bruker faktiske klubbkonsekvenser", files.postMatch.includes("lastMatch?.clubConsequences?.effects"));
 check("beste og svakeste managergrep vises", files.postMatch.includes("report?.bestDecision") && files.postMatch.includes("report?.worstDecision"));
