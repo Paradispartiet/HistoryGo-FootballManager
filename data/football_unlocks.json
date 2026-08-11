@@ -1310,10 +1310,6 @@
         {
           "type": "player_candidate",
           "targetId": "magne_hoseth"
-        },
-        {
-          "type": "player_candidate",
-          "targetId": "joshua_king"
         }
       ],
       "notes": "Intility brukes som moderne klubbground-kilde. Låser opp ekspertise og et utvalg ekte spillere (player_candidate)."

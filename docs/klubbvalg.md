@@ -167,7 +167,7 @@ avhenger av hvor History Go-kortet hans ligger.
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
 | Strømsgodset | Marienlyst stadion | 143 |
-| Vålerenga | Intility Arena | 127 |
+| Vålerenga | Intility Arena | 126 |
 | Sarpsborg 08 | Sarpsborg stadion | 107 |
 | Fredrikstad | Fredrikstad stadion | 100 |
 | Odd | Skagerak Arena | 100 |
@@ -211,7 +211,7 @@ avhenger av hvor History Go-kortet hans ligger.
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
 Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Notodden, Hønefoss,
-Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3391 arveplasser fordelt på
+Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3390 arveplasser fordelt på
 alle 42, og **ingen klubb med bane har under 46 navn**. De 18 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
@@ -1491,6 +1491,93 @@ Auditen ber om tre ting, og bare den ene er ren datajobb:
 
 Rekkefølgen er verdt å merke seg: å konvertere de 22 er større og viktigere enn
 å legge til de 18. En arv som er feil er dyrere enn en arv som mangler.
+
+### Første konvertering: Rosenborg, Tromsø og Vålerenga ut av gjelden
+
+Tre v2-konverteringer av legacy-filene kom samtidig — 156, 81 og 126 profiler.
+De er ikke importer: spillerne fantes fra før. Jobben er å **fjerne** et
+ferdighetslag.
+
+Filene gjør det enkelt å avgjøre hva som skal beholdes. Hver eneste profil har
+samme setning i `Kvaliteter`-feltet — målt: **363 profiler, én unik
+kvalitetskjerne per fil**:
+
+> Ingen teknisk, fysisk eller mental ferdighet låses canonical fra legacy-filens
+> gamle scoutingtekst alene.
+
+Konverteringen er derfor total. 326 lister tømt, 10 satt til den v2-lesningen
+som finnes for spilleren fra en annen klubb, 9 rørt ikke, 1 fjernet.
+
+#### Det vanskelige var avgrensningen, ikke tømmingen
+
+`strengths` ligger per **spiller**, ikke per arv, og 129 av de 363 står også på
+en annen modellert bane. Én liste, to kilder, ingen måte å se hvem som bidro
+med hva. Reglene som ble valgt:
+
+| Spilleren står … | Handling |
+|---|---|
+| bare på modellerte baner | tømmes helt — verdiene har ingen kilde uansett hvilken de kom fra |
+| også på en v2-bane | settes til v2-lesningen fra ordboka, det eneste med belegg |
+| på en bane utenfor begge | **røres ikke** |
+
+Den siste gjelder ni spillere, alle med `ullevaal_stadion` ved siden av klubben —
+John Carew, Ronny Johnsen, Tore André Flo, Sander Berge, Stefan Strandberg, Rune
+Jarstein. Nasjonalarenaene har egne påstander jeg ikke kan trekke fra her, og å
+slette dem ville vært å rette én ukildet påstand med en annen.
+
+Og som i Jerv-saken bærer én v2-fil en spiller ut av poolen: Vålerenga-fila sier
+selv at **Joshua King aldri spilte VIFs A-lag** og fører ham i et eget
+ikke-canonical vedlegg. 127 → 126.
+
+#### Katalogen bar allerede splitten kildefila ikke kjente
+
+Oppslaget måtte gjøres **banebevisst**. Katalogen har «Tore Pedersen (RBK)» ved
+siden av Branns «Tore Pedersen», og navnenøkkelen stryker parentesen — et
+globalt oppslag traff Brann-stopperen og ville tømt feil mann. Tre navn til sto
+i kildefila med mellomnavn eller annen stavemåte: Harald Martin Brattbakk, Rune
+Almenning Jarstein, Christian/Cristian Gamboa.
+
+#### Konverteringen tvang begge klumpevaktene til å remåles
+
+Å fjerne 326 ukildede styrkelister gjør profilene mer grunnlinjeformede. Det er
+den ærlige retningen, og begge vaktene merket det:
+
+| | før | etter | ny grense |
+|---|---:|---:|---:|
+| Toppbøtter, ærlig | 38,01 % | **40,44 %** | 0,42 |
+| Toppbøtter, flat grunnlinje | 46,92 % | 44,32 % | |
+| Profil-unikhet, ærlig | 85,12 % | **84,17 %** | 0,837 |
+| Profil-unikhet, flat grunnlinje | 84,11 % | 83,31 % | |
+
+Begge grensene er flyttet dit de fortsatt ligger mellom endepunktene, aldri
+under bittet. Men det er verdt å se hva som skjer med **avstanden**: profil-
+unikheten har 0,86 poeng til bittet, ned fra 0,96.
+
+Det er en strukturell observasjon, ikke en tilfeldighet. Vakten finnes for å
+fange en katalog som ligner sin egen posisjonsmal — og en katalog som slutter å
+påstå ting den ikke kan belegge, *nærmer seg* posisjonsmalen. Jo mer ærlig
+katalogen blir, jo svakere blir vakten. Den fungerer fortsatt, men grensa må
+følge etter nedover, og regelen om å alltid remåle begge endepunktene er det
+eneste som holder den meningsfull.
+
+#### Taket måtte remåles på samme måte, av samme grunn
+
+`KJENT_UDOKUMENTERT` telte alle spillerne på banen. Da Rosenborg ble tømt, gikk
+Strømsgodset til 7 % tomme — uten at noen hadde rørt Strømsgodset-kilden — og
+felte taket sitt. **Et tak som beveger seg når naboen konverteres måler naboen,
+ikke kilden.**
+
+Alle 23 tak er derfor remålt på **eksklusive spillere**, de med nøyaktig én
+kilde. Rekkefølgen er den samme — den følger fortsatt hvor mye kilden siterer —
+men nivåene er høyere, fordi fellesspillerne som pyntet på tallet er ute:
+Notodden 78 % → 93 %, Sandnes Ulf 10 % → 14 %.
+
+Den samme målingen gjør gulvet skarpt. Etter konverteringen står de tre på
+83/83, 53/53 og 66/66 tomme blant sine egne, mens **alle nitten gjenværende
+modellerte arver står på 0 av mellom 24 og 87**. Ingen gråsone — og det er
+beviset på at eksklusiv måling isolerer konverteringen fra forurensningen.
+
+**Gjelden: 22 arver og 1951 spillere → 19 arver og 1587 spillere.**
 
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
