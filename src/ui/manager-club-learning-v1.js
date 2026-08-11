@@ -207,6 +207,7 @@ function appendMedicalRehabilitationPath(body) {
       node("span", "medical-rehabilitation-kicker", "Skade → opptrening → lagtrening → kamp"),
       node("h3", "", "Rehabiliteringsforløp v2"),
       node("strong", "medical-rehabilitation-player", path.playerName),
+      node("span", "medical-rehabilitation-current-stage", path.currentStage.label),
       node("p", "medical-rehabilitation-purpose", path.currentStage.purpose)
     );
     shell.querySelector("h3").id = "medicalRehabilitationTitle";

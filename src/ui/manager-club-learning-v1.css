@@ -181,6 +181,13 @@
 
 .medical-rehabilitation-path-v2 > h3 { font-size: 1rem; }
 .medical-rehabilitation-player { font-size: .88rem; }
+.medical-rehabilitation-current-stage {
+  color: #f5d85e;
+  font-size: .64rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .medical-rehabilitation-purpose,
 .medical-rehabilitation-watch,
 .medical-rehabilitation-selected-approach p,
