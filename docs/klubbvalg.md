@@ -1825,6 +1825,58 @@ derfor alle per-arv-målingene teller eksklusive spillere.
 
 Igjen står **Stabæk (41), Kristiansund (29) og Lillestrøm (24)**.
 
+### Gjelden er gjort opp: alle 22 modellerte arver er konvertert
+
+Stabæk, Lillestrøm og Kristiansund var de siste, og alle tre traff rent — 75 av
+75, 56 av 56, 49 av 49. **115 tømt, 8 satt til v2-lesning, 3 rørt ikke.**
+
+`MODELLERTE_ARVER` er tom. Det som sto der som en inventarliste over gjeld — 22
+arver og 1951 spillere uten én eneste tom styrkeliste — er nå null.
+
+| | ved oppdagelsen | nå |
+|---|---:|---:|
+| Modellerte arver | 22 | **0** |
+| Spillere med udokumenterte styrker | 1951 | **0** |
+| Spillere med *dokumenterte* styrker | — | 470 av 2756 (17 %) |
+
+Vakten står igjen som en regresjonsvakt, og den virker fortsatt: fyller man
+Rosenborgs 83 eksklusive profiler med posisjonsmalen igjen, feller
+per-klubb-gulvet det på `8 unike sett av 83 (10 %)`.
+
+#### Medianvakten pensjonert, etter samme prøve som profil-unikheten
+
+Da den siste arven ble konvertert, falt «median arv skiller klart» fra 0,75 til
+63 %. Prøven er den samme som sist, og svaret ble det samme:
+
+| spredt malimport | median | laveste arv |
+|---|---:|---:|
+| ingen (ærlig) | 63,0 % | 32 % |
+| 100 spillere | **63,0 %** | 32 % |
+| 300 spillere | 47,6 % | 10 % |
+
+Medianen rører seg **ikke i det hele tatt** for en malimport på hundre, og når
+den endelig gjør det ved tre hundre, har gulvet på 0,25 for lengst felt arven
+det gjelder. Bare et monotont mål kan ha en terskel.
+
+Grensa var dessuten kalibrert på en populasjon som ikke finnes lenger. Da 0,75
+ble satt, var medianen dominert av de modellerte arvene — og firetokens
+scoutingpakker er varierte. Nå står bare de ærlige v2-kildene igjen, tynne og
+med gjentatte sett fordi de sier «målproduksjon» om mange. **63 % er hva
+ærlighet ser ut som her.**
+
+Åtte arver kvalifiserer nå til per-klubb-målingen. Det er nøyaktig tallet som
+ble målt på forhånd da meta-vakten på 20 arver ble skrevet om — den ville felt
+siste etappe av dette arbeidet.
+
+#### Hva som står igjen
+
+Ingen del av katalogen påstår lenger en ferdighet den ikke kan belegge. 17 % av
+spillerne har dokumenterte styrker; de øvrige 83 % bærer posisjon, epoke og
+klassetak, og det er hva det ser ut som å ikke vite noe.
+
+Det som gjenstår er å **legge til**, ikke å rette: individuelle kilder for de
+konverterte arvene, og de 18 klubbene i 2. divisjon som fortsatt mangler arv.
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,
