@@ -556,28 +556,38 @@ const strengthShare = strengthSets.size / medStyrker.length;
 // ---------------------------------------------------------------------------
 // Tredje gang huset lærer det samme: en korpusbred andel er feil form.
 //
-// Det korpusbrede tallet teller unike KOMBINASJONER over hele katalogen, og
-// antallet kombinasjoner kildene faktisk produserer er begrenset. To
-// midtstoppere fra hver sin klubb med «duels, heading, positioning» kolliderer,
-// og det sier ingenting om kildene deres. Tallet synker derfor for hver import
-// uansett kvalitet — nøyaktig det en vakt ikke skal gjøre.
+// Målt PER ARV, og på EKSKLUSIVE spillere — de med nøyaktig én kilde.
 //
-// Per arv skiller det skarpt, og målt stemmer det med det vi vet om kildene:
+// Gulvet var kalibrert mot de modellerte arvene: «Lerkendal 43 %, Marienlyst
+// 45 %» var de to laveste, og 0,40 sto rett under dem. Den kalibreringen døde
+// med konverteringene. Legacy-filenes firetokens scoutingpakker var VARIERTE —
+// modellering produserer variasjon — så da de forsvant, sto de tynne, ekte
+// v2-kildene igjen som de laveste, og Sandnes Ulf falt gjennom på 40 %.
 //
-//   Lerkendal 43 %, Marienlyst 45 %   <- de to tynneste kildene, kjent fra før
-//   Høddvoll 52 %, Consto 63 %        <- v2-kildene som avstår ofte
-//   Briskeby 82 %                     <- HamKam, over medianen
-//   Fredrikstad/Romssa/Color Line 100 %
+// Det andre problemet var at målingen talte alle spillerne på banen. Sandnes
+// Ulf endret seg fordi Aalesund, Skeid og Haugesund ble konvertert: fellesspillere
+// mistet styrkene sine og falt ut av tellingen, og det de tok med seg var
+// nettopp den lånte variasjonen. En arv kan ikke måles på naboens kilde.
 //
-// Median 82 %. Gulvet står på 0,40, rett under Lerkendal, og det er dette
-// tallet som skal opp — ikke det korpusbrede, som bare kan synke.
+// Eksklusive spillere løser begge deler på én gang, og den andre egenskapen er
+// den viktigste: et eksklusivt utvalg er INVARIANT under konvertering av naboer.
+// Tallet flytter seg bare når denne kildens egne påstander endrer seg.
+//
+// Målt på eksklusive spillere med styrker, 21 arver:
+//
+//   Sandnes Ulf 32 %, Hødd 39 %       <- v2-kilder som sier «målproduksjon» om mange
+//   Sarpsborg 48 %, Kongsvinger 48 %
+//   median 83 %
+//
+// Bittet: hele Molde-arven gitt posisjonsmalens styrker gir 9 %. Gulvet settes
+// på 0,25 — sju poeng under den laveste ærlige og godt over bittet.
 {
   const perArvStyrker = new Map();
   for (const player of medStyrker) {
-    for (const placeId of player.sourcePlaceIds || []) {
-      if (!perArvStyrker.has(placeId)) perArvStyrker.set(placeId, []);
-      perArvStyrker.get(placeId).push(player);
-    }
+    const steder = player.sourcePlaceIds || [];
+    if (steder.length !== 1) continue;
+    if (!perArvStyrker.has(steder[0])) perArvStyrker.set(steder[0], []);
+    perArvStyrker.get(steder[0]).push(player);
   }
   const andeler = [];
   for (const [placeId, liste] of perArvStyrker) {
@@ -585,7 +595,7 @@ const strengthShare = strengthSets.size / medStyrker.length;
     const sett = new Set(liste.map((player) => JSON.stringify([...player.strengths].sort())));
     const andel = sett.size / liste.length;
     andeler.push(andel);
-    check(`${placeId}: styrkene skiller spillere fra hverandre`, andel > 0.4,
+    check(`${placeId}: styrkene skiller spillere fra hverandre`, andel > 0.25,
       `${sett.size} unike sett av ${liste.length} (${(andel * 100).toFixed(0)} %)`);
   }
   check("nok arver til å måle styrkespredningen per klubb", andeler.length >= 20, String(andeler.length));
@@ -763,6 +773,9 @@ const KJENT_UDOKUMENTERT = {
   // låses fra legacy-filens scoutingtekst. Taket er derfor ikke en grense her,
   // det er en registrering av at arven ikke dokumenterer ferdigheter i det hele
   // tatt. Tallet skal SYNKE når individuelle kilder leses tilbake.
+  color_line_stadion: 1.01,  // Aalesund
+  nordre_asen: 1.01,         // Skeid
+  haugesund_stadion: 1.01,   // Haugesund/Haugar/Djerv
   fredrikstad_stadion: 1.01, // Fredrikstad: se konverteringen
   marienlyst_stadion: 1.01,  // Strømsgodset
   skagerak_arena: 1.01,      // Odd
@@ -801,9 +814,6 @@ const KJENT_UDOKUMENTERT = {
 // den da kan telles ned: konverteres en arv til source-only, får den tomme
 // lister, og da SKAL oppføringen fjernes. Vakten under krever begge veier.
 const MODELLERTE_ARVER = new Set([
-  "haugesund_stadion",    // Haugesund/Haugar/Djerv 100
-  "nordre_asen",          // Skeid 100
-  "color_line_stadion",   // Aalesund 90
   "aspmyra_stadion",      // Bodø/Glimt 89      — ikke lokalisert av auditen
   "aker_stadion",         // Molde 89           — ikke lokalisert av auditen
   "sor_arena",            // Start 85

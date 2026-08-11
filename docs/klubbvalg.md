@@ -1653,6 +1653,55 @@ posisjonsvektingen betyr minst for.
 
 **Gjelden: 19 arver / 1587 spillere → 16 arver / 1244 spillere.**
 
+### Tredje konvertering: Aalesund, Skeid og Haugesund — og en vakt kalibrert mot feil populasjon
+
+290 profiler, samme boilerplate. **266 tømt, 1 satt til v2-lesning, 2 rørt ikke**
+(John Arne Riise og Omar Elabdellaoui, begge også på Ullevaal). Skeid traff 100
+av 100 rent; de tre andre navnene var mellomnavn-varianter regelen håndterer —
+Sondre Brunstad Fet, Bala Ahmed Garba, Morten Ågnes Konradsen.
+
+Haugesund stadion bærer tre klubber (FK Haugesund, SK Haugar, SK Djerv 1919), og
+fila dekker alle tre. Konverteringen er nøklet på *bane*, så de følges ad.
+
+#### Vakten som var kalibrert mot det den skulle fange
+
+Per-klubb-vakten «styrkene skiller spillere fra hverandre» hadde gulv 0,40, satt
+«rett under Lerkendal 43 % og Marienlyst 45 %» — de to laveste den gang. Etter
+denne runden falt Sandnes Ulf gjennom på 40 %, og grunnen er lærerik:
+
+> Legacy-filenes firetokens scoutingpakker var **varierte**. Modellering
+> produserer variasjon. Da de forsvant, sto de tynne, *ekte* v2-kildene igjen
+> som de laveste.
+
+Gulvet var altså kalibrert mot nettopp den feilen vakten finnes for å fange, og
+ble strengere jo mer ærlig katalogen ble.
+
+Det andre problemet var det samme som traff taket og gulvet før: målingen talte
+alle spillerne på banen, så Sandnes Ulf endret seg fordi *naboene* ble
+konvertert. Fellesspillere mistet styrkene sine og falt ut av tellingen — og det
+de tok med seg var nettopp den lånte variasjonen.
+
+**Eksklusive spillere løser begge deler**, og den andre egenskapen er den
+viktigste: et eksklusivt utvalg er **invariant under konvertering av naboer**.
+Tallet flytter seg bare når denne kildens egne påstander endrer seg.
+
+| | eksklusive spillere med styrker |
+|---|---:|
+| Sandnes Ulf | 32 % |
+| Hødd | 39 % |
+| Sarpsborg 08 / Kongsvinger | 48 % |
+| median (21 arver) | 83 % |
+| **bitt: hele Molde malimportert** | **9 %** |
+
+Gulvet står nå på **0,25** — sju poeng under den laveste ærlige, godt over
+bittet. Bittestet: malimportert Molde feller den på 15 %.
+
+Dette er tredje vakt på rad som måtte over til eksklusiv måling, og mønsteret er
+nå tydelig nok til å skrives ned som en regel: **en måling per arv må telle
+spillere arven eier alene, ellers måler den naboen.**
+
+**Gjelden: 16 arver / 1244 spillere → 13 arver / 954 spillere.**
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,
