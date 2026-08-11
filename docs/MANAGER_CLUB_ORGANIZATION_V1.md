@@ -75,7 +75,7 @@ Følgende kilder er autoritative:
 
 `manager-club-organization-v1.js` er bare presentasjon og navigasjon. Den oppretter ingen ny klubbmotor, ingen ny progresjonsmotor og ingen ny localStorage-nøkkel.
 
-## Medisinsk beslutningsverksted
+## Medisinsk beslutningsverksted og rehabiliteringsforløp v2
 
 `Kontor → Klubben → Medisinsk apparat` lar manageren arbeide med et faktisk condition-signal gjennom:
 
@@ -85,6 +85,10 @@ aktiv modussnapshot
 → velg neste medisinske arbeidssteg
 → faglig konsekvens og forklaring
 → eksisterende individuell opptrening
+→ tilpasset trening
+→ delvis og full lagtrening
+→ eksplisitt kampklarhetsvurdering
+→ sammenlign planlagte og faktiske kampminutter
 ```
 
 Den skadde spilleren med lengst registrert fravær prioriteres. Hvis ingen er skadet, brukes spilleren med høyest belastning over condition-motorens tretthetsgrense. Når aktiv save-/modussnapshot ikke har et slikt signal, opprettes ingen oppdiktet pasient.
@@ -92,6 +96,18 @@ Den skadde spilleren med lengst registrert fravær prioriteres. Hvis ingen er sk
 Verkstedet lærer forskjellen mellom full retur nå, retur styrt av ukeestimat alene og kriteriebasert opptrening med ny funksjonsvurdering. Retur til fotball må vurderes mot symptomer, funksjon, styrke/bevegelighet, løp og sprint, spillerens trygghet og en delt beslutning mellom relevante fagpersoner, trener og spiller. Det finnes ikke ett validert enkeltkriterium som alene avgjør trygg retur.
 
 `football-medical-decision-learning.js` er et rent læringslag. Det diagnostiserer ingen skade og endrer aldri skade, belastning, form, tilgjengelighet eller kampklarhet. UI-et leser `playerCondition` fra den aktive `hgfm.modeSessions.v1`-sesjonen og bruker `hgfm.playerCondition.v1` bare som migreringsfallback. Det skriver ingen state, oppretter ingen ny lagringsnøkkel, score eller skjult effekt, og sender anbefalt oppfølging til den eksisterende **Individuell oppfølging**-flaten.
+
+V2 gjør returen synlig som fem trinn:
+
+1. individuell rehabilitering;
+2. tilpasset fotballtrening;
+3. delvis lagtrening;
+4. full lagtrening;
+5. kampklarhetsvurdering.
+
+Manageren velger forsiktig, kriteriestyrt eller raskere tilbakeføring. Valget er en dokumentert arbeidsmåte, ikke en ny rehabiliteringsbonus. `playerCondition` avgjør fortsatt om spilleren er markert skadet og hvilken belastning som er registrert; eksisterende individuell trening avgjør om **Opptrening** er valgt. Managerens plan lagres som `medicalRehabilitationPlan` i den aktive `hgfm.modeSessions.v1`-sesjonen. Det opprettes ingen ny localStorage-nøkkel.
+
+Når skadeflagget er borte, skiller forløpet mellom treningsklar og kampklar. Manageren må velge **ute**, **benk med begrensede minutter** eller **start**. Etter neste kamp sammenlignes denne intensjonen med de faktiske minuttene i kampresultatet og det nåværende condition-signalet. Systemet sier eksplisitt at sammenhengen ikke alene beviser at rehabiliteringsvalget forårsaket utfallet.
 
 Faggrunnlaget er:
 

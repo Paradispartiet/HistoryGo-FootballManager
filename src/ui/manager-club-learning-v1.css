@@ -154,6 +154,178 @@
   border-left: 3px solid rgba(255,255,255,.4);
 }
 
+.medical-rehabilitation-path-v2 {
+  display: grid;
+  gap: .85rem;
+  margin-top: 1.15rem;
+  padding: 1rem;
+  border: 1px solid rgba(117,211,155,.34);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(117,211,155,.07), rgba(255,255,255,.025));
+}
+
+.medical-rehabilitation-path-v2 h3,
+.medical-rehabilitation-path-v2 p,
+.medical-rehabilitation-path-v2 ul,
+.medical-rehabilitation-path-v2 ol { margin: 0; }
+
+.medical-rehabilitation-kicker,
+.medical-rehabilitation-selected-approach span,
+.medical-rehabilitation-match-evidence span {
+  color: rgba(255,255,255,.6);
+  font-size: .61rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.medical-rehabilitation-path-v2 > h3 { font-size: 1rem; }
+.medical-rehabilitation-player { font-size: .88rem; }
+.medical-rehabilitation-current-stage {
+  color: #f5d85e;
+  font-size: .64rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.medical-rehabilitation-purpose,
+.medical-rehabilitation-assignment,
+.medical-rehabilitation-watch,
+.medical-rehabilitation-selected-approach p,
+.medical-rehabilitation-evidence li,
+.medical-rehabilitation-availability-outcome p,
+.medical-rehabilitation-match-evidence p,
+.medical-rehabilitation-empty {
+  color: rgba(255,255,255,.72);
+  font-size: .71rem;
+  line-height: 1.5;
+}
+
+.medical-rehabilitation-stages {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .35rem;
+  padding: 0;
+  list-style: none;
+}
+
+.medical-rehabilitation-stages li {
+  min-width: 0;
+  padding: .5rem .35rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  color: rgba(255,255,255,.48);
+  font-size: .58rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.medical-rehabilitation-stages li[data-status="completed"] {
+  border-color: rgba(117,211,155,.35);
+  color: rgba(181,238,202,.78);
+}
+
+.medical-rehabilitation-stages li[data-status="current"] {
+  border-color: #75d39b;
+  background: rgba(117,211,155,.14);
+  color: #eafff1;
+}
+
+.medical-rehabilitation-question { font-size: .73rem; font-weight: 850; }
+
+.medical-rehabilitation-approaches,
+.medical-rehabilitation-actions,
+.medical-rehabilitation-availability {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .5rem;
+}
+
+.medical-rehabilitation-approach,
+.medical-rehabilitation-primary,
+.medical-rehabilitation-secondary,
+.medical-rehabilitation-availability-choice,
+.medical-rehabilitation-complete {
+  min-width: 0;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 10px;
+  background: rgba(0,0,0,.22);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.medical-rehabilitation-approach {
+  display: grid;
+  gap: .32rem;
+  padding: .75rem;
+  text-align: left;
+}
+
+.medical-rehabilitation-approach strong { font-size: .7rem; }
+.medical-rehabilitation-approach span,
+.medical-rehabilitation-approach small {
+  color: rgba(255,255,255,.66);
+  font-size: .62rem;
+  line-height: 1.42;
+}
+
+.medical-rehabilitation-selected-approach,
+.medical-rehabilitation-availability-outcome,
+.medical-rehabilitation-match-evidence {
+  display: grid;
+  gap: .35rem;
+  padding: .8rem;
+  border-left: 3px solid #75d39b;
+  background: rgba(0,0,0,.18);
+}
+
+.medical-rehabilitation-evidence {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+}
+
+.medical-rehabilitation-evidence section {
+  min-width: 0;
+  padding: .75rem;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+}
+
+.medical-rehabilitation-evidence section > strong { font-size: .68rem; }
+.medical-rehabilitation-evidence ul { display: grid; gap: .35rem; margin-top: .45rem; padding-left: 1rem; }
+.medical-rehabilitation-criteria li[data-met="true"]::marker { color: #75d39b; }
+.medical-rehabilitation-criteria li[data-met="false"]::marker { color: #f0c75e; }
+
+.medical-rehabilitation-primary,
+.medical-rehabilitation-secondary,
+.medical-rehabilitation-availability-choice,
+.medical-rehabilitation-complete {
+  padding: .7rem;
+  font-size: .66rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.medical-rehabilitation-primary { border-color: rgba(117,211,155,.7); }
+.medical-rehabilitation-primary:disabled { opacity: .42; cursor: not-allowed; }
+.medical-rehabilitation-availability-choice[aria-pressed="true"] { border-color: #75d39b; background: rgba(117,211,155,.14); }
+.medical-rehabilitation-availability-outcome[data-status="incomplete"] { border-left-color: #f0c75e; }
+.medical-rehabilitation-availability-outcome[data-status="premature"] { border-left-color: #ef8d8d; }
+.medical-rehabilitation-match-evidence[data-aligned="false"] { border-left-color: #f0c75e; }
+.medical-rehabilitation-availability-outcome small,
+.medical-rehabilitation-match-evidence small,
+.medical-rehabilitation-guardrail {
+  color: rgba(255,255,255,.56);
+  font-size: .62rem;
+  line-height: 1.45;
+}
+
+.medical-rehabilitation-complete { justify-self: start; }
+
 .opponent-analysis-workshop-v1 {
   display: grid;
   gap: .85rem;
@@ -330,6 +502,11 @@
 
   .medical-decision-evidence,
   .medical-decision-choices,
+  .medical-rehabilitation-stages,
+  .medical-rehabilitation-approaches,
+  .medical-rehabilitation-evidence,
+  .medical-rehabilitation-actions,
+  .medical-rehabilitation-availability,
   .opponent-analysis-focuses,
   .opponent-analysis-countermeasures,
   .opponent-analysis-actions { grid-template-columns: 1fr; }

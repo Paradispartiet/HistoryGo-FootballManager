@@ -216,6 +216,7 @@ import {
   resolveIndividualTrainingWeek,
   summarizeIndividualTraining
 } from "./football-individual-training.js";
+import { sanitizeMedicalRehabilitationPlan } from "./football-medical-decision-learning.js";
 import { buildStaffIdentitySummary } from "./football-staff-identity-engine.js";
 import {
   createDefaultOffPitchState,
@@ -487,6 +488,10 @@ const state = {
   // ingen vei inn i treningsscore, kampbonus eller motorberegning.
   trainingExerciseHypothesis: null,
   trainingProblemSuggestion: null,
+  // Managerens kriteriebaserte returplan. Planen bor i aktiv modussesjon og
+  // beskriver arbeidsforløpet; player-condition eier fortsatt skade,
+  // belastning, tilgjengelighet og alle virkninger.
+  medicalRehabilitationPlan: null,
   // Katalogen over individuelle treningsspor (fra datafil, normalisert).
   individualTrainingCatalogue: { capacity: { base: 1, perStaffMember: 1, max: 5 }, tracks: [] },
   // Ukas individuelle oppfølging: { week, assignments: [] }.
@@ -16489,6 +16494,24 @@ function bindTrainingWorkspaceControls() {
 }
 
 function bindTrainingAndKnowledgeControls() {
+  window.addEventListener("hgfm:medical-rehabilitation-plan-save", (event) => {
+    const requested = event.detail?.plan;
+    const plan = requested == null ? null : sanitizeMedicalRehabilitationPlan(requested);
+    if (requested != null && !plan) return;
+    state.medicalRehabilitationPlan = plan ? JSON.parse(JSON.stringify(plan)) : null;
+    if (state.modeEnvelope) {
+      state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+      try { state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope); } catch (_) { /* memory-only */ }
+    }
+    if (event.detail && typeof event.detail === "object") {
+      event.detail.savedPlan = state.medicalRehabilitationPlan;
+    }
+    window.dispatchEvent(new CustomEvent("hgfm:medical-rehabilitation-plan-changed", {
+      detail: { plan: state.medicalRehabilitationPlan }
+    }));
+    renderApp();
+  });
+
   window.addEventListener("hgfm:training-exercise-save", (event) => {
     const hypothesis = event.detail?.hypothesis;
     const currentWeek = Number(state.clubWeekState?.week) || 1;
@@ -17200,6 +17223,7 @@ function hydrateModeSessions() {
   } else {
     applyModeSession(state, state.modeEnvelope.sessions[mode]);
   }
+  state.medicalRehabilitationPlan = sanitizeMedicalRehabilitationPlan(state.medicalRehabilitationPlan);
   state.gameStartState = normalizeGameStartState({ ...state.gameStartState, selectedMode: mode });
   // Availability er klubb- og modusavhengig. hydratePersistedUiState() kan ha
   // fylt cachen før gameStartState og aktiv modussnapshot var ferdig hydrert;

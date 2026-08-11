@@ -13,7 +13,7 @@ export const MODES = Object.freeze(["league", "scenario", "training", "national"
 export const SESSION_STATE_FIELDS = Object.freeze([
   "selectedFormationId", "selectedTacticId", "lineup", "slotPositions",
   "weeklyTrainingFocus", "weeklyTrainingProgram", "individualTraining", "trainingWeek",
-  "opponentAnalysisPlan", "trainingExerciseHypothesis", "trainingProblemSuggestion",
+  "opponentAnalysisPlan", "trainingExerciseHypothesis", "trainingProblemSuggestion", "medicalRehabilitationPlan",
   "activeKnowledgeFocusId", "completedKnowledgeFocusIds", "clubWeekState",
   "clubWeekFeedback", "clubWeekEventLog", "matchday", "miniSeason",
   "readInboxMessageIds", "deliveredInboxMessageIds", "selectedInboxChoices",
@@ -134,6 +134,7 @@ export function createSecondarySession(league, mode) {
   session.weeklyTrainingProgram = null;
   session.trainingExerciseHypothesis = null;
   session.trainingProblemSuggestion = null;
+  session.medicalRehabilitationPlan = null;
   const firstStepByMode = { scenario: "scenario_select", national: "nation_select", training: "training" };
   session.firstTimePlaythrough = { started: false, completed: false, currentStep: firstStepByMode[mode] || "training" };
   return session;
