@@ -1702,6 +1702,61 @@ spillere arven eier alene, ellers måler den naboen.**
 
 **Gjelden: 16 arver / 1244 spillere → 13 arver / 954 spillere.**
 
+### Fjerde konvertering: Start, Bryne og Moss — og to vakter som skiller lag
+
+255 profiler, samme boilerplate. **192 tømt, 6 satt til v2-lesning, 2 rørt ikke.**
+Start traff 85 av 85 rent.
+
+Bryne og Moss hadde flere navn i fila enn i katalogen — 85 mot 68 og 85 mot 82 —
+og hele differansen er profiler **uten oppgitt posisjon**. Sytten av dem er
+Brynes eldste bevarte lagbilde fra 1928 ved Bryne Mølle. De ble aldri importert,
+fordi en profil uten posisjon ikke kan bygges, og det er riktig at de fortsatt
+ikke er det.
+
+Unntaket er derfor generalisert i stedet for å liste tjue navn: et navn kan
+mangle i katalogen **hvis og bare hvis kilden ikke gir ham en posisjon**. Alt
+annet stopper konverteringen.
+
+Og en feil verdt å ha med: `finn()` hadde en global fallback, og den koblet
+Moss' posisjonsløse «John Olsen» til en helt annen John Olsen i katalogen.
+Fallbacken er fjernet — **en konverteringsfil beskriver én klubbs spillere, så
+oppslaget holder seg på banen.**
+
+#### To korpusbrede vakter, to motsatte utfall
+
+Begge måler «er styrkene lest per spiller eller malt per posisjon», begge er
+korpusbrede, og begge falt i denne runden. Den ene ble lagt ned forrige gang,
+den andre er beholdt — og forskjellen lar seg måle:
+
+| spredt malimport | profil-unikhet | unike styrke-sett |
+|---|---:|---:|
+| ingen (ærlig) | 83,23 % | 45,54 % |
+| 100 spillere | **83,47 %** ↑ | 41,75 % ↓ |
+| 300 spillere | 79,54 % ↓ | 35,39 % ↓ |
+
+Profil-unikheten **går opp** av en malimport på 100 og kunne derfor ikke reddes
+av en terskel. Styrke-sett-andelen går ned, monotont, og da er remåling riktig
+svar: grensa flyttet fra 0,50 til **0,43**, mellom den ærlige katalogen og
+100-spiller-bittet.
+
+Regelen som skiller dem er ikke «korpusbred eller per klubb», men **om målet er
+monotont i feilen**. Det er det eneste som avgjør om en terskel kan finnes.
+
+#### Vakten som ikke kunne overleve sin egen jobb
+
+Meta-vakten «nok arver til å måle styrkespredningen per klubb» krevde 20 arver
+med minst 20 eksklusive styrkebærende spillere. Målt: når alle 22 modellerte
+arver er konvertert, står **åtte** igjen. Vakten ville felt siste etappe av
+arbeidet den er del av.
+
+Den beskyttet heller ikke mot det den så ut til å beskytte mot. En malimport gir
+*alle* spillerne i en arv styrker, så den gjør arven kvalifiserende av seg selv —
+per-klubb-sjekken er **selvbevæpnende** mot nettopp den feilen den finnes for.
+Det eneste tallet fanger er at løkka har sluttet å kjøre, og til det holder et
+gulv på 5. Den er nå navngitt som det den er: en røyktest.
+
+**Gjelden: 13 arver / 954 spillere → 10 arver / 719 spillere.**
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,
