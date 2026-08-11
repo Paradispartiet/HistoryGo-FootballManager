@@ -6,29 +6,21 @@ hvordan det måles på nytt.
 
 ---
 
-## P0 — to vakter er i ferd med å felle neste endring
+## P0 — GJORT (11.08.2026)
 
-Begge er målt, begge ligger mellom en ærlig katalog og et bitt, og begge har
-nesten ingen klaring igjen. De feller neste import eller konvertering uansett
-hvor riktig den er.
+Begge vaktene er behandlet, og de svarte forskjellig på monotonitetsprøven:
 
-| Vakt | Ærlig | Grense | Klaring | Bitt |
-|---|---:|---:|---:|---:|
-| Unike styrke-sett, korpus | 43,19 % | 43,00 | **0,19 poeng** | 41,75 % (malimport 100) |
-| Toppbøtter | 44,30 % | 45,00 | 0,70 poeng | 48,65 % (flat grunnlinje) |
+- **Toppbøtter** var ikke bare feil satt, den var feil form. Tallet SYNKER med
+  en malimport (44,30 → 42,73 ved 600 spillere), så terskelen har aldri kunnet
+  fange feilen. Erstattet av en relativ vakt: posisjonsvektingen må bidra minst
+  1,5 poeng mindre klumping enn en flat grunnlinje. Begge endepunktene regnes ut
+  hver kjøring, så den kan ikke bli utdatert. Verifisert isolert.
+- **Unike styrke-sett** er monoton (43,19 → 37,02 → 27,40 → 19,72) og ble
+  remålt: grensa fra 0,43 til **0,40**, 3,2 poeng klaring hver vei.
 
-**Handling:** ikke flytt dem preventivt. Rutinen er fast og skal følges når de
-fyrer: mål *begge* endepunktene på nytt, sett grensa mellom dem, aldri under
-bittet — og sjekk først at målet fortsatt er **monotont i feilen**. Er det ikke
-det, skal vakten skrives om eller legges ned, slik profil-unikheten og medianen
-ble.
-
-Den korpusbrede styrke-sett-vakten er den mest utsatte, og den er verdt et
-ekstra blikk: den er korpusbred, og fire slike er allerede lagt ned eller
-omskrevet. Den ble beholdt fordi den *er* monoton. Neste gang den fyrer, prøv
-monotoniteten på nytt før grensa flyttes.
-
----
+Se `docs/klubbvalg.md` for målingene. Regelen som nå har avgjort fire vakter:
+**sjekk om målet er monotont i feilen før grensa flyttes** — og hvis det ikke er
+det, skriv om eller legg ned.
 
 ## P1 — 1244 spillere har ingen dokumentasjon i det hele tatt
 

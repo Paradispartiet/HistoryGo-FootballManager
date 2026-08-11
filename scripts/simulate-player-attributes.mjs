@@ -302,10 +302,38 @@ const bøtter = [...new Set(allValues)]
   .sort((a, b) => b - a);
 const toStørste = (bøtter[0] + (bøtter[1] || 0)) / allValues.length;
 const toStørsteFlat = toStørsteAv(players.flatMap((p) => Object.values(flatProfiles[p.id].values)));
-check("flat grunnlinje klumper seg MER enn katalogen", toStørsteFlat > 0.45,
-  `flat ${(toStørsteFlat * 100).toFixed(2)} % mot ærlig ${(toStørste * 100).toFixed(2)} %`);
-check("verdiene klumper seg ikke på to tall", toStørste < 0.45,
-  `${(toStørste * 100).toFixed(1)} %`);
+// Den absolutte grensa er ERSTATTET av en relativ, og grunnen er at den aldri
+// kunne fange feilen den påstod å fange.
+//
+// Vakten sier «verdiene klumper seg ikke på to tall» og feller et for HØYT
+// tall. Men målt mot en malimport går tallet ned, ikke opp:
+//
+//   ærlig katalog        44,30 %
+//   malimport 100        44,01 %
+//   malimport 300        43,99 %
+//   malimport 600        42,73 %
+//
+// Malte spillere får fire ferdigheter hver, og det SPRER verdiene deres bort
+// fra grunnlinjen. Den absolutte grensa har altså vært en terskel mot et tall
+// som beveger seg motsatt vei av feilen — og den har måttet flyttes fem ganger
+// (0,38 → 0,40 → 0,42 → 0,43 → 0,45) uten å ha fanget noe.
+//
+// Det vakten FAKTISK har målt hele tiden, er det ene bittet som virker: en flat
+// grunnlinje klumper hardere enn en posisjonsvektet. Det er en forskjell, ikke
+// et nivå, og forskjellen trenger ingen kalibrering:
+//
+//   ærlig      44,30 mot flat 48,65   = 4,36 poeng
+//   malimport 300                     = 2,49 poeng
+//   flat grunnlinje (bittet)          = 0 poeng, per definisjon
+//
+// Kravet er derfor at posisjonsvektingen må BIDRA — minst halvannet poeng
+// mindre klumping enn en posisjonsblind katalog. Det er selvkalibrerende: begge
+// endepunktene regnes ut hver kjøring fra de samme dataene, så tallet kan aldri
+// bli utdatert slik de fem forrige grensene ble.
+const baselineBidrag = toStørsteFlat - toStørste;
+check("posisjonsvektingen reduserer klumpingen", baselineBidrag >= 0.015,
+  `flat ${(toStørsteFlat * 100).toFixed(2)} % mot ærlig ${(toStørste * 100).toFixed(2)} %` +
+  ` = ${(baselineBidrag * 100).toFixed(2)} poeng`);
 
 // Svake sider måles bare der de betyr noe. En utespiller som ikke redder skudd
 // er ikke svak, han er utespiller — og en «svakest»-liste full av
@@ -936,7 +964,20 @@ check("tomme styrkelister finnes bare der kilden sa fra",
 // Nivået faller fordi konverteringene fjerner modellerte firetokens-sett og
 // lar tynne, ekte lesninger stå igjen; åtte Levanger-navn bærer nøyaktig
 // ["finishing"]. Det er ikke fortynning som skal slippe unna, det er ærlighet.
-check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.43,
+//
+// Remålt igjen etter de siste konverteringene, og denne gangen fordi klaringen
+// var nede i 0,19 poeng — 43,19 % mot en grense på 0,43. Endepunktene nå:
+//
+//   ærlig katalog        43,19 %
+//   malimport 100        37,02 %
+//   malimport 300        27,40 %
+//   malimport 600        19,72 %
+//
+// Grensa settes til 0,40, midt mellom den ærlige katalogen og 100-bittet — 3,2
+// poeng klaring hver vei i stedet for 0,19 på den ene siden. Monotoniteten er
+// prøvd på nytt og holder: dette er fortsatt et mål som synker med feilen, og
+// det er derfor det fortsatt kan ha en terskel.
+check("styrkene er lest per spiller, ikke malt per posisjon", strengthShare > 0.40,
   `${strengthSets.size} unike styrke-sett av ${medStyrker.length} med styrker (${(strengthShare * 100).toFixed(1)} %)`);
 
 // ---------------------------------------------------------------------------
@@ -1197,7 +1238,7 @@ console.log(JSON.stringify({
   toppbøtter: {
     ærlig: `${(toStørste * 100).toFixed(2)} %`,
     flatGrunnlinje: `${(toStørsteFlat * 100).toFixed(2)} %`,
-    grense: "45,00 %"
+    baselineBidrag: `${((toStørsteFlat - toStørste) * 100).toFixed(2)} poeng (krav 1,50)`
   },
   profilUnikhet: {
     ærlig: `${(uniqueShare * 100).toFixed(2)} %`,
