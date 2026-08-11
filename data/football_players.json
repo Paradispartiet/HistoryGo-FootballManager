@@ -2547,12 +2547,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "shot_stopping",
-        "positioning",
-        "command_of_area",
-        "distribution"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "calm_build_up",
@@ -2694,12 +2689,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "dribbling",
-        "acceleration",
-        "one_vs_one",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "width",
         "isolation_duels",
@@ -3196,12 +3186,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "positioning",
-        "tackling"
-      ],
+      "strengths": [],
       "needs": [
         "defensive_support",
         "clear_marking_scheme",
@@ -3263,12 +3248,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "stamina",
-        "crossing",
-        "overlapping_runs",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "width",
         "runners_ahead",
@@ -3332,12 +3312,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "vision",
-        "passing_range",
-        "tempo_control",
-        "composure"
-      ],
+      "strengths": [],
       "needs": [
         "time_on_ball",
         "passing_options",
@@ -3493,12 +3468,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "finishing",
-        "movement",
-        "runs_behind",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "service",
         "space_behind",
@@ -3824,12 +3794,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "positioning",
-        "interceptions",
-        "simple_passing",
-        "tempo_control"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_reference",
         "passing_options",
@@ -4037,12 +4002,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "dribbling",
-        "acceleration",
-        "one_vs_one",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "width",
         "isolation_duels",
@@ -4113,12 +4073,7 @@
       "archetypes": [
         "club_professional"
       ],
-      "strengths": [
-        "vision",
-        "final_pass",
-        "first_touch",
-        "combination_play"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -4252,12 +4207,7 @@
         "leader",
         "club_professional"
       ],
-      "strengths": [
-        "passing_range",
-        "tempo_control",
-        "leadership",
-        "game_reading"
-      ],
+      "strengths": [],
       "needs": [
         "clear_task",
         "midfield_partner",
@@ -4327,12 +4277,7 @@
         "link_player",
         "runner"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "runs_behind",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "runners_around",
         "space_behind",
@@ -5301,14 +5246,7 @@
         "movement",
         "one_vs_one"
       ],
-      "strengths": [
-        "dribbling",
-        "acceleration",
-        "final_pass",
-        "wide_support",
-        "one_vs_one",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "isolation_duels",
@@ -6409,13 +6347,7 @@
         "stamina",
         "defensive_presence"
       ],
-      "strengths": [
-        "duels",
-        "tackling",
-        "interceptions",
-        "stamina",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "clear_task",
         "midfield_partner",
@@ -7214,14 +7146,7 @@
         "leader",
         "build_up_defender"
       ],
-      "strengths": [
-        "positioning",
-        "game_reading",
-        "duels",
-        "simple_passing",
-        "leadership",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "covering_partner",
@@ -8654,13 +8579,7 @@
         "dribbler",
         "final_pass"
       ],
-      "strengths": [
-        "final_pass",
-        "dribbling",
-        "vision",
-        "chance_creation",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "time_on_ball",
         "central_space",
@@ -27253,11 +27172,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "dribbling",
-        "final_pass",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -27922,11 +27837,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -28191,11 +28102,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "hold_up_play",
-        "box_finishing",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -28329,11 +28236,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "pace",
-        "acceleration",
-        "pressing"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -28873,11 +28776,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "strength",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -29975,13 +29874,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "box_finishing",
-        "final_pass",
-        "leadership",
-        "game_reading",
-        "finishing"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -30116,13 +30009,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement",
-        "strength",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -30181,13 +30068,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning",
-        "command_of_area",
-        "bravery"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -30245,12 +30126,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "positioning",
-        "leadership",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -30311,11 +30187,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "long_shots",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -30383,12 +30255,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "positioning",
-        "tackling",
-        "leadership",
-        "interceptions"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -30534,12 +30401,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning",
-        "leadership",
-        "interceptions"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -30666,12 +30528,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "leadership",
-        "determination",
-        "teamwork",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -30732,12 +30589,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "set_pieces",
-        "stamina",
-        "leadership",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -30797,12 +30649,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning",
-        "determination",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -30859,11 +30706,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -30924,13 +30767,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "final_pass",
-        "leadership",
-        "box_finishing",
-        "chance_creation"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -30988,11 +30825,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -31053,12 +30886,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "aggression",
-        "movement",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -31125,11 +30953,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "bravery"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -31188,12 +31012,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "passing_range",
-        "set_pieces",
-        "tempo_control",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -31336,12 +31155,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "leadership",
-        "duels",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -31401,12 +31215,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "passing_range",
-        "positioning",
-        "tempo_control",
-        "interceptions"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -31466,12 +31275,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "leadership",
-        "passing_range",
-        "tempo_control",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -31531,12 +31335,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "crossing",
-        "box_finishing",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -31597,12 +31396,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "teamwork",
-        "simple_passing",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -31662,11 +31456,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "chance_creation",
-        "dribbling",
-        "final_pass"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -31726,11 +31516,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "combination_play"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -31790,11 +31576,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -31852,12 +31634,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "positioning",
-        "concentration",
-        "reflexes"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -31916,11 +31693,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -31979,12 +31752,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "positioning",
-        "heading",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -32045,11 +31813,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "chance_creation",
-        "first_touch",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -32112,12 +31876,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "box_finishing",
-        "determination",
-        "movement",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -32179,12 +31938,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "pace",
-        "acceleration",
-        "positioning",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -32253,11 +32007,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "chance_creation",
-        "dribbling",
-        "final_pass"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -32319,11 +32069,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -32391,11 +32137,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "box_finishing",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -32465,12 +32207,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "first_touch",
-        "dribbling",
-        "one_vs_one",
-        "game_reading"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -32539,11 +32276,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "overlapping_runs",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -32603,11 +32336,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "acceleration",
-        "dribbling",
-        "box_finishing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -32668,12 +32397,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "heading",
-        "positioning",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -32741,11 +32465,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "teamwork",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -32805,11 +32525,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "teamwork",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -32868,11 +32584,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -32932,11 +32644,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "crossing",
-        "box_finishing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -32997,11 +32705,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "pace",
-        "box_finishing",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -33062,11 +32766,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "crossing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -33126,11 +32826,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -33190,11 +32886,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "teamwork",
-        "positioning",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -33251,11 +32943,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -33314,11 +33002,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -33376,11 +33060,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -33440,11 +33120,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "first_touch",
-        "simple_passing",
-        "tempo_control"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -33505,11 +33181,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "first_touch",
-        "teamwork",
-        "combination_play"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -33569,11 +33241,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "teamwork",
-        "positioning",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -33634,11 +33302,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "positioning",
-        "leadership",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -33706,11 +33370,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -33772,10 +33432,6 @@
         "tempo_setter"
       ],
       "strengths": [
-        "work_rate",
-        "leadership",
-        "stamina",
-        "teamwork",
         "natural_fitness",
         "box_finishing"
       ],
@@ -33843,11 +33499,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "combination_play"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -33907,10 +33559,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -33967,11 +33616,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "determination",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -34032,11 +33677,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "composure",
-        "set_pieces",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -34098,12 +33739,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "dribbling",
-        "first_touch",
-        "vision",
-        "one_vs_one"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -34165,11 +33801,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "positioning",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -34298,14 +33930,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "tackling",
-        "stamina",
-        "heading",
-        "natural_fitness",
-        "determination",
-        "game_reading"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -34373,11 +33998,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "heading",
-        "tackling",
-        "long_shots"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -34436,11 +34057,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -34501,11 +34118,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "first_touch",
-        "vision",
-        "passing_range"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -34564,11 +34177,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "leadership",
-        "box_finishing",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -34628,11 +34237,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -34693,11 +34298,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -34757,11 +34358,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -34822,11 +34419,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "positioning",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -34886,11 +34479,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "positioning",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -34950,11 +34539,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "strength",
-        "tackling",
-        "long_shots"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -35011,11 +34596,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -35074,11 +34655,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "positioning",
-        "command_of_area"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -35136,11 +34713,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "heading",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -35199,11 +34772,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "distribution"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -35270,11 +34839,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "positioning",
-        "teamwork",
-        "concentration"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -35398,11 +34963,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "composure"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -35463,11 +35024,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "leadership",
-        "passing_range",
-        "tempo_control"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -35527,11 +35084,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "positioning",
-        "stamina",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -35591,11 +35144,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "leadership",
-        "stamina",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -35655,11 +35204,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -35718,11 +35263,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "positioning",
-        "tackling"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -35782,11 +35323,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "duels",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -35855,11 +35392,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "first_touch",
-        "final_pass",
-        "set_pieces"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -35920,11 +35453,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -35982,11 +35511,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -36189,11 +35714,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "strength",
-        "heading",
-        "hold_up_play"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -36255,11 +35776,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "leadership",
-        "stamina",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -36317,11 +35834,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "command_of_area"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -36377,11 +35890,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -36442,11 +35951,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "teamwork",
-        "simple_passing",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -36503,11 +36008,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "finishing"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -36567,13 +36068,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -36632,13 +36127,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -36698,11 +36187,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "crossing",
-        "dribbling",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -36761,11 +36246,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -36824,11 +36305,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "acceleration",
-        "box_finishing",
-        "dribbling"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -36889,12 +36366,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -36954,12 +36426,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "tempo_control"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -37019,11 +36486,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "tempo_control",
-        "passing_range",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -37149,11 +36612,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -37212,11 +36671,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "heading",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -37279,9 +36734,6 @@
         "tempo_setter"
       ],
       "strengths": [
-        "late_runs",
-        "long_shots",
-        "stamina",
         "finishing",
         "final_pass"
       ],
@@ -37351,11 +36803,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -37416,11 +36864,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "teamwork",
-        "stamina",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -37480,11 +36924,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "concentration"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -37552,11 +36992,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "crossing",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -37617,11 +37053,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "duels",
-        "hold_up_play"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -41934,12 +41366,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "first_touch",
-        "hold_up_play",
-        "vision",
-        "combination_play"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -42000,11 +41427,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "defensive_reading",
-        "stamina",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -42067,12 +41490,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -42140,12 +41558,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "duels",
-        "defensive_reading",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -42215,12 +41628,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "vision",
-        "final_pass",
-        "set_pieces",
-        "combination_play"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -42288,11 +41696,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "strength",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -42430,13 +41834,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "command_of_area",
-        "composure",
-        "set_pieces"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -42572,12 +41970,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "crossing",
-        "one_vs_one",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -42639,11 +42032,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "passing_range",
-        "long_shots",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -42703,11 +42092,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "positioning",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -42768,11 +42153,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "first_touch",
-        "vision",
-        "dribbling"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -42835,12 +42216,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "teamwork",
-        "simple_passing",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -42899,11 +42275,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "positioning",
-        "defensive_reading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -42963,11 +42335,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "crossing",
-        "stamina",
-        "wide_support"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -43027,11 +42395,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning",
-        "tackling"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -43092,11 +42456,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -43170,10 +42530,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -43232,11 +42589,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "duels",
-        "stamina",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -43295,11 +42648,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "duels",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -43359,11 +42708,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "leadership",
-        "tempo_control",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -43422,12 +42767,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "positioning",
-        "bravery"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -43487,11 +42827,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "defensive_reading",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -43548,11 +42884,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -43613,11 +42945,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "stamina",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -43676,12 +43004,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "command_of_area",
-        "positioning",
-        "game_reading"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -43748,11 +43071,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "overlapping_runs",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -43961,11 +43280,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "dribbling",
-        "first_touch",
-        "final_pass"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -44094,11 +43409,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "heading",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -44156,11 +43467,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -44230,11 +43537,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "acceleration",
-        "dribbling",
-        "box_finishing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -44303,11 +43606,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -44366,11 +43665,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "duels",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -44565,11 +43860,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "teamwork",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -44629,11 +43920,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -44693,10 +43980,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -44756,10 +44040,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -44821,11 +44102,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "final_pass",
-        "box_finishing",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -44886,10 +44163,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -44947,11 +44221,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "heading",
-        "duels",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -45010,10 +44280,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -45073,10 +44340,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "overlapping_runs"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -45133,10 +44397,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -45197,10 +44458,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -45285,11 +44543,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "heading",
-        "hold_up_play",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -45360,10 +44614,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "final_pass",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -45425,10 +44676,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "command_of_area"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -45492,11 +44740,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "strength",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -45558,10 +44802,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "acceleration",
-        "dribbling"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -45627,10 +44868,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "strength",
-        "box_finishing"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -45691,10 +44929,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "tackling"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -45754,11 +44989,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "pace",
-        "acceleration",
-        "dribbling"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -45820,11 +45051,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "crossing",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -45892,10 +45119,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "overlapping_runs"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -45956,12 +45180,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "simple_passing",
-        "stamina",
-        "teamwork",
-        "game_reading"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -46026,10 +45245,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -46091,10 +45307,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "simple_passing",
-        "long_shots"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -46153,10 +45366,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -46213,10 +45423,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -46341,12 +45548,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_presence"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -46407,12 +45609,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "positioning",
-        "tackling",
-        "interceptions",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -46471,13 +45668,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "heading",
-        "positioning",
-        "blocking",
-        "defensive_reading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -46534,12 +45725,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "positioning",
-        "box_presence"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -46597,11 +45783,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "pace",
-        "acceleration",
-        "box_finishing"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -46728,13 +45910,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "vision",
-        "dribbling",
-        "final_pass",
-        "first_touch",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -50885,11 +50061,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "simple_passing",
-        "tempo_control",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -61719,12 +60891,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement",
-        "off_ball_runs"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -61785,12 +60952,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "leadership",
-        "tackling",
-        "simple_passing",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -61920,11 +61082,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "positioning",
-        "tackling",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -61985,11 +61143,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "box_finishing",
-        "acceleration",
-        "off_ball_runs"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -62047,11 +61201,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -62112,12 +61262,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "positioning",
-        "game_reading",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -62177,11 +61322,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -62238,11 +61379,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -62301,11 +61438,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "command_of_area",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -62363,12 +61496,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "positioning",
-        "duels",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -62430,12 +61558,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "first_touch",
-        "game_reading",
-        "final_pass",
-        "long_shots"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -62500,11 +61623,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "late_runs",
-        "box_finishing",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -62566,11 +61685,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -62631,11 +61746,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "positioning",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -62695,11 +61806,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -62760,11 +61867,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "crossing",
-        "acceleration"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -62825,11 +61928,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "determination"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -62890,12 +61989,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "positioning",
-        "interceptions",
-        "simple_passing",
-        "strength"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -62955,12 +62049,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "tackling",
-        "aggression",
-        "stamina",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -63018,11 +62107,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "command_of_area"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -63078,11 +62163,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "strength",
-        "hold_up_play"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -63143,11 +62224,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "acceleration",
-        "box_finishing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -63208,11 +62285,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "final_pass",
-        "long_shots",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -63358,11 +62431,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "duels",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -63422,11 +62491,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -63486,11 +62551,7 @@
       "archetypes": [
         "ball_winner"
       ],
-      "strengths": [
-        "tackling",
-        "stamina",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "clear_structure",
         "midfield_partner"
@@ -63548,11 +62609,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "distribution"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -63612,11 +62669,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -63674,11 +62727,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "positioning",
-        "command_of_area"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -63734,11 +62783,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -63799,11 +62844,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "box_finishing",
-        "acceleration",
-        "dribbling"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -63863,11 +62904,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -63924,11 +62961,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -64065,11 +63098,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "movement",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -64127,11 +63156,7 @@
       "archetypes": [
         "box_presence"
       ],
-      "strengths": [
-        "box_finishing",
-        "finishing",
-        "movement"
-      ],
+      "strengths": [],
       "needs": [
         "box_service",
         "runners_inside"
@@ -64192,11 +63217,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "late_runs",
-        "long_shots",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -64256,11 +63277,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -64321,11 +63338,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "first_touch",
-        "final_pass",
-        "long_shots"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -64386,11 +63399,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -64449,11 +63458,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "simple_passing",
-        "stamina",
-        "tackling"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -64512,11 +63517,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "positioning",
-        "duels"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -64576,11 +63577,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "ball_carrying",
-        "stamina",
-        "long_shots"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -64639,11 +63636,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -64704,11 +63697,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "stamina",
-        "positioning",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -64767,11 +63756,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -64832,11 +63817,7 @@
       "archetypes": [
         "wide_support"
       ],
-      "strengths": [
-        "overlapping_runs",
-        "crossing",
-        "stamina"
-      ],
+      "strengths": [],
       "needs": [
         "wide_lane",
         "cover_behind"
@@ -64895,9 +63876,8 @@
         "box_presence"
       ],
       "strengths": [
-        "box_finishing",
         "finishing",
-        "movement",
+        "box_finishing",
         "strength"
       ],
       "needs": [
@@ -64968,11 +63948,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "leadership",
-        "stamina",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -65031,11 +64007,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "positioning",
-        "duels",
-        "leadership"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -65097,9 +64069,7 @@
         "dribbler"
       ],
       "strengths": [
-        "box_finishing",
-        "acceleration",
-        "dribbling"
+        "box_finishing"
       ],
       "needs": [
         "wide_space",
@@ -65169,9 +64139,6 @@
         "box_presence"
       ],
       "strengths": [
-        "strength",
-        "hold_up_play",
-        "box_finishing",
         "finishing"
       ],
       "needs": [
@@ -65250,11 +64217,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing",
-        "tempo_control"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -65315,11 +64278,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "work_rate",
-        "stamina",
-        "teamwork"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"
@@ -65386,11 +64345,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "leadership",
-        "duels",
-        "heading"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -65451,11 +64406,7 @@
         "creator",
         "between_lines"
       ],
-      "strengths": [
-        "final_pass",
-        "long_shots",
-        "first_touch"
-      ],
+      "strengths": [],
       "needs": [
         "central_space",
         "passing_options",
@@ -65519,11 +64470,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "crossing",
-        "dribbling",
-        "box_finishing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -65582,11 +64529,7 @@
       "archetypes": [
         "shot_stopper"
       ],
-      "strengths": [
-        "shot_stopping",
-        "reflexes",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "clear_defensive_line",
         "protected_box"
@@ -65647,11 +64590,7 @@
       "archetypes": [
         "dribbler"
       ],
-      "strengths": [
-        "dribbling",
-        "acceleration",
-        "crossing"
-      ],
+      "strengths": [],
       "needs": [
         "wide_space",
         "isolation_duels"
@@ -65719,10 +64658,7 @@
       "archetypes": [
         "duel_winner"
       ],
-      "strengths": [
-        "duels",
-        "positioning"
-      ],
+      "strengths": [],
       "needs": [
         "covering_partner",
         "clear_defensive_line"
@@ -65782,10 +64718,7 @@
       "archetypes": [
         "tempo_setter"
       ],
-      "strengths": [
-        "stamina",
-        "simple_passing"
-      ],
+      "strengths": [],
       "needs": [
         "midfield_partner",
         "passing_options"

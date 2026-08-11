@@ -301,9 +301,9 @@ const bøtter = [...new Set(allValues)]
   .sort((a, b) => b - a);
 const toStørste = (bøtter[0] + (bøtter[1] || 0)) / allValues.length;
 const toStørsteFlat = toStørsteAv(players.flatMap((p) => Object.values(flatProfiles[p.id].values)));
-check("flat grunnlinje klumper seg MER enn katalogen", toStørsteFlat > 0.44,
+check("flat grunnlinje klumper seg MER enn katalogen", toStørsteFlat > 0.45,
   `flat ${(toStørsteFlat * 100).toFixed(2)} % mot ærlig ${(toStørste * 100).toFixed(2)} %`);
-check("verdiene klumper seg ikke på to tall", toStørste < 0.44,
+check("verdiene klumper seg ikke på to tall", toStørste < 0.45,
   `${(toStørste * 100).toFixed(1)} %`);
 
 // Svake sider måles bare der de betyr noe. En utespiller som ikke redder skudd
@@ -786,6 +786,10 @@ const KJENT_UDOKUMENTERT = {
   // låses fra legacy-filens scoutingtekst. Taket er derfor ikke en grense her,
   // det er en registrering av at arven ikke dokumenterer ferdigheter i det hele
   // tatt. Tallet skal SYNKE når individuelle kilder leses tilbake.
+  brann_stadion: 1.01,       // Brann
+  aker_stadion: 1.01,        // Molde
+  bislett_stadion: 1.01,     // Lyn
+  lyse_arena: 1.01,          // Viking
   sor_arena: 1.01,           // Start
   bryne_stadion: 1.01,       // Bryne
   mellos_stadion: 1.01,      // Moss
@@ -831,11 +835,7 @@ const KJENT_UDOKUMENTERT = {
 // lister, og da SKAL oppføringen fjernes. Vakten under krever begge veier.
 const MODELLERTE_ARVER = new Set([
   "aspmyra_stadion",      // Bodø/Glimt 89      — ikke lokalisert av auditen
-  "aker_stadion",         // Molde 89           — ikke lokalisert av auditen
-  "bislett_stadion",      // Lyn 82             — ikke lokalisert av auditen
-  "brann_stadion",        // Brann 75           — ikke lokalisert av auditen
   "nadderud_stadion",     // Stabæk 75          — ikke lokalisert av auditen
-  "lyse_arena",           // Viking 70          — ikke lokalisert av auditen
   "jotun_arena",          // Sandefjord 68      — ikke lokalisert av auditen
   "kfum_arena",           // KFUM 66            — ikke lokalisert av auditen
   "araasen_stadion",      // Lillestrøm 56      — ikke lokalisert av auditen
@@ -1176,7 +1176,7 @@ console.log(JSON.stringify({
   toppbøtter: {
     ærlig: `${(toStørste * 100).toFixed(2)} %`,
     flatGrunnlinje: `${(toStørsteFlat * 100).toFixed(2)} %`,
-    grense: "44,00 %"
+    grense: "45,00 %"
   },
   profilUnikhet: {
     ærlig: `${(uniqueShare * 100).toFixed(2)} %`,

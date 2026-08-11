@@ -1757,6 +1757,48 @@ gulv på 5. Den er nå navngitt som det den er: en røyktest.
 
 **Gjelden: 13 arver / 954 spillere → 10 arver / 719 spillere.**
 
+### Femte konvertering: Brann, Molde, Lyn og Viking — de fire auditen ikke fant filer for
+
+316 profiler. **248 tømt, 6 satt til v2-lesning, 6 rørt ikke.** Alle fire
+antallene stemte eksakt med katalogen (75, 89, 82, 70), som er den beste
+indikasjonen på at filene er regenerert fra den samme importen.
+
+Lyn-fila har et vedlegg med **egen nummerering** — «## 1. Jørgen Juve og Arne
+Brustad» etter «## 82. Knut Berg» — og parseren leste første post der som en 83.
+profil. Rader uten `Kvaliteter`-felt filtreres nå bort; et vedlegg har ingen.
+
+#### Sju navn som skilte seg med ett tegn
+
+Katalogen har lagret disse i ASCII-nære former som kildefilene skriver med tegn:
+
+| Kilden | Katalogen |
+|---|---|
+| Jan Erik **Ø**sland | Jan Erik **O**sland |
+| Kristj**á**n Flittie Onstad | Kristj**a**n Flittie Onstad |
+| **Á**rmann Bj**ö**rnsson | **A**rmann Bj**ö**rnsson |
+| Einar Sekkes**æ**ter | Einar Sekkes**e**ter |
+| Thomas M**ø**rk | Thomas M**o**rk |
+| Kåre Elvs**ås** | Kåre Elvs**aas** |
+| Ingve B**ø** | Ingve B**øe** |
+
+Konvensjonene spriker — `æ` er blitt `e` ett sted og `å` er blitt `aa` et annet —
+så én translitterasjonstabell treffer ikke alle. Fall-tilbaket bretter ned til
+a–z, slår sammen doble bokstaver og godtar **én redigering**, med kandidater
+bare blant spillere på *denne banen* og krav om entydig treff. Hver kobling
+skrives ut, fordi det er slik de gale ble funnet.
+
+#### Toppbøttene flyttet før de rakk å felle noe
+
+Grensa hadde 0,15 poeng klaring etter denne runden (43,85 % mot 0,44). Den er
+flyttet til **0,45** nå, mellom ærlig 43,85 % og bittet 46,65 %, i stedet for å
+bli stående som en snublestein for neste konvertering. Begge bitt kjørt: flat
+grunnlinje og malimport på 100 feller begge.
+
+**Gjelden: 10 arver / 719 spillere → 6 arver / 403 spillere.**
+
+Igjen står Bodø/Glimt (47), KFUM (46), Sandefjord (41), Stabæk (41),
+Kristiansund (29) og Lillestrøm (24).
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,
