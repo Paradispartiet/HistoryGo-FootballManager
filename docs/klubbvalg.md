@@ -1799,6 +1799,32 @@ grunnlinje og malimport på 100 feller begge.
 Igjen står Bodø/Glimt (47), KFUM (46), Sandefjord (41), Stabæk (41),
 Kristiansund (29) og Lillestrøm (24).
 
+### Sjette konvertering: KFUM, Bodø/Glimt og Sandefjord
+
+223 profiler. **164 tømt, 3 satt til v2-lesning.** KFUM og Sandefjord traff rent,
+66 av 66 og 68 av 68.
+
+Bodø/Glimt hadde tre navn uten treff, og de deler seg i to slag. To ble tatt av
+det diakritiske fall-tilbaket — Papa Alioune **N'Diaye**/Ndiaye og Knut Helge
+**Nærås**/Nerås — mens den tredje viser en grense ved navnenøkkelen selv:
+
+> Katalogen har **Jahn Ivar «Mini» Jakobsen**. Nøkkelen stryker klammene, så det
+> som står igjen er «jahn ivar jakobsen». Fila skriver **Mini Jakobsen**.
+
+Konvensjonen som ellers *hjelper* — den som kobler «Rune «Bolli» Bolseth» til
+«Rune Bolseth» — gjemmer ham her, fordi kildefila bruker kallenavnet som
+fornavn. Ingen automatisk regel kan bygge bro over det uten å koble på etternavn
+alene, så han står i en navngitt kallenavnsliste, og oppføringen feiler høyt hvis
+navnet den peker på ikke finnes på banen.
+
+Bodø/Glimt hadde også 31 profiler som alt var tomme før denne runden. Det er
+naboeffekten: de står også på arver som er konvertert tidligere. Det er nettopp
+derfor alle per-arv-målingene teller eksklusive spillere.
+
+**Gjelden: 6 arver / 403 spillere → 3 arver / 180 spillere.**
+
+Igjen står **Stabæk (41), Kristiansund (29) og Lillestrøm (24)**.
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,

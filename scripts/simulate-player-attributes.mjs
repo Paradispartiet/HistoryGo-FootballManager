@@ -786,6 +786,9 @@ const KJENT_UDOKUMENTERT = {
   // låses fra legacy-filens scoutingtekst. Taket er derfor ikke en grense her,
   // det er en registrering av at arven ikke dokumenterer ferdigheter i det hele
   // tatt. Tallet skal SYNKE når individuelle kilder leses tilbake.
+  kfum_arena: 1.01,          // KFUM Oslo
+  aspmyra_stadion: 1.01,     // Bodø/Glimt
+  jotun_arena: 1.01,         // Sandefjord
   brann_stadion: 1.01,       // Brann
   aker_stadion: 1.01,        // Molde
   bislett_stadion: 1.01,     // Lyn
@@ -834,10 +837,7 @@ const KJENT_UDOKUMENTERT = {
 // den da kan telles ned: konverteres en arv til source-only, får den tomme
 // lister, og da SKAL oppføringen fjernes. Vakten under krever begge veier.
 const MODELLERTE_ARVER = new Set([
-  "aspmyra_stadion",      // Bodø/Glimt 89      — ikke lokalisert av auditen
   "nadderud_stadion",     // Stabæk 75          — ikke lokalisert av auditen
-  "jotun_arena",          // Sandefjord 68      — ikke lokalisert av auditen
-  "kfum_arena",           // KFUM 66            — ikke lokalisert av auditen
   "araasen_stadion",      // Lillestrøm 56      — ikke lokalisert av auditen
   "nordmore_stadion"      // Kristiansund 49    — ikke lokalisert av auditen
 ]);
