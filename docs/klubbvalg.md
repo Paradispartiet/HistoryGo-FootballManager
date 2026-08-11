@@ -1579,6 +1579,80 @@ beviset på at eksklusiv måling isolerer konverteringen fra forurensningen.
 
 **Gjelden: 22 arver og 1951 spillere → 19 arver og 1587 spillere.**
 
+### Andre konvertering: Fredrikstad, Strømsgodset og Odd — og en vakt som mistet premisset sitt
+
+344 profiler til, samme form: én unik kvalitetskjerne per fil. **301 lister
+tømt, 7 satt til v2-lesning, 2 rørt ikke** (Martin Ødegaard og Rune Jarstein, som
+begge også står på Ullevaal).
+
+Fredrikstad traff 100 av 100 rent. Odd hadde to mellomnavn-varianter. Strømsgodset
+hadde tre navn uten banetreff, og de tre er lærerike hver for seg:
+
+| Kilden | Katalogen | |
+|---|---|---|
+| Mustafa «Mos» Abdellaoue | Mostafa «Mos» Abdellaoue | ett tegn i fornavnet — samme mann |
+| Tobias Fjeld Gulliksen | Tobias Gulliksen | mellomnavn — samme mann |
+| **Rolf Halvorsen** | *finnes ikke* | 274 kamper, men «Uavklart historisk hovedposisjon» |
+
+Rolf Halvorsen er grunnen til at fila teller 144 og katalogen 143. Han faller på
+den samme regelen som «Historisk utespiller»: uten posisjon kan det ikke bygges
+en profil, og å gjette en ville vært posisjonsmalen kildene uttrykkelig sier de
+ikke bruker. Han står navngitt i konverteringsskriptet, ikke stilltiende hoppet
+over — et ukjent navn i en konverteringsfil er nesten alltid en feilkobling, og
+det var slik «Tore Pedersen (RBK)» ble funnet.
+
+#### Korpusandelen for profil-unikhet er pensjonert
+
+Vakten «profilene skiller stort sett spillere fra hverandre» har vært en
+ratchet, så en absolutt terskel målt mot et flat-grunnlinje-bitt. Etter seks
+konverteringer holder ingen av delene. Denne gangen er svaret å **fjerne** den.
+
+Tre målinger avgjør det:
+
+1. **Bittet snudde.** Ærlig katalog 83,23 %, flat grunnlinje 83,30 %. Det finnes
+   ikke lenger en terskel som slipper den ene og feller den andre.
+   Posisjonsvektingen var aldri det som skilte *dokumenterte* spillere fra
+   hverandre — den finnes for å gjøre en tier svak i forsvar — og da styrkene
+   ble færre og ærligere, forsvant korrelasjonen som gjorde bittet brukbart.
+
+2. **Målet er ikke monotont i feilen.** Malimport av 60 spillere gir 83,56 %, av
+   100 gir 83,47 % — begge *høyere* enn den ærlige katalogen. Først rundt 150
+   faller tallet.
+
+   | malimport | unikhet |
+   |---:|---:|
+   | ingen (ærlig) | 83,23 % |
+   | 60 spillere | **83,56 %** |
+   | 100 spillere | **83,47 %** |
+   | 150 spillere | 82,55 % |
+   | 300 spillere | 79,54 % |
+
+   En vakt som blir *grønnere* av feilen den skal fange, kan ikke reddes av en
+   bedre terskel.
+
+3. **Vakten som fanger feilen finnes allerede.** Bitt med en realistisk
+   malimport — hele Molde-arven gitt posisjonsmalens styrker — feller
+   per-klubb-målingen av seg selv, og med en skarpere melding:
+   `aker_stadion: 8 unike sett av 89 (9 %)`.
+
+Tallene regnes fortsatt ut og skrives ut, fordi trenden er verdt å se. De er
+bare ikke lenger en port.
+
+Dette er **femte gang** huset lærer at en korpusbred andel er feil form for en
+vakt. De fire første gangene ble den skrevet om. Denne gangen ble den lagt ned,
+og forskjellen er at det nå finnes en måling som gjør jobben bedre.
+
+#### Toppbøttene lever fortsatt — og det er ikke tilfeldig
+
+Den andre klumpevakten står: ærlig 41,50 % mot flat grunnlinje 44,63 %, grense
+flyttet til 0,43. Asymmetrien er verdt å forstå. Toppbøttene måler *alle*
+verdier hos *alle* spillere, også de uten dokumenterte styrker — og de er rene
+posisjonsgrunnlinjer. Der biter en flat grunnlinje fortsatt hardt.
+Profil-unikheten måler bare de dokumenterte, og det er nettopp den gruppa
+posisjonsvektingen betyr minst for.
+
+**Gjelden: 19 arver / 1587 spillere → 16 arver / 1244 spillere.**
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,
