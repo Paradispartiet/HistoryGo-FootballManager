@@ -89,6 +89,120 @@ test("medisinsk apparat gjør faktisk skade til valg og forklaring uten save-mut
   expect(conditionAfter).toBe(conditionBefore);
 });
 
+test("manageren lagrer et femtrinns rehabiliteringsforløp i aktiv modussesjon", async ({ page }) => {
+  await openMedicalRoom(page);
+  const path = page.locator(".medical-rehabilitation-path-v2");
+  await expect(path).toBeVisible();
+  await expect(path).toHaveAttribute("data-stage", "individual_rehab");
+  await expect(path.locator(".medical-rehabilitation-stages li")).toHaveCount(5);
+  await expect(path).toContainText("Individuell rehabilitering");
+  await expect(path).toContainText("Opptrening er ikke valgt");
+
+  const before = await page.evaluate(() => ({
+    condition: localStorage.getItem("hgfm.playerCondition.v1"),
+    keys: Object.keys(localStorage).sort()
+  }));
+  await path.locator('[data-medical-rehab-approach="criteria_led"]').click();
+  await expect(path).toContainText("Kriteriestyrt progresjon");
+  await expect(path.locator('[data-medical-rehab-action="advance"]')).toBeDisabled();
+
+  const after = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    return {
+      condition: localStorage.getItem("hgfm.playerCondition.v1"),
+      keys: Object.keys(localStorage).sort(),
+      plan: envelope?.sessions?.[envelope.activeMode]?.medicalRehabilitationPlan
+    };
+  });
+  expect(after.condition).toBe(before.condition);
+  expect(after.keys).toEqual(before.keys);
+  expect(after.plan.approachId).toBe("criteria_led");
+  expect(after.plan.stageId).toBe("individual_rehab");
+  expect(after.plan).not.toHaveProperty("score");
+  expect(after.plan).not.toHaveProperty("bonus");
+});
+
+test("condition-signalet åpner lagtrening og manageren velger kampbruk uten motorbonus", async ({ page }) => {
+  await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    const session = envelope.sessions[envelope.activeMode];
+    session.playerCondition = [{
+      playerId: "medical-case-player",
+      name: "Testspiller",
+      load: 62,
+      form: 0,
+      consecutiveFullMatches: 0,
+      injury: null
+    }];
+    session.medicalRehabilitationPlan = {
+      version: "historygo-football-manager.medical-rehabilitation.v2",
+      playerId: "medical-case-player",
+      playerName: "Testspiller",
+      approachId: "criteria_led",
+      stageId: "adapted_training",
+      startedWeek: 3,
+      updatedWeek: 3,
+      history: []
+    };
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+  });
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await openMedicalRoom(page);
+  const path = page.locator(".medical-rehabilitation-path-v2");
+  await expect(path).toHaveAttribute("data-stage", "partial_team_training");
+  await path.locator('[data-medical-rehab-action="advance"]').click();
+  await expect(path).toHaveAttribute("data-stage", "full_team_training");
+  await path.locator('[data-medical-availability="bench"]').click();
+  await expect(path.locator(".medical-rehabilitation-availability-outcome")).toHaveAttribute("data-status", "supported");
+  await expect(path).toContainText("Kampmotoren og player-condition endres ikke");
+
+  const stored = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
+    return envelope.sessions[envelope.activeMode].medicalRehabilitationPlan;
+  });
+  expect(stored.stageId).toBe("full_team_training");
+  expect(stored.availabilityDecisionId).toBe("bench");
+});
+
+test("etterkampen sammenligner planlagt retur med faktiske minutter og usikkerhet", async ({ page }) => {
+  await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    const session = envelope.sessions[envelope.activeMode];
+    session.playerCondition = [{ playerId: "medical-case-player", name: "Testspiller", load: 55, form: 0, injury: null }];
+    session.medicalRehabilitationPlan = {
+      version: "historygo-football-manager.medical-rehabilitation.v2",
+      playerId: "medical-case-player",
+      playerName: "Testspiller",
+      approachId: "criteria_led",
+      stageId: "full_team_training",
+      startedWeek: 3,
+      updatedWeek: 3,
+      availabilityDecisionId: "bench",
+      availabilityDecisionWeek: 3,
+      baselineMatchId: "before-return",
+      history: []
+    };
+    session.matchday = {
+      session: null,
+      lastMatch: {
+        id: "return-match",
+        opponent: { name: "Motstanderlaget" },
+        playerStats: { appearances: [{ playerId: "medical-case-player", minutes: 24 }] }
+      }
+    };
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+  });
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await openMedicalRoom(page);
+  const evidence = page.locator(".medical-rehabilitation-match-evidence");
+  await expect(evidence).toBeVisible();
+  await expect(evidence).toContainText("Plan: begrensede minutter");
+  await expect(evidence).toContainText("faktisk: begrensede minutter");
+  await expect(evidence).toContainText("beviser ikke alene");
+});
+
 test("medisinsk apparat leser aktiv modussnapshot fremfor delt legacy-key", async ({ page }) => {
   await page.evaluate(() => {
     const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
@@ -107,7 +221,8 @@ test("medisinsk apparat leser aktiv modussnapshot fremfor delt legacy-key", asyn
 
 test("medisinsk rom åpner eksisterende individuell oppfølging", async ({ page }) => {
   await openMedicalRoom(page);
-  await page.locator('#managerClubRoomDrawer [data-club-room-action="individual-training"]').click();
+  await page.locator('.medical-rehabilitation-path-v2 [data-medical-rehab-approach="criteria_led"]').click();
+  await page.locator('.medical-rehabilitation-path-v2 [data-medical-rehab-action="individual-training"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
   await expect(page.locator("#individualTrainingPicker")).toBeVisible();
@@ -119,6 +234,7 @@ test("medisinsk beslutningsverksted er responsivt og tilgjengelig", async ({ pag
   await expectNoHorizontalOverflow(page);
   const results = await new AxeBuilder({ page })
     .include(".medical-decision-workshop-v1")
+    .include(".medical-rehabilitation-path-v2")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));

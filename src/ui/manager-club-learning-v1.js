@@ -1,6 +1,11 @@
 import {
+  MEDICAL_REHABILITATION_APPROACHES,
+  createMedicalRehabilitationPath,
+  createRehabilitationMatchEvidence,
   createMedicalDecisionCase,
-  evaluateMedicalDecision
+  evaluateMedicalDecision,
+  evaluateRehabilitationAvailability,
+  updateMedicalRehabilitationPlan
 } from "../football-medical-decision-learning.js";
 import { MODE_SESSION_KEY, normalizeMode } from "../football-mode-sessions.js";
 import {
@@ -73,13 +78,19 @@ function ensureStyles() {
   document.head.append(link);
 }
 
-function readConditions() {
+function readMedicalContext() {
   try {
     const envelope = JSON.parse(localStorage.getItem(MODE_SESSION_KEY) || "null");
     const activeMode = normalizeMode(envelope?.activeMode);
     const activeSession = envelope?.sessions?.[activeMode];
     if (activeSession && Array.isArray(activeSession.playerCondition)) {
-      return activeSession.playerCondition;
+      return {
+        conditions: activeSession.playerCondition,
+        individualTraining: activeSession.individualTraining || null,
+        plan: activeSession.medicalRehabilitationPlan || null,
+        currentWeek: Number(activeSession?.clubWeekState?.week) || 1,
+        lastMatch: activeSession?.matchday?.lastMatch || null
+      };
     }
   } catch {
     // En korrupt konvolutt skal ikke gjøre den migrerte league-conditionen
@@ -87,10 +98,20 @@ function readConditions() {
   }
   try {
     const value = JSON.parse(localStorage.getItem(PLAYER_CONDITION_KEY) || "null");
-    return Array.isArray(value) ? value : [];
+    return {
+      conditions: Array.isArray(value) ? value : [],
+      individualTraining: null,
+      plan: null,
+      currentWeek: 1,
+      lastMatch: null
+    };
   } catch {
-    return [];
+    return { conditions: [], individualTraining: null, plan: null, currentWeek: 1, lastMatch: null };
   }
+}
+
+function readConditions() {
+  return readMedicalContext().conditions;
 }
 
 function renderMedicalOutcome(container, outcome) {
@@ -158,6 +179,191 @@ function appendMedicalDecisionWorkshop(body) {
   const source = node("p", "medical-decision-source", "Faggrunnlag: kriteriebasert og individuelt tilpasset rehabilitering; retur vurderes mot symptomer, funksjon, fotballkrav og en delt beslutning i støtteapparatet.");
   workshop.append(evidence, question, choices, outcome, source);
   body.append(workshop);
+}
+
+function saveMedicalRehabilitationPlan(plan) {
+  const detail = { plan };
+  window.dispatchEvent(new CustomEvent("hgfm:medical-rehabilitation-plan-save", { detail }));
+  return detail.savedPlan === undefined ? plan : detail.savedPlan;
+}
+
+function openIndividualRehabilitation() {
+  const button = document.querySelector('#managerClubRoomDrawer [data-club-room-action="individual-training"]');
+  if (button instanceof HTMLElement) button.click();
+}
+
+function appendMedicalRehabilitationPath(body) {
+  const context = readMedicalContext();
+  let localPlan = context.plan;
+  const shell = node("section", "medical-rehabilitation-path-v2");
+  shell.setAttribute("aria-labelledby", "medicalRehabilitationTitle");
+
+  function render() {
+    const path = createMedicalRehabilitationPath({ ...context, plan: localPlan });
+    shell.replaceChildren();
+    if (!path) return;
+    shell.dataset.stage = path.currentStage.id;
+    shell.append(
+      node("span", "medical-rehabilitation-kicker", "Skade → opptrening → lagtrening → kamp"),
+      node("h3", "", "Rehabiliteringsforløp v2"),
+      node("strong", "medical-rehabilitation-player", path.playerName),
+      node("p", "medical-rehabilitation-purpose", path.currentStage.purpose)
+    );
+    shell.querySelector("h3").id = "medicalRehabilitationTitle";
+
+    const stages = node("ol", "medical-rehabilitation-stages");
+    path.stages.forEach((stage) => {
+      const item = node("li", "", stage.shortLabel);
+      item.dataset.status = stage.status;
+      item.title = `${stage.label}: ${stage.purpose}`;
+      if (stage.status === "current") item.setAttribute("aria-current", "step");
+      stages.append(item);
+    });
+    shell.append(stages);
+
+    if (!path.plan) {
+      shell.append(node("p", "medical-rehabilitation-question", "Hvordan vil støtteapparatet styre tilbakeføringen?"));
+      const approaches = node("div", "medical-rehabilitation-approaches");
+      MEDICAL_REHABILITATION_APPROACHES.forEach((approach) => {
+        const button = node("button", "medical-rehabilitation-approach");
+        button.type = "button";
+        button.dataset.medicalRehabApproach = approach.id;
+        button.append(node("strong", "", approach.label), node("span", "", approach.summary), node("small", "", approach.consequence));
+        button.addEventListener("click", () => {
+          localPlan = saveMedicalRehabilitationPlan(updateMedicalRehabilitationPlan(path, {
+            actionId: "start",
+            approachId: approach.id,
+            currentWeek: context.currentWeek,
+            baselineMatchId: context.lastMatch?.id || null
+          }));
+          render();
+        });
+        approaches.append(button);
+      });
+      shell.append(approaches, node("p", "medical-rehabilitation-guardrail", "Arbeidsmåten endrer ikke skadeuker eller belastning. Den gjør managerens intensjon synlig gjennom det eksisterende forløpet."));
+      return;
+    }
+
+    const approach = node("section", "medical-rehabilitation-selected-approach");
+    approach.append(
+      node("span", "", "Valgt arbeidsmåte"),
+      node("strong", "", path.approach?.label || "Kriteriestyrt progresjon"),
+      node("p", "", path.approach?.summary || "Neste trinn vurderes mot eksisterende signaler.")
+    );
+    shell.append(approach);
+
+    const evidence = node("div", "medical-rehabilitation-evidence");
+    const known = node("section", "");
+    known.append(node("strong", "", "Registrert nå"));
+    const knownList = node("ul", "");
+    path.known.forEach((item) => knownList.append(node("li", "", item)));
+    known.append(knownList);
+    const criteria = node("section", "");
+    criteria.append(node("strong", "", `Kriterier · ${path.currentStage.label}`));
+    const criteriaList = node("ul", "medical-rehabilitation-criteria");
+    path.criteria.forEach((item) => {
+      const row = node("li", "", item.label);
+      row.dataset.met = item.met ? "true" : "false";
+      criteriaList.append(row);
+    });
+    criteria.append(criteriaList);
+    evidence.append(known, criteria);
+    shell.append(evidence, node("p", "medical-rehabilitation-watch", `Observer: ${path.currentStage.watch}`));
+
+    const actions = node("div", "medical-rehabilitation-actions");
+    const individual = node("button", "medical-rehabilitation-secondary", path.hasRehabAssignment ? "Opptrening er valgt" : "Velg Opptrening");
+    individual.type = "button";
+    individual.dataset.medicalRehabAction = "individual-training";
+    individual.addEventListener("click", openIndividualRehabilitation);
+    const hold = node("button", "medical-rehabilitation-secondary", "Behold dette trinnet");
+    hold.type = "button";
+    hold.dataset.medicalRehabAction = "hold";
+    hold.addEventListener("click", () => {
+      localPlan = saveMedicalRehabilitationPlan(updateMedicalRehabilitationPlan(path, {
+        actionId: "hold",
+        currentWeek: context.currentWeek
+      }));
+      render();
+    });
+    const advance = node("button", "medical-rehabilitation-primary", path.canAdvance
+      ? `Registrer overgang til ${path.stages[path.currentStageIndex + 1]?.shortLabel || "neste trinn"}`
+      : "Neste trinn mangler støtte");
+    advance.type = "button";
+    advance.dataset.medicalRehabAction = "advance";
+    advance.disabled = !path.canAdvance;
+    advance.addEventListener("click", () => {
+      localPlan = saveMedicalRehabilitationPlan(updateMedicalRehabilitationPlan(path, {
+        actionId: "advance",
+        currentWeek: context.currentWeek
+      }));
+      render();
+    });
+    actions.append(individual, hold, advance);
+    shell.append(actions);
+
+    if (!path.condition.injury) {
+      shell.append(node("p", "medical-rehabilitation-question", "Hvordan skal spilleren brukes i neste kamp?"));
+      const availability = node("div", "medical-rehabilitation-availability");
+      [
+        ["out", "Ute"],
+        ["bench", "Benk · begrensede minutter"],
+        ["start", "Start"]
+      ].forEach(([id, label]) => {
+        const button = node("button", "medical-rehabilitation-availability-choice", label);
+        button.type = "button";
+        button.dataset.medicalAvailability = id;
+        button.setAttribute("aria-pressed", path.plan?.availabilityDecisionId === id ? "true" : "false");
+        button.addEventListener("click", () => {
+          localPlan = saveMedicalRehabilitationPlan(updateMedicalRehabilitationPlan(path, {
+            actionId: "availability",
+            availabilityDecisionId: id,
+            currentWeek: context.currentWeek,
+            baselineMatchId: context.lastMatch?.id || null
+          }));
+          render();
+        });
+        availability.append(button);
+      });
+      shell.append(availability);
+      const selectedDecision = path.plan?.availabilityDecisionId;
+      const outcome = evaluateRehabilitationAvailability(path, selectedDecision);
+      if (outcome) {
+        const result = node("section", "medical-rehabilitation-availability-outcome");
+        result.dataset.status = outcome.status;
+        result.append(node("strong", "", outcome.label), node("p", "", outcome.explanation), node("small", "", outcome.guardrail));
+        shell.append(result);
+      }
+    }
+
+    const matchEvidence = createRehabilitationMatchEvidence(path, context.lastMatch);
+    if (matchEvidence) {
+      const comparison = node("section", "medical-rehabilitation-match-evidence");
+      comparison.append(
+        node("span", "", `Etter kamp · ${matchEvidence.opponent}`),
+        node("strong", "", `Plan: ${matchEvidence.intended} · faktisk: ${matchEvidence.actual}`),
+        node("p", "", matchEvidence.conditionSignal),
+        node("small", "", matchEvidence.uncertainty)
+      );
+      comparison.dataset.aligned = matchEvidence.aligned ? "true" : "false";
+      shell.append(comparison);
+    }
+
+    if (path.currentStage.id === "match_ready" && path.plan?.availabilityDecisionId) {
+      const complete = node("button", "medical-rehabilitation-complete", "Avslutt dokumentert forløp");
+      complete.type = "button";
+      complete.dataset.medicalRehabAction = "complete";
+      complete.addEventListener("click", () => {
+        localPlan = saveMedicalRehabilitationPlan(null);
+        shell.replaceChildren(node("p", "medical-rehabilitation-empty", "Forløpet er avsluttet. Player-condition fortsetter å følge belastning og eventuelle nye signaler."));
+      });
+      shell.append(complete);
+    }
+
+    shell.append(node("p", "medical-rehabilitation-guardrail", "Planen er dokumentasjon og managerintensjon. Player-condition, individuell trening og kampens faktiske minutter er fortsatt fasit."));
+  }
+
+  render();
+  if (shell.childElementCount > 0) body.append(shell);
 }
 
 function appendList(parent, items, className = "") {
@@ -373,7 +579,10 @@ function renderRoomLearning() {
   });
   section.append(list, node("p", "club-room-learning-note", config.note));
   body.append(section);
-  if (title === "Medisinsk apparat") appendMedicalDecisionWorkshop(body);
+  if (title === "Medisinsk apparat") {
+    appendMedicalDecisionWorkshop(body);
+    appendMedicalRehabilitationPath(body);
+  }
   if (title === "Analyse") appendOpponentAnalysisWorkshop(body);
 }
 

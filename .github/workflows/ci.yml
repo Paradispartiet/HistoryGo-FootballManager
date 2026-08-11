@@ -140,6 +140,7 @@ jobs:
           npm run sim:player-stats
           npm run sim:substitutions
           npm run sim:player-condition
+          npm run sim:medical-rehabilitation-v2
           npm run sim:scenarios
           npm run sim:season-review
           npm run sim:federation-verdict

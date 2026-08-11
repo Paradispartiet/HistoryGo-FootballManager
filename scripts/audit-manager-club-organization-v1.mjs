@@ -21,6 +21,7 @@ const files = {
   docs: fs.readFileSync(new URL("../docs/MANAGER_CLUB_ORGANIZATION_V1.md", import.meta.url), "utf8"),
   browser: fs.readFileSync(new URL("../tests/browser/manager-club-organization-v1.spec.js", import.meta.url), "utf8"),
   medicalBrowser: fs.readFileSync(new URL("../tests/browser/manager-medical-decision-learning-v1.spec.js", import.meta.url), "utf8"),
+  medicalSimulation: fs.readFileSync(new URL("../scripts/simulate-medical-rehabilitation-v2.mjs", import.meta.url), "utf8"),
   analysisBrowser: fs.readFileSync(new URL("../tests/browser/manager-opponent-analysis-preparation-v1.spec.js", import.meta.url), "utf8"),
   package: fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"),
   ci: fs.readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8")
@@ -47,6 +48,11 @@ check("medisinsk rom har situasjon valg og konsekvens", files.learning.includes(
 check("medisinsk læringsmodell er ren og deterministisk", !/\bdocument\b|\bwindow\b|localStorage|sessionStorage|Math\.random|Date\.now/.test(files.medicalModel));
 check("faktisk skade og belastning gir sak uten oppdiktet pasient", files.medicalModel.includes('kind: "return_to_play"') && files.medicalModel.includes('kind: "load_management"') && files.medicalModel.includes('kind: "no_case"'));
 check("returvalgene skiller for tidlig kalender og kriterier", ["full_return_now", "calendar_only", "rehab_and_assess"].every((id) => files.medicalModel.includes(id)));
+check("rehabiliteringsforløpet skiller fem trinn fra opptrening til kampklarhet", ["individual_rehab", "adapted_training", "partial_team_training", "full_team_training", "match_ready"].every((id) => files.medicalModel.includes(id)));
+check("manageren velger forsiktig kriteriestyrt eller raskere tilbakeføring", ["cautious", "criteria_led", "accelerated"].every((id) => files.medicalModel.includes(id)));
+check("rehabiliteringsplanen persisteres bare gjennom appens aktive modussnapshot", files.modeSessions.includes('"medicalRehabilitationPlan"') && files.app.includes('hgfm:medical-rehabilitation-plan-save') && !files.learning.includes("localStorage.setItem"));
+check("forløpet leser Opptrening og faktiske kampminutter", files.medicalModel.includes('trackId === "rehab"') && files.medicalModel.includes("playerStats?.appearances"));
+check("etterkampbeviset bevarer usikkerhet om årsak", files.medicalModel.includes("beviser ikke alene") && files.learning.includes("createRehabilitationMatchEvidence"));
 check("medisinsk UI leser aktiv modussnapshot", files.learning.includes("MODE_SESSION_KEY") && files.learning.includes("envelope?.sessions?.[activeMode]") && files.modeSessions.includes('playerCondition: "hgfm.playerCondition.v1"'));
 check("legacy condition er bare fallback og UI skriver ingen state", files.learning.includes("PLAYER_CONDITION_KEY") && !files.learning.includes("localStorage.setItem"));
 check("medisinsk valg har ingen ny score eller skjult motor", !/medicalScore|recoveryScore|returnScore|medicalOverall/i.test(files.medicalModel));
@@ -83,6 +89,8 @@ check("browser tester ingen fasilitetsnivå", files.browser.includes("dikter ikk
 check("browser tester mobil overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
 check("browser tester WCAG", files.browser.includes("AxeBuilder") && files.browser.includes("wcag2aa"));
 check("browser tester medisinsk valg uten save-mutasjon", files.medicalBrowser.includes("conditionBefore") && files.medicalBrowser.includes("conditionAfter") && files.medicalBrowser.includes('data-medical-decision="rehab_and_assess"'));
+check("browser tester femtrinnsforløp og moduspersistens", files.medicalBrowser.includes("femtrinns rehabiliteringsforløp") && files.medicalBrowser.includes("medicalRehabilitationPlan"));
+check("browser tester lagtrening kampbruk og etterkampbevis", files.medicalBrowser.includes("partial_team_training") && files.medicalBrowser.includes("medical-rehabilitation-match-evidence"));
 check("browser tester aktiv modus uten condition-lekkasje", files.medicalBrowser.includes("aktiv modussnapshot") && files.medicalBrowser.includes('playerCondition: []'));
 check("browser tester medisinsk navigasjon mobil og WCAG", files.medicalBrowser.includes('[data-tab-section="trening"]') && files.medicalBrowser.includes("expectNoHorizontalOverflow") && files.medicalBrowser.includes("AxeBuilder"));
 check("browser tester analysevalg lagring og aktiv modussnapshot", files.analysisBrowser.includes("choosePressPlan") && files.analysisBrowser.includes("hgfm.modeSessions.v1") && files.analysisBrowser.includes("opponentAnalysisPlan"));
@@ -92,8 +100,9 @@ check("dokumentasjonen låser rejected live IA", files.docs.includes("Rejected l
 check("dokumentasjonen peker cleanup til Pass 7", files.docs.includes("Pass 7"));
 check("dokumentasjonen låser medisinsk faggrunnlag og state-grense", files.docs.includes("London International Consensus") && files.docs.includes("aktive `hgfm.modeSessions.v1`-sesjonen") && files.docs.includes("gir ikke medisinske råd"));
 check("simuleringen er registrert", files.package.includes('"sim:manager-club-organization-v1"'));
+check("rehabiliteringssimuleringen er registrert og dekker condition uten mutasjon", files.package.includes('"sim:medical-rehabilitation-v2"') && files.medicalSimulation.includes("muterer ikke player-condition"));
 check("auditen er registrert", files.package.includes('"audit:manager-club-organization-v1"'));
-check("CI kjører begge permanente porter", files.ci.includes("audit:manager-club-organization-v1") && files.ci.includes("sim:manager-club-organization-v1"));
+check("CI kjører alle permanente medisinske porter", files.ci.includes("audit:manager-club-organization-v1") && files.ci.includes("sim:manager-club-organization-v1") && files.ci.includes("sim:medical-rehabilitation-v2"));
 
 console.log(`\nManager Club Organization v1 audit: ${checks - failures}/${checks} bestått.`);
 if (failures > 0) process.exitCode = 1;
