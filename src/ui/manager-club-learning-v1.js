@@ -223,6 +223,9 @@ function appendMedicalRehabilitationPath(body) {
     shell.append(stages);
 
     if (!path.plan) {
+      shell.append(node("p", "medical-rehabilitation-assignment", path.hasRehabAssignment
+        ? "Opptrening er valgt i eksisterende individuell oppfølging."
+        : "Opptrening er ikke valgt i eksisterende individuell oppfølging."));
       shell.append(node("p", "medical-rehabilitation-question", "Hvordan vil støtteapparatet styre tilbakeføringen?"));
       const approaches = node("div", "medical-rehabilitation-approaches");
       MEDICAL_REHABILITATION_APPROACHES.forEach((approach) => {
