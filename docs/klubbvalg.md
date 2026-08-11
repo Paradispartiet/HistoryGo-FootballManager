@@ -1421,6 +1421,77 @@ Der **kjeder tidslinjen seg sammen**, og det er positivt belegg — ikke bare et
 navn som ligner. De tre andre har ingenting utenom navnet, og
 mellomnavn-heuristikken har nå tatt feil fire ganger totalt.
 
+### Den store gjelden, målt: 22 arver uten én eneste tom styrkeliste
+
+En full sluttaudit av alle 42 klubbpooler (10.08.2026) konkluderte med at
+klubbjobben ikke er ferdig. Tolv av kildefilene er bygget etter en eldre modell
+der styrker og svakheter er «redaksjonelle scoutingvurderinger» — utledet av
+rolle og karriere, ikke lest om den enkelte spilleren. Ti andre pooler kunne
+auditen ikke sertifisere i det hele tatt, fordi filene ikke lot seg finne.
+
+Forrige audit stoppet ved grensa: kildefeilen nådde ikke katalogen, fordi bare
+påstandslaget importeres. **Denne gjorde det ikke.** De tolv legacy-filene ble
+importert før v2-rørledningen fantes, og styrkene deres kommer derfra.
+
+Det lar seg måle med ett tall:
+
+| | arver | tomme styrkelister | styrker per spiller |
+|---|---:|---:|---:|
+| **Modellerte** (legacy + ikke-sertifiserte) | 22 | **0,0 %** | 3,70 |
+| v2-arver | 16 | 52,9 % | 1,37 |
+| Best dekkede v2 (Sandnes Ulf) | | 10,0 % | 2,67 |
+
+**Null av 1951 spillere.** Det er ikke hva en kilde ser ut som. En kilde er taus
+om noen — det er hele grunnen til at `KJENT_UDOKUMENTERT` finnes og setter tak
+på hvor høy tomandelen får bli. Null tomme er hva en *generator* ser ut som.
+
+#### De ti «ikke sertifiserte» er ikke et åpent spørsmål lenger
+
+Auditen kunne ikke inspisere filene for Lillestrøm, Viking, Brann, Molde,
+Bodø/Glimt, Kristiansund, KFUM, Sandefjord, Lyn og Stabæk, og skrev derfor at de
+ikke kan sertifiseres. Katalogen svarer på det filene ikke kunne: **alle ti har
+samme fingeravtrykk som de tolv** — 0,0 % tomme, 3,0–3,6 styrker per spiller.
+
+Det er altså 22 arver som trenger source-only-passet, ikke tolv.
+
+Motprøven ligger i de fire som allerede *fikk* rettingen i etterkant: Hødd
+18,8 %, Sarpsborg 36,4 %, HamKam 40,7 % og Mjøndalen 43,4 % tomme. De ligger
+mellom de to gruppene, som er nøyaktig der en delvis konvertert arv skal ligge.
+
+#### Gjelden er nå tellbar, ikke bare beskrevet
+
+`MODELLERTE_ARVER` i `sim:player-attributes` navngir de 22, og vakten går begge
+veier:
+
+- en arv på 40+ spillere uten én eneste tom liste **må stå på lista**;
+- en arv på lista som *har fått* tomme lister er konvertert, og oppføringen skal
+  ut.
+
+Den andre halvdelen er den som teller ned. Skriptet skriver ut
+`modellerteArver: { arver: 22, spillere: 1951, snittStyrker: 3.70 }` hver
+kjøring, og tallet skal synke. Går det opp, er en ny arv importert med utfylte
+felt.
+
+Lista er en **inventarliste, ikke en dom over enkeltspillere**. Den står der
+fordi gjeld som bare finnes i et opplastet auditdokument blir glemt.
+
+#### Hva som faktisk gjenstår
+
+Auditen ber om tre ting, og bare den ene er ren datajobb:
+
+1. **22 arver gjennom source-only-passet.** Det krever kildefilene på nytt — de
+   opprinnelige spillerlistene finnes, men ferdighetslaget må leses om fra
+   individuell kilde. Uten filene kan ingenting av dette gjøres fra katalogen
+   alene, for det som mangler er nettopp belegget.
+2. **Filrydding** (duplikater, gamle versjoner) — utenfor dette repoet.
+3. **18 klubber uten arv i det hele tatt**, alle i 2. divisjon. De er `pending`,
+   altså ute av overtakelseslista, og det er ingen blindvei: alle 60 klubber har
+   ligaprofil, så de spilles som motstandere med sin egen fotball. Nivå 3 har
+   10 overtakbare klubber av 28.
+
+Rekkefølgen er verdt å merke seg: å konvertere de 22 er større og viktigere enn
+å legge til de 18. En arv som er feil er dyrere enn en arv som mangler.
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,

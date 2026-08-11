@@ -722,11 +722,66 @@ const KJENT_UDOKUMENTERT = {
   // som bare har HØYDE står tomme med vilje — se ordboka. Målt 47 av 71.
   grorud_idrettspark: 0.69
 };
+
+// ---------------------------------------------------------------------------
+// Det motsatte hullet: arver der INGEN står uten styrker
+// ---------------------------------------------------------------------------
+// `KJENT_UDOKUMENTERT` over setter tak på hvor HØY tomandelen får bli. Ingenting
+// har satt gulv, og det er der den største gjelden i katalogen har ligget i ro.
+//
+// En ekstern sluttaudit av alle 42 klubbpooler (10.08.2026) fant at tolv av
+// kildefilene er bygget etter en eldre modell der styrker og svakheter er
+// «redaksjonelle scoutingvurderinger» — utledet av rolle og karriere, ikke lest
+// om den enkelte spilleren. Ti andre pooler kunne den ikke sertifisere i det
+// hele tatt, fordi filene ikke lot seg finne.
+//
+// Katalogen svarer på begge deler med ett tall:
+//
+//     22 arver med minst 40 spillere har NULL tomme styrkelister
+//     til sammen 1951 spillere, i snitt 3,7 styrker hver
+//
+//     de 16 v2-arvene:  52,9 % tomme, i snitt 1,37 styrker
+//     best dekkede v2:  Sandnes Ulf, 10,0 % tomme
+//
+// Null av 1951 er ikke hva en kilde ser ut som. En kilde er taus om NOEN — det
+// er hele grunnen til at taket over finnes. Null tomme er hva en GENERATOR ser
+// ut som, og de 22 er nøyaktig auditens tolv legacy-filer pluss de ti den ikke
+// fant. De ti er altså ikke et åpent spørsmål lenger: de bærer samme fingeravtrykk.
+//
+// Lista er en INVENTARLISTE, ikke en dom over enkeltspillere. Den står her
+// fordi gjeld som bare finnes i et opplastet auditdokument blir glemt, og fordi
+// den da kan telles ned: konverteres en arv til source-only, får den tomme
+// lister, og da SKAL oppføringen fjernes. Vakten under krever begge veier.
+const MODELLERTE_ARVER = new Set([
+  "lerkendal_stadion",    // Rosenborg 156
+  "marienlyst_stadion",   // Strømsgodset 143
+  "intility_arena",       // Vålerenga 127
+  "fredrikstad_stadion",  // Fredrikstad 100
+  "skagerak_arena",       // Odd 100
+  "haugesund_stadion",    // Haugesund/Haugar/Djerv 100
+  "nordre_asen",          // Skeid 100
+  "color_line_stadion",   // Aalesund 90
+  "aspmyra_stadion",      // Bodø/Glimt 89      — ikke lokalisert av auditen
+  "aker_stadion",         // Molde 89           — ikke lokalisert av auditen
+  "sor_arena",            // Start 85
+  "bislett_stadion",      // Lyn 82             — ikke lokalisert av auditen
+  "mellos_stadion",       // Moss 82
+  "romssa_arena",         // Tromsø 81
+  "brann_stadion",        // Brann 75           — ikke lokalisert av auditen
+  "nadderud_stadion",     // Stabæk 75          — ikke lokalisert av auditen
+  "lyse_arena",           // Viking 70          — ikke lokalisert av auditen
+  "jotun_arena",          // Sandefjord 68      — ikke lokalisert av auditen
+  "bryne_stadion",        // Bryne 68
+  "kfum_arena",           // KFUM 66            — ikke lokalisert av auditen
+  "araasen_stadion",      // Lillestrøm 56      — ikke lokalisert av auditen
+  "nordmore_stadion"      // Kristiansund 49    — ikke lokalisert av auditen
+]);
 const perArv = new Map();
 for (const player of players) {
   for (const placeId of player.sourcePlaceIds || []) {
-    if (!perArv.has(placeId)) perArv.set(placeId, { alle: 0, tomme: 0 });
+    if (!perArv.has(placeId)) perArv.set(placeId, { alle: 0, tomme: 0, styrker: 0 });
     perArv.get(placeId).alle += 1;
+    perArv.get(placeId).styrker += (player.strengths || []).length;
     if ((player.strengths || []).length === 0) perArv.get(placeId).tomme += 1;
   }
 }
@@ -737,6 +792,25 @@ for (const [placeId, tall] of perArv) {
   check(`${placeId}: andelen uten dokumenterte styrker vokser ikke`, andel < tak,
     `${tall.tomme} av ${tall.alle} (${(andel * 100).toFixed(0)} %, tak ${(tak * 100).toFixed(0)} %)`);
 }
+
+// Gulvet: en arv på 40+ spillere der INGEN står uten styrker må stå navngitt.
+// Ikke fordi hver enkelt profil er gal, men fordi mønsteret bare oppstår når
+// noen har fylt ut felt for alle — og da skal det være skrevet ned hvem det
+// gjelder, ikke oppdages på nytt av neste audit.
+const modellerteNå = [...perArv.entries()]
+  .filter(([, tall]) => tall.alle >= 40 && tall.tomme === 0)
+  .map(([placeId]) => placeId);
+const uNavngitt = modellerteNå.filter((placeId) => !MODELLERTE_ARVER.has(placeId));
+check("arver uten én eneste tom styrkeliste står navngitt", uNavngitt.length === 0,
+  uNavngitt.join(", "));
+// Og motsatt vei, som er den som teller ned: har en oppført arv fått tomme
+// lister, er den konvertert til source-only, og oppføringen er foreldet.
+const foreldet = [...MODELLERTE_ARVER].filter((placeId) => {
+  const tall = perArv.get(placeId);
+  return tall && tall.alle >= 40 && tall.tomme > 0;
+});
+check("ingen foreldede oppføringer i MODELLERTE_ARVER", foreldet.length === 0,
+  `${foreldet.join(", ")} har fått tomme lister og skal ut av lista`);
 // Og de tomme må være tomme AV EN GRUNN — bare der en kilde selv trakk grensen.
 const kjenteSteder = new Set(Object.keys(KJENT_UDOKUMENTERT));
 const tommeAndreSteder = utenStyrker.filter((player) =>
@@ -992,6 +1066,16 @@ console.log(JSON.stringify({
   sprikMedian: medianRange,
   // De to endepunktene grensa på 0,848 skal ligge mellom. Skrives ut hver
   // kjøring nettopp fordi de før måtte måles for hånd og ble stående feil.
+  // Gjelden auditen fant, gjort tellbar: arver der ingen står uten styrker.
+  // Tallet skal SYNKE. Går det opp, er en ny arv importert med utfylte felt.
+  modellerteArver: {
+    arver: MODELLERTE_ARVER.size,
+    spillere: [...MODELLERTE_ARVER].reduce((sum, id) => sum + (perArv.get(id)?.alle || 0), 0),
+    snittStyrker: ([...MODELLERTE_ARVER].reduce((sum, id) => {
+      const t = perArv.get(id);
+      return sum + (t ? t.styrker / t.alle : 0);
+    }, 0) / MODELLERTE_ARVER.size).toFixed(2)
+  },
   toppbøtter: {
     ærlig: `${(toStørste * 100).toFixed(2)} %`,
     flatGrunnlinje: `${(toStørsteFlat * 100).toFixed(2)} %`,
