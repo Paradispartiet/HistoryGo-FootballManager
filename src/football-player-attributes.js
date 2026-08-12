@@ -13,6 +13,19 @@ export const classCeilingFactor = base.classCeilingFactor;
 export const describePositionDemands = base.describePositionDemands;
 export const calculateRoleAttributeFit = base.calculateRoleAttributeFit;
 
+function synchronizeP1SourceClaims(players) {
+  if (!Array.isArray(players)) return [];
+  const effective = applyP1SourceClaims(players);
+  for (let index = 0; index < players.length; index += 1) {
+    const sourceStrengths = effective[index]?.strengths;
+    if (!Array.isArray(sourceStrengths)) continue;
+    const currentStrengths = Array.isArray(players[index]?.strengths) ? players[index].strengths : [];
+    if (JSON.stringify(currentStrengths) === JSON.stringify(sourceStrengths)) continue;
+    players[index].strengths = [...sourceStrengths];
+  }
+  return players;
+}
+
 export function derivePlayerAttributes(player, options = {}) {
   return base.derivePlayerAttributes(applyP1SourceClaimsToPlayer(player), options);
 }
@@ -22,5 +35,5 @@ export function buildAttributeScaling(players, options = {}) {
 }
 
 export function derivePlayerAttributeIndex(players, options = {}) {
-  return base.derivePlayerAttributeIndex(applyP1SourceClaims(players), options);
+  return base.derivePlayerAttributeIndex(synchronizeP1SourceClaims(players), options);
 }
