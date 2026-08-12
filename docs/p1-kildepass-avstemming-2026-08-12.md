@@ -1,17 +1,16 @@
-# P1-kildepass — avstemmingscheckpoint 12.08.2026
+# P1-kildepass — ferdig avstemming 12.08.2026
 
-Dette checkpointet bevarer statusen i P1-avstemmingen før kilde-/claim-passene ferdigstilles og importeres. Det markerer **ikke** P1 som ferdig.
+P1-avstemmingen er ferdig. Nevneren er frosset, de 13 nye passene er kildeklassifisert, de fem tidligere passene er tatt inn i samme kontrollkontrakt, og source-claim-laget er koblet til attributtmotoren.
 
-## Kontrakt
+## Frosset kontrakt
 
-- Hele avstemmingssettet: **936 profiler over 18 arver**.
-- **5 eksisterende P1-pass** er identifisert og avstemt: Vålerenga, Brann, Bodø/Glimt, Viking og Lillestrøm.
-- **13 nye pass** skal samlet dekke **701 eksklusive profiler**.
-- En profil tilhører P1 for en arv bare når canonical `football_players.json` har `sourcePlaceIds.length === 1` for profilen.
-- Profiler med flere `sourcePlaceIds` skal ikke med i den eksklusive P1-nevneren.
+- **18 arver / 936 eksklusive profiler** totalt.
+- **5 tidligere pass / 235 profiler:** Vålerenga, Brann, Bodø/Glimt, Viking og Lillestrøm.
+- **13 nye pass / 701 profiler.**
+- En profil tilhører P1 for en arv bare når canonical `football_players.json` har `sourcePlaceIds.length === 1` og den ene ID-en er arvens sted.
 - Canonical spiller-ID og `sourcePlaceIds` vinner over navnebasert deduplisering og eldre klubbpoolfiler.
 
-## Nye pass — populasjonsstatus
+## Nye pass — låst populasjon
 
 | Arv | Eksklusive profiler | Status |
 |---|---:|---|
@@ -26,35 +25,40 @@ Dette checkpointet bevarer statusen i P1-avstemmingen før kilde-/claim-passene 
 | KFUM | 46 | LÅST |
 | Bryne | 41 | LÅST |
 | Sandefjord | 41 | LÅST |
-| Stabæk | 41 | **IKKE LÅST — ett identitetsavvik gjenstår** |
+| Stabæk | 41 | LÅST |
 | Kristiansund | 29 | LÅST |
+| **Sum** | **701** | **LÅST** |
 
-De 12 låste populasjonene utgjør **660 profiler**. Stabæks målnevner på 41 gir samlet **701** når den siste identitetsavstemmingen er løst.
+## Stabæk 41/41
 
-## Viktige identitetsfunn fra avstemmingen
+Det siste identitetsavviket var `kjell_roar_kaasa`. Canonical-profilen er delt mellom Intility Arena, Nadderud og Gjemselund og skal derfor ikke inn i Stabæks eksklusive P1-nevner. `antonio_nusa` var allerede bekreftet delt og står også utenfor.
 
-Avstemmingen viste at navnekryss mellom klubbpooler ikke er tilstrekkelig. Ikke-klubbarver og separate canonical-ID-er med like navn må kontrolleres direkte.
+`christer_basma` på Nadderud og `ole_christer_basma` på Lerkendal er separate canonical-ID-er og beholdes som to profiler.
 
-- **Fredrikstad 70/70:** `cristian_gamboa` er delt mellom Fredrikstad og Rosenborg, og `hans_jorgen_deunk` mellom Fredrikstad og Moss. Begge skal ut av Fredrikstads eksklusive P1-nevner.
-- **Odd 68/68:** Sverre Andersen er to forskjellige canonical-profiler: `sverre_andersen` på Viking og `sverre_andersen_odd` på Odd. Odd-profilen skal derfor med.
-- **Aalesund 69/69:** `sondre_fet` er delt mellom Aspmyra og Color Line, og `fredrik_klock` mellom Color Line og Høddvoll. Begge skal ut.
-- **Lyn 55/55:** Jørgen Juve og Arne Brustad har flere `sourcePlaceIds` og skal ut, mens `jan_julle_berg` er en egen canonical-ID med bare Bislett og skal med.
-- **Sandefjord 41/41:** `kristoffer_normann_hansen` er delt mellom Jotun Arena og Jessheim stadion og skal ut.
-- **Stabæk:** Antonio Nusa er bekreftet delt mot Ekebergsletta/Ullevaal/Nadderud og skal ut. Én ytterligere canonical delt profil må fortsatt identifiseres for å reprodusere målnevneren 41. `christer_basma` og `ole_christer_basma` er separate canonical-ID-er og må ikke slås sammen bare på navn.
+## Andre identitetsfunn
 
-## Kontrollregel videre
+- **Fredrikstad:** `cristian_gamboa` og `hans_jorgen_deunk` er delte profiler og står utenfor den eksklusive nevneren.
+- **Odd:** `sverre_andersen` og `sverre_andersen_odd` er to forskjellige canonical-profiler; Odd-profilen er med.
+- **Aalesund:** `sondre_fet` og `fredrik_klock` er delte og står utenfor.
+- **Lyn:** Jørgen Juve og Arne Brustad er delte; `jan_julle_berg` er egen Bislett-only profil og er med.
+- **Sandefjord:** `kristoffer_normann_hansen` er delt og står utenfor.
 
-Før et kilde-/claim-pass kan få PASS:
+## Kilderesultat
 
-1. Kandidatsettet må filtreres direkte mot canonical `sourcePlaceIds`.
-2. Nevneren må treffe arbeidslistas eksakte mål for arven.
-3. Navnelikhet alene kan aldri brukes til å slå sammen profiler.
-4. Delt profil (`sourcePlaceIds.length > 1`) skal ikke inn i det eksklusive P1-passet.
-5. Først etter at populasjonen er låst, ferdigstilles kilde-/claim-vurderingen.
+De 13 nye passene: **17 DOKUMENTERT · 0 DELVIS · 684 THIN-SOURCE = 701**.
 
-## Neste arbeid
+Samlet med de fem tidligere passene: **45 DOKUMENTERT · 15 DELVIS · 876 THIN-SOURCE = 936**.
 
-1. Løs det siste Stabæk-avviket og lås **41/41**.
-2. Bekreft dermed komplett **701/701** for de 13 nye passene.
-3. Ferdigstill de 13 kilde-/claim-passene sammen med de fem eksisterende til ett komplett **18-arvers P1-sett / 936 profiler**.
-4. Importer først når passene er komplett kontrollert; dette checkpointet innebærer ingen spillerdataendring.
+Dette er bevisst konservativt. Manglende beskrivende kilde er et sluttresultat, ikke et hull som skal fylles med posisjonsmaler, merittslutninger eller plausible styrker.
+
+## Importform
+
+P1 materialiseres gjennom `src/football-player-source-claims-p1.js`. Laget skaper ikke medlemskap; det anvender kun kildeverifiserte ferdighetsclaims etter at canonical identitet og én-stedsregelen er kontrollert. For nye P1-profiler som ikke er DOKUMENTERT blir `strengths` eksplisitt tom.
+
+Tre tidligere godkjente claims manglet i rå spillerdata og er kildeverifisert som supplements i samme lag: Kenneth Storvik, Tom Lund og Alf «Kaka» Martinsen.
+
+Se `docs/P1_SOURCE_CLAIMS.md` for full kontrakt og statusfordeling.
+
+## Permanent kontroll
+
+`node scripts/audit-p1-source-claims.mjs` er den nye P1-porten. Den krever eksakte 936/936, 701/701 og 235/235 nevnerverdier, unike canonical-ID-er, kilder per eksplisitt claim, gyldig ferdighetsvokabular og Stabæk-regresjonene. Den kjører i CI før `sim:player-attributes` og de øvrige motorsimuleringene.
