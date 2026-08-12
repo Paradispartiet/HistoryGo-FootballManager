@@ -1984,6 +1984,57 @@ opp fra 470 (17 %). Profil-unikheten — nå en måling, ikke en grense — gikk
 den. Alle 94 skriptene er grønne, og taket for Haugesund er bittestet: tømmer
 man de 37 igjen, feller det på `87 av 87 (100 %, tak 59 %)`.
 
+#### Andre pulje: Vålerenga, Brann, Viking og Bodø/Glimt
+
+Fire pass til, 211 eksklusive profiler, og de deler seg skarpt i to:
+
+| Arv | Eksklusive | DOK / DELVIS / THIN | Fikk styrker | Dekning | Tak |
+|---|---:|---|---:|---:|---:|
+| Vålerenga | 66 | 13 / 5 / 48 | 13 | **20 %** | 0,81 |
+| Brann | 47 | 5 / 2 / 40 | 5 | **11 %** | 0,90 |
+| Bodø/Glimt | 47 | 4 / 3 / 40 | 4 | **9 %** | 0,92 |
+| Viking | 51 | 4 / 2 / 45 | 4 | **6 %** | 0,95 |
+
+Vålerenga lander på linje med Rosenborg fordi klubbens eget nyhetsarkiv
+**siterer trenere ved navn**: Deila om Fellah og Ejuke, Fagermo om Håkans,
+Drillo om Håvard Nielsen. De tre andre passene fant i hovedsak Store norske
+leksikon og klubbenes spillersider — leksikonet beskriver bare de aller
+største, spillersidene fører kampdata — og det gir fire til fem beskrevne
+profiler av femti.
+
+Det er ikke et dårligere pass. Det er hva en klubb som dokumenterer
+**resultater** i stedet for **spillere** ser ut som, og forskjellen mellom 20 %
+og 6 % er en forskjell i kildesjanger, ikke i klubbstørrelse. Viking og
+Bodø/Glimt er ikke mindre kartlagt enn Vålerenga; de er kartlagt med tabeller.
+
+#### Syv nye kandidater, og én kilde som holdt igjen selv
+
+De fire filene brakte 38 kandidater, hvorav 31 alt hadde stilling i ordboka.
+Av de syv nye er seks ordrette oversettelser — `game_intelligence` og
+`football_understanding` → `game_reading`, `quickness` → `agility`,
+`between_lines` → `final_pass` (samme lesning som det eksisterende aliaset
+`line_breaking_pass`), `two_way_energy` → `work_rate`.
+
+To krevde en avgjørelse:
+
+- **`ball_retention`** («liker å holde på ballen», om Ghayas Zahid) ser ut som
+  `hold_up_play`, men vokabularet definerer den som «Ryggen mot mål — å holde
+  på ballen med en stopper i ryggen. Klassisk spissvakhet». Zahid er tier.
+  Riktig motstykke er `composure`, som heter «Ro på ballen».
+- **`goal_instinct`** (målteft, om Jones El-Abdellaoui) er droppet fordi
+  **kilden holder igjen selv**: «Fart og dribling er de sikreste direkte
+  ferdighetsclaimene; målteft beholdes som egen research-tag.» Brann-fila låser
+  derimot samme egenskap for Aune Heggebø, og der følges den. Hver fils egen
+  vurdering står — det er ikke en inkonsekvens, det er to kilder av ulik styrke.
+
+Parseren telte først tre profiler for mye: siste mann i hver fil henger sammen
+med sluttauditen, og den inneholder linja `DOKUMENTERT: **4**`. Uten et kutt på
+audit-overskriften arver den siste spilleren filas oppsummering som sin egen
+kildestatus. Alle fire filene stemmer nå eksakt med sin egen audit.
+
+Katalogen: **592 av 2756 (21,5 %)**, profil-unikhet **80,07 %**. Viking-taket er
+bittestet: tømmer man de tre igjen, feller det på `51 av 51 (100 %, tak 95 %)`.
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,

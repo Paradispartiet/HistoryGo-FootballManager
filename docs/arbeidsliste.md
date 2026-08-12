@@ -22,7 +22,7 @@ Se `docs/klubbvalg.md` for målingene. Regelen som nå har avgjort fire vakter:
 **sjekk om målet er monotont i feilen før grensa flyttes** — og hvis det ikke er
 det, skriv om eller legg ned.
 
-## P1 — dekningen bygges tilbake, én arv om gangen (4 av 22 gjort)
+## P1 — dekningen bygges tilbake, én arv om gangen (8 av 22 gjort)
 
 Konverteringen fjernet 1951 ukildede påstander. Den la ikke til noe, og etterlot
 22 arver på 0 % dokumentasjonsdekning. Kildepasset er svaret: hver eksklusive
@@ -41,44 +41,49 @@ Bare den første gir styrker.
 | **Strømsgodset** | 84 | 63 | **25 %** |
 | **Molde** | 54 | 41 | **24 %** |
 | **Rosenborg** | 83 | 66 | **20 %** |
+| **Vålerenga** | 66 | 53 | **20 %** |
+| **Brann** | 47 | 42 | **11 %** |
+| **Bodø/Glimt** | 47 | 43 | **9 %** |
+| **Viking** | 51 | 48 | **6 %** |
 | Fredrikstad, Skeid | 70 hver | 70 | 0 % |
 | Aalesund | 69 | 69 | 0 % |
 | Odd | 68 | 68 | 0 % |
-| Vålerenga | 66 | 66 | 0 % |
 | Start | 60 | 60 | 0 % |
 | Moss | 58 | 58 | 0 % |
 | Lyn | 55 | 55 | 0 % |
 | Tromsø | 53 | 53 | 0 % |
-| Viking | 51 | 51 | 0 % |
-| Brann, Bodø/Glimt | 47 hver | 47 | 0 % |
 | KFUM | 46 | 46 | 0 % |
 | Bryne, Sandefjord, Stabæk | 41 hver | 41 | 0 % |
 | Kristiansund | 29 | 29 | 0 % |
 | Lillestrøm | 24 | 24 | 0 % |
 
 Til sammenlikning har de best dekkede v2-arvene 86 % (Sandnes Ulf) og 77 %
-(Hødd). Katalogen som helhet: **567 av 2756 spillere (21 %) har dokumenterte
+(Hødd). Katalogen som helhet: **592 av 2756 spillere (21,5 %) har dokumenterte
 styrker**, opp fra 470 (17 %) rett etter konverteringen.
 
-Rangeringen mellom de fire gjentar aksen alle de tynne kildene har vist:
-**det er hvor mye kilden siterer som avgjør dekningen, ikke hvor lang den er.**
-Rosenborg har mest dokumentasjon av alle 42 klubbene og lavest dekning av de
-fire — mesteparten handler om meritter og kampmengde, som er produksjon og
-karriere, ikke ferdigheter. Haugesund har halvparten så mye tekst og dobbelt så
-mange spillerbeskrivelser.
+Rangeringen gjentar aksen alle de tynne kildene har vist: **det er hvor mye
+kilden siterer som avgjør dekningen, ikke hvor lang den er.** Rosenborg har mest
+dokumentasjon av alle 42 klubbene og lav dekning — mesteparten handler om
+meritter og kampmengde, som er produksjon og karriere, ikke ferdigheter.
+Vålerenga ligger på samme nivå fordi nyhetsarkivet siterer trenere ved navn,
+mens Viking og Bodø/Glimt faller til 6–9 % fordi passene der i hovedsak fant
+Store norske leksikon og klubbens spillersider — leksikonet beskriver bare de
+aller største, spillersidene fører kampdata. Det er en forskjell i
+**kildesjanger**, ikke i klubbstørrelse.
 
-**Handling for de 18 som står igjen:** kildefiler med *individuelle*
+**Handling for de 14 som står igjen:** kildefiler med *individuelle*
 ferdighetspåstander per spiller — sitater fra klubben, kampomtaler,
 trenerutsagn. Samme sjanger som Kjelsås (siterer treneren), Arendal
 (kampomtaler) og Grorud (spillerportretter).
 
-Prioriter etter størrelse × synlighet: Vålerenga, Brann, Bodø/Glimt, Viking og
-Lillestrøm er Eliteserie-klubber spilleren møter oftest.
+Prioriter etter størrelse × synlighet: Lillestrøm, Tromsø, Odd, Sandefjord,
+Kristiansund og KFUM er Eliteserie-klubber spilleren møter oftest; Fredrikstad
+og Skeid har de største gjenstående poolene.
 
 **Måles med:** `sim:player-attributes` → takene i `KJENT_UDOKUMENTERT` for de
-fire arvene er målt NED fra 1,01 (0,80 · 0,77 · 0,76 · 0,59) og skal fortsette
-nedover. Dekningstabellen over regnes ut med et par linjer mot
-`sourcePlaceIds.length === 1`.
+åtte arvene er målt NED fra 1,01 (0,59 · 0,76 · 0,77 · 0,80 · 0,81 · 0,90 ·
+0,92 · 0,95) og skal fortsette nedover. Dekningstabellen over regnes ut med et
+par linjer mot `sourcePlaceIds.length === 1`.
 
 ---
 

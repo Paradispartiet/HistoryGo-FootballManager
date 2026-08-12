@@ -837,11 +837,8 @@ const KJENT_UDOKUMENTERT = {
   araasen_stadion: 1.01,     // Lillestrøm
   nordmore_stadion: 1.01,    // Kristiansund
   kfum_arena: 1.01,          // KFUM Oslo
-  aspmyra_stadion: 1.01,     // Bodø/Glimt
   jotun_arena: 1.01,         // Sandefjord
-  brann_stadion: 1.01,       // Brann
   bislett_stadion: 1.01,     // Lyn
-  lyse_arena: 1.01,          // Viking
   sor_arena: 1.01,           // Start
   bryne_stadion: 1.01,       // Bryne
   mellos_stadion: 1.01,      // Moss
@@ -849,7 +846,6 @@ const KJENT_UDOKUMENTERT = {
   nordre_asen: 1.01,         // Skeid
   fredrikstad_stadion: 1.01, // Fredrikstad: se konverteringen
   skagerak_arena: 1.01,      // Odd
-  intility_arena: 1.01,      // Vålerenga: 66 av 66
   romssa_arena: 1.01,        // Tromsø: 53 av 53
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
@@ -870,7 +866,23 @@ const KJENT_UDOKUMENTERT = {
   lerkendal_stadion: 0.80,   // Rosenborg: målt 66 av 83
   aker_stadion: 0.77,        // Molde: målt 41 av 54
   marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
-  haugesund_stadion: 0.59    // Haugesund/Haugar/Djerv: målt 50 av 87
+  haugesund_stadion: 0.59,   // Haugesund/Haugar/Djerv: målt 50 av 87
+  // Andre pulje kildepass, og den viser hva aksen koster i den lave enden.
+  // Vålerenga lander på linje med Rosenborg fordi klubbens eget nyhetsarkiv
+  // siterer trenere ved navn (Deila om Fellah og Ejuke, Fagermo om Håkans).
+  // De tre andre passene fant i hovedsak Store norske leksikon og klubbenes
+  // spillersider — leksikonet beskriver de aller største, spillersidene fører
+  // kampdata — og det gir fire til fem beskrevne profiler av femti.
+  //
+  // Det er ikke et dårligere pass. Det er hva en klubb som dokumenterer
+  // RESULTATER i stedet for SPILLERE ser ut som, og forskjellen mellom 20 % og
+  // 6 % er en forskjell i kildesjanger, ikke i klubbstørrelse: Viking og
+  // Bodø/Glimt er ikke mindre kartlagt enn Vålerenga, de er kartlagt med
+  // tabeller.
+  intility_arena: 0.81,      // Vålerenga: målt 53 av 66
+  aspmyra_stadion: 0.92,     // Bodø/Glimt: målt 43 av 47
+  brann_stadion: 0.90,       // Brann: målt 42 av 47
+  lyse_arena: 0.95           // Viking: målt 48 av 51
 };
 
 // ---------------------------------------------------------------------------
