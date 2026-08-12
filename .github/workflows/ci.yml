@@ -63,6 +63,7 @@ jobs:
           npm run audit:tournaments
           npm run audit:tactics
           npm run audit:attributes
+          node scripts/diagnose-p1-existing.mjs
           node scripts/audit-p1-source-claims.mjs
 
       - name: UI-/flyt-vakter
