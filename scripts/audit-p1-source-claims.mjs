@@ -5,6 +5,7 @@ import {
   P1_HERITAGES,
   P1_NEW_DOCUMENTED,
   P1_NEW_PARTIAL,
+  P1_EXISTING_SUPPLEMENTS,
   getP1HeritageForPlayer,
   getP1NewSourceRecord,
   applyP1NewSourceClaims
@@ -49,6 +50,7 @@ ok(newExclusive.length === 701, `expected new-pass denominator 701, got ${newExc
 ok(existingExclusive.length === 235, `expected existing-pass denominator 235, got ${existingExclusive.length}`);
 ok(new Set(allExclusive.map((player) => player.id)).size === 936, "exclusive P1 player IDs must be unique");
 
+// The 13 new passes begin from the post-conversion zero-strength baseline.
 for (const player of newExclusive) {
   ok(asArray(player.strengths).length === 0,
     `${player.id}: new P1 baseline must have empty strengths before source-claim overlay`);
@@ -56,9 +58,9 @@ for (const player of newExclusive) {
   ok(heritage?.generation === "new", `${player.id}: failed new-P1 heritage resolution`);
 }
 
-const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_PARTIAL];
+const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_PARTIAL, ...P1_EXISTING_SUPPLEMENTS];
 ok(new Set(explicitRecords.map((record) => record.playerId)).size === explicitRecords.length,
-  "explicit new-P1 records must not duplicate player IDs");
+  "explicit P1 records must not duplicate player IDs");
 
 for (const record of P1_NEW_DOCUMENTED) {
   const player = playerById.get(record.playerId);
@@ -89,6 +91,23 @@ for (const record of P1_NEW_PARTIAL) {
   ok(asArray(record.strengths).length === 0, `${record.playerId}: DELVIS strengths must stay empty`);
 }
 
+for (const record of P1_EXISTING_SUPPLEMENTS) {
+  const player = playerById.get(record.playerId);
+  ok(Boolean(player), `${record.playerId}: existing supplement player missing from canonical catalogue`);
+  const heritage = getP1HeritageForPlayer(player);
+  ok(heritage?.generation === "existing" && heritage.placeId === record.placeId,
+    `${record.playerId}: existing supplement is outside its canonical exclusive population`);
+  ok(asArray(player.strengths).length === 0,
+    `${record.playerId}: supplement must fill a previously empty raw strengths list`);
+  ok(typeof record.claim === "string" && record.claim.trim().length > 20,
+    `${record.playerId}: supplement claim must be concrete`);
+  ok(/^https:\/\//.test(record.source || ""), `${record.playerId}: supplement needs an https source`);
+  ok(asArray(record.strengths).length > 0, `${record.playerId}: supplement DOKUMENTERT requires strengths`);
+  for (const strength of record.strengths) {
+    ok(validAttributes.has(strength), `${record.playerId}: unknown supplement attribute ${strength}`);
+  }
+}
+
 const statusCounts = { DOKUMENTERT: 0, DELVIS: 0, "THIN-SOURCE": 0 };
 for (const player of newExclusive) {
   const record = getP1NewSourceRecord(player);
@@ -113,17 +132,39 @@ for (const player of newExclusive) {
     `${player.id}: source-claim overlay differs from audited record`);
 }
 
+// The five earlier passes remain provenance for already-materialized claims.
+// Three source-verified supplements close the materialization gaps found by the
+// audit (one Viking profile and two Lillestrøm profiles).
 for (const heritage of existingHeritages) {
   const population = exclusiveByPlace.get(heritage.placeId);
-  const documented = population.filter((player) => asArray(player.strengths).length > 0);
-  const empty = population.length - documented.length;
+  const effectivePopulation = population.map((player) => overlaidById.get(player.id));
+  const documented = effectivePopulation.filter((player) => asArray(player.strengths).length > 0);
+  const empty = effectivePopulation.length - documented.length;
   ok(documented.length === heritage.expectedDocumented,
-    `${heritage.key}: expected ${heritage.expectedDocumented} imported documented profiles, got ${documented.length}`);
+    `${heritage.key}: expected ${heritage.expectedDocumented} effective documented profiles, got ${documented.length}`);
   ok(empty === heritage.expectedPartial + heritage.expectedThin,
     `${heritage.key}: existing DELVIS + THIN-SOURCE empty count drift`);
   ok(Boolean(heritage.sourcePass), `${heritage.key}: existing pass must name its audited source-pass artifact`);
 }
 
+const existingStatusCounts = existingHeritages.reduce((totals, heritage) => {
+  totals.DOKUMENTERT += heritage.expectedDocumented;
+  totals.DELVIS += heritage.expectedPartial;
+  totals["THIN-SOURCE"] += heritage.expectedThin;
+  return totals;
+}, { DOKUMENTERT: 0, DELVIS: 0, "THIN-SOURCE": 0 });
+const totalStatusCounts = {
+  DOKUMENTERT: statusCounts.DOKUMENTERT + existingStatusCounts.DOKUMENTERT,
+  DELVIS: statusCounts.DELVIS + existingStatusCounts.DELVIS,
+  "THIN-SOURCE": statusCounts["THIN-SOURCE"] + existingStatusCounts["THIN-SOURCE"]
+};
+ok(totalStatusCounts.DOKUMENTERT === 45, `expected 45 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
+ok(totalStatusCounts.DELVIS === 15, `expected 15 total partial P1 profiles, got ${totalStatusCounts.DELVIS}`);
+ok(totalStatusCounts["THIN-SOURCE"] === 876, `expected 876 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
+ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
+  "combined status distribution must cover 936/936");
+
+// Stabæk identity regressions that caused the final denominator mismatch.
 const stabakExclusiveIds = new Set(exclusiveByPlace.get("nadderud_stadion").map((player) => player.id));
 ok(!stabakExclusiveIds.has("antonio_nusa"), "Antonio Nusa must stay outside Stabæk exclusive P1");
 ok(!stabakExclusiveIds.has("kjell_roar_kaasa"), "Kjell Roar Kaasa must stay outside Stabæk exclusive P1");
@@ -138,3 +179,4 @@ for (const record of explicitRecords) {
 console.log(`P1 source-claim audit PASS: ${checks} checks`);
 console.log(`P1 population: 936/936 across 18 heritages (701 new + 235 existing)`);
 console.log(`New-pass statuses: ${statusCounts.DOKUMENTERT} DOKUMENTERT · ${statusCounts.DELVIS} DELVIS · ${statusCounts["THIN-SOURCE"]} THIN-SOURCE`);
+console.log(`Combined P1 statuses: ${totalStatusCounts.DOKUMENTERT} DOKUMENTERT · ${totalStatusCounts.DELVIS} DELVIS · ${totalStatusCounts["THIN-SOURCE"]} THIN-SOURCE`);
