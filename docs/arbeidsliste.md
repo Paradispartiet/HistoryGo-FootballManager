@@ -22,46 +22,62 @@ Se `docs/klubbvalg.md` for målingene. Regelen som nå har avgjort fire vakter:
 **sjekk om målet er monotont i feilen før grensa flyttes** — og hvis det ikke er
 det, skriv om eller legg ned.
 
-## P1 — 1244 spillere har ingen dokumentasjon i det hele tatt
+## P1 — dekningen bygges tilbake, én arv om gangen (4 av 22 gjort)
 
-Konverteringen fjernet 1951 ukildede påstander. Den la ikke til noe. Resultatet
-er at **22 arver står på 0 % dokumentasjonsdekning**:
+Konverteringen fjernet 1951 ukildede påstander. Den la ikke til noe, og etterlot
+22 arver på 0 % dokumentasjonsdekning. Kildepasset er svaret: hver eksklusive
+profil leses på nytt mot en faktisk kilde, og passet skiller tre tilstander.
+Bare den første gir styrker.
 
-| Arv | Eksklusive spillere uten styrker |
-|---|---:|
-| Haugesund/Haugar/Djerv | 87 |
-| Strømsgodset | 84 |
-| Rosenborg | 83 |
-| Fredrikstad, Skeid | 70 hver |
-| Odd, Aalesund | 68–69 |
-| Vålerenga | 66 |
-| Start | 60 |
-| Moss | 58 |
-| Lyn | 55 |
-| Molde | 54 |
-| Tromsø | 53 |
-| Viking | 51 |
-| Brann, Bodø/Glimt | 47 hver |
-| KFUM | 46 |
-| Bryne, Sandefjord, Stabæk | 41 hver |
-| Kristiansund | 29 |
-| Lillestrøm | 24 |
+| Kildestatus | Betyr | Resultat |
+|---|---|---|
+| DOKUMENTERT | en kilde beskriver mannen | styrker legges tilbake |
+| DELVIS | karriere og rolle er dokumentert | tom liste — en rolle er ingen ferdighet |
+| THIN-SOURCE | ingen beskrivende kilde funnet | tom liste |
+
+| Arv | Eksklusive | Uten styrker | Dekning |
+|---|---:|---:|---:|
+| **Haugesund/Haugar/Djerv** | 87 | 50 | **43 %** |
+| **Strømsgodset** | 84 | 63 | **25 %** |
+| **Molde** | 54 | 41 | **24 %** |
+| **Rosenborg** | 83 | 66 | **20 %** |
+| Fredrikstad, Skeid | 70 hver | 70 | 0 % |
+| Aalesund | 69 | 69 | 0 % |
+| Odd | 68 | 68 | 0 % |
+| Vålerenga | 66 | 66 | 0 % |
+| Start | 60 | 60 | 0 % |
+| Moss | 58 | 58 | 0 % |
+| Lyn | 55 | 55 | 0 % |
+| Tromsø | 53 | 53 | 0 % |
+| Viking | 51 | 51 | 0 % |
+| Brann, Bodø/Glimt | 47 hver | 47 | 0 % |
+| KFUM | 46 | 46 | 0 % |
+| Bryne, Sandefjord, Stabæk | 41 hver | 41 | 0 % |
+| Kristiansund | 29 | 29 | 0 % |
+| Lillestrøm | 24 | 24 | 0 % |
 
 Til sammenlikning har de best dekkede v2-arvene 86 % (Sandnes Ulf) og 77 %
-(Hødd). Katalogen som helhet: **470 av 2756 spillere (17 %) har dokumenterte
-styrker**.
+(Hødd). Katalogen som helhet: **567 av 2756 spillere (21 %) har dokumenterte
+styrker**, opp fra 470 (17 %) rett etter konverteringen.
 
-**Handling:** kildefiler med *individuelle* ferdighetspåstander per spiller —
-sitater fra klubben, kampomtaler, trenerutsagn. Det er samme sjanger som Kjelsås
-(siterer treneren), Arendal (kampomtaler) og Grorud (spillerportretter), og
-målingen fra fem-klubbrunden gjelder fortsatt: **det er hvor mye kilden siterer
-som avgjør dekningen**, ikke hvor lang den er.
+Rangeringen mellom de fire gjentar aksen alle de tynne kildene har vist:
+**det er hvor mye kilden siterer som avgjør dekningen, ikke hvor lang den er.**
+Rosenborg har mest dokumentasjon av alle 42 klubbene og lavest dekning av de
+fire — mesteparten handler om meritter og kampmengde, som er produksjon og
+karriere, ikke ferdigheter. Haugesund har halvparten så mye tekst og dobbelt så
+mange spillerbeskrivelser.
 
-Prioriter etter størrelse × synlighet: Rosenborg, Vålerenga, Molde, Brann og
-Bodø/Glimt er Eliteserie-klubber spilleren møter oftest.
+**Handling for de 18 som står igjen:** kildefiler med *individuelle*
+ferdighetspåstander per spiller — sitater fra klubben, kampomtaler,
+trenerutsagn. Samme sjanger som Kjelsås (siterer treneren), Arendal
+(kampomtaler) og Grorud (spillerportretter).
 
-**Måles med:** `sim:player-attributes` → `perArvStyrkesett.median` skal opp fra
-63 %, og dekningstabellen over regnes ut med et par linjer mot
+Prioriter etter størrelse × synlighet: Vålerenga, Brann, Bodø/Glimt, Viking og
+Lillestrøm er Eliteserie-klubber spilleren møter oftest.
+
+**Måles med:** `sim:player-attributes` → takene i `KJENT_UDOKUMENTERT` for de
+fire arvene er målt NED fra 1,01 (0,80 · 0,77 · 0,76 · 0,59) og skal fortsette
+nedover. Dekningstabellen over regnes ut med et par linjer mot
 `sourcePlaceIds.length === 1`.
 
 ---

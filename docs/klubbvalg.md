@@ -1877,6 +1877,113 @@ klassetak, og det er hva det ser ut som å ikke vite noe.
 Det som gjenstår er å **legge til**, ikke å rette: individuelle kilder for de
 konverterte arvene, og de 18 klubbene i 2. divisjon som fortsatt mangler arv.
 
+### Kildepasset: Rosenborg, Molde, Strømsgodset og Haugesund får dekning tilbake
+
+Dette er den motsatte operasjonen av konverteringen. Der konverteringen fjernet
+et modellert ferdighetslag i én bevegelse, leser kildepasset **hver eksklusive
+profil for seg** mot en faktisk kilde, og legger tilbake bare det kilden sier.
+
+Passet skiller tre tilstander, og bare den første gir styrker:
+
+| Kildestatus | Betyr | Resultat |
+|---|---|---|
+| DOKUMENTERT | en kilde beskriver mannen | styrker legges tilbake |
+| DELVIS | karriere og rolle er dokumentert, men det er ikke en ferdighet | tom liste |
+| THIN-SOURCE | ingen individspesifikk, beskrivende kilde funnet | tom liste |
+
+Fordelingen over 344 profiler: **106 DOKUMENTERT, 14 DELVIS, 223 THIN-SOURCE.**
+At to tredeler blir stående tomme er ikke et frafall — det er formen på en
+kilde. En kilde er taus om *noen*, og det er hele grunnen til at
+`KJENT_UDOKUMENTERT` finnes.
+
+Lista legges som **union** med det som allerede står der. En spiller står på
+flere baner med én styrkeliste, og at Rosenborg-kilden beskriver ham fjerner
+ikke det Vålerenga-kilden sa. Ingen styrke tas bort i dette passet.
+
+#### 88 kandidater, 58 ferdigheter — og filene sier selv hvem som bestemmer
+
+Kildefilene foreslår ferdighetsnavn, og sier på hver eneste profil hvem som har
+siste ord:
+
+> `HG-kandidater` er research-/mappingforslag; eksisterende motorvokabular er
+> fasit ved eventuell import.
+
+33 av de 88 kandidatene er allerede gyldige id-er eller alias. De 55 andre er
+lest for hånd, og spørsmålet er hvert sted det samme: **finnes det en ferdighet
+i de 58 som bærer nøyaktig den påstanden kilden gjorde?**
+
+For 43 av dem er svaret ja, og oversettelsen er ordrett — `aerial` → `heading`,
+`through_balls` → `final_pass`, `physicality` → `strength`, `front_foot_defending`
+→ `interceptions` («villig til å bryte foran»), `inside_runs` → `dribbling` (jf.
+det eksisterende aliaset `cut_inside`).
+
+For 12 er svaret nei, og de står tomme:
+
+| Droppet | Ganger | Hvorfor |
+|---|---:|---|
+| `professionalism`, `training_dedication` | 15 | holdning og treningsvilje er ingen ferdighet i vokabularet |
+| `versatility`, `adaptability` | 10 | ingen allsidighetsferdighet — den ble vurdert og avvist ved Sandnes Ulf også |
+| `left_foot_quality`, `right_foot_quality`, `two_footed` | 8 | vokabularet kjenner ingen fot |
+| `consistency` | 3 | `concentration` er noe annet enn stabilitet over tid |
+| `offensive_power`, `attacking_quality`, `experience` | 3 | for vagt til å peke på én ferdighet |
+| `offensive_threat` | 1 | kilden skriver «kan bli en offensiv trussel» — altså ikke dokumentert |
+
+Å låne et nabotoken ville importert en annen påstand enn den kilden gjorde. Det
+er nøyaktig feilen katalogen nettopp brukte 22 konverteringer på å rydde bort.
+
+Seks profiler er DOKUMENTERT og står likevel tomme, fordi *alle* kandidatene
+deres falt i tabellen over — blant dem Bassel Jradi og Viljar Myhra, som begge
+er hedret av Strømsgodset for holdninger.
+
+#### Gruppa `gk` er en sperre, ikke en etikett — og den fant to ekte feil
+
+Kildepasset merket «pålitelig på høyt nivå» som `goalkeeping_reliability` også
+på utespillere. En blind oversettelse ville gitt en back `shot_stopping`, så
+regelen er: **treffer en gk-ferdighet en spiller uten GK i posisjonene, droppes
+tokenet og navnet skrives ut.** Den fyrte tre ganger, og to av dem var mer enn
+et oversettelsesproblem — begge radene er derfor holdt helt utenfor:
+
+**Per Andreas Haftorsen** står i katalogen som FK Haugesunds forsvars- og
+midtbanespiller med 171 kamper. Avisklippene kildepasset fører på ham handler om
+en *keeper* — og keeperen står i den samme fila, som rad 37: SK Haugars **Per
+Haftorsen**, 130 kamper 1967–78 og tolv A-landskamper. To menn med samme
+etternavn i to klubber som **deler Haugesund stadion**. Det er nøyaktig den
+sammenblandingen den delte banen inviterer til, og som `docs/klubbvalg.md` har
+måttet holde rede på siden importen. Claimet ligger allerede riktig på rad 37.
+
+**Ole Johnny Friise** er en hard motstrid mellom to Strømsgodset-kilder:
+v2-fila fører ham som «Midtbane / angrep», kildepasset siterer klubben på «en
+meget god keeper som alltid leverte godt når han ble kalt på». Posisjonen er
+inngangen til hele ferdighetsprofilen — den setter grunnlinja for alle 58
+verdiene — så å snu den på ett sitat ville vært en større påstand enn den jeg
+kan belegge. Den står ubesvart til en tredje kilde skiller dem.
+
+#### Resultatet, og aksen det bekrefter igjen
+
+| Arv | Eksklusive | Dokumenterte rader | Fikk styrker | Dekning | Tak (var 1,01) |
+|---|---:|---:|---:|---:|---:|
+| Haugesund/Haugar/Djerv | 87 | 40 | 37 | **43 %** | 0,59 |
+| Strømsgodset | 84 | 26 | 21 | **25 %** | 0,76 |
+| Molde | 54 | 23 | 23 | **24 %** | 0,77 |
+| Rosenborg | 83 | 17 | 17 | **20 %** | 0,80 |
+
+Dette er de første takene i `KJENT_UDOKUMENTERT` som er **målt nedover** fra
+1,01, og det er slik gjelden fra konverteringen betales: tallet er ikke en
+grense noen har satt, det er hvor langt kilden faktisk rakk.
+
+Rangeringen gjentar aksen alle de tynne kildene har vist, nå fra motsatt kant:
+**det er hvor mye kilden siterer som avgjør dekningen, ikke hvor lang den er.**
+Rosenborg har mest dokumentasjon av alle 42 klubbene og lavest dekning av de
+fire — mesteparten handler om meritter og kampmengde, som er produksjon og
+karriere, ikke ferdigheter. Kildefila skriver det selv, uoppfordret. Haugesund
+har halvparten så mye tekst og dobbelt så mange spillerbeskrivelser.
+
+Katalogen som helhet: **567 av 2756 spillere (21 %) har dokumenterte styrker**,
+opp fra 470 (17 %). Profil-unikheten — nå en måling, ikke en grense — gikk
+76,38 % → **79,19 %**, som er den retningen ekte individpåstander skal flytte
+den. Alle 94 skriptene er grønne, og taket for Haugesund er bittestet: tømmer
+man de 37 igjen, feller det på `87 av 87 (100 %, tak 59 %)`.
+
 ### Slutt-auditen: hva som traff dataene, og hva regelen alt hadde fanget
 
 En ekstern slutt-audit (10.08.2026) gikk gjennom de ni siste kildeFILENE — Åsane,

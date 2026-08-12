@@ -828,11 +828,11 @@ const KJENT_UDOKUMENTERT = {
   // Grorud: nitten påstander, alle fra klubbens egne spillerportretter. De tre
   // som bare har HØYDE står tomme med vilje — se ordboka. Målt 47 av 71.
   grorud_idrettspark: 0.80,
-  // De tre v2-KONVERTERTE arvene. De står på 100 % fordi konverteringen tømte
-  // dem med vilje: kildefilene sier på hver eneste profil at ingen ferdighet
-  // låses fra legacy-filens scoutingtekst. Taket er derfor ikke en grense her,
-  // det er en registrering av at arven ikke dokumenterer ferdigheter i det hele
-  // tatt. Tallet skal SYNKE når individuelle kilder leses tilbake.
+  // De v2-KONVERTERTE arvene. De står på 100 % fordi konverteringen tømte dem
+  // med vilje: kildefilene sier på hver eneste profil at ingen ferdighet låses
+  // fra legacy-filens scoutingtekst. Taket er derfor ikke en grense her, det er
+  // en registrering av at arven ikke dokumenterer ferdigheter i det hele tatt.
+  // Tallet skal SYNKE når individuelle kilder leses tilbake.
   nadderud_stadion: 1.01,    // Stabæk
   araasen_stadion: 1.01,     // Lillestrøm
   nordmore_stadion: 1.01,    // Kristiansund
@@ -840,7 +840,6 @@ const KJENT_UDOKUMENTERT = {
   aspmyra_stadion: 1.01,     // Bodø/Glimt
   jotun_arena: 1.01,         // Sandefjord
   brann_stadion: 1.01,       // Brann
-  aker_stadion: 1.01,        // Molde
   bislett_stadion: 1.01,     // Lyn
   lyse_arena: 1.01,          // Viking
   sor_arena: 1.01,           // Start
@@ -848,13 +847,30 @@ const KJENT_UDOKUMENTERT = {
   mellos_stadion: 1.01,      // Moss
   color_line_stadion: 1.01,  // Aalesund
   nordre_asen: 1.01,         // Skeid
-  haugesund_stadion: 1.01,   // Haugesund/Haugar/Djerv
   fredrikstad_stadion: 1.01, // Fredrikstad: se konverteringen
-  marienlyst_stadion: 1.01,  // Strømsgodset
   skagerak_arena: 1.01,      // Odd
-  lerkendal_stadion: 1.01,   // Rosenborg: 83 av 83
   intility_arena: 1.01,      // Vålerenga: 66 av 66
-  romssa_arena: 1.01         // Tromsø: 53 av 53
+  romssa_arena: 1.01,        // Tromsø: 53 av 53
+  // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
+  // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
+  // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare
+  // den første gir noe — DOKUMENTERT (en kilde beskriver mannen), DELVIS
+  // (karriere og rolle er dokumentert, men det er ikke en ferdighet) og
+  // THIN-SOURCE (ingen beskrivende kilde funnet).
+  //
+  // Dette er de eneste takene i tabellen som er MÅLT NEDOVER fra 1,01, og det
+  // er slik gjelden fra konverteringen betales: tallet er ikke en grense noen
+  // har satt, det er hvor langt kilden faktisk rakk.
+  //
+  // Rangeringen gjentar aksen alle de tynne kildene har vist: det avgjørende er
+  // ikke hvor mye klubben har skrevet, men hvor mye den SITERER. Rosenborg har
+  // mest dokumentasjon av alle og lavest dekning av de fire, fordi mesteparten
+  // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
+  // dobbelt så mange spillerbeskrivelser.
+  lerkendal_stadion: 0.80,   // Rosenborg: målt 66 av 83
+  aker_stadion: 0.77,        // Molde: målt 41 av 54
+  marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
+  haugesund_stadion: 0.59    // Haugesund/Haugar/Djerv: målt 50 av 87
 };
 
 // ---------------------------------------------------------------------------
