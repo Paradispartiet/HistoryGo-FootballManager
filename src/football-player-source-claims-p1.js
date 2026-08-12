@@ -161,9 +161,39 @@ export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.
 // retain their own already-audited DELVIS identities.
 export const P1_NEW_PARTIAL = Object.freeze([]);
 
+const existingSupplements = [
+  {
+    playerId: "kenneth_storvik",
+    placeId: "lyse_arena",
+    strengths: ["dribbling", "one_vs_one"],
+    claim: "Viking describes Storvik as a major technician who repeatedly ran defenders ragged during seven seasons at the club.",
+    source: "https://www.vikingfotball.no/former-players/storvik-kenneth"
+  },
+  {
+    playerId: "tom_lund",
+    placeId: "araasen_stadion",
+    strengths: ["vision"],
+    claim: "Lillestrøm's memorial profile describes Lund as a player with rare technique and overview; only the directly mappable overview claim is retained as vision.",
+    source: "https://www.lsk.no/nyheter/tusen-takk-for-alt-tommy"
+  },
+  {
+    playerId: "alf_kaka_martinsen",
+    placeId: "araasen_stadion",
+    strengths: ["acceleration"],
+    claim: "Store norske leksikon describes Martinsen as known for a change of pace, a low centre of gravity and quick steps that let him accelerate toward goal.",
+    source: "https://snl.no/Alf_Martinsen"
+  }
+];
+
+export const P1_EXISTING_SUPPLEMENTS = Object.freeze(existingSupplements.map((entry) => Object.freeze({
+  ...entry,
+  strengths: Object.freeze([...entry.strengths])
+})));
+
 const NEW_PLACE_IDS = new Set(P1_HERITAGES.filter((entry) => entry.generation === "new").map((entry) => entry.placeId));
 const DOCUMENTED_BY_ID = new Map(P1_NEW_DOCUMENTED.map((entry) => [entry.playerId, entry]));
 const PARTIAL_BY_ID = new Map(P1_NEW_PARTIAL.map((entry) => [entry.playerId, entry]));
+const EXISTING_SUPPLEMENT_BY_ID = new Map(P1_EXISTING_SUPPLEMENTS.map((entry) => [entry.playerId, entry]));
 
 export function getP1HeritageForPlayer(player) {
   const sourcePlaceIds = Array.isArray(player?.sourcePlaceIds) ? player.sourcePlaceIds : [];
@@ -188,13 +218,24 @@ export function getP1NewSourceRecord(player) {
   };
 }
 
-export function applyP1NewSourceClaimsToPlayer(player) {
+export function applyP1SourceClaimsToPlayer(player) {
   const heritage = getP1HeritageForPlayer(player);
-  if (!heritage || !NEW_PLACE_IDS.has(heritage.placeId)) return player;
-  const record = getP1NewSourceRecord(player);
-  return { ...player, strengths: [...record.strengths] };
+  if (!heritage) return player;
+  if (NEW_PLACE_IDS.has(heritage.placeId)) {
+    const record = getP1NewSourceRecord(player);
+    return { ...player, strengths: [...record.strengths] };
+  }
+  const supplement = EXISTING_SUPPLEMENT_BY_ID.get(player.id);
+  if (supplement && supplement.placeId === heritage.placeId) {
+    return { ...player, strengths: [...supplement.strengths] };
+  }
+  return player;
 }
 
-export function applyP1NewSourceClaims(players) {
-  return (Array.isArray(players) ? players : []).map(applyP1NewSourceClaimsToPlayer);
+export function applyP1SourceClaims(players) {
+  return (Array.isArray(players) ? players : []).map(applyP1SourceClaimsToPlayer);
 }
+
+// Backwards-compatible names used while the P1 branch was built audit-first.
+export const applyP1NewSourceClaimsToPlayer = applyP1SourceClaimsToPlayer;
+export const applyP1NewSourceClaims = applyP1SourceClaims;
