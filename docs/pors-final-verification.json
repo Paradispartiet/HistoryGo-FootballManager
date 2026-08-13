@@ -1,0 +1,35 @@
+{
+  "schema": "historygo-football-manager.pors-final-verification.v1",
+  "generatedOn": "2026-08-13",
+  "sourceDelivery": {
+    "pullRequest": 211,
+    "mergeCommit": "ef1bfd579f684ff6a0e2fc19b3fc8f8a97d3b64a",
+    "browserRun": {
+      "runId": 31691833242,
+      "passed": 143,
+      "failed": 3,
+      "status": "failure"
+    }
+  },
+  "canonicalPopulation": {
+    "affiliated": 63,
+    "exclusive": 58,
+    "crossLinked": 5,
+    "stadiumUnlocks": 63
+  },
+  "stabilization": {
+    "branch": "agent/pors-browser-stabilization",
+    "pullRequest": null,
+    "mergeCommit": null,
+    "ci": "pending"
+  },
+  "checks": [
+    "npm run audit:clubs",
+    "npm run sim:club-squad",
+    "npm run audit:attributes",
+    "npm run sim:player-attributes",
+    "npm run sim:player-weaknesses",
+    "node scripts/audit-p1-source-claims.mjs",
+    "npm run test:browser"
+  ]
+}
