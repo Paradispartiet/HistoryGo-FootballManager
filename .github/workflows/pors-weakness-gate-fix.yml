@@ -1,0 +1,43 @@
+name: Pors weakness gate one-shot fix
+
+on:
+  push:
+    branches:
+      - agent/pors-p2-heritage
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/pors-p2-heritage
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Patch source-only weakness gate
+        run: node scripts/patch-pors-weakness-gate.mjs
+
+      - name: Prove weakness gate and P1 denominator
+        run: |
+          npm run sim:player-weaknesses
+          node scripts/audit-p1-source-claims.mjs
+
+      - name: Commit permanent gate and remove one-shot harness
+        run: |
+          rm scripts/patch-pors-weakness-gate.mjs
+          rm .github/workflows/pors-weakness-gate-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/simulate-player-weaknesses.mjs scripts/patch-pors-weakness-gate.mjs .github/workflows/pors-weakness-gate-fix.yml
+          git commit -m "Tillat uløst posisjon uten konstruerte svakheter"
+          git push origin HEAD:agent/pors-p2-heritage
