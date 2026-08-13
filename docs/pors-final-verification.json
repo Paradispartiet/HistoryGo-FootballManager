@@ -1,35 +1,36 @@
 {
-  "schema": "historygo-football-manager.pors-final-verification.v1",
+  "schema": "historygo-football-manager.pors-verification.v2",
   "generatedOn": "2026-08-13",
   "sourceDelivery": {
     "pullRequest": 211,
     "mergeCommit": "ef1bfd579f684ff6a0e2fc19b3fc8f8a97d3b64a",
-    "browserRun": {
-      "runId": 31691833242,
-      "passed": 143,
-      "failed": 3,
-      "status": "failure"
-    }
+    "browserStatus": "three_failures"
+  },
+  "hydrationDelivery": {
+    "pullRequest": 212,
+    "mergeCommit": "e28988aff32f6d4720f80bb905542fed3170b4dc",
+    "workflowRun": 31727529407,
+    "status": "success",
+    "browserPassed": 146,
+    "browserFailed": 0
   },
   "canonicalPopulation": {
-    "affiliated": 63,
-    "exclusive": 58,
+    "documented": 63,
+    "newProfiles": 58,
     "crossLinked": 5,
-    "stadiumUnlocks": 63
+    "playable": 16,
+    "heritageOnly": 47,
+    "p1Denominator": 936
   },
-  "stabilization": {
-    "branch": "agent/pors-browser-stabilization",
-    "pullRequest": null,
-    "mergeCommit": null,
-    "ci": "pending"
+  "runtimeContract": {
+    "documentedFunction": "listClubPoolPlayers",
+    "playableFunction": "listPlayableClubPoolPlayers",
+    "selectableIds": "playable_only",
+    "baseSquad": "playable_only",
+    "historicalRecordsPreserved": true
   },
-  "checks": [
-    "npm run audit:clubs",
-    "npm run sim:club-squad",
-    "npm run audit:attributes",
-    "npm run sim:player-attributes",
-    "npm run sim:player-weaknesses",
-    "node scripts/audit-p1-source-claims.mjs",
-    "npm run test:browser"
-  ]
+  "playableBoundaryDelivery": {
+    "branch": "agent/pors-playable-pool",
+    "status": "ci_pending"
+  }
 }

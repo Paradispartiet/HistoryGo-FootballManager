@@ -1,27 +1,23 @@
 # Pors · post-merge-verifisering
 
-Pors-passet ble squash-merget i PR #211 med merge-SHA `ef1bfd579f684ff6a0e2fc19b3fc8f8a97d3b64a`.
+## Kildeleveransen
 
-Data-, motor-, flyt- og Pages-portene var grønne. Den siste PR-kjøringen hadde likevel **143 beståtte og 3 feilende nettlesertester**. Alle tre feilene lå i tropps- og spillerprofilflaten.
+PR #211 ble squash-merget som `ef1bfd579f684ff6a0e2fc19b3fc8f8a97d3b64a`. Data-, motor- og Pages-portene var grønne, men tre tropps-/profiltester feilet i den siste nettleserkjøringen.
 
-## Rotårsak
+## Hydreringsrettingen
 
-Troppslisten kunne rendres før den autoritative `squadPlayerIds`-tilstanden var hydrert. Når troppen senere ble oppdatert, observeren oppdaterte bare den kompakte lagstatusen. Tabellen kunne derfor beholde en foreldet fallback-liste, mens søk og profiloppslag allerede leste den nye troppen.
+PR #212 ble squash-merget som `e28988aff32f6d4720f80bb905542fed3170b4dc` etter grønn full-CI, inkludert 146/146 Chromium-tester. Rettelsen synkroniserer tabell, søk og profilvisning mot autoritativ `squadPlayerIds`.
 
-## Retting
-
-- Sesjonscachen erstattes når autoritativ tropp finnes.
-- Global fallback tømmes når en lokal starttropp er tilgjengelig.
-- Både status og spillerliste rendres på nytt ved troppshydrering.
-- En allerede synlig spillerad kan åpne profilen read-only selv om hydrering skjer i samme øyeblikk.
-- Laguttak, rekruttering, klubbmedlemskap og spillerdata endres ikke.
-
-## Låst Pors-kontrakt
+## Canonical Pors-kontrakt
 
 - 63 eksplisitte Pors-tilknytninger.
-- 58 nye `pors_stadion`-profiler.
-- Fem canonical krysskoblinger uten omskriving av eldre `sourcePlaceIds`.
-- 63 duplikatfrie stadion-unlocks.
+- 58 nye profiler og fem verifiserte canonical krysskoblinger.
+- 16 profiler med dokumentert posisjon er spillbare.
+- 47 profiler uten dokumentert posisjon beholdes som historikkposter.
+- `clubPoolIds` og automatisk grunntropp bruker bare den spillbare delmengden.
+- Den komplette historikkatalogen bevares separat og kan utvides uten nye identiteter.
 - P1-nevneren forblir 936/936.
 
-Kontrakten kontrolleres av de eksisterende klubb-, attributt-, tropps- og P1-auditene sammen med nettleserregresjonen i `manager-squad-tactics-scene-v2.spec.js`.
+## Verifisering
+
+Den dokumenterte/spillbare todelingen kjøres gjennom eksisterende typecheck, build, Pages-artifakt, dataaudits, UI-vakter, motorsimuleringer og hele Chromium-pakken. PR-en for spillbarhetsgrensen skal bare merges når alle disse portene er grønne.
