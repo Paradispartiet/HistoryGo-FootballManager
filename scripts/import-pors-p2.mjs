@@ -7,44 +7,45 @@ const UNLOCKS_PATH = new URL("../data/football_unlocks.json", import.meta.url);
 
 const PLACE_ID = "pors_stadion";
 const CLUB_ID = "pors";
-const SOURCE_URL = "https://www.pors.no/om-pors/historie/";
+const SOURCE_URL = "https://porsfotball.no/historie";
 
 const records = [
-  // Pors-historikken identifiserer disse som tidlige A-lag/landslagsspillere.
-  { name: "Thor Wollebæk", era: "historical" },
-  { name: "Erling Norvik", era: "historical" },
+  // Tidlige A-lags-/landslagsprofiler eksplisitt omtalt i klubbhistorikken.
   { name: "Aksel Fjeld", era: "historical", positions: ["GK"] },
-  { name: "Einar Jeremiassen", era: "historical" },
-  // Opprykkslaget 1969.
+  { name: "Erling Olsen", era: "historical" },
+  { name: "Leif Lindstad", era: "historical" },
+  { name: "Frank Olsen", era: "historical" },
+  { name: "Karl Skifjeld", era: "historical" },
+  { name: "Einar «Jeisen» Gundersen", era: "historical" },
+  { name: "Morten Røed", era: "historical" },
+  { name: "Kjell Gundersen", era: "historical" },
+  { name: "Arnold Johannesen", era: "historical" },
+
+  // A-laget som sikret opprykket til toppserien mot Stag i 1969.
   ...[
-    "Per Andersen", "Gunnar Hidle", "Birger Olausen", "Reidar Stenberg",
-    "Thorstein Brattbakk", "Per Inge Holmen", "Jon Arne Juell", "Jan Øverland",
-    "Arvid Fjelddalen", "Jan Ragnar Rølland", "Jørgen Dahl", "Ole Bjørnstad",
-    "Per Vegard Nilsen", "Roy Gulbrandsen"
+    "Kjell Madsen", "Kåre Bergstrøm", "Asbjørn Marthinsen", "Arild Weholt",
+    "Jan Magnussen", "Ragnar Numme", "Svein Halvorsen", "Kai Gulliksen",
+    "Thor Halvorsen", "John E. Odden", "Øystein Numme", "Roy Elseth",
+    "Rolf Nilsen", "Rolf Askedalen", "Basse Hansen", "Thorbjørn Gravklev"
   ].map((name) => ({ name, era: "historical" })),
-  // Opprykkslaget og reserver 1988.
+
+  // Det ubeseirede opprykkslaget fra 1988, eksplisitt listet av klubben.
   ...[
-    "Olav Krogsæter", "Bjørn Meland", "Svein Harald Roaas", "Vegard Antonsen",
-    "Hans Knutsen", "Christian Møller", "Johan Flaten", "Pål Tangen",
-    "Roy Gulbrandsen", "Tormod Coldevin", "Atle Semb", "Ronny Nerland", "Gunnar Holte"
+    "Per William Nilssen", "Espen Gundersen", "Terje Isaksen", "Bent Tommy Larsen",
+    "Terje Bråthen", "Hans Olav Berge", "Tor Arne Stølan", "Erik Skretveidt",
+    "Jon Arve Olsen", "Arvid Tveit", "Jarle Steen", "Einar Rossbach",
+    "Birger Kittilsen", "Kjell Inge Davik", "Gøran Heimdahl", "Terje Bordi",
+    "Peter Aam", "Jarle Rognlien", "Erik Wickmann", "Tor Dreyer"
   ].map((name) => ({ name, era: "historical" })),
-  // Opprykksstallen 2003.
+
+  // Opprykksstallen fra 2003, eksplisitt listet av klubben.
   ...[
-    "Thomas Jacobsen", "Knut Rønningene", "Pål Christian Hansen", "Jonas Holmvåg",
-    "Ole Einar Fuglerud", "Espen Holtan", "Einar Sandvand", "Lars Ørbeck",
-    "Oskar Sandvand", "Kjetil Moen", "Ove Ås", "Campher Mørk", "Mustafa Abdulla",
-    "Tarjei Bugge", "Stian Kristiansen", "Per-Christian Hoppestad", "Kenn Halvorsen",
-    "Per Johnny Stigen", "Leif Gunnar Odinsen", "Kjetil Ulvestrand", "Tommy Svendsen",
-    "Anders Nygaard", "Hans Roger Bøe"
-  ].map((name) => ({ name, era: "modern" })),
-  // Andre eksplisitt navngitte A-lagsspillere i klubbhistorikken.
-  ...[
-    "Ove Eriksen", "Tore Andersen", "Jan Christian Halvorsen", "Bård Antonsen",
-    "Henning Kristiansen", "Helge Haugen", "Bo Edin", "Christian Tynnilä"
-  ].map((name) => ({ name, era: "modern" })),
-  // Klubbhistorikken omtaler disse gjennom landskamp-/kamprekorder.
-  { name: "Alf Johansen", era: "historical" },
-  { name: "Kåre Fjalestad", era: "historical" }
+    "John Erling Kleppe", "Fredrik Nordkvelle", "Svein Roger Dahlen", "Frode Klingberg",
+    "Marius Solberg", "Bård Andre Nilssen", "Erik Pedersen", "Thomas Bråthen",
+    "Sandro Occhipinti", "Vetle Odden", "Torkild Lorentzen", "Knut Stian Knutsen",
+    "Kjell Gunnar Ildhusøy", "Ole Halvor Kolstad", "Tore Arne Sannerholt",
+    "Trond Viggo Toresen", "Jan Erik Suarez", "Terje Isaksen", "Christer Fjellstad"
+  ].map((name) => ({ name, era: "modern" }))
 ];
 
 const normalizeName = (value) => String(value || "")
@@ -136,8 +137,8 @@ for (const record of deduped) {
       era: record.era,
       eraSource: "belagt",
       sourcePlaceIds: [],
-      // 79 er eksisterende canonical grunnnivå for en ukjent seniorprofil;
-      // det er teknisk baseline, ikke en ny kildepåstand om ferdighet.
+      // Canonical grunnnivå for en seniorprofil uten eget nivåbelegg. Dette er
+      // teknisk baseline, ikke en kildepåstand om hvor god personen var.
       classHeight: 79,
       classSource: "utledet",
       naturalPositions: record.positions || [],
@@ -181,9 +182,9 @@ const unlockIds = deduped.map((record) => {
 const existingUnlockIndex = placeUnlocks.findIndex((entry) => entry.placeId === PLACE_ID);
 const unlockEntry = {
   placeId: PLACE_ID,
-  placeName: "Pors stadion",
+  placeName: "Pors Stadion",
   placeRole: "historical_club_ground_source",
-  notes: `Klubbanlegg: Pors' hjemmebane i Porsgrunn. Spillerutvalget er hentet fra klubbens egen historikk (${SOURCE_URL}).`,
+  notes: `Klubbanlegg: Pors' hjemmebane i Porsgrunn. Spillerutvalget er kildebåret fra klubbens egen 105-årshistorie (${SOURCE_URL}); juniorlag uten eksplisitt seniorbelegg er ikke importert.`,
   unlocks: unlockIds.map((targetId) => ({ type: "player_candidate", targetId }))
 };
 if (existingUnlockIndex >= 0) placeUnlocks[existingUnlockIndex] = unlockEntry;
