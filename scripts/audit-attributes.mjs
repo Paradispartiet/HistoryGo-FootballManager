@@ -298,6 +298,7 @@ for (const file of fs.readdirSync(engineDir).filter((name) => name.endsWith(".js
 const REVIEWED_NAME_PAIRS = new Map([
   // Brann-stopper med landskamper (86) mot Tromsø-stopper (82). To menn,
   // hver navngitt av sin egen klubbkilde.
+  ["einar gundersen|einar gundersen", "Einar «Jeja» Gundersen mot nevøen Einar «Jeisen» Gundersen, senere Pors-spiller/trener"],
   ["tor pedersen|tore pedersen", "to ulike midtstoppere, Brann og Tromsø"],
   // Stabæks keeper er moderne, Branns er historisk. To menn.
   ["jan knudsen|jon knudsen", "to ulike keepere, Brann (historisk) og Stabæk (moderne)"],

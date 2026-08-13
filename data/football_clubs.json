@@ -528,8 +528,9 @@
       "group": "avdeling1",
       "strength": 54,
       "form": 60,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolSize": 63,
+      "playerPoolStatus": "ready",
+      "homePlaceId": "pors_stadion"
     },
     {
       "id": "brattvag",
