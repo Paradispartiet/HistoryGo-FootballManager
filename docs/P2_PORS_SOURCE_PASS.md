@@ -15,6 +15,8 @@ Primærkilden er Pors' egen klubbhistorie (`https://porsfotball.no/historie`). U
 
 Spillerposisjon legges bare inn når den kan belegges. Profiler uten belagt posisjon får ingen konstruerte posisjonsdata, individuelle styrker eller posisjonsavledede svakheter. Svakhetsvakten krever derfor null avledede svakheter for uløst posisjon, men fortsatt minst én for alle posisjonsavklarte profiler.
 
+De 58 nye eksklusive Pors-profilene står 58/58 uten dokumenterte ferdighetsclaims. `pors_stadion` er derfor eksplisitt registrert som 100 % `THIN-SOURCE` i representativitetsvakten. Det er en ratchet for kildegjeld, ikke tillatelse til å modellere egenskaper: tallet skal bare kunne synke når individuelle ferdighetskilder faktisk dokumenteres.
+
 ## Identitetsavgjørelser
 
 Einar «Jeja» Gundersen og Einar «Jeisen» Gundersen er to forskjellige personer og står som permanent gjennomgått navnepar. Pors-sidens «Tore Arne Sannerholt» er verifisert som canonical Tor Arne Sannerholt og krysskobles i stedet for å bli en ny profil.
