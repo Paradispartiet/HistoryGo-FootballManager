@@ -14,10 +14,16 @@ let sim = fs.readFileSync(simPath, "utf8");
 const oldBlock = `// Kompatibilitetsfunksjonen må ikke gå tilbake til sourcePlaceIds heller.\nfor (const club of clubs.filter((entry) => entry.homePlaceId)) {\n  const explicit = listClubPoolPlayers({ clubId: club.id, players });\n  const legacy = listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players });\n  check(\`${'${club.name}'}: legacy place-status og eksplisitt pool har samme størrelse etter migreringen\`,\n    explicit.length === legacy.length, \`${'${explicit.length}'}/${'${legacy.length}'}\`);\n}\n`;
 const newBlock = `// Kompatibilitetsfunksjonen må ikke gå tilbake til sourcePlaceIds heller.\n// Legacy place-status er nå bare en migreringsbro: alle legacy-medlemmer må\n// finnes i den eksplisitte poolen, men en kildeverifisert krysskobling kan være\n// eksplisitt medlemskap uten å omskrive spillerens gamle oppdagelsessted.\nfor (const club of clubs.filter((entry) => entry.homePlaceId)) {\n  const explicit = listClubPoolPlayers({ clubId: club.id, players });\n  const explicitIds = new Set(explicit.map((player) => player.id));\n  const legacy = listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players });\n  check(\`${'${club.name}'}: legacy place-status er delmengde av eksplisitt pool\`,\n    legacy.every((player) => explicitIds.has(player.id)),\n    legacy.filter((player) => !explicitIds.has(player.id)).map((player) => player.id).join(\", \"));\n  check(\`${'${club.name}'}: eksplisitt pool kan ikke være mindre enn legacy\`,\n    explicit.length >= legacy.length, \`${'${explicit.length}'}/${'${legacy.length}'}\`);\n}\n`;
 assert.ok(sim.includes(oldBlock) || sim.includes(newBlock), "fant ikke legacy/explicit-vakten i club-squad-simuleringen");
-if (sim.includes(oldBlock)) {
-  sim = sim.replace(oldBlock, newBlock);
-  fs.writeFileSync(simPath, sim);
-}
+if (sim.includes(oldBlock)) sim = sim.replace(oldBlock, newBlock);
+
+// Dokumentasjonstabellen beskriver den canonical klubbpoolen, ikke den gamle
+// stadionbaserte migreringsbroen. Dette skillet blir synlig først når en spiller
+// allerede har et frosset sourcePlaceId fra et tidligere kildepass.
+const oldDocsMap = `  const arvPerNavn = new Map(clubs.filter((club) => club.homePlaceId).map((club) =>\n    [club.name, listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players }).length]));`;
+const newDocsMap = `  const arvPerNavn = new Map(clubs.filter((club) => club.homePlaceId).map((club) =>\n    [club.name, listClubPoolPlayers({ clubId: club.id, players }).length]));`;
+assert.ok(sim.includes(oldDocsMap) || sim.includes(newDocsMap), "fant ikke datakilden for arvetabellen i club-squad-simuleringen");
+if (sim.includes(oldDocsMap)) sim = sim.replace(oldDocsMap, newDocsMap);
+fs.writeFileSync(simPath, sim);
 
 const clubs = JSON.parse(fs.readFileSync(clubsPath, "utf8")).clubs || [];
 const players = JSON.parse(fs.readFileSync(playersPath, "utf8")).players || [];
