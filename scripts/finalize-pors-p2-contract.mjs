@@ -39,9 +39,9 @@ docs = docs.replace(/Summen er \*plasser\*, ikke personer: \d+ spillere står p�
 
 const crosslinkNote = "En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceId`: klubbmedlemskapet kan ligge bare i `clubAffiliations`, mens klubbens stadion-unlock åpner hele den eksplisitte poolen. Dette bevarer eldre, frosne kildepass uten å duplisere samme person.";
 if (!docs.includes(crosslinkNote)) {
-  const architecturePattern = /(En spiller kan dermed være dokumentert klubbspiller uten at klubbidentiteten\s+avhenger av hvor History Go-kortet hans ligger\.)/m;
-  assert.ok(architecturePattern.test(docs), "fant ikke arkitekturavsnittet i klubbvalg-docs");
-  docs = docs.replace(architecturePattern, `$1\n\n${crosslinkNote}`);
+  const tableMarker = "\n| Klubb | Bane | Historiske spillere |";
+  assert.ok(docs.includes(tableMarker), "fant ikke klubbarvtabellen i klubbvalg-docs");
+  docs = docs.replace(tableMarker, `\n\n${crosslinkNote}\n${tableMarker}`);
 }
 fs.writeFileSync(docsPath, docs);
 
