@@ -37,11 +37,11 @@ docs = docs.replace("Åsane, Jerv, Notodden", "Åsane, Jerv, Pors, Notodden");
 docs = docs.replace(/— \d+ arveplasser fordelt på\nalle \d+,/, `— ${affiliationCount} arveplasser fordelt på\nalle ${readyWithGround},`);
 docs = docs.replace(/Summen er \*plasser\*, ikke personer: \d+ spillere står på to eller flere baner/, `Summen er *plasser*, ikke personer: ${multiClubCount} spillere står på to eller flere baner`);
 
-const distinction = "En spiller kan dermed være dokumentert klubbspiller uten at klubbidentiteten\navhenger av hvor History Go-kortet hans ligger.\n";
-const crosslinkNote = "En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceId`: klubbmedlemskapet kan ligge bare i `clubAffiliations`, mens klubbens stadion-unlock åpner hele den eksplisitte poolen. Dette bevarer eldre, frosne kildepass uten å duplisere samme person.\n";
-if (!docs.includes(crosslinkNote.trim())) {
-  assert.ok(docs.includes(distinction), "fant ikke arkitekturavsnittet i klubbvalg-docs");
-  docs = docs.replace(distinction, distinction + "\n" + crosslinkNote);
+const crosslinkNote = "En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceId`: klubbmedlemskapet kan ligge bare i `clubAffiliations`, mens klubbens stadion-unlock åpner hele den eksplisitte poolen. Dette bevarer eldre, frosne kildepass uten å duplisere samme person.";
+if (!docs.includes(crosslinkNote)) {
+  const architecturePattern = /(En spiller kan dermed være dokumentert klubbspiller uten at klubbidentiteten\s+avhenger av hvor History Go-kortet hans ligger\.)/m;
+  assert.ok(architecturePattern.test(docs), "fant ikke arkitekturavsnittet i klubbvalg-docs");
+  docs = docs.replace(architecturePattern, `$1\n\n${crosslinkNote}`);
 }
 fs.writeFileSync(docsPath, docs);
 
