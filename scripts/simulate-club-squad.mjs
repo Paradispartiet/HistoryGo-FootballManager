@@ -69,11 +69,18 @@ for (const club of clubs) {
 }
 
 // Kompatibilitetsfunksjonen må ikke gå tilbake til sourcePlaceIds heller.
+// Legacy place-status er nå bare en migreringsbro: alle legacy-medlemmer må
+// finnes i den eksplisitte poolen, men en kildeverifisert krysskobling kan være
+// eksplisitt medlemskap uten å omskrive spillerens gamle oppdagelsessted.
 for (const club of clubs.filter((entry) => entry.homePlaceId)) {
   const explicit = listClubPoolPlayers({ clubId: club.id, players });
+  const explicitIds = new Set(explicit.map((player) => player.id));
   const legacy = listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players });
-  check(`${club.name}: legacy place-status og eksplisitt pool har samme størrelse etter migreringen`,
-    explicit.length === legacy.length, `${explicit.length}/${legacy.length}`);
+  check(`${club.name}: legacy place-status er delmengde av eksplisitt pool`,
+    legacy.every((player) => explicitIds.has(player.id)),
+    legacy.filter((player) => !explicitIds.has(player.id)).map((player) => player.id).join(", "));
+  check(`${club.name}: eksplisitt pool kan ikke være mindre enn legacy`,
+    explicit.length >= legacy.length, `${explicit.length}/${legacy.length}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -252,7 +259,7 @@ check("docs skiller klubbtilknytning fra oppdagelsessted", docs.includes("`clubA
   check("ingen klubb står to ganger i arvetabellen", toGanger.length === 0, toGanger.join(", "));
 
   const arvPerNavn = new Map(clubs.filter((club) => club.homePlaceId).map((club) =>
-    [club.name, listClubHeritagePlayers({ homePlaceId: club.homePlaceId, players }).length]));
+    [club.name, listClubPoolPlayers({ clubId: club.id, players }).length]));
   for (const row of navngitte) {
     for (const navn of row.clubs) {
       check(`docs: «${navn}» er en klubb med bane`, arvPerNavn.has(navn), navn);

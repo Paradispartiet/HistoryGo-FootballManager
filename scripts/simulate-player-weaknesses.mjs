@@ -94,28 +94,42 @@ check(
 check("en manglende fil degraderer til gyldig, tom katalog", normalizeWeaknessCatalogue(null).attributes.length === 0);
 
 // ---------------------------------------------------------------------------
-stage("2. Alle spillere har svake sider");
+stage("2. Bare posisjonsavklarte spillere får avledede svake sider");
 
-const counts = players.map((player) => weaknessesFor(player).length);
-const withNone = players.filter((player) => weaknessesFor(player).length === 0);
-const thin = players.filter((player) => weaknessesFor(player).length < 3);
-console.log(`     svake sider per spiller: min ${Math.min(...counts)} · maks ${Math.max(...counts)} · uten ${withNone.length}`);
-if (thin.length > 0) console.log(`     færre enn tre: ${thin.map((p) => p.name).join(", ")}`);
+// Svakhetsmotoren identifiserer jobbkrav fra naturalPositions/usablePositions.
+// En ekte spiller uten kildebelagt posisjon gir derfor ikke motoren noe
+// grunnlag å utlede en svakhet fra. Å tvinge fram tre svakheter i det tilfellet
+// ville være samme type personpåstand som P2-importen eksplisitt avstår fra.
+const hasResolvedPosition = (player) =>
+  [...(player.naturalPositions || []), ...(player.usablePositions || [])]
+    .some((position) => (catalogue.positionDemands[position] || []).length > 0);
+const resolvedPlayers = players.filter(hasResolvedPosition);
+const unresolvedPlayers = players.filter((player) => !hasResolvedPosition(player));
+const resolvedCounts = resolvedPlayers.map((player) => weaknessesFor(player).length);
+const unresolvedWithWeaknesses = unresolvedPlayers.filter((player) => weaknessesFor(player).length > 0);
+const resolvedWithNone = resolvedPlayers.filter((player) => weaknessesFor(player).length === 0);
+const resolvedThin = resolvedPlayers.filter((player) => weaknessesFor(player).length < 3);
+const allCounts = players.map((player) => weaknessesFor(player).length);
 
-check("ingen spiller står helt uten svake sider", withNone.length === 0);
-check("de aller fleste har tre", counts.filter((n) => n >= 3).length >= players.length - 5);
-check("ingen får flere enn grensen", counts.every((n) => n <= 3));
+console.log(`     posisjonsavklart: ${resolvedPlayers.length} · uløst: ${unresolvedPlayers.length}`);
+console.log(`     avklarte svake sider: min ${Math.min(...resolvedCounts)} · maks ${Math.max(...resolvedCounts)} · uten ${resolvedWithNone.length}`);
+if (resolvedThin.length > 0) console.log(`     avklarte med færre enn tre: ${resolvedThin.map((p) => p.name).join(", ")}`);
 
-const labels = new Set(players.flatMap((player) => weaknessesFor(player).map((w) => w.label)));
+check("uløst posisjon gir ingen konstruerte svake sider", unresolvedWithWeaknesses.length === 0);
+check("alle posisjonsavklarte har minst én svak side", resolvedWithNone.length === 0);
+check("de aller fleste posisjonsavklarte har tre", resolvedCounts.filter((n) => n >= 3).length >= resolvedPlayers.length - 5);
+check("ingen får flere enn grensen", allCounts.every((n) => n <= 3));
+
+const labels = new Set(resolvedPlayers.flatMap((player) => weaknessesFor(player).map((w) => w.label)));
 console.log(`     ${labels.size} ulike svakheter i bruk`);
 check("svakhetene er varierte, ikke samme tre for alle", labels.size >= 15);
 {
-  // En svakhet som gjelder nesten alle sier ingenting. Måles, ikke antas.
+  // En svakhet som gjelder nesten alle posisjonsavklarte sier ingenting.
   const tally = new Map();
-  players.forEach((player) => weaknessesFor(player).forEach((w) => tally.set(w.label, (tally.get(w.label) || 0) + 1)));
+  resolvedPlayers.forEach((player) => weaknessesFor(player).forEach((w) => tally.set(w.label, (tally.get(w.label) || 0) + 1)));
   const commonest = Math.max(...tally.values());
-  console.log(`     vanligste svakhet dekker ${commonest}/${players.length} spillere`);
-  check(`ingen enkelt svakhet dekker mer enn halvparten (${commonest}/${players.length})`, commonest <= players.length / 2);
+  console.log(`     vanligste svakhet dekker ${commonest}/${resolvedPlayers.length} posisjonsavklarte spillere`);
+  check(`ingen enkelt svakhet dekker mer enn halvparten (${commonest}/${resolvedPlayers.length})`, commonest <= resolvedPlayers.length / 2);
 }
 
 // ---------------------------------------------------------------------------

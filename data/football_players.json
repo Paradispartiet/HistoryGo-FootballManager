@@ -38794,6 +38794,12 @@
       "eraSource": "utledet",
       "clubAffiliations": [
         {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        },
+        {
           "clubId": "tromso",
           "relation": "played_for",
           "status": "elite_career",
@@ -39565,6 +39571,12 @@
       },
       "eraSource": "utledet",
       "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        },
         {
           "clubId": "tromso",
           "relation": "played_for",
@@ -71757,7 +71769,8 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CM"
+        "CM",
+        "AM"
       ],
       "usablePositions": [
         "DM",
@@ -71803,6 +71816,12 @@
       "clubAffiliations": [
         {
           "clubId": "odd",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        },
+        {
+          "clubId": "pors",
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"
@@ -130077,6 +130096,12 @@
           "relation": "played_for",
           "status": "club_legend",
           "source": "utledet"
+        },
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -155404,6 +155429,12 @@
           "relation": "played_for",
           "status": "club_legend",
           "source": "utledet"
+        },
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -174852,6 +174883,2174 @@
       "clubAffiliations": [
         {
           "clubId": "grorud",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "aksel_fjeld",
+      "name": "Aksel Fjeld",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "erling_olsen",
+      "name": "Erling Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "leif_lindstad",
+      "name": "Leif Lindstad",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "frank_olsen",
+      "name": "Frank Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "karl_skifjeld",
+      "name": "Karl Skifjeld",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "einar_jeisen_gundersen",
+      "name": "Einar «Jeisen» Gundersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "morten_roed",
+      "name": "Morten Røed",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjell_gundersen",
+      "name": "Kjell Gundersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arnold_johannesen",
+      "name": "Arnold Johannesen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjell_madsen",
+      "name": "Kjell Madsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kare_bergstrom",
+      "name": "Kåre Bergstrøm",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "asbjorn_marthinsen",
+      "name": "Asbjørn Marthinsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arild_weholt",
+      "name": "Arild Weholt",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jan_magnussen",
+      "name": "Jan Magnussen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ragnar_numme",
+      "name": "Ragnar Numme",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "svein_halvorsen",
+      "name": "Svein Halvorsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kai_gulliksen",
+      "name": "Kai Gulliksen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "thor_halvorsen",
+      "name": "Thor Halvorsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "john_e_odden",
+      "name": "John E. Odden",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oystein_numme",
+      "name": "Øystein Numme",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "roy_elseth",
+      "name": "Roy Elseth",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "rolf_nilsen",
+      "name": "Rolf Nilsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "rolf_askedalen",
+      "name": "Rolf Askedalen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "basse_hansen",
+      "name": "Basse Hansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "thorbjorn_gravklev",
+      "name": "Thorbjørn Gravklev",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "per_william_nilssen",
+      "name": "Per William Nilssen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "espen_gundersen",
+      "name": "Espen Gundersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "terje_isaksen",
+      "name": "Terje Isaksen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bent_tommy_larsen",
+      "name": "Bent Tommy Larsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "terje_brathen",
+      "name": "Terje Bråthen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "hans_olav_berge",
+      "name": "Hans Olav Berge",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "tor_arne_stolan",
+      "name": "Tor Arne Stølan",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "erik_skretveidt",
+      "name": "Erik Skretveidt",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jon_arve_olsen",
+      "name": "Jon Arve Olsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arvid_tveit",
+      "name": "Arvid Tveit",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jarle_steen",
+      "name": "Jarle Steen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "birger_kittilsen",
+      "name": "Birger Kittilsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjell_inge_davik",
+      "name": "Kjell Inge Davik",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "goran_heimdahl",
+      "name": "Gøran Heimdahl",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "terje_bordi",
+      "name": "Terje Bordi",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "peter_aam",
+      "name": "Peter Aam",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jarle_rognlien",
+      "name": "Jarle Rognlien",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "erik_wickmann",
+      "name": "Erik Wickmann",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "tor_dreyer",
+      "name": "Tor Dreyer",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "john_erling_kleppe",
+      "name": "John Erling Kleppe",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "svein_roger_dahlen",
+      "name": "Svein Roger Dahlen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "frode_klingberg",
+      "name": "Frode Klingberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "marius_solberg",
+      "name": "Marius Solberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "RB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bard_andre_nilssen",
+      "name": "Bård Andre Nilssen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "thomas_brathen",
+      "name": "Thomas Bråthen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sandro_occhipinti",
+      "name": "Sandro Occhipinti",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "vetle_odden",
+      "name": "Vetle Odden",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "torkild_lorentzen",
+      "name": "Torkild Lorentzen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "knut_stian_knutsen",
+      "name": "Knut Stian Knutsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjell_gunnar_ildhusoy",
+      "name": "Kjell Gunnar Ildhusøy",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_halvor_kolstad",
+      "name": "Ole Halvor Kolstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "trond_viggo_toresen",
+      "name": "Trond Viggo Toresen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jan_erik_suarez",
+      "name": "Jan Erik Suarez",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Pors-historikken.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"

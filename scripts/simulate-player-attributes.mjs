@@ -75,30 +75,45 @@ for (const player of players.slice(0, 40)) {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Profilen SPRIKER — det er hele forskjellen fra en rating
+// 2. Kildebårne profiler SPRIKER; helt uløste profiler forblir nøytrale
 // ---------------------------------------------------------------------------
-const ranges = players.map((player) => profiles[player.id].spread.range).sort((a, b) => a - b);
+// Posisjonsprofilen er en påstand om jobben spilleren gjorde. Når verken
+// posisjon eller individuell styrke er kildebelagt, skal attributtmotoren ikke
+// finne på en personprofil bare for å tilfredsstille en sprikvakt. De profilene
+// får derfor en nøytral, flat grunnlinje inntil kilden bærer mer.
+const hasResolvedPosition = (player) =>
+  [...(player.naturalPositions || []), ...(player.usablePositions || [])]
+    .some((position) => catalogue.positionProfiles[position]);
+const hasIndividualStrengthEvidence = (player) => (player.strengths || []).length > 0;
+const shapedPlayers = players.filter((player) => hasResolvedPosition(player) || hasIndividualStrengthEvidence(player));
+const unresolvedNeutralPlayers = players.filter((player) => !hasResolvedPosition(player) && !hasIndividualStrengthEvidence(player));
+const unresolvedRanges = unresolvedNeutralPlayers.map((player) => profiles[player.id].spread.range);
+check("helt uløst profil forblir nøytral uten konstruert sprik",
+  unresolvedRanges.every((range) => range === 0),
+  `${unresolvedNeutralPlayers.length} uløste · maks sprik ${Math.max(0, ...unresolvedRanges)}`);
+
+const ranges = shapedPlayers.map((player) => profiles[player.id].spread.range).sort((a, b) => a - b);
 const medianRange = ranges[Math.floor(ranges.length / 2)];
 // Grensen er 8, ikke 10. Klassetaket senker toppene, og etter at spillerne ble
 // tiered på ekte nivå (78–99 i stedet for 86–99) har bunnsjiktet mindre spenn å
 // sprike i — en 79-spiller KAN ikke sprike 16 når taket hans er 13. Målt median
-// er 9. Det som må holde er at profilen bruker det spennet han HAR.
-check("median spiller spriker minst 8 av 20", medianRange >= 8, `median ${medianRange}`);
-check("ingen spiller er flat", ranges[0] >= 5, `laveste sprik ${ranges[0]}`);
+// er 9. Det som må holde er at en faktisk formet profil bruker spennet den HAR.
+check("median kildebåret/formet spiller spriker minst 8 av 20", medianRange >= 8, `median ${medianRange}`);
+check("ingen kildebåret/formet spiller er flat", ranges[0] >= 5, `laveste sprik ${ranges[0]}`);
 
 // Det absolutte spriket er ikke lenger den ærlige testen: en spiller med lavt
-// tak KAN ikke sprike 16. Det som må holde er at han bruker det spennet han
-// HAR — ellers er profilen flat uansett hva taket sier.
-const usage = players.map((player) => {
+// tak KAN ikke sprike 16. Det som må holde er at den formede profilen bruker
+// det spennet den HAR — ellers er profilen flat uansett hva taket sier.
+const usage = shapedPlayers.map((player) => {
   const profile = profiles[player.id];
   const available = (ATTRIBUTE_SCALE.max - ATTRIBUTE_SCALE.floor)
     * classCeilingFactor(player.classHeight, scaling.classBand);
   return profile.spread.range / available;
 }).sort((a, b) => a - b);
 const medianUsage = usage[Math.floor(usage.length / 2)];
-check("median spiller bruker det meste av sitt eget spenn", medianUsage > 0.7,
+check("median kildebåret/formet spiller bruker det meste av sitt eget spenn", medianUsage > 0.7,
   `${(medianUsage * 100).toFixed(0)} %`);
-check("ingen spiller bruker under en tredel", usage[0] > 0.33, `${(usage[0] * 100).toFixed(0)} %`);
+check("ingen kildebåret/formet spiller bruker under en tredel", usage[0] > 0.33, `${(usage[0] * 100).toFixed(0)} %`);
 
 // Klassebåndet leses av korpuset, ikke hardkodet. Sto det fast på 85–99 ville
 // hele bunnsjiktet blitt klemt til null da spillerne ble tiered til 78–99.
@@ -847,6 +862,11 @@ const KJENT_UDOKUMENTERT = {
   fredrikstad_stadion: 1.01, // Fredrikstad: se konverteringen
   skagerak_arena: 1.01,      // Odd
   romssa_arena: 1.01,        // Tromsø: 53 av 53
+  // Pors P2: klubbhistorikken dokumenterer medlemskap/epoker og et begrenset
+  // posisjonslag, men ingen individuelle ferdighetsclaims. 58/58 nye eksklusive
+  // profiler er derfor THIN-SOURCE på ferdighetsaksen. 1,01 er en eksplisitt
+  // registrering av 100 % tomme styrkelister, ikke tillatelse til modellering.
+  pors_stadion: 1.01,
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
   // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare

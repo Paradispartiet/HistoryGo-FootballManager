@@ -163,6 +163,9 @@ bestemmer bare hvilke History Go-steder som kan oppdage/låse opp spilleren.
 spiller kan dermed være dokumentert klubbspiller uten at klubbidentiteten
 avhenger av hvor History Go-kortet hans ligger.
 
+
+En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceId`: klubbmedlemskapet kan ligge bare i `clubAffiliations`, mens klubbens stadion-unlock åpner hele den eksplisitte poolen. Dette bevarer eldre, frosne kildepass uten å duplisere samme person.
+
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
@@ -199,6 +202,7 @@ avhenger av hvor History Go-kortet hans ligger.
 | Sandefjord | Jotun Arena | 68 |
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
+| Pors | Pors stadion | 63 |
 | Sandnes Ulf | Øster Hus Arena | 60 |
 | Raufoss | Raufoss Arena | 58 |
 | Hønefoss | AKA Arena | 58 |
@@ -210,9 +214,9 @@ avhenger av hvor History Go-kortet hans ligger.
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Notodden, Hønefoss,
-Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3390 arveplasser fordelt på
-alle 42, og **ingen klubb med bane har under 46 navn**. De 18 klubbene som
+Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Pors, Notodden, Hønefoss,
+Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3453 arveplasser fordelt på
+alle 43, og **ingen klubb med bane har under 46 navn**. De 18 klubbene som
 mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
@@ -223,7 +227,7 @@ fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvi
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 495 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 499 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 **Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 dokumenterte klubbtilknytninger finnes. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.
