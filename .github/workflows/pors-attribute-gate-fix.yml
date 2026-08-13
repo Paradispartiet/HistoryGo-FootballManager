@@ -25,7 +25,9 @@ jobs:
           node-version: 22
 
       - name: Patch source-only attribute gate
-        run: node scripts/patch-pors-attribute-gate.mjs
+        run: |
+          node scripts/patch-pors-attribute-gate.mjs
+          node scripts/patch-pors-thin-source-gate.mjs
 
       - name: Prove source-only player profile gates
         run: |
@@ -36,9 +38,10 @@ jobs:
       - name: Commit permanent gate and remove one-shot harness
         run: |
           rm scripts/patch-pors-attribute-gate.mjs
+          rm scripts/patch-pors-thin-source-gate.mjs
           rm .github/workflows/pors-attribute-gate-fix.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/simulate-player-attributes.mjs scripts/patch-pors-attribute-gate.mjs .github/workflows/pors-attribute-gate-fix.yml
-          git commit -m "Behold helt uløste spillerprofiler nøytrale"
+          git add scripts/simulate-player-attributes.mjs scripts/patch-pors-attribute-gate.mjs scripts/patch-pors-thin-source-gate.mjs .github/workflows/pors-attribute-gate-fix.yml
+          git commit -m "Behold uløste Pors-profiler som thin-source"
           git push origin HEAD:agent/pors-p2-heritage
