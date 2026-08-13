@@ -27,11 +27,17 @@ jobs:
       - name: Import Pors source population
         run: node scripts/import-pors-p2.mjs
 
+      - name: Preserve frozen P1 source denominator for crosslinks
+        run: node scripts/preserve-p1-for-pors-crosslinks.mjs
+
       - name: Apply sourced Pors positions
         run: node scripts/apply-pors-p2-position-evidence.mjs
 
       - name: Materialize canonical club affiliations
         run: node scripts/sync-club-affiliations.mjs --write
+
+      - name: Finalize explicit-pool contract and docs
+        run: node scripts/finalize-pors-p2-contract.mjs
 
       - name: Targeted data gates
         run: |
@@ -44,10 +50,12 @@ jobs:
       - name: Commit generated canonical data and remove migration harness
         run: |
           rm scripts/import-pors-p2.mjs
+          rm scripts/preserve-p1-for-pors-crosslinks.mjs
           rm scripts/apply-pors-p2-position-evidence.mjs
+          rm scripts/finalize-pors-p2-contract.mjs
           rm .github/workflows/pors-p2-import.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/football_players.json data/football_clubs.json data/football_unlocks.json scripts/audit-attributes.mjs scripts/import-pors-p2.mjs scripts/apply-pors-p2-position-evidence.mjs .github/workflows/pors-p2-import.yml
+          git add data/football_players.json data/football_clubs.json data/football_unlocks.json docs/klubbvalg.md scripts/audit-attributes.mjs scripts/simulate-club-squad.mjs scripts/import-pors-p2.mjs scripts/preserve-p1-for-pors-crosslinks.mjs scripts/apply-pors-p2-position-evidence.mjs scripts/finalize-pors-p2-contract.mjs .github/workflows/pors-p2-import.yml
           git commit -m "Importer Pors P2-arv i canonical spillerkatalog"
           git push origin HEAD:agent/pors-p2-heritage
