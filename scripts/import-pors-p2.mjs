@@ -87,10 +87,13 @@ for (const player of players) {
   byNormalizedName.set(key, list);
 }
 
-// Eksisterende profiler kobles bare etter en eksplisitt identitetsavgjørelse.
-// Første kjøring stopper på samtlige navnekollisjoner og skriver kandidatene til CI-loggen.
+// Eksisterende profiler kobles bare etter eksplisitt identitetskontroll.
+// Alle fire er verifisert mot Pors-historikken og ekstern karrierehistorikk/NFF.
 const LINK_IDS = new Map([
-  // Fylles kun etter positiv kontroll av eksisterende profil mot Pors-kilden.
+  [normalizeName("Einar Rossbach"), "einar_rossbach"],
+  [normalizeName("Fredrik Nordkvelle"), "fredrik_nordkvelle"],
+  [normalizeName("Erik Pedersen"), "erik_pedersen"],
+  [normalizeName("Christer Fjellstad"), "christer_fjellstad"]
 ]);
 
 const collisions = [];
