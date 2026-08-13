@@ -4,6 +4,7 @@ import fs from "node:fs";
 const PLAYERS_PATH = new URL("../data/football_players.json", import.meta.url);
 const CLUBS_PATH = new URL("../data/football_clubs.json", import.meta.url);
 const UNLOCKS_PATH = new URL("../data/football_unlocks.json", import.meta.url);
+const ATTRIBUTE_AUDIT_PATH = new URL("./audit-attributes.mjs", import.meta.url);
 
 const PLACE_ID = "pors_stadion";
 const CLUB_ID = "pors";
@@ -38,12 +39,14 @@ const records = [
     "Peter Aam", "Jarle Rognlien", "Erik Wickmann", "Tor Dreyer"
   ].map((name) => ({ name, era: "historical" })),
 
-  // Opprykksstallen fra 2003, eksplisitt listet av klubben.
+  // Opprykksstallen fra 2003. Pors-siden skriver «Tore Arne Sannerholt»;
+  // NFFs personprofil viser samme Pors-spiller som Tor Arne Sannerholt, som er
+  // canonical skrivemåte i katalogen.
   ...[
     "John Erling Kleppe", "Fredrik Nordkvelle", "Svein Roger Dahlen", "Frode Klingberg",
     "Marius Solberg", "Bård Andre Nilssen", "Erik Pedersen", "Thomas Bråthen",
     "Sandro Occhipinti", "Vetle Odden", "Torkild Lorentzen", "Knut Stian Knutsen",
-    "Kjell Gunnar Ildhusøy", "Ole Halvor Kolstad", "Tore Arne Sannerholt",
+    "Kjell Gunnar Ildhusøy", "Ole Halvor Kolstad", "Tor Arne Sannerholt",
     "Trond Viggo Toresen", "Jan Erik Suarez", "Terje Isaksen", "Christer Fjellstad"
   ].map((name) => ({ name, era: "modern" }))
 ];
@@ -88,12 +91,12 @@ for (const player of players) {
 }
 
 // Eksisterende profiler kobles bare etter eksplisitt identitetskontroll.
-// Alle fire er verifisert mot Pors-historikken og ekstern karrierehistorikk/NFF.
 const LINK_IDS = new Map([
   [normalizeName("Einar Rossbach"), "einar_rossbach"],
   [normalizeName("Fredrik Nordkvelle"), "fredrik_nordkvelle"],
   [normalizeName("Erik Pedersen"), "erik_pedersen"],
-  [normalizeName("Christer Fjellstad"), "christer_fjellstad"]
+  [normalizeName("Christer Fjellstad"), "christer_fjellstad"],
+  [normalizeName("Tor Arne Sannerholt"), "tor_arne_sannerholt"]
 ]);
 
 const collisions = [];
@@ -140,8 +143,6 @@ for (const record of deduped) {
       era: record.era,
       eraSource: "belagt",
       sourcePlaceIds: [],
-      // Canonical grunnnivå for en seniorprofil uten eget nivåbelegg. Dette er
-      // teknisk baseline, ikke en kildepåstand om hvor god personen var.
       classHeight: 79,
       classSource: "utledet",
       naturalPositions: record.positions || [],
@@ -192,6 +193,18 @@ const unlockEntry = {
 };
 if (existingUnlockIndex >= 0) placeUnlocks[existingUnlockIndex] = unlockEntry;
 else placeUnlocks.push(unlockEntry);
+
+// Jeja og Jeisen Gundersen er eksplisitt gjennomgått som to forskjellige menn.
+// Auditen normaliserer bort kallenavnene og ser dem derfor som samme nøkkel;
+// legg avgjørelsen i den permanente review-lista i stedet for å svekke vakten.
+let attributeAudit = fs.readFileSync(ATTRIBUTE_AUDIT_PATH, "utf8");
+const reviewedPair = '  ["einar gundersen|einar gundersen", "Einar «Jeja» Gundersen mot nevøen Einar «Jeisen» Gundersen, senere Pors-spiller/trener"],\n';
+if (!attributeAudit.includes(reviewedPair.trim())) {
+  const marker = '  ["tor pedersen|tore pedersen", "to ulike midtstoppere, Brann og Tromsø"],\n';
+  assert.ok(attributeAudit.includes(marker), "fant ikke innsettingspunkt i REVIEWED_NAME_PAIRS");
+  attributeAudit = attributeAudit.replace(marker, reviewedPair + marker);
+  fs.writeFileSync(ATTRIBUTE_AUDIT_PATH, attributeAudit);
+}
 
 playerData.players = players;
 clubData.clubs = clubs;
