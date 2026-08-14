@@ -22,10 +22,17 @@
     "stadiumUnlocks": 16
   },
   "playabilityBoundary": {
-    "branch": "agent/pors-playable-boundary-v2",
-    "pullRequest": null,
-    "mergeCommit": null,
-    "ci": "pending"
+    "pullRequest": 214,
+    "head": "c756ad02ae08218a9bf52fbe7a0ca1b138f07e0e",
+    "mergeCommit": "505ff0acd5590f18792588938c92b281da94b436",
+    "branchCiRun": 31762841954,
+    "pullRequestCiRun": 31762919713,
+    "status": "success"
+  },
+  "supersededDelivery": {
+    "pullRequest": 213,
+    "status": "closed",
+    "replacedBy": 214
   },
   "checks": [
     "npm run audit:pors-heritage",
