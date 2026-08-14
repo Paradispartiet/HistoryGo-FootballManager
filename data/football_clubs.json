@@ -93,7 +93,8 @@
       "form": 57,
       "homePlaceId": "aspmyra_stadion",
       "playerPoolSize": 89,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 89
     },
     {
       "id": "viking",
@@ -105,7 +106,8 @@
       "form": 55,
       "homePlaceId": "lyse_arena",
       "playerPoolSize": 70,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 70
     },
     {
       "id": "brann",
@@ -117,7 +119,8 @@
       "form": 52,
       "homePlaceId": "brann_stadion",
       "playerPoolSize": 75,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 75
     },
     {
       "id": "molde",
@@ -129,7 +132,8 @@
       "form": 51,
       "homePlaceId": "aker_stadion",
       "playerPoolSize": 89,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 89
     },
     {
       "id": "rosenborg",
@@ -141,7 +145,8 @@
       "form": 60,
       "homePlaceId": "lerkendal_stadion",
       "playerPoolSize": 156,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 156
     },
     {
       "id": "tromso",
@@ -153,7 +158,8 @@
       "form": 60,
       "homePlaceId": "romssa_arena",
       "playerPoolSize": 81,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 81
     },
     {
       "id": "fredrikstad",
@@ -165,7 +171,8 @@
       "form": 58,
       "homePlaceId": "fredrikstad_stadion",
       "playerPoolSize": 100,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 100
     },
     {
       "id": "valerenga",
@@ -177,7 +184,8 @@
       "form": 57,
       "homePlaceId": "intility_arena",
       "playerPoolSize": 126,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 126
     },
     {
       "id": "lillestrom",
@@ -189,7 +197,8 @@
       "form": 57,
       "homePlaceId": "araasen_stadion",
       "playerPoolSize": 56,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 56
     },
     {
       "id": "sarpsborg08",
@@ -201,7 +210,8 @@
       "form": 56,
       "homePlaceId": "sarpsborg_stadion",
       "playerPoolSize": 107,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 107
     },
     {
       "id": "kristiansund",
@@ -213,7 +223,8 @@
       "form": 55,
       "homePlaceId": "nordmore_stadion",
       "playerPoolSize": 49,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 49
     },
     {
       "id": "start",
@@ -225,7 +236,8 @@
       "form": 55,
       "homePlaceId": "sor_arena",
       "playerPoolSize": 85,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 85
     },
     {
       "id": "aalesund",
@@ -237,7 +249,8 @@
       "form": 55,
       "homePlaceId": "color_line_stadion",
       "playerPoolSize": 90,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 90
     },
     {
       "id": "hamkam",
@@ -249,7 +262,8 @@
       "form": 54,
       "homePlaceId": "briskeby_stadion",
       "playerPoolSize": 81,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 81
     },
     {
       "id": "sandefjord",
@@ -261,7 +275,8 @@
       "form": 54,
       "homePlaceId": "jotun_arena",
       "playerPoolSize": 68,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 68
     },
     {
       "id": "kfum",
@@ -273,7 +288,8 @@
       "form": 54,
       "homePlaceId": "kfum_arena",
       "playerPoolSize": 66,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 66
     },
     {
       "id": "odd",
@@ -285,7 +301,8 @@
       "form": 52,
       "homePlaceId": "skagerak_arena",
       "playerPoolSize": 100,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 100
     },
     {
       "id": "stromsgodset",
@@ -297,7 +314,8 @@
       "form": 52,
       "homePlaceId": "marienlyst_stadion",
       "playerPoolSize": 143,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 143
     },
     {
       "id": "haugesund",
@@ -309,7 +327,8 @@
       "form": 51,
       "homePlaceId": "haugesund_stadion",
       "playerPoolSize": 100,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 100
     },
     {
       "id": "stabak",
@@ -321,7 +340,8 @@
       "form": 60,
       "homePlaceId": "nadderud_stadion",
       "playerPoolSize": 75,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 75
     },
     {
       "id": "lyn",
@@ -333,7 +353,8 @@
       "form": 59,
       "homePlaceId": "bislett_stadion",
       "playerPoolSize": 82,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 82
     },
     {
       "id": "sogndal",
@@ -345,7 +366,8 @@
       "form": 58,
       "playerPoolSize": 75,
       "playerPoolStatus": "ready",
-      "homePlaceId": "fosshaugane_campus"
+      "homePlaceId": "fosshaugane_campus",
+      "playablePlayerPoolSize": 75
     },
     {
       "id": "ranheim",
@@ -357,7 +379,8 @@
       "form": 57,
       "playerPoolSize": 81,
       "playerPoolStatus": "ready",
-      "homePlaceId": "extra_arena"
+      "homePlaceId": "extra_arena",
+      "playablePlayerPoolSize": 81
     },
     {
       "id": "bryne",
@@ -369,7 +392,8 @@
       "form": 57,
       "homePlaceId": "bryne_stadion",
       "playerPoolSize": 68,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 68
     },
     {
       "id": "egersund",
@@ -381,7 +405,8 @@
       "form": 57,
       "playerPoolSize": 56,
       "playerPoolStatus": "ready",
-      "homePlaceId": "egersund_arena"
+      "homePlaceId": "egersund_arena",
+      "playablePlayerPoolSize": 56
     },
     {
       "id": "asane",
@@ -393,7 +418,8 @@
       "form": 56,
       "playerPoolSize": 76,
       "playerPoolStatus": "ready",
-      "homePlaceId": "myrdal_idrettspark"
+      "homePlaceId": "myrdal_idrettspark",
+      "playablePlayerPoolSize": 76
     },
     {
       "id": "raufoss",
@@ -405,7 +431,8 @@
       "form": 56,
       "playerPoolSize": 58,
       "playerPoolStatus": "ready",
-      "homePlaceId": "raufoss_arena"
+      "homePlaceId": "raufoss_arena",
+      "playablePlayerPoolSize": 58
     },
     {
       "id": "kongsvinger",
@@ -417,7 +444,8 @@
       "form": 55,
       "playerPoolSize": 79,
       "playerPoolStatus": "ready",
-      "homePlaceId": "gjemselund_stadion"
+      "homePlaceId": "gjemselund_stadion",
+      "playablePlayerPoolSize": 79
     },
     {
       "id": "hodd",
@@ -429,7 +457,8 @@
       "form": 55,
       "homePlaceId": "hoddvoll",
       "playerPoolSize": 69,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 69
     },
     {
       "id": "moss",
@@ -441,7 +470,8 @@
       "form": 55,
       "homePlaceId": "mellos_stadion",
       "playerPoolSize": 82,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 82
     },
     {
       "id": "sandnes_ulf",
@@ -453,7 +483,8 @@
       "form": 55,
       "playerPoolSize": 60,
       "playerPoolStatus": "ready",
-      "homePlaceId": "oster_hus_arena"
+      "homePlaceId": "oster_hus_arena",
+      "playablePlayerPoolSize": 60
     },
     {
       "id": "strommen",
@@ -465,7 +496,8 @@
       "form": 53,
       "playerPoolSize": 54,
       "playerPoolStatus": "ready",
-      "homePlaceId": "strommen_stadion"
+      "homePlaceId": "strommen_stadion",
+      "playablePlayerPoolSize": 54
     },
     {
       "id": "arendal",
@@ -478,7 +510,8 @@
       "form": 52,
       "playerPoolSize": 77,
       "playerPoolStatus": "ready",
-      "homePlaceId": "norac_stadion"
+      "homePlaceId": "norac_stadion",
+      "playablePlayerPoolSize": 77
     },
     {
       "id": "jerv",
@@ -491,7 +524,8 @@
       "form": 52,
       "playerPoolSize": 72,
       "playerPoolStatus": "ready",
-      "homePlaceId": "levermyr_stadion"
+      "homePlaceId": "levermyr_stadion",
+      "playablePlayerPoolSize": 72
     },
     {
       "id": "notodden",
@@ -504,7 +538,8 @@
       "form": 51,
       "playerPoolSize": 80,
       "playerPoolStatus": "ready",
-      "homePlaceId": "notodden_stadion"
+      "homePlaceId": "notodden_stadion",
+      "playablePlayerPoolSize": 80
     },
     {
       "id": "mjondalen",
@@ -517,7 +552,8 @@
       "form": 51,
       "homePlaceId": "consto_arena",
       "playerPoolSize": 83,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 83
     },
     {
       "id": "pors",
@@ -530,7 +566,8 @@
       "form": 60,
       "playerPoolSize": 63,
       "playerPoolStatus": "ready",
-      "homePlaceId": "pors_stadion"
+      "homePlaceId": "pors_stadion",
+      "playablePlayerPoolSize": 16
     },
     {
       "id": "brattvag",
@@ -542,7 +579,8 @@
       "strength": 53,
       "form": 59,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "eik_tonsberg",
@@ -554,7 +592,8 @@
       "strength": 53,
       "form": 59,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "vidar",
@@ -566,7 +605,8 @@
       "strength": 52,
       "form": 58,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "kvik_halden",
@@ -578,7 +618,8 @@
       "strength": 51,
       "form": 57,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "sandviken",
@@ -590,7 +631,8 @@
       "strength": 51,
       "form": 57,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "lysekloster",
@@ -602,7 +644,8 @@
       "strength": 50,
       "form": 56,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "sotra",
@@ -614,7 +657,8 @@
       "strength": 49,
       "form": 55,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "traff",
@@ -626,7 +670,8 @@
       "strength": 48,
       "form": 54,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "bjarg",
@@ -638,7 +683,8 @@
       "strength": 47,
       "form": 53,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "skeid",
@@ -651,7 +697,8 @@
       "form": 52,
       "homePlaceId": "nordre_asen",
       "playerPoolSize": 100,
-      "playerPoolStatus": "ready"
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 100
     },
     {
       "id": "honefoss",
@@ -664,7 +711,8 @@
       "form": 51,
       "playerPoolSize": 58,
       "playerPoolStatus": "ready",
-      "homePlaceId": "aka_arena"
+      "homePlaceId": "aka_arena",
+      "playablePlayerPoolSize": 58
     },
     {
       "id": "ull_kisa",
@@ -677,7 +725,8 @@
       "form": 51,
       "playerPoolSize": 81,
       "playerPoolStatus": "ready",
-      "homePlaceId": "jessheim_stadion"
+      "homePlaceId": "jessheim_stadion",
+      "playablePlayerPoolSize": 81
     },
     {
       "id": "levanger",
@@ -690,7 +739,8 @@
       "form": 50,
       "playerPoolSize": 76,
       "playerPoolStatus": "ready",
-      "homePlaceId": "levanger_stadion"
+      "homePlaceId": "levanger_stadion",
+      "playablePlayerPoolSize": 76
     },
     {
       "id": "kjelsas",
@@ -703,7 +753,8 @@
       "form": 60,
       "playerPoolSize": 46,
       "playerPoolStatus": "ready",
-      "homePlaceId": "grefsen_stadion"
+      "homePlaceId": "grefsen_stadion",
+      "playablePlayerPoolSize": 46
     },
     {
       "id": "grorud",
@@ -716,7 +767,8 @@
       "form": 59,
       "playerPoolSize": 71,
       "playerPoolStatus": "ready",
-      "homePlaceId": "grorud_idrettspark"
+      "homePlaceId": "grorud_idrettspark",
+      "playablePlayerPoolSize": 71
     },
     {
       "id": "tromsdalen",
@@ -728,7 +780,8 @@
       "strength": 52,
       "form": 58,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "stjordals_blink",
@@ -740,7 +793,8 @@
       "strength": 52,
       "form": 58,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "rana",
@@ -752,7 +806,8 @@
       "strength": 51,
       "form": 57,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "junkeren",
@@ -764,7 +819,8 @@
       "strength": 50,
       "form": 56,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "lorenskog",
@@ -776,7 +832,8 @@
       "strength": 50,
       "form": 56,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "eidsvold_turn",
@@ -788,7 +845,8 @@
       "strength": 49,
       "form": 55,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "follo",
@@ -800,7 +858,8 @@
       "strength": 48,
       "form": 54,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     },
     {
       "id": "trygg_lade",
@@ -812,7 +871,8 @@
       "strength": 47,
       "form": 53,
       "playerPoolSize": 0,
-      "playerPoolStatus": "pending"
+      "playerPoolStatus": "pending",
+      "playablePlayerPoolSize": 0
     }
   ],
   "playerPoolSchema": "historygo-football-manager.club-player-pool.v1",

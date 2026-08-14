@@ -24,3 +24,15 @@ Einar «Jeja» Gundersen og Einar «Jeisen» Gundersen er to forskjellige person
 ## Regresjonskrav
 
 Pors-passet skal ikke endre P1: `audit-p1-source-claims.mjs` skal fortsatt treffe 936/936 eksklusive profiler og den låste statusfordelingen 45 DOKUMENTERT · 15 DELVIS · 876 THIN-SOURCE.
+
+## Spillbarhetsgrense
+
+De 63 Pors-navnene er én dokumentert historikkatalog, men ikke én automatisk spillbar tropp.
+
+- **16** profiler har dokumentert posisjon og er spillbare.
+- **47** profiler uten dokumentert posisjon beholdes som historikkposter.
+- `pors_stadion` åpner bare de 16 spillbare profilene.
+- Stadionbesøket konstruerer aldri posisjoner, roller, styrker eller taktisk fit.
+- Senere kildebelegg kan flytte en eksisterende historikkpost inn i den spillbare poolen uten ny identitet.
+
+`audit:pors-heritage` låser 63/16/47-grensen, de fem krysskoblingene, P1-nevneren og stadion-unlocken.

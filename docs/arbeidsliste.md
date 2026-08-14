@@ -67,9 +67,11 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 
 ---
 
-## P2 — 18 klubber uten arv, alle i 2. divisjon
+## P2 — 17 klubber uten arv, alle i 2. divisjon
 
-**Avdeling 1 (10):** Pors · Brattvåg · Eik Tønsberg · Vidar · Kvik Halden · Sandviken · Lysekloster · Sotra · Træff · Bjarg
+**Ferdig første leveranse:** Pors har 63 dokumenterte klubbprofiler, 16 spillbare profiler og 47 historikkposter uten konstruert posisjon. `audit:pors-heritage` låser grensen.
+
+**Avdeling 1 (9 gjenstår):** Brattvåg · Eik Tønsberg · Vidar · Kvik Halden · Sandviken · Lysekloster · Sotra · Træff · Bjarg
 
 **Avdeling 2 (8):** Tromsdalen · Stjørdals-Blink · Rana · Junkeren · Lørenskog · Eidsvold Turn · Follo · Trygg/Lade
 
