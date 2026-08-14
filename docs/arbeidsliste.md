@@ -67,15 +67,22 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 
 ---
 
-## P2 — 17 klubber uten arv, alle i 2. divisjon
+## P2 — 16 klubber uten arv, alle i 2. divisjon
 
-**Ferdig første leveranse:** Pors har 63 dokumenterte klubbprofiler, 16 spillbare profiler og 47 historikkposter uten konstruert posisjon. `audit:pors-heritage` låser grensen.
+**Ferdig (2):**
 
-**Avdeling 1 (9 gjenstår):** Brattvåg · Eik Tønsberg · Vidar · Kvik Halden · Sandviken · Lysekloster · Sotra · Træff · Bjarg
+| Klubb | Dokumentert | Spillbar | Historikkposter | Vakt |
+|---|---:|---:|---:|---|
+| Pors | 63 | 16 | 47 | `audit:pors-heritage` |
+| Brattvåg | 81 | 18 | 63 | `audit:brattvag-heritage` |
+
+Begge følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Se `docs/P2_BRATTVAG_SOURCE_PASS.md`.
+
+**Avdeling 1 (8 gjenstår):** Eik Tønsberg · Vidar · Kvik Halden · Sandviken · Lysekloster · Sotra · Træff · Bjarg
 
 **Avdeling 2 (8):** Tromsdalen · Stjørdals-Blink · Rana · Junkeren · Lørenskog · Eidsvold Turn · Follo · Trygg/Lade
 
-Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som motstandere med sin egen fotball, og `pending` holder dem bare ute av overtakelseslista. Nivå 3 har 10 overtakbare klubber av 28, og **avdeling 1 er den tynneste flaten i spillet med 4 av 14**.
+Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som motstandere med sin egen fotball, og `pending` holder dem bare ute av overtakelseslista. Nivå 3 har 12 overtakbare klubber av 28, og **avdeling 1 er fortsatt den tynneste flaten i spillet med 6 av 14**.
 
 **Handling:** v2-kildefiler i samme form som de siste importene. Hver klubb trenger også en `placeId` (alle har `ground` uten), og importen lager stedet.
 

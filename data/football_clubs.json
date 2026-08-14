@@ -578,9 +578,10 @@
       "group": "avdeling1",
       "strength": 53,
       "form": 59,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 81,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 18,
+      "homePlaceId": "brattvag_stadion"
     },
     {
       "id": "eik_tonsberg",

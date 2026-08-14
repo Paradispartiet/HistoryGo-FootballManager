@@ -867,6 +867,12 @@ const KJENT_UDOKUMENTERT = {
   // profiler er derfor THIN-SOURCE på ferdighetsaksen. 1,01 er en eksplisitt
   // registrering av 100 % tomme styrkelister, ikke tillatelse til modellering.
   pors_stadion: 1.01,
+  // Brattvåg P2, samme form og samme grunn. Kilden er to lister: 63 navn med
+  // kampantall og 18 med posisjon. Et kampantall er individuelt og dokumentert,
+  // men det er ikke en ferdighet — det er tilgjengelighet, og det eneste det
+  // belegger er A-lagstilhørighet. 79/79 nye eksklusive profiler står derfor
+  // uten en eneste ferdighetsclaim.
+  brattvag_stadion: 1.01,
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
   // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare

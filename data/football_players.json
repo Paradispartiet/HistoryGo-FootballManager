@@ -92300,6 +92300,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"
+        },
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -134812,6 +134818,12 @@
       },
       "clubAffiliations": [
         {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        },
+        {
           "clubId": "ranheim",
           "relation": "played_for",
           "status": "club_profile",
@@ -177051,6 +177063,2965 @@
       "clubAffiliations": [
         {
           "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stig_ekanger",
+      "name": "Stig Ekanger",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bard_flem",
+      "name": "Bård Flem",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "frank_dalhaug",
+      "name": "Frank Dalhaug",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "egil_flem",
+      "name": "Egil Flem",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "trond_austnes",
+      "name": "Trond Austnes",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "svein_age_klokk",
+      "name": "Svein Åge Klokk",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bjarte_steinsbu",
+      "name": "Bjarte Steinsbu",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "hans_inge_flem",
+      "name": "Hans Inge Flem",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "per_willy_otterlei",
+      "name": "Per Willy Otterlei",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oddmund_d_otterlei",
+      "name": "Oddmund D. Otterlei",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "espen_wold",
+      "name": "Espen Wold",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "thor_gronmyr",
+      "name": "Thor Grønmyr",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "trygve_jan_havik",
+      "name": "Trygve Jan Håvik",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jan_petter_hagen",
+      "name": "Jan Petter Hagen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "werner_ellingsaeter",
+      "name": "Werner Ellingsæter",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "gunnar_lodoen",
+      "name": "Gunnar Lødøen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "roger_grytten",
+      "name": "Roger Grytten",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kristian_gronmyr",
+      "name": "Kristian Grønmyr",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stale_jenssen",
+      "name": "Ståle Jenssen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "svein_dalhaug",
+      "name": "Svein Dalhaug",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjell_petter_hoel",
+      "name": "Kjell Petter Hoel",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "orjan_ekanger",
+      "name": "Ørjan Ekanger",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oddbjorn_hatlehol",
+      "name": "Oddbjørn Hatlehol",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "michael_johnsen",
+      "name": "Michael Johnsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bjarne_flem",
+      "name": "Bjarne Flem",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ingbert_indrestrand",
+      "name": "Ingbert Indrestrand",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jan_skjelten",
+      "name": "Jan Skjelten",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjell_ellingsaeter",
+      "name": "Kjell Ellingsæter",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "rune_dalhaug",
+      "name": "Rune Dalhaug",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "steinar_hildremyr",
+      "name": "Steinar Hildremyr",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "hans_martin_otterlei",
+      "name": "Hans-Martin Otterlei",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "bjorn_gronmyr",
+      "name": "Bjørn Grønmyr",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "martin_sundnes",
+      "name": "Martin Sundnes",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "helge_austbo",
+      "name": "Helge Austbø",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arnel_colic",
+      "name": "Arnel Colic",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "harald_dyroy",
+      "name": "Harald Dyrøy",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjartan_myklebust",
+      "name": "Kjartan Myklebust",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "terje_skarbo",
+      "name": "Terje Skarbø",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "per_ove_tennfjord",
+      "name": "Per Ove Tennfjord",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "asbjorn_leine",
+      "name": "Asbjørn Leine",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "otto_saeter",
+      "name": "Otto Sæter",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "paul_arne_dalhaug",
+      "name": "Paul Arne Dalhaug",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "per_saebones",
+      "name": "Per Sæbønes",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "rikard_vestre",
+      "name": "Rikard Vestre",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stein_gisle_alvestad",
+      "name": "Stein Gisle Alvestad",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jan_tore_fjortoft",
+      "name": "Jan Tore Fjørtoft",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "eivind_g_ulla",
+      "name": "Eivind G. Ulla",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "runar_londal",
+      "name": "Runar Løndal",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "henning_o_koppen",
+      "name": "Henning O. Koppen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "lennart_bjorkeli",
+      "name": "Lennart Bjørkeli",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "age_maridal",
+      "name": "Åge Maridal",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "inge_gjerde",
+      "name": "Inge Gjerde",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "eldar_tandstad",
+      "name": "Eldar Tandstad",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stig_fjortoft",
+      "name": "Stig Fjørtoft",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stale_hurlen",
+      "name": "Ståle Hurlen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "even_heggdal",
+      "name": "Even Heggdal",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "frederik_s_johnsen",
+      "name": "Frederik S. Johnsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jostein_gamlem",
+      "name": "Jostein Gamlem",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "finn_alvestad",
+      "name": "Finn Alvestad",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sindre_dalhaug",
+      "name": "Sindre Dalhaug",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "lennart_holmem",
+      "name": "Lennart Holmem",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oyvind_grytten",
+      "name": "Øyvind Grytten",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "rolv_seth",
+      "name": "Rolv Seth",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Brattvåg-historikken.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kieran_baskett",
+      "name": "Kieran Baskett",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jarik_sundling",
+      "name": "Jarik Sundling",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "iver_hagen",
+      "name": "Iver Hagen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ruben_kolseth_myers",
+      "name": "Ruben Kolseth Myers",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oskar_stolan",
+      "name": "Oskar Stølan",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CB"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "diedrick_bubahe",
+      "name": "Diedrick Bubahe",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "WB",
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "tobias_flem",
+      "name": "Tobias Flem",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oscar_solnordal",
+      "name": "Oscar Solnørdal",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "fredrik_vinje",
+      "name": "Fredrik Vinje",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "emil_dahle",
+      "name": "Emil Dahle",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "AM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "john_norvik",
+      "name": "John Norvik",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sami_kamel",
+      "name": "Sami Kamel",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "eivind_stromsheim_kolve",
+      "name": "Eivind Strømsheim Kolve",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "CM"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jorgen_galta",
+      "name": "Jørgen Galta",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "AM",
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "andreas_tveiten",
+      "name": "Andreas Tveiten",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "AM",
+        "LW",
+        "RW"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "anders_nytoft",
+      "name": "Anders Nytoft",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "utledet",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"

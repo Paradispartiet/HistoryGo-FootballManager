@@ -338,6 +338,13 @@ const REVIEWED_NAME_PAIRS = new Map([
   // mål på 80 kamper mellom 1911 og 1920. Posisjonen alene avgjør det. Han er
   // ført med klubbsuffiks, slik Tore Pedersen (RBK) allerede var.
   ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"],
+  // Brattvåg-importen: Flem er et av de vanligste navnene i Haram, og klubbens
+  // egen adelskalender fører fire av dem (Bård, Egil, Hans Inge og Bjarne).
+  // Bjarte er et annet fornavn enn Bjarne, ikke en stavevariant, og de to står
+  // i hver sin klubbkilde: Tromsøs keeper mot Brattvågs utespiller med 250
+  // kamper. Vakten fanget paret fordi ÉN bokstav skiller dem — og den bokstaven
+  // er hele forskjellen.
+  ["bjarne flem|bjarte flem", "Brattvågs utespiller mot Tromsøs keeper"],
   // Haugesund-kilden utløste fem par på én gang — det er vakten som virker, og
   // to av dem VAR samme mann (Konradsen og Garba, begge slått sammen). De tre
   // her er forskjellige menn, og alle tre skilles av posisjon eller epoke.

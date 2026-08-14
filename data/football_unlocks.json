@@ -14349,6 +14349,86 @@
           "targetId": "christer_fjellstad"
         }
       ]
+    },
+    {
+      "placeId": "brattvag_stadion",
+      "placeName": "Brattvåg stadion",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Brattvågs hjemmebane på Brattvåg i Haram. 81 dokumenterte klubbprofiler bevares i historikkatalogen; stadionet åpner bare de 18 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "anders_nytoft"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_tveiten"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "diedrick_bubahe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eivind_stromsheim_kolve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "emil_dahle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_vinje"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "iver_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jarik_sundling"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_norvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_galta"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kieran_baskett"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oscar_solnordal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oskar_stolan"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ruben_kolseth_myers"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sami_kamel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sivert_solli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_flem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ulrik_valderhaug_syversen"
+        }
+      ]
     }
   ]
 }

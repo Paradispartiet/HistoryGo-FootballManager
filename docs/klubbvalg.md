@@ -202,6 +202,7 @@ En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceI
 | Sandefjord | Jotun Arena | 68 |
 | Bryne | Bryne stadion | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
+| Brattvåg | Brattvåg stadion | 81 |
 | Pors | Pors stadion | 63 |
 | Sandnes Ulf | Øster Hus Arena | 60 |
 | Raufoss | Raufoss Arena | 58 |
@@ -214,10 +215,10 @@ En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceI
 
 **Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
 Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Pors, Notodden, Hønefoss,
-Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3453 arveplasser fordelt på
-alle 43, og **ingen klubb med bane har under 46 navn**. De 18 klubbene som
-mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
+Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Pors, Brattvåg, Notodden,
+Hønefoss, Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3527 arveplasser
+fordelt på alle 44, og **ingen klubb med bane har under 46 navn**. De 17
+klubbene som mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
 med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
 2. divisjon.
 
