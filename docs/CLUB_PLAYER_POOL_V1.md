@@ -55,8 +55,8 @@ denne kildegraden.
 }
 ```
 
-- `ready`: minst 15 eksplisitt tilknyttede spillere.
-- `pending`: færre enn 15.
+- `ready`: minst 15 eksplisitt tilknyttede spillere med dokumentert posisjon.
+- `pending`: færre enn 15 slike spillbare profiler, uavhengig av hvor mange navn historikkatalogen inneholder.
 
 En `pending` klubb skal ikke vises som nytt overtakelsesvalg. Spillet skal heller
 mangle et valg midlertidig enn å fylle en virkelig klubb med tilfeldige ekte
@@ -132,3 +132,11 @@ Full CI og Pages-deploy kjører denne auditen.
 `sim:club-squad` vokter i tillegg runtime-reglene: ready-klubber får bare egne
 spillere, pending-klubber får ingen global fallback, stadion åpner hele poolen,
 og gamle saves repareres.
+
+## Dokumentert pool og spillbar pool
+
+`listClubPoolPlayers` er klubbens komplette, dokumenterte historikkatalog. Den kan inneholde source-thin personer som foreløpig mangler dokumentert posisjon.
+
+`listPlayableClubPoolPlayers` er den simuleringsklare delmengden. En profil må ha minst én dokumentert naturlig eller brukbar posisjon før den kan velges til tropp, oppstilling, trening eller kamp. Motoren modellerer aldri en posisjon for å få en klubb over 15-spillergrensen.
+
+`playerPoolSize` teller dokumenterte klubbtilknytninger. `playablePlayerPoolSize` og `playerPoolStatus` følger den spillbare delmengden. Runtime rapporterer derfor `documentedCount`, `poolSize` og `unprofiledCount` separat.

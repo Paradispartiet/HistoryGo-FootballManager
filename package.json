@@ -62,6 +62,7 @@
     "sim:player-weaknesses": "node scripts/simulate-player-weaknesses.mjs",
     "sim:player-attributes": "node scripts/simulate-player-attributes.mjs",
     "audit:clubs": "node scripts/audit-clubs.mjs",
+    "audit:pors-heritage": "node scripts/audit-pors-heritage.mjs",
     "sim:league-playoff": "node scripts/simulate-league-playoff.mjs",
     "audit:ci-coverage": "node scripts/audit-ci-coverage.mjs",
     "audit:product-status": "node scripts/audit-product-status.mjs",

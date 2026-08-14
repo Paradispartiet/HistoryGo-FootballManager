@@ -1,27 +1,29 @@
-# Pors · post-merge-verifisering
+# Pors · endelig repo-verifisering
 
-Pors-passet ble squash-merget i PR #211 med merge-SHA `ef1bfd579f684ff6a0e2fc19b3fc8f8a97d3b64a`.
+## Leveranser
 
-Data-, motor-, flyt- og Pages-portene var grønne. Den siste PR-kjøringen hadde likevel **143 beståtte og 3 feilende nettlesertester**. Alle tre feilene lå i tropps- og spillerprofilflaten.
+- PR #211 materialiserte 63 dokumenterte Pors-koblinger og ble squash-merget som `ef1bfd579f684ff6a0e2fc19b3fc8f8a97d3b64a`.
+- PR #212 rettet troppshydreringen og ble squash-merget som `e28988aff32f6d4720f80bb905542fed3170b4dc`; full CI passerte 146/146 nettlesertester.
+- Denne leveransen lukker reviewpunktet om posisjonsløse profiler ved å skille historikkatalogen fra den spillbare poolen.
 
-## Rotårsak
+## Låst kontrakt
 
-Troppslisten kunne rendres før den autoritative `squadPlayerIds`-tilstanden var hydrert. Når troppen senere ble oppdatert, observeren oppdaterte bare den kompakte lagstatusen. Tabellen kunne derfor beholde en foreldet fallback-liste, mens søk og profiloppslag allerede leste den nye troppen.
-
-## Retting
-
-- Sesjonscachen erstattes når autoritativ tropp finnes.
-- Global fallback tømmes når en lokal starttropp er tilgjengelig.
-- Både status og spillerliste rendres på nytt ved troppshydrering.
-- En allerede synlig spillerad kan åpne profilen read-only selv om hydrering skjer i samme øyeblikk.
-- Laguttak, rekruttering, klubbmedlemskap og spillerdata endres ikke.
-
-## Låst Pors-kontrakt
-
-- 63 eksplisitte Pors-tilknytninger.
-- 58 nye `pors_stadion`-profiler.
-- Fem canonical krysskoblinger uten omskriving av eldre `sourcePlaceIds`.
-- 63 duplikatfrie stadion-unlocks.
+- 63 dokumenterte Pors-profiler.
+- 16 profiler med dokumentert posisjon og simuleringstilgang.
+- 47 historikkposter uten konstruert posisjon, rolle eller taktisk fit.
+- `pors_stadion` åpner 16 spillerkandidater, ikke 63.
+- Fem canonical krysskoblinger beholdes uten omskriving av eldre `sourcePlaceIds`.
 - P1-nevneren forblir 936/936.
 
-Kontrakten kontrolleres av de eksisterende klubb-, attributt-, tropps- og P1-auditene sammen med nettleserregresjonen i `manager-squad-tactics-scene-v2.spec.js`.
+## Permanente porter
+
+```bash
+npm run audit:pors-heritage
+node scripts/sync-club-affiliations.mjs
+npm run sim:club-squad
+npm run audit:attributes
+npm run sim:player-attributes
+npm run sim:player-weaknesses
+node scripts/audit-p1-source-claims.mjs
+npm run test:browser
+```
