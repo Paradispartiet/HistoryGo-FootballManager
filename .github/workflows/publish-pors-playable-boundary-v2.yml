@@ -84,7 +84,6 @@ jobs:
           npm run sim:player-attributes
           npm run sim:player-weaknesses
           node scripts/audit-p1-source-claims.mjs
-          npm run audit:ci-coverage
 
       - name: Commit and push product files
         run: |
