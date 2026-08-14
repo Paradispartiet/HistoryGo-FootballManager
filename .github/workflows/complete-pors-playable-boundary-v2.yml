@@ -1,0 +1,93 @@
+name: Complete Pors playable boundary v2
+
+on:
+  push:
+    branches:
+      - agent/pors-playable-boundary-v2
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/pors-playable-boundary-v2
+          fetch-depth: 0
+
+      - name: Execute normalized materializer
+        shell: python
+        run: |
+          from pathlib import Path
+          import textwrap
+
+          source_path = Path("src/football-club-squad.js")
+          source = source_path.read_text(encoding="utf-8")
+          actual = '''    clubStatusLabel: CLUB_STATUS_LABEL[status] || "",
+              clubStatusSource: affiliation?.source || "utledet"
+            };'''
+          expected_by_materializer = '''    clubStatusLabel: CLUB_STATUS_LABEL[status] || "",
+            clubStatusSource: affiliation?.source || "utledet"
+            };'''
+          if actual not in source:
+              raise SystemExit("Could not locate the actual poolSummary block")
+          source_path.write_text(source.replace(actual, expected_by_materializer, 1), encoding="utf-8")
+
+          workflow_path = Path(".github/workflows/apply-pors-playable-boundary-v2.yml")
+          workflow = workflow_path.read_text(encoding="utf-8")
+          marker = "      - name: Materialize permanent boundary\n        shell: python\n        run: |\n"
+          start = workflow.index(marker) + len(marker)
+          end = workflow.index("\n      - name: Install dependencies", start)
+          materializer = textwrap.dedent(workflow[start:end])
+          materializer = materializer.replace(
+              "'''          npm run audit:clubs\n  node scripts/sync-club-affiliations.mjs'''",
+              "'''          npm run audit:clubs\n          node scripts/sync-club-affiliations.mjs'''"
+          )
+          materializer = materializer.replace(
+              "'''          npm run audit:clubs\n  npm run audit:pors-heritage\n  node scripts/sync-club-affiliations.mjs'''",
+              "'''          npm run audit:clubs\n          npm run audit:pors-heritage\n          node scripts/sync-club-affiliations.mjs'''"
+          )
+          exec(compile(materializer, str(workflow_path), "exec"), {})
+
+          for transient in (
+              ".github/workflows/retry-pors-playable-boundary-v2.yml",
+              ".github/workflows/finalize-pors-playable-boundary-v2.yml",
+              ".github/workflows/complete-pors-playable-boundary-v2.yml",
+          ):
+              path = Path(transient)
+              if path.exists():
+                  path.unlink()
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Materialize derived club status
+        run: node scripts/sync-club-affiliations.mjs --write
+
+      - name: Validate permanent boundary
+        run: |
+          node --check src/football-club-squad.js
+          node --check scripts/sync-club-affiliations.mjs
+          node --check scripts/simulate-club-squad.mjs
+          node --check scripts/audit-pors-heritage.mjs
+          node scripts/sync-club-affiliations.mjs
+          npm run audit:pors-heritage
+          npm run sim:club-squad
+          npm run audit:clubs
+          npm run audit:attributes
+          npm run sim:player-attributes
+          npm run sim:player-weaknesses
+          node scripts/audit-p1-source-claims.mjs
+          npm run audit:ci-coverage
+
+      - name: Commit permanent files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Skill Pors-historikk fra spillbar spillerpool"
+          git push origin HEAD:agent/pors-playable-boundary-v2
