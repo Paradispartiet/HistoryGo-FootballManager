@@ -26,7 +26,7 @@ Kilden er to lister, og ingenting annet:
 Det er tilgjengelighet, og det eneste det belegger er A-lagstilhørighet — det
 inklusjonskriteriet Jerv-passet trakk opp. Der stopper det. Ingen styrke, ingen
 arketype, ingen rollepreferanse og ingen taktisk preferanse utledes av at en
-mann spilte 546 kamper. `audit:brattvag-heritage` krever alle fire feltene tomme
+mann spilte 546 kamper. `audit:club-heritage` krever alle fire feltene tomme
 på alle 79 nye profiler, nettopp fordi kampantallet er den ene opplysningen
 Pors ikke hadde og derfor den ene fristelsen dette passet har.
 
@@ -91,5 +91,7 @@ Brattvåg-passet skal ikke endre P1: `audit-p1-source-claims.mjs` skal fortsatt
 treffe 936/936 eksklusive profiler og den låste statusfordelingen
 45 DOKUMENTERT · 15 DELVIS · 876 THIN-SOURCE.
 
-`audit:brattvag-heritage` låser 81/18/63-grensen, de to krysskoblingene, at de
-79 nye profilene er tomme på alle fire modellerbare felt, og stadion-unlocken.
+`audit:club-heritage` låser 81/18/63-grensen, de to krysskoblingene, at de 79
+nye profilene er tomme på alle fire modellerbare felt, og stadion-unlocken.
+Vakten er felles for alle P2-arver — én rad per klubb — så neste klubb er en
+rad, ikke en ny fil.

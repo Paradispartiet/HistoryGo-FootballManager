@@ -28,6 +28,7 @@ import {
   ATTRIBUTE_SCALE
 } from "../src/football-player-attributes.js";
 import { calculatePlayerMatchFit, calculateClassBonus, CLASS_BONUS_MAX } from "../src/football-fit-engine.js";
+import { applyP1SourceClaims, P1_HERITAGES } from "../src/football-player-source-claims-p1.js";
 
 // `Math.min(...liste)` sprer hele lista som ARGUMENTER, og argumentlista har en
 // grense — målt ~125 000 i denne noden. Katalogen har 2053 spillere × 58
@@ -49,7 +50,17 @@ const check = (label, ok, detail = "") => {
 };
 
 const catalogue = normalizeAttributeCatalogue(read("data/football_attributes.json"));
-const players = read("data/football_players.json").players;
+// ÉN populasjon. `strengths` bor to steder i dag — direkte i players.json for
+// arvene som ble kildepasset før overlayet fantes, og i P1-overlayet for de
+// øvrige — og motoren leser alltid den SAMMENSATTE profilen. Leste dette
+// skriptet råfila, målte vakten en annen katalog enn spillet bruker: tolv arver
+// ga to forskjellige tall, og taket for en overlay-arv stod på 1,01 fordi
+// måleren var blind for laget claimene faktisk lå i.
+//
+// Derfor leses den effektive profilen her også. Da betyr ett tall én ting,
+// uansett hvilket lag en arv ble passet i.
+const rawPlayers = read("data/football_players.json").players;
+const players = applyP1SourceClaims(rawPlayers);
 const roles = read("data/football_roles.json").roles;
 const tactics = read("data/football_tactics.json").tactics;
 for (const role of roles) role.requiredSkills = splitRoleRequirements(catalogue, role).skills;
@@ -702,7 +713,7 @@ const strengthShare = strengthSets.size / medStyrker.length;
 const KJENT_UDOKUMENTERT = {
   // Kilden sier ordrett om 28 av sine 85 at den ikke dokumenterer en ferdighet
   // «som bør importeres som strength uten ny kilde». Målt 13 av 69.
-  hoddvoll: 0.26,
+  hoddvoll: 0.24,
   // Samme v2-form, og 31 av 85 sier det samme — de fleste fra cupmesterlagene
   // 1933–1937, der kilden bare har «fast på cupmesterlaget 1937». Ni til er
   // moderne spillere hvis eneste påstand er overgangsverdi, som ikke er en
@@ -714,12 +725,12 @@ const KJENT_UDOKUMENTERT = {
   // den avdekket gjelder hele katalogen — en tittel er lagets. Beviset på at
   // hevingen kjøpte noe står i profil-unikheten: den gikk OPP, fra 86,2 % til
   // 86,4 %, samtidig som disse listene ble tomme.
-  consto_arena: 0.54,
+  consto_arena: 0.53,
   // HamKam: 41 av 85 med samme markør, i egen ordlyd — «ingen teknisk/fysisk
   // strength skal derfor fylles uten ny individuell kilde». Målt 33 av 81.
   // Hevet fra 0,34 av samme retting: åtte bar `determination` fra «dokumentert
   // opprykksverdi», og et opprykk er lagets.
-  briskeby_stadion: 0.60,
+  briskeby_stadion: 0.59,
   // Sarpsborg er det fjerde hullet, og det eneste med en annen årsak: kilden
   // avstår bare 14 ganger av 100 — den SIER noe om nesten alle. Men hele
   // ordforrådet er fjorten fraser, og de er merittfraser. «Del av det første
@@ -732,7 +743,7 @@ const KJENT_UDOKUMENTERT = {
   // 66 % til 84 %. En tom liste er derfor ikke det dårligere alternativet her —
   // det er det som ga den mest presise katalogen.
   // Målt 39 av 107.
-  sarpsborg_stadion: 0.50,
+  sarpsborg_stadion: 0.48,
   // Sogndal er den TYNNESTE arven i katalogen, og kilden sier det selv: 52 av
   // 85 profiler erklærer ordrett at «ingen teknisk eller fysisk strength skal
   // fylles uten en ny individuell kilde». Ni til bærer bare finaleerfaring
@@ -744,26 +755,26 @@ const KJENT_UDOKUMENTERT = {
   // ingen bane i katalogen før denne importen — og 75 navngitte spillere med
   // riktig posisjon, epoke og nivå er mer enn ingenting. Det som IKKE er gjort,
   // er å dikte opp ferdigheter for å pynte på tallet.
-  fosshaugane_campus: 0.88,
+  fosshaugane_campus: 0.87,
   // Kongsvinger er samme kildeform som Sogndal, men vesentlig bedre belagt:
   // bare 16 av 85 avstår, mot Sogndals 52. Det som tømmer resten er
   // merittregelen — «dokumentert cupsemifinaleerfaring» står 25 ganger, og KILs
   // fire cupsemifinaler er lagets merittliste sett fra spilleren, ikke en
   // ferdighet hos mannen. Målt 40 av 79.
-  gjemselund_stadion: 0.66,
+  gjemselund_stadion: 0.65,
   // Ranheim er den tredje v2-kilden, og markøren skiftet ordlyd igjen — «ingen
   // teknisk eller fysisk STYRKE fylles utover dette uten ny individuell kilde»,
   // norsk ord og uten «skal». 55 av 85 profiler bruker den. Kilden har ingen
   // fraseliste i det hele tatt: de 30 andre er skrevet ut i klartekst og lest
   // for hånd. Fem av dem er salg, utlån og «rask integrasjon» — marked, ikke
   // ferdighet. Målt 44 av 81.
-  extra_arena: 0.72,
+  extra_arena: 0.70,
   // Strømmen har den rikeste prosaen av alle v2-kildene — VG- og klubbomtaler av
   // 2025-/2026-troppen med faktiske ferdighetsbeskrivelser, som gir 100 % unike
   // styrkesett blant de 16 som har noen. Men den gjelder en liten del av arven:
   // 69 av 85 profiler er tynn-markert, og 30 mangler posisjon helt.
   // Målt 24 av 54.
-  strommen_stadion: 0.64,
+  strommen_stadion: 0.63,
   // Raufoss blander alle TRE kildeformene i én fil — 49 tynne, 18 fraselister og
   // 18 prosapåstander — og er den best dekkede av v2-kildene: bare 36 % uten
   // styrker. Prosaen er klubbens egne spillervurderinger, med faktiske
@@ -773,29 +784,29 @@ const KJENT_UDOKUMENTERT = {
   // Målt 18 av 58. Tallet ble bedre ETTER at flettingen av koblede spillere kom
   // på plass — tre Raufoss-profiler som sto tomme, hadde påstander i en annen
   // klubbs kilde. Taket er satt på det målte, ikke på det opprinnelige 21 av 58.
-  raufoss_arena: 0.48,
+  raufoss_arena: 0.46,
   // Sandnes Ulf er den BEST dekkede arven i katalogen: bare 6 av 60 uten
   // dokumenterte styrker. Kilden avstår åtte ganger av 85 og er nesten ren
   // fraseform. Taket står likevel her, fordi 10 % er over standardtaket på 5 %
   // og en navngitt verdi er den eneste måten hullet ikke kan vokse i stillhet.
   // Målt 6 av 60.
-  oster_hus_arena: 0.16,
+  oster_hus_arena: 0.15,
   // Egersund er den best DATERTE kilden i katalogen — bare 7 av 85 uten årstall,
   // de fleste med hele karrierespennet («441 kamper og klubbens målrekord med
   // 241 mål, 1975–1992»). Til gjengjeld avstår den 73 ganger av 85, så bare tolv
   // profiler bærer en påstand i det hele tatt. Godt datert og tynt beskrevet er
   // to uavhengige egenskaper ved en kilde. Målt 36 av 56.
-  egersund_arena: 0.86,
+  egersund_arena: 0.84,
   // Åsane er stiftet i 1971, og kilden er derfor nesten helt moderne — 61 av 76
   // på banen. Den avstår 69 ganger av 85, men de seksten som står igjen rommer
   // den mest DETALJERTE enkeltbeskrivelsen i katalogen: Martin Uelands
   // tidligere lagkamerater gir fem ferdigheter i én setning. Målt 56 av 76.
-  myrdal_idrettspark: 0.82,
+  myrdal_idrettspark: 0.81,
   // Jerv avstår 67 ganger av 85. De atten som står igjen er nesten alle
   // konkrete HANDLINGER — stupheadingen mot Brann, fire strafferedninger i
   // samme kvalifiseringsfinale, opprykksmålet mot Rolvsøy i 1982 — så det som
   // finnes er godt, det er bare lite av det. Målt 53 av 72.
-  levermyr_stadion: 0.80,
+  levermyr_stadion: 0.79,
   // Notodden er det største hullet i katalogen, og årsaken er ny: kilden
   // beskriver DOKUMENTASJON i stedet for fotball. 77 av 85 kvalitetslinjer har
   // formen «N kamper dokumenterer kontinuitet», og kilden slår selv fast i
@@ -812,7 +823,7 @@ const KJENT_UDOKUMENTERT = {
   // Taket er satt tett på det målte med vilje. Et tak på 76 % vokter lite i seg
   // selv, men gulvet på baksiden gjør det: faller to av de nitten med styrker
   // ut, slår vakten inn.
-  notodden_stadion: 0.96,
+  notodden_stadion: 0.94,
   // Hønefoss har samme form og samme forbud, men er dobbelt så godt dekket —
   // fordi klubbens adelskalender fører MÅL per mann fra 1987. 24 av 85 har
   // dermed en individuell påstand mot Notoddens åtte, og etter at de 27 uten
@@ -821,7 +832,7 @@ const KJENT_UDOKUMENTERT = {
   // To kilder med identisk struktur, identisk forbud og dobbelt så stor
   // forskjell i dekning: det er skillet mellom godt datert og godt beskrevet
   // igjen, i en tredje form. Målt 23 av 58.
-  aka_arena: 0.58,
+  aka_arena: 0.57,
   // Fem klubber kom samtidig, og de er de fem best BESKREVNE tynne kildene så
   // langt — fordi de siterer noen. Kjelsås siterer Eivind Kampen, Arendal
   // skriver kampomtaler, Grorud lager spillerportretter. Hullet er derfor
@@ -831,37 +842,37 @@ const KJENT_UDOKUMENTERT = {
   // Kjelsås er den laveste av alle klubbheritagene med prosakilde — men 42 av
   // 85 profiler har ingen posisjon i kilden og utelates, så de 46 som står
   // igjen er de kilden faktisk sier noe om. Målt 16 av 46.
-  grefsen_stadion: 0.42,
+  grefsen_stadion: 0.40,
   // Arendal: klubbens egne kampomtaler gir 30 av 85 en påstand. Målt 43 av 77.
-  norac_stadion: 0.68,
+  norac_stadion: 0.66,
   // Levanger: best DATERT av de fem (5 av 85 uten årstall) og teller mål per
   // mann gjennom hele nivå-2-perioden. Målt 42 av 76.
-  levanger_stadion: 0.76,
+  levanger_stadion: 0.74,
   // Ull/Kisa er den tynneste: elleve påstander av 85, resten troppslister.
   // Målt 54 av 81.
-  jessheim_stadion: 0.84,
+  jessheim_stadion: 0.83,
   // Grorud: nitten påstander, alle fra klubbens egne spillerportretter. De tre
   // som bare har HØYDE står tomme med vilje — se ordboka. Målt 47 av 71.
-  grorud_idrettspark: 0.80,
+  grorud_idrettspark: 0.79,
   // De v2-KONVERTERTE arvene. De står på 100 % fordi konverteringen tømte dem
   // med vilje: kildefilene sier på hver eneste profil at ingen ferdighet låses
   // fra legacy-filens scoutingtekst. Taket er derfor ikke en grense her, det er
   // en registrering av at arven ikke dokumenterer ferdigheter i det hele tatt.
   // Tallet skal SYNKE når individuelle kilder leses tilbake.
   nadderud_stadion: 1.01,    // Stabæk
-  araasen_stadion: 1.01,     // Lillestrøm
+  araasen_stadion: 0.93,     // Lillestrøm
   nordmore_stadion: 1.01,    // Kristiansund
-  kfum_arena: 1.01,          // KFUM Oslo
-  jotun_arena: 1.01,         // Sandefjord
-  bislett_stadion: 1.01,     // Lyn
-  sor_arena: 1.01,           // Start
+  kfum_arena: 0.93,          // KFUM Oslo
+  jotun_arena: 0.99,         // Sandefjord
+  bislett_stadion: 1.00,     // Lyn
+  sor_arena: 1.00,           // Start
   bryne_stadion: 1.01,       // Bryne
-  mellos_stadion: 1.01,      // Moss
-  color_line_stadion: 1.01,  // Aalesund
-  nordre_asen: 1.01,         // Skeid
-  fredrikstad_stadion: 1.01, // Fredrikstad: se konverteringen
-  skagerak_arena: 1.01,      // Odd
-  romssa_arena: 1.01,        // Tromsø: 53 av 53
+  mellos_stadion: 1.00,      // Moss
+  color_line_stadion: 1.00,  // Aalesund
+  nordre_asen: 1.00,         // Skeid
+  fredrikstad_stadion: 0.96, // Fredrikstad: se konverteringen
+  skagerak_arena: 1.00,      // Odd
+  romssa_arena: 0.98,        // Tromsø: 53 av 53
   // Pors P2: klubbhistorikken dokumenterer medlemskap/epoker og et begrenset
   // posisjonslag, men ingen individuelle ferdighetsclaims. 58/58 nye eksklusive
   // profiler er derfor THIN-SOURCE på ferdighetsaksen. 1,01 er en eksplisitt
@@ -889,7 +900,7 @@ const KJENT_UDOKUMENTERT = {
   // mest dokumentasjon av alle og lavest dekning av de fire, fordi mesteparten
   // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
   // dobbelt så mange spillerbeskrivelser.
-  lerkendal_stadion: 0.80,   // Rosenborg: målt 66 av 83
+  lerkendal_stadion: 0.81,   // Rosenborg: målt 66 av 83
   aker_stadion: 0.77,        // Molde: målt 41 av 54
   marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
   haugesund_stadion: 0.59,   // Haugesund/Haugar/Djerv: målt 50 av 87
@@ -905,10 +916,10 @@ const KJENT_UDOKUMENTERT = {
   // 6 % er en forskjell i kildesjanger, ikke i klubbstørrelse: Viking og
   // Bodø/Glimt er ikke mindre kartlagt enn Vålerenga, de er kartlagt med
   // tabeller.
-  intility_arena: 0.81,      // Vålerenga: målt 53 av 66
-  aspmyra_stadion: 0.92,     // Bodø/Glimt: målt 43 av 47
-  brann_stadion: 0.90,       // Brann: målt 42 av 47
-  lyse_arena: 0.95           // Viking: målt 48 av 51
+  intility_arena: 0.82,      // Vålerenga: målt 53 av 66
+  aspmyra_stadion: 0.93,     // Bodø/Glimt: målt 43 av 47
+  brann_stadion: 0.91,       // Brann: målt 42 av 47
+  lyse_arena: 0.94           // Viking: målt 47 av 51
 };
 
 // ---------------------------------------------------------------------------
@@ -960,13 +971,62 @@ for (const player of players) {
   eksklusivt.get(id).alle += 1;
   if ((player.strengths || []).length === 0) eksklusivt.get(id).tomme += 1;
 }
+// Taket er en RATCHET: andelen skal aldri vokse forbi det som er målt.
+//
+// Men et tak kan svikte på to måter, og lenge var bare den ene sperret. Det
+// åpenbare er at andelen vokser forbi taket — en arv mister dokumentasjon. Det
+// andre er at taket blir stående langt over det målte, og da fanger det
+// ingenting: tolv arver stod på 1,01 mens den effektive andelen var 0,91–0,99,
+// fordi måleren var blind for laget claimene lå i. Et tak med tjue poeng luft
+// er ikke en ratchet, det er en kommentar.
+//
+// Regelen er derfor tosidig, og den er den samme for alle arver:
+//
+//     målt  <  tak  <=  målt avrundet opp til hele prosent, pluss ett poeng
+//
+// Øvre grense holder tabellen stram — et tak kan ikke bli liggende igjen når
+// dekningen forbedres — og nedre grense er ratchet-en. Til sammen betyr det at
+// tabellen ikke lenger kan drifte: forbedres en arv, MÅ taket følge etter i
+// samme commit, og forverres den, feller den. 1,01 er reservert for arver som
+// faktisk står på 100 % og betyr «ingen ferdighetsdokumentasjon i det hele
+// tatt», ikke «ikke målt».
+const takRegel = (andel) => Math.min(1.01, (Math.ceil(andel * 100) + 1) / 100);
+const forLøse = [];
 for (const [placeId, tall] of eksklusivt) {
   if (tall.alle < 20) continue;
   const andel = tall.tomme / tall.alle;
   const tak = KJENT_UDOKUMENTERT[placeId] ?? 0.05;
   check(`${placeId}: andelen uten dokumenterte styrker vokser ikke`, andel < tak,
     `${tall.tomme} av ${tall.alle} (${(andel * 100).toFixed(0)} %, tak ${(tak * 100).toFixed(0)} %)`);
+  if (KJENT_UDOKUMENTERT[placeId] !== undefined && tak > takRegel(andel)) {
+    forLøse.push(`${placeId}: tak ${tak}, målt ${andel.toFixed(4)}, skal være ${takRegel(andel)}`);
+  }
 }
+check("ingen tak ligger igjen over det målte", forLøse.length === 0, forLøse.join(" · "));
+
+// ÉN metode per arv, håndhevet.
+//
+// `strengths` kan skrives to steder: direkte i players.json, eller i
+// P1-overlayet. For arvene overlayet eier («new») OVERSKRIVER det lista —
+// `{ ...player, strengths: [...record.strengths] }` — så en styrke skrevet
+// direkte i players.json for en slik arv forsvinner ved kjøring uten et eneste
+// varsel. Det er den farligste formen for to metoder: den ene taper stille.
+//
+// Vakten gjør tapet høylytt. Skriver noen en styrke i feil lag, faller den her
+// med navn, og valget er da eksplisitt: enten flytt claimet til overlayet, der
+// det får `claim` og `source` med seg, eller ta arven ut av overlayet.
+const overlayEide = new Set(P1_HERITAGES.filter((arv) => arv.generation === "new").map((arv) => arv.placeId));
+// Målt EKSKLUSIVT, av samme grunn som alt annet per arv i dette skriptet:
+// overlayet slår bare til når `sourcePlaceIds.length === 1`, så en delt spiller
+// beholder styrkene sine uansett. Haaland står på Ullevaal og Bryne, og
+// styrkene hans kommer fra Ullevaal — han er ikke i feil lag, han er i to arver.
+const iFeilLag = rawPlayers.filter((player) =>
+  (player.strengths || []).length > 0
+  && (player.sourcePlaceIds || []).length === 1
+  && overlayEide.has(player.sourcePlaceIds[0]));
+check("ingen styrker skrevet direkte i players.json for en overlay-arv",
+  iFeilLag.length === 0,
+  iFeilLag.map((p) => `${p.name} (${p.sourcePlaceIds.join(",")})`).slice(0, 6).join(" · "));
 
 // Gulvet, målt på EKSKLUSIVE spillere — de som bare har denne ene kilden.
 //

@@ -35,4 +35,4 @@ De 63 Pors-navnene er én dokumentert historikkatalog, men ikke én automatisk s
 - Stadionbesøket konstruerer aldri posisjoner, roller, styrker eller taktisk fit.
 - Senere kildebelegg kan flytte en eksisterende historikkpost inn i den spillbare poolen uten ny identitet.
 
-`audit:pors-heritage` låser 63/16/47-grensen, de fem krysskoblingene, P1-nevneren og stadion-unlocken.
+`audit:club-heritage` låser 63/16/47-grensen, de fem krysskoblingene, P1-nevneren og stadion-unlocken. Vakten er felles for alle P2-arver: forventningene ligger som én rad i tabellen øverst i `scripts/audit-club-heritage.mjs`, slik at en skjerpelse av regelen treffer alle klubbene samtidig.

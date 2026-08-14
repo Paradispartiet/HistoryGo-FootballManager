@@ -51,8 +51,7 @@ jobs:
           npm run audit:ci-coverage
           npm run audit:product-status
           npm run audit:clubs
-          npm run audit:pors-heritage
-          npm run audit:brattvag-heritage
+          npm run audit:club-heritage
           node scripts/sync-club-affiliations.mjs
           npm run audit:football-book-knowledge
           npm run audit:football-book-ux

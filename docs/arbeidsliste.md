@@ -71,12 +71,12 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 
 **Ferdig (2):**
 
-| Klubb | Dokumentert | Spillbar | Historikkposter | Vakt |
-|---|---:|---:|---:|---|
-| Pors | 63 | 16 | 47 | `audit:pors-heritage` |
-| Brattvåg | 81 | 18 | 63 | `audit:brattvag-heritage` |
+| Klubb | Dokumentert | Spillbar | Historikkposter |
+|---|---:|---:|---:|
+| Pors | 63 | 16 | 47 |
+| Brattvåg | 81 | 18 | 63 |
 
-Begge følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Se `docs/P2_BRATTVAG_SOURCE_PASS.md`.
+Begge følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Begge er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Se `docs/P2_PORS_SOURCE_PASS.md` og `docs/P2_BRATTVAG_SOURCE_PASS.md`.
 
 **Avdeling 1 (8 gjenstår):** Eik Tønsberg · Vidar · Kvik Halden · Sandviken · Lysekloster · Sotra · Træff · Bjarg
 
