@@ -25,7 +25,13 @@ const HISTORICAL_STALE_BRANCHES = new Set([
   // forfedre av main (behind_by 0); de har derfor ingen unik kode å bevare.
   // fix/playable-first-run-gate peker på merge-committen til PR #95.
   "fix/playable-first-run-gate",
-  "ui/navigation-cleanup-v1"
+  "ui/navigation-cleanup-v1",
+  // Pors-spor som ble erstattet av de mergede PR-ene #212 og #214. Den første
+  // er head på den lukkede PR #213; de to andre er workflow-/diagnosebrancher
+  // uten permanent kode utover det som nå er canonical på main.
+  "agent/pors-playable-pool",
+  "agent/pors-pool-hardening",
+  "agent/pors-postmerge-stabilization"
 ]);
 
 async function github(path, { method = "GET" } = {}) {
