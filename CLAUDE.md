@@ -74,7 +74,7 @@ npm run sim:club-squad        # klubbens historiske spillere ligger på banen
 Run a single script directly, e.g. `node scripts/simulate-matchday-v02.mjs`. When you change a live engine in `src/*.js`, run the matching `sim:*` / `audit:*` script; when you change a JSON data file, run the matching `audit:*` script.
 
 **Two CI workflows** (`.github/workflows/`):
-- `pages.yml` (push to `main`) runs the core gate then deploys: `typecheck`, `audit:knowledge`, `check:syntax`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `audit:tournaments`, `audit:tactics`, `build`.
+- `pages.yml` (push to `main`, and PRs into it) runs the core gate, then deploys on push only: `typecheck`, `audit:knowledge`, `check:syntax`, `check:dom-ids`, `audit:flow`, `audit:dead-ends`, `audit:historical-opponents`, `audit:tournaments`, `audit:tactics`, `build`.
 - `ci.yml` (PRs + every non-`main` branch push) is the safety net that runs the **whole** suite — all `audit:*`, `check:*`, `build` **and** every `sim:*` script. That claim used to be false: 15 of 48 scripts were never listed, including the entire league guard, so they only ran when someone ran them by hand. `audit:ci-coverage` now compares `package.json` against both workflows and fails if a script is missing from `ci.yml` or if the pages gate loses one of its core checks — add a script, and CI must list it.
 
 So on a feature branch, expect the full suite to gate your PR; run the relevant scripts locally before pushing.
@@ -87,7 +87,9 @@ Static HTML/CSS/JS, no framework, no bundler. Opening `index.html` directly fail
 python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-Pushing to `main` deploys the whole repo to GitHub Pages.
+**Deploy.** A push to `main` runs `pages.yml`, which verifies and then publishes `_site` to GitHub Pages — `npm run stage:pages` builds that directory, `npm run audit:pages-artifact` checks it can actually boot, and the `deploy` job is the only one holding `pages: write`. A pull request runs the same verification and stops before the upload.
+
+The publishing shape is load-bearing and has been broken once: `upload-pages-artifact@v3` + `deploy-pages@v5`, with **no** `configure-pages` step. An attempt to "restore publishing" on 18.08.2026 added `configure-pages@v5`, bumped upload to v4 and *downgraded* deploy to v4; it failed on the configure step after one second, and the deploy job was deleted rather than fixed — so `main` published nothing for a period while CI stayed green. When deploy fails, the cause is almost always **not** in the repo: **Settings → Pages → Source must be "GitHub Actions"**. A green suite proves the code is right, never that it is live.
 
 ## Architecture: two parallel layers
 
@@ -213,6 +215,6 @@ When you feed a data value into a bounded engine input, **normalise explicitly a
 
 ## Git workflow
 
-- Develop on the assigned feature branch; create it locally if absent. Never push to `main` without explicit permission (pushing to `main` triggers a Pages deploy).
+- Develop on the assigned feature branch; create it locally if absent. Never push to `main` without explicit permission (a push to `main` publishes the live site — see Deploy above).
 - Push with `git push -u origin <branch>`. Do not open a PR unless explicitly asked.
 - The legacy demo must keep working: build the TS engine alongside it, don't tear it down.

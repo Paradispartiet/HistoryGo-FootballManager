@@ -1,4 +1,4 @@
-name: Verify Football Manager
+name: Verify and deploy Football Manager
 
 on:
   pull_request:
@@ -7,6 +7,8 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Bare lesing på toppnivå. Deploy-jobben ber om det den trenger selv, slik at
+# en PR-kjøring aldri har skriverettigheter mot Pages.
 permissions:
   contents: read
 
@@ -57,3 +59,43 @@ jobs:
         run: |
           npm run stage:pages
           npm run audit:pages-artifact
+      # En PR skal verifiseres, ikke publiseres. Opplastingen hoppes over der,
+      # så PR-kjøringen er ren kontroll uten noe artefakt å deploye.
+      - name: Upload GitHub Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    # Denne jobben er den eneste som publiserer, og den kjøres aldri på PR.
+    if: github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Formen her er den som FAKTISK har deployet: upload-pages-artifact@v3 +
+      # deploy-pages@v5, uten et `configure-pages`-steg. Det er verdt å skrive
+      # ned, fordi et forsøk på å «gjenopprette publisering» 18.08. gjorde tre
+      # endringer og to av dem var feil vei — det la til configure-pages@v5 med
+      # `enablement: true`, oppgraderte upload til v4 og NEDGRADERTE deploy fra
+      # v5 til v4. Kjøringen falt på configure-pages etter ett sekund og hoppet
+      # over hele resten, og fire timer senere ble deploy-jobben slettet i
+      # stedet for rettet.
+      #
+      # `configure-pages` er ikke nødvendig her og var aldri med i den formen
+      # som virket. Feiler denne jobben nå, er årsaken nesten alltid den samme
+      # og den ligger IKKE i repoet: Pages-kilden i Settings → Pages må stå på
+      # «GitHub Actions».
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
