@@ -23,12 +23,12 @@ tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 
 | # | Klubb | Bane i katalogen | Beste kildespor | Forventning |
 |---|---|---|---|---|
-| 1 | **Bjarg** | Bjarg kunstgress | egen historieside | best strukturelle utsikter |
+| 1 | **Bjarg** | Stavollen kunstgress | egen historieside | best strukturelle utsikter |
 | 2 | **Kvik Halden** | Halden stadion | SNL + cupmeritter 1915–22 | ekte historisk arv |
 | 3 | **Eik Tønsberg** | Eik stadion | klubbens historieside | eliteserieperiode 1983–85 |
 | 4 | **Sotra** | Straume idrettspark | klubbside, tre forgjengere | krever avklaring først |
 | 5 | **Sandviken** | Stemmemyren | SNL + klubbside | krever avklaring først |
-| 6 | **Vidar** | Midjord | Aftenbladets emneside | banen må avklares |
+| 6 | **Vidar** | Lassa idrettspark | Aftenbladets emneside | tynt |
 | 7 | **Træff** | Molde idrettspark | forbundsdata | tynt |
 | 8 | **Lysekloster** | Lysekloster idrettspark | forbundsdata | tynnest — søket fant ingen historikk |
 
@@ -45,10 +45,17 @@ tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 - Wikipedia: https://en.wikipedia.org/wiki/IL_Bjarg
 - Forbundet: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=780
 
-**Banenavnet bør kontrolleres.** Katalogen har «Bjarg kunstgress». Søket peker på
-**Stavollen idrettspark** som hjemmebanen, og på Bjarghallen som en *innendørs*
-flerbrukshall (40 × 20 m) — altså ikke en fotballbane. Avklar før `placeId`
-lages.
+**Banenavnet er rettet** (23.08.2026): katalogen hadde «Bjarg kunstgress», som
+ikke er et virkelig anleggsnavn men klubbnavnet med «kunstgress» påhengt. Banen
+heter **Stavollen kunstgress**, bekreftet av fire uavhengige treff — egen
+artikkel på no.wikipedia, footballgroundmap, playmakerstats og Fanaposten — og
+den ligger i Fana ved Stend jordbruksskole. Bjarghallen er en *innendørs*
+flerbrukshall på 40 × 20 m, altså ikke fotballbanen.
+
+**Én ting å følge med på:** klubben meldte i mars 2026 om et nytt anlegg kalt
+**Bjarg arena**. Det er et framtidig prosjekt, ikke dagens bane, så `placeId`
+skal lages fra Stavollen. Skifter hjemmebanen senere, er det et nytt sted — ikke
+et omdøpt.
 
 *Lead, ukontrollert:* stiftet 1947 i Fana; opprykk fra 3. divisjon i 2025-sesongen.
 
@@ -101,8 +108,12 @@ kilden må si hvilken en spiller representerte. Det er samme problem som
 Haugesund stadion (tre klubber, én bane) sett fra motsatt kant, og der ble
 løsningen å holde klubbene fra hverandre i kilden.
 
-Katalogen har banen som «Straume idrettspark»; søket skriver «Straume Sotra
-Stadion». Avklar før `placeId`.
+**Banenavnet er IKKE endret.** Katalogen har «Straume idrettspark», søket skriver
+«Straume Sotra Stadion». Begge finnes, og idrettsparken ser ut til å være
+anlegget som inneholder stadion — katalogverdien er altså mindre presis, ikke
+gal. Klubbfila sier selv at «banenavn følger sponsorer og skifter oftere enn
+klubbene gjør», så den generiske formen er den stabile. Bekreft mot klubbens egen
+anleggsside når `placeId` lages.
 
 ### Sandviken (`sandviken`)
 
@@ -125,12 +136,32 @@ herrelagspool. Kilden må si hvilket lag den beskriver, ellers importeres ingen.
 - Wikipedia: https://en.wikipedia.org/wiki/FK_Vidar
 - Forbundet: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=698
 
-**To avvik mot katalogen, begge må avklares.** Katalogen har banen «Midjord»;
-søket sier hjemmebanen er **Lassa idrettspark**, med Stavanger stadion som
-midlertidig bane mens Lassa oppgraderes. Og katalogen plasserer Vidar i
-2. divisjon avdeling 1, mens søket sier 3. divisjon. Det siste kan være
-sesongdrift i pyramiden vår og bør sjekkes mot `data/football_clubs.json`
-uansett import.
+**Banen er rettet** (23.08.2026), og feilen var ikke en unøyaktighet — den var
+en annen klubbs bane. Katalogen hadde «Midjord», som er et eget Stavanger-anlegg
+med kapasitet 1 000 og ikke Vidars. Vidar holder til på **Lassa idrettspark**
+(Rektor Oldens gate 31), bekreftet av klubbens egen anleggsside, no./en.wikipedia,
+footballgroundmap og adresseoppslag. Stavanger stadion har vært midlertidig bane
+mens Lassa oppgraderes.
+
+Feilen hadde forplantet seg til **ligaprofilen**, som er det som avgjør hvordan
+klubben faktisk spiller: `styleName` het «Midjord-nærhet» og `tacticalSchool`
+«Bydelsklubb på Storhaug» — Storhaug er der Midjord ligger, ikke Lassa. Begge er
+rettet til «Lassa-nærhet» og «Bydelsklubb i Stavanger». Distriktet er bevisst
+holdt nøytralt i stedet for å bytte én ugjettet bydel med en annen.
+
+Selve fotballen er ikke rørt. Profilen sier selv at den er *klubbkarakter, ikke
+en spilletradisjon slått opp i historien*, så «kort spill i trange rom, slik det
+spilles på et lite anlegg» er en oppdiktet karakter og ikke en kildepåstand — men
+begrunnelsen lener seg på et lite anlegg, og Lassa oppgis med kapasitet 5 000.
+Det er en designavgjørelse, ikke en datafeil, og står derfor urørt.
+
+**Divisjonen er IKKE rettet.** Søket sier Vidar spiller i 3. divisjon, mens
+katalogen har dem i 2. divisjon avdeling 1. `data/football_clubs.json` er
+uttrykkelig et **øyeblikksbilde av 2026-sesongen**, og opp- og nedrykk i spillet
+flytter klubber mellom nivåene uten at fila endres. Å ta Vidar ut av avdeling 1
+ville tømt en plass i en avdeling `audit:clubs` krever fjorten lag i, og krevd at
+noen bestemte hvem som skulle inn i stedet. Det er en designavgjørelse om
+pyramidens sammensetning, ikke en korreksjon, og den hører til deg.
 
 *Lead, ukontrollert:* stiftet 18. april 1906; første kamp mot Stavanger IF
 15. august 1906.
@@ -152,6 +183,11 @@ og Molde har alt arv i katalogen (`aker_stadion`).
 
 - Klubbside/forbundet: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=872
 - Instagram: https://www.instagram.com/lyseklosterofficial/
+
+**Banenavnet er IKKE endret.** Katalogen har «Lysekloster idrettspark», søket
+skriver «Lysekloster Framo Idrettsplass». Framo er en sponsor, og klubbfila slår
+fast at sponsornavn skifter oftere enn klubbene — den generiske formen er derfor
+den riktige å bære i katalogen.
 
 **Søket fant ingen klubbhistorikk i det hele tatt** — bare dagens tropp, tabeller
 og kampdata. Det er den tynneste av de åtte, og hvis den beste kilden er en

@@ -599,7 +599,7 @@
     {
       "id": "vidar",
       "name": "Vidar",
-      "ground": "Midjord",
+      "ground": "Lassa idrettspark",
       "city": "Stavanger",
       "tier": "andredivisjon",
       "group": "avdeling1",
@@ -677,7 +677,7 @@
     {
       "id": "bjarg",
       "name": "Bjarg",
-      "ground": "Bjarg kunstgress",
+      "ground": "Stavollen kunstgress",
       "city": "Bergen",
       "tier": "andredivisjon",
       "group": "avdeling1",
