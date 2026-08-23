@@ -190,6 +190,29 @@ check("skaleringen ble målt av korpuset", scaling.sampled === players.length * 
 // på, og ga Ødegaard 46 som midtstopper — en posisjon han aldri skal spille.
 // Ferdighetene ER scoren; en spiller skal aldri kunne oppsummeres i ett tall.
 const POSITIONS = ["GK", "CB", "LB", "RB", "WB", "DM", "CM", "AM", "LW", "RW", "ST"];
+
+// GK er en SPERRE i posisjonslista, ikke bare en av elleve verdier.
+//
+// Samme regel som gk-gruppa i ferdighetsvokabularet, men på posisjoner: en
+// profil kan ikke være keeper ett sted og utespiller et annet. Katalogen hadde
+// seks slike — fire keepere med CM eller CB som `usablePositions`, og to
+// utespillere med GK. Ingen av dem hadde en kilde som sa det; det er en
+// generatorrest, og fire av de seks kom fra én import.
+//
+// Det er ikke kosmetisk. `usablePositions` gir positionFit 78, altså «passer
+// fint» — så katalogen påsto at en navngitt keeper var en brukbar midtbane, og
+// motoren ville stilt ham der UTEN å flagge misbruk. Hele poenget med
+// misbruksmaskineriet er at feilbruk skal forklares, og en udokumentert
+// usable-posisjon skrur den forklaringen av.
+//
+// Rettelsen er å fjerne dem, ikke å legge til noe: en keeper som blir tvunget
+// ut på banen skal gå gjennom misbruksveien og bli forklart der.
+const gkOgUte = players.filter((player) => {
+  const alle = [...(player.naturalPositions || []), ...(player.usablePositions || [])];
+  return alle.includes("GK") && alle.some((position) => position !== "GK");
+});
+check("ingen profil er både keeper og utespiller", gkOgUte.length === 0,
+  gkOgUte.map((p) => `${p.name} (${[...(p.naturalPositions || []), ...(p.usablePositions || [])].join("/")})`).join(" · "));
 // Kommentarene strippes: motoren FORKLARER hvorfor samlescoren ble fjernet, og
 // en vakt som leser prosa ville falt på sin egen begrunnelse.
 const attributeSource = fs.readFileSync(new URL("../src/football-player-attributes.js", import.meta.url), "utf8")

@@ -37275,8 +37275,7 @@
       ],
       "usablePositions": [
         "DM",
-        "AM",
-        "GK"
+        "AM"
       ],
       "poorFits": [
         "GK",
@@ -37334,9 +37333,7 @@
       "naturalPositions": [
         "GK"
       ],
-      "usablePositions": [
-        "CM"
-      ],
+      "usablePositions": [],
       "poorFits": [
         "ST",
         "AM",
@@ -39348,9 +39345,7 @@
       "naturalPositions": [
         "GK"
       ],
-      "usablePositions": [
-        "CM"
-      ],
+      "usablePositions": [],
       "poorFits": [
         "ST",
         "AM",
@@ -40849,9 +40844,7 @@
       "naturalPositions": [
         "GK"
       ],
-      "usablePositions": [
-        "CM"
-      ],
+      "usablePositions": [],
       "poorFits": [
         "ST",
         "AM",
@@ -95843,9 +95836,7 @@
       "naturalPositions": [
         "GK"
       ],
-      "usablePositions": [
-        "CB"
-      ],
+      "usablePositions": [],
       "poorFits": [
         "ST",
         "AM",
@@ -149696,9 +149687,7 @@
       "naturalPositions": [
         "ST"
       ],
-      "usablePositions": [
-        "GK"
-      ],
+      "usablePositions": [],
       "poorFits": [
         "CB",
         "GK",

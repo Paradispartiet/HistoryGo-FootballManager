@@ -94,7 +94,19 @@ Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som
 
 - **Filrydding utenfor repoet.** Sperrelista i sluttauditen (gamle `*_utvidede_*`-filer, ASCII-duplikatet av Hønefoss, den ene av to Jerv-kopier, gamle `Notodden.md` og `Honefoss.md`). Ingenting av dette bor i repoet, men det avgjør hva som kan bli importert ved en feiltakelse.
 - **Rolf Halvorsen** (Strømsgodset, 274 kamper) står utenfor katalogen fordi kilden gir ham «Uavklart historisk hovedposisjon». Han kommer inn den dagen en kilde plasserer ham. Samme gjelder Brynes 1928-lag (17 navn) og tre Moss-profiler.
-- **Fellesnavn uten motsigelse** er katalogens største uverifiserbare klasse: eksakte navnetreff koblet fordi ingenting motsier dem. Den vokser med hver arv. Ingen handling nå — men den bør ikke oppdages på nytt som en overraskelse.
+- **Fellesnavn uten motsigelse — nå målt, og mye mindre enn antatt.** Klassen ble lenge omtalt som katalogens største uverifiserbare, uten at noen hadde tallfestet den. Målingen står nå i `audit:attributes` hver kjøring:
+
+  | | Antall |
+  |---|---:|
+  | Profiler som står på mer enn én bane | 505 |
+  | … med kjent karriere (`classSource: belagt`) | 421 |
+  | … med dokumenterte styrker (kilde lest) | 33 |
+  | … med distinkt navn (sjeldent etternavn eller tre ledd) | 41 |
+  | **Restklasse: koblet på navnet alene** | **10** |
+
+  De ti er navngitt i skriptets utdata. Tallet **rapporteres, det er ingen grense**: det stiger både av en feilkobling og av at en ny arv deler en spiller med en gammel, så en terskel ville felt ærlig vekst like ofte som feil — samme fella profil-unikheten gikk i.
+
+  Det som *kan* felle er den direkte koherenstesten, og den er ny: **ingen profil kan være keeper i én arv og utespiller i en annen** (`sim:player-attributes`). Den fant seks profiler ved innføring — fire keepere med CM eller CB blant `usablePositions` og to utespillere med GK, fire av dem fra én import. Ingen av dem hadde en kilde. Det var ikke kosmetisk: `usablePositions` gir positionFit **78**, altså «passer fint», så katalogen påsto at en navngitt keeper var en brukbar midtbanespiller og motoren ville stilt ham der **uten å flagge misbruk**. Alle seks er ryddet, og en keeper som tvinges ut på banen går nå gjennom misbruksveien og blir forklart der.
 
 ---
 

@@ -499,10 +499,50 @@ for (let i = 0; i < keyed.length; i += 1) {
 check("ingen ugjennomgåtte nær-duplikate spillernavn", nearPairs.length === 0,
   nearPairs.slice(0, 5).join(" · "));
 
+// Restklassen, målt i stedet for beskrevet.
+//
+// Arbeidslista har lenge kalt «fellesnavn uten motsigelse» katalogens største
+// uverifiserbare klasse — eksakte navnetreff koblet på tvers av arver fordi
+// ingenting motsa dem — og sagt at den vokser med hver import. Den påstanden
+// var aldri tallfestet, og den bør ikke oppdages på nytt som en overraskelse.
+//
+// Målt: 505 profiler står på mer enn én bane. De aller fleste av dem hviler på
+// noe mer enn navnet — en kjent karriere (`classSource: belagt`) eller en kilde
+// noen faktisk har lest (dokumenterte styrker) — og et distinkt navn (sjeldent
+// etternavn eller tre navneledd) gjør en feilkobling usannsynlig i seg selv.
+// Det som blir igjen er koblinger som hviler på navnet ALENE.
+//
+// Tallet RAPPORTERES, det er ingen grense. Det stiger både av en feilkobling og
+// av at en ny arv deler en spiller med en gammel, så en terskel ville felt
+// ærlig vekst like ofte som feil — samme fella som profil-unikheten gikk i.
+// Det som faktisk kan felle er den direkte koherenstesten, og den bor i
+// `sim:player-attributes`: ingen profil kan være keeper i én arv og utespiller
+// i en annen.
+const etternavnFrekvens = {};
+for (const player of players) {
+  const ledd = nameKey(player.name).split(" ");
+  const etternavn = ledd[ledd.length - 1];
+  etternavnFrekvens[etternavn] = (etternavnFrekvens[etternavn] || 0) + 1;
+}
+const restklasse = players.filter((player) => {
+  if ((player.sourcePlaceIds || []).length < 2) return false;
+  if (player.classSource === "belagt") return false;
+  if ((player.strengths || []).length > 0) return false;
+  const ledd = nameKey(player.name).split(" ");
+  if (ledd.length >= 3) return false;
+  return (etternavnFrekvens[ledd[ledd.length - 1]] || 0) > 2;
+});
+
 console.log(JSON.stringify({
   ok: true,
   sjekker: checks,
   gjennomgåtteNavnepar: REVIEWED_NAME_PAIRS.size,
+  koblingerPåTversAvArver: players.filter((player) => (player.sourcePlaceIds || []).length > 1).length,
+  restklasseKobletPåNavnAlene: {
+    antall: restklasse.length,
+    navn: restklasse.map((player) => player.name),
+    merknad: "måling, ikke grense — se kommentaren i skriptet"
+  },
   ferdigheter: catalogue.attributes.length,
   grupper: Object.fromEntries(Object.keys(catalogue.groups).map((group) =>
     [group, catalogue.attributes.filter((entry) => entry.group === group).length])),
