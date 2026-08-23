@@ -80,6 +80,8 @@ Begge følger samme grense: posisjon legges bare inn der kilden gir den, og bane
 
 **Avdeling 1 (8 gjenstår):** Eik Tønsberg · Vidar · Kvik Halden · Sandviken · Lysekloster · Sotra · Træff · Bjarg
 
+Kildesporene for disse åtte er kartlagt i **`docs/P2_KILDELISTE_AVDELING1.md`** — hvilke sider som finnes per klubb, med URL, rangert etter forventet utbytte. Det dokumentet er et finneverktøy og ingen kilde: innholdet er websøk, og et søketreff er en parafrase av en side ingen har åpnet. Fire feller er allerede synlige derfra og bør avklares før import: **Eik** blander spillere og trenere i én liste, **Sandviken**s dokumenterte historie er i stor grad kvinnefotball, **Sotra** er en sammenslåing av tre forgjengerklubber fra 2009, og **Træff** deler bane med Molde FKs rekruttlag. To banenavn i katalogen stemmer trolig ikke: Bjarg («Bjarg kunstgress» mot Stavollen idrettspark) og Vidar («Midjord» mot Lassa idrettspark).
+
 **Avdeling 2 (8):** Tromsdalen · Stjørdals-Blink · Rana · Junkeren · Lørenskog · Eidsvold Turn · Follo · Trygg/Lade
 
 Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som motstandere med sin egen fotball, og `pending` holder dem bare ute av overtakelseslista. Nivå 3 har 12 overtakbare klubber av 28, og **avdeling 1 er fortsatt den tynneste flaten i spillet med 6 av 14**.
