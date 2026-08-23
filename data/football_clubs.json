@@ -774,7 +774,7 @@
     {
       "id": "tromsdalen",
       "name": "Tromsdalen",
-      "ground": "Tromsdalen kunstgress",
+      "ground": "TUIL Arena",
       "city": "Tromsdalen",
       "tier": "andredivisjon",
       "group": "avdeling2",
@@ -787,7 +787,7 @@
     {
       "id": "stjordals_blink",
       "name": "Stjørdals-Blink",
-      "ground": "Øverlands Minde",
+      "ground": "Sandskogan stadion",
       "city": "Stjørdal",
       "tier": "andredivisjon",
       "group": "avdeling2",
@@ -813,7 +813,7 @@
     {
       "id": "junkeren",
       "name": "Junkeren",
-      "ground": "Bodø Spektrum kunstgress",
+      "ground": "Nordlandshallen",
       "city": "Bodø",
       "tier": "andredivisjon",
       "group": "avdeling2",
@@ -826,7 +826,7 @@
     {
       "id": "lorenskog",
       "name": "Lørenskog",
-      "ground": "Lørenskog stadion",
+      "ground": "Rolvsrud stadion",
       "city": "Lørenskog",
       "tier": "andredivisjon",
       "group": "avdeling2",

@@ -84,6 +84,10 @@ Kildesporene for disse åtte er kartlagt i **`docs/P2_KILDELISTE_AVDELING1.md`**
 
 **Avdeling 2 (8):** Tromsdalen · Stjørdals-Blink · Rana · Junkeren · Lørenskog · Eidsvold Turn · Follo · Trygg/Lade
 
+Kartlagt i **`docs/P2_KILDELISTE_AVDELING2.md`**, samme form og samme forbehold. Beste kilder her: **Eidsvold Turn har egen adelskalender** (Brattvåg-formen, navn med kampantall), **Stjørdals-Blink har klubbarkiv**, **Trygg/Lade har historikkside**, og **Lørenskog** dekkes av Romerikes Blads «Klubblegende»-serie — portrettsjangeren som faktisk gir dokumenterte styrker. Tre klubber er sammenslåinger med flere forgjengere (Stjørdals-Blink 1956, Trygg/Lade 1986, Rana 2017) og Follo er en paraply for fem lag fra 2000, så kilden må si hvilken enhet en spiller representerte.
+
+**Fire banenavn var gale og er rettet**, etter samme mønster som i avdeling 1: Tromsdalen «Tromsdalen kunstgress» → **TUIL Arena**, Lørenskog «Lørenskog stadion» → **Rolvsrud stadion** (begge generatorrester — klubbnavnet med «stadion»/«kunstgress» påhengt), Junkeren «Bodø Spektrum kunstgress» → **Nordlandshallen** (feil anlegg i samme by), og Stjørdals-Blink «Øverlands Minde» → **Sandskogan stadion** (klubben forlot Øverlands Minde i 2012 og Sandskogan har vært hjemmebane siden 2020; ført sponsorfritt). Ligaprofilene er kontrollert og ingen måtte rettes — de henter navnet fra klubben, ikke fra banen. Tre tier-avvik (Junkeren, Lørenskog, Trygg/Lade oppgis i 3. divisjon) er **ikke** rørt, av samme grunn som Vidar.
+
 Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som motstandere med sin egen fotball, og `pending` holder dem bare ute av overtakelseslista. Nivå 3 har 12 overtakbare klubber av 28, og **avdeling 1 er fortsatt den tynneste flaten i spillet med 6 av 14**.
 
 **Handling:** v2-kildefiler i samme form som de siste importene. Hver klubb trenger også en `placeId` (alle har `ground` uten), og importen lager stedet.
