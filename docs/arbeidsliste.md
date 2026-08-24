@@ -94,6 +94,10 @@ Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som
 
 **Rekkefølge:** avdeling 1 først — den er tynnest.
 
+**Én ting krever en avgjørelse før import, ikke etterpå:** Eik Tønsbergs bane. «Eik stadion» finnes ikke, og klubben har to kandidater med hvert sitt svar — **Eik Idrettsanlegg** er klubbens eget anlegg, mens **Tønsberg gressbane** (5 600) er der seniorlagene faktisk spiller, trolig delt med andre klubber. `homePlaceId` er permanent, så valget hører til importen med kilden i hånd. Den er derfor ikke rettet.
+
+**Og en ledetråd som ikke lar seg automatisere:** fire av de seks gale banenavnene hadde formen «klubbnavn + stadion/kunstgress», som ser ut som en generatorsignatur man kan skrive en vakt på. Målt treffer mønsteret **16 av 60 klubber**, og minst tolv av dem er helt riktige virkelige navn (Brann Stadion, Fredrikstad stadion, Haugesund stadion …). En vakt ville gitt fjorten falske positive av seksten. Det som skiller er ikke navneformen, men om banen har et *eget lokalt navn* — Stavollen, TUIL Arena, Rolvsrud, Nordlandshallen, Lassa — og det kan bare avgjøres mot en kilde, én klubb om gangen. Mønsteret er en søkeliste, ikke en regel.
+
 ---
 
 ## P3 — restpunkter fra de to auditene

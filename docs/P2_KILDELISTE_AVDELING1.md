@@ -25,7 +25,7 @@ tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 |---|---|---|---|---|
 | 1 | **Bjarg** | Stavollen kunstgress | egen historieside | best strukturelle utsikter |
 | 2 | **Kvik Halden** | Halden stadion | SNL + cupmeritter 1915–22 | ekte historisk arv |
-| 3 | **Eik Tønsberg** | Eik stadion | klubbens historieside | eliteserieperiode 1983–85 |
+| 3 | **Eik Tønsberg** | Eik stadion ⚠️ | klubbens historieside | eliteserieperiode 1983–85 |
 | 4 | **Sotra** | Straume idrettspark | klubbside, tre forgjengere | krever avklaring først |
 | 5 | **Sandviken** | Stemmemyren | SNL + klubbside | krever avklaring først |
 | 6 | **Vidar** | Lassa idrettspark | Aftenbladets emneside | tynt |
@@ -87,6 +87,22 @@ Brattvåg — krysskobling, ikke ny profil, og hver kobling navngis.
 **Identiteten har skiftet navn tre ganger** — Eik IF (1928) → Eik-Tønsberg
 (1989) → FK Eik Tønsberg 871 (2020) — og søket returnerte i tillegg en egen
 **FK Tønsberg** som er noe annet. Kilden må si hvilken enhet den beskriver.
+
+**Banenavnet er galt, men jeg har IKKE rettet det — valget krever en avgjørelse
+jeg ikke kan ta.** «Eik stadion» finnes ikke som anleggsnavn. Klubben har to
+baner, og de er ulike svar på hvert sitt spørsmål:
+
+- **Eik Idrettsanlegg** (Jutulveien 13) er klubbens *eget* anlegg — to
+  kunstgress, ett gressbane, én stor gresslette.
+- **Tønsberg gressbane** (kapasitet 5 600) er der *seniorlagene faktisk spiller
+  hjemmekampene*, byens største stadion.
+
+`homePlaceId` er banen en groundhopper må ha besøkt for å åpne klubbens
+historiske spillere, så spørsmålet er hvilken av de to som *er* Eiks bane i den
+forstand. Og Tønsberg gressbane er trolig delt med andre klubber — samme
+problem som Haugesund stadion med tre klubber. Å mynte en permanent `placeId` på
+feil av dem er ikke noe man angrer billig, så avgjørelsen hører til importen,
+med kilden i hånd.
 
 **Den viktigste fella her er allerede synlig.** Søket ga åtte navn i én liste
 som «players **and coaches**», uten å si hvem som er hva: Arne Natland, Geir
@@ -211,3 +227,28 @@ Uansett klubb er kravet det samme, og `audit:club-heritage` håndhever det:
    preferanser skal stå tomme med mindre kilden beskriver spilleren
    individuelt, og da hører claimet hjemme i P1-overlayet med `claim` og
    `source`, ikke i råfila.
+
+---
+
+## En ledetråd som IKKE lar seg automatisere
+
+Seks av seksten banenavn viste seg gale, og fire av dem hadde samme form:
+klubbnavnet med «stadion» eller «kunstgress» påhengt. Det ser ut som en
+generatorsignatur man kan skrive en vakt på. **Det er det ikke**, og det er målt.
+
+Mønsteret «klubbnavn + generisk ord» treffer **16 av de 60 klubbene**, og minst
+tolv av dem er helt riktige, virkelige navn: Brann Stadion, Fredrikstad stadion,
+Haugesund stadion, Bryne stadion, Notodden stadion, Levanger stadion, Grorud
+idrettspark, Sarpsborg stadion, Strømmen stadion, Raufoss Arena, Egersund Arena,
+KFUM Arena, Pors stadion, Brattvåg stadion. Norske klubber kalles ofte opp etter
+stedet, og banen med dem.
+
+Én av de seksten er gal (Eik), og én er sponsorfri form av et sponset navn
+(Lysekloster). En vakt på mønsteret ville altså gitt fjorten falske positive av
+seksten.
+
+**Det som skiller de gale fra de riktige er ikke formen på navnet, men om banen
+har et eget lokalt navn** — Stavollen, TUIL Arena, Rolvsrud, Nordlandshallen,
+Lassa. Det kan bare avgjøres mot en kilde, én klubb om gangen. Mønsteret er
+derfor en søkeliste, ikke en regel, og det er grunnen til at det ikke er lagt
+inn som en sjekk.
