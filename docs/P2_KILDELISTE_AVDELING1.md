@@ -26,16 +26,22 @@ mye kilden siterer, ikke hvor lang den er.** En klubb med egen historieside som
 omtaler enkeltspillere gir dekning; en klubb som bare har troppslister og
 tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 
+**ALLE ÅTTE ER NÅ LEST (24.08.2026).** Kvik Halden er importert; Bjarg og de seks
+øvrige når ikke femten spillbare. Målingen av de seks står i
+**`docs/P2_AVDELING1_MALING.md`**, som også fører de to banerettelsene og svaret
+på Eik-spørsmålet. Tabellen under er bevart som den sto, fordi forventningene i
+den er selve lærdommen: ingen av dem traff.
+
 | # | Klubb | Bane i katalogen | Beste kildespor | Forventning |
 |---|---|---|---|---|
 | ~~1~~ | ~~**Bjarg**~~ | Stavollen kunstgress | egen historieside | **LEST 24.08.2026: 4 navn, 1 posisjon — ingen import** |
 | ~~2~~ | ~~**Kvik Halden**~~ | Halden stadion | klubbens historikk + Wikipedia | **IMPORTERT 24.08.2026: 41 dokumenterte, 23 spillbare** |
-| 3 | **Eik Tønsberg** | Eik stadion ⚠️ | klubbens historieside | eliteserieperiode 1983–85 |
-| 4 | **Sotra** | Straume idrettspark | klubbside, tre forgjengere | krever avklaring først |
-| 5 | **Sandviken** | Stemmemyren | SNL + klubbside | krever avklaring først |
-| 6 | **Vidar** | Lassa idrettspark | Aftenbladets emneside | tynt |
-| 7 | **Træff** | Molde idrettspark | forbundsdata | tynt |
-| 8 | **Lysekloster** | Lysekloster idrettspark | forbundsdata | tynnest — søket fant ingen historikk |
+| ~~3~~ | ~~**Eik Tønsberg**~~ | **Tønsberg gressbane** (rettet) | klubbens historieside | **LEST: 4 navn, 1 posisjon — banespørsmålet besvart** |
+| ~~4~~ | ~~**Sotra**~~ | Straume idrettspark | klubbside, tre forgjengere | **LEST: 2 navn** |
+| ~~5~~ | ~~**Sandviken**~~ | Stemmemyren | SNL + klubbside | **LEST: 0 navn — artikkelen er kvinnefotball** |
+| ~~6~~ | ~~**Vidar**~~ | Lassa idrettspark | Aftenbladets emneside | **LEST: 2 navn, 1 posisjon** |
+| ~~7~~ | ~~**Træff**~~ | **Reknesbanen** (rettet) | forbundsdata | **LEST: 9 navn, alle «med bakgrunn i»** |
+| ~~8~~ | ~~**Lysekloster**~~ | Lysekloster idrettspark | Wikipedias troppsmal | **LEST: 18 navn, 0 posisjoner** |
 
 ---
 

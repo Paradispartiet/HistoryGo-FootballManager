@@ -586,7 +586,7 @@
     {
       "id": "eik_tonsberg",
       "name": "Eik Tønsberg",
-      "ground": "Eik stadion",
+      "ground": "Tønsberg gressbane",
       "city": "Tønsberg",
       "tier": "andredivisjon",
       "group": "avdeling1",
@@ -665,7 +665,7 @@
     {
       "id": "traff",
       "name": "Træff",
-      "ground": "Molde idrettspark",
+      "ground": "Reknesbanen",
       "city": "Molde",
       "tier": "andredivisjon",
       "group": "avdeling1",
