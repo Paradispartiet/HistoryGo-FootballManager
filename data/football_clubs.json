@@ -618,9 +618,10 @@
       "group": "avdeling1",
       "strength": 51,
       "form": 57,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 41,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 23,
+      "homePlaceId": "halden_stadion"
     },
     {
       "id": "sandviken",

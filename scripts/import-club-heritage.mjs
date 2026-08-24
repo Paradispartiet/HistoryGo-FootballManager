@@ -45,6 +45,32 @@ const POSISJONER = new Set([GK, ...UTESPILLER]);
 // som er den som faktisk utleder playerPoolStatus og håndhever den i CI.
 const MIN_POOL = 15;
 
+// ---------------------------------------------------------------------------
+// Gruppeposisjoner
+//
+// Noen kilder — typisk en troppsliste — sier «forsvar» og ikke «midtstopper».
+// Det er mindre enn en posisjon, men mer enn ingenting, og det er nøyaktig den
+// oppløsningen motorens egen troppsmodell er bygget på (SQUAD_GROUPS i
+// src/football-club-squad.js).
+//
+// Gruppen skrives derfor til `usablePositions` og IKKE til `naturalPositions`,
+// og det er ikke en detalj. `calculatePositionFit` gir 96 for en naturlig
+// posisjon og 78 for en brukbar. «Forsvar» ført som fire naturlige posisjoner
+// ville påstått at mannen passer GODT som både midtstopper, høyre- og
+// venstreback — en allsidighet ingen kilde har hevdet. Ført som brukbare sier
+// den at han kan brukes der, som er det kilden faktisk sier.
+//
+// `positionSource: "gruppe"` gjør forskjellen målbar i dataene, slik at et
+// senere kildepass kan skjerpe dem uten å gjette, og slik at ingen tror
+// oppløsningen er finere enn den er. Presise posisjoner bærer ikke feltet.
+const GRUPPEPOSISJONER = Object.freeze({
+  forsvar: ["CB", "LB", "RB", "WB"],
+  midtbane: ["DM", "CM", "AM"],
+  angrep: ["ST", "LW", "RW"]
+});
+// Keeper er IKKE en gruppe: «keeper» og `GK` er samme oppløsning, så en
+// troppsliste som sier keeper gir en presis posisjon.
+
 const EPOKER = new Set(["historical", "modern"]);
 const ERA_SOURCE = new Set(["belagt", "utledet"]);
 
@@ -82,7 +108,8 @@ const navnenokkel = (navn) => slugify(navn);
 // Bygg én canonical profil. Formen er lest av Pors- og Brattvåg-profilene.
 // ---------------------------------------------------------------------------
 function byggProfil(rad, kilde) {
-  const harPosisjon = rad.posisjoner.length > 0;
+  const gruppe = rad.gruppe ? GRUPPEPOSISJONER[rad.gruppe] : null;
+  const harPosisjon = rad.posisjoner.length > 0 || Boolean(gruppe);
   return {
     id: rad.id,
     name: rad.navn,
@@ -92,8 +119,9 @@ function byggProfil(rad, kilde) {
     sourcePlaceIds: [kilde.placeId],
     classHeight: 79,
     classSource: "utledet",
-    naturalPositions: rad.posisjoner,
-    usablePositions: [],
+    naturalPositions: gruppe ? [] : rad.posisjoner,
+    usablePositions: gruppe ? [...gruppe] : [],
+    ...(gruppe ? { positionSource: "gruppe" } : {}),
     poorFits: [],
     archetypeIds: [],
     archetypes: [],
@@ -102,9 +130,11 @@ function byggProfil(rad, kilde) {
     preferredRoles: [],
     likesTactics: [],
     dislikesTactics: [],
-    warningWhenMisused: harPosisjon
-      ? "Ingen individuelle styrker er lagt til uten kildebelegg."
-      : `Posisjon og individuelle styrker er ikke kildebelagt i ${kilde.clubName || kilde.clubId}-historikken.`,
+    warningWhenMisused: gruppe
+      ? `Kilden oppgir bare lagdel (${rad.gruppe}), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.`
+      : harPosisjon
+        ? "Ingen individuelle styrker er lagt til uten kildebelegg."
+        : `Posisjon og individuelle styrker er ikke kildebelagt i ${kilde.clubName || kilde.clubId}-historikken.`,
     clubStatus: { [kilde.placeId]: "club_profile" },
     clubStatusSource: { [kilde.placeId]: "belagt" },
     clubAffiliations: [
@@ -199,6 +229,17 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
       stopp(`${merke} (${navn}): GK står sammen med utespillerposisjon — en kilde som sier begge deler beskriver to menn eller er lest feil`);
     }
 
+    // Gruppeposisjon. Enten sier kilden hvilken posisjon mannen spilte, eller
+    // bare hvilken lagdel — aldri begge, for da er det to ulike påstander og
+    // kilden må si hvilken som gjelder.
+    const gruppe = typeof rad.positionGroup === "string" ? rad.positionGroup.trim() : null;
+    if (gruppe && !Object.hasOwn(GRUPPEPOSISJONER, gruppe)) {
+      stopp(`${merke} (${navn}): ukjent lagdel ${JSON.stringify(gruppe)} — gyldige er ${Object.keys(GRUPPEPOSISJONER).join(", ")}. En kilde som sier «keeper» gir en presis posisjon (GK), ikke en lagdel`);
+    }
+    if (gruppe && posisjoner.length > 0) {
+      stopp(`${merke} (${navn}): både \`positions\` og \`positionGroup\` er satt — kilden sier enten posisjon eller lagdel, ikke begge`);
+    }
+
     const era = rad.era ?? kilde.defaultEra ?? null;
     if (!era || !EPOKER.has(era)) {
       stopp(`${merke} (${navn}): \`era\` må være "historical" eller "modern"`);
@@ -214,6 +255,7 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
       id,
       navn,
       posisjoner,
+      gruppe,
       era,
       krysskobling: rad.crossLink === true,
       existingId: typeof rad.existingId === "string" ? rad.existingId.trim() : null
@@ -267,7 +309,12 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
 
   // -- resultatet --
   const profiler = nye.map((rad) => byggProfil(rad, kilde));
-  const spillbare = profiler.filter((p) => p.naturalPositions.length > 0).map((p) => p.id);
+  // Spillbar = har en posisjon motoren kan stille ham i, enten naturlig eller
+  // brukbar. Det er samme regel som `isSimulationReadyPlayer`, og den er grunnen
+  // til at en gruppeposisjon i `usablePositions` faktisk gjør profilen valgbar.
+  const spillbare = profiler
+    .filter((p) => p.naturalPositions.length > 0 || p.usablePositions.length > 0)
+    .map((p) => p.id);
 
   // Krysskoblede profiler teller med i klubbpoolen, og de som har posisjon fra
   // før er også spillbare der. Banen åpner poolen, så de hører med i unlocks.

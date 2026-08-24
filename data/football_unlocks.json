@@ -14429,6 +14429,106 @@
           "targetId": "ulrik_valderhaug_syversen"
         }
       ]
+    },
+    {
+      "placeId": "halden_stadion",
+      "placeName": "Halden stadion",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Kvik Haldens hjemmebane i Halden, åpnet 1927. Klubbpoolen dekker to lag: FK Kvik-perioden 1906–1997, der klubben ble cupmester i 1918 og spilte finaler i 1915 og 1922, og A-lagstroppen etter sammenslåingen. Banen åpner bare profilene som har kildebelagt posisjon eller lagdel og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "albert_makiadi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aleksander_karstensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anwar_elyounoussi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "benjamin_kielland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dardan_saeter_mehmeti"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fabian_stensrud_ness"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "filip_johansen_westgaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harmohan_singh"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jesper_wichstrom_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_lindquist"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johnny_helgesen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kastriot_murseli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "konrad_thorvaldsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lucas_fritzen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marcus_moberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_manirakiza"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohammed_jatta"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_stromsborg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oystein_lundblad_naesheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_bonogard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "raymond_kvisvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_thulin"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_svenningsen_gronn"
+        }
+      ]
     }
   ]
 }

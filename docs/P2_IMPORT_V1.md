@@ -42,7 +42,8 @@ noe som ikke står der.
 | `placeId` | permanent. Banen en groundhopper må ha besøkt for å åpne klubbens spillere. Byttes aldri av en senere import. |
 | `eraSource` | `belagt` når kilden daterer profilene selv (Pors), `utledet` når epoken leses av hvilken liste navnet står i (Brattvåg). |
 | `sources` | minst én faktisk lest side, med hentedato. Et søketreff er ikke en kilde. |
-| `positions` | bare der kilden gir den. Uten posisjon blir profilen en historikkpost: den står i klubbpoolen, men banen åpner den ikke. |
+| `positions` | presis posisjon, bare der kilden gir den. Uten posisjon blir profilen en historikkpost: den står i klubbpoolen, men banen åpner den ikke. |
+| `positionGroup` | `forsvar`, `midtbane` eller `angrep` — når kilden bare oppgir lagdel. Se «Lagdel som posisjon» under. Aldri sammen med `positions`. |
 | `crossLink` + `existingId` | navnet finnes i katalogen fra før og er samme mann. Profilen får klubbtilknytningen, men beholder sin egen arv — `sourcePlaceIds` røres ikke, så den frosne P1-nevneren står urørt. |
 
 Kjøring:
@@ -58,6 +59,54 @@ kjør `npm run audit:club-heritage`.
 
 ---
 
+## Lagdel som posisjon
+
+En troppsliste sier ofte «forsvar» og ikke «midtstopper». Det er mindre enn en
+posisjon og mer enn ingenting, og det er nøyaktig den oppløsningen motorens egen
+troppsmodell er bygget på (`SQUAD_GROUPS`: 2 GK, 5 forsvar, 5 midtbane,
+3 angrep).
+
+Lagdelen skrives til **`usablePositions`**, ikke til `naturalPositions`, og det
+er ikke en detalj. `calculatePositionFit` gir **96** for en naturlig posisjon og
+**78** for en brukbar. «Forsvar» ført som fire naturlige posisjoner ville
+påstått at mannen passer *godt* som både midtstopper og begge backer — en
+allsidighet ingen kilde har hevdet. Ført som brukbare sier den at han kan brukes
+der, som er det kilden faktisk sier.
+
+```json
+{ "name": "Ole Strømsborg", "positionGroup": "forsvar", "era": "modern" }
+```
+
+gir
+
+```json
+"naturalPositions": [],
+"usablePositions": ["CB", "LB", "RB", "WB"],
+"positionSource": "gruppe"
+```
+
+| Lagdel | Posisjoner |
+|---|---|
+| `forsvar` | CB, LB, RB, WB |
+| `midtbane` | DM, CM, AM |
+| `angrep` | ST, LW, RW |
+
+**Keeper er ikke en lagdel.** «Keeper» og `GK` er samme oppløsning, så en
+troppsliste som sier keeper gir en presis posisjon. `positionGroup: "keeper"`
+avvises.
+
+`positionSource: "gruppe"` gjør oppløsningen målbar, slik at et senere kildepass
+kan skjerpe profilen uten å gjette. Presise posisjoner bærer ikke feltet, og
+`audit:import-club-heritage` håndhever begge veier på hele katalogen: ingen
+profil kan bære merket uten å ha en hel lagdel i `usablePositions`, og ingen kan
+bære en hel lagdel uten merket. Grov oppløsning skal ikke kunne se presis ut.
+
+En profil med lagdel er **spillbar** — `isSimulationReadyPlayer` leser både
+naturlige og brukbare posisjoner — så lagdelen er det som avgjorde at Kvik
+Halden kunne landes med 23 spillbare i stedet for 9.
+
+---
+
 ## Hva importen stopper på
 
 Ingen av disse er en verdi skriptet kan velge. Hver av dem er en avgjørelse
@@ -65,6 +114,8 @@ kilden må ta, og importen skriver ingenting før alle er ryddet.
 
 - ukjent posisjon — en kilde som sier «spiss» oversettes av den som leser den,
   ikke av en synonymtabell i skriptet;
+- ukjent lagdel, og `positions` og `positionGroup` satt samtidig — kilden sier
+  enten posisjon eller lagdel, ikke begge;
 - `GK` sammen med en utespillerposisjon — koherensregelen fra P3. Uten den gir
   `usablePositions` positionFit 78, og motoren ville stilt en navngitt keeper på
   midtbanen uten å flagge misbruk;
@@ -85,8 +136,9 @@ importen gjenskaper begge arvene — profilene felt for felt, banens unlocks,
 klubbraden og hver krysskobling. Fasiten hentes fra katalogen slik den er, så
 endrer profilformen seg, endrer fasiten seg med. Begge arvene er med fordi de er
 ulike på det ene punktet som betyr noe for formen: Pors daterer seg selv,
-Brattvåg har ikke ett eneste årstall. Deretter kreves det at hvert av de seksten
-avslagene faktisk slår til.
+Brattvåg har ikke ett eneste årstall. Deretter kreves det at hvert av de nitten
+avslagene faktisk slår til, og at ingen profil i katalogen kan bære en grov
+posisjonsoppløsning uten å si det.
 
 ---
 

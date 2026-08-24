@@ -29,7 +29,7 @@ tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 | # | Klubb | Bane i katalogen | Beste kildespor | Forventning |
 |---|---|---|---|---|
 | ~~1~~ | ~~**Bjarg**~~ | Stavollen kunstgress | egen historieside | **LEST 24.08.2026: 4 navn, 1 posisjon — ingen import** |
-| ~~2~~ | ~~**Kvik Halden**~~ | Halden stadion | klubbens historikk + Wikipedia | **LEST 24.08.2026: 44 navn, 9 med presis posisjon — venter på én avgjørelse** |
+| ~~2~~ | ~~**Kvik Halden**~~ | Halden stadion | klubbens historikk + Wikipedia | **IMPORTERT 24.08.2026: 41 dokumenterte, 23 spillbare** |
 | 3 | **Eik Tønsberg** | Eik stadion ⚠️ | klubbens historieside | eliteserieperiode 1983–85 |
 | 4 | **Sotra** | Straume idrettspark | klubbside, tre forgjengere | krever avklaring først |
 | 5 | **Sandviken** | Stemmemyren | SNL + klubbside | krever avklaring først |
@@ -82,11 +82,15 @@ et omdøpt.
 - Wikipedia: https://en.wikipedia.org/wiki/Kvik_Halden_FK
 - Forbundet, personer: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=3&underside=personer
 
-**Kilden er lest 24.08.2026 — se `docs/P2_KVIK_HALDEN_SOURCE_PASS.md`.** 44
-dokumenterte A-lagsnavn ble funnet, men bare 9 med presis posisjon, og det
-kreves 15 for at klubben skal bli spillbar. Passet stoppet på ett spørsmål som
-ikke er avgjort før: teller en kilde som sier «forsvar» som posisjon? Svaret
-avgjør formen på alle de fjorten gjenstående klubbene.
+**IMPORTERT 24.08.2026 — se `docs/P2_KVIK_HALDEN_SOURCE_PASS.md`.** 41
+dokumenterte klubbprofiler, 23 spillbare, 18 historikkposter. Klubben er `ready`.
+
+Passet stoppet først på et spørsmål som ikke var avgjort før: teller en kilde som
+sier «forsvar» som posisjon? Svaret ble ja — men lagdelen skrives til
+`usablePositions` og merkes `positionSource: "gruppe"`, så oppløsningen står i
+dataene. Med bare presise posisjoner ville klubben fått 9 spillbare og forblitt
+`pending`. Formen gjelder nå alle de gjenstående klubbene; se
+`docs/P2_IMPORT_V1.md`.
 
 **Kildelista overså at klubben er en sammenslåing.** FK Kvik og Halden
 Fotballklubb ble slått sammen i 1997. Cupgullet i 1918 og begge cupfinalene ble

@@ -907,6 +907,15 @@ const KJENT_UDOKUMENTERT = {
   // belegger er A-lagstilhørighet. 79/79 nye eksklusive profiler står derfor
   // uten en eneste ferdighetsclaim.
   brattvag_stadion: 1.01,
+  // Kvik Halden P2, tredje av samme form. Kilden er to lag i ett: klubbens egen
+  // årstallsliste fører landslagsuttak år for år gjennom FK Kvik-perioden, og
+  // Wikipedia navngir cupvinnerlaget fra 1918 og A-lagstroppen 2023. Begge
+  // belegger A-lagstilhørighet og — for de fleste — en lagdel. Ingen av dem
+  // beskriver en enkelt spillers ferdigheter. Et landslagsuttak er den sterkeste
+  // påstanden i hele kilden, og det er fortsatt en MERITT og ikke en ferdighet:
+  // samme grense som Sarpsborg-kilden slo fast, der en tittel er lagets.
+  // 39/39 nye eksklusive profiler står derfor uten en eneste ferdighetsclaim.
+  halden_stadion: 1.01,
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
   // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare

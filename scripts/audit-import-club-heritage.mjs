@@ -308,6 +308,79 @@ for (const arv of ARVER) {
 }
 
 // ---------------------------------------------------------------------------
+// Gruppeposisjoner
+//
+// En kilde som sier «forsvar» sier mindre enn en posisjon og mer enn ingenting.
+// Den skrives til `usablePositions`, ikke `naturalPositions`, fordi
+// `calculatePositionFit` gir 96 for en naturlig posisjon og 78 for en brukbar —
+// fire naturlige ville påstått at mannen passer GODT som både midtstopper og
+// begge backer. `positionSource: "gruppe"` gjør oppløsningen målbar.
+// ---------------------------------------------------------------------------
+const GRUPPESETT = {
+  forsvar: ["CB", "LB", "RB", "WB"],
+  midtbane: ["DM", "CM", "AM"],
+  angrep: ["ST", "LW", "RW"]
+};
+
+for (const [gruppe, sett] of Object.entries(GRUPPESETT)) {
+  const r = planImport({
+    kilde: { ...basis, players: [{ name: "Testolav Testesen", positionGroup: gruppe, era: "modern" }] },
+    ...grunnlag()
+  });
+  assert.deepEqual(r.feil, [], `${gruppe}: skal være en gyldig lagdel`);
+  const p = r.profiler[0];
+  assert.deepEqual(p.naturalPositions, [], `${gruppe}: en lagdel er ingen naturlig posisjon`);
+  assert.deepEqual(p.usablePositions, sett, `${gruppe}: lagdelen skal skrives som brukbare posisjoner`);
+  assert.equal(p.positionSource, "gruppe", `${gruppe}: oppløsningen skal stå i dataene`);
+  assert.match(p.warningWhenMisused, /bare lagdel/, `${gruppe}: advarselen skal si at posisjonen ikke er kjent`);
+  assert.equal(r.rapport.spillbar, 1, `${gruppe}: en lagdel gjør profilen spillbar`);
+}
+
+// En presis posisjon bærer ikke merket.
+{
+  const r = planImport({
+    kilde: { ...basis, players: [{ name: "Testolav Testesen", positions: ["CB"], era: "modern" }] },
+    ...grunnlag()
+  });
+  assert.equal(r.profiler[0].positionSource, undefined, "en presis posisjon skal ikke merkes som gruppe");
+  assert.deepEqual(r.profiler[0].naturalPositions, ["CB"], "en presis posisjon er naturlig");
+}
+
+krevAvslag("ukjent lagdel",
+  { players: [{ name: "Testolav Testesen", positionGroup: "backrekka", era: "modern" }] },
+  /ukjent lagdel/);
+
+krevAvslag("keeper ført som lagdel",
+  { players: [{ name: "Testolav Testesen", positionGroup: "keeper", era: "modern" }] },
+  /ukjent lagdel/);
+
+krevAvslag("både posisjon og lagdel",
+  { players: [{ name: "Testolav Testesen", positions: ["CB"], positionGroup: "forsvar", era: "modern" }] },
+  /ikke begge/);
+
+// Og regelen håndheves på katalogen som helhet: ingen profil kan bære en grov
+// oppløsning uten å si det, og ingen kan si det uten å ha den.
+{
+  const gyldigeSett = new Set(Object.values(GRUPPESETT).map((s) => s.join(",")));
+  let merket = 0;
+  for (const p of alleSpillere) {
+    const sett = (p.usablePositions || []).join(",");
+    if (p.positionSource !== undefined) {
+      merket += 1;
+      assert.equal(p.positionSource, "gruppe",
+        `${p.id}: positionSource kan bare være "gruppe" — fikk ${JSON.stringify(p.positionSource)}`);
+      assert.deepEqual(p.naturalPositions || [], [],
+        `${p.id}: en gruppeposisjon er ingen naturlig posisjon`);
+      assert.ok(gyldigeSett.has(sett),
+        `${p.id}: merket som gruppe, men usablePositions er ikke en hel lagdel (${sett})`);
+    } else if (gyldigeSett.has(sett) && (p.naturalPositions || []).length === 0) {
+      assert.fail(`${p.id}: bærer en hel lagdel i usablePositions uten \`positionSource: "gruppe"\` — grov oppløsning skal ikke kunne se presis ut`);
+    }
+  }
+  console.error(`# profiler med gruppeoppløsning i katalogen: ${merket}`);
+}
+
+// ---------------------------------------------------------------------------
 // Id-formen, mot navn som faktisk står i katalogen
 // ---------------------------------------------------------------------------
 for (const [navn, forventet] of [

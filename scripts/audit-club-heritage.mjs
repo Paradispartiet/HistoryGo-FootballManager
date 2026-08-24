@@ -53,6 +53,21 @@ const ARVER = [
     // troppsliste — så epoken er lest av hvilken liste navnet står i.
     eraSource: "utledet",
     doc: "docs/P2_BRATTVAG_SOURCE_PASS.md"
+  },
+  {
+    clubId: "kvik_halden",
+    placeId: "halden_stadion",
+    dokumentert: 41,
+    spillbar: 23,
+    nye: 39,
+    // Kvik-kilden er to lag i ett: FK Kvik-perioden 1906–1997 med cupgullet i
+    // 1918, og A-lagstroppen 2023. To navn fantes fra før, begge bekreftet av
+    // sin egen individkilde.
+    krysskoblet: ["raymond_kvisvik", "fabian_stensrud_ness"],
+    // Klubbens historikk daterer landslagsuttakene år for år, og troppen er
+    // datert 27.07.2023 — hver profil har en epoke fra kilden selv.
+    eraSource: "belagt",
+    doc: "docs/P2_KVIK_HALDEN_SOURCE_PASS.md"
   }
 ];
 

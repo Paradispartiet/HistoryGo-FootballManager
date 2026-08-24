@@ -1,15 +1,20 @@
-# P2 · Kvik Halden — kildepass, stoppet på én avgjørelse
+# P2 · Kvik Halden — importert
 
-**44 dokumenterte A-lagsnavn er funnet. Om klubben blir spillbar avhenger av
-ett spørsmål som ikke er avgjort før: teller en kilde som sier «forsvar» som
-posisjon?**
+**41 dokumenterte A-lagsnavn, 23 spillbare. Klubben er `ready` og kan overtas.**
 
-Med dagens praksis — bare presise posisjoner — er 9 av de 44 spillbare, og
-klubben når ikke de 15 som kreves. Godtas gruppenivå, blir omtrent 25 spillbare
-og Kvik Halden lander som tredje ferdige P2-arv.
+Passet stoppet først på ett spørsmål som ikke var avgjort før: teller en kilde
+som sier «forsvar» som posisjon? Svaret ble **ja, men oppløsningen skal stå i
+dataene** — se «Lagdel som posisjon» under. Med dagens praksis alene, bare
+presise posisjoner, ville Kvik Halden fått 9 spillbare og forblitt `pending`.
 
-Spørsmålet gjelder ikke bare Kvik. Det avgjør formen på alle de fjorten
-gjenstående klubbene, og det er derfor det ikke er avgjort her.
+| | |
+|---|---:|
+| Dokumenterte klubbprofiler | 41 |
+| Spillbare (posisjon eller lagdel) | 23 |
+| Historikkposter | 18 |
+| Nye canonical profiler | 39 |
+| Krysskoblinger | 2 |
+| Utelatt på motsigelse | 3 |
 
 ---
 
@@ -77,34 +82,62 @@ være CB, LB, RB eller WB, og kilden sier ikke hvilken.
 
 ---
 
-## Avgjørelsen
+## Lagdel som posisjon
 
-Motorens egen troppsmodell er bygget på nøyaktig disse fire gruppene
-(`SQUAD_GROUPS` i `src/football-club-squad.js`: 2 GK, 5 forsvar, 5 midtbane,
-3 angrep). Kildens presisjon treffer altså motorens strukturelle presisjon
-eksakt. Men `naturalPositions` er et felt for posisjoner, ikke for grupper.
+Motorens egen troppsmodell er bygget på nøyaktig fire lagdeler (`SQUAD_GROUPS` i
+`src/football-club-squad.js`: 2 GK, 5 forsvar, 5 midtbane, 3 angrep). Kildens
+presisjon treffer altså motorens strukturelle presisjon eksakt. Men
+`naturalPositions` er et felt for posisjoner, ikke for lagdeler.
 
-**Alternativ A — bare presise posisjoner (dagens praksis).**
-Pors og Brattvåg brukte utelukkende presise, oftest enkeltverdier. «Forsvar»
-blir da ingen posisjon, og profilen blir en historikkpost.
-Resultat: **9 spillbare av 44. Kvik Halden når ikke 15 og forblir `pending`.**
+**Løsningen ble ikke å skrive lagdelen som naturlige posisjoner.**
+`calculatePositionFit` gir **96** for en naturlig posisjon og **78** for en
+brukbar. «Forsvar» ført som fire naturlige posisjoner ville påstått at mannen
+passer *godt* som både midtstopper, høyreback og venstreback — en allsidighet
+ingen kilde har hevdet. Ført som **brukbare** sier den at han kan brukes der,
+som er det kilden faktisk sier.
 
-**Alternativ B — gruppen skrives som gruppens posisjoner.**
-`F` blir `["CB","LB","RB","WB"]`. Det påstår ikke mer enn kilden sier — «han
-spilte i forsvaret» — og motoren kan stille laget.
-Resultat: **~25 spillbare. Kvik Halden lander.**
-Innvendingen: `naturalPositions` mater `positionFit`. Fire naturlige posisjoner
-påstår en allsidighet kilden ikke hevder, og en venstreback ville blitt regnet
-som like naturlig midtstopper. Presisjonsforskjellen ville dessuten vært usynlig
-for den som leser dataene senere.
+En lagdel importeres derfor slik:
 
-**Alternativ C — som B, men presisjonen gjøres synlig i dataene**, for eksempel
-med et eget felt som sier at posisjonen er lest på gruppenivå. Da kan en vakt
-skille de to klassene, og et senere kildepass kan skjerpe dem uten å gjette.
-Dette er en schemaendring og hører til en beslutning, ikke til en import.
+```json
+{ "name": "Ole Strømsborg", "positionGroup": "forsvar", "era": "modern" }
+```
 
-Ingen av dem er en verdi importen kan velge. Valget avgjør formen på de fjorten
-gjenstående klubbene, ikke bare denne.
+```json
+"naturalPositions": [],
+"usablePositions": ["CB", "LB", "RB", "WB"],
+"positionSource": "gruppe",
+"warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. …"
+```
+
+`positionSource: "gruppe"` gjør oppløsningen målbar. Et senere kildepass kan
+skjerpe profilen uten å gjette, og ingen kan tro at oppløsningen er finere enn
+den er. Presise posisjoner bærer ikke feltet.
+
+**Keeper er ikke en lagdel.** «Keeper» og `GK` er samme oppløsning, så en
+troppsliste som sier keeper gir en presis posisjon. Importen avviser
+`positionGroup: "keeper"`.
+
+`audit:import-club-heritage` håndhever begge veier, på hele katalogen: en profil
+kan ikke bære `positionSource` uten å ha en hel lagdel i `usablePositions`, og
+den kan ikke bære en hel lagdel uten merket. Grov oppløsning skal ikke kunne se
+presis ut.
+
+### Hva som ble spillbart
+
+| Kilde | Oppløsning | Antall |
+|---|---|---:|
+| Johnny Helgesen, egen artikkel | `ST`, presis | 1 |
+| Troppen 2023, `K` | `GK`, presis | 3 |
+| Troppen 2023, `F` | lagdel forsvar | 8 |
+| Troppen 2023, `MB` | lagdel midtbane | 5 |
+| Troppen 2023, `A` | lagdel angrep | 4 |
+| Krysskoblinger med posisjon fra før | presis | 2 |
+| **Sum spillbare** | | **23** |
+
+De 18 øvrige — cupvinnerlaget fra 1918 og landslagsspillerne fra 1916–1934 — er
+historikkposter. De står i klubbpoolen, men banen åpner dem ikke, fordi ingen
+kilde sier hvor på banen de spilte. Bildeteksten til cupfinalen lister laget
+«fra venstre» i et fotografi, og det er ingen oppstilling.
 
 ---
 
@@ -147,19 +180,29 @@ Engebretsen som `MB` — midtbane. Enten er det to forskjellige menn, eller så 
 
 ---
 
-## Krysskoblinger: fem, alle med posisjon fra før
+## Krysskoblinger: to gjort, tre utelatt
 
-| Navn | Profil i katalogen | Posisjon | Arv |
+Fem av de 44 navnene finnes i katalogen fra før. **Fire av dem har en
+posisjonsmotsigelse mellom 2023-troppen og katalogen**, og en krysskobling er en
+navngitt påstand om at det er samme mann. Bare de to som er bekreftet av sin egen
+individkilde er koblet.
+
+| Navn | Katalogen | Troppen 2023 | Avgjørelse |
 |---|---|---|---|
-| Raymond Kvisvik | `raymond_kvisvik` | LW, RW (usable AM) | brann, fredrikstad, moss, sarpsborg08 |
-| Marius Ophaug | `marius_ophaug` | ST (usable RW) | ull_kisa |
-| Fabian Stensrud Ness | `fabian_stensrud_ness` | ST | arendal |
-| Mathias Engebretsen | `mathias_engebretsen` | GK | sarpsborg08 — **motsier troppen, se over** |
-| Henrik Hagen | `henrik_hagen` | CB (usable DM) | skeid |
+| Raymond Kvisvik | `raymond_kvisvik`, LW/RW | — (2009-signering) | **koblet** — egen artikkel: Kvik Halden 2009–2011, 34 kamper |
+| Fabian Stensrud Ness | `fabian_stensrud_ness`, ST | `A` angrep | **koblet** — samme lagdel, ingen motsigelse; egen artikkel nevner Kvik |
+| Marius Ophaug | `marius_ophaug`, ST/RW | `MB` midtbane | **utelatt** — motsier hverandre, og navnet er ikke lenket i troppen |
+| Mathias Engebretsen | `mathias_engebretsen`, GK | `MB` midtbane | **utelatt** — keeper mot midtbanespiller er den hardeste motsigelsen |
+| Henrik Hagen | `henrik_hagen`, CB | `MB` midtbane | **utelatt** — motsier hverandre; artikkelen nevner ikke Kvik |
 
-Bare Kvisvik er bekreftet som samme mann av en individkilde (hans egen artikkel
-fører Kvik Halden 2009–2011, 34 kamper, 6 mål). De fire andre er navnetreff mot
-2023-troppen og må bekreftes mot klubbens egen troppsside før de kobles.
+De tre utelatte er ikke avvist som spillere. De er avventet: enten er det to
+menn med samme navn, eller så tar én av kildene feil om posisjonen, og
+`homePlaceId`-tilknytningen er permanent. Klubbens egen troppsside vil avgjøre
+det når den blir tilgjengelig — Wikipedias troppsliste siterer den, men den lot
+seg ikke hente.
+
+Kvik Halden når 23 spillbare uten dem, altså godt over de femten som kreves, så
+avventingen koster ingenting nå.
 
 ---
 

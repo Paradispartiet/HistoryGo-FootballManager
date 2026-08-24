@@ -1,0 +1,64 @@
+{
+  "clubId": "kvik_halden",
+  "clubName": "Kvik Halden",
+  "placeId": "halden_stadion",
+  "placeName": "Halden stadion",
+  "placeNotes": "Klubbanlegg: Kvik Haldens hjemmebane i Halden, åpnet 1927. Klubbpoolen dekker to lag: FK Kvik-perioden 1906–1997, der klubben ble cupmester i 1918 og spilte finaler i 1915 og 1922, og A-lagstroppen etter sammenslåingen. Banen åpner bare profilene som har kildebelagt posisjon eller lagdel og derfor kan brukes i simuleringen.",
+  "eraSource": "belagt",
+  "doc": "docs/P2_KVIK_HALDEN_SOURCE_PASS.md",
+  "sources": [
+    { "url": "https://kvikhaldenfk.spond.club/historien", "hentet": "2026-08-24", "beskrivelse": "klubbens egen historikk med årstallsliste 1906–2020; landslagsuttak år for år" },
+    { "url": "https://no.wikipedia.org/wiki/Kvik_Halden_Fotballklubb", "hentet": "2026-08-24", "beskrivelse": "bildetekst med cupvinnerlaget 1918; A-lagstroppen per 27.07.2023 med lagdel" },
+    { "url": "https://no.wikipedia.org/wiki/Johnny_Helgesen", "hentet": "2026-08-24", "beskrivelse": "individkilde: posisjon Centerforward, Kvik Halden 1915–1933" },
+    { "url": "https://no.wikipedia.org/wiki/Raymond_Kvisvik", "hentet": "2026-08-24", "beskrivelse": "individkilde: Kvik Halden 2009–2011, 34 kamper" },
+    { "url": "https://snl.no/Kvik_Halden_Fotballklubb", "hentet": "2026-08-24", "beskrivelse": "kjent spiller: Johnny Helgesen" }
+  ],
+  "players": [
+    { "name": "Johnny Helgesen", "positions": ["ST"], "era": "historical", "note": "Centerforward i egen artikkel; Kvik Halden 1915–1933, landslag 1917–1928" },
+    { "name": "Peder Puck", "era": "historical", "note": "cupvinnerlaget 1918; landslaget 1917" },
+    { "name": "Alf Flinth", "era": "historical", "note": "cupvinnerlaget 1918; landslaget 1924, 1925, 1926" },
+    { "name": "Arne Andersen", "era": "historical", "note": "cupvinnerlaget 1918; landslaget 1920 (OL), 1924, 1926, 1927" },
+    { "name": "Thomas Andresen", "era": "historical", "note": "cupvinnerlaget 1918" },
+    { "name": "Johan Svendsen", "era": "historical", "note": "cupvinnerlaget 1918" },
+    { "name": "Ole Paulsen", "era": "historical", "note": "cupvinnerlaget 1918" },
+    { "name": "Otto Klein", "era": "historical", "note": "cupvinnerlaget 1918" },
+    { "name": "Fritz Karlsen", "era": "historical", "note": "cupvinnerlaget 1918" },
+    { "name": "Ole Poulsbo", "era": "historical", "note": "cupvinnerlaget 1918" },
+    { "name": "Hartvig Olavesen", "era": "historical", "note": "cupvinnerlaget 1918" },
+    { "name": "Wilhelm Strand", "era": "historical", "note": "klubbens første landslagsspiller, 1916" },
+    { "name": "Yngvar Tørnros", "era": "historical", "note": "klubbens første landslagsspillere, 1916" },
+    { "name": "Wilhelm Nilsen", "era": "historical", "note": "landslaget 1922, 1923, 1925" },
+    { "name": "Arne Johansen", "era": "historical", "note": "landslaget 1925" },
+    { "name": "Alf Johansen", "era": "historical", "note": "landslaget 1926" },
+    { "name": "Robert Danielsen", "era": "historical", "note": "landslaget 1928" },
+    { "name": "Roy Fosdahl", "era": "historical", "note": "landslaget 1930 og 1934" },
+    { "name": "Thorleif Svendsen", "era": "historical", "note": "landslaget 1934" },
+
+    { "name": "Raymond Kvisvik", "crossLink": true, "existingId": "raymond_kvisvik", "era": "historical", "note": "klubbens historikk 2009: treårskontrakt. Egen artikkel: Kvik Halden 2009–2011, 34 kamper, 6 mål" },
+    { "name": "Fabian Stensrud Ness", "crossLink": true, "existingId": "fabian_stensrud_ness", "era": "modern", "note": "A-lagstroppen 2023 som angrep; katalogen har ST — samme lagdel, ingen motsigelse. Egen artikkel nevner Kvik" },
+
+    { "name": "Petter Bønøgård", "positions": ["GK"], "era": "modern", "note": "A-lagstroppen 2023, keeper" },
+    { "name": "Sander Thulin", "positions": ["GK"], "era": "modern", "note": "A-lagstroppen 2023, keeper" },
+    { "name": "Aleksander Karstensen", "positions": ["GK"], "era": "modern", "note": "A-lagstroppen 2023, keeper" },
+
+    { "name": "Ole Strømsborg", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023; egen artikkel oppgir «Forsvar»" },
+    { "name": "Marcus Moberg", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Sebastian Svenningsen-Grønn", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Johannes Lindquist", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Filip Johansen Westgaard", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Dardan Sæter-Mehmeti", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023, lagkaptein" },
+    { "name": "Anwar Elyounoussi", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Albert Makiadi", "positionGroup": "forsvar", "era": "modern", "note": "A-lagstroppen 2023" },
+
+    { "name": "Lucas Fritzen", "positionGroup": "midtbane", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Markus Manirakiza", "positionGroup": "midtbane", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Konrad Thorvaldsen", "positionGroup": "midtbane", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Mohammed Jatta", "positionGroup": "midtbane", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Jesper Wichstrøm Johansen", "positionGroup": "midtbane", "era": "modern", "note": "A-lagstroppen 2023" },
+
+    { "name": "Øystein Lundblad Næsheim", "positionGroup": "angrep", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Benjamin Kielland", "positionGroup": "angrep", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Kastriot Murseli", "positionGroup": "angrep", "era": "modern", "note": "A-lagstroppen 2023" },
+    { "name": "Harmohan Singh", "positionGroup": "angrep", "era": "modern", "note": "A-lagstroppen 2023" }
+  ]
+}

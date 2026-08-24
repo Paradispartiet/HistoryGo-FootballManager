@@ -6480,6 +6480,12 @@
           "source": "belagt"
         },
         {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        },
+        {
           "clubId": "moss",
           "relation": "played_for",
           "status": "elite_career",
@@ -160228,6 +160234,12 @@
           "relation": "played_for",
           "status": "club_icon",
           "source": "utledet"
+        },
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -180011,6 +180023,1550 @@
       "clubAffiliations": [
         {
           "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "johnny_helgesen",
+      "name": "Johnny Helgesen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "ST"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "peder_puck",
+      "name": "Peder Puck",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "alf_flinth",
+      "name": "Alf Flinth",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arne_andersen",
+      "name": "Arne Andersen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "thomas_andresen",
+      "name": "Thomas Andresen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "johan_svendsen",
+      "name": "Johan Svendsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_paulsen",
+      "name": "Ole Paulsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "otto_klein",
+      "name": "Otto Klein",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "fritz_karlsen",
+      "name": "Fritz Karlsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_poulsbo",
+      "name": "Ole Poulsbo",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "hartvig_olavesen",
+      "name": "Hartvig Olavesen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "wilhelm_strand",
+      "name": "Wilhelm Strand",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "yngvar_tornros",
+      "name": "Yngvar Tørnros",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "wilhelm_nilsen",
+      "name": "Wilhelm Nilsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "arne_johansen",
+      "name": "Arne Johansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "alf_johansen",
+      "name": "Alf Johansen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "robert_danielsen",
+      "name": "Robert Danielsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "roy_fosdahl",
+      "name": "Roy Fosdahl",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "thorleif_svendsen",
+      "name": "Thorleif Svendsen",
+      "nationality": "Norge",
+      "era": "historical",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Posisjon og individuelle styrker er ikke kildebelagt i Kvik Halden-historikken.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "petter_bonogard",
+      "name": "Petter Bønøgård",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sander_thulin",
+      "name": "Sander Thulin",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "aleksander_karstensen",
+      "name": "Aleksander Karstensen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_stromsborg",
+      "name": "Ole Strømsborg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "marcus_moberg",
+      "name": "Marcus Moberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sebastian_svenningsen_gronn",
+      "name": "Sebastian Svenningsen-Grønn",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "johannes_lindquist",
+      "name": "Johannes Lindquist",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "filip_johansen_westgaard",
+      "name": "Filip Johansen Westgaard",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "dardan_saeter_mehmeti",
+      "name": "Dardan Sæter-Mehmeti",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "anwar_elyounoussi",
+      "name": "Anwar Elyounoussi",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "albert_makiadi",
+      "name": "Albert Makiadi",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "lucas_fritzen",
+      "name": "Lucas Fritzen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "markus_manirakiza",
+      "name": "Markus Manirakiza",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "konrad_thorvaldsen",
+      "name": "Konrad Thorvaldsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "mohammed_jatta",
+      "name": "Mohammed Jatta",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jesper_wichstrom_johansen",
+      "name": "Jesper Wichstrøm Johansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oystein_lundblad_naesheim",
+      "name": "Øystein Lundblad Næsheim",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "benjamin_kielland",
+      "name": "Benjamin Kielland",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kastriot_murseli",
+      "name": "Kastriot Murseli",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "harmohan_singh",
+      "name": "Harmohan Singh",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"
