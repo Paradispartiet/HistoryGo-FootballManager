@@ -9,8 +9,13 @@ som en påstand. Listen sier hvor kildene *finnes*, slik at noen kan hente dem.
 Alt som står som «lead» under er et navn eller et tall søket nevnte, og det er
 ikke kontrollert mot noe. Det hører hjemme i en søkestreng, ikke i katalogen.
 
-Nettverkspolicyen i utviklingsmiljøet blokkerer alle eksterne verter, så sidene
-må hentes utenfra.
+Nettverkspolicyen i utviklingsmiljøet blokket først alle eksterne verter. Den er
+nå åpnet (24.08.2026), så sidene kan leses direkte herfra.
+
+**Rangeringen under er en søkerekkefølge, ikke en forventning.** Den er bygget
+på hvilke *typer* sider som finnes per klubb, ikke på hva sidene inneholder.
+Bjarg sto øverst og ga fire navn da kilden faktisk ble lest — se
+`docs/P2_BJARG_SOURCE_PASS.md`. Les den før du stoler på en rad her.
 
 ---
 
@@ -23,7 +28,7 @@ tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 
 | # | Klubb | Bane i katalogen | Beste kildespor | Forventning |
 |---|---|---|---|---|
-| 1 | **Bjarg** | Stavollen kunstgress | egen historieside | best strukturelle utsikter |
+| ~~1~~ | ~~**Bjarg**~~ | Stavollen kunstgress | egen historieside | **LEST 24.08.2026: 4 navn, 1 posisjon — ingen import** |
 | 2 | **Kvik Halden** | Halden stadion | SNL + cupmeritter 1915–22 | ekte historisk arv |
 | 3 | **Eik Tønsberg** | Eik stadion ⚠️ | klubbens historieside | eliteserieperiode 1983–85 |
 | 4 | **Sotra** | Straume idrettspark | klubbside, tre forgjengere | krever avklaring først |
@@ -36,11 +41,22 @@ tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 
 ## Per klubb
 
-### Bjarg (`bjarg`)
+### Bjarg (`bjarg`) — FERDIG LEST, IKKE IMPORTERT
+
+**Kilden er lest i sin helhet 24.08.2026. Utfallet står i
+`docs/P2_BJARG_SOURCE_PASS.md`: fire A-lagsnavn, ett av dem med posisjon, og
+ingen import — fire profiler gjør ikke klubben overtakbar.** Resten av dette
+avsnittet er bevart som det sto, fordi antakelsen i det er selve lærdommen.
 
 - **Egen historieside:** https://www.bjargsinhistorie.no — et helt nettsted viet
   klubbens historie. Dette er den eneste av de åtte som har det, og det er
   akkurat sjangeren som gir dekning.
+  **Det stemte ikke.** Nettstedet er 66 årsrapporter for *hele* idrettslaget —
+  turn, håndball, friidrett og fotball i samme artikkel — og sjangeren er
+  organisasjonsberetning. Den navngir formenn, trenere, dommere og
+  kretslagsuttak, og omtaler lagene kollektivt. Av rundt femti personnavn i
+  fotballstoffet er fire A-lagsspillere. De fem portrettartiklene på stedet
+  handler om friidrett og håndball, med ett unntak.
 - Klubbside: https://bjarg.net/om-il-bjarg/ · https://bjarg.net/fotball/
 - Wikipedia: https://en.wikipedia.org/wiki/IL_Bjarg
 - Forbundet: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=780
