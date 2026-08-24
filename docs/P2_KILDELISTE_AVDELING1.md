@@ -29,7 +29,7 @@ tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 | # | Klubb | Bane i katalogen | Beste kildespor | Forventning |
 |---|---|---|---|---|
 | ~~1~~ | ~~**Bjarg**~~ | Stavollen kunstgress | egen historieside | **LEST 24.08.2026: 4 navn, 1 posisjon — ingen import** |
-| 2 | **Kvik Halden** | Halden stadion | SNL + cupmeritter 1915–22 | ekte historisk arv |
+| ~~2~~ | ~~**Kvik Halden**~~ | Halden stadion | klubbens historikk + Wikipedia | **LEST 24.08.2026: 44 navn, 9 med presis posisjon — venter på én avgjørelse** |
 | 3 | **Eik Tønsberg** | Eik stadion ⚠️ | klubbens historieside | eliteserieperiode 1983–85 |
 | 4 | **Sotra** | Straume idrettspark | klubbside, tre forgjengere | krever avklaring først |
 | 5 | **Sandviken** | Stemmemyren | SNL + klubbside | krever avklaring først |
@@ -82,6 +82,17 @@ et omdøpt.
 - Wikipedia: https://en.wikipedia.org/wiki/Kvik_Halden_FK
 - Forbundet, personer: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=3&underside=personer
 
+**Kilden er lest 24.08.2026 — se `docs/P2_KVIK_HALDEN_SOURCE_PASS.md`.** 44
+dokumenterte A-lagsnavn ble funnet, men bare 9 med presis posisjon, og det
+kreves 15 for at klubben skal bli spillbar. Passet stoppet på ett spørsmål som
+ikke er avgjort før: teller en kilde som sier «forsvar» som posisjon? Svaret
+avgjør formen på alle de fjorten gjenstående klubbene.
+
+**Kildelista overså at klubben er en sammenslåing.** FK Kvik og Halden
+Fotballklubb ble slått sammen i 1997. Cupgullet i 1918 og begge cupfinalene ble
+tatt av **FK Kvik**, og alle de tjue historiske navnene tilhører den perioden —
+samme problem som Sotra, som listen flagget.
+
 Dette er den klart tyngste historiske arven av de åtte: cupmester 1918 (mot
 Brann i finalen), cupfinaler 1915 og 1922 (begge tapt mot Odd), og landslags-
 spillere på 1910- og 20-tallet.
@@ -90,7 +101,10 @@ spillere på 1910- og 20-tallet.
 Kvik-import vil kunne møte navn som finnes fra før. Samme regel som Pors og
 Brattvåg — krysskobling, ikke ny profil, og hver kobling navngis.
 
-*Lead, ukontrollert:* Robert Danielsen og Johnny Helgesen (landslag).
+~~*Lead, ukontrollert:* Robert Danielsen og Johnny Helgesen (landslag).~~
+**Kontrollert:** begge stemmer. Klubbens egen årstallsliste fører Danielsen på
+landslaget i 1928 og Helgesen i 1917–1928. Helgesen er den eneste profilen i
+hele passet med presis posisjon fra en individkilde — `Centerforward`.
 
 ### Eik Tønsberg (`eik_tonsberg`)
 

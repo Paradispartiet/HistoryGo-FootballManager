@@ -274,6 +274,40 @@ krevAvslag("stedet finnes fra før", {}, /finnes allerede i unlock-katalogen/,
   (g) => { g.placeUnlocks.push({ placeId: PRØVESTED, placeName: "x", unlocks: [] }); });
 
 // ---------------------------------------------------------------------------
+// playerPoolStatus er utledet, ikke valgt
+//
+// `sync-club-affiliations.mjs` regner status som `playable >= 15` og håndhever
+// den i CI. En import som satte «ready» ubetinget ville felt den vakten for
+// enhver klubb med for få spillbare — og påstått at en pool som ikke kan stille
+// et lag er ferdig. De to ferdige arvene har 16 og 18 spillbare og skal bli
+// «ready»; en liten import skal bli «pending» og si fra.
+// ---------------------------------------------------------------------------
+{
+  const liten = {
+    ...basis,
+    players: [
+      { name: "Testolav Testesen", positions: ["CM"], era: "modern" },
+      { name: "Testkåre Prøvesen", positions: ["GK"], era: "modern" },
+      { name: "Testarne Uten Posisjon", era: "modern" }
+    ]
+  };
+  const r = planImport({ kilde: liten, ...grunnlag() });
+  assert.deepEqual(r.feil, [], "en liten import er et gyldig utfall, ikke en feil");
+  assert.equal(r.clubPatch.playerPoolStatus, "pending",
+    "under femten spillbare skal gi `pending`, ikke `ready`");
+  assert.ok(r.advarsler.some((a) => /trengs 15 for en spillbar pool|trengs 15/.test(a)),
+    `en for liten pool skal si fra i klartekst — fikk ${JSON.stringify(r.advarsler)}`);
+  assert.equal(r.rapport.spillbar, 2, "spillbare telles av posisjon, ikke av antall profiler");
+  assert.equal(r.rapport.dokumentert, 3, "dokumenterte teller alle profilene");
+}
+
+// Og motsatt: de to ferdige arvene skal fortsatt bli «ready».
+for (const arv of ARVER) {
+  const rad = rapport.find((r) => r.klubb === arv.clubId);
+  assert.ok(rad.baneåpner >= 15, `${arv.clubId}: en ferdig arv skal ha minst femten spillbare`);
+}
+
+// ---------------------------------------------------------------------------
 // Id-formen, mot navn som faktisk står i katalogen
 // ---------------------------------------------------------------------------
 for (const [navn, forventet] of [

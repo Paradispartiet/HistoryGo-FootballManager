@@ -41,6 +41,10 @@ const GK = "GK";
 const UTESPILLER = ["CB", "LB", "RB", "WB", "DM", "CM", "AM", "ST", "LW", "RW"];
 const POSISJONER = new Set([GK, ...UTESPILLER]);
 
+// Grensa for en spillbar pool. Speiler MIN_POOL i sync-club-affiliations.mjs,
+// som er den som faktisk utleder playerPoolStatus og håndhever den i CI.
+const MIN_POOL = 15;
+
 const EPOKER = new Set(["historical", "modern"]);
 const ERA_SOURCE = new Set(["belagt", "utledet"]);
 
@@ -275,6 +279,17 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
   const alleSpillbare = [...spillbare, ...krysskobletSpillbare].sort();
   const dokumentert = profiler.length + krysskoblinger.length;
 
+  // Ikke en feil — en import med for få spillbare er et gyldig utfall, og
+  // klubben blir stående `pending`. Men det skal stå i klartekst, ikke oppdages
+  // først når noen lurer på hvorfor klubben ikke kan overtas.
+  if (alleSpillbare.length < MIN_POOL) {
+    advarsler.push(
+      `bare ${alleSpillbare.length} av ${dokumentert} profiler har kildebelagt posisjon. `
+      + `Det trengs ${MIN_POOL} for en spillbar pool, så klubben blir stående \`pending\` `
+      + "og kan ikke overtas. Importen er fortsatt gyldig — profilene bevares som historikkposter."
+    );
+  }
+
   const place = {
     placeId: kilde.placeId,
     placeName: kilde.placeName,
@@ -294,7 +309,12 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
       homePlaceId: kilde.placeId,
       playerPoolSize: dokumentert,
       playablePlayerPoolSize: alleSpillbare.length,
-      playerPoolStatus: "ready"
+      // `playerPoolStatus` er UTLEDET, ikke valgt: `sync-club-affiliations.mjs`
+      // regner den som `playable >= MIN_POOL` og kjører i CI som drift-sjekk.
+      // En import som satte «ready» ubetinget ville felt den vakten for enhver
+      // klubb med under femten spillbare — og påstått at en pool som ikke kan
+      // stille et lag er ferdig.
+      playerPoolStatus: alleSpillbare.length >= MIN_POOL ? "ready" : "pending"
     },
     rapport: {
       klubb: kilde.clubId,

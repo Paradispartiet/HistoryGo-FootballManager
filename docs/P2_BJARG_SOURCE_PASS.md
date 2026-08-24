@@ -104,15 +104,15 @@ uttrykkelig.
 
 ## Hvorfor det ikke ble importert
 
-En klubb trenger **15 dokumenterte tilknytninger** for å være overtakbar;
-under det er den `unavailable` (`MIN_POOL` i `scripts/sync-club-affiliations.mjs`).
-Fire profiler, hvorav én spillbar, gjør ikke Bjarg spillbar.
+En klubb trenger **15 profiler med kildebelagt posisjon** for å være overtakbar.
+Grensa gjelder de spillbare, ikke de dokumenterte: `sync-club-affiliations.mjs`
+utleder `playerPoolStatus` som `playable >= MIN_POOL`, og
+`resolveClubSquadAccess` melder klubben `unavailable` når poolen er mindre enn
+troppen på femten. Bjarg har fire dokumenterte og **én** spillbar, så klubben
+faller på begge målene.
 
-Importen setter samtidig `playerPoolStatus: "ready"` og mynter et permanent
-`homePlaceId`. Å sette «ready» på en pool som ikke kan stille et lag ville vært
-en påstand katalogen ikke bærer — og `audit:club-heritage` ville felt den med
-en gang, siden grunntroppen da blir 1 og ikke 15. `pending` sier det som er
-sant: arven er ikke gjort.
+Importen mynter samtidig et permanent `homePlaceId` og oppretter stedet.
+`pending` sier det som er sant: arven er ikke gjort.
 
 De fire står derfor her, med sitat og årstall, klare til å bli importert den
 dagen en kilde tar poolen over femten.
