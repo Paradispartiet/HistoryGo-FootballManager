@@ -52,6 +52,7 @@ jobs:
           npm run audit:product-status
           npm run audit:clubs
           npm run audit:club-heritage
+          npm run audit:import-club-heritage
           node scripts/sync-club-affiliations.mjs
           npm run audit:football-book-knowledge
           npm run audit:football-book-ux

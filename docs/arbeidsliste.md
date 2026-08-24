@@ -94,6 +94,10 @@ Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som
 
 **Rekkefølge:** avdeling 1 først — den er tynnest.
 
+**Formen er mekanisert (24.08.2026).** `scripts/import-club-heritage.mjs` leser en kildefil et menneske har fylt ut med kilden i hånd, og gjør oversettelsen til canonical form: profiler, banens unlocks, klubbraden, krysskoblinger og den ferdige `ARVER`-raden. Den flytter ingen grense — den stopper i stedet for å gjette, på ukjent posisjon, GK sammen med utespillerposisjon, styrker satt i råfila, et navn som finnes fra før uten at kildefila sier om det er samme mann, manglende epoke eller manglende kilde. `npm run audit:import-club-heritage` fjerner Pors og Brattvåg fra katalogen i minnet og krever at importen gjenskaper begge felt for felt, og at hvert av de seksten avslagene slår til. Se `docs/P2_IMPORT_V1.md`.
+
+**Reproduksjonen fant to ting som sto i katalogen fra før.** Rekkefølgen i `clubAffiliations` eies av `sync-club-affiliations.mjs` (alfabetisk på `clubId`, kjørt i CI som drift-sjekk), så en krysskobling lagt bakerst ville felt en helt annen vakt ved neste kjøring; importen sorterer nå. Og **ti av Pors' elleve profiler med kildebelagt posisjon bærer historikkpostens advarsel om at posisjonen ikke er kildebelagt** — feltet motsier `naturalPositions`, som både banen og `spillbar: 16` behandler som belagt. Brattvåg har null slike. Hvilken av de to halvdelene som er feil kan bare avgjøres mot Pors-kilden, så det er ikke rettet; tallet er festet i vakten som `ordlydsavvik: 10` og kan verken vokse eller krympe stille.
+
 **Én ting krever en avgjørelse før import, ikke etterpå:** Eik Tønsbergs bane. «Eik stadion» finnes ikke, og klubben har to kandidater med hvert sitt svar — **Eik Idrettsanlegg** er klubbens eget anlegg, mens **Tønsberg gressbane** (5 600) er der seniorlagene faktisk spiller, trolig delt med andre klubber. `homePlaceId` er permanent, så valget hører til importen med kilden i hånd. Den er derfor ikke rettet.
 
 **Og en ledetråd som ikke lar seg automatisere:** fire av de seks gale banenavnene hadde formen «klubbnavn + stadion/kunstgress», som ser ut som en generatorsignatur man kan skrive en vakt på. Målt treffer mønsteret **16 av 60 klubber**, og minst tolv av dem er helt riktige virkelige navn (Brann Stadion, Fredrikstad stadion, Haugesund stadion …). En vakt ville gitt fjorten falske positive av seksten. Det som skiller er ikke navneformen, men om banen har et *eget lokalt navn* — Stavollen, TUIL Arena, Rolvsrud, Nordlandshallen, Lassa — og det kan bare avgjøres mot en kilde, én klubb om gangen. Mønsteret er en søkeliste, ikke en regel.
@@ -126,6 +130,8 @@ Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som
 node scripts/audit-p1-source-claims.mjs
 npm run sim:player-attributes
 npm run sim:club-squad
+npm run audit:club-heritage
+npm run audit:import-club-heritage
 node scripts/sync-club-affiliations.mjs
 ```
 
