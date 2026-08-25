@@ -564,10 +564,10 @@
       "group": "avdeling1",
       "strength": 54,
       "form": 60,
-      "playerPoolSize": 63,
+      "playerPoolSize": 89,
       "playerPoolStatus": "ready",
       "homePlaceId": "pors_stadion",
-      "playablePlayerPoolSize": 16
+      "playablePlayerPoolSize": 42
     },
     {
       "id": "brattvag",
@@ -578,9 +578,9 @@
       "group": "avdeling1",
       "strength": 53,
       "form": 59,
-      "playerPoolSize": 81,
+      "playerPoolSize": 93,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 18,
+      "playablePlayerPoolSize": 30,
       "homePlaceId": "brattvag_stadion"
     },
     {
@@ -620,9 +620,9 @@
       "group": "avdeling1",
       "strength": 51,
       "form": 57,
-      "playerPoolSize": 41,
+      "playerPoolSize": 56,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 23,
+      "playablePlayerPoolSize": 38,
       "homePlaceId": "halden_stadion"
     },
     {

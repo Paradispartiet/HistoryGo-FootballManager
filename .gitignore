@@ -3,3 +3,8 @@ dist/
 _site/
 *.log
 .DS_Store
+
+# Playwright: test-results er kjøringsavfall, og snapshot-PNG-en skrives av
+# testen selv fra den committede .base64-fila.
+test-results/
+tests/browser/**/*-snapshots/*.png

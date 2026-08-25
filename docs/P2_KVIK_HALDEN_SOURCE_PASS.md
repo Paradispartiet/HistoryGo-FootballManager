@@ -221,3 +221,33 @@ avventingen koster ingenting nå.
 **Banenavnet står urørt.** Katalogen har «Halden stadion»; både no. og
 en.wikipedia fører `Halden Stadion` som hjemmebane, kapasitet 5 000 (4 000
 sitteplasser), åpnet 1927 ifølge klubbens egen årstallsliste.
+
+---
+
+## Supplering 24.08.2026 — NFFs 2026-tropp
+
+**Notatet over om forbundet er feil, og feilen kostet seks klubber.** Tabellen
+sier at fotball.no er «JS-rendret, blokkerer proxyen». Det stemmer for
+*klubbsiden*. **Lagsiden er server-rendret**, og der ligger hele troppen
+gruppert under Keeper · Forsvar · Midtbane · Angrep — nøyaktig oppløsningen
+`positionGroup` er bygget for. `curl` holder. `scripts/nff-squad.mjs` gjør
+jobben nå, så neste sesong slipper å finne veien på nytt.
+
+**21 navn fra lagsiden** (`fiksId=139`, hentet 24.08.2026) er lagt til med
+`import-club-heritage --suppler`:
+
+| | Før | Etter |
+|---|---:|---:|
+| Dokumenterte | 41 | **56** |
+| Spillbare | 23 | **38** |
+| Historikkposter | 18 | **18** |
+
+Seks av de 21 sto i arven fra før — 2023-troppen fra Wikipedia og 2026-troppen
+fra registeret overlapper — og ble hoppet over som gjensyn. De 15 nye er
+2 keepere og 13 med lagdel.
+
+Ett navn måtte avgjøres: **Mathias Engebretsen** finnes i katalogen som
+Sarpsborgs keeper. Kvik Haldens er midtbanespiller. Ulik lagdel og ulik klubb er
+to menn, ikke én, så han er ført som `mathias_engebretsen_kvik` etter mønsteret
+fra `tore_pedersen_rbk` og `sverre_andersen_odd`, og navneparet er registrert
+permanent i `REVIEWED_NAME_PAIRS` med den begrunnelsen.

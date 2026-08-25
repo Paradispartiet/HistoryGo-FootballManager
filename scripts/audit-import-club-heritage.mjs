@@ -25,6 +25,13 @@ import { planImport, applyImport, slugify } from "./import-club-heritage.mjs";
 const les = (fil) => JSON.parse(fs.readFileSync(new URL(`../data/${fil}`, import.meta.url), "utf8"));
 const kopi = (verdi) => JSON.parse(JSON.stringify(verdi));
 
+// Fra gruppens posisjoner tilbake til lagdelen den kom fra.
+const TIL_LAGDEL = {
+  "CB,LB,RB,WB": "forsvar",
+  "DM,CM,AM": "midtbane",
+  "ST,LW,RW": "angrep"
+};
+
 const alleKlubber = les("football_clubs.json").clubs;
 const alleSpillere = les("football_players.json").players;
 const alleSteder = les("football_unlocks.json").placeUnlocks;
@@ -43,7 +50,9 @@ const ARVER = [
     clubId: "brattvag",
     clubName: "Brattvåg",
     placeId: "brattvag_stadion",
-    eraSource: "utledet",
+    // To generasjoner: den udaterte klubbhistorikken som landet arven, og NFFs
+    // daterte 2026-tropp som senere supplerte den.
+    eraSource: ["utledet", "belagt"],
     doc: "docs/P2_BRATTVAG_SOURCE_PASS.md",
     krysskoblet: ["sivert_solli", "ulrik_valderhaug_syversen"],
     ordlydsavvik: 0
@@ -54,7 +63,7 @@ const ARVER = [
     placeId: "pors_stadion",
     eraSource: "belagt",
     doc: "docs/P2_PORS_SOURCE_PASS.md",
-    krysskoblet: ["einar_rossbach", "fredrik_nordkvelle", "erik_pedersen", "tor_arne_sannerholt", "christer_fjellstad"],
+    krysskoblet: ["einar_rossbach", "fredrik_nordkvelle", "erik_pedersen", "tor_arne_sannerholt", "christer_fjellstad", "redon_pllana"],
     ordlydsavvik: 10
   }
 ];
@@ -72,25 +81,47 @@ for (const arv of ARVER) {
   assert.ok(fasitSted, `${merke}: fasiten mangler stedet i unlock-katalogen`);
   assert.ok(fasitKlubb, `${merke}: fasiten mangler klubbraden`);
 
-  // Kildefila slik et menneske ville fylt den ut med kilden i hånd.
-  const kilde = {
+  // En arv kan være bygget av FLERE importer. Brattvåg ble landet på en udatert
+  // klubbhistorikk og senere supplert med NFFs daterte 2026-tropp, og de to
+  // generasjonene bærer hver sin `eraSource`. Rekonstruksjonen gjør derfor det
+  // samme som historien gjorde: én vanlig import, så én supplering — og det er
+  // den eneste måten å måle suppleringsmodusen mot ekte katalogdata på.
+  const generasjoner = Array.isArray(arv.eraSource) ? arv.eraSource : [arv.eraSource];
+
+  const somRad = (p) => (p.positionSource === "gruppe"
+    // En profil med `positionSource: "gruppe"` kom inn som en LAGDEL, ikke som
+    // posisjoner. Rekonstruksjonen må gi den tilbake på samme form, ellers ville
+    // fasiten bli bygget fra `naturalPositions` — som er tom for dem.
+    ? { name: p.name, positionGroup: TIL_LAGDEL[p.usablePositions.join(",")], era: p.era }
+    : { name: p.name, positions: p.naturalPositions, era: p.era });
+
+  const byggKilde = (eraSource, profiler, krysskoblet) => ({
     clubId: arv.clubId,
     clubName: arv.clubName,
     placeId: arv.placeId,
     placeName: fasitSted.placeName,
     placeNotes: fasitSted.notes,
-    eraSource: arv.eraSource,
+    eraSource,
     doc: arv.doc,
     sources: [{ url: "https://example.invalid/fasit", hentet: "2026-08-12", beskrivelse: "fasit rekonstruert av vakten" }],
     players: [
-      ...fasitProfiler.map((p) => ({ name: p.name, positions: p.naturalPositions, era: p.era })),
-      ...arv.krysskoblet.map((id) => {
+      ...profiler.map(somRad),
+      ...krysskoblet.map((id) => {
         const e = alleSpillere.find((p) => p.id === id);
         assert.ok(e, `${merke}: fasiten mangler krysskoblingen ${id}`);
         return { name: e.name, crossLink: true, existingId: id, era: "modern" };
       })
     ]
-  };
+  });
+
+  // Alle krysskoblingene legges i første generasjon. De er navngitte påstander
+  // om identitet, ikke om epoke, så hvilken import de kom med endrer ingenting
+  // i det ferdige resultatet.
+  const kilde = byggKilde(
+    generasjoner[0],
+    fasitProfiler.filter((p) => p.eraSource === generasjoner[0]),
+    arv.krysskoblet
+  );
 
   // Katalogen slik den så ut RETT FØR importen.
   const førKlubber = kopi(alleKlubber);
@@ -108,12 +139,21 @@ for (const arv of ARVER) {
 
   const plan = planImport({ kilde, clubs: førKlubber, players: førSpillere, placeUnlocks: førSteder });
   assert.deepEqual(plan.feil, [], `${merke}: reproduksjonen skal ikke stoppe på noen avklaring`);
-  assert.equal(plan.rapport.dokumentert, fasitKlubb.playerPoolSize, `${merke}: playerPoolSize`);
-  assert.equal(plan.rapport.spillbar, fasitKlubb.playablePlayerPoolSize, `${merke}: playablePlayerPoolSize`);
-  assert.equal(plan.rapport.nye, fasitProfiler.length, `${merke}: antall nye profiler`);
-  assert.deepEqual(plan.rapport.krysskoblet, arv.krysskoblet, `${merke}: krysskoblinger`);
-
   applyImport({ plan, kilde, clubs: førKlubber, players: førSpillere, placeUnlocks: førSteder });
+
+  // Så suppleringene, én per senere generasjon.
+  for (const era of generasjoner.slice(1)) {
+    const senere = byggKilde(era, fasitProfiler.filter((p) => p.eraSource === era), []);
+    const pluss = planImport({
+      kilde: senere, clubs: førKlubber, players: førSpillere, placeUnlocks: førSteder, modus: "suppler"
+    });
+    assert.deepEqual(pluss.feil, [], `${merke}: suppleringen (${era}) skal ikke stoppe`);
+    applyImport({ plan: pluss, kilde: senere, clubs: førKlubber, players: førSpillere, placeUnlocks: førSteder });
+  }
+
+  const førKlubbEtter = førKlubber.find((c) => c.id === arv.clubId);
+  assert.equal(førKlubbEtter.playerPoolSize, fasitKlubb.playerPoolSize, `${merke}: playerPoolSize`);
+  assert.equal(førKlubbEtter.playablePlayerPoolSize, fasitKlubb.playablePlayerPoolSize, `${merke}: playablePlayerPoolSize`);
 
   // Profilene, felt for felt.
   const bygdPåId = new Map(
@@ -169,7 +209,7 @@ for (const arv of ARVER) {
     profiler: fasitProfiler.length,
     baneåpner: fasitSted.unlocks.length,
     krysskoblet: arv.krysskoblet.length,
-    eraSource: arv.eraSource,
+    eraSource: arv.eraSource,  // rekonstruksjonens felles verdi, se under
     ordlydsavvik
   });
 }
@@ -378,6 +418,95 @@ krevAvslag("både posisjon og lagdel",
     }
   }
   console.error(`# profiler med gruppeoppløsning i katalogen: ${merket}`);
+}
+
+// ---------------------------------------------------------------------------
+// Supplering: fyll på en ferdig arv
+//
+// En arv er ikke ferdig for godt. Registeret oppdateres hver sesong, og en
+// klubb som ble landet på historiske navn skal kunne få dagens tropp uten at
+// noen redigerer katalogen for hånd. Modusen speilvender tre av reglene, og det
+// er nettopp speilvendingen som må måles: en supplering skal ALDRI kunne
+// opprette en arv, og en ny import skal aldri kunne skrive inn i en.
+// ---------------------------------------------------------------------------
+{
+  const kilde = {
+    ...basis,
+    players: [
+      { name: "Testolav Testesen", positions: ["CM"], era: "modern" },
+      { name: "Testkåre Prøvesen", positionGroup: "forsvar", era: "modern" }
+    ]
+  };
+  const g = {
+    clubs: kopi(alleKlubber),
+    players: kopi(alleSpillere),
+    placeUnlocks: kopi(alleSteder)
+  };
+  const r = planImport({ kilde, ...g, modus: "suppler" });
+  assert.deepEqual(r.feil, [], "supplering av en ferdig arv skal gå gjennom");
+
+  const brattvag = alleKlubber.find((c) => c.id === PRØVEKLUBB);
+  assert.equal(r.rapport.tilfort, 2, "tilført av denne kjøringen");
+  assert.equal(r.rapport.dokumentert, brattvag.playerPoolSize + 2, "dokumentert er arvens TOTAL");
+  assert.equal(r.rapport.spillbar, brattvag.playablePlayerPoolSize + 2, "spillbar er arvens TOTAL");
+  assert.equal(r.clubPatch.playerPoolStatus, "ready", "arven forblir ready");
+  assert.ok(r.place.leggTilUnlocks, "stedet skal patches, ikke opprettes");
+  assert.equal(r.place.placeName, undefined, "en supplering skriver ikke om stedets navn");
+  assert.equal(r.place.leggTilUnlocks.length, 2, "bare de nye spillbare legges til");
+
+  // Anvendt: stedet beholder sine gamle unlocks OG får de nye.
+  const førAntall = alleSteder.find((e) => e.placeId === PRØVESTED).unlocks.length;
+  applyImport({ plan: r, kilde, clubs: g.clubs, players: g.players, placeUnlocks: g.placeUnlocks });
+  const etter = g.placeUnlocks.find((e) => e.placeId === PRØVESTED);
+  assert.equal(etter.unlocks.length, førAntall + 2, "banen skal åpne både de gamle og de nye");
+  assert.equal(g.placeUnlocks.filter((e) => e.placeId === PRØVESTED).length, 1,
+    "stedet skal ikke bli lagt inn en gang til");
+}
+
+// En spiller som ALT står i arven er ikke en kollisjon i supplerings-modus —
+// kilden er den samme troppen en sesong senere. Han hoppes over og telles.
+{
+  const iArven = alleSpillere.find((p) => (p.clubAffiliations || [])
+    .some((a) => a.clubId === PRØVEKLUBB));
+  assert.ok(iArven, "fant ingen profil i prøvearven");
+  const kilde = {
+    ...basis,
+    players: [
+      { name: iArven.name, positionGroup: "midtbane", era: "modern" },
+      { name: "Testolav Testesen", positions: ["CM"], era: "modern" }
+    ]
+  };
+  const r = planImport({
+    kilde,
+    clubs: kopi(alleKlubber),
+    players: kopi(alleSpillere),
+    placeUnlocks: kopi(alleSteder),
+    modus: "suppler"
+  });
+  assert.deepEqual(r.feil, [], `en spiller som alt står i arven skal ikke stoppe en supplering — fikk ${JSON.stringify(r.feil)}`);
+  assert.equal(r.rapport.gjensyn, 1, "gjensynet skal telles");
+  assert.equal(r.rapport.tilfort, 1, "bare den nye er tilført");
+  assert.equal(r.profiler.length, 1, "gjensynet skal ikke bli en ny profil");
+}
+
+// Speilvendingene: hver modus avviser den andres tilstand.
+krevAvslag("ny import på en ferdig arv", {}, /Bruk --suppler/,
+  (g) => { g.clubs.find((c) => c.id === PRØVEKLUBB).playerPoolStatus = "ready"; });
+
+{
+  const r = planImport({
+    kilde: basis, ...grunnlag(), modus: "suppler"
+  });
+  assert.ok(r.feil.some((f) => /ingen arv å supplere|står ikke som `ready`/.test(f)),
+    `supplering av en pending klubb skal avvises — fikk ${JSON.stringify(r.feil)}`);
+}
+
+{
+  const g = { clubs: kopi(alleKlubber), players: kopi(alleSpillere), placeUnlocks: kopi(alleSteder) };
+  g.clubs.find((c) => c.id === PRØVEKLUBB).homePlaceId = "en_annen_bane";
+  const r = planImport({ kilde: basis, ...g, modus: "suppler" });
+  assert.ok(r.feil.some((f) => /kan ikke flytte banen/.test(f)),
+    "en supplering skal ikke kunne flytte homePlaceId");
 }
 
 // ---------------------------------------------------------------------------

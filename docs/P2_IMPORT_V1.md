@@ -142,6 +142,49 @@ Halden kunne landes med 23 spillbare i stedet for 9.
 
 ---
 
+## Supplering: en arv er ikke ferdig for godt
+
+Registeret oppdateres hver sesong. En klubb landet på historiske navn skal kunne
+få dagens tropp uten at noen redigerer katalogen for hånd, og en klubb landet på
+registeret skal kunne få historien sin senere. `--suppler` er den veien inn:
+
+```bash
+node scripts/import-club-heritage.mjs data/heritage-sources/pors-2026.source.json --suppler --write
+```
+
+Modusen speilvender tre regler, og speilvendingen er hele poenget — en
+supplering skal **aldri** kunne opprette en arv, og en ny import skal aldri
+kunne skrive inn i en:
+
+| | Ny import | `--suppler` |
+|---|---|---|
+| Klubben står `ready` | stopper | **kreves** |
+| Stedet finnes i unlock-katalogen | stopper | **kreves** — og patches, ikke opprettes |
+| Navnet står alt i denne arven | stopper på kollisjon | **hoppes over** som gjensyn og telles |
+
+Den siste er den viktige. Samme tropp ett år senere er ikke tjue kollisjoner,
+det er tjue av de samme mennene, og en modus som stoppet på dem ville aldri
+kunne kjøres to ganger. Men den slapper bare av på **denne** klubbens navn: et
+navn som står i katalogen under en annen klubb stopper fortsatt, og må avgjøres
+som krysskobling eller navnebror.
+
+**Mellomnavn er ikke et nytt menneske.** Registeret skriver `Iver Krogh Hagen`
+der klubbhistorikken skrev `Iver Hagen`, og et gjensyn som bare sammenlignet
+eksakte navn laget en dublett av begge — to ganger, i samme import. Skriptet
+stopper nå på navnepar som skiller seg med nøyaktig ett ledd i midten, med begge
+navnene i meldingen, og lar mennesket avgjøre.
+
+Tallene i rapporten er arvens **totaler**, ikke kjøringens: `tilfort` er det
+denne kjøringen la til, `dokumentert` og `spillbar` er hva klubben har etterpå.
+Det er de siste to som skal inn i `ARVER`.
+
+En arv bygget av flere importer kan bære flere `eraSource` — Brattvåg har
+`utledet` fra en udatert klubbhistorikk og `belagt` fra NFFs daterte 2026-tropp.
+`audit:club-heritage` godtar derfor en liste, og `audit:import-club-heritage`
+rekonstruerer arven i samme rekkefølge som den faktisk ble bygget.
+
+---
+
 ## Hva importen stopper på
 
 Ingen av disse er en verdi skriptet kan velge. Hver av dem er en avgjørelse
@@ -171,7 +214,7 @@ importen gjenskaper begge arvene — profilene felt for felt, banens unlocks,
 klubbraden og hver krysskobling. Fasiten hentes fra katalogen slik den er, så
 endrer profilformen seg, endrer fasiten seg med. Begge arvene er med fordi de er
 ulike på det ene punktet som betyr noe for formen: Pors daterer seg selv,
-Brattvåg har ikke ett eneste årstall. Deretter kreves det at hvert av de nitten
+Brattvåg har ikke ett eneste årstall. Deretter kreves det at hvert av de tjue
 avslagene faktisk slår til, og at ingen profil i katalogen kan bære en grov
 posisjonsoppløsning uten å si det.
 

@@ -363,6 +363,18 @@ const REVIEWED_NAME_PAIRS = new Map([
   ["nils arne eggen|nils gunnar barstad eggen", "Rosenborgs historiske stopper mot Stjørdals-Blinks nåværende forsvarsspiller"],
   ["nicolai aas|nikolai aas", "Ranas forsvarsspiller mot en offensiv spiller i katalogen"],
   ["johan andersson|johan rickard andersson", "Eidsvold Turns forsvarsspiller mot en offensiv midtbanespiller"],
+  // Suppleringen av de tre eldste arvene med NFFs 2026-tropper etterlot bare
+  // dette ene paret å registrere. De øvrige nær-treffene var samme mann ført med
+  // og uten mellomnavn — registeret staver fyldigere enn klubbhistorikken gjorde
+  // — og de er UTELATT fra importen i stedet, så det er ingen par av dem.
+  // `import-club-heritage` stopper nå på den formen av seg selv.
+  //
+  // Dette er derimot en ekte disambiguering, gjort med vilje og etter katalogens
+  // eget mønster: Sarpsborgs Mathias Engebretsen er KEEPER, mens Kvik Haldens
+  // er midtbanespiller ifølge to uavhengige kilder — Wikipedias 2023-tropp og
+  // NFFs 2026-registrering. Posisjonen avgjør det alene, og han er ført med
+  // klubbsuffiks slik `tore_pedersen_rbk` og `sverre_andersen_odd` er.
+  ["mathias engebretsen|mathias engebretsen kvik", "Sarpsborgs keeper mot Kvik Haldens midtbanespiller"],
   // Brattvåg-importen: Flem er et av de vanligste navnene i Haram, og klubbens
   // egen adelskalender fører fire av dem (Bård, Egil, Hans Inge og Bjarne).
   // Bjarte er et annet fornavn enn Bjarne, ikke en stavevariant, og de to står

@@ -174,11 +174,16 @@ for (const row of rows.filter((entry) => entry.count > 0)) {
 const pors = clubById.get("pors");
 const porsDocumented = listClubPoolPlayers({ clubId: "pors", players });
 const porsPlayable = listPlayableClubPoolPlayers({ clubId: "pors", players });
-check("Pors 63 dokumenterte", porsDocumented.length === 63, String(porsDocumented.length));
-check("Pors 16 spillbare", porsPlayable.length === 16, String(porsPlayable.length));
+// Pors er festet med tall og ikke bare mot seg selv, fordi arven er den ene som
+// bærer BEGGE tilstandene: 63 navn lest ut av klubbhistorikken, og 26 til fra
+// NFFs 2026-tropp. Splitten er poenget — 42 spillbare og 47 historikkposter er
+// ikke to tall om det samme, og en import som blandet dem ville ikke felt noen
+// annen vakt her.
+check("Pors 89 dokumenterte", porsDocumented.length === 89, String(porsDocumented.length));
+check("Pors 42 spillbare", porsPlayable.length === 42, String(porsPlayable.length));
 check("Pors 47 historikkposter", porsDocumented.length - porsPlayable.length === 47);
 const porsFull = resolveClubSquadAccess({ club: pors, players, unlockedPlaceIds: [pors.homePlaceId], candidateIds, squadSize: REQUIRED });
-check("Pors åpner bare 16", porsFull.clubPoolIds.length === 16 && porsFull.heritage.length === 16);
+check("Pors åpner bare 42", porsFull.clubPoolIds.length === 42 && porsFull.heritage.length === 42);
 
 console.log(JSON.stringify({
   ok: true,

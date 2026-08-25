@@ -95,3 +95,33 @@ treffe 936/936 eksklusive profiler og den låste statusfordelingen
 nye profilene er tomme på alle fire modellerbare felt, og stadion-unlocken.
 Vakten er felles for alle P2-arver — én rad per klubb — så neste klubb er en
 rad, ikke en ny fil.
+
+---
+
+## Supplering 24.08.2026 — NFFs 2026-tropp
+
+Klubbhistorikken over daterer seg ikke selv, og profilene den ga bærer derfor
+`eraSource: "utledet"`. **20 navn fra NFFs lagside** (`fiksId=138`, hentet
+24.08.2026) er nå lagt oppå med `import-club-heritage --suppler`, og de er
+datert: `eraSource: "belagt"`. Arven bærer med det to generasjoner, og det er
+den første i katalogen som gjør det.
+
+| | Før | Etter |
+|---|---:|---:|
+| Dokumenterte | 81 | **93** |
+| Spillbare | 18 | **30** |
+| Historikkposter | 63 | **63** |
+
+**Åtte av de tjue sto i arven fra før** og ble hoppet over som gjensyn — samme
+mann, samme klubb, ett år senere. To av dem stoppet importen først, og det var
+riktig av den: `Iver Hagen` mot `Iver Krogh Hagen` og `John Norvik` mot
+`John Ruud Norvik` er ikke to menn, det er ett navn med og uten mellomnavn.
+Skriptet har nå en egen stopp for nettopp den formen, med begge navnene i
+meldingen, i stedet for å lage en dublett.
+
+De tolv nye er 3 keepere og 9 med lagdel (`positionSource: "gruppe"`).
+
+`audit:club-heritage` godtar nå en liste med `eraSource` for en arv, og
+`audit:import-club-heritage` rekonstruerer Brattvåg som historien faktisk gikk:
+én vanlig import, så én supplering. Det er den eneste måten suppleringsmodusen
+måles mot ekte katalogdata på.

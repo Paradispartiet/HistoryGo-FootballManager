@@ -24,16 +24,14 @@ const ARVER = [
   {
     clubId: "pors",
     placeId: "pors_stadion",
-    dokumentert: 63,
-    spillbar: 16,
-    nye: 58,
-    // Pors-kilden er klubbhistorikk uten kampantall. Fem navn fantes fra før.
+    dokumentert: 89,
+    spillbar: 42,
+    nye: 83,
+    // Pors-kilden er klubbhistorikk uten kampantall. Fem navn fantes fra før;
+    // Redon Pllana kom til med 2026-troppen fra NFF.
     krysskoblet: [
-      "einar_rossbach",
-      "fredrik_nordkvelle",
-      "erik_pedersen",
-      "tor_arne_sannerholt",
-      "christer_fjellstad"
+      "christer_fjellstad", "einar_rossbach", "erik_pedersen",
+      "fredrik_nordkvelle", "redon_pllana", "tor_arne_sannerholt"
     ],
     // Pors-kilden daterer: hver profil har en epoke fra kilden selv.
     eraSource: "belagt",
@@ -42,24 +40,25 @@ const ARVER = [
   {
     clubId: "brattvag",
     placeId: "brattvag_stadion",
-    dokumentert: 81,
-    spillbar: 18,
-    nye: 79,
+    dokumentert: 93,
+    spillbar: 30,
+    nye: 91,
     // Brattvåg-kilden har kampantall per mann (546 ned til 143). Det er den ene
     // opplysningen Pors ikke hadde, og derfor den ene fristelsen: en kamp er
     // individuell og dokumentert, men den er tilgjengelighet, ikke en ferdighet.
     krysskoblet: ["sivert_solli", "ulrik_valderhaug_syversen"],
-    // Brattvåg-kilden har ingen årstall i det hele tatt — bare kampantall og en
-    // troppsliste — så epoken er lest av hvilken liste navnet står i.
-    eraSource: "utledet",
+    // Brattvåg-kilden hadde ingen årstall i det hele tatt — bare kampantall og
+    // en troppsliste — så epoken var lest av hvilken liste navnet sto i.
+    // 2026-suppleringen fra NFF er derimot datert, så arven bærer nå begge.
+    eraSource: ["utledet", "belagt"],
     doc: "docs/P2_BRATTVAG_SOURCE_PASS.md"
   },
   {
     clubId: "kvik_halden",
     placeId: "halden_stadion",
-    dokumentert: 41,
-    spillbar: 23,
-    nye: 39,
+    dokumentert: 56,
+    spillbar: 38,
+    nye: 54,
     // Kvik-kilden er to lag i ett: FK Kvik-perioden 1906–1997 med cupgullet i
     // 1918, og A-lagstroppen 2023. To navn fantes fra før, begge bekreftet av
     // sin egen individkilde.
@@ -262,8 +261,16 @@ for (const arv of ARVER) {
     // aldri en karrierepåstand. `eraSource` er derimot per kilde — Pors daterer
     // seg selv, Brattvåg har ikke ett eneste årstall — og forskjellen skal stå
     // i tabellen, ikke skjules i en felles antakelse.
+    //
+    // En arv kan ha TO kildegenerasjoner. Brattvåg ble landet på en udatert
+    // klubbhistorikk (`utledet`) og senere supplert med NFFs 2026-tropp, som er
+    // datert (`belagt`). Da er én verdi per arv feil form: profilene har ulik
+    // epokebelegg fordi de har ulik kilde. Raden tar derfor en liste når arven
+    // har flere, og lista er uttømmende — en tredje verdi feller fortsatt.
+    const tillatteEra = Array.isArray(arv.eraSource) ? arv.eraSource : [arv.eraSource];
     assert.equal(player.classSource, "utledet", `${merke}/${player.id}: classSource`);
-    assert.equal(player.eraSource, arv.eraSource, `${merke}/${player.id}: eraSource`);
+    assert.ok(tillatteEra.includes(player.eraSource),
+      `${merke}/${player.id}: eraSource ${JSON.stringify(player.eraSource)} står ikke i arvens liste ${JSON.stringify(tillatteEra)}`);
   }
 
   // Krysskoblingene er navngitte påstander. Hver av dem beholder sin egen

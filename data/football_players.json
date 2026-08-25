@@ -162440,6 +162440,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"
+        },
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -195040,6 +195046,2192 @@
       "clubAffiliations": [
         {
           "clubId": "trygg_lade",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "petter_saga_hagen",
+      "name": "Petter Saga Hagen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sebastian_eiris_vassend",
+      "name": "Sebastian Eiris Vassend",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "eirik_brokeland_holst",
+      "name": "Eirik Brokeland Holst",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "simen_ostby",
+      "name": "Simen Østby",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "tobias_bless_garstad",
+      "name": "Tobias Bless Garstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "johannes_holstad_dahlby",
+      "name": "Johannes Holstad Dahlby",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "fillip_saether_kimerud",
+      "name": "Fillip Sæther Kimerud",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "brage_evensen",
+      "name": "Brage Evensen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "emmanuel_baru_gisa",
+      "name": "Emmanuel Baru Gisa",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "eirik_asante_gayi",
+      "name": "Eirik Asante Gayi",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "mats_bruu",
+      "name": "Mats Bruu",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "alexander_remy_bjornhaug",
+      "name": "Alexander Remy Bjørnhaug",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kjetil_svarteberg",
+      "name": "Kjetil Svarteberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "andreas_kornelius_bakeng_rogne",
+      "name": "Andreas Kornelius Bakeng-Rogne",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jonas_lomeland_seim",
+      "name": "Jonas Lomeland Seim",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "viktor_namlos",
+      "name": "Viktor Namløs",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jarl_emil_drange_nesland",
+      "name": "Jarl-Emil Drange Nesland",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "andreas_giske",
+      "name": "Andreas Giske",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oliver_odde_henriksrud",
+      "name": "Oliver Odde Henriksrud",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "truls_kristian_meen",
+      "name": "Truls Kristian Meen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "oskar_sundland_johnsen",
+      "name": "Oskar Sundland Johnsen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stefan_mladenovic",
+      "name": "Stefan Mladenovic",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "mats_kristian_kampfe_mauset",
+      "name": "Mats Kristian Kämpfe Mauset",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jonah_disch_lindvig",
+      "name": "Jonah Disch Lindvig",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "christian_arne_dankwah",
+      "name": "Christian Arne Dankwah",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "pors_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "pors_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "pors_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "pors",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kieran_joseph_roy_baskett",
+      "name": "Kieran Joseph Roy Baskett",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "iaroslav_sundling",
+      "name": "Iaroslav Sundling",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "owen_hjelme_connor",
+      "name": "Owen Hjelme Connor",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "filip_stankovic",
+      "name": "Filip Stankovic",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jonas_skjerven_valland",
+      "name": "Jonas Skjerven Valland",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "samuel_james_tattum",
+      "name": "Samuel James Tattum",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "maksymilian_tomasz_czyz",
+      "name": "Maksymilian Tomasz Czyz",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "karim_magdy_bata",
+      "name": "Karim Magdy Bata",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jacob_steinsland_kvarven",
+      "name": "Jacob Steinsland Kvarven",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "andreas_eikrem_myklebust",
+      "name": "Andreas Eikrem Myklebust",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "jorgen_havig",
+      "name": "Jørgen Havig",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "leandro_elvestad_neto",
+      "name": "Leandro Elvestad Neto",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "brattvag_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "brattvag_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "brattvag_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "brattvag",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "stefans_keiss",
+      "name": "Stefans Keiss",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "markus_grimstad",
+      "name": "Markus Grimstad",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "selius_gindeberg",
+      "name": "Selius Gindeberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "fredrik_steinsnes_asbo",
+      "name": "Fredrik Steinsnes-Åsbø",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_viktor_skjonberg_nymo",
+      "name": "Ole Viktor Skjønberg-Nymo",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "adhurim_mjekiqi",
+      "name": "Adhurim Mjekiqi",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kristian_lorentzen",
+      "name": "Kristian Lorentzen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "erlind_krasniqi",
+      "name": "Erlind Krasniqi",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "uranik_seferi",
+      "name": "Uranik Seferi",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "mathias_engebretsen_kvik",
+      "name": "Mathias Engebretsen (Kvik)",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "szymon_roguski",
+      "name": "Szymon Roguski",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "nikolai_solberg",
+      "name": "Nikolai Solberg",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "adam_kaszuba",
+      "name": "Adam Kaszuba",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "youssef_chaib",
+      "name": "Youssef Chaib",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "alexander_puck",
+      "name": "Alexander Puck",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "halden_stadion"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "halden_stadion": "club_profile"
+      },
+      "clubStatusSource": {
+        "halden_stadion": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "kvik_halden",
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"

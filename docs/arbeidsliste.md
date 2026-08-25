@@ -73,9 +73,9 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 
 | Klubb | Dokumentert | Spillbar | Historikkposter |
 |---|---:|---:|---:|
-| Brattvåg | 81 | 18 | 63 |
-| Pors | 63 | 16 | 47 |
-| Kvik Halden | 41 | 23 | 18 |
+| Brattvåg | 93 | 30 | 63 |
+| Pors | 89 | 42 | 47 |
+| Kvik Halden | 56 | 38 | 18 |
 | Bjarg | 32 | 30 | 2 |
 | Sandviken | 31 | 31 | 0 |
 | Vidar | 26 | 26 | 0 |
@@ -120,17 +120,43 @@ Hele målingen, med lærdommen om hvorfor første konklusjon var feil, står i `
 
 Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som motstandere med sin egen fotball, og `pending` holder dem bare ute av overtakelseslista. Nivå 3 har 12 overtakbare klubber av 28, og **avdeling 1 er fortsatt den tynneste flaten i spillet med 6 av 14**.
 
-**Handling:** v2-kildefiler i samme form som de siste importene. Hver klubb trenger også en `placeId` (alle har `ground` uten), og importen lager stedet.
+~~**Handling:** v2-kildefiler … **Rekkefølge:** avdeling 1 først — den er tynnest. **Neste klubb er Kvik Halden.**~~ **UTFØRT 24.08.2026 — alle seksten er importert.** Rekkefølgen holdt: Kvik Halden ble tatt nest, og forutsigelsen om den slo til på begge halvdeler — meritter fra 1918 ga navn, og krysskoblingsrisikoen mot Brann og Odd var reell. Det som ikke sto i planen var at redaksjonelle kilder skulle vise seg utilstrekkelige for fjorten av dem. Se avsnittet over.
 
-**Rekkefølge:** avdeling 1 først — den er tynnest. **Neste klubb er Kvik Halden**, ikke fordi den står nest øverst i rangeringen, men fordi meritter som cupmester 1918 og cupfinaler 1915 og 1922 pleier å bli skrevet om med navn. Bjarg viste at «har egen historieside» ikke er det samme som «omtaler enkeltspillere», og det er det siste som avgjør. Merk krysskoblingsrisikoen: Brann og Odd har alt arv i katalogen.
-
-**Formen er mekanisert (24.08.2026).** `scripts/import-club-heritage.mjs` leser en kildefil et menneske har fylt ut med kilden i hånd, og gjør oversettelsen til canonical form: profiler, banens unlocks, klubbraden, krysskoblinger og den ferdige `ARVER`-raden. Den flytter ingen grense — den stopper i stedet for å gjette, på ukjent posisjon, GK sammen med utespillerposisjon, styrker satt i råfila, et navn som finnes fra før uten at kildefila sier om det er samme mann, manglende epoke eller manglende kilde. `npm run audit:import-club-heritage` fjerner Pors og Brattvåg fra katalogen i minnet og krever at importen gjenskaper begge felt for felt, og at hvert av de seksten avslagene slår til. Se `docs/P2_IMPORT_V1.md`.
+**Formen er mekanisert (24.08.2026).** `scripts/import-club-heritage.mjs` leser en kildefil et menneske har fylt ut med kilden i hånd, og gjør oversettelsen til canonical form: profiler, banens unlocks, klubbraden, krysskoblinger og den ferdige `ARVER`-raden. Den flytter ingen grense — den stopper i stedet for å gjette, på ukjent posisjon, GK sammen med utespillerposisjon, styrker satt i råfila, et navn som finnes fra før uten at kildefila sier om det er samme mann, manglende epoke eller manglende kilde. `npm run audit:import-club-heritage` fjerner Pors og Brattvåg fra katalogen i minnet og krever at importen gjenskaper begge felt for felt, og at hvert av de tjue avslagene slår til. Se `docs/P2_IMPORT_V1.md`.
 
 **Reproduksjonen fant to ting som sto i katalogen fra før.** Rekkefølgen i `clubAffiliations` eies av `sync-club-affiliations.mjs` (alfabetisk på `clubId`, kjørt i CI som drift-sjekk), så en krysskobling lagt bakerst ville felt en helt annen vakt ved neste kjøring; importen sorterer nå. Og **ti av Pors' elleve profiler med kildebelagt posisjon bærer historikkpostens advarsel om at posisjonen ikke er kildebelagt** — feltet motsier `naturalPositions`, som både banen og `spillbar: 16` behandler som belagt. Brattvåg har null slike. Hvilken av de to halvdelene som er feil kan bare avgjøres mot Pors-kilden, så det er ikke rettet; tallet er festet i vakten som `ordlydsavvik: 10` og kan verken vokse eller krympe stille.
 
 ~~**Én ting krever en avgjørelse før import, ikke etterpå:** Eik Tønsbergs bane.~~ **AVGJORT 24.08.2026 mot kilden — Tønsberg gressbane. Se over.** Den opprinnelige teksten: «Eik stadion» finnes ikke, og klubben har to kandidater med hvert sitt svar — **Eik Idrettsanlegg** er klubbens eget anlegg, mens **Tønsberg gressbane** (5 600) er der seniorlagene faktisk spiller, trolig delt med andre klubber. `homePlaceId` er permanent, så valget hører til importen med kilden i hånd. Den er derfor ikke rettet.
 
 **Og en ledetråd som ikke lar seg automatisere:** fire av de seks gale banenavnene hadde formen «klubbnavn + stadion/kunstgress», som ser ut som en generatorsignatur man kan skrive en vakt på. Målt treffer mønsteret **16 av 60 klubber**, og minst tolv av dem er helt riktige virkelige navn (Brann Stadion, Fredrikstad stadion, Haugesund stadion …). En vakt ville gitt fjorten falske positive av seksten. Det som skiller er ikke navneformen, men om banen har et *eget lokalt navn* — Stavollen, TUIL Arena, Rolvsrud, Nordlandshallen, Lassa — og det kan bare avgjøres mot en kilde, én klubb om gangen. Mønsteret er en søkeliste, ikke en regel.
+
+**De tre store arvene er supplert med 2026-troppen (24.08.2026).** Pors, Brattvåg
+og Kvik Halden ble landet på klubbhistorikk og hadde derfor mange navn og få
+spillbare. NFFs lagside ga dem dagens tropp, ført inn med den nye
+`--suppler`-modusen:
+
+| Klubb | Dokumentert | Spillbar | Tilført | Gjensyn |
+|---|---:|---:|---:|---:|
+| Pors | 63 → **89** | 16 → **42** | 26 | 0 |
+| Brattvåg | 81 → **93** | 18 → **30** | 12 | 8 |
+| Kvik Halden | 41 → **56** | 23 → **38** | 15 | 6 |
+
+Historikkpostene står stille i alle tre — en supplering legger til, den skriver
+ikke om. Modusen speilvender tre av importens regler (en supplering *krever* at
+klubben står `ready`, og hopper over navn som alt står i arven), og
+`audit:import-club-heritage` måler speilvendingen mot ekte katalogdata ved å
+rekonstruere Brattvåg som historien faktisk gikk: én vanlig import, så én
+supplering.
+
+**To dubletter ble stoppet av en regel som ikke fantes.** Registeret skriver
+`Iver Krogh Hagen` og `John Ruud Norvik` der klubbhistorikken skrev `Iver Hagen`
+og `John Norvik`. Gjensynssjekken sammenlignet eksakte navn og laget begge som
+nye profiler. Skriptet stopper nå på navnepar som skiller seg med nøyaktig ett
+ledd i midten, med begge navnene i meldingen.
+
+**Brattvåg er den første arven med to `eraSource`** — `utledet` fra en udatert
+klubbhistorikk og `belagt` fra det daterte registeret. `audit:club-heritage`
+godtar derfor en liste per arv i stedet for én verdi.
 
 ---
 

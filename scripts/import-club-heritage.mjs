@@ -104,6 +104,19 @@ export function slugify(navn) {
 // «Kåre Bergstrøm» og «Kare Bergstrom» treffer hverandre.
 const navnenokkel = (navn) => slugify(navn);
 
+// Samme fornavn, samme etternavn, ett navneledd i forskjell — «Rune Jarstein»
+// mot «Rune Almenning Jarstein». Regelen er den samme som `audit:attributes`
+// bruker, og den er tatt hit fordi den fanger noe importen ellers gjør galt:
+// et register staver ofte navnet fyldigere enn en klubbhistorikk, så en
+// supplering kan legge inn en mann som ALT står i arven, bare med mellomnavn.
+// Eksaktsøket ser ham ikke, og resultatet er to halve karrierer.
+function erMellomnavnVariant(a, b) {
+  const [kort, lang] = a.length <= b.length ? [a, b] : [b, a];
+  if (lang.length - kort.length !== 1 || kort.length < 2) return false;
+  return kort[0] === lang[0] && kort[kort.length - 1] === lang[lang.length - 1];
+}
+const navneledd = (navn) => navnenokkel(navn).split("_").filter(Boolean);
+
 // ---------------------------------------------------------------------------
 // Bygg én canonical profil. Formen er lest av Pors- og Brattvåg-profilene.
 // ---------------------------------------------------------------------------
@@ -147,7 +160,10 @@ function byggProfil(rad, kilde) {
 // Ren planlegging. Ingen fil leses eller skrives her; alt kommer inn som data
 // og alt som er uavklart kommer ut som en linje i `feil`.
 // ---------------------------------------------------------------------------
-export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [], docExists = () => true } = {}) {
+export function planImport({
+  kilde, clubs = [], players = [], placeUnlocks = [], docExists = () => true, modus = "ny"
+} = {}) {
+  const suppler = modus === "suppler";
   const feil = [];
   const advarsler = [];
   const stopp = (melding) => feil.push(melding);
@@ -179,15 +195,29 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
   const club = clubs.find((c) => c.id === kilde?.clubId) || null;
   if (!club) {
     stopp(`klubben \`${kilde?.clubId}\` finnes ikke i football_clubs.json`);
+  } else if (suppler) {
+    // Supplering fyller PÅ en ferdig arv. Den skal aldri kunne opprette en, og
+    // aldri kunne mynte et nytt homePlaceId — begge deler ville vært en ny
+    // import forkledd som en påfylling.
+    if (club.playerPoolStatus !== "ready") {
+      stopp(`klubben \`${kilde.clubId}\` står ikke som \`ready\` — det finnes ingen arv å supplere. Kjør en vanlig import.`);
+    }
+    if (club.homePlaceId !== kilde.placeId) {
+      stopp(`klubben har homePlaceId \`${club.homePlaceId}\`, kildefila sier \`${kilde.placeId}\` — en supplering kan ikke flytte banen`);
+    }
   } else {
     if (club.playerPoolStatus === "ready") {
-      stopp(`klubben \`${kilde.clubId}\` står allerede som \`ready\` — en ny import ville skrevet over en ferdig arv`);
+      stopp(`klubben \`${kilde.clubId}\` står allerede som \`ready\` — en ny import ville skrevet over en ferdig arv. Bruk --suppler for å fylle på.`);
     }
     if (club.homePlaceId && club.homePlaceId !== kilde.placeId) {
       stopp(`klubben har allerede homePlaceId \`${club.homePlaceId}\`, kildefila sier \`${kilde.placeId}\` — homePlaceId er permanent og byttes ikke av en import`);
     }
   }
-  if (placeUnlocks.some((e) => e.placeId === kilde?.placeId)) {
+  const stedFinnes = placeUnlocks.some((e) => e.placeId === kilde?.placeId);
+  if (suppler && !stedFinnes) {
+    stopp(`stedet \`${kilde.placeId}\` finnes ikke i unlock-katalogen — det er ingen arv å supplere`);
+  }
+  if (!suppler && stedFinnes) {
     stopp(`stedet \`${kilde.placeId}\` finnes allerede i unlock-katalogen`);
   }
   if (kilde?.doc && !docExists(kilde.doc)) {
@@ -274,6 +304,10 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
 
   const nye = [];
   const krysskoblinger = [];
+  const gjensyn = [];
+  const iArven = suppler
+    ? players.filter((p) => (p.clubAffiliations || []).some((a) => a.clubId === kilde.clubId))
+    : [];
   for (const rad of rader) {
     if (rad.krysskobling) {
       if (!rad.existingId) {
@@ -290,6 +324,34 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
     }
 
     const treff = påNavn.get(navnenokkel(rad.navn)) || [];
+
+    // I supplerings-modus er en spiller som ALT står i arven ikke en kollisjon,
+    // men et gjensyn: kilden er den samme troppen en sesong senere. Han hoppes
+    // over og telles, slik at rapporten sier hvor mye av troppen som var ny.
+    const alleredeIArven = treff.filter((p) => (p.clubAffiliations || [])
+      .some((a) => a.clubId === kilde.clubId));
+    if (suppler && alleredeIArven.length > 0) {
+      gjensyn.push({ navn: rad.navn, id: alleredeIArven[0].id });
+      continue;
+    }
+
+    // Mellomnavnvarianten stopper importen i stedet for å bli hoppet over.
+    // Skriptet KAN ikke avgjøre om «Iver Krogh Hagen» er «Iver Hagen» med
+    // mellomnavn eller en annen mann — men det kan nekte å gjette, og det er
+    // forskjellen på to halve karrierer og én hel.
+    if (suppler) {
+      const ledd = navneledd(rad.navn);
+      const nesten = iArven.filter((p) => erMellomnavnVariant(ledd, navneledd(p.name)));
+      if (nesten.length > 0) {
+        stopp(
+          `${rad.navn}: arven har allerede ${nesten.map((p) => `«${p.name}» (\`${p.id}\`)`).join(", ")}, `
+          + "som skiller seg med ett navneledd. Er det samme mann, utelat raden — han står der alt. "
+          + "Er det to menn, må navnet få et skille, slik `tore_pedersen_rbk` og `sverre_andersen_odd` har."
+        );
+        continue;
+      }
+    }
+
     if (treff.length > 0) {
       stopp(
         `${rad.navn}: finnes allerede i katalogen som ${treff.map((p) => `\`${p.id}\``).join(", ")}. `
@@ -324,27 +386,50 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
     .map(({ eksisterende }) => eksisterende.id);
 
   const alleSpillbare = [...spillbare, ...krysskobletSpillbare].sort();
-  const dokumentert = profiler.length + krysskoblinger.length;
+  const tilfort = profiler.length + krysskoblinger.length;
+
+  // I supplerings-modus er tallene arvens TOTAL, ikke det denne kjøringen la
+  // til. De regnes fra katalogen, ikke fra kildefila, slik at de blir de samme
+  // som `sync-club-affiliations` og `audit:club-heritage` kommer fram til.
+  const iArvenFraFor = players.filter((p) => (p.clubAffiliations || [])
+    .some((a) => a.clubId === kilde.clubId));
+  const spillbarFraFor = iArvenFraFor.filter((p) =>
+    [...(p.naturalPositions || []), ...(p.usablePositions || [])].length > 0);
+  const dokumentert = suppler ? iArvenFraFor.length + tilfort : tilfort;
+  const spillbarTotalt = suppler ? spillbarFraFor.length + alleSpillbare.length : alleSpillbare.length;
+  // `nye` i ARVER-raden er profilene arven eier ALENE, målt på sourcePlaceIds —
+  // og `krysskoblet` er resten. Begge må derfor telle det som alt står der.
+  const eksklusiveFraFor = suppler
+    ? iArvenFraFor.filter((p) => (p.sourcePlaceIds || []).includes(kilde.placeId)).length
+    : 0;
+  const krysskobletFraFor = suppler
+    ? iArvenFraFor.filter((p) => !(p.sourcePlaceIds || []).includes(kilde.placeId)).map((p) => p.id).sort()
+    : [];
 
   // Ikke en feil — en import med for få spillbare er et gyldig utfall, og
   // klubben blir stående `pending`. Men det skal stå i klartekst, ikke oppdages
   // først når noen lurer på hvorfor klubben ikke kan overtas.
-  if (alleSpillbare.length < MIN_POOL) {
+  if (spillbarTotalt < MIN_POOL) {
     advarsler.push(
-      `bare ${alleSpillbare.length} av ${dokumentert} profiler har kildebelagt posisjon. `
+      `bare ${spillbarTotalt} av ${dokumentert} profiler har kildebelagt posisjon. `
       + `Det trengs ${MIN_POOL} for en spillbar pool, så klubben blir stående \`pending\` `
       + "og kan ikke overtas. Importen er fortsatt gyldig — profilene bevares som historikkposter."
     );
   }
 
-  const place = {
-    placeId: kilde.placeId,
-    placeName: kilde.placeName,
-    placeRole: "historical_club_ground_source",
-    notes: kilde.placeNotes
-      || `Klubbanlegg: ${club.name}s hjemmebane. ${dokumentert} dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de ${alleSpillbare.length} profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.`,
-    unlocks: alleSpillbare.map((id) => ({ type: "player_candidate", targetId: id }))
-  };
+  // En supplering OPPRETTER ikke stedet — det finnes, og notatet der er skrevet
+  // av den opprinnelige importen. Den legger bare til unlocks for de nye
+  // spillbare profilene.
+  const place = suppler
+    ? { placeId: kilde.placeId, leggTilUnlocks: alleSpillbare }
+    : {
+      placeId: kilde.placeId,
+      placeName: kilde.placeName,
+      placeRole: "historical_club_ground_source",
+      notes: kilde.placeNotes
+        || `Klubbanlegg: ${club.name}s hjemmebane. ${dokumentert} dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de ${alleSpillbare.length} profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.`,
+      unlocks: alleSpillbare.map((id) => ({ type: "player_candidate", targetId: id }))
+    };
 
   return {
     feil,
@@ -355,24 +440,28 @@ export function planImport({ kilde, clubs = [], players = [], placeUnlocks = [],
     clubPatch: {
       homePlaceId: kilde.placeId,
       playerPoolSize: dokumentert,
-      playablePlayerPoolSize: alleSpillbare.length,
+      playablePlayerPoolSize: spillbarTotalt,
       // `playerPoolStatus` er UTLEDET, ikke valgt: `sync-club-affiliations.mjs`
       // regner den som `playable >= MIN_POOL` og kjører i CI som drift-sjekk.
       // En import som satte «ready» ubetinget ville felt den vakten for enhver
       // klubb med under femten spillbare — og påstått at en pool som ikke kan
       // stille et lag er ferdig.
-      playerPoolStatus: alleSpillbare.length >= MIN_POOL ? "ready" : "pending"
+      playerPoolStatus: spillbarTotalt >= MIN_POOL ? "ready" : "pending"
     },
     rapport: {
       klubb: kilde.clubId,
       sted: kilde.placeId,
+      // Alle fire tallene er ARVENS totaler, slik `audit:club-heritage` regner
+      // dem — ikke det denne kjøringen la til. `tilfort` og `gjensyn` sier hva
+      // kjøringen selv gjorde.
       dokumentert,
-      spillbar: alleSpillbare.length,
-      historikkposter: dokumentert - alleSpillbare.length,
-      nye: profiler.length,
-      krysskoblet: krysskoblinger.map((k) => k.existingId),
+      spillbar: spillbarTotalt,
+      historikkposter: dokumentert - spillbarTotalt,
+      nye: eksklusiveFraFor + profiler.length,
+      krysskoblet: [...krysskobletFraFor, ...krysskoblinger.map((k) => k.existingId)],
       eraSource: kilde.eraSource,
-      kilder: kilde.sources.length
+      kilder: kilde.sources.length,
+      ...(suppler ? { tilfort, gjensyn: gjensyn.length } : {})
     }
   };
 }
@@ -396,7 +485,19 @@ export function applyImport({ plan, kilde, clubs, players, placeUnlocks }) {
     // `sourcePlaceIds` røres ikke: krysskoblingen beholder sin egen arv, slik
     // at den frosne P1-nevneren står urørt.
   }
-  placeUnlocks.push(plan.place);
+  if (plan.place.leggTilUnlocks) {
+    // Supplering: stedet finnes, og bare de nye spillbare legges til. Lista
+    // sorteres etter innsetting, slik at `audit:club-heritage` kan sammenligne
+    // banens unlocks med den spillbare poolen uten å bry seg om rekkefølgen.
+    const sted = placeUnlocks.find((e) => e.placeId === plan.place.placeId);
+    const fra_for = new Set(sted.unlocks.map((u) => u.targetId));
+    for (const id of plan.place.leggTilUnlocks) {
+      if (!fra_for.has(id)) sted.unlocks.push({ type: "player_candidate", targetId: id });
+    }
+    sted.unlocks.sort((a, b) => a.targetId.localeCompare(b.targetId));
+  } else {
+    placeUnlocks.push(plan.place);
+  }
   Object.assign(clubs.find((c) => c.id === kilde.clubId), plan.clubPatch);
 }
 
@@ -419,9 +520,14 @@ export function arverRad(kilde, rapport) {
 function main() {
   const args = process.argv.slice(2);
   const skriv = args.includes("--write");
+  const modus = args.includes("--suppler") ? "suppler" : "ny";
   const filsti = args.find((a) => !a.startsWith("--"));
   if (!filsti) {
-    console.error("Bruk: node scripts/import-club-heritage.mjs <kildefil.json> [--write]");
+    console.error(`Bruk: node scripts/import-club-heritage.mjs <kildefil.json> [--suppler] [--write]
+
+  (uten flagg)  ny arv: klubben må være \`pending\` og stedet må ikke finnes
+  --suppler     fyll på en ferdig arv: klubben må være \`ready\`, stedet må finnes,
+                og spillere som alt står i arven hoppes over`);
     process.exit(1);
   }
 
@@ -451,7 +557,8 @@ function main() {
     clubs: klubbdata.clubs,
     players: spillerdata.players,
     placeUnlocks: unlockdata.placeUnlocks,
-    docExists: (doc) => fs.existsSync(path.join(ROOT, doc))
+    docExists: (doc) => fs.existsSync(path.join(ROOT, doc)),
+    modus
   });
 
   if (plan.feil.length > 0) {
