@@ -1,0 +1,166 @@
+{
+  "clubId": "lorenskog",
+  "clubName": "Lørenskog",
+  "placeId": "rolvsrud_stadion",
+  "placeName": "Rolvsrud stadion",
+  "eraSource": "belagt",
+  "doc": "docs/P2_AVDELING2_SOURCE_PASS.md",
+  "sources": [
+    {
+      "url": "https://www.fotball.no/fotballdata/lag/hjem/?fiksId=188",
+      "hentet": "2026-08-24",
+      "beskrivelse": "NFFs lagside for klubbens A-lag: troppen gruppert etter lagdel (Keeper, Forsvar, Midtbane, Angrep). Laget er identifisert mot tabellen for 2. divisjon avdeling 2."
+    }
+  ],
+  "players": [
+    {
+      "name": "Thomas Viljugrein",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Ole Martin Drevland",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Henrik Solvoll Navarsete",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Besian Kadri",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Erlend Berg Farstad",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Aiden Connor Harvey",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Miran Kuci",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Matias Rogstad Aadnøy",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Casper Myhren Fjeld",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "HERMAN HAGEN",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Lars Følstad",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Tollef Kvello Etholm",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Sander Helland Richardsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Vegard Holsæther",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Kacper Serafin",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Drilon Zeneli",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Leon Dahlstrøm",
+      "crossLink": true,
+      "existingId": "leon_dahlstrom",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane"
+    },
+    {
+      "name": "Sander Haugaard Werni",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Daniel Notanes Brandal",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Kasper Reme Abrahamsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Michael Phillipe Bal Singh",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Sheikh Omar Mbye",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Brage Williamsen Hylen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Ardian Arber Kazimi",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    }
+  ]
+}

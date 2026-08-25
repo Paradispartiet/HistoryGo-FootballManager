@@ -1,0 +1,175 @@
+{
+  "clubId": "trygg_lade",
+  "clubName": "Trygg/Lade",
+  "placeId": "lade_idrettsanlegg",
+  "placeName": "Lade idrettsanlegg",
+  "eraSource": "belagt",
+  "doc": "docs/P2_AVDELING2_SOURCE_PASS.md",
+  "sources": [
+    {
+      "url": "https://www.fotball.no/fotballdata/lag/hjem/?fiksId=134611",
+      "hentet": "2026-08-24",
+      "beskrivelse": "NFFs lagside for klubbens A-lag: troppen gruppert etter lagdel (Keeper, Forsvar, Midtbane, Angrep). Laget er identifisert mot tabellen for 2. divisjon avdeling 2."
+    }
+  ],
+  "players": [
+    {
+      "name": "Mads Berentzen Finseth",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Simen Rekstad-Johnsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Blessings Mkyombwe",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Claus Martin Flage",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Even Torrey Tjøm Flottorp",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Gustav Hasle Juliebø",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Sindre Greiff",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Sander Kleppe Halgunset",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Torgeir Ektvedt Fredriksen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Andre Ekseth",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Ola Johannes Elvedahl",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Victor Ferner Bergersen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Brage Prestmo Kvithyld",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Halvor Skaro",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Kristoffer Flo Mørkved",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Jørgen Bøhle",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Leonard Våge",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Heine Enger Kleiven",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Mathias Flotve",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Thomas Bjørgve",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Elias Einarsen Hansen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Felix Brattbakk",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Yafet Bahta Kahsay",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Simon Einarsen Hansen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Magnus Vollan",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    }
+  ]
+}

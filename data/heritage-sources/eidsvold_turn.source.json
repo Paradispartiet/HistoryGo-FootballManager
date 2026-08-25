@@ -1,0 +1,148 @@
+{
+  "clubId": "eidsvold_turn",
+  "clubName": "Eidsvold Turn",
+  "placeId": "myhrer_stadion",
+  "placeName": "Myhrer stadion",
+  "eraSource": "belagt",
+  "doc": "docs/P2_AVDELING2_SOURCE_PASS.md",
+  "sources": [
+    {
+      "url": "https://www.fotball.no/fotballdata/lag/hjem/?fiksId=756",
+      "hentet": "2026-08-24",
+      "beskrivelse": "NFFs lagside for klubbens A-lag: troppen gruppert etter lagdel (Keeper, Forsvar, Midtbane, Angrep). Laget er identifisert mot tabellen for 2. divisjon avdeling 2."
+    }
+  ],
+  "players": [
+    {
+      "name": "Simen Lillevik Kjellevold",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Mehmet Rrahmani",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Sebastian Stokke",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Christopher Frederick Morala Notoane",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Henrik Holtet Thorkildsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Kristian Bjerknes Håkenstad",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Erik Ruud",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Oliver Stenseth",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Heine Wiik Stigersand",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Edonis Mulaj",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Johan Rickard Andersson",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Runar Frøhaug Johnsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Lucas Kolstad",
+      "crossLink": true,
+      "existingId": "lucas_kolstad",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane"
+    },
+    {
+      "name": "Tengel Lia Fredriksen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Lars Julian Fjeld",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Edin Øy",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Herman Jappée Henriksen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Benedict Lethabo Notoane",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Simon Stenseth",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Alieu Bandeh",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Filip Fjeldheim Da Silva",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    }
+  ]
+}

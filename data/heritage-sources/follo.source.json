@@ -1,0 +1,237 @@
+{
+  "clubId": "follo",
+  "clubName": "Follo",
+  "placeId": "ski_stadion",
+  "placeName": "Ski stadion",
+  "eraSource": "belagt",
+  "doc": "docs/P2_AVDELING2_SOURCE_PASS.md",
+  "sources": [
+    {
+      "url": "https://www.fotball.no/fotballdata/lag/hjem/?fiksId=695",
+      "hentet": "2026-08-24",
+      "beskrivelse": "NFFs lagside for klubbens A-lag: troppen gruppert etter lagdel (Keeper, Forsvar, Midtbane, Angrep). Laget er identifisert mot tabellen for 2. divisjon avdeling 2."
+    }
+  ],
+  "players": [
+    {
+      "name": "Adam Tamrat Vik",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Fredrik Schrøder Hol",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Erik Østbye",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Sander Rød",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Jakob Stang Hansen Granli",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Jabes Niyosoko Maturire",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Shahram Rashid Majid Jabari",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Henrik Hagen",
+      "crossLink": true,
+      "existingId": "henrik_hagen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar"
+    },
+    {
+      "name": "Haakon Ludvigsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "André Nysted",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "William Andrade-Hellerud",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Sadri Gashi",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Rene Aleksander Elshaug",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Øyvind Rishaug",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Florind Lokaj",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Emil Tjøstheim",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Yossef Suleman Ibrahim",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Mathias Øfsti Bråten",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Almin Hrustic",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Noah Mathias Josefsson",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Jonas Aune Jorde",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Niklas Schmidt-Løvlund",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Teo Aarhus Bastiansen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "el Schaddai Prince Furaha",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Habib Geir Diallo",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Albert Braut Tjåland",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Nicolai Skoglund",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Fredrik Leren Hoel",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Mustapha Fofana",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Maximilian Dahl",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Otman Khris",
+      "crossLink": true,
+      "existingId": "otman_khris",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep"
+    },
+    {
+      "name": "Lukas Følstad-Andersen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Gustav Sving Helling",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Joakim Halsnes Knudsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Joakim Kjensli",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    }
+  ]
+}

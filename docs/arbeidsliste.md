@@ -69,7 +69,7 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 
 ## P2 — 16 klubber uten arv, alle i 2. divisjon
 
-**Ferdig (9 av 16):**
+**Ferdig (16 av 16 påbegynt — 14 landet, 2 står igjen):**
 
 | Klubb | Dokumentert | Spillbar | Historikkposter |
 |---|---:|---:|---:|
@@ -82,8 +82,19 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 | Eik Tønsberg | 25 | 25 | 0 |
 | Træff | 23 | 23 | 0 |
 | Lysekloster | 16 | 16 | 0 |
+| Follo | 35 | 35 | 0 |
+| Rana | 28 | 28 | 0 |
+| Junkeren | 27 | 27 | 0 |
+| Trygg/Lade | 25 | 25 | 0 |
+| Stjørdals-Blink | 24 | 24 | 0 |
+| Lørenskog | 24 | 24 | 0 |
+| Eidsvold Turn | 21 | 21 | 0 |
 
-Alle ni følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den — enten posisjonen er presis eller en lagdel. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Alle ni er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Hver klubb har sitt eget kildepass, `docs/P2_<KLUBB>_SOURCE_PASS.md`.
+**Gjenstår (2):** Sotra (12 registrerte spillere) og Tromsdalen (9). Begge under grensa på femten, begge avhengige av at troppen i registeret vokser eller at en klubbkilde navngir spillere med posisjon.
+
+**2. divisjon har nå arv i 26 av 28 klubber**, mot 12 før dette arbeidet. Hele katalogen står på 58 av 60 overtakbare.
+
+Alle fjorten følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den — enten posisjonen er presis eller en lagdel. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Alle fjorten er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Hver klubb har sitt eget kildepass, `docs/P2_<KLUBB>_SOURCE_PASS.md`.
 
 **Avdeling 1 er ferdig: 13 av 14 klubber har arv (24.08.2026).** Bare Sotra står igjen, med 12 registrerte A-lagsspillere mot grensa på femten.
 
@@ -99,9 +110,11 @@ Hele målingen, med lærdommen om hvorfor første konklusjon var feil, står i `
 
 **To banenavn ble rettet underveis, og Eik-spørsmålet er besvart.** Træff sto som «Molde idrettspark», som er **naboanlegget** — banen heter **Reknesbanen** og deles med Molde 2. Og Eik Tønsberg, som sto uttrykkelig åpen fordi `homePlaceId` er permanent, er avgjort mot kilden: **Tønsberg gressbane**, kapasitet 5 600, ifølge både klubbartikkelens infoboks og banens egen artikkel. Delingen med Tønsberg FK er bekreftet, ikke bortforklart.
 
-**Avdeling 2 (8):** Tromsdalen · Stjørdals-Blink · Rana · Junkeren · Lørenskog · Eidsvold Turn · Follo · Trygg/Lade
+**Avdeling 2 er ferdig: 7 av 8 landet (24.08.2026).** Samme kilde og samme form som avdeling 1 — NFFs lagside, med laget identifisert mot tabellen for avdeling 2. Bare Tromsdalen står igjen, med 9 registrerte spillere og ingen registrert keeper, som tyder på ufullstendig registrering snarere enn tom klubb. Se `docs/P2_AVDELING2_SOURCE_PASS.md`.
 
-Kartlagt i **`docs/P2_KILDELISTE_AVDELING2.md`**, samme form og samme forbehold. Beste kilder her: **Eidsvold Turn har egen adelskalender** (Brattvåg-formen, navn med kampantall), **Stjørdals-Blink har klubbarkiv**, **Trygg/Lade har historikkside**, og **Lørenskog** dekkes av Romerikes Blads «Klubblegende»-serie — portrettsjangeren som faktisk gir dokumenterte styrker. Tre klubber er sammenslåinger med flere forgjengere (Stjørdals-Blink 1956, Trygg/Lade 1986, Rana 2017) og Follo er en paraply for fem lag fra 2000, så kilden må si hvilken enhet en spiller representerte.
+**De fire redaksjonelle sporene kildelista pekte på er ikke lest, og var ikke nødvendige.** Eidsvold Turns adelskalender, Stjørdals-Blinks klubbarkiv, Trygg/Lades historikkside og Romerikes Blads «Klubblegende»-serie er fortsatt de beste kandidatene til å gi de sju klubbene **dybde** — historiske profiler med sitat, og eventuelt P1-claims. De er bare ikke lenger det som avgjør om en klubb er spillbar.
+
+**Sammenslåingene er ikke løst, bare ikke utløst.** Stjørdals-Blink (1956), Trygg/Lade (1986), Rana (2017) og Follo (paraply for fem lag fra 2000) har alle flere forgjengere, og kilden må si hvilken enhet en spiller representerte. En dagens tropp representerer dagens klubb uten tvetydighet, så spørsmålet er ikke stilt her. Det slår inn i det øyeblikket noen importerer historiske navn.
 
 **Fire banenavn var gale og er rettet**, etter samme mønster som i avdeling 1: Tromsdalen «Tromsdalen kunstgress» → **TUIL Arena**, Lørenskog «Lørenskog stadion» → **Rolvsrud stadion** (begge generatorrester — klubbnavnet med «stadion»/«kunstgress» påhengt), Junkeren «Bodø Spektrum kunstgress» → **Nordlandshallen** (feil anlegg i samme by), og Stjørdals-Blink «Øverlands Minde» → **Sandskogan stadion** (klubben forlot Øverlands Minde i 2012 og Sandskogan har vært hjemmebane siden 2020; ført sponsorfritt). Ligaprofilene er kontrollert og ingen måtte rettes — de henter navnet fra klubben, ikke fra banen. Tre tier-avvik (Junkeren, Lørenskog, Trygg/Lade oppgis i 3. divisjon) er **ikke** rørt, av samme grunn som Vidar.
 

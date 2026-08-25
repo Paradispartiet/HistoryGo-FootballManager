@@ -927,6 +927,16 @@ const KJENT_UDOKUMENTERT = {
   reknesbanen: 1.01,            // Træff
   lassa_idrettspark: 1.01,      // Vidar
   stemmemyren: 1.01,            // Sandviken
+  // Avdeling 2, samme kilde og samme grunn: NFFs lagside gir lagdel og
+  // ingenting mer. Ingen av de sju har en redaksjonell kilde som beskriver en
+  // enkelt spiller, så ingen profil bærer en ferdighetsclaim.
+  sandskogan_stadion: 1.01,     // Stjørdals-Blink
+  sagbakken: 1.01,              // Rana
+  nordlandshallen: 1.01,        // Junkeren
+  rolvsrud_stadion: 1.01,       // Lørenskog
+  myhrer_stadion: 1.01,         // Eidsvold Turn
+  ski_stadion: 1.01,            // Follo
+  lade_idrettsanlegg: 1.01,     // Trygg/Lade
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
   // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare

@@ -139,6 +139,80 @@ const ARVER = [
     krysskoblet: ["joakim_aasen", "david_sissoko"],
     eraSource: "belagt",
     doc: "docs/P2_SANDVIKEN_SOURCE_PASS.md"
+  },
+  // Avdeling 2. Samme kilde og samme form som avdeling 1: NFFs lagside, med
+  // laget identifisert mot tabellen for 2. divisjon avdeling 2. Ingen av de sju
+  // har en redaksjonell kilde som navngir historiske spillere, så poolene er
+  // rene troppspooler uten historikkposter.
+  {
+    clubId: "stjordals_blink",
+    placeId: "sandskogan_stadion",
+    dokumentert: 24,
+    spillbar: 24,
+    nye: 24,
+    krysskoblet: [],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "rana",
+    placeId: "sagbakken",
+    dokumentert: 28,
+    spillbar: 28,
+    nye: 26,
+    krysskoblet: ["theo_aksnes_olsen", "adrian_olsen_teigen"],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "junkeren",
+    placeId: "nordlandshallen",
+    dokumentert: 27,
+    spillbar: 27,
+    nye: 27,
+    krysskoblet: [],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "lorenskog",
+    placeId: "rolvsrud_stadion",
+    dokumentert: 24,
+    spillbar: 24,
+    nye: 23,
+    krysskoblet: ["leon_dahlstrom"],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "eidsvold_turn",
+    placeId: "myhrer_stadion",
+    dokumentert: 21,
+    spillbar: 21,
+    nye: 20,
+    krysskoblet: ["lucas_kolstad"],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "follo",
+    placeId: "ski_stadion",
+    dokumentert: 35,
+    spillbar: 35,
+    nye: 33,
+    krysskoblet: ["henrik_hagen", "otman_khris"],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "trygg_lade",
+    placeId: "lade_idrettsanlegg",
+    dokumentert: 25,
+    spillbar: 25,
+    nye: 25,
+    krysskoblet: [],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
   }
 ];
 

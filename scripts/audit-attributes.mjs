@@ -356,6 +356,13 @@ const REVIEWED_NAME_PAIRS = new Map([
   //
   // Det ene ekte paret står igjen, og posisjonen avgjør det alene:
   ["alexander alnæs pedersen|alexander pedersen", "Bjargs angrepsspiller mot Lyns keeper"],
+  // Avdeling 2 utløste tre par, og alle tre er ekte forskjellige menn.
+  // Eggen-paret er det eneste med samme lagdel, og der avgjør epoken det:
+  // Rosenborgs Nils Arne Eggen er historisk, Stjørdals-Blinks mann står i
+  // dagens registrerte tropp.
+  ["nils arne eggen|nils gunnar barstad eggen", "Rosenborgs historiske stopper mot Stjørdals-Blinks nåværende forsvarsspiller"],
+  ["nicolai aas|nikolai aas", "Ranas forsvarsspiller mot en offensiv spiller i katalogen"],
+  ["johan andersson|johan rickard andersson", "Eidsvold Turns forsvarsspiller mot en offensiv midtbanespiller"],
   // Brattvåg-importen: Flem er et av de vanligste navnene i Haram, og klubbens
   // egen adelskalender fører fire av dem (Bård, Egil, Hans Inge og Bjarne).
   // Bjarte er et annet fornavn enn Bjarne, ikke en stavevariant, og de to står
