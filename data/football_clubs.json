@@ -592,9 +592,10 @@
       "group": "avdeling1",
       "strength": 53,
       "form": 59,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 25,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 25,
+      "homePlaceId": "tonsberg_gressbane"
     },
     {
       "id": "vidar",
@@ -605,9 +606,10 @@
       "group": "avdeling1",
       "strength": 52,
       "form": 58,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 26,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 26,
+      "homePlaceId": "lassa_idrettspark"
     },
     {
       "id": "kvik_halden",
@@ -632,9 +634,10 @@
       "group": "avdeling1",
       "strength": 51,
       "form": 57,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 31,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 31,
+      "homePlaceId": "stemmemyren"
     },
     {
       "id": "lysekloster",
@@ -645,9 +648,10 @@
       "group": "avdeling1",
       "strength": 50,
       "form": 56,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 16,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 16,
+      "homePlaceId": "lysekloster_idrettspark"
     },
     {
       "id": "sotra",
@@ -671,9 +675,10 @@
       "group": "avdeling1",
       "strength": 48,
       "form": 54,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 23,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 23,
+      "homePlaceId": "reknesbanen"
     },
     {
       "id": "bjarg",
@@ -684,9 +689,10 @@
       "group": "avdeling1",
       "strength": 47,
       "form": 53,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 32,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 30,
+      "homePlaceId": "stavollen_kunstgress"
     },
     {
       "id": "skeid",

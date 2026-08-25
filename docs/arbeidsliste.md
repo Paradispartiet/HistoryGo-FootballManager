@@ -69,46 +69,35 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 
 ## P2 — 16 klubber uten arv, alle i 2. divisjon
 
-**Ferdig (3):**
+**Ferdig (9 av 16):**
 
 | Klubb | Dokumentert | Spillbar | Historikkposter |
 |---|---:|---:|---:|
-| Pors | 63 | 16 | 47 |
 | Brattvåg | 81 | 18 | 63 |
+| Pors | 63 | 16 | 47 |
 | Kvik Halden | 41 | 23 | 18 |
+| Bjarg | 32 | 30 | 2 |
+| Sandviken | 31 | 31 | 0 |
+| Vidar | 26 | 26 | 0 |
+| Eik Tønsberg | 25 | 25 | 0 |
+| Træff | 23 | 23 | 0 |
+| Lysekloster | 16 | 16 | 0 |
 
-Alle tre følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den — enten posisjonen er presis eller en lagdel. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Alle tre er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Se `docs/P2_PORS_SOURCE_PASS.md`, `docs/P2_BRATTVAG_SOURCE_PASS.md` og `docs/P2_KVIK_HALDEN_SOURCE_PASS.md`.
+Alle ni følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den — enten posisjonen er presis eller en lagdel. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Alle ni er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Hver klubb har sitt eget kildepass, `docs/P2_<KLUBB>_SOURCE_PASS.md`.
 
-**Avdeling 1 er ferdig lest (24.08.2026). Én av åtte kunne landes.**
+**Avdeling 1 er ferdig: 13 av 14 klubber har arv (24.08.2026).** Bare Sotra står igjen, med 12 registrerte A-lagsspillere mot grensa på femten.
 
-| Klubb | A-lagsnavn | Med posisjon/lagdel | Utfall |
-|---|---:|---:|---|
-| Kvik Halden | 44 | 23 | **importert** |
-| Lysekloster | 18 | 0 | `pending` — troppsmalen har ingen posisjoner |
-| Træff | 9 | 0 | `pending` — «med bakgrunn i», ikke A-lagsspill |
-| Bjarg | 4 | 1 | `pending` |
-| Eik Tønsberg | 4 | 1 | `pending` — alle er korte opphold |
-| Vidar | 2 | 1 | `pending` |
-| Sotra | 2 | 0 | `pending` |
-| Sandviken | 0 | 0 | `pending` — artikkelen er kvinnefotball |
+**Kilden som landet dem var ikke den vi lette etter.** Passet leste først klubbenes *redaksjonelle* kilder — historiesider, Wikipedia, SNL — og konkluderte med at ingen av de seks gjenstående kunne landes. Riktig målt, feil spørsmål. **NFFs egen lagside** (`fotball.no/fotballdata/lag/hjem/?fiksId=N`) fører troppen for hvert registrerte lag, server-rendret i HTML-en, gruppert under **Keeper · Forsvar · Midtbane · Angrep** — nøyaktig oppløsningen `positionGroup` bruker. Sju klubber sto `pending` på redaksjonelle kilder; seks landet på registeret.
 
-Grensa er 15 med kildebelagt posisjon eller lagdel. **Kvik Halden var unntaket, ikke regelen:** den landet fordi Wikipedia førte en A-lagstropp med lagdel, og ingen av de sju andre har en slik liste. Det er den ene egenskapen som skiller en klubb som kan landes fra en som ikke kan, og den er billig å måle — søk etter `Spillerstall` i klubbens Wikipedia-artikkel før du åpner noe annet. Hele målingen står i `docs/P2_AVDELING1_MALING.md`.
+De to kildetypene svarer på hver sin ting: **redaksjonelle kilder gir dybde** (Bjargs fire navn med sitat, Vidars 510 kamper og 289 mål, Kviks cupvinnerlag fra 1918), **registeret gir bredde** (tjue til tretti navn med lagdel, hver sesong). En klubb trenger femten spillbare. Redaksjonelle kilder ga det hos null av åtte; registeret hos sju av åtte.
 
-**Beste gjenværende spor for alle sju:** klubbenes egne A-lagssider. De kjører samme CMS som Kvik Haldens, der troppssiden heller ikke lot seg hente med `curl`, og en side med posisjoner ville landet flere av dem på lagdel-formen. Det krever en nettleser nettstedet slipper gjennom. Sandviken har i tillegg en jubileumsbok fra 2020 og et digitalt arkiv som ingen har åpnet — men klubbens dokumenterte historie er kvinnefotball, så de må leses med lagskillet i hånd.
+**Lagvalget må gå gjennom ligatabellen**, ikke klubbens lagliste. Bjarg har 84 registrerte lag og Sotra 79, blandet A-lag, rekrutt og 7er. To av åtte fikk først feil tropp: Sandviken traff B-laget (10 spillere mot 32), og Eik traff breddeklubbens «Menn 1» i stedet for «871 Menn Senior A».
 
-**To banenavn er rettet, og Eik-spørsmålet er besvart.** Træff sto som «Molde idrettspark», som er **naboanlegget**; banen heter **Reknesbanen** og deles med Molde 2 — fella kildelista flagget var reell, men hang på feil bane. Og Eik Tønsberg, som sto uttrykkelig åpen fordi `homePlaceId` er permanent, er avgjort mot kilden: **Tønsberg gressbane** er hjemmebanen ifølge både klubbartikkelens infoboks og banens egen artikkel, kapasitet 5 600. Delingen med Tønsberg FK er bekreftet, ikke bortforklart. Eik Idrettsanlegg finnes fortsatt, men er treningsanlegget.
+**Identitetsvakten avgjorde tre par mot importen.** `audit:attributes` flagget seks nær-duplikate navn. To var samme mann og ble krysskoblet: Bjargs Rolf Birger Pedersen er Branns «Pesen» (kilden sier «tidligere Brannspiller»), og Træffs Vegard Valgermo Forren er Moldes Vegard Forren (Wikipedia: «spillende assistenttrener for Træff»). Fire er **utelatt** fordi paret er samme lagdel og ingen kilde skiller dem — å slå sammen to dokumenterte karrierer er den ene feilen som ikke kan angres, og å påstå at de er to menn er like ubelagt. Utelatelse påstår ingenting.
 
-**Kvik Halden er importert (24.08.2026), og avgjørelsen den stoppet på er tatt.** Kilden ga 44 A-lagsnavn — tjue historiske fra klubbens egen årstallsliste og Wikipedias bildetekst av cupvinnerlaget 1918, og 24 fra A-lagstroppen 2023 — men bare 9 med presis posisjon, og det kreves 15 spillbare. Spørsmålet var nytt: **teller en kilde som sier «forsvar» som posisjon?**
+Hele målingen, med lærdommen om hvorfor første konklusjon var feil, står i `docs/P2_AVDELING1_MALING.md`.
 
-**Svaret ble ja, men oppløsningen skal stå i dataene.** Lagdelen skrives til `usablePositions` og ikke til `naturalPositions`, fordi `calculatePositionFit` gir 96 for en naturlig posisjon og 78 for en brukbar — fire naturlige ville påstått at mannen passer *godt* som både midtstopper og begge backer. Profilen merkes `positionSource: "gruppe"`, og `audit:import-club-heritage` håndhever begge veier på hele katalogen: ingen profil kan bære merket uten å ha en hel lagdel i `usablePositions`, og ingen kan bære en hel lagdel uten merket. Keeper er ikke en lagdel — «keeper» og `GK` er samme oppløsning. Resultatet ble **41 dokumenterte, 23 spillbare, 18 historikkposter**, og formen gjelder nå de åtte gjenstående i avdeling 2 — avdeling 1 er ferdig lest. Se `docs/P2_IMPORT_V1.md` og `docs/P2_KVIK_HALDEN_SOURCE_PASS.md`.
-
-**Passet fant også to ting kildelista ikke hadde flagget.** Kvik Halden er en **sammenslåing fra 1997** (FK Kvik + Halden Fotballklubb), og cupgullet i 1918 ble tatt av FK Kvik — samme problem som Sotra, som listen flagget. Og navnekollisjonene traff: av seks historiske navn med Wikipedia-artikkel var **tre en annen person** — en skøyteløper, en komponist og en dansk ordfører. Fem navn fantes i katalogen fra før, og fire av dem hadde en posisjonsmotsigelse mellom troppen og katalogen. **To er koblet** (Raymond Kvisvik og Fabian Stensrud Ness, begge bekreftet av sin egen individkilde) og **tre er utelatt** til klubbens egen troppsside kan avgjøre om det er samme mann: Marius Ophaug, Mathias Engebretsen (`GK` i katalogen, midtbane i troppen) og Henrik Hagen. Klubben når 23 spillbare uten dem, så avventingen koster ingenting nå.
-
-**Bjarg er lest ut og gir ikke en pool (24.08.2026).** Kilden er gjennomgått i sin helhet — alle 66 artiklene på `bjargsinhistorie.no`, pluss Wikipedia, klubbsiden og forbundet — og bærer **fire A-lagsnavn, ett av dem med posisjon**: Frank Berentsen (midtstopper), Rolf Birger Pedersen (spillende trener 1973), Kjell Jensen og Stig Arve Vangsnes. En klubb trenger femten profiler med kildebelagt posisjon for å være overtakbar — grensa gjelder de spillbare, ikke de dokumenterte — og Bjarg har én. Klubben står derfor `pending`, og de fire er skrevet ned med sitat og årstall i `docs/P2_BJARG_SOURCE_PASS.md` så ingen leser de 66 artiklene på nytt.
-
-**Og rangeringen i kildelista holdt ikke.** Bjarg sto først av åtte med «best strukturelle utsikter», fordi klubben som den eneste har et helt nettsted viet sin egen historie. Nettstedet viste seg å være årsrapporter for *hele* idrettslaget, der sjangeren er organisasjonsberetning: den navngir formenn, trenere, dommere og kretslagsuttak, og omtaler lagene kollektivt. Det er samme lærdom som P1 endte på — **sjangeren avgjør, ikke lengden** — og den gjelder de sju andre radene også. Rangeringen skal leses som en søkerekkefølge, ikke som en forventning. Banenavnet **Stavollen kunstgress** er derimot bekreftet mot klubbens egen kilde og Wikipedias infoboks, og står urørt.
-
-Kildesporene for disse åtte er kartlagt i **`docs/P2_KILDELISTE_AVDELING1.md`** — hvilke sider som finnes per klubb, med URL, rangert etter forventet utbytte. Det dokumentet er et finneverktøy og ingen kilde: innholdet er websøk, og et søketreff er en parafrase av en side ingen har åpnet. Fire feller er allerede synlige derfra og bør avklares før import: **Eik** blander spillere og trenere i én liste, **Sandviken**s dokumenterte historie er i stor grad kvinnefotball, **Sotra** er en sammenslåing av tre forgjengerklubber fra 2009, og **Træff** deler bane med Molde FKs rekruttlag. To banenavn var gale og er rettet: Bjarg sto som «Bjarg kunstgress» (klubbnavnet med «kunstgress» påhengt) og heter **Stavollen kunstgress**; Vidar sto som «Midjord», som er **en annen klubbs bane** — Vidar holder til på **Lassa idrettspark**. Vidar-feilen hadde forplantet seg til ligaprofilen, der `styleName` het «Midjord-nærhet» og `tacticalSchool` «Bydelsklubb på Storhaug», altså feil bydel; begge er rettet. Divisjonen er derimot **ikke** rørt: `football_clubs.json` er et uttrykkelig 2026-øyeblikksbilde, og å flytte Vidar ut av avdeling 1 ville tømt en plass `audit:clubs` krever fjorten lag i — det er en designavgjørelse om pyramiden, ikke en korreksjon.
+**To banenavn ble rettet underveis, og Eik-spørsmålet er besvart.** Træff sto som «Molde idrettspark», som er **naboanlegget** — banen heter **Reknesbanen** og deles med Molde 2. Og Eik Tønsberg, som sto uttrykkelig åpen fordi `homePlaceId` er permanent, er avgjort mot kilden: **Tønsberg gressbane**, kapasitet 5 600, ifølge både klubbartikkelens infoboks og banens egen artikkel. Delingen med Tønsberg FK er bekreftet, ikke bortforklart.
 
 **Avdeling 2 (8):** Tromsdalen · Stjørdals-Blink · Rana · Junkeren · Lørenskog · Eidsvold Turn · Follo · Trygg/Lade
 

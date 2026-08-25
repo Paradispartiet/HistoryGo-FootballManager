@@ -1,16 +1,42 @@
-# P2 · Bjarg — kildepass uten import
+# P2 · Bjarg — importert
 
-**Utfall: ingen import. Kilden bærer fire A-lagsnavn, ett av dem med posisjon.**
-Bjarg blir stående `pending`.
+**32 dokumenterte klubbprofiler, 30 spillbare. Klubben er `ready` og kan overtas.**
 
-Kilden er lest i sin helhet, ikke stikkprøvet: alle 66 artiklene på
-`bjargsinhistorie.no` er hentet ned og gjennomgått, sammen med Wikipedia,
-klubbsiden og forbundets klubb- og lagside. Dette dokumentet finnes for at ingen
-skal lese de 66 artiklene på nytt for å komme til samme svar.
+Dette passet ble først skrevet som **«kildepass uten import»**: klubbens eget
+historienettsted ga fire A-lagsnavn og ett med posisjon, altså langt under de
+femten som kreves. Den konklusjonen var riktig om den kilden, og feil om
+klubben — fordi NFFs egen lagside ikke var lest.
+
+| | |
+|---|---:|
+| Dokumenterte klubbprofiler | 32 |
+| Spillbare (posisjon eller lagdel) | 30 |
+| Historikkposter | 2 |
+| Nye canonical profiler | 31 |
+| Krysskoblinger | 1 |
+
+**A-lagstroppen fra NFF** gir 28 spillere: 4 keepere, 8 forsvar, 10 midtbane og
+6 angrep. Troppen er gruppert etter lagdel, som er nøyaktig oppløsningen
+importens `positionGroup` bruker — «Keeper» blir `GK`, de tre andre blir
+lagdeler i `usablePositions` med `positionSource: "gruppe"`. Se
+`docs/P2_IMPORT_V1.md`.
+
+**De fire historiske navnene er importert i tillegg.** Ett av dem viste seg å
+finnes fra før: `audit:attributes` flagget «Rolf Birger Pedersen» mot katalogens
+**Rolf Birger «Pesen» Pedersen** i Brann-arven — og Bjarg-kilden sier det selv,
+«tidligere **Brannspiller** og landslagsspiller». Samme mann, altså en
+krysskobling og ikke en ny profil. De to uten posisjon, Kjell Jensen og Stig
+Arve Vangsnes, er klubbens eneste historikkposter.
+
+Lærdommen står igjen uendret, og er verdt mer enn tallet: **et eget
+historienettsted er ikke et løfte om spillerdekning.** Målingen under er derfor
+bevart som den ble gjort.
 
 ---
 
-## Hvorfor rangeringen var feil
+## Hva klubbens eget historienettsted ga
+
+### Hvorfor forventningen ikke traff
 
 `docs/P2_KILDELISTE_AVDELING1.md` satte Bjarg **først av åtte** med «best
 strukturelle utsikter», og begrunnelsen var at klubben som den eneste har et
@@ -102,20 +128,16 @@ uttrykkelig.
 
 ---
 
-## Hvorfor det ikke ble importert
+## Hvorfor de fire alene ikke holdt
 
-En klubb trenger **15 profiler med kildebelagt posisjon** for å være overtakbar.
-Grensa gjelder de spillbare, ikke de dokumenterte: `sync-club-affiliations.mjs`
-utleder `playerPoolStatus` som `playable >= MIN_POOL`, og
-`resolveClubSquadAccess` melder klubben `unavailable` når poolen er mindre enn
-troppen på femten. Bjarg har fire dokumenterte og **én** spillbar, så klubben
-faller på begge målene.
+En klubb trenger **15 profiler med kildebelagt posisjon eller lagdel** for å være
+overtakbar. Grensa gjelder de spillbare, ikke de dokumenterte:
+`sync-club-affiliations.mjs` utleder `playerPoolStatus` som
+`playable >= MIN_POOL`, og `resolveClubSquadAccess` melder klubben `unavailable`
+når poolen er mindre enn troppen på femten.
 
-Importen mynter samtidig et permanent `homePlaceId` og oppretter stedet.
-`pending` sier det som er sant: arven er ikke gjort.
-
-De fire står derfor her, med sitat og årstall, klare til å bli importert den
-dagen en kilde tar poolen over femten.
+Med bare historienettstedet hadde Bjarg fire dokumenterte og **én** spillbar.
+NFF-troppen på 28 løftet den til 32 og 29.
 
 ---
 
@@ -160,6 +182,10 @@ som vakt.
 Det som skiller en kilde som gir dekning fra en som ikke gjør det, er om den
 omtaler **enkeltspillere** — en adelskalender som Eidsvold Turns, en
 portrettserie som Romerikes Blads «Klubblegende», en historikk med kampantall
-som Brattvågs. Kvik Halden står nå som det beste gjenværende sporet i avdeling
-1: cupmester 1918 og cupfinaler 1915 og 1922 er meritter som pleier å bli
-skrevet om med navn.
+som Brattvågs.
+
+**Men den viktigste lærdommen kom etterpå:** ingen av de åtte klubbenes
+redaksjonelle kilder var det som landet dem. Det var **NFFs lagside**, som
+finnes for hver eneste klubb, er server-rendret og fører troppen gruppert etter
+lagdel. Historiske kilder gir dybde — Bjargs fire, Vidars klubbrekorder, Kviks
+cupvinnerlag fra 1918 — men det er registeret som gir en pool.

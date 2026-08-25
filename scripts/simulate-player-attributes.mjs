@@ -916,6 +916,17 @@ const KJENT_UDOKUMENTERT = {
   // samme grense som Sarpsborg-kilden slo fast, der en tittel er lagets.
   // 39/39 nye eksklusive profiler står derfor uten en eneste ferdighetsclaim.
   halden_stadion: 1.01,
+  // De seks siste P2-arvene i avdeling 1. Alle bygger på NFFs lagside, som
+  // fører A-lagstroppen gruppert etter lagdel. En lagdel belegger hvor på banen
+  // mannen spiller og ingenting mer — den er ikke en ferdighet, samme grense
+  // som kampantallet i Brattvåg-kilden og landslagsuttaket i Kvik-kilden.
+  // Ingen av de nye profilene bærer en eneste ferdighetsclaim.
+  stavollen_kunstgress: 1.01,   // Bjarg
+  tonsberg_gressbane: 1.01,     // Eik Tønsberg
+  lysekloster_idrettspark: 1.01, // Lysekloster
+  reknesbanen: 1.01,            // Træff
+  lassa_idrettspark: 1.01,      // Vidar
+  stemmemyren: 1.01,            // Sandviken
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
   // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare

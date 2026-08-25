@@ -68,6 +68,77 @@ const ARVER = [
     // datert 27.07.2023 — hver profil har en epoke fra kilden selv.
     eraSource: "belagt",
     doc: "docs/P2_KVIK_HALDEN_SOURCE_PASS.md"
+  },
+  // De seks siste i avdeling 1. Alle bygger på NFFs egen lagside, som fører
+  // A-lagstroppen gruppert etter lagdel — Keeper, Forsvar, Midtbane, Angrep.
+  // Keeper er en presis posisjon; de tre andre er lagdeler og bæres i
+  // `usablePositions` med `positionSource: "gruppe"`.
+  {
+    clubId: "bjarg",
+    placeId: "stavollen_kunstgress",
+    dokumentert: 32,
+    spillbar: 30,
+    nye: 31,
+    // Rolf Birger Pedersen fantes i Brann-arven som «Pesen» — Bjarg-kilden
+    // sier selv at han kom fra Brann. De tre andre historiske er nye.
+    krysskoblet: ["rolf_birger_pesen_pedersen"],
+    eraSource: "belagt",
+    doc: "docs/P2_BJARG_SOURCE_PASS.md"
+  },
+  {
+    clubId: "eik_tonsberg",
+    placeId: "tonsberg_gressbane",
+    dokumentert: 25,
+    spillbar: 25,
+    nye: 21,
+    // De fire med «kortere klubbopphold» i klubbartikkelen finnes alle fra før.
+    krysskoblet: ["erik_soler", "ronny_johnsen", "jan_frode_nornes", "erik_thorstvedt"],
+    eraSource: "belagt",
+    doc: "docs/P2_EIK_TONSBERG_SOURCE_PASS.md"
+  },
+  {
+    clubId: "lysekloster",
+    placeId: "lysekloster_idrettspark",
+    dokumentert: 16,
+    spillbar: 16,
+    nye: 15,
+    krysskoblet: ["ola_lerheim_olsen"],
+    eraSource: "belagt",
+    doc: "docs/P2_LYSEKLOSTER_SOURCE_PASS.md"
+  },
+  {
+    clubId: "traff",
+    placeId: "reknesbanen",
+    dokumentert: 23,
+    spillbar: 23,
+    nye: 21,
+    // Petter Eichler Jensen er utelatt: NFF fører ham som keeper, katalogen som
+    // CB/CM/DM. To menn, eller én kilde som tar feil — ikke en kobling å gjøre.
+    // Vegard Valgermo Forren er derimot krysskoblet: no.wikipedia sier at han er
+    // «spillende assistenttrener for Træff», altså Moldes Vegard Forren.
+    krysskoblet: ["vegard_forren", "kjetil_holand_tosse"],
+    eraSource: "belagt",
+    doc: "docs/P2_TRAFF_SOURCE_PASS.md"
+  },
+  {
+    clubId: "vidar",
+    placeId: "lassa_idrettspark",
+    dokumentert: 26,
+    spillbar: 26,
+    nye: 24,
+    krysskoblet: ["william_schjolberg_husebo", "jan_fjetland"],
+    eraSource: "belagt",
+    doc: "docs/P2_VIDAR_SOURCE_PASS.md"
+  },
+  {
+    clubId: "sandviken",
+    placeId: "stemmemyren",
+    dokumentert: 31,
+    spillbar: 31,
+    nye: 29,
+    krysskoblet: ["joakim_aasen", "david_sissoko"],
+    eraSource: "belagt",
+    doc: "docs/P2_SANDVIKEN_SOURCE_PASS.md"
   }
 ];
 

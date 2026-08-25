@@ -338,6 +338,24 @@ const REVIEWED_NAME_PAIRS = new Map([
   // mål på 80 kamper mellom 1911 og 1920. Posisjonen alene avgjør det. Han er
   // ført med klubbsuffiks, slik Tore Pedersen (RBK) allerede var.
   ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"],
+  // NFF-troppene i avdeling 1 utløste fem par på én gang, og vakten avgjorde
+  // tre av dem MOT importen: to var samme mann, og de ble krysskoblet i stedet
+  // for å bli nye profiler.
+  //
+  //   Rolf Birger Pedersen  — Bjarg-kilden sier «tidligere Brannspiller og
+  //     landslagsspiller», og katalogen hadde ham i Brann-arven som «Pesen».
+  //   Vegard Valgermo Forren — no.wikipedia: «(født 1988) … spillende
+  //     assistenttrener for Træff». Samme mann som Moldes Vegard Forren.
+  //
+  // To andre par lot seg ikke avgjøre: Tommy Rivaldo Svendsen (Lysekloster) mot
+  // Skeids Tommy Svendsen, og Adrian Bergersen (Vidar) mot Egersunds Adrian
+  // Amundsen Bergersen. Begge par er samme lagdel, så det finnes ikke noe
+  // skille å begrunne med — og en påstand om at de ER to menn er like ubelagt
+  // som en sammenslåing. De to nye er derfor UTELATT fra importen. Da påstår
+  // katalogen ingenting, og paret finnes ikke å registrere.
+  //
+  // Det ene ekte paret står igjen, og posisjonen avgjør det alene:
+  ["alexander alnæs pedersen|alexander pedersen", "Bjargs angrepsspiller mot Lyns keeper"],
   // Brattvåg-importen: Flem er et av de vanligste navnene i Haram, og klubbens
   // egen adelskalender fører fire av dem (Bård, Egil, Hans Inge og Bjarne).
   // Bjarte er et annet fornavn enn Bjarne, ikke en stavevariant, og de to står
