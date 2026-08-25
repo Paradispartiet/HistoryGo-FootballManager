@@ -64,6 +64,7 @@
     "audit:clubs": "node scripts/audit-clubs.mjs",
     "audit:club-heritage": "node scripts/audit-club-heritage.mjs",
     "audit:import-club-heritage": "node scripts/audit-import-club-heritage.mjs",
+    "audit:nff-squad": "node scripts/audit-nff-squad.mjs",
     "sim:league-playoff": "node scripts/simulate-league-playoff.mjs",
     "audit:ci-coverage": "node scripts/audit-ci-coverage.mjs",
     "audit:product-status": "node scripts/audit-product-status.mjs",

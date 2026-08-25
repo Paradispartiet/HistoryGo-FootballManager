@@ -59,6 +59,41 @@ kjør `npm run audit:club-heritage`.
 
 ---
 
+## Hvor troppen hentes fra
+
+Fjorten av de seksten P2-arvene ble landet på **NFFs lagside**, og ingen av dem
+på klubbenes redaksjonelle historikk. `scripts/nff-squad.mjs` henter og leser
+den:
+
+```bash
+node scripts/nff-squad.mjs --turnering 206007   # lagene i 2. divisjon avd. 1
+node scripts/nff-squad.mjs --lag 24             # troppen for ett lag
+node scripts/nff-squad.mjs --lag 24 --json      # samme, som JSON
+```
+
+Sidene er server-rendret, så `curl` holder — ingen nettleser trengs. (I dette
+utviklingsmiljøet må Node fetch få `NODE_USE_ENV_PROXY=1` for å lese
+`HTTPS_PROXY`; se `/root/.ccr/README.md`.)
+
+**Laget må finnes via ligatabellen, ikke via klubben.** Klubbenes lagoversikt
+blander A-lag, rekruttlag, andrelag og 7er-lag — Bjarg har 84 registrerte lag,
+Sotra 79. To av åtte klubber i avdeling 1 fikk først feil tropp da laget ble
+plukket fra klubbsiden: Sandviken traff B-laget (10 spillere mot 32) og Eik
+traff breddeklubbens «Menn 1» i stedet for «871 Menn Senior A».
+
+Overskriftene på siden — Keeper, Forsvar, Midtbane, Angrep — oversettes av
+`tilKildefelt()` til nøyaktig de feltene kildefila forstår. Draktnummer leses,
+men importeres ikke: at nummer 1 pleier å være keeper er en konvensjon, ikke en
+kilde, og lagdelen sier allerede det nummeret ville antydet.
+
+`npm run audit:nff-squad` måler parseren mot en lagret lagside
+(`tests/fixtures/nff-lagside-tropp.html`). Den kan ikke fange en framtidig
+markupendring hos NFF — ingenting offline kan det — men den låser kontrakten og
+fanger de to feilene som faktisk oppsto: at lagdel-tilskrivningen lekker forbi
+troppen, og at navn og draktnummer hentes fra hver sin spiller.
+
+---
+
 ## Lagdel som posisjon
 
 En troppsliste sier ofte «forsvar» og ikke «midtstopper». Det er mindre enn en

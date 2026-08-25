@@ -162,7 +162,10 @@ npm run sim:player-attributes
 npm run sim:club-squad
 npm run audit:club-heritage
 npm run audit:import-club-heritage
+npm run audit:nff-squad
 node scripts/sync-club-affiliations.mjs
 ```
+
+Troppene hentes med `node scripts/nff-squad.mjs --lag <fiksId>`; lagene finnes med `--turnering <fiksId>`. Se `docs/P2_IMPORT_V1.md`.
 
 `modellerteArver.arver` skal fortsatt være **0**. Går den opp, er en arv fylt med modellerte felt igjen, og gjelden er tilbake.
