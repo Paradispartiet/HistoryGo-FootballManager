@@ -733,6 +733,10 @@ const strengthShare = strengthSets.size / medStyrker.length;
 // ferdighet. Rekkefølgen er den samme som før — den følger hvor mye kilden
 // siterer — men nivåene er høyere, fordi fellesspillerne som pyntet på tallet
 // er ute.
+// SNL-passet 26.08.2026 senket tolv av disse takene. Ratchet-vakten regnet dem
+// ut selv og nektet å godta de gamle: 55 profiler fikk kildebelagte styrker,
+// og et tak som ligger igjen over det målte er en tillatelse til å drive
+// tilbake. Tallene under er derfor målte, ikke valgte.
 const KJENT_UDOKUMENTERT = {
   // Kilden sier ordrett om 28 av sine 85 at den ikke dokumenterer en ferdighet
   // «som bør importeres som strength uten ny kilde». Målt 13 av 69.
@@ -882,20 +886,20 @@ const KJENT_UDOKUMENTERT = {
   // fra legacy-filens scoutingtekst. Taket er derfor ikke en grense her, det er
   // en registrering av at arven ikke dokumenterer ferdigheter i det hele tatt.
   // Tallet skal SYNKE når individuelle kilder leses tilbake.
-  nadderud_stadion: 1.01,    // Stabæk
-  araasen_stadion: 0.93,     // Lillestrøm
+  nadderud_stadion: 0.99,    // Stabæk
+  araasen_stadion: 0.89,     // Lillestrøm
   nordmore_stadion: 1.01,    // Kristiansund
   kfum_arena: 0.93,          // KFUM Oslo
   jotun_arena: 0.99,         // Sandefjord
-  bislett_stadion: 1.00,     // Lyn
-  sor_arena: 1.00,           // Start
+  bislett_stadion: 0.96,     // Lyn
+  sor_arena: 0.96,           // Start
   bryne_stadion: 1.01,       // Bryne
   mellos_stadion: 1.00,      // Moss
   color_line_stadion: 1.00,  // Aalesund
-  nordre_asen: 1.00,         // Skeid
-  fredrikstad_stadion: 0.96, // Fredrikstad: se konverteringen
-  skagerak_arena: 1.00,      // Odd
-  romssa_arena: 0.98,        // Tromsø: 53 av 53
+  nordre_asen: 0.97,         // Skeid
+  fredrikstad_stadion: 0.94, // Fredrikstad: se konverteringen
+  skagerak_arena: 0.97,      // Odd
+  romssa_arena: 0.96,        // Tromsø: 53 av 53
   // Pors P2: klubbhistorikken dokumenterer medlemskap/epoker og et begrenset
   // posisjonslag, men ingen individuelle ferdighetsclaims. 58/58 nye eksklusive
   // profiler er derfor THIN-SOURCE på ferdighetsaksen. 1,01 er en eksplisitt
@@ -959,8 +963,8 @@ const KJENT_UDOKUMENTERT = {
   // mest dokumentasjon av alle og lavest dekning av de fire, fordi mesteparten
   // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
   // dobbelt så mange spillerbeskrivelser.
-  lerkendal_stadion: 0.81,   // Rosenborg: målt 66 av 83
-  aker_stadion: 0.77,        // Molde: målt 41 av 54
+  lerkendal_stadion: 0.79,   // Rosenborg: målt 66 av 83
+  aker_stadion: 0.72,        // Molde: målt 41 av 54
   marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
   haugesund_stadion: 0.59,   // Haugesund/Haugar/Djerv: målt 50 av 87
   // Andre pulje kildepass, og den viser hva aksen koster i den lave enden.
@@ -977,8 +981,8 @@ const KJENT_UDOKUMENTERT = {
   // tabeller.
   intility_arena: 0.82,      // Vålerenga: målt 53 av 66
   aspmyra_stadion: 0.93,     // Bodø/Glimt: målt 43 av 47
-  brann_stadion: 0.91,       // Brann: målt 42 av 47
-  lyse_arena: 0.94           // Viking: målt 47 av 51
+  brann_stadion: 0.84,       // Brann: målt 42 av 47
+  lyse_arena: 0.90           // Viking: målt 47 av 51
 };
 
 // ---------------------------------------------------------------------------

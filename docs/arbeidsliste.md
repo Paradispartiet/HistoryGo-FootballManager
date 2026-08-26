@@ -272,6 +272,52 @@ null arbeid å gjøre.
 
 ---
 
+## P3 — GJORT (26.08.2026): styrkepasset
+
+Da alle 60 klubbene hadde arv, var den tynne flaten ikke lenger navn.
+**2692 av 3284 spillbare profiler hadde ingen styrker**, og sju klubber sto på
+null av tretti. Posisjon uten karakter betyr at motoren skiller spillere på
+epoke og posisjon alene.
+
+**Kilden fantes fra før og var ikke lest ut.** P1 brukte Store norske leksikon,
+men aldri systematisk: SNL har en taksonomi, «Norske fotballspillere», med
+**305 biografier**. 171 av navnene står i katalogen; 109 var uten styrker og ble
+lest enkeltvis.
+
+**55 av 109 bærer en ferdighetspåstand. 54 gjør det ikke**, og de står ikke i
+noe register — en biografi som bare forteller karriere gir ingen styrker.
+Utelatelsene er like mye et resultat: Thomas Myhre har bare *svakheter*
+beskrevet; Erland Johnsen fikk seks styrker og ikke `first_touch`, fordi kilden
+selv sier at teknikk og pasningsspill var svakhetene hans; Vidar Riseth var «en
+brukbar hodespiller», og brukbar er ikke en styrke.
+
+`claim` siterer nå kilden ordrett i stedet for å sammenfatte den på engelsk,
+slik P1-postene gjorde. En påstand som gjengir kildens egne ord kan
+kontrolleres uten å åpne kilden, og `audit:p2-source-claims` krever det.
+
+| | Antall | Hvor |
+|---|---:|---|
+| Utenfor de 18 P1-arvene | 38 | `src/football-player-source-claims-p2.js` (ny) |
+| I en NY P1-arv | 11 | `P1_NEW_DOCUMENTED` |
+| I en EKSISTERENDE P1-arv | 6 | `P1_EXISTING_SUPPLEMENTS` |
+
+**Det frosne er nevneren, ikke dekningen.** 936/701/235 er populasjonen P1
+målte. Fordelingen over den er en måling av hvor mye en kilde beskriver, og den
+skal flytte seg når noen leser en kilde som ikke var lest:
+**45 → 62 DOKUMENTERT, 876 → 859 THIN-SOURCE**, DELVIS uendret.
+
+**Ratchet-vakten regnet ut sin egen konsekvens.** Tolv tak i
+`KJENT_UDOKUMENTERT` lå etterpå igjen over det målte, og `sim:player-attributes`
+felte dem med de nye verdiene i feilmeldingen. Et tak over det målte er en
+tillatelse til å drive tilbake. Tallene er nå målte, ikke valgte.
+
+Katalogen står på **667 av 3448 med styrker**, mot 592. Fem klubber har fortsatt
+null — Brattvåg, Vidar, Sandviken, Bjarg og Junkeren — og det er ikke en feil et
+verktøy kan rette: **SNL dekker ikke 2. divisjon.** Hele passet står i
+`docs/P3_SNL_STYRKEPASS.md`.
+
+---
+
 ## Slik måles status
 
 ```bash
@@ -281,6 +327,7 @@ npm run sim:club-squad
 npm run audit:club-heritage
 npm run audit:import-club-heritage
 npm run audit:nff-squad
+npm run audit:p2-source-claims
 node scripts/sync-club-affiliations.mjs
 ```
 
