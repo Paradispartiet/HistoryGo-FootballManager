@@ -87,13 +87,21 @@ const ALDRI_FRA_IMPORT = [
 // Anførselstegn rundt kallenavn fjernes, men kallenavnet selv beholdes — det er
 // formen de to siste P2-importene brukte (einar_jeisen_gundersen).
 // ---------------------------------------------------------------------------
+// Bokstaver Unicode-dekomponering IKKE tar. NFD splitter «é» i e + aksent, men
+// «ł» er én egen bokstav uten aksent å skille ut, og faller derfor gjennom til
+// `[^a-z0-9]` og blir til understrek. `Paweł Chrupałła` ble `pawe_chrupa_a` —
+// og siden samme slug er navnekollisjonsnøkkelen, ville en senere kilde som
+// staver navnet med ASCII ikke funnet ham og laget en dublett med halv karriere.
+const UDEKOMPONERBARE = [
+  [/ł/g, "l"], [/đ/g, "d"], [/ħ/g, "h"], [/ŋ/g, "ng"], [/œ/g, "oe"],
+  [/þ/g, "th"], [/ð/g, "d"], [/ß/g, "ss"], [/ı/g, "i"], [/ĸ/g, "k"]
+];
+
 export function slugify(navn) {
-  return String(navn)
-    .replace(/[«»"'']/g, "")
-    .toLowerCase()
-    .replace(/æ/g, "ae")
-    .replace(/ø/g, "o")
-    .replace(/å/g, "a")
+  let s = String(navn).replace(/[«»"'']/g, "").toLowerCase();
+  s = s.replace(/æ/g, "ae").replace(/ø/g, "o").replace(/å/g, "a");
+  for (const [fra, til] of UDEKOMPONERBARE) s = s.replace(fra, til);
+  return s
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "_")
@@ -126,7 +134,15 @@ function byggProfil(rad, kilde) {
   return {
     id: rad.id,
     name: rad.navn,
-    nationality: kilde.nationality || "Norge",
+    // NASJONALITET OPPFINNES IKKE. Feltet sto som `kilde.nationality || "Norge"`,
+    // og siden ingen kildefil oppga det, ble hver eneste importerte spiller
+    // norsk. En troppsliste dokumenterer at mannen er REGISTRERT i norsk
+    // seriesystem, ikke hvilket land han spiller for — og `getNationalBasePlayerIds`
+    // i app.js velger landslagsspillere på nøyaktig likhet, så en feil her gjør
+    // Gambias Jibril Bojang valgbar for Norge og utilgjengelig for sitt eget lag.
+    // Fire slike sto i katalogen. Feltet settes nå bare når kilden sier det,
+    // per spiller eller for hele fila, og utelates ellers.
+    ...(rad.nasjonalitet || kilde.nationality ? { nationality: rad.nasjonalitet || kilde.nationality } : {}),
     era: rad.era,
     eraSource: kilde.eraSource,
     sourcePlaceIds: [kilde.placeId],
@@ -153,6 +169,39 @@ function byggProfil(rad, kilde) {
     clubAffiliations: [
       { clubId: kilde.clubId, relation: "played_for", status: "club_profile", source: "belagt" }
     ]
+  };
+}
+
+
+// Et gjensyn kan bære en posisjon profilen ikke har.
+//
+// `--suppler` hoppet over enhver mann som alt sto i arven, og kastet dermed
+// posisjonen kilden ga. En historikkpost uten posisjon som senere dukker opp i
+// en datert tropp med lagdel forble ikke-spillbar, utenfor banens unlocks og
+// utenfor den spillbare poolen — og rapporten kalte det et harmløst gjensyn.
+//
+// Regelen er ensrettet: en profil UTEN posisjon kan få en, og bare det. Har han
+// alt en posisjon, er dette to påstander om samme mann, og det er ikke en
+// avgjørelse et skript kan ta — importen stopper og lar mennesket lese begge
+// kildene. En posisjon skrives aldri over, og oppløsningen kan aldri bli grovere.
+function skjerp(mann, rad) {
+  const nyPosisjon = rad.posisjoner.length > 0 || Boolean(rad.gruppe);
+  if (!nyPosisjon) return {};
+  const har = [...(mann.naturalPositions || []), ...(mann.usablePositions || [])];
+  if (har.length === 0) {
+    return {
+      patch: rad.gruppe
+        ? { naturalPositions: [], usablePositions: [...GRUPPEPOSISJONER[rad.gruppe]], positionSource: "gruppe" }
+        : { naturalPositions: [...rad.posisjoner], usablePositions: [] }
+    };
+  }
+  const nye = rad.gruppe ? GRUPPEPOSISJONER[rad.gruppe] : rad.posisjoner;
+  const likt = nye.length === har.length && nye.every((p) => har.includes(p));
+  if (likt) return {};
+  return {
+    feil: `${rad.navn}: står i arven med ${JSON.stringify(har)}, kilden sier ${JSON.stringify(nye)}. `
+      + "To kilder sier ulikt om samme mann, og en supplering skriver ikke over en posisjon. "
+      + "Avgjør mot kildene og rett profilen for hånd, eller utelat raden."
   };
 }
 
@@ -196,13 +245,20 @@ export function planImport({
   if (!club) {
     stopp(`klubben \`${kilde?.clubId}\` finnes ikke i football_clubs.json`);
   } else if (suppler) {
-    // Supplering fyller PÅ en ferdig arv. Den skal aldri kunne opprette en, og
-    // aldri kunne mynte et nytt homePlaceId — begge deler ville vært en ny
+    // Supplering fyller PÅ en arv som finnes. Den skal aldri kunne opprette en,
+    // og aldri kunne mynte et nytt homePlaceId — begge deler ville vært en ny
     // import forkledd som en påfylling.
-    if (club.playerPoolStatus !== "ready") {
-      stopp(`klubben \`${kilde.clubId}\` står ikke som \`ready\` — det finnes ingen arv å supplere. Kjør en vanlig import.`);
-    }
-    if (club.homePlaceId !== kilde.placeId) {
+    //
+    // KRAVET ER AT ARVEN FINNES, IKKE AT DEN ER FERDIG. Første utgave krevde
+    // `ready`, og det stengte en dør: en import med under femten spillbare er
+    // et gyldig utfall — stedet blir opprettet og klubben står `pending` — men
+    // da avviste vanlig modus den fordi stedet fantes, og `--suppler` fordi
+    // poolen ikke var ferdig. Den halve arven kunne bare fullføres ved å
+    // redigere katalogen for hånd, som er nøyaktig det verktøyet finnes for å
+    // slippe. `homePlaceId` er det som avgjør at det er en arv å fylle på.
+    if (!club.homePlaceId) {
+      stopp(`klubben \`${kilde.clubId}\` har ingen \`homePlaceId\` — det finnes ingen arv å supplere. Kjør en vanlig import.`);
+    } else if (club.homePlaceId !== kilde.placeId) {
       stopp(`klubben har homePlaceId \`${club.homePlaceId}\`, kildefila sier \`${kilde.placeId}\` — en supplering kan ikke flytte banen`);
     }
   } else {
@@ -288,7 +344,10 @@ export function planImport({
       gruppe,
       era,
       krysskobling: rad.crossLink === true,
-      existingId: typeof rad.existingId === "string" ? rad.existingId.trim() : null
+      existingId: typeof rad.existingId === "string" ? rad.existingId.trim() : null,
+      nasjonalitet: typeof rad.nationality === "string" && rad.nationality.trim()
+        ? rad.nationality.trim()
+        : null
     });
   });
 
@@ -305,6 +364,7 @@ export function planImport({
   const nye = [];
   const krysskoblinger = [];
   const gjensyn = [];
+  const skjerpinger = [];
   const iArven = suppler
     ? players.filter((p) => (p.clubAffiliations || []).some((a) => a.clubId === kilde.clubId))
     : [];
@@ -342,7 +402,11 @@ export function planImport({
     const alleredeIArven = treff.filter((p) => (p.clubAffiliations || [])
       .some((a) => a.clubId === kilde.clubId));
     if (suppler && alleredeIArven.length > 0) {
-      gjensyn.push({ navn: rad.navn, id: alleredeIArven[0].id });
+      const mann = alleredeIArven[0];
+      const skjerping = skjerp(mann, rad);
+      if (skjerping.feil) stopp(skjerping.feil);
+      else if (skjerping.patch) skjerpinger.push({ navn: rad.navn, id: mann.id, ...skjerping.patch });
+      else gjensyn.push({ navn: rad.navn, id: mann.id });
       continue;
     }
 
@@ -408,7 +472,11 @@ export function planImport({
       [...(eksisterende.naturalPositions || []), ...(eksisterende.usablePositions || [])].length > 0)
     .map(({ eksisterende }) => eksisterende.id);
 
-  const alleSpillbare = [...spillbare, ...krysskobletSpillbare].sort();
+  // En skjerpet profil BLIR spillbar av denne kjøringen, og må derfor både
+  // telles og legges inn i banens unlocks. Uten det ville `audit:club-heritage`
+  // felt arven på at banen åpner færre enn den spillbare poolen.
+  const skjerpetSpillbare = skjerpinger.map((x) => x.id);
+  const alleSpillbare = [...spillbare, ...krysskobletSpillbare, ...skjerpetSpillbare].sort();
   const tilfort = profiler.length + krysskoblinger.length;
 
   // I supplerings-modus er tallene arvens TOTAL, ikke det denne kjøringen la
@@ -419,6 +487,8 @@ export function planImport({
   const spillbarFraFor = iArvenFraFor.filter((p) =>
     [...(p.naturalPositions || []), ...(p.usablePositions || [])].length > 0);
   const dokumentert = suppler ? iArvenFraFor.length + tilfort : tilfort;
+  // `spillbarFraFor` er målt FØR skjerpingen, så en skjerpet profil lå der som
+  // ikke-spillbar og telles nå én gang gjennom `alleSpillbare`.
   const spillbarTotalt = suppler ? spillbarFraFor.length + alleSpillbare.length : alleSpillbare.length;
   // `nye` i ARVER-raden er profilene arven eier ALENE, målt på sourcePlaceIds —
   // og `krysskoblet` er resten. Begge må derfor telle det som alt står der.
@@ -459,6 +529,7 @@ export function planImport({
     advarsler,
     profiler,
     krysskoblinger,
+    skjerpinger,
     place,
     clubPatch: {
       homePlaceId: kilde.placeId,
@@ -484,7 +555,7 @@ export function planImport({
       krysskoblet: [...krysskobletFraFor, ...krysskoblinger.map((k) => k.existingId)],
       eraSource: kilde.eraSource,
       kilder: kilde.sources.length,
-      ...(suppler ? { tilfort, gjensyn: gjensyn.length } : {})
+      ...(suppler ? { tilfort, gjensyn: gjensyn.length, skjerpet: skjerpinger.length } : {})
     }
   };
 }
@@ -495,6 +566,11 @@ export function planImport({
 // ---------------------------------------------------------------------------
 export function applyImport({ plan, kilde, clubs, players, placeUnlocks }) {
   players.push(...plan.profiler);
+  // Skjerpingene: en profil som sto i arven uten posisjon har fått en av
+  // kilden. Bare posisjonsfeltene røres — identitet, epoke og arv står.
+  for (const { id, ...patch } of plan.skjerpinger || []) {
+    Object.assign(players.find((p) => p.id === id), patch);
+  }
   for (const { existingId } of plan.krysskoblinger) {
     const mål = players.find((p) => p.id === existingId);
     mål.clubAffiliations = mål.clubAffiliations || [];

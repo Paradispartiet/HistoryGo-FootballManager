@@ -200,6 +200,69 @@ rekonstruerer arven i samme rekkefølge som den faktisk ble bygget.
 
 ---
 
+## Fire ting en review-bot fant, og som alle var ekte
+
+`chatgpt-codex-connector` leste PR-en og flagget fire ting. Alle fire var reelle
+feil i koden her, og alle er rettet.
+
+**Nasjonalitet ble oppfunnet.** Feltet sto som `kilde.nationality || "Norge"`,
+og siden ingen kildefil oppga det, ble hver eneste importerte spiller norsk. En
+troppsliste dokumenterer at mannen er *registrert i norsk seriesystem*, ikke
+hvilket land han spiller for — og `getNationalBasePlayerIds` i `app.js` velger
+landslagsspillere på nøyaktig likhet, så feilen gjorde **Gambias Jibril Bojang
+og Robin Bjørnholm-Jatta, Tunisias Sebastian Tounekti og Trinidad og Tobagos
+Nicklas Frenderup valgbare for Norge** — og utilgjengelige for sine egne land.
+Feltet settes nå bare når kilden sier det, per spiller eller for hele fila, og
+utelates ellers. De fire er rettet i katalogen.
+
+**Slugen tapte bokstaver Unicode ikke dekomponerer.** NFD splitter «é» i e +
+aksent, men «ł» er én egen bokstav uten aksent å skille ut, og falt gjennom til
+understrek: `Paweł Chrupałła` ble `pawe_chrupa_a`. Siden samme slug er
+navnekollisjonsnøkkelen, ville en senere kilde med ASCII-stavemåten ikke funnet
+ham og laget en dublett med halv karriere. `ł đ ħ ŋ œ þ ð ß ı ĸ` translittereres
+nå eksplisitt, og id-en er rettet.
+
+**En halv arv kunne ikke fullføres.** `--suppler` krevde `ready`. En import med
+under femten spillbare er et gyldig utfall — stedet opprettes og klubben står
+`pending` — men da avviste vanlig modus den fordi stedet fantes, og `--suppler`
+fordi poolen ikke var ferdig. Den halve arven kunne bare fullføres ved å
+redigere katalogen for hånd, som er nøyaktig det verktøyet finnes for å slippe.
+Kravet er nå at arven FINNES (`homePlaceId`), ikke at den er ferdig.
+
+**Et gjensyn kastet posisjonen kilden ga.** Se under.
+
+---
+
+## Skjerping: et gjensyn kan bære en posisjon profilen ikke har
+
+`--suppler` hoppet over enhver mann som alt sto i arven. En historikkpost uten
+posisjon som senere dukket opp i en datert tropp med lagdel forble derfor
+ikke-spillbar, utenfor banens unlocks og utenfor den spillbare poolen — og
+rapporten kalte det et harmløst gjensyn.
+
+Regelen er **ensrettet**, og de tre utfallene er ulike påstander:
+
+| Kilden sier | Utfall |
+|---|---|
+| ingenting nytt om posisjonen | gjensyn — han hoppes over og telles |
+| en posisjon, og profilen har ingen | **skjerping** — han blir spillbar |
+| en posisjon som avviker fra den han har | **stopp** |
+
+En posisjon skrives aldri over, og oppløsningen kan aldri bli grovere. Sier to
+kilder ulikt om samme mann, er det ikke en avgjørelse et skript kan ta:
+importen stopper og lar mennesket lese begge.
+
+En skjerpet profil legges også inn i **banens unlocks**. Uten det ville arven
+stått med flere spillbare enn banen åpner, og `audit:club-heritage` felt den.
+
+**Modusen har null arbeid å gjøre i dag.** Målt mot alle 326 hentede
+Wikipedia-artikler finnes det sju profiler en kilde kunne skjerpet, og alle sju
+er de tvetydige tolagdels-verdiene («Forsvar/Midtbane», «Back, midtbanespiller»)
+som skjemaet ikke kan uttrykke og importen med vilje avviser. Regelen finnes
+fordi den stille tapte en påstand, ikke fordi den har en kø å ta.
+
+---
+
 ## Hva importen stopper på
 
 Ingen av disse er en verdi skriptet kan velge. Hver av dem er en avgjørelse

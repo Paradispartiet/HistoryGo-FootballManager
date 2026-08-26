@@ -88,12 +88,21 @@ for (const arv of ARVER) {
   // den eneste måten å måle suppleringsmodusen mot ekte katalogdata på.
   const generasjoner = Array.isArray(arv.eraSource) ? arv.eraSource : [arv.eraSource];
 
-  const somRad = (p) => (p.positionSource === "gruppe"
-    // En profil med `positionSource: "gruppe"` kom inn som en LAGDEL, ikke som
-    // posisjoner. Rekonstruksjonen må gi den tilbake på samme form, ellers ville
-    // fasiten bli bygget fra `naturalPositions` — som er tom for dem.
-    ? { name: p.name, positionGroup: TIL_LAGDEL[p.usablePositions.join(",")], era: p.era }
-    : { name: p.name, positions: p.naturalPositions, era: p.era });
+  // `nationality` er med fordi importen ikke lenger oppfinner den. Feltet sto
+  // som `kilde.nationality || "Norge"` og gjorde hver importert spiller norsk;
+  // nå settes det bare når kilden sier det. Rekonstruksjonen er en kildefil, og
+  // en kildefil som skal gjenskape en profil med nasjonalitet må oppgi den.
+  const somRad = (p) => ({
+    name: p.name,
+    ...(p.nationality ? { nationality: p.nationality } : {}),
+    ...(p.positionSource === "gruppe"
+      // En profil med `positionSource: "gruppe"` kom inn som en LAGDEL, ikke som
+      // posisjoner. Rekonstruksjonen må gi den tilbake på samme form, ellers ville
+      // fasiten bli bygget fra `naturalPositions` — som er tom for dem.
+      ? { positionGroup: TIL_LAGDEL[p.usablePositions.join(",")] }
+      : { positions: p.naturalPositions }),
+    era: p.era
+  });
 
   const byggKilde = (eraSource, profiler, krysskoblet) => ({
     clubId: arv.clubId,
@@ -471,29 +480,82 @@ krevAvslag("både posisjon og lagdel",
 }
 
 // En spiller som ALT står i arven er ikke en kollisjon i supplerings-modus —
-// kilden er den samme troppen en sesong senere. Han hoppes over og telles.
+// kilden er den samme troppen en sesong senere. Men hva som skjer med ham
+// avhenger av hva kilden sier om posisjonen hans, og de tre utfallene er
+// ULIKE påstander:
+//
+//   * kilden sier ingenting nytt        → gjensyn, han hoppes over
+//   * han står uten posisjon, kilden gir én → SKJERPING, han blir spillbar
+//   * de sier ulikt                     → STOPP, to kilder om samme mann
+//
+// Uten det tredje ville en supplering stille skrevet over en posisjon; uten
+// det andre ville en historikkpost blitt liggende ikke-spillbar selv om en
+// datert tropp navnga lagdelen hans.
 {
-  const iArven = alleSpillere.find((p) => (p.clubAffiliations || [])
-    .some((a) => a.clubId === PRØVEKLUBB));
-  assert.ok(iArven, "fant ingen profil i prøvearven");
-  const kilde = {
-    ...basis,
-    players: [
-      { name: iArven.name, positionGroup: "midtbane", era: "modern" },
-      { name: "Testolav Testesen", positions: ["CM"], era: "modern" }
-    ]
-  };
-  const r = planImport({
-    kilde,
-    clubs: kopi(alleKlubber),
-    players: kopi(alleSpillere),
-    placeUnlocks: kopi(alleSteder),
-    modus: "suppler"
-  });
-  assert.deepEqual(r.feil, [], `en spiller som alt står i arven skal ikke stoppe en supplering — fikk ${JSON.stringify(r.feil)}`);
-  assert.equal(r.rapport.gjensyn, 1, "gjensynet skal telles");
-  assert.equal(r.rapport.tilfort, 1, "bare den nye er tilført");
-  assert.equal(r.profiler.length, 1, "gjensynet skal ikke bli en ny profil");
+  const medPosisjon = alleSpillere.find((p) => (p.clubAffiliations || [])
+    .some((a) => a.clubId === PRØVEKLUBB)
+    && [...(p.naturalPositions || []), ...(p.usablePositions || [])].length > 0);
+  assert.ok(medPosisjon, "fant ingen profil med posisjon i prøvearven");
+
+  // 1. Uten ny posisjon: gjensyn.
+  {
+    const r = planImport({
+      kilde: { ...basis, players: [
+        { name: medPosisjon.name, era: "modern" },
+        { name: "Testolav Testesen", positions: ["CM"], era: "modern" }
+      ] },
+      clubs: kopi(alleKlubber), players: kopi(alleSpillere), placeUnlocks: kopi(alleSteder),
+      modus: "suppler"
+    });
+    assert.deepEqual(r.feil, [], `et gjensyn uten ny posisjon skal ikke stoppe — fikk ${JSON.stringify(r.feil)}`);
+    assert.equal(r.rapport.gjensyn, 1, "gjensynet skal telles");
+    assert.equal(r.rapport.skjerpet, 0, "ingenting å skjerpe");
+    assert.equal(r.rapport.tilfort, 1, "bare den nye er tilført");
+    assert.equal(r.profiler.length, 1, "gjensynet skal ikke bli en ny profil");
+  }
+
+  // 2. Motstridende posisjon: stopp. Skriptet KAN ikke avgjøre hvilken kilde
+  //    som gjelder, og en supplering skriver aldri over en posisjon.
+  {
+    const har = [...(medPosisjon.naturalPositions || []), ...(medPosisjon.usablePositions || [])];
+    const annen = ["forsvar", "midtbane", "angrep"].find((g) => {
+      const sett = { forsvar: ["CB", "LB", "RB", "WB"], midtbane: ["DM", "CM", "AM"], angrep: ["ST", "LW", "RW"] }[g];
+      return sett.length !== har.length || !sett.every((x) => har.includes(x));
+    });
+    const r = planImport({
+      kilde: { ...basis, players: [{ name: medPosisjon.name, positionGroup: annen, era: "modern" }] },
+      clubs: kopi(alleKlubber), players: kopi(alleSpillere), placeUnlocks: kopi(alleSteder),
+      modus: "suppler"
+    });
+    assert.ok(r.feil.some((f) => /To kilder sier ulikt om samme mann/.test(f)),
+      `en motstridende posisjon skal stoppe importen — fikk ${JSON.stringify(r.feil)}`);
+    assert.equal(r.profiler, undefined, "et avslag skal ikke returnere profiler");
+  }
+
+  // 3. Historikkpost som får sin første posisjon: skjerping. Han blir spillbar,
+  //    telles i poolen OG legges inn i banens unlocks — ellers ville arven stå
+  //    med flere spillbare enn banen åpner.
+  {
+    const utenPosisjon = alleSpillere.find((p) => (p.clubAffiliations || [])
+      .some((a) => a.clubId === PRØVEKLUBB)
+      && [...(p.naturalPositions || []), ...(p.usablePositions || [])].length === 0);
+    assert.ok(utenPosisjon, "fant ingen historikkpost i prøvearven");
+    const g = { clubs: kopi(alleKlubber), players: kopi(alleSpillere), placeUnlocks: kopi(alleSteder) };
+    const kilde = { ...basis, players: [{ name: utenPosisjon.name, positionGroup: "midtbane", era: "modern" }] };
+    const r = planImport({ kilde, ...g, modus: "suppler" });
+    assert.deepEqual(r.feil, [], `en skjerping skal ikke stoppe — fikk ${JSON.stringify(r.feil)}`);
+    assert.equal(r.rapport.skjerpet, 1, "skjerpingen skal telles");
+    assert.equal(r.rapport.tilfort, 0, "en skjerping tilfører ingen ny profil");
+    assert.ok(r.place.leggTilUnlocks.includes(utenPosisjon.id), "den skjerpede skal åpnes av banen");
+
+    applyImport({ plan: r, kilde, clubs: g.clubs, players: g.players, placeUnlocks: g.placeUnlocks });
+    const etter = g.players.find((p) => p.id === utenPosisjon.id);
+    assert.deepEqual(etter.usablePositions, ["DM", "CM", "AM"], "lagdelen skal skrives til usablePositions");
+    assert.deepEqual(etter.naturalPositions, [], "en lagdel er ingen naturlig posisjon");
+    assert.equal(etter.positionSource, "gruppe", "oppløsningen skal stå i dataene");
+    assert.equal(etter.era, utenPosisjon.era, "en skjerping rører ikke epoken");
+    assert.deepEqual(etter.sourcePlaceIds, utenPosisjon.sourcePlaceIds, "en skjerping rører ikke arven");
+  }
 }
 
 // Speilvendingene: hver modus avviser den andres tilstand.
@@ -515,6 +577,62 @@ krevAvslag("ny import på en ferdig arv", {}, /Bruk --suppler/,
   assert.ok(r.feil.some((f) => /kan ikke flytte banen/.test(f)),
     "en supplering skal ikke kunne flytte homePlaceId");
 }
+
+
+// ---------------------------------------------------------------------------
+// Nasjonalitet oppfinnes ikke
+//
+// Feltet sto som `kilde.nationality || "Norge"`, og siden ingen kildefil oppga
+// det, ble hver eneste importerte spiller norsk. En troppsliste dokumenterer at
+// mannen er REGISTRERT i norsk seriesystem, ikke hvilket land han spiller for.
+// `getNationalBasePlayerIds` i app.js velger landslagsspillere på nøyaktig
+// likhet, så feilen gjorde Gambias Jibril Bojang, Tunisias Sebastian Tounekti,
+// Robin Bjørnholm-Jatta og Trinidad og Tobagos Nicklas Frenderup valgbare for
+// Norge — og utilgjengelige for sine egne land. Alle fire er rettet i katalogen.
+// ---------------------------------------------------------------------------
+{
+  const g = grunnlag();
+  const r = planImport({
+    kilde: { ...basis, players: [
+      { name: "Testolav Testesen", positions: ["CM"], era: "modern" },
+      { name: "Testkåre Prøvesen", positions: ["CB"], era: "modern", nationality: "Gambia" }
+    ] },
+    ...g
+  });
+  assert.deepEqual(r.feil, [], "nasjonalitet per spiller er gyldig");
+  const uten = r.profiler.find((p) => p.id === "testolav_testesen");
+  const med = r.profiler.find((p) => p.id === "testkare_provesen");
+  assert.ok(!Object.hasOwn(uten, "nationality"),
+    "en kilde som ikke sier nasjonalitet skal ikke gi profilen én — «Norge» er en påstand, ikke en standardverdi");
+  assert.equal(med.nationality, "Gambia", "nasjonalitet fra kildefila skal skrives");
+
+  // Hele fila kan sette den, for en kilde som faktisk oppgir det.
+  const helFil = planImport({
+    kilde: { ...basis, nationality: "Island", players: [{ name: "Testolav Testesen", positions: ["CM"], era: "modern" }] },
+    ...grunnlag()
+  });
+  assert.equal(helFil.profiler[0].nationality, "Island", "nasjonalitet for hele fila skal skrives");
+}
+
+// ---------------------------------------------------------------------------
+// Slugen tåler bokstaver Unicode ikke dekomponerer
+//
+// NFD splitter «é» i e + aksent, men «ł» er én egen bokstav uten aksent å
+// skille ut, og falt gjennom til understrek. `Paweł Chrupałła` ble
+// `pawe_chrupa_a` — og siden samme slug er navnekollisjonsnøkkelen, ville en
+// senere kilde med ASCII-stavemåten ikke funnet ham og laget en dublett med
+// halv karriere.
+// ---------------------------------------------------------------------------
+for (const [navn, forventet] of [
+  ["Paweł Chrupałła", "pawel_chrupalla"],
+  ["Pawel Chrupalla", "pawel_chrupalla"],
+  ["Ægir Þórsson", "aegir_thorsson"],
+  ["Nikola Đurđić", "nikola_durdic"]
+]) {
+  assert.equal(slugify(navn), forventet, `id-form for «${navn}»`);
+}
+assert.ok(!alleSpillere.some((p) => /_[a-z]?_[a-z]?_$|__/.test(p.id)),
+  "ingen profil i katalogen skal ha en id med tapte bokstaver");
 
 // ---------------------------------------------------------------------------
 // Id-formen, mot navn som faktisk står i katalogen
