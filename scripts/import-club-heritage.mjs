@@ -319,6 +319,17 @@ export function planImport({
         stopp(`${rad.navn}: \`existingId\` \`${rad.existingId}\` finnes ikke i katalogen`);
         continue;
       }
+      // En krysskobling til en mann som ALT står i arven er ikke en ny
+      // påstand — den er den samme påstanden en gang til. Uten dette ble han
+      // talt to ganger og fikk `clubAffiliations` med samme klubb to steder,
+      // som `sync-club-affiliations` og `sim:club-squad` begge feller ved
+      // neste kjøring — altså et sted som ikke peker tilbake på importen.
+      // Åtte profiler traff dette i Wikipedia-passet. Behandles som gjensyn,
+      // slik at en kildefil kan kjøres om igjen uten å endre katalogen.
+      if ((eksisterende.clubAffiliations || []).some((a) => a.clubId === kilde.clubId)) {
+        gjensyn.push({ navn: rad.navn, id: eksisterende.id });
+        continue;
+      }
       krysskoblinger.push({ ...rad, eksisterende });
       continue;
     }
@@ -339,13 +350,25 @@ export function planImport({
     // Skriptet KAN ikke avgjøre om «Iver Krogh Hagen» er «Iver Hagen» med
     // mellomnavn eller en annen mann — men det kan nekte å gjette, og det er
     // forskjellen på to halve karrierer og én hel.
-    if (suppler) {
+    //
+    // Sjekken gjelder HELE KATALOGEN, ikke bare denne arven. Første utgave så
+    // bare i arven, fordi feilen ble funnet der. Wikipedia-passet viste hvorfor
+    // det var for smalt: «Joachim Olufsen» skulle inn i Stjørdals-Blink, mens
+    // `joachim_erlend_olufsen` sto under Rana — ingen felles arv, ingen
+    // navnetreff, og importen ville laget mannen på nytt. Eksaktnavn-sjekken
+    // under har alltid vært katalogomfattende; denne skal være det samme.
+    {
       const ledd = navneledd(rad.navn);
-      const nesten = iArven.filter((p) => erMellomnavnVariant(ledd, navneledd(p.name)));
+      const nesten = players.filter((p) => erMellomnavnVariant(ledd, navneledd(p.name)));
       if (nesten.length > 0) {
+        const iDenneArven = nesten.some((p) => (p.clubAffiliations || [])
+          .some((a) => a.clubId === kilde.clubId));
         stopp(
-          `${rad.navn}: arven har allerede ${nesten.map((p) => `«${p.name}» (\`${p.id}\`)`).join(", ")}, `
-          + "som skiller seg med ett navneledd. Er det samme mann, utelat raden — han står der alt. "
+          `${rad.navn}: katalogen har allerede ${nesten.map((p) => `«${p.name}» (\`${p.id}\`)`).join(", ")}, `
+          + "som skiller seg med ett navneledd. "
+          + (iDenneArven
+            ? "Er det samme mann, utelat raden — han står der alt. "
+            : "Er det samme mann, sett `crossLink: true` og `existingId`. ")
           + "Er det to menn, må navnet få et skille, slik `tore_pedersen_rbk` og `sverre_andersen_odd` har."
         );
         continue;

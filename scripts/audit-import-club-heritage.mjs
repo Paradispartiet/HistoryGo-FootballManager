@@ -172,11 +172,18 @@ for (const arv of ARVER) {
       assert.ok((fasit.naturalPositions || []).length > 0,
         `${merke}/${fasit.id}: ordlyd avviker på en profil UTEN posisjon — det er en ny feil, ikke den kjente`);
     }
-    assert.deepEqual(
-      { ...bygd, warningWhenMisused: null },
-      { ...fasit, warningWhenMisused: null },
-      `${merke}/${fasit.id}: profilen avviker fra katalogen`
-    );
+    // `clubAffiliations` sammenlignes bare på ARVENS EGEN klubb. En senere
+    // import kan krysskoble seg til en profil denne arven eier — Brattvågs
+    // Fredrik Vinje fikk Stjørdals-Blink av Wikipedia-passet — og den raden er
+    // ikke Brattvåg-importens ansvar og finnes ikke i kildefila den bygges av.
+    // Rekkefølgen og formen på arvens egen rad måles fortsatt felt for felt.
+    const egen = (p) => ({
+      ...p,
+      warningWhenMisused: null,
+      clubAffiliations: (p.clubAffiliations || []).filter((a) => a.clubId === arv.clubId)
+    });
+    assert.deepEqual(egen(bygd), egen(fasit),
+      `${merke}/${fasit.id}: profilen avviker fra katalogen`);
   }
   assert.equal(ordlydsavvik, arv.ordlydsavvik,
     `${merke}: antall profiler der katalogens advarsel motsier den kildebelagte posisjonen`);

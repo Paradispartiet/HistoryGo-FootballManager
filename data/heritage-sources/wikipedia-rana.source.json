@@ -1,0 +1,46 @@
+{
+  "clubId": "rana",
+  "clubName": "Rana",
+  "placeId": "sagbakken",
+  "placeName": "Sagbakken",
+  "eraSource": "belagt",
+  "doc": "docs/P2_WIKIPEDIA_DYBDEPASS.md",
+  "sources": [
+    {
+      "url": "https://no.wikipedia.org/wiki/Kategori:Fotballspillere_for_Rana_FK",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Wikipedia-kategorien for klubbens spillere; hver profil lest enkeltvis, og bare de som har klubben i SENIORkarrieren i infoboksen er tatt med."
+    }
+  ],
+  "players": [
+    {
+      "name": "Gabriel Andersen",
+      "crossLink": true,
+      "existingId": "gabriel_andersen",
+      "era": "modern"
+    },
+    {
+      "name": "Sevald Andreassen",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Theo Aksnes Olsen",
+      "crossLink": true,
+      "existingId": "theo_aksnes_olsen",
+      "era": "modern"
+    },
+    {
+      "name": "Joachim Olufsen",
+      "crossLink": true,
+      "existingId": "joachim_erlend_olufsen",
+      "era": "modern"
+    },
+    {
+      "name": "Adrian Olsen Teigen",
+      "crossLink": true,
+      "existingId": "adrian_olsen_teigen",
+      "era": "modern"
+    }
+  ]
+}

@@ -937,6 +937,11 @@ const KJENT_UDOKUMENTERT = {
   myhrer_stadion: 1.01,         // Eidsvold Turn
   ski_stadion: 1.01,            // Follo
   lade_idrettsanlegg: 1.01,     // Trygg/Lade
+  // Tromsdalen kom inn med Wikipedia-dybdepasset og ikke med registeret:
+  // 56 navn med posisjon fra artiklenes infobokser, og null styrker. En
+  // infoboks er en KARRIERETABELL — år, klubb, kamper — og beskriver ikke
+  // hvordan mannen spilte. Samme grunn som de tretten over.
+  tuil_arena: 1.01,             // Tromsdalen
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
   // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare

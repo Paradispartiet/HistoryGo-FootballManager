@@ -1,0 +1,451 @@
+{
+  "clubId": "tromsdalen",
+  "clubName": "Tromsdalen",
+  "placeId": "tuil_arena",
+  "placeName": "TUIL Arena",
+  "eraSource": "belagt",
+  "doc": "docs/P2_WIKIPEDIA_DYBDEPASS.md",
+  "sources": [
+    {
+      "url": "https://no.wikipedia.org/wiki/Kategori:Fotballspillere_for_Tromsdalen_UIL",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Wikipedia-kategorien for klubbens spillere; hver profil lest enkeltvis, og bare de som har klubben i SENIORkarrieren i infoboksen er tatt med."
+    }
+  ],
+  "players": [
+    {
+      "name": "Mathias Dahl Abelsen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Mohammed Ahamed",
+      "positions": [
+        "ST"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Fredrik Allertsen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Gabriel Andersen",
+      "crossLink": true,
+      "existingId": "gabriel_andersen",
+      "era": "modern"
+    },
+    {
+      "name": "Lars Henrik Andreassen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Thomas Kind Bendiksen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Stein Berg Johansen",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Vegard Berg Johansen",
+      "positions": [
+        "ST"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Eirik Bertheussen",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Morten Bredal-Thorsen",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Henrik Breimyr",
+      "era": "modern"
+    },
+    {
+      "name": "Jan Egil Brekke",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Thomas Braaten",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Ketil Elvenes",
+      "positions": [
+        "GK"
+      ],
+      "era": "historical"
+    },
+    {
+      "name": "Tarjei Hansen Gautestad",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Morten Giæver",
+      "crossLink": true,
+      "existingId": "morten_giaever",
+      "era": "modern"
+    },
+    {
+      "name": "Sigurd Grønli",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Tobias Hafstad",
+      "era": "modern"
+    },
+    {
+      "name": "Bjørn Lidin Hansen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Preben Yttergård Hanssen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Kristoffer Hay",
+      "crossLink": true,
+      "existingId": "kristoffer_hay",
+      "era": "modern"
+    },
+    {
+      "name": "Lars Helbostad",
+      "era": "modern"
+    },
+    {
+      "name": "Gaute Helstrup",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Anders Jenssen",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Jonas Johansen",
+      "era": "modern"
+    },
+    {
+      "name": "Peder Meen Johansen",
+      "crossLink": true,
+      "existingId": "peder_meen_johansen",
+      "era": "modern"
+    },
+    {
+      "name": "Lars-Gunnar Johnsen",
+      "crossLink": true,
+      "existingId": "lars_gunnar_johnsen",
+      "era": "modern"
+    },
+    {
+      "name": "Lasse Berg Johnsen",
+      "crossLink": true,
+      "existingId": "lasse_berg_johnsen",
+      "era": "modern"
+    },
+    {
+      "name": "Christer Johnsgård",
+      "positions": [
+        "ST"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Anders Karlsen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Håvard Karlsen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Håkon Kjæve",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Gudmund Kongshavn",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Ruben Kristiansen",
+      "crossLink": true,
+      "existingId": "ruben_kristiansen",
+      "era": "modern"
+    },
+    {
+      "name": "Tomas Kristoffersen",
+      "crossLink": true,
+      "existingId": "tomas_kristoffersen",
+      "era": "modern"
+    },
+    {
+      "name": "Eirik André Lamøy",
+      "crossLink": true,
+      "existingId": "eirik_lamoy",
+      "era": "modern"
+    },
+    {
+      "name": "Rune Lange",
+      "crossLink": true,
+      "existingId": "rune_lange",
+      "era": "modern"
+    },
+    {
+      "name": "Håvard Lysvoll",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Vegard Lysvoll",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Andreas Løvland",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Jo Nymo Matland",
+      "crossLink": true,
+      "existingId": "jo_nymo_matland",
+      "era": "modern"
+    },
+    {
+      "name": "Tor Martin Mienna",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "August Mikkelsen",
+      "crossLink": true,
+      "existingId": "august_mikkelsen",
+      "era": "modern"
+    },
+    {
+      "name": "Espen Minde",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Kristoffer Nessø",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Sean Nilsen-Modebe",
+      "crossLink": true,
+      "existingId": "sean_nilsen_modebe",
+      "era": "modern"
+    },
+    {
+      "name": "Bjørn Nilsen",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Lasse Nilsen",
+      "crossLink": true,
+      "existingId": "lasse_nilsen",
+      "era": "modern"
+    },
+    {
+      "name": "Hans Norbye",
+      "crossLink": true,
+      "existingId": "hans_norbye",
+      "era": "modern"
+    },
+    {
+      "name": "Runar Normann",
+      "era": "modern"
+    },
+    {
+      "name": "Jesse Ohene",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Leo Olsen",
+      "era": "modern"
+    },
+    {
+      "name": "Steffen Skogvang Pedersen",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Thomas Rekdal",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Ludvig Rinde",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Sander Ringberg",
+      "crossLink": true,
+      "existingId": "sander_finjord_ringberg",
+      "era": "modern"
+    },
+    {
+      "name": "Adrian Sandbukt",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Uranik Seferi",
+      "crossLink": true,
+      "existingId": "uranik_seferi",
+      "era": "modern"
+    },
+    {
+      "name": "Elias Uppheim Skogvoll",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Andreas Sletvold",
+      "positions": [
+        "RW"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Erlend Stenberg",
+      "positions": [
+        "CB"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Bjørn Strøm",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "John Fredrik Strøm",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Mathias Sundberg",
+      "crossLink": true,
+      "existingId": "mathias_sundberg",
+      "era": "modern"
+    },
+    {
+      "name": "Sander Svela",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Eirik Sørensen",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Ole Talberg",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Harald Nilsen Tangen",
+      "crossLink": true,
+      "existingId": "harald_nilsen_tangen",
+      "era": "modern"
+    },
+    {
+      "name": "Simon Thomas",
+      "crossLink": true,
+      "existingId": "simon_thomas",
+      "era": "modern"
+    },
+    {
+      "name": "Sebastian Tounekti",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Tobias Vibe",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Isak Vik",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Jørgen Vik",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Isak Vådebu",
+      "crossLink": true,
+      "existingId": "isak_vadebu",
+      "era": "modern"
+    },
+    {
+      "name": "Reidar Waage",
+      "positions": [
+        "ST"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Eirik André Yndestad",
+      "era": "modern"
+    },
+    {
+      "name": "Hans Åge Yndestad",
+      "crossLink": true,
+      "existingId": "hans_age_yndestad",
+      "era": "modern"
+    },
+    {
+      "name": "Casper Øyvann",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Elias Aarflot",
+      "crossLink": true,
+      "existingId": "elias_aarflot",
+      "era": "modern"
+    }
+  ],
+  "placeNotes": "Klubbanlegg: Tromsdalens hjemmebane. Historiske klubbprofiler bevares i historikkatalogen; banen åpner bare profilene som har kildebelagt posisjon."
+}

@@ -75,24 +75,30 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 |---|---:|---:|---:|
 | Brattvåg | 93 | 30 | 63 |
 | Pors | 89 | 42 | 47 |
+| Stjørdals-Blink | 78 | 68 | 10 |
+| Lørenskog | 58 | 54 | 4 |
 | Kvik Halden | 56 | 38 | 18 |
+| Eidsvold Turn | 54 | 52 | 2 |
+| Follo | 35 | 35 | 0 |
 | Bjarg | 32 | 30 | 2 |
 | Sandviken | 31 | 31 | 0 |
+| Rana | 30 | 30 | 0 |
+| Junkeren | 27 | 27 | 0 |
+| Lysekloster | 27 | 27 | 0 |
+| Trygg/Lade | 26 | 26 | 0 |
 | Vidar | 26 | 26 | 0 |
 | Eik Tønsberg | 25 | 25 | 0 |
 | Træff | 23 | 23 | 0 |
-| Lysekloster | 16 | 16 | 0 |
-| Follo | 35 | 35 | 0 |
-| Rana | 28 | 28 | 0 |
-| Junkeren | 27 | 27 | 0 |
-| Trygg/Lade | 25 | 25 | 0 |
-| Stjørdals-Blink | 24 | 24 | 0 |
-| Lørenskog | 24 | 24 | 0 |
-| Eidsvold Turn | 21 | 21 | 0 |
 
-**Gjenstår (2):** Sotra (12 registrerte spillere) og Tromsdalen (9). Begge under grensa på femten, begge avhengige av at troppen i registeret vokser eller at en klubbkilde navngir spillere med posisjon.
+Og den syttende, som passet før dette ikke kunne lande:
 
-**2. divisjon har nå arv i 26 av 28 klubber**, mot 12 før dette arbeidet. Hele katalogen står på 58 av 60 overtakbare.
+| Klubb | Dokumentert | Spillbar | Historikkposter |
+|---|---:|---:|---:|
+| **Tromsdalen** | 79 | 72 | 7 |
+
+**Gjenstår (1):** Sotra, med 12 registrerte spillere og ingen Wikipedia-kategori. Klubben er avhengig av at troppen i registeret vokser eller at en klubbkilde navngir spillere med posisjon.
+
+**2. divisjon har nå arv i 27 av 28 klubber**, mot 12 før dette arbeidet. Hele katalogen står på **59 av 60 overtakbare**.
 
 Alle fjorten følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den — enten posisjonen er presis eller en lagdel. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Alle fjorten er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Hver klubb har sitt eget kildepass, `docs/P2_<KLUBB>_SOURCE_PASS.md`.
 
@@ -112,7 +118,7 @@ Hele målingen, med lærdommen om hvorfor første konklusjon var feil, står i `
 
 **Avdeling 2 er ferdig: 7 av 8 landet (24.08.2026).** Samme kilde og samme form som avdeling 1 — NFFs lagside, med laget identifisert mot tabellen for avdeling 2. Bare Tromsdalen står igjen, med 9 registrerte spillere og ingen registrert keeper, som tyder på ufullstendig registrering snarere enn tom klubb. Se `docs/P2_AVDELING2_SOURCE_PASS.md`.
 
-**De fire redaksjonelle sporene kildelista pekte på er ikke lest, og var ikke nødvendige.** Eidsvold Turns adelskalender, Stjørdals-Blinks klubbarkiv, Trygg/Lades historikkside og Romerikes Blads «Klubblegende»-serie er fortsatt de beste kandidatene til å gi de sju klubbene **dybde** — historiske profiler med sitat, og eventuelt P1-claims. De er bare ikke lenger det som avgjør om en klubb er spillbar.
+~~**De fire redaksjonelle sporene kildelista pekte på er ikke lest, og var ikke nødvendige.**~~ **LEST 26.08.2026 — og de ga ikke dybden heller.** Eidsvold Turns adelskalender, Stjørdals-Blinks klubbarkiv, Trygg/Lades historikkside og Romerikes Blads «Klubblegende»-serie oppgir ikke posisjon; RBs bildetekst er transkribert med feil, og de ti «legendene» ligger i video. Ingen av navnene er importert. Dybden kom fra Wikipedia-kategoriene i stedet — se avsnittet under.
 
 **Sammenslåingene er ikke løst, bare ikke utløst.** Stjørdals-Blink (1956), Trygg/Lade (1986), Rana (2017) og Follo (paraply for fem lag fra 2000) har alle flere forgjengere, og kilden må si hvilken enhet en spiller representerte. En dagens tropp representerer dagens klubb uten tvetydighet, så spørsmålet er ikke stilt her. Det slår inn i det øyeblikket noen importerer historiske navn.
 
@@ -157,6 +163,51 @@ ledd i midten, med begge navnene i meldingen.
 **Brattvåg er den første arven med to `eraSource`** — `utledet` fra en udatert
 klubbhistorikk og `belagt` fra det daterte registeret. `audit:club-heritage`
 godtar derfor en liste per arv i stedet for én verdi.
+
+**Dybdepasset: Wikipedia ga sju klubber en fortid (26.08.2026).** De fjorten
+registerklubbene hadde dagens tropp og ingenting bak den. Kildelista pekte på
+fire redaksjonelle spor for å rette det; alle fire er lest, og **ingen av
+navnene deres er importert** — de oppgir ikke posisjon, Romerikes Blads
+bildetekst er transkribert med feil, og de ti «legendene» ligger i video.
+
+Dybden lå i **no.wikipedias klubbkategorier**: én kategori per klubb, og hver
+artikkel har posisjon i infoboksen og en datert karrieretabell. 326 artikler
+lest enkeltvis, og bare de som har klubben i sin egen SENIORkarriere tatt med.
+
+| Klubb | Dokumentert | Spillbar | Tilført |
+|---|---:|---:|---:|
+| **Tromsdalen** | 0 → **79** | 0 → **72** | 79 |
+| Stjørdals-Blink | 24 → **78** | 24 → **68** | 54 |
+| Lørenskog | 24 → **58** | 24 → **54** | 34 |
+| Eidsvold Turn | 21 → **54** | 21 → **52** | 33 |
+| Lysekloster | 16 → **27** | 16 → **27** | 11 |
+| Rana | 28 → **30** | 28 → **30** | 2 |
+| Trygg/Lade | 25 → **26** | 25 → **26** | 1 |
+
+**Tromsdalen var den andre klubben passet før dette ikke kunne lande.** Med 72
+spillbare er den `ready`, og `tuil_arena` er banen.
+
+**Kategorien er ikke kilden — artikkelen er**, og de tre feilene den gjør er
+verdt å huske. Den plasserer folk som aldri spilte der (Lørenskog IFs egen
+artikkel fører Henning Berg blant «kjente spillere»; Bergs artikkel sier at han
+spilte i KFUM fra lilleputt). Den skiller ikke herrelaget fra kvinnelaget
+(`IL Sandviken` er på Wikipedia nesten utelukkende kvinnelaget som ble Branns i
+2022 — 31 av 32 treff, **klubben er derfor utelatt fra passet i sin helhet**).
+Og den tar med ungdomsspillere (fem av Trygg/Lades sju).
+
+**Passet fant tre hull i importverktøyet.** En krysskobling til en mann som alt
+sto i arven ble talt to ganger og ga duplikat `clubAffiliations` (åtte
+profiler). Mellomnavn-sjekken fra Brattvåg så bare i arven, ikke i katalogen,
+og ville laget 13 duplikate mennesker. Og Wikipedias titteltvetydiggjørere
+(«Elias Solberg (f. 2004)») ble ført som en del av navnet, slik at
+eksaktnavn-sjekken ikke så at mannen alt sto der (sju navn). Alle tre er rettet
+i skriptet, ikke bare i dataene.
+
+**90 av 95 navnekollisjoner ble avgjort av kilden selv** — artikkelens
+seniorklubber mot katalogprofilens klubbtilknytninger. John Carew er
+Lørenskogs, Svein Bakke og Stian Ringstad er Eidsvold Turns. Fem er **utelatt**
+fordi ingen felles klubb finnes og posisjonen, der den er kjent, er samme
+lagdel. Hele passet står i `docs/P2_WIKIPEDIA_DYBDEPASS.md`.
 
 ---
 

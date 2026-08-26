@@ -648,9 +648,9 @@
       "group": "avdeling1",
       "strength": 50,
       "form": 56,
-      "playerPoolSize": 16,
+      "playerPoolSize": 27,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 16,
+      "playablePlayerPoolSize": 27,
       "homePlaceId": "lysekloster_idrettspark"
     },
     {
@@ -787,9 +787,10 @@
       "group": "avdeling2",
       "strength": 52,
       "form": 58,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 79,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 72,
+      "homePlaceId": "tuil_arena"
     },
     {
       "id": "stjordals_blink",
@@ -800,9 +801,9 @@
       "group": "avdeling2",
       "strength": 52,
       "form": 58,
-      "playerPoolSize": 24,
+      "playerPoolSize": 78,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 24,
+      "playablePlayerPoolSize": 68,
       "homePlaceId": "sandskogan_stadion"
     },
     {
@@ -814,9 +815,9 @@
       "group": "avdeling2",
       "strength": 51,
       "form": 57,
-      "playerPoolSize": 28,
+      "playerPoolSize": 30,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 28,
+      "playablePlayerPoolSize": 30,
       "homePlaceId": "sagbakken"
     },
     {
@@ -842,9 +843,9 @@
       "group": "avdeling2",
       "strength": 50,
       "form": 56,
-      "playerPoolSize": 24,
+      "playerPoolSize": 58,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 24,
+      "playablePlayerPoolSize": 54,
       "homePlaceId": "rolvsrud_stadion"
     },
     {
@@ -856,9 +857,9 @@
       "group": "avdeling2",
       "strength": 49,
       "form": 55,
-      "playerPoolSize": 21,
+      "playerPoolSize": 54,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 21,
+      "playablePlayerPoolSize": 52,
       "homePlaceId": "myhrer_stadion"
     },
     {
@@ -884,9 +885,9 @@
       "group": "avdeling2",
       "strength": 47,
       "form": 53,
-      "playerPoolSize": 25,
+      "playerPoolSize": 26,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 25,
+      "playablePlayerPoolSize": 26,
       "homePlaceId": "lade_idrettsanlegg"
     }
   ],

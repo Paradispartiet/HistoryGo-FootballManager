@@ -98,12 +98,12 @@ const ARVER = [
   {
     clubId: "lysekloster",
     placeId: "lysekloster_idrettspark",
-    dokumentert: 16,
-    spillbar: 16,
-    nye: 15,
-    krysskoblet: ["ola_lerheim_olsen"],
+    dokumentert: 27,
+    spillbar: 27,
+    nye: 22,
+    krysskoblet: ["jonas_vagen", "ola_lerheim_olsen", "ole_marius_habestad", "senai_hagos", "thomas_hille"],
     eraSource: "belagt",
-    doc: "docs/P2_LYSEKLOSTER_SOURCE_PASS.md"
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
   },
   {
     clubId: "traff",
@@ -146,22 +146,22 @@ const ARVER = [
   {
     clubId: "stjordals_blink",
     placeId: "sandskogan_stadion",
-    dokumentert: 24,
-    spillbar: 24,
-    nye: 24,
-    krysskoblet: [],
-    eraSource: "belagt",
-    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+    dokumentert: 78,
+    spillbar: 68,
+    nye: 54,
+    krysskoblet: ["anders_nygaard", "andreas_fossli", "andreas_lykke_strand", "awet_alemseged", "brage_prestmo_kvithyld", "emil_odegaard", "fredrik_vinje", "havard_kleven_lorentsen", "ivar_sandvik", "ivar_sollie_ronning", "jakob_romo_skille", "jakob_tromsdal", "joachim_erlend_olufsen", "jorgen_solli", "kjetil_holand_tosse", "mathusan_sandrakumar", "mats_lillebo", "mikael_torset_johnsen", "sander_erik_kartum", "simen_raaen_sandmael", "sivert_solli", "sondre_langas", "sondre_sorlokk", "vegard_voll"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
   },
   {
     clubId: "rana",
     placeId: "sagbakken",
-    dokumentert: 28,
-    spillbar: 28,
-    nye: 26,
-    krysskoblet: ["theo_aksnes_olsen", "adrian_olsen_teigen"],
+    dokumentert: 30,
+    spillbar: 30,
+    nye: 27,
+    krysskoblet: ["adrian_olsen_teigen", "gabriel_andersen", "theo_aksnes_olsen"],
     eraSource: "belagt",
-    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
   },
   {
     clubId: "junkeren",
@@ -176,22 +176,22 @@ const ARVER = [
   {
     clubId: "lorenskog",
     placeId: "rolvsrud_stadion",
-    dokumentert: 24,
-    spillbar: 24,
-    nye: 23,
-    krysskoblet: ["leon_dahlstrom"],
-    eraSource: "belagt",
-    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+    dokumentert: 58,
+    spillbar: 54,
+    nye: 45,
+    krysskoblet: ["bjorn_viljugrein", "dadi_dodou_gaye", "daniel_novak", "espen_olsen", "joackim_jorgensen", "jorgen_isnes", "karim_aoudia", "kim_kristian_holmen", "kjetil_berge", "leon_dahlstrom", "marius_andresen", "omar_fonstad_el_ghaouti", "tommy_berntsen"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
   },
   {
     clubId: "eidsvold_turn",
     placeId: "myhrer_stadion",
-    dokumentert: 21,
-    spillbar: 21,
-    nye: 20,
-    krysskoblet: ["lucas_kolstad"],
-    eraSource: "belagt",
-    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+    dokumentert: 54,
+    spillbar: 52,
+    nye: 38,
+    krysskoblet: ["christian_aas", "elias_solberg", "geir_frigard", "hallgeir_finbraten", "helge_ostvold", "jonas_enkerud", "lucas_kolstad", "ole_andreas_nesset", "ole_einar_martinsen", "ole_kristian_langas", "sebastian_remme_berge", "stian_ringstad", "tom_fodstad", "tom_vermelid_kristoffersen", "vegard_storsve", "william_fredriksen_bjeglerud"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
   },
   {
     clubId: "follo",
@@ -206,12 +206,22 @@ const ARVER = [
   {
     clubId: "trygg_lade",
     placeId: "lade_idrettsanlegg",
-    dokumentert: 25,
-    spillbar: 25,
+    dokumentert: 26,
+    spillbar: 26,
     nye: 25,
-    krysskoblet: [],
-    eraSource: "belagt",
-    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+    krysskoblet: ["steffen_iversen"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "tromsdalen",
+    placeId: "tuil_arena",
+    dokumentert: 79,
+    spillbar: 72,
+    nye: 56,
+    krysskoblet: ["august_mikkelsen", "eirik_lamoy", "elias_aarflot", "gabriel_andersen", "hans_age_yndestad", "hans_norbye", "harald_nilsen_tangen", "isak_vadebu", "jo_nymo_matland", "kristoffer_hay", "lars_gunnar_johnsen", "lasse_berg_johnsen", "lasse_nilsen", "mathias_sundberg", "morten_giaever", "peder_meen_johansen", "ruben_kristiansen", "rune_lange", "sander_finjord_ringberg", "sean_nilsen_modebe", "simon_thomas", "tomas_kristoffersen", "uranik_seferi"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
   }
 ];
 

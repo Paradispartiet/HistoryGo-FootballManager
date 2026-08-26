@@ -44,10 +44,15 @@ Kildelista pekte på fire redaksjonelle spor: **Eidsvold Turns adelskalender**
 **Trygg/Lades historikkside** og **Lørenskog** via Romerikes Blads
 «Klubblegende»-serie.
 
-**Ingen av dem er lest, og ingen av dem var nødvendig.** Registeret landet alle
-sju uten dem. De fire sporene er fortsatt de beste kandidatene til å gi
-klubbene *dybde* — historiske profiler med sitat, og eventuelt P1-claims — men
-de er ikke lenger det som avgjør om en klubb er spillbar.
+**Ingen av dem var nødvendig.** Registeret landet alle sju uten dem.
+
+**Alle fire ble lest 26.08.2026, og ingen av dem ga dybden heller.** De oppgir
+ikke posisjon, Romerikes Blads bildetekst er transkribert med feil, og de ti
+«legendene» presenteres i video. Ingen av navnene deres er importert. Dybden
+kom fra **no.wikipedias klubbkategorier**, som gir posisjon i infoboksen og en
+datert karrieretabell — se `docs/P2_WIKIPEDIA_DYBDEPASS.md`. Fem av de sju
+klubbene i denne avdelingen fikk til sammen 124 navn til der, og Tromsdalen —
+den ene som sto igjen — ble landet med 79.
 
 Det er samme todeling som avdeling 1 endte på: **redaksjonelle kilder gir dybde,
 registeret gir bredde.** En pool trenger bredden.

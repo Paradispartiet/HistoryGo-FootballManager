@@ -1,0 +1,23 @@
+{
+  "clubId": "trygg_lade",
+  "clubName": "Trygg/Lade",
+  "placeId": "lade_idrettsanlegg",
+  "placeName": "Lade idrettsanlegg",
+  "eraSource": "belagt",
+  "doc": "docs/P2_WIKIPEDIA_DYBDEPASS.md",
+  "sources": [
+    {
+      "url": "https://no.wikipedia.org/wiki/Kategori:Fotballspillere_for_SK_Trygg/Lade",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Wikipedia-kategorien for klubbens spillere; hver profil lest enkeltvis, og bare de som har klubben i SENIORkarrieren i infoboksen er tatt med."
+    }
+  ],
+  "players": [
+    {
+      "name": "Steffen Iversen",
+      "crossLink": true,
+      "existingId": "steffen_iversen",
+      "era": "modern"
+    }
+  ]
+}

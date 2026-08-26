@@ -1,0 +1,76 @@
+{
+  "clubId": "lysekloster",
+  "clubName": "Lysekloster",
+  "placeId": "lysekloster_idrettspark",
+  "placeName": "Lysekloster idrettspark",
+  "eraSource": "belagt",
+  "doc": "docs/P2_WIKIPEDIA_DYBDEPASS.md",
+  "sources": [
+    {
+      "url": "https://no.wikipedia.org/wiki/Kategori:Fotballspillere_for_Lysekloster_IL",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Wikipedia-kategorien for klubbens spillere; hver profil lest enkeltvis, og bare de som har klubben i SENIORkarrieren i infoboksen er tatt med."
+    }
+  ],
+  "players": [
+    {
+      "name": "Alexander Dang",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Senai Hagos",
+      "crossLink": true,
+      "existingId": "senai_hagos",
+      "era": "modern"
+    },
+    {
+      "name": "Thomas Hille",
+      "crossLink": true,
+      "existingId": "thomas_hille",
+      "era": "modern"
+    },
+    {
+      "name": "Truls Hovland",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Ole Marius Håbestad",
+      "crossLink": true,
+      "existingId": "ole_marius_habestad",
+      "era": "modern"
+    },
+    {
+      "name": "Sander Marthinussen",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Yannis Moula",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Tim Nilsen",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Joachim Nysveen",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Jonas Vågen",
+      "crossLink": true,
+      "existingId": "jonas_vagen",
+      "era": "modern"
+    },
+    {
+      "name": "Marcel Wawrzynkiewicz",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    }
+  ]
+}

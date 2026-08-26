@@ -174,6 +174,21 @@ eksakte navn laget en dublett av begge — to ganger, i samme import. Skriptet
 stopper nå på navnepar som skiller seg med nøyaktig ett ledd i midten, med begge
 navnene i meldingen, og lar mennesket avgjøre.
 
+Sjekken gjelder **hele katalogen**, ikke bare arven. Første utgave så bare i
+arven, fordi feilen ble funnet der. Wikipedia-passet viste hvorfor det var for
+smalt: «Joachim Olufsen» skulle inn i Stjørdals-Blink mens
+`joachim_erlend_olufsen` sto under Rana — ingen felles arv, ingen
+eksaktnavn-treff, og importen ville laget mannen på nytt. Utvidelsen fanget
+**13 flere** duplikater i samme pass.
+
+**En krysskobling til en mann som alt står i arven er også et gjensyn.** Første
+utgave hoppet bare over *nye profiler* med et navn arven kjente. En
+krysskobling gikk rett gjennom og ga profilen `clubAffiliations` med samme
+klubb to steder — som `sync-club-affiliations` og `sim:club-squad` begge feller
+ved neste kjøring, altså et sted som ikke peker tilbake på importen. Åtte
+profiler traff dette i Wikipedia-passet. Nå telles den som gjensyn, og en
+kildefil kan kjøres om igjen uten å endre katalogen.
+
 Tallene i rapporten er arvens **totaler**, ikke kjøringens: `tilfort` er det
 denne kjøringen la til, `dokumentert` og `spillbar` er hva klubben har etterpå.
 Det er de siste to som skal inn i `ARVER`.

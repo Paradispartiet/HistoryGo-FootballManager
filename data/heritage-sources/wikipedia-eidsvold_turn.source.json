@@ -1,0 +1,223 @@
+{
+  "clubId": "eidsvold_turn",
+  "clubName": "Eidsvold Turn",
+  "placeId": "myhrer_stadion",
+  "placeName": "Myhrer stadion",
+  "eraSource": "belagt",
+  "doc": "docs/P2_WIKIPEDIA_DYBDEPASS.md",
+  "sources": [
+    {
+      "url": "https://no.wikipedia.org/wiki/Kategori:Fotballspillere_for_Eidsvold_Turn",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Wikipedia-kategorien for klubbens spillere; hver profil lest enkeltvis, og bare de som har klubben i SENIORkarrieren i infoboksen er tatt med."
+    }
+  ],
+  "players": [
+    {
+      "name": "Harald Aksnes",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Edmir Asani",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Sebastian Remme Berge",
+      "crossLink": true,
+      "existingId": "sebastian_remme_berge",
+      "era": "modern"
+    },
+    {
+      "name": "William Bjeglerud",
+      "crossLink": true,
+      "existingId": "william_fredriksen_bjeglerud",
+      "era": "modern"
+    },
+    {
+      "name": "Frode Skarsgard Bjørnevik",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Filip Delaveris",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Jonas Enkerud",
+      "crossLink": true,
+      "existingId": "jonas_enkerud",
+      "era": "modern"
+    },
+    {
+      "name": "Sigurd Ertsås",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Andreas Hippe Fagereng",
+      "era": "modern"
+    },
+    {
+      "name": "Hallgeir Finbråten",
+      "crossLink": true,
+      "existingId": "hallgeir_finbraten",
+      "era": "modern"
+    },
+    {
+      "name": "Tom Fodstad",
+      "crossLink": true,
+      "existingId": "tom_fodstad",
+      "era": "historical"
+    },
+    {
+      "name": "Geir Frigård",
+      "crossLink": true,
+      "existingId": "geir_frigard",
+      "era": "modern"
+    },
+    {
+      "name": "Arnar Førsund",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Julian Gonstad",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Petter Hokstad",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Heine Jenssen",
+      "positionGroup": "forsvar",
+      "era": "historical"
+    },
+    {
+      "name": "Simen Lillevik Kjellevold",
+      "crossLink": true,
+      "existingId": "simen_lillevik_kjellevold",
+      "era": "modern"
+    },
+    {
+      "name": "Lucas Kolstad",
+      "crossLink": true,
+      "existingId": "lucas_kolstad",
+      "era": "modern"
+    },
+    {
+      "name": "Tom Kristoffersen",
+      "crossLink": true,
+      "existingId": "tom_vermelid_kristoffersen",
+      "era": "modern"
+    },
+    {
+      "name": "Ole Kristian Langås",
+      "crossLink": true,
+      "existingId": "ole_kristian_langas",
+      "era": "modern"
+    },
+    {
+      "name": "Prince Mambouana",
+      "era": "modern"
+    },
+    {
+      "name": "Ole Einar Martinsen",
+      "crossLink": true,
+      "existingId": "ole_einar_martinsen",
+      "era": "historical"
+    },
+    {
+      "name": "Ulrich Østigård Ness",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Ole Andreas Nesset",
+      "crossLink": true,
+      "existingId": "ole_andreas_nesset",
+      "era": "modern"
+    },
+    {
+      "name": "Markus Nygård",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Stian Ringstad",
+      "crossLink": true,
+      "existingId": "stian_ringstad",
+      "era": "modern"
+    },
+    {
+      "name": "Kristian Skogsrud",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Elias Solberg",
+      "crossLink": true,
+      "existingId": "elias_solberg",
+      "era": "modern"
+    },
+    {
+      "name": "Sebastian Stokke",
+      "crossLink": true,
+      "existingId": "sebastian_stokke",
+      "era": "modern"
+    },
+    {
+      "name": "Vegard Storsve",
+      "crossLink": true,
+      "existingId": "vegard_storsve",
+      "era": "modern"
+    },
+    {
+      "name": "Jonas Tekle",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Kjell André Thu",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Andreas Vedeler",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Helge Østvold",
+      "crossLink": true,
+      "existingId": "helge_ostvold",
+      "era": "historical"
+    },
+    {
+      "name": "Armand Øverby",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Edin Øy",
+      "crossLink": true,
+      "existingId": "edin_oy",
+      "era": "modern"
+    },
+    {
+      "name": "Christian Aas",
+      "crossLink": true,
+      "existingId": "christian_aas",
+      "era": "modern"
+    }
+  ]
+}
