@@ -78,7 +78,17 @@ for (const club of clubs.filter((entry) => entry.homePlaceId)) {
 const ready = clubs.filter((club) => club.playerPoolStatus === "ready");
 const pending = clubs.filter((club) => club.playerPoolStatus === "pending");
 check("det finnes ready-klubber", ready.length > 0, String(ready.length));
-check("det finnes pending-klubber", pending.length > 0, String(pending.length));
+
+// `pending` er ikke lenger en tilstand katalogen HAR — alle 60 klubbene har
+// ferdig pool etter Sotra. Vakten som krevde at det fantes pending-klubber
+// målte to ting samtidig: at katalogen hadde uferdig arbeid, og at motorens
+// unavailable-vei virket. Bare den andre er verdt å beholde, og den kan ikke
+// måles mot data som ikke finnes lenger. Den måles derfor mot en konstruert
+// klubb, slik at veien fortsatt er dekket den dagen en ny klubb legges inn.
+const pendingCases = pending.length > 0
+  ? pending
+  : [{ id: "syntetisk_pending", name: "Uferdig FK", ground: "Ukjent bane", playerPoolStatus: "pending", playerPoolSize: 0, playablePlayerPoolSize: 0 }];
+check("pending-veien er dekket", pendingCases.length > 0, String(pendingCases.length));
 
 for (const club of ready) {
   const access = resolveClubSquadAccess({ club, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
@@ -96,7 +106,7 @@ for (const club of ready) {
     [...(byId.get(id)?.naturalPositions || []), ...(byId.get(id)?.usablePositions || [])].includes("GK")));
 }
 
-for (const club of pending) {
+for (const club of pendingCases) {
   const access = resolveClubSquadAccess({ club, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
   check(`${club.name}: pending er unavailable`, access.mode === "unavailable", access.mode);
   check(`${club.name}: ingen global fallback`, access.baseSquad.length === 0);

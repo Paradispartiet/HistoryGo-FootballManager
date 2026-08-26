@@ -26,8 +26,17 @@
 //   node scripts/nff-squad.mjs --turnering 206007     # lag i en avdeling
 //   node scripts/nff-squad.mjs --lag 24               # troppen for ett lag
 //   node scripts/nff-squad.mjs --lag 24 --json        # samme, som JSON
+//   node scripts/nff-squad.mjs --person 2760762       # én manns klubbhistorikk
 //
-// `parseSquad` og `parseTournamentTeams` er rene og tar HTML som argument.
+// PERSONSIDEN ER DEN BESTE NAVNEBROR-TESTEN VI HAR. Forbundet fører hver sesong
+// en spiller har vært registrert, med klubb — også ungdomsårene. Der Wikipedia
+// gir et utvalg og en klubbhistorikk gir en periode, gir registeret HELE
+// karrieren, og en klubb som ikke står der har mannen ikke spilt for. Det
+// avgjorde Sotras Håvard Arefjord Foldnes: katalogen hadde en «Håvard Foldnes»
+// under Åsane, og personsiden viser Brann 2014–18, Fyllingsdalen 2019 og Sotra
+// 2020–2026 — aldri Åsane. To menn, ikke én.
+//
+// `parseSquad`, `parseTournamentTeams` og `parseCareer` er rene og tar HTML som argument.
 // Det er dem `audit:nff-squad` måler mot en lagret fixture; henting krever nett
 // og kjøres aldri i CI.
 import process from "node:process";
@@ -103,6 +112,35 @@ export function parseTournamentTeams(html) {
     .sort((a, b) => a.navn.localeCompare(b.navn, "no"));
 }
 
+/**
+ * Klubbhistorikken fra en personside: én rad per sesong, med lag og
+ * alderskategori. Radene står i en `Sesongstatistikk`-tabell der de tre første
+ * cellene er sesong, lag og alderskategori; resten er kamper, mål og kort, som
+ * er statistikk og ikke en påstand om spilleren.
+ */
+export function parseCareer(html) {
+  const s = avkod(html);
+  const start = s.indexOf("Sesongstatistikk");
+  if (start < 0) return [];
+  const tabell = /<table[^>]*>([\s\S]*?)<\/table>/.exec(s.slice(start));
+  if (!tabell) return [];
+  const ut = [];
+  for (const rad of tabell[1].match(/<tr[^>]*>[\s\S]*?<\/tr>/g) || []) {
+    const celler = [...rad.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)]
+      .map((m) => m[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim());
+    if (celler.length < 3) continue;
+    const sesong = celler[0].trim();
+    if (!/^(\d{4}|\d{4}\/\d{2,4}|Futsalsesongen .*)$/.test(sesong)) continue;
+    ut.push({ sesong, lag: celler[1].replace(/\s+/g, " ").trim(), alderskategori: celler[2].trim() });
+  }
+  return ut;
+}
+
+/** Klubbene en mann har vært registrert for, uten sesongene. Navnebror-testen. */
+export function careerClubs(karriere) {
+  return [...new Set(karriere.map((r) => r.lag).filter(Boolean))].sort((a, b) => a.localeCompare(b, "no"));
+}
+
 /** Lagdel → felt i kildefila for import-club-heritage. */
 export function tilKildefelt(lagdel) {
   if (lagdel === "Keeper") return { positions: ["GK"] };
@@ -126,12 +164,14 @@ async function main() {
   };
   const turnering = verdi("--turnering");
   const lag = verdi("--lag");
+  const person = verdi("--person");
 
-  if (!turnering && !lag) {
+  if (!turnering && !lag && !person) {
     console.error(`Bruk:
   node scripts/nff-squad.mjs --turnering <fiksId>   lagene i en avdeling
   node scripts/nff-squad.mjs --lag <fiksId>         troppen for ett lag
   node scripts/nff-squad.mjs --lag <fiksId> --json  samme, som JSON
+  node scripts/nff-squad.mjs --person <fiksId>     klubbhistorikken for én mann
 
 Turneringer: 2. divisjon avdeling 1 = 206007, avdeling 2 = 206008 (2026).
 Finn laget via turneringen, ikke via klubben — klubbenes laglister blander
@@ -144,6 +184,18 @@ A-lag, rekrutt og 7er.`);
     for (const { fiksId, navn } of parseTournamentTeams(html)) {
       console.log(`${fiksId.padStart(8)}  ${navn}`);
     }
+    return;
+  }
+
+  if (person) {
+    const html = await hent(`https://www.fotball.no/fotballdata/person/profil/?fiksId=${person}`);
+    const karriere = parseCareer(html);
+    if (args.includes("--json")) {
+      console.log(JSON.stringify({ karriere, klubber: careerClubs(karriere) }, null, 2));
+      return;
+    }
+    for (const r of karriere) console.log(`  ${r.sesong.padEnd(22)} ${r.alderskategori.padEnd(8)} ${r.lag}`);
+    console.log(`\nKlubber: ${careerClubs(karriere).join(", ") || "(ingen)"}`);
     return;
   }
 

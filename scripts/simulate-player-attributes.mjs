@@ -942,6 +942,7 @@ const KJENT_UDOKUMENTERT = {
   // infoboks er en KARRIERETABELL — år, klubb, kamper — og beskriver ikke
   // hvordan mannen spilte. Samme grunn som de tretten over.
   tuil_arena: 1.01,             // Tromsdalen
+  straume_idrettspark: 1.01,    // Sotra
   // De fire første arvene som har fått et KILDEPASS etter konverteringen: hver
   // eksklusive profil lest på nytt, og bare de som har en gjenbrukbar
   // individclaim får styrker tilbake. Passet skiller tre tilstander, og bare

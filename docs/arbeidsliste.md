@@ -96,9 +96,9 @@ Og den syttende, som passet før dette ikke kunne lande:
 |---|---:|---:|---:|
 | **Tromsdalen** | 79 | 72 | 7 |
 
-**Gjenstår (1):** Sotra, med 12 registrerte spillere og ingen Wikipedia-kategori. Klubben er avhengig av at troppen i registeret vokser eller at en klubbkilde navngir spillere med posisjon.
+**Gjenstår: ingen.** Sotra ble landet 26.08.2026 på 15 spillbare — nøyaktig grensa. Se avsnittet nederst.
 
-**2. divisjon har nå arv i 27 av 28 klubber**, mot 12 før dette arbeidet. Hele katalogen står på **59 av 60 overtakbare**.
+**2. divisjon har arv i alle 28 klubber**, mot 12 før dette arbeidet. Hele katalogen står på **60 av 60 overtakbare**, og ingen klubb er `pending`.
 
 Alle fjorten følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den — enten posisjonen er presis eller en lagdel. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Alle fjorten er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Hver klubb har sitt eget kildepass, `docs/P2_<KLUBB>_SOURCE_PASS.md`.
 
@@ -208,6 +208,47 @@ seniorklubber mot katalogprofilens klubbtilknytninger. John Carew er
 Lørenskogs, Svein Bakke og Stian Ringstad er Eidsvold Turns. Fem er **utelatt**
 fordi ingen felles klubb finnes og posisjonen, der den er kjent, er samme
 lagdel. Hele passet står i `docs/P2_WIKIPEDIA_DYBDEPASS.md`.
+
+**Sotra, den siste (26.08.2026).** Klubben sto igjen etter både registerpasset
+og Wikipedia-dybdepasset, med 12 registrerte mot grensa på femten.
+
+**Wikipedia har to kategorier som ser ut som klubbens, og ingen av dem er det.**
+`Fotballspillere for Nest-Sotra` (61 artikler) og `Fotballspillere for Øygarden
+FK` (35) tilhører to andre juridiske enheter: Sotra Sportsklubb ble til i 2009
+av Foldnes IL, Brattholmen IL og IL Øygard (1945); Nest-Sotra ble stiftet i
+1968 og fortsatte som breddeklubb; Øygarden FK overtok Nest-Sotras OBOS-lisens
+og gikk konkurs i 2022. Å importere de 96 hadde vært den største enkeltfeilen i
+hele P2-arbeidet, og det er nøyaktig sammenslåingsfellen listen over advarer mot.
+
+Klubbartikkelens «Kjente utøvere» ga tre navn — Zachariassen, Skålevik og Dang,
+alle med Sotra i seniorkarrieren og alle datert etter 2009. Det fjerde, **Knut
+Tørum**, nevner ikke Sotra i sin egen artikkel; samme feil som Lørenskog IFs
+liste gjorde med Henning Berg.
+
+**De to siste ble avgjort av NFFs PERSONSIDE**, som er den beste
+navnebror-testen vi har: den fører hver sesong en mann har vært registrert, med
+klubb, også ungdomsår og andrelag. Importen stoppet på Håvard Arefjord Foldnes
+og Erlend Hellevik Larsen, som begge kolliderte med katalogens Åsane-profiler —
+og de profilene er `utledet` med posisjonssettet `["CB","DM"]`, som **19 av
+Åsanes 76 profiler deler**. Det er en mal, ikke en lest posisjon, så posisjonen
+kunne ikke skille noen fra noen. Personsiden viste at begge har Åsane i
+karrieren. Samme menn, krysskoblinger, og det tok Sotra fra 13 til 15.
+
+Foldnes nesten gikk galt: første gjennomlesning fant Brann, Fyllingsdalen og
+Sotra og *ikke* Åsane — det står **`Åsane 2`**, andrelaget, som er samme klubb.
+`parseCareer` i `scripts/nff-squad.mjs` gjør siden til et verktøy, og
+`audit:nff-squad` låser den mot nettopp den raden.
+
+To vakter måtte skrives om, ikke slettes: «det finnes pending-klubber» målte
+både at katalogen hadde uferdig arbeid og at motorens unavailable-vei virket.
+Bare den andre er verdt å beholde, og den måles nå mot en konstruert klubb.
+
+**`--skjerp` er målt og ikke bygget.** En supplering kan legge til menn, men
+ikke skjerpe posisjonen til en som alt står der. Målingen mot alle 326 hentede
+artikler fant **sju** profiler en kilde kunne skjerpet — og alle sju er de
+tvetydige tolagdels-verdiene («Forsvar/Midtbane», «Back, midtbanespiller») som
+skjemaet ikke kan uttrykke og importen med vilje avviser. Modusen ville hatt
+null arbeid å gjøre.
 
 ---
 

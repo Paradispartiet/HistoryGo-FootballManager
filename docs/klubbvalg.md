@@ -227,23 +227,29 @@ En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceI
 | Vidar | Lassa idrettspark | 26 |
 | Eik Tønsberg | Tønsberg gressbane | 25 |
 | Træff | Reknesbanen | 23 |
+| Sotra | Straume idrettspark | 15 |
 
-**59 av 60 klubber har bane** — 4179 arveplasser — og bare Sotra mangler.
-Sotra sier det rett ut i profilen i stedet for å late som. **Alle klubber med en
-nasjonal tittel har arv.**
+**Alle 60 klubbene har bane** — 4194 arveplasser — og **ingen står `pending`**.
+Alle klubber med en nasjonal tittel har arv, og det har alle de andre også.
 
 Gulvet i tabellen er nytt og skal leses som det er. Fram til P2-passet hadde
-ingen klubb med bane under 46 navn; nå har Træff 23. Klubbene nederst ble landet
-på **NFFs lagside** — dagens registrerte tropp, ikke klubbens historie — og det
-gir *bredde uten dybde*: nok navn til at klubben kan overtas, og nesten ingen
-fortid bak dem. Det er en ærligere tilstand enn en klubb som står `pending`
-fordi ingen har lest kilden, men det er ikke det samme som en Rosenborg-arv, og
-tabellen skal ikke få det til å se sånn ut.
+ingen klubb med bane under 46 navn; nå har Sotra 15, som er **nøyaktig** grensa
+for en spillbar pool. Klubbene nederst ble landet på **NFFs lagside** — dagens
+registrerte tropp, ikke klubbens historie — og det gir *bredde uten dybde*: nok
+navn til at klubben kan overtas, og nesten ingen fortid bak dem. Det er en
+ærligere tilstand enn en klubb som står `pending` fordi ingen har lest kilden,
+men det er ikke det samme som en Rosenborg-arv, og tabellen skal ikke få det til
+å se sånn ut.
 
 Sju av dem har fått en fortid siden: **Wikipedia-dybdepasset** leste 326
 spillerartikler og ga Tromsdalen, Stjørdals-Blink, Lørenskog, Eidsvold Turn,
-Lysekloster, Rana og Trygg/Lade til sammen 227 navn til — hver med klubben i
+Lysekloster, Rana og Trygg/Lade til sammen 214 navn til — hver med klubben i
 seniorkarrieren sin. Se `docs/P2_WIKIPEDIA_DYBDEPASS.md`.
+
+Sotra, den siste, ble avgjort av **NFFs personside**: to av femten navn kolliderte
+med katalogen, og personsidens fulle klubbhistorikk viste at begge er katalogens
+egne Åsane-profiler. Uten dem hadde klubben stått på 13. Se
+`docs/P2_SOTRA_SOURCE_PASS.md`.
 
 Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund,
 Lyn, Moss, Bryne og Hødd ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
@@ -251,7 +257,7 @@ femte største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvin
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 575 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 579 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
 **Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 **spillbare** profiler finnes — dokumenterte klubbtilknytninger uten posisjon teller i historikken, men stiller ikke lag. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.

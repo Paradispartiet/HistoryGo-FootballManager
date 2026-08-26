@@ -16957,6 +16957,74 @@
           "targetId": "vegard_lysvoll"
         }
       ]
+    },
+    {
+      "placeId": "straume_idrettspark",
+      "placeName": "Straume idrettspark",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Sotra Sportsklubbs hjemmebane på Straume. Klubben ble til i 2009 ved sammenslåing av Foldnes IL, Brattholmen IL og IL Øygard (stiftet 1945), og er en ANNEN klubb enn Nest-Sotra (1968) og Øygarden FK, som gikk konkurs i 2022. Banen åpner de kildebelagte profilene.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_dang"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_johan_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_steensaeth_torum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlend_hellevik_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frederic_doksaeter_falck"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_foldnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kasper_klett_straume"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_skjorli_ree"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_zachariassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_oskar_groos_kilen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_eide_bildoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_grasmo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_martin_davoy_skar"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_wik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steffen_lie_skalevik"
+        }
+      ]
     }
   ]
 }

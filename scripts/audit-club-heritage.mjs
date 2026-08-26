@@ -222,6 +222,19 @@ const ARVER = [
     krysskoblet: ["august_mikkelsen", "eirik_lamoy", "elias_aarflot", "gabriel_andersen", "hans_age_yndestad", "hans_norbye", "harald_nilsen_tangen", "isak_vadebu", "jo_nymo_matland", "kristoffer_hay", "lars_gunnar_johnsen", "lasse_berg_johnsen", "lasse_nilsen", "mathias_sundberg", "morten_giaever", "peder_meen_johansen", "ruben_kristiansen", "rune_lange", "sander_finjord_ringberg", "sean_nilsen_modebe", "simon_thomas", "tomas_kristoffersen", "uranik_seferi"],
     eraSource: ["belagt", "utledet"],
     doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "sotra",
+    placeId: "straume_idrettspark",
+    dokumentert: 15,
+    spillbar: 15,
+    nye: 11,
+    // De to første er navnekollisjoner avgjort mot NFFs PERSONSIDE, som fører
+    // hele klubbhistorikken: begge har Åsane i karrieren, og er katalogens
+    // Åsane-profiler. De to siste sto i klubbartikkelens «Kjente utøvere».
+    krysskoblet: ["alexander_dang", "erlend_hellevik_larsen", "havard_foldnes", "kristoffer_zachariassen"],
+    eraSource: "belagt",
+    doc: "docs/P2_SOTRA_SOURCE_PASS.md"
   }
 ];
 

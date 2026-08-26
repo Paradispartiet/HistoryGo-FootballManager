@@ -6179,6 +6179,12 @@
           "relation": "played_for",
           "status": "club_icon",
           "source": "belagt"
+        },
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -148341,6 +148347,12 @@
           "relation": "played_for",
           "status": "club_legend",
           "source": "utledet"
+        },
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -148646,6 +148658,12 @@
           "relation": "played_for",
           "status": "club_legend",
           "source": "utledet"
+        },
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -197800,6 +197818,12 @@
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"
+        },
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
         }
       ]
     },
@@ -203172,6 +203196,469 @@
       "clubAffiliations": [
         {
           "clubId": "tromsdalen",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "morten_grasmo",
+      "name": "Morten Grasmo",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [
+        "GK"
+      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kristian_skjorli_ree",
+      "name": "Kristian Skjørli Ree",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "anders_johan_johansen",
+      "name": "Anders Johan Johansen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "ole_martin_davoy_skar",
+      "name": "Ole Martin Dåvøy Skår",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "daniel_steensaeth_torum",
+      "name": "Daniel Steensæth Tørum",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "CB",
+        "LB",
+        "RB",
+        "WB"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (forsvar), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "sander_wik",
+      "name": "Sander Wik",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "magnus_eide_bildoy",
+      "name": "Magnus Eide Bildøy",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "DM",
+        "CM",
+        "AM"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (midtbane), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "frederic_doksaeter_falck",
+      "name": "Frederic Doksæter Falck",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "lars_oskar_groos_kilen",
+      "name": "Lars Oskar Groos Kilen",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "kasper_klett_straume",
+      "name": "Kasper Klett Straume",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
+          "relation": "played_for",
+          "status": "club_profile",
+          "source": "belagt"
+        }
+      ]
+    },
+    {
+      "id": "steffen_lie_skalevik",
+      "name": "Steffen Lie Skålevik",
+      "nationality": "Norge",
+      "era": "modern",
+      "eraSource": "belagt",
+      "sourcePlaceIds": [
+        "straume_idrettspark"
+      ],
+      "classHeight": 79,
+      "classSource": "utledet",
+      "naturalPositions": [],
+      "usablePositions": [
+        "ST",
+        "LW",
+        "RW"
+      ],
+      "positionSource": "gruppe",
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
+      "strengths": [],
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Kilden oppgir bare lagdel (angrep), ikke posisjon. Ingen individuelle styrker er lagt til uten kildebelegg.",
+      "clubStatus": {
+        "straume_idrettspark": "club_profile"
+      },
+      "clubStatusSource": {
+        "straume_idrettspark": "belagt"
+      },
+      "clubAffiliations": [
+        {
+          "clubId": "sotra",
           "relation": "played_for",
           "status": "club_profile",
           "source": "belagt"

@@ -662,9 +662,10 @@
       "group": "avdeling1",
       "strength": 49,
       "form": 55,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 15,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 15,
+      "homePlaceId": "straume_idrettspark"
     },
     {
       "id": "traff",

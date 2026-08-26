@@ -14,7 +14,7 @@
 //   * draktnummer og navn hentes fra hver sin spiller når kortet endrer form.
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { parseSquad, parseTournamentTeams, tilKildefelt } from "./nff-squad.mjs";
+import { parseSquad, parseTournamentTeams, tilKildefelt, parseCareer, careerClubs } from "./nff-squad.mjs";
 
 const html = fs.readFileSync(new URL("../tests/fixtures/nff-lagside-tropp.html", import.meta.url), "utf8");
 const tropp = parseSquad(html);
@@ -85,3 +85,50 @@ console.log(JSON.stringify({
   spillere: tropp.length,
   perLagdel
 }, null, 2));
+
+// ---------------------------------------------------------------------------
+// Personsiden: hele klubbhistorikken, og dermed den beste navnebror-testen
+//
+// Der lagsiden sier hvem som spiller for klubben NÅ, sier personsiden hvor én
+// mann har vært registrert gjennom hele karrieren — ungdomsår og andrelag
+// inkludert. Det er den forskjellen som avgjør en navnekollisjon: en klubb som
+// IKKE står i historikken har mannen ikke spilt for.
+//
+// Fixturen er Håvard Arefjord Foldnes' sesongtabell, og den er valgt fordi den
+// nesten ga feil svar. Katalogen hadde en «Håvard Foldnes» under Åsane, og en
+// grov gjennomlesning av siden fant Brann, Fyllingsdalen og Sotra — men ikke
+// Åsane, som ville gjort dem til to menn. Det står `Åsane 2` i tabellen.
+// Andrelaget er samme klubb, og det er én mann.
+// ---------------------------------------------------------------------------
+const personHtml = fs.readFileSync(new URL("../tests/fixtures/nff-personside-karriere.html", import.meta.url), "utf8");
+const karriere = parseCareer(personHtml);
+
+assert.equal(karriere.length, 24, "antall sesongrader i fixturen");
+
+// Hver rad skal bære alle tre feltene, og sesongen skal være et årstall eller
+// en futsalsesong — aldri en overskrift eller en statistikkcelle.
+for (const rad of karriere) {
+  assert.ok(rad.lag, `rad uten lag: ${JSON.stringify(rad)}`);
+  assert.ok(rad.alderskategori, `rad uten alderskategori: ${JSON.stringify(rad)}`);
+  assert.match(rad.sesong, /^(\d{4}|\d{4}\/\d{2,4}|Futsalsesongen \d{4}\/\d{4})$/,
+    `sesongen er ikke et årstall: ${JSON.stringify(rad)}`);
+}
+
+// Andrelaget står som eget lagnavn og skal IKKE slås sammen med A-laget av
+// parseren — sammenslåingen er en avgjørelse den som leser tar, ikke en verdi
+// skriptet kan velge.
+assert.deepEqual(
+  careerClubs(karriere),
+  ["Brann", "Brann 2", "Brann 3", "Brann G19", "Fyllingsdalen", "Sotra", "Sund 1", "Åsane 2"],
+  "klubbene i karrieren"
+);
+
+// Den ene raden hele Sotra-importen hang på.
+assert.ok(karriere.some((r) => r.lag === "Åsane 2"),
+  "Åsane 2 må stå i karrieren — uten den blir Håvard Arefjord Foldnes en navnebror han ikke er");
+assert.ok(karriere.some((r) => r.sesong === "2026" && r.lag === "Sotra"),
+  "den nyeste sesongen skal være med");
+
+// En side uten sesongtabell gir tom liste, ikke et krasj.
+assert.deepEqual(parseCareer("<html><body>ingen tabell</body></html>"), [],
+  "en side uten Sesongstatistikk gir tom karriere");
