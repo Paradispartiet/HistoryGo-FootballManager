@@ -63,7 +63,10 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:
 
-- ferdigstille dokumenterte spillerpooler for klubber som fortsatt står `pending`;
+- **fordype dokumenterte spillerpooler som er komplette, men grunne.** Ingen klubb
+  står lenger `pending` — alle 60 har en pool på minst femten spillbare — men
+  bredden kom fra registeret, og fem klubber har null profiler med kildebelagte
+  styrker. Å fylle dybden er gyldig arbeid; å senke grensa er det ikke;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
