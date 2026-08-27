@@ -24,16 +24,14 @@ const ARVER = [
   {
     clubId: "pors",
     placeId: "pors_stadion",
-    dokumentert: 63,
-    spillbar: 16,
-    nye: 58,
-    // Pors-kilden er klubbhistorikk uten kampantall. Fem navn fantes fra før.
+    dokumentert: 89,
+    spillbar: 42,
+    nye: 83,
+    // Pors-kilden er klubbhistorikk uten kampantall. Fem navn fantes fra før;
+    // Redon Pllana kom til med 2026-troppen fra NFF.
     krysskoblet: [
-      "einar_rossbach",
-      "fredrik_nordkvelle",
-      "erik_pedersen",
-      "tor_arne_sannerholt",
-      "christer_fjellstad"
+      "christer_fjellstad", "einar_rossbach", "erik_pedersen",
+      "fredrik_nordkvelle", "redon_pllana", "tor_arne_sannerholt"
     ],
     // Pors-kilden daterer: hver profil har en epoke fra kilden selv.
     eraSource: "belagt",
@@ -42,17 +40,201 @@ const ARVER = [
   {
     clubId: "brattvag",
     placeId: "brattvag_stadion",
-    dokumentert: 81,
-    spillbar: 18,
-    nye: 79,
+    dokumentert: 93,
+    spillbar: 30,
+    nye: 91,
     // Brattvåg-kilden har kampantall per mann (546 ned til 143). Det er den ene
     // opplysningen Pors ikke hadde, og derfor den ene fristelsen: en kamp er
     // individuell og dokumentert, men den er tilgjengelighet, ikke en ferdighet.
     krysskoblet: ["sivert_solli", "ulrik_valderhaug_syversen"],
-    // Brattvåg-kilden har ingen årstall i det hele tatt — bare kampantall og en
-    // troppsliste — så epoken er lest av hvilken liste navnet står i.
-    eraSource: "utledet",
+    // Brattvåg-kilden hadde ingen årstall i det hele tatt — bare kampantall og
+    // en troppsliste — så epoken var lest av hvilken liste navnet sto i.
+    // 2026-suppleringen fra NFF er derimot datert, så arven bærer nå begge.
+    eraSource: ["utledet", "belagt"],
     doc: "docs/P2_BRATTVAG_SOURCE_PASS.md"
+  },
+  {
+    clubId: "kvik_halden",
+    placeId: "halden_stadion",
+    dokumentert: 56,
+    spillbar: 38,
+    nye: 54,
+    // Kvik-kilden er to lag i ett: FK Kvik-perioden 1906–1997 med cupgullet i
+    // 1918, og A-lagstroppen 2023. To navn fantes fra før, begge bekreftet av
+    // sin egen individkilde.
+    krysskoblet: ["raymond_kvisvik", "fabian_stensrud_ness"],
+    // Klubbens historikk daterer landslagsuttakene år for år, og troppen er
+    // datert 27.07.2023 — hver profil har en epoke fra kilden selv.
+    eraSource: "belagt",
+    doc: "docs/P2_KVIK_HALDEN_SOURCE_PASS.md"
+  },
+  // De seks siste i avdeling 1. Alle bygger på NFFs egen lagside, som fører
+  // A-lagstroppen gruppert etter lagdel — Keeper, Forsvar, Midtbane, Angrep.
+  // Keeper er en presis posisjon; de tre andre er lagdeler og bæres i
+  // `usablePositions` med `positionSource: "gruppe"`.
+  {
+    clubId: "bjarg",
+    placeId: "stavollen_kunstgress",
+    dokumentert: 32,
+    spillbar: 30,
+    nye: 31,
+    // Rolf Birger Pedersen fantes i Brann-arven som «Pesen» — Bjarg-kilden
+    // sier selv at han kom fra Brann. De tre andre historiske er nye.
+    krysskoblet: ["rolf_birger_pesen_pedersen"],
+    eraSource: "belagt",
+    doc: "docs/P2_BJARG_SOURCE_PASS.md"
+  },
+  {
+    clubId: "eik_tonsberg",
+    placeId: "tonsberg_gressbane",
+    dokumentert: 25,
+    spillbar: 25,
+    nye: 21,
+    // De fire med «kortere klubbopphold» i klubbartikkelen finnes alle fra før.
+    krysskoblet: ["erik_soler", "ronny_johnsen", "jan_frode_nornes", "erik_thorstvedt"],
+    eraSource: "belagt",
+    doc: "docs/P2_EIK_TONSBERG_SOURCE_PASS.md"
+  },
+  {
+    clubId: "lysekloster",
+    placeId: "lysekloster_idrettspark",
+    dokumentert: 27,
+    spillbar: 27,
+    nye: 22,
+    krysskoblet: ["jonas_vagen", "ola_lerheim_olsen", "ole_marius_habestad", "senai_hagos", "thomas_hille"],
+    eraSource: "belagt",
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "traff",
+    placeId: "reknesbanen",
+    dokumentert: 23,
+    spillbar: 23,
+    nye: 21,
+    // Petter Eichler Jensen er utelatt: NFF fører ham som keeper, katalogen som
+    // CB/CM/DM. To menn, eller én kilde som tar feil — ikke en kobling å gjøre.
+    // Vegard Valgermo Forren er derimot krysskoblet: no.wikipedia sier at han er
+    // «spillende assistenttrener for Træff», altså Moldes Vegard Forren.
+    krysskoblet: ["vegard_forren", "kjetil_holand_tosse"],
+    eraSource: "belagt",
+    doc: "docs/P2_TRAFF_SOURCE_PASS.md"
+  },
+  {
+    clubId: "vidar",
+    placeId: "lassa_idrettspark",
+    dokumentert: 26,
+    spillbar: 26,
+    nye: 24,
+    krysskoblet: ["william_schjolberg_husebo", "jan_fjetland"],
+    eraSource: "belagt",
+    doc: "docs/P2_VIDAR_SOURCE_PASS.md"
+  },
+  {
+    clubId: "sandviken",
+    placeId: "stemmemyren",
+    dokumentert: 31,
+    spillbar: 31,
+    nye: 29,
+    krysskoblet: ["joakim_aasen", "david_sissoko"],
+    eraSource: "belagt",
+    doc: "docs/P2_SANDVIKEN_SOURCE_PASS.md"
+  },
+  // Avdeling 2. Samme kilde og samme form som avdeling 1: NFFs lagside, med
+  // laget identifisert mot tabellen for 2. divisjon avdeling 2. Ingen av de sju
+  // har en redaksjonell kilde som navngir historiske spillere, så poolene er
+  // rene troppspooler uten historikkposter.
+  {
+    clubId: "stjordals_blink",
+    placeId: "sandskogan_stadion",
+    dokumentert: 78,
+    spillbar: 68,
+    nye: 54,
+    krysskoblet: ["anders_nygaard", "andreas_fossli", "andreas_lykke_strand", "awet_alemseged", "brage_prestmo_kvithyld", "emil_odegaard", "fredrik_vinje", "havard_kleven_lorentsen", "ivar_sandvik", "ivar_sollie_ronning", "jakob_romo_skille", "jakob_tromsdal", "joachim_erlend_olufsen", "jorgen_solli", "kjetil_holand_tosse", "mathusan_sandrakumar", "mats_lillebo", "mikael_torset_johnsen", "sander_erik_kartum", "simen_raaen_sandmael", "sivert_solli", "sondre_langas", "sondre_sorlokk", "vegard_voll"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "rana",
+    placeId: "sagbakken",
+    dokumentert: 30,
+    spillbar: 30,
+    nye: 27,
+    krysskoblet: ["adrian_olsen_teigen", "gabriel_andersen", "theo_aksnes_olsen"],
+    eraSource: "belagt",
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "junkeren",
+    placeId: "nordlandshallen",
+    dokumentert: 27,
+    spillbar: 27,
+    nye: 27,
+    krysskoblet: [],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "lorenskog",
+    placeId: "rolvsrud_stadion",
+    dokumentert: 58,
+    spillbar: 54,
+    nye: 45,
+    krysskoblet: ["bjorn_viljugrein", "dadi_dodou_gaye", "daniel_novak", "espen_olsen", "joackim_jorgensen", "jorgen_isnes", "karim_aoudia", "kim_kristian_holmen", "kjetil_berge", "leon_dahlstrom", "marius_andresen", "omar_fonstad_el_ghaouti", "tommy_berntsen"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "eidsvold_turn",
+    placeId: "myhrer_stadion",
+    dokumentert: 54,
+    spillbar: 52,
+    nye: 38,
+    krysskoblet: ["christian_aas", "elias_solberg", "geir_frigard", "hallgeir_finbraten", "helge_ostvold", "jonas_enkerud", "lucas_kolstad", "ole_andreas_nesset", "ole_einar_martinsen", "ole_kristian_langas", "sebastian_remme_berge", "stian_ringstad", "tom_fodstad", "tom_vermelid_kristoffersen", "vegard_storsve", "william_fredriksen_bjeglerud"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "follo",
+    placeId: "ski_stadion",
+    dokumentert: 35,
+    spillbar: 35,
+    nye: 33,
+    krysskoblet: ["henrik_hagen", "otman_khris"],
+    eraSource: "belagt",
+    doc: "docs/P2_AVDELING2_SOURCE_PASS.md"
+  },
+  {
+    clubId: "trygg_lade",
+    placeId: "lade_idrettsanlegg",
+    dokumentert: 26,
+    spillbar: 26,
+    nye: 25,
+    krysskoblet: ["steffen_iversen"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "tromsdalen",
+    placeId: "tuil_arena",
+    dokumentert: 79,
+    spillbar: 72,
+    nye: 56,
+    krysskoblet: ["august_mikkelsen", "eirik_lamoy", "elias_aarflot", "gabriel_andersen", "hans_age_yndestad", "hans_norbye", "harald_nilsen_tangen", "isak_vadebu", "jo_nymo_matland", "kristoffer_hay", "lars_gunnar_johnsen", "lasse_berg_johnsen", "lasse_nilsen", "mathias_sundberg", "morten_giaever", "peder_meen_johansen", "ruben_kristiansen", "rune_lange", "sander_finjord_ringberg", "sean_nilsen_modebe", "simon_thomas", "tomas_kristoffersen", "uranik_seferi"],
+    eraSource: ["belagt", "utledet"],
+    doc: "docs/P2_WIKIPEDIA_DYBDEPASS.md"
+  },
+  {
+    clubId: "sotra",
+    placeId: "straume_idrettspark",
+    dokumentert: 15,
+    spillbar: 15,
+    nye: 11,
+    // De to første er navnekollisjoner avgjort mot NFFs PERSONSIDE, som fører
+    // hele klubbhistorikken: begge har Åsane i karrieren, og er katalogens
+    // Åsane-profiler. De to siste sto i klubbartikkelens «Kjente utøvere».
+    krysskoblet: ["alexander_dang", "erlend_hellevik_larsen", "havard_foldnes", "kristoffer_zachariassen"],
+    eraSource: "belagt",
+    doc: "docs/P2_SOTRA_SOURCE_PASS.md"
   }
 ];
 
@@ -102,8 +284,16 @@ for (const arv of ARVER) {
     // aldri en karrierepåstand. `eraSource` er derimot per kilde — Pors daterer
     // seg selv, Brattvåg har ikke ett eneste årstall — og forskjellen skal stå
     // i tabellen, ikke skjules i en felles antakelse.
+    //
+    // En arv kan ha TO kildegenerasjoner. Brattvåg ble landet på en udatert
+    // klubbhistorikk (`utledet`) og senere supplert med NFFs 2026-tropp, som er
+    // datert (`belagt`). Da er én verdi per arv feil form: profilene har ulik
+    // epokebelegg fordi de har ulik kilde. Raden tar derfor en liste når arven
+    // har flere, og lista er uttømmende — en tredje verdi feller fortsatt.
+    const tillatteEra = Array.isArray(arv.eraSource) ? arv.eraSource : [arv.eraSource];
     assert.equal(player.classSource, "utledet", `${merke}/${player.id}: classSource`);
-    assert.equal(player.eraSource, arv.eraSource, `${merke}/${player.id}: eraSource`);
+    assert.ok(tillatteEra.includes(player.eraSource),
+      `${merke}/${player.id}: eraSource ${JSON.stringify(player.eraSource)} står ikke i arvens liste ${JSON.stringify(tillatteEra)}`);
   }
 
   // Krysskoblingene er navngitte påstander. Hver av dem beholder sin egen

@@ -8,10 +8,10 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 5, expectedPartial: 2, expectedThin: 40, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 8, expectedPartial: 2, expectedThin: 37, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 4, expectedPartial: 3, expectedThin: 40, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 4, expectedPartial: 2, expectedThin: 45, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 2, expectedPartial: 3, expectedThin: 19, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 6, expectedPartial: 2, expectedThin: 43, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -147,7 +147,91 @@ const documented = [
     strengths: ["game_reading"],
     claim: "Sandefjord head coach Martí Cifuentes explicitly described Kurtovic as having good game understanding; generic 'technically good' wording is not converted into an invented technique token.",
     source: "https://www.sandefjordfotball.no/nyheter/ny-toarskontrakt-for-kurtovic"
-  }
+  },
+
+  // --- SNL-passet, 26.08.2026 -------------------------------------------------
+  // Store norske leksikons taksonomi «Norske fotballspillere» ble lest i sin
+  // helhet (305 biografier, 171 navn katalogen alt har). Elleve av dem hører til
+  // en NY P1-arv og bærer en ferdighetspåstand. `claim` siterer kilden ordrett
+  // her, i motsetning til postene over — en påstand som kan kontrolleres uten å
+  // åpne kilden er verdt mer enn et sammendrag.
+  {
+    playerId: "bjorn_borgen",
+    placeId: "fredrikstad_stadion",
+    strengths: ["first_touch", "dribbling", "pace", "finishing"],
+    claim: "«Bjørn Borgen var en teknisk briljant, fintesterk, rask og målfarlig ving …»",
+    source: "https://snl.no/Bj%C3%B8rn_Borgen"
+  },
+  {
+    playerId: "christer_basma",
+    placeId: "nadderud_stadion",
+    strengths: ["pace", "decisions", "simple_passing", "positioning"],
+    claim: "«Basma kunne spille både offensivt og defensivt, og hadde først og fremst fordel av sin hurtighet. Han var også kjent for sine kloke valg, pasningsfot og plasseringsevne.»",
+    source: "https://snl.no/Christer_Basma"
+  },
+  {
+    playerId: "erik_johansen",
+    placeId: "nordre_asen",
+    strengths: ["game_reading", "first_touch", "simple_passing", "long_shots"],
+    claim: "«Johansen var en fotballklok, ikke spesielt rask, men teknisk god offensiv spiller, pasningssikker og med en god skuddfot.»",
+    source: "https://snl.no/Erik_Johansen"
+  },
+  {
+    playerId: "espen_ruud",
+    placeId: "skagerak_arena",
+    strengths: ["finishing", "simple_passing", "set_pieces"],
+    claim: "«Espen Ruud var en målfarlig og pasningssikker back, som blant annet har scoret en del mål på dødball for klubblagene sine.»",
+    source: "https://snl.no/Espen_Ruud"
+  },
+  {
+    playerId: "finn_gundersen",
+    placeId: "nordre_asen",
+    strengths: ["long_shots", "finishing"],
+    claim: "«Som fotballspiller var Finn Gundersen en skuddsterk angrepsspiller …»",
+    source: "https://snl.no/Finn_Gundersen"
+  },
+  {
+    playerId: "fredrik_stromstad",
+    placeId: "sor_arena",
+    strengths: ["work_rate", "stamina", "first_touch", "final_pass", "late_runs"],
+    claim: "«Strømstad var en hardtarbeidende og løpssterk midtbanespiller med gode tekniske ferdigheter, blant annet med gode gjennombruddspasninger og evne til å score mål på løp inn i motstanderens straffefelt.»",
+    source: "https://snl.no/Fredrik_Str%C3%B8mstad"
+  },
+  {
+    playerId: "gunnar_andersen",
+    placeId: "bislett_stadion",
+    strengths: ["first_touch", "strength", "simple_passing", "heading", "leadership"],
+    claim: "«Gunnar Andersen var en teknisk god og robust spiller med en god pasningsfot og hodestyrke, men ikke så rask. Han var en sympatisk ledertype, kaptein både i klubb- og landslaget, og med evne til å inspirere andre til å yte noe ekstra.»",
+    source: "https://snl.no/Gunnar_Andersen_-_idrettsut%C3%B8ver"
+  },
+  {
+    playerId: "oivind_holmsen",
+    placeId: "bislett_stadion",
+    strengths: ["pace", "strength", "passing_range"],
+    claim: "«Som spiller var Holmsen stor og atletisk, men med en hurtighet som overgikk norske og nordiske spillere på denne tiden. … spilte han mer på kraft enn teknikk, men hadde et godt tilslag og var pasningssikker, spesielt når det gjaldt langpasninger.»",
+    source: "https://snl.no/%C3%98ivind_Holmsen"
+  },
+  {
+    playerId: "ragnar_larsen",
+    placeId: "skagerak_arena",
+    strengths: ["stamina", "work_rate", "determination", "flair", "leadership"],
+    claim: "«Han var også svært treningsvillig med god kondisjon, innsatsvilje og kreativitet, og ble blant annet kalt «en hardtarbeidende kriger på banen». … den som holdt laget sammen og gikk foran som leder og kaptein.»",
+    source: "https://snl.no/Ragnar_Larsen"
+  },
+  {
+    playerId: "tom_hogli",
+    placeId: "romssa_arena",
+    strengths: ["first_touch", "tackling", "overlapping_runs", "game_reading", "crossing"],
+    claim: "«Høgli var en ballsikker og taklingssterk høyreback, som ofte gikk på offensive løp. Han var også flink til å lese spillet og slo gode innlegg.»",
+    source: "https://snl.no/Tom_H%C3%B8gli"
+  },
+  {
+    playerId: "trond_pedersen",
+    placeId: "sor_arena",
+    strengths: ["pace", "overlapping_runs"],
+    claim: "«Han var en offensiv og rask back som spilte hele 277 førstedivisjonskamper.»",
+    source: "https://snl.no/Trond_Pedersen"
+  },
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
@@ -182,7 +266,55 @@ const existingSupplements = [
     strengths: ["acceleration"],
     claim: "Store norske leksikon describes Martinsen as known for a change of pace, a low centre of gravity and quick steps that let him accelerate toward goal.",
     source: "https://snl.no/Alf_Martinsen"
-  }
+  },
+
+  // --- SNL-passet, 26.08.2026 -------------------------------------------------
+  // Seks navn fra samme gjennomlesning hører til en EKSISTERENDE P1-arv.
+  // `expectedDocumented` i P1_HERITAGES er flyttet tilsvarende: Brann 5 → 8,
+  // Viking 4 → 6, Lillestrøm 2 → 3, og `expectedThin` ned med det samme.
+  // Nevneren står urørt — det er dekningen som har flyttet seg, ikke arven.
+  {
+    playerId: "finn_berstad",
+    placeId: "brann_stadion",
+    strengths: ["first_touch", "finishing", "passing_range", "game_reading", "leadership"],
+    claim: "«Berstad var en allsidig spiller, teknisk god og målfarlig med en utmerket pasningsfot. … endte til slutt opp som en taktisk klok back med gode defensive ferdigheter. … han den ubestridte lederen og kapteinen på klubblaget.»",
+    source: "https://snl.no/Finn_Berstad"
+  },
+  {
+    playerId: "gunnar_halle",
+    placeId: "araasen_stadion",
+    strengths: ["work_rate", "tackling"],
+    claim: "«Gunnar Halle var en hardtarbeidende og taklingssterk back med gode defensive og offensive kvaliteter.»",
+    source: "https://snl.no/Gunnar_Halle"
+  },
+  {
+    playerId: "olav_nilsen",
+    placeId: "lyse_arena",
+    strengths: ["strength", "finishing", "first_touch", "game_reading", "tackling", "heading"],
+    claim: "«Olav Nilsen var en fysisk sterk, målfarlig og teknisk glimrende midtbanespiller med et stort repertoar. I tillegg var han fotballklok, taklingssterk, god på hodet …»",
+    source: "https://snl.no/Olav_Nilsen"
+  },
+  {
+    playerId: "sigbjorn_slinning",
+    placeId: "lyse_arena",
+    strengths: ["work_rate", "pace", "tackling", "determination", "overlapping_runs"],
+    claim: "«Slinning var en energisk, hurtig, kompromissløs og taklingssterk spiller med et ukuelig pågangsmot og vinnerinstinkt. … kjent for sine offensive raids og defensive løp langs sidelinjen …»",
+    source: "https://snl.no/Sigbj%C3%B8rn_Slinning"
+  },
+  {
+    playerId: "tore_pedersen",
+    placeId: "brann_stadion",
+    strengths: ["pace", "tackling", "heading", "game_reading", "positioning", "interceptions"],
+    claim: "«Tore Pedersens fremste egenskaper var hurtigheten og taklingsevnen. Han var også god med hodet, hadde god spilleforståelse, plasseringsevne og evne til å bryte motstanderens pasningsspill.»",
+    source: "https://snl.no/Tore_Pedersen"
+  },
+  {
+    playerId: "trygve_andersen",
+    placeId: "brann_stadion",
+    strengths: ["strength", "duels", "tackling", "interceptions", "aggression"],
+    claim: "«Andersen var en storvokst og robust spiller, duell- og taklingssterk, flink til å gjenvinne ballen og med en pågående spillestil.»",
+    source: "https://snl.no/Trygve_Andersen"
+  },
 ];
 
 export const P1_EXISTING_SUPPLEMENTS = Object.freeze(existingSupplements.map((entry) => Object.freeze({

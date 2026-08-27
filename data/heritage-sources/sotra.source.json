@@ -1,0 +1,109 @@
+{
+  "clubId": "sotra",
+  "clubName": "Sotra",
+  "placeId": "straume_idrettspark",
+  "placeName": "Straume idrettspark",
+  "placeNotes": "Klubbanlegg: Sotra Sportsklubbs hjemmebane på Straume. Klubben ble til i 2009 ved sammenslåing av Foldnes IL, Brattholmen IL og IL Øygard (stiftet 1945), og er en ANNEN klubb enn Nest-Sotra (1968) og Øygarden FK, som gikk konkurs i 2022. Banen åpner de kildebelagte profilene.",
+  "eraSource": "belagt",
+  "doc": "docs/P2_SOTRA_SOURCE_PASS.md",
+  "sources": [
+    {
+      "url": "https://www.fotball.no/fotballdata/lag/hjem/?fiksId=508",
+      "hentet": "2026-08-26",
+      "beskrivelse": "NFFs lagside for Sotra Menn Senior 1, 2026-troppen gruppert etter lagdel. Laget funnet via ligatabellen for 2. divisjon avdeling 1 (turnering 206007), ikke via klubbsiden."
+    },
+    {
+      "url": "https://no.wikipedia.org/wiki/Sotra_SK",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Klubbartikkelens «Kjente utøvere». Hvert navn kontrollert mot spillerens EGEN artikkel; bare de som har Sotra i seniorkarrieren er tatt med."
+    },
+    {
+      "url": "https://www.fotball.no/fotballdata/person/profil/?fiksId=2760762",
+      "hentet": "2026-08-26",
+      "beskrivelse": "NFFs personside gir HELE klubbhistorikken, også ungdomsår og andrelag. Brukt til å avgjøre de to navnekollisjonene mot katalogen: Håvard Arefjord Foldnes har Åsane 2 i karrieren (fiksId 2760762) og Erlend Hellevik Larsen har Åsane 2021–22 (fiksId 3142691) — begge er katalogens Åsane-profiler."
+    }
+  ],
+  "players": [
+    {
+      "name": "Morten Grasmo",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Kristian Skjørli Ree",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Anders Johan Johansen",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Ole Martin Dåvøy Skår",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Håvard Arefjord Foldnes",
+      "crossLink": true,
+      "existingId": "havard_foldnes",
+      "era": "modern"
+    },
+    {
+      "name": "Daniel Steensæth Tørum",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Sander Wik",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Magnus Eide Bildøy",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Frederic Doksæter Falck",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Lars Oskar Groos Kilen",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Kasper Klett Straume",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Erlend Hellevik Larsen",
+      "crossLink": true,
+      "existingId": "erlend_hellevik_larsen",
+      "era": "modern"
+    },
+    {
+      "name": "Steffen Lie Skålevik",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Kristoffer Zachariassen",
+      "crossLink": true,
+      "existingId": "kristoffer_zachariassen",
+      "era": "modern"
+    },
+    {
+      "name": "Alexander Dang",
+      "crossLink": true,
+      "existingId": "alexander_dang",
+      "era": "modern"
+    }
+  ]
+}

@@ -52,6 +52,8 @@ jobs:
           npm run audit:product-status
           npm run audit:clubs
           npm run audit:club-heritage
+          npm run audit:import-club-heritage
+          npm run audit:nff-squad
           node scripts/sync-club-affiliations.mjs
           npm run audit:football-book-knowledge
           npm run audit:football-book-ux
@@ -64,6 +66,7 @@ jobs:
           npm run audit:tournaments
           npm run audit:tactics
           npm run audit:attributes
+          npm run audit:p2-source-claims
           node scripts/audit-p1-source-claims.mjs
 
       - name: UI-/flyt-vakter

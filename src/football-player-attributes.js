@@ -3,6 +3,17 @@ import {
   applyP1SourceClaims,
   applyP1SourceClaimsToPlayer
 } from "./football-player-source-claims-p1.js";
+import {
+  applyP2SourceClaims,
+  applyP2SourceClaimsToPlayer
+} from "./football-player-source-claims-p2.js";
+
+// P1 FØRST, SÅ P2. De to registrene overlapper ikke — P2 dekker bare spillere
+// utenfor de 18 frosne P1-arvene — men rekkefølgen er likevel eksplisitt, og
+// P2 lar en profil som alt har styrker stå. Da kan ikke rekkefølgen snu et
+// resultat, uansett hvordan registrene vokser.
+const applySourceClaims = (players) => applyP2SourceClaims(applyP1SourceClaims(players));
+const applySourceClaimsToPlayer = (player) => applyP2SourceClaimsToPlayer(applyP1SourceClaimsToPlayer(player));
 
 export const PLAYER_ATTRIBUTES_VERSION = base.PLAYER_ATTRIBUTES_VERSION;
 export const ATTRIBUTE_SCALE = base.ATTRIBUTE_SCALE;
@@ -13,9 +24,9 @@ export const classCeilingFactor = base.classCeilingFactor;
 export const describePositionDemands = base.describePositionDemands;
 export const calculateRoleAttributeFit = base.calculateRoleAttributeFit;
 
-function synchronizeP1SourceClaims(players) {
+function synchronizeSourceClaims(players) {
   if (!Array.isArray(players)) return [];
-  const effective = applyP1SourceClaims(players);
+  const effective = applySourceClaims(players);
   for (let index = 0; index < players.length; index += 1) {
     const sourceStrengths = effective[index]?.strengths;
     if (!Array.isArray(sourceStrengths)) continue;
@@ -27,13 +38,13 @@ function synchronizeP1SourceClaims(players) {
 }
 
 export function derivePlayerAttributes(player, options = {}) {
-  return base.derivePlayerAttributes(applyP1SourceClaimsToPlayer(player), options);
+  return base.derivePlayerAttributes(applySourceClaimsToPlayer(player), options);
 }
 
 export function buildAttributeScaling(players, options = {}) {
-  return base.buildAttributeScaling(applyP1SourceClaims(players), options);
+  return base.buildAttributeScaling(applySourceClaims(players), options);
 }
 
 export function derivePlayerAttributeIndex(players, options = {}) {
-  return base.derivePlayerAttributeIndex(synchronizeP1SourceClaims(players), options);
+  return base.derivePlayerAttributeIndex(synchronizeSourceClaims(players), options);
 }

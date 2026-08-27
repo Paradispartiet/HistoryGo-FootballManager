@@ -1,5 +1,14 @@
 # P2 · kildeliste for de åtte gjenstående i avdeling 2
 
+> **Lest 26.08.2026, og konklusjonen står ikke.** Alle fire de redaksjonelle
+> sporene under — adelskalenderen, klubbarkivet, historikksida og
+> «Klubblegende»-serien — er lest. Til sammen ga de ingen navn som kunne
+> importeres: de oppgir ikke posisjon, og Romerikes Blads bildetekst er
+> transkribert med feil. Dybden kom fra **no.wikipedias klubbkategorier** i
+> stedet. Se `docs/P2_WIKIPEDIA_DYBDEPASS.md` for hva hver av de fire faktisk
+> inneholdt, slik at ingen trenger å lese dem på nytt for å finne det samme.
+
+
 **Dette dokumentet er et FINNEVERKTØY, ikke en kilde.** Innholdet er satt sammen
 av websøk, og et søketreff er en oppsummerers parafrase av en side ingen her har
 åpnet. Ingenting herfra skal importeres som en påstand — listen sier hvor

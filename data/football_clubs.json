@@ -564,10 +564,10 @@
       "group": "avdeling1",
       "strength": 54,
       "form": 60,
-      "playerPoolSize": 63,
+      "playerPoolSize": 89,
       "playerPoolStatus": "ready",
       "homePlaceId": "pors_stadion",
-      "playablePlayerPoolSize": 16
+      "playablePlayerPoolSize": 42
     },
     {
       "id": "brattvag",
@@ -578,23 +578,24 @@
       "group": "avdeling1",
       "strength": 53,
       "form": 59,
-      "playerPoolSize": 81,
+      "playerPoolSize": 93,
       "playerPoolStatus": "ready",
-      "playablePlayerPoolSize": 18,
+      "playablePlayerPoolSize": 30,
       "homePlaceId": "brattvag_stadion"
     },
     {
       "id": "eik_tonsberg",
       "name": "Eik Tønsberg",
-      "ground": "Eik stadion",
+      "ground": "Tønsberg gressbane",
       "city": "Tønsberg",
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 53,
       "form": 59,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 25,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 25,
+      "homePlaceId": "tonsberg_gressbane"
     },
     {
       "id": "vidar",
@@ -605,9 +606,10 @@
       "group": "avdeling1",
       "strength": 52,
       "form": 58,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 26,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 26,
+      "homePlaceId": "lassa_idrettspark"
     },
     {
       "id": "kvik_halden",
@@ -618,9 +620,10 @@
       "group": "avdeling1",
       "strength": 51,
       "form": 57,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 56,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 38,
+      "homePlaceId": "halden_stadion"
     },
     {
       "id": "sandviken",
@@ -631,9 +634,10 @@
       "group": "avdeling1",
       "strength": 51,
       "form": 57,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 31,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 31,
+      "homePlaceId": "stemmemyren"
     },
     {
       "id": "lysekloster",
@@ -644,9 +648,10 @@
       "group": "avdeling1",
       "strength": 50,
       "form": 56,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 27,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 27,
+      "homePlaceId": "lysekloster_idrettspark"
     },
     {
       "id": "sotra",
@@ -657,22 +662,24 @@
       "group": "avdeling1",
       "strength": 49,
       "form": 55,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 15,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 15,
+      "homePlaceId": "straume_idrettspark"
     },
     {
       "id": "traff",
       "name": "Træff",
-      "ground": "Molde idrettspark",
+      "ground": "Reknesbanen",
       "city": "Molde",
       "tier": "andredivisjon",
       "group": "avdeling1",
       "strength": 48,
       "form": 54,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 23,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 23,
+      "homePlaceId": "reknesbanen"
     },
     {
       "id": "bjarg",
@@ -683,9 +690,10 @@
       "group": "avdeling1",
       "strength": 47,
       "form": 53,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 32,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 30,
+      "homePlaceId": "stavollen_kunstgress"
     },
     {
       "id": "skeid",
@@ -780,9 +788,10 @@
       "group": "avdeling2",
       "strength": 52,
       "form": 58,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 79,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 72,
+      "homePlaceId": "tuil_arena"
     },
     {
       "id": "stjordals_blink",
@@ -793,9 +802,10 @@
       "group": "avdeling2",
       "strength": 52,
       "form": 58,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 78,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 68,
+      "homePlaceId": "sandskogan_stadion"
     },
     {
       "id": "rana",
@@ -806,9 +816,10 @@
       "group": "avdeling2",
       "strength": 51,
       "form": 57,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 30,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 30,
+      "homePlaceId": "sagbakken"
     },
     {
       "id": "junkeren",
@@ -819,9 +830,10 @@
       "group": "avdeling2",
       "strength": 50,
       "form": 56,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 27,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 27,
+      "homePlaceId": "nordlandshallen"
     },
     {
       "id": "lorenskog",
@@ -832,9 +844,10 @@
       "group": "avdeling2",
       "strength": 50,
       "form": 56,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 58,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 54,
+      "homePlaceId": "rolvsrud_stadion"
     },
     {
       "id": "eidsvold_turn",
@@ -845,9 +858,10 @@
       "group": "avdeling2",
       "strength": 49,
       "form": 55,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 54,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 52,
+      "homePlaceId": "myhrer_stadion"
     },
     {
       "id": "follo",
@@ -858,9 +872,10 @@
       "group": "avdeling2",
       "strength": 48,
       "form": 54,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 35,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 35,
+      "homePlaceId": "ski_stadion"
     },
     {
       "id": "trygg_lade",
@@ -871,9 +886,10 @@
       "group": "avdeling2",
       "strength": 47,
       "form": 53,
-      "playerPoolSize": 0,
-      "playerPoolStatus": "pending",
-      "playablePlayerPoolSize": 0
+      "playerPoolSize": 26,
+      "playerPoolStatus": "ready",
+      "playablePlayerPoolSize": 26,
+      "homePlaceId": "lade_idrettsanlegg"
     }
   ],
   "playerPoolSchema": "historygo-football-manager.club-player-pool.v1",

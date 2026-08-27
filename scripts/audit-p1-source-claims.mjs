@@ -158,9 +158,21 @@ const totalStatusCounts = {
   DELVIS: statusCounts.DELVIS + existingStatusCounts.DELVIS,
   "THIN-SOURCE": statusCounts["THIN-SOURCE"] + existingStatusCounts["THIN-SOURCE"]
 };
-ok(totalStatusCounts.DOKUMENTERT === 45, `expected 45 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
+// THE FROZEN THING IS THE DENOMINATOR, NOT THE COVERAGE.
+//
+// 936/701/235 above may never move without a documented identity decision: that
+// is the population P1 measured. The distribution across it is a MEASUREMENT of
+// how much of that population a source describes, and it is supposed to move
+// when someone reads a source that was not read before.
+//
+// It moved on 2026-08-26. Store norske leksikon's taxonomy "Norske
+// fotballspillere" (305 biographies) was read in full; 17 of the names inside a
+// P1 heritage carry a skill claim that had never been recorded. DOKUMENTERT
+// 45 -> 62, THIN-SOURCE 876 -> 859, DELVIS unchanged. Nothing was inferred: the
+// 54 other articles read in the same pass describe career only and stay empty.
+ok(totalStatusCounts.DOKUMENTERT === 62, `expected 62 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
 ok(totalStatusCounts.DELVIS === 15, `expected 15 total partial P1 profiles, got ${totalStatusCounts.DELVIS}`);
-ok(totalStatusCounts["THIN-SOURCE"] === 876, `expected 876 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
+ok(totalStatusCounts["THIN-SOURCE"] === 859, `expected 859 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
 ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
   "combined status distribution must cover 936/936");
 

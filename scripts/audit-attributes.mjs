@@ -338,6 +338,43 @@ const REVIEWED_NAME_PAIRS = new Map([
   // mål på 80 kamper mellom 1911 og 1920. Posisjonen alene avgjør det. Han er
   // ført med klubbsuffiks, slik Tore Pedersen (RBK) allerede var.
   ["sverre andersen|sverre andersen odd", "Vikings keeper mot Odds spiss fra 1910-tallet"],
+  // NFF-troppene i avdeling 1 utløste fem par på én gang, og vakten avgjorde
+  // tre av dem MOT importen: to var samme mann, og de ble krysskoblet i stedet
+  // for å bli nye profiler.
+  //
+  //   Rolf Birger Pedersen  — Bjarg-kilden sier «tidligere Brannspiller og
+  //     landslagsspiller», og katalogen hadde ham i Brann-arven som «Pesen».
+  //   Vegard Valgermo Forren — no.wikipedia: «(født 1988) … spillende
+  //     assistenttrener for Træff». Samme mann som Moldes Vegard Forren.
+  //
+  // To andre par lot seg ikke avgjøre: Tommy Rivaldo Svendsen (Lysekloster) mot
+  // Skeids Tommy Svendsen, og Adrian Bergersen (Vidar) mot Egersunds Adrian
+  // Amundsen Bergersen. Begge par er samme lagdel, så det finnes ikke noe
+  // skille å begrunne med — og en påstand om at de ER to menn er like ubelagt
+  // som en sammenslåing. De to nye er derfor UTELATT fra importen. Da påstår
+  // katalogen ingenting, og paret finnes ikke å registrere.
+  //
+  // Det ene ekte paret står igjen, og posisjonen avgjør det alene:
+  ["alexander alnæs pedersen|alexander pedersen", "Bjargs angrepsspiller mot Lyns keeper"],
+  // Avdeling 2 utløste tre par, og alle tre er ekte forskjellige menn.
+  // Eggen-paret er det eneste med samme lagdel, og der avgjør epoken det:
+  // Rosenborgs Nils Arne Eggen er historisk, Stjørdals-Blinks mann står i
+  // dagens registrerte tropp.
+  ["nils arne eggen|nils gunnar barstad eggen", "Rosenborgs historiske stopper mot Stjørdals-Blinks nåværende forsvarsspiller"],
+  ["nicolai aas|nikolai aas", "Ranas forsvarsspiller mot en offensiv spiller i katalogen"],
+  ["johan andersson|johan rickard andersson", "Eidsvold Turns forsvarsspiller mot en offensiv midtbanespiller"],
+  // Suppleringen av de tre eldste arvene med NFFs 2026-tropper etterlot bare
+  // dette ene paret å registrere. De øvrige nær-treffene var samme mann ført med
+  // og uten mellomnavn — registeret staver fyldigere enn klubbhistorikken gjorde
+  // — og de er UTELATT fra importen i stedet, så det er ingen par av dem.
+  // `import-club-heritage` stopper nå på den formen av seg selv.
+  //
+  // Dette er derimot en ekte disambiguering, gjort med vilje og etter katalogens
+  // eget mønster: Sarpsborgs Mathias Engebretsen er KEEPER, mens Kvik Haldens
+  // er midtbanespiller ifølge to uavhengige kilder — Wikipedias 2023-tropp og
+  // NFFs 2026-registrering. Posisjonen avgjør det alene, og han er ført med
+  // klubbsuffiks slik `tore_pedersen_rbk` og `sverre_andersen_odd` er.
+  ["mathias engebretsen|mathias engebretsen kvik", "Sarpsborgs keeper mot Kvik Haldens midtbanespiller"],
   // Brattvåg-importen: Flem er et av de vanligste navnene i Haram, og klubbens
   // egen adelskalender fører fire av dem (Bård, Egil, Hans Inge og Bjarne).
   // Bjarte er et annet fornavn enn Bjarne, ikke en stavevariant, og de to står

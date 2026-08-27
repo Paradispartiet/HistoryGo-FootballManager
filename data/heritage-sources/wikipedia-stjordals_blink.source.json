@@ -1,0 +1,327 @@
+{
+  "clubId": "stjordals_blink",
+  "clubName": "Stjørdals-Blink",
+  "placeId": "sandskogan_stadion",
+  "placeName": "Sandskogan stadion",
+  "eraSource": "belagt",
+  "doc": "docs/P2_WIKIPEDIA_DYBDEPASS.md",
+  "sources": [
+    {
+      "url": "https://no.wikipedia.org/wiki/Kategori:Fotballspillere_for_IL_Stjørdals-Blink",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Wikipedia-kategorien for klubbens spillere; hver profil lest enkeltvis, og bare de som har klubben i SENIORkarrieren i infoboksen er tatt med."
+    }
+  ],
+  "players": [
+    {
+      "name": "Awet Alemseged",
+      "crossLink": true,
+      "existingId": "awet_alemseged",
+      "era": "modern"
+    },
+    {
+      "name": "Marius Augdal",
+      "era": "modern"
+    },
+    {
+      "name": "Adrian Bartel",
+      "crossLink": true,
+      "existingId": "adrian_bartel",
+      "era": "modern"
+    },
+    {
+      "name": "Robin Bjørnholm-Jatta",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Lasse Bransdal",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Geir Olav Bøgseth",
+      "era": "modern"
+    },
+    {
+      "name": "Paweł Chrupałła",
+      "era": "modern"
+    },
+    {
+      "name": "Vegard Fiske",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Aleksander Foosnæs",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Andreas Fossli",
+      "crossLink": true,
+      "existingId": "andreas_fossli",
+      "era": "modern"
+    },
+    {
+      "name": "Nicklas Frenderup",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Runar Hauge",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Arne Holter",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Bjørnar Hove",
+      "era": "modern"
+    },
+    {
+      "name": "Mikael Tørset Johnsen",
+      "crossLink": true,
+      "existingId": "mikael_torset_johnsen",
+      "era": "modern"
+    },
+    {
+      "name": "Syver Karlsen",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Sander Kartum",
+      "crossLink": true,
+      "existingId": "sander_erik_kartum",
+      "era": "modern"
+    },
+    {
+      "name": "Brage Kvithyld",
+      "crossLink": true,
+      "existingId": "brage_prestmo_kvithyld",
+      "era": "modern"
+    },
+    {
+      "name": "Sondre Langås",
+      "crossLink": true,
+      "existingId": "sondre_langas",
+      "era": "modern"
+    },
+    {
+      "name": "Tor Erik Larsen",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Mats Lillebo",
+      "crossLink": true,
+      "existingId": "mats_lillebo",
+      "era": "modern"
+    },
+    {
+      "name": "Håvard Kleven Lorentsen",
+      "crossLink": true,
+      "existingId": "havard_kleven_lorentsen",
+      "era": "modern"
+    },
+    {
+      "name": "Sjur Lothe",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Martin Lundal",
+      "positions": [
+        "CB"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Eirik Malmo",
+      "era": "modern"
+    },
+    {
+      "name": "Franklin Daddys Boy Nyenetue",
+      "era": "modern"
+    },
+    {
+      "name": "Anders Nygaard",
+      "crossLink": true,
+      "existingId": "anders_nygaard",
+      "era": "modern"
+    },
+    {
+      "name": "Joachim Olufsen",
+      "crossLink": true,
+      "existingId": "joachim_erlend_olufsen",
+      "era": "modern"
+    },
+    {
+      "name": "Osei Oviasu",
+      "era": "modern"
+    },
+    {
+      "name": "David Paulmin",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Lars Ramstad",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Karl Martin Rolstad",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Ole Kristian Rødahl",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Ivar Sollie Rønning",
+      "crossLink": true,
+      "existingId": "ivar_sollie_ronning",
+      "era": "modern"
+    },
+    {
+      "name": "Rasmus Sandberg",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Simen Raaen Sandmæl",
+      "crossLink": true,
+      "existingId": "simen_raaen_sandmael",
+      "era": "modern"
+    },
+    {
+      "name": "Mathusan Sandrakumar",
+      "crossLink": true,
+      "existingId": "mathusan_sandrakumar",
+      "era": "modern"
+    },
+    {
+      "name": "Ivar Arnljot Sandvik",
+      "crossLink": true,
+      "existingId": "ivar_sandvik",
+      "era": "modern"
+    },
+    {
+      "name": "Jonas Selnæs",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Nedzad Sisic",
+      "positions": [
+        "ST"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Jakob Rømo Skille",
+      "crossLink": true,
+      "existingId": "jakob_romo_skille",
+      "era": "modern"
+    },
+    {
+      "name": "Adrian Nicolai Anhanger Solberg",
+      "era": "modern"
+    },
+    {
+      "name": "Jørgen Solli",
+      "crossLink": true,
+      "existingId": "jorgen_solli",
+      "era": "modern"
+    },
+    {
+      "name": "Sivert Solli",
+      "crossLink": true,
+      "existingId": "sivert_solli",
+      "era": "modern"
+    },
+    {
+      "name": "Noah Solskjær",
+      "crossLink": true,
+      "existingId": "noah_solskjaer",
+      "era": "modern"
+    },
+    {
+      "name": "Sondre Stokke",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Frank Stople",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Andreas Lykke Strand",
+      "crossLink": true,
+      "existingId": "andreas_lykke_strand",
+      "era": "modern"
+    },
+    {
+      "name": "Sondre Sørløkk",
+      "crossLink": true,
+      "existingId": "sondre_sorlokk",
+      "era": "modern"
+    },
+    {
+      "name": "Ask Tjærandsen-Skau",
+      "era": "modern"
+    },
+    {
+      "name": "Jakob Tromsdal",
+      "crossLink": true,
+      "existingId": "jakob_tromsdal",
+      "era": "modern"
+    },
+    {
+      "name": "Kjetil Holand Tøsse",
+      "crossLink": true,
+      "existingId": "kjetil_holand_tosse",
+      "era": "modern"
+    },
+    {
+      "name": "Fredrik Vinje",
+      "crossLink": true,
+      "existingId": "fredrik_vinje",
+      "era": "modern"
+    },
+    {
+      "name": "Vegard Voll",
+      "crossLink": true,
+      "existingId": "vegard_voll",
+      "era": "modern"
+    },
+    {
+      "name": "Robert Behson-Courage Williams",
+      "era": "modern"
+    },
+    {
+      "name": "Emil Ødegaard",
+      "crossLink": true,
+      "existingId": "emil_odegaard",
+      "era": "modern"
+    }
+  ]
+}

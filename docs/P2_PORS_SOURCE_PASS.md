@@ -36,3 +36,31 @@ De 63 Pors-navnene er én dokumentert historikkatalog, men ikke én automatisk s
 - Senere kildebelegg kan flytte en eksisterende historikkpost inn i den spillbare poolen uten ny identitet.
 
 `audit:club-heritage` låser 63/16/47-grensen, de fem krysskoblingene, P1-nevneren og stadion-unlocken. Vakten er felles for alle P2-arver: forventningene ligger som én rad i tabellen øverst i `scripts/audit-club-heritage.mjs`, slik at en skjerpelse av regelen treffer alle klubbene samtidig.
+
+---
+
+## Supplering 24.08.2026 — NFFs 2026-tropp
+
+Arven over ble lest ut av klubbens egen historikk, og den er uendret. Dette er
+et lag oppå: **26 navn fra NFFs lagside** (`fiksId=82`, hentet 24.08.2026), ført
+inn med `import-club-heritage --suppler`. Kilden er et *register*, ikke en
+fortelling — den gir hvem som spiller nå, gruppert etter lagdel, og ingenting om
+hvem de er.
+
+| | Før | Etter |
+|---|---:|---:|
+| Dokumenterte | 63 | **89** |
+| Spillbare | 16 | **42** |
+| Historikkposter | 47 | **47** |
+
+Historikkpostene står stille, og det er poenget: en supplering legger til, den
+skriver ikke om. De 26 fordeler seg på 2 keepere, 10 forsvar, 7 midtbane,
+6 angrep og **én krysskobling** — Redon Pllana sto i katalogen fra før og fikk
+klubbtilknytningen i stedet for en ny identitet.
+
+23 av de 42 spillbare bærer `positionSource: "gruppe"`. Lagsida oppgir lagdel,
+ikke posisjon, og oppløsningen står i dataene i stedet for å bli gjettet bort.
+Se `docs/P2_IMPORT_V1.md` § «Lagdel som posisjon».
+
+`audit:club-heritage` er oppdatert til 89/42/47, og `audit:import-club-heritage`
+bygger arven opp igjen fra katalogen med alle seks krysskoblingene.

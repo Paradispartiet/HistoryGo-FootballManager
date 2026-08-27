@@ -69,34 +69,186 @@ Se `docs/P1_SOURCE_CLAIMS.md` for frosset nevner, Stabæk-identitetene, statusko
 
 ## P2 — 16 klubber uten arv, alle i 2. divisjon
 
-**Ferdig (2):**
+**Ferdig (16 av 16 påbegynt — 14 landet, 2 står igjen):**
 
 | Klubb | Dokumentert | Spillbar | Historikkposter |
 |---|---:|---:|---:|
-| Pors | 63 | 16 | 47 |
-| Brattvåg | 81 | 18 | 63 |
+| Brattvåg | 93 | 30 | 63 |
+| Pors | 89 | 42 | 47 |
+| Stjørdals-Blink | 78 | 68 | 10 |
+| Lørenskog | 58 | 54 | 4 |
+| Kvik Halden | 56 | 38 | 18 |
+| Eidsvold Turn | 54 | 52 | 2 |
+| Follo | 35 | 35 | 0 |
+| Bjarg | 32 | 30 | 2 |
+| Sandviken | 31 | 31 | 0 |
+| Rana | 30 | 30 | 0 |
+| Junkeren | 27 | 27 | 0 |
+| Lysekloster | 27 | 27 | 0 |
+| Trygg/Lade | 26 | 26 | 0 |
+| Vidar | 26 | 26 | 0 |
+| Eik Tønsberg | 25 | 25 | 0 |
+| Træff | 23 | 23 | 0 |
 
-Begge følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Begge er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Se `docs/P2_PORS_SOURCE_PASS.md` og `docs/P2_BRATTVAG_SOURCE_PASS.md`.
+Og den syttende, som passet før dette ikke kunne lande:
 
-**Avdeling 1 (8 gjenstår):** Eik Tønsberg · Vidar · Kvik Halden · Sandviken · Lysekloster · Sotra · Træff · Bjarg
+| Klubb | Dokumentert | Spillbar | Historikkposter |
+|---|---:|---:|---:|
+| **Tromsdalen** | 79 | 72 | 7 |
 
-Kildesporene for disse åtte er kartlagt i **`docs/P2_KILDELISTE_AVDELING1.md`** — hvilke sider som finnes per klubb, med URL, rangert etter forventet utbytte. Det dokumentet er et finneverktøy og ingen kilde: innholdet er websøk, og et søketreff er en parafrase av en side ingen har åpnet. Fire feller er allerede synlige derfra og bør avklares før import: **Eik** blander spillere og trenere i én liste, **Sandviken**s dokumenterte historie er i stor grad kvinnefotball, **Sotra** er en sammenslåing av tre forgjengerklubber fra 2009, og **Træff** deler bane med Molde FKs rekruttlag. To banenavn var gale og er rettet: Bjarg sto som «Bjarg kunstgress» (klubbnavnet med «kunstgress» påhengt) og heter **Stavollen kunstgress**; Vidar sto som «Midjord», som er **en annen klubbs bane** — Vidar holder til på **Lassa idrettspark**. Vidar-feilen hadde forplantet seg til ligaprofilen, der `styleName` het «Midjord-nærhet» og `tacticalSchool` «Bydelsklubb på Storhaug», altså feil bydel; begge er rettet. Divisjonen er derimot **ikke** rørt: `football_clubs.json` er et uttrykkelig 2026-øyeblikksbilde, og å flytte Vidar ut av avdeling 1 ville tømt en plass `audit:clubs` krever fjorten lag i — det er en designavgjørelse om pyramiden, ikke en korreksjon.
+**Gjenstår: ingen.** Sotra ble landet 26.08.2026 på 15 spillbare — nøyaktig grensa. Se avsnittet nederst.
 
-**Avdeling 2 (8):** Tromsdalen · Stjørdals-Blink · Rana · Junkeren · Lørenskog · Eidsvold Turn · Follo · Trygg/Lade
+**2. divisjon har arv i alle 28 klubber**, mot 12 før dette arbeidet. Hele katalogen står på **60 av 60 overtakbare**, og ingen klubb er `pending`.
 
-Kartlagt i **`docs/P2_KILDELISTE_AVDELING2.md`**, samme form og samme forbehold. Beste kilder her: **Eidsvold Turn har egen adelskalender** (Brattvåg-formen, navn med kampantall), **Stjørdals-Blink har klubbarkiv**, **Trygg/Lade har historikkside**, og **Lørenskog** dekkes av Romerikes Blads «Klubblegende»-serie — portrettsjangeren som faktisk gir dokumenterte styrker. Tre klubber er sammenslåinger med flere forgjengere (Stjørdals-Blink 1956, Trygg/Lade 1986, Rana 2017) og Follo er en paraply for fem lag fra 2000, så kilden må si hvilken enhet en spiller representerte.
+Alle fjorten følger samme grense: posisjon legges bare inn der kilden gir den, og banen åpner bare profilene som har den — enten posisjonen er presis eller en lagdel. Brattvåg-kilden har i tillegg kampantall per mann (546 ned til 143) — det belegger A-lagstilhørighet og ingenting mer, og vakten krever at ingen av de 79 nye profilene bærer styrke, arketype, rollepreferanse eller taktisk preferanse. Alle fjorten er låst av **én** felles vakt, `audit:club-heritage`: forventningene per klubb er én rad i tabellen øverst i skriptet, så neste klubb er en rad og ikke en ny fil, og en skjerpelse treffer alle samtidig. Hver klubb har sitt eget kildepass, `docs/P2_<KLUBB>_SOURCE_PASS.md`.
+
+**Avdeling 1 er ferdig: 13 av 14 klubber har arv (24.08.2026).** Bare Sotra står igjen, med 12 registrerte A-lagsspillere mot grensa på femten.
+
+**Kilden som landet dem var ikke den vi lette etter.** Passet leste først klubbenes *redaksjonelle* kilder — historiesider, Wikipedia, SNL — og konkluderte med at ingen av de seks gjenstående kunne landes. Riktig målt, feil spørsmål. **NFFs egen lagside** (`fotball.no/fotballdata/lag/hjem/?fiksId=N`) fører troppen for hvert registrerte lag, server-rendret i HTML-en, gruppert under **Keeper · Forsvar · Midtbane · Angrep** — nøyaktig oppløsningen `positionGroup` bruker. Sju klubber sto `pending` på redaksjonelle kilder; seks landet på registeret.
+
+De to kildetypene svarer på hver sin ting: **redaksjonelle kilder gir dybde** (Bjargs fire navn med sitat, Vidars 510 kamper og 289 mål, Kviks cupvinnerlag fra 1918), **registeret gir bredde** (tjue til tretti navn med lagdel, hver sesong). En klubb trenger femten spillbare. Redaksjonelle kilder ga det hos null av åtte; registeret hos sju av åtte.
+
+**Lagvalget må gå gjennom ligatabellen**, ikke klubbens lagliste. Bjarg har 84 registrerte lag og Sotra 79, blandet A-lag, rekrutt og 7er. To av åtte fikk først feil tropp: Sandviken traff B-laget (10 spillere mot 32), og Eik traff breddeklubbens «Menn 1» i stedet for «871 Menn Senior A».
+
+**Identitetsvakten avgjorde tre par mot importen.** `audit:attributes` flagget seks nær-duplikate navn. To var samme mann og ble krysskoblet: Bjargs Rolf Birger Pedersen er Branns «Pesen» (kilden sier «tidligere Brannspiller»), og Træffs Vegard Valgermo Forren er Moldes Vegard Forren (Wikipedia: «spillende assistenttrener for Træff»). Fire er **utelatt** fordi paret er samme lagdel og ingen kilde skiller dem — å slå sammen to dokumenterte karrierer er den ene feilen som ikke kan angres, og å påstå at de er to menn er like ubelagt. Utelatelse påstår ingenting.
+
+Hele målingen, med lærdommen om hvorfor første konklusjon var feil, står i `docs/P2_AVDELING1_MALING.md`.
+
+**To banenavn ble rettet underveis, og Eik-spørsmålet er besvart.** Træff sto som «Molde idrettspark», som er **naboanlegget** — banen heter **Reknesbanen** og deles med Molde 2. Og Eik Tønsberg, som sto uttrykkelig åpen fordi `homePlaceId` er permanent, er avgjort mot kilden: **Tønsberg gressbane**, kapasitet 5 600, ifølge både klubbartikkelens infoboks og banens egen artikkel. Delingen med Tønsberg FK er bekreftet, ikke bortforklart.
+
+**Avdeling 2 er ferdig: 7 av 8 landet (24.08.2026).** Samme kilde og samme form som avdeling 1 — NFFs lagside, med laget identifisert mot tabellen for avdeling 2. Bare Tromsdalen står igjen, med 9 registrerte spillere og ingen registrert keeper, som tyder på ufullstendig registrering snarere enn tom klubb. Se `docs/P2_AVDELING2_SOURCE_PASS.md`.
+
+~~**De fire redaksjonelle sporene kildelista pekte på er ikke lest, og var ikke nødvendige.**~~ **LEST 26.08.2026 — og de ga ikke dybden heller.** Eidsvold Turns adelskalender, Stjørdals-Blinks klubbarkiv, Trygg/Lades historikkside og Romerikes Blads «Klubblegende»-serie oppgir ikke posisjon; RBs bildetekst er transkribert med feil, og de ti «legendene» ligger i video. Ingen av navnene er importert. Dybden kom fra Wikipedia-kategoriene i stedet — se avsnittet under.
+
+**Sammenslåingene er ikke løst, bare ikke utløst.** Stjørdals-Blink (1956), Trygg/Lade (1986), Rana (2017) og Follo (paraply for fem lag fra 2000) har alle flere forgjengere, og kilden må si hvilken enhet en spiller representerte. En dagens tropp representerer dagens klubb uten tvetydighet, så spørsmålet er ikke stilt her. Det slår inn i det øyeblikket noen importerer historiske navn.
 
 **Fire banenavn var gale og er rettet**, etter samme mønster som i avdeling 1: Tromsdalen «Tromsdalen kunstgress» → **TUIL Arena**, Lørenskog «Lørenskog stadion» → **Rolvsrud stadion** (begge generatorrester — klubbnavnet med «stadion»/«kunstgress» påhengt), Junkeren «Bodø Spektrum kunstgress» → **Nordlandshallen** (feil anlegg i samme by), og Stjørdals-Blink «Øverlands Minde» → **Sandskogan stadion** (klubben forlot Øverlands Minde i 2012 og Sandskogan har vært hjemmebane siden 2020; ført sponsorfritt). Ligaprofilene er kontrollert og ingen måtte rettes — de henter navnet fra klubben, ikke fra banen. Tre tier-avvik (Junkeren, Lørenskog, Trygg/Lade oppgis i 3. divisjon) er **ikke** rørt, av samme grunn som Vidar.
 
 Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som motstandere med sin egen fotball, og `pending` holder dem bare ute av overtakelseslista. Nivå 3 har 12 overtakbare klubber av 28, og **avdeling 1 er fortsatt den tynneste flaten i spillet med 6 av 14**.
 
-**Handling:** v2-kildefiler i samme form som de siste importene. Hver klubb trenger også en `placeId` (alle har `ground` uten), og importen lager stedet.
+~~**Handling:** v2-kildefiler … **Rekkefølge:** avdeling 1 først — den er tynnest. **Neste klubb er Kvik Halden.**~~ **UTFØRT 24.08.2026 — alle seksten er importert.** Rekkefølgen holdt: Kvik Halden ble tatt nest, og forutsigelsen om den slo til på begge halvdeler — meritter fra 1918 ga navn, og krysskoblingsrisikoen mot Brann og Odd var reell. Det som ikke sto i planen var at redaksjonelle kilder skulle vise seg utilstrekkelige for fjorten av dem. Se avsnittet over.
 
-**Rekkefølge:** avdeling 1 først — den er tynnest.
+**Formen er mekanisert (24.08.2026).** `scripts/import-club-heritage.mjs` leser en kildefil et menneske har fylt ut med kilden i hånd, og gjør oversettelsen til canonical form: profiler, banens unlocks, klubbraden, krysskoblinger og den ferdige `ARVER`-raden. Den flytter ingen grense — den stopper i stedet for å gjette, på ukjent posisjon, GK sammen med utespillerposisjon, styrker satt i råfila, et navn som finnes fra før uten at kildefila sier om det er samme mann, manglende epoke eller manglende kilde. `npm run audit:import-club-heritage` fjerner Pors og Brattvåg fra katalogen i minnet og krever at importen gjenskaper begge felt for felt, og at hvert av de tjue avslagene slår til. Se `docs/P2_IMPORT_V1.md`.
 
-**Én ting krever en avgjørelse før import, ikke etterpå:** Eik Tønsbergs bane. «Eik stadion» finnes ikke, og klubben har to kandidater med hvert sitt svar — **Eik Idrettsanlegg** er klubbens eget anlegg, mens **Tønsberg gressbane** (5 600) er der seniorlagene faktisk spiller, trolig delt med andre klubber. `homePlaceId` er permanent, så valget hører til importen med kilden i hånd. Den er derfor ikke rettet.
+**Reproduksjonen fant to ting som sto i katalogen fra før.** Rekkefølgen i `clubAffiliations` eies av `sync-club-affiliations.mjs` (alfabetisk på `clubId`, kjørt i CI som drift-sjekk), så en krysskobling lagt bakerst ville felt en helt annen vakt ved neste kjøring; importen sorterer nå. Og **ti av Pors' elleve profiler med kildebelagt posisjon bærer historikkpostens advarsel om at posisjonen ikke er kildebelagt** — feltet motsier `naturalPositions`, som både banen og `spillbar: 16` behandler som belagt. Brattvåg har null slike. Hvilken av de to halvdelene som er feil kan bare avgjøres mot Pors-kilden, så det er ikke rettet; tallet er festet i vakten som `ordlydsavvik: 10` og kan verken vokse eller krympe stille.
+
+~~**Én ting krever en avgjørelse før import, ikke etterpå:** Eik Tønsbergs bane.~~ **AVGJORT 24.08.2026 mot kilden — Tønsberg gressbane. Se over.** Den opprinnelige teksten: «Eik stadion» finnes ikke, og klubben har to kandidater med hvert sitt svar — **Eik Idrettsanlegg** er klubbens eget anlegg, mens **Tønsberg gressbane** (5 600) er der seniorlagene faktisk spiller, trolig delt med andre klubber. `homePlaceId` er permanent, så valget hører til importen med kilden i hånd. Den er derfor ikke rettet.
 
 **Og en ledetråd som ikke lar seg automatisere:** fire av de seks gale banenavnene hadde formen «klubbnavn + stadion/kunstgress», som ser ut som en generatorsignatur man kan skrive en vakt på. Målt treffer mønsteret **16 av 60 klubber**, og minst tolv av dem er helt riktige virkelige navn (Brann Stadion, Fredrikstad stadion, Haugesund stadion …). En vakt ville gitt fjorten falske positive av seksten. Det som skiller er ikke navneformen, men om banen har et *eget lokalt navn* — Stavollen, TUIL Arena, Rolvsrud, Nordlandshallen, Lassa — og det kan bare avgjøres mot en kilde, én klubb om gangen. Mønsteret er en søkeliste, ikke en regel.
+
+**De tre store arvene er supplert med 2026-troppen (24.08.2026).** Pors, Brattvåg
+og Kvik Halden ble landet på klubbhistorikk og hadde derfor mange navn og få
+spillbare. NFFs lagside ga dem dagens tropp, ført inn med den nye
+`--suppler`-modusen:
+
+| Klubb | Dokumentert | Spillbar | Tilført | Gjensyn |
+|---|---:|---:|---:|---:|
+| Pors | 63 → **89** | 16 → **42** | 26 | 0 |
+| Brattvåg | 81 → **93** | 18 → **30** | 12 | 8 |
+| Kvik Halden | 41 → **56** | 23 → **38** | 15 | 6 |
+
+Historikkpostene står stille i alle tre — en supplering legger til, den skriver
+ikke om. Modusen speilvender tre av importens regler (en supplering *krever* at
+klubben står `ready`, og hopper over navn som alt står i arven), og
+`audit:import-club-heritage` måler speilvendingen mot ekte katalogdata ved å
+rekonstruere Brattvåg som historien faktisk gikk: én vanlig import, så én
+supplering.
+
+**To dubletter ble stoppet av en regel som ikke fantes.** Registeret skriver
+`Iver Krogh Hagen` og `John Ruud Norvik` der klubbhistorikken skrev `Iver Hagen`
+og `John Norvik`. Gjensynssjekken sammenlignet eksakte navn og laget begge som
+nye profiler. Skriptet stopper nå på navnepar som skiller seg med nøyaktig ett
+ledd i midten, med begge navnene i meldingen.
+
+**Brattvåg er den første arven med to `eraSource`** — `utledet` fra en udatert
+klubbhistorikk og `belagt` fra det daterte registeret. `audit:club-heritage`
+godtar derfor en liste per arv i stedet for én verdi.
+
+**Dybdepasset: Wikipedia ga sju klubber en fortid (26.08.2026).** De fjorten
+registerklubbene hadde dagens tropp og ingenting bak den. Kildelista pekte på
+fire redaksjonelle spor for å rette det; alle fire er lest, og **ingen av
+navnene deres er importert** — de oppgir ikke posisjon, Romerikes Blads
+bildetekst er transkribert med feil, og de ti «legendene» ligger i video.
+
+Dybden lå i **no.wikipedias klubbkategorier**: én kategori per klubb, og hver
+artikkel har posisjon i infoboksen og en datert karrieretabell. 326 artikler
+lest enkeltvis, og bare de som har klubben i sin egen SENIORkarriere tatt med.
+
+| Klubb | Dokumentert | Spillbar | Tilført |
+|---|---:|---:|---:|
+| **Tromsdalen** | 0 → **79** | 0 → **72** | 79 |
+| Stjørdals-Blink | 24 → **78** | 24 → **68** | 54 |
+| Lørenskog | 24 → **58** | 24 → **54** | 34 |
+| Eidsvold Turn | 21 → **54** | 21 → **52** | 33 |
+| Lysekloster | 16 → **27** | 16 → **27** | 11 |
+| Rana | 28 → **30** | 28 → **30** | 2 |
+| Trygg/Lade | 25 → **26** | 25 → **26** | 1 |
+
+**Tromsdalen var den andre klubben passet før dette ikke kunne lande.** Med 72
+spillbare er den `ready`, og `tuil_arena` er banen.
+
+**Kategorien er ikke kilden — artikkelen er**, og de tre feilene den gjør er
+verdt å huske. Den plasserer folk som aldri spilte der (Lørenskog IFs egen
+artikkel fører Henning Berg blant «kjente spillere»; Bergs artikkel sier at han
+spilte i KFUM fra lilleputt). Den skiller ikke herrelaget fra kvinnelaget
+(`IL Sandviken` er på Wikipedia nesten utelukkende kvinnelaget som ble Branns i
+2022 — 31 av 32 treff, **klubben er derfor utelatt fra passet i sin helhet**).
+Og den tar med ungdomsspillere (fem av Trygg/Lades sju).
+
+**Passet fant tre hull i importverktøyet.** En krysskobling til en mann som alt
+sto i arven ble talt to ganger og ga duplikat `clubAffiliations` (åtte
+profiler). Mellomnavn-sjekken fra Brattvåg så bare i arven, ikke i katalogen,
+og ville laget 13 duplikate mennesker. Og Wikipedias titteltvetydiggjørere
+(«Elias Solberg (f. 2004)») ble ført som en del av navnet, slik at
+eksaktnavn-sjekken ikke så at mannen alt sto der (sju navn). Alle tre er rettet
+i skriptet, ikke bare i dataene.
+
+**90 av 95 navnekollisjoner ble avgjort av kilden selv** — artikkelens
+seniorklubber mot katalogprofilens klubbtilknytninger. John Carew er
+Lørenskogs, Svein Bakke og Stian Ringstad er Eidsvold Turns. Fem er **utelatt**
+fordi ingen felles klubb finnes og posisjonen, der den er kjent, er samme
+lagdel. Hele passet står i `docs/P2_WIKIPEDIA_DYBDEPASS.md`.
+
+**Sotra, den siste (26.08.2026).** Klubben sto igjen etter både registerpasset
+og Wikipedia-dybdepasset, med 12 registrerte mot grensa på femten.
+
+**Wikipedia har to kategorier som ser ut som klubbens, og ingen av dem er det.**
+`Fotballspillere for Nest-Sotra` (61 artikler) og `Fotballspillere for Øygarden
+FK` (35) tilhører to andre juridiske enheter: Sotra Sportsklubb ble til i 2009
+av Foldnes IL, Brattholmen IL og IL Øygard (1945); Nest-Sotra ble stiftet i
+1968 og fortsatte som breddeklubb; Øygarden FK overtok Nest-Sotras OBOS-lisens
+og gikk konkurs i 2022. Å importere de 96 hadde vært den største enkeltfeilen i
+hele P2-arbeidet, og det er nøyaktig sammenslåingsfellen listen over advarer mot.
+
+Klubbartikkelens «Kjente utøvere» ga tre navn — Zachariassen, Skålevik og Dang,
+alle med Sotra i seniorkarrieren og alle datert etter 2009. Det fjerde, **Knut
+Tørum**, nevner ikke Sotra i sin egen artikkel; samme feil som Lørenskog IFs
+liste gjorde med Henning Berg.
+
+**De to siste ble avgjort av NFFs PERSONSIDE**, som er den beste
+navnebror-testen vi har: den fører hver sesong en mann har vært registrert, med
+klubb, også ungdomsår og andrelag. Importen stoppet på Håvard Arefjord Foldnes
+og Erlend Hellevik Larsen, som begge kolliderte med katalogens Åsane-profiler —
+og de profilene er `utledet` med posisjonssettet `["CB","DM"]`, som **19 av
+Åsanes 76 profiler deler**. Det er en mal, ikke en lest posisjon, så posisjonen
+kunne ikke skille noen fra noen. Personsiden viste at begge har Åsane i
+karrieren. Samme menn, krysskoblinger, og det tok Sotra fra 13 til 15.
+
+Foldnes nesten gikk galt: første gjennomlesning fant Brann, Fyllingsdalen og
+Sotra og *ikke* Åsane — det står **`Åsane 2`**, andrelaget, som er samme klubb.
+`parseCareer` i `scripts/nff-squad.mjs` gjør siden til et verktøy, og
+`audit:nff-squad` låser den mot nettopp den raden.
+
+To vakter måtte skrives om, ikke slettes: «det finnes pending-klubber» målte
+både at katalogen hadde uferdig arbeid og at motorens unavailable-vei virket.
+Bare den andre er verdt å beholde, og den måles nå mot en konstruert klubb.
+
+**`--skjerp` er målt og ikke bygget.** En supplering kan legge til menn, men
+ikke skjerpe posisjonen til en som alt står der. Målingen mot alle 326 hentede
+artikler fant **sju** profiler en kilde kunne skjerpet — og alle sju er de
+tvetydige tolagdels-verdiene («Forsvar/Midtbane», «Back, midtbanespiller») som
+skjemaet ikke kan uttrykke og importen med vilje avviser. Modusen ville hatt
+null arbeid å gjøre.
 
 ---
 
@@ -120,13 +272,65 @@ Ingen av dem er en blindvei i dag: alle 60 klubber har ligaprofil og spilles som
 
 ---
 
+## P3 — GJORT (26.08.2026): styrkepasset
+
+Da alle 60 klubbene hadde arv, var den tynne flaten ikke lenger navn.
+**2692 av 3284 spillbare profiler hadde ingen styrker**, og sju klubber sto på
+null av tretti. Posisjon uten karakter betyr at motoren skiller spillere på
+epoke og posisjon alene.
+
+**Kilden fantes fra før og var ikke lest ut.** P1 brukte Store norske leksikon,
+men aldri systematisk: SNL har en taksonomi, «Norske fotballspillere», med
+**305 biografier**. 171 av navnene står i katalogen; 109 var uten styrker og ble
+lest enkeltvis.
+
+**55 av 109 bærer en ferdighetspåstand. 54 gjør det ikke**, og de står ikke i
+noe register — en biografi som bare forteller karriere gir ingen styrker.
+Utelatelsene er like mye et resultat: Thomas Myhre har bare *svakheter*
+beskrevet; Erland Johnsen fikk seks styrker og ikke `first_touch`, fordi kilden
+selv sier at teknikk og pasningsspill var svakhetene hans; Vidar Riseth var «en
+brukbar hodespiller», og brukbar er ikke en styrke.
+
+`claim` siterer nå kilden ordrett i stedet for å sammenfatte den på engelsk,
+slik P1-postene gjorde. En påstand som gjengir kildens egne ord kan
+kontrolleres uten å åpne kilden, og `audit:p2-source-claims` krever det.
+
+| | Antall | Hvor |
+|---|---:|---|
+| Utenfor de 18 P1-arvene | 38 | `src/football-player-source-claims-p2.js` (ny) |
+| I en NY P1-arv | 11 | `P1_NEW_DOCUMENTED` |
+| I en EKSISTERENDE P1-arv | 6 | `P1_EXISTING_SUPPLEMENTS` |
+
+**Det frosne er nevneren, ikke dekningen.** 936/701/235 er populasjonen P1
+målte. Fordelingen over den er en måling av hvor mye en kilde beskriver, og den
+skal flytte seg når noen leser en kilde som ikke var lest:
+**45 → 62 DOKUMENTERT, 876 → 859 THIN-SOURCE**, DELVIS uendret.
+
+**Ratchet-vakten regnet ut sin egen konsekvens.** Tolv tak i
+`KJENT_UDOKUMENTERT` lå etterpå igjen over det målte, og `sim:player-attributes`
+felte dem med de nye verdiene i feilmeldingen. Et tak over det målte er en
+tillatelse til å drive tilbake. Tallene er nå målte, ikke valgte.
+
+Katalogen står på **667 av 3448 med styrker**, mot 592. Fem klubber har fortsatt
+null — Brattvåg, Vidar, Sandviken, Bjarg og Junkeren — og det er ikke en feil et
+verktøy kan rette: **SNL dekker ikke 2. divisjon.** Hele passet står i
+`docs/P3_SNL_STYRKEPASS.md`.
+
+---
+
 ## Slik måles status
 
 ```bash
 node scripts/audit-p1-source-claims.mjs
 npm run sim:player-attributes
 npm run sim:club-squad
+npm run audit:club-heritage
+npm run audit:import-club-heritage
+npm run audit:nff-squad
+npm run audit:p2-source-claims
 node scripts/sync-club-affiliations.mjs
 ```
+
+Troppene hentes med `node scripts/nff-squad.mjs --lag <fiksId>`; lagene finnes med `--turnering <fiksId>`. Se `docs/P2_IMPORT_V1.md`.
 
 `modellerteArver.arver` skal fortsatt være **0**. Går den opp, er en arv fylt med modellerte felt igjen, og gjelden er tilbake.

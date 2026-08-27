@@ -1,0 +1,207 @@
+{
+  "clubId": "lorenskog",
+  "clubName": "Lørenskog",
+  "placeId": "rolvsrud_stadion",
+  "placeName": "Rolvsrud stadion",
+  "eraSource": "belagt",
+  "doc": "docs/P2_WIKIPEDIA_DYBDEPASS.md",
+  "sources": [
+    {
+      "url": "https://no.wikipedia.org/wiki/Kategori:Fotballspillere_for_Lørenskog_IF",
+      "hentet": "2026-08-26",
+      "beskrivelse": "Wikipedia-kategorien for klubbens spillere; hver profil lest enkeltvis, og bare de som har klubben i SENIORkarrieren i infoboksen er tatt med."
+    }
+  ],
+  "players": [
+    {
+      "name": "Faysal Mohamed Ahmed",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Riki Alba",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Marius Andresen",
+      "crossLink": true,
+      "existingId": "marius_andresen",
+      "era": "modern"
+    },
+    {
+      "name": "Karim Aoudia",
+      "crossLink": true,
+      "existingId": "karim_aoudia",
+      "era": "modern"
+    },
+    {
+      "name": "Kjetil Berge",
+      "crossLink": true,
+      "existingId": "kjetil_berge",
+      "era": "modern"
+    },
+    {
+      "name": "Tommy Berntsen",
+      "crossLink": true,
+      "existingId": "tommy_berntsen",
+      "era": "modern"
+    },
+    {
+      "name": "Jibril Bojang",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "David Driscoll",
+      "positions": [
+        "CB"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Marius Lundeberg Enger",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Dan Alberto Fellus",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Dadi Dodou Gaye",
+      "crossLink": true,
+      "existingId": "dadi_dodou_gaye",
+      "era": "modern"
+    },
+    {
+      "name": "Keivan Ghaedamini",
+      "positionGroup": "forsvar",
+      "era": "modern"
+    },
+    {
+      "name": "Omar Fonstad El Ghaouti",
+      "crossLink": true,
+      "existingId": "omar_fonstad_el_ghaouti",
+      "era": "modern"
+    },
+    {
+      "name": "Leif Harboe-Ree",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Magnus Hjulstad",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Kim Holmen",
+      "crossLink": true,
+      "existingId": "kim_kristian_holmen",
+      "era": "modern"
+    },
+    {
+      "name": "Kamran Ali Iqbal",
+      "era": "modern"
+    },
+    {
+      "name": "Jørgen Isnes",
+      "crossLink": true,
+      "existingId": "jorgen_isnes",
+      "era": "modern"
+    },
+    {
+      "name": "Joackim Jørgensen",
+      "crossLink": true,
+      "existingId": "joackim_jorgensen",
+      "era": "modern"
+    },
+    {
+      "name": "Fitim Kastrati",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Tobias Myhre",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Colin N’kee",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Peter Sørensen Nergaard",
+      "era": "modern"
+    },
+    {
+      "name": "Gunnar Norebø",
+      "positionGroup": "midtbane",
+      "era": "modern"
+    },
+    {
+      "name": "Daniel Novak",
+      "crossLink": true,
+      "existingId": "daniel_novak",
+      "era": "modern"
+    },
+    {
+      "name": "Kim Nysted",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Espen Olsen",
+      "crossLink": true,
+      "existingId": "espen_olsen",
+      "era": "modern"
+    },
+    {
+      "name": "Kamil Olsztynski",
+      "era": "modern"
+    },
+    {
+      "name": "Øyvind Risjord",
+      "era": "modern"
+    },
+    {
+      "name": "Dyre Ekeberg Schjerve",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Tore Stenshagen",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    },
+    {
+      "name": "Andreas Storsveen Romøren",
+      "positionGroup": "angrep",
+      "era": "modern"
+    },
+    {
+      "name": "Bjørn Viljugrein",
+      "crossLink": true,
+      "existingId": "bjorn_viljugrein",
+      "era": "modern"
+    },
+    {
+      "name": "Bjørn Amund Øverseth",
+      "positions": [
+        "GK"
+      ],
+      "era": "modern"
+    }
+  ]
+}

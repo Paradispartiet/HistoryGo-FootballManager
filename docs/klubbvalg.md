@@ -169,29 +169,33 @@ En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceI
 | Klubb | Bane | Historiske spillere |
 |---|---|---:|
 | Rosenborg | Lerkendal | 156 |
-| Strømsgodset | Marienlyst stadion | 143 |
+| Strømsgodset | Marienlyst | 143 |
 | Vålerenga | Intility Arena | 126 |
 | Sarpsborg 08 | Sarpsborg stadion | 107 |
 | Fredrikstad | Fredrikstad stadion | 100 |
-| Odd | Skagerak Arena | 100 |
 | Haugesund | Haugesund stadion | 100 |
+| Odd | Skagerak Arena | 100 |
 | Skeid | Nordre Åsen | 100 |
+| Brattvåg | Brattvåg stadion | 93 |
 | Aalesund | Color Line Stadion | 90 |
 | Bodø/Glimt | Aspmyra stadion | 89 |
 | Molde | Aker stadion | 89 |
+| Pors | Pors stadion | 89 |
 | Start | Sparebanken Sør Arena | 85 |
 | Mjøndalen | Consto Arena | 83 |
 | Lyn | Bislett | 82 |
 | Moss | Melløs | 82 |
-| Tromsø | Romssa Arena | 81 |
 | HamKam | Briskeby | 81 |
 | Ranheim | Extra Arena | 81 |
+| Tromsø | Romssa Arena | 81 |
 | Ullensaker/Kisa | Jessheim stadion | 81 |
 | Notodden | Notodden stadion | 80 |
 | Kongsvinger | Gjemselund | 79 |
+| Tromsdalen | TUIL Arena | 79 |
+| Stjørdals-Blink | Sandskogan stadion | 78 |
 | Arendal Fotball | Norac stadion | 77 |
-| Åsane | Myrdal | 76 |
 | Levanger | Levanger stadion | 76 |
+| Åsane | Myrdal | 76 |
 | Brann | Brann Stadion | 75 |
 | Sogndal | Fosshaugane Campus | 75 |
 | Stabæk | Nadderud | 75 |
@@ -199,39 +203,64 @@ En kildeverifisert krysskobling trenger derfor ikke å få et nytt `sourcePlaceI
 | Grorud | Grorud idrettspark | 71 |
 | Viking | Lyse Arena | 70 |
 | Hødd | Høddvoll | 69 |
-| Sandefjord | Jotun Arena | 68 |
 | Bryne | Bryne stadion | 68 |
+| Sandefjord | Jotun Arena | 68 |
 | KFUM Oslo | KFUM Arena | 66 |
-| Brattvåg | Brattvåg stadion | 81 |
-| Pors | Pors stadion | 63 |
 | Sandnes Ulf | Øster Hus Arena | 60 |
-| Raufoss | Raufoss Arena | 58 |
 | Hønefoss | AKA Arena | 58 |
-| Lillestrøm | Åråsen | 56 |
+| Lørenskog | Rolvsrud stadion | 58 |
+| Raufoss | Raufoss Arena | 58 |
 | Egersund | Egersund Arena | 56 |
+| Kvik Halden | Halden stadion | 56 |
+| Lillestrøm | Åråsen | 56 |
+| Eidsvold Turn | Myhrer stadion | 54 |
 | Strømmen | Strømmen stadion | 54 |
 | Kristiansund | Nordmøre stadion | 49 |
 | Kjelsås | Grefsen stadion | 46 |
+| Follo | Ski stadion | 35 |
+| Bjarg | Stavollen kunstgress | 32 |
+| Sandviken | Stemmemyren | 31 |
+| Rana | Sagbakken | 30 |
+| Junkeren | Nordlandshallen | 27 |
+| Lysekloster | Lysekloster idrettspark | 27 |
+| Trygg/Lade | Lade idrettsanlegg | 26 |
+| Vidar | Lassa idrettspark | 26 |
+| Eik Tønsberg | Tønsberg gressbane | 25 |
+| Træff | Reknesbanen | 23 |
+| Sotra | Straume idrettspark | 15 |
 
-**Alle 16 eliteserieklubbene har bane**, pluss Stabæk, Lyn, Strømsgodset, Odd,
-Haugesund, Skeid, Moss, Bryne, Hødd, Mjøndalen, Sogndal, Kongsvinger, Ranheim,
-Strømmen, Raufoss, Sandnes Ulf, Egersund, Åsane, Jerv, Pors, Brattvåg, Notodden,
-Hønefoss, Kjelsås, Arendal, Levanger, Ull/Kisa og Grorud — 3527 arveplasser
-fordelt på alle 44, og **ingen klubb med bane har under 46 navn**. De 17
-klubbene som mangler bane sier det rett ut i profilen i stedet for å late som. **Alle klubber
-med en nasjonal tittel har arv**, og Mjøndalen og Skeid ligger begge i
-2. divisjon.
+**Alle 60 klubbene har bane** — 4194 arveplasser — og **ingen står `pending`**.
+Alle klubber med en nasjonal tittel har arv, og det har alle de andre også.
+
+Gulvet i tabellen er nytt og skal leses som det er. Fram til P2-passet hadde
+ingen klubb med bane under 46 navn; nå har Sotra 15, som er **nøyaktig** grensa
+for en spillbar pool. Klubbene nederst ble landet på **NFFs lagside** — dagens
+registrerte tropp, ikke klubbens historie — og det gir *bredde uten dybde*: nok
+navn til at klubben kan overtas, og nesten ingen fortid bak dem. Det er en
+ærligere tilstand enn en klubb som står `pending` fordi ingen har lest kilden,
+men det er ikke det samme som en Rosenborg-arv, og tabellen skal ikke få det til
+å se sånn ut.
+
+Sju av dem har fått en fortid siden: **Wikipedia-dybdepasset** leste 326
+spillerartikler og ga Tromsdalen, Stjørdals-Blink, Lørenskog, Eidsvold Turn,
+Lysekloster, Rana og Trygg/Lade til sammen 214 navn til — hver med klubben i
+seniorkarrieren sin. Se `docs/P2_WIKIPEDIA_DYBDEPASS.md`.
+
+Sotra, den siste, ble avgjort av **NFFs personside**: to av femten navn kolliderte
+med katalogen, og personsidens fulle klubbhistorikk viste at begge er katalogens
+egne Åsane-profiler. Uten dem hadde klubben stått på 13. Se
+`docs/P2_SOTRA_SOURCE_PASS.md`.
 
 Arven er ikke lenger et eliteserieprivilegium. Strømsgodset, Odd, Haugesund,
 Lyn, Moss, Bryne og Hødd ligger i OBOS-ligaen, og **Skeid ligger i 2. divisjon med den delt
-fjerde største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvinner
+femte største arven i katalogen** — åtte cupgull mellom 1947 og 1974 forsvinner
 ikke fordi klubben i dag spiller på tredje nivå. Det er riktig — arv er klubbens
 historie, ikke dens tabellplass i dag.
 
-Summen er *plasser*, ikke personer: 499 spillere står på to eller flere baner
+Summen er *plasser*, ikke personer: 579 spillere står på to eller flere baner
 fordi de faktisk spilte begge steder, og teller derfor hos hver klubb.
 
-**Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 dokumenterte klubbtilknytninger finnes. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.
+**Klubber uten ferdig spillerpool blir ikke lenger fylt med tilfeldige ekte spillere.** De står som `pending` i klubbdataene og er midlertidig ute av overtakelseslista til minst 15 **spillbare** profiler finnes — dokumenterte klubbtilknytninger uten posisjon teller i historikken, men stiller ikke lag. Poolen kan bygges ferdig uavhengig av om klubben allerede har et History Go-sted.
 
 Tabellen over er **vaktet mot dataene** (`sim:club-squad`): et tall som ikke
 stemmer, en klubb som står to ganger, eller en klubb med spillere plassert i

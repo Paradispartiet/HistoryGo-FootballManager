@@ -78,7 +78,17 @@ for (const club of clubs.filter((entry) => entry.homePlaceId)) {
 const ready = clubs.filter((club) => club.playerPoolStatus === "ready");
 const pending = clubs.filter((club) => club.playerPoolStatus === "pending");
 check("det finnes ready-klubber", ready.length > 0, String(ready.length));
-check("det finnes pending-klubber", pending.length > 0, String(pending.length));
+
+// `pending` er ikke lenger en tilstand katalogen HAR — alle 60 klubbene har
+// ferdig pool etter Sotra. Vakten som krevde at det fantes pending-klubber
+// målte to ting samtidig: at katalogen hadde uferdig arbeid, og at motorens
+// unavailable-vei virket. Bare den andre er verdt å beholde, og den kan ikke
+// måles mot data som ikke finnes lenger. Den måles derfor mot en konstruert
+// klubb, slik at veien fortsatt er dekket den dagen en ny klubb legges inn.
+const pendingCases = pending.length > 0
+  ? pending
+  : [{ id: "syntetisk_pending", name: "Uferdig FK", ground: "Ukjent bane", playerPoolStatus: "pending", playerPoolSize: 0, playablePlayerPoolSize: 0 }];
+check("pending-veien er dekket", pendingCases.length > 0, String(pendingCases.length));
 
 for (const club of ready) {
   const access = resolveClubSquadAccess({ club, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
@@ -96,7 +106,7 @@ for (const club of ready) {
     [...(byId.get(id)?.naturalPositions || []), ...(byId.get(id)?.usablePositions || [])].includes("GK")));
 }
 
-for (const club of pending) {
+for (const club of pendingCases) {
   const access = resolveClubSquadAccess({ club, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
   check(`${club.name}: pending er unavailable`, access.mode === "unavailable", access.mode);
   check(`${club.name}: ingen global fallback`, access.baseSquad.length === 0);
@@ -174,11 +184,16 @@ for (const row of rows.filter((entry) => entry.count > 0)) {
 const pors = clubById.get("pors");
 const porsDocumented = listClubPoolPlayers({ clubId: "pors", players });
 const porsPlayable = listPlayableClubPoolPlayers({ clubId: "pors", players });
-check("Pors 63 dokumenterte", porsDocumented.length === 63, String(porsDocumented.length));
-check("Pors 16 spillbare", porsPlayable.length === 16, String(porsPlayable.length));
+// Pors er festet med tall og ikke bare mot seg selv, fordi arven er den ene som
+// bærer BEGGE tilstandene: 63 navn lest ut av klubbhistorikken, og 26 til fra
+// NFFs 2026-tropp. Splitten er poenget — 42 spillbare og 47 historikkposter er
+// ikke to tall om det samme, og en import som blandet dem ville ikke felt noen
+// annen vakt her.
+check("Pors 89 dokumenterte", porsDocumented.length === 89, String(porsDocumented.length));
+check("Pors 42 spillbare", porsPlayable.length === 42, String(porsPlayable.length));
 check("Pors 47 historikkposter", porsDocumented.length - porsPlayable.length === 47);
 const porsFull = resolveClubSquadAccess({ club: pors, players, unlockedPlaceIds: [pors.homePlaceId], candidateIds, squadSize: REQUIRED });
-check("Pors åpner bare 16", porsFull.clubPoolIds.length === 16 && porsFull.heritage.length === 16);
+check("Pors åpner bare 42", porsFull.clubPoolIds.length === 42 && porsFull.heritage.length === 42);
 
 console.log(JSON.stringify({
   ok: true,

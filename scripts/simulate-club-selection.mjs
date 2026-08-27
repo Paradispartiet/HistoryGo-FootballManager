@@ -36,7 +36,15 @@ const selectable = groups.flatMap((group) => group.clubs);
 const selectableIds = new Set(selectable.map((club) => club.id));
 
 check("det finnes overtakbare klubber", ready.length > 0, String(ready.length));
-check("det finnes fortsatt klubber med uferdig pool", pending.length > 0, String(pending.length));
+// Alle 60 klubbene er overtakbare etter at Sotra ble landet, så det finnes
+// ingen pending-klubb å måle mot lenger. Det som må holde er REGELEN — at en
+// klubb uten ferdig pool holdes utenfor lista — og den måles mot en konstruert
+// klubb i stedet for mot en tilstand katalogen har vokst fra.
+const syntetiskPending = { ...allClubs[0], id: "syntetisk_pending", name: "Uferdig FK", playerPoolStatus: "pending", playerPoolSize: 0, playablePlayerPoolSize: 0 };
+check("en klubb uten ferdig pool er ikke overtakbar", !isClubTakeoverReady(syntetiskPending));
+check("en klubb uten ferdig pool havner ikke på lista",
+  !listSelectableClubs({ clubs: [...allClubs, syntetiskPending], tiers, profiles })
+    .flatMap((group) => group.clubs).some((club) => club.id === "syntetisk_pending"));
 check("overtakelseslista inneholder nøyaktig ready-klubbene", selectable.length === ready.length,
   `${selectable.length}/${ready.length}`);
 check("ingen pending-klubb kan velges", pending.every((club) => !selectableIds.has(club.id)));

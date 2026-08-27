@@ -1,0 +1,180 @@
+{
+  "clubId": "eik_tonsberg",
+  "clubName": "Eik Tønsberg",
+  "placeId": "tonsberg_gressbane",
+  "placeName": "Tønsberg gressbane",
+  "eraSource": "belagt",
+  "doc": "docs/P2_EIK_TONSBERG_SOURCE_PASS.md",
+  "sources": [
+    {
+      "url": "https://www.fotball.no/fotballdata/lag/hjem/?fiksId=730",
+      "hentet": "2026-08-24",
+      "beskrivelse": "NFFs lagside for klubbens A-lag: troppen gruppert etter lagdel (Keeper, Forsvar, Midtbane, Angrep)"
+    },
+    {
+      "url": "https://no.wikipedia.org/wiki/Fotballklubben_Eik_Tønsberg",
+      "hentet": "2026-08-24",
+      "beskrivelse": "klubbartikkel: fire spillere med kortere klubbopphold, trenerne uttrykkelig skilt ut"
+    }
+  ],
+  "players": [
+    {
+      "name": "Daniel Rachlew-Rønningen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Leander Larona Gunnerød",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), keeper",
+      "positions": [
+        "GK"
+      ]
+    },
+    {
+      "name": "Vemund Skar Roberg",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Joachim Lundhagebakken",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Luis Brendsrød",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Harald Danielsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Kristian Mathias Pangilinan Lillevik",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Wilhelm Schmidt Godø",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Kevin Carlstedt",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Andreas Larsen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Mohammed Hopsdal Abbas",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Mads Delerud Volden",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), forsvar",
+      "positionGroup": "forsvar"
+    },
+    {
+      "name": "Jørgen Wilhelm Skøre Solberg",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Sander Aamelfot",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Thomas Nygaard",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Anders Nygaard",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Benjamin Hellum Andersen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Mohamed Moussa Srour",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Magnus Moen",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Martin Solli",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), midtbane",
+      "positionGroup": "midtbane"
+    },
+    {
+      "name": "Lukas Johnsen-Mørken",
+      "era": "modern",
+      "note": "A-lagstroppen 2026 (NFF), angrep",
+      "positionGroup": "angrep"
+    },
+    {
+      "name": "Erik Solér",
+      "crossLink": true,
+      "existingId": "erik_soler",
+      "era": "historical",
+      "note": "navngitt i klubbartikkelen"
+    },
+    {
+      "name": "Ronny Johnsen",
+      "crossLink": true,
+      "existingId": "ronny_johnsen",
+      "era": "historical",
+      "note": "navngitt i klubbartikkelen"
+    },
+    {
+      "name": "Jan Frode Nornes",
+      "crossLink": true,
+      "existingId": "jan_frode_nornes",
+      "era": "historical",
+      "note": "navngitt i klubbartikkelen"
+    },
+    {
+      "name": "Erik Thorstvedt",
+      "crossLink": true,
+      "existingId": "erik_thorstvedt",
+      "era": "historical",
+      "note": "navngitt i klubbartikkelen"
+    }
+  ]
+}

@@ -49,7 +49,11 @@ check("README inneholder ingen kjente utgåtte nåstatuspåstander", staleClaims
 check("statusen skiller implementert fra avtalt ikke-system", files.status.includes("Implementerte hovedkontrakter") && files.status.includes("Avtalte ikke-systemer"));
 check("statusen krever kode og permanente porter", files.status.includes("live kode") && files.status.includes("permanent audit") && files.status.includes("browservern"));
 check("statusen avviser uavklarte troppsgrenser", files.status.includes("Troppsgrenser, overgangsregler og fasilitetseffekter er ikke åpne kodeoppgaver"));
-check("statusen beskriver reelt dataarbeid", files.status.includes("spillerpooler for klubber som fortsatt står `pending`"));
+// Formuleringen ble byttet da den siste `pending`-klubben ble landet: null står
+// igjen, så «ferdigstille pooler som står pending» beskrev arbeid som ikke
+// finnes. Vakten sjekker nå etterfølgeren, som er det arbeidet som FAKTISK er
+// åpent — dybde i pooler som er komplette, men grunne.
+check("statusen beskriver reelt dataarbeid", files.status.includes("fordype dokumenterte spillerpooler som er komplette, men grunne"));
 
 check("spillerpool/tropp er faktisk implementert", files.recruitment.includes("PLAYER_POOL_SQUAD_STATE_VERSION") && files.recruitment.includes("squadPlayerIds"));
 check("øvelsesdesign er faktisk implementert", files.exercise.includes("evaluateTrainingExerciseDesign") && files.exercise.includes("EXERCISE_DESIGN_CONTROLS"));

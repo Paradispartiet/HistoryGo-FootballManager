@@ -9,8 +9,13 @@ som en påstand. Listen sier hvor kildene *finnes*, slik at noen kan hente dem.
 Alt som står som «lead» under er et navn eller et tall søket nevnte, og det er
 ikke kontrollert mot noe. Det hører hjemme i en søkestreng, ikke i katalogen.
 
-Nettverkspolicyen i utviklingsmiljøet blokkerer alle eksterne verter, så sidene
-må hentes utenfra.
+Nettverkspolicyen i utviklingsmiljøet blokket først alle eksterne verter. Den er
+nå åpnet (24.08.2026), så sidene kan leses direkte herfra.
+
+**Rangeringen under er en søkerekkefølge, ikke en forventning.** Den er bygget
+på hvilke *typer* sider som finnes per klubb, ikke på hva sidene inneholder.
+Bjarg sto øverst og ga fire navn da kilden faktisk ble lest — se
+`docs/P2_BJARG_SOURCE_PASS.md`. Les den før du stoler på en rad her.
 
 ---
 
@@ -21,26 +26,43 @@ mye kilden siterer, ikke hvor lang den er.** En klubb med egen historieside som
 omtaler enkeltspillere gir dekning; en klubb som bare har troppslister og
 tabeller gir navn og posisjon og ingenting mer — som Brattvåg.
 
+**ALLE ÅTTE ER NÅ LEST (24.08.2026).** Kvik Halden er importert; Bjarg og de seks
+øvrige når ikke femten spillbare. Målingen av de seks står i
+**`docs/P2_AVDELING1_MALING.md`**, som også fører de to banerettelsene og svaret
+på Eik-spørsmålet. Tabellen under er bevart som den sto, fordi forventningene i
+den er selve lærdommen: ingen av dem traff.
+
 | # | Klubb | Bane i katalogen | Beste kildespor | Forventning |
 |---|---|---|---|---|
-| 1 | **Bjarg** | Stavollen kunstgress | egen historieside | best strukturelle utsikter |
-| 2 | **Kvik Halden** | Halden stadion | SNL + cupmeritter 1915–22 | ekte historisk arv |
-| 3 | **Eik Tønsberg** | Eik stadion ⚠️ | klubbens historieside | eliteserieperiode 1983–85 |
-| 4 | **Sotra** | Straume idrettspark | klubbside, tre forgjengere | krever avklaring først |
-| 5 | **Sandviken** | Stemmemyren | SNL + klubbside | krever avklaring først |
-| 6 | **Vidar** | Lassa idrettspark | Aftenbladets emneside | tynt |
-| 7 | **Træff** | Molde idrettspark | forbundsdata | tynt |
-| 8 | **Lysekloster** | Lysekloster idrettspark | forbundsdata | tynnest — søket fant ingen historikk |
+| ~~1~~ | ~~**Bjarg**~~ | Stavollen kunstgress | egen historieside | **LEST 24.08.2026: 4 navn, 1 posisjon — ingen import** |
+| ~~2~~ | ~~**Kvik Halden**~~ | Halden stadion | klubbens historikk + Wikipedia | **IMPORTERT 24.08.2026: 41 dokumenterte, 23 spillbare** |
+| ~~3~~ | ~~**Eik Tønsberg**~~ | **Tønsberg gressbane** (rettet) | klubbens historieside | **LEST: 4 navn, 1 posisjon — banespørsmålet besvart** |
+| ~~4~~ | ~~**Sotra**~~ | Straume idrettspark | klubbside, tre forgjengere | **LEST: 2 navn** |
+| ~~5~~ | ~~**Sandviken**~~ | Stemmemyren | SNL + klubbside | **LEST: 0 navn — artikkelen er kvinnefotball** |
+| ~~6~~ | ~~**Vidar**~~ | Lassa idrettspark | Aftenbladets emneside | **LEST: 2 navn, 1 posisjon** |
+| ~~7~~ | ~~**Træff**~~ | **Reknesbanen** (rettet) | forbundsdata | **LEST: 9 navn, alle «med bakgrunn i»** |
+| ~~8~~ | ~~**Lysekloster**~~ | Lysekloster idrettspark | Wikipedias troppsmal | **LEST: 18 navn, 0 posisjoner** |
 
 ---
 
 ## Per klubb
 
-### Bjarg (`bjarg`)
+### Bjarg (`bjarg`) — FERDIG LEST, IKKE IMPORTERT
+
+**Kilden er lest i sin helhet 24.08.2026. Utfallet står i
+`docs/P2_BJARG_SOURCE_PASS.md`: fire A-lagsnavn, ett av dem med posisjon, og
+ingen import — fire profiler gjør ikke klubben overtakbar.** Resten av dette
+avsnittet er bevart som det sto, fordi antakelsen i det er selve lærdommen.
 
 - **Egen historieside:** https://www.bjargsinhistorie.no — et helt nettsted viet
   klubbens historie. Dette er den eneste av de åtte som har det, og det er
   akkurat sjangeren som gir dekning.
+  **Det stemte ikke.** Nettstedet er 66 årsrapporter for *hele* idrettslaget —
+  turn, håndball, friidrett og fotball i samme artikkel — og sjangeren er
+  organisasjonsberetning. Den navngir formenn, trenere, dommere og
+  kretslagsuttak, og omtaler lagene kollektivt. Av rundt femti personnavn i
+  fotballstoffet er fire A-lagsspillere. De fem portrettartiklene på stedet
+  handler om friidrett og håndball, med ett unntak.
 - Klubbside: https://bjarg.net/om-il-bjarg/ · https://bjarg.net/fotball/
 - Wikipedia: https://en.wikipedia.org/wiki/IL_Bjarg
 - Forbundet: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=780
@@ -66,6 +88,21 @@ et omdøpt.
 - Wikipedia: https://en.wikipedia.org/wiki/Kvik_Halden_FK
 - Forbundet, personer: https://www.fotball.no/fotballdata/klubb/hjem/?fiksId=3&underside=personer
 
+**IMPORTERT 24.08.2026 — se `docs/P2_KVIK_HALDEN_SOURCE_PASS.md`.** 41
+dokumenterte klubbprofiler, 23 spillbare, 18 historikkposter. Klubben er `ready`.
+
+Passet stoppet først på et spørsmål som ikke var avgjort før: teller en kilde som
+sier «forsvar» som posisjon? Svaret ble ja — men lagdelen skrives til
+`usablePositions` og merkes `positionSource: "gruppe"`, så oppløsningen står i
+dataene. Med bare presise posisjoner ville klubben fått 9 spillbare og forblitt
+`pending`. Formen gjelder nå alle de gjenstående klubbene; se
+`docs/P2_IMPORT_V1.md`.
+
+**Kildelista overså at klubben er en sammenslåing.** FK Kvik og Halden
+Fotballklubb ble slått sammen i 1997. Cupgullet i 1918 og begge cupfinalene ble
+tatt av **FK Kvik**, og alle de tjue historiske navnene tilhører den perioden —
+samme problem som Sotra, som listen flagget.
+
 Dette er den klart tyngste historiske arven av de åtte: cupmester 1918 (mot
 Brann i finalen), cupfinaler 1915 og 1922 (begge tapt mot Odd), og landslags-
 spillere på 1910- og 20-tallet.
@@ -74,7 +111,10 @@ spillere på 1910- og 20-tallet.
 Kvik-import vil kunne møte navn som finnes fra før. Samme regel som Pors og
 Brattvåg — krysskobling, ikke ny profil, og hver kobling navngis.
 
-*Lead, ukontrollert:* Robert Danielsen og Johnny Helgesen (landslag).
+~~*Lead, ukontrollert:* Robert Danielsen og Johnny Helgesen (landslag).~~
+**Kontrollert:** begge stemmer. Klubbens egen årstallsliste fører Danielsen på
+landslaget i 1928 og Helgesen i 1917–1928. Helgesen er den eneste profilen i
+hele passet med presis posisjon fra en individkilde — `Centerforward`.
 
 ### Eik Tønsberg (`eik_tonsberg`)
 

@@ -14290,23 +14290,15 @@
         },
         {
           "type": "player_candidate",
-          "targetId": "einar_rossbach"
+          "targetId": "alexander_remy_bjornhaug"
         },
         {
           "type": "player_candidate",
-          "targetId": "john_erling_kleppe"
+          "targetId": "andreas_giske"
         },
         {
           "type": "player_candidate",
-          "targetId": "fredrik_nordkvelle"
-        },
-        {
-          "type": "player_candidate",
-          "targetId": "svein_roger_dahlen"
-        },
-        {
-          "type": "player_candidate",
-          "targetId": "marius_solberg"
+          "targetId": "andreas_kornelius_bakeng_rogne"
         },
         {
           "type": "player_candidate",
@@ -14314,31 +14306,43 @@
         },
         {
           "type": "player_candidate",
+          "targetId": "brage_evensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christer_fjellstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_arne_dankwah"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "einar_rossbach"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_asante_gayi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_brokeland_holst"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "emmanuel_baru_gisa"
+        },
+        {
+          "type": "player_candidate",
           "targetId": "erik_pedersen"
         },
         {
           "type": "player_candidate",
-          "targetId": "sandro_occhipinti"
+          "targetId": "fillip_saether_kimerud"
         },
         {
           "type": "player_candidate",
-          "targetId": "torkild_lorentzen"
-        },
-        {
-          "type": "player_candidate",
-          "targetId": "kjell_gunnar_ildhusoy"
-        },
-        {
-          "type": "player_candidate",
-          "targetId": "ole_halvor_kolstad"
-        },
-        {
-          "type": "player_candidate",
-          "targetId": "tor_arne_sannerholt"
-        },
-        {
-          "type": "player_candidate",
-          "targetId": "trond_viggo_toresen"
+          "targetId": "fredrik_nordkvelle"
         },
         {
           "type": "player_candidate",
@@ -14346,7 +14350,107 @@
         },
         {
           "type": "player_candidate",
-          "targetId": "christer_fjellstad"
+          "targetId": "jarl_emil_drange_nesland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_holstad_dahlby"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_erling_kleppe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonah_disch_lindvig"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_lomeland_seim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_gunnar_ildhusoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjetil_svarteberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_solberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mats_bruu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mats_kristian_kampfe_mauset"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_halvor_kolstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oliver_odde_henriksrud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oskar_sundland_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_saga_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "redon_pllana"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sandro_occhipinti"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_eiris_vassend"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_ostby"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stefan_mladenovic"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "svein_roger_dahlen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_bless_garstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tor_arne_sannerholt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torkild_lorentzen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "trond_viggo_toresen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "truls_kristian_meen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "viktor_namlos"
         }
       ]
     },
@@ -14359,6 +14463,10 @@
         {
           "type": "player_candidate",
           "targetId": "anders_nytoft"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_eikrem_myklebust"
         },
         {
           "type": "player_candidate",
@@ -14378,11 +14486,23 @@
         },
         {
           "type": "player_candidate",
+          "targetId": "filip_stankovic"
+        },
+        {
+          "type": "player_candidate",
           "targetId": "fredrik_vinje"
         },
         {
           "type": "player_candidate",
+          "targetId": "iaroslav_sundling"
+        },
+        {
+          "type": "player_candidate",
           "targetId": "iver_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jacob_steinsland_kvarven"
         },
         {
           "type": "player_candidate",
@@ -14394,11 +14514,35 @@
         },
         {
           "type": "player_candidate",
+          "targetId": "jonas_skjerven_valland"
+        },
+        {
+          "type": "player_candidate",
           "targetId": "jorgen_galta"
         },
         {
           "type": "player_candidate",
+          "targetId": "jorgen_havig"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "karim_magdy_bata"
+        },
+        {
+          "type": "player_candidate",
           "targetId": "kieran_baskett"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kieran_joseph_roy_baskett"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leandro_elvestad_neto"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "maksymilian_tomasz_czyz"
         },
         {
           "type": "player_candidate",
@@ -14410,11 +14554,19 @@
         },
         {
           "type": "player_candidate",
+          "targetId": "owen_hjelme_connor"
+        },
+        {
+          "type": "player_candidate",
           "targetId": "ruben_kolseth_myers"
         },
         {
           "type": "player_candidate",
           "targetId": "sami_kamel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "samuel_james_tattum"
         },
         {
           "type": "player_candidate",
@@ -14427,6 +14579,2450 @@
         {
           "type": "player_candidate",
           "targetId": "ulrik_valderhaug_syversen"
+        }
+      ]
+    },
+    {
+      "placeId": "halden_stadion",
+      "placeName": "Halden stadion",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Kvik Haldens hjemmebane i Halden, åpnet 1927. Klubbpoolen dekker to lag: FK Kvik-perioden 1906–1997, der klubben ble cupmester i 1918 og spilte finaler i 1915 og 1922, og A-lagstroppen etter sammenslåingen. Banen åpner bare profilene som har kildebelagt posisjon eller lagdel og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "adam_kaszuba"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "adhurim_mjekiqi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "albert_makiadi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aleksander_karstensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_puck"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anwar_elyounoussi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "benjamin_kielland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dardan_saeter_mehmeti"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlind_krasniqi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fabian_stensrud_ness"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "filip_johansen_westgaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_steinsnes_asbo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harmohan_singh"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jesper_wichstrom_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_lindquist"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johnny_helgesen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kastriot_murseli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "konrad_thorvaldsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_lorentzen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lucas_fritzen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marcus_moberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_grimstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_manirakiza"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_engebretsen_kvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohammed_jatta"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nikolai_solberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_stromsborg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_viktor_skjonberg_nymo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oystein_lundblad_naesheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_bonogard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "raymond_kvisvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_thulin"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_svenningsen_gronn"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "selius_gindeberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stefans_keiss"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "szymon_roguski"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "uranik_seferi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "youssef_chaib"
+        }
+      ]
+    },
+    {
+      "placeId": "stavollen_kunstgress",
+      "placeName": "Stavollen kunstgress",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Bjargs hjemmebane. 32 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 30 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_alnaes_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_bomark_hanssen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "axel_ahlander"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_dahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "david_flygel_tufta"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "edvin_dvergsdal_brattreit"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_refsahl_iversen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "embrik_fromreide_aasbo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlend_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frank_berentsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_rossevold_mildestveit"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_toska_madsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jacob_jorgensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "knut_indrehus_vikane"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "knut_raude_angerman"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_stephensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mads_christophersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_eiane"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morgan_ahmer"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "moutaz_ali_alzubi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_mossestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rolf_birger_pesen_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_hopsdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_johannesen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_aleksander_aanonsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_hopsdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sindre_stronstad_loseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "trym_steensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_halset"
+        }
+      ]
+    },
+    {
+      "placeId": "tonsberg_gressbane",
+      "placeName": "Tønsberg gressbane",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Eik Tønsbergs hjemmebane. 25 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 25 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "anders_nygaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "benjamin_hellum_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_rachlew_ronningen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_soler"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_thorstvedt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_danielsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_frode_nornes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joachim_lundhagebakken"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_wilhelm_skore_solberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kevin_carlstedt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_mathias_pangilinan_lillevik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leander_larona_gunnerod"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "luis_brendsrod"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lukas_johnsen_morken"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mads_delerud_volden"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_moen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_solli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohamed_moussa_srour"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohammed_hopsdal_abbas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ronny_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_aamelfot"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_nygaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vemund_skar_roberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "wilhelm_schmidt_godo"
+        }
+      ]
+    },
+    {
+      "placeId": "lysekloster_idrettspark",
+      "placeName": "Lysekloster idrettspark",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Lyseklosters hjemmebane. 16 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 16 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_dang"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_gjerde_saetren"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "einar_hogetveit_jolle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jacob_skjerven_valland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joachim_nysveen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_heie_lie"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_konstali_lodemel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_vagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_nordvold_lunde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kriss_havila_bonabandi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_kongelf"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lloyd_adrian_dahle_fagerlie"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marcel_wawrzynkiewicz"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_mattingsdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nihat_fabian_roed_ozyilmaz"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ola_lerheim_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_marius_habestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_marthinussen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "senai_hagos"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_hille"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thorstein_horneland_hildal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tim_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "truls_hovland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "trym_vatn_ovreberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vebjorn_nakken"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "viljar_stavo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "yannis_moula"
+        }
+      ]
+    },
+    {
+      "placeId": "reknesbanen",
+      "placeName": "Reknesbanen",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Træffs hjemmebane. 23 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 23 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "benjamin_bratli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "casper_smordal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dino_okanovic"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "edvard_mogstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "emil_visnes_silseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "filip_heggdal_kristoffersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_boe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "iver_flones"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "james_oliver_evensen_knudson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johan_flataker"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjetil_holand_tosse"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "linus_juberg_hovland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_fjortoft_lovik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_hammerbekk_lewis"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_silseth_mork"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nikolai_eide_ohr"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_ole_eidsaeter_tveraas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_svorkmo_finnoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simon_odegard_kjorvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sindre_heggstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sivert_gussias"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_forren"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "wachirawut_phudithip"
+        }
+      ]
+    },
+    {
+      "placeId": "lassa_idrettspark",
+      "placeName": "Lassa idrettspark",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Vidars hjemmebane. 26 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 26 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_kirkevold_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_soraas_sebulonsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_finnesand_vaaland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "egil_klinkenberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eivind_thomsen_joakimsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_ronning_orn"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_kulsrud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frede_asen_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hakon_steen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_bjorgen_jensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_fjetland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_doble"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kujtim_ismaili"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lewi_brandser"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marton_soyland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mateus_van_der_veen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_fister_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_tjoland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "maxmillian_taraldset_haestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_landa_vik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_remme"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_sorlie_henriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_haughom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_svanes_strand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sune_haug_espevoll"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "william_schjolberg_husebo"
+        }
+      ]
+    },
+    {
+      "placeId": "stemmemyren",
+      "placeName": "Stemmemyren",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Sandvikens hjemmebane. 31 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 31 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "anders_grindheim_njos"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_heimvik_haugland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "beltran_mvuka"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bendik_august_engen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bongani_lionel_kamanzi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "casper_thorsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "david_sissoko"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eskil_opheim_instebo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "filip_serika_lundeland_abinda"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_vindenes_presthus"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_bjelland_ostratt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_leander_ovrebo_flagtvedt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "isak_midttun_solberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jakob_hellevik_lie"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joakim_aasen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johannes_gjostol"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_aasen_garmann"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_dalsto"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_nybakken_bruun_hanssen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marcus_berg_devik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_aas_bergstrom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_helland_tislevoll"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_oliver_kvalheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nicholas_marthinussen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oscar_bakke_hodne"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "samuel_villalta_huesa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_skare_tune"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_roger_lotsberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_gjesdahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vebjorn_hoynes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vestar_almeland_stub"
+        }
+      ]
+    },
+    {
+      "placeId": "sandskogan_stadion",
+      "placeName": "Sandskogan stadion",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Stjørdals-Blinks hjemmebane. 24 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 24 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "adrian_bartel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "aleksander_foosnaes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_kvalvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_nygaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_fossli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_lykke_strand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arne_holter"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "awet_alemseged"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "benjamin_feldt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brage_prestmo_kvithyld"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "david_paulmin"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dennis_torp_helland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_hovdahl_sandrod"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_sandoy_myrvagnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "emil_odegaard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_hansen_meidal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eskil_forren_vik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frank_stople"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_vinje"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "george_lewis_igaba_ishimwe_maniraguha"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_kleven_lorentsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ivar_sandvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ivar_sollie_ronning"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jakob_romo_skille"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jakob_tromsdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joachim_erlend_olufsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_andre_strand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_selnaes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_solli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_sonstebo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "karl_martin_rolstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjetil_holand_tosse"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_hilstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_ramstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lasse_bransdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leo_haug_utkilen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "linton_leon_ulloa_niinivirta"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "linus_bartsch"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_valle_fagerhaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_weidel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_lundal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathusan_sandrakumar"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mats_lillebo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mikael_torset_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nedzad_sisic"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nicklas_frenderup"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nils_gunnar_barstad_eggen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "noah_solskjaer"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_kristian_rodahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_nilssen_einarson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rasmus_sandberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "robin_bjornholm_jatta"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "runar_hauge"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_erik_kartum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_tronseth_sakshaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_raaen_sandmael"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sivert_solli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sjur_lothe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_kvikstad_stuen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_langas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_sorlokk"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_stokke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "syver_karlsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tor_erik_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_fiske"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_voll"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "viljar_fiske_kvande"
+        }
+      ]
+    },
+    {
+      "placeId": "sagbakken",
+      "placeName": "Sagbakken",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Ranas hjemmebane. 28 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 28 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "adam_hakonsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "adrian_olsen_teigen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "adrian_selliah"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arve_ekroll_hauknes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brede_froysa"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dharmesh_navaratnam"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_grimeland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "emilian_falstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fabian_jeppestol_engedal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_sivertsen_bergslid"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gabriel_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gabriel_gjesbakk_valla"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hannes_franklin_bergmann_bordal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jacob_leander_thuv"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joachim_erlend_olufsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marco_cheng"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mario_bjorhusdal_nilsskog"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohammed_eds"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nikolai_aas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oskar_wardzala"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sakarias_amandus_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_breunig_guttormsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_sverre_henriksen_bratvold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sevald_andreassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sevald_birk_bokestad_andreassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_andre_romslo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "theo_aksnes_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ulrik_strom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "yasir_abdiqadir_saad"
+        }
+      ]
+    },
+    {
+      "placeId": "nordlandshallen",
+      "placeName": "Nordlandshallen",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Junkerens hjemmebane. 27 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 27 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "adan_abadala_hussein"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_winther_jakobsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bastian_hanssen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "benjamin_selvik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "cassander_krane_dreyer"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eskil_mattias_melstein"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hakon_elias_myrseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "isak_sebastian_helbostad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "isak_wiik_lekang"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ivar_johannes_jakobsen_unhjem"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_berentzen_finseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_esten_skarn_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_steffensen_lamark"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kwame_rasch_moyo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mads_fagerli_halsoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_fagervik_antonsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_alexandersen_elden"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "martin_johan_lauritzen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "michael_tobias_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "per_kristian_helle_hildre"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petit_jean_gohine"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sidad_najah_chooly"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sondre_johansen_solhaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sverre_magne_schonningsen_sivertsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "teodor_kristiansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_nicolai_rengard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torje_fabian_skarn_johansen"
+        }
+      ]
+    },
+    {
+      "placeId": "rolvsrud_stadion",
+      "placeName": "Rolvsrud stadion",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Lørenskogs hjemmebane. 24 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 24 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "aiden_connor_harvey"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_storsveen_romoren"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ardian_arber_kazimi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "besian_kadri"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_amund_overseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_viljugrein"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brage_williamsen_hylen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "casper_myhren_fjeld"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "colin_n_kee"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dadi_dodou_gaye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dan_alberto_fellus"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_notanes_brandal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_novak"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "david_driscoll"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "drilon_zeneli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "dyre_ekeberg_schjerve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlend_berg_farstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_olsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "faysal_mohamed_ahmed"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fitim_kastrati"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gunnar_norebo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_solvoll_navarsete"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "herman_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jibril_bojang"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joackim_jorgensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_isnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kacper_serafin"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "karim_aoudia"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kasper_reme_abrahamsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "keivan_ghaedamini"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kim_kristian_holmen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kim_nysted"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjetil_berge"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_folstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leif_harboe_ree"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leon_dahlstrom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_hjulstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_andresen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "marius_lundeberg_enger"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "matias_rogstad_aadnoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "michael_phillipe_bal_singh"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "miran_kuci"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_martin_drevland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "omar_fonstad_el_ghaouti"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "riki_alba"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_haugaard_werni"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_helland_richardsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sheikh_omar_mbye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_viljugrein"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_myhre"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tollef_kvello_etholm"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tommy_berntsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tore_stenshagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_holsaether"
+        }
+      ]
+    },
+    {
+      "placeId": "myhrer_stadion",
+      "placeName": "Myhrer stadion",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Eidsvold Turns hjemmebane. 21 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 21 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "alieu_bandeh"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_vedeler"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "armand_overby"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "arnar_forsund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "benedict_lethabo_notoane"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christian_aas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christopher_frederick_morala_notoane"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "edin_oy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "edmir_asani"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "edonis_mulaj"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_solberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_ruud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "filip_delaveris"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "filip_fjeldheim_da_silva"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frode_skarsgard_bjornevik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "geir_frigard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hallgeir_finbraten"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_aksnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "heine_jenssen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "heine_wiik_stigersand"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "helge_ostvold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_holtet_thorkildsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "herman_jappee_henriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "johan_rickard_andersson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_enkerud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_tekle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "julian_gonstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kjell_andre_thu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_bjerknes_hakenstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_skogsrud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_julian_fjeld"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lucas_kolstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "markus_nygard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mehmet_rrahmani"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_andreas_nesset"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_einar_martinsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_kristian_langas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oliver_stenseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "petter_hokstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "runar_frohaug_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_remme_berge"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_stokke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sigurd_ertsas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_lillevik_kjellevold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simon_stenseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stian_ringstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tengel_lia_fredriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tom_fodstad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tom_vermelid_kristoffersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ulrich_ostigard_ness"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_storsve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "william_fredriksen_bjeglerud"
+        }
+      ]
+    },
+    {
+      "placeId": "ski_stadion",
+      "placeName": "Ski stadion",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Follos hjemmebane. 35 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 35 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "adam_tamrat_vik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "albert_braut_tjaland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "almin_hrustic"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andre_nysted"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "el_schaddai_prince_furaha"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "emil_tjostheim"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erik_ostbye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "florind_lokaj"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_leren_hoel"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_schroder_hol"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gustav_sving_helling"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "haakon_ludvigsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "habib_geir_diallo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "henrik_hagen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jabes_niyosoko_maturire"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jakob_stang_hansen_granli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joakim_halsnes_knudsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "joakim_kjensli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jonas_aune_jorde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lukas_folstad_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_ofsti_braten"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "maximilian_dahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mustapha_fofana"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "nicolai_skoglund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "niklas_schmidt_lovlund"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "noah_mathias_josefsson"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "otman_khris"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "oyvind_rishaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rene_aleksander_elshaug"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sadri_gashi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_rod"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "shahram_rashid_majid_jabari"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "teo_aarhus_bastiansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "william_andrade_hellerud"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "yossef_suleman_ibrahim"
+        }
+      ]
+    },
+    {
+      "placeId": "lade_idrettsanlegg",
+      "placeName": "Lade idrettsanlegg",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Trygg/Lades hjemmebane. 25 dokumenterte klubbprofiler bevares i historikkatalogen; banen åpner bare de 25 profilene som har kildebelagt posisjon og derfor kan brukes i simuleringen.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "andre_ekseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "blessings_mkyombwe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "brage_prestmo_kvithyld"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "claus_martin_flage"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_einarsen_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "even_torrey_tjom_flottorp"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "felix_brattbakk"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gustav_hasle_juliebo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "halvor_skaro"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "heine_enger_kleiven"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_bohle"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_flo_morkved"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "leonard_vage"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mads_berentzen_finseth"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_vollan"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_flotve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ola_johannes_elvedahl"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_kleppe_halgunset"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simen_rekstad_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simon_einarsen_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sindre_greiff"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steffen_iversen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_bjorgve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "torgeir_ektvedt_fredriksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "victor_ferner_bergersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "yafet_bahta_kahsay"
+        }
+      ]
+    },
+    {
+      "placeId": "tuil_arena",
+      "placeName": "TUIL Arena",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Tromsdalens hjemmebane. Historiske klubbprofiler bevares i historikkatalogen; banen åpner bare profilene som har kildebelagt posisjon.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "adrian_sandbukt"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_jenssen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_karlsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_lovland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "andreas_sletvold"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "august_mikkelsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_lidin_hansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "bjorn_strom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "casper_oyvann"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "christer_johnsgard"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_bertheussen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_lamoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "eirik_sorensen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_aarflot"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "elias_uppheim_skogvoll"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlend_stenberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "espen_minde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "fredrik_allertsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gabriel_andersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gaute_helstrup"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "gudmund_kongshavn"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hakon_kjaeve"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hans_age_yndestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "hans_norbye"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "harald_nilsen_tangen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_karlsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_lysvoll"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "isak_vadebu"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "isak_vik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jan_egil_brekke"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jesse_ohene"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jo_nymo_matland"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "john_fredrik_strom"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "jorgen_vik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ketil_elvenes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_hay"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_nesso"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_gunnar_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_henrik_andreassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lasse_berg_johnsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lasse_nilsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ludvig_rinde"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_dahl_abelsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mathias_sundberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "mohammed_ahamed"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_bredal_thorsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_giaever"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_talberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "peder_meen_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "preben_yttergard_hanssen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "reidar_waage"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ruben_kristiansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "rune_lange"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_finjord_ringberg"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_svela"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sean_nilsen_modebe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sebastian_tounekti"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sigurd_gronli"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "simon_thomas"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steffen_skogvang_pedersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "stein_berg_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tarjei_hansen_gautestad"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_braaten"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_kind_bendiksen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "thomas_rekdal"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tobias_vibe"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tomas_kristoffersen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "tor_martin_mienna"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "uranik_seferi"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_berg_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "vegard_lysvoll"
+        }
+      ]
+    },
+    {
+      "placeId": "straume_idrettspark",
+      "placeName": "Straume idrettspark",
+      "placeRole": "historical_club_ground_source",
+      "notes": "Klubbanlegg: Sotra Sportsklubbs hjemmebane på Straume. Klubben ble til i 2009 ved sammenslåing av Foldnes IL, Brattholmen IL og IL Øygard (stiftet 1945), og er en ANNEN klubb enn Nest-Sotra (1968) og Øygarden FK, som gikk konkurs i 2022. Banen åpner de kildebelagte profilene.",
+      "unlocks": [
+        {
+          "type": "player_candidate",
+          "targetId": "alexander_dang"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "anders_johan_johansen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "daniel_steensaeth_torum"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "erlend_hellevik_larsen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "frederic_doksaeter_falck"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "havard_foldnes"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kasper_klett_straume"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristian_skjorli_ree"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "kristoffer_zachariassen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "lars_oskar_groos_kilen"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "magnus_eide_bildoy"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "morten_grasmo"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "ole_martin_davoy_skar"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "sander_wik"
+        },
+        {
+          "type": "player_candidate",
+          "targetId": "steffen_lie_skalevik"
         }
       ]
     }
