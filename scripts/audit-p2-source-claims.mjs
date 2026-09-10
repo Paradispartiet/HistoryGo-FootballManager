@@ -1,10 +1,9 @@
 // P2 source-claim-registeret, målt mot katalogen og mot P1.
 //
-// Registeret er det eneste stedet en spiller utenfor de 18 P1-arvene kan få en
-// kildebelagt styrke. Det gjør det til nøyaktig den slags fil som stille kan
-// vokse seg feil: et token som ikke finnes, en spiller som er borte, en kilde
-// som ikke er en kilde, eller en overlapp med P1 som gjør at rekkefølgen
-// avgjør resultatet.
+// P2 er SNL-laget utenfor de 18 P1-arvene. Senere source-depth har sitt eget
+// register og audit; denne vakten måler likevel klubbdekningen etter HELE
+// overlay-kjeden, ellers ville den rapportert Junkeren som null selv etter at
+// runtime faktisk har fått et kildebelagt claim.
 //
 // Vakten krever i tillegg at hver post FAKTISK er belagt: `claim` må sitere
 // kilden, og et sitat kjennes på anførselstegnene. En parafrase kan ikke
@@ -13,6 +12,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { P2_DOCUMENTED, applyP2SourceClaims, applyP2SourceClaimsToPlayer } from "../src/football-player-source-claims-p2.js";
 import { getP1HeritageForPlayer, applyP1SourceClaims } from "../src/football-player-source-claims-p1.js";
+import { applySourceDepthClaims } from "../src/football-player-source-claims-depth.js";
 
 const les = (fil) => JSON.parse(fs.readFileSync(new URL(`../data/${fil}`, import.meta.url), "utf8"));
 const players = les("football_players.json").players;
@@ -72,8 +72,10 @@ for (const rad of P2_DOCUMENTED) {
 
 // Og hele veien gjennom: P1 først, så P2, og ingen av dem mister noe.
 const etterBegge = applyP2SourceClaims(applyP1SourceClaims(players));
-const medStyrker = etterBegge.filter((p) => (p.strengths || []).length > 0).length;
-krev(medStyrker >= P2_DOCUMENTED.length, "P2-postene forsvant i kjeden");
+const medStyrkerP1P2 = etterBegge.filter((p) => (p.strengths || []).length > 0).length;
+krev(medStyrkerP1P2 >= P2_DOCUMENTED.length, "P2-postene forsvant i kjeden");
+const etterAlle = applySourceDepthClaims(etterBegge);
+const medStyrker = etterAlle.filter((p) => (p.strengths || []).length > 0).length;
 
 const klubbnavn = new Map(clubs.map((c) => [c.id, c.name]));
 const perKlubb = {};
@@ -89,7 +91,7 @@ for (const rad of P2_DOCUMENTED) {
 // én styrke etter P1- og P2-overlayene; klubbmedlemskapet kommer fortsatt bare
 // fra player.clubAffiliations.
 const styrkedekningPerKlubb = clubs.map((club) => {
-  const pool = etterBegge.filter((player) =>
+  const pool = etterAlle.filter((player) =>
     (player.clubAffiliations || []).some((entry) => entry?.clubId === club.id)
   );
   const medKildebelagtStyrke = pool.filter((player) => (player.strengths || []).length > 0);
@@ -117,8 +119,9 @@ krev(nullKlubber.every((entry) => entry.profiler >= 15),
 // flyttes. Bjarg gikk 10.09.2026 fra null til Pesen som første dokumenterte
 // styrkeprofil via den eksisterende Brann-P1-identiteten. Brattvåg fulgte
 // samme dag via Ulrik Valderhaug Syversens Aalesund-P1-identitet og klubbens
-// eksplisitte lederbeskrivelse.
-const forventedeNullKlubber = ["junkeren", "sandviken", "vidar"];
+// eksplisitte lederbeskrivelse. Junkeren følger via Ivar Unhjems eksplisitte
+// beskrivelse som hurtig og solid avslutter i det separate source-depth-laget.
+const forventedeNullKlubber = ["sandviken", "vidar"];
 assert.deepEqual(
   nullKlubber.map((entry) => entry.clubId),
   forventedeNullKlubber,
@@ -131,6 +134,8 @@ console.log(JSON.stringify({
   dokumenterte: P2_DOCUMENTED.length,
   ferdighetstokens: [...new Set(P2_DOCUMENTED.flatMap((r) => r.strengths))].length,
   spillereMedStyrkerTotalt: medStyrker,
+  spillereMedStyrkerP1P2: medStyrkerP1P2,
+  sourceDepthTillegg: medStyrker - medStyrkerP1P2,
   nullKlubber,
   svakesteKlubber: styrkedekningPerKlubb.slice(0, 12),
   perKlubb: Object.fromEntries(Object.entries(perKlubb).sort((a, b) => b[1] - a[1]).slice(0, 12))

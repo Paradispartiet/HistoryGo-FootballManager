@@ -7,13 +7,18 @@ import {
   applyP2SourceClaims,
   applyP2SourceClaimsToPlayer
 } from "./football-player-source-claims-p2.js";
+import {
+  applySourceDepthClaims,
+  applySourceDepthClaimsToPlayer
+} from "./football-player-source-claims-depth.js";
 
-// P1 FØRST, SÅ P2. De to registrene overlapper ikke — P2 dekker bare spillere
-// utenfor de 18 frosne P1-arvene — men rekkefølgen er likevel eksplisitt, og
-// P2 lar en profil som alt har styrker stå. Da kan ikke rekkefølgen snu et
-// resultat, uansett hvordan registrene vokser.
-const applySourceClaims = (players) => applyP2SourceClaims(applyP1SourceClaims(players));
-const applySourceClaimsToPlayer = (player) => applyP2SourceClaimsToPlayer(applyP1SourceClaimsToPlayer(player));
+// Precedence er provenance, ikke kvalitetsscore: P1 først, så P2, så senere
+// source-depth. Hvert nyere lag fyller bare tomme styrkelister og kan derfor
+// aldri overstyre et eldre, allerede kildebelagt claim.
+const applySourceClaims = (players) =>
+  applySourceDepthClaims(applyP2SourceClaims(applyP1SourceClaims(players)));
+const applySourceClaimsToPlayer = (player) =>
+  applySourceDepthClaimsToPlayer(applyP2SourceClaimsToPlayer(applyP1SourceClaimsToPlayer(player)));
 
 export const PLAYER_ATTRIBUTES_VERSION = base.PLAYER_ATTRIBUTES_VERSION;
 export const ATTRIBUTE_SCALE = base.ATTRIBUTE_SCALE;
