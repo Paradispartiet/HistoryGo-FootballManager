@@ -1,9 +1,9 @@
 // P2 source-claim-registeret — Store norske leksikon.
 //
-// P1 leste 18 arver og frøs nevneren på 936 eksklusive profiler. Alt utenfor de
-// arvene sto igjen uten et sted å legge en kildebelagt styrke: importen nekter
-// å ta imot `strengths` i en råfil, og P1-overlayet gjelder bare sine egne 18.
-// Dette registeret er det stedet, i nøyaktig samme form.
+// P1 leste 18 arver og frøs nevneren på 936 eksklusive profiler. P2 ble laget
+// som det første source-claim-laget utenfor disse arvene, basert på én full
+// gjennomlesning av SNL. Senere kildearbeid fra andre eksplisitte kilder ligger
+// i source-depth-registeret; P2 forblir SNL-only og endrer ikke semantikk.
 //
 // KILDEN ER DEN SAMME SOM P1 BRUKTE. Store norske leksikons taksonomi «Norske
 // fotballspillere» har 305 biografier, og 171 av dem er navn katalogen alt har.
