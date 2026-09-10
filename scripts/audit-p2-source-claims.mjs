@@ -122,7 +122,9 @@ krev(nullKlubber.every((entry) => entry.profiler >= 15),
 // eksplisitte lederbeskrivelse. Junkeren følger via Ivar Unhjems eksplisitte
 // beskrivelse som hurtig og solid avslutter i det separate source-depth-laget.
 // Sandviken følger via Beltran Mvukas eksplisitte egenbeskrivelse av farten.
-const forventedeNullKlubber = ["vidar"];
+// Vidar lukker den siste nullplassen via Simen Haughoms eksplisitte beskrivelse
+// som hardtarbeidende skarpskytter.
+const forventedeNullKlubber = [];
 assert.deepEqual(
   nullKlubber.map((entry) => entry.clubId),
   forventedeNullKlubber,
