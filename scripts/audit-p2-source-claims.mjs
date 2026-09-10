@@ -83,11 +83,42 @@ for (const rad of P2_DOCUMENTED) {
   }
 }
 
+// Produktstatusen peker eksplisitt på klubbpooler som er komplette, men grunne.
+// Derfor må vi kunne måle dette fra canonical runtime-data, ikke telle manuelt
+// i et dokument. Her betyr "kildebelagt styrke" at profilen faktisk har minst
+// én styrke etter P1- og P2-overlayene; klubbmedlemskapet kommer fortsatt bare
+// fra player.clubAffiliations.
+const styrkedekningPerKlubb = clubs.map((club) => {
+  const pool = etterBegge.filter((player) =>
+    (player.clubAffiliations || []).some((entry) => entry?.clubId === club.id)
+  );
+  const medKildebelagtStyrke = pool.filter((player) => (player.strengths || []).length > 0);
+  return {
+    clubId: club.id,
+    klubb: club.name,
+    profiler: pool.length,
+    medKildebelagtStyrke: medKildebelagtStyrke.length,
+    utenKildebelagtStyrke: pool.length - medKildebelagtStyrke.length,
+    nullDekning: medKildebelagtStyrke.length === 0
+      ? pool.map((player) => ({ id: player.id, name: player.name }))
+      : undefined
+  };
+}).sort((a, b) =>
+  a.medKildebelagtStyrke - b.medKildebelagtStyrke
+  || a.klubb.localeCompare(b.klubb, "nb")
+);
+
+const nullKlubber = styrkedekningPerKlubb.filter((entry) => entry.medKildebelagtStyrke === 0);
+krev(nullKlubber.every((entry) => entry.profiler >= 15),
+  "null-dekning skal være et dybdeproblem, ikke en uferdig klubbpool");
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
   dokumenterte: P2_DOCUMENTED.length,
   ferdighetstokens: [...new Set(P2_DOCUMENTED.flatMap((r) => r.strengths))].length,
   spillereMedStyrkerTotalt: medStyrker,
+  nullKlubber,
+  svakesteKlubber: styrkedekningPerKlubb.slice(0, 12),
   perKlubb: Object.fromEntries(Object.entries(perKlubb).sort((a, b) => b[1] - a[1]).slice(0, 12))
 }, null, 2));
