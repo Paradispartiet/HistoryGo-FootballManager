@@ -112,7 +112,16 @@ const nullKlubber = styrkedekningPerKlubb.filter((entry) => entry.medKildebelagt
 krev(nullKlubber.every((entry) => entry.profiler >= 15),
   "null-dekning skal være et dybdeproblem, ikke en uferdig klubbpool");
 
-assert.fail(`SOURCE_DEPTH_DIAGNOSTIC ${JSON.stringify(nullKlubber)}`);
+// Source-depth er en ratchet: en klubb som først har fått et kildeclaim skal
+// ikke kunne falle tilbake til null uten at denne forventningen eksplisitt
+// flyttes. Bjarg gikk 10.09.2026 fra null til Pesen som første dokumenterte
+// styrkeprofil via den eksisterende Brann-P1-identiteten.
+const forventedeNullKlubber = ["brattvag", "junkeren", "sandviken", "vidar"];
+assert.deepEqual(
+  nullKlubber.map((entry) => entry.clubId),
+  forventedeNullKlubber,
+  `nullklubb-ratchet driftet: ${nullKlubber.map((entry) => entry.clubId).join(", ")}`
+);
 
 console.log(JSON.stringify({
   ok: true,
