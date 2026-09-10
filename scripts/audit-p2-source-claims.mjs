@@ -115,8 +115,10 @@ krev(nullKlubber.every((entry) => entry.profiler >= 15),
 // Source-depth er en ratchet: en klubb som først har fått et kildeclaim skal
 // ikke kunne falle tilbake til null uten at denne forventningen eksplisitt
 // flyttes. Bjarg gikk 10.09.2026 fra null til Pesen som første dokumenterte
-// styrkeprofil via den eksisterende Brann-P1-identiteten.
-const forventedeNullKlubber = ["brattvag", "junkeren", "sandviken", "vidar"];
+// styrkeprofil via den eksisterende Brann-P1-identiteten. Brattvåg fulgte
+// samme dag via Ulrik Valderhaug Syversens Aalesund-P1-identitet og klubbens
+// eksplisitte lederbeskrivelse.
+const forventedeNullKlubber = ["junkeren", "sandviken", "vidar"];
 assert.deepEqual(
   nullKlubber.map((entry) => entry.clubId),
   forventedeNullKlubber,

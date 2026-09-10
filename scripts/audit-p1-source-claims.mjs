@@ -173,11 +173,15 @@ const totalStatusCounts = {
 // 45 -> 62, THIN-SOURCE 876 -> 859, DELVIS unchanged. Nothing was inferred: the
 // 54 other articles read in the same pass describe career only and stay empty.
 // On 2026-09-10 Brann's official history supplied the first later source-depth
-// supplement: Pesen's teamwork and hard shot. That moves only the measured
+// supplement: Pesen's teamwork and hard shot. That moved only the measured
 // distribution, 62 -> 63 DOKUMENTERT and 859 -> 858 THIN-SOURCE.
-ok(totalStatusCounts.DOKUMENTERT === 63, `expected 63 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
+// Later the same day Brattvåg's official player text supplied an explicit
+// leadership claim for Ulrik Valderhaug Syversen. His canonical source identity
+// is Aalesund-P1, so the claim belongs in P1_NEW_DOCUMENTED while also deepening
+// Brattvåg through the existing club affiliation: 63 -> 64 and 858 -> 857.
+ok(totalStatusCounts.DOKUMENTERT === 64, `expected 64 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
 ok(totalStatusCounts.DELVIS === 15, `expected 15 total partial P1 profiles, got ${totalStatusCounts.DELVIS}`);
-ok(totalStatusCounts["THIN-SOURCE"] === 858, `expected 858 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
+ok(totalStatusCounts["THIN-SOURCE"] === 857, `expected 857 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
 ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
   "combined status distribution must cover 936/936");
 
