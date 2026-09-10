@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 8, expectedPartial: 2, expectedThin: 37, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 4, expectedPartial: 3, expectedThin: 40, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 6, expectedPartial: 2, expectedThin: 43, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -314,6 +314,18 @@ const existingSupplements = [
     strengths: ["strength", "duels", "tackling", "interceptions", "aggression"],
     claim: "«Andersen var en storvokst og robust spiller, duell- og taklingssterk, flink til å gjenvinne ballen og med en pågående spillestil.»",
     source: "https://snl.no/Trygve_Andersen"
+  },
+
+  // --- Bjarg source-depth, 10.09.2026 ----------------------------------------
+  // Én canonical spiller kan gi dybde i flere klubbpooler når tilknytningene
+  // allerede er kildebelagt. Pesen er Brann-P1-profil og samtidig krysskoblet
+  // til Bjarg; derfor hører styrkeclaimet hjemme her, ikke i P2.
+  {
+    playerId: "rolf_birger_pesen_pedersen",
+    placeId: "brann_stadion",
+    strengths: ["teamwork", "long_shots"],
+    claim: "Branns offisielle historie beskriver Pesen som mer lagspiller enn individualist og sier at det harde skuddet hans ble beryktet.",
+    source: "https://historie.brann.no/spillere/rolf-birger-pedersen/"
   },
 ];
 
