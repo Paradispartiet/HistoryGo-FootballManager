@@ -59,6 +59,11 @@ for (const record of SOURCE_DEPTH_DOCUMENTED) {
   ok(typeof record.claim === "string" && record.claim.length >= 12,
     `${record.playerId}: claim er for kort`);
   ok(/[«"]/.test(record.claim), `${record.playerId}: claim må sitere kilden direkte`);
+  ok(typeof record.clubId === "string" && record.clubId.length > 0,
+    `${record.playerId}: source-depth-posten må navngi klubben den fordyper`);
+  ok(player.clubAffiliations?.some((entry) =>
+    entry.clubId === record.clubId && entry.source === "belagt"
+  ), `${record.playerId}: mangler kildebelagt klubbtilknytning til ${record.clubId}`);
 
   const after = applySourceDepthClaimsToPlayer(player);
   assert.deepEqual(
@@ -78,9 +83,7 @@ const afterCount = afterDepth.filter((player) => (player.strengths || []).length
 ok(afterCount === beforeCount + SOURCE_DEPTH_DOCUMENTED.length,
   `source-depth skulle øke dokumenterte profiler ${beforeCount} -> ${beforeCount + SOURCE_DEPTH_DOCUMENTED.length}, fikk ${afterCount}`);
 
-const ivar = byId.get("ivar_johannes_jakobsen_unhjem");
-ok(ivar?.clubAffiliations?.some((entry) => entry.clubId === "junkeren" && entry.source === "belagt"),
-  "Ivar Unhjem må ha kildebelagt Junkeren-tilknytning før styrkeclaimet kan brukes");
+const clubsDeepened = [...new Set(SOURCE_DEPTH_DOCUMENTED.map((record) => record.clubId))].sort();
 
 console.log(JSON.stringify({
   ok: true,
@@ -88,5 +91,5 @@ console.log(JSON.stringify({
   documented: SOURCE_DEPTH_DOCUMENTED.length,
   beforeCount,
   afterCount,
-  clubsDeepened: ["junkeren"]
+  clubsDeepened
 }, null, 2));
