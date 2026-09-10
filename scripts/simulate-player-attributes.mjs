@@ -929,7 +929,7 @@ const KJENT_UDOKUMENTERT = {
   tonsberg_gressbane: 1.01,     // Eik Tønsberg
   lysekloster_idrettspark: 1.01, // Lysekloster
   reknesbanen: 1.01,            // Træff
-  lassa_idrettspark: 1.01,      // Vidar
+  lassa_idrettspark: 0.97,      // Vidar: Haughom source-depth senket målt tomandel
   stemmemyren: 0.98,            // Sandviken: Beltran source-depth senket målt tomandel
   // Avdeling 2, samme kilde og samme grunn: NFFs lagside gir lagdel og
   // ingenting mer. Ingen av de sju har en redaksjonell kilde som beskriver en
