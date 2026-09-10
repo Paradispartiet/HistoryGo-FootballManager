@@ -981,7 +981,7 @@ const KJENT_UDOKUMENTERT = {
   // tabeller.
   intility_arena: 0.82,      // Vålerenga: målt 53 av 66
   aspmyra_stadion: 0.93,     // Bodø/Glimt: målt 43 av 47
-  brann_stadion: 0.84,       // Brann: målt 42 av 47
+  brann_stadion: 0.82,       // Brann: 38 av 47 uten styrker etter Pesen-passet
   lyse_arena: 0.90           // Viking: målt 47 av 51
 };
 
