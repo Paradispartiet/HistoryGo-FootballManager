@@ -133,8 +133,10 @@ for (const player of newExclusive) {
 }
 
 // The five earlier passes remain provenance for already-materialized claims.
-// Three source-verified supplements close the materialization gaps found by the
-// audit (one Viking profile and two Lillestrøm profiles).
+// Three source-verified supplements close the original materialization gaps
+// (one Viking profile and two Lillestrøm profiles). Later source-depth passes
+// may add another supplement only when an inspected source carries a concrete
+// individual skill claim.
 for (const heritage of existingHeritages) {
   const population = exclusiveByPlace.get(heritage.placeId);
   const effectivePopulation = population.map((player) => overlaidById.get(player.id));
@@ -170,9 +172,12 @@ const totalStatusCounts = {
 // P1 heritage carry a skill claim that had never been recorded. DOKUMENTERT
 // 45 -> 62, THIN-SOURCE 876 -> 859, DELVIS unchanged. Nothing was inferred: the
 // 54 other articles read in the same pass describe career only and stay empty.
-ok(totalStatusCounts.DOKUMENTERT === 62, `expected 62 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
+// On 2026-09-10 Brann's official history supplied the first later source-depth
+// supplement: Pesen's teamwork and hard shot. That moves only the measured
+// distribution, 62 -> 63 DOKUMENTERT and 859 -> 858 THIN-SOURCE.
+ok(totalStatusCounts.DOKUMENTERT === 63, `expected 63 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
 ok(totalStatusCounts.DELVIS === 15, `expected 15 total partial P1 profiles, got ${totalStatusCounts.DELVIS}`);
-ok(totalStatusCounts["THIN-SOURCE"] === 859, `expected 859 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
+ok(totalStatusCounts["THIN-SOURCE"] === 858, `expected 858 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
 ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
   "combined status distribution must cover 936/936");
 
