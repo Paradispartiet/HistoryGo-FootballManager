@@ -103,7 +103,8 @@
     "audit:manager-visual-identity-v1": "node scripts/audit-manager-visual-identity-v1.mjs",
     "sim:manager-visual-identity-v1": "node scripts/simulate-manager-visual-identity-v1.mjs",
     "audit:manager-legacy-cleanup-v1": "node scripts/audit-manager-legacy-cleanup-v1.mjs",
-    "sim:manager-legacy-cleanup-v1": "node scripts/simulate-manager-legacy-cleanup-v1.mjs"
+    "sim:manager-legacy-cleanup-v1": "node scripts/simulate-manager-legacy-cleanup-v1.mjs",
+    "audit:source-depth-claims": "node scripts/audit-source-depth-claims.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
