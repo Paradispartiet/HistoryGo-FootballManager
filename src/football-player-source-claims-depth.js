@@ -28,6 +28,14 @@ const documented = [
     claim: "«da mister jeg farten. Og den vil jeg gjerne beholde.»",
     source: "https://www.sandefjordfotball.no/nyheter/belly-bestemte-seg-helt-mot-slutten",
     sourceKind: "club"
+  },
+  {
+    playerId: "simen_haughom",
+    clubId: "vidar",
+    strengths: ["work_rate", "finishing"],
+    claim: "«Er intensiv i spillestilen, jobber hardt og kriger for laget. ... Haughom er smart, flink til å time løpene og en skarpskytter!»",
+    source: "https://fkvidar.no/her-er-de-beste-spillerne-i-alle-divisjoner-i-lokalfotballen-aftenbladet/",
+    sourceKind: "club"
   }
 ];
 
