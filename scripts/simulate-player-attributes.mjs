@@ -930,7 +930,7 @@ const KJENT_UDOKUMENTERT = {
   lysekloster_idrettspark: 1.01, // Lysekloster
   reknesbanen: 1.01,            // Træff
   lassa_idrettspark: 1.01,      // Vidar
-  stemmemyren: 1.01,            // Sandviken
+  stemmemyren: 0.98,            // Sandviken: Beltran source-depth senket målt tomandel
   // Avdeling 2, samme kilde og samme grunn: NFFs lagside gir lagdel og
   // ingenting mer. Ingen av de sju har en redaksjonell kilde som beskriver en
   // enkelt spiller, så ingen profil bærer en ferdighetsclaim.

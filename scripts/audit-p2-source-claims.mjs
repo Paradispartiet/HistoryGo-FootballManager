@@ -121,7 +121,8 @@ krev(nullKlubber.every((entry) => entry.profiler >= 15),
 // samme dag via Ulrik Valderhaug Syversens Aalesund-P1-identitet og klubbens
 // eksplisitte lederbeskrivelse. Junkeren følger via Ivar Unhjems eksplisitte
 // beskrivelse som hurtig og solid avslutter i det separate source-depth-laget.
-const forventedeNullKlubber = ["sandviken", "vidar"];
+// Sandviken følger via Beltran Mvukas eksplisitte egenbeskrivelse av farten.
+const forventedeNullKlubber = ["vidar"];
 assert.deepEqual(
   nullKlubber.map((entry) => entry.clubId),
   forventedeNullKlubber,
