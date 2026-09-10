@@ -232,6 +232,19 @@ const documented = [
     claim: "«Han var en offensiv og rask back som spilte hele 277 førstedivisjonskamper.»",
     source: "https://snl.no/Trond_Pedersen"
   },
+
+  // --- Brattvåg source-depth, 10.09.2026 ------------------------------------
+  // Ulrik eies av Aalesund-P1-identiteten, men samme canonical profil er
+  // kildebelagt tilknyttet Brattvåg. Klubbens egen avskjedstekst beskriver
+  // eksplisitt lederrollen; ingen øvrige egenskaper utledes fra fysikk,
+  // balltrygghet, kamper eller mål.
+  {
+    playerId: "ulrik_valderhaug_syversen",
+    placeId: "color_line_stadion",
+    strengths: ["leadership"],
+    claim: "«Han har teke stort ansvar, vore ein leiar i laget»",
+    source: "https://brattvag-il.no/herrelag/herrelaget/takk-for-no-ulrik"
+  },
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
