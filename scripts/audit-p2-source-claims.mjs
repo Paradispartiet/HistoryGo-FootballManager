@@ -20,22 +20,6 @@ const clubs = les("football_clubs.json").clubs;
 const gyldige = new Set(les("football_attributes.json").attributes.map((a) => a.id));
 const byId = new Map(players.map((p) => [p.id, p]));
 
-const BRATTVAG_IDENTITY_IDS = ["ulrik_valderhaug_syversen", "jorgen_galta"];
-assert.fail("BRATTVAG_IDENTITY " + JSON.stringify(BRATTVAG_IDENTITY_IDS.map((id) => {
-  const player = byId.get(id);
-  const heritage = player ? getP1HeritageForPlayer(player) : null;
-  return {
-    id,
-    player: player ? {
-      name: player.name,
-      sourcePlaceIds: player.sourcePlaceIds,
-      clubAffiliations: player.clubAffiliations,
-      strengths: player.strengths
-    } : null,
-    p1Heritage: heritage
-  };
-})));
-
 let sjekker = 0;
 const krev = (betingelse, melding) => { sjekker += 1; assert.ok(betingelse, melding); };
 
