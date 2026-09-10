@@ -895,7 +895,7 @@ const KJENT_UDOKUMENTERT = {
   sor_arena: 0.96,           // Start
   bryne_stadion: 1.01,       // Bryne
   mellos_stadion: 1.00,      // Moss
-  color_line_stadion: 1.00,  // Aalesund
+  color_line_stadion: 0.99,  // Aalesund: Ulrik source-depth senket målt tomandel
   nordre_asen: 0.97,         // Skeid
   fredrikstad_stadion: 0.94, // Fredrikstad: se konverteringen
   skagerak_arena: 0.97,      // Odd
