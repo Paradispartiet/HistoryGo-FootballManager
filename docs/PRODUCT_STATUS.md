@@ -68,9 +68,11 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   bredden kom fra registeret. Bjarg har nå fått sin første kildebelagte
   styrkeprofil via Pesen, Brattvåg via Ulrik Valderhaug Syversens eksplisitt
   dokumenterte lederrolle, Junkeren via Ivar Unhjems eksplisitte beskrivelse
-  som hurtig og solid avslutter og Sandviken via Beltran Mvukas eksplisitte
-  beskrivelse av egen fart. Én klubb står fortsatt på null: Vidar. Å fylle
-  dybden er gyldig arbeid; å senke grensa er det ikke;
+  som hurtig og solid avslutter, Sandviken via Beltran Mvukas eksplisitte
+  beskrivelse av egen fart og Vidar via Simen Haughoms eksplisitte beskrivelse
+  som hardtarbeidende skarpskytter. Ingen av de 60 klubbene står nå på null
+  kildebelagte styrkeprofiler. Videre dybdearbeid skal øke belegg, ikke senke
+  noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
