@@ -936,7 +936,7 @@ const KJENT_UDOKUMENTERT = {
   // enkelt spiller, så ingen profil bærer en ferdighetsclaim.
   sandskogan_stadion: 1.01,     // Stjørdals-Blink
   sagbakken: 1.01,              // Rana
-  nordlandshallen: 1.01,        // Junkeren
+  nordlandshallen: 0.98,    // Junkeren: Ivar source-depth senket målt tomandel        // Junkeren
   rolvsrud_stadion: 1.01,       // Lørenskog
   myhrer_stadion: 1.01,         // Eidsvold Turn
   ski_stadion: 1.01,            // Follo
