@@ -112,6 +112,8 @@ const nullKlubber = styrkedekningPerKlubb.filter((entry) => entry.medKildebelagt
 krev(nullKlubber.every((entry) => entry.profiler >= 15),
   "null-dekning skal være et dybdeproblem, ikke en uferdig klubbpool");
 
+assert.fail(`SOURCE_DEPTH_DIAGNOSTIC ${JSON.stringify(nullKlubber)}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
