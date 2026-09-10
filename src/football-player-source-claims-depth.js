@@ -15,10 +15,19 @@ export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-de
 const documented = [
   {
     playerId: "ivar_johannes_jakobsen_unhjem",
+    clubId: "junkeren",
     strengths: ["pace", "finishing"],
     claim: "«Hurtig og en meget solid avslutter»",
     source: "https://www.norskfotball.com/blogg/3-divisjonstipset-avdeling-5",
     sourceKind: "football_editorial"
+  },
+  {
+    playerId: "beltran_mvuka",
+    clubId: "sandviken",
+    strengths: ["pace"],
+    claim: "«da mister jeg farten. Og den vil jeg gjerne beholde.»",
+    source: "https://www.sandefjordfotball.no/nyheter/belly-bestemte-seg-helt-mot-slutten",
+    sourceKind: "club"
   }
 ];
 
