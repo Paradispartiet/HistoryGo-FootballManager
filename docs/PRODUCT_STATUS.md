@@ -66,9 +66,10 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
 - **fordype dokumenterte spillerpooler som er komplette, men grunne.** Ingen klubb
   står lenger `pending` — alle 60 har en pool på minst femten spillbare — men
   bredden kom fra registeret. Bjarg har nå fått sin første kildebelagte
-  styrkeprofil via Pesen, og Brattvåg via Ulrik Valderhaug Syversens eksplisitt
-  dokumenterte lederrolle. Tre klubber står fortsatt på null: Junkeren,
-  Sandviken og Vidar. Å fylle dybden er gyldig arbeid; å senke grensa er det ikke;
+  styrkeprofil via Pesen, Brattvåg via Ulrik Valderhaug Syversens eksplisitt
+  dokumenterte lederrolle og Junkeren via Ivar Unhjems eksplisitte beskrivelse
+  som hurtig og solid avslutter. To klubber står fortsatt på null: Sandviken og
+  Vidar. Å fylle dybden er gyldig arbeid; å senke grensa er det ikke;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
