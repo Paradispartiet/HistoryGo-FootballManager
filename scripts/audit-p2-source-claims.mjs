@@ -164,8 +164,8 @@ krev(ranaDekning?.medKildebelagtStyrke >= 3,
   `Rana source-depth skal være minst 3, fikk ${ranaDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const sandvikenDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "sandviken");
-krev(sandvikenDekning?.medKildebelagtStyrke >= 2,
-  `Sandviken source-depth skal være minst 2, fikk ${sandvikenDekning?.medKildebelagtStyrke ?? "mangler"}`);
+krev(sandvikenDekning?.medKildebelagtStyrke >= 3,
+  `Sandviken source-depth skal være minst 3, fikk ${sandvikenDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const sotraDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "sotra");
 krev(sotraDekning?.medKildebelagtStyrke >= 2,
