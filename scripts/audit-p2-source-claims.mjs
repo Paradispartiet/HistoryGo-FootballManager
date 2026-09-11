@@ -172,8 +172,8 @@ krev(sotraDekning?.medKildebelagtStyrke >= 3,
   `Sotra source-depth skal være minst 3, fikk ${sotraDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const tryggLadeDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "trygg_lade");
-krev(tryggLadeDekning?.medKildebelagtStyrke >= 2,
-  `Trygg/Lade source-depth skal være minst 2, fikk ${tryggLadeDekning?.medKildebelagtStyrke ?? "mangler"}`);
+krev(tryggLadeDekning?.medKildebelagtStyrke >= 3,
+  `Trygg/Lade source-depth skal være minst 3, fikk ${tryggLadeDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const traffDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "traff");
 krev(traffDekning?.medKildebelagtStyrke >= 2,
