@@ -930,7 +930,7 @@ const KJENT_UDOKUMENTERT = {
   // som kampantallet i Brattvåg-kilden og landslagsuttaket i Kvik-kilden.
   // Ingen av de nye profilene bærer en eneste ferdighetsclaim.
   stavollen_kunstgress: 0.95,   // Bjarg: Jørgensen pass 3 senket målt tomandel
-  tonsberg_gressbane: 1.01,     // Eik Tønsberg
+  tonsberg_gressbane: 0.97,     // Eik Tønsberg: Lundhagebakken pass 3 senket målt tomandel
   lysekloster_idrettspark: 1.01, // Lysekloster
   reknesbanen: 0.97,            // Træff: Ohr source-depth senket målt tomandel
   lassa_idrettspark: 0.93,      // Vidar: Tjoland source-depth senket målt tomandel
