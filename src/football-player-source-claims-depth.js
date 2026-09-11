@@ -108,6 +108,14 @@ const documented = [
     claim: "«Den hardtarbeidende midtspissen»",
     source: "https://historie.brann.no/spillere/steffen-lie-skaalevik/",
     sourceKind: "club"
+  },
+  {
+    playerId: "kristoffer_flo_morkved",
+    clubId: "trygg_lade",
+    strengths: ["technique"],
+    claim: "«Kristoffer er en teknisk god spiller som kan bekle flere offensive roller i laget.»",
+    source: "https://strindheimtoppfotball.no/a-lag-herrer/ny-signering-kristoffer-flo-morkved",
+    sourceKind: "club"
   }
 ];
 
