@@ -164,6 +164,14 @@ const documented = [
     claim: "«god til å stoppe skudd»",
     source: "https://www.vartoslo.no/adam-tamrat-vik-bydel-sagene-emil-tjostheim/skeids-nye-keeper-adam-tamrat-vik-19-sikter-mot-manchester-united/270601",
     sourceKind: "press"
+  },
+  {
+    playerId: "mads_fagerli_halsoy",
+    clubId: "junkeren",
+    strengths: ["finishing"],
+    claim: "«Mads Fagerli Halsøy satt ballen strålende opp i hjørnet.»",
+    source: "https://www.fotball.no/landslag/norge-gutter-17/2019/g17-avsluttet-med-seier---en-kanonsterk-turnering/",
+    sourceKind: "press"
   }
 ];
 
