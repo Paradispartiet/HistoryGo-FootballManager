@@ -4201,6 +4201,7 @@ function getMatchdayReadiness(teamFit) {
     clubWeekReason: clubWeekBlocked
       ? `Klubbuka står i «${CLUB_WEEK_PHASE_LABELS[clubWeekPhase] || clubWeekPhase}». Gå videre til kampdag.`
       : "",
+    clubWeekTarget: clubWeekPhase === "match_prep" ? "advance_matchday" : "dashboard",
     matchInProgress: Boolean(state.matchday?.session)
   });
 }
@@ -9871,6 +9872,10 @@ function appendMatchdayNavButton(parent, label, tab) {
 }
 
 function openManagerMatchdayTarget(target) {
+  if (target === "advance_matchday") {
+    handleManagerMatchdayPrimaryAction(target);
+    return;
+  }
   if (target === "carry_training_problem") {
     const lastMatch = state.matchday?.lastMatch;
     const hypothesis = lastMatch?.trainingExerciseHypothesis;
@@ -9909,7 +9914,17 @@ function openManagerMatchdayTarget(target) {
   }
 }
 
-function handleManagerMatchdayPrimaryAction(target) {
+async function handleManagerMatchdayPrimaryAction(target) {
+  if (target === "advance_matchday") {
+    const readiness = getMatchdayReadiness(getTeamFit());
+    const onlyClubWeekBlocker = readiness.blockers?.length === 1
+      && readiness.primaryBlocker?.code === "club_week_blocked";
+    if (!onlyClubWeekBlocker || state.clubWeekState?.phase !== "match_prep") return;
+    await advanceClubWeekPhaseAction();
+    activateTab("kamp");
+    renderApp();
+    return;
+  }
   if (target === "create_session") {
     const button = document.querySelector("#playMatchdayButton");
     if (button && !button.disabled) button.click();
