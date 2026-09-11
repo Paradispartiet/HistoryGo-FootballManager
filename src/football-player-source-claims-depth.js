@@ -44,6 +44,14 @@ const documented = [
     claim: "«God med ball, god fotballforståelse og gjør mange kloke valg gjennom hele kampen.»",
     source: "https://www.dagbladet.no/tema/karing-arets-lag-i-3-divisjon/84048919",
     sourceKind: "press"
+  },
+  {
+    playerId: "tobias_flem",
+    clubId: "brattvag",
+    strengths: ["pace"],
+    claim: "«I tillegg er han hurtig og går gjerne på løp inn i boksen»",
+    source: "https://www.miffotball.no/nyheter/tobias-flem-er-mif-spiller",
+    sourceKind: "club"
   }
 ];
 
