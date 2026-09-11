@@ -167,6 +167,10 @@ const sotraDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "sot
 krev(sotraDekning?.medKildebelagtStyrke >= 2,
   `Sotra source-depth skal være minst 2, fikk ${sotraDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const tryggLadeDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "trygg_lade");
+krev(tryggLadeDekning?.medKildebelagtStyrke >= 2,
+  `Trygg/Lade source-depth skal være minst 2, fikk ${tryggLadeDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
