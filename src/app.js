@@ -7147,6 +7147,17 @@ function loadClubWeekState() {
 }
 
 function saveClubWeekState(clubWeekState) {
+  // Club Week finnes både som aktivt session-felt og som del av league-merits.
+  // Begge er samme sannhet. Oppdater session-kopien FØR saveTeamMerits()
+  // persisterer mode-envelope, ellers kan en gammel session-fase vinne ved
+  // neste rehydrering selv om merits allerede står på den nye fasen.
+  if (state.modeEnvelope && isLeagueModeActive()) {
+    state.modeEnvelope.sessions.league = {
+      ...state.modeEnvelope.sessions.league,
+      clubWeekState: cloneTeamMerits(clubWeekState)
+    };
+  }
+
   // Skriv til den kanoniske plasseringen i merits. Uten merits (skulle ikke
   // skje etter init) faller vi stille tilbake uten persistens.
   if (state.teamMerits && typeof state.teamMerits === "object") {
