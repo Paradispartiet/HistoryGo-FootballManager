@@ -148,6 +148,14 @@ const documented = [
     claim: "«enorme éin-mot-éin-ferdigheiter, fart og offensive kraft»",
     source: "https://brattvag-il.no/herrelag/herrelaget/fire-nysigneringer",
     sourceKind: "club"
+  },
+  {
+    playerId: "joachim_lundhagebakken",
+    clubId: "eik_tonsberg",
+    strengths: ["strength", "pace"],
+    claim: "«en fysisk sterk spiller med god fart»",
+    source: "https://elverumfotball.no/nyheter/joachim-21-klar-for-elverum",
+    sourceKind: "club"
   }
 ];
 
