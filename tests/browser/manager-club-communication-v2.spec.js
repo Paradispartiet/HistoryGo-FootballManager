@@ -63,6 +63,7 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(({ leagueSeason, clubWeekState, matchday, plan }) => {
+    const effectivePlan = sessionStorage.getItem("hgfm.test.missingOpponentPlan") === "1" ? null : plan;
     const teamMerits = {
       unlockedPlaceIds: ["ullevaal_stadion", "bislett_stadion"],
       hiredStaffIds: ["ullevaal_final_pressure_mentor", "bislett_first_team_physio"],
@@ -83,7 +84,7 @@ test.beforeEach(async ({ page }) => {
     localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify({
       version: "mode-sessions.v1",
       activeMode: "league",
-      sessions: { league: { clubWeekState, teamMerits, leagueSeason, matchday: { lastMatch: matchday, session: null }, playerCondition: [{ playerId: "ada", name: "Ada Hegerberg", load: 64, consecutiveFullMatches: 4, injury: null }], weeklyTrainingProgram: { week: 8, programId: "program_rest_defense" }, weeklyTrainingFocus: { week: 8, focusId: "rest_defence" }, opponentAnalysisPlan: plan, readInboxMessageIds: [], deliveredInboxMessageIds: [], selectedInboxChoices: {} }, scenario: null, training: null, national: null }
+      sessions: { league: { clubWeekState, teamMerits, leagueSeason, matchday: { lastMatch: matchday, session: null }, playerCondition: [{ playerId: "ada", name: "Ada Hegerberg", load: 64, consecutiveFullMatches: 4, injury: null }], weeklyTrainingProgram: { week: 8, programId: "program_rest_defense" }, weeklyTrainingFocus: { week: 8, focusId: "rest_defence" }, opponentAnalysisPlan: effectivePlan, readInboxMessageIds: [], deliveredInboxMessageIds: [], selectedInboxChoices: {} }, scenario: null, training: null, national: null }
     }));
   }, { leagueSeason: season(), clubWeekState: weekState, matchday: lastMatch, plan: analysisPlan });
   await page.goto("/");
@@ -155,11 +156,7 @@ test("motstanderbriefens lenke åpner riktig kampforberedelse", async ({ page })
 
 
 test("manglende motstanderplan åpner Klubben Analyse direkte", async ({ page }) => {
-  await page.evaluate(() => {
-    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
-    if (envelope.sessions?.league) envelope.sessions.league.opponentAnalysisPlan = null;
-    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
-  });
+  await page.evaluate(() => sessionStorage.setItem("hgfm.test.missingOpponentPlan", "1"));
   await page.reload();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 
