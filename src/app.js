@@ -4152,6 +4152,42 @@ function saveMatchdayState() {
 // Kampklar-status: én autoritativ port for alle flater og handlere. Den rene
 // motoren eier status, blokkeringer, rekkefølge og canStartMatch. App-laget
 // oversetter bare eksisterende state til et rent inputobjekt.
+function getManagerMatchPrepPresentationState(teamFit = getTeamFit()) {
+  const roster = getAvailability().rosterReadiness || {};
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const completeStarters = assignments.filter((item) => item?.player && item?.role).length;
+  const formation = getFormation();
+  const tactic = getTactic();
+  const program = getSelectedTrainingProgramComposition();
+  const focus = getTrainingFocus(state.weeklyTrainingFocus?.focusId || null);
+  const opponent = getMiniSeasonNextOpponent();
+  const readiness = getMatchdayReadiness(teamFit);
+  const minimumBench = REQUIRED_BENCH;
+  const benchCount = Number(roster.benchCount) || 0;
+
+  return {
+    lineup: {
+      starters: `${Math.min(completeStarters, REQUIRED_STARTERS)}/${REQUIRED_STARTERS}`,
+      roles: completeStarters >= REQUIRED_STARTERS ? "OK" : "Trenger valg"
+    },
+    bench: {
+      bench: `${Math.min(benchCount, minimumBench)}/${minimumBench}`,
+      availability: Number(roster.unlockedCount) >= REQUIRED_SQUAD_SIZE
+        ? `Tropp ${Number(roster.unlockedCount)}/${REQUIRED_SQUAD_SIZE} · minimumsbenken er kontrollert.`
+        : `Tropp ${Number(roster.unlockedCount) || 0}/${REQUIRED_SQUAD_SIZE} · flere spillere mangler.`
+    },
+    formationName: formation?.name || "Formasjon ikke valgt",
+    tacticName: tactic?.name || "Kampplan ikke valgt",
+    training: {
+      program: program?.title || "Treningsprogram ikke valgt",
+      focus: focus?.name || "Fokus ikke valgt"
+    },
+    opponentLabel: opponent?.name || opponent?.displayName || "Motstander ikke klar",
+    readinessText: readiness?.summary || "Kampklarhet kontrolleres av eksisterende readiness.",
+    threat: opponent?.style || opponent?.archetypeName || "Motstanderbriefen bruker eksisterende kamp- og motstanderdata."
+  };
+}
+
 function getMatchdayReadiness(teamFit) {
   const roster = getAvailability().rosterReadiness || {};
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
@@ -16680,6 +16716,11 @@ function bindLocalStartControls() {
 }
 
 function bindHistoryGoSyncControls() {
+  window.addEventListener("hgfm:request-match-prep-context", (event) => {
+    if (event.detail && typeof event.detail === "object") {
+      event.detail.context = getManagerMatchPrepPresentationState(getTeamFit());
+    }
+  });
   window.addEventListener("hgfm:request-club-communication-context", (event) => {
     if (event.detail && typeof event.detail === "object") {
       event.detail.context = getClubCommunicationContext();
