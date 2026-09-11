@@ -925,7 +925,7 @@ const KJENT_UDOKUMENTERT = {
   // mannen spiller og ingenting mer — den er ikke en ferdighet, samme grense
   // som kampantallet i Brattvåg-kilden og landslagsuttaket i Kvik-kilden.
   // Ingen av de nye profilene bærer en eneste ferdighetsclaim.
-  stavollen_kunstgress: 1.01,   // Bjarg
+  stavollen_kunstgress: 0.98,   // Bjarg: Axel source-depth senket målt tomandel
   tonsberg_gressbane: 1.01,     // Eik Tønsberg
   lysekloster_idrettspark: 1.01, // Lysekloster
   reknesbanen: 1.01,            // Træff

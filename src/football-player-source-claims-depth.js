@@ -36,6 +36,14 @@ const documented = [
     claim: "«Er intensiv i spillestilen, jobber hardt og kriger for laget. ... Haughom er smart, flink til å time løpene og en skarpskytter!»",
     source: "https://fkvidar.no/her-er-de-beste-spillerne-i-alle-divisjoner-i-lokalfotballen-aftenbladet/",
     sourceKind: "club"
+  },
+  {
+    playerId: "axel_ahlander",
+    clubId: "bjarg",
+    strengths: ["vision", "decisions"],
+    claim: "«God med ball, god fotballforståelse og gjør mange kloke valg gjennom hele kampen.»",
+    source: "https://www.dagbladet.no/tema/karing-arets-lag-i-3-divisjon/84048919",
+    sourceKind: "press"
   }
 ];
 
