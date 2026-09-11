@@ -910,7 +910,7 @@ const KJENT_UDOKUMENTERT = {
   // men det er ikke en ferdighet — det er tilgjengelighet, og det eneste det
   // belegger er A-lagstilhørighet. 79/79 nye eksklusive profiler står derfor
   // uten en eneste ferdighetsclaim.
-  brattvag_stadion: 1.01,
+  brattvag_stadion: 1.00, // Brattvåg: Tobias source-depth senket målt tomandel
   // Kvik Halden P2, tredje av samme form. Kilden er to lag i ett: klubbens egen
   // årstallsliste fører landslagsuttak år for år gjennom FK Kvik-perioden, og
   // Wikipedia navngir cupvinnerlaget fra 1918 og A-lagstroppen 2023. Begge
