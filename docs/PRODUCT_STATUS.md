@@ -80,8 +80,10 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   kildebelagt profil. Junkeren har nå minst to, med Sidad Choolys eksplisitt
   dokumenterte dødballutførelse i tillegg til Ivar Unhjem. Kvik Halden har nå
   minst to, med Dardan Sæter-Mehmetis eksplisitt dokumenterte lederskap i
-  tillegg til eksisterende kildebelagt profil. Videre dybdearbeid skal øke
-  belegg, ikke senke noen terskel;
+  tillegg til eksisterende kildebelagt profil. Pors har nå minst to, med Oskar
+  Sundland Johnsens eksplisitt dokumenterte bevegelse i riktige rom i tillegg
+  til eksisterende kildebelagt profil. Videre dybdearbeid skal øke belegg, ikke
+  senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
