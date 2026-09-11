@@ -2406,7 +2406,16 @@ function computeAvailability() {
   // aldri i unlockedPlaceIds eller History Go-lagring, og manageren må fortsatt
   // engasjere personene selv. Erstatter den gamle stedsanker-baserte kilden.
   const starterStaff = getStarterSquadStaffCandidates(staff);
-  const staffById = new Map([...normallyUnlockedStaff, ...starterStaff].map((member) => [member.id, member]));
+  const hasCuratedClubStarterStaff =
+    starterStaff.length >= REQUIRED_STAFF_SIZE &&
+    starterStaff.every((member) => member?.isPlaceholder !== true);
+  // Når en etablert klubb har et komplett kuratert startersett, skal de
+  // generiske spillbarhets-placeholderne ikke lekke inn igjen via andre
+  // sted/unlock-kilder. De er bare fallback for ukurerte klubber.
+  const visibleNormallyUnlockedStaff = hasCuratedClubStarterStaff
+    ? normallyUnlockedStaff.filter((member) => !(member?.starterStaff === true && member?.isPlaceholder === true))
+    : normallyUnlockedStaff;
+  const staffById = new Map([...visibleNormallyUnlockedStaff, ...starterStaff].map((member) => [member.id, member]));
   const unlockedStaff = [...staffById.values()];
 
   // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
