@@ -446,15 +446,16 @@
       "sourcePlaceIds": [
         "lerkendal_stadion"
       ],
-      "sourceUrl": "https://www.rbk.no/lag/alexander-lund-hansen",
-      "sourceUpdatedAt": "2026-07-11",
+      "sourceUrl": "https://www.rbk.no/om-rbk/ansatte/a-lag-menn",
+      "sourceUpdatedAt": "2026-08-11",
       "expertiseIds": [
         "goalkeeper_training"
       ],
       "roles": [
         "goalkeeper_development"
       ],
-      "warningWhenMisused": "Dokumentert som keepertrener for Rosenborgs A-lag og med UEFA Keeper A; profilen brukes kun i keepertrenerrollen."
+      "warningWhenMisused": "Dokumentert som keepertrener for Rosenborgs A-lag og med UEFA Keeper A; profilen brukes kun i keepertrenerrollen.",
+      "profileSourceUrl": "https://www.rbk.no/lag/alexander-lund-hansen"
     }
   ]
 }
