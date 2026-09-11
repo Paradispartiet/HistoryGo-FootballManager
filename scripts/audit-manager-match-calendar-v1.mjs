@@ -1,6 +1,7 @@
 import fs from "node:fs";
 
 const files = {
+  app: fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8"),
   shell: fs.readFileSync(new URL("../src/ui/manager-shell-view.js", import.meta.url), "utf8"),
   calendar: fs.readFileSync(new URL("../src/ui/manager-calendar-workspace-v1.js", import.meta.url), "utf8"),
   matchCalendar: fs.readFileSync(new URL("../src/ui/manager-match-calendar-v1.js", import.meta.url), "utf8"),
