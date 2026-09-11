@@ -188,6 +188,14 @@ const documented = [
     claim: "«Treningsiver: Jonah Disch Lindvig.»",
     source: "https://www.odd.no/sok/_/attachment/download/d3056c9d-1b57-4adb-ae0d-a6804bfb331b%3Ad12abc9ce82514a608562e07d3b23bf05bfb9f27/260217%20Odd%20%C3%85rsberetning%202025%20W.pdf",
     sourceKind: "club"
+  },
+  {
+    playerId: "brede_froysa",
+    clubId: "rana",
+    strengths: ["work_rate"],
+    claim: "«hardtarbeidende nøkkelspiller for A-laget»",
+    source: "https://www.ranafk.no/barn-og-ungdom/",
+    sourceKind: "club"
   }
 ];
 

@@ -939,7 +939,7 @@ const KJENT_UDOKUMENTERT = {
   // ingenting mer. Ingen av de sju har en redaksjonell kilde som beskriver en
   // enkelt spiller, så ingen profil bærer en ferdighetsclaim.
   sandskogan_stadion: 1.01,     // Stjørdals-Blink
-  sagbakken: 0.97,              // Rana: Dharmesh source-depth senket målt tomandel
+  sagbakken: 0.94,              // Rana: Frøysa pass 3 senket målt tomandel
   nordlandshallen: 0.90,    // Junkeren: Halsøy source-depth senket målt tomandel
   rolvsrud_stadion: 1.01,       // Lørenskog
   myhrer_stadion: 1.01,         // Eidsvold Turn
