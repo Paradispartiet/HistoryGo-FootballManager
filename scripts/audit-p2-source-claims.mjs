@@ -136,8 +136,8 @@ krev(bjargDekning?.medKildebelagtStyrke >= 3,
   `Bjarg source-depth skal være minst 3, fikk ${bjargDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const brattvagDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "brattvag");
-krev(brattvagDekning?.medKildebelagtStyrke >= 2,
-  `Brattvåg source-depth skal være minst 2, fikk ${brattvagDekning?.medKildebelagtStyrke ?? "mangler"}`);
+krev(brattvagDekning?.medKildebelagtStyrke >= 3,
+  `Brattvåg source-depth skal være minst 3, fikk ${brattvagDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const folloDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "follo");
 krev(folloDekning?.medKildebelagtStyrke >= 2,

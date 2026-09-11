@@ -140,6 +140,14 @@ const documented = [
     claim: "«løpt inn over 11 km i snitt per kamp, ofte med siste energi i sluttminuttene»",
     source: "https://www.451.no/bredderykter-rett-fra-brattvag-til-serie-b/",
     sourceKind: "football_editorial"
+  },
+  {
+    playerId: "jorgen_galta",
+    clubId: "brattvag",
+    strengths: ["one_vs_one", "pace"],
+    claim: "«enorme éin-mot-éin-ferdigheiter, fart og offensive kraft»",
+    source: "https://brattvag-il.no/herrelag/herrelaget/fire-nysigneringer",
+    sourceKind: "club"
   }
 ];
 
