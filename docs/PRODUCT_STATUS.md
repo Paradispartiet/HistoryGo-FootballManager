@@ -86,7 +86,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Navaratnams eksplisitt dokumenterte arbeidsinnsats i tillegg til eksisterende
   kildebelagt profil. Sandviken har nå minst to, med Nicholas Marthinussens
   eksplisitt dokumenterte duellstyrke i tillegg til Beltran Mvukas fart.
-  Videre dybdearbeid skal øke belegg, ikke senke noen terskel;
+  Sotra har nå minst to, med Steffen Lie Skåleviks eksplisitt dokumenterte
+  arbeidsinnsats i tillegg til eksisterende kildebelagt profil. Videre
+  dybdearbeid skal øke belegg, ikke senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
