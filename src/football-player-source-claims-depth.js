@@ -196,6 +196,14 @@ const documented = [
     claim: "«hardtarbeidende nøkkelspiller for A-laget»",
     source: "https://www.ranafk.no/barn-og-ungdom/",
     sourceKind: "club"
+  },
+  {
+    playerId: "bendik_august_engen",
+    clubId: "sandviken",
+    strengths: ["pace", "work_rate"],
+    claim: "«Med fart og rykk» og «En ærlig og hardtarbeidende spiller»",
+    source: "https://fanafotball.no/fotballutdanning/seniorfotball/representasjonslag/herrelaget/bendik-august-engen-ny-fana-spiller/",
+    sourceKind: "club"
   }
 ];
 

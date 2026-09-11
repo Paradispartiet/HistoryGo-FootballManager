@@ -91,8 +91,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Sundland Johnsens bevegelse i riktige rom og den eksisterende kildebelagte
   profilen. Rana har nå minst tre, med Brede Frøysas eksplisitt dokumenterte
   arbeidsinnsats i tillegg til Dharmesh Navaratnams arbeidsinnsats og den
-  eksisterende kildebelagte profilen. Sandviken har nå minst to, med Nicholas Marthinussens
-  eksplisitt dokumenterte duellstyrke i tillegg til Beltran Mvukas fart.
+  eksisterende kildebelagte profilen. Sandviken har nå minst tre, med Bendik August
+  Engens eksplisitt dokumenterte fart og arbeidsinnsats i tillegg til Nicholas
+  Marthinussens duellstyrke og Beltran Mvukas fart.
   Sotra har nå minst to, med Steffen Lie Skåleviks eksplisitt dokumenterte
   arbeidsinnsats i tillegg til eksisterende kildebelagt profil. Trygg/Lade har
   nå minst to, med Ola Elvedahls eksplisitt dokumenterte løpskapasitet i
