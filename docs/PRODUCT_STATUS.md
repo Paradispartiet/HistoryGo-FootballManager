@@ -77,7 +77,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   dokumenterte løpskapasitet. Brattvåg
   har nå minst tre, med Tobias Flems eksplisitt dokumenterte fart og Jørgen
   Galtas dokumenterte én-mot-én-ferdigheter og fart i tillegg til Ulrik
-  Valderhaug Syversens lederrolle. Follo har nå minst to, med Albert
+  Valderhaug Syversens lederrolle. Eik Tønsberg har nå minst tre, med Joachim
+  Lundhagebakkens eksplisitt dokumenterte styrke og fart i tillegg til de to
+  eksisterende kildebelagte profilene. Follo har nå minst to, med Albert
   Braut Tjålands eksplisitt dokumenterte styrke i tillegg til eksisterende
   kildebelagt profil. Junkeren har nå minst to, med Sidad Choolys eksplisitt
   dokumenterte dødballutførelse i tillegg til Ivar Unhjem. Kvik Halden har nå
