@@ -58,6 +58,16 @@ test("preseason følger onboarding og kan ikke konsumere Club Week", async ({ pa
   expect(after.program?.applied).toBe(false);
 });
 
+test("ingen etterkampknapp eier en skjult flerfase-løkke", async ({ page }) => {
+  await page.goto("/");
+  const source = await page.evaluate(() => fetch("/src/app.js").then((response) => response.text()));
+  const reportStart = source.indexOf("nextWeekButton.addEventListener");
+  const reportEnd = source.indexOf("card.append(nextWeekButton)", reportStart);
+  const reportHandler = source.slice(reportStart, reportEnd);
+  expect(reportHandler).toContain('openManagerMatchdayTarget("next_week")');
+  expect(reportHandler).not.toMatch(/for\s*\(let\s+i\s*=\s*0;\s*i\s*<=?\s*CLUB_WEEK_PHASE_IDS\.length/);
+});
+
 test("treningssynk kan ikke hoppe over Analyse og Innboks", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.addInitScript(() => {
