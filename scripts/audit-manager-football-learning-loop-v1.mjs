@@ -33,7 +33,7 @@ const checks = [
   ["treningsdommen sammenlignes med hele faktorlisten", ui.includes("signals.slice(0, 2).forEach") && browser.includes("alle viste taktiske faktorer")],
   ["treningssløyfen bruker motorens fasit uten å overtolke", ui.includes("Etter kamp · motorens fasit") && ui.includes("ikke bevis på at én øvelse alene feilet")],
   ["etterkamp skiller intensjon bevis dom og usikkerhet", ["Intensjonen", "Kampens bevis", "Kampmotorens treningsdom", "Det som fortsatt er usikkert"].every((text) => ui.includes(text))],
-  ["problem sendes videre eksplisitt uten autovalg", app.includes('target === "carry_training_problem"') && app.includes("trainingProblemSuggestion") && browser.includes("uten automatisk valg")],
+  ["problem sendes videre eksplisitt gjennom ny manageruke uten autovalg", app.includes('target === "carry_training_problem_next_week"') && app.includes("trainingProblemSuggestion") && browser.includes("neste manageruke") && browser.includes("uten autovalg")],
   ["observasjonsøyeblikk bruker faktisk grep og motorens signal", app.includes("matchday-training-observation") && app.includes("resolution.trainingImpact") && app.includes("resolution.feedback")],
   ["systemet viser kompromiss", ui.includes("Kompromiss:") && ui.includes("createSystemLearningLesson")],
   ["etterkamp bruker faktiske taktiske li-signaler", ui.includes("tacticalSignals") && ui.includes("querySelectorAll(\"li\")")],
