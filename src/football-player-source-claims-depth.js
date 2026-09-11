@@ -110,12 +110,12 @@ const documented = [
     sourceKind: "club"
   },
   {
-    playerId: "kristoffer_flo_morkved",
+    playerId: "ola_johannes_elvedahl",
     clubId: "trygg_lade",
-    strengths: ["technique"],
-    claim: "«Kristoffer er en teknisk god spiller som kan bekle flere offensive roller i laget.»",
-    source: "https://strindheimtoppfotball.no/a-lag-herrer/ny-signering-kristoffer-flo-morkved",
-    sourceKind: "club"
+    strengths: ["stamina"],
+    claim: "«Voldsom løpskapasitet, og nesten umulig å gå forbi en mot en.»",
+    source: "https://www.dagbladet.no/tema/karing-arets-lag-i-3-divisjon/84048919",
+    sourceKind: "press"
   }
 ];
 
