@@ -75,8 +75,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Bjarg har nå minst tre kildebelagte styrkeprofiler: Pesen, Axel Ahlanders
   dokumenterte spilleforståelse og beslutninger, og Jacob Jørgensens
   dokumenterte løpskapasitet. Brattvåg
-  har også minst to, med Tobias Flems eksplisitt dokumenterte fart i tillegg
-  til Ulrik Valderhaug Syversens lederrolle. Follo har nå minst to, med Albert
+  har nå minst tre, med Tobias Flems eksplisitt dokumenterte fart og Jørgen
+  Galtas dokumenterte én-mot-én-ferdigheter og fart i tillegg til Ulrik
+  Valderhaug Syversens lederrolle. Follo har nå minst to, med Albert
   Braut Tjålands eksplisitt dokumenterte styrke i tillegg til eksisterende
   kildebelagt profil. Junkeren har nå minst to, med Sidad Choolys eksplisitt
   dokumenterte dødballutførelse i tillegg til Ivar Unhjem. Kvik Halden har nå
