@@ -21,6 +21,11 @@ test("preseason følger onboarding og kan ikke konsumere Club Week", async ({ pa
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
   await expect(page.locator("#managerStaffRosterV1")).toBeVisible();
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "false");
+  await expect(page.locator("#availableStaffList")).toBeVisible();
+  await expect(page.locator("#availableStaffList")).toContainText("Jonathan Hartmann");
+  await expect(page.locator("#availableStaffList")).toContainText("Alexander Tettey");
+  await expect(page.locator("#availableStaffList")).toContainText("Alexander Lund Hansen");
+  await expect(page.locator("#availableStaffList")).not.toContainText("Prototypeprofil");
 
   const before = await page.evaluate(() => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
