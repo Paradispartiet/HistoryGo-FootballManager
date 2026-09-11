@@ -121,6 +121,10 @@ test("fredagens kalenderhendelse eier kampforberedelsen", async ({ page }) => {
   await expect(page.locator("#matchPrepBackCalendar")).toContainText("Fredag");
   await expect(page.locator("#matchPrepEvent")).toHaveText("Kampforberedelse");
   await expect(page.locator("#matchPrepOpponent")).toContainText("Viking");
+  await expect(page.locator("#matchPrepLineup")).toContainText("11/11");
+  await expect(page.locator("#matchPrepBench")).toContainText("4/4");
+  await expect(page.locator("#matchPrepFormation")).not.toHaveText("Formasjon ikke valgt");
+  await expect(page.locator("#matchPrepTactic")).not.toHaveText("Kampplan ikke valgt");
   await expect(page.locator("#managerLocationText")).toHaveText("Lag · Oppstilling · Fredag");
 });
 
