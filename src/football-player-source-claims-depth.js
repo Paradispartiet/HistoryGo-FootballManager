@@ -108,6 +108,14 @@ const documented = [
     claim: "«Den hardtarbeidende midtspissen»",
     source: "https://historie.brann.no/spillere/steffen-lie-skaalevik/",
     sourceKind: "club"
+  },
+  {
+    playerId: "ola_johannes_elvedahl",
+    clubId: "trygg_lade",
+    strengths: ["stamina"],
+    claim: "«Voldsom løpskapasitet, og nesten umulig å gå forbi en mot en.»",
+    source: "https://www.dagbladet.no/tema/karing-arets-lag-i-3-divisjon/84048919",
+    sourceKind: "press"
   }
 ];
 

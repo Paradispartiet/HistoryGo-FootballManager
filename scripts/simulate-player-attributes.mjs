@@ -29,6 +29,7 @@ import {
 } from "../src/football-player-attributes.js";
 import { calculatePlayerMatchFit, calculateClassBonus, CLASS_BONUS_MAX } from "../src/football-fit-engine.js";
 import { applyP1SourceClaims, P1_HERITAGES } from "../src/football-player-source-claims-p1.js";
+import { applySourceDepthClaims } from "../src/football-player-source-claims-depth.js";
 
 // `Math.min(...liste)` sprer hele lista som ARGUMENTER, og argumentlista har en
 // grense — målt ~125 000 i denne noden. Katalogen har 2053 spillere × 58
@@ -50,17 +51,20 @@ const check = (label, ok, detail = "") => {
 };
 
 const catalogue = normalizeAttributeCatalogue(read("data/football_attributes.json"));
-// ÉN populasjon. `strengths` bor to steder i dag — direkte i players.json for
-// arvene som ble kildepasset før overlayet fantes, og i P1-overlayet for de
-// øvrige — og motoren leser alltid den SAMMENSATTE profilen. Leste dette
-// skriptet råfila, målte vakten en annen katalog enn spillet bruker: tolv arver
-// ga to forskjellige tall, og taket for en overlay-arv stod på 1,01 fordi
-// måleren var blind for laget claimene faktisk lå i.
+// ÉN populasjon. `strengths` bor i flere canonical lag: direkte i players.json
+// for eldre kildepass, i P1-overlayet og nå også i source-depth for eksplisitte
+// individuelle etterlesninger. Source-depth-postene er permanent auditert til
+// profiler uten P1/P2-eierskap og fyller bare tomme styrkelister, så det kan
+// legges over den eksisterende P1-populasjonen uten å endre presedens.
 //
-// Derfor leses den effektive profilen her også. Da betyr ett tall én ting,
-// uansett hvilket lag en arv ble passet i.
+// Leste dette skriptet bare råfila/P1, målte ratchet-vakten en annen katalog
+// enn source-depth-auditen. Det ble synlig da små source-depth-arver fikk
+// strammere dokumenterte caper uten at simulasjonen selv så claimene.
+//
+// Derfor leses source-depth inn i den effektive profilen her også. Da måler
+// attributtratchet-en de samme source-depth-påstandene den er ment å vokte.
 const rawPlayers = read("data/football_players.json").players;
-const players = applyP1SourceClaims(rawPlayers);
+const players = applySourceDepthClaims(applyP1SourceClaims(rawPlayers));
 const roles = read("data/football_roles.json").roles;
 const tactics = read("data/football_tactics.json").tactics;
 for (const role of roles) role.requiredSkills = splitRoleRequirements(catalogue, role).skills;
@@ -940,7 +944,7 @@ const KJENT_UDOKUMENTERT = {
   rolvsrud_stadion: 1.01,       // Lørenskog
   myhrer_stadion: 1.01,         // Eidsvold Turn
   ski_stadion: 0.98,            // Follo: Tjåland source-depth senket målt tomandel
-  lade_idrettsanlegg: 1.01,     // Trygg/Lade
+  lade_idrettsanlegg: 0.97,     // Trygg/Lade: Elvedahl source-depth senket målt tomandel
   // Tromsdalen kom inn med Wikipedia-dybdepasset og ikke med registeret:
   // 56 navn med posisjon fra artiklenes infobokser, og null styrker. En
   // infoboks er en KARRIERETABELL — år, klubb, kamper — og beskriver ikke
