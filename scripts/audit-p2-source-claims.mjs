@@ -139,6 +139,10 @@ const brattvagDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "
 krev(brattvagDekning?.medKildebelagtStyrke >= 2,
   `Brattvåg source-depth skal være minst 2, fikk ${brattvagDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const folloDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "follo");
+krev(folloDekning?.medKildebelagtStyrke >= 2,
+  `Follo source-depth skal være minst 2, fikk ${folloDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
