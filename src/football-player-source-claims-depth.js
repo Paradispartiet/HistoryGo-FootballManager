@@ -60,6 +60,14 @@ const documented = [
     claim: "«målfarlig, stor og sterk»",
     source: "https://www.aftenposten.no/sport/fotball/i/qLaXXO/dette-stortalentet-er-erling-haalands-fetter-naa-kan-han-bli-molde-spiller",
     sourceKind: "press"
+  },
+  {
+    playerId: "sidad_najah_chooly",
+    clubId: "junkeren",
+    strengths: ["set_pieces"],
+    claim: "«setter innsiden av venstrebeinet til! Ballen skrus eksemplarisk over muren»",
+    source: "https://vglive.vg.no/fotball/junkeren-bod%C3%B8-glimt/692798/rapport",
+    sourceKind: "press"
   }
 ];
 
