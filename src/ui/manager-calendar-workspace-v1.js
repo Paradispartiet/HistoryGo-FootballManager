@@ -212,6 +212,18 @@ function revealDeepTarget(focusId) {
 
 function activateTarget(target, focusId = "") {
   if (!target) return;
+
+  if (target === "club_analysis") {
+    document.querySelector('.main-nav .nav-tab[data-tab-target="dashboard"]')?.click();
+    queueMicrotask(() => {
+      document.querySelector('.app-subtab[data-tab-target="board"]')?.click();
+      queueMicrotask(() => {
+        document.querySelector('[data-club-room="analysis"]')?.click();
+        revealDeepTarget(focusId);
+      });
+    });
+    return;
+  }
   const subtab = document.querySelector(`.app-subtab[data-tab-target="${target}"]:not(.office-subnav-proxy)`);
   if (subtab) {
     subtab.click();
