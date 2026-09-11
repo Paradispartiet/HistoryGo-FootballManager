@@ -132,6 +132,14 @@ const documented = [
     claim: "«en sterk arbeidsinnsats» og «en målscorer med stort reportoar og avslutninger»",
     source: "https://www.fkh.no/nyheter/heder-og-aere-i-akademiet",
     sourceKind: "club"
+  },
+  {
+    playerId: "jacob_jorgensen",
+    clubId: "bjarg",
+    strengths: ["stamina"],
+    claim: "«løpt inn over 11 km i snitt per kamp, ofte med siste energi i sluttminuttene»",
+    source: "https://www.451.no/bredderykter-rett-fra-brattvag-til-serie-b/",
+    sourceKind: "football_editorial"
   }
 ];
 

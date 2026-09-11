@@ -132,8 +132,8 @@ assert.deepEqual(
 );
 
 const bjargDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "bjarg");
-krev(bjargDekning?.medKildebelagtStyrke >= 2,
-  `Bjarg source-depth skal være minst 2, fikk ${bjargDekning?.medKildebelagtStyrke ?? "mangler"}`);
+krev(bjargDekning?.medKildebelagtStyrke >= 3,
+  `Bjarg source-depth skal være minst 3, fikk ${bjargDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const brattvagDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "brattvag");
 krev(brattvagDekning?.medKildebelagtStyrke >= 2,
