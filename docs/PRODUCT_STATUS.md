@@ -72,8 +72,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   beskrivelse av egen fart og Vidar via Simen Haughoms eksplisitte beskrivelse
   som hardtarbeidende skarpskytter. Ingen av de 60 klubbene står nå på null
   kildebelagte styrkeprofiler. Første videre dybdepass er også materialisert:
-  Bjarg har nå minst to kildebelagte styrkeprofiler, med Axel Ahlanders
-  dokumenterte spilleforståelse og beslutninger i tillegg til Pesen. Brattvåg
+  Bjarg har nå minst tre kildebelagte styrkeprofiler: Pesen, Axel Ahlanders
+  dokumenterte spilleforståelse og beslutninger, og Jacob Jørgensens
+  dokumenterte løpskapasitet. Brattvåg
   har også minst to, med Tobias Flems eksplisitt dokumenterte fart i tillegg
   til Ulrik Valderhaug Syversens lederrolle. Follo har nå minst to, med Albert
   Braut Tjålands eksplisitt dokumenterte styrke i tillegg til eksisterende
