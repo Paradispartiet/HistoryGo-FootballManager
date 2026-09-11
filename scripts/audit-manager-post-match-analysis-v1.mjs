@@ -58,7 +58,7 @@ check("egen etterkamp-CSS finnes", files.style.includes("Manager Post-match Anal
 check("CSS dekker mobil", files.style.includes("@media (max-width: 640px)"));
 check("CSS lastes som separat presentasjonsressurs", files.postMatch.includes("manager-post-match-analysis-v1.css"));
 check("browsertest dekker struktur", files.browser.includes("managergrep, spillerbidrag og konsekvenser"));
-check("browsertest dekker eksplisitt videreføring og analyse", files.browser.includes('[data-matchday-target="carry_training_problem"]') && files.browser.includes('[data-matchday-target="analyse"]'));
+check("browsertest dekker eksplisitt videreføring og analyse", files.browser.includes('[data-matchday-target="carry_training_problem_next_week"]') && files.browser.includes('[data-matchday-target="analyse"]'));
 check("browsertest dekker mobil overflow", files.browser.includes("scrollWidth") && files.browser.includes("clientWidth"));
 check("browsertest dekker WCAG", files.browser.includes("AxeBuilder") && files.browser.includes("wcag2aa"));
 check("browsertest har visuell baseline", files.browser.includes('toHaveScreenshot("post-match-analysis-768.png"'));
