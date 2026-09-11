@@ -904,7 +904,7 @@ const KJENT_UDOKUMENTERT = {
   // posisjonslag, men ingen individuelle ferdighetsclaims. 58/58 nye eksklusive
   // profiler er derfor THIN-SOURCE på ferdighetsaksen. 1,01 er en eksplisitt
   // registrering av 100 % tomme styrkelister, ikke tillatelse til modellering.
-  pors_stadion: 1.01,
+  pors_stadion: 0.99, // Pors: Oskar source-depth senket målt tomandel
   // Brattvåg P2, samme form og samme grunn. Kilden er to lister: 63 navn med
   // kampantall og 18 med posisjon. Et kampantall er individuelt og dokumentert,
   // men det er ikke en ferdighet — det er tilgjengelighet, og det eneste det
