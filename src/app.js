@@ -5052,6 +5052,10 @@ function isLeagueSeasonActive() {
     state.leagueSeason?.status === "active";
 }
 
+function isLeaguePreseason() {
+  return isLeagueModeActive() && !isLeagueSeasonActive();
+}
+
 function getLeagueStatusLabel(status = state.gameStartState?.leagueSeasonStatus, season = state.leagueSeason) {
   if (status === "completed" || season?.status === "completed") return "Fullført sesong";
   if (status === "active" && season?.status === "active") return "Aktiv sesong";
@@ -5134,6 +5138,19 @@ function activateLeagueOnboardingTarget(step) {
 }
 
 function activateRecommendedLeagueTab(teamFit = null) {
+  // Før seriestart er onboarding-rekkefølgen autoritativ. Den gamle snarveien
+  // så bare på spiller-/lag-/treningsstate og kunne derfor sende en ny manager
+  // rett til Trening mens seks påkrevde stabsroller fortsatt manglet.
+  if (isLeaguePreseason()) {
+    const nextStep = getLeagueOnboardingSteps(teamFit).find((step) => !step.done) || null;
+    if (nextStep && nextStep.id !== "sesong") {
+      activateLeagueOnboardingTarget(nextStep);
+      return;
+    }
+    activateTab("dashboard");
+    return;
+  }
+
   const rosterReadiness = getAvailability().rosterReadiness;
   if (!rosterReadiness.hasEnoughUnlocked) {
     activateTab("historygo");
@@ -6913,8 +6930,11 @@ function selectWeeklyTrainingFocus(focusId) {
   }
 
   renderApp();
-  // Valgt trening nudger uka til Kampplan-fasen (gate-sikkert).
-  syncClubWeekPhaseToProgress().catch(console.error);
+  // Preseason-valg er onboarding-state og får aldri konsumere Club Week.
+  // I aktiv sesong kan synken bare fullføre den fasen manageren faktisk står i.
+  if (!isLeaguePreseason()) {
+    syncClubWeekPhaseToProgress().catch(console.error);
+  }
 }
 
 function syncWeeklyTrainingFocusToClubWeek() {
@@ -6986,12 +7006,13 @@ function selectWeeklyTrainingProgram(program) {
     return;
   }
 
+  const leaguePreseason = isLeaguePreseason();
   state.weeklyTrainingProgram = { programId: program.id, week, applied: false };
 
-  // Treningsprogrammet beveger konteksten utenfor banen (slitasje, klarhet,
-  // samhold). Effekten anvendes kun én gang per uke; senere bytter samme uke
-  // bare oppdaterer hvilket program som er valgt uten å stable opp belastning.
-  if (state.teamMerits) {
+  // I aktiv manageruke får programmet sin off-pitch-effekt som før. I preseason
+  // er valget bare en før-sesongplan: det skal kunne endres, ikke markeres som
+  // «brukt denne uka», og ikke skrive ukeeffekter før den faktiske treningsfasen.
+  if (!leaguePreseason && state.teamMerits) {
     state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
     state.weeklyTrainingProgram.applied = true;
     saveTeamMerits();
@@ -6999,8 +7020,25 @@ function selectWeeklyTrainingProgram(program) {
   saveWeeklyTrainingProgram();
 
   renderApp();
-  // Valgt treningsprogram nudger uka til Kampplan-fasen (gate-sikkert).
-  syncClubWeekPhaseToProgress().catch(console.error);
+  // Et programvalg alene skal aldri hoppe over Analyse/Innboks/Trening. Når
+  // både ramme og fokus er valgt i riktig treningsfase kan progresjonen synkes.
+  if (!leaguePreseason) {
+    syncClubWeekPhaseToProgress().catch(console.error);
+  }
+}
+
+function applyPendingWeeklyTrainingProgramIfNeeded() {
+  const selected = state.weeklyTrainingProgram;
+  if (!selected?.programId || selected.applied || !state.teamMerits) return false;
+  const program = (Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [])
+    .find((item) => item?.id === selected.programId);
+  if (!program) return false;
+
+  state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
+  state.weeklyTrainingProgram = { ...selected, applied: true };
+  saveTeamMerits();
+  saveWeeklyTrainingProgram();
+  return true;
 }
 
 // Gyldige fase-ID-er i den nye 6-fase-rytmen. Brukes til sanering av lagret
@@ -7156,32 +7194,31 @@ function getClubWeekMatchdayGate() {
 function clubWeekPhaseTargetFromProgress() {
   const week = Number(state.clubWeekState?.week) || 1;
   if (state.matchday?.lastMatch?.playedInClubWeek === week) return "review";
-  if (state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId) return "match_prep";
+  // Program + fokus er de to operative lagvalgene i treningsscenen. Ett av dem
+  // alene kan være nok til match-readiness, men det skal ikke automatisk lukke
+  // treningsfasen mens scenen fortsatt peker på det andre som neste steg.
+  if (state.weeklyTrainingProgram?.programId && state.weeklyTrainingFocus?.focusId) return "match_prep";
   return null;
 }
 
-// Rull klubbukens fase FRAMOVER til den fasen spillerens handlinger tilsier, via
-// den eksisterende fasemotoren (advanceClubWeekPhaseAction). Gate-sikker
-// (kampdag→oppsummering krever spilt kamp, som nettopp er oppfylt når
-// target=review), går aldri bakover, ruller aldri over til ny uke (stopper på
-// review), og er idempotent når fasen alt er på/forbi målet. Orkestrering, ikke
-// en ny motor — samme transitions/konsekvenser som «Neste fase»-knappen.
+// Synk bare ÉN canonical fase når handlingen faktisk hører til current phase.
+// Den gamle løkka kunne la et treningsvalg fra mandag konsumere Analyse,
+// Innboks og Trening i ett klikk. Det gjorde Kalenderen til pynt og kunne påføre
+// konsekvenser for arbeid manageren aldri fikk sjansen til å gjøre.
 async function syncClubWeekPhaseToProgress() {
   if (!state.clubWeekState) return;
   const target = clubWeekPhaseTargetFromProgress();
   if (!target) return;
-  const targetIdx = CLUB_WEEK_PHASE_IDS.indexOf(target);
-  if (targetIdx < 0) return;
 
-  for (let i = 0; i < CLUB_WEEK_PHASE_IDS.length; i++) {
-    const before = state.clubWeekState;
-    const currentIdx = CLUB_WEEK_PHASE_IDS.indexOf(before?.phase);
-    if (currentIdx < 0 || currentIdx >= targetIdx) break;
-    if (getClubWeekMatchdayGate().isBlocked) break;
-    await advanceClubWeekPhaseAction();
-    // Stopp hvis fasen ikke beveget seg eller uka rullet over (sikkerhetsnett).
-    if (state.clubWeekState === before || state.clubWeekState?.week !== before.week) break;
-  }
+  const allowedCurrentPhase = target === "match_prep"
+    ? "training"
+    : target === "review"
+      ? "matchday"
+      : null;
+
+  if (!allowedCurrentPhase || state.clubWeekState.phase !== allowedCurrentPhase) return;
+  if (getClubWeekMatchdayGate().isBlocked) return;
+  await advanceClubWeekPhaseAction();
 }
 
 // Kort norsk effekt-fras per treningsfokus: hva treningen faktisk gjorde med
@@ -16758,6 +16795,14 @@ async function advanceClubWeekPhaseAction() {
   }
 
   const previous = state.clubWeekState;
+
+  // Et program valgt i preseason er bare en plan fram til manageren faktisk
+  // fullfører treningsfasen. Da anvendes off-pitch-effekten én gang og statusen
+  // går fra «valgt» til «brukt denne uka».
+  if (previous.phase === "training") {
+    applyPendingWeeklyTrainingProgramIfNeeded();
+  }
+
   let next = await advanceClubWeekPhaseFromBrowser(previous);
   if (next.week !== previous.week) {
     if (!state.firstTimePlaythrough?.completed && state.matchday?.lastMatch && !hasUnseenMatchReport()) {
