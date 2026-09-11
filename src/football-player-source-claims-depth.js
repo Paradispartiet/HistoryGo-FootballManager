@@ -68,6 +68,14 @@ const documented = [
     claim: "«setter innsiden av venstrebeinet til! Ballen skrus eksemplarisk over muren»",
     source: "https://vglive.vg.no/fotball/junkeren-bod%C3%B8-glimt/692798/rapport",
     sourceKind: "press"
+  },
+  {
+    playerId: "dardan_saeter_mehmeti",
+    clubId: "kvik_halden",
+    strengths: ["leadership"],
+    claim: "«kontinuitet, profesjonalitet og lederskap»",
+    source: "https://www.kvikhalden.no/news-article/1B94C429DDE44F6CB35A08083B271B8A",
+    sourceKind: "club"
   }
 ];
 
