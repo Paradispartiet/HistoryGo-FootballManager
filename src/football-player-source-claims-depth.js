@@ -204,6 +204,14 @@ const documented = [
     claim: "«Med fart og rykk» og «En ærlig og hardtarbeidende spiller»",
     source: "https://fanafotball.no/fotballutdanning/seniorfotball/representasjonslag/herrelaget/bendik-august-engen-ny-fana-spiller/",
     sourceKind: "club"
+  },
+  {
+    playerId: "morten_grasmo",
+    clubId: "sotra",
+    strengths: ["shot_stopping"],
+    claim: "«en fantastisk redning av Sotras keeper hindret scoring»",
+    source: "https://www.brann.no/nyheter/sloste-med-sjansene-mot-sotra",
+    sourceKind: "club"
   }
 ];
 

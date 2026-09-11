@@ -94,8 +94,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   eksisterende kildebelagte profilen. Sandviken har nå minst tre, med Bendik August
   Engens eksplisitt dokumenterte fart og arbeidsinnsats i tillegg til Nicholas
   Marthinussens duellstyrke og Beltran Mvukas fart.
-  Sotra har nå minst to, med Steffen Lie Skåleviks eksplisitt dokumenterte
-  arbeidsinnsats i tillegg til eksisterende kildebelagt profil. Trygg/Lade har
+  Sotra har nå minst tre, med Morten Grasmos konkret dokumenterte skuddredning i
+  tillegg til Steffen Lie Skåleviks arbeidsinnsats og den eksisterende
+  kildebelagte profilen. Trygg/Lade har
   nå minst to, med Ola Elvedahls eksplisitt dokumenterte løpskapasitet i
   tillegg til eksisterende kildebelagt profil. Træff har nå minst to, med
   Nikolai Eide Ohrs eksplisitt dokumenterte løpskraft og arbeidsinnsats i
