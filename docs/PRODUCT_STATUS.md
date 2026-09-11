@@ -88,7 +88,7 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   eksplisitt dokumenterte duellstyrke i tillegg til Beltran Mvukas fart.
   Sotra har nå minst to, med Steffen Lie Skåleviks eksplisitt dokumenterte
   arbeidsinnsats i tillegg til eksisterende kildebelagt profil. Trygg/Lade har
-  nå minst to, med Kristoffer Flo Mørkveds eksplisitt dokumenterte teknikk i
+  nå minst to, med Ola Elvedahls eksplisitt dokumenterte løpskapasitet i
   tillegg til eksisterende kildebelagt profil. Videre dybdearbeid skal øke
   belegg, ikke senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
