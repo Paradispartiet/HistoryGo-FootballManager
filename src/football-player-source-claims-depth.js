@@ -180,6 +180,14 @@ const documented = [
     claim: "«på grunn av en vanvittig corner- fot fra Øystein Lundblad Næsheim»",
     source: "https://www.sprintjeloy.no/2019/05/14/poengdeling-mot-kvik-halden-2/",
     sourceKind: "club"
+  },
+  {
+    playerId: "jonah_disch_lindvig",
+    clubId: "pors",
+    strengths: ["work_rate"],
+    claim: "«Treningsiver: Jonah Disch Lindvig.»",
+    source: "https://www.odd.no/sok/_/attachment/download/d3056c9d-1b57-4adb-ae0d-a6804bfb331b%3Ad12abc9ce82514a608562e07d3b23bf05bfb9f27/260217%20Odd%20%C3%85rsberetning%202025%20W.pdf",
+    sourceKind: "club"
   }
 ];
 
