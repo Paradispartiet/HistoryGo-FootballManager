@@ -11240,18 +11240,9 @@ function renderMatchdayReport(container, lastMatch) {
   nextWeekButton.className = "matchday-next-week-button";
   nextWeekButton.textContent = "Til managerkontoret";
   nextWeekButton.addEventListener("click", async () => {
-    markMatchReportSeen();
-    // Kampen er spilt og rapporten lest: rull ukas gjenværende faser helt til
-    // ny uke, uansett hvilken fase kampen ble spilt i. Kampdag-porten er åpen
-    // (kampen finnes), så løkka terminerer alltid; grensen er et sikkerhetsnett.
-    const currentWeek = state.clubWeekState?.week;
-    for (let i = 0; i <= CLUB_WEEK_PHASE_IDS.length; i++) {
-      if (state.clubWeekState?.week !== currentWeek) break;
-      if (getClubWeekMatchdayGate().isBlocked) break;
-      await advanceClubWeekPhaseAction();
-    }
-    activateTab("dashboard");
-    renderApp();
+    // Samme canonicale review → ny uke / analysis-sti som den nye
+    // etterkampflaten. Ingen skjult flerfase-løkke får eie progresjon her.
+    await openManagerMatchdayTarget("next_week");
   });
   card.append(nextWeekButton);
 
