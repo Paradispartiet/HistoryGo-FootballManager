@@ -151,6 +151,10 @@ const kvikHaldenDekning = styrkedekningPerKlubb.find((entry) => entry.clubId ===
 krev(kvikHaldenDekning?.medKildebelagtStyrke >= 2,
   `Kvik Halden source-depth skal være minst 2, fikk ${kvikHaldenDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const porsDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "pors");
+krev(porsDekning?.medKildebelagtStyrke >= 2,
+  `Pors source-depth skal være minst 2, fikk ${porsDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
