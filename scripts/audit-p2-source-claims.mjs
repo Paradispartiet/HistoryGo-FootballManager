@@ -131,6 +131,10 @@ assert.deepEqual(
   `nullklubb-ratchet driftet: ${nullKlubber.map((entry) => entry.clubId).join(", ")}`
 );
 
+const bjargDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "bjarg");
+krev(bjargDekning?.medKildebelagtStyrke >= 2,
+  `Bjarg source-depth skal være minst 2, fikk ${bjargDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
