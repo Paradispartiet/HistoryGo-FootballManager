@@ -943,7 +943,7 @@ const KJENT_UDOKUMENTERT = {
   nordlandshallen: 0.94,    // Junkeren: Sidad source-depth senket målt tomandel
   rolvsrud_stadion: 1.01,       // Lørenskog
   myhrer_stadion: 1.01,         // Eidsvold Turn
-  ski_stadion: 0.98,            // Follo: Tjåland source-depth senket målt tomandel
+  ski_stadion: 0.95,            // Follo: Vik pass 3 senket målt tomandel
   lade_idrettsanlegg: 0.97,     // Trygg/Lade: Elvedahl source-depth senket målt tomandel
   // Tromsdalen kom inn med Wikipedia-dybdepasset og ikke med registeret:
   // 56 navn med posisjon fra artiklenes infobokser, og null styrker. En
