@@ -39,12 +39,15 @@ test("preseason følger onboarding og kan ikke konsumere Club Week", async ({ pa
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
 
-  const programButton = page.locator(".training-program-select:not([disabled])").first();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+  await page.locator("#trainingDayChangeProgram").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  const programButton = page.locator("#managerTeamChoiceDrawerBody .training-program-select:not([disabled])").first();
   await expect(programButton).toBeVisible();
   await programButton.click();
-
-  await expect(page.locator("#weeklyTrainingProgramStatus")).toContainText("valgt");
-  await expect(page.locator("#weeklyTrainingProgramStatus")).not.toContainText("brukt denne uka");
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
+  await expect(page.locator("#trainingDayProgramTitle")).not.toHaveText("Ikke valgt");
 
   const after = await page.evaluate(() => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
@@ -162,6 +165,8 @@ test("ferdig kampforberedelse gjør matchday canonical", async ({ page }) => {
       activeMode: "league",
       sessions: {
         league: {
+          leagueSeason: season,
+          clubWeekState,
           opponentAnalysisPlan: {
             version: "opponent-analysis.v1",
             fixtureId: "flow-r1-0",
