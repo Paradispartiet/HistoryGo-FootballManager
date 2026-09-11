@@ -52,6 +52,14 @@ const documented = [
     claim: "«I tillegg er han hurtig og går gjerne på løp inn i boksen»",
     source: "https://www.miffotball.no/nyheter/tobias-flem-er-mif-spiller",
     sourceKind: "club"
+  },
+  {
+    playerId: "albert_braut_tjaland",
+    clubId: "follo",
+    strengths: ["strength"],
+    claim: "«målfarlig, stor og sterk»",
+    source: "https://www.aftenposten.no/sport/fotball/i/qLaXXO/dette-stortalentet-er-erling-haalands-fetter-naa-kan-han-bli-molde-spiller",
+    sourceKind: "press"
   }
 ];
 
