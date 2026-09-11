@@ -4539,7 +4539,24 @@ function chooseMatchdayDecision(optionId) {
     session.liveMinute = 90;
     state.matchday.session = session;
     // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
+    // Fang terminlistekonteksten FØR completeLeagueRound() flytter serien til
+    // neste runde. Rapporten må aldri blande forrige motstander med neste
+    // fixtures runde/hjemme-borte-metadata.
+    const completedLeagueFixture = isLeagueModeActive() && state.leagueSeason?.status === "active"
+      ? getNextLeagueOpponent(state.leagueSeason)
+      : null;
     state.matchday.lastMatch = finalizeMatchdaySession(session);
+    if (completedLeagueFixture) {
+      state.matchday.lastMatch.leagueContext = {
+        fixtureId: completedLeagueFixture.matchId || completedLeagueFixture.fixtureId || null,
+        round: Number(completedLeagueFixture.round) || null,
+        homeAway: completedLeagueFixture.homeAway || null,
+        opponentId: completedLeagueFixture.id || null,
+        opponentName: completedLeagueFixture.name || session?.opponent?.name || null,
+        ground: completedLeagueFixture.ground || null,
+        competitionLabel: state.leagueSeason?.competition?.tierName || state.leagueSeason?.tier?.name || null
+      };
+    }
     // Kampdag ↔ Club Week: merk resultatet med uka det ble spilt i, slik at
     // kampdagfasen kan kreve en faktisk spilt kamp før uka ruller videre.
     state.matchday.lastMatch.playedInClubWeek = state.clubWeekState?.week ?? null;
@@ -10035,6 +10052,23 @@ function renderMatchdayGate(container, teamFit) {
   const opponent = session?.opponent || lastMatch?.opponent || null;
   const leagueSeason = state.leagueSeason || null;
   const nextOpponent = leagueSeason ? getNextLeagueOpponent(leagueSeason) : null;
+  const completedLeagueContext = !session && lastMatch?.leagueContext && typeof lastMatch.leagueContext === "object"
+    ? lastMatch.leagueContext
+    : null;
+  const sceneRound = completedLeagueContext
+    ? completedLeagueContext.round
+    : lastMatch && !session
+      ? null
+      : nextOpponent?.round;
+  const sceneHomeAway = completedLeagueContext
+    ? completedLeagueContext.homeAway
+    : lastMatch && !session
+      ? null
+      : nextOpponent?.homeAway;
+  const sceneCompetition = completedLeagueContext?.competitionLabel
+    || leagueSeason?.competition?.tierName
+    || leagueSeason?.tier?.name
+    || "";
 
   if (elements.matchdayDepth && elements.matchdayDepth.dataset.initialized !== "true") {
     elements.matchdayDepth.open = false;
@@ -10045,9 +10079,9 @@ function renderMatchdayGate(container, teamFit) {
     teamName: session?.teamName || getTemporaryClubName().name,
     opponentBrief: getMatchdayOpponentBrief(session),
     opponent,
-    competitionLabel: leagueSeason?.competition?.tierName || leagueSeason?.tier?.name || "",
-    roundLabel: nextOpponent?.round ? `Runde ${nextOpponent.round}` : "",
-    venueLabel: nextOpponent?.homeAway === "home" ? "Hjemme" : nextOpponent?.homeAway === "away" ? "Borte" : "",
+    competitionLabel: sceneCompetition,
+    roundLabel: sceneRound ? `Runde ${sceneRound}` : "",
+    venueLabel: sceneHomeAway === "home" ? "Hjemme" : sceneHomeAway === "away" ? "Borte" : "",
     formationName: formation.name,
     tacticName: tactic.name,
     trainingLabel: getWeeklyTrainingChoiceLabel(),
