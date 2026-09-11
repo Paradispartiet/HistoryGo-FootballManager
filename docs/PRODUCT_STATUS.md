@@ -86,9 +86,10 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Sidad Choolys dødballutførelse og Ivar Unhjems fart/avslutning. Kvik Halden
   har nå minst tre, med Øystein Lundblad Næsheims eksplisitt dokumenterte
   corner-/dødballfot i tillegg til Dardan Sæter-Mehmetis lederskap og Fabian
-  Stensrud Ness' eksisterende kildebelagte profil. Pors har nå minst to, med Oskar
-  Sundland Johnsens eksplisitt dokumenterte bevegelse i riktige rom i tillegg
-  til eksisterende kildebelagt profil. Rana har nå minst to, med Dharmesh
+  Stensrud Ness' eksisterende kildebelagte profil. Pors har nå minst tre, med Jonah
+  Disch Lindvigs dokumenterte treningsiver/arbeidsinnsats i tillegg til Oskar
+  Sundland Johnsens bevegelse i riktige rom og den eksisterende kildebelagte
+  profilen. Rana har nå minst to, med Dharmesh
   Navaratnams eksplisitt dokumenterte arbeidsinnsats i tillegg til eksisterende
   kildebelagt profil. Sandviken har nå minst to, med Nicholas Marthinussens
   eksplisitt dokumenterte duellstyrke i tillegg til Beltran Mvukas fart.
