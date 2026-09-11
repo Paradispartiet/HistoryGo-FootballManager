@@ -944,7 +944,7 @@ const KJENT_UDOKUMENTERT = {
   rolvsrud_stadion: 1.01,       // Lørenskog
   myhrer_stadion: 1.01,         // Eidsvold Turn
   ski_stadion: 0.95,            // Follo: Vik pass 3 senket målt tomandel
-  lade_idrettsanlegg: 0.97,     // Trygg/Lade: Elvedahl source-depth senket målt tomandel
+  lade_idrettsanlegg: 0.93,     // Trygg/Lade: Kvithyld pass 3, 23/25 tomme eksklusive profiler
   // Tromsdalen kom inn med Wikipedia-dybdepasset og ikke med registeret:
   // 56 navn med posisjon fra artiklenes infobokser, og null styrker. En
   // infoboks er en KARRIERETABELL — år, klubb, kamper — og beskriver ikke
