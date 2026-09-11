@@ -73,8 +73,10 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   som hardtarbeidende skarpskytter. Ingen av de 60 klubbene står nå på null
   kildebelagte styrkeprofiler. Første videre dybdepass er også materialisert:
   Bjarg har nå minst to kildebelagte styrkeprofiler, med Axel Ahlanders
-  dokumenterte spilleforståelse og beslutninger i tillegg til Pesen. Videre
-  dybdearbeid skal øke belegg, ikke senke noen terskel;
+  dokumenterte spilleforståelse og beslutninger i tillegg til Pesen. Brattvåg
+  har også minst to, med Tobias Flems eksplisitt dokumenterte fart i tillegg
+  til Ulrik Valderhaug Syversens lederrolle. Videre dybdearbeid skal øke
+  belegg, ikke senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;

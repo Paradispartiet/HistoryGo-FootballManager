@@ -135,6 +135,10 @@ const bjargDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "bja
 krev(bjargDekning?.medKildebelagtStyrke >= 2,
   `Bjarg source-depth skal være minst 2, fikk ${bjargDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const brattvagDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "brattvag");
+krev(brattvagDekning?.medKildebelagtStyrke >= 2,
+  `Brattvåg source-depth skal være minst 2, fikk ${brattvagDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
