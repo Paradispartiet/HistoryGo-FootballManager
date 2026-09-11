@@ -153,6 +153,32 @@ test("motstanderbriefens lenke åpner riktig kampforberedelse", async ({ page })
   await expect(page.locator("#teamTacticsSelectedState")).toBeFocused();
 });
 
+
+test("manglende motstanderplan åpner Klubben Analyse direkte", async ({ page }) => {
+  await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    if (envelope.sessions?.league) envelope.sessions.league.opponentAnalysisPlan = null;
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+  });
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await openCalendar(page);
+  await selectDay(page, 5);
+  await page.locator('[data-event-id="club-mail:w8:opponent-plan"]').click();
+  const mail = page.locator(".manager-club-mail");
+  await expect(mail).toContainText("Analyseplan");
+  await expect(mail).toContainText("Mangler");
+
+  const link = mail.locator('.manager-club-mail-links a[href="#club_analysis/managerClubRoomDrawer"]');
+  await expect(link).toContainText("Bygg kampforberedelsen");
+  await link.click();
+
+  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
+  await expect(page.locator(".opponent-analysis-workshop-v1")).toBeVisible();
+  await expect(page.locator(".opponent-analysis-workshop-v1")).toContainText("Viking");
+});
+
 test("å lese én mail flytter ikke fasen eller skjuler andre mailer", async ({ page }) => {
   await openCalendar(page);
   await selectDay(page, 3);
