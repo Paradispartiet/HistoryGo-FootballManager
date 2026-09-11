@@ -82,8 +82,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   minst to, med Dardan Sæter-Mehmetis eksplisitt dokumenterte lederskap i
   tillegg til eksisterende kildebelagt profil. Pors har nå minst to, med Oskar
   Sundland Johnsens eksplisitt dokumenterte bevegelse i riktige rom i tillegg
-  til eksisterende kildebelagt profil. Videre dybdearbeid skal øke belegg, ikke
-  senke noen terskel;
+  til eksisterende kildebelagt profil. Rana har nå minst to, med Dharmesh
+  Navaratnams eksplisitt dokumenterte arbeidsinnsats i tillegg til eksisterende
+  kildebelagt profil. Videre dybdearbeid skal øke belegg, ikke senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
