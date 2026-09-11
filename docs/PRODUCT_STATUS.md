@@ -89,9 +89,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Stensrud Ness' eksisterende kildebelagte profil. Pors har nå minst tre, med Jonah
   Disch Lindvigs dokumenterte treningsiver/arbeidsinnsats i tillegg til Oskar
   Sundland Johnsens bevegelse i riktige rom og den eksisterende kildebelagte
-  profilen. Rana har nå minst to, med Dharmesh
-  Navaratnams eksplisitt dokumenterte arbeidsinnsats i tillegg til eksisterende
-  kildebelagt profil. Sandviken har nå minst to, med Nicholas Marthinussens
+  profilen. Rana har nå minst tre, med Brede Frøysas eksplisitt dokumenterte
+  arbeidsinnsats i tillegg til Dharmesh Navaratnams arbeidsinnsats og den
+  eksisterende kildebelagte profilen. Sandviken har nå minst to, med Nicholas Marthinussens
   eksplisitt dokumenterte duellstyrke i tillegg til Beltran Mvukas fart.
   Sotra har nå minst to, med Steffen Lie Skåleviks eksplisitt dokumenterte
   arbeidsinnsats i tillegg til eksisterende kildebelagt profil. Trygg/Lade har
