@@ -172,6 +172,14 @@ const documented = [
     claim: "«Mads Fagerli Halsøy satt ballen strålende opp i hjørnet.»",
     source: "https://www.fotball.no/landslag/norge-gutter-17/2019/g17-avsluttet-med-seier---en-kanonsterk-turnering/",
     sourceKind: "press"
+  },
+  {
+    playerId: "oystein_lundblad_naesheim",
+    clubId: "kvik_halden",
+    strengths: ["set_pieces"],
+    claim: "«på grunn av en vanvittig corner- fot fra Øystein Lundblad Næsheim»",
+    source: "https://www.sprintjeloy.no/2019/05/14/poengdeling-mot-kvik-halden-2/",
+    sourceKind: "club"
   }
 ];
 
