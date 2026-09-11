@@ -77,7 +77,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   har også minst to, med Tobias Flems eksplisitt dokumenterte fart i tillegg
   til Ulrik Valderhaug Syversens lederrolle. Follo har nå minst to, med Albert
   Braut Tjålands eksplisitt dokumenterte styrke i tillegg til eksisterende
-  kildebelagt profil. Videre dybdearbeid skal øke belegg, ikke senke noen terskel;
+  kildebelagt profil. Junkeren har nå minst to, med Sidad Choolys eksplisitt
+  dokumenterte dødballutførelse i tillegg til Ivar Unhjem. Videre dybdearbeid
+  skal øke belegg, ikke senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
