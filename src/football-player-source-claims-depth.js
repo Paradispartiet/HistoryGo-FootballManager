@@ -84,6 +84,14 @@ const documented = [
     claim: "«flink til å bevege seg mye i de riktige rommene»",
     source: "https://agent1.no/agent1-spar-norges-lag-til-unionsduellen/",
     sourceKind: "football_editorial"
+  },
+  {
+    playerId: "dharmesh_navaratnam",
+    clubId: "rana",
+    strengths: ["work_rate"],
+    claim: "«alltid gir 100%»",
+    source: "https://www.strommen-if.no/nyheter/solberg-og-navaratnam-tar-ferden-videre",
+    sourceKind: "club"
   }
 ];
 
