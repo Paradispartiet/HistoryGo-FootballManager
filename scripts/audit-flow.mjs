@@ -126,9 +126,9 @@ requireHandler("clearLocalStartSquad");
 requireHandler("getStarterSquadPlayerIds");
 requireHandler("activateStarterSquad");
 check(
-  "auto-troppen gir rollekomplette stabskandidater (så «Velg stab» er mulig uten samling)",
+  "auto-troppen gir rollekomplette klubbtilknyttede stabskandidater med trygg fallback",
   app.includes("getStarterSquadStaffCandidates(staff)")
-    && app.includes("selectStarterStaffCandidates(staff)")
+    && app.includes("selectStarterStaffCandidates(staff, clubId)")
 );
 check(
   "ingen geolokasjon eller stedsanker i starttroppen",
