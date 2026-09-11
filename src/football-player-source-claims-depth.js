@@ -156,6 +156,14 @@ const documented = [
     claim: "«en fysisk sterk spiller med god fart»",
     source: "https://elverumfotball.no/nyheter/joachim-21-klar-for-elverum",
     sourceKind: "club"
+  },
+  {
+    playerId: "adam_tamrat_vik",
+    clubId: "follo",
+    strengths: ["shot_stopping"],
+    claim: "«god til å stoppe skudd»",
+    source: "https://www.vartoslo.no/adam-tamrat-vik-bydel-sagene-emil-tjostheim/skeids-nye-keeper-adam-tamrat-vik-19-sikter-mot-manchester-united/270601",
+    sourceKind: "press"
   }
 ];
 
