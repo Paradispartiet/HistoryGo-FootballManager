@@ -152,8 +152,8 @@ krev(junkerenDekning?.medKildebelagtStyrke >= 3,
   `Junkeren source-depth skal være minst 3, fikk ${junkerenDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const kvikHaldenDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "kvik_halden");
-krev(kvikHaldenDekning?.medKildebelagtStyrke >= 2,
-  `Kvik Halden source-depth skal være minst 2, fikk ${kvikHaldenDekning?.medKildebelagtStyrke ?? "mangler"}`);
+krev(kvikHaldenDekning?.medKildebelagtStyrke >= 3,
+  `Kvik Halden source-depth skal være minst 3, fikk ${kvikHaldenDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
 const porsDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "pors");
 krev(porsDekning?.medKildebelagtStyrke >= 2,
