@@ -2036,7 +2036,8 @@ function isStarterSquadActive() {
 // Manageren må fortsatt engasjere dem selv. Ingen stabsdata hardkodes her.
 function getStarterSquadStaffCandidates(staff) {
   if (!isStarterSquadActive()) return [];
-  return selectStarterStaffCandidates(staff);
+  const clubId = state.gameStartState?.takeoverClubId || null;
+  return selectStarterStaffCandidates(staff, clubId);
 }
 
 // Draft-pool: grunnsjiktet av klubbspillere (under NAME_TIER_MIN). De store
@@ -9441,7 +9442,7 @@ function renderAdminRoom() {
       { label: "Spillere i stall", value: roster.unlockedCount, threshold: REQUIRED_SQUAD_SIZE },
       { label: "Startellever satt", value: roster.starterCount, threshold: REQUIRED_STARTERS },
       { label: "Benk", value: roster.benchCount, threshold: REQUIRED_BENCH },
-      { label: "Stab engasjert", value: staffCount, threshold: 1 }
+      { label: "Stab engasjert", value: staffCount, threshold: REQUIRED_STAFF_SIZE }
     ];
     for (const metric of metrics) {
       const value = Number(metric.value);
