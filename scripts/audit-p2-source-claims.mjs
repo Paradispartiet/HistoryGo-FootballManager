@@ -163,6 +163,10 @@ const sandvikenDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === 
 krev(sandvikenDekning?.medKildebelagtStyrke >= 2,
   `Sandviken source-depth skal være minst 2, fikk ${sandvikenDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const sotraDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "sotra");
+krev(sotraDekning?.medKildebelagtStyrke >= 2,
+  `Sotra source-depth skal være minst 2, fikk ${sotraDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,

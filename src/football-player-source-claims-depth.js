@@ -100,6 +100,14 @@ const documented = [
     claim: "«Duellsterk spiller, flink å kommunisere, god med ball.»",
     source: "https://www.brann.no/nyheter/disse-er-pa-varens-b-liste",
     sourceKind: "club"
+  },
+  {
+    playerId: "steffen_lie_skalevik",
+    clubId: "sotra",
+    strengths: ["work_rate"],
+    claim: "«Den hardtarbeidende midtspissen»",
+    source: "https://historie.brann.no/spillere/steffen-lie-skaalevik/",
+    sourceKind: "club"
   }
 ];
 
