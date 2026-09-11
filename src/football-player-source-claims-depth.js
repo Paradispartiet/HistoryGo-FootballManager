@@ -76,6 +76,14 @@ const documented = [
     claim: "«kontinuitet, profesjonalitet og lederskap»",
     source: "https://www.kvikhalden.no/news-article/1B94C429DDE44F6CB35A08083B271B8A",
     sourceKind: "club"
+  },
+  {
+    playerId: "oskar_sundland_johnsen",
+    clubId: "pors",
+    strengths: ["movement"],
+    claim: "«flink til å bevege seg mye i de riktige rommene»",
+    source: "https://agent1.no/agent1-spar-norges-lag-til-unionsduellen/",
+    sourceKind: "football_editorial"
   }
 ];
 
