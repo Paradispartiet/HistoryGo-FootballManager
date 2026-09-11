@@ -37,6 +37,8 @@ const curated = first.messages.filter((message) => message.id.startsWith("club-m
 const legacy = first.messages.find((message) => message.id === "legacy-signal");
 const medical = first.messages.find((message) => message.id.endsWith(":medical"));
 const opponent = first.messages.find((message) => message.id.endsWith(":opponent-plan"));
+const missingPlan = createClubCommunicationTimeline({ ...context, analysisPlan: null });
+const missingOpponent = missingPlan.messages.find((message) => message.id.endsWith(":opponent-plan"));
 
 check("v3-versjon brukes", first.version.endsWith(".v3"));
 check("samme input gir samme mailer", JSON.stringify(first) === JSON.stringify(second));
@@ -50,6 +52,7 @@ check("arbeidslenkene har faktiske mål", curated.every((message) => message.lin
 check("arbeidslenkene er deduplisert", curated.every((message) => new Set(message.links.map((link) => `${link.target}:${link.focusId}`)).size === message.links.length));
 check("medisinsk mail peker presist til synlig individuell oppfølging", medical.links.some((link) => link.focusId === "trainingDayChangeIndividual"));
 check("motstanderbrief peker presist til synlig kampforberedelse", opponent.links.some((link) => link.focusId === "teamTacticsSelectedState"));
+check("manglende motstanderplan peker til analyseverkstedet", missingOpponent.links.some((link) => link.target === "club_analysis"));
 check("eldre signal får samme veiledningsstruktur", Object.values(legacy.guidance).every(Boolean));
 check("veiledning eller lenker flytter ingen fase", context.clubWeekState.phase === "review");
 
