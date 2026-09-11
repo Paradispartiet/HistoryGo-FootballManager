@@ -124,6 +124,14 @@ const documented = [
     claim: "«Med stor løpskraft» og «en lojal, hardtarbeidende back»",
     source: "https://www.strommen-if.no/nyheter/to-nysigneringer-klare",
     sourceKind: "club"
+  },
+  {
+    playerId: "mathias_tjoland",
+    clubId: "vidar",
+    strengths: ["work_rate", "finishing"],
+    claim: "«en sterk arbeidsinnsats» og «en målscorer med stort reportoar og avslutninger»",
+    source: "https://www.fkh.no/nyheter/heder-og-aere-i-akademiet",
+    sourceKind: "club"
   }
 ];
 

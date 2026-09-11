@@ -175,6 +175,21 @@ const traffDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "tra
 krev(traffDekning?.medKildebelagtStyrke >= 2,
   `Træff source-depth skal være minst 2, fikk ${traffDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const vidarDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "vidar");
+krev(vidarDekning?.medKildebelagtStyrke >= 2,
+  `Vidar source-depth skal være minst 2, fikk ${vidarDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
+krev(styrkedekningPerKlubb.length === 60,
+  `source-depth-gulvet skal dekke 60 klubber, fikk ${styrkedekningPerKlubb.length}`);
+const underToKildebelagte = styrkedekningPerKlubb.filter((entry) => entry.medKildebelagtStyrke < 2);
+assert.deepEqual(
+  underToKildebelagte.map((entry) => entry.clubId),
+  [],
+  `60/60-ratcheten driftet: ${underToKildebelagte.map((entry) =>
+    `${entry.clubId}=${entry.medKildebelagtStyrke}`
+  ).join(", ")}`
+);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,
