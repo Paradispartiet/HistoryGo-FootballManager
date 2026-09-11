@@ -91,8 +91,10 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   nå minst to, med Ola Elvedahls eksplisitt dokumenterte løpskapasitet i
   tillegg til eksisterende kildebelagt profil. Træff har nå minst to, med
   Nikolai Eide Ohrs eksplisitt dokumenterte løpskraft og arbeidsinnsats i
-  tillegg til eksisterende kildebelagt profil. Videre dybdearbeid skal øke
-  belegg, ikke senke noen terskel;
+  tillegg til eksisterende kildebelagt profil. Vidar har nå minst to, med
+  Mathias Tjolands eksplisitt dokumenterte arbeidsinnsats og avslutningsevne i
+  tillegg til Simen Haughom. Dermed har alle 60 klubber minst to kildebelagte
+  styrkeprofiler; videre dybdearbeid skal øke belegg, ikke senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;
