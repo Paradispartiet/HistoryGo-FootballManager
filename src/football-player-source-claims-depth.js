@@ -92,6 +92,14 @@ const documented = [
     claim: "«alltid gir 100%»",
     source: "https://www.strommen-if.no/nyheter/solberg-og-navaratnam-tar-ferden-videre",
     sourceKind: "club"
+  },
+  {
+    playerId: "nicholas_marthinussen",
+    clubId: "sandviken",
+    strengths: ["duels"],
+    claim: "«Duellsterk spiller, flink å kommunisere, god med ball.»",
+    source: "https://www.brann.no/nyheter/disse-er-pa-varens-b-liste",
+    sourceKind: "club"
   }
 ];
 
