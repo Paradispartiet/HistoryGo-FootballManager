@@ -81,8 +81,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Lundhagebakkens eksplisitt dokumenterte styrke og fart i tillegg til de to
   eksisterende kildebelagte profilene. Follo har nå minst tre, med Adam Tamrat
   Viks eksplisitt dokumenterte skuddredning i tillegg til Albert Braut Tjålands
-  styrke og den eksisterende kildebelagte profilen. Junkeren har nå minst to, med Sidad Choolys eksplisitt
-  dokumenterte dødballutførelse i tillegg til Ivar Unhjem. Kvik Halden har nå
+  styrke og den eksisterende kildebelagte profilen. Junkeren har nå minst tre,
+  med Mads Fagerli Halsøys eksplisitt dokumenterte avslutning i tillegg til
+  Sidad Choolys dødballutførelse og Ivar Unhjems fart/avslutning. Kvik Halden har nå
   minst to, med Dardan Sæter-Mehmetis eksplisitt dokumenterte lederskap i
   tillegg til eksisterende kildebelagt profil. Pors har nå minst to, med Oskar
   Sundland Johnsens eksplisitt dokumenterte bevegelse i riktige rom i tillegg
