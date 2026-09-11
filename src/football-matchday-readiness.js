@@ -159,7 +159,7 @@ export function evaluateMatchdayReadiness(input = {}) {
     blockers.push(blocker(
       "club_week_blocked",
       input.clubWeekReason || "Klubbuka er ikke kommet til kampdag ennå.",
-      "dashboard",
+      input.clubWeekTarget || "dashboard",
       "Driv klubbuka fram til kampdag før kampen kan startes."
     ));
   }
