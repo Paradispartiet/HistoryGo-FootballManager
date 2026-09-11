@@ -284,7 +284,7 @@ test("etterkamp dikter ikke teorikobling når kampforklaringen mangler taktisk s
   await expect(page.locator(".football-learning-post-match")).toContainText("ikke på en oppdiktet teoriforklaring");
 });
 
-test("etterkampens problemhandling åpner Trening som forslag uten automatisk valg", async ({ page }) => {
+test("etterkampens problemhandling ruller til neste manageruke og bevarer forslaget uten autovalg", async ({ page }) => {
   await page.evaluate(() => {
     const lastMatch = {
       id: "learning-loop-v2-match",
@@ -312,33 +312,58 @@ test("etterkampens problemhandling åpner Trening som forslag uten automatisk va
     };
     const matchday = { lastMatch, session: null, lastSeenMatchId: null };
     localStorage.setItem("hgfm.matchday.v1", JSON.stringify(matchday));
+
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.clubWeekState = {
+      ...(merits.clubWeekState || {}),
+      week: 3,
+      phase: "review",
+      boardTrust: merits.clubWeekState?.boardTrust ?? 58,
+      playerMorale: merits.clubWeekState?.playerMorale ?? 55,
+      tacticalClarity: merits.clubWeekState?.tacticalClarity ?? 54,
+      trainingCulture: merits.clubWeekState?.trainingCulture ?? 56,
+      mediaPressure: merits.clubWeekState?.mediaPressure ?? 43
+    };
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+
     const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
     envelope.sessions[envelope.activeMode].matchday = matchday;
+    envelope.sessions[envelope.activeMode].clubWeekState = merits.clubWeekState;
     localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
   });
   await page.reload();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
   await page.locator('.main-nav [data-tab-target="kamp"]').click();
-  const carry = page.locator('[data-matchday-target="carry_training_problem"]');
+  const carry = page.locator('[data-matchday-target="carry_training_problem_next_week"]');
   await expect(carry).toBeVisible();
+
   const before = await page.evaluate(() => {
     const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
     const session = envelope.sessions[envelope.activeMode];
     return { program: session.weeklyTrainingProgram || null, focus: session.weeklyTrainingFocus || null };
   });
+
   await carry.click();
-  await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
-  await expect(page.locator("#trainingDayProblemSuggestion")).toBeVisible();
-  await expect(page.locator("#trainingDayProblemSuggestion")).toContainText("Overgangsproblemet");
-  await expect(page.locator("#trainingDayProblemSuggestion")).toContainText("ikke program eller fokus automatisk");
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+
+  await expect.poll(async () => page.evaluate(() => {
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    return { week: merits.clubWeekState?.week, phase: merits.clubWeekState?.phase };
+  })).toEqual({ week: 4, phase: "analysis" });
+
   const after = await page.evaluate(() => {
     const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
     const session = envelope.sessions[envelope.activeMode];
     return { program: session.weeklyTrainingProgram || null, focus: session.weeklyTrainingFocus || null, suggestion: session.trainingProblemSuggestion };
   });
-  expect(after.program).toEqual(before.program);
-  expect(after.focus).toEqual(before.focus);
+  expect(after.program).toBeNull();
+  expect(after.focus).toBeNull();
   expect(after.suggestion.archetypeId).toBe("rest_defence");
+
+  await openTraining(page);
+  await expect(page.locator("#trainingDayProblemSuggestion")).toBeVisible();
+  await expect(page.locator("#trainingDayProblemSuggestion")).toContainText("Overgangsproblemet");
+  await expect(page.locator("#trainingDayProblemSuggestion")).toContainText("ikke program eller fokus automatisk");
 });
 
 test("fotballæringen fungerer på mobil uten sideoverflow og alvorlige WCAG-brudd", async ({ page }) => {

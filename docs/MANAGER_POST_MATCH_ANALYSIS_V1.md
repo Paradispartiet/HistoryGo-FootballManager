@@ -50,7 +50,7 @@ Viser de faktiske deltaene som allerede er brukt på styretillit, moral, taktisk
 
 ### Neste handling
 
-Primær handling er `Planlegg neste treningsuke` og bruker eksisterende `trening`-mål. Full teknisk rapport er fortsatt tilgjengelig via `analyse`. Etterkampen har derfor ingen dead end.
+Primær handling er `Start neste manageruke`. Appen lukker først canonical `review`, ruller til `week + 1 / analysis` gjennom eksisterende Club Week-motor og åpner deretter Kalender. Hvis kampen har et eksplisitt treningsproblem, lagres dette som forslag til den nye uka uten å velge program eller fokus automatisk. Full teknisk rapport er fortsatt tilgjengelig via `analyse`.
 
 ## Skade, belastning og suspensjon
 

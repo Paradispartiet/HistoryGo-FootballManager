@@ -63,6 +63,7 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(({ leagueSeason, clubWeekState, matchday, plan }) => {
+    const effectivePlan = sessionStorage.getItem("hgfm.test.missingOpponentPlan") === "1" ? null : plan;
     const teamMerits = {
       unlockedPlaceIds: ["ullevaal_stadion", "bislett_stadion"],
       hiredStaffIds: ["ullevaal_final_pressure_mentor", "bislett_first_team_physio"],
@@ -83,7 +84,7 @@ test.beforeEach(async ({ page }) => {
     localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify({
       version: "mode-sessions.v1",
       activeMode: "league",
-      sessions: { league: { clubWeekState, teamMerits, leagueSeason, matchday: { lastMatch: matchday, session: null }, playerCondition: [{ playerId: "ada", name: "Ada Hegerberg", load: 64, consecutiveFullMatches: 4, injury: null }], weeklyTrainingProgram: { week: 8, programId: "program_rest_defense" }, weeklyTrainingFocus: { week: 8, focusId: "rest_defence" }, opponentAnalysisPlan: plan, readInboxMessageIds: [], deliveredInboxMessageIds: [], selectedInboxChoices: {} }, scenario: null, training: null, national: null }
+      sessions: { league: { clubWeekState, teamMerits, leagueSeason, matchday: { lastMatch: matchday, session: null }, playerCondition: [{ playerId: "ada", name: "Ada Hegerberg", load: 64, consecutiveFullMatches: 4, injury: null }], weeklyTrainingProgram: { week: 8, programId: "program_rest_defense" }, weeklyTrainingFocus: { week: 8, focusId: "rest_defence" }, opponentAnalysisPlan: effectivePlan, readInboxMessageIds: [], deliveredInboxMessageIds: [], selectedInboxChoices: {} }, scenario: null, training: null, national: null }
     }));
   }, { leagueSeason: season(), clubWeekState: weekState, matchday: lastMatch, plan: analysisPlan });
   await page.goto("/");
@@ -151,6 +152,28 @@ test("motstanderbriefens lenke åpner riktig kampforberedelse", async ({ page })
   await link.click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
   await expect(page.locator("#teamTacticsSelectedState")).toBeFocused();
+});
+
+
+test("manglende motstanderplan åpner Klubben Analyse direkte", async ({ page }) => {
+  await page.evaluate(() => sessionStorage.setItem("hgfm.test.missingOpponentPlan", "1"));
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await openCalendar(page);
+  await selectDay(page, 5);
+  await page.locator('[data-event-id="club-mail:w8:opponent-plan"]').click();
+  const mail = page.locator(".manager-club-mail");
+  await expect(mail).toContainText("Analyseplan");
+  await expect(mail).toContainText("Mangler");
+
+  const link = mail.locator('.manager-club-mail-links a[href="#club_analysis/managerClubRoomDrawer"]');
+  await expect(link).toContainText("Bygg kampforberedelsen");
+  await link.click();
+
+  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
+  await expect(page.locator(".opponent-analysis-workshop-v1")).toBeVisible();
+  await expect(page.locator(".opponent-analysis-workshop-v1")).toContainText("Viking");
 });
 
 test("å lese én mail flytter ikke fasen eller skjuler andre mailer", async ({ page }) => {

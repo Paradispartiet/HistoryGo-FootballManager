@@ -59,6 +59,14 @@ Disse skal ikke gjeninnføres som «neste naturlige steg» uten at produktregele
 
 Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør ikke det gamle systemet til en live produktretning.
 
+## Aktiv konsolideringsfase — Manager Career Flow Integrity
+
+Fra 11.09.2026 er hovedarbeidet flyttet fra spiller-source-depth til **managerkarrierens ende-til-ende-flyt**. Produksjonsbuilden er spilt manuelt gjennom klubbvalg, før-sesong, trening, stab, motstanderanalyse, kampforberedelse, kamp og etterkamp. Motorene og innholdet er langt nok kommet; de høyeste produktgapene er nå faseprogresjon, routing og stale presentasjonsstate.
+
+Canonical plan: [`MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md`](MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md).
+
+For 2. divisjon er det systematiske source-depth-gulvet **frosset ved minst to kildebelagte styrkeprofiler per klubb**. Allerede mergede tredjeprofiler beholdes, men det kjøres ikke en automatisk 2→3→4-runde gjennom resten av divisjonen. Ny spillerresearch gjøres selektivt når en konkret profil har særskilt produktverdi.
+
 ## Reelt åpent arbeid
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:
@@ -103,7 +111,7 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   tillegg til eksisterende kildebelagt profil. Vidar har nå minst to, med
   Mathias Tjolands eksplisitt dokumenterte arbeidsinnsats og avslutningsevne i
   tillegg til Simen Haughom. Dermed har alle 60 klubber minst to kildebelagte
-  styrkeprofiler; videre dybdearbeid skal øke belegg, ikke senke noen terskel;
+  styrkeprofiler. Dette er nå det canonicale systematiske gulvet for 2. divisjon; videre spillerresearch er selektiv og skal ikke drive en ny obligatorisk pass-runde;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
 - rette målbare flyt-, tilgjengelighets-, mobil- og integrasjonsfeil;
 - fordype eksisterende arbeidsverksteder når valgene fortsatt bruker samme autoritative motor;

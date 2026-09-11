@@ -1,6 +1,7 @@
 import fs from "node:fs";
 
 const files = {
+  app: fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8"),
   shell: fs.readFileSync(new URL("../src/ui/manager-shell-view.js", import.meta.url), "utf8"),
   calendar: fs.readFileSync(new URL("../src/ui/manager-calendar-workspace-v1.js", import.meta.url), "utf8"),
   matchCalendar: fs.readFileSync(new URL("../src/ui/manager-match-calendar-v1.js", import.meta.url), "utf8"),
@@ -35,7 +36,7 @@ check("kalenderkontekst er bare runtime-minne", files.matchCalendar.includes("le
 check("ingen ny progresjonsmotor", !files.matchCalendar.includes("advanceClubWeek") && !files.matchCalendar.includes("nextAction") && !files.matchCalendar.includes("Math.random"));
 check("ingen ny kampmotor", !files.matchCalendar.includes("football-matchday-engine") && !files.matchCalendar.includes("createMatchdaySession") && !files.matchCalendar.includes("finalizeMatchdaySession"));
 check("oppstillingsvalg gjenbruker eksisterende drawer-knapper", files.matchCalendar.includes("teamChangePlayerRole") && files.matchCalendar.includes("teamChangeFormation") && files.drawer.includes("openManagerTeamChoiceDrawer"));
-check("fredag leser eksisterende kampklarhet", files.matchCalendar.includes("#matchdayReadiness") && files.matchCalendar.includes("#squadGateStarters") && files.matchCalendar.includes("#squadGateBench"));
+check("fredag leser canonical kampforberedelsesstate gjennom app-bridge", files.matchCalendar.includes("hgfm:request-match-prep-context") && files.app.includes("hgfm:request-match-prep-context") && files.app.includes("getManagerMatchPrepPresentationState"));
 check("fredag leser eksisterende trening", files.matchCalendar.includes("teamSelectedTrainingProgram") && files.matchCalendar.includes("teamSelectedTrainingFocus"));
 check("fredag leser eksisterende motstanderbrief", files.matchCalendar.includes("Motstanderens viktigste trussel") && files.matchCalendar.includes("matchday-scene-status-card"));
 check("fredag skjuler bare gammel kommandopresentasjon", files.style.includes("#squadTacticsCommandPanel") && !files.style.includes("#lineupSlots") && !files.style.includes("#teamTacticsSelectedState"));

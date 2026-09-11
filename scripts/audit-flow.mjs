@@ -263,7 +263,7 @@ check("ny uke ruller mini-sesongen", /advanceMiniSeasonForNewWeek\(\)/.test(app)
 // Club Week Orchestrator v1.1: handlingene driver fasen framover (gate-sikkert).
 requireHandler("syncClubWeekPhaseToProgress");
 requireHandler("clubWeekPhaseTargetFromProgress");
-check("fase-synk går aldri forbi kampdag-porten", /if\s*\(getClubWeekMatchdayGate\(\)\.isBlocked\)\s*break;/.test(app));
+check("fase-synk flytter bare én eksplisitt tillatt current phase", /state\.clubWeekState\.phase\s*!==\s*allowedCurrentPhase/.test(app) && !/syncClubWeekPhaseToProgress[\s\S]{0,900}for\s*\(let\s+i/.test(app));
 check("fase-synk stopper på review (ruller ikke til ny uke)", /clubWeekPhaseTargetFromProgress[\s\S]{0,400}return "review";/.test(app));
 
 // ---- 8) Innboks -------------------------------------------------------------

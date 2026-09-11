@@ -265,9 +265,9 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
       title: "Gjør kampens læring til neste uke",
       detail: nextDetail,
       primaryLabel: trainingHypothesis?.archetypeId === "rest_defence"
-        ? "Ta med overgangsproblemet til neste treningsuke"
-        : trainingHypothesis ? "Ta med problemet til neste treningsuke" : "Planlegg neste treningsuke",
-      primaryTarget: trainingHypothesis ? "carry_training_problem" : "trening",
+        ? "Ta med overgangsproblemet til neste manageruke"
+        : trainingHypothesis ? "Ta med problemet til neste manageruke" : "Start neste manageruke",
+      primaryTarget: trainingHypothesis ? "carry_training_problem_next_week" : "next_week",
       secondaryLabel: "Åpne full kampanalyse",
       secondaryTarget: "analyse"
     }

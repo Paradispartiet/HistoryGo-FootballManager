@@ -449,7 +449,7 @@ function opponentMessage(context, readIds) {
       watch: "Formuler én synlig atferd som kan bekrefte eller avkrefte hypotesen."
     },
     links: [
-      { label: "Bygg kampforberedelsen", target: "tactics", focusId: "teamTacticsSelectedState" },
+      { label: "Bygg kampforberedelsen", target: "club_analysis", focusId: "managerClubRoomDrawer" },
       { label: "Les lagets system", target: "system", focusId: "managerSystemWorkspaceV2" }
     ],
     priority: "urgent",

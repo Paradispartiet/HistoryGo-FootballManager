@@ -92,6 +92,12 @@ function ensureStyles() {
   document.head.append(link);
 }
 
+function requestAuthoritativePrepContext() {
+  const detail = { context: null };
+  window.dispatchEvent(new CustomEvent("hgfm:request-match-prep-context", { detail }));
+  return detail.context && typeof detail.context === "object" ? detail.context : null;
+}
+
 function compactText(selector, fallback = "") {
   return String(document.querySelector(selector)?.textContent || fallback).trim().replace(/\s+/g, " ");
 }
@@ -269,9 +275,10 @@ function renderPrepSurface() {
   section.classList.toggle("has-manager-match-prep-day-v1", visible);
   if (!context) return;
 
-  const lineup = lineupStatus();
-  const bench = benchStatus();
-  const training = trainingStatus();
+  const authoritative = requestAuthoritativePrepContext();
+  const lineup = authoritative?.lineup || lineupStatus();
+  const bench = authoritative?.bench || benchStatus();
+  const training = authoritative?.training || trainingStatus();
   setText(surface, "#matchPrepBackCalendar", `Kalender · Uke ${context.week} · ${context.day}`);
   setText(surface, "#matchPrepEyebrow", `Lag · Oppstilling · Uke ${context.week} · ${context.day}`);
   setText(surface, "#matchPrepLede", context.source === "calendar"
@@ -279,17 +286,17 @@ function renderPrepSurface() {
     : "Kampforberedelsen ligger i den eksisterende manageruka. Kalenderen er fortsatt fasit for når kampdagen skjer.");
   setText(surface, "#matchPrepTime", context.time || "10:00");
   setText(surface, "#matchPrepEvent", context.eventTitle || "Kampforberedelse");
-  setText(surface, "#matchPrepOpponent", opponentLabel());
-  setText(surface, "#matchPrepReadiness", readinessText());
+  setText(surface, "#matchPrepOpponent", authoritative?.opponentLabel || opponentLabel());
+  setText(surface, "#matchPrepReadiness", authoritative?.readinessText || readinessText());
   setText(surface, "#matchPrepLineup", `${lineup.starters} klare`);
   setText(surface, "#matchPrepRoles", lineup.roles);
-  setText(surface, "#matchPrepFormation", selectedLabel("#formationSelect", "#teamSelectedFormation", "Formasjon ikke valgt"));
-  setText(surface, "#matchPrepTactic", selectedLabel("#tacticSelect", "#teamSelectedTactic", "Kampplan ikke valgt"));
+  setText(surface, "#matchPrepFormation", authoritative?.formationName || selectedLabel("#formationSelect", "#teamSelectedFormation", "Formasjon ikke valgt"));
+  setText(surface, "#matchPrepTactic", authoritative?.tacticName || selectedLabel("#tacticSelect", "#teamSelectedTactic", "Kampplan ikke valgt"));
   setText(surface, "#matchPrepBench", `${bench.bench} kampklare`);
   setText(surface, "#matchPrepAvailability", bench.availability);
   setText(surface, "#matchPrepTraining", training.program);
   setText(surface, "#matchPrepFocus", training.focus);
-  setText(surface, "#matchPrepThreat", opponentThreat());
+  setText(surface, "#matchPrepThreat", authoritative?.threat || opponentThreat());
 }
 
 function renderMatchContextSurface() {

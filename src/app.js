@@ -4152,6 +4152,42 @@ function saveMatchdayState() {
 // Kampklar-status: én autoritativ port for alle flater og handlere. Den rene
 // motoren eier status, blokkeringer, rekkefølge og canStartMatch. App-laget
 // oversetter bare eksisterende state til et rent inputobjekt.
+function getManagerMatchPrepPresentationState(teamFit = getTeamFit()) {
+  const roster = getAvailability().rosterReadiness || {};
+  const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
+  const completeStarters = assignments.filter((item) => item?.player && item?.role).length;
+  const formation = getFormation();
+  const tactic = getTactic();
+  const program = getSelectedTrainingProgramComposition();
+  const focus = getTrainingFocus(state.weeklyTrainingFocus?.focusId || null);
+  const opponent = getMiniSeasonNextOpponent();
+  const readiness = getMatchdayReadiness(teamFit);
+  const minimumBench = REQUIRED_BENCH;
+  const benchCount = Number(roster.benchCount) || 0;
+
+  return {
+    lineup: {
+      starters: `${Math.min(completeStarters, REQUIRED_STARTERS)}/${REQUIRED_STARTERS}`,
+      roles: completeStarters >= REQUIRED_STARTERS ? "OK" : "Trenger valg"
+    },
+    bench: {
+      bench: `${Math.min(benchCount, minimumBench)}/${minimumBench}`,
+      availability: Number(roster.unlockedCount) >= REQUIRED_SQUAD_SIZE
+        ? `Tropp ${Number(roster.unlockedCount)}/${REQUIRED_SQUAD_SIZE} · minimumsbenken er kontrollert.`
+        : `Tropp ${Number(roster.unlockedCount) || 0}/${REQUIRED_SQUAD_SIZE} · flere spillere mangler.`
+    },
+    formationName: formation?.name || "Formasjon ikke valgt",
+    tacticName: tactic?.name || "Kampplan ikke valgt",
+    training: {
+      program: program?.title || "Treningsprogram ikke valgt",
+      focus: focus?.name || "Fokus ikke valgt"
+    },
+    opponentLabel: opponent?.name || opponent?.displayName || "Motstander ikke klar",
+    readinessText: readiness?.summary || "Kampklarhet kontrolleres av eksisterende readiness.",
+    threat: opponent?.style || opponent?.archetypeName || "Motstanderbriefen bruker eksisterende kamp- og motstanderdata."
+  };
+}
+
 function getMatchdayReadiness(teamFit) {
   const roster = getAvailability().rosterReadiness || {};
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
@@ -4201,6 +4237,7 @@ function getMatchdayReadiness(teamFit) {
     clubWeekReason: clubWeekBlocked
       ? `Klubbuka står i «${CLUB_WEEK_PHASE_LABELS[clubWeekPhase] || clubWeekPhase}». Gå videre til kampdag.`
       : "",
+    clubWeekTarget: clubWeekPhase === "match_prep" ? "advance_matchday" : "dashboard",
     matchInProgress: Boolean(state.matchday?.session)
   });
 }
@@ -4502,7 +4539,24 @@ function chooseMatchdayDecision(optionId) {
     session.liveMinute = 90;
     state.matchday.session = session;
     // Siste hendelse besvart: avslutt kampen og vis sluttrapporten.
+    // Fang terminlistekonteksten FØR completeLeagueRound() flytter serien til
+    // neste runde. Rapporten må aldri blande forrige motstander med neste
+    // fixtures runde/hjemme-borte-metadata.
+    const completedLeagueFixture = isLeagueModeActive() && state.leagueSeason?.status === "active"
+      ? getNextLeagueOpponent(state.leagueSeason)
+      : null;
     state.matchday.lastMatch = finalizeMatchdaySession(session);
+    if (completedLeagueFixture) {
+      state.matchday.lastMatch.leagueContext = {
+        fixtureId: completedLeagueFixture.matchId || completedLeagueFixture.fixtureId || null,
+        round: Number(completedLeagueFixture.round) || null,
+        homeAway: completedLeagueFixture.homeAway || null,
+        opponentId: completedLeagueFixture.id || null,
+        opponentName: completedLeagueFixture.name || session?.opponent?.name || null,
+        ground: completedLeagueFixture.ground || null,
+        competitionLabel: state.leagueSeason?.competition?.tierName || state.leagueSeason?.tier?.name || null
+      };
+    }
     // Kampdag ↔ Club Week: merk resultatet med uka det ble spilt i, slik at
     // kampdagfasen kan kreve en faktisk spilt kamp før uka ruller videre.
     state.matchday.lastMatch.playedInClubWeek = state.clubWeekState?.week ?? null;
@@ -5052,6 +5106,10 @@ function isLeagueSeasonActive() {
     state.leagueSeason?.status === "active";
 }
 
+function isLeaguePreseason() {
+  return isLeagueModeActive() && !isLeagueSeasonActive();
+}
+
 function getLeagueStatusLabel(status = state.gameStartState?.leagueSeasonStatus, season = state.leagueSeason) {
   if (status === "completed" || season?.status === "completed") return "Fullført sesong";
   if (status === "active" && season?.status === "active") return "Aktiv sesong";
@@ -5134,6 +5192,19 @@ function activateLeagueOnboardingTarget(step) {
 }
 
 function activateRecommendedLeagueTab(teamFit = null) {
+  // Før seriestart er onboarding-rekkefølgen autoritativ. Den gamle snarveien
+  // så bare på spiller-/lag-/treningsstate og kunne derfor sende en ny manager
+  // rett til Trening mens seks påkrevde stabsroller fortsatt manglet.
+  if (isLeaguePreseason()) {
+    const nextStep = getLeagueOnboardingSteps(teamFit).find((step) => !step.done) || null;
+    if (nextStep && nextStep.id !== "sesong") {
+      activateLeagueOnboardingTarget(nextStep);
+      return;
+    }
+    activateTab("dashboard");
+    return;
+  }
+
   const rosterReadiness = getAvailability().rosterReadiness;
   if (!rosterReadiness.hasEnoughUnlocked) {
     activateTab("historygo");
@@ -6913,8 +6984,11 @@ function selectWeeklyTrainingFocus(focusId) {
   }
 
   renderApp();
-  // Valgt trening nudger uka til Kampplan-fasen (gate-sikkert).
-  syncClubWeekPhaseToProgress().catch(console.error);
+  // Preseason-valg er onboarding-state og får aldri konsumere Club Week.
+  // I aktiv sesong kan synken bare fullføre den fasen manageren faktisk står i.
+  if (!isLeaguePreseason()) {
+    syncClubWeekPhaseToProgress().catch(console.error);
+  }
 }
 
 function syncWeeklyTrainingFocusToClubWeek() {
@@ -6986,12 +7060,13 @@ function selectWeeklyTrainingProgram(program) {
     return;
   }
 
+  const leaguePreseason = isLeaguePreseason();
   state.weeklyTrainingProgram = { programId: program.id, week, applied: false };
 
-  // Treningsprogrammet beveger konteksten utenfor banen (slitasje, klarhet,
-  // samhold). Effekten anvendes kun én gang per uke; senere bytter samme uke
-  // bare oppdaterer hvilket program som er valgt uten å stable opp belastning.
-  if (state.teamMerits) {
+  // I aktiv manageruke får programmet sin off-pitch-effekt som før. I preseason
+  // er valget bare en før-sesongplan: det skal kunne endres, ikke markeres som
+  // «brukt denne uka», og ikke skrive ukeeffekter før den faktiske treningsfasen.
+  if (!leaguePreseason && state.teamMerits) {
     state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
     state.weeklyTrainingProgram.applied = true;
     saveTeamMerits();
@@ -6999,8 +7074,25 @@ function selectWeeklyTrainingProgram(program) {
   saveWeeklyTrainingProgram();
 
   renderApp();
-  // Valgt treningsprogram nudger uka til Kampplan-fasen (gate-sikkert).
-  syncClubWeekPhaseToProgress().catch(console.error);
+  // Et programvalg alene skal aldri hoppe over Analyse/Innboks/Trening. Når
+  // både ramme og fokus er valgt i riktig treningsfase kan progresjonen synkes.
+  if (!leaguePreseason) {
+    syncClubWeekPhaseToProgress().catch(console.error);
+  }
+}
+
+function applyPendingWeeklyTrainingProgramIfNeeded() {
+  const selected = state.weeklyTrainingProgram;
+  if (!selected?.programId || selected.applied || !state.teamMerits) return false;
+  const program = (Array.isArray(state.trainingPrograms) ? state.trainingPrograms : [])
+    .find((item) => item?.id === selected.programId);
+  if (!program) return false;
+
+  state.teamMerits.offPitch = applyTrainingProgramOffPitchEffects(getOffPitchState(), program);
+  state.weeklyTrainingProgram = { ...selected, applied: true };
+  saveTeamMerits();
+  saveWeeklyTrainingProgram();
+  return true;
 }
 
 // Gyldige fase-ID-er i den nye 6-fase-rytmen. Brukes til sanering av lagret
@@ -7055,6 +7147,17 @@ function loadClubWeekState() {
 }
 
 function saveClubWeekState(clubWeekState) {
+  // Club Week finnes både som aktivt session-felt og som del av league-merits.
+  // Begge er samme sannhet. Oppdater session-kopien FØR saveTeamMerits()
+  // persisterer mode-envelope, ellers kan en gammel session-fase vinne ved
+  // neste rehydrering selv om merits allerede står på den nye fasen.
+  if (state.modeEnvelope && isLeagueModeActive()) {
+    state.modeEnvelope.sessions.league = {
+      ...state.modeEnvelope.sessions.league,
+      clubWeekState: cloneTeamMerits(clubWeekState)
+    };
+  }
+
   // Skriv til den kanoniske plasseringen i merits. Uten merits (skulle ikke
   // skje etter init) faller vi stille tilbake uten persistens.
   if (state.teamMerits && typeof state.teamMerits === "object") {
@@ -7156,32 +7259,31 @@ function getClubWeekMatchdayGate() {
 function clubWeekPhaseTargetFromProgress() {
   const week = Number(state.clubWeekState?.week) || 1;
   if (state.matchday?.lastMatch?.playedInClubWeek === week) return "review";
-  if (state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId) return "match_prep";
+  // Program + fokus er de to operative lagvalgene i treningsscenen. Ett av dem
+  // alene kan være nok til match-readiness, men det skal ikke automatisk lukke
+  // treningsfasen mens scenen fortsatt peker på det andre som neste steg.
+  if (state.weeklyTrainingProgram?.programId && state.weeklyTrainingFocus?.focusId) return "match_prep";
   return null;
 }
 
-// Rull klubbukens fase FRAMOVER til den fasen spillerens handlinger tilsier, via
-// den eksisterende fasemotoren (advanceClubWeekPhaseAction). Gate-sikker
-// (kampdag→oppsummering krever spilt kamp, som nettopp er oppfylt når
-// target=review), går aldri bakover, ruller aldri over til ny uke (stopper på
-// review), og er idempotent når fasen alt er på/forbi målet. Orkestrering, ikke
-// en ny motor — samme transitions/konsekvenser som «Neste fase»-knappen.
+// Synk bare ÉN canonical fase når handlingen faktisk hører til current phase.
+// Den gamle løkka kunne la et treningsvalg fra mandag konsumere Analyse,
+// Innboks og Trening i ett klikk. Det gjorde Kalenderen til pynt og kunne påføre
+// konsekvenser for arbeid manageren aldri fikk sjansen til å gjøre.
 async function syncClubWeekPhaseToProgress() {
   if (!state.clubWeekState) return;
   const target = clubWeekPhaseTargetFromProgress();
   if (!target) return;
-  const targetIdx = CLUB_WEEK_PHASE_IDS.indexOf(target);
-  if (targetIdx < 0) return;
 
-  for (let i = 0; i < CLUB_WEEK_PHASE_IDS.length; i++) {
-    const before = state.clubWeekState;
-    const currentIdx = CLUB_WEEK_PHASE_IDS.indexOf(before?.phase);
-    if (currentIdx < 0 || currentIdx >= targetIdx) break;
-    if (getClubWeekMatchdayGate().isBlocked) break;
-    await advanceClubWeekPhaseAction();
-    // Stopp hvis fasen ikke beveget seg eller uka rullet over (sikkerhetsnett).
-    if (state.clubWeekState === before || state.clubWeekState?.week !== before.week) break;
-  }
+  const allowedCurrentPhase = target === "match_prep"
+    ? "training"
+    : target === "review"
+      ? "matchday"
+      : null;
+
+  if (!allowedCurrentPhase || state.clubWeekState.phase !== allowedCurrentPhase) return;
+  if (getClubWeekMatchdayGate().isBlocked) return;
+  await advanceClubWeekPhaseAction();
 }
 
 // Kort norsk effekt-fras per treningsfokus: hva treningen faktisk gjorde med
@@ -9833,7 +9935,54 @@ function appendMatchdayNavButton(parent, label, tab) {
   parent.append(button);
 }
 
-function openManagerMatchdayTarget(target) {
+async function openManagerMatchdayTarget(target) {
+  if (target === "advance_matchday") {
+    await handleManagerMatchdayPrimaryAction(target);
+    return;
+  }
+
+  const carryProblemToNextWeek = target === "carry_training_problem_next_week";
+  if (target === "next_week" || carryProblemToNextWeek) {
+    const lastMatch = state.matchday?.lastMatch;
+    if (carryProblemToNextWeek) {
+      const hypothesis = lastMatch?.trainingExerciseHypothesis;
+      if (!hypothesis) return;
+      const transitionProblem = hypothesis.archetypeId === "rest_defence";
+      state.trainingProblemSuggestion = {
+        version: "historygo-football-manager.training-problem-suggestion.v1",
+        sourceMatchId: lastMatch.id || null,
+        sourceWeek: Number(lastMatch.playedInClubWeek) || Number(hypothesis.week) || null,
+        targetWeek: (Number(lastMatch.playedInClubWeek) || Number(hypothesis.week) || 0) + 1,
+        archetypeId: hypothesis.archetypeId,
+        title: transitionProblem ? "Overgangsproblemet fra forrige kamp" : `${hypothesis.title || "Treningsproblemet"} fra forrige kamp`,
+        problem: lastMatch.trainingFocus?.summary || hypothesis.hypothesis,
+        question: hypothesis.watch
+      };
+      if (state.modeEnvelope) {
+        state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+        try { state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope); } catch (_) { /* memory-only */ }
+      }
+    }
+
+    markMatchReportSeen();
+    const currentWeek = Number(state.clubWeekState?.week) || 1;
+    if (state.clubWeekState?.phase === "review" && !getClubWeekMatchdayGate().isBlocked) {
+      await advanceClubWeekPhaseAction();
+    }
+    const rolledToNextWeek = Number(state.clubWeekState?.week) > currentWeek
+      && state.clubWeekState?.phase === "analysis";
+    if (!rolledToNextWeek) return;
+
+    activateTab("dashboard");
+    renderApp();
+    if (carryProblemToNextWeek) {
+      window.dispatchEvent(new CustomEvent("hgfm:training-problem-suggested"));
+    }
+    return;
+  }
+
+  // Legacy target kept for old saves/components; it only carries the problem
+  // to Trening and does not own canonical review progression.
   if (target === "carry_training_problem") {
     const lastMatch = state.matchday?.lastMatch;
     const hypothesis = lastMatch?.trainingExerciseHypothesis;
@@ -9872,7 +10021,17 @@ function openManagerMatchdayTarget(target) {
   }
 }
 
-function handleManagerMatchdayPrimaryAction(target) {
+async function handleManagerMatchdayPrimaryAction(target) {
+  if (target === "advance_matchday") {
+    const readiness = getMatchdayReadiness(getTeamFit());
+    const onlyClubWeekBlocker = readiness.blockers?.length === 1
+      && readiness.primaryBlocker?.code === "club_week_blocked";
+    if (!onlyClubWeekBlocker || state.clubWeekState?.phase !== "match_prep") return;
+    await advanceClubWeekPhaseAction();
+    activateTab("kamp");
+    renderApp();
+    return;
+  }
   if (target === "create_session") {
     const button = document.querySelector("#playMatchdayButton");
     if (button && !button.disabled) button.click();
@@ -9904,6 +10063,23 @@ function renderMatchdayGate(container, teamFit) {
   const opponent = session?.opponent || lastMatch?.opponent || null;
   const leagueSeason = state.leagueSeason || null;
   const nextOpponent = leagueSeason ? getNextLeagueOpponent(leagueSeason) : null;
+  const completedLeagueContext = !session && lastMatch?.leagueContext && typeof lastMatch.leagueContext === "object"
+    ? lastMatch.leagueContext
+    : null;
+  const sceneRound = completedLeagueContext
+    ? completedLeagueContext.round
+    : lastMatch && !session
+      ? null
+      : nextOpponent?.round;
+  const sceneHomeAway = completedLeagueContext
+    ? completedLeagueContext.homeAway
+    : lastMatch && !session
+      ? null
+      : nextOpponent?.homeAway;
+  const sceneCompetition = completedLeagueContext?.competitionLabel
+    || leagueSeason?.competition?.tierName
+    || leagueSeason?.tier?.name
+    || "";
 
   if (elements.matchdayDepth && elements.matchdayDepth.dataset.initialized !== "true") {
     elements.matchdayDepth.open = false;
@@ -9914,9 +10090,9 @@ function renderMatchdayGate(container, teamFit) {
     teamName: session?.teamName || getTemporaryClubName().name,
     opponentBrief: getMatchdayOpponentBrief(session),
     opponent,
-    competitionLabel: leagueSeason?.competition?.tierName || leagueSeason?.tier?.name || "",
-    roundLabel: nextOpponent?.round ? `Runde ${nextOpponent.round}` : "",
-    venueLabel: nextOpponent?.homeAway === "home" ? "Hjemme" : nextOpponent?.homeAway === "away" ? "Borte" : "",
+    competitionLabel: sceneCompetition,
+    roundLabel: sceneRound ? `Runde ${sceneRound}` : "",
+    venueLabel: sceneHomeAway === "home" ? "Hjemme" : sceneHomeAway === "away" ? "Borte" : "",
     formationName: formation.name,
     tacticName: tactic.name,
     trainingLabel: getWeeklyTrainingChoiceLabel(),
@@ -11075,18 +11251,9 @@ function renderMatchdayReport(container, lastMatch) {
   nextWeekButton.className = "matchday-next-week-button";
   nextWeekButton.textContent = "Til managerkontoret";
   nextWeekButton.addEventListener("click", async () => {
-    markMatchReportSeen();
-    // Kampen er spilt og rapporten lest: rull ukas gjenværende faser helt til
-    // ny uke, uansett hvilken fase kampen ble spilt i. Kampdag-porten er åpen
-    // (kampen finnes), så løkka terminerer alltid; grensen er et sikkerhetsnett.
-    const currentWeek = state.clubWeekState?.week;
-    for (let i = 0; i <= CLUB_WEEK_PHASE_IDS.length; i++) {
-      if (state.clubWeekState?.week !== currentWeek) break;
-      if (getClubWeekMatchdayGate().isBlocked) break;
-      await advanceClubWeekPhaseAction();
-    }
-    activateTab("dashboard");
-    renderApp();
+    // Samme canonicale review → ny uke / analysis-sti som den nye
+    // etterkampflaten. Ingen skjult flerfase-løkke får eie progresjon her.
+    await openManagerMatchdayTarget("next_week");
   });
   card.append(nextWeekButton);
 
@@ -16585,6 +16752,11 @@ function bindLocalStartControls() {
 }
 
 function bindHistoryGoSyncControls() {
+  window.addEventListener("hgfm:request-match-prep-context", (event) => {
+    if (event.detail && typeof event.detail === "object") {
+      event.detail.context = getManagerMatchPrepPresentationState(getTeamFit());
+    }
+  });
   window.addEventListener("hgfm:request-club-communication-context", (event) => {
     if (event.detail && typeof event.detail === "object") {
       event.detail.context = getClubCommunicationContext();
@@ -16758,6 +16930,14 @@ async function advanceClubWeekPhaseAction() {
   }
 
   const previous = state.clubWeekState;
+
+  // Et program valgt i preseason er bare en plan fram til manageren faktisk
+  // fullfører treningsfasen. Da anvendes off-pitch-effekten én gang og statusen
+  // går fra «valgt» til «brukt denne uka».
+  if (previous.phase === "training") {
+    applyPendingWeeklyTrainingProgramIfNeeded();
+  }
+
   let next = await advanceClubWeekPhaseFromBrowser(previous);
   if (next.week !== previous.week) {
     if (!state.firstTimePlaythrough?.completed && state.matchday?.lastMatch && !hasUnseenMatchReport()) {

@@ -34,7 +34,7 @@ check("v3-portene er registrert", files.package.includes("audit:manager-club-com
 check("CI kjører v3-portene", files.ci.includes("audit:manager-club-communication-v3") && files.ci.includes("sim:manager-club-communication-v3"));
 
 const output = execFileSync(process.execPath, [fileURLToPath(new URL("./simulate-manager-club-communication-v3.mjs", import.meta.url))], { encoding: "utf8" });
-check("deterministisk v3-simulering er grønn", output.includes("Klubbkommunikasjon v3: 14/14"));
+check("deterministisk v3-simulering er grønn", output.includes("Klubbkommunikasjon v3: 15/15"));
 
 checks.forEach(([label, ok]) => console.log(`${ok ? "✓" : "✗"} ${label}`));
 const failed = checks.filter(([, ok]) => !ok);

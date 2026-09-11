@@ -171,6 +171,58 @@ test("kampforberedelsen går videre til eksisterende avspark", async ({ page }) 
   await expect(page.locator("#matchdayCommand .matchday-scene")).toHaveAttribute("data-phase", "live");
 });
 
+test("rapportscenen blander ikke forrige motstander med neste fixtures metadata", async ({ page }) => {
+  await page.evaluate(() => {
+    const lastMatch = {
+      id: "completed-r1-brann",
+      version: 2,
+      outcome: "draw",
+      score: { for: 0, against: 0 },
+      expectedGoals: { for: 1.2, against: 0.8 },
+      opponent: { id: "brann", name: "Brann", style: "høyt press" },
+      formationSnapshot: { name: "Modern 4-2-3-1", baseShape: "4-2-3-1" },
+      tacticSnapshot: { name: "Balansert" },
+      decisions: [],
+      playerStats: { goals: [] },
+      clubConsequences: { effects: {} },
+      playedInClubWeek: 1,
+      leagueContext: {
+        fixtureId: "matchday-r1-0",
+        round: 1,
+        homeAway: "home",
+        opponentId: "brann",
+        opponentName: "Brann",
+        ground: "Lerkendal",
+        competitionLabel: "Eliteserien"
+      }
+    };
+    const matchday = { lastMatch, session: null, lastSeenMatchId: null };
+    localStorage.setItem("hgfm.matchday.v1", JSON.stringify(matchday));
+
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.clubWeekState = { ...(merits.clubWeekState || {}), week: 1, phase: "review" };
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    if (envelope.sessions?.league) {
+      envelope.sessions.league.matchday = matchday;
+      envelope.sessions.league.clubWeekState = merits.clubWeekState;
+    }
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+  });
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await openMatchday(page);
+  const scene = page.locator("#matchdayCommand .matchday-scene");
+  await expect(scene).toHaveAttribute("data-phase", "report");
+  await expect(scene).toContainText("Brann");
+  await expect(scene).toContainText("Runde 1");
+  await expect(scene).toContainText("Hjemme");
+  await expect(scene).not.toContainText("Runde 2");
+  await expect(scene).not.toContainText("Borte");
+});
+
 test("kampdagen har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openMatchday(page);

@@ -107,7 +107,7 @@ check("formasjonstilvenning vises", winModel.consequences.familiarityLabel.inclu
 check("lagret treningsrapport føres til presentasjonsmodellen", winModel.trainingEvidence?.focusId === "pressing");
 check("treningsdommens faktiske hjalp-status bevares", winModel.trainingEvidence?.helped === true);
 check("treningsrapportens ordlyd bevares", winModel.trainingEvidence?.summary.includes("relevant managergrep"));
-check("neste handling peker til Trening", winModel.next.primaryTarget === "trening");
+check("neste handling starter neste manageruke", winModel.next.primaryTarget === "next_week");
 check("full analyse er sekundær handling", winModel.next.secondaryTarget === "analyse");
 
 const hypothesisModel = createPostMatchAnalysisModel({
@@ -124,7 +124,7 @@ const hypothesisModel = createPostMatchAnalysisModel({
   }
 });
 check("konkret hypotese eksponeres uten ny beregning", hypothesisModel.trainingHypothesis?.setup.includes("Stort område"));
-check("restforsvarsproblem må bæres videre eksplisitt", hypothesisModel.next.primaryTarget === "carry_training_problem" && hypothesisModel.next.primaryLabel.includes("overgangsproblemet"));
+check("restforsvarsproblem må bæres videre eksplisitt", hypothesisModel.next.primaryTarget === "carry_training_problem_next_week" && hypothesisModel.next.primaryLabel.includes("overgangsproblemet"));
 
 const drawModel = createPostMatchAnalysisModel(resultFixture("draw"));
 check("uavgjort gir nøytral tone", drawModel.outcomeTone === "neutral", drawModel.outcomeTone);
@@ -138,7 +138,7 @@ check("tap viser negative klubbkonsekvenser", lossModel.consequences.effects.som
 
 const injuryModel = createPostMatchAnalysisModel(resultFixture("draw", { injury: true }));
 check("skadesignal fra eksisterende forklaring vises", injuryModel.humanFactors.some((factor) => factor.includes("skade")));
-check("skadesignal leder fortsatt til neste treningsuke", injuryModel.next.primaryTarget === "trening");
+check("skadesignal leder fortsatt til neste manageruke", injuryModel.next.primaryTarget === "next_week");
 
 const scene = createMatchdaySceneModel({
   teamName: "Rosenborg",

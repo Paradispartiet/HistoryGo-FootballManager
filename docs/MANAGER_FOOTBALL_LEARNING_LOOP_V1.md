@@ -52,7 +52,7 @@ Det valgte treningsarbeidet følger nå samme observasjonsspørsmål gjennom hel
 2. **Kampforberedelse** viser det samme oppsettet, intensjonen og ett konkret observasjonsspørsmål.
 3. **Kampen** viser et observasjonsøyeblikk når en faktisk motorhendelse berører samme problem. Manageren bruker fortsatt et eksisterende kampgrep, og konsekvensen kommer fra kampmotoren. En forklaring legges bare til når motorens `trainingImpact` registrerer koblingen.
 4. **Etterkamp** skiller mellom managerens intensjon, registrerte taktiske bevis, kampmotorens treningsdom og det som fortsatt er usikkert.
-5. **Neste uke** kan manageren eksplisitt ta problemet med videre. Trening åpnes da med et forslag, men program og fokus velges aldri automatisk.
+5. **Neste uke** kan manageren eksplisitt ta problemet med videre. Først lukkes etterkampens `review` og Club Week rulles canonicalt til ny uke / `analysis`. Problemet lagres som et forslag; når manageren senere åpner Trening i den nye uka, ligger forslaget der, men program og fokus velges aldri automatisk.
 
 Læringslaget sier ikke at en øvelse «virket» bare fordi et beslektet ord finnes i rapporten. Kampmotorens treningsrapport er fasit for registrert effekt. Den taktiske evalueringen brukes som konkret bevismateriale når samme problemområde finnes, og fravær av et slikt signal forklares eksplisitt i stedet for å fylles med en oppdiktet kamphendelse.
 

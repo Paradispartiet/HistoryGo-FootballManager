@@ -113,13 +113,13 @@ test("etterkampen viser resultat, forklaring, managergrep, spillerbidrag og kons
   await expect(page.locator(".matchday-post-match-effect")).toHaveCount(3);
 });
 
-test("etterkampen kan ta problemet videre uten å velge trening automatisk", async ({ page }) => {
+test("etterkampen kan ta problemet videre til neste manageruke uten å velge trening automatisk", async ({ page }) => {
   await renderFixture(page);
-  const carry = page.locator('.matchday-post-match-primary[data-matchday-target="carry_training_problem"]');
+  const carry = page.locator('.matchday-post-match-primary[data-matchday-target="carry_training_problem_next_week"]');
   await expect(carry).toContainText("Ta med overgangsproblemet");
   await carry.click();
   await page.locator('.matchday-post-match-secondary[data-matchday-target="analyse"]').click();
-  await expect.poll(() => page.evaluate(() => window.__postMatchTargets)).toEqual(["carry_training_problem", "analyse"]);
+  await expect.poll(() => page.evaluate(() => window.__postMatchTargets)).toEqual(["carry_training_problem_next_week", "analyse"]);
 });
 
 test("etterkampen har ingen mobil overflow", async ({ page }) => {
