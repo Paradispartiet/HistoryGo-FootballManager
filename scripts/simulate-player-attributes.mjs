@@ -919,7 +919,7 @@ const KJENT_UDOKUMENTERT = {
   // påstanden i hele kilden, og det er fortsatt en MERITT og ikke en ferdighet:
   // samme grense som Sarpsborg-kilden slo fast, der en tittel er lagets.
   // 39/39 nye eksklusive profiler står derfor uten en eneste ferdighetsclaim.
-  halden_stadion: 1.01,
+  halden_stadion: 0.99, // Kvik Halden: Dardan source-depth senket målt tomandel
   // De seks siste P2-arvene i avdeling 1. Alle bygger på NFFs lagside, som
   // fører A-lagstroppen gruppert etter lagdel. En lagdel belegger hvor på banen
   // mannen spiller og ingenting mer — den er ikke en ferdighet, samme grense
