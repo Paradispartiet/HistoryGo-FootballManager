@@ -42,7 +42,7 @@ check("rapporten bruker faktiske spillerstatistikker", files.postMatch.includes(
 check("rapporten bruker faktiske klubbkonsekvenser", files.postMatch.includes("lastMatch?.clubConsequences?.effects"));
 check("beste og svakeste managergrep vises", files.postMatch.includes("report?.bestDecision") && files.postMatch.includes("report?.worstDecision"));
 check("seier, uavgjort og tap har egne toner", ["positive", "neutral", "negative"].every((tone) => files.postMatch.includes(`"${tone}"`)));
-check("neste handling går til Trening eller eksplisitt problemforslag", files.postMatch.includes('"carry_training_problem"') && files.postMatch.includes(': "trening"'));
+check("neste handling går gjennom ny manageruke eller eksplisitt problemforslag", files.postMatch.includes('"carry_training_problem_next_week"') && files.postMatch.includes('"next_week"'));
 check("full rapport går til eksisterende Analyse", files.postMatch.includes('secondaryTarget: "analyse"'));
 check("etterkampen har semantisk overskrift", files.postMatch.includes('aria-labelledby", "postMatchAnalysisTitle"'));
 check("etterkampen viser konkrete spillerbidrag uten overall", files.postMatch.includes("buildContributors") && !files.postMatch.includes("overall"));
