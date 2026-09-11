@@ -212,6 +212,14 @@ const documented = [
     claim: "«en fantastisk redning av Sotras keeper hindret scoring»",
     source: "https://www.brann.no/nyheter/sloste-med-sjansene-mot-sotra",
     sourceKind: "club"
+  },
+  {
+    playerId: "brage_prestmo_kvithyld",
+    clubId: "trygg_lade",
+    strengths: ["pace"],
+    claim: "«Han er en dyktig venstreback som er bra med ball i beina, samtidig er han veldig rask.»",
+    source: "https://www.ranheimfotball.no/nyheter/brage-kvithyld-klar-for-ranheim",
+    sourceKind: "club"
   }
 ];
 
