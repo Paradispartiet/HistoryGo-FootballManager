@@ -79,9 +79,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Galtas dokumenterte én-mot-én-ferdigheter og fart i tillegg til Ulrik
   Valderhaug Syversens lederrolle. Eik Tønsberg har nå minst tre, med Joachim
   Lundhagebakkens eksplisitt dokumenterte styrke og fart i tillegg til de to
-  eksisterende kildebelagte profilene. Follo har nå minst to, med Albert
-  Braut Tjålands eksplisitt dokumenterte styrke i tillegg til eksisterende
-  kildebelagt profil. Junkeren har nå minst to, med Sidad Choolys eksplisitt
+  eksisterende kildebelagte profilene. Follo har nå minst tre, med Adam Tamrat
+  Viks eksplisitt dokumenterte skuddredning i tillegg til Albert Braut Tjålands
+  styrke og den eksisterende kildebelagte profilen. Junkeren har nå minst to, med Sidad Choolys eksplisitt
   dokumenterte dødballutførelse i tillegg til Ivar Unhjem. Kvik Halden har nå
   minst to, med Dardan Sæter-Mehmetis eksplisitt dokumenterte lederskap i
   tillegg til eksisterende kildebelagt profil. Pors har nå minst to, med Oskar
