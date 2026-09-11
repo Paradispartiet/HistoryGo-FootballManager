@@ -171,6 +171,10 @@ const tryggLadeDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === 
 krev(tryggLadeDekning?.medKildebelagtStyrke >= 2,
   `Trygg/Lade source-depth skal være minst 2, fikk ${tryggLadeDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const traffDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "traff");
+krev(traffDekning?.medKildebelagtStyrke >= 2,
+  `Træff source-depth skal være minst 2, fikk ${traffDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 console.log(JSON.stringify({
   ok: true,
   sjekker,

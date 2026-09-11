@@ -116,6 +116,14 @@ const documented = [
     claim: "«Voldsom løpskapasitet, og nesten umulig å gå forbi en mot en.»",
     source: "https://www.dagbladet.no/tema/karing-arets-lag-i-3-divisjon/84048919",
     sourceKind: "press"
+  },
+  {
+    playerId: "nikolai_eide_ohr",
+    clubId: "traff",
+    strengths: ["stamina", "work_rate"],
+    claim: "«Med stor løpskraft» og «en lojal, hardtarbeidende back»",
+    source: "https://www.strommen-if.no/nyheter/to-nysigneringer-klare",
+    sourceKind: "club"
   }
 ];
 
