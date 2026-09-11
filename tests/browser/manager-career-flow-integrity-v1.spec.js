@@ -4,8 +4,14 @@ test("preseason følger onboarding og kan ikke konsumere Club Week", async ({ pa
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeVisible();
+  const leagueStart = page.locator('[data-start-mode="league"]');
+  await expect(leagueStart).toBeVisible();
 
-  await page.locator('[data-start-mode="league"]').click();
+  await leagueStart.click();
+  await expect(page.locator("#onboardingClubStep")).toBeVisible();
+  await expect(page.locator("#onboardingClubModeTakeover")).toBeVisible();
   await page.locator("#onboardingClubModeTakeover").click();
   await page.locator('.club-takeover-option[data-club-id="rosenborg"]').click();
   await page.locator("#onboardingCreateClub").click();
@@ -191,12 +197,17 @@ test("ferdig kampforberedelse gjør matchday canonical", async ({ page }) => {
 
   const action = page.locator("#matchdayCommand .matchday-scene-action");
   await expect(action).toHaveText("Fullfør forberedelsene");
+  await expect(action).toHaveAttribute("data-matchday-target", "advance_matchday");
   await action.click();
 
   await expect.poll(async () => page.evaluate(() => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
-    return merits.clubWeekState?.phase || null;
-  })).toBe("matchday");
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    return {
+      merits: merits.clubWeekState?.phase || null,
+      session: envelope.sessions?.league?.clubWeekState?.phase || null
+    };
+  })).toEqual({ merits: "matchday", session: "matchday" });
 
   await expect(page.locator("#matchdayCommand .matchday-scene")).toHaveAttribute("data-phase", "ready");
   await expect(page.locator("#matchdayCommand .matchday-scene-action")).toHaveText("Åpne kampforberedelsen");
