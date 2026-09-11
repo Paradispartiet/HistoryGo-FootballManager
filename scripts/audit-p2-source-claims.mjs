@@ -139,6 +139,10 @@ const brattvagDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "
 krev(brattvagDekning?.medKildebelagtStyrke >= 3,
   `Brattvåg source-depth skal være minst 3, fikk ${brattvagDekning?.medKildebelagtStyrke ?? "mangler"}`);
 
+const eikTonsbergDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "eik_tonsberg");
+krev(eikTonsbergDekning?.medKildebelagtStyrke >= 3,
+  `Eik Tønsberg source-depth skal være minst 3, fikk ${eikTonsbergDekning?.medKildebelagtStyrke ?? "mangler"}`);
+
 const folloDekning = styrkedekningPerKlubb.find((entry) => entry.clubId === "follo");
 krev(folloDekning?.medKildebelagtStyrke >= 2,
   `Follo source-depth skal være minst 2, fikk ${folloDekning?.medKildebelagtStyrke ?? "mangler"}`);
