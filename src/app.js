@@ -9871,11 +9871,54 @@ function appendMatchdayNavButton(parent, label, tab) {
   parent.append(button);
 }
 
-function openManagerMatchdayTarget(target) {
+async function openManagerMatchdayTarget(target) {
   if (target === "advance_matchday") {
-    handleManagerMatchdayPrimaryAction(target);
+    await handleManagerMatchdayPrimaryAction(target);
     return;
   }
+
+  const carryProblemToNextWeek = target === "carry_training_problem_next_week";
+  if (target === "next_week" || carryProblemToNextWeek) {
+    const lastMatch = state.matchday?.lastMatch;
+    if (carryProblemToNextWeek) {
+      const hypothesis = lastMatch?.trainingExerciseHypothesis;
+      if (!hypothesis) return;
+      const transitionProblem = hypothesis.archetypeId === "rest_defence";
+      state.trainingProblemSuggestion = {
+        version: "historygo-football-manager.training-problem-suggestion.v1",
+        sourceMatchId: lastMatch.id || null,
+        sourceWeek: Number(lastMatch.playedInClubWeek) || Number(hypothesis.week) || null,
+        targetWeek: (Number(lastMatch.playedInClubWeek) || Number(hypothesis.week) || 0) + 1,
+        archetypeId: hypothesis.archetypeId,
+        title: transitionProblem ? "Overgangsproblemet fra forrige kamp" : `${hypothesis.title || "Treningsproblemet"} fra forrige kamp`,
+        problem: lastMatch.trainingFocus?.summary || hypothesis.hypothesis,
+        question: hypothesis.watch
+      };
+      if (state.modeEnvelope) {
+        state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+        try { state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope); } catch (_) { /* memory-only */ }
+      }
+    }
+
+    markMatchReportSeen();
+    const currentWeek = Number(state.clubWeekState?.week) || 1;
+    if (state.clubWeekState?.phase === "review" && !getClubWeekMatchdayGate().isBlocked) {
+      await advanceClubWeekPhaseAction();
+    }
+    const rolledToNextWeek = Number(state.clubWeekState?.week) > currentWeek
+      && state.clubWeekState?.phase === "analysis";
+    if (!rolledToNextWeek) return;
+
+    activateTab("dashboard");
+    renderApp();
+    if (carryProblemToNextWeek) {
+      window.dispatchEvent(new CustomEvent("hgfm:training-problem-suggested"));
+    }
+    return;
+  }
+
+  // Legacy target kept for old saves/components; it only carries the problem
+  // to Trening and does not own canonical review progression.
   if (target === "carry_training_problem") {
     const lastMatch = state.matchday?.lastMatch;
     const hypothesis = lastMatch?.trainingExerciseHypothesis;
