@@ -96,9 +96,9 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Marthinussens duellstyrke og Beltran Mvukas fart.
   Sotra har nå minst tre, med Morten Grasmos konkret dokumenterte skuddredning i
   tillegg til Steffen Lie Skåleviks arbeidsinnsats og den eksisterende
-  kildebelagte profilen. Trygg/Lade har
-  nå minst to, med Ola Elvedahls eksplisitt dokumenterte løpskapasitet i
-  tillegg til eksisterende kildebelagt profil. Træff har nå minst to, med
+  kildebelagte profilen. Trygg/Lade har nå minst tre, med Brage Prestmo
+  Kvithylds eksplisitt dokumenterte fart i tillegg til Ola Elvedahls
+  løpskapasitet og den eksisterende kildebelagte profilen. Træff har nå minst to, med
   Nikolai Eide Ohrs eksplisitt dokumenterte løpskraft og arbeidsinnsats i
   tillegg til eksisterende kildebelagt profil. Vidar har nå minst to, med
   Mathias Tjolands eksplisitt dokumenterte arbeidsinnsats og avslutningsevne i
