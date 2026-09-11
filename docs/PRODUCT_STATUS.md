@@ -89,6 +89,8 @@ Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør
   Sotra har nå minst to, med Steffen Lie Skåleviks eksplisitt dokumenterte
   arbeidsinnsats i tillegg til eksisterende kildebelagt profil. Trygg/Lade har
   nå minst to, med Ola Elvedahls eksplisitt dokumenterte løpskapasitet i
+  tillegg til eksisterende kildebelagt profil. Træff har nå minst to, med
+  Nikolai Eide Ohrs eksplisitt dokumenterte løpskraft og arbeidsinnsats i
   tillegg til eksisterende kildebelagt profil. Videre dybdearbeid skal øke
   belegg, ikke senke noen terskel;
 - forbedre redaksjonell spiller-, klubb- og fotballkunnskap med kildebelegg;
