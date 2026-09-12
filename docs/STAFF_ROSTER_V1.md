@@ -4,6 +4,8 @@ Før seriestart trenger klubben **1 assistenttrener, 3 trenere, 1 fysio og 1 kee
 
 Modellen bruker eksisterende stabsdata og coach-context; den er ikke en parallell stabsmotor. `hiredStaffIds` i `hgfm.teamMerits.v1` forblir lagringens sannhetskilde. `football-staff-roster.js` fordeler de engasjerte personene deterministisk på kompatible rolleplasser, og samme person kan ikke fylle to plasser. De tildelte rollene sendes videre til eksisterende coach-context.
 
+Ansettelsesgrensen vurderer den **effektive tildelte førstelagsrollen**, ikke bare kildens `staffType`. En person som dokumentert er assistenttrener, men også har `canBeHiredAs: ["coach"]`, kan derfor fylle én av de tre trenerplassene når rosterfordelingen velger det. Kildens rolle omskrives aldri; dette er bare aktiv bruk i managerens 1+3+1+1-stab.
+
 Ukurerte klubber får seks tydelig merkede plassholderprofiler som et nøytralt spillbarhetsgulv. Plassholderne har `isPlaceholder` og `needsResearch` og er ikke påstander om virkelige personer. History Go-opplåst stab fortsetter å komme fra eksisterende stedskoblinger.
 
 ## Klubbspesifikke startersett
