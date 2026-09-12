@@ -18,6 +18,8 @@ Brann er andre komplette klubbsett. Seks starterprofiler er hentet fra klubbens 
 
 Fredrikstad er tredje komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.fredrikstadfk.no/lag` dokumenterer Andreas Jenssen (assistenttrener), Kevin Nicol (førstelagstrener), Aleksander Bakken (toppspillerutvikler), Torvald Berthelsen (fysisk trener), Håkon Wæhler (fysioterapeut) og Samuel Dirscher (keepertrener). Bare disse eksplisitte rollene er materialisert.
 
+Vålerenga er fjerde komplette klubbsett. Klubbens offisielle støtteapparat på `https://www.vif-fotball.no/lag/a-laget/a-lag-stotteapparat` dokumenterer Vetle Kristoffer Rygh (assistenttrener), Knut Rønningene (førstelagstrener), Aaron Horne (fysisk trener), Martin Flesland (fysisk trener / fysioterapeut), Carl Fredrik Birkemo (fysioterapeut) og Lukasz Jarosinski (keepertrener). Hovedtrener Johannes Moesgaard brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
+
 `Kontor → Klubbdrift → Stab & drift` viser rolledekningen som `1/1`, `3/3`, `1/1` og `1/1`. Før-sesongsgaten blir først komplett når alle fire rollefamiliene er dekket; seks personer med feil rollefordeling kan derfor ikke passere. Administrasjon bruker samme seks-personers krav, slik at «Stab engasjert» aldri kan vise `6/1`.
 
 
