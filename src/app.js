@@ -2900,12 +2900,16 @@ function getClassificationName(classificationId) {
   return match?.name || classificationId;
 }
 
-// Engasjert stab: tilgjengelig stab som finnes i hiredStaffIds.
+// Engasjert stab: hiredStaffIds er sannhetskilden. Unlock-poolen avgjør hvem
+// som kan ansettes NÅ, men en person som allerede er engasjert skal ikke
+// forsvinne hvis stedstilgang endres, en starter-fallback skjules eller en save
+// migreres til et kuratert klubbsett.
 function getHiredStaff() {
   const hiredIds = new Set(
-    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : []
+    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds.map(String) : []
   );
-  const hired = getUnlockedStaff().filter((member) => hiredIds.has(member.id));
+  const hired = (Array.isArray(state.staff) ? state.staff : [])
+    .filter((member) => member?.id && hiredIds.has(String(member.id)));
   return decorateHiredStaffWithAssignments(hired);
 }
 
