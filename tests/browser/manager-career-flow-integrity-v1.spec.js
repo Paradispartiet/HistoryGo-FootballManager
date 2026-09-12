@@ -76,7 +76,13 @@ test("Rosenborg kan engasjere hele kildekorrekte 1+3+1+1-staben", async ({ page 
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await page.locator('[data-start-mode="league"]').click();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeVisible();
+  const leagueStart = page.locator('[data-start-mode="league"]');
+  await expect(leagueStart).toBeVisible();
+  await leagueStart.click();
+  await expect(page.locator("#onboardingClubStep")).toBeVisible();
+  await expect(page.locator("#onboardingClubModeTakeover")).toBeVisible();
   await page.locator("#onboardingClubModeTakeover").click();
   await page.locator('.club-takeover-option[data-club-id="rosenborg"]').click();
   await page.locator("#onboardingCreateClub").click();

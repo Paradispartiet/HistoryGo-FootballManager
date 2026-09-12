@@ -456,6 +456,133 @@
       ],
       "warningWhenMisused": "Dokumentert som keepertrener for Rosenborgs A-lag og med UEFA Keeper A; profilen brukes kun i keepertrenerrollen.",
       "profileSourceUrl": "https://www.rbk.no/lag/alexander-lund-hansen"
+    },
+    {
+      "id": "morten_kalvenes_staff",
+      "name": "Morten Kalvenes",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "brann"
+      ],
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "sourceUrl": "https://www.brann.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Branns A-lagsapparat; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "erik_huseklepp_staff",
+      "name": "Erik Huseklepp",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "brann"
+      ],
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "sourceUrl": "https://www.brann.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Branns A-lagsapparat; profilen kan fylle trenerplass via canBeHiredAs uten at kilderollen omskrives."
+    },
+    {
+      "id": "hassan_el_fakiri_staff",
+      "name": "Hassan El Fakiri",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "brann"
+      ],
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "sourceUrl": "https://www.brann.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Branns A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "helge_haugen_staff",
+      "name": "Helge Haugen",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "brann"
+      ],
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "sourceUrl": "https://www.brann.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i Branns A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "robert_dyvik_staff",
+      "name": "Robert Dyvik",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "brann"
+      ],
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "sourceUrl": "https://www.brann.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysio i Branns A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "dan_riisnes_staff",
+      "name": "Dan Riisnes",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "brann"
+      ],
+      "sourcePlaceIds": [
+        "brann_stadion"
+      ],
+      "sourceUrl": "https://www.brann.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Branns A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
