@@ -72,6 +72,48 @@ test("preseason følger onboarding og kan ikke konsumere Club Week", async ({ pa
   expect(after.program?.applied).toBe(false);
 });
 
+test("Rosenborg kan engasjere hele kildekorrekte 1+3+1+1-staben", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.locator('[data-start-mode="league"]').click();
+  await page.locator("#onboardingClubModeTakeover").click();
+  await page.locator('.club-takeover-option[data-club-id="rosenborg"]').click();
+  await page.locator("#onboardingCreateClub").click();
+
+  await expect(page.locator("#availableStaffList")).toBeVisible();
+  const names = [
+    "Jonathan Hartmann",
+    "Alexander Tettey",
+    "Roger Naustan",
+    "Vetle Veierød",
+    "Ole Næss",
+    "Alexander Lund Hansen"
+  ];
+  for (const name of names) {
+    const card = page.locator("#availableStaffList .unlock-card").filter({ hasText: name });
+    await expect(card).toHaveCount(1);
+    await card.getByRole("button", { name: "Engasjer" }).click();
+  }
+
+  await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 roller");
+  const metric = page.locator("#adminDriftMetrics .admin-metric").filter({ hasText: "Stab engasjert" });
+  await expect(metric.locator(".admin-metric-value")).toHaveText("6/6");
+
+  const state = await page.evaluate(() => {
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    return {
+      hired: merits.hiredStaffIds || [],
+      week: merits.clubWeekState?.week ?? null,
+      phase: merits.clubWeekState?.phase ?? null
+    };
+  });
+  expect(state.hired).toHaveLength(6);
+  expect(state.week).toBe(1);
+  expect(state.phase).toBe("analysis");
+});
+
 test("ingen etterkampknapp eier en skjult flerfase-løkke", async ({ page }) => {
   await page.goto("/");
   const source = await page.evaluate(() => fetch("/src/app.js").then((response) => response.text()));
