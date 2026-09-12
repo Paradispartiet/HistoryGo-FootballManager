@@ -971,6 +971,135 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Lillestrøms A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "sander_nyland_staff",
+      "name": "Sander Nyland",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "sarpsborg08"
+      ],
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "sourceUrl": "https://www.sarpsborg08.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Sarpsborg 08s A-lagsapparat; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "dag_tore_bergerud_staff",
+      "name": "Dag Tore Bergerud",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "sarpsborg08"
+      ],
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "sourceUrl": "https://www.sarpsborg08.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Sarpsborg 08s A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "halvor_elverhoi_staff",
+      "name": "Halvor Elverhøi",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "sarpsborg08"
+      ],
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "sourceUrl": "https://www.sarpsborg08.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk ansvarlig i Sarpsborg 08s A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "filipe_monteiro_staff",
+      "name": "Filipe Monteiro",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "sarpsborg08"
+      ],
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "sourceUrl": "https://www.sarpsborg08.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i Sarpsborg 08s A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "abel_viana_staff",
+      "name": "Abel Viana",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "sarpsborg08"
+      ],
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "sourceUrl": "https://www.sarpsborg08.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i Sarpsborg 08s A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "john_alvbage_staff",
+      "name": "John Alvbåge",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "sarpsborg08"
+      ],
+      "sourcePlaceIds": [
+        "sarpsborg_stadion"
+      ],
+      "sourceUrl": "https://www.sarpsborg08.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Sarpsborg 08s A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
