@@ -73,6 +73,8 @@ Etter grønn Manager Career Flow Integrity er staff neste synlige innholdsgap. G
 
 Rosenborg er første klubbsett, basert på klubbens offisielle A-lagsstab oppdatert 11.08.2026. Administrasjon bruker samtidig samme seksrollerskrav som før-sesong, slik at den gamle `6/1`-presentasjonen ikke kan komme tilbake.
 
+Brann er andre komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen står dermed på 2/16 komplette Eliteserie-sett; de øvrige klubbene bruker fortsatt hele det generiske placeholder-gulvet til et komplett klubbsett kan bevises.
+
 ## Reelt åpent arbeid
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:
