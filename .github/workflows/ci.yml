@@ -93,6 +93,7 @@ jobs:
           npm run audit:manager-club-communication-v2
           npm run audit:manager-club-communication-v3
           npm run audit:manager-staff-roster-v1
+          npm run audit:eliteserien-staff-coverage
           npm run audit:manager-visual-identity-v1
           npm run audit:manager-legacy-cleanup-v1
           node scripts/audit-manager-football-learning-loop-v1.mjs
