@@ -77,8 +77,13 @@ test("Rosenborg kan engasjere hele kildekorrekte 1+3+1+1-staben", async ({ page 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await page.locator('[data-start-mode="league"]').click();
+  await expect(page.locator("#onboardingClubStep")).toBeVisible();
+  await expect(page.locator("#onboardingClubModeTakeover")).toBeVisible();
   await page.locator("#onboardingClubModeTakeover").click();
-  await page.locator('.club-takeover-option[data-club-id="rosenborg"]').click();
+  const rosenborg = page.locator('.club-takeover-option[data-club-id="rosenborg"]');
+  await expect(rosenborg).toBeVisible();
+  await rosenborg.click();
+  await expect(page.locator("#onboardingCreateClub")).toBeEnabled();
   await page.locator("#onboardingCreateClub").click();
 
   await expect(page.locator("#availableStaffList")).toBeVisible();
@@ -272,8 +277,13 @@ test("blank Rosenborg-takeover starter faktisk Eliteserien gjennom synlig manage
   await page.goto("/");
 
   await page.locator('[data-start-mode="league"]').click();
+  await expect(page.locator("#onboardingClubStep")).toBeVisible();
+  await expect(page.locator("#onboardingClubModeTakeover")).toBeVisible();
   await page.locator("#onboardingClubModeTakeover").click();
-  await page.locator('.club-takeover-option[data-club-id="rosenborg"]').click();
+  const rosenborg = page.locator('.club-takeover-option[data-club-id="rosenborg"]');
+  await expect(rosenborg).toBeVisible();
+  await rosenborg.click();
+  await expect(page.locator("#onboardingCreateClub")).toBeEnabled();
   await page.locator("#onboardingCreateClub").click();
 
   const staffNames = [
