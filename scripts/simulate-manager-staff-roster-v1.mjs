@@ -54,6 +54,17 @@ check(valerengaDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").leng
 check(valerengaDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Vålerenga-rosteren bruker tre aktive trenerroller");
 check(valerengaDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Vålerenga-rosteren bruker én fysiorolle");
 check(valerengaDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Vålerenga-rosteren bruker én keepertrenerrolle");
+const lillestromStarters=selectStarterStaffCandidates(staff,"lillestrom"); const lillestromSummary=summarizeStaffRoster(lillestromStarters);
+check(lillestromStarters.length===6,"Lillestrøm får seks klubbspesifikke starterprofiler");
+check(lillestromSummary.complete,"Lillestrøm-settet dekker 1+3+1+1-kontrakten");
+check(lillestromStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Lillestrøm-settet inneholder ingen placeholders");
+check(lillestromStarters.every(m=>Array.isArray(m.starterClubIds)&&m.starterClubIds.includes("lillestrom")),"alle Lillestrøm-startere er eksplisitt klubbtilknyttet");
+check(lillestromStarters.every(m=>m.sourceUrl==="https://www.lsk.no/lag"),"alle Lillestrøm-startere bruker klubbens offisielle A-lagsoversikt som kilde");
+const lillestromDecorated=decorateHiredStaffWithAssignments(lillestromStarters);
+check(lillestromDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Lillestrøm-rosteren bruker én aktiv assistentrolle");
+check(lillestromDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Lillestrøm-rosteren bruker tre aktive trenerroller");
+check(lillestromDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Lillestrøm-rosteren bruker én fysiorolle");
+check(lillestromDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Lillestrøm-rosteren bruker én keepertrenerrolle");
 const three=[{id:"a",staffType:"coach",canBeHiredAs:["coach"]},{id:"b",staffType:"coach",canBeHiredAs:["coach"]},{id:"c",staffType:"coach",canBeHiredAs:["coach"]}]; const incomplete=summarizeStaffRoster(three);
 check(!incomplete.complete,"tre vilkårlige trenere er ikke komplett stab"); check(incomplete.byRole.find(r=>r.id==="training_coach")?.filled===3,"tre trenere fyller bare trenerplassene"); check(incomplete.missing.some(r=>r.id==="assistant_coach"),"manglende assistent oppdages"); check(incomplete.missing.some(r=>r.id==="physio"),"manglende fysio oppdages"); check(incomplete.missing.some(r=>r.id==="goalkeeper_coach"),"manglende keepertrener oppdages");
 const assignments=assignFirstTeamStaff(starters); check(assignments.filter(e=>e.staffId).length===6,"seks rolleplasser tildeles"); check(new Set(assignments.filter(e=>e.staffId).map(e=>e.staffId)).size===6,"samme person fyller ikke to plasser"); const decorated=decorateHiredStaffWithAssignments(starters); check(decorated.filter(m=>m.assignedStaffRole).length===6,"coach-context får tildelte roller"); check(decorated.some(m=>m.staffType==="physio"),"fysiorollen mates videre"); check(decorated.some(m=>m.staffType==="goalkeeper_coach"),"keepertrenerrollen mates videre"); console.log(`\n${checks}/${checks} staff-roster-sjekker bestått.`);

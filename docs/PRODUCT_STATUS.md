@@ -79,6 +79,8 @@ Fredrikstad er tredje komplette klubbsett, kildebelagt fra klubbens offisielle A
 
 Vålerenga er fjerde komplette klubbsett, kildebelagt fra klubbens offisielle støtteapparat. Coverage-auditen skal dermed stå på 4/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
 
+Lillestrøm er femte komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 5/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
+
 ## Reelt åpent arbeid
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:
