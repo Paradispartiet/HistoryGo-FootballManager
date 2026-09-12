@@ -709,6 +709,137 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Fredrikstads A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "vetle_kristoffer_rygh_staff",
+      "name": "Vetle Kristoffer Rygh",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "valerenga"
+      ],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
+      "sourceUrl": "https://www.vif-fotball.no/lag/a-laget/a-lag-stotteapparat",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Vålerengas A-lagsapparat; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "knut_ronningene_staff",
+      "name": "Knut Rønningene",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "valerenga"
+      ],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
+      "sourceUrl": "https://www.vif-fotball.no/lag/a-laget/a-lag-stotteapparat",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som førstelagstrener i Vålerengas A-lagsapparat; profilen brukes som trener uten oppdiktede spesialistkvaliteter."
+    },
+    {
+      "id": "aaron_horne_staff",
+      "name": "Aaron Horne",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "valerenga"
+      ],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
+      "sourceUrl": "https://www.vif-fotball.no/lag/a-laget/a-lag-stotteapparat",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i Vålerengas A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "martin_flesland_staff",
+      "name": "Martin Flesland",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach",
+        "physio"
+      ],
+      "starterClubIds": [
+        "valerenga"
+      ],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
+      "sourceUrl": "https://www.vif-fotball.no/lag/a-laget/a-lag-stotteapparat",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach",
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener / fysioterapeut i Vålerengas A-lagsapparat; profilen brukes bare innen disse eksplisitte funksjonene."
+    },
+    {
+      "id": "carl_fredrik_birkemo_staff",
+      "name": "Carl Fredrik Birkemo",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "valerenga"
+      ],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
+      "sourceUrl": "https://www.vif-fotball.no/lag/a-laget/a-lag-stotteapparat",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i Vålerengas A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "lukasz_jarosinski_staff",
+      "name": "Lukasz Jarosinski",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "valerenga"
+      ],
+      "sourcePlaceIds": [
+        "intility_arena"
+      ],
+      "sourceUrl": "https://www.vif-fotball.no/lag/a-laget/a-lag-stotteapparat",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Vålerengas A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
