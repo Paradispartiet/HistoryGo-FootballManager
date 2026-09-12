@@ -583,6 +583,132 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Branns A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "andreas_jenssen_staff",
+      "name": "Andreas Jenssen",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "fredrikstad"
+      ],
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "sourceUrl": "https://www.fredrikstadfk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Fredrikstads A-lagsapparat; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "kevin_nicol_staff",
+      "name": "Kevin Nicol",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "fredrikstad"
+      ],
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "sourceUrl": "https://www.fredrikstadfk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som førstelagstrener i Fredrikstads A-lagsapparat; profilen brukes som trener uten oppdiktede spesialistkvaliteter."
+    },
+    {
+      "id": "aleksander_bakken_staff",
+      "name": "Aleksander Bakken",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "fredrikstad"
+      ],
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "sourceUrl": "https://www.fredrikstadfk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Fredrikstads A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "torvald_berthelsen_staff",
+      "name": "Torvald Berthelsen",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "fredrikstad"
+      ],
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "sourceUrl": "https://www.fredrikstadfk.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i Fredrikstads A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "hakon_waehler_staff",
+      "name": "Håkon Wæhler",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "fredrikstad"
+      ],
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "sourceUrl": "https://www.fredrikstadfk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i Fredrikstads A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "samuel_dirscher_staff",
+      "name": "Samuel Dirscher",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "fredrikstad"
+      ],
+      "sourcePlaceIds": [
+        "fredrikstad_stadion"
+      ],
+      "sourceUrl": "https://www.fredrikstadfk.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Fredrikstads A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }

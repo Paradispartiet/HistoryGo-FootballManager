@@ -16,6 +16,8 @@ Rosenborg er første kuraterte klubbsett. A-lagsstaben er hentet fra Rosenborg B
 
 Brann er andre komplette klubbsett. Seks starterprofiler er hentet fra klubbens løpende A-lagsoversikt på `https://www.brann.no/lag`: Morten Kalvenes og Erik Huseklepp (assistenttrenere), Hassan El Fakiri (toppspillerutvikler), Helge Haugen (fysisk trener), Robert Dyvik (fysio) og Dan Riisnes (keepertrener). Bare rolleinformasjon som står eksplisitt hos klubben er materialisert.
 
+Fredrikstad er tredje komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.fredrikstadfk.no/lag` dokumenterer Andreas Jenssen (assistenttrener), Kevin Nicol (førstelagstrener), Aleksander Bakken (toppspillerutvikler), Torvald Berthelsen (fysisk trener), Håkon Wæhler (fysioterapeut) og Samuel Dirscher (keepertrener). Bare disse eksplisitte rollene er materialisert.
+
 `Kontor → Klubbdrift → Stab & drift` viser rolledekningen som `1/1`, `3/3`, `1/1` og `1/1`. Før-sesongsgaten blir først komplett når alle fire rollefamiliene er dekket; seks personer med feil rollefordeling kan derfor ikke passere. Administrasjon bruker samme seks-personers krav, slik at «Stab engasjert» aldri kan vise `6/1`.
 
 
