@@ -14,6 +14,8 @@ Ukurerte klubber får seks tydelig merkede plassholderprofiler som et nøytralt 
 
 Rosenborg er første kuraterte klubbsett. A-lagsstaben er hentet fra Rosenborg Ballklubs offisielle oversikt, oppdatert 11.08.2026: `https://www.rbk.no/om-rbk/ansatte/a-lag-menn`. Alexander Lund Hansens keepertrenerprofil har i tillegg klubbens egen profilsak som provenance. Dataene bruker bare dokumenterte roller; taktiske ekspertiser legges ikke til uten særskilt kilde.
 
+Brann er andre komplette klubbsett. Seks starterprofiler er hentet fra klubbens løpende A-lagsoversikt på `https://www.brann.no/lag`: Morten Kalvenes og Erik Huseklepp (assistenttrenere), Hassan El Fakiri (toppspillerutvikler), Helge Haugen (fysisk trener), Robert Dyvik (fysio) og Dan Riisnes (keepertrener). Bare rolleinformasjon som står eksplisitt hos klubben er materialisert.
+
 `Kontor → Klubbdrift → Stab & drift` viser rolledekningen som `1/1`, `3/3`, `1/1` og `1/1`. Før-sesongsgaten blir først komplett når alle fire rollefamiliene er dekket; seks personer med feil rollefordeling kan derfor ikke passere. Administrasjon bruker samme seks-personers krav, slik at «Stab engasjert» aldri kan vise `6/1`.
 
 
