@@ -77,8 +77,13 @@ test("Rosenborg kan engasjere hele kildekorrekte 1+3+1+1-staben", async ({ page 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await page.locator('[data-start-mode="league"]').click();
+  await expect(page.locator("#onboardingClubStep")).toBeVisible();
+  await expect(page.locator("#onboardingClubModeTakeover")).toBeVisible();
   await page.locator("#onboardingClubModeTakeover").click();
-  await page.locator('.club-takeover-option[data-club-id="rosenborg"]').click();
+  const rosenborg = page.locator('.club-takeover-option[data-club-id="rosenborg"]');
+  await expect(rosenborg).toBeVisible();
+  await rosenborg.click();
+  await expect(page.locator("#onboardingCreateClub")).toBeEnabled();
   await page.locator("#onboardingCreateClub").click();
 
   await expect(page.locator("#availableStaffList")).toBeVisible();
@@ -263,4 +268,78 @@ test("ferdig kampforberedelse gjør matchday canonical", async ({ page }) => {
 
   await expect(page.locator("#matchdayCommand .matchday-scene")).toHaveAttribute("data-phase", "ready");
   await expect(page.locator("#matchdayCommand .matchday-scene-action")).toHaveText("Åpne kampforberedelsen");
+});
+
+
+test("blank Rosenborg-takeover starter faktisk Eliteserien gjennom synlig managerflyt", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  await page.locator('[data-start-mode="league"]').click();
+  await expect(page.locator("#onboardingClubStep")).toBeVisible();
+  await expect(page.locator("#onboardingClubModeTakeover")).toBeVisible();
+  await page.locator("#onboardingClubModeTakeover").click();
+  const rosenborg = page.locator('.club-takeover-option[data-club-id="rosenborg"]');
+  await expect(rosenborg).toBeVisible();
+  await rosenborg.click();
+  await expect(page.locator("#onboardingCreateClub")).toBeEnabled();
+  await page.locator("#onboardingCreateClub").click();
+
+  const staffNames = [
+    "Jonathan Hartmann",
+    "Alexander Tettey",
+    "Roger Naustan",
+    "Vetle Veierød",
+    "Ole Næss",
+    "Alexander Lund Hansen"
+  ];
+  for (const name of staffNames) {
+    const card = page.locator("#availableStaffList .unlock-card").filter({ hasText: name });
+    await expect(card).toHaveCount(1);
+    await card.getByRole("button", { name: "Engasjer" }).click();
+  }
+
+  await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
+  await expect(page.locator("#nextActionPrimaryTitle")).toHaveText("Velg treningsprogram");
+  await page.locator("#nextActionPrimary").click();
+
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+  await page.locator("#trainingDayChangeProgram").click();
+  const programButton = page.locator("#managerTeamChoiceDrawerBody .training-program-select:not([disabled])").first();
+  await expect(programButton).toBeVisible();
+  await programButton.click();
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+
+  await expect(page.locator("#nextActionPrimaryTitle")).toHaveText("Start sesongen");
+
+  // Dette er den tidligere utestede overgangen i den faktiske managerflyten.
+  // Klikket må returnere og materialisere terminlisten uten skjult state-seeding.
+  await page.locator("#nextActionPrimary").click();
+
+  await expect.poll(async () => page.evaluate(() => {
+    const game = JSON.parse(localStorage.getItem("hgfm.gameStartState.v1") || "{}");
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    return {
+      leagueSeasonStatus: game.leagueSeasonStatus || null,
+      seasonStatus: season?.status || null,
+      currentRound: season?.currentRound || null,
+      rounds: season?.competition?.rounds || null,
+      clubCount: season?.competition?.clubCount || null,
+      week: merits.clubWeekState?.week || null,
+      phase: merits.clubWeekState?.phase || null
+    };
+  }), { timeout: 15_000 }).toEqual({
+    leagueSeasonStatus: "active",
+    seasonStatus: "active",
+    currentRound: 1,
+    rounds: 30,
+    clubCount: 16,
+    week: 1,
+    phase: "analysis"
+  });
+
+  await expect(page.locator("#leagueOnboardingPanel")).toBeHidden();
+  await expect(page.locator("#nextActionPhase")).toContainText("UKE 1");
 });
