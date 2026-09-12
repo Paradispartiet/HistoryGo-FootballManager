@@ -3351,27 +3351,50 @@ function hireStaff(staffId) {
   renderApp();
 }
 
-// Sjekk om en ny ansatt holder seg innenfor staffRoles.maxActive for sin
-// kategori. Returnerer true (tillat) ved usikker mapping. Keepertrener og
-// "tidligere keeper"-keepertrener deler kategori, så grensen gjelder begge.
+// Sjekk om en ny ansatt holder seg innenfor staffRoles.maxActive. For
+// førstelagsstaben er den EFFEKTIVE 1+3+1+1-rollen sannheten: en dokumentert
+// assistent som også kan ansettes som coach kan derfor fylle en trenerplass
+// uten å bli blokkert som «assistent nummer to». Kildens staffType endres aldri.
+// Kandidater som ikke får en førstelagsrolle bruker fortsatt legacy-kategorien.
 function canHireWithinStaffLimits(member) {
-  const category = getStaffCategory(member);
-  if (!category) {
+  const hiredIds = new Set(
+    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds.map(String) : []
+  );
+  const rawHired = (Array.isArray(state.staff) ? state.staff : [])
+    .filter((candidate) => candidate?.id && hiredIds.has(String(candidate.id)));
+  const prospectiveRaw = [...rawHired, member]
+    .filter((candidate, index, list) =>
+      candidate?.id && list.findIndex((other) => String(other?.id) === String(candidate.id)) === index
+    );
+  const prospectiveAssigned = decorateHiredStaffWithAssignments(prospectiveRaw);
+  const assignedCandidate = prospectiveAssigned.find(
+    (candidate) => String(candidate?.id) === String(member?.id)
+  );
+  const effectiveCategory = assignedCandidate?.assignedStaffRole
+    ? getStaffCategory(assignedCandidate)
+    : getStaffCategory(member);
+
+  if (!effectiveCategory) {
     return true;
   }
 
   const staffRole = (Array.isArray(state.hgStaffRoles) ? state.hgStaffRoles : []).find(
-    (role) => role && role.id === category
+    (role) => role && role.id === effectiveCategory
   );
   const maxActive = staffRole && Number.isInteger(staffRole.maxActive) ? staffRole.maxActive : null;
   if (!maxActive) {
     return true;
   }
 
-  const currentInCategory = getHiredStaff().filter((hired) => getStaffCategory(hired) === category).length;
-  if (currentInCategory >= maxActive) {
+  const currentInCategory = assignedCandidate?.assignedStaffRole
+    ? prospectiveAssigned.filter(
+        (candidate) => candidate?.assignedStaffRole && getStaffCategory(candidate) === effectiveCategory
+      ).length
+    : getHiredStaff().filter((hired) => getStaffCategory(hired) === effectiveCategory).length + 1;
+
+  if (currentInCategory > maxActive) {
     console.warn(
-      `hireStaff: ${staffRole.name || category} er allerede engasjert med maks ${maxActive}. Ny ansettelse blokkeres.`
+      `hireStaff: ${staffRole.name || effectiveCategory} er allerede engasjert med maks ${maxActive}. Ny ansettelse blokkeres.`
     );
     return false;
   }
