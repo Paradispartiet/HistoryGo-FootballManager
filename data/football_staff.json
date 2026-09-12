@@ -840,6 +840,137 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Vålerengas A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "eirik_maeland_staff",
+      "name": "Eirik Mæland",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "lillestrom"
+      ],
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "sourceUrl": "https://www.lsk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Lillestrøms A-lagsapparat; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "frode_kippe_staff",
+      "name": "Frode Kippe",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "lillestrom"
+      ],
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "sourceUrl": "https://www.lsk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Lillestrøms A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "martin_jakobsen_staff",
+      "name": "Martin Jakobsen",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "lillestrom"
+      ],
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "sourceUrl": "https://www.lsk.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener for Lillestrøms A-lag; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "geir_kasene_staff",
+      "name": "Geir Kåsene",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach",
+        "physio"
+      ],
+      "starterClubIds": [
+        "lillestrom"
+      ],
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "sourceUrl": "https://www.lsk.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach",
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener/fysioterapeut i Lillestrøms A-lagsapparat; profilen brukes bare innen disse eksplisitte funksjonene."
+    },
+    {
+      "id": "sondre_sjogren_jakobsen_staff",
+      "name": "Sondre Sjøgren Jakobsen",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "lillestrom"
+      ],
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "sourceUrl": "https://www.lsk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i Lillestrøms A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "bartosz_deregowski_staff",
+      "name": "Bartosz Deregowski",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "lillestrom"
+      ],
+      "sourcePlaceIds": [
+        "araasen_stadion"
+      ],
+      "sourceUrl": "https://www.lsk.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Lillestrøms A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
