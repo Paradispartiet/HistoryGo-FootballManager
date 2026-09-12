@@ -15,3 +15,12 @@ Ukurerte klubber får seks tydelig merkede plassholderprofiler som et nøytralt 
 Rosenborg er første kuraterte klubbsett. A-lagsstaben er hentet fra Rosenborg Ballklubs offisielle oversikt, oppdatert 11.08.2026: `https://www.rbk.no/om-rbk/ansatte/a-lag-menn`. Alexander Lund Hansens keepertrenerprofil har i tillegg klubbens egen profilsak som provenance. Dataene bruker bare dokumenterte roller; taktiske ekspertiser legges ikke til uten særskilt kilde.
 
 `Kontor → Klubbdrift → Stab & drift` viser rolledekningen som `1/1`, `3/3`, `1/1` og `1/1`. Før-sesongsgaten blir først komplett når alle fire rollefamiliene er dekket; seks personer med feil rollefordeling kan derfor ikke passere. Administrasjon bruker samme seks-personers krav, slik at «Stab engasjert» aldri kan vise `6/1`.
+
+
+## Eliteserien-kø og ferdigdefinisjon
+
+`npm run audit:eliteserien-staff-coverage` måler alle 16 klubbene i 2026-snapshotet mot den samme `starterClubIds`-tilknytningen og den samme 1+3+1+1-rosteren som runtime bruker.
+
+Auditen er en **coverage-/integritetsport**, ikke et krav om å dikte fram 16 komplette sett med en gang. Et klubbsett regnes først som komplett når kuraterte, ikke-placeholder profiler alene dekker alle seks rolleplassene. Inntil da skal onboarding bruke hele det generiske placeholder-gulvet; et halvkurert klubbsett får aldri lekke inn som en tilsynelatende ferdig starterstab.
+
+Dette gjør produksjonsrekkefølgen klubbvis i stedet for personvis: kurater et dokumentert, komplett sett for én klubb, la den eksisterende rosteren bevise 1+3+1+1, og gå deretter videre til neste klubb. Ingen ny klubb/staff-mapping eller parallell lagringsmodell skal opprettes.
