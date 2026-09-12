@@ -322,6 +322,140 @@
         "big_match_team"
       ],
       "warningWhenMisused": "Denne plassholderprofilen representerer keepertrenerrollen, ikke en identifisert virkelig person."
+    },
+    {
+      "id": "jonathan_hartmann",
+      "name": "Jonathan Hartmann",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "rosenborg"
+      ],
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "sourceUrl": "https://www.rbk.no/om-rbk/ansatte/a-lag-menn",
+      "sourceUpdatedAt": "2026-08-11",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener for Rosenborgs A-lag; profilen tillegges ingen ekstra spesialisering uten egen kilde."
+    },
+    {
+      "id": "alexander_tettey_staff",
+      "name": "Alexander Tettey",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "rosenborg"
+      ],
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "sourceUrl": "https://www.rbk.no/om-rbk/ansatte/a-lag-menn",
+      "sourceUpdatedAt": "2026-08-11",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener for Rosenborgs A-lag; profilen tillegges ingen ekstra spesialisering uten egen kilde."
+    },
+    {
+      "id": "roger_naustan_staff",
+      "name": "Roger Naustan",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "rosenborg"
+      ],
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "sourceUrl": "https://www.rbk.no/om-rbk/ansatte/a-lag-menn",
+      "sourceUpdatedAt": "2026-08-11",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Rosenborgs A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske spesialiteter."
+    },
+    {
+      "id": "vetle_veierod",
+      "name": "Vetle Veierød",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "rosenborg"
+      ],
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "sourceUrl": "https://www.rbk.no/om-rbk/ansatte/a-lag-menn",
+      "sourceUpdatedAt": "2026-08-11",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener for Rosenborgs A-lag; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "ole_naess",
+      "name": "Ole Næss",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "rosenborg"
+      ],
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "sourceUrl": "https://www.rbk.no/om-rbk/ansatte/a-lag-menn",
+      "sourceUpdatedAt": "2026-08-11",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut/osteopat for Rosenborgs A-lag; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "alexander_lund_hansen",
+      "name": "Alexander Lund Hansen",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "rosenborg"
+      ],
+      "sourcePlaceIds": [
+        "lerkendal_stadion"
+      ],
+      "sourceUrl": "https://www.rbk.no/om-rbk/ansatte/a-lag-menn",
+      "sourceUpdatedAt": "2026-08-11",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener for Rosenborgs A-lag og med UEFA Keeper A; profilen brukes kun i keepertrenerrollen.",
+      "profileSourceUrl": "https://www.rbk.no/lag/alexander-lund-hansen"
     }
   ]
 }

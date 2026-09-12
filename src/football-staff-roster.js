@@ -113,7 +113,20 @@ export function decorateHiredStaffWithAssignments(staff = []) {
   });
 }
 
-export function selectStarterStaffCandidates(staff = []) {
+export function selectStarterStaffCandidates(staff = [], clubId = null) {
+  const normalizedClubId = clubId == null ? "" : String(clubId);
+  if (normalizedClubId) {
+    const clubStarters = asArray(staff).filter((member) =>
+      staffId(member) &&
+      asArray(member?.starterClubIds).map(String).includes(normalizedClubId)
+    );
+    const clubAssignments = assignFirstTeamStaff(clubStarters).filter((entry) => entry.staffId);
+    if (clubAssignments.length >= REQUIRED_FIRST_TEAM_STAFF) {
+      const selectedIds = new Set(clubAssignments.map((entry) => entry.staffId));
+      return clubStarters.filter((member) => selectedIds.has(staffId(member)));
+    }
+  }
+
   const starters = asArray(staff).filter((member) => member?.starterStaff === true && staffId(member));
   const selectedIds = new Set(assignFirstTeamStaff(starters).filter((entry) => entry.staffId).map((entry) => entry.staffId));
   return starters.filter((member) => selectedIds.has(staffId(member)));

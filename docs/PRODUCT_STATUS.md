@@ -67,6 +67,12 @@ Canonical plan: [`MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md`](MANAGER_CAREER_FLOW_IN
 
 For 2. divisjon er det systematiske source-depth-gulvet **frosset ved minst to kildebelagte styrkeprofiler per klubb**. Allerede mergede tredjeprofiler beholdes, men det kjøres ikke en automatisk 2→3→4-runde gjennom resten av divisjonen. Ny spillerresearch gjøres selektivt når en konkret profil har særskilt produktverdi.
 
+### P1 staff — klubbspesifikke startersett
+
+Etter grønn Manager Career Flow Integrity er staff neste synlige innholdsgap. Generiske seksrollers-placeholders beholdes kun som fallback for ukurerte klubber. Kuraterte klubber kan bruke `starterClubIds`; et klubbsett tas bare i bruk når det alene dekker hele 1 assistent + 3 trenere + 1 fysio + 1 keepertrener.
+
+Rosenborg er første klubbsett, basert på klubbens offisielle A-lagsstab oppdatert 11.08.2026. Administrasjon bruker samtidig samme seksrollerskrav som før-sesong, slik at den gamle `6/1`-presentasjonen ikke kan komme tilbake.
+
 ## Reelt åpent arbeid
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:

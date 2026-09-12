@@ -64,6 +64,13 @@ test("viser 1 assistent, 3 trenere, fysio og keepertrener", async ({ page }) => 
   await expect(page.locator("#managerStaffRosterV1")).toContainText("Keepertrener");
 });
 
+test("Administrasjon bruker samme 6-personers stabsgrense", async ({ page }) => {
+  await openStaff(page);
+  const metric = page.locator("#adminDriftMetrics .admin-metric").filter({ hasText: "Stab engasjert" });
+  await expect(metric).toHaveCount(1);
+  await expect(metric.locator(".admin-metric-value")).toHaveText("6/6");
+});
+
 test("tre trenere er ikke komplett støtteapparat", async ({ page }) => {
   await openStaff(page);
   await page.evaluate(() => {

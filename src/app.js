@@ -2036,7 +2036,8 @@ function isStarterSquadActive() {
 // Manageren må fortsatt engasjere dem selv. Ingen stabsdata hardkodes her.
 function getStarterSquadStaffCandidates(staff) {
   if (!isStarterSquadActive()) return [];
-  return selectStarterStaffCandidates(staff);
+  const clubId = state.gameStartState?.takeoverClubId || null;
+  return selectStarterStaffCandidates(staff, clubId);
 }
 
 // Draft-pool: grunnsjiktet av klubbspillere (under NAME_TIER_MIN). De store
@@ -2405,7 +2406,16 @@ function computeAvailability() {
   // aldri i unlockedPlaceIds eller History Go-lagring, og manageren må fortsatt
   // engasjere personene selv. Erstatter den gamle stedsanker-baserte kilden.
   const starterStaff = getStarterSquadStaffCandidates(staff);
-  const staffById = new Map([...normallyUnlockedStaff, ...starterStaff].map((member) => [member.id, member]));
+  const hasCuratedClubStarterStaff =
+    starterStaff.length >= REQUIRED_STAFF_SIZE &&
+    starterStaff.every((member) => member?.isPlaceholder !== true);
+  // Når en etablert klubb har et komplett kuratert startersett, skal de
+  // generiske spillbarhets-placeholderne ikke lekke inn igjen via andre
+  // sted/unlock-kilder. De er bare fallback for ukurerte klubber.
+  const visibleNormallyUnlockedStaff = hasCuratedClubStarterStaff
+    ? normallyUnlockedStaff.filter((member) => !(member?.starterStaff === true && member?.isPlaceholder === true))
+    : normallyUnlockedStaff;
+  const staffById = new Map([...visibleNormallyUnlockedStaff, ...starterStaff].map((member) => [member.id, member]));
   const unlockedStaff = [...staffById.values()];
 
   // 4) Formasjonstilgjengelighet: unlockRules.json + formation.unlockLinks
@@ -2890,12 +2900,16 @@ function getClassificationName(classificationId) {
   return match?.name || classificationId;
 }
 
-// Engasjert stab: tilgjengelig stab som finnes i hiredStaffIds.
+// Engasjert stab: hiredStaffIds er sannhetskilden. Unlock-poolen avgjør hvem
+// som kan ansettes NÅ, men en person som allerede er engasjert skal ikke
+// forsvinne hvis stedstilgang endres, en starter-fallback skjules eller en save
+// migreres til et kuratert klubbsett.
 function getHiredStaff() {
   const hiredIds = new Set(
-    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds : []
+    Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds.map(String) : []
   );
-  const hired = getUnlockedStaff().filter((member) => hiredIds.has(member.id));
+  const hired = (Array.isArray(state.staff) ? state.staff : [])
+    .filter((member) => member?.id && hiredIds.has(String(member.id)));
   return decorateHiredStaffWithAssignments(hired);
 }
 
@@ -9441,7 +9455,7 @@ function renderAdminRoom() {
       { label: "Spillere i stall", value: roster.unlockedCount, threshold: REQUIRED_SQUAD_SIZE },
       { label: "Startellever satt", value: roster.starterCount, threshold: REQUIRED_STARTERS },
       { label: "Benk", value: roster.benchCount, threshold: REQUIRED_BENCH },
-      { label: "Stab engasjert", value: staffCount, threshold: 1 }
+      { label: "Stab engasjert", value: staffCount, threshold: REQUIRED_STAFF_SIZE }
     ];
     for (const metric of metrics) {
       const value = Number(metric.value);
