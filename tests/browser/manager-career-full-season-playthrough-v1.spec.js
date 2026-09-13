@@ -25,6 +25,8 @@ async function readProgress(page) {
     const clubWeek = merits.clubWeekState || session.clubWeekState || parse("hgfm.clubWeekState.v1", {});
     const season = parse("historygo-football-manager.league-season.v3", null) || session.leagueSeason;
     const matchday = parse("hgfm.matchday.v1", null) || session.matchday;
+    const weeklyTrainingProgram = session.weeklyTrainingProgram || parse("hgfm.weeklyTrainingProgram.v1", null);
+    const weeklyTrainingFocus = session.weeklyTrainingFocus || parse("hgfm.weeklyTrainingFocus.v1", null);
     const lastMatch = matchday?.lastMatch || null;
     const archive = parse("hgfm.seasonArchive.v1", []);
     const playerStats = parse("hgfm.playerSeasonStats.v1", { rows: [], matchIds: [] });
@@ -49,6 +51,10 @@ async function readProgress(page) {
         : [],
       trainingFocusId: lastMatch?.trainingFocus?.focusId || null,
       trainingFocusName: lastMatch?.trainingFocus?.name || null,
+      weeklyTrainingProgramId: weeklyTrainingProgram?.programId || null,
+      weeklyTrainingProgramWeek: Number(weeklyTrainingProgram?.week) || null,
+      weeklyTrainingFocusId: weeklyTrainingFocus?.focusId || null,
+      weeklyTrainingFocusWeek: Number(weeklyTrainingFocus?.week) || null,
       lineupCount: Object.values(session.lineup || {}).filter(Boolean).length,
       hiredStaffCount: Array.isArray(merits.hiredStaffIds) ? merits.hiredStaffIds.length : 0
     };
@@ -129,8 +135,10 @@ async function chooseTrainingProgram(page, choiceIndex = 0) {
   await option.click();
   await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
-  await expect(page.locator("#trainingDayProgramTitle")).not.toHaveText("Ikke valgt");
-  return (await page.locator("#trainingDayProgramTitle").textContent())?.trim() || null;
+  const progress = await readProgress(page);
+  expect(progress.weeklyTrainingProgramId).toBeTruthy();
+  expect(progress.weeklyTrainingProgramWeek).toBe(progress.week);
+  return progress.weeklyTrainingProgramId;
 }
 
 async function chooseTrainingFocus(page, choiceIndex = 0) {
@@ -147,6 +155,10 @@ async function chooseTrainingFocus(page, choiceIndex = 0) {
   await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
   await expect(page.locator("#weeklyTrainingStatus")).not.toContainText("Ikke valgt");
+  const progress = await readProgress(page);
+  expect(progress.weeklyTrainingFocusId).toBeTruthy();
+  expect(progress.weeklyTrainingFocusWeek).toBe(progress.week);
+  return progress.weeklyTrainingFocusId;
 }
 
 async function choosePreseasonTraining(page) {
@@ -208,15 +220,31 @@ async function advanceClubWeek(page, expectedPhase) {
 
 async function chooseTrainingForCurrentWeek(page, choiceIndex = 0) {
   await openTraining(page);
-  const selectedProgram = await chooseTrainingProgram(page, choiceIndex);
+  const programId = await chooseTrainingProgram(page, choiceIndex);
 
   const afterProgram = await readProgress(page);
+  let focusId = afterProgram.weeklyTrainingFocusId;
   if (afterProgram.phase === "training") {
-    await chooseTrainingFocus(page, choiceIndex);
+    focusId = await chooseTrainingFocus(page, choiceIndex);
   }
 
-  await expect.poll(async () => (await readProgress(page)).phase).toBe("match_prep");
-  return selectedProgram;
+  await expect.poll(async () => {
+    const progress = await readProgress(page);
+    return {
+      phase: progress.phase,
+      programId: progress.weeklyTrainingProgramId,
+      programWeek: progress.weeklyTrainingProgramWeek,
+      focusId: progress.weeklyTrainingFocusId,
+      focusWeek: progress.weeklyTrainingFocusWeek
+    };
+  }).toEqual({
+    phase: "match_prep",
+    programId,
+    programWeek: afterProgram.week,
+    focusId,
+    focusWeek: afterProgram.week
+  });
+  return { programId, focusId };
 }
 
 async function openPreMatch(page) {
@@ -306,7 +334,35 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     await openCurrentOpponentAnalysis(page, choiceIndex);
     await advanceClubWeek(page, "inbox");
     await advanceClubWeek(page, "training");
-    const trainingProgram = await chooseTrainingForCurrentWeek(page, choiceIndex);
+    const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
+
+    // Mode-session er canonical eier av treningsvalgene. Bevis én faktisk
+    // reload midt i sesongen, slik at legacy-key alene ikke kan maskere stale
+    // session-state.
+    if (round === 2) {
+      await page.reload();
+      await expect(page.locator("#formationSelect option").first()).toBeAttached();
+      await expect(page.locator("#onboardingScreen")).toBeHidden();
+      await expect.poll(async () => {
+        const progress = await readProgress(page);
+        return {
+          week: progress.week,
+          phase: progress.phase,
+          programId: progress.weeklyTrainingProgramId,
+          programWeek: progress.weeklyTrainingProgramWeek,
+          focusId: progress.weeklyTrainingFocusId,
+          focusWeek: progress.weeklyTrainingFocusWeek
+        };
+      }).toEqual({
+        week: round,
+        phase: "match_prep",
+        programId: trainingSelection.programId,
+        programWeek: round,
+        focusId: trainingSelection.focusId,
+        focusWeek: round
+      });
+    }
+
     await playCurrentMatch(page, choiceIndex);
 
     const played = await readProgress(page);
@@ -319,14 +375,14 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
 
     matchIds.add(played.lastMatchId);
     opponentIds.add(played.lastOpponentId);
-    if (trainingProgram) trainingPrograms.add(trainingProgram);
+    trainingPrograms.add(trainingSelection.programId);
     trainingFocusIds.add(played.trainingFocusId);
     played.decisionLabels.forEach((label) => decisionLabels.add(label));
     observations.push({
       round,
       opponent: played.lastOpponentName,
       opponentId: played.lastOpponentId,
-      trainingProgram,
+      trainingProgram: trainingSelection.programId,
       training: played.trainingFocusName,
       decisions: played.decisionCount
     });
