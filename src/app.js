@@ -9517,17 +9517,22 @@ function renderTeamSummary(teamFit) {
     return;
   }
 
-  elements.teamStatus.textContent = getTeamStatus(teamFit);
-  elements.completeCount.textContent = `${teamFit.completeCount}/${teamFit.totalSlots}`;
-  elements.roleFitAverage.textContent = teamFit.metrics.roleFitAverage;
-  elements.tacticFitAverage.textContent = teamFit.metrics.tacticFitAverage;
-  elements.balanceScore.textContent = teamFit.metrics.balanceScore;
-  elements.restDefenseScore.textContent = teamFit.metrics.restDefenseScore;
-  elements.widthScore.textContent = teamFit.metrics.widthScore;
-  elements.depthScore.textContent = teamFit.metrics.depthScore;
-  elements.buildUpScore.textContent = teamFit.metrics.buildUpScore;
-  elements.pressScore.textContent = teamFit.metrics.pressScore;
-  elements.relationshipScore.textContent = teamFit.metrics.relationshipScore;
+  const setMetricText = (element, value) => {
+    if (!element) return;
+    const next = String(value);
+    if (element.textContent !== next) element.textContent = next;
+  };
+  setMetricText(elements.teamStatus, getTeamStatus(teamFit));
+  setMetricText(elements.completeCount, `${teamFit.completeCount}/${teamFit.totalSlots}`);
+  setMetricText(elements.roleFitAverage, teamFit.metrics.roleFitAverage);
+  setMetricText(elements.tacticFitAverage, teamFit.metrics.tacticFitAverage);
+  setMetricText(elements.balanceScore, teamFit.metrics.balanceScore);
+  setMetricText(elements.restDefenseScore, teamFit.metrics.restDefenseScore);
+  setMetricText(elements.widthScore, teamFit.metrics.widthScore);
+  setMetricText(elements.depthScore, teamFit.metrics.depthScore);
+  setMetricText(elements.buildUpScore, teamFit.metrics.buildUpScore);
+  setMetricText(elements.pressScore, teamFit.metrics.pressScore);
+  setMetricText(elements.relationshipScore, teamFit.metrics.relationshipScore);
 }
 
 
