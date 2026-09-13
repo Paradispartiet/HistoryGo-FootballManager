@@ -16204,6 +16204,9 @@ function renderApp() {
 }
 
 function bindEvents() {
+  window.addEventListener("hgfm:calendar-advance-club-week", () => {
+    advanceClubWeekPhaseAction().catch(console.error);
+  });
   bindFormationAndTacticControls();
   bindTrainingWorkspaceControls();
   bindTrainingAndKnowledgeControls();
