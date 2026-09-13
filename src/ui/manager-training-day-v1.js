@@ -280,7 +280,8 @@ function syncLocation(context) {
   const section = document.querySelector('[data-tab-section="trening"]');
   if (!section || section.hidden) return;
   const location = document.getElementById("managerLocationText");
-  if (location) location.textContent = `Lag · Trening · ${context.day}`;
+  const value = `Lag · Trening · ${context.day}`;
+  if (location && location.textContent !== value) location.textContent = value;
 }
 
 function renderTrainingDay() {
