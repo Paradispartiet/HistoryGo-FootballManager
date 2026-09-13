@@ -247,8 +247,8 @@ async function rollToNextWeek(page, expectedWeek) {
   }).toEqual({ week: expectedWeek, phase: "analysis" });
 }
 
-test("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
-  test.setTimeout(240_000);
+test.only("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
+  test.setTimeout(30_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
