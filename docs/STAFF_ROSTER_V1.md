@@ -22,6 +22,8 @@ Vålerenga er fjerde komplette klubbsett. Klubbens offisielle støtteapparat på
 
 Lillestrøm er femte komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.lsk.no/lag` dokumenterer Eirik Mæland (assistenttrener), Frode Kippe (toppspillerutvikler), Martin Jakobsen (fysisk trener), Geir Kåsene (fysisk trener/fysioterapeut), Sondre Sjøgren Jakobsen (fysioterapeut) og Bartosz Deregowski (keepertrener). Hovedtrener Hans Erik Ødegaard brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
 
+Sarpsborg 08 er sjette komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.sarpsborg08.no/lag` dokumenterer Sander Nyland (assistenttrener), Dag Tore Bergerud (toppspillerutvikler), Halvor Elverhøi (fysisk ansvarlig), Filipe Monteiro (fysisk trener), Abel Viana (fysioterapeut) og John Alvbåge (keepertrener). Hovedtrener Even Sel brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
+
 `Kontor → Klubbdrift → Stab & drift` viser rolledekningen som `1/1`, `3/3`, `1/1` og `1/1`. Før-sesongsgaten blir først komplett når alle fire rollefamiliene er dekket; seks personer med feil rollefordeling kan derfor ikke passere. Administrasjon bruker samme seks-personers krav, slik at «Stab engasjert» aldri kan vise `6/1`.
 
 
