@@ -249,6 +249,7 @@ async function rollToNextWeek(page, expectedWeek) {
 
 test.only("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
   test.setTimeout(30_000);
+  page.on("console", (message) => console.log("[browser-console]", message.text()));
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
