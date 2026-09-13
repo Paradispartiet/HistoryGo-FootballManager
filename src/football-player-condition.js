@@ -164,6 +164,15 @@ export function describeCondition(condition) {
 export function applyMatchLoad(conditions, { played, intensity = 1 } = {}) {
   const map = toMap(conditions);
   const factor = clamp(num(intensity, 1), 0.6, 1.6);
+  const playedIds = new Set(asArray(played).map((entry) => entry?.playerId).filter(Boolean));
+
+  // «Fulle kamper på rad» er en faktisk rekke. Å stå over én kamp bryter den,
+  // også når spilleren allerede finnes i condition-state fra tidligere uker.
+  // Uten dette kunne en benket spiller fortsatt stå med f.eks. 20 fulle kamper
+  // på rad når han kom tilbake, og UI-et ga manageren et falskt slitasjesignal.
+  map.forEach((condition, playerId) => {
+    if (!playedIds.has(playerId)) condition.consecutiveFullMatches = 0;
+  });
 
   asArray(played).forEach((entry) => {
     if (!entry?.playerId) return;

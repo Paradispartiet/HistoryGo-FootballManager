@@ -30,6 +30,15 @@ async function readProgress(page) {
     const lastMatch = matchday?.lastMatch || null;
     const archive = parse("hgfm.seasonArchive.v1", []);
     const playerStats = parse("hgfm.playerSeasonStats.v1", { rows: [], matchIds: [] });
+    const playerCondition = Array.isArray(session.playerCondition)
+      ? session.playerCondition
+      : parse("hgfm.playerCondition.v1", []);
+    const playerConditionMatchIds = Array.isArray(session.playerConditionMatchIds)
+      ? session.playerConditionMatchIds
+      : [];
+    const conditionLoads = playerCondition.map((entry) => Number(entry?.load) || 0);
+    const conditionForms = playerCondition.map((entry) => Math.abs(Number(entry?.form) || 0));
+    const conditionConsecutive = playerCondition.map((entry) => Number(entry?.consecutiveFullMatches) || 0);
 
     return {
       week: Number(clubWeek?.week) || null,
@@ -40,6 +49,21 @@ async function readProgress(page) {
       currentRound: Number(season?.currentRound) || null,
       archiveCount: Array.isArray(archive) ? archive.length : 0,
       playerStatsCount: Array.isArray(playerStats?.rows) ? playerStats.rows.length : 0,
+      conditionCount: playerCondition.length,
+      conditionMatchCount: playerConditionMatchIds.length,
+      conditionTotalLoad: conditionLoads.reduce((sum, value) => sum + value, 0),
+      conditionMaxLoad: Math.max(0, ...conditionLoads),
+      conditionMaxAbsForm: Math.max(0, ...conditionForms),
+      conditionMaxConsecutiveFullMatches: Math.max(0, ...conditionConsecutive),
+      conditionInjuredCount: playerCondition.filter((entry) => Number(entry?.injury?.weeksOut) > 0).length,
+      conditionTotalMatchesPlayed: playerCondition.reduce((sum, entry) => sum + (Number(entry?.matchesPlayed) || 0), 0),
+      conditionTotalMinutesPlayed: playerCondition.reduce((sum, entry) => sum + (Number(entry?.minutesPlayed) || 0), 0),
+      conditionRows: playerCondition.map((entry) => ({
+        playerId: entry?.playerId || null,
+        load: Number(entry?.load) || 0,
+        consecutiveFullMatches: Number(entry?.consecutiveFullMatches) || 0,
+        injured: Number(entry?.injury?.weeksOut) > 0
+      })),
       activeMatchSession: Boolean(matchday?.session),
       lastMatchId: lastMatch?.id || null,
       lastMatchRound: Number(lastMatch?.leagueContext?.round) || null,
@@ -122,6 +146,143 @@ async function openTraining(page) {
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
+}
+
+async function readRotationNeed(page) {
+  return page.evaluate(() => {
+    const parse = (key, fallback = null) => {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (_) {
+        return fallback;
+      }
+    };
+    const envelope = parse("hgfm.modeSessions.v1", {});
+    const session = envelope?.sessions?.[envelope?.activeMode] || {};
+    const conditions = Array.isArray(session.playerCondition)
+      ? session.playerCondition
+      : parse("hgfm.playerCondition.v1", []);
+    const lineup = session.lineup || {};
+    const conditionByPlayerId = new Map(
+      conditions
+        .filter((entry) => entry?.playerId)
+        .map((entry) => [entry.playerId, entry])
+    );
+    const tiredOrInjuredNames = new Set(
+      conditions
+        .filter((entry) => Number(entry?.load) > 50 || Number(entry?.injury?.weeksOut) > 0)
+        .map((entry) => String(entry?.name || "").trim())
+        .filter(Boolean)
+    );
+    const candidates = Object.entries(lineup)
+      .map(([slotId, assignment]) => {
+        const playerId = assignment?.playerId || null;
+        const condition = playerId ? conditionByPlayerId.get(playerId) : null;
+        return {
+          slotId,
+          playerId,
+          name: String(condition?.name || "").trim(),
+          load: Number(condition?.load) || 0,
+          injured: Number(condition?.injury?.weeksOut) > 0
+        };
+      })
+      .filter((entry) => entry.playerId && (entry.injured || entry.load > 50))
+      .sort((a, b) => Number(b.injured) - Number(a.injured) || b.load - a.load);
+
+    return {
+      targets: candidates,
+      avoidNames: [...tiredOrInjuredNames]
+    };
+  });
+}
+
+async function rotateTiredStarters(page, maximumRotations = 4) {
+  const rotations = [];
+
+  for (let attempt = 0; attempt < maximumRotations; attempt += 1) {
+    const need = await readRotationNeed(page);
+    if (need.targets.length === 0) break;
+
+    let performedRotation = null;
+
+    for (const target of need.targets) {
+      await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+      await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+      const chip = page.locator(`#lineupSlots .player-chip[data-slot-id="${target.slotId}"]`);
+      await expect(chip).toBeVisible();
+      const beforePlayerId = await chip.getAttribute("data-player-id");
+      const position = String(await chip.getAttribute("data-position") || "").trim();
+      expect(beforePlayerId).toBe(target.playerId);
+      expect(position).toBeTruthy();
+
+      await chip.click();
+      const inspector = page.locator("#managerLineupSlotInspector");
+      await expect(inspector).toBeVisible();
+      await inspector.locator('[data-slot-action="player"]').click();
+
+      const drawer = page.locator("#managerTeamChoiceDrawer");
+      await expect(drawer).toBeVisible();
+      await expect.poll(async () =>
+        drawer.locator(".lineup-player-choice-row").count()
+      ).toBeGreaterThan(0);
+      const rows = drawer.locator(".lineup-player-choice-row");
+      const rowCount = await rows.count();
+      let replacement = null;
+
+      for (let index = 0; index < rowCount; index += 1) {
+        const row = rows.nth(index);
+        const choice = row.locator(".lineup-player-select-action");
+        if (await choice.isDisabled()) continue;
+        if (await choice.evaluate((element) => element.classList.contains("is-selected"))) continue;
+
+        const profile = row.locator(".lineup-player-profile-link");
+        const name = String(await profile.locator("strong").textContent() || "").trim();
+        const positions = String(await profile.locator("span").textContent() || "");
+        if (!name || need.avoidNames.includes(name)) continue;
+        if (position && !positions.includes(position)) continue;
+        replacement = { choice, name };
+        break;
+      }
+
+      if (!replacement) {
+        // Drawerens Escape-kontrakt er samme brukerflate som Lukk/Ferdig, men
+        // uten Playwright-actionability på en footer som kan flytte seg mens
+        // den lange spillerlisten synkroniseres.
+        await page.keyboard.press("Escape");
+        await expect(drawer).toBeHidden();
+        continue;
+      }
+
+      await replacement.choice.click();
+      await drawer.locator(".manager-team-choice-done").click();
+      await expect(drawer).toBeHidden();
+
+      await expect.poll(async () =>
+        page.locator(`#lineupSlots .player-chip[data-slot-id="${target.slotId}"]`).getAttribute("data-player-id")
+      ).not.toBe(beforePlayerId);
+
+      const afterChip = page.locator(`#lineupSlots .player-chip[data-slot-id="${target.slotId}"]`);
+      performedRotation = {
+        slotId: target.slotId,
+        outPlayerId: beforePlayerId,
+        outName: target.name,
+        outLoad: target.load,
+        outInjured: target.injured,
+        inPlayerId: await afterChip.getAttribute("data-player-id"),
+        inName: replacement.name
+      };
+      rotations.push(performedRotation);
+      break;
+    }
+
+    // Alle slitne/skadde startere er vurdert, men ingen har en frisk,
+    // posisjonskompatibel reserve. Det er et reelt troppsvalg, ikke en testfeil.
+    if (!performedRotation) break;
+  }
+
+  return rotations;
 }
 
 async function chooseTrainingProgram(page, choiceIndex = 0) {
@@ -368,6 +529,11 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   const inboxMessageKinds = new Set();
   const inboxSubjects = new Set();
   const openedInboxMessageIds = new Set();
+  let peakConditionLoad = 0;
+  let peakConditionAbsForm = 0;
+  let peakConsecutiveFullMatches = 0;
+  let peakInjuredPlayers = 0;
+  const rotationEvents = [];
 
   for (let round = 1; round <= 30; round += 1) {
     await expect.poll(async () => {
@@ -389,6 +555,8 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     if (inbox.openedSubject) inboxSubjects.add(inbox.openedSubject);
 
     await advanceClubWeek(page, "training");
+    const rotations = await rotateTiredStarters(page);
+    rotationEvents.push(...rotations.map((rotation) => ({ round, ...rotation })));
     const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
 
     // Klubbkommunikasjonen er fasebevisst: medisinsk/trening blir tilgjengelig
@@ -438,6 +606,26 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(played.decisionCount).toBeGreaterThan(0);
     expect(played.trainingFocusId).toBeTruthy();
     expect(played.activeMatchSession).toBe(false);
+    expect(played.conditionMatchCount).toBe(round);
+    expect(played.conditionCount).toBeGreaterThanOrEqual(11);
+    expect(played.conditionTotalMatchesPlayed).toBeGreaterThan(0);
+    expect(played.conditionTotalMinutesPlayed).toBeGreaterThan(0);
+    expect(played.conditionMaxLoad).toBeGreaterThan(0);
+    for (const rotation of rotations) {
+      const rested = played.conditionRows.find((entry) => entry.playerId === rotation.outPlayerId);
+      const incoming = played.conditionRows.find((entry) => entry.playerId === rotation.inPlayerId);
+      expect(rested).toBeTruthy();
+      expect(rested.consecutiveFullMatches).toBe(0);
+      expect(incoming).toBeTruthy();
+    }
+
+    peakConditionLoad = Math.max(peakConditionLoad, played.conditionMaxLoad);
+    peakConditionAbsForm = Math.max(peakConditionAbsForm, played.conditionMaxAbsForm);
+    peakConsecutiveFullMatches = Math.max(
+      peakConsecutiveFullMatches,
+      played.conditionMaxConsecutiveFullMatches
+    );
+    peakInjuredPlayers = Math.max(peakInjuredPlayers, played.conditionInjuredCount);
 
     matchIds.add(played.lastMatchId);
     opponentIds.add(played.lastOpponentId);
@@ -452,6 +640,15 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       training: played.trainingFocusName,
       inboxMessages: weeklyMail.messages.length,
       openedInboxMessage: inbox.openedMessageId,
+      condition: {
+        players: played.conditionCount,
+        trackedMatches: played.conditionMatchCount,
+        maxLoad: played.conditionMaxLoad,
+        maxAbsForm: played.conditionMaxAbsForm,
+        maxConsecutiveFullMatches: played.conditionMaxConsecutiveFullMatches,
+        injured: played.conditionInjuredCount
+      },
+      rotations,
       decisions: played.decisionCount
     });
 
@@ -486,6 +683,21 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(completed.seasonStatus).toBe("completed");
   expect(completed.archiveCount).toBe(1);
   expect(completed.playerStatsCount).toBeGreaterThan(0);
+  expect(completed.conditionMatchCount).toBe(30);
+  expect(completed.conditionCount).toBeGreaterThanOrEqual(11);
+  expect(completed.conditionTotalMatchesPlayed).toBeGreaterThan(0);
+  expect(completed.conditionTotalMinutesPlayed).toBeGreaterThan(0);
+  expect(peakConditionLoad).toBeGreaterThan(50);
+  expect(peakConditionAbsForm).toBeGreaterThan(0);
+  expect(peakConsecutiveFullMatches).toBeGreaterThanOrEqual(2);
+  // Rotasjon skal være en reell managerbeslutning når condition-motorens
+  // faktiske slitasjeterskel (>50) nås. To separate rotasjoner beviser både
+  // at terskelen får konsekvens og at streak-reset ikke er et engangstilfelle,
+  // uten å bake en bestemt sesongbalanse inn i browserkontrakten.
+  expect(rotationEvents.length).toBeGreaterThanOrEqual(2);
+  expect(new Set(rotationEvents.map((entry) => entry.outPlayerId)).size).toBeGreaterThanOrEqual(2);
+  expect(new Set(rotationEvents.map((entry) => entry.inPlayerId)).size).toBeGreaterThanOrEqual(2);
+  expect(completed.conditionCount).toBeGreaterThan(11);
   expect(completed.activeMatchSession).toBe(false);
 
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
@@ -510,6 +722,12 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(seasonTwo.phase).toBe("analysis");
   expect(seasonTwo.archiveCount).toBe(1);
   expect(seasonTwo.playerStatsCount).toBe(0);
+  expect(seasonTwo.conditionMatchCount).toBe(0);
+  expect(seasonTwo.conditionMaxLoad).toBe(0);
+  expect(seasonTwo.conditionMaxConsecutiveFullMatches).toBe(0);
+  expect(seasonTwo.conditionTotalMatchesPlayed).toBe(0);
+  expect(seasonTwo.conditionTotalMinutesPlayed).toBe(0);
+  expect(seasonTwo.conditionInjuredCount).toBe(0);
   expect(seasonTwo.activeMatchSession).toBe(false);
   await expect(page.locator("#seasonReviewPanel")).toBeHidden();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
@@ -518,5 +736,31 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#nextActionPrimary")).toBeEnabled();
 
-  console.log("Full-season canonical playthrough observations:", JSON.stringify(observations));
+  console.log(
+    "Full-season canonical playthrough observations:",
+    JSON.stringify({
+      rounds: observations,
+      rotations: rotationEvents,
+      conditionSummary: {
+        peakLoad: peakConditionLoad,
+        peakAbsForm: peakConditionAbsForm,
+        peakConsecutiveFullMatches,
+        peakInjuredPlayers,
+        seasonOneEnd: {
+          players: completed.conditionCount,
+          trackedMatches: completed.conditionMatchCount,
+          totalLoad: completed.conditionTotalLoad,
+          maxLoad: completed.conditionMaxLoad,
+          maxAbsForm: completed.conditionMaxAbsForm
+        },
+        seasonTwoStart: {
+          players: seasonTwo.conditionCount,
+          trackedMatches: seasonTwo.conditionMatchCount,
+          totalLoad: seasonTwo.conditionTotalLoad,
+          maxLoad: seasonTwo.conditionMaxLoad,
+          maxAbsForm: seasonTwo.conditionMaxAbsForm
+        }
+      }
+    })
+  );
 });
