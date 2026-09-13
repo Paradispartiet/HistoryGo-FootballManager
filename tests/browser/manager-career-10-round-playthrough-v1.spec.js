@@ -202,7 +202,7 @@ async function openPreMatch(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="kamp"]').click();
   await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
 
-  const kickoff = page.locator(".matchday-kickoff-button");
+  const kickoff = page.locator(".matchday-kickoff-button:visible").first();
   for (let attempt = 0; attempt < 3; attempt += 1) {
     if (await kickoff.isVisible()) break;
     const action = page.locator(".matchday-scene-action:visible").first();
@@ -222,12 +222,12 @@ async function playCurrentMatch(page) {
   for (let event = 0; event < 6; event += 1) {
     if (await nextWeek.isVisible()) break;
 
-    const skip = page.locator(".matchday-live-button.is-secondary").filter({ hasText: "Hopp til pausen" });
+    const skip = page.locator(".matchday-live-button.is-secondary:visible").filter({ hasText: "Hopp til pausen" }).first();
     if (await skip.isVisible()) {
       await skip.click();
     }
 
-    const decision = page.locator(".matchday-decision-button:not([disabled])").first();
+    const decision = page.locator(".matchday-decision-button:not([disabled]):visible").first();
     await expect(decision).toBeVisible();
     await decision.click();
   }
