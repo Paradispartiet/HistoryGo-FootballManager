@@ -85,12 +85,19 @@ async function choosePlayableFormation(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 
+  await page.locator("#teamChangeFormation").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  await expect(page.locator("#formationSelect")).toBeVisible();
+
   const formationId = await page.locator("#formationSelect option:not([disabled])").evaluateAll((options) => {
     const playable = options.find((option) => String(option.value || "").trim());
     return playable?.value || null;
   });
   expect(formationId).toBeTruthy();
   await page.locator("#formationSelect").selectOption(formationId);
+
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
 
   await expect.poll(async () => {
     const text = await page.locator("#completeCount").textContent();
