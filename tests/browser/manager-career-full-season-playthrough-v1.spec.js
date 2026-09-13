@@ -30,6 +30,15 @@ async function readProgress(page) {
     const lastMatch = matchday?.lastMatch || null;
     const archive = parse("hgfm.seasonArchive.v1", []);
     const playerStats = parse("hgfm.playerSeasonStats.v1", { rows: [], matchIds: [] });
+    const playerCondition = Array.isArray(session.playerCondition)
+      ? session.playerCondition
+      : parse("hgfm.playerCondition.v1", []);
+    const playerConditionMatchIds = Array.isArray(session.playerConditionMatchIds)
+      ? session.playerConditionMatchIds
+      : [];
+    const conditionLoads = playerCondition.map((entry) => Number(entry?.load) || 0);
+    const conditionForms = playerCondition.map((entry) => Math.abs(Number(entry?.form) || 0));
+    const conditionConsecutive = playerCondition.map((entry) => Number(entry?.consecutiveFullMatches) || 0);
 
     return {
       week: Number(clubWeek?.week) || null,
@@ -40,6 +49,15 @@ async function readProgress(page) {
       currentRound: Number(season?.currentRound) || null,
       archiveCount: Array.isArray(archive) ? archive.length : 0,
       playerStatsCount: Array.isArray(playerStats?.rows) ? playerStats.rows.length : 0,
+      conditionCount: playerCondition.length,
+      conditionMatchCount: playerConditionMatchIds.length,
+      conditionTotalLoad: conditionLoads.reduce((sum, value) => sum + value, 0),
+      conditionMaxLoad: Math.max(0, ...conditionLoads),
+      conditionMaxAbsForm: Math.max(0, ...conditionForms),
+      conditionMaxConsecutiveFullMatches: Math.max(0, ...conditionConsecutive),
+      conditionInjuredCount: playerCondition.filter((entry) => Number(entry?.injury?.weeksOut) > 0).length,
+      conditionTotalMatchesPlayed: playerCondition.reduce((sum, entry) => sum + (Number(entry?.matchesPlayed) || 0), 0),
+      conditionTotalMinutesPlayed: playerCondition.reduce((sum, entry) => sum + (Number(entry?.minutesPlayed) || 0), 0),
       activeMatchSession: Boolean(matchday?.session),
       lastMatchId: lastMatch?.id || null,
       lastMatchRound: Number(lastMatch?.leagueContext?.round) || null,
@@ -368,6 +386,10 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   const inboxMessageKinds = new Set();
   const inboxSubjects = new Set();
   const openedInboxMessageIds = new Set();
+  let peakConditionLoad = 0;
+  let peakConditionAbsForm = 0;
+  let peakConsecutiveFullMatches = 0;
+  let peakInjuredPlayers = 0;
 
   for (let round = 1; round <= 30; round += 1) {
     await expect.poll(async () => {
@@ -438,6 +460,19 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(played.decisionCount).toBeGreaterThan(0);
     expect(played.trainingFocusId).toBeTruthy();
     expect(played.activeMatchSession).toBe(false);
+    expect(played.conditionMatchCount).toBe(round);
+    expect(played.conditionCount).toBeGreaterThanOrEqual(11);
+    expect(played.conditionTotalMatchesPlayed).toBeGreaterThan(0);
+    expect(played.conditionTotalMinutesPlayed).toBeGreaterThan(0);
+    expect(played.conditionMaxLoad).toBeGreaterThan(0);
+
+    peakConditionLoad = Math.max(peakConditionLoad, played.conditionMaxLoad);
+    peakConditionAbsForm = Math.max(peakConditionAbsForm, played.conditionMaxAbsForm);
+    peakConsecutiveFullMatches = Math.max(
+      peakConsecutiveFullMatches,
+      played.conditionMaxConsecutiveFullMatches
+    );
+    peakInjuredPlayers = Math.max(peakInjuredPlayers, played.conditionInjuredCount);
 
     matchIds.add(played.lastMatchId);
     opponentIds.add(played.lastOpponentId);
@@ -452,6 +487,14 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       training: played.trainingFocusName,
       inboxMessages: weeklyMail.messages.length,
       openedInboxMessage: inbox.openedMessageId,
+      condition: {
+        players: played.conditionCount,
+        trackedMatches: played.conditionMatchCount,
+        maxLoad: played.conditionMaxLoad,
+        maxAbsForm: played.conditionMaxAbsForm,
+        maxConsecutiveFullMatches: played.conditionMaxConsecutiveFullMatches,
+        injured: played.conditionInjuredCount
+      },
       decisions: played.decisionCount
     });
 
@@ -486,6 +529,13 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(completed.seasonStatus).toBe("completed");
   expect(completed.archiveCount).toBe(1);
   expect(completed.playerStatsCount).toBeGreaterThan(0);
+  expect(completed.conditionMatchCount).toBe(30);
+  expect(completed.conditionCount).toBeGreaterThanOrEqual(11);
+  expect(completed.conditionTotalMatchesPlayed).toBeGreaterThan(0);
+  expect(completed.conditionTotalMinutesPlayed).toBeGreaterThan(0);
+  expect(peakConditionLoad).toBeGreaterThan(0);
+  expect(peakConditionAbsForm).toBeGreaterThan(0);
+  expect(peakConsecutiveFullMatches).toBeGreaterThanOrEqual(2);
   expect(completed.activeMatchSession).toBe(false);
 
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
@@ -510,6 +560,12 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(seasonTwo.phase).toBe("analysis");
   expect(seasonTwo.archiveCount).toBe(1);
   expect(seasonTwo.playerStatsCount).toBe(0);
+  expect(seasonTwo.conditionMatchCount).toBe(0);
+  expect(seasonTwo.conditionMaxLoad).toBe(0);
+  expect(seasonTwo.conditionMaxConsecutiveFullMatches).toBe(0);
+  expect(seasonTwo.conditionTotalMatchesPlayed).toBe(0);
+  expect(seasonTwo.conditionTotalMinutesPlayed).toBe(0);
+  expect(seasonTwo.conditionInjuredCount).toBe(0);
   expect(seasonTwo.activeMatchSession).toBe(false);
   await expect(page.locator("#seasonReviewPanel")).toBeHidden();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
@@ -518,5 +574,30 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#nextActionPrimary")).toBeEnabled();
 
-  console.log("Full-season canonical playthrough observations:", JSON.stringify(observations));
+  console.log(
+    "Full-season canonical playthrough observations:",
+    JSON.stringify({
+      rounds: observations,
+      conditionSummary: {
+        peakLoad: peakConditionLoad,
+        peakAbsForm: peakConditionAbsForm,
+        peakConsecutiveFullMatches,
+        peakInjuredPlayers,
+        seasonOneEnd: {
+          players: completed.conditionCount,
+          trackedMatches: completed.conditionMatchCount,
+          totalLoad: completed.conditionTotalLoad,
+          maxLoad: completed.conditionMaxLoad,
+          maxAbsForm: completed.conditionMaxAbsForm
+        },
+        seasonTwoStart: {
+          players: seasonTwo.conditionCount,
+          trackedMatches: seasonTwo.conditionMatchCount,
+          totalLoad: seasonTwo.conditionTotalLoad,
+          maxLoad: seasonTwo.conditionMaxLoad,
+          maxAbsForm: seasonTwo.conditionMaxAbsForm
+        }
+      }
+    })
+  );
 });
