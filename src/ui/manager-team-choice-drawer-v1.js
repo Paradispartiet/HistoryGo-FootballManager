@@ -356,6 +356,12 @@ function statusText(id, fallback) {
   return String(document.getElementById(id)?.textContent || fallback).trim().replace(/\s+/g, " ");
 }
 
+function setTextIfChanged(element, value) {
+  if (!element) return;
+  const next = String(value);
+  if (element.textContent !== next) element.textContent = next;
+}
+
 function syncSelectedState() {
   const formation = selectedOptionLabel(document.getElementById("formationSelect"), "Formasjon ikke valgt");
   const tactic = selectedOptionLabel(document.getElementById("tacticSelect"), "Kampplan ikke valgt");
@@ -364,24 +370,24 @@ function syncSelectedState() {
   const tacticValue = document.getElementById("teamSelectedTactic");
   const systemFormation = document.getElementById("teamSystemFormation");
   const systemTactic = document.getElementById("teamSystemTactic");
-  if (formationValue) formationValue.textContent = formation;
-  if (tacticValue) tacticValue.textContent = tactic;
-  if (systemFormation) systemFormation.textContent = formation;
-  if (systemTactic) systemTactic.textContent = tactic;
+  setTextIfChanged(formationValue, formation);
+  setTextIfChanged(tacticValue, tactic);
+  setTextIfChanged(systemFormation, formation);
+  setTextIfChanged(systemTactic, tactic);
 
   const slot = document.getElementById("teamSelectedSlot");
   const player = document.getElementById("teamSelectedPlayer");
   const role = document.getElementById("teamSelectedRole");
-  if (slot) slot.textContent = selectedPitchSlotLabel();
-  if (player) player.textContent = selectedPlayerLabel();
-  if (role) role.textContent = selectedRoleLabel();
+  setTextIfChanged(slot, selectedPitchSlotLabel());
+  setTextIfChanged(player, selectedPlayerLabel());
+  setTextIfChanged(role, selectedRoleLabel());
 
   const programValue = document.getElementById("teamSelectedTrainingProgram");
   const focusValue = document.getElementById("teamSelectedTrainingFocus");
   const individualValue = document.getElementById("teamSelectedIndividualTraining");
-  if (programValue) programValue.textContent = statusText("weeklyTrainingProgramStatus", "Treningsprogram ikke valgt");
-  if (focusValue) focusValue.textContent = statusText("weeklyTrainingStatus", "Treningsfokus ikke valgt");
-  if (individualValue) individualValue.textContent = statusText("individualTrainingCapacity", "Ingen individuell oppfølging valgt");
+  setTextIfChanged(programValue, statusText("weeklyTrainingProgramStatus", "Treningsprogram ikke valgt"));
+  setTextIfChanged(focusValue, statusText("weeklyTrainingStatus", "Treningsfokus ikke valgt"));
+  setTextIfChanged(individualValue, statusText("individualTrainingCapacity", "Ingen individuell oppfølging valgt"));
 }
 
 function installSelectedStateContract() {
