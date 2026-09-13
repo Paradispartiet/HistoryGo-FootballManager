@@ -144,12 +144,10 @@ async function choosePreseasonTraining(page) {
 }
 
 async function startSeasonFromOnboarding(page) {
-  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
-  await expect(page.locator('[data-tab-section="dashboard"]')).toBeVisible();
-  await expect(page.locator("#leagueOnboardingPanel")).toBeVisible();
-  const startSeason = page.locator(".league-onboarding-step").filter({ hasText: "Start sesongen" });
-  await expect(startSeason).toBeVisible();
-  await startSeason.click();
+  await expect(page.locator("#nextActionPrimaryTag")).toHaveText("Før sesong");
+  await expect(page.locator("#nextActionPrimaryTitle")).toHaveText("Start sesongen");
+  await expect(page.locator("#nextActionPrimary")).toBeEnabled();
+  await page.locator("#nextActionPrimary").click();
 
   await expect.poll(async () => {
     const progress = await readProgress(page);
