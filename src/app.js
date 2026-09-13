@@ -10093,7 +10093,16 @@ async function handleManagerMatchdayPrimaryAction(target) {
 function renderMatchdayGate(container, teamFit) {
   const readiness = getMatchdayReadiness(teamFit);
   const session = state.matchday?.session || null;
-  const lastMatch = state.matchday?.lastMatch || null;
+  const storedLastMatch = state.matchday?.lastMatch || null;
+  // I ligamodus er en lagret kamp bare den AKTIVE rapporten mens Club Week
+  // faktisk står i review. Når neste uke er rullet til analysis skal forrige
+  // resultat fortsatt finnes i historikken, men det må ikke eie Kamp-flatas
+  // primærhandling og blokkere veien inn i neste kamp.
+  const lastMatch = isLeagueModeActive()
+    ? state.clubWeekState?.phase === "review"
+      ? storedLastMatch
+      : null
+    : storedLastMatch;
   const formation = session?.formationSnapshot || getFormation() || {};
   const tactic = session?.tacticSnapshot || getTactic() || {};
   const report = lastMatch ? createMatchReport(lastMatch) : null;
