@@ -758,7 +758,19 @@ function installObservers() {
 
   const footerStrip = document.getElementById("nextActionStrip");
   if (footerStrip) {
-    const observer = new MutationObserver(() => queueMicrotask(() => renderCalendarFooter(lastCalendarModel)));
+    const observer = new MutationObserver(() => {
+      if (!lastCalendarModel || !isNormalLeagueSave()) return;
+      const host = footerStrip.closest("manager-next-action");
+      const primary = footerStrip.querySelector("#nextActionPrimary");
+      const tag = footerStrip.querySelector("#nextActionPrimaryTag");
+      const footerNeedsRepair = host?.dataset.calendarOwned !== "true"
+        || footerStrip.dataset.surface !== "manager-calendar"
+        || footerStrip.hidden
+        || Boolean(primary?.disabled)
+        || String(tag?.textContent || "").trim() !== "Kalender";
+      if (!footerNeedsRepair) return;
+      queueMicrotask(() => renderCalendarFooter(lastCalendarModel));
+    });
     observer.observe(footerStrip, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "disabled"] });
   }
 
