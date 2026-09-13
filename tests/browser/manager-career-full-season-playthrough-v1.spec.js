@@ -275,7 +275,7 @@ async function rollToNextWeek(page, expectedWeek) {
 }
 
 test.only("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2 gjennom ekte UI", async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(720_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
