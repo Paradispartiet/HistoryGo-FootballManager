@@ -1100,6 +1100,132 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Sarpsborg 08s A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "joey_hardarson_staff",
+      "name": "Joey Hardarson",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "start"
+      ],
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "sourceUrl": "https://www.ikstart.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Starts A-lagsapparat; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "kristoffer_vangen_lysgaard_staff",
+      "name": "Kristoffer Vangen Lysgård",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "start"
+      ],
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "sourceUrl": "https://www.ikstart.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som trener A-lag/analyse i Starts A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "roger_risholt_staff",
+      "name": "Roger Risholt",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "start"
+      ],
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "sourceUrl": "https://www.ikstart.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Starts A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "kristian_gjostol_staff",
+      "name": "Kristian Gjøstøl",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "start"
+      ],
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "sourceUrl": "https://www.ikstart.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i Starts A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "jorgen_rostrup_staff",
+      "name": "Jørgen Rostrup",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "start"
+      ],
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "sourceUrl": "https://www.ikstart.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysio i Starts A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "alexander_aaser_staff",
+      "name": "Alexander Aaser",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "start"
+      ],
+      "sourcePlaceIds": [
+        "sor_arena"
+      ],
+      "sourceUrl": "https://www.ikstart.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Starts A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
