@@ -76,6 +76,17 @@ check(sarpsborgDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").leng
 check(sarpsborgDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Sarpsborg 08-rosteren bruker tre aktive trenerroller");
 check(sarpsborgDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Sarpsborg 08-rosteren bruker én fysiorolle");
 check(sarpsborgDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Sarpsborg 08-rosteren bruker én keepertrenerrolle");
+const startStarters=selectStarterStaffCandidates(staff,"start"); const startSummary=summarizeStaffRoster(startStarters);
+check(startStarters.length===6,"Start får seks klubbspesifikke starterprofiler");
+check(startSummary.complete,"Start-settet dekker 1+3+1+1-kontrakten");
+check(startStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Start-settet inneholder ingen placeholders");
+check(startStarters.every(m=>Array.isArray(m.starterClubIds)&&m.starterClubIds.includes("start")),"alle Start-startere er eksplisitt klubbtilknyttet");
+check(startStarters.every(m=>m.sourceUrl==="https://www.ikstart.no/lag"),"alle Start-startere bruker klubbens offisielle A-lagsoversikt som kilde");
+const startDecorated=decorateHiredStaffWithAssignments(startStarters);
+check(startDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Start-rosteren bruker én aktiv assistentrolle");
+check(startDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Start-rosteren bruker tre aktive trenerroller");
+check(startDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Start-rosteren bruker én fysiorolle");
+check(startDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Start-rosteren bruker én keepertrenerrolle");
 const three=[{id:"a",staffType:"coach",canBeHiredAs:["coach"]},{id:"b",staffType:"coach",canBeHiredAs:["coach"]},{id:"c",staffType:"coach",canBeHiredAs:["coach"]}]; const incomplete=summarizeStaffRoster(three);
 check(!incomplete.complete,"tre vilkårlige trenere er ikke komplett stab"); check(incomplete.byRole.find(r=>r.id==="training_coach")?.filled===3,"tre trenere fyller bare trenerplassene"); check(incomplete.missing.some(r=>r.id==="assistant_coach"),"manglende assistent oppdages"); check(incomplete.missing.some(r=>r.id==="physio"),"manglende fysio oppdages"); check(incomplete.missing.some(r=>r.id==="goalkeeper_coach"),"manglende keepertrener oppdages");
 const assignments=assignFirstTeamStaff(starters); check(assignments.filter(e=>e.staffId).length===6,"seks rolleplasser tildeles"); check(new Set(assignments.filter(e=>e.staffId).map(e=>e.staffId)).size===6,"samme person fyller ikke to plasser"); const decorated=decorateHiredStaffWithAssignments(starters); check(decorated.filter(m=>m.assignedStaffRole).length===6,"coach-context får tildelte roller"); check(decorated.some(m=>m.staffType==="physio"),"fysiorollen mates videre"); check(decorated.some(m=>m.staffType==="goalkeeper_coach"),"keepertrenerrollen mates videre"); console.log(`\n${checks}/${checks} staff-roster-sjekker bestått.`);
