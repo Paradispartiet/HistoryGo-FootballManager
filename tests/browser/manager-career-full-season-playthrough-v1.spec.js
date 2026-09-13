@@ -25,6 +25,8 @@ async function readProgress(page) {
     const clubWeek = merits.clubWeekState || session.clubWeekState || parse("hgfm.clubWeekState.v1", {});
     const season = parse("historygo-football-manager.league-season.v3", null) || session.leagueSeason;
     const matchday = parse("hgfm.matchday.v1", null) || session.matchday;
+    const weeklyTrainingProgram = session.weeklyTrainingProgram || parse("hgfm.weeklyTrainingProgram.v1", null);
+    const weeklyTrainingFocus = session.weeklyTrainingFocus || parse("hgfm.weeklyTrainingFocus.v1", null);
     const lastMatch = matchday?.lastMatch || null;
     const archive = parse("hgfm.seasonArchive.v1", []);
     const playerStats = parse("hgfm.playerSeasonStats.v1", { rows: [], matchIds: [] });
@@ -49,6 +51,10 @@ async function readProgress(page) {
         : [],
       trainingFocusId: lastMatch?.trainingFocus?.focusId || null,
       trainingFocusName: lastMatch?.trainingFocus?.name || null,
+      weeklyTrainingProgramId: weeklyTrainingProgram?.programId || null,
+      weeklyTrainingProgramWeek: Number(weeklyTrainingProgram?.week) || null,
+      weeklyTrainingFocusId: weeklyTrainingFocus?.focusId || null,
+      weeklyTrainingFocusWeek: Number(weeklyTrainingFocus?.week) || null,
       lineupCount: Object.values(session.lineup || {}).filter(Boolean).length,
       hiredStaffCount: Array.isArray(merits.hiredStaffIds) ? merits.hiredStaffIds.length : 0
     };
@@ -118,29 +124,41 @@ async function openTraining(page) {
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
 }
 
-async function chooseTrainingProgram(page) {
+async function chooseTrainingProgram(page, choiceIndex = 0) {
   await page.locator("#trainingDayChangeProgram").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
-  const option = page.locator("#managerTeamChoiceDrawerBody .training-program-select:not([disabled])").first();
+  const options = page.locator("#managerTeamChoiceDrawerBody .training-program-select:not([disabled])");
+  const optionCount = await options.count();
+  expect(optionCount).toBeGreaterThan(0);
+  const option = options.nth(choiceIndex % optionCount);
   await expect(option).toBeVisible();
   await option.click();
   await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
-  await expect(page.locator("#trainingDayProgramTitle")).not.toHaveText("Ikke valgt");
+  const progress = await readProgress(page);
+  expect(progress.weeklyTrainingProgramId).toBeTruthy();
+  expect(progress.weeklyTrainingProgramWeek).toBe(progress.week);
+  return progress.weeklyTrainingProgramId;
 }
 
-async function chooseTrainingFocus(page) {
+async function chooseTrainingFocus(page, choiceIndex = 0) {
   await page.locator("#trainingDayChangeFocus").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
-  const option = page
+  const options = page
     .locator("#managerTeamChoiceDrawerBody .weekly-training-card")
-    .getByRole("button", { name: "Velg fokus" })
-    .first();
+    .getByRole("button", { name: "Velg fokus" });
+  const optionCount = await options.count();
+  expect(optionCount).toBeGreaterThan(0);
+  const option = options.nth(choiceIndex % optionCount);
   await expect(option).toBeVisible();
   await option.click();
   await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
   await expect(page.locator("#weeklyTrainingStatus")).not.toContainText("Ikke valgt");
+  const progress = await readProgress(page);
+  expect(progress.weeklyTrainingFocusId).toBeTruthy();
+  expect(progress.weeklyTrainingFocusWeek).toBe(progress.week);
+  return progress.weeklyTrainingFocusId;
 }
 
 async function choosePreseasonTraining(page) {
@@ -161,7 +179,7 @@ async function startSeasonFromOnboarding(page) {
   }).toEqual({ status: "active", round: 1 });
 }
 
-async function openCurrentOpponentAnalysis(page) {
+async function openCurrentOpponentAnalysis(page, choiceIndex = 0) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.locator('.app-subtab[data-tab-target="board"]').click();
@@ -172,8 +190,16 @@ async function openCurrentOpponentAnalysis(page) {
   const workshop = page.locator(".opponent-analysis-workshop-v1");
   await expect(workshop).toBeVisible();
   await expect(workshop).toHaveAttribute("data-case-kind", "fixture");
-  await workshop.locator('[data-opponent-analysis-focus="press"]').click();
-  await workshop.locator('[data-opponent-analysis-countermeasure="train_escape"]').click();
+  const focusOptions = workshop.locator("[data-opponent-analysis-focus]");
+  const focusCount = await focusOptions.count();
+  expect(focusCount).toBeGreaterThan(0);
+  await focusOptions.nth(choiceIndex % focusCount).click();
+
+  const countermeasureOptions = workshop.locator("[data-opponent-analysis-countermeasure]");
+  const countermeasureCount = await countermeasureOptions.count();
+  expect(countermeasureCount).toBeGreaterThan(0);
+  await countermeasureOptions.nth(choiceIndex % countermeasureCount).click();
+
   await workshop.locator(".opponent-analysis-save").click();
   await expect(workshop.locator(".opponent-analysis-feedback")).toContainText("kampklarheten er oppdatert");
 
@@ -192,16 +218,33 @@ async function advanceClubWeek(page, expectedPhase) {
   await expect.poll(async () => (await readProgress(page)).phase).toBe(expectedPhase);
 }
 
-async function chooseTrainingForCurrentWeek(page) {
+async function chooseTrainingForCurrentWeek(page, choiceIndex = 0) {
   await openTraining(page);
-  await chooseTrainingProgram(page);
+  const programId = await chooseTrainingProgram(page, choiceIndex);
 
   const afterProgram = await readProgress(page);
+  let focusId = afterProgram.weeklyTrainingFocusId;
   if (afterProgram.phase === "training") {
-    await chooseTrainingFocus(page);
+    focusId = await chooseTrainingFocus(page, choiceIndex);
   }
 
-  await expect.poll(async () => (await readProgress(page)).phase).toBe("match_prep");
+  await expect.poll(async () => {
+    const progress = await readProgress(page);
+    return {
+      phase: progress.phase,
+      programId: progress.weeklyTrainingProgramId,
+      programWeek: progress.weeklyTrainingProgramWeek,
+      focusId: progress.weeklyTrainingFocusId,
+      focusWeek: progress.weeklyTrainingFocusWeek
+    };
+  }).toEqual({
+    phase: "match_prep",
+    programId,
+    programWeek: afterProgram.week,
+    focusId,
+    focusWeek: afterProgram.week
+  });
+  return { programId, focusId };
 }
 
 async function openPreMatch(page) {
@@ -220,7 +263,7 @@ async function openPreMatch(page) {
   await expect(kickoff).toBeVisible();
 }
 
-async function playCurrentMatch(page) {
+async function playCurrentMatch(page, choiceIndex = 0) {
   await openPreMatch(page);
   await page.locator(".matchday-kickoff-button").click();
 
@@ -233,7 +276,10 @@ async function playCurrentMatch(page) {
       await skip.click();
     }
 
-    const decision = page.locator(".matchday-decision-button:not([disabled]):visible").first();
+    const decisions = page.locator(".matchday-decision-button:not([disabled]):visible");
+    const decisionCount = await decisions.count();
+    expect(decisionCount).toBeGreaterThan(0);
+    const decision = decisions.nth((choiceIndex + event) % decisionCount);
     await expect(decision).toBeVisible();
     await decision.click();
   }
@@ -253,7 +299,7 @@ async function rollToNextWeek(page, expectedWeek) {
   }).toEqual({ week: expectedWeek, phase: "analysis" });
 }
 
-test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2 gjennom ekte UI", async ({ page }) => {
+test("blank Rosenborg-save spiller full sesong med varierte valg og går canonicalt inn i sesong 2 gjennom ekte UI", async ({ page }) => {
   test.setTimeout(720_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -274,6 +320,8 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
   const observations = [];
   const opponentIds = new Set();
   const matchIds = new Set();
+  const trainingPrograms = new Set();
+  const trainingFocusIds = new Set();
   const decisionLabels = new Set();
 
   for (let round = 1; round <= 30; round += 1) {
@@ -282,11 +330,40 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
       return { week: progress.week, phase: progress.phase, round: progress.currentRound };
     }).toEqual({ week: round, phase: "analysis", round });
 
-    await openCurrentOpponentAnalysis(page);
+    const choiceIndex = round - 1;
+    await openCurrentOpponentAnalysis(page, choiceIndex);
     await advanceClubWeek(page, "inbox");
     await advanceClubWeek(page, "training");
-    await chooseTrainingForCurrentWeek(page);
-    await playCurrentMatch(page);
+    const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
+
+    // Mode-session er canonical eier av treningsvalgene. Bevis én faktisk
+    // reload midt i sesongen, slik at legacy-key alene ikke kan maskere stale
+    // session-state.
+    if (round === 2) {
+      await page.reload();
+      await expect(page.locator("#formationSelect option").first()).toBeAttached();
+      await expect(page.locator("#onboardingScreen")).toBeHidden();
+      await expect.poll(async () => {
+        const progress = await readProgress(page);
+        return {
+          week: progress.week,
+          phase: progress.phase,
+          programId: progress.weeklyTrainingProgramId,
+          programWeek: progress.weeklyTrainingProgramWeek,
+          focusId: progress.weeklyTrainingFocusId,
+          focusWeek: progress.weeklyTrainingFocusWeek
+        };
+      }).toEqual({
+        week: round,
+        phase: "match_prep",
+        programId: trainingSelection.programId,
+        programWeek: round,
+        focusId: trainingSelection.focusId,
+        focusWeek: round
+      });
+    }
+
+    await playCurrentMatch(page, choiceIndex);
 
     const played = await readProgress(page);
     expect(played.lastMatchId).toBeTruthy();
@@ -298,11 +375,14 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
 
     matchIds.add(played.lastMatchId);
     opponentIds.add(played.lastOpponentId);
+    trainingPrograms.add(trainingSelection.programId);
+    trainingFocusIds.add(played.trainingFocusId);
     played.decisionLabels.forEach((label) => decisionLabels.add(label));
     observations.push({
       round,
       opponent: played.lastOpponentName,
       opponentId: played.lastOpponentId,
+      trainingProgram: trainingSelection.programId,
       training: played.trainingFocusName,
       decisions: played.decisionCount
     });
@@ -313,7 +393,9 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
   const completed = await readProgress(page);
   expect(matchIds.size).toBe(30);
   expect(opponentIds.size).toBe(15);
-  expect(decisionLabels.size).toBeGreaterThan(1);
+  expect(trainingPrograms.size).toBeGreaterThanOrEqual(3);
+  expect(trainingFocusIds.size).toBeGreaterThanOrEqual(4);
+  expect(decisionLabels.size).toBeGreaterThanOrEqual(6);
   expect(completed.week).toBe(31);
   expect(completed.phase).toBe("analysis");
   expect(completed.seasonNumber).toBe(1);

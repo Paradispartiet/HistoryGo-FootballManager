@@ -6986,15 +6986,28 @@ function loadWeeklyTrainingFocus() {
 }
 
 function saveWeeklyTrainingFocus() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    if (state.weeklyTrainingFocus) {
-      localStorage.setItem(WEEKLY_TRAINING_FOCUS_KEY, JSON.stringify(state.weeklyTrainingFocus));
-    } else {
-      localStorage.removeItem(WEEKLY_TRAINING_FOCUS_KEY);
+  if (shouldWriteLegacyLeagueStorage()) {
+    try {
+      if (state.weeklyTrainingFocus) {
+        localStorage.setItem(WEEKLY_TRAINING_FOCUS_KEY, JSON.stringify(state.weeklyTrainingFocus));
+      } else {
+        localStorage.removeItem(WEEKLY_TRAINING_FOCUS_KEY);
+      }
+    } catch (error) {
+      // Privat modus e.l.: appen fortsetter uten persistens.
     }
-  } catch (error) {
-    // Privat modus e.l.: appen fortsetter uten persistens.
+  }
+
+  // Mode Isolation eier den aktive managersesjonen. Hold snapshotet i samme
+  // transaksjon som legacy-lagringen, ellers kan et eldre session-snapshot
+  // vinne ved reload og gjenopprette feil/forrige ukes treningsfokus.
+  if (state.modeEnvelope) {
+    state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+    try {
+      state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+    } catch (_) {
+      // Privat modus: state i minnet er fortsatt autoritativ for denne økten.
+    }
   }
 }
 
@@ -7070,15 +7083,28 @@ function loadWeeklyTrainingProgram() {
 }
 
 function saveWeeklyTrainingProgram() {
-  if (!shouldWriteLegacyLeagueStorage()) return;
-  try {
-    if (state.weeklyTrainingProgram) {
-      localStorage.setItem(WEEKLY_TRAINING_PROGRAM_KEY, JSON.stringify(state.weeklyTrainingProgram));
-    } else {
-      localStorage.removeItem(WEEKLY_TRAINING_PROGRAM_KEY);
+  if (shouldWriteLegacyLeagueStorage()) {
+    try {
+      if (state.weeklyTrainingProgram) {
+        localStorage.setItem(WEEKLY_TRAINING_PROGRAM_KEY, JSON.stringify(state.weeklyTrainingProgram));
+      } else {
+        localStorage.removeItem(WEEKLY_TRAINING_PROGRAM_KEY);
+      }
+    } catch (error) {
+      // Privat modus e.l.: appen fortsetter uten persistens.
     }
-  } catch (error) {
-    // Privat modus e.l.: appen fortsetter uten persistens.
+  }
+
+  // Treningsprogrammet er et SESSION_STATE_FIELD på lik linje med fokuset.
+  // Persistér derfor aktiv mode-session med en gang, også når programmet ryddes
+  // ved ny uke. Uten dette kan hydrateModeSessions() vinne med stale state.
+  if (state.modeEnvelope) {
+    state.modeEnvelope.sessions[state.modeEnvelope.activeMode] = captureModeSession(state);
+    try {
+      state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+    } catch (_) {
+      // Privat modus: state i minnet er fortsatt autoritativ for denne økten.
+    }
   }
 }
 
