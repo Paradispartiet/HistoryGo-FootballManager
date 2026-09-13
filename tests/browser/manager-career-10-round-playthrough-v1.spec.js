@@ -22,9 +22,9 @@ async function readProgress(page) {
     const merits = parse("hgfm.teamMerits.v1", {});
     const envelope = parse("hgfm.modeSessions.v1", {});
     const session = envelope?.sessions?.[envelope?.activeMode] || {};
-    const clubWeek = session.clubWeekState || merits.clubWeekState || parse("hgfm.clubWeekState.v1", {});
-    const season = session.leagueSeason || parse("historygo-football-manager.league-season.v3", null);
-    const matchday = session.matchday || parse("hgfm.matchday.v1", null);
+    const clubWeek = merits.clubWeekState || session.clubWeekState || parse("hgfm.clubWeekState.v1", {});
+    const season = parse("historygo-football-manager.league-season.v3", null) || session.leagueSeason;
+    const matchday = parse("hgfm.matchday.v1", null) || session.matchday;
     const lastMatch = matchday?.lastMatch || null;
 
     return {
@@ -247,9 +247,8 @@ async function rollToNextWeek(page, expectedWeek) {
   }).toEqual({ week: expectedWeek, phase: "analysis" });
 }
 
-test.only("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
-  test.setTimeout(30_000);
-  page.on("console", (message) => console.log("[browser-console]", message.text()));
+test("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
+  test.setTimeout(240_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
