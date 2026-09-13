@@ -268,10 +268,14 @@ test.only("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ek
             const targets = [...new Set(mutations.slice(0, 6).map((mutation) => {
               const node = mutation.target;
               if (!node) return "unknown";
-              if (node.id) return `#${node.id}`;
-              if (node.dataset?.tabSection) return `[tab=${node.dataset.tabSection}]`;
-              return node.tagName?.toLowerCase?.() || node.nodeName || "node";
-            }))].join(",");
+              const tag = node.tagName?.toLowerCase?.() || node.nodeName || "node";
+              const id = node.id ? `#${node.id}` : "";
+              const classes = node.classList?.length ? `.${[...node.classList].slice(0, 3).join(".")}` : "";
+              const tab = node.dataset?.tabSection ? `[tab=${node.dataset.tabSection}]` : "";
+              const attr = mutation.type === "attributes" ? `@${mutation.attributeName}` : mutation.type;
+              const text = String(node.textContent || "").replace(/\s+/g, " ").trim().slice(0, 70);
+              return `${tag}${id}${classes}${tab}:${attr}:${text}`;
+            }))].join(" || ");
             console.log(`[mo-debug] callback #${this.id} count=${this.count} targets=${targets}`);
           }
           return callback(mutations, this);
