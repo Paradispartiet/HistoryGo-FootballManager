@@ -134,6 +134,15 @@ console.log("\n4. Rotasjon lønner seg");
   check("den som spiller alt bygger belastning", a.load > 0, `load=${a.load}`);
   check("den roterte er friskere", freshnessFor(b) > freshnessFor(a), `${freshnessFor(b)} mot ${freshnessFor(a)}`);
   check("rekka med fulle kamper synes", a.consecutiveFullMatches === 6, `rekke=${a.consecutiveFullMatches}`);
+
+  let bruttRekke = applyMatchLoad([], { played: fullMatch(["starter"]) });
+  bruttRekke = applyMatchLoad(bruttRekke, { played: fullMatch(["erstatter"]) });
+  check(
+    "å stå over én kamp bryter rekka med fulle kamper",
+    conditionFor(bruttRekke, "starter").consecutiveFullMatches === 0,
+    `rekke=${conditionFor(bruttRekke, "starter").consecutiveFullMatches}`
+  );
+
   check("forklaringen peker på bruken, ikke på spilleren",
     /kamper på rad|friskhet|Frisk|kjenne/i.test(describeCondition(a)), describeCondition(a));
 }
