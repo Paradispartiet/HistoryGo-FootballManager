@@ -1,5 +1,5 @@
 // ============================================================================
-// Klubbtropp v5 — klubbmedlemskap er data, stadion er tilgang
+// Klubbtropp v7 — klubbmedlemskap er data, stadion er tilgang
 //
 // Canonical modell:
 //
@@ -23,7 +23,8 @@
 // LESER History Go-progresjon som input og skriver aldri til den.
 // ============================================================================
 
-export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v6";
+export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v7";
+export const CLUB_BASE_SQUAD_TARGET = 20;
 export const CLUB_PLAYER_POOL_VERSION = "historygo-football-manager.club-player-pool.v2";
 
 export const CLUB_STATUS_RANK = Object.freeze({
@@ -55,6 +56,18 @@ const SQUAD_GROUPS = Object.freeze([
   { positions: ["CB", "LB", "RB", "WB"], count: 5 },
   { positions: ["DM", "CM", "AM"], count: 5 },
   { positions: ["ST", "LW", "RW"], count: 3 }
+]);
+
+// De første 15 er fortsatt spillbarhetsgulvet. Når klubbpoolen tåler det,
+// bygges fem ekstra utespillere som faktisk rotasjonsdybde i stedet for fem
+// tilfeldige katalogprofiler. Rekkefølgen gjør også mellomstørrelser robuste:
+// 16 = ekstra forsvarer, 17 = +midt, 18 = +angrep, 19 = +forsvar, 20 = +midt.
+const ROTATION_DEPTH_SEQUENCE = Object.freeze([
+  ["CB", "LB", "RB", "WB"],
+  ["DM", "CM", "AM"],
+  ["ST", "LW", "RW"],
+  ["CB", "LB", "RB", "WB"],
+  ["DM", "CM", "AM"]
 ]);
 
 const asArray = (value) => (Array.isArray(value) ? value : []);
@@ -184,6 +197,18 @@ export function buildClubBaseSquad({
       need -= 1;
     }
   }
+
+  // Slitasje/skader gjør 15 spillere til et minimum, ikke en sesongtropp.
+  // Behold den balanserte 15-kjernen uendret, og legg deretter på rotasjonsdybde
+  // fra samme klubbpool når caller ber om mer.
+  for (const positions of ROTATION_DEPTH_SEQUENCE) {
+    if (picked.length >= size) break;
+    const player = ordered.find((candidate) => !taken.has(candidate.id) && playsIn(candidate, positions));
+    if (!player) continue;
+    picked.push(player.id);
+    taken.add(player.id);
+  }
+
   for (const player of ordered) {
     if (picked.length >= size) break;
     if (taken.has(player.id)) continue;
@@ -230,7 +255,9 @@ export function resolveClubSquadAccess({
   const pool = listPlayableClubPoolPlayers({ clubId, players });
   const unprofiledPool = documentedPool.filter((player) => !isSimulationReadyPlayer(player));
   const poolIds = new Set(pool.map((player) => player.id));
-  const poolReady = pool.length >= squadSize;
+  const minimumSquadSize = Math.max(1, Math.trunc(num(squadSize, 15)));
+  const baseSquadTarget = Math.min(pool.length, Math.max(minimumSquadSize, CLUB_BASE_SQUAD_TARGET));
+  const poolReady = pool.length >= minimumSquadSize;
   const visited = hasVisitedClubGround({ homePlaceId, unlockedPlaceIds });
   const groundName = club.ground || "klubbens bane";
   const archiveNote = unprofiledPool.length
@@ -261,7 +288,7 @@ export function resolveClubSquadAccess({
       lockedCount: pool.length,
       baseSquad: [],
       headline: `${club.name} har ikke en ferdig spillbar spillerpool ennå.`,
-      detail: `Klubben har ${documentedPool.length} dokumenterte spillerprofiler, men bare ${pool.length} med dokumentert posisjon. Det trengs minst ${squadSize} spillbare profiler før klubben kan overtas uten å fylle laget med spillere fra andre klubber.${archiveNote}`,
+      detail: `Klubben har ${documentedPool.length} dokumenterte spillerprofiler, men bare ${pool.length} med dokumentert posisjon. Det trengs minst ${minimumSquadSize} spillbare profiler før klubben kan overtas uten å fylle laget med spillere fra andre klubber.${archiveNote}`,
       todo: ["Dokumenter minst én posisjon per spiller før profilen gjøres valgbar i simuleringen."]
     };
   }
@@ -285,11 +312,11 @@ export function resolveClubSquadAccess({
   const eligibleClubIds = allowed
     ? new Set([...poolIds].filter((id) => allowed.has(id)))
     : poolIds;
-  const basePoolIds = eligibleClubIds.size >= squadSize ? eligibleClubIds : poolIds;
+  const basePoolIds = eligibleClubIds.size >= baseSquadTarget ? eligibleClubIds : poolIds;
   const baseSquad = buildClubBaseSquad({
     players,
     candidateIds: basePoolIds,
-    size: squadSize,
+    size: baseSquadTarget,
     clubId
   });
   const baseIds = new Set(baseSquad);

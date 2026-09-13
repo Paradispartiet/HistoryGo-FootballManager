@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
+  CLUB_BASE_SQUAD_TARGET,
   CLUB_SQUAD_VERSION,
   clubAffiliationFor,
   hasVisitedClubGround,
@@ -32,7 +33,7 @@ function check(name, condition, detail = "") {
   assert.ok(condition, `${name}${detail ? ` — ${detail}` : ""}`);
 }
 
-check("klubbtroppmotoren er v6", CLUB_SQUAD_VERSION.endsWith(".v6"), CLUB_SQUAD_VERSION);
+check("klubbtroppmotoren er v7", CLUB_SQUAD_VERSION.endsWith(".v7"), CLUB_SQUAD_VERSION);
 check("alle spiller-id-er er unike", new Set(players.map((player) => player.id)).size === players.length);
 check("alle klubb-id-er er unike", new Set(clubs.map((club) => club.id)).size === clubs.length);
 
@@ -95,13 +96,15 @@ for (const club of ready) {
   const documented = listClubPoolPlayers({ clubId: club.id, players });
   const playable = listPlayableClubPoolPlayers({ clubId: club.id, players });
   const playableIds = new Set(playable.map((player) => player.id));
+  const expectedBaseSize = Math.min(playable.length, Math.max(REQUIRED, CLUB_BASE_SQUAD_TARGET));
   check(`${club.name}: kald start er base`, access.mode === "base", access.mode);
-  check(`${club.name}: 15 i grunntropp`, access.baseSquad.length === REQUIRED, String(access.baseSquad.length));
+  check(`${club.name}: sesongtropp når poolen tåler det`, access.baseSquad.length === expectedBaseSize,
+    `${access.baseSquad.length}/${expectedBaseSize}`);
   check(`${club.name}: bare egne spillbare profiler`, access.baseSquad.every((id) => playableIds.has(id)));
   check(`${club.name}: dokumentert antall`, access.documentedCount === documented.length);
   check(`${club.name}: spillbart antall`, access.poolSize === playable.length);
   check(`${club.name}: arkivantall`, access.unprofiledCount === documented.length - playable.length);
-  check(`${club.name}: låst antall`, access.lockedCount === playable.length - REQUIRED);
+  check(`${club.name}: låst antall`, access.lockedCount === playable.length - expectedBaseSize);
   check(`${club.name}: minst én keeper`, access.baseSquad.some((id) =>
     [...(byId.get(id)?.naturalPositions || []), ...(byId.get(id)?.usablePositions || [])].includes("GK")));
 }
@@ -135,6 +138,15 @@ const syntheticPlayers = playableSeed.map((player) => ({
 }));
 const synthetic = resolveClubSquadAccess({ club: syntheticClub, players: syntheticPlayers, unlockedPlaceIds: [], squadSize: REQUIRED });
 check("spillbar pool kan finnes uten stadion", synthetic.mode === "base" && synthetic.baseSquad.length === REQUIRED);
+
+const rosenborg = clubById.get("rosenborg");
+const rosenborgAccess = resolveClubSquadAccess({ club: rosenborg, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
+check("Rosenborg får 20-manns rotasjonsdybde", rosenborgAccess.baseSquad.length === CLUB_BASE_SQUAD_TARGET,
+  String(rosenborgAccess.baseSquad.length));
+const sotra = clubById.get("sotra");
+const sotraAccess = resolveClubSquadAccess({ club: sotra, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
+check("Sotra beholder 15-spillers minimum uten fremmede spillere", sotraAccess.baseSquad.length === REQUIRED,
+  String(sotraAccess.baseSquad.length));
 
 const viking = clubById.get("viking");
 const vikingPool = listPlayableClubPoolPlayers({ clubId: viking.id, players });

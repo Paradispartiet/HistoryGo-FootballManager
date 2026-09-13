@@ -11,6 +11,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
+  CLUB_BASE_SQUAD_TARGET,
   isSimulationReadyPlayer,
   listClubPoolPlayers,
   listPlayableClubPoolPlayers,
@@ -313,8 +314,9 @@ for (const arv of ARVER) {
   const cold = resolveClubSquadAccess({
     club, players, unlockedPlaceIds: [], candidateIds: new Set(playableIds), squadSize: 15
   });
+  const expectedBaseSize = Math.min(arv.spillbar, Math.max(15, CLUB_BASE_SQUAD_TARGET));
   assert.equal(cold.mode, "base", `${merke}: uten besøk skal grunntroppen gjelde`);
-  assert.equal(cold.baseSquad.length, 15, `${merke}: grunntropp`);
+  assert.equal(cold.baseSquad.length, expectedBaseSize, `${merke}: sesongklar grunntropp`);
   assert.equal(cold.documentedCount, arv.dokumentert, `${merke}: documentedCount (kald)`);
   assert.equal(cold.poolSize, arv.spillbar, `${merke}: poolSize (kald)`);
   assert.equal(cold.unprofiledCount, arv.dokumentert - arv.spillbar, `${merke}: unprofiledCount (kald)`);
