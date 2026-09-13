@@ -142,6 +142,122 @@ async function openTraining(page) {
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
 }
 
+async function readRotationNeed(page) {
+  return page.evaluate(() => {
+    const parse = (key, fallback = null) => {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (_) {
+        return fallback;
+      }
+    };
+    const envelope = parse("hgfm.modeSessions.v1", {});
+    const session = envelope?.sessions?.[envelope?.activeMode] || {};
+    const conditions = Array.isArray(session.playerCondition)
+      ? session.playerCondition
+      : parse("hgfm.playerCondition.v1", []);
+    const lineup = session.lineup || {};
+    const conditionByPlayerId = new Map(
+      conditions
+        .filter((entry) => entry?.playerId)
+        .map((entry) => [entry.playerId, entry])
+    );
+    const tiredOrInjuredNames = new Set(
+      conditions
+        .filter((entry) => Number(entry?.load) > 50 || Number(entry?.injury?.weeksOut) > 0)
+        .map((entry) => String(entry?.name || "").trim())
+        .filter(Boolean)
+    );
+    const candidates = Object.entries(lineup)
+      .map(([slotId, assignment]) => {
+        const playerId = assignment?.playerId || null;
+        const condition = playerId ? conditionByPlayerId.get(playerId) : null;
+        return {
+          slotId,
+          playerId,
+          name: String(condition?.name || "").trim(),
+          load: Number(condition?.load) || 0,
+          injured: Number(condition?.injury?.weeksOut) > 0
+        };
+      })
+      .filter((entry) => entry.playerId && (entry.injured || entry.load > 50))
+      .sort((a, b) => Number(b.injured) - Number(a.injured) || b.load - a.load);
+
+    return {
+      target: candidates[0] || null,
+      avoidNames: [...tiredOrInjuredNames]
+    };
+  });
+}
+
+async function rotateTiredStarters(page, maximumRotations = 4) {
+  const rotations = [];
+
+  for (let attempt = 0; attempt < maximumRotations; attempt += 1) {
+    const need = await readRotationNeed(page);
+    if (!need.target) break;
+
+    await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+    await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+    const chip = page.locator(`#lineupSlots .player-chip[data-slot-id="${need.target.slotId}"]`);
+    await expect(chip).toBeVisible();
+    const beforePlayerId = await chip.getAttribute("data-player-id");
+    const position = String(await chip.getAttribute("data-position") || "").trim();
+    expect(beforePlayerId).toBe(need.target.playerId);
+    expect(position).toBeTruthy();
+
+    await chip.click();
+    const inspector = page.locator("#managerLineupSlotInspector");
+    await expect(inspector).toBeVisible();
+    await inspector.locator('[data-slot-action="player"]').click();
+
+    const drawer = page.locator("#managerTeamChoiceDrawer");
+    await expect(drawer).toBeVisible();
+    const choices = drawer.locator(".lineup-player-card:not(.is-selected):not([disabled])");
+    const choiceCount = await choices.count();
+    let replacement = null;
+
+    for (let index = 0; index < choiceCount; index += 1) {
+      const choice = choices.nth(index);
+      const name = String(await choice.locator("strong").textContent() || "").trim();
+      const label = String(await choice.textContent() || "");
+      if (!name || need.avoidNames.includes(name)) continue;
+      if (position && !label.includes(position)) continue;
+      replacement = { choice, name };
+      break;
+    }
+
+    if (!replacement) {
+      await drawer.locator(".manager-team-choice-done").click();
+      await expect(drawer).toBeHidden();
+      break;
+    }
+
+    await replacement.choice.click();
+    await drawer.locator(".manager-team-choice-done").click();
+    await expect(drawer).toBeHidden();
+
+    await expect.poll(async () =>
+      page.locator(`#lineupSlots .player-chip[data-slot-id="${need.target.slotId}"]`).getAttribute("data-player-id")
+    ).not.toBe(beforePlayerId);
+
+    const afterChip = page.locator(`#lineupSlots .player-chip[data-slot-id="${need.target.slotId}"]`);
+    rotations.push({
+      slotId: need.target.slotId,
+      outPlayerId: beforePlayerId,
+      outName: need.target.name,
+      outLoad: need.target.load,
+      outInjured: need.target.injured,
+      inPlayerId: await afterChip.getAttribute("data-player-id"),
+      inName: replacement.name
+    });
+  }
+
+  return rotations;
+}
+
 async function chooseTrainingProgram(page, choiceIndex = 0) {
   await page.locator("#trainingDayChangeProgram").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
@@ -390,6 +506,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   let peakConditionAbsForm = 0;
   let peakConsecutiveFullMatches = 0;
   let peakInjuredPlayers = 0;
+  const rotationEvents = [];
 
   for (let round = 1; round <= 30; round += 1) {
     await expect.poll(async () => {
@@ -411,6 +528,8 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     if (inbox.openedSubject) inboxSubjects.add(inbox.openedSubject);
 
     await advanceClubWeek(page, "training");
+    const rotations = await rotateTiredStarters(page);
+    rotationEvents.push(...rotations.map((rotation) => ({ round, ...rotation })));
     const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
 
     // Klubbkommunikasjonen er fasebevisst: medisinsk/trening blir tilgjengelig
@@ -495,6 +614,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
         maxConsecutiveFullMatches: played.conditionMaxConsecutiveFullMatches,
         injured: played.conditionInjuredCount
       },
+      rotations,
       decisions: played.decisionCount
     });
 
@@ -534,8 +654,12 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(completed.conditionTotalMatchesPlayed).toBeGreaterThan(0);
   expect(completed.conditionTotalMinutesPlayed).toBeGreaterThan(0);
   expect(peakConditionLoad).toBeGreaterThan(0);
+  expect(peakConditionLoad).toBeLessThan(100);
   expect(peakConditionAbsForm).toBeGreaterThan(0);
   expect(peakConsecutiveFullMatches).toBeGreaterThanOrEqual(2);
+  expect(peakConsecutiveFullMatches).toBeLessThan(30);
+  expect(rotationEvents.length).toBeGreaterThanOrEqual(4);
+  expect(completed.conditionCount).toBeGreaterThan(11);
   expect(completed.activeMatchSession).toBe(false);
 
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
@@ -578,6 +702,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     "Full-season canonical playthrough observations:",
     JSON.stringify({
       rounds: observations,
+      rotations: rotationEvents,
       conditionSummary: {
         peakLoad: peakConditionLoad,
         peakAbsForm: peakConditionAbsForm,
