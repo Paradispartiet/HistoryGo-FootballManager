@@ -70,12 +70,17 @@ Poolen er uavhengig av History Go-stadion. Det er dermed mulig å gjøre en klub
 For en `ready` klubb som ikke har full stadiontilgang:
 
 1. Kandidatene avgrenses til klubbens egen `clubAffiliations`-pool.
-2. Motoren dekker keeper, forsvar, midtbane og angrep.
-3. Ordinære tropps-/klubbprofiler prioriteres foran ikoner og legender.
-4. Innenfor samme statusnivå prioriteres lavere `classHeight`.
-5. Ingen global katalogfallback er tillatt for en overtatt klubb.
+2. **15 spillere er fortsatt minimumet** som gjør klubben takeover-klar.
+3. Når klubbpoolen har nok spillbare profiler, bygges grunntroppen til **20 spillere** slik at slitasje, skader og rotasjon kan håndteres gjennom en hel sesong.
+4. De første 15 dekker keeper, forsvar, midtbane og angrep etter den etablerte spillbarhetsfordelingen.
+5. De fem ekstra plassene prioriterer rotasjonsdybde i forsvar, midtbane og angrep; de er ikke en ny unlock- eller transfermekanikk.
+6. Ordinære tropps-/klubbprofiler prioriteres foran ikoner og legender.
+7. Innenfor samme statusnivå prioriteres lavere `classHeight`.
+8. Ingen global katalogfallback er tillatt for en overtatt klubb.
 
-Dette er et spillbarhetsgulv, ikke en påstand om en bestemt historisk førsteellever.
+En klubb med bare 15 spillbare profiler er fortsatt `ready` og får alle sine 15. Troppsstørrelsen er dermed et sesongmessig dybdelag oppå det eksisterende spillbarhetsgulvet, ikke et nytt researchkrav.
+
+Dette er et spillbarhetsgulv og en rotasjonsbuffer, ikke en påstand om en bestemt historisk førsteellever.
 
 ## Stadionbesøk
 
@@ -97,7 +102,7 @@ koblet til History Go.
   "enabled": true,
   "source": "auto_squad",
   "clubId": "viking",
-  "poolVersion": "historygo-football-manager.club-squad.v5",
+  "poolVersion": "historygo-football-manager.club-squad.v7",
   "generatedFrom": "club_pool",
   "playerIds": []
 }
@@ -111,7 +116,7 @@ mot dagens canonical klubbpool før spiller-ID-ene gjøres tilgjengelige.
 - Stadionet er siden besøkt → auto-troppen fjernes, full klubbpool brukes.
 - Klubben er `pending` → gammel auto-tropp fjernes; ingen global fallback.
 
-Migreringen er idempotent: en allerede gyldig v5-save endres ikke igjen.
+Migreringen er idempotent: en allerede gyldig v7-save endres ikke igjen.
 
 ## Datamigrering og audit
 
