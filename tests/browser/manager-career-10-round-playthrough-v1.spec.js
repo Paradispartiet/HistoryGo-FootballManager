@@ -247,53 +247,10 @@ async function rollToNextWeek(page, expectedWeek) {
   }).toEqual({ week: expectedWeek, phase: "analysis" });
 }
 
-test.only("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
-  test.setTimeout(30_000);
-  page.on("console", (message) => {
-    const text = message.text();
-    if (text.includes("[mo-debug]")) console.log(text);
-  });
+test("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
+  test.setTimeout(240_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.addInitScript(() => {
-    const NativeMutationObserver = window.MutationObserver;
-    let nextObserverId = 0;
-    window.MutationObserver = class DiagnosticMutationObserver {
-      constructor(callback) {
-        this.id = ++nextObserverId;
-        this.count = 0;
-        this.inner = new NativeMutationObserver((mutations) => {
-          this.count += 1;
-          if (this.count <= 3 || this.count === 10 || this.count === 100 || this.count % 1000 === 0) {
-            const targets = [...new Set(mutations.slice(0, 6).map((mutation) => {
-              const node = mutation.target;
-              if (!node) return "unknown";
-              const tag = node.tagName?.toLowerCase?.() || node.nodeName || "node";
-              const id = node.id ? `#${node.id}` : "";
-              const classes = node.classList?.length ? `.${[...node.classList].slice(0, 3).join(".")}` : "";
-              const tab = node.dataset?.tabSection ? `[tab=${node.dataset.tabSection}]` : "";
-              const attr = mutation.type === "attributes" ? `@${mutation.attributeName}` : mutation.type;
-              const text = String(node.textContent || "").replace(/\s+/g, " ").trim().slice(0, 70);
-              return `${tag}${id}${classes}${tab}:${attr}:${text}`;
-            }))].join(" || ");
-            console.log(`[mo-debug] callback #${this.id} count=${this.count} targets=${targets}`);
-          }
-          return callback(mutations, this);
-        });
-      }
-      observe(target, options) {
-        const label = target?.id
-          ? `#${target.id}`
-          : target?.dataset?.tabSection
-            ? `[tab=${target.dataset.tabSection}]`
-            : target?.tagName?.toLowerCase?.() || target?.nodeName || "unknown";
-        console.log(`[mo-debug] observe #${this.id} target=${label} options=${JSON.stringify(options)}`);
-        return this.inner.observe(target, options);
-      }
-      disconnect() { return this.inner.disconnect(); }
-      takeRecords() { return this.inner.takeRecords(); }
-    };
-  });
   await page.goto("/");
 
   // Null state-seeding: alt under skjer gjennom de samme kontrollene spilleren bruker.
