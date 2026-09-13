@@ -205,7 +205,7 @@ async function openPreMatch(page) {
   const kickoff = page.locator(".matchday-kickoff-button");
   for (let attempt = 0; attempt < 3; attempt += 1) {
     if (await kickoff.isVisible()) break;
-    const action = page.locator(".matchday-scene-action").first();
+    const action = page.locator(".matchday-scene-action:visible").first();
     await expect(action).toBeVisible();
     await action.click();
   }
