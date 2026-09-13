@@ -277,16 +277,20 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
   const decisionLabels = new Set();
 
   for (let round = 1; round <= 30; round += 1) {
+    console.log(`[full-season] round ${round}: begin`);
     await expect.poll(async () => {
       const progress = await readProgress(page);
       return { week: progress.week, phase: progress.phase, round: progress.currentRound };
     }).toEqual({ week: round, phase: "analysis", round });
 
     await openCurrentOpponentAnalysis(page);
+    console.log(`[full-season] round ${round}: analysis saved`);
     await advanceClubWeek(page, "inbox");
     await advanceClubWeek(page, "training");
     await chooseTrainingForCurrentWeek(page);
+    console.log(`[full-season] round ${round}: training complete`);
     await playCurrentMatch(page);
+    console.log(`[full-season] round ${round}: match complete`);
 
     const played = await readProgress(page);
     expect(played.lastMatchId).toBeTruthy();
@@ -308,6 +312,7 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
     });
 
     await rollToNextWeek(page, round + 1);
+    console.log(`[full-season] round ${round}: rolled to week ${round + 1}`);
   }
 
   const completed = await readProgress(page);
@@ -330,6 +335,7 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
   await expect(page.locator("#seasonArchiveTable tbody tr")).toHaveCount(1);
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
+  console.log("[full-season] season 1 complete; starting season 2");
   await page.locator("#startNewLeagueSeasonButton").click();
 
   await expect.poll(async () => {
