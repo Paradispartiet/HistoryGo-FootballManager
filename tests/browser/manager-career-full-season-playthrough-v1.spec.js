@@ -220,42 +220,26 @@ async function openPreMatch(page) {
   await expect(kickoff).toBeVisible();
 }
 
-async function playCurrentMatch(page, round) {
-  console.log(`[full-season] round ${round}: open prematch`);
+async function playCurrentMatch(page) {
   await openPreMatch(page);
-  console.log(`[full-season] round ${round}: prematch ready; kickoff`);
   await page.locator(".matchday-kickoff-button").click();
-  console.log(`[full-season] round ${round}: kickoff returned`);
 
   const nextWeek = page.locator(".matchday-next-week-button:visible").first();
   for (let event = 0; event < 6; event += 1) {
-    const eventNumber = event + 1;
-    if (await nextWeek.isVisible()) {
-      console.log(`[full-season] round ${round}: review visible before event ${eventNumber}`);
-      break;
-    }
+    if (await nextWeek.isVisible()) break;
 
-    console.log(`[full-season] round ${round}: event ${eventNumber} begin`);
     const skip = page.locator(".matchday-live-button.is-secondary:visible").filter({ hasText: "Hopp til pausen" }).first();
     if (await skip.isVisible()) {
-      console.log(`[full-season] round ${round}: event ${eventNumber} skip halftime`);
       await skip.click();
-      console.log(`[full-season] round ${round}: event ${eventNumber} skip returned`);
     }
 
     const decision = page.locator(".matchday-decision-button:not([disabled]):visible").first();
-    console.log(`[full-season] round ${round}: event ${eventNumber} await decision`);
     await expect(decision).toBeVisible();
-    const label = (await decision.textContent())?.trim() || "<empty>";
-    console.log(`[full-season] round ${round}: event ${eventNumber} decision visible: ${label}`);
     await decision.click();
-    console.log(`[full-season] round ${round}: event ${eventNumber} decision returned`);
   }
 
-  console.log(`[full-season] round ${round}: await review`);
   await expect(nextWeek).toBeVisible();
   await expect.poll(async () => (await readProgress(page)).phase).toBe("review");
-  console.log(`[full-season] round ${round}: review ready`);
 }
 
 async function rollToNextWeek(page, expectedWeek) {
@@ -293,20 +277,16 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
   const decisionLabels = new Set();
 
   for (let round = 1; round <= 30; round += 1) {
-    console.log(`[full-season] round ${round}: begin`);
     await expect.poll(async () => {
       const progress = await readProgress(page);
       return { week: progress.week, phase: progress.phase, round: progress.currentRound };
     }).toEqual({ week: round, phase: "analysis", round });
 
     await openCurrentOpponentAnalysis(page);
-    console.log(`[full-season] round ${round}: analysis saved`);
     await advanceClubWeek(page, "inbox");
     await advanceClubWeek(page, "training");
     await chooseTrainingForCurrentWeek(page);
-    console.log(`[full-season] round ${round}: training complete`);
-    await playCurrentMatch(page, round);
-    console.log(`[full-season] round ${round}: match complete`);
+    await playCurrentMatch(page);
 
     const played = await readProgress(page);
     expect(played.lastMatchId).toBeTruthy();
@@ -328,7 +308,6 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
     });
 
     await rollToNextWeek(page, round + 1);
-    console.log(`[full-season] round ${round}: rolled to week ${round + 1}`);
   }
 
   const completed = await readProgress(page);
@@ -351,7 +330,6 @@ test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2
   await expect(page.locator("#seasonArchiveTable tbody tr")).toHaveCount(1);
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
-  console.log("[full-season] season 1 complete; starting season 2");
   await page.locator("#startNewLeagueSeasonButton").click();
 
   await expect.poll(async () => {
