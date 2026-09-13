@@ -179,7 +179,7 @@ async function advanceClubWeek(page, expectedPhase) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 
-  const advance = page.locator("#decisionCards .decision-card").filter({ hasText: "Driv klubbuken videre" }).first();
+  const advance = page.locator("#managerCalendarAdvancePhase");
   await expect(advance).toBeVisible();
   await advance.click();
 
