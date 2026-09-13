@@ -215,16 +215,24 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
 
     const drawer = page.locator("#managerTeamChoiceDrawer");
     await expect(drawer).toBeVisible();
-    const choices = drawer.locator(".lineup-player-card:not(.is-selected):not([disabled])");
-    const choiceCount = await choices.count();
+    await expect.poll(async () =>
+      drawer.locator(".lineup-player-choice-row").count()
+    ).toBeGreaterThan(0);
+    const rows = drawer.locator(".lineup-player-choice-row");
+    const rowCount = await rows.count();
     let replacement = null;
 
-    for (let index = 0; index < choiceCount; index += 1) {
-      const choice = choices.nth(index);
-      const name = String(await choice.locator("strong").textContent() || "").trim();
-      const label = String(await choice.textContent() || "");
+    for (let index = 0; index < rowCount; index += 1) {
+      const row = rows.nth(index);
+      const choice = row.locator(".lineup-player-select-action");
+      if (await choice.isDisabled()) continue;
+      if (await choice.evaluate((element) => element.classList.contains("is-selected"))) continue;
+
+      const profile = row.locator(".lineup-player-profile-link");
+      const name = String(await profile.locator("strong").textContent() || "").trim();
+      const positions = String(await profile.locator("span").textContent() || "");
       if (!name || need.avoidNames.includes(name)) continue;
-      if (position && !label.includes(position)) continue;
+      if (position && !positions.includes(position)) continue;
       replacement = { choice, name };
       break;
     }
