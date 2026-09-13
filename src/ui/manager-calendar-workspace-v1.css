@@ -353,15 +353,40 @@ html[data-manager-office-calendar-v1="active"] #nextActionStrip[data-surface="ma
 
 .manager-calendar-rule {
   display: flex;
-  gap: .6rem;
-  align-items: baseline;
+  gap: .8rem;
+  align-items: center;
+  justify-content: space-between;
   padding: .7rem 1.05rem;
   border-top: 1px solid rgba(255,255,255,.16);
   background: #070a0d;
   font-size: .7rem;
 }
 
+.manager-calendar-rule-copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem .6rem;
+  align-items: baseline;
+}
+
 .manager-calendar-rule span { color: rgba(255,255,255,.62); }
+
+.manager-calendar-advance-phase {
+  flex: 0 0 auto;
+  padding: .48rem .68rem;
+  border: 1px solid rgba(255,255,255,.34);
+  border-radius: 8px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.manager-calendar-advance-phase:hover,
+.manager-calendar-advance-phase:focus-visible {
+  background: rgba(255,255,255,.14);
+}
 
 .manager-calendar-drawer[hidden] { display: none !important; }
 
