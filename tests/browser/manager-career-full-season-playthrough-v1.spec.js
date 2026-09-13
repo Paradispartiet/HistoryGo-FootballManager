@@ -218,7 +218,7 @@ async function advanceClubWeek(page, expectedPhase) {
   await expect.poll(async () => (await readProgress(page)).phase).toBe(expectedPhase);
 }
 
-async function exerciseCurrentInbox(page) {
+async function inspectCurrentCalendarMessages(page, { openFirst = false } = {}) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 
@@ -239,7 +239,7 @@ async function exerciseCurrentInbox(page) {
       const label = String((await event.innerText()) || "").replace(/\s+/g, " ").trim();
       if (id) messages.push({ id, label });
 
-      if (!openedMessageId) {
+      if (openFirst && !openedMessageId) {
         await event.click();
         const mail = page.locator("#managerCalendarDrawerBody .manager-club-mail");
         await expect(mail).toBeVisible();
@@ -255,7 +255,7 @@ async function exerciseCurrentInbox(page) {
   }
 
   expect(messages.length).toBeGreaterThan(0);
-  expect(openedMessageId).toBeTruthy();
+  if (openFirst) expect(openedMessageId).toBeTruthy();
   return { messages, openedMessageId, openedSubject };
 }
 
@@ -378,7 +378,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     const choiceIndex = round - 1;
     await openCurrentOpponentAnalysis(page, choiceIndex);
     await advanceClubWeek(page, "inbox");
-    const inbox = await exerciseCurrentInbox(page);
+    const inbox = await inspectCurrentCalendarMessages(page, { openFirst: true });
     inbox.messages.forEach(({ id, label }) => {
       inboxMessageIds.add(id);
       const kind = id.replace(/^club-mail:w\d+:/, "");
@@ -387,8 +387,20 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     });
     openedInboxMessageIds.add(inbox.openedMessageId);
     if (inbox.openedSubject) inboxSubjects.add(inbox.openedSubject);
+
     await advanceClubWeek(page, "training");
     const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
+
+    // Klubbkommunikasjonen er fasebevisst: medisinsk/trening blir tilgjengelig
+    // fra dag 3 og kampbrief/presse fra dag 5. Mål derfor hele ukas mailbredde
+    // først når match_prep har gjort disse dagene canonicalt tilgjengelige.
+    const weeklyMail = await inspectCurrentCalendarMessages(page);
+    weeklyMail.messages.forEach(({ id, label }) => {
+      inboxMessageIds.add(id);
+      const kind = id.replace(/^club-mail:w\d+:/, "");
+      if (kind) inboxMessageKinds.add(kind);
+      if (label) inboxSubjects.add(label);
+    });
 
     // Mode-session er canonical eier av treningsvalgene. Bevis én faktisk
     // reload midt i sesongen, slik at legacy-key alene ikke kan maskere stale
@@ -438,7 +450,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       opponentId: played.lastOpponentId,
       trainingProgram: trainingSelection.programId,
       training: played.trainingFocusName,
-      inboxMessages: inbox.messages.length,
+      inboxMessages: weeklyMail.messages.length,
       openedInboxMessage: inbox.openedMessageId,
       decisions: played.decisionCount
     });
@@ -454,7 +466,17 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(decisionLabels.size).toBeGreaterThanOrEqual(6);
   expect(openedInboxMessageIds.size).toBe(30);
   expect(inboxMessageIds.size).toBeGreaterThanOrEqual(30);
-  expect(inboxMessageKinds.size).toBeGreaterThanOrEqual(4);
+  expect(inboxMessageKinds.size).toBeGreaterThanOrEqual(6);
+  for (const kind of [
+    "week-analysis",
+    "match-review",
+    "medical",
+    "training-follow-up",
+    "opponent-plan",
+    "press-brief"
+  ]) {
+    expect(inboxMessageKinds).toContain(kind);
+  }
   expect(inboxSubjects.size).toBeGreaterThanOrEqual(15);
   expect(completed.week).toBe(31);
   expect(completed.phase).toBe("analysis");
