@@ -214,9 +214,16 @@ function syncOrientation() {
     if (grouped) clubTab.setAttribute("aria-selected", "true");
   }
 
+  const footerHost = document.querySelector("manager-next-action");
+  const footerStrip = footerHost?.querySelector("#nextActionStrip");
+  const calendarOwnsFooter = footerStrip?.dataset.surface === "manager-calendar"
+    || footerHost?.dataset.calendarOwned === "true";
   const destination = document.querySelector("#nextActionDestination");
   const tag = document.querySelector("#nextActionPrimaryTag")?.textContent?.trim();
-  if (destination) destination.textContent = tag || "neste arbeidsflate";
+  const destinationLabel = tag || "neste arbeidsflate";
+  if (destination && !calendarOwnsFooter && destination.textContent !== destinationLabel) {
+    destination.textContent = destinationLabel;
+  }
 }
 
 function applyManagerInformationArchitectureV4() {
