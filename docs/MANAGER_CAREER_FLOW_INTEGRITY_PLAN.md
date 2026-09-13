@@ -1,7 +1,8 @@
 # Manager Career Flow Integrity
 
-> Status: **AKTIV KONSOLIDERINGSFASE**  
+> Status: **FULLFØRT OG BEVIST**  
 > Startet: 11.09.2026  
+> Fullført: 13.09.2026  
 > Canonical mål: gjør den eksisterende managerkarrieren sammenhengende og pålitelig før nye hovedsystemer bygges.
 
 ## Hvorfor denne fasen finnes
@@ -135,7 +136,9 @@ Minimumskontrakt:
 
 ### Produkt-playthrough
 
-Etter P0/P1 skal produksjonsbuilden spilles uten state-seeding gjennom minst 10 sammenhengende serierunder.
+Kravet er nå bevist gjennom den samme blanke Rosenborg-saven uten state-seeding. Den permanente browsertesten driver ekte UI gjennom hele den canonicale Eliteserien på 30 runder, feller sesongdommen, verifiserer merittarkivet og starter sesong 2 gjennom den synlige «Start ny sesong»-kontrollen.
+
+Den tidligere 10-rundersgrensen ble dermed ikke bare nådd, men utvidet til full sesong. Gjennomspillingen beviser 15 ulike seriemotstandere hjemme/borte og samme uke-/fase-løkke uten manuell localStorage-reparasjon.
 
 For hver runde vurderes:
 
@@ -154,7 +157,7 @@ Deretter gjennomføres full sesongkontroll til sesongdom og sesong 2.
 
 ## Sluttkriterium
 
-Fasen er ferdig når følgende kan gjøres fra blank produksjonsbuild uten manuell localStorage/state-reparasjon:
+Fasen er ferdig når følgende kan gjøres fra blank produksjonsbuild uten manuell localStorage/state-reparasjon. Dette sluttkriteriet er oppfylt:
 
 ```text
 Ta over Rosenborg
@@ -164,7 +167,11 @@ Ta over Rosenborg
 → les etterkamp
 → gå til uke 2
 → spill Sandefjord
-→ fortsett samme canonicale løkke i minst 10 runder
+→ fortsett samme canonicale løkke gjennom 30 serierunder
+→ les sesongdom og merittarkiv
+→ start sesong 2 gjennom synlig UI
 ```
 
-Først etter dette velges neste produktområde fra faktisk spilling.
+Permanent bevis: `tests/browser/manager-career-full-season-playthrough-v1.spec.js`.
+
+Neste produktområde skal velges fra faktisk spilling og de målbare repetisjons-/dybdesignalene fra den fullførte sesongen, ikke fra en gammel source-depth-kø.
