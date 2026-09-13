@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const FULL_SEASON_SPEC = /manager-career-full-season-playthrough-v1\.spec\.js/;
+
 export default defineConfig({
   testDir: "./tests/browser",
   timeout: 30_000,
@@ -17,5 +19,17 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 15_000
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }]
+  projects: [
+    {
+      name: "chromium",
+      testIgnore: FULL_SEASON_SPEC,
+      use: { ...devices["Desktop Chrome"] }
+    },
+    {
+      name: "chromium-full-season",
+      testMatch: FULL_SEASON_SPEC,
+      dependencies: ["chromium"],
+      use: { ...devices["Desktop Chrome"] }
+    }
+  ]
 });

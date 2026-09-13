@@ -5,6 +5,8 @@ const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), "
 const files = {
   readme: read("README.md"),
   status: read("docs/PRODUCT_STATUS.md"),
+  careerFlowPlan: read("docs/MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md"),
+  careerFullSeason: read("tests/browser/manager-career-full-season-playthrough-v1.spec.js"),
   menu: read("docs/meny.md"),
   recruitment: read("src/football-recruitment.js"),
   exercise: read("src/football-training-exercise-design.js"),
@@ -54,6 +56,8 @@ check("statusen avviser uavklarte troppsgrenser", files.status.includes("Troppsg
 // finnes. Vakten sjekker nå etterfølgeren, som er det arbeidet som FAKTISK er
 // åpent — dybde i pooler som er komplette, men grunne.
 check("statusen beskriver reelt dataarbeid", files.status.includes("fordype dokumenterte spillerpooler som er komplette, men grunne"));
+check("Manager Career Flow Integrity er canonicalt lukket", files.status.includes("Fullført konsolideringsfase — Manager Career Flow Integrity") && files.careerFlowPlan.includes("**FULLFØRT OG BEVIST**"));
+check("fullsesong-browserbeviset dekker 30 runder og sesong 2", files.careerFullSeason.includes("round <= 30") && files.careerFullSeason.includes("#startNewLeagueSeasonButton") && files.careerFullSeason.includes("seasonNumber: 2"));
 
 check("spillerpool/tropp er faktisk implementert", files.recruitment.includes("PLAYER_POOL_SQUAD_STATE_VERSION") && files.recruitment.includes("squadPlayerIds"));
 check("øvelsesdesign er faktisk implementert", files.exercise.includes("evaluateTrainingExerciseDesign") && files.exercise.includes("EXERCISE_DESIGN_CONTROLS"));

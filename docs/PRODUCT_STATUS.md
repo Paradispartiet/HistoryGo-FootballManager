@@ -59,17 +59,19 @@ Disse skal ikke gjeninnføres som «neste naturlige steg» uten at produktregele
 
 Legacy-kode kan beholdes for save-migrering og monolittkompatibilitet. Det gjør ikke det gamle systemet til en live produktretning.
 
-## Aktiv konsolideringsfase — Manager Career Flow Integrity
+## Fullført konsolideringsfase — Manager Career Flow Integrity
 
-Fra 11.09.2026 er hovedarbeidet flyttet fra spiller-source-depth til **managerkarrierens ende-til-ende-flyt**. Produksjonsbuilden er spilt manuelt gjennom klubbvalg, før-sesong, trening, stab, motstanderanalyse, kampforberedelse, kamp og etterkamp. Motorene og innholdet er langt nok kommet; de høyeste produktgapene er nå faseprogresjon, routing og stale presentasjonsstate.
+Fra 11.09.2026 til 13.09.2026 ble hovedarbeidet flyttet fra spiller-source-depth til **managerkarrierens ende-til-ende-flyt**. Fasen er nå lukket: en blank Rosenborg-save går gjennom før-sesong, 30 canonicale Eliteserie-runder, sesongdom, merittarkiv og synlig overgang til sesong 2 uten manuell state-seeding eller localStorage-reparasjon.
 
-Canonical plan: [`MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md`](MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md).
+Permanent browservern: `tests/browser/manager-career-full-season-playthrough-v1.spec.js`. Den fullførte sesongen møter 15 ulike seriemotstandere hjemme og borte, registrerer hver kamp én gang og holder den samme autoritative Club Week-løkken gjennom hele sesongen.
+
+Canonical plan og sluttkriterium: [`MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md`](MANAGER_CAREER_FLOW_INTEGRITY_PLAN.md).
 
 For 2. divisjon er det systematiske source-depth-gulvet **frosset ved minst to kildebelagte styrkeprofiler per klubb**. Allerede mergede tredjeprofiler beholdes, men det kjøres ikke en automatisk 2→3→4-runde gjennom resten av divisjonen. Ny spillerresearch gjøres selektivt når en konkret profil har særskilt produktverdi.
 
 ### P1 staff — klubbspesifikke startersett
 
-Etter grønn Manager Career Flow Integrity er staff neste synlige innholdsgap. Generiske seksrollers-placeholders beholdes kun som fallback for ukurerte klubber. Kuraterte klubber kan bruke `starterClubIds`; et klubbsett tas bare i bruk når det alene dekker hele 1 assistent + 3 trenere + 1 fysio + 1 keepertrener.
+Etter fullført Manager Career Flow Integrity er staff fortsatt et synlig, men kildebegrenset innholdsgap. Generiske seksrollers-placeholders beholdes kun som fallback for ukurerte klubber. Kuraterte klubber kan bruke `starterClubIds`; et klubbsett tas bare i bruk når det alene dekker hele 1 assistent + 3 trenere + 1 fysio + 1 keepertrener.
 
 Rosenborg er første klubbsett, basert på klubbens offisielle A-lagsstab oppdatert 11.08.2026. Administrasjon bruker samtidig samme seksrollerskrav som før-sesong, slik at den gamle `6/1`-presentasjonen ikke kan komme tilbake.
 
@@ -83,7 +85,7 @@ Lillestrøm er femte komplette klubbsett, kildebelagt fra klubbens offisielle A-
 
 Sarpsborg 08 er sjette komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 6/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
 
-Start er sjuende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 7/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
+Start er sjuende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 7/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert. Dette er ikke grunnlag for å fylle de ni resterende klubbene med gjetning eller halvkomplette startersett.
 
 ## Reelt åpent arbeid
 

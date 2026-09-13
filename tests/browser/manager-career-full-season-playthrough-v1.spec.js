@@ -26,12 +26,18 @@ async function readProgress(page) {
     const season = parse("historygo-football-manager.league-season.v3", null) || session.leagueSeason;
     const matchday = parse("hgfm.matchday.v1", null) || session.matchday;
     const lastMatch = matchday?.lastMatch || null;
+    const archive = parse("hgfm.seasonArchive.v1", []);
+    const playerStats = parse("hgfm.playerSeasonStats.v1", { rows: [], matchIds: [] });
 
     return {
       week: Number(clubWeek?.week) || null,
       phase: clubWeek?.phase || null,
       seasonStatus: season?.status || null,
+      seasonNumber: Number(season?.seasonNumber) || null,
+      seasonRounds: Number(season?.competition?.rounds) || null,
       currentRound: Number(season?.currentRound) || null,
+      archiveCount: Array.isArray(archive) ? archive.length : 0,
+      playerStatsCount: Array.isArray(playerStats?.rows) ? playerStats.rows.length : 0,
       activeMatchSession: Boolean(matchday?.session),
       lastMatchId: lastMatch?.id || null,
       lastMatchRound: Number(lastMatch?.leagueContext?.round) || null,
@@ -247,8 +253,8 @@ async function rollToNextWeek(page, expectedWeek) {
   }).toEqual({ week: expectedWeek, phase: "analysis" });
 }
 
-test("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI", async ({ page }) => {
-  test.setTimeout(240_000);
+test("blank Rosenborg-save spiller full sesong og går canonicalt inn i sesong 2 gjennom ekte UI", async ({ page }) => {
+  test.setTimeout(720_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
@@ -270,7 +276,7 @@ test("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI
   const matchIds = new Set();
   const decisionLabels = new Set();
 
-  for (let round = 1; round <= 10; round += 1) {
+  for (let round = 1; round <= 30; round += 1) {
     await expect.poll(async () => {
       const progress = await readProgress(page);
       return { week: progress.week, phase: progress.phase, round: progress.currentRound };
@@ -304,19 +310,49 @@ test("blank Rosenborg-save spiller ti sammenhengende serierunder gjennom ekte UI
     await rollToNextWeek(page, round + 1);
   }
 
-  const final = await readProgress(page);
-  expect(matchIds.size).toBe(10);
-  expect(opponentIds.size).toBe(10);
+  const completed = await readProgress(page);
+  expect(matchIds.size).toBe(30);
+  expect(opponentIds.size).toBe(15);
   expect(decisionLabels.size).toBeGreaterThan(1);
-  expect(final.week).toBe(11);
-  expect(final.phase).toBe("analysis");
-  expect(final.currentRound).toBe(11);
-  expect(final.seasonStatus).toBe("active");
-  expect(final.activeMatchSession).toBe(false);
+  expect(completed.week).toBe(31);
+  expect(completed.phase).toBe("analysis");
+  expect(completed.seasonNumber).toBe(1);
+  expect(completed.seasonRounds).toBe(30);
+  expect(completed.currentRound).toBe(30);
+  expect(completed.seasonStatus).toBe("completed");
+  expect(completed.archiveCount).toBe(1);
+  expect(completed.playerStatsCount).toBeGreaterThan(0);
+  expect(completed.activeMatchSession).toBe(false);
+
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator('[data-tab-section="statistikk"]')).toBeVisible();
+  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
+  await expect(page.locator("#seasonArchiveTable tbody tr")).toHaveCount(1);
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
+  await page.locator("#startNewLeagueSeasonButton").click();
+
+  await expect.poll(async () => {
+    const progress = await readProgress(page);
+    return {
+      seasonNumber: progress.seasonNumber,
+      status: progress.seasonStatus,
+      round: progress.currentRound
+    };
+  }).toEqual({ seasonNumber: 2, status: "active", round: 1 });
+
+  const seasonTwo = await readProgress(page);
+  expect(seasonTwo.week).toBe(31);
+  expect(seasonTwo.phase).toBe("analysis");
+  expect(seasonTwo.archiveCount).toBe(1);
+  expect(seasonTwo.playerStatsCount).toBe(0);
+  expect(seasonTwo.activeMatchSession).toBe(false);
+  await expect(page.locator("#seasonReviewPanel")).toBeHidden();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
 
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#nextActionPrimary")).toBeEnabled();
 
-  console.log("10-round canonical playthrough observations:", JSON.stringify(observations));
+  console.log("Full-season canonical playthrough observations:", JSON.stringify(observations));
 });
