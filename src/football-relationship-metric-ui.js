@@ -109,8 +109,9 @@ function setRelationshipScore(value, title = "") {
     return;
   }
 
-  target.textContent = value;
-  if (title) {
+  const nextValue = String(value);
+  if (target.textContent !== nextValue) target.textContent = nextValue;
+  if (title && target.title !== title) {
     target.title = title;
   }
 }

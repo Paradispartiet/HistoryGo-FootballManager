@@ -242,8 +242,22 @@ function selectedIndividual() {
 function renderSessions(surface, context) {
   const list = surface.querySelector("#trainingDaySessions");
   if (!list) return;
+  const sessions = selectedSessions();
+  const signature = JSON.stringify({
+    week: Number(context.week) || 1,
+    dayIndex: Number(context.dayIndex) || 3,
+    day: String(context.day || ""),
+    sessions: sessions.map((session) => ({
+      day: String(session.day || ""),
+      title: String(session.title || ""),
+      intensity: String(session.intensity || ""),
+      openable: isExerciseSession(session)
+    }))
+  });
+  if (list.dataset.renderSignature === signature) return;
+
   const fragment = document.createDocumentFragment();
-  selectedSessions().forEach((session, index) => {
+  sessions.forEach((session, index) => {
     const item = node("li", "training-day-session");
     const sameDay = session.day.toLocaleLowerCase("nb-NO").startsWith(context.day.toLocaleLowerCase("nb-NO"));
     const openable = isExerciseSession(session);
@@ -274,13 +288,15 @@ function renderSessions(surface, context) {
     fragment.append(item);
   });
   list.replaceChildren(fragment);
+  list.dataset.renderSignature = signature;
 }
 
 function syncLocation(context) {
   const section = document.querySelector('[data-tab-section="trening"]');
   if (!section || section.hidden) return;
   const location = document.getElementById("managerLocationText");
-  if (location) location.textContent = `Lag · Trening · ${context.day}`;
+  const value = `Lag · Trening · ${context.day}`;
+  if (location && location.textContent !== value) location.textContent = value;
 }
 
 function renderTrainingDay() {
@@ -399,9 +415,39 @@ function installObservers() {
   });
   document.addEventListener("change", scheduleRender);
 
+  const trainingSourceSelector = [
+    '[data-tab-section="trening"]',
+    "#trainingPrograms",
+    "#weeklyTrainingOptions",
+    "#individualTrainingPicker",
+    "#individualTrainingAssignments",
+    "#teamSelectedTrainingProgram",
+    "#teamSelectedTrainingFocus",
+    "#teamSelectedIndividualTraining",
+    "#weeklyTrainingStatus",
+    "#individualTrainingCapacity",
+    ".training-assistant-signal",
+    ".training-command-status",
+    ".training-load-brief",
+    ".training-opponent-brief"
+  ].join(", ");
+
+  const touchesTrainingSource = (mutation) => {
+    const target = mutation.target instanceof Element
+      ? mutation.target
+      : mutation.target?.parentElement;
+    if (target?.closest?.(trainingSourceSelector)) return true;
+    if (mutation.type !== "childList") return false;
+    return [...mutation.addedNodes, ...mutation.removedNodes].some((candidate) => {
+      if (!(candidate instanceof Element)) return false;
+      return candidate.matches(trainingSourceSelector) || Boolean(candidate.querySelector(trainingSourceSelector));
+    });
+  };
+
   const observer = new MutationObserver((mutations) => {
     const surface = document.getElementById(SURFACE_ID);
     if (surface && mutations.every((mutation) => surface.contains(mutation.target))) return;
+    if (!mutations.some(touchesTrainingSource)) return;
     scheduleRender();
   });
   observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected"] });

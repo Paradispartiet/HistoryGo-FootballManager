@@ -286,7 +286,10 @@ function ensureSection() {
         </header>
         <ol id="managerCalendarTimeline" class="manager-calendar-timeline" aria-label="Dagens hendelser"></ol>
       </section>
-      <footer class="manager-calendar-rule"><strong>Klubben snakker gjennom arbeidsdagen.</strong><span>Mailene forklarer eksisterende kamp-, trenings- og klubbstate. De gir ingen ny score eller skjult bonus.</span></footer>
+      <footer class="manager-calendar-rule">
+        <div class="manager-calendar-rule-copy"><strong>Klubben snakker gjennom arbeidsdagen.</strong><span>Mailene forklarer eksisterende kamp-, trenings- og klubbstate. De gir ingen ny score eller skjult bonus.</span></div>
+        <button type="button" class="manager-calendar-advance-phase" id="managerCalendarAdvancePhase" hidden>Avslutt dagen · gå videre</button>
+      </footer>
     </section>
     <div id="managerCalendarMessageDrawer" class="manager-calendar-drawer" role="dialog" aria-modal="true" aria-labelledby="managerCalendarDrawerTitle" hidden>
       <button type="button" class="manager-calendar-drawer-backdrop" data-calendar-drawer-close aria-label="Lukk melding"></button>
@@ -300,6 +303,13 @@ function ensureSection() {
     </div>`;
   document.getElementById("app")?.append(section);
   section.querySelectorAll("[data-calendar-drawer-close]").forEach((button) => button.addEventListener("click", closeInboxDrawer));
+  section.querySelector("#managerCalendarAdvancePhase")?.addEventListener("click", () => {
+    const model = lastCalendarModel;
+    if (!model || !["analysis", "inbox"].includes(model.phase)) return;
+    window.dispatchEvent(new CustomEvent("hgfm:calendar-advance-club-week", {
+      detail: { week: model.week, phase: model.phase, source: "calendar" }
+    }));
+  });
   return section;
 }
 
@@ -693,6 +703,17 @@ function renderCalendar() {
   const match = section.querySelector("#managerCalendarMatch");
   if (now) now.textContent = model.summary;
   if (match) match.textContent = model.nextMatchLabel;
+  const advance = section.querySelector("#managerCalendarAdvancePhase");
+  if (advance) {
+    const canAdvanceManually = ["analysis", "inbox"].includes(model.phase);
+    advance.hidden = !canAdvanceManually;
+    if (canAdvanceManually) {
+      advance.textContent = `Avslutt ${model.currentDay.day.toLocaleLowerCase("nb-NO")} · gå videre`;
+      advance.dataset.phase = model.phase;
+    } else {
+      delete advance.dataset.phase;
+    }
+  }
   renderDayRail(section, model);
   renderTimeline(section, model.days.find((day) => day.dayIndex === selectedDayIndex) || model.currentDay);
   refreshOpenMail(section);
@@ -758,7 +779,19 @@ function installObservers() {
 
   const footerStrip = document.getElementById("nextActionStrip");
   if (footerStrip) {
-    const observer = new MutationObserver(() => queueMicrotask(() => renderCalendarFooter(lastCalendarModel)));
+    const observer = new MutationObserver(() => {
+      if (!lastCalendarModel || !isNormalLeagueSave()) return;
+      const host = footerStrip.closest("manager-next-action");
+      const primary = footerStrip.querySelector("#nextActionPrimary");
+      const tag = footerStrip.querySelector("#nextActionPrimaryTag");
+      const footerNeedsRepair = host?.dataset.calendarOwned !== "true"
+        || footerStrip.dataset.surface !== "manager-calendar"
+        || footerStrip.hidden
+        || Boolean(primary?.disabled)
+        || String(tag?.textContent || "").trim() !== "Kalender";
+      if (!footerNeedsRepair) return;
+      queueMicrotask(() => renderCalendarFooter(lastCalendarModel));
+    });
     observer.observe(footerStrip, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "disabled"] });
   }
 

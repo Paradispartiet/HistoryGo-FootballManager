@@ -9517,17 +9517,22 @@ function renderTeamSummary(teamFit) {
     return;
   }
 
-  elements.teamStatus.textContent = getTeamStatus(teamFit);
-  elements.completeCount.textContent = `${teamFit.completeCount}/${teamFit.totalSlots}`;
-  elements.roleFitAverage.textContent = teamFit.metrics.roleFitAverage;
-  elements.tacticFitAverage.textContent = teamFit.metrics.tacticFitAverage;
-  elements.balanceScore.textContent = teamFit.metrics.balanceScore;
-  elements.restDefenseScore.textContent = teamFit.metrics.restDefenseScore;
-  elements.widthScore.textContent = teamFit.metrics.widthScore;
-  elements.depthScore.textContent = teamFit.metrics.depthScore;
-  elements.buildUpScore.textContent = teamFit.metrics.buildUpScore;
-  elements.pressScore.textContent = teamFit.metrics.pressScore;
-  elements.relationshipScore.textContent = teamFit.metrics.relationshipScore;
+  const setMetricText = (element, value) => {
+    if (!element) return;
+    const next = String(value);
+    if (element.textContent !== next) element.textContent = next;
+  };
+  setMetricText(elements.teamStatus, getTeamStatus(teamFit));
+  setMetricText(elements.completeCount, `${teamFit.completeCount}/${teamFit.totalSlots}`);
+  setMetricText(elements.roleFitAverage, teamFit.metrics.roleFitAverage);
+  setMetricText(elements.tacticFitAverage, teamFit.metrics.tacticFitAverage);
+  setMetricText(elements.balanceScore, teamFit.metrics.balanceScore);
+  setMetricText(elements.restDefenseScore, teamFit.metrics.restDefenseScore);
+  setMetricText(elements.widthScore, teamFit.metrics.widthScore);
+  setMetricText(elements.depthScore, teamFit.metrics.depthScore);
+  setMetricText(elements.buildUpScore, teamFit.metrics.buildUpScore);
+  setMetricText(elements.pressScore, teamFit.metrics.pressScore);
+  setMetricText(elements.relationshipScore, teamFit.metrics.relationshipScore);
 }
 
 
@@ -10093,7 +10098,16 @@ async function handleManagerMatchdayPrimaryAction(target) {
 function renderMatchdayGate(container, teamFit) {
   const readiness = getMatchdayReadiness(teamFit);
   const session = state.matchday?.session || null;
-  const lastMatch = state.matchday?.lastMatch || null;
+  const storedLastMatch = state.matchday?.lastMatch || null;
+  // I ligamodus er en lagret kamp bare den AKTIVE rapporten mens Club Week
+  // faktisk står i review. Når neste uke er rullet til analysis skal forrige
+  // resultat fortsatt finnes i historikken, men det må ikke eie Kamp-flatas
+  // primærhandling og blokkere veien inn i neste kamp.
+  const lastMatch = isLeagueModeActive()
+    ? state.clubWeekState?.phase === "review"
+      ? storedLastMatch
+      : null
+    : storedLastMatch;
   const formation = session?.formationSnapshot || getFormation() || {};
   const tactic = session?.tacticSnapshot || getTactic() || {};
   const report = lastMatch ? createMatchReport(lastMatch) : null;
@@ -16204,6 +16218,9 @@ function renderApp() {
 }
 
 function bindEvents() {
+  window.addEventListener("hgfm:calendar-advance-club-week", () => {
+    advanceClubWeekPhaseAction().catch(console.error);
+  });
   bindFormationAndTacticControls();
   bindTrainingWorkspaceControls();
   bindTrainingAndKnowledgeControls();
