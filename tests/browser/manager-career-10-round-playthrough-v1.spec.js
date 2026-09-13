@@ -218,7 +218,7 @@ async function playCurrentMatch(page) {
   await openPreMatch(page);
   await page.locator(".matchday-kickoff-button").click();
 
-  const nextWeek = page.locator(".matchday-next-week-button");
+  const nextWeek = page.locator(".matchday-next-week-button:visible").first();
   for (let event = 0; event < 6; event += 1) {
     if (await nextWeek.isVisible()) break;
 
@@ -237,7 +237,7 @@ async function playCurrentMatch(page) {
 }
 
 async function rollToNextWeek(page, expectedWeek) {
-  const nextWeek = page.locator(".matchday-next-week-button");
+  const nextWeek = page.locator(".matchday-next-week-button:visible").first();
   await expect(nextWeek).toBeVisible();
   await nextWeek.click();
 
