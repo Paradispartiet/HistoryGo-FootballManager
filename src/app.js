@@ -6153,14 +6153,10 @@ function startLeagueSeasonFromOnboarding() {
   if (!isLeaguePreseasonReady(getTeamFit())) {
     return;
   }
-  console.log("[career-debug] start:before-save");
   state.gameStartState = normalizeGameStartState({ ...state.gameStartState, ...createLeagueSaveExtras() });
   saveGameStartState();
-  console.log("[career-debug] start:before-ensure");
   ensureLeagueSeason();
-  console.log("[career-debug] start:after-ensure");
   renderApp();
-  console.log("[career-debug] start:after-render");
 }
 
 const SEASON_ARCHIVE_KEY = "hgfm.seasonArchive.v1";
@@ -16130,7 +16126,6 @@ function renderBenchList(players) {
 }
 
 function renderApp() {
-  console.log("[career-debug] render:enter");
   // Fersk availability-beregning per render: én runtime-kilde for unlocks,
   // formasjonstilgjengelighet og roster readiness.
   invalidateAvailability();
@@ -16152,7 +16147,6 @@ function renderApp() {
   renderSidePanel(teamFit);
   renderLeagueOnboarding(teamFit);
   renderNextActionStrip(teamFit);
-  console.log("[career-debug] render:after-next-action");
   renderDecisionCards(teamFit);
   renderSuggestedSetups(teamFit);
   renderContextPanel();
@@ -16161,7 +16155,6 @@ function renderApp() {
   renderMatchday(teamFit);
   renderMiniSeason();
   renderLeagueSeason();
-  console.log("[career-debug] render:after-league-season");
   renderWeeklyTrainingFocus(teamFit);
   renderTrainingProgramCompositions(teamFit);
   // Ukens plan må rendres ETTER programkomposisjonene: de setter valgt-tilstand
@@ -16183,7 +16176,6 @@ function renderApp() {
   renderInboxThreads();
   renderDepartments();
   renderOfficeScene(teamFit);
-  console.log("[career-debug] render:after-office");
 
   // History Go-unlocks (v1): sted → person → ekspertise → program → badge → lagklasse.
   renderHistoryGoSyncStatus();
@@ -16201,7 +16193,6 @@ function renderApp() {
   renderTeamIdentityPanel();
   renderGameModeStatus(teamFit);
   renderModeIsolation();
-  console.log("[career-debug] render:after-mode-isolation");
 
   // Persist only the active namespace. Visiting a secondary mode therefore
   // cannot overwrite the league snapshot, even though all modes reuse the
