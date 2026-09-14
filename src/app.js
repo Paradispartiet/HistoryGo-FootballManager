@@ -8242,8 +8242,7 @@ function renderDirectLineupEditor() {
   const available = getUnlockedPlayers();
   const current = available.find((player) => player.id === slotState.playerId);
   const choices = [current, ...available.filter((player) => player.id !== current?.id)]
-    .filter(Boolean)
-    .slice(0, 16);
+    .filter(Boolean);
 
   playerHost.replaceChildren();
   choices.forEach((player) => {
@@ -8251,7 +8250,10 @@ function renderDirectLineupEditor() {
     button.type = "button";
     button.className = `lineup-player-card${player.id === slotState.playerId ? " is-selected" : ""}`;
     button.disabled = usedPlayerIds.has(player.id);
-    const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions.join(" / ") : "–";
+    const positions = [...new Set([
+      ...(Array.isArray(player.naturalPositions) ? player.naturalPositions : []),
+      ...(Array.isArray(player.usablePositions) ? player.usablePositions : [])
+    ])].join(" / ") || "–";
     button.innerHTML = `<strong>${player.name || player.id}</strong><span>${positions}</span>`;
     button.addEventListener("click", () => setSelectedSlotPlayer(player.id));
     playerHost.append(button);
