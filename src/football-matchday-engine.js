@@ -712,9 +712,9 @@ export function pickOpponentProfile(index = null) {
 // C. Formasjonsfamilier og hendelsesbibliotek.
 //
 // Hver hgFootball-formasjon mappes til en taktisk familie via id-mønster, og
-// hver familie har 3 korte, fotballfaglige hendelser. I tillegg gir hver
-// motstanderprofil én egen hendelse. En kamp = 2 familiehendelser + 1
-// motstanderhendelse.
+// hver familie har et bredere bibliotek av korte, fotballfaglige hendelser.
+// I tillegg gir hver motstanderprofil én egen hendelse. En kamp = 2
+// familiehendelser + 1 motstanderhendelse.
 // ----------------------------------------------------------------------------
 const FORMATION_FAMILY_PATTERNS = [
   { family: "wm", pattern: /^(wm_|metodo|danubian|hungarian_mm)/ },
@@ -802,6 +802,30 @@ const FAMILY_EVENTS = {
         opt("go_direct", "Spill mer direkte forbi midten", [m("depthScore", 60)], IMPACTS.aggressive, 1),
         opt("free_creator", "Gi frihet til den kreative indreløperen", [m("roleFitAverage", 62), c("roleFitClarity", 55)], IMPACTS.balanced, 1)
       ]
+    },
+    {
+      id: "wm_wide_release",
+      title: "Ytterløperen får backen alene",
+      text: "WM-strukturen har flyttet motstanderen inn og åpnet en ren én-mot-én ute.",
+      pressure: "medium",
+      relevantWhen: { metric: "widthScore", above: 56 },
+      options: [
+        opt("attack_wide", "Isoler ytterløperen og angrip utsiden", [m("widthScore", 60)], IMPACTS.aggressive, 1),
+        opt("inside_support", "Send en inside forward i støtte", [m("roleFitAverage", 58), m("buildUpScore", 56)], IMPACTS.balanced, 0),
+        opt("keep_balance", "Behold half-back-balansen bak angrepet", [m("balanceScore", 56)], IMPACTS.holdPlan, 0)
+      ]
+    },
+    {
+      id: "wm_center_forward_link",
+      title: "Center forward trekker stopperen ut",
+      text: "Spissen faller av og åpner løpsrommet for inside forwards bak seg.",
+      pressure: "medium",
+      relevantWhen: { metric: "depthScore", above: 56 },
+      options: [
+        opt("attack_depth", "Send inside forwards inn i bakrommet", [m("depthScore", 60)], IMPACTS.aggressive, 1),
+        opt("combine_central", "Kombiner rundt den møtende spissen", [m("buildUpScore", 58)], IMPACTS.balanced, 0),
+        opt("hold_shape", "Behold posisjonene og vent på neste åpning", [m("balanceScore", 55)], IMPACTS.holdPlan, 0)
+      ]
     }
   ],
   catenaccio: [
@@ -839,6 +863,30 @@ const FAMILY_EVENTS = {
         opt("go_direct", "Slå direkte og hopp over presset", [m("depthScore", 58)], IMPACTS.balanced, 1),
         opt("calm_buildup", "Hold fast på rolig oppbygging", [m("buildUpScore", 65), e("centralControl", 5)], IMPACTS.balanced, 2),
         opt("protect_box", "Senk laget og beskytt boksen", [m("restDefenseScore", 55), e("restDefenceSecurity", 5)], IMPACTS.defensive, 0)
+      ]
+    },
+    {
+      id: "cat_second_ball_pressure",
+      title: "Andreballene faller foran boksen",
+      text: "Det direkte spillet blir klarert, men motstanderen samler andreballene og angriper på nytt.",
+      pressure: "high",
+      relevantWhen: { metric: "balanceScore", below: 60 },
+      options: [
+        opt("step_midfield", "Skyv midtbanen frem på andreballen", [m("balanceScore", 58), m("pressScore", 55)], IMPACTS.balanced, 1),
+        opt("protect_box", "Hold blokka og beskytt boksen", [m("restDefenseScore", 58)], IMPACTS.defensive, 0),
+        opt("counter_release", "La én bli igjen for kontringen", [m("depthScore", 58)], IMPACTS.aggressive, 1)
+      ]
+    },
+    {
+      id: "cat_wingback_escape",
+      title: "Flanken åpner en vei ut av presset",
+      text: "Motstanderens sentrale press gir backen rom til å føre laget frem langs siden.",
+      pressure: "medium",
+      relevantWhen: { metric: "widthScore", above: 54 },
+      options: [
+        opt("release_wide", "Spill tidlig ut på flanken", [m("widthScore", 58), m("buildUpScore", 54)], IMPACTS.balanced, 0),
+        opt("direct_channel", "Slå kanalen bak deres back", [m("depthScore", 58)], IMPACTS.aggressive, 1),
+        opt("stay_low", "Behold den lave strukturen", [m("restDefenseScore", 56)], IMPACTS.holdPlan, 0)
       ]
     }
   ],
@@ -878,6 +926,30 @@ const FAMILY_EVENTS = {
         opt("counterpress", "Press høyere ved balltap", [m("pressScore", 62), e("pressingIntensity", 6)], IMPACTS.aggressive, 1),
         opt("hold_plan", "Behold planen", [m("balanceScore", 55)], IMPACTS.holdPlan, 0)
       ]
+    },
+    {
+      id: "total_false_nine_pull",
+      title: "Den falske nierens bevegelse åpner sisteleddet",
+      text: "Spissen trekker en stopper ut, og rommet bak må angripes før det lukkes.",
+      pressure: "medium",
+      relevantWhen: { metric: "depthScore", above: 56 },
+      options: [
+        opt("run_beyond", "Angrip rommet med neste spiller", [m("depthScore", 60), m("roleFitAverage", 58)], IMPACTS.aggressive, 1),
+        opt("third_man", "Bruk tredjemannskombinasjonen sentralt", [m("buildUpScore", 60)], IMPACTS.balanced, 0),
+        opt("keep_rotation", "La rotasjonen fortsette uten å tvinge frem pasningen", [m("balanceScore", 56)], IMPACTS.holdPlan, 0)
+      ]
+    },
+    {
+      id: "total_counterpress_spacing",
+      title: "Rotasjonen etterlater et åpent balltap",
+      text: "Flere spillere har byttet plass, og første reaksjon etter balltap avgjør om strukturen tåler det.",
+      pressure: "high",
+      relevantWhen: { metric: "restDefenseScore", below: 62 },
+      options: [
+        opt("counterpress", "Lås ballfører med umiddelbart motpress", [m("pressScore", 62), m("restDefenseScore", 54)], IMPACTS.aggressive, 1),
+        opt("recover_shape", "Fall tilbake i referanseposisjonene", [m("balanceScore", 58)], IMPACTS.defensive, 0),
+        opt("delay_transition", "Forsink overgangen og kjøp tid", [m("restDefenseScore", 58)], IMPACTS.balanced, 0)
+      ]
     }
   ],
   brazil: [
@@ -915,6 +987,30 @@ const FAMILY_EVENTS = {
         opt("free_creator", "Gi frihet til den kreative spilleren", [m("roleFitAverage", 63)], IMPACTS.aggressive, 1),
         opt("combine_central", "Kombiner sentralt rundt ham", [m("buildUpScore", 60), e("centralControl", 4)], IMPACTS.balanced, 0),
         opt("hold_plan", "Behold planen", [m("balanceScore", 55)], IMPACTS.holdPlan, 0)
+      ]
+    },
+    {
+      id: "brazil_fullback_overlap",
+      title: "Backen kommer på utsiden",
+      text: "Kantspilleren binder backen inne, og overlappen gir et nytt angrepspunkt.",
+      pressure: "medium",
+      relevantWhen: { metric: "widthScore", above: 56 },
+      options: [
+        opt("release_overlap", "Slipp backen rundt på utsiden", [m("widthScore", 60)], IMPACTS.aggressive, 1),
+        opt("underlap", "Bruk løpet som lokk og spill inn i mellomrommet", [m("buildUpScore", 58)], IMPACTS.balanced, 0),
+        opt("protect_rest", "Hold backen igjen og sikre balltapet", [m("restDefenseScore", 56)], IMPACTS.defensive, 0)
+      ]
+    },
+    {
+      id: "brazil_box_spacing",
+      title: "For mange angripere søker samme rom",
+      text: "Frontrekka samler seg i boksen og gjør det lett å forsvare innlegg og andreball.",
+      pressure: "medium",
+      relevantWhen: { metric: "balanceScore", below: 60 },
+      options: [
+        opt("stretch_front", "Trekk én angriper ut og strekk sisteleddet", [m("widthScore", 58)], IMPACTS.balanced, 0),
+        opt("late_runner", "Hold én igjen for et sent løp", [m("balanceScore", 58), m("depthScore", 56)], IMPACTS.balanced, 0),
+        opt("force_box", "Fyll boksen enda hardere", [m("roleFitAverage", 64)], IMPACTS.aggressive, 2)
       ]
     }
   ],
@@ -954,6 +1050,30 @@ const FAMILY_EVENTS = {
         opt("go_direct", "Slå direkte bak backlinjen", [m("depthScore", 60)], IMPACTS.aggressive, 1),
         opt("hold_plan", "Behold planen", [m("balanceScore", 55)], IMPACTS.holdPlan, 0)
       ]
+    },
+    {
+      id: "pyramid_inside_channel",
+      title: "Innerne finner kanalen mellom back og stopper",
+      text: "Femmannsfronten binder bredden, og innerløpet åpner en diagonal pasningslinje.",
+      pressure: "medium",
+      relevantWhen: { metric: "buildUpScore", above: 56 },
+      options: [
+        opt("feed_inside", "Spill tidlig inn i innerkanalen", [m("buildUpScore", 60), m("depthScore", 56)], IMPACTS.aggressive, 1),
+        opt("switch_wide", "Flytt ballen ut før diagonalpasningen", [m("widthScore", 58)], IMPACTS.balanced, 0),
+        opt("hold_pattern", "Behold pasningsmønsteret", [m("balanceScore", 55)], IMPACTS.holdPlan, 0)
+      ]
+    },
+    {
+      id: "pyramid_second_ball",
+      title: "Det direkte oppspillet skaper en andreballkamp",
+      text: "Første duell avgjør lite; laget som står best rundt nedfallsrommet tar kontroll.",
+      pressure: "high",
+      relevantWhen: { metric: "balanceScore", below: 62 },
+      options: [
+        opt("collapse_second", "Samle half-backene rundt andreballen", [m("balanceScore", 58)], IMPACTS.balanced, 0),
+        opt("stay_stretched", "Behold femmannsfronten for neste angrep", [m("depthScore", 60)], IMPACTS.aggressive, 1),
+        opt("drop_off", "Sikre bakrommet før duellen", [m("restDefenseScore", 56)], IMPACTS.defensive, 0)
+      ]
     }
   ],
   press: [
@@ -991,6 +1111,30 @@ const FAMILY_EVENTS = {
         opt("smart_zones", "Press smartere i soner", [c("coachUnderstanding", 58), m("pressScore", 60)], IMPACTS.balanced, 1),
         opt("direct_after_win", "Spill direkte etter gjenvinning", [m("depthScore", 58)], IMPACTS.balanced, 1),
         opt("hold_plan", "Behold planen", [m("balanceScore", 55)], IMPACTS.holdPlan, 0)
+      ]
+    },
+    {
+      id: "press_first_line_broken",
+      title: "Første pressledd blir spilt av",
+      text: "Motstanderen finner en fri spiller bak første bølge og vender opp mot midtbanen.",
+      pressure: "high",
+      relevantWhen: { metric: "balanceScore", below: 62 },
+      options: [
+        opt("collapse_center", "Klem inn sentralt og steng neste pasning", [m("balanceScore", 58), m("pressScore", 58)], IMPACTS.balanced, 0),
+        opt("press_again", "Jag videre med neste ledd", [m("pressScore", 64)], IMPACTS.aggressive, 2),
+        opt("drop_line", "Bryt presset og reorganiser laget", [m("restDefenseScore", 56)], IMPACTS.defensive, 0)
+      ]
+    },
+    {
+      id: "press_weak_side_switch",
+      title: "Motstanderen vender ut av pressfellen",
+      text: "Presset låser én side, men en lang vending finner den svake siden åpen.",
+      pressure: "medium",
+      relevantWhen: { metric: "widthScore", below: 60 },
+      options: [
+        opt("shift_faster", "Flytt blokka raskere over", [m("pressScore", 60), m("balanceScore", 56)], IMPACTS.balanced, 0),
+        opt("trap_again", "La dem vende og bygg en ny pressfelle", [c("coachUnderstanding", 58), m("pressScore", 60)], IMPACTS.holdPlan, 1),
+        opt("protect_far_side", "Hold motsatt kant dypere", [m("restDefenseScore", 56)], IMPACTS.defensive, 0)
       ]
     }
   ],
@@ -1030,6 +1174,30 @@ const FAMILY_EVENTS = {
         opt("go_direct", "Spill mer direkte og unngå balltap", [m("depthScore", 56)], IMPACTS.balanced, 1),
         opt("trust_roles", "Behold rollene som planlagt", [m("roleFitAverage", 64)], IMPACTS.holdPlan, 1)
       ]
+    },
+    {
+      id: "rest_inverted_build",
+      title: "Den inverterte backen åpner sentral oppbygging",
+      text: "Backen går inn ved siden av midtbanen og skaper et ekstra pasningspunkt bak presset.",
+      pressure: "medium",
+      relevantWhen: { metric: "buildUpScore", above: 56 },
+      options: [
+        opt("use_inversion", "Bygg gjennom overtallet sentralt", [m("buildUpScore", 60), m("balanceScore", 56)], IMPACTS.balanced, 0),
+        opt("release_width", "Bruk overtallet til å frigjøre breddeholderen", [m("widthScore", 60)], IMPACTS.aggressive, 1),
+        opt("keep_rest", "Hold backen i sikringen", [m("restDefenseScore", 58)], IMPACTS.defensive, 0)
+      ]
+    },
+    {
+      id: "rest_counterpress_gap",
+      title: "Motpresset åpner rom bak boksmidten",
+      text: "Første press etter balltap går frem, men dekningen bak presset er et øyeblikk sen.",
+      pressure: "high",
+      relevantWhen: { metric: "restDefenseScore", below: 64 },
+      options: [
+        opt("delay_press", "Forsink presset til sikringen er på plass", [m("restDefenseScore", 60)], IMPACTS.defensive, 0),
+        opt("swarm_ball", "Overbelast ballområdet og vinn den tilbake", [m("pressScore", 64)], IMPACTS.aggressive, 1),
+        opt("screen_center", "La boksmidten skjerme kontringslinjen", [m("balanceScore", 58)], IMPACTS.balanced, 0)
+      ]
     }
   ],
   modern: [
@@ -1065,6 +1233,30 @@ const FAMILY_EVENTS = {
         opt("calm_buildup", "Bygg roligere bakfra", [m("buildUpScore", 60)], IMPACTS.balanced, 0),
         opt("raise_tempo", "Øk tempoet og spill direkte", [m("depthScore", 58), m("pressScore", 58)], IMPACTS.aggressive, 1),
         opt("hold_plan", "Behold planen", [c("coachUnderstanding", 55)], IMPACTS.holdPlan, 0)
+      ]
+    },
+    {
+      id: "modern_halfspace_overload",
+      title: "Overtall i mellomrommet",
+      text: "En kant, back og tier kombinerer rundt motstanderens sideledd.",
+      pressure: "medium",
+      relevantWhen: { metric: "buildUpScore", above: 56 },
+      options: [
+        opt("combine_halfspace", "Kombiner videre i mellomrommet", [m("buildUpScore", 60), m("roleFitAverage", 56)], IMPACTS.balanced, 0),
+        opt("release_overlap", "Spill backen fri på utsiden", [m("widthScore", 60)], IMPACTS.aggressive, 1),
+        opt("recycle", "Spill ut og bygg angrepet på nytt", [m("balanceScore", 56)], IMPACTS.holdPlan, 0)
+      ]
+    },
+    {
+      id: "modern_late_game_control",
+      title: "Kampen trenger kontroll før sluttfasen",
+      text: "Tempoet er høyt og neste balltap kan bli viktigere enn neste angrep.",
+      pressure: "high",
+      relevantWhen: { metric: "balanceScore", below: 62 },
+      options: [
+        opt("slow_game", "Ta ned tempoet og sikre pasningene", [m("buildUpScore", 58), m("balanceScore", 58)], IMPACTS.defensive, 0),
+        opt("push_winner", "Fortsett å jage avgjørelsen", [m("depthScore", 62), m("pressScore", 58)], IMPACTS.aggressive, 2),
+        opt("hold_plan", "Behold kampplanen", [c("coachUnderstanding", 55)], IMPACTS.holdPlan, 0)
       ]
     }
   ]
@@ -1131,9 +1323,19 @@ const OPPONENT_EVENTS = {
 };
 
 // Hvor relevant en hendelse er for lagets faktiske tilstand. Treff på
-// relevantWhen gir +1; liten tilfeldighet skiller ellers like kandidater.
-function scoreEventRelevance(event, tp) {
-  let score = Math.random() * 0.5;
+// relevantWhen gir +1. Like relevante kandidater fordeles deterministisk etter
+// motstander, slik at en lang sesong får variasjon uten Math.random-flakiness.
+function stableVariationScore(value) {
+  let hash = 2166136261;
+  for (const char of String(value || "")) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) / 4294967295;
+}
+
+function scoreEventRelevance(event, tp, variationKey = "") {
+  let score = stableVariationScore(`${variationKey}:${event?.id || ""}`) * 0.5;
   const rule = event.relevantWhen;
   if (rule && rule.metric) {
     const value = num(tp[rule.metric]);
@@ -1150,8 +1352,9 @@ export function generateMatchdayEvents({ formation, tacticalProfile, opponent } 
   const pool = FAMILY_EVENTS[family] || FAMILY_EVENTS.modern;
   const tp = tacticalProfile || {};
 
+  const variationKey = opponent?.id || opponent?.baseStyleId || "opponent";
   const rankedFamily = pool
-    .map((event) => ({ event, score: scoreEventRelevance(event, tp) }))
+    .map((event) => ({ event, score: scoreEventRelevance(event, tp, variationKey) }))
     .sort((a, b) => b.score - a.score)
     .map((entry) => entry.event);
 

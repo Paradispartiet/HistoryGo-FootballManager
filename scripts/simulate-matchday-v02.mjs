@@ -169,6 +169,43 @@ const catIds = eventSets.get("catenaccio_1432").map((event) => event.id).sort().
 const totalIds = eventSets.get("total_433").map((event) => event.id).sort().join(",");
 check("WM, catenaccio og totalfotball gir ulike hendelser", wmIds !== catIds && catIds !== totalIds && wmIds !== totalIds);
 
+// Sesongdybde: samme input er stabil, men fem motstanderstiler og ulike
+// lagtilstander skal eksponere mer enn det gamle tre-hendelsesbiblioteket.
+familyExpectations.forEach(([id]) => {
+  const formation = getFormationById(id);
+  const first = generateMatchdayEvents({
+    formation,
+    tacticalProfile: { ...strongFit.metrics, relationshipScore: 74 },
+    opponent: OPPONENT_PROFILES[0]
+  }).map((event) => event.id);
+  const again = generateMatchdayEvents({
+    formation,
+    tacticalProfile: { ...strongFit.metrics, relationshipScore: 74 },
+    opponent: OPPONENT_PROFILES[0]
+  }).map((event) => event.id);
+  check(`${id}: samme kampinput gir samme hendelsesrekkefølge`, JSON.stringify(first) === JSON.stringify(again));
+
+  const familyEventIds = new Set();
+  [42, 57, 74].forEach((value) => {
+    OPPONENT_PROFILES.forEach((seasonOpponent) => {
+      const tacticalProfile = {
+        balanceScore: value,
+        widthScore: value,
+        depthScore: value,
+        buildUpScore: value,
+        pressScore: value,
+        restDefenseScore: value,
+        roleFitAverage: value,
+        relationshipScore: value
+      };
+      generateMatchdayEvents({ formation, tacticalProfile, opponent: seasonOpponent })
+        .filter((event) => !event.id.startsWith("opp_"))
+        .forEach((event) => familyEventIds.add(event.id));
+    });
+  });
+  check(`${id}: familiehendelser har sesongdybde utover gamle tre`, familyEventIds.size >= 4);
+});
+
 // --- 3) Full sesjonsløkke ----------------------------------------------------
 console.log("\nSesjonsløkke (sterkt lag, sterk stab):");
 const wmFormation = getFormationById("wm_3223");
