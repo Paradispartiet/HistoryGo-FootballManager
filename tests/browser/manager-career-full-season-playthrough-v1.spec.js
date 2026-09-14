@@ -67,12 +67,22 @@ async function readProgress(page) {
     const conditionLoads = playerCondition.map((entry) => Number(entry?.load) || 0);
     const conditionForms = playerCondition.map((entry) => Math.abs(Number(entry?.form) || 0));
     const conditionConsecutive = playerCondition.map((entry) => Number(entry?.consecutiveFullMatches) || 0);
+    const playerPartnerships =
+      merits?.playerPartnerships && typeof merits.playerPartnerships === "object" && !Array.isArray(merits.playerPartnerships)
+        ? merits.playerPartnerships
+        : {};
+    const partnershipValues = Object.values(playerPartnerships)
+      .map((value) => Number(value) || 0)
+      .filter((value) => value > 0);
 
     return {
       unlockedPlaceCount: Array.isArray(merits.unlockedPlaceIds) ? merits.unlockedPlaceIds.length : 0,
       unlockedExpertiseCount: Array.isArray(merits.unlockedExpertiseIds) ? merits.unlockedExpertiseIds.length : 0,
       earnedBadgeCount: Array.isArray(merits.earnedBadgeIds) ? merits.earnedBadgeIds.length : 0,
       activeClassificationCount: Array.isArray(merits.activeClassifications) ? merits.activeClassifications.length : 0,
+      partnershipPairCount: partnershipValues.length,
+      partnershipMaxSharedStarts: Math.max(0, ...partnershipValues),
+      partnershipTotalSharedStarts: partnershipValues.reduce((sum, value) => sum + value, 0),
       week: Number(clubWeek?.week) || null,
       phase: clubWeek?.phase || null,
       seasonStatus: season?.status || null,
@@ -606,6 +616,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(blankMerits.unlockedExpertiseCount).toBe(0);
   expect(blankMerits.earnedBadgeCount).toBe(0);
   expect(blankMerits.activeClassificationCount).toBe(0);
+  expect(blankMerits.partnershipPairCount).toBe(0);
   // Null state-seeding: alt under skjer gjennom de samme kontrollene spilleren bruker.
   await startLeagueAsRosenborg(page);
   await hireRosenborgStaff(page);
@@ -725,6 +736,8 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(played.conditionTotalMatchesPlayed).toBeGreaterThan(0);
     expect(played.conditionTotalMinutesPlayed).toBeGreaterThan(0);
     expect(played.conditionMaxLoad).toBeGreaterThan(0);
+    expect(played.partnershipPairCount).toBeGreaterThanOrEqual(55);
+    expect(played.partnershipMaxSharedStarts).toBeGreaterThan(0);
     for (const rotation of rotations) {
       const rested = played.conditionRows.find((entry) => entry.playerId === rotation.outPlayerId);
       const incoming = played.conditionRows.find((entry) => entry.playerId === rotation.inPlayerId);
@@ -766,6 +779,11 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
         injured: played.conditionInjuredCount
       },
       rotations,
+      partnerships: {
+        pairCount: played.partnershipPairCount,
+        maxSharedStarts: played.partnershipMaxSharedStarts,
+        totalSharedStarts: played.partnershipTotalSharedStarts
+      },
       decisions: played.decisionCount,
       analysisPreparedDecisions: played.analysisPreparedDecisionCount,
       result: {
@@ -835,6 +853,9 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(new Set(rotationEvents.map((entry) => entry.outPlayerId)).size).toBeGreaterThanOrEqual(2);
   expect(new Set(rotationEvents.map((entry) => entry.inPlayerId)).size).toBeGreaterThanOrEqual(2);
   expect(completed.conditionCount).toBeGreaterThan(11);
+  expect(completed.partnershipPairCount).toBeGreaterThanOrEqual(55);
+  expect(completed.partnershipMaxSharedStarts).toBeGreaterThanOrEqual(10);
+  expect(completed.partnershipTotalSharedStarts).toBeGreaterThan(0);
   expect(completed.activeMatchSession).toBe(false);
 
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
@@ -865,6 +886,9 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(seasonTwo.conditionTotalMatchesPlayed).toBe(0);
   expect(seasonTwo.conditionTotalMinutesPlayed).toBe(0);
   expect(seasonTwo.conditionInjuredCount).toBe(0);
+  expect(seasonTwo.partnershipPairCount).toBe(completed.partnershipPairCount);
+  expect(seasonTwo.partnershipMaxSharedStarts).toBe(completed.partnershipMaxSharedStarts);
+  expect(seasonTwo.partnershipTotalSharedStarts).toBe(completed.partnershipTotalSharedStarts);
   expect(seasonTwo.activeMatchSession).toBe(false);
   await expect(page.locator("#seasonReviewPanel")).toBeHidden();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
@@ -894,6 +918,14 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
           goalsAgainst: completed.leagueGoalsAgainst
         },
         archive: completed.archiveLatest
+      },
+      relationshipSummary: {
+        pairCount: completed.partnershipPairCount,
+        maxSharedStarts: completed.partnershipMaxSharedStarts,
+        totalSharedStarts: completed.partnershipTotalSharedStarts,
+        seasonTwoPersisted:
+          seasonTwo.partnershipPairCount === completed.partnershipPairCount &&
+          seasonTwo.partnershipMaxSharedStarts === completed.partnershipMaxSharedStarts
       },
       conditionSummary: {
         peakLoad: peakConditionLoad,
