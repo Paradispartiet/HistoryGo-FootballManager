@@ -69,6 +69,10 @@ async function readProgress(page) {
     const conditionConsecutive = playerCondition.map((entry) => Number(entry?.consecutiveFullMatches) || 0);
 
     return {
+      unlockedPlaceCount: Array.isArray(merits.unlockedPlaceIds) ? merits.unlockedPlaceIds.length : 0,
+      unlockedExpertiseCount: Array.isArray(merits.unlockedExpertiseIds) ? merits.unlockedExpertiseIds.length : 0,
+      earnedBadgeCount: Array.isArray(merits.earnedBadgeIds) ? merits.earnedBadgeIds.length : 0,
+      activeClassificationCount: Array.isArray(merits.activeClassifications) ? merits.activeClassifications.length : 0,
       week: Number(clubWeek?.week) || null,
       phase: clubWeek?.phase || null,
       seasonStatus: season?.status || null,
@@ -597,6 +601,11 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
 
+  const blankMerits = await readProgress(page);
+  expect(blankMerits.unlockedPlaceCount).toBe(0);
+  expect(blankMerits.unlockedExpertiseCount).toBe(0);
+  expect(blankMerits.earnedBadgeCount).toBe(0);
+  expect(blankMerits.activeClassificationCount).toBe(0);
   // Null state-seeding: alt under skjer gjennom de samme kontrollene spilleren bruker.
   await startLeagueAsRosenborg(page);
   await hireRosenborgStaff(page);
