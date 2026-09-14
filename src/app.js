@@ -347,8 +347,8 @@ const DATA_PATHS = {
   // Stedsrapporter (v1): forklarer hva hvert sportsted gir manageren. Rent
   // UI-/forklaringslag – ingen unlock-, fit- eller badgeeffektmotor-effekt.
   placeReports: "data/football_place_reports.json",
-  // V1 bruker example-filen som midlertidig lag-/demostate (unlockedPlaceIds,
-  // hiredStaffIds, earnedBadgeIds osv.). Flyttes til save-system senere.
+  // Blank startshape for team merits. History Go-progresjon kommer bare fra
+  // faktisk lagret save eller ekte History Go-sync, aldri fra demo-unlocks.
   teamMerits: "data/football_team_merits.example.json"
 };
 
@@ -377,8 +377,9 @@ const INDIVIDUAL_TRAINING_KEY = "hgfm.individualTraining.v1";
 const CLUB_WEEK_STATE_KEY = "hgfm.clubWeekState.v1";
 const CLUB_WEEK_FEEDBACK_KEY = "hgfm.clubWeekFeedback.v1";
 const CLUB_WEEK_EVENT_LOG_KEY = "hgfm.clubWeekEventLog.v1";
-// History Go-lagprogresjon (team merits) i localStorage. Seedes fra example-filen
-// ved første lasting, deretter persisteres brukerens egne endringer her.
+// Manager-/History Go-progresjon (team merits) i localStorage. Nye saves
+// seedes kun med en blank struktur; faktisk progresjon kommer fra brukerens
+// save og History Go-sync.
 const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
 // Innboks-tråder: leste og leverte meldings-id-er (kun UI/progresjon).
 const READ_INBOX_MESSAGE_IDS_KEY = "hgfm.readInboxMessageIds.v1";
@@ -564,8 +565,8 @@ const state = {
   // Stedsrapporter (v1): forklaringskort per sportsted. Kun visning – ingen
   // effekt på unlock-, fit- eller badgeeffektmotor.
   placeReports: { placeReports: [] },
-  // Midlertidig lag-/demostate fra example-filen (unlockedPlaceIds, hiredStaffIds,
-  // unlockedExpertiseIds, earnedBadgeIds, badgeProgress, activeClassifications).
+  // Canonical managerprogresjon. Example-filen gir bare en blank startshape;
+  // ingen steder, ekspertiser, badges eller klassifiseringer er forhåndsåpnet.
   teamMerits: null,
   // Midlertidig UI-melding for geolokasjon/aktivering. Selve valget persisteres
   // under teamMerits.localStart; denne teksten er kun status i gjeldende økt.
@@ -1629,8 +1630,8 @@ function recomputeActiveClassifications() {
 // ----------------------------------------------------------------------------
 // Ekte History Go-sync (v1)
 // Football Manager leser History Go sin egen localStorage-progresjon og bruker
-// faktisk besøkte sportsteder som grunnlag for unlocks. Dette legges som et lag
-// oppå demo-/lagstaten i hgfm.teamMerits.v1 – det erstatter den ikke.
+// faktisk besøkte sportsteder som grunnlag for unlocks. Dette legges oppå
+// managerens eksisterende save-state; nye saves starter uten demo-unlocks.
 // ----------------------------------------------------------------------------
 
 // Trygg JSON-lesing fra localStorage. Krasjer aldri: returnerer fallback ved
@@ -1772,7 +1773,7 @@ function syncUnlockedPlacesFromHistoryGo() {
     ? state.teamMerits.unlockedPlaceIds.filter((id) => typeof id === "string" && id)
     : [];
 
-  // Ingen ekte History Go-steder: ikke rør eksisterende demo-/lagstate.
+  // Ingen ekte History Go-steder: ikke rør eksisterende save-state.
   if (collected.size === 0) {
     state.teamMerits.unlockedPlaceIds = Array.from(new Set(existing));
     return;
