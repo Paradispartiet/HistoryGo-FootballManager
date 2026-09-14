@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
   CLUB_BASE_SQUAD_TARGET,
+  CLUB_SEASON_COVERAGE_TARGET,
   CLUB_SQUAD_VERSION,
   clubAffiliationFor,
   hasVisitedClubGround,
@@ -33,7 +34,32 @@ function check(name, condition, detail = "") {
   assert.ok(condition, `${name}${detail ? ` — ${detail}` : ""}`);
 }
 
-check("klubbtroppmotoren er v7", CLUB_SQUAD_VERSION.endsWith(".v7"), CLUB_SQUAD_VERSION);
+function positionsFor(player) {
+  return [...new Set([...(player?.naturalPositions || []), ...(player?.usablePositions || [])])];
+}
+
+function positionCoverage(playerIds) {
+  const coverage = Object.fromEntries(Object.keys(CLUB_SEASON_COVERAGE_TARGET).map((position) => [position, 0]));
+  for (const id of playerIds) {
+    const player = byId.get(id);
+    for (const position of positionsFor(player)) {
+      if (coverage[position] !== undefined) coverage[position] += 1;
+    }
+  }
+  return coverage;
+}
+
+function poolPositionCoverage(pool) {
+  const coverage = Object.fromEntries(Object.keys(CLUB_SEASON_COVERAGE_TARGET).map((position) => [position, 0]));
+  for (const player of pool) {
+    for (const position of positionsFor(player)) {
+      if (coverage[position] !== undefined) coverage[position] += 1;
+    }
+  }
+  return coverage;
+}
+
+check("klubbtroppmotoren er v8", CLUB_SQUAD_VERSION.endsWith(".v8"), CLUB_SQUAD_VERSION);
 check("alle spiller-id-er er unike", new Set(players.map((player) => player.id)).size === players.length);
 check("alle klubb-id-er er unike", new Set(clubs.map((club) => club.id)).size === clubs.length);
 
@@ -107,6 +133,14 @@ for (const club of ready) {
   check(`${club.name}: låst antall`, access.lockedCount === playable.length - expectedBaseSize);
   check(`${club.name}: minst én keeper`, access.baseSquad.some((id) =>
     [...(byId.get(id)?.naturalPositions || []), ...(byId.get(id)?.usablePositions || [])].includes("GK")));
+
+  const baseCoverage = positionCoverage(access.baseSquad);
+  const poolCoverage = poolPositionCoverage(playable);
+  for (const [position, target] of Object.entries(CLUB_SEASON_COVERAGE_TARGET)) {
+    const bestAvailable = Math.min(target, poolCoverage[position]);
+    check(`${club.name}: ${position} best mulig sesongdekning`, baseCoverage[position] >= bestAvailable,
+      `${baseCoverage[position]}/${bestAvailable} (pool ${poolCoverage[position]})`);
+  }
 }
 
 for (const club of pendingCases) {
@@ -169,6 +203,18 @@ const repaired = reconcileClubBaseSquadSave({ localStart: oldVikingSave, access:
 check("gammel save repareres", repaired.changed && repaired.reason === "foreign_players", repaired.reason);
 check("reparert save er spillbar Viking", repaired.localStart.playerIds.every((id) => vikingIds.has(id)));
 check("save-reparasjon er idempotent", !reconcileClubBaseSquadSave({ localStart: repaired.localStart, access: vikingAccess }).changed);
+
+const v7VikingSave = {
+  enabled: true,
+  source: "auto_squad",
+  clubId: viking.id,
+  poolVersion: "historygo-football-manager.club-squad.v7",
+  generatedFrom: "club_pool",
+  playerIds: [...vikingAccess.baseSquad]
+};
+const migratedV8 = reconcileClubBaseSquadSave({ localStart: v7VikingSave, access: vikingAccess });
+check("v7-auto-tropp regenereres til v8", migratedV8.changed && migratedV8.reason === "pool_version", migratedV8.reason);
+check("v8-save får ny versjon", migratedV8.localStart.poolVersion === CLUB_SQUAD_VERSION, migratedV8.localStart.poolVersion);
 
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 check("app importerer save-reparasjonen", /reconcileClubBaseSquadSave/.test(app));
