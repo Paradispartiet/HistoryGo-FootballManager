@@ -18,6 +18,7 @@ const economyPattern = /\b(?:transferFee|salary|wage|contractLength|agentFee|mar
 const checks = [
   ["canonical pool/tropp-state finnes", engine.includes("PLAYER_POOL_SQUAD_STATE_VERSION") && engine.includes("squadPlayerIds")],
   ["spillerpool og valgt tropp er separate runtime-mengder", app.includes("playerPoolIds") && app.includes("legacyPlayablePlayerIds") && app.includes("unlockedPlayerIds")],
+  ["takeover-grunntropp beholder klubbmotorens rotasjonsdybde", app.includes("CLUB_BASE_SQUAD_TARGET") && app.includes('generatedFrom === "club_pool"') && app.includes("clubPoolStart ? CLUB_BASE_SQUAD_TARGET : REQUIRED_SQUAD_SIZE")],
   ["kampmotorintegrasjonen bruker fortsatt eksisterende unlocked-getter", app.includes("function getUnlockedPlayers()") && app.includes("return getAvailability().unlockedPlayers")],
   ["poolen lagres ikke parallelt", !/playerPoolIds\s*[:=][^\n]*localStorage/i.test(runtime) && !/hgfm\.playerPool/i.test(runtime)],
   ["troppsvalget bor i eksisterende teamMerits", poolUi.includes('merits: "hgfm.teamMerits.v1"') && seed.includes('"squadPlayerIds"')],
