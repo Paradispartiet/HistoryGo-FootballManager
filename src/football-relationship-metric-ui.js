@@ -12,6 +12,8 @@ const DATA_PATHS = {
   tactics: "data/football_tactics.json"
 };
 
+const TEAM_MERITS_KEY = "hgfm.teamMerits.v1";
+
 const state = {
   roles: [],
   tactics: [],
@@ -94,7 +96,10 @@ function getAssignmentsFromPitch() {
       return {
         isComplete: true,
         role,
-        player: { name: playerName || `Spiller ${index + 1}` },
+        player: {
+          id: chip.dataset.playerId || null,
+          name: playerName || `Spiller ${index + 1}`
+        },
         slot: { label: chip.getAttribute("aria-label") || `Slot ${index + 1}` }
       };
     })
@@ -116,6 +121,17 @@ function setRelationshipScore(value, title = "") {
   }
 }
 
+function readPlayerPartnerships() {
+  try {
+    const merits = JSON.parse(localStorage.getItem(TEAM_MERITS_KEY) || "null");
+    return merits?.playerPartnerships && typeof merits.playerPartnerships === "object"
+      ? merits.playerPartnerships
+      : {};
+  } catch (_) {
+    return {};
+  }
+}
+
 function renderRelationshipScore() {
   if (!state.ready) {
     setRelationshipScore("–", "Relasjonsmotoren laster.");
@@ -130,13 +146,17 @@ function renderRelationshipScore() {
     return;
   }
 
-  const result = calculateRoleRelationships(assignments, tactic);
+  const result = calculateRoleRelationships(assignments, tactic, readPlayerPartnerships());
   const positiveCount = result.positiveRelations?.length || 0;
   const negativeCount = result.negativeRelations?.length || 0;
+  const continuity = result.partnershipContinuity;
+  const continuityText = continuity?.bonus > 0
+    ? ` · samspill +${continuity.bonus} (${continuity.averageSharedStarts} felles starter i snitt)`
+    : "";
 
   setRelationshipScore(
     result.relationshipScore,
-    `${positiveCount} positive relasjoner · ${negativeCount} negative relasjoner`
+    `${positiveCount} positive relasjoner · ${negativeCount} negative relasjoner${continuityText}`
   );
 }
 
@@ -173,6 +193,11 @@ function bindControls() {
     if (element) {
       element.addEventListener("change", () => scheduleRender());
     }
+  });
+  window.addEventListener("hgfm:team-merits-changed", () => scheduleRender());
+  window.addEventListener("updateProfile", () => scheduleRender());
+  window.addEventListener("storage", (event) => {
+    if (!event.key || event.key === TEAM_MERITS_KEY) scheduleRender();
   });
 }
 

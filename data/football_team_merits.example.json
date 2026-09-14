@@ -36,5 +36,6 @@
   "nearbyFavorites": {
     "placeIds": [],
     "updatedAt": null
-  }
+  },
+  "playerPartnerships": {}
 }

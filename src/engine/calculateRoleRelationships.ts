@@ -12,6 +12,7 @@
 import type { ID, Score100, Tactic } from "../domain/footballTypes.js";
 
 export type RelationshipAssignment = {
+  playerId?: ID;
   roleId: ID;
   // Posisjonsstreng (domenets Position eller legacy-posisjon). Relasjonsmotoren
   // leser den ikke, men feltet bæres med for kontekst/parity med legacy.
@@ -31,6 +32,13 @@ export type RoleRelationship = {
 
 export type RoleRelationshipResult = {
   relationshipScore: Score100;
+  structuralRelationshipScore: Score100;
+  partnershipContinuity: {
+    pairCount: number;
+    averageSharedStarts: number;
+    establishedPairs: number;
+    bonus: number;
+  };
   positivePoints: number;
   negativePoints: number;
   positiveRelations: RoleRelationship[];
@@ -45,6 +53,66 @@ export type RoleRelationshipResult = {
 
 function clamp(value: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, value));
+}
+
+export const PLAYER_PARTNERSHIP_MAX_MATCHES = 30;
+export const PLAYER_PARTNERSHIP_BONUS_CAP = 5;
+
+function partnershipKey(firstPlayerId?: ID, secondPlayerId?: ID): string | null {
+  const ids = [firstPlayerId, secondPlayerId].filter(Boolean).map(String).sort();
+  return ids.length === 2 && ids[0] !== ids[1] ? `${ids[0]}::${ids[1]}` : null;
+}
+
+export function normalizePlayerPartnerships(value: unknown): Record<string, number> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const result: Record<string, number> = {};
+  for (const [rawKey, rawValue] of Object.entries(value as Record<string, unknown>)) {
+    const [firstPlayerId, secondPlayerId, ...rest] = rawKey.split("::");
+    if (rest.length || !firstPlayerId || !secondPlayerId || firstPlayerId === secondPlayerId) continue;
+    const key = partnershipKey(firstPlayerId, secondPlayerId);
+    const matches = Number(rawValue);
+    if (!key || !Number.isFinite(matches) || matches <= 0) continue;
+    result[key] = Math.min(PLAYER_PARTNERSHIP_MAX_MATCHES, Math.round(matches));
+  }
+  return result;
+}
+
+export function recordPlayerPartnerships(
+  store: unknown,
+  assignments: RelationshipAssignment[],
+): Record<string, number> {
+  const next = { ...normalizePlayerPartnerships(store) };
+  const ids = [...new Set(assignments.map((assignment) => assignment.playerId).filter((id): id is ID => Boolean(id)))];
+  for (let first = 0; first < ids.length; first += 1) {
+    for (let second = first + 1; second < ids.length; second += 1) {
+      const key = partnershipKey(ids[first], ids[second]);
+      if (!key) continue;
+      next[key] = Math.min(PLAYER_PARTNERSHIP_MAX_MATCHES, (next[key] || 0) + 1);
+    }
+  }
+  return next;
+}
+
+export function summarizePlayerPartnerships(
+  store: unknown,
+  assignments: RelationshipAssignment[],
+): RoleRelationshipResult["partnershipContinuity"] {
+  const normalized = normalizePlayerPartnerships(store);
+  const ids = [...new Set(assignments.map((assignment) => assignment.playerId).filter((id): id is ID => Boolean(id)))];
+  const sharedStarts: number[] = [];
+  for (let first = 0; first < ids.length; first += 1) {
+    for (let second = first + 1; second < ids.length; second += 1) {
+      const key = partnershipKey(ids[first], ids[second]);
+      if (key) sharedStarts.push(normalized[key] || 0);
+    }
+  }
+  const pairCount = sharedStarts.length;
+  const averageSharedStarts = pairCount
+    ? Math.round((sharedStarts.reduce((sum, value) => sum + value, 0) / pairCount) * 10) / 10
+    : 0;
+  const establishedPairs = sharedStarts.filter((value) => value >= 5).length;
+  const bonus = Math.min(PLAYER_PARTNERSHIP_BONUS_CAP, Math.floor(averageSharedStarts / 3));
+  return { pairCount, averageSharedStarts, establishedPairs, bonus };
 }
 
 function hasRole(assignments: RelationshipAssignment[], roleId: ID): boolean {
@@ -82,6 +150,7 @@ function addRelation(
 export function calculateRoleRelationships(
   assignments: RelationshipAssignment[],
   tactic: Pick<Tactic, "tags">,
+  partnershipStore: unknown = {},
 ): RoleRelationshipResult {
   const tacticTags = tactic.tags ?? [];
   const positives: RoleRelationship[] = [];
@@ -331,10 +400,14 @@ export function calculateRoleRelationships(
 
   const positivePoints = positives.reduce((sum, relation) => sum + relation.points, 0);
   const negativePoints = negatives.reduce((sum, relation) => sum + relation.points, 0);
-  const relationshipScore = clamp(Math.round(55 + positivePoints - negativePoints));
+  const structuralRelationshipScore = clamp(Math.round(55 + positivePoints - negativePoints));
+  const partnershipContinuity = summarizePlayerPartnerships(partnershipStore, assignments);
+  const relationshipScore = clamp(structuralRelationshipScore + partnershipContinuity.bonus);
 
   return {
     relationshipScore,
+    structuralRelationshipScore,
+    partnershipContinuity,
     positivePoints,
     negativePoints,
     positiveRelations: positives,
