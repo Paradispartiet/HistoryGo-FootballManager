@@ -17,6 +17,10 @@ import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
+import {
+  normalizePlayerPartnerships,
+  recordPlayerPartnerships
+} from "./football-relationship-engine.js";
 import { calculateBadgeMetricEffects } from "./football-badge-effect-engine.js";
 import {
   createMatchReport,
@@ -1475,6 +1479,9 @@ function normalizeTeamMerits(merits) {
     // ved RIKTIG bruk over kamper. Bor i manager-staten (teamMerits), aldri i
     // History Go-progresjonen. Robust mot gamle/korrupte data.
     roleFamiliarity: normalizeRoleFamiliarity(base.roleFamiliarity),
+    // Spillerrelasjoner: antall felles starter per spillerpar. Samme manager-state
+    // som rollefortrolighet; aldri History Go-progresjon.
+    playerPartnerships: normalizePlayerPartnerships(base.playerPartnerships),
     // Framgang på svake sider, spiller×attributt → 0–100. Persisteres sammen med
     // rollefortroligheten, aldri i History Go-progresjonen.
     weaknessProgress: normalizeWeaknessProgress(base.weaknessProgress),
@@ -3918,6 +3925,25 @@ function recordRoleFamiliarityFromMatch(teamFit) {
   saveTeamMerits();
 }
 
+function getPlayerPartnershipStore() {
+  return state.teamMerits?.playerPartnerships && typeof state.teamMerits.playerPartnerships === "object"
+    ? state.teamMerits.playerPartnerships
+    : {};
+}
+
+// Samme startellever som rollefortroligheten bruker, men spiller×spiller:
+// hvert par får én felles start når kampen faktisk er fullført. Ingen straff
+// for nye par; kontinuitetsbonusen beregnes først ved neste teamFit.
+function recordPlayerPartnershipsFromMatch(teamFit) {
+  if (!state.teamMerits) return;
+  const assignments = Array.isArray(teamFit?.assignments)
+    ? teamFit.assignments.filter((item) => item?.isComplete && item?.player?.id)
+    : [];
+  if (assignments.length < 2) return;
+  state.teamMerits.playerPartnerships = recordPlayerPartnerships(getPlayerPartnershipStore(), assignments);
+  saveTeamMerits();
+}
+
 // Bygg coachContext fra ansatt stab, staffRoles, valgt formasjon og team merits.
 // Alltid gyldig og nøytral/lav selv uten ansatt stab (ingen null-krasj).
 function getCoachContext() {
@@ -3945,7 +3971,8 @@ function getTeamFit() {
     roles: state.roles,
     earnedBadgeIds: state.teamMerits?.earnedBadgeIds || [],
     trainingBadges: state.trainingBadges,
-    coachContext: getCoachContext()
+    coachContext: getCoachContext(),
+    playerPartnerships: getPlayerPartnershipStore()
   };
 
   // Steg 7b: TS-motoren eier teamFit-beregningen når den er lastet. Outputen er
@@ -4630,7 +4657,9 @@ function chooseMatchdayDecision(optionId) {
     // bruk (forvitre litt ved feilbruk). Startelleveren er låst gjennom sesjonen,
     // så gjeldende teamFit speiler laget som spilte. Kjøres én gang per kamp
     // (denne grenen treffes bare når siste hendelse er besvart).
-    recordRoleFamiliarityFromMatch(getTeamFit());
+    const completedTeamFit = getTeamFit();
+    recordRoleFamiliarityFromMatch(completedTeamFit);
+    recordPlayerPartnershipsFromMatch(completedTeamFit);
     state.matchday.session = null;
     matchJustFinished = true;
   }
@@ -9685,7 +9714,20 @@ function renderRelationships(teamFit) {
   positives.forEach((relation) => appendRelation(relation, "positive", "+"));
   negatives.forEach((relation) => appendRelation(relation, "negative", "−"));
 
-  if (positives.length === 0 && negatives.length === 0) {
+  const continuity = relationships.partnershipContinuity;
+  if (continuity?.bonus > 0) {
+    appendRelation(
+      {
+        title: "Samspillskontinuitet",
+        points: continuity.bonus,
+        explanation: `${continuity.establishedPairs} spillerpar har minst fem felles starter. Snittet i denne elleveren er ${continuity.averageSharedStarts} felles starter.`
+      },
+      "positive",
+      "+"
+    );
+  }
+
+  if (positives.length === 0 && negatives.length === 0 && !(continuity?.bonus > 0)) {
     const entry = document.createElement("p");
     entry.className = "relationship-explanation muted-text";
     entry.textContent = "Ingen tydelige relasjoner mellom rollene ennå.";
