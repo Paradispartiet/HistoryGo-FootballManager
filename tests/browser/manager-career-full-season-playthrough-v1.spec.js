@@ -30,6 +30,34 @@ async function readProgress(page) {
     const lastMatch = matchday?.lastMatch || null;
     const archive = parse("hgfm.seasonArchive.v1", []);
     const playerStats = parse("hgfm.playerSeasonStats.v1", { rows: [], matchIds: [] });
+    const completedManagerFixtures = Array.isArray(season?.fixtures)
+      ? season.fixtures
+          .flatMap((round) => Array.isArray(round?.matches) ? round.matches : [])
+          .filter((fixture) =>
+            fixture?.status === "completed" &&
+            fixture?.result &&
+            (fixture.homeClubId === season?.managerClubId || fixture.awayClubId === season?.managerClubId)
+          )
+      : [];
+    const leagueSummary = completedManagerFixtures.reduce((summary, fixture) => {
+      const managerHome = fixture.homeClubId === season.managerClubId;
+      const goalsFor = Number(managerHome ? fixture.result.homeGoals : fixture.result.awayGoals) || 0;
+      const goalsAgainst = Number(managerHome ? fixture.result.awayGoals : fixture.result.homeGoals) || 0;
+      summary.played += 1;
+      summary.goalsFor += goalsFor;
+      summary.goalsAgainst += goalsAgainst;
+      if (goalsFor > goalsAgainst) {
+        summary.won += 1;
+        summary.points += 3;
+      } else if (goalsFor < goalsAgainst) {
+        summary.lost += 1;
+      } else {
+        summary.drawn += 1;
+        summary.points += 1;
+      }
+      return summary;
+    }, { played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 });
+    const archiveLatest = Array.isArray(archive) && archive.length ? archive[archive.length - 1] : null;
     const playerCondition = Array.isArray(session.playerCondition)
       ? session.playerCondition
       : parse("hgfm.playerCondition.v1", []);
@@ -69,6 +97,24 @@ async function readProgress(page) {
       lastMatchRound: Number(lastMatch?.leagueContext?.round) || null,
       lastOpponentId: lastMatch?.leagueContext?.opponentId || lastMatch?.opponent?.id || null,
       lastOpponentName: lastMatch?.leagueContext?.opponentName || lastMatch?.opponent?.name || null,
+      lastOutcome: lastMatch?.outcome || null,
+      lastGoalsFor: Number(lastMatch?.score?.for) || 0,
+      lastGoalsAgainst: Number(lastMatch?.score?.against) || 0,
+      leaguePlayed: leagueSummary.played,
+      leagueWon: leagueSummary.won,
+      leagueDrawn: leagueSummary.drawn,
+      leagueLost: leagueSummary.lost,
+      leagueGoalsFor: leagueSummary.goalsFor,
+      leagueGoalsAgainst: leagueSummary.goalsAgainst,
+      leaguePoints: leagueSummary.points,
+      archiveLatest: archiveLatest
+        ? {
+            played: Number(archiveLatest.played) || 0,
+            points: Number(archiveLatest.points) || 0,
+            goalsFor: Number(archiveLatest.goalsFor) || 0,
+            goalsAgainst: Number(archiveLatest.goalsAgainst) || 0
+          }
+        : null,
       decisionCount: Array.isArray(lastMatch?.decisions) ? lastMatch.decisions.length : 0,
       decisionLabels: Array.isArray(lastMatch?.decisions)
         ? lastMatch.decisions.map((entry) => entry?.optionLabel || entry?.label || entry?.optionId).filter(Boolean)
@@ -571,6 +617,8 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   const trainingPrograms = new Set();
   const trainingFocusIds = new Set();
   const decisionLabels = new Set();
+  const matchOutcomes = new Set();
+  const scorelines = new Set();
   const inboxMessageIds = new Set();
   const inboxMessageKinds = new Set();
   const inboxSubjects = new Set();
@@ -652,6 +700,12 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(played.decisionCount).toBeGreaterThan(0);
     expect(played.trainingFocusId).toBeTruthy();
     expect(played.activeMatchSession).toBe(false);
+    expect(["win", "draw", "loss"]).toContain(played.lastOutcome);
+    expect(played.leaguePlayed).toBe(round);
+    expect(played.leagueWon + played.leagueDrawn + played.leagueLost).toBe(round);
+    expect(played.leaguePoints).toBe(played.leagueWon * 3 + played.leagueDrawn);
+    expect(played.leagueGoalsFor).toBeGreaterThanOrEqual(0);
+    expect(played.leagueGoalsAgainst).toBeGreaterThanOrEqual(0);
     expect(played.conditionMatchCount).toBe(round);
     expect(played.conditionCount).toBeGreaterThanOrEqual(11);
     expect(played.conditionTotalMatchesPlayed).toBeGreaterThan(0);
@@ -678,6 +732,8 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     trainingPrograms.add(trainingSelection.programId);
     trainingFocusIds.add(played.trainingFocusId);
     played.decisionLabels.forEach((label) => decisionLabels.add(label));
+    matchOutcomes.add(played.lastOutcome);
+    scorelines.add(`${played.lastGoalsFor}–${played.lastGoalsAgainst}`);
     observations.push({
       round,
       opponent: played.lastOpponentName,
@@ -695,7 +751,15 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
         injured: played.conditionInjuredCount
       },
       rotations,
-      decisions: played.decisionCount
+      decisions: played.decisionCount,
+      result: {
+        outcome: played.lastOutcome,
+        score: `${played.lastGoalsFor}–${played.lastGoalsAgainst}`,
+        record: `${played.leagueWon}-${played.leagueDrawn}-${played.leagueLost}`,
+        points: played.leaguePoints,
+        goalsFor: played.leagueGoalsFor,
+        goalsAgainst: played.leagueGoalsAgainst
+      }
     });
 
     await rollToNextWeek(page, round + 1);
@@ -733,6 +797,15 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(completed.conditionCount).toBeGreaterThanOrEqual(11);
   expect(completed.conditionTotalMatchesPlayed).toBeGreaterThan(0);
   expect(completed.conditionTotalMinutesPlayed).toBeGreaterThan(0);
+  expect(completed.leaguePlayed).toBe(30);
+  expect(completed.leagueWon + completed.leagueDrawn + completed.leagueLost).toBe(30);
+  expect(completed.leaguePoints).toBe(completed.leagueWon * 3 + completed.leagueDrawn);
+  expect(completed.archiveLatest).toEqual({
+    played: completed.leaguePlayed,
+    points: completed.leaguePoints,
+    goalsFor: completed.leagueGoalsFor,
+    goalsAgainst: completed.leagueGoalsAgainst
+  });
   expect(peakConditionLoad).toBeGreaterThan(50);
   expect(peakConditionAbsForm).toBeGreaterThan(0);
   expect(peakConsecutiveFullMatches).toBeGreaterThanOrEqual(2);
@@ -787,6 +860,20 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     JSON.stringify({
       rounds: observations,
       rotations: rotationEvents,
+      competitionSummary: {
+        outcomes: [...matchOutcomes],
+        scorelines: [...scorelines],
+        record: {
+          played: completed.leaguePlayed,
+          won: completed.leagueWon,
+          drawn: completed.leagueDrawn,
+          lost: completed.leagueLost,
+          points: completed.leaguePoints,
+          goalsFor: completed.leagueGoalsFor,
+          goalsAgainst: completed.leagueGoalsAgainst
+        },
+        archive: completed.archiveLatest
+      },
       conditionSummary: {
         peakLoad: peakConditionLoad,
         peakAbsForm: peakConditionAbsForm,
