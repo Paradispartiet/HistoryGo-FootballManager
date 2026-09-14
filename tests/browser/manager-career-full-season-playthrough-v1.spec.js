@@ -702,7 +702,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(played.lastMatchRound).toBe(round);
     expect(played.lastOpponentId).toBeTruthy();
     expect(played.decisionCount).toBeGreaterThan(0);
-    expect(played.analysisPreparedDecisionCount).toBeGreaterThan(0);
+    expect(played.analysisPreparedDecisionCount).toBe(1);
     expect(played.trainingFocusId).toBeTruthy();
     expect(played.activeMatchSession).toBe(false);
     expect(["win", "draw", "loss"]).toContain(played.lastOutcome);
@@ -779,6 +779,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(trainingFocusIds.size).toBeGreaterThanOrEqual(4);
   expect(decisionLabels.size).toBeGreaterThanOrEqual(6);
   expect(analysisPreparedRounds.size).toBe(30);
+  expect(observations.every((entry) => entry.analysisPreparedDecisions === 1)).toBe(true);
   expect(openedInboxMessageIds.size).toBe(30);
   expect(inboxMessageIds.size).toBeGreaterThanOrEqual(30);
   expect(inboxMessageKinds.size).toBeGreaterThanOrEqual(6);

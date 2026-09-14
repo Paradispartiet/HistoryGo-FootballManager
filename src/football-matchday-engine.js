@@ -1343,10 +1343,11 @@ function eventMatchesOpponentAnalysis(event, opponentAnalysisPlan) {
 }
 
 // Hvor relevant en hendelse er for lagets faktiske tilstand. Treff på
-// relevantWhen gir +1. Analysefokus gir +1,6 i UTVALGET (aldri i kampregnestykket),
-// slik at minst én forberedt situasjon løftes inn foran tilfeldige tie-breaks.
-// Like relevante kandidater fordeles deterministisk etter motstander, slik at
-// en lang sesong får variasjon uten Math.random-flakiness.
+// relevantWhen gir +1. Like relevante kandidater fordeles deterministisk etter
+// motstander, slik at en lang sesong får variasjon uten Math.random-flakiness.
+//
+// Analysefokus håndteres ETTER denne rangeringen: det garanterer én relevant
+// situasjon, men får ikke omsortere resten av kampen eller påvirke noen tall.
 function stableVariationScore(value) {
   let hash = 2166136261;
   for (const char of String(value || "")) {
@@ -1356,7 +1357,7 @@ function stableVariationScore(value) {
   return (hash >>> 0) / 4294967295;
 }
 
-function scoreEventRelevance(event, tp, variationKey = "", opponentAnalysisPlan = null) {
+function scoreEventRelevance(event, tp, variationKey = "") {
   let score = stableVariationScore(`${variationKey}:${event?.id || ""}`) * 0.5;
   const rule = event.relevantWhen;
   if (rule && rule.metric) {
@@ -1364,7 +1365,6 @@ function scoreEventRelevance(event, tp, variationKey = "", opponentAnalysisPlan 
     if (Number.isFinite(rule.below) && value < rule.below) score += 1;
     if (Number.isFinite(rule.above) && value > rule.above) score += 1;
   }
-  if (eventMatchesOpponentAnalysis(event, opponentAnalysisPlan)) score += 1.6;
   return score;
 }
 
@@ -1377,19 +1377,33 @@ export function generateMatchdayEvents({ formation, tacticalProfile, opponent, o
 
   const variationKey = opponent?.id || opponent?.baseStyleId || "opponent";
   const rankedFamily = pool
-    .map((event) => ({ event, score: scoreEventRelevance(event, tp, variationKey, opponentAnalysisPlan) }))
+    .map((event) => ({ event, score: scoreEventRelevance(event, tp, variationKey) }))
     .sort((a, b) => b.score - a.score)
     .map((entry) => entry.event);
+
+  // Analyseplanen skal forme kampen, ikke skrive den. Velg derfor den høyest
+  // rangerte hendelsen som matcher analysefokuset som ÉN garantert situasjon.
+  // Den andre familiehendelsen følger den vanlige rangeringen uavhengig av om
+  // den tilfeldigvis også er faglig relevant for samme brede analysefokus.
+  const preparedEvent = opponentAnalysisPlan
+    ? rankedFamily.find((event) => eventMatchesOpponentAnalysis(event, opponentAnalysisPlan)) || null
+    : null;
+  const companionEvent = rankedFamily.find((event) => event.id !== preparedEvent?.id) || null;
+  const familyPicked = preparedEvent
+    ? [preparedEvent, companionEvent]
+        .filter(Boolean)
+        .sort((a, b) => rankedFamily.indexOf(a) - rankedFamily.indexOf(b))
+    : rankedFamily.slice(0, 2);
 
   // Historiske stil-motstandere har egne id-er; de peker på en generisk
   // stil-familie via baseStyleId for å gjenbruke hendelsesbiblioteket.
   const opponentEvent = OPPONENT_EVENTS[opponent?.id] || OPPONENT_EVENTS[opponent?.baseStyleId] || null;
 
-  const picked = [rankedFamily[0], opponentEvent, rankedFamily[1]].filter(Boolean).slice(0, 3);
+  const picked = [familyPicked[0], opponentEvent, familyPicked[1]].filter(Boolean).slice(0, 3);
 
   // Dypkopi slik at sesjonen kan persisteres trygt i localStorage.
   return picked.map((event, index) => {
-    const analysisPrepared = eventMatchesOpponentAnalysis(event, opponentAnalysisPlan);
+    const analysisPrepared = Boolean(preparedEvent && event.id === preparedEvent.id);
     return {
       sequence: index + 1,
       id: event.id,
