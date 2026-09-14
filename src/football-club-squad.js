@@ -1,5 +1,5 @@
 // ============================================================================
-// Klubbtropp v7 — klubbmedlemskap er data, stadion er tilgang
+// Klubbtropp v8 — klubbmedlemskap er data, stadion er tilgang
 //
 // Canonical modell:
 //
@@ -23,8 +23,18 @@
 // LESER History Go-progresjon som input og skriver aldri til den.
 // ============================================================================
 
-export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v7";
+export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v8";
 export const CLUB_BASE_SQUAD_TARGET = 20;
+export const CLUB_SEASON_COVERAGE_TARGET = Object.freeze({
+  GK: 2,
+  LB: 2,
+  CB: 4,
+  RB: 2,
+  CM: 4,
+  LW: 2,
+  ST: 2,
+  RW: 2
+});
 export const CLUB_PLAYER_POOL_VERSION = "historygo-football-manager.club-player-pool.v2";
 
 export const CLUB_STATUS_RANK = Object.freeze({
@@ -58,24 +68,21 @@ const SQUAD_GROUPS = Object.freeze([
   { positions: ["ST", "LW", "RW"], count: 3 }
 ]);
 
-// De første 15 er fortsatt spillbarhetsgulvet. Når klubbpoolen tåler det,
-// bygges fem ekstra utespillere som faktisk rotasjonsdybde i stedet for fem
-// tilfeldige katalogprofiler. Rekkefølgen gjør også mellomstørrelser robuste:
-// 16 = ekstra forsvarer, 17 = +midt, 18 = +angrep, 19 = +forsvar, 20 = +midt.
-const ROTATION_DEPTH_SEQUENCE = Object.freeze([
-  ["CB", "LB", "RB", "WB"],
-  ["DM", "CM", "AM"],
-  ["ST", "LW", "RW"],
-  ["CB", "LB", "RB", "WB"],
-  ["DM", "CM", "AM"]
-]);
+// De første 15 er fortsatt spillbarhetsgulvet. De fem ekstra plassene er
+// sesongbufferen. De skal ikke bare fylle brede grupper, men redusere faktiske
+// posisjonsunderskudd i en representativ moderne 4-3-3. Målet er best mulig
+// tilgjengelig dekning fra klubbens egen pool, aldri å modellere nye posisjoner.
+const SEASON_COVERAGE_POSITIONS = Object.keys(CLUB_SEASON_COVERAGE_TARGET);
 
 const asArray = (value) => (Array.isArray(value) ? value : []);
 const num = (value, fallback = 0) => (Number.isFinite(Number(value)) ? Number(value) : fallback);
 
+function playerPositions(player) {
+  return [...new Set([...asArray(player?.naturalPositions), ...asArray(player?.usablePositions)])];
+}
+
 function playsIn(player, positions) {
-  return [...asArray(player?.naturalPositions), ...asArray(player?.usablePositions)]
-    .some((position) => positions.includes(position));
+  return playerPositions(player).some((position) => positions.includes(position));
 }
 
 export function isSimulationReadyPlayer(player) {
@@ -187,34 +194,53 @@ export function buildClubBaseSquad({
 
   const picked = [];
   const taken = new Set();
+  const coverage = Object.fromEntries(SEASON_COVERAGE_POSITIONS.map((position) => [position, 0]));
+  const addPlayer = (player) => {
+    picked.push(player.id);
+    taken.add(player.id);
+    for (const position of playerPositions(player)) {
+      if (coverage[position] !== undefined) coverage[position] += 1;
+    }
+  };
+
+  // Behold den etablerte 15-spillerskjernen uendret. Dette er fortsatt
+  // takeover-gulvet og er ikke formation-spesifikk optimalisering.
   for (const group of SQUAD_GROUPS) {
     let need = group.count;
     for (const player of ordered) {
       if (need <= 0 || picked.length >= size) break;
       if (taken.has(player.id) || !playsIn(player, group.positions)) continue;
-      picked.push(player.id);
-      taken.add(player.id);
+      addPlayer(player);
       need -= 1;
     }
   }
 
-  // Slitasje/skader gjør 15 spillere til et minimum, ikke en sesongtropp.
-  // Behold den balanserte 15-kjernen uendret, og legg deretter på rotasjonsdybde
-  // fra samme klubbpool når caller ber om mer.
-  for (const positions of ROTATION_DEPTH_SEQUENCE) {
-    if (picked.length >= size) break;
-    const player = ordered.find((candidate) => !taken.has(candidate.id) && playsIn(candidate, positions));
-    if (!player) continue;
-    picked.push(player.id);
-    taken.add(player.id);
+  // Plass 16–20 er sesongbufferen. Velg den neste spilleren som dekker flest
+  // hittil udekkede canonical-posisjoner. Ved lik gevinst beholder ordered
+  // eksisterende determinisme/status/classHeight-prioritet. Når alle mål er
+  // dekket, faller vi naturlig tilbake til første gjenværende spiller.
+  while (picked.length < size) {
+    let best = null;
+    let bestGain = -1;
+
+    for (const player of ordered) {
+      if (taken.has(player.id)) continue;
+      const gain = playerPositions(player).reduce((sum, position) => {
+        const target = CLUB_SEASON_COVERAGE_TARGET[position];
+        if (!target) return sum;
+        return sum + (coverage[position] < target ? 1 : 0);
+      }, 0);
+
+      if (gain > bestGain) {
+        best = player;
+        bestGain = gain;
+      }
+    }
+
+    if (!best) break;
+    addPlayer(best);
   }
 
-  for (const player of ordered) {
-    if (picked.length >= size) break;
-    if (taken.has(player.id)) continue;
-    picked.push(player.id);
-    taken.add(player.id);
-  }
   return picked;
 }
 
