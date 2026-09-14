@@ -1,8 +1,8 @@
 {
   "schema": "historygo-football-manager.team_merits.v1",
   "version": 1,
-  "teamId": "blank_team_seed",
-  "teamName": "Blank Team Seed",
+  "teamId": "browser_legacy_team",
+  "teamName": "Browser Legacy Team",
   "activeTrainingWeek": 1,
   "recruitmentVersion": 1,
   "recruitedPlayerIds": [],
