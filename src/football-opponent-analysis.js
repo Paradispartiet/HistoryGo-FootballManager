@@ -2,8 +2,11 @@
 //
 // Et rent lærings- og planleggingslag over eksisterende terminliste,
 // motstanderprofil og formasjons-matchup. Modulen beregner ingen kampbonus,
-// rating eller skjult effekt. Den gjør bare datagrunnlaget om til en konkret
+// rating eller skjult effekt. Den gjør datagrunnlaget om til en konkret
 // arbeidsprosess: observasjon -> hypotese -> motgrep -> observasjonspunkt.
+// Kampmotoren kan bruke focusId til å PRIORITERE en allerede eksisterende
+// kampsituasjon som passer observasjonen; selve effekten kommer fortsatt bare
+// fra managergrepet i den situasjonen.
 
 export const OPPONENT_ANALYSIS_VERSION = "opponent-analysis.v1";
 

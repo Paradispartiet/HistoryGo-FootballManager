@@ -4403,6 +4403,13 @@ function playMatchday() {
     ).metricBonusDelta
   });
 
+  const analysisFixture = isLeagueModeActive() ? getOpponentAnalysisFixtures()[0] || null : null;
+  const normalizedAnalysisPlan = normalizeOpponentAnalysisPlan(state.opponentAnalysisPlan);
+  const activeAnalysisPlan =
+    analysisFixture && isOpponentAnalysisPlanForFixture(normalizedAnalysisPlan, analysisFixture.fixtureId)
+      ? normalizedAnalysisPlan
+      : null;
+
   state.matchday.session = createMatchdaySession({
     teamFit,
     formation,
@@ -4414,6 +4421,7 @@ function playMatchday() {
     // tilfeldig motstander som før (testkamp).
     opponent,
     trainingFocus,
+    opponentAnalysisPlan: activeAnalysisPlan,
     // Formation Knowledge Engine: valgt formasjons kunnskapsoppslag (hvis dekket)
     // lar kampmotoren beregne formasjons-matchup mot motstanderens spillestil.
     formationKnowledge: state.formationKnowledgeById[formation?.id] || null,
@@ -4438,18 +4446,6 @@ function playMatchday() {
     // Svakhetstrening betaler kun når spilleren står i rollen han trente seg til.
     weaknessWorkBonus: getLineupWeaknessWork(teamFit).bonus
   });
-
-  const analysisFixture = isLeagueModeActive() ? getOpponentAnalysisFixtures()[0] || null : null;
-  const analysisPlan = normalizeOpponentAnalysisPlan(state.opponentAnalysisPlan);
-  if (
-    state.matchday.session &&
-    analysisFixture &&
-    isOpponentAnalysisPlanForFixture(analysisPlan, analysisFixture.fixtureId)
-  ) {
-    // Snapshotet følger kampbriefen og sluttrapporten, men endrer ingen tall i
-    // kampmotoren. Det er managerens hypotese og observasjonspunkt, ikke bonus.
-    state.matchday.session.opponentAnalysisPlan = analysisPlan;
-  }
 
   const exerciseHypothesis = state.trainingExerciseHypothesis;
   if (
@@ -4560,6 +4556,16 @@ function chooseMatchdayDecision(optionId) {
           // Forklaringen finnes bare når kampmotoren selv registrerte et
           // relevant treningssignal på dette grepet.
           explanation: `Kampmotoren registrerte hendelsen som relevant for ${resolution.trainingImpact.focusName.toLowerCase()}.`
+        }
+      : null,
+    analysisObservation: event.analysisPreparation
+      ? {
+          focusLabel: event.analysisPreparation.focusLabel,
+          countermeasureLabel: event.analysisPreparation.countermeasureLabel,
+          watch: event.analysisPreparation.watch,
+          action: option.label,
+          consequence: resolution.feedback,
+          explanation: "Denne situasjonen ble prioritert fordi den traff ukas analysefokus. Konsekvensen kommer fortsatt fra kampgrepet ditt."
         }
       : null
   });
@@ -10269,6 +10275,19 @@ function appendMatchdayDecisionLog(parent, decisions, heading) {
       entry.append(observation);
     }
 
+    if (decision.analysisObservation) {
+      const observation = document.createElement("div");
+      observation.className = "matchday-training-observation-result";
+      observation.innerHTML = `
+        <p><b>Analysefokus:</b> ${escapeHtml(decision.analysisObservation.focusLabel)}</p>
+        <p><b>Planlagt motgrep:</b> ${escapeHtml(decision.analysisObservation.countermeasureLabel || "Observér og reager")}</p>
+        <p><b>Se etter:</b> ${escapeHtml(decision.analysisObservation.watch || "")}</p>
+        <p><b>Handling:</b> ${escapeHtml(decision.analysisObservation.action)}</p>
+        <p><b>Konsekvens:</b> ${escapeHtml(decision.analysisObservation.consequence)}</p>
+        <p><b>Forklaring:</b> ${escapeHtml(decision.analysisObservation.explanation)}</p>`;
+      entry.append(observation);
+    }
+
     parent.append(entry);
   });
 }
@@ -10574,6 +10593,16 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   pressure.className = "matchday-event-pressure";
   pressure.textContent = MATCHDAY_PRESSURE_LABELS[event.pressure] || MATCHDAY_PRESSURE_LABELS.medium;
   eventCard.append(pressure);
+
+  if (event.analysisPreparation) {
+    const prepared = document.createElement("p");
+    prepared.className = "matchday-meta";
+    const countermeasure = event.analysisPreparation.countermeasureLabel
+      ? ` · planlagt motgrep: ${event.analysisPreparation.countermeasureLabel}`
+      : "";
+    prepared.textContent = `Analyseplanen traff denne situasjonen · ${event.analysisPreparation.focusLabel}${countermeasure}`;
+    eventCard.append(prepared);
+  }
 
   const title = document.createElement("h4");
   title.className = "matchday-event-title";

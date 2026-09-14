@@ -206,6 +206,70 @@ familyExpectations.forEach(([id]) => {
   check(`${id}: familiehendelser har sesongdybde utover gamle tre`, familyEventIds.size >= 4);
 });
 
+// Analyseplan: fokus skal endre HVA kampen løfter fram, aldri option-impact.
+console.log("\nMotstanderanalyse → kampsituasjon:");
+const neutralProfile = {
+  balanceScore: 60,
+  widthScore: 60,
+  depthScore: 60,
+  buildUpScore: 60,
+  pressScore: 60,
+  restDefenseScore: 60,
+  roleFitAverage: 60,
+  relationshipScore: 60
+};
+const wmForAnalysis = getFormationById("wm_3223");
+const analysisPlan = {
+  focusId: "build_up",
+  focusLabel: "Oppbyggingen deres",
+  countermeasureLabel: "Styr første pasning",
+  watch: "Se hvilken spiller som får motta den andre pasningen."
+};
+const unpreparedEvents = generateMatchdayEvents({
+  formation: wmForAnalysis,
+  tacticalProfile: neutralProfile,
+  opponent: OPPONENT_PROFILES[0]
+});
+const preparedEvents = generateMatchdayEvents({
+  formation: wmForAnalysis,
+  tacticalProfile: neutralProfile,
+  opponent: OPPONENT_PROFILES[0],
+  opponentAnalysisPlan: analysisPlan
+});
+const unpreparedFamilyIds = unpreparedEvents.filter((event) => !event.id.startsWith("opp_")).map((event) => event.id).join(",");
+const preparedFamilyIds = preparedEvents.filter((event) => !event.id.startsWith("opp_")).map((event) => event.id).join(",");
+check("analysefokus endrer hvilke familiehendelser som prioriteres", unpreparedFamilyIds !== preparedFamilyIds);
+check("minst én valgt hendelse er eksplisitt analyseforberedt", preparedEvents.some((event) => event.analysisPrepared));
+check(
+  "analyseforberedelsen er forklarbar og bærer valgt motgrep",
+  preparedEvents.some((event) =>
+    event.analysisPreparation?.focusId === analysisPlan.focusId &&
+    event.analysisPreparation?.countermeasureLabel === analysisPlan.countermeasureLabel
+  )
+);
+
+const preparedSession = createMatchdaySession({
+  teamFit: strongFit,
+  formation: wmForAnalysis,
+  tactic,
+  activeClassifications: [],
+  coachContext: strongCoach,
+  opponent: OPPONENT_PROFILES[0],
+  opponentAnalysisPlan: analysisPlan
+});
+check("kampsesjonen bærer analyseplanen", preparedSession.opponentAnalysisPlan?.focusId === "build_up");
+check("kampsesjonen har en forberedt situasjon", preparedSession.events.some((event) => event.analysisPrepared));
+check(
+  "analyseplanen endrer ikke option-impact direkte",
+  preparedSession.events.every((event) =>
+    event.options.every((option) =>
+      Number.isFinite(option.impact?.xgFor) &&
+      Number.isFinite(option.impact?.xgAgainst) &&
+      Number.isFinite(option.impact?.momentum)
+    )
+  )
+);
+
 // --- 3) Full sesjonsløkke ----------------------------------------------------
 console.log("\nSesjonsløkke (sterkt lag, sterk stab):");
 const wmFormation = getFormationById("wm_3223");
