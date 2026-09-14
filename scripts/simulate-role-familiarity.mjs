@@ -16,6 +16,14 @@ import {
   describeRoleFamiliarity,
   summarizeLineupFamiliarity
 } from "../src/football-role-familiarity-engine.js";
+import {
+  PLAYER_PARTNERSHIP_MAX_MATCHES,
+  PLAYER_PARTNERSHIP_BONUS_CAP,
+  normalizePlayerPartnerships,
+  recordPlayerPartnerships,
+  summarizePlayerPartnerships,
+  calculateRoleRelationships
+} from "../src/football-relationship-engine.js";
 
 const failures = [];
 const check = (label, ok) => {
@@ -125,6 +133,57 @@ const check = (label, ok) => {
   check("tom summarize kaster ikke", summarizeLineupFamiliarity(undefined, undefined).bonus === 0);
 }
 
+// 12) Spillerpar starter uten bonus og bygger samspill gjennom felles starter.
+{
+  const lineup = Array.from({ length: 11 }, (_, index) => ({ playerId: `p${index + 1}` }));
+  const fresh = summarizePlayerPartnerships({}, lineup);
+  check("ny ellever har 55 par", fresh.pairCount === 55);
+  check("ny ellever har ingen kontinuitetsbonus", fresh.bonus === 0 && fresh.averageSharedStarts === 0);
+
+  let store = {};
+  for (let match = 0; match < 15; match += 1) {
+    store = recordPlayerPartnerships(store, lineup);
+  }
+  const settled = summarizePlayerPartnerships(store, lineup);
+  check("femten felles starter gir maks samspillsbonus", settled.bonus === PLAYER_PARTNERSHIP_BONUS_CAP);
+  check("alle elleverpar er etablerte", settled.establishedPairs === 55);
+  check("felles starter måles riktig", settled.averageSharedStarts === 15);
+
+  const rotated = [...lineup.slice(0, 10), { playerId: "p12" }];
+  const rotatedSummary = summarizePlayerPartnerships(store, rotated);
+  check("rotasjon reduserer kontinuitet uten negativ straff", rotatedSummary.bonus >= 0 && rotatedSummary.bonus < settled.bonus);
+}
+
+// 13) Parhistorikken klampes, normaliseres og muterer ikke inn-staten.
+{
+  const lineup = [{ playerId: "a" }, { playerId: "b" }];
+  const original = {};
+  let store = recordPlayerPartnerships(original, lineup);
+  check("parregistrering muterer ikke inn-staten", Object.keys(original).length === 0 && store !== original);
+  for (let match = 1; match < 60; match += 1) store = recordPlayerPartnerships(store, lineup);
+  check("parhistorikk klampes", store["a::b"] === PLAYER_PARTNERSHIP_MAX_MATCHES);
+  const cleaned = normalizePlayerPartnerships({ "b::a": 7, bad: 4, "x::x": 9, "a::b": 999 });
+  check("partnership-normalisering canonicaliserer og klamper", cleaned["a::b"] === PLAYER_PARTNERSHIP_MAX_MATCHES);
+  check("ugyldige partnership-nøkler droppes", !("bad" in cleaned) && !("x::x" in cleaned));
+}
+
+// 14) Relasjonsscoren beholder struktur som base og legger bare på liten samspillsbonus.
+{
+  const assignments = [
+    { isComplete: true, player: { id: "p1", name: "P1" }, role: { id: "holding_midfielder" }, slot: { label: "DM" } },
+    { isComplete: true, player: { id: "p2", name: "P2" }, role: { id: "classic_ten" }, slot: { label: "AM" } }
+  ];
+  let store = {};
+  const base = calculateRoleRelationships(assignments, { tags: [] }, store);
+  for (let match = 0; match < 15; match += 1) store = recordPlayerPartnerships(store, assignments);
+  const settled = calculateRoleRelationships(assignments, { tags: [] }, store);
+  check("strukturpoeng endres ikke av samspill", settled.structuralRelationshipScore === base.structuralRelationshipScore);
+  check(
+    "samspill løfter kun innenfor bonuscap",
+    settled.relationshipScore - base.relationshipScore === PLAYER_PARTNERSHIP_BONUS_CAP
+  );
+}
+
 if (failures.length) {
   console.error("✗ Role Familiarity-sim feilet:");
   for (const f of failures) console.error(`  - ${f}`);
@@ -140,7 +199,8 @@ console.log(
         "p1",
         "r1"
       ),
-      maxBonus: ROLE_FAMILIARITY_BONUS_CAP
+      maxBonus: ROLE_FAMILIARITY_BONUS_CAP,
+      partnershipMaxBonus: PLAYER_PARTNERSHIP_BONUS_CAP
     },
     null,
     2
