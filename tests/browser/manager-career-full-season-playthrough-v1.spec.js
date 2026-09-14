@@ -116,6 +116,9 @@ async function readProgress(page) {
           }
         : null,
       decisionCount: Array.isArray(lastMatch?.decisions) ? lastMatch.decisions.length : 0,
+      analysisPreparedDecisionCount: Array.isArray(lastMatch?.decisions)
+        ? lastMatch.decisions.filter((entry) => entry?.analysisObservation).length
+        : 0,
       decisionLabels: Array.isArray(lastMatch?.decisions)
         ? lastMatch.decisions.map((entry) => entry?.optionLabel || entry?.label || entry?.optionId).filter(Boolean)
         : [],
@@ -617,6 +620,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   const trainingPrograms = new Set();
   const trainingFocusIds = new Set();
   const decisionLabels = new Set();
+  const analysisPreparedRounds = new Set();
   const matchOutcomes = new Set();
   const scorelines = new Set();
   const inboxMessageIds = new Set();
@@ -698,6 +702,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(played.lastMatchRound).toBe(round);
     expect(played.lastOpponentId).toBeTruthy();
     expect(played.decisionCount).toBeGreaterThan(0);
+    expect(played.analysisPreparedDecisionCount).toBeGreaterThan(0);
     expect(played.trainingFocusId).toBeTruthy();
     expect(played.activeMatchSession).toBe(false);
     expect(["win", "draw", "loss"]).toContain(played.lastOutcome);
@@ -732,6 +737,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     trainingPrograms.add(trainingSelection.programId);
     trainingFocusIds.add(played.trainingFocusId);
     played.decisionLabels.forEach((label) => decisionLabels.add(label));
+    if (played.analysisPreparedDecisionCount > 0) analysisPreparedRounds.add(round);
     matchOutcomes.add(played.lastOutcome);
     scorelines.add(`${played.lastGoalsFor}–${played.lastGoalsAgainst}`);
     observations.push({
@@ -752,6 +758,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       },
       rotations,
       decisions: played.decisionCount,
+      analysisPreparedDecisions: played.analysisPreparedDecisionCount,
       result: {
         outcome: played.lastOutcome,
         score: `${played.lastGoalsFor}–${played.lastGoalsAgainst}`,
@@ -771,6 +778,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(trainingPrograms.size).toBeGreaterThanOrEqual(3);
   expect(trainingFocusIds.size).toBeGreaterThanOrEqual(4);
   expect(decisionLabels.size).toBeGreaterThanOrEqual(6);
+  expect(analysisPreparedRounds.size).toBe(30);
   expect(openedInboxMessageIds.size).toBe(30);
   expect(inboxMessageIds.size).toBeGreaterThanOrEqual(30);
   expect(inboxMessageKinds.size).toBeGreaterThanOrEqual(6);
@@ -860,6 +868,9 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     JSON.stringify({
       rounds: observations,
       rotations: rotationEvents,
+      analysisSummary: {
+        preparedRounds: analysisPreparedRounds.size
+      },
       competitionSummary: {
         outcomes: [...matchOutcomes],
         scorelines: [...scorelines],
