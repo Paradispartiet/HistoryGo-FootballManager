@@ -116,7 +116,12 @@ import {
 } from "./football-opponent-analysis.js";
 import { registerOpponentAnalysisBridge } from "./football-opponent-analysis-bridge.js";
 import { judgeClubTradition, buildTraditionThresholds } from "./football-club-tradition.js";
-import { resolveClubSquadAccess, reconcileClubBaseSquadSave, listClubHeritagePlayers } from "./football-club-squad.js";
+import {
+  CLUB_BASE_SQUAD_TARGET,
+  resolveClubSquadAccess,
+  reconcileClubBaseSquadSave,
+  listClubHeritagePlayers
+} from "./football-club-squad.js";
 import {
   normalizeAttributeCatalogue,
   derivePlayerAttributeIndex,
@@ -1401,10 +1406,13 @@ function normalizeNearbyFavorites(value) {
 
 function normalizeLocalStart(value) {
   const base = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const localStartLimit = base.generatedFrom === "club_pool"
+    ? CLUB_BASE_SQUAD_TARGET
+    : REQUIRED_SQUAD_SIZE;
   const playerIds = Array.isArray(base.playerIds)
     ? [...new Set(base.playerIds.filter((playerId) => typeof playerId === "string").map((playerId) => playerId.trim()))]
         .filter(Boolean)
-        .slice(0, REQUIRED_SQUAD_SIZE)
+        .slice(0, localStartLimit)
     : [];
 
   return {
@@ -2104,9 +2112,12 @@ function activateStarterSquad(chosenPlayerIds = null, metadata = null) {
     return;
   }
 
-  // Draften sender spillerens eget utvalg; ellers bygges en balansert tropp.
+  // Draft/egen klubb beholder 15-spillers spillbarhetsgulvet. En takeover-
+  // grunntropp er allerede validert av club-squad-motoren og kan være opptil
+  // CLUB_BASE_SQUAD_TARGET, slik at rotasjonsdybden ikke kappes bort i state.
+  const clubPoolStart = metadata?.generatedFrom === "club_pool";
   const playerIds = Array.isArray(chosenPlayerIds) && chosenPlayerIds.length
-    ? chosenPlayerIds.slice(0, REQUIRED_SQUAD_SIZE)
+    ? chosenPlayerIds.slice(0, clubPoolStart ? CLUB_BASE_SQUAD_TARGET : REQUIRED_SQUAD_SIZE)
     : getStarterSquadPlayerIds(REQUIRED_SQUAD_SIZE);
   if (!playerIds.length) {
     state.localStartMessage = "Fant ingen spillere å fylle troppen med.";
@@ -8242,8 +8253,7 @@ function renderDirectLineupEditor() {
   const available = getUnlockedPlayers();
   const current = available.find((player) => player.id === slotState.playerId);
   const choices = [current, ...available.filter((player) => player.id !== current?.id)]
-    .filter(Boolean)
-    .slice(0, 16);
+    .filter(Boolean);
 
   playerHost.replaceChildren();
   choices.forEach((player) => {
@@ -8251,7 +8261,10 @@ function renderDirectLineupEditor() {
     button.type = "button";
     button.className = `lineup-player-card${player.id === slotState.playerId ? " is-selected" : ""}`;
     button.disabled = usedPlayerIds.has(player.id);
-    const positions = Array.isArray(player.naturalPositions) ? player.naturalPositions.join(" / ") : "–";
+    const positions = [...new Set([
+      ...(Array.isArray(player.naturalPositions) ? player.naturalPositions : []),
+      ...(Array.isArray(player.usablePositions) ? player.usablePositions : [])
+    ])].join(" / ") || "–";
     button.innerHTML = `<strong>${player.name || player.id}</strong><span>${positions}</span>`;
     button.addEventListener("click", () => setSelectedSlotPlayer(player.id));
     playerHost.append(button);
