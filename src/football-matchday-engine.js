@@ -1322,9 +1322,31 @@ const OPPONENT_EVENTS = {
   }
 };
 
+// Analyseplanen gir ingen skjult kampbonus. Den gjør i stedet managerens valgte
+// observasjonsfokus reelt ved å prioritere en EKSISTERENDE kampsituasjon som
+// treffer det fokuset. Det er fortsatt valget i situasjonen som avgjør xG,
+// momentum og risiko.
+//
+// Fokusene beskriver MOTSTANDEREN, derfor peker de på hvilke av våre etablerte
+// lagmetrikker som blir satt på prøve når vi ser etter akkurat dette.
+const ANALYSIS_FOCUS_EVENT_METRICS = Object.freeze({
+  build_up: Object.freeze(["pressScore", "restDefenseScore", "balanceScore"]),
+  press: Object.freeze(["buildUpScore", "depthScore", "roleFitAverage", "widthScore"]),
+  transition: Object.freeze(["restDefenseScore", "depthScore", "balanceScore"]),
+  spaces: Object.freeze(["widthScore", "balanceScore", "roleFitAverage"])
+});
+
+function eventMatchesOpponentAnalysis(event, opponentAnalysisPlan) {
+  const focusId = opponentAnalysisPlan?.focusId || "";
+  const metrics = ANALYSIS_FOCUS_EVENT_METRICS[focusId] || [];
+  return Boolean(event?.relevantWhen?.metric && metrics.includes(event.relevantWhen.metric));
+}
+
 // Hvor relevant en hendelse er for lagets faktiske tilstand. Treff på
-// relevantWhen gir +1. Like relevante kandidater fordeles deterministisk etter
-// motstander, slik at en lang sesong får variasjon uten Math.random-flakiness.
+// relevantWhen gir +1. Analysefokus gir +1,6 i UTVALGET (aldri i kampregnestykket),
+// slik at minst én forberedt situasjon løftes inn foran tilfeldige tie-breaks.
+// Like relevante kandidater fordeles deterministisk etter motstander, slik at
+// en lang sesong får variasjon uten Math.random-flakiness.
 function stableVariationScore(value) {
   let hash = 2166136261;
   for (const char of String(value || "")) {
@@ -1334,7 +1356,7 @@ function stableVariationScore(value) {
   return (hash >>> 0) / 4294967295;
 }
 
-function scoreEventRelevance(event, tp, variationKey = "") {
+function scoreEventRelevance(event, tp, variationKey = "", opponentAnalysisPlan = null) {
   let score = stableVariationScore(`${variationKey}:${event?.id || ""}`) * 0.5;
   const rule = event.relevantWhen;
   if (rule && rule.metric) {
@@ -1342,19 +1364,20 @@ function scoreEventRelevance(event, tp, variationKey = "") {
     if (Number.isFinite(rule.below) && value < rule.below) score += 1;
     if (Number.isFinite(rule.above) && value > rule.above) score += 1;
   }
+  if (eventMatchesOpponentAnalysis(event, opponentAnalysisPlan)) score += 1.6;
   return score;
 }
 
 // Genererer kampens 3 hendelser: to fra formasjonsfamilien (mest relevante
 // først) og én fra motstanderprofilen i midten.
-export function generateMatchdayEvents({ formation, tacticalProfile, opponent } = {}) {
+export function generateMatchdayEvents({ formation, tacticalProfile, opponent, opponentAnalysisPlan = null } = {}) {
   const family = getFormationFamily(formation);
   const pool = FAMILY_EVENTS[family] || FAMILY_EVENTS.modern;
   const tp = tacticalProfile || {};
 
   const variationKey = opponent?.id || opponent?.baseStyleId || "opponent";
   const rankedFamily = pool
-    .map((event) => ({ event, score: scoreEventRelevance(event, tp, variationKey) }))
+    .map((event) => ({ event, score: scoreEventRelevance(event, tp, variationKey, opponentAnalysisPlan) }))
     .sort((a, b) => b.score - a.score)
     .map((entry) => entry.event);
 
@@ -1365,20 +1388,32 @@ export function generateMatchdayEvents({ formation, tacticalProfile, opponent } 
   const picked = [rankedFamily[0], opponentEvent, rankedFamily[1]].filter(Boolean).slice(0, 3);
 
   // Dypkopi slik at sesjonen kan persisteres trygt i localStorage.
-  return picked.map((event, index) => ({
-    sequence: index + 1,
-    id: event.id,
-    title: event.title,
-    text: event.text,
-    pressure: event.pressure || "medium",
-    options: event.options.map((option) => ({
-      id: option.id,
-      label: option.label,
-      checks: option.checks.map((check) => ({ ...check })),
-      impact: { ...option.impact },
-      risk: num(option.risk)
-    }))
-  }));
+  return picked.map((event, index) => {
+    const analysisPrepared = eventMatchesOpponentAnalysis(event, opponentAnalysisPlan);
+    return {
+      sequence: index + 1,
+      id: event.id,
+      title: event.title,
+      text: event.text,
+      pressure: event.pressure || "medium",
+      analysisPrepared,
+      analysisPreparation: analysisPrepared
+        ? {
+            focusId: opponentAnalysisPlan.focusId,
+            focusLabel: opponentAnalysisPlan.focusLabel || opponentAnalysisPlan.focusId,
+            countermeasureLabel: opponentAnalysisPlan.countermeasureLabel || "",
+            watch: opponentAnalysisPlan.watch || ""
+          }
+        : null,
+      options: event.options.map((option) => ({
+        id: option.id,
+        label: option.label,
+        checks: option.checks.map((check) => ({ ...check })),
+        impact: { ...option.impact },
+        risk: num(option.risk)
+      }))
+    };
+  });
 }
 
 // ----------------------------------------------------------------------------
@@ -1560,7 +1595,7 @@ export function resolveMatchdayDecision({ event, option, tacticalProfile, matchE
 
 // Oppretter en ny kampdagsesjon med motstander, snapshots og genererte
 // hendelser. app.js eier lagringen (localStorage) og faseflyten.
-export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus, weaknessWorkBonus, benchPlayers, roles, conditionPenalty, conditionByPlayerId } = {}) {
+export function createMatchdaySession({ teamFit, formation, tactic, activeClassifications, coachContext, opponent, trainingFocus, formationKnowledge, offPitchContext, relationships, staffIdentity, roleFamiliarityBonus, weaknessWorkBonus, benchPlayers, roles, conditionPenalty, conditionByPlayerId, opponentAnalysisPlan } = {}) {
   const matchOpponent = opponent || pickOpponentProfile();
 
   // Formasjons-matchup mot motstanderens spillestil (Formation Knowledge Engine).
@@ -1604,7 +1639,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
   const events = generateMatchdayEvents({
     formation,
     tacticalProfile,
-    opponent: matchOpponent
+    opponent: matchOpponent,
+    opponentAnalysisPlan
   });
 
   // Forklaringsgrunnlag (Match Explanation v1.5): snapshot av relasjoner og
@@ -1686,6 +1722,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
         }
       : null,
     trainingFocus: trainingFocus ? { ...trainingFocus } : null,
+    // Analyseplanen påvirker bare hvilke eksisterende situasjoner som prioriteres
+    // over. Den endrer aldri styrke, checks, impact eller xG direkte.
+    opponentAnalysisPlan: opponentAnalysisPlan ? { ...opponentAnalysisPlan } : null,
     staffIdentitySnapshot: staffIdentity && typeof staffIdentity === "object" ? { ...staffIdentity } : null,
     relationshipSnapshot,
     offPitchSnapshot,
