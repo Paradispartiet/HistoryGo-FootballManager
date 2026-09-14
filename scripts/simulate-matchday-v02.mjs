@@ -239,7 +239,7 @@ const preparedEvents = generateMatchdayEvents({
 const unpreparedFamilyIds = unpreparedEvents.filter((event) => !event.id.startsWith("opp_")).map((event) => event.id).join(",");
 const preparedFamilyIds = preparedEvents.filter((event) => !event.id.startsWith("opp_")).map((event) => event.id).join(",");
 check("analysefokus endrer hvilke familiehendelser som prioriteres", unpreparedFamilyIds !== preparedFamilyIds);
-check("minst én valgt hendelse er eksplisitt analyseforberedt", preparedEvents.some((event) => event.analysisPrepared));
+check("nøyaktig én valgt hendelse er eksplisitt analyseforberedt", preparedEvents.filter((event) => event.analysisPrepared).length === 1);
 check(
   "analyseforberedelsen er forklarbar og bærer valgt motgrep",
   preparedEvents.some((event) =>
@@ -258,7 +258,7 @@ const preparedSession = createMatchdaySession({
   opponentAnalysisPlan: analysisPlan
 });
 check("kampsesjonen bærer analyseplanen", preparedSession.opponentAnalysisPlan?.focusId === "build_up");
-check("kampsesjonen har en forberedt situasjon", preparedSession.events.some((event) => event.analysisPrepared));
+check("kampsesjonen har nøyaktig én forberedt situasjon", preparedSession.events.filter((event) => event.analysisPrepared).length === 1);
 check(
   "analyseplanen endrer ikke option-impact direkte",
   preparedSession.events.every((event) =>
