@@ -197,6 +197,27 @@ async function readRotationNeed(page) {
   });
 }
 
+async function countVisibleLineupChoices(page) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+  await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+  const chip = page.locator("#lineupSlots .player-chip").first();
+  await expect(chip).toBeVisible();
+  await chip.click();
+
+  const inspector = page.locator("#managerLineupSlotInspector");
+  await expect(inspector).toBeVisible();
+  await inspector.locator('[data-slot-action="player"]').click();
+
+  const drawer = page.locator("#managerTeamChoiceDrawer");
+  await expect(drawer).toBeVisible();
+  await expect.poll(async () => drawer.locator(".lineup-player-choice-row").count()).toBeGreaterThan(0);
+  const count = await drawer.locator(".lineup-player-choice-row").count();
+  await page.keyboard.press("Escape");
+  await expect(drawer).toBeHidden();
+  return count;
+}
+
 async function rotateTiredStarters(page, maximumRotations = 4) {
   const rotations = [];
 
@@ -229,7 +250,7 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
       ).toBeGreaterThan(0);
       const rows = drawer.locator(".lineup-player-choice-row");
       const rowCount = await rows.count();
-      let replacement = null;
+      const candidates = [];
 
       for (let index = 0; index < rowCount; index += 1) {
         const row = rows.nth(index);
@@ -241,10 +262,29 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
         const name = String(await profile.locator("strong").textContent() || "").trim();
         const positions = String(await profile.locator("span").textContent() || "");
         if (!name || need.avoidNames.includes(name)) continue;
-        if (position && !positions.includes(position)) continue;
-        replacement = { choice, name };
-        break;
+        const positionTokens = positions
+          .split("/")
+          .map((value) => value.trim())
+          .filter(Boolean);
+        candidates.push({
+          choice,
+          name,
+          positionTokens,
+          exactPosition: Boolean(position && positionTokens.includes(position))
+        });
       }
+
+      // Først naturlig/brukbar posisjon. Hvis hele posisjonsgruppen er sliten,
+      // bruker manageren en frisk utespiller som nødløsning. Oppstilling tillater
+      // allerede slik feilbruk og rollefit forklarer konsekvensen; testen skal
+      // derfor ikke være strengere enn selve produktet.
+      const exactReplacement = candidates.find((candidate) => candidate.exactPosition) || null;
+      const flexibleReplacement = candidates.find((candidate) =>
+        position === "GK"
+          ? candidate.positionTokens.includes("GK")
+          : candidate.positionTokens.some((token) => token !== "GK")
+      ) || null;
+      const replacement = exactReplacement || flexibleReplacement;
 
       if (!replacement) {
         // Drawerens Escape-kontrakt er samme brukerflate som Lukk/Ferdig, men
@@ -271,14 +311,15 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
         outLoad: target.load,
         outInjured: target.injured,
         inPlayerId: await afterChip.getAttribute("data-player-id"),
-        inName: replacement.name
+        inName: replacement.name,
+        exactPosition: replacement.exactPosition
       };
       rotations.push(performedRotation);
       break;
     }
 
-    // Alle slitne/skadde startere er vurdert, men ingen har en frisk,
-    // posisjonskompatibel reserve. Det er et reelt troppsvalg, ikke en testfeil.
+    // Alle slitne/skadde startere er vurdert, men ingen frisk spiller kan
+    // brukes uten å sette en keeper som utespiller (eller omvendt).
     if (!performedRotation) break;
   }
 
@@ -518,6 +559,11 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(initial.week).toBe(1);
   expect(initial.phase).toBe("analysis");
   expect(initial.hiredStaffCount).toBe(6);
+
+  // #262 utvidet ready-klubbens sesongtropp fra spillbarhetsgulvet 15 til 20
+  // når klubbpoolen tåler det. Oppstilling skal eksponere hele denne troppen,
+  // ikke den gamle UI-grensen på 16 valg.
+  expect(await countVisibleLineupChoices(page)).toBeGreaterThanOrEqual(20);
 
   const observations = [];
   const opponentIds = new Set();
