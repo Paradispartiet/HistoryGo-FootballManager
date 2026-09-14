@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+const CANONICAL_FULL_SEASON_FORMATION_ID = "modern_433";
+
 const ROSENBORG_STAFF = [
   "Jonathan Hartmann",
   "Alexander Tettey",
@@ -85,6 +87,7 @@ async function readProgress(page) {
       partnershipTotalSharedStarts: partnershipValues.reduce((sum, value) => sum + value, 0),
       week: Number(clubWeek?.week) || null,
       phase: clubWeek?.phase || null,
+      formationId: session.selectedFormationId || null,
       seasonStatus: season?.status || null,
       seasonNumber: Number(season?.seasonNumber) || null,
       seasonRounds: Number(season?.competition?.rounds) || null,
@@ -188,20 +191,28 @@ async function choosePlayableFormation(page) {
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
   await expect(page.locator("#formationSelect")).toBeVisible();
 
-  const formationId = await page.locator("#formationSelect option:not([disabled])").evaluateAll((options) => {
-    const playable = options.find((option) => String(option.value || "").trim());
-    return playable?.value || null;
-  });
-  expect(formationId).toBeTruthy();
-  await page.locator("#formationSelect").selectOption(formationId);
+  // Canonical career-playthrough skal måle en representativ moderne ligasesong,
+  // ikke tilfeldigvis den første dataraden (Pre-modern Rush 1-1-8). Historiske
+  // ekstremformer har egne motor-/layouttester; denne testen må være et godt
+  // diagnostisk speil for rotasjon, belastning og sesongspill.
+  const formationOption = page.locator(
+    `#formationSelect option[value="${CANONICAL_FULL_SEASON_FORMATION_ID}"]`
+  );
+  await expect(formationOption).toHaveCount(1);
+  await expect(formationOption).toBeEnabled();
+  await page.locator("#formationSelect").selectOption(CANONICAL_FULL_SEASON_FORMATION_ID);
 
   await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
+  await expect(page.locator("#formationSelect")).toHaveValue(CANONICAL_FULL_SEASON_FORMATION_ID);
 
   await expect.poll(async () => {
     const text = await page.locator("#completeCount").textContent();
     return text?.trim() || "";
   }).toBe("11/11");
+
+  await expect.poll(async () => (await readProgress(page)).formationId)
+    .toBe(CANONICAL_FULL_SEASON_FORMATION_ID);
 }
 
 async function openTraining(page) {
@@ -800,6 +811,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   }
 
   const completed = await readProgress(page);
+  expect(completed.formationId).toBe(CANONICAL_FULL_SEASON_FORMATION_ID);
   expect(matchIds.size).toBe(30);
   expect(opponentIds.size).toBe(15);
   expect(trainingPrograms.size).toBeGreaterThanOrEqual(3);
@@ -900,8 +912,16 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   console.log(
     "Full-season canonical playthrough observations:",
     JSON.stringify({
+      formationSummary: {
+        formationId: completed.formationId
+      },
       rounds: observations,
       rotations: rotationEvents,
+      rotationSummary: {
+        total: rotationEvents.length,
+        exact: rotationEvents.filter((entry) => entry.exactPosition).length,
+        nonExact: rotationEvents.filter((entry) => !entry.exactPosition).length
+      },
       analysisSummary: {
         preparedRounds: analysisPreparedRounds.size
       },
