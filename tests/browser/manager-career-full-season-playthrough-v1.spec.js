@@ -946,7 +946,19 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   // club-squad v9 reduserte canonical full-season nødrotasjoner fra 8 til 1.
   // Lås bare nødposisjonsregresjonen; eksakte rotasjoner får fortsatt variere
   // med condition, skade og sesongforløp.
-  expect(rotationEvents.filter((entry) => !entry.exactPosition).length).toBeLessThanOrEqual(1);
+  const nonExactRotationEvents = rotationEvents.filter((entry) => !entry.exactPosition);
+  const nonExactRotationDiagnostics = observations
+    .filter((entry) => nonExactRotationEvents.some((rotation) => rotation.round === entry.round))
+    .map((entry) => ({
+      round: entry.round,
+      trainingProgram: entry.trainingProgram,
+      condition: entry.condition,
+      rotations: entry.rotations
+    }));
+  expect(
+    nonExactRotationEvents.length,
+    `Non-exact rotation diagnostic: ${JSON.stringify({ nonExactRotationEvents, nonExactRotationDiagnostics })}`
+  ).toBeLessThanOrEqual(1);
   expect(substitutionEvents).toHaveLength(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(new Set(substitutionEvents.map((entry) => entry.round))).toEqual(CANONICAL_SUBSTITUTION_ROUNDS);
   expect(completed.conditionCount).toBeGreaterThan(11);
