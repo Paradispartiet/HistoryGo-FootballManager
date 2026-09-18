@@ -73,7 +73,7 @@ For en `ready` klubb som ikke har full stadiontilgang:
 2. **15 spillere er fortsatt minimumet** som gjør klubben takeover-klar.
 3. Når klubbpoolen har nok spillbare profiler, bygges grunntroppen til **20 spillere** slik at slitasje, skader og rotasjon kan håndteres gjennom en hel sesong.
 4. De første 15 dekker keeper, forsvar, midtbane og angrep etter den etablerte spillbarhetsfordelingen.
-5. De fem ekstra plassene prioriterer rotasjonsdybde i forsvar, midtbane og angrep; de er ikke en ny unlock- eller transfermekanikk.
+5. De fem ekstra plassene prioriterer konkrete posisjonsunderskudd for sesongrotasjon. Canonical mål er best mulig tilgjengelig dekning av 2 GK, 2 LB, 4 CB, 2 RB, 4 CM, 2 LW, 2 ST og 2 RW fra klubbens egen pool; motoren modellerer aldri nye posisjoner for å nå målet.
 6. Ordinære tropps-/klubbprofiler prioriteres foran ikoner og legender.
 7. Innenfor samme statusnivå prioriteres lavere `classHeight`.
 8. Ingen global katalogfallback er tillatt for en overtatt klubb.
@@ -102,7 +102,7 @@ koblet til History Go.
   "enabled": true,
   "source": "auto_squad",
   "clubId": "viking",
-  "poolVersion": "historygo-football-manager.club-squad.v7",
+  "poolVersion": "historygo-football-manager.club-squad.v8",
   "generatedFrom": "club_pool",
   "playerIds": []
 }
@@ -116,7 +116,7 @@ mot dagens canonical klubbpool før spiller-ID-ene gjøres tilgjengelige.
 - Stadionet er siden besøkt → auto-troppen fjernes, full klubbpool brukes.
 - Klubben er `pending` → gammel auto-tropp fjernes; ingen global fallback.
 
-Migreringen er idempotent: en allerede gyldig v7-save endres ikke igjen.
+Migreringen er idempotent: en allerede gyldig v8-save endres ikke igjen. v7-auto-tropper regenereres én gang slik at de får den nye posisjonsdekkende sesongbufferen.
 
 ## Datamigrering og audit
 
@@ -136,7 +136,9 @@ Full CI og Pages-deploy kjører denne auditen.
 
 `sim:club-squad` vokter i tillegg runtime-reglene: ready-klubber får bare egne
 spillere, pending-klubber får ingen global fallback, stadion åpner hele poolen,
-og gamle saves repareres.
+og gamle saves repareres. For alle ready-klubber beviser simuleringen også at
+auto-troppen oppnår best mulig canonical sesongdekning for hver posisjon gitt
+det som faktisk finnes dokumentert i klubbpoolen.
 
 ## Dokumentert pool og spillbar pool
 
