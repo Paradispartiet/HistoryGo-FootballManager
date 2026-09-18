@@ -72,11 +72,12 @@ For en `ready` klubb som ikke har full stadiontilgang:
 1. Kandidatene avgrenses til klubbens egen `clubAffiliations`-pool.
 2. **15 spillere er fortsatt minimumet** som gjør klubben takeover-klar.
 3. Når klubbpoolen har nok spillbare profiler, bygges grunntroppen til **20 spillere** slik at slitasje, skader og rotasjon kan håndteres gjennom en hel sesong.
-4. De første 15 dekker keeper, forsvar, midtbane og angrep etter den etablerte spillbarhetsfordelingen.
-5. De fem ekstra plassene prioriterer konkrete posisjonsunderskudd for sesongrotasjon. Canonical mål er best mulig tilgjengelig dekning av 2 GK, 2 LB, 4 CB, 2 RB, 4 CM, 2 LW, 2 ST og 2 RW fra klubbens egen pool; motoren modellerer aldri nye posisjoner for å nå målet.
-6. Ordinære tropps-/klubbprofiler prioriteres foran ikoner og legender.
-7. Innenfor samme statusnivå prioriteres lavere `classHeight`.
-8. Ingen global katalogfallback er tillatt for en overtatt klubb.
+4. En klubb som bare har 15 spillbare profiler beholder det etablerte gulvet som dekker keeper, forsvar, midtbane og angrep.
+5. Når sesongtroppen kan bli større enn 15, bygges hele utvalget samlet mot canonical måldekning: 2 GK, 2 LB, 4 CB, 2 RB, 4 CM, 2 LW, 2 ST og 2 RW.
+6. Dekningen er én-til-én: samme flerposisjonsspiller kan bare fylle én target-slot i dekningsbeviset. Dermed teller for eksempel ikke én CM/LB som både sentral midtbane og venstreback samtidig.
+7. Ordinære tropps-/klubbprofiler prioriteres foran ikoner og legender.
+8. Innenfor samme statusnivå prioriteres lavere `classHeight`.
+9. Ingen global katalogfallback er tillatt for en overtatt klubb.
 
 En klubb med bare 15 spillbare profiler er fortsatt `ready` og får alle sine 15. Troppsstørrelsen er dermed et sesongmessig dybdelag oppå det eksisterende spillbarhetsgulvet, ikke et nytt researchkrav.
 
@@ -102,7 +103,7 @@ koblet til History Go.
   "enabled": true,
   "source": "auto_squad",
   "clubId": "viking",
-  "poolVersion": "historygo-football-manager.club-squad.v8",
+  "poolVersion": "historygo-football-manager.club-squad.v9",
   "generatedFrom": "club_pool",
   "playerIds": []
 }
@@ -116,7 +117,7 @@ mot dagens canonical klubbpool før spiller-ID-ene gjøres tilgjengelige.
 - Stadionet er siden besøkt → auto-troppen fjernes, full klubbpool brukes.
 - Klubben er `pending` → gammel auto-tropp fjernes; ingen global fallback.
 
-Migreringen er idempotent: en allerede gyldig v8-save endres ikke igjen. v7-auto-tropper regenereres én gang slik at de får den nye posisjonsdekkende sesongbufferen.
+Migreringen er idempotent: en allerede gyldig v9-save endres ikke igjen. v8-auto-tropper regenereres én gang slik at de får samtidig én-spiller-per-slot sesongdekning.
 
 ## Datamigrering og audit
 
@@ -136,9 +137,11 @@ Full CI og Pages-deploy kjører denne auditen.
 
 `sim:club-squad` vokter i tillegg runtime-reglene: ready-klubber får bare egne
 spillere, pending-klubber får ingen global fallback, stadion åpner hele poolen,
-og gamle saves repareres. For alle ready-klubber beviser simuleringen også at
-auto-troppen oppnår best mulig canonical sesongdekning for hver posisjon gitt
-det som faktisk finnes dokumentert i klubbpoolen.
+og gamle saves repareres. For alle ready-klubber med sesongtropp større enn
+15 beviser simuleringen også best mulig samtidig canonical sesongdekning i den
+samme effektive startpoolen som runtime bruker etter eksisterende History Go-
+candidate-filter. En spiller kan bare eie én target-slot i dette beviset;
+manglende kildeposisjoner fylles aldri med gjetning.
 
 ## Dokumentert pool og spillbar pool
 

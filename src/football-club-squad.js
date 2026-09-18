@@ -1,5 +1,5 @@
 // ============================================================================
-// Klubbtropp v8 — klubbmedlemskap er data, stadion er tilgang
+// Klubbtropp v9 — klubbmedlemskap er data, stadion er tilgang
 //
 // Canonical modell:
 //
@@ -23,7 +23,7 @@
 // LESER History Go-progresjon som input og skriver aldri til den.
 // ============================================================================
 
-export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v8";
+export const CLUB_SQUAD_VERSION = "historygo-football-manager.club-squad.v9";
 export const CLUB_BASE_SQUAD_TARGET = 20;
 export const CLUB_SEASON_COVERAGE_TARGET = Object.freeze({
   GK: 2,
@@ -68,11 +68,16 @@ const SQUAD_GROUPS = Object.freeze([
   { positions: ["ST", "LW", "RW"], count: 3 }
 ]);
 
-// De første 15 er fortsatt spillbarhetsgulvet. De fem ekstra plassene er
-// sesongbufferen. De skal ikke bare fylle brede grupper, men redusere faktiske
-// posisjonsunderskudd i en representativ moderne 4-3-3. Målet er best mulig
-// tilgjengelig dekning fra klubbens egen pool, aldri å modellere nye posisjoner.
-const SEASON_COVERAGE_POSITIONS = Object.keys(CLUB_SEASON_COVERAGE_TARGET);
+// 15 spillere er fortsatt takeover-gulvet. Når klubbpoolen tåler en større
+// sesongtropp, skal dekningen derimot vurderes samtidig: én spiller kan ikke
+// telle som både venstreback og sentral midtbane i samme dekningsbevis.
+// Targeten er fortsatt den canonicale 20-spillers sesongprofilen, men motoren
+// matcher hver valgt spiller mot høyst én target-slot og modellerer aldri nye
+// posisjoner for å fylle hull.
+const SEASON_COVERAGE_SLOTS = Object.freeze(
+  Object.entries(CLUB_SEASON_COVERAGE_TARGET)
+    .flatMap(([position, count]) => Array.from({ length: count }, () => position))
+);
 
 const asArray = (value) => (Array.isArray(value) ? value : []);
 const num = (value, fallback = 0) => (Number.isFinite(Number(value)) ? Number(value) : fallback);
@@ -175,6 +180,52 @@ export function hasVisitedClubGround({ homePlaceId = null, unlockedPlaceIds = []
 // ordinære troppsprofiler foran ikoner/legender før classHeight avgjør innenfor
 // samme statusnivå. Dermed er stadionbesøket fortsatt en meningsfull åpning av
 // klubbhistorien uten at vi later som de 15 svakeste tallene er en historisk XI.
+function buildSimultaneousSeasonSquad(ordered, size) {
+  const slotOwners = Array(SEASON_COVERAGE_SLOTS.length).fill(null);
+  const picked = [];
+  const pickedIds = new Set();
+
+  // Standard augmenting-path matching: hver spiller kan eie høyst én slot,
+  // mens en fleksibel spiller kan flyttes mellom slotter når en senere spiller
+  // gjør total samtidig dekning bedre. Spillerrekkefølgen er fortsatt den
+  // eksisterende status/classHeight/id-prioriteten.
+  const assignPlayer = (player, seenSlots) => {
+    for (let index = 0; index < SEASON_COVERAGE_SLOTS.length; index += 1) {
+      if (seenSlots.has(index) || !playerPositions(player).includes(SEASON_COVERAGE_SLOTS[index])) continue;
+      seenSlots.add(index);
+
+      const displaced = slotOwners[index];
+      if (!displaced || assignPlayer(displaced, seenSlots)) {
+        slotOwners[index] = player;
+        return true;
+      }
+    }
+    return false;
+  };
+
+  let matched = 0;
+  for (const player of ordered) {
+    if (picked.length >= size) break;
+    if (assignPlayer(player, new Set())) {
+      matched += 1;
+      picked.push(player.id);
+      pickedIds.add(player.id);
+      if (matched >= size) break;
+    }
+  }
+
+  // En kildepool kan mangle enkelte target-posisjoner. Da beholder vi best
+  // mulig samtidig dekning og fyller resten deterministisk fra samme klubbpool.
+  for (const player of ordered) {
+    if (picked.length >= size) break;
+    if (pickedIds.has(player.id)) continue;
+    picked.push(player.id);
+    pickedIds.add(player.id);
+  }
+
+  return picked;
+}
+
 export function buildClubBaseSquad({
   players = [], candidateIds = null, excludePlayerIds = [], size = 15, clubId = null
 } = {}) {
@@ -192,53 +243,32 @@ export function buildClubBaseSquad({
       return num(a.classHeight) - num(b.classHeight) || String(a.id).localeCompare(String(b.id));
     });
 
+  // 15 er fortsatt det etablerte takeover-gulvet og beholder den brede
+  // keeper/forsvar/midtbane/angrep-fordelingen. Fra 16 spillere og oppover er
+  // formålet sesongdybde, og hele utvalget bygges derfor som én samtidig
+  // posisjonsdekning i stedet for «første 15 + fem ekstra».
+  if (size > 15) {
+    return buildSimultaneousSeasonSquad(ordered, size);
+  }
+
   const picked = [];
   const taken = new Set();
-  const coverage = Object.fromEntries(SEASON_COVERAGE_POSITIONS.map((position) => [position, 0]));
-  const addPlayer = (player) => {
-    picked.push(player.id);
-    taken.add(player.id);
-    for (const position of playerPositions(player)) {
-      if (coverage[position] !== undefined) coverage[position] += 1;
-    }
-  };
-
-  // Behold den etablerte 15-spillerskjernen uendret. Dette er fortsatt
-  // takeover-gulvet og er ikke formation-spesifikk optimalisering.
   for (const group of SQUAD_GROUPS) {
     let need = group.count;
     for (const player of ordered) {
       if (need <= 0 || picked.length >= size) break;
       if (taken.has(player.id) || !playsIn(player, group.positions)) continue;
-      addPlayer(player);
+      picked.push(player.id);
+      taken.add(player.id);
       need -= 1;
     }
   }
 
-  // Plass 16–20 er sesongbufferen. Velg den neste spilleren som dekker flest
-  // hittil udekkede canonical-posisjoner. Ved lik gevinst beholder ordered
-  // eksisterende determinisme/status/classHeight-prioritet. Når alle mål er
-  // dekket, faller vi naturlig tilbake til første gjenværende spiller.
-  while (picked.length < size) {
-    let best = null;
-    let bestGain = -1;
-
-    for (const player of ordered) {
-      if (taken.has(player.id)) continue;
-      const gain = playerPositions(player).reduce((sum, position) => {
-        const target = CLUB_SEASON_COVERAGE_TARGET[position];
-        if (!target) return sum;
-        return sum + (coverage[position] < target ? 1 : 0);
-      }, 0);
-
-      if (gain > bestGain) {
-        best = player;
-        bestGain = gain;
-      }
-    }
-
-    if (!best) break;
-    addPlayer(best);
+  for (const player of ordered) {
+    if (picked.length >= size) break;
+    if (taken.has(player.id)) continue;
+    picked.push(player.id);
+    taken.add(player.id);
   }
 
   return picked;

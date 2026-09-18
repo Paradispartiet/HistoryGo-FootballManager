@@ -38,28 +38,35 @@ function positionsFor(player) {
   return [...new Set([...(player?.naturalPositions || []), ...(player?.usablePositions || [])])];
 }
 
-function positionCoverage(playerIds) {
-  const coverage = Object.fromEntries(Object.keys(CLUB_SEASON_COVERAGE_TARGET).map((position) => [position, 0]));
-  for (const id of playerIds) {
-    const player = byId.get(id);
-    for (const position of positionsFor(player)) {
-      if (coverage[position] !== undefined) coverage[position] += 1;
+const seasonCoverageSlots = Object.entries(CLUB_SEASON_COVERAGE_TARGET)
+  .flatMap(([position, count]) => Array.from({ length: count }, () => position));
+
+function simultaneousSeasonCoverage(playerIds) {
+  const available = playerIds
+    .map((id) => byId.get(id))
+    .filter(Boolean);
+  const owners = Array(seasonCoverageSlots.length).fill(null);
+
+  const assign = (player, seenSlots) => {
+    for (let index = 0; index < seasonCoverageSlots.length; index += 1) {
+      if (seenSlots.has(index) || !positionsFor(player).includes(seasonCoverageSlots[index])) continue;
+      seenSlots.add(index);
+      if (!owners[index] || assign(owners[index], seenSlots)) {
+        owners[index] = player;
+        return true;
+      }
     }
+    return false;
+  };
+
+  let matched = 0;
+  for (const player of available) {
+    if (assign(player, new Set())) matched += 1;
   }
-  return coverage;
+  return matched;
 }
 
-function poolPositionCoverage(pool) {
-  const coverage = Object.fromEntries(Object.keys(CLUB_SEASON_COVERAGE_TARGET).map((position) => [position, 0]));
-  for (const player of pool) {
-    for (const position of positionsFor(player)) {
-      if (coverage[position] !== undefined) coverage[position] += 1;
-    }
-  }
-  return coverage;
-}
-
-check("klubbtroppmotoren er v8", CLUB_SQUAD_VERSION.endsWith(".v8"), CLUB_SQUAD_VERSION);
+check("klubbtroppmotoren er v9", CLUB_SQUAD_VERSION.endsWith(".v9"), CLUB_SQUAD_VERSION);
 check("alle spiller-id-er er unike", new Set(players.map((player) => player.id)).size === players.length);
 check("alle klubb-id-er er unike", new Set(clubs.map((club) => club.id)).size === clubs.length);
 
@@ -134,12 +141,14 @@ for (const club of ready) {
   check(`${club.name}: minst én keeper`, access.baseSquad.some((id) =>
     [...(byId.get(id)?.naturalPositions || []), ...(byId.get(id)?.usablePositions || [])].includes("GK")));
 
-  const baseCoverage = positionCoverage(access.baseSquad);
-  const poolCoverage = poolPositionCoverage(playable);
-  for (const [position, target] of Object.entries(CLUB_SEASON_COVERAGE_TARGET)) {
-    const bestAvailable = Math.min(target, poolCoverage[position]);
-    check(`${club.name}: ${position} best mulig sesongdekning`, baseCoverage[position] >= bestAvailable,
-      `${baseCoverage[position]}/${bestAvailable} (pool ${poolCoverage[position]})`);
+  if (expectedBaseSize > REQUIRED) {
+    const eligiblePlayable = playable.filter((player) => candidateIds.has(player.id));
+    const effectivePool = eligiblePlayable.length >= expectedBaseSize ? eligiblePlayable : playable;
+    const baseCoverage = simultaneousSeasonCoverage(access.baseSquad);
+    const poolCoverage = simultaneousSeasonCoverage(effectivePool.map((player) => player.id));
+    const bestAvailable = Math.min(expectedBaseSize, poolCoverage);
+    check(`${club.name}: best mulig samtidig sesongdekning`, baseCoverage === bestAvailable,
+      `${baseCoverage}/${bestAvailable} (effective pool ${poolCoverage})`);
   }
 }
 
@@ -177,6 +186,9 @@ const rosenborg = clubById.get("rosenborg");
 const rosenborgAccess = resolveClubSquadAccess({ club: rosenborg, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
 check("Rosenborg får 20-manns rotasjonsdybde", rosenborgAccess.baseSquad.length === CLUB_BASE_SQUAD_TARGET,
   String(rosenborgAccess.baseSquad.length));
+check("Rosenborg har 20/20 samtidig sesongdekning",
+  simultaneousSeasonCoverage(rosenborgAccess.baseSquad) === CLUB_BASE_SQUAD_TARGET,
+  String(simultaneousSeasonCoverage(rosenborgAccess.baseSquad)));
 const sotra = clubById.get("sotra");
 const sotraAccess = resolveClubSquadAccess({ club: sotra, players, unlockedPlaceIds: [], candidateIds, squadSize: REQUIRED });
 check("Sotra beholder 15-spillers minimum uten fremmede spillere", sotraAccess.baseSquad.length === REQUIRED,
@@ -204,17 +216,17 @@ check("gammel save repareres", repaired.changed && repaired.reason === "foreign_
 check("reparert save er spillbar Viking", repaired.localStart.playerIds.every((id) => vikingIds.has(id)));
 check("save-reparasjon er idempotent", !reconcileClubBaseSquadSave({ localStart: repaired.localStart, access: vikingAccess }).changed);
 
-const v7VikingSave = {
+const v8VikingSave = {
   enabled: true,
   source: "auto_squad",
   clubId: viking.id,
-  poolVersion: "historygo-football-manager.club-squad.v7",
+  poolVersion: "historygo-football-manager.club-squad.v8",
   generatedFrom: "club_pool",
   playerIds: [...vikingAccess.baseSquad]
 };
-const migratedV8 = reconcileClubBaseSquadSave({ localStart: v7VikingSave, access: vikingAccess });
-check("v7-auto-tropp regenereres til v8", migratedV8.changed && migratedV8.reason === "pool_version", migratedV8.reason);
-check("v8-save får ny versjon", migratedV8.localStart.poolVersion === CLUB_SQUAD_VERSION, migratedV8.localStart.poolVersion);
+const migratedV9 = reconcileClubBaseSquadSave({ localStart: v8VikingSave, access: vikingAccess });
+check("v8-auto-tropp regenereres til v9", migratedV9.changed && migratedV9.reason === "pool_version", migratedV9.reason);
+check("v9-save får ny versjon", migratedV9.localStart.poolVersion === CLUB_SQUAD_VERSION, migratedV9.localStart.poolVersion);
 
 const app = fs.readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 check("app importerer save-reparasjonen", /reconcileClubBaseSquadSave/.test(app));
