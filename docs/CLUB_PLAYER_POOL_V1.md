@@ -138,9 +138,10 @@ Full CI og Pages-deploy kjører denne auditen.
 `sim:club-squad` vokter i tillegg runtime-reglene: ready-klubber får bare egne
 spillere, pending-klubber får ingen global fallback, stadion åpner hele poolen,
 og gamle saves repareres. For alle ready-klubber med sesongtropp større enn
-15 beviser simuleringen også best mulig samtidig canonical sesongdekning gitt
-det som faktisk finnes dokumentert i klubbpoolen. En spiller kan bare eie én
-target-slot i dette beviset; manglende kildeposisjoner fylles aldri med gjetning.
+15 beviser simuleringen også best mulig samtidig canonical sesongdekning i den
+samme effektive startpoolen som runtime bruker etter eksisterende History Go-
+candidate-filter. En spiller kan bare eie én target-slot i dette beviset;
+manglende kildeposisjoner fylles aldri med gjetning.
 
 ## Dokumentert pool og spillbar pool
 
