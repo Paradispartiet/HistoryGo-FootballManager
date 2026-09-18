@@ -142,11 +142,13 @@ for (const club of ready) {
     [...(byId.get(id)?.naturalPositions || []), ...(byId.get(id)?.usablePositions || [])].includes("GK")));
 
   if (expectedBaseSize > REQUIRED) {
+    const eligiblePlayable = playable.filter((player) => candidateIds.has(player.id));
+    const effectivePool = eligiblePlayable.length >= expectedBaseSize ? eligiblePlayable : playable;
     const baseCoverage = simultaneousSeasonCoverage(access.baseSquad);
-    const poolCoverage = simultaneousSeasonCoverage(playable.map((player) => player.id));
+    const poolCoverage = simultaneousSeasonCoverage(effectivePool.map((player) => player.id));
     const bestAvailable = Math.min(expectedBaseSize, poolCoverage);
     check(`${club.name}: best mulig samtidig sesongdekning`, baseCoverage === bestAvailable,
-      `${baseCoverage}/${bestAvailable} (pool ${poolCoverage})`);
+      `${baseCoverage}/${bestAvailable} (effective pool ${poolCoverage})`);
   }
 }
 
