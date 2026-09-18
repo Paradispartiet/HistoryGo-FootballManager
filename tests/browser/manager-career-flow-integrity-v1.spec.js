@@ -275,7 +275,7 @@ test("ferdig kampforberedelse gjør matchday canonical", async ({ page }) => {
 test("ukeovergang bruker ukas treningsvalg før de nullstilles", async ({ page }) => {
   await page.goto("/");
   const source = await page.evaluate(() => fetch("/src/app.js").then((response) => response.text()));
-  const transitionStart = source.indexOf("async function advanceClubWeek()");
+  const transitionStart = source.indexOf("async function advanceClubWeekPhaseAction()");
   const transitionEnd = source.indexOf("function ", transitionStart + 30);
   const transitionSource = source.slice(transitionStart, transitionEnd);
 
