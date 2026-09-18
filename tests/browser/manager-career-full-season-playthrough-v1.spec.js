@@ -864,6 +864,10 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(rotationEvents.length).toBeGreaterThanOrEqual(2);
   expect(new Set(rotationEvents.map((entry) => entry.outPlayerId)).size).toBeGreaterThanOrEqual(2);
   expect(new Set(rotationEvents.map((entry) => entry.inPlayerId)).size).toBeGreaterThanOrEqual(2);
+  // club-squad v9 reduserte canonical full-season nødrotasjoner fra 8 til 1.
+  // Lås bare nødposisjonsregresjonen; eksakte rotasjoner får fortsatt variere
+  // med condition, skade og sesongforløp.
+  expect(rotationEvents.filter((entry) => !entry.exactPosition).length).toBeLessThanOrEqual(1);
   expect(completed.conditionCount).toBeGreaterThan(11);
   expect(completed.partnershipPairCount).toBeGreaterThanOrEqual(55);
   expect(completed.partnershipMaxSharedStarts).toBeGreaterThanOrEqual(10);
