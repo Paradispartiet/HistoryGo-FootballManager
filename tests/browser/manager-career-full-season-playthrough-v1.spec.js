@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const CANONICAL_FULL_SEASON_FORMATION_ID = "modern_433";
+const CANONICAL_SUBSTITUTION_ROUNDS = new Set([5, 15, 25]);
 
 const ROSENBORG_STAFF = [
   "Jonathan Hartmann",
@@ -117,6 +118,17 @@ async function readProgress(page) {
       lastOutcome: lastMatch?.outcome || null,
       lastGoalsFor: Number(lastMatch?.score?.for) || 0,
       lastGoalsAgainst: Number(lastMatch?.score?.against) || 0,
+      lastSubstitutions: Array.isArray(lastMatch?.substitutions)
+        ? lastMatch.substitutions.map((entry) => ({
+            minute: Number(entry?.minute) || 0,
+            outPlayerId: entry?.outPlayerId || null,
+            outName: entry?.outName || null,
+            inPlayerId: entry?.inPlayerId || null,
+            inName: entry?.inName || null,
+            position: entry?.position || null,
+            roleName: entry?.roleName || null
+          }))
+        : [],
       leaguePlayed: leagueSummary.played,
       leagueWon: leagueSummary.won,
       leagueDrawn: leagueSummary.drawn,
@@ -580,10 +592,56 @@ async function openPreMatch(page) {
   await expect(kickoff).toBeVisible();
 }
 
-async function playCurrentMatch(page, choiceIndex = 0) {
+async function makeOneHalftimeSubstitution(page, choiceIndex = 0) {
+  let wrap = page.locator("details.match-subs:visible").first();
+  await expect(wrap).toBeVisible();
+
+  if (!(await wrap.evaluate((element) => element.open))) {
+    await wrap.locator("summary").click();
+  }
+
+  const outButtons = wrap.locator(".match-subs-out .match-subs-player");
+  const outCount = await outButtons.count();
+  expect(outCount).toBeGreaterThan(1);
+
+  const fieldIndexes = [];
+  for (let index = 0; index < outCount; index += 1) {
+    const meta = String(await outButtons.nth(index).locator("small").textContent() || "").trim();
+    if (!meta.startsWith("GK ·")) fieldIndexes.push(index);
+  }
+  expect(fieldIndexes.length).toBeGreaterThan(0);
+
+  const outIndex = fieldIndexes[choiceIndex % fieldIndexes.length];
+  const outButton = outButtons.nth(outIndex);
+  const outName = String(await outButton.locator("strong").textContent() || "").trim();
+  expect(outName).toBeTruthy();
+  await outButton.click();
+
+  wrap = page.locator("details.match-subs:visible").first();
+  await expect(wrap).toBeVisible();
+  const optionLists = wrap.locator(".match-subs-options");
+  await expect.poll(async () => optionLists.count()).toBeGreaterThanOrEqual(2);
+
+  const inButtons = optionLists.nth(1).locator(".match-subs-player");
+  const inCount = await inButtons.count();
+  expect(inCount).toBeGreaterThan(0);
+  const inButton = inButtons.first();
+  const inName = String(await inButton.locator("strong").textContent() || "").trim();
+  expect(inName).toBeTruthy();
+  await inButton.click();
+
+  wrap = page.locator("details.match-subs:visible").first();
+  await expect(wrap.locator("summary")).toContainText("2 av 3 igjen");
+  await expect(wrap.locator(".match-subs-log li")).toHaveCount(1);
+
+  return { outName, inName };
+}
+
+async function playCurrentMatch(page, choiceIndex = 0, { substituteAtHalftime = false } = {}) {
   await openPreMatch(page);
   await page.locator(".matchday-kickoff-button").click();
 
+  let substitution = null;
   const nextWeek = page.locator(".matchday-next-week-button:visible").first();
   for (let event = 0; event < 6; event += 1) {
     if (await nextWeek.isVisible()) break;
@@ -591,6 +649,9 @@ async function playCurrentMatch(page, choiceIndex = 0) {
     const skip = page.locator(".matchday-live-button.is-secondary:visible").filter({ hasText: "Hopp til pausen" }).first();
     if (await skip.isVisible()) {
       await skip.click();
+      if (substituteAtHalftime && !substitution) {
+        substitution = await makeOneHalftimeSubstitution(page, choiceIndex);
+      }
     }
 
     const decisions = page.locator(".matchday-decision-button:not([disabled]):visible");
@@ -603,6 +664,7 @@ async function playCurrentMatch(page, choiceIndex = 0) {
 
   await expect(nextWeek).toBeVisible();
   await expect.poll(async () => (await readProgress(page)).phase).toBe("review");
+  return substitution;
 }
 
 async function rollToNextWeek(page, expectedWeek) {
@@ -663,6 +725,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   let peakConsecutiveFullMatches = 0;
   let peakInjuredPlayers = 0;
   const rotationEvents = [];
+  const substitutionEvents = [];
 
   for (let round = 1; round <= 30; round += 1) {
     await expect.poll(async () => {
@@ -726,7 +789,10 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       });
     }
 
-    await playCurrentMatch(page, choiceIndex);
+    const requestedSubstitution = CANONICAL_SUBSTITUTION_ROUNDS.has(round);
+    const matchSubstitution = await playCurrentMatch(page, choiceIndex, {
+      substituteAtHalftime: requestedSubstitution
+    });
 
     const played = await readProgress(page);
     expect(played.lastMatchId).toBeTruthy();
@@ -737,6 +803,18 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(played.trainingFocusId).toBeTruthy();
     expect(played.activeMatchSession).toBe(false);
     expect(["win", "draw", "loss"]).toContain(played.lastOutcome);
+    if (requestedSubstitution) {
+      expect(matchSubstitution).toBeTruthy();
+      expect(played.lastSubstitutions).toHaveLength(1);
+      expect(played.lastSubstitutions[0].outName).toBe(matchSubstitution.outName);
+      expect(played.lastSubstitutions[0].inName).toBe(matchSubstitution.inName);
+      expect(played.lastSubstitutions[0].minute).toBeGreaterThan(0);
+      expect(played.lastSubstitutions[0].minute).toBeLessThan(90);
+      substitutionEvents.push({ round, ...played.lastSubstitutions[0] });
+    } else {
+      expect(matchSubstitution).toBeNull();
+      expect(played.lastSubstitutions).toHaveLength(0);
+    }
     expect(played.leaguePlayed).toBe(round);
     expect(played.leagueWon + played.leagueDrawn + played.leagueLost).toBe(round);
     expect(played.leaguePoints).toBe(played.leagueWon * 3 + played.leagueDrawn);
@@ -790,6 +868,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
         injured: played.conditionInjuredCount
       },
       rotations,
+      substitutions: played.lastSubstitutions,
       partnerships: {
         pairCount: played.partnershipPairCount,
         maxSharedStarts: played.partnershipMaxSharedStarts,
@@ -868,6 +947,8 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   // Lås bare nødposisjonsregresjonen; eksakte rotasjoner får fortsatt variere
   // med condition, skade og sesongforløp.
   expect(rotationEvents.filter((entry) => !entry.exactPosition).length).toBeLessThanOrEqual(1);
+  expect(substitutionEvents).toHaveLength(CANONICAL_SUBSTITUTION_ROUNDS.size);
+  expect(new Set(substitutionEvents.map((entry) => entry.round))).toEqual(CANONICAL_SUBSTITUTION_ROUNDS);
   expect(completed.conditionCount).toBeGreaterThan(11);
   expect(completed.partnershipPairCount).toBeGreaterThanOrEqual(55);
   expect(completed.partnershipMaxSharedStarts).toBeGreaterThanOrEqual(10);
@@ -925,6 +1006,11 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
         total: rotationEvents.length,
         exact: rotationEvents.filter((entry) => entry.exactPosition).length,
         nonExact: rotationEvents.filter((entry) => !entry.exactPosition).length
+      },
+      substitutionSummary: {
+        total: substitutionEvents.length,
+        rounds: substitutionEvents.map((entry) => entry.round),
+        events: substitutionEvents
       },
       analysisSummary: {
         preparedRounds: analysisPreparedRounds.size
