@@ -3,6 +3,14 @@ import { expect, test } from "@playwright/test";
 const CANONICAL_FULL_SEASON_FORMATION_ID = "modern_433";
 const CANONICAL_SUBSTITUTION_ROUNDS = new Set([5, 15, 25]);
 
+function substitutionPositionBand(position) {
+  const token = String(position || "").trim().toUpperCase();
+  if (["LB", "CB", "RB", "LWB", "RWB", "SW"].includes(token)) return "defence";
+  if (["DM", "CM", "AM", "LM", "RM"].includes(token)) return "midfield";
+  if (["LW", "RW", "ST", "CF"].includes(token)) return "attack";
+  return token ? `other:${token}` : "unknown";
+}
+
 const ROSENBORG_STAFF = [
   "Jonathan Hartmann",
   "Alexander Tettey",
@@ -1315,6 +1323,25 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   ).toBeLessThanOrEqual(1);
   expect(substitutionEvents).toHaveLength(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(new Set(substitutionEvents.map((entry) => entry.round))).toEqual(CANONICAL_SUBSTITUTION_ROUNDS);
+  const substitutionCoverageDiagnostic = substitutionEvents.map((entry) => ({
+    round: entry.round,
+    position: entry.position,
+    band: substitutionPositionBand(entry.position),
+    roleName: entry.roleName,
+    outPlayerId: entry.outPlayerId,
+    outName: entry.outName,
+    inPlayerId: entry.inPlayerId,
+    inName: entry.inName,
+    minute: entry.minute
+  }));
+  expect(
+    new Set(substitutionCoverageDiagnostic.map((entry) => entry.band)),
+    `Substitution coverage diagnostic: ${JSON.stringify(substitutionCoverageDiagnostic)}`
+  ).toEqual(new Set(["defence", "midfield", "attack"]));
+  expect(
+    new Set(substitutionCoverageDiagnostic.map((entry) => entry.inPlayerId)).size,
+    `Substitution candidate diagnostic: ${JSON.stringify(substitutionCoverageDiagnostic)}`
+  ).toBe(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(completed.conditionCount).toBeGreaterThan(11);
   expect(completed.partnershipPairCount).toBeGreaterThanOrEqual(55);
   expect(completed.partnershipMaxSharedStarts).toBeGreaterThanOrEqual(10);
