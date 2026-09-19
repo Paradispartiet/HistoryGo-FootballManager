@@ -316,28 +316,28 @@ async function readExactRotationPlanningState(page, need, probeSlotId) {
   await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 
-  const playerNameById = new Map(
+  const playerNameById = Object.fromEntries(
     (need.players || [])
       .filter((entry) => entry?.playerId && entry?.name)
       .map((entry) => [entry.playerId, entry.name])
   );
   const chips = page.locator("#lineupSlots .player-chip[data-slot-id]");
-  const chipCount = await chips.count();
-  const lineup = [];
-
-  for (let index = 0; index < chipCount; index += 1) {
-    const chip = chips.nth(index);
-    const slotId = String(await chip.getAttribute("data-slot-id") || "").trim();
-    const playerId = String(await chip.getAttribute("data-player-id") || "").trim();
-    const position = String(await chip.getAttribute("data-position") || "").trim();
-    if (!slotId || !playerId || !position) continue;
-    lineup.push({
-      slotId,
-      playerId,
-      name: playerNameById.get(playerId) || "",
-      position
-    });
-  }
+  const lineup = await chips.evaluateAll((elements, namesById) =>
+    elements
+      .map((element) => {
+        const slotId = String(element.getAttribute("data-slot-id") || "").trim();
+        const playerId = String(element.getAttribute("data-player-id") || "").trim();
+        const position = String(element.getAttribute("data-position") || "").trim();
+        return {
+          slotId,
+          playerId,
+          name: namesById[playerId] || "",
+          position
+        };
+      })
+      .filter((entry) => entry.slotId && entry.playerId && entry.position),
+    playerNameById
+  );
 
   const lineupSlotByName = new Map(
     lineup
@@ -358,29 +358,29 @@ async function readExactRotationPlanningState(page, need, probeSlotId) {
     drawer.locator(".lineup-player-choice-row").count()
   ).toBeGreaterThan(0);
 
-  const rows = drawer.locator(".lineup-player-choice-row");
-  const rowCount = await rows.count();
-  const profiles = [];
-
-  for (let index = 0; index < rowCount; index += 1) {
-    const row = rows.nth(index);
-    const choice = row.locator(".lineup-player-select-action");
-    const profile = row.locator(".lineup-player-profile-link");
-    const name = String(await profile.locator("strong").textContent() || "").trim();
-    const positions = String(await profile.locator("span").textContent() || "");
-    const positionTokens = positions
-      .split("/")
-      .map((value) => value.trim())
-      .filter(Boolean);
-    const disabled = await choice.isDisabled();
-
-    if (!name) continue;
-    profiles.push({
-      name,
-      positionTokens,
-      selectable: !disabled || lineupSlotByName.has(name)
-    });
-  }
+  const rawProfiles = await drawer.locator(".lineup-player-choice-row").evaluateAll((rows) =>
+    rows
+      .map((row) => {
+        const choice = row.querySelector(".lineup-player-select-action");
+        const profile = row.querySelector(".lineup-player-profile-link");
+        const name = String(profile?.querySelector("strong")?.textContent || "").trim();
+        const positions = String(profile?.querySelector("span")?.textContent || "");
+        return {
+          name,
+          positionTokens: positions
+            .split("/")
+            .map((value) => value.trim())
+            .filter(Boolean),
+          disabled: Boolean(choice?.matches?.(":disabled"))
+        };
+      })
+      .filter((entry) => entry.name)
+  );
+  const profiles = rawProfiles.map((profile) => ({
+    name: profile.name,
+    positionTokens: profile.positionTokens,
+    selectable: !profile.disabled || lineupSlotByName.has(profile.name)
+  }));
 
   await page.keyboard.press("Escape");
   await expect(drawer).toBeHidden();
@@ -477,27 +477,31 @@ async function applyExactRotationPath(page, path) {
     ).toBeGreaterThan(0);
 
     const rows = drawer.locator(".lineup-player-choice-row");
-    const rowCount = await rows.count();
-    let replacementChoice = null;
+    const rowAudit = await rows.evaluateAll((elements) =>
+      elements.map((row, index) => {
+        const choice = row.querySelector(".lineup-player-select-action");
+        const profile = row.querySelector(".lineup-player-profile-link");
+        const name = String(profile?.querySelector("strong")?.textContent || "").trim();
+        const positions = String(profile?.querySelector("span")?.textContent || "");
+        return {
+          index,
+          name,
+          positionTokens: positions
+            .split("/")
+            .map((value) => value.trim())
+            .filter(Boolean),
+          disabled: Boolean(choice?.matches?.(":disabled"))
+        };
+      })
+    );
+    const replacementRow = rowAudit.find((entry) =>
+      entry.name === step.playerName &&
+      entry.positionTokens.includes(step.position)
+    );
+    expect(replacementRow).toBeTruthy();
+    expect(replacementRow.disabled).toBe(false);
 
-    for (let index = 0; index < rowCount; index += 1) {
-      const row = rows.nth(index);
-      const choice = row.locator(".lineup-player-select-action");
-      const profile = row.locator(".lineup-player-profile-link");
-      const name = String(await profile.locator("strong").textContent() || "").trim();
-      const positions = String(await profile.locator("span").textContent() || "");
-      const positionTokens = positions
-        .split("/")
-        .map((value) => value.trim())
-        .filter(Boolean);
-
-      if (name !== step.playerName || !positionTokens.includes(step.position)) continue;
-      expect(await choice.isDisabled()).toBe(false);
-      replacementChoice = choice;
-      break;
-    }
-
-    expect(replacementChoice).toBeTruthy();
+    const replacementChoice = rows.nth(replacementRow.index).locator(".lineup-player-select-action");
     await replacementChoice.click();
     await drawer.locator(".manager-team-choice-done").click();
     await expect(drawer).toBeHidden();
