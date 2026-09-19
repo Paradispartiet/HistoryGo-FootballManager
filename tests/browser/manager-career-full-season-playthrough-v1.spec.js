@@ -337,26 +337,38 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
       const rows = drawer.locator(".lineup-player-choice-row");
       const rowCount = await rows.count();
       const candidates = [];
+      const candidateAudit = [];
 
       for (let index = 0; index < rowCount; index += 1) {
         const row = rows.nth(index);
         const choice = row.locator(".lineup-player-select-action");
-        if (await choice.isDisabled()) continue;
-        if (await choice.evaluate((element) => element.classList.contains("is-selected"))) continue;
-
+        const disabled = await choice.isDisabled();
+        const selected = await choice.evaluate((element) => element.classList.contains("is-selected"));
         const profile = row.locator(".lineup-player-profile-link");
         const name = String(await profile.locator("strong").textContent() || "").trim();
         const positions = String(await profile.locator("span").textContent() || "");
-        if (!name || need.avoidNames.includes(name)) continue;
         const positionTokens = positions
           .split("/")
           .map((value) => value.trim())
           .filter(Boolean);
+        const avoided = Boolean(name && need.avoidNames.includes(name));
+        const exactPosition = Boolean(position && positionTokens.includes(position));
+
+        candidateAudit.push({
+          name,
+          positionTokens,
+          disabled,
+          selected,
+          avoided,
+          exactPosition
+        });
+
+        if (disabled || selected || !name || avoided) continue;
         candidates.push({
           choice,
           name,
           positionTokens,
-          exactPosition: Boolean(position && positionTokens.includes(position))
+          exactPosition
         });
       }
 
@@ -398,7 +410,15 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
         outInjured: target.injured,
         inPlayerId: await afterChip.getAttribute("data-player-id"),
         inName: replacement.name,
-        exactPosition: replacement.exactPosition
+        exactPosition: replacement.exactPosition,
+        decisionTrace: replacement.exactPosition
+          ? null
+          : {
+              position,
+              targetOrder: need.targets,
+              avoidNames: need.avoidNames,
+              candidateAudit
+            }
       };
       rotations.push(performedRotation);
       break;
