@@ -304,7 +304,86 @@ async function countVisibleLineupChoices(page) {
   return count;
 }
 
+async function repairEmergencyLineupAssignments(page) {
+  const need = await readRotationNeed(page);
+  const slotIds = await page.locator("#lineupSlots .player-chip").evaluateAll((chips) =>
+    chips.map((chip) => chip.getAttribute("data-slot-id")).filter(Boolean)
+  );
+
+  for (const slotId of slotIds) {
+    await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+    await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+    const chip = page.locator(`#lineupSlots .player-chip[data-slot-id="${slotId}"]`);
+    await expect(chip).toBeVisible();
+    const beforePlayerId = await chip.getAttribute("data-player-id");
+    const position = String(await chip.getAttribute("data-position") || "").trim();
+    expect(beforePlayerId).toBeTruthy();
+    expect(position).toBeTruthy();
+
+    await chip.click();
+    const inspector = page.locator("#managerLineupSlotInspector");
+    await expect(inspector).toBeVisible();
+    await inspector.locator('[data-slot-action="player"]').click();
+
+    const drawer = page.locator("#managerTeamChoiceDrawer");
+    await expect(drawer).toBeVisible();
+    await expect.poll(async () =>
+      drawer.locator(".lineup-player-choice-row").count()
+    ).toBeGreaterThan(0);
+
+    const rows = drawer.locator(".lineup-player-choice-row");
+    const rowCount = await rows.count();
+    let selectedSeen = false;
+    let currentSupportsPosition = false;
+    let exactReplacement = null;
+
+    for (let index = 0; index < rowCount; index += 1) {
+      const row = rows.nth(index);
+      const choice = row.locator(".lineup-player-select-action");
+      const profile = row.locator(".lineup-player-profile-link");
+      const name = String(await profile.locator("strong").textContent() || "").trim();
+      const positions = String(await profile.locator("span").textContent() || "");
+      const positionTokens = positions
+        .split("/")
+        .map((value) => value.trim())
+        .filter(Boolean);
+      const isSelected = await choice.evaluate((element) => element.classList.contains("is-selected"));
+
+      if (isSelected) {
+        selectedSeen = true;
+        currentSupportsPosition = positionTokens.includes(position);
+        continue;
+      }
+
+      if (exactReplacement) continue;
+      if (await choice.isDisabled()) continue;
+      if (!name || need.avoidNames.includes(name)) continue;
+      if (!positionTokens.includes(position)) continue;
+      exactReplacement = { choice, name };
+    }
+
+    expect(selectedSeen).toBe(true);
+    if (currentSupportsPosition || !exactReplacement) {
+      await page.keyboard.press("Escape");
+      await expect(drawer).toBeHidden();
+      continue;
+    }
+
+    await exactReplacement.choice.click();
+    await drawer.locator(".manager-team-choice-done").click();
+    await expect(drawer).toBeHidden();
+    await expect.poll(async () =>
+      page.locator(`#lineupSlots .player-chip[data-slot-id="${slotId}"]`).getAttribute("data-player-id")
+    ).not.toBe(beforePlayerId);
+  }
+}
+
 async function rotateTiredStarters(page, maximumRotations = 4) {
+  // En nødplassering kan være riktig én uke, men skal ikke bli permanent.
+  // Før ny fatigue-rotasjon gjenoppretter testmanageren derfor en frisk,
+  // eksakt spiller når nødårsaken er borte.
+  await repairEmergencyLineupAssignments(page);
   const rotations = [];
 
   for (let attempt = 0; attempt < maximumRotations; attempt += 1) {
