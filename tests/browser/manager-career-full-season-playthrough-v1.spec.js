@@ -608,9 +608,12 @@ async function rotateTiredStarters(page, emergencySlots, maximumRotations = 4) {
     if (need.targets.length === 0) break;
 
     let performedRotation = null;
+    // Spillerdraweren er den samme kandidatpoolen for alle slots. Les den én
+    // gang per faktisk rotasjonsforsøk, og gjenbruk snapshotet mens oppstillingen
+    // er uendret. Det beholder simultan matching uten O(targets) ekstra UI-runder.
+    const planning = await readExactRotationPlanningState(page, need, need.targets[0].slotId);
 
     for (const target of need.targets) {
-      const planning = await readExactRotationPlanningState(page, need, target.slotId);
       const exactPath = planExactRotationPath(planning, need, target.slotId);
 
       if (exactPath) {
