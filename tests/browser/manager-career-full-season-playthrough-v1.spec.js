@@ -278,7 +278,15 @@ async function readRotationNeed(page) {
 
     return {
       targets: candidates,
-      avoidNames: [...tiredOrInjuredNames]
+      avoidNames: [...tiredOrInjuredNames],
+      players: conditions
+        .filter((entry) => entry?.playerId)
+        .map((entry) => ({
+          playerId: entry.playerId,
+          name: String(entry?.name || "").trim(),
+          load: Number(entry?.load) || 0,
+          injured: Number(entry?.injury?.weeksOut) > 0
+        }))
     };
   });
 }
@@ -302,6 +310,210 @@ async function countVisibleLineupChoices(page) {
   await page.keyboard.press("Escape");
   await expect(drawer).toBeHidden();
   return count;
+}
+
+async function readExactRotationPlanningState(page, need, probeSlotId) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+  await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+  const playerNameById = new Map(
+    (need.players || [])
+      .filter((entry) => entry?.playerId && entry?.name)
+      .map((entry) => [entry.playerId, entry.name])
+  );
+  const chips = page.locator("#lineupSlots .player-chip[data-slot-id]");
+  const chipCount = await chips.count();
+  const lineup = [];
+
+  for (let index = 0; index < chipCount; index += 1) {
+    const chip = chips.nth(index);
+    const slotId = String(await chip.getAttribute("data-slot-id") || "").trim();
+    const playerId = String(await chip.getAttribute("data-player-id") || "").trim();
+    const position = String(await chip.getAttribute("data-position") || "").trim();
+    if (!slotId || !playerId || !position) continue;
+    lineup.push({
+      slotId,
+      playerId,
+      name: playerNameById.get(playerId) || "",
+      position
+    });
+  }
+
+  const lineupSlotByName = new Map(
+    lineup
+      .filter((entry) => entry.name)
+      .map((entry) => [entry.name, entry.slotId])
+  );
+  const probeChip = page.locator(`#lineupSlots .player-chip[data-slot-id="${probeSlotId}"]`);
+  await expect(probeChip).toBeVisible();
+  await probeChip.click();
+
+  const inspector = page.locator("#managerLineupSlotInspector");
+  await expect(inspector).toBeVisible();
+  await inspector.locator('[data-slot-action="player"]').click();
+
+  const drawer = page.locator("#managerTeamChoiceDrawer");
+  await expect(drawer).toBeVisible();
+  await expect.poll(async () =>
+    drawer.locator(".lineup-player-choice-row").count()
+  ).toBeGreaterThan(0);
+
+  const rows = drawer.locator(".lineup-player-choice-row");
+  const rowCount = await rows.count();
+  const profiles = [];
+
+  for (let index = 0; index < rowCount; index += 1) {
+    const row = rows.nth(index);
+    const choice = row.locator(".lineup-player-select-action");
+    const profile = row.locator(".lineup-player-profile-link");
+    const name = String(await profile.locator("strong").textContent() || "").trim();
+    const positions = String(await profile.locator("span").textContent() || "");
+    const positionTokens = positions
+      .split("/")
+      .map((value) => value.trim())
+      .filter(Boolean);
+    const disabled = await choice.isDisabled();
+
+    if (!name) continue;
+    profiles.push({
+      name,
+      positionTokens,
+      selectable: !disabled || lineupSlotByName.has(name)
+    });
+  }
+
+  await page.keyboard.press("Escape");
+  await expect(drawer).toBeHidden();
+  return { lineup, profiles };
+}
+
+function planExactRotationPath(planning, need, targetSlotId) {
+  const lineupBySlot = new Map(
+    planning.lineup.map((entry) => [entry.slotId, entry])
+  );
+  const slotByPlayerName = new Map(
+    planning.lineup
+      .filter((entry) => entry.name)
+      .map((entry) => [entry.name, entry.slotId])
+  );
+  const avoidNames = new Set(need.avoidNames || []);
+
+  const search = (slotId, reservedPlayers, visitedSlots) => {
+    const slot = lineupBySlot.get(slotId);
+    if (!slot) return null;
+
+    const candidates = planning.profiles
+      .filter((profile) =>
+        profile.selectable &&
+        profile.name !== slot.name &&
+        !avoidNames.has(profile.name) &&
+        !reservedPlayers.has(profile.name) &&
+        profile.positionTokens.includes(slot.position)
+      )
+      .sort((a, b) => {
+        const aOccupied = slotByPlayerName.has(a.name) ? 1 : 0;
+        const bOccupied = slotByPlayerName.has(b.name) ? 1 : 0;
+        return aOccupied - bOccupied ||
+          a.positionTokens.length - b.positionTokens.length ||
+          a.name.localeCompare(b.name);
+      });
+
+    for (const candidate of candidates) {
+      const occupiedSlotId = slotByPlayerName.get(candidate.name) || null;
+      if (!occupiedSlotId) {
+        return [{
+          slotId,
+          position: slot.position,
+          playerName: candidate.name
+        }];
+      }
+      if (occupiedSlotId === slotId || visitedSlots.has(occupiedSlotId)) continue;
+
+      const nextReserved = new Set(reservedPlayers);
+      nextReserved.add(candidate.name);
+      const nextVisited = new Set(visitedSlots);
+      nextVisited.add(occupiedSlotId);
+      const prefix = search(occupiedSlotId, nextReserved, nextVisited);
+      if (!prefix) continue;
+
+      return [
+        ...prefix,
+        {
+          slotId,
+          position: slot.position,
+          playerName: candidate.name
+        }
+      ];
+    }
+
+    return null;
+  };
+
+  return search(targetSlotId, new Set(), new Set([targetSlotId]));
+}
+
+async function applyExactRotationPath(page, path) {
+  const applied = [];
+
+  for (const step of path) {
+    await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+    await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+    const chip = page.locator(`#lineupSlots .player-chip[data-slot-id="${step.slotId}"]`);
+    await expect(chip).toBeVisible();
+    const beforePlayerId = await chip.getAttribute("data-player-id");
+    const position = String(await chip.getAttribute("data-position") || "").trim();
+    expect(position).toBe(step.position);
+
+    await chip.click();
+    const inspector = page.locator("#managerLineupSlotInspector");
+    await expect(inspector).toBeVisible();
+    await inspector.locator('[data-slot-action="player"]').click();
+
+    const drawer = page.locator("#managerTeamChoiceDrawer");
+    await expect(drawer).toBeVisible();
+    await expect.poll(async () =>
+      drawer.locator(".lineup-player-choice-row").count()
+    ).toBeGreaterThan(0);
+
+    const rows = drawer.locator(".lineup-player-choice-row");
+    const rowCount = await rows.count();
+    let replacementChoice = null;
+
+    for (let index = 0; index < rowCount; index += 1) {
+      const row = rows.nth(index);
+      const choice = row.locator(".lineup-player-select-action");
+      const profile = row.locator(".lineup-player-profile-link");
+      const name = String(await profile.locator("strong").textContent() || "").trim();
+      const positions = String(await profile.locator("span").textContent() || "");
+      const positionTokens = positions
+        .split("/")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      if (name !== step.playerName || !positionTokens.includes(step.position)) continue;
+      expect(await choice.isDisabled()).toBe(false);
+      replacementChoice = choice;
+      break;
+    }
+
+    expect(replacementChoice).toBeTruthy();
+    await replacementChoice.click();
+    await drawer.locator(".manager-team-choice-done").click();
+    await expect(drawer).toBeHidden();
+    await expect.poll(async () =>
+      page.locator(`#lineupSlots .player-chip[data-slot-id="${step.slotId}"]`).getAttribute("data-player-id")
+    ).not.toBe(beforePlayerId);
+
+    const afterChip = page.locator(`#lineupSlots .player-chip[data-slot-id="${step.slotId}"]`);
+    applied.push({
+      ...step,
+      beforePlayerId,
+      afterPlayerId: await afterChip.getAttribute("data-player-id")
+    });
+  }
+
+  return applied;
 }
 
 async function repairEmergencyLineupAssignments(page, emergencySlots) {
@@ -398,6 +610,31 @@ async function rotateTiredStarters(page, emergencySlots, maximumRotations = 4) {
     let performedRotation = null;
 
     for (const target of need.targets) {
+      const planning = await readExactRotationPlanningState(page, need, target.slotId);
+      const exactPath = planExactRotationPath(planning, need, target.slotId);
+
+      if (exactPath) {
+        const applied = await applyExactRotationPath(page, exactPath);
+        const targetAssignment = applied.at(-1);
+        expect(targetAssignment?.slotId).toBe(target.slotId);
+        expect(targetAssignment?.afterPlayerId).toBeTruthy();
+
+        performedRotation = {
+          slotId: target.slotId,
+          outPlayerId: target.playerId,
+          outName: target.name,
+          outLoad: target.load,
+          outInjured: target.injured,
+          inPlayerId: targetAssignment.afterPlayerId,
+          inName: targetAssignment.playerName,
+          exactPosition: true,
+          decisionTrace: null
+        };
+        emergencySlots.delete(target.slotId);
+        rotations.push(performedRotation);
+        break;
+      }
+
       await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
       await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 
