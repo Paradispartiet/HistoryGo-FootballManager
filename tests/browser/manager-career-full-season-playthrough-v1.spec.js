@@ -304,13 +304,11 @@ async function countVisibleLineupChoices(page) {
   return count;
 }
 
-async function repairEmergencyLineupAssignments(page) {
+async function repairEmergencyLineupAssignments(page, emergencySlots) {
+  if (emergencySlots.size === 0) return;
   const need = await readRotationNeed(page);
-  const slotIds = await page.locator("#lineupSlots .player-chip").evaluateAll((chips) =>
-    chips.map((chip) => chip.getAttribute("data-slot-id")).filter(Boolean)
-  );
 
-  for (const slotId of slotIds) {
+  for (const slotId of [...emergencySlots]) {
     await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
     await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 
@@ -364,7 +362,13 @@ async function repairEmergencyLineupAssignments(page) {
     }
 
     expect(selectedSeen).toBe(true);
-    if (currentSupportsPosition || !exactReplacement) {
+    if (currentSupportsPosition) {
+      emergencySlots.delete(slotId);
+      await page.keyboard.press("Escape");
+      await expect(drawer).toBeHidden();
+      continue;
+    }
+    if (!exactReplacement) {
       await page.keyboard.press("Escape");
       await expect(drawer).toBeHidden();
       continue;
@@ -376,14 +380,15 @@ async function repairEmergencyLineupAssignments(page) {
     await expect.poll(async () =>
       page.locator(`#lineupSlots .player-chip[data-slot-id="${slotId}"]`).getAttribute("data-player-id")
     ).not.toBe(beforePlayerId);
+    emergencySlots.delete(slotId);
   }
 }
 
-async function rotateTiredStarters(page, maximumRotations = 4) {
+async function rotateTiredStarters(page, emergencySlots, maximumRotations = 4) {
   // En nødplassering kan være riktig én uke, men skal ikke bli permanent.
   // Før ny fatigue-rotasjon gjenoppretter testmanageren derfor en frisk,
   // eksakt spiller når nødårsaken er borte.
-  await repairEmergencyLineupAssignments(page);
+  await repairEmergencyLineupAssignments(page, emergencySlots);
   const rotations = [];
 
   for (let attempt = 0; attempt < maximumRotations; attempt += 1) {
@@ -499,6 +504,11 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
               candidateAudit
             }
       };
+      if (performedRotation.exactPosition) {
+        emergencySlots.delete(target.slotId);
+      } else {
+        emergencySlots.add(target.slotId);
+      }
       rotations.push(performedRotation);
       break;
     }
@@ -824,6 +834,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   let peakConsecutiveFullMatches = 0;
   let peakInjuredPlayers = 0;
   const rotationEvents = [];
+  const emergencyRotationSlots = new Set();
   const substitutionEvents = [];
 
   for (let round = 1; round <= 30; round += 1) {
@@ -846,7 +857,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     if (inbox.openedSubject) inboxSubjects.add(inbox.openedSubject);
 
     await advanceClubWeek(page, "training");
-    const rotations = await rotateTiredStarters(page);
+    const rotations = await rotateTiredStarters(page, emergencyRotationSlots);
     rotationEvents.push(...rotations.map((rotation) => ({ round, ...rotation })));
     const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
 
