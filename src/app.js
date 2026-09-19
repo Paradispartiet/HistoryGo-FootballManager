@@ -17109,15 +17109,17 @@ async function advanceClubWeekPhaseAction() {
       state.firstTimePlaythrough = { started: true, completed: true, currentStep: "completed" };
       saveFirstTimePlaythrough();
     }
+    // Mini Season v1 / League Loop v1: en ny Club Week-uke ruller mini-sesongen
+    // til neste kamp (eller fullfører den etter femte kamp).
+    advanceMiniSeasonForNewWeek();
+    // Gjør opp uka mens program/fokus fortsatt peker på uka som nettopp ble
+    // spilt. applyWeeklyPlayerRecovery() leser disse direkte for å beregne
+    // treningsintensitet og individuell oppfølging.
+    applyWeeklyPlayerRecovery();
     state.weeklyTrainingFocus = null;
     saveWeeklyTrainingFocus();
     state.weeklyTrainingProgram = null;
     saveWeeklyTrainingProgram();
-    // Mini Season v1 / League Loop v1: en ny Club Week-uke ruller mini-sesongen
-    // til neste kamp (eller fullfører den etter femte kamp).
-    advanceMiniSeasonForNewWeek();
-    // Ny uke = hvile. Uten dette bygde belastningen seg opp for alltid.
-    applyWeeklyPlayerRecovery();
   }
   const consequences = getClubWeekTransitionConsequences(previous, next);
 

@@ -278,7 +278,15 @@ async function readRotationNeed(page) {
 
     return {
       targets: candidates,
-      avoidNames: [...tiredOrInjuredNames]
+      avoidNames: [...tiredOrInjuredNames],
+      players: conditions
+        .filter((entry) => entry?.playerId)
+        .map((entry) => ({
+          playerId: entry.playerId,
+          name: String(entry?.name || "").trim(),
+          load: Number(entry?.load) || 0,
+          injured: Number(entry?.injury?.weeksOut) > 0
+        }))
     };
   });
 }
@@ -304,7 +312,299 @@ async function countVisibleLineupChoices(page) {
   return count;
 }
 
-async function rotateTiredStarters(page, maximumRotations = 4) {
+async function readExactRotationPlanningState(page, need, probeSlotId) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+  await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+  const playerNameById = Object.fromEntries(
+    (need.players || [])
+      .filter((entry) => entry?.playerId && entry?.name)
+      .map((entry) => [entry.playerId, entry.name])
+  );
+  const chips = page.locator("#lineupSlots .player-chip[data-slot-id]");
+  const lineup = await chips.evaluateAll((elements, namesById) =>
+    elements
+      .map((element) => {
+        const slotId = String(element.getAttribute("data-slot-id") || "").trim();
+        const playerId = String(element.getAttribute("data-player-id") || "").trim();
+        const position = String(element.getAttribute("data-position") || "").trim();
+        return {
+          slotId,
+          playerId,
+          name: namesById[playerId] || "",
+          position
+        };
+      })
+      .filter((entry) => entry.slotId && entry.playerId && entry.position),
+    playerNameById
+  );
+
+  const lineupSlotByName = new Map(
+    lineup
+      .filter((entry) => entry.name)
+      .map((entry) => [entry.name, entry.slotId])
+  );
+  const probeChip = page.locator(`#lineupSlots .player-chip[data-slot-id="${probeSlotId}"]`);
+  await expect(probeChip).toBeVisible();
+  await probeChip.click();
+
+  const inspector = page.locator("#managerLineupSlotInspector");
+  await expect(inspector).toBeVisible();
+  await inspector.locator('[data-slot-action="player"]').click();
+
+  const drawer = page.locator("#managerTeamChoiceDrawer");
+  await expect(drawer).toBeVisible();
+  await expect.poll(async () =>
+    drawer.locator(".lineup-player-choice-row").count()
+  ).toBeGreaterThan(0);
+
+  const rawProfiles = await drawer.locator(".lineup-player-choice-row").evaluateAll((rows) =>
+    rows
+      .map((row) => {
+        const choice = row.querySelector(".lineup-player-select-action");
+        const profile = row.querySelector(".lineup-player-profile-link");
+        const name = String(profile?.querySelector("strong")?.textContent || "").trim();
+        const positions = String(profile?.querySelector("span")?.textContent || "");
+        return {
+          name,
+          positionTokens: positions
+            .split("/")
+            .map((value) => value.trim())
+            .filter(Boolean),
+          disabled: Boolean(choice?.matches?.(":disabled"))
+        };
+      })
+      .filter((entry) => entry.name)
+  );
+  const profiles = rawProfiles.map((profile) => ({
+    name: profile.name,
+    positionTokens: profile.positionTokens,
+    selectable: !profile.disabled || lineupSlotByName.has(profile.name)
+  }));
+
+  await page.keyboard.press("Escape");
+  await expect(drawer).toBeHidden();
+  return { lineup, profiles };
+}
+
+function planExactRotationPath(planning, need, targetSlotId) {
+  const lineupBySlot = new Map(
+    planning.lineup.map((entry) => [entry.slotId, entry])
+  );
+  const slotByPlayerName = new Map(
+    planning.lineup
+      .filter((entry) => entry.name)
+      .map((entry) => [entry.name, entry.slotId])
+  );
+  const avoidNames = new Set(need.avoidNames || []);
+
+  const search = (slotId, reservedPlayers, visitedSlots) => {
+    const slot = lineupBySlot.get(slotId);
+    if (!slot) return null;
+
+    const candidates = planning.profiles
+      .filter((profile) =>
+        profile.selectable &&
+        profile.name !== slot.name &&
+        !avoidNames.has(profile.name) &&
+        !reservedPlayers.has(profile.name) &&
+        profile.positionTokens.includes(slot.position)
+      )
+      .sort((a, b) => {
+        const aOccupied = slotByPlayerName.has(a.name) ? 1 : 0;
+        const bOccupied = slotByPlayerName.has(b.name) ? 1 : 0;
+        return aOccupied - bOccupied ||
+          a.positionTokens.length - b.positionTokens.length ||
+          a.name.localeCompare(b.name);
+      });
+
+    for (const candidate of candidates) {
+      const occupiedSlotId = slotByPlayerName.get(candidate.name) || null;
+      if (!occupiedSlotId) {
+        return [{
+          slotId,
+          position: slot.position,
+          playerName: candidate.name
+        }];
+      }
+      if (occupiedSlotId === slotId || visitedSlots.has(occupiedSlotId)) continue;
+
+      const nextReserved = new Set(reservedPlayers);
+      nextReserved.add(candidate.name);
+      const nextVisited = new Set(visitedSlots);
+      nextVisited.add(occupiedSlotId);
+      const prefix = search(occupiedSlotId, nextReserved, nextVisited);
+      if (!prefix) continue;
+
+      return [
+        ...prefix,
+        {
+          slotId,
+          position: slot.position,
+          playerName: candidate.name
+        }
+      ];
+    }
+
+    return null;
+  };
+
+  return search(targetSlotId, new Set(), new Set([targetSlotId]));
+}
+
+async function applyExactRotationPath(page, path) {
+  const applied = [];
+
+  for (const step of path) {
+    await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+    await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+    const chip = page.locator(`#lineupSlots .player-chip[data-slot-id="${step.slotId}"]`);
+    await expect(chip).toBeVisible();
+    const beforePlayerId = await chip.getAttribute("data-player-id");
+    const position = String(await chip.getAttribute("data-position") || "").trim();
+    expect(position).toBe(step.position);
+
+    await chip.click();
+    const inspector = page.locator("#managerLineupSlotInspector");
+    await expect(inspector).toBeVisible();
+    await inspector.locator('[data-slot-action="player"]').click();
+
+    const drawer = page.locator("#managerTeamChoiceDrawer");
+    await expect(drawer).toBeVisible();
+    await expect.poll(async () =>
+      drawer.locator(".lineup-player-choice-row").count()
+    ).toBeGreaterThan(0);
+
+    const rows = drawer.locator(".lineup-player-choice-row");
+    const rowAudit = await rows.evaluateAll((elements) =>
+      elements.map((row, index) => {
+        const choice = row.querySelector(".lineup-player-select-action");
+        const profile = row.querySelector(".lineup-player-profile-link");
+        const name = String(profile?.querySelector("strong")?.textContent || "").trim();
+        const positions = String(profile?.querySelector("span")?.textContent || "");
+        return {
+          index,
+          name,
+          positionTokens: positions
+            .split("/")
+            .map((value) => value.trim())
+            .filter(Boolean),
+          disabled: Boolean(choice?.matches?.(":disabled"))
+        };
+      })
+    );
+    const replacementRow = rowAudit.find((entry) =>
+      entry.name === step.playerName &&
+      entry.positionTokens.includes(step.position)
+    );
+    expect(replacementRow).toBeTruthy();
+    expect(replacementRow.disabled).toBe(false);
+
+    const replacementChoice = rows.nth(replacementRow.index).locator(".lineup-player-select-action");
+    await replacementChoice.click();
+    await drawer.locator(".manager-team-choice-done").click();
+    await expect(drawer).toBeHidden();
+    await expect.poll(async () =>
+      page.locator(`#lineupSlots .player-chip[data-slot-id="${step.slotId}"]`).getAttribute("data-player-id")
+    ).not.toBe(beforePlayerId);
+
+    const afterChip = page.locator(`#lineupSlots .player-chip[data-slot-id="${step.slotId}"]`);
+    applied.push({
+      ...step,
+      beforePlayerId,
+      afterPlayerId: await afterChip.getAttribute("data-player-id")
+    });
+  }
+
+  return applied;
+}
+
+async function repairEmergencyLineupAssignments(page, emergencySlots) {
+  if (emergencySlots.size === 0) return;
+  const need = await readRotationNeed(page);
+
+  for (const slotId of [...emergencySlots]) {
+    await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+    await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+    const chip = page.locator(`#lineupSlots .player-chip[data-slot-id="${slotId}"]`);
+    await expect(chip).toBeVisible();
+    const beforePlayerId = await chip.getAttribute("data-player-id");
+    const position = String(await chip.getAttribute("data-position") || "").trim();
+    expect(beforePlayerId).toBeTruthy();
+    expect(position).toBeTruthy();
+
+    await chip.click();
+    const inspector = page.locator("#managerLineupSlotInspector");
+    await expect(inspector).toBeVisible();
+    await inspector.locator('[data-slot-action="player"]').click();
+
+    const drawer = page.locator("#managerTeamChoiceDrawer");
+    await expect(drawer).toBeVisible();
+    await expect.poll(async () =>
+      drawer.locator(".lineup-player-choice-row").count()
+    ).toBeGreaterThan(0);
+
+    const rows = drawer.locator(".lineup-player-choice-row");
+    const rowCount = await rows.count();
+    let selectedSeen = false;
+    let currentSupportsPosition = false;
+    let exactReplacement = null;
+
+    for (let index = 0; index < rowCount; index += 1) {
+      const row = rows.nth(index);
+      const choice = row.locator(".lineup-player-select-action");
+      const profile = row.locator(".lineup-player-profile-link");
+      const name = String(await profile.locator("strong").textContent() || "").trim();
+      const positions = String(await profile.locator("span").textContent() || "");
+      const positionTokens = positions
+        .split("/")
+        .map((value) => value.trim())
+        .filter(Boolean);
+      const isSelected = await choice.evaluate((element) => element.classList.contains("is-selected"));
+
+      if (isSelected) {
+        selectedSeen = true;
+        currentSupportsPosition = positionTokens.includes(position);
+        continue;
+      }
+
+      if (exactReplacement) continue;
+      if (await choice.isDisabled()) continue;
+      if (!name || need.avoidNames.includes(name)) continue;
+      if (!positionTokens.includes(position)) continue;
+      exactReplacement = { choice, name };
+    }
+
+    expect(selectedSeen).toBe(true);
+    if (currentSupportsPosition) {
+      emergencySlots.delete(slotId);
+      await page.keyboard.press("Escape");
+      await expect(drawer).toBeHidden();
+      continue;
+    }
+    if (!exactReplacement) {
+      await page.keyboard.press("Escape");
+      await expect(drawer).toBeHidden();
+      continue;
+    }
+
+    await exactReplacement.choice.click();
+    await drawer.locator(".manager-team-choice-done").click();
+    await expect(drawer).toBeHidden();
+    await expect.poll(async () =>
+      page.locator(`#lineupSlots .player-chip[data-slot-id="${slotId}"]`).getAttribute("data-player-id")
+    ).not.toBe(beforePlayerId);
+    emergencySlots.delete(slotId);
+  }
+}
+
+async function rotateTiredStarters(page, emergencySlots, maximumRotations = 4) {
+  // En nødplassering kan være riktig én uke, men skal ikke bli permanent.
+  // Før ny fatigue-rotasjon gjenoppretter testmanageren derfor en frisk,
+  // eksakt spiller når nødårsaken er borte.
+  await repairEmergencyLineupAssignments(page, emergencySlots);
   const rotations = [];
 
   for (let attempt = 0; attempt < maximumRotations; attempt += 1) {
@@ -312,8 +612,36 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
     if (need.targets.length === 0) break;
 
     let performedRotation = null;
+    // Spillerdraweren er den samme kandidatpoolen for alle slots. Les den én
+    // gang per faktisk rotasjonsforsøk, og gjenbruk snapshotet mens oppstillingen
+    // er uendret. Det beholder simultan matching uten O(targets) ekstra UI-runder.
+    const planning = await readExactRotationPlanningState(page, need, need.targets[0].slotId);
 
     for (const target of need.targets) {
+      const exactPath = planExactRotationPath(planning, need, target.slotId);
+
+      if (exactPath) {
+        const applied = await applyExactRotationPath(page, exactPath);
+        const targetAssignment = applied.at(-1);
+        expect(targetAssignment?.slotId).toBe(target.slotId);
+        expect(targetAssignment?.afterPlayerId).toBeTruthy();
+
+        performedRotation = {
+          slotId: target.slotId,
+          outPlayerId: target.playerId,
+          outName: target.name,
+          outLoad: target.load,
+          outInjured: target.injured,
+          inPlayerId: targetAssignment.afterPlayerId,
+          inName: targetAssignment.playerName,
+          exactPosition: true,
+          decisionTrace: null
+        };
+        emergencySlots.delete(target.slotId);
+        rotations.push(performedRotation);
+        break;
+      }
+
       await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
       await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 
@@ -337,26 +665,38 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
       const rows = drawer.locator(".lineup-player-choice-row");
       const rowCount = await rows.count();
       const candidates = [];
+      const candidateAudit = [];
 
       for (let index = 0; index < rowCount; index += 1) {
         const row = rows.nth(index);
         const choice = row.locator(".lineup-player-select-action");
-        if (await choice.isDisabled()) continue;
-        if (await choice.evaluate((element) => element.classList.contains("is-selected"))) continue;
-
+        const disabled = await choice.isDisabled();
+        const selected = await choice.evaluate((element) => element.classList.contains("is-selected"));
         const profile = row.locator(".lineup-player-profile-link");
         const name = String(await profile.locator("strong").textContent() || "").trim();
         const positions = String(await profile.locator("span").textContent() || "");
-        if (!name || need.avoidNames.includes(name)) continue;
         const positionTokens = positions
           .split("/")
           .map((value) => value.trim())
           .filter(Boolean);
+        const avoided = Boolean(name && need.avoidNames.includes(name));
+        const exactPosition = Boolean(position && positionTokens.includes(position));
+
+        candidateAudit.push({
+          name,
+          positionTokens,
+          disabled,
+          selected,
+          avoided,
+          exactPosition
+        });
+
+        if (disabled || selected || !name || avoided) continue;
         candidates.push({
           choice,
           name,
           positionTokens,
-          exactPosition: Boolean(position && positionTokens.includes(position))
+          exactPosition
         });
       }
 
@@ -398,8 +738,21 @@ async function rotateTiredStarters(page, maximumRotations = 4) {
         outInjured: target.injured,
         inPlayerId: await afterChip.getAttribute("data-player-id"),
         inName: replacement.name,
-        exactPosition: replacement.exactPosition
+        exactPosition: replacement.exactPosition,
+        decisionTrace: replacement.exactPosition
+          ? null
+          : {
+              position,
+              targetOrder: need.targets,
+              avoidNames: need.avoidNames,
+              candidateAudit
+            }
       };
+      if (performedRotation.exactPosition) {
+        emergencySlots.delete(target.slotId);
+      } else {
+        emergencySlots.add(target.slotId);
+      }
       rotations.push(performedRotation);
       break;
     }
@@ -725,6 +1078,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   let peakConsecutiveFullMatches = 0;
   let peakInjuredPlayers = 0;
   const rotationEvents = [];
+  const emergencyRotationSlots = new Set();
   const substitutionEvents = [];
 
   for (let round = 1; round <= 30; round += 1) {
@@ -747,7 +1101,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     if (inbox.openedSubject) inboxSubjects.add(inbox.openedSubject);
 
     await advanceClubWeek(page, "training");
-    const rotations = await rotateTiredStarters(page);
+    const rotations = await rotateTiredStarters(page, emergencyRotationSlots);
     rotationEvents.push(...rotations.map((rotation) => ({ round, ...rotation })));
     const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
 
@@ -946,7 +1300,19 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   // club-squad v9 reduserte canonical full-season nødrotasjoner fra 8 til 1.
   // Lås bare nødposisjonsregresjonen; eksakte rotasjoner får fortsatt variere
   // med condition, skade og sesongforløp.
-  expect(rotationEvents.filter((entry) => !entry.exactPosition).length).toBeLessThanOrEqual(1);
+  const nonExactRotationEvents = rotationEvents.filter((entry) => !entry.exactPosition);
+  const nonExactRotationDiagnostics = observations
+    .filter((entry) => nonExactRotationEvents.some((rotation) => rotation.round === entry.round))
+    .map((entry) => ({
+      round: entry.round,
+      trainingProgram: entry.trainingProgram,
+      condition: entry.condition,
+      rotations: entry.rotations
+    }));
+  expect(
+    nonExactRotationEvents.length,
+    `Non-exact rotation diagnostic: ${JSON.stringify({ nonExactRotationEvents, nonExactRotationDiagnostics })}`
+  ).toBeLessThanOrEqual(1);
   expect(substitutionEvents).toHaveLength(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(new Set(substitutionEvents.map((entry) => entry.round))).toEqual(CANONICAL_SUBSTITUTION_ROUNDS);
   expect(completed.conditionCount).toBeGreaterThan(11);

@@ -270,3 +270,22 @@ test("ferdig kampforberedelse gjør matchday canonical", async ({ page }) => {
   await expect(page.locator("#matchdayCommand .matchday-scene")).toHaveAttribute("data-phase", "ready");
   await expect(page.locator("#matchdayCommand .matchday-scene-action")).toHaveText("Åpne kampforberedelsen");
 });
+
+
+test("ukeovergang bruker ukas treningsvalg før de nullstilles", async ({ page }) => {
+  await page.goto("/");
+  const source = await page.evaluate(() => fetch("/src/app.js").then((response) => response.text()));
+  const transitionStart = source.indexOf("async function advanceClubWeekPhaseAction()");
+  const transitionEnd = source.indexOf("function ", transitionStart + 30);
+  const transitionSource = source.slice(transitionStart, transitionEnd);
+
+  const recoveryIndex = transitionSource.indexOf("applyWeeklyPlayerRecovery();");
+  const clearFocusIndex = transitionSource.indexOf("state.weeklyTrainingFocus = null;");
+  const clearProgramIndex = transitionSource.indexOf("state.weeklyTrainingProgram = null;");
+
+  expect(recoveryIndex).toBeGreaterThan(-1);
+  expect(clearFocusIndex).toBeGreaterThan(-1);
+  expect(clearProgramIndex).toBeGreaterThan(-1);
+  expect(recoveryIndex).toBeLessThan(clearFocusIndex);
+  expect(recoveryIndex).toBeLessThan(clearProgramIndex);
+});
