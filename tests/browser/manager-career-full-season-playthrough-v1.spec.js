@@ -1,7 +1,20 @@
 import { expect, test } from "@playwright/test";
 
 const CANONICAL_FULL_SEASON_FORMATION_ID = "modern_433";
-const CANONICAL_SUBSTITUTION_ROUNDS = new Set([5, 15, 25]);
+const CANONICAL_SUBSTITUTION_PLAN = new Map([
+  [5, { positionBand: "defence", candidateOffset: 0 }],
+  [15, { positionBand: "midfield", candidateOffset: 1 }],
+  [25, { positionBand: "attack", candidateOffset: 2 }]
+]);
+const CANONICAL_SUBSTITUTION_ROUNDS = new Set(CANONICAL_SUBSTITUTION_PLAN.keys());
+
+function substitutionPositionBand(position) {
+  const token = String(position || "").trim().toUpperCase();
+  if (["LB", "CB", "RB", "LWB", "RWB", "SW"].includes(token)) return "defence";
+  if (["DM", "CM", "AM", "LM", "RM"].includes(token)) return "midfield";
+  if (["LW", "RW", "ST", "CF"].includes(token)) return "attack";
+  return token ? `other:${token}` : "unknown";
+}
 
 const ROSENBORG_STAFF = [
   "Jonathan Hartmann",
@@ -945,7 +958,10 @@ async function openPreMatch(page) {
   await expect(kickoff).toBeVisible();
 }
 
-async function makeOneHalftimeSubstitution(page, choiceIndex = 0) {
+async function makeOneHalftimeSubstitution(
+  page,
+  { positionBand = null, candidateOffset = 0, avoidInNames = [] } = {}
+) {
   let wrap = page.locator("details.match-subs:visible").first();
   await expect(wrap).toBeVisible();
 
@@ -957,15 +973,29 @@ async function makeOneHalftimeSubstitution(page, choiceIndex = 0) {
   const outCount = await outButtons.count();
   expect(outCount).toBeGreaterThan(1);
 
-  const fieldIndexes = [];
+  const outChoices = [];
   for (let index = 0; index < outCount; index += 1) {
     const meta = String(await outButtons.nth(index).locator("small").textContent() || "").trim();
-    if (!meta.startsWith("GK ·")) fieldIndexes.push(index);
+    const position = meta.split("·")[0]?.trim() || "";
+    if (position === "GK") continue;
+    outChoices.push({
+      index,
+      position,
+      band: substitutionPositionBand(position)
+    });
   }
-  expect(fieldIndexes.length).toBeGreaterThan(0);
+  expect(outChoices.length).toBeGreaterThan(0);
 
-  const outIndex = fieldIndexes[choiceIndex % fieldIndexes.length];
-  const outButton = outButtons.nth(outIndex);
+  const bandChoices = positionBand
+    ? outChoices.filter((choice) => choice.band === positionBand)
+    : outChoices;
+  expect(
+    bandChoices.length,
+    `No outgoing substitution choice for ${positionBand || "field"}: ${JSON.stringify(outChoices)}`
+  ).toBeGreaterThan(0);
+
+  const outChoice = bandChoices[candidateOffset % bandChoices.length];
+  const outButton = outButtons.nth(outChoice.index);
   const outName = String(await outButton.locator("strong").textContent() || "").trim();
   expect(outName).toBeTruthy();
   await outButton.click();
@@ -978,8 +1008,21 @@ async function makeOneHalftimeSubstitution(page, choiceIndex = 0) {
   const inButtons = optionLists.nth(1).locator(".match-subs-player");
   const inCount = await inButtons.count();
   expect(inCount).toBeGreaterThan(0);
-  const inButton = inButtons.first();
-  const inName = String(await inButton.locator("strong").textContent() || "").trim();
+
+  const incomingChoices = [];
+  for (let index = 0; index < inCount; index += 1) {
+    const name = String(await inButtons.nth(index).locator("strong").textContent() || "").trim();
+    if (name) incomingChoices.push({ index, name });
+  }
+  expect(incomingChoices.length).toBeGreaterThan(0);
+
+  const avoided = new Set(avoidInNames);
+  const orderedIncoming = incomingChoices.map((_, offset) =>
+    incomingChoices[(candidateOffset + offset) % incomingChoices.length]
+  );
+  const inChoice = orderedIncoming.find((choice) => !avoided.has(choice.name)) || orderedIncoming[0];
+  const inButton = inButtons.nth(inChoice.index);
+  const inName = inChoice.name;
   expect(inName).toBeTruthy();
   await inButton.click();
 
@@ -987,10 +1030,19 @@ async function makeOneHalftimeSubstitution(page, choiceIndex = 0) {
   await expect(wrap.locator("summary")).toContainText("2 av 3 igjen");
   await expect(wrap.locator(".match-subs-log li")).toHaveCount(1);
 
-  return { outName, inName };
+  return {
+    outName,
+    inName,
+    outPosition: outChoice.position,
+    positionBand: outChoice.band
+  };
 }
 
-async function playCurrentMatch(page, choiceIndex = 0, { substituteAtHalftime = false } = {}) {
+async function playCurrentMatch(
+  page,
+  choiceIndex = 0,
+  { substitutionPlan = null, avoidSubstituteNames = [] } = {}
+) {
   await openPreMatch(page);
   await page.locator(".matchday-kickoff-button").click();
 
@@ -1002,8 +1054,11 @@ async function playCurrentMatch(page, choiceIndex = 0, { substituteAtHalftime = 
     const skip = page.locator(".matchday-live-button.is-secondary:visible").filter({ hasText: "Hopp til pausen" }).first();
     if (await skip.isVisible()) {
       await skip.click();
-      if (substituteAtHalftime && !substitution) {
-        substitution = await makeOneHalftimeSubstitution(page, choiceIndex);
+      if (substitutionPlan && !substitution) {
+        substitution = await makeOneHalftimeSubstitution(page, {
+          ...substitutionPlan,
+          avoidInNames: avoidSubstituteNames
+        });
       }
     }
 
@@ -1080,6 +1135,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   const rotationEvents = [];
   const emergencyRotationSlots = new Set();
   const substitutionEvents = [];
+  const usedSubstituteNames = new Set();
 
   for (let round = 1; round <= 30; round += 1) {
     await expect.poll(async () => {
@@ -1143,9 +1199,11 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       });
     }
 
-    const requestedSubstitution = CANONICAL_SUBSTITUTION_ROUNDS.has(round);
+    const substitutionPlan = CANONICAL_SUBSTITUTION_PLAN.get(round) || null;
+    const requestedSubstitution = Boolean(substitutionPlan);
     const matchSubstitution = await playCurrentMatch(page, choiceIndex, {
-      substituteAtHalftime: requestedSubstitution
+      substitutionPlan,
+      avoidSubstituteNames: [...usedSubstituteNames]
     });
 
     const played = await readProgress(page);
@@ -1165,6 +1223,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       expect(played.lastSubstitutions[0].minute).toBeGreaterThan(0);
       expect(played.lastSubstitutions[0].minute).toBeLessThan(90);
       substitutionEvents.push({ round, ...played.lastSubstitutions[0] });
+      usedSubstituteNames.add(played.lastSubstitutions[0].inName);
     } else {
       expect(matchSubstitution).toBeNull();
       expect(played.lastSubstitutions).toHaveLength(0);
@@ -1315,6 +1374,25 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   ).toBeLessThanOrEqual(1);
   expect(substitutionEvents).toHaveLength(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(new Set(substitutionEvents.map((entry) => entry.round))).toEqual(CANONICAL_SUBSTITUTION_ROUNDS);
+  const substitutionCoverageDiagnostic = substitutionEvents.map((entry) => ({
+    round: entry.round,
+    position: entry.position,
+    band: substitutionPositionBand(entry.position),
+    roleName: entry.roleName,
+    outPlayerId: entry.outPlayerId,
+    outName: entry.outName,
+    inPlayerId: entry.inPlayerId,
+    inName: entry.inName,
+    minute: entry.minute
+  }));
+  expect(
+    new Set(substitutionCoverageDiagnostic.map((entry) => entry.band)),
+    `Substitution coverage diagnostic: ${JSON.stringify(substitutionCoverageDiagnostic)}`
+  ).toEqual(new Set(["defence", "midfield", "attack"]));
+  expect(
+    new Set(substitutionCoverageDiagnostic.map((entry) => entry.inPlayerId)).size,
+    `Substitution candidate diagnostic: ${JSON.stringify(substitutionCoverageDiagnostic)}`
+  ).toBe(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(completed.conditionCount).toBeGreaterThan(11);
   expect(completed.partnershipPairCount).toBeGreaterThanOrEqual(55);
   expect(completed.partnershipMaxSharedStarts).toBeGreaterThanOrEqual(10);
