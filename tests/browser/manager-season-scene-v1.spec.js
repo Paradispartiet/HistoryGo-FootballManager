@@ -368,6 +368,7 @@ test("fullført sesong bruker sesongslutt i footer i stedet for ny manageruke", 
     const meritsKey = "hgfm.teamMerits.v1";
     const modeKey = "hgfm.modeSessions.v1";
     const gameStartKey = "hgfm.gameStartState.v1";
+    const archiveKey = "hgfm.seasonArchive.v1";
 
     const season = JSON.parse(localStorage.getItem(seasonKey));
     season.status = "completed";
@@ -389,6 +390,38 @@ test("fullført sesong bruker sesongslutt i footer i stedet for ny manageruke", 
     });
     localStorage.setItem(seasonKey, JSON.stringify(season));
 
+    const seasonReview = {
+      seasonNumber: season.seasonNumber,
+      verdict: "triumph",
+      verdictLabel: "Seriemester",
+      headline: "Seriemester! Rosenborg vant ligaen.",
+      boardMessage: "Styret er overveldet. Kontrakten din er trygg.",
+      boardTrustDelta: 14,
+      boardTrustAfter: 64,
+      position: 1,
+      points: 18,
+      warning: false,
+      sacked: false,
+      reasons: [],
+      highlights: []
+    };
+    const archive = [{
+      seasonNumber: season.seasonNumber,
+      position: 1,
+      points: 18,
+      played: season.competition.rounds,
+      goalsFor: 12,
+      goalsAgainst: 0,
+      verdict: "triumph",
+      verdictLabel: "Seriemester",
+      champion: "Rosenborg",
+      targetPosition: 2,
+      warning: false,
+      sacked: false,
+      topScorer: null
+    }];
+    localStorage.setItem(archiveKey, JSON.stringify(archive));
+
     const merits = JSON.parse(localStorage.getItem(meritsKey) || "{}");
     merits.clubWeekState = {
       ...(merits.clubWeekState || {}),
@@ -406,6 +439,8 @@ test("fullført sesong bruker sesongslutt i footer i stedet for ny manageruke", 
       envelope.sessions.league = {
         ...envelope.sessions.league,
         leagueSeason: season,
+        seasonReview,
+        seasonArchive: archive,
         teamMerits: merits,
         clubWeekState: merits.clubWeekState,
         gameStartState: gameStart
