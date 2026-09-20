@@ -6289,19 +6289,27 @@ function registerSeasonReview(season) {
   const seasonNumber = Number(season.seasonNumber) || 1;
   if (getSeasonArchive().some((entry) => Number(entry.seasonNumber) === seasonNumber)) return;
 
+  const currentBoardTrust = Number(state.clubWeekState?.boardTrust);
   const review = createSeasonReview({
     season,
     table: createLeagueTable(season),
     target: getSeasonTarget(),
     playerStats: state.playerSeasonStats?.rows || [],
     previousReviews: getSeasonArchive(),
-    boardTrust: Number(getOffPitchState()?.boardTrust) || 50,
+    boardTrust: Number.isFinite(currentBoardTrust) ? currentBoardTrust : 50,
     // Overtok du en klubb, dømmer styret også på om du spilte klubbens fotball.
     tradition: getClubTraditionVerdict()
   });
   if (!review) return;
 
   state.seasonReview = review;
+  if (state.clubWeekState && typeof state.clubWeekState === "object") {
+    state.clubWeekState = {
+      ...state.clubWeekState,
+      boardTrust: review.boardTrustAfter
+    };
+    saveClubWeekState(state.clubWeekState);
+  }
   state.seasonArchive = appendSeasonArchive(getSeasonArchive(), createSeasonArchiveEntry(review, {
     playerStats: state.playerSeasonStats?.rows || []
   }));
