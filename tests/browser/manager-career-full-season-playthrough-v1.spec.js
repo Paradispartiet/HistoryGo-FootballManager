@@ -1438,6 +1438,53 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#nextActionPrimary")).toBeEnabled();
 
+  // Sesongskiftet er først bevist når den nye sesongen faktisk kan brukes.
+  // Spill derfor første canonicale uke i sesong 2 gjennom de samme flatene som
+  // sesong 1, i stedet for å stoppe ved at "Start ny sesong" opprettet state.
+  await openCurrentOpponentAnalysis(page, 0);
+  await advanceClubWeek(page, "inbox");
+  const seasonTwoInbox = await inspectCurrentCalendarMessages(page, { openFirst: true });
+  expect(seasonTwoInbox.openedMessageId).toBeTruthy();
+
+  await advanceClubWeek(page, "training");
+  const seasonTwoTraining = await chooseTrainingForCurrentWeek(page, 0);
+  expect(seasonTwoTraining.programId).toBeTruthy();
+  expect(seasonTwoTraining.focusId).toBeTruthy();
+
+  const seasonTwoMatchSubstitution = await playCurrentMatch(page, 0);
+  expect(seasonTwoMatchSubstitution).toBeNull();
+
+  const seasonTwoRoundOne = await readProgress(page);
+  expect(seasonTwoRoundOne.seasonNumber).toBe(2);
+  expect(seasonTwoRoundOne.seasonStatus).toBe("active");
+  expect(seasonTwoRoundOne.currentRound).toBe(2);
+  expect(seasonTwoRoundOne.phase).toBe("review");
+  expect(seasonTwoRoundOne.lastMatchRound).toBe(1);
+  expect(seasonTwoRoundOne.lastMatchId).toBeTruthy();
+  expect(seasonTwoRoundOne.lastMatchId).not.toBe(completed.lastMatchId);
+  expect(seasonTwoRoundOne.leaguePlayed).toBe(1);
+  expect(seasonTwoRoundOne.leagueWon + seasonTwoRoundOne.leagueDrawn + seasonTwoRoundOne.leagueLost).toBe(1);
+  expect(seasonTwoRoundOne.archiveCount).toBe(1);
+  expect(seasonTwoRoundOne.playerStatsCount).toBeGreaterThan(0);
+  expect(seasonTwoRoundOne.conditionMatchCount).toBe(1);
+  expect(seasonTwoRoundOne.conditionTotalMatchesPlayed).toBeGreaterThan(0);
+  expect(seasonTwoRoundOne.conditionTotalMinutesPlayed).toBeGreaterThan(0);
+  expect(seasonTwoRoundOne.conditionMaxLoad).toBeGreaterThan(0);
+  expect(seasonTwoRoundOne.partnershipPairCount).toBeGreaterThanOrEqual(seasonTwo.partnershipPairCount);
+  expect(seasonTwoRoundOne.partnershipTotalSharedStarts).toBeGreaterThan(seasonTwo.partnershipTotalSharedStarts);
+  expect(seasonTwoRoundOne.activeMatchSession).toBe(false);
+
+  await rollToNextWeek(page, 32);
+  const seasonTwoWeekTwo = await readProgress(page);
+  expect(seasonTwoWeekTwo.seasonNumber).toBe(2);
+  expect(seasonTwoWeekTwo.seasonStatus).toBe("active");
+  expect(seasonTwoWeekTwo.currentRound).toBe(2);
+  expect(seasonTwoWeekTwo.week).toBe(32);
+  expect(seasonTwoWeekTwo.phase).toBe("analysis");
+  expect(seasonTwoWeekTwo.archiveCount).toBe(1);
+  expect(seasonTwoWeekTwo.playerStatsCount).toBeGreaterThan(0);
+  expect(seasonTwoWeekTwo.conditionMatchCount).toBe(1);
+
   console.log(
     "Full-season canonical playthrough observations:",
     JSON.stringify({
