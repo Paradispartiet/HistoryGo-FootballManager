@@ -61,6 +61,7 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript((season) => {
+    if (localStorage.getItem("historygo-football-manager.league-season.v3")) return;
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
@@ -118,3 +119,92 @@ test("Stats har ingen horisontal overflow på mobil", async ({ page }) => {
   await expect(page.locator(".season-fixture-columns")).toBeVisible();
   await expect(page.locator(".season-full-table")).toBeVisible();
 });
+
+test("sesongdom flytter canonical styretillit før sesong 2", async ({ page }) => {
+  await page.evaluate(() => {
+    const seasonKey = "historygo-football-manager.league-season.v3";
+    const meritsKey = "hgfm.teamMerits.v1";
+    const modeKey = "hgfm.modeSessions.v1";
+    const gameStartKey = "hgfm.gameStartState.v1";
+
+    const season = JSON.parse(localStorage.getItem(seasonKey));
+    season.status = "completed";
+    season.currentRound = season.competition.rounds;
+    season.completedMatchIds = [];
+    season.fixtures.forEach((round) => {
+      round.status = "completed";
+      round.matches.forEach((match) => {
+        const managerHome = match.homeClubId === season.managerClubId;
+        const managerAway = match.awayClubId === season.managerClubId;
+        match.status = "completed";
+        match.result = managerHome
+          ? { homeGoals: 2, awayGoals: 0, simulated: false }
+          : managerAway
+            ? { homeGoals: 0, awayGoals: 2, simulated: false }
+            : { homeGoals: 0, awayGoals: 0, simulated: true };
+        season.completedMatchIds.push(match.id);
+      });
+    });
+    localStorage.setItem(seasonKey, JSON.stringify(season));
+
+    const merits = JSON.parse(localStorage.getItem(meritsKey) || "{}");
+    merits.clubWeekState = {
+      ...(merits.clubWeekState || {}),
+      week: 7,
+      phase: "review",
+      boardTrust: 63,
+      playerMorale: Number(merits.clubWeekState?.playerMorale) || 50,
+      tacticalClarity: Number(merits.clubWeekState?.tacticalClarity) || 50,
+      trainingCulture: Number(merits.clubWeekState?.trainingCulture) || 50,
+      mediaPressure: Number(merits.clubWeekState?.mediaPressure) || 50
+    };
+    localStorage.setItem(meritsKey, JSON.stringify(merits));
+
+    const gameStart = JSON.parse(localStorage.getItem(gameStartKey) || "{}");
+    gameStart.leagueSeasonStatus = "completed";
+    localStorage.setItem(gameStartKey, JSON.stringify(gameStart));
+
+    const envelope = JSON.parse(localStorage.getItem(modeKey) || "null");
+    if (envelope?.sessions?.league) {
+      envelope.sessions.league = {
+        ...envelope.sessions.league,
+        leagueSeason: season,
+        teamMerits: merits,
+        clubWeekState: merits.clubWeekState,
+        gameStartState: gameStart
+      };
+      localStorage.setItem(modeKey, JSON.stringify(envelope));
+    }
+  });
+
+  await page.reload();
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+
+  const before = await page.evaluate(() => {
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    return Number(merits.clubWeekState?.boardTrust);
+  });
+  expect(before).toBe(63);
+
+  await page.locator("#startNewLeagueSeasonButton").click();
+
+  await expect.poll(async () => page.evaluate(() => {
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const latest = archive[archive.length - 1] || null;
+    return {
+      seasonNumber: Number(season?.seasonNumber) || null,
+      boardTrust: Number(merits.clubWeekState?.boardTrust),
+      verdict: latest?.verdict || null,
+      position: Number(latest?.position) || null
+    };
+  })).toEqual({
+    seasonNumber: 2,
+    boardTrust: 77,
+    verdict: "triumph",
+    position: 1
+  });
+});
+
