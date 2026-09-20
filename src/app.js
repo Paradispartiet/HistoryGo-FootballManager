@@ -5191,6 +5191,10 @@ function isLeagueSeasonActive() {
 }
 
 function isLeaguePreseason() {
+  return isLeagueModeActive() && !isLeagueSeasonActive();
+}
+
+function isLeagueInitialPreseason() {
   return isLeagueModeActive() && !state.leagueSeason;
 }
 
@@ -5279,7 +5283,7 @@ function activateRecommendedLeagueTab(teamFit = null) {
   // Før seriestart er onboarding-rekkefølgen autoritativ. Den gamle snarveien
   // så bare på spiller-/lag-/treningsstate og kunne derfor sende en ny manager
   // rett til Trening mens seks påkrevde stabsroller fortsatt manglet.
-  if (isLeaguePreseason()) {
+  if (isLeagueInitialPreseason()) {
     const nextStep = getLeagueOnboardingSteps(teamFit).find((step) => !step.done) || null;
     if (nextStep && nextStep.id !== "sesong") {
       activateLeagueOnboardingTarget(nextStep);
@@ -5395,7 +5399,7 @@ function renderLeagueOnboarding(teamFit) {
   const panel = elements.leagueOnboardingPanel;
   const list = elements.leagueOnboardingSteps;
   if (!panel || !list) return;
-  const active = isLeaguePreseason();
+  const active = isLeagueInitialPreseason();
   const steps = getLeagueOnboardingSteps(teamFit);
   const complete = steps.filter((step) => step.done).length;
   const done = complete === steps.length;
@@ -6194,7 +6198,7 @@ function getClubExpectation() {
 // Etter fullført ligasesong: legg den bak deg og start neste. Rører kun
 // mini-sesong-state — aldri History Go-unlocks, merits eller Club Week.
 function startLeagueSeasonFromOnboarding() {
-  if (!isLeaguePreseason()) {
+  if (!isLeagueInitialPreseason()) {
     return;
   }
   if (!isLeaguePreseasonReady(getTeamFit())) {
@@ -9366,7 +9370,7 @@ function buildNextActionContext(teamFit) {
   const gate = getClubWeekMatchdayGate();
   const clubWeekState = state.clubWeekState || null;
 
-  const leaguePreseasonStep = isLeaguePreseason()
+  const leaguePreseasonStep = isLeagueInitialPreseason()
     ? getLeagueOnboardingSteps(teamFit).find((step) => !step.done) || null
     : null;
   return {
