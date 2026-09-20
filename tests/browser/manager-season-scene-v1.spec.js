@@ -294,6 +294,7 @@ test("ekte avskjedsdom overlever reload som synlig sesongdom", async ({ page }) 
     const archiveKey = "hgfm.seasonArchive.v1";
 
     const season = JSON.parse(localStorage.getItem(seasonKey));
+    season.seasonNumber = 2;
     season.status = "completed";
     season.currentRound = season.competition.rounds;
     season.completedMatchIds = [];
@@ -314,8 +315,8 @@ test("ekte avskjedsdom overlever reload som synlig sesongdom", async ({ page }) 
     localStorage.setItem(seasonKey, JSON.stringify(season));
 
     const archive = [{
-      seasonNumber: 0,
-      position: 4,
+      seasonNumber: 1,
+      position: 3,
       points: 0,
       played: season.competition.rounds,
       goalsFor: 0,
@@ -323,7 +324,7 @@ test("ekte avskjedsdom overlever reload som synlig sesongdom", async ({ page }) 
       verdict: "failed",
       verdictLabel: "Langt under forventning",
       champion: "Brann",
-      targetPosition: 2,
+      targetPosition: 1,
       warning: true,
       sacked: false,
       topScorer: null
@@ -377,7 +378,7 @@ test("ekte avskjedsdom overlever reload som synlig sesongdom", async ({ page }) 
   });
 
   expect(persisted).toEqual({
-    seasonNumber: 1,
+    seasonNumber: 2,
     seasonStatus: "completed",
     archiveCount: 2,
     latestSacked: true,
