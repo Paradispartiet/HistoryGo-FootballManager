@@ -361,3 +361,107 @@ test("sparket manager får ikke før-sesong tilbake etter reload", async ({ page
     leagueSeasonStatus: "completed"
   });
 });
+
+test("fullført sesong bruker sesongslutt i footer i stedet for ny manageruke", async ({ page }) => {
+  await page.evaluate(() => {
+    const seasonKey = "historygo-football-manager.league-season.v3";
+    const meritsKey = "hgfm.teamMerits.v1";
+    const modeKey = "hgfm.modeSessions.v1";
+    const gameStartKey = "hgfm.gameStartState.v1";
+    const archiveKey = "hgfm.seasonArchive.v1";
+
+    const season = JSON.parse(localStorage.getItem(seasonKey));
+    season.status = "completed";
+    season.currentRound = season.competition.rounds;
+    season.completedMatchIds = [];
+    season.fixtures.forEach((round) => {
+      round.status = "completed";
+      round.matches.forEach((match) => {
+        const managerHome = match.homeClubId === season.managerClubId;
+        const managerAway = match.awayClubId === season.managerClubId;
+        match.status = "completed";
+        match.result = managerHome
+          ? { homeGoals: 2, awayGoals: 0, simulated: false }
+          : managerAway
+            ? { homeGoals: 0, awayGoals: 2, simulated: false }
+            : { homeGoals: 0, awayGoals: 0, simulated: true };
+        season.completedMatchIds.push(match.id);
+      });
+    });
+    localStorage.setItem(seasonKey, JSON.stringify(season));
+
+    const seasonReview = {
+      seasonNumber: season.seasonNumber,
+      verdict: "triumph",
+      verdictLabel: "Seriemester",
+      headline: "Seriemester! Rosenborg vant ligaen.",
+      boardMessage: "Styret er overveldet. Kontrakten din er trygg.",
+      boardTrustDelta: 14,
+      boardTrustAfter: 64,
+      position: 1,
+      points: 18,
+      warning: false,
+      sacked: false,
+      reasons: [],
+      highlights: []
+    };
+    const archive = [{
+      seasonNumber: season.seasonNumber,
+      position: 1,
+      points: 18,
+      played: season.competition.rounds,
+      goalsFor: 12,
+      goalsAgainst: 0,
+      verdict: "triumph",
+      verdictLabel: "Seriemester",
+      champion: "Rosenborg",
+      targetPosition: 2,
+      warning: false,
+      sacked: false,
+      topScorer: null
+    }];
+    localStorage.setItem(archiveKey, JSON.stringify(archive));
+
+    const merits = JSON.parse(localStorage.getItem(meritsKey) || "{}");
+    merits.clubWeekState = {
+      ...(merits.clubWeekState || {}),
+      week: 31,
+      phase: "analysis"
+    };
+    localStorage.setItem(meritsKey, JSON.stringify(merits));
+
+    const gameStart = JSON.parse(localStorage.getItem(gameStartKey) || "{}");
+    gameStart.leagueSeasonStatus = "completed";
+    localStorage.setItem(gameStartKey, JSON.stringify(gameStart));
+
+    const envelope = JSON.parse(localStorage.getItem(modeKey) || "null");
+    if (envelope?.sessions?.league) {
+      envelope.sessions.league = {
+        ...envelope.sessions.league,
+        leagueSeason: season,
+        seasonReview,
+        seasonArchive: archive,
+        teamMerits: merits,
+        clubWeekState: merits.clubWeekState,
+        gameStartState: gameStart
+      };
+      localStorage.setItem(modeKey, JSON.stringify(envelope));
+    }
+  });
+
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+
+  await expect(page.locator("#managerCalendarMatch")).toHaveText("Ingen terminfestet kamp");
+  await expect(page.locator("#nextActionPrimaryTag")).toHaveText("Sesongslutt");
+  await expect(page.locator("#nextActionPrimaryTitle")).toHaveText("Se sesongdommen");
+  await expect(page.locator("#nextActionPrimaryHint")).toContainText("Sesongen er fullført");
+  await expect(page.locator("#nextActionDestination")).toHaveText("Stats");
+
+  await page.locator("#nextActionPrimary").click();
+  await expect(page.locator('[data-tab-section="statistikk"]')).toBeVisible();
+  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+});
