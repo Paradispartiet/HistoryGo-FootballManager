@@ -74,6 +74,13 @@ function isNormalLeagueSave() {
   return !onboarding || onboarding.hidden;
 }
 
+function isCompletedLeagueSave() {
+  const start = gameStartState();
+  if ((start.selectedMode || "league") !== "league") return false;
+  if (start.leagueSeasonStatus === "completed") return true;
+  return normalizeLeagueSeason(readJson(LEAGUE_SEASON_VERSION, null))?.status === "completed";
+}
+
 function clubWeekState() {
   const merits = readJson(TEAM_MERITS_KEY, {});
   if (merits?.clubWeekState?.phase) return merits.clubWeekState;
@@ -653,6 +660,32 @@ function renderCalendarFooter(model) {
   const primary = host?.querySelector("#nextActionPrimary");
   if (!host || !strip || !primary) return;
 
+  if (isCompletedLeagueSave()) {
+    if (host.hidden) host.hidden = false;
+    if (strip.hidden) strip.hidden = false;
+    if (host.dataset.calendarOwned !== "true") host.dataset.calendarOwned = "true";
+    if (strip.dataset.surface !== "manager-calendar") strip.dataset.surface = "manager-calendar";
+    strip.dataset.calendarInteractive = "true";
+    syncText(host.querySelector(".next-action-head .eyebrow"), "Sesongslutt");
+    syncAttribute(strip, "aria-label", "Sesongslutt · neste karrieresteg");
+    syncText(host.querySelector("#nextActionPhase"), "Sesongen er fullført");
+    syncText(host.querySelector("#nextActionPrimaryTag"), "Sesongslutt");
+    syncText(host.querySelector("#nextActionPrimaryTitle"), "Se sesongdommen");
+    syncText(host.querySelector("#nextActionPrimaryHint"), "Sesongen er fullført. Gå til Stats for sesongdom, merittliste og neste karrieresteg.");
+    syncText(host.querySelector("#nextActionDestination"), "Stats");
+    syncAttribute(primary, "aria-label", "Åpne Stats og se sesongdommen.");
+    if (primary.disabled) primary.disabled = false;
+    primary.onclick = () => activateTarget("statistikk");
+    strip.onclick = (event) => {
+      if (event.target?.closest?.("button, a, input, select, textarea")) return;
+      primary.click();
+    };
+    const secondary = host.querySelector("#nextActionSecondary");
+    if (secondary?.childElementCount) secondary.replaceChildren();
+    window.dispatchEvent(new CustomEvent("hgfm:manager-calendar-footer-ready"));
+    return;
+  }
+
   const day = model.currentDay;
   const nextEvent = day?.events?.find((entry) => entry.attention) || day?.events?.[0] || null;
   const title = nextEvent ? `${day.day} · ${nextEvent.title}` : `${day.day} · ${day.title}`;
@@ -784,11 +817,12 @@ function installObservers() {
       const host = footerStrip.closest("manager-next-action");
       const primary = footerStrip.querySelector("#nextActionPrimary");
       const tag = footerStrip.querySelector("#nextActionPrimaryTag");
+      const expectedTag = isCompletedLeagueSave() ? "Sesongslutt" : "Kalender";
       const footerNeedsRepair = host?.dataset.calendarOwned !== "true"
         || footerStrip.dataset.surface !== "manager-calendar"
         || footerStrip.hidden
         || Boolean(primary?.disabled)
-        || String(tag?.textContent || "").trim() !== "Kalender";
+        || String(tag?.textContent || "").trim() !== expectedTag;
       if (!footerNeedsRepair) return;
       queueMicrotask(() => renderCalendarFooter(lastCalendarModel));
     });
