@@ -331,6 +331,10 @@ test("sparket manager får ikke før-sesong tilbake etter reload", async ({ page
   });
 
   await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
   await expect(page.locator("#leagueOnboardingPanel")).toHaveAttribute("hidden", "");
