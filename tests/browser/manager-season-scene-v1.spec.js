@@ -246,6 +246,7 @@ test("sparket manager kan ikke starte en ny sesong etter reload", async ({ page 
       envelope.sessions.league = {
         ...envelope.sessions.league,
         leagueSeason: season,
+        seasonArchive: archive,
         gameStartState: gameStart
       };
       localStorage.setItem(modeKey, JSON.stringify(envelope));
