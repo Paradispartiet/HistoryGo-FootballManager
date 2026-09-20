@@ -361,3 +361,64 @@ test("sparket manager får ikke før-sesong tilbake etter reload", async ({ page
     leagueSeasonStatus: "completed"
   });
 });
+
+test("diagnose: synlig footer etter fullført trygg sesong", async ({ page }) => {
+  await page.evaluate(() => {
+    const seasonKey = "historygo-football-manager.league-season.v3";
+    const modeKey = "hgfm.modeSessions.v1";
+    const gameStartKey = "hgfm.gameStartState.v1";
+
+    const season = JSON.parse(localStorage.getItem(seasonKey));
+    season.status = "completed";
+    season.currentRound = season.competition.rounds;
+    season.completedMatchIds = [];
+    season.fixtures.forEach((round) => {
+      round.status = "completed";
+      round.matches.forEach((match) => {
+        const managerHome = match.homeClubId === season.managerClubId;
+        const managerAway = match.awayClubId === season.managerClubId;
+        match.status = "completed";
+        match.result = managerHome
+          ? { homeGoals: 2, awayGoals: 0, simulated: false }
+          : managerAway
+            ? { homeGoals: 0, awayGoals: 2, simulated: false }
+            : { homeGoals: 0, awayGoals: 0, simulated: true };
+        season.completedMatchIds.push(match.id);
+      });
+    });
+    localStorage.setItem(seasonKey, JSON.stringify(season));
+
+    const gameStart = JSON.parse(localStorage.getItem(gameStartKey) || "{}");
+    gameStart.leagueSeasonStatus = "completed";
+    localStorage.setItem(gameStartKey, JSON.stringify(gameStart));
+
+    const envelope = JSON.parse(localStorage.getItem(modeKey) || "null");
+    if (envelope?.sessions?.league) {
+      envelope.sessions.league = {
+        ...envelope.sessions.league,
+        leagueSeason: season,
+        gameStartState: gameStart
+      };
+      localStorage.setItem(modeKey, JSON.stringify(envelope));
+    }
+  });
+
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+
+  const snapshot = await page.evaluate(() => ({
+    footerOwner: document.querySelector("manager-next-action")?.dataset.calendarOwned || null,
+    surface: document.querySelector("#nextActionStrip")?.dataset.surface || null,
+    phase: document.querySelector("#nextActionPhase")?.textContent?.trim() || null,
+    tag: document.querySelector("#nextActionPrimaryTag")?.textContent?.trim() || null,
+    title: document.querySelector("#nextActionPrimaryTitle")?.textContent?.trim() || null,
+    hint: document.querySelector("#nextActionPrimaryHint")?.textContent?.trim() || null,
+    calendarMatch: document.querySelector("#managerCalendarMatch")?.textContent?.trim() || null,
+    nextSeasonVisible: !document.querySelector("#startNewLeagueSeasonButton")?.hidden
+  }));
+  console.log("COMPLETED_SEASON_FOOTER_DIAGNOSTIC", JSON.stringify(snapshot));
+  expect(snapshot.footerOwner).toBe("true");
+  expect(snapshot.calendarMatch).toBe("Ingen terminfestet kamp");
+});
