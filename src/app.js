@@ -6239,6 +6239,20 @@ function getSeasonArchive() {
   return normalizeSeasonArchive(state.seasonArchive);
 }
 
+function isCurrentLeagueManagerDismissed() {
+  const seasonNumber = Number(state.leagueSeason?.seasonNumber);
+  if (!Number.isFinite(seasonNumber)) return false;
+  if (
+    Number(state.seasonReview?.seasonNumber) === seasonNumber &&
+    state.seasonReview?.sacked === true
+  ) {
+    return true;
+  }
+  return getSeasonArchive().some(
+    (entry) => Number(entry?.seasonNumber) === seasonNumber && entry?.sacked === true
+  );
+}
+
 // Målet styret setter for inneværende sesong: en tabellplass, avledet av der du
 // endte sist. Brukes både til dommen og til å vise forventningen underveis.
 function getSeasonTarget() {
@@ -6337,6 +6351,10 @@ function startNewLeagueSeason() {
   // Sørg for at sesongen som avsluttes faktisk er dømt og arkivert før vi
   // ruller videre — ellers ville en sesong kunne forsvinne uten spor.
   registerSeasonReview(state.leagueSeason);
+  if (isCurrentLeagueManagerDismissed()) {
+    renderApp();
+    return;
+  }
 
   state.gameStartState = normalizeGameStartState({ ...state.gameStartState, ...createLeagueSaveExtras() });
   saveGameStartState();
@@ -13005,7 +13023,7 @@ function renderLeagueSeason() {
   });
 
   if (newSeasonButton) {
-    newSeasonButton.hidden = season?.status !== "completed";
+    newSeasonButton.hidden = season?.status !== "completed" || isCurrentLeagueManagerDismissed();
   }
 
   if (statusEl) {
