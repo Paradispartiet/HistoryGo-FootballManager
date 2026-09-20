@@ -351,6 +351,25 @@ test("ekte avskjedsdom overlever reload som synlig sesongdom", async ({ page }) 
 
   await page.locator("#startNewLeagueSeasonButton").click();
 
+  const afterClickDiagnostic = await page.evaluate(() => {
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    return {
+      seasonNumber: Number(season?.seasonNumber) || null,
+      seasonStatus: season?.status || null,
+      archive: archive.map((entry) => ({
+        seasonNumber: Number(entry?.seasonNumber),
+        verdict: entry?.verdict || null,
+        warning: Boolean(entry?.warning),
+        sacked: Boolean(entry?.sacked)
+      })),
+      sessionReview: envelope?.sessions?.league?.seasonReview || null,
+      sessionArchive: envelope?.sessions?.league?.seasonArchive || null
+    };
+  });
+  console.log("SEASON_REVIEW_RELOAD_DIAG", JSON.stringify(afterClickDiagnostic));
+
   await expect(page.locator("#seasonReviewPanel")).toBeVisible();
   await expect(page.locator("#seasonReviewVerdict")).toHaveText("Sesongdom · sparket");
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
