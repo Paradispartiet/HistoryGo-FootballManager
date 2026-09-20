@@ -6228,10 +6228,26 @@ function loadSeasonArchive() {
 }
 
 function saveSeasonArchive() {
+  const archive = normalizeSeasonArchive(state.seasonArchive);
   try {
-    localStorage.setItem(SEASON_ARCHIVE_KEY, JSON.stringify(normalizeSeasonArchive(state.seasonArchive)));
+    localStorage.setItem(SEASON_ARCHIVE_KEY, JSON.stringify(archive));
   } catch (error) {
     console.error("Kunne ikke lagre merittlista", error);
+  }
+
+  // Mode Isolation eier league-snapshoten ved reload. Hold den canonical
+  // merittlista synkronisert her, ellers kan et eldre snapshot vinne over
+  // hgfm.seasonArchive.v1 og glemme en avskjedsdom etter omlasting.
+  if (state.modeEnvelope && isLeagueModeActive()) {
+    state.modeEnvelope.sessions.league = {
+      ...state.modeEnvelope.sessions.league,
+      seasonArchive: archive
+    };
+    try {
+      state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
+    } catch (_) {
+      // Legacy-lagringen over er fortsatt best effort i privat modus.
+    }
   }
 }
 
