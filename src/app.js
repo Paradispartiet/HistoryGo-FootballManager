@@ -6241,8 +6241,7 @@ function saveSeasonArchive() {
   if (state.modeEnvelope && isLeagueModeActive()) {
     state.modeEnvelope.sessions.league = {
       ...state.modeEnvelope.sessions.league,
-      seasonArchive: archive,
-      seasonReview: state.seasonReview || null
+      seasonArchive: archive
     };
     try {
       state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope);
