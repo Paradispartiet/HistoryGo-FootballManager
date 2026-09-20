@@ -1,0 +1,27 @@
+name: Dismissed preseason visible diagnostic
+
+on:
+  push:
+    branches:
+      - agent/dismissed-preseason-visible-testonly-20260920
+
+permissions:
+  contents: read
+
+jobs:
+  targeted-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run dismissal preseason regression
+        run: npx playwright test tests/browser/manager-season-scene-v1.spec.js --project=chromium -g "sparket manager får ikke før-sesong tilbake etter reload"
