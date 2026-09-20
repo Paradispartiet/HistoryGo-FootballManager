@@ -285,3 +285,102 @@ test("sparket manager kan ikke starte en ny sesong etter reload", async ({ page 
   });
 });
 
+
+test("ekte avskjedsdom overlever reload som synlig sesongdom", async ({ page }) => {
+  await page.evaluate(() => {
+    const seasonKey = "historygo-football-manager.league-season.v3";
+    const modeKey = "hgfm.modeSessions.v1";
+    const gameStartKey = "hgfm.gameStartState.v1";
+    const archiveKey = "hgfm.seasonArchive.v1";
+
+    const season = JSON.parse(localStorage.getItem(seasonKey));
+    season.status = "completed";
+    season.currentRound = season.competition.rounds;
+    season.completedMatchIds = [];
+    season.fixtures.forEach((round) => {
+      round.status = "completed";
+      round.matches.forEach((match) => {
+        const managerHome = match.homeClubId === season.managerClubId;
+        const managerAway = match.awayClubId === season.managerClubId;
+        match.status = "completed";
+        match.result = managerHome
+          ? { homeGoals: 0, awayGoals: 3, simulated: false }
+          : managerAway
+            ? { homeGoals: 3, awayGoals: 0, simulated: false }
+            : { homeGoals: 1, awayGoals: 1, simulated: true };
+        season.completedMatchIds.push(match.id);
+      });
+    });
+    localStorage.setItem(seasonKey, JSON.stringify(season));
+
+    const archive = [{
+      seasonNumber: 0,
+      position: 4,
+      points: 0,
+      played: season.competition.rounds,
+      goalsFor: 0,
+      goalsAgainst: 18,
+      verdict: "failed",
+      verdictLabel: "Langt under forventning",
+      champion: "Brann",
+      targetPosition: 2,
+      warning: true,
+      sacked: false,
+      topScorer: null
+    }];
+    localStorage.setItem(archiveKey, JSON.stringify(archive));
+
+    const gameStart = JSON.parse(localStorage.getItem(gameStartKey) || "{}");
+    gameStart.leagueSeasonStatus = "completed";
+    localStorage.setItem(gameStartKey, JSON.stringify(gameStart));
+
+    const envelope = JSON.parse(localStorage.getItem(modeKey) || "null");
+    if (envelope?.sessions?.league) {
+      envelope.sessions.league = {
+        ...envelope.sessions.league,
+        leagueSeason: season,
+        seasonArchive: archive
+      };
+      localStorage.setItem(modeKey, JSON.stringify(envelope));
+    }
+  });
+
+  await page.reload();
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+
+  await page.locator("#startNewLeagueSeasonButton").click();
+
+  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
+  await expect(page.locator("#seasonReviewVerdict")).toHaveText("Sesongdom · sparket");
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+
+  await page.reload();
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+
+  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
+  await expect(page.locator("#seasonReviewVerdict")).toHaveText("Sesongdom · sparket");
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+
+  const persisted = await page.evaluate(() => {
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    const latest = archive[archive.length - 1] || null;
+    return {
+      seasonNumber: Number(season?.seasonNumber) || null,
+      seasonStatus: season?.status || null,
+      archiveCount: archive.length,
+      latestSacked: Boolean(latest?.sacked),
+      sessionReviewSacked: Boolean(envelope?.sessions?.league?.seasonReview?.sacked)
+    };
+  });
+
+  expect(persisted).toEqual({
+    seasonNumber: 1,
+    seasonStatus: "completed",
+    archiveCount: 2,
+    latestSacked: true,
+    sessionReviewSacked: true
+  });
+});
