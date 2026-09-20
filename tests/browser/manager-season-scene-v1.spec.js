@@ -333,7 +333,7 @@ test("sparket manager får ikke før-sesong tilbake etter reload", async ({ page
   await page.reload();
 
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
-  await expect(page.locator("#leagueOnboardingPanel")).toBeHidden();
+  await expect(page.locator("#leagueOnboardingPanel")).toHaveAttribute("hidden", "");
 
   const startStep = page.locator("#leagueOnboardingSteps button").filter({ hasText: "Start sesongen" });
   await expect(startStep).toHaveCount(0);
