@@ -138,3 +138,80 @@ test("aktiv kvalifisering erstatter død ny-sesong-handling i Stats", async ({ p
   await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
   await expect(page.locator('.main-nav [role="tab"][data-tab-target="kamp"]')).toHaveAttribute("aria-selected", "true");
 });
+
+
+test("aktiv kvalifisering er en spillbar kamp i den autoritative kampklarheten", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(({ season, playoff }) => {
+    const clubWeekState = {
+      week: 31,
+      phase: "matchday",
+      boardTrust: 50,
+      playerMorale: 50,
+      tacticalClarity: 50,
+      trainingCulture: 50,
+      mediaPressure: 50
+    };
+    localStorage.setItem("hgfm.onboarded.v1", "1");
+    localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
+      selectedMode: "league",
+      activeLeagueSaveId: "playoff_matchday_regression",
+      clubName: "Rosenborg",
+      takeoverClubId: "rosenborg",
+      managerName: "Manager",
+      leagueName: "Eliteserien",
+      leagueSeasonStatus: "completed",
+      boardExpectation: "Øvre halvdel"
+    }));
+    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
+    localStorage.setItem("historygo-football-manager.league-playoff.v1", JSON.stringify(playoff));
+    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(clubWeekState));
+    localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
+      focusId: "formation_familiarity",
+      week: 31,
+      appliedSessionId: null
+    }));
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify({
+      version: "mode-sessions.v1",
+      activeMode: "league",
+      sessions: {
+        league: {
+          opponentAnalysisPlan: {
+            version: "opponent-analysis.v1",
+            fixtureId: "playoff-browser-regression-kval-kval-r1-k1",
+            opponentId: "odd",
+            opponentName: "Odd",
+            round: 1,
+            week: 31,
+            focusId: "press",
+            focusLabel: "Presset deres",
+            question: "Hvor starter presset?",
+            hypothesis: "Behold en fri spiller bak første pressledd.",
+            evidence: ["Odd presser høyt"],
+            countermeasureId: "free_player",
+            countermeasureLabel: "Skap en fri spiller",
+            target: "system",
+            targetLabel: "Systemet",
+            why: "Kvalifiseringskampen er analysert.",
+            risk: "Krever presisjon nær eget mål.",
+            watch: "Se hvem som blir fri når første pressledd går."
+          }
+        },
+        scenario: null,
+        training: null,
+        national: null
+      }
+    }));
+  }, { season: completedSeason(), playoff: activePlayoff() });
+
+  await page.goto("/");
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [role="tab"][data-tab-target="kamp"]').click();
+  await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
+
+  await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator("#matchdayReadiness")).toContainText(/kampklar/i);
+  await expect(page.locator("#playMatchdayButton")).toBeEnabled();
+});
