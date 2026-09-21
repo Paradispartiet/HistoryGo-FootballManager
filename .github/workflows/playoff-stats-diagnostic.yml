@@ -1,0 +1,25 @@
+name: Playoff Stats diagnostic
+
+on:
+  push:
+    branches:
+      - agent/prove-playoff-stats-dead-end-20260921
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Run playoff Stats regression
+        run: npx playwright test tests/browser/manager-league-playoff-flow-v1.spec.js --project=chromium
