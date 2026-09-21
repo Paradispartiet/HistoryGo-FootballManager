@@ -8,6 +8,29 @@ const CANONICAL_SUBSTITUTION_PLAN = new Map([
 ]);
 const CANONICAL_SUBSTITUTION_ROUNDS = new Set(CANONICAL_SUBSTITUTION_PLAN.keys());
 
+async function installDeterministicInjuryRng(page) {
+  await page.addInitScript(() => {
+    const stateKey = "hgfm.test.injury-rng-state.v1";
+    const countKey = "hgfm.test.injury-rng-count.v1";
+    const nativeRandom = Math.random.bind(Math);
+
+    Math.random = () => {
+      const stack = String(new Error().stack || "");
+      if (!stack.includes("football-player-condition.js")) {
+        return nativeRandom();
+      }
+
+      let state = Number(sessionStorage.getItem(stateKey) || "1592594996") >>> 0;
+      state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+      sessionStorage.setItem(stateKey, String(state));
+
+      const count = Number(sessionStorage.getItem(countKey) || "0") || 0;
+      sessionStorage.setItem(countKey, String(count + 1));
+      return state / 0x100000000;
+    };
+  });
+}
+
 function substitutionPositionBand(position) {
   const token = String(position || "").trim().toUpperCase();
   if (["LB", "CB", "RB", "LWB", "RWB", "SW"].includes(token)) return "defence";
@@ -1090,6 +1113,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   test.setTimeout(720_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await installDeterministicInjuryRng(page);
   await page.goto("/");
 
   const blankMerits = await readProgress(page);
@@ -1372,6 +1396,12 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     nonExactRotationEvents.length,
     `Non-exact rotation diagnostic: ${JSON.stringify({ nonExactRotationEvents, nonExactRotationDiagnostics })}`
   ).toBeLessThanOrEqual(1);
+
+  const injuryRngCalls = await page.evaluate(() =>
+    Number(sessionStorage.getItem("hgfm.test.injury-rng-count.v1") || "0") || 0
+  );
+  expect(injuryRngCalls).toBeGreaterThan(0);
+  console.log(`injuryRngCalls: ${injuryRngCalls}`);
   expect(substitutionEvents).toHaveLength(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(new Set(substitutionEvents.map((entry) => entry.round))).toEqual(CANONICAL_SUBSTITUTION_ROUNDS);
   const substitutionCoverageDiagnostic = substitutionEvents.map((entry) => ({
