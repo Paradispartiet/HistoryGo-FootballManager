@@ -119,6 +119,17 @@ function activePlayoff() {
   };
 }
 
+function activePlayoffAfterFirstLeg() {
+  const playoff = activePlayoff();
+  playoff.rounds[0].legs[0] = {
+    leg: 1,
+    homeAway: "away",
+    status: "completed",
+    score: { for: 0, against: 0 }
+  };
+  return playoff;
+}
+
 test("aktiv kvalifisering erstatter død ny-sesong-handling i Stats", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -360,6 +371,110 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
     roundStatus: "active",
     seasonReview: null,
     archiveCount: 0
+  });
+});
+
+
+test("andre kvaliklegg løser playoff gjennom ekte Kampdag før sesongdom og arkiv", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(({ season, playoff }) => {
+    const clubWeekState = {
+      week: 31,
+      phase: "matchday",
+      boardTrust: 50,
+      playerMorale: 50,
+      tacticalClarity: 50,
+      trainingCulture: 50,
+      mediaPressure: 50
+    };
+    localStorage.setItem("hgfm.onboarded.v1", "1");
+    localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
+      selectedMode: "league",
+      activeLeagueSaveId: "playoff_second_leg_ui",
+      clubName: "Rosenborg",
+      takeoverClubId: "rosenborg",
+      managerName: "Manager",
+      leagueName: "Eliteserien",
+      leagueSeasonStatus: "completed",
+      boardExpectation: "Øvre halvdel"
+    }));
+    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
+    localStorage.setItem("historygo-football-manager.league-playoff.v1", JSON.stringify(playoff));
+    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(clubWeekState));
+    localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
+      focusId: "formation_familiarity",
+      week: 31,
+      appliedSessionId: null
+    }));
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify({
+      version: "mode-sessions.v1",
+      activeMode: "league",
+      sessions: {
+        league: {
+          opponentAnalysisPlan: {
+            version: "opponent-analysis.v1",
+            fixtureId: "playoff-browser-regression-kval-kval-r1-k2",
+            opponentId: "odd",
+            opponentName: "Odd",
+            round: 1,
+            week: 31,
+            focusId: "press",
+            focusLabel: "Presset deres",
+            question: "Hvor starter presset?",
+            hypothesis: "Behold en fri spiller bak første pressledd.",
+            evidence: ["Odd presser høyt"],
+            countermeasureId: "free_player",
+            countermeasureLabel: "Skap en fri spiller",
+            target: "system",
+            targetLabel: "Systemet",
+            why: "Returkampen er analysert.",
+            risk: "Krever presisjon nær eget mål.",
+            watch: "Se hvem som blir fri når første pressledd går."
+          }
+        },
+        scenario: null,
+        training: null,
+        national: null
+      }
+    }));
+  }, { season: completedSeason(), playoff: activePlayoffAfterFirstLeg() });
+
+  await page.goto("/");
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [role="tab"][data-tab-target="kamp"]').click();
+  await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-ready", "true");
+
+  await playVisibleMatchday(page, 1);
+
+  await expect.poll(async () => page.evaluate(() => {
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const round = playoff?.rounds?.[0] || null;
+    const latest = Array.isArray(archive) && archive.length ? archive[archive.length - 1] : null;
+    const review = envelope?.sessions?.league?.seasonReview || null;
+    return {
+      playoffResolved: playoff?.status === "won" || playoff?.status === "lost",
+      firstLegStatus: round?.legs?.[0]?.status || null,
+      secondLegStatus: round?.legs?.[1]?.status || null,
+      roundResolved: round?.status === "won" || round?.status === "lost",
+      seasonReviewCreated: Boolean(review),
+      seasonReviewNumber: Number(review?.seasonNumber) || null,
+      archiveCount: Array.isArray(archive) ? archive.length : -1,
+      archiveSeasonNumber: Number(latest?.seasonNumber) || null
+    };
+  })).toEqual({
+    playoffResolved: true,
+    firstLegStatus: "completed",
+    secondLegStatus: "completed",
+    roundResolved: true,
+    seasonReviewCreated: true,
+    seasonReviewNumber: 2,
+    archiveCount: 1,
+    archiveSeasonNumber: 2
   });
 });
 
