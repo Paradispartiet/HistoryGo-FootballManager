@@ -169,6 +169,30 @@ check(
   appSource.includes("leagueSeasonActive: isLeaguePlayableMatchActive()")
 );
 
+// 5c. Etter siste kamp og lest sluttrapport finnes ingen neste kampuke. En
+// ferdig ligasesong med registrert sesongdom skal derfor sende manageren til
+// Statistikk, ikke falle tilbake til «Forbered neste kamp».
+{
+  const completedSeasonReview = primary(ctx({
+    selectedMode: "league",
+    leagueModeActive: true,
+    leagueSeasonActive: false,
+    leagueSeasonCompleted: true,
+    seasonReviewAvailable: true,
+    miniSeasonActive: false,
+    clubWeek: { week: 31, phase: "review", phaseLabel: "Oppsummering" },
+    hasUnseenReport: false,
+    matchdayReadiness: {
+      status: "blocked",
+      canStartMatch: false,
+      isReady: false,
+      primaryBlocker: null
+    }
+  }));
+  check("ferdig ligasesong prioriterer sesongdommen etter lest sluttrapport", completedSeasonReview?.title === "Se sesongdommen");
+  check("sesongdom-handlingen peker til Statistikk", completedSeasonReview?.action?.type === NEXT_ACTION_TYPES.TAB && completedSeasonReview.action.tab === "statistikk");
+}
+
 // 6. Kampdag og review bruker eksisterende kamp-/analyseflater.
 {
   const blockedByMatch = primary(ctx({
