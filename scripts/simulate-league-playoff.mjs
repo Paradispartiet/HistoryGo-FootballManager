@@ -251,6 +251,31 @@ check("app.js henter kvalifiseringsmotstanderen til Kampdag", /getPlayoffMatchda
 check("app.js mater kampdagresultatet inn i kvalifiseringen", /completePlayoffLeg\(/.test(app));
 check("app.js gir kvalifiseringsutfallet videre til neste sesong", /playoffResolution/.test(app));
 
+// Sesongdommen må komme ETTER at en eventuell kvalifisering er avgjort.
+// Ellers kan en tidligere advarsel bli til permanent avskjed mens sesongen
+// fortsatt har kvalifiseringskamper igjen.
+const leagueResultStart = app.indexOf("const updated = completeLeagueRound(state.leagueSeason, lastMatch);");
+const leagueResultEnd = app.indexOf("saveLeagueSeason(); saveGameStartState();", leagueResultStart);
+const leagueResultBlock = app.slice(leagueResultStart, leagueResultEnd);
+const playoffSetupIndex = leagueResultBlock.indexOf("ensureLeaguePlayoff();");
+const regularReviewIndex = leagueResultBlock.indexOf("registerSeasonReview(updated);");
+check(
+  "siste serierunde avklarer kvalifisering før sesongdommen registreres",
+  playoffSetupIndex >= 0 && regularReviewIndex >= 0 && playoffSetupIndex < regularReviewIndex
+);
+check(
+  "aktiv kvalifisering utsetter sesongdommen",
+  /ensureLeaguePlayoff\(\);[\s\S]*state\.leaguePlayoff\?\.status\s*!==\s*"active"[\s\S]*registerSeasonReview\(updated\)/.test(leagueResultBlock)
+);
+
+const playoffResultStart = app.indexOf("const updatedPlayoff = completePlayoffLeg(state.leaguePlayoff, lastMatch);");
+const playoffResultEnd = app.indexOf("return;", playoffResultStart);
+const playoffResultBlock = app.slice(playoffResultStart, playoffResultEnd);
+check(
+  "ferdig kvalifisering registrerer den utsatte sesongdommen",
+  /updatedPlayoff\.status\s*!==\s*"active"[\s\S]*registerSeasonReview\(state\.leagueSeason\)/.test(playoffResultBlock)
+);
+
 console.log(JSON.stringify({
   ok: true, sjekker: checks,
   format: "to kamper sammenlagt · bortemål · straffer",

@@ -6653,6 +6653,11 @@ function registerMatchInMiniSeason(lastMatch) {
         phaseLabel: "Kvalifisering",
         message: `${described.headline} ${described.detail}`
       });
+      // Sesongen er først endelig avgjort når siste kvalikkamp er ferdig.
+      // Vent derfor med styredom/arkivering til playoffen er terminal.
+      if (updatedPlayoff.status !== "active") {
+        registerSeasonReview(state.leagueSeason);
+      }
       window.dispatchEvent(new Event("updateProfile"));
     }
     return;
@@ -6664,13 +6669,15 @@ function registerMatchInMiniSeason(lastMatch) {
       state.leagueSeason = updated;
       if (updated.status === "completed") {
         state.gameStartState.leagueSeasonStatus = "completed";
-        // Styret gjør opp regnskapet. Før sa statuslinja bare hvem som ble
-        // seriemester — forventningen de satte da klubben ble opprettet ble
-        // aldri målt mot noe.
-        registerSeasonReview(updated);
-        // Endte sesongen på en kvalifiseringsplass, skal kampene spilles før
-        // noen ny sesong kan starte.
+        // Endte sesongen på en kvalifiseringsplass, er den sportslige sesongen
+        // ikke avgjort før kvalikken er spilt. Opprett derfor playoffen før
+        // styret registrerer sesongdommen.
         ensureLeaguePlayoff();
+        if (state.leaguePlayoff?.status !== "active") {
+          // Ingen kvalifisering gjenstår: da kan sesongen dømmes og arkiveres
+          // med en gang, som før.
+          registerSeasonReview(updated);
+        }
       }
       saveLeagueSeason(); saveGameStartState();
       addClubWeekEvent({ id: `league-r${previousRound}`, week: previousRound, phase: "matchday", phaseLabel: "Ligaspill", message: `Serierunde ${previousRound} er ferdig. Alle fire resultater er registrert.` });
