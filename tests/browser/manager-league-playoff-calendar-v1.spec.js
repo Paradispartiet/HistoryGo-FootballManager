@@ -62,6 +62,23 @@ function completedSeason() {
   };
 }
 
+function completedPlayoff() {
+  const playoff = activePlayoff();
+  playoff.status = "won";
+  playoff.rounds[0] = {
+    ...playoff.rounds[0],
+    status: "won",
+    legs: [
+      { leg: 1, homeAway: "away", status: "completed", score: { for: 1, against: 1 } },
+      { leg: 2, homeAway: "home", status: "completed", score: { for: 2, against: 0 } }
+    ],
+    aggregate: { for: 3, against: 1 },
+    awayGoals: { manager: 1, opponent: 0 },
+    decidedBy: "sammenlagt"
+  };
+  return playoff;
+}
+
 function activePlayoff() {
   return {
     version: "historygo-football-manager.league-playoff.v1",
@@ -140,4 +157,50 @@ test("aktiv kvalifisering holder managerkalenderen i spill", async ({ page }) =>
   await expect(page.locator("#nextActionPrimaryTag")).toHaveText("Kalender");
   await expect(page.locator("#nextActionPrimaryTitle")).not.toHaveText("Se sesongdommen");
   await expect(page.locator("#nextActionStrip")).toHaveAttribute("aria-label", "Managerkalender · neste hendelse");
+});
+
+
+test("ferdig kvalifisering leverer kalenderfooteren til sesongdommen", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(({ season, playoff }) => {
+    localStorage.setItem("hgfm.onboarded.v1", "1");
+    localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
+      selectedMode: "league",
+      activeLeagueSaveId: "playoff_calendar_terminal",
+      clubName: "Rosenborg",
+      takeoverClubId: "rosenborg",
+      managerName: "Manager",
+      leagueName: "Eliteserien",
+      leagueSeasonStatus: "completed"
+    }));
+    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
+    localStorage.setItem("historygo-football-manager.league-playoff.v1", JSON.stringify(playoff));
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
+      clubWeekState: {
+        week: 31,
+        phase: "review",
+        boardTrust: 50,
+        playerMorale: 50,
+        tacticalClarity: 50,
+        trainingCulture: 50,
+        mediaPressure: 50
+      }
+    }));
+  }, { season: completedSeason(), playoff: completedPlayoff() });
+
+  await page.goto("/");
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+
+  await expect(page.locator("#nextActionStrip")).toHaveAttribute("data-surface", "manager-calendar");
+  await expect(page.locator("#nextActionStrip")).toHaveAttribute("aria-label", "Sesongslutt · neste karrieresteg");
+  await expect(page.locator("#nextActionPrimaryTag")).toHaveText("Sesongslutt");
+  await expect(page.locator("#nextActionPrimaryTitle")).toHaveText("Se sesongdommen");
+  await expect(page.locator("#nextActionDestination")).toHaveText("Stats");
+
+  await page.locator("#nextActionPrimary").click();
+  await expect(page.locator('[data-tab-section="statistikk"]')).toBeVisible();
 });
