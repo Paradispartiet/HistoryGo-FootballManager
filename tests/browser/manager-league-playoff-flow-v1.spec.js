@@ -63,6 +63,23 @@ function completedSeason() {
   };
 }
 
+function lostRelegationPlayoff() {
+  const playoff = activePlayoff();
+  playoff.status = "lost";
+  playoff.rounds[0] = {
+    ...playoff.rounds[0],
+    status: "lost",
+    legs: [
+      { leg: 1, homeAway: "away", status: "completed", score: { for: 0, against: 2 } },
+      { leg: 2, homeAway: "home", status: "completed", score: { for: 0, against: 1 } }
+    ],
+    aggregate: { for: 0, against: 3 },
+    awayGoals: { manager: 0, opponent: 1 },
+    decidedBy: "sammenlagt"
+  };
+  return playoff;
+}
+
 function activePlayoff() {
   return {
     version: "historygo-football-manager.league-playoff.v1",
@@ -214,4 +231,70 @@ test("aktiv kvalifisering er en spillbar kamp i den autoritative kampklarheten",
   await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-ready", "true");
   await expect(page.locator("#matchdayReadiness")).toContainText(/kampklar/i);
   await expect(page.locator("#playMatchdayButton")).toBeEnabled();
+});
+
+
+test("tapt nedrykkskvalifisering flytter neste synlige sesong til OBOS", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(({ season, playoff }) => {
+    localStorage.setItem("hgfm.onboarded.v1", "1");
+    localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
+      selectedMode: "league",
+      activeLeagueSaveId: "playoff_resolution_next_season",
+      clubName: "Rosenborg",
+      takeoverClubId: "rosenborg",
+      managerName: "Manager",
+      leagueName: "Eliteserien",
+      leagueSeasonStatus: "completed",
+      boardExpectation: "Øvre halvdel"
+    }));
+    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
+    localStorage.setItem("historygo-football-manager.league-playoff.v1", JSON.stringify(playoff));
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
+      clubWeekState: {
+        week: 31,
+        phase: "review",
+        boardTrust: 50,
+        playerMorale: 50,
+        tacticalClarity: 50,
+        trainingCulture: 50,
+        mediaPressure: 50
+      }
+    }));
+  }, { season: completedSeason(), playoff: lostRelegationPlayoff() });
+
+  await page.goto("/");
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
+  await page.locator("#startNewLeagueSeasonButton").click();
+
+  await expect.poll(async () => page.evaluate(() => {
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    return {
+      seasonNumber: Number(season?.seasonNumber) || null,
+      status: season?.status || null,
+      tierId: season?.competition?.tierId || null,
+      tierName: season?.competition?.tierName || null,
+      viaPlayoff: Boolean(season?.previousOutcome?.viaPlayoff),
+      movement: season?.previousOutcome?.movement || null,
+      playoff
+    };
+  })).toEqual({
+    seasonNumber: 3,
+    status: "active",
+    tierId: "obosligaen",
+    tierName: "OBOS-ligaen",
+    viaPlayoff: true,
+    movement: "relegated",
+    playoff: null
+  });
+
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+  await expect(page.locator("#seasonCommand")).toContainText("OBOS-ligaen");
 });
