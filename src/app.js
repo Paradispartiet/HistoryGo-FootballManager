@@ -4269,7 +4269,7 @@ function getMatchdayReadiness(teamFit) {
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   const selectedMode = state.gameStartState?.selectedMode || state.modeEnvelope?.activeMode || null;
   const hasPlayableMatch = isLeagueModeActive()
-    ? isLeagueSeasonActive()
+    ? isLeaguePlayableMatchActive()
     : isScenarioModeActive()
       ? state.miniSeason?.status === "active"
       : isNationalModeActive()
@@ -4308,7 +4308,7 @@ function getMatchdayReadiness(teamFit) {
     opponentName: analysisFixture?.opponent?.name || "neste motstander",
     selectedMode,
     hasPlayableMatch,
-    leagueSeasonActive: !isLeagueModeActive() || isLeagueSeasonActive(),
+    leagueSeasonActive: !isLeagueModeActive() || isLeaguePlayableMatchActive(),
     clubWeekBlocked,
     clubWeekReason: clubWeekBlocked
       ? `Klubbuka står i «${CLUB_WEEK_PHASE_LABELS[clubWeekPhase] || clubWeekPhase}». Gå videre til kampdag.`
@@ -5190,8 +5190,16 @@ function isLeagueSeasonActive() {
     state.leagueSeason?.status === "active";
 }
 
+function isLeaguePlayableMatchActive() {
+  return isLeagueSeasonActive() || (
+    isLeagueModeActive() &&
+    state.leaguePlayoff?.status === "active" &&
+    Boolean(getPlayoffMatchdayOpponent(state.leaguePlayoff))
+  );
+}
+
 function isLeaguePreseason() {
-  return isLeagueModeActive() && !isLeagueSeasonActive();
+  return isLeagueModeActive() && !isLeaguePlayableMatchActive();
 }
 
 function isLeagueInitialPreseason() {
@@ -9404,9 +9412,9 @@ function buildNextActionContext(teamFit) {
     matchdayReady: Boolean(readiness.canStartMatch),
     unreadThreads: getInboxAttentionCount(),
     hasUnseenReport: hasUnseenMatchReport(),
-    miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active" || isLeagueModeActive() && state.leagueSeason?.status === "active",
+    miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active" || isLeaguePlayableMatchActive(),
     leagueModeActive: isLeagueModeActive(),
-    leagueSeasonActive: isLeagueSeasonActive(),
+    leagueSeasonActive: isLeaguePlayableMatchActive(),
     leaguePreseasonReady: isLeagueModeActive() ? isLeaguePreseasonReady(teamFit) : true,
     leaguePreseasonStep,
     scenarioModeActive: isScenarioModeActive(),
