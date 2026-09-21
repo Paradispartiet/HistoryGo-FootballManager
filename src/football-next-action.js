@@ -103,6 +103,8 @@ function normalizeContext(context = {}) {
     miniSeasonActive: Boolean(context.miniSeasonActive),
     leagueModeActive: Boolean(context.leagueModeActive) || context.selectedMode === "league",
     leagueSeasonActive: Boolean(context.leagueSeasonActive),
+    leagueSeasonCompleted: Boolean(context.leagueSeasonCompleted),
+    seasonReviewAvailable: Boolean(context.seasonReviewAvailable),
     leaguePreseasonReady: Boolean(context.leaguePreseasonReady),
     leaguePreseasonStep: context.leaguePreseasonStep && typeof context.leaguePreseasonStep === "object"
       ? context.leaguePreseasonStep
@@ -424,6 +426,19 @@ export function computeNextActions(context = {}) {
       hint: "Les resultat, nøkkelfaktorer og trenergrepet før du planlegger neste uke.",
       action: { type: NEXT_ACTION_TYPES.TAB, tab: "kamp" }
     });
+  }
+
+  // Sesongslutt er ikke en ny klubbuke. Når siste kamprapport er lest og
+  // sesongdommen finnes, skal manageren til Statistikk i stedet for å få en
+  // falsk «Forbered neste kamp»-handling uten noen neste kamp.
+  if (!ctx.hasSession && ctx.leagueModeActive && ctx.leagueSeasonCompleted && ctx.seasonReviewAvailable && !ctx.hasUnseenReport) {
+    return [{
+      id: "open-season-review",
+      tag: "Sesongslutt",
+      title: "Se sesongdommen",
+      hint: "Sesongen er avgjort. Les styrets dom og merittarkivet før du går videre.",
+      action: { type: NEXT_ACTION_TYPES.TAB, tab: "statistikk" }
+    }];
   }
 
   // 9) Uleste innbokstråder er signaler som skal leses før treningsvalg.
