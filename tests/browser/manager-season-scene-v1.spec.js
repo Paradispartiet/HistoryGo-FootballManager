@@ -564,4 +564,28 @@ test("ekte avskjedsdom overlever reload som synlig sesongdom", async ({ page }) 
     latestSacked: true,
     sessionReviewSacked: true
   });
+
+  // Avskjedsdommen eies av ligasesjonen, ikke av den aktive UI-modusen.
+  // Bytt faktisk ut av ligaspill og tilbake gjennom synlige kontroller før en
+  // ny reload, slik at capture/apply-grensen bevises sammen med dismissal-vakten.
+  await page.locator("#settingsButton").click();
+  await expect(page.locator("#modalSettings")).toBeVisible();
+  await page.locator('[data-settings-action="mode"]').click();
+  await expect(page.locator("#onboardingScreen")).toBeVisible();
+
+  await page.locator('[data-start-mode="scenario"]').click();
+  await expect(page.locator('[data-tab-section="scenarios"]')).toBeVisible();
+  await expect(page.locator("#returnToLeagueButton")).toBeVisible();
+  await page.locator("#returnToLeagueButton").click();
+
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
+  await expect(page.locator("#seasonReviewVerdict")).toHaveText("Sesongdom · sparket");
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+
+  await page.reload();
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
+  await expect(page.locator("#seasonReviewVerdict")).toHaveText("Sesongdom · sparket");
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
 });
