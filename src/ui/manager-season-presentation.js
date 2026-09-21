@@ -66,6 +66,7 @@ export function createSeasonSceneModel({
   season = null,
   table = [],
   nextMatch = null,
+  playoff = null,
   boardExpectation = ""
 } = {}) {
   const rows = asArray(table);
@@ -95,11 +96,14 @@ export function createSeasonSceneModel({
     matchId: nextMatch.matchId || ""
   } : scheduled[0] || null;
 
+  const playoffActive = Boolean(playoff?.active && resolvedNext);
   const state = !season
     ? "preseason"
-    : season.status === "completed"
-      ? "completed"
-      : "active";
+    : playoffActive
+      ? "playoff"
+      : season.status === "completed"
+        ? "completed"
+        : "active";
   const positionTone = !managerRow
     ? "neutral"
     : managerRow.position <= Math.max(2, Math.ceil(rows.length * 0.2))
@@ -125,11 +129,13 @@ export function createSeasonSceneModel({
     compactTable: compactTableRows(rows, managerRow),
     table: rows,
     goalDifferenceLabel: managerRow ? signed(managerRow.goalDifference) : "0",
-    statusLabel: state === "completed"
-      ? "Sesongen er ferdigspilt"
-      : state === "active"
-        ? `Serierunde ${currentRound} av ${totalRounds}`
-        : "Før sesongstart"
+    statusLabel: state === "playoff"
+      ? playoff?.headline || "Kvalifisering"
+      : state === "completed"
+        ? "Sesongen er ferdigspilt"
+        : state === "active"
+          ? `Serierunde ${currentRound} av ${totalRounds}`
+          : "Før sesongstart"
   };
 }
 
@@ -165,7 +171,7 @@ export function renderSeasonCommand(container, model, { onOpenMatch, onOpenTeam 
   const actions = document.createElement("div");
   actions.className = "season-command-actions";
   actions.append(
-    button("Gå til kamp", "is-primary", onOpenMatch, !model.nextMatch || model.state !== "active"),
+    button("Gå til kamp", "is-primary", onOpenMatch, !model.nextMatch || !["active", "playoff"].includes(model.state)),
     button("Juster laget", "is-secondary", onOpenTeam)
   );
   head.append(copy, actions);
@@ -291,7 +297,11 @@ function renderFixtureCard(model) {
   else {
     const empty = document.createElement("li");
     empty.className = "season-fixture-empty";
-    empty.textContent = model.state === "completed" ? "Sesongen er ferdigspilt." : "Terminlisten er ikke klar.";
+    empty.textContent = model.state === "completed"
+      ? "Sesongen er ferdigspilt."
+      : model.state === "playoff"
+        ? "Kvalifiseringskampen vises i sesongkontrollen."
+        : "Terminlisten er ikke klar.";
     upcomingList.append(empty);
   }
   upcoming.append(upcomingList);
