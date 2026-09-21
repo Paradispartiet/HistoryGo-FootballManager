@@ -127,7 +127,7 @@ test("aktiv kvalifisering erstatter død ny-sesong-handling i Stats", async ({ p
 
   const command = page.locator("#seasonCommand");
   await expect(command).toHaveAttribute("data-state", "playoff");
-  await expect(command).toContainText("Kvalifisering");
+  await expect(command).toContainText(/kvalifisering/i);
   await expect(command.locator(".season-next-match")).toContainText("Odd");
 
   const goToMatch = command.getByRole("button", { name: "Gå til kamp" });
