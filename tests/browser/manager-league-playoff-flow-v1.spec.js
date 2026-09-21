@@ -158,8 +158,14 @@ test("aktiv kvalifisering erstatter død ny-sesong-handling i Stats", async ({ p
 
 
 async function playVisibleMatchday(page, choiceIndex = 0) {
-  await page.locator("#playMatchdayButton").click();
   const kickoff = page.locator(".matchday-kickoff-button:visible").first();
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (await kickoff.isVisible()) break;
+    const action = page.locator(".matchday-scene-action:visible").first();
+    await expect(action).toBeVisible();
+    await action.click();
+  }
+
   await expect(kickoff).toBeVisible();
   await kickoff.click();
 
