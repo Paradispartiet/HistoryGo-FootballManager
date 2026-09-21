@@ -11,6 +11,11 @@ import {
   getNextLeagueOpponent,
   normalizeLeagueSeason
 } from "../football-league-season.js";
+import {
+  LEAGUE_PLAYOFF_VERSION,
+  getPlayoffMatchdayOpponent,
+  normalizeLeaguePlayoff
+} from "../football-league-playoff.js";
 
 const STYLE_ID = "managerCalendarWorkspaceV1Style";
 const SECTION_ID = "managerCalendarSection";
@@ -74,9 +79,15 @@ function isNormalLeagueSave() {
   return !onboarding || onboarding.hidden;
 }
 
+function activeLeaguePlayoff() {
+  const playoff = normalizeLeaguePlayoff(readJson(LEAGUE_PLAYOFF_VERSION, null));
+  return playoff?.status === "active" ? playoff : null;
+}
+
 function isCompletedLeagueSave() {
   const start = gameStartState();
   if ((start.selectedMode || "league") !== "league") return false;
+  if (activeLeaguePlayoff()) return false;
   if (start.leagueSeasonStatus === "completed") return true;
   return normalizeLeagueSeason(readJson(LEAGUE_SEASON_VERSION, null))?.status === "completed";
 }
@@ -93,6 +104,8 @@ function clubWeekState() {
 }
 
 function leagueOpponent() {
+  const playoffOpponent = getPlayoffMatchdayOpponent(activeLeaguePlayoff());
+  if (playoffOpponent) return playoffOpponent;
   const season = normalizeLeagueSeason(readJson(LEAGUE_SEASON_VERSION, null));
   return season?.status === "active" ? getNextLeagueOpponent(season) : null;
 }
