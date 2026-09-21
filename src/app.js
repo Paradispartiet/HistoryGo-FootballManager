@@ -4269,7 +4269,7 @@ function getMatchdayReadiness(teamFit) {
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   const selectedMode = state.gameStartState?.selectedMode || state.modeEnvelope?.activeMode || null;
   const hasPlayableMatch = isLeagueModeActive()
-    ? isLeagueSeasonActive()
+    ? isLeaguePlayableMatchActive()
     : isScenarioModeActive()
       ? state.miniSeason?.status === "active"
       : isNationalModeActive()
@@ -4308,7 +4308,7 @@ function getMatchdayReadiness(teamFit) {
     opponentName: analysisFixture?.opponent?.name || "neste motstander",
     selectedMode,
     hasPlayableMatch,
-    leagueSeasonActive: !isLeagueModeActive() || isLeagueSeasonActive(),
+    leagueSeasonActive: !isLeagueModeActive() || isLeaguePlayableMatchActive(),
     clubWeekBlocked,
     clubWeekReason: clubWeekBlocked
       ? `Klubbuka står i «${CLUB_WEEK_PHASE_LABELS[clubWeekPhase] || clubWeekPhase}». Gå videre til kampdag.`
@@ -5188,6 +5188,16 @@ function isLeagueSeasonActive() {
     Boolean(state.gameStartState?.activeLeagueSaveId) &&
     state.gameStartState?.leagueSeasonStatus === "active" &&
     state.leagueSeason?.status === "active";
+}
+
+// Kampporten må følge den konkurransen som faktisk har en spillbar kamp.
+// En kvalifisering skjer ETTER at seriesesongen er fullført, så den skal ikke
+// gjøre isLeagueSeasonActive() sann; den åpner bare kamp-/Next Action-porten.
+function isLeaguePlayableMatchActive() {
+  if (isLeagueSeasonActive()) return true;
+  return isLeagueModeActive() &&
+    state.leaguePlayoff?.status === "active" &&
+    Boolean(getPlayoffMatchdayOpponent(state.leaguePlayoff));
 }
 
 function isLeaguePreseason() {
@@ -9406,7 +9416,9 @@ function buildNextActionContext(teamFit) {
     hasUnseenReport: hasUnseenMatchReport(),
     miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active" || isLeagueModeActive() && state.leagueSeason?.status === "active",
     leagueModeActive: isLeagueModeActive(),
-    leagueSeasonActive: isLeagueSeasonActive(),
+    // Next Action beholder feltnavnet av bakoverkompatibilitet, men porten
+    // betyr her «finnes en spillbar ligakamp?» — serie eller kvalifisering.
+    leagueSeasonActive: isLeaguePlayableMatchActive(),
     leaguePreseasonReady: isLeagueModeActive() ? isLeaguePreseasonReady(teamFit) : true,
     leaguePreseasonStep,
     scenarioModeActive: isScenarioModeActive(),
