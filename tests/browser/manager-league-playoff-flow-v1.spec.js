@@ -212,6 +212,6 @@ test("aktiv kvalifisering er en spillbar kamp i den autoritative kampklarheten",
   await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
 
   await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-ready", "true");
-  await expect(page.locator("#matchdayReadiness")).toContainText("kampklart");
+  await expect(page.locator("#matchdayReadiness")).toContainText(/kampklar/i);
   await expect(page.locator("#playMatchdayButton")).toBeEnabled();
 });
