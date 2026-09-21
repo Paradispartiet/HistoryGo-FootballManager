@@ -340,13 +340,21 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
 
   await expect.poll(async () => page.evaluate(() => {
     const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const matchday = JSON.parse(localStorage.getItem("hgfm.matchday.v1") || "null");
     const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
     const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
     const round = playoff?.rounds?.[0] || null;
+    const firstLegScore = round?.legs?.[0]?.score || null;
+    const matchScore = matchday?.lastMatch?.score || null;
     return {
       playoffStatus: playoff?.status || null,
       currentRoundIndex: Number(playoff?.currentRoundIndex),
       firstLegStatus: round?.legs?.[0]?.status || null,
+      firstLegScoreRecorded: Number.isFinite(Number(firstLegScore?.for)) && Number.isFinite(Number(firstLegScore?.against)),
+      matchScoreRecorded: Number.isFinite(Number(matchScore?.for)) && Number.isFinite(Number(matchScore?.against)),
+      firstLegScoreMatchesMatchday:
+        Number(firstLegScore?.for) === Number(matchScore?.for) &&
+        Number(firstLegScore?.against) === Number(matchScore?.against),
       secondLegStatus: round?.legs?.[1]?.status || null,
       roundStatus: round?.status || null,
       seasonReview: envelope?.sessions?.league?.seasonReview || null,
@@ -356,6 +364,9 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
     playoffStatus: "active",
     currentRoundIndex: 0,
     firstLegStatus: "completed",
+    firstLegScoreRecorded: true,
+    matchScoreRecorded: true,
+    firstLegScoreMatchesMatchday: true,
     secondLegStatus: "scheduled",
     roundStatus: "active",
     seasonReview: null,
