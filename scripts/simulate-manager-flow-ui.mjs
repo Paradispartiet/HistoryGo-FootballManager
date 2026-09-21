@@ -129,6 +129,46 @@ const primary = (context) => actions(context)[0] || null;
   check("ingen facilities-handling finnes i prioritert liste", !titles(READY).some((title) => /fasilitet|facilit/i.test(title)));
 }
 
+// 5b. Aktiv ligakvalifisering er fortsatt en spillbar konkurransekamp selv om
+// den ordinære serien er fullført. Next Action må derfor få en åpen ligakamp-port
+// fra app-state, mens en faktisk fullført sesong uten kvalifisering fortsatt er lukket.
+{
+  const completedWithoutPlayoff = primary(ctx({
+    selectedMode: "league",
+    leagueModeActive: true,
+    leagueSeasonActive: false,
+    miniSeasonActive: false,
+    opponentName: "Odd",
+    matchdayReadiness: {
+      status: "ready",
+      canStartMatch: true,
+      isReady: true,
+      primaryBlocker: null
+    }
+  }));
+  check("ferdig serie uten aktiv kvalifisering prioriterer ikke kamp", completedWithoutPlayoff?.title !== "Spill kamp");
+
+  const activePlayoff = primary(ctx({
+    selectedMode: "league",
+    leagueModeActive: true,
+    leagueSeasonActive: true,
+    miniSeasonActive: true,
+    opponentName: "Odd",
+    matchdayReadiness: {
+      status: "ready",
+      canStartMatch: true,
+      isReady: true,
+      primaryBlocker: null
+    }
+  }));
+  check("aktiv kvalifisering prioriterer Spill kamp i Next Action", activePlayoff?.title === "Spill kamp");
+  check("aktiv kvalifisering peker Next Action til Kamp", activePlayoff?.action?.type === NEXT_ACTION_TYPES.TAB && activePlayoff.action.tab === "kamp");
+}
+check(
+  "app kobler aktiv kvalifisering til Next Action-ligaporten",
+  appSource.includes("leagueSeasonActive: isLeaguePlayableMatchActive()")
+);
+
 // 6. Kampdag og review bruker eksisterende kamp-/analyseflater.
 {
   const blockedByMatch = primary(ctx({
