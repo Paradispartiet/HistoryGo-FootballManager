@@ -8,6 +8,19 @@ const CANONICAL_SUBSTITUTION_PLAN = new Map([
 ]);
 const CANONICAL_SUBSTITUTION_ROUNDS = new Set(CANONICAL_SUBSTITUTION_PLAN.keys());
 
+async function installCanonicalLeagueSeed(page) {
+  await page.addInitScript(() => {
+    const nativeNow = Date.now.bind(Date);
+
+    Date.now = () => {
+      const stack = String(new Error().stack || "");
+      if (stack.includes("createLeagueSaveExtras")) {
+        return 1700000000000;
+      }
+      return nativeNow();
+    };
+  });
+}
 function substitutionPositionBand(position) {
   const token = String(position || "").trim().toUpperCase();
   if (["LB", "CB", "RB", "LWB", "RWB", "SW"].includes(token)) return "defence";
@@ -103,6 +116,7 @@ async function readProgress(page) {
       phase: clubWeek?.phase || null,
       formationId: session.selectedFormationId || null,
       seasonStatus: season?.status || null,
+      seasonSeed: season?.seed || null,
       seasonNumber: Number(season?.seasonNumber) || null,
       seasonRounds: Number(season?.competition?.rounds) || null,
       currentRound: Number(season?.currentRound) || null,
@@ -1090,6 +1104,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   test.setTimeout(720_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await installCanonicalLeagueSeed(page);
   await page.goto("/");
 
   const blankMerits = await readProgress(page);
@@ -1109,6 +1124,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(initial.week).toBe(1);
   expect(initial.phase).toBe("analysis");
   expect(initial.hiredStaffCount).toBe(6);
+  expect(initial.seasonSeed).toBe("league_save_1700000000000-season-1");
 
   // #262 utvidet ready-klubbens sesongtropp fra spillbarhetsgulvet 15 til 20
   // når klubbpoolen tåler det. Oppstilling skal eksponere hele denne troppen,
@@ -1372,6 +1388,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     nonExactRotationEvents.length,
     `Non-exact rotation diagnostic: ${JSON.stringify({ nonExactRotationEvents, nonExactRotationDiagnostics })}`
   ).toBeLessThanOrEqual(1);
+
   expect(substitutionEvents).toHaveLength(CANONICAL_SUBSTITUTION_ROUNDS.size);
   expect(new Set(substitutionEvents.map((entry) => entry.round))).toEqual(CANONICAL_SUBSTITUTION_ROUNDS);
   const substitutionCoverageDiagnostic = substitutionEvents.map((entry) => ({
