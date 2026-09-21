@@ -9422,6 +9422,8 @@ function buildNextActionContext(teamFit) {
     miniSeasonActive: isScenarioModeActive() && state.miniSeason?.status === "active" || isLeaguePlayableMatchActive(),
     leagueModeActive: isLeagueModeActive(),
     leagueSeasonActive: isLeaguePlayableMatchActive(),
+    leagueSeasonCompleted: isLeagueModeActive() && state.leagueSeason?.status === "completed",
+    seasonReviewAvailable: Boolean(state.seasonReview),
     leaguePreseasonReady: isLeagueModeActive() ? isLeaguePreseasonReady(teamFit) : true,
     leaguePreseasonStep,
     scenarioModeActive: isScenarioModeActive(),
