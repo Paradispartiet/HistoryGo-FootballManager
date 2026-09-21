@@ -13029,11 +13029,14 @@ function renderLeagueSeason() {
   const newSeasonButton = elements.startNewLeagueSeasonButton;
   const table = season ? createLeagueTable(season) : [];
   const managerRow = table.find((row) => row.isManager);
-  const nextMatch = season?.status === "active" ? getNextLeagueOpponent(season) : null;
+  const playoffDescription = describePlayoff(state.leaguePlayoff);
+  const playoffOpponent = getPlayoffMatchdayOpponent(state.leaguePlayoff);
+  const nextMatch = playoffOpponent || (season?.status === "active" ? getNextLeagueOpponent(season) : null);
   const scene = createSeasonSceneModel({
     season,
     table,
     nextMatch,
+    playoff: playoffDescription,
     boardExpectation: getLeagueSaveModel().boardExpectation
   });
 
@@ -13043,12 +13046,17 @@ function renderLeagueSeason() {
   });
 
   if (newSeasonButton) {
-    newSeasonButton.hidden = season?.status !== "completed" || isCurrentLeagueManagerDismissed();
+    newSeasonButton.hidden =
+      season?.status !== "completed" ||
+      state.leaguePlayoff?.status === "active" ||
+      isCurrentLeagueManagerDismissed();
   }
 
   if (statusEl) {
     if (!season) {
       statusEl.textContent = "Sesongkontrollen åpner når før-sesongen er bekreftet: klubbanker, tropp, stab, ellever, formasjon og trening.";
+    } else if (playoffDescription?.active && playoffOpponent) {
+      statusEl.textContent = `${playoffDescription.headline} mot ${playoffDescription.opponentName}. ${playoffDescription.detail}`;
     } else if (season.status === "completed") {
       statusEl.textContent = `${table[0]?.club || "Ligamesteren"} er seriemester. ${managerRow?.club || "Managerklubben"} endte på ${managerRow?.position || "–"}. plass med ${managerRow?.points || 0} poeng.`;
     } else {
