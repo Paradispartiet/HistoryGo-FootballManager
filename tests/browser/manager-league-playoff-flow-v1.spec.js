@@ -387,7 +387,7 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
 });
 
 
-test("andre kvaliklegg avgjør playoff gjennom ekte Kampdag og arkiverer sesongen", async ({ page }) => {
+test("andre kvaliklegg avgjør playoff og ruller riktig nivå inn i neste sesong", async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -490,6 +490,49 @@ test("andre kvaliklegg avgjør playoff gjennom ekte Kampdag og arkiverer sesonge
     archiveCount: 1,
     archivedSeasonNumber: 2
   });
+
+  const terminalStatus = await page.evaluate(() => {
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    return playoff?.status || null;
+  });
+  expect(["won", "lost"]).toContain(terminalStatus);
+
+  const expectedTierId = terminalStatus === "won" ? "eliteserien" : "obosligaen";
+  const expectedTierName = terminalStatus === "won" ? "Eliteserien" : "OBOS-ligaen";
+  const expectedMovement = terminalStatus === "won" ? "stay" : "relegated";
+
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
+  await page.locator("#startNewLeagueSeasonButton").click();
+
+  await expect.poll(async () => page.evaluate(() => {
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    return {
+      seasonNumber: Number(season?.seasonNumber) || null,
+      status: season?.status || null,
+      tierId: season?.competition?.tierId || null,
+      tierName: season?.competition?.tierName || null,
+      viaPlayoff: Boolean(season?.previousOutcome?.viaPlayoff),
+      movement: season?.previousOutcome?.movement || null,
+      playoff,
+      archiveCount: Array.isArray(archive) ? archive.length : -1
+    };
+  })).toEqual({
+    seasonNumber: 3,
+    status: "active",
+    tierId: expectedTierId,
+    tierName: expectedTierName,
+    viaPlayoff: true,
+    movement: expectedMovement,
+    playoff: null,
+    archiveCount: 1
+  });
+
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+  await expect(page.locator("#seasonCommand")).toContainText(expectedTierName);
 });
 
 
