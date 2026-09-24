@@ -220,6 +220,24 @@ function activeTwoRoundPromotionPlayoffAfterFirstLeg() {
 }
 
 
+function activeTwoRoundPromotionPlayoffInSecondRound() {
+  const playoff = activeTwoRoundPromotionPlayoffAfterFirstLeg();
+  playoff.currentRoundIndex = 1;
+  playoff.rounds[0] = {
+    ...playoff.rounds[0],
+    status: "won",
+    legs: [
+      { leg: 1, homeAway: "away", status: "completed", score: { for: 20, against: 0 } },
+      { leg: 2, homeAway: "home", status: "completed", score: { for: 1, against: 0 } }
+    ],
+    aggregate: { for: 21, against: 0 },
+    awayGoals: { manager: 20, opponent: 0 },
+    decidedBy: "sammenlagt"
+  };
+  return playoff;
+}
+
+
 test("aktiv kvalifisering erstatter død ny-sesong-handling i Stats", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -582,6 +600,116 @@ test("vunnet første omgang i to-runders kvalifisering åpner omgang 2 uten tidl
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
   await expect(page.locator("#seasonCommand")).toContainText("Odd");
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+});
+
+
+test("første kamp i omgang 2 registreres gjennom ekte Kampdag uten tidlig sesongdom", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(({ season, playoff }) => {
+    const clubWeekState = {
+      week: 33,
+      phase: "matchday",
+      boardTrust: 50,
+      playerMorale: 50,
+      tacticalClarity: 50,
+      trainingCulture: 50,
+      mediaPressure: 50
+    };
+    localStorage.setItem("hgfm.onboarded.v1", "1");
+    localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
+      selectedMode: "league",
+      activeLeagueSaveId: "playoff_two_round_second_round_ui",
+      clubName: "Rosenborg",
+      takeoverClubId: "rosenborg",
+      managerName: "Manager",
+      leagueName: "2. divisjon",
+      leagueSeasonStatus: "completed",
+      boardExpectation: "Øvre halvdel"
+    }));
+    localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
+    localStorage.setItem("historygo-football-manager.league-playoff.v1", JSON.stringify(playoff));
+    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(clubWeekState));
+    localStorage.setItem("hgfm.weeklyTrainingFocus.v1", JSON.stringify({
+      focusId: "formation_familiarity",
+      week: 33,
+      appliedSessionId: null
+    }));
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify({
+      version: "mode-sessions.v1",
+      activeMode: "league",
+      sessions: {
+        league: {
+          opponentAnalysisPlan: {
+            version: "opponent-analysis.v1",
+            fixtureId: "playoff-browser-two-round-kval-kval-r2-k1",
+            opponentId: "odd",
+            opponentName: "Odd",
+            round: 2,
+            week: 33,
+            focusId: "press",
+            focusLabel: "Presset deres",
+            question: "Hvor starter presset?",
+            hypothesis: "Behold en fri spiller bak første pressledd.",
+            evidence: ["Odd presser høyt"],
+            countermeasureId: "free_player",
+            countermeasureLabel: "Skap en fri spiller",
+            target: "system",
+            targetLabel: "Systemet",
+            why: "Første kamp i opprykkskvalifiseringen er analysert.",
+            risk: "Krever presisjon nær eget mål.",
+            watch: "Se hvem som blir fri når første pressledd går."
+          }
+        },
+        scenario: null,
+        training: null,
+        national: null
+      }
+    }));
+  }, { season: completedSecondDivisionSeason(), playoff: activeTwoRoundPromotionPlayoffInSecondRound() });
+
+  await page.goto("/");
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [role="tab"][data-tab-target="kamp"]').click();
+  await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-ready", "true");
+
+  await playVisibleMatchday(page, 2);
+
+  await expect.poll(async () => page.evaluate(() => {
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const matchday = JSON.parse(localStorage.getItem("hgfm.matchday.v1") || "null");
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const firstRound = playoff?.rounds?.[0] || null;
+    const secondRound = playoff?.rounds?.[1] || null;
+    const firstLegScore = secondRound?.legs?.[0]?.score || null;
+    const matchScore = matchday?.lastMatch?.score || null;
+    return {
+      playoffStatus: playoff?.status || null,
+      currentRoundIndex: Number(playoff?.currentRoundIndex),
+      firstRoundStatus: firstRound?.status || null,
+      secondRoundStatus: secondRound?.status || null,
+      secondRoundFirstLegStatus: secondRound?.legs?.[0]?.status || null,
+      secondRoundFirstLegScoreMatchesMatchday:
+        Number(firstLegScore?.for) === Number(matchScore?.for) &&
+        Number(firstLegScore?.against) === Number(matchScore?.against),
+      secondRoundSecondLegStatus: secondRound?.legs?.[1]?.status || null,
+      seasonReview: envelope?.sessions?.league?.seasonReview || null,
+      archiveCount: Array.isArray(archive) ? archive.length : -1
+    };
+  })).toEqual({
+    playoffStatus: "active",
+    currentRoundIndex: 1,
+    firstRoundStatus: "won",
+    secondRoundStatus: "active",
+    secondRoundFirstLegStatus: "completed",
+    secondRoundFirstLegScoreMatchesMatchday: true,
+    secondRoundSecondLegStatus: "scheduled",
+    seasonReview: null,
+    archiveCount: 0
+  });
 });
 
 
