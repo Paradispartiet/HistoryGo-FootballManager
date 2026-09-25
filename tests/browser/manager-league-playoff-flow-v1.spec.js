@@ -625,8 +625,8 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
 });
 
 
-test("første kvaliklegg ruller Club Week videre og fører returkampen til kickoff", async ({ page }) => {
-  test.setTimeout(120_000);
+test("to kvaliklegg går gjennom Club Week og avgjør neste sesong i én sammenhengende flyt", async ({ page }) => {
+  test.setTimeout(180_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(({ season, playoff }) => {
@@ -770,6 +770,81 @@ test("første kvaliklegg ruller Club Week videre og fører returkampen til kicko
     secondLegStatus: "scheduled",
     archiveCount: 0
   });
+
+  await playVisibleMatchday(page, 1);
+
+  await expect.poll(async () => page.evaluate(() => {
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const matchday = JSON.parse(localStorage.getItem("hgfm.matchday.v1") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const round = playoff?.rounds?.[0] || null;
+    const secondLegScore = round?.legs?.[1]?.score || null;
+    const matchScore = matchday?.lastMatch?.score || null;
+    return {
+      playoffStatus: playoff?.status || null,
+      roundStatus: round?.status || null,
+      firstLegStatus: round?.legs?.[0]?.status || null,
+      secondLegStatus: round?.legs?.[1]?.status || null,
+      secondLegScoreMatchesMatchday:
+        Number(secondLegScore?.for) === Number(matchScore?.for) &&
+        Number(secondLegScore?.against) === Number(matchScore?.against),
+      archiveCount: Array.isArray(archive) ? archive.length : -1,
+      archivedSeasonNumber: Number(archive?.[0]?.seasonNumber) || null
+    };
+  })).toMatchObject({
+    firstLegStatus: "completed",
+    secondLegStatus: "completed",
+    secondLegScoreMatchesMatchday: true,
+    archiveCount: 1,
+    archivedSeasonNumber: 2
+  });
+
+  const terminalState = await page.evaluate(() => {
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    return {
+      playoffStatus: playoff?.status || null,
+      roundStatus: playoff?.rounds?.[0]?.status || null
+    };
+  });
+  expect(["won", "lost"]).toContain(terminalState.playoffStatus);
+  expect(terminalState.roundStatus).toBe(terminalState.playoffStatus);
+
+  const expectedTierId = terminalState.playoffStatus === "won" ? "eliteserien" : "obosligaen";
+  const expectedTierName = terminalState.playoffStatus === "won" ? "Eliteserien" : "OBOS-ligaen";
+  const expectedMovement = terminalState.playoffStatus === "won" ? "stay" : "relegated";
+
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
+  await page.locator("#startNewLeagueSeasonButton").click();
+
+  await expect.poll(async () => page.evaluate(() => {
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    return {
+      seasonNumber: Number(season?.seasonNumber) || null,
+      status: season?.status || null,
+      tierId: season?.competition?.tierId || null,
+      tierName: season?.competition?.tierName || null,
+      viaPlayoff: Boolean(season?.previousOutcome?.viaPlayoff),
+      movement: season?.previousOutcome?.movement || null,
+      playoff,
+      archiveCount: Array.isArray(archive) ? archive.length : -1
+    };
+  })).toEqual({
+    seasonNumber: 3,
+    status: "active",
+    tierId: expectedTierId,
+    tierName: expectedTierName,
+    viaPlayoff: true,
+    movement: expectedMovement,
+    playoff: null,
+    archiveCount: 1
+  });
+
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+  await expect(page.locator("#seasonCommand")).toContainText(expectedTierName);
 });
 
 
