@@ -208,6 +208,108 @@ test("sesongdom flytter canonical styretillit før sesong 2", async ({ page }) =
   });
 });
 
+test("direkte opprykk ruller neste sesong til OBOS uten playoff", async ({ page }) => {
+  await page.evaluate(() => {
+    const seasonKey = "historygo-football-manager.league-season.v3";
+    const modeKey = "hgfm.modeSessions.v1";
+    const gameStartKey = "hgfm.gameStartState.v1";
+    const playoffKey = "historygo-football-manager.league-playoff.v1";
+
+    const season = JSON.parse(localStorage.getItem(seasonKey));
+    season.competition = {
+      ...season.competition,
+      id: "hg-andredivisjon-avdeling1",
+      tierId: "andredivisjon",
+      tierName: "2. divisjon",
+      tierLevel: 3
+    };
+    season.tier = {
+      id: "andredivisjon",
+      name: "2. divisjon",
+      level: 3,
+      clubCount: 4,
+      groupSize: 4,
+      groups: 1,
+      rounds: 6,
+      promotion: { toTier: "obosligaen", direct: 1, playoff: 1, playoffRounds: 2 },
+      relegation: null
+    };
+    season.status = "completed";
+    season.currentRound = season.competition.rounds;
+    season.completedMatchIds = [];
+    season.fixtures.forEach((round) => {
+      round.status = "completed";
+      round.matches.forEach((match) => {
+        const managerHome = match.homeClubId === season.managerClubId;
+        const managerAway = match.awayClubId === season.managerClubId;
+        match.status = "completed";
+        match.result = managerHome
+          ? { homeGoals: 4, awayGoals: 0, simulated: false }
+          : managerAway
+            ? { homeGoals: 0, awayGoals: 4, simulated: false }
+            : { homeGoals: 0, awayGoals: 0, simulated: true };
+        season.completedMatchIds.push(match.id);
+      });
+    });
+    localStorage.setItem(seasonKey, JSON.stringify(season));
+    localStorage.removeItem(playoffKey);
+
+    const gameStart = JSON.parse(localStorage.getItem(gameStartKey) || "{}");
+    gameStart.leagueName = "2. divisjon";
+    gameStart.leagueSeasonStatus = "completed";
+    localStorage.setItem(gameStartKey, JSON.stringify(gameStart));
+
+    const envelope = JSON.parse(localStorage.getItem(modeKey) || "null");
+    if (envelope?.sessions?.league) {
+      envelope.sessions.league = {
+        ...envelope.sessions.league,
+        leagueSeason: season,
+        leaguePlayoff: null,
+        gameStartState: gameStart
+      };
+      localStorage.setItem(modeKey, JSON.stringify(envelope));
+    }
+  });
+
+  await page.reload();
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+
+  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
+
+  await page.locator("#startNewLeagueSeasonButton").click();
+
+  await expect.poll(async () => page.evaluate(() => {
+    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    return {
+      seasonNumber: Number(season?.seasonNumber) || null,
+      status: season?.status || null,
+      tierId: season?.competition?.tierId || null,
+      tierName: season?.competition?.tierName || null,
+      movement: season?.previousOutcome?.movement || null,
+      viaPlayoff: Boolean(season?.previousOutcome?.viaPlayoff),
+      playoff,
+      archiveCount: Array.isArray(archive) ? archive.length : -1
+    };
+  })).toEqual({
+    seasonNumber: 2,
+    status: "active",
+    tierId: "obosligaen",
+    tierName: "OBOS-ligaen",
+    movement: "promoted",
+    viaPlayoff: false,
+    playoff: null,
+    archiveCount: 1
+  });
+
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+  await expect(page.locator("#seasonCommand")).toContainText("OBOS-ligaen");
+});
+
+
 test("sparket manager kan ikke starte en ny sesong etter reload", async ({ page }) => {
   await page.evaluate(() => {
     const seasonKey = "historygo-football-manager.league-season.v3";
