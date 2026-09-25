@@ -335,6 +335,104 @@ async function rollVisibleMatchdayToNextWeek(page, expectedWeek) {
 }
 
 
+async function readCanonicalClubWeek(page) {
+  return page.evaluate(() => {
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "null");
+    const clubWeek = merits?.clubWeekState || null;
+    return {
+      week: Number(clubWeek?.week) || null,
+      phase: clubWeek?.phase || null
+    };
+  });
+}
+
+async function saveCurrentPlayoffOpponentAnalysis(page) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="board"]').click();
+  await expect(page.locator("#managerClubOrganization")).toBeVisible();
+  await page.locator('[data-club-room="analysis"]').click();
+  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
+
+  const workshop = page.locator(".opponent-analysis-workshop-v1");
+  await expect(workshop).toBeVisible();
+  await expect(workshop).toContainText("Odd");
+
+  const focusOptions = workshop.locator("[data-opponent-analysis-focus]");
+  const focusCount = await focusOptions.count();
+  expect(focusCount).toBeGreaterThan(0);
+  await focusOptions.first().click();
+
+  const countermeasureOptions = workshop.locator("[data-opponent-analysis-countermeasure]");
+  const countermeasureCount = await countermeasureOptions.count();
+  expect(countermeasureCount).toBeGreaterThan(0);
+  await countermeasureOptions.first().click();
+
+  await workshop.locator(".opponent-analysis-save").click();
+  await expect(workshop.locator(".opponent-analysis-feedback")).toContainText("kampklarheten er oppdatert");
+
+  await page.locator("#managerClubRoomDrawer .club-room-close").click();
+  await expect(page.locator("#managerClubRoomDrawer")).toBeHidden();
+}
+
+async function advancePlayoffClubWeek(page, expectedPhase) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+
+  const advance = page.locator("#managerCalendarAdvancePhase");
+  await expect(advance).toBeVisible();
+  await advance.click();
+
+  await expect.poll(async () => (await readCanonicalClubWeek(page)).phase).toBe(expectedPhase);
+}
+
+async function choosePlayoffTraining(page) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+  await page.locator('.app-subtab[data-tab-target="trening"]').click();
+  await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+
+  await page.locator("#trainingDayChangeProgram").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  const programOptions = page.locator("#managerTeamChoiceDrawerBody .training-program-select:not([disabled])");
+  expect(await programOptions.count()).toBeGreaterThan(0);
+  await programOptions.first().click();
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
+
+  if ((await readCanonicalClubWeek(page)).phase === "training") {
+    await page.locator("#trainingDayChangeFocus").click();
+    await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+    const focusOptions = page
+      .locator("#managerTeamChoiceDrawerBody .weekly-training-card")
+      .getByRole("button", { name: "Velg fokus" });
+    expect(await focusOptions.count()).toBeGreaterThan(0);
+    await focusOptions.first().click();
+    await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+    await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
+  }
+
+  await expect.poll(async () => (await readCanonicalClubWeek(page)).phase).toBe("match_prep");
+}
+
+async function openPlayoffPreMatch(page) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="kamp"]').click();
+  await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
+
+  const kickoff = page.locator(".matchday-kickoff-button:visible").first();
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (await kickoff.isVisible()) break;
+    const action = page.locator(".matchday-scene-action:visible").first();
+    await expect(action).toBeVisible();
+    await action.click();
+  }
+
+  await expect.poll(async () => (await readCanonicalClubWeek(page)).phase).toBe("matchday");
+  await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-ready", "true");
+  await expect(kickoff).toBeVisible();
+}
+
+
 test("aktiv kvalifisering er en spillbar kamp i den autoritative kampklarheten", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -523,7 +621,7 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
 });
 
 
-test("første kvaliklegg ruller Club Week videre til neste legg uten å miste playoff-state", async ({ page }) => {
+test("første kvaliklegg ruller Club Week videre og gjør returkampen kampklar", async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -630,6 +728,44 @@ test("første kvaliklegg ruller Club Week videre til neste legg uten å miste pl
   await expect(page.locator("#seasonCommand")).toContainText("Odd");
   await expect(page.locator("#seasonCommand")).toContainText(/kamp 2 av 2/i);
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
+
+  await saveCurrentPlayoffOpponentAnalysis(page);
+
+  await expect.poll(async () => page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
+    const plan = envelope?.sessions?.league?.opponentAnalysisPlan || null;
+    return {
+      fixtureId: plan?.fixtureId || null,
+      opponentId: plan?.opponentId || null,
+      opponentName: plan?.opponentName || null
+    };
+  })).toEqual({
+    fixtureId: "playoff-browser-regression-kval-kval-r1-k2",
+    opponentId: "odd",
+    opponentName: "Odd"
+  });
+
+  await advancePlayoffClubWeek(page, "inbox");
+  await advancePlayoffClubWeek(page, "training");
+  await choosePlayoffTraining(page);
+  await openPlayoffPreMatch(page);
+
+  await expect.poll(async () => page.evaluate(() => {
+    const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const round = playoff?.rounds?.[0] || null;
+    return {
+      playoffStatus: playoff?.status || null,
+      firstLegStatus: round?.legs?.[0]?.status || null,
+      secondLegStatus: round?.legs?.[1]?.status || null,
+      archiveCount: Array.isArray(archive) ? archive.length : -1
+    };
+  })).toEqual({
+    playoffStatus: "active",
+    firstLegStatus: "completed",
+    secondLegStatus: "scheduled",
+    archiveCount: 0
+  });
 });
 
 
