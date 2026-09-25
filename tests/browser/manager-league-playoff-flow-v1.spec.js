@@ -428,8 +428,12 @@ async function openPlayoffPreMatch(page) {
   }
 
   await expect.poll(async () => (await readCanonicalClubWeek(page)).phase).toBe("matchday");
-  await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator("#matchdayReadiness")).toHaveAttribute("data-status", "in_progress");
   await expect(kickoff).toBeVisible();
+  await expect.poll(async () => page.evaluate(() => {
+    const matchday = JSON.parse(localStorage.getItem("hgfm.matchday.v1") || "null");
+    return matchday?.session?.opponent?.name || null;
+  })).toBe("Odd");
 }
 
 
@@ -621,7 +625,7 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
 });
 
 
-test("første kvaliklegg ruller Club Week videre og gjør returkampen kampklar", async ({ page }) => {
+test("første kvaliklegg ruller Club Week videre og fører returkampen til kickoff", async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
