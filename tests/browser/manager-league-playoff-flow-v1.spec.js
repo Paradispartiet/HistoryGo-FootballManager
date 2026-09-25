@@ -883,11 +883,13 @@ test("to kvaliklegg overlever reload mellom leggene og avgjør neste sesong", as
 });
 
 
-test("to-runders opprykkskvalifisering går gjennom alle resterende Club Week-uker til neste sesong", async ({ page }) => {
+test("to-runders opprykkskvalifisering overlever reload ved rundeovergangen og går til neste sesong", async ({ page }) => {
   test.setTimeout(300_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(({ season, playoff }) => {
+    if (localStorage.getItem("hgfm.test.twoRoundPlayoffSeeded.v1") === "1") return;
+    localStorage.setItem("hgfm.test.twoRoundPlayoffSeeded.v1", "1");
     const clubWeekState = {
       week: 32,
       phase: "matchday",
@@ -981,6 +983,40 @@ test("to-runders opprykkskvalifisering går gjennom alle resterende Club Week-uk
 
   await expect.poll(async () => (await readCanonicalClubWeek(page)).phase).toBe("review");
   await rollVisibleMatchdayToNextWeek(page, 33);
+
+  await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await expect.poll(async () => {
+    const clubWeek = await readCanonicalClubWeek(page);
+    const persisted = await page.evaluate(() => {
+      const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+      const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+      return {
+        playoffStatus: playoff?.status || null,
+        currentRoundIndex: Number(playoff?.currentRoundIndex),
+        firstRoundStatus: playoff?.rounds?.[0]?.status || null,
+        secondRoundStatus: playoff?.rounds?.[1]?.status || null,
+        secondRoundFirstLegStatus: playoff?.rounds?.[1]?.legs?.[0]?.status || null,
+        archiveCount: Array.isArray(archive) ? archive.length : -1
+      };
+    });
+    return {
+      week: clubWeek.week,
+      phase: clubWeek.phase,
+      ...persisted
+    };
+  }).toEqual({
+    week: 33,
+    phase: "analysis",
+    playoffStatus: "active",
+    currentRoundIndex: 1,
+    firstRoundStatus: "won",
+    secondRoundStatus: "active",
+    secondRoundFirstLegStatus: "scheduled",
+    archiveCount: 0
+  });
 
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
   await expect(page.locator("#seasonCommand")).toContainText("Odd");
