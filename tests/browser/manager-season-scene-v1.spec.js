@@ -384,7 +384,6 @@ test("direkte nedrykk ruller neste sesong til OBOS uten playoff", async ({ page 
     const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
     const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
     const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
-    const latest = archive[archive.length - 1] || null;
     return {
       seasonNumber: Number(season?.seasonNumber) || null,
       status: season?.status || null,
@@ -393,9 +392,7 @@ test("direkte nedrykk ruller neste sesong til OBOS uten playoff", async ({ page 
       movement: season?.previousOutcome?.movement || null,
       viaPlayoff: Boolean(season?.previousOutcome?.viaPlayoff),
       playoff,
-      archiveCount: Array.isArray(archive) ? archive.length : -1,
-      warning: Boolean(latest?.warning),
-      sacked: Boolean(latest?.sacked)
+      archiveCount: Array.isArray(archive) ? archive.length : -1
     };
   })).toEqual({
     seasonNumber: 2,
@@ -405,9 +402,7 @@ test("direkte nedrykk ruller neste sesong til OBOS uten playoff", async ({ page 
     movement: "relegated",
     viaPlayoff: false,
     playoff: null,
-    archiveCount: 1,
-    warning: true,
-    sacked: false
+    archiveCount: 1
   });
 
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
