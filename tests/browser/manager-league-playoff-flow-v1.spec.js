@@ -625,11 +625,13 @@ test("første kvaliklegg registreres gjennom ekte Kampdag uten tidlig sesongdom"
 });
 
 
-test("to kvaliklegg går gjennom Club Week og avgjør neste sesong i én sammenhengende flyt", async ({ page }) => {
+test("to kvaliklegg overlever reload mellom leggene og avgjør neste sesong", async ({ page }) => {
   test.setTimeout(180_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(({ season, playoff }) => {
+    if (localStorage.getItem("hgfm.test.playoffFullFlowSeeded.v1") === "1") return;
+    localStorage.setItem("hgfm.test.playoffFullFlowSeeded.v1", "1");
     const clubWeekState = {
       week: 31,
       phase: "matchday",
@@ -725,6 +727,39 @@ test("to kvaliklegg går gjennom Club Week og avgjør neste sesong i én sammenh
     firstLegStatus: "completed",
     secondLegStatus: "scheduled",
     trainingFocus: null,
+    archiveCount: 0
+  });
+
+  await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+
+  await expect.poll(async () => {
+    const clubWeek = await readCanonicalClubWeek(page);
+    const persisted = await page.evaluate(() => {
+      const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
+      const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+      const round = playoff?.rounds?.[0] || null;
+      return {
+        playoffStatus: playoff?.status || null,
+        currentRoundIndex: Number(playoff?.currentRoundIndex),
+        firstLegStatus: round?.legs?.[0]?.status || null,
+        secondLegStatus: round?.legs?.[1]?.status || null,
+        archiveCount: Array.isArray(archive) ? archive.length : -1
+      };
+    });
+    return {
+      week: clubWeek.week,
+      phase: clubWeek.phase,
+      ...persisted
+    };
+  }).toEqual({
+    week: 32,
+    phase: "analysis",
+    playoffStatus: "active",
+    currentRoundIndex: 0,
+    firstLegStatus: "completed",
+    secondLegStatus: "scheduled",
     archiveCount: 0
   });
 
