@@ -325,7 +325,8 @@ async function rollVisibleMatchdayToNextWeek(page, expectedWeek) {
   await nextWeek.click();
 
   await expect.poll(async () => page.evaluate(() => {
-    const clubWeek = JSON.parse(localStorage.getItem("hgfm.clubWeekState.v1") || "null");
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "null");
+    const clubWeek = merits?.clubWeekState || null;
     return {
       week: Number(clubWeek?.week) || null,
       phase: clubWeek?.phase || null
@@ -597,8 +598,8 @@ test("første kvaliklegg ruller Club Week videre til neste legg uten å miste pl
   await playVisibleMatchday(page, 0);
 
   await expect.poll(async () => page.evaluate(() => {
-    const clubWeek = JSON.parse(localStorage.getItem("hgfm.clubWeekState.v1") || "null");
-    return clubWeek?.phase || null;
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "null");
+    return merits?.clubWeekState?.phase || null;
   })).toBe("review");
 
   await rollVisibleMatchdayToNextWeek(page, 32);
