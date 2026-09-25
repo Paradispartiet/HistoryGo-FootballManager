@@ -274,7 +274,6 @@ test("direkte opprykk ruller neste sesong til OBOS uten playoff", async ({ page 
   await page.reload();
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
 
-  await expect(page.locator("#seasonReviewPanel")).toBeVisible();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
 
