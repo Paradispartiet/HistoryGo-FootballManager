@@ -773,7 +773,7 @@ test("to kvaliklegg går gjennom Club Week og avgjør neste sesong i én sammenh
 
   await playVisibleMatchday(page, 1);
 
-  const terminal = await expect.poll(async () => page.evaluate(() => {
+  await expect.poll(async () => page.evaluate(() => {
     const playoff = JSON.parse(localStorage.getItem("historygo-football-manager.league-playoff.v1") || "null");
     const matchday = JSON.parse(localStorage.getItem("hgfm.matchday.v1") || "null");
     const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
