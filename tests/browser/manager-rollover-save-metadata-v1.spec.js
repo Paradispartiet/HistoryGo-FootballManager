@@ -68,6 +68,7 @@ test("opprykk synkroniserer league-save metadata med den nye sesongen", async ({
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(({ season, gameStart }) => {
+    if (localStorage.getItem("hgfm.test.rolloverSaveMetadataSeeded") === "1") return;
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify(gameStart));
     localStorage.setItem("historygo-football-manager.league-season.v3", JSON.stringify(season));
@@ -88,6 +89,7 @@ test("opprykk synkroniserer league-save metadata med den nye sesongen", async ({
         national: null
       }
     }));
+    localStorage.setItem("hgfm.test.rolloverSaveMetadataSeeded", "1");
   }, { season, gameStart });
 
   await page.goto("/");
