@@ -6312,6 +6312,23 @@ function getSeasonTarget() {
   });
 }
 
+// `leagueSeason` er canonical for hvilket nivå og hvilken sesong manageren
+// faktisk er i. Etter rollover må legacy/game-start-metadata følge den,
+// ellers viser header/Stats fortsatt forrige divisjon og forrige styremål.
+function syncLeagueSaveMetadataFromSeason() {
+  const season = state.leagueSeason;
+  if (!season) return;
+  const target = getSeasonTarget();
+  state.gameStartState = normalizeGameStartState({
+    ...state.gameStartState,
+    leagueSeasonStatus: season.status,
+    leagueName: season.tier?.name || season.competition?.tierName || state.gameStartState?.leagueName,
+    seasonLabel: `Sesong ${Number(season.seasonNumber) || 1}`,
+    boardExpectation: target?.label || state.gameStartState?.boardExpectation
+  });
+  saveGameStartState();
+}
+
 // Spilte manageren klubbens fotball? Bare aktuelt for en overtatt klubb — en
 // egenopprettet klubb har ingen tradisjon å svikte.
 //
@@ -6433,6 +6450,7 @@ function startNewLeagueSeason() {
   saveLeaguePlayoff();
   saveLeagueSeason();
   if (!state.leagueSeason) ensureLeagueSeason();
+  syncLeagueSaveMetadataFromSeason();
   renderApp();
 }
 
