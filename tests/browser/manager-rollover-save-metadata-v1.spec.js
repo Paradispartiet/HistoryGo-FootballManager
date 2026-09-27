@@ -97,7 +97,7 @@ test("opprykk synkroniserer league-save metadata med den nye sesongen", async ({
 
   await page.locator("#startNewLeagueSeasonButton").click();
 
-  const persisted = await expect.poll(async () => page.evaluate(() => {
+  await expect.poll(async () => page.evaluate(() => {
     const nextSeason = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
     const nextGameStart = JSON.parse(localStorage.getItem("hgfm.gameStartState.v1") || "null");
     return {
@@ -129,6 +129,32 @@ test("opprykk synkroniserer league-save metadata med den nye sesongen", async ({
   });
 
   await expect(page.locator("#clubIdentityHeader")).toContainText(snapshot.season.tier.name);
+  await expect(page.locator("#statsBoardGoal")).toHaveText(expected.label);
+  await expect(page.locator("#statsBoardGoal")).not.toHaveText("Seriegull");
+
+  // Mode-session eier den aktive league-snapshoten ved oppstart. Reload må derfor
+  // bevise at snapshotet ikke kan gjeninnføre den gamle divisjonen eller målet.
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+
+  const reloaded = await page.evaluate(() => ({
+    season: JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null"),
+    gameStart: JSON.parse(localStorage.getItem("hgfm.gameStartState.v1") || "null")
+  }));
+  expect(reloaded.season).toMatchObject({
+    seasonNumber: 2,
+    status: "active",
+    tier: { id: "obosligaen", name: "OBOS-ligaen" },
+    previousOutcome: { movement: "promoted" }
+  });
+  expect(reloaded.gameStart).toMatchObject({
+    leagueName: "OBOS-ligaen",
+    seasonLabel: "Sesong 2",
+    boardExpectation: expected.label,
+    leagueSeasonStatus: "active"
+  });
+  await expect(page.locator("#clubIdentityHeader")).toContainText("OBOS-ligaen");
   await expect(page.locator("#statsBoardGoal")).toHaveText(expected.label);
   await expect(page.locator("#statsBoardGoal")).not.toHaveText("Seriegull");
 });
