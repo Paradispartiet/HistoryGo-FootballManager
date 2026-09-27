@@ -6,14 +6,18 @@ on:
       - test/season-target-tier-change-v1
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  targeted:
+  patch-and-prove:
+    if: ${{ !contains(github.event.head_commit.message, '[tier-target-patched]') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: test/season-target-tier-change-v1
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -21,5 +25,108 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Apply exact runtime replacements
+        shell: python
+        run: |
+          from pathlib import Path
+
+          review_path = Path("src/football-season-review.js")
+          review = review_path.read_text()
+          old_signature = "export function deriveSeasonTarget({ clubCount = 8, seasonNumber = 1, previousPosition = null, clubExpectation = null } = {}) {"
+          new_signature = "export function deriveSeasonTarget({ clubCount = 8, seasonNumber = 1, previousPosition = null, clubExpectation = null, tierChanged = false } = {}) {"
+          if review.count(old_signature) != 1:
+              raise SystemExit("season-review signature drift: expected exactly one old signature")
+          review = review.replace(old_signature, new_signature, 1)
+
+          old_condition = "  if (!previousPosition || seasonNumber <= 1) {"
+          new_condition = "  if (tierChanged || !previousPosition || seasonNumber <= 1) {"
+          if review.count(old_condition) != 1:
+              raise SystemExit("season-review condition drift: expected exactly one old condition")
+          review = review.replace(old_condition, new_condition, 1)
+
+          old_description = "      description: `Første sesong: styret vil se en klubb som hører hjemme i øvre halvdel. Topp ${midtre} holder.`"
+          new_description = "      description: tierChanged\n        ? `Nytt nivå: styret nullstiller forrige divisjons tabellplass. Topp ${midtre} er utgangspunktet.`\n        : `Første sesong: styret vil se en klubb som hører hjemme i øvre halvdel. Topp ${midtre} holder.`"
+          if review.count(old_description) != 1:
+              raise SystemExit("season-review midpoint description drift")
+          review = review.replace(old_description, new_description, 1)
+          review_path.write_text(review)
+
+          app_path = Path("src/app.js")
+          app = app_path.read_text()
+          old_expectation_block = '''function getClubExpectation() {
+            const takeover = getTakeoverClub();
+            if (!takeover) return null;
+            const tier = (state.leaguePyramid?.tiers || []).find((entry) => entry.id === takeover.tier);
+            return tier ? deriveClubExpectation(takeover, state.leaguePyramid?.clubs || [], tier) : null;
+          }
+          '''
+          new_expectation_block = '''function getClubExpectation() {
+            const takeover = getTakeoverClub();
+            if (!takeover) return null;
+            const tier = (state.leaguePyramid?.tiers || []).find((entry) => entry.id === takeover.tier);
+            return tier ? deriveClubExpectation(takeover, state.leaguePyramid?.clubs || [], tier) : null;
+          }
+
+          // Etter opp- eller nedrykk må styrets mål måles mot klubbenes faktiske
+          // styrke på det NYE nivået. Den opprinnelige takeover-divisjonen er da
+          // historikk, ikke en gyldig forventningsbase.
+          function getCurrentLeagueClubExpectation() {
+            const takeover = getTakeoverClub();
+            const season = state.leagueSeason;
+            if (!takeover || !season?.tier || !Array.isArray(season.clubs)) return null;
+            const managerClub = season.clubs.find(
+              (club) => String(club?.id || "") === String(season.managerClubId || "")
+            );
+            return managerClub ? deriveClubExpectation(managerClub, season.clubs, season.tier) : null;
+          }
+          '''
+          if app.count(old_expectation_block) != 1:
+              raise SystemExit("app expectation block drift: expected exactly one old block")
+          app = app.replace(old_expectation_block, new_expectation_block, 1)
+
+          old_target_block = '''// Målet styret setter for inneværende sesong: en tabellplass, avledet av der du
+          // endte sist. Brukes både til dommen og til å vise forventningen underveis.
+          function getSeasonTarget() {
+            const archive = getSeasonArchive();
+            const previous = archive[archive.length - 1] || null;
+            return deriveSeasonTarget({
+              clubCount: state.leagueSeason?.clubs?.length || 8,
+              seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
+              previousPosition: previous ? Number(previous.position) : null,
+              // Tok du over en etablert klubb, arver du styrets forventning fra dag én.
+              clubExpectation: getClubExpectation()
+            });
+          }
+          '''
+          new_target_block = '''// Målet styret setter for inneværende sesong: en tabellplass, avledet av der du
+          // endte sist på SAMME nivå. Ved nivåskifte nullstilles den gamle plasseringen
+          // og takeover-klubben vurderes mot motstanderne i den nye divisjonen.
+          function getSeasonTarget() {
+            const archive = getSeasonArchive();
+            const previous = archive[archive.length - 1] || null;
+            const previousTierId = String(state.leagueSeason?.previousOutcome?.tierId || "");
+            const currentTierId = String(state.leagueSeason?.tier?.id || "");
+            const tierChanged = Boolean(previousTierId && currentTierId && previousTierId !== currentTierId);
+            return deriveSeasonTarget({
+              clubCount: state.leagueSeason?.clubs?.length || 8,
+              seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
+              previousPosition: previous ? Number(previous.position) : null,
+              clubExpectation: tierChanged ? getCurrentLeagueClubExpectation() : getClubExpectation(),
+              tierChanged
+            });
+          }
+          '''
+          if app.count(old_target_block) != 1:
+              raise SystemExit("app season-target block drift: expected exactly one old block")
+          app = app.replace(old_target_block, new_target_block, 1)
+          app_path.write_text(app)
       - name: Run focused tier-change target proof
         run: npx playwright test tests/browser/manager-season-target-tier-change-v1.spec.js
+      - name: Commit proven runtime fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/football-season-review.js src/app.js
+          git diff --cached --check
+          git commit -m "fix: reset board target after tier change [tier-target-patched]"
+          git push origin HEAD:test/season-target-tier-change-v1
