@@ -1,0 +1,25 @@
+name: Diagnose season target tier change
+
+on:
+  push:
+    branches:
+      - test/season-target-tier-change-v1
+
+permissions:
+  contents: read
+
+jobs:
+  targeted:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Run focused tier-change target proof
+        run: npx playwright test tests/browser/manager-season-target-tier-change-v1.spec.js
