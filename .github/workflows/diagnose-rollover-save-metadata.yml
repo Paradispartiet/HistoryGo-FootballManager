@@ -6,14 +6,18 @@ on:
       - test/rollover-save-metadata-v1
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  targeted:
+  patch-and-prove:
+    if: ${{ !contains(github.event.head_commit.message, '[rollover-metadata-patched]') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: test/rollover-save-metadata-v1
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -21,7 +25,91 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Apply exact runtime replacements
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("src/app.js")
+          text = path.read_text()
+
+          old_target = '''function getSeasonTarget() {
+            const archive = getSeasonArchive();
+            const previous = archive[archive.length - 1] || null;
+            const previousTierId = String(state.leagueSeason?.previousOutcome?.tierId || "");
+            const currentTierId = String(state.leagueSeason?.tier?.id || "");
+            const tierChanged = Boolean(previousTierId && currentTierId && previousTierId !== currentTierId);
+            return deriveSeasonTarget({
+              clubCount: state.leagueSeason?.clubs?.length || 8,
+              seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
+              previousPosition: previous ? Number(previous.position) : null,
+              clubExpectation: tierChanged ? getCurrentLeagueClubExpectation() : getClubExpectation(),
+              tierChanged
+            });
+          }
+          '''
+          new_target = '''function getSeasonTarget() {
+            const archive = getSeasonArchive();
+            const previous = archive[archive.length - 1] || null;
+            const previousTierId = String(state.leagueSeason?.previousOutcome?.tierId || "");
+            const currentTierId = String(state.leagueSeason?.tier?.id || "");
+            const tierChanged = Boolean(previousTierId && currentTierId && previousTierId !== currentTierId);
+            return deriveSeasonTarget({
+              clubCount: state.leagueSeason?.clubs?.length || 8,
+              seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
+              previousPosition: previous ? Number(previous.position) : null,
+              clubExpectation: tierChanged ? getCurrentLeagueClubExpectation() : getClubExpectation(),
+              tierChanged
+            });
+          }
+
+          // `leagueSeason` er canonical for hvilket nivå og hvilken sesong manageren
+          // faktisk er i. Etter rollover må legacy/game-start-metadata følge den,
+          // ellers viser header/Stats fortsatt forrige divisjon og forrige styremål.
+          function syncLeagueSaveMetadataFromSeason() {
+            const season = state.leagueSeason;
+            if (!season) return;
+            const target = getSeasonTarget();
+            state.gameStartState = normalizeGameStartState({
+              ...state.gameStartState,
+              leagueSeasonStatus: season.status,
+              leagueName: season.tier?.name || season.competition?.tierName || state.gameStartState?.leagueName,
+              seasonLabel: `Sesong ${Number(season.seasonNumber) || 1}`,
+              boardExpectation: target?.label || state.gameStartState?.boardExpectation
+            });
+            saveGameStartState();
+          }
+          '''
+          if text.count(old_target) != 1:
+              raise SystemExit("getSeasonTarget block drift: expected exactly one match")
+          text = text.replace(old_target, new_target, 1)
+
+          old_rollover = '''  saveLeaguePlayoff();
+            saveLeagueSeason();
+            if (!state.leagueSeason) ensureLeagueSeason();
+            renderApp();
+          }
+          '''
+          new_rollover = '''  saveLeaguePlayoff();
+            saveLeagueSeason();
+            if (!state.leagueSeason) ensureLeagueSeason();
+            syncLeagueSaveMetadataFromSeason();
+            renderApp();
+          }
+          '''
+          if text.count(old_rollover) != 1:
+              raise SystemExit("startNewLeagueSeason tail drift: expected exactly one match")
+          text = text.replace(old_rollover, new_rollover, 1)
+          path.write_text(text)
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Run focused rollover metadata proof
         run: npx playwright test tests/browser/manager-rollover-save-metadata-v1.spec.js
+      - name: Commit proven runtime fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app.js
+          git diff --cached --check
+          git commit -m "fix: sync league-save metadata after rollover [rollover-metadata-patched]"
+          git push origin HEAD:test/rollover-save-metadata-v1
