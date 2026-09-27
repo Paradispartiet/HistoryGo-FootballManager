@@ -67,39 +67,12 @@ const priorArchive = [
   }
 ];
 
-async function expectDismissalTerminal(page) {
+async function expectDismissalBlocked(page) {
   await expect(page.getByText(/avslutter samarbeidet/i)).toBeVisible();
-
-  const startNextSeason = page.locator("#startNewLeagueSeasonButton");
-  const actionable = await startNextSeason.evaluate((button) => {
-    const style = window.getComputedStyle(button);
-    const visible = !button.hidden && style.display !== "none" && style.visibility !== "hidden";
-    return visible && !button.disabled;
-  });
-  expect(actionable).toBe(false);
-
-  const state = await page.evaluate(() => {
-    const season = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
-    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
-    return {
-      seasonNumber: Number(season?.seasonNumber) || null,
-      status: season?.status || null,
-      archiveCount: archive.length,
-      priorWarning: Boolean(archive[0]?.warning),
-      priorSacked: Boolean(archive[0]?.sacked)
-    };
-  });
-
-  expect(state).toEqual({
-    seasonNumber: 2,
-    status: "completed",
-    archiveCount: 1,
-    priorWarning: true,
-    priorSacked: false
-  });
+  await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
 }
 
-test("andre katastrofesesong avslutter managerjobben og sperrer samme karriere etter reload", async ({ page }) => {
+test("andre katastrofesesong blir en vedvarende avskjed uten forhåndsseedet sacked-dom", async ({ page }) => {
   const season = completedFailedSeason();
   const gameStart = {
     selectedMode: "league",
@@ -140,10 +113,65 @@ test("andre katastrofesesong avslutter managerjobben og sperrer samme karriere e
   await page.goto("/");
   await expect(page.locator("#onboardingScreen")).toBeHidden();
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
-  await expectDismissalTerminal(page);
+
+  // Ingen `sacked: true` er seedet. Browseren må selv avlede avskjeden fra
+  // forrige sesongs advarsel + den nye katastrofesesongen.
+  await expectDismissalBlocked(page);
+
+  // UI-skjulingen er ikke nok. Tving fram samme klikk som en programmatisk
+  // caller kunne gjort og krev at runtime-guarden både stanser rollover og
+  // registrerer avskjeden canonicalt før reload.
+  await page.evaluate(() => {
+    const button = document.querySelector("#startNewLeagueSeasonButton");
+    if (!button) return;
+    button.hidden = false;
+    button.click();
+  });
+
+  await expect.poll(async () => page.evaluate(() => {
+    const activeSeason = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const latest = archive[archive.length - 1] || null;
+    return {
+      seasonNumber: Number(activeSeason?.seasonNumber) || null,
+      seasonStatus: activeSeason?.status || null,
+      archiveCount: archive.length,
+      latestSeasonNumber: Number(latest?.seasonNumber) || null,
+      latestWarning: Boolean(latest?.warning),
+      latestSacked: Boolean(latest?.sacked)
+    };
+  })).toEqual({
+    seasonNumber: 2,
+    seasonStatus: "completed",
+    archiveCount: 2,
+    latestSeasonNumber: 2,
+    latestWarning: false,
+    latestSacked: true
+  });
 
   await page.reload();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
-  await expectDismissalTerminal(page);
+  await expectDismissalBlocked(page);
+
+  const afterReload = await page.evaluate(() => {
+    const activeSeason = JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null");
+    const archive = JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]");
+    const latest = archive[archive.length - 1] || null;
+    return {
+      seasonNumber: Number(activeSeason?.seasonNumber) || null,
+      seasonStatus: activeSeason?.status || null,
+      archiveCount: archive.length,
+      latestSeasonNumber: Number(latest?.seasonNumber) || null,
+      latestSacked: Boolean(latest?.sacked)
+    };
+  });
+
+  expect(afterReload).toEqual({
+    seasonNumber: 2,
+    seasonStatus: "completed",
+    archiveCount: 2,
+    latestSeasonNumber: 2,
+    latestSacked: true
+  });
 });
