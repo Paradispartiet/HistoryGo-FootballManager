@@ -6203,6 +6203,19 @@ function getClubExpectation() {
   return tier ? deriveClubExpectation(takeover, state.leaguePyramid?.clubs || [], tier) : null;
 }
 
+// Etter opp- eller nedrykk må styrets mål måles mot klubbenes faktiske
+// styrke på det NYE nivået. Den opprinnelige takeover-divisjonen er da
+// historikk, ikke en gyldig forventningsbase.
+function getCurrentLeagueClubExpectation() {
+  const takeover = getTakeoverClub();
+  const season = state.leagueSeason;
+  if (!takeover || !season?.tier || !Array.isArray(season.clubs)) return null;
+  const managerClub = season.clubs.find(
+    (club) => String(club?.id || "") === String(season.managerClubId || "")
+  );
+  return managerClub ? deriveClubExpectation(managerClub, season.clubs, season.tier) : null;
+}
+
 // Etter fullført ligasesong: legg den bak deg og start neste. Rører kun
 // mini-sesong-state — aldri History Go-unlocks, merits eller Club Week.
 function startLeagueSeasonFromOnboarding() {
@@ -6282,16 +6295,20 @@ function isCurrentLeagueManagerDismissed() {
 }
 
 // Målet styret setter for inneværende sesong: en tabellplass, avledet av der du
-// endte sist. Brukes både til dommen og til å vise forventningen underveis.
+// endte sist på SAMME nivå. Ved nivåskifte nullstilles den gamle plasseringen
+// og takeover-klubben vurderes mot motstanderne i den nye divisjonen.
 function getSeasonTarget() {
   const archive = getSeasonArchive();
   const previous = archive[archive.length - 1] || null;
+  const previousTierId = String(state.leagueSeason?.previousOutcome?.tierId || "");
+  const currentTierId = String(state.leagueSeason?.tier?.id || "");
+  const tierChanged = Boolean(previousTierId && currentTierId && previousTierId !== currentTierId);
   return deriveSeasonTarget({
     clubCount: state.leagueSeason?.clubs?.length || 8,
     seasonNumber: Number(state.leagueSeason?.seasonNumber) || 1,
     previousPosition: previous ? Number(previous.position) : null,
-    // Tok du over en etablert klubb, arver du styrets forventning fra dag én.
-    clubExpectation: getClubExpectation()
+    clubExpectation: tierChanged ? getCurrentLeagueClubExpectation() : getClubExpectation(),
+    tierChanged
   });
 }
 
