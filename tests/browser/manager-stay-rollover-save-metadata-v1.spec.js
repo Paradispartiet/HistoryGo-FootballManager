@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { createLeagueSeason } from "../../src/football-league-season.js";
 import { deriveClubExpectation } from "../../src/football-club-selection.js";
+import { deriveSeasonTarget } from "../../src/football-season-review.js";
 
 function completedStaySeason() {
   const tier = {
@@ -14,7 +15,9 @@ function completedStaySeason() {
     promotion: null,
     relegation: { toTier: "obosligaen", direct: 1, playoff: 1 }
   };
-  const managerClub = { id: "rosenborg", name: "Rosenborg", tier: "eliteserien", strength: 82 };
+  // Bevisst svakere enn klubbene i den virkelige Eliteserien-pyramiden:
+  // same-tier-målet etter 2.-plass skal derfor avvike fra klubbens styrkebaserte mål.
+  const managerClub = { id: "rosenborg", name: "Rosenborg", tier: "eliteserien", strength: 60 };
   const opponents = [
     { id: "brann", name: "Brann", tier: "eliteserien", strength: 80 },
     { id: "viking", name: "Viking", tier: "eliteserien", strength: 79 },
@@ -128,7 +131,7 @@ test("stay-rollover synkroniserer league-save metadata og overlever reload", asy
       seasonNumber: 2,
       status: "active",
       tier: { id: "eliteserien", name: "Eliteserien" },
-      previousOutcome: { movement: "stay", position: 2, viaPlayoff: false }
+      previousOutcome: { movement: "stay", position: 2 }
     },
     playoff: null,
     archive: [{ seasonNumber: 1 }]
@@ -136,12 +139,23 @@ test("stay-rollover synkroniserer league-save metadata og overlever reload", asy
 
   const snapshot = await page.evaluate(() => ({
     season: JSON.parse(localStorage.getItem("historygo-football-manager.league-season.v3") || "null"),
+    archive: JSON.parse(localStorage.getItem("hgfm.seasonArchive.v1") || "[]"),
     gameStart: JSON.parse(localStorage.getItem("hgfm.gameStartState.v1") || "null")
   }));
   const managerClub = snapshot.season.clubs.find((club) => club.id === snapshot.season.managerClubId);
-  const expected = deriveClubExpectation(managerClub, snapshot.season.clubs, snapshot.season.tier);
+  const clubExpectation = deriveClubExpectation(managerClub, snapshot.season.clubs, snapshot.season.tier);
+  const previous = snapshot.archive.at(-1) || null;
+  const expected = deriveSeasonTarget({
+    clubCount: snapshot.season.clubs.length,
+    seasonNumber: snapshot.season.seasonNumber,
+    previousPosition: previous?.position ?? null,
+    clubExpectation,
+    tierChanged: false
+  });
 
-  expect(expected).not.toBeNull();
+  expect(clubExpectation).not.toBeNull();
+  expect(expected.label).not.toBe(clubExpectation.label);
+  expect(Boolean(snapshot.season.previousOutcome?.viaPlayoff)).toBe(false);
   expect(snapshot.gameStart).toMatchObject({
     leagueName: "Eliteserien",
     seasonLabel: "Sesong 2",
@@ -168,8 +182,9 @@ test("stay-rollover synkroniserer league-save metadata og overlever reload", asy
     seasonNumber: 2,
     status: "active",
     tier: { id: "eliteserien", name: "Eliteserien" },
-    previousOutcome: { movement: "stay", position: 2, viaPlayoff: false }
+    previousOutcome: { movement: "stay", position: 2 }
   });
+  expect(Boolean(reloaded.season.previousOutcome?.viaPlayoff)).toBe(false);
   expect(reloaded.playoff).toBeNull();
   expect(reloaded.archive).toHaveLength(1);
   expect(reloaded.gameStart).toMatchObject({
