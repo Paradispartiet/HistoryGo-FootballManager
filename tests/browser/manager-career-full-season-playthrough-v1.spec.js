@@ -56,6 +56,7 @@ async function readProgress(page) {
     const matchday = parse("hgfm.matchday.v1", null) || session.matchday;
     const weeklyTrainingProgram = session.weeklyTrainingProgram || parse("hgfm.weeklyTrainingProgram.v1", null);
     const weeklyTrainingFocus = session.weeklyTrainingFocus || parse("hgfm.weeklyTrainingFocus.v1", null);
+    const individualTraining = session.individualTraining || parse("hgfm.individualTraining.v1", { week: null, assignments: [] });
     const lastMatch = matchday?.lastMatch || null;
     const archive = parse("hgfm.seasonArchive.v1", []);
     const playerStats = parse("hgfm.playerSeasonStats.v1", { rows: [], matchIds: [] });
@@ -133,10 +134,23 @@ async function readProgress(page) {
       conditionTotalMinutesPlayed: playerCondition.reduce((sum, entry) => sum + (Number(entry?.minutesPlayed) || 0), 0),
       conditionRows: playerCondition.map((entry) => ({
         playerId: entry?.playerId || null,
+        name: String(entry?.name || "").trim(),
         load: Number(entry?.load) || 0,
+        matchesPlayed: Number(entry?.matchesPlayed) || 0,
+        minutesPlayed: Number(entry?.minutesPlayed) || 0,
         consecutiveFullMatches: Number(entry?.consecutiveFullMatches) || 0,
+        injuryWeeksOut: Number(entry?.injury?.weeksOut) || 0,
         injured: Number(entry?.injury?.weeksOut) > 0
       })),
+      individualTrainingWeek: Number(individualTraining?.week) || null,
+      individualTrainingAssignments: Array.isArray(individualTraining?.assignments)
+        ? individualTraining.assignments.map((entry) => ({
+            playerId: entry?.playerId || null,
+            trackId: entry?.trackId || null,
+            roleId: entry?.roleId || null,
+            attributeId: entry?.attributeId || null
+          }))
+        : [],
       activeMatchSession: Boolean(matchday?.session),
       lastMatchId: lastMatch?.id || null,
       lastMatchRound: Number(lastMatch?.leagueContext?.round) || null,
@@ -829,6 +843,130 @@ async function chooseTrainingFocus(page, choiceIndex = 0) {
   return progress.weeklyTrainingFocusId;
 }
 
+async function chooseIndividualTrainingTrack(
+  page,
+  { trackId, trackName, playerName = null } = {}
+) {
+  expect(trackId).toBeTruthy();
+  expect(trackName).toBeTruthy();
+  await openTraining(page);
+
+  const cards = page.locator("#individualTrainingPicker .individual-training-card");
+  const cardCount = await cards.count();
+  expect(cardCount).toBeGreaterThan(0);
+  let selectedCard = null;
+  let selectedButton = null;
+
+  for (let index = 0; index < cardCount; index += 1) {
+    const card = cards.nth(index);
+    const heading = String(await card.locator("h5").textContent() || "").trim();
+    if (playerName && heading !== playerName) continue;
+    const button = card.getByRole("button", { name: trackName, exact: true });
+    if ((await button.count()) !== 1 || !(await button.isEnabled())) continue;
+    selectedCard = card;
+    selectedButton = button;
+    break;
+  }
+
+  expect(selectedCard).toBeTruthy();
+  expect(selectedButton).toBeTruthy();
+  const selectedName = String(await selectedCard.locator("h5").textContent() || "").trim();
+  const before = await readProgress(page);
+  const condition = before.conditionRows.find((entry) => entry.name === selectedName);
+  expect(condition).toBeTruthy();
+
+  await selectedButton.click();
+  await expect.poll(async () => {
+    const progress = await readProgress(page);
+    const assignment = progress.individualTrainingAssignments.find((entry) =>
+      entry.playerId === condition.playerId
+    );
+    return {
+      week: progress.individualTrainingWeek,
+      trackId: assignment?.trackId || null
+    };
+  }).toEqual({ week: before.week, trackId });
+
+  return {
+    week: before.week,
+    playerId: condition.playerId,
+    playerName: selectedName,
+    trackId,
+    loadBefore: condition.load,
+    minutesBefore: condition.minutesPlayed
+  };
+}
+
+async function seedCanonicalInjuryForStarter(page, weeksOut = 3) {
+  await page.locator('.main-nav [role="tab"][data-tab-target="tactics"]').click();
+  await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+
+  const progress = await readProgress(page);
+  const conditionByPlayerId = new Map(
+    progress.conditionRows.map((entry) => [entry.playerId, entry])
+  );
+  const chips = page.locator("#lineupSlots .player-chip[data-slot-id][data-player-id]");
+  const chipCount = await chips.count();
+  const candidates = [];
+
+  for (let index = 0; index < chipCount; index += 1) {
+    const chip = chips.nth(index);
+    const slotId = String(await chip.getAttribute("data-slot-id") || "").trim();
+    const playerId = String(await chip.getAttribute("data-player-id") || "").trim();
+    const position = String(await chip.getAttribute("data-position") || "").trim();
+    const condition = conditionByPlayerId.get(playerId);
+    if (!slotId || !playerId || !position || position === "GK") continue;
+    if (!condition?.name || condition.injured) continue;
+    candidates.push({ slotId, playerId, position, condition });
+  }
+
+  candidates.sort((a, b) => a.condition.load - b.condition.load || a.condition.name.localeCompare(b.condition.name));
+  const target = candidates[0] || null;
+  expect(target).toBeTruthy();
+
+  await page.evaluate(({ playerId, weeks }) => {
+    const raw = localStorage.getItem("hgfm.modeSessions.v1");
+    const envelope = raw ? JSON.parse(raw) : null;
+    const activeMode = envelope?.activeMode;
+    const session = activeMode ? envelope?.sessions?.[activeMode] : null;
+    if (!session || !Array.isArray(session.playerCondition)) {
+      throw new Error("Canonical mode session mangler playerCondition");
+    }
+    const condition = session.playerCondition.find((entry) => entry?.playerId === playerId);
+    if (!condition) throw new Error(`Fant ikke condition for ${playerId}`);
+    condition.injury = {
+      weeksOut: weeks,
+      reason: "Deterministisk canonical skade-/returkjede"
+    };
+    envelope.sessions[activeMode] = session;
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+  }, { playerId: target.playerId, weeks: weeksOut });
+
+  await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  const seeded = await readProgress(page);
+  const condition = seeded.conditionRows.find((entry) => entry.playerId === target.playerId);
+  expect(condition).toBeTruthy();
+  expect(condition.injuryWeeksOut).toBe(weeksOut);
+
+  return {
+    slotId: target.slotId,
+    position: target.position,
+    playerId: target.playerId,
+    playerName: condition.name,
+    minutesAtInjury: condition.minutesPlayed,
+    injuryWeeksAtSeed: condition.injuryWeeksOut,
+    rehabAssignment: null,
+    injuryRotationRound: null,
+    weeksAfterRehab: null,
+    missedRounds: [],
+    recoveredRound: null,
+    returnRound: null,
+    returnMinutes: 0
+  };
+}
+
 async function choosePreseasonTraining(page) {
   await openTraining(page);
   await chooseTrainingProgram(page);
@@ -1152,12 +1290,43 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   const emergencyRotationSlots = new Set();
   const substitutionEvents = [];
   const usedSubstituteNames = new Set();
+  let ordinaryIndividualTraining = null;
+  let forcedInjuryJourney = null;
 
   for (let round = 1; round <= 30; round += 1) {
     await expect.poll(async () => {
       const progress = await readProgress(page);
       return { week: progress.week, phase: progress.phase, round: progress.currentRound };
     }).toEqual({ week: round, phase: "analysis", round });
+
+    if (round === 6) {
+      // Selve skaden er den eneste deterministiske preconditionen i scenariet.
+      // Alle managerhandlinger etterpå — uttak, opptrening og retur — går via UI.
+      forcedInjuryJourney = await seedCanonicalInjuryForStarter(page, 3);
+    }
+    if (round === 7) {
+      const progress = await readProgress(page);
+      const target = progress.conditionRows.find((entry) => entry.playerId === forcedInjuryJourney?.playerId);
+      expect(target).toBeTruthy();
+      expect(target.injuryWeeksOut).toBe(1);
+      expect(target.minutesPlayed).toBe(forcedInjuryJourney.minutesAtInjury);
+      forcedInjuryJourney.weeksAfterRehab = target.injuryWeeksOut;
+    }
+    if (round === 8) {
+      const progress = await readProgress(page);
+      const target = progress.conditionRows.find((entry) => entry.playerId === forcedInjuryJourney?.playerId);
+      expect(target).toBeTruthy();
+      expect(target.injuryWeeksOut).toBe(0);
+      expect(target.minutesPlayed).toBe(forcedInjuryJourney.minutesAtInjury);
+      const restored = await applyExactRotationPath(page, [{
+        slotId: forcedInjuryJourney.slotId,
+        position: forcedInjuryJourney.position,
+        playerName: forcedInjuryJourney.playerName
+      }]);
+      expect(restored).toHaveLength(1);
+      expect(restored[0].afterPlayerId).toBe(forcedInjuryJourney.playerId);
+      forcedInjuryJourney.recoveredRound = round;
+    }
 
     const choiceIndex = round - 1;
     await openCurrentOpponentAnalysis(page, choiceIndex);
@@ -1175,6 +1344,27 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     await advanceClubWeek(page, "training");
     const rotations = await rotateTiredStarters(page, emergencyRotationSlots);
     rotationEvents.push(...rotations.map((rotation) => ({ round, ...rotation })));
+    if (round === 6) {
+      const injuryRotation = rotations.find((rotation) => rotation.outPlayerId === forcedInjuryJourney.playerId);
+      expect(injuryRotation).toBeTruthy();
+      expect(injuryRotation.outInjured).toBe(true);
+      forcedInjuryJourney.injuryRotationRound = round;
+    }
+
+    if (round === 3) {
+      ordinaryIndividualTraining = await chooseIndividualTrainingTrack(page, {
+        trackId: "recovery",
+        trackName: "Egen restitusjon"
+      });
+    }
+    if (round === 6) {
+      forcedInjuryJourney.rehabAssignment = await chooseIndividualTrainingTrack(page, {
+        trackId: "rehab",
+        trackName: "Opptrening",
+        playerName: forcedInjuryJourney.playerName
+      });
+    }
+
     const trainingSelection = await chooseTrainingForCurrentWeek(page, choiceIndex);
 
     // Klubbkommunikasjonen er fasebevisst: medisinsk/trening blir tilgjengelig
@@ -1264,6 +1454,20 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
       expect(incoming).toBeTruthy();
     }
 
+    if ((round === 6 || round === 7) && forcedInjuryJourney) {
+      const target = played.conditionRows.find((entry) => entry.playerId === forcedInjuryJourney.playerId);
+      expect(target).toBeTruthy();
+      expect(target.minutesPlayed).toBe(forcedInjuryJourney.minutesAtInjury);
+      forcedInjuryJourney.missedRounds.push(round);
+    }
+    if (round === 8 && forcedInjuryJourney) {
+      const target = played.conditionRows.find((entry) => entry.playerId === forcedInjuryJourney.playerId);
+      expect(target).toBeTruthy();
+      expect(target.minutesPlayed).toBeGreaterThan(forcedInjuryJourney.minutesAtInjury);
+      forcedInjuryJourney.returnRound = round;
+      forcedInjuryJourney.returnMinutes = target.minutesPlayed - forcedInjuryJourney.minutesAtInjury;
+    }
+
     peakConditionLoad = Math.max(peakConditionLoad, played.conditionMaxLoad);
     peakConditionAbsForm = Math.max(peakConditionAbsForm, played.conditionMaxAbsForm);
     peakConsecutiveFullMatches = Math.max(
@@ -1341,6 +1545,17 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     expect(inboxMessageKinds).toContain(kind);
   }
   expect(inboxSubjects.size).toBeGreaterThanOrEqual(15);
+  expect(ordinaryIndividualTraining).toMatchObject({ week: 3, trackId: "recovery" });
+  expect(ordinaryIndividualTraining.playerId).toBeTruthy();
+  expect(forcedInjuryJourney).toBeTruthy();
+  expect(forcedInjuryJourney.injuryWeeksAtSeed).toBe(3);
+  expect(forcedInjuryJourney.injuryRotationRound).toBe(6);
+  expect(forcedInjuryJourney.rehabAssignment).toMatchObject({ week: 6, trackId: "rehab" });
+  expect(forcedInjuryJourney.weeksAfterRehab).toBe(1);
+  expect(forcedInjuryJourney.missedRounds).toEqual([6, 7]);
+  expect(forcedInjuryJourney.recoveredRound).toBe(8);
+  expect(forcedInjuryJourney.returnRound).toBe(8);
+  expect(forcedInjuryJourney.returnMinutes).toBeGreaterThan(0);
   expect(completed.week).toBe(31);
   expect(completed.phase).toBe("analysis");
   expect(completed.seasonNumber).toBe(1);
@@ -1519,6 +1734,10 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
         total: substitutionEvents.length,
         rounds: substitutionEvents.map((entry) => entry.round),
         events: substitutionEvents
+      },
+      individualTrainingSummary: {
+        ordinary: ordinaryIndividualTraining,
+        forcedInjuryJourney
       },
       analysisSummary: {
         preparedRounds: analysisPreparedRounds.size
